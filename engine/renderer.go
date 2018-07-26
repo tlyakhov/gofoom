@@ -4,7 +4,6 @@ import (
 	"math"
 
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/engine/mapping"
 	"github.com/tlyakhov/gofoom/util"
 )
 
@@ -18,7 +17,7 @@ type trigEntry struct {
 }
 
 type Renderer struct {
-	Map                                    *mapping.Map
+	Map                                    *Map
 	ScreenWidth, ScreenHeight              int
 	Frame, FrameTint, WorkerWidth, Counter int
 	MaxViewDist, FOV                       float64
@@ -83,7 +82,7 @@ func (r *Renderer) normRayIndex(index int) int {
 }
 
 // Render a frame.
-func (r *Renderer) Render(buffer []uint) {
+func (r *Renderer) Render(buffer []uint8) {
 	r.Counter = 0
 	xStart := 0
 	xEnd := xStart + r.WorkerWidth
@@ -112,7 +111,7 @@ func (r *Renderer) Render(buffer []uint) {
 
 		slice.Ray = Ray{
 			Start: r.Map.Player.Pos,
-			End: util.Vector3{
+			End: &util.Vector3{
 				X: r.Map.Player.Pos.X + r.MaxViewDist*r.trigTable[slice.RayIndex].cos,
 				Y: r.Map.Player.Pos.Y + r.MaxViewDist*r.trigTable[slice.RayIndex].sin,
 			},

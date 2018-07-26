@@ -1,7 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"image"
+
+	"github.com/tlyakhov/gofoom/engine/mapping"
+
 	// "math"
 	// "math/rand"
 	// "os"
@@ -36,7 +40,12 @@ func run() {
 
 	buffer := image.NewRGBA(image.Rect(0, 0, 1024, 768))
 
-	renderer := engine.NewRenderer(buffer.Pix)
+	m := mapping.Map{}
+	m.GenerateID()
+	fmt.Println(m.ID)
+	return
+
+	renderer := engine.NewRenderer()
 
 	last := time.Now()
 	for !win.Closed() {
@@ -58,7 +67,7 @@ func run() {
 		if win.Pressed(pixelgl.KeyUp) {
 		}
 
-		renderer.Render()
+		renderer.Render(buffer.Pix)
 
 		canvas.SetPixels(buffer.Pix)
 		canvas.Draw(win, mat)

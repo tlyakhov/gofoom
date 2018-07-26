@@ -1,20 +1,19 @@
 package engine
 
 import (
-	"github.com/tlyakhov/gofoom/engine/mapping"
 	"github.com/tlyakhov/gofoom/util"
 )
 
 type Ray struct {
-	Start, End util.Vector3
+	Start, End *util.Vector3
 }
 
 type RenderSlice struct {
-	RenderTarget       []uint
+	RenderTarget       []uint8
 	X, Y, YStart, YEnd int
 	TargetX            int
-	Sector             *mapping.MapSector
-	Segment            *mapping.MapSegment
+	Sector             *MapSector
+	Segment            *MapSegment
 	Ray                Ray
 	RayIndex           int
 	// Intersection
