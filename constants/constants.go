@@ -9,6 +9,7 @@ const (
 	MaxViewDistance         = 1000000.0
 	FieldOfView             = 75
 	DebugLevel              = 1
+	CollisionSteps          = 10
 
 	// Audio constants
 	SourcesPerSound  = 8
