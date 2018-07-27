@@ -71,3 +71,8 @@ func (v *Vector3) Reflect(normal *Vector3) *Vector3 {
 func (v *Vector3) Clamp(min, max float64) *Vector3 {
 	return &Vector3{Clamp(v.X, min, max), Clamp(v.Y, min, max), Clamp(v.Z, min, max)}
 }
+
+// To2D converts a 3D vector to 2D
+func (v *Vector3) To2D() *Vector2 {
+	return &Vector2{v.X, v.Y}
+}

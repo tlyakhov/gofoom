@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/tlyakhov/gofoom/constants"
@@ -69,8 +70,66 @@ func (r *Renderer) initTables() {
 
 }
 
-func (r *Renderer) RenderSector(slice RenderSlice) {
+func (r *Renderer) RenderSlice(slice *RenderSlice) {
+	slice.CalcScreen()
 
+	// renderCeiling
+	// renderFloor
+	if slice.Segment.AdjacentSector == nil {
+		slice.RenderMid()
+		return
+	}
+	rsp := &RenderSlicePortal{RenderSlice: slice}
+	rsp.CalcScreen()
+	rsp.RenderHigh()
+	rsp.RenderLow()
+
+	portalSlice := *slice
+	portalSlice.Sector = rsp.Adj
+	portalSlice.YStart = rsp.AdjClippedTop
+	portalSlice.YEnd = rsp.AdjClippedBottom
+	portalSlice.Depth++
+	r.RenderSector(&portalSlice)
+}
+
+func (r *Renderer) RenderSector(slice *RenderSlice) {
+	slice.Distance = constants.MaxViewDistance
+
+	dist := math.MaxFloat64
+
+	for _, segment := range slice.Sector.Segments {
+		if slice.Ray.End.Sub(slice.Ray.Start).Dot(segment.Normal) > 0 {
+			continue
+		}
+
+		isect := segment.Intersect(slice.Ray.Start, slice.Ray.End)
+
+		if isect == nil {
+			continue
+		}
+
+		delta := &util.Vector2{math.Abs(isect.X - slice.Ray.Start.X), math.Abs(isect.Y - slice.Ray.Start.Y)}
+		if delta.Y > delta.X {
+			dist = math.Abs(delta.Y / r.trigTable[slice.RayIndex].sin)
+		} else {
+			dist = math.Abs(delta.X / r.trigTable[slice.RayIndex].cos)
+		}
+
+		if dist > slice.Distance {
+			continue
+		}
+
+		slice.Segment = segment
+		slice.Distance = dist
+		slice.Intersection = isect.To3D()
+		slice.U = isect.Dist(segment.A) / segment.Length
+	}
+
+	if dist != math.MaxFloat64 {
+		r.RenderSlice(slice)
+	} else {
+		fmt.Println("Depth: %v, sector: %s", slice.Depth, slice.Sector.ID)
+	}
 }
 
 func (r *Renderer) normRayIndex(index int) int {
@@ -98,7 +157,7 @@ func (r *Renderer) Render(buffer []uint8) {
 		}
 
 		// Initialize a slice...
-		slice := RenderSlice{
+		slice := &RenderSlice{
 			Renderer:     r,
 			RenderTarget: buffer,
 			X:            x,
@@ -107,11 +166,12 @@ func (r *Renderer) Render(buffer []uint8) {
 			YEnd:         r.ScreenHeight - 1,
 			RayIndex:     r.normRayIndex(int(r.Map.Player.Angle*float64(r.trigCount)/360.0) + x - r.ScreenWidth/2 + 1),
 			Sector:       r.Map.Player.Sector,
+			CameraZ:      r.Map.Player.Pos.Z + r.Map.Player.Height,
 		}
 
 		slice.Ray = Ray{
-			Start: r.Map.Player.Pos,
-			End: &util.Vector3{
+			Start: r.Map.Player.Pos.To2D(),
+			End: &util.Vector2{
 				X: r.Map.Player.Pos.X + r.MaxViewDist*r.trigTable[slice.RayIndex].cos,
 				Y: r.Map.Player.Pos.Y + r.MaxViewDist*r.trigTable[slice.RayIndex].sin,
 			},
