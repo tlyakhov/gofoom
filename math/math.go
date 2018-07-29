@@ -1,4 +1,11 @@
-package util
+package math
+
+import "math"
+
+const (
+	Deg2rad float64 = math.Pi / 180.0
+	Rad2deg float64 = 180.0 / math.Pi
+)
 
 // Clamp clamps a value between a minimum and maximum.
 func Clamp(x, min, max float64) float64 {
@@ -51,4 +58,14 @@ func UMax(x, y uint) uint {
 		return x
 	}
 	return y
+}
+
+func NormalizeAngle(a float64) float64 {
+	for a < 0 {
+		a += 360.0
+	}
+	for a >= 360.0 {
+		a -= 360.0
+	}
+	return a
 }

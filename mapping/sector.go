@@ -1,36 +1,43 @@
-package engine
+package mapping
 
 import (
 	"math"
 
+	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-
-	"github.com/tlyakhov/gofoom/util"
+	fmath "github.com/tlyakhov/gofoom/math"
 )
 
-type MapSector struct {
-	util.CommonFields
+type IActor interface {
+	OnEnter(e *Entity)
+	OnExit(e *Entity)
+	ActOnEntity(e *Entity)
+}
 
-	Segments                      []*MapSegment
-	Entities                      map[string]*Entity
+type Sector struct {
+	concepts.Base
+
+	Segments                      []*Segment
+	Entities                      map[string]concepts.ISerializable
 	Map                           *Map
 	BottomZ, TopZ                 float64
-	Min, Max, Center              *util.Vector3
+	Min, Max, Center              *fmath.Vector3
 	LightmapWidth, LightmapHeight uint
 	FloorLightmap, CeilLightmap   []float64
 	FloorScale, CeilScale         float64
-	Hurt                          float64
-	FloorTarget, CeilTarget       *MapSector
+	FloorTarget, CeilTarget       *Sector
+	FloorMaterial                 concepts.ISerializable
+	CeilMaterial                  concepts.ISerializable
+	PVSEntity                     map[string]Sector
 	// RoomImpulse
 	// PVS
-	// PVSEntity
 	// PVSLights []
 }
 
-func (ms *MapSector) Update() {
-	ms.Center = &util.Vector3{0, 0, (ms.TopZ + ms.BottomZ) / 2}
-	ms.Min = &util.Vector3{math.Inf(1), math.Inf(1), ms.BottomZ}
-	ms.Max = &util.Vector3{math.Inf(-1), math.Inf(-1), ms.TopZ}
+func (ms *Sector) Update() {
+	ms.Center = &fmath.Vector3{0, 0, (ms.TopZ + ms.BottomZ) / 2}
+	ms.Min = &fmath.Vector3{math.Inf(1), math.Inf(1), ms.BottomZ}
+	ms.Max = &fmath.Vector3{math.Inf(-1), math.Inf(-1), ms.TopZ}
 
 	w := ms.Winding()
 
@@ -61,10 +68,14 @@ func (ms *MapSector) Update() {
 
 	ms.Center = ms.Center.Mul(1.0 / float64(len(ms.Segments)))
 
-	for _, e := range ms.Entities {
-		e.Map = ms.Map
-		e.Sector = ms
-		e.Collide()
+	for _, item := range ms.Entities {
+		if e, ok := item.(*Entity); ok {
+			e.Map = ms.Map
+			e.Sector = ms
+		}
+		if e, ok := item.(ICollider); ok {
+			e.Collide()
+		}
 	}
 
 	ms.LightmapWidth = uint((ms.Max.X-ms.Min.X)/constants.LightGrid) + 6
@@ -74,7 +85,7 @@ func (ms *MapSector) Update() {
 	ms.ClearLightmaps()
 }
 
-func (ms *MapSector) ClearLightmaps() {
+func (ms *Sector) ClearLightmaps() {
 	for i := range ms.FloorLightmap {
 		ms.FloorLightmap[i] = -1
 		ms.CeilLightmap[i] = -1
@@ -88,7 +99,7 @@ func (ms *MapSector) ClearLightmaps() {
 	// ms.UpdateEntityPVS()
 }
 
-func (ms *MapSector) IsPointInside2D(p *util.Vector2) bool {
+func (ms *Sector) IsPointInside2D(p *fmath.Vector2) bool {
 	inside := false
 	flag1 := (p.Y >= ms.Segments[0].A.Y)
 
@@ -105,20 +116,11 @@ func (ms *MapSector) IsPointInside2D(p *util.Vector2) bool {
 	return inside
 }
 
-func (ms *MapSector) Winding() bool {
+func (ms *Sector) Winding() bool {
 	sum := 0.0
 	for i, segment := range ms.Segments {
 		next := ms.Segments[(i+1)%len(ms.Segments)]
 		sum += (next.A.X - segment.A.X) * (segment.A.Y + next.A.Y)
 	}
 	return sum < 0
-}
-
-func (ms *MapSector) OnEnter(e *Entity) {
-	if ms.FloorTarget == nil && e.Pos.Z <= e.Sector.BottomZ {
-		e.Pos.Z = e.Sector.BottomZ
-	}
-}
-
-func (ms *MapSector) OnExit(e *Entity) {
 }

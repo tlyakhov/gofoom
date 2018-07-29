@@ -5,31 +5,14 @@ import (
 	"math"
 
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/util"
+	"github.com/tlyakhov/gofoom/mapping"
+	fmath "github.com/tlyakhov/gofoom/math"
+	"github.com/tlyakhov/gofoom/render"
 )
-
-const (
-	deg2rad float64 = math.Pi / 180.0
-	rad2deg float64 = 180.0 / math.Pi
-)
-
-type trigEntry struct {
-	sin, cos float64
-}
 
 type Renderer struct {
-	Map                                    *Map
-	ScreenWidth, ScreenHeight              int
-	Frame, FrameTint, WorkerWidth, Counter int
-	MaxViewDist, FOV                       float64
-
-	cameraToProjectionPlane float64
-	trigCount               int
-	trigTable               []trigEntry
-	viewFix                 []float64
-	zbuffer                 []float64
-	floorNormal             util.Vector3
-	ceilingNormal           util.Vector3
+	*Config
+	Map *mapping.Map
 }
 
 func NewRenderer() *Renderer {
@@ -43,43 +26,24 @@ func NewRenderer() *Renderer {
 		WorkerWidth:  640,
 		Counter:      0,
 
-		floorNormal:   util.Vector3{X: 0, Y: 0, Z: 1},
-		ceilingNormal: util.Vector3{X: 0, Y: 0, Z: -1},
+		floorNormal:   fmath.Vector3{X: 0, Y: 0, Z: 1},
+		ceilingNormal: fmath.Vector3{X: 0, Y: 0, Z: -1},
 	}
-	r.initTables()
+	r.InitTables()
 	return &r
 }
 
-func (r *Renderer) initTables() {
-	r.cameraToProjectionPlane = (float64(r.ScreenWidth) / 2.0) / math.Tan(r.FOV*deg2rad/2.0)
-	r.trigCount = int(float64(r.ScreenWidth) * 360.0 / r.FOV) // Quantize trig tables per-Pixel.
-	r.trigTable = make([]trigEntry, r.trigCount)
-	r.viewFix = make([]float64, r.ScreenWidth)
-
-	for i := 0; i < r.trigCount; i++ {
-		r.trigTable[i].sin = math.Sin(float64(i) * 2.0 * math.Pi / float64(r.trigCount))
-		r.trigTable[i].cos = math.Cos(float64(i) * 2.0 * math.Pi / float64(r.trigCount))
-	}
-
-	for i := 0; i < r.ScreenWidth/2; i++ {
-		r.viewFix[i] = r.cameraToProjectionPlane / r.trigTable[r.ScreenWidth/2-1-i].cos
-		r.viewFix[(r.ScreenWidth-1)-i] = r.viewFix[i]
-	}
-
-	r.zbuffer = make([]float64, r.WorkerWidth*r.ScreenHeight)
-
-}
-
-func (r *Renderer) RenderSlice(slice *RenderSlice) {
+func (r *Renderer) RenderSlice(slice *render.Slice) {
 	slice.CalcScreen()
 
-	// renderCeiling
-	// renderFloor
+	slice.RenderCeiling()
+	slice.RenderFloor()
+
 	if slice.Segment.AdjacentSector == nil {
 		slice.RenderMid()
 		return
 	}
-	rsp := &RenderSlicePortal{RenderSlice: slice}
+	rsp := &render.SlicePortal{render.Slice: slice}
 	rsp.CalcScreen()
 	rsp.RenderHigh()
 	rsp.RenderLow()
@@ -92,7 +56,7 @@ func (r *Renderer) RenderSlice(slice *RenderSlice) {
 	r.RenderSector(&portalSlice)
 }
 
-func (r *Renderer) RenderSector(slice *RenderSlice) {
+func (r *Renderer) RenderSector(slice *render.Slice) {
 	slice.Distance = constants.MaxViewDistance
 
 	dist := math.MaxFloat64
@@ -108,7 +72,7 @@ func (r *Renderer) RenderSector(slice *RenderSlice) {
 			continue
 		}
 
-		delta := &util.Vector2{math.Abs(isect.X - slice.Ray.Start.X), math.Abs(isect.Y - slice.Ray.Start.Y)}
+		delta := &math.Vector2{math.Abs(isect.X - slice.Ray.Start.X), math.Abs(isect.Y - slice.Ray.Start.Y)}
 		if delta.Y > delta.X {
 			dist = math.Abs(delta.Y / r.trigTable[slice.RayIndex].sin)
 		} else {
@@ -126,7 +90,7 @@ func (r *Renderer) RenderSector(slice *RenderSlice) {
 	}
 
 	if dist != math.MaxFloat64 {
-		r.RenderSlice(slice)
+		r.render.Slice(slice)
 	} else {
 		fmt.Println("Depth: %v, sector: %s", slice.Depth, slice.Sector.ID)
 	}
@@ -157,7 +121,7 @@ func (r *Renderer) Render(buffer []uint8) {
 		}
 
 		// Initialize a slice...
-		slice := &RenderSlice{
+		slice := &render.Slice{
 			Renderer:     r,
 			RenderTarget: buffer,
 			X:            x,
@@ -169,9 +133,9 @@ func (r *Renderer) Render(buffer []uint8) {
 			CameraZ:      r.Map.Player.Pos.Z + r.Map.Player.Height,
 		}
 
-		slice.Ray = Ray{
+		slice.Ray = render.Ray{
 			Start: r.Map.Player.Pos.To2D(),
-			End: &util.Vector2{
+			End: &math.Vector2{
 				X: r.Map.Player.Pos.X + r.MaxViewDist*r.trigTable[slice.RayIndex].cos,
 				Y: r.Map.Player.Pos.Y + r.MaxViewDist*r.trigTable[slice.RayIndex].sin,
 			},

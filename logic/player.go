@@ -1,19 +1,10 @@
-package engine
+package logic
 
 import (
 	"math"
 
 	"github.com/tlyakhov/gofoom/constants"
 )
-
-type Player struct {
-	Entity
-
-	Height    float64
-	Standing  bool
-	Crouching bool
-	Inventory []Entity
-}
 
 func (p *Player) Frame(lastFrameTime float64) {
 	p.Entity.Frame(lastFrameTime)

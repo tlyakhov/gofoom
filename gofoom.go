@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"image"
 
-	"github.com/tlyakhov/gofoom/engine/mapping"
+	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/math"
+
+	"github.com/tlyakhov/gofoom/engine"
 
 	// "math"
 	// "math/rand"
@@ -15,8 +17,6 @@ import (
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-
-	"github.com/tlyakhov/gofoom/engine"
 )
 
 func run() {
@@ -40,10 +40,7 @@ func run() {
 
 	buffer := image.NewRGBA(image.Rect(0, 0, 1024, 768))
 
-	m := mapping.Map{}
-	m.GenerateID()
-	fmt.Println(m.ID)
-	return
+	gameMap := engine.Map{}
 
 	renderer := engine.NewRenderer()
 
@@ -52,19 +49,32 @@ func run() {
 		dt := time.Since(last).Seconds()
 		last = time.Now()
 
-		_ = dt
-
 		win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
 		}
-		if win.Pressed(pixelgl.KeyLeft) {
+		if win.Pressed(pixelgl.KeyW) {
+			gameMap.Player.Move(gameMap.Player.Angle, dt, 1.0)
 		}
-		if win.Pressed(pixelgl.KeyRight) {
+		if win.Pressed(pixelgl.KeyS) {
+			gameMap.Player.Move(gameMap.Player.Angle+180.0, dt, 1.0)
 		}
-		if win.Pressed(pixelgl.KeyDown) {
+		if win.Pressed(pixelgl.KeyQ) {
+			gameMap.Player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
 		}
-		if win.Pressed(pixelgl.KeyUp) {
+		if win.Pressed(pixelgl.KeyE) {
+			gameMap.Player.Move(gameMap.Player.Angle+90.0, dt, 1.0)
+		}
+		if win.Pressed(pixelgl.KeyQ) {
+			gameMap.Player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
+		}
+		if win.Pressed(pixelgl.KeyA) {
+			gameMap.Player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
+			gameMap.Player.Angle = math.NormalizeAngle(gameMap.Player.Angle)
+		}
+		if win.Pressed(pixelgl.KeyD) {
+			gameMap.Player.Angle += constants.PlayerTurnSpeed * dt / 30.0
+			gameMap.Player.Angle = math.NormalizeAngle(gameMap.Player.Angle)
 		}
 
 		renderer.Render(buffer.Pix)

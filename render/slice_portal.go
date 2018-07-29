@@ -1,10 +1,12 @@
-package engine
+package render
 
-import "github.com/tlyakhov/gofoom/util"
+import (
+	"github.com/tlyakhov/gofoom/math"
+)
 
-type RenderSlicePortal struct {
-	*RenderSlice
-	Adj                 *MapSector
+type SlicePortal struct {
+	*Slice
+	Adj                 *BasicSector
 	AdjSegment          *MapSegment
 	AdjProjHeightTop    float64
 	AdjProjHeightBottom float64
@@ -14,18 +16,18 @@ type RenderSlicePortal struct {
 	AdjClippedBottom    int
 }
 
-func (slice *RenderSlicePortal) CalcScreen() {
+func (slice *SlicePortal) CalcScreen() {
 	slice.Adj = slice.Segment.AdjacentSector
 	slice.AdjSegment = slice.Segment.AdjacentSegment
 	slice.AdjProjHeightTop = slice.ProjectZ(slice.Adj.TopZ - slice.CameraZ)
 	slice.AdjProjHeightBottom = slice.ProjectZ(slice.Adj.BottomZ - slice.CameraZ)
 	slice.AdjScreenTop = slice.ScreenHeight/2 - int(slice.AdjProjHeightTop)
 	slice.AdjScreenBottom = slice.ScreenHeight/2 - int(slice.AdjProjHeightBottom)
-	slice.AdjClippedTop = util.Max(slice.AdjScreenTop, slice.ClippedStart)
-	slice.AdjClippedBottom = util.Min(slice.AdjScreenBottom, slice.ClippedEnd)
+	slice.AdjClippedTop = math.Max(slice.AdjScreenTop, slice.ClippedStart)
+	slice.AdjClippedBottom = math.Min(slice.AdjScreenBottom, slice.ClippedEnd)
 }
 
-func (slice *RenderSlicePortal) RenderHigh() {
+func (slice *SlicePortal) RenderHigh() {
 	if slice.AdjSegment.HiMaterial == nil {
 		return
 	}
@@ -43,13 +45,13 @@ func (slice *RenderSlicePortal) RenderHigh() {
 		if slice.AdjSegment.HiBehavior == ScaleWidth || slice.AdjSegment.HiBehavior == ScaleNone {
 			v = (v*(slice.Adj.TopZ-slice.Sector.TopZ) - slice.Adj.TopZ) / 64.0
 		}
-		slice.Write(screenIndex, slice.Segment.HiMaterial.Sample(slice.RenderSlice, slice.U, v, nil, uint(slice.AdjScreenTop-slice.ScreenStart)))
+		slice.Write(screenIndex, slice.Segment.HiMaterial.Sample(slice, slice.U, v, nil, uint(slice.AdjScreenTop-slice.ScreenStart)))
 		slice.zbuffer[screenIndex] = slice.Distance
 	}
 
 }
 
-func (slice *RenderSlicePortal) RenderLow() {
+func (slice *SlicePortal) RenderLow() {
 	if slice.AdjSegment.LoMaterial == nil {
 		return
 	}
@@ -65,7 +67,7 @@ func (slice *RenderSlicePortal) RenderLow() {
 			v = (v*(slice.Sector.BottomZ-slice.Adj.BottomZ) - slice.Sector.BottomZ) / 64.0
 		}
 
-		slice.Write(screenIndex, slice.Segment.LoMaterial.Sample(slice.RenderSlice, slice.U, v, nil, uint(slice.ScreenEnd-slice.AdjScreenBottom)))
+		slice.Write(screenIndex, slice.Segment.LoMaterial.Sample(slice, slice.U, v, nil, uint(slice.ScreenEnd-slice.AdjScreenBottom)))
 		slice.zbuffer[screenIndex] = slice.Distance
 	}
 }
