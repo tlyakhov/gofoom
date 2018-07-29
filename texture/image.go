@@ -1,17 +1,13 @@
-package engine
+package texture
 
 import (
 	"image"
 	"image/color"
 	"math"
-
-	// Decoders for common image types
-	_ "image/jpeg"
-	_ "image/png"
-
 	"os"
 
-	"github.com/tlyakhov/gofoom/util"
+	"github.com/tlyakhov/gofoom/concepts"
+	fmath "github.com/tlyakhov/gofoom/math"
 )
 
 type mipMap struct {
@@ -19,9 +15,9 @@ type mipMap struct {
 	Data          *image.NRGBA
 }
 
-// Texture represents an image that will be rendered in-game.
-type Texture struct {
-	util.CommonFields
+// Image represents an image that will be rendered in-game.
+type Image struct {
+	concepts.Base
 
 	Width, Height   uint
 	Source          string `editable:"Texture Source" edit_type:"string"`
@@ -33,7 +29,7 @@ type Texture struct {
 }
 
 // Load a texture from a file (pre-processing mipmaps if set)
-func (t *Texture) Load() (*Texture, error) {
+func (t *Image) Load() (*Image, error) {
 	if t.Source == "" {
 		return t, nil
 	}
@@ -62,10 +58,10 @@ func (t *Texture) Load() (*Texture, error) {
 	return t, nil
 }
 
-func (t *Texture) generateMipMaps() {
+func (t *Image) generateMipMaps() {
 	t.MipMaps = make(map[uint]*mipMap)
 
-	index := util.NearestPow2(uint(t.Height))
+	index := fmath.NearestPow2(uint(t.Height))
 	t.MipMaps[index] = &mipMap{Width: t.Width, Height: t.Height, Data: t.Data}
 	prev := t.MipMaps[index]
 
@@ -81,8 +77,8 @@ func (t *Texture) generateMipMaps() {
 			for x = 0; x < w; x++ {
 				px = x * (prev.Width - 1) / (w - 1)
 				py = y * (prev.Height - 1) / (h - 1)
-				pcx = util.UMin(px+1, prev.Width-1)
-				pcy = util.UMin(py+1, prev.Height-1)
+				pcx = fmath.UMin(px+1, prev.Width-1)
+				pcy = fmath.UMin(py+1, prev.Height-1)
 				c := [4]color.NRGBA{
 					prev.Data.At(int(px), int(py)).(color.NRGBA),
 					prev.Data.At(int(pcx), int(py)).(color.NRGBA),
@@ -98,20 +94,20 @@ func (t *Texture) generateMipMaps() {
 				mm.Data.Set(int(x), int(y), avg)
 			}
 		}
-		index := util.NearestPow2(uint(mm.Height))
+		index := fmath.NearestPow2(uint(mm.Height))
 		t.MipMaps[index] = &mm
 		prev = &mm
 		if w > 1 {
-			w = util.UMax(1, w/2)
+			w = fmath.UMax(1, w/2)
 		}
 		if h > 1 {
-			h = util.UMax(1, h/2)
+			h = fmath.UMax(1, h/2)
 		}
 	}
 	t.SmallestMipMap = prev
 }
 
-func (t *Texture) Sample(x, y float64, scaledHeight uint) color.NRGBA {
+func (t *Image) Sample(x, y float64, scaledHeight uint) color.NRGBA {
 	data := t.Data
 	w := t.Width
 	h := t.Height
@@ -122,7 +118,7 @@ func (t *Texture) Sample(x, y float64, scaledHeight uint) color.NRGBA {
 			w = t.SmallestMipMap.Width
 			h = t.SmallestMipMap.Height
 		} else if scaledHeight < t.Height {
-			mm := t.MipMaps[util.NearestPow2(scaledHeight)]
+			mm := t.MipMaps[fmath.NearestPow2(scaledHeight)]
 			data = mm.Data
 			w = mm.Width
 			h = mm.Height
@@ -140,14 +136,14 @@ func (t *Texture) Sample(x, y float64, scaledHeight uint) color.NRGBA {
 	fy := uint(y * float64(h))
 
 	if !t.Filter {
-		index := (util.UMin(fy, h)*w + util.UMin(fx, w)) * 4
+		index := (fmath.UMin(fy, h)*w + fmath.UMin(fx, w)) * 4
 		return color.NRGBA{data.Pix[index], data.Pix[index+1], data.Pix[index+2], data.Pix[index+3]}
 	}
 
 	wx := x - float64(fx)
 	wy := y - float64(fy)
-	fx = util.UMax(fx, w-1)
-	fy = util.UMax(fy, h-1)
+	fx = fmath.UMax(fx, w-1)
+	fy = fmath.UMax(fy, h-1)
 	cx := (fx + 1) % w
 	cy := (fy + 1) % h
 	t00 := (fy*w + fx) * 4

@@ -1,48 +1,13 @@
-package engine
+package logic
 
 import (
 	"math"
 
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/util"
+	"github.com/tlyakhov/gofoom/mapping"
 )
 
-type CollisionResponse int
-
-//go:generate stringer -type=CollisionResponse
-const (
-	Slide CollisionResponse = iota
-	Bounce
-	Stop
-	Remove
-	Callback
-)
-
-type Entity struct {
-	util.CommonFields
-
-	Pos               *util.Vector3
-	Vel               *util.Vector3
-	Angle             float64
-	HurtTime          float64
-	BoundingRadius    float64
-	CollisionResponse CollisionResponse
-	CRCallback        func() CollisionResponse
-	Health            float64
-	Height            float64
-	MountHeight       float64
-	Active            bool
-	Sector            *MapSector
-	Map               *Map
-}
-
-func (e *Entity) Angle2DTo(p *util.Vector3) float64 {
-	dx := e.Pos.X - p.X
-	dy := e.Pos.Y - p.Y
-	return math.Atan2(dy, dx)*rad2deg + 180.0
-}
-
-func (e *Entity) PushBack(segment *MapSegment) bool {
+func (e *mapping.Entity) PushBack(segment *mapping.Segment) bool {
 	p2d := e.Pos.To2D()
 	d := segment.DistanceToPoint(p2d)
 	if d > e.BoundingRadius*e.BoundingRadius {
@@ -64,7 +29,7 @@ func (e *Entity) PushBack(segment *MapSegment) bool {
 	return true
 }
 
-func (e *Entity) Collide() []*MapSegment {
+func (e *mapping.Entity) Collide() []*mapping.Segment {
 	if e.Map == nil {
 		return nil
 	}
@@ -86,15 +51,15 @@ func (e *Entity) Collide() []*MapSegment {
 
 	// Cases 1 & 2.
 	if e.Sector == nil {
-		var closestSector *MapSector
+		var closestSector *mapping.Sector
 		closestDistance2 := math.MaxFloat64
 
 		for _, sector := range e.Map.Sectors {
-			d2 := e.Pos.Dist2(sector.Center)
+			d2 := e.Pos.Dist2(sector.MapSector().Center)
 
 			if closestSector == nil || d2 < closestDistance2 {
 				closestDistance2 = d2
-				closestSector = sector
+				closestSector = sector.MapSector()
 			}
 		}
 
@@ -199,26 +164,18 @@ func (e *Entity) Collide() []*MapSegment {
 	return collided
 }
 
-func (e *Entity) Remove() {
-	if e.Sector != nil {
-		delete(e.Sector.Entities, e.ID)
-		e.Sector = nil
+func (e *mapping.Entity) Frame(lastFrameTime float64) {
+	if !e.Active {
 		return
 	}
 
-	for _, sector := range e.Map.Sectors {
-		delete(sector.Entities, e.ID)
-	}
-}
-
-func (e *Entity) Frame(lastFrameTime float64) {
 	frameScale := lastFrameTime / 10.0
 
 	if math.Abs(e.Vel.X) > constants.VelocityEpsilon ||
 		math.Abs(e.Vel.Y) > constants.VelocityEpsilon ||
 		math.Abs(e.Vel.Z) > constants.VelocityEpsilon {
 		speed := e.Vel.Length() * frameScale
-		steps := util.Max(int(speed/constants.CollisionCheck), 1)
+		steps := math.Max(int(speed/constants.CollisionCheck), 1)
 		for step := 0; step < steps; step++ {
 			e.Pos = e.Pos.Add(e.Vel.Mul(frameScale / float64(steps)))
 
@@ -228,8 +185,4 @@ func (e *Entity) Frame(lastFrameTime float64) {
 			}
 		}
 	}
-}
-
-func (e *Entity) Hurt(amount float64) {
-	e.Health -= amount
 }
