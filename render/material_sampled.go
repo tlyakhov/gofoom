@@ -4,14 +4,17 @@ import (
 	"image/color"
 	"math"
 
+	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/material"
+	"github.com/tlyakhov/gofoom/mapping/material"
 )
 
-func (m *material.Sampled) Sample(slice *Slice, u, v float64, light *math.Vector3, scaledHeight uint) color.NRGBA {
+type Sampled material.Sampled
+
+func (m *Sampled) Sample(slice *Slice, u, v float64, light *concepts.Vector3, scale float64) color.NRGBA {
 	if m.IsLiquid {
-		u += math.Cos(float64(slice.Frame)*constants.LiquidChurnSpeed*deg2rad) * constants.LiquidChurnSize
-		v += math.Cos(float64(slice.Frame)*constants.LiquidChurnSpeed*deg2rad) * constants.LiquidChurnSize
+		u += math.Cos(float64(slice.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
+		v += math.Cos(float64(slice.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
 	}
 
 	if u < 0 {
@@ -26,5 +29,5 @@ func (m *material.Sampled) Sample(slice *Slice, u, v float64, light *math.Vector
 		v -= math.Floor(v)
 	}
 
-	return m.Sampler.Sample(u, v, scaledHeight)
+	return m.Sampler.Sample(u, v, scale)
 }

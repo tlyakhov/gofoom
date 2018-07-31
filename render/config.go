@@ -2,6 +2,8 @@ package render
 
 import (
 	"math"
+
+	"github.com/tlyakhov/gofoom/concepts"
 )
 
 type trigEntry struct {
@@ -17,14 +19,14 @@ type Config struct {
 	TrigTable                              []trigEntry
 	ViewFix                                []float64
 	ZBuffer                                []float64
-	FloorNormal                            math.Vector3
-	CeilingNormal                          math.Vector3
+	FloorNormal                            concepts.Vector3
+	CeilingNormal                          concepts.Vector3
 }
 
 func (c *Config) Initialize() {
-	c.CameraToProjectionPlane = (float64(c.ScreenWidth) / 2.0) / math.Tan(c.FOV*deg2rad/2.0)
+	c.CameraToProjectionPlane = (float64(c.ScreenWidth) / 2.0) / math.Tan(c.FOV*concepts.Deg2rad/2.0)
 	c.TrigCount = int(float64(c.ScreenWidth) * 360.0 / c.FOV) // Quantize trig tables per-Pixel.
-	c.TrigTable = make([]trigEntry, c.trigCount)
+	c.TrigTable = make([]trigEntry, c.TrigCount)
 	c.ViewFix = make([]float64, c.ScreenWidth)
 
 	for i := 0; i < c.TrigCount; i++ {

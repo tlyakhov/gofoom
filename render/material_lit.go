@@ -3,15 +3,14 @@ package render
 import (
 	"image/color"
 
-	"github.com/tlyakhov/gofoom/material"
-	"github.com/tlyakhov/gofoom/math"
+	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/mapping/material"
 )
 
-func (m *material.Lit) Sample(slice *Slice, u, v float64, light *math.Vector3, scaledHeight uint) color.NRGBA {
-	surface := m.Sampled.Sample(slice, u, v, light, scaledHeight)
-	sum := &math.Vector3{float64(surface.R), float64(surface.G), float64(surface.B)}
-	sum = sum.Mul3(m.Diffuse)
+type Lit material.Lit
 
+func (m *Lit) Sample(slice *Slice, u, v float64, light *concepts.Vector3, scale float64) color.NRGBA {
+	sum := m.Diffuse
 	if light != nil {
 		sum = sum.Mul3(light)
 	}

@@ -1,0 +1,43 @@
+{
+    "SpawnX": 0,
+    "SpawnY": 0,
+    "Materials": [
+        {
+            "Type": "mapping.LitSampled",
+            "ID": "Default",
+            "Texture": {
+                "Type": "texture.Solid",
+                "Diffuse": {"R": 1.0, "G": 0.0, "B": 1.0}
+            }
+        }
+    ],
+    "Sectors": [
+        {
+            "Type": "mapping.Sector",
+            "BottomZ": 0,
+            "TopZ": 64,
+            "Segments": [
+                {
+                    "X": -300,
+                    "Y": -300,
+                    "MidMaterial": "Default"
+                },
+                {
+                    "X": 300,
+                    "Y": -300,
+                    "MidMaterial": "Default"
+                },
+                {
+                    "X": 300,
+                    "Y": 300,
+                    "MidMaterial": "Default"
+                },
+                {
+                    "X": -300,
+                    "Y": 300,
+                    "MidMaterial": "Default"
+                }
+            ]
+        }
+    ]
+}

@@ -2,7 +2,7 @@ package mapping
 
 type MaterialBehavior int
 
-//go:generate stringer -type=MaterialBehavior
+//go:generate enumer -type=MaterialBehavior -json
 const (
 	ScaleNone MaterialBehavior = iota
 	ScaleWidth

@@ -3,11 +3,16 @@ package logic
 import (
 	"math"
 
+	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/mapping"
+
 	"github.com/tlyakhov/gofoom/constants"
 )
 
+type Player mapping.Player
+
 func (p *Player) Frame(lastFrameTime float64) {
-	p.Entity.Frame(lastFrameTime)
+	concepts.Local(p.Entity, TypeMap).(*Entity).Frame(lastFrameTime)
 
 	if p.Sector == nil {
 		return
@@ -32,11 +37,11 @@ func (p *Player) Frame(lastFrameTime float64) {
 }
 
 func (p *Player) Hurt(amount float64) {
-	p.Entity.Hurt(amount)
+	concepts.Local(p.Entity, TypeMap).(*AliveEntity).Hurt(amount)
 	p.HurtTime = constants.PlayerHurtTime
 }
 
 func (p *Player) Move(angle, lastFrameTime, speed float64) {
-	p.Vel.X += math.Cos(angle*deg2rad) * constants.PlayerSpeed * speed
-	p.Vel.Y += math.Sin(angle*deg2rad) * constants.PlayerSpeed * speed
+	p.Vel.X += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
+	p.Vel.Y += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
 }
