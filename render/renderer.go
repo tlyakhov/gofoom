@@ -1,13 +1,12 @@
-package engine
+package render
 
 import (
 	"fmt"
 	"math"
 
+	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/mapping"
-	fmath "github.com/tlyakhov/gofoom/math"
-	"github.com/tlyakhov/gofoom/render"
 )
 
 type Renderer struct {
@@ -17,23 +16,25 @@ type Renderer struct {
 
 func NewRenderer() *Renderer {
 	r := Renderer{
-		ScreenWidth:  640,
-		ScreenHeight: 360,
-		FOV:          constants.FieldOfView,
-		MaxViewDist:  constants.MaxViewDistance,
-		Frame:        0,
-		FrameTint:    0,
-		WorkerWidth:  640,
-		Counter:      0,
+		Config: &Config{
+			ScreenWidth:  640,
+			ScreenHeight: 360,
+			FOV:          constants.FieldOfView,
+			MaxViewDist:  constants.MaxViewDistance,
+			Frame:        0,
+			FrameTint:    0,
+			WorkerWidth:  640,
+			Counter:      0,
 
-		floorNormal:   fmath.Vector3{X: 0, Y: 0, Z: 1},
-		ceilingNormal: fmath.Vector3{X: 0, Y: 0, Z: -1},
+			FloorNormal:   concepts.Vector3{X: 0, Y: 0, Z: 1},
+			CeilingNormal: concepts.Vector3{X: 0, Y: 0, Z: -1},
+		},
 	}
-	r.InitTables()
+	r.Initialize()
 	return &r
 }
 
-func (r *Renderer) RenderSlice(slice *render.Slice) {
+func (r *Renderer) RenderSlice(slice *Slice) {
 	slice.CalcScreen()
 
 	slice.RenderCeiling()
@@ -43,7 +44,7 @@ func (r *Renderer) RenderSlice(slice *render.Slice) {
 		slice.RenderMid()
 		return
 	}
-	rsp := &render.SlicePortal{render.Slice: slice}
+	rsp := &SlicePortal{Slice: slice}
 	rsp.CalcScreen()
 	rsp.RenderHigh()
 	rsp.RenderLow()
@@ -56,7 +57,7 @@ func (r *Renderer) RenderSlice(slice *render.Slice) {
 	r.RenderSector(&portalSlice)
 }
 
-func (r *Renderer) RenderSector(slice *render.Slice) {
+func (r *Renderer) RenderSector(slice *Slice) {
 	slice.Distance = constants.MaxViewDistance
 
 	dist := math.MaxFloat64
@@ -72,11 +73,11 @@ func (r *Renderer) RenderSector(slice *render.Slice) {
 			continue
 		}
 
-		delta := &math.Vector2{math.Abs(isect.X - slice.Ray.Start.X), math.Abs(isect.Y - slice.Ray.Start.Y)}
+		delta := &concepts.Vector2{math.Abs(isect.X - slice.Ray.Start.X), math.Abs(isect.Y - slice.Ray.Start.Y)}
 		if delta.Y > delta.X {
-			dist = math.Abs(delta.Y / r.trigTable[slice.RayIndex].sin)
+			dist = math.Abs(delta.Y / r.TrigTable[slice.RayIndex].sin)
 		} else {
-			dist = math.Abs(delta.X / r.trigTable[slice.RayIndex].cos)
+			dist = math.Abs(delta.X / r.TrigTable[slice.RayIndex].cos)
 		}
 
 		if dist > slice.Distance {
@@ -90,16 +91,16 @@ func (r *Renderer) RenderSector(slice *render.Slice) {
 	}
 
 	if dist != math.MaxFloat64 {
-		r.render.Slice(slice)
+		r.RenderSlice(slice)
 	} else {
 		fmt.Println("Depth: %v, sector: %s", slice.Depth, slice.Sector.ID)
 	}
 }
 
 func (r *Renderer) normRayIndex(index int) int {
-	for ; index < 0; index += r.trigCount {
+	for ; index < 0; index += r.TrigCount {
 	}
-	for ; index >= r.trigCount; index -= r.trigCount {
+	for ; index >= r.TrigCount; index -= r.TrigCount {
 	}
 	return index
 }
@@ -113,7 +114,7 @@ func (r *Renderer) Render(buffer []uint8) {
 	for x := xStart; x < xEnd; x++ {
 		// Reset the z-buffer to maximum viewing distance.
 		for i := 0; i < r.ScreenHeight; i++ {
-			r.zbuffer[i*r.WorkerWidth+x-xStart] = r.MaxViewDist
+			r.ZBuffer[i*r.WorkerWidth+x-xStart] = r.MaxViewDist
 		}
 
 		if r.Map.Player.Sector == nil {
@@ -121,23 +122,23 @@ func (r *Renderer) Render(buffer []uint8) {
 		}
 
 		// Initialize a slice...
-		slice := &render.Slice{
-			Renderer:     r,
+		slice := &Slice{
+			Config:       r.Config,
 			RenderTarget: buffer,
 			X:            x,
 			TargetX:      x - xStart,
 			YStart:       0,
 			YEnd:         r.ScreenHeight - 1,
-			RayIndex:     r.normRayIndex(int(r.Map.Player.Angle*float64(r.trigCount)/360.0) + x - r.ScreenWidth/2 + 1),
-			Sector:       r.Map.Player.Sector,
+			RayIndex:     r.normRayIndex(int(r.Map.Player.Angle*float64(r.TrigCount)/360.0) + x - r.ScreenWidth/2 + 1),
+			Sector:       r.Map.Player.Sector.(*mapping.Sector),
 			CameraZ:      r.Map.Player.Pos.Z + r.Map.Player.Height,
 		}
 
-		slice.Ray = render.Ray{
+		slice.Ray = &Ray{
 			Start: r.Map.Player.Pos.To2D(),
-			End: &math.Vector2{
-				X: r.Map.Player.Pos.X + r.MaxViewDist*r.trigTable[slice.RayIndex].cos,
-				Y: r.Map.Player.Pos.Y + r.MaxViewDist*r.trigTable[slice.RayIndex].sin,
+			End: &concepts.Vector2{
+				X: r.Map.Player.Pos.X + r.MaxViewDist*r.TrigTable[slice.RayIndex].cos,
+				Y: r.Map.Player.Pos.Y + r.MaxViewDist*r.TrigTable[slice.RayIndex].sin,
 			},
 		}
 

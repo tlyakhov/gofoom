@@ -3,25 +3,15 @@ package mapping
 import (
 	"math"
 
+	"github.com/tlyakhov/gofoom/constants"
+
 	"github.com/tlyakhov/gofoom/concepts"
-	fmath "github.com/tlyakhov/gofoom/math"
-)
-
-type CollisionResponse int
-
-//go:generate stringer -type=CollisionResponse
-const (
-	Slide CollisionResponse = iota
-	Bounce
-	Stop
-	Remove
-	Callback
 )
 
 type Entity struct {
 	*concepts.Base
-	Pos               *fmath.Vector3
-	Vel               *fmath.Vector3
+	Pos               *concepts.Vector3
+	Vel               *concepts.Vector3
 	Angle             float64
 	BoundingRadius    float64
 	CollisionResponse CollisionResponse
@@ -29,32 +19,30 @@ type Entity struct {
 	Height            float64
 	MountHeight       float64
 	Active            bool
-	Sector            *Sector
+	Sector            concepts.ISerializable
 	Map               *Map
 }
 
-type AliveEntity struct {
-	Entity
-	Health   float64
-	HurtTime float64
+func (e *Entity) Initialize() {
+	e.Pos = &concepts.Vector3{}
+	e.Vel = &concepts.Vector3{}
+	e.BoundingRadius = 10
+	e.CollisionResponse = Slide
+	e.MountHeight = constants.PlayerMountHeight
+	e.Active = true
 }
 
-func (e *Entity) Angle2DTo(p *fmath.Vector3) float64 {
+func (e *Entity) Angle2DTo(p *concepts.Vector3) float64 {
 	dx := e.Pos.X - p.X
 	dy := e.Pos.Y - p.Y
-	return math.Atan2(dy, dx)*fmath.Rad2deg + 180.0
+	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
-func (e *Entity) Remove() {
-	if e.Sector != nil {
-		delete(e.Sector.Entities, e.ID)
-		e.Sector = nil
-		return
-	}
-
-	for _, item := range e.Map.Sectors {
-		if sector, ok := item.(*Sector); ok {
-			delete(sector.Entities, e.ID)
-		}
+func (e *Entity) SetParent(parent interface{}) {
+	if sector, ok := parent.(*Sector); ok {
+		e.Sector = sector
+		e.Map = sector.Map
+	} else {
+		panic("Tried mapping.Entity.SetParent with a parameter that wasn't a *mapping.Sector")
 	}
 }

@@ -2,22 +2,16 @@ package mapping
 
 import (
 	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/math"
-)
-
-var (
-	ValidSectorTypes = map[string]interface{}{
-		"Sector": Sector{},
-	}
+	"github.com/tlyakhov/gofoom/mapping/material"
 )
 
 type Map struct {
 	concepts.Base
 
-	Sectors        []concepts.ISerializable
-	Materials      []concepts.ISerializable `editable:"Materials" edit_type:"Material"`
+	Sectors        concepts.Collection
+	Materials      concepts.Collection `editable:"Materials" edit_type:"Material"`
 	Player         *Player
-	Spawn          *math.Vector3 `editable:"Spawn" edit_type:"Vector"`
+	Spawn          *concepts.Vector3 `editable:"Spawn" edit_type:"Vector"`
 	EntitiesPaused bool
 }
 
@@ -29,15 +23,33 @@ func (m *Map) ClearLightmaps() {
 	}
 }
 
-func (m *Map) Deserialize(data map[string]interface{}) *Map {
+func (m *Map) Initialize() {
+	m.Spawn = &concepts.Vector3{}
+	m.Materials = make(concepts.Collection)
+	m.Sectors = make(concepts.Collection)
+	m.Player = &Player{}
+	m.Player.Initialize()
+}
+
+func (m *Map) Deserialize(data map[string]interface{}) {
+	m.Initialize()
 	m.Base.Deserialize(data)
 	if v, ok := data["EntitiesPaused"]; ok {
 		m.EntitiesPaused = v.(bool)
-	} else {
-		m.EntitiesPaused = false
+	}
+	if v, ok := data["SpawnX"]; ok {
+		m.Spawn.X = v.(float64)
+		m.Player.Pos.X = m.Spawn.X
+	}
+	if v, ok := data["SpawnY"]; ok {
+		m.Spawn.Y = v.(float64)
+		m.Player.Pos.Y = m.Spawn.Y
+	}
+	// Load materials first so sectors have access to them.
+	if v, ok := data["Materials"]; ok {
+		m.MapCollection(&m.Sectors, v, material.ValidMaterialTypes)
 	}
 	if v, ok := data["Sectors"]; ok {
-		concepts.DeSeArray(&m.Sectors, v, ValidSectorTypes)
+		m.MapCollection(&m.Sectors, v, ValidSectorTypes)
 	}
-	return m
 }

@@ -1,10 +1,22 @@
 package logic
 
-import "github.com/tlyakhov/gofoom/constants"
+import (
+	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/mapping"
+)
+
+type Sector mapping.Sector
+
+type IActor interface {
+	OnEnter(e *Entity)
+	OnExit(e *Entity)
+	ActOnEntity(e *Entity)
+}
 
 func (s *Sector) OnEnter(e *Entity) {
-	if s.FloorTarget == nil && e.Pos.Z <= e.Sector.BottomZ {
-		e.Pos.Z = e.Sector.BottomZ
+	if s.FloorTarget == nil && e.Pos.Z <= e.Sector.(*mapping.Sector).BottomZ {
+		e.Pos.Z = e.Sector.(*mapping.Sector).BottomZ
 	}
 }
 
@@ -14,58 +26,42 @@ func (s *Sector) OnExit(e *Entity) {
 func (s *Sector) Collide(e *Entity) {
 	entityTop := e.Pos.Z + e.Height
 
-	if ms.FloorTarget != nil && entityTop < ms.BottomZ {
-		e.Sector.OnExit(e)
-		e.Sector = ms.FloorTarget
-		e.Sector.OnEnter(e)
-		e.Pos.Z = e.Sector.TopZ - e.Height - 1.0
-	} else if ms.FloorTarget == nil && e.Pos.Z <= ms.BottomZ {
+	esector := concepts.Local(e.Sector, TypeMap).(*Sector)
+
+	if s.FloorTarget != nil && entityTop < s.BottomZ {
+		esector.OnExit(e)
+		e.Sector = s.FloorTarget
+		esector.OnEnter(e)
+		e.Pos.Z = esector.TopZ - e.Height - 1.0
+	} else if s.FloorTarget == nil && e.Pos.Z <= s.BottomZ {
 		e.Vel.Z = 0
-		e.Pos.Z = ms.BottomZ
+		e.Pos.Z = s.BottomZ
 	}
 
-	if ms.CeilTarget != nil && entityTop > ms.TopZ {
-		e.Sector.OnExit(e)
-		e.Sector = ms.CeilTarget
-		e.Sector.OnEnter(e)
-		e.Pos.Z = e.Sector.BottomZ - e.Height + 1.0
-	} else if ms.CeilTarget == nil && entityTop > ms.TopZ {
+	if s.CeilTarget != nil && entityTop > s.TopZ {
+		esector.OnExit(e)
+		e.Sector = s.CeilTarget
+		esector.OnEnter(e)
+		e.Pos.Z = esector.BottomZ - e.Height + 1.0
+	} else if s.CeilTarget == nil && entityTop > s.TopZ {
 		e.Vel.Z = 0
-		e.Pos.Z = ms.TopZ - e.Height - 1.0
+		e.Pos.Z = s.TopZ - e.Height - 1.0
 	}
 }
 
-func (s *BasicSector) Collide(e Entity) {
-	ms := s.Sector()
-	me := e.MapEntity()
-	ms.Collide(me)
-
-	if ae, ok := e.(*AliveEntity); ok && s.Hurt != 0 && ae.HurtTime == 0 {
-		ae.Hurt(s.Hurt)
-	}
-
-	if ms.FloorMaterial != nil && me.Pos.Z <= ms.BottomZ {
-		ms.FloorMaterial.ActOnEntity(e)
-	}
-	if ms.CeilMaterial != nil && me.Pos.Z >= ms.TopZ {
-		ms.CeilMaterial.ActOnEntity(e)
-	}
-}
-
-func (ms *Sector) ActOnEntity(e *Entity) {
-	if e.Sector == nil || e.Sector.ID != ms.ID {
+func (s *Sector) ActOnEntity(e *Entity) {
+	if e.Sector == nil || e.Sector.(*concepts.Base).ID != s.ID {
 		return
 	}
 
-	if e.ID == ms.Map.Player.ID {
+	if e.ID == s.Map.Player.ID {
 		e.Vel.X = 0
 		e.Vel.Y = 0
 	}
 
 	e.Vel.Z -= constants.Gravity
 
-	ms.Collide(e)
-
+	s.Collide(e)
 }
 
 func (s *Sector) Frame(lastFrameTime float64) {

@@ -5,7 +5,6 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	fmath "github.com/tlyakhov/gofoom/math"
 )
 
 const (
@@ -13,17 +12,18 @@ const (
 )
 
 type Segment struct {
-	concepts.Base
+	*concepts.Base
 
-	A, B            *fmath.Vector2
-	LoMaterial      concepts.ISerializable
-	MidMaterial     concepts.ISerializable
-	HiMaterial      concepts.ISerializable
-	LoBehavior      MaterialBehavior
-	Midhavior       MaterialBehavior
-	HiBehavior      MaterialBehavior
+	A, B        *concepts.Vector2
+	LoMaterial  concepts.ISerializable
+	MidMaterial concepts.ISerializable
+	HiMaterial  concepts.ISerializable
+	LoBehavior  MaterialBehavior
+	MidBehavior MaterialBehavior
+	HiBehavior  MaterialBehavior
+
 	Length          float64
-	Normal          *fmath.Vector2
+	Normal          *concepts.Vector2
 	Sector          *Sector
 	AdjacentSector  *Sector
 	AdjacentSegment *Segment
@@ -33,9 +33,9 @@ type Segment struct {
 	Flags           int
 }
 
-func (s *Segment) Update() {
+func (s *Segment) Recalculate() {
 	s.Length = s.B.Sub(s.A).Length()
-	s.Normal = &fmath.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
+	s.Normal = &concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
 	if s.Sector != nil {
 		s.LightmapWidth = uint(s.Length/constants.LightGrid) + 2
 		s.LightmapHeight = uint((s.Sector.TopZ-s.Sector.BottomZ)/constants.LightGrid) + 2
@@ -60,7 +60,7 @@ func (s *Segment) Matches(s2 *Segment) bool {
 	return d1 || d2
 }
 
-func (s1 *Segment) Intersect(s2A, s2B *fmath.Vector2) *fmath.Vector2 {
+func (s1 *Segment) Intersect(s2A, s2B *concepts.Vector2) *concepts.Vector2 {
 	s1dx := s1.B.X - s1.A.X
 	s1dy := s1.B.Y - s1.A.Y
 	s2dx := s2B.X - s2A.X
@@ -85,8 +85,8 @@ func (s1 *Segment) Intersect(s2A, s2B *fmath.Vector2) *fmath.Vector2 {
 	if r > 1.0+constants.IntersectEpsilon || s > 1.0+constants.IntersectEpsilon {
 		return nil
 	}
-	r = fmath.Clamp(r, 0.0, 1.0)
-	return &fmath.Vector2{s1.A.X + r*s1dx, s1.A.Y + r*s1dy}
+	r = concepts.Clamp(r, 0.0, 1.0)
+	return &concepts.Vector2{s1.A.X + r*s1dx, s1.A.Y + r*s1dy}
 }
 
 func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
@@ -139,7 +139,7 @@ func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
 	return minY <= maxY // If Y-projections do not intersect return false
 }
 
-func (s *Segment) DistanceToPoint2(p *fmath.Vector2) float64 {
+func (s *Segment) DistanceToPoint2(p *concepts.Vector2) float64 {
 	l2 := s.A.Dist2(s.B)
 	if l2 == 0 {
 		return p.Dist2(s.A)
@@ -154,11 +154,11 @@ func (s *Segment) DistanceToPoint2(p *fmath.Vector2) float64 {
 	return p.Dist2(s.A.Add(s.B.Sub(s.A).Mul(t)))
 }
 
-func (s *Segment) DistanceToPoint(p *fmath.Vector2) float64 {
+func (s *Segment) DistanceToPoint(p *concepts.Vector2) float64 {
 	return math.Sqrt(s.DistanceToPoint2(p))
 }
 
-func (s *Segment) ClosestToPoint(p *fmath.Vector2) *fmath.Vector2 {
+func (s *Segment) ClosestToPoint(p *concepts.Vector2) *concepts.Vector2 {
 	delta := s.B.Sub(s.A)
 	dist2 := delta.X*delta.X + delta.Y*delta.Y
 	if dist2 == 0 {
@@ -176,19 +176,71 @@ func (s *Segment) ClosestToPoint(p *fmath.Vector2) *fmath.Vector2 {
 	return s.A.Add(delta.Mul(t))
 }
 
-func (s *Segment) WhichSide(p *fmath.Vector2) float64 {
+func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 	return s.Normal.Dot(p.Sub(s.A))
 }
 
-func (s *Segment) UVToWorld(u, v float64) *fmath.Vector3 {
+func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
 	alongSegment := s.A.Add(s.B.Sub(s.A).Mul(u))
-	return &fmath.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.BottomZ + (1.0-v)*s.Sector.TopZ}
+	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.BottomZ + (1.0-v)*s.Sector.TopZ}
 }
 
-func (s *Segment) LMAddressToWorld(mapIndex uint) *fmath.Vector3 {
+func (s *Segment) LMAddressToWorld(mapIndex uint) *concepts.Vector3 {
 	lu := ((mapIndex / 3) % s.LightmapWidth) - 1
 	lv := ((mapIndex / 3) / s.LightmapWidth) - 1
 	u := float64(lu) / float64(s.LightmapWidth-2)
 	v := float64(lv) / float64(s.LightmapHeight-2)
 	return s.UVToWorld(u, v)
+}
+
+func (s *Segment) SetParent(parent interface{}) {
+	if sector, ok := parent.(*Sector); ok {
+		s.Sector = sector
+	} else {
+		panic("Tried mapping.Segment.SetParent with a parameter that wasn't a *mapping.Sector")
+	}
+}
+
+func (s *Segment) Deserialize(data map[string]interface{}) {
+	s.Base.Deserialize(data)
+	if v, ok := data["X"]; ok {
+		s.A.X = v.(float64)
+	}
+	if v, ok := data["Y"]; ok {
+		s.A.Y = v.(float64)
+	}
+	if v, ok := data["LoMaterial"]; ok {
+		s.LoMaterial = s.Sector.Map.Materials[v.(string)]
+	}
+	if v, ok := data["MidMaterial"]; ok {
+		s.MidMaterial = s.Sector.Map.Materials[v.(string)]
+	}
+	if v, ok := data["HiMaterial"]; ok {
+		s.HiMaterial = s.Sector.Map.Materials[v.(string)]
+	}
+	if v, ok := data["LoBehavior"]; ok {
+		mb, error := MaterialBehaviorString(v.(string))
+		if error == nil {
+			s.LoBehavior = mb
+		} else {
+			panic(error)
+		}
+	}
+	if v, ok := data["MidBehavior"]; ok {
+		mb, error := MaterialBehaviorString(v.(string))
+		if error == nil {
+			s.MidBehavior = mb
+		} else {
+			panic(error)
+		}
+	}
+	if v, ok := data["HiBehavior"]; ok {
+		mb, error := MaterialBehaviorString(v.(string))
+		if error == nil {
+			s.HiBehavior = mb
+		} else {
+			panic(error)
+		}
+	}
+	s.Recalculate()
 }

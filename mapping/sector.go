@@ -5,39 +5,33 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	fmath "github.com/tlyakhov/gofoom/math"
 )
-
-type IActor interface {
-	OnEnter(e *Entity)
-	OnExit(e *Entity)
-	ActOnEntity(e *Entity)
-}
 
 type Sector struct {
 	concepts.Base
 
-	Segments                      []*Segment
-	Entities                      map[string]concepts.ISerializable
-	Map                           *Map
-	BottomZ, TopZ                 float64
-	Min, Max, Center              *fmath.Vector3
+	Map                     *Map
+	Segments                []*Segment
+	Entities                concepts.Collection
+	BottomZ, TopZ           float64
+	FloorScale, CeilScale   float64
+	FloorTarget, CeilTarget concepts.ISerializable
+	FloorMaterial           concepts.ISerializable
+	CeilMaterial            concepts.ISerializable
+
+	Min, Max, Center              *concepts.Vector3
 	LightmapWidth, LightmapHeight uint
 	FloorLightmap, CeilLightmap   []float64
-	FloorScale, CeilScale         float64
-	FloorTarget, CeilTarget       *Sector
-	FloorMaterial                 concepts.ISerializable
-	CeilMaterial                  concepts.ISerializable
 	PVSEntity                     map[string]Sector
 	// RoomImpulse
 	// PVS
 	// PVSLights []
 }
 
-func (ms *Sector) Update() {
-	ms.Center = &fmath.Vector3{0, 0, (ms.TopZ + ms.BottomZ) / 2}
-	ms.Min = &fmath.Vector3{math.Inf(1), math.Inf(1), ms.BottomZ}
-	ms.Max = &fmath.Vector3{math.Inf(-1), math.Inf(-1), ms.TopZ}
+func (ms *Sector) Recalculate() {
+	ms.Center = &concepts.Vector3{0, 0, (ms.TopZ + ms.BottomZ) / 2}
+	ms.Min = &concepts.Vector3{math.Inf(1), math.Inf(1), ms.BottomZ}
+	ms.Max = &concepts.Vector3{math.Inf(-1), math.Inf(-1), ms.TopZ}
 
 	w := ms.Winding()
 
@@ -59,7 +53,7 @@ func (ms *Sector) Update() {
 		}
 		segment.Sector = ms
 		segment.B = next.A
-		segment.Update()
+		segment.Recalculate()
 
 		if !w {
 			segment.Normal = segment.Normal.Mul(-1)
@@ -99,7 +93,7 @@ func (ms *Sector) ClearLightmaps() {
 	// ms.UpdateEntityPVS()
 }
 
-func (ms *Sector) IsPointInside2D(p *fmath.Vector2) bool {
+func (ms *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	inside := false
 	flag1 := (p.Y >= ms.Segments[0].A.Y)
 
@@ -123,4 +117,50 @@ func (ms *Sector) Winding() bool {
 		sum += (next.A.X - segment.A.X) * (segment.A.Y + next.A.Y)
 	}
 	return sum < 0
+}
+
+func (s *Sector) SetParent(parent interface{}) {
+	if m, ok := parent.(*Map); ok {
+		s.Map = m
+	} else {
+		panic("Tried mapping.Sector.SetParent with a parameter that wasn't a *mapping.Map")
+	}
+}
+
+func (s *Sector) Initialize() {
+	s.Segments = make([]*Segment, 0)
+	s.Entities = make(concepts.Collection)
+	s.BottomZ = 0.0
+	s.TopZ = 64.0
+	s.FloorScale = 64.0
+	s.CeilScale = 64.0
+}
+
+func (s *Sector) Deserialize(data map[string]interface{}) {
+	s.Base.Deserialize(data)
+	if v, ok := data["TopZ"]; ok {
+		s.TopZ = v.(float64)
+	}
+	if v, ok := data["BottomZ"]; ok {
+		s.BottomZ = v.(float64)
+	}
+	if v, ok := data["FloorScale"]; ok {
+		s.FloorScale = v.(float64)
+	}
+	if v, ok := data["CeilScale"]; ok {
+		s.CeilScale = v.(float64)
+	}
+	if v, ok := data["FloorMaterial"]; ok {
+		s.FloorMaterial = s.Map.Materials[v.(string)]
+	}
+	if v, ok := data["CeilMaterial"]; ok {
+		s.CeilMaterial = s.Map.Materials[v.(string)]
+	}
+	if v, ok := data["Segments"]; ok {
+		s.MapArray(&s.Segments, v)
+	}
+	if v, ok := data["Entities"]; ok {
+		s.MapCollection(&s.Entities, v, ValidEntityTypes)
+	}
+	s.Recalculate()
 }

@@ -12,9 +12,9 @@ import (
 
 type Solid struct {
 	concepts.Base
-	diffuse color.NRGBA
+	Diffuse color.NRGBA
 }
 
-func (s *Solid) Sample(x, y float64, scaledHeight uint) color.NRGBA {
-	return s.diffuse
+func (s *Solid) Sample(x, y float64, scale float64) color.NRGBA {
+	return s.Diffuse
 }

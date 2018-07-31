@@ -4,12 +4,12 @@ import (
 	"image/color"
 	"math"
 
+	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping"
-	"github.com/tlyakhov/gofoom/math"
 )
 
 type Ray struct {
-	Start, End *math.Vector2
+	Start, End *concepts.Vector2
 }
 
 type Slice struct {
@@ -17,11 +17,12 @@ type Slice struct {
 	RenderTarget       []uint8
 	X, Y, YStart, YEnd int
 	TargetX            int
-	Sector             *mapping.MapSector
-	Segment            *mapping.MapSegment
-	Ray                Ray
+	Map                *mapping.Map
+	Sector             *mapping.Sector
+	Segment            *mapping.Segment
+	Ray                *Ray
 	RayIndex           int
-	Intersection       *math.Vector3
+	Intersection       *concepts.Vector3
 	Distance           float64
 	U                  float64
 	Depth              int
@@ -44,8 +45,8 @@ func (s *Slice) CalcScreen() {
 
 	s.ScreenStart = s.ScreenHeight/2 - int(s.ProjHeightTop)
 	s.ScreenEnd = s.ScreenHeight/2 - int(s.ProjHeightBottom)
-	s.ClippedStart = math.Max(s.ScreenStart, s.YStart)
-	s.ClippedEnd = math.Min(s.ScreenEnd, s.YEnd)
+	s.ClippedStart = concepts.Max(s.ScreenStart, s.YStart)
+	s.ClippedEnd = concepts.Min(s.ScreenEnd, s.YEnd)
 }
 
 func (s *Slice) Write(screenIndex uint, color color.NRGBA) {
@@ -71,16 +72,17 @@ func (s *Slice) RenderMid() {
 
 		// var light = this.map.light(slice.intersection, segment.normal, slice.sector, slice.segment, slice.u, v, true);
 
-		if s.Segment.Midhavior == ScaleWidth || s.Segment.Midhavior == ScaleNone {
+		if s.Segment.MidBehavior == mapping.ScaleWidth || s.Segment.MidBehavior == mapping.ScaleNone {
 			v = (v*(s.Sector.TopZ-s.Sector.BottomZ) - s.Sector.TopZ) / 64.0
 		}
-		s.Write(screenIndex, s.Segment.MidMaterial.Sample(s, s.U, v, nil, uint(s.ScreenEnd-s.ScreenStart)))
-		s.zbuffer[screenIndex] = s.Distance
+		mat := concepts.Local(s.Segment.MidMaterial, typeMap).(ISampler)
+		s.Write(screenIndex, mat.Sample(s, s.U, v, nil, s.ProjectZ(1.0)))
+		s.ZBuffer[screenIndex] = s.Distance
 	}
 }
 
 func (s *Slice) RenderFloor() {
-	world := &math.Vector3{0, 0, s.Sector.BottomZ}
+	world := &concepts.Vector3{0, 0, s.Sector.BottomZ}
 
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
 		if s.Y-s.ScreenHeight/2 == 0 {
@@ -88,10 +90,10 @@ func (s *Slice) RenderFloor() {
 		}
 
 		distToFloor := (-s.Sector.BottomZ + s.CameraZ) * s.ViewFix[s.X] / float64(s.Y-s.ScreenHeight/2)
-		scaler := float64(s.Sector.FloorMaterial.Texture.Height) * s.Sector.FloorScale / distToFloor
+		scaler := s.Sector.FloorScale / distToFloor
 		screenIndex := uint(s.TargetX + s.Y*s.WorkerWidth)
 
-		if distToFloor >= s.zbuffer[screenIndex] {
+		if distToFloor >= s.ZBuffer[screenIndex] {
 			continue
 		}
 
@@ -111,13 +113,14 @@ func (s *Slice) RenderFloor() {
 
 		// var light = this.map.light(world, FLOOR_NORMAL, slice.sector, slice.segment, null, null, true);
 
-		s.Write(screenIndex, s.Sector.FloorMaterial.Sample(s, tx, ty, nil, uint(scaler)))
+		mat := concepts.Local(s.Sector.FloorMaterial, typeMap).(ISampler)
+		s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
 		s.ZBuffer[screenIndex] = distToFloor
 	}
 }
 
 func (s *Slice) RenderCeiling() {
-	world := &math.Vector3{0, 0, s.Sector.TopZ}
+	world := &concepts.Vector3{0, 0, s.Sector.TopZ}
 
 	for s.Y = s.YStart; s.Y < s.ClippedStart; s.Y++ {
 		if s.Y-s.ScreenHeight/2 == 0 {
@@ -125,10 +128,10 @@ func (s *Slice) RenderCeiling() {
 		}
 
 		distToCeil := (s.Sector.TopZ - s.CameraZ) * s.ViewFix[s.X] / float64(s.ScreenHeight/2-1-s.Y)
-		scaler := float64(s.Sector.CeilMaterial.Texture.Height) * s.Sector.CeilScale / distToCeil
+		scaler := s.Sector.CeilScale / distToCeil
 		screenIndex := uint(s.TargetX + s.Y*s.WorkerWidth)
 
-		if distToCeil >= s.zbuffer[screenIndex] {
+		if distToCeil >= s.ZBuffer[screenIndex] {
 			continue
 		}
 
@@ -143,7 +146,8 @@ func (s *Slice) RenderCeiling() {
 		ty = math.Abs(ty)
 		// var light = this.map.light(world, CEIL_NORMAL, slice.sector, slice.segment, null, null, true);
 
-		s.Write(screenIndex, s.Sector.CeilMaterial.Sample(s, tx, ty, nil, uint(scaler)))
+		mat := concepts.Local(s.Sector.FloorMaterial, typeMap).(ISampler)
+		s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
 		s.ZBuffer[screenIndex] = distToCeil
 	}
 }

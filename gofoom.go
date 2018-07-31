@@ -1,12 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"image"
+	"io/ioutil"
 
+	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/math"
-
-	"github.com/tlyakhov/gofoom/engine"
+	"github.com/tlyakhov/gofoom/logic"
+	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/render"
 
 	// "math"
 	// "math/rand"
@@ -18,6 +21,20 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 )
+
+func loadMap(filename string) *mapping.Map {
+	fileContents, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		panic(err)
+	}
+	var parsed interface{}
+	err = json.Unmarshal(fileContents, &parsed)
+	m := &mapping.Map{}
+	m.Initialize()
+	m.Deserialize(parsed.(map[string]interface{}))
+	return m
+}
 
 func run() {
 	cfg := pixelgl.WindowConfig{
@@ -39,10 +56,8 @@ func run() {
 	)
 
 	buffer := image.NewRGBA(image.Rect(0, 0, 1024, 768))
-
-	gameMap := engine.Map{}
-
-	renderer := engine.NewRenderer()
+	renderer := render.NewRenderer()
+	gameMap := loadMap("data/testMap.json")
 
 	last := time.Now()
 	for !win.Closed() {
@@ -51,30 +66,31 @@ func run() {
 
 		win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
+		player := concepts.Local(gameMap.Player, logic.TypeMap).(*logic.Player)
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
 		}
 		if win.Pressed(pixelgl.KeyW) {
-			gameMap.Player.Move(gameMap.Player.Angle, dt, 1.0)
+			player.Move(gameMap.Player.Angle, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyS) {
-			gameMap.Player.Move(gameMap.Player.Angle+180.0, dt, 1.0)
+			player.Move(gameMap.Player.Angle+180.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyQ) {
-			gameMap.Player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
+			player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyE) {
-			gameMap.Player.Move(gameMap.Player.Angle+90.0, dt, 1.0)
+			player.Move(gameMap.Player.Angle+90.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyQ) {
-			gameMap.Player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
+			player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyA) {
-			gameMap.Player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
-			gameMap.Player.Angle = math.NormalizeAngle(gameMap.Player.Angle)
+			player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
+			player.Angle = concepts.NormalizeAngle(player.Angle)
 		}
 		if win.Pressed(pixelgl.KeyD) {
-			gameMap.Player.Angle += constants.PlayerTurnSpeed * dt / 30.0
-			gameMap.Player.Angle = math.NormalizeAngle(gameMap.Player.Angle)
+			player.Angle += constants.PlayerTurnSpeed * dt / 30.0
+			player.Angle = concepts.NormalizeAngle(player.Angle)
 		}
 
 		renderer.Render(buffer.Pix)
