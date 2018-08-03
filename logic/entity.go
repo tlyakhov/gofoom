@@ -1,14 +1,20 @@
 package logic
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Entity mapping.Entity
+
+func init() {
+	registry.Instance().RegisterMapped(Entity{}, mapping.Entity{})
+}
 
 func (e *Entity) PushBack(segment *mapping.Segment) bool {
 	p2d := e.Pos.To2D()
@@ -58,7 +64,7 @@ func (e *Entity) Collide() []*mapping.Segment {
 		closestDistance2 := math.MaxFloat64
 
 		for _, item := range e.Map.Sectors {
-			sector := item.(*Sector)
+			sector := registry.Translate(item).(*Sector)
 			d2 := e.Pos.Dist2(sector.Center)
 
 			if closestSector == nil || d2 < closestDistance2 {
@@ -75,15 +81,16 @@ func (e *Entity) Collide() []*mapping.Segment {
 			e.Pos.Z = closestSector.Center.Z
 		}
 
-		e.Sector = closestSector
-		e.Sector.(*Sector).Entities[e.ID] = e
-		concepts.Local(e.Sector, TypeMap).(*Sector).OnEnter(e)
+		fmt.Printf("Collide: %v\n", e.ID)
+		e.Sector = registry.Translate(closestSector).(*mapping.Sector) // Convert back to mapping.Sector
+		closestSector.Entities[e.ID] = e
+		closestSector.OnEnter(e)
 		// Don't mark as collided because this is probably an initialization.
 	}
 
 	// Case 3 & 4
 	// See if we need to push back into the current sector.
-	for _, segment := range e.Sector.(*Sector).Segments {
+	for _, segment := range e.Sector.(*mapping.Sector).Segments {
 		adj := segment.AdjacentSector
 		if adj != nil {
 			// We can still collide with a portal if the heights don't match.
@@ -100,12 +107,11 @@ func (e *Entity) Collide() []*mapping.Segment {
 
 	ePosition2D := e.Pos.To2D()
 	inSector := e.Sector.(*mapping.Sector).IsPointInside2D(ePosition2D)
-
 	if !inSector {
 		// Cases 5 & 6
 
 		// Exit the current sector.
-		concepts.Local(e.Sector, TypeMap).(*Sector).OnExit(e)
+		registry.Translate(e.Sector).(*Sector).OnExit(e)
 		delete(e.Sector.(*Sector).Entities, e.ID)
 		e.Sector = nil
 
@@ -120,7 +126,7 @@ func (e *Entity) Collide() []*mapping.Segment {
 					e.Pos.Z = sector.BottomZ
 				}
 				e.Sector.(*Sector).Entities[e.ID] = e
-				concepts.Local(e.Sector, TypeMap).(*Sector).OnEnter(e)
+				registry.Translate(e.Sector).(*Sector).OnEnter(e)
 				break
 			}
 		}

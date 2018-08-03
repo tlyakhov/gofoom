@@ -5,14 +5,19 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/registry"
 
 	"github.com/tlyakhov/gofoom/constants"
 )
 
 type Player mapping.Player
 
+func init() {
+	registry.Instance().RegisterMapped(Player{}, mapping.Player{})
+}
+
 func (p *Player) Frame(lastFrameTime float64) {
-	concepts.Local(p.Entity, TypeMap).(*Entity).Frame(lastFrameTime)
+	registry.Translate(p.Entity).(*Entity).Frame(lastFrameTime)
 
 	if p.Sector == nil {
 		return
@@ -37,7 +42,7 @@ func (p *Player) Frame(lastFrameTime float64) {
 }
 
 func (p *Player) Hurt(amount float64) {
-	concepts.Local(p.Entity, TypeMap).(*AliveEntity).Hurt(amount)
+	registry.Translate(p.Entity).(*AliveEntity).Hurt(amount)
 	p.HurtTime = constants.PlayerHurtTime
 }
 

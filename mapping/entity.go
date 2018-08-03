@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/registry"
 
 	"github.com/tlyakhov/gofoom/concepts"
 )
@@ -23,7 +24,13 @@ type Entity struct {
 	Map               *Map
 }
 
+func init() {
+	registry.Instance().Register(Entity{})
+}
+
 func (e *Entity) Initialize() {
+	e.Base = &concepts.Base{}
+	e.Base.Initialize()
 	e.Pos = &concepts.Vector3{}
 	e.Vel = &concepts.Vector3{}
 	e.BoundingRadius = 10

@@ -5,6 +5,7 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Sector struct {
@@ -26,6 +27,10 @@ type Sector struct {
 	// RoomImpulse
 	// PVS
 	// PVSLights []
+}
+
+func init() {
+	registry.Instance().Register(Sector{})
 }
 
 func (ms *Sector) Recalculate() {
@@ -128,6 +133,7 @@ func (s *Sector) SetParent(parent interface{}) {
 }
 
 func (s *Sector) Initialize() {
+	s.Base.Initialize()
 	s.Segments = make([]*Segment, 0)
 	s.Entities = make(concepts.Collection)
 	s.BottomZ = 0.0
@@ -137,6 +143,7 @@ func (s *Sector) Initialize() {
 }
 
 func (s *Sector) Deserialize(data map[string]interface{}) {
+	s.Initialize()
 	s.Base.Deserialize(data)
 	if v, ok := data["TopZ"]; ok {
 		s.TopZ = v.(float64)
@@ -157,10 +164,10 @@ func (s *Sector) Deserialize(data map[string]interface{}) {
 		s.CeilMaterial = s.Map.Materials[v.(string)]
 	}
 	if v, ok := data["Segments"]; ok {
-		s.MapArray(&s.Segments, v)
+		concepts.MapArray(s, &s.Segments, v)
 	}
 	if v, ok := data["Entities"]; ok {
-		s.MapCollection(&s.Entities, v, ValidEntityTypes)
+		concepts.MapCollection(s, &s.Entities, v)
 	}
 	s.Recalculate()
 }

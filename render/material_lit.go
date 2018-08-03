@@ -5,9 +5,14 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping/material"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Lit material.Lit
+
+func init() {
+	registry.Instance().RegisterMapped(Lit{}, material.Lit{})
+}
 
 func (m *Lit) Sample(slice *Slice, u, v float64, light *concepts.Vector3, scale float64) color.NRGBA {
 	sum := m.Diffuse

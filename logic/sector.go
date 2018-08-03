@@ -4,9 +4,14 @@ import (
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Sector mapping.Sector
+
+func init() {
+	registry.Instance().RegisterMapped(Sector{}, mapping.Sector{})
+}
 
 type IActor interface {
 	OnEnter(e *Entity)
@@ -15,8 +20,9 @@ type IActor interface {
 }
 
 func (s *Sector) OnEnter(e *Entity) {
-	if s.FloorTarget == nil && e.Pos.Z <= e.Sector.(*mapping.Sector).BottomZ {
-		e.Pos.Z = e.Sector.(*mapping.Sector).BottomZ
+	eSector := registry.Translate(e.Sector).(*Sector)
+	if s.FloorTarget == nil && e.Pos.Z <= eSector.BottomZ {
+		e.Pos.Z = eSector.BottomZ
 	}
 }
 
@@ -26,7 +32,7 @@ func (s *Sector) OnExit(e *Entity) {
 func (s *Sector) Collide(e *Entity) {
 	entityTop := e.Pos.Z + e.Height
 
-	esector := concepts.Local(e.Sector, TypeMap).(*Sector)
+	esector := registry.Translate(e.Sector).(*Sector)
 
 	if s.FloorTarget != nil && entityTop < s.BottomZ {
 		esector.OnExit(e)

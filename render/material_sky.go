@@ -5,9 +5,14 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping/material"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Sky material.Sky
+
+func init() {
+	registry.Instance().RegisterMapped(Sky{}, material.Sky{})
+}
 
 func (m *Sky) Sample(slice *Slice, u, v float64, light *concepts.Vector3, scale float64) color.NRGBA {
 	v = float64(slice.Y) / (float64(slice.ScreenHeight) - 1)

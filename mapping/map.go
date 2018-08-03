@@ -1,8 +1,10 @@
 package mapping
 
 import (
+	"fmt"
+
 	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/mapping/material"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Map struct {
@@ -13,6 +15,10 @@ type Map struct {
 	Player         *Player
 	Spawn          *concepts.Vector3 `editable:"Spawn" edit_type:"Vector"`
 	EntitiesPaused bool
+}
+
+func init() {
+	registry.Instance().Register(Map{})
 }
 
 func (m *Map) ClearLightmaps() {
@@ -29,6 +35,7 @@ func (m *Map) Initialize() {
 	m.Sectors = make(concepts.Collection)
 	m.Player = &Player{}
 	m.Player.Initialize()
+	m.Player.Map = m
 }
 
 func (m *Map) Deserialize(data map[string]interface{}) {
@@ -47,9 +54,10 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 	}
 	// Load materials first so sectors have access to them.
 	if v, ok := data["Materials"]; ok {
-		m.MapCollection(&m.Sectors, v, material.ValidMaterialTypes)
+		concepts.MapCollection(m, &m.Materials, v)
+		fmt.Printf("Materials: %v\n", m.Materials)
 	}
 	if v, ok := data["Sectors"]; ok {
-		m.MapCollection(&m.Sectors, v, ValidSectorTypes)
+		concepts.MapCollection(m, &m.Sectors, v)
 	}
 }

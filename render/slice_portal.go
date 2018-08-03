@@ -3,6 +3,7 @@ package render
 import (
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type SlicePortal struct {
@@ -46,7 +47,7 @@ func (slice *SlicePortal) RenderHigh() {
 		if slice.AdjSegment.HiBehavior == mapping.ScaleWidth || slice.AdjSegment.HiBehavior == mapping.ScaleNone {
 			v = (v*(slice.Adj.TopZ-slice.Sector.TopZ) - slice.Adj.TopZ) / 64.0
 		}
-		mat := concepts.Local(slice.Segment.HiMaterial, typeMap).(ISampler)
+		mat := registry.Translate(slice.Segment.HiMaterial).(ISampler)
 		slice.Write(screenIndex, mat.Sample(slice.Slice, slice.U, v, nil, slice.ProjectZ(1.0)))
 		slice.ZBuffer[screenIndex] = slice.Distance
 	}
@@ -68,7 +69,7 @@ func (slice *SlicePortal) RenderLow() {
 			v = (v*(slice.Sector.BottomZ-slice.Adj.BottomZ) - slice.Sector.BottomZ) / 64.0
 		}
 
-		mat := concepts.Local(slice.Segment.LoMaterial, typeMap).(ISampler)
+		mat := registry.Translate(slice.Segment.LoMaterial).(ISampler)
 		slice.Write(screenIndex, mat.Sample(slice.Slice, slice.U, v, nil, slice.ProjectZ(1.0)))
 		slice.ZBuffer[screenIndex] = slice.Distance
 	}

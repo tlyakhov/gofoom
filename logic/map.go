@@ -1,14 +1,18 @@
 package logic
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Map mapping.Map
 
+func init() {
+	registry.Instance().RegisterMapped(Map{}, mapping.Map{})
+}
+
 func (m *Map) Frame(lastFrameTime float64) {
-	concepts.Local(m.Player, TypeMap).(*Player).Frame(lastFrameTime)
+	registry.Translate(m.Player).(*Player).Frame(lastFrameTime)
 
 	for _, item := range m.Sectors {
 		sector := item.(*mapping.Sector)
@@ -23,6 +27,6 @@ func (m *Map) Frame(lastFrameTime float64) {
 				//pvs.ActOnEntity(e)
 			}
 		}
-		concepts.Local(sector, TypeMap).(*Sector).Frame(lastFrameTime)
+		registry.Translate(sector).(*Sector).Frame(lastFrameTime)
 	}
 }

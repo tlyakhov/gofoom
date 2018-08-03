@@ -111,6 +111,7 @@ func (r *Renderer) Render(buffer []uint8) {
 	xStart := 0
 	xEnd := xStart + r.WorkerWidth
 
+	fmt.Printf("%v\n", r.Map.Player.Angle)
 	for x := xStart; x < xEnd; x++ {
 		// Reset the z-buffer to maximum viewing distance.
 		for i := 0; i < r.ScreenHeight; i++ {
@@ -124,6 +125,7 @@ func (r *Renderer) Render(buffer []uint8) {
 		// Initialize a slice...
 		slice := &Slice{
 			Config:       r.Config,
+			Map:          r.Map,
 			RenderTarget: buffer,
 			X:            x,
 			TargetX:      x - xStart,
