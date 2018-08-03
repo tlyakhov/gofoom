@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type mipMap struct {
@@ -25,6 +26,10 @@ type Image struct {
 	Data            *image.NRGBA
 	MipMaps         map[uint]*mipMap
 	SmallestMipMap  *mipMap
+}
+
+func init() {
+	registry.Instance().Register(Image{})
 }
 
 // Load a texture from a file (pre-processing mipmaps if set)

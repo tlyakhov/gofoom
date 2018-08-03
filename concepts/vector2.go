@@ -75,3 +75,13 @@ func (v *Vector2) Clamp(min, max float64) *Vector2 {
 func (v *Vector2) To3D() *Vector3 {
 	return &Vector3{v.X, v.Y, 0}
 }
+
+// Deserialize assigns this vector's fields from a parsed JSON map.
+func (vec *Vector2) Deserialize(data map[string]interface{}) {
+	if v, ok := data["X"]; ok {
+		vec.X = v.(float64)
+	}
+	if v, ok := data["Y"]; ok {
+		vec.Y = v.(float64)
+	}
+}

@@ -2,6 +2,7 @@ package mapping
 
 import (
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Player struct {
@@ -11,6 +12,10 @@ type Player struct {
 	Standing  bool
 	Crouching bool
 	Inventory []Entity
+}
+
+func init() {
+	registry.Instance().Register(Player{})
 }
 
 func (p *Player) Initialize() {

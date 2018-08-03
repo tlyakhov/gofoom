@@ -1,9 +1,11 @@
 package concepts
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/rs/xid"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Base struct {
@@ -19,6 +21,10 @@ func (b *Base) SetParent(parent interface{}) {
 }
 
 func (b *Base) Deserialize(data map[string]interface{}) {
+	if b == nil {
+		fmt.Printf("Error: attempting to deserialize nil *concepts.Base. Probably target type doesn't implement concepts.ISerializable.\n")
+		return
+	}
 	b.Initialize()
 	if v, ok := data["ID"]; ok {
 		b.ID = v.(string)
@@ -28,42 +34,76 @@ func (b *Base) Deserialize(data map[string]interface{}) {
 	}
 }
 
-func (b *Base) MapPolyStruct(data map[string]interface{}, valid map[string]interface{}) ISerializable {
+func MapPolyStruct(parent interface{}, data map[string]interface{}) ISerializable {
+	typeMap := registry.Instance().All
 	typeName := data["Type"].(string)
-	if copied, ok := valid[typeName]; ok {
-		asserted := copied.(ISerializable)
-		asserted.SetParent(b)
+	fmt.Printf("MapPolyStruct - TypeName: %v\nMap: %v\n", typeName, typeMap)
+	if t, ok := typeMap[typeName]; ok {
+		created := reflect.New(t).Interface()
+		fmt.Printf("MapPolyStruct - created: %v\n", reflect.ValueOf(created).Type())
+		asserted := created.(ISerializable)
+		fmt.Printf("MapPolyStruct - asserted: %v\n", reflect.ValueOf(asserted).Type())
+		asserted.SetParent(parent)
 		asserted.Deserialize(data)
 		return asserted
 	}
+	fmt.Printf("Warning: attempted to deserialize unknown polymorphic type: %v (onto a field of %v)\n", typeName, parent)
 	return nil
 }
 
-func (b *Base) MapPolyArray(target *[]ISerializable, data interface{}, valid map[string]interface{}) {
+func MapPolyArray(parent interface{}, target *[]ISerializable, data interface{}) {
 	*target = make([]ISerializable, 0)
 	for _, child := range data.([]map[string]interface{}) {
-		*target = append(*target, b.MapPolyStruct(child, valid))
+		item := MapPolyStruct(parent, child)
+		if item == nil {
+			continue
+		}
+		*target = append(*target, item)
 	}
 }
 
-func (b *Base) MapArray(arrayPtr interface{}, data interface{}) {
+func MapArray(parent interface{}, arrayPtr interface{}, data interface{}) {
 	valuePtr := reflect.ValueOf(arrayPtr)
 	arrayValue := valuePtr.Elem()
 
 	itemType := reflect.TypeOf(arrayPtr).Elem().Elem()
-	arrayValue.Set(reflect.Zero(valuePtr.Type()))
-	for _, child := range data.([]map[string]interface{}) {
-		item := reflect.New(itemType).Interface().(ISerializable)
-		item.SetParent(b)
-		item.Deserialize(child)
+	arrayValue.Set(reflect.Zero(arrayValue.Type()))
+	for _, child := range data.([]interface{}) {
+		item := reflect.New(itemType.Elem()).Interface().(ISerializable)
+		item.SetParent(parent)
+		item.Deserialize(child.(map[string]interface{}))
 		arrayValue.Set(reflect.Append(arrayValue, reflect.ValueOf(item)))
 	}
 }
 
-func (b *Base) MapCollection(target *Collection, data interface{}, valid map[string]interface{}) {
+func MapCollection(parent interface{}, target *Collection, data interface{}) {
 	*target = make(Collection, 0)
 	for _, child := range data.([]interface{}) {
-		item := b.MapPolyStruct(child.(map[string]interface{}), valid)
-		(*target)[item.(*Base).ID] = item
+		item := MapPolyStruct(parent, child.(map[string]interface{}))
+		if item == nil {
+			continue
+		}
+		itemBase := ConvertOrCast(item, reflect.TypeOf(&Base{})).(*Base)
+		(*target)[itemBase.ID] = item
 	}
+}
+
+func ConvertOrCast(source ISerializable, target reflect.Type) interface{} {
+	v := reflect.ValueOf(source)
+	if v.Type() == target {
+		return source
+	}
+	name := target.Name()
+	if name == "" {
+		name = target.Elem().Name()
+	}
+	// Try to get an embedded field...
+	embedded := v.Elem().FieldByName(name)
+	fmt.Printf("Embedded: %v\n", name)
+	if embedded.Type() == target {
+		return embedded.Interface()
+	} else if reflect.PtrTo(embedded.Type()) == target {
+		return embedded.Addr().Interface()
+	}
+	return nil
 }

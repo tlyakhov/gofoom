@@ -9,6 +9,7 @@ import (
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/logic"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/registry"
 	"github.com/tlyakhov/gofoom/render"
 
 	// "math"
@@ -58,15 +59,18 @@ func run() {
 	buffer := image.NewRGBA(image.Rect(0, 0, 1024, 768))
 	renderer := render.NewRenderer()
 	gameMap := loadMap("data/testMap.json")
+	player := registry.Translate(gameMap.Player).(*logic.Player)
+	registry.Translate(&player.Entity).(*logic.Entity).Collide()
+	renderer.Map = gameMap
 
 	last := time.Now()
 	for !win.Closed() {
-		dt := time.Since(last).Seconds()
+		dt := time.Since(last).Seconds() * 1000
 		last = time.Now()
 
 		win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
-		player := concepts.Local(gameMap.Player, logic.TypeMap).(*logic.Player)
+		player := registry.Translate(gameMap.Player).(*logic.Player)
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
 		}
 		if win.Pressed(pixelgl.KeyW) {
@@ -94,6 +98,7 @@ func run() {
 		}
 
 		renderer.Render(buffer.Pix)
+		registry.Translate(gameMap).(*logic.Map).Frame(dt)
 
 		canvas.SetPixels(buffer.Pix)
 		canvas.Draw(win, mat)

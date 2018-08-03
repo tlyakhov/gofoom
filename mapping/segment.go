@@ -5,6 +5,7 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 const (
@@ -12,7 +13,7 @@ const (
 )
 
 type Segment struct {
-	*concepts.Base
+	concepts.Base
 
 	A, B        *concepts.Vector2
 	LoMaterial  concepts.ISerializable
@@ -31,6 +32,17 @@ type Segment struct {
 	LightmapWidth   uint
 	LightmapHeight  uint
 	Flags           int
+}
+
+func init() {
+	registry.Instance().Register(Segment{})
+}
+
+func (s *Segment) Initialize() {
+	s.Base.Initialize()
+	s.A = &concepts.Vector2{}
+	s.B = &concepts.Vector2{}
+	s.Normal = &concepts.Vector2{}
 }
 
 func (s *Segment) Recalculate() {
@@ -202,6 +214,7 @@ func (s *Segment) SetParent(parent interface{}) {
 }
 
 func (s *Segment) Deserialize(data map[string]interface{}) {
+	s.Initialize()
 	s.Base.Deserialize(data)
 	if v, ok := data["X"]; ok {
 		s.A.X = v.(float64)

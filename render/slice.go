@@ -6,6 +6,7 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Ray struct {
@@ -57,10 +58,6 @@ func (s *Slice) Write(screenIndex uint, color color.NRGBA) {
 }
 
 func (s *Slice) RenderMid() {
-	if s.Segment.MidMaterial == nil {
-		return
-	}
-
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint(s.TargetX + s.Y*s.WorkerWidth)
 
@@ -75,8 +72,11 @@ func (s *Slice) RenderMid() {
 		if s.Segment.MidBehavior == mapping.ScaleWidth || s.Segment.MidBehavior == mapping.ScaleNone {
 			v = (v*(s.Sector.TopZ-s.Sector.BottomZ) - s.Sector.TopZ) / 64.0
 		}
-		mat := concepts.Local(s.Segment.MidMaterial, typeMap).(ISampler)
-		s.Write(screenIndex, mat.Sample(s, s.U, v, nil, s.ProjectZ(1.0)))
+		//fmt.Printf("%v\n", screenIndex)
+		if s.Segment.MidMaterial != nil {
+			mat := registry.Translate(s.Segment.MidMaterial).(ISampler)
+			s.Write(screenIndex, mat.Sample(s, s.U, v, nil, s.ProjectZ(1.0)))
+		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }
@@ -113,8 +113,10 @@ func (s *Slice) RenderFloor() {
 
 		// var light = this.map.light(world, FLOOR_NORMAL, slice.sector, slice.segment, null, null, true);
 
-		mat := concepts.Local(s.Sector.FloorMaterial, typeMap).(ISampler)
-		s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
+		if s.Sector.FloorMaterial != nil {
+			mat := registry.Translate(s.Sector.FloorMaterial).(ISampler)
+			s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
+		}
 		s.ZBuffer[screenIndex] = distToFloor
 	}
 }
@@ -146,8 +148,10 @@ func (s *Slice) RenderCeiling() {
 		ty = math.Abs(ty)
 		// var light = this.map.light(world, CEIL_NORMAL, slice.sector, slice.segment, null, null, true);
 
-		mat := concepts.Local(s.Sector.FloorMaterial, typeMap).(ISampler)
-		s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
+		if s.Sector.FloorMaterial != nil {
+			mat := registry.Translate(s.Sector.FloorMaterial).(ISampler)
+			s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
+		}
 		s.ZBuffer[screenIndex] = distToCeil
 	}
 }

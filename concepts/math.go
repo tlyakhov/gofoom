@@ -1,6 +1,10 @@
 package concepts
 
-import "math"
+import (
+	"fmt"
+	"image/color"
+	"math"
+)
 
 const (
 	Deg2rad float64 = math.Pi / 180.0
@@ -68,4 +72,24 @@ func NormalizeAngle(a float64) float64 {
 		a -= 360.0
 	}
 	return a
+}
+
+func ParseHexColor(hex string) (color.NRGBA, error) {
+	var r, g, b, factor uint8
+	var n int
+	var err error
+	if len(hex) == 4 {
+		n, err = fmt.Sscanf(hex, "#%1x%1x%1x", &r, &g, &b)
+		factor = 16
+	} else {
+		n, err = fmt.Sscanf(hex, "#%2x%2x%2x", &r, &g, &b)
+		factor = 1
+	}
+	if err != nil {
+		return color.NRGBA{}, err
+	}
+	if n != 3 {
+		return color.NRGBA{}, fmt.Errorf("color %v is not a hex-color", hex)
+	}
+	return color.NRGBA{r * factor, g * factor, b * factor, 255}, nil
 }

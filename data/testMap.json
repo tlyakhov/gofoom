@@ -3,11 +3,11 @@
     "SpawnY": 0,
     "Materials": [
         {
-            "Type": "mapping.LitSampled",
+            "Type": "material.LitSampled",
             "ID": "Default",
             "Texture": {
                 "Type": "texture.Solid",
-                "Diffuse": {"R": 1.0, "G": 0.0, "B": 1.0}
+                "Diffuse": "#F0F"
             }
         }
     ],
