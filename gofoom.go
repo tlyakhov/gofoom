@@ -2,8 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"image"
 	"io/ioutil"
+	"log"
+	"os"
+	"runtime/pprof"
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
@@ -23,6 +27,8 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
+var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
+
 func loadMap(filename string) *mapping.Map {
 	fileContents, err := ioutil.ReadFile(filename)
 
@@ -38,10 +44,18 @@ func loadMap(filename string) *mapping.Map {
 }
 
 func run() {
+	if *cpuProfile != "" {
+		f, err := os.Create(*cpuProfile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
 	cfg := pixelgl.WindowConfig{
 		Title:  "Foom",
-		Bounds: pixel.R(0, 0, 1024, 768),
-		VSync:  true,
+		Bounds: pixel.R(0, 0, 800, 600),
+		VSync:  false,
 	}
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
@@ -56,11 +70,15 @@ func run() {
 		mat = pixel.IM.Moved(win.Bounds().Center())
 	)
 
-	buffer := image.NewRGBA(image.Rect(0, 0, 1024, 768))
+	buffer := image.NewRGBA(image.Rect(0, 0, 800, 600))
 	renderer := render.NewRenderer()
+	renderer.ScreenWidth = 800
+	renderer.ScreenHeight = 600
+	renderer.WorkerWidth = 800
+	renderer.Initialize()
 	gameMap := loadMap("data/testMap.json")
-	player := registry.Translate(gameMap.Player).(*logic.Player)
-	registry.Translate(&player.Entity).(*logic.Entity).Collide()
+	player := registry.Translate(gameMap.Player, "logic").(*logic.Player)
+	registry.Translate(&player.Entity, "logic").(*logic.Entity).Collide()
 	renderer.Map = gameMap
 
 	last := time.Now()
@@ -70,7 +88,6 @@ func run() {
 
 		win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
-		player := registry.Translate(gameMap.Player).(*logic.Player)
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
 		}
 		if win.Pressed(pixelgl.KeyW) {
@@ -98,7 +115,7 @@ func run() {
 		}
 
 		renderer.Render(buffer.Pix)
-		registry.Translate(gameMap).(*logic.Map).Frame(dt)
+		registry.Translate(gameMap, "logic").(*logic.Map).Frame(dt)
 
 		canvas.SetPixels(buffer.Pix)
 		canvas.Draw(win, mat)
@@ -107,5 +124,7 @@ func run() {
 }
 
 func main() {
+	flag.Parse()
+
 	pixelgl.Run(run)
 }

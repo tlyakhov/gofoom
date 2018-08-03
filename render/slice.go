@@ -22,7 +22,9 @@ type Slice struct {
 	Sector             *mapping.Sector
 	Segment            *mapping.Segment
 	Ray                *Ray
-	RayIndex           int
+	Angle              float64
+	AngleCos           float64
+	AngleSin           float64
 	Intersection       *concepts.Vector3
 	Distance           float64
 	U                  float64
@@ -58,6 +60,11 @@ func (s *Slice) Write(screenIndex uint, color color.NRGBA) {
 }
 
 func (s *Slice) RenderMid() {
+	var mat ISampler = nil
+	if s.Segment.MidMaterial != nil {
+		mat = registry.Translate(s.Segment.MidMaterial, "render").(ISampler)
+	}
+
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint(s.TargetX + s.Y*s.WorkerWidth)
 
@@ -72,16 +79,26 @@ func (s *Slice) RenderMid() {
 		if s.Segment.MidBehavior == mapping.ScaleWidth || s.Segment.MidBehavior == mapping.ScaleNone {
 			v = (v*(s.Sector.TopZ-s.Sector.BottomZ) - s.Sector.TopZ) / 64.0
 		}
+
+		u := s.U
+		if s.Segment.MidBehavior == mapping.ScaleHeight || s.Segment.MidBehavior == mapping.ScaleNone {
+			u = u * s.Segment.Length / 64.0
+		}
+
 		//fmt.Printf("%v\n", screenIndex)
-		if s.Segment.MidMaterial != nil {
-			mat := registry.Translate(s.Segment.MidMaterial).(ISampler)
-			s.Write(screenIndex, mat.Sample(s, s.U, v, nil, s.ProjectZ(1.0)))
+		if mat != nil {
+			s.Write(screenIndex, mat.Sample(s, u, v, nil, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }
 
 func (s *Slice) RenderFloor() {
+	var mat ISampler = nil
+	if s.Sector.FloorMaterial != nil {
+		mat = registry.Translate(s.Sector.FloorMaterial, "render").(ISampler)
+	}
+
 	world := &concepts.Vector3{0, 0, s.Sector.BottomZ}
 
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
@@ -97,8 +114,8 @@ func (s *Slice) RenderFloor() {
 			continue
 		}
 
-		world.X = s.Map.Player.Pos.X + s.TrigTable[s.RayIndex].cos*distToFloor
-		world.Y = s.Map.Player.Pos.Y + s.TrigTable[s.RayIndex].sin*distToFloor
+		world.X = s.Map.Player.Pos.X + s.AngleCos*distToFloor
+		world.Y = s.Map.Player.Pos.Y + s.AngleSin*distToFloor
 
 		tx := world.X / s.Sector.FloorScale
 		tx -= math.Floor(tx)
@@ -113,8 +130,7 @@ func (s *Slice) RenderFloor() {
 
 		// var light = this.map.light(world, FLOOR_NORMAL, slice.sector, slice.segment, null, null, true);
 
-		if s.Sector.FloorMaterial != nil {
-			mat := registry.Translate(s.Sector.FloorMaterial).(ISampler)
+		if mat != nil {
 			s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor
@@ -122,6 +138,11 @@ func (s *Slice) RenderFloor() {
 }
 
 func (s *Slice) RenderCeiling() {
+	var mat ISampler = nil
+	if s.Sector.CeilMaterial != nil {
+		mat = registry.Translate(s.Sector.CeilMaterial, "render").(ISampler)
+	}
+
 	world := &concepts.Vector3{0, 0, s.Sector.TopZ}
 
 	for s.Y = s.YStart; s.Y < s.ClippedStart; s.Y++ {
@@ -137,8 +158,8 @@ func (s *Slice) RenderCeiling() {
 			continue
 		}
 
-		world.X = s.Map.Player.Pos.X + s.TrigTable[s.RayIndex].cos*distToCeil
-		world.Y = s.Map.Player.Pos.Y + s.TrigTable[s.RayIndex].sin*distToCeil
+		world.X = s.Map.Player.Pos.X + s.AngleCos*distToCeil
+		world.Y = s.Map.Player.Pos.Y + s.AngleSin*distToCeil
 
 		tx := world.X / s.Sector.CeilScale
 		tx -= math.Floor(tx)
@@ -148,8 +169,7 @@ func (s *Slice) RenderCeiling() {
 		ty = math.Abs(ty)
 		// var light = this.map.light(world, CEIL_NORMAL, slice.sector, slice.segment, null, null, true);
 
-		if s.Sector.FloorMaterial != nil {
-			mat := registry.Translate(s.Sector.FloorMaterial).(ISampler)
+		if mat != nil {
 			s.Write(screenIndex, mat.Sample(s, tx, ty, nil, scaler))
 		}
 		s.ZBuffer[screenIndex] = distToCeil

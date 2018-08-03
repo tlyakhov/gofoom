@@ -17,7 +17,7 @@ func init() {
 }
 
 func (p *Player) Frame(lastFrameTime float64) {
-	registry.Translate(p.Entity).(*Entity).Frame(lastFrameTime)
+	registry.Translate(&p.Entity, "logic").(*Entity).Frame(lastFrameTime)
 
 	if p.Sector == nil {
 		return
@@ -42,7 +42,7 @@ func (p *Player) Frame(lastFrameTime float64) {
 }
 
 func (p *Player) Hurt(amount float64) {
-	registry.Translate(p.Entity).(*AliveEntity).Hurt(amount)
+	registry.Translate(p.Entity, "logic").(*AliveEntity).Hurt(amount)
 	p.HurtTime = constants.PlayerHurtTime
 }
 

@@ -20,7 +20,7 @@ func (m *Sky) Sample(slice *Slice, u, v float64, light *concepts.Vector3, scale 
 	if m.StaticBackground {
 		u = float64(slice.X) / (float64(slice.ScreenWidth) - 1)
 	} else {
-		u = float64(slice.RayIndex) / (float64(slice.TrigCount) - 1)
+		u = float64(slice.Angle)
 	}
 	return m.Sampler.Sample(u, v, 1.0)
 }

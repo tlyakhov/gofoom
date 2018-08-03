@@ -15,8 +15,7 @@ type Config struct {
 	Frame, FrameTint, WorkerWidth, Counter int
 	MaxViewDist, FOV                       float64
 	CameraToProjectionPlane                float64
-	TrigCount                              int
-	TrigTable                              []trigEntry
+	ViewRadians                            []float64
 	ViewFix                                []float64
 	ZBuffer                                []float64
 	FloorNormal                            concepts.Vector3
@@ -25,18 +24,13 @@ type Config struct {
 
 func (c *Config) Initialize() {
 	c.CameraToProjectionPlane = (float64(c.ScreenWidth) / 2.0) / math.Tan(c.FOV*concepts.Deg2rad/2.0)
-	c.TrigCount = int(float64(c.ScreenWidth) * 360.0 / c.FOV) // Quantize trig tables per-Pixel.
-	c.TrigTable = make([]trigEntry, c.TrigCount)
+	c.ViewRadians = make([]float64, c.ScreenWidth)
 	c.ViewFix = make([]float64, c.ScreenWidth)
 
-	for i := 0; i < c.TrigCount; i++ {
-		c.TrigTable[i].sin = math.Sin(float64(i) * 2.0 * math.Pi / float64(c.TrigCount))
-		c.TrigTable[i].cos = math.Cos(float64(i) * 2.0 * math.Pi / float64(c.TrigCount))
-	}
-
-	for i := 0; i < c.ScreenWidth/2; i++ {
-		c.ViewFix[i] = c.CameraToProjectionPlane / c.TrigTable[c.ScreenWidth/2-1-i].cos
-		c.ViewFix[(c.ScreenWidth-1)-i] = c.ViewFix[i]
+	for i := 0; i < c.ScreenWidth; i++ {
+		// See https://stackoverflow.com/questions/24173966/raycasting-engine-rendering-creating-slight-distortion-increasing-towards-edges
+		c.ViewRadians[i] = math.Atan(float64(i-c.ScreenWidth/2) / c.CameraToProjectionPlane)
+		c.ViewFix[i] = c.CameraToProjectionPlane / math.Cos(c.ViewRadians[i])
 	}
 
 	c.ZBuffer = make([]float64, c.WorkerWidth*c.ScreenHeight)

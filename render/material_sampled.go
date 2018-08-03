@@ -23,13 +23,13 @@ func (m *Sampled) Sample(slice *Slice, u, v float64, light *concepts.Vector3, sc
 	}
 
 	if u < 0 {
-		u = math.Floor(u) - u
+		u = -u - math.Floor(-u)
 	} else if u >= 1.0 {
 		u -= math.Floor(u)
 	}
 
 	if v < 0 {
-		v = math.Floor(v) - v
+		v = -v - math.Floor(-v)
 	} else if v >= 1.0 {
 		v -= math.Floor(v)
 	}
