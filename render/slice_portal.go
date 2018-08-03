@@ -47,7 +47,7 @@ func (slice *SlicePortal) RenderHigh() {
 		if slice.AdjSegment.HiBehavior == mapping.ScaleWidth || slice.AdjSegment.HiBehavior == mapping.ScaleNone {
 			v = (v*(slice.Adj.TopZ-slice.Sector.TopZ) - slice.Adj.TopZ) / 64.0
 		}
-		mat := registry.Translate(slice.Segment.HiMaterial).(ISampler)
+		mat := registry.Translate(slice.Segment.HiMaterial, "render").(ISampler)
 		slice.Write(screenIndex, mat.Sample(slice.Slice, slice.U, v, nil, slice.ProjectZ(1.0)))
 		slice.ZBuffer[screenIndex] = slice.Distance
 	}
@@ -69,7 +69,7 @@ func (slice *SlicePortal) RenderLow() {
 			v = (v*(slice.Sector.BottomZ-slice.Adj.BottomZ) - slice.Sector.BottomZ) / 64.0
 		}
 
-		mat := registry.Translate(slice.Segment.LoMaterial).(ISampler)
+		mat := registry.Translate(slice.Segment.LoMaterial, "render").(ISampler)
 		slice.Write(screenIndex, mat.Sample(slice.Slice, slice.U, v, nil, slice.ProjectZ(1.0)))
 		slice.ZBuffer[screenIndex] = slice.Distance
 	}

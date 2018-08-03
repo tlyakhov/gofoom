@@ -1,6 +1,8 @@
 package logic
 
 import (
+	"reflect"
+
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/mapping"
@@ -20,7 +22,7 @@ type IActor interface {
 }
 
 func (s *Sector) OnEnter(e *Entity) {
-	eSector := registry.Translate(e.Sector).(*Sector)
+	eSector := registry.Translate(e.Sector, "logic").(*Sector)
 	if s.FloorTarget == nil && e.Pos.Z <= eSector.BottomZ {
 		e.Pos.Z = eSector.BottomZ
 	}
@@ -32,7 +34,7 @@ func (s *Sector) OnExit(e *Entity) {
 func (s *Sector) Collide(e *Entity) {
 	entityTop := e.Pos.Z + e.Height
 
-	esector := registry.Translate(e.Sector).(*Sector)
+	esector := registry.Translate(e.Sector, "logic").(*Sector)
 
 	if s.FloorTarget != nil && entityTop < s.BottomZ {
 		esector.OnExit(e)
@@ -56,7 +58,7 @@ func (s *Sector) Collide(e *Entity) {
 }
 
 func (s *Sector) ActOnEntity(e *Entity) {
-	if e.Sector == nil || e.Sector.(*concepts.Base).ID != s.ID {
+	if e.Sector == nil || concepts.ConvertOrCast(e.Sector, reflect.TypeOf(&concepts.Base{})).(*concepts.Base).ID != s.ID {
 		return
 	}
 

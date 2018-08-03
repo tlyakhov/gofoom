@@ -12,13 +12,14 @@ func init() {
 }
 
 func (m *Map) Frame(lastFrameTime float64) {
-	registry.Translate(m.Player).(*Player).Frame(lastFrameTime)
+	player := registry.Translate(m.Player, "logic").(*Player)
+	player.Frame(lastFrameTime)
 
 	for _, item := range m.Sectors {
 		sector := item.(*mapping.Sector)
-		// sector.ActOnEntity(player)
+		registry.Translate(sector, "logic").(*Sector).ActOnEntity(registry.Translate(&player.Entity, "logic").(*Entity))
 		for _, item2 := range sector.Entities {
-			e := item2.(*mapping.Entity)
+			e := registry.Translate(item2, "mapping").(*mapping.Entity)
 			if !e.Active {
 				continue
 			}
@@ -27,6 +28,6 @@ func (m *Map) Frame(lastFrameTime float64) {
 				//pvs.ActOnEntity(e)
 			}
 		}
-		registry.Translate(sector).(*Sector).Frame(lastFrameTime)
+		registry.Translate(sector, "logic").(*Sector).Frame(lastFrameTime)
 	}
 }

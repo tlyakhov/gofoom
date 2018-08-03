@@ -64,7 +64,7 @@ func (e *Entity) Collide() []*mapping.Segment {
 		closestDistance2 := math.MaxFloat64
 
 		for _, item := range e.Map.Sectors {
-			sector := registry.Translate(item).(*Sector)
+			sector := registry.Translate(item, "logic").(*Sector)
 			d2 := e.Pos.Dist2(sector.Center)
 
 			if closestSector == nil || d2 < closestDistance2 {
@@ -82,7 +82,7 @@ func (e *Entity) Collide() []*mapping.Segment {
 		}
 
 		fmt.Printf("Collide: %v\n", e.ID)
-		e.Sector = registry.Translate(closestSector).(*mapping.Sector) // Convert back to mapping.Sector
+		e.Sector = registry.Translate(closestSector, "mapping").(*mapping.Sector) // Convert back to mapping.Sector
 		closestSector.Entities[e.ID] = e
 		closestSector.OnEnter(e)
 		// Don't mark as collided because this is probably an initialization.
@@ -111,8 +111,8 @@ func (e *Entity) Collide() []*mapping.Segment {
 		// Cases 5 & 6
 
 		// Exit the current sector.
-		registry.Translate(e.Sector).(*Sector).OnExit(e)
-		delete(e.Sector.(*Sector).Entities, e.ID)
+		registry.Translate(e.Sector, "logic").(*Sector).OnExit(e)
+		delete(e.Sector.(*mapping.Sector).Entities, e.ID)
 		e.Sector = nil
 
 		for _, item := range e.Map.Sectors {
@@ -126,7 +126,7 @@ func (e *Entity) Collide() []*mapping.Segment {
 					e.Pos.Z = sector.BottomZ
 				}
 				e.Sector.(*Sector).Entities[e.ID] = e
-				registry.Translate(e.Sector).(*Sector).OnEnter(e)
+				registry.Translate(e.Sector, "logic").(*Sector).OnEnter(e)
 				break
 			}
 		}

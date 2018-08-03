@@ -75,9 +75,9 @@ func (r *Renderer) RenderSector(slice *Slice) {
 
 		delta := &concepts.Vector2{math.Abs(isect.X - slice.Ray.Start.X), math.Abs(isect.Y - slice.Ray.Start.Y)}
 		if delta.Y > delta.X {
-			dist = math.Abs(delta.Y / r.TrigTable[slice.RayIndex].sin)
+			dist = math.Abs(delta.Y / slice.AngleSin)
 		} else {
-			dist = math.Abs(delta.X / r.TrigTable[slice.RayIndex].cos)
+			dist = math.Abs(delta.X / slice.AngleCos)
 		}
 
 		if dist > slice.Distance {
@@ -97,25 +97,16 @@ func (r *Renderer) RenderSector(slice *Slice) {
 	}
 }
 
-func (r *Renderer) normRayIndex(index int) int {
-	for ; index < 0; index += r.TrigCount {
-	}
-	for ; index >= r.TrigCount; index -= r.TrigCount {
-	}
-	return index
-}
-
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
 	r.Counter = 0
 	xStart := 0
 	xEnd := xStart + r.WorkerWidth
 
-	fmt.Printf("%v\n", r.Map.Player.Angle)
 	for x := xStart; x < xEnd; x++ {
 		// Reset the z-buffer to maximum viewing distance.
-		for i := 0; i < r.ScreenHeight; i++ {
-			r.ZBuffer[i*r.WorkerWidth+x-xStart] = r.MaxViewDist
+		for i := x - xStart; i < r.ScreenHeight*r.WorkerWidth+x-xStart; i += r.WorkerWidth {
+			r.ZBuffer[i] = r.MaxViewDist
 		}
 
 		if r.Map.Player.Sector == nil {
@@ -131,16 +122,18 @@ func (r *Renderer) Render(buffer []uint8) {
 			TargetX:      x - xStart,
 			YStart:       0,
 			YEnd:         r.ScreenHeight - 1,
-			RayIndex:     r.normRayIndex(int(r.Map.Player.Angle*float64(r.TrigCount)/360.0) + x - r.ScreenWidth/2 + 1),
+			Angle:        r.Map.Player.Angle*concepts.Deg2rad + r.ViewRadians[x],
 			Sector:       r.Map.Player.Sector.(*mapping.Sector),
 			CameraZ:      r.Map.Player.Pos.Z + r.Map.Player.Height,
 		}
+		slice.AngleCos = math.Cos(slice.Angle)
+		slice.AngleSin = math.Sin(slice.Angle)
 
 		slice.Ray = &Ray{
 			Start: r.Map.Player.Pos.To2D(),
 			End: &concepts.Vector2{
-				X: r.Map.Player.Pos.X + r.MaxViewDist*r.TrigTable[slice.RayIndex].cos,
-				Y: r.Map.Player.Pos.Y + r.MaxViewDist*r.TrigTable[slice.RayIndex].sin,
+				X: r.Map.Player.Pos.X + r.MaxViewDist*slice.AngleCos,
+				Y: r.Map.Player.Pos.Y + r.MaxViewDist*slice.AngleSin,
 			},
 		}
 

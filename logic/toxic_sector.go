@@ -13,18 +13,18 @@ func init() {
 }
 
 func (s *ToxicSector) Collide(e *Entity) {
-	registry.Translate(s.Sector).(*Sector).Collide(e)
+	registry.Translate(s.Sector, "logic").(*Sector).Collide(e)
 	ae, ok := ((concepts.ISerializable)(e)).(*AliveEntity)
 	if ok && s.Hurt != 0 && ae.HurtTime == 0 {
 		ae.Hurt(s.Hurt)
 	}
 
 	if s.FloorMaterial != nil && e.Pos.Z <= s.BottomZ {
-		m := registry.Translate(s.FloorMaterial).(*Painful)
+		m := registry.Translate(s.FloorMaterial, "logic").(*Painful)
 		m.ActOnEntity(e)
 	}
 	if s.CeilMaterial != nil && e.Pos.Z >= s.TopZ {
-		m := registry.Translate(s.CeilMaterial).(*Painful)
+		m := registry.Translate(s.CeilMaterial, "logic").(*Painful)
 		m.ActOnEntity(e)
 	}
 }

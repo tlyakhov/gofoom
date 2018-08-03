@@ -17,7 +17,7 @@ type mipMap struct {
 
 // Image represents an image that will be rendered in-game.
 type Image struct {
-	concepts.Base
+	*concepts.Base
 
 	Width, Height   uint
 	Source          string `editable:"Texture Source" edit_type:"string"`
@@ -30,6 +30,13 @@ type Image struct {
 
 func init() {
 	registry.Instance().Register(Image{})
+}
+
+func (t *Image) Initialize() {
+	t.Base = &concepts.Base{}
+	t.Base.Initialize()
+	t.Filter = true
+	t.GenerateMipMaps = true
 }
 
 // Load a texture from a file (pre-processing mipmaps if set)
@@ -141,14 +148,14 @@ func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
 	fy := uint(y * float64(h))
 
 	if !t.Filter {
-		index := (concepts.UMin(fy, h)*w + concepts.UMin(fx, w)) * 4
+		index := (concepts.UMin(fy, h-1)*w + concepts.UMin(fx, w-1)) * 4
 		return color.NRGBA{data.Pix[index], data.Pix[index+1], data.Pix[index+2], data.Pix[index+3]}
 	}
 
-	wx := x - float64(fx)
-	wy := y - float64(fy)
-	fx = concepts.UMax(fx, w-1)
-	fy = concepts.UMax(fy, h-1)
+	wx := x*float64(w) - float64(fx)
+	wy := y*float64(h) - float64(fy)
+	fx = concepts.UMin(fx, w-1)
+	fy = concepts.UMin(fy, h-1)
 	cx := (fx + 1) % w
 	cy := (fy + 1) % h
 	t00 := (fy*w + fx) * 4
@@ -161,4 +168,19 @@ func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
 		uint8(float64(data.Pix[t00+2])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10+2])*wx*(1.0-wy) + float64(data.Pix[t11+2])*wx*wy + float64(data.Pix[t01+2])*(1.0-wx)*wy),
 		uint8(float64(data.Pix[t00+3])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10+3])*wx*(1.0-wy) + float64(data.Pix[t11+3])*wx*wy + float64(data.Pix[t01+3])*(1.0-wx)*wy),
 	}
+}
+
+func (t *Image) Deserialize(data map[string]interface{}) {
+	t.Initialize()
+	t.Base.Deserialize(data)
+	if v, ok := data["Source"]; ok {
+		t.Source = v.(string)
+	}
+	if v, ok := data["GenerateMipMaps"]; ok {
+		t.GenerateMipMaps = v.(bool)
+	}
+	if v, ok := data["Filter"]; ok {
+		t.Filter = v.(bool)
+	}
+	t.Load()
 }

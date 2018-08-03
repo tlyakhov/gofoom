@@ -37,7 +37,7 @@ func (b *Base) Deserialize(data map[string]interface{}) {
 func MapPolyStruct(parent interface{}, data map[string]interface{}) ISerializable {
 	typeMap := registry.Instance().All
 	typeName := data["Type"].(string)
-	fmt.Printf("MapPolyStruct - TypeName: %v\nMap: %v\n", typeName, typeMap)
+	fmt.Printf("MapPolyStruct - TypeName: %v\n", typeName)
 	if t, ok := typeMap[typeName]; ok {
 		created := reflect.New(t).Interface()
 		fmt.Printf("MapPolyStruct - created: %v\n", reflect.ValueOf(created).Type())
@@ -99,7 +99,6 @@ func ConvertOrCast(source ISerializable, target reflect.Type) interface{} {
 	}
 	// Try to get an embedded field...
 	embedded := v.Elem().FieldByName(name)
-	fmt.Printf("Embedded: %v\n", name)
 	if embedded.Type() == target {
 		return embedded.Interface()
 	} else if reflect.PtrTo(embedded.Type()) == target {

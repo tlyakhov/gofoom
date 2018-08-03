@@ -2,12 +2,14 @@ package registry
 
 import (
 	"fmt"
+	"path"
 	"reflect"
 	"sync"
 )
 
 type typeRegistry struct {
-	ByPackage map[string]map[string]reflect.Type
+	ByPackage map[string]map[reflect.Type]reflect.Type
+	Inverse   map[string]map[reflect.Type]reflect.Type
 	All       map[string]reflect.Type
 }
 
@@ -17,7 +19,8 @@ var once sync.Once
 func Instance() *typeRegistry {
 	once.Do(func() {
 		instance = &typeRegistry{
-			ByPackage: make(map[string]map[string]reflect.Type),
+			ByPackage: make(map[string]map[reflect.Type]reflect.Type),
+			Inverse:   make(map[string]map[reflect.Type]reflect.Type),
 			All:       make(map[string]reflect.Type),
 		}
 	})
@@ -42,51 +45,54 @@ func (tr *typeRegistry) RegisterMapped(local, external interface{}) {
 	tr.All[tLocal.String()] = tLocal
 	tr.All[reflect.PtrTo(tLocal).String()] = reflect.PtrTo(tLocal)
 
-	pkgLocal := tLocal.PkgPath()
-	pkgExternal := tExternal.PkgPath()
+	pkgLocal := path.Base(tLocal.PkgPath())
+	pkgExternal := path.Base(tExternal.PkgPath())
 
-	var tmPkgLocal map[string]reflect.Type
-	var tmPkgExternal map[string]reflect.Type
+	var tmPkgLocal map[reflect.Type]reflect.Type
+	var tmPkgInverse map[reflect.Type]reflect.Type
 	var ok bool
 
 	if tmPkgLocal, ok = tr.ByPackage[pkgLocal]; !ok {
-		tmPkgLocal = make(map[string]reflect.Type)
+		tmPkgLocal = make(map[reflect.Type]reflect.Type)
 		tr.ByPackage[pkgLocal] = tmPkgLocal
 	}
 
 	if pkgLocal != pkgExternal {
-		if tmPkgExternal, ok = tr.ByPackage[pkgExternal]; !ok {
-			tmPkgExternal = make(map[string]reflect.Type)
-			tr.ByPackage[pkgExternal] = tmPkgExternal
+		if tmPkgInverse, ok = tr.Inverse[pkgExternal]; !ok {
+			tmPkgInverse = make(map[reflect.Type]reflect.Type)
+			tr.Inverse[pkgExternal] = tmPkgInverse
 		}
-	} else {
-		tmPkgExternal = tmPkgLocal
 	}
 
-	tmPkgLocal[tLocal.String()] = tExternal
-	tmPkgLocal[reflect.PtrTo(tLocal).String()] = reflect.PtrTo(tExternal)
+	tmPkgLocal[tExternal] = tLocal
+	tmPkgLocal[reflect.PtrTo(tExternal)] = reflect.PtrTo(tLocal)
 
 	if tLocal != tExternal {
-		tmPkgExternal[tExternal.String()] = tLocal
-		tmPkgExternal[reflect.PtrTo(tExternal).String()] = reflect.PtrTo(tLocal)
+		//tmPkgLocal[tExternal.String()] = tLocal
+		//tmPkgLocal[reflect.PtrTo(tExternal).String()] = reflect.PtrTo(tLocal)
+		tmPkgInverse[tLocal] = tExternal
+		tmPkgInverse[reflect.PtrTo(tLocal)] = reflect.PtrTo(tExternal)
 		tr.All[tExternal.String()] = tExternal
 		tr.All[reflect.PtrTo(tExternal).String()] = reflect.PtrTo(tExternal)
 	}
 }
 
-func (tr *typeRegistry) Translate(x interface{}) interface{} {
+func (tr *typeRegistry) Translate(x interface{}, pkg string) interface{} {
 	// fmt.Printf("Local: %v -> %v (%v)\n", x, reflect.TypeOf(x).String(), byPackage)
-	v := reflect.ValueOf(x)
-	t := v.Type()
-	if target, ok := tr.ByPackage[t.PkgPath()][t.String()]; ok {
+	t := reflect.TypeOf(x)
+	if target, ok := tr.ByPackage[pkg][t]; ok {
+		v := reflect.ValueOf(x)
+		return v.Convert(target).Interface()
+	} else if target, ok := tr.Inverse[pkg][t]; ok {
+		v := reflect.ValueOf(x)
 		return v.Convert(target).Interface()
 	}
-	fmt.Printf("Warning: tried to convert %v to local alias, but couldn't find it in the type map %v\n", reflect.TypeOf(x).String(), tr.ByPackage)
+	fmt.Printf("Warning: tried to convert %v to %v alias, but couldn't find it in the registry.\n", reflect.TypeOf(x).String(), pkg)
 	return x
 }
 
-func Translate(x interface{}) interface{} {
-	return Instance().Translate(x)
+func Translate(x interface{}, pkg string) interface{} {
+	return Instance().Translate(x, pkg)
 }
 
 /* func LocalToExternal(x interface{}, reflect.Type target) interface{} {

@@ -6,16 +6,31 @@
             "Type": "material.LitSampled",
             "ID": "Default",
             "Texture": {
-                "Type": "texture.Solid",
-                "Diffuse": "#F0F"
+                "Type": "texture.Image",
+                "Source": "data/WDef.png",
+                "GenerateMipMaps": true,
+                "Filter": true                
+            }
+        },
+        {
+            "Type": "material.LitSampled",
+            "ID": "Blue",
+            "Texture": {
+                "Type": "texture.Image",
+                "Source": "data/grass.jpg",
+                "GenerateMipMaps": true,
+                "Filter": true
             }
         }
+
     ],
     "Sectors": [
         {
             "Type": "mapping.Sector",
             "BottomZ": 0,
             "TopZ": 64,
+            "FloorMaterial": "Blue",
+            "CeilMaterial": "Blue",
             "Segments": [
                 {
                     "X": -300,
