@@ -31,7 +31,6 @@ func (m *LitSampled) Deserialize(data map[string]interface{}) {
 	m.Initialize()
 	m.Lit.Deserialize(data)
 	m.Sampled.Deserialize(data)
-	fmt.Printf("LitSampled: %v\n", m.Lit.ID)
 	m.Lit.Base = m.Sampled.Base
 	m.Base = m.Sampled.Base
 }
@@ -52,4 +51,6 @@ func (m *PainfulLitSampled) Initialize() {
 func (m *PainfulLitSampled) Deserialize(data map[string]interface{}) {
 	m.Initialize()
 	m.LitSampled.Deserialize(data)
+	m.Base = m.LitSampled.Base
+	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.ID)
 }

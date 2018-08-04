@@ -22,6 +22,17 @@ func Clamp(x, min, max float64) float64 {
 	return x
 }
 
+// IntClamp clamps a value between a minimum and maximum.
+func IntClamp(x, min, max int) int {
+	if x < min {
+		return min
+	}
+	if x > max {
+		return max
+	}
+	return x
+}
+
 func NearestPow2(n uint) uint {
 	n--
 

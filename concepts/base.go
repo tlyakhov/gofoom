@@ -13,6 +13,10 @@ type Base struct {
 	Tags []string `editable:"Tags" edit_type:"tags"`
 }
 
+func init() {
+	registry.Instance().Register(Base{})
+}
+
 func (b *Base) Initialize() {
 	b.ID = xid.New().String()
 }
@@ -34,15 +38,19 @@ func (b *Base) Deserialize(data map[string]interface{}) {
 	}
 }
 
+func Placeholder(x interface{}) bool {
+	return reflect.TypeOf(x) == reflect.PtrTo(registry.Type("concepts.Base"))
+}
+
 func MapPolyStruct(parent interface{}, data map[string]interface{}) ISerializable {
 	typeMap := registry.Instance().All
 	typeName := data["Type"].(string)
-	fmt.Printf("MapPolyStruct - TypeName: %v\n", typeName)
+	//fmt.Printf("MapPolyStruct - TypeName: %v\n", typeName)
 	if t, ok := typeMap[typeName]; ok {
 		created := reflect.New(t).Interface()
-		fmt.Printf("MapPolyStruct - created: %v\n", reflect.ValueOf(created).Type())
+		//fmt.Printf("MapPolyStruct - created: %v\n", reflect.ValueOf(created).Type())
 		asserted := created.(ISerializable)
-		fmt.Printf("MapPolyStruct - asserted: %v\n", reflect.ValueOf(asserted).Type())
+		//fmt.Printf("MapPolyStruct - asserted: %v\n", reflect.ValueOf(asserted).Type())
 		asserted.SetParent(parent)
 		asserted.Deserialize(data)
 		return asserted
@@ -83,26 +91,7 @@ func MapCollection(parent interface{}, target *Collection, data interface{}) {
 		if item == nil {
 			continue
 		}
-		itemBase := ConvertOrCast(item, reflect.TypeOf(&Base{})).(*Base)
+		itemBase := registry.Coalesce(item, "concepts.Base").(*Base)
 		(*target)[itemBase.ID] = item
 	}
-}
-
-func ConvertOrCast(source ISerializable, target reflect.Type) interface{} {
-	v := reflect.ValueOf(source)
-	if v.Type() == target {
-		return source
-	}
-	name := target.Name()
-	if name == "" {
-		name = target.Elem().Name()
-	}
-	// Try to get an embedded field...
-	embedded := v.Elem().FieldByName(name)
-	if embedded.Type() == target {
-		return embedded.Interface()
-	} else if reflect.PtrTo(embedded.Type()) == target {
-		return embedded.Addr().Interface()
-	}
-	return nil
 }

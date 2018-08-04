@@ -1,8 +1,6 @@
 package logic
 
 import (
-	"reflect"
-
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/mapping"
@@ -58,7 +56,7 @@ func (s *Sector) Collide(e *Entity) {
 }
 
 func (s *Sector) ActOnEntity(e *Entity) {
-	if e.Sector == nil || concepts.ConvertOrCast(e.Sector, reflect.TypeOf(&concepts.Base{})).(*concepts.Base).ID != s.ID {
+	if e.Sector == nil || registry.Coalesce(e.Sector, "concepts.Base").(*concepts.Base).ID != s.ID {
 		return
 	}
 

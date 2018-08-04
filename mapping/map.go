@@ -21,6 +21,14 @@ func init() {
 	registry.Instance().Register(Map{})
 }
 
+func (m *Map) Recalculate() {
+	for _, item := range m.Sectors {
+		if sector, ok := item.(*Sector); ok {
+			sector.Recalculate()
+		}
+	}
+}
+
 func (m *Map) ClearLightmaps() {
 	for _, item := range m.Sectors {
 		if sector, ok := item.(*Sector); ok {
@@ -60,4 +68,5 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 	if v, ok := data["Sectors"]; ok {
 		concepts.MapCollection(m, &m.Sectors, v)
 	}
+	m.Recalculate()
 }

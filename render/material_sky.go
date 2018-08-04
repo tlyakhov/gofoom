@@ -2,6 +2,7 @@ package render
 
 import (
 	"image/color"
+	"math"
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping/material"
@@ -20,7 +21,7 @@ func (m *Sky) Sample(slice *Slice, u, v float64, light *concepts.Vector3, scale 
 	if m.StaticBackground {
 		u = float64(slice.X) / (float64(slice.ScreenWidth) - 1)
 	} else {
-		u = float64(slice.Angle)
+		u = float64(slice.Angle) / (2.0 * math.Pi)
 	}
 	return m.Sampler.Sample(u, v, 1.0)
 }

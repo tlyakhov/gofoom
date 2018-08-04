@@ -95,6 +95,39 @@ func Translate(x interface{}, pkg string) interface{} {
 	return Instance().Translate(x, pkg)
 }
 
+func Type(name string) reflect.Type {
+	return Instance().All[name]
+}
+
+func Coalesce(source interface{}, target string) interface{} {
+	targetType := Instance().All[target]
+	if targetType == nil {
+		fmt.Printf("Warning: tried to coalesce %v into %v but couldn't find the type in registry.\n", reflect.TypeOf(source), target)
+		return nil
+	}
+
+	sourceType := reflect.TypeOf(source)
+	if sourceType == targetType || sourceType == reflect.PtrTo(targetType) {
+		return source
+	}
+
+	v := reflect.ValueOf(source)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	// Try to get an embedded field...
+	name := targetType.Name()
+	embedded := v.FieldByName(name)
+	if embedded.Type() == targetType {
+		return embedded.Addr().Interface()
+	} else if embedded.Type() == reflect.PtrTo(targetType) {
+		return embedded.Interface()
+	} else {
+		fmt.Printf("Warning: tried to coalesce %v into %v but couldn't find the target type embedded in source.\n", reflect.TypeOf(source), target)
+	}
+	return nil
+}
+
 /* func LocalToExternal(x interface{}, reflect.Type target) interface{} {
 	v := reflect.ValueOf(x)
 	t := v.Type()

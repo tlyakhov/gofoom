@@ -1,6 +1,7 @@
 package mapping
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/tlyakhov/gofoom/concepts"
@@ -26,7 +27,7 @@ type Segment struct {
 	Length          float64
 	Normal          *concepts.Vector2
 	Sector          *Sector
-	AdjacentSector  *Sector
+	AdjacentSector  concepts.ISerializable
 	AdjacentSegment *Segment
 	Lightmap        []float64
 	LightmapWidth   uint
@@ -49,6 +50,24 @@ func (s *Segment) Recalculate() {
 	s.Length = s.B.Sub(s.A).Length()
 	s.Normal = &concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
 	if s.Sector != nil {
+		if s.AdjacentSector != nil && concepts.Placeholder(s.AdjacentSector) {
+			// Get the actual one.
+			id := registry.Coalesce(s.AdjacentSector, "concepts.Base").(*concepts.Base).ID
+			s.AdjacentSector = s.Sector.Map.Sectors[id]
+			if s.AdjacentSector != nil {
+				adj := registry.Coalesce(s.AdjacentSector, "mapping.Sector").(*Sector)
+				for _, s2 := range adj.Segments {
+					if s2.Matches(s) {
+						s.AdjacentSegment = s2
+						s2.AdjacentSector = s.Sector
+						s2.AdjacentSegment = s
+						fmt.Printf("Got adjacent %v\n", id)
+						break
+					}
+				}
+			}
+		}
+
 		s.LightmapWidth = uint(s.Length/constants.LightGrid) + 2
 		s.LightmapHeight = uint((s.Sector.TopZ-s.Sector.BottomZ)/constants.LightGrid) + 2
 		s.Lightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
@@ -222,6 +241,9 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 	if v, ok := data["Y"]; ok {
 		s.A.Y = v.(float64)
 	}
+	if v, ok := data["AdjacentSector"]; ok {
+		s.AdjacentSector = &concepts.Base{ID: v.(string)}
+	}
 	if v, ok := data["LoMaterial"]; ok {
 		s.LoMaterial = s.Sector.Map.Materials[v.(string)]
 	}
@@ -255,5 +277,4 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 			panic(error)
 		}
 	}
-	s.Recalculate()
 }

@@ -22,7 +22,8 @@ func (m *Sky) Initialize() {
 
 func (m *Sky) Deserialize(data map[string]interface{}) {
 	m.Initialize()
-	m.Base.Deserialize(data)
+	m.Sampled.Deserialize(data)
+	m.Base = m.Sampled.Base
 	if v, ok := data["StaticBackground"]; ok {
 		m.StaticBackground = v.(bool)
 	}
