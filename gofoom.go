@@ -53,9 +53,10 @@ func run() {
 		defer pprof.StopCPUProfile()
 	}
 	cfg := pixelgl.WindowConfig{
-		Title:  "Foom",
-		Bounds: pixel.R(0, 0, 800, 600),
-		VSync:  false,
+		Title:     "Foom",
+		Bounds:    pixel.R(0, 0, 1280, 720),
+		VSync:     false,
+		Resizable: true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
@@ -67,16 +68,16 @@ func run() {
 	canvas := pixelgl.NewCanvas(win.Bounds())
 
 	var (
-		mat = pixel.IM.Moved(win.Bounds().Center())
+		mat = pixel.IM.ScaledXY(pixel.Vec{0, 0}, pixel.Vec{1, -1}).Moved(win.Bounds().Center())
 	)
 
-	buffer := image.NewRGBA(image.Rect(0, 0, 800, 600))
+	buffer := image.NewRGBA(image.Rect(0, 0, 1280, 720))
 	renderer := render.NewRenderer()
-	renderer.ScreenWidth = 800
-	renderer.ScreenHeight = 600
-	renderer.WorkerWidth = 800
+	renderer.ScreenWidth = 1280
+	renderer.ScreenHeight = 720
+	renderer.WorkerWidth = 1280
 	renderer.Initialize()
-	gameMap := loadMap("data/testMap.json")
+	gameMap := loadMap("data/classicMap.json")
 	player := registry.Translate(gameMap.Player, "logic").(*logic.Player)
 	registry.Translate(&player.Entity, "logic").(*logic.Entity).Collide()
 	renderer.Map = gameMap

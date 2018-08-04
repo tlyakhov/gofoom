@@ -19,14 +19,14 @@ type SlicePortal struct {
 }
 
 func (slice *SlicePortal) CalcScreen() {
-	slice.Adj = slice.Segment.AdjacentSector
+	slice.Adj = registry.Translate(slice.Segment.AdjacentSector, "mapping").(*mapping.Sector)
 	slice.AdjSegment = slice.Segment.AdjacentSegment
 	slice.AdjProjHeightTop = slice.ProjectZ(slice.Adj.TopZ - slice.CameraZ)
 	slice.AdjProjHeightBottom = slice.ProjectZ(slice.Adj.BottomZ - slice.CameraZ)
 	slice.AdjScreenTop = slice.ScreenHeight/2 - int(slice.AdjProjHeightTop)
 	slice.AdjScreenBottom = slice.ScreenHeight/2 - int(slice.AdjProjHeightBottom)
-	slice.AdjClippedTop = concepts.Max(slice.AdjScreenTop, slice.ClippedStart)
-	slice.AdjClippedBottom = concepts.Min(slice.AdjScreenBottom, slice.ClippedEnd)
+	slice.AdjClippedTop = concepts.IntClamp(slice.AdjScreenTop, slice.ClippedStart, slice.ClippedEnd)
+	slice.AdjClippedBottom = concepts.IntClamp(slice.AdjScreenBottom, slice.ClippedStart, slice.ClippedEnd)
 }
 
 func (slice *SlicePortal) RenderHigh() {
@@ -36,6 +36,7 @@ func (slice *SlicePortal) RenderHigh() {
 
 	for slice.Y = slice.ClippedStart; slice.Y < slice.AdjClippedTop; slice.Y++ {
 		screenIndex := uint(slice.TargetX + slice.Y*slice.WorkerWidth)
+		//fmt.Printf("%v %v %v %v\n", screenIndex, slice.Y, slice.ClippedStart, slice.AdjClippedTop)
 		if slice.Distance >= slice.ZBuffer[screenIndex] {
 			continue
 		}

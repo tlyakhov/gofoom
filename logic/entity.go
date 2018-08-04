@@ -18,7 +18,7 @@ func init() {
 
 func (e *Entity) PushBack(segment *mapping.Segment) bool {
 	p2d := e.Pos.To2D()
-	d := segment.DistanceToPoint(p2d)
+	d := segment.DistanceToPoint2(p2d)
 	if d > e.BoundingRadius*e.BoundingRadius {
 		return false
 	}
@@ -60,6 +60,7 @@ func (e *Entity) Collide() []*mapping.Segment {
 
 	// Cases 1 & 2.
 	if e.Sector == nil {
+		fmt.Printf("Collide: case 1/2 sector=nil\n")
 		var closestSector *Sector
 		closestDistance2 := math.MaxFloat64
 
@@ -74,14 +75,15 @@ func (e *Entity) Collide() []*mapping.Segment {
 		}
 
 		if !(*mapping.Sector)(closestSector).IsPointInside2D(e.Pos.To2D()) {
+			fmt.Printf("Collide: put in center\n")
 			e.Pos.X = closestSector.Center.X
 			e.Pos.Y = closestSector.Center.Y
 			e.Pos.Z = closestSector.Center.Z
 		} else if e.Pos.Z < closestSector.BottomZ || e.Pos.Z+e.Height > closestSector.TopZ {
+			fmt.Printf("Collide: already in sector\n")
 			e.Pos.Z = closestSector.Center.Z
 		}
 
-		fmt.Printf("Collide: %v\n", e.ID)
 		e.Sector = registry.Translate(closestSector, "mapping").(*mapping.Sector) // Convert back to mapping.Sector
 		closestSector.Entities[e.ID] = e
 		closestSector.OnEnter(e)
@@ -90,9 +92,9 @@ func (e *Entity) Collide() []*mapping.Segment {
 
 	// Case 3 & 4
 	// See if we need to push back into the current sector.
-	for _, segment := range e.Sector.(*mapping.Sector).Segments {
-		adj := segment.AdjacentSector
-		if adj != nil {
+	for _, segment := range registry.Coalesce(e.Sector, "mapping.Sector").(*mapping.Sector).Segments {
+		if segment.AdjacentSector != nil {
+			adj := segment.AdjacentSector.(*mapping.Sector)
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
 			if e.Pos.Z+e.MountHeight >= adj.BottomZ &&
@@ -101,14 +103,16 @@ func (e *Entity) Collide() []*mapping.Segment {
 			}
 		}
 		if e.PushBack(segment) {
+			fmt.Printf("Collide: case 3/4 pushed back!\n")
 			collided = append(collided, segment)
 		}
 	}
 
 	ePosition2D := e.Pos.To2D()
-	inSector := e.Sector.(*mapping.Sector).IsPointInside2D(ePosition2D)
+	inSector := registry.Coalesce(e.Sector, "mapping.Sector").(*mapping.Sector).IsPointInside2D(ePosition2D)
 	if !inSector {
 		// Cases 5 & 6
+		fmt.Printf("Collide: case 5/6 not in sector!\n")
 
 		// Exit the current sector.
 		registry.Translate(e.Sector, "logic").(*Sector).OnExit(e)
@@ -116,16 +120,16 @@ func (e *Entity) Collide() []*mapping.Segment {
 		e.Sector = nil
 
 		for _, item := range e.Map.Sectors {
-			sector := item.(*mapping.Sector)
+			sector := registry.Coalesce(item, "mapping.Sector").(*mapping.Sector)
 			if e.Pos.Z+e.MountHeight >= sector.BottomZ &&
 				e.Pos.Z+e.Height < sector.TopZ &&
 				sector.IsPointInside2D(ePosition2D) {
 				// Hooray, we've handled case 5! Make sure Z is good.
-				e.Sector = sector
 				if e.Pos.Z < sector.BottomZ {
 					e.Pos.Z = sector.BottomZ
 				}
-				e.Sector.(*Sector).Entities[e.ID] = e
+				e.Sector = item
+				registry.Translate(e.Sector, "logic").(*Sector).Entities[e.ID] = e
 				registry.Translate(e.Sector, "logic").(*Sector).OnEnter(e)
 				break
 			}

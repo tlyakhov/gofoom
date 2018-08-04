@@ -3,7 +3,6 @@ package texture
 import (
 	"image"
 	"image/color"
-	"math"
 	"os"
 
 	"github.com/tlyakhov/gofoom/concepts"
@@ -141,8 +140,12 @@ func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
 		return color.NRGBA{0, 0, 0, 0xFF}
 	}
 
-	x = math.Max(x, 0)
-	y = math.Max(y, 0)
+	if x < 0 {
+		x = 0
+	}
+	if y < 0 {
+		y = 0
+	}
 
 	fx := uint(x * float64(w))
 	fy := uint(y * float64(h))

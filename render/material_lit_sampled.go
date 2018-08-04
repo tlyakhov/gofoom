@@ -25,7 +25,5 @@ func (m *LitSampled) Sample(slice *Slice, u, v float64, light *concepts.Vector3,
 		sum = sum.Mul3(light)
 	}
 	sum = sum.Add(m.Ambient).Clamp(0.0, 255.0)
-	//fmt.Printf("sample: %v\n", m.Diffuse)
-	//panic("asdf")
 	return color.NRGBA{uint8(sum.X), uint8(sum.Y), uint8(sum.Z), 255}
 }

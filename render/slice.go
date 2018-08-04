@@ -48,8 +48,8 @@ func (s *Slice) CalcScreen() {
 
 	s.ScreenStart = s.ScreenHeight/2 - int(s.ProjHeightTop)
 	s.ScreenEnd = s.ScreenHeight/2 - int(s.ProjHeightBottom)
-	s.ClippedStart = concepts.Max(s.ScreenStart, s.YStart)
-	s.ClippedEnd = concepts.Min(s.ScreenEnd, s.YEnd)
+	s.ClippedStart = concepts.IntClamp(s.ScreenStart, s.YStart, s.YEnd)
+	s.ClippedEnd = concepts.IntClamp(s.ScreenEnd, s.YStart, s.YEnd)
 }
 
 func (s *Slice) Write(screenIndex uint, color color.NRGBA) {

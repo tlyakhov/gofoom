@@ -99,6 +99,7 @@ func (r *Renderer) RenderSector(slice *Slice) {
 
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
+	r.Frame += 1
 	r.Counter = 0
 	xStart := 0
 	xEnd := xStart + r.WorkerWidth
