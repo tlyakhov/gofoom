@@ -89,3 +89,7 @@ func (vec *Vector3) Deserialize(data map[string]interface{}) {
 		vec.Z = v.(float64)
 	}
 }
+
+func (vec *Vector3) ToInt32Color() uint32 {
+	return uint32(vec.X)<<24 | uint32(vec.Y)<<16 | uint32(vec.Z)<<8 | 0xFF
+}

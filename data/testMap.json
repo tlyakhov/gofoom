@@ -26,7 +26,7 @@
     ],
     "Sectors": [
         {
-            "Type": "mapping.Sector",
+            "Type": "mapping.PhysicalSector",
             "BottomZ": 0,
             "TopZ": 64,
             "FloorMaterial": "Blue",

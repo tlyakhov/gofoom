@@ -11,15 +11,15 @@ type trigEntry struct {
 }
 
 type Config struct {
-	ScreenWidth, ScreenHeight              int
-	Frame, FrameTint, WorkerWidth, Counter int
-	MaxViewDist, FOV                       float64
-	CameraToProjectionPlane                float64
-	ViewRadians                            []float64
-	ViewFix                                []float64
-	ZBuffer                                []float64
-	FloorNormal                            concepts.Vector3
-	CeilingNormal                          concepts.Vector3
+	ScreenWidth, ScreenHeight int
+	Frame, FrameTint, Counter int
+	MaxViewDist, FOV          float64
+	CameraToProjectionPlane   float64
+	ViewRadians               []float64
+	ViewFix                   []float64
+	ZBuffer                   []float64
+	FloorNormal               concepts.Vector3
+	CeilingNormal             concepts.Vector3
 }
 
 func (c *Config) Initialize() {
@@ -33,6 +33,6 @@ func (c *Config) Initialize() {
 		c.ViewFix[i] = c.CameraToProjectionPlane / math.Cos(c.ViewRadians[i])
 	}
 
-	c.ZBuffer = make([]float64, c.WorkerWidth*c.ScreenHeight)
+	c.ZBuffer = make([]float64, c.ScreenWidth*c.ScreenHeight)
 
 }

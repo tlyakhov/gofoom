@@ -8,7 +8,7 @@ import (
 	"github.com/tlyakhov/gofoom/registry"
 )
 
-type Sector struct {
+type PhysicalSector struct {
 	concepts.Base
 
 	Map                     *Map
@@ -23,7 +23,7 @@ type Sector struct {
 	Min, Max, Center              *concepts.Vector3
 	LightmapWidth, LightmapHeight uint
 	FloorLightmap, CeilLightmap   []float64
-	PVSEntity                     map[string]Sector
+	PVSEntity                     map[string]PhysicalSector
 	// RoomImpulse
 	// PVS
 	// PVSLights []
@@ -31,26 +31,19 @@ type Sector struct {
 
 type AbstractSector interface {
 	concepts.ISerializable
-	GetSector() *Sector
-}
-
-type PlaceholderSector struct {
-	concepts.Base
-}
-
-func (s *PlaceholderSector) GetSector() *Sector {
-	return nil
+	GetPhysical() *PhysicalSector
+	IsPointInside2D(p *concepts.Vector2) bool
 }
 
 func init() {
-	registry.Instance().Register(Sector{})
+	registry.Instance().Register(PhysicalSector{})
 }
 
-func (s *Sector) GetSector() *Sector {
+func (s *PhysicalSector) GetPhysical() *PhysicalSector {
 	return s
 }
 
-func (ms *Sector) Recalculate() {
+func (ms *PhysicalSector) Recalculate() {
 	ms.Center = &concepts.Vector3{0, 0, (ms.TopZ + ms.BottomZ) / 2}
 	ms.Min = &concepts.Vector3{math.Inf(1), math.Inf(1), ms.BottomZ}
 	ms.Max = &concepts.Vector3{math.Inf(-1), math.Inf(-1), ms.TopZ}
@@ -85,8 +78,8 @@ func (ms *Sector) Recalculate() {
 	ms.Center = ms.Center.Mul(1.0 / float64(len(ms.Segments)))
 
 	for _, e := range ms.Entities {
-		e.GetEntity().Map = ms.Map
-		e.GetEntity().Sector = ms
+		e.GetPhysical().Map = ms.Map
+		e.GetPhysical().Sector = ms
 		if c, ok := e.(Collideable); ok {
 			c.Collide()
 		}
@@ -99,7 +92,7 @@ func (ms *Sector) Recalculate() {
 	ms.ClearLightmaps()
 }
 
-func (ms *Sector) ClearLightmaps() {
+func (ms *PhysicalSector) ClearLightmaps() {
 	for i := range ms.FloorLightmap {
 		ms.FloorLightmap[i] = -1
 		ms.CeilLightmap[i] = -1
@@ -113,7 +106,7 @@ func (ms *Sector) ClearLightmaps() {
 	// ms.UpdateEntityPVS()
 }
 
-func (ms *Sector) IsPointInside2D(p *concepts.Vector2) bool {
+func (ms *PhysicalSector) IsPointInside2D(p *concepts.Vector2) bool {
 	inside := false
 	flag1 := (p.Y >= ms.Segments[0].A.Y)
 
@@ -129,7 +122,7 @@ func (ms *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	return inside
 }
 
-func (ms *Sector) Winding() bool {
+func (ms *PhysicalSector) Winding() bool {
 	sum := 0.0
 	for i, segment := range ms.Segments {
 		next := ms.Segments[(i+1)%len(ms.Segments)]
@@ -138,15 +131,15 @@ func (ms *Sector) Winding() bool {
 	return sum < 0
 }
 
-func (s *Sector) SetParent(parent interface{}) {
+func (s *PhysicalSector) SetParent(parent interface{}) {
 	if m, ok := parent.(*Map); ok {
 		s.Map = m
 	} else {
-		panic("Tried mapping.Sector.SetParent with a parameter that wasn't a *mapping.Map")
+		panic("Tried mapping.PhysicalSector.SetParent with a parameter that wasn't a *mapping.Map")
 	}
 }
 
-func (s *Sector) Initialize() {
+func (s *PhysicalSector) Initialize() {
 	s.Base.Initialize()
 	s.Segments = make([]*Segment, 0)
 	s.Entities = make(map[string]AbstractEntity)
@@ -156,7 +149,7 @@ func (s *Sector) Initialize() {
 	s.CeilScale = 64.0
 }
 
-func (s *Sector) Deserialize(data map[string]interface{}) {
+func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 	s.Initialize()
 	s.Base.Deserialize(data)
 	if v, ok := data["TopZ"]; ok {

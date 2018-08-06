@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"image"
 	"io/ioutil"
 	"log"
@@ -25,6 +26,7 @@ import (
 	// "os"
 	"time"
 
+	"image/color"
 	_ "image/png"
 
 	"github.com/faiface/pixel"
@@ -56,9 +58,11 @@ func run() {
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
 	}
+	w := 1280
+	h := 720
 	cfg := pixelgl.WindowConfig{
 		Title:     "Foom",
-		Bounds:    pixel.R(0, 0, 1280, 720),
+		Bounds:    pixel.R(0, 0, float64(w), float64(h)),
 		VSync:     false,
 		Resizable: true,
 	}
@@ -75,16 +79,17 @@ func run() {
 		mat = pixel.IM.ScaledXY(pixel.Vec{0, 0}, pixel.Vec{1, -1}).Moved(win.Bounds().Center())
 	)
 
-	buffer := image.NewRGBA(image.Rect(0, 0, 1280, 720))
+	buffer := image.NewRGBA(image.Rect(0, 0, w, h))
 	renderer := render.NewRenderer()
-	renderer.ScreenWidth = 1280
-	renderer.ScreenHeight = 720
-	renderer.WorkerWidth = 1280
+	renderer.ScreenWidth = w
+	renderer.ScreenHeight = h
 	renderer.Initialize()
 	gameMap := loadMap("data/classicMap.json")
 	ps := entity.NewPlayerService(gameMap.Player)
 	ps.Collide()
 	renderer.Map = gameMap
+
+	mainFont, _ := render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 
 	last := time.Now()
 	for !win.Closed() {
@@ -130,6 +135,7 @@ func run() {
 
 		canvas.SetPixels(buffer.Pix)
 		canvas.Draw(win, mat)
+		mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", 1000.0/dt))
 		win.Update()
 	}
 }

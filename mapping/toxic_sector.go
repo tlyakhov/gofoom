@@ -3,7 +3,7 @@ package mapping
 import "github.com/tlyakhov/gofoom/registry"
 
 type ToxicSector struct {
-	Sector
+	PhysicalSector
 	Hurt float64
 }
 
@@ -12,11 +12,11 @@ func init() {
 }
 
 func (s *ToxicSector) Initialize() {
-	s.Sector.Initialize()
+	s.PhysicalSector.Initialize()
 }
 
 func (s *ToxicSector) Deserialize(data map[string]interface{}) {
-	s.Sector.Deserialize(data)
+	s.PhysicalSector.Deserialize(data)
 
 	if v, ok := data["Hurt"]; ok {
 		s.Hurt = v.(float64)

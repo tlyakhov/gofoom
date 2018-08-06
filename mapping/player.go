@@ -11,7 +11,7 @@ type Player struct {
 	Height    float64
 	Standing  bool
 	Crouching bool
-	Inventory []Entity
+	Inventory []PhysicalEntity
 }
 
 func init() {

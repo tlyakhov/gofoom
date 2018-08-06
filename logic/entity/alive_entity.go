@@ -5,12 +5,12 @@ import (
 )
 
 type AliveEntityService struct {
-	*EntityService
+	*PhysicalEntityService
 	*mapping.AliveEntity
 }
 
 func NewAliveEntityService(e *mapping.AliveEntity) *AliveEntityService {
-	return &AliveEntityService{AliveEntity: e, EntityService: NewEntityService(&e.Entity)}
+	return &AliveEntityService{AliveEntity: e, PhysicalEntityService: NewPhysicalEntityService(&e.PhysicalEntity)}
 }
 
 func (e *AliveEntityService) Hurt(amount float64) {

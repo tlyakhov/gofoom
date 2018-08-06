@@ -19,7 +19,7 @@ func NewPlayerService(p *mapping.Player) *PlayerService {
 }
 
 func (p *PlayerService) Frame(lastFrameTime float64) {
-	p.AliveEntityService.EntityService.Frame(lastFrameTime)
+	p.AliveEntityService.PhysicalEntityService.Frame(lastFrameTime)
 	if p.Player.Sector == nil {
 		return
 	}

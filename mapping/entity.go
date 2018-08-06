@@ -9,7 +9,7 @@ import (
 	"github.com/tlyakhov/gofoom/concepts"
 )
 
-type Entity struct {
+type PhysicalEntity struct {
 	*concepts.Base
 	Pos               *concepts.Vector3
 	Vel               *concepts.Vector3
@@ -26,15 +26,15 @@ type Entity struct {
 
 type AbstractEntity interface {
 	concepts.ISerializable
-	GetEntity() *Entity
+	GetPhysical() *PhysicalEntity
 	GetSector() AbstractSector
 }
 
 func init() {
-	registry.Instance().Register(Entity{})
+	registry.Instance().Register(PhysicalEntity{})
 }
 
-func (e *Entity) Initialize() {
+func (e *PhysicalEntity) Initialize() {
 	e.Base = &concepts.Base{}
 	e.Base.Initialize()
 	e.Pos = &concepts.Vector3{}
@@ -45,25 +45,25 @@ func (e *Entity) Initialize() {
 	e.Active = true
 }
 
-func (e *Entity) GetEntity() *Entity {
+func (e *PhysicalEntity) GetPhysical() *PhysicalEntity {
 	return e
 }
 
-func (e *Entity) GetSector() AbstractSector {
+func (e *PhysicalEntity) GetSector() AbstractSector {
 	return e.Sector
 }
 
-func (e *Entity) Angle2DTo(p *concepts.Vector3) float64 {
+func (e *PhysicalEntity) Angle2DTo(p *concepts.Vector3) float64 {
 	dx := e.Pos.X - p.X
 	dy := e.Pos.Y - p.Y
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
-func (e *Entity) SetParent(parent interface{}) {
-	if sector, ok := parent.(*Sector); ok {
+func (e *PhysicalEntity) SetParent(parent interface{}) {
+	if sector, ok := parent.(*PhysicalSector); ok {
 		e.Sector = sector
 		e.Map = sector.Map
 	} else {
-		panic("Tried mapping.Entity.SetParent with a parameter that wasn't a *mapping.Sector")
+		panic("Tried mapping.PhysicalEntity.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
 	}
 }

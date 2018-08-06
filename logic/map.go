@@ -19,11 +19,11 @@ func (m *MapService) Frame(lastFrameTime float64) {
 
 	for _, sector := range m.Sectors {
 		provide.Interactor.For(sector).ActOnEntity(m.Player)
-		for _, e := range sector.GetSector().Entities {
-			if !e.GetEntity().Active {
+		for _, e := range sector.GetPhysical().Entities {
+			if !e.GetPhysical().Active {
 				continue
 			}
-			for _, pvs := range sector.GetSector().PVSEntity {
+			for _, pvs := range sector.GetPhysical().PVSEntity {
 				_ = pvs
 				//pvs.ActOnEntity(e)
 			}
