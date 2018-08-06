@@ -22,8 +22,8 @@ func (f *AnimatorFactory) For(concrete interface{}) provide.Animateable {
 		return nil
 	}
 	switch target := concrete.(type) {
-	case *mapping.Entity:
-		return NewEntityService(target)
+	case *mapping.PhysicalEntity:
+		return NewPhysicalEntityService(target)
 	case *mapping.AliveEntity:
 		return NewAliveEntityService(target)
 	case *mapping.Player:

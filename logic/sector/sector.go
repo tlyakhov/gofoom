@@ -6,32 +6,32 @@ import (
 	"github.com/tlyakhov/gofoom/mapping"
 )
 
-type SectorService struct {
-	*mapping.Sector
+type PhysicalSectorService struct {
+	*mapping.PhysicalSector
 }
 
-func NewSectorService(s *mapping.Sector) *SectorService {
-	return &SectorService{Sector: s}
+func NewPhysicalSectorService(s *mapping.PhysicalSector) *PhysicalSectorService {
+	return &PhysicalSectorService{PhysicalSector: s}
 }
 
-func (s *SectorService) OnEnter(e mapping.AbstractEntity) {
-	if s.FloorTarget == nil && e.GetEntity().Pos.Z <= e.GetEntity().Sector.GetSector().BottomZ {
-		e.GetEntity().Pos.Z = e.GetEntity().Sector.GetSector().BottomZ
+func (s *PhysicalSectorService) OnEnter(e mapping.AbstractEntity) {
+	if s.FloorTarget == nil && e.GetPhysical().Pos.Z <= e.GetSector().GetPhysical().BottomZ {
+		e.GetPhysical().Pos.Z = e.GetSector().GetPhysical().BottomZ
 	}
 }
 
-func (s *SectorService) OnExit(e mapping.AbstractEntity) {
+func (s *PhysicalSectorService) OnExit(e mapping.AbstractEntity) {
 }
 
-func (s *SectorService) Collide(e mapping.AbstractEntity) {
-	concrete := e.GetEntity()
+func (s *PhysicalSectorService) Collide(e mapping.AbstractEntity) {
+	concrete := e.GetPhysical()
 	entityTop := concrete.Pos.Z + concrete.Height
 
 	if s.FloorTarget != nil && entityTop < s.BottomZ {
 		provide.Passer.For(e.GetSector()).OnExit(e)
 		concrete.Sector = s.FloorTarget
 		provide.Passer.For(e.GetSector()).OnEnter(e)
-		concrete.Pos.Z = e.GetSector().GetSector().TopZ - concrete.Height - 1.0
+		concrete.Pos.Z = e.GetSector().GetPhysical().TopZ - concrete.Height - 1.0
 	} else if s.FloorTarget == nil && concrete.Pos.Z <= s.BottomZ {
 		concrete.Vel.Z = 0
 		concrete.Pos.Z = s.BottomZ
@@ -41,29 +41,29 @@ func (s *SectorService) Collide(e mapping.AbstractEntity) {
 		provide.Passer.For(e.GetSector()).OnExit(e)
 		concrete.Sector = s.CeilTarget
 		provide.Passer.For(e.GetSector()).OnEnter(e)
-		concrete.Pos.Z = e.GetSector().GetSector().BottomZ - concrete.Height + 1.0
+		concrete.Pos.Z = e.GetSector().GetPhysical().BottomZ - concrete.Height + 1.0
 	} else if s.CeilTarget == nil && entityTop > s.TopZ {
 		concrete.Vel.Z = 0
 		concrete.Pos.Z = s.TopZ - concrete.Height - 1.0
 	}
 }
 
-func (s *SectorService) ActOnEntity(e mapping.AbstractEntity) {
+func (s *PhysicalSectorService) ActOnEntity(e mapping.AbstractEntity) {
 	if e.GetSector() == nil || e.GetSector().GetBase().ID != s.ID {
 		return
 	}
 
 	if e.GetBase().ID == s.Map.Player.ID {
-		e.GetEntity().Vel.X = 0
-		e.GetEntity().Vel.Y = 0
+		e.GetPhysical().Vel.X = 0
+		e.GetPhysical().Vel.Y = 0
 	}
 
-	e.GetEntity().Vel.Z -= constants.Gravity
+	e.GetPhysical().Vel.Z -= constants.Gravity
 
 	s.Collide(e)
 }
 
-func (s *SectorService) Frame(lastFrameTime float64) {
+func (s *PhysicalSectorService) Frame(lastFrameTime float64) {
 	for _, e := range s.Entities {
 		if e.GetBase().ID == s.Map.Player.ID || s.Map.EntitiesPaused {
 			continue

@@ -10,18 +10,18 @@ func WallMid(s *state.Slice) {
 	mat := material.For(s.Segment.MidMaterial, s)
 
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
-		screenIndex := uint(s.TargetX + s.Y*s.WorkerWidth)
+		screenIndex := uint(s.X + s.Y*s.ScreenWidth)
 
 		if s.Distance >= s.ZBuffer[screenIndex] {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		s.Intersection.Z = s.Sector.TopZ + v*(s.Sector.BottomZ-s.Sector.TopZ)
+		s.Intersection.Z = s.PhysicalSector.TopZ + v*(s.PhysicalSector.BottomZ-s.PhysicalSector.TopZ)
 
 		// var light = this.map.light(slice.intersection, segment.normal, slice.sector, slice.segment, slice.u, v, true);
 
 		if s.Segment.MidBehavior == mapping.ScaleWidth || s.Segment.MidBehavior == mapping.ScaleNone {
-			v = (v*(s.Sector.TopZ-s.Sector.BottomZ) - s.Sector.TopZ) / 64.0
+			v = (v*(s.PhysicalSector.TopZ-s.PhysicalSector.BottomZ) - s.PhysicalSector.TopZ) / 64.0
 		}
 
 		u := s.U

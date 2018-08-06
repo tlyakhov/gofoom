@@ -30,7 +30,7 @@ func (v *Vector2) Mul(f float64) *Vector2 {
 }
 
 // Length calculates the length of a vector.
-func (v *Vector2) Length() float64 {
+func (v *Vector2) Length() float64 { 
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 

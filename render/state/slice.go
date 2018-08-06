@@ -1,8 +1,6 @@
 package state
 
 import (
-	"image/color"
-
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/mapping"
 )
@@ -15,9 +13,8 @@ type Slice struct {
 	*Config
 	RenderTarget       []uint8
 	X, Y, YStart, YEnd int
-	TargetX            int
 	Map                *mapping.Map
-	Sector             *mapping.Sector
+	PhysicalSector     *mapping.PhysicalSector
 	Segment            *mapping.Segment
 	Ray                *Ray
 	Angle              float64
@@ -41,8 +38,8 @@ func (s *Slice) ProjectZ(z float64) float64 {
 }
 
 func (s *Slice) CalcScreen() {
-	s.ProjHeightTop = s.ProjectZ(s.Sector.TopZ - s.CameraZ)
-	s.ProjHeightBottom = s.ProjectZ(s.Sector.BottomZ - s.CameraZ)
+	s.ProjHeightTop = s.ProjectZ(s.PhysicalSector.TopZ - s.CameraZ)
+	s.ProjHeightBottom = s.ProjectZ(s.PhysicalSector.BottomZ - s.CameraZ)
 
 	s.ScreenStart = s.ScreenHeight/2 - int(s.ProjHeightTop)
 	s.ScreenEnd = s.ScreenHeight/2 - int(s.ProjHeightBottom)
@@ -50,9 +47,9 @@ func (s *Slice) CalcScreen() {
 	s.ClippedEnd = concepts.IntClamp(s.ScreenEnd, s.YStart, s.YEnd)
 }
 
-func (s *Slice) Write(screenIndex uint, color color.NRGBA) {
-	s.RenderTarget[screenIndex*4+0] = color.R
-	s.RenderTarget[screenIndex*4+1] = color.G
-	s.RenderTarget[screenIndex*4+2] = color.B
-	s.RenderTarget[screenIndex*4+3] = color.A
+func (s *Slice) Write(screenIndex uint, c uint32) {
+	s.RenderTarget[screenIndex*4+0] = uint8((c >> 24) & 0xFF)
+	s.RenderTarget[screenIndex*4+1] = uint8((c >> 16) & 0xFF)
+	s.RenderTarget[screenIndex*4+2] = uint8((c >> 8) & 0xFF)
+	s.RenderTarget[screenIndex*4+3] = uint8(c & 0xFF)
 }

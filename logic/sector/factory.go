@@ -28,8 +28,8 @@ func (f *InteractorFactory) For(concrete interface{}) provide.Interactable {
 		return nil
 	}
 	switch target := concrete.(type) {
-	case *mapping.Sector:
-		return NewSectorService(target)
+	case *mapping.PhysicalSector:
+		return NewPhysicalSectorService(target)
 	case *mapping.ToxicSector:
 		return NewToxicSectorService(target)
 	default:

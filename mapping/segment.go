@@ -52,9 +52,9 @@ func (s *Segment) RealizeAdjacentSector() {
 	if ph, ok := s.AdjacentSector.(*PlaceholderSector); ok {
 
 		// Get the actual one.
-		s.AdjacentSector = s.Sector.GetSector().Map.Sectors[ph.ID]
+		s.AdjacentSector = s.Sector.GetPhysical().Map.Sectors[ph.ID]
 		if s.AdjacentSector != nil {
-			for _, s2 := range s.AdjacentSector.GetSector().Segments {
+			for _, s2 := range s.AdjacentSector.GetPhysical().Segments {
 				if s2.Matches(s) {
 					s.AdjacentSegment = s2
 					s2.AdjacentSector = s.Sector
@@ -71,7 +71,7 @@ func (s *Segment) Recalculate() {
 	s.Normal = &concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()
-		sector := s.Sector.GetSector()
+		sector := s.Sector.GetPhysical()
 		s.LightmapWidth = uint(s.Length/constants.LightGrid) + 2
 		s.LightmapHeight = uint((sector.TopZ-sector.BottomZ)/constants.LightGrid) + 2
 		s.Lightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
@@ -218,7 +218,7 @@ func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 
 func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
 	alongSegment := s.A.Add(s.B.Sub(s.A).Mul(u))
-	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.GetSector().BottomZ + (1.0-v)*s.Sector.GetSector().TopZ}
+	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.GetPhysical().BottomZ + (1.0-v)*s.Sector.GetPhysical().TopZ}
 }
 
 func (s *Segment) LMAddressToWorld(mapIndex uint) *concepts.Vector3 {
@@ -230,10 +230,10 @@ func (s *Segment) LMAddressToWorld(mapIndex uint) *concepts.Vector3 {
 }
 
 func (s *Segment) SetParent(parent interface{}) {
-	if sector, ok := parent.(*Sector); ok {
+	if sector, ok := parent.(*PhysicalSector); ok {
 		s.Sector = sector
 	} else {
-		panic("Tried mapping.Segment.SetParent with a parameter that wasn't a *mapping.Sector")
+		panic("Tried mapping.Segment.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
 	}
 }
 
@@ -250,13 +250,13 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 		s.AdjacentSector = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
 	}
 	if v, ok := data["LoMaterial"]; ok {
-		s.LoMaterial = s.Sector.GetSector().Map.Materials[v.(string)]
+		s.LoMaterial = s.Sector.GetPhysical().Map.Materials[v.(string)]
 	}
 	if v, ok := data["MidMaterial"]; ok {
-		s.MidMaterial = s.Sector.GetSector().Map.Materials[v.(string)]
+		s.MidMaterial = s.Sector.GetPhysical().Map.Materials[v.(string)]
 	}
 	if v, ok := data["HiMaterial"]; ok {
-		s.HiMaterial = s.Sector.GetSector().Map.Materials[v.(string)]
+		s.HiMaterial = s.Sector.GetPhysical().Map.Materials[v.(string)]
 	}
 	if v, ok := data["LoBehavior"]; ok {
 		mb, error := MaterialBehaviorString(v.(string))

@@ -23,7 +23,7 @@ func init() {
 
 func (m *Map) Recalculate() {
 	for _, item := range m.Sectors {
-		if sector, ok := item.(*Sector); ok {
+		if sector, ok := item.(*PhysicalSector); ok {
 			sector.Recalculate()
 		}
 	}
@@ -31,7 +31,7 @@ func (m *Map) Recalculate() {
 
 func (m *Map) ClearLightmaps() {
 	for _, item := range m.Sectors {
-		if sector, ok := item.(*Sector); ok {
+		if sector, ok := item.(*PhysicalSector); ok {
 			sector.ClearLightmaps()
 		}
 	}

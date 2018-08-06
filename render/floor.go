@@ -9,18 +9,18 @@ import (
 )
 
 func Floor(s *state.Slice) {
-	mat := material.For(s.Sector.FloorMaterial, s)
+	mat := material.For(s.PhysicalSector.FloorMaterial, s)
 
-	world := &concepts.Vector3{0, 0, s.Sector.BottomZ}
+	world := &concepts.Vector3{0, 0, s.PhysicalSector.BottomZ}
 
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
 		if s.Y-s.ScreenHeight/2 == 0 {
 			continue
 		}
 
-		distToFloor := (-s.Sector.BottomZ + s.CameraZ) * s.ViewFix[s.X] / float64(s.Y-s.ScreenHeight/2)
-		scaler := s.Sector.FloorScale / distToFloor
-		screenIndex := uint(s.TargetX + s.Y*s.WorkerWidth)
+		distToFloor := (-s.PhysicalSector.BottomZ + s.CameraZ) * s.ViewFix[s.X] / float64(s.Y-s.ScreenHeight/2)
+		scaler := s.PhysicalSector.FloorScale / distToFloor
+		screenIndex := uint(s.X + s.Y*s.ScreenWidth)
 
 		if distToFloor >= s.ZBuffer[screenIndex] {
 			continue
@@ -29,9 +29,9 @@ func Floor(s *state.Slice) {
 		world.X = s.Map.Player.Pos.X + s.AngleCos*distToFloor
 		world.Y = s.Map.Player.Pos.Y + s.AngleSin*distToFloor
 
-		tx := world.X / s.Sector.FloorScale
+		tx := world.X / s.PhysicalSector.FloorScale
 		tx -= math.Floor(tx)
-		ty := world.Y / s.Sector.FloorScale
+		ty := world.Y / s.PhysicalSector.FloorScale
 		ty -= math.Floor(ty)
 		if tx < 0 {
 			tx += 1.0

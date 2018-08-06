@@ -12,7 +12,8 @@ import (
 
 type Renderer struct {
 	*state.Config
-	Map *mapping.Map
+	Map     *mapping.Map
+	columns chan int
 }
 
 func NewRenderer() *Renderer {
@@ -24,12 +25,12 @@ func NewRenderer() *Renderer {
 			MaxViewDist:  constants.MaxViewDistance,
 			Frame:        0,
 			FrameTint:    0,
-			WorkerWidth:  640,
 			Counter:      0,
 
 			FloorNormal:   concepts.Vector3{X: 0, Y: 0, Z: 1},
 			CeilingNormal: concepts.Vector3{X: 0, Y: 0, Z: -1},
 		},
+		columns: make(chan int),
 	}
 	r.Initialize()
 	return &r
@@ -37,7 +38,6 @@ func NewRenderer() *Renderer {
 
 func (r *Renderer) RenderSlice(slice *state.Slice) {
 	slice.CalcScreen()
-
 	Ceiling(slice)
 	Floor(slice)
 
@@ -51,7 +51,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	WallLow(sp)
 
 	portalSlice := *slice
-	portalSlice.Sector = sp.Adj.GetSector()
+	portalSlice.PhysicalSector = sp.Adj.GetPhysical()
 	portalSlice.YStart = sp.AdjClippedTop
 	portalSlice.YEnd = sp.AdjClippedBottom
 	portalSlice.Depth++
@@ -63,7 +63,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 
 	dist := math.MaxFloat64
 
-	for _, segment := range slice.Sector.Segments {
+	for _, segment := range slice.PhysicalSector.Segments {
 		if slice.Ray.End.Sub(slice.Ray.Start).Dot(segment.Normal) > 0 {
 			continue
 		}
@@ -94,53 +94,57 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	if dist != math.MaxFloat64 {
 		r.RenderSlice(slice)
 	} else {
-		fmt.Println("Depth: %v, sector: %s", slice.Depth, slice.Sector.ID)
+		fmt.Printf("Depth: %v, sector: %s\n", slice.Depth, slice.PhysicalSector.ID)
 	}
+}
+
+func (r *Renderer) RenderColumn(buffer []uint8, x int) {
+	// Reset the z-buffer to maximum viewing distance.
+	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
+		r.ZBuffer[i] = r.MaxViewDist
+	}
+
+	// Initialize a slice...
+	slice := &state.Slice{
+		Config:         r.Config,
+		Map:            r.Map,
+		RenderTarget:   buffer,
+		X:              x,
+		YStart:         0,
+		YEnd:           r.ScreenHeight - 1,
+		Angle:          r.Map.Player.Angle*concepts.Deg2rad + r.ViewRadians[x],
+		PhysicalSector: r.Map.Player.Sector.GetPhysical(),
+		CameraZ:        r.Map.Player.Pos.Z + r.Map.Player.Height,
+	}
+	slice.AngleCos = math.Cos(slice.Angle)
+	slice.AngleSin = math.Sin(slice.Angle)
+
+	slice.Ray = &state.Ray{
+		Start: r.Map.Player.Pos.To2D(),
+		End: &concepts.Vector2{
+			X: r.Map.Player.Pos.X + r.MaxViewDist*slice.AngleCos,
+			Y: r.Map.Player.Pos.Y + r.MaxViewDist*slice.AngleSin,
+		},
+	}
+
+	r.RenderSector(slice)
+	r.columns <- x
 }
 
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
-	r.Frame += 1
-	r.Counter = 0
-	xStart := 0
-	xEnd := xStart + r.WorkerWidth
-
-	for x := xStart; x < xEnd; x++ {
-		// Reset the z-buffer to maximum viewing distance.
-		for i := x - xStart; i < r.ScreenHeight*r.WorkerWidth+x-xStart; i += r.WorkerWidth {
-			r.ZBuffer[i] = r.MaxViewDist
-		}
-
-		if r.Map.Player.Sector == nil {
-			continue
-		}
-
-		// Initialize a slice...
-		slice := &state.Slice{
-			Config:       r.Config,
-			Map:          r.Map,
-			RenderTarget: buffer,
-			X:            x,
-			TargetX:      x - xStart,
-			YStart:       0,
-			YEnd:         r.ScreenHeight - 1,
-			Angle:        r.Map.Player.Angle*concepts.Deg2rad + r.ViewRadians[x],
-			Sector:       r.Map.Player.Sector.(*mapping.Sector),
-			CameraZ:      r.Map.Player.Pos.Z + r.Map.Player.Height,
-		}
-		slice.AngleCos = math.Cos(slice.Angle)
-		slice.AngleSin = math.Sin(slice.Angle)
-
-		slice.Ray = &state.Ray{
-			Start: r.Map.Player.Pos.To2D(),
-			End: &concepts.Vector2{
-				X: r.Map.Player.Pos.X + r.MaxViewDist*slice.AngleCos,
-				Y: r.Map.Player.Pos.Y + r.MaxViewDist*slice.AngleSin,
-			},
-		}
-
-		r.RenderSector(slice)
+	if r.Map.Player.Sector == nil {
+		return
 	}
 
+	r.Frame++
+	r.Counter = 0
+
+	for x := 0; x < r.ScreenWidth; x++ {
+		go r.RenderColumn(buffer, x)
+	}
+	for x := 0; x < r.ScreenWidth; x++ {
+		<-r.columns
+	}
 	// Entities...
 }

@@ -11,7 +11,7 @@ import (
 
 type mipMap struct {
 	Width, Height uint
-	Data          *image.NRGBA
+	Data          []uint32
 }
 
 // Image represents an image that will be rendered in-game.
@@ -22,7 +22,7 @@ type Image struct {
 	Source          string `editable:"Texture Source" edit_type:"string"`
 	GenerateMipMaps bool   `editable:"Generate Mip Maps?" edit_type:"bool"`
 	Filter          bool   `editable:"Filter?" edit_type:"bool"`
-	Data            *image.NRGBA
+	Data            []uint32
 	MipMaps         map[uint]*mipMap
 	SmallestMipMap  *mipMap
 }
@@ -59,10 +59,11 @@ func (t *Image) Load() (*Image, error) {
 	bounds := img.Bounds()
 	t.Width = uint(bounds.Dx())
 	t.Height = uint(bounds.Dy())
-	t.Data = image.NewNRGBA(image.Rectangle{image.Point{0, 0}, image.Point{int(t.Width), int(t.Height)}})
+	t.Data = make([]uint32, int(t.Width)*int(t.Height))
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			t.Data.Set(x-bounds.Min.X, y-bounds.Min.Y, img.At(x, y))
+			index := uint(x-bounds.Min.X) + uint(y-bounds.Min.Y)*t.Width
+			t.Data[index] = concepts.ColorToInt32(img.At(x, y))
 		}
 	}
 	return t, nil
@@ -81,7 +82,7 @@ func (t *Image) generateMipMaps() {
 	var x, y, px, py, pcx, pcy uint
 
 	for w > 1 && h > 1 {
-		mm := mipMap{Width: w, Height: h, Data: image.NewNRGBA(image.Rectangle{image.Point{0, 0}, image.Point{int(w), int(h)}})}
+		mm := mipMap{Width: w, Height: h, Data: make([]uint32, w*h)}
 
 		for y = 0; y < h; y++ {
 			for x = 0; x < w; x++ {
@@ -89,11 +90,11 @@ func (t *Image) generateMipMaps() {
 				py = y * (prev.Height - 1) / (h - 1)
 				pcx = concepts.UMin(px+1, prev.Width-1)
 				pcy = concepts.UMin(py+1, prev.Height-1)
-				c := [4]color.NRGBA{
-					prev.Data.At(int(px), int(py)).(color.NRGBA),
-					prev.Data.At(int(pcx), int(py)).(color.NRGBA),
-					prev.Data.At(int(pcx), int(pcy)).(color.NRGBA),
-					prev.Data.At(int(px), int(pcy)).(color.NRGBA),
+				c := [16]color.NRGBA{
+					concepts.Int32ToNRGBA(prev.Data[py*prev.Width+px]),
+					concepts.Int32ToNRGBA(prev.Data[py*prev.Width+pcx]),
+					concepts.Int32ToNRGBA(prev.Data[pcy*prev.Width+pcx]),
+					concepts.Int32ToNRGBA(prev.Data[pcy*prev.Width+px]),
 				}
 				avg := color.NRGBA{
 					uint8((uint(c[0].R) + uint(c[1].R) + uint(c[2].R) + uint(c[3].R)) / 4),
@@ -101,7 +102,7 @@ func (t *Image) generateMipMaps() {
 					uint8((uint(c[0].B) + uint(c[1].B) + uint(c[2].B) + uint(c[3].B)) / 4),
 					uint8((uint(c[0].A) + uint(c[1].A) + uint(c[2].A) + uint(c[3].A)) / 4),
 				}
-				mm.Data.Set(int(x), int(y), avg)
+				mm.Data[y*mm.Width+x] = concepts.NRGBAToInt32(avg)
 			}
 		}
 		index := concepts.NearestPow2(uint(mm.Height))
@@ -117,7 +118,7 @@ func (t *Image) generateMipMaps() {
 	t.SmallestMipMap = prev
 }
 
-func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
+func (t *Image) Sample(x, y float64, scale float64) uint32 {
 	data := t.Data
 	w := t.Width
 	h := t.Height
@@ -137,7 +138,7 @@ func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
 	}
 
 	if data == nil || w == 0 || h == 0 {
-		return color.NRGBA{0, 0, 0, 0xFF}
+		return 0xFF // Black, full alpha
 	}
 
 	if x < 0 {
@@ -151,26 +152,36 @@ func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
 	fy := uint(y * float64(h))
 
 	if !t.Filter {
-		index := (concepts.UMin(fy, h-1)*w + concepts.UMin(fx, w-1)) * 4
-		return color.NRGBA{data.Pix[index], data.Pix[index+1], data.Pix[index+2], data.Pix[index+3]}
+		index := concepts.UMin(fy, h-1)*w + concepts.UMin(fx, w-1)
+		return data[index]
 	}
 
 	fx = concepts.UMin(fx, w-1)
 	fy = concepts.UMin(fy, h-1)
 	cx := (fx + 1) % w
 	cy := (fy + 1) % h
-	t00 := (fy*w + fx) * 4
-	t10 := (fy*w + cx) * 4
-	t11 := (cy*w + cx) * 4
-	t01 := (cy*w + fx) * 4
+	t00 := data[fy*w+fx]
+	t10 := data[fy*w+cx]
+	t11 := data[cy*w+cx]
+	t01 := data[cy*w+fx]
 	wx := x*float64(w) - float64(fx)
 	wy := y*float64(h) - float64(fy)
-	return color.NRGBA{
-		uint8(float64(data.Pix[t00])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10])*wx*(1.0-wy) + float64(data.Pix[t11])*wx*wy + float64(data.Pix[t01])*(1.0-wx)*wy),
-		uint8(float64(data.Pix[t00+1])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10+1])*wx*(1.0-wy) + float64(data.Pix[t11+1])*wx*wy + float64(data.Pix[t01+1])*(1.0-wx)*wy),
-		uint8(float64(data.Pix[t00+2])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10+2])*wx*(1.0-wy) + float64(data.Pix[t11+2])*wx*wy + float64(data.Pix[t01+2])*(1.0-wx)*wy),
-		uint8(float64(data.Pix[t00+3])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10+3])*wx*(1.0-wy) + float64(data.Pix[t11+3])*wx*wy + float64(data.Pix[t01+3])*(1.0-wx)*wy),
+
+	var j uint32 = 24
+	var r [4]uint32
+	for i := 0; i < 4; i++ {
+		c00 := (t00 >> j) & 0xFF
+		c10 := (t10 >> j) & 0xFF
+		c11 := (t11 >> j) & 0xFF
+		c01 := (t01 >> j) & 0xFF
+		if c00 == c10 && c10 == c11 && c11 == c01 {
+			r[i] = c00
+		} else {
+			r[i] = uint32(float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy)
+		}
+		j -= 8
 	}
+	return ((r[0] & 0xFF) << 24) | ((r[1] & 0xFF) << 16) | ((r[2] & 0xFF) << 8) | (r[3] & 0xFF)
 }
 
 func (t *Image) Deserialize(data map[string]interface{}) {

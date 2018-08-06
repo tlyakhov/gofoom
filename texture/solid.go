@@ -26,8 +26,8 @@ func (s *Solid) Initialize() {
 	s.Base.Initialize()
 }
 
-func (s *Solid) Sample(x, y float64, scale float64) color.NRGBA {
-	return s.Diffuse
+func (s *Solid) Sample(x, y float64, scale float64) uint32 {
+	return concepts.NRGBAToInt32(s.Diffuse)
 }
 
 func (s *Solid) Deserialize(data map[string]interface{}) {
