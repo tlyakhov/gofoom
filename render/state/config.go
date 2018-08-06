@@ -12,7 +12,7 @@ type trigEntry struct {
 
 type Config struct {
 	ScreenWidth, ScreenHeight int
-	Frame, FrameTint, Counter int
+	Frame, Counter            int
 	MaxViewDist, FOV          float64
 	CameraToProjectionPlane   float64
 	ViewRadians               []float64

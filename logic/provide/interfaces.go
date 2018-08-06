@@ -1,17 +1,21 @@
 package provide
 
-import "github.com/tlyakhov/gofoom/mapping"
+import "github.com/tlyakhov/gofoom/core"
 
 type Interactable interface {
-	ActOnEntity(e mapping.AbstractEntity)
+	ActOnEntity(e core.AbstractEntity)
 }
 
 type Passable interface {
-	OnEnter(e mapping.AbstractEntity)
-	OnExit(e mapping.AbstractEntity)
-	Collide(e mapping.AbstractEntity)
+	OnEnter(e core.AbstractEntity)
+	OnExit(e core.AbstractEntity)
+	Collide(e core.AbstractEntity)
 }
 
 type Animateable interface {
 	Frame(lastFrameTime float64)
+}
+
+type Hurtable interface {
+	Hurt(amount float64)
 }

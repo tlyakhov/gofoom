@@ -5,19 +5,19 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/logic/provide"
-	"github.com/tlyakhov/gofoom/mapping"
 )
 
 type PhysicalEntityService struct {
-	*mapping.PhysicalEntity
+	*core.PhysicalEntity
 }
 
-func NewPhysicalEntityService(e *mapping.PhysicalEntity) *PhysicalEntityService {
+func NewPhysicalEntityService(e *core.PhysicalEntity) *PhysicalEntityService {
 	return &PhysicalEntityService{PhysicalEntity: e}
 }
 
-func (e *PhysicalEntityService) PushBack(segment *mapping.Segment) bool {
+func (e *PhysicalEntityService) PushBack(segment *core.Segment) bool {
 	p2d := e.Pos.To2D()
 	d := segment.DistanceToPoint2(p2d)
 	if d > e.BoundingRadius*e.BoundingRadius {
@@ -39,7 +39,7 @@ func (e *PhysicalEntityService) PushBack(segment *mapping.Segment) bool {
 	return true
 }
 
-func (e *PhysicalEntityService) Collide() []*mapping.Segment {
+func (e *PhysicalEntityService) Collide() []*core.Segment {
 	if e.Map == nil {
 		return nil
 	}
@@ -56,15 +56,15 @@ func (e *PhysicalEntityService) Collide() []*mapping.Segment {
 	// The central method here is to push back, but the wall that's doing the pushing requires some logic to get.
 
 	// Assume we haven't collided.
-	var collided []*mapping.Segment
+	var collided []*core.Segment
 
 	// Cases 1 & 2.
 	if e.Sector == nil {
-		var closestSector mapping.AbstractSector
+		var closestSector core.AbstractSector
 		closestDistance2 := math.MaxFloat64
 
 		for _, sector := range e.Map.Sectors {
-			d2 := e.Pos.Dist2(sector.GetPhysical().Center)
+			d2 := e.Pos.Dist2(sector.Physical().Center)
 
 			if closestSector == nil || d2 < closestDistance2 {
 				closestDistance2 = d2
@@ -73,22 +73,22 @@ func (e *PhysicalEntityService) Collide() []*mapping.Segment {
 		}
 
 		if !closestSector.IsPointInside2D(e.Pos.To2D()) {
-			*e.Pos = *closestSector.GetPhysical().Center
-		} else if e.Pos.Z < closestSector.GetPhysical().BottomZ || e.Pos.Z+e.Height > closestSector.GetPhysical().TopZ {
-			e.Pos.Z = closestSector.GetPhysical().Center.Z
+			*e.Pos = *closestSector.Physical().Center
+		} else if e.Pos.Z < closestSector.Physical().BottomZ || e.Pos.Z+e.Height > closestSector.Physical().TopZ {
+			e.Pos.Z = closestSector.Physical().Center.Z
 		}
 
 		e.Sector = closestSector
-		closestSector.GetPhysical().Entities[e.ID] = e.PhysicalEntity
+		closestSector.Physical().Entities[e.ID] = e.PhysicalEntity
 		provide.Passer.For(closestSector).OnEnter(e.PhysicalEntity)
 		// Don't mark as collided because this is probably an initialization.
 	}
 
 	// Case 3 & 4
 	// See if we need to push back into the current sector.
-	for _, segment := range e.Sector.GetPhysical().Segments {
+	for _, segment := range e.Sector.Physical().Segments {
 		if segment.AdjacentSector != nil {
-			adj := segment.AdjacentSector.(*mapping.PhysicalSector)
+			adj := segment.AdjacentSector.Physical()
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
 			if e.Pos.Z+e.MountHeight >= adj.BottomZ &&
@@ -107,12 +107,12 @@ func (e *PhysicalEntityService) Collide() []*mapping.Segment {
 		// Cases 5 & 6
 
 		// Exit the current sector.
-		provide.Passer.For(e.Sector).OnExit(e.GetPhysical())
-		delete(e.Sector.GetPhysical().Entities, e.ID)
+		provide.Passer.For(e.Sector).OnExit(e.Physical())
+		delete(e.Sector.Physical().Entities, e.ID)
 		e.Sector = nil
 
 		for _, item := range e.Map.Sectors {
-			sector := item.GetPhysical()
+			sector := item.Physical()
 			if e.Pos.Z+e.MountHeight >= sector.BottomZ &&
 				e.Pos.Z+e.Height < sector.TopZ &&
 				sector.IsPointInside2D(ePosition2D) {
@@ -121,7 +121,7 @@ func (e *PhysicalEntityService) Collide() []*mapping.Segment {
 					e.Pos.Z = sector.BottomZ
 				}
 				e.Sector = item
-				e.Sector.GetPhysical().Entities[e.ID] = e
+				e.Sector.Physical().Entities[e.ID] = e
 				provide.Passer.For(e.Sector).OnEnter(e)
 				break
 			}
@@ -130,7 +130,7 @@ func (e *PhysicalEntityService) Collide() []*mapping.Segment {
 		if e.Sector == nil {
 			// Case 6! This is the worst.
 			for _, item := range e.Map.Sectors {
-				sector := item.GetPhysical()
+				sector := item.Physical()
 				if e.Pos.Z+e.MountHeight >= sector.BottomZ &&
 					e.Pos.Z+e.Height < sector.TopZ {
 
@@ -153,20 +153,20 @@ func (e *PhysicalEntityService) Collide() []*mapping.Segment {
 			response = e.CRCallback()
 		}
 
-		if response == mapping.Stop {
+		if response == core.Stop {
 			e.Vel.X = 0
 			e.Vel.Y = 0
-		} else if response == mapping.Bounce {
+		} else if response == core.Bounce {
 			for _, segment := range collided {
 				e.Vel = e.Vel.Sub(segment.Normal.To3D().Mul(2 * e.Vel.Dot(segment.Normal.To3D())))
 			}
-		} else if response == mapping.Remove {
+		} else if response == core.Remove {
 			e.Remove()
 		}
 	}
 
 	if e.Sector != nil {
-		e.Sector.GetPhysical().Entities[e.ID] = e
+		e.Sector.Physical().Entities[e.ID] = e
 	}
 
 	return collided
@@ -174,13 +174,13 @@ func (e *PhysicalEntityService) Collide() []*mapping.Segment {
 
 func (e *PhysicalEntityService) Remove() {
 	if e.Sector != nil {
-		delete(e.Sector.GetPhysical().Entities, e.ID)
+		delete(e.Sector.Physical().Entities, e.ID)
 		e.Sector = nil
 		return
 	}
 
 	for _, sector := range e.Map.Sectors {
-		delete(sector.GetPhysical().Entities, e.ID)
+		delete(sector.Physical().Entities, e.ID)
 	}
 }
 

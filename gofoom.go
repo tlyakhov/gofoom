@@ -10,15 +10,17 @@ import (
 	"os"
 	"runtime/pprof"
 
+	"github.com/tlyakhov/gofoom/entities"
 	"github.com/tlyakhov/gofoom/logic"
 	"github.com/tlyakhov/gofoom/logic/entity"
+	"github.com/tlyakhov/gofoom/sectors"
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/core"
 	_ "github.com/tlyakhov/gofoom/logic/entity"
 	_ "github.com/tlyakhov/gofoom/logic/provide"
 	_ "github.com/tlyakhov/gofoom/logic/sector"
-	"github.com/tlyakhov/gofoom/mapping"
 	"github.com/tlyakhov/gofoom/render"
 
 	// "math"
@@ -35,7 +37,7 @@ import (
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 
-func loadMap(filename string) *mapping.Map {
+func loadMap(filename string) *core.Map {
 	fileContents, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -43,9 +45,11 @@ func loadMap(filename string) *mapping.Map {
 	}
 	var parsed interface{}
 	err = json.Unmarshal(fileContents, &parsed)
-	m := &mapping.Map{}
+	m := &core.Map{}
 	m.Initialize()
 	m.Deserialize(parsed.(map[string]interface{}))
+	m.Player = entities.NewPlayer(m)
+	m.Recalculate()
 	return m
 }
 
@@ -63,7 +67,7 @@ func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:     "Foom",
 		Bounds:    pixel.R(0, 0, float64(w), float64(h)),
-		VSync:     false,
+		VSync:     true,
 		Resizable: true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -85,7 +89,7 @@ func run() {
 	renderer.ScreenHeight = h
 	renderer.Initialize()
 	gameMap := loadMap("data/classicMap.json")
-	ps := entity.NewPlayerService(gameMap.Player)
+	ps := entity.NewPlayerService(gameMap.Player.(*entities.Player))
 	ps.Collide()
 	renderer.Map = gameMap
 
@@ -101,19 +105,19 @@ func run() {
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
 		}
 		if win.Pressed(pixelgl.KeyW) {
-			ps.Move(gameMap.Player.Angle, dt, 1.0)
+			ps.Move(ps.Player.Angle, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyS) {
-			ps.Move(gameMap.Player.Angle+180.0, dt, 1.0)
+			ps.Move(ps.Player.Angle+180.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyQ) {
-			ps.Move(gameMap.Player.Angle+270.0, dt, 1.0)
+			ps.Move(ps.Player.Angle+270.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyE) {
-			ps.Move(gameMap.Player.Angle+90.0, dt, 1.0)
+			ps.Move(ps.Player.Angle+90.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyQ) {
-			ps.Move(gameMap.Player.Angle+270.0, dt, 1.0)
+			ps.Move(ps.Player.Angle+270.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyA) {
 			ps.Player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
@@ -124,10 +128,21 @@ func run() {
 			ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
 		}
 		if win.Pressed(pixelgl.KeySpace) {
-			if ps.Standing {
+			if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
+				ps.Player.Vel.Z += constants.PlayerSwimStrength * dt / 30.0
+			} else if ps.Standing {
 				ps.Player.Vel.Z += constants.PlayerJumpStrength * dt / 30.0
 				ps.Standing = false
 			}
+		}
+		if win.Pressed(pixelgl.KeyC) {
+			if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
+				ps.Player.Vel.Z -= constants.PlayerSwimStrength * dt / 30.0
+			} else {
+				ps.Crouching = true
+			}
+		} else {
+			ps.Crouching = false
 		}
 
 		renderer.Render(buffer.Pix)

@@ -2,16 +2,16 @@ package material
 
 import (
 	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/mapping/material"
+	"github.com/tlyakhov/gofoom/materials"
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
 type LitService struct {
-	*material.Lit
+	*materials.Lit
 	*state.Slice
 }
 
-func NewLitService(m *material.Lit, s *state.Slice) *LitService {
+func NewLitService(m *materials.Lit, s *state.Slice) *LitService {
 	return &LitService{Lit: m, Slice: s}
 }
 

@@ -1,7 +1,7 @@
 package render
 
 import (
-	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/render/material"
 	"github.com/tlyakhov/gofoom/render/state"
 )
@@ -20,12 +20,12 @@ func WallMid(s *state.Slice) {
 
 		// var light = this.map.light(slice.intersection, segment.normal, slice.sector, slice.segment, slice.u, v, true);
 
-		if s.Segment.MidBehavior == mapping.ScaleWidth || s.Segment.MidBehavior == mapping.ScaleNone {
+		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
 			v = (v*(s.PhysicalSector.TopZ-s.PhysicalSector.BottomZ) - s.PhysicalSector.TopZ) / 64.0
 		}
 
 		u := s.U
-		if s.Segment.MidBehavior == mapping.ScaleHeight || s.Segment.MidBehavior == mapping.ScaleNone {
+		if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleNone {
 			u = u * s.Segment.Length / 64.0
 		}
 

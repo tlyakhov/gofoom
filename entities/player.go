@@ -1,21 +1,32 @@
-package mapping
+package entities
 
 import (
+	"image/color"
+
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Player struct {
 	AliveEntity
 
-	Height    float64
+	FrameTint color.NRGBA
 	Standing  bool
 	Crouching bool
-	Inventory []PhysicalEntity
+	Inventory []core.AbstractEntity
 }
 
 func init() {
 	registry.Instance().Register(Player{})
+}
+
+func NewPlayer(m *core.Map) *Player {
+	p := &Player{}
+	p.Map = m
+	p.Initialize()
+	p.Pos = m.Spawn
+	return p
 }
 
 func (p *Player) Initialize() {

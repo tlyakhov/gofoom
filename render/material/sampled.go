@@ -5,16 +5,16 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/mapping/material"
+	"github.com/tlyakhov/gofoom/materials"
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
 type SampledService struct {
-	*material.Sampled
+	*materials.Sampled
 	*state.Slice
 }
 
-func NewSampledService(m *material.Sampled, s *state.Slice) *SampledService {
+func NewSampledService(m *materials.Sampled, s *state.Slice) *SampledService {
 	return &SampledService{Sampled: m, Slice: s}
 }
 

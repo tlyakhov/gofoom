@@ -4,16 +4,16 @@ import (
 	"math"
 
 	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/mapping/material"
+	"github.com/tlyakhov/gofoom/materials"
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
 type SkyService struct {
-	*material.Sky
+	*materials.Sky
 	*state.Slice
 }
 
-func NewSkyService(m *material.Sky, s *state.Slice) *SkyService {
+func NewSkyService(m *materials.Sky, s *state.Slice) *SkyService {
 	return &SkyService{Sky: m, Slice: s}
 }
 

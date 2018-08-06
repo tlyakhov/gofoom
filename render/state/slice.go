@@ -2,7 +2,7 @@ package state
 
 import (
 	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/core"
 )
 
 type Ray struct {
@@ -13,9 +13,9 @@ type Slice struct {
 	*Config
 	RenderTarget       []uint8
 	X, Y, YStart, YEnd int
-	Map                *mapping.Map
-	PhysicalSector     *mapping.PhysicalSector
-	Segment            *mapping.Segment
+	Map                *core.Map
+	PhysicalSector     *core.PhysicalSector
+	Segment            *core.Segment
 	Ray                *Ray
 	Angle              float64
 	AngleCos           float64

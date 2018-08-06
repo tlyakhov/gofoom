@@ -1,9 +1,12 @@
-package mapping
+package sectors
 
-import "github.com/tlyakhov/gofoom/registry"
+import (
+	"github.com/tlyakhov/gofoom/core"
+	"github.com/tlyakhov/gofoom/registry"
+)
 
 type ToxicSector struct {
-	PhysicalSector
+	core.PhysicalSector
 	Hurt float64
 }
 

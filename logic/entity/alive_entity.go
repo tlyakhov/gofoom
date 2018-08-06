@@ -1,15 +1,15 @@
 package entity
 
 import (
-	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/entities"
 )
 
 type AliveEntityService struct {
 	*PhysicalEntityService
-	*mapping.AliveEntity
+	*entities.AliveEntity
 }
 
-func NewAliveEntityService(e *mapping.AliveEntity) *AliveEntityService {
+func NewAliveEntityService(e *entities.AliveEntity) *AliveEntityService {
 	return &AliveEntityService{AliveEntity: e, PhysicalEntityService: NewPhysicalEntityService(&e.PhysicalEntity)}
 }
 
