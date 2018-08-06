@@ -1,15 +1,15 @@
 package logic
 
 import (
+	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/logic/provide"
-	"github.com/tlyakhov/gofoom/mapping"
 )
 
 type MapService struct {
-	*mapping.Map
+	*core.Map
 }
 
-func NewMapService(m *mapping.Map) *MapService {
+func NewMapService(m *core.Map) *MapService {
 	return &MapService{Map: m}
 }
 
@@ -19,11 +19,11 @@ func (m *MapService) Frame(lastFrameTime float64) {
 
 	for _, sector := range m.Sectors {
 		provide.Interactor.For(sector).ActOnEntity(m.Player)
-		for _, e := range sector.GetPhysical().Entities {
-			if !e.GetPhysical().Active {
+		for _, e := range sector.Physical().Entities {
+			if !e.Physical().Active {
 				continue
 			}
-			for _, pvs := range sector.GetPhysical().PVSEntity {
+			for _, pvs := range sector.Physical().PVSEntity {
 				_ = pvs
 				//pvs.ActOnEntity(e)
 			}

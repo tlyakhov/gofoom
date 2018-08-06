@@ -17,7 +17,7 @@ const (
 
 	// World constants
 	Gravity          = 0.1
-	GravitySwim      = 0.001
+	GravitySwim      = 0.01
 	SwimDamping      = 2.0
 	CollisionCheck   = 2.0
 	LiquidChurnSpeed = 2.0

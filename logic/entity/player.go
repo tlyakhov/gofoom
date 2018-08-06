@@ -1,20 +1,21 @@
 package entity
 
 import (
+	"image/color"
 	"math"
 
 	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/entities"
 
 	"github.com/tlyakhov/gofoom/constants"
 )
 
 type PlayerService struct {
-	*mapping.Player
+	*entities.Player
 	*AliveEntityService
 }
 
-func NewPlayerService(p *mapping.Player) *PlayerService {
+func NewPlayerService(p *entities.Player) *PlayerService {
 	return &PlayerService{Player: p, AliveEntityService: NewAliveEntityService(&p.AliveEntity)}
 }
 
@@ -31,13 +32,14 @@ func (p *PlayerService) Frame(lastFrameTime float64) {
 	}
 
 	if p.Crouching {
-		p.Height = constants.PlayerCrouchHeight
+		p.Player.Height = constants.PlayerCrouchHeight
 	} else {
-		p.Height = constants.PlayerHeight
+		p.Player.Height = constants.PlayerHeight
 	}
 
 	if p.Player.HurtTime > 0 {
 		//globalGame.frameTint = 255 | ((fast_floor(this.hurtTime * 200 / GAME_CONSTANTS.playerHurtTime) & 0xFF) << 24);
+		p.FrameTint = color.NRGBA{0xFF, 0, 0, uint8(p.Player.HurtTime * 200 / constants.PlayerHurtTime)}
 		p.Player.HurtTime--
 	}
 }

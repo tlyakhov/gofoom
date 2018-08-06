@@ -1,9 +1,12 @@
-package mapping
+package entities
 
-import "github.com/tlyakhov/gofoom/registry"
+import (
+	"github.com/tlyakhov/gofoom/core"
+	"github.com/tlyakhov/gofoom/registry"
+)
 
 type AliveEntity struct {
-	PhysicalEntity
+	core.PhysicalEntity
 	Health   float64
 	HurtTime float64
 }

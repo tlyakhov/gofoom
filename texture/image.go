@@ -167,21 +167,44 @@ func (t *Image) Sample(x, y float64, scale float64) uint32 {
 	wx := x*float64(w) - float64(fx)
 	wy := y*float64(h) - float64(fy)
 
-	var j uint32 = 24
-	var r [4]uint32
-	for i := 0; i < 4; i++ {
-		c00 := (t00 >> j) & 0xFF
-		c10 := (t10 >> j) & 0xFF
-		c11 := (t11 >> j) & 0xFF
-		c01 := (t01 >> j) & 0xFF
-		if c00 == c10 && c10 == c11 && c11 == c01 {
-			r[i] = c00
-		} else {
-			r[i] = uint32(float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy)
-		}
-		j -= 8
+	var r, g, b, a uint32
+	c00 := (t00 >> 24) & 0xFF
+	c10 := (t10 >> 24) & 0xFF
+	c11 := (t11 >> 24) & 0xFF
+	c01 := (t01 >> 24) & 0xFF
+	if c00 == c10 && c10 == c11 && c11 == c01 {
+		r = c00
+	} else {
+		r = uint32(float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy)
 	}
-	return ((r[0] & 0xFF) << 24) | ((r[1] & 0xFF) << 16) | ((r[2] & 0xFF) << 8) | (r[3] & 0xFF)
+	c00 = (t00 >> 16) & 0xFF
+	c10 = (t10 >> 16) & 0xFF
+	c11 = (t11 >> 16) & 0xFF
+	c01 = (t01 >> 16) & 0xFF
+	if c00 == c10 && c10 == c11 && c11 == c01 {
+		g = c00
+	} else {
+		g = uint32(float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy)
+	}
+	c00 = (t00 >> 8) & 0xFF
+	c10 = (t10 >> 8) & 0xFF
+	c11 = (t11 >> 8) & 0xFF
+	c01 = (t01 >> 8) & 0xFF
+	if c00 == c10 && c10 == c11 && c11 == c01 {
+		b = c00
+	} else {
+		b = uint32(float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy)
+	}
+	c00 = t00 & 0xFF
+	c10 = t10 & 0xFF
+	c11 = t11 & 0xFF
+	c01 = t01 & 0xFF
+	if c00 == c10 && c10 == c11 && c11 == c01 {
+		a = c00
+	} else {
+		a = uint32(float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy)
+	}
+	return ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | (a & 0xFF)
 }
 
 func (t *Image) Deserialize(data map[string]interface{}) {

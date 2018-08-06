@@ -1,4 +1,4 @@
-package mapping
+package core
 
 import (
 	"math"
@@ -29,81 +29,12 @@ type PhysicalSector struct {
 	// PVSLights []
 }
 
-type AbstractSector interface {
-	concepts.ISerializable
-	GetPhysical() *PhysicalSector
-	IsPointInside2D(p *concepts.Vector2) bool
-}
-
 func init() {
 	registry.Instance().Register(PhysicalSector{})
 }
 
-func (s *PhysicalSector) GetPhysical() *PhysicalSector {
+func (s *PhysicalSector) Physical() *PhysicalSector {
 	return s
-}
-
-func (ms *PhysicalSector) Recalculate() {
-	ms.Center = &concepts.Vector3{0, 0, (ms.TopZ + ms.BottomZ) / 2}
-	ms.Min = &concepts.Vector3{math.Inf(1), math.Inf(1), ms.BottomZ}
-	ms.Max = &concepts.Vector3{math.Inf(-1), math.Inf(-1), ms.TopZ}
-
-	w := ms.Winding()
-
-	for i, segment := range ms.Segments {
-		next := ms.Segments[(i+1)%len(ms.Segments)]
-		ms.Center.X += segment.A.X
-		ms.Center.Y += segment.A.Y
-		if segment.A.X < ms.Min.X {
-			ms.Min.X = segment.A.X
-		}
-		if segment.A.Y < ms.Min.Y {
-			ms.Min.Y = segment.A.Y
-		}
-		if segment.A.X > ms.Max.X {
-			ms.Max.X = segment.A.X
-		}
-		if segment.A.Y > ms.Max.Y {
-			ms.Max.Y = segment.A.Y
-		}
-		segment.Sector = ms
-		segment.B = next.A
-		segment.Recalculate()
-
-		if !w {
-			segment.Normal = segment.Normal.Mul(-1)
-		}
-	}
-
-	ms.Center = ms.Center.Mul(1.0 / float64(len(ms.Segments)))
-
-	for _, e := range ms.Entities {
-		e.GetPhysical().Map = ms.Map
-		e.GetPhysical().Sector = ms
-		if c, ok := e.(Collideable); ok {
-			c.Collide()
-		}
-	}
-
-	ms.LightmapWidth = uint((ms.Max.X-ms.Min.X)/constants.LightGrid) + 6
-	ms.LightmapHeight = uint((ms.Max.Y-ms.Min.Y)/constants.LightGrid) + 6
-	ms.FloorLightmap = make([]float64, ms.LightmapWidth*ms.LightmapHeight*3)
-	ms.CeilLightmap = make([]float64, ms.LightmapWidth*ms.LightmapHeight*3)
-	ms.ClearLightmaps()
-}
-
-func (ms *PhysicalSector) ClearLightmaps() {
-	for i := range ms.FloorLightmap {
-		ms.FloorLightmap[i] = -1
-		ms.CeilLightmap[i] = -1
-	}
-
-	for _, segment := range ms.Segments {
-		segment.ClearLightmap()
-	}
-
-	// ms.UpdatePVS()
-	// ms.UpdateEntityPVS()
 }
 
 func (ms *PhysicalSector) IsPointInside2D(p *concepts.Vector2) bool {
@@ -129,14 +60,6 @@ func (ms *PhysicalSector) Winding() bool {
 		sum += (next.A.X - segment.A.X) * (segment.A.Y + next.A.Y)
 	}
 	return sum < 0
-}
-
-func (s *PhysicalSector) SetParent(parent interface{}) {
-	if m, ok := parent.(*Map); ok {
-		s.Map = m
-	} else {
-		panic("Tried mapping.PhysicalSector.SetParent with a parameter that wasn't a *mapping.Map")
-	}
 }
 
 func (s *PhysicalSector) Initialize() {
@@ -176,5 +99,96 @@ func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 	if v, ok := data["Entities"]; ok {
 		concepts.MapCollection(s, &s.Entities, v)
 	}
+	if v, ok := data["FloorTarget"]; ok {
+		s.FloorTarget = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
+	}
+	if v, ok := data["CeilTarget"]; ok {
+		s.CeilTarget = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
+	}
 	s.Recalculate()
+}
+
+func (s *PhysicalSector) Recalculate() {
+	s.Center = &concepts.Vector3{0, 0, (s.TopZ + s.BottomZ) / 2}
+	s.Min = &concepts.Vector3{math.Inf(1), math.Inf(1), s.BottomZ}
+	s.Max = &concepts.Vector3{math.Inf(-1), math.Inf(-1), s.TopZ}
+
+	w := s.Winding()
+
+	for i, segment := range s.Segments {
+		next := s.Segments[(i+1)%len(s.Segments)]
+		s.Center.X += segment.A.X
+		s.Center.Y += segment.A.Y
+		if segment.A.X < s.Min.X {
+			s.Min.X = segment.A.X
+		}
+		if segment.A.Y < s.Min.Y {
+			s.Min.Y = segment.A.Y
+		}
+		if segment.A.X > s.Max.X {
+			s.Max.X = segment.A.X
+		}
+		if segment.A.Y > s.Max.Y {
+			s.Max.Y = segment.A.Y
+		}
+		segment.Sector = s
+		segment.B = next.A
+		segment.Recalculate()
+
+		if !w {
+			segment.Normal = segment.Normal.Mul(-1)
+		}
+	}
+
+	s.Center = s.Center.Mul(1.0 / float64(len(s.Segments)))
+
+	if ph, ok := s.FloorTarget.(*PlaceholderSector); ok {
+		// Get the actual one.
+		if actual, ok := s.Map.Sectors[ph.ID]; ok {
+			s.FloorTarget = actual
+		}
+	}
+
+	if ph, ok := s.CeilTarget.(*PlaceholderSector); ok {
+		// Get the actual one.
+		if actual, ok := s.Map.Sectors[ph.ID]; ok {
+			s.CeilTarget = actual
+		}
+	}
+
+	for _, e := range s.Entities {
+		e.Physical().Map = s.Map
+		e.Physical().Sector = s
+		if c, ok := e.(Collideable); ok {
+			c.Collide()
+		}
+	}
+
+	s.LightmapWidth = uint((s.Max.X-s.Min.X)/constants.LightGrid) + 6
+	s.LightmapHeight = uint((s.Max.Y-s.Min.Y)/constants.LightGrid) + 6
+	s.FloorLightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
+	s.CeilLightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
+	s.ClearLightmaps()
+}
+
+func (s *PhysicalSector) ClearLightmaps() {
+	for i := range s.FloorLightmap {
+		s.FloorLightmap[i] = -1
+		s.CeilLightmap[i] = -1
+	}
+
+	for _, segment := range s.Segments {
+		segment.ClearLightmap()
+	}
+
+	// s.UpdatePVS()
+	// s.UpdateEntityPVS()
+}
+
+func (s *PhysicalSector) SetParent(parent interface{}) {
+	if m, ok := parent.(*Map); ok {
+		s.Map = m
+	} else {
+		panic("Tried mapping.PhysicalSector.SetParent with a parameter that wasn't a *mapping.Map")
+	}
 }

@@ -1,4 +1,4 @@
-package mapping
+package core
 
 import (
 	"math"
@@ -24,12 +24,6 @@ type PhysicalEntity struct {
 	Map               *Map
 }
 
-type AbstractEntity interface {
-	concepts.ISerializable
-	GetPhysical() *PhysicalEntity
-	GetSector() AbstractSector
-}
-
 func init() {
 	registry.Instance().Register(PhysicalEntity{})
 }
@@ -45,7 +39,7 @@ func (e *PhysicalEntity) Initialize() {
 	e.Active = true
 }
 
-func (e *PhysicalEntity) GetPhysical() *PhysicalEntity {
+func (e *PhysicalEntity) Physical() *PhysicalEntity {
 	return e
 }
 

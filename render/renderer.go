@@ -6,13 +6,14 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/core"
+	"github.com/tlyakhov/gofoom/entities"
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
 type Renderer struct {
 	*state.Config
-	Map     *mapping.Map
+	Map     *core.Map
 	columns chan int
 }
 
@@ -24,7 +25,6 @@ func NewRenderer() *Renderer {
 			FOV:          constants.FieldOfView,
 			MaxViewDist:  constants.MaxViewDistance,
 			Frame:        0,
-			FrameTint:    0,
 			Counter:      0,
 
 			FloorNormal:   concepts.Vector3{X: 0, Y: 0, Z: 1},
@@ -34,6 +34,10 @@ func NewRenderer() *Renderer {
 	}
 	r.Initialize()
 	return &r
+}
+
+func (r *Renderer) Player() *entities.Player {
+	return r.Map.Player.(*entities.Player)
 }
 
 func (r *Renderer) RenderSlice(slice *state.Slice) {
@@ -51,7 +55,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	WallLow(sp)
 
 	portalSlice := *slice
-	portalSlice.PhysicalSector = sp.Adj.GetPhysical()
+	portalSlice.PhysicalSector = sp.Adj.Physical()
 	portalSlice.YStart = sp.AdjClippedTop
 	portalSlice.YEnd = sp.AdjClippedBottom
 	portalSlice.Depth++
@@ -112,18 +116,18 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 		X:              x,
 		YStart:         0,
 		YEnd:           r.ScreenHeight - 1,
-		Angle:          r.Map.Player.Angle*concepts.Deg2rad + r.ViewRadians[x],
-		PhysicalSector: r.Map.Player.Sector.GetPhysical(),
-		CameraZ:        r.Map.Player.Pos.Z + r.Map.Player.Height,
+		Angle:          r.Player().Angle*concepts.Deg2rad + r.ViewRadians[x],
+		PhysicalSector: r.Player().Sector.Physical(),
+		CameraZ:        r.Player().Pos.Z + r.Player().Height,
 	}
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)
 
 	slice.Ray = &state.Ray{
-		Start: r.Map.Player.Pos.To2D(),
+		Start: r.Player().Pos.To2D(),
 		End: &concepts.Vector2{
-			X: r.Map.Player.Pos.X + r.MaxViewDist*slice.AngleCos,
-			Y: r.Map.Player.Pos.Y + r.MaxViewDist*slice.AngleSin,
+			X: r.Player().Pos.X + r.MaxViewDist*slice.AngleCos,
+			Y: r.Player().Pos.Y + r.MaxViewDist*slice.AngleSin,
 		},
 	}
 
@@ -133,7 +137,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
-	if r.Map.Player.Sector == nil {
+	if r.Player().Sector == nil {
 		return
 	}
 
@@ -147,4 +151,15 @@ func (r *Renderer) Render(buffer []uint8) {
 		<-r.columns
 	}
 	// Entities...
+
+	// Frame Tint
+	tint := r.Map.Player.(*entities.Player).FrameTint
+	if tint.A != 0 {
+		a := float64(tint.A) / 255.0
+		for i := 0; i < r.ScreenWidth*r.ScreenHeight; i++ {
+			buffer[i*4] = uint8(float64(buffer[i*4])*(1.0-a) + float64(tint.R)*a)
+			buffer[i*4+1] = uint8(float64(buffer[i*4+1])*(1.0-a) + float64(tint.G)*a)
+			buffer[i*4+2] = uint8(float64(buffer[i*4+2])*(1.0-a) + float64(tint.B)*a)
+		}
+	}
 }

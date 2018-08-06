@@ -1,4 +1,4 @@
-package mapping
+package core
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ type Map struct {
 
 	Sectors        map[string]AbstractSector
 	Materials      map[string]concepts.ISerializable `editable:"Materials" edit_type:"Material"`
-	Player         *Player
+	Player         AbstractEntity
 	Spawn          *concepts.Vector3 `editable:"Spawn" edit_type:"Vector"`
 	EntitiesPaused bool
 }
@@ -22,18 +22,14 @@ func init() {
 }
 
 func (m *Map) Recalculate() {
-	for _, item := range m.Sectors {
-		if sector, ok := item.(*PhysicalSector); ok {
-			sector.Recalculate()
-		}
+	for _, sector := range m.Sectors {
+		sector.Physical().Recalculate()
 	}
 }
 
 func (m *Map) ClearLightmaps() {
-	for _, item := range m.Sectors {
-		if sector, ok := item.(*PhysicalSector); ok {
-			sector.ClearLightmaps()
-		}
+	for _, sector := range m.Sectors {
+		sector.Physical().ClearLightmaps()
 	}
 }
 
@@ -41,9 +37,6 @@ func (m *Map) Initialize() {
 	m.Spawn = &concepts.Vector3{}
 	m.Materials = make(map[string]concepts.ISerializable)
 	m.Sectors = make(map[string]AbstractSector)
-	m.Player = &Player{}
-	m.Player.Initialize()
-	m.Player.Map = m
 }
 
 func (m *Map) Deserialize(data map[string]interface{}) {
@@ -54,11 +47,9 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 	}
 	if v, ok := data["SpawnX"]; ok {
 		m.Spawn.X = v.(float64)
-		m.Player.Pos.X = m.Spawn.X
 	}
 	if v, ok := data["SpawnY"]; ok {
 		m.Spawn.Y = v.(float64)
-		m.Player.Pos.Y = m.Spawn.Y
 	}
 	// Load materials first so sectors have access to them.
 	if v, ok := data["Materials"]; ok {

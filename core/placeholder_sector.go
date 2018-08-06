@@ -1,4 +1,4 @@
-package mapping
+package core
 
 import (
 	"github.com/tlyakhov/gofoom/concepts"
@@ -8,7 +8,7 @@ type PlaceholderSector struct {
 	concepts.Base
 }
 
-func (s *PlaceholderSector) GetPhysical() *PhysicalSector {
+func (s *PlaceholderSector) Physical() *PhysicalSector {
 	return nil
 }
 

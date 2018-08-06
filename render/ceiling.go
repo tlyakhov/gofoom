@@ -26,8 +26,8 @@ func Ceiling(s *state.Slice) {
 			continue
 		}
 
-		world.X = s.Map.Player.Pos.X + s.AngleCos*distToCeil
-		world.Y = s.Map.Player.Pos.Y + s.AngleSin*distToCeil
+		world.X = s.Map.Player.Physical().Pos.X + s.AngleCos*distToCeil
+		world.Y = s.Map.Player.Physical().Pos.Y + s.AngleSin*distToCeil
 
 		tx := world.X / s.PhysicalSector.CeilScale
 		tx -= math.Floor(tx)

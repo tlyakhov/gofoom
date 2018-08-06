@@ -1,4 +1,4 @@
-package mapping
+package core
 
 import (
 	"math"
@@ -45,19 +45,26 @@ func (s *Segment) Initialize() {
 	s.Normal = &concepts.Vector2{}
 }
 
+func (s *Segment) SetParent(parent interface{}) {
+	if sector, ok := parent.(AbstractSector); ok {
+		s.Sector = sector
+	} else {
+		panic("Tried core.Segment.SetParent with a parameter that wasn't a *core.AbstractSector")
+	}
+}
+
 func (s *Segment) RealizeAdjacentSector() {
 	if s.AdjacentSector == nil {
 		return
 	}
 	if ph, ok := s.AdjacentSector.(*PlaceholderSector); ok {
-
 		// Get the actual one.
-		s.AdjacentSector = s.Sector.GetPhysical().Map.Sectors[ph.ID]
-		if s.AdjacentSector != nil {
-			for _, s2 := range s.AdjacentSector.GetPhysical().Segments {
+		if adj, ok := s.Sector.Physical().Map.Sectors[ph.ID]; ok {
+			s.AdjacentSector = adj
+			for _, s2 := range s.AdjacentSector.Physical().Segments {
 				if s2.Matches(s) {
 					s.AdjacentSegment = s2
-					s2.AdjacentSector = s.Sector
+					s2.Sector = s.Sector
 					s2.AdjacentSegment = s
 					break
 				}
@@ -71,7 +78,7 @@ func (s *Segment) Recalculate() {
 	s.Normal = &concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()
-		sector := s.Sector.GetPhysical()
+		sector := s.Sector.Physical()
 		s.LightmapWidth = uint(s.Length/constants.LightGrid) + 2
 		s.LightmapHeight = uint((sector.TopZ-sector.BottomZ)/constants.LightGrid) + 2
 		s.Lightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
@@ -218,7 +225,7 @@ func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 
 func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
 	alongSegment := s.A.Add(s.B.Sub(s.A).Mul(u))
-	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.GetPhysical().BottomZ + (1.0-v)*s.Sector.GetPhysical().TopZ}
+	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
 }
 
 func (s *Segment) LMAddressToWorld(mapIndex uint) *concepts.Vector3 {
@@ -227,14 +234,6 @@ func (s *Segment) LMAddressToWorld(mapIndex uint) *concepts.Vector3 {
 	u := float64(lu) / float64(s.LightmapWidth-2)
 	v := float64(lv) / float64(s.LightmapHeight-2)
 	return s.UVToWorld(u, v)
-}
-
-func (s *Segment) SetParent(parent interface{}) {
-	if sector, ok := parent.(*PhysicalSector); ok {
-		s.Sector = sector
-	} else {
-		panic("Tried mapping.Segment.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
-	}
 }
 
 func (s *Segment) Deserialize(data map[string]interface{}) {
@@ -250,13 +249,13 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 		s.AdjacentSector = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
 	}
 	if v, ok := data["LoMaterial"]; ok {
-		s.LoMaterial = s.Sector.GetPhysical().Map.Materials[v.(string)]
+		s.LoMaterial = s.Sector.Physical().Map.Materials[v.(string)]
 	}
 	if v, ok := data["MidMaterial"]; ok {
-		s.MidMaterial = s.Sector.GetPhysical().Map.Materials[v.(string)]
+		s.MidMaterial = s.Sector.Physical().Map.Materials[v.(string)]
 	}
 	if v, ok := data["HiMaterial"]; ok {
-		s.HiMaterial = s.Sector.GetPhysical().Map.Materials[v.(string)]
+		s.HiMaterial = s.Sector.Physical().Map.Materials[v.(string)]
 	}
 	if v, ok := data["LoBehavior"]; ok {
 		mb, error := MaterialBehaviorString(v.(string))

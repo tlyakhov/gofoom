@@ -11,7 +11,12 @@ type passer interface {
 	For(concrete interface{}) Passable
 }
 
+type hurter interface {
+	For(concrete interface{}) Hurtable
+}
+
 var SectorAnimator animator
 var EntityAnimator animator
 var Interactor interactor
 var Passer passer
+var Hurter hurter

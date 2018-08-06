@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/tlyakhov/gofoom/mapping/material"
+	"github.com/tlyakhov/gofoom/materials"
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
@@ -13,15 +13,15 @@ func For(concrete interface{}, s *state.Slice) state.Sampleable {
 		return nil
 	}
 	switch target := concrete.(type) {
-	case *material.LitSampled:
+	case *materials.LitSampled:
 		return NewLitSampledService(target, s)
-	case *material.Lit:
+	case *materials.Lit:
 		return NewLitService(target, s)
-	case *material.Sampled:
+	case *materials.Sampled:
 		return NewSampledService(target, s)
-	case *material.Sky:
+	case *materials.Sky:
 		return NewSkyService(target, s)
-	case *material.PainfulLitSampled:
+	case *materials.PainfulLitSampled:
 		return NewLitSampledService(&target.LitSampled, s)
 	default:
 		panic(fmt.Sprintf("Tried to get a material service for %v and didn't find one.", reflect.TypeOf(concrete)))

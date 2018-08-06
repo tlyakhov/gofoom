@@ -26,8 +26,8 @@ func Floor(s *state.Slice) {
 			continue
 		}
 
-		world.X = s.Map.Player.Pos.X + s.AngleCos*distToFloor
-		world.Y = s.Map.Player.Pos.Y + s.AngleSin*distToFloor
+		world.X = s.Map.Player.Physical().Pos.X + s.AngleCos*distToFloor
+		world.Y = s.Map.Player.Physical().Pos.Y + s.AngleSin*distToFloor
 
 		tx := world.X / s.PhysicalSector.FloorScale
 		tx -= math.Floor(tx)

@@ -3,7 +3,7 @@
     "SpawnY": -70,
     "Materials": [
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "Default",
             "Texture": {
                 "Type": "texture.Image",
@@ -11,7 +11,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "mat1",
             "Texture": {
                 "Type": "texture.Image",
@@ -19,7 +19,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "mat2",
             "Texture": {
                 "Type": "texture.Image",
@@ -27,7 +27,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "mat3",
             "Texture": {
                 "Type": "texture.Image",
@@ -35,7 +35,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "mat6",
             "Texture": {
                 "Type": "texture.Image",
@@ -43,7 +43,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "Doom Garage Door",
             "Texture": {
                 "Type": "texture.Image",
@@ -51,7 +51,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "Default Floor",
             "Texture": {
                 "Type": "texture.Image",
@@ -59,7 +59,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "f1",
             "Texture": {
                 "Type": "texture.Image",
@@ -67,7 +67,7 @@
             }
         },
         {
-            "Type": "material.PainfulLitSampled",
+            "Type": "materials.PainfulLitSampled",
             "ID": "Painful Slime",
             "Texture": {
                 "Type": "texture.Image",
@@ -77,7 +77,7 @@
             "Hurt": 5
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "f5",
             "Texture": {
                 "Type": "texture.Image",
@@ -85,7 +85,7 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "f6",
             "Texture": {
                 "Type": "texture.Image",
@@ -93,16 +93,16 @@
             }
         },
         {
-            "Type": "material.LitSampled",
+            "Type": "materials.LitSampled",
             "ID": "Water",
             "Texture": {
                 "Type": "texture.Image",
                 "Source": "data/Water.png"
             },
-            "isLiquid": true
+            "IsLiquid": true
         },
         {
-            "Type": "material.Sky",
+            "Type": "materials.Sky",
             "ID": "Sky",
             "Texture": {
                 "Type": "texture.Image",
@@ -112,7 +112,7 @@
     ],
     "Sectors": [
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector0",
             "BottomZ": 0,
             "TopZ": 64,
@@ -170,7 +170,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector1",
             "BottomZ": 0,
             "TopZ": 64,
@@ -212,7 +212,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector2",
             "BottomZ": -10,
             "TopZ": 64,
@@ -254,7 +254,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector3",
             "BottomZ": 0,
             "TopZ": 64,
@@ -352,7 +352,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector4",
             "BottomZ": -3,
             "TopZ": 50,
@@ -394,7 +394,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector5",
             "BottomZ": -20,
             "TopZ": 64,
@@ -436,7 +436,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector6",
             "BottomZ": -30,
             "TopZ": 64,
@@ -478,7 +478,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector7",
             "BottomZ": -40,
             "TopZ": 64,
@@ -520,7 +520,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector8",
             "BottomZ": -50,
             "TopZ": 64,
@@ -562,7 +562,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.ToxicSector",
             "ID": "sector9",
             "BottomZ": -60,
             "TopZ": -6,
@@ -640,7 +640,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.ToxicSector",
             "ID": "sector10",
             "BottomZ": -60,
             "TopZ": -6,
@@ -702,7 +702,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.ToxicSector",
             "ID": "sector11",
             "BottomZ": -60,
             "TopZ": -6,
@@ -764,7 +764,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector12",
             "BottomZ": 0,
             "TopZ": 60,
@@ -814,7 +814,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector13",
             "BottomZ": 0,
             "TopZ": 60,
@@ -864,7 +864,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector14",
             "BottomZ": 0,
             "TopZ": 60,
@@ -906,13 +906,13 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector15",
             "BottomZ": -20,
             "TopZ": 100,
             "FloorMaterial": "Water",
             "CeilMaterial": "Sky",
-            "floorTargetSectorId": "sector17",
+            "FloorTarget": "sector17",
             "Entities": [
                 {
                     "Type": "LightEntity",
@@ -994,7 +994,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector16",
             "BottomZ": 10,
             "TopZ": 60,
@@ -1036,13 +1036,13 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.Underwater",
             "ID": "sector17",
             "BottomZ": -170,
             "TopZ": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Water",
-            "ceilTargetSectorId": "sector15",
+            "CeilTarget": "sector15",
             "tags": [
                 "underwater"
             ],
@@ -1082,7 +1082,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.Underwater",
             "ID": "sector18",
             "BottomZ": -230,
             "TopZ": -20,
@@ -1164,7 +1164,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.Underwater",
             "ID": "sector19",
             "BottomZ": -50,
             "TopZ": -20,
@@ -1209,13 +1209,13 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector20",
             "BottomZ": -20,
             "TopZ": 60,
             "FloorMaterial": "Water",
             "CeilMaterial": "f1",
-            "floorTargetSectorId": "sector21",
+            "FloorTarget": "sector21",
             "Segments": [
                 {
                     "X": 400,
@@ -1268,13 +1268,13 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.Underwater",
             "ID": "sector21",
             "BottomZ": -200,
             "TopZ": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Water",
-            "ceilTargetSectorId": "sector20",
+            "CeilTarget": "sector20",
             "tags": [
                 "underwater"
             ],
@@ -1314,13 +1314,13 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.Underwater",
             "ID": "sector22",
             "BottomZ": -70,
             "TopZ": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Water",
-            "ceilTargetSectorId": "sector23",
+            "CeilTarget": "sector23",
             "tags": [
                 "underwater"
             ],
@@ -1381,13 +1381,13 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector23",
             "BottomZ": -20,
             "TopZ": 50,
             "FloorMaterial": "Water",
             "CeilMaterial": "Default Floor",
-            "floorTargetSectorId": "sector22",
+            "FloorTarget": "sector22",
             "Segments": [
                 {
                     "X": 620,
@@ -1424,7 +1424,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "core.PhysicalSector",
             "ID": "sector24",
             "BottomZ": -10,
             "TopZ": 70,
@@ -1481,7 +1481,7 @@
             ]
         },
         {
-            "Type": "mapping.PhysicalSector",
+            "Type": "sectors.VerticalDoor",
             "ID": "sector25",
             "BottomZ": 0,
             "TopZ": 64,

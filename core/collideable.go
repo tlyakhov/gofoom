@@ -1,4 +1,4 @@
-package mapping
+package core
 
 type Collideable interface {
 	Collide()

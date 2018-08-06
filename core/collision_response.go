@@ -1,4 +1,4 @@
-package mapping
+package core
 
 type CollisionResponse int
 
