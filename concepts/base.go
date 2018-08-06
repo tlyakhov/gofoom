@@ -17,6 +17,10 @@ func init() {
 	registry.Instance().Register(Base{})
 }
 
+func (b *Base) GetBase() *Base {
+	return b
+}
+
 func (b *Base) Initialize() {
 	b.ID = xid.New().String()
 }
@@ -36,10 +40,6 @@ func (b *Base) Deserialize(data map[string]interface{}) {
 	if v, ok := data["Tags"]; ok {
 		b.Tags = v.([]string)
 	}
-}
-
-func Placeholder(x interface{}) bool {
-	return reflect.TypeOf(x) == reflect.PtrTo(registry.Type("concepts.Base"))
 }
 
 func MapPolyStruct(parent interface{}, data map[string]interface{}) ISerializable {
@@ -84,14 +84,15 @@ func MapArray(parent interface{}, arrayPtr interface{}, data interface{}) {
 	}
 }
 
-func MapCollection(parent interface{}, target *Collection, data interface{}) {
-	*target = make(Collection, 0)
+func MapCollection(parent interface{}, target interface{}, data interface{}) {
+	mv := reflect.ValueOf(target)
+	t := mv.Type()
+	mv.Elem().Set(reflect.MakeMap(t.Elem()))
 	for _, child := range data.([]interface{}) {
 		item := MapPolyStruct(parent, child.(map[string]interface{}))
 		if item == nil {
 			continue
 		}
-		itemBase := registry.Coalesce(item, "concepts.Base").(*Base)
-		(*target)[itemBase.ID] = item
+		mv.Elem().SetMapIndex(reflect.ValueOf(item.GetBase().ID), reflect.ValueOf(item))
 	}
 }

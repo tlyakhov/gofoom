@@ -1,0 +1,48 @@
+package sector
+
+import (
+	"fmt"
+	"reflect"
+	"sync"
+
+	"github.com/tlyakhov/gofoom/logic/provide"
+	"github.com/tlyakhov/gofoom/mapping"
+)
+
+type AnimatorFactory struct{}
+type InteractorFactory struct{}
+type PasserFactory struct{}
+
+var once sync.Once
+
+func init() {
+	once.Do(func() {
+		provide.SectorAnimator = &AnimatorFactory{}
+		provide.Interactor = &InteractorFactory{}
+		provide.Passer = &PasserFactory{}
+	})
+}
+
+func (f *InteractorFactory) For(concrete interface{}) provide.Interactable {
+	if concrete == nil {
+		return nil
+	}
+	switch target := concrete.(type) {
+	case *mapping.Sector:
+		return NewSectorService(target)
+	case *mapping.ToxicSector:
+		return NewToxicSectorService(target)
+	default:
+		panic(fmt.Sprintf("Tried to get a sector interactor service for %v and didn't find one.", reflect.TypeOf(concrete)))
+	}
+}
+
+func (f *AnimatorFactory) For(concrete interface{}) provide.Animateable {
+	// For now all sector types are Interactable, Passable, and Animatable, but that may change.
+	return provide.Interactor.For(concrete).(provide.Animateable)
+}
+
+func (f *PasserFactory) For(concrete interface{}) provide.Passable {
+	// For now all sector types are Interactable, Passable, and Animatable, but that may change.
+	return provide.Interactor.For(concrete).(provide.Passable)
+}

@@ -7,7 +7,7 @@ import (
 )
 
 type Sampled struct {
-	*concepts.Base
+	concepts.Base
 	Sampler  texture.ISampler `editable:"Texture" edit_type:"Texture"`
 	IsLiquid bool             `editable:"Is Liquid?" edit_type:"bool"`
 }
@@ -17,7 +17,6 @@ func init() {
 }
 
 func (m *Sampled) Initialize() {
-	m.Base = &concepts.Base{}
 	m.Base.Initialize()
 }
 

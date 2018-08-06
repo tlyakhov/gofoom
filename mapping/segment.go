@@ -1,7 +1,6 @@
 package mapping
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/tlyakhov/gofoom/concepts"
@@ -26,8 +25,8 @@ type Segment struct {
 
 	Length          float64
 	Normal          *concepts.Vector2
-	Sector          *Sector
-	AdjacentSector  concepts.ISerializable
+	Sector          AbstractSector
+	AdjacentSector  AbstractSector
 	AdjacentSegment *Segment
 	Lightmap        []float64
 	LightmapWidth   uint
@@ -46,30 +45,35 @@ func (s *Segment) Initialize() {
 	s.Normal = &concepts.Vector2{}
 }
 
+func (s *Segment) RealizeAdjacentSector() {
+	if s.AdjacentSector == nil {
+		return
+	}
+	if ph, ok := s.AdjacentSector.(*PlaceholderSector); ok {
+
+		// Get the actual one.
+		s.AdjacentSector = s.Sector.GetSector().Map.Sectors[ph.ID]
+		if s.AdjacentSector != nil {
+			for _, s2 := range s.AdjacentSector.GetSector().Segments {
+				if s2.Matches(s) {
+					s.AdjacentSegment = s2
+					s2.AdjacentSector = s.Sector
+					s2.AdjacentSegment = s
+					break
+				}
+			}
+		}
+	}
+}
+
 func (s *Segment) Recalculate() {
 	s.Length = s.B.Sub(s.A).Length()
 	s.Normal = &concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
 	if s.Sector != nil {
-		if s.AdjacentSector != nil && concepts.Placeholder(s.AdjacentSector) {
-			// Get the actual one.
-			id := registry.Coalesce(s.AdjacentSector, "concepts.Base").(*concepts.Base).ID
-			s.AdjacentSector = s.Sector.Map.Sectors[id]
-			if s.AdjacentSector != nil {
-				adj := registry.Coalesce(s.AdjacentSector, "mapping.Sector").(*Sector)
-				for _, s2 := range adj.Segments {
-					if s2.Matches(s) {
-						s.AdjacentSegment = s2
-						s2.AdjacentSector = s.Sector
-						s2.AdjacentSegment = s
-						fmt.Printf("Got adjacent %v\n", id)
-						break
-					}
-				}
-			}
-		}
-
+		s.RealizeAdjacentSector()
+		sector := s.Sector.GetSector()
 		s.LightmapWidth = uint(s.Length/constants.LightGrid) + 2
-		s.LightmapHeight = uint((s.Sector.TopZ-s.Sector.BottomZ)/constants.LightGrid) + 2
+		s.LightmapHeight = uint((sector.TopZ-sector.BottomZ)/constants.LightGrid) + 2
 		s.Lightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
 		s.ClearLightmap()
 	}
@@ -175,14 +179,15 @@ func (s *Segment) DistanceToPoint2(p *concepts.Vector2) float64 {
 	if l2 == 0 {
 		return p.Dist2(s.A)
 	}
-	t := p.Sub(s.A).Dot(s.B.Sub(s.A))
+	delta := s.B.Sub(s.A)
+	t := p.Sub(s.A).Dot(delta) / l2
 	if t < 0 {
 		return p.Dist2(s.A)
 	}
 	if t > 1 {
 		return p.Dist2(s.B)
 	}
-	return p.Dist2(s.A.Add(s.B.Sub(s.A).Mul(t)))
+	return p.Dist2(s.A.Add(delta.Mul(t)))
 }
 
 func (s *Segment) DistanceToPoint(p *concepts.Vector2) float64 {
@@ -213,7 +218,7 @@ func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 
 func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
 	alongSegment := s.A.Add(s.B.Sub(s.A).Mul(u))
-	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.BottomZ + (1.0-v)*s.Sector.TopZ}
+	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.GetSector().BottomZ + (1.0-v)*s.Sector.GetSector().TopZ}
 }
 
 func (s *Segment) LMAddressToWorld(mapIndex uint) *concepts.Vector3 {
@@ -242,16 +247,16 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 		s.A.Y = v.(float64)
 	}
 	if v, ok := data["AdjacentSector"]; ok {
-		s.AdjacentSector = &concepts.Base{ID: v.(string)}
+		s.AdjacentSector = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
 	}
 	if v, ok := data["LoMaterial"]; ok {
-		s.LoMaterial = s.Sector.Map.Materials[v.(string)]
+		s.LoMaterial = s.Sector.GetSector().Map.Materials[v.(string)]
 	}
 	if v, ok := data["MidMaterial"]; ok {
-		s.MidMaterial = s.Sector.Map.Materials[v.(string)]
+		s.MidMaterial = s.Sector.GetSector().Map.Materials[v.(string)]
 	}
 	if v, ok := data["HiMaterial"]; ok {
-		s.HiMaterial = s.Sector.Map.Materials[v.(string)]
+		s.HiMaterial = s.Sector.GetSector().Map.Materials[v.(string)]
 	}
 	if v, ok := data["LoBehavior"]; ok {
 		mb, error := MaterialBehaviorString(v.(string))
