@@ -8,9 +8,8 @@ import (
 )
 
 type LitSampled struct {
-	*concepts.Base
-	*Lit
-	*Sampled
+	Lit
+	Sampled
 }
 
 func init() {
@@ -18,39 +17,42 @@ func init() {
 	registry.Instance().Register(PainfulLitSampled{})
 }
 
+func (m *LitSampled) SetParent(interface{}) {}
+
+func (m *LitSampled) GetBase() *concepts.Base {
+	return m.Lit.GetBase()
+}
+
 func (m *LitSampled) Initialize() {
-	m.Sampled = &Sampled{}
 	m.Sampled.Initialize()
-	m.Lit = &Lit{}
 	m.Lit.Initialize()
-	m.Lit.Base = m.Sampled.Base
-	m.Base = m.Sampled.Base
 }
 
 func (m *LitSampled) Deserialize(data map[string]interface{}) {
 	m.Initialize()
 	m.Lit.Deserialize(data)
 	m.Sampled.Deserialize(data)
-	m.Lit.Base = m.Sampled.Base
-	m.Base = m.Sampled.Base
 }
 
 type PainfulLitSampled struct {
-	*concepts.Base
-	*LitSampled
-	*Painful
+	LitSampled
+	Painful
+}
+
+func (m *PainfulLitSampled) SetParent(interface{}) {}
+
+func (m *PainfulLitSampled) GetBase() *concepts.Base {
+	return m.LitSampled.GetBase()
 }
 
 func (m *PainfulLitSampled) Initialize() {
-	m.LitSampled = &LitSampled{}
+	m.LitSampled = LitSampled{}
 	m.LitSampled.Initialize()
-	m.Base = m.LitSampled.Base
-	m.Painful = &Painful{}
+	m.Painful = Painful{}
 }
 
 func (m *PainfulLitSampled) Deserialize(data map[string]interface{}) {
 	m.Initialize()
 	m.LitSampled.Deserialize(data)
-	m.Base = m.LitSampled.Base
-	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.ID)
+	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.GetBase().ID)
 }

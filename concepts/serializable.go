@@ -4,6 +4,5 @@ type ISerializable interface {
 	Initialize()
 	Deserialize(data map[string]interface{})
 	SetParent(interface{})
+	GetBase() *Base
 }
-
-type Collection map[string]ISerializable

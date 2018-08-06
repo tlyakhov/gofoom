@@ -10,8 +10,8 @@ import (
 type Map struct {
 	concepts.Base
 
-	Sectors        concepts.Collection
-	Materials      concepts.Collection `editable:"Materials" edit_type:"Material"`
+	Sectors        map[string]AbstractSector
+	Materials      map[string]concepts.ISerializable `editable:"Materials" edit_type:"Material"`
 	Player         *Player
 	Spawn          *concepts.Vector3 `editable:"Spawn" edit_type:"Vector"`
 	EntitiesPaused bool
@@ -39,8 +39,8 @@ func (m *Map) ClearLightmaps() {
 
 func (m *Map) Initialize() {
 	m.Spawn = &concepts.Vector3{}
-	m.Materials = make(concepts.Collection)
-	m.Sectors = make(concepts.Collection)
+	m.Materials = make(map[string]concepts.ISerializable)
+	m.Sectors = make(map[string]AbstractSector)
 	m.Player = &Player{}
 	m.Player.Initialize()
 	m.Player.Map = m

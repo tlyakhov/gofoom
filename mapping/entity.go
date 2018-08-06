@@ -20,8 +20,14 @@ type Entity struct {
 	Height            float64
 	MountHeight       float64
 	Active            bool
-	Sector            concepts.ISerializable
+	Sector            AbstractSector
 	Map               *Map
+}
+
+type AbstractEntity interface {
+	concepts.ISerializable
+	GetEntity() *Entity
+	GetSector() AbstractSector
 }
 
 func init() {
@@ -37,6 +43,14 @@ func (e *Entity) Initialize() {
 	e.CollisionResponse = Slide
 	e.MountHeight = constants.PlayerMountHeight
 	e.Active = true
+}
+
+func (e *Entity) GetEntity() *Entity {
+	return e
+}
+
+func (e *Entity) GetSector() AbstractSector {
+	return e.Sector
 }
 
 func (e *Entity) Angle2DTo(p *concepts.Vector3) float64 {

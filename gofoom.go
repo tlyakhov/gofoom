@@ -9,11 +9,15 @@ import (
 	"os"
 	"runtime/pprof"
 
+	"github.com/tlyakhov/gofoom/logic"
+	"github.com/tlyakhov/gofoom/logic/entity"
+
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/logic"
+	_ "github.com/tlyakhov/gofoom/logic/entity"
+	_ "github.com/tlyakhov/gofoom/logic/provide"
+	_ "github.com/tlyakhov/gofoom/logic/sector"
 	"github.com/tlyakhov/gofoom/mapping"
-	"github.com/tlyakhov/gofoom/registry"
 	"github.com/tlyakhov/gofoom/render"
 
 	// "math"
@@ -78,8 +82,8 @@ func run() {
 	renderer.WorkerWidth = 1280
 	renderer.Initialize()
 	gameMap := loadMap("data/classicMap.json")
-	player := registry.Translate(gameMap.Player, "logic").(*logic.Player)
-	registry.Translate(&player.Entity, "logic").(*logic.Entity).Collide()
+	ps := entity.NewPlayerService(gameMap.Player)
+	ps.Collide()
 	renderer.Map = gameMap
 
 	last := time.Now()
@@ -92,31 +96,37 @@ func run() {
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
 		}
 		if win.Pressed(pixelgl.KeyW) {
-			player.Move(gameMap.Player.Angle, dt, 1.0)
+			ps.Move(gameMap.Player.Angle, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyS) {
-			player.Move(gameMap.Player.Angle+180.0, dt, 1.0)
+			ps.Move(gameMap.Player.Angle+180.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyQ) {
-			player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
+			ps.Move(gameMap.Player.Angle+270.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyE) {
-			player.Move(gameMap.Player.Angle+90.0, dt, 1.0)
+			ps.Move(gameMap.Player.Angle+90.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyQ) {
-			player.Move(gameMap.Player.Angle+270.0, dt, 1.0)
+			ps.Move(gameMap.Player.Angle+270.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyA) {
-			player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
-			player.Angle = concepts.NormalizeAngle(player.Angle)
+			ps.Player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
+			ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
 		}
 		if win.Pressed(pixelgl.KeyD) {
-			player.Angle += constants.PlayerTurnSpeed * dt / 30.0
-			player.Angle = concepts.NormalizeAngle(player.Angle)
+			ps.Player.Angle += constants.PlayerTurnSpeed * dt / 30.0
+			ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+		}
+		if win.Pressed(pixelgl.KeySpace) {
+			if ps.Standing {
+				ps.Player.Vel.Z += constants.PlayerJumpStrength * dt / 30.0
+				ps.Standing = false
+			}
 		}
 
 		renderer.Render(buffer.Pix)
-		registry.Translate(gameMap, "logic").(*logic.Map).Frame(dt)
+		logic.NewMapService(gameMap).Frame(dt)
 
 		canvas.SetPixels(buffer.Pix)
 		canvas.Draw(win, mat)

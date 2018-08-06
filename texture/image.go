@@ -155,8 +155,6 @@ func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
 		return color.NRGBA{data.Pix[index], data.Pix[index+1], data.Pix[index+2], data.Pix[index+3]}
 	}
 
-	wx := x*float64(w) - float64(fx)
-	wy := y*float64(h) - float64(fy)
 	fx = concepts.UMin(fx, w-1)
 	fy = concepts.UMin(fy, h-1)
 	cx := (fx + 1) % w
@@ -165,6 +163,8 @@ func (t *Image) Sample(x, y float64, scale float64) color.NRGBA {
 	t10 := (fy*w + cx) * 4
 	t11 := (cy*w + cx) * 4
 	t01 := (cy*w + fx) * 4
+	wx := x*float64(w) - float64(fx)
+	wy := y*float64(h) - float64(fy)
 	return color.NRGBA{
 		uint8(float64(data.Pix[t00])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10])*wx*(1.0-wy) + float64(data.Pix[t11])*wx*wy + float64(data.Pix[t01])*(1.0-wx)*wy),
 		uint8(float64(data.Pix[t00+1])*(1.0-wx)*(1.0-wy) + float64(data.Pix[t10+1])*wx*(1.0-wy) + float64(data.Pix[t11+1])*wx*wy + float64(data.Pix[t01+1])*(1.0-wx)*wy),

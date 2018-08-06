@@ -13,10 +13,10 @@ type Sector struct {
 
 	Map                     *Map
 	Segments                []*Segment
-	Entities                concepts.Collection
+	Entities                map[string]AbstractEntity
 	BottomZ, TopZ           float64
 	FloorScale, CeilScale   float64
-	FloorTarget, CeilTarget concepts.ISerializable
+	FloorTarget, CeilTarget AbstractSector
 	FloorMaterial           concepts.ISerializable
 	CeilMaterial            concepts.ISerializable
 
@@ -29,8 +29,25 @@ type Sector struct {
 	// PVSLights []
 }
 
+type AbstractSector interface {
+	concepts.ISerializable
+	GetSector() *Sector
+}
+
+type PlaceholderSector struct {
+	concepts.Base
+}
+
+func (s *PlaceholderSector) GetSector() *Sector {
+	return nil
+}
+
 func init() {
 	registry.Instance().Register(Sector{})
+}
+
+func (s *Sector) GetSector() *Sector {
+	return s
 }
 
 func (ms *Sector) Recalculate() {
@@ -67,13 +84,11 @@ func (ms *Sector) Recalculate() {
 
 	ms.Center = ms.Center.Mul(1.0 / float64(len(ms.Segments)))
 
-	for _, item := range ms.Entities {
-		if e, ok := item.(*Entity); ok {
-			e.Map = ms.Map
-			e.Sector = ms
-		}
-		if e, ok := item.(ICollider); ok {
-			e.Collide()
+	for _, e := range ms.Entities {
+		e.GetEntity().Map = ms.Map
+		e.GetEntity().Sector = ms
+		if c, ok := e.(Collideable); ok {
+			c.Collide()
 		}
 	}
 
@@ -102,11 +117,10 @@ func (ms *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	inside := false
 	flag1 := (p.Y >= ms.Segments[0].A.Y)
 
-	for i, segment := range ms.Segments {
-		next := ms.Segments[(i+1)%len(ms.Segments)]
-		flag2 := (p.Y >= next.A.Y)
+	for _, segment := range ms.Segments {
+		flag2 := (p.Y >= segment.B.Y)
 		if flag1 != flag2 {
-			if ((next.A.Y-p.Y)*(segment.A.X-next.A.X) >= (next.A.X-p.X)*(segment.A.Y-next.A.Y)) == flag2 {
+			if ((segment.B.Y-p.Y)*(segment.A.X-segment.B.X) >= (segment.B.X-p.X)*(segment.A.Y-segment.B.Y)) == flag2 {
 				inside = !inside
 			}
 		}
@@ -135,7 +149,7 @@ func (s *Sector) SetParent(parent interface{}) {
 func (s *Sector) Initialize() {
 	s.Base.Initialize()
 	s.Segments = make([]*Segment, 0)
-	s.Entities = make(concepts.Collection)
+	s.Entities = make(map[string]AbstractEntity)
 	s.BottomZ = 0.0
 	s.TopZ = 64.0
 	s.FloorScale = 64.0

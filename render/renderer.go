@@ -7,16 +7,17 @@ import (
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/mapping"
+	"github.com/tlyakhov/gofoom/render/state"
 )
 
 type Renderer struct {
-	*Config
+	*state.Config
 	Map *mapping.Map
 }
 
 func NewRenderer() *Renderer {
 	r := Renderer{
-		Config: &Config{
+		Config: &state.Config{
 			ScreenWidth:  640,
 			ScreenHeight: 360,
 			FOV:          constants.FieldOfView,
@@ -34,30 +35,30 @@ func NewRenderer() *Renderer {
 	return &r
 }
 
-func (r *Renderer) RenderSlice(slice *Slice) {
+func (r *Renderer) RenderSlice(slice *state.Slice) {
 	slice.CalcScreen()
 
-	slice.RenderCeiling()
-	slice.RenderFloor()
+	Ceiling(slice)
+	Floor(slice)
 
 	if slice.Segment.AdjacentSector == nil {
-		slice.RenderMid()
+		WallMid(slice)
 		return
 	}
-	rsp := &SlicePortal{Slice: slice}
-	rsp.CalcScreen()
-	rsp.RenderHigh()
-	rsp.RenderLow()
+	sp := &state.SlicePortal{Slice: slice}
+	sp.CalcScreen()
+	WallHi(sp)
+	WallLow(sp)
 
 	portalSlice := *slice
-	portalSlice.Sector = rsp.Adj
-	portalSlice.YStart = rsp.AdjClippedTop
-	portalSlice.YEnd = rsp.AdjClippedBottom
+	portalSlice.Sector = sp.Adj.GetSector()
+	portalSlice.YStart = sp.AdjClippedTop
+	portalSlice.YEnd = sp.AdjClippedBottom
 	portalSlice.Depth++
 	r.RenderSector(&portalSlice)
 }
 
-func (r *Renderer) RenderSector(slice *Slice) {
+func (r *Renderer) RenderSector(slice *state.Slice) {
 	slice.Distance = constants.MaxViewDistance
 
 	dist := math.MaxFloat64
@@ -115,7 +116,7 @@ func (r *Renderer) Render(buffer []uint8) {
 		}
 
 		// Initialize a slice...
-		slice := &Slice{
+		slice := &state.Slice{
 			Config:       r.Config,
 			Map:          r.Map,
 			RenderTarget: buffer,
@@ -130,7 +131,7 @@ func (r *Renderer) Render(buffer []uint8) {
 		slice.AngleCos = math.Cos(slice.Angle)
 		slice.AngleSin = math.Sin(slice.Angle)
 
-		slice.Ray = &Ray{
+		slice.Ray = &state.Ray{
 			Start: r.Map.Player.Pos.To2D(),
 			End: &concepts.Vector2{
 				X: r.Map.Player.Pos.X + r.MaxViewDist*slice.AngleCos,
