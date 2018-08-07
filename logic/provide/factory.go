@@ -12,7 +12,11 @@ type passer interface {
 }
 
 type hurter interface {
-	For(concrete interface{}) Hurtable
+	For(concrete interface{}) (Hurtable, bool)
+}
+
+type collider interface {
+	For(concrete interface{}) (Collideable, bool)
 }
 
 var SectorAnimator animator
@@ -20,3 +24,4 @@ var EntityAnimator animator
 var Interactor interactor
 var Passer passer
 var Hurter hurter
+var Collider collider

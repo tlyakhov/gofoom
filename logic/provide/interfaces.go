@@ -18,4 +18,9 @@ type Animateable interface {
 
 type Hurtable interface {
 	Hurt(amount float64)
+	HurtTime() float64
+}
+
+type Collideable interface {
+	Collide()
 }

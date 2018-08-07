@@ -156,14 +156,6 @@ func (s *PhysicalSector) Recalculate() {
 		}
 	}
 
-	for _, e := range s.Entities {
-		e.Physical().Map = s.Map
-		e.Physical().Sector = s
-		if c, ok := e.(Collideable); ok {
-			c.Collide()
-		}
-	}
-
 	s.LightmapWidth = uint((s.Max.X-s.Min.X)/constants.LightGrid) + 6
 	s.LightmapHeight = uint((s.Max.Y-s.Min.Y)/constants.LightGrid) + 6
 	s.FloorLightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)

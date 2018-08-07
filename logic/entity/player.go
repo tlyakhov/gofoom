@@ -45,7 +45,7 @@ func (p *PlayerService) Frame(lastFrameTime float64) {
 }
 
 func (p *PlayerService) Hurt(amount float64) {
-	p.Hurt(amount)
+	p.AliveEntityService.Hurt(amount)
 	p.Player.HurtTime = constants.PlayerHurtTime
 }
 
