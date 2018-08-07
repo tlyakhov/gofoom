@@ -54,9 +54,9 @@ func (e *PhysicalEntity) Angle2DTo(p *concepts.Vector3) float64 {
 }
 
 func (e *PhysicalEntity) SetParent(parent interface{}) {
-	if sector, ok := parent.(*PhysicalSector); ok {
+	if sector, ok := parent.(AbstractSector); ok {
 		e.Sector = sector
-		e.Map = sector.Map
+		e.Map = sector.Physical().Map
 	} else {
 		panic("Tried mapping.PhysicalEntity.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
 	}

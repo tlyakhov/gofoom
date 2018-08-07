@@ -1,13 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"image"
-	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
 	"runtime/pprof"
 
 	"github.com/tlyakhov/gofoom/entities"
@@ -17,7 +16,6 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/core"
 	_ "github.com/tlyakhov/gofoom/logic/entity"
 	_ "github.com/tlyakhov/gofoom/logic/provide"
 	_ "github.com/tlyakhov/gofoom/logic/sector"
@@ -36,22 +34,6 @@ import (
 )
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
-
-func loadMap(filename string) *core.Map {
-	fileContents, err := ioutil.ReadFile(filename)
-
-	if err != nil {
-		panic(err)
-	}
-	var parsed interface{}
-	err = json.Unmarshal(fileContents, &parsed)
-	m := &core.Map{}
-	m.Initialize()
-	m.Deserialize(parsed.(map[string]interface{}))
-	m.Player = entities.NewPlayer(m)
-	m.Recalculate()
-	return m
-}
 
 func run() {
 	if *cpuProfile != "" {
@@ -88,10 +70,10 @@ func run() {
 	renderer.ScreenWidth = w
 	renderer.ScreenHeight = h
 	renderer.Initialize()
-	gameMap := loadMap("data/classicMap.json")
+	gameMap := logic.LoadMap("data/classicMap.json")
 	ps := entity.NewPlayerService(gameMap.Player.(*entities.Player))
 	ps.Collide()
-	renderer.Map = gameMap
+	renderer.Map = gameMap.Map
 
 	mainFont, _ := render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 
@@ -144,13 +126,14 @@ func run() {
 		} else {
 			ps.Crouching = false
 		}
-
+		gameMap.Frame(dt)
 		renderer.Render(buffer.Pix)
-		logic.NewMapService(gameMap).Frame(dt)
 
 		canvas.SetPixels(buffer.Pix)
 		canvas.Draw(win, mat)
 		mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", 1000.0/dt))
+		mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", ps.Player.Health))
+		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(ps.Player.Sector), ps.Player.Sector.GetBase().ID))
 		win.Update()
 	}
 }

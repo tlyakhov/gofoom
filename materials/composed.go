@@ -49,10 +49,12 @@ func (m *PainfulLitSampled) Initialize() {
 	m.LitSampled = LitSampled{}
 	m.LitSampled.Initialize()
 	m.Painful = Painful{}
+	m.Painful.Initialize()
 }
 
 func (m *PainfulLitSampled) Deserialize(data map[string]interface{}) {
 	m.Initialize()
 	m.LitSampled.Deserialize(data)
+	m.Painful.Deserialize(data)
 	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.GetBase().ID)
 }

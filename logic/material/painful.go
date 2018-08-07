@@ -1,9 +1,8 @@
-package logic
+package material
 
 import (
 	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
-	"github.com/tlyakhov/gofoom/logic/entity"
+	"github.com/tlyakhov/gofoom/logic/provide"
 	"github.com/tlyakhov/gofoom/materials"
 )
 
@@ -19,8 +18,8 @@ func (m *PainfulService) ActOnEntity(e core.AbstractEntity) {
 	if m.Hurt == 0 {
 		return
 	}
-
-	if ae, ok := e.(*entities.AliveEntity); ok && ae.HurtTime == 0 {
-		entity.NewAliveEntityService(ae).Hurt(m.Hurt)
+	hurter, ok := provide.Hurter.For(e)
+	if ok && hurter.HurtTime() == 0 {
+		hurter.Hurt(m.Hurt)
 	}
 }

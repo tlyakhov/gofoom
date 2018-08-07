@@ -16,3 +16,7 @@ func NewAliveEntityService(e *entities.AliveEntity) *AliveEntityService {
 func (e *AliveEntityService) Hurt(amount float64) {
 	e.Health -= amount
 }
+
+func (e *AliveEntityService) HurtTime() float64 {
+	return e.AliveEntity.HurtTime
+}

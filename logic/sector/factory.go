@@ -29,14 +29,14 @@ func (f *InteractorFactory) For(concrete interface{}) provide.Interactable {
 		return nil
 	}
 	switch target := concrete.(type) {
-	case *core.PhysicalSector:
-		return NewPhysicalSectorService(target)
 	case *sectors.ToxicSector:
 		return NewToxicSectorService(target)
 	case *sectors.VerticalDoor:
 		return NewVerticalDoorService(target)
 	case *sectors.Underwater:
 		return NewUnderwaterService(target)
+	case *core.PhysicalSector:
+		return NewPhysicalSectorService(target)
 	default:
 		panic(fmt.Sprintf("Tried to get a sector interactor service for %v and didn't find one.", reflect.TypeOf(concrete)))
 	}

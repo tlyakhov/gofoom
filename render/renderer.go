@@ -115,7 +115,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 		RenderTarget:   buffer,
 		X:              x,
 		YStart:         0,
-		YEnd:           r.ScreenHeight - 1,
+		YEnd:           r.ScreenHeight,
 		Angle:          r.Player().Angle*concepts.Deg2rad + r.ViewRadians[x],
 		PhysicalSector: r.Player().Sector.Physical(),
 		CameraZ:        r.Player().Pos.Z + r.Player().Height,
@@ -132,6 +132,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 	}
 
 	r.RenderSector(slice)
+
 	r.columns <- x
 }
 
@@ -151,15 +152,4 @@ func (r *Renderer) Render(buffer []uint8) {
 		<-r.columns
 	}
 	// Entities...
-
-	// Frame Tint
-	tint := r.Map.Player.(*entities.Player).FrameTint
-	if tint.A != 0 {
-		a := float64(tint.A) / 255.0
-		for i := 0; i < r.ScreenWidth*r.ScreenHeight; i++ {
-			buffer[i*4] = uint8(float64(buffer[i*4])*(1.0-a) + float64(tint.R)*a)
-			buffer[i*4+1] = uint8(float64(buffer[i*4+1])*(1.0-a) + float64(tint.G)*a)
-			buffer[i*4+2] = uint8(float64(buffer[i*4+2])*(1.0-a) + float64(tint.B)*a)
-		}
-	}
 }
