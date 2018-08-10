@@ -11,8 +11,8 @@ import (
 
 type PhysicalEntity struct {
 	*concepts.Base
-	Pos               *concepts.Vector3
-	Vel               *concepts.Vector3
+	Pos               concepts.Vector3
+	Vel               concepts.Vector3
 	Angle             float64
 	BoundingRadius    float64
 	CollisionResponse CollisionResponse
@@ -33,8 +33,8 @@ func init() {
 func (e *PhysicalEntity) Initialize() {
 	e.Base = &concepts.Base{}
 	e.Base.Initialize()
-	e.Pos = &concepts.Vector3{}
-	e.Vel = &concepts.Vector3{}
+	e.Pos = concepts.Vector3{}
+	e.Vel = concepts.Vector3{}
 	e.BoundingRadius = 10
 	e.CollisionResponse = Slide
 	e.MountHeight = constants.PlayerMountHeight

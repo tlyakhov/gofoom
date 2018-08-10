@@ -12,6 +12,6 @@ func (s *PlaceholderSector) Physical() *PhysicalSector {
 	return nil
 }
 
-func (s *PlaceholderSector) IsPointInside2D(*concepts.Vector2) bool {
+func (s *PlaceholderSector) IsPointInside2D(concepts.Vector2) bool {
 	return false
 }

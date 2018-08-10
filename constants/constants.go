@@ -4,6 +4,7 @@ const (
 	// Rendering constants
 	IntersectEpsilon        = 1e-10
 	LightGrid               = 2
+	LightSafety             = 3
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.001
 	MaxViewDistance         = 1000000.0

@@ -11,7 +11,7 @@ type Map struct {
 	Sectors        map[string]AbstractSector
 	Materials      map[string]concepts.ISerializable `editable:"Materials" edit_type:"Material"`
 	Player         AbstractEntity
-	Spawn          *concepts.Vector3 `editable:"Spawn" edit_type:"Vector"`
+	Spawn          concepts.Vector3 `editable:"Spawn" edit_type:"Vector"`
 	EntitiesPaused bool
 }
 
@@ -32,7 +32,7 @@ func (m *Map) ClearLightmaps() {
 }
 
 func (m *Map) Initialize() {
-	m.Spawn = &concepts.Vector3{}
+	m.Spawn = concepts.Vector3{}
 	m.Materials = make(map[string]concepts.ISerializable)
 	m.Sectors = make(map[string]AbstractSector)
 }

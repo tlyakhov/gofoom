@@ -1,7 +1,6 @@
 package sector
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/tlyakhov/gofoom/behaviors"
@@ -81,14 +80,13 @@ func (s *PhysicalSectorService) Frame(lastFrameTime float64) {
 
 func hasLightBehavior(e core.AbstractEntity) bool {
 	for _, b := range e.Behaviors() {
-		fmt.Printf("%v\n", b)
 		if _, ok := b.(*behaviors.Light); ok {
 			return true
 		}
 	}
 	return false
 }
-func (s *PhysicalSectorService) UpdatePVS(normal *concepts.Vector2, s2 core.AbstractSector) {
+func (s *PhysicalSectorService) UpdatePVS(normal concepts.Vector2, s2 core.AbstractSector) {
 	if s2 == nil {
 		s2 = s
 		s.PVS = make(map[string]core.AbstractSector)
@@ -108,7 +106,7 @@ func (s *PhysicalSectorService) UpdatePVS(normal *concepts.Vector2, s2 core.Abst
 			continue
 		}
 
-		correctSide := normal == nil || normal.Dot(seg.Normal) >= 0
+		correctSide := normal == concepts.ZeroVector2 || normal.Dot(seg.Normal) >= 0
 		if !correctSide || s.PVS[seg.AdjacentSector.GetBase().ID] != nil {
 			continue
 		}
@@ -119,7 +117,7 @@ func (s *PhysicalSectorService) UpdatePVS(normal *concepts.Vector2, s2 core.Abst
 				s.PVSLights = append(s.PVSLights, e)
 			}
 		}
-		if normal == nil {
+		if normal == concepts.ZeroVector2 {
 			s.UpdatePVS(seg.Normal, seg.AdjacentSector)
 		} else {
 			s.UpdatePVS(normal, seg.AdjacentSector)
@@ -127,7 +125,7 @@ func (s *PhysicalSectorService) UpdatePVS(normal *concepts.Vector2, s2 core.Abst
 	}
 }
 
-func (s *PhysicalSectorService) UpdateEntityPVS(normal *concepts.Vector2, s2 core.AbstractSector) {
+func (s *PhysicalSectorService) UpdateEntityPVS(normal concepts.Vector2, s2 core.AbstractSector) {
 	if s2 == nil {
 		s.PVSEntity = make(map[string]core.AbstractSector)
 		s.PVSEntity[s.ID] = s
@@ -139,14 +137,14 @@ func (s *PhysicalSectorService) UpdateEntityPVS(normal *concepts.Vector2, s2 cor
 		if adj == nil || adj.MidMaterial != nil {
 			continue
 		}
-		correctSide := normal == nil || normal.Dot(seg.Normal) >= 0
+		correctSide := normal == concepts.ZeroVector2 || normal.Dot(seg.Normal) >= 0
 		if !correctSide || s.PVSEntity[adj.Sector.GetBase().ID] != nil {
 			continue
 		}
 
 		s.PVSEntity[seg.AdjacentSector.GetBase().ID] = seg.AdjacentSector
 
-		if normal == nil {
+		if normal == concepts.ZeroVector2 {
 			s.UpdateEntityPVS(seg.Normal, seg.AdjacentSector)
 		} else {
 			s.UpdateEntityPVS(normal, seg.AdjacentSector)
@@ -155,6 +153,6 @@ func (s *PhysicalSectorService) UpdateEntityPVS(normal *concepts.Vector2, s2 cor
 }
 
 func (s *PhysicalSectorService) Recalculate() {
-	s.UpdatePVS(nil, nil)
-	//s.UpdateEntityPVS(nil, nil)
+	s.UpdatePVS(concepts.ZeroVector2, nil)
+	s.UpdateEntityPVS(concepts.ZeroVector2, nil)
 }

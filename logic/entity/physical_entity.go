@@ -73,7 +73,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 		}
 
 		if !closestSector.IsPointInside2D(e.Pos.To2D()) {
-			*e.Pos = *closestSector.Physical().Center
+			e.Pos = closestSector.Physical().Center
 		} else if e.Pos.Z < closestSector.Physical().BottomZ || e.Pos.Z+e.Height > closestSector.Physical().TopZ {
 			e.Pos.Z = closestSector.Physical().Center.Z
 		}

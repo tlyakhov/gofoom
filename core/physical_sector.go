@@ -20,9 +20,9 @@ type PhysicalSector struct {
 	FloorMaterial           concepts.ISerializable
 	CeilMaterial            concepts.ISerializable
 
-	Min, Max, Center              *concepts.Vector3
+	Min, Max, Center              concepts.Vector3
 	LightmapWidth, LightmapHeight uint32
-	FloorLightmap, CeilLightmap   []float64
+	FloorLightmap, CeilLightmap   []concepts.Vector3
 	PVS                           map[string]AbstractSector
 	PVSEntity                     map[string]AbstractSector
 	PVSLights                     []AbstractEntity
@@ -38,7 +38,7 @@ func (s *PhysicalSector) Physical() *PhysicalSector {
 	return s
 }
 
-func (ms *PhysicalSector) IsPointInside2D(p *concepts.Vector2) bool {
+func (ms *PhysicalSector) IsPointInside2D(p concepts.Vector2) bool {
 	inside := false
 	flag1 := (p.Y >= ms.Segments[0].A.Y)
 
@@ -110,9 +110,9 @@ func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 }
 
 func (s *PhysicalSector) Recalculate() {
-	s.Center = &concepts.Vector3{0, 0, (s.TopZ + s.BottomZ) / 2}
-	s.Min = &concepts.Vector3{math.Inf(1), math.Inf(1), s.BottomZ}
-	s.Max = &concepts.Vector3{math.Inf(-1), math.Inf(-1), s.TopZ}
+	s.Center = concepts.Vector3{0, 0, (s.TopZ + s.BottomZ) / 2}
+	s.Min = concepts.Vector3{math.Inf(1), math.Inf(1), s.BottomZ}
+	s.Max = concepts.Vector3{math.Inf(-1), math.Inf(-1), s.TopZ}
 
 	w := s.Winding()
 
@@ -157,17 +157,17 @@ func (s *PhysicalSector) Recalculate() {
 		}
 	}
 
-	s.LightmapWidth = uint32((s.Max.X-s.Min.X)/constants.LightGrid) + 6
-	s.LightmapHeight = uint32((s.Max.Y-s.Min.Y)/constants.LightGrid) + 6
-	s.FloorLightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
-	s.CeilLightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
+	s.LightmapWidth = uint32((s.Max.X-s.Min.X)/constants.LightGrid) + constants.LightSafety*2
+	s.LightmapHeight = uint32((s.Max.Y-s.Min.Y)/constants.LightGrid) + constants.LightSafety*2
+	s.FloorLightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
+	s.CeilLightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
 	s.ClearLightmaps()
 }
 
 func (s *PhysicalSector) ClearLightmaps() {
 	for i := range s.FloorLightmap {
-		s.FloorLightmap[i] = -1
-		s.CeilLightmap[i] = -1
+		s.FloorLightmap[i] = concepts.Vector3{-1, -1, -1}
+		s.CeilLightmap[i] = concepts.Vector3{-1, -1, -1}
 	}
 
 	for _, segment := range s.Segments {
@@ -175,19 +175,15 @@ func (s *PhysicalSector) ClearLightmaps() {
 	}
 }
 
-func (s *PhysicalSector) LightmapAddress(p *concepts.Vector2) uint32 {
-	dx := int(p.X-s.Min.X)/constants.LightGrid + 3
-	dy := int(p.Y-s.Min.Y)/constants.LightGrid + 3
-	if dx < 0 {
-		dx = 0
-	}
-	if dy < 0 {
-		dy = 0
-	}
-	return uint32((uint32(dy)*s.LightmapWidth + uint32(dx)) * 3)
+func (s *PhysicalSector) LightmapAddress(p concepts.Vector2) uint32 {
+	dx := int(p.X-s.Min.X)/constants.LightGrid + constants.LightSafety
+	dy := int(p.Y-s.Min.Y)/constants.LightGrid + constants.LightSafety
+	dx = concepts.IntClamp(dx, 0, int(s.LightmapWidth))
+	dy = concepts.IntClamp(dy, 0, int(s.LightmapHeight))
+	return uint32(dy)*s.LightmapWidth + uint32(dx)
 }
 
-func (s *PhysicalSector) LightmapWorld(p *concepts.Vector3) *concepts.Vector3 {
+func (s *PhysicalSector) LightmapWorld(p concepts.Vector3) concepts.Vector3 {
 	lw := p.Sub(s.Min).Mul(1.0 / constants.LightGrid)
 	lw.X = math.Floor(lw.X) * constants.LightGrid
 	lw.Y = math.Floor(lw.Y) * constants.LightGrid
@@ -195,14 +191,14 @@ func (s *PhysicalSector) LightmapWorld(p *concepts.Vector3) *concepts.Vector3 {
 	return lw
 }
 
-func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) *concepts.Vector3 {
-	u := int((mapIndex/3)%s.LightmapWidth) - 3
-	v := int((mapIndex/3)/s.LightmapWidth) - 3
+func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) concepts.Vector3 {
+	u := int(mapIndex%s.LightmapWidth) - constants.LightSafety
+	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
 	r := concepts.Vector3{s.Min.X + float64(u)*constants.LightGrid, s.Min.Y + float64(v)*constants.LightGrid, s.TopZ}
 	if floor {
 		r.Z = s.BottomZ
 	}
-	return &r
+	return r
 }
 
 func (s *PhysicalSector) SetParent(parent interface{}) {

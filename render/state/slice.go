@@ -10,7 +10,7 @@ import (
 )
 
 type Ray struct {
-	Start, End *concepts.Vector2
+	Start, End concepts.Vector2
 }
 
 type Slice struct {
@@ -24,7 +24,7 @@ type Slice struct {
 	Angle              float64
 	AngleCos           float64
 	AngleSin           float64
-	Intersection       *concepts.Vector3
+	Intersection       concepts.Vector3
 	Distance           float64
 	U                  float64
 	Depth              int
@@ -72,7 +72,7 @@ func (s *Slice) Write(screenIndex uint32, c uint32) {
 	s.RenderTarget[screenIndex*4+3] = uint8(c & 0xFF)
 }
 
-func (s *Slice) Light(world, normal *concepts.Vector3, u, v float64) *concepts.Vector3 {
+func (s *Slice) Light(world, normal concepts.Vector3, u, v float64) concepts.Vector3 {
 	le00 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
 	le10 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
 	le11 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
@@ -96,9 +96,12 @@ func (s *Slice) Light(world, normal *concepts.Vector3, u, v float64) *concepts.V
 		}
 		lightmapLength = uint32(len(le00.Lightmap))
 		le00.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
-		le10.MapIndex = le00.MapIndex + 3
-		le11.MapIndex = le10.MapIndex + 3*s.PhysicalSector.LightmapWidth
-		le01.MapIndex = le11.MapIndex - 3
+		le10.MapIndex = le00.MapIndex + 1
+		le11.MapIndex = le10.MapIndex + s.PhysicalSector.LightmapWidth
+		le01.MapIndex = le11.MapIndex - 1
+		if le00.MapIndex > lightmapLength-1 {
+			le00.MapIndex = lightmapLength - 1
+		}
 		if le10.MapIndex > lightmapLength-1 {
 			le10.MapIndex = lightmapLength - 1
 		}
@@ -116,10 +119,10 @@ func (s *Slice) Light(world, normal *concepts.Vector3, u, v float64) *concepts.V
 		le10.Lightmap = s.Segment.Lightmap
 		le11.Lightmap = s.Segment.Lightmap
 		le01.Lightmap = s.Segment.Lightmap
-		wu = u * (float64(s.Segment.LightmapWidth) - 2)
-		wv = v * (float64(s.Segment.LightmapHeight) - 2)
-		iu := uint32(wu) + 1
-		iv := uint32(wv) + 1
+		wu = u * (float64(s.Segment.LightmapWidth) - constants.LightSafety*2)
+		wv = v * (float64(s.Segment.LightmapHeight) - constants.LightSafety*2)
+		iu := uint32(wu) + constants.LightSafety
+		iv := uint32(wv) + constants.LightSafety
 		if iu > s.Segment.LightmapWidth-1 {
 			iu = s.Segment.LightmapWidth - 1
 		}
@@ -134,23 +137,18 @@ func (s *Slice) Light(world, normal *concepts.Vector3, u, v float64) *concepts.V
 		if iv2 > s.Segment.LightmapHeight-1 {
 			iv2 = s.Segment.LightmapHeight - 1
 		}
-		le00.MapIndex = (iu + iv*s.Segment.LightmapWidth) * 3
-		le10.MapIndex = (iu2 + iv*s.Segment.LightmapWidth) * 3
-		le11.MapIndex = (iu2 + iv2*s.Segment.LightmapWidth) * 3
-		le01.MapIndex = (iu + iv2*s.Segment.LightmapWidth) * 3
+		le00.MapIndex = iu + iv*s.Segment.LightmapWidth
+		le10.MapIndex = iu2 + iv*s.Segment.LightmapWidth
+		le11.MapIndex = iu2 + iv2*s.Segment.LightmapWidth
+		le01.MapIndex = iu + iv2*s.Segment.LightmapWidth
 		wu = 1.0 - (wu - math.Floor(wu))
 		wv = 1.0 - (wv - math.Floor(wv))
 	}
 	wu = concepts.Clamp(wu, 0.0, 1.0)
 	wv = concepts.Clamp(wv, 0.0, 1.0)
 
-	light00 := le00.Get(wall)
-	light10 := le10.Get(wall)
-	light11 := le11.Get(wall)
-	light01 := le01.Get(wall)
-
-	return light00.Mul(wu * wv).Add(
-		light10.Mul((1.0 - wu) * wv)).Add(
-		light11.Mul((1.0 - wu) * (1.0 - wv))).Add(
-		light01.Mul(wu * (1.0 - wv)))
+	return le00.Get(wall).Mul(wu * wv).
+		Add(le10.Get(wall).Mul((1.0 - wu) * wv)).
+		Add(le11.Get(wall).Mul((1.0 - wu) * (1.0 - wv))).
+		Add(le01.Get(wall).Mul(wu * (1.0 - wv)))
 }

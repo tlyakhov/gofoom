@@ -96,10 +96,10 @@ func run() {
 			ps.Move(ps.Player.Angle+270.0, dt, 1.0)
 		}
 		if win.Pressed(pixelgl.KeyE) {
-			ps.Move(ps.Player.Angle+90.0, dt, 1.0)
+			ps.Move(ps.Player.Angle+90.0, dt, 0.5)
 		}
 		if win.Pressed(pixelgl.KeyQ) {
-			ps.Move(ps.Player.Angle+270.0, dt, 1.0)
+			ps.Move(ps.Player.Angle+270.0, dt, 0.5)
 		}
 		if win.Pressed(pixelgl.KeyA) {
 			ps.Player.Angle -= constants.PlayerTurnSpeed * dt / 30.0

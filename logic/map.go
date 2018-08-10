@@ -2,7 +2,6 @@ package logic
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 
 	"github.com/tlyakhov/gofoom/core"
@@ -43,10 +42,6 @@ func (m *MapService) Recalculate() {
 				c.Collide()
 			}
 		}
-	}
-	for _, s := range m.Sectors {
-		provide.Passer.For(s).Recalculate()
-		fmt.Printf("%v\n", len(s.Physical().PVSLights))
 	}
 }
 
