@@ -15,7 +15,7 @@ const (
 type Segment struct {
 	concepts.Base
 
-	A, B        *concepts.Vector2
+	A, B        concepts.Vector2
 	LoMaterial  concepts.ISerializable
 	MidMaterial concepts.ISerializable
 	HiMaterial  concepts.ISerializable
@@ -24,11 +24,11 @@ type Segment struct {
 	HiBehavior  MaterialBehavior
 
 	Length          float64
-	Normal          *concepts.Vector2
+	Normal          concepts.Vector2
 	Sector          AbstractSector
 	AdjacentSector  AbstractSector
 	AdjacentSegment *Segment
-	Lightmap        []float64
+	Lightmap        []concepts.Vector3
 	LightmapWidth   uint32
 	LightmapHeight  uint32
 	Flags           int
@@ -40,9 +40,9 @@ func init() {
 
 func (s *Segment) Initialize() {
 	s.Base.Initialize()
-	s.A = &concepts.Vector2{}
-	s.B = &concepts.Vector2{}
-	s.Normal = &concepts.Vector2{}
+	s.A = concepts.Vector2{}
+	s.B = concepts.Vector2{}
+	s.Normal = concepts.Vector2{}
 }
 
 func (s *Segment) SetParent(parent interface{}) {
@@ -75,20 +75,20 @@ func (s *Segment) RealizeAdjacentSector() {
 
 func (s *Segment) Recalculate() {
 	s.Length = s.B.Sub(s.A).Length()
-	s.Normal = &concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
+	s.Normal = concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()
 		sector := s.Sector.Physical()
-		s.LightmapWidth = uint32(s.Length/constants.LightGrid) + 2
-		s.LightmapHeight = uint32((sector.TopZ-sector.BottomZ)/constants.LightGrid) + 2
-		s.Lightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
+		s.LightmapWidth = uint32(s.Length/constants.LightGrid) + constants.LightSafety*2
+		s.LightmapHeight = uint32((sector.TopZ-sector.BottomZ)/constants.LightGrid) + constants.LightSafety*2
+		s.Lightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
 		s.ClearLightmap()
 	}
 }
 
 func (s *Segment) ClearLightmap() {
 	for i := range s.Lightmap {
-		s.Lightmap[i] = -1
+		s.Lightmap[i] = concepts.Vector3{-1, -1, -1}
 	}
 }
 
@@ -102,7 +102,7 @@ func (s *Segment) Matches(s2 *Segment) bool {
 	return d1 || d2
 }
 
-func (s1 *Segment) intersect(s2A, s2B *concepts.Vector2) (float64, float64, float64, float64) {
+func (s1 *Segment) intersect(s2A, s2B concepts.Vector2) (float64, float64, float64, float64) {
 	s1dx := s1.B.X - s1.A.X
 	s1dy := s1.B.Y - s1.A.Y
 	s2dx := s2B.X - s2A.X
@@ -130,20 +130,20 @@ func (s1 *Segment) intersect(s2A, s2B *concepts.Vector2) (float64, float64, floa
 	return concepts.Clamp(r, 0.0, 1.0), concepts.Clamp(s, 0.0, 1.0), s1dx, s1dy
 }
 
-func (s1 *Segment) Intersect2D(s2A, s2B *concepts.Vector2) *concepts.Vector2 {
+func (s1 *Segment) Intersect2D(s2A, s2B concepts.Vector2) (concepts.Vector2, bool) {
 	r, _, s1dx, s1dy := s1.intersect(s2A, s2B)
 	if r < 0 {
-		return nil
+		return concepts.Vector2{}, false
 	}
-	return &concepts.Vector2{s1.A.X + r*s1dx, s1.A.Y + r*s1dy}
+	return concepts.Vector2{s1.A.X + r*s1dx, s1.A.Y + r*s1dy}, true
 }
 
-func (s1 *Segment) Intersect3D(s2A, s2B *concepts.Vector3) *concepts.Vector3 {
+func (s1 *Segment) Intersect3D(s2A, s2B concepts.Vector3) (concepts.Vector3, bool) {
 	r, s, s1dx, s1dy := s1.intersect(s2A.To2D(), s2B.To2D())
 	if r < 0 {
-		return nil
+		return concepts.Vector3{}, false
 	}
-	return &concepts.Vector3{s1.A.X + r*s1dx, s1.A.Y + r*s1dy, s*s2A.Z + (1.0-s)*s2B.Z}
+	return concepts.Vector3{s1.A.X + r*s1dx, s1.A.Y + r*s1dy, s*s2A.Z + (1.0-s)*s2B.Z}, true
 }
 
 func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
@@ -196,7 +196,7 @@ func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
 	return minY <= maxY // If Y-projections do not intersect return false
 }
 
-func (s *Segment) DistanceToPoint2(p *concepts.Vector2) float64 {
+func (s *Segment) DistanceToPoint2(p concepts.Vector2) float64 {
 	l2 := s.A.Dist2(s.B)
 	if l2 == 0 {
 		return p.Dist2(s.A)
@@ -212,11 +212,11 @@ func (s *Segment) DistanceToPoint2(p *concepts.Vector2) float64 {
 	return p.Dist2(s.A.Add(delta.Mul(t)))
 }
 
-func (s *Segment) DistanceToPoint(p *concepts.Vector2) float64 {
+func (s *Segment) DistanceToPoint(p concepts.Vector2) float64 {
 	return math.Sqrt(s.DistanceToPoint2(p))
 }
 
-func (s *Segment) ClosestToPoint(p *concepts.Vector2) *concepts.Vector2 {
+func (s *Segment) ClosestToPoint(p concepts.Vector2) concepts.Vector2 {
 	delta := s.B.Sub(s.A)
 	dist2 := delta.X*delta.X + delta.Y*delta.Y
 	if dist2 == 0 {
@@ -234,20 +234,20 @@ func (s *Segment) ClosestToPoint(p *concepts.Vector2) *concepts.Vector2 {
 	return s.A.Add(delta.Mul(t))
 }
 
-func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
+func (s *Segment) WhichSide(p concepts.Vector2) float64 {
 	return s.Normal.Dot(p.Sub(s.A))
 }
 
-func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
+func (s *Segment) UVToWorld(u, v float64) concepts.Vector3 {
 	alongSegment := s.A.Add(s.B.Sub(s.A).Mul(u))
-	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
+	return concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
 }
 
-func (s *Segment) LightmapAddressToWorld(mapIndex uint32) *concepts.Vector3 {
-	lu := ((mapIndex / 3) % s.LightmapWidth) - 1
-	lv := ((mapIndex / 3) / s.LightmapWidth) - 1
-	u := float64(lu) / float64(s.LightmapWidth-2)
-	v := float64(lv) / float64(s.LightmapHeight-2)
+func (s *Segment) LightmapAddressToWorld(mapIndex uint32) concepts.Vector3 {
+	lu := (mapIndex % s.LightmapWidth) - constants.LightSafety
+	lv := (mapIndex / s.LightmapWidth) - constants.LightSafety
+	u := float64(lu) / float64(s.LightmapWidth-(constants.LightSafety*2))
+	v := float64(lv) / float64(s.LightmapHeight-(constants.LightSafety*2))
 	return s.UVToWorld(u, v)
 }
 

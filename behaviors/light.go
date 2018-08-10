@@ -9,9 +9,9 @@ import (
 type Light struct {
 	core.AnimatedBehavior
 
-	Diffuse               *concepts.Vector3
+	Diffuse               concepts.Vector3
 	Strength, Attenuation float64
-	LastPos               *concepts.Vector3
+	LastPos               concepts.Vector3
 }
 
 func init() {
@@ -21,7 +21,7 @@ func init() {
 func (l *Light) Initialize() {
 	l.AnimatedBehavior.Initialize()
 
-	l.Diffuse = &concepts.Vector3{1, 1, 1}
+	l.Diffuse = concepts.Vector3{1, 1, 1}
 	l.Strength = 15
 	l.Attenuation = 1.2
 }
@@ -34,10 +34,10 @@ func (l *Light) Frame(lastFrameTime float64) {
 	}
 
 	pos := l.Entity.Physical().Pos
-	if l.LastPos != nil && *pos != *l.LastPos {
+	if pos != l.LastPos {
 		l.Entity.Physical().Map.ClearLightmaps()
 	}
-	*l.LastPos = *pos
+	l.LastPos = pos
 }
 
 func (l *Light) Deserialize(data map[string]interface{}) {

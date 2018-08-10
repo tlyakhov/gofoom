@@ -11,7 +11,7 @@ import (
 func Floor(s *state.Slice) {
 	mat := material.For(s.PhysicalSector.FloorMaterial, s)
 
-	world := &concepts.Vector3{0, 0, s.PhysicalSector.BottomZ}
+	world := concepts.Vector3{0, 0, s.PhysicalSector.BottomZ}
 
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
 		if s.Y-s.ScreenHeight/2 == 0 {
@@ -41,7 +41,7 @@ func Floor(s *state.Slice) {
 		}
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, &state.FloorNormal, 0, 0), scaler))
+			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, state.FloorNormal, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor
 	}

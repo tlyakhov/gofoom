@@ -11,7 +11,7 @@ import (
 func Ceiling(s *state.Slice) {
 	mat := material.For(s.PhysicalSector.CeilMaterial, s)
 
-	world := &concepts.Vector3{0, 0, s.PhysicalSector.TopZ}
+	world := concepts.Vector3{0, 0, s.PhysicalSector.TopZ}
 
 	for s.Y = s.YStart; s.Y < s.ClippedStart; s.Y++ {
 		if s.Y-s.ScreenHeight/2 == 0 {
@@ -37,7 +37,7 @@ func Ceiling(s *state.Slice) {
 		ty = math.Abs(ty)
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, &state.CeilingNormal, 0, 0), scaler))
+			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, state.CeilingNormal, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToCeil
 	}

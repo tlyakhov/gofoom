@@ -69,9 +69,9 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 			continue
 		}
 
-		isect := segment.Intersect2D(slice.Ray.Start, slice.Ray.End)
+		isect, ok := segment.Intersect2D(slice.Ray.Start, slice.Ray.End)
 
-		if isect == nil {
+		if !ok {
 			continue
 		}
 
@@ -122,7 +122,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 
 	slice.Ray = &state.Ray{
 		Start: r.Player().Pos.To2D(),
-		End: &concepts.Vector2{
+		End: concepts.Vector2{
 			X: r.Player().Pos.X + r.MaxViewDist*slice.AngleCos,
 			Y: r.Player().Pos.Y + r.MaxViewDist*slice.AngleSin,
 		},

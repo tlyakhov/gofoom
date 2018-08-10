@@ -10,19 +10,22 @@ import (
 )
 
 type LightElement struct {
-	Normal        *concepts.Vector3
+	Normal        concepts.Vector3
 	Sector        *core.PhysicalSector
 	Segment       *core.Segment
 	U, V          float64
 	MapIndex      uint32
-	Lightmap      []float64
+	Lightmap      []concepts.Vector3
 	VisibleLights map[string]*core.PhysicalEntity
 }
 
-func (le *LightElement) Get(wall bool) *concepts.Vector3 {
+func (le LightElement) Get(wall bool) concepts.Vector3 {
+	if le.MapIndex < 0 {
+		le.MapIndex = 0
+	}
 	v := le.Lightmap[le.MapIndex]
-	if v < 0 {
-		var q *concepts.Vector3
+	if v.X < 0 {
+		var q concepts.Vector3
 		if !wall {
 			q = le.Sector.LightmapAddressToWorld(le.MapIndex, le.Normal.Z > 0)
 		} else {
@@ -30,10 +33,10 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 		}
 		le.Calculate(q)
 	}
-	return &concepts.Vector3{le.Lightmap[le.MapIndex], le.Lightmap[le.MapIndex+1], le.Lightmap[le.MapIndex+2]}
+	return le.Lightmap[le.MapIndex]
 }
 
-func (le *LightElement) markVisibleLight(p *concepts.Vector3, e *core.PhysicalEntity) {
+func (le *LightElement) markVisibleLight(p concepts.Vector3, e *core.PhysicalEntity) {
 	rayLength := p.Dist(e.Pos)
 	if rayLength == 0 {
 		return
@@ -48,10 +51,10 @@ func (le *LightElement) markVisibleLight(p *concepts.Vector3, e *core.PhysicalEn
 			if delta.To2D().Dot(seg.Normal) > 0 {
 				continue
 			}
-			isect := seg.Intersect3D(p, e.Pos)
-			if isect == nil {
+			isect, ok := seg.Intersect3D(p, e.Pos)
+			if !ok {
 				continue
-			} else if isect != nil && seg.AdjacentSector == nil {
+			} else if ok && seg.AdjacentSector == nil {
 				delete(le.VisibleLights, e.ID)
 				continue
 			} else if isect.Z < sector.BottomZ && isect.Z > sector.TopZ {
@@ -67,7 +70,7 @@ func (le *LightElement) markVisibleLight(p *concepts.Vector3, e *core.PhysicalEn
 	}
 }
 
-func (le *LightElement) MarkVisibleLights(p *concepts.Vector3) {
+func (le *LightElement) MarkVisibleLights(p concepts.Vector3) {
 	le.VisibleLights = make(map[string]*core.PhysicalEntity)
 	for _, l := range le.Sector.PVSLights {
 		if !l.Physical().Active {
@@ -86,7 +89,7 @@ func (le *LightElement) MarkVisibleLights(p *concepts.Vector3) {
 	}
 }
 
-func (le *LightElement) Calculate(world *concepts.Vector3) {
+func (le *LightElement) Calculate(world concepts.Vector3) {
 	w2d := world.To2D()
 	p := world
 	if !le.Sector.IsPointInside2D(w2d) {
@@ -113,13 +116,12 @@ func (le *LightElement) Calculate(world *concepts.Vector3) {
 	}
 
 	le.MarkVisibleLights(p)
-	diffuseSum := &concepts.Vector3{}
+	diffuseSum := concepts.ZeroVector3
 
 	for _, lightEntity := range le.Sector.PVSLights {
 		if !lightEntity.Physical().Active {
 			continue
 		}
-		le.Lightmap[le.MapIndex+0] = 1
 
 		for _, b := range lightEntity.Behaviors() {
 			lb, ok := b.(*behaviors.Light)
@@ -153,7 +155,5 @@ func (le *LightElement) Calculate(world *concepts.Vector3) {
 			}
 		}
 	}
-	le.Lightmap[le.MapIndex+0] = diffuseSum.X
-	le.Lightmap[le.MapIndex+1] = diffuseSum.Y
-	le.Lightmap[le.MapIndex+2] = diffuseSum.Z
+	le.Lightmap[le.MapIndex] = diffuseSum
 }
