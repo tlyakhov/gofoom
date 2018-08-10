@@ -22,6 +22,8 @@ type PhysicalEntity struct {
 	Active            bool
 	Sector            AbstractSector
 	Map               *Map
+
+	behaviors map[string]AbstractBehavior
 }
 
 func init() {
@@ -37,10 +39,15 @@ func (e *PhysicalEntity) Initialize() {
 	e.CollisionResponse = Slide
 	e.MountHeight = constants.PlayerMountHeight
 	e.Active = true
+	e.behaviors = make(map[string]AbstractBehavior)
 }
 
 func (e *PhysicalEntity) Physical() *PhysicalEntity {
 	return e
+}
+
+func (e *PhysicalEntity) Behaviors() map[string]AbstractBehavior {
+	return e.behaviors
 }
 
 func (e *PhysicalEntity) GetSector() AbstractSector {
@@ -59,5 +66,43 @@ func (e *PhysicalEntity) SetParent(parent interface{}) {
 		e.Map = sector.Physical().Map
 	} else {
 		panic("Tried mapping.PhysicalEntity.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
+	}
+}
+
+func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
+	e.Initialize()
+	e.Base.Deserialize(data)
+
+	if v, ok := data["Active"]; ok {
+		e.Active = v.(bool)
+	}
+	if v, ok := data["Pos"]; ok {
+		e.Pos.Deserialize(v.(map[string]interface{}))
+	}
+	if v, ok := data["Vel"]; ok {
+		e.Vel.Deserialize(v.(map[string]interface{}))
+	}
+	if v, ok := data["Angle"]; ok {
+		e.Angle = v.(float64)
+	}
+	if v, ok := data["BoundingRadius"]; ok {
+		e.BoundingRadius = v.(float64)
+	}
+	if v, ok := data["Height"]; ok {
+		e.Height = v.(float64)
+	}
+	if v, ok := data["MountHeight"]; ok {
+		e.MountHeight = v.(float64)
+	}
+	if v, ok := data["CollisionResponse"]; ok {
+		c, err := CollisionResponseString(v.(string))
+		if err == nil {
+			e.CollisionResponse = c
+		} else {
+			panic(err)
+		}
+	}
+	if v, ok := data["Behaviors"]; ok {
+		concepts.MapCollection(e, &e.behaviors, v)
 	}
 }

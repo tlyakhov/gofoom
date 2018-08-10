@@ -10,7 +10,7 @@ func WallMid(s *state.Slice) {
 	mat := material.For(s.Segment.MidMaterial, s)
 
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
-		screenIndex := uint(s.X + s.Y*s.ScreenWidth)
+		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if s.Distance >= s.ZBuffer[screenIndex] {
 			continue
@@ -18,7 +18,7 @@ func WallMid(s *state.Slice) {
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
 		s.Intersection.Z = s.PhysicalSector.TopZ + v*(s.PhysicalSector.BottomZ-s.PhysicalSector.TopZ)
 
-		// var light = this.map.light(slice.intersection, segment.normal, slice.sector, slice.segment, slice.u, v, true);
+		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, v)
 
 		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
 			v = (v*(s.PhysicalSector.TopZ-s.PhysicalSector.BottomZ) - s.PhysicalSector.TopZ) / 64.0
@@ -31,7 +31,7 @@ func WallMid(s *state.Slice) {
 
 		//fmt.Printf("%v\n", screenIndex)
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(u, v, nil, s.ProjectZ(1.0)))
+			s.Write(screenIndex, mat.Sample(u, v, light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}

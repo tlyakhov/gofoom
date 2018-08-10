@@ -26,9 +26,6 @@ func NewRenderer() *Renderer {
 			MaxViewDist:  constants.MaxViewDistance,
 			Frame:        0,
 			Counter:      0,
-
-			FloorNormal:   concepts.Vector3{X: 0, Y: 0, Z: 1},
-			CeilingNormal: concepts.Vector3{X: 0, Y: 0, Z: -1},
 		},
 		columns: make(chan int),
 	}
@@ -72,7 +69,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 			continue
 		}
 
-		isect := segment.Intersect(slice.Ray.Start, slice.Ray.End)
+		isect := segment.Intersect2D(slice.Ray.Start, slice.Ray.End)
 
 		if isect == nil {
 			continue

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 
 	"github.com/tlyakhov/gofoom/core"
@@ -36,11 +37,16 @@ func LoadMap(filename string) *MapService {
 func (m *MapService) Recalculate() {
 	m.Map.Recalculate()
 	for _, s := range m.Sectors {
+		provide.Passer.For(s).Recalculate()
 		for _, e := range s.Physical().Entities {
 			if c, ok := provide.Collider.For(e); ok {
 				c.Collide()
 			}
 		}
+	}
+	for _, s := range m.Sectors {
+		provide.Passer.For(s).Recalculate()
+		fmt.Printf("%v\n", len(s.Physical().PVSLights))
 	}
 }
 

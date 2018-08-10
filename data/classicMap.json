@@ -286,7 +286,7 @@
                     }
                 },
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": 0,
                         "Y": 68,
@@ -294,7 +294,7 @@
                     },
                     "Behaviors": [
                         {
-                            "Type": "LightBehavior",
+                            "Type": "behaviors.Light",
                             "Attenuation": 0
                         }
                     ]
@@ -570,7 +570,7 @@
             "CeilMaterial": "Default Floor",
             "Entities": [
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": -240,
                         "Y": 0,
@@ -578,7 +578,7 @@
                     },
                     "Behaviors": [
                         {
-                            "Type": "LightBehavior",
+                            "Type": "behaviors.Light",
                             "Diffuse": {
                                 "X": 0.1,
                                 "Y": 1.0,
@@ -648,7 +648,7 @@
             "CeilMaterial": "Default Floor",
             "Entities": [
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": -240,
                         "Y": -100,
@@ -656,7 +656,7 @@
                     },
                     "behaviors": [
                         {
-                            "Type": "LightBehavior",
+                            "Type": "behaviors.Light",
                             "diffuse": {
                                 "X": 0.1,
                                 "Y": 1.0,
@@ -710,7 +710,7 @@
             "CeilMaterial": "Default Floor",
             "Entities": [
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": -240,
                         "Y": 100,
@@ -718,7 +718,7 @@
                     },
                     "Behaviors": [
                         {
-                            "Type": "LightBehavior",
+                            "Type": "behaviors.Light",
                             "Diffuse": {
                                 "X": 0.1,
                                 "Y": 1.0,
@@ -915,7 +915,7 @@
             "FloorTarget": "sector17",
             "Entities": [
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": 350,
                         "Y": 80,
@@ -923,7 +923,7 @@
                     },
                     "Behaviors": [
                         {
-                            "Type": "LightBehavior",
+                            "Type": "behaviors.Light",
                             "Diffuse": {
                                 "X": 0.4,
                                 "Y": 0.6,
@@ -1093,7 +1093,7 @@
             ],
             "Entities": [
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": 340,
                         "Y": 260,
@@ -1101,13 +1101,13 @@
                     },
                     "Behaviors": [
                         {
-                            "Type": "LightBehavior",
+                            "Type": "behaviors.Light",
                             "Diffuse": {
                                 "X": 0.8,
                                 "Y": 0.8,
                                 "Z": 1.0
                             },
-                            "Attenuation": false
+                            "Attenuation": 0
                         }
                     ]
                 }
@@ -1326,7 +1326,7 @@
             ],
             "Entities": [
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": 610,
                         "Y": 175,
@@ -1334,13 +1334,13 @@
                     },
                     "Behaviors": [
                         {
-                            "Type": "LightBehavior",
+                            "Type": "behaviors.Light",
                             "Diffuse": {
                                 "X": 0.8,
                                 "Y": 0.8,
                                 "Z": 1.0
                             },
-                            "Attenuation": false
+                            "Attenuation": 0
                         }
                     ]
                 }
@@ -1432,7 +1432,7 @@
             "CeilMaterial": "Default",
             "Entities": [
                 {
-                    "Type": "LightEntity",
+                    "Type": "entities.Light",
                     "Pos": {
                         "X": 700,
                         "Y": 175,
@@ -1440,7 +1440,7 @@
                     },
                     "Behaviors": [
                         {
-                            "Type": "LightBehavior"
+                            "Type": "behaviors.Light"
                         }
                     ]
                 }

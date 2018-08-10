@@ -33,7 +33,7 @@ func IntClamp(x, min, max int) int {
 	return x
 }
 
-func NearestPow2(n uint) uint {
+func NearestPow2(n uint32) uint32 {
 	n--
 
 	n |= n >> 1
@@ -61,14 +61,14 @@ func Max(x, y int) int {
 	return y
 }
 
-func UMin(x, y uint) uint {
+func UMin(x, y uint32) uint32 {
 	if x < y {
 		return x
 	}
 	return y
 }
 
-func UMax(x, y uint) uint {
+func UMax(x, y uint32) uint32 {
 	if x > y {
 		return x
 	}
