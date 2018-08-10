@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"runtime/pprof"
 
+	_ "github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/entities"
 	"github.com/tlyakhov/gofoom/logic"
 	"github.com/tlyakhov/gofoom/logic/entity"
@@ -16,7 +17,6 @@ import (
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
-	_ "github.com/tlyakhov/gofoom/logic/entity"
 	_ "github.com/tlyakhov/gofoom/logic/provide"
 	_ "github.com/tlyakhov/gofoom/logic/sector"
 	"github.com/tlyakhov/gofoom/render"

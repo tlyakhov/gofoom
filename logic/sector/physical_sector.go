@@ -1,6 +1,11 @@
 package sector
 
 import (
+	"fmt"
+	"math"
+
+	"github.com/tlyakhov/gofoom/behaviors"
+	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/logic/provide"
@@ -72,4 +77,84 @@ func (s *PhysicalSectorService) Frame(lastFrameTime float64) {
 		}
 		provide.EntityAnimator.For(e).Frame(lastFrameTime)
 	}
+}
+
+func hasLightBehavior(e core.AbstractEntity) bool {
+	for _, b := range e.Behaviors() {
+		fmt.Printf("%v\n", b)
+		if _, ok := b.(*behaviors.Light); ok {
+			return true
+		}
+	}
+	return false
+}
+func (s *PhysicalSectorService) UpdatePVS(normal *concepts.Vector2, s2 core.AbstractSector) {
+	if s2 == nil {
+		s2 = s
+		s.PVS = make(map[string]core.AbstractSector)
+		s.PVS[s.ID] = s
+		s.PVSLights = []core.AbstractEntity{}
+		for _, e := range s.Entities {
+			if hasLightBehavior(e) {
+				s.PVSLights = append(s.PVSLights, e)
+			}
+		}
+	}
+	for _, seg := range s2.Physical().Segments {
+		adj := seg.AdjacentSegment
+		if adj == nil ||
+			math.Abs(adj.Sector.Physical().TopZ-adj.Sector.Physical().BottomZ) < constants.VelocityEpsilon ||
+			seg.AdjacentSegment.MidMaterial != nil {
+			continue
+		}
+
+		correctSide := normal == nil || normal.Dot(seg.Normal) >= 0
+		if !correctSide || s.PVS[seg.AdjacentSector.GetBase().ID] != nil {
+			continue
+		}
+		s.PVS[seg.AdjacentSector.GetBase().ID] = seg.AdjacentSector
+
+		for _, e := range seg.AdjacentSector.Physical().Entities {
+			if hasLightBehavior(e) {
+				s.PVSLights = append(s.PVSLights, e)
+			}
+		}
+		if normal == nil {
+			s.UpdatePVS(seg.Normal, seg.AdjacentSector)
+		} else {
+			s.UpdatePVS(normal, seg.AdjacentSector)
+		}
+	}
+}
+
+func (s *PhysicalSectorService) UpdateEntityPVS(normal *concepts.Vector2, s2 core.AbstractSector) {
+	if s2 == nil {
+		s.PVSEntity = make(map[string]core.AbstractSector)
+		s.PVSEntity[s.ID] = s
+		s2 = s
+	}
+
+	for _, seg := range s2.Physical().Segments {
+		adj := seg.AdjacentSegment
+		if adj == nil || adj.MidMaterial != nil {
+			continue
+		}
+		correctSide := normal == nil || normal.Dot(seg.Normal) >= 0
+		if !correctSide || s.PVSEntity[adj.Sector.GetBase().ID] != nil {
+			continue
+		}
+
+		s.PVSEntity[seg.AdjacentSector.GetBase().ID] = seg.AdjacentSector
+
+		if normal == nil {
+			s.UpdateEntityPVS(seg.Normal, seg.AdjacentSector)
+		} else {
+			s.UpdateEntityPVS(normal, seg.AdjacentSector)
+		}
+	}
+}
+
+func (s *PhysicalSectorService) Recalculate() {
+	s.UpdatePVS(nil, nil)
+	//s.UpdateEntityPVS(nil, nil)
 }

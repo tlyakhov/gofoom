@@ -20,7 +20,7 @@ func Ceiling(s *state.Slice) {
 
 		distToCeil := (s.PhysicalSector.TopZ - s.CameraZ) * s.ViewFix[s.X] / float64(s.ScreenHeight/2-1-s.Y)
 		scaler := s.PhysicalSector.CeilScale / distToCeil
-		screenIndex := uint(s.X + s.Y*s.ScreenWidth)
+		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToCeil >= s.ZBuffer[screenIndex] {
 			continue
@@ -35,10 +35,9 @@ func Ceiling(s *state.Slice) {
 		ty -= math.Floor(ty)
 		tx = math.Abs(tx)
 		ty = math.Abs(ty)
-		// var light = this.map.light(world, CEIL_NORMAL, slice.sector, slice.segment, null, null, true);
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, nil, scaler))
+			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, &state.CeilingNormal, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToCeil
 	}

@@ -23,7 +23,11 @@ func (m *SkyService) Sample(u, v float64, light *concepts.Vector3, scale float64
 	if m.StaticBackground {
 		u = float64(m.X) / (float64(m.ScreenWidth) - 1)
 	} else {
-		u = float64(m.Angle) / (2.0 * math.Pi)
+		u = m.Angle / (2.0 * math.Pi)
+		for ; u < 0; u++ {
+		}
+		for ; u > 1; u-- {
+		}
 	}
 	return m.Sampler.Sample(u, v, 1.0)
 }

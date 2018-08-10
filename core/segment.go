@@ -29,8 +29,8 @@ type Segment struct {
 	AdjacentSector  AbstractSector
 	AdjacentSegment *Segment
 	Lightmap        []float64
-	LightmapWidth   uint
-	LightmapHeight  uint
+	LightmapWidth   uint32
+	LightmapHeight  uint32
 	Flags           int
 }
 
@@ -79,8 +79,8 @@ func (s *Segment) Recalculate() {
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()
 		sector := s.Sector.Physical()
-		s.LightmapWidth = uint(s.Length/constants.LightGrid) + 2
-		s.LightmapHeight = uint((sector.TopZ-sector.BottomZ)/constants.LightGrid) + 2
+		s.LightmapWidth = uint32(s.Length/constants.LightGrid) + 2
+		s.LightmapHeight = uint32((sector.TopZ-sector.BottomZ)/constants.LightGrid) + 2
 		s.Lightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
 		s.ClearLightmap()
 	}
@@ -102,7 +102,7 @@ func (s *Segment) Matches(s2 *Segment) bool {
 	return d1 || d2
 }
 
-func (s1 *Segment) Intersect(s2A, s2B *concepts.Vector2) *concepts.Vector2 {
+func (s1 *Segment) intersect(s2A, s2B *concepts.Vector2) (float64, float64, float64, float64) {
 	s1dx := s1.B.X - s1.A.X
 	s1dy := s1.B.Y - s1.A.Y
 	s2dx := s2B.X - s2A.X
@@ -110,25 +110,40 @@ func (s1 *Segment) Intersect(s2A, s2B *concepts.Vector2) *concepts.Vector2 {
 
 	denom := s1dx*s2dy - s2dx*s1dy
 	if denom == 0 {
-		return nil
+		return -1, -1, -1, -1
 	}
 	r := (s1.A.Y-s2A.Y)*s2dx - (s1.A.X-s2A.X)*s2dy
 	if (denom < 0 && r >= constants.IntersectEpsilon) ||
 		(denom > 0 && r < -constants.IntersectEpsilon) {
-		return nil
+		return -1, -1, -1, -1
 	}
 	s := (s1.A.Y-s2A.Y)*s1dx - (s1.A.X-s2A.X)*s1dy
 	if (denom < 0 && s >= constants.IntersectEpsilon) ||
 		(denom > 0 && s < -constants.IntersectEpsilon) {
-		return nil
+		return -1, -1, -1, -1
 	}
 	r /= denom
 	s /= denom
 	if r > 1.0+constants.IntersectEpsilon || s > 1.0+constants.IntersectEpsilon {
+		return -1, -1, -1, -1
+	}
+	return concepts.Clamp(r, 0.0, 1.0), concepts.Clamp(s, 0.0, 1.0), s1dx, s1dy
+}
+
+func (s1 *Segment) Intersect2D(s2A, s2B *concepts.Vector2) *concepts.Vector2 {
+	r, _, s1dx, s1dy := s1.intersect(s2A, s2B)
+	if r < 0 {
 		return nil
 	}
-	r = concepts.Clamp(r, 0.0, 1.0)
 	return &concepts.Vector2{s1.A.X + r*s1dx, s1.A.Y + r*s1dy}
+}
+
+func (s1 *Segment) Intersect3D(s2A, s2B *concepts.Vector3) *concepts.Vector3 {
+	r, s, s1dx, s1dy := s1.intersect(s2A.To2D(), s2B.To2D())
+	if r < 0 {
+		return nil
+	}
+	return &concepts.Vector3{s1.A.X + r*s1dx, s1.A.Y + r*s1dy, s*s2A.Z + (1.0-s)*s2B.Z}
 }
 
 func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
@@ -228,7 +243,7 @@ func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
 	return &concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
 }
 
-func (s *Segment) LMAddressToWorld(mapIndex uint) *concepts.Vector3 {
+func (s *Segment) LightmapAddressToWorld(mapIndex uint32) *concepts.Vector3 {
 	lu := ((mapIndex / 3) % s.LightmapWidth) - 1
 	lv := ((mapIndex / 3) / s.LightmapWidth) - 1
 	u := float64(lu) / float64(s.LightmapWidth-2)

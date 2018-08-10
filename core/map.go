@@ -1,8 +1,6 @@
 package core
 
 import (
-	"fmt"
-
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/registry"
 )
@@ -54,7 +52,6 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 	// Load materials first so sectors have access to them.
 	if v, ok := data["Materials"]; ok {
 		concepts.MapCollection(m, &m.Materials, v)
-		fmt.Printf("Materials: %v\n", m.Materials)
 	}
 	if v, ok := data["Sectors"]; ok {
 		concepts.MapCollection(m, &m.Sectors, v)

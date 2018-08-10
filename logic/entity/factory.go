@@ -33,6 +33,8 @@ func (f *AnimatorFactory) For(concrete interface{}) provide.Animateable {
 		return NewAliveEntityService(target)
 	case *entities.Player:
 		return NewPlayerService(target)
+	case *entities.Light:
+		return NewPhysicalEntityService(target.Physical())
 	default:
 		return nil
 		//panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(concrete)))

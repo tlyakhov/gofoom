@@ -20,7 +20,7 @@ func Floor(s *state.Slice) {
 
 		distToFloor := (-s.PhysicalSector.BottomZ + s.CameraZ) * s.ViewFix[s.X] / float64(s.Y-s.ScreenHeight/2)
 		scaler := s.PhysicalSector.FloorScale / distToFloor
-		screenIndex := uint(s.X + s.Y*s.ScreenWidth)
+		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToFloor >= s.ZBuffer[screenIndex] {
 			continue
@@ -40,10 +40,8 @@ func Floor(s *state.Slice) {
 			ty += 1.0
 		}
 
-		// var light = this.map.light(world, FLOOR_NORMAL, slice.sector, slice.segment, null, null, true);
-
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, nil, scaler))
+			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, &state.FloorNormal, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor
 	}

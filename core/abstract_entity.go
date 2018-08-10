@@ -6,4 +6,5 @@ type AbstractEntity interface {
 	concepts.ISerializable
 	GetSector() AbstractSector
 	Physical() *PhysicalEntity
+	Behaviors() map[string]AbstractBehavior
 }

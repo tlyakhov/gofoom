@@ -21,12 +21,13 @@ type PhysicalSector struct {
 	CeilMaterial            concepts.ISerializable
 
 	Min, Max, Center              *concepts.Vector3
-	LightmapWidth, LightmapHeight uint
+	LightmapWidth, LightmapHeight uint32
 	FloorLightmap, CeilLightmap   []float64
-	PVSEntity                     map[string]PhysicalSector
+	PVS                           map[string]AbstractSector
+	PVSEntity                     map[string]AbstractSector
+	PVSLights                     []AbstractEntity
+
 	// RoomImpulse
-	// PVS
-	// PVSLights []
 }
 
 func init() {
@@ -156,8 +157,8 @@ func (s *PhysicalSector) Recalculate() {
 		}
 	}
 
-	s.LightmapWidth = uint((s.Max.X-s.Min.X)/constants.LightGrid) + 6
-	s.LightmapHeight = uint((s.Max.Y-s.Min.Y)/constants.LightGrid) + 6
+	s.LightmapWidth = uint32((s.Max.X-s.Min.X)/constants.LightGrid) + 6
+	s.LightmapHeight = uint32((s.Max.Y-s.Min.Y)/constants.LightGrid) + 6
 	s.FloorLightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
 	s.CeilLightmap = make([]float64, s.LightmapWidth*s.LightmapHeight*3)
 	s.ClearLightmaps()
@@ -172,9 +173,36 @@ func (s *PhysicalSector) ClearLightmaps() {
 	for _, segment := range s.Segments {
 		segment.ClearLightmap()
 	}
+}
 
-	// s.UpdatePVS()
-	// s.UpdateEntityPVS()
+func (s *PhysicalSector) LightmapAddress(p *concepts.Vector2) uint32 {
+	dx := int(p.X-s.Min.X)/constants.LightGrid + 3
+	dy := int(p.Y-s.Min.Y)/constants.LightGrid + 3
+	if dx < 0 {
+		dx = 0
+	}
+	if dy < 0 {
+		dy = 0
+	}
+	return uint32((uint32(dy)*s.LightmapWidth + uint32(dx)) * 3)
+}
+
+func (s *PhysicalSector) LightmapWorld(p *concepts.Vector3) *concepts.Vector3 {
+	lw := p.Sub(s.Min).Mul(1.0 / constants.LightGrid)
+	lw.X = math.Floor(lw.X) * constants.LightGrid
+	lw.Y = math.Floor(lw.Y) * constants.LightGrid
+	lw.Z = p.Z
+	return lw
+}
+
+func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) *concepts.Vector3 {
+	u := int((mapIndex/3)%s.LightmapWidth) - 3
+	v := int((mapIndex/3)/s.LightmapWidth) - 3
+	r := concepts.Vector3{s.Min.X + float64(u)*constants.LightGrid, s.Min.Y + float64(v)*constants.LightGrid, s.TopZ}
+	if floor {
+		r.Z = s.BottomZ
+	}
+	return &r
 }
 
 func (s *PhysicalSector) SetParent(parent interface{}) {

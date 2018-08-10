@@ -10,7 +10,7 @@ import (
 )
 
 type mipMap struct {
-	Width, Height uint
+	Width, Height uint32
 	Data          []uint32
 }
 
@@ -18,12 +18,12 @@ type mipMap struct {
 type Image struct {
 	*concepts.Base
 
-	Width, Height   uint
+	Width, Height   uint32
 	Source          string `editable:"Texture Source" edit_type:"string"`
 	GenerateMipMaps bool   `editable:"Generate Mip Maps?" edit_type:"bool"`
 	Filter          bool   `editable:"Filter?" edit_type:"bool"`
 	Data            []uint32
-	MipMaps         map[uint]*mipMap
+	MipMaps         map[uint32]*mipMap
 	SmallestMipMap  *mipMap
 }
 
@@ -57,12 +57,12 @@ func (t *Image) Load() (*Image, error) {
 
 	// Let's convert to 0-based NRGBA for speed/convenience.
 	bounds := img.Bounds()
-	t.Width = uint(bounds.Dx())
-	t.Height = uint(bounds.Dy())
+	t.Width = uint32(bounds.Dx())
+	t.Height = uint32(bounds.Dy())
 	t.Data = make([]uint32, int(t.Width)*int(t.Height))
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			index := uint(x-bounds.Min.X) + uint(y-bounds.Min.Y)*t.Width
+			index := uint32(x-bounds.Min.X) + uint32(y-bounds.Min.Y)*t.Width
 			t.Data[index] = concepts.ColorToInt32(img.At(x, y))
 		}
 	}
@@ -70,16 +70,16 @@ func (t *Image) Load() (*Image, error) {
 }
 
 func (t *Image) generateMipMaps() {
-	t.MipMaps = make(map[uint]*mipMap)
+	t.MipMaps = make(map[uint32]*mipMap)
 
-	index := concepts.NearestPow2(uint(t.Height))
+	index := concepts.NearestPow2(uint32(t.Height))
 	t.MipMaps[index] = &mipMap{Width: t.Width, Height: t.Height, Data: t.Data}
 	prev := t.MipMaps[index]
 
 	w := t.Width / 2
 	h := t.Height / 2
 
-	var x, y, px, py, pcx, pcy uint
+	var x, y, px, py, pcx, pcy uint32
 
 	for w > 1 && h > 1 {
 		mm := mipMap{Width: w, Height: h, Data: make([]uint32, w*h)}
@@ -97,15 +97,15 @@ func (t *Image) generateMipMaps() {
 					concepts.Int32ToNRGBA(prev.Data[pcy*prev.Width+px]),
 				}
 				avg := color.NRGBA{
-					uint8((uint(c[0].R) + uint(c[1].R) + uint(c[2].R) + uint(c[3].R)) / 4),
-					uint8((uint(c[0].G) + uint(c[1].G) + uint(c[2].G) + uint(c[3].G)) / 4),
-					uint8((uint(c[0].B) + uint(c[1].B) + uint(c[2].B) + uint(c[3].B)) / 4),
-					uint8((uint(c[0].A) + uint(c[1].A) + uint(c[2].A) + uint(c[3].A)) / 4),
+					uint8((uint32(c[0].R) + uint32(c[1].R) + uint32(c[2].R) + uint32(c[3].R)) / 4),
+					uint8((uint32(c[0].G) + uint32(c[1].G) + uint32(c[2].G) + uint32(c[3].G)) / 4),
+					uint8((uint32(c[0].B) + uint32(c[1].B) + uint32(c[2].B) + uint32(c[3].B)) / 4),
+					uint8((uint32(c[0].A) + uint32(c[1].A) + uint32(c[2].A) + uint32(c[3].A)) / 4),
 				}
 				mm.Data[y*mm.Width+x] = concepts.NRGBAToInt32(avg)
 			}
 		}
-		index := concepts.NearestPow2(uint(mm.Height))
+		index := concepts.NearestPow2(uint32(mm.Height))
 		t.MipMaps[index] = &mm
 		prev = &mm
 		if w > 1 {
@@ -122,7 +122,7 @@ func (t *Image) Sample(x, y float64, scale float64) uint32 {
 	data := t.Data
 	w := t.Width
 	h := t.Height
-	scaledHeight := uint(float64(h) * scale)
+	scaledHeight := uint32(float64(h) * scale)
 
 	if scaledHeight > 0 && t.GenerateMipMaps && t.SmallestMipMap != nil {
 		if scaledHeight < t.SmallestMipMap.Height {
@@ -148,8 +148,8 @@ func (t *Image) Sample(x, y float64, scale float64) uint32 {
 		y = 0
 	}
 
-	fx := uint(x * float64(w))
-	fy := uint(y * float64(h))
+	fx := uint32(x * float64(w))
+	fy := uint32(y * float64(h))
 
 	if !t.Filter {
 		index := concepts.UMin(fy, h-1)*w + concepts.UMin(fx, w-1)

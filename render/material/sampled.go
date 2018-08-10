@@ -21,19 +21,16 @@ func NewSampledService(m *materials.Sampled, s *state.Slice) *SampledService {
 func (m *SampledService) Sample(u, v float64, light *concepts.Vector3, scale float64) uint32 {
 	if m.IsLiquid {
 		u += math.Cos(float64(m.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
-		v += math.Cos(float64(m.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
+		v += math.Sin(float64(m.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
 	}
 
-	if u < 0 {
-		u = -u - math.Floor(-u)
-	} else if u >= 1.0 {
-		u -= math.Floor(u)
+	for ; u < 0; u++ {
 	}
-
-	if v < 0 {
-		v = -v - math.Floor(-v)
-	} else if v >= 1.0 {
-		v -= math.Floor(v)
+	for ; u > 1; u-- {
+	}
+	for ; v < 0; v++ {
+	}
+	for ; v > 1; v-- {
 	}
 
 	return m.Sampler.Sample(u, v, scale)
