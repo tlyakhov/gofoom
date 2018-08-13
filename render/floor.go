@@ -8,6 +8,7 @@ import (
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
+// Floor renders the floor portion of a slice.
 func Floor(s *state.Slice) {
 	mat := material.For(s.PhysicalSector.FloorMaterial, s)
 

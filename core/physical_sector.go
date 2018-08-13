@@ -205,6 +205,6 @@ func (s *PhysicalSector) SetParent(parent interface{}) {
 	if m, ok := parent.(*Map); ok {
 		s.Map = m
 	} else {
-		panic("Tried mapping.PhysicalSector.SetParent with a parameter that wasn't a *mapping.Map")
+		panic("Tried core.PhysicalSector.SetParent with a parameter that wasn't a *core.Map.")
 	}
 }

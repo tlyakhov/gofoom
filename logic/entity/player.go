@@ -38,7 +38,6 @@ func (p *PlayerService) Frame(lastFrameTime float64) {
 	}
 
 	if p.Player.HurtTime > 0 {
-		//globalGame.frameTint = 255 | ((fast_floor(this.hurtTime * 200 / GAME_CONSTANTS.playerHurtTime) & 0xFF) << 24);
 		p.FrameTint = color.NRGBA{0xFF, 0, 0, uint8(p.Player.HurtTime * 200 / constants.PlayerHurtTime)}
 		p.Player.HurtTime--
 	}

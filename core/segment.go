@@ -64,8 +64,6 @@ func (s *Segment) RealizeAdjacentSector() {
 			for _, s2 := range s.AdjacentSector.Physical().Segments {
 				if s2.Matches(s) {
 					s.AdjacentSegment = s2
-					s2.Sector = s.Sector
-					s2.AdjacentSegment = s
 					break
 				}
 			}
