@@ -8,6 +8,7 @@ import (
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
+// Ceiling renders the ceiling portion of a slice.
 func Ceiling(s *state.Slice) {
 	mat := material.For(s.PhysicalSector.CeilMaterial, s)
 

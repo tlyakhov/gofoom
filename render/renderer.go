@@ -11,12 +11,14 @@ import (
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
+// Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*state.Config
 	Map     *core.Map
 	columns chan int
 }
 
+// NewRenderer constructs a new Renderer.
 func NewRenderer() *Renderer {
 	r := Renderer{
 		Config: &state.Config{
@@ -33,10 +35,12 @@ func NewRenderer() *Renderer {
 	return &r
 }
 
+// Player is a convenience function to get the player this renderer links to.
 func (r *Renderer) Player() *entities.Player {
 	return r.Map.Player.(*entities.Player)
 }
 
+// RenderSlice draws a single pixel vertical column given a particular segment intersection.
 func (r *Renderer) RenderSlice(slice *state.Slice) {
 	slice.CalcScreen()
 	Ceiling(slice)
@@ -46,10 +50,15 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 		WallMid(slice)
 		return
 	}
+	if slice.Depth > 100 {
+		return
+	}
 	sp := &state.SlicePortal{Slice: slice}
 	sp.CalcScreen()
-	WallHi(sp)
-	WallLow(sp)
+	if sp.AdjSegment != nil {
+		WallHi(sp)
+		WallLow(sp)
+	}
 
 	portalSlice := *slice
 	portalSlice.PhysicalSector = sp.Adj.Physical()
@@ -59,6 +68,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	r.RenderSector(&portalSlice)
 }
 
+// RenderSector intersects a camera ray for a single pixel column with a map sector.
 func (r *Renderer) RenderSector(slice *state.Slice) {
 	slice.Distance = constants.MaxViewDistance
 
@@ -99,6 +109,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	}
 }
 
+// RenderColumn draws a single pixel column to an 8bit RGBA buffer.
 func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {

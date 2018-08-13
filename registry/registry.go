@@ -1,7 +1,6 @@
 package registry
 
 import (
-	"fmt"
 	"reflect"
 	"sync"
 )
@@ -31,7 +30,6 @@ func (tr *typeRegistry) Register(local interface{}) {
 
 	tr.All[tLocal.String()] = tLocal
 	tr.All[reflect.PtrTo(tLocal).String()] = reflect.PtrTo(tLocal)
-	fmt.Printf("%v\n", tLocal.String())
 }
 
 func Type(name string) reflect.Type {

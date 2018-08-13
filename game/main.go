@@ -92,9 +92,6 @@ func run() {
 		if win.Pressed(pixelgl.KeyS) {
 			ps.Move(ps.Player.Angle+180.0, dt, 1.0)
 		}
-		if win.Pressed(pixelgl.KeyQ) {
-			ps.Move(ps.Player.Angle+270.0, dt, 1.0)
-		}
 		if win.Pressed(pixelgl.KeyE) {
 			ps.Move(ps.Player.Angle+90.0, dt, 0.5)
 		}

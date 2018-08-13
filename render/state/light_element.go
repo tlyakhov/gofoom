@@ -19,7 +19,7 @@ type LightElement struct {
 	VisibleLights map[string]*core.PhysicalEntity
 }
 
-func (le LightElement) Get(wall bool) concepts.Vector3 {
+func (le *LightElement) Get(wall bool) concepts.Vector3 {
 	if le.MapIndex < 0 {
 		le.MapIndex = 0
 	}

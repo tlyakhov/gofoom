@@ -304,7 +304,7 @@
                 {
                     "X": -100,
                     "Y": 100,
-                    "MidMaterial": "Sky",
+                    "AdjacentSector": "sector26",
                     "LoMaterial": "Default",
                     "HiMaterial": "Default",
                     "Flags": 0
@@ -1518,6 +1518,92 @@
                     "MidMaterial": "Default",
                     "LoMaterial": "Default",
                     "HiMaterial": "Doom Garage Door",
+                    "Flags": 0
+                }
+            ]
+        },
+        {
+            "Type": "core.PhysicalSector",
+            "ID": "sector26",
+            "BottomZ": 15,
+            "TopZ": 64,
+            "FloorMaterial": "Default Floor",
+            "CeilMaterial": "Sky",
+            "Entities": [],
+            "Segments": [
+                {
+                    "X": -100,
+                    "Y": 100,
+                    "AdjacentSector": "sector3",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
+                    "Flags": 0
+                },
+                {
+                    "X": 100,
+                    "Y": 100,
+                    "MidMaterial": "mat2",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
+                    "Flags": 0
+                },
+                {
+                    "X": 100,
+                    "Y": 120,
+                    "AdjacentSector": "sector27",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
+                    "Flags": 0
+                },
+                {
+                    "X": -100,
+                    "Y": 120,
+                    "MidMaterial": "Sky",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
+                    "Flags": 0
+                }
+            ]
+        },
+        {
+            "Type": "core.PhysicalSector",
+            "ID": "sector27",
+            "BottomZ": 0,
+            "TopZ": 64,
+            "FloorMaterial": "Default Floor",
+            "CeilMaterial": "Sky",
+            "Entities": [],
+            "Segments": [
+                {
+                    "X": -100,
+                    "Y": 120,
+                    "AdjacentSector": "sector26",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
+                    "Flags": 0
+                },
+                {
+                    "X": 100,
+                    "Y": 120,
+                    "MidMaterial": "Sky",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
+                    "Flags": 0
+                },
+                {
+                    "X": 100,
+                    "Y": 3000,
+                    "MidMaterial": "Sky",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
+                    "Flags": 0
+                },
+                {
+                    "X": -100,
+                    "Y": 3000,
+                    "MidMaterial": "Sky",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default",
                     "Flags": 0
                 }
             ]

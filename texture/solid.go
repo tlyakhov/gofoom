@@ -13,7 +13,7 @@ import (
 )
 
 type Solid struct {
-	*concepts.Base
+	concepts.Base
 	Diffuse color.NRGBA
 }
 
@@ -22,7 +22,7 @@ func init() {
 }
 
 func (s *Solid) Initialize() {
-	s.Base = &concepts.Base{}
+	s.Base = concepts.Base{}
 	s.Base.Initialize()
 }
 

@@ -73,6 +73,11 @@ func (v Vector2) Clamp(min, max float64) Vector2 {
 	return Vector2{Clamp(v.X, min, max), Clamp(v.Y, min, max)}
 }
 
+// Floor gets the integer part of the vector's values.
+func (v Vector2) Floor() Vector2 {
+	return Vector2{math.Floor(v.X), math.Floor(v.Y)}
+}
+
 // To3D converts a 2D vector to 3D.
 func (v Vector2) To3D() Vector3 {
 	return Vector3{v.X, v.Y, 0}

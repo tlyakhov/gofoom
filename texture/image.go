@@ -16,7 +16,7 @@ type mipMap struct {
 
 // Image represents an image that will be rendered in-game.
 type Image struct {
-	*concepts.Base
+	concepts.Base
 
 	Width, Height   uint32
 	Source          string `editable:"Texture Source" edit_type:"string"`
@@ -32,27 +32,27 @@ func init() {
 }
 
 func (t *Image) Initialize() {
-	t.Base = &concepts.Base{}
+	t.Base = concepts.Base{}
 	t.Base.Initialize()
 	t.Filter = true
 	t.GenerateMipMaps = true
 }
 
 // Load a texture from a file (pre-processing mipmaps if set)
-func (t *Image) Load() (*Image, error) {
+func (t *Image) Load() error {
 	if t.Source == "" {
-		return t, nil
+		return nil
 	}
 
 	// Load the image from a file...
 	file, err := os.Open(t.Source)
 	if err != nil {
-		return t, err
+		return err
 	}
 	defer file.Close()
 	img, _, err := image.Decode(file)
 	if err != nil {
-		return t, err
+		return err
 	}
 
 	// Let's convert to 0-based NRGBA for speed/convenience.
@@ -66,7 +66,7 @@ func (t *Image) Load() (*Image, error) {
 			t.Data[index] = concepts.ColorToInt32(img.At(x, y))
 		}
 	}
-	return t, nil
+	return nil
 }
 
 func (t *Image) generateMipMaps() {

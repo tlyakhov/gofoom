@@ -6,6 +6,7 @@ import (
 	"github.com/tlyakhov/gofoom/render/state"
 )
 
+// WallMid renders the wall portion of a non-portal segment.
 func WallMid(s *state.Slice) {
 	mat := material.For(s.Segment.MidMaterial, s)
 
