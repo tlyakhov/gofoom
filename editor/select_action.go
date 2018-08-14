@@ -16,8 +16,8 @@ const (
 type SelectAction struct {
 	*Editor
 	Mode     SelectMode
-	Original map[string]concepts.ISerializable
-	Selected map[string]concepts.ISerializable
+	Original []concepts.ISerializable
+	Selected []concepts.ISerializable
 }
 
 func (a *SelectAction) OnMouseDown(button *gdk.EventButton) {
@@ -38,18 +38,31 @@ func (a *SelectAction) OnMouseMove() {
 func (a *SelectAction) OnMouseUp() {
 	hovering := a.HoveringObjects
 
-	if hovering == nil || len(hovering) == 0 { // User is trying to select a sector?
-		hovering = make(map[string]concepts.ISerializable)
-		for id, sector := range a.GameMap.Sectors {
+	if len(hovering) == 0 { // User is trying to select a sector?
+		hovering = []concepts.ISerializable{}
+		for _, sector := range a.GameMap.Sectors {
 			if sector.IsPointInside2D(a.MouseWorld) {
-				hovering[id] = sector
+				hovering = append(hovering, sector)
 			}
 		}
 	}
 
 	if a.Mode == SelectAdd {
-		a.Selected = make(map[string]concepts.ISerializable)
+		a.Selected = make([]concepts.ISerializable, len(a.Original))
+		copy(a.Selected, a.Original)
+		a.Selected = append(a.Selected, hovering...)
+	} else if a.Mode == SelectSub {
+		a.Selected = []concepts.ISerializable{}
+		for _, obj := range a.Original {
+			if indexOfObject(hovering, obj) == -1 {
+				a.Selected = append(a.Selected, obj)
+			}
+		}
+	} else {
+		a.Selected = make([]concepts.ISerializable, len(hovering))
+		copy(a.Selected, hovering)
 	}
+	a.SelectObjects(a.Selected)
 	a.ActionFinished()
 }
 func (a *SelectAction) Act()    {}
@@ -57,6 +70,8 @@ func (a *SelectAction) Cancel() {}
 func (a *SelectAction) Frame()  {}
 
 func (a *SelectAction) Undo() {
+	a.SelectObjects(a.Original)
 }
 func (a *SelectAction) Redo() {
+	a.SelectObjects(a.Selected)
 }

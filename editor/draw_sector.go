@@ -1,57 +1,11 @@
 package main
 
 import (
-	"math"
 	"reflect"
 
 	"github.com/gotk3/gotk3/cairo"
-	"github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
 )
-
-func DrawEntityAngle(cr *cairo.Context, e *core.PhysicalEntity) {
-	cr.SetLineWidth(2)
-	cr.NewPath()
-	cr.MoveTo(e.Pos.X, e.Pos.Y)
-	cr.LineTo(e.Pos.X+math.Cos(e.Angle*math.Pi/180.0)*e.BoundingRadius*2,
-		e.Pos.Y+math.Sin(e.Angle*math.Pi/180.0)*e.BoundingRadius*2)
-	cr.ClosePath()
-	cr.Stroke()
-}
-func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
-	phys := e.Physical()
-
-	if _, ok := e.(*entities.Player); ok {
-		// Let's get fancy:
-		cr.SetSourceRGB(0.6, 0.6, 0.6)
-		cr.NewPath()
-		cr.Arc(phys.Pos.X, phys.Pos.Y, phys.BoundingRadius/2, 0, math.Pi*2)
-		cr.ClosePath()
-		cr.Stroke()
-		cr.SetSourceRGB(0.33, 0.33, 0.33)
-		DrawEntityAngle(cr, phys)
-	} else if _, ok := e.(*entities.Light); ok {
-		for _, b := range e.Behaviors() {
-			if lb, ok := b.(*behaviors.Light); ok {
-				cr.SetSourceRGB(lb.Diffuse.X, lb.Diffuse.Y, lb.Diffuse.Z)
-			}
-		}
-	} // Sprite...
-
-	hovering := editor.HoveringObjects[e.GetBase().ID] == e
-	selected := editor.SelectedObjects[e.GetBase().ID] == e
-	if selected {
-		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
-	} else if hovering {
-		cr.SetSourceRGB(ColorSelectionSecondary.X, ColorSelectionSecondary.Y, ColorSelectionSecondary.Z)
-	}
-
-	cr.NewPath()
-	cr.Arc(phys.Pos.X, phys.Pos.Y, phys.BoundingRadius, 0, math.Pi*2)
-	cr.ClosePath()
-	cr.Stroke()
-}
 
 func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 	phys := sector.Physical()
@@ -62,8 +16,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 
 	cr.Save()
 
-	sectorHovering := editor.HoveringObjects[sector.GetBase().ID] == sector
-	sectorSelected := editor.SelectedObjects[sector.GetBase().ID] == sector
+	sectorHovering := indexOfObject(editor.HoveringObjects, sector) != -1
+	sectorSelected := indexOfObject(editor.SelectedObjects, sector) != -1
 
 	if editor.EntitiesVisible {
 		for _, e := range phys.Entities {
@@ -74,8 +28,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 	for i, segment := range phys.Segments {
 		next := phys.Segments[(i+1)%len(phys.Segments)]
 
-		segmentHovering := editor.HoveringObjects[segment.GetBase().ID] == segment
-		segmentSelected := editor.SelectedObjects[segment.GetBase().ID] == segment
+		segmentHovering := indexOfObject(editor.HoveringObjects, segment) != -1
+		segmentSelected := indexOfObject(editor.SelectedObjects, segment) != -1
 
 		if segment.AdjacentSector == nil {
 			cr.SetSourceRGB(1, 1, 1)
@@ -122,8 +76,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 		cr.ClosePath()
 		cr.Stroke()
 
-		_, mapPointHovering := editor.HoveringObjects[segment.ID].(*MapPoint)
-		_, mapPointSelected := editor.SelectedObjects[segment.ID].(*MapPoint)
+		mapPointHovering := indexOfObject(editor.HoveringObjects, &MapPoint{Segment: segment}) != -1
+		mapPointSelected := indexOfObject(editor.SelectedObjects, &MapPoint{Segment: segment}) != -1
 
 		if mapPointSelected {
 			cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)

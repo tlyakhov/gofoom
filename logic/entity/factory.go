@@ -28,13 +28,13 @@ func (f *AnimatorFactory) For(concrete interface{}) provide.Animateable {
 	}
 	switch target := concrete.(type) {
 	case *core.PhysicalEntity:
-		return NewPhysicalEntityService(target)
+		return NewPhysicalEntityService(target, target)
 	case *entities.AliveEntity:
-		return NewAliveEntityService(target)
+		return NewAliveEntityService(target, target)
 	case *entities.Player:
 		return NewPlayerService(target)
 	case *entities.Light:
-		return NewPhysicalEntityService(target.Physical())
+		return NewPhysicalEntityService(target.Physical(), target)
 	default:
 		return nil
 		//panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(concrete)))
@@ -58,7 +58,7 @@ func (f *HurterFactory) For(concrete interface{}) (provide.Hurtable, bool) {
 	case *entities.Player:
 		return NewPlayerService(target), true
 	case *entities.AliveEntity:
-		return NewAliveEntityService(target), true
+		return NewAliveEntityService(target, target), true
 	default:
 		//		panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(concrete)))
 		return nil, false

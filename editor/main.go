@@ -2,56 +2,89 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"math"
 	"os"
 	"runtime/pprof"
+	"time"
 
 	"github.com/gotk3/gotk3/glib"
 
-	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
 	_ "github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/entities"
 	"github.com/tlyakhov/gofoom/logic"
 	"github.com/tlyakhov/gofoom/logic/entity"
-	"github.com/tlyakhov/gofoom/render"
+	"github.com/tlyakhov/gofoom/sectors"
 
 	_ "github.com/tlyakhov/gofoom/logic/provide"
 	_ "github.com/tlyakhov/gofoom/logic/sector"
 )
 
 const (
-	KEY_LEFT  uint = 65361
-	KEY_UP    uint = 65362
-	KEY_RIGHT uint = 65363
-	KEY_DOWN  uint = 65364
-
 	GridSize                float64 = 10
 	SegmentSelectionEpsilon float64 = 5.0
 )
 
 var (
-	ColorSelectionPrimary   concepts.Vector3 = concepts.Vector3{0, 1, 0}
-	ColorSelectionSecondary concepts.Vector3 = concepts.Vector3{0, 1, 1}
-	ColorPVS                concepts.Vector3 = concepts.Vector3{0.6, 1, 0.6}
-	editor                  *Editor          = NewEditor()
+	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
+	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
+	ColorPVS                = concepts.Vector3{0.6, 1, 0.6}
+	editor                  = NewEditor()
+	gameKeyMap              = make(map[uint]bool)
+	last                    = time.Now()
 )
 
-func DrawHandle(cr *cairo.Context, v concepts.Vector2) {
-	v = editor.WorldToScreen(v)
-	v1 := editor.ScreenToWorld(v.Sub(concepts.Vector2{3, 3}))
-	v2 := editor.ScreenToWorld(v.Add(concepts.Vector2{3, 3}))
-	cr.Rectangle(v1.X, v1.Y, v2.X-v1.X, v2.Y-v1.Y)
-	cr.Stroke()
-}
+func EditorTimer(win *gtk.Window) bool {
+	dt := time.Since(last).Seconds() * 1000
+	last = time.Now()
 
-func MapTimer(win *gtk.Window) bool {
-	editor.GameMap.Frame(15)
-	//fmt.Println("timer")
+	editor.GameMap.Frame(dt)
+	editor.GatherHoveringObjects()
+
+	ps := entity.NewPlayerService(editor.GameMap.Player.(*entities.Player))
+
+	if gameKeyMap[gdk.KEY_w] {
+		ps.Move(ps.Player.Angle, dt, 1.0)
+	}
+	if gameKeyMap[gdk.KEY_s] {
+		ps.Move(ps.Player.Angle+180.0, dt, 1.0)
+	}
+	if gameKeyMap[gdk.KEY_e] {
+		ps.Move(ps.Player.Angle+90.0, dt, 0.5)
+	}
+	if gameKeyMap[gdk.KEY_q] {
+		ps.Move(ps.Player.Angle+270.0, dt, 0.5)
+	}
+	if gameKeyMap[gdk.KEY_a] {
+		ps.Player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
+		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+	}
+	if gameKeyMap[gdk.KEY_d] {
+		ps.Player.Angle += constants.PlayerTurnSpeed * dt / 30.0
+		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+	}
+	if gameKeyMap[gdk.KEY_space] {
+		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
+			ps.Player.Vel.Z += constants.PlayerSwimStrength * dt / 30.0
+		} else if ps.Standing {
+			ps.Player.Vel.Z += constants.PlayerJumpStrength * dt / 30.0
+			ps.Standing = false
+		}
+	}
+	if gameKeyMap[gdk.KEY_c] {
+		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
+			ps.Player.Vel.Z -= constants.PlayerSwimStrength * dt / 30.0
+		} else {
+			ps.Crouching = true
+		}
+	} else {
+		ps.Crouching = false
+	}
+
 	win.QueueDraw()
 	return true
 }
@@ -75,7 +108,10 @@ func main() {
 	win, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
 	mapArea, _ := gtk.DrawingAreaNew()
 	mapArea.SetEvents(int(gdk.POINTER_MOTION_MASK) | int(gdk.SCROLL_MASK) | int(gdk.BUTTON_PRESS_MASK) | int(gdk.BUTTON_RELEASE_MASK) | int(gdk.KEY_PRESS_MASK))
+	mapArea.SetCanFocus(true)
 	gameArea, _ := gtk.DrawingAreaNew()
+	gameArea.SetEvents(int(gdk.KEY_PRESS_MASK) | int(gdk.KEY_RELEASE_MASK))
+	gameArea.SetCanFocus(true)
 	propGrid, _ := gtk.GridNew()
 	hpane, _ := gtk.PanedNew(gtk.ORIENTATION_HORIZONTAL)
 	vpane, _ := gtk.PanedNew(gtk.ORIENTATION_VERTICAL)
@@ -90,18 +126,15 @@ func main() {
 	win.Connect("destroy", gtk.MainQuit)
 	win.ShowAll()
 
-	renderer := render.NewRenderer()
-	renderer.ScreenWidth = 800
-	renderer.ScreenHeight = 600
-	renderer.Initialize()
 	editor.GameMap = logic.LoadMap("data/classicMap.json")
 	ps := entity.NewPlayerService(editor.GameMap.Player.(*entities.Player))
 	ps.Collide()
-	renderer.Map = editor.GameMap.Map
-	_, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
+
+	editor.GameView(gameArea.GetAllocatedWidth(), gameArea.GetAllocatedHeight())
 
 	// Event handlers
 	mapArea.Connect("draw", DrawMap)
+	gameArea.Connect("draw", DrawGame)
 
 	mapArea.Connect("motion-notify-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
 		motion := gdk.EventMotionNewFromEvent(ev)
@@ -125,9 +158,8 @@ func main() {
 		editor.MouseDownWorld = editor.ScreenToWorld(editor.MouseDown)
 
 		if press.Button() == 3 && editor.CurrentAction == nil {
-			//editor.NewAction(SelectAction{})
-		}
-		if press.Button() == 2 && editor.CurrentAction == nil {
+			editor.NewAction(&SelectAction{Editor: editor})
+		} else if press.Button() == 2 && editor.CurrentAction == nil {
 			editor.NewAction(&PanAction{Editor: editor})
 		}
 
@@ -159,13 +191,18 @@ func main() {
 			editor.Scale += delta * 0.002
 		}
 	})
-	mapArea.Connect("key-press-event", func(win *gtk.Window, ev *gdk.Event) {
+	mapArea.Connect("key-press-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
+		//key := gdk.EventKeyNewFromEvent(ev)
+	})
+	gameArea.Connect("key-press-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
 		key := gdk.EventKeyNewFromEvent(ev)
-		if key.KeyVal() == gdk.KEY_Shift_L {
-			fmt.Println("hmmm")
-		}
+		gameKeyMap[key.KeyVal()] = true
+	})
+	gameArea.Connect("key-release-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
+		key := gdk.EventKeyNewFromEvent(ev)
+		delete(gameKeyMap, key.KeyVal())
 	})
 
-	glib.TimeoutAdd(15, MapTimer, win)
+	glib.TimeoutAdd(15, EditorTimer, win)
 	gtk.Main()
 }
