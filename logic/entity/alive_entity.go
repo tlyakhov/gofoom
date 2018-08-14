@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/entities"
 )
 
@@ -9,8 +10,8 @@ type AliveEntityService struct {
 	*entities.AliveEntity
 }
 
-func NewAliveEntityService(e *entities.AliveEntity) *AliveEntityService {
-	return &AliveEntityService{AliveEntity: e, PhysicalEntityService: NewPhysicalEntityService(&e.PhysicalEntity)}
+func NewAliveEntityService(ae *entities.AliveEntity, e core.AbstractEntity) *AliveEntityService {
+	return &AliveEntityService{AliveEntity: ae, PhysicalEntityService: NewPhysicalEntityService(&ae.PhysicalEntity, e)}
 }
 
 func (e *AliveEntityService) Hurt(amount float64) {

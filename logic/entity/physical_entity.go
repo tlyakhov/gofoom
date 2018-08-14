@@ -11,10 +11,11 @@ import (
 
 type PhysicalEntityService struct {
 	*core.PhysicalEntity
+	Original core.AbstractEntity
 }
 
-func NewPhysicalEntityService(e *core.PhysicalEntity) *PhysicalEntityService {
-	return &PhysicalEntityService{PhysicalEntity: e}
+func NewPhysicalEntityService(pe *core.PhysicalEntity, e core.AbstractEntity) *PhysicalEntityService {
+	return &PhysicalEntityService{PhysicalEntity: pe, Original: e}
 }
 
 func (e *PhysicalEntityService) PushBack(segment *core.Segment) bool {
@@ -79,8 +80,8 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 		}
 
 		e.Sector = closestSector
-		closestSector.Physical().Entities[e.ID] = e.PhysicalEntity
-		provide.Passer.For(closestSector).OnEnter(e.PhysicalEntity)
+		closestSector.Physical().Entities[e.ID] = e.Original
+		provide.Passer.For(closestSector).OnEnter(e.Original)
 		// Don't mark as collided because this is probably an initialization.
 	}
 
@@ -107,7 +108,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 		// Cases 5 & 6
 
 		// Exit the current sector.
-		provide.Passer.For(e.Sector).OnExit(e.Physical())
+		provide.Passer.For(e.Sector).OnExit(e.Original)
 		delete(e.Sector.Physical().Entities, e.ID)
 		e.Sector = nil
 
@@ -121,8 +122,8 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 					e.Pos.Z = sector.BottomZ
 				}
 				e.Sector = item
-				e.Sector.Physical().Entities[e.ID] = e
-				provide.Passer.For(e.Sector).OnEnter(e)
+				e.Sector.Physical().Entities[e.ID] = e.Original
+				provide.Passer.For(e.Sector).OnEnter(e.Original)
 				break
 			}
 		}
@@ -166,7 +167,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 	}
 
 	if e.Sector != nil {
-		e.Sector.Physical().Entities[e.ID] = e
+		e.Sector.Physical().Entities[e.ID] = e.Original
 	}
 
 	return collided

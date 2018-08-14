@@ -16,7 +16,7 @@ type PlayerService struct {
 }
 
 func NewPlayerService(p *entities.Player) *PlayerService {
-	return &PlayerService{Player: p, AliveEntityService: NewAliveEntityService(&p.AliveEntity)}
+	return &PlayerService{Player: p, AliveEntityService: NewAliveEntityService(&p.AliveEntity, p)}
 }
 
 func (p *PlayerService) Frame(lastFrameTime float64) {
