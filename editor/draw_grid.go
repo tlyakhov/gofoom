@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/tlyakhov/gofoom/concepts"
 )
@@ -15,22 +13,16 @@ func DrawGrid(cr *cairo.Context) {
 	}
 
 	if editor.Grid.Prev != editor.MapViewState {
-		fmt.Println("change")
 		RefreshGrid(cr)
 		editor.Grid.Prev = editor.MapViewState
 	}
 
-	//editor.Grid.Surface.MarkDirty()
 	cr.SetSourceSurface(editor.Grid.Surface, 0, 0)
 	cr.Paint()
 }
 
 func RefreshGrid(cr *cairo.Context) {
-	//target := cr.GetTarget()
-	//editor.Grid.Surface = target.CreateSimilar(cairo.CONTENT_COLOR_ALPHA, target.GetWidth(), target.GetHeight())
 	cr.PushGroup()
-	//gcr := cairo.Create(editor.Grid.Surface)
-
 	cr.SetSourceRGB(0, 0, 0)
 	cr.Paint()
 	TransformContext(cr)
@@ -46,8 +38,4 @@ func RefreshGrid(cr *cairo.Context) {
 	}
 	editor.Grid.Surface = cr.GetGroupTarget()
 	cr.PopGroupToSource()
-
-	//editor.Grid.Surface.Flush()
-	//editor.Grid.Surface.MarkDirty()
-
 }

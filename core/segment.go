@@ -15,10 +15,11 @@ const (
 type Segment struct {
 	concepts.Base
 
-	A, B        concepts.Vector2
-	LoMaterial  concepts.ISerializable
-	MidMaterial concepts.ISerializable
-	HiMaterial  concepts.ISerializable
+	A           concepts.Vector2       `editable:"A" edit_type:"Vector2"`
+	B           concepts.Vector2       `editable:"B" edit_type:"Vector2"`
+	LoMaterial  concepts.ISerializable `editable:"Low Material" edit_type:"Material"`
+	MidMaterial concepts.ISerializable `editable:"Mid Material" edit_type:"Material"`
+	HiMaterial  concepts.ISerializable `editable:"High Material" edit_type:"Material"`
 	LoBehavior  MaterialBehavior
 	MidBehavior MaterialBehavior
 	HiBehavior  MaterialBehavior

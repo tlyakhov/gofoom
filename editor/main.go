@@ -38,7 +38,7 @@ var (
 	last                    = time.Now()
 )
 
-func EditorTimer(win *gtk.Window) bool {
+func EditorTimer(win *gtk.ApplicationWindow) bool {
 	dt := time.Since(last).Seconds() * 1000
 	last = time.Now()
 
@@ -89,95 +89,64 @@ func EditorTimer(win *gtk.Window) bool {
 	return true
 }
 
-var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
-
-func main() {
-	flag.Parse()
-
-	if *cpuProfile != "" {
-		f, err := os.Create(*cpuProfile)
-		if err != nil {
-			log.Fatal(err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
+func onActivate() {
+	builder, err := gtk.BuilderNew()
+	if err != nil {
+		log.Fatal("Can't create GTK+ builder.", err)
 	}
+	err = builder.AddFromFile("editor-glade.glade")
+	if err != nil {
+		log.Fatal("Can't load GTK+ UI from file.", err)
+	}
+	obj, err := builder.GetObject("MainWindow")
+	if err != nil {
+		log.Fatal("Can't find MainWindow object in GTK+ UI file.", err)
+	}
+	editor.Window = obj.(*gtk.ApplicationWindow)
+	obj, err = builder.GetObject("MapArea")
+	if err != nil {
+		log.Fatal("Can't find MapArea object in GTK+ UI file.", err)
+	}
+	editor.MapArea = obj.(*gtk.DrawingArea)
+	obj, err = builder.GetObject("GameArea")
+	if err != nil {
+		log.Fatal("Can't find GameArea object in GTK+ UI file.", err)
+	}
+	editor.GameArea = obj.(*gtk.DrawingArea)
+	obj, err = builder.GetObject("PropertyGrid")
+	if err != nil {
+		log.Fatal("Can't find PropertyGrid object in GTK+ UI file.", err)
+	}
+	editor.PropertyGrid = obj.(*gtk.Grid)
 
-	gtk.Init(nil)
-
-	win, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
-	mapArea, _ := gtk.DrawingAreaNew()
-	mapArea.SetEvents(int(gdk.POINTER_MOTION_MASK) | int(gdk.SCROLL_MASK) | int(gdk.BUTTON_PRESS_MASK) | int(gdk.BUTTON_RELEASE_MASK) | int(gdk.KEY_PRESS_MASK))
-	mapArea.SetCanFocus(true)
-	gameArea, _ := gtk.DrawingAreaNew()
-	gameArea.SetEvents(int(gdk.KEY_PRESS_MASK) | int(gdk.KEY_RELEASE_MASK))
-	gameArea.SetCanFocus(true)
-	propGrid, _ := gtk.GridNew()
-	hpane, _ := gtk.PanedNew(gtk.ORIENTATION_HORIZONTAL)
-	vpane, _ := gtk.PanedNew(gtk.ORIENTATION_VERTICAL)
-	hpane.Pack1(mapArea, true, true)
-	hpane.Pack2(vpane, true, true)
-	vpane.Pack1(gameArea, true, true)
-	vpane.Pack2(propGrid, true, true)
-	win.Add(hpane)
-	win.SetSizeRequest(1280, 720)
-	win.SetPosition(gtk.WIN_POS_CENTER)
-	win.SetTitle("Foom Editor")
-	win.Connect("destroy", gtk.MainQuit)
-	win.ShowAll()
+	editor.Window.SetApplication(editor.App)
+	editor.Window.ShowAll()
 
 	editor.GameMap = logic.LoadMap("data/classicMap.json")
 	ps := entity.NewPlayerService(editor.GameMap.Player.(*entities.Player))
 	ps.Collide()
 
-	editor.GameView(gameArea.GetAllocatedWidth(), gameArea.GetAllocatedHeight())
+	editor.GameView(editor.GameArea.GetAllocatedWidth(), editor.GameArea.GetAllocatedHeight())
+	editor.RefreshPropertyGrid()
 
 	// Event handlers
-	mapArea.Connect("draw", DrawMap)
-	gameArea.Connect("draw", DrawGame)
+	signals := make(map[string]interface{})
+	signals["MapDraw"] = DrawMap
+	signals["MapMotionNotify"] = MapMotionNotify
+	signals["MapButtonPress"] = MapButtonPress
+	signals["MapButtonRelease"] = MapButtonRelease
+	signals["GameDraw"] = DrawGame
+	signals["GameKeyPress"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
+		key := gdk.EventKeyNewFromEvent(ev)
+		gameKeyMap[key.KeyVal()] = true
+	}
+	signals["GameKeyRelease"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
+		key := gdk.EventKeyNewFromEvent(ev)
+		delete(gameKeyMap, key.KeyVal())
+	}
+	builder.ConnectSignals(signals)
 
-	mapArea.Connect("motion-notify-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
-		motion := gdk.EventMotionNewFromEvent(ev)
-		x, y := motion.MotionVal()
-		if x == editor.Mouse.X && y == editor.Mouse.Y {
-			return
-		}
-		editor.Mouse.X = x
-		editor.Mouse.Y = y
-		editor.MouseWorld = editor.ScreenToWorld(editor.Mouse)
-
-		if editor.CurrentAction != nil {
-			editor.CurrentAction.OnMouseMove()
-		}
-	})
-
-	mapArea.Connect("button-press-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
-		press := gdk.EventButtonNewFromEvent(ev)
-		editor.MousePressed = true
-		editor.MouseDown.X, editor.MouseDown.Y = press.MotionVal()
-		editor.MouseDownWorld = editor.ScreenToWorld(editor.MouseDown)
-
-		if press.Button() == 3 && editor.CurrentAction == nil {
-			editor.NewAction(&SelectAction{Editor: editor})
-		} else if press.Button() == 2 && editor.CurrentAction == nil {
-			editor.NewAction(&PanAction{Editor: editor})
-		}
-
-		if editor.CurrentAction != nil {
-			editor.CurrentAction.OnMouseDown(press)
-		}
-	})
-
-	mapArea.Connect("button-release-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
-		//release := &gdk.EventButton{ev}
-		editor.MousePressed = false
-
-		if editor.CurrentAction != nil {
-			editor.CurrentAction.OnMouseUp()
-		}
-	})
-
-	mapArea.Connect("scroll-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
+	editor.MapArea.Connect("scroll-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
 		scroll := gdk.EventScrollNewFromEvent(ev)
 		delta := math.Abs(scroll.DeltaY() / 5)
 		if scroll.Direction() == gdk.SCROLL_DOWN {
@@ -191,18 +160,36 @@ func main() {
 			editor.Scale += delta * 0.002
 		}
 	})
-	mapArea.Connect("key-press-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
+	editor.MapArea.Connect("key-press-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
 		//key := gdk.EventKeyNewFromEvent(ev)
 	})
-	gameArea.Connect("key-press-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
-		key := gdk.EventKeyNewFromEvent(ev)
-		gameKeyMap[key.KeyVal()] = true
-	})
-	gameArea.Connect("key-release-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
-		key := gdk.EventKeyNewFromEvent(ev)
-		delete(gameKeyMap, key.KeyVal())
-	})
 
-	glib.TimeoutAdd(15, EditorTimer, win)
-	gtk.Main()
+	glib.TimeoutAdd(15, EditorTimer, editor.Window)
+}
+
+var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
+
+func main() {
+	gtk.Init(&os.Args)
+	flag.Parse()
+
+	if *cpuProfile != "" {
+		f, err := os.Create(*cpuProfile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+
+	const appID = "com.foom.editor"
+	var err error
+	editor.App, err = gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
+
+	if err != nil {
+		log.Fatal("Could not create application.", err)
+	}
+
+	editor.App.Connect("activate", onActivate)
+	os.Exit(editor.App.Run(os.Args))
 }

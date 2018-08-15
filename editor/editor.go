@@ -5,6 +5,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/cairo"
+	"github.com/gotk3/gotk3/gtk"
 
 	"github.com/tlyakhov/gofoom/render"
 
@@ -24,13 +25,22 @@ type MapViewGrid struct {
 	Surface *cairo.Surface
 }
 
+type EditorWidgets struct {
+	App          *gtk.Application
+	Window       *gtk.ApplicationWindow
+	PropertyGrid *gtk.Grid
+	GameArea     *gtk.DrawingArea
+	MapArea      *gtk.DrawingArea
+}
+
 type Editor struct {
 	// What we're editing.
 	GameMap *logic.MapService
+	MapViewState
+	Grid MapViewGrid
+	EditorWidgets
 
 	// Map view positions in world/screen space.
-	MapViewState
-	Grid           MapViewGrid
 	Mouse          concepts.Vector2 // Screen
 	MouseDown      concepts.Vector2 // Screen
 	MouseWorld     concepts.Vector2
@@ -126,7 +136,7 @@ func (e *Editor) SelectObjects(objects []concepts.ISerializable) {
 	}
 
 	e.SelectedObjects = objects
-	// e.RefreshPropertyGrid
+	e.RefreshPropertyGrid()
 }
 
 func indexOfObject(s []concepts.ISerializable, obj concepts.ISerializable) int {
