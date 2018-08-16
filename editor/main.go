@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"log"
-	"math"
 	"os"
 	"runtime/pprof"
 	"time"
@@ -131,38 +130,27 @@ func onActivate() {
 
 	// Event handlers
 	signals := make(map[string]interface{})
-	signals["MapDraw"] = DrawMap
-	signals["MapMotionNotify"] = MapMotionNotify
-	signals["MapButtonPress"] = MapButtonPress
-	signals["MapButtonRelease"] = MapButtonRelease
-	signals["GameDraw"] = DrawGame
-	signals["GameKeyPress"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
+	signals["Menu.File.Quit"] = func(obj *glib.Object) {
+		editor.App.Quit()
+	}
+	signals["MapArea.Draw"] = DrawMap
+	signals["MapArea.MotionNotify"] = MapMotionNotify
+	signals["MapArea.ButtonPress"] = MapButtonPress
+	signals["MapArea.ButtonRelease"] = MapButtonRelease
+	signals["GameArea.Draw"] = DrawGame
+	signals["GameArea.ButtonPress"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
+		da.GrabFocus()
+	}
+	signals["GameArea.KeyPress"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
 		key := gdk.EventKeyNewFromEvent(ev)
 		gameKeyMap[key.KeyVal()] = true
 	}
-	signals["GameKeyRelease"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
+	signals["GameArea.KeyRelease"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
 		key := gdk.EventKeyNewFromEvent(ev)
 		delete(gameKeyMap, key.KeyVal())
 	}
+	signals["MapArea.Scroll"] = MapScroll
 	builder.ConnectSignals(signals)
-
-	editor.MapArea.Connect("scroll-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
-		scroll := gdk.EventScrollNewFromEvent(ev)
-		delta := math.Abs(scroll.DeltaY() / 5)
-		if scroll.Direction() == gdk.SCROLL_DOWN {
-			delta = -delta
-		}
-		if editor.Scale > 0.25 {
-			editor.Scale += delta * 0.2
-		} else if editor.Scale > 0.025 {
-			editor.Scale += delta * 0.02
-		} else if editor.Scale > 0.0025 {
-			editor.Scale += delta * 0.002
-		}
-	})
-	editor.MapArea.Connect("key-press-event", func(da *gtk.DrawingArea, ev *gdk.Event) {
-		//key := gdk.EventKeyNewFromEvent(ev)
-	})
 
 	glib.TimeoutAdd(15, EditorTimer, editor.Window)
 }

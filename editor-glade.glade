@@ -81,6 +81,7 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="Menu.File.Quit" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -178,7 +179,7 @@
         <child>
           <object class="GtkPaned">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="position">61</property>
             <property name="position_set">True</property>
             <child>
@@ -196,7 +197,7 @@
             <child>
               <object class="GtkPaned" id="HPane">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="position">300</property>
                 <property name="position_set">True</property>
                 <property name="wide_handle">True</property>
@@ -206,10 +207,11 @@
                     <property name="can_focus">True</property>
                     <property name="is_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK | GDK_SCROLL_MASK</property>
-                    <signal name="button-press-event" handler="MapButtonPress" swapped="no"/>
-                    <signal name="button-release-event" handler="MapButtonRelease" swapped="no"/>
-                    <signal name="draw" handler="MapDraw" swapped="no"/>
-                    <signal name="motion-notify-event" handler="MapMotionNotify" swapped="no"/>
+                    <signal name="button-press-event" handler="MapArea.ButtonPress" swapped="no"/>
+                    <signal name="button-release-event" handler="MapArea.ButtonRelease" swapped="no"/>
+                    <signal name="draw" handler="MapArea.Draw" swapped="no"/>
+                    <signal name="motion-notify-event" handler="MapArea.MotionNotify" swapped="no"/>
+                    <signal name="scroll-event" handler="MapArea.Scroll" swapped="no"/>
                   </object>
                   <packing>
                     <property name="resize">True</property>
@@ -219,7 +221,7 @@
                 <child>
                   <object class="GtkPaned" id="VPane">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="position">300</property>
                     <property name="position_set">True</property>
@@ -228,11 +230,12 @@
                       <object class="GtkDrawingArea" id="GameArea">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="is_focus">True</property>
-                        <property name="events">GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <signal name="draw" handler="GameDraw" swapped="no"/>
-                        <signal name="key-press-event" handler="GameKeyPress" swapped="no"/>
-                        <signal name="key-release-event" handler="GameKeyRelease" swapped="no"/>
+                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                        <property name="double_buffered">False</property>
+                        <signal name="button-press-event" handler="GameArea.ButtonPress" swapped="no"/>
+                        <signal name="draw" handler="GameArea.Draw" swapped="no"/>
+                        <signal name="key-press-event" handler="GameArea.KeyPress" swapped="no"/>
+                        <signal name="key-release-event" handler="GameArea.KeyRelease" swapped="no"/>
                       </object>
                       <packing>
                         <property name="resize">True</property>
