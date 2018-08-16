@@ -11,14 +11,17 @@ import (
 type PhysicalSector struct {
 	concepts.Base
 
-	Map                     *Map
-	Segments                []*Segment
-	Entities                map[string]AbstractEntity
-	BottomZ, TopZ           float64
-	FloorScale, CeilScale   float64
-	FloorTarget, CeilTarget AbstractSector
-	FloorMaterial           concepts.ISerializable
-	CeilMaterial            concepts.ISerializable
+	Map           *Map
+	Segments      []*Segment
+	Entities      map[string]AbstractEntity
+	BottomZ       float64                `editable:"Bottom Z"`
+	TopZ          float64                `editable:"Top Z"`
+	FloorScale    float64                `editable:"Floor Material Scale"`
+	CeilScale     float64                `editable:"Ceiling Material Scale"`
+	FloorTarget   AbstractSector         `editable:"Floor Target"`
+	CeilTarget    AbstractSector         `editable:"Ceiling Target"`
+	FloorMaterial concepts.ISerializable `editable:"Floor Material"`
+	CeilMaterial  concepts.ISerializable `editable:"Ceiling Material"`
 
 	Min, Max, Center              concepts.Vector3
 	LightmapWidth, LightmapHeight uint32

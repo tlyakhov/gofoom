@@ -9,8 +9,8 @@ import (
 )
 
 type Base struct {
-	ID   string   `editable:"ID" edit_type:"string"`
-	Tags []string `editable:"Tags" edit_type:"tags"`
+	ID   string   `editable:"ID"`
+	Tags []string `editable:"Tags"`
 }
 
 func init() {

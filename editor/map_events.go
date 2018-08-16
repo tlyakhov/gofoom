@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math"
+
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -43,5 +45,20 @@ func MapButtonRelease(da *gtk.DrawingArea, ev *gdk.Event) {
 
 	if editor.CurrentAction != nil {
 		editor.CurrentAction.OnMouseUp()
+	}
+}
+
+func MapScroll(da *gtk.DrawingArea, ev *gdk.Event) {
+	scroll := gdk.EventScrollNewFromEvent(ev)
+	delta := math.Abs(scroll.DeltaY() / 5)
+	if scroll.Direction() == gdk.SCROLL_DOWN {
+		delta = -delta
+	}
+	if editor.Scale > 0.25 {
+		editor.Scale += delta * 0.2
+	} else if editor.Scale > 0.025 {
+		editor.Scale += delta * 0.02
+	} else if editor.Scale > 0.0025 {
+		editor.Scale += delta * 0.002
 	}
 }

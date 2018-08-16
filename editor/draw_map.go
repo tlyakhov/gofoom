@@ -17,7 +17,7 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	h := da.GetAllocatedHeight()
 	editor.MapViewSize = concepts.Vector2{float64(w), float64(h)}
 
-	DrawGrid(cr)
+	DrawMapGrid(cr)
 	TransformContext(cr)
 
 	for _, sector := range editor.GameMap.Sectors {

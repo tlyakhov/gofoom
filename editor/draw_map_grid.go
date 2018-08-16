@@ -5,7 +5,7 @@ import (
 	"github.com/tlyakhov/gofoom/concepts"
 )
 
-func DrawGrid(cr *cairo.Context) {
+func DrawMapGrid(cr *cairo.Context) {
 	if !editor.Grid.Visible || editor.Scale*GridSize < 5.0 {
 		cr.SetSourceRGB(0, 0, 0)
 		cr.Paint()
@@ -13,15 +13,18 @@ func DrawGrid(cr *cairo.Context) {
 	}
 
 	if editor.Grid.Prev != editor.MapViewState {
-		RefreshGrid(cr)
+		RefreshMapGrid(cr)
 		editor.Grid.Prev = editor.MapViewState
 	}
 
+	cr.Save()
+	cr.IdentityMatrix()
 	cr.SetSourceSurface(editor.Grid.Surface, 0, 0)
 	cr.Paint()
+	cr.Restore()
 }
 
-func RefreshGrid(cr *cairo.Context) {
+func RefreshMapGrid(cr *cairo.Context) {
 	cr.PushGroup()
 	cr.SetSourceRGB(0, 0, 0)
 	cr.Paint()

@@ -23,18 +23,10 @@ func (e *Editor) PropertyGridFieldString(state *gridState) {
 	e.PropertyGrid.Attach(box, 2, state.index, 1, 1)
 }
 
-func (e *Editor) PropertyGridUpdate(state *gridState) {
-	/*x := e.HPane.GetPosition()
-	y := e.VPane.GetPosition()
-	e.HPane.ShowAll()
-	e.HPane.SetPosition(x)
-	e.VPane.SetPosition(y)*/
-}
-
 func (e *Editor) PropertyGridFields(obj interface{}, state *gridState) {
 	v := reflect.ValueOf(obj)
 	t := v.Type().Elem()
-	if v.IsNil() {
+	if v.IsNil() || t.String() == "main.MapPoint" {
 		return
 	}
 
@@ -53,6 +45,11 @@ func (e *Editor) PropertyGridFields(obj interface{}, state *gridState) {
 			e.PropertyGrid.Attach(label, 1, state.index, 1, 1)
 			e.PropertyGridFieldString(state)
 			state.index++
+		} else if field.Type.Kind() == reflect.Struct {
+			child := v.Elem().Field(i).Addr().Interface()
+			if !state.visited[child] {
+				e.PropertyGridFields(child, state)
+			}
 		} else if field.Type.Kind() == reflect.Ptr {
 			child := v.Elem().Field(i).Interface()
 			if !state.visited[child] {
@@ -60,7 +57,7 @@ func (e *Editor) PropertyGridFields(obj interface{}, state *gridState) {
 			}
 		}
 	}
-	e.PropertyGridUpdate(state)
+	e.PropertyGrid.ShowAll()
 }
 
 func (e *Editor) RefreshPropertyGrid() {
