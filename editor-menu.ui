@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+    <menu id="Menu">
+        <submenu>
+            <attribute name="label" translatable="yes">_File</attribute>
+            <section>
+                <item>
+                    <attribute name="label" translatable="yes">_New</attribute>
+                    <attribute name="icon">document-new</attribute>
+                    <attribute name="accel">&lt;Primary&gt;n</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Quit</attribute>
+                    <attribute name="icon">application-exit</attribute>
+                    <attribute name="accel">&lt;Primary&gt;q</attribute>
+                    <attribute name="action">app.quit</attribute>                    
+                </item>
+            </section>
+        </submenu>
+        <submenu>
+            <attribute name="label" translatable="yes">_Edit</attribute>
+            <section>
+                <item>
+                    <attribute name="label" translatable="yes">_Undo</attribute>
+                    <attribute name="icon">edit-undo</attribute>
+                    <attribute name="accel">&lt;Primary&gt;z</attribute>
+                    <attribute name="action">app.undo</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">_Redo</attribute>
+                    <attribute name="icon">edit-redo</attribute>
+                    <attribute name="accel">&lt;Primary&gt;y</attribute>
+                    <attribute name="action">app.redo</attribute>
+                </item>
+            </section>
+            <section>
+                <item>
+                    <attribute name="label" translatable="yes">Cut</attribute>
+                    <attribute name="icon">edit-cut</attribute>
+                    <attribute name="accel">&lt;Primary&gt;x</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Copy</attribute>
+                    <attribute name="icon">edit-copy</attribute>
+                    <attribute name="accel">&lt;Primary&gt;c</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Paste</attribute>
+                    <attribute name="icon">edit-paste</attribute>
+                    <attribute name="accel">&lt;Primary&gt;c</attribute>
+                </item>
+            </section>
+        </submenu>
+    </menu>
+</interface>

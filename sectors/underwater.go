@@ -6,7 +6,7 @@ import (
 )
 
 type Underwater struct {
-	core.PhysicalSector
+	core.PhysicalSector `editable:"^"`
 }
 
 func init() {

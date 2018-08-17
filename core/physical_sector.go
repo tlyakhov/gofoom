@@ -9,7 +9,7 @@ import (
 )
 
 type PhysicalSector struct {
-	concepts.Base
+	concepts.Base `editable:"^"`
 
 	Map           *Map
 	Segments      []*Segment

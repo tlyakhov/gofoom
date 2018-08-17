@@ -16,7 +16,7 @@ const (
 )
 
 type VerticalDoor struct {
-	core.PhysicalSector
+	core.PhysicalSector `editable:"^"`
 
 	OrigTopZ float64
 	VelZ     float64

@@ -5,6 +5,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/cairo"
+	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 
 	"github.com/tlyakhov/gofoom/render"
@@ -231,4 +232,10 @@ func (e *Editor) GameView(w, h int) {
 	header := reflect.SliceHeader{uintptr(pBuffer), length, length}
 	// Type safe!
 	e.GameViewBuffer = *(*[]uint8)(unsafe.Pointer(&header))
+}
+
+func (e *Editor) AddSimpleMenuAction(name string, cb func(obj *glib.Object)) {
+	action := glib.SimpleActionNew(name, nil)
+	action.Connect("activate", cb)
+	e.App.AddAction(action)
 }

@@ -6,8 +6,8 @@ import (
 )
 
 type ToxicSector struct {
-	core.PhysicalSector
-	Hurt float64
+	core.PhysicalSector `editable:"^"`
+	Hurt                float64 `editable:"Hurt Amount"`
 }
 
 func init() {

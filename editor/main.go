@@ -88,6 +88,28 @@ func EditorTimer(win *gtk.ApplicationWindow) bool {
 	return true
 }
 
+func setupMenu() {
+	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
+	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.Undo() })
+	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.Redo() })
+
+	menuBuilder, err := gtk.BuilderNew()
+	if err != nil {
+		log.Fatal("Can't create GTK+ builder.", err)
+	}
+	err = menuBuilder.AddFromFile("editor-menu.ui")
+	if err != nil {
+		log.Fatal("Can't load GTK+ Menu UI from file editor-menu.ui.", err)
+	}
+	menu, err := menuBuilder.GetObject("Menu")
+	if err != nil {
+		log.Fatal("Can't find Menu object in GTK+ menu UI file.", err)
+	}
+
+	//editor.App.SetAppMenu(&menu.(*glib.Menu).MenuModel)
+	editor.App.SetMenubar(&menu.(*glib.Menu).MenuModel)
+}
+
 func onActivate() {
 	builder, err := gtk.BuilderNew()
 	if err != nil {
@@ -118,6 +140,7 @@ func onActivate() {
 	}
 	editor.PropertyGrid = obj.(*gtk.Grid)
 
+	setupMenu()
 	editor.Window.SetApplication(editor.App)
 	editor.Window.ShowAll()
 

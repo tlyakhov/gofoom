@@ -1,7 +1,10 @@
 package concepts
 
 import (
+	"errors"
 	"math"
+	"strconv"
+	"strings"
 )
 
 // Vector3 is a simple 3d vector type.
@@ -94,4 +97,34 @@ func (vec *Vector3) Deserialize(data map[string]interface{}) {
 
 func (vec Vector3) ToInt32Color() uint32 {
 	return uint32(vec.X)<<24 | uint32(vec.Y)<<16 | uint32(vec.Z)<<8 | 0xFF
+}
+
+// String formats the vector as a string
+func (vec Vector3) String() string {
+	return strconv.FormatFloat(vec.X, 'f', -1, 64) + ", " +
+		strconv.FormatFloat(vec.Y, 'f', -1, 64) + ", " +
+		strconv.FormatFloat(vec.Z, 'f', -1, 64)
+}
+
+// ParseVector3 parses strings in the form "X, Y, Z" into vectors.
+func ParseVector3(s string) (Vector3, error) {
+	result := Vector3{}
+	split := strings.Split(s, ",")
+	if len(split) != 3 {
+		return result, errors.New("can't parse Vector3: input string should have three comma-separated values")
+	}
+	var err error
+	result.X, err = strconv.ParseFloat(strings.TrimSpace(split[0]), 64)
+	if err != nil {
+		return result, err
+	}
+	result.Y, err = strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
+	if err != nil {
+		return result, err
+	}
+	result.Z, err = strconv.ParseFloat(strings.TrimSpace(split[2]), 64)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }

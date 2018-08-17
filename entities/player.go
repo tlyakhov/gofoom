@@ -9,7 +9,7 @@ import (
 )
 
 type Player struct {
-	AliveEntity
+	AliveEntity `editable:"^"`
 
 	FrameTint color.NRGBA
 	Standing  bool

@@ -6,7 +6,7 @@ import (
 )
 
 type Light struct {
-	core.PhysicalEntity
+	core.PhysicalEntity `editable:"^"`
 }
 
 func init() {
