@@ -6,9 +6,9 @@ import (
 )
 
 type AliveEntity struct {
-	core.PhysicalEntity
-	Health   float64
-	HurtTime float64
+	core.PhysicalEntity `editable:"^"`
+	Health              float64 `editable:"Health"`
+	HurtTime            float64
 }
 
 func init() {

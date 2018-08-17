@@ -13,16 +13,16 @@ const (
 )
 
 type Segment struct {
-	concepts.Base
+	concepts.Base `editable:"^"`
 
 	A           concepts.Vector2 `editable:"X/Y"`
 	B           concepts.Vector2
 	LoMaterial  concepts.ISerializable `editable:"Low Material" edit_type:"Material"`
 	MidMaterial concepts.ISerializable `editable:"Mid Material" edit_type:"Material"`
 	HiMaterial  concepts.ISerializable `editable:"High Material" edit_type:"Material"`
-	LoBehavior  MaterialBehavior
-	MidBehavior MaterialBehavior
-	HiBehavior  MaterialBehavior
+	LoBehavior  MaterialBehavior       `editable:"Low Behavior"`
+	MidBehavior MaterialBehavior       `editable:"Mid Behavior"`
+	HiBehavior  MaterialBehavior       `editable:"High Behavior"`
 
 	Length          float64
 	Normal          concepts.Vector2

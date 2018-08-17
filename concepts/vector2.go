@@ -1,7 +1,10 @@
 package concepts
 
 import (
+	"errors"
 	"math"
+	"strconv"
+	"strings"
 )
 
 // Vector2 is a simple 2d vector type.
@@ -91,4 +94,29 @@ func (vec *Vector2) Deserialize(data map[string]interface{}) {
 	if v, ok := data["Y"]; ok {
 		vec.Y = v.(float64)
 	}
+}
+
+// String formats the vector as a string
+func (vec Vector2) String() string {
+	return strconv.FormatFloat(vec.X, 'f', -1, 64) + ", " +
+		strconv.FormatFloat(vec.Y, 'f', -1, 64)
+}
+
+// ParseVector2 parses strings in the form "X, Y" into vectors.
+func ParseVector2(s string) (Vector2, error) {
+	result := Vector2{}
+	split := strings.Split(s, ",")
+	if len(split) != 2 {
+		return result, errors.New("can't parse Vector2: input string should have two comma-separated values")
+	}
+	var err error
+	result.X, err = strconv.ParseFloat(strings.TrimSpace(split[0]), 64)
+	if err != nil {
+		return result, err
+	}
+	result.Y, err = strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }

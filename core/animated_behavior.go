@@ -8,7 +8,7 @@ type AnimatedBehavior struct {
 	concepts.Base
 	Entity AbstractEntity
 
-	Active bool
+	Active bool `editable:"Active?"`
 }
 
 func (b *AnimatedBehavior) Initialize() {

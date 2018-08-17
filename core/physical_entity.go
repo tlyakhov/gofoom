@@ -10,20 +10,20 @@ import (
 )
 
 type PhysicalEntity struct {
-	*concepts.Base
-	Pos               concepts.Vector3
+	*concepts.Base    `editable:"^"`
+	Pos               concepts.Vector3 `editable:"Position"`
 	Vel               concepts.Vector3
-	Angle             float64
-	BoundingRadius    float64
-	CollisionResponse CollisionResponse
+	Angle             float64           `editable:"Angle"`
+	BoundingRadius    float64           `editable:"Bounding Radius"`
+	CollisionResponse CollisionResponse `editable:"Collision Response"`
 	CRCallback        func() CollisionResponse
-	Height            float64
-	MountHeight       float64
-	Active            bool
+	Height            float64 `editable:"Height"`
+	MountHeight       float64 `editable:"Mount Height"`
+	Active            bool    `editable:"Active?"`
 	Sector            AbstractSector
 	Map               *Map
 
-	behaviors map[string]AbstractBehavior
+	behaviors map[string]AbstractBehavior `editable:"Behaviors"`
 }
 
 func init() {

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/tlyakhov/gofoom/concepts"
 )
@@ -14,9 +12,6 @@ type PanAction struct {
 }
 
 func (a *PanAction) OnMouseDown(button *gdk.EventButton) {
-	if button.State()&uint(gdk.GDK_SHIFT_MASK) != 0 {
-		fmt.Println("asdfasdf")
-	}
 	a.State = "PanStart"
 	a.OriginalPos = a.Pos
 	// Set Cursor all-scroll
