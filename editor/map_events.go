@@ -32,6 +32,8 @@ func MapButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 		editor.NewAction(&SelectAction{Editor: editor})
 	} else if press.Button() == 2 && editor.CurrentAction == nil {
 		editor.NewAction(&PanAction{Editor: editor})
+	} else if press.Button() == 1 && editor.CurrentAction == nil && len(editor.SelectedObjects) > 0 {
+		editor.NewAction(&MoveAction{Editor: editor})
 	}
 
 	if editor.CurrentAction != nil {

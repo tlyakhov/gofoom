@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math"
+
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/tlyakhov/gofoom/concepts"
@@ -31,6 +33,14 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 		cr.Fill()
 		cr.SetSourceRGBA(0.67, 0.67, 1.0, 0.3)
 		cr.Stroke()
+	} else if _, ok := editor.CurrentAction.(*AddSectorAction); ok {
+		gridMouse := editor.MouseWorld
+		if editor.Grid.Visible {
+			gridMouse.X = math.Round(gridMouse.X/GridSize) * GridSize
+			gridMouse.Y = math.Round(gridMouse.Y/GridSize) * GridSize
+		}
+		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
+		DrawHandle(cr, gridMouse)
 	}
 
 	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse.X, Mouse.Y))

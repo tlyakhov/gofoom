@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"reflect"
 
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/tlyakhov/gofoom/behaviors"
@@ -58,4 +59,14 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 	cr.Arc(phys.Pos.X, phys.Pos.Y, phys.BoundingRadius, 0, math.Pi*2)
 	cr.ClosePath()
 	cr.Stroke()
+
+	if editor.EntityTypesVisible {
+		text := reflect.TypeOf(e).String()
+		extents := cr.TextExtents(text)
+		cr.Save()
+		cr.SetSourceRGB(0.3, 0.3, 0.3)
+		cr.Translate(phys.Pos.X-extents.Width/2, phys.Pos.Y-extents.Height/2-extents.YBearing)
+		cr.ShowText(text)
+		cr.Restore()
+	}
 }

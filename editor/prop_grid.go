@@ -84,7 +84,6 @@ func (e *Editor) PropertyGridFieldString(index int, field GridField) {
 		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(text)}
 		e.NewAction(action)
 		action.Act()
-		//		field.Value.Elem().SetString(text)
 		origValue = text
 		e.PropertyGrid.GrabFocus()
 	})
@@ -120,7 +119,9 @@ func (e *Editor) PropertyGridFieldEnum(index int, field GridField, enumValues in
 		selected, _ := box.GetActiveIter()
 		value, _ := opts.GetValue(selected, 0)
 		value2, _ := value.GoValue()
-		field.Value.Elem().SetInt(int64(value2.(int)))
+		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(int64(value2.(int)))}
+		e.NewAction(action)
+		action.Act()
 	})
 
 	e.PropertyGrid.Attach(box, 2, index, 1, 1)
@@ -146,7 +147,9 @@ func (e *Editor) PropertyGridFieldFloat64(index int, field GridField) {
 			e.PropertyGrid.GrabFocus()
 			return
 		}
-		field.Value.Elem().SetFloat(f)
+		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(f)}
+		e.NewAction(action)
+		action.Act()
 		origValue = text
 		e.PropertyGrid.GrabFocus()
 	})
@@ -173,7 +176,9 @@ func (e *Editor) PropertyGridFieldVector2(index int, field GridField) {
 			e.PropertyGrid.GrabFocus()
 			return
 		}
-		field.Value.Elem().Set(reflect.ValueOf(vec))
+		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(vec)}
+		e.NewAction(action)
+		action.Act()
 		origValue = vec.String()
 		e.PropertyGrid.GrabFocus()
 	})

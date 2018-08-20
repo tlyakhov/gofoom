@@ -8,6 +8,7 @@ import (
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 
+	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/render"
 
 	"github.com/tlyakhov/gofoom/concepts"
@@ -34,6 +35,15 @@ type EditorWidgets struct {
 	MapArea      *gtk.DrawingArea
 }
 
+type EditorTool int
+
+const (
+	ToolSelect EditorTool = iota
+	ToolSplitSegment
+	ToolSplitSector
+	TooAddStandardSector
+)
+
 type Editor struct {
 	// What we're editing.
 	GameMap *logic.MapService
@@ -51,10 +61,12 @@ type Editor struct {
 	// Map view filters
 	EntitiesVisible    bool
 	SectorTypesVisible bool
+	EntityTypesVisible bool
 	HoveringObjects    []concepts.ISerializable
 	SelectedObjects    []concepts.ISerializable
 
 	// Should be typed enum, used by actions only?
+	Tool          EditorTool
 	State         string
 	CurrentAction AbstractAction
 	UndoHistory   []AbstractAction
@@ -71,7 +83,8 @@ func NewEditor() *Editor {
 		MapViewState:       MapViewState{Scale: 1.0},
 		Grid:               MapViewGrid{Visible: true},
 		EntitiesVisible:    true,
-		SectorTypesVisible: true,
+		SectorTypesVisible: false,
+		EntityTypesVisible: true,
 	}
 }
 
@@ -100,7 +113,16 @@ func (e *Editor) NewAction(a AbstractAction) {
 }
 
 func (e *Editor) ActTool() {
-
+	switch e.Tool {
+	case ToolSplitSegment:
+	case ToolSplitSector:
+	case TooAddStandardSector:
+		s := &core.PhysicalSector{}
+		s.Initialize()
+		s.SetParent(e.GameMap.Map)
+		e.NewAction(&AddSectorAction{Editor: e, Sector: s})
+		e.CurrentAction.Act()
+	}
 }
 
 func (e *Editor) Undo() {

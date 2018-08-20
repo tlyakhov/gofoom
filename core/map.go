@@ -11,7 +11,7 @@ type Map struct {
 	Sectors        map[string]AbstractSector
 	Materials      map[string]concepts.ISerializable `editable:"Materials" edit_type:"Material"`
 	Player         AbstractEntity
-	Spawn          concepts.Vector3 `editable:"Spawn" edit_type:"Vector"`
+	Spawn          concepts.Vector3 `editable:"Spawn"`
 	EntitiesPaused bool
 }
 

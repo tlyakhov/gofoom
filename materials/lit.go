@@ -7,8 +7,8 @@ import (
 
 type Lit struct {
 	concepts.Base
-	Ambient concepts.Vector3 `editable:"Ambient Color" edit_type:"vector"`
-	Diffuse concepts.Vector3 `editable:"Diffuse Color" edit_type:"vector"`
+	Ambient concepts.Vector3 `editable:"Ambient Color" edit_type:"color"`
+	Diffuse concepts.Vector3 `editable:"Diffuse Color" edit_type:"color"`
 }
 
 func init() {
@@ -17,7 +17,7 @@ func init() {
 
 func (m *Lit) Initialize() {
 	m.Base.Initialize()
-	m.Ambient = concepts.Vector3{}
+	m.Ambient = concepts.Vector3{0.3, 0.3, 0.3}
 	m.Diffuse = concepts.Vector3{1, 1, 1}
 }
 
