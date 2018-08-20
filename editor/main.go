@@ -173,6 +173,30 @@ func onActivate() {
 		delete(gameKeyMap, key.KeyVal())
 	}
 	signals["MapArea.Scroll"] = MapScroll
+	signals["Tools.Toggled"] = func(obj *glib.Object) {
+		active, _ := obj.GetProperty("active")
+		if !active.(bool) {
+			return
+		}
+
+		// We don't have gtk.Buildable available so we can't get the ids. :(
+		switch label, _ := obj.GetProperty("label"); label {
+		case "Select/Move":
+			editor.Tool = ToolSelect
+		case "Split Segment":
+			editor.Tool = ToolSplitSegment
+		case "Split Sector":
+			editor.Tool = ToolSplitSector
+		case "Add Standard Sector":
+			editor.Tool = TooAddStandardSector
+		}
+
+		if editor.CurrentAction != nil {
+			editor.CurrentAction.Cancel()
+		} else {
+			editor.ActTool()
+		}
+	}
 	builder.ConnectSignals(signals)
 
 	glib.TimeoutAdd(15, EditorTimer, editor.Window)

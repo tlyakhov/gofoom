@@ -26,7 +26,7 @@
           <object class="GtkPaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">61</property>
+            <property name="position">80</property>
             <property name="position_set">True</property>
             <child>
               <object class="GtkToolPalette">
@@ -34,6 +34,76 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolItemGroup">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">Tools</property>
+                    <child>
+                      <object class="GtkRadioToolButton" id="ToolSelect">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text">Select/Move</property>
+                        <property name="label">Select/Move</property>
+                        <property name="icon_name">view-fullscreen</property>
+                        <property name="active">True</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="ToolSplitSegment">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text">Split Segment</property>
+                        <property name="label">Split Segment</property>
+                        <property name="icon_name">applications-accessories</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="ToolSplitSector">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text">Split Sector</property>
+                        <property name="label">Split Sector</property>
+                        <property name="icon_name">document-page-setup</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolItemGroup">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">Sectors</property>
+                    <child>
+                      <object class="GtkRadioToolButton" id="AddStandardSector">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text">Add Standard Sector</property>
+                        <property name="label">Add Standard Sector</property>
+                        <property name="icon_name">insert-object</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="resize">True</property>

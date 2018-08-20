@@ -153,6 +153,7 @@ func (s *PhysicalSectorService) UpdateEntityPVS(normal concepts.Vector2, s2 core
 }
 
 func (s *PhysicalSectorService) Recalculate() {
+	s.PhysicalSector.Recalculate()
 	s.UpdatePVS(concepts.ZeroVector2, nil)
 	s.UpdateEntityPVS(concepts.ZeroVector2, nil)
 }

@@ -4,8 +4,17 @@ import (
 	"reflect"
 
 	"github.com/gotk3/gotk3/cairo"
+	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/core"
 )
+
+func DrawHandle(cr *cairo.Context, v concepts.Vector2) {
+	v = editor.WorldToScreen(v)
+	v1 := editor.ScreenToWorld(v.Sub(concepts.Vector2{3, 3}))
+	v2 := editor.ScreenToWorld(v.Add(concepts.Vector2{3, 3}))
+	cr.Rectangle(v1.X, v1.Y, v2.X-v1.X, v2.Y-v1.Y)
+	cr.Stroke()
+}
 
 func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 	phys := sector.Physical()
