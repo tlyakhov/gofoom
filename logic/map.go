@@ -57,7 +57,7 @@ func (m *MapService) Frame(lastFrameTime float64) {
 			}
 			for _, pvs := range sector.Physical().PVSEntity {
 				_ = pvs
-				//pvs.ActOnEntity(e)
+				provide.Interactor.For(pvs).ActOnEntity(e)
 			}
 		}
 		provide.SectorAnimator.For(sector).Frame(lastFrameTime)

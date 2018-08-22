@@ -67,6 +67,7 @@ func (a *MoveAction) Act() {
 			}
 			if _, ok := target.(*entities.Light); ok {
 				a.GameMap.ClearLightmaps()
+				a.GameMap.Recalculate()
 			}
 		}
 	}

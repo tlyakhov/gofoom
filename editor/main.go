@@ -31,7 +31,7 @@ const (
 var (
 	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
 	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
-	ColorPVS                = concepts.Vector3{0.6, 1, 0.6}
+	ColorPVS                = concepts.Vector3{0.9, 1, 0.9}
 	editor                  = NewEditor()
 	gameKeyMap              = make(map[uint]bool)
 	last                    = time.Now()
@@ -89,10 +89,6 @@ func EditorTimer(win *gtk.ApplicationWindow) bool {
 }
 
 func setupMenu() {
-	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
-	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.Undo() })
-	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.Redo() })
-
 	menuBuilder, err := gtk.BuilderNew()
 	if err != nil {
 		log.Fatal("Can't create GTK+ builder.", err)
@@ -106,7 +102,6 @@ func setupMenu() {
 		log.Fatal("Can't find Menu object in GTK+ menu UI file.", err)
 	}
 
-	//editor.App.SetAppMenu(&menu.(*glib.Menu).MenuModel)
 	editor.App.SetMenubar(&menu.(*glib.Menu).MenuModel)
 }
 
@@ -139,6 +134,35 @@ func onActivate() {
 		log.Fatal("Can't find PropertyGrid object in GTK+ UI file.", err)
 	}
 	editor.PropertyGrid = obj.(*gtk.Grid)
+
+	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
+	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.Undo() })
+	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.Redo() })
+	editor.AddSimpleMenuAction("tool.select", func(obj *glib.Object) {
+		editor.SwitchTool(ToolSelect)
+		tool, _ := builder.GetObject("ToolSelect")
+		tool.(*gtk.RadioButton).SetProperty("active", true)
+	})
+	editor.AddSimpleMenuAction("tool.raise.ceil", func(obj *glib.Object) {
+		action := &MoveSurfaceAction{Editor: editor, Delta: 2, Floor: false}
+		editor.NewAction(action)
+		action.Act()
+	})
+	editor.AddSimpleMenuAction("tool.lower.ceil", func(obj *glib.Object) {
+		action := &MoveSurfaceAction{Editor: editor, Delta: -2, Floor: false}
+		editor.NewAction(action)
+		action.Act()
+	})
+	editor.AddSimpleMenuAction("tool.raise.floor", func(obj *glib.Object) {
+		action := &MoveSurfaceAction{Editor: editor, Delta: 2, Floor: true}
+		editor.NewAction(action)
+		action.Act()
+	})
+	editor.AddSimpleMenuAction("tool.lower.floor", func(obj *glib.Object) {
+		action := &MoveSurfaceAction{Editor: editor, Delta: -2, Floor: true}
+		editor.NewAction(action)
+		action.Act()
+	})
 
 	setupMenu()
 	editor.Window.SetApplication(editor.App)
@@ -182,19 +206,13 @@ func onActivate() {
 		// We don't have gtk.Buildable available so we can't get the ids. :(
 		switch label, _ := obj.GetProperty("label"); label {
 		case "Select/Move":
-			editor.Tool = ToolSelect
+			editor.SwitchTool(ToolSelect)
 		case "Split Segment":
-			editor.Tool = ToolSplitSegment
+			editor.SwitchTool(ToolSplitSegment)
 		case "Split Sector":
-			editor.Tool = ToolSplitSector
+			editor.SwitchTool(ToolSplitSector)
 		case "Add Standard Sector":
-			editor.Tool = TooAddStandardSector
-		}
-
-		if editor.CurrentAction != nil {
-			editor.CurrentAction.Cancel()
-		} else {
-			editor.ActTool()
+			editor.SwitchTool(ToolAddStandardSector)
 		}
 	}
 	builder.ConnectSignals(signals)

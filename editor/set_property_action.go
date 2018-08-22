@@ -26,6 +26,7 @@ func (a *SetPropertyAction) Act() {
 		field.Elem().Set(a.ToSet)
 	}
 	a.RefreshPropertyGrid()
+	a.ActionFinished()
 }
 
 func (a *SetPropertyAction) Undo() {
