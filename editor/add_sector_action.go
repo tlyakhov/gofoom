@@ -16,6 +16,7 @@ type AddSectorAction struct {
 }
 
 func (a *AddSectorAction) Act() {
+	a.SetMapCursor("crosshair")
 	a.State = "AddSector"
 	a.SelectObjects([]concepts.ISerializable{a.Sector})
 	//set cursor
@@ -23,6 +24,7 @@ func (a *AddSectorAction) Act() {
 
 func (a *AddSectorAction) Cancel() {
 	a.RemoveFromMap()
+	a.Sector.Physical().Segments = []*core.Segment{}
 	a.SelectObjects([]concepts.ISerializable{})
 	if index := len(a.UndoHistory) - 1; index >= 0 {
 		a.UndoHistory = a.UndoHistory[:index]

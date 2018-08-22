@@ -87,6 +87,31 @@
                     <attribute name="accel">&lt;Primary&gt;Page_Down</attribute>
                     <attribute name="action">app.tool.lower.floor</attribute>
                 </item>
+
+                <item>
+                    <attribute name="label" translatable="yes">Raise Selection Ceiling Slope</attribute>
+                    <attribute name="icon">go-top</attribute>
+                    <attribute name="accel">bracketright</attribute>
+                    <attribute name="action">app.tool.raise.ceil.slope</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Lower Selection Ceiling Slope</attribute>
+                    <attribute name="icon">go-down</attribute>
+                    <attribute name="accel">bracketleft</attribute>
+                    <attribute name="action">app.tool.lower.ceil.slope</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Raise Selection Floor Slope</attribute>
+                    <attribute name="icon">go-up</attribute>
+                    <attribute name="accel">&lt;Primary&gt;bracketright</attribute>
+                    <attribute name="action">app.tool.raise.floor.slope</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Lower Selection Floor Slope</attribute>
+                    <attribute name="icon">go-bottom</attribute>
+                    <attribute name="accel">&lt;Primary&gt;bracketleft</attribute>
+                    <attribute name="action">app.tool.lower.floor.slope</attribute>
+                </item>
             </section>
         </submenu>
     </menu>

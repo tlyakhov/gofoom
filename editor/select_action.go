@@ -28,7 +28,7 @@ func (a *SelectAction) OnMouseDown(button *gdk.EventButton) {
 	}
 
 	a.State = "SelectionStart"
-	// SetCursor
+	a.SetMapCursor("cell")
 }
 
 func (a *SelectAction) OnMouseMove() {

@@ -12,8 +12,6 @@ type Vector3 struct {
 	X, Y, Z float64
 }
 
-var ZeroVector3 = Vector3{}
-
 // Add a vector to a vector.
 func (v Vector3) Add(v2 Vector3) Vector3 {
 	return Vector3{v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z}
@@ -83,27 +81,32 @@ func (v Vector3) To2D() Vector2 {
 }
 
 // Deserialize assigns this vector's fields from a parsed JSON map.
-func (vec *Vector3) Deserialize(data map[string]interface{}) {
-	if v, ok := data["X"]; ok {
-		vec.X = v.(float64)
+func (v *Vector3) Deserialize(data map[string]interface{}) {
+	if val, ok := data["X"]; ok {
+		v.X = val.(float64)
 	}
-	if v, ok := data["Y"]; ok {
-		vec.Y = v.(float64)
+	if val, ok := data["Y"]; ok {
+		v.Y = val.(float64)
 	}
-	if v, ok := data["Z"]; ok {
-		vec.Z = v.(float64)
+	if val, ok := data["Z"]; ok {
+		v.Z = val.(float64)
 	}
 }
 
-func (vec Vector3) ToInt32Color() uint32 {
-	return uint32(vec.X)<<24 | uint32(vec.Y)<<16 | uint32(vec.Z)<<8 | 0xFF
+func (v Vector3) ToInt32Color() uint32 {
+	return uint32(v.X)<<24 | uint32(v.Y)<<16 | uint32(v.Z)<<8 | 0xFF
+}
+
+// Cross computes the cross product of two vectors.
+func (v Vector3) Cross(vec2 Vector3) Vector3 {
+	return Vector3{v.Y*vec2.Z - v.Z*vec2.Y, v.Z*vec2.X - v.X*vec2.Z, v.X*vec2.Y - v.Y*vec2.X}
 }
 
 // String formats the vector as a string
-func (vec Vector3) String() string {
-	return strconv.FormatFloat(vec.X, 'f', -1, 64) + ", " +
-		strconv.FormatFloat(vec.Y, 'f', -1, 64) + ", " +
-		strconv.FormatFloat(vec.Z, 'f', -1, 64)
+func (v Vector3) String() string {
+	return strconv.FormatFloat(v.X, 'f', -1, 64) + ", " +
+		strconv.FormatFloat(v.Y, 'f', -1, 64) + ", " +
+		strconv.FormatFloat(v.Z, 'f', -1, 64)
 }
 
 // ParseVector3 parses strings in the form "X, Y, Z" into vectors.

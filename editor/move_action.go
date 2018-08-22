@@ -19,6 +19,8 @@ type MoveAction struct {
 }
 
 func (a *MoveAction) OnMouseDown(button *gdk.EventButton) {
+	a.SetMapCursor("move")
+
 	a.Selected = make([]concepts.ISerializable, len(a.SelectedObjects))
 	a.Original = make([]concepts.Vector3, len(a.SelectedObjects))
 	copy(a.Selected, a.SelectedObjects)

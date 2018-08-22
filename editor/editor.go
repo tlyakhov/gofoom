@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"unsafe"
 
+	"github.com/gotk3/gotk3/gdk"
+
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
@@ -96,8 +98,19 @@ func (e *Editor) WorldToScreen(p concepts.Vector2) concepts.Vector2 {
 	return p.Sub(e.Pos).Mul(e.Scale).Add(e.MapViewSize.Mul(0.5))
 }
 
+func (e *Editor) SetMapCursor(name string) {
+	win, _ := e.MapArea.GetWindow()
+	if name == "" {
+		win.SetCursor(nil)
+		return
+	}
+	dis, _ := gdk.DisplayGetDefault()
+	cursor, _ := gdk.CursorNewFromName(dis, name)
+	win.SetCursor(cursor)
+}
+
 func (e *Editor) ActionFinished() {
-	// Set Cursor
+	e.SetMapCursor("")
 	e.State = "Idle"
 	e.CurrentAction = nil
 	e.ActTool()
@@ -142,6 +155,10 @@ func (e *Editor) Undo() {
 		return
 	}
 	a := e.UndoHistory[index]
+	// Don't undo the current action!
+	if a == e.CurrentAction {
+		return
+	}
 	e.UndoHistory = e.UndoHistory[:index]
 	if a == nil {
 		return
@@ -156,6 +173,10 @@ func (e *Editor) Redo() {
 		return
 	}
 	a := e.RedoHistory[index]
+	// Don't redo the current action!
+	if a == e.CurrentAction {
+		return
+	}
 	e.RedoHistory = e.RedoHistory[:index]
 	if a == nil {
 		return
@@ -271,4 +292,10 @@ func (e *Editor) AddSimpleMenuAction(name string, cb func(obj *glib.Object)) {
 	action := glib.SimpleActionNew(name, nil)
 	action.Connect("activate", cb)
 	e.App.AddAction(action)
+}
+
+func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
+	action := &MoveSurfaceAction{Editor: e, Delta: delta, Floor: floor, Slope: slope}
+	e.NewAction(action)
+	action.Act()
 }

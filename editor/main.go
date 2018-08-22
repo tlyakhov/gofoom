@@ -143,26 +143,14 @@ func onActivate() {
 		tool, _ := builder.GetObject("ToolSelect")
 		tool.(*gtk.RadioButton).SetProperty("active", true)
 	})
-	editor.AddSimpleMenuAction("tool.raise.ceil", func(obj *glib.Object) {
-		action := &MoveSurfaceAction{Editor: editor, Delta: 2, Floor: false}
-		editor.NewAction(action)
-		action.Act()
-	})
-	editor.AddSimpleMenuAction("tool.lower.ceil", func(obj *glib.Object) {
-		action := &MoveSurfaceAction{Editor: editor, Delta: -2, Floor: false}
-		editor.NewAction(action)
-		action.Act()
-	})
-	editor.AddSimpleMenuAction("tool.raise.floor", func(obj *glib.Object) {
-		action := &MoveSurfaceAction{Editor: editor, Delta: 2, Floor: true}
-		editor.NewAction(action)
-		action.Act()
-	})
-	editor.AddSimpleMenuAction("tool.lower.floor", func(obj *glib.Object) {
-		action := &MoveSurfaceAction{Editor: editor, Delta: -2, Floor: true}
-		editor.NewAction(action)
-		action.Act()
-	})
+	editor.AddSimpleMenuAction("tool.raise.ceil", func(obj *glib.Object) { editor.MoveSurface(2, false, false) })
+	editor.AddSimpleMenuAction("tool.lower.ceil", func(obj *glib.Object) { editor.MoveSurface(-2, false, false) })
+	editor.AddSimpleMenuAction("tool.raise.floor", func(obj *glib.Object) { editor.MoveSurface(2, true, false) })
+	editor.AddSimpleMenuAction("tool.lower.floor", func(obj *glib.Object) { editor.MoveSurface(-2, true, false) })
+	editor.AddSimpleMenuAction("tool.raise.ceil.slope", func(obj *glib.Object) { editor.MoveSurface(0.05, false, true) })
+	editor.AddSimpleMenuAction("tool.lower.ceil.slope", func(obj *glib.Object) { editor.MoveSurface(-0.05, false, true) })
+	editor.AddSimpleMenuAction("tool.raise.floor.slope", func(obj *glib.Object) { editor.MoveSurface(0.05, true, true) })
+	editor.AddSimpleMenuAction("tool.lower.floor.slope", func(obj *glib.Object) { editor.MoveSurface(-0.05, true, true) })
 
 	setupMenu()
 	editor.Window.SetApplication(editor.App)

@@ -18,12 +18,15 @@ type PhysicalSector struct {
 	TopZ          float64                `editable:"Ceiling Height"`
 	FloorScale    float64                `editable:"Floor Material Scale"`
 	CeilScale     float64                `editable:"Ceiling Material Scale"`
+	FloorSlope    float64                `editable:"Floor Slope"`
+	CeilSlope     float64                `editable:"Ceiling Slope"`
 	FloorTarget   AbstractSector         `editable:"Floor Target"`
 	CeilTarget    AbstractSector         `editable:"Ceiling Target"`
 	FloorMaterial concepts.ISerializable `editable:"Floor Material"`
 	CeilMaterial  concepts.ISerializable `editable:"Ceiling Material"`
 
 	Min, Max, Center              concepts.Vector3
+	FloorNormal, CeilNormal       concepts.Vector3
 	LightmapWidth, LightmapHeight uint32
 	FloorLightmap, CeilLightmap   []concepts.Vector3
 	PVS                           map[string]AbstractSector
@@ -144,6 +147,26 @@ func (s *PhysicalSector) Recalculate() {
 		}
 	}
 
+	if len(s.Segments) > 0 {
+		sloped := s.Segments[0].Normal.To3D()
+		delta := s.Segments[0].B.Sub(s.Segments[0].A).To3D()
+		sloped.Z = s.FloorSlope
+		s.FloorNormal = sloped.Cross(delta).Norm()
+		if s.FloorNormal.Z < 0 {
+			s.FloorNormal.X = -s.FloorNormal.X
+			s.FloorNormal.Y = -s.FloorNormal.Y
+			s.FloorNormal.Z = -s.FloorNormal.Z
+		}
+		sloped = s.Segments[0].Normal.To3D()
+		sloped.Z = s.CeilSlope
+		s.CeilNormal = sloped.Cross(delta).Norm()
+		if s.CeilNormal.Z > 0 {
+			s.CeilNormal.X = -s.CeilNormal.X
+			s.CeilNormal.Y = -s.CeilNormal.Y
+			s.CeilNormal.Z = -s.CeilNormal.Z
+		}
+	}
+
 	s.Center = s.Center.Mul(1.0 / float64(len(s.Segments)))
 
 	if ph, ok := s.FloorTarget.(*PlaceholderSector); ok {
@@ -176,6 +199,35 @@ func (s *PhysicalSector) ClearLightmaps() {
 	for _, segment := range s.Segments {
 		segment.ClearLightmap()
 	}
+}
+
+// CalcFloorCeilingZ figures out the current slice Z values accounting for slope.
+func (s *PhysicalSector) CalcFloorCeilingZ(isect concepts.Vector2) (floorZ float64, ceilZ float64) {
+	dist := 0.0
+	if s.FloorSlope != 0 || s.CeilSlope != 0 {
+		first := s.Segments[0]
+		length2 := first.A.Dist2(first.B)
+		if length2 == 0 {
+			dist = isect.Dist2(first.A)
+		} else {
+			delta := first.B.Sub(first.A)
+			t := isect.Sub(first.A).Dot(delta) / length2
+			dist = isect.Dist(first.A.Add(delta.Mul(t)))
+		}
+	}
+
+	if s.FloorSlope == 0 {
+		floorZ = s.BottomZ
+	} else {
+		floorZ = s.BottomZ + s.FloorSlope*dist
+	}
+
+	if s.CeilSlope == 0 {
+		ceilZ = s.TopZ
+	} else {
+		ceilZ = s.TopZ + s.CeilSlope*dist
+	}
+	return
 }
 
 func (s *PhysicalSector) LightmapAddress(p concepts.Vector2) uint32 {

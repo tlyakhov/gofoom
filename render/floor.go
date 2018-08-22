@@ -12,23 +12,26 @@ import (
 func Floor(s *state.Slice) {
 	mat := material.For(s.PhysicalSector.FloorMaterial, s)
 
-	world := concepts.Vector3{0, 0, s.PhysicalSector.BottomZ}
+	planeRayDelta := s.PhysicalSector.Segments[0].A.Sub(s.Ray.Start).To3D()
+	planeRayDelta.Z = s.PhysicalSector.BottomZ - s.CameraZ
 
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
-		if s.Y-s.ScreenHeight/2 == 0 {
+		rayDir := concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], float64(s.ScreenHeight/2 - s.Y)} //.Norm()
+		denom := s.PhysicalSector.FloorNormal.Dot(rayDir)
+
+		if math.Abs(denom) == 0 {
 			continue
 		}
 
-		distToFloor := (-s.PhysicalSector.BottomZ + s.CameraZ) * s.ViewFix[s.X] / float64(s.Y-s.ScreenHeight/2)
+		t := planeRayDelta.Dot(s.PhysicalSector.FloorNormal) / denom
+		world := concepts.Vector3{s.Ray.Start.X, s.Ray.Start.Y, s.CameraZ}.Add(rayDir.Mul(t))
+		distToFloor := world.Length()
 		scaler := s.PhysicalSector.FloorScale / distToFloor
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToFloor >= s.ZBuffer[screenIndex] {
 			continue
 		}
-
-		world.X = s.Map.Player.Physical().Pos.X + s.AngleCos*distToFloor
-		world.Y = s.Map.Player.Physical().Pos.Y + s.AngleSin*distToFloor
 
 		tx := world.X / s.PhysicalSector.FloorScale
 		tx -= math.Floor(tx)
@@ -42,7 +45,7 @@ func Floor(s *state.Slice) {
 		}
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, state.FloorNormal, 0, 0), scaler))
+			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, s.PhysicalSector.FloorNormal, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor
 	}

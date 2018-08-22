@@ -14,7 +14,7 @@ type PanAction struct {
 func (a *PanAction) OnMouseDown(button *gdk.EventButton) {
 	a.State = "PanStart"
 	a.OriginalPos = a.Pos
-	// Set Cursor all-scroll
+	a.SetMapCursor("all-scroll")
 }
 
 func (a *PanAction) OnMouseMove() {
