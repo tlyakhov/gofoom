@@ -7,9 +7,9 @@ import (
 	"fmt"
 )
 
-const _MaterialBehaviorName = "ScaleHeightScaleWidthScaleAllScaleNone"
+const _MaterialBehaviorName = "ScaleNoneScaleHeightScaleWidthScaleAll"
 
-var _MaterialBehaviorIndex = [...]uint8{0, 11, 21, 29, 38}
+var _MaterialBehaviorIndex = [...]uint8{0, 9, 20, 30, 38}
 
 func (i MaterialBehavior) String() string {
 	if i < 0 || i >= MaterialBehavior(len(_MaterialBehaviorIndex)-1) {
@@ -21,10 +21,10 @@ func (i MaterialBehavior) String() string {
 var _MaterialBehaviorValues = []MaterialBehavior{0, 1, 2, 3}
 
 var _MaterialBehaviorNameToValueMap = map[string]MaterialBehavior{
-	_MaterialBehaviorName[0:11]:  0,
-	_MaterialBehaviorName[11:21]: 1,
-	_MaterialBehaviorName[21:29]: 2,
-	_MaterialBehaviorName[29:38]: 3,
+	_MaterialBehaviorName[0:9]:   0,
+	_MaterialBehaviorName[9:20]:  1,
+	_MaterialBehaviorName[20:30]: 2,
+	_MaterialBehaviorName[30:38]: 3,
 }
 
 // MaterialBehaviorString retrieves an enum value from the enum constants string name.

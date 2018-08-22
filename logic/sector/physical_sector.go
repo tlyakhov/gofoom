@@ -30,27 +30,30 @@ func (s *PhysicalSectorService) OnExit(e core.AbstractEntity) {
 func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 	concrete := e.Physical()
 	entityTop := concrete.Pos.Z + concrete.Height
+	floorZ, ceilZ := s.CalcFloorCeilingZ(concrete.Pos.To2D())
 
-	if s.FloorTarget != nil && entityTop < s.BottomZ {
-		provide.Passer.For(e.GetSector()).OnExit(e)
+	if s.FloorTarget != nil && entityTop < floorZ {
+		provide.Passer.For(concrete.Sector).OnExit(e)
 		concrete.Sector = s.FloorTarget
-		provide.Passer.For(e.GetSector()).OnEnter(e)
-		concrete.Pos.Z = e.GetSector().Physical().TopZ - concrete.Height - 1.0
-	} else if s.FloorTarget != nil && concrete.Pos.Z <= s.BottomZ && concrete.Vel.Z > 0 {
+		provide.Passer.For(concrete.Sector).OnEnter(e)
+		floorZ, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.To2D())
+		concrete.Pos.Z = ceilZ - concrete.Height - 1.0
+	} else if s.FloorTarget != nil && concrete.Pos.Z <= floorZ && concrete.Vel.Z > 0 {
 		concrete.Vel.Z = constants.PlayerJumpStrength
-	} else if s.FloorTarget == nil && concrete.Pos.Z <= s.BottomZ {
+	} else if s.FloorTarget == nil && concrete.Pos.Z <= floorZ {
 		concrete.Vel.Z = 0
-		concrete.Pos.Z = s.BottomZ
+		concrete.Pos.Z = floorZ
 	}
 
-	if s.CeilTarget != nil && entityTop > s.TopZ {
-		provide.Passer.For(e.GetSector()).OnExit(e)
+	if s.CeilTarget != nil && entityTop > ceilZ {
+		provide.Passer.For(concrete.Sector).OnExit(e)
 		concrete.Sector = s.CeilTarget
-		provide.Passer.For(e.GetSector()).OnEnter(e)
-		concrete.Pos.Z = e.GetSector().Physical().BottomZ - concrete.Height + 1.0
-	} else if s.CeilTarget == nil && entityTop > s.TopZ {
+		provide.Passer.For(concrete.Sector).OnEnter(e)
+		floorZ, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.To2D())
+		concrete.Pos.Z = floorZ - concrete.Height + 1.0
+	} else if s.CeilTarget == nil && entityTop > ceilZ {
 		concrete.Vel.Z = 0
-		concrete.Pos.Z = s.TopZ - concrete.Height - 1.0
+		concrete.Pos.Z = ceilZ - concrete.Height - 1.0
 	}
 }
 
@@ -100,9 +103,11 @@ func (s *PhysicalSectorService) UpdatePVS(normal concepts.Vector2, s2 core.Abstr
 	}
 	for _, seg := range s2.Physical().Segments {
 		adj := seg.AdjacentSegment
-		if adj == nil ||
-			math.Abs(adj.Sector.Physical().TopZ-adj.Sector.Physical().BottomZ) < constants.VelocityEpsilon ||
-			seg.AdjacentSegment.MidMaterial != nil {
+		if adj == nil {
+			continue
+		}
+		floorZ, ceilZ := adj.Sector.Physical().CalcFloorCeilingZ(seg.A)
+		if math.Abs(ceilZ-floorZ) < constants.VelocityEpsilon || adj.MidMaterial != nil {
 			continue
 		}
 
@@ -137,14 +142,14 @@ func (s *PhysicalSectorService) UpdateEntityPVS(normal concepts.Vector2, s2 core
 		if adj == nil || adj.MidMaterial != nil {
 			continue
 		}
-		correctSide := normal == concepts.ZeroVector2 || normal.Dot(seg.Normal) >= 0
+		correctSide := normal == concepts.Vector2{} || normal.Dot(seg.Normal) >= 0
 		if !correctSide || s.PVSEntity[adj.Sector.GetBase().ID] != nil {
 			continue
 		}
 
 		s.PVSEntity[seg.AdjacentSector.GetBase().ID] = seg.AdjacentSector
 
-		if normal == concepts.ZeroVector2 {
+		if (normal == concepts.Vector2{}) {
 			s.UpdateEntityPVS(seg.Normal, seg.AdjacentSector)
 		} else {
 			s.UpdateEntityPVS(normal, seg.AdjacentSector)

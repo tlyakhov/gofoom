@@ -20,9 +20,6 @@ type Config struct {
 	ZBuffer                   []float64
 }
 
-var FloorNormal concepts.Vector3 = concepts.Vector3{0, 0, 1}
-var CeilingNormal concepts.Vector3 = concepts.Vector3{0, 0, -1}
-
 func (c *Config) Initialize() {
 	c.CameraToProjectionPlane = (float64(c.ScreenWidth) / 2.0) / math.Tan(c.FOV*concepts.Deg2rad/2.0)
 	c.ViewRadians = make([]float64, c.ScreenWidth)

@@ -11,24 +11,26 @@ import (
 // Ceiling renders the ceiling portion of a slice.
 func Ceiling(s *state.Slice) {
 	mat := material.For(s.PhysicalSector.CeilMaterial, s)
-
-	world := concepts.Vector3{0, 0, s.PhysicalSector.TopZ}
+	planeRayDelta := s.PhysicalSector.Segments[0].A.Sub(s.Ray.Start).To3D()
+	planeRayDelta.Z = s.PhysicalSector.TopZ - s.CameraZ
 
 	for s.Y = s.YStart; s.Y < s.ClippedStart; s.Y++ {
-		if s.Y-s.ScreenHeight/2 == 0 {
+		rayDir := concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], float64(s.ScreenHeight/2 - 1 - s.Y)}
+		denom := s.PhysicalSector.CeilNormal.Dot(rayDir)
+
+		if math.Abs(denom) == 0 {
 			continue
 		}
 
-		distToCeil := (s.PhysicalSector.TopZ - s.CameraZ) * s.ViewFix[s.X] / float64(s.ScreenHeight/2-1-s.Y)
+		t := planeRayDelta.Dot(s.PhysicalSector.CeilNormal) / denom
+		world := concepts.Vector3{s.Ray.Start.X, s.Ray.Start.Y, s.CameraZ}.Add(rayDir.Mul(t))
+		distToCeil := world.Length()
 		scaler := s.PhysicalSector.CeilScale / distToCeil
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToCeil >= s.ZBuffer[screenIndex] {
 			continue
 		}
-
-		world.X = s.Map.Player.Physical().Pos.X + s.AngleCos*distToCeil
-		world.Y = s.Map.Player.Physical().Pos.Y + s.AngleSin*distToCeil
 
 		tx := world.X / s.PhysicalSector.CeilScale
 		tx -= math.Floor(tx)
@@ -38,7 +40,7 @@ func Ceiling(s *state.Slice) {
 		ty = math.Abs(ty)
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, state.CeilingNormal, 0, 0), scaler))
+			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, s.PhysicalSector.CeilNormal, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToCeil
 	}

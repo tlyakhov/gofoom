@@ -57,7 +57,9 @@ func (le *LightElement) markVisibleLight(p concepts.Vector3, e *core.PhysicalEnt
 			} else if ok && seg.AdjacentSector == nil {
 				delete(le.VisibleLights, e.ID)
 				continue
-			} else if isect.Z < sector.BottomZ && isect.Z > sector.TopZ {
+			}
+			floorZ, ceilZ := sector.CalcFloorCeilingZ(isect.To2D())
+			if isect.Z < floorZ && isect.Z > ceilZ {
 				delete(le.VisibleLights, e.ID)
 				continue
 			}
@@ -116,7 +118,7 @@ func (le *LightElement) Calculate(world concepts.Vector3) {
 	}
 
 	le.MarkVisibleLights(p)
-	diffuseSum := concepts.ZeroVector3
+	diffuseSum := concepts.Vector3{}
 
 	for _, lightEntity := range le.Sector.PVSLights {
 		if !lightEntity.Physical().Active {

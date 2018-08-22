@@ -29,6 +29,8 @@ type Slice struct {
 	U                  float64
 	Depth              int
 	CameraZ            float64
+	FloorZ             float64
+	CeilZ              float64
 	ProjHeightTop      float64
 	ProjHeightBottom   float64
 	ScreenStart        int
@@ -44,8 +46,9 @@ func (s *Slice) ProjectZ(z float64) float64 {
 
 func (s *Slice) CalcScreen() {
 	// Screen slice precalculation
-	s.ProjHeightTop = s.ProjectZ(s.PhysicalSector.TopZ - s.CameraZ)
-	s.ProjHeightBottom = s.ProjectZ(s.PhysicalSector.BottomZ - s.CameraZ)
+	s.FloorZ, s.CeilZ = s.PhysicalSector.CalcFloorCeilingZ(s.Intersection.To2D())
+	s.ProjHeightTop = s.ProjectZ(s.CeilZ - s.CameraZ)
+	s.ProjHeightBottom = s.ProjectZ(s.FloorZ - s.CameraZ)
 
 	s.ScreenStart = s.ScreenHeight/2 - int(s.ProjHeightTop)
 	s.ScreenEnd = s.ScreenHeight/2 - int(s.ProjHeightBottom)

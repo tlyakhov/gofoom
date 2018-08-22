@@ -16,12 +16,12 @@ func WallHi(s *state.SlicePortal) {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
-		s.Intersection.Z = s.PhysicalSector.TopZ - v*(s.PhysicalSector.TopZ-s.Adj.Physical().TopZ)
+		s.Intersection.Z = s.CeilZ - v*(s.CeilZ-s.AdjCeilZ)
 
 		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, v*0.5)
 
-		if s.Segment.HiBehavior == core.ScaleHeight || s.Segment.HiBehavior == core.ScaleAll {
-			v = (s.Adj.Physical().TopZ - v*(s.Adj.Physical().TopZ-s.PhysicalSector.TopZ)) / 64.0
+		if s.Segment.HiBehavior == core.ScaleWidth || s.Segment.HiBehavior == core.ScaleNone {
+			v = (s.AdjCeilZ - v*(s.AdjCeilZ-s.CeilZ)) / 64.0
 		}
 
 		u := s.U
@@ -46,11 +46,11 @@ func WallLow(s *state.SlicePortal) {
 			continue
 		}
 		v := float64(s.Y-s.AdjClippedBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
-		s.Intersection.Z = s.Adj.Physical().BottomZ - v*(s.Adj.Physical().BottomZ-s.PhysicalSector.BottomZ)
+		s.Intersection.Z = s.AdjFloorZ - v*(s.AdjFloorZ-s.FloorZ)
 		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, v*0.5+0.5)
 
-		if s.Segment.LoBehavior == core.ScaleHeight || s.Segment.LoBehavior == core.ScaleAll {
-			v = (v*(s.PhysicalSector.BottomZ-s.Adj.Physical().BottomZ) - s.PhysicalSector.BottomZ) / 64.0
+		if s.Segment.LoBehavior == core.ScaleWidth || s.Segment.LoBehavior == core.ScaleNone {
+			v = (v*(s.FloorZ-s.AdjFloorZ) - s.FloorZ) / 64.0
 		}
 
 		u := s.U

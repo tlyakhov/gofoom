@@ -11,19 +11,22 @@ type SlicePortal struct {
 	AdjSegment          *core.Segment
 	AdjProjHeightTop    float64
 	AdjProjHeightBottom float64
+	AdjFloorZ           float64
+	AdjCeilZ            float64
 	AdjScreenTop        int
 	AdjScreenBottom     int
 	AdjClippedTop       int
 	AdjClippedBottom    int
 }
 
-func (slice *SlicePortal) CalcScreen() {
-	slice.Adj = slice.Segment.AdjacentSector
-	slice.AdjSegment = slice.Segment.AdjacentSegment
-	slice.AdjProjHeightTop = slice.ProjectZ(slice.Adj.Physical().TopZ - slice.CameraZ)
-	slice.AdjProjHeightBottom = slice.ProjectZ(slice.Adj.Physical().BottomZ - slice.CameraZ)
-	slice.AdjScreenTop = slice.ScreenHeight/2 - int(slice.AdjProjHeightTop)
-	slice.AdjScreenBottom = slice.ScreenHeight/2 - int(slice.AdjProjHeightBottom)
-	slice.AdjClippedTop = concepts.IntClamp(slice.AdjScreenTop, slice.ClippedStart, slice.ClippedEnd)
-	slice.AdjClippedBottom = concepts.IntClamp(slice.AdjScreenBottom, slice.ClippedStart, slice.ClippedEnd)
+func (s *SlicePortal) CalcScreen() {
+	s.Adj = s.Segment.AdjacentSector
+	s.AdjSegment = s.Segment.AdjacentSegment
+	s.AdjFloorZ, s.AdjCeilZ = s.Adj.Physical().CalcFloorCeilingZ(s.Intersection.To2D())
+	s.AdjProjHeightTop = s.ProjectZ(s.AdjCeilZ - s.CameraZ)
+	s.AdjProjHeightBottom = s.ProjectZ(s.AdjFloorZ - s.CameraZ)
+	s.AdjScreenTop = s.ScreenHeight/2 - int(s.AdjProjHeightTop)
+	s.AdjScreenBottom = s.ScreenHeight/2 - int(s.AdjProjHeightBottom)
+	s.AdjClippedTop = concepts.IntClamp(s.AdjScreenTop, s.ClippedStart, s.ClippedEnd)
+	s.AdjClippedBottom = concepts.IntClamp(s.AdjScreenBottom, s.ClippedStart, s.ClippedEnd)
 }
