@@ -21,7 +21,7 @@ func WallMid(s *state.Slice) {
 
 		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, v)
 
-		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
+		if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleAll {
 			v = (v*(s.PhysicalSector.TopZ-s.PhysicalSector.BottomZ) - s.PhysicalSector.TopZ) / 64.0
 		}
 

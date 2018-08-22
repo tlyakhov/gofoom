@@ -14,8 +14,8 @@ type PhysicalSector struct {
 	Map           *Map
 	Segments      []*Segment
 	Entities      map[string]AbstractEntity
-	BottomZ       float64                `editable:"Bottom Z"`
-	TopZ          float64                `editable:"Top Z"`
+	BottomZ       float64                `editable:"Floor Height"`
+	TopZ          float64                `editable:"Ceiling Height"`
 	FloorScale    float64                `editable:"Floor Material Scale"`
 	CeilScale     float64                `editable:"Ceiling Material Scale"`
 	FloorTarget   AbstractSector         `editable:"Floor Target"`

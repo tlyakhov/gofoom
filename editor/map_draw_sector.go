@@ -37,6 +37,10 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 	for i, segment := range phys.Segments {
 		next := phys.Segments[(i+1)%len(phys.Segments)]
 
+		if next.A == segment.A {
+			continue
+		}
+
 		segmentHovering := indexOfObject(editor.HoveringObjects, segment) != -1
 		segmentSelected := indexOfObject(editor.SelectedObjects, segment) != -1
 

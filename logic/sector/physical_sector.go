@@ -128,7 +128,7 @@ func (s *PhysicalSectorService) UpdatePVS(normal concepts.Vector2, s2 core.Abstr
 func (s *PhysicalSectorService) UpdateEntityPVS(normal concepts.Vector2, s2 core.AbstractSector) {
 	if s2 == nil {
 		s.PVSEntity = make(map[string]core.AbstractSector)
-		s.PVSEntity[s.ID] = s
+		s.PVSEntity[s.ID] = s.PhysicalSector
 		s2 = s
 	}
 

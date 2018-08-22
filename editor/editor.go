@@ -41,7 +41,7 @@ const (
 	ToolSelect EditorTool = iota
 	ToolSplitSegment
 	ToolSplitSector
-	TooAddStandardSector
+	ToolAddStandardSector
 )
 
 type Editor struct {
@@ -116,12 +116,23 @@ func (e *Editor) ActTool() {
 	switch e.Tool {
 	case ToolSplitSegment:
 	case ToolSplitSector:
-	case TooAddStandardSector:
+	case ToolAddStandardSector:
 		s := &core.PhysicalSector{}
 		s.Initialize()
+		s.FloorMaterial = e.GameMap.DefaultMaterial()
+		s.CeilMaterial = e.GameMap.DefaultMaterial()
 		s.SetParent(e.GameMap.Map)
 		e.NewAction(&AddSectorAction{Editor: e, Sector: s})
 		e.CurrentAction.Act()
+	}
+}
+
+func (e *Editor) SwitchTool(tool EditorTool) {
+	e.Tool = tool
+	if e.CurrentAction != nil {
+		e.CurrentAction.Cancel()
+	} else {
+		e.ActTool()
 	}
 }
 

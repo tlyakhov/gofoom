@@ -28,6 +28,8 @@ func MapButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 	editor.MouseDown.X, editor.MouseDown.Y = press.MotionVal()
 	editor.MouseDownWorld = editor.ScreenToWorld(editor.MouseDown)
 
+	da.GrabFocus()
+
 	if press.Button() == 3 && editor.CurrentAction == nil {
 		editor.NewAction(&SelectAction{Editor: editor})
 	} else if press.Button() == 2 && editor.CurrentAction == nil {

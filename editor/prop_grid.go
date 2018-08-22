@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -16,14 +17,14 @@ import (
 
 type GridField struct {
 	Name       string
-	Value      reflect.Value
+	Values     []reflect.Value
 	Type       reflect.Type
 	ParentName string
 	Depth      int
 }
 
 type GridState struct {
-	Fields  *[]GridField
+	Fields  map[string]*GridField
 	Visited map[interface{}]bool
 	Depth   int
 }
@@ -46,13 +47,17 @@ func (e *Editor) PropertyGridFields(obj interface{}, state GridState) {
 		}
 
 		if display != "^" {
-			gf := GridField{
-				Name:  display,
-				Depth: state.Depth,
-				Value: v.Elem().Field(i).Addr(),
-				Type:  v.Elem().Field(i).Addr().Type(),
+			gf, ok := state.Fields[display]
+			if !ok {
+				gf = &GridField{
+					Name:  display,
+					Depth: state.Depth,
+					Type:  v.Elem().Field(i).Addr().Type(),
+				}
+				state.Fields[display] = gf
 			}
-			*state.Fields = append(*state.Fields, gf)
+			gf.Values = append(gf.Values, v.Elem().Field(i).Addr())
+
 			continue
 		}
 
@@ -68,8 +73,15 @@ func (e *Editor) PropertyGridFields(obj interface{}, state GridState) {
 	}
 }
 
-func (e *Editor) PropertyGridFieldString(index int, field GridField) {
-	origValue := field.Value.Elem().String()
+func (e *Editor) PropertyGridFieldString(index int, field *GridField) {
+	origValue := ""
+	for i, v := range field.Values {
+		if i != 0 {
+			origValue += ", "
+		}
+		origValue += v.Elem().String()
+	}
+
 	box, _ := gtk.EntryNew()
 	box.SetHExpand(true)
 	box.SetText(origValue)
@@ -81,7 +93,7 @@ func (e *Editor) PropertyGridFieldString(index int, field GridField) {
 			e.PropertyGrid.GrabFocus()
 			return
 		}
-		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(text)}
+		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(text)}
 		e.NewAction(action)
 		action.Act()
 		origValue = text
@@ -90,7 +102,7 @@ func (e *Editor) PropertyGridFieldString(index int, field GridField) {
 	e.PropertyGrid.Attach(box, 2, index, 1, 1)
 }
 
-func (e *Editor) PropertyGridFieldEnum(index int, field GridField, enumValues interface{}) {
+func (e *Editor) PropertyGridFieldEnum(index int, field *GridField, enumValues interface{}) {
 	// Create our combo box with int/string enum entries.
 	rend, _ := gtk.CellRendererTextNew()
 	opts, _ := gtk.ListStoreNew(glib.TYPE_INT, glib.TYPE_STRING)
@@ -99,7 +111,7 @@ func (e *Editor) PropertyGridFieldEnum(index int, field GridField, enumValues in
 	box.PackStart(rend, true)
 	box.AddAttribute(rend, "text", 1)
 	// This is the actual value of this property converted to an int.
-	origValue := field.Value.Elem().Int()
+	origValue := field.Values[0].Elem().Int()
 
 	// Iterate through all the values of the enum type.
 	refEnumValues := reflect.ValueOf(enumValues)
@@ -119,7 +131,7 @@ func (e *Editor) PropertyGridFieldEnum(index int, field GridField, enumValues in
 		selected, _ := box.GetActiveIter()
 		value, _ := opts.GetValue(selected, 0)
 		value2, _ := value.GoValue()
-		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(int64(value2.(int)))}
+		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(value2).Convert(field.Type.Elem())}
 		e.NewAction(action)
 		action.Act()
 	})
@@ -127,8 +139,15 @@ func (e *Editor) PropertyGridFieldEnum(index int, field GridField, enumValues in
 	e.PropertyGrid.Attach(box, 2, index, 1, 1)
 }
 
-func (e *Editor) PropertyGridFieldFloat64(index int, field GridField) {
-	origValue := strconv.FormatFloat(field.Value.Elem().Float(), 'f', -1, 64)
+func (e *Editor) PropertyGridFieldFloat64(index int, field *GridField) {
+	origValue := ""
+	for i, v := range field.Values {
+		if i != 0 {
+			origValue += ", "
+		}
+		origValue += strconv.FormatFloat(v.Elem().Float(), 'f', -1, 64)
+	}
+
 	box, _ := gtk.EntryNew()
 	box.SetHExpand(true)
 	box.SetText(origValue)
@@ -147,7 +166,7 @@ func (e *Editor) PropertyGridFieldFloat64(index int, field GridField) {
 			e.PropertyGrid.GrabFocus()
 			return
 		}
-		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(f)}
+		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(f)}
 		e.NewAction(action)
 		action.Act()
 		origValue = text
@@ -156,8 +175,15 @@ func (e *Editor) PropertyGridFieldFloat64(index int, field GridField) {
 	e.PropertyGrid.Attach(box, 2, index, 1, 1)
 }
 
-func (e *Editor) PropertyGridFieldVector2(index int, field GridField) {
-	origValue := field.Value.Elem().Interface().(concepts.Vector2).String()
+func (e *Editor) PropertyGridFieldVector2(index int, field *GridField) {
+	origValue := ""
+	for i, v := range field.Values {
+		if i != 0 {
+			origValue += ", "
+		}
+		origValue += v.Elem().Interface().(concepts.Vector2).String()
+	}
+
 	box, _ := gtk.EntryNew()
 	box.SetHExpand(true)
 	box.SetText(origValue)
@@ -176,7 +202,7 @@ func (e *Editor) PropertyGridFieldVector2(index int, field GridField) {
 			e.PropertyGrid.GrabFocus()
 			return
 		}
-		action := &SetPropertyAction{Editor: e, Fields: []reflect.Value{field.Value}, ToSet: reflect.ValueOf(vec)}
+		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(vec)}
 		e.NewAction(action)
 		action.Act()
 		origValue = vec.String()
@@ -190,14 +216,32 @@ func (e *Editor) RefreshPropertyGrid() {
 		e.PropertyGrid.Remove(child.(gtk.IWidget))
 	})
 
-	state := GridState{Visited: make(map[interface{}]bool), Fields: &[]GridField{}}
+	state := GridState{Visited: make(map[interface{}]bool), Fields: make(map[string]*GridField)}
 	for _, obj := range e.SelectedObjects {
 		e.PropertyGridFields(obj, state)
 	}
 
+	sorted := make([]string, len(state.Fields))
+	i := 0
+	for display := range state.Fields {
+		sorted[i] = display
+		i++
+	}
+	sort.SliceStable(sorted, func(i, j int) bool {
+		f1 := state.Fields[sorted[i]]
+		f2 := state.Fields[sorted[j]]
+		if f1.Depth > f2.Depth {
+			return true
+		} else if f1.Depth < f2.Depth {
+			return false
+		}
+		return f1.Name < f2.Name
+	})
+
 	var lastParentName string
 	index := 1
-	for _, field := range *state.Fields {
+	for _, display := range sorted {
+		field := state.Fields[display]
 		if field.ParentName != lastParentName {
 			label, _ := gtk.LabelNew(field.ParentName)
 			label.SetJustify(gtk.JUSTIFY_CENTER)

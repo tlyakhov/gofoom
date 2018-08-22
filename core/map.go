@@ -58,3 +58,15 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 	}
 	m.Recalculate()
 }
+
+func (m *Map) DefaultMaterial() concepts.ISerializable {
+	if def, ok := m.Materials["Default"]; ok {
+		return def
+	}
+
+	// Otherwise try a random one?
+	for _, mat := range m.Materials {
+		return mat
+	}
+	return nil
+}
