@@ -28,3 +28,11 @@ func (e *AliveEntity) Deserialize(data map[string]interface{}) {
 		e.Health = v.(float64)
 	}
 }
+
+func (e *AliveEntity) Serialize() map[string]interface{} {
+	result := e.PhysicalEntity.Serialize()
+	result["Type"] = "entities.AliveEntity"
+	result["Health"] = e.Health
+
+	return result
+}

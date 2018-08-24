@@ -102,6 +102,11 @@ func (vec Vector2) String() string {
 		strconv.FormatFloat(vec.Y, 'f', -1, 64)
 }
 
+// Serialize formats the vector as a JSON key-value map.
+func (vec Vector2) Serialize() map[string]interface{} {
+	return map[string]interface{}{"X": vec.X, "Y": vec.Y}
+}
+
 // ParseVector2 parses strings in the form "X, Y" into vectors.
 func ParseVector2(s string) (Vector2, error) {
 	result := Vector2{}

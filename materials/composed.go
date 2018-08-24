@@ -34,6 +34,16 @@ func (m *LitSampled) Deserialize(data map[string]interface{}) {
 	m.Sampled.Deserialize(data)
 }
 
+func (m *LitSampled) Serialize() map[string]interface{} {
+	result := m.Lit.Serialize()
+	result2 := m.Sampled.Serialize()
+	for k, v := range result2 {
+		result[k] = v
+	}
+	result["Type"] = "materials.LitSampled"
+	return result
+}
+
 type PainfulLitSampled struct {
 	LitSampled
 	Painful
@@ -57,4 +67,14 @@ func (m *PainfulLitSampled) Deserialize(data map[string]interface{}) {
 	m.LitSampled.Deserialize(data)
 	m.Painful.Deserialize(data)
 	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.GetBase().ID)
+}
+
+func (m *PainfulLitSampled) Serialize() map[string]interface{} {
+	result := m.LitSampled.Serialize()
+	result2 := m.Painful.Serialize()
+	for k, v := range result2 {
+		result[k] = v
+	}
+	result["Type"] = "materials.PainfulLitSampled"
+	return result
 }

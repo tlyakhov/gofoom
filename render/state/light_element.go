@@ -43,8 +43,10 @@ func (le *LightElement) markVisibleLight(p concepts.Vector3, e *core.PhysicalEnt
 	}
 
 	sector := le.Sector
+	visited := make(map[string]bool)
 
 	for sector != nil {
+		visited[sector.ID] = true
 		var next *core.PhysicalSector
 		for _, seg := range sector.Segments {
 			delta := e.Pos.Sub(p)
@@ -65,7 +67,7 @@ func (le *LightElement) markVisibleLight(p concepts.Vector3, e *core.PhysicalEnt
 			}
 			next = seg.AdjacentSector.Physical()
 		}
-		if next == nil {
+		if next == nil || visited[next.ID] {
 			break
 		}
 		sector = next

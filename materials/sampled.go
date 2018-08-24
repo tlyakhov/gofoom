@@ -30,3 +30,11 @@ func (m *Sampled) Deserialize(data map[string]interface{}) {
 		m.Sampler = concepts.MapPolyStruct(m, v.(map[string]interface{})).(texture.ISampler)
 	}
 }
+
+func (m *Sampled) Serialize() map[string]interface{} {
+	result := m.Base.Serialize()
+	result["Type"] = "materials.Sampled"
+	result["IsLiquid"] = m.IsLiquid
+	result["Texture"] = m.Sampler.Serialize()
+	return result
+}

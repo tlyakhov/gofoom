@@ -47,8 +47,7 @@ func (a *MoveSurfaceAction) Act() {
 		}
 	}
 	a.GameMap.Recalculate()
-	a.RefreshPropertyGrid()
-	a.ActionFinished()
+	a.ActionFinished(false)
 }
 
 func (a *MoveSurfaceAction) Undo() {
@@ -60,7 +59,6 @@ func (a *MoveSurfaceAction) Undo() {
 		}
 	}
 	a.GameMap.Recalculate()
-	a.RefreshPropertyGrid()
 }
 func (a *MoveSurfaceAction) Redo() {
 	for _, obj := range a.SelectedObjects {
@@ -71,5 +69,4 @@ func (a *MoveSurfaceAction) Redo() {
 		}
 	}
 	a.GameMap.Recalculate()
-	a.RefreshPropertyGrid()
 }

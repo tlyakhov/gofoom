@@ -11,6 +11,12 @@
                     <attribute name="accel">&lt;Primary&gt;n</attribute>
                 </item>
                 <item>
+                    <attribute name="label" translatable="yes">_Save</attribute>
+                    <attribute name="icon">document-save</attribute>
+                    <attribute name="accel">&lt;Primary&gt;s</attribute>
+                    <attribute name="action">app.save</attribute>                    
+                </item>                
+                <item>
                     <attribute name="label" translatable="yes">Quit</attribute>
                     <attribute name="icon">application-exit</attribute>
                     <attribute name="accel">&lt;Primary&gt;q</attribute>
@@ -111,6 +117,12 @@
                     <attribute name="icon">go-bottom</attribute>
                     <attribute name="accel">&lt;Primary&gt;bracketleft</attribute>
                     <attribute name="action">app.tool.lower.floor.slope</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Rotate Slope Anchor</attribute>
+                    <attribute name="icon">go-jump</attribute>
+                    <attribute name="accel">r</attribute>
+                    <attribute name="action">app.tool.rotate.slope</attribute>
                 </item>
             </section>
         </submenu>

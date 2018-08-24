@@ -39,3 +39,9 @@ func (b *AnimatedBehavior) Deserialize(data map[string]interface{}) {
 		b.Active = v.(bool)
 	}
 }
+
+func (b *AnimatedBehavior) Serialize() map[string]interface{} {
+	result := b.Base.Serialize()
+	result["Active"] = b.Active
+	return result
+}

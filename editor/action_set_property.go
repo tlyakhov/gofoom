@@ -25,8 +25,7 @@ func (a *SetPropertyAction) Act() {
 		a.Original = append(a.Original, reflect.ValueOf(field.Elem().Interface()))
 		field.Elem().Set(a.ToSet)
 	}
-	a.RefreshPropertyGrid()
-	a.ActionFinished()
+	a.ActionFinished(false)
 }
 
 func (a *SetPropertyAction) Undo() {
@@ -34,12 +33,10 @@ func (a *SetPropertyAction) Undo() {
 		fmt.Println(a.Original[i].String())
 		field.Elem().Set(a.Original[i])
 	}
-	a.RefreshPropertyGrid()
 }
 func (a *SetPropertyAction) Redo() {
 	for _, field := range a.Fields {
 		fmt.Println(a.ToSet.String())
 		field.Elem().Set(a.ToSet)
 	}
-	a.RefreshPropertyGrid()
 }

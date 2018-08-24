@@ -1,6 +1,8 @@
 package materials
 
 import (
+	"strconv"
+
 	"github.com/tlyakhov/gofoom/registry"
 )
 
@@ -23,4 +25,11 @@ func (m *Sky) Deserialize(data map[string]interface{}) {
 	if v, ok := data["StaticBackground"]; ok {
 		m.StaticBackground = v.(bool)
 	}
+}
+
+func (m *Sky) Serialize() map[string]interface{} {
+	result := m.Sampled.Serialize()
+	result["Type"] = "materials.Sky"
+	result["StaticBackground"] = strconv.FormatBool(m.StaticBackground)
+	return result
 }

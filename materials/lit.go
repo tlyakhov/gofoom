@@ -31,3 +31,11 @@ func (m *Lit) Deserialize(data map[string]interface{}) {
 		m.Diffuse.Deserialize(v.(map[string]interface{}))
 	}
 }
+
+func (m *Lit) Serialize() map[string]interface{} {
+	result := m.Base.Serialize()
+	result["Type"] = "materials.Lit"
+	result["Ambient"] = m.Ambient.Serialize()
+	result["Diffuse"] = m.Diffuse.Serialize()
+	return result
+}

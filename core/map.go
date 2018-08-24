@@ -59,6 +59,24 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 	m.Recalculate()
 }
 
+func (m *Map) Serialize() map[string]interface{} {
+	result := m.Base.Serialize()
+	result["EntitiesPaused"] = m.EntitiesPaused
+	result["SpawnX"] = m.Spawn.X
+	result["SpawnY"] = m.Spawn.Y
+	materials := []interface{}{}
+	for _, mat := range m.Materials {
+		materials = append(materials, mat.Serialize())
+	}
+	result["Materials"] = materials
+	sectors := []interface{}{}
+	for _, sector := range m.Sectors {
+		sectors = append(sectors, sector.Serialize())
+	}
+	result["Sectors"] = sectors
+	return result
+}
+
 func (m *Map) DefaultMaterial() concepts.ISerializable {
 	if def, ok := m.Materials["Default"]; ok {
 		return def

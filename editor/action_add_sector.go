@@ -1,8 +1,6 @@
 package main
 
 import (
-	"math"
-
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/core"
@@ -26,10 +24,7 @@ func (a *AddSectorAction) Cancel() {
 	a.RemoveFromMap()
 	a.Sector.Physical().Segments = []*core.Segment{}
 	a.SelectObjects([]concepts.ISerializable{})
-	if index := len(a.UndoHistory) - 1; index >= 0 {
-		a.UndoHistory = a.UndoHistory[:index]
-	}
-	a.ActionFinished()
+	a.ActionFinished(true)
 }
 
 func (a *AddSectorAction) RemoveFromMap() {
@@ -55,12 +50,7 @@ func (a *AddSectorAction) OnMouseDown(button *gdk.EventButton) {
 	seg.HiMaterial = a.GameMap.DefaultMaterial()
 	seg.LoMaterial = a.GameMap.DefaultMaterial()
 	seg.MidMaterial = a.GameMap.DefaultMaterial()
-	seg.A = a.MouseDownWorld
-
-	if a.Grid.Visible {
-		seg.A.X = math.Round(seg.A.X/GridSize) * GridSize
-		seg.A.Y = math.Round(seg.A.Y/GridSize) * GridSize
-	}
+	seg.A = a.WorldGrid(a.MouseDownWorld)
 	seg.B = seg.A
 
 	a.Sector.Physical().Segments = append(a.Sector.Physical().Segments, &seg)
@@ -73,14 +63,7 @@ func (a *AddSectorAction) OnMouseMove() {
 
 	segs := a.Sector.Physical().Segments
 	seg := segs[len(segs)-1]
-	seg.A = a.MouseWorld
-
-	if a.Grid.Visible {
-		seg.A.X = math.Round(seg.A.X/GridSize) * GridSize
-		seg.A.Y = math.Round(seg.A.Y/GridSize) * GridSize
-	}
-
-	provide.Passer.For(a.Sector).Recalculate()
+	seg.A = a.WorldGrid(a.MouseWorld)
 }
 
 func (a *AddSectorAction) AutoPortal() {
@@ -117,8 +100,9 @@ func (a *AddSectorAction) OnMouseUp() {
 		last := segs[len(segs)-1]
 		if last.A.Sub(first.A).Length() < SegmentSelectionEpsilon {
 			a.Sector.Physical().Segments = segs[:(len(segs) - 1)]
+			provide.Passer.For(a.Sector).Recalculate()
 			a.AutoPortal()
-			a.ActionFinished()
+			a.ActionFinished(false)
 		}
 	}
 	// TODO: right-mouse button end
