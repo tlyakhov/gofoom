@@ -109,6 +109,11 @@ func (v Vector3) String() string {
 		strconv.FormatFloat(v.Z, 'f', -1, 64)
 }
 
+// Serialize formats the vector as a JSON key-value map.
+func (v Vector3) Serialize() map[string]interface{} {
+	return map[string]interface{}{"X": v.X, "Y": v.Y, "Z": v.Z}
+}
+
 // ParseVector3 parses strings in the form "X, Y, Z" into vectors.
 func ParseVector3(s string) (Vector3, error) {
 	result := Vector3{}

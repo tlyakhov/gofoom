@@ -42,6 +42,13 @@ func (b *Base) Deserialize(data map[string]interface{}) {
 	}
 }
 
+func (b *Base) Serialize() map[string]interface{} {
+	return map[string]interface{}{
+		"ID":   b.ID,
+		"Tags": b.Tags,
+	}
+}
+
 func MapPolyStruct(parent interface{}, data map[string]interface{}) ISerializable {
 	typeMap := registry.Instance().All
 	typeName := data["Type"].(string)

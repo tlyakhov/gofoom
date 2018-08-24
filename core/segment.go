@@ -24,15 +24,16 @@ type Segment struct {
 	MidBehavior MaterialBehavior       `editable:"Mid Behavior"`
 	HiBehavior  MaterialBehavior       `editable:"High Behavior"`
 
-	Length          float64
-	Normal          concepts.Vector2
-	Sector          AbstractSector
 	AdjacentSector  AbstractSector
 	AdjacentSegment *Segment
-	Lightmap        []concepts.Vector3
-	LightmapWidth   uint32
-	LightmapHeight  uint32
-	Flags           int
+
+	Length         float64
+	Normal         concepts.Vector2
+	Sector         AbstractSector
+	Lightmap       []concepts.Vector3
+	LightmapWidth  uint32
+	LightmapHeight uint32
+	Flags          int
 }
 
 func init() {
@@ -295,4 +296,35 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 			panic(error)
 		}
 	}
+}
+
+func (s *Segment) Serialize() map[string]interface{} {
+	result := s.Base.Serialize()
+	result["X"] = s.A.X
+	result["Y"] = s.A.Y
+
+	if s.HiMaterial != nil {
+		result["HiMaterial"] = s.HiMaterial.GetBase().ID
+	}
+	if s.LoMaterial != nil {
+		result["LoMaterial"] = s.LoMaterial.GetBase().ID
+	}
+	if s.MidMaterial != nil {
+		result["MidMaterial"] = s.MidMaterial.GetBase().ID
+	}
+
+	if s.HiBehavior != ScaleNone {
+		result["HiBehavior"] = s.HiBehavior.String()
+	}
+	if s.LoBehavior != ScaleNone {
+		result["LoBehavior"] = s.LoBehavior.String()
+	}
+	if s.MidBehavior != ScaleNone {
+		result["MidBehavior"] = s.MidBehavior.String()
+	}
+
+	if s.AdjacentSector != nil {
+		result["AdjacentSector"] = s.AdjacentSector.GetBase().ID
+	}
+	return result
 }

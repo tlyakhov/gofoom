@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"reflect"
 	"unsafe"
 
@@ -98,6 +99,22 @@ func (e *Editor) WorldToScreen(p concepts.Vector2) concepts.Vector2 {
 	return p.Sub(e.Pos).Mul(e.Scale).Add(e.MapViewSize.Mul(0.5))
 }
 
+func (e *Editor) WorldGrid(p concepts.Vector2) concepts.Vector2 {
+	if !e.Grid.Visible {
+		return p
+	}
+
+	return concepts.Vector2{math.Round(p.X/GridSize) * GridSize, math.Round(p.Y/GridSize) * GridSize}
+}
+
+func (e *Editor) WorldGrid3D(p concepts.Vector3) concepts.Vector3 {
+	if !e.Grid.Visible {
+		return p
+	}
+
+	return concepts.Vector3{math.Round(p.X/GridSize) * GridSize, math.Round(p.Y/GridSize) * GridSize, p.Z}
+}
+
 func (e *Editor) SetMapCursor(name string) {
 	win, _ := e.MapArea.GetWindow()
 	if name == "" {
@@ -109,7 +126,15 @@ func (e *Editor) SetMapCursor(name string) {
 	win.SetCursor(cursor)
 }
 
-func (e *Editor) ActionFinished() {
+func (e *Editor) ActionFinished(canceled bool) {
+	if !canceled {
+		e.UndoHistory = append(e.UndoHistory, e.CurrentAction)
+		if len(e.UndoHistory) > 100 {
+			e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
+		}
+		e.RedoHistory = []AbstractAction{}
+	}
+	e.RefreshPropertyGrid()
 	e.SetMapCursor("")
 	e.State = "Idle"
 	e.CurrentAction = nil
@@ -118,17 +143,16 @@ func (e *Editor) ActionFinished() {
 
 func (e *Editor) NewAction(a AbstractAction) {
 	e.CurrentAction = a
-	e.UndoHistory = append(e.UndoHistory, a)
-	if len(e.UndoHistory) > 100 {
-		e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
-	}
-	e.RedoHistory = []AbstractAction{}
 }
 
 func (e *Editor) ActTool() {
 	switch e.Tool {
 	case ToolSplitSegment:
+		e.NewAction(&SplitSegmentAction{Editor: e})
+		e.CurrentAction.Act()
 	case ToolSplitSector:
+		e.NewAction(&SplitSectorAction{Editor: e})
+		e.CurrentAction.Act()
 	case ToolAddStandardSector:
 		s := &core.PhysicalSector{}
 		s.Initialize()
@@ -164,6 +188,7 @@ func (e *Editor) Undo() {
 		return
 	}
 	a.Undo()
+	e.RefreshPropertyGrid()
 	e.RedoHistory = append(e.RedoHistory, a)
 }
 
@@ -182,12 +207,13 @@ func (e *Editor) Redo() {
 		return
 	}
 	a.Redo()
+	e.RefreshPropertyGrid()
 	e.UndoHistory = append(e.UndoHistory, a)
 }
 
 func (e *Editor) SelectObjects(objects []concepts.ISerializable) {
 	if len(objects) == 0 {
-		objects = append(objects, e.GameMap)
+		objects = append(objects, e.GameMap.Map)
 	}
 
 	e.SelectedObjects = objects

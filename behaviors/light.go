@@ -54,3 +54,13 @@ func (l *Light) Deserialize(data map[string]interface{}) {
 		l.Attenuation = v.(float64)
 	}
 }
+
+func (l *Light) Serialize() map[string]interface{} {
+	result := l.AnimatedBehavior.Serialize()
+	result["Type"] = "behaviors.Light"
+	result["Diffuse"] = l.Diffuse.Serialize()
+	result["Strength"] = l.Strength
+	result["Attenuation"] = l.Attenuation
+
+	return result
+}

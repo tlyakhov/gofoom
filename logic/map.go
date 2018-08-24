@@ -3,6 +3,7 @@ package logic
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
 
 	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/entities"
@@ -31,6 +32,17 @@ func LoadMap(filename string) *MapService {
 	m.Player = entities.NewPlayer(m.Map)
 	m.Recalculate()
 	return m
+}
+
+func (m *MapService) Save(filename string) {
+	mapped := m.Serialize()
+	bytes, err := json.MarshalIndent(mapped, "", "  ")
+
+	if err != nil {
+		panic(err)
+	}
+
+	ioutil.WriteFile(filename, bytes, os.ModePerm)
 }
 
 func (m *MapService) Recalculate() {

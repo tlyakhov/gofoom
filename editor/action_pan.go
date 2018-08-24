@@ -24,7 +24,7 @@ func (a *PanAction) OnMouseMove() {
 }
 
 func (a *PanAction) OnMouseUp() {
-	a.ActionFinished()
+	a.ActionFinished(false)
 }
 func (a *PanAction) Act()    {}
 func (a *PanAction) Cancel() {}

@@ -25,3 +25,10 @@ func (m *Painful) Deserialize(data map[string]interface{}) {
 		m.Hurt = v.(float64)
 	}
 }
+
+func (m *Painful) Serialize() map[string]interface{} {
+	result := m.Base.Serialize()
+	result["Type"] = "materials.Painful"
+	result["Hurt"] = m.Hurt
+	return result
+}

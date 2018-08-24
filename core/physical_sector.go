@@ -94,6 +94,12 @@ func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 	if v, ok := data["CeilScale"]; ok {
 		s.CeilScale = v.(float64)
 	}
+	if v, ok := data["FloorSlope"]; ok {
+		s.FloorSlope = v.(float64)
+	}
+	if v, ok := data["CeilSlope"]; ok {
+		s.CeilSlope = v.(float64)
+	}
 	if v, ok := data["FloorMaterial"]; ok {
 		s.FloorMaterial = s.Map.Materials[v.(string)]
 	}
@@ -115,6 +121,47 @@ func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 	s.Recalculate()
 }
 
+func (s *PhysicalSector) Serialize() map[string]interface{} {
+	result := s.Base.Serialize()
+	result["Type"] = "core.PhysicalSector"
+	result["TopZ"] = s.TopZ
+	result["BottomZ"] = s.BottomZ
+	result["FloorScale"] = s.FloorScale
+	result["CeilScale"] = s.CeilScale
+	if s.FloorSlope != 0 {
+		result["FloorSlope"] = s.FloorSlope
+	}
+	if s.CeilSlope != 0 {
+		result["CeilSlope"] = s.CeilSlope
+	}
+
+	if s.FloorTarget != nil {
+		result["FloorTarget"] = s.FloorTarget.GetBase().ID
+	}
+	if s.CeilTarget != nil {
+		result["CeilTarget"] = s.CeilTarget.GetBase().ID
+	}
+	if s.FloorMaterial != nil {
+		result["FloorMaterial"] = s.FloorMaterial.GetBase().ID
+	}
+	if s.CeilMaterial != nil {
+		result["CeilMaterial"] = s.CeilMaterial.GetBase().ID
+	}
+
+	entities := []interface{}{}
+	for _, e := range s.Entities {
+		entities = append(entities, e.Serialize())
+	}
+	result["Entities"] = entities
+
+	segments := []interface{}{}
+	for _, seg := range s.Segments {
+		segments = append(segments, seg.Serialize())
+	}
+	result["Segments"] = segments
+	return result
+}
+
 func (s *PhysicalSector) Recalculate() {
 	s.Center = concepts.Vector3{0, 0, (s.TopZ + s.BottomZ) / 2}
 	s.Min = concepts.Vector3{math.Inf(1), math.Inf(1), s.BottomZ}
@@ -122,8 +169,18 @@ func (s *PhysicalSector) Recalculate() {
 
 	w := s.Winding()
 
+	filtered := s.Segments[:0]
+	var prev *Segment
 	for i, segment := range s.Segments {
-		next := s.Segments[(i+1)%len(s.Segments)]
+		nextIndex := (i + 1) % len(s.Segments)
+		next := s.Segments[nextIndex]
+		// Filter out degenerate segments.
+		if prev != nil && prev.A == segment.A {
+			continue
+		}
+		filtered = append(filtered, segment)
+		prev = segment
+
 		s.Center.X += segment.A.X
 		s.Center.Y += segment.A.Y
 		if segment.A.X < s.Min.X {
@@ -146,6 +203,7 @@ func (s *PhysicalSector) Recalculate() {
 			segment.Normal = segment.Normal.Mul(-1)
 		}
 	}
+	s.Segments = filtered
 
 	if len(s.Segments) > 0 {
 		sloped := s.Segments[0].Normal.To3D()

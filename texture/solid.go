@@ -41,3 +41,14 @@ func (s *Solid) Deserialize(data map[string]interface{}) {
 		}
 	}
 }
+
+func (s *Solid) Serialize() map[string]interface{} {
+	result := s.Base.Serialize()
+	result["Type"] = "texture.Solid"
+	if s.Diffuse.A == 255 {
+		result["Diffuse"] = fmt.Sprintf("#%02X%02X%02X", s.Diffuse.R, s.Diffuse.G, s.Diffuse.B)
+	} else {
+		result["Diffuse"] = fmt.Sprintf("#%02X%02X%02X%02X", s.Diffuse.R, s.Diffuse.G, s.Diffuse.B, s.Diffuse.A)
+	}
+	return result
+}

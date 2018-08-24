@@ -63,7 +63,7 @@ func (a *SelectAction) OnMouseUp() {
 		copy(a.Selected, hovering)
 	}
 	a.SelectObjects(a.Selected)
-	a.ActionFinished()
+	a.ActionFinished(false)
 }
 func (a *SelectAction) Act()    {}
 func (a *SelectAction) Cancel() {}

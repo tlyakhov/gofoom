@@ -25,3 +25,10 @@ func (s *ToxicSector) Deserialize(data map[string]interface{}) {
 		s.Hurt = v.(float64)
 	}
 }
+
+func (s *ToxicSector) Serialize() map[string]interface{} {
+	result := s.PhysicalSector.Serialize()
+	result["Type"] = "sectors.ToxicSector"
+	result["Hurt"] = s.Hurt
+	return result
+}

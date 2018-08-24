@@ -106,3 +106,23 @@ func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
 		concepts.MapCollection(e, &e.behaviors, v)
 	}
 }
+
+func (e *PhysicalEntity) Serialize() map[string]interface{} {
+	result := e.Base.Serialize()
+	result["Type"] = "core.PhysicalEntity"
+	result["Active"] = e.Active
+	result["Pos"] = e.Pos.Serialize()
+	result["Vel"] = e.Vel.Serialize()
+	result["Angle"] = e.Angle
+	result["BoundingRadius"] = e.BoundingRadius
+	result["Height"] = e.Height
+	result["MountHeight"] = e.MountHeight
+	result["CollisionResponse"] = e.CollisionResponse.String()
+
+	behaviors := []interface{}{}
+	for _, b := range e.behaviors {
+		behaviors = append(behaviors, b.Serialize())
+	}
+	result["Behaviors"] = behaviors
+	return result
+}

@@ -135,6 +135,7 @@ func onActivate() {
 	}
 	editor.PropertyGrid = obj.(*gtk.Grid)
 
+	editor.AddSimpleMenuAction("save", func(obj *glib.Object) { editor.GameMap.Save("test-saved-map.json") })
 	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
 	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.Undo() })
 	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.Redo() })
@@ -151,6 +152,11 @@ func onActivate() {
 	editor.AddSimpleMenuAction("tool.lower.ceil.slope", func(obj *glib.Object) { editor.MoveSurface(-0.05, false, true) })
 	editor.AddSimpleMenuAction("tool.raise.floor.slope", func(obj *glib.Object) { editor.MoveSurface(0.05, true, true) })
 	editor.AddSimpleMenuAction("tool.lower.floor.slope", func(obj *glib.Object) { editor.MoveSurface(-0.05, true, true) })
+	editor.AddSimpleMenuAction("tool.rotate.slope", func(obj *glib.Object) {
+		action := &RotateSegmentsAction{Editor: editor}
+		editor.NewAction(action)
+		action.Act()
+	})
 
 	setupMenu()
 	editor.Window.SetApplication(editor.App)
@@ -159,6 +165,8 @@ func onActivate() {
 	editor.GameMap = logic.LoadMap("data/classicMap.json")
 	ps := entity.NewPlayerService(editor.GameMap.Player.(*entities.Player))
 	ps.Collide()
+
+	editor.SelectObjects([]concepts.ISerializable{})
 
 	editor.GameView(editor.GameArea.GetAllocatedWidth(), editor.GameArea.GetAllocatedHeight())
 	editor.RefreshPropertyGrid()

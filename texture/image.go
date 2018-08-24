@@ -34,7 +34,7 @@ func init() {
 func (t *Image) Initialize() {
 	t.Base = concepts.Base{}
 	t.Base.Initialize()
-	t.Filter = true
+	t.Filter = false
 	t.GenerateMipMaps = true
 }
 
@@ -220,4 +220,13 @@ func (t *Image) Deserialize(data map[string]interface{}) {
 		t.Filter = v.(bool)
 	}
 	t.Load()
+}
+
+func (t *Image) Serialize() map[string]interface{} {
+	result := t.Base.Serialize()
+	result["Type"] = "texture.Image"
+	result["Source"] = t.Source
+	result["GenerateMipMaps"] = t.GenerateMipMaps
+	result["Filter"] = t.Filter
+	return result
 }

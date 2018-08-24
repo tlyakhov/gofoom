@@ -36,3 +36,9 @@ func (s *VerticalDoor) Deserialize(data map[string]interface{}) {
 	s.PhysicalSector.Deserialize(data)
 	s.OrigTopZ = s.TopZ
 }
+
+func (s *VerticalDoor) Serialize() map[string]interface{} {
+	result := s.PhysicalSector.Serialize()
+	result["Type"] = "sectors.VerticalDoor"
+	return result
+}
