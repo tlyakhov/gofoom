@@ -30,15 +30,16 @@ func (a *SplitSegmentAction) Split(ss *SplitSegment) bool {
 	m := a.WorldGrid(a.MouseWorld)
 	isect, exists := ss.split.Intersect2D(md, m)
 
-	if !exists || isect == ss.split.A || isect == ss.split.B {
+	if !exists || isect == ss.split.P || isect == ss.split.Next.P {
 		return false
 	}
 
-	// TODO: in the future this should be serialize->deserialize for a good clone.
-	copied := *ss.split
-	ss.added = &copied
+	copied := &core.Segment{}
+	copied.SetParent(ss.split.Sector)
+	copied.Deserialize(ss.split.Serialize())
+	ss.added = copied
 	ss.added.ID = xid.New().String()
-	ss.added.A = isect
+	ss.added.P = isect
 	*ss.segments = append(*ss.segments, nil)
 	copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])
 	(*ss.segments)[ss.index] = ss.added

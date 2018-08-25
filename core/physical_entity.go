@@ -15,6 +15,7 @@ type PhysicalEntity struct {
 	Vel               concepts.Vector3
 	Angle             float64           `editable:"Angle"`
 	BoundingRadius    float64           `editable:"Bounding Radius"`
+	Weight            float64           `editable:"Weight"`
 	CollisionResponse CollisionResponse `editable:"Collision Response"`
 	CRCallback        func() CollisionResponse
 	Height            float64 `editable:"Height"`

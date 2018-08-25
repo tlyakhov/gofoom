@@ -15,8 +15,7 @@ const (
 type Segment struct {
 	concepts.Base `editable:"^"`
 
-	A           concepts.Vector2 `editable:"X/Y"`
-	B           concepts.Vector2
+	P           concepts.Vector2       `editable:"X/Y"`
 	LoMaterial  concepts.ISerializable `editable:"Low Material" edit_type:"Material"`
 	MidMaterial concepts.ISerializable `editable:"Mid Material" edit_type:"Material"`
 	HiMaterial  concepts.ISerializable `editable:"High Material" edit_type:"Material"`
@@ -30,6 +29,8 @@ type Segment struct {
 	Length         float64
 	Normal         concepts.Vector2
 	Sector         AbstractSector
+	Next           *Segment
+	Prev           *Segment
 	Lightmap       []concepts.Vector3
 	LightmapWidth  uint32
 	LightmapHeight uint32
@@ -42,8 +43,7 @@ func init() {
 
 func (s *Segment) Initialize() {
 	s.Base.Initialize()
-	s.A = concepts.Vector2{}
-	s.B = concepts.Vector2{}
+	s.P = concepts.Vector2{}
 	s.Normal = concepts.Vector2{}
 }
 
@@ -74,8 +74,8 @@ func (s *Segment) RealizeAdjacentSector() {
 }
 
 func (s *Segment) Recalculate() {
-	s.Length = s.B.Sub(s.A).Length()
-	s.Normal = concepts.Vector2{-(s.B.Y - s.A.Y) / s.Length, (s.B.X - s.A.X) / s.Length}
+	s.Length = s.Next.P.Sub(s.P).Length()
+	s.Normal = concepts.Vector2{-(s.Next.P.Y - s.P.Y) / s.Length, (s.Next.P.X - s.P.X) / s.Length}
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()
 		sector := s.Sector.Physical()
@@ -93,18 +93,18 @@ func (s *Segment) ClearLightmap() {
 }
 
 func (s *Segment) Matches(s2 *Segment) bool {
-	d1 := math.Abs(s.A.X-s2.A.X) < matchEpsilon && math.Abs(s.B.X-s2.B.X) < matchEpsilon &&
-		math.Abs(s.A.Y-s2.A.Y) < matchEpsilon && math.Abs(s.B.Y-s2.B.Y) < matchEpsilon
+	d1 := math.Abs(s.P.X-s2.P.X) < matchEpsilon && math.Abs(s.Next.P.X-s2.Next.P.X) < matchEpsilon &&
+		math.Abs(s.P.Y-s2.P.Y) < matchEpsilon && math.Abs(s.Next.P.Y-s2.Next.P.Y) < matchEpsilon
 
-	d2 := math.Abs(s.A.X-s2.B.X) < matchEpsilon && math.Abs(s.B.X-s2.A.X) < matchEpsilon &&
-		math.Abs(s.A.Y-s2.B.Y) < matchEpsilon && math.Abs(s.B.Y-s2.A.Y) < matchEpsilon
+	d2 := math.Abs(s.P.X-s2.Next.P.X) < matchEpsilon && math.Abs(s.Next.P.X-s2.P.X) < matchEpsilon &&
+		math.Abs(s.P.Y-s2.Next.P.Y) < matchEpsilon && math.Abs(s.Next.P.Y-s2.P.Y) < matchEpsilon
 
 	return d1 || d2
 }
 
 func (s1 *Segment) intersect(s2A, s2B concepts.Vector2) (float64, float64, float64, float64) {
-	s1dx := s1.B.X - s1.A.X
-	s1dy := s1.B.Y - s1.A.Y
+	s1dx := s1.Next.P.X - s1.P.X
+	s1dy := s1.Next.P.Y - s1.P.Y
 	s2dx := s2B.X - s2A.X
 	s2dy := s2B.Y - s2A.Y
 
@@ -112,12 +112,12 @@ func (s1 *Segment) intersect(s2A, s2B concepts.Vector2) (float64, float64, float
 	if denom == 0 {
 		return -1, -1, -1, -1
 	}
-	r := (s1.A.Y-s2A.Y)*s2dx - (s1.A.X-s2A.X)*s2dy
+	r := (s1.P.Y-s2A.Y)*s2dx - (s1.P.X-s2A.X)*s2dy
 	if (denom < 0 && r >= constants.IntersectEpsilon) ||
 		(denom > 0 && r < -constants.IntersectEpsilon) {
 		return -1, -1, -1, -1
 	}
-	s := (s1.A.Y-s2A.Y)*s1dx - (s1.A.X-s2A.X)*s1dy
+	s := (s1.P.Y-s2A.Y)*s1dx - (s1.P.X-s2A.X)*s1dy
 	if (denom < 0 && s >= constants.IntersectEpsilon) ||
 		(denom > 0 && s < -constants.IntersectEpsilon) {
 		return -1, -1, -1, -1
@@ -135,7 +135,7 @@ func (s1 *Segment) Intersect2D(s2A, s2B concepts.Vector2) (concepts.Vector2, boo
 	if r < 0 {
 		return concepts.Vector2{}, false
 	}
-	return concepts.Vector2{s1.A.X + r*s1dx, s1.A.Y + r*s1dy}, true
+	return concepts.Vector2{s1.P.X + r*s1dx, s1.P.Y + r*s1dy}, true
 }
 
 func (s1 *Segment) Intersect3D(s2A, s2B concepts.Vector3) (concepts.Vector3, bool) {
@@ -143,17 +143,17 @@ func (s1 *Segment) Intersect3D(s2A, s2B concepts.Vector3) (concepts.Vector3, boo
 	if r < 0 {
 		return concepts.Vector3{}, false
 	}
-	return concepts.Vector3{s1.A.X + r*s1dx, s1.A.Y + r*s1dy, s*s2A.Z + (1.0-s)*s2B.Z}, true
+	return concepts.Vector3{s1.P.X + r*s1dx, s1.P.Y + r*s1dy, s*s2A.Z + (1.0-s)*s2B.Z}, true
 }
 
 func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
 	// Find min and mA.X X for the segment
-	minX := s.A.X
-	maxX := s.B.X
+	minX := s.P.X
+	maxX := s.Next.P.X
 
-	if s.A.X > s.B.X {
-		minX = s.B.X
-		maxX = s.A.X
+	if s.P.X > s.Next.P.X {
+		minX = s.Next.P.X
+		maxX = s.P.X
 	}
 
 	// Find the intersection of the segment's and rectangle's x-projections
@@ -169,13 +169,13 @@ func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
 	}
 
 	// Find corresponding min and mA.X Y for min and mA.X X we found before
-	minY := s.A.Y
-	maxY := s.B.Y
-	dx := s.B.X - s.A.X
+	minY := s.P.Y
+	maxY := s.Next.P.Y
+	dx := s.Next.P.X - s.P.X
 
 	if math.Abs(dx) > constants.IntersectEpsilon {
-		a := (s.B.Y - s.A.Y) / dx
-		b := s.A.Y - a*s.A.X
+		a := (s.Next.P.Y - s.P.Y) / dx
+		b := s.P.Y - a*s.P.X
 		minY = a*minX + b
 		maxY = a*maxX + b
 	}
@@ -197,19 +197,19 @@ func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
 }
 
 func (s *Segment) DistanceToPoint2(p concepts.Vector2) float64 {
-	l2 := s.A.Dist2(s.B)
+	l2 := s.P.Dist2(s.Next.P)
 	if l2 == 0 {
-		return p.Dist2(s.A)
+		return p.Dist2(s.P)
 	}
-	delta := s.B.Sub(s.A)
-	t := p.Sub(s.A).Dot(delta) / l2
+	delta := s.Next.P.Sub(s.P)
+	t := p.Sub(s.P).Dot(delta) / l2
 	if t < 0 {
-		return p.Dist2(s.A)
+		return p.Dist2(s.P)
 	}
 	if t > 1 {
-		return p.Dist2(s.B)
+		return p.Dist2(s.Next.P)
 	}
-	return p.Dist2(s.A.Add(delta.Mul(t)))
+	return p.Dist2(s.P.Add(delta.Mul(t)))
 }
 
 func (s *Segment) DistanceToPoint(p concepts.Vector2) float64 {
@@ -217,29 +217,29 @@ func (s *Segment) DistanceToPoint(p concepts.Vector2) float64 {
 }
 
 func (s *Segment) ClosestToPoint(p concepts.Vector2) concepts.Vector2 {
-	delta := s.B.Sub(s.A)
+	delta := s.Next.P.Sub(s.P)
 	dist2 := delta.X*delta.X + delta.Y*delta.Y
 	if dist2 == 0 {
-		return s.A
+		return s.P
 	}
-	ap := p.Sub(s.A)
+	ap := p.Sub(s.P)
 	t := ap.Dot(delta) / dist2
 
 	if t < 0 {
-		return s.A
+		return s.P
 	}
 	if t > 1 {
-		return s.B
+		return s.Next.P
 	}
-	return s.A.Add(delta.Mul(t))
+	return s.P.Add(delta.Mul(t))
 }
 
 func (s *Segment) WhichSide(p concepts.Vector2) float64 {
-	return s.Normal.Dot(p.Sub(s.A))
+	return s.Normal.Dot(p.Sub(s.P))
 }
 
 func (s *Segment) UVToWorld(u, v float64) concepts.Vector3 {
-	alongSegment := s.A.Add(s.B.Sub(s.A).Mul(u))
+	alongSegment := s.P.Add(s.Next.P.Sub(s.P).Mul(u))
 	return concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
 }
 
@@ -255,10 +255,10 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 	s.Initialize()
 	s.Base.Deserialize(data)
 	if v, ok := data["X"]; ok {
-		s.A.X = v.(float64)
+		s.P.X = v.(float64)
 	}
 	if v, ok := data["Y"]; ok {
-		s.A.Y = v.(float64)
+		s.P.Y = v.(float64)
 	}
 	if v, ok := data["AdjacentSector"]; ok {
 		s.AdjacentSector = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
@@ -300,8 +300,8 @@ func (s *Segment) Deserialize(data map[string]interface{}) {
 
 func (s *Segment) Serialize() map[string]interface{} {
 	result := s.Base.Serialize()
-	result["X"] = s.A.X
-	result["Y"] = s.A.Y
+	result["X"] = s.P.X
+	result["Y"] = s.P.Y
 
 	if s.HiMaterial != nil {
 		result["HiMaterial"] = s.HiMaterial.GetBase().ID

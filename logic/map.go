@@ -75,3 +75,34 @@ func (m *MapService) Frame(lastFrameTime float64) {
 		provide.SectorAnimator.For(sector).Frame(lastFrameTime)
 	}
 }
+
+func (m *MapService) AutoPortal() {
+	for _, sector := range m.Sectors {
+		for _, segment := range sector.Physical().Segments {
+			segment.AdjacentSector = nil
+			segment.AdjacentSegment = nil
+			if segment.MidMaterial == nil {
+				segment.MidMaterial = m.DefaultMaterial()
+			}
+		}
+		for _, sector2 := range m.Sectors {
+			if sector == sector2 {
+				continue
+			}
+
+			for _, segment := range sector.Physical().Segments {
+				for _, segment2 := range sector2.Physical().Segments {
+					if segment.Matches(segment2) {
+						segment2.AdjacentSector = sector
+						segment2.AdjacentSegment = segment
+						segment.AdjacentSector = sector2
+						segment.AdjacentSegment = segment2
+					}
+				}
+
+			}
+		}
+	}
+	m.ClearLightmaps()
+	m.Recalculate()
+}

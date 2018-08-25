@@ -19,14 +19,22 @@ type MoveAction struct {
 func (a *MoveAction) OnMouseDown(button *gdk.EventButton) {
 	a.SetMapCursor("move")
 
-	a.Selected = make([]concepts.ISerializable, len(a.SelectedObjects))
-	a.Original = make([]concepts.Vector3, len(a.SelectedObjects))
-	copy(a.Selected, a.SelectedObjects)
+	a.Selected = []concepts.ISerializable{}
+	for _, obj := range a.SelectedObjects {
+		if sector, ok := obj.(core.AbstractSector); ok {
+			for _, seg := range sector.Physical().Segments {
+				a.Selected = append(a.Selected, &MapPoint{Segment: seg})
+			}
+		} else {
+			a.Selected = append(a.Selected, obj)
+		}
+	}
 
+	a.Original = make([]concepts.Vector3, len(a.Selected))
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *MapPoint:
-			a.Original[i] = target.A.To3D()
+			a.Original[i] = target.P.To3D()
 		case core.AbstractEntity:
 			a.Original[i] = target.Physical().Pos
 		}
@@ -46,7 +54,7 @@ func (a *MoveAction) Act() {
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *MapPoint:
-			target.A = a.WorldGrid(a.Original[i].To2D().Add(a.Delta))
+			target.P = a.WorldGrid(a.Original[i].To2D().Add(a.Delta))
 			provide.Passer.For(target.Sector).Recalculate()
 		case core.AbstractEntity:
 			if target == a.GameMap.Player {
@@ -71,7 +79,7 @@ func (a *MoveAction) Undo() {
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *MapPoint:
-			target.A = a.Original[i].To2D()
+			target.P = a.Original[i].To2D()
 			provide.Passer.For(target.Sector).Recalculate()
 		case core.AbstractEntity:
 			if target == a.GameMap.Player {

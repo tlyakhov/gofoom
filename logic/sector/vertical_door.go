@@ -54,6 +54,9 @@ func (s *VerticalDoorService) Frame(lastFrameTime float64) {
 
 	if last != ps.TopZ {
 		ps.ClearLightmaps()
+		for _, pvs := range ps.PVS {
+			pvs.Physical().ClearLightmaps()
+		}
 		//for (var key in this.pvs) {
 		//   this.pvs[key].clearLightmaps();
 		//}

@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"sort"
 
 	"github.com/rs/xid"
@@ -35,12 +36,24 @@ type splitEdge struct {
 	Visited          bool
 }
 
+func (se *splitEdge) String() string {
+	p := concepts.Vector2{}
+	n := concepts.Vector2{}
+	if se.Prev != nil {
+		p = se.Prev.Start
+	}
+	if se.Next != nil {
+		n = se.Next.Start
+	}
+	return fmt.Sprintf("Split Edge: <%v>, dist: %v, side: %v, src/dest: %v/%v, prev: <%v>, next: <%v>", se.Start.String(), se.DistOnLine, se.Side, se.SrcEdge, se.DstEdge, p, n)
+}
+
 type splitEdgeByStart []*splitEdge
 
 func (edges splitEdgeByStart) Len() int      { return len(edges) }
 func (edges splitEdgeByStart) Swap(i, j int) { edges[i], edges[j] = edges[j], edges[i] }
 func (edges splitEdgeByStart) Less(i, j int) bool {
-	return edges[i].signedDist(edges[i].Splitter1, edges[i].Splitter2, edges[i].Start) < edges[i].signedDist(edges[i].Splitter1, edges[i].Splitter2, edges[j].Start)
+	return edges[i].signedDist(edges[i].Splitter1, edges[i].Splitter2, edges[i].Start) < edges[j].signedDist(edges[j].Splitter1, edges[j].Splitter2, edges[j].Start)
 }
 
 func (a *SectorSplitter) whichSide(l1, l2, p concepts.Vector2) splitSide {
@@ -62,38 +75,71 @@ func (a *SectorSplitter) signedDist(l1, l2, p concepts.Vector2) float64 {
 
 func (a *SectorSplitter) Do() {
 	a.splitEdges()
-	a.sortEdges()
-	a.split()
-	a.collect()
+	if len(a.EdgesOnLine) > 0 {
+		a.sortEdges()
+		a.split()
+		a.collect()
+	} else {
+		a.Result = nil
+	}
 }
 
 func (a *SectorSplitter) splitEdges() {
+	// fmt.Printf("Splitting %v\n", a.Sector.GetBase().ID)
+
 	a.SplitSector = []*splitEdge{}
 	a.EdgesOnLine = []*splitEdge{}
 
-	for _, segment := range a.Sector.Physical().Segments {
-		edgeStartSide := a.whichSide(a.Splitter1, a.Splitter2, segment.A)
-		edgeEndSide := a.whichSide(a.Splitter1, a.Splitter2, segment.B)
-		se := &splitEdge{SectorSplitter: a, Source: segment, Start: segment.A, Side: edgeStartSide}
+	// We need to iterate counter-clockwise for the splitting to work, so let's use the sector winding to figure that out.
+	start := 0
+	end := len(a.Sector.Physical().Segments) - 1
+	dir := 1
+	if !a.Sector.Physical().Winding() {
+		end, start = start, end
+		dir = -1
+	}
+
+	for i := start; i != end+dir; i += dir {
+		j := i + dir
+		if j < 0 {
+			j += len(a.Sector.Physical().Segments)
+		} else if j >= len(a.Sector.Physical().Segments) {
+			j -= len(a.Sector.Physical().Segments)
+		}
+		segment := a.Sector.Physical().Segments[i]
+		next := a.Sector.Physical().Segments[j]
+		edgeStartSide := a.whichSide(a.Splitter1, a.Splitter2, segment.P)
+		edgeEndSide := a.whichSide(a.Splitter1, a.Splitter2, next.P)
+		se := &splitEdge{SectorSplitter: a, Source: segment, Start: segment.P, Side: edgeStartSide}
 		a.SplitSector = append(a.SplitSector, se)
+		// fmt.Printf("Added %v to SplitSector...\n", se.String())
 
 		if edgeStartSide == sideOn {
 			a.EdgesOnLine = append(a.EdgesOnLine, se)
+			// fmt.Printf("Edge on line!\n")
 		} else if edgeStartSide != edgeEndSide && edgeEndSide != sideOn {
-			isect, ok := segment.Intersect2D(a.Splitter1, a.Splitter2)
+			isect, ok := concepts.Intersect(segment.P, next.P, a.Splitter1, a.Splitter2)
+			// fmt.Printf("Edge intersects at %v\n", isect.String())
 			if !ok {
-				panic("Split Sector error: no intersection despite side difference!")
+				// The splitter line is not fully bisecting the sector. Ignore, and continue.
+				// fmt.Println("Splitter not bisecting sector.")
+				continue
 			}
 			se := &splitEdge{SectorSplitter: a, Source: segment, Start: isect, Side: sideOn}
 			a.SplitSector = append(a.SplitSector, se)
 			a.EdgesOnLine = append(a.EdgesOnLine, se)
+		} else {
+			// fmt.Printf("Edge doesn't intersect split line (or end point is on the line).\n")
 		}
 	}
 
+	// fmt.Println("Final constructed splitter:")
 	// Connect doubly linked list
 	for i, edge := range a.SplitSector {
-		edge.Next = a.SplitSector[(i+1)%len(a.SplitSector)]
-		a.SplitSector[(i+1)%len(a.SplitSector)].Prev = edge
+		next := a.SplitSector[(i+1)%len(a.SplitSector)]
+		edge.Next = next
+		next.Prev = edge
+		// fmt.Printf("%v\n", edge.String())
 	}
 }
 
@@ -101,9 +147,11 @@ func (a *SectorSplitter) sortEdges() {
 	// Sort edges by start position relative to the start position of the split line
 	sort.Sort(splitEdgeByStart(a.EdgesOnLine))
 
+	// fmt.Println("Sorted edges:")
 	// Compute the distance of each edge to the first one.
 	for _, edge := range a.EdgesOnLine {
 		edge.DistOnLine = edge.Start.Dist(a.EdgesOnLine[0].Start)
+		// fmt.Printf("%v\n", edge.String())
 	}
 }
 
@@ -181,15 +229,18 @@ func (a *SectorSplitter) createBridge(srcEdge, dstEdge *splitEdge) {
 }
 
 func (a *SectorSplitter) verifyCycles() {
+	// fmt.Println("Verifying cycles...")
 	for _, edge := range a.SplitSector {
 		visitor := edge
 		count := 0
 
+		// fmt.Printf("Starting cycle test at %v\n", edge.String())
 		for {
-			if count >= len(a.SplitSector) {
+			if count > len(a.SplitSector) {
 				panic("Split Sector error: verify cycles failed.")
 			}
-			visitor = edge.Next
+			// fmt.Printf("%v\n", visitor.String())
+			visitor = visitor.Next
 			count++
 			if visitor == edge {
 				break
@@ -223,13 +274,40 @@ func (a *SectorSplitter) collect() {
 			addedSegment.SetParent(added)
 			addedSegment.Deserialize(visitor.Source.Serialize())
 			addedSegment.GetBase().ID = xid.New().String()
-			addedSegment.A = visitor.Start
+			addedSegment.P = visitor.Start
 			addedSegment.AdjacentSegment = nil
 			addedSegment.AdjacentSector = nil
+			if len(phys.Segments) > 0 {
+				addedSegment.Next = phys.Segments[0]
+				addedSegment.Prev = phys.Segments[len(phys.Segments)-1]
+				addedSegment.Next.Prev = addedSegment
+				addedSegment.Prev.Next = addedSegment
+			}
 			phys.Segments = append(phys.Segments, addedSegment)
+			if visitor.Source.AdjacentSegment != nil {
+				visitor.Source.AdjacentSegment.AdjacentSector = nil
+				visitor.Source.AdjacentSegment.AdjacentSegment = nil
+			}
 			visitor = visitor.Next
 			if visitor == edge {
 				break
+			}
+		}
+	}
+	// Only one sector means we didn't split anything
+	if len(a.Result) == 1 && len(a.Result[0].Physical().Segments) == len(a.Sector.Physical().Segments) {
+		a.Result = nil
+		return
+	}
+
+	for id, e := range a.Sector.Physical().Entities {
+		e.Physical().Sector = nil
+		for _, added := range a.Result {
+			phys := added.Physical()
+			phys.Recalculate()
+			if phys.IsPointInside2D(e.Physical().Pos.To2D()) {
+				phys.Entities[id] = e
+				e.SetParent(added)
 			}
 		}
 	}

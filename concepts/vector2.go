@@ -5,14 +5,14 @@ import (
 	"math"
 	"strconv"
 	"strings"
+
+	"github.com/tlyakhov/gofoom/constants"
 )
 
 // Vector2 is a simple 2d vector type.
 type Vector2 struct {
 	X, Y float64
 }
-
-var ZeroVector2 = Vector2{}
 
 // Add a vector to a vector.
 func (v Vector2) Add(v2 Vector2) Vector2 {
@@ -81,30 +81,59 @@ func (v Vector2) Floor() Vector2 {
 	return Vector2{math.Floor(v.X), math.Floor(v.Y)}
 }
 
+// Intersect returns the intersection of two 2D line segments.
+func Intersect(s1A, s1B, s2A, s2B Vector2) (Vector2, bool) {
+	s1dx := s1B.X - s1A.X
+	s1dy := s1B.Y - s1A.Y
+	s2dx := s2B.X - s2A.X
+	s2dy := s2B.Y - s2A.Y
+
+	denom := s1dx*s2dy - s2dx*s1dy
+	if denom == 0 {
+		return Vector2{}, false
+	}
+	r := (s1A.Y-s2A.Y)*s2dx - (s1A.X-s2A.X)*s2dy
+	if (denom < 0 && r >= constants.IntersectEpsilon) ||
+		(denom > 0 && r < -constants.IntersectEpsilon) {
+		return Vector2{}, false
+	}
+	s := (s1A.Y-s2A.Y)*s1dx - (s1A.X-s2A.X)*s1dy
+	if (denom < 0 && s >= constants.IntersectEpsilon) ||
+		(denom > 0 && s < -constants.IntersectEpsilon) {
+		return Vector2{}, false
+	}
+	r /= denom
+	s /= denom
+	if r < 0 || r > 1.0+constants.IntersectEpsilon || s > 1.0+constants.IntersectEpsilon {
+		return Vector2{}, false
+	}
+	return Vector2{s1A.X + r*s1dx, s1A.Y + r*s1dy}, true
+}
+
 // To3D converts a 2D vector to 3D.
 func (v Vector2) To3D() Vector3 {
 	return Vector3{v.X, v.Y, 0}
 }
 
 // Deserialize assigns this vector's fields from a parsed JSON map.
-func (vec *Vector2) Deserialize(data map[string]interface{}) {
-	if v, ok := data["X"]; ok {
-		vec.X = v.(float64)
+func (v *Vector2) Deserialize(data map[string]interface{}) {
+	if val, ok := data["X"]; ok {
+		v.X = val.(float64)
 	}
-	if v, ok := data["Y"]; ok {
-		vec.Y = v.(float64)
+	if val, ok := data["Y"]; ok {
+		v.Y = val.(float64)
 	}
 }
 
 // String formats the vector as a string
-func (vec Vector2) String() string {
-	return strconv.FormatFloat(vec.X, 'f', -1, 64) + ", " +
-		strconv.FormatFloat(vec.Y, 'f', -1, 64)
+func (v Vector2) String() string {
+	return strconv.FormatFloat(v.X, 'f', -1, 64) + ", " +
+		strconv.FormatFloat(v.Y, 'f', -1, 64)
 }
 
 // Serialize formats the vector as a JSON key-value map.
-func (vec Vector2) Serialize() map[string]interface{} {
-	return map[string]interface{}{"X": vec.X, "Y": vec.Y}
+func (v Vector2) Serialize() map[string]interface{} {
+	return map[string]interface{}{"X": v.X, "Y": v.Y}
 }
 
 // ParseVector2 parses strings in the form "X, Y" into vectors.

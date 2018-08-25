@@ -127,6 +127,7 @@ func (e *Editor) SetMapCursor(name string) {
 }
 
 func (e *Editor) ActionFinished(canceled bool) {
+	e.GameMap.AutoPortal()
 	if !canceled {
 		e.UndoHistory = append(e.UndoHistory, e.CurrentAction)
 		if len(e.UndoHistory) > 100 {
@@ -188,6 +189,7 @@ func (e *Editor) Undo() {
 		return
 	}
 	a.Undo()
+	e.GameMap.AutoPortal()
 	e.RefreshPropertyGrid()
 	e.RedoHistory = append(e.RedoHistory, a)
 }
@@ -207,6 +209,7 @@ func (e *Editor) Redo() {
 		return
 	}
 	a.Redo()
+	e.GameMap.AutoPortal()
 	e.RefreshPropertyGrid()
 	e.UndoHistory = append(e.UndoHistory, a)
 }
@@ -263,11 +266,11 @@ func (e *Editor) GatherHoveringObjects() {
 
 		for _, segment := range phys.Segments {
 			if e.CurrentAction == nil {
-				if e.Mouse.Sub(e.WorldToScreen(segment.A)).Length() < SegmentSelectionEpsilon {
+				if e.Mouse.Sub(e.WorldToScreen(segment.P)).Length() < SegmentSelectionEpsilon {
 					e.HoveringObjects = append(e.HoveringObjects, segment)
 				}
 			} else if editor.Selecting() {
-				if segment.A.X >= v1.X && segment.A.Y >= v1.Y && segment.A.X <= v2.X && segment.A.Y <= v2.Y {
+				if segment.P.X >= v1.X && segment.P.Y >= v1.Y && segment.P.X <= v2.X && segment.P.Y <= v2.Y {
 					mp := &MapPoint{Segment: segment}
 					if indexOfObject(e.HoveringObjects, mp) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, mp)

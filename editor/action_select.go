@@ -27,6 +27,11 @@ func (a *SelectAction) OnMouseDown(button *gdk.EventButton) {
 		a.Mode = SelectSub
 	}
 
+	a.Original = make([]concepts.ISerializable, len(editor.SelectedObjects))
+	for i, o := range editor.SelectedObjects {
+		a.Original[i] = o
+	}
+
 	a.State = "SelectionStart"
 	a.SetMapCursor("cell")
 }

@@ -99,7 +99,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 		slice.Segment = segment
 		slice.Distance = dist
 		slice.Intersection = isect.To3D()
-		slice.U = isect.Dist(segment.A) / segment.Length
+		slice.U = isect.Dist(segment.P) / segment.Length
 	}
 
 	if dist != math.MaxFloat64 {
