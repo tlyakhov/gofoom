@@ -17,7 +17,7 @@ func init() {
 
 func (m *Lit) Initialize() {
 	m.Base.Initialize()
-	m.Ambient = concepts.Vector3{0.5, 0.5, 0.5}
+	m.Ambient = concepts.Vector3{0.1, 0.1, 0.1}
 	m.Diffuse = concepts.Vector3{1, 1, 1}
 }
 

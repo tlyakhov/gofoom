@@ -34,10 +34,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 		}
 	}
 
-	for i, segment := range phys.Segments {
-		next := phys.Segments[(i+1)%len(phys.Segments)]
-
-		if next.A == segment.A {
+	for _, segment := range phys.Segments {
+		if segment.P == segment.Next.P {
 			continue
 		}
 
@@ -76,13 +74,13 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 		// Draw segment
 		cr.SetLineWidth(1)
 		cr.NewPath()
-		cr.MoveTo(segment.A.X, segment.A.Y)
-		cr.LineTo(next.A.X, next.A.Y)
+		cr.MoveTo(segment.P.X, segment.P.Y)
+		cr.LineTo(segment.Next.P.X, segment.Next.P.Y)
 		cr.ClosePath()
 		cr.Stroke()
 		// Draw normal
 		cr.NewPath()
-		ns := next.A.Add(segment.A).Mul(0.5)
+		ns := segment.Next.P.Add(segment.P).Mul(0.5)
 		ne := ns.Add(segment.Normal.Mul(4.0))
 		cr.MoveTo(ns.X, ns.Y)
 		cr.LineTo(ne.X, ne.Y)
@@ -94,12 +92,12 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 
 		if mapPointSelected {
 			cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
-			DrawHandle(cr, segment.A)
+			DrawHandle(cr, segment.P)
 		} else if mapPointHovering {
 			cr.SetSourceRGB(ColorSelectionSecondary.X, ColorSelectionSecondary.Y, ColorSelectionSecondary.Z)
-			DrawHandle(cr, segment.A)
+			DrawHandle(cr, segment.P)
 		} else {
-			cr.Rectangle(segment.A.X-1, segment.A.Y-1, 2, 2)
+			cr.Rectangle(segment.P.X-1, segment.P.Y-1, 2, 2)
 			cr.Stroke()
 		}
 	}

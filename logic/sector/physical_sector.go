@@ -67,7 +67,7 @@ func (s *PhysicalSectorService) ActOnEntity(e core.AbstractEntity) {
 		e.Physical().Vel.Y = 0
 	}
 
-	e.Physical().Vel.Z -= constants.Gravity
+	e.Physical().Vel.Z -= constants.Gravity * e.Physical().Weight
 
 	s.Collide(e)
 }
@@ -106,12 +106,12 @@ func (s *PhysicalSectorService) UpdatePVS(normal concepts.Vector2, s2 core.Abstr
 		if adj == nil {
 			continue
 		}
-		floorZ, ceilZ := adj.Sector.Physical().CalcFloorCeilingZ(seg.A)
-		if math.Abs(ceilZ-floorZ) < constants.VelocityEpsilon || adj.MidMaterial != nil {
+		floorZ, ceilZ := adj.Sector.Physical().CalcFloorCeilingZ(seg.P)
+		if math.Abs(ceilZ-floorZ) < constants.VelocityEpsilon {
 			continue
 		}
 
-		correctSide := normal == concepts.ZeroVector2 || normal.Dot(seg.Normal) >= 0
+		correctSide := normal == concepts.Vector2{} || normal.Dot(seg.Normal) >= 0
 		if !correctSide || s.PVS[seg.AdjacentSector.GetBase().ID] != nil {
 			continue
 		}
@@ -122,7 +122,7 @@ func (s *PhysicalSectorService) UpdatePVS(normal concepts.Vector2, s2 core.Abstr
 				s.PVSLights = append(s.PVSLights, e)
 			}
 		}
-		if normal == concepts.ZeroVector2 {
+		if (normal == concepts.Vector2{}) {
 			s.UpdatePVS(seg.Normal, seg.AdjacentSector)
 		} else {
 			s.UpdatePVS(normal, seg.AdjacentSector)
@@ -159,6 +159,6 @@ func (s *PhysicalSectorService) UpdateEntityPVS(normal concepts.Vector2, s2 core
 
 func (s *PhysicalSectorService) Recalculate() {
 	s.PhysicalSector.Recalculate()
-	s.UpdatePVS(concepts.ZeroVector2, nil)
-	s.UpdateEntityPVS(concepts.ZeroVector2, nil)
+	s.UpdatePVS(concepts.Vector2{}, nil)
+	s.UpdateEntityPVS(concepts.Vector2{}, nil)
 }

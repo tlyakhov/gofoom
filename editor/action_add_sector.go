@@ -9,8 +9,7 @@ import (
 
 type AddSectorAction struct {
 	*Editor
-	Sector           core.AbstractSector
-	OriginalSegments []core.Segment
+	Sector core.AbstractSector
 }
 
 func (a *AddSectorAction) Act() {
@@ -50,10 +49,17 @@ func (a *AddSectorAction) OnMouseDown(button *gdk.EventButton) {
 	seg.HiMaterial = a.GameMap.DefaultMaterial()
 	seg.LoMaterial = a.GameMap.DefaultMaterial()
 	seg.MidMaterial = a.GameMap.DefaultMaterial()
-	seg.A = a.WorldGrid(a.MouseDownWorld)
-	seg.B = seg.A
+	seg.P = a.WorldGrid(a.MouseDownWorld)
 
-	a.Sector.Physical().Segments = append(a.Sector.Physical().Segments, &seg)
+	segs := a.Sector.Physical().Segments
+	if len(segs) > 0 {
+		seg.Prev = segs[len(segs)-1]
+		seg.Next = segs[0]
+		seg.Next.Prev = &seg
+		seg.Prev.Next = &seg
+	}
+
+	a.Sector.Physical().Segments = append(segs, &seg)
 	a.AddToMap()
 }
 func (a *AddSectorAction) OnMouseMove() {
@@ -63,32 +69,7 @@ func (a *AddSectorAction) OnMouseMove() {
 
 	segs := a.Sector.Physical().Segments
 	seg := segs[len(segs)-1]
-	seg.A = a.WorldGrid(a.MouseWorld)
-}
-
-func (a *AddSectorAction) AutoPortal() {
-	for _, sector := range a.GameMap.Sectors {
-		if sector == a.Sector {
-			continue
-		}
-
-		for _, segment := range sector.Physical().Segments {
-			for _, addedSegment := range a.Sector.Physical().Segments {
-				if addedSegment.Matches(segment) {
-					a.OriginalSegments = append(a.OriginalSegments, *segment)
-					addedSegment.AdjacentSector = sector
-					addedSegment.AdjacentSegment = segment
-					addedSegment.MidMaterial = nil
-					segment.AdjacentSector = a.Sector
-					segment.AdjacentSegment = addedSegment
-					segment.MidMaterial = nil
-				}
-			}
-
-		}
-	}
-	a.GameMap.ClearLightmaps()
-	provide.Passer.For(a.Sector).Recalculate()
+	seg.P = a.WorldGrid(a.MouseWorld)
 }
 
 func (a *AddSectorAction) OnMouseUp() {
@@ -98,10 +79,9 @@ func (a *AddSectorAction) OnMouseUp() {
 	if len(segs) > 1 {
 		first := segs[0]
 		last := segs[len(segs)-1]
-		if last.A.Sub(first.A).Length() < SegmentSelectionEpsilon {
+		if last.P.Sub(first.P).Length() < SegmentSelectionEpsilon {
 			a.Sector.Physical().Segments = segs[:(len(segs) - 1)]
 			provide.Passer.For(a.Sector).Recalculate()
-			a.AutoPortal()
 			a.ActionFinished(false)
 		}
 	}
@@ -111,19 +91,8 @@ func (a *AddSectorAction) OnMouseUp() {
 func (a *AddSectorAction) Frame() {}
 
 func (a *AddSectorAction) Undo() {
-	// Restore original segments.
-	for _, segment := range a.OriginalSegments {
-		segs := segment.Sector.Physical().Segments
-		for index, link := range segs {
-			if link.ID == segment.ID {
-				segs[index] = &segment
-			}
-		}
-	}
-	a.OriginalSegments = []core.Segment{}
 	a.RemoveFromMap()
 }
 func (a *AddSectorAction) Redo() {
 	a.AddToMap()
-	a.AutoPortal()
 }

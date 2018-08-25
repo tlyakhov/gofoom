@@ -10,6 +10,7 @@ import (
 type SplitSectorAction struct {
 	*Editor
 	Splitters []*core.SectorSplitter
+	Original  []core.AbstractSector
 }
 
 func (a *SplitSectorAction) OnMouseDown(button *gdk.EventButton) {}
@@ -25,11 +26,14 @@ func (a *SplitSectorAction) Split(sector core.AbstractSector) {
 	}
 	a.Splitters = append(a.Splitters, s)
 	s.Do()
+	if s.Result == nil || len(s.Result) == 0 {
+		return
+	}
 	delete(a.GameMap.Sectors, sector.GetBase().ID)
+	a.Original = append(a.Original, sector)
 	for _, added := range s.Result {
 		a.GameMap.Sectors[added.GetBase().ID] = added
 	}
-	a.GameMap.Recalculate()
 }
 
 func (a *SplitSectorAction) OnMouseUp() {
@@ -49,8 +53,8 @@ func (a *SplitSectorAction) OnMouseUp() {
 	for _, obj := range all {
 		if sector, ok := obj.(core.AbstractSector); ok {
 			a.Split(sector)
-		} else if _, ok := obj.(MapPoint); ok {
-			// TODO...
+		} else if mp, ok := obj.(MapPoint); ok {
+			a.Split(mp.Segment.Sector)
 		}
 	}
 	a.ActionFinished(false)
@@ -61,6 +65,56 @@ func (a *SplitSectorAction) Cancel() {
 }
 
 func (a *SplitSectorAction) Undo() {
+	entities := []core.AbstractEntity{}
+
+	for _, splitter := range a.Splitters {
+		if splitter.Result == nil {
+			continue
+		}
+		for _, added := range splitter.Result {
+			for _, e := range added.Physical().Entities {
+				entities = append(entities, e)
+				e.Physical().Sector = nil
+			}
+			added.Physical().Entities = make(map[string]core.AbstractEntity)
+			delete(a.GameMap.Sectors, added.GetBase().ID)
+		}
+	}
+	for _, original := range a.Original {
+		a.GameMap.Sectors[original.GetBase().ID] = original
+		for _, e := range entities {
+			if original.Physical().IsPointInside2D(e.Physical().Pos.To2D()) {
+				original.Physical().Entities[e.GetBase().ID] = e
+				e.SetParent(original)
+			}
+		}
+	}
 }
 func (a *SplitSectorAction) Redo() {
+	entities := []core.AbstractEntity{}
+
+	for _, original := range a.Original {
+		delete(a.GameMap.Sectors, original.GetBase().ID)
+		for _, e := range original.Physical().Entities {
+			entities = append(entities, e)
+			e.Physical().Sector = nil
+		}
+		original.Physical().Entities = make(map[string]core.AbstractEntity)
+	}
+
+	for _, splitter := range a.Splitters {
+		if splitter.Result == nil {
+			continue
+		}
+		for _, added := range splitter.Result {
+			a.GameMap.Sectors[added.GetBase().ID] = added
+			for _, e := range entities {
+				if added.Physical().IsPointInside2D(e.Physical().Pos.To2D()) {
+					added.Physical().Entities[e.GetBase().ID] = e
+					e.SetParent(added)
+				}
+			}
+		}
+	}
+
 }

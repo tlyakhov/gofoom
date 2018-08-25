@@ -24,18 +24,21 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 		DrawSector(cr, sector)
 	}
 
-	if editor.Selecting() {
-		v1, v2 := editor.SelectionBox()
-		cr.Rectangle(v1.X, v1.Y, v2.X-v1.X, v2.Y-v1.Y)
-		cr.SetSourceRGBA(0.2, 0.2, 1.0, 0.3)
-		cr.Fill()
-		cr.SetSourceRGBA(0.67, 0.67, 1.0, 0.3)
-		cr.Stroke()
-	} else if _, ok := editor.CurrentAction.(*AddSectorAction); ok {
+	switch editor.CurrentAction.(type) {
+	case *SelectAction:
+		if editor.MousePressed {
+			v1, v2 := editor.SelectionBox()
+			cr.Rectangle(v1.X, v1.Y, v2.X-v1.X, v2.Y-v1.Y)
+			cr.SetSourceRGBA(0.2, 0.2, 1.0, 0.3)
+			cr.Fill()
+			cr.SetSourceRGBA(0.67, 0.67, 1.0, 0.3)
+			cr.Stroke()
+		}
+	case *AddSectorAction:
 		gridMouse := editor.WorldGrid(editor.MouseWorld)
 		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
 		DrawHandle(cr, gridMouse)
-	} else if _, ok := editor.CurrentAction.(*SplitSegmentAction); ok {
+	case *SplitSectorAction, *SplitSegmentAction:
 		gridMouse := editor.WorldGrid(editor.MouseWorld)
 		gridMouseDown := editor.WorldGrid(editor.MouseDownWorld)
 		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
@@ -48,6 +51,7 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 			cr.Stroke()
 			DrawHandle(cr, gridMouseDown)
 		}
+
 	}
 
 	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse.X, Mouse.Y))

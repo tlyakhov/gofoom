@@ -34,4 +34,5 @@ func (p *Player) Initialize() {
 	p.Height = constants.PlayerHeight
 	p.BoundingRadius = constants.PlayerBoundingRadius
 	p.Standing = true
+	p.Weight = 1
 }

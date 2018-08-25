@@ -15,7 +15,7 @@ func Ceiling(s *state.Slice) {
 	// Because of our sloped ceilings, we can't use simple linear interpolation to calculate the distance
 	// or world position of the ceiling sample, we have to do a ray-plane intersection.
 	// Thankfully, the only expensive operation is a square root to get the distance.
-	planeRayDelta := s.PhysicalSector.Segments[0].A.Sub(s.Ray.Start).To3D()
+	planeRayDelta := s.PhysicalSector.Segments[0].P.Sub(s.Ray.Start).To3D()
 	planeRayDelta.Z = s.PhysicalSector.TopZ - s.CameraZ
 	rayDir := concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], 0}
 
