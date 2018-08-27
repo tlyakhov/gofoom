@@ -20,7 +20,51 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <placeholder/>
+          <object class="GtkBox" id="TopBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkComboBoxText" id="SectorTypes">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="active">0</property>
+                <items>
+                  <item id="core.PhysicalSector" translatable="yes">Standard Sector</item>
+                  <item id="sectors.Underwater" translatable="yes">Underwater Sector</item>
+                  <item id="sectors.VerticalDoor" translatable="yes">Vertical Door</item>
+                  <item id="sectors.ToxicSector" translatable="yes">Toxic Sector</item>
+                </items>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="EntityTypes">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="active">0</property>
+                <items>
+                  <item id="entities.Light" translatable="yes">Light</item>
+                </items>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <object class="GtkPaned">
@@ -89,12 +133,23 @@
                     <property name="can_focus">False</property>
                     <property name="label">Sectors</property>
                     <child>
-                      <object class="GtkRadioToolButton" id="AddStandardSector">
+                      <object class="GtkRadioToolButton" id="AddSector">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text">Add Standard Sector</property>
-                        <property name="label">Add Standard Sector</property>
+                        <property name="tooltip_text">Add Sector</property>
+                        <property name="label">Add Sector</property>
                         <property name="icon_name">insert-object</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="AddEntity">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text">Add Entity</property>
+                        <property name="label">Add Entity</property>
+                        <property name="icon_name">preferences-desktop-accessibility</property>
                         <property name="group">ToolSelect</property>
                         <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
                       </object>

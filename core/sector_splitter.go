@@ -93,10 +93,9 @@ func (a *SectorSplitter) splitEdges() {
 	// We need to iterate counter-clockwise for the splitting to work, so let's use the sector winding to figure that out.
 	start := 0
 	end := len(a.Sector.Physical().Segments) - 1
-	dir := 1
-	if !a.Sector.Physical().Winding() {
+	dir := int(a.Sector.Physical().Winding)
+	if a.Sector.Physical().Winding < 0 {
 		end, start = start, end
-		dir = -1
 	}
 
 	for i := start; i != end+dir; i += dir {

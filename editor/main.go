@@ -134,6 +134,11 @@ func onActivate() {
 		log.Fatal("Can't find PropertyGrid object in GTK+ UI file.", err)
 	}
 	editor.PropertyGrid = obj.(*gtk.Grid)
+	obj, err = builder.GetObject("EntityTypes")
+	if err != nil {
+		log.Fatal("Can't find EntityTypes object in GTK+ UI file.", err)
+	}
+	editor.EntityTypes = obj.(*gtk.ComboBoxText)
 
 	editor.AddSimpleMenuAction("save", func(obj *glib.Object) { editor.GameMap.Save("test-saved-map.json") })
 	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
@@ -207,8 +212,10 @@ func onActivate() {
 			editor.SwitchTool(ToolSplitSegment)
 		case "Split Sector":
 			editor.SwitchTool(ToolSplitSector)
-		case "Add Standard Sector":
-			editor.SwitchTool(ToolAddStandardSector)
+		case "Add Sector":
+			editor.SwitchTool(ToolAddSector)
+		case "Add Entity":
+			editor.SwitchTool(ToolAddEntity)
 		}
 	}
 	builder.ConnectSignals(signals)
