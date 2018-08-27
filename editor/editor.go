@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"reflect"
 	"unsafe"
@@ -12,6 +13,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 
 	"github.com/tlyakhov/gofoom/core"
+	"github.com/tlyakhov/gofoom/registry"
 	"github.com/tlyakhov/gofoom/render"
 
 	"github.com/tlyakhov/gofoom/concepts"
@@ -36,6 +38,7 @@ type EditorWidgets struct {
 	PropertyGrid *gtk.Grid
 	GameArea     *gtk.DrawingArea
 	MapArea      *gtk.DrawingArea
+	EntityTypes  *gtk.ComboBoxText
 }
 
 type EditorTool int
@@ -44,7 +47,8 @@ const (
 	ToolSelect EditorTool = iota
 	ToolSplitSegment
 	ToolSplitSector
-	ToolAddStandardSector
+	ToolAddSector
+	ToolAddEntity
 )
 
 type Editor struct {
@@ -150,19 +154,26 @@ func (e *Editor) ActTool() {
 	switch e.Tool {
 	case ToolSplitSegment:
 		e.NewAction(&SplitSegmentAction{Editor: e})
-		e.CurrentAction.Act()
 	case ToolSplitSector:
 		e.NewAction(&SplitSectorAction{Editor: e})
-		e.CurrentAction.Act()
-	case ToolAddStandardSector:
+	case ToolAddSector:
 		s := &core.PhysicalSector{}
 		s.Initialize()
 		s.FloorMaterial = e.GameMap.DefaultMaterial()
 		s.CeilMaterial = e.GameMap.DefaultMaterial()
 		s.SetParent(e.GameMap.Map)
 		e.NewAction(&AddSectorAction{Editor: e, Sector: s})
-		e.CurrentAction.Act()
+	case ToolAddEntity:
+		typeId := e.EntityTypes.GetActiveID()
+		t := registry.Instance().All[typeId]
+		fmt.Println(t)
+		ae := reflect.New(t).Interface().(core.AbstractEntity)
+		ae.Initialize()
+		e.NewAction(&AddEntityAction{Editor: e, Entity: ae})
+	default:
+		return
 	}
+	e.CurrentAction.Act()
 }
 
 func (e *Editor) SwitchTool(tool EditorTool) {

@@ -10,6 +10,14 @@ import (
 func WallHi(s *state.SlicePortal) {
 	mat := material.For(s.AdjSegment.HiMaterial, s.Slice)
 
+	u := s.U
+	if s.Segment.HiBehavior == core.ScaleHeight || s.Segment.HiBehavior == core.ScaleNone {
+		if s.PhysicalSector.Winding < 0 {
+			u = 1.0 - u
+		}
+		u = (s.Segment.P.X + s.Segment.P.Y + u*s.Segment.Length) / 64.0
+	}
+
 	for s.Y = s.ClippedStart; s.Y < s.AdjClippedTop; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 		if s.Distance >= s.ZBuffer[screenIndex] {
@@ -24,11 +32,6 @@ func WallHi(s *state.SlicePortal) {
 			v = (s.AdjCeilZ - v*(s.AdjCeilZ-s.CeilZ)) / 64.0
 		}
 
-		u := s.U
-		if s.Segment.HiBehavior == core.ScaleHeight || s.Segment.HiBehavior == core.ScaleNone {
-			u = u * s.Segment.Length / 64.0
-		}
-
 		if mat != nil {
 			s.Write(screenIndex, mat.Sample(u, v, light, s.ProjectZ(1.0)))
 		}
@@ -39,7 +42,13 @@ func WallHi(s *state.SlicePortal) {
 // WallLow renders the bottom portion of a portal segment.
 func WallLow(s *state.SlicePortal) {
 	mat := material.For(s.AdjSegment.LoMaterial, s.Slice)
-
+	u := s.U
+	if s.Segment.LoBehavior == core.ScaleHeight || s.Segment.LoBehavior == core.ScaleNone {
+		if s.PhysicalSector.Winding < 0 {
+			u = 1.0 - u
+		}
+		u = (s.Segment.P.X + s.Segment.P.Y + u*s.Segment.Length) / 64.0
+	}
 	for s.Y = s.AdjClippedBottom; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 		if s.Distance >= s.ZBuffer[screenIndex] {
@@ -51,11 +60,6 @@ func WallLow(s *state.SlicePortal) {
 
 		if s.Segment.LoBehavior == core.ScaleWidth || s.Segment.LoBehavior == core.ScaleNone {
 			v = (v*(s.FloorZ-s.AdjFloorZ) - s.FloorZ) / 64.0
-		}
-
-		u := s.U
-		if s.Segment.LoBehavior == core.ScaleHeight || s.Segment.LoBehavior == core.ScaleNone {
-			u = u * s.Segment.Length / 64.0
 		}
 
 		if mat != nil {

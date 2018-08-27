@@ -10,6 +10,14 @@ import (
 func WallMid(s *state.Slice) {
 	mat := material.For(s.Segment.MidMaterial, s)
 
+	u := s.U
+	if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleNone {
+		if s.PhysicalSector.Winding < 0 {
+			u = 1.0 - u
+		}
+		u = (s.Segment.P.X + s.Segment.P.Y + u*s.Segment.Length) / 64.0
+	}
+
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
@@ -23,11 +31,6 @@ func WallMid(s *state.Slice) {
 
 		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
 			v = (v*(s.CeilZ-s.FloorZ) - s.CeilZ) / 64.0
-		}
-
-		u := s.U
-		if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleNone {
-			u = u * s.Segment.Length / 64.0
 		}
 
 		//fmt.Printf("%v\n", screenIndex)

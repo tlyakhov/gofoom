@@ -22,9 +22,10 @@ type PhysicalSector struct {
 	CeilSlope     float64                `editable:"Ceiling Slope"`
 	FloorTarget   AbstractSector         `editable:"Floor Target"`
 	CeilTarget    AbstractSector         `editable:"Ceiling Target"`
-	FloorMaterial concepts.ISerializable `editable:"Floor Material"`
-	CeilMaterial  concepts.ISerializable `editable:"Ceiling Material"`
+	FloorMaterial concepts.ISerializable `editable:"Floor Material" edit_type:"Material"`
+	CeilMaterial  concepts.ISerializable `editable:"Ceiling Material" edit_type:"Material"`
 
+	Winding                       int8
 	Min, Max, Center              concepts.Vector3
 	FloorNormal, CeilNormal       concepts.Vector3
 	LightmapWidth, LightmapHeight uint32
@@ -58,16 +59,6 @@ func (ms *PhysicalSector) IsPointInside2D(p concepts.Vector2) bool {
 		flag1 = flag2
 	}
 	return inside
-}
-
-func (ms *PhysicalSector) Winding() bool {
-	sum := 0.0
-	for i, segment := range ms.Segments {
-		// Can't use prev/next pointers because they haven't been initialized yet.
-		next := ms.Segments[(i+1)%len(ms.Segments)]
-		sum += (next.P.X - segment.P.X) * (segment.P.Y + next.P.Y)
-	}
-	return sum < 0
 }
 
 func (s *PhysicalSector) Initialize() {
@@ -168,7 +159,18 @@ func (s *PhysicalSector) Recalculate() {
 	s.Min = concepts.Vector3{math.Inf(1), math.Inf(1), s.BottomZ}
 	s.Max = concepts.Vector3{math.Inf(-1), math.Inf(-1), s.TopZ}
 
-	w := s.Winding()
+	sum := 0.0
+	for i, segment := range s.Segments {
+		// Can't use prev/next pointers because they haven't been initialized yet.
+		next := s.Segments[(i+1)%len(s.Segments)]
+		sum += (next.P.X - segment.P.X) * (segment.P.Y + next.P.Y)
+	}
+
+	if sum < 0 {
+		s.Winding = 1
+	} else {
+		s.Winding = -1
+	}
 
 	filtered := s.Segments[:0]
 	var prev *Segment
@@ -202,7 +204,7 @@ func (s *PhysicalSector) Recalculate() {
 		segment.Sector = s
 		segment.Recalculate()
 
-		if !w {
+		if s.Winding < 0 {
 			segment.Normal = segment.Normal.Mul(-1)
 		}
 	}
