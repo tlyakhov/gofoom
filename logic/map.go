@@ -103,6 +103,5 @@ func (m *MapService) AutoPortal() {
 			}
 		}
 	}
-	m.ClearLightmaps()
 	m.Recalculate()
 }

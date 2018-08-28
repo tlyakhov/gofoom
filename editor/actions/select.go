@@ -1,65 +1,68 @@
-package main
+package actions
 
 import (
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/editor/state"
 )
 
-type SelectMode int
+type SelectModifier int
 
 const (
-	SelectNew SelectMode = iota
+	SelectNew SelectModifier = iota
 	SelectAdd
 	SelectSub
 )
 
-type SelectAction struct {
-	*Editor
-	Mode     SelectMode
+type Select struct {
+	state.IEditor
+
+	Mode     string
+	Modifier SelectModifier
 	Original []concepts.ISerializable
 	Selected []concepts.ISerializable
 }
 
-func (a *SelectAction) OnMouseDown(button *gdk.EventButton) {
+func (a *Select) OnMouseDown(button *gdk.EventButton) {
 	if button.State()&uint(gdk.GDK_SHIFT_MASK) != 0 {
-		a.Mode = SelectAdd
+		a.Modifier = SelectAdd
 	} else if button.State()&uint(gdk.GDK_META_MASK) != 0 {
-		a.Mode = SelectSub
+		a.Modifier = SelectSub
 	}
 
-	a.Original = make([]concepts.ISerializable, len(editor.SelectedObjects))
-	for i, o := range editor.SelectedObjects {
+	a.Original = make([]concepts.ISerializable, len(a.State().SelectedObjects))
+	for i, o := range a.State().SelectedObjects {
 		a.Original[i] = o
 	}
 
-	a.State = "SelectionStart"
+	a.Mode = "SelectionStart"
 	a.SetMapCursor("cell")
 }
 
-func (a *SelectAction) OnMouseMove() {
-	a.State = "Selecting"
+func (a *Select) OnMouseMove() {
+	a.Mode = "Selecting"
 }
 
-func (a *SelectAction) OnMouseUp() {
-	hovering := a.HoveringObjects
+func (a *Select) OnMouseUp() {
+	hovering := a.State().HoveringObjects
 
 	if len(hovering) == 0 { // User is trying to select a sector?
 		hovering = []concepts.ISerializable{}
-		for _, sector := range a.GameMap.Sectors {
-			if sector.IsPointInside2D(a.MouseWorld) {
+		for _, sector := range a.State().World.Sectors {
+			if sector.IsPointInside2D(a.State().MouseWorld) {
 				hovering = append(hovering, sector)
 			}
 		}
 	}
 
-	if a.Mode == SelectAdd {
+	if a.Modifier == SelectAdd {
 		a.Selected = make([]concepts.ISerializable, len(a.Original))
 		copy(a.Selected, a.Original)
 		a.Selected = append(a.Selected, hovering...)
-	} else if a.Mode == SelectSub {
+	} else if a.Modifier == SelectSub {
 		a.Selected = []concepts.ISerializable{}
 		for _, obj := range a.Original {
-			if indexOfObject(hovering, obj) == -1 {
+			if concepts.IndexOf(hovering, obj) == -1 {
 				a.Selected = append(a.Selected, obj)
 			}
 		}
@@ -70,13 +73,13 @@ func (a *SelectAction) OnMouseUp() {
 	a.SelectObjects(a.Selected)
 	a.ActionFinished(false)
 }
-func (a *SelectAction) Act()    {}
-func (a *SelectAction) Cancel() {}
-func (a *SelectAction) Frame()  {}
+func (a *Select) Act()    {}
+func (a *Select) Cancel() {}
+func (a *Select) Frame()  {}
 
-func (a *SelectAction) Undo() {
+func (a *Select) Undo() {
 	a.SelectObjects(a.Original)
 }
-func (a *SelectAction) Redo() {
+func (a *Select) Redo() {
 	a.SelectObjects(a.Selected)
 }

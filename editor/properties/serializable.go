@@ -1,8 +1,10 @@
-package main
+package properties
 
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/tlyakhov/gofoom/concepts"
@@ -13,7 +15,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (e *Editor) PropertyGridPixbuf(obj interface{}) *gdk.Pixbuf {
+func (g *Grid) pixbuf(obj interface{}) *gdk.Pixbuf {
 	pbFromFile := func(filename string) *gdk.Pixbuf {
 		pixbuf, err := gdk.PixbufNewFromFileAtSize(filename, 16, 16)
 		if err != nil {
@@ -33,19 +35,18 @@ func (e *Editor) PropertyGridPixbuf(obj interface{}) *gdk.Pixbuf {
 	return nil
 }
 
-func (e *Editor) PropertyGridFieldCollection(index int, field *GridField) {
+func (g *Grid) fieldSerializable(index int, field *pgField) {
 	// The value of this property is a pointer to a type that implements ISerializable.
 	var origValue string
 	if !field.Values[0].Elem().IsNil() {
 		origValue = field.Values[0].Elem().Interface().(concepts.ISerializable).GetBase().ID
 	}
 
-	editType, ok := field.Source.Tag.Lookup("edit_type")
+	_, ok := field.Source.Tag.Lookup("edit_type")
 
 	if !ok {
 		return
 	}
-	fmt.Println(editType)
 
 	// Create our combo box with pixbuf/string enum entries.
 	rendText, _ := gtk.CellRendererTextNew()
@@ -58,9 +59,9 @@ func (e *Editor) PropertyGridFieldCollection(index int, field *GridField) {
 	box.AddAttribute(rendPix, "pixbuf", 1)
 	box.AddAttribute(rendText, "text", 0)
 
-	for id, mat := range e.GameMap.Materials {
+	for id, mat := range g.State().World.Materials {
 		listItem := opts.Append()
-		pixbuf := e.PropertyGridPixbuf(mat)
+		pixbuf := g.pixbuf(mat)
 		opts.Set(listItem, []int{0, 1}, []interface{}{id, pixbuf})
 		if id == origValue {
 			box.SetActiveIter(listItem)
@@ -71,11 +72,11 @@ func (e *Editor) PropertyGridFieldCollection(index int, field *GridField) {
 		selected, _ := box.GetActiveIter()
 		value, _ := opts.GetValue(selected, 0)
 		value2, _ := value.GoValue()
-		ptr := e.GameMap.Materials[value2.(string)]
-		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(ptr).Convert(field.Type.Elem())}
-		e.NewAction(action)
+		ptr := g.State().World.Materials[value2.(string)]
+		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(ptr).Convert(field.Type.Elem())}
+		g.NewAction(action)
 		action.Act()
 	})
 
-	e.PropertyGrid.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 1, 1)
 }

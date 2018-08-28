@@ -6,7 +6,8 @@ import (
 )
 
 type Painful struct {
-	concepts.Base
+	concepts.Base `editable:"^"`
+
 	Hurt float64 `editable:"Hurt" edit_type:"float"`
 }
 

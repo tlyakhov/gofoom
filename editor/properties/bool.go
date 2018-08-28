@@ -1,12 +1,13 @@
-package main
+package properties
 
 import (
 	"reflect"
 
 	"github.com/gotk3/gotk3/gtk"
+	"github.com/tlyakhov/gofoom/editor/actions"
 )
 
-func (e *Editor) PropertyGridFieldBool(index int, field *GridField) {
+func (g *Grid) fieldBool(index int, field *pgField) {
 	origValue := false
 	for _, v := range field.Values {
 		origValue = origValue || v.Elem().Bool()
@@ -16,11 +17,11 @@ func (e *Editor) PropertyGridFieldBool(index int, field *GridField) {
 	cb.SetHExpand(true)
 	cb.SetActive(origValue)
 	cb.Connect("toggled", func(_ *gtk.CheckButton) {
-		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(cb.GetActive())}
-		e.NewAction(action)
+		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(cb.GetActive())}
+		g.NewAction(action)
 		action.Act()
 		origValue = cb.GetActive()
-		e.PropertyGrid.GrabFocus()
+		g.Container.GrabFocus()
 	})
-	e.PropertyGrid.Attach(cb, 2, index, 1, 1)
+	g.Container.Attach(cb, 2, index, 1, 1)
 }

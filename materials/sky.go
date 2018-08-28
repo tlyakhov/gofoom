@@ -1,13 +1,12 @@
 package materials
 
 import (
-	"strconv"
-
 	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Sky struct {
-	Sampled
+	Sampled `editable:"^"`
+
 	StaticBackground bool `editable:"Static Background?" edit_type:"bool"`
 }
 
@@ -30,6 +29,6 @@ func (m *Sky) Deserialize(data map[string]interface{}) {
 func (m *Sky) Serialize() map[string]interface{} {
 	result := m.Sampled.Serialize()
 	result["Type"] = "materials.Sky"
-	result["StaticBackground"] = strconv.FormatBool(m.StaticBackground)
+	result["StaticBackground"] = m.StaticBackground
 	return result
 }

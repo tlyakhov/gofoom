@@ -8,6 +8,9 @@ import (
 	"github.com/tlyakhov/gofoom/concepts"
 )
 
+// The algorithm here is from:
+// https://geidav.wordpress.com/2015/03/21/splitting-an-arbitrary-polygon-by-a-line/
+
 type splitSide int
 
 const (

@@ -2,6 +2,7 @@ package core
 
 import (
 	"math"
+	"reflect"
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
@@ -142,6 +143,10 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 
 	entities := []interface{}{}
 	for _, e := range s.Entities {
+		// Don't serialize player
+		if reflect.TypeOf(e).String() == "*entities.Player" {
+			continue
+		}
 		entities = append(entities, e.Serialize())
 	}
 	result["Entities"] = entities

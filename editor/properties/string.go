@@ -1,20 +1,24 @@
-package main
+package properties
 
 import (
 	"log"
 	"reflect"
 
+	"github.com/tlyakhov/gofoom/editor/actions"
+
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (e *Editor) PropertyGridFieldString(index int, field *GridField) {
+func (g *Grid) fieldString(index int, field *pgField) {
 	origValue := ""
-	for i, v := range field.Values {
+	i := 0
+	for _, v := range field.Unique {
 		if i != 0 {
 			origValue += ", "
 		}
 		origValue += v.Elem().String()
+		i++
 	}
 
 	box, _ := gtk.EntryNew()
@@ -25,14 +29,14 @@ func (e *Editor) PropertyGridFieldString(index int, field *GridField) {
 		if err != nil {
 			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
 			box.SetText(origValue)
-			e.PropertyGrid.GrabFocus()
+			g.Container.GrabFocus()
 			return
 		}
-		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(text)}
-		e.NewAction(action)
+		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(text)}
+		g.NewAction(action)
 		action.Act()
 		origValue = text
-		e.PropertyGrid.GrabFocus()
+		g.Container.GrabFocus()
 	})
-	e.PropertyGrid.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 1, 1)
 }

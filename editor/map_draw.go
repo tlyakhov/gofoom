@@ -4,10 +4,11 @@ import (
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/editor/actions"
 )
 
 func TransformContext(cr *cairo.Context) {
-	t := editor.Pos.Mul(-editor.Scale).Add(editor.MapViewSize.Mul(0.5))
+	t := editor.Pos.Mul(-editor.Scale).Add(editor.Size.Mul(0.5))
 	cr.Translate(t.X, t.Y)
 	cr.Scale(editor.Scale, editor.Scale)
 }
@@ -15,17 +16,17 @@ func TransformContext(cr *cairo.Context) {
 func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	w := da.GetAllocatedWidth()
 	h := da.GetAllocatedHeight()
-	editor.MapViewSize = concepts.Vector2{float64(w), float64(h)}
+	editor.Size = concepts.Vector2{float64(w), float64(h)}
 
 	DrawMapGrid(cr)
 	TransformContext(cr)
 
-	for _, sector := range editor.GameMap.Sectors {
+	for _, sector := range editor.World.Sectors {
 		DrawSector(cr, sector)
 	}
 
 	switch editor.CurrentAction.(type) {
-	case *SelectAction:
+	case *actions.Select:
 		if editor.MousePressed {
 			v1, v2 := editor.SelectionBox()
 			cr.Rectangle(v1.X, v1.Y, v2.X-v1.X, v2.Y-v1.Y)
@@ -34,11 +35,11 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 			cr.SetSourceRGBA(0.67, 0.67, 1.0, 0.3)
 			cr.Stroke()
 		}
-	case *AddSectorAction:
+	case *actions.AddSector:
 		gridMouse := editor.WorldGrid(editor.MouseWorld)
 		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
 		DrawHandle(cr, gridMouse)
-	case *SplitSectorAction, *SplitSegmentAction:
+	case *actions.SplitSector, *actions.SplitSegment:
 		gridMouse := editor.WorldGrid(editor.MouseWorld)
 		gridMouseDown := editor.WorldGrid(editor.MouseDownWorld)
 		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)

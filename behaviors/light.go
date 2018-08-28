@@ -7,11 +7,12 @@ import (
 )
 
 type Light struct {
-	core.AnimatedBehavior
+	core.AnimatedBehavior `editable:"^"`
 
-	Diffuse               concepts.Vector3
-	Strength, Attenuation float64
-	LastPos               concepts.Vector3
+	Diffuse     concepts.Vector3 `editable:"Diffuse"`
+	Strength    float64          `editable:"Strength"`
+	Attenuation float64          `editable:"Attenuation"`
+	LastPos     concepts.Vector3
 }
 
 func init() {

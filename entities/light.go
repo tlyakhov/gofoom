@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/core"
 	"github.com/tlyakhov/gofoom/registry"
 )
@@ -16,6 +17,10 @@ func init() {
 func (l *Light) Initialize() {
 	l.PhysicalEntity.Initialize()
 	l.BoundingRadius = 10.0
+
+	lb := &behaviors.Light{}
+	lb.Initialize()
+	l.Behaviors[lb.GetBase().ID] = lb
 }
 
 func (l *Light) Serialize() map[string]interface{} {

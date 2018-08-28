@@ -1,15 +1,17 @@
-package main
+package properties
 
 import (
 	"log"
 	"reflect"
+
+	"github.com/tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/tlyakhov/gofoom/concepts"
 )
 
-func (e *Editor) PropertyGridFieldVector3(index int, field *GridField) {
+func (g *Grid) fieldVector3(index int, field *pgField) {
 	origValue := ""
 	for i, v := range field.Values {
 		if i != 0 {
@@ -26,21 +28,21 @@ func (e *Editor) PropertyGridFieldVector3(index int, field *GridField) {
 		if err != nil {
 			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
 			box.SetText(origValue)
-			e.PropertyGrid.GrabFocus()
+			g.Container.GrabFocus()
 			return
 		}
 		vec, err := concepts.ParseVector3(text)
 		if err != nil {
 			log.Printf("Couldn't parse Vector3 from user entry. %v\n", err)
 			box.SetText(origValue)
-			e.PropertyGrid.GrabFocus()
+			g.Container.GrabFocus()
 			return
 		}
-		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(vec)}
-		e.NewAction(action)
+		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(vec)}
+		g.NewAction(action)
 		action.Act()
 		origValue = vec.String()
-		e.PropertyGrid.GrabFocus()
+		g.Container.GrabFocus()
 	})
-	e.PropertyGrid.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 1, 1)
 }

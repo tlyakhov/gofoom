@@ -3,6 +3,7 @@ package sector
 import (
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/core"
+	"github.com/tlyakhov/gofoom/logic/provide"
 	"github.com/tlyakhov/gofoom/sectors"
 )
 
@@ -17,10 +18,6 @@ func NewVerticalDoorService(s *sectors.VerticalDoor) *VerticalDoorService {
 
 func (s *VerticalDoorService) ActOnEntity(e core.AbstractEntity) {
 	s.PhysicalSectorService.ActOnEntity(e)
-
-	//if _, ok := e.(*LightEntity); ok {
-	//	return
-	//}
 
 	ps := s.PhysicalSectorService
 
@@ -53,12 +50,9 @@ func (s *VerticalDoorService) Frame(lastFrameTime float64) {
 	}
 
 	if last != ps.TopZ {
-		ps.ClearLightmaps()
+		s.UpdatePVS()
 		for _, pvs := range ps.PVS {
-			pvs.Physical().ClearLightmaps()
+			provide.Passer.For(pvs).UpdatePVS()
 		}
-		//for (var key in this.pvs) {
-		//   this.pvs[key].clearLightmaps();
-		//}
 	}
 }

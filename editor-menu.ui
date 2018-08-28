@@ -11,10 +11,22 @@
                     <attribute name="accel">&lt;Primary&gt;n</attribute>
                 </item>
                 <item>
+                    <attribute name="label" translatable="yes">_Open...</attribute>
+                    <attribute name="icon">document-open</attribute>
+                    <attribute name="accel">&lt;Primary&gt;o</attribute>
+                    <attribute name="action">app.open</attribute>                    
+                </item>  
+                <item>
                     <attribute name="label" translatable="yes">_Save</attribute>
                     <attribute name="icon">document-save</attribute>
                     <attribute name="accel">&lt;Primary&gt;s</attribute>
                     <attribute name="action">app.save</attribute>                    
+                </item>                
+                <item>
+                    <attribute name="label" translatable="yes">Save _As...</attribute>
+                    <attribute name="icon">document-save-as</attribute>
+                    <attribute name="accel">&lt;Primary&gt;a</attribute>
+                    <attribute name="action">app.saveas</attribute>                    
                 </item>                
                 <item>
                     <attribute name="label" translatable="yes">Quit</attribute>

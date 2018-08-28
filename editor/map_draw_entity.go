@@ -4,6 +4,8 @@ import (
 	"math"
 	"reflect"
 
+	"github.com/tlyakhov/gofoom/concepts"
+
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/core"
@@ -39,15 +41,15 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 		cr.SetSourceRGB(0.33, 0.33, 0.33)
 		DrawEntityAngle(cr, phys)
 	} else if _, ok := e.(*entities.Light); ok {
-		for _, b := range e.Behaviors() {
+		for _, b := range e.Physical().Behaviors {
 			if lb, ok := b.(*behaviors.Light); ok {
 				cr.SetSourceRGB(lb.Diffuse.X, lb.Diffuse.Y, lb.Diffuse.Z)
 			}
 		}
 	} // Sprite...
 
-	hovering := indexOfObject(editor.HoveringObjects, e) != -1
-	selected := indexOfObject(editor.SelectedObjects, e) != -1
+	hovering := concepts.IndexOf(editor.HoveringObjects, e) != -1
+	selected := concepts.IndexOf(editor.SelectedObjects, e) != -1
 	if selected {
 		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
 	} else if hovering {

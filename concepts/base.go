@@ -43,10 +43,11 @@ func (b *Base) Deserialize(data map[string]interface{}) {
 }
 
 func (b *Base) Serialize() map[string]interface{} {
-	return map[string]interface{}{
-		"ID":   b.ID,
-		"Tags": b.Tags,
+	result := map[string]interface{}{"ID": b.ID}
+	if b.Tags != nil && len(b.Tags) > 0 {
+		result["Tags"] = b.Tags
 	}
+	return result
 }
 
 func MapPolyStruct(parent interface{}, data map[string]interface{}) ISerializable {

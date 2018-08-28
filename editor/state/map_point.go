@@ -1,4 +1,4 @@
-package main
+package state
 
 import (
 	"github.com/tlyakhov/gofoom/core"

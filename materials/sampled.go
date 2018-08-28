@@ -7,7 +7,8 @@ import (
 )
 
 type Sampled struct {
-	concepts.Base
+	concepts.Base `editable:"^"`
+
 	Sampler  texture.ISampler `editable:"Texture" edit_type:"Texture"`
 	IsLiquid bool             `editable:"Is Liquid?" edit_type:"bool"`
 }
