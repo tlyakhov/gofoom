@@ -1,4 +1,4 @@
-package main
+package properties
 
 import (
 	"log"
@@ -6,11 +6,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/tlyakhov/gofoom/editor/actions"
+
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (e *Editor) PropertyGridFieldFloat64(index int, field *GridField) {
+func (g *Grid) fieldFloat64(index int, field *pgField) {
 	origValue := ""
 	for i, v := range field.Values {
 		if i != 0 {
@@ -27,21 +29,21 @@ func (e *Editor) PropertyGridFieldFloat64(index int, field *GridField) {
 		if err != nil {
 			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
 			box.SetText(origValue)
-			e.PropertyGrid.GrabFocus()
+			g.Container.GrabFocus()
 			return
 		}
 		f, err := strconv.ParseFloat(strings.TrimSpace(text), 64)
 		if err != nil {
 			log.Printf("Couldn't parse float64 from user entry. %v\n", err)
 			box.SetText(origValue)
-			e.PropertyGrid.GrabFocus()
+			g.Container.GrabFocus()
 			return
 		}
-		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(f)}
-		e.NewAction(action)
+		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(f)}
+		g.NewAction(action)
 		action.Act()
 		origValue = text
-		e.PropertyGrid.GrabFocus()
+		g.Container.GrabFocus()
 	})
-	e.PropertyGrid.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 1, 1)
 }

@@ -8,8 +8,8 @@ import (
 )
 
 type LitSampled struct {
-	Lit
-	Sampled
+	Lit     `editable:"^"`
+	Sampled `editable:"^"`
 }
 
 func init() {
@@ -45,8 +45,8 @@ func (m *LitSampled) Serialize() map[string]interface{} {
 }
 
 type PainfulLitSampled struct {
-	LitSampled
-	Painful
+	LitSampled `editable:"^"`
+	Painful    `editable:"^"`
 }
 
 func (m *PainfulLitSampled) SetParent(interface{}) {}

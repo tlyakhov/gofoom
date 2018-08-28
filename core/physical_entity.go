@@ -24,7 +24,7 @@ type PhysicalEntity struct {
 	Sector            AbstractSector
 	Map               *Map
 
-	behaviors map[string]AbstractBehavior `editable:"Behaviors"`
+	Behaviors map[string]AbstractBehavior `editable:"Behaviors"`
 }
 
 func init() {
@@ -40,15 +40,11 @@ func (e *PhysicalEntity) Initialize() {
 	e.CollisionResponse = Slide
 	e.MountHeight = constants.PlayerMountHeight
 	e.Active = true
-	e.behaviors = make(map[string]AbstractBehavior)
+	e.Behaviors = make(map[string]AbstractBehavior)
 }
 
 func (e *PhysicalEntity) Physical() *PhysicalEntity {
 	return e
-}
-
-func (e *PhysicalEntity) Behaviors() map[string]AbstractBehavior {
-	return e.behaviors
 }
 
 func (e *PhysicalEntity) GetSector() AbstractSector {
@@ -104,7 +100,7 @@ func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
 		}
 	}
 	if v, ok := data["Behaviors"]; ok {
-		concepts.MapCollection(e, &e.behaviors, v)
+		concepts.MapCollection(e, &e.Behaviors, v)
 	}
 }
 
@@ -121,7 +117,7 @@ func (e *PhysicalEntity) Serialize() map[string]interface{} {
 	result["CollisionResponse"] = e.CollisionResponse.String()
 
 	behaviors := []interface{}{}
-	for _, b := range e.behaviors {
+	for _, b := range e.Behaviors {
 		behaviors = append(behaviors, b.Serialize())
 	}
 	result["Behaviors"] = behaviors

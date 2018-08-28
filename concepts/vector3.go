@@ -12,6 +12,11 @@ type Vector3 struct {
 	X, Y, Z float64
 }
 
+// Zero returns true if all components are 0.
+func (v Vector3) Zero() bool {
+	return v.X == 0 && v.Y == 0 && v.Z == 0
+}
+
 // Add a vector to a vector.
 func (v Vector3) Add(v2 Vector3) Vector3 {
 	return Vector3{v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z}

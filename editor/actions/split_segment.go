@@ -1,33 +1,35 @@
-package main
+package actions
 
 import (
 	"github.com/rs/xid"
 	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/tlyakhov/gofoom/core"
 )
 
-type SplitSegment struct {
+type segmentSplitter struct {
 	segments *[]*core.Segment
 	index    int
 	split    *core.Segment
 	added    *core.Segment
 }
 
-type SplitSegmentAction struct {
-	*Editor
-	NewSegments []*SplitSegment
+type SplitSegment struct {
+	state.IEditor
+
+	NewSegments []*segmentSplitter
 }
 
-func (a *SplitSegmentAction) OnMouseDown(button *gdk.EventButton) {}
-func (a *SplitSegmentAction) OnMouseMove()                        {}
-func (a *SplitSegmentAction) Frame()                              {}
-func (a *SplitSegmentAction) Act()                                {}
+func (a *SplitSegment) OnMouseDown(button *gdk.EventButton) {}
+func (a *SplitSegment) OnMouseMove()                        {}
+func (a *SplitSegment) Frame()                              {}
+func (a *SplitSegment) Act()                                {}
 
-func (a *SplitSegmentAction) Split(ss *SplitSegment) bool {
-	md := a.WorldGrid(a.MouseDownWorld)
-	m := a.WorldGrid(a.MouseWorld)
+func (a *SplitSegment) Split(ss *segmentSplitter) bool {
+	md := a.WorldGrid(a.State().MouseDownWorld)
+	m := a.WorldGrid(a.State().MouseWorld)
 	isect, exists := ss.split.Intersect2D(md, m)
 
 	if !exists || isect == ss.split.P || isect == ss.split.Next.P {
@@ -48,15 +50,15 @@ func (a *SplitSegmentAction) Split(ss *SplitSegment) bool {
 	return true
 }
 
-func (a *SplitSegmentAction) OnMouseUp() {
-	a.NewSegments = []*SplitSegment{}
+func (a *SplitSegment) OnMouseUp() {
+	a.NewSegments = []*segmentSplitter{}
 
 	// Split only selected if any, otherwise all sectors/segments.
-	all := a.SelectedObjects
-	if all == nil || len(all) == 0 || (len(all) == 1 && all[0] == a.GameMap.Map) {
-		all = make([]concepts.ISerializable, len(a.GameMap.Sectors))
+	all := a.State().SelectedObjects
+	if all == nil || len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
+		all = make([]concepts.ISerializable, len(a.State().World.Sectors))
 		i := 0
-		for _, s := range a.GameMap.Sectors {
+		for _, s := range a.State().World.Sectors {
 			all[i] = s
 			i++
 		}
@@ -65,25 +67,26 @@ func (a *SplitSegmentAction) OnMouseUp() {
 	for _, obj := range all {
 		if sector, ok := obj.(core.AbstractSector); ok {
 			for j := 0; j < len(sector.Physical().Segments); j++ {
-				if a.Split(&SplitSegment{
+				if a.Split(&segmentSplitter{
 					segments: &sector.Physical().Segments,
 					split:    sector.Physical().Segments[j],
 					index:    j + 1}) {
 					j++ // Avoid infinite splitting.
 				}
 			}
-		} else if _, ok := obj.(MapPoint); ok {
+		} else if _, ok := obj.(state.MapPoint); ok {
 			// TODO...
 		}
 	}
+	a.State().Modified = true
 	a.ActionFinished(false)
 }
 
-func (a *SplitSegmentAction) Cancel() {
+func (a *SplitSegment) Cancel() {
 	a.ActionFinished(true)
 }
 
-func (a *SplitSegmentAction) Undo() {
+func (a *SplitSegment) Undo() {
 	for _, ss := range a.NewSegments {
 		reset := (*ss.segments)[:0]
 		for _, seg := range *ss.segments {
@@ -95,7 +98,7 @@ func (a *SplitSegmentAction) Undo() {
 		ss.added.Sector.Physical().Recalculate()
 	}
 }
-func (a *SplitSegmentAction) Redo() {
+func (a *SplitSegment) Redo() {
 	for _, ss := range a.NewSegments {
 		*ss.segments = append(*ss.segments, nil)
 		copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
+	"github.com/tlyakhov/gofoom/editor/actions"
 )
 
 func MapMotionNotify(da *gtk.DrawingArea, ev *gdk.Event) {
@@ -31,11 +32,11 @@ func MapButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 	da.GrabFocus()
 
 	if press.Button() == 3 && editor.CurrentAction == nil {
-		editor.NewAction(&SelectAction{Editor: editor})
+		editor.NewAction(&actions.Select{IEditor: editor})
 	} else if press.Button() == 2 && editor.CurrentAction == nil {
-		editor.NewAction(&PanAction{Editor: editor})
+		editor.NewAction(&actions.Pan{IEditor: editor})
 	} else if press.Button() == 1 && editor.CurrentAction == nil && len(editor.SelectedObjects) > 0 {
-		editor.NewAction(&MoveAction{Editor: editor})
+		editor.NewAction(&actions.Move{IEditor: editor})
 	}
 
 	if editor.CurrentAction != nil {

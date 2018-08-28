@@ -1,27 +1,29 @@
-package main
+package actions
 
 import (
 	"github.com/tlyakhov/gofoom/concepts"
+	"github.com/tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/tlyakhov/gofoom/core"
 )
 
-type SplitSectorAction struct {
-	*Editor
+type SplitSector struct {
+	state.IEditor
+
 	Splitters []*core.SectorSplitter
 	Original  []core.AbstractSector
 }
 
-func (a *SplitSectorAction) OnMouseDown(button *gdk.EventButton) {}
-func (a *SplitSectorAction) OnMouseMove()                        {}
-func (a *SplitSectorAction) Frame()                              {}
-func (a *SplitSectorAction) Act()                                {}
+func (a *SplitSector) OnMouseDown(button *gdk.EventButton) {}
+func (a *SplitSector) OnMouseMove()                        {}
+func (a *SplitSector) Frame()                              {}
+func (a *SplitSector) Act()                                {}
 
-func (a *SplitSectorAction) Split(sector core.AbstractSector) {
+func (a *SplitSector) Split(sector core.AbstractSector) {
 	s := &core.SectorSplitter{
-		Splitter1: a.WorldGrid(a.MouseDownWorld),
-		Splitter2: a.WorldGrid(a.MouseWorld),
+		Splitter1: a.WorldGrid(a.State().MouseDownWorld),
+		Splitter2: a.WorldGrid(a.State().MouseWorld),
 		Sector:    sector,
 	}
 	a.Splitters = append(a.Splitters, s)
@@ -29,22 +31,22 @@ func (a *SplitSectorAction) Split(sector core.AbstractSector) {
 	if s.Result == nil || len(s.Result) == 0 {
 		return
 	}
-	delete(a.GameMap.Sectors, sector.GetBase().ID)
+	delete(a.State().World.Sectors, sector.GetBase().ID)
 	a.Original = append(a.Original, sector)
 	for _, added := range s.Result {
-		a.GameMap.Sectors[added.GetBase().ID] = added
+		a.State().World.Sectors[added.GetBase().ID] = added
 	}
 }
 
-func (a *SplitSectorAction) OnMouseUp() {
+func (a *SplitSector) OnMouseUp() {
 	a.Splitters = []*core.SectorSplitter{}
 
 	// Split only selected if any, otherwise all sectors/segments.
-	all := a.SelectedObjects
-	if all == nil || len(all) == 0 || (len(all) == 1 && all[0] == a.GameMap.Map) {
-		all = make([]concepts.ISerializable, len(a.GameMap.Sectors))
+	all := a.State().SelectedObjects
+	if all == nil || len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
+		all = make([]concepts.ISerializable, len(a.State().World.Sectors))
 		i := 0
-		for _, s := range a.GameMap.Sectors {
+		for _, s := range a.State().World.Sectors {
 			all[i] = s
 			i++
 		}
@@ -53,18 +55,19 @@ func (a *SplitSectorAction) OnMouseUp() {
 	for _, obj := range all {
 		if sector, ok := obj.(core.AbstractSector); ok {
 			a.Split(sector)
-		} else if mp, ok := obj.(MapPoint); ok {
+		} else if mp, ok := obj.(state.MapPoint); ok {
 			a.Split(mp.Segment.Sector)
 		}
 	}
+	a.State().Modified = true
 	a.ActionFinished(false)
 }
 
-func (a *SplitSectorAction) Cancel() {
+func (a *SplitSector) Cancel() {
 	a.ActionFinished(true)
 }
 
-func (a *SplitSectorAction) Undo() {
+func (a *SplitSector) Undo() {
 	entities := []core.AbstractEntity{}
 
 	for _, splitter := range a.Splitters {
@@ -77,11 +80,11 @@ func (a *SplitSectorAction) Undo() {
 				e.Physical().Sector = nil
 			}
 			added.Physical().Entities = make(map[string]core.AbstractEntity)
-			delete(a.GameMap.Sectors, added.GetBase().ID)
+			delete(a.State().World.Sectors, added.GetBase().ID)
 		}
 	}
 	for _, original := range a.Original {
-		a.GameMap.Sectors[original.GetBase().ID] = original
+		a.State().World.Sectors[original.GetBase().ID] = original
 		for _, e := range entities {
 			if original.Physical().IsPointInside2D(e.Physical().Pos.To2D()) {
 				original.Physical().Entities[e.GetBase().ID] = e
@@ -90,11 +93,11 @@ func (a *SplitSectorAction) Undo() {
 		}
 	}
 }
-func (a *SplitSectorAction) Redo() {
+func (a *SplitSector) Redo() {
 	entities := []core.AbstractEntity{}
 
 	for _, original := range a.Original {
-		delete(a.GameMap.Sectors, original.GetBase().ID)
+		delete(a.State().World.Sectors, original.GetBase().ID)
 		for _, e := range original.Physical().Entities {
 			entities = append(entities, e)
 			e.Physical().Sector = nil
@@ -107,7 +110,7 @@ func (a *SplitSectorAction) Redo() {
 			continue
 		}
 		for _, added := range splitter.Result {
-			a.GameMap.Sectors[added.GetBase().ID] = added
+			a.State().World.Sectors[added.GetBase().ID] = added
 			for _, e := range entities {
 				if added.Physical().IsPointInside2D(e.Physical().Pos.To2D()) {
 					added.Physical().Entities[e.GetBase().ID] = e

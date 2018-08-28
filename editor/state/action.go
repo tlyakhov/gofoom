@@ -1,11 +1,11 @@
-package main
+package state
 
 import (
 	"github.com/gotk3/gotk3/gdk"
 )
 
-// AbstractAction represents a generic editor action.
-type AbstractAction interface {
+// IAction represents a generic editor action.
+type IAction interface {
 	OnMouseDown(button *gdk.EventButton)
 	OnMouseUp()
 	OnMouseMove()

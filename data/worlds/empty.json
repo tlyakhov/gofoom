@@ -1,0 +1,54 @@
+{
+    "SpawnX": 0,
+    "SpawnY": 0,
+    "Materials": [
+        {
+            "Type": "materials.LitSampled",
+            "ID": "Default",
+            "Texture": {
+                "Type": "texture.Image",
+                "Source": "data/WDef.png"
+            }
+        }
+    ],
+    "Sectors": [
+        {
+            "Type": "core.PhysicalSector",
+            "ID": "Starting",
+            "BottomZ": 0,
+            "TopZ": 64,
+            "FloorMaterial": "Default",
+            "CeilMaterial": "Default",
+            "Segments": [
+                {
+                    "X": -100,
+                    "Y": -100,
+                    "MidMaterial": "Default",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default"
+                },
+                {
+                    "X": 100,
+                    "Y": -100,
+                    "MidMaterial": "Default",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default"
+                },
+                {
+                    "X": 100,
+                    "Y": 100,
+                    "MidMaterial": "Default",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default"
+                },
+                {
+                    "X": -100,
+                    "Y": 100,
+                    "MidMaterial": "Default",
+                    "LoMaterial": "Default",
+                    "HiMaterial": "Default"
+                }
+            ]
+        }
+    ]
+}

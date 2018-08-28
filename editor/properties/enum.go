@@ -1,13 +1,15 @@
-package main
+package properties
 
 import (
 	"reflect"
+
+	"github.com/tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (e *Editor) PropertyGridFieldEnum(index int, field *GridField, enumValues interface{}) {
+func (g *Grid) fieldEnum(index int, field *pgField, enumValues interface{}) {
 	// Create our combo box with int/string enum entries.
 	rend, _ := gtk.CellRendererTextNew()
 	opts, _ := gtk.ListStoreNew(glib.TYPE_INT, glib.TYPE_STRING)
@@ -36,10 +38,10 @@ func (e *Editor) PropertyGridFieldEnum(index int, field *GridField, enumValues i
 		selected, _ := box.GetActiveIter()
 		value, _ := opts.GetValue(selected, 0)
 		value2, _ := value.GoValue()
-		action := &SetPropertyAction{Editor: e, Fields: field.Values, ToSet: reflect.ValueOf(value2).Convert(field.Type.Elem())}
-		e.NewAction(action)
+		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(value2).Convert(field.Type.Elem())}
+		g.NewAction(action)
 		action.Act()
 	})
 
-	e.PropertyGrid.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 1, 1)
 }

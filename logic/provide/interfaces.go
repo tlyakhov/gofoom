@@ -11,6 +11,7 @@ type Passable interface {
 	OnExit(e core.AbstractEntity)
 	Collide(e core.AbstractEntity)
 	Recalculate()
+	UpdatePVS()
 }
 
 type Animateable interface {

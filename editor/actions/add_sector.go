@@ -1,55 +1,58 @@
-package main
+package actions
 
 import (
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/core"
+	"github.com/tlyakhov/gofoom/editor/state"
 	"github.com/tlyakhov/gofoom/logic/provide"
 )
 
-type AddSectorAction struct {
-	*Editor
+type AddSector struct {
+	state.IEditor
+
+	Mode   string
 	Sector core.AbstractSector
 }
 
-func (a *AddSectorAction) Act() {
+func (a *AddSector) Act() {
 	a.SetMapCursor("crosshair")
-	a.State = "AddSector"
+	a.Mode = "AddSector"
 	a.SelectObjects([]concepts.ISerializable{a.Sector})
 	//set cursor
 }
 
-func (a *AddSectorAction) Cancel() {
+func (a *AddSector) Cancel() {
 	a.RemoveFromMap()
 	a.Sector.Physical().Segments = []*core.Segment{}
 	a.SelectObjects([]concepts.ISerializable{})
 	a.ActionFinished(true)
 }
 
-func (a *AddSectorAction) RemoveFromMap() {
+func (a *AddSector) RemoveFromMap() {
 	id := a.Sector.GetBase().ID
-	if a.GameMap.Sectors[id] != nil {
-		delete(a.GameMap.Sectors, id)
+	if a.State().World.Sectors[id] != nil {
+		delete(a.State().World.Sectors, id)
 	}
 }
 
-func (a *AddSectorAction) AddToMap() {
+func (a *AddSector) AddToMap() {
 	id := a.Sector.GetBase().ID
-	a.Sector.Physical().Map = a.GameMap.Map
-	a.GameMap.Sectors[id] = a.Sector
+	a.Sector.Physical().Map = a.State().World.Map
+	a.State().World.Sectors[id] = a.Sector
 	provide.Passer.For(a.Sector).Recalculate()
 }
 
-func (a *AddSectorAction) OnMouseDown(button *gdk.EventButton) {
-	a.State = "AddSectorSegment"
+func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
+	a.Mode = "AddSectorSegment"
 
 	seg := core.Segment{}
 	seg.Initialize()
 	seg.SetParent(a.Sector)
-	seg.HiMaterial = a.GameMap.DefaultMaterial()
-	seg.LoMaterial = a.GameMap.DefaultMaterial()
-	seg.MidMaterial = a.GameMap.DefaultMaterial()
-	seg.P = a.WorldGrid(a.MouseDownWorld)
+	seg.HiMaterial = a.State().World.DefaultMaterial()
+	seg.LoMaterial = a.State().World.DefaultMaterial()
+	seg.MidMaterial = a.State().World.DefaultMaterial()
+	seg.P = a.WorldGrid(a.State().MouseDownWorld)
 
 	segs := a.Sector.Physical().Segments
 	if len(segs) > 0 {
@@ -62,37 +65,38 @@ func (a *AddSectorAction) OnMouseDown(button *gdk.EventButton) {
 	a.Sector.Physical().Segments = append(segs, &seg)
 	a.AddToMap()
 }
-func (a *AddSectorAction) OnMouseMove() {
-	if a.State != "AddSectorSegment" {
+func (a *AddSector) OnMouseMove() {
+	if a.Mode != "AddSectorSegment" {
 		return
 	}
 
 	segs := a.Sector.Physical().Segments
 	seg := segs[len(segs)-1]
-	seg.P = a.WorldGrid(a.MouseWorld)
+	seg.P = a.WorldGrid(a.State().MouseWorld)
 }
 
-func (a *AddSectorAction) OnMouseUp() {
-	a.State = "AddSector"
+func (a *AddSector) OnMouseUp() {
+	a.Mode = "AddSector"
 
 	segs := a.Sector.Physical().Segments
 	if len(segs) > 1 {
 		first := segs[0]
 		last := segs[len(segs)-1]
-		if last.P.Sub(first.P).Length() < SegmentSelectionEpsilon {
+		if last.P.Sub(first.P).Length() < state.SegmentSelectionEpsilon {
 			a.Sector.Physical().Segments = segs[:(len(segs) - 1)]
 			provide.Passer.For(a.Sector).Recalculate()
+			a.State().Modified = true
 			a.ActionFinished(false)
 		}
 	}
 	// TODO: right-mouse button end
 }
 
-func (a *AddSectorAction) Frame() {}
+func (a *AddSector) Frame() {}
 
-func (a *AddSectorAction) Undo() {
+func (a *AddSector) Undo() {
 	a.RemoveFromMap()
 }
-func (a *AddSectorAction) Redo() {
+func (a *AddSector) Redo() {
 	a.AddToMap()
 }

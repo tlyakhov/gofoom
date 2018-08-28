@@ -6,6 +6,7 @@ import (
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/core"
+	"github.com/tlyakhov/gofoom/editor/state"
 )
 
 func DrawHandle(cr *cairo.Context, v concepts.Vector2) {
@@ -25,8 +26,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 
 	cr.Save()
 
-	sectorHovering := indexOfObject(editor.HoveringObjects, sector) != -1
-	sectorSelected := indexOfObject(editor.SelectedObjects, sector) != -1
+	sectorHovering := concepts.IndexOf(editor.HoveringObjects, sector) != -1
+	sectorSelected := concepts.IndexOf(editor.SelectedObjects, sector) != -1
 
 	if editor.EntitiesVisible {
 		for _, e := range phys.Entities {
@@ -39,8 +40,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 			continue
 		}
 
-		segmentHovering := indexOfObject(editor.HoveringObjects, segment) != -1
-		segmentSelected := indexOfObject(editor.SelectedObjects, segment) != -1
+		segmentHovering := concepts.IndexOf(editor.HoveringObjects, segment) != -1
+		segmentSelected := concepts.IndexOf(editor.SelectedObjects, segment) != -1
 
 		if segment.AdjacentSector == nil {
 			cr.SetSourceRGB(1, 1, 1)
@@ -67,7 +68,7 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 				continue
 			}
 			if s2.Physical().PVS[sector.GetBase().ID] != nil {
-				cr.SetSourceRGB(ColorPVS.X, ColorPVS.Y, ColorPVS.Z)
+				//cr.SetSourceRGB(ColorPVS.X, ColorPVS.Y, ColorPVS.Z)
 			}
 		}
 
@@ -87,8 +88,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 		cr.ClosePath()
 		cr.Stroke()
 
-		mapPointHovering := indexOfObject(editor.HoveringObjects, &MapPoint{Segment: segment}) != -1
-		mapPointSelected := indexOfObject(editor.SelectedObjects, &MapPoint{Segment: segment}) != -1
+		mapPointHovering := concepts.IndexOf(editor.HoveringObjects, &state.MapPoint{Segment: segment}) != -1
+		mapPointSelected := concepts.IndexOf(editor.SelectedObjects, &state.MapPoint{Segment: segment}) != -1
 
 		if mapPointSelected {
 			cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)

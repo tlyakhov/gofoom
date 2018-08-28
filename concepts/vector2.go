@@ -14,6 +14,11 @@ type Vector2 struct {
 	X, Y float64
 }
 
+// Zero returns true if all components are 0.
+func (v Vector2) Zero() bool {
+	return v.X == 0 && v.Y == 0
+}
+
 // Add a vector to a vector.
 func (v Vector2) Add(v2 Vector2) Vector2 {
 	return Vector2{v.X + v2.X, v.Y + v2.Y}

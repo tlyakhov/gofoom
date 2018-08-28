@@ -7,6 +7,8 @@ import (
 	"runtime/pprof"
 	"time"
 
+	"github.com/tlyakhov/gofoom/editor/actions"
+
 	"github.com/gotk3/gotk3/glib"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -14,8 +16,8 @@ import (
 	_ "github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
+	"github.com/tlyakhov/gofoom/editor/state"
 	"github.com/tlyakhov/gofoom/entities"
-	"github.com/tlyakhov/gofoom/logic"
 	"github.com/tlyakhov/gofoom/logic/entity"
 	"github.com/tlyakhov/gofoom/sectors"
 
@@ -24,8 +26,7 @@ import (
 )
 
 const (
-	GridSize                float64 = 10
-	SegmentSelectionEpsilon float64 = 5.0
+	GridSize float64 = 10
 )
 
 var (
@@ -41,10 +42,10 @@ func EditorTimer(win *gtk.ApplicationWindow) bool {
 	dt := time.Since(last).Seconds() * 1000
 	last = time.Now()
 
-	editor.GameMap.Frame(dt)
+	editor.World.Frame(dt)
 	editor.GatherHoveringObjects()
 
-	ps := entity.NewPlayerService(editor.GameMap.Player.(*entities.Player))
+	ps := entity.NewPlayerService(editor.World.Player.(*entities.Player))
 
 	if gameKeyMap[gdk.KEY_w] {
 		ps.Move(ps.Player.Angle, dt, 1.0)
@@ -133,19 +134,22 @@ func onActivate() {
 	if err != nil {
 		log.Fatal("Can't find PropertyGrid object in GTK+ UI file.", err)
 	}
-	editor.PropertyGrid = obj.(*gtk.Grid)
+	editor.Grid.Container = obj.(*gtk.Grid)
 	obj, err = builder.GetObject("EntityTypes")
 	if err != nil {
 		log.Fatal("Can't find EntityTypes object in GTK+ UI file.", err)
 	}
+
 	editor.EntityTypes = obj.(*gtk.ComboBoxText)
 
-	editor.AddSimpleMenuAction("save", func(obj *glib.Object) { editor.GameMap.Save("test-saved-map.json") })
+	editor.AddSimpleMenuAction("open", MainOpen)
+	editor.AddSimpleMenuAction("save", MainSave)
+	editor.AddSimpleMenuAction("saveas", MainSaveAs)
 	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
 	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.Undo() })
 	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.Redo() })
 	editor.AddSimpleMenuAction("tool.select", func(obj *glib.Object) {
-		editor.SwitchTool(ToolSelect)
+		editor.SwitchTool(state.ToolSelect)
 		tool, _ := builder.GetObject("ToolSelect")
 		tool.(*gtk.RadioButton).SetProperty("active", true)
 	})
@@ -158,7 +162,7 @@ func onActivate() {
 	editor.AddSimpleMenuAction("tool.raise.floor.slope", func(obj *glib.Object) { editor.MoveSurface(0.05, true, true) })
 	editor.AddSimpleMenuAction("tool.lower.floor.slope", func(obj *glib.Object) { editor.MoveSurface(-0.05, true, true) })
 	editor.AddSimpleMenuAction("tool.rotate.slope", func(obj *glib.Object) {
-		action := &RotateSegmentsAction{Editor: editor}
+		action := &actions.RotateSegments{IEditor: editor}
 		editor.NewAction(action)
 		action.Act()
 	})
@@ -166,15 +170,6 @@ func onActivate() {
 	setupMenu()
 	editor.Window.SetApplication(editor.App)
 	editor.Window.ShowAll()
-
-	editor.GameMap = logic.LoadMap("data/classicMap.json")
-	ps := entity.NewPlayerService(editor.GameMap.Player.(*entities.Player))
-	ps.Collide()
-
-	editor.SelectObjects([]concepts.ISerializable{})
-
-	editor.GameView(editor.GameArea.GetAllocatedWidth(), editor.GameArea.GetAllocatedHeight())
-	editor.RefreshPropertyGrid()
 
 	// Event handlers
 	signals := make(map[string]interface{})
@@ -207,19 +202,20 @@ func onActivate() {
 		// We don't have gtk.Buildable available so we can't get the ids. :(
 		switch label, _ := obj.GetProperty("label"); label {
 		case "Select/Move":
-			editor.SwitchTool(ToolSelect)
+			editor.SwitchTool(state.ToolSelect)
 		case "Split Segment":
-			editor.SwitchTool(ToolSplitSegment)
+			editor.SwitchTool(state.ToolSplitSegment)
 		case "Split Sector":
-			editor.SwitchTool(ToolSplitSector)
+			editor.SwitchTool(state.ToolSplitSector)
 		case "Add Sector":
-			editor.SwitchTool(ToolAddSector)
+			editor.SwitchTool(state.ToolAddSector)
 		case "Add Entity":
-			editor.SwitchTool(ToolAddEntity)
+			editor.SwitchTool(state.ToolAddEntity)
 		}
 	}
 	builder.ConnectSignals(signals)
 
+	editor.Load("data/worlds/empty.json")
 	glib.TimeoutAdd(15, EditorTimer, editor.Window)
 }
 

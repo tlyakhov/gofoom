@@ -5,8 +5,8 @@ import (
 )
 
 type AnimatedBehavior struct {
-	concepts.Base
-	Entity AbstractEntity
+	concepts.Base `editable:"^"`
+	Entity        AbstractEntity
 
 	Active bool `editable:"Active?"`
 }
