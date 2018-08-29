@@ -136,6 +136,12 @@ func (v Vector2) String() string {
 		strconv.FormatFloat(v.Y, 'f', -1, 64)
 }
 
+// StringHuman formats the vector as a string with 2 digit precision.
+func (v Vector2) StringHuman() string {
+	return strconv.FormatFloat(v.X, 'f', 2, 64) + ", " +
+		strconv.FormatFloat(v.Y, 'f', 2, 64)
+}
+
 // Serialize formats the vector as a JSON key-value map.
 func (v Vector2) Serialize() map[string]interface{} {
 	return map[string]interface{}{"X": v.X, "Y": v.Y}

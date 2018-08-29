@@ -26,6 +26,7 @@ type Slice struct {
 	AngleSin           float64
 	Intersection       concepts.Vector3
 	Distance           float64
+	LastPortalDistance float64
 	U                  float64
 	Depth              int
 	CameraZ            float64

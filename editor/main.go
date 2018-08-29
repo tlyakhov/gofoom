@@ -25,10 +25,6 @@ import (
 	_ "github.com/tlyakhov/gofoom/logic/sector"
 )
 
-const (
-	GridSize float64 = 10
-)
-
 var (
 	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
 	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
@@ -139,8 +135,12 @@ func onActivate() {
 	if err != nil {
 		log.Fatal("Can't find EntityTypes object in GTK+ UI file.", err)
 	}
-
 	editor.EntityTypes = obj.(*gtk.ComboBoxText)
+	obj, err = builder.GetObject("StatusBar")
+	if err != nil {
+		log.Fatal("Can't find StatusBar object in GTK+ UI file.", err)
+	}
+	editor.StatusBar = obj.(*gtk.Label)
 
 	editor.AddSimpleMenuAction("open", MainOpen)
 	editor.AddSimpleMenuAction("save", MainSave)
@@ -211,6 +211,8 @@ func onActivate() {
 			editor.SwitchTool(state.ToolAddSector)
 		case "Add Entity":
 			editor.SwitchTool(state.ToolAddEntity)
+		case "Align Grid":
+			editor.SwitchTool(state.ToolAlignGrid)
 		}
 	}
 	builder.ConnectSignals(signals)

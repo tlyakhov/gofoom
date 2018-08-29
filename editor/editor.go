@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"reflect"
+	"strconv"
 	"unsafe"
 
 	"github.com/tlyakhov/gofoom/editor/actions"
@@ -26,18 +26,13 @@ import (
 	"github.com/tlyakhov/gofoom/logic"
 )
 
-type MapViewGrid struct {
-	Prev    state.MapView
-	Visible bool
-	Surface *cairo.Surface
-}
-
 type EditorWidgets struct {
 	App         *gtk.Application
 	Window      *gtk.ApplicationWindow
 	GameArea    *gtk.DrawingArea
 	MapArea     *gtk.DrawingArea
 	EntityTypes *gtk.ComboBoxText
+	StatusBar   *gtk.Label
 }
 
 type Editor struct {
@@ -65,13 +60,21 @@ func (e *Editor) State() *state.Edit {
 
 func NewEditor() *Editor {
 	e := &Editor{
-		Edit:               state.Edit{MapView: state.MapView{Scale: 1.0}, Modified: false},
+		Edit: state.Edit{
+			MapView: state.MapView{
+				Scale: 1.0,
+				Step:  10,
+				GridB: concepts.Vector2{1, 0},
+			},
+			Modified: false,
+		},
 		MapViewGrid:        MapViewGrid{Visible: true},
 		EntitiesVisible:    true,
 		SectorTypesVisible: false,
 		EntityTypesVisible: true,
 	}
 	e.Grid.IEditor = e
+	e.MapViewGrid.Current = &e.Edit.MapView
 	return e
 }
 
@@ -81,22 +84,6 @@ func (e *Editor) ScreenToWorld(p concepts.Vector2) concepts.Vector2 {
 
 func (e *Editor) WorldToScreen(p concepts.Vector2) concepts.Vector2 {
 	return p.Sub(e.Pos).Mul(e.Scale).Add(e.Size.Mul(0.5))
-}
-
-func (e *Editor) WorldGrid(p concepts.Vector2) concepts.Vector2 {
-	if !e.MapViewGrid.Visible {
-		return p
-	}
-
-	return concepts.Vector2{math.Round(p.X/GridSize) * GridSize, math.Round(p.Y/GridSize) * GridSize}
-}
-
-func (e *Editor) WorldGrid3D(p concepts.Vector3) concepts.Vector3 {
-	if !e.MapViewGrid.Visible {
-		return p
-	}
-
-	return concepts.Vector3{math.Round(p.X/GridSize) * GridSize, math.Round(p.Y/GridSize) * GridSize, p.Z}
 }
 
 func (e *Editor) SetMapCursor(name string) {
@@ -121,6 +108,24 @@ func (e *Editor) UpdateTitle() {
 		title += " *"
 	}
 	e.Window.SetTitle(title)
+}
+
+func (e *Editor) UpdateStatus() {
+	text := e.WorldGrid(e.MouseWorld).StringHuman()
+	if e.MousePressed {
+		text = e.WorldGrid(e.MouseDownWorld).StringHuman() + " -> " + text
+		dist := e.WorldGrid(e.MouseDownWorld).Sub(e.WorldGrid(e.MouseWorld)).Length()
+		text += " Length: " + strconv.FormatFloat(dist, 'f', 2, 64)
+	}
+	list := ""
+	for _, obj := range e.HoveringObjects {
+		if len(list) > 0 {
+			list += ", "
+		}
+		list += obj.GetBase().ID
+	}
+	text = list + " ( " + text + " )"
+	e.StatusBar.SetText(text)
 }
 
 func (e *Editor) Load(filename string) {
@@ -175,6 +180,8 @@ func (e *Editor) ActTool() {
 		ae := reflect.New(t).Interface().(core.AbstractEntity)
 		ae.Initialize()
 		e.NewAction(&actions.AddEntity{IEditor: e, Entity: ae})
+	case state.ToolAlignGrid:
+		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:
 		return
 	}

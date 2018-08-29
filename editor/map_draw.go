@@ -18,7 +18,7 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	h := da.GetAllocatedHeight()
 	editor.Size = concepts.Vector2{float64(w), float64(h)}
 
-	DrawMapGrid(cr)
+	editor.MapViewGrid.Draw(&editor.Edit, cr)
 	TransformContext(cr)
 
 	for _, sector := range editor.World.Sectors {
@@ -39,7 +39,7 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 		gridMouse := editor.WorldGrid(editor.MouseWorld)
 		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
 		DrawHandle(cr, gridMouse)
-	case *actions.SplitSector, *actions.SplitSegment:
+	case *actions.SplitSector, *actions.SplitSegment, *actions.AlignGrid:
 		gridMouse := editor.WorldGrid(editor.MouseWorld)
 		gridMouseDown := editor.WorldGrid(editor.MouseDownWorld)
 		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)

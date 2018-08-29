@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"sort"
+	"strings"
 
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/editor/state"
@@ -21,6 +22,14 @@ type pgField struct {
 	ParentName string
 	Depth      int
 	Source     *reflect.StructField
+}
+
+func (f *pgField) Short() string {
+	split := strings.Split(f.Name, "[")
+	if len(split) > 1 {
+		return "[" + split[len(split)-1]
+	}
+	return f.Name
 }
 
 type pgState struct {
@@ -57,40 +66,31 @@ func (g *Grid) gatherFields(obj interface{}, state pgState) {
 		return
 	}
 
-	fmt.Printf("%v\n", t)
 	state.Depth++
 	state.Visited[obj] = true
 
 	for i := 0; i < t.NumField(); i++ {
 		field := t.FieldByIndex([]int{i})
 		fieldValue := v.Elem().Field(i)
-		display, ok := field.Tag.Lookup("editable")
+		tag, ok := field.Tag.Lookup("editable")
 		if !ok {
 			continue
 		}
-		fmt.Println(display)
+		display := tag
+		if state.ParentName != "" {
+			display = state.ParentName + "." + display
+		}
 
-		if field.Type.Kind() == reflect.Map {
-			keys := fieldValue.MapKeys()
-			for _, key := range keys {
-				name := field.Name + "[" + key.String() + "]"
-				if state.ParentName != "" {
-					name = state.ParentName + "." + name
-				}
-				g.childFields(name, fieldValue.MapIndex(key), state)
-			}
-		} else if display != "^" {
-			if state.ParentName != "" {
-				display = state.ParentName + "." + display
-			}
+		if tag != "^" {
 			gf, ok := state.Fields[display]
 			if !ok {
 				gf = &pgField{
-					Name:   display,
-					Depth:  state.Depth,
-					Type:   fieldValue.Addr().Type(),
-					Source: &field,
-					Unique: make(map[string]reflect.Value),
+					Name:       display,
+					Depth:      state.Depth,
+					Type:       fieldValue.Addr().Type(),
+					Source:     &field,
+					ParentName: state.ParentName,
+					Unique:     make(map[string]reflect.Value),
 				}
 				state.Fields[display] = gf
 			}
@@ -98,13 +98,23 @@ func (g *Grid) gatherFields(obj interface{}, state pgState) {
 			gf.Values = append(gf.Values, fieldValue.Addr())
 			gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
+			if field.Type.Kind() == reflect.Map {
+				keys := fieldValue.MapKeys()
+				for _, key := range keys {
+					name := field.Name + "[" + key.String() + "]"
+					if state.ParentName != "" {
+						name = state.ParentName + "." + name
+					}
+					g.childFields(name, fieldValue.MapIndex(key), state)
+				}
+			}
 			continue
 		} else {
 			name := field.Name
 			if state.ParentName != "" {
 				name = state.ParentName + "." + name
 			}
-			g.childFields(name, fieldValue, state)
+			g.childFields(state.ParentName, fieldValue, state)
 		}
 	}
 }
@@ -143,6 +153,8 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 		if field.ParentName != lastParentName {
 			label, _ := gtk.LabelNew(field.ParentName)
 			label.SetJustify(gtk.JUSTIFY_CENTER)
+			label.SetHExpand(true)
+			label.SetHAlign(gtk.ALIGN_START)
 			g.Container.Attach(label, 1, index, 2, 1)
 			lastParentName = field.ParentName
 			index++
@@ -151,7 +163,8 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 		if !field.Values[0].CanInterface() {
 			continue
 		}
-		label, _ := gtk.LabelNew(field.Name)
+		label, _ := gtk.LabelNew(field.Short())
+		label.SetTooltipText(field.Name)
 		label.SetJustify(gtk.JUSTIFY_LEFT)
 		label.SetHExpand(true)
 		label.SetHAlign(gtk.ALIGN_START)
