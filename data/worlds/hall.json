@@ -33,43 +33,43 @@
       "Entities": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "be26uavvn27vmb5f7e20",
+      "ID": "be3dsc7vn27ho9jt57u0",
       "Segments": [
         {
-          "AdjacentSector": "be26u9vvn27vmb5f7cp0",
+          "AdjacentSector": "be3dsc7vn27ho9jt56fg",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7e3g",
+          "ID": "be3dsc7vn27ho9jt57vg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 80,
-          "Y": 30
-        },
-        {
-          "AdjacentSector": "be26uavvn27vmb5f7ep0",
-          "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7e50",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 80,
-          "Y": 80
+          "X": 21.213203435596423,
+          "Y": 85.35533905932738
         },
         {
           "AdjacentSector": "be26uavvn27vmb5f7edg",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7e6g",
+          "ID": "be3dsc7vn27ho9jt5810",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 40,
-          "Y": 80
+          "X": -14.14213562373095,
+          "Y": 50
         },
         {
-          "AdjacentSector": "be26uavvn27vmb5f7dl0",
+          "AdjacentSector": "be3dsc7vn27ho9jt5740",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7e80",
+          "ID": "be3dsc7vn27ho9jt582g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 40,
-          "Y": 30
+          "X": 28.284271247461895,
+          "Y": 7.573593128807154
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt57ig",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt5840",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 63.639610306789265,
+          "Y": 42.928932188134524
         }
       ],
       "TopZ": 64,
@@ -79,213 +79,46 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "CeilSlope": -0.3,
+      "CeilSlope": -0.7000000000000001,
       "Entities": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "FloorSlope": 0.15000000000000002,
-      "ID": "be26u9vvn27vmb5f7cp0",
+      "FloorSlope": 0.7000000000000001,
+      "ID": "be3eo0fvn27i2m3sagn0",
       "Segments": [
         {
-          "AdjacentSector": "be26uavvn27vmb5f7e20",
+          "AdjacentSector": "be3esufvn27i2m3sau70",
           "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7cqg",
+          "ID": "be3eo0fvn27i2m3sagog",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 80,
-          "Y": 80
-        },
-        {
-          "AdjacentSector": "be26u9vvn27vmb5f7d4g",
-          "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7cs0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 80,
-          "Y": 30
+          "X": 200,
+          "Y": -330
         },
         {
           "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7ctg",
+          "ID": "be3eo0fvn27i2m3sagq0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 100,
-          "Y": 30
-        },
-        {
-          "AdjacentSector": "be26u7fvn27vmb5f7790",
-          "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7cv0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 100,
-          "Y": 80
-        }
-      ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
-    },
-    {
-      "BottomZ": 0,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "CeilSlope": -0.3,
-      "Entities": [],
-      "FloorMaterial": "Default",
-      "FloorScale": 64,
-      "FloorSlope": 0.3,
-      "ID": "be26tcnvn27vmb5f74n0",
-      "Segments": [
-        {
-          "AdjacentSector": "be26tcnvn27vmb5f75j0",
-          "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f74og",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 30,
-          "Y": -360
-        },
-        {
-          "AdjacentSector": "be26u9vvn27vmb5f7b10",
-          "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f74q0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -80,
-          "Y": -160
+          "X": 580,
+          "Y": -330
         },
         {
           "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f74rg",
+          "ID": "be3eo0fvn27i2m3sagrg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": -100,
-          "Y": -160
+          "X": 580,
+          "Y": -310
         },
         {
+          "AdjacentSector": "be3eq5fvn27i2m3sais0",
           "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f74t0",
+          "ID": "be3eo0fvn27i2m3sagt0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 10,
-          "Y": -360
-        }
-      ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
-    },
-    {
-      "BottomZ": 0,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "Entities": [
-        {
-          "Active": true,
-          "Angle": 0,
-          "Behaviors": [
-            {
-              "Active": true,
-              "Attenuation": 1.2,
-              "Diffuse": {
-                "X": 1,
-                "Y": 1,
-                "Z": 1
-              },
-              "ID": "be26tkvvn27vmb5f771g",
-              "Strength": 15,
-              "Type": "behaviors.Light"
-            }
-          ],
-          "BoundingRadius": 10,
-          "CollisionResponse": "Slide",
-          "Height": 0,
-          "ID": "be26tkvvn27vmb5f7710",
-          "MountHeight": 30,
-          "Pos": {
-            "X": -20,
-            "Y": -260,
-            "Z": 32
-          },
-          "Type": "entities.Light",
-          "Vel": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          }
-        },
-        {
-          "Active": true,
-          "Angle": 0,
-          "Behaviors": [
-            {
-              "Active": true,
-              "Attenuation": 1.2,
-              "Diffuse": {
-                "X": 1,
-                "Y": 1,
-                "Z": 1
-              },
-              "ID": "be26tlfvn27vmb5f772g",
-              "Strength": 15,
-              "Type": "behaviors.Light"
-            }
-          ],
-          "BoundingRadius": 10,
-          "CollisionResponse": "Slide",
-          "Height": 0,
-          "ID": "be26tlfvn27vmb5f7720",
-          "MountHeight": 30,
-          "Pos": {
-            "X": 130,
-            "Y": -260,
-            "Z": 32
-          },
-          "Type": "entities.Light",
-          "Vel": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          }
-        }
-      ],
-      "FloorMaterial": "Default",
-      "FloorScale": 64,
-      "ID": "be26tcnvn27vmb5f75j0",
-      "Segments": [
-        {
-          "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f75kg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 30,
-          "Y": -360
-        },
-        {
-          "AdjacentSector": "be26tcvvn27vmb5f76qg",
-          "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f75m0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 190,
-          "Y": -360
-        },
-        {
-          "AdjacentSector": "be26uavvn27vmb5f7dl0",
-          "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f75ng",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 80,
-          "Y": -160
-        },
-        {
-          "AdjacentSector": "be26tcnvn27vmb5f74n0",
-          "HiMaterial": "Default",
-          "ID": "be26tcnvn27vmb5f75p0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -80,
-          "Y": -160
+          "X": 200,
+          "Y": -310
         }
       ],
       "TopZ": 64,
@@ -298,51 +131,43 @@
       "Entities": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "be26uavvn27vmb5f7ep0",
+      "ID": "be3eq5fvn27i2m3sajcg",
       "Segments": [
         {
-          "AdjacentSector": "be26u7fvn27vmb5f7790",
+          "AdjacentSector": "be3eq5fvn27i2m3sais0",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7eqg",
+          "ID": "be3eq5fvn27i2m3saje0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -330
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sajt0",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sajfg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 80,
-          "Y": 80
+          "Y": -330
         },
         {
+          "AdjacentSector": "be3eq5fvn27i2m3sahpg",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7es0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 80,
-          "Y": 100
-        },
-        {
-          "AdjacentSector": "be26u7fvn27vmb5f78bg",
-          "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7etg",
+          "ID": "be3eq5fvn27i2m3sajh0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -80,
-          "Y": 100
+          "Y": -490
         },
         {
-          "AdjacentSector": "be26uavvn27vmb5f7edg",
+          "AdjacentSector": "be3esufvn27i2m3sau70",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7ev0",
+          "ID": "be3eq5fvn27i2m3sajig",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": -80,
-          "Y": 80
-        },
-        {
-          "AdjacentSector": "be26uavvn27vmb5f7e20",
-          "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7f0g",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 40,
-          "Y": 80
+          "X": 200,
+          "Y": -490
         }
       ],
       "TopZ": 64,
@@ -352,195 +177,47 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "CeilSlope": -0.3,
+      "CeilSlope": -0.7000000000000001,
       "Entities": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "FloorSlope": 0.3,
-      "ID": "be26u9vvn27vmb5f7b10",
+      "FloorSlope": 0.8500000000000002,
+      "ID": "be3eq5fvn27i2m3sahpg",
       "Segments": [
         {
-          "AdjacentSector": "be26uavvn27vmb5f7dl0",
+          "AdjacentSector": "be3eq5fvn27i2m3sajcg",
           "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7b2g",
+          "ID": "be3eq5fvn27i2m3sahr0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sai50",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sahsg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -80,
-          "Y": -160
-        },
-        {
-          "AdjacentSector": "be26u9vvn27vmb5f7bcg",
-          "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7b40",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -80,
-          "Y": 30
+          "Y": -490
         },
         {
           "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7b5g",
+          "ID": "be3eq5fvn27i2m3sahu0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
-          "Y": 30
+          "Y": -510
         },
         {
-          "AdjacentSector": "be26tcnvn27vmb5f74n0",
+          "AdjacentSector": "be3estnvn27i2m3satqg",
           "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7b70",
+          "ID": "be3eq5fvn27i2m3sahvg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": -100,
-          "Y": -160
-        }
-      ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
-    },
-    {
-      "BottomZ": 0,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "CeilSlope": -0.3,
-      "Entities": [],
-      "FloorMaterial": "Default",
-      "FloorScale": 64,
-      "FloorSlope": 0.3,
-      "ID": "be26u9vvn27vmb5f7bcg",
-      "Segments": [
-        {
-          "AdjacentSector": "be26uavvn27vmb5f7edg",
-          "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7be0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -80,
-          "Y": 30
-        },
-        {
-          "AdjacentSector": "be26u7fvn27vmb5f78bg",
-          "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7bfg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -80,
-          "Y": 80
-        },
-        {
-          "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7bh0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -100,
-          "Y": 80
-        },
-        {
-          "AdjacentSector": "be26u9vvn27vmb5f7b10",
-          "HiMaterial": "Default",
-          "ID": "be26u9vvn27vmb5f7big",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -100,
-          "Y": 30
-        }
-      ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
-    },
-    {
-      "BottomZ": 0,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "CeilSlope": -0.3,
-      "Entities": [],
-      "FloorMaterial": "Default",
-      "FloorScale": 64,
-      "FloorSlope": 0.3,
-      "ID": "be26u7fvn27vmb5f78bg",
-      "Segments": [
-        {
-          "AdjacentSector": "be26uavvn27vmb5f7ep0",
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f78d0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -80,
-          "Y": 80
-        },
-        {
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f78eg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -80,
-          "Y": 100
-        },
-        {
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f78g0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -100,
-          "Y": 100
-        },
-        {
-          "AdjacentSector": "be26u9vvn27vmb5f7bcg",
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f78hg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": -100,
-          "Y": 80
-        }
-      ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
-    },
-    {
-      "BottomZ": 0,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "CeilSlope": -0.3,
-      "Entities": [],
-      "FloorMaterial": "Default",
-      "FloorScale": 64,
-      "FloorSlope": 0.15000000000000002,
-      "ID": "be26u7fvn27vmb5f7790",
-      "Segments": [
-        {
-          "AdjacentSector": "be26uavvn27vmb5f7ep0",
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f77ag",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 80,
-          "Y": 100
-        },
-        {
-          "AdjacentSector": "be26u9vvn27vmb5f7cp0",
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f77c0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 80,
-          "Y": 80
-        },
-        {
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f77dg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 100,
-          "Y": 80
-        },
-        {
-          "HiMaterial": "Default",
-          "ID": "be26u7fvn27vmb5f77f0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
-          "X": 100,
-          "Y": 100
+          "X": 200,
+          "Y": -510
         }
       ],
       "TopZ": 64,
@@ -622,48 +299,57 @@
       ],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "be26uavvn27vmb5f7dl0",
+      "ID": "be3dsc7vn27ho9jt5740",
       "Segments": [
         {
           "AdjacentSector": "be26u9vvn27vmb5f7d4g",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7dmg",
+          "ID": "be3dsc7vn27ho9jt575g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 80,
           "Y": -160
         },
         {
-          "AdjacentSector": "be26uavvn27vmb5f7e20",
+          "AdjacentSector": "be3dsc7vn27ho9jt57ig",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7do0",
+          "ID": "be3dsc7vn27ho9jt5770",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 80,
-          "Y": 30
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt57u0",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt578g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 63.639610306789265,
+          "Y": 42.928932188134524
         },
         {
           "AdjacentSector": "be26uavvn27vmb5f7edg",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7dpg",
+          "ID": "be3dsc7vn27ho9jt57a0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 40,
-          "Y": 30
+          "X": 28.284271247461895,
+          "Y": 7.573593128807154
         },
         {
           "AdjacentSector": "be26u9vvn27vmb5f7b10",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7dr0",
+          "ID": "be3dsc7vn27ho9jt57bg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -80,
-          "Y": 30
+          "Y": 10
         },
         {
-          "AdjacentSector": "be26tcnvn27vmb5f75j0",
+          "AdjacentSector": "be3eq5fvn27i2m3sajt0",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7dsg",
+          "ID": "be3dsc7vn27ho9jt57d0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -80,
@@ -677,24 +363,414 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "CeilSlope": -0.3,
+      "CeilSlope": -0.7000000000000001,
       "Entities": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "FloorSlope": 0.15000000000000002,
+      "FloorSlope": 0.8500000000000002,
+      "ID": "be26u9vvn27vmb5f7b10",
+      "Segments": [
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt5740",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7b2g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": -160
+        },
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7bcg",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7b40",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 10
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7b5g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": 10
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sai50",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7b70",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": -160
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be26uavvn27vmb5f7edg",
+      "Segments": [
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt56fg",
+          "HiMaterial": "Default",
+          "ID": "be26uavvn27vmb5f7ef0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -14.14213562373095,
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7bcg",
+          "HiMaterial": "Default",
+          "ID": "be26uavvn27vmb5f7egg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt5740",
+          "HiMaterial": "Default",
+          "ID": "be26uavvn27vmb5f7ei0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 10
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt57u0",
+          "HiMaterial": "Default",
+          "ID": "be26uavvn27vmb5f7ejg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 28.284271247461895,
+          "Y": 7.573593128807154
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.8500000000000002,
+      "ID": "be26u7fvn27vmb5f78bg",
+      "Segments": [
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt56fg",
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f78d0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 50
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f78eg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f78g0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7bcg",
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f78hg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": 50
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be3dsc7vn27ho9jt57ig",
+      "Segments": [
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7cp0",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt57k0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt56fg",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt57lg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 90
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt57u0",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt57n0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 21.213203435596423,
+          "Y": 85.35533905932738
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt5740",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt57og",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 63.639610306789265,
+          "Y": 42.928932188134524
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be3ercnvn27i2m3saspg",
+      "Segments": [
+        {
+          "HiMaterial": "Default",
+          "ID": "be3erd7vn27i2m3sasq0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 290,
+          "Y": -60
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3erdfvn27i2m3sasqg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 430.5563856997455,
+          "Y": -172.44510855979638
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3ere7vn27i2m3sasr0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 505.5197914062764,
+          "Y": -78.74085142663272
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3erefvn27i2m3sasrg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 364.9634057065309,
+          "Y": 33.70425713316365
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be3esufvn27i2m3sav10",
+      "Segments": [
+        {
+          "AdjacentSector": "be3esufvn27i2m3sau70",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3sav2g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 410,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3estnvn27i2m3satqg",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3sav40",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 330,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3esvnvn27i2m3sav7g",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3sav5g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 330,
+          "Y": -510
+        },
+        {
+          "AdjacentSector": "be3esufvn27i2m3saulg",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3sav70",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 410,
+          "Y": -510
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.8500000000000002,
+      "ID": "be3estnvn27i2m3satqg",
+      "Segments": [
+        {
+          "AdjacentSector": "be3esufvn27i2m3sau70",
+          "HiMaterial": "Default",
+          "ID": "be3estnvn27i2m3sats0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 330,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sahpg",
+          "HiMaterial": "Default",
+          "ID": "be3estnvn27i2m3sattg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -490
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3estnvn27i2m3satv0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -510
+        },
+        {
+          "AdjacentSector": "be3esufvn27i2m3sav10",
+          "HiMaterial": "Default",
+          "ID": "be3estnvn27i2m3sau0g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 330,
+          "Y": -510
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.7000000000000001,
+      "ID": "be26u7fvn27vmb5f7790",
+      "Segments": [
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt56fg",
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f77ag",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7cp0",
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f77c0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 90
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f77dg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 90
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be26u7fvn27vmb5f77f0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 100
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.7000000000000001,
       "ID": "be26u9vvn27vmb5f7d4g",
       "Segments": [
         {
-          "AdjacentSector": "be26uavvn27vmb5f7dl0",
+          "AdjacentSector": "be3dsc7vn27ho9jt5740",
           "HiMaterial": "Default",
           "ID": "be26u9vvn27vmb5f7d60",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 80,
-          "Y": 30
+          "Y": 50
         },
         {
-          "AdjacentSector": "be26tcvvn27vmb5f76qg",
+          "AdjacentSector": "be3eq5fvn27i2m3saigg",
           "HiMaterial": "Default",
           "ID": "be26u9vvn27vmb5f7d7g",
           "LoMaterial": "Default",
@@ -717,7 +793,7 @@
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
-          "Y": 30
+          "Y": 50
         }
       ],
       "TopZ": 64,
@@ -727,42 +803,43 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "CeilSlope": -0.3,
+      "CeilSlope": -0.7000000000000001,
       "Entities": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "FloorSlope": 0.15000000000000002,
-      "ID": "be26tcvvn27vmb5f76qg",
+      "FloorSlope": 0.7000000000000001,
+      "ID": "be3eq5fvn27i2m3saigg",
       "Segments": [
         {
-          "AdjacentSector": "be26tcnvn27vmb5f75j0",
+          "AdjacentSector": "be3eq5fvn27i2m3sajt0",
           "HiMaterial": "Default",
-          "ID": "be26tcvvn27vmb5f76s0",
+          "ID": "be3eq5fvn27i2m3saii0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 80,
           "Y": -160
         },
         {
+          "AdjacentSector": "be3eq5fvn27i2m3sais0",
           "HiMaterial": "Default",
-          "ID": "be26tcvvn27vmb5f76tg",
+          "ID": "be3eq5fvn27i2m3saijg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 190,
-          "Y": -360
+          "X": 80,
+          "Y": -330
         },
         {
           "HiMaterial": "Default",
-          "ID": "be26tcvvn27vmb5f76v0",
+          "ID": "be3eq5fvn27i2m3sail0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 210,
-          "Y": -360
+          "X": 100,
+          "Y": -310
         },
         {
           "AdjacentSector": "be26u9vvn27vmb5f7d4g",
           "HiMaterial": "Default",
-          "ID": "be26tcvvn27vmb5f770g",
+          "ID": "be3eq5fvn27i2m3saimg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -776,46 +853,577 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
       "Entities": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "be26uavvn27vmb5f7edg",
+      "FloorSlope": 0.7000000000000001,
+      "ID": "be3eq5fvn27i2m3sais0",
       "Segments": [
         {
-          "AdjacentSector": "be26uavvn27vmb5f7ep0",
+          "AdjacentSector": "be3eq5fvn27i2m3sajcg",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7ef0",
+          "ID": "be3eq5fvn27i2m3saitg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 40,
-          "Y": 80
+          "X": 80,
+          "Y": -330
         },
         {
-          "AdjacentSector": "be26u9vvn27vmb5f7bcg",
+          "AdjacentSector": "be3eo0fvn27i2m3sagn0",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7egg",
+          "ID": "be3eq5fvn27i2m3saiv0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -330
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3saj0g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -310
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3saigg",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3saj20",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": -310
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [
+        {
+          "Active": true,
+          "Angle": 0,
+          "Behaviors": [
+            {
+              "Active": true,
+              "Attenuation": 1.2,
+              "Diffuse": {
+                "X": 1,
+                "Y": 0.6,
+                "Z": 1
+              },
+              "ID": "be26tkvvn27vmb5f771g",
+              "Strength": 15,
+              "Type": "behaviors.Light"
+            }
+          ],
+          "BoundingRadius": 10,
+          "CollisionResponse": "Slide",
+          "Height": 0,
+          "ID": "be26tkvvn27vmb5f7710",
+          "MountHeight": 30,
+          "Pos": {
+            "X": 10,
+            "Y": -240,
+            "Z": 32
+          },
+          "Type": "entities.Light",
+          "Vel": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          }
+        },
+        {
+          "Active": true,
+          "Angle": 0,
+          "Behaviors": [
+            {
+              "Active": true,
+              "Attenuation": 1.2,
+              "Diffuse": {
+                "X": 1,
+                "Y": 1,
+                "Z": 1
+              },
+              "ID": "be26tlfvn27vmb5f772g",
+              "Strength": 15,
+              "Type": "behaviors.Light"
+            }
+          ],
+          "BoundingRadius": 10,
+          "CollisionResponse": "Slide",
+          "Height": 0,
+          "ID": "be26tlfvn27vmb5f7720",
+          "MountHeight": 30,
+          "Pos": {
+            "X": 290,
+            "Y": -410,
+            "Z": 32
+          },
+          "Type": "entities.Light",
+          "Vel": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          }
+        }
+      ],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be3eq5fvn27i2m3sajt0",
+      "Segments": [
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3saigg",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sajug",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": -330
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt5740",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sak00",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": -160
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sai50",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sak1g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -80,
-          "Y": 80
+          "Y": -160
         },
         {
-          "AdjacentSector": "be26uavvn27vmb5f7dl0",
+          "AdjacentSector": "be3eq5fvn27i2m3sajcg",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7ei0",
+          "ID": "be3eq5fvn27i2m3sak30",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -80,
-          "Y": 30
-        },
+          "Y": -490
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be3esufvn27i2m3sau70",
+      "Segments": [
         {
-          "AdjacentSector": "be26uavvn27vmb5f7e20",
           "HiMaterial": "Default",
-          "ID": "be26uavvn27vmb5f7ejg",
+          "ID": "be3esufvn27i2m3sau8g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
-          "X": 40,
-          "Y": 30
+          "X": 580,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3eo0fvn27i2m3sagn0",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3saua0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 580,
+          "Y": -330
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sajcg",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3saubg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -330
+        },
+        {
+          "AdjacentSector": "be3estnvn27i2m3satqg",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3saud0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 200,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3esufvn27i2m3sav10",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3saueg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 330,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3esufvn27i2m3saulg",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3saug0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 410,
+          "Y": -490
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [
+        {
+          "Active": true,
+          "Angle": 0,
+          "Behaviors": [
+            {
+              "Active": true,
+              "Attenuation": 1.2,
+              "Diffuse": {
+                "X": 1,
+                "Y": 1,
+                "Z": 1
+              },
+              "ID": "Light",
+              "Strength": 15,
+              "Type": "behaviors.Light"
+            }
+          ],
+          "BoundingRadius": 10,
+          "CollisionResponse": "Slide",
+          "Height": 0,
+          "ID": "be3et4nvn27i2m3savb0",
+          "MountHeight": 30,
+          "Pos": {
+            "X": 370,
+            "Y": -630,
+            "Z": 32
+          },
+          "Type": "entities.Light",
+          "Vel": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          }
+        }
+      ],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be3esvnvn27i2m3sav7g",
+      "Segments": [
+        {
+          "HiMaterial": "Default",
+          "ID": "be3et07vn27i2m3sav80",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 330,
+          "Y": -510
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3et0fvn27i2m3sav8g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 330,
+          "Y": -690
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3et0nvn27i2m3sav90",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 410,
+          "Y": -690
+        },
+        {
+          "AdjacentSector": "be3esufvn27i2m3sav10",
+          "HiMaterial": "Default",
+          "ID": "be3et17vn27i2m3sav9g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 410,
+          "Y": -510
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.8500000000000002,
+      "ID": "be3esufvn27i2m3saulg",
+      "Segments": [
+        {
+          "AdjacentSector": "be3esufvn27i2m3sau70",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3saun0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 580,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be3esufvn27i2m3sav10",
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3sauog",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 410,
+          "Y": -490
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3sauq0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 410,
+          "Y": -510
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3esufvn27i2m3saurg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 580,
+          "Y": -510
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "be3dsc7vn27ho9jt56fg",
+      "Segments": [
+        {
+          "AdjacentSector": "be26u7fvn27vmb5f7790",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt56h0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 90
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt56ig",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "be26u7fvn27vmb5f78bg",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt56k0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "be26uavvn27vmb5f7edg",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt56lg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt57u0",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt56n0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -14.14213562373095,
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt57ig",
+          "HiMaterial": "Default",
+          "ID": "be3dsc7vn27ho9jt56og",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 21.213203435596423,
+          "Y": 85.35533905932738
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.7000000000000001,
+      "ID": "be26u9vvn27vmb5f7cp0",
+      "Segments": [
+        {
+          "AdjacentSector": "be3dsc7vn27ho9jt57ig",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7cqg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 90
+        },
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7d4g",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7cs0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 80,
+          "Y": 50
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7ctg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be26u7fvn27vmb5f7790",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7cv0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 90
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.8500000000000002,
+      "ID": "be26u9vvn27vmb5f7bcg",
+      "Segments": [
+        {
+          "AdjacentSector": "be26uavvn27vmb5f7edg",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7be0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 10
+        },
+        {
+          "AdjacentSector": "be26u7fvn27vmb5f78bg",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7bfg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": 50
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7bh0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": 50
+        },
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7b10",
+          "HiMaterial": "Default",
+          "ID": "be26u9vvn27vmb5f7big",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": 10
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "CeilSlope": -0.7000000000000001,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "FloorSlope": 0.8500000000000002,
+      "ID": "be3eq5fvn27i2m3sai50",
+      "Segments": [
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sajt0",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sai6g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": -490
+        },
+        {
+          "AdjacentSector": "be26u9vvn27vmb5f7b10",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sai80",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -80,
+          "Y": -160
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3sai9g",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": -160
+        },
+        {
+          "AdjacentSector": "be3eq5fvn27i2m3sahpg",
+          "HiMaterial": "Default",
+          "ID": "be3eq5fvn27i2m3saib0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": -510
         }
       ],
       "TopZ": 64,

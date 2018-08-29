@@ -95,6 +95,17 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkRadioToolButton" id="ToolAlignGrid">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text">Align Grid</property>
+                        <property name="label">Align Grid</property>
+                        <property name="icon_name">format-justify-fill</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkRadioToolButton" id="ToolSplitSegment">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -153,6 +164,9 @@
                         <property name="group">ToolSelect</property>
                         <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
                       </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -234,6 +248,7 @@
                                 <property name="orientation">vertical</property>
                                 <property name="row_spacing">4</property>
                                 <property name="column_spacing">4</property>
+                                <property name="row_homogeneous">True</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -294,13 +309,18 @@
           <object class="GtkLabel" id="StatusBar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="valign">end</property>
             <property name="margin_top">4</property>
             <property name="margin_bottom">4</property>
-            <property name="label" translatable="yes">Status Bar Test</property>
+            <property name="hexpand">True</property>
+            <property name="justify">right</property>
+            <property name="ellipsize">start</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="fill">False</property>
+            <property name="padding">1</property>
             <property name="position">2</property>
           </packing>
         </child>

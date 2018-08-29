@@ -20,6 +20,7 @@ func (l *Light) Initialize() {
 
 	lb := &behaviors.Light{}
 	lb.Initialize()
+	lb.ID = "Light"
 	l.Behaviors[lb.GetBase().ID] = lb
 }
 

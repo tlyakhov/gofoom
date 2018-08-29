@@ -17,6 +17,7 @@ func MapMotionNotify(da *gtk.DrawingArea, ev *gdk.Event) {
 	editor.Mouse.X = x
 	editor.Mouse.Y = y
 	editor.MouseWorld = editor.ScreenToWorld(editor.Mouse)
+	editor.UpdateStatus()
 
 	if editor.CurrentAction != nil {
 		editor.CurrentAction.OnMouseMove()

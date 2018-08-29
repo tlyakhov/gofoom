@@ -70,7 +70,7 @@ func run() {
 	renderer.ScreenWidth = w
 	renderer.ScreenHeight = h
 	renderer.Initialize()
-	gameMap := logic.LoadMap("data/classicMap.json")
+	gameMap := logic.LoadMap("data/worlds/hall.json")
 	ps := entity.NewPlayerService(gameMap.Player.(*entities.Player))
 	ps.Collide()
 	renderer.Map = gameMap.Map

@@ -51,6 +51,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 		return
 	}
 	if slice.Depth > 100 {
+		fmt.Printf("Max depth reached!\n")
 		return
 	}
 	sp := &state.SlicePortal{Slice: slice}
@@ -64,6 +65,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	portalSlice.PhysicalSector = sp.Adj.Physical()
 	portalSlice.YStart = sp.AdjClippedTop
 	portalSlice.YEnd = sp.AdjClippedBottom
+	portalSlice.LastPortalDistance = slice.Distance
 	portalSlice.Depth++
 	r.RenderSector(&portalSlice)
 }
@@ -85,14 +87,14 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 			continue
 		}
 
-		delta := &concepts.Vector2{math.Abs(isect.X - slice.Ray.Start.X), math.Abs(isect.Y - slice.Ray.Start.Y)}
+		delta := &concepts.Vector2{X: math.Abs(isect.X - slice.Ray.Start.X), Y: math.Abs(isect.Y - slice.Ray.Start.Y)}
 		if delta.Y > delta.X {
 			dist = math.Abs(delta.Y / slice.AngleSin)
 		} else {
 			dist = math.Abs(delta.X / slice.AngleCos)
 		}
 
-		if dist > slice.Distance {
+		if dist > slice.Distance || dist < slice.LastPortalDistance {
 			continue
 		}
 

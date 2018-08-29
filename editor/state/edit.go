@@ -13,13 +13,8 @@ const (
 	ToolSplitSector
 	ToolAddSector
 	ToolAddEntity
+	ToolAlignGrid
 )
-
-type MapView struct {
-	Scale float64
-	Pos   concepts.Vector2 // World
-	Size  concepts.Vector2 // Screen
-}
 
 type Edit struct {
 	MapView
