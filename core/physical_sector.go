@@ -33,7 +33,7 @@ type PhysicalSector struct {
 	FloorLightmap, CeilLightmap   []concepts.Vector3
 	PVS                           map[string]AbstractSector
 	PVSEntity                     map[string]AbstractSector
-	PVSLights                     []AbstractEntity
+	PVL                           map[string]AbstractEntity
 
 	// RoomImpulse
 }

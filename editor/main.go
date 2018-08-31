@@ -136,6 +136,11 @@ func onActivate() {
 		log.Fatal("Can't find EntityTypes object in GTK+ UI file.", err)
 	}
 	editor.EntityTypes = obj.(*gtk.ComboBoxText)
+	obj, err = builder.GetObject("SectorTypes")
+	if err != nil {
+		log.Fatal("Can't find SectorTypes object in GTK+ UI file.", err)
+	}
+	editor.SectorTypes = obj.(*gtk.ComboBoxText)
 	obj, err = builder.GetObject("StatusBar")
 	if err != nil {
 		log.Fatal("Can't find StatusBar object in GTK+ UI file.", err)
