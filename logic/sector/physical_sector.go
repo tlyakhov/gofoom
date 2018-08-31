@@ -1,8 +1,6 @@
 package sector
 
 import (
-	"math"
-
 	"github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
@@ -89,45 +87,93 @@ func hasLightBehavior(e core.AbstractEntity) bool {
 	}
 	return false
 }
-func (s *PhysicalSectorService) updatePVS(normal concepts.Vector2, visitor core.AbstractSector) {
-	if visitor == nil {
-		visitor = s.PhysicalSector
-		s.PVS = make(map[string]core.AbstractSector)
-		s.PVS[s.ID] = visitor
-		s.PVSLights = []core.AbstractEntity{}
-		for _, e := range s.Entities {
-			if hasLightBehavior(e) {
-				s.PVSLights = append(s.PVSLights, e)
+
+func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
+	// Check if the "visitor" sector is completely blocked by a non-portal- or zero-height-portal segment.
+	vphys := visitor.Physical()
+	// Performance of this is terrible... :(
+	// For a map of 10000 segments & current sector = 10 segs, this loop could run:
+	// 10 * 10000 * 10000 = 1B times
+	// This loop is all the potential occluding sectors.
+	for id, isector := range s.Map.Sectors {
+		if id == s.ID || id == vphys.ID {
+			continue
+		}
+		for _, iseg := range isector.Physical().Segments {
+			if iseg.AdjacentSector != nil {
+				continue
+			}
+			count := 0
+			// This loop is for our visitor segments
+			for _, vseg := range vphys.Segments {
+				// Then our target sector segments
+				for _, oseg := range s.PhysicalSector.Segments {
+					if oseg.Matches(vseg) {
+						count++
+						continue
+					}
+					// We make two lines on either side and see if there is a segment that intersects both of them
+					// (which means vseg is fully occluded from oseg)
+					l1a := oseg.P
+					l1b := vseg.P
+					l2a := oseg.Next.P
+					l2b := vseg.Next.P
+					sameFacing := oseg.Normal.Dot(vseg.Normal) >= 0
+					if !sameFacing {
+						l1b, l2b = l2b, l1b
+					}
+
+					_, isect1 := iseg.Intersect2D(l1a, l1b)
+					_, isect2 := iseg.Intersect2D(l2a, l2b)
+					if isect1 && isect2 {
+						count++
+					} else {
+						break
+					}
+				}
+			}
+			if count == len(vphys.Segments)*len(s.PhysicalSector.Segments) {
+				return true
 			}
 		}
 	}
+	return false
+}
+
+func (s *PhysicalSectorService) buildPVS(visitor core.AbstractSector) {
+	if visitor == nil {
+		s.PVS = make(map[string]core.AbstractSector)
+		s.PVS[s.ID] = s.PhysicalSector
+		s.PVL = make(map[string]core.AbstractEntity)
+		visitor = s.PhysicalSector
+	} else if s.occludedBy(visitor) {
+		return
+	}
+
+	s.PVS[visitor.GetBase().ID] = visitor
+
+	for id, e := range visitor.Physical().Entities {
+		if hasLightBehavior(e) {
+			s.PVL[id] = e
+		}
+	}
+
 	for _, seg := range visitor.Physical().Segments {
-		adj := seg.AdjacentSegment
+		adj := seg.AdjacentSector
 		if adj == nil {
 			continue
 		}
-
-		correctSide := normal.Zero() || normal.Dot(seg.Normal) >= 0
-		if !correctSide || s.PVS[seg.AdjacentSector.GetBase().ID] != nil {
-			continue
-		}
-		s.PVS[seg.AdjacentSector.GetBase().ID] = seg.AdjacentSector
-
-		floorZ, ceilZ := adj.Sector.Physical().CalcFloorCeilingZ(seg.P)
-		if math.Abs(ceilZ-floorZ) < constants.VelocityEpsilon {
+		adjID := adj.GetBase().ID
+		if s.PVS[adjID] != nil {
 			continue
 		}
 
-		for _, e := range seg.AdjacentSector.Physical().Entities {
-			if hasLightBehavior(e) {
-				s.PVSLights = append(s.PVSLights, e)
-			}
+		floorZ, ceilZ := adj.Physical().CalcFloorCeilingZ(seg.P)
+		if ceilZ-floorZ < constants.VelocityEpsilon {
+			continue
 		}
-		if normal.Zero() {
-			s.updatePVS(seg.Normal, seg.AdjacentSector)
-		} else {
-			s.updatePVS(normal, seg.AdjacentSector)
-		}
+
+		s.buildPVS(adj)
 	}
 }
 
@@ -159,7 +205,7 @@ func (s *PhysicalSectorService) updateEntityPVS(normal concepts.Vector2, visitor
 }
 
 func (s *PhysicalSectorService) UpdatePVS() {
-	s.updatePVS(concepts.Vector2{}, nil)
+	s.buildPVS(nil)
 	s.updateEntityPVS(concepts.Vector2{}, nil)
 	s.ClearLightmaps()
 }

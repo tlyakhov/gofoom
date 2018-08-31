@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/gotk3/gotk3/cairo"
@@ -89,13 +90,16 @@ func (g *MapViewGrid) Refresh(e *state.Edit, cr *cairo.Context) {
 	qstart = qstart.Sub(right.Mul(delta.X)).Sub(down.Mul(delta.Y))
 	qend = qend.Add(right.Mul(delta.X)).Add(down.Mul(delta.Y))
 
+	d := 3.0 / (g.Current.Scale + 1)
+	fmt.Printf("%v\n", d)
+
 	for x := 0.0; x < delta.X*3; x++ {
 		for y := 0.0; y < delta.Y*3; y++ {
 			pos := qstart.Add(right.Mul(x)).Add(down.Mul(y))
 			if pos.X < start.X || pos.X > end.X || pos.Y < start.Y || pos.Y > end.Y {
 				continue
 			}
-			cr.Rectangle(pos.X, pos.Y, 1, 1)
+			cr.Rectangle(pos.X-d*0.5, pos.Y-d*0.5, d, d)
 			cr.Fill()
 		}
 	}

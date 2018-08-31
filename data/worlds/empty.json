@@ -1,54 +1,77 @@
 {
-    "SpawnX": 0,
-    "SpawnY": 0,
-    "Materials": [
+  "EntitiesPaused": false,
+  "ID": "be3h6pnvn27in35ekqj0",
+  "Materials": [
+    {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "ID": "Default",
+      "IsLiquid": false,
+      "Texture": {
+        "Filter": false,
+        "GenerateMipMaps": true,
+        "ID": "be3h6pnvn27in35ekqn0",
+        "Source": "data/WDef.png",
+        "Type": "texture.Image"
+      },
+      "Type": "materials.LitSampled"
+    }
+  ],
+  "Sectors": [
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Entities": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "ID": "Starting",
+      "Segments": [
         {
-            "Type": "materials.LitSampled",
-            "ID": "Default",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/WDef.png"
-            }
-        }
-    ],
-    "Sectors": [
+          "HiMaterial": "Default",
+          "ID": "be3h6pnvn27in35ekqp0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": -100
+        },
         {
-            "Type": "core.PhysicalSector",
-            "ID": "Starting",
-            "BottomZ": 0,
-            "TopZ": 64,
-            "FloorMaterial": "Default",
-            "CeilMaterial": "Default",
-            "Segments": [
-                {
-                    "X": -100,
-                    "Y": -100,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default"
-                },
-                {
-                    "X": 100,
-                    "Y": -100,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default"
-                },
-                {
-                    "X": 100,
-                    "Y": 100,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default"
-                },
-                {
-                    "X": -100,
-                    "Y": 100,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default"
-                }
-            ]
+          "HiMaterial": "Default",
+          "ID": "be3h6pnvn27in35ekqq0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": -100
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3h6pnvn27in35ekqr0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "Default",
+          "ID": "be3h6pnvn27in35ekqs0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -100,
+          "Y": 100
         }
-    ]
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    }
+  ],
+  "SpawnX": 0,
+  "SpawnY": 0
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"reflect"
 	"strconv"
 	"unsafe"
@@ -32,6 +31,7 @@ type EditorWidgets struct {
 	GameArea    *gtk.DrawingArea
 	MapArea     *gtk.DrawingArea
 	EntityTypes *gtk.ComboBoxText
+	SectorTypes *gtk.ComboBoxText
 	StatusBar   *gtk.Label
 }
 
@@ -167,16 +167,17 @@ func (e *Editor) ActTool() {
 	case state.ToolSplitSector:
 		e.NewAction(&actions.SplitSector{IEditor: e})
 	case state.ToolAddSector:
-		s := &core.PhysicalSector{}
+		typeId := e.SectorTypes.GetActiveID()
+		t := registry.Instance().All[typeId]
+		s := reflect.New(t).Interface().(core.AbstractSector)
 		s.Initialize()
-		s.FloorMaterial = e.World.DefaultMaterial()
-		s.CeilMaterial = e.World.DefaultMaterial()
+		s.Physical().FloorMaterial = e.World.DefaultMaterial()
+		s.Physical().CeilMaterial = e.World.DefaultMaterial()
 		s.SetParent(e.World.Map)
 		e.NewAction(&actions.AddSector{IEditor: e, Sector: s})
 	case state.ToolAddEntity:
 		typeId := e.EntityTypes.GetActiveID()
 		t := registry.Instance().All[typeId]
-		fmt.Println(t)
 		ae := reflect.New(t).Interface().(core.AbstractEntity)
 		ae.Initialize()
 		e.NewAction(&actions.AddEntity{IEditor: e, Entity: ae})
