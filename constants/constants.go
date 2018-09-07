@@ -6,9 +6,9 @@ const (
 	LightGrid               = 1
 	LightSafety             = 5
 	VelocityEpsilon         = 1e-15
-	LightAttenuationEpsilon = 0.001
+	LightAttenuationEpsilon = 0.00001
 	MaxViewDistance         = 1000000.0
-	FieldOfView             = 75
+	FieldOfView             = 90
 	DebugLevel              = 1
 	CollisionSteps          = 10
 
@@ -29,12 +29,12 @@ const (
 	PlayerBoundingRadius = 10.0
 	PlayerHeight         = 32.0
 	PlayerCrouchHeight   = 16.0
-	PlayerSpeed          = 3.2
+	PlayerSpeed          = 1
 	PlayerTurnSpeed      = 4.0
 	PlayerJumpStrength   = 1.5
 	PlayerSwimStrength   = 0.6
 	PlayerHurtTime       = 30
-	PlayerMountHeight    = 20.0
+	PlayerMountHeight    = 15.0
 	PlayerMaxHealth      = 100
 
 	// Game constants

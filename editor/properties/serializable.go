@@ -2,6 +2,7 @@ package properties
 
 import (
 	"fmt"
+	"image/color"
 	"reflect"
 
 	"github.com/tlyakhov/gofoom/editor/actions"
@@ -15,7 +16,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (g *Grid) pixbuf(obj interface{}) *gdk.Pixbuf {
+func (g *Grid) pixbufSampler(sampler texture.ISampler) *gdk.Pixbuf {
 	pbFromFile := func(filename string) *gdk.Pixbuf {
 		pixbuf, err := gdk.PixbufNewFromFileAtSize(filename, 16, 16)
 		if err != nil {
@@ -24,13 +25,38 @@ func (g *Grid) pixbuf(obj interface{}) *gdk.Pixbuf {
 		}
 		return pixbuf
 	}
+	pbFromColor := func(c color.NRGBA) *gdk.Pixbuf {
+		pixbuf, err := gdk.PixbufNew(gdk.COLORSPACE_RGB, false, 8, 16, 16)
+		if err != nil {
+			fmt.Printf("Warning: %v", err)
+			return nil
+		}
+		pixels := pixbuf.GetPixels()
+		for i := 0; i < len(pixels)-2; i += 3 {
+			pixels[i] = c.R
+			pixels[i+1] = c.G
+			pixels[i+2] = c.B
+		}
+		return pixbuf
+	}
+	switch target := sampler.(type) {
+	case *texture.Image:
+		return pbFromFile(target.Source)
+	case *texture.Solid:
+		return pbFromColor(target.Diffuse)
+	}
+	return nil
+}
+
+func (g *Grid) pixbuf(obj interface{}) *gdk.Pixbuf {
+
 	switch target := obj.(type) {
 	case *materials.PainfulLitSampled:
-		return pbFromFile(target.Sampler.(*texture.Image).Source)
+		return g.pixbufSampler(target.Sampler)
 	case *materials.LitSampled:
-		return pbFromFile(target.Sampler.(*texture.Image).Source)
+		return g.pixbufSampler(target.Sampler)
 	case *materials.Sky:
-		return pbFromFile(target.Sampler.(*texture.Image).Source)
+		return g.pixbufSampler(target.Sampler)
 	}
 	return nil
 }

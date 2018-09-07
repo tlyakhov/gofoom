@@ -153,6 +153,11 @@ func onActivate() {
 	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
 	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.Undo() })
 	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.Redo() })
+	editor.AddSimpleMenuAction("delete", func(obj *glib.Object) {
+		action := &actions.Delete{IEditor: editor}
+		editor.NewAction(action)
+		action.Act()
+	})
 	editor.AddSimpleMenuAction("tool.select", func(obj *glib.Object) {
 		editor.SwitchTool(state.ToolSelect)
 		tool, _ := builder.GetObject("ToolSelect")
@@ -171,6 +176,10 @@ func onActivate() {
 		editor.NewAction(action)
 		action.Act()
 	})
+	editor.AddSimpleMenuAction("tool.grid.up", func(obj *glib.Object) {
+		editor.Current.Step *= 2
+	})
+	editor.AddSimpleMenuAction("tool.grid.down", func(obj *glib.Object) { editor.Current.Step /= 2 })
 
 	setupMenu()
 	editor.Window.SetApplication(editor.App)

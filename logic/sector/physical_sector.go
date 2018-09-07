@@ -1,6 +1,8 @@
 package sector
 
 import (
+	"math"
+
 	"github.com/tlyakhov/gofoom/behaviors"
 	"github.com/tlyakhov/gofoom/concepts"
 	"github.com/tlyakhov/gofoom/constants"
@@ -41,6 +43,7 @@ func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 	} else if s.FloorTarget == nil && concrete.Pos.Z <= floorZ {
 		concrete.Vel.Z = 0
 		concrete.Pos.Z = floorZ
+		//fmt.Printf("%v\n", concrete.Pos)
 	}
 
 	if s.CeilTarget != nil && entityTop > ceilZ {
@@ -61,8 +64,14 @@ func (s *PhysicalSectorService) ActOnEntity(e core.AbstractEntity) {
 	}
 
 	if e.GetBase().ID == s.Map.Player.GetBase().ID {
-		e.Physical().Vel.X = 0
-		e.Physical().Vel.Y = 0
+		e.Physical().Vel.X /= 1.2
+		e.Physical().Vel.Y /= 1.2
+		if math.Abs(e.Physical().Vel.X) < 0.0001 {
+			e.Physical().Vel.X = 0
+		}
+		if math.Abs(e.Physical().Vel.Y) < 0.0001 {
+			e.Physical().Vel.Y = 0
+		}
 	}
 
 	e.Physical().Vel.Z -= constants.Gravity * e.Physical().Weight
@@ -95,49 +104,56 @@ func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
 	// For a map of 10000 segments & current sector = 10 segs, this loop could run:
 	// 10 * 10000 * 10000 = 1B times
 	// This loop is all the potential occluding sectors.
-	for id, isector := range s.Map.Sectors {
-		if id == s.ID || id == vphys.ID {
-			continue
-		}
-		for _, iseg := range isector.Physical().Segments {
-			if iseg.AdjacentSector != nil {
+
+	// This loop is for our visitor segments
+	for _, vseg := range vphys.Segments {
+		// Then our target sector segments
+		for _, oseg := range s.PhysicalSector.Segments {
+			if oseg.Matches(vseg) {
 				continue
 			}
-			count := 0
-			// This loop is for our visitor segments
-			for _, vseg := range vphys.Segments {
-				// Then our target sector segments
-				for _, oseg := range s.PhysicalSector.Segments {
-					if oseg.Matches(vseg) {
-						count++
+			// We make two lines on either side and see if there is a segment that intersects both of them
+			// (which means vseg is fully occluded from oseg)
+			l1a := oseg.P
+			l1b := vseg.P
+			l2a := oseg.Next.P
+			l2b := vseg.Next.P
+			sameFacing := oseg.Normal.Dot(vseg.Normal) >= 0
+			if !sameFacing {
+				l1b, l2b = l2b, l1b
+			}
+
+			occluded := false
+
+			for id, isector := range s.Map.Sectors {
+				if id == s.ID || id == vphys.ID {
+					continue
+				}
+				for _, iseg := range isector.Physical().Segments {
+					if iseg.AdjacentSector != nil {
 						continue
 					}
-					// We make two lines on either side and see if there is a segment that intersects both of them
-					// (which means vseg is fully occluded from oseg)
-					l1a := oseg.P
-					l1b := vseg.P
-					l2a := oseg.Next.P
-					l2b := vseg.Next.P
-					sameFacing := oseg.Normal.Dot(vseg.Normal) >= 0
-					if !sameFacing {
-						l1b, l2b = l2b, l1b
-					}
-
 					_, isect1 := iseg.Intersect2D(l1a, l1b)
+					if !isect1 {
+						continue
+					}
 					_, isect2 := iseg.Intersect2D(l2a, l2b)
-					if isect1 && isect2 {
-						count++
-					} else {
+					if isect2 {
+						occluded = true
 						break
 					}
 				}
+				if occluded {
+					break
+				}
 			}
-			if count == len(vphys.Segments)*len(s.PhysicalSector.Segments) {
-				return true
+
+			if !occluded {
+				return false
 			}
 		}
 	}
-	return false
+	return true
 }
 
 func (s *PhysicalSectorService) buildPVS(visitor core.AbstractSector) {
@@ -168,8 +184,7 @@ func (s *PhysicalSectorService) buildPVS(visitor core.AbstractSector) {
 			continue
 		}
 
-		floorZ, ceilZ := adj.Physical().CalcFloorCeilingZ(seg.P)
-		if ceilZ-floorZ < constants.VelocityEpsilon {
+		if adj.Physical().Min.Z >= s.PhysicalSector.Max.Z || adj.Physical().Max.Z <= s.PhysicalSector.Min.Z {
 			continue
 		}
 

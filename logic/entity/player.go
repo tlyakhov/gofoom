@@ -20,6 +20,10 @@ func NewPlayerService(p *entities.Player) *PlayerService {
 }
 
 func (p *PlayerService) Frame(lastFrameTime float64) {
+	p.Bob += p.Player.Vel.Length() / 6.0
+	for p.Bob > math.Pi*2 {
+		p.Bob -= math.Pi * 2
+	}
 	p.AliveEntityService.PhysicalEntityService.Frame(lastFrameTime)
 	if p.Player.Sector == nil {
 		return

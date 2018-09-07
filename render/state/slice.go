@@ -77,6 +77,9 @@ func (s *Slice) Write(screenIndex uint32, c uint32) {
 }
 
 func (s *Slice) Light(world, normal concepts.Vector3, u, v float64) concepts.Vector3 {
+	//le := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
+	//return le.Calculate(world)
+
 	le00 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
 	le10 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
 	le11 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
@@ -115,7 +118,7 @@ func (s *Slice) Light(world, normal concepts.Vector3, u, v float64) concepts.Vec
 		if le01.MapIndex > lightmapLength-1 {
 			le01.MapIndex = lightmapLength - 1
 		}
-		q := s.PhysicalSector.LightmapWorld(world)
+		q := s.PhysicalSector.LightmapWorld(world, normal.Z > 0)
 		wu = 1.0 - (world.X-q.X)/constants.LightGrid
 		wv = 1.0 - (world.Y-q.Y)/constants.LightGrid
 	} else {
@@ -148,8 +151,8 @@ func (s *Slice) Light(world, normal concepts.Vector3, u, v float64) concepts.Vec
 		wu = 1.0 - (wu - math.Floor(wu))
 		wv = 1.0 - (wv - math.Floor(wv))
 	}
-	wu = concepts.Clamp(wu, 0.0, 1.0)
-	wv = concepts.Clamp(wv, 0.0, 1.0)
+	//wu = concepts.Clamp(wu, 0.0, 1.0)
+	//wv = concepts.Clamp(wv, 0.0, 1.0)
 
 	return le00.Get(wall).Mul(wu * wv).
 		Add(le10.Get(wall).Mul((1.0 - wu) * wv)).

@@ -3,7 +3,6 @@ package sector
 import (
 	"github.com/tlyakhov/gofoom/constants"
 	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/logic/provide"
 	"github.com/tlyakhov/gofoom/sectors"
 )
 
@@ -50,9 +49,15 @@ func (s *VerticalDoorService) Frame(lastFrameTime float64) {
 	}
 
 	if last != ps.TopZ {
-		s.UpdatePVS()
+		s.PhysicalSectorService.ClearLightmaps()
 		for _, pvs := range ps.PVS {
-			provide.Passer.For(pvs).UpdatePVS()
+			pvs.Physical().ClearLightmaps()
 		}
 	}
+}
+
+func (s *VerticalDoorService) Recalculate() {
+	s.PhysicalSectorService.PhysicalSector.Recalculate()
+	s.PhysicalSectorService.Max.Z = s.OrigTopZ
+	s.UpdatePVS()
 }

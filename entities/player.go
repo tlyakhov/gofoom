@@ -15,6 +15,7 @@ type Player struct {
 	Standing  bool
 	Crouching bool
 	Inventory []core.AbstractEntity
+	Bob       float64
 }
 
 func init() {
