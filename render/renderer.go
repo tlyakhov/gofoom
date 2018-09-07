@@ -118,6 +118,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 		r.ZBuffer[i] = r.MaxViewDist
 	}
 
+	bob := math.Sin(r.Player().Bob)
 	// Initialize a slice...
 	slice := &state.Slice{
 		Config:         r.Config,
@@ -128,7 +129,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 		YEnd:           r.ScreenHeight,
 		Angle:          r.Player().Angle*concepts.Deg2rad + r.ViewRadians[x],
 		PhysicalSector: r.Player().Sector.Physical(),
-		CameraZ:        r.Player().Pos.Z + r.Player().Height,
+		CameraZ:        r.Player().Pos.Z + r.Player().Height + bob,
 	}
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)

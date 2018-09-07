@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/tlyakhov/gofoom/concepts"
@@ -75,8 +76,12 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 
 		if !closestSector.IsPointInside2D(e.Pos.To2D()) {
 			e.Pos = closestSector.Physical().Center
-		} else if e.Pos.Z < closestSector.Physical().BottomZ || e.Pos.Z+e.Height > closestSector.Physical().TopZ {
-			e.Pos.Z = closestSector.Physical().Center.Z
+		}
+
+		floorZ, ceilZ := closestSector.Physical().CalcFloorCeilingZ(e.Pos.To2D())
+		if e.Pos.Z < floorZ || e.Pos.Z+e.Height > ceilZ {
+			e.Pos.Z = floorZ
+			fmt.Println("goop1?")
 		}
 
 		e.Sector = closestSector
@@ -92,8 +97,9 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 			adj := segment.AdjacentSector.Physical()
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
-			if e.Pos.Z+e.MountHeight >= adj.BottomZ &&
-				e.Pos.Z+e.Height < adj.TopZ {
+			floorZ, ceilZ := adj.CalcFloorCeilingZ(e.Pos.To2D())
+			if e.Pos.Z+e.MountHeight >= floorZ &&
+				e.Pos.Z+e.Height < ceilZ {
 				continue
 			}
 		}
@@ -108,21 +114,28 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 		// Cases 5 & 6
 
 		// Exit the current sector.
+		sector := e.Sector
 		provide.Passer.For(e.Sector).OnExit(e.Original)
 		delete(e.Sector.Physical().Entities, e.ID)
 		e.Sector = nil
 
-		for _, item := range e.Map.Sectors {
-			sector := item.Physical()
-			if e.Pos.Z+e.MountHeight >= sector.BottomZ &&
-				e.Pos.Z+e.Height < sector.TopZ &&
-				sector.IsPointInside2D(ePosition2D) {
+		for _, segment := range sector.Physical().Segments {
+			if segment.AdjacentSector == nil {
+				continue
+			}
+			adj := segment.AdjacentSector.Physical()
+			floorZ, ceilZ := adj.CalcFloorCeilingZ(ePosition2D)
+			if e.Pos.Z+e.MountHeight >= floorZ &&
+				e.Pos.Z+e.Height < ceilZ &&
+				adj.IsPointInside2D(ePosition2D) {
 				// Hooray, we've handled case 5! Make sure Z is good.
-				if e.Pos.Z < sector.BottomZ {
-					e.Pos.Z = sector.BottomZ
+				fmt.Printf("Case 5! entity = %v, floor z = %v\n", e.Pos, floorZ)
+				if e.Pos.Z < floorZ {
+					//e.Pos.Z = floorZ
+					fmt.Println("goop2?")
 				}
-				e.Sector = item
-				e.Sector.Physical().Entities[e.ID] = e.Original
+				e.Sector = segment.AdjacentSector
+				adj.Entities[e.ID] = e.Original
 				provide.Passer.For(e.Sector).OnEnter(e.Original)
 				break
 			}
@@ -130,12 +143,12 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 
 		if e.Sector == nil {
 			// Case 6! This is the worst.
-			for _, item := range e.Map.Sectors {
-				sector := item.Physical()
-				if e.Pos.Z+e.MountHeight >= sector.BottomZ &&
-					e.Pos.Z+e.Height < sector.TopZ {
-
-					for _, segment := range sector.Segments {
+			for _, sector := range e.Map.Sectors {
+				phys := sector.Physical()
+				floorZ, ceilZ := phys.CalcFloorCeilingZ(e.Pos.To2D())
+				if e.Pos.Z+e.MountHeight >= floorZ &&
+					e.Pos.Z+e.Height < ceilZ {
+					for _, segment := range phys.Segments {
 						if e.PushBack(segment) {
 							collided = append(collided, segment)
 						}

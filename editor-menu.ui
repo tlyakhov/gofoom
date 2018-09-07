@@ -68,6 +68,12 @@
                     <attribute name="icon">edit-paste</attribute>
                     <attribute name="accel">&lt;Primary&gt;c</attribute>
                 </item>
+                <item>
+                    <attribute name="label" translatable="yes">Delete</attribute>
+                    <attribute name="icon">edit-delete</attribute>
+                    <attribute name="accel">Delete</attribute>
+                    <attribute name="action">app.delete</attribute>
+                </item>
             </section>
         </submenu>
         <submenu>
@@ -135,6 +141,20 @@
                     <attribute name="icon">go-jump</attribute>
                     <attribute name="accel">r</attribute>
                     <attribute name="action">app.tool.rotate.slope</attribute>
+                </item>
+            </section>
+            <section>
+                <item>
+                    <attribute name="label" translatable="yes">Increase Grid Size</attribute>
+                    <attribute name="icon">zoom-in</attribute>
+                    <attribute name="accel">&lt;Shift&gt;Up</attribute>
+                    <attribute name="action">app.tool.grid.up</attribute>
+                </item>
+                <item>
+                    <attribute name="label" translatable="yes">Decrease Grid Size</attribute>
+                    <attribute name="icon">zoom-out</attribute>
+                    <attribute name="accel">&lt;Shift&gt;Down</attribute>
+                    <attribute name="action">app.tool.grid.down</attribute>
                 </item>
             </section>
         </submenu>

@@ -161,8 +161,8 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 
 func (s *PhysicalSector) Recalculate() {
 	s.Center = concepts.Vector3{0, 0, (s.TopZ + s.BottomZ) / 2}
-	s.Min = concepts.Vector3{math.Inf(1), math.Inf(1), s.BottomZ}
-	s.Max = concepts.Vector3{math.Inf(-1), math.Inf(-1), s.TopZ}
+	s.Min = concepts.Vector3{math.Inf(1), math.Inf(1), math.Inf(1)}
+	s.Max = concepts.Vector3{math.Inf(-1), math.Inf(-1), math.Inf(-1)}
 
 	sum := 0.0
 	for i, segment := range s.Segments {
@@ -205,6 +205,19 @@ func (s *PhysicalSector) Recalculate() {
 		}
 		if segment.P.Y > s.Max.Y {
 			s.Max.Y = segment.P.Y
+		}
+		floorZ, ceilZ := s.CalcFloorCeilingZ(segment.P)
+		if floorZ < s.Min.Z {
+			s.Min.Z = floorZ
+		}
+		if ceilZ < s.Min.Z {
+			s.Min.Z = ceilZ
+		}
+		if floorZ > s.Max.Z {
+			s.Max.Z = floorZ
+		}
+		if ceilZ > s.Max.Z {
+			s.Max.Z = ceilZ
 		}
 		segment.Sector = s
 		segment.Recalculate()
@@ -272,7 +285,7 @@ func (s *PhysicalSector) ClearLightmaps() {
 // CalcFloorCeilingZ figures out the current slice Z values accounting for slope.
 func (s *PhysicalSector) CalcFloorCeilingZ(isect concepts.Vector2) (floorZ float64, ceilZ float64) {
 	if len(s.Segments) < 2 {
-		return 0, 0
+		return s.BottomZ, s.TopZ
 	}
 	dist := 0.0
 	if s.FloorSlope != 0 || s.CeilSlope != 0 {
@@ -280,7 +293,7 @@ func (s *PhysicalSector) CalcFloorCeilingZ(isect concepts.Vector2) (floorZ float
 		b := s.Segments[1].P
 		length2 := a.Dist2(b)
 		if length2 == 0 {
-			dist = isect.Dist2(a)
+			dist = isect.Dist(a)
 		} else {
 			delta := b.Sub(a)
 			t := isect.Sub(a).Dot(delta) / length2
@@ -303,19 +316,23 @@ func (s *PhysicalSector) CalcFloorCeilingZ(isect concepts.Vector2) (floorZ float
 }
 
 func (s *PhysicalSector) LightmapAddress(p concepts.Vector2) uint32 {
-	dx := int(p.X-s.Min.X)/constants.LightGrid + constants.LightSafety
-	dy := int(p.Y-s.Min.Y)/constants.LightGrid + constants.LightSafety
+	dx := int((p.X-s.Min.X)/constants.LightGrid) + constants.LightSafety
+	dy := int((p.Y-s.Min.Y)/constants.LightGrid) + constants.LightSafety
 	dx = concepts.IntClamp(dx, 0, int(s.LightmapWidth))
 	dy = concepts.IntClamp(dy, 0, int(s.LightmapHeight))
 	return uint32(dy)*s.LightmapWidth + uint32(dx)
 }
 
-func (s *PhysicalSector) LightmapWorld(p concepts.Vector3) concepts.Vector3 {
+func (s *PhysicalSector) LightmapWorld(p concepts.Vector3, floor bool) concepts.Vector3 {
 	lw := p.Sub(s.Min).Mul(1.0 / constants.LightGrid)
-	lw.X = math.Floor(lw.X) * constants.LightGrid
-	lw.Y = math.Floor(lw.Y) * constants.LightGrid
-	lw.Z = p.Z
-
+	lw.X = math.Floor(lw.X)*constants.LightGrid + s.Min.X
+	lw.Y = math.Floor(lw.Y)*constants.LightGrid + s.Min.Y
+	floorZ, ceilZ := s.CalcFloorCeilingZ(lw.To2D())
+	if floor {
+		lw.Z = floorZ
+	} else {
+		lw.Z = ceilZ
+	}
 	return lw
 }
 
