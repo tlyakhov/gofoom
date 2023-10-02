@@ -3,9 +3,9 @@ package entities
 import (
 	"image/color"
 
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/registry"
 )
 
 type Player struct {

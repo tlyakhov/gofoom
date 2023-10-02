@@ -1,9 +1,9 @@
 package render
 
 import (
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/render/material"
-	"github.com/tlyakhov/gofoom/render/state"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/render/material"
+	"tlyakhov/gofoom/render/state"
 )
 
 // WallMid renders the wall portion of a non-portal segment.

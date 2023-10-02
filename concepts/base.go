@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"reflect"
 
+	"tlyakhov/gofoom/registry"
+
 	"github.com/rs/xid"
-	"github.com/tlyakhov/gofoom/registry"
 )
 
 type Base struct {

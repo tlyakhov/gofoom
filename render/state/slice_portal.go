@@ -1,8 +1,8 @@
 package state
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/core"
 )
 
 type SlicePortal struct {

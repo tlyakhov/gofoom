@@ -1,6 +1,6 @@
 package core
 
-import "github.com/tlyakhov/gofoom/concepts"
+import "tlyakhov/gofoom/concepts"
 
 type AbstractSector interface {
 	concepts.ISerializable

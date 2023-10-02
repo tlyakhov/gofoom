@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/tlyakhov/gofoom/materials"
-	"github.com/tlyakhov/gofoom/render/state"
+	"tlyakhov/gofoom/materials"
+	"tlyakhov/gofoom/render/state"
 )
 
 func For(concrete interface{}, s *state.Slice) state.Sampleable {

@@ -1,10 +1,11 @@
 package main
 
 import (
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/editor/actions"
+
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gtk"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/editor/actions"
 )
 
 func TransformContext(cr *cairo.Context) {

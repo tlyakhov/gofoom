@@ -3,10 +3,10 @@ package state
 import (
 	"math"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/entities"
 )
 
 type Ray struct {

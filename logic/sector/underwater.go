@@ -3,10 +3,10 @@ package sector
 import (
 	"image/color"
 
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
-	"github.com/tlyakhov/gofoom/sectors"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/sectors"
 )
 
 type UnderwaterService struct {

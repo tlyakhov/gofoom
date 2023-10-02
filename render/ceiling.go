@@ -3,9 +3,9 @@ package render
 import (
 	"math"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/render/material"
-	"github.com/tlyakhov/gofoom/render/state"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/render/material"
+	"tlyakhov/gofoom/render/state"
 )
 
 // Ceiling renders the ceiling portion of a slice.

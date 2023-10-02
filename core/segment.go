@@ -3,9 +3,9 @@ package core
 import (
 	"math"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/registry"
 )
 
 const (

@@ -6,10 +6,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/editor/state"
 
-	"github.com/tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/core"
 
 	"github.com/gotk3/gotk3/gtk"
 )

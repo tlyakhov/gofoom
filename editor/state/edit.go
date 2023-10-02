@@ -1,8 +1,8 @@
 package state
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/logic"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/logic"
 )
 
 type EditorTool int

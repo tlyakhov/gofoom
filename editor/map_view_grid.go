@@ -3,9 +3,10 @@ package main
 import (
 	"math"
 
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/editor/state"
+
 	"github.com/gotk3/gotk3/cairo"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/editor/state"
 )
 
 type MapViewGrid struct {

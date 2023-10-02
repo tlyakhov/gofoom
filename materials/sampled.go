@@ -1,9 +1,9 @@
 package materials
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/registry"
-	"github.com/tlyakhov/gofoom/texture"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/texture"
 )
 
 type Sampled struct {

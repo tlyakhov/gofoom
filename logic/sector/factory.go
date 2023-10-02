@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/logic/provide"
-	"github.com/tlyakhov/gofoom/sectors"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/logic/provide"
+	"tlyakhov/gofoom/sectors"
 )
 
 type AnimatorFactory struct{}

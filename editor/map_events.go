@@ -3,9 +3,10 @@ package main
 import (
 	"math"
 
+	"tlyakhov/gofoom/editor/actions"
+
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
-	"github.com/tlyakhov/gofoom/editor/actions"
 )
 
 func MapMotionNotify(da *gtk.DrawingArea, ev *gdk.Event) {

@@ -3,9 +3,9 @@ package entity
 import (
 	"sync"
 
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
-	"github.com/tlyakhov/gofoom/logic/provide"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/logic/provide"
 )
 
 type AnimatorFactory struct{}

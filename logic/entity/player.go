@@ -4,10 +4,10 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/entities"
 
-	"github.com/tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/constants"
 )
 
 type PlayerService struct {

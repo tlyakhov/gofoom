@@ -5,12 +5,13 @@ import (
 	"image/color"
 	"reflect"
 
-	"github.com/tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/actions"
+
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/materials"
+	"tlyakhov/gofoom/texture"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/materials"
-	"github.com/tlyakhov/gofoom/texture"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"

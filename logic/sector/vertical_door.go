@@ -1,9 +1,9 @@
 package sector
 
 import (
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/sectors"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/sectors"
 )
 
 type VerticalDoorService struct {

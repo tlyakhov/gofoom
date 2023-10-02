@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
-	"github.com/tlyakhov/gofoom/render/state"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/render/state"
 )
 
 // Renderer holds all state related to a specific camera/map configuration.

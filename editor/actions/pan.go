@@ -1,9 +1,10 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/editor/state"
+
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/editor/state"
 )
 
 type Pan struct {

@@ -1,9 +1,9 @@
 package entities
 
 import (
-	"github.com/tlyakhov/gofoom/behaviors"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/behaviors"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/registry"
 )
 
 type Light struct {

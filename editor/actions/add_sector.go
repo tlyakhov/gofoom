@@ -1,11 +1,12 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/logic/provide"
+
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/editor/state"
-	"github.com/tlyakhov/gofoom/logic/provide"
 )
 
 type AddSector struct {

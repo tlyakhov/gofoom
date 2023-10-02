@@ -8,8 +8,8 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/registry"
 )
 
 type Solid struct {

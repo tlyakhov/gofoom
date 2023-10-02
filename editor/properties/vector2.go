@@ -4,11 +4,12 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/actions"
+
+	"tlyakhov/gofoom/concepts"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
-	"github.com/tlyakhov/gofoom/concepts"
 )
 
 func (g *Grid) fieldVector2(index int, field *pgField) {

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"sort"
 
+	"tlyakhov/gofoom/concepts"
+
 	"github.com/rs/xid"
-	"github.com/tlyakhov/gofoom/concepts"
 )
 
 // The algorithm here is from:

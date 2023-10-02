@@ -1,9 +1,10 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/editor/state"
+
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/editor/state"
 )
 
 type SelectModifier int
@@ -24,9 +25,9 @@ type Select struct {
 }
 
 func (a *Select) OnMouseDown(button *gdk.EventButton) {
-	if button.State()&uint(gdk.GDK_SHIFT_MASK) != 0 {
+	if button.State()&uint(gdk.SHIFT_MASK) != 0 {
 		a.Modifier = SelectAdd
-	} else if button.State()&uint(gdk.GDK_META_MASK) != 0 {
+	} else if button.State()&uint(gdk.META_MASK) != 0 {
 		a.Modifier = SelectSub
 	}
 

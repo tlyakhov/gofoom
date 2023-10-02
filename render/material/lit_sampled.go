@@ -1,9 +1,9 @@
 package material
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/materials"
-	"github.com/tlyakhov/gofoom/render/state"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/materials"
+	"tlyakhov/gofoom/render/state"
 )
 
 type LitSampledService struct {

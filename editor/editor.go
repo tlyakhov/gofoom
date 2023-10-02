@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"unsafe"
 
-	"github.com/tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/gdk"
 
@@ -13,16 +13,16 @@ import (
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/editor/properties"
-	"github.com/tlyakhov/gofoom/editor/state"
-	"github.com/tlyakhov/gofoom/entities"
-	"github.com/tlyakhov/gofoom/logic/entity"
-	"github.com/tlyakhov/gofoom/registry"
-	"github.com/tlyakhov/gofoom/render"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/editor/properties"
+	"tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/logic/entity"
+	"tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/render"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/logic"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/logic"
 )
 
 type EditorWidgets struct {
@@ -326,14 +326,12 @@ func (e *Editor) GameView(w, h int) {
 	e.GameViewSurface.Flush() // necessary?
 	pBuffer := e.GameViewSurface.GetData()
 	// Make a new slice
-	header := reflect.SliceHeader{uintptr(pBuffer), length, length}
-	// Type safe!
-	e.GameViewBuffer = *(*[]uint8)(unsafe.Pointer(&header))
+	e.GameViewBuffer = unsafe.Slice((*uint8)(pBuffer), length)
 }
 
 func (e *Editor) AddSimpleMenuAction(name string, cb func(obj *glib.Object)) {
 	action := glib.SimpleActionNew(name, nil)
-	action.Connect("activate", cb)
+	action.Connect("activate", func(sa *glib.SimpleAction) { cb(sa.Object) })
 	e.App.AddAction(action)
 }
 
