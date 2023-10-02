@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/entities"
 )
 
 type AliveEntityService struct {

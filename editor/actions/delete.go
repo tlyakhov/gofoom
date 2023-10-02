@@ -1,11 +1,12 @@
 package actions
 
 import (
-	"github.com/tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/editor/state"
+
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/core"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/core"
 )
 
 type Delete struct {

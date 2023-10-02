@@ -7,22 +7,23 @@ import (
 	"runtime/pprof"
 	"time"
 
-	"github.com/tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/glib"
 
+	_ "tlyakhov/gofoom/behaviors"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/logic/entity"
+	"tlyakhov/gofoom/sectors"
+
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
-	_ "github.com/tlyakhov/gofoom/behaviors"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/editor/state"
-	"github.com/tlyakhov/gofoom/entities"
-	"github.com/tlyakhov/gofoom/logic/entity"
-	"github.com/tlyakhov/gofoom/sectors"
 
-	_ "github.com/tlyakhov/gofoom/logic/provide"
-	_ "github.com/tlyakhov/gofoom/logic/sector"
+	_ "tlyakhov/gofoom/logic/provide"
+	_ "tlyakhov/gofoom/logic/sector"
 )
 
 var (
@@ -34,7 +35,7 @@ var (
 	last                    = time.Now()
 )
 
-func EditorTimer(win *gtk.ApplicationWindow) bool {
+func EditorTimer() bool {
 	dt := time.Since(last).Seconds() * 1000
 	last = time.Now()
 
@@ -81,7 +82,7 @@ func EditorTimer(win *gtk.ApplicationWindow) bool {
 		ps.Crouching = false
 	}
 
-	win.QueueDraw()
+	editor.Window.QueueDraw()
 	return true
 }
 
@@ -99,7 +100,7 @@ func setupMenu() {
 		log.Fatal("Can't find Menu object in GTK+ menu UI file.", err)
 	}
 
-	editor.App.SetMenubar(&menu.(*glib.Menu).MenuModel)
+	editor.App.SetMenubar(menu.(*glib.MenuModel))
 }
 
 func onActivate() {
@@ -232,7 +233,7 @@ func onActivate() {
 	builder.ConnectSignals(signals)
 
 	editor.Load("data/worlds/empty.json")
-	glib.TimeoutAdd(15, EditorTimer, editor.Window)
+	glib.TimeoutAdd(15, EditorTimer)
 }
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")

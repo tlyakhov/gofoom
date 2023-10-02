@@ -1,11 +1,11 @@
 package sector
 
 import (
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/logic/material"
-	"github.com/tlyakhov/gofoom/logic/provide"
-	"github.com/tlyakhov/gofoom/materials"
-	"github.com/tlyakhov/gofoom/sectors"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/logic/material"
+	"tlyakhov/gofoom/logic/provide"
+	"tlyakhov/gofoom/materials"
+	"tlyakhov/gofoom/sectors"
 )
 
 type ToxicSectorService struct {

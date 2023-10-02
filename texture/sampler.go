@@ -1,6 +1,6 @@
 package texture
 
-import "github.com/tlyakhov/gofoom/concepts"
+import "tlyakhov/gofoom/concepts"
 
 type ISampler interface {
 	concepts.ISerializable

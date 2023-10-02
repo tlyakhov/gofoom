@@ -3,7 +3,7 @@ package state
 import (
 	"math"
 
-	"github.com/tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/concepts"
 )
 
 type trigEntry struct {

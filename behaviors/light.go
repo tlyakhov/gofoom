@@ -1,9 +1,9 @@
 package behaviors
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/registry"
 )
 
 type Light struct {

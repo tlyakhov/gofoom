@@ -1,7 +1,7 @@
 package state
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/concepts"
 )
 
 type Sampleable interface {

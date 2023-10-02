@@ -1,6 +1,6 @@
 package state
 
-import "github.com/tlyakhov/gofoom/concepts"
+import "tlyakhov/gofoom/concepts"
 
 type MapView struct {
 	Scale        float64

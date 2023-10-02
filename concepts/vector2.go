@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/constants"
 )
 
 // Vector2 is a simple 2d vector type.

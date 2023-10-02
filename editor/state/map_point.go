@@ -1,7 +1,7 @@
 package state
 
 import (
-	"github.com/tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/core"
 )
 
 type MapPoint struct {

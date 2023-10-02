@@ -1,7 +1,7 @@
 package materials
 
 import (
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/registry"
 )
 
 type Sky struct {

@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/concepts"
 )
 
 type AbstractBehavior interface {

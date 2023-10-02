@@ -1,9 +1,10 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/editor/state"
+
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/editor/state"
 )
 
 type RotateSegments struct {

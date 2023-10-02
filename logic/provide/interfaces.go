@@ -1,6 +1,6 @@
 package provide
 
-import "github.com/tlyakhov/gofoom/core"
+import "tlyakhov/gofoom/core"
 
 type Interactable interface {
 	ActOnEntity(e core.AbstractEntity)

@@ -3,10 +3,10 @@ package core
 import (
 	"math"
 
-	"github.com/tlyakhov/gofoom/constants"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/registry"
 
-	"github.com/tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/concepts"
 )
 
 type PhysicalEntity struct {

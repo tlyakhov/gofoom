@@ -3,8 +3,9 @@ package properties
 import (
 	"reflect"
 
+	"tlyakhov/gofoom/editor/actions"
+
 	"github.com/gotk3/gotk3/gtk"
-	"github.com/tlyakhov/gofoom/editor/actions"
 )
 
 func (g *Grid) fieldBool(index int, field *pgField) {

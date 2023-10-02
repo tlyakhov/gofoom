@@ -4,12 +4,13 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/concepts"
+
+	"tlyakhov/gofoom/behaviors"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/entities"
 
 	"github.com/gotk3/gotk3/cairo"
-	"github.com/tlyakhov/gofoom/behaviors"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/entities"
 )
 
 func DrawEntityAngle(cr *cairo.Context, e *core.PhysicalEntity) {

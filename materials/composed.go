@@ -3,8 +3,8 @@ package materials
 import (
 	"fmt"
 
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/registry"
 )
 
 type LitSampled struct {

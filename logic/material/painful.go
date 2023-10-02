@@ -1,9 +1,9 @@
 package material
 
 import (
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/logic/provide"
-	"github.com/tlyakhov/gofoom/materials"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/logic/provide"
+	"tlyakhov/gofoom/materials"
 )
 
 type PainfulService struct {

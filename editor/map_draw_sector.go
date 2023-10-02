@@ -3,10 +3,11 @@ package main
 import (
 	"reflect"
 
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/editor/state"
+
 	"github.com/gotk3/gotk3/cairo"
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/core"
-	"github.com/tlyakhov/gofoom/editor/state"
 )
 
 func DrawHandle(cr *cairo.Context, v concepts.Vector2) {

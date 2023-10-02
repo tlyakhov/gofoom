@@ -1,8 +1,8 @@
 package materials
 
 import (
-	"github.com/tlyakhov/gofoom/concepts"
-	"github.com/tlyakhov/gofoom/registry"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/registry"
 )
 
 type Lit struct {

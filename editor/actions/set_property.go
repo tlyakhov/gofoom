@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"reflect"
 
+	"tlyakhov/gofoom/editor/state"
+
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/tlyakhov/gofoom/editor/state"
 )
 
 type SetProperty struct {
