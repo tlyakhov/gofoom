@@ -77,8 +77,9 @@ func (s *Slice) Write(screenIndex uint32, c uint32) {
 }
 
 func (s *Slice) Light(world, normal concepts.Vector3, u, v float64) concepts.Vector3 {
+	//return s.LightUnfiltered(world, normal, u, v)
 	//le := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
-	//return le.Calculate(world)
+	//return le.Calculate(world, s.Segment)
 
 	le00 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
 	le10 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
@@ -158,4 +159,31 @@ func (s *Slice) Light(world, normal concepts.Vector3, u, v float64) concepts.Vec
 		Add(le10.Get(wall).Mul((1.0 - wu) * wv)).
 		Add(le11.Get(wall).Mul((1.0 - wu) * (1.0 - wv))).
 		Add(le01.Get(wall).Mul(wu * (1.0 - wv)))
+}
+
+func (s *Slice) LightUnfiltered(world, normal concepts.Vector3, u, v float64) concepts.Vector3 {
+	le00 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
+	wall := s.Segment != nil && normal.Z == 0
+
+	if !wall {
+		if normal.Z < 0 {
+			le00.Lightmap = s.PhysicalSector.CeilLightmap
+		} else {
+			le00.Lightmap = s.PhysicalSector.FloorLightmap
+		}
+		lightmapLength := uint32(len(le00.Lightmap))
+		le00.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
+		if le00.MapIndex > lightmapLength-1 {
+			le00.MapIndex = lightmapLength - 1
+		}
+	} else {
+		le00.Lightmap = s.Segment.Lightmap
+		lightmapLength := uint32(len(le00.Lightmap))
+		le00.MapIndex = s.Segment.LightmapAddress(u, v)
+		if le00.MapIndex > lightmapLength-1 {
+			le00.MapIndex = lightmapLength - 1
+		}
+	}
+
+	return le00.Get(wall)
 }

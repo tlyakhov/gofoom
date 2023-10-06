@@ -1,6 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"reflect"
+	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/logic/entity"
+
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -22,4 +27,16 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	editor.GameViewSurface.MarkDirty()
 	cr.SetSourceSurface(editor.GameViewSurface, 0, 0)
 	cr.Paint()
+
+	ps := entity.NewPlayerService(editor.World.Player.(*entities.Player))
+
+	cr.SetSourceRGB(1, 0, 1)
+	cr.SelectFontFace("Courier", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+	cr.SetFontSize(13)
+	cr.MoveTo(10, 10)
+	cr.ShowText(fmt.Sprintf("FPS: %.1f", 1000.0/editor.LastFrameTime))
+	cr.MoveTo(10, 20)
+	cr.ShowText(fmt.Sprintf("Health: %.1f", ps.Player.Health))
+	cr.MoveTo(10, 30)
+	cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(ps.Player.Sector), ps.Player.Sector.GetBase().ID))
 }

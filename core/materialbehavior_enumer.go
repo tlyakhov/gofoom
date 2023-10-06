@@ -5,11 +5,14 @@ package core
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 const _MaterialBehaviorName = "ScaleNoneScaleHeightScaleWidthScaleAll"
 
 var _MaterialBehaviorIndex = [...]uint8{0, 9, 20, 30, 38}
+
+const _MaterialBehaviorLowerName = "scalenonescaleheightscalewidthscaleall"
 
 func (i MaterialBehavior) String() string {
 	if i < 0 || i >= MaterialBehavior(len(_MaterialBehaviorIndex)-1) {
@@ -18,13 +21,34 @@ func (i MaterialBehavior) String() string {
 	return _MaterialBehaviorName[_MaterialBehaviorIndex[i]:_MaterialBehaviorIndex[i+1]]
 }
 
-var _MaterialBehaviorValues = []MaterialBehavior{0, 1, 2, 3}
+// An "invalid array index" compiler error signifies that the constant values have changed.
+// Re-run the stringer command to generate them again.
+func _MaterialBehaviorNoOp() {
+	var x [1]struct{}
+	_ = x[ScaleNone-(0)]
+	_ = x[ScaleHeight-(1)]
+	_ = x[ScaleWidth-(2)]
+	_ = x[ScaleAll-(3)]
+}
+
+var _MaterialBehaviorValues = []MaterialBehavior{ScaleNone, ScaleHeight, ScaleWidth, ScaleAll}
 
 var _MaterialBehaviorNameToValueMap = map[string]MaterialBehavior{
-	_MaterialBehaviorName[0:9]:   0,
-	_MaterialBehaviorName[9:20]:  1,
-	_MaterialBehaviorName[20:30]: 2,
-	_MaterialBehaviorName[30:38]: 3,
+	_MaterialBehaviorName[0:9]:        ScaleNone,
+	_MaterialBehaviorLowerName[0:9]:   ScaleNone,
+	_MaterialBehaviorName[9:20]:       ScaleHeight,
+	_MaterialBehaviorLowerName[9:20]:  ScaleHeight,
+	_MaterialBehaviorName[20:30]:      ScaleWidth,
+	_MaterialBehaviorLowerName[20:30]: ScaleWidth,
+	_MaterialBehaviorName[30:38]:      ScaleAll,
+	_MaterialBehaviorLowerName[30:38]: ScaleAll,
+}
+
+var _MaterialBehaviorNames = []string{
+	_MaterialBehaviorName[0:9],
+	_MaterialBehaviorName[9:20],
+	_MaterialBehaviorName[20:30],
+	_MaterialBehaviorName[30:38],
 }
 
 // MaterialBehaviorString retrieves an enum value from the enum constants string name.
@@ -33,12 +57,23 @@ func MaterialBehaviorString(s string) (MaterialBehavior, error) {
 	if val, ok := _MaterialBehaviorNameToValueMap[s]; ok {
 		return val, nil
 	}
+
+	if val, ok := _MaterialBehaviorNameToValueMap[strings.ToLower(s)]; ok {
+		return val, nil
+	}
 	return 0, fmt.Errorf("%s does not belong to MaterialBehavior values", s)
 }
 
 // MaterialBehaviorValues returns all values of the enum
 func MaterialBehaviorValues() []MaterialBehavior {
 	return _MaterialBehaviorValues
+}
+
+// MaterialBehaviorStrings returns a slice of all String values of the enum
+func MaterialBehaviorStrings() []string {
+	strs := make([]string, len(_MaterialBehaviorNames))
+	copy(strs, _MaterialBehaviorNames)
+	return strs
 }
 
 // IsAMaterialBehavior returns "true" if the value is listed in the enum definition. "false" otherwise

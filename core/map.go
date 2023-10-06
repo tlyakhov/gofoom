@@ -1,6 +1,7 @@
 package core
 
 import (
+	"sync"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/registry"
 )
@@ -13,6 +14,7 @@ type Map struct {
 	Player         AbstractEntity
 	Spawn          concepts.Vector3 `editable:"Spawn"`
 	EntitiesPaused bool
+	RenderLock     sync.Mutex
 }
 
 func init() {
@@ -20,12 +22,16 @@ func init() {
 }
 
 func (m *Map) Recalculate() {
+	m.RenderLock.Lock()
+	defer m.RenderLock.Unlock()
 	for _, sector := range m.Sectors {
 		sector.Physical().Recalculate()
 	}
 }
 
 func (m *Map) ClearLightmaps() {
+	m.RenderLock.Lock()
+	defer m.RenderLock.Unlock()
 	for _, sector := range m.Sectors {
 		sector.Physical().ClearLightmaps()
 	}

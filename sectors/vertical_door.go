@@ -7,7 +7,7 @@ import (
 
 type DoorBehavior int
 
-//go:generate enumer -type=DoorBehavior -json
+//go:generate go run github.com/dmarkham/enumer -type=DoorBehavior -json
 const (
 	Open DoorBehavior = iota
 	Opening

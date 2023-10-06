@@ -3,14 +3,15 @@ package constants
 const (
 	// Rendering constants
 	IntersectEpsilon        = 1e-10
-	LightGrid               = 1
-	LightSafety             = 5
+	LightGrid               = 4
+	LightSafety             = 2
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.00001
 	MaxViewDistance         = 1000000.0
 	FieldOfView             = 90
 	DebugLevel              = 1
 	CollisionSteps          = 10
+	DebugLighting           = true
 
 	// Audio constants
 	SourcesPerSound  = 8

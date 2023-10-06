@@ -44,13 +44,15 @@ func run() {
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
 	}
-	w := 1280
-	h := 720
+	w := 640
+	h := 360
 	cfg := pixelgl.WindowConfig{
-		Title:     "Foom",
-		Bounds:    pixel.R(0, 0, float64(w), float64(h)),
-		VSync:     true,
-		Resizable: true,
+		Title:  "Foom",
+		Bounds: pixel.R(0, 0, 3840, 2160),
+		VSync:  true,
+		//Resizable:   true,
+		Undecorated: true,
+		Monitor:     pixelgl.PrimaryMonitor(),
 	}
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
@@ -59,11 +61,7 @@ func run() {
 
 	win.SetSmooth(false)
 
-	canvas := pixelgl.NewCanvas(win.Bounds())
-
-	var (
-		mat = pixel.IM.ScaledXY(pixel.Vec{0, 0}, pixel.Vec{1, -1}).Moved(win.Bounds().Center())
-	)
+	canvas := pixelgl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
 
 	buffer := image.NewRGBA(image.Rect(0, 0, w, h))
 	renderer := render.NewRenderer()
@@ -127,6 +125,9 @@ func run() {
 		renderer.Render(buffer.Pix)
 
 		canvas.SetPixels(buffer.Pix)
+		winw := win.Bounds().W()
+		winh := win.Bounds().H()
+		mat := pixel.IM.ScaledXY(pixel.Vec{X: 0, Y: 0}, pixel.Vec{X: winw / float64(w), Y: -winh / float64(h)}).Moved(win.Bounds().Center())
 		canvas.Draw(win, mat)
 		mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", 1000.0/dt))
 		mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", ps.Player.Health))

@@ -12,8 +12,8 @@ import (
 
 func DrawHandle(cr *cairo.Context, v concepts.Vector2) {
 	v = editor.WorldToScreen(v)
-	v1 := editor.ScreenToWorld(v.Sub(concepts.Vector2{3, 3}))
-	v2 := editor.ScreenToWorld(v.Add(concepts.Vector2{3, 3}))
+	v1 := editor.ScreenToWorld(v.Sub(concepts.Vector2{X: 3, Y: 3}))
+	v2 := editor.ScreenToWorld(v.Add(concepts.Vector2{X: 3, Y: 3}))
 	cr.Rectangle(v1.X, v1.Y, v2.X-v1.X, v2.Y-v1.Y)
 	cr.Stroke()
 }

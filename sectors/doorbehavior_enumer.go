@@ -5,11 +5,14 @@ package sectors
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 const _DoorBehaviorName = "OpenOpeningClosingClosed"
 
 var _DoorBehaviorIndex = [...]uint8{0, 4, 11, 18, 24}
+
+const _DoorBehaviorLowerName = "openopeningclosingclosed"
 
 func (i DoorBehavior) String() string {
 	if i < 0 || i >= DoorBehavior(len(_DoorBehaviorIndex)-1) {
@@ -18,13 +21,34 @@ func (i DoorBehavior) String() string {
 	return _DoorBehaviorName[_DoorBehaviorIndex[i]:_DoorBehaviorIndex[i+1]]
 }
 
-var _DoorBehaviorValues = []DoorBehavior{0, 1, 2, 3}
+// An "invalid array index" compiler error signifies that the constant values have changed.
+// Re-run the stringer command to generate them again.
+func _DoorBehaviorNoOp() {
+	var x [1]struct{}
+	_ = x[Open-(0)]
+	_ = x[Opening-(1)]
+	_ = x[Closing-(2)]
+	_ = x[Closed-(3)]
+}
+
+var _DoorBehaviorValues = []DoorBehavior{Open, Opening, Closing, Closed}
 
 var _DoorBehaviorNameToValueMap = map[string]DoorBehavior{
-	_DoorBehaviorName[0:4]:   0,
-	_DoorBehaviorName[4:11]:  1,
-	_DoorBehaviorName[11:18]: 2,
-	_DoorBehaviorName[18:24]: 3,
+	_DoorBehaviorName[0:4]:        Open,
+	_DoorBehaviorLowerName[0:4]:   Open,
+	_DoorBehaviorName[4:11]:       Opening,
+	_DoorBehaviorLowerName[4:11]:  Opening,
+	_DoorBehaviorName[11:18]:      Closing,
+	_DoorBehaviorLowerName[11:18]: Closing,
+	_DoorBehaviorName[18:24]:      Closed,
+	_DoorBehaviorLowerName[18:24]: Closed,
+}
+
+var _DoorBehaviorNames = []string{
+	_DoorBehaviorName[0:4],
+	_DoorBehaviorName[4:11],
+	_DoorBehaviorName[11:18],
+	_DoorBehaviorName[18:24],
 }
 
 // DoorBehaviorString retrieves an enum value from the enum constants string name.
@@ -33,12 +57,23 @@ func DoorBehaviorString(s string) (DoorBehavior, error) {
 	if val, ok := _DoorBehaviorNameToValueMap[s]; ok {
 		return val, nil
 	}
+
+	if val, ok := _DoorBehaviorNameToValueMap[strings.ToLower(s)]; ok {
+		return val, nil
+	}
 	return 0, fmt.Errorf("%s does not belong to DoorBehavior values", s)
 }
 
 // DoorBehaviorValues returns all values of the enum
 func DoorBehaviorValues() []DoorBehavior {
 	return _DoorBehaviorValues
+}
+
+// DoorBehaviorStrings returns a slice of all String values of the enum
+func DoorBehaviorStrings() []string {
+	strs := make([]string, len(_DoorBehaviorNames))
+	copy(strs, _DoorBehaviorNames)
+	return strs
 }
 
 // IsADoorBehavior returns "true" if the value is listed in the enum definition. "false" otherwise

@@ -2,7 +2,7 @@ package core
 
 type CollisionResponse int
 
-//go:generate enumer -type=CollisionResponse -json
+//go:generate go run github.com/dmarkham/enumer -type=CollisionResponse -json
 const (
 	Slide CollisionResponse = iota
 	Bounce

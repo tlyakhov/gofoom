@@ -17,7 +17,7 @@ func Ceiling(s *state.Slice) {
 	// Thankfully, the only expensive operation is a square root to get the distance.
 	planeRayDelta := s.PhysicalSector.Segments[0].P.Sub(s.Ray.Start).To3D()
 	planeRayDelta.Z = s.PhysicalSector.TopZ - s.CameraZ
-	rayDir := concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], 0}
+	rayDir := concepts.Vector3{X: s.AngleCos * s.ViewFix[s.X], Y: s.AngleSin * s.ViewFix[s.X], Z: 0}
 
 	for s.Y = s.YStart; s.Y < s.ClippedStart; s.Y++ {
 		rayDir.Z = float64(s.ScreenHeight/2 - 1 - s.Y)
@@ -28,7 +28,7 @@ func Ceiling(s *state.Slice) {
 		}
 
 		t := planeRayDelta.Dot(s.PhysicalSector.CeilNormal) / denom
-		world := concepts.Vector3{s.Ray.Start.X, s.Ray.Start.Y, s.CameraZ}.Add(rayDir.Mul(t))
+		world := concepts.Vector3{X: s.Ray.Start.X, Y: s.Ray.Start.Y, Z: s.CameraZ}.Add(rayDir.Mul(t))
 		distToCeil := world.Length()
 		scaler := s.PhysicalSector.CeilScale / distToCeil
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)

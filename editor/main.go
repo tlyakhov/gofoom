@@ -27,9 +27,9 @@ import (
 )
 
 var (
-	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
-	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
-	ColorPVS                = concepts.Vector3{0.9, 1, 0.9}
+	ColorSelectionPrimary   = concepts.Vector3{X: 0, Y: 1, Z: 0}
+	ColorSelectionSecondary = concepts.Vector3{X: 0, Y: 1, Z: 1}
+	ColorPVS                = concepts.Vector3{X: 0.9, Y: 1, Z: 0.9}
 	editor                  = NewEditor()
 	gameKeyMap              = make(map[uint]bool)
 	last                    = time.Now()
@@ -37,6 +37,7 @@ var (
 
 func EditorTimer() bool {
 	dt := time.Since(last).Seconds() * 1000
+	editor.LastFrameTime = dt
 	last = time.Now()
 
 	editor.World.Frame(dt)
@@ -80,6 +81,10 @@ func EditorTimer() bool {
 		}
 	} else {
 		ps.Crouching = false
+	}
+
+	if gameKeyMap[gdk.KEY_t] {
+		editor.World.ClearLightmaps()
 	}
 
 	editor.Window.QueueDraw()
@@ -240,6 +245,8 @@ var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 
 func main() {
 	gtk.Init(&os.Args)
+	// Gtk bindings are missing this widget in builders. Add it in manually.
+	gtk.WrapMap["GtkRadioToolButton"] = gtk.WrapMap["GtkRadioButton"]
 	flag.Parse()
 
 	if *cpuProfile != "" {

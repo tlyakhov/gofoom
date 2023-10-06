@@ -6,7 +6,6 @@ import (
 
 	"tlyakhov/gofoom/editor/actions"
 
-	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
@@ -24,7 +23,7 @@ func (g *Grid) fieldString(index int, field *pgField) {
 	box, _ := gtk.EntryNew()
 	box.SetHExpand(true)
 	box.SetText(origValue)
-	box.Connect("activate", func(_ *glib.Object) {
+	box.Connect("activate", func(_ *gtk.Entry) {
 		text, err := box.GetText()
 		if err != nil {
 			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
