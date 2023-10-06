@@ -65,7 +65,7 @@ func NewEditor() *Editor {
 			MapView: state.MapView{
 				Scale: 1.0,
 				Step:  10,
-				GridB: concepts.Vector2{X: 1, Y: 0},
+				GridB: concepts.V2(1, 0),
 			},
 			Modified: false,
 		},
