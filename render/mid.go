@@ -25,12 +25,12 @@ func WallMid(s *state.Slice) {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		s.Intersection.Z = s.CeilZ + v*(s.FloorZ-s.CeilZ)
+		s.Intersection.Z = (1.0-v)*s.CeilZ + v*s.FloorZ
 
 		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, v)
 
 		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
-			v = (v*(s.CeilZ-s.FloorZ) - s.CeilZ) / 64.0
+			v = s.Intersection.Z / 64.0
 		}
 
 		//fmt.Printf("%v\n", screenIndex)

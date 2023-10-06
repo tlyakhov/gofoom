@@ -2,7 +2,7 @@ package core
 
 type MaterialBehavior int
 
-//go:generate enumer -type=MaterialBehavior -json
+//go:generate go run github.com/dmarkham/enumer -type=MaterialBehavior -json
 const (
 	ScaleNone MaterialBehavior = iota
 	ScaleHeight

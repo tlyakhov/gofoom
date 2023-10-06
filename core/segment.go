@@ -143,7 +143,7 @@ func (s1 *Segment) Intersect3D(s2A, s2B concepts.Vector3) (concepts.Vector3, boo
 	if r < 0 {
 		return concepts.Vector3{}, false
 	}
-	return concepts.Vector3{s1.P.X + r*s1dx, s1.P.Y + r*s1dy, s*s2A.Z + (1.0-s)*s2B.Z}, true
+	return concepts.Vector3{s1.P.X + r*s1dx, s1.P.Y + r*s1dy, (1.0-s)*s2A.Z + s*s2B.Z}, true
 }
 
 func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
@@ -238,6 +238,12 @@ func (s *Segment) WhichSide(p concepts.Vector2) float64 {
 	return s.Normal.Dot(p.Sub(s.P))
 }
 
+func (s *Segment) LightmapAddress(u, v float64) uint32 {
+	dx := int(u*float64(s.LightmapWidth-constants.LightSafety*2)) + constants.LightSafety
+	dy := int(v*float64(s.LightmapHeight-constants.LightSafety*2)) + constants.LightSafety
+	return uint32(dy)*s.LightmapWidth + uint32(dx)
+}
+
 func (s *Segment) UVToWorld(u, v float64) concepts.Vector3 {
 	alongSegment := s.P.Add(s.Next.P.Sub(s.P).Mul(u))
 	return concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
@@ -246,8 +252,8 @@ func (s *Segment) UVToWorld(u, v float64) concepts.Vector3 {
 func (s *Segment) LightmapAddressToWorld(mapIndex uint32) concepts.Vector3 {
 	lu := (mapIndex % s.LightmapWidth) - constants.LightSafety
 	lv := (mapIndex / s.LightmapWidth) - constants.LightSafety
-	u := float64(lu) / float64(s.LightmapWidth-(constants.LightSafety*2))
-	v := float64(lv) / float64(s.LightmapHeight-(constants.LightSafety*2))
+	u := (float64(lu) + 0.5) / float64(s.LightmapWidth-(constants.LightSafety*2))
+	v := (float64(lv) + 0.5) / float64(s.LightmapHeight-(constants.LightSafety*2))
 	return s.UVToWorld(u, v)
 }
 

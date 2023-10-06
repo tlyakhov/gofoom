@@ -5,11 +5,14 @@ package core
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 const _CollisionResponseName = "SlideBounceStopRemoveCallback"
 
 var _CollisionResponseIndex = [...]uint8{0, 5, 11, 15, 21, 29}
+
+const _CollisionResponseLowerName = "slidebouncestopremovecallback"
 
 func (i CollisionResponse) String() string {
 	if i < 0 || i >= CollisionResponse(len(_CollisionResponseIndex)-1) {
@@ -18,14 +21,38 @@ func (i CollisionResponse) String() string {
 	return _CollisionResponseName[_CollisionResponseIndex[i]:_CollisionResponseIndex[i+1]]
 }
 
-var _CollisionResponseValues = []CollisionResponse{0, 1, 2, 3, 4}
+// An "invalid array index" compiler error signifies that the constant values have changed.
+// Re-run the stringer command to generate them again.
+func _CollisionResponseNoOp() {
+	var x [1]struct{}
+	_ = x[Slide-(0)]
+	_ = x[Bounce-(1)]
+	_ = x[Stop-(2)]
+	_ = x[Remove-(3)]
+	_ = x[Callback-(4)]
+}
+
+var _CollisionResponseValues = []CollisionResponse{Slide, Bounce, Stop, Remove, Callback}
 
 var _CollisionResponseNameToValueMap = map[string]CollisionResponse{
-	_CollisionResponseName[0:5]:   0,
-	_CollisionResponseName[5:11]:  1,
-	_CollisionResponseName[11:15]: 2,
-	_CollisionResponseName[15:21]: 3,
-	_CollisionResponseName[21:29]: 4,
+	_CollisionResponseName[0:5]:        Slide,
+	_CollisionResponseLowerName[0:5]:   Slide,
+	_CollisionResponseName[5:11]:       Bounce,
+	_CollisionResponseLowerName[5:11]:  Bounce,
+	_CollisionResponseName[11:15]:      Stop,
+	_CollisionResponseLowerName[11:15]: Stop,
+	_CollisionResponseName[15:21]:      Remove,
+	_CollisionResponseLowerName[15:21]: Remove,
+	_CollisionResponseName[21:29]:      Callback,
+	_CollisionResponseLowerName[21:29]: Callback,
+}
+
+var _CollisionResponseNames = []string{
+	_CollisionResponseName[0:5],
+	_CollisionResponseName[5:11],
+	_CollisionResponseName[11:15],
+	_CollisionResponseName[15:21],
+	_CollisionResponseName[21:29],
 }
 
 // CollisionResponseString retrieves an enum value from the enum constants string name.
@@ -34,12 +61,23 @@ func CollisionResponseString(s string) (CollisionResponse, error) {
 	if val, ok := _CollisionResponseNameToValueMap[s]; ok {
 		return val, nil
 	}
+
+	if val, ok := _CollisionResponseNameToValueMap[strings.ToLower(s)]; ok {
+		return val, nil
+	}
 	return 0, fmt.Errorf("%s does not belong to CollisionResponse values", s)
 }
 
 // CollisionResponseValues returns all values of the enum
 func CollisionResponseValues() []CollisionResponse {
 	return _CollisionResponseValues
+}
+
+// CollisionResponseStrings returns a slice of all String values of the enum
+func CollisionResponseStrings() []string {
+	strs := make([]string, len(_CollisionResponseNames))
+	copy(strs, _CollisionResponseNames)
+	return strs
 }
 
 // IsACollisionResponse returns "true" if the value is listed in the enum definition. "false" otherwise

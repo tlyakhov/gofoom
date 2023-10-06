@@ -52,6 +52,7 @@ type Editor struct {
 	Renderer        *render.Renderer
 	GameViewSurface *cairo.Surface
 	GameViewBuffer  []uint8
+	LastFrameTime   float64
 }
 
 func (e *Editor) State() *state.Edit {
@@ -64,7 +65,7 @@ func NewEditor() *Editor {
 			MapView: state.MapView{
 				Scale: 1.0,
 				Step:  10,
-				GridB: concepts.Vector2{1, 0},
+				GridB: concepts.Vector2{X: 1, Y: 0},
 			},
 			Modified: false,
 		},

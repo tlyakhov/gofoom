@@ -339,7 +339,7 @@ func (s *PhysicalSector) LightmapWorld(p concepts.Vector3, floor bool) concepts.
 func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) concepts.Vector3 {
 	u := int(mapIndex%s.LightmapWidth) - constants.LightSafety
 	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
-	r := concepts.Vector3{s.Min.X + float64(u)*constants.LightGrid, s.Min.Y + float64(v)*constants.LightGrid, 0}
+	r := concepts.Vector3{s.Min.X + (float64(u)+0.5)*constants.LightGrid, s.Min.Y + (float64(v)+0.5)*constants.LightGrid, 0}
 	floorZ, ceilZ := s.CalcFloorCeilingZ(r.To2D())
 	if floor {
 		r.Z = floorZ

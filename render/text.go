@@ -8,7 +8,7 @@ import (
 	"github.com/faiface/pixel/text"
 
 	"golang.org/x/image/font"
-	"golang.org/x/image/font/inconsolata"
+	"golang.org/x/image/font/basicfont"
 )
 
 type Font struct {
@@ -17,7 +17,7 @@ type Font struct {
 }
 
 func NewFont(path string, size float64) (*Font, error) {
-	f := &Font{Face: inconsolata.Regular8x16}
+	f := &Font{Face: basicfont.Face7x13}
 	f.atlas = text.NewAtlas(f.Face, text.ASCII)
 	return f, nil
 
@@ -53,8 +53,10 @@ func NewFont(path string, size float64) (*Font, error) {
 }
 
 func (f *Font) Draw(win *pixelgl.Window, x, y float64, c color.Color, s string) {
+	// log.Printf("Font draw: %v\n", f.atlas.Glyph(text.ASCII[65]))
 	txt := text.New(pixel.V(x, y), f.atlas)
 	txt.Color = c
+
 	txt.WriteString(s)
-	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)))
+	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 4))
 }

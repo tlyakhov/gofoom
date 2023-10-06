@@ -34,13 +34,13 @@ func (a *SetProperty) Act() {
 
 func (a *SetProperty) Undo() {
 	for i, field := range a.Fields {
-		fmt.Println(a.Original[i].String())
+		fmt.Printf("Undo: %v\n", a.Original[i].String())
 		field.Elem().Set(a.Original[i])
 	}
 }
 func (a *SetProperty) Redo() {
 	for _, field := range a.Fields {
-		fmt.Println(a.ToSet.String())
+		fmt.Printf("Redo: %v\n", a.ToSet.String())
 		field.Elem().Set(a.ToSet)
 	}
 }

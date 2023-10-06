@@ -17,7 +17,7 @@ func TransformContext(cr *cairo.Context) {
 func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	w := da.GetAllocatedWidth()
 	h := da.GetAllocatedHeight()
-	editor.Size = concepts.Vector2{float64(w), float64(h)}
+	editor.Size = concepts.Vector2{X: float64(w), Y: float64(h)}
 
 	editor.MapViewGrid.Draw(&editor.Edit, cr)
 	TransformContext(cr)

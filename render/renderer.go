@@ -152,6 +152,8 @@ func (r *Renderer) Render(buffer []uint8) {
 	if r.Player().Sector == nil {
 		return
 	}
+	r.Map.RenderLock.Lock()
+	defer r.Map.RenderLock.Unlock()
 
 	r.Frame++
 	r.Counter = 0
