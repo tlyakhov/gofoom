@@ -12,6 +12,10 @@ type Vector3 struct {
 	X, Y, Z float64
 }
 
+func V3(x float64, y float64, z float64) Vector3 {
+	return Vector3{X: x, Y: y, Z: z}
+}
+
 // Zero returns true if all components are 0.
 func (v Vector3) Zero() bool {
 	return v.X == 0 && v.Y == 0 && v.Z == 0

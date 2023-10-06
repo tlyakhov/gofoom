@@ -75,7 +75,7 @@ func (s *Segment) RealizeAdjacentSector() {
 
 func (s *Segment) Recalculate() {
 	s.Length = s.Next.P.Sub(s.P).Length()
-	s.Normal = concepts.Vector2{-(s.Next.P.Y - s.P.Y) / s.Length, (s.Next.P.X - s.P.X) / s.Length}
+	s.Normal = concepts.V2(-(s.Next.P.Y-s.P.Y)/s.Length, (s.Next.P.X-s.P.X)/s.Length)
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()
 		sector := s.Sector.Physical()
@@ -88,7 +88,7 @@ func (s *Segment) Recalculate() {
 
 func (s *Segment) ClearLightmap() {
 	for i := range s.Lightmap {
-		s.Lightmap[i] = concepts.Vector3{-1, -1, -1}
+		s.Lightmap[i] = concepts.V3(-1, -1, -1)
 	}
 }
 
@@ -135,7 +135,7 @@ func (s1 *Segment) Intersect2D(s2A, s2B concepts.Vector2) (concepts.Vector2, boo
 	if r < 0 {
 		return concepts.Vector2{}, false
 	}
-	return concepts.Vector2{s1.P.X + r*s1dx, s1.P.Y + r*s1dy}, true
+	return concepts.V2(s1.P.X+r*s1dx, s1.P.Y+r*s1dy), true
 }
 
 func (s1 *Segment) Intersect3D(s2A, s2B concepts.Vector3) (concepts.Vector3, bool) {
@@ -143,7 +143,7 @@ func (s1 *Segment) Intersect3D(s2A, s2B concepts.Vector3) (concepts.Vector3, boo
 	if r < 0 {
 		return concepts.Vector3{}, false
 	}
-	return concepts.Vector3{s1.P.X + r*s1dx, s1.P.Y + r*s1dy, (1.0-s)*s2A.Z + s*s2B.Z}, true
+	return concepts.V3(s1.P.X+r*s1dx, s1.P.Y+r*s1dy, (1.0-s)*s2A.Z+s*s2B.Z), true
 }
 
 func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
@@ -246,7 +246,7 @@ func (s *Segment) LightmapAddress(u, v float64) uint32 {
 
 func (s *Segment) UVToWorld(u, v float64) concepts.Vector3 {
 	alongSegment := s.P.Add(s.Next.P.Sub(s.P).Mul(u))
-	return concepts.Vector3{alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
+	return concepts.V3(alongSegment.X, alongSegment.Y, v*s.Sector.Physical().BottomZ+(1.0-v)*s.Sector.Physical().TopZ)
 }
 
 func (s *Segment) LightmapAddressToWorld(mapIndex uint32) concepts.Vector3 {

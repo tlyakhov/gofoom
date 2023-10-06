@@ -33,7 +33,7 @@ func (le *LightElement) Get(wall bool) concepts.Vector3 {
 	}
 	result = le.Calculate(q)
 	//dbg := q.Mul(1.0 / 64.0)
-	//result = concepts.Vector3{dbg.X - math.Floor(dbg.X), dbg.Y - math.Floor(dbg.Y), dbg.Z - math.Floor(dbg.Z)}
+	//result = concepts.V3(dbg.X - math.Floor(dbg.X), dbg.Y - math.Floor(dbg.Y), dbg.Z - math.Floor(dbg.Z))
 
 	le.Lightmap[le.MapIndex] = result
 	return result

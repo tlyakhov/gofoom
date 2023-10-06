@@ -23,7 +23,7 @@ func (a *AlignGrid) OnMouseUp() {
 	a.B = a.WorldGrid(a.State().MouseWorld)
 	if a.A.Dist2(a.B) < 0.001 {
 		a.A = concepts.Vector2{}
-		a.B = concepts.Vector2{X: 0, Y: 1}
+		a.B = concepts.V2(0, 1)
 	}
 	a.State().MapView.GridA, a.State().MapView.GridB = a.A, a.B
 	a.ActionFinished(false)

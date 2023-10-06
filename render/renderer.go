@@ -87,7 +87,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 			continue
 		}
 
-		delta := &concepts.Vector2{X: math.Abs(isect.X - slice.Ray.Start.X), Y: math.Abs(isect.Y - slice.Ray.Start.Y)}
+		delta := concepts.V2(math.Abs(isect.X-slice.Ray.Start.X), math.Abs(isect.Y-slice.Ray.Start.Y))
 		if delta.Y > delta.X {
 			dist = math.Abs(delta.Y / slice.AngleSin)
 		} else {

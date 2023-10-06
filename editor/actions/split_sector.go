@@ -44,7 +44,7 @@ func (a *SplitSector) OnMouseUp() {
 
 	// Split only selected if any, otherwise all sectors/segments.
 	all := a.State().SelectedObjects
-	if all == nil || len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
+	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
 		all = make([]concepts.ISerializable, len(a.State().World.Sectors))
 		i := 0
 		for _, s := range a.State().World.Sectors {

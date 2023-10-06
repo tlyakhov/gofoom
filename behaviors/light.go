@@ -22,7 +22,7 @@ func init() {
 func (l *Light) Initialize() {
 	l.AnimatedBehavior.Initialize()
 
-	l.Diffuse = concepts.Vector3{1, 1, 1}
+	l.Diffuse = concepts.V3(1, 1, 1)
 	l.Strength = 2
 	l.Attenuation = 0.4
 }

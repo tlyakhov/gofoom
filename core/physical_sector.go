@@ -160,9 +160,9 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 }
 
 func (s *PhysicalSector) Recalculate() {
-	s.Center = concepts.Vector3{0, 0, (s.TopZ + s.BottomZ) / 2}
-	s.Min = concepts.Vector3{math.Inf(1), math.Inf(1), math.Inf(1)}
-	s.Max = concepts.Vector3{math.Inf(-1), math.Inf(-1), math.Inf(-1)}
+	s.Center = concepts.V3(0, 0, (s.TopZ+s.BottomZ)/2)
+	s.Min = concepts.V3(math.Inf(1), math.Inf(1), math.Inf(1))
+	s.Max = concepts.V3(math.Inf(-1), math.Inf(-1), math.Inf(-1))
 
 	sum := 0.0
 	for i, segment := range s.Segments {
@@ -273,8 +273,8 @@ func (s *PhysicalSector) Recalculate() {
 
 func (s *PhysicalSector) ClearLightmaps() {
 	for i := range s.FloorLightmap {
-		s.FloorLightmap[i] = concepts.Vector3{-1, -1, -1}
-		s.CeilLightmap[i] = concepts.Vector3{-1, -1, -1}
+		s.FloorLightmap[i] = concepts.V3(-1, -1, -1)
+		s.CeilLightmap[i] = concepts.V3(-1, -1, -1)
 	}
 
 	for _, segment := range s.Segments {
@@ -339,7 +339,7 @@ func (s *PhysicalSector) LightmapWorld(p concepts.Vector3, floor bool) concepts.
 func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) concepts.Vector3 {
 	u := int(mapIndex%s.LightmapWidth) - constants.LightSafety
 	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
-	r := concepts.Vector3{s.Min.X + (float64(u)+0.5)*constants.LightGrid, s.Min.Y + (float64(v)+0.5)*constants.LightGrid, 0}
+	r := concepts.V3(s.Min.X+(float64(u)+0.5)*constants.LightGrid, s.Min.Y+(float64(v)+0.5)*constants.LightGrid, 0)
 	floorZ, ceilZ := s.CalcFloorCeilingZ(r.To2D())
 	if floor {
 		r.Z = floorZ

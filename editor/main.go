@@ -27,9 +27,9 @@ import (
 )
 
 var (
-	ColorSelectionPrimary   = concepts.Vector3{X: 0, Y: 1, Z: 0}
-	ColorSelectionSecondary = concepts.Vector3{X: 0, Y: 1, Z: 1}
-	ColorPVS                = concepts.Vector3{X: 0.9, Y: 1, Z: 0.9}
+	ColorSelectionPrimary   = concepts.V3(0, 1, 0)
+	ColorSelectionSecondary = concepts.V3(0, 1, 1)
+	ColorPVS                = concepts.V3(0.9, 1, 0.9)
 	editor                  = NewEditor()
 	gameKeyMap              = make(map[uint]bool)
 	last                    = time.Now()

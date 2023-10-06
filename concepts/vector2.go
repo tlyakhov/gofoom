@@ -14,6 +14,10 @@ type Vector2 struct {
 	X, Y float64
 }
 
+func V2(x float64, y float64) Vector2 {
+	return Vector2{X: x, Y: y}
+}
+
 // Zero returns true if all components are 0.
 func (v Vector2) Zero() bool {
 	return v.X == 0 && v.Y == 0

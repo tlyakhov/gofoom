@@ -22,12 +22,12 @@ func (g *MapViewGrid) WorldGrid(p concepts.Vector2) concepts.Vector2 {
 	}
 
 	down := g.Current.GridB.Sub(g.Current.GridA).Norm()
-	right := concepts.Vector2{X: down.Y, Y: -down.X}
+	right := concepts.V2(down.Y, -down.X)
 	p = p.Sub(g.Current.GridA)
-	p = concepts.Vector2{X: p.X*down.Y - p.Y*down.X, Y: -p.X*right.Y + p.Y*right.X}
+	p = concepts.V2(p.X*down.Y-p.Y*down.X, -p.X*right.Y+p.Y*right.X)
 	p.X = math.Round(p.X/g.Current.Step) * g.Current.Step
 	p.Y = math.Round(p.Y/g.Current.Step) * g.Current.Step
-	p = concepts.Vector2{X: p.X*right.X + p.Y*down.X, Y: p.X*right.Y + p.Y*down.Y}
+	p = concepts.V2(p.X*right.X+p.Y*down.X, p.X*right.Y+p.Y*down.Y)
 	p = p.Add(g.Current.GridA)
 	return p
 }
@@ -70,7 +70,7 @@ func (g *MapViewGrid) Refresh(e *state.Edit, cr *cairo.Context) {
 	cr.SetSourceRGB(0.5, 0.5, 0.5)
 
 	down := g.Current.GridB.Sub(g.Current.GridA).Norm().Mul(g.Current.Step)
-	right := concepts.Vector2{X: down.Y, Y: -down.X}
+	right := concepts.V2(down.Y, -down.X)
 	if math.Abs(down.X) > math.Abs(right.X) {
 		down, right = right, down
 	}
