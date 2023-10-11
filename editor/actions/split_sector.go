@@ -23,8 +23,8 @@ func (a *SplitSector) Act()                                {}
 
 func (a *SplitSector) Split(sector core.AbstractSector) {
 	s := &core.SectorSplitter{
-		Splitter1: a.WorldGrid(a.State().MouseDownWorld),
-		Splitter2: a.WorldGrid(a.State().MouseWorld),
+		Splitter1: *a.WorldGrid(&a.State().MouseDownWorld),
+		Splitter2: *a.WorldGrid(&a.State().MouseWorld),
 		Sector:    sector,
 	}
 	a.Splitters = append(a.Splitters, s)

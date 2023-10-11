@@ -29,7 +29,7 @@ func (p *PlayerService) Frame(lastFrameTime float64) {
 		return
 	}
 
-	if p.Player.Vel.Z <= 0 && p.Player.Vel.Z >= -0.001 {
+	if p.Player.Vel[2] <= 0 && p.Player.Vel[2] >= -0.001 {
 		p.Standing = true
 	} else {
 		p.Standing = false
@@ -53,6 +53,6 @@ func (p *PlayerService) Hurt(amount float64) {
 }
 
 func (p *PlayerService) Move(angle, lastFrameTime, speed float64) {
-	p.Player.Vel.X += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
-	p.Player.Vel.Y += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
+	p.Player.Vel[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
+	p.Player.Vel[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
 }

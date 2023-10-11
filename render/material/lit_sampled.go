@@ -20,9 +20,10 @@ func NewLitSampledService(m *materials.LitSampled, s *state.Slice) *LitSampledSe
 	}
 }
 
-func (m *LitSampledService) Sample(u, v float64, light concepts.Vector3, scale float64) uint32 {
+func (m *LitSampledService) Sample(u, v float64, light *concepts.Vector3, scale float64) uint32 {
 	surface := concepts.Int32ToVector3(m.SampledService.Sample(u, v, light, scale))
-	sum := surface
-	sum = sum.Mul3(m.Diffuse).Mul3(light.Add(m.Ambient)).Clamp(0.0, 255.0)
+	amb := *light
+	amb.AddSelf(&m.Ambient)
+	sum := (&surface).Mul3Self(&m.Diffuse).Mul3Self(&amb).ClampSelf(0.0, 255.0)
 	return sum.ToInt32Color()
 }

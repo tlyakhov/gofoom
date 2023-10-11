@@ -52,8 +52,8 @@ func (e *PhysicalEntity) GetSector() AbstractSector {
 }
 
 func (e *PhysicalEntity) Angle2DTo(p *concepts.Vector3) float64 {
-	dx := e.Pos.X - p.X
-	dy := e.Pos.Y - p.Y
+	dx := e.Pos[0] - p[0]
+	dy := e.Pos[1] - p[1]
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 

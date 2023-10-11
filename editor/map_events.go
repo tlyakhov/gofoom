@@ -12,12 +12,12 @@ import (
 func MapMotionNotify(da *gtk.DrawingArea, ev *gdk.Event) {
 	motion := gdk.EventMotionNewFromEvent(ev)
 	x, y := motion.MotionVal()
-	if x == editor.Mouse.X && y == editor.Mouse.Y {
+	if x == editor.Mouse[0] && y == editor.Mouse[1] {
 		return
 	}
-	editor.Mouse.X = x
-	editor.Mouse.Y = y
-	editor.MouseWorld = editor.ScreenToWorld(editor.Mouse)
+	editor.Mouse[0] = x
+	editor.Mouse[1] = y
+	editor.MouseWorld = *editor.ScreenToWorld(&editor.Mouse)
 	editor.UpdateStatus()
 
 	if editor.CurrentAction != nil {
@@ -28,8 +28,8 @@ func MapMotionNotify(da *gtk.DrawingArea, ev *gdk.Event) {
 func MapButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 	press := gdk.EventButtonNewFromEvent(ev)
 	editor.MousePressed = true
-	editor.MouseDown.X, editor.MouseDown.Y = press.MotionVal()
-	editor.MouseDownWorld = editor.ScreenToWorld(editor.MouseDown)
+	editor.MouseDown[0], editor.MouseDown[1] = press.MotionVal()
+	editor.MouseDownWorld = *editor.ScreenToWorld(&editor.MouseDown)
 
 	da.GrabFocus()
 

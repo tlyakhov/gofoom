@@ -33,7 +33,7 @@ func (a *AddEntity) AddToMap(sector core.AbstractSector) {
 func (a *AddEntity) OnMouseDown(button *gdk.EventButton) {}
 
 func (a *AddEntity) OnMouseMove() {
-	wg := a.WorldGrid(a.State().MouseWorld)
+	wg := a.WorldGrid(&a.State().MouseWorld)
 	var sector core.AbstractSector
 
 	for _, sector = range a.State().World.Sectors {
@@ -49,9 +49,9 @@ func (a *AddEntity) OnMouseMove() {
 	a.RemoveFromMap()
 	a.AddToMap(sector)
 	a.Sector = sector
-	a.Entity.Physical().Pos = wg.To3D()
+	wg.To3D(&a.Entity.Physical().Pos)
 	floorZ, ceilZ := a.Sector.Physical().CalcFloorCeilingZ(wg)
-	a.Entity.Physical().Pos.Z = (floorZ + ceilZ) / 2
+	a.Entity.Physical().Pos[2] = (floorZ + ceilZ) / 2
 }
 
 func (a *AddEntity) OnMouseUp() {

@@ -65,7 +65,7 @@ func NewEditor() *Editor {
 			MapView: state.MapView{
 				Scale: 1.0,
 				Step:  10,
-				GridB: concepts.V2(1, 0),
+				GridB: concepts.Vector2{1, 0},
 			},
 			Modified: false,
 		},
@@ -79,12 +79,12 @@ func NewEditor() *Editor {
 	return e
 }
 
-func (e *Editor) ScreenToWorld(p concepts.Vector2) concepts.Vector2 {
-	return p.Sub(e.Size.Mul(0.5)).Mul(1.0 / e.Scale).Add(e.Pos)
+func (e *Editor) ScreenToWorld(p *concepts.Vector2) *concepts.Vector2 {
+	return p.Sub(e.Size.Mul(0.5)).MulSelf(1.0 / e.Scale).AddSelf(&e.Pos)
 }
 
-func (e *Editor) WorldToScreen(p concepts.Vector2) concepts.Vector2 {
-	return p.Sub(e.Pos).Mul(e.Scale).Add(e.Size.Mul(0.5))
+func (e *Editor) WorldToScreen(p *concepts.Vector2) *concepts.Vector2 {
+	return p.Sub(&e.Pos).MulSelf(e.Scale).AddSelf(e.Size.Mul(0.5))
 }
 
 func (e *Editor) SetMapCursor(name string) {
@@ -112,10 +112,10 @@ func (e *Editor) UpdateTitle() {
 }
 
 func (e *Editor) UpdateStatus() {
-	text := e.WorldGrid(e.MouseWorld).StringHuman()
+	text := e.WorldGrid(&e.MouseWorld).StringHuman()
 	if e.MousePressed {
-		text = e.WorldGrid(e.MouseDownWorld).StringHuman() + " -> " + text
-		dist := e.WorldGrid(e.MouseDownWorld).Sub(e.WorldGrid(e.MouseWorld)).Length()
+		text = e.WorldGrid(&e.MouseDownWorld).StringHuman() + " -> " + text
+		dist := e.WorldGrid(&e.MouseDownWorld).Sub(e.WorldGrid(&e.MouseWorld)).Length()
 		text += " Length: " + strconv.FormatFloat(dist, 'f', 2, 64)
 	}
 	list := ""
@@ -253,19 +253,18 @@ func (e *Editor) Selecting() bool {
 	return ok && e.MousePressed
 }
 
-func (e *Editor) SelectionBox() (v1 concepts.Vector2, v2 concepts.Vector2) {
-	v1 = e.MouseWorld
-	v2 = e.MouseDownWorld
+func (e *Editor) SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2) {
+	// Copy
+	mw := e.MouseWorld
+	mdw := e.MouseDownWorld
+	v1 = &mw
+	v2 = &mdw
 
-	if e.MousePressed && v2.X < v1.X {
-		tmp := v1.X
-		v1.X = v2.X
-		v2.X = tmp
+	if e.MousePressed && v2[0] < v1[0] {
+		v1[0], v2[0] = v2[0], v1[0]
 	}
-	if e.MousePressed && v2.Y < v1.Y {
-		tmp := v1.Y
-		v1.Y = v2.Y
-		v2.Y = tmp
+	if e.MousePressed && v2[1] < v1[1] {
+		v1[1], v2[1] = v2[1], v1[1]
 	}
 	return
 }
@@ -281,17 +280,17 @@ func (e *Editor) GatherHoveringObjects() {
 
 		for _, segment := range phys.Segments {
 			if e.CurrentAction == nil {
-				if e.Mouse.Sub(e.WorldToScreen(segment.P)).Length() < state.SegmentSelectionEpsilon {
+				if e.Mouse.Sub(e.WorldToScreen(&segment.P)).Length() < state.SegmentSelectionEpsilon {
 					e.HoveringObjects = append(e.HoveringObjects, segment)
 				}
 			} else if editor.Selecting() {
-				if segment.P.X >= v1.X && segment.P.Y >= v1.Y && segment.P.X <= v2.X && segment.P.Y <= v2.Y {
+				if segment.P[0] >= v1[0] && segment.P[1] >= v1[1] && segment.P[0] <= v2[0] && segment.P[1] <= v2[1] {
 					mp := &state.MapPoint{Segment: segment}
 					if concepts.IndexOf(e.HoveringObjects, mp) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, mp)
 					}
 				}
-				if segment.AABBIntersect(v1.X, v1.Y, v2.X, v2.Y) {
+				if segment.AABBIntersect(v1[0], v1[1], v2[0], v2[1]) {
 					if concepts.IndexOf(e.HoveringObjects, segment) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, segment)
 					}
@@ -302,8 +301,8 @@ func (e *Editor) GatherHoveringObjects() {
 		if e.Selecting() {
 			for _, entity := range sector.Physical().Entities {
 				pe := entity.Physical()
-				if pe.Pos.X+pe.BoundingRadius >= v1.X && pe.Pos.X-pe.BoundingRadius <= v2.X &&
-					pe.Pos.Y+pe.BoundingRadius >= v1.Y && pe.Pos.Y-pe.BoundingRadius <= v2.Y {
+				if pe.Pos[0]+pe.BoundingRadius >= v1[0] && pe.Pos[0]-pe.BoundingRadius <= v2[0] &&
+					pe.Pos[1]+pe.BoundingRadius >= v1[1] && pe.Pos[1]-pe.BoundingRadius <= v2[1] {
 					if concepts.IndexOf(e.HoveringObjects, entity) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, entity)
 					}
