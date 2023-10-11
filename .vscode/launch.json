@@ -26,6 +26,24 @@
             "mode": "auto",
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Profile Editor",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "args": ["-cpuprofile=editor.prof"],
+            "program": "${workspaceFolder}/editor/",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Profile Game",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "args": ["-cpuprofile=game.prof"],
+            "program": "${workspaceFolder}/game/",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

@@ -24,5 +24,5 @@ type Hurtable interface {
 }
 
 type Collideable interface {
-	Collide()
+	Collide() []*core.Segment
 }

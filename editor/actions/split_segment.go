@@ -30,11 +30,12 @@ func (a *SplitSegment) Frame()                              {}
 func (a *SplitSegment) Act()                                {}
 
 func (a *SplitSegment) Split(ss *segmentSplitter) bool {
-	md := a.WorldGrid(a.State().MouseDownWorld)
-	m := a.WorldGrid(a.State().MouseWorld)
-	isect, exists := ss.split.Intersect2D(md, m)
+	md := a.WorldGrid(&a.State().MouseDownWorld)
+	m := a.WorldGrid(&a.State().MouseWorld)
+	isect := &concepts.Vector2{}
+	exists := ss.split.Intersect2D(md, m, isect)
 
-	if !exists || isect == ss.split.P || isect == ss.split.Next.P {
+	if !exists || *isect == ss.split.P || *isect == ss.split.Next.P {
 		return false
 	}
 
@@ -43,7 +44,7 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	copied.Deserialize(ss.split.Serialize())
 	ss.added = copied
 	ss.added.ID = xid.New().String()
-	ss.added.P = isect
+	ss.added.P = *isect
 	*ss.segments = append(*ss.segments, nil)
 	copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])
 	(*ss.segments)[ss.index] = ss.added

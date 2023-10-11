@@ -5,155 +5,231 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"unsafe"
 )
 
 // Vector3 is a simple 3d vector type.
-type Vector3 struct {
-	X, Y, Z float64
+type Vector3 [3]float64
+
+func V3(v *Vector3, x, y, z float64) *Vector3 {
+	v[0] = x
+	v[1] = y
+	v[2] = z
+	return v
 }
 
-func V3(x float64, y float64, z float64) Vector3 {
-	return Vector3{X: x, Y: y, Z: z}
+func (v *Vector3) To2D() *Vector2 {
+	// In place cast works since it's just an array.
+	return (*Vector2)(unsafe.Pointer(v))
 }
 
 // Zero returns true if all components are 0.
-func (v Vector3) Zero() bool {
-	return v.X == 0 && v.Y == 0 && v.Z == 0
+func (v *Vector3) Zero() bool {
+	return v[0] == 0 && v[1] == 0 && v[2] == 0
+}
+
+func (v *Vector3) Clone() *Vector3 {
+	return &Vector3{v[0], v[1], v[2]}
 }
 
 // Add a vector to a vector.
-func (v Vector3) Add(v2 Vector3) Vector3 {
-	return Vector3{v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z}
+func (v *Vector3) Add(v2 *Vector3) *Vector3 {
+	return &Vector3{v[0] + v2[0], v[1] + v2[1], v[2] + v2[2]}
+}
+
+// Add a vector to a vector.
+func (v *Vector3) AddSelf(v2 *Vector3) *Vector3 {
+	v[0] += v2[0]
+	v[1] += v2[1]
+	v[2] += v2[2]
+	return v
 }
 
 // Sub subtracts a vector from a vector.
-func (v Vector3) Sub(v2 Vector3) Vector3 {
-	return Vector3{v.X - v2.X, v.Y - v2.Y, v.Z - v2.Z}
+func (v *Vector3) Sub(v2 *Vector3) *Vector3 {
+	return &Vector3{v[0] - v2[0], v[1] - v2[1], v[2] - v2[2]}
+}
+
+// Sub subtracts a vector from a vector.
+func (v *Vector3) SubSelf(v2 *Vector3) *Vector3 {
+	v[0] -= v2[0]
+	v[1] -= v2[1]
+	v[2] -= v2[2]
+	return v
 }
 
 // Mul3 multiplies a vector by a vector.
-func (v Vector3) Mul3(v2 Vector3) Vector3 {
-	return Vector3{v.X * v2.X, v.Y * v2.Y, v.Z * v2.Z}
+func (v *Vector3) Mul3(v2 *Vector3) *Vector3 {
+	return &Vector3{v[0] * v2[0], v[1] * v2[1], v[2] * v2[2]}
+}
+
+// Mul3 multiplies a vector by a vector.
+func (v *Vector3) Mul3Self(v2 *Vector3) *Vector3 {
+	v[0] *= v2[0]
+	v[1] *= v2[1]
+	v[2] *= v2[2]
+	return v
 }
 
 // Mul multiplies a vector by a scalar.
-func (v Vector3) Mul(f float64) Vector3 {
-	return Vector3{v.X * f, v.Y * f, v.Z * f}
+func (v *Vector3) Mul(f float64) *Vector3 {
+	return &Vector3{v[0] * f, v[1] * f, v[2] * f}
+}
+
+// Mul multiplies a vector by a scalar.
+func (v *Vector3) MulSelf(f float64) *Vector3 {
+	v[0] *= f
+	v[1] *= f
+	v[2] *= f
+	return v
 }
 
 // Length calculates the length of a vector.
-func (v Vector3) Length() float64 {
-	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
+func (v *Vector3) Length() float64 {
+	return math.Sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
 }
 
 // Length2 calculates the squared length of a vector.
-func (v Vector3) Length2() float64 {
-	return v.X*v.X + v.Y*v.Y + v.Z*v.Z
+func (v *Vector3) Length2() float64 {
+	return v[0]*v[0] + v[1]*v[1] + v[2]*v[2]
 }
 
 // Dist2 calculates the squared distance between two vectors.
-func (v Vector3) Dist2(v2 Vector3) float64 {
-	return (v.X-v2.X)*(v.X-v2.X) +
-		(v.Y-v2.Y)*(v.Y-v2.Y) +
-		(v.Z-v2.Z)*(v.Z-v2.Z)
+func (v *Vector3) Dist2(v2 *Vector3) float64 {
+	return (v[0]-v2[0])*(v[0]-v2[0]) +
+		(v[1]-v2[1])*(v[1]-v2[1]) +
+		(v[2]-v2[2])*(v[2]-v2[2])
 }
 
 // Dist calculates the distance between two vectors.
-func (v Vector3) Dist(v2 Vector3) float64 {
+func (v *Vector3) Dist(v2 *Vector3) float64 {
 	return math.Sqrt(v.Dist2(v2))
 }
 
-// Norm normalizes a vector.
-func (v Vector3) Norm() Vector3 {
-	l := v.Length()
-
-	if l == 0.0 {
-		return Vector3{0, 0, 0}
+// Norm normalizes a vector and returns a new vector.
+func (v *Vector3) Norm() *Vector3 {
+	if v[0] == 0 && v[1] == 0 && v[2] == 0 {
+		return &Vector3{0, 0, 0}
 	}
 
-	return Vector3{v.X / l, v.Y / l, v.Z / l}
+	l := v.Length()
+	return &Vector3{v[0] / l, v[1] / l, v[2] / l}
+}
+
+// NormSelf normalizes a vector in place.
+func (v *Vector3) NormSelf() *Vector3 {
+	if v[0] == 0 && v[1] == 0 && v[2] == 0 {
+		return v
+	}
+
+	l := v.Length()
+
+	v[0] /= l
+	v[1] /= l
+	v[2] /= l
+	return v
 }
 
 // Dot calculates the dot product of two vectors.
-func (v Vector3) Dot(v2 Vector3) float64 {
-	return v.X*v2.X + v.Y*v2.Y + v.Z*v2.Z
+func (v *Vector3) Dot(v2 *Vector3) float64 {
+	return v[0]*v2[0] + v[1]*v2[1] + v[2]*v2[2]
 }
 
 // Reflect reflects a vector around another vector.
-func (v Vector3) Reflect(normal Vector3) Vector3 {
-	return normal.Mul(2.0 * v.Dot(normal)).Sub(v)
+func (v *Vector3) Reflect(normal *Vector3) *Vector3 {
+	return (&Vector3{normal[0], normal[1], normal[2]}).MulSelf(2.0 * v.Dot(normal)).SubSelf(v)
 }
 
-// Clamp clamps a vector's values between a minimum and maximum range.
-func (v Vector3) Clamp(min, max float64) Vector3 {
-	return Vector3{Clamp(v.X, min, max), Clamp(v.Y, min, max), Clamp(v.Z, min, max)}
+// Reflect reflects a vector around another vector.
+func (v *Vector3) ReflectSelf(normal *Vector3) *Vector3 {
+	m := 2.0 * v.Dot(normal)
+	v[0] = normal[0]*m - v[0]
+	v[1] = normal[1]*m - v[1]
+	v[2] = normal[2]*m - v[2]
+	return v
 }
 
-// To2D converts a 3D vector to 2D
-func (v Vector3) To2D() Vector2 {
-	return Vector2{v.X, v.Y}
+// Clamp clamps a vector's values between a minimum and maximum range and returns a new vector.
+func (v *Vector3) Clamp(min, max float64) *Vector3 {
+	return &Vector3{Clamp(v[0], min, max), Clamp(v[1], min, max), Clamp(v[2], min, max)}
+}
+
+// ClampSelf clamps a vector's values between a minimum and maximum range in place.
+func (v *Vector3) ClampSelf(min, max float64) *Vector3 {
+	v[0] = Clamp(v[0], min, max)
+	v[1] = Clamp(v[1], min, max)
+	v[2] = Clamp(v[2], min, max)
+	return v
 }
 
 // Deserialize assigns this vector's fields from a parsed JSON map.
 func (v *Vector3) Deserialize(data map[string]interface{}) {
 	if val, ok := data["X"]; ok {
-		v.X = val.(float64)
+		v[0] = val.(float64)
 	}
 	if val, ok := data["Y"]; ok {
-		v.Y = val.(float64)
+		v[1] = val.(float64)
 	}
 	if val, ok := data["Z"]; ok {
-		v.Z = val.(float64)
+		v[2] = val.(float64)
 	}
 }
 
-func (v Vector3) ToInt32Color() uint32 {
-	return uint32(v.X)<<24 | uint32(v.Y)<<16 | uint32(v.Z)<<8 | 0xFF
+func (v *Vector3) ToInt32Color() uint32 {
+	return uint32(v[0])<<24 | uint32(v[1])<<16 | uint32(v[2])<<8 | 0xFF
 }
 
 // Cross computes the cross product of two vectors.
-func (v Vector3) Cross(vec2 Vector3) Vector3 {
-	return Vector3{v.Y*vec2.Z - v.Z*vec2.Y, v.Z*vec2.X - v.X*vec2.Z, v.X*vec2.Y - v.Y*vec2.X}
+func (v *Vector3) Cross(vec2 *Vector3) *Vector3 {
+	return &Vector3{v[1]*vec2[2] - v[2]*vec2[1], v[2]*vec2[0] - v[0]*vec2[2], v[0]*vec2[1] - v[1]*vec2[0]}
+}
+
+// CrossSelf computes the cross product of two vectors in place.
+func (v *Vector3) CrossSelf(vec1, vec2 *Vector3) *Vector3 {
+	v[0] = vec1[1]*vec2[2] - vec1[2]*vec2[1]
+	v[1] = vec1[2]*vec2[0] - vec1[0]*vec2[2]
+	v[2] = vec1[0]*vec2[1] - vec1[1]*vec2[0]
+	return v
 }
 
 // String formats the vector as a string
-func (v Vector3) String() string {
-	return strconv.FormatFloat(v.X, 'f', -1, 64) + ", " +
-		strconv.FormatFloat(v.Y, 'f', -1, 64) + ", " +
-		strconv.FormatFloat(v.Z, 'f', -1, 64)
+func (v *Vector3) String() string {
+	return strconv.FormatFloat(v[0], 'f', -1, 64) + ", " +
+		strconv.FormatFloat(v[1], 'f', -1, 64) + ", " +
+		strconv.FormatFloat(v[2], 'f', -1, 64)
 }
 
 // StringHuman formats the vector as a string with 2 digit precision.
-func (v Vector3) StringHuman() string {
-	return strconv.FormatFloat(v.X, 'f', 2, 64) + ", " +
-		strconv.FormatFloat(v.Y, 'f', 2, 64) + ", " +
-		strconv.FormatFloat(v.Z, 'f', 2, 64)
+func (v *Vector3) StringHuman() string {
+	return strconv.FormatFloat(v[0], 'f', 2, 64) + ", " +
+		strconv.FormatFloat(v[1], 'f', 2, 64) + ", " +
+		strconv.FormatFloat(v[2], 'f', 2, 64)
 }
 
 // Serialize formats the vector as a JSON key-value map.
-func (v Vector3) Serialize() map[string]interface{} {
-	return map[string]interface{}{"X": v.X, "Y": v.Y, "Z": v.Z}
+func (v *Vector3) Serialize() map[string]interface{} {
+	return map[string]interface{}{"X": v[0], "Y": v[1], "Z": v[2]}
 }
 
 // ParseVector3 parses strings in the form "X, Y, Z" into vectors.
-func ParseVector3(s string) (Vector3, error) {
-	result := Vector3{}
+func ParseVector3(s string) (*Vector3, error) {
+	result := &Vector3{}
 	split := strings.Split(s, ",")
 	if len(split) != 3 {
-		return result, errors.New("can't parse Vector3: input string should have three comma-separated values")
+		return nil, errors.New("can't parse Vector3: input string should have three comma-separated values")
 	}
 	var err error
-	result.X, err = strconv.ParseFloat(strings.TrimSpace(split[0]), 64)
+	result[0], err = strconv.ParseFloat(strings.TrimSpace(split[0]), 64)
 	if err != nil {
-		return result, err
+		return nil, err
 	}
-	result.Y, err = strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
+	result[1], err = strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
 	if err != nil {
-		return result, err
+		return nil, err
 	}
-	result.Z, err = strconv.ParseFloat(strings.TrimSpace(split[2]), 64)
+	result[2], err = strconv.ParseFloat(strings.TrimSpace(split[2]), 64)
 	if err != nil {
-		return result, err
+		return nil, err
 	}
 	return result, nil
 }

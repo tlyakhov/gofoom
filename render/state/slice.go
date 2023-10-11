@@ -2,7 +2,6 @@ package state
 
 import (
 	"math"
-
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/core"
@@ -39,6 +38,10 @@ type Slice struct {
 	ClippedStart       int
 	ClippedEnd         int
 	FrameTint          [4]uint32
+	LightElements      [4]LightElement
+	Normal             concepts.Vector3
+	Lightmap           []concepts.Vector3
+	LightmapAge        []int
 }
 
 func (s *Slice) ProjectZ(z float64) float64 {
@@ -76,114 +79,97 @@ func (s *Slice) Write(screenIndex uint32, c uint32) {
 	s.RenderTarget[screenIndex*4+3] = uint8(c & 0xFF)
 }
 
-func (s *Slice) Light(world, normal concepts.Vector3, u, v float64) concepts.Vector3 {
-	//return s.LightUnfiltered(world, normal, u, v)
+func (s *Slice) Light(world *concepts.Vector3, u, v float64) *concepts.Vector3 {
+	//return s.LightUnfiltered(world, u, v)
 	//le := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
 	//return le.Calculate(world, s.Segment)
 
-	le00 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
-	le10 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
-	le11 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
-	le01 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
+	le00 := &s.LightElements[0]
+	le10 := &s.LightElements[1]
+	le11 := &s.LightElements[2]
+	le01 := &s.LightElements[3]
 
-	wall := s.Segment != nil && normal.Z == 0
+	wall := s.Segment != nil && s.Normal[2] == 0
 	var lightmapLength uint32
 	var wu, wv float64
 
 	if !wall {
-		if normal.Z < 0 {
-			le00.Lightmap = s.PhysicalSector.CeilLightmap
-			le10.Lightmap = s.PhysicalSector.CeilLightmap
-			le11.Lightmap = s.PhysicalSector.CeilLightmap
-			le01.Lightmap = s.PhysicalSector.CeilLightmap
+		if s.Normal[2] < 0 {
+			s.Lightmap = s.PhysicalSector.CeilLightmap
+			s.LightmapAge = s.PhysicalSector.CeilLightmapAge
 		} else {
-			le00.Lightmap = s.PhysicalSector.FloorLightmap
-			le10.Lightmap = s.PhysicalSector.FloorLightmap
-			le11.Lightmap = s.PhysicalSector.FloorLightmap
-			le01.Lightmap = s.PhysicalSector.FloorLightmap
+			s.Lightmap = s.PhysicalSector.FloorLightmap
+			s.LightmapAge = s.PhysicalSector.FloorLightmapAge
 		}
-		lightmapLength = uint32(len(le00.Lightmap))
 		le00.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
 		le10.MapIndex = le00.MapIndex + 1
 		le11.MapIndex = le10.MapIndex + s.PhysicalSector.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
-		if le00.MapIndex > lightmapLength-1 {
-			le00.MapIndex = lightmapLength - 1
-		}
-		if le10.MapIndex > lightmapLength-1 {
-			le10.MapIndex = lightmapLength - 1
-		}
-		if le11.MapIndex > lightmapLength-1 {
-			le11.MapIndex = lightmapLength - 1
-		}
-		if le01.MapIndex > lightmapLength-1 {
-			le01.MapIndex = lightmapLength - 1
-		}
-		q := s.PhysicalSector.LightmapWorld(world, normal.Z > 0)
-		wu = 1.0 - (world.X-q.X)/constants.LightGrid
-		wv = 1.0 - (world.Y-q.Y)/constants.LightGrid
+		q := s.PhysicalSector.ToLightmapWorld(&concepts.Vector3{world[0], world[1], world[2]}, s.Normal[2] > 0)
+		wu = 1.0 - (world[0]-q[0])/constants.LightGrid
+		wv = 1.0 - (world[1]-q[1])/constants.LightGrid
 	} else {
-		le00.Lightmap = s.Segment.Lightmap
-		le10.Lightmap = s.Segment.Lightmap
-		le11.Lightmap = s.Segment.Lightmap
-		le01.Lightmap = s.Segment.Lightmap
-		wu = u * (float64(s.Segment.LightmapWidth) - constants.LightSafety*2)
-		wv = v * (float64(s.Segment.LightmapHeight) - constants.LightSafety*2)
-		iu := uint32(wu) + constants.LightSafety
-		iv := uint32(wv) + constants.LightSafety
-		if iu > s.Segment.LightmapWidth-1 {
-			iu = s.Segment.LightmapWidth - 1
-		}
-		if iv > s.Segment.LightmapHeight-1 {
-			iv = s.Segment.LightmapHeight - 1
-		}
-		iu2 := iu + 1
-		iv2 := iv + 1
-		if iu2 > s.Segment.LightmapWidth-1 {
-			iu2 = s.Segment.LightmapWidth - 1
-		}
-		if iv2 > s.Segment.LightmapHeight-1 {
-			iv2 = s.Segment.LightmapHeight - 1
-		}
-		le00.MapIndex = iu + iv*s.Segment.LightmapWidth
-		le10.MapIndex = iu2 + iv*s.Segment.LightmapWidth
-		le11.MapIndex = iu2 + iv2*s.Segment.LightmapWidth
-		le01.MapIndex = iu + iv2*s.Segment.LightmapWidth
+		s.Lightmap = s.Segment.Lightmap
+		s.LightmapAge = s.Segment.LightmapAge
+		le00.MapIndex = s.Segment.LightmapAddress(u, v)
+		le10.MapIndex = le00.MapIndex + 1
+		le11.MapIndex = le10.MapIndex + s.Segment.LightmapWidth
+		le01.MapIndex = le11.MapIndex - 1
+		wu = u * float64(s.Segment.LightmapWidth-constants.LightSafety*2)
+		wv = v * float64(s.Segment.LightmapHeight-constants.LightSafety*2)
 		wu = 1.0 - (wu - math.Floor(wu))
 		wv = 1.0 - (wv - math.Floor(wv))
 	}
-	//wu = concepts.Clamp(wu, 0.0, 1.0)
-	//wv = concepts.Clamp(wv, 0.0, 1.0)
 
-	return le00.Get(wall).Mul(wu * wv).
-		Add(le10.Get(wall).Mul((1.0 - wu) * wv)).
-		Add(le11.Get(wall).Mul((1.0 - wu) * (1.0 - wv))).
-		Add(le01.Get(wall).Mul(wu * (1.0 - wv)))
+	lightmapLength = uint32(len(s.Lightmap))
+	if le00.MapIndex > lightmapLength-1 {
+		le00.MapIndex = lightmapLength - 1
+	}
+	if le10.MapIndex > lightmapLength-1 {
+		le10.MapIndex = lightmapLength - 1
+	}
+	if le11.MapIndex > lightmapLength-1 {
+		le11.MapIndex = lightmapLength - 1
+	}
+	if le01.MapIndex > lightmapLength-1 {
+		le01.MapIndex = lightmapLength - 1
+	}
+	r00 := *le00.Get(wall)
+	r10 := *le10.Get(wall)
+	r11 := *le11.Get(wall)
+	r01 := *le01.Get(wall)
+	return r00.MulSelf(wu * wv).
+		AddSelf(r10.MulSelf((1.0 - wu) * wv)).
+		AddSelf(r11.MulSelf((1.0 - wu) * (1.0 - wv))).
+		AddSelf(r01.MulSelf(wu * (1.0 - wv)))
 }
 
-func (s *Slice) LightUnfiltered(world, normal concepts.Vector3, u, v float64) concepts.Vector3 {
-	le00 := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
-	wall := s.Segment != nil && normal.Z == 0
+func (s *Slice) LightUnfiltered(world *concepts.Vector3, u, v float64) *concepts.Vector3 {
+	le := &s.LightElements[0]
+	wall := s.Segment != nil && s.Normal[2] == 0
 
 	if !wall {
-		if normal.Z < 0 {
-			le00.Lightmap = s.PhysicalSector.CeilLightmap
+		if s.Normal[2] < 0 {
+			s.Lightmap = s.PhysicalSector.CeilLightmap
+			s.LightmapAge = s.PhysicalSector.CeilLightmapAge
 		} else {
-			le00.Lightmap = s.PhysicalSector.FloorLightmap
+			s.Lightmap = s.PhysicalSector.FloorLightmap
+			s.LightmapAge = s.PhysicalSector.FloorLightmapAge
 		}
-		lightmapLength := uint32(len(le00.Lightmap))
-		le00.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
-		if le00.MapIndex > lightmapLength-1 {
-			le00.MapIndex = lightmapLength - 1
+		lightmapLength := uint32(len(le.Lightmap))
+		le.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
+		if le.MapIndex > lightmapLength-1 {
+			le.MapIndex = lightmapLength - 1
 		}
 	} else {
-		le00.Lightmap = s.Segment.Lightmap
-		lightmapLength := uint32(len(le00.Lightmap))
-		le00.MapIndex = s.Segment.LightmapAddress(u, v)
-		if le00.MapIndex > lightmapLength-1 {
-			le00.MapIndex = lightmapLength - 1
+		s.Lightmap = s.Segment.Lightmap
+		s.LightmapAge = s.Segment.LightmapAge
+		lightmapLength := uint32(len(le.Lightmap))
+		le.MapIndex = s.Segment.LightmapAddress(u, v)
+		if le.MapIndex > lightmapLength-1 {
+			le.MapIndex = lightmapLength - 1
 		}
 	}
 
-	return le00.Get(wall)
+	return le.Get(wall)
 }

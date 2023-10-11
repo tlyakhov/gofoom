@@ -29,14 +29,6 @@ func (m *Map) Recalculate() {
 	}
 }
 
-func (m *Map) ClearLightmaps() {
-	m.RenderLock.Lock()
-	defer m.RenderLock.Unlock()
-	for _, sector := range m.Sectors {
-		sector.Physical().ClearLightmaps()
-	}
-}
-
 func (m *Map) Initialize() {
 	m.Spawn = concepts.Vector3{}
 	m.Materials = make(map[string]concepts.ISerializable)
@@ -50,10 +42,10 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 		m.EntitiesPaused = v.(bool)
 	}
 	if v, ok := data["SpawnX"]; ok {
-		m.Spawn.X = v.(float64)
+		m.Spawn[0] = v.(float64)
 	}
 	if v, ok := data["SpawnY"]; ok {
-		m.Spawn.Y = v.(float64)
+		m.Spawn[1] = v.(float64)
 	}
 	// Load materials first so sectors have access to them.
 	if v, ok := data["Materials"]; ok {
@@ -68,8 +60,8 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 func (m *Map) Serialize() map[string]interface{} {
 	result := m.Base.Serialize()
 	result["EntitiesPaused"] = m.EntitiesPaused
-	result["SpawnX"] = m.Spawn.X
-	result["SpawnY"] = m.Spawn.Y
+	result["SpawnX"] = m.Spawn[0]
+	result["SpawnY"] = m.Spawn[1]
 	materials := []interface{}{}
 	for _, mat := range m.Materials {
 		materials = append(materials, mat.Serialize())

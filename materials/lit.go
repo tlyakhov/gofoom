@@ -18,8 +18,8 @@ func init() {
 
 func (m *Lit) Initialize() {
 	m.Base.Initialize()
-	m.Ambient = concepts.V3(0.1, 0.1, 0.1)
-	m.Diffuse = concepts.V3(1, 1, 1)
+	m.Ambient = concepts.Vector3{0.1, 0.1, 0.1}
+	m.Diffuse = concepts.Vector3{1, 1, 1}
 }
 
 func (m *Lit) Deserialize(data map[string]interface{}) {

@@ -27,9 +27,9 @@ import (
 )
 
 var (
-	ColorSelectionPrimary   = concepts.V3(0, 1, 0)
-	ColorSelectionSecondary = concepts.V3(0, 1, 1)
-	ColorPVS                = concepts.V3(0.9, 1, 0.9)
+	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
+	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
+	ColorPVS                = concepts.Vector3{0.9, 1, 0.9}
 	editor                  = NewEditor()
 	gameKeyMap              = make(map[uint]bool)
 	last                    = time.Now()
@@ -67,15 +67,15 @@ func EditorTimer() bool {
 	}
 	if gameKeyMap[gdk.KEY_space] {
 		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Z += constants.PlayerSwimStrength * dt / 30.0
+			ps.Player.Vel[2] += constants.PlayerSwimStrength * dt / 30.0
 		} else if ps.Standing {
-			ps.Player.Vel.Z += constants.PlayerJumpStrength * dt / 30.0
+			ps.Player.Vel[2] += constants.PlayerJumpStrength * dt / 30.0
 			ps.Standing = false
 		}
 	}
 	if gameKeyMap[gdk.KEY_c] {
 		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Z -= constants.PlayerSwimStrength * dt / 30.0
+			ps.Player.Vel[2] -= constants.PlayerSwimStrength * dt / 30.0
 		} else {
 			ps.Crouching = true
 		}
@@ -84,7 +84,7 @@ func EditorTimer() bool {
 	}
 
 	if gameKeyMap[gdk.KEY_t] {
-		editor.World.ClearLightmaps()
+		//editor.World.ClearLightmaps()
 	}
 
 	editor.Window.QueueDraw()

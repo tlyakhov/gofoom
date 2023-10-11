@@ -47,12 +47,12 @@ func run() {
 	w := 640
 	h := 360
 	cfg := pixelgl.WindowConfig{
-		Title:  "Foom",
-		Bounds: pixel.R(0, 0, 3840, 2160),
-		VSync:  true,
-		//Resizable:   true,
+		Title:       "Foom",
+		Bounds:      pixel.R(0, 0, 1920, 1080),
+		VSync:       true,
+		Resizable:   true,
 		Undecorated: true,
-		Monitor:     pixelgl.PrimaryMonitor(),
+		//Monitor:     pixelgl.PrimaryMonitor(),
 	}
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
@@ -106,15 +106,15 @@ func run() {
 		}
 		if win.Pressed(pixelgl.KeySpace) {
 			if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-				ps.Player.Vel.Z += constants.PlayerSwimStrength * dt / 30.0
+				ps.Player.Vel[2] += constants.PlayerSwimStrength * dt / 30.0
 			} else if ps.Standing {
-				ps.Player.Vel.Z += constants.PlayerJumpStrength * dt / 30.0
+				ps.Player.Vel[2] += constants.PlayerJumpStrength * dt / 30.0
 				ps.Standing = false
 			}
 		}
 		if win.Pressed(pixelgl.KeyC) {
 			if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-				ps.Player.Vel.Z -= constants.PlayerSwimStrength * dt / 30.0
+				ps.Player.Vel[2] -= constants.PlayerSwimStrength * dt / 30.0
 			} else {
 				ps.Crouching = true
 			}

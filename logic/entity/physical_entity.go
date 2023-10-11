@@ -2,6 +2,7 @@ package entity
 
 import (
 	"fmt"
+	"log"
 	"math"
 
 	"tlyakhov/gofoom/concepts"
@@ -27,16 +28,16 @@ func (e *PhysicalEntityService) PushBack(segment *core.Segment) bool {
 	}
 	side := segment.WhichSide(p2d)
 	closest := segment.ClosestToPoint(p2d)
-	v := e.Pos.Sub(closest.To3D())
-	v.Z = 0
+	v := e.Pos.Sub(closest.To3D(&concepts.Vector3{}))
+	v[2] = 0
 	d = v.Length()
-	v = v.Norm()
+	v.NormSelf()
 	if side > 0 {
-		v = v.Mul(e.BoundingRadius - d)
+		v.MulSelf(e.BoundingRadius - d)
 	} else {
-		v = v.Mul(-e.BoundingRadius - d)
+		v.MulSelf(-e.BoundingRadius - d)
 	}
-	e.Pos = e.Pos.Add(v)
+	e.Pos.AddSelf(v)
 
 	return true
 }
@@ -66,22 +67,26 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 		closestDistance2 := math.MaxFloat64
 
 		for _, sector := range e.Map.Sectors {
-			d2 := e.Pos.Dist2(sector.Physical().Center)
+			d2 := e.Pos.Dist2(&sector.Physical().Center)
 
 			if closestSector == nil || d2 < closestDistance2 {
 				closestDistance2 = d2
 				closestSector = sector
 			}
+			if sector.IsPointInside2D(e.Pos.To2D()) {
+				closestDistance2 = 0
+				break
+			}
 		}
 
-		if !closestSector.IsPointInside2D(e.Pos.To2D()) {
+		if closestDistance2 > 0 {
 			e.Pos = closestSector.Physical().Center
 		}
 
 		floorZ, ceilZ := closestSector.Physical().CalcFloorCeilingZ(e.Pos.To2D())
-		if e.Pos.Z < floorZ || e.Pos.Z+e.Height > ceilZ {
-			e.Pos.Z = floorZ
-			fmt.Println("goop1?")
+		if e.Pos[2] < floorZ || e.Pos[2]+e.Height > ceilZ {
+			log.Printf("Moved entity %v to closest sector and adjusted Z from %v to %v", e.ID, e.Pos[2], floorZ)
+			e.Pos[2] = floorZ
 		}
 
 		e.Sector = closestSector
@@ -98,8 +103,8 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
 			floorZ, ceilZ := adj.CalcFloorCeilingZ(e.Pos.To2D())
-			if e.Pos.Z+e.MountHeight >= floorZ &&
-				e.Pos.Z+e.Height < ceilZ {
+			if e.Pos[2]+e.MountHeight >= floorZ &&
+				e.Pos[2]+e.Height < ceilZ {
 				continue
 			}
 		}
@@ -125,13 +130,13 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 			}
 			adj := segment.AdjacentSector.Physical()
 			floorZ, ceilZ := adj.CalcFloorCeilingZ(ePosition2D)
-			if e.Pos.Z+e.MountHeight >= floorZ &&
-				e.Pos.Z+e.Height < ceilZ &&
+			if e.Pos[2]+e.MountHeight >= floorZ &&
+				e.Pos[2]+e.Height < ceilZ &&
 				adj.IsPointInside2D(ePosition2D) {
 				// Hooray, we've handled case 5! Make sure Z is good.
 				fmt.Printf("Case 5! entity = %v, floor z = %v\n", e.Pos, floorZ)
-				if e.Pos.Z < floorZ {
-					//e.Pos.Z = floorZ
+				if e.Pos[2] < floorZ {
+					//e.Pos[2] = floorZ
 					fmt.Println("goop2?")
 				}
 				e.Sector = segment.AdjacentSector
@@ -146,8 +151,8 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 			for _, sector := range e.Map.Sectors {
 				phys := sector.Physical()
 				floorZ, ceilZ := phys.CalcFloorCeilingZ(e.Pos.To2D())
-				if e.Pos.Z+e.MountHeight >= floorZ &&
-					e.Pos.Z+e.Height < ceilZ {
+				if e.Pos[2]+e.MountHeight >= floorZ &&
+					e.Pos[2]+e.Height < ceilZ {
 					for _, segment := range phys.Segments {
 						if e.PushBack(segment) {
 							collided = append(collided, segment)
@@ -168,11 +173,12 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 		}
 
 		if response == core.Stop {
-			e.Vel.X = 0
-			e.Vel.Y = 0
+			e.Vel[0] = 0
+			e.Vel[1] = 0
 		} else if response == core.Bounce {
 			for _, segment := range collided {
-				e.Vel = e.Vel.Sub(segment.Normal.To3D().Mul(2 * e.Vel.Dot(segment.Normal.To3D())))
+				n := segment.Normal.To3D(&concepts.Vector3{})
+				e.Vel.SubSelf(n.Mul(2 * e.Vel.Dot(n)))
 			}
 		} else if response == core.Remove {
 			e.Remove()
@@ -205,13 +211,13 @@ func (e *PhysicalEntityService) Frame(lastFrameTime float64) {
 
 	frameScale := lastFrameTime / 10.0
 
-	if math.Abs(e.Vel.X) > constants.VelocityEpsilon ||
-		math.Abs(e.Vel.Y) > constants.VelocityEpsilon ||
-		math.Abs(e.Vel.Z) > constants.VelocityEpsilon {
+	if math.Abs(e.Vel[0]) > constants.VelocityEpsilon ||
+		math.Abs(e.Vel[1]) > constants.VelocityEpsilon ||
+		math.Abs(e.Vel[2]) > constants.VelocityEpsilon {
 		speed := e.Vel.Length() * frameScale
 		steps := concepts.Max(int(speed/constants.CollisionCheck), 1)
 		for step := 0; step < steps; step++ {
-			e.Pos = e.Pos.Add(e.Vel.Mul(frameScale / float64(steps)))
+			e.Pos.AddSelf(e.Vel.Mul(frameScale / float64(steps)))
 
 			collSegments := e.Collide()
 			if collSegments != nil {

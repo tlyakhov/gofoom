@@ -10,14 +10,14 @@ import (
 
 func TransformContext(cr *cairo.Context) {
 	t := editor.Pos.Mul(-editor.Scale).Add(editor.Size.Mul(0.5))
-	cr.Translate(t.X, t.Y)
+	cr.Translate(t[0], t[1])
 	cr.Scale(editor.Scale, editor.Scale)
 }
 
 func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	w := da.GetAllocatedWidth()
 	h := da.GetAllocatedHeight()
-	editor.Size = concepts.V2(float64(w), float64(h))
+	editor.Size = concepts.Vector2{float64(w), float64(h)}
 
 	editor.MapViewGrid.Draw(&editor.Edit, cr)
 	TransformContext(cr)
@@ -30,25 +30,25 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	case *actions.Select:
 		if editor.MousePressed {
 			v1, v2 := editor.SelectionBox()
-			cr.Rectangle(v1.X, v1.Y, v2.X-v1.X, v2.Y-v1.Y)
+			cr.Rectangle(v1[0], v1[1], v2[0]-v1[0], v2[1]-v1[1])
 			cr.SetSourceRGBA(0.2, 0.2, 1.0, 0.3)
 			cr.Fill()
 			cr.SetSourceRGBA(0.67, 0.67, 1.0, 0.3)
 			cr.Stroke()
 		}
 	case *actions.AddSector:
-		gridMouse := editor.WorldGrid(editor.MouseWorld)
-		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
+		gridMouse := editor.WorldGrid(&editor.MouseWorld)
+		cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 		DrawHandle(cr, gridMouse)
 	case *actions.SplitSector, *actions.SplitSegment, *actions.AlignGrid:
-		gridMouse := editor.WorldGrid(editor.MouseWorld)
-		gridMouseDown := editor.WorldGrid(editor.MouseDownWorld)
-		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
+		gridMouse := editor.WorldGrid(&editor.MouseWorld)
+		gridMouseDown := editor.WorldGrid(&editor.MouseDownWorld)
+		cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 		DrawHandle(cr, gridMouse)
 		if editor.MousePressed {
 			cr.NewPath()
-			cr.MoveTo(gridMouseDown.X, gridMouseDown.Y)
-			cr.LineTo(gridMouse.X, gridMouse.Y)
+			cr.MoveTo(gridMouseDown[0], gridMouseDown[1])
+			cr.LineTo(gridMouse[0], gridMouse[1])
 			cr.ClosePath()
 			cr.Stroke()
 			DrawHandle(cr, gridMouseDown)
@@ -56,5 +56,5 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 
 	}
 
-	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse.X, Mouse.Y))
+	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse[0], Mouse[1]))
 }

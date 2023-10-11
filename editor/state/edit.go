@@ -40,10 +40,10 @@ type Edit struct {
 
 type IEditor interface {
 	State() *Edit
-	ScreenToWorld(p concepts.Vector2) concepts.Vector2
-	WorldToScreen(p concepts.Vector2) concepts.Vector2
-	WorldGrid(p concepts.Vector2) concepts.Vector2
-	WorldGrid3D(p concepts.Vector3) concepts.Vector3
+	ScreenToWorld(p *concepts.Vector2) *concepts.Vector2
+	WorldToScreen(p *concepts.Vector2) *concepts.Vector2
+	WorldGrid(p *concepts.Vector2) *concepts.Vector2
+	WorldGrid3D(p *concepts.Vector3) *concepts.Vector3
 	SetMapCursor(name string)
 	UpdateTitle()
 	Load(filename string)
@@ -55,5 +55,5 @@ type IEditor interface {
 	Redo()
 	SelectObjects(objects []concepts.ISerializable)
 	Selecting() bool
-	SelectionBox() (v1 concepts.Vector2, v2 concepts.Vector2)
+	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 }

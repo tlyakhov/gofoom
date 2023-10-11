@@ -26,14 +26,15 @@ type PhysicalSector struct {
 	FloorMaterial concepts.ISerializable `editable:"Floor Material" edit_type:"Material"`
 	CeilMaterial  concepts.ISerializable `editable:"Ceiling Material" edit_type:"Material"`
 
-	Winding                       int8
-	Min, Max, Center              concepts.Vector3
-	FloorNormal, CeilNormal       concepts.Vector3
-	LightmapWidth, LightmapHeight uint32
-	FloorLightmap, CeilLightmap   []concepts.Vector3
-	PVS                           map[string]AbstractSector
-	PVSEntity                     map[string]AbstractSector
-	PVL                           map[string]AbstractEntity
+	Winding                           int8
+	Min, Max, Center                  concepts.Vector3
+	FloorNormal, CeilNormal           concepts.Vector3
+	LightmapWidth, LightmapHeight     uint32
+	FloorLightmap, CeilLightmap       []concepts.Vector3
+	FloorLightmapAge, CeilLightmapAge []int
+	PVS                               map[string]AbstractSector
+	PVSEntity                         map[string]AbstractSector
+	PVL                               map[string]AbstractEntity
 
 	// RoomImpulse
 }
@@ -46,14 +47,14 @@ func (s *PhysicalSector) Physical() *PhysicalSector {
 	return s
 }
 
-func (ms *PhysicalSector) IsPointInside2D(p concepts.Vector2) bool {
+func (ms *PhysicalSector) IsPointInside2D(p *concepts.Vector2) bool {
 	inside := false
-	flag1 := (p.Y >= ms.Segments[0].P.Y)
+	flag1 := (p[1] >= ms.Segments[0].P[1])
 
 	for _, segment := range ms.Segments {
-		flag2 := (p.Y >= segment.Next.P.Y)
+		flag2 := (p[1] >= segment.Next.P[1])
 		if flag1 != flag2 {
-			if ((segment.Next.P.Y-p.Y)*(segment.P.X-segment.Next.P.X) >= (segment.Next.P.X-p.X)*(segment.P.Y-segment.Next.P.Y)) == flag2 {
+			if ((segment.Next.P[1]-p[1])*(segment.P[0]-segment.Next.P[0]) >= (segment.Next.P[0]-p[0])*(segment.P[1]-segment.Next.P[1])) == flag2 {
 				inside = !inside
 			}
 		}
@@ -160,15 +161,15 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 }
 
 func (s *PhysicalSector) Recalculate() {
-	s.Center = concepts.V3(0, 0, (s.TopZ+s.BottomZ)/2)
-	s.Min = concepts.V3(math.Inf(1), math.Inf(1), math.Inf(1))
-	s.Max = concepts.V3(math.Inf(-1), math.Inf(-1), math.Inf(-1))
+	concepts.V3(&s.Center, 0, 0, (s.TopZ+s.BottomZ)/2)
+	concepts.V3(&s.Min, math.Inf(1), math.Inf(1), math.Inf(1))
+	concepts.V3(&s.Max, math.Inf(-1), math.Inf(-1), math.Inf(-1))
 
 	sum := 0.0
 	for i, segment := range s.Segments {
 		// Can't use prev/next pointers because they haven't been initialized yet.
 		next := s.Segments[(i+1)%len(s.Segments)]
-		sum += (next.P.X - segment.P.X) * (segment.P.Y + next.P.Y)
+		sum += (next.P[0] - segment.P[0]) * (segment.P[1] + next.P[1])
 	}
 
 	if sum < 0 {
@@ -191,64 +192,59 @@ func (s *PhysicalSector) Recalculate() {
 		segment.Next = next
 		next.Prev = segment
 		prev = segment
-
-		s.Center.X += segment.P.X
-		s.Center.Y += segment.P.Y
-		if segment.P.X < s.Min.X {
-			s.Min.X = segment.P.X
+		s.Center[0] += segment.P[0]
+		s.Center[1] += segment.P[1]
+		if segment.P[0] < s.Min[0] {
+			s.Min[0] = segment.P[0]
 		}
-		if segment.P.Y < s.Min.Y {
-			s.Min.Y = segment.P.Y
+		if segment.P[1] < s.Min[1] {
+			s.Min[1] = segment.P[1]
 		}
-		if segment.P.X > s.Max.X {
-			s.Max.X = segment.P.X
+		if segment.P[0] > s.Max[0] {
+			s.Max[0] = segment.P[0]
 		}
-		if segment.P.Y > s.Max.Y {
-			s.Max.Y = segment.P.Y
+		if segment.P[1] > s.Max[1] {
+			s.Max[1] = segment.P[1]
 		}
-		floorZ, ceilZ := s.CalcFloorCeilingZ(segment.P)
-		if floorZ < s.Min.Z {
-			s.Min.Z = floorZ
+		floorZ, ceilZ := s.CalcFloorCeilingZ(&segment.P)
+		if floorZ < s.Min[2] {
+			s.Min[2] = floorZ
 		}
-		if ceilZ < s.Min.Z {
-			s.Min.Z = ceilZ
+		if ceilZ < s.Min[2] {
+			s.Min[2] = ceilZ
 		}
-		if floorZ > s.Max.Z {
-			s.Max.Z = floorZ
+		if floorZ > s.Max[2] {
+			s.Max[2] = floorZ
 		}
-		if ceilZ > s.Max.Z {
-			s.Max.Z = ceilZ
+		if ceilZ > s.Max[2] {
+			s.Max[2] = ceilZ
 		}
 		segment.Sector = s
 		segment.Recalculate()
 
 		if s.Winding < 0 {
-			segment.Normal = segment.Normal.Mul(-1)
+			segment.Normal.MulSelf(-1)
 		}
 	}
 	s.Segments = filtered
 
 	if len(s.Segments) > 1 {
-		sloped := s.Segments[0].Normal.To3D()
-		delta := s.Segments[1].P.Sub(s.Segments[0].P).To3D()
-		sloped.Z = s.FloorSlope
-		s.FloorNormal = sloped.Cross(delta).Norm()
-		if s.FloorNormal.Z < 0 {
-			s.FloorNormal.X = -s.FloorNormal.X
-			s.FloorNormal.Y = -s.FloorNormal.Y
-			s.FloorNormal.Z = -s.FloorNormal.Z
+		sloped := s.Segments[0].Normal.To3D(&concepts.Vector3{})
+		delta := (&concepts.Vector2{s.Segments[1].P[0], s.Segments[1].P[1]}).Sub(&s.Segments[0].P).To3D(&concepts.Vector3{})
+		sloped[2] = s.FloorSlope
+		s.FloorNormal.CrossSelf(sloped, delta).NormSelf()
+		if s.FloorNormal[2] < 0 {
+			s.FloorNormal.MulSelf(-1)
 		}
-		sloped = s.Segments[0].Normal.To3D()
-		sloped.Z = s.CeilSlope
-		s.CeilNormal = sloped.Cross(delta).Norm()
-		if s.CeilNormal.Z > 0 {
-			s.CeilNormal.X = -s.CeilNormal.X
-			s.CeilNormal.Y = -s.CeilNormal.Y
-			s.CeilNormal.Z = -s.CeilNormal.Z
+		s.Segments[0].Normal.To3D(sloped)
+		sloped[2] = s.CeilSlope
+		s.CeilNormal.CrossSelf(sloped, delta).NormSelf()
+		if s.CeilNormal[2] > 0 {
+			s.CeilNormal.MulSelf(-1)
 		}
 	}
 
-	s.Center = s.Center.Mul(1.0 / float64(len(s.Segments)))
+	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
 
 	if ph, ok := s.FloorTarget.(*PlaceholderSector); ok {
 		// Get the actual one.
@@ -264,40 +260,30 @@ func (s *PhysicalSector) Recalculate() {
 		}
 	}
 
-	s.LightmapWidth = uint32((s.Max.X-s.Min.X)/constants.LightGrid) + constants.LightSafety*2
-	s.LightmapHeight = uint32((s.Max.Y-s.Min.Y)/constants.LightGrid) + constants.LightSafety*2
+	s.LightmapWidth = uint32((s.Max[0]-s.Min[0])/constants.LightGrid) + constants.LightSafety*2
+	s.LightmapHeight = uint32((s.Max[1]-s.Min[1])/constants.LightGrid) + constants.LightSafety*2
 	s.FloorLightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
 	s.CeilLightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
-	s.ClearLightmaps()
-}
-
-func (s *PhysicalSector) ClearLightmaps() {
-	for i := range s.FloorLightmap {
-		s.FloorLightmap[i] = concepts.V3(-1, -1, -1)
-		s.CeilLightmap[i] = concepts.V3(-1, -1, -1)
-	}
-
-	for _, segment := range s.Segments {
-		segment.ClearLightmap()
-	}
+	s.FloorLightmapAge = make([]int, s.LightmapWidth*s.LightmapHeight)
+	s.CeilLightmapAge = make([]int, s.LightmapWidth*s.LightmapHeight)
 }
 
 // CalcFloorCeilingZ figures out the current slice Z values accounting for slope.
-func (s *PhysicalSector) CalcFloorCeilingZ(isect concepts.Vector2) (floorZ float64, ceilZ float64) {
+func (s *PhysicalSector) CalcFloorCeilingZ(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
 	if len(s.Segments) < 2 {
 		return s.BottomZ, s.TopZ
 	}
 	dist := 0.0
 	if s.FloorSlope != 0 || s.CeilSlope != 0 {
-		a := s.Segments[0].P
-		b := s.Segments[1].P
+		a := &s.Segments[0].P
+		b := &s.Segments[1].P
 		length2 := a.Dist2(b)
 		if length2 == 0 {
 			dist = isect.Dist(a)
 		} else {
-			delta := b.Sub(a)
-			t := isect.Sub(a).Dot(delta) / length2
-			dist = isect.Dist(a.Add(delta.Mul(t)))
+			delta := (&concepts.Vector2{b[0], b[1]}).SubSelf(a)
+			t := (&concepts.Vector2{isect[0], isect[1]}).SubSelf(a).Dot(delta) / length2
+			dist = isect.Dist(delta.MulSelf(t).AddSelf(a))
 		}
 	}
 
@@ -315,38 +301,39 @@ func (s *PhysicalSector) CalcFloorCeilingZ(isect concepts.Vector2) (floorZ float
 	return
 }
 
-func (s *PhysicalSector) LightmapAddress(p concepts.Vector2) uint32 {
-	dx := int((p.X-s.Min.X)/constants.LightGrid) + constants.LightSafety
-	dy := int((p.Y-s.Min.Y)/constants.LightGrid) + constants.LightSafety
+func (s *PhysicalSector) LightmapAddress(p *concepts.Vector2) uint32 {
+	dx := int((p[0]-s.Min[0])/constants.LightGrid) + constants.LightSafety
+	dy := int((p[1]-s.Min[1])/constants.LightGrid) + constants.LightSafety
 	dx = concepts.IntClamp(dx, 0, int(s.LightmapWidth))
 	dy = concepts.IntClamp(dy, 0, int(s.LightmapHeight))
 	return uint32(dy)*s.LightmapWidth + uint32(dx)
 }
 
-func (s *PhysicalSector) LightmapWorld(p concepts.Vector3, floor bool) concepts.Vector3 {
-	lw := p.Sub(s.Min).Mul(1.0 / constants.LightGrid)
-	lw.X = math.Floor(lw.X)*constants.LightGrid + s.Min.X
-	lw.Y = math.Floor(lw.Y)*constants.LightGrid + s.Min.Y
+func (s *PhysicalSector) ToLightmapWorld(p *concepts.Vector3, floor bool) *concepts.Vector3 {
+	lw := p
+	lw.SubSelf(&s.Min).MulSelf(1.0 / constants.LightGrid)
+	lw[0] = math.Floor(lw[0])*constants.LightGrid + s.Min[0]
+	lw[1] = math.Floor(lw[1])*constants.LightGrid + s.Min[1]
 	floorZ, ceilZ := s.CalcFloorCeilingZ(lw.To2D())
 	if floor {
-		lw.Z = floorZ
+		lw[2] = floorZ
 	} else {
-		lw.Z = ceilZ
+		lw[2] = ceilZ
 	}
 	return lw
 }
 
-func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) concepts.Vector3 {
+func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) *concepts.Vector3 {
 	u := int(mapIndex%s.LightmapWidth) - constants.LightSafety
 	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
-	r := concepts.V3(s.Min.X+(float64(u)+0.5)*constants.LightGrid, s.Min.Y+(float64(v)+0.5)*constants.LightGrid, 0)
+	r := concepts.Vector3{s.Min[0] + (float64(u)+0.0)*constants.LightGrid, s.Min[1] + (float64(v)+0.0)*constants.LightGrid, 0}
 	floorZ, ceilZ := s.CalcFloorCeilingZ(r.To2D())
 	if floor {
-		r.Z = floorZ
+		r[2] = floorZ
 	} else {
-		r.Z = ceilZ
+		r[2] = ceilZ
 	}
-	return r
+	return &r
 }
 
 func (s *PhysicalSector) SetParent(parent interface{}) {

@@ -18,11 +18,11 @@ func DrawEntityAngle(cr *cairo.Context, e *core.PhysicalEntity) {
 	aend := (e.Angle + editor.Renderer.FOV/2) * math.Pi / 180.0
 	cr.SetLineWidth(2)
 	cr.NewPath()
-	cr.MoveTo(e.Pos.X, e.Pos.Y)
-	cr.LineTo(e.Pos.X+math.Cos(astart)*e.BoundingRadius*2, e.Pos.Y+math.Sin(astart)*e.BoundingRadius*2)
-	cr.Arc(e.Pos.X, e.Pos.Y, e.BoundingRadius*2, astart, aend)
-	cr.MoveTo(e.Pos.X, e.Pos.Y)
-	cr.LineTo(e.Pos.X+math.Cos(aend)*e.BoundingRadius*2, e.Pos.Y+math.Sin(aend)*e.BoundingRadius*2)
+	cr.MoveTo(e.Pos[0], e.Pos[1])
+	cr.LineTo(e.Pos[0]+math.Cos(astart)*e.BoundingRadius*2, e.Pos[1]+math.Sin(astart)*e.BoundingRadius*2)
+	cr.Arc(e.Pos[0], e.Pos[1], e.BoundingRadius*2, astart, aend)
+	cr.MoveTo(e.Pos[0], e.Pos[1])
+	cr.LineTo(e.Pos[0]+math.Cos(aend)*e.BoundingRadius*2, e.Pos[1]+math.Sin(aend)*e.BoundingRadius*2)
 	cr.ClosePath()
 	cr.Stroke()
 }
@@ -36,7 +36,7 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 		cr.SetSourceRGB(0.6, 0.6, 0.6)
 		cr.SetLineWidth(1)
 		cr.NewPath()
-		cr.Arc(phys.Pos.X, phys.Pos.Y, phys.BoundingRadius/2, 0, math.Pi*2)
+		cr.Arc(phys.Pos[0], phys.Pos[1], phys.BoundingRadius/2, 0, math.Pi*2)
 		cr.ClosePath()
 		cr.Stroke()
 		cr.SetSourceRGB(0.33, 0.33, 0.33)
@@ -44,7 +44,7 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 	} else if _, ok := e.(*entities.Light); ok {
 		for _, b := range e.Physical().Behaviors {
 			if lb, ok := b.(*behaviors.Light); ok {
-				cr.SetSourceRGB(lb.Diffuse.X, lb.Diffuse.Y, lb.Diffuse.Z)
+				cr.SetSourceRGB(lb.Diffuse[0], lb.Diffuse[1], lb.Diffuse[2])
 			}
 		}
 	} // Sprite...
@@ -52,14 +52,14 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 	hovering := concepts.IndexOf(editor.HoveringObjects, e) != -1
 	selected := concepts.IndexOf(editor.SelectedObjects, e) != -1
 	if selected {
-		cr.SetSourceRGB(ColorSelectionPrimary.X, ColorSelectionPrimary.Y, ColorSelectionPrimary.Z)
+		cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 	} else if hovering {
-		cr.SetSourceRGB(ColorSelectionSecondary.X, ColorSelectionSecondary.Y, ColorSelectionSecondary.Z)
+		cr.SetSourceRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
 	}
 
 	cr.SetLineWidth(1)
 	cr.NewPath()
-	cr.Arc(phys.Pos.X, phys.Pos.Y, phys.BoundingRadius, 0, math.Pi*2)
+	cr.Arc(phys.Pos[0], phys.Pos[1], phys.BoundingRadius, 0, math.Pi*2)
 	cr.ClosePath()
 	cr.Stroke()
 
@@ -68,7 +68,7 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 		extents := cr.TextExtents(text)
 		cr.Save()
 		cr.SetSourceRGB(0.3, 0.3, 0.3)
-		cr.Translate(phys.Pos.X-extents.Width/2, phys.Pos.Y-extents.Height/2-extents.YBearing)
+		cr.Translate(phys.Pos[0]-extents.Width/2, phys.Pos[1]-extents.Height/2-extents.YBearing)
 		cr.ShowText(text)
 		cr.Restore()
 	}

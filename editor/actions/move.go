@@ -36,7 +36,7 @@ func (a *Move) OnMouseDown(button *gdk.EventButton) {
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *state.MapPoint:
-			a.Original[i] = target.P.To3D()
+			target.P.To3D(&a.Original[i])
 		case core.AbstractEntity:
 			a.Original[i] = target.Physical().Pos
 		}
@@ -44,7 +44,7 @@ func (a *Move) OnMouseDown(button *gdk.EventButton) {
 }
 
 func (a *Move) OnMouseMove() {
-	a.Delta = a.State().MouseWorld.Sub(a.State().MouseDownWorld)
+	a.Delta = *a.State().MouseWorld.Sub(&a.State().MouseDownWorld)
 	a.Act()
 }
 
@@ -57,14 +57,14 @@ func (a *Move) Act() {
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *state.MapPoint:
-			target.P = a.WorldGrid(a.Original[i].To2D().Add(a.Delta))
+			target.P = *a.WorldGrid(a.Original[i].To2D().Add(&a.Delta))
 			provide.Passer.For(target.Sector).Recalculate()
 		case core.AbstractEntity:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...
 				continue
 			}
-			target.Physical().Pos = a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D()))
+			target.Physical().Pos = *a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D(&concepts.Vector3{})))
 			a.State().World.Recalculate()
 		}
 	}
@@ -76,7 +76,7 @@ func (a *Move) Undo() {
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *state.MapPoint:
-			target.P = a.Original[i].To2D()
+			target.P = *a.Original[i].To2D()
 			provide.Passer.For(target.Sector).Recalculate()
 		case core.AbstractEntity:
 			if target == a.State().World.Player {

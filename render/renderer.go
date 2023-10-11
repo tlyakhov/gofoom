@@ -43,8 +43,12 @@ func (r *Renderer) Player() *entities.Player {
 // RenderSlice draws a single pixel vertical column given a particular segment intersection.
 func (r *Renderer) RenderSlice(slice *state.Slice) {
 	slice.CalcScreen()
+	slice.Normal = slice.PhysicalSector.CeilNormal
 	Ceiling(slice)
+	slice.Normal = slice.PhysicalSector.FloorNormal
 	Floor(slice)
+
+	slice.Segment.Normal.To3D(&slice.Normal)
 
 	if slice.Segment.AdjacentSector == nil {
 		WallMid(slice)
@@ -62,6 +66,10 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	}
 
 	portalSlice := *slice
+	portalSlice.LightElements[0].Slice = &portalSlice
+	portalSlice.LightElements[1].Slice = &portalSlice
+	portalSlice.LightElements[2].Slice = &portalSlice
+	portalSlice.LightElements[3].Slice = &portalSlice
 	portalSlice.PhysicalSector = sp.Adj.Physical()
 	portalSlice.YStart = sp.AdjClippedTop
 	portalSlice.YEnd = sp.AdjClippedBottom
@@ -77,21 +85,22 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	dist := math.MaxFloat64
 
 	for _, segment := range slice.PhysicalSector.Segments {
-		if slice.Ray.End.Sub(slice.Ray.Start).Dot(segment.Normal) > 0 {
+		if slice.Ray.End.Sub(&slice.Ray.Start).Dot(&segment.Normal) > 0 {
 			continue
 		}
 
-		isect, ok := segment.Intersect2D(slice.Ray.Start, slice.Ray.End)
+		isect := &concepts.Vector2{}
+		ok := segment.Intersect2D(&slice.Ray.Start, &slice.Ray.End, isect)
 
 		if !ok {
 			continue
 		}
 
-		delta := concepts.V2(math.Abs(isect.X-slice.Ray.Start.X), math.Abs(isect.Y-slice.Ray.Start.Y))
-		if delta.Y > delta.X {
-			dist = math.Abs(delta.Y / slice.AngleSin)
+		delta := concepts.Vector2{math.Abs(isect[0] - slice.Ray.Start[0]), math.Abs(isect[1] - slice.Ray.Start[1])}
+		if delta[1] > delta[0] {
+			dist = math.Abs(delta[1] / slice.AngleSin)
 		} else {
-			dist = math.Abs(delta.X / slice.AngleCos)
+			dist = math.Abs(delta[0] / slice.AngleCos)
 		}
 
 		if dist > slice.Distance || dist < slice.LastPortalDistance {
@@ -100,8 +109,8 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 
 		slice.Segment = segment
 		slice.Distance = dist
-		slice.Intersection = isect.To3D()
-		slice.U = isect.Dist(segment.P) / segment.Length
+		isect.To3D(&slice.Intersection)
+		slice.U = isect.Dist(&segment.P) / segment.Length
 	}
 
 	if dist != math.MaxFloat64 {
@@ -129,22 +138,28 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 		YEnd:           r.ScreenHeight,
 		Angle:          r.Player().Angle*concepts.Deg2rad + r.ViewRadians[x],
 		PhysicalSector: r.Player().Sector.Physical(),
-		CameraZ:        r.Player().Pos.Z + r.Player().Height + bob,
+		CameraZ:        r.Player().Pos[2] + r.Player().Height + bob,
 	}
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)
+	slice.LightElements[0].Slice = slice
+	slice.LightElements[1].Slice = slice
+	slice.LightElements[2].Slice = slice
+	slice.LightElements[3].Slice = slice
 
 	slice.Ray = &state.Ray{
-		Start: r.Player().Pos.To2D(),
+		Start: *r.Player().Pos.To2D(),
 		End: concepts.Vector2{
-			X: r.Player().Pos.X + r.MaxViewDist*slice.AngleCos,
-			Y: r.Player().Pos.Y + r.MaxViewDist*slice.AngleSin,
+			r.Player().Pos[0] + r.MaxViewDist*slice.AngleCos,
+			r.Player().Pos[1] + r.MaxViewDist*slice.AngleSin,
 		},
 	}
 
 	r.RenderSector(slice)
 
-	r.columns <- x
+	if constants.RenderMultiThreaded {
+		r.columns <- x
+	}
 }
 
 // Render a frame.
@@ -158,11 +173,18 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.Frame++
 	r.Counter = 0
 
-	for x := 0; x < r.ScreenWidth; x++ {
-		go r.RenderColumn(buffer, x)
-	}
-	for x := 0; x < r.ScreenWidth; x++ {
-		<-r.columns
+	if constants.RenderMultiThreaded {
+		for x := 0; x < r.ScreenWidth; x++ {
+			go r.RenderColumn(buffer, x)
+		}
+
+		for x := 0; x < r.ScreenWidth; x++ {
+			<-r.columns
+		}
+	} else {
+		for x := 0; x < r.ScreenWidth; x++ {
+			r.RenderColumn(buffer, x)
+		}
 	}
 	// Entities...
 }

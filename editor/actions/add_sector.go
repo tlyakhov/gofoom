@@ -53,7 +53,7 @@ func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
 	seg.HiMaterial = a.State().World.DefaultMaterial()
 	seg.LoMaterial = a.State().World.DefaultMaterial()
 	seg.MidMaterial = a.State().World.DefaultMaterial()
-	seg.P = a.WorldGrid(a.State().MouseDownWorld)
+	seg.P = *a.WorldGrid(&a.State().MouseDownWorld)
 
 	segs := a.Sector.Physical().Segments
 	if len(segs) > 0 {
@@ -73,7 +73,7 @@ func (a *AddSector) OnMouseMove() {
 
 	segs := a.Sector.Physical().Segments
 	seg := segs[len(segs)-1]
-	seg.P = a.WorldGrid(a.State().MouseWorld)
+	seg.P = *a.WorldGrid(&a.State().MouseWorld)
 }
 
 func (a *AddSector) OnMouseUp() {
@@ -83,7 +83,7 @@ func (a *AddSector) OnMouseUp() {
 	if len(segs) > 1 {
 		first := segs[0]
 		last := segs[len(segs)-1]
-		if last.P.Sub(first.P).Length() < state.SegmentSelectionEpsilon {
+		if last.P.Sub(&first.P).Length() < state.SegmentSelectionEpsilon {
 			a.Sector.Physical().Segments = segs[:(len(segs) - 1)]
 			provide.Passer.For(a.Sector).Recalculate()
 			a.State().Modified = true

@@ -15,7 +15,7 @@ func WallMid(s *state.Slice) {
 		if s.PhysicalSector.Winding < 0 {
 			u = 1.0 - u
 		}
-		u = (s.Segment.P.X + s.Segment.P.Y + u*s.Segment.Length) / 64.0
+		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
 
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
@@ -25,12 +25,15 @@ func WallMid(s *state.Slice) {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		s.Intersection.Z = (1.0-v)*s.CeilZ + v*s.FloorZ
-
-		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, v)
+		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.FloorZ
+		lightV := v
+		if s.PhysicalSector.FloorSlope != 0 || s.PhysicalSector.CeilSlope != 0 {
+			lightV = 1.0 - (s.Intersection[2]-s.PhysicalSector.BottomZ)/(s.PhysicalSector.TopZ-s.PhysicalSector.BottomZ)
+		}
+		light := s.Light(&s.Intersection, s.U, lightV)
 
 		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
-			v = s.Intersection.Z / 64.0
+			v = s.Intersection[2] / 64.0
 		}
 
 		//fmt.Printf("%v\n", screenIndex)

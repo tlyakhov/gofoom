@@ -19,8 +19,8 @@ func NewPhysicalSectorService(s *core.PhysicalSector) *PhysicalSectorService {
 }
 
 func (s *PhysicalSectorService) OnEnter(e core.AbstractEntity) {
-	if s.FloorTarget == nil && e.Physical().Pos.Z <= e.GetSector().Physical().BottomZ {
-		e.Physical().Pos.Z = e.GetSector().Physical().BottomZ
+	if s.FloorTarget == nil && e.Physical().Pos[2] <= e.GetSector().Physical().BottomZ {
+		e.Physical().Pos[2] = e.GetSector().Physical().BottomZ
 	}
 }
 
@@ -29,7 +29,7 @@ func (s *PhysicalSectorService) OnExit(e core.AbstractEntity) {
 
 func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 	concrete := e.Physical()
-	entityTop := concrete.Pos.Z + concrete.Height
+	entityTop := concrete.Pos[2] + concrete.Height
 	floorZ, ceilZ := s.CalcFloorCeilingZ(concrete.Pos.To2D())
 
 	if s.FloorTarget != nil && entityTop < floorZ {
@@ -37,12 +37,12 @@ func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 		concrete.Sector = s.FloorTarget
 		provide.Passer.For(concrete.Sector).OnEnter(e)
 		floorZ, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.To2D())
-		concrete.Pos.Z = ceilZ - concrete.Height - 1.0
-	} else if s.FloorTarget != nil && concrete.Pos.Z <= floorZ && concrete.Vel.Z > 0 {
-		concrete.Vel.Z = constants.PlayerJumpStrength
-	} else if s.FloorTarget == nil && concrete.Pos.Z <= floorZ {
-		concrete.Vel.Z = 0
-		concrete.Pos.Z = floorZ
+		concrete.Pos[2] = ceilZ - concrete.Height - 1.0
+	} else if s.FloorTarget != nil && concrete.Pos[2] <= floorZ && concrete.Vel[2] > 0 {
+		concrete.Vel[2] = constants.PlayerJumpStrength
+	} else if s.FloorTarget == nil && concrete.Pos[2] <= floorZ {
+		concrete.Vel[2] = 0
+		concrete.Pos[2] = floorZ
 		//fmt.Printf("%v\n", concrete.Pos)
 	}
 
@@ -51,10 +51,10 @@ func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 		concrete.Sector = s.CeilTarget
 		provide.Passer.For(concrete.Sector).OnEnter(e)
 		floorZ, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.To2D())
-		concrete.Pos.Z = floorZ - concrete.Height + 1.0
+		concrete.Pos[2] = floorZ - concrete.Height + 1.0
 	} else if s.CeilTarget == nil && entityTop > ceilZ {
-		concrete.Vel.Z = 0
-		concrete.Pos.Z = ceilZ - concrete.Height - 1.0
+		concrete.Vel[2] = 0
+		concrete.Pos[2] = ceilZ - concrete.Height - 1.0
 	}
 }
 
@@ -64,17 +64,17 @@ func (s *PhysicalSectorService) ActOnEntity(e core.AbstractEntity) {
 	}
 
 	if e.GetBase().ID == s.Map.Player.GetBase().ID {
-		e.Physical().Vel.X /= 1.2
-		e.Physical().Vel.Y /= 1.2
-		if math.Abs(e.Physical().Vel.X) < 0.0001 {
-			e.Physical().Vel.X = 0
+		e.Physical().Vel[0] /= 1.2
+		e.Physical().Vel[1] /= 1.2
+		if math.Abs(e.Physical().Vel[0]) < 0.0001 {
+			e.Physical().Vel[0] = 0
 		}
-		if math.Abs(e.Physical().Vel.Y) < 0.0001 {
-			e.Physical().Vel.Y = 0
+		if math.Abs(e.Physical().Vel[1]) < 0.0001 {
+			e.Physical().Vel[1] = 0
 		}
 	}
 
-	e.Physical().Vel.Z -= constants.Gravity * e.Physical().Weight
+	e.Physical().Vel[2] -= constants.Gravity * e.Physical().Weight
 
 	s.Collide(e)
 }
@@ -114,11 +114,11 @@ func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
 			}
 			// We make two lines on either side and see if there is a segment that intersects both of them
 			// (which means vseg is fully occluded from oseg)
-			l1a := oseg.P
-			l1b := vseg.P
-			l2a := oseg.Next.P
-			l2b := vseg.Next.P
-			sameFacing := oseg.Normal.Dot(vseg.Normal) >= 0
+			l1a := &oseg.P
+			l1b := &vseg.P
+			l2a := &oseg.Next.P
+			l2b := &vseg.Next.P
+			sameFacing := oseg.Normal.Dot(&vseg.Normal) >= 0
 			if !sameFacing {
 				l1b, l2b = l2b, l1b
 			}
@@ -133,11 +133,11 @@ func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
 					if iseg.AdjacentSector != nil {
 						continue
 					}
-					_, isect1 := iseg.Intersect2D(l1a, l1b)
+					isect1 := iseg.Intersect2D(l1a, l1b, &concepts.Vector2{})
 					if !isect1 {
 						continue
 					}
-					_, isect2 := iseg.Intersect2D(l2a, l2b)
+					isect2 := iseg.Intersect2D(l2a, l2b, &concepts.Vector2{})
 					if isect2 {
 						occluded = true
 						break
@@ -184,7 +184,7 @@ func (s *PhysicalSectorService) buildPVS(visitor core.AbstractSector) {
 			continue
 		}
 
-		if adj.Physical().Min.Z >= s.PhysicalSector.Max.Z || adj.Physical().Max.Z <= s.PhysicalSector.Min.Z {
+		if adj.Physical().Min[2] >= s.PhysicalSector.Max[2] || adj.Physical().Max[2] <= s.PhysicalSector.Min[2] {
 			continue
 		}
 
@@ -192,7 +192,7 @@ func (s *PhysicalSectorService) buildPVS(visitor core.AbstractSector) {
 	}
 }
 
-func (s *PhysicalSectorService) updateEntityPVS(normal concepts.Vector2, visitor core.AbstractSector) {
+func (s *PhysicalSectorService) updateEntityPVS(normal *concepts.Vector2, visitor core.AbstractSector) {
 	if visitor == nil {
 		s.PVSEntity = make(map[string]core.AbstractSector)
 		s.PVSEntity[s.ID] = s.PhysicalSector
@@ -204,7 +204,7 @@ func (s *PhysicalSectorService) updateEntityPVS(normal concepts.Vector2, visitor
 		if adj == nil || adj.MidMaterial != nil {
 			continue
 		}
-		correctSide := normal.Zero() || normal.Dot(seg.Normal) >= 0
+		correctSide := normal.Zero() || normal.Dot(&seg.Normal) >= 0
 		if !correctSide || s.PVSEntity[adj.Sector.GetBase().ID] != nil {
 			continue
 		}
@@ -212,7 +212,7 @@ func (s *PhysicalSectorService) updateEntityPVS(normal concepts.Vector2, visitor
 		s.PVSEntity[seg.AdjacentSector.GetBase().ID] = seg.AdjacentSector
 
 		if normal.Zero() {
-			s.updateEntityPVS(seg.Normal, seg.AdjacentSector)
+			s.updateEntityPVS(&seg.Normal, seg.AdjacentSector)
 		} else {
 			s.updateEntityPVS(normal, seg.AdjacentSector)
 		}
@@ -221,8 +221,7 @@ func (s *PhysicalSectorService) updateEntityPVS(normal concepts.Vector2, visitor
 
 func (s *PhysicalSectorService) UpdatePVS() {
 	s.buildPVS(nil)
-	s.updateEntityPVS(concepts.Vector2{}, nil)
-	s.ClearLightmaps()
+	s.updateEntityPVS(&concepts.Vector2{}, nil)
 }
 
 func (s *PhysicalSectorService) Recalculate() {

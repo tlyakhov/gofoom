@@ -50,7 +50,7 @@ func (a *Select) OnMouseUp() {
 	if len(hovering) == 0 { // User is trying to select a sector?
 		hovering = []concepts.ISerializable{}
 		for _, sector := range a.State().World.Sectors {
-			if sector.IsPointInside2D(a.State().MouseWorld) {
+			if sector.IsPointInside2D(&a.State().MouseWorld) {
 				hovering = append(hovering, sector)
 			}
 		}

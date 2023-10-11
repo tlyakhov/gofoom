@@ -17,7 +17,8 @@ func (g *Grid) fieldVector2(index int, field *pgField) {
 		if i != 0 {
 			origValue += ", "
 		}
-		origValue += v.Elem().Interface().(concepts.Vector2).String()
+		vec := v.Elem().Interface().(concepts.Vector2)
+		origValue += vec.String()
 	}
 
 	box, _ := gtk.EntryNew()

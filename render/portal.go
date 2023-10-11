@@ -15,7 +15,7 @@ func WallHi(s *state.SlicePortal) {
 		if s.PhysicalSector.Winding < 0 {
 			u = 1.0 - u
 		}
-		u = (s.Segment.P.X + s.Segment.P.Y + u*s.Segment.Length) / 64.0
+		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
 
 	for s.Y = s.ClippedStart; s.Y < s.AdjClippedTop; s.Y++ {
@@ -24,12 +24,12 @@ func WallHi(s *state.SlicePortal) {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
-		s.Intersection.Z = (1.0-v)*s.CeilZ + v*s.AdjCeilZ
+		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.AdjCeilZ
 		lightV := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, lightV)
+		light := s.Light(&s.Intersection, s.U, lightV)
 
 		if s.Segment.HiBehavior == core.ScaleWidth || s.Segment.HiBehavior == core.ScaleNone {
-			v = s.Intersection.Z / 64.0
+			v = s.Intersection[2] / 64.0
 		}
 
 		if mat != nil {
@@ -47,7 +47,7 @@ func WallLow(s *state.SlicePortal) {
 		if s.PhysicalSector.Winding < 0 {
 			u = 1.0 - u
 		}
-		u = (s.Segment.P.X + s.Segment.P.Y + u*s.Segment.Length) / 64.0
+		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
 	for s.Y = s.AdjClippedBottom; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
@@ -55,12 +55,12 @@ func WallLow(s *state.SlicePortal) {
 			continue
 		}
 		v := float64(s.Y-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
-		s.Intersection.Z = (1.0-v)*s.AdjFloorZ + v*s.FloorZ
+		s.Intersection[2] = (1.0-v)*s.AdjFloorZ + v*s.FloorZ
 		lightV := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		light := s.Light(s.Intersection, s.Segment.Normal.To3D(), s.U, lightV)
+		light := s.Light(&s.Intersection, s.U, lightV)
 
 		if s.Segment.LoBehavior == core.ScaleWidth || s.Segment.LoBehavior == core.ScaleNone {
-			v = s.Intersection.Z / 64.0
+			v = s.Intersection[2] / 64.0
 		}
 
 		if mat != nil {

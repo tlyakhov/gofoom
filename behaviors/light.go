@@ -22,7 +22,7 @@ func init() {
 func (l *Light) Initialize() {
 	l.AnimatedBehavior.Initialize()
 
-	l.Diffuse = concepts.V3(1, 1, 1)
+	l.Diffuse = concepts.Vector3{1, 1, 1}
 	l.Strength = 2
 	l.Attenuation = 0.4
 }
@@ -34,11 +34,11 @@ func (l *Light) Frame(lastFrameTime float64) {
 		return
 	}
 
-	pos := l.Entity.Physical().Pos
+	/*pos := l.Entity.Physical().Pos
 	if pos != l.LastPos {
 		l.Entity.Physical().Map.ClearLightmaps()
 	}
-	l.LastPos = pos
+	l.LastPos = pos*/
 }
 
 func (l *Light) Deserialize(data map[string]interface{}) {

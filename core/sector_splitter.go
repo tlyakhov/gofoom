@@ -57,13 +57,13 @@ type splitEdgeByStart []*splitEdge
 func (edges splitEdgeByStart) Len() int      { return len(edges) }
 func (edges splitEdgeByStart) Swap(i, j int) { edges[i], edges[j] = edges[j], edges[i] }
 func (edges splitEdgeByStart) Less(i, j int) bool {
-	return edges[i].signedDist(edges[i].Splitter1, edges[i].Splitter2, edges[i].Start) < edges[j].signedDist(edges[j].Splitter1, edges[j].Splitter2, edges[j].Start)
+	return edges[i].signedDist(&edges[i].Splitter1, &edges[i].Splitter2, &edges[i].Start) < edges[j].signedDist(&edges[j].Splitter1, &edges[j].Splitter2, &edges[j].Start)
 }
 
-func (a *SectorSplitter) whichSide(l1, l2, p concepts.Vector2) splitSide {
+func (a *SectorSplitter) whichSide(l1, l2, p *concepts.Vector2) splitSide {
 	ld := l2.Sub(l1)
 	pd := p.Sub(l1)
-	d := pd.X*ld.Y - pd.Y*ld.X
+	d := pd[0]*ld[1] - pd[1]*ld[0]
 
 	if d > 0.000001 {
 		return sideRight
@@ -73,7 +73,7 @@ func (a *SectorSplitter) whichSide(l1, l2, p concepts.Vector2) splitSide {
 	return sideOn
 }
 
-func (a *SectorSplitter) signedDist(l1, l2, p concepts.Vector2) float64 {
+func (a *SectorSplitter) signedDist(l1, l2, p *concepts.Vector2) float64 {
 	return l2.Sub(l1).Dot(p.Sub(l1))
 }
 
@@ -111,8 +111,8 @@ func (a *SectorSplitter) splitEdges() {
 		}
 		segment := a.Sector.Physical().Segments[i]
 		next := a.Sector.Physical().Segments[j]
-		edgeStartSide := a.whichSide(a.Splitter1, a.Splitter2, segment.P)
-		edgeEndSide := a.whichSide(a.Splitter1, a.Splitter2, next.P)
+		edgeStartSide := a.whichSide(&a.Splitter1, &a.Splitter2, &segment.P)
+		edgeEndSide := a.whichSide(&a.Splitter1, &a.Splitter2, &next.P)
 		se := &splitEdge{SectorSplitter: a, Source: segment, Start: segment.P, Side: edgeStartSide}
 		a.SplitSector = append(a.SplitSector, se)
 		// fmt.Printf("Added %v to SplitSector...\n", se.String())
@@ -121,14 +121,14 @@ func (a *SectorSplitter) splitEdges() {
 			a.EdgesOnLine = append(a.EdgesOnLine, se)
 			// fmt.Printf("Edge on line!\n")
 		} else if edgeStartSide != edgeEndSide && edgeEndSide != sideOn {
-			isect, ok := concepts.Intersect(segment.P, next.P, a.Splitter1, a.Splitter2)
+			isect, ok := concepts.Intersect(&segment.P, &next.P, &a.Splitter1, &a.Splitter2)
 			// fmt.Printf("Edge intersects at %v\n", isect.String())
 			if !ok {
 				// The splitter line is not fully bisecting the sector. Ignore, and continue.
 				// fmt.Println("Splitter not bisecting sector.")
 				continue
 			}
-			se := &splitEdge{SectorSplitter: a, Source: segment, Start: isect, Side: sideOn}
+			se := &splitEdge{SectorSplitter: a, Source: segment, Start: *isect, Side: sideOn}
 			a.SplitSector = append(a.SplitSector, se)
 			a.EdgesOnLine = append(a.EdgesOnLine, se)
 		} else {
@@ -153,7 +153,7 @@ func (a *SectorSplitter) sortEdges() {
 	// fmt.Println("Sorted edges:")
 	// Compute the distance of each edge to the first one.
 	for _, edge := range a.EdgesOnLine {
-		edge.DistOnLine = edge.Start.Dist(a.EdgesOnLine[0].Start)
+		edge.DistOnLine = edge.Start.Dist(&a.EdgesOnLine[0].Start)
 		// fmt.Printf("%v\n", edge.String())
 	}
 }
@@ -308,7 +308,7 @@ func (a *SectorSplitter) collect() {
 		for _, added := range a.Result {
 			phys := added.Physical()
 			phys.Recalculate()
-			if phys.IsPointInside2D(e.Physical().Pos.To2D()) {
+			if phys.IsPointInside2D(&concepts.Vector2{e.Physical().Pos[0], e.Physical().Pos[1]}) {
 				phys.Entities[id] = e
 				e.SetParent(added)
 			}

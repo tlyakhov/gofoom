@@ -16,29 +16,29 @@ type MapViewGrid struct {
 	Surface *cairo.Surface
 }
 
-func (g *MapViewGrid) WorldGrid(p concepts.Vector2) concepts.Vector2 {
+func (g *MapViewGrid) WorldGrid(p *concepts.Vector2) *concepts.Vector2 {
 	if !g.Visible {
 		return p
 	}
 
-	down := g.Current.GridB.Sub(g.Current.GridA).Norm()
-	right := concepts.V2(down.Y, -down.X)
-	p = p.Sub(g.Current.GridA)
-	p = concepts.V2(p.X*down.Y-p.Y*down.X, -p.X*right.Y+p.Y*right.X)
-	p.X = math.Round(p.X/g.Current.Step) * g.Current.Step
-	p.Y = math.Round(p.Y/g.Current.Step) * g.Current.Step
-	p = concepts.V2(p.X*right.X+p.Y*down.X, p.X*right.Y+p.Y*down.Y)
-	p = p.Add(g.Current.GridA)
+	down := g.Current.GridB.Sub(&g.Current.GridA).Norm()
+	right := &concepts.Vector2{down[1], -down[0]}
+	p = p.Sub(&g.Current.GridA)
+	p[0], p[1] = p[0]*down[1]-p[1]*down[0], -p[0]*right[1]+p[1]*right[0]
+	p[0], p[1] = math.Round(p[0]/g.Current.Step)*g.Current.Step, math.Round(p[1]/g.Current.Step)*g.Current.Step
+	p[0], p[1] = p[0]*right[0]+p[1]*down[0], p[0]*right[1]+p[1]*down[1]
+	p = p.AddSelf(&g.Current.GridA)
 	return p
 }
 
-func (g *MapViewGrid) WorldGrid3D(p concepts.Vector3) concepts.Vector3 {
+func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
 	if !g.Visible {
 		return p
 	}
 
-	r := g.WorldGrid(p.To2D()).To3D()
-	r.Z = p.Z
+	r := &concepts.Vector3{}
+	g.WorldGrid(&concepts.Vector2{p[0], p[1]}).To3D(r)
+	r[2] = p[2]
 	return r
 }
 
@@ -69,36 +69,36 @@ func (g *MapViewGrid) Refresh(e *state.Edit, cr *cairo.Context) {
 	TransformContext(cr)
 	cr.SetSourceRGB(0.5, 0.5, 0.5)
 
-	down := g.Current.GridB.Sub(g.Current.GridA).Norm().Mul(g.Current.Step)
-	right := concepts.V2(down.Y, -down.X)
-	if math.Abs(down.X) > math.Abs(right.X) {
+	down := g.Current.GridB.Sub(&g.Current.GridA).Norm().Mul(g.Current.Step)
+	right := &concepts.Vector2{down[1], -down[0]}
+	if math.Abs(down[0]) > math.Abs(right[0]) {
 		down, right = right, down
 	}
-	if down.Y < 0 {
-		down.X = -down.X
-		down.Y = -down.Y
+	if down[1] < 0 {
+		down[0] = -down[0]
+		down[1] = -down[1]
 	}
-	if right.X < 0 {
-		right.X = -right.X
-		right.Y = -right.Y
+	if right[0] < 0 {
+		right[0] = -right[0]
+		right[1] = -right[1]
 	}
-	start := editor.ScreenToWorld(concepts.Vector2{})
-	end := editor.ScreenToWorld(editor.Size)
+	start := editor.ScreenToWorld(&concepts.Vector2{})
+	end := editor.ScreenToWorld(&editor.Size)
 	qstart := g.WorldGrid(start)
 	qend := g.WorldGrid(end)
 	delta := qend.Sub(qstart).Mul(1.0 / g.Current.Step).Floor()
-	qstart = qstart.Sub(right.Mul(delta.X)).Sub(down.Mul(delta.Y))
-	// qend = qend.Add(right.Mul(delta.X)).Add(down.Mul(delta.Y))
+	qstart = qstart.Sub(right.Mul(delta[0])).Sub(down.Mul(delta[1]))
+	// qend = qend.Add(right.Mul(delta[0])).Add(down.Mul(delta[1]))
 
 	d := 3.0 / (g.Current.Scale + 1)
 
-	for x := 0.0; x < delta.X*3; x++ {
-		for y := 0.0; y < delta.Y*3; y++ {
+	for x := 0.0; x < delta[0]*3; x++ {
+		for y := 0.0; y < delta[1]*3; y++ {
 			pos := qstart.Add(right.Mul(x)).Add(down.Mul(y))
-			if pos.X < start.X || pos.X > end.X || pos.Y < start.Y || pos.Y > end.Y {
+			if pos[0] < start[0] || pos[0] > end[0] || pos[1] < start[1] || pos[1] > end[1] {
 				continue
 			}
-			cr.Rectangle(pos.X-d*0.5, pos.Y-d*0.5, d, d)
+			cr.Rectangle(pos[0]-d*0.5, pos[1]-d*0.5, d, d)
 			cr.Fill()
 		}
 	}

@@ -23,8 +23,8 @@ func (s *UnderwaterService) ActOnEntity(e core.AbstractEntity) {
 		return
 	}
 
-	e.Physical().Vel = e.Physical().Vel.Mul(1.0 / constants.SwimDamping)
-	e.Physical().Vel.Z -= constants.GravitySwim
+	e.Physical().Vel.MulSelf(1.0 / constants.SwimDamping)
+	e.Physical().Vel[2] -= constants.GravitySwim
 
 	//if _, ok := e.(*LightEntity); ok {
 	//	return
