@@ -201,15 +201,15 @@ func (s *Segment) DistanceToPoint2(p *concepts.Vector2) float64 {
 	if l2 == 0 {
 		return p.Dist2(&s.P)
 	}
-	delta := s.Next.P.Sub(&s.P)
-	t := p.Sub(&s.P).Dot(delta) / l2
+	delta := &concepts.Vector2{s.Next.P[0] - s.P[0], s.Next.P[1] - s.P[1]}
+	t := (&concepts.Vector2{p[0], p[1]}).SubSelf(&s.P).Dot(delta) / l2
 	if t < 0 {
 		return p.Dist2(&s.P)
 	}
 	if t > 1 {
 		return p.Dist2(&s.Next.P)
 	}
-	return p.Dist2(s.P.Add(delta.Mul(t)))
+	return p.Dist2(delta.MulSelf(t).AddSelf(&s.P))
 }
 
 func (s *Segment) DistanceToPoint(p *concepts.Vector2) float64 {
@@ -253,8 +253,8 @@ func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
 func (s *Segment) LightmapAddressToWorld(mapIndex uint32) *concepts.Vector3 {
 	lu := (mapIndex % s.LightmapWidth) - constants.LightSafety
 	lv := (mapIndex / s.LightmapWidth) - constants.LightSafety
-	u := (float64(lu) + 0.0) / float64(s.LightmapWidth-(constants.LightSafety*2))
-	v := (float64(lv) + 0.0) / float64(s.LightmapHeight-(constants.LightSafety*2))
+	u := (float64(lu) + 0.5) / float64(s.LightmapWidth-(constants.LightSafety*2))
+	v := (float64(lv) + 0.5) / float64(s.LightmapHeight-(constants.LightSafety*2))
 	return s.UVToWorld(u, v)
 }
 

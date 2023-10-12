@@ -19,7 +19,7 @@ type LightElement struct {
 
 func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 	result := &le.Lightmap[le.MapIndex]
-	if le.LightmapAge[le.MapIndex]+4 >= le.Config.Frame || rand.Uint32()%8 > 0 {
+	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame || rand.Uint32()%constants.LightmapRefreshDither > 0 {
 		return result
 	}
 
@@ -41,28 +41,34 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 }
 
 // allContainingSectors returns all sectors current/adjacent that include a given world location
-func (le *LightElement) allContainingSectors(p *concepts.Vector3, startingSector *core.PhysicalSector) []*core.PhysicalSector {
+func (le *LightElement) allSourceSectors(p *concepts.Vector3, startingSector *core.PhysicalSector) []*core.PhysicalSector {
 	le.allSectors = le.allSectors[:0]
 	// Always check the current sector
 	le.allSectors = append(le.allSectors, startingSector)
 	for _, seg := range startingSector.Segments {
-		if seg.AdjacentSector == nil || !seg.AdjacentSector.IsPointInside2D(p.To2D()) {
+		if seg.AdjacentSector == nil {
 			continue
 		}
+		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
+		if d2 > constants.LightGrid*constants.LightGrid {
+			continue
+		}
+
 		floorZ, ceilZ := seg.AdjacentSector.Physical().CalcFloorCeilingZ(p.To2D())
 		if ceilZ-floorZ <= constants.IntersectEpsilon {
 			continue
 		}
 		le.allSectors = append(le.allSectors, seg.AdjacentSector.Physical())
 	}
+
 	return le.allSectors
 }
 
 // lightVisible determines whether a given light is visible from a world location.
 func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity) bool {
-	allSectors := le.allContainingSectors(p, le.PhysicalSector)
+	allSectors := le.allSourceSectors(p, le.PhysicalSector)
 	for _, sector := range allSectors {
-		if le.lightVisibleEx(p, e, sector) {
+		if le.lightVisibleFromSector(p, e, sector) {
 			return true
 		}
 	}
@@ -70,7 +76,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity
 }
 
 // lightVisibleEx determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisibleEx(p *concepts.Vector3, e *core.PhysicalEntity, sector *core.PhysicalSector) bool {
+func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.PhysicalEntity, sector *core.PhysicalSector) bool {
 	debugSectorID := "lower" // "be4bqmfvn27mek306btg"
 	debugWallCheck := le.Normal[2] == 0
 	if constants.DebugLighting && debugWallCheck && sector.ID == debugSectorID {

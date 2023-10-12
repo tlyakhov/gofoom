@@ -11,8 +11,10 @@ const (
 	FieldOfView             = 90
 	DebugLevel              = 1
 	CollisionSteps          = 10
+	MaxLightmapAge          = 4 // in frames
+	LightmapRefreshDither   = 8 // in frames
 	RenderMultiThreaded     = true
-	DebugLighting           = true
+	DebugLighting           = false
 
 	// Audio constants
 	SourcesPerSound  = 8
