@@ -2,6 +2,7 @@ package state
 
 import (
 	"math"
+	"sync"
 
 	"tlyakhov/gofoom/concepts"
 )
@@ -18,6 +19,7 @@ type Config struct {
 	ViewRadians               []float64
 	ViewFix                   []float64
 	ZBuffer                   []float64
+	MaterialServiceCache      sync.Map
 }
 
 func (c *Config) Initialize() {
@@ -32,5 +34,4 @@ func (c *Config) Initialize() {
 	}
 
 	c.ZBuffer = make([]float64, c.ScreenWidth*c.ScreenHeight)
-
 }

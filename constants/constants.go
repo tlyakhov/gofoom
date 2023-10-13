@@ -3,8 +3,8 @@ package constants
 const (
 	// Rendering constants
 	IntersectEpsilon        = 1e-10
-	LightGrid               = 8
-	LightSafety             = 4
+	LightGrid               = 4
+	LightSafety             = 2
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.001
 	MaxViewDistance         = 1000000.0

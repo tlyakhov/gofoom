@@ -105,7 +105,8 @@ func (s *Slice) Light(world *concepts.Vector3, u, v float64) *concepts.Vector3 {
 		le10.MapIndex = le00.MapIndex + 1
 		le11.MapIndex = le10.MapIndex + s.PhysicalSector.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
-		q := s.PhysicalSector.ToLightmapWorld(&concepts.Vector3{world[0], world[1], world[2]}, s.Normal[2] > 0)
+		q := &concepts.Vector3{world[0], world[1], world[2]}
+		s.PhysicalSector.ToLightmapWorld(q, s.Normal[2] > 0)
 		wu = 1.0 - (world[0]-q[0])/constants.LightGrid
 		wv = 1.0 - (world[1]-q[1])/constants.LightGrid
 	} else {
