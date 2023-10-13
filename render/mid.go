@@ -2,14 +2,12 @@ package render
 
 import (
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/render/material"
 	"tlyakhov/gofoom/render/state"
 )
 
 // WallMid renders the wall portion of a non-portal segment.
 func WallMid(s *state.Slice) {
-	mat := material.For(s.Segment.MidMaterial, s)
-
+	mat := s.Segment.MidMaterial
 	u := s.U
 	if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleNone {
 		if s.PhysicalSector.Winding < 0 {
@@ -38,7 +36,7 @@ func WallMid(s *state.Slice) {
 
 		//fmt.Printf("%v\n", screenIndex)
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(u, v, light, s.ProjectZ(1.0)))
+			s.Write(screenIndex, s.SampleMaterial(mat, u, v, light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}

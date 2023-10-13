@@ -4,13 +4,12 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/render/material"
 	"tlyakhov/gofoom/render/state"
 )
 
 // Floor renders the floor portion of a slice.
 func Floor(s *state.Slice) {
-	mat := material.For(s.PhysicalSector.FloorMaterial, s)
+	mat := s.PhysicalSector.FloorMaterial
 
 	// Because of our sloped floors, we can't use simple linear interpolation to calculate the distance
 	// or world position of the floor sample, we have to do a ray-plane intersection.
@@ -49,7 +48,7 @@ func Floor(s *state.Slice) {
 		}
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, 0, 0), scaler))
+			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(world, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor
 	}

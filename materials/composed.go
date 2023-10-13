@@ -44,6 +44,14 @@ func (m *LitSampled) Serialize() map[string]interface{} {
 	return result
 }
 
+func (m *LitSampled) Sample(u, v float64, light *concepts.Vector3, scale float64) uint32 {
+	surface := concepts.Int32ToVector3(m.Sampled.Sample(u, v, light, scale))
+	amb := *light
+	amb.AddSelf(&m.Ambient)
+	sum := (&surface).Mul3Self(&m.Diffuse).Mul3Self(&amb).ClampSelf(0.0, 255.0)
+	return sum.ToInt32Color()
+}
+
 type PainfulLitSampled struct {
 	LitSampled `editable:"^"`
 	Painful    `editable:"^"`

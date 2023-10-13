@@ -40,3 +40,8 @@ func (m *Lit) Serialize() map[string]interface{} {
 	result["Diffuse"] = m.Diffuse.Serialize()
 	return result
 }
+
+func (m *Lit) Sample(u, v float64, light *concepts.Vector3, scale float64) uint32 {
+	sum := m.Diffuse.Mul3(light.Add(&m.Ambient)).Mul(255.0).Clamp(0.0, 255.0)
+	return sum.ToInt32Color()
+}

@@ -10,7 +10,7 @@ type Map struct {
 	concepts.Base
 
 	Sectors        map[string]AbstractSector
-	Materials      map[string]concepts.ISerializable `editable:"Materials" edit_type:"Material"`
+	Materials      map[string]Sampleable `editable:"Materials" edit_type:"Material"`
 	Player         AbstractEntity
 	Spawn          concepts.Vector3 `editable:"Spawn"`
 	EntitiesPaused bool
@@ -31,7 +31,7 @@ func (m *Map) Recalculate() {
 
 func (m *Map) Initialize() {
 	m.Spawn = concepts.Vector3{}
-	m.Materials = make(map[string]concepts.ISerializable)
+	m.Materials = make(map[string]Sampleable)
 	m.Sectors = make(map[string]AbstractSector)
 }
 
@@ -75,7 +75,7 @@ func (m *Map) Serialize() map[string]interface{} {
 	return result
 }
 
-func (m *Map) DefaultMaterial() concepts.ISerializable {
+func (m *Map) DefaultMaterial() Sampleable {
 	if def, ok := m.Materials["Default"]; ok {
 		return def
 	}
