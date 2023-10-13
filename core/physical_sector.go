@@ -323,17 +323,18 @@ func (s *PhysicalSector) ToLightmapWorld(p *concepts.Vector3, floor bool) *conce
 	return lw
 }
 
-func (s *PhysicalSector) LightmapAddressToWorld(mapIndex uint32, floor bool) *concepts.Vector3 {
+func (s *PhysicalSector) LightmapAddressToWorld(r *concepts.Vector3, mapIndex uint32, floor bool) *concepts.Vector3 {
 	u := int(mapIndex%s.LightmapWidth) - constants.LightSafety
 	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
-	r := concepts.Vector3{s.Min[0] + (float64(u)+0.0)*constants.LightGrid, s.Min[1] + (float64(v)+0.0)*constants.LightGrid, 0}
+	r[0] = s.Min[0] + (float64(u)+0.0)*constants.LightGrid
+	r[1] = s.Min[1] + (float64(v)+0.0)*constants.LightGrid
 	floorZ, ceilZ := s.CalcFloorCeilingZ(r.To2D())
 	if floor {
 		r[2] = floorZ
 	} else {
 		r[2] = ceilZ
 	}
-	return &r
+	return r
 }
 
 func (s *PhysicalSector) SetParent(parent interface{}) {

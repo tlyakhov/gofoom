@@ -244,18 +244,20 @@ func (s *Segment) LightmapAddress(u, v float64) uint32 {
 	return uint32(dy)*s.LightmapWidth + uint32(dx)
 }
 
-func (s *Segment) UVToWorld(u, v float64) *concepts.Vector3 {
-	result := &concepts.Vector3{s.Next.P[0], s.Next.P[1], v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ}
+func (s *Segment) UVToWorld(result *concepts.Vector3, u, v float64) *concepts.Vector3 {
+	result[0] = s.Next.P[0]
+	result[1] = s.Next.P[1]
+	result[2] = v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ
 	result.To2D().SubSelf(&s.P).MulSelf(u).AddSelf(&s.P)
 	return result
 }
 
-func (s *Segment) LightmapAddressToWorld(mapIndex uint32) *concepts.Vector3 {
+func (s *Segment) LightmapAddressToWorld(result *concepts.Vector3, mapIndex uint32) *concepts.Vector3 {
 	lu := (mapIndex % s.LightmapWidth) - constants.LightSafety
 	lv := (mapIndex / s.LightmapWidth) - constants.LightSafety
 	u := (float64(lu) + 0.5) / float64(s.LightmapWidth-(constants.LightSafety*2))
 	v := (float64(lv) + 0.5) / float64(s.LightmapHeight-(constants.LightSafety*2))
-	return s.UVToWorld(u, v)
+	return s.UVToWorld(result, u, v)
 }
 
 func (s *Segment) Deserialize(data map[string]interface{}) {

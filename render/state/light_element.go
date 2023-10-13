@@ -17,18 +17,29 @@ type LightElement struct {
 	allSectors []*core.PhysicalSector
 }
 
+var lightmapDither []uint32
+var lightmapDitherOffset int
+
 func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 	result := &le.Lightmap[le.MapIndex]
-	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame || rand.Uint32()%constants.LightmapRefreshDither > 0 {
+	if len(lightmapDither) == 0 {
+		lightmapDither = make([]uint32, 0)
+		for i := 0; i < 256; i++ {
+			lightmapDither = append(lightmapDither, rand.Uint32())
+		}
+	}
+	lightmapDitherOffset++
+	ld := lightmapDither[lightmapDitherOffset%len(lightmapDither)]
+	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame || ld%constants.LightmapRefreshDither > 0 {
 		return result
 	}
 
-	var q *concepts.Vector3
+	var q = &concepts.Vector3{}
 	if !wall {
-		q = le.PhysicalSector.LightmapAddressToWorld(le.MapIndex, le.Normal[2] > 0)
+		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
 	} else {
 		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.ID, le.MapIndex, le.Segment.ID)
-		q = le.Segment.LightmapAddressToWorld(le.MapIndex)
+		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
 	}
 	*result = le.Calculate(q)
 	/*dbg := q.Mul(1.0 / 64.0)

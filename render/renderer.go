@@ -3,6 +3,7 @@ package render
 import (
 	"fmt"
 	"math"
+	"sync"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -31,6 +32,7 @@ func NewRenderer() *Renderer {
 		},
 		columns: make(chan int),
 	}
+
 	r.Initialize()
 	return &r
 }
@@ -169,6 +171,8 @@ func (r *Renderer) Render(buffer []uint8) {
 	}
 	r.Map.RenderLock.Lock()
 	defer r.Map.RenderLock.Unlock()
+
+	r.Config.MaterialServiceCache = sync.Map{}
 
 	r.Frame++
 	r.Counter = 0
