@@ -39,3 +39,16 @@ func (m *Sampled) Serialize() map[string]interface{} {
 	result["Texture"] = m.Sampler.Serialize()
 	return result
 }
+
+func (m *Sampled) Sample(u, v float64, light *concepts.Vector3, scale float64) uint32 {
+	for ; u < 0; u++ {
+	}
+	for ; u > 1; u-- {
+	}
+	for ; v < 0; v++ {
+	}
+	for ; v > 1; v-- {
+	}
+
+	return m.Sampler.Sample(u, v, scale)
+}

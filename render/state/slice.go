@@ -6,6 +6,7 @@ import (
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/materials"
 )
 
 type Ray struct {
@@ -79,6 +80,31 @@ func (s *Slice) Write(screenIndex uint32, c uint32) {
 	s.RenderTarget[screenIndex*4+3] = uint8(c & 0xFF)
 }
 
+func (s *Slice) SampleMaterial(m core.Sampleable, u, v float64, light *concepts.Vector3, scale float64) uint32 {
+	if sampled, ok := m.(*materials.Sampled); ok {
+		if sampled.IsLiquid {
+			u += math.Cos(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
+			v += math.Sin(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
+		}
+	}
+
+	if sky, ok := m.(*materials.Sky); ok {
+		v = float64(s.Y) / (float64(s.ScreenHeight) - 1)
+
+		if sky.StaticBackground {
+			u = float64(s.X) / (float64(s.ScreenWidth) - 1)
+		} else {
+			u = s.Angle / (2.0 * math.Pi)
+			for ; u < 0; u++ {
+			}
+			for ; u > 1; u-- {
+			}
+		}
+	}
+
+	return m.Sample(u, v, light, scale)
+
+}
 func (s *Slice) Light(world *concepts.Vector3, u, v float64) *concepts.Vector3 {
 	//return s.LightUnfiltered(world, u, v)
 	//le := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}

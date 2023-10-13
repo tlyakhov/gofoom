@@ -2,14 +2,12 @@ package render
 
 import (
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/render/material"
 	"tlyakhov/gofoom/render/state"
 )
 
 // WallHi renders the top portion of a portal segment.
 func WallHi(s *state.SlicePortal) {
-	mat := material.For(s.AdjSegment.HiMaterial, s.Slice)
-
+	mat := s.AdjSegment.HiMaterial
 	u := s.U
 	if s.Segment.HiBehavior == core.ScaleHeight || s.Segment.HiBehavior == core.ScaleNone {
 		if s.PhysicalSector.Winding < 0 {
@@ -33,7 +31,7 @@ func WallHi(s *state.SlicePortal) {
 		}
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(u, v, light, s.ProjectZ(1.0)))
+			s.Write(screenIndex, s.SampleMaterial(mat, u, v, light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}
@@ -41,7 +39,7 @@ func WallHi(s *state.SlicePortal) {
 
 // WallLow renders the bottom portion of a portal segment.
 func WallLow(s *state.SlicePortal) {
-	mat := material.For(s.AdjSegment.LoMaterial, s.Slice)
+	mat := s.AdjSegment.LoMaterial
 	u := s.U
 	if s.Segment.LoBehavior == core.ScaleHeight || s.Segment.LoBehavior == core.ScaleNone {
 		if s.PhysicalSector.Winding < 0 {
@@ -64,7 +62,7 @@ func WallLow(s *state.SlicePortal) {
 		}
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(u, v, light, s.ProjectZ(1.0)))
+			s.Write(screenIndex, s.SampleMaterial(mat, u, v, light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}

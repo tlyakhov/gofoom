@@ -15,13 +15,13 @@ const (
 type Segment struct {
 	concepts.Base `editable:"^"`
 
-	P           concepts.Vector2       `editable:"X/Y"`
-	LoMaterial  concepts.ISerializable `editable:"Low Material" edit_type:"Material"`
-	MidMaterial concepts.ISerializable `editable:"Mid Material" edit_type:"Material"`
-	HiMaterial  concepts.ISerializable `editable:"High Material" edit_type:"Material"`
-	LoBehavior  MaterialBehavior       `editable:"Low Behavior"`
-	MidBehavior MaterialBehavior       `editable:"Mid Behavior"`
-	HiBehavior  MaterialBehavior       `editable:"High Behavior"`
+	P           concepts.Vector2 `editable:"X/Y"`
+	LoMaterial  Sampleable       `editable:"Low Material" edit_type:"Material"`
+	MidMaterial Sampleable       `editable:"Mid Material" edit_type:"Material"`
+	HiMaterial  Sampleable       `editable:"High Material" edit_type:"Material"`
+	LoBehavior  MaterialBehavior `editable:"Low Behavior"`
+	MidBehavior MaterialBehavior `editable:"Mid Behavior"`
+	HiBehavior  MaterialBehavior `editable:"High Behavior"`
 
 	AdjacentSector  AbstractSector
 	AdjacentSegment *Segment

@@ -2,6 +2,7 @@ package properties
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"sort"
 	"strings"
@@ -187,6 +188,8 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 			g.fieldEnum(index, field, core.CollisionResponseValues())
 		case *concepts.ISerializable:
 			g.fieldSerializable(index, field)
+		case *map[string]core.Sampleable:
+			log.Printf("Materials!\n")
 		}
 		index++
 	}

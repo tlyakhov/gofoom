@@ -15,16 +15,16 @@ type PhysicalSector struct {
 	Map           *Map
 	Segments      []*Segment
 	Entities      map[string]AbstractEntity
-	BottomZ       float64                `editable:"Floor Height"`
-	TopZ          float64                `editable:"Ceiling Height"`
-	FloorScale    float64                `editable:"Floor Material Scale"`
-	CeilScale     float64                `editable:"Ceiling Material Scale"`
-	FloorSlope    float64                `editable:"Floor Slope"`
-	CeilSlope     float64                `editable:"Ceiling Slope"`
-	FloorTarget   AbstractSector         `editable:"Floor Target"`
-	CeilTarget    AbstractSector         `editable:"Ceiling Target"`
-	FloorMaterial concepts.ISerializable `editable:"Floor Material" edit_type:"Material"`
-	CeilMaterial  concepts.ISerializable `editable:"Ceiling Material" edit_type:"Material"`
+	BottomZ       float64        `editable:"Floor Height"`
+	TopZ          float64        `editable:"Ceiling Height"`
+	FloorScale    float64        `editable:"Floor Material Scale"`
+	CeilScale     float64        `editable:"Ceiling Material Scale"`
+	FloorSlope    float64        `editable:"Floor Slope"`
+	CeilSlope     float64        `editable:"Ceiling Slope"`
+	FloorTarget   AbstractSector `editable:"Floor Target"`
+	CeilTarget    AbstractSector `editable:"Ceiling Target"`
+	FloorMaterial Sampleable     `editable:"Floor Material" edit_type:"Material"`
+	CeilMaterial  Sampleable     `editable:"Ceiling Material" edit_type:"Material"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3

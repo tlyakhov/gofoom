@@ -4,13 +4,12 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/render/material"
 	"tlyakhov/gofoom/render/state"
 )
 
 // Ceiling renders the ceiling portion of a slice.
 func Ceiling(s *state.Slice) {
-	mat := material.For(s.PhysicalSector.CeilMaterial, s)
+	mat := s.PhysicalSector.CeilMaterial
 
 	// Because of our sloped ceilings, we can't use simple linear interpolation to calculate the distance
 	// or world position of the ceiling sample, we have to do a ray-plane intersection.
@@ -45,7 +44,7 @@ func Ceiling(s *state.Slice) {
 		ty = math.Abs(ty)
 
 		if mat != nil {
-			s.Write(screenIndex, mat.Sample(tx, ty, s.Light(world, 0, 0), scaler))
+			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(world, 0, 0), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToCeil
 	}

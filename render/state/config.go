@@ -7,10 +7,6 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-type trigEntry struct {
-	sin, cos float64
-}
-
 type Config struct {
 	ScreenWidth, ScreenHeight int
 	Frame, Counter            int
