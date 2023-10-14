@@ -1,6 +1,7 @@
 package render
 
 import (
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/render/state"
 )
@@ -15,7 +16,7 @@ func WallMid(s *state.Slice) {
 		}
 		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
-
+	light := concepts.Vector3{}
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
@@ -28,7 +29,7 @@ func WallMid(s *state.Slice) {
 		if s.PhysicalSector.FloorSlope != 0 || s.PhysicalSector.CeilSlope != 0 {
 			lightV = 1.0 - (s.Intersection[2]-s.PhysicalSector.BottomZ)/(s.PhysicalSector.TopZ-s.PhysicalSector.BottomZ)
 		}
-		light := s.Light(&s.Intersection, s.U, lightV)
+		s.Light(&light, &s.Intersection, s.U, lightV)
 
 		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
 			v = s.Intersection[2] / 64.0
@@ -36,7 +37,7 @@ func WallMid(s *state.Slice) {
 
 		//fmt.Printf("%v\n", screenIndex)
 		if mat != nil {
-			s.Write(screenIndex, s.SampleMaterial(mat, u, v, light, s.ProjectZ(1.0)))
+			s.Write(screenIndex, s.SampleMaterial(mat, u, v, &light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}

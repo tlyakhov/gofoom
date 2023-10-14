@@ -1,6 +1,7 @@
 package render
 
 import (
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/render/state"
 )
@@ -15,7 +16,7 @@ func WallHi(s *state.SlicePortal) {
 		}
 		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
-
+	light := &concepts.Vector3{}
 	for s.Y = s.ClippedStart; s.Y < s.AdjClippedTop; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 		if s.Distance >= s.ZBuffer[screenIndex] {
@@ -24,7 +25,7 @@ func WallHi(s *state.SlicePortal) {
 		v := float64(s.Y-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
 		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.AdjCeilZ
 		lightV := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		light := s.Light(&s.Intersection, s.U, lightV)
+		s.Light(light, &s.Intersection, s.U, lightV)
 
 		if s.Segment.HiBehavior == core.ScaleWidth || s.Segment.HiBehavior == core.ScaleNone {
 			v = s.Intersection[2] / 64.0
@@ -47,6 +48,7 @@ func WallLow(s *state.SlicePortal) {
 		}
 		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
+	light := concepts.Vector3{}
 	for s.Y = s.AdjClippedBottom; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 		if s.Distance >= s.ZBuffer[screenIndex] {
@@ -55,14 +57,14 @@ func WallLow(s *state.SlicePortal) {
 		v := float64(s.Y-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
 		s.Intersection[2] = (1.0-v)*s.AdjFloorZ + v*s.FloorZ
 		lightV := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		light := s.Light(&s.Intersection, s.U, lightV)
+		s.Light(&light, &s.Intersection, s.U, lightV)
 
 		if s.Segment.LoBehavior == core.ScaleWidth || s.Segment.LoBehavior == core.ScaleNone {
 			v = s.Intersection[2] / 64.0
 		}
 
 		if mat != nil {
-			s.Write(screenIndex, s.SampleMaterial(mat, u, v, light, s.ProjectZ(1.0)))
+			s.Write(screenIndex, s.SampleMaterial(mat, u, v, &light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
 	}

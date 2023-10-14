@@ -3,7 +3,6 @@ package render
 import (
 	"fmt"
 	"math"
-	"sync"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -158,9 +157,18 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 	}
 
 	r.RenderSector(slice)
+}
+
+func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
+	for x := xStart; x < xEnd; x++ {
+		if x >= xEnd {
+			break
+		}
+		r.RenderColumn(buffer, x)
+	}
 
 	if constants.RenderMultiThreaded {
-		r.columns <- x
+		r.columns <- xStart
 	}
 }
 
@@ -172,17 +180,17 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.Map.RenderLock.Lock()
 	defer r.Map.RenderLock.Unlock()
 
-	r.Config.MaterialServiceCache = sync.Map{}
-
 	r.Frame++
 	r.Counter = 0
 
 	if constants.RenderMultiThreaded {
-		for x := 0; x < r.ScreenWidth; x++ {
-			go r.RenderColumn(buffer, x)
+		blockSize := r.ScreenWidth / 8
+		blocks := 8
+		for x := 0; x < blocks; x++ {
+			go r.RenderBlock(buffer, x*blockSize, x*blockSize+blockSize)
 		}
 
-		for x := 0; x < r.ScreenWidth; x++ {
+		for x := 0; x < blocks; x++ {
 			<-r.columns
 		}
 	} else {

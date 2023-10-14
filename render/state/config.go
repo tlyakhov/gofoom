@@ -2,8 +2,6 @@ package state
 
 import (
 	"math"
-	"sync"
-
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -15,7 +13,6 @@ type Config struct {
 	ViewRadians               []float64
 	ViewFix                   []float64
 	ZBuffer                   []float64
-	MaterialServiceCache      sync.Map
 }
 
 func (c *Config) Initialize() {

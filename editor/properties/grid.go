@@ -2,7 +2,6 @@ package properties
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"sort"
 	"strings"
@@ -189,7 +188,7 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 		case *concepts.ISerializable:
 			g.fieldSerializable(index, field)
 		case *map[string]core.Sampleable:
-			log.Printf("Materials!\n")
+			g.fieldMaterials(index, field)
 		}
 		index++
 	}

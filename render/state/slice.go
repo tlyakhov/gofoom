@@ -105,7 +105,7 @@ func (s *Slice) SampleMaterial(m core.Sampleable, u, v float64, light *concepts.
 	return m.Sample(u, v, light, scale)
 
 }
-func (s *Slice) Light(world *concepts.Vector3, u, v float64) *concepts.Vector3 {
+func (s *Slice) Light(result, world *concepts.Vector3, u, v float64) *concepts.Vector3 {
 	//return s.LightUnfiltered(world, u, v)
 	//le := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
 	//return le.Calculate(world, s.Segment)
@@ -161,14 +161,15 @@ func (s *Slice) Light(world *concepts.Vector3, u, v float64) *concepts.Vector3 {
 	if le01.MapIndex > lightmapLength-1 {
 		le01.MapIndex = lightmapLength - 1
 	}
-	r00 := *le00.Get(wall)
-	r10 := *le10.Get(wall)
-	r11 := *le11.Get(wall)
-	r01 := *le01.Get(wall)
-	return r00.MulSelf(wu * wv).
-		AddSelf(r10.MulSelf((1.0 - wu) * wv)).
-		AddSelf(r11.MulSelf((1.0 - wu) * (1.0 - wv))).
-		AddSelf(r01.MulSelf(wu * (1.0 - wv)))
+	r00 := le00.Get(wall)
+	r10 := le10.Get(wall)
+	r11 := le11.Get(wall)
+	r01 := le01.Get(wall)
+	result[0] = r00[0]*(wu*wv) + r10[0]*((1.0-wu)*wv) + r11[0]*(1.0-wu)*(1.0-wv) + r01[0]*wu*(1.0-wv)
+	result[1] = r00[1]*(wu*wv) + r10[1]*((1.0-wu)*wv) + r11[1]*(1.0-wu)*(1.0-wv) + r01[1]*wu*(1.0-wv)
+	result[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
+
+	return result
 }
 
 func (s *Slice) LightUnfiltered(world *concepts.Vector3, u, v float64) *concepts.Vector3 {

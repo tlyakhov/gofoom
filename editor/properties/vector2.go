@@ -39,7 +39,7 @@ func (g *Grid) fieldVector2(index int, field *pgField) {
 			g.Container.GrabFocus()
 			return
 		}
-		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(vec)}
+		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(vec).Elem()}
 		g.NewAction(action)
 		action.Act()
 		origValue = vec.String()
