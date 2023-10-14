@@ -3,7 +3,6 @@ package state
 import (
 	"log"
 	"math"
-	"math/rand"
 
 	"tlyakhov/gofoom/behaviors"
 	"tlyakhov/gofoom/concepts"
@@ -17,20 +16,9 @@ type LightElement struct {
 	allSectors []*core.PhysicalSector
 }
 
-var lightmapDither []uint32
-var lightmapDitherOffset int
-
 func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 	result := &le.Lightmap[le.MapIndex]
-	if len(lightmapDither) == 0 {
-		lightmapDither = make([]uint32, 0)
-		for i := 0; i < 256; i++ {
-			lightmapDither = append(lightmapDither, rand.Uint32())
-		}
-	}
-	lightmapDitherOffset++
-	ld := lightmapDither[lightmapDitherOffset%len(lightmapDither)]
-	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame || ld%constants.LightmapRefreshDither > 0 {
+	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame || concepts.RngXorShift64()%constants.LightmapRefreshDither > 0 {
 		return result
 	}
 

@@ -3,7 +3,7 @@ package constants
 const (
 	// Rendering constants
 	IntersectEpsilon        = 1e-10
-	LightGrid               = 4
+	LightGrid               = 5
 	LightSafety             = 2
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.001
@@ -11,7 +11,7 @@ const (
 	FieldOfView             = 90
 	DebugLevel              = 1
 	CollisionSteps          = 10
-	MaxLightmapAge          = 4 // in frames
+	MaxLightmapAge          = 3 // in frames
 	LightmapRefreshDither   = 8 // in frames
 	RenderMultiThreaded     = true
 	DebugLighting           = false

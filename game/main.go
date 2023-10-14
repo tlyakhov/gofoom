@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"runtime/debug"
 	"runtime/pprof"
 
 	_ "tlyakhov/gofoom/behaviors"
@@ -36,6 +37,7 @@ import (
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 
 func run() {
+	debug.SetGCPercent(2000)
 	if *cpuProfile != "" {
 		f, err := os.Create(*cpuProfile)
 		if err != nil {
@@ -44,14 +46,14 @@ func run() {
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
 	}
-	w := 640
-	h := 360
+	w := 1280
+	h := 720
 	cfg := pixelgl.WindowConfig{
-		Title:       "Foom",
-		Bounds:      pixel.R(0, 0, 1920, 1080),
-		VSync:       true,
-		Resizable:   true,
-		Undecorated: true,
+		Title:     "Foom",
+		Bounds:    pixel.R(0, 0, 3840, 2160),
+		VSync:     true,
+		Resizable: true,
+		//Undecorated: true,
 		//Monitor:     pixelgl.PrimaryMonitor(),
 	}
 	win, err := pixelgl.NewWindow(cfg)

@@ -1,0 +1,14 @@
+{
+  "gopls": {
+    "codelenses": {
+      "gc_details": true // Show a code lens toggling the display of gc's choices.
+    }
+  },
+  "ui": {
+    "diagnostic": {
+      "annotations": {
+        "escape": true
+      }
+    }
+  }
+}
