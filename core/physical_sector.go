@@ -73,6 +73,15 @@ func (s *PhysicalSector) Initialize() {
 	s.CeilScale = 64.0
 }
 
+func (s *PhysicalSector) AddSegment(x float64, y float64) *Segment {
+	segment := &Segment{}
+	segment.Initialize()
+	segment.SetParent(s)
+	segment.P = concepts.Vector2{x, y}
+	s.Segments = append(s.Segments, segment)
+	return segment
+}
+
 func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 	s.Initialize()
 	s.Base.Deserialize(data)
@@ -281,9 +290,11 @@ func (s *PhysicalSector) CalcFloorCeilingZ(isect *concepts.Vector2) (floorZ floa
 		if length2 == 0 {
 			dist = isect.Dist(a)
 		} else {
-			delta := (&concepts.Vector2{b[0], b[1]}).SubSelf(a)
-			t := (&concepts.Vector2{isect[0], isect[1]}).SubSelf(a).Dot(delta) / length2
-			dist = isect.Dist(delta.MulSelf(t).AddSelf(a))
+			delta := concepts.Vector2{b[0] - a[0], b[1] - a[1]}
+			t := ((isect[0]-a[0])*delta[0] + (isect[1]-a[1])*delta[1]) / length2
+			delta[0] = a[0] + delta[0]*t
+			delta[1] = a[1] + delta[1]*t
+			dist = isect.Dist(&delta)
 		}
 	}
 

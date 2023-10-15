@@ -23,6 +23,12 @@ func (v *Vector2) Zero() bool {
 	return v[0] == 0 && v[1] == 0
 }
 
+func (v *Vector2) From(v2 *Vector2) *Vector2 {
+	v[0] = v2[0]
+	v[1] = v2[1]
+	return v
+}
+
 func (v *Vector2) Clone() *Vector2 {
 	return &Vector2{v[0], v[1]}
 }

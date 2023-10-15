@@ -49,12 +49,12 @@ func (le *LightElement) allSourceSectors(p *concepts.Vector3, startingSector *co
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
-		if d2 > constants.LightGrid*constants.LightGrid {
+		if d2 >= constants.LightGrid*constants.LightGrid {
 			continue
 		}
 
 		floorZ, ceilZ := seg.AdjacentSector.Physical().CalcFloorCeilingZ(p.To2D())
-		if ceilZ-floorZ <= constants.IntersectEpsilon {
+		if p[2]-ceilZ > constants.LightGrid || floorZ-p[2] > constants.LightGrid {
 			continue
 		}
 		le.allSectors = append(le.allSectors, seg.AdjacentSector.Physical())
@@ -76,7 +76,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity
 
 // lightVisibleEx determines whether a given light is visible from a world location.
 func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.PhysicalEntity, sector *core.PhysicalSector) bool {
-	debugSectorID := "lower" // "be4bqmfvn27mek306btg"
+	debugSectorID := "Starting" // "be4bqmfvn27mek306btg"
 	debugWallCheck := le.Normal[2] == 0
 	if constants.DebugLighting && debugWallCheck && sector.ID == debugSectorID {
 		log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), e.Pos)
@@ -176,16 +176,6 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			return false
 		}
 		if next == nil && sector != e.Sector.Physical() {
-			// Maybe adjacent?
-			/*allLightSectors := le.allContainingSectors(e.Pos, e.Sector.Physical())
-			for _, lightSector := range allLightSectors {
-				if lightSector == sector {
-					if constants.DebugLighting && debugWallCheck && le.Sector.ID == debugSectorID {
-						log.Printf("Lit!\n")
-					}
-					return true
-				}
-			}*/
 			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}

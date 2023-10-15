@@ -7,10 +7,10 @@ import (
 	"log"
 	"os"
 	"reflect"
-	"runtime/debug"
 	"runtime/pprof"
 
 	_ "tlyakhov/gofoom/behaviors"
+	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/entities"
 	"tlyakhov/gofoom/logic"
 	"tlyakhov/gofoom/logic/entity"
@@ -37,7 +37,6 @@ import (
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 
 func run() {
-	debug.SetGCPercent(2000)
 	if *cpuProfile != "" {
 		f, err := os.Create(*cpuProfile)
 		if err != nil {
@@ -46,8 +45,9 @@ func run() {
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
 	}
-	w := 1280
-	h := 720
+
+	w := 640
+	h := 360
 	cfg := pixelgl.WindowConfig{
 		Title:     "Foom",
 		Bounds:    pixel.R(0, 0, 3840, 2160),
@@ -70,7 +70,11 @@ func run() {
 	renderer.ScreenWidth = w
 	renderer.ScreenHeight = h
 	renderer.Initialize()
-	gameMap := logic.LoadMap("data/worlds/hall.json")
+	gameMap := logic.NewMapService(&core.Map{})
+	gameMap.Initialize()
+	gameMap.CreateTest()
+
+	//gameMap := logic.LoadMap("data/worlds/hall.json")
 	ps := entity.NewPlayerService(gameMap.Player.(*entities.Player))
 	ps.Collide()
 	renderer.Map = gameMap.Map

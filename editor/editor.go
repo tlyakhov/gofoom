@@ -141,6 +141,20 @@ func (e *Editor) Load(filename string) {
 	e.Grid.Refresh(e.SelectedObjects)
 }
 
+func (e *Editor) Test() {
+	e.Modified = false
+	e.UpdateTitle()
+	e.World = logic.NewMapService(&core.Map{})
+	e.World.Initialize()
+	e.World.CreateTest()
+	ps := entity.NewPlayerService(e.World.Player.(*entities.Player))
+	ps.Collide()
+	e.SelectObjects([]concepts.ISerializable{})
+	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
+	e.Grid.Refresh(e.SelectedObjects)
+
+}
+
 func (e *Editor) ActionFinished(canceled bool) {
 	e.UpdateTitle()
 	e.World.AutoPortal()
