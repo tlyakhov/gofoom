@@ -32,6 +32,13 @@ func (v *Vector3) Clone() *Vector3 {
 	return &Vector3{v[0], v[1], v[2]}
 }
 
+func (v *Vector3) From(v2 *Vector3) *Vector3 {
+	v[0] = v2[0]
+	v[1] = v2[1]
+	v[2] = v2[2]
+	return v
+}
+
 // Add a vector to a vector.
 func (v *Vector3) Add(v2 *Vector3) *Vector3 {
 	return &Vector3{v[0] + v2[0], v[1] + v2[1], v[2] + v2[2]}

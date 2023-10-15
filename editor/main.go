@@ -238,6 +238,7 @@ func onActivate() {
 	builder.ConnectSignals(signals)
 
 	editor.Load("data/worlds/empty.json")
+	//editor.Test()
 	glib.TimeoutAdd(15, EditorTimer)
 }
 

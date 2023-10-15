@@ -98,6 +98,7 @@ func hasLightBehavior(e core.AbstractEntity) bool {
 }
 
 func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
+	//return false
 	// Check if the "visitor" sector is completely blocked by a non-portal- or zero-height-portal segment.
 	vphys := visitor.Physical()
 	// Performance of this is terrible... :(
