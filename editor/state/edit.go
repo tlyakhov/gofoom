@@ -56,4 +56,5 @@ type IEditor interface {
 	SelectObjects(objects []concepts.ISerializable)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
+	Alert(text string)
 }

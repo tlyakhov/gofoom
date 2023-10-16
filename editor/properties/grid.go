@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"reflect"
 	"sort"
-	"strings"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
@@ -14,29 +13,13 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-type pgField struct {
-	Name       string
-	Values     []reflect.Value
-	Unique     map[string]reflect.Value
-	Type       reflect.Type
-	ParentName string
-	Depth      int
-	Source     *reflect.StructField
-}
-
-func (f *pgField) Short() string {
-	split := strings.Split(f.Name, "[")
-	if len(split) > 1 {
-		return "[" + split[len(split)-1]
-	}
-	return f.Name
-}
-
 type pgState struct {
-	Fields     map[string]*pgField
-	Visited    map[interface{}]bool
-	Depth      int
-	ParentName string
+	Fields           map[string]*state.PropertyGridField
+	Visited          map[interface{}]bool
+	Depth            int
+	ParentName       string
+	ParentCollection *reflect.Value
+	Parent           interface{}
 }
 
 type Grid struct {
@@ -44,7 +27,7 @@ type Grid struct {
 	Container *gtk.Grid
 }
 
-func (g *Grid) childFields(parentName string, childValue reflect.Value, state pgState) {
+func (g *Grid) childFields(parentName string, childValue reflect.Value, state pgState, updateParent bool) {
 	var child interface{}
 	if childValue.Type().Kind() == reflect.Struct {
 		child = childValue.Addr().Interface()
@@ -55,19 +38,22 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state pg
 	}
 	if !state.Visited[child] {
 		state.ParentName = parentName
+		if updateParent {
+			state.Parent = child
+		}
 		g.gatherFields(child, state)
 	}
 }
 
-func (g *Grid) gatherFields(obj interface{}, state pgState) {
+func (g *Grid) gatherFields(obj interface{}, pgs pgState) {
 	v := reflect.ValueOf(obj)
 	t := v.Type().Elem()
 	if v.IsNil() || t.String() == "main.MapPoint" {
 		return
 	}
 
-	state.Depth++
-	state.Visited[obj] = true
+	pgs.Depth++
+	pgs.Visited[obj] = true
 
 	for i := 0; i < t.NumField(); i++ {
 		field := t.FieldByIndex([]int{i})
@@ -77,22 +63,24 @@ func (g *Grid) gatherFields(obj interface{}, state pgState) {
 			continue
 		}
 		display := tag
-		if state.ParentName != "" {
-			display = state.ParentName + "." + display
+		if pgs.ParentName != "" {
+			display = pgs.ParentName + "." + display
 		}
 
 		if tag != "^" {
-			gf, ok := state.Fields[display]
+			gf, ok := pgs.Fields[display]
 			if !ok {
-				gf = &pgField{
-					Name:       display,
-					Depth:      state.Depth,
-					Type:       fieldValue.Addr().Type(),
-					Source:     &field,
-					ParentName: state.ParentName,
-					Unique:     make(map[string]reflect.Value),
+				gf = &state.PropertyGridField{
+					Name:             display,
+					Depth:            pgs.Depth,
+					Type:             fieldValue.Addr().Type(),
+					Source:           &field,
+					ParentName:       pgs.ParentName,
+					ParentCollection: pgs.ParentCollection,
+					Unique:           make(map[string]reflect.Value),
+					Parent:           pgs.Parent,
 				}
-				state.Fields[display] = gf
+				pgs.Fields[display] = gf
 			}
 
 			gf.Values = append(gf.Values, fieldValue.Addr())
@@ -102,19 +90,21 @@ func (g *Grid) gatherFields(obj interface{}, state pgState) {
 				keys := fieldValue.MapKeys()
 				for _, key := range keys {
 					name := field.Name + "[" + key.String() + "]"
-					if state.ParentName != "" {
-						name = state.ParentName + "." + name
+					if pgs.ParentName != "" {
+						name = pgs.ParentName + "." + name
 					}
-					g.childFields(name, fieldValue.MapIndex(key), state)
+					pgs2 := pgs
+					pgs2.ParentCollection = &fieldValue
+					g.childFields(name, fieldValue.MapIndex(key), pgs2, true)
 				}
 			}
 			continue
 		} else {
 			name := field.Name
-			if state.ParentName != "" {
-				name = state.ParentName + "." + name
+			if pgs.ParentName != "" {
+				name = pgs.ParentName + "." + name
 			}
-			g.childFields(state.ParentName, fieldValue, state)
+			g.childFields(pgs.ParentName, fieldValue, pgs, false)
 		}
 	}
 }
@@ -124,8 +114,9 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 		g.Container.Remove(child.(gtk.IWidget))
 	})
 
-	state := pgState{Visited: make(map[interface{}]bool), Fields: make(map[string]*pgField)}
+	state := pgState{Visited: make(map[interface{}]bool), Fields: make(map[string]*state.PropertyGridField)}
 	for _, obj := range selection {
+		state.Parent = obj
 		g.gatherFields(obj, state)
 	}
 

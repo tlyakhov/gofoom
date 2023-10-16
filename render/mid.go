@@ -27,7 +27,7 @@ func WallMid(s *state.Slice) {
 		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.FloorZ
 		lightV := v
 		if s.PhysicalSector.FloorSlope != 0 || s.PhysicalSector.CeilSlope != 0 {
-			lightV = 1.0 - (s.Intersection[2]-s.PhysicalSector.Min[2])/(s.PhysicalSector.Max[2]-s.PhysicalSector.Min[2])
+			lightV = (s.PhysicalSector.Max[2] - s.Intersection[2]) / (s.PhysicalSector.Max[2] - s.PhysicalSector.Min[2])
 		}
 		s.Light(&light, &s.Intersection, s.U, lightV)
 

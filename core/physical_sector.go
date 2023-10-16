@@ -315,8 +315,8 @@ func (s *PhysicalSector) CalcFloorCeilingZ(isect *concepts.Vector2) (floorZ floa
 func (s *PhysicalSector) LightmapAddress(p *concepts.Vector2) uint32 {
 	dx := int((p[0]-s.Min[0])/constants.LightGrid) + constants.LightSafety
 	dy := int((p[1]-s.Min[1])/constants.LightGrid) + constants.LightSafety
-	dx = concepts.IntClamp(dx, 0, int(s.LightmapWidth))
-	dy = concepts.IntClamp(dy, 0, int(s.LightmapHeight))
+	dx = concepts.IntClamp(dx, 0, int(s.LightmapWidth-constants.LightSafety))  // Leave column safety for bi-linear filtering
+	dy = concepts.IntClamp(dy, 0, int(s.LightmapHeight-constants.LightSafety)) // Leave row safety for bi-linear filtering
 	return uint32(dy)*s.LightmapWidth + uint32(dx)
 }
 
@@ -354,4 +354,10 @@ func (s *PhysicalSector) SetParent(parent interface{}) {
 	} else {
 		panic("Tried core.PhysicalSector.SetParent with a parameter that wasn't a *core.Map.")
 	}
+}
+
+func (s *PhysicalSector) InBounds(world *concepts.Vector3) bool {
+	return (world[0] >= s.Min[0]-constants.IntersectEpsilon && world[0] <= s.Max[0]+constants.IntersectEpsilon &&
+		world[1] >= s.Min[1]-constants.IntersectEpsilon && world[1] <= s.Max[1]+constants.IntersectEpsilon &&
+		world[2] >= s.Min[2]-constants.IntersectEpsilon && world[2] <= s.Max[2]+constants.IntersectEpsilon)
 }

@@ -21,7 +21,7 @@ const (
 	AudioUnitsFactor = 12
 
 	// World constants
-	Gravity          = 0.1
+	Gravity          = 0.2
 	GravitySwim      = 0.01
 	SwimDamping      = 2.0
 	CollisionCheck   = 2.0

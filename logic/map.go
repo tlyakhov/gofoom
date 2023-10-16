@@ -3,7 +3,6 @@ package logic
 import (
 	"encoding/json"
 	"fmt"
-	"image/color"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -156,11 +155,20 @@ func (ms *MapService) CreateTest() {
 	ms.Spawn[0] = 50
 	ms.Spawn[1] = 50
 	ms.Spawn[2] = 32
+	ms.Player.Physical().Pos = ms.Spawn
 	mat := &materials.LitSampled{}
 	mat.Initialize()
 	mat.GetBase().ID = "Default"
-	tex := &texture.Solid{Diffuse: color.NRGBA{R: 128, G: 100, B: 50, A: 255}}
+	//tex := &texture.Solid{Diffuse: color.NRGBA{R: 128, G: 100, B: 50, A: 255}}
+	tex := &texture.Image{}
+	tex.Initialize()
+	tex.Source = "data/grass.jpg"
+	tex.Filter = true
+	tex.GenerateMipMaps = true
+	tex.Load()
 	mat.Sampler = tex
+	mat.Scale = 10.0
+
 	mat.SetParent(ms.Map)
 	tex.SetParent(mat)
 	ms.Materials[mat.GetBase().ID] = mat
@@ -168,7 +176,7 @@ func (ms *MapService) CreateTest() {
 	for x := 0; x < 20; x++ {
 		for y := 0; y < 20; y++ {
 			sector := ms.CreateTestSector(fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
-			sector.TopZ = 100
+			sector.TopZ = 300
 			sector.BottomZ = rand.Float64() * 30
 			sector.FloorSlope = rand.Float64() * 0.2
 			// Randomly rotate the segments
@@ -180,7 +188,7 @@ func (ms *MapService) CreateTest() {
 			if rand.Uint32()%40 == 0 {
 				light := &entities.Light{}
 				light.Initialize()
-				light.Pos = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 300}
+				light.Pos = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				light.SetParent(sector)
 				sector.Entities[light.ID] = light
 				log.Println("Generated light")

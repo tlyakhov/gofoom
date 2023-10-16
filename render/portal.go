@@ -24,7 +24,7 @@ func WallHi(s *state.SlicePortal) {
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
 		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.AdjCeilZ
-		lightV := 1.0 - (s.Intersection[2]-s.PhysicalSector.Min[2])/(s.PhysicalSector.Max[2]-s.PhysicalSector.Min[2])
+		lightV := (s.PhysicalSector.Max[2] - s.Intersection[2]) / (s.PhysicalSector.Max[2] - s.PhysicalSector.Min[2])
 		s.Light(light, &s.Intersection, s.U, lightV)
 
 		if s.Segment.HiBehavior == core.ScaleWidth || s.Segment.HiBehavior == core.ScaleNone {
@@ -56,7 +56,7 @@ func WallLow(s *state.SlicePortal) {
 		}
 		v := float64(s.Y-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
 		s.Intersection[2] = (1.0-v)*s.AdjFloorZ + v*s.FloorZ
-		lightV := 1.0 - (s.Intersection[2]-s.PhysicalSector.Min[2])/(s.PhysicalSector.Max[2]-s.PhysicalSector.Min[2])
+		lightV := (s.PhysicalSector.Max[2] - s.Intersection[2]) / (s.PhysicalSector.Max[2] - s.PhysicalSector.Min[2])
 		s.Light(&light, &s.Intersection, s.U, lightV)
 
 		if s.Segment.LoBehavior == core.ScaleWidth || s.Segment.LoBehavior == core.ScaleNone {

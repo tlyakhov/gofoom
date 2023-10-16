@@ -106,9 +106,7 @@ func (s *Slice) SampleMaterial(m core.Sampleable, u, v float64, light *concepts.
 
 }
 func (s *Slice) Light(result, world *concepts.Vector3, u, v float64) *concepts.Vector3 {
-	//return s.LightUnfiltered(world, u, v)
-	//le := LightElement{Sector: s.PhysicalSector, Segment: s.Segment, Normal: normal}
-	//return le.Calculate(world, s.Segment)
+	//return s.LightUnfiltered(result, world, u, v)
 
 	le00 := &s.LightElements[0]
 	le10 := &s.LightElements[1]
@@ -116,7 +114,6 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v float64) *concepts.V
 	le01 := &s.LightElements[3]
 
 	wall := s.Segment != nil && s.Normal[2] == 0
-	var lightmapLength uint32
 	var wu, wv float64
 
 	if !wall {
@@ -148,19 +145,6 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v float64) *concepts.V
 		wv = 1.0 - (wv - math.Floor(wv))
 	}
 
-	lightmapLength = uint32(len(s.Lightmap))
-	if le00.MapIndex > lightmapLength-1 {
-		le00.MapIndex = lightmapLength - 1
-	}
-	if le10.MapIndex > lightmapLength-1 {
-		le10.MapIndex = lightmapLength - 1
-	}
-	if le11.MapIndex > lightmapLength-1 {
-		le11.MapIndex = lightmapLength - 1
-	}
-	if le01.MapIndex > lightmapLength-1 {
-		le01.MapIndex = lightmapLength - 1
-	}
 	r00 := le00.Get(wall)
 	r10 := le10.Get(wall)
 	r11 := le11.Get(wall)
@@ -172,7 +156,7 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v float64) *concepts.V
 	return result
 }
 
-func (s *Slice) LightUnfiltered(world *concepts.Vector3, u, v float64) *concepts.Vector3 {
+func (s *Slice) LightUnfiltered(result, world *concepts.Vector3, u, v float64) *concepts.Vector3 {
 	le := &s.LightElements[0]
 	wall := s.Segment != nil && s.Normal[2] == 0
 
@@ -184,20 +168,16 @@ func (s *Slice) LightUnfiltered(world *concepts.Vector3, u, v float64) *concepts
 			s.Lightmap = s.PhysicalSector.FloorLightmap
 			s.LightmapAge = s.PhysicalSector.FloorLightmapAge
 		}
-		lightmapLength := uint32(len(le.Lightmap))
 		le.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
-		if le.MapIndex > lightmapLength-1 {
-			le.MapIndex = lightmapLength - 1
-		}
 	} else {
 		s.Lightmap = s.Segment.Lightmap
 		s.LightmapAge = s.Segment.LightmapAge
-		lightmapLength := uint32(len(le.Lightmap))
 		le.MapIndex = s.Segment.LightmapAddress(u, v)
-		if le.MapIndex > lightmapLength-1 {
-			le.MapIndex = lightmapLength - 1
-		}
 	}
 
-	return le.Get(wall)
+	r00 := le.Get(wall)
+	result[0] = r00[0]
+	result[1] = r00[1]
+	result[2] = r00[2]
+	return result
 }

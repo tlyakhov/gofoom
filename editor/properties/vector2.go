@@ -5,13 +5,14 @@ import (
 	"reflect"
 
 	"tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
 
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (g *Grid) fieldVector2(index int, field *pgField) {
+func (g *Grid) fieldVector2(index int, field *state.PropertyGridField) {
 	origValue := ""
 	for i, v := range field.Values {
 		if i != 0 {
@@ -39,7 +40,7 @@ func (g *Grid) fieldVector2(index int, field *pgField) {
 			g.Container.GrabFocus()
 			return
 		}
-		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(vec).Elem()}
+		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(vec).Elem()}
 		g.NewAction(action)
 		action.Act()
 		origValue = vec.String()

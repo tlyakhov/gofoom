@@ -16,9 +16,27 @@ type LightElement struct {
 	allSectors []*core.PhysicalSector
 }
 
+func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
+	var q = &concepts.Vector3{}
+	if !wall {
+		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
+	} else {
+		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.ID, le.MapIndex, le.Segment.ID)
+		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
+	}
+	dbg := q.Mul(1.0 / 64.0)
+	result := &concepts.Vector3{}
+	result[0] = dbg[0] - math.Floor(dbg[0])
+	result[1] = dbg[1] - math.Floor(dbg[1])
+	result[2] = dbg[2] - math.Floor(dbg[2])
+	return result
+}
+
 func (le *LightElement) Get(wall bool) *concepts.Vector3 {
+	//return le.Debug(wall)
 	result := &le.Lightmap[le.MapIndex]
-	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame || concepts.RngXorShift64()%constants.LightmapRefreshDither > 0 {
+	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame ||
+		concepts.RngXorShift64()%constants.LightmapRefreshDither > 0 {
 		return result
 	}
 
@@ -30,11 +48,6 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
 	}
 	*result = le.Calculate(q)
-	/*dbg := q.Mul(1.0 / 64.0)
-	result[0] = dbg[0] - math.Floor(dbg[0])
-	result[1] = dbg[1] - math.Floor(dbg[1])
-	result[2] = dbg[2] - math.Floor(dbg[2])*/
-
 	le.LightmapAge[le.MapIndex] = le.Config.Frame
 	return result
 }

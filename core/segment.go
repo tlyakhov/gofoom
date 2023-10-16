@@ -247,7 +247,8 @@ func (s *Segment) LightmapAddress(u, v float64) uint32 {
 func (s *Segment) UVToWorld(result *concepts.Vector3, u, v float64) *concepts.Vector3 {
 	result[0] = s.P[0] + (s.Next.P[0]-s.P[0])*u
 	result[1] = s.P[1] + (s.Next.P[1]-s.P[1])*u
-	result[2] = v*s.Sector.Physical().BottomZ + (1.0-v)*s.Sector.Physical().TopZ
+	// v goes from top (0) to bottom (1)
+	result[2] = v*s.Sector.Physical().Min[2] + (1.0-v)*s.Sector.Physical().Max[2]
 	return result
 }
 
