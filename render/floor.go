@@ -26,6 +26,11 @@ func Floor(s *state.Slice) {
 		}
 
 		t := planeRayDelta.Dot(&s.PhysicalSector.FloorNormal) / denom
+		if t <= 0 {
+			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
+			//log.Printf("floor t<0\n")
+			continue
+		}
 		world := (&concepts.Vector3{s.Ray.Start[0] + rayDir[0]*t, s.Ray.Start[1] + rayDir[1]*t, s.CameraZ + rayDir[2]*t})
 		distToFloor := world.Length()
 		scaler := s.PhysicalSector.FloorScale / distToFloor

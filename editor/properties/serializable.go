@@ -6,6 +6,7 @@ import (
 	"reflect"
 
 	"tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/materials"
@@ -62,7 +63,7 @@ func (g *Grid) pixbuf(obj interface{}) *gdk.Pixbuf {
 	return nil
 }
 
-func (g *Grid) fieldSerializable(index int, field *pgField) {
+func (g *Grid) fieldSerializable(index int, field *state.PropertyGridField) {
 	// The value of this property is a pointer to a type that implements ISerializable.
 	var origValue string
 	if !field.Values[0].Elem().IsNil() {
@@ -100,7 +101,7 @@ func (g *Grid) fieldSerializable(index int, field *pgField) {
 		value, _ := opts.GetValue(selected, 0)
 		value2, _ := value.GoValue()
 		ptr := g.State().World.Materials[value2.(string)]
-		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(ptr).Convert(field.Type.Elem())}
+		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(ptr).Convert(field.Type.Elem())}
 		g.NewAction(action)
 		action.Act()
 	})

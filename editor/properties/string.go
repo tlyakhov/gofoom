@@ -5,11 +5,12 @@ import (
 	"reflect"
 
 	"tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (g *Grid) fieldString(index int, field *pgField) {
+func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
 	origValue := ""
 	i := 0
 	for _, v := range field.Unique {
@@ -31,7 +32,7 @@ func (g *Grid) fieldString(index int, field *pgField) {
 			g.Container.GrabFocus()
 			return
 		}
-		action := &actions.SetProperty{IEditor: g.IEditor, Fields: field.Values, ToSet: reflect.ValueOf(text)}
+		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(text)}
 		g.NewAction(action)
 		action.Act()
 		origValue = text

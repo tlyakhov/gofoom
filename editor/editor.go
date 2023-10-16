@@ -354,3 +354,13 @@ func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
 	e.NewAction(action)
 	action.Act()
 }
+
+func (e *Editor) Alert(text string) {
+	if win, err := e.Container.GetToplevel(); err == nil {
+		dlg := gtk.MessageDialogNew(win.(gtk.IWindow), gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, text)
+		dlg.Connect("response", func() {
+			dlg.Destroy()
+		})
+		dlg.ShowAll()
+	}
+}
