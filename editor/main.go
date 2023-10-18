@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"runtime/pprof"
 	"time"
@@ -29,7 +31,7 @@ import (
 var (
 	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
 	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
-	ColorPVS                = concepts.Vector3{0.9, 1, 0.9}
+	ColorPVS                = concepts.Vector3{0.6, 1, 0.6}
 	editor                  = NewEditor()
 	gameKeyMap              = make(map[uint]bool)
 	last                    = time.Now()
@@ -190,6 +192,7 @@ func onActivate() {
 	setupMenu()
 	editor.Window.SetApplication(editor.App)
 	editor.Window.ShowAll()
+	editor.Window.Maximize()
 
 	// Event handlers
 	signals := make(map[string]interface{})
@@ -200,10 +203,9 @@ func onActivate() {
 	signals["MapArea.MotionNotify"] = MapMotionNotify
 	signals["MapArea.ButtonPress"] = MapButtonPress
 	signals["MapArea.ButtonRelease"] = MapButtonRelease
+	signals["GameArea.ButtonRelease"] = GameButtonPress
 	signals["GameArea.Draw"] = DrawGame
-	signals["GameArea.ButtonPress"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
-		da.GrabFocus()
-	}
+	signals["GameArea.ButtonPress"] = GameButtonPress
 	signals["GameArea.KeyPress"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
 		key := gdk.EventKeyNewFromEvent(ev)
 		gameKeyMap[key.KeyVal()] = true
@@ -245,6 +247,10 @@ func onActivate() {
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 
 func main() {
+	go func() {
+		http.ListenAndServe("localhost:8080", nil)
+	}()
+
 	gtk.Init(&os.Args)
 	// Gtk bindings are missing this widget in builders. Add it in manually.
 	gtk.WrapMap["GtkRadioToolButton"] = gtk.WrapMap["GtkRadioButton"]

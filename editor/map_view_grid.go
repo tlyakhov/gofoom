@@ -99,9 +99,9 @@ func (g *MapViewGrid) Refresh(e *state.Edit, cr *cairo.Context) {
 				continue
 			}
 			cr.Rectangle(pos[0]-d*0.5, pos[1]-d*0.5, d, d)
-			cr.Fill()
 		}
 	}
+	cr.Fill()
 	editor.MapViewGrid.Surface = cr.GetGroupTarget()
 	cr.PopGroupToSource()
 }

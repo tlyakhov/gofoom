@@ -3,6 +3,7 @@ package main
 import (
 	"math"
 
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -57,7 +58,11 @@ func MapButtonRelease(da *gtk.DrawingArea, ev *gdk.Event) {
 
 func MapScroll(da *gtk.DrawingArea, ev *gdk.Event) {
 	scroll := gdk.EventScrollNewFromEvent(ev)
-	delta := math.Abs(scroll.DeltaY() / 5)
+	delta := 0.25
+	if scroll.DeltaY() != 0 {
+		delta = math.Abs(scroll.DeltaY() / 5)
+	}
+
 	if scroll.Direction() == gdk.SCROLL_DOWN {
 		delta = -delta
 	}
@@ -67,5 +72,26 @@ func MapScroll(da *gtk.DrawingArea, ev *gdk.Event) {
 		editor.Scale += delta * 0.02
 	} else if editor.Scale > 0.0025 {
 		editor.Scale += delta * 0.002
+	}
+}
+
+func GameButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
+	press := gdk.EventButtonNewFromEvent(ev)
+	da.GrabFocus()
+
+	// TODO: make this more granular, and also support entities
+	if press.Button() == 1 {
+		daw := da.GetAllocatedWidth()
+		dah := da.GetAllocatedHeight()
+		rw := editor.Renderer.ScreenWidth
+		rh := editor.Renderer.ScreenHeight
+		x := press.X() * float64(rw) / float64(daw)
+		y := press.Y() * float64(rh) / float64(dah)
+		picked := editor.Renderer.Pick(int(x), int(y))
+		objects := make([]concepts.ISerializable, 0)
+		for _, p := range picked {
+			objects = append(objects, p.ISerializable)
+		}
+		editor.SelectObjects(objects)
 	}
 }

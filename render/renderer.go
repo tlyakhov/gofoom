@@ -45,14 +45,26 @@ func (r *Renderer) Player() *entities.Player {
 func (r *Renderer) RenderSlice(slice *state.Slice) {
 	slice.CalcScreen()
 	slice.Normal = slice.PhysicalSector.CeilNormal
-	Ceiling(slice)
+	if slice.Pick {
+		CeilingPick(slice)
+	} else {
+		Ceiling(slice)
+	}
 	slice.Normal = slice.PhysicalSector.FloorNormal
-	Floor(slice)
+	if slice.Pick {
+		FloorPick(slice)
+	} else {
+		Floor(slice)
+	}
 
 	slice.Segment.Normal.To3D(&slice.Normal)
 
 	if slice.Segment.AdjacentSector == nil {
-		WallMid(slice)
+		if slice.Pick {
+			WallMidPick(slice)
+		} else {
+			WallMid(slice)
+		}
 		return
 	}
 	if slice.Depth > 100 {
@@ -62,8 +74,13 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	sp := &state.SlicePortal{Slice: slice}
 	sp.CalcScreen()
 	if sp.AdjSegment != nil {
-		WallHi(sp)
-		WallLow(sp)
+		if slice.Pick {
+			WallHiPick(sp)
+			WallLowPick(sp)
+		} else {
+			WallHi(sp)
+			WallLow(sp)
+		}
 	}
 
 	portalSlice := *slice
@@ -77,6 +94,9 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	portalSlice.LastPortalDistance = slice.Distance
 	portalSlice.Depth++
 	r.RenderSector(&portalSlice)
+	if slice.Pick {
+		slice.PickedElements = portalSlice.PickedElements
+	}
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
@@ -84,16 +104,17 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	slice.Distance = constants.MaxViewDistance
 
 	dist := math.MaxFloat64
-
+	isect := &concepts.Vector2{}
+	ray := &concepts.Vector2{}
+	ray.From(&slice.Ray.End).SubSelf(&slice.Ray.Start)
 	for _, segment := range slice.PhysicalSector.Segments {
-		if slice.Ray.End.Sub(&slice.Ray.Start).Dot(&segment.Normal) > 0 {
+		// Wall is facing away from us
+		if ray.Dot(&segment.Normal) > 0 {
 			continue
 		}
 
-		isect := &concepts.Vector2{}
-		ok := segment.Intersect2D(&slice.Ray.Start, &slice.Ray.End, isect)
-
-		if !ok {
+		// Ray intersects?
+		if ok := segment.Intersect2D(&slice.Ray.Start, &slice.Ray.End, isect); !ok {
 			continue
 		}
 
@@ -122,7 +143,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(buffer []uint8, x int) {
+func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state.PickedElement {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
@@ -134,7 +155,9 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 		Config:         r.Config,
 		Map:            r.Map,
 		RenderTarget:   buffer,
+		Pick:           pick,
 		X:              x,
+		Y:              y,
 		YStart:         0,
 		YEnd:           r.ScreenHeight,
 		Angle:          r.Player().Angle*concepts.Deg2rad + r.ViewRadians[x],
@@ -157,6 +180,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int) {
 	}
 
 	r.RenderSector(slice)
+	return slice.PickedElements
 }
 
 func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
@@ -164,7 +188,7 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 		if x >= xEnd {
 			break
 		}
-		r.RenderColumn(buffer, x)
+		r.RenderColumn(buffer, x, 0, false)
 	}
 
 	if constants.RenderMultiThreaded {
@@ -195,8 +219,15 @@ func (r *Renderer) Render(buffer []uint8) {
 		}
 	} else {
 		for x := 0; x < r.ScreenWidth; x++ {
-			r.RenderColumn(buffer, x)
+			r.RenderColumn(buffer, x, 0, false)
 		}
 	}
 	// Entities...
+}
+
+func (r *Renderer) Pick(x, y int) []state.PickedElement {
+	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
+		return nil
+	}
+	return r.RenderColumn(nil, x, y, true)
 }

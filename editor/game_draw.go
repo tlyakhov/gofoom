@@ -11,8 +11,8 @@ import (
 )
 
 func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
-	w := da.GetAllocatedWidth()
-	h := da.GetAllocatedHeight()
+	w := 640
+	h := 360
 
 	if editor.Renderer == nil || editor.Renderer.ScreenWidth != w || editor.Renderer.ScreenHeight != h {
 		editor.GameView(w, h)
@@ -25,6 +25,9 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 		editor.GameViewBuffer[i+2] = tmp
 	}
 	editor.GameViewSurface.MarkDirty()
+	daw := da.GetAllocatedWidth()
+	dah := da.GetAllocatedHeight()
+	cr.Scale(float64(daw)/float64(w), float64(dah)/float64(h))
 	cr.SetSourceSurface(editor.GameViewSurface, 0, 0)
 	cr.Paint()
 
