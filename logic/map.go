@@ -3,6 +3,7 @@ package logic
 import (
 	"encoding/json"
 	"fmt"
+	"image/color"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -159,13 +160,13 @@ func (ms *MapService) CreateTest() {
 	mat := &materials.LitSampled{}
 	mat.Initialize()
 	mat.GetBase().ID = "Default"
-	//tex := &texture.Solid{Diffuse: color.NRGBA{R: 128, G: 100, B: 50, A: 255}}
-	tex := &texture.Image{}
+	tex := &texture.Solid{Diffuse: color.NRGBA{R: 128, G: 100, B: 50, A: 255}}
+	/*tex := &texture.Image{}
 	tex.Initialize()
 	tex.Source = "data/grass.jpg"
 	tex.Filter = true
 	tex.GenerateMipMaps = true
-	tex.Load()
+	tex.Load()*/
 	mat.Sampler = tex
 	mat.Scale = 10.0
 

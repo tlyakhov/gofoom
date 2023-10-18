@@ -13,6 +13,11 @@ type Ray struct {
 	Start, End concepts.Vector2
 }
 
+type PickedElement struct {
+	Type string // ceil, floor, mid, hi, lo, entity
+	concepts.ISerializable
+}
+
 type Slice struct {
 	*Config
 	RenderTarget       []uint8
@@ -43,6 +48,8 @@ type Slice struct {
 	Normal             concepts.Vector3
 	Lightmap           []concepts.Vector3
 	LightmapAge        []int
+	Pick               bool
+	PickedElements     []PickedElement
 }
 
 func (s *Slice) ProjectZ(z float64) float64 {
@@ -105,8 +112,16 @@ func (s *Slice) SampleMaterial(m core.Sampleable, u, v float64, light *concepts.
 	return m.Sample(u, v, light, scale)
 
 }
-func (s *Slice) Light(result, world *concepts.Vector3, u, v float64) *concepts.Vector3 {
-	//return s.LightUnfiltered(result, world, u, v)
+func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *concepts.Vector3 {
+	// Don't filter far away lightmaps. Tolerate a ~5px snap-in
+	if dist > float64(s.ScreenWidth)*constants.LightGrid*0.2 {
+		// testing...
+		/*result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
+		result[1] = result[0]
+		result[2] = result[0]
+		return result*/
+		return s.LightUnfiltered(result, world, u, v)
+	}
 
 	le00 := &s.LightElements[0]
 	le10 := &s.LightElements[1]

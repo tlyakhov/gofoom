@@ -6,6 +6,12 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
+func WallHiPick(s *state.SlicePortal) {
+	if s.Y >= s.ClippedStart && s.Y < s.AdjClippedTop {
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "hi", ISerializable: s.Segment})
+	}
+}
+
 // WallHi renders the top portion of a portal segment.
 func WallHi(s *state.SlicePortal) {
 	mat := s.AdjSegment.HiMaterial
@@ -25,7 +31,7 @@ func WallHi(s *state.SlicePortal) {
 		v := float64(s.Y-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
 		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.AdjCeilZ
 		lightV := (s.PhysicalSector.Max[2] - s.Intersection[2]) / (s.PhysicalSector.Max[2] - s.PhysicalSector.Min[2])
-		s.Light(light, &s.Intersection, s.U, lightV)
+		s.Light(light, &s.Intersection, s.U, lightV, s.Distance)
 
 		if s.Segment.HiBehavior == core.ScaleWidth || s.Segment.HiBehavior == core.ScaleNone {
 			v = s.Intersection[2] / 64.0
@@ -35,6 +41,12 @@ func WallHi(s *state.SlicePortal) {
 			s.Write(screenIndex, s.SampleMaterial(mat, u, v, light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
+	}
+}
+
+func WallLowPick(s *state.SlicePortal) {
+	if s.Y >= s.AdjClippedBottom && s.Y < s.ClippedEnd {
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "lo", ISerializable: s.Segment})
 	}
 }
 
@@ -57,7 +69,7 @@ func WallLow(s *state.SlicePortal) {
 		v := float64(s.Y-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
 		s.Intersection[2] = (1.0-v)*s.AdjFloorZ + v*s.FloorZ
 		lightV := (s.PhysicalSector.Max[2] - s.Intersection[2]) / (s.PhysicalSector.Max[2] - s.PhysicalSector.Min[2])
-		s.Light(&light, &s.Intersection, s.U, lightV)
+		s.Light(&light, &s.Intersection, s.U, lightV, s.Distance)
 
 		if s.Segment.LoBehavior == core.ScaleWidth || s.Segment.LoBehavior == core.ScaleNone {
 			v = s.Intersection[2] / 64.0

@@ -7,6 +7,12 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
+func CeilingPick(s *state.Slice) {
+	if s.Y >= s.YStart && s.Y < s.ClippedStart {
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "ceiling", ISerializable: s.PhysicalSector})
+	}
+}
+
 // Ceiling renders the ceiling portion of a slice.
 func Ceiling(s *state.Slice) {
 	mat := s.PhysicalSector.CeilMaterial
@@ -31,8 +37,11 @@ func Ceiling(s *state.Slice) {
 			//log.Printf("ceil t<0\n")
 			continue
 		}
-		world := (&concepts.Vector3{s.Ray.Start[0] + rayDir[0]*t, s.Ray.Start[1] + rayDir[1]*t, s.CameraZ + rayDir[2]*t})
+		world := &concepts.Vector3{rayDir[0] * t, rayDir[1] * t, rayDir[2] * t}
 		distToCeil := world.Length()
+		world[0] += s.Ray.Start[0]
+		world[1] += s.Ray.Start[1]
+		world[2] += s.CameraZ
 		scaler := s.PhysicalSector.CeilScale / distToCeil
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
@@ -48,7 +57,7 @@ func Ceiling(s *state.Slice) {
 		ty = math.Abs(ty)
 
 		if mat != nil {
-			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0), scaler))
+			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToCeil), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToCeil
 	}

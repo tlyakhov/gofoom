@@ -7,6 +7,12 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
+func FloorPick(s *state.Slice) {
+	if s.Y >= s.ClippedEnd && s.Y < s.YEnd {
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "floor", ISerializable: s.PhysicalSector})
+	}
+}
+
 // Floor renders the floor portion of a slice.
 func Floor(s *state.Slice) {
 	mat := s.PhysicalSector.FloorMaterial
@@ -31,8 +37,11 @@ func Floor(s *state.Slice) {
 			//log.Printf("floor t<0\n")
 			continue
 		}
-		world := (&concepts.Vector3{s.Ray.Start[0] + rayDir[0]*t, s.Ray.Start[1] + rayDir[1]*t, s.CameraZ + rayDir[2]*t})
+		world := &concepts.Vector3{rayDir[0] * t, rayDir[1] * t, rayDir[2] * t}
 		distToFloor := world.Length()
+		world[0] += s.Ray.Start[0]
+		world[1] += s.Ray.Start[1]
+		world[2] += s.CameraZ
 		scaler := s.PhysicalSector.FloorScale / distToFloor
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
@@ -52,7 +61,7 @@ func Floor(s *state.Slice) {
 		}
 
 		if mat != nil {
-			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0), scaler))
+			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToFloor), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor
 	}

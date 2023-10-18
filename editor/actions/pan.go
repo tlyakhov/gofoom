@@ -24,7 +24,7 @@ func (a *Pan) OnMouseDown(button *gdk.EventButton) {
 func (a *Pan) OnMouseMove() {
 	a.Mode = "Panning"
 	a.Delta = *a.State().Mouse.Sub(&a.State().MouseDown)
-	a.State().Pos = *a.OriginalPos.Sub(&a.Delta)
+	a.State().Pos = *a.OriginalPos.Sub(a.Delta.Mul(1.0 / a.State().Scale))
 }
 
 func (a *Pan) OnMouseUp() {

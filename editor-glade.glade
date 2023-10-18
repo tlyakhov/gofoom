@@ -218,6 +218,7 @@
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="double_buffered">False</property>
                         <signal name="button-press-event" handler="GameArea.ButtonPress" swapped="no"/>
+                        <signal name="button-release-event" handler="GameArea.ButtonRelease" swapped="no"/>                        
                         <signal name="draw" handler="GameArea.Draw" swapped="no"/>
                         <signal name="key-press-event" handler="GameArea.KeyPress" swapped="no"/>
                         <signal name="key-release-event" handler="GameArea.KeyRelease" swapped="no"/>

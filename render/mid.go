@@ -6,6 +6,12 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
+func WallMidPick(s *state.Slice) {
+	if s.Y >= s.ClippedStart && s.Y < s.ClippedEnd {
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "mid", ISerializable: s.Segment})
+	}
+}
+
 // WallMid renders the wall portion of a non-portal segment.
 func WallMid(s *state.Slice) {
 	mat := s.Segment.MidMaterial
@@ -29,7 +35,7 @@ func WallMid(s *state.Slice) {
 		if s.PhysicalSector.FloorSlope != 0 || s.PhysicalSector.CeilSlope != 0 {
 			lightV = (s.PhysicalSector.Max[2] - s.Intersection[2]) / (s.PhysicalSector.Max[2] - s.PhysicalSector.Min[2])
 		}
-		s.Light(&light, &s.Intersection, s.U, lightV)
+		s.Light(&light, &s.Intersection, s.U, lightV, s.Distance)
 
 		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
 			v = s.Intersection[2] / 64.0
