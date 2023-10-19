@@ -28,7 +28,7 @@ func (b *AnimatedBehavior) SetParent(parent interface{}) {
 	}
 }
 
-func (b *AnimatedBehavior) Frame(lastFrameTime float64) {
+func (b *AnimatedBehavior) Frame() {
 }
 
 func (b *AnimatedBehavior) Deserialize(data map[string]interface{}) {

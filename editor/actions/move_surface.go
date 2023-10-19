@@ -31,9 +31,9 @@ func (a *MoveSurface) Get(sector *core.PhysicalSector) *float64 {
 		}
 	} else {
 		if a.Floor {
-			return &sector.BottomZ
+			return &sector.BottomZ.Original
 		} else {
-			return &sector.TopZ
+			return &sector.TopZ.Original
 		}
 	}
 }

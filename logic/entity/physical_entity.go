@@ -84,7 +84,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 			e.Pos.Now = closestSector.Physical().Center
 		}
 
-		floorZ, ceilZ := closestSector.Physical().CalcFloorCeilingZ(p.To2D())
+		floorZ, ceilZ := closestSector.Physical().CalcFloorCeilingZ(p.To2D(), false)
 		if p[2] < floorZ || p[2]+e.Height > ceilZ {
 			log.Printf("Moved entity %v to closest sector and adjusted Z from %v to %v", e.ID, p[2], floorZ)
 			p[2] = floorZ
@@ -103,7 +103,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 			adj := segment.AdjacentSector.Physical()
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
-			floorZ, ceilZ := adj.CalcFloorCeilingZ(p.To2D())
+			floorZ, ceilZ := adj.CalcFloorCeilingZ(p.To2D(), false)
 			if p[2]+e.MountHeight >= floorZ &&
 				p[2]+e.Height < ceilZ {
 				continue
@@ -130,7 +130,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 				continue
 			}
 			adj := segment.AdjacentSector.Physical()
-			floorZ, ceilZ := adj.CalcFloorCeilingZ(ePosition2D)
+			floorZ, ceilZ := adj.CalcFloorCeilingZ(ePosition2D, false)
 			if p[2]+e.MountHeight >= floorZ &&
 				p[2]+e.Height < ceilZ &&
 				adj.IsPointInside2D(ePosition2D) {
@@ -151,7 +151,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 			// Case 6! This is the worst.
 			for _, sector := range e.Map.Sectors {
 				phys := sector.Physical()
-				floorZ, ceilZ := phys.CalcFloorCeilingZ(p.To2D())
+				floorZ, ceilZ := phys.CalcFloorCeilingZ(p.To2D(), false)
 				if p[2]+e.MountHeight >= floorZ &&
 					p[2]+e.Height < ceilZ {
 					for _, segment := range phys.Segments {
@@ -205,7 +205,7 @@ func (e *PhysicalEntityService) Remove() {
 	}
 }
 
-func (e *PhysicalEntityService) Frame(sim *core.Simulation) {
+func (e *PhysicalEntityService) Frame() {
 	if !e.Active {
 		return
 	}

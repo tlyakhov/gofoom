@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"time"
 	"tlyakhov/gofoom/entities"
 	"tlyakhov/gofoom/logic/entity"
 
@@ -42,4 +43,21 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.ShowText(fmt.Sprintf("Health: %.1f", ps.Player.Health))
 	cr.MoveTo(10, 30)
 	cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(ps.Player.Sector), ps.Player.Sector.GetBase().ID))
+
+	cr.SetSourceRGB(1, 0, 0)
+
+	for i := 0; i < 20; i++ {
+		if i >= editor.Renderer.DebugNotices.Length() {
+			break
+		}
+		msg := editor.Renderer.DebugNotices.Items[i].(string)
+		if t, ok := editor.Renderer.DebugNotices.SetWithTimes.Load(msg); ok {
+			cr.MoveTo(10, 40+float64(i)*10)
+			cr.ShowText(msg)
+			age := time.Now().UnixMilli() - t.(int64)
+			if age > 10000 {
+				editor.Renderer.DebugNotices.PopAtIndex(i)
+			}
+		}
+	}
 }

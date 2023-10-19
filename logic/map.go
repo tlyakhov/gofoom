@@ -63,9 +63,9 @@ func (m *MapService) Recalculate() {
 	}
 }
 
-func (m *MapService) Frame(sim *core.Simulation) {
+func (m *MapService) Frame() {
 	player := provide.EntityAnimator.For(m.Player)
-	player.Frame(sim)
+	player.Frame()
 
 	for _, sector := range m.Sectors {
 		provide.Interactor.For(sector).ActOnEntity(m.Player)
@@ -78,7 +78,7 @@ func (m *MapService) Frame(sim *core.Simulation) {
 				provide.Interactor.For(pvs).ActOnEntity(e)
 			}
 		}
-		provide.SectorAnimator.For(sector).Frame(sim)
+		provide.SectorAnimator.For(sector).Frame()
 	}
 }
 
@@ -177,8 +177,8 @@ func (ms *MapService) CreateTest() {
 	for x := 0; x < 20; x++ {
 		for y := 0; y < 20; y++ {
 			sector := ms.CreateTestSector(fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
-			sector.TopZ = 300
-			sector.BottomZ = rand.Float64() * 30
+			sector.TopZ.Original = 300
+			sector.BottomZ.Original = rand.Float64() * 30
 			sector.FloorSlope = rand.Float64() * 0.2
 			// Randomly rotate the segments
 			rot := int(rand.Uint32() % 3)

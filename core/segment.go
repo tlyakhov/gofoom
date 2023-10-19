@@ -81,7 +81,7 @@ func (s *Segment) Recalculate() {
 		s.RealizeAdjacentSector()
 		sector := s.Sector.Physical()
 		s.LightmapWidth = uint32(s.Length/constants.LightGrid) + constants.LightSafety*2
-		s.LightmapHeight = uint32((sector.TopZ-sector.BottomZ)/constants.LightGrid) + constants.LightSafety*2
+		s.LightmapHeight = uint32((sector.TopZ.Now-sector.BottomZ.Now)/constants.LightGrid) + constants.LightSafety*2
 		s.Lightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
 		s.LightmapAge = make([]int, s.LightmapWidth*s.LightmapHeight)
 	}

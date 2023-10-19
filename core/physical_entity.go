@@ -47,15 +47,15 @@ func (e *PhysicalEntity) Initialize() {
 
 func (e *PhysicalEntity) Attach(sim *Simulation) {
 	e.Simulation = sim
-	sim.AllVector3s[&e.Pos] = true
-	sim.AllVector3s[&e.Vel] = true
+	e.Pos.Attach(sim)
+	e.Vel.Attach(sim)
 }
 func (e *PhysicalEntity) Detach() {
 	if e.Simulation == nil {
 		return
 	}
-	delete(e.Simulation.AllVector3s, &e.Pos)
-	delete(e.Simulation.AllVector3s, &e.Vel)
+	e.Pos.Detach(e.Simulation)
+	e.Vel.Detach(e.Simulation)
 	e.Simulation = nil
 }
 

@@ -57,9 +57,36 @@ func (s *SimScalar) Reset() {
 	s.Now = s.Original
 }
 
+func (s *SimScalar) Set(v float64) {
+	s.Original = v
+	s.Reset()
+}
+
+func (s *SimScalar) Attach(sim *Simulation) {
+	sim.AllScalars[s] = true
+}
+
+func (s *SimScalar) Detach(sim *Simulation) {
+	delete(sim.AllScalars, s)
+}
+
 func (s *SimVector2) Reset() {
 	s.Prev = s.Original
 	s.Now = s.Original
+}
+
+func (s *SimVector2) Set(x float64, y float64) {
+	s.Original[1] = y
+	s.Original[0] = x
+	s.Reset()
+}
+
+func (s *SimVector2) Attach(sim *Simulation) {
+	sim.AllVector2s[s] = true
+}
+
+func (s *SimVector2) Detach(sim *Simulation) {
+	delete(sim.AllVector2s, s)
 }
 
 func (v *SimVector2) Serialize() map[string]interface{} {
@@ -73,6 +100,21 @@ func (v *SimVector2) Deserialize(data map[string]interface{}) {
 func (s *SimVector3) Reset() {
 	s.Prev = s.Original
 	s.Now = s.Original
+}
+
+func (s *SimVector3) Set(x float64, y float64, z float64) {
+	s.Original[2] = z
+	s.Original[1] = y
+	s.Original[0] = x
+	s.Reset()
+}
+
+func (s *SimVector3) Attach(sim *Simulation) {
+	sim.AllVector3s[s] = true
+}
+
+func (s *SimVector3) Detach(sim *Simulation) {
+	delete(sim.AllVector3s, s)
 }
 
 func (v *SimVector3) Serialize() map[string]interface{} {

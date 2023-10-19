@@ -69,7 +69,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSector.Physical().CalcFloorCeilingZ(p.To2D())
+		floorZ, ceilZ := seg.AdjacentSector.Physical().CalcFloorCeilingZ(p.To2D(), true)
 		if p[2]-ceilZ > constants.LightGrid || floorZ-p[2] > constants.LightGrid {
 			continue
 		}
@@ -141,8 +141,8 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.CalcFloorCeilingZ(isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSector.Physical().CalcFloorCeilingZ(isect.To2D())
+			floorZ, ceilZ := sector.CalcFloorCeilingZ(isect.To2D(), true)
+			floorZ2, ceilZ2 := seg.AdjacentSector.Physical().CalcFloorCeilingZ(isect.To2D(), true)
 			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}
@@ -154,26 +154,32 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			}
 
 			// Get the square of the distance to the intersection (from the target point)
-			d := isect.Dist2(p)
+			idist2 := isect.Dist2(p)
 
-			if d-dist2 > constants.IntersectEpsilon {
+			// If the difference between the intersected distance and the light distance is
+			// within the bounding radius of our light, our light is right on a portal boundary and visible.
+			if math.Abs(idist2-maxDist2) < e.BoundingRadius {
+				return true
+			}
+
+			if idist2-dist2 > constants.IntersectEpsilon {
 				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
-					log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", d, dist2)
+					log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
 				}
 				// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
 				continue
 			}
 
-			if prevDist-d > constants.IntersectEpsilon {
+			if prevDist-idist2 > constants.IntersectEpsilon {
 				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
-					log.Printf("Found intersection point before the previous sector: %v < %v\n", d, prevDist)
+					log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
 				}
 				// If the current intersection point is BEHIND the last one, we went backwards?
 				continue
 			}
 
 			// We're in the clear! Move to the next adjacent sector.
-			dist2 = d
+			dist2 = idist2
 			next = seg.AdjacentSector.Physical()
 		}
 		prevDist = dist2

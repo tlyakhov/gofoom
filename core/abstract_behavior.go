@@ -6,6 +6,6 @@ import (
 
 type AbstractBehavior interface {
 	concepts.ISerializable
-	Frame(lastFrameTime float64)
+	Frame()
 	Animated() *AnimatedBehavior
 }

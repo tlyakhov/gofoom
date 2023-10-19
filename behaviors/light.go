@@ -27,18 +27,12 @@ func (l *Light) Initialize() {
 	l.Attenuation = 0.4
 }
 
-func (l *Light) Frame(lastFrameTime float64) {
-	l.AnimatedBehavior.Frame(lastFrameTime)
+func (l *Light) Frame() {
+	l.AnimatedBehavior.Frame()
 
 	if !l.Active {
 		return
 	}
-
-	/*pos := l.Entity.Physical().Pos
-	if pos != l.LastPos {
-		l.Entity.Physical().Map.ClearLightmaps()
-	}
-	l.LastPos = pos*/
 }
 
 func (l *Light) Deserialize(data map[string]interface{}) {
