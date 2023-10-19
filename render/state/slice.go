@@ -113,13 +113,14 @@ func (s *Slice) SampleMaterial(m core.Sampleable, u, v float64, light *concepts.
 
 }
 func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *concepts.Vector3 {
+	/*// testing...
+	result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
+	result[1] = result[0]
+	result[2] = result[0]
+	return result*/
+
 	// Don't filter far away lightmaps. Tolerate a ~5px snap-in
 	if dist > float64(s.ScreenWidth)*constants.LightGrid*0.2 {
-		// testing...
-		/*result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
-		result[1] = result[0]
-		result[2] = result[0]
-		return result*/
 		return s.LightUnfiltered(result, world, u, v)
 	}
 

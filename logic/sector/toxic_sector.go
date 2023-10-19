@@ -28,12 +28,12 @@ func (s *ToxicSectorService) Collide(e core.AbstractEntity) {
 
 	concrete := s.ToxicSector
 
-	if concrete.FloorMaterial != nil && e.Physical().Pos[2] <= concrete.BottomZ {
+	if concrete.FloorMaterial != nil && e.Physical().Pos.Now[2] <= concrete.BottomZ {
 		if p, ok := concrete.FloorMaterial.(*materials.PainfulLitSampled); ok {
 			material.NewPainfulService(&p.Painful).ActOnEntity(e)
 		}
 	}
-	if concrete.CeilMaterial != nil && e.Physical().Pos[2] >= concrete.TopZ {
+	if concrete.CeilMaterial != nil && e.Physical().Pos.Now[2] >= concrete.TopZ {
 		if p, ok := concrete.CeilMaterial.(*materials.PainfulLitSampled); ok {
 			material.NewPainfulService(&p.Painful).ActOnEntity(e)
 		}

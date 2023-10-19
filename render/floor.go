@@ -50,15 +50,7 @@ func Floor(s *state.Slice) {
 		}
 
 		tx := world[0] / s.PhysicalSector.FloorScale
-		tx -= math.Floor(tx)
 		ty := world[1] / s.PhysicalSector.FloorScale
-		ty -= math.Floor(ty)
-		if tx < 0 {
-			tx += 1.0
-		}
-		if ty < 0 {
-			ty += 1.0
-		}
 
 		if mat != nil {
 			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToFloor), scaler))

@@ -129,11 +129,20 @@ func (e *Editor) UpdateStatus() {
 	e.StatusBar.SetText(text)
 }
 
+func (e *Editor) Integrate() {
+	editor.World.Frame(editor.World.Sim)
+	editor.GatherHoveringObjects()
+
+}
+
 func (e *Editor) Load(filename string) {
 	e.OpenFile = filename
 	e.Modified = false
 	e.UpdateTitle()
-	e.World = logic.LoadMap(e.OpenFile)
+	sim := core.NewSimulation()
+	sim.Integrate = e.Integrate
+	sim.Render = e.Window.QueueDraw
+	e.World = logic.LoadMap(e.OpenFile, sim)
 	ps := entity.NewPlayerService(e.World.Player.(*entities.Player))
 	ps.Collide()
 	e.SelectObjects([]concepts.ISerializable{})
@@ -144,7 +153,7 @@ func (e *Editor) Load(filename string) {
 func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
-	e.World = logic.NewMapService(&core.Map{})
+	e.World = logic.NewMapService(&core.Map{Sim: new(core.Simulation)})
 	e.World.Initialize()
 	e.World.CreateTest()
 	ps := entity.NewPlayerService(e.World.Player.(*entities.Player))
@@ -315,8 +324,9 @@ func (e *Editor) GatherHoveringObjects() {
 		if e.Selecting() {
 			for _, entity := range sector.Physical().Entities {
 				pe := entity.Physical()
-				if pe.Pos[0]+pe.BoundingRadius >= v1[0] && pe.Pos[0]-pe.BoundingRadius <= v2[0] &&
-					pe.Pos[1]+pe.BoundingRadius >= v1[1] && pe.Pos[1]-pe.BoundingRadius <= v2[1] {
+				p := pe.Pos.Original
+				if p[0]+pe.BoundingRadius >= v1[0] && p[0]-pe.BoundingRadius <= v2[0] &&
+					p[1]+pe.BoundingRadius >= v1[1] && p[1]-pe.BoundingRadius <= v2[1] {
 					if concepts.IndexOf(e.HoveringObjects, entity) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, entity)
 					}

@@ -1,6 +1,7 @@
 package materials
 
 import (
+	"math"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/registry"
 	"tlyakhov/gofoom/texture"
@@ -48,14 +49,10 @@ func (m *Sampled) Serialize() map[string]interface{} {
 }
 
 func (m *Sampled) Sample(u, v float64, light *concepts.Vector3, scale float64) uint32 {
-	for ; u < 0; u++ {
-	}
-	for ; u > 1; u-- {
-	}
-	for ; v < 0; v++ {
-	}
-	for ; v > 1; v-- {
-	}
+	u -= math.Floor(u)
+	v -= math.Floor(v)
+	u = math.Abs(u)
+	v = math.Abs(v)
 
 	return m.Sampler.Sample(u/m.Scale, v/m.Scale, scale/m.Scale)
 }

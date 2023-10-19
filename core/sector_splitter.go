@@ -308,7 +308,7 @@ func (a *SectorSplitter) collect() {
 		for _, added := range a.Result {
 			phys := added.Physical()
 			phys.Recalculate()
-			if phys.IsPointInside2D(&concepts.Vector2{e.Physical().Pos[0], e.Physical().Pos[1]}) {
+			if phys.IsPointInside2D(&concepts.Vector2{e.Physical().Pos.Original[0], e.Physical().Pos.Original[1]}) {
 				phys.Entities[id] = e
 				e.SetParent(added)
 			}

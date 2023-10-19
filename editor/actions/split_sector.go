@@ -87,7 +87,7 @@ func (a *SplitSector) Undo() {
 	for _, original := range a.Original {
 		a.State().World.Sectors[original.GetBase().ID] = original
 		for _, e := range entities {
-			if original.Physical().IsPointInside2D(e.Physical().Pos.To2D()) {
+			if original.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
 				original.Physical().Entities[e.GetBase().ID] = e
 				e.SetParent(original)
 			}
@@ -113,7 +113,7 @@ func (a *SplitSector) Redo() {
 		for _, added := range splitter.Result {
 			a.State().World.Sectors[added.GetBase().ID] = added
 			for _, e := range entities {
-				if added.Physical().IsPointInside2D(e.Physical().Pos.To2D()) {
+				if added.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
 					added.Physical().Entities[e.GetBase().ID] = e
 					e.SetParent(added)
 				}
