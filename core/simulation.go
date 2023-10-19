@@ -1,0 +1,140 @@
+package core
+
+import (
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
+
+	"github.com/loov/hrtime"
+)
+
+// This is based on the "Fix your timestep" blog post here:
+// https://gafferongames.com/post/fix_your_timestep/
+type Simulation struct {
+	SimTime          float64
+	RenderTime       float64
+	RenderStateBlend float64
+	FPS              float64
+	PrevTimestamp    int64
+	Integrate        func()
+	Render           func()
+	AllScalars       []*SimScalar
+	AllVector2s      []*SimVector2
+	AllVector3s      []*SimVector3
+}
+
+type SimScalar struct {
+	Now            float64
+	Prev           float64
+	Original       float64
+	Render         float64
+	RenderCallback func()
+}
+
+type SimVector2 struct {
+	Now            concepts.Vector2
+	Prev           concepts.Vector2
+	Original       concepts.Vector2
+	Render         concepts.Vector2
+	RenderCallback func()
+}
+
+type SimVector3 struct {
+	Now            concepts.Vector3
+	Prev           concepts.Vector3
+	Original       concepts.Vector3
+	Render         concepts.Vector3
+	RenderCallback func()
+}
+
+func (s *SimScalar) Reset() {
+	s.Prev = s.Original
+	s.Now = s.Original
+}
+
+func (s *SimVector2) Reset() {
+	s.Prev = s.Original
+	s.Now = s.Original
+}
+
+func (v *SimVector2) Serialize() map[string]interface{} {
+	return v.Original.Serialize()
+}
+
+func (v *SimVector2) Deserialize(data map[string]interface{}) {
+	v.Original.Deserialize(data)
+}
+
+func (s *SimVector3) Reset() {
+	s.Prev = s.Original
+	s.Now = s.Original
+}
+
+func (v *SimVector3) Serialize() map[string]interface{} {
+	return v.Original.Serialize()
+}
+
+func (v *SimVector3) Deserialize(data map[string]interface{}) {
+	v.Original.Deserialize(data)
+}
+
+func NewSimulation() *Simulation {
+	return &Simulation{PrevTimestamp: hrtime.Now().Milliseconds()}
+}
+
+func (s *Simulation) Step() {
+	newTimestamp := hrtime.Now().Milliseconds()
+	frameMillis := float64(newTimestamp - s.PrevTimestamp)
+	s.PrevTimestamp = newTimestamp
+	if frameMillis != 0 {
+		s.FPS = 1000.0 / frameMillis
+	}
+
+	if frameMillis > constants.MinMillisPerFrame {
+		frameMillis = constants.MinMillisPerFrame
+	}
+
+	s.RenderTime += frameMillis
+
+	for s.RenderTime >= constants.TimeStep {
+		for _, v := range s.AllScalars {
+			v.Prev = v.Now
+		}
+		for _, v := range s.AllVector2s {
+			v.Prev = v.Now
+		}
+		for _, v := range s.AllVector3s {
+			v.Prev = v.Now
+		}
+
+		s.Integrate()
+		s.RenderTime -= constants.TimeStep
+		s.SimTime += constants.TimeStep
+	}
+
+	// Update the blended values
+	s.RenderStateBlend = s.RenderTime / constants.TimeStep
+
+	for _, v := range s.AllScalars {
+		v.Render = v.Now*s.RenderStateBlend + v.Prev*(1.0-s.RenderStateBlend)
+		if v.RenderCallback != nil {
+			v.RenderCallback()
+		}
+	}
+	for _, v := range s.AllVector2s {
+		v.Render[1] = v.Now[1]*s.RenderStateBlend + v.Prev[1]*(1.0-s.RenderStateBlend)
+		v.Render[0] = v.Now[0]*s.RenderStateBlend + v.Prev[0]*(1.0-s.RenderStateBlend)
+		if v.RenderCallback != nil {
+			v.RenderCallback()
+		}
+	}
+	for _, v := range s.AllVector3s {
+		v.Render[2] = v.Now[2]*s.RenderStateBlend + v.Prev[2]*(1.0-s.RenderStateBlend)
+		v.Render[1] = v.Now[1]*s.RenderStateBlend + v.Prev[1]*(1.0-s.RenderStateBlend)
+		v.Render[0] = v.Now[0]*s.RenderStateBlend + v.Prev[0]*(1.0-s.RenderStateBlend)
+		if v.RenderCallback != nil {
+			v.RenderCallback()
+		}
+	}
+
+	s.Render()
+}

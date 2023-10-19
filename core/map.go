@@ -9,6 +9,7 @@ import (
 type Map struct {
 	concepts.Base
 
+	Sim            *Simulation
 	Sectors        map[string]AbstractSector
 	Materials      map[string]Sampleable `editable:"Materials" edit_type:"Material"`
 	Player         AbstractEntity

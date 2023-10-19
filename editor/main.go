@@ -42,51 +42,44 @@ func EditorTimer() bool {
 	editor.LastFrameTime = dt
 	last = time.Now()
 
-	editor.World.Frame(dt)
-	editor.GatherHoveringObjects()
-
 	ps := entity.NewPlayerService(editor.World.Player.(*entities.Player))
 
 	if gameKeyMap[gdk.KEY_w] {
-		ps.Move(ps.Player.Angle, dt, 1.0)
+		ps.Move(ps.Player.Angle, 1.0)
 	}
 	if gameKeyMap[gdk.KEY_s] {
-		ps.Move(ps.Player.Angle+180.0, dt, 1.0)
+		ps.Move(ps.Player.Angle+180.0, 1.0)
 	}
 	if gameKeyMap[gdk.KEY_e] {
-		ps.Move(ps.Player.Angle+90.0, dt, 0.5)
+		ps.Move(ps.Player.Angle+90.0, 0.5)
 	}
 	if gameKeyMap[gdk.KEY_q] {
-		ps.Move(ps.Player.Angle+270.0, dt, 0.5)
+		ps.Move(ps.Player.Angle+270.0, 0.5)
 	}
 	if gameKeyMap[gdk.KEY_a] {
-		ps.Player.Angle -= constants.PlayerTurnSpeed * dt / 30.0
+		ps.Player.Angle -= constants.PlayerTurnSpeed / 30.0
 		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
 	}
 	if gameKeyMap[gdk.KEY_d] {
-		ps.Player.Angle += constants.PlayerTurnSpeed * dt / 30.0
+		ps.Player.Angle += constants.PlayerTurnSpeed / 30.0
 		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
 	}
 	if gameKeyMap[gdk.KEY_space] {
 		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel[2] += constants.PlayerSwimStrength * dt / 30.0
-		} else if ps.Standing {
-			ps.Player.Vel[2] += constants.PlayerJumpStrength * dt / 30.0
-			ps.Standing = false
+			ps.Player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
+		} else if ps.Player.OnGround {
+			ps.Player.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
+			ps.Player.OnGround = false
 		}
 	}
 	if gameKeyMap[gdk.KEY_c] {
 		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel[2] -= constants.PlayerSwimStrength * dt / 30.0
+			ps.Player.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
 		} else {
 			ps.Crouching = true
 		}
 	} else {
 		ps.Crouching = false
-	}
-
-	if gameKeyMap[gdk.KEY_t] {
-		//editor.World.ClearLightmaps()
 	}
 
 	editor.Window.QueueDraw()

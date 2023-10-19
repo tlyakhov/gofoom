@@ -6,10 +6,10 @@ require (
 	github.com/dmarkham/enumer v1.5.8
 	github.com/faiface/pixel v0.10.0
 	github.com/gotk3/gotk3 v0.6.2
+	github.com/loov/hrtime v1.0.3
 	github.com/rs/xid v1.5.0
 	golang.org/x/image v0.12.0
 	golang.org/x/tools v0.6.0
-	pgregory.net/rand v1.0.2
 )
 
 require (

@@ -22,7 +22,7 @@ func WallHi(s *state.SlicePortal) {
 		}
 		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
-	light := &concepts.Vector3{}
+	light := new(concepts.Vector3)
 	for s.Y = s.ClippedStart; s.Y < s.AdjClippedTop; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 		if s.Distance >= s.ZBuffer[screenIndex] {

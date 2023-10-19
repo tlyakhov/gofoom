@@ -49,9 +49,10 @@ func (a *AddEntity) OnMouseMove() {
 	a.RemoveFromMap()
 	a.AddToMap(sector)
 	a.Sector = sector
-	wg.To3D(&a.Entity.Physical().Pos)
+	wg.To3D(&a.Entity.Physical().Pos.Original)
 	floorZ, ceilZ := a.Sector.Physical().CalcFloorCeilingZ(wg)
-	a.Entity.Physical().Pos[2] = (floorZ + ceilZ) / 2
+	a.Entity.Physical().Pos.Original[2] = (floorZ + ceilZ) / 2
+	a.Entity.Physical().Pos.Reset()
 }
 
 func (a *AddEntity) OnMouseUp() {

@@ -3,6 +3,7 @@ package render
 import (
 	"fmt"
 	"math"
+	"sync"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -14,8 +15,8 @@ import (
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*state.Config
-	Map     *core.Map
-	columns chan int
+	Map         *core.Map
+	columnGroup *sync.WaitGroup
 }
 
 // NewRenderer constructs a new Renderer.
@@ -29,7 +30,7 @@ func NewRenderer() *Renderer {
 			Frame:        0,
 			Counter:      0,
 		},
-		columns: make(chan int),
+		columnGroup: new(sync.WaitGroup),
 	}
 
 	r.Initialize()
@@ -104,8 +105,8 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	slice.Distance = constants.MaxViewDistance
 
 	dist := math.MaxFloat64
-	isect := &concepts.Vector2{}
-	ray := &concepts.Vector2{}
+	isect := new(concepts.Vector2)
+	ray := new(concepts.Vector2)
 	ray.From(&slice.Ray.End).SubSelf(&slice.Ray.Start)
 	for _, segment := range slice.PhysicalSector.Segments {
 		// Wall is facing away from us
@@ -162,7 +163,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 		YEnd:           r.ScreenHeight,
 		Angle:          r.Player().Angle*concepts.Deg2rad + r.ViewRadians[x],
 		PhysicalSector: r.Player().Sector.Physical(),
-		CameraZ:        r.Player().Pos[2] + r.Player().Height + bob,
+		CameraZ:        r.Player().Pos.Render[2] + r.Player().Height + bob,
 	}
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)
@@ -172,10 +173,10 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 	slice.LightElements[3].Slice = slice
 
 	slice.Ray = &state.Ray{
-		Start: *r.Player().Pos.To2D(),
+		Start: *r.Player().Pos.Render.To2D(),
 		End: concepts.Vector2{
-			r.Player().Pos[0] + r.MaxViewDist*slice.AngleCos,
-			r.Player().Pos[1] + r.MaxViewDist*slice.AngleSin,
+			r.Player().Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
+			r.Player().Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
 		},
 	}
 
@@ -192,7 +193,7 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 	}
 
 	if constants.RenderMultiThreaded {
-		r.columns <- xStart
+		r.columnGroup.Done()
 	}
 }
 
@@ -208,15 +209,13 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.Counter = 0
 
 	if constants.RenderMultiThreaded {
-		blockSize := r.ScreenWidth / 8
-		blocks := 8
+		blockSize := r.ScreenWidth / 48
+		blocks := 48
+		r.columnGroup.Add(blocks)
 		for x := 0; x < blocks; x++ {
 			go r.RenderBlock(buffer, x*blockSize, x*blockSize+blockSize)
 		}
-
-		for x := 0; x < blocks; x++ {
-			<-r.columns
-		}
+		r.columnGroup.Wait()
 	} else {
 		for x := 0; x < r.ScreenWidth; x++ {
 			r.RenderColumn(buffer, x, 0, false)

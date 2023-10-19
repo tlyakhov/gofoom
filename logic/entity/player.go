@@ -5,6 +5,7 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/entities"
 
 	"tlyakhov/gofoom/constants"
@@ -19,20 +20,14 @@ func NewPlayerService(p *entities.Player) *PlayerService {
 	return &PlayerService{Player: p, AliveEntityService: NewAliveEntityService(&p.AliveEntity, p)}
 }
 
-func (p *PlayerService) Frame(lastFrameTime float64) {
-	p.Bob += p.Player.Vel.Length() / 6.0
+func (p *PlayerService) Frame(sim *core.Simulation) {
+	p.Bob += p.Player.Vel.Now.Length() / 6.0
 	for p.Bob > math.Pi*2 {
 		p.Bob -= math.Pi * 2
 	}
-	p.AliveEntityService.PhysicalEntityService.Frame(lastFrameTime)
+	p.AliveEntityService.PhysicalEntityService.Frame(sim)
 	if p.Player.Sector == nil {
 		return
-	}
-
-	if p.Player.Vel[2] <= 0 && p.Player.Vel[2] >= -0.001 {
-		p.Standing = true
-	} else {
-		p.Standing = false
 	}
 
 	if p.Crouching {
@@ -52,7 +47,7 @@ func (p *PlayerService) Hurt(amount float64) {
 	p.Player.HurtTime = constants.PlayerHurtTime
 }
 
-func (p *PlayerService) Move(angle, lastFrameTime, speed float64) {
-	p.Player.Vel[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
-	p.Player.Vel[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * speed
+func (p *PlayerService) Move(angle, lastFrameTime float64) {
+	p.Player.Vel.Now[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
+	p.Player.Vel.Now[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
 }

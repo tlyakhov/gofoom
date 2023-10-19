@@ -66,6 +66,7 @@ func (t *Image) Load() error {
 			t.Data[index] = concepts.ColorToInt32(img.At(x, y))
 		}
 	}
+	t.generateMipMaps()
 	return nil
 }
 
@@ -119,6 +120,8 @@ func (t *Image) generateMipMaps() {
 }
 
 func (t *Image) Sample(x, y float64, scale float64) uint32 {
+	// Testing:
+	// return (0xAF << 24) | 0xFF
 	data := t.Data
 	w := t.Width
 	h := t.Height

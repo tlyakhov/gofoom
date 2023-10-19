@@ -18,32 +18,42 @@ const (
 type VerticalDoor struct {
 	core.PhysicalSector `editable:"^"`
 
-	OrigTopZ float64
-	VelZ     float64
-	State    DoorBehavior
+	Pos   core.SimScalar
+	VelZ  float64
+	State DoorBehavior
 }
 
 func init() {
 	registry.Instance().Register(VerticalDoor{})
 }
 
+func (s *VerticalDoor) Apply() {
+	s.TopZ = s.Pos.Render
+}
+
 func (s *VerticalDoor) Initialize() {
 	s.PhysicalSector.Initialize()
-	s.OrigTopZ = s.TopZ
+	s.Sim.AllScalars = append(s.Sim.AllScalars, &s.Pos)
+	s.Pos.RenderCallback = s.Apply
+	s.Pos.Original = s.TopZ
+	s.Pos.Reset()
 }
 
 func (s *VerticalDoor) Deserialize(data map[string]interface{}) {
 	s.PhysicalSector.Deserialize(data)
+	s.Sim.AllScalars = append(s.Sim.AllScalars, &s.Pos)
+	s.Pos.RenderCallback = s.Apply
 	if v, ok := data["OrigTopZ"]; ok {
-		s.OrigTopZ = v.(float64)
+		s.Pos.Original = v.(float64)
 	} else {
-		s.OrigTopZ = s.TopZ
+		s.Pos.Original = s.TopZ
 	}
+	s.Pos.Reset()
 }
 
 func (s *VerticalDoor) Serialize() map[string]interface{} {
 	result := s.PhysicalSector.Serialize()
 	result["Type"] = "sectors.VerticalDoor"
-	result["OrigTopZ"] = s.OrigTopZ
+	result["OrigTopZ"] = s.Pos.Original
 	return result
 }

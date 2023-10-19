@@ -11,16 +11,18 @@ import (
 
 type PhysicalEntity struct {
 	*concepts.Base    `editable:"^"`
-	Pos               concepts.Vector3 `editable:"Position"`
-	Vel               concepts.Vector3
+	Sim               *Simulation
+	Pos               SimVector3 `editable:"Position"`
+	Vel               SimVector3
 	Angle             float64           `editable:"Angle"`
 	BoundingRadius    float64           `editable:"Bounding Radius"`
-	Weight            float64           `editable:"Weight"`
+	Mass              float64           `editable:"Mass"`
 	CollisionResponse CollisionResponse `editable:"Collision Response"`
 	CRCallback        func() CollisionResponse
 	Height            float64 `editable:"Height"`
 	MountHeight       float64 `editable:"Mount Height"`
 	Active            bool    `editable:"Active?"`
+	OnGround          bool
 	Sector            AbstractSector
 	Map               *Map
 
@@ -34,8 +36,10 @@ func init() {
 func (e *PhysicalEntity) Initialize() {
 	e.Base = &concepts.Base{}
 	e.Base.Initialize()
-	e.Pos = concepts.Vector3{}
-	e.Vel = concepts.Vector3{}
+	e.Pos.Original = concepts.Vector3{}
+	e.Sim.AllVector3s = append(e.Sim.AllVector3s, &e.Pos)
+	e.Vel.Original = concepts.Vector3{}
+	e.Sim.AllVector3s = append(e.Sim.AllVector3s, &e.Vel)
 	e.BoundingRadius = 10
 	e.CollisionResponse = Slide
 	e.MountHeight = constants.PlayerMountHeight
@@ -52,8 +56,8 @@ func (e *PhysicalEntity) GetSector() AbstractSector {
 }
 
 func (e *PhysicalEntity) Angle2DTo(p *concepts.Vector3) float64 {
-	dx := e.Pos[0] - p[0]
-	dy := e.Pos[1] - p[1]
+	dx := e.Pos.Now[0] - p[0]
+	dy := e.Pos.Now[1] - p[1]
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
@@ -67,6 +71,9 @@ func (e *PhysicalEntity) SetParent(parent interface{}) {
 }
 
 func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
+	if sector, ok := e.Sector.(*PhysicalSector); ok {
+		e.Sim = sector.Sim
+	}
 	e.Initialize()
 	e.Base.Deserialize(data)
 
@@ -74,10 +81,12 @@ func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
 		e.Active = v.(bool)
 	}
 	if v, ok := data["Pos"]; ok {
-		e.Pos.Deserialize(v.(map[string]interface{}))
+		e.Pos.Original.Deserialize(v.(map[string]interface{}))
+		e.Pos.Reset()
 	}
 	if v, ok := data["Vel"]; ok {
-		e.Vel.Deserialize(v.(map[string]interface{}))
+		e.Vel.Original.Deserialize(v.(map[string]interface{}))
+		e.Pos.Reset()
 	}
 	if v, ok := data["Angle"]; ok {
 		e.Angle = v.(float64)

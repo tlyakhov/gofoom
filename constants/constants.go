@@ -1,6 +1,10 @@
 package constants
 
 const (
+	// Simulation constants
+	TimeStep          = 1000.0 / 120.0 // calibrate to 120 frames per second
+	MinMillisPerFrame = 1000.0 / 15.0  // Ensure we don't do a spiral of death at framerates < 15
+
 	// Rendering constants
 	IntersectEpsilon        = 1e-10
 	LightGrid               = 6.0
@@ -21,22 +25,22 @@ const (
 	AudioUnitsFactor = 12
 
 	// World constants
-	Gravity          = 0.2
-	GravitySwim      = 0.01
+	Gravity          = 9.8 * 2 / (TimeStep * TimeStep) //0.005
+	GravitySwim      = 0.1 * 2 / (TimeStep * TimeStep)
 	SwimDamping      = 2.0
 	CollisionCheck   = 2.0
 	LiquidChurnSpeed = 2.0
 	LiquidChurnSize  = 0.03
-	DoorSpeed        = 3.0
+	DoorSpeed        = 0.1
 
 	// Player constants
 	PlayerBoundingRadius = 10.0
 	PlayerHeight         = 32.0
 	PlayerCrouchHeight   = 16.0
-	PlayerSpeed          = 1
-	PlayerTurnSpeed      = 4.0
-	PlayerJumpStrength   = 1.5
-	PlayerSwimStrength   = 0.6
+	PlayerSpeed          = 0.015
+	PlayerTurnSpeed      = 0.17
+	PlayerJumpStrength   = 0.02
+	PlayerSwimStrength   = 0.005
 	PlayerHurtTime       = 30
 	PlayerMountHeight    = 15.0
 	PlayerMaxHealth      = 100

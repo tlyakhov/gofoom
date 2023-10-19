@@ -20,7 +20,7 @@ func (s *VerticalDoorService) ActOnEntity(e core.AbstractEntity) {
 
 	ps := s.PhysicalSectorService
 
-	if ps.Center.Dist(&e.Physical().Pos) < 100 {
+	if ps.Center.Dist(&e.Physical().Pos.Now) < 100 {
 		if s.State == sectors.Closed || s.State == sectors.Closing {
 			s.State = sectors.Opening
 			s.VelZ = constants.DoorSpeed
@@ -31,24 +31,25 @@ func (s *VerticalDoorService) ActOnEntity(e core.AbstractEntity) {
 	}
 }
 
-func (s *VerticalDoorService) Frame(lastFrameTime float64) {
+func (s *VerticalDoorService) Frame(sim *core.Simulation) {
 	ps := s.PhysicalSectorService
-	ps.TopZ += s.VelZ * lastFrameTime / 30.0
+	z := s.Pos.Now + s.VelZ*constants.TimeStep
 
-	if ps.TopZ < ps.BottomZ {
-		ps.TopZ = ps.BottomZ
+	if z < ps.BottomZ {
+		z = ps.BottomZ
 		s.VelZ = 0
 		s.State = sectors.Closed
 	}
-	if ps.TopZ > s.OrigTopZ {
-		ps.TopZ = s.OrigTopZ
+	if z > s.Pos.Original {
+		z = s.Pos.Original
 		s.VelZ = 0
 		s.State = sectors.Open
 	}
+	s.Pos.Now = z
 }
 
 func (s *VerticalDoorService) Recalculate() {
 	s.PhysicalSectorService.PhysicalSector.Recalculate()
-	s.PhysicalSectorService.Max[2] = s.OrigTopZ
+	s.PhysicalSectorService.Max[2] = s.Pos.Original
 	s.UpdatePVS()
 }

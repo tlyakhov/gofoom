@@ -19,8 +19,9 @@ func NewPhysicalSectorService(s *core.PhysicalSector) *PhysicalSectorService {
 }
 
 func (s *PhysicalSectorService) OnEnter(e core.AbstractEntity) {
-	if s.FloorTarget == nil && e.Physical().Pos[2] <= e.GetSector().Physical().BottomZ {
-		e.Physical().Pos[2] = e.GetSector().Physical().BottomZ
+	p := &e.Physical().Pos.Now
+	if s.FloorTarget == nil && p[2] <= e.GetSector().Physical().BottomZ {
+		p[2] = e.GetSector().Physical().BottomZ
 	}
 }
 
@@ -29,20 +30,22 @@ func (s *PhysicalSectorService) OnExit(e core.AbstractEntity) {
 
 func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 	concrete := e.Physical()
-	entityTop := concrete.Pos[2] + concrete.Height
-	floorZ, ceilZ := s.CalcFloorCeilingZ(concrete.Pos.To2D())
+	entityTop := concrete.Pos.Now[2] + concrete.Height
+	floorZ, ceilZ := s.CalcFloorCeilingZ(concrete.Pos.Now.To2D())
 
+	concrete.OnGround = false
 	if s.FloorTarget != nil && entityTop < floorZ {
 		provide.Passer.For(concrete.Sector).OnExit(e)
 		concrete.Sector = s.FloorTarget
 		provide.Passer.For(concrete.Sector).OnEnter(e)
-		floorZ, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.To2D())
-		concrete.Pos[2] = ceilZ - concrete.Height - 1.0
-	} else if s.FloorTarget != nil && concrete.Pos[2] <= floorZ && concrete.Vel[2] > 0 {
-		concrete.Vel[2] = constants.PlayerJumpStrength
-	} else if s.FloorTarget == nil && concrete.Pos[2] <= floorZ {
-		concrete.Vel[2] = 0
-		concrete.Pos[2] = floorZ
+		_, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D())
+		concrete.Pos.Now[2] = ceilZ - concrete.Height - 1.0
+	} else if s.FloorTarget != nil && concrete.Pos.Now[2] <= floorZ && concrete.Vel.Now[2] > 0 {
+		concrete.Vel.Now[2] = constants.PlayerJumpStrength
+	} else if s.FloorTarget == nil && concrete.Pos.Now[2] <= floorZ {
+		concrete.Vel.Now[2] = 0
+		concrete.Pos.Now[2] = floorZ
+		concrete.OnGround = true
 		//fmt.Printf("%v\n", concrete.Pos)
 	}
 
@@ -50,11 +53,11 @@ func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 		provide.Passer.For(concrete.Sector).OnExit(e)
 		concrete.Sector = s.CeilTarget
 		provide.Passer.For(concrete.Sector).OnEnter(e)
-		floorZ, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.To2D())
-		concrete.Pos[2] = floorZ - concrete.Height + 1.0
+		floorZ, _ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D())
+		concrete.Pos.Now[2] = floorZ - concrete.Height + 1.0
 	} else if s.CeilTarget == nil && entityTop > ceilZ {
-		concrete.Vel[2] = 0
-		concrete.Pos[2] = ceilZ - concrete.Height - 1.0
+		concrete.Vel.Now[2] = 0
+		concrete.Pos.Now[2] = ceilZ - concrete.Height - 1.0
 	}
 }
 
@@ -63,28 +66,31 @@ func (s *PhysicalSectorService) ActOnEntity(e core.AbstractEntity) {
 		return
 	}
 
+	v := &e.Physical().Vel.Now
 	if e.GetBase().ID == s.Map.Player.GetBase().ID {
-		e.Physical().Vel[0] /= 1.2
-		e.Physical().Vel[1] /= 1.2
-		if math.Abs(e.Physical().Vel[0]) < 0.0001 {
-			e.Physical().Vel[0] = 0
+		v[0] /= 1.2
+		v[1] /= 1.2
+		if math.Abs(v[0]) < 0.0001 {
+			v[0] = 0
 		}
-		if math.Abs(e.Physical().Vel[1]) < 0.0001 {
-			e.Physical().Vel[1] = 0
+		if math.Abs(v[1]) < 0.0001 {
+			v[1] = 0
 		}
 	}
 
-	e.Physical().Vel[2] -= constants.Gravity * e.Physical().Weight
+	if e.Physical().Mass > 0 {
+		v[2] -= constants.Gravity / e.Physical().Mass
+	}
 
 	s.Collide(e)
 }
 
-func (s *PhysicalSectorService) Frame(lastFrameTime float64) {
+func (s *PhysicalSectorService) Frame(sim *core.Simulation) {
 	for _, e := range s.Entities {
 		if e.GetBase().ID == s.Map.Player.GetBase().ID || s.Map.EntitiesPaused {
 			continue
 		}
-		provide.EntityAnimator.For(e).Frame(lastFrameTime)
+		provide.EntityAnimator.For(e).Frame(sim)
 	}
 }
 
@@ -134,11 +140,11 @@ func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
 					if iseg.AdjacentSector != nil {
 						continue
 					}
-					isect1 := iseg.Intersect2D(l1a, l1b, &concepts.Vector2{})
+					isect1 := iseg.Intersect2D(l1a, l1b, new(concepts.Vector2))
 					if !isect1 {
 						continue
 					}
-					isect2 := iseg.Intersect2D(l2a, l2b, &concepts.Vector2{})
+					isect2 := iseg.Intersect2D(l2a, l2b, new(concepts.Vector2))
 					if isect2 {
 						occluded = true
 						break
@@ -222,7 +228,7 @@ func (s *PhysicalSectorService) updateEntityPVS(normal *concepts.Vector2, visito
 
 func (s *PhysicalSectorService) UpdatePVS() {
 	s.buildPVS(nil)
-	s.updateEntityPVS(&concepts.Vector2{}, nil)
+	s.updateEntityPVS(new(concepts.Vector2), nil)
 }
 
 func (s *PhysicalSectorService) Recalculate() {

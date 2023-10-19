@@ -36,7 +36,7 @@ func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
 		return p
 	}
 
-	r := &concepts.Vector3{}
+	r := new(concepts.Vector3)
 	g.WorldGrid(&concepts.Vector2{p[0], p[1]}).To3D(r)
 	r[2] = p[2]
 	return r
@@ -82,7 +82,7 @@ func (g *MapViewGrid) Refresh(e *state.Edit, cr *cairo.Context) {
 		right[0] = -right[0]
 		right[1] = -right[1]
 	}
-	start := editor.ScreenToWorld(&concepts.Vector2{})
+	start := editor.ScreenToWorld(new(concepts.Vector2))
 	end := editor.ScreenToWorld(&editor.Size)
 	qstart := g.WorldGrid(start)
 	qend := g.WorldGrid(end)

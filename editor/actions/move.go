@@ -38,7 +38,7 @@ func (a *Move) OnMouseDown(button *gdk.EventButton) {
 		case *state.MapPoint:
 			target.P.To3D(&a.Original[i])
 		case core.AbstractEntity:
-			a.Original[i] = target.Physical().Pos
+			a.Original[i] = target.Physical().Pos.Original
 		}
 	}
 }
@@ -64,7 +64,8 @@ func (a *Move) Act() {
 				// Otherwise weird things happen...
 				continue
 			}
-			target.Physical().Pos = *a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D(&concepts.Vector3{})))
+			target.Physical().Pos.Original = *a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D(new(concepts.Vector3))))
+			target.Physical().Pos.Reset()
 			a.State().World.Recalculate()
 		}
 	}
@@ -83,7 +84,8 @@ func (a *Move) Undo() {
 				// Otherwise weird things happen...
 				continue
 			}
-			target.Physical().Pos = a.Original[i]
+			target.Physical().Pos.Original = a.Original[i]
+			target.Physical().Pos.Reset()
 			a.State().World.Recalculate()
 		}
 	}

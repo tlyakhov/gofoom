@@ -15,7 +15,7 @@ type Passable interface {
 }
 
 type Animateable interface {
-	Frame(lastFrameTime float64)
+	Frame(sim *core.Simulation)
 }
 
 type Hurtable interface {

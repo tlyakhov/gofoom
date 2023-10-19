@@ -50,11 +50,7 @@ func Ceiling(s *state.Slice) {
 		}
 
 		tx := world[0] / s.PhysicalSector.CeilScale
-		tx -= math.Floor(tx)
 		ty := world[1] / s.PhysicalSector.CeilScale
-		ty -= math.Floor(ty)
-		tx = math.Abs(tx)
-		ty = math.Abs(ty)
 
 		if mat != nil {
 			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToCeil), scaler))

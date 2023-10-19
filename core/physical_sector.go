@@ -12,6 +12,7 @@ import (
 type PhysicalSector struct {
 	concepts.Base `editable:"^"`
 
+	Sim           *Simulation
 	Map           *Map
 	Segments      []*Segment
 	Entities      map[string]AbstractEntity
@@ -83,6 +84,7 @@ func (s *PhysicalSector) AddSegment(x float64, y float64) *Segment {
 }
 
 func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
+	s.Sim = s.Map.Sim
 	s.Initialize()
 	s.Base.Deserialize(data)
 	if v, ok := data["TopZ"]; ok {
@@ -238,8 +240,8 @@ func (s *PhysicalSector) Recalculate() {
 	s.Segments = filtered
 
 	if len(s.Segments) > 1 {
-		sloped := s.Segments[0].Normal.To3D(&concepts.Vector3{})
-		delta := (&concepts.Vector2{s.Segments[1].P[0], s.Segments[1].P[1]}).Sub(&s.Segments[0].P).To3D(&concepts.Vector3{})
+		sloped := s.Segments[0].Normal.To3D(new(concepts.Vector3))
+		delta := (&concepts.Vector2{s.Segments[1].P[0], s.Segments[1].P[1]}).Sub(&s.Segments[0].P).To3D(new(concepts.Vector3))
 		sloped[2] = s.FloorSlope
 		s.FloorNormal.CrossSelf(sloped, delta).NormSelf()
 		if s.FloorNormal[2] < 0 {

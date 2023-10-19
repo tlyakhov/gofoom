@@ -17,7 +17,7 @@ type LightElement struct {
 }
 
 func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
-	var q = &concepts.Vector3{}
+	var q = new(concepts.Vector3)
 	if !wall {
 		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
 	} else {
@@ -25,7 +25,7 @@ func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
 		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
 	}
 	dbg := q.Mul(1.0 / 64.0)
-	result := &concepts.Vector3{}
+	result := new(concepts.Vector3)
 	result[0] = dbg[0] - math.Floor(dbg[0])
 	result[1] = dbg[1] - math.Floor(dbg[1])
 	result[2] = dbg[2] - math.Floor(dbg[2])
@@ -40,7 +40,7 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 		return result
 	}
 
-	var q = &concepts.Vector3{}
+	var q = new(concepts.Vector3)
 	if !wall {
 		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
 	} else {
@@ -52,12 +52,14 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 	return result
 }
 
-// allContainingSectors returns all sectors current/adjacent that include a given world location
-func (le *LightElement) allSourceSectors(p *concepts.Vector3, startingSector *core.PhysicalSector) []*core.PhysicalSector {
-	le.allSectors = le.allSectors[:0]
-	// Always check the current sector
-	le.allSectors = append(le.allSectors, startingSector)
-	for _, seg := range startingSector.Segments {
+// lightVisible determines whether a given light is visible from a world location.
+func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity) bool {
+	// Always check the starting sector
+	if le.lightVisibleFromSector(p, e, le.PhysicalSector) {
+		return true
+	}
+
+	for _, seg := range le.PhysicalSector.Segments {
 		if seg.AdjacentSector == nil {
 			continue
 		}
@@ -70,20 +72,11 @@ func (le *LightElement) allSourceSectors(p *concepts.Vector3, startingSector *co
 		if p[2]-ceilZ > constants.LightGrid || floorZ-p[2] > constants.LightGrid {
 			continue
 		}
-		le.allSectors = append(le.allSectors, seg.AdjacentSector.Physical())
-	}
-
-	return le.allSectors
-}
-
-// lightVisible determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity) bool {
-	allSectors := le.allSourceSectors(p, le.PhysicalSector)
-	for _, sector := range allSectors {
-		if le.lightVisibleFromSector(p, e, sector) {
+		if le.lightVisibleFromSector(p, e, seg.AdjacentSector.Physical()) {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -94,7 +87,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 	if constants.DebugLighting && debugWallCheck && sector.ID == debugSectorID {
 		log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), e.Pos)
 	}
-	delta := &concepts.Vector3{e.Pos[0], e.Pos[1], e.Pos[2]}
+	delta := &concepts.Vector3{e.Pos.Render[0], e.Pos.Render[1], e.Pos.Render[2]}
 	delta.SubSelf(p)
 	maxDist2 := delta.Length2()
 	// Is the point right next to the light? Visible by definition.
@@ -125,8 +118,8 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			}
 
 			// Find the intersection with this segment.
-			isect := &concepts.Vector3{}
-			ok := seg.Intersect3D(p, &e.Pos, isect)
+			isect := new(concepts.Vector3)
+			ok := seg.Intersect3D(p, &e.Pos.Render, isect)
 			if !ok {
 				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
 					log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
@@ -216,7 +209,7 @@ func (le *LightElement) Calculate(world *concepts.Vector3) concepts.Vector3 {
 			if !ok {
 				continue
 			}
-			delta := &lightEntity.Physical().Pos
+			delta := &lightEntity.Physical().Pos.Render
 			delta = &concepts.Vector3{delta[0], delta[1], delta[2]}
 			delta.SubSelf(world)
 			dist := delta.Length()
