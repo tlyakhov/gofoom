@@ -12,7 +12,7 @@ import (
 type PhysicalSector struct {
 	concepts.Base `editable:"^"`
 
-	Sim           *Simulation
+	Simulation    *Simulation
 	Map           *Map
 	Segments      []*Segment
 	Entities      map[string]AbstractEntity
@@ -74,6 +74,30 @@ func (s *PhysicalSector) Initialize() {
 	s.CeilScale = 64.0
 }
 
+func (s *PhysicalSector) Attach(sim *Simulation) {
+	s.Simulation = sim
+	for _, e := range s.Entities {
+		if simmed, ok := e.(Simulated); ok {
+			simmed.Attach(sim)
+		}
+	}
+}
+func (s *PhysicalSector) Detach() {
+	if s.Simulation == nil {
+		return
+	}
+	for _, e := range s.Entities {
+		if simmed, ok := e.(Simulated); ok {
+			simmed.Detach()
+		}
+	}
+	s.Simulation = nil
+}
+
+func (s *PhysicalSector) Sim() *Simulation {
+	return s.Simulation
+}
+
 func (s *PhysicalSector) AddSegment(x float64, y float64) *Segment {
 	segment := &Segment{}
 	segment.Initialize()
@@ -84,7 +108,6 @@ func (s *PhysicalSector) AddSegment(x float64, y float64) *Segment {
 }
 
 func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
-	s.Sim = s.Map.Sim
 	s.Initialize()
 	s.Base.Deserialize(data)
 	if v, ok := data["TopZ"]; ok {

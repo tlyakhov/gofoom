@@ -24,7 +24,6 @@ func init() {
 func NewPlayer(m *core.Map) *Player {
 	p := &Player{}
 	p.Map = m
-	p.Sim = m.Sim
 	p.Initialize()
 	p.Pos.Original = m.Spawn
 	p.Pos.Reset()

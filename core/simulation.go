@@ -17,9 +17,15 @@ type Simulation struct {
 	PrevTimestamp    int64
 	Integrate        func()
 	Render           func()
-	AllScalars       []*SimScalar
-	AllVector2s      []*SimVector2
-	AllVector3s      []*SimVector3
+	AllScalars       map[*SimScalar]bool
+	AllVector2s      map[*SimVector2]bool
+	AllVector3s      map[*SimVector3]bool
+}
+
+type Simulated interface {
+	Attach(sim *Simulation)
+	Detach()
+	Sim() *Simulation
 }
 
 type SimScalar struct {
@@ -78,7 +84,12 @@ func (v *SimVector3) Deserialize(data map[string]interface{}) {
 }
 
 func NewSimulation() *Simulation {
-	return &Simulation{PrevTimestamp: hrtime.Now().Milliseconds()}
+	return &Simulation{
+		PrevTimestamp: hrtime.Now().Milliseconds(),
+		AllScalars:    make(map[*SimScalar]bool),
+		AllVector2s:   make(map[*SimVector2]bool),
+		AllVector3s:   make(map[*SimVector3]bool),
+	}
 }
 
 func (s *Simulation) Step() {
@@ -96,13 +107,13 @@ func (s *Simulation) Step() {
 	s.RenderTime += frameMillis
 
 	for s.RenderTime >= constants.TimeStep {
-		for _, v := range s.AllScalars {
+		for v := range s.AllScalars {
 			v.Prev = v.Now
 		}
-		for _, v := range s.AllVector2s {
+		for v := range s.AllVector2s {
 			v.Prev = v.Now
 		}
-		for _, v := range s.AllVector3s {
+		for v := range s.AllVector3s {
 			v.Prev = v.Now
 		}
 
@@ -114,20 +125,20 @@ func (s *Simulation) Step() {
 	// Update the blended values
 	s.RenderStateBlend = s.RenderTime / constants.TimeStep
 
-	for _, v := range s.AllScalars {
+	for v := range s.AllScalars {
 		v.Render = v.Now*s.RenderStateBlend + v.Prev*(1.0-s.RenderStateBlend)
 		if v.RenderCallback != nil {
 			v.RenderCallback()
 		}
 	}
-	for _, v := range s.AllVector2s {
+	for v := range s.AllVector2s {
 		v.Render[1] = v.Now[1]*s.RenderStateBlend + v.Prev[1]*(1.0-s.RenderStateBlend)
 		v.Render[0] = v.Now[0]*s.RenderStateBlend + v.Prev[0]*(1.0-s.RenderStateBlend)
 		if v.RenderCallback != nil {
 			v.RenderCallback()
 		}
 	}
-	for _, v := range s.AllVector3s {
+	for v := range s.AllVector3s {
 		v.Render[2] = v.Now[2]*s.RenderStateBlend + v.Prev[2]*(1.0-s.RenderStateBlend)
 		v.Render[1] = v.Now[1]*s.RenderStateBlend + v.Prev[1]*(1.0-s.RenderStateBlend)
 		v.Render[0] = v.Now[0]*s.RenderStateBlend + v.Prev[0]*(1.0-s.RenderStateBlend)

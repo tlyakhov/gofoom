@@ -7,7 +7,6 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"runtime/pprof"
-	"time"
 
 	"tlyakhov/gofoom/editor/actions"
 
@@ -15,11 +14,7 @@ import (
 
 	_ "tlyakhov/gofoom/behaviors"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/entities"
-	"tlyakhov/gofoom/logic/entity"
-	"tlyakhov/gofoom/sectors"
 
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
@@ -34,55 +29,11 @@ var (
 	ColorPVS                = concepts.Vector3{0.6, 1, 0.6}
 	editor                  = NewEditor()
 	gameKeyMap              = make(map[uint]bool)
-	last                    = time.Now()
 )
 
 func EditorTimer() bool {
-	dt := time.Since(last).Seconds() * 1000
-	editor.LastFrameTime = dt
-	last = time.Now()
+	editor.World.Sim().Step()
 
-	ps := entity.NewPlayerService(editor.World.Player.(*entities.Player))
-
-	if gameKeyMap[gdk.KEY_w] {
-		ps.Move(ps.Player.Angle, 1.0)
-	}
-	if gameKeyMap[gdk.KEY_s] {
-		ps.Move(ps.Player.Angle+180.0, 1.0)
-	}
-	if gameKeyMap[gdk.KEY_e] {
-		ps.Move(ps.Player.Angle+90.0, 0.5)
-	}
-	if gameKeyMap[gdk.KEY_q] {
-		ps.Move(ps.Player.Angle+270.0, 0.5)
-	}
-	if gameKeyMap[gdk.KEY_a] {
-		ps.Player.Angle -= constants.PlayerTurnSpeed / 30.0
-		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
-	}
-	if gameKeyMap[gdk.KEY_d] {
-		ps.Player.Angle += constants.PlayerTurnSpeed / 30.0
-		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
-	}
-	if gameKeyMap[gdk.KEY_space] {
-		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
-		} else if ps.Player.OnGround {
-			ps.Player.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
-			ps.Player.OnGround = false
-		}
-	}
-	if gameKeyMap[gdk.KEY_c] {
-		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
-		} else {
-			ps.Crouching = true
-		}
-	} else {
-		ps.Crouching = false
-	}
-
-	editor.Window.QueueDraw()
 	return true
 }
 

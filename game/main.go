@@ -89,7 +89,7 @@ func processInput() {
 
 func integrateGame() {
 	processInput()
-	gameMap.Frame(gameMap.Sim)
+	gameMap.Frame(gameMap.Sim())
 }
 
 func renderGame() {
@@ -155,7 +155,8 @@ func run() {
 	sim = core.NewSimulation()
 	sim.Integrate = integrateGame
 	sim.Render = renderGame
-	gameMap = logic.LoadMap("data/worlds/hall.json", sim)
+	gameMap = logic.LoadMap("data/worlds/hall.json")
+	gameMap.Attach(sim)
 	ps = entity.NewPlayerService(gameMap.Player.(*entities.Player))
 	ps.Collide()
 	renderer.Map = gameMap.Map
