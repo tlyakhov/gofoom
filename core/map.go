@@ -9,7 +9,7 @@ import (
 type Map struct {
 	concepts.Base
 
-	Sim            *Simulation
+	Simulation     *Simulation
 	Sectors        map[string]AbstractSector
 	Materials      map[string]Sampleable `editable:"Materials" edit_type:"Material"`
 	Player         AbstractEntity
@@ -36,6 +36,42 @@ func (m *Map) Initialize() {
 	m.Sectors = make(map[string]AbstractSector)
 }
 
+func (m *Map) Attach(sim *Simulation) {
+	m.Simulation = sim
+	m.Player.Physical().Attach(sim)
+	for _, s := range m.Sectors {
+		if simmed, ok := s.(Simulated); ok {
+			simmed.Attach(sim)
+		}
+	}
+	for _, m := range m.Materials {
+		if simmed, ok := m.(Simulated); ok {
+			simmed.Attach(sim)
+		}
+	}
+}
+func (m *Map) Detach() {
+	if m.Simulation == nil {
+		return
+	}
+	m.Player.Physical().Detach()
+	for _, s := range m.Sectors {
+		if simmed, ok := s.(Simulated); ok {
+			simmed.Detach()
+		}
+	}
+	for _, m := range m.Materials {
+		if simmed, ok := m.(Simulated); ok {
+			simmed.Detach()
+		}
+	}
+	m.Simulation = nil
+}
+
+func (m *Map) Sim() *Simulation {
+	return m.Simulation
+}
+
 func (m *Map) Deserialize(data map[string]interface{}) {
 	m.Initialize()
 	m.Base.Deserialize(data)
@@ -54,6 +90,9 @@ func (m *Map) Deserialize(data map[string]interface{}) {
 	}
 	if v, ok := data["Sectors"]; ok {
 		concepts.MapCollection(m, &m.Sectors, v)
+	}
+	if m.Sim() != nil {
+		m.Attach(m.Sim())
 	}
 	m.Recalculate()
 }

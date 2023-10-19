@@ -24,7 +24,7 @@ func NewMapService(m *core.Map) *MapService {
 	return &MapService{Map: m}
 }
 
-func LoadMap(filename string, sim *core.Simulation) *MapService {
+func LoadMap(filename string) *MapService {
 	fileContents, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -32,7 +32,7 @@ func LoadMap(filename string, sim *core.Simulation) *MapService {
 	}
 	var parsed interface{}
 	err = json.Unmarshal(fileContents, &parsed)
-	m := NewMapService(&core.Map{Sim: sim})
+	m := NewMapService(new(core.Map))
 	m.Initialize()
 	m.Deserialize(parsed.(map[string]interface{}))
 	m.Player = entities.NewPlayer(m.Map)

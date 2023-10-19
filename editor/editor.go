@@ -5,7 +5,9 @@ import (
 	"strconv"
 	"unsafe"
 
+	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/sectors"
 
 	"github.com/gotk3/gotk3/gdk"
 
@@ -130,9 +132,48 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) Integrate() {
-	editor.World.Frame(editor.World.Sim)
-	editor.GatherHoveringObjects()
+	ps := entity.NewPlayerService(editor.World.Player.(*entities.Player))
 
+	if gameKeyMap[gdk.KEY_w] {
+		ps.Move(ps.Player.Angle, 1.0)
+	}
+	if gameKeyMap[gdk.KEY_s] {
+		ps.Move(ps.Player.Angle+180.0, 1.0)
+	}
+	if gameKeyMap[gdk.KEY_e] {
+		ps.Move(ps.Player.Angle+90.0, 0.5)
+	}
+	if gameKeyMap[gdk.KEY_q] {
+		ps.Move(ps.Player.Angle+270.0, 0.5)
+	}
+	if gameKeyMap[gdk.KEY_a] {
+		ps.Player.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
+		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+	}
+	if gameKeyMap[gdk.KEY_d] {
+		ps.Player.Angle += constants.PlayerTurnSpeed * constants.TimeStep
+		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+	}
+	if gameKeyMap[gdk.KEY_space] {
+		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
+			ps.Player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
+		} else if ps.Player.OnGround {
+			ps.Player.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
+			ps.Player.OnGround = false
+		}
+	}
+	if gameKeyMap[gdk.KEY_c] {
+		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
+			ps.Player.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
+		} else {
+			ps.Crouching = true
+		}
+	} else {
+		ps.Crouching = false
+	}
+
+	editor.World.Frame(editor.World.Sim())
+	editor.GatherHoveringObjects()
 }
 
 func (e *Editor) Load(filename string) {
@@ -142,7 +183,8 @@ func (e *Editor) Load(filename string) {
 	sim := core.NewSimulation()
 	sim.Integrate = e.Integrate
 	sim.Render = e.Window.QueueDraw
-	e.World = logic.LoadMap(e.OpenFile, sim)
+	e.World = logic.LoadMap(e.OpenFile)
+	e.World.Attach(sim)
 	ps := entity.NewPlayerService(e.World.Player.(*entities.Player))
 	ps.Collide()
 	e.SelectObjects([]concepts.ISerializable{})
@@ -153,8 +195,12 @@ func (e *Editor) Load(filename string) {
 func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
-	e.World = logic.NewMapService(&core.Map{Sim: new(core.Simulation)})
+	sim := core.NewSimulation()
+	sim.Integrate = e.Integrate
+	sim.Render = e.Window.QueueDraw
+	e.World = logic.NewMapService(new(core.Map))
 	e.World.Initialize()
+	e.World.Attach(sim)
 	e.World.CreateTest()
 	ps := entity.NewPlayerService(e.World.Player.(*entities.Player))
 	ps.Collide()
@@ -195,6 +241,9 @@ func (e *Editor) ActTool() {
 		t := registry.Instance().All[typeId]
 		s := reflect.New(t).Interface().(core.AbstractSector)
 		s.Initialize()
+		if simmed, ok := s.(core.Simulated); ok {
+			simmed.Attach(e.World.Sim())
+		}
 		s.Physical().FloorMaterial = e.World.DefaultMaterial()
 		s.Physical().CeilMaterial = e.World.DefaultMaterial()
 		s.SetParent(e.World.Map)
@@ -204,6 +253,9 @@ func (e *Editor) ActTool() {
 		t := registry.Instance().All[typeId]
 		ae := reflect.New(t).Interface().(core.AbstractEntity)
 		ae.Initialize()
+		if simmed, ok := ae.(core.Simulated); ok {
+			simmed.Attach(e.World.Sim())
+		}
 		e.NewAction(&actions.AddEntity{IEditor: e, Entity: ae})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})

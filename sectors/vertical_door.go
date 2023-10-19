@@ -33,15 +33,22 @@ func (s *VerticalDoor) Apply() {
 
 func (s *VerticalDoor) Initialize() {
 	s.PhysicalSector.Initialize()
-	s.Sim.AllScalars = append(s.Sim.AllScalars, &s.Pos)
 	s.Pos.RenderCallback = s.Apply
 	s.Pos.Original = s.TopZ
 	s.Pos.Reset()
 }
 
+func (s *VerticalDoor) Attach(sim *core.Simulation) {
+	s.PhysicalSector.Attach(sim)
+	sim.AllScalars[&s.Pos] = true
+}
+func (s *VerticalDoor) Detach() {
+	delete(s.Simulation.AllScalars, &s.Pos)
+	s.PhysicalSector.Detach()
+}
+
 func (s *VerticalDoor) Deserialize(data map[string]interface{}) {
 	s.PhysicalSector.Deserialize(data)
-	s.Sim.AllScalars = append(s.Sim.AllScalars, &s.Pos)
 	s.Pos.RenderCallback = s.Apply
 	if v, ok := data["OrigTopZ"]; ok {
 		s.Pos.Original = v.(float64)

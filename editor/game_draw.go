@@ -37,7 +37,7 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.SelectFontFace("Courier", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
 	cr.SetFontSize(13)
 	cr.MoveTo(10, 10)
-	cr.ShowText(fmt.Sprintf("FPS: %.1f", 1000.0/editor.LastFrameTime))
+	cr.ShowText(fmt.Sprintf("FPS: %.1f", editor.World.Sim().FPS))
 	cr.MoveTo(10, 20)
 	cr.ShowText(fmt.Sprintf("Health: %.1f", ps.Player.Health))
 	cr.MoveTo(10, 30)

@@ -11,7 +11,7 @@ import (
 
 type PhysicalEntity struct {
 	*concepts.Base    `editable:"^"`
-	Sim               *Simulation
+	Simulation        *Simulation
 	Pos               SimVector3 `editable:"Position"`
 	Vel               SimVector3
 	Angle             float64           `editable:"Angle"`
@@ -37,14 +37,30 @@ func (e *PhysicalEntity) Initialize() {
 	e.Base = &concepts.Base{}
 	e.Base.Initialize()
 	e.Pos.Original = concepts.Vector3{}
-	e.Sim.AllVector3s = append(e.Sim.AllVector3s, &e.Pos)
 	e.Vel.Original = concepts.Vector3{}
-	e.Sim.AllVector3s = append(e.Sim.AllVector3s, &e.Vel)
 	e.BoundingRadius = 10
 	e.CollisionResponse = Slide
 	e.MountHeight = constants.PlayerMountHeight
 	e.Active = true
 	e.Behaviors = make(map[string]AbstractBehavior)
+}
+
+func (e *PhysicalEntity) Attach(sim *Simulation) {
+	e.Simulation = sim
+	sim.AllVector3s[&e.Pos] = true
+	sim.AllVector3s[&e.Vel] = true
+}
+func (e *PhysicalEntity) Detach() {
+	if e.Simulation == nil {
+		return
+	}
+	delete(e.Simulation.AllVector3s, &e.Pos)
+	delete(e.Simulation.AllVector3s, &e.Vel)
+	e.Simulation = nil
+}
+
+func (e *PhysicalEntity) Sim() *Simulation {
+	return e.Simulation
 }
 
 func (e *PhysicalEntity) Physical() *PhysicalEntity {
@@ -65,15 +81,15 @@ func (e *PhysicalEntity) SetParent(parent interface{}) {
 	if sector, ok := parent.(AbstractSector); ok {
 		e.Sector = sector
 		e.Map = sector.Physical().Map
+		if e.Map.Sim() != nil {
+			e.Attach(e.Map.Sim())
+		}
 	} else {
 		panic("Tried mapping.PhysicalEntity.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
 	}
 }
 
 func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
-	if sector, ok := e.Sector.(*PhysicalSector); ok {
-		e.Sim = sector.Sim
-	}
 	e.Initialize()
 	e.Base.Deserialize(data)
 
