@@ -16,8 +16,8 @@ type PhysicalSector struct {
 	Map           *Map
 	Segments      []*Segment
 	Entities      map[string]AbstractEntity
-	BottomZ       float64        `editable:"Floor Height"`
-	TopZ          float64        `editable:"Ceiling Height"`
+	BottomZ       SimScalar      `editable:"Floor Height"`
+	TopZ          SimScalar      `editable:"Ceiling Height"`
 	FloorScale    float64        `editable:"Floor Material Scale"`
 	CeilScale     float64        `editable:"Ceiling Material Scale"`
 	FloorSlope    float64        `editable:"Floor Slope"`
@@ -68,14 +68,16 @@ func (s *PhysicalSector) Initialize() {
 	s.Base.Initialize()
 	s.Segments = make([]*Segment, 0)
 	s.Entities = make(map[string]AbstractEntity)
-	s.BottomZ = 0.0
-	s.TopZ = 64.0
+	s.BottomZ.Set(0.0)
+	s.TopZ.Set(64.0)
 	s.FloorScale = 64.0
 	s.CeilScale = 64.0
 }
 
 func (s *PhysicalSector) Attach(sim *Simulation) {
 	s.Simulation = sim
+	s.TopZ.Attach(sim)
+	s.BottomZ.Attach(sim)
 	for _, e := range s.Entities {
 		if simmed, ok := e.(Simulated); ok {
 			simmed.Attach(sim)
@@ -86,6 +88,8 @@ func (s *PhysicalSector) Detach() {
 	if s.Simulation == nil {
 		return
 	}
+	s.TopZ.Detach(s.Simulation)
+	s.BottomZ.Detach(s.Simulation)
 	for _, e := range s.Entities {
 		if simmed, ok := e.(Simulated); ok {
 			simmed.Detach()
@@ -111,10 +115,12 @@ func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 	s.Initialize()
 	s.Base.Deserialize(data)
 	if v, ok := data["TopZ"]; ok {
-		s.TopZ = v.(float64)
+		s.TopZ.Original = v.(float64)
+		s.TopZ.Reset()
 	}
 	if v, ok := data["BottomZ"]; ok {
-		s.BottomZ = v.(float64)
+		s.BottomZ.Original = v.(float64)
+		s.BottomZ.Reset()
 	}
 	if v, ok := data["FloorScale"]; ok {
 		s.FloorScale = v.(float64)
@@ -152,8 +158,8 @@ func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
 func (s *PhysicalSector) Serialize() map[string]interface{} {
 	result := s.Base.Serialize()
 	result["Type"] = "core.PhysicalSector"
-	result["TopZ"] = s.TopZ
-	result["BottomZ"] = s.BottomZ
+	result["TopZ"] = s.TopZ.Original
+	result["BottomZ"] = s.BottomZ.Original
 	result["FloorScale"] = s.FloorScale
 	result["CeilScale"] = s.CeilScale
 	if s.FloorSlope != 0 {
@@ -195,7 +201,7 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 }
 
 func (s *PhysicalSector) Recalculate() {
-	concepts.V3(&s.Center, 0, 0, (s.TopZ+s.BottomZ)/2)
+	concepts.V3(&s.Center, 0, 0, (s.TopZ.Original+s.BottomZ.Original)/2)
 	concepts.V3(&s.Min, math.Inf(1), math.Inf(1), math.Inf(1))
 	concepts.V3(&s.Max, math.Inf(-1), math.Inf(-1), math.Inf(-1))
 
@@ -240,7 +246,7 @@ func (s *PhysicalSector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		floorZ, ceilZ := s.CalcFloorCeilingZ(&segment.P)
+		floorZ, ceilZ := s.CalcFloorCeilingZ(&segment.P, false)
 		if floorZ < s.Min[2] {
 			s.Min[2] = floorZ
 		}
@@ -303,9 +309,13 @@ func (s *PhysicalSector) Recalculate() {
 }
 
 // CalcFloorCeilingZ figures out the current slice Z values accounting for slope.
-func (s *PhysicalSector) CalcFloorCeilingZ(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
+func (s *PhysicalSector) CalcFloorCeilingZ(isect *concepts.Vector2, rendering bool) (floorZ float64, ceilZ float64) {
 	if len(s.Segments) < 2 {
-		return s.BottomZ, s.TopZ
+		if rendering {
+			return s.BottomZ.Render, s.TopZ.Render
+		} else {
+			return s.BottomZ.Render, s.TopZ.Render
+		}
 	}
 	dist := 0.0
 	if s.FloorSlope != 0 || s.CeilSlope != 0 {
@@ -324,15 +334,31 @@ func (s *PhysicalSector) CalcFloorCeilingZ(isect *concepts.Vector2) (floorZ floa
 	}
 
 	if s.FloorSlope == 0 {
-		floorZ = s.BottomZ
+		if rendering {
+			floorZ = s.BottomZ.Render
+		} else {
+			floorZ = s.BottomZ.Now
+		}
 	} else {
-		floorZ = s.BottomZ + s.FloorSlope*dist
+		if rendering {
+			floorZ = s.BottomZ.Render + s.FloorSlope*dist
+		} else {
+			floorZ = s.BottomZ.Now
+		}
 	}
 
 	if s.CeilSlope == 0 {
-		ceilZ = s.TopZ
+		if rendering {
+			ceilZ = s.TopZ.Render
+		} else {
+			ceilZ = s.TopZ.Now
+		}
 	} else {
-		ceilZ = s.TopZ + s.CeilSlope*dist
+		if rendering {
+			ceilZ = s.TopZ.Render + s.CeilSlope*dist
+		} else {
+			ceilZ = s.TopZ.Now + s.CeilSlope*dist
+		}
 	}
 	return
 }
@@ -350,7 +376,7 @@ func (s *PhysicalSector) ToLightmapWorld(p *concepts.Vector3, floor bool) *conce
 	lw.SubSelf(&s.Min).MulSelf(1.0 / constants.LightGrid)
 	lw[0] = math.Floor(lw[0])*constants.LightGrid + s.Min[0]
 	lw[1] = math.Floor(lw[1])*constants.LightGrid + s.Min[1]
-	floorZ, ceilZ := s.CalcFloorCeilingZ(lw.To2D())
+	floorZ, ceilZ := s.CalcFloorCeilingZ(lw.To2D(), true)
 	if floor {
 		lw[2] = floorZ
 	} else {
@@ -364,7 +390,7 @@ func (s *PhysicalSector) LightmapAddressToWorld(r *concepts.Vector3, mapIndex ui
 	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
 	r[0] = s.Min[0] + (float64(u)+0.0)*constants.LightGrid
 	r[1] = s.Min[1] + (float64(v)+0.0)*constants.LightGrid
-	floorZ, ceilZ := s.CalcFloorCeilingZ(r.To2D())
+	floorZ, ceilZ := s.CalcFloorCeilingZ(r.To2D(), true)
 	if floor {
 		r[2] = floorZ
 	} else {

@@ -21,7 +21,7 @@ func Floor(s *state.Slice) {
 	// Because of our sloped floors, we can't use simple linear interpolation to calculate the distance
 	// or world position of the floor sample, we have to do a ray-plane intersection.
 	// Thankfully, the only expensive operation is a square root to get the distance.
-	planeRayDelta := &concepts.Vector3{s.PhysicalSector.Segments[0].P[0] - s.Ray.Start[0], s.PhysicalSector.Segments[0].P[1] - s.Ray.Start[1], s.PhysicalSector.BottomZ - s.CameraZ}
+	planeRayDelta := &concepts.Vector3{s.PhysicalSector.Segments[0].P[0] - s.Ray.Start[0], s.PhysicalSector.Segments[0].P[1] - s.Ray.Start[1], s.PhysicalSector.BottomZ.Render - s.CameraZ}
 	rayDir := &concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], 0}
 	light := concepts.Vector3{}
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {

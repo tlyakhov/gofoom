@@ -31,25 +31,25 @@ func (s *VerticalDoorService) ActOnEntity(e core.AbstractEntity) {
 	}
 }
 
-func (s *VerticalDoorService) Frame(sim *core.Simulation) {
+func (s *VerticalDoorService) Frame() {
 	ps := s.PhysicalSectorService
-	z := s.Pos.Now + s.VelZ*constants.TimeStep
+	z := ps.TopZ.Now + s.VelZ*constants.TimeStep
 
-	if z < ps.BottomZ {
-		z = ps.BottomZ
+	if z < ps.BottomZ.Now {
+		z = ps.BottomZ.Now
 		s.VelZ = 0
 		s.State = sectors.Closed
 	}
-	if z > s.Pos.Original {
-		z = s.Pos.Original
+	if z > ps.TopZ.Original {
+		z = ps.TopZ.Original
 		s.VelZ = 0
 		s.State = sectors.Open
 	}
-	s.Pos.Now = z
+	ps.TopZ.Now = z
 }
 
 func (s *VerticalDoorService) Recalculate() {
 	s.PhysicalSectorService.PhysicalSector.Recalculate()
-	s.PhysicalSectorService.Max[2] = s.Pos.Original
+	s.PhysicalSectorService.Max[2] = s.PhysicalSectorService.TopZ.Original
 	s.UpdatePVS()
 }

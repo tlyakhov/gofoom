@@ -20,8 +20,8 @@ func NewPhysicalSectorService(s *core.PhysicalSector) *PhysicalSectorService {
 
 func (s *PhysicalSectorService) OnEnter(e core.AbstractEntity) {
 	p := &e.Physical().Pos.Now
-	if s.FloorTarget == nil && p[2] <= e.GetSector().Physical().BottomZ {
-		p[2] = e.GetSector().Physical().BottomZ
+	if s.FloorTarget == nil && p[2] <= e.GetSector().Physical().BottomZ.Now {
+		p[2] = e.GetSector().Physical().BottomZ.Now
 	}
 }
 
@@ -31,14 +31,14 @@ func (s *PhysicalSectorService) OnExit(e core.AbstractEntity) {
 func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 	concrete := e.Physical()
 	entityTop := concrete.Pos.Now[2] + concrete.Height
-	floorZ, ceilZ := s.CalcFloorCeilingZ(concrete.Pos.Now.To2D())
+	floorZ, ceilZ := s.CalcFloorCeilingZ(concrete.Pos.Now.To2D(), false)
 
 	concrete.OnGround = false
 	if s.FloorTarget != nil && entityTop < floorZ {
 		provide.Passer.For(concrete.Sector).OnExit(e)
 		concrete.Sector = s.FloorTarget
 		provide.Passer.For(concrete.Sector).OnEnter(e)
-		_, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D())
+		_, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D(), false)
 		concrete.Pos.Now[2] = ceilZ - concrete.Height - 1.0
 	} else if s.FloorTarget != nil && concrete.Pos.Now[2] <= floorZ && concrete.Vel.Now[2] > 0 {
 		concrete.Vel.Now[2] = constants.PlayerJumpStrength
@@ -53,7 +53,7 @@ func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 		provide.Passer.For(concrete.Sector).OnExit(e)
 		concrete.Sector = s.CeilTarget
 		provide.Passer.For(concrete.Sector).OnEnter(e)
-		floorZ, _ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D())
+		floorZ, _ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D(), false)
 		concrete.Pos.Now[2] = floorZ - concrete.Height + 1.0
 	} else if s.CeilTarget == nil && entityTop > ceilZ {
 		concrete.Vel.Now[2] = 0
@@ -85,12 +85,12 @@ func (s *PhysicalSectorService) ActOnEntity(e core.AbstractEntity) {
 	s.Collide(e)
 }
 
-func (s *PhysicalSectorService) Frame(sim *core.Simulation) {
+func (s *PhysicalSectorService) Frame() {
 	for _, e := range s.Entities {
 		if e.GetBase().ID == s.Map.Player.GetBase().ID || s.Map.EntitiesPaused {
 			continue
 		}
-		provide.EntityAnimator.For(e).Frame(sim)
+		provide.EntityAnimator.For(e).Frame()
 	}
 }
 

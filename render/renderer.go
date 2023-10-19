@@ -201,6 +201,11 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
+	// Make sure we don't have too many debug notices
+	for r.DebugNotices.Length() > 1000 {
+		r.DebugNotices.Pop()
+	}
+
 	if r.Player().Sector == nil {
 		r.DebugNotices.Push("Player is not in a sector")
 		return

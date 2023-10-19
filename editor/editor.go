@@ -54,7 +54,6 @@ type Editor struct {
 	Renderer        *render.Renderer
 	GameViewSurface *cairo.Surface
 	GameViewBuffer  []uint8
-	LastFrameTime   float64
 }
 
 func (e *Editor) State() *state.Edit {
@@ -135,16 +134,16 @@ func (e *Editor) Integrate() {
 	ps := entity.NewPlayerService(editor.World.Player.(*entities.Player))
 
 	if gameKeyMap[gdk.KEY_w] {
-		ps.Move(ps.Player.Angle, 1.0)
+		ps.Move(ps.Player.Angle)
 	}
 	if gameKeyMap[gdk.KEY_s] {
-		ps.Move(ps.Player.Angle+180.0, 1.0)
+		ps.Move(ps.Player.Angle + 180.0)
 	}
 	if gameKeyMap[gdk.KEY_e] {
-		ps.Move(ps.Player.Angle+90.0, 0.5)
+		ps.Move(ps.Player.Angle + 90.0)
 	}
 	if gameKeyMap[gdk.KEY_q] {
-		ps.Move(ps.Player.Angle+270.0, 0.5)
+		ps.Move(ps.Player.Angle + 270.0)
 	}
 	if gameKeyMap[gdk.KEY_a] {
 		ps.Player.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
@@ -172,7 +171,7 @@ func (e *Editor) Integrate() {
 		ps.Crouching = false
 	}
 
-	editor.World.Frame(editor.World.Sim())
+	editor.World.Frame()
 	editor.GatherHoveringObjects()
 }
 
