@@ -68,8 +68,9 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 		}
 		return
 	}
-	if slice.Depth > 100 {
-		fmt.Printf("Max depth reached!\n")
+	if slice.Depth > constants.MaxPortals {
+		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.PhysicalSector.ID)
+		slice.DebugNotices.Push(dbg)
 		return
 	}
 	sp := &state.SlicePortal{Slice: slice}
@@ -139,7 +140,8 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	if dist != math.MaxFloat64 {
 		r.RenderSlice(slice)
 	} else {
-		fmt.Printf("Depth: %v, sector: %s\n", slice.Depth, slice.PhysicalSector.ID)
+		dbg := fmt.Sprintf("No intersections for sector %s at depth: %v", slice.PhysicalSector.ID, slice.Depth)
+		r.DebugNotices.Push(dbg)
 	}
 }
 
@@ -200,6 +202,7 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
 	if r.Player().Sector == nil {
+		r.DebugNotices.Push("Player is not in a sector")
 		return
 	}
 	r.Map.RenderLock.Lock()

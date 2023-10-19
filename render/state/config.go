@@ -13,6 +13,7 @@ type Config struct {
 	ViewRadians               []float64
 	ViewFix                   []float64
 	ZBuffer                   []float64
+	DebugNotices              concepts.SyncUniqueQueue
 }
 
 func (c *Config) Initialize() {

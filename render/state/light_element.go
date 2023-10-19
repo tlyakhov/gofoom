@@ -1,6 +1,7 @@
 package state
 
 import (
+	"fmt"
 	"log"
 	"math"
 
@@ -177,8 +178,9 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 		}
 		prevDist = dist2
 		depth++
-		if depth > 100 { // Avoid infinite looping.
-			log.Printf("warning: lightVisible traversed > 100 sectors.\n")
+		if depth > constants.MaxPortals { // Avoid infinite looping.
+			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, e.ID)
+			le.DebugNotices.Push(dbg)
 			return false
 		}
 		if next == nil && sector != e.Sector.Physical() {
