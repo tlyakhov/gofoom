@@ -6,6 +6,7 @@ const (
 	MinMillisPerFrame = 1000.0 / 15.0  // Ensure we don't do a spiral of death at framerates < 15
 
 	// Rendering constants
+	MaxPortals              = 30 // avoid infinite portal traversal
 	IntersectEpsilon        = 1e-10
 	LightGrid               = 6.0
 	LightSafety             = 2

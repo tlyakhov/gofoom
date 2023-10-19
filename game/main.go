@@ -102,6 +102,12 @@ func renderGame() {
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", sim.FPS))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", ps.Player.Health))
 	mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(ps.Player.Sector), ps.Player.Sector.GetBase().ID))
+	y := 0
+	for y < 20 && renderer.DebugNotices.Length() > 0 {
+		msg := renderer.DebugNotices.Pop().(string)
+		mainFont.Draw(win, 10, 40+float64(y)*10, color.NRGBA{0xff, 0, 0, 0xff}, msg)
+		y++
+	}
 	win.Update()
 }
 
@@ -149,7 +155,7 @@ func run() {
 	sim = core.NewSimulation()
 	sim.Integrate = integrateGame
 	sim.Render = renderGame
-	gameMap = logic.LoadMap("data/worlds/classic.json", sim)
+	gameMap = logic.LoadMap("data/worlds/hall.json", sim)
 	ps = entity.NewPlayerService(gameMap.Player.(*entities.Player))
 	ps.Collide()
 	renderer.Map = gameMap.Map

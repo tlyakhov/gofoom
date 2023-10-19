@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"math"
 
 	"tlyakhov/gofoom/concepts"
@@ -34,7 +35,8 @@ func Floor(s *state.Slice) {
 		t := planeRayDelta.Dot(&s.PhysicalSector.FloorNormal) / denom
 		if t <= 0 {
 			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
-			//log.Printf("floor t<0\n")
+			dbg := fmt.Sprintf("%v floor t <= 0", s.PhysicalSector.ID)
+			s.DebugNotices.Push(dbg)
 			continue
 		}
 		world := &concepts.Vector3{rayDir[0] * t, rayDir[1] * t, rayDir[2] * t}
