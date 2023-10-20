@@ -24,22 +24,3 @@ type VerticalDoor struct {
 func init() {
 	registry.Instance().Register(VerticalDoor{})
 }
-
-func (s *VerticalDoor) Initialize() {
-	s.PhysicalSector.Initialize()
-}
-
-func (s *VerticalDoor) Deserialize(data map[string]interface{}) {
-	s.PhysicalSector.Deserialize(data)
-
-	if v, ok := data["OrigTopZ"]; ok {
-		s.TopZ.Set(v.(float64))
-	}
-}
-
-func (s *VerticalDoor) Serialize() map[string]interface{} {
-	result := s.PhysicalSector.Serialize()
-	result["Type"] = "sectors.VerticalDoor"
-	result["OrigTopZ"] = s.TopZ.Original
-	return result
-}

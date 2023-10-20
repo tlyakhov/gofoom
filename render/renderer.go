@@ -42,7 +42,7 @@ func (r *Renderer) Player() *entities.Player {
 	return r.Map.Player.(*entities.Player)
 }
 
-// RenderSlice draws a single pixel vertical column given a particular segment intersection.
+// RenderSlice draws or picks a single pixel vertical column given a particular segment intersection.
 func (r *Renderer) RenderSlice(slice *state.Slice) {
 	slice.CalcScreen()
 	slice.Normal = slice.PhysicalSector.CeilNormal

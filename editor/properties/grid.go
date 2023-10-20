@@ -67,44 +67,50 @@ func (g *Grid) gatherFields(obj interface{}, pgs pgState) {
 			display = pgs.ParentName + "." + display
 		}
 
-		if tag != "^" {
-			gf, ok := pgs.Fields[display]
-			if !ok {
-				gf = &state.PropertyGridField{
-					Name:             display,
-					Depth:            pgs.Depth,
-					Type:             fieldValue.Addr().Type(),
-					Source:           &field,
-					ParentName:       pgs.ParentName,
-					ParentCollection: pgs.ParentCollection,
-					Unique:           make(map[string]reflect.Value),
-					Parent:           pgs.Parent,
-				}
-				pgs.Fields[display] = gf
-			}
-
-			gf.Values = append(gf.Values, fieldValue.Addr())
-			gf.Unique[fieldValue.String()] = fieldValue.Addr()
-
-			if field.Type.Kind() == reflect.Map {
-				keys := fieldValue.MapKeys()
-				for _, key := range keys {
-					name := field.Name + "[" + key.String() + "]"
-					if pgs.ParentName != "" {
-						name = pgs.ParentName + "." + name
-					}
-					pgs2 := pgs
-					pgs2.ParentCollection = &fieldValue
-					g.childFields(name, fieldValue.MapIndex(key), pgs2, true)
-				}
-			}
+		if tag == "^" {
+			// Include the child fields as part of the parent.
+			// This is nice for embedded Golang structs so we don't have
+			// a giant nested hierarchy.
+			g.childFields(pgs.ParentName, fieldValue, pgs, false)
 			continue
-		} else {
-			name := field.Name
+		}
+
+		gf, ok := pgs.Fields[display]
+		if !ok {
+			gf = &state.PropertyGridField{
+				Name:             display,
+				Depth:            pgs.Depth,
+				Type:             fieldValue.Addr().Type(),
+				Source:           &field,
+				ParentName:       pgs.ParentName,
+				ParentCollection: pgs.ParentCollection,
+				Unique:           make(map[string]reflect.Value),
+				Parent:           pgs.Parent,
+			}
+			pgs.Fields[display] = gf
+		}
+
+		gf.Values = append(gf.Values, fieldValue.Addr())
+		gf.Unique[fieldValue.String()] = fieldValue.Addr()
+
+		if field.Type.Kind() == reflect.Map {
+			keys := fieldValue.MapKeys()
+			for _, key := range keys {
+				name := field.Name + "[" + key.String() + "]"
+				if pgs.ParentName != "" {
+					name = pgs.ParentName + "." + name
+				}
+				pgs2 := pgs
+				pgs2.ParentCollection = &fieldValue
+				g.childFields(name, fieldValue.MapIndex(key), pgs2, true)
+			}
+		} else if field.Type.Name() == "SimScalar" || field.Type.Name() == "SimVector2" || field.Type.Name() == "SimVector3" {
+			delete(pgs.Fields, display)
+			name := display
 			if pgs.ParentName != "" {
 				name = pgs.ParentName + "." + name
 			}
-			g.childFields(pgs.ParentName, fieldValue, pgs, false)
+			g.childFields(name, fieldValue, pgs, false)
 		}
 	}
 }
@@ -143,9 +149,9 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 		field := state.Fields[display]
 		if field.ParentName != lastParentName {
 			label, _ := gtk.LabelNew(field.ParentName)
-			label.SetJustify(gtk.JUSTIFY_CENTER)
+			label.SetJustify(gtk.JUSTIFY_FILL)
 			label.SetHExpand(true)
-			label.SetHAlign(gtk.ALIGN_START)
+			label.SetHAlign(gtk.ALIGN_CENTER)
 			g.Container.Attach(label, 1, index, 2, 1)
 			lastParentName = field.ParentName
 			index++

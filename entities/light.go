@@ -22,6 +22,7 @@ func (l *Light) Initialize() {
 	lb.Initialize()
 	lb.ID = "Light"
 	l.Behaviors[lb.GetBase().ID] = lb
+	lb.SetParent(l)
 }
 
 func (l *Light) Serialize() map[string]interface{} {

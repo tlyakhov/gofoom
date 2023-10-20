@@ -31,7 +31,7 @@ type Simulated interface {
 type SimScalar struct {
 	Now            float64
 	Prev           float64
-	Original       float64
+	Original       float64 `editable:"Initial Value"`
 	Render         float64
 	RenderCallback func()
 }
@@ -39,7 +39,7 @@ type SimScalar struct {
 type SimVector2 struct {
 	Now            concepts.Vector2
 	Prev           concepts.Vector2
-	Original       concepts.Vector2
+	Original       concepts.Vector2 `editable:"Initial Value"`
 	Render         concepts.Vector2
 	RenderCallback func()
 }
@@ -47,7 +47,7 @@ type SimVector2 struct {
 type SimVector3 struct {
 	Now            concepts.Vector3
 	Prev           concepts.Vector3
-	Original       concepts.Vector3
+	Original       concepts.Vector3 `editable:"Initial Value"`
 	Render         concepts.Vector3
 	RenderCallback func()
 }
@@ -95,6 +95,7 @@ func (v *SimVector2) Serialize() map[string]interface{} {
 
 func (v *SimVector2) Deserialize(data map[string]interface{}) {
 	v.Original.Deserialize(data)
+	v.Reset()
 }
 
 func (s *SimVector3) Reset() {
@@ -123,6 +124,7 @@ func (v *SimVector3) Serialize() map[string]interface{} {
 
 func (v *SimVector3) Deserialize(data map[string]interface{}) {
 	v.Original.Deserialize(data)
+	v.Reset()
 }
 
 func NewSimulation() *Simulation {

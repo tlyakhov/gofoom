@@ -700,7 +700,6 @@
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "be4c2p7vn27mi9gdb8n0",
-      "OrigTopZ": 64,
       "Segments": [
         {
           "HiMaterial": "Default",
@@ -737,7 +736,7 @@
           "Y": 20
         }
       ],
-      "TopZ": -64,
+      "TopZ": 64,
       "Type": "sectors.VerticalDoor"
     },
     {
@@ -1221,7 +1220,6 @@
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "be4ps7vvn27o06iaju50",
-      "OrigTopZ": 64,
       "Segments": [
         {
           "HiMaterial": "Default",
@@ -1280,7 +1278,7 @@
           "Y": -990
         }
       ],
-      "TopZ": 0,
+      "TopZ": 64,
       "Type": "sectors.VerticalDoor"
     },
     {
@@ -1896,7 +1894,6 @@
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "be4c3pfvn27mi9gdb9mg",
-      "OrigTopZ": 64,
       "Segments": [
         {
           "HiMaterial": "Default",
@@ -1933,7 +1930,7 @@
           "Y": -520
         }
       ],
-      "TopZ": 0,
+      "TopZ": 64,
       "Type": "sectors.VerticalDoor"
     },
     {
@@ -3293,7 +3290,6 @@
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "be4pufvvn27o06iajuu0",
-      "OrigTopZ": 64,
       "Segments": [
         {
           "HiMaterial": "Default",
@@ -3420,7 +3416,7 @@
           "Y": -860
         }
       ],
-      "TopZ": 0,
+      "TopZ": 64,
       "Type": "sectors.VerticalDoor"
     },
     {
@@ -4596,7 +4592,6 @@
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "be49hlvvn27m4cr0h360",
-      "OrigTopZ": 64,
       "Segments": [
         {
           "AdjacentSector": "be46jcvvn27lk1dec9cg",
@@ -4633,7 +4628,7 @@
           "Y": -160
         }
       ],
-      "TopZ": 0,
+      "TopZ": 64,
       "Type": "sectors.VerticalDoor"
     },
     {

@@ -105,6 +105,10 @@ func (m *MapService) AutoPortal() {
 			}
 			seen[id] = true
 
+			//if !sector.Physical().AABBIntersect(&sector2.Physical().Min, &sector2.Physical().Max) {
+			//	continue
+			//}
+
 			for _, segment := range sector.Physical().Segments {
 				for _, segment2 := range sector2.Physical().Segments {
 					if segment.Matches(segment2) {

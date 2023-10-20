@@ -246,7 +246,7 @@ func (s *PhysicalSector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		floorZ, ceilZ := s.CalcFloorCeilingZ(&segment.P, false)
+		floorZ, ceilZ := s.SlopedZOriginal(&segment.P)
 		if floorZ < s.Min[2] {
 			s.Min[2] = floorZ
 		}
@@ -308,57 +308,80 @@ func (s *PhysicalSector) Recalculate() {
 	s.CeilLightmapAge = make([]int, s.LightmapWidth*s.LightmapHeight)
 }
 
-// CalcFloorCeilingZ figures out the current slice Z values accounting for slope.
-func (s *PhysicalSector) CalcFloorCeilingZ(isect *concepts.Vector2, rendering bool) (floorZ float64, ceilZ float64) {
-	if len(s.Segments) < 2 {
-		if rendering {
-			return s.BottomZ.Render, s.TopZ.Render
-		} else {
-			return s.BottomZ.Render, s.TopZ.Render
-		}
+func (s *PhysicalSector) CalcDistforZ(isect *concepts.Vector2) float64 {
+	a := &s.Segments[0].P
+	b := &s.Segments[1].P
+	length2 := a.Dist2(b)
+	if length2 == 0 {
+		return isect.Dist(a)
+	} else {
+		delta := concepts.Vector2{b[0] - a[0], b[1] - a[1]}
+		t := ((isect[0]-a[0])*delta[0] + (isect[1]-a[1])*delta[1]) / length2
+		delta[0] = a[0] + delta[0]*t
+		delta[1] = a[1] + delta[1]*t
+		return isect.Dist(&delta)
 	}
-	dist := 0.0
-	if s.FloorSlope != 0 || s.CeilSlope != 0 {
-		a := &s.Segments[0].P
-		b := &s.Segments[1].P
-		length2 := a.Dist2(b)
-		if length2 == 0 {
-			dist = isect.Dist(a)
-		} else {
-			delta := concepts.Vector2{b[0] - a[0], b[1] - a[1]}
-			t := ((isect[0]-a[0])*delta[0] + (isect[1]-a[1])*delta[1]) / length2
-			delta[0] = a[0] + delta[0]*t
-			delta[1] = a[1] + delta[1]*t
-			dist = isect.Dist(&delta)
-		}
+}
+
+// SlopedZRender figures out the current slice Z values accounting for slope.
+func (s *PhysicalSector) SlopedZRender(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
+	floorZ = s.BottomZ.Render
+	ceilZ = s.TopZ.Render
+
+	// Fast path
+	if (s.FloorSlope == 0 && s.CeilSlope == 0) || len(s.Segments) < 2 {
+		return
 	}
 
-	if s.FloorSlope == 0 {
-		if rendering {
-			floorZ = s.BottomZ.Render
-		} else {
-			floorZ = s.BottomZ.Now
-		}
-	} else {
-		if rendering {
-			floorZ = s.BottomZ.Render + s.FloorSlope*dist
-		} else {
-			floorZ = s.BottomZ.Now
-		}
+	dist := s.CalcDistforZ(isect)
+
+	if s.FloorSlope != 0 {
+		floorZ += s.FloorSlope * dist
+	}
+	if s.CeilSlope != 0 {
+		ceilZ += s.CeilSlope * dist
+	}
+	return
+}
+
+// SlopedZOriginal figures out the current slice Z values accounting for slope.
+func (s *PhysicalSector) SlopedZOriginal(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
+	floorZ = s.BottomZ.Original
+	ceilZ = s.TopZ.Original
+
+	// Fast path
+	if (s.FloorSlope == 0 && s.CeilSlope == 0) || len(s.Segments) < 2 {
+		return
 	}
 
-	if s.CeilSlope == 0 {
-		if rendering {
-			ceilZ = s.TopZ.Render
-		} else {
-			ceilZ = s.TopZ.Now
-		}
-	} else {
-		if rendering {
-			ceilZ = s.TopZ.Render + s.CeilSlope*dist
-		} else {
-			ceilZ = s.TopZ.Now + s.CeilSlope*dist
-		}
+	dist := s.CalcDistforZ(isect)
+
+	if s.FloorSlope != 0 {
+		floorZ += s.FloorSlope * dist
+	}
+	if s.CeilSlope != 0 {
+		ceilZ += s.CeilSlope * dist
+	}
+	return
+}
+
+// SlopedZNow figures out the current slice Z values accounting for slope.
+func (s *PhysicalSector) SlopedZNow(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
+	floorZ = s.BottomZ.Now
+	ceilZ = s.TopZ.Now
+
+	// Fast path
+	if (s.FloorSlope == 0 && s.CeilSlope == 0) || len(s.Segments) < 2 {
+		return
+	}
+
+	dist := s.CalcDistforZ(isect)
+
+	if s.FloorSlope != 0 {
+		floorZ += s.FloorSlope * dist
+	}
+	if s.CeilSlope != 0 {
+		ceilZ += s.CeilSlope * dist
 	}
 	return
 }
@@ -376,7 +399,7 @@ func (s *PhysicalSector) ToLightmapWorld(p *concepts.Vector3, floor bool) *conce
 	lw.SubSelf(&s.Min).MulSelf(1.0 / constants.LightGrid)
 	lw[0] = math.Floor(lw[0])*constants.LightGrid + s.Min[0]
 	lw[1] = math.Floor(lw[1])*constants.LightGrid + s.Min[1]
-	floorZ, ceilZ := s.CalcFloorCeilingZ(lw.To2D(), true)
+	floorZ, ceilZ := s.SlopedZRender(lw.To2D())
 	if floor {
 		lw[2] = floorZ
 	} else {
@@ -390,7 +413,7 @@ func (s *PhysicalSector) LightmapAddressToWorld(r *concepts.Vector3, mapIndex ui
 	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
 	r[0] = s.Min[0] + (float64(u)+0.0)*constants.LightGrid
 	r[1] = s.Min[1] + (float64(v)+0.0)*constants.LightGrid
-	floorZ, ceilZ := s.CalcFloorCeilingZ(r.To2D(), true)
+	floorZ, ceilZ := s.SlopedZRender(r.To2D())
 	if floor {
 		r[2] = floorZ
 	} else {
@@ -411,4 +434,17 @@ func (s *PhysicalSector) InBounds(world *concepts.Vector3) bool {
 	return (world[0] >= s.Min[0]-constants.IntersectEpsilon && world[0] <= s.Max[0]+constants.IntersectEpsilon &&
 		world[1] >= s.Min[1]-constants.IntersectEpsilon && world[1] <= s.Max[1]+constants.IntersectEpsilon &&
 		world[2] >= s.Min[2]-constants.IntersectEpsilon && world[2] <= s.Max[2]+constants.IntersectEpsilon)
+}
+
+func (s *PhysicalSector) AABBIntersect(min, max *concepts.Vector3) bool {
+	dx := (s.Min[0] + s.Max[0] - min[0] - max[0]) * 0.5
+	px := (s.Max[0]-s.Min[0]+max[0]-min[0])*0.5 - math.Abs(dx)
+	if px <= 0 {
+		return false
+	}
+
+	dy := (s.Min[1] + s.Max[1] - min[1] - max[1]) * 0.5
+	py := (s.Max[1] - s.Min[1] + max[1] - min[1]) - math.Abs(dy)
+
+	return py > 0
 }
