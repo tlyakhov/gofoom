@@ -29,35 +29,35 @@ func (s *PhysicalSectorService) OnExit(e core.AbstractEntity) {
 }
 
 func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
-	concrete := e.Physical()
-	entityTop := concrete.Pos.Now[2] + concrete.Height
-	floorZ, ceilZ := s.CalcFloorCeilingZ(concrete.Pos.Now.To2D(), false)
+	entity := e.Physical()
+	entityTop := entity.Pos.Now[2] + entity.Height
+	floorZ, ceilZ := s.SlopedZNow(entity.Pos.Now.To2D())
 
-	concrete.OnGround = false
+	entity.OnGround = false
 	if s.FloorTarget != nil && entityTop < floorZ {
-		provide.Passer.For(concrete.Sector).OnExit(e)
-		concrete.Sector = s.FloorTarget
-		provide.Passer.For(concrete.Sector).OnEnter(e)
-		_, ceilZ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D(), false)
-		concrete.Pos.Now[2] = ceilZ - concrete.Height - 1.0
-	} else if s.FloorTarget != nil && concrete.Pos.Now[2] <= floorZ && concrete.Vel.Now[2] > 0 {
-		concrete.Vel.Now[2] = constants.PlayerJumpStrength
-	} else if s.FloorTarget == nil && concrete.Pos.Now[2] <= floorZ {
-		concrete.Vel.Now[2] = 0
-		concrete.Pos.Now[2] = floorZ
-		concrete.OnGround = true
+		provide.Passer.For(entity.Sector).OnExit(e)
+		entity.Sector = s.FloorTarget
+		provide.Passer.For(entity.Sector).OnEnter(e)
+		_, ceilZ = entity.Sector.Physical().SlopedZNow(entity.Pos.Now.To2D())
+		entity.Pos.Now[2] = ceilZ - entity.Height - 1.0
+	} else if s.FloorTarget != nil && entity.Pos.Now[2] <= floorZ && entity.Vel.Now[2] > 0 {
+		entity.Vel.Now[2] = constants.PlayerJumpStrength
+	} else if s.FloorTarget == nil && entity.Pos.Now[2] <= floorZ {
+		entity.Vel.Now[2] = 0
+		entity.Pos.Now[2] = floorZ
+		entity.OnGround = true
 		//fmt.Printf("%v\n", concrete.Pos)
 	}
 
 	if s.CeilTarget != nil && entityTop > ceilZ {
-		provide.Passer.For(concrete.Sector).OnExit(e)
-		concrete.Sector = s.CeilTarget
-		provide.Passer.For(concrete.Sector).OnEnter(e)
-		floorZ, _ = concrete.Sector.Physical().CalcFloorCeilingZ(concrete.Pos.Now.To2D(), false)
-		concrete.Pos.Now[2] = floorZ - concrete.Height + 1.0
+		provide.Passer.For(entity.Sector).OnExit(e)
+		entity.Sector = s.CeilTarget
+		provide.Passer.For(entity.Sector).OnEnter(e)
+		floorZ, _ = entity.Sector.Physical().SlopedZNow(entity.Pos.Now.To2D())
+		entity.Pos.Now[2] = floorZ - entity.Height + 1.0
 	} else if s.CeilTarget == nil && entityTop > ceilZ {
-		concrete.Vel.Now[2] = 0
-		concrete.Pos.Now[2] = ceilZ - concrete.Height - 1.0
+		entity.Vel.Now[2] = 0
+		entity.Pos.Now[2] = ceilZ - entity.Height - 1.0
 	}
 }
 

@@ -22,7 +22,7 @@ type SlicePortal struct {
 func (s *SlicePortal) CalcScreen() {
 	s.Adj = s.Segment.AdjacentSector
 	s.AdjSegment = s.Segment.AdjacentSegment
-	s.AdjFloorZ, s.AdjCeilZ = s.Adj.Physical().CalcFloorCeilingZ(s.Intersection.To2D(), true)
+	s.AdjFloorZ, s.AdjCeilZ = s.Adj.Physical().SlopedZRender(s.Intersection.To2D())
 	s.AdjProjHeightTop = s.ProjectZ(s.AdjCeilZ - s.CameraZ)
 	s.AdjProjHeightBottom = s.ProjectZ(s.AdjFloorZ - s.CameraZ)
 	s.AdjScreenTop = s.ScreenHeight/2 - int(s.AdjProjHeightTop)

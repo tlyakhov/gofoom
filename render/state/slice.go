@@ -58,7 +58,7 @@ func (s *Slice) ProjectZ(z float64) float64 {
 
 func (s *Slice) CalcScreen() {
 	// Screen slice precalculation
-	s.FloorZ, s.CeilZ = s.PhysicalSector.CalcFloorCeilingZ(s.Intersection.To2D(), true)
+	s.FloorZ, s.CeilZ = s.PhysicalSector.SlopedZRender(s.Intersection.To2D())
 	s.ProjHeightTop = s.ProjectZ(s.CeilZ - s.CameraZ)
 	s.ProjHeightBottom = s.ProjectZ(s.FloorZ - s.CameraZ)
 

@@ -1,0 +1,37 @@
+# gofoom
+
+gofoom is a very WIP golang 2.5D sector/portal-based software raycasting game engine. It continues on from my older project https://github.com/tlyakhov/jsfoom.
+
+## Motivation
+
+Constraints are fun :). This project has the following goals:
+* No GPU involvement in rendering.
+* High quality editing tools.
+* High degree of flexibility and expandability. Game code separate from engine code.
+* Scalability. While the number of sectors/segments/entities on screen at once may have performance limitations, overall level size should be unconstrained.
+* Cross-platform compatibility (Linux, Mac tested, not sure about Windows)
+
+This project takes inspiration from Ken Silverman's BUILD engine used for Duke Nukem 3D for the portal concept and Doom of course, but unlike BUILD and Doom it aims to be a fully dynamic raycaster, avoiding pre-processing steps or multi-pass rendering.
+
+## Features
+
+* Multi-threaded rendering using goroutines.
+* Sectors with non-orthogonal walls of variable height.
+* Texture mapped floors, ceilings, and walls.
+* Sloped floors and ceilings.
+* No limits to sector/entity counts
+* Fully dynamic lighting with dynamic shadow maps.
+* Bilinear filtering & mipmapping for images and shadow maps.
+* Separation of game/engine code.
+* Behavioral system for entities.
+* Various effect sectors (doors, underwater sectors)
+* Physics and collision detection for player and objects.
+* World editor:
+    * Realtime 3D view, allowing live manipulation of the world by clicking.
+    * Edit any sector/segment/entity property.
+    * Slice sectors/split segments.
+    * Undo/redo history.
+
+### Soon:
+
+* Objects represented as sprites with multiple angles.

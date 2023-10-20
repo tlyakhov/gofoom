@@ -36,8 +36,8 @@ func init() {
 func (e *PhysicalEntity) Initialize() {
 	e.Base = &concepts.Base{}
 	e.Base.Initialize()
-	e.Pos.Original = concepts.Vector3{}
-	e.Vel.Original = concepts.Vector3{}
+	e.Pos.Set(0, 0, 0)
+	e.Vel.Set(0, 0, 0)
 	e.BoundingRadius = 10
 	e.CollisionResponse = Slide
 	e.MountHeight = constants.PlayerMountHeight
@@ -97,12 +97,10 @@ func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
 		e.Active = v.(bool)
 	}
 	if v, ok := data["Pos"]; ok {
-		e.Pos.Original.Deserialize(v.(map[string]interface{}))
-		e.Pos.Reset()
+		e.Pos.Deserialize(v.(map[string]interface{}))
 	}
 	if v, ok := data["Vel"]; ok {
-		e.Vel.Original.Deserialize(v.(map[string]interface{}))
-		e.Pos.Reset()
+		e.Vel.Deserialize(v.(map[string]interface{}))
 	}
 	if v, ok := data["Angle"]; ok {
 		e.Angle = v.(float64)

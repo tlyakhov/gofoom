@@ -69,7 +69,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSector.Physical().CalcFloorCeilingZ(p.To2D(), true)
+		floorZ, ceilZ := seg.AdjacentSector.Physical().SlopedZRender(p.To2D())
 		if p[2]-ceilZ > constants.LightGrid || floorZ-p[2] > constants.LightGrid {
 			continue
 		}
@@ -141,8 +141,8 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.CalcFloorCeilingZ(isect.To2D(), true)
-			floorZ2, ceilZ2 := seg.AdjacentSector.Physical().CalcFloorCeilingZ(isect.To2D(), true)
+			floorZ, ceilZ := sector.SlopedZRender(isect.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSector.Physical().SlopedZRender(isect.To2D())
 			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}
