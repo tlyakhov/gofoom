@@ -11,11 +11,6 @@ type AnimatedBehavior struct {
 	Active bool `editable:"Active?"`
 }
 
-func (b *AnimatedBehavior) Initialize() {
-	b.Base.Initialize()
-	b.Active = true
-}
-
 func (b *AnimatedBehavior) Animated() *AnimatedBehavior {
 	return b
 }
@@ -31,9 +26,14 @@ func (b *AnimatedBehavior) SetParent(parent interface{}) {
 func (b *AnimatedBehavior) Frame() {
 }
 
-func (b *AnimatedBehavior) Deserialize(data map[string]interface{}) {
-	b.Initialize()
-	b.Base.Deserialize(data)
+func (b *AnimatedBehavior) Construct(data map[string]interface{}) {
+	b.Base.Construct(data)
+	b.Model = b
+	b.Active = true
+
+	if data == nil {
+		return
+	}
 
 	if v, ok := data["Active"]; ok {
 		b.Active = v.(bool)

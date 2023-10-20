@@ -18,8 +18,8 @@ func (m *PainfulController) ActOnEntity(e core.AbstractEntity) {
 	if m.Hurt == 0 {
 		return
 	}
-	hurter, ok := provide.Hurter.For(e)
-	if ok && hurter.HurtTime() == 0 {
+	hurter := provide.Hurter.For(e)
+	if hurter != nil && hurter.HurtTime() == 0 {
 		hurter.Hurt(m.Hurt)
 	}
 }

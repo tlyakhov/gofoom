@@ -23,15 +23,15 @@ func (m *LitSampled) GetBase() *concepts.Base {
 	return m.Lit.GetBase()
 }
 
-func (m *LitSampled) Initialize() {
-	m.Sampled.Initialize()
-	m.Lit.Initialize()
+func (m *LitSampled) GetModel() concepts.ISerializable {
+	return m.Lit.Model
 }
 
-func (m *LitSampled) Deserialize(data map[string]interface{}) {
-	m.Initialize()
-	m.Lit.Deserialize(data)
-	m.Sampled.Deserialize(data)
+func (m *LitSampled) Construct(data map[string]interface{}) {
+	m.Lit.Construct(data)
+	m.Lit.Model = m
+	m.Sampled.Construct(data)
+	m.Sampled.Model = m
 }
 
 func (m *LitSampled) Serialize() map[string]interface{} {
@@ -63,17 +63,12 @@ func (m *PainfulLitSampled) GetBase() *concepts.Base {
 	return m.LitSampled.GetBase()
 }
 
-func (m *PainfulLitSampled) Initialize() {
-	m.LitSampled = LitSampled{}
-	m.LitSampled.Initialize()
-	m.Painful = Painful{}
-	m.Painful.Initialize()
-}
-
-func (m *PainfulLitSampled) Deserialize(data map[string]interface{}) {
-	m.Initialize()
-	m.LitSampled.Deserialize(data)
-	m.Painful.Deserialize(data)
+func (m *PainfulLitSampled) Construct(data map[string]interface{}) {
+	m.LitSampled.Construct(data)
+	m.LitSampled.Lit.Model = m
+	m.LitSampled.Sampled.Model = m
+	m.Painful.Construct(data)
+	m.Painful.Model = m
 	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.GetBase().ID)
 }
 

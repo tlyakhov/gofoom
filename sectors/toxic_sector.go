@@ -14,12 +14,13 @@ func init() {
 	registry.Instance().Register(ToxicSector{})
 }
 
-func (s *ToxicSector) Initialize() {
-	s.PhysicalSector.Initialize()
-}
+func (s *ToxicSector) Construct(data map[string]interface{}) {
+	s.PhysicalSector.Construct(data)
+	s.Model = s
 
-func (s *ToxicSector) Deserialize(data map[string]interface{}) {
-	s.PhysicalSector.Deserialize(data)
+	if data == nil {
+		return
+	}
 
 	if v, ok := data["Hurt"]; ok {
 		s.Hurt = v.(float64)

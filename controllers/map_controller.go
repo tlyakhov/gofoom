@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
@@ -24,20 +23,24 @@ func NewMapController(m *core.Map) *MapController {
 	return &MapController{Map: m}
 }
 
-func LoadMap(filename string) *MapController {
-	fileContents, err := ioutil.ReadFile(filename)
+func LoadMap(filename string) (*MapController, error) {
+	fileContents, err := os.ReadFile(filename)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
+
 	var parsed interface{}
 	err = json.Unmarshal(fileContents, &parsed)
+	if err != nil {
+		return nil, err
+	}
+
 	m := NewMapController(new(core.Map))
-	m.Initialize()
-	m.Deserialize(parsed.(map[string]interface{}))
+	m.Construct(parsed.(map[string]interface{}))
 	m.Player = entities.NewPlayer(m.Map)
 	m.Recalculate()
-	return m
+	return m, nil
 }
 
 func (m *MapController) Save(filename string) {
@@ -48,7 +51,7 @@ func (m *MapController) Save(filename string) {
 		panic(err)
 	}
 
-	ioutil.WriteFile(filename, bytes, os.ModePerm)
+	os.WriteFile(filename, bytes, os.ModePerm)
 }
 
 func (m *MapController) Recalculate() {
@@ -56,7 +59,7 @@ func (m *MapController) Recalculate() {
 	for _, s := range m.Sectors {
 		provide.Passer.For(s).Recalculate()
 		for _, e := range s.Physical().Entities {
-			if c, ok := provide.Collider.For(e); ok {
+			if c := provide.Collider.For(e); c != nil {
 				c.Collide()
 			}
 		}
@@ -128,7 +131,7 @@ func (m *MapController) AutoPortal() {
 func (ms *MapController) CreateTestSector(id string, x, y, size float64) *core.PhysicalSector {
 	mat := ms.Map.Materials["Default"]
 	sector := &core.PhysicalSector{}
-	sector.Initialize()
+	sector.Construct(nil)
 	sector.GetBase().ID = id
 	sector.SetParent(ms.Map)
 	ms.Sectors[sector.ID] = sector
@@ -162,11 +165,11 @@ func (ms *MapController) CreateTest() {
 	ms.Player.Physical().Pos.Original = ms.Spawn
 	ms.Player.Physical().Pos.Reset()
 	mat := &materials.LitSampled{}
-	mat.Initialize()
+	mat.Construct(nil)
 	mat.GetBase().ID = "Default"
 	//tex := &texture.Solid{Diffuse: color.NRGBA{R: 128, G: 100, B: 50, A: 255}}
 	tex := &texture.Image{}
-	tex.Initialize()
+	tex.Construct(nil)
 	tex.Source = "data/grass.jpg"
 	tex.Filter = true
 	tex.GenerateMipMaps = true
@@ -192,7 +195,7 @@ func (ms *MapController) CreateTest() {
 
 			if rand.Uint32()%40 == 0 {
 				light := &entities.Light{}
-				light.Initialize()
+				light.Construct(nil)
 				light.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				light.Pos.Reset()
 				light.SetParent(sector)

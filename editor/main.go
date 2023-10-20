@@ -32,6 +32,9 @@ var (
 )
 
 func EditorTimer() bool {
+	if editor.World == nil {
+		return true
+	}
 	editor.World.Sim().Step()
 
 	return true

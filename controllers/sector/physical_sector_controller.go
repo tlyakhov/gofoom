@@ -1,8 +1,8 @@
 package sector
 
 import (
+	"log"
 	"math"
-
 	"tlyakhov/gofoom/behaviors"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -19,13 +19,24 @@ func NewPhysicalSectorController(s *core.PhysicalSector) *PhysicalSectorControll
 }
 
 func (s *PhysicalSectorController) OnEnter(e core.AbstractEntity) {
-	p := &e.Physical().Pos.Now
+	phys := e.Physical()
+	phys.Sector = s.PhysicalSector.Model.(core.AbstractSector)
+	s.PhysicalSector.Entities[phys.ID] = e.GetModel().(core.AbstractEntity)
+
+	p := &phys.Pos.Now
 	if s.FloorTarget == nil && p[2] <= e.GetSector().Physical().BottomZ.Now {
 		p[2] = e.GetSector().Physical().BottomZ.Now
 	}
 }
 
 func (s *PhysicalSectorController) OnExit(e core.AbstractEntity) {
+	phys := e.Physical()
+	if phys.Sector.Physical() != s.PhysicalSector {
+		log.Printf("OnExit called for sector %v, but entity had %v as owner", s.PhysicalSector.ID, phys.Sector.Physical().ID)
+		delete(phys.Sector.Physical().Entities, phys.ID)
+	}
+
+	delete(s.Entities, phys.ID)
 }
 
 func (s *PhysicalSectorController) Collide(e core.AbstractEntity) {
@@ -36,8 +47,7 @@ func (s *PhysicalSectorController) Collide(e core.AbstractEntity) {
 	entity.OnGround = false
 	if s.FloorTarget != nil && entityTop < floorZ {
 		provide.Passer.For(entity.Sector).OnExit(e)
-		entity.Sector = s.FloorTarget
-		provide.Passer.For(entity.Sector).OnEnter(e)
+		provide.Passer.For(s.FloorTarget).OnEnter(e)
 		_, ceilZ = entity.Sector.Physical().SlopedZNow(entity.Pos.Now.To2D())
 		entity.Pos.Now[2] = ceilZ - entity.Height - 1.0
 	} else if s.FloorTarget != nil && entity.Pos.Now[2] <= floorZ && entity.Vel.Now[2] > 0 {
@@ -46,13 +56,12 @@ func (s *PhysicalSectorController) Collide(e core.AbstractEntity) {
 		entity.Vel.Now[2] = 0
 		entity.Pos.Now[2] = floorZ
 		entity.OnGround = true
-		//fmt.Printf("%v\n", concrete.Pos)
+		//fmt.Printf("%v\n", model.Pos)
 	}
 
 	if s.CeilTarget != nil && entityTop > ceilZ {
 		provide.Passer.For(entity.Sector).OnExit(e)
-		entity.Sector = s.CeilTarget
-		provide.Passer.For(entity.Sector).OnEnter(e)
+		provide.Passer.For(s.CeilTarget).OnEnter(e)
 		floorZ, _ = entity.Sector.Physical().SlopedZNow(entity.Pos.Now.To2D())
 		entity.Pos.Now[2] = floorZ - entity.Height + 1.0
 	} else if s.CeilTarget == nil && entityTop > ceilZ {
@@ -66,20 +75,28 @@ func (s *PhysicalSectorController) ActOnEntity(e core.AbstractEntity) {
 		return
 	}
 
+	f := &e.Physical().Force
 	v := &e.Physical().Vel.Now
-	if e.GetBase().ID == s.Map.Player.GetBase().ID {
-		v[0] /= 1.2
-		v[1] /= 1.2
-		if math.Abs(v[0]) < 0.0001 {
-			v[0] = 0
-		}
-		if math.Abs(v[1]) < 0.0001 {
-			v[1] = 0
-		}
-	}
 
 	if e.Physical().Mass > 0 {
-		v[2] -= constants.Gravity / e.Physical().Mass
+		// Weight = g*m
+		f[2] -= constants.Gravity * e.Physical().Mass
+		// Air drag
+		crossSectionArea := math.Pi * e.Physical().BoundingRadius * e.Physical().BoundingRadius
+		//terminalV := math.Sqrt(2.0 * e.Physical().Mass * constants.Gravity / constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
+		drag := concepts.Vector3{v[0] * v[0], v[1] * v[1], v[2] * v[2]}
+		if !math.Signbit(v[2]) {
+			v[2] = -v[2]
+		}
+		if !math.Signbit(v[1]) {
+			v[1] = -v[1]
+		}
+		if !math.Signbit(v[0]) {
+			v[0] = -v[0]
+		}
+		drag.MulSelf(0.5 * constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
+		f.AddSelf(&drag)
+		//log.Printf("%v\n", f)
 	}
 
 	s.Collide(e)

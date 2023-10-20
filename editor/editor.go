@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 	"strconv"
 	"unsafe"
@@ -131,44 +132,45 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) Integrate() {
-	ps := entity.NewPlayerController(editor.World.Player.(*entities.Player))
+	player := editor.World.Player.(*entities.Player)
+	ps := entity.NewPlayerController(player)
 
 	if gameKeyMap[gdk.KEY_w] {
-		ps.Move(ps.Player.Angle)
+		ps.Move(ps.Angle)
 	}
 	if gameKeyMap[gdk.KEY_s] {
-		ps.Move(ps.Player.Angle + 180.0)
+		ps.Move(ps.Angle + 180.0)
 	}
 	if gameKeyMap[gdk.KEY_e] {
-		ps.Move(ps.Player.Angle + 90.0)
+		ps.Move(ps.Angle + 90.0)
 	}
 	if gameKeyMap[gdk.KEY_q] {
-		ps.Move(ps.Player.Angle + 270.0)
+		ps.Move(ps.Angle + 270.0)
 	}
 	if gameKeyMap[gdk.KEY_a] {
-		ps.Player.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
-		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+		ps.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
+		ps.Angle = concepts.NormalizeAngle(ps.Angle)
 	}
 	if gameKeyMap[gdk.KEY_d] {
-		ps.Player.Angle += constants.PlayerTurnSpeed * constants.TimeStep
-		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+		ps.Angle += constants.PlayerTurnSpeed * constants.TimeStep
+		ps.Angle = concepts.NormalizeAngle(ps.Angle)
 	}
 	if gameKeyMap[gdk.KEY_space] {
-		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
-		} else if ps.Player.OnGround {
-			ps.Player.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
-			ps.Player.OnGround = false
+		if _, ok := ps.Sector.(*sectors.Underwater); ok {
+			ps.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
+		} else if ps.OnGround {
+			ps.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
+			ps.OnGround = false
 		}
 	}
 	if gameKeyMap[gdk.KEY_c] {
-		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
+		if _, ok := ps.Sector.(*sectors.Underwater); ok {
+			ps.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
 		} else {
-			ps.Crouching = true
+			player.Crouching = true
 		}
 	} else {
-		ps.Crouching = false
+		player.Crouching = false
 	}
 
 	editor.World.Frame()
@@ -182,7 +184,12 @@ func (e *Editor) Load(filename string) {
 	sim := core.NewSimulation()
 	sim.Integrate = e.Integrate
 	sim.Render = e.Window.QueueDraw
-	e.World = controllers.LoadMap(e.OpenFile)
+	world, err := controllers.LoadMap(e.OpenFile)
+	if err != nil {
+		e.Alert(fmt.Sprintf("Error loading world: %v", err))
+		return
+	}
+	e.World = world
 	e.World.Attach(sim)
 	ps := entity.NewPlayerController(e.World.Player.(*entities.Player))
 	ps.Collide()
@@ -198,7 +205,7 @@ func (e *Editor) Test() {
 	sim.Integrate = e.Integrate
 	sim.Render = e.Window.QueueDraw
 	e.World = controllers.NewMapController(new(core.Map))
-	e.World.Initialize()
+	e.World.Construct(nil)
 	e.World.Attach(sim)
 	e.World.CreateTest()
 	ps := entity.NewPlayerController(e.World.Player.(*entities.Player))
@@ -239,7 +246,7 @@ func (e *Editor) ActTool() {
 		typeId := e.SectorTypes.GetActiveID()
 		t := registry.Instance().All[typeId]
 		s := reflect.New(t).Interface().(core.AbstractSector)
-		s.Initialize()
+		s.Construct(nil)
 		if simmed, ok := s.(core.Simulated); ok {
 			simmed.Attach(e.World.Sim())
 		}
@@ -251,7 +258,7 @@ func (e *Editor) ActTool() {
 		typeId := e.EntityTypes.GetActiveID()
 		t := registry.Instance().All[typeId]
 		ae := reflect.New(t).Interface().(core.AbstractEntity)
-		ae.Initialize()
+		ae.Construct(nil)
 		if simmed, ok := ae.(core.Simulated); ok {
 			simmed.Attach(e.World.Sim())
 		}

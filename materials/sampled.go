@@ -19,14 +19,15 @@ func init() {
 	registry.Instance().Register(Sampled{})
 }
 
-func (m *Sampled) Initialize() {
-	m.Base.Initialize()
+func (m *Sampled) Construct(data map[string]interface{}) {
+	m.Base.Construct(data)
+	m.Model = m
 	m.Scale = 1.0
-}
 
-func (m *Sampled) Deserialize(data map[string]interface{}) {
-	m.Initialize()
-	m.Base.Deserialize(data)
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["IsLiquid"]; ok {
 		m.IsLiquid = v.(bool)
 	}

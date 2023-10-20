@@ -16,15 +16,16 @@ func init() {
 	registry.Instance().Register(Lit{})
 }
 
-func (m *Lit) Initialize() {
-	m.Base.Initialize()
+func (m *Lit) Construct(data map[string]interface{}) {
+	m.Base.Construct(data)
+	m.Model = m
 	m.Ambient = concepts.Vector3{0.1, 0.1, 0.1}
 	m.Diffuse = concepts.Vector3{1, 1, 1}
-}
 
-func (m *Lit) Deserialize(data map[string]interface{}) {
-	m.Initialize()
-	m.Base.Deserialize(data)
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["Ambient"]; ok {
 		m.Ambient.Deserialize(v.(map[string]interface{}))
 	}

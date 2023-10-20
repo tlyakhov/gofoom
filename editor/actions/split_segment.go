@@ -41,7 +41,7 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 
 	copied := &core.Segment{}
 	copied.SetParent(ss.split.Sector)
-	copied.Deserialize(ss.split.Serialize())
+	copied.Construct(ss.split.Serialize())
 	ss.added = copied
 	ss.added.ID = xid.New().String()
 	ss.added.P = *isect

@@ -24,14 +24,15 @@ func init() {
 func NewPlayer(m *core.Map) *Player {
 	p := &Player{}
 	p.Map = m
-	p.Initialize()
+	p.Construct(nil)
 	p.Pos.Original = m.Spawn
 	p.Pos.Reset()
 	return p
 }
 
-func (p *Player) Initialize() {
-	p.AliveEntity.Initialize()
+func (p *Player) Construct(data map[string]interface{}) {
+	p.AliveEntity.Construct(data)
+	p.Model = p
 	p.Height = constants.PlayerHeight
 	p.BoundingRadius = constants.PlayerBoundingRadius
 	p.Mass = 70 // kg

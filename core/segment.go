@@ -42,12 +42,6 @@ func init() {
 	registry.Instance().Register(Segment{})
 }
 
-func (s *Segment) Initialize() {
-	s.Base.Initialize()
-	s.P = concepts.Vector2{}
-	s.Normal = concepts.Vector2{}
-}
-
 func (s *Segment) SetParent(parent interface{}) {
 	if sector, ok := parent.(AbstractSector); ok {
 		s.Sector = sector
@@ -260,9 +254,16 @@ func (s *Segment) LightmapAddressToWorld(result *concepts.Vector3, mapIndex uint
 	return s.UVToWorld(result, u, v)
 }
 
-func (s *Segment) Deserialize(data map[string]interface{}) {
-	s.Initialize()
-	s.Base.Deserialize(data)
+func (s *Segment) Construct(data map[string]interface{}) {
+	s.Base.Construct(data)
+	s.Model = s
+	s.P = concepts.Vector2{}
+	s.Normal = concepts.Vector2{}
+
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["X"]; ok {
 		s.P[0] = v.(float64)
 	}

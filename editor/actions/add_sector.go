@@ -48,7 +48,7 @@ func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
 	a.Mode = "AddSectorSegment"
 
 	seg := core.Segment{}
-	seg.Initialize()
+	seg.Construct(nil)
 	seg.SetParent(a.Sector)
 	seg.HiMaterial = a.State().World.DefaultMaterial()
 	seg.LoMaterial = a.State().World.DefaultMaterial()

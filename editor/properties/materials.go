@@ -17,7 +17,7 @@ func (g *Grid) fieldMaterials(index int, field *state.PropertyGridField) {
 	button.SetLabel("Add Material")
 	button.Connect("clicked", func(_ *gtk.Button) {
 		mat := &materials.LitSampled{}
-		mat.Initialize()
+		mat.Construct(nil)
 		action := &actions.AddMaterial{IEditor: g.IEditor, Sampleable: mat}
 		g.NewAction(action)
 		action.Act()

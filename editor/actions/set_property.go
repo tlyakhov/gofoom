@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -32,6 +33,14 @@ func (a *SetProperty) Act() {
 			a.ParentCollection.SetMapIndex(a.ToSet, reflect.ValueOf(a.Parent))
 		}
 		v.Elem().Set(a.ToSet)
+		switch sim := a.Parent.(type) {
+		case *core.SimScalar:
+			sim.Reset()
+		case *core.SimVector2:
+			sim.Reset()
+		case *core.SimVector3:
+			sim.Reset()
+		}
 	}
 	a.State().Modified = true
 	a.ActionFinished(false)

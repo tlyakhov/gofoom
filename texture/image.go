@@ -31,13 +31,6 @@ func init() {
 	registry.Instance().Register(Image{})
 }
 
-func (t *Image) Initialize() {
-	t.Base = concepts.Base{}
-	t.Base.Initialize()
-	t.Filter = false
-	t.GenerateMipMaps = true
-}
-
 // Load a texture from a file (pre-processing mipmaps if set)
 func (t *Image) Load() error {
 	if t.Source == "" {
@@ -210,9 +203,16 @@ func (t *Image) Sample(x, y float64, scale float64) uint32 {
 	return ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | (a & 0xFF)
 }
 
-func (t *Image) Deserialize(data map[string]interface{}) {
-	t.Initialize()
-	t.Base.Deserialize(data)
+func (t *Image) Construct(data map[string]interface{}) {
+	t.Base.Construct(data)
+	t.Model = t
+	t.Filter = false
+	t.GenerateMipMaps = true
+
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["Source"]; ok {
 		t.Source = v.(string)
 	}

@@ -10,18 +10,19 @@ import (
 )
 
 type PhysicalEntity struct {
-	*concepts.Base    `editable:"^"`
+	concepts.Base     `editable:"^"`
 	Simulation        *Simulation
 	Pos               SimVector3 `editable:"Position"`
 	Vel               SimVector3
+	Force             concepts.Vector3
 	Angle             float64           `editable:"Angle"`
 	BoundingRadius    float64           `editable:"Bounding Radius"`
 	Mass              float64           `editable:"Mass"`
 	CollisionResponse CollisionResponse `editable:"Collision Response"`
+	Height            float64           `editable:"Height"`
+	MountHeight       float64           `editable:"Mount Height"`
+	Active            bool              `editable:"Active?"`
 	CRCallback        func() CollisionResponse
-	Height            float64 `editable:"Height"`
-	MountHeight       float64 `editable:"Mount Height"`
-	Active            bool    `editable:"Active?"`
 	OnGround          bool
 	Sector            AbstractSector
 	Map               *Map
@@ -31,18 +32,6 @@ type PhysicalEntity struct {
 
 func init() {
 	registry.Instance().Register(PhysicalEntity{})
-}
-
-func (e *PhysicalEntity) Initialize() {
-	e.Base = &concepts.Base{}
-	e.Base.Initialize()
-	e.Pos.Set(0, 0, 0)
-	e.Vel.Set(0, 0, 0)
-	e.BoundingRadius = 10
-	e.CollisionResponse = Slide
-	e.MountHeight = constants.PlayerMountHeight
-	e.Active = true
-	e.Behaviors = make(map[string]AbstractBehavior)
 }
 
 func (e *PhysicalEntity) Attach(sim *Simulation) {
@@ -89,9 +78,20 @@ func (e *PhysicalEntity) SetParent(parent interface{}) {
 	}
 }
 
-func (e *PhysicalEntity) Deserialize(data map[string]interface{}) {
-	e.Initialize()
-	e.Base.Deserialize(data)
+func (e *PhysicalEntity) Construct(data map[string]interface{}) {
+	e.Base.Construct(data)
+	e.Model = e
+	e.Pos.Set(0, 0, 0)
+	e.Vel.Set(0, 0, 0)
+	e.BoundingRadius = 10
+	e.CollisionResponse = Slide
+	e.MountHeight = constants.PlayerMountHeight
+	e.Active = true
+	e.Behaviors = make(map[string]AbstractBehavior)
+
+	if data == nil {
+		return
+	}
 
 	if v, ok := data["Active"]; ok {
 		e.Active = v.(bool)

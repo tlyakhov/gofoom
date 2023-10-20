@@ -26,13 +26,16 @@ const (
 	AudioUnitsFactor = 12
 
 	// World constants
-	Gravity          = 9.8 * 2 / (TimeStep * TimeStep) //0.005
-	GravitySwim      = 0.1 * 2 / (TimeStep * TimeStep)
-	SwimDamping      = 2.0
-	CollisionCheck   = 2.0
-	LiquidChurnSpeed = 2.0
-	LiquidChurnSize  = 0.03
-	DoorSpeed        = 0.1
+	// 32 units = 1m
+	Gravity               = 9.8 * 32 / (TimeStep * TimeStep) //0.005
+	GravitySwim           = 0.1 / (TimeStep * TimeStep)
+	AirDensity            = 1.293
+	SphereDragCoefficient = 0.47
+	SwimDamping           = 2.0
+	CollisionCheck        = 2.0
+	LiquidChurnSpeed      = 2.0
+	LiquidChurnSize       = 0.03
+	DoorSpeed             = 0.1
 
 	// Player constants
 	PlayerBoundingRadius = 10.0
