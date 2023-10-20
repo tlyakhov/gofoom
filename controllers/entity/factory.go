@@ -3,9 +3,9 @@ package entity
 import (
 	"sync"
 
+	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/entities"
-	"tlyakhov/gofoom/logic/provide"
 )
 
 type AnimatorFactory struct{}
@@ -28,13 +28,13 @@ func (f *AnimatorFactory) For(concrete interface{}) provide.Animateable {
 	}
 	switch target := concrete.(type) {
 	case *core.PhysicalEntity:
-		return NewPhysicalEntityService(target, target)
+		return NewPhysicalEntityController(target, target)
 	case *entities.AliveEntity:
-		return NewAliveEntityService(target, target)
+		return NewAliveEntityController(target, target)
 	case *entities.Player:
-		return NewPlayerService(target)
+		return NewPlayerController(target)
 	case *entities.Light:
-		return NewPhysicalEntityService(target.Physical(), target)
+		return NewPhysicalEntityController(target.Physical(), target)
 	default:
 		return nil
 		//panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(concrete)))
@@ -47,13 +47,13 @@ func (f *ColliderFactory) For(concrete interface{}) (provide.Collideable, bool) 
 	}
 	switch target := concrete.(type) {
 	case *core.PhysicalEntity:
-		return NewPhysicalEntityService(target, target), true
+		return NewPhysicalEntityController(target, target), true
 	case *entities.AliveEntity:
-		return NewAliveEntityService(target, target), true
+		return NewAliveEntityController(target, target), true
 	case *entities.Player:
-		return NewPlayerService(target), true
+		return NewPlayerController(target), true
 	case *entities.Light:
-		return NewPhysicalEntityService(target.Physical(), target), true
+		return NewPhysicalEntityController(target.Physical(), target), true
 	default:
 		return nil, false
 		//panic(fmt.Sprintf("Tried to get an collider service for %v and didn't find one.", reflect.TypeOf(concrete)))
@@ -66,9 +66,9 @@ func (f *HurterFactory) For(concrete interface{}) (provide.Hurtable, bool) {
 	}
 	switch target := concrete.(type) {
 	case *entities.Player:
-		return NewPlayerService(target), true
+		return NewPlayerController(target), true
 	case *entities.AliveEntity:
-		return NewAliveEntityService(target, target), true
+		return NewAliveEntityController(target, target), true
 	default:
 		//		panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(concrete)))
 		return nil, false

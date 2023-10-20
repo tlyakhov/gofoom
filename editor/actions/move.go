@@ -1,8 +1,8 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/logic/provide"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/core"

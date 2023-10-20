@@ -1,4 +1,4 @@
-package logic
+package controllers
 
 import (
 	"encoding/json"
@@ -9,22 +9,22 @@ import (
 	"os"
 
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/entities"
-	"tlyakhov/gofoom/logic/provide"
 	"tlyakhov/gofoom/materials"
 	"tlyakhov/gofoom/texture"
 )
 
-type MapService struct {
+type MapController struct {
 	*core.Map
 }
 
-func NewMapService(m *core.Map) *MapService {
-	return &MapService{Map: m}
+func NewMapController(m *core.Map) *MapController {
+	return &MapController{Map: m}
 }
 
-func LoadMap(filename string) *MapService {
+func LoadMap(filename string) *MapController {
 	fileContents, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -32,7 +32,7 @@ func LoadMap(filename string) *MapService {
 	}
 	var parsed interface{}
 	err = json.Unmarshal(fileContents, &parsed)
-	m := NewMapService(new(core.Map))
+	m := NewMapController(new(core.Map))
 	m.Initialize()
 	m.Deserialize(parsed.(map[string]interface{}))
 	m.Player = entities.NewPlayer(m.Map)
@@ -40,7 +40,7 @@ func LoadMap(filename string) *MapService {
 	return m
 }
 
-func (m *MapService) Save(filename string) {
+func (m *MapController) Save(filename string) {
 	mapped := m.Serialize()
 	bytes, err := json.MarshalIndent(mapped, "", "  ")
 
@@ -51,7 +51,7 @@ func (m *MapService) Save(filename string) {
 	ioutil.WriteFile(filename, bytes, os.ModePerm)
 }
 
-func (m *MapService) Recalculate() {
+func (m *MapController) Recalculate() {
 	m.Map.Recalculate()
 	for _, s := range m.Sectors {
 		provide.Passer.For(s).Recalculate()
@@ -63,7 +63,7 @@ func (m *MapService) Recalculate() {
 	}
 }
 
-func (m *MapService) Frame() {
+func (m *MapController) Frame() {
 	player := provide.EntityAnimator.For(m.Player)
 	player.Frame()
 
@@ -82,7 +82,7 @@ func (m *MapService) Frame() {
 	}
 }
 
-func (m *MapService) AutoPortal() {
+func (m *MapController) AutoPortal() {
 	seen := map[string]bool{}
 	for _, sector := range m.Sectors {
 		for _, segment := range sector.Physical().Segments {
@@ -125,7 +125,7 @@ func (m *MapService) AutoPortal() {
 	m.Recalculate()
 }
 
-func (ms *MapService) CreateTestSector(id string, x, y, size float64) *core.PhysicalSector {
+func (ms *MapController) CreateTestSector(id string, x, y, size float64) *core.PhysicalSector {
 	mat := ms.Map.Materials["Default"]
 	sector := &core.PhysicalSector{}
 	sector.Initialize()
@@ -154,7 +154,7 @@ func (ms *MapService) CreateTestSector(id string, x, y, size float64) *core.Phys
 	return sector
 }
 
-func (ms *MapService) CreateTest() {
+func (ms *MapController) CreateTest() {
 	ms.Player = entities.NewPlayer(ms.Map)
 	ms.Spawn[0] = 50
 	ms.Spawn[1] = 50

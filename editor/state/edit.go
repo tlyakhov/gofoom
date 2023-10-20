@@ -2,7 +2,7 @@ package state
 
 import (
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/logic"
+	"tlyakhov/gofoom/controllers"
 )
 
 type EditorTool int
@@ -18,7 +18,7 @@ const (
 
 type Edit struct {
 	MapView
-	World *logic.MapService
+	World *controllers.MapController
 
 	// Map view positions in world/screen space.
 	Mouse          concepts.Vector2 // Screen

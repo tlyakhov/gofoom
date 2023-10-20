@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"sync"
 
+	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/logic/provide"
 	"tlyakhov/gofoom/sectors"
 )
 
@@ -30,13 +30,13 @@ func (f *InteractorFactory) For(concrete interface{}) provide.Interactable {
 	}
 	switch target := concrete.(type) {
 	case *sectors.ToxicSector:
-		return NewToxicSectorService(target)
+		return NewToxicSectorController(target)
 	case *sectors.VerticalDoor:
-		return NewVerticalDoorService(target)
+		return NewVerticalDoorController(target)
 	case *sectors.Underwater:
-		return NewUnderwaterService(target)
+		return NewUnderwaterController(target)
 	case *core.PhysicalSector:
-		return NewPhysicalSectorService(target)
+		return NewPhysicalSectorController(target)
 	default:
 		panic(fmt.Sprintf("Tried to get a sector interactor service for %v and didn't find one.", reflect.TypeOf(concrete)))
 	}
