@@ -5,11 +5,11 @@ import (
 )
 
 type ISerializable interface {
-	Initialize()
-	Deserialize(data map[string]interface{})
+	Construct(data map[string]interface{})
 	Serialize() map[string]interface{}
 	SetParent(interface{})
 	GetBase() *Base
+	GetModel() ISerializable
 }
 
 func IndexOf(s []ISerializable, obj ISerializable) int {

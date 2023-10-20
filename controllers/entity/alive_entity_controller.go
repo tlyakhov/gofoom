@@ -1,17 +1,15 @@
 package entity
 
 import (
-	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/entities"
 )
 
 type AliveEntityController struct {
-	*PhysicalEntityController
 	*entities.AliveEntity
 }
 
-func NewAliveEntityController(ae *entities.AliveEntity, e core.AbstractEntity) *AliveEntityController {
-	return &AliveEntityController{AliveEntity: ae, PhysicalEntityController: NewPhysicalEntityController(&ae.PhysicalEntity, e)}
+func NewAliveEntityController(ae *entities.AliveEntity) *AliveEntityController {
+	return &AliveEntityController{AliveEntity: ae}
 }
 
 func (e *AliveEntityController) Hurt(amount float64) {

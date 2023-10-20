@@ -13,11 +13,10 @@ import (
 
 type PhysicalEntityController struct {
 	*core.PhysicalEntity
-	Original core.AbstractEntity
 }
 
-func NewPhysicalEntityController(pe *core.PhysicalEntity, e core.AbstractEntity) *PhysicalEntityController {
-	return &PhysicalEntityController{PhysicalEntity: pe, Original: e}
+func NewPhysicalEntityController(pe *core.PhysicalEntity) *PhysicalEntityController {
+	return &PhysicalEntityController{PhysicalEntity: pe}
 }
 
 func (e *PhysicalEntityController) PushBack(segment *core.Segment) bool {
@@ -61,6 +60,7 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 	// Assume we haven't collided.
 	var collided []*core.Segment
 	p := &e.Pos.Now
+	model := e.Model.(core.AbstractEntity)
 
 	// Cases 1 & 2.
 	if e.Sector == nil {
@@ -91,8 +91,7 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 		}
 
 		e.Sector = closestSector
-		closestSector.Physical().Entities[e.ID] = e.Original
-		provide.Passer.For(closestSector).OnEnter(e.Original)
+		provide.Passer.For(closestSector).OnEnter(model)
 		// Don't mark as collided because this is probably an initialization.
 	}
 
@@ -121,8 +120,7 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 
 		// Exit the current sector.
 		sector := e.Sector
-		provide.Passer.For(e.Sector).OnExit(e.Original)
-		delete(e.Sector.Physical().Entities, e.ID)
+		provide.Passer.For(e.Sector).OnExit(model)
 		e.Sector = nil
 
 		for _, segment := range sector.Physical().Segments {
@@ -141,8 +139,7 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 					fmt.Println("goop2?")
 				}
 				e.Sector = segment.AdjacentSector
-				adj.Entities[e.ID] = e.Original
-				provide.Passer.For(e.Sector).OnEnter(e.Original)
+				provide.Passer.For(e.Sector).OnEnter(model)
 				break
 			}
 		}
@@ -186,8 +183,8 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 		}
 	}
 
-	if e.Sector != nil {
-		e.Sector.Physical().Entities[e.ID] = e.Original
+	if e.Sector != nil && e.Sector.Physical().Entities[e.ID] == nil {
+		e.Sector.Physical().Entities[e.ID] = model
 	}
 
 	return collided
@@ -210,21 +207,27 @@ func (e *PhysicalEntityController) Frame() {
 		return
 	}
 
-	if math.Abs(e.Vel.Now[0]) > constants.VelocityEpsilon ||
-		math.Abs(e.Vel.Now[1]) > constants.VelocityEpsilon ||
-		math.Abs(e.Vel.Now[2]) > constants.VelocityEpsilon {
+	// f = ma
+	// a = f/m
+	// v = ∫a dt
+	// p = ∫v dt
+	e.Vel.Now.AddSelf(e.Force.Mul(1.0 / e.Mass))
+	if e.Vel.Now.Length2() > constants.VelocityEpsilon {
 		speed := e.Vel.Now.Length() * constants.TimeStep
 		steps := concepts.Max(int(speed/constants.CollisionCheck), 1)
+		dt := constants.TimeStep / float64(steps)
 		for step := 0; step < steps; step++ {
-			e.Pos.Now.AddSelf(e.Vel.Now.Mul(constants.TimeStep / float64(steps)))
-
-			collSegments := e.Collide()
-			if collSegments != nil {
-				//break
-			}
+			e.Pos.Now.AddSelf(e.Vel.Now.Mul(dt))
+			e.Collide()
+			/*
+				collSegments := e.Collide()
+				if collSegments != nil {
+					break
+				}*/
 		}
 	}
-}
-
-func (e *PhysicalEntityController) Render(sim *core.Simulation) {
+	// Reset force for next frame
+	e.Force[2] = 0.0
+	e.Force[1] = 0.0
+	e.Force[0] = 0.0
 }

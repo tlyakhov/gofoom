@@ -21,18 +21,18 @@ func init() {
 	registry.Instance().Register(Solid{})
 }
 
-func (s *Solid) Initialize() {
-	s.Base = concepts.Base{}
-	s.Base.Initialize()
-}
-
 func (s *Solid) Sample(x, y float64, scale float64) uint32 {
 	return concepts.NRGBAToInt32(s.Diffuse)
 }
 
-func (s *Solid) Deserialize(data map[string]interface{}) {
-	s.Initialize()
-	s.Base.Deserialize(data)
+func (s *Solid) Construct(data map[string]interface{}) {
+	s.Base.Construct(data)
+	s.Model = s
+
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["Diffuse"]; ok {
 		var err error
 		s.Diffuse, err = concepts.ParseHexColor(v.(string))

@@ -64,16 +64,6 @@ func (ms *PhysicalSector) IsPointInside2D(p *concepts.Vector2) bool {
 	return inside
 }
 
-func (s *PhysicalSector) Initialize() {
-	s.Base.Initialize()
-	s.Segments = make([]*Segment, 0)
-	s.Entities = make(map[string]AbstractEntity)
-	s.BottomZ.Set(0.0)
-	s.TopZ.Set(64.0)
-	s.FloorScale = 64.0
-	s.CeilScale = 64.0
-}
-
 func (s *PhysicalSector) Attach(sim *Simulation) {
 	s.Simulation = sim
 	s.TopZ.Attach(sim)
@@ -104,16 +94,26 @@ func (s *PhysicalSector) Sim() *Simulation {
 
 func (s *PhysicalSector) AddSegment(x float64, y float64) *Segment {
 	segment := &Segment{}
-	segment.Initialize()
+	segment.Construct(nil)
 	segment.SetParent(s)
 	segment.P = concepts.Vector2{x, y}
 	s.Segments = append(s.Segments, segment)
 	return segment
 }
 
-func (s *PhysicalSector) Deserialize(data map[string]interface{}) {
-	s.Initialize()
-	s.Base.Deserialize(data)
+func (s *PhysicalSector) Construct(data map[string]interface{}) {
+	s.Base.Construct(data)
+	s.Model = s
+	s.Segments = make([]*Segment, 0)
+	s.Entities = make(map[string]AbstractEntity)
+	s.BottomZ.Set(0.0)
+	s.TopZ.Set(64.0)
+	s.FloorScale = 64.0
+	s.CeilScale = 64.0
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["TopZ"]; ok {
 		s.TopZ.Original = v.(float64)
 		s.TopZ.Reset()

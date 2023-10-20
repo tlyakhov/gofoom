@@ -22,19 +22,19 @@ func (s *ToxicSectorController) Collide(e core.AbstractEntity) {
 		return
 	}
 
-	if h, ok := provide.Hurter.For(e); ok && h.HurtTime() == 0 && s.Hurt > 0 {
+	if h := provide.Hurter.For(e); h != nil && h.HurtTime() == 0 && s.Hurt > 0 {
 		h.Hurt(s.Hurt)
 	}
 
-	concrete := s.ToxicSector
+	model := s.ToxicSector
 
-	if concrete.FloorMaterial != nil && e.Physical().Pos.Now[2] <= concrete.BottomZ.Now {
-		if p, ok := concrete.FloorMaterial.(*materials.PainfulLitSampled); ok {
+	if model.FloorMaterial != nil && e.Physical().Pos.Now[2] <= model.BottomZ.Now {
+		if p, ok := model.FloorMaterial.(*materials.PainfulLitSampled); ok {
 			material.NewPainfulController(&p.Painful).ActOnEntity(e)
 		}
 	}
-	if concrete.CeilMaterial != nil && e.Physical().Pos.Now[2] >= concrete.TopZ.Now {
-		if p, ok := concrete.CeilMaterial.(*materials.PainfulLitSampled); ok {
+	if model.CeilMaterial != nil && e.Physical().Pos.Now[2] >= model.TopZ.Now {
+		if p, ok := model.CeilMaterial.(*materials.PainfulLitSampled); ok {
 			material.NewPainfulController(&p.Painful).ActOnEntity(e)
 		}
 	}

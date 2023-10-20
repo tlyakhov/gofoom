@@ -24,11 +24,11 @@ func init() {
 	})
 }
 
-func (f *InteractorFactory) For(concrete interface{}) provide.Interactable {
-	if concrete == nil {
+func (f *InteractorFactory) For(model interface{}) provide.Interactable {
+	if model == nil {
 		return nil
 	}
-	switch target := concrete.(type) {
+	switch target := model.(type) {
 	case *sectors.ToxicSector:
 		return NewToxicSectorController(target)
 	case *sectors.VerticalDoor:
@@ -38,16 +38,16 @@ func (f *InteractorFactory) For(concrete interface{}) provide.Interactable {
 	case *core.PhysicalSector:
 		return NewPhysicalSectorController(target)
 	default:
-		panic(fmt.Sprintf("Tried to get a sector interactor service for %v and didn't find one.", reflect.TypeOf(concrete)))
+		panic(fmt.Sprintf("Tried to get a sector interactor service for %v and didn't find one.", reflect.TypeOf(model)))
 	}
 }
 
-func (f *AnimatorFactory) For(concrete interface{}) provide.Animateable {
+func (f *AnimatorFactory) For(model interface{}) provide.Animateable {
 	// For now all sector types are Interactable, Passable, and Animatable, but that may change.
-	return provide.Interactor.For(concrete).(provide.Animateable)
+	return provide.Interactor.For(model).(provide.Animateable)
 }
 
-func (f *PasserFactory) For(concrete interface{}) provide.Passable {
+func (f *PasserFactory) For(model interface{}) provide.Passable {
 	// For now all sector types are Interactable, Passable, and Animatable, but that may change.
-	return provide.Interactor.For(concrete).(provide.Passable)
+	return provide.Interactor.For(model).(provide.Passable)
 }

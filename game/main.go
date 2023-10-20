@@ -35,7 +35,7 @@ import (
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var win *pixelgl.Window
-var ps *entity.PlayerService
+var ps *entity.PlayerController
 var sim *core.Simulation
 var renderer *render.Renderer
 var gameMap *controllers.MapController
@@ -44,46 +44,47 @@ var buffer *image.RGBA
 var mainFont *render.Font
 
 func processInput() {
+	player := gameMap.Player.(*entities.Player)
 	win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 	}
 	if win.Pressed(pixelgl.KeyW) {
-		ps.Move(ps.Player.Angle)
+		ps.Move(player.Angle)
 	}
 	if win.Pressed(pixelgl.KeyS) {
-		ps.Move(ps.Player.Angle + 180.0)
+		ps.Move(player.Angle + 180.0)
 	}
 	if win.Pressed(pixelgl.KeyE) {
-		ps.Move(ps.Player.Angle + 90.0)
+		ps.Move(player.Angle + 90.0)
 	}
 	if win.Pressed(pixelgl.KeyQ) {
-		ps.Move(ps.Player.Angle + 270.0)
+		ps.Move(player.Angle + 270.0)
 	}
 	if win.Pressed(pixelgl.KeyA) {
-		ps.Player.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
-		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+		player.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
+		player.Angle = concepts.NormalizeAngle(player.Angle)
 	}
 	if win.Pressed(pixelgl.KeyD) {
-		ps.Player.Angle += constants.PlayerTurnSpeed * constants.TimeStep
-		ps.Player.Angle = concepts.NormalizeAngle(ps.Player.Angle)
+		player.Angle += constants.PlayerTurnSpeed * constants.TimeStep
+		player.Angle = concepts.NormalizeAngle(player.Angle)
 	}
 	if win.Pressed(pixelgl.KeySpace) {
-		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
-		} else if ps.Player.OnGround {
-			ps.Player.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
-			ps.Player.OnGround = false
+		if _, ok := player.Sector.(*sectors.Underwater); ok {
+			player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
+		} else if player.OnGround {
+			player.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
+			player.OnGround = false
 		}
 	}
 	if win.Pressed(pixelgl.KeyC) {
-		if _, ok := ps.Player.Sector.(*sectors.Underwater); ok {
-			ps.Player.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
+		if _, ok := player.Sector.(*sectors.Underwater); ok {
+			player.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
 		} else {
-			ps.Crouching = true
+			player.Crouching = true
 		}
 	} else {
-		ps.Crouching = false
+		player.Crouching = false
 	}
 }
 
@@ -93,6 +94,8 @@ func integrateGame() {
 }
 
 func renderGame() {
+	player := gameMap.Player.(*entities.Player)
+
 	renderer.Render(buffer.Pix)
 	canvas.SetPixels(buffer.Pix)
 	winw := win.Bounds().W()
@@ -100,8 +103,8 @@ func renderGame() {
 	mat := pixel.IM.ScaledXY(pixel.Vec{X: 0, Y: 0}, pixel.Vec{X: winw / float64(renderer.ScreenWidth), Y: -winh / float64(renderer.ScreenHeight)}).Moved(win.Bounds().Center())
 	canvas.Draw(win, mat)
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", sim.FPS))
-	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", ps.Player.Health))
-	mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(ps.Player.Sector), ps.Player.Sector.GetBase().ID))
+	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", player.Health))
+	mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {
 		msg := renderer.DebugNotices.Pop().(string)
@@ -155,7 +158,11 @@ func run() {
 	sim = core.NewSimulation()
 	sim.Integrate = integrateGame
 	sim.Render = renderGame
-	gameMap = controllers.LoadMap("data/worlds/hall.json")
+	gameMap, err = controllers.LoadMap("data/worlds/hall.json")
+	if err != nil {
+		log.Printf("Error loading world %v", err)
+		return
+	}
 	gameMap.Attach(sim)
 	ps = entity.NewPlayerController(gameMap.Player.(*entities.Player))
 	ps.Collide()

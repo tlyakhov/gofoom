@@ -15,14 +15,14 @@ func init() {
 	registry.Instance().Register(AliveEntity{})
 }
 
-func (e *AliveEntity) Initialize() {
-	e.PhysicalEntity.Initialize()
+func (e *AliveEntity) Construct(data map[string]interface{}) {
+	e.PhysicalEntity.Construct(data)
+	e.Model = e
 	e.Health = 100
-}
 
-func (e *AliveEntity) Deserialize(data map[string]interface{}) {
-	e.Initialize()
-	e.PhysicalEntity.Deserialize(data)
+	if data == nil {
+		return
+	}
 
 	if v, ok := data["Health"]; ok {
 		e.Health = v.(float64)

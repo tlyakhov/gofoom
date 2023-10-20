@@ -12,6 +12,8 @@ import (
 type Base struct {
 	ID   string   `editable:"ID"`
 	Tags []string `editable:"Tags"`
+	// Represents the fully composed type that this embedding (could be) a part of
+	Model ISerializable
 }
 
 func init() {
@@ -22,19 +24,24 @@ func (b *Base) GetBase() *Base {
 	return b
 }
 
-func (b *Base) Initialize() {
-	b.ID = xid.New().String()
+func (b *Base) GetModel() ISerializable {
+	return b.Model
 }
 
 func (b *Base) SetParent(parent interface{}) {
 }
 
-func (b *Base) Deserialize(data map[string]interface{}) {
+func (b *Base) Construct(data map[string]interface{}) {
 	if b == nil {
 		fmt.Printf("Error: attempting to deserialize nil *concepts.Base. Probably target type doesn't implement concepts.ISerializable.\n")
 		return
 	}
-	b.Initialize()
+	b.ID = xid.New().String()
+	b.Model = b
+
+	if data == nil {
+		return
+	}
 	if v, ok := data["ID"]; ok {
 		b.ID = v.(string)
 	}
@@ -61,7 +68,7 @@ func MapPolyStruct(parent interface{}, data map[string]interface{}) ISerializabl
 		asserted := created.(ISerializable)
 		//fmt.Printf("MapPolyStruct - asserted: %v\n", reflect.ValueOf(asserted).Type())
 		asserted.SetParent(parent)
-		asserted.Deserialize(data)
+		asserted.Construct(data)
 		return asserted
 	}
 	fmt.Printf("Warning: attempted to deserialize unknown polymorphic type: %v (onto a field of %v)\n", typeName, parent)
@@ -88,7 +95,7 @@ func MapArray(parent interface{}, arrayPtr interface{}, data interface{}) {
 	for _, child := range data.([]interface{}) {
 		item := reflect.New(itemType.Elem()).Interface().(ISerializable)
 		item.SetParent(parent)
-		item.Deserialize(child.(map[string]interface{}))
+		item.Construct(child.(map[string]interface{}))
 		arrayValue.Set(reflect.Append(arrayValue, reflect.ValueOf(item)))
 	}
 }

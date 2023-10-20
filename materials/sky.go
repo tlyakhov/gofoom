@@ -14,13 +14,14 @@ func init() {
 	registry.Instance().Register(Sky{})
 }
 
-func (m *Sky) Initialize() {
-	m.Sampled.Initialize()
-}
+func (m *Sky) Construct(data map[string]interface{}) {
+	m.Sampled.Construct(data)
+	m.Model = m
 
-func (m *Sky) Deserialize(data map[string]interface{}) {
-	m.Initialize()
-	m.Sampled.Deserialize(data)
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["StaticBackground"]; ok {
 		m.StaticBackground = v.(bool)
 	}

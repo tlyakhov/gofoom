@@ -110,7 +110,7 @@ func (g *Grid) gatherFields(obj interface{}, pgs pgState) {
 			if pgs.ParentName != "" {
 				name = pgs.ParentName + "." + name
 			}
-			g.childFields(name, fieldValue, pgs, false)
+			g.childFields(name, fieldValue, pgs, true)
 		}
 	}
 }

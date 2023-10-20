@@ -275,7 +275,7 @@ func (a *SectorSplitter) collect() {
 			visitor.Visited = true
 			addedSegment := &Segment{}
 			addedSegment.SetParent(added)
-			addedSegment.Deserialize(visitor.Source.Serialize())
+			addedSegment.Construct(visitor.Source.Serialize())
 			addedSegment.GetBase().ID = xid.New().String()
 			addedSegment.P = visitor.Start
 			addedSegment.AdjacentSegment = nil

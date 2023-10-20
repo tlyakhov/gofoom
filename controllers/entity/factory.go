@@ -22,55 +22,51 @@ func init() {
 	})
 }
 
-func (f *AnimatorFactory) For(concrete interface{}) provide.Animateable {
-	if concrete == nil {
+func (f *AnimatorFactory) For(model interface{}) provide.Animateable {
+	if model == nil {
 		return nil
 	}
-	switch target := concrete.(type) {
+	switch target := model.(type) {
 	case *core.PhysicalEntity:
-		return NewPhysicalEntityController(target, target)
-	case *entities.AliveEntity:
-		return NewAliveEntityController(target, target)
+		return NewPhysicalEntityController(target)
 	case *entities.Player:
 		return NewPlayerController(target)
 	case *entities.Light:
-		return NewPhysicalEntityController(target.Physical(), target)
+		return NewPhysicalEntityController(target.Physical())
 	default:
 		return nil
-		//panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(concrete)))
+		//panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(model)))
 	}
 }
 
-func (f *ColliderFactory) For(concrete interface{}) (provide.Collideable, bool) {
-	if concrete == nil {
-		return nil, false
+func (f *ColliderFactory) For(model interface{}) provide.Collideable {
+	if model == nil {
+		return nil
 	}
-	switch target := concrete.(type) {
+	switch target := model.(type) {
 	case *core.PhysicalEntity:
-		return NewPhysicalEntityController(target, target), true
-	case *entities.AliveEntity:
-		return NewAliveEntityController(target, target), true
+		return NewPhysicalEntityController(target)
 	case *entities.Player:
-		return NewPlayerController(target), true
+		return NewPhysicalEntityController(target.Physical())
 	case *entities.Light:
-		return NewPhysicalEntityController(target.Physical(), target), true
+		return NewPhysicalEntityController(target.Physical())
 	default:
-		return nil, false
-		//panic(fmt.Sprintf("Tried to get an collider service for %v and didn't find one.", reflect.TypeOf(concrete)))
+		return nil
+		//panic(fmt.Sprintf("Tried to get an collider service for %v and didn't find one.", reflect.TypeOf(model)))
 	}
 }
 
-func (f *HurterFactory) For(concrete interface{}) (provide.Hurtable, bool) {
-	if concrete == nil {
-		return nil, false
+func (f *HurterFactory) For(model interface{}) provide.Hurtable {
+	if model == nil {
+		return nil
 	}
-	switch target := concrete.(type) {
+	switch target := model.(type) {
 	case *entities.Player:
-		return NewPlayerController(target), true
+		return NewPlayerController(target)
 	case *entities.AliveEntity:
-		return NewAliveEntityController(target, target), true
+		return NewAliveEntityController(target)
 	default:
-		//		panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(concrete)))
-		return nil, false
+		//		panic(fmt.Sprintf("Tried to get an entity animator service for %v and didn't find one.", reflect.TypeOf(model)))
+		return nil
 	}
 }

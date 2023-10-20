@@ -10,43 +10,52 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-type PlayerService struct {
-	*entities.Player
+type PlayerController struct {
+	*PhysicalEntityController
 	*AliveEntityController
 }
 
-func NewPlayerController(p *entities.Player) *PlayerService {
-	return &PlayerService{Player: p, AliveEntityController: NewAliveEntityController(&p.AliveEntity, p)}
+func NewPlayerController(p *entities.Player) *PlayerController {
+	return &PlayerController{
+		PhysicalEntityController: NewPhysicalEntityController(&p.PhysicalEntity),
+		AliveEntityController:    NewAliveEntityController(&p.AliveEntity),
+	}
 }
 
-func (p *PlayerService) Frame() {
-	p.Bob += p.Player.Vel.Now.Length() / 6.0
+func (pc *PlayerController) Frame() {
+	p := pc.Model.(*entities.Player)
+	p.Bob += p.Vel.Now.Length() / 6.0
 	for p.Bob > math.Pi*2 {
 		p.Bob -= math.Pi * 2
 	}
-	p.AliveEntityController.PhysicalEntityController.Frame()
-	if p.Player.Sector == nil {
+	pc.PhysicalEntityController.Frame()
+	if p.Sector == nil {
 		return
 	}
 
 	if p.Crouching {
-		p.Player.Height = constants.PlayerCrouchHeight
+		p.Height = constants.PlayerCrouchHeight
 	} else {
-		p.Player.Height = constants.PlayerHeight
+		p.Height = constants.PlayerHeight
 	}
 
-	if p.Player.HurtTime > 0 {
-		p.FrameTint = color.NRGBA{0xFF, 0, 0, uint8(p.Player.HurtTime * 200 / constants.PlayerHurtTime)}
-		p.Player.HurtTime--
+	if p.HurtTime > 0 {
+		p.FrameTint = color.NRGBA{0xFF, 0, 0, uint8(p.HurtTime * 200 / constants.PlayerHurtTime)}
+		p.HurtTime--
 	}
 }
 
-func (p *PlayerService) Hurt(amount float64) {
-	p.AliveEntityController.Hurt(amount)
-	p.Player.HurtTime = constants.PlayerHurtTime
+func (pc *PlayerController) Hurt(amount float64) {
+	p := pc.Model.(*entities.Player)
+	pc.AliveEntityController.Hurt(amount)
+	p.HurtTime = constants.PlayerHurtTime
 }
 
-func (p *PlayerService) Move(angle float64) {
-	p.Player.Vel.Now[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
-	p.Player.Vel.Now[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
+func (pc *PlayerController) HurtTime() float64 {
+	return pc.AliveEntity.HurtTime
+}
+
+func (p *PlayerController) Move(angle float64) {
+	p.Force[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
+	p.Force[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
 }

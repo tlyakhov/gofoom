@@ -1,22 +1,22 @@
 package provide
 
 type animator interface {
-	For(concrete interface{}) Animateable
+	For(model interface{}) Animateable
 }
 type interactor interface {
-	For(concrete interface{}) Interactable
+	For(model interface{}) Interactable
 }
 
 type passer interface {
-	For(concrete interface{}) Passable
+	For(model interface{}) Passable
 }
 
 type hurter interface {
-	For(concrete interface{}) (Hurtable, bool)
+	For(model interface{}) Hurtable
 }
 
 type collider interface {
-	For(concrete interface{}) (Collideable, bool)
+	For(model interface{}) Collideable
 }
 
 var SectorAnimator animator

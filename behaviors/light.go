@@ -19,14 +19,6 @@ func init() {
 	registry.Instance().Register(Light{})
 }
 
-func (l *Light) Initialize() {
-	l.AnimatedBehavior.Initialize()
-
-	l.Diffuse = concepts.Vector3{1, 1, 1}
-	l.Strength = 2
-	l.Attenuation = 0.4
-}
-
 func (l *Light) Frame() {
 	l.AnimatedBehavior.Frame()
 
@@ -35,9 +27,16 @@ func (l *Light) Frame() {
 	}
 }
 
-func (l *Light) Deserialize(data map[string]interface{}) {
-	l.Initialize()
-	l.AnimatedBehavior.Deserialize(data)
+func (l *Light) Construct(data map[string]interface{}) {
+	l.AnimatedBehavior.Construct(data)
+	l.Model = l
+	l.Diffuse = concepts.Vector3{1, 1, 1}
+	l.Strength = 2
+	l.Attenuation = 0.4
+
+	if data == nil {
+		return
+	}
 
 	if v, ok := data["Diffuse"]; ok {
 		l.Diffuse.Deserialize(v.(map[string]interface{}))

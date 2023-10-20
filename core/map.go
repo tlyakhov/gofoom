@@ -30,12 +30,6 @@ func (m *Map) Recalculate() {
 	}
 }
 
-func (m *Map) Initialize() {
-	m.Spawn = concepts.Vector3{}
-	m.Materials = make(map[string]Sampleable)
-	m.Sectors = make(map[string]AbstractSector)
-}
-
 func (m *Map) Attach(sim *Simulation) {
 	m.Simulation = sim
 	m.Player.Physical().Attach(sim)
@@ -72,9 +66,17 @@ func (m *Map) Sim() *Simulation {
 	return m.Simulation
 }
 
-func (m *Map) Deserialize(data map[string]interface{}) {
-	m.Initialize()
-	m.Base.Deserialize(data)
+func (m *Map) Construct(data map[string]interface{}) {
+	m.Base.Construct(data)
+	m.Model = m
+	m.Spawn = concepts.Vector3{}
+	m.Materials = make(map[string]Sampleable)
+	m.Sectors = make(map[string]AbstractSector)
+
+	if data == nil {
+		return
+	}
+
 	if v, ok := data["EntitiesPaused"]; ok {
 		m.EntitiesPaused = v.(bool)
 	}
