@@ -15,16 +15,16 @@ import (
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 
+	"tlyakhov/gofoom/controllers/entity"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/entities"
-	"tlyakhov/gofoom/logic/entity"
 	"tlyakhov/gofoom/registry"
 	"tlyakhov/gofoom/render"
 
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/logic"
+	"tlyakhov/gofoom/controllers"
 )
 
 type EditorWidgets struct {
@@ -131,7 +131,7 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) Integrate() {
-	ps := entity.NewPlayerService(editor.World.Player.(*entities.Player))
+	ps := entity.NewPlayerController(editor.World.Player.(*entities.Player))
 
 	if gameKeyMap[gdk.KEY_w] {
 		ps.Move(ps.Player.Angle)
@@ -182,9 +182,9 @@ func (e *Editor) Load(filename string) {
 	sim := core.NewSimulation()
 	sim.Integrate = e.Integrate
 	sim.Render = e.Window.QueueDraw
-	e.World = logic.LoadMap(e.OpenFile)
+	e.World = controllers.LoadMap(e.OpenFile)
 	e.World.Attach(sim)
-	ps := entity.NewPlayerService(e.World.Player.(*entities.Player))
+	ps := entity.NewPlayerController(e.World.Player.(*entities.Player))
 	ps.Collide()
 	e.SelectObjects([]concepts.ISerializable{})
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
@@ -197,11 +197,11 @@ func (e *Editor) Test() {
 	sim := core.NewSimulation()
 	sim.Integrate = e.Integrate
 	sim.Render = e.Window.QueueDraw
-	e.World = logic.NewMapService(new(core.Map))
+	e.World = controllers.NewMapController(new(core.Map))
 	e.World.Initialize()
 	e.World.Attach(sim)
 	e.World.CreateTest()
-	ps := entity.NewPlayerService(e.World.Player.(*entities.Player))
+	ps := entity.NewPlayerController(e.World.Player.(*entities.Player))
 	ps.Collide()
 	e.SelectObjects([]concepts.ISerializable{})
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())

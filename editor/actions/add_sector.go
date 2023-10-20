@@ -2,9 +2,9 @@ package actions
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/logic/provide"
 
 	"github.com/gotk3/gotk3/gdk"
 )

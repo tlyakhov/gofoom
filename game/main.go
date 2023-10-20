@@ -10,16 +10,16 @@ import (
 	"runtime/pprof"
 
 	_ "tlyakhov/gofoom/behaviors"
+	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/controllers/entity"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/entities"
-	"tlyakhov/gofoom/logic"
-	"tlyakhov/gofoom/logic/entity"
 	"tlyakhov/gofoom/sectors"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	_ "tlyakhov/gofoom/logic/provide"
-	_ "tlyakhov/gofoom/logic/sector"
+	_ "tlyakhov/gofoom/controllers/provide"
+	_ "tlyakhov/gofoom/controllers/sector"
 	"tlyakhov/gofoom/render"
 
 	// "math"
@@ -38,7 +38,7 @@ var win *pixelgl.Window
 var ps *entity.PlayerService
 var sim *core.Simulation
 var renderer *render.Renderer
-var gameMap *logic.MapService
+var gameMap *controllers.MapController
 var canvas *pixelgl.Canvas
 var buffer *image.RGBA
 var mainFont *render.Font
@@ -155,9 +155,9 @@ func run() {
 	sim = core.NewSimulation()
 	sim.Integrate = integrateGame
 	sim.Render = renderGame
-	gameMap = logic.LoadMap("data/worlds/hall.json")
+	gameMap = controllers.LoadMap("data/worlds/hall.json")
 	gameMap.Attach(sim)
-	ps = entity.NewPlayerService(gameMap.Player.(*entities.Player))
+	ps = entity.NewPlayerController(gameMap.Player.(*entities.Player))
 	ps.Collide()
 	renderer.Map = gameMap.Map
 

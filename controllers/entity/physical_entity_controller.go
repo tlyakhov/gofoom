@@ -7,20 +7,20 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/logic/provide"
 )
 
-type PhysicalEntityService struct {
+type PhysicalEntityController struct {
 	*core.PhysicalEntity
 	Original core.AbstractEntity
 }
 
-func NewPhysicalEntityService(pe *core.PhysicalEntity, e core.AbstractEntity) *PhysicalEntityService {
-	return &PhysicalEntityService{PhysicalEntity: pe, Original: e}
+func NewPhysicalEntityController(pe *core.PhysicalEntity, e core.AbstractEntity) *PhysicalEntityController {
+	return &PhysicalEntityController{PhysicalEntity: pe, Original: e}
 }
 
-func (e *PhysicalEntityService) PushBack(segment *core.Segment) bool {
+func (e *PhysicalEntityController) PushBack(segment *core.Segment) bool {
 	p2d := e.Pos.Now.To2D()
 	d := segment.DistanceToPoint2(p2d)
 	if d > e.BoundingRadius*e.BoundingRadius {
@@ -42,7 +42,7 @@ func (e *PhysicalEntityService) PushBack(segment *core.Segment) bool {
 	return true
 }
 
-func (e *PhysicalEntityService) Collide() []*core.Segment {
+func (e *PhysicalEntityController) Collide() []*core.Segment {
 	if e.Map == nil {
 		return nil
 	}
@@ -193,7 +193,7 @@ func (e *PhysicalEntityService) Collide() []*core.Segment {
 	return collided
 }
 
-func (e *PhysicalEntityService) Remove() {
+func (e *PhysicalEntityController) Remove() {
 	if e.Sector != nil {
 		delete(e.Sector.Physical().Entities, e.ID)
 		e.Sector = nil
@@ -205,7 +205,7 @@ func (e *PhysicalEntityService) Remove() {
 	}
 }
 
-func (e *PhysicalEntityService) Frame() {
+func (e *PhysicalEntityController) Frame() {
 	if !e.Active {
 		return
 	}
@@ -226,5 +226,5 @@ func (e *PhysicalEntityService) Frame() {
 	}
 }
 
-func (e *PhysicalEntityService) Render(sim *core.Simulation) {
+func (e *PhysicalEntityController) Render(sim *core.Simulation) {
 }

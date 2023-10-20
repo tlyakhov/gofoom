@@ -12,11 +12,11 @@ import (
 
 type PlayerService struct {
 	*entities.Player
-	*AliveEntityService
+	*AliveEntityController
 }
 
-func NewPlayerService(p *entities.Player) *PlayerService {
-	return &PlayerService{Player: p, AliveEntityService: NewAliveEntityService(&p.AliveEntity, p)}
+func NewPlayerController(p *entities.Player) *PlayerService {
+	return &PlayerService{Player: p, AliveEntityController: NewAliveEntityController(&p.AliveEntity, p)}
 }
 
 func (p *PlayerService) Frame() {
@@ -24,7 +24,7 @@ func (p *PlayerService) Frame() {
 	for p.Bob > math.Pi*2 {
 		p.Bob -= math.Pi * 2
 	}
-	p.AliveEntityService.PhysicalEntityService.Frame()
+	p.AliveEntityController.PhysicalEntityController.Frame()
 	if p.Player.Sector == nil {
 		return
 	}
@@ -42,7 +42,7 @@ func (p *PlayerService) Frame() {
 }
 
 func (p *PlayerService) Hurt(amount float64) {
-	p.AliveEntityService.Hurt(amount)
+	p.AliveEntityController.Hurt(amount)
 	p.Player.HurtTime = constants.PlayerHurtTime
 }
 

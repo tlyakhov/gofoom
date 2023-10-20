@@ -6,19 +6,19 @@ import (
 	"tlyakhov/gofoom/sectors"
 )
 
-type VerticalDoorService struct {
-	*PhysicalSectorService
+type VerticalDoorController struct {
+	*PhysicalSectorController
 	*sectors.VerticalDoor
 }
 
-func NewVerticalDoorService(s *sectors.VerticalDoor) *VerticalDoorService {
-	return &VerticalDoorService{VerticalDoor: s, PhysicalSectorService: NewPhysicalSectorService(&s.PhysicalSector)}
+func NewVerticalDoorController(s *sectors.VerticalDoor) *VerticalDoorController {
+	return &VerticalDoorController{VerticalDoor: s, PhysicalSectorController: NewPhysicalSectorController(&s.PhysicalSector)}
 }
 
-func (s *VerticalDoorService) ActOnEntity(e core.AbstractEntity) {
-	s.PhysicalSectorService.ActOnEntity(e)
+func (s *VerticalDoorController) ActOnEntity(e core.AbstractEntity) {
+	s.PhysicalSectorController.ActOnEntity(e)
 
-	ps := s.PhysicalSectorService
+	ps := s.PhysicalSectorController
 
 	if ps.Center.Dist(&e.Physical().Pos.Now) < 100 {
 		if s.State == sectors.Closed || s.State == sectors.Closing {
@@ -31,8 +31,8 @@ func (s *VerticalDoorService) ActOnEntity(e core.AbstractEntity) {
 	}
 }
 
-func (s *VerticalDoorService) Frame() {
-	ps := s.PhysicalSectorService
+func (s *VerticalDoorController) Frame() {
+	ps := s.PhysicalSectorController
 	z := ps.TopZ.Now + s.VelZ*constants.TimeStep
 
 	if z < ps.BottomZ.Now {
@@ -48,8 +48,8 @@ func (s *VerticalDoorService) Frame() {
 	ps.TopZ.Now = z
 }
 
-func (s *VerticalDoorService) Recalculate() {
-	s.PhysicalSectorService.PhysicalSector.Recalculate()
-	s.PhysicalSectorService.Max[2] = s.PhysicalSectorService.TopZ.Original
+func (s *VerticalDoorController) Recalculate() {
+	s.PhysicalSectorController.PhysicalSector.Recalculate()
+	s.PhysicalSectorController.Max[2] = s.PhysicalSectorController.TopZ.Original
 	s.UpdatePVS()
 }

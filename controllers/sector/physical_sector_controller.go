@@ -6,29 +6,29 @@ import (
 	"tlyakhov/gofoom/behaviors"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/logic/provide"
 )
 
-type PhysicalSectorService struct {
+type PhysicalSectorController struct {
 	*core.PhysicalSector
 }
 
-func NewPhysicalSectorService(s *core.PhysicalSector) *PhysicalSectorService {
-	return &PhysicalSectorService{PhysicalSector: s}
+func NewPhysicalSectorController(s *core.PhysicalSector) *PhysicalSectorController {
+	return &PhysicalSectorController{PhysicalSector: s}
 }
 
-func (s *PhysicalSectorService) OnEnter(e core.AbstractEntity) {
+func (s *PhysicalSectorController) OnEnter(e core.AbstractEntity) {
 	p := &e.Physical().Pos.Now
 	if s.FloorTarget == nil && p[2] <= e.GetSector().Physical().BottomZ.Now {
 		p[2] = e.GetSector().Physical().BottomZ.Now
 	}
 }
 
-func (s *PhysicalSectorService) OnExit(e core.AbstractEntity) {
+func (s *PhysicalSectorController) OnExit(e core.AbstractEntity) {
 }
 
-func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
+func (s *PhysicalSectorController) Collide(e core.AbstractEntity) {
 	entity := e.Physical()
 	entityTop := entity.Pos.Now[2] + entity.Height
 	floorZ, ceilZ := s.SlopedZNow(entity.Pos.Now.To2D())
@@ -61,7 +61,7 @@ func (s *PhysicalSectorService) Collide(e core.AbstractEntity) {
 	}
 }
 
-func (s *PhysicalSectorService) ActOnEntity(e core.AbstractEntity) {
+func (s *PhysicalSectorController) ActOnEntity(e core.AbstractEntity) {
 	if e.GetSector() == nil || e.GetSector().GetBase().ID != s.ID {
 		return
 	}
@@ -85,7 +85,7 @@ func (s *PhysicalSectorService) ActOnEntity(e core.AbstractEntity) {
 	s.Collide(e)
 }
 
-func (s *PhysicalSectorService) Frame() {
+func (s *PhysicalSectorController) Frame() {
 	for _, e := range s.Entities {
 		if e.GetBase().ID == s.Map.Player.GetBase().ID || s.Map.EntitiesPaused {
 			continue
@@ -103,7 +103,7 @@ func hasLightBehavior(e core.AbstractEntity) bool {
 	return false
 }
 
-func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
+func (s *PhysicalSectorController) occludedBy(visitor core.AbstractSector) bool {
 	//return false
 	// Check if the "visitor" sector is completely blocked by a non-portal- or zero-height-portal segment.
 	vphys := visitor.Physical()
@@ -163,7 +163,7 @@ func (s *PhysicalSectorService) occludedBy(visitor core.AbstractSector) bool {
 	return true
 }
 
-func (s *PhysicalSectorService) buildPVS(visitor core.AbstractSector) {
+func (s *PhysicalSectorController) buildPVS(visitor core.AbstractSector) {
 	if visitor == nil {
 		s.PVS = make(map[string]core.AbstractSector)
 		s.PVS[s.ID] = s.PhysicalSector
@@ -199,7 +199,7 @@ func (s *PhysicalSectorService) buildPVS(visitor core.AbstractSector) {
 	}
 }
 
-func (s *PhysicalSectorService) updateEntityPVS(normal *concepts.Vector2, visitor core.AbstractSector) {
+func (s *PhysicalSectorController) updateEntityPVS(normal *concepts.Vector2, visitor core.AbstractSector) {
 	if visitor == nil {
 		s.PVSEntity = make(map[string]core.AbstractSector)
 		s.PVSEntity[s.ID] = s.PhysicalSector
@@ -226,12 +226,12 @@ func (s *PhysicalSectorService) updateEntityPVS(normal *concepts.Vector2, visito
 	}
 }
 
-func (s *PhysicalSectorService) UpdatePVS() {
+func (s *PhysicalSectorController) UpdatePVS() {
 	s.buildPVS(nil)
 	s.updateEntityPVS(new(concepts.Vector2), nil)
 }
 
-func (s *PhysicalSectorService) Recalculate() {
+func (s *PhysicalSectorController) Recalculate() {
 	s.PhysicalSector.Recalculate()
 	s.UpdatePVS()
 }

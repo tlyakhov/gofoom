@@ -19,8 +19,8 @@ import (
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
 
-	_ "tlyakhov/gofoom/logic/provide"
-	_ "tlyakhov/gofoom/logic/sector"
+	_ "tlyakhov/gofoom/controllers/provide"
+	_ "tlyakhov/gofoom/controllers/sector"
 )
 
 var (
