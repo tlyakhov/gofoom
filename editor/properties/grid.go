@@ -178,8 +178,8 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 			g.fieldVector2(index, field)
 		case *concepts.Vector3:
 			g.fieldVector3(index, field)
-		case *core.MaterialBehavior:
-			g.fieldEnum(index, field, core.MaterialBehaviorValues())
+		case *core.MaterialScale:
+			g.fieldEnum(index, field, core.MaterialScaleValues())
 		case *core.CollisionResponse:
 			g.fieldEnum(index, field, core.CollisionResponseValues())
 		case *concepts.ISerializable:

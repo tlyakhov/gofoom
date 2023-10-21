@@ -7,5 +7,4 @@ import (
 type AbstractBehavior interface {
 	concepts.ISerializable
 	Frame()
-	Animated() *AnimatedBehavior
 }

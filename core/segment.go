@@ -19,9 +19,9 @@ type Segment struct {
 	LoMaterial  Sampleable       `editable:"Low Material" edit_type:"Material"`
 	MidMaterial Sampleable       `editable:"Mid Material" edit_type:"Material"`
 	HiMaterial  Sampleable       `editable:"High Material" edit_type:"Material"`
-	LoBehavior  MaterialBehavior `editable:"Low Behavior"`
-	MidBehavior MaterialBehavior `editable:"Mid Behavior"`
-	HiBehavior  MaterialBehavior `editable:"High Behavior"`
+	LoBehavior  MaterialScale    `editable:"Low Behavior"`
+	MidBehavior MaterialScale    `editable:"Mid Behavior"`
+	HiBehavior  MaterialScale    `editable:"High Behavior"`
 
 	AdjacentSector  AbstractSector
 	AdjacentSegment *Segment
@@ -283,7 +283,7 @@ func (s *Segment) Construct(data map[string]interface{}) {
 		s.HiMaterial = s.Sector.Physical().Map.Materials[v.(string)]
 	}
 	if v, ok := data["LoBehavior"]; ok {
-		mb, error := MaterialBehaviorString(v.(string))
+		mb, error := MaterialScaleString(v.(string))
 		if error == nil {
 			s.LoBehavior = mb
 		} else {
@@ -291,7 +291,7 @@ func (s *Segment) Construct(data map[string]interface{}) {
 		}
 	}
 	if v, ok := data["MidBehavior"]; ok {
-		mb, error := MaterialBehaviorString(v.(string))
+		mb, error := MaterialScaleString(v.(string))
 		if error == nil {
 			s.MidBehavior = mb
 		} else {
@@ -299,7 +299,7 @@ func (s *Segment) Construct(data map[string]interface{}) {
 		}
 	}
 	if v, ok := data["HiBehavior"]; ok {
-		mb, error := MaterialBehaviorString(v.(string))
+		mb, error := MaterialScaleString(v.(string))
 		if error == nil {
 			s.HiBehavior = mb
 		} else {

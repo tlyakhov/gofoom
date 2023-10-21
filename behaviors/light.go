@@ -2,12 +2,11 @@ package behaviors
 
 import (
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/registry"
 )
 
 type Light struct {
-	core.AnimatedBehavior `editable:"^"`
+	AnimatedBehavior `editable:"^"`
 
 	Diffuse     concepts.Vector3 `editable:"Diffuse"`
 	Strength    float64          `editable:"Strength"`
