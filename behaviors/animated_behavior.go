@@ -1,22 +1,19 @@
-package core
+package behaviors
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/core"
 )
 
 type AnimatedBehavior struct {
 	concepts.Base `editable:"^"`
-	Entity        AbstractEntity
+	Entity        core.AbstractEntity
 
 	Active bool `editable:"Active?"`
 }
 
-func (b *AnimatedBehavior) Animated() *AnimatedBehavior {
-	return b
-}
-
 func (b *AnimatedBehavior) SetParent(parent interface{}) {
-	if e, ok := parent.(AbstractEntity); ok {
+	if e, ok := parent.(core.AbstractEntity); ok {
 		b.Entity = e
 	} else {
 		panic("Tried core.AnimatedBehavior.SetParent with a parameter that wasn't a core.AbstractEntity")
