@@ -24,10 +24,11 @@ func (l *Light) Construct(data map[string]interface{}) {
 	l.PhysicalEntity.Construct(data)
 	l.Model = l
 	l.BoundingRadius = 10.0
-
-	lb := &behaviors.Light{}
-	lb.Construct(nil)
-	lb.ID = "Light"
-	l.Behaviors[lb.GetBase().ID] = lb
-	lb.SetParent(l)
+	if data == nil {
+		lb := &behaviors.Light{}
+		lb.Construct(data)
+		lb.ID = "Light"
+		l.Behaviors[lb.GetBase().ID] = lb
+		lb.SetParent(l)
+	}
 }

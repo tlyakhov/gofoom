@@ -24,7 +24,7 @@ func NewPlayerController(p *entities.Player) *PlayerController {
 
 func (pc *PlayerController) Frame() {
 	p := pc.Model.(*entities.Player)
-	p.Bob += p.Vel.Now.Length() / 6.0
+	p.Bob += p.Vel.Now.Length() / 100.0
 	for p.Bob > math.Pi*2 {
 		p.Bob -= math.Pi * 2
 	}
@@ -56,6 +56,8 @@ func (pc *PlayerController) HurtTime() float64 {
 }
 
 func (p *PlayerController) Move(angle float64) {
-	p.Force[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
-	p.Force[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerSpeed * constants.TimeStep
+	if p.OnGround {
+		p.Force[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerWalkForce
+		p.Force[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerWalkForce
+	}
 }

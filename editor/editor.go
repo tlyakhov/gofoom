@@ -148,24 +148,24 @@ func (e *Editor) Integrate() {
 		ps.Move(ps.Angle + 270.0)
 	}
 	if gameKeyMap[gdk.KEY_a] {
-		ps.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
+		ps.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
 		ps.Angle = concepts.NormalizeAngle(ps.Angle)
 	}
 	if gameKeyMap[gdk.KEY_d] {
-		ps.Angle += constants.PlayerTurnSpeed * constants.TimeStep
+		ps.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
 		ps.Angle = concepts.NormalizeAngle(ps.Angle)
 	}
 	if gameKeyMap[gdk.KEY_space] {
 		if _, ok := ps.Sector.(*sectors.Underwater); ok {
-			ps.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
+			ps.Force[2] += constants.PlayerSwimStrength
 		} else if ps.OnGround {
-			ps.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
+			ps.Force[2] += constants.PlayerJumpForce
 			ps.OnGround = false
 		}
 	}
 	if gameKeyMap[gdk.KEY_c] {
 		if _, ok := ps.Sector.(*sectors.Underwater); ok {
-			ps.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
+			ps.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
 		}

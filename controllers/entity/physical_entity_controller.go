@@ -27,16 +27,18 @@ func (e *PhysicalEntityController) PushBack(segment *core.Segment) bool {
 	}
 	side := segment.WhichSide(p2d)
 	closest := segment.ClosestToPoint(p2d)
-	v := e.Pos.Now.Sub(closest.To3D(new(concepts.Vector3)))
-	v[2] = 0
-	d = v.Length()
-	v.NormSelf()
+	delta := p2d.Sub(closest)
+	d = delta.Length()
+	delta.NormSelf()
 	if side > 0 {
-		v.MulSelf(e.BoundingRadius - d)
+		delta.MulSelf(e.BoundingRadius - d)
 	} else {
-		v.MulSelf(-e.BoundingRadius - d)
+		log.Printf("PushBack: entity is on the front-facing side of segment (%v units)\n", d)
+		delta.MulSelf(-e.BoundingRadius - d)
 	}
-	e.Pos.Now.AddSelf(v)
+	// Apply the impulse at the same time
+	e.Pos.Now.To2D().AddSelf(delta)
+	e.Vel.Now.To2D().AddSelf(delta)
 
 	return true
 }
@@ -158,8 +160,8 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 					}
 				}
 			}
-			children := e.Collide() // RECURSIVE! Can be infinite, I suppose?
-			collided = append(collided, children...)
+			//children := e.Collide() // RECURSIVE! Can be infinite, I suppose?
+			//collided = append(collided, children...)
 		}
 	}
 
@@ -207,23 +209,28 @@ func (e *PhysicalEntityController) Frame() {
 		return
 	}
 
-	// f = ma
-	// a = f/m
-	// v = ∫a dt
-	// p = ∫v dt
-	e.Vel.Now.AddSelf(e.Force.Mul(1.0 / e.Mass))
-	if e.Vel.Now.Length2() > constants.VelocityEpsilon {
-		speed := e.Vel.Now.Length() * constants.TimeStep
-		steps := concepts.Max(int(speed/constants.CollisionCheck), 1)
-		dt := constants.TimeStep / float64(steps)
-		for step := 0; step < steps; step++ {
-			e.Pos.Now.AddSelf(e.Vel.Now.Mul(dt))
-			e.Collide()
-			/*
-				collSegments := e.Collide()
-				if collSegments != nil {
-					break
-				}*/
+	if e.Mass != 0 {
+		// Our physics are impulse-based. We do semi-implicit Euler calculations
+		// at each time step, and apply constraints (e.g. collision) directly to the velocities
+		// f = ma
+		// a = f/m
+		// v = ∫a dt
+		// p = ∫v dt
+		e.Vel.Now.AddSelf(e.Force.Mul(constants.TimeStepS / e.Mass))
+		if e.Vel.Now.Length2() > constants.VelocityEpsilon {
+			speed := e.Vel.Now.Length() * constants.TimeStepS
+			steps := concepts.Min(concepts.Max(int(speed/constants.CollisionCheck), 1), 10)
+			dt := constants.TimeStepS / float64(steps)
+			for step := 0; step < steps; step++ {
+				e.Pos.Now.AddSelf(e.Vel.Now.Mul(dt * constants.UnitsPerMeter))
+				// Constraint impulses
+				e.Collide()
+				/*
+					collSegments := e.Collide()
+					if collSegments != nil {
+						break
+					}*/
+			}
 		}
 	}
 	// Reset force for next frame

@@ -41,13 +41,15 @@ func (a *MoveSurface) Get(sector *core.PhysicalSector) *float64 {
 func (a *MoveSurface) Act() {
 	a.Original = make([]float64, len(a.State().SelectedObjects))
 	for i, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.AbstractSector); ok {
-			a.Original[i] = *a.Get(sector.Physical())
-			*a.Get(sector.Physical()) += a.Delta
-		} else if p, ok := obj.(state.MapPoint); ok {
+		switch p := obj.(type) {
+		case core.AbstractSector:
+			a.Original[i] = *a.Get(p.Physical())
+			*a.Get(p.Physical()) += a.Delta
+		case *state.MapPoint:
 			a.Original[i] = *a.Get(p.Sector.Physical())
 			*a.Get(p.Sector.Physical()) += a.Delta
 		}
+
 	}
 	a.State().World.Recalculate()
 	a.State().Modified = true

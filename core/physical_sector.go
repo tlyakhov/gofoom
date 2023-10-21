@@ -26,6 +26,7 @@ type PhysicalSector struct {
 	CeilTarget    AbstractSector `editable:"Ceiling Target"`
 	FloorMaterial Sampleable     `editable:"Floor Material" edit_type:"Material"`
 	CeilMaterial  Sampleable     `editable:"Ceiling Material" edit_type:"Material"`
+	FloorFriction float64        `editable:"Floor Friction"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3
@@ -110,6 +111,7 @@ func (s *PhysicalSector) Construct(data map[string]interface{}) {
 	s.TopZ.Set(64.0)
 	s.FloorScale = 64.0
 	s.CeilScale = 64.0
+	s.FloorFriction = 0.85
 	if data == nil {
 		return
 	}
@@ -152,6 +154,9 @@ func (s *PhysicalSector) Construct(data map[string]interface{}) {
 	if v, ok := data["CeilTarget"]; ok {
 		s.CeilTarget = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
 	}
+	if v, ok := data["FloorFriction"]; ok {
+		s.FloorFriction = v.(float64)
+	}
 	s.Recalculate()
 }
 
@@ -162,6 +167,7 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 	result["BottomZ"] = s.BottomZ.Original
 	result["FloorScale"] = s.FloorScale
 	result["CeilScale"] = s.CeilScale
+	result["FloorFriction"] = s.FloorFriction
 	if s.FloorSlope != 0 {
 		result["FloorSlope"] = s.FloorSlope
 	}

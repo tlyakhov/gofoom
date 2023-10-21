@@ -25,10 +25,6 @@ func (s *UnderwaterController) ActOnEntity(e core.AbstractEntity) {
 
 	e.Physical().Vel.Now.MulSelf(1.0 / constants.SwimDamping)
 	e.Physical().Vel.Now[2] -= constants.GravitySwim
-
-	//if _, ok := e.(*LightEntity); ok {
-	//	return
-	//}
 	s.Collide(e)
 }
 

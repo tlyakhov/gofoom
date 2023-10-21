@@ -3,7 +3,8 @@ package constants
 const (
 	// Simulation constants
 	TimeStep          = 1000.0 / 120.0 // calibrate to 120 frames per second
-	MinMillisPerFrame = 1000.0 / 15.0  // Ensure we don't do a spiral of death at framerates < 15
+	TimeStepS         = TimeStep / 1000.0
+	MinMillisPerFrame = 1000.0 / 15.0 // Ensure we don't do a spiral of death at framerates < 15
 
 	// Rendering constants
 	MaxPortals              = 30 // avoid infinite portal traversal
@@ -26,9 +27,10 @@ const (
 	AudioUnitsFactor = 12
 
 	// World constants
-	// 32 units = 1m
-	Gravity               = 9.8 * 32 / (TimeStep * TimeStep) //0.005
-	GravitySwim           = 0.1 / (TimeStep * TimeStep)
+	UnitsPerMeter         = 32.0 // 20 units = 1m
+	MetersPerUnit         = 1.0 / UnitsPerMeter
+	Gravity               = 9.8 //0.005
+	GravitySwim           = 0.1
 	AirDensity            = 1.293
 	SphereDragCoefficient = 0.47
 	SwimDamping           = 2.0
@@ -38,12 +40,14 @@ const (
 	DoorSpeed             = 0.1
 
 	// Player constants
+	// Some of these are loosely based on Doom constants, see https://doomwiki.org/wiki/Player
+	PlayerMass           = 80.0 // kg
 	PlayerBoundingRadius = 10.0
 	PlayerHeight         = 32.0
 	PlayerCrouchHeight   = 16.0
-	PlayerSpeed          = 0.015
-	PlayerTurnSpeed      = 0.17
-	PlayerJumpStrength   = 0.02
+	PlayerWalkForce      = 10.0 * PlayerMass * TimeStep // Newtons (we work backwards and aim for X meters/time step)
+	PlayerTurnSpeed      = 180.0                        // Degrees per second
+	PlayerJumpForce      = 30.0 * PlayerMass * TimeStep // Newtons
 	PlayerSwimStrength   = 0.005
 	PlayerHurtTime       = 30
 	PlayerMountHeight    = 15.0

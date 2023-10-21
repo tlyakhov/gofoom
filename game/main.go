@@ -73,7 +73,7 @@ func processInput() {
 		if _, ok := player.Sector.(*sectors.Underwater); ok {
 			player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
 		} else if player.OnGround {
-			player.Vel.Now[2] += constants.PlayerJumpStrength * constants.TimeStep
+			player.Vel.Now[2] += constants.PlayerJumpForce * constants.TimeStep
 			player.OnGround = false
 		}
 	}
