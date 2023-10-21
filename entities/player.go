@@ -35,5 +35,5 @@ func (p *Player) Construct(data map[string]interface{}) {
 	p.Model = p
 	p.Height = constants.PlayerHeight
 	p.BoundingRadius = constants.PlayerBoundingRadius
-	p.Mass = 70 // kg
+	p.Mass = constants.PlayerMass // kg
 }

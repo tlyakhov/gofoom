@@ -189,7 +189,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			le.DebugNotices.Push(dbg)
 			return false
 		}
-		if next == nil && sector != e.Sector.Physical() {
+		if next == nil && e.Sector != nil && sector != e.Sector.Physical() {
 			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}

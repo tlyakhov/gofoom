@@ -1,17 +1,26 @@
 # gofoom
 
-gofoom is a very WIP golang 2.5D sector/portal-based software raycasting game engine. It continues on from my older project https://github.com/tlyakhov/jsfoom.
+gofoom is a very WIP golang 2.5D sector/portal-based software raycasting game
+engine. It continues on from my older project
+https://github.com/tlyakhov/jsfoom.
 
 ## Motivation
 
 Constraints are fun :). This project has the following goals:
 * No GPU involvement in rendering.
 * High quality editing tools.
-* High degree of flexibility and expandability. Game code separate from engine code.
-* Scalability. While the number of sectors/segments/entities on screen at once may have performance limitations, overall level size should be unconstrained.
+* High degree of flexibility and expandability. Game code separate from engine
+  code.
+    * Corrolary: lots of knobs to tweak. Examples include per-sector
+      gravity/friction, entities can have different collision response, etc...
+* Scalability. While the number of sectors/segments/entities on screen at once
+  may have performance limitations, overall level size should be unconstrained.
 * Cross-platform compatibility (Linux, Mac tested, not sure about Windows)
 
-This project takes inspiration from Ken Silverman's BUILD engine used for Duke Nukem 3D for the portal concept and Doom of course, but unlike BUILD and Doom it aims to be a fully dynamic raycaster, avoiding pre-processing steps or multi-pass rendering.
+This project takes inspiration from Ken Silverman's BUILD engine used for Duke
+Nukem 3D for the portal concept and Doom of course, but unlike BUILD and Doom it
+aims to be a fully dynamic raycaster, avoiding pre-processing steps or
+multi-pass rendering.
 
 ## Features
 
@@ -23,6 +32,7 @@ This project takes inspiration from Ken Silverman's BUILD engine used for Duke N
 * Fully dynamic lighting with dynamic shadow maps.
 * Bilinear filtering & mipmapping for images and shadow maps.
 * Separation of game/engine code.
+* Entity/Component/System architecture
 * Behavioral system for entities.
 * Various effect sectors (doors, underwater sectors)
 * Physics and collision detection for player and objects.
@@ -35,3 +45,28 @@ This project takes inspiration from Ken Silverman's BUILD engine used for Duke N
 ### Soon:
 
 * Objects represented as sprites with multiple angles.
+
+## Repository Structure
+
+* [/behaviors](/behaviors/) - these are components that entities can include.
+* [/concepts](/concepts/) - non-engine general types, interfaces, and functions.
+  Math, serialization, etc...
+* [/constants](/constants/) - self-explanatory. Currently a mix of game and
+  engine constants.
+* [/controllers](/controllers/) - the "systems" in the ECS architecture.
+  Basically all the logic, and simulation.
+* [/core](/core/) - the fundamental engine models and interfaces. As a general
+  rule, code that changes model state based on another model belongs in
+  [/controllers](/controllers/) rather than here.
+* [/data](/data/) - a bunch of test data.
+* [/editor](/editor/) - all the code for the world editor.
+* [/entities](/entities/) - models for game objects, creatures, and
+  the player.
+* [/game](/game/) - the game executable.
+* [/materials](/materials/) - models for materials in the game world.
+* [/registry](/registry/) - stores all the types used by the engine. Primarily
+  for instantiation when loading from disk.
+* [/render](/render/) - the renderer and its state.
+* [/sectors](/sectors/) - world geometry models.
+* [/texture](/texture/) - sampled image models. Also includes procedurally
+  generated 2D stuff. 

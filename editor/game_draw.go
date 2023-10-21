@@ -42,6 +42,8 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.ShowText(fmt.Sprintf("Health: %.1f", player.Health))
 	cr.MoveTo(10, 30)
 	cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
+	cr.MoveTo(10, 40)
+	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", player.Force.StringHuman(), player.Vel.Render.StringHuman(), player.Pos.Render.StringHuman()))
 
 	cr.SetSourceRGB(1, 0, 0)
 
@@ -51,7 +53,7 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 		}
 		msg := editor.Renderer.DebugNotices.Items[i].(string)
 		if t, ok := editor.Renderer.DebugNotices.SetWithTimes.Load(msg); ok {
-			cr.MoveTo(10, 40+float64(i)*10)
+			cr.MoveTo(10, 50+float64(i)*10)
 			cr.ShowText(msg)
 			age := time.Now().UnixMilli() - t.(int64)
 			if age > 10000 {

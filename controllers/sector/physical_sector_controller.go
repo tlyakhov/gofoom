@@ -51,12 +51,13 @@ func (s *PhysicalSectorController) Collide(e core.AbstractEntity) {
 		_, ceilZ = entity.Sector.Physical().SlopedZNow(entity.Pos.Now.To2D())
 		entity.Pos.Now[2] = ceilZ - entity.Height - 1.0
 	} else if s.FloorTarget != nil && entity.Pos.Now[2] <= floorZ && entity.Vel.Now[2] > 0 {
-		entity.Vel.Now[2] = constants.PlayerJumpStrength
+		entity.Vel.Now[2] = constants.PlayerJumpForce
 	} else if s.FloorTarget == nil && entity.Pos.Now[2] <= floorZ {
-		entity.Vel.Now[2] = 0
-		entity.Pos.Now[2] = floorZ
+		dist := s.FloorNormal[2] * (floorZ - entity.Pos.Now[2])
+		delta := s.FloorNormal.Mul(dist)
+		entity.Vel.Now.AddSelf(delta)
+		entity.Pos.Now.AddSelf(delta)
 		entity.OnGround = true
-		//fmt.Printf("%v\n", model.Pos)
 	}
 
 	if s.CeilTarget != nil && entityTop > ceilZ {
@@ -64,9 +65,11 @@ func (s *PhysicalSectorController) Collide(e core.AbstractEntity) {
 		provide.Passer.For(s.CeilTarget).OnEnter(e)
 		floorZ, _ = entity.Sector.Physical().SlopedZNow(entity.Pos.Now.To2D())
 		entity.Pos.Now[2] = floorZ - entity.Height + 1.0
-	} else if s.CeilTarget == nil && entityTop > ceilZ {
-		entity.Vel.Now[2] = 0
-		entity.Pos.Now[2] = ceilZ - entity.Height - 1.0
+	} else if s.CeilTarget == nil && entityTop >= ceilZ {
+		dist := -s.CeilNormal[2] * (entityTop - ceilZ + 1.0)
+		delta := s.CeilNormal.Mul(dist)
+		entity.Vel.Now.AddSelf(delta)
+		entity.Pos.Now.AddSelf(delta)
 	}
 }
 
@@ -76,27 +79,27 @@ func (s *PhysicalSectorController) ActOnEntity(e core.AbstractEntity) {
 	}
 
 	f := &e.Physical().Force
-	v := &e.Physical().Vel.Now
-
 	if e.Physical().Mass > 0 {
 		// Weight = g*m
 		f[2] -= constants.Gravity * e.Physical().Mass
-		// Air drag
-		crossSectionArea := math.Pi * e.Physical().BoundingRadius * e.Physical().BoundingRadius
-		//terminalV := math.Sqrt(2.0 * e.Physical().Mass * constants.Gravity / constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
-		drag := concepts.Vector3{v[0] * v[0], v[1] * v[1], v[2] * v[2]}
-		if !math.Signbit(v[2]) {
-			v[2] = -v[2]
+		v := &e.Physical().Vel.Now
+		if !v.Zero() {
+			// Air drag
+			r := e.Physical().BoundingRadius * constants.MetersPerUnit
+			crossSectionArea := math.Pi * r * r
+			drag := concepts.Vector3{v[0], v[1], v[2]}
+			drag.MulSelf(drag.Length())
+			drag.MulSelf(-0.5 * constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
+			f.AddSelf(&drag)
+			if e.Physical().OnGround {
+				// Kinetic friction
+				drag.From(v)
+				g := concepts.Vector3{0, 0, constants.Gravity * e.Physical().Mass}
+				drag.MulSelf(-s.FloorFriction * s.FloorNormal.Dot(&g))
+				f.AddSelf(&drag)
+			}
+			//log.Printf("%v\n", drag)
 		}
-		if !math.Signbit(v[1]) {
-			v[1] = -v[1]
-		}
-		if !math.Signbit(v[0]) {
-			v[0] = -v[0]
-		}
-		drag.MulSelf(0.5 * constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
-		f.AddSelf(&drag)
-		//log.Printf("%v\n", f)
 	}
 
 	s.Collide(e)
