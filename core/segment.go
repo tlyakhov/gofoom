@@ -56,7 +56,7 @@ func (s *Segment) RealizeAdjacentSector() {
 	}
 	if ph, ok := s.AdjacentSector.(*PlaceholderSector); ok {
 		// Get the actual one.
-		if adj, ok := s.Sector.Physical().Map.Sectors[ph.ID]; ok {
+		if adj, ok := s.Sector.Physical().Map.Sectors[ph.Name]; ok {
 			s.AdjacentSector = adj
 			for _, s2 := range s.AdjacentSector.Physical().Segments {
 				if s2.Matches(s) {
@@ -271,7 +271,7 @@ func (s *Segment) Construct(data map[string]interface{}) {
 		s.P[1] = v.(float64)
 	}
 	if v, ok := data["AdjacentSector"]; ok {
-		s.AdjacentSector = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
+		s.AdjacentSector = &PlaceholderSector{Base: concepts.Base{Name: v.(string)}}
 	}
 	if v, ok := data["LoMaterial"]; ok {
 		s.LoMaterial = s.Sector.Physical().Map.Materials[v.(string)]
@@ -314,13 +314,13 @@ func (s *Segment) Serialize() map[string]interface{} {
 	result["Y"] = s.P[1]
 
 	if s.HiMaterial != nil {
-		result["HiMaterial"] = s.HiMaterial.GetBase().ID
+		result["HiMaterial"] = s.HiMaterial.GetBase().Name
 	}
 	if s.LoMaterial != nil {
-		result["LoMaterial"] = s.LoMaterial.GetBase().ID
+		result["LoMaterial"] = s.LoMaterial.GetBase().Name
 	}
 	if s.MidMaterial != nil {
-		result["MidMaterial"] = s.MidMaterial.GetBase().ID
+		result["MidMaterial"] = s.MidMaterial.GetBase().Name
 	}
 
 	if s.HiBehavior != ScaleNone {
@@ -334,7 +334,7 @@ func (s *Segment) Serialize() map[string]interface{} {
 	}
 
 	if s.AdjacentSector != nil {
-		result["AdjacentSector"] = s.AdjacentSector.GetBase().ID
+		result["AdjacentSector"] = s.AdjacentSector.GetBase().Name
 	}
 	return result
 }

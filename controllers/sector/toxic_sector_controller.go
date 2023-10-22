@@ -18,7 +18,7 @@ func NewToxicSectorController(s *sectors.ToxicSector) *ToxicSectorController {
 }
 
 func (s *ToxicSectorController) Collide(e core.AbstractMob) {
-	if e.GetSector() == nil || e.GetSector().GetBase().ID != s.PhysicalSectorController.ID {
+	if e.GetSector() == nil || e.GetSector().GetBase().Name != s.PhysicalSectorController.Name {
 		return
 	}
 

@@ -67,7 +67,7 @@ func (g *Grid) fieldSerializable(index int, field *state.PropertyGridField) {
 	// The value of this property is a pointer to a type that implements ISerializable.
 	var origValue string
 	if !field.Values[0].Elem().IsNil() {
-		origValue = field.Values[0].Elem().Interface().(concepts.ISerializable).GetBase().ID
+		origValue = field.Values[0].Elem().Interface().(concepts.ISerializable).GetBase().Name
 	}
 
 	_, ok := field.Source.Tag.Lookup("edit_type")
@@ -87,11 +87,11 @@ func (g *Grid) fieldSerializable(index int, field *state.PropertyGridField) {
 	box.AddAttribute(rendPix, "pixbuf", 1)
 	box.AddAttribute(rendText, "text", 0)
 
-	for id, mat := range g.State().World.Materials {
+	for name, mat := range g.State().World.Materials {
 		listItem := opts.Append()
 		pixbuf := g.pixbuf(mat)
-		opts.Set(listItem, []int{0, 1}, []interface{}{id, pixbuf})
-		if id == origValue {
+		opts.Set(listItem, []int{0, 1}, []interface{}{name, pixbuf})
+		if name == origValue {
 			box.SetActiveIter(listItem)
 		}
 	}

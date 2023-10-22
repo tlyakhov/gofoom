@@ -105,7 +105,7 @@ func renderGame() {
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", sim.FPS))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", player.Health))
 	if player.Sector != nil {
-		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
+		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().Name))
 	}
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {

@@ -32,10 +32,10 @@ func (a *SplitSector) Split(sector core.AbstractSector) {
 	if s.Result == nil || len(s.Result) == 0 {
 		return
 	}
-	delete(a.State().World.Sectors, sector.GetBase().ID)
+	delete(a.State().World.Sectors, sector.GetBase().Name)
 	a.Original = append(a.Original, sector)
 	for _, added := range s.Result {
-		a.State().World.Sectors[added.GetBase().ID] = added
+		a.State().World.Sectors[added.GetBase().Name] = added
 	}
 }
 
@@ -81,14 +81,14 @@ func (a *SplitSector) Undo() {
 				e.Physical().Sector = nil
 			}
 			added.Physical().Mobs = make(map[string]core.AbstractMob)
-			delete(a.State().World.Sectors, added.GetBase().ID)
+			delete(a.State().World.Sectors, added.GetBase().Name)
 		}
 	}
 	for _, original := range a.Original {
-		a.State().World.Sectors[original.GetBase().ID] = original
+		a.State().World.Sectors[original.GetBase().Name] = original
 		for _, e := range mobs {
 			if original.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
-				original.Physical().Mobs[e.GetBase().ID] = e
+				original.Physical().Mobs[e.GetBase().Name] = e
 				e.SetParent(original)
 			}
 		}
@@ -98,7 +98,7 @@ func (a *SplitSector) Redo() {
 	mobs := []core.AbstractMob{}
 
 	for _, original := range a.Original {
-		delete(a.State().World.Sectors, original.GetBase().ID)
+		delete(a.State().World.Sectors, original.GetBase().Name)
 		for _, e := range original.Physical().Mobs {
 			mobs = append(mobs, e)
 			e.Physical().Sector = nil
@@ -111,10 +111,10 @@ func (a *SplitSector) Redo() {
 			continue
 		}
 		for _, added := range splitter.Result {
-			a.State().World.Sectors[added.GetBase().ID] = added
+			a.State().World.Sectors[added.GetBase().Name] = added
 			for _, e := range mobs {
 				if added.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
-					added.Physical().Mobs[e.GetBase().ID] = e
+					added.Physical().Mobs[e.GetBase().Name] = e
 					e.SetParent(added)
 				}
 			}

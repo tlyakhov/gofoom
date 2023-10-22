@@ -89,7 +89,7 @@ func (a *SectorSplitter) Do() {
 }
 
 func (a *SectorSplitter) splitEdges() {
-	// fmt.Printf("Splitting %v\n", a.Sector.GetBase().ID)
+	// fmt.Printf("Splitting %v\n", a.Sector.GetBase().Name)
 
 	a.SplitSector = []*splitEdge{}
 	a.EdgesOnLine = []*splitEdge{}
@@ -262,7 +262,7 @@ func (a *SectorSplitter) collect() {
 
 		// Clone the original sector using serialization.
 		added := concepts.MapPolyStruct(a.Sector.Physical().Map, a.Sector.Serialize()).(AbstractSector)
-		added.GetBase().ID = xid.New().String()
+		added.GetBase().Name = xid.New().String()
 		a.Result = append(a.Result, added)
 		phys := added.Physical()
 		// Don't clone the mobs.
@@ -276,7 +276,7 @@ func (a *SectorSplitter) collect() {
 			addedSegment := &Segment{}
 			addedSegment.SetParent(added)
 			addedSegment.Construct(visitor.Source.Serialize())
-			addedSegment.GetBase().ID = xid.New().String()
+			addedSegment.GetBase().Name = xid.New().String()
 			addedSegment.P = visitor.Start
 			addedSegment.AdjacentSegment = nil
 			addedSegment.AdjacentSector = nil
@@ -303,13 +303,13 @@ func (a *SectorSplitter) collect() {
 		return
 	}
 
-	for id, e := range a.Sector.Physical().Mobs {
+	for name, e := range a.Sector.Physical().Mobs {
 		e.Physical().Sector = nil
 		for _, added := range a.Result {
 			phys := added.Physical()
 			phys.Recalculate()
 			if phys.IsPointInside2D(&concepts.Vector2{e.Physical().Pos.Original[0], e.Physical().Pos.Original[1]}) {
-				phys.Mobs[id] = e
+				phys.Mobs[name] = e
 				e.SetParent(added)
 			}
 		}

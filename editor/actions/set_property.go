@@ -27,7 +27,7 @@ func (a *SetProperty) Act() {
 	for _, v := range a.Values {
 		origValue := reflect.ValueOf(v.Elem().Interface())
 		a.Original = append(a.Original, origValue)
-		if a.Source.Name == "ID" {
+		if a.Source.Name == "Name" {
 			// IDs are special, because we have to also update the containing map key.
 			a.ParentCollection.SetMapIndex(origValue, reflect.Value{})
 			a.ParentCollection.SetMapIndex(a.ToSet, reflect.ValueOf(a.Parent))

@@ -125,7 +125,7 @@ func (e *Editor) UpdateStatus() {
 		if len(list) > 0 {
 			list += ", "
 		}
-		list += obj.GetBase().ID
+		list += obj.GetBase().Name
 	}
 	text = list + " ( " + text + " )"
 	e.StatusBar.SetText(text)

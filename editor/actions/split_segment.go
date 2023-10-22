@@ -43,7 +43,7 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	copied.SetParent(ss.split.Sector)
 	copied.Construct(ss.split.Serialize())
 	ss.added = copied
-	ss.added.ID = xid.New().String()
+	ss.added.Name = xid.New().String()
 	ss.added.P = *isect
 	*ss.segments = append(*ss.segments, nil)
 	copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])
@@ -93,7 +93,7 @@ func (a *SplitSegment) Undo() {
 	for _, ss := range a.NewSegments {
 		reset := (*ss.segments)[:0]
 		for _, seg := range *ss.segments {
-			if seg.ID != ss.added.ID {
+			if seg.Name != ss.added.Name {
 				reset = append(reset, seg)
 			}
 		}

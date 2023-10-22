@@ -21,7 +21,7 @@ func NewPhysicalSectorController(s *core.PhysicalSector) *PhysicalSectorControll
 func (s *PhysicalSectorController) OnEnter(e core.AbstractMob) {
 	phys := e.Physical()
 	phys.Sector = s.PhysicalSector.Model.(core.AbstractSector)
-	s.PhysicalSector.Mobs[phys.ID] = e.GetModel().(core.AbstractMob)
+	s.PhysicalSector.Mobs[phys.Name] = e.GetModel().(core.AbstractMob)
 
 	if phys.OnGround {
 		floorZ, _ := s.SlopedZNow(phys.Pos.Now.To2D())
@@ -35,11 +35,11 @@ func (s *PhysicalSectorController) OnEnter(e core.AbstractMob) {
 func (s *PhysicalSectorController) OnExit(e core.AbstractMob) {
 	phys := e.Physical()
 	if phys.Sector.Physical() != s.PhysicalSector {
-		log.Printf("OnExit called for sector %v, but mob had %v as owner", s.PhysicalSector.ID, phys.Sector.Physical().ID)
-		delete(phys.Sector.Physical().Mobs, phys.ID)
+		log.Printf("OnExit called for sector %v, but mob had %v as owner", s.PhysicalSector.Name, phys.Sector.Physical().Name)
+		delete(phys.Sector.Physical().Mobs, phys.Name)
 	}
 
-	delete(s.Mobs, phys.ID)
+	delete(s.Mobs, phys.Name)
 }
 
 func (s *PhysicalSectorController) Collide(e core.AbstractMob) {
@@ -77,7 +77,7 @@ func (s *PhysicalSectorController) Collide(e core.AbstractMob) {
 }
 
 func (s *PhysicalSectorController) ActOnMob(e core.AbstractMob) {
-	if e.GetSector() == nil || e.GetSector().GetBase().ID != s.ID {
+	if e.GetSector() == nil || e.GetSector().GetBase().Name != s.Name {
 		return
 	}
 
@@ -110,7 +110,7 @@ func (s *PhysicalSectorController) ActOnMob(e core.AbstractMob) {
 
 func (s *PhysicalSectorController) Frame() {
 	for _, e := range s.Mobs {
-		if e.GetBase().ID == s.Map.Player.GetBase().ID || s.Map.MobsPaused {
+		if e.GetBase().Name == s.Map.Player.GetBase().Name || s.Map.MobsPaused {
 			continue
 		}
 		provide.MobAnimator.For(e).Frame()
@@ -155,8 +155,8 @@ func (s *PhysicalSectorController) occludedBy(visitor core.AbstractSector) bool 
 
 			occluded := false
 
-			for id, isector := range s.Map.Sectors {
-				if id == s.ID || id == vphys.ID {
+			for name, isector := range s.Map.Sectors {
+				if name == s.Name || name == vphys.Name {
 					continue
 				}
 				for _, iseg := range isector.Physical().Segments {
@@ -189,18 +189,18 @@ func (s *PhysicalSectorController) occludedBy(visitor core.AbstractSector) bool 
 func (s *PhysicalSectorController) buildPVS(visitor core.AbstractSector) {
 	if visitor == nil {
 		s.PVS = make(map[string]core.AbstractSector)
-		s.PVS[s.ID] = s.PhysicalSector
+		s.PVS[s.Name] = s.PhysicalSector
 		s.PVL = make(map[string]core.AbstractMob)
 		visitor = s.PhysicalSector
 	} else if s.occludedBy(visitor) {
 		return
 	}
 
-	s.PVS[visitor.GetBase().ID] = visitor
+	s.PVS[visitor.GetBase().Name] = visitor
 
-	for id, e := range visitor.Physical().Mobs {
+	for name, e := range visitor.Physical().Mobs {
 		if hasLightBehavior(e) {
-			s.PVL[id] = e
+			s.PVL[name] = e
 		}
 	}
 
@@ -209,7 +209,7 @@ func (s *PhysicalSectorController) buildPVS(visitor core.AbstractSector) {
 		if adj == nil {
 			continue
 		}
-		adjID := adj.GetBase().ID
+		adjID := adj.GetBase().Name
 		if s.PVS[adjID] != nil {
 			continue
 		}
@@ -225,7 +225,7 @@ func (s *PhysicalSectorController) buildPVS(visitor core.AbstractSector) {
 func (s *PhysicalSectorController) updateMobPVS(normal *concepts.Vector2, visitor core.AbstractSector) {
 	if visitor == nil {
 		s.PVSMob = make(map[string]core.AbstractSector)
-		s.PVSMob[s.ID] = s.PhysicalSector
+		s.PVSMob[s.Name] = s.PhysicalSector
 		visitor = s.PhysicalSector
 	}
 
@@ -235,11 +235,11 @@ func (s *PhysicalSectorController) updateMobPVS(normal *concepts.Vector2, visito
 			continue
 		}
 		correctSide := normal.Zero() || normal.Dot(&seg.Normal) >= 0
-		if !correctSide || s.PVSMob[adj.Sector.GetBase().ID] != nil {
+		if !correctSide || s.PVSMob[adj.Sector.GetBase().Name] != nil {
 			continue
 		}
 
-		s.PVSMob[seg.AdjacentSector.GetBase().ID] = seg.AdjacentSector
+		s.PVSMob[seg.AdjacentSector.GetBase().Name] = seg.AdjacentSector
 
 		if normal.Zero() {
 			s.updateMobPVS(&seg.Normal, seg.AdjacentSector)

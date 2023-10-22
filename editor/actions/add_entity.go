@@ -19,14 +19,14 @@ type AddMob struct {
 func (a *AddMob) RemoveFromMap() {
 	phys := a.Mob.Physical()
 	if phys.Sector != nil {
-		delete(phys.Sector.Physical().Mobs, a.Mob.GetBase().ID)
+		delete(phys.Sector.Physical().Mobs, a.Mob.GetBase().Name)
 	}
 }
 
 func (a *AddMob) AddToMap(sector core.AbstractSector) {
 	a.Mob.Physical().Sector = sector
 	a.Mob.Physical().Map = a.State().World.Map
-	sector.Physical().Mobs[a.Mob.GetBase().ID] = a.Mob
+	sector.Physical().Mobs[a.Mob.GetBase().Name] = a.Mob
 	a.State().World.Recalculate()
 }
 

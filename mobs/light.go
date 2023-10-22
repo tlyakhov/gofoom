@@ -27,8 +27,8 @@ func (l *Light) Construct(data map[string]interface{}) {
 	if data == nil {
 		lb := &behaviors.Light{}
 		lb.Construct(data)
-		lb.ID = "Light"
-		l.Behaviors[lb.GetBase().ID] = lb
+		lb.Name = "Light"
+		l.Behaviors[lb.GetBase().Name] = lb
 		lb.SetParent(l)
 	}
 }

@@ -69,7 +69,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 		return
 	}
 	if slice.Depth > constants.MaxPortals {
-		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.PhysicalSector.ID)
+		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.PhysicalSector.Name)
 		slice.DebugNotices.Push(dbg)
 		return
 	}
@@ -140,7 +140,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	if dist != math.MaxFloat64 {
 		r.RenderSlice(slice)
 	} else {
-		dbg := fmt.Sprintf("No intersections for sector %s at depth: %v", slice.PhysicalSector.ID, slice.Depth)
+		dbg := fmt.Sprintf("No intersections for sector %s at depth: %v", slice.PhysicalSector.Name, slice.Depth)
 		r.DebugNotices.Push(dbg)
 	}
 }

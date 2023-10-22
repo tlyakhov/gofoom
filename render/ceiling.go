@@ -35,7 +35,7 @@ func Ceiling(s *state.Slice) {
 		t := planeRayDelta.Dot(&s.PhysicalSector.CeilNormal) / denom
 		if t <= 0 {
 			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
-			dbg := fmt.Sprintf("%v ceiling t <= 0", s.PhysicalSector.ID)
+			dbg := fmt.Sprintf("%v ceiling t <= 0", s.PhysicalSector.Name)
 			s.DebugNotices.Push(dbg)
 			continue
 		}

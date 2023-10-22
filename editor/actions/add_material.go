@@ -14,8 +14,8 @@ type AddMaterial struct {
 
 func (a *AddMaterial) Act() {
 	state := a.IEditor.State()
-	id := a.GetBase().ID
-	state.World.Materials[id] = a.Sampleable
+	name := a.GetBase().Name
+	state.World.Materials[name] = a.Sampleable
 	a.ActionFinished(false)
 }
 func (a *AddMaterial) Cancel() {
@@ -23,8 +23,8 @@ func (a *AddMaterial) Cancel() {
 }
 func (a *AddMaterial) Undo() {
 	state := a.IEditor.State()
-	id := a.GetBase().ID
-	delete(state.World.Materials, id)
+	name := a.GetBase().Name
+	delete(state.World.Materials, name)
 }
 func (a *AddMaterial) Redo() {
 	a.Act()
