@@ -23,9 +23,12 @@ func (s *PhysicalSectorController) OnEnter(e core.AbstractEntity) {
 	phys.Sector = s.PhysicalSector.Model.(core.AbstractSector)
 	s.PhysicalSector.Entities[phys.ID] = e.GetModel().(core.AbstractEntity)
 
-	p := &phys.Pos.Now
-	if s.FloorTarget == nil && p[2] <= e.GetSector().Physical().BottomZ.Now {
-		p[2] = e.GetSector().Physical().BottomZ.Now
+	if phys.OnGround {
+		floorZ, _ := s.SlopedZNow(phys.Pos.Now.To2D())
+		p := &phys.Pos.Now
+		if s.FloorTarget == nil && p[2] < floorZ {
+			p[2] = floorZ
+		}
 	}
 }
 
@@ -223,12 +226,12 @@ func (s *PhysicalSectorController) updateEntityPVS(normal *concepts.Vector2, vis
 	if visitor == nil {
 		s.PVSEntity = make(map[string]core.AbstractSector)
 		s.PVSEntity[s.ID] = s.PhysicalSector
-		visitor = s
+		visitor = s.PhysicalSector
 	}
 
 	for _, seg := range visitor.Physical().Segments {
 		adj := seg.AdjacentSegment
-		if adj == nil || adj.MidMaterial != nil {
+		if adj == nil {
 			continue
 		}
 		correctSide := normal.Zero() || normal.Dot(&seg.Normal) >= 0

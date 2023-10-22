@@ -70,18 +70,18 @@ func (m *MapController) Frame() {
 	/*player := provide.EntityAnimator.For(m.Player)
 	player.Frame()*/
 
-	for _, sector := range m.Sectors {
-		for _, e := range sector.Physical().Entities {
+	for _, s := range m.Sectors {
+		for _, e := range s.Physical().Entities {
 			if !e.Physical().Active {
 				continue
 			}
-			for _, pvs := range sector.Physical().PVSEntity {
+			for _, pvs := range s.Physical().PVSEntity {
 				_ = pvs
 				provide.Interactor.For(pvs).ActOnEntity(e)
 			}
 			provide.EntityAnimator.For(e).Frame()
 		}
-		provide.SectorAnimator.For(sector).Frame()
+		provide.SectorAnimator.For(s).Frame()
 	}
 }
 

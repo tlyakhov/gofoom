@@ -36,7 +36,18 @@ func (a *Delete) Act() {
 		switch target := obj.(type) {
 		case *state.MapPoint:
 			phys := target.Sector.Physical()
-			phys.Segments = append(phys.Segments[:a.Indices[target]], phys.Segments[a.Indices[target]+1:]...)
+			indexToDelete := a.Indices[target]
+			phys.Segments = append(phys.Segments[:indexToDelete], phys.Segments[indexToDelete+1:]...)
+			for _, obj2 := range a.Selected {
+				if mp2, ok := obj2.(*state.MapPoint); ok {
+					if mp2.Sector.Physical() != phys {
+						continue
+					}
+					if a.Indices[mp2] >= indexToDelete {
+						a.Indices[mp2]--
+					}
+				}
+			}
 		case core.AbstractEntity:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...

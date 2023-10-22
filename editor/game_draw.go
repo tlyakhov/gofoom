@@ -40,8 +40,10 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.ShowText(fmt.Sprintf("FPS: %.1f", editor.World.Sim().FPS))
 	cr.MoveTo(10, 20)
 	cr.ShowText(fmt.Sprintf("Health: %.1f", player.Health))
-	cr.MoveTo(10, 30)
-	cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
+	if player.Sector != nil {
+		cr.MoveTo(10, 30)
+		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
+	}
 	cr.MoveTo(10, 40)
 	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", player.Force.StringHuman(), player.Vel.Render.StringHuman(), player.Pos.Render.StringHuman()))
 

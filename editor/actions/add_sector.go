@@ -35,6 +35,7 @@ func (a *AddSector) RemoveFromMap() {
 	if a.State().World.Sectors[id] != nil {
 		delete(a.State().World.Sectors, id)
 	}
+	a.State().World.Recalculate()
 }
 
 func (a *AddSector) AddToMap() {
