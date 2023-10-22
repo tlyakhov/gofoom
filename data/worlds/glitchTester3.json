@@ -1,6 +1,6 @@
 {
   "MobsPaused": false,
-  "ID": "be3h6pnvn27in35ekqj0",
+  "Name": "be3h6pnvn27in35ekqj0",
   "Materials": [
     {
       "Ambient": {
@@ -13,12 +13,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "Default",
+      "Name": "Default",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be3h6pnvn27in35ekqn0",
+        "Name": "be3h6pnvn27in35ekqn0",
         "Source": "data/WDef.png",
         "Type": "texture.Image"
       },
@@ -43,7 +43,7 @@
                 "Y": 1,
                 "Z": 1
               },
-              "ID": "Light",
+              "Name": "Light",
               "Strength": 2,
               "Type": "behaviors.Light"
             }
@@ -51,7 +51,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "ckg769lmdsrlum5bli80",
+          "Name": "ckg769lmdsrlum5bli80",
           "MountHeight": 15,
           "Pos": {
             "X": -50,
@@ -69,12 +69,12 @@
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "FloorSlope": 0.15000000000000002,
-      "ID": "upper",
+      "Name": "upper",
       "Segments": [
         {
           "AdjacentSector": "ckg76htmdsrlum5blid0",
           "HiMaterial": "Default",
-          "ID": "ckg76gdmdsrlum5bliag",
+          "Name": "ckg76gdmdsrlum5bliag",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -82,7 +82,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "ckg76glmdsrlum5blib0",
+          "Name": "ckg76glmdsrlum5blib0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -90,7 +90,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "ckg76h5mdsrlum5blibg",
+          "Name": "ckg76h5mdsrlum5blibg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -99,7 +99,7 @@
         {
           "AdjacentSector": "Starting",
           "HiMaterial": "Default",
-          "ID": "ckg76hdmdsrlum5blic0",
+          "Name": "ckg76hdmdsrlum5blic0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -116,12 +116,12 @@
       "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "ckg76htmdsrlum5blid0",
+      "Name": "ckg76htmdsrlum5blid0",
       "Segments": [
         {
           "AdjacentSector": "lower",
           "HiMaterial": "Default",
-          "ID": "ckg76ilmdsrlum5blidg",
+          "Name": "ckg76ilmdsrlum5blidg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -129,7 +129,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "ckg76itmdsrlum5blie0",
+          "Name": "ckg76itmdsrlum5blie0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 160,
@@ -137,7 +137,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "ckg76jdmdsrlum5blieg",
+          "Name": "ckg76jdmdsrlum5blieg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 160,
@@ -146,7 +146,7 @@
         {
           "AdjacentSector": "upper",
           "HiMaterial": "Default",
-          "ID": "ckg76jlmdsrlum5blif0",
+          "Name": "ckg76jlmdsrlum5blif0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -163,12 +163,12 @@
       "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "lower",
+      "Name": "lower",
       "Segments": [
         {
           "AdjacentSector": "Starting",
           "HiMaterial": "Default",
-          "ID": "ckg76kdmdsrlum5bligg",
+          "Name": "ckg76kdmdsrlum5bligg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -176,7 +176,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "ckg76ktmdsrlum5blih0",
+          "Name": "ckg76ktmdsrlum5blih0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -184,7 +184,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "ckg76ldmdsrlum5blihg",
+          "Name": "ckg76ldmdsrlum5blihg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 160,
@@ -193,7 +193,7 @@
         {
           "AdjacentSector": "ckg76htmdsrlum5blid0",
           "HiMaterial": "Default",
-          "ID": "ckg76ltmdsrlum5blii0",
+          "Name": "ckg76ltmdsrlum5blii0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 160,
@@ -210,12 +210,12 @@
       "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "Starting",
+      "Name": "Starting",
       "Segments": [
         {
           "AdjacentSector": "upper",
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqp0",
+          "Name": "be3h6pnvn27in35ekqp0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -224,7 +224,7 @@
         {
           "AdjacentSector": "lower",
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqq0",
+          "Name": "be3h6pnvn27in35ekqq0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -232,7 +232,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqr0",
+          "Name": "be3h6pnvn27in35ekqr0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -240,7 +240,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqs0",
+          "Name": "be3h6pnvn27in35ekqs0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,

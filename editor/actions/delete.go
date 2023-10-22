@@ -53,9 +53,9 @@ func (a *Delete) Act() {
 				// Otherwise weird things happen...
 				continue
 			}
-			delete(target.GetSector().Physical().Mobs, target.GetBase().ID)
+			delete(target.GetSector().Physical().Mobs, target.GetBase().Name)
 		case core.AbstractSector:
-			delete(target.Physical().Map.Sectors, target.GetBase().ID)
+			delete(target.Physical().Map.Sectors, target.GetBase().Name)
 		}
 	}
 	a.State().World.Recalculate()

@@ -31,17 +31,17 @@ func (a *AddSector) Cancel() {
 }
 
 func (a *AddSector) RemoveFromMap() {
-	id := a.Sector.GetBase().ID
-	if a.State().World.Sectors[id] != nil {
-		delete(a.State().World.Sectors, id)
+	name := a.Sector.GetBase().Name
+	if a.State().World.Sectors[name] != nil {
+		delete(a.State().World.Sectors, name)
 	}
 	a.State().World.Recalculate()
 }
 
 func (a *AddSector) AddToMap() {
-	id := a.Sector.GetBase().ID
+	name := a.Sector.GetBase().Name
 	a.Sector.Physical().Map = a.State().World.Map
-	a.State().World.Sectors[id] = a.Sector
+	a.State().World.Sectors[name] = a.Sector
 	provide.Passer.For(a.Sector).Recalculate()
 }
 

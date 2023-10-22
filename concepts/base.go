@@ -10,8 +10,7 @@ import (
 )
 
 type Base struct {
-	ID   string   `editable:"ID"`
-	Tags []string `editable:"Tags"`
+	Name string `editable:"Name"`
 	// Represents the fully composed type that this embedding (could be) a part of
 	Model ISerializable
 }
@@ -36,25 +35,19 @@ func (b *Base) Construct(data map[string]interface{}) {
 		fmt.Printf("Error: attempting to deserialize nil *concepts.Base. Probably target type doesn't implement concepts.ISerializable.\n")
 		return
 	}
-	b.ID = xid.New().String()
+	b.Name = xid.New().String()
 	b.Model = b
 
 	if data == nil {
 		return
 	}
-	if v, ok := data["ID"]; ok {
-		b.ID = v.(string)
-	}
-	if v, ok := data["Tags"]; ok {
-		b.Tags = v.([]string)
+	if v, ok := data["Name"]; ok {
+		b.Name = v.(string)
 	}
 }
 
 func (b *Base) Serialize() map[string]interface{} {
-	result := map[string]interface{}{"ID": b.ID}
-	if b.Tags != nil && len(b.Tags) > 0 {
-		result["Tags"] = b.Tags
-	}
+	result := map[string]interface{}{"Name": b.Name}
 	return result
 }
 
@@ -109,6 +102,6 @@ func MapCollection(parent interface{}, target interface{}, data interface{}) {
 		if item == nil {
 			continue
 		}
-		mv.Elem().SetMapIndex(reflect.ValueOf(item.GetBase().ID), reflect.ValueOf(item))
+		mv.Elem().SetMapIndex(reflect.ValueOf(item.GetBase().Name), reflect.ValueOf(item))
 	}
 }

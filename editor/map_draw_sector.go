@@ -68,7 +68,7 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 			if !ok || s2 == sector {
 				continue
 			}
-			if s2.Physical().PVSMob[sector.GetBase().ID] != nil {
+			if s2.Physical().PVSMob[sector.GetBase().Name] != nil {
 				cr.SetSourceRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
 			}
 		}

@@ -88,7 +88,7 @@ func (e *PhysicalMobController) Collide() []*core.Segment {
 
 		floorZ, ceilZ := closestSector.Physical().SlopedZNow(p.To2D())
 		if p[2] < floorZ || p[2]+e.Height > ceilZ {
-			log.Printf("Moved mob %v to closest sector and adjusted Z from %v to %v", e.ID, p[2], floorZ)
+			log.Printf("Moved mob %v to closest sector and adjusted Z from %v to %v", e.Name, p[2], floorZ)
 			p[2] = floorZ
 		}
 
@@ -185,8 +185,8 @@ func (e *PhysicalMobController) Collide() []*core.Segment {
 		}
 	}
 
-	if e.Sector != nil && e.Sector.Physical().Mobs[e.ID] == nil {
-		e.Sector.Physical().Mobs[e.ID] = model
+	if e.Sector != nil && e.Sector.Physical().Mobs[e.Name] == nil {
+		e.Sector.Physical().Mobs[e.Name] = model
 	}
 
 	return collided
@@ -194,13 +194,13 @@ func (e *PhysicalMobController) Collide() []*core.Segment {
 
 func (e *PhysicalMobController) Remove() {
 	if e.Sector != nil {
-		delete(e.Sector.Physical().Mobs, e.ID)
+		delete(e.Sector.Physical().Mobs, e.Name)
 		e.Sector = nil
 		return
 	}
 
 	for _, sector := range e.Map.Sectors {
-		delete(sector.Physical().Mobs, e.ID)
+		delete(sector.Physical().Mobs, e.Name)
 	}
 }
 

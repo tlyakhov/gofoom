@@ -1,6 +1,6 @@
 {
   "MobsPaused": false,
-  "ID": "be3h6pnvn27in35ekqj0",
+  "Name": "be3h6pnvn27in35ekqj0",
   "Materials": [
     {
       "Ambient": {
@@ -13,13 +13,13 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "Default",
+      "Name": "Default",
       "IsLiquid": false,
       "Scale": 1,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be3h6pnvn27in35ekqn0",
+        "Name": "be3h6pnvn27in35ekqn0",
         "Source": "data/WDef.png",
         "Type": "texture.Image"
       },
@@ -44,7 +44,7 @@
                 "Y": 1,
                 "Z": 1
               },
-              "ID": "Light",
+              "Name": "Light",
               "Strength": 2,
               "Type": "behaviors.Light"
             }
@@ -52,7 +52,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "ckpvt5dmdsrrj1r5a5pg",
+          "Name": "ckpvt5dmdsrrj1r5a5pg",
           "MountHeight": 15,
           "Pos": {
             "X": -60,
@@ -69,11 +69,11 @@
       ],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "Starting",
+      "Name": "Starting",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqp0",
+          "Name": "be3h6pnvn27in35ekqp0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -81,7 +81,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqq0",
+          "Name": "be3h6pnvn27in35ekqq0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -89,7 +89,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqr0",
+          "Name": "be3h6pnvn27in35ekqr0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -97,7 +97,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be3h6pnvn27in35ekqs0",
+          "Name": "be3h6pnvn27in35ekqs0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,

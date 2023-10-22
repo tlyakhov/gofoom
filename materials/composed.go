@@ -69,7 +69,7 @@ func (m *PainfulLitSampled) Construct(data map[string]interface{}) {
 	m.LitSampled.Sampled.Model = m
 	m.Painful.Construct(data)
 	m.Painful.Model = m
-	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.GetBase().ID)
+	fmt.Printf("PainfulLitSampled: %v\n", m.Lit.GetBase().Name)
 }
 
 func (m *PainfulLitSampled) Serialize() map[string]interface{} {

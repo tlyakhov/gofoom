@@ -19,7 +19,7 @@ func NewUnderwaterController(s *sectors.Underwater) *UnderwaterController {
 }
 
 func (s *UnderwaterController) ActOnMob(e core.AbstractMob) {
-	if e.GetSector() == nil || e.GetSector().GetBase().ID != s.PhysicalSectorController.ID {
+	if e.GetSector() == nil || e.GetSector().GetBase().Name != s.PhysicalSectorController.Name {
 		return
 	}
 

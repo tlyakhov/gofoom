@@ -149,10 +149,10 @@ func (s *PhysicalSector) Construct(data map[string]interface{}) {
 		concepts.MapCollection(s, &s.Mobs, v)
 	}
 	if v, ok := data["FloorTarget"]; ok {
-		s.FloorTarget = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
+		s.FloorTarget = &PlaceholderSector{Base: concepts.Base{Name: v.(string)}}
 	}
 	if v, ok := data["CeilTarget"]; ok {
-		s.CeilTarget = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
+		s.CeilTarget = &PlaceholderSector{Base: concepts.Base{Name: v.(string)}}
 	}
 	if v, ok := data["FloorFriction"]; ok {
 		s.FloorFriction = v.(float64)
@@ -176,16 +176,16 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 	}
 
 	if s.FloorTarget != nil {
-		result["FloorTarget"] = s.FloorTarget.GetBase().ID
+		result["FloorTarget"] = s.FloorTarget.GetBase().Name
 	}
 	if s.CeilTarget != nil {
-		result["CeilTarget"] = s.CeilTarget.GetBase().ID
+		result["CeilTarget"] = s.CeilTarget.GetBase().Name
 	}
 	if s.FloorMaterial != nil {
-		result["FloorMaterial"] = s.FloorMaterial.GetBase().ID
+		result["FloorMaterial"] = s.FloorMaterial.GetBase().Name
 	}
 	if s.CeilMaterial != nil {
-		result["CeilMaterial"] = s.CeilMaterial.GetBase().ID
+		result["CeilMaterial"] = s.CeilMaterial.GetBase().Name
 	}
 
 	mobs := []interface{}{}
@@ -294,14 +294,14 @@ func (s *PhysicalSector) Recalculate() {
 
 	if ph, ok := s.FloorTarget.(*PlaceholderSector); ok {
 		// Get the actual one.
-		if actual, ok := s.Map.Sectors[ph.ID]; ok {
+		if actual, ok := s.Map.Sectors[ph.Name]; ok {
 			s.FloorTarget = actual
 		}
 	}
 
 	if ph, ok := s.CeilTarget.(*PlaceholderSector); ok {
 		// Get the actual one.
-		if actual, ok := s.Map.Sectors[ph.ID]; ok {
+		if actual, ok := s.Map.Sectors[ph.Name]; ok {
 			s.CeilTarget = actual
 		}
 	}

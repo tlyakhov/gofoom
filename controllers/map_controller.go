@@ -101,12 +101,12 @@ func (m *MapController) AutoPortal() {
 			if sector == sector2 {
 				continue
 			}
-			id := sector.GetBase().ID + "|" + sector2.GetBase().ID
-			id2 := sector2.GetBase().ID + "|" + sector.GetBase().ID
-			if seen[id2] || seen[id] {
+			name := sector.GetBase().Name + "|" + sector2.GetBase().Name
+			id2 := sector2.GetBase().Name + "|" + sector.GetBase().Name
+			if seen[id2] || seen[name] {
 				continue
 			}
-			seen[id] = true
+			seen[name] = true
 
 			//if !sector.Physical().AABBIntersect(&sector2.Physical().Min, &sector2.Physical().Max) {
 			//	continue
@@ -128,13 +128,13 @@ func (m *MapController) AutoPortal() {
 	m.Recalculate()
 }
 
-func (ms *MapController) CreateTestSector(id string, x, y, size float64) *core.PhysicalSector {
+func (ms *MapController) CreateTestSector(name string, x, y, size float64) *core.PhysicalSector {
 	mat := ms.Map.Materials["Default"]
 	sector := &core.PhysicalSector{}
 	sector.Construct(nil)
-	sector.GetBase().ID = id
+	sector.GetBase().Name = name
 	sector.SetParent(ms.Map)
-	ms.Sectors[sector.ID] = sector
+	ms.Sectors[sector.Name] = sector
 	sector.FloorMaterial = mat
 	sector.CeilMaterial = mat
 	seg := sector.AddSegment(x, y)
@@ -166,7 +166,7 @@ func (ms *MapController) CreateTest() {
 	ms.Player.Physical().Pos.Reset()
 	mat := &materials.LitSampled{}
 	mat.Construct(nil)
-	mat.GetBase().ID = "Default"
+	mat.GetBase().Name = "Default"
 	//tex := &texture.Solid{Diffuse: color.NRGBA{R: 128, G: 100, B: 50, A: 255}}
 	tex := &texture.Image{}
 	tex.Construct(nil)
@@ -179,7 +179,7 @@ func (ms *MapController) CreateTest() {
 
 	mat.SetParent(ms.Map)
 	tex.SetParent(mat)
-	ms.Materials[mat.GetBase().ID] = mat
+	ms.Materials[mat.GetBase().Name] = mat
 	scale := 75
 	for x := 0; x < 20; x++ {
 		for y := 0; y < 20; y++ {
@@ -199,7 +199,7 @@ func (ms *MapController) CreateTest() {
 				light.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				light.Pos.Reset()
 				light.SetParent(sector)
-				sector.Mobs[light.ID] = light
+				sector.Mobs[light.Name] = light
 				log.Println("Generated light")
 			}
 		}

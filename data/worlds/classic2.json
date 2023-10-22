@@ -1,6 +1,6 @@
 {
   "MobsPaused": false,
-  "ID": "be25rlnvn27v99df1ckg",
+  "Name": "be25rlnvn27v99df1ckg",
   "Materials": [
     {
       "Ambient": {
@@ -13,12 +13,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "mat6",
+      "Name": "mat6",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1d8g",
+        "Name": "be25rlnvn27v99df1d8g",
         "Source": "data/WDirty.png",
         "Type": "texture.Image"
       },
@@ -35,12 +35,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "f5",
+      "Name": "f5",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1dv0",
+        "Name": "be25rlnvn27v99df1dv0",
         "Source": "data/FRedLight.png",
         "Type": "texture.Image"
       },
@@ -57,12 +57,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "f6",
+      "Name": "f6",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1e30",
+        "Name": "be25rlnvn27v99df1e30",
         "Source": "data/FHexMetal.png",
         "Type": "texture.Image"
       },
@@ -79,25 +79,25 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "Water",
+      "Name": "Water",
       "IsLiquid": true,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1e70",
+        "Name": "be25rlnvn27v99df1e70",
         "Source": "data/Water.png",
         "Type": "texture.Image"
       },
       "Type": "materials.LitSampled"
     },
     {
-      "ID": "Sky",
+      "Name": "Sky",
       "IsLiquid": false,
       "StaticBackground": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1e9g",
+        "Name": "be25rlnvn27v99df1e9g",
         "Source": "data/game/sky.png",
         "Type": "texture.Image"
       },
@@ -114,12 +114,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "mat1",
+      "Name": "mat1",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1csg",
+        "Name": "be25rlnvn27v99df1csg",
         "Source": "data/WSlimy.png",
         "Type": "texture.Image"
       },
@@ -136,12 +136,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "mat2",
+      "Name": "mat2",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1d0g",
+        "Name": "be25rlnvn27v99df1d0g",
         "Source": "data/WMetal.png",
         "Type": "texture.Image"
       },
@@ -158,12 +158,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "Doom Garage Door",
+      "Name": "Doom Garage Door",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1dcg",
+        "Name": "be25rlnvn27v99df1dcg",
         "Source": "data/DGarage.png",
         "Type": "texture.Image"
       },
@@ -180,12 +180,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "Default Floor",
+      "Name": "Default Floor",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1dgg",
+        "Name": "be25rlnvn27v99df1dgg",
         "Source": "data/FDef.png",
         "Type": "texture.Image"
       },
@@ -202,12 +202,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "f1",
+      "Name": "f1",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1dkg",
+        "Name": "be25rlnvn27v99df1dkg",
         "Source": "data/FGrayTile.png",
         "Type": "texture.Image"
       },
@@ -225,12 +225,12 @@
         "Z": 1
       },
       "Hurt": 5,
-      "ID": "Painful Slime",
+      "Name": "Painful Slime",
       "IsLiquid": true,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1dq0",
+        "Name": "be25rlnvn27v99df1dq0",
         "Source": "data/FSlime.png",
         "Type": "texture.Image"
       },
@@ -247,12 +247,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "Default",
+      "Name": "Default",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1cog",
+        "Name": "be25rlnvn27v99df1cog",
         "Source": "data/WDef.png",
         "Type": "texture.Image"
       },
@@ -269,12 +269,12 @@
         "Y": 1,
         "Z": 1
       },
-      "ID": "mat3",
+      "Name": "mat3",
       "IsLiquid": false,
       "Texture": {
         "Filter": false,
         "GenerateMipMaps": true,
-        "ID": "be25rlnvn27v99df1d4g",
+        "Name": "be25rlnvn27v99df1d4g",
         "Source": "data/WSlimeGrate.png",
         "Type": "texture.Image"
       },
@@ -289,11 +289,11 @@
       "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
-      "ID": "sector5",
+      "Name": "sector5",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fb0",
+          "Name": "be25rlnvn27v99df1fb0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -302,7 +302,7 @@
         {
           "AdjacentSector": "sector6",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fc0",
+          "Name": "be25rlnvn27v99df1fc0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -120,
@@ -310,7 +310,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fd0",
+          "Name": "be25rlnvn27v99df1fd0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -120,
@@ -319,7 +319,7 @@
         {
           "AdjacentSector": "sector2",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fe0",
+          "Name": "be25rlnvn27v99df1fe0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -336,12 +336,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector16",
+      "Name": "sector16",
       "Segments": [
         {
           "AdjacentSector": "sector15",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hhg",
+          "Name": "be25rlnvn27v99df1hhg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 380,
@@ -349,7 +349,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hig",
+          "Name": "be25rlnvn27v99df1hig",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": 400,
@@ -358,7 +358,7 @@
         {
           "AdjacentSector": "sector20",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hjg",
+          "Name": "be25rlnvn27v99df1hjg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 400,
@@ -366,7 +366,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hkg",
+          "Name": "be25rlnvn27v99df1hkg",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": 380,
@@ -383,12 +383,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector14",
+      "Name": "sector14",
       "Segments": [
         {
           "AdjacentSector": "sector13",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h20",
+          "Name": "be25rlnvn27v99df1h20",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 150,
@@ -396,7 +396,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h30",
+          "Name": "be25rlnvn27v99df1h30",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 150,
@@ -405,7 +405,7 @@
         {
           "AdjacentSector": "sector15",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h40",
+          "Name": "be25rlnvn27v99df1h40",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 300,
@@ -413,7 +413,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h50",
+          "Name": "be25rlnvn27v99df1h50",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -440,7 +440,7 @@
                 "Y": 0.6,
                 "Z": 1
               },
-              "ID": "be25rlnvn27v99df1hfg",
+              "Name": "be25rlnvn27v99df1hfg",
               "Strength": 25,
               "Type": "behaviors.Light"
             }
@@ -448,7 +448,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1he0",
+          "Name": "be25rlnvn27v99df1he0",
           "MountHeight": 30,
           "Pos": {
             "X": 350,
@@ -466,11 +466,11 @@
       "FloorMaterial": "Water",
       "FloorScale": 64,
       "FloorTarget": "sector17",
-      "ID": "sector15",
+      "Name": "sector15",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h70",
+          "Name": "be25rlnvn27v99df1h70",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -479,7 +479,7 @@
         {
           "AdjacentSector": "sector14",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h80",
+          "Name": "be25rlnvn27v99df1h80",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 300,
@@ -487,7 +487,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h90",
+          "Name": "be25rlnvn27v99df1h90",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -495,7 +495,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ha0",
+          "Name": "be25rlnvn27v99df1ha0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -504,7 +504,7 @@
         {
           "AdjacentSector": "sector16",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hb0",
+          "Name": "be25rlnvn27v99df1hb0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 380,
@@ -513,7 +513,7 @@
         {
           "AdjacentSector": "sector17",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hc0",
+          "Name": "be25rlnvn27v99df1hc0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 400,
@@ -522,7 +522,7 @@
         {
           "AdjacentSector": "sector17",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hd0",
+          "Name": "be25rlnvn27v99df1hd0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 400,
@@ -539,12 +539,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector2",
+      "Name": "sector2",
       "Segments": [
         {
           "AdjacentSector": "sector5",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1eng",
+          "Name": "be25rlnvn27v99df1eng",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -553,7 +553,7 @@
         {
           "AdjacentSector": "sector3",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1eog",
+          "Name": "be25rlnvn27v99df1eog",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -562,7 +562,7 @@
         {
           "AdjacentSector": "sector4",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1epg",
+          "Name": "be25rlnvn27v99df1epg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -30,
@@ -571,7 +571,7 @@
         {
           "AdjacentSector": "be25rp7vn27v99df1mgg",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1eqg",
+          "Name": "be25rlnvn27v99df1eqg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -30,
@@ -598,7 +598,7 @@
                 "Y": 1,
                 "Z": 0.1
               },
-              "ID": "be25rlnvn27v99df1g6g",
+              "Name": "be25rlnvn27v99df1g6g",
               "Strength": 15,
               "Type": "behaviors.Light"
             }
@@ -606,7 +606,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1g50",
+          "Name": "be25rlnvn27v99df1g50",
           "MountHeight": 30,
           "Pos": {
             "X": -240,
@@ -624,12 +624,12 @@
       "FloorMaterial": "Painful Slime",
       "FloorScale": 64,
       "Hurt": 0,
-      "ID": "sector9",
+      "Name": "sector9",
       "Segments": [
         {
           "AdjacentSector": "sector10",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fv0",
+          "Name": "be25rlnvn27v99df1fv0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -180,
@@ -637,7 +637,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1g00",
+          "Name": "be25rlnvn27v99df1g00",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -300,
@@ -645,7 +645,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1g10",
+          "Name": "be25rlnvn27v99df1g10",
           "LoMaterial": "Default",
           "MidMaterial": "mat3",
           "X": -300,
@@ -653,7 +653,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1g20",
+          "Name": "be25rlnvn27v99df1g20",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -300,
@@ -662,7 +662,7 @@
         {
           "AdjacentSector": "sector11",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1g30",
+          "Name": "be25rlnvn27v99df1g30",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -300,
@@ -671,7 +671,7 @@
         {
           "AdjacentSector": "sector8",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1g40",
+          "Name": "be25rlnvn27v99df1g40",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -180,
@@ -688,12 +688,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "be25rp7vn27v99df1mgg",
+      "Name": "be25rp7vn27v99df1mgg",
       "Segments": [
         {
           "AdjacentSector": "sector2",
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1mi0",
+          "Name": "be25rp7vn27v99df1mi0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -30,
@@ -701,7 +701,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1mjg",
+          "Name": "be25rp7vn27v99df1mjg",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -100,
@@ -710,7 +710,7 @@
         {
           "AdjacentSector": "be25rp7vn27v99df1n7g",
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1ml0",
+          "Name": "be25rp7vn27v99df1ml0",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -100,
@@ -719,7 +719,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1o10",
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1mmg",
+          "Name": "be25rp7vn27v99df1mmg",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -10,
@@ -737,12 +737,12 @@
       "FloorMaterial": "Water",
       "FloorScale": 64,
       "FloorTarget": "sector21",
-      "ID": "sector20",
+      "Name": "sector20",
       "Segments": [
         {
           "AdjacentSector": "sector16",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ia0",
+          "Name": "be25rlnvn27v99df1ia0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 400,
@@ -750,7 +750,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ib0",
+          "Name": "be25rlnvn27v99df1ib0",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": 380,
@@ -759,7 +759,7 @@
         {
           "AdjacentSector": "sector21",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ic0",
+          "Name": "be25rlnvn27v99df1ic0",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": 300,
@@ -768,7 +768,7 @@
         {
           "AdjacentSector": "sector21",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1id0",
+          "Name": "be25rlnvn27v99df1id0",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": 300,
@@ -777,7 +777,7 @@
         {
           "AdjacentSector": "sector21",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ie0",
+          "Name": "be25rlnvn27v99df1ie0",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": 480,
@@ -785,7 +785,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1if0",
+          "Name": "be25rlnvn27v99df1if0",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": 480,
@@ -802,12 +802,12 @@
       "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
-      "ID": "sector25",
+      "Name": "sector25",
       "Segments": [
         {
           "AdjacentSector": "sector12",
           "HiMaterial": "Doom Garage Door",
-          "ID": "be25rlnvn27v99df1ja0",
+          "Name": "be25rlnvn27v99df1ja0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 105,
@@ -815,7 +815,7 @@
         },
         {
           "HiMaterial": "Doom Garage Door",
-          "ID": "be25rlnvn27v99df1jb0",
+          "Name": "be25rlnvn27v99df1jb0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 105,
@@ -824,7 +824,7 @@
         {
           "AdjacentSector": "sector1",
           "HiMaterial": "Doom Garage Door",
-          "ID": "be25rlnvn27v99df1jc0",
+          "Name": "be25rlnvn27v99df1jc0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -832,7 +832,7 @@
         },
         {
           "HiMaterial": "Doom Garage Door",
-          "ID": "be25rlnvn27v99df1jd0",
+          "Name": "be25rlnvn27v99df1jd0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -849,11 +849,11 @@
       "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
-      "ID": "sector8",
+      "Name": "sector8",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fq0",
+          "Name": "be25rlnvn27v99df1fq0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -160,
@@ -862,7 +862,7 @@
         {
           "AdjacentSector": "sector9",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fr0",
+          "Name": "be25rlnvn27v99df1fr0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -180,
@@ -870,7 +870,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fs0",
+          "Name": "be25rlnvn27v99df1fs0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -180,
@@ -879,7 +879,7 @@
         {
           "AdjacentSector": "sector7",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ft0",
+          "Name": "be25rlnvn27v99df1ft0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -160,
@@ -896,11 +896,11 @@
       "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
-      "ID": "sector6",
+      "Name": "sector6",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fg0",
+          "Name": "be25rlnvn27v99df1fg0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -120,
@@ -909,7 +909,7 @@
         {
           "AdjacentSector": "sector7",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fh0",
+          "Name": "be25rlnvn27v99df1fh0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -140,
@@ -917,7 +917,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fi0",
+          "Name": "be25rlnvn27v99df1fi0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -140,
@@ -926,7 +926,7 @@
         {
           "AdjacentSector": "sector5",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fj0",
+          "Name": "be25rlnvn27v99df1fj0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -120,
@@ -943,11 +943,11 @@
       "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
-      "ID": "sector7",
+      "Name": "sector7",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fl0",
+          "Name": "be25rlnvn27v99df1fl0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -140,
@@ -956,7 +956,7 @@
         {
           "AdjacentSector": "sector8",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fm0",
+          "Name": "be25rlnvn27v99df1fm0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -160,
@@ -964,7 +964,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fn0",
+          "Name": "be25rlnvn27v99df1fn0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -160,
@@ -973,7 +973,7 @@
         {
           "AdjacentSector": "sector6",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1fo0",
+          "Name": "be25rlnvn27v99df1fo0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -140,
@@ -1000,7 +1000,7 @@
                 "Y": 1,
                 "Z": 0.1
               },
-              "ID": "be25rlnvn27v99df1gk0",
+              "Name": "be25rlnvn27v99df1gk0",
               "Strength": 15,
               "Type": "behaviors.Light"
             }
@@ -1008,7 +1008,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1gig",
+          "Name": "be25rlnvn27v99df1gig",
           "MountHeight": 30,
           "Pos": {
             "X": -240,
@@ -1026,12 +1026,12 @@
       "FloorMaterial": "Painful Slime",
       "FloorScale": 64,
       "Hurt": 0,
-      "ID": "sector11",
+      "Name": "sector11",
       "Segments": [
         {
           "AdjacentSector": "sector9",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1geg",
+          "Name": "be25rlnvn27v99df1geg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -180,
@@ -1039,7 +1039,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gfg",
+          "Name": "be25rlnvn27v99df1gfg",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -300,
@@ -1047,7 +1047,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ggg",
+          "Name": "be25rlnvn27v99df1ggg",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -300,
@@ -1055,7 +1055,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ghg",
+          "Name": "be25rlnvn27v99df1ghg",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -180,
@@ -1073,12 +1073,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector21",
+      "Name": "sector21",
       "Segments": [
         {
           "AdjacentSector": "sector20",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ih0",
+          "Name": "be25rlnvn27v99df1ih0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -1087,7 +1087,7 @@
         {
           "AdjacentSector": "sector20",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ii0",
+          "Name": "be25rlnvn27v99df1ii0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -1096,7 +1096,7 @@
         {
           "AdjacentSector": "sector20",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ij0",
+          "Name": "be25rlnvn27v99df1ij0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 480,
@@ -1105,7 +1105,7 @@
         {
           "AdjacentSector": "sector18",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ik0",
+          "Name": "be25rlnvn27v99df1ik0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 480,
@@ -1123,12 +1123,12 @@
       "FloorMaterial": "Water",
       "FloorScale": 64,
       "FloorTarget": "sector22",
-      "ID": "sector23",
+      "Name": "sector23",
       "Segments": [
         {
           "AdjacentSector": "sector22",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1itg",
+          "Name": "be25rlnvn27v99df1itg",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 620,
@@ -1137,7 +1137,7 @@
         {
           "AdjacentSector": "sector19",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1iug",
+          "Name": "be25rlnvn27v99df1iug",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 600,
@@ -1146,7 +1146,7 @@
         {
           "AdjacentSector": "sector22",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ivg",
+          "Name": "be25rlnvn27v99df1ivg",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 600,
@@ -1155,7 +1155,7 @@
         {
           "AdjacentSector": "sector22",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1j0g",
+          "Name": "be25rlnvn27v99df1j0g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 620,
@@ -1172,12 +1172,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector26",
+      "Name": "sector26",
       "Segments": [
         {
           "AdjacentSector": "sector3",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1jf0",
+          "Name": "be25rlnvn27v99df1jf0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -1185,7 +1185,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1jg0",
+          "Name": "be25rlnvn27v99df1jg0",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 100,
@@ -1194,7 +1194,7 @@
         {
           "AdjacentSector": "sector27",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1jh0",
+          "Name": "be25rlnvn27v99df1jh0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -1202,7 +1202,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ji0",
+          "Name": "be25rlnvn27v99df1ji0",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": -100,
@@ -1219,12 +1219,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector1",
+      "Name": "sector1",
       "Segments": [
         {
           "AdjacentSector": "sector25",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1eig",
+          "Name": "be25rlnvn27v99df1eig",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -1233,7 +1233,7 @@
         {
           "AdjacentSector": "sector3",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ejg",
+          "Name": "be25rlnvn27v99df1ejg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -1242,7 +1242,7 @@
         {
           "AdjacentSector": "sector4",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ekg",
+          "Name": "be25rlnvn27v99df1ekg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 30,
@@ -1251,7 +1251,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1o10",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1elg",
+          "Name": "be25rlnvn27v99df1elg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 30,
@@ -1268,12 +1268,12 @@
       "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
-      "ID": "sector4",
+      "Name": "sector4",
       "Segments": [
         {
           "AdjacentSector": "be25rpfvn27v99df1o10",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1f60",
+          "Name": "be25rlnvn27v99df1f60",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -30,
@@ -1282,7 +1282,7 @@
         {
           "AdjacentSector": "sector1",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1f70",
+          "Name": "be25rlnvn27v99df1f70",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 30,
@@ -1291,7 +1291,7 @@
         {
           "AdjacentSector": "sector3",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1f80",
+          "Name": "be25rlnvn27v99df1f80",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 30,
@@ -1300,7 +1300,7 @@
         {
           "AdjacentSector": "sector2",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1f90",
+          "Name": "be25rlnvn27v99df1f90",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -30,
@@ -1327,7 +1327,7 @@
                 "Y": 1,
                 "Z": 1
               },
-              "ID": "be25rlnvn27v99df1j80",
+              "Name": "be25rlnvn27v99df1j80",
               "Strength": 15,
               "Type": "behaviors.Light"
             }
@@ -1335,7 +1335,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1j6g",
+          "Name": "be25rlnvn27v99df1j6g",
           "MountHeight": 30,
           "Pos": {
             "X": 700,
@@ -1352,11 +1352,11 @@
       ],
       "FloorMaterial": "mat1",
       "FloorScale": 64,
-      "ID": "sector24",
+      "Name": "sector24",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1j2g",
+          "Name": "be25rlnvn27v99df1j2g",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 620,
@@ -1364,7 +1364,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1j3g",
+          "Name": "be25rlnvn27v99df1j3g",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 740,
@@ -1372,7 +1372,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1j4g",
+          "Name": "be25rlnvn27v99df1j4g",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 740,
@@ -1381,7 +1381,7 @@
         {
           "AdjacentSector": "sector22",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1j5g",
+          "Name": "be25rlnvn27v99df1j5g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 620,
@@ -1398,11 +1398,11 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "be25rp7vn27v99df1n7g",
+      "Name": "be25rp7vn27v99df1n7g",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1n90",
+          "Name": "be25rp7vn27v99df1n90",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": -100,
@@ -1411,7 +1411,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1ofg",
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1nag",
+          "Name": "be25rp7vn27v99df1nag",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": -40,
@@ -1420,7 +1420,7 @@
         {
           "AdjacentSector": "be25rp7vn27v99df1mgg",
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1nc0",
+          "Name": "be25rp7vn27v99df1nc0",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -10,
@@ -1428,7 +1428,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rp7vn27v99df1ndg",
+          "Name": "be25rp7vn27v99df1ndg",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -100,
@@ -1455,7 +1455,7 @@
                 "Y": 1,
                 "Z": 1
               },
-              "ID": "be25rlnvn27v99df1f40",
+              "Name": "be25rlnvn27v99df1f40",
               "Strength": 15,
               "Type": "behaviors.Light"
             }
@@ -1463,7 +1463,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1f2g",
+          "Name": "be25rlnvn27v99df1f2g",
           "MountHeight": 30,
           "Pos": {
             "X": 0,
@@ -1480,12 +1480,12 @@
       ],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector3",
+      "Name": "sector3",
       "Segments": [
         {
           "AdjacentSector": "sector26",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1esg",
+          "Name": "be25rlnvn27v99df1esg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -1493,7 +1493,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1etg",
+          "Name": "be25rlnvn27v99df1etg",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 100,
@@ -1502,7 +1502,7 @@
         {
           "AdjacentSector": "sector1",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1eug",
+          "Name": "be25rlnvn27v99df1eug",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -1511,7 +1511,7 @@
         {
           "AdjacentSector": "sector4",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1evg",
+          "Name": "be25rlnvn27v99df1evg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 30,
@@ -1520,7 +1520,7 @@
         {
           "AdjacentSector": "sector2",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1f0g",
+          "Name": "be25rlnvn27v99df1f0g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -30,
@@ -1528,7 +1528,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1f1g",
+          "Name": "be25rlnvn27v99df1f1g",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -100,
@@ -1545,12 +1545,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector13",
+      "Name": "sector13",
       "Segments": [
         {
           "AdjacentSector": "sector12",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gs0",
+          "Name": "be25rlnvn27v99df1gs0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 115,
@@ -1558,7 +1558,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gt0",
+          "Name": "be25rlnvn27v99df1gt0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 150,
@@ -1567,7 +1567,7 @@
         {
           "AdjacentSector": "sector14",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gu0",
+          "Name": "be25rlnvn27v99df1gu0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 150,
@@ -1575,7 +1575,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gv0",
+          "Name": "be25rlnvn27v99df1gv0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 150,
@@ -1583,7 +1583,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1h00",
+          "Name": "be25rlnvn27v99df1h00",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 115,
@@ -1600,12 +1600,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector27",
+      "Name": "sector27",
       "Segments": [
         {
           "AdjacentSector": "sector26",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1jk0",
+          "Name": "be25rlnvn27v99df1jk0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -100,
@@ -1613,7 +1613,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1jl0",
+          "Name": "be25rlnvn27v99df1jl0",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": 100,
@@ -1621,7 +1621,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1jm0",
+          "Name": "be25rlnvn27v99df1jm0",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": 100,
@@ -1629,7 +1629,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1jn0",
+          "Name": "be25rlnvn27v99df1jn0",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": -100,
@@ -1646,11 +1646,11 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "be25rpfvn27v99df1ofg",
+      "Name": "be25rpfvn27v99df1ofg",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1oh0",
+          "Name": "be25rpfvn27v99df1oh0",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": -40,
@@ -1659,7 +1659,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1or0",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1oig",
+          "Name": "be25rpfvn27v99df1oig",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": 170,
@@ -1668,7 +1668,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1o10",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1ok0",
+          "Name": "be25rpfvn27v99df1ok0",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 70,
@@ -1677,7 +1677,7 @@
         {
           "AdjacentSector": "be25rp7vn27v99df1n7g",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1olg",
+          "Name": "be25rpfvn27v99df1olg",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -10,
@@ -1694,12 +1694,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector12",
+      "Name": "sector12",
       "Segments": [
         {
           "AdjacentSector": "sector25",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gm0",
+          "Name": "be25rlnvn27v99df1gm0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 105,
@@ -1707,7 +1707,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gn0",
+          "Name": "be25rlnvn27v99df1gn0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 105,
@@ -1716,7 +1716,7 @@
         {
           "AdjacentSector": "sector13",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1go0",
+          "Name": "be25rlnvn27v99df1go0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 115,
@@ -1724,7 +1724,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gp0",
+          "Name": "be25rlnvn27v99df1gp0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 150,
@@ -1732,7 +1732,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gq0",
+          "Name": "be25rlnvn27v99df1gq0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 150,
@@ -1759,7 +1759,7 @@
                 "Y": 0.8,
                 "Z": 1
               },
-              "ID": "be25rlnvn27v99df1i30",
+              "Name": "be25rlnvn27v99df1i30",
               "Strength": 15,
               "Type": "behaviors.Light"
             }
@@ -1767,7 +1767,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1i1g",
+          "Name": "be25rlnvn27v99df1i1g",
           "MountHeight": 30,
           "Pos": {
             "X": 340,
@@ -1784,12 +1784,12 @@
       ],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector18",
+      "Name": "sector18",
       "Segments": [
         {
           "AdjacentSector": "sector17",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hrg",
+          "Name": "be25rlnvn27v99df1hrg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 300,
@@ -1798,7 +1798,7 @@
         {
           "AdjacentSector": "sector19",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hsg",
+          "Name": "be25rlnvn27v99df1hsg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 400,
@@ -1806,7 +1806,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1htg",
+          "Name": "be25rlnvn27v99df1htg",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 400,
@@ -1815,7 +1815,7 @@
         {
           "AdjacentSector": "sector21",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hug",
+          "Name": "be25rlnvn27v99df1hug",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 480,
@@ -1823,7 +1823,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hvg",
+          "Name": "be25rlnvn27v99df1hvg",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -1831,7 +1831,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1i0g",
+          "Name": "be25rlnvn27v99df1i0g",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,
@@ -1848,11 +1848,11 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector19",
+      "Name": "sector19",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1i50",
+          "Name": "be25rlnvn27v99df1i50",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 600,
@@ -1861,7 +1861,7 @@
         {
           "AdjacentSector": "sector18",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1i60",
+          "Name": "be25rlnvn27v99df1i60",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 400,
@@ -1869,7 +1869,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1i70",
+          "Name": "be25rlnvn27v99df1i70",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 400,
@@ -1878,7 +1878,7 @@
         {
           "AdjacentSector": "sector22",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1i80",
+          "Name": "be25rlnvn27v99df1i80",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 600,
@@ -1906,7 +1906,7 @@
                 "Y": 0.8,
                 "Z": 1
               },
-              "ID": "be25rlnvn27v99df1irg",
+              "Name": "be25rlnvn27v99df1irg",
               "Strength": 15,
               "Type": "behaviors.Light"
             }
@@ -1914,7 +1914,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1iq0",
+          "Name": "be25rlnvn27v99df1iq0",
           "MountHeight": 30,
           "Pos": {
             "X": 610,
@@ -1931,12 +1931,12 @@
       ],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector22",
+      "Name": "sector22",
       "Segments": [
         {
           "AdjacentSector": "sector23",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1im0",
+          "Name": "be25rlnvn27v99df1im0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 620,
@@ -1945,7 +1945,7 @@
         {
           "AdjacentSector": "sector19",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1in0",
+          "Name": "be25rlnvn27v99df1in0",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 600,
@@ -1954,7 +1954,7 @@
         {
           "AdjacentSector": "sector23",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1io0",
+          "Name": "be25rlnvn27v99df1io0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 600,
@@ -1963,7 +1963,7 @@
         {
           "AdjacentSector": "sector24",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1ip0",
+          "Name": "be25rlnvn27v99df1ip0",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 620,
@@ -1986,7 +1986,7 @@
           "CollisionResponse": "Slide",
           "Health": 100,
           "Height": 32,
-          "ID": "be25rlnvn27v99df1jng",
+          "Name": "be25rlnvn27v99df1jng",
           "MountHeight": 30,
           "Pos": {
             "X": 0,
@@ -2003,11 +2003,11 @@
       ],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "be25rpfvn27v99df1o10",
+      "Name": "be25rpfvn27v99df1o10",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1o2g",
+          "Name": "be25rpfvn27v99df1o2g",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 100,
@@ -2016,7 +2016,7 @@
         {
           "AdjacentSector": "sector1",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1o40",
+          "Name": "be25rpfvn27v99df1o40",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 100,
@@ -2025,7 +2025,7 @@
         {
           "AdjacentSector": "sector4",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1o5g",
+          "Name": "be25rpfvn27v99df1o5g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 30,
@@ -2034,7 +2034,7 @@
         {
           "AdjacentSector": "be25rp7vn27v99df1mgg",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1o70",
+          "Name": "be25rpfvn27v99df1o70",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -30,
@@ -2043,7 +2043,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1ofg",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1o8g",
+          "Name": "be25rpfvn27v99df1o8g",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": -10,
@@ -2052,7 +2052,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1or0",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1oa0",
+          "Name": "be25rpfvn27v99df1oa0",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 70,
@@ -2069,11 +2069,11 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "be25rpfvn27v99df1or0",
+      "Name": "be25rpfvn27v99df1or0",
       "Segments": [
         {
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1osg",
+          "Name": "be25rpfvn27v99df1osg",
           "LoMaterial": "Default",
           "MidMaterial": "Sky",
           "X": 170,
@@ -2081,7 +2081,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1ou0",
+          "Name": "be25rpfvn27v99df1ou0",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 280,
@@ -2090,7 +2090,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1o10",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1ovg",
+          "Name": "be25rpfvn27v99df1ovg",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 100,
@@ -2099,7 +2099,7 @@
         {
           "AdjacentSector": "be25rpfvn27v99df1ofg",
           "HiMaterial": "Default",
-          "ID": "be25rpfvn27v99df1p10",
+          "Name": "be25rpfvn27v99df1p10",
           "LoMaterial": "Default",
           "MidMaterial": "mat2",
           "X": 70,
@@ -2121,7 +2121,7 @@
           "BoundingRadius": 10,
           "CollisionResponse": "Slide",
           "Height": 0,
-          "ID": "be25rlnvn27v99df1gcg",
+          "Name": "be25rlnvn27v99df1gcg",
           "MountHeight": 30,
           "Pos": {
             "X": -240,
@@ -2139,12 +2139,12 @@
       "FloorMaterial": "Painful Slime",
       "FloorScale": 64,
       "Hurt": 0,
-      "ID": "sector10",
+      "Name": "sector10",
       "Segments": [
         {
           "AdjacentSector": "sector9",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1g8g",
+          "Name": "be25rlnvn27v99df1g8g",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": -180,
@@ -2152,7 +2152,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1g9g",
+          "Name": "be25rlnvn27v99df1g9g",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -300,
@@ -2160,7 +2160,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gag",
+          "Name": "be25rlnvn27v99df1gag",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -300,
@@ -2168,7 +2168,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1gbg",
+          "Name": "be25rlnvn27v99df1gbg",
           "LoMaterial": "Default",
           "MidMaterial": "mat1",
           "X": -180,
@@ -2186,12 +2186,12 @@
       "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
-      "ID": "sector17",
+      "Name": "sector17",
       "Segments": [
         {
           "AdjacentSector": "sector18",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hmg",
+          "Name": "be25rlnvn27v99df1hmg",
           "LoMaterial": "Default",
           "MidMaterial": "Default",
           "X": 300,
@@ -2200,7 +2200,7 @@
         {
           "AdjacentSector": "sector15",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hng",
+          "Name": "be25rlnvn27v99df1hng",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 400,
@@ -2209,7 +2209,7 @@
         {
           "AdjacentSector": "sector15",
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hog",
+          "Name": "be25rlnvn27v99df1hog",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 400,
@@ -2217,7 +2217,7 @@
         },
         {
           "HiMaterial": "Default",
-          "ID": "be25rlnvn27v99df1hpg",
+          "Name": "be25rlnvn27v99df1hpg",
           "LoMaterial": "Default",
           "MidMaterial": "mat6",
           "X": 300,

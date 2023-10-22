@@ -4,17 +4,17 @@
     "Materials": [
         {
             "Type": "material.LitSampled",
-            "ID": "Default",
+            "Name": "Default",
             "Texture": {
                 "Type": "texture.Image",
                 "Source": "data/WDef.png",
                 "GenerateMipMaps": true,
-                "Filter": true                
+                "Filter": true
             }
         },
         {
             "Type": "material.LitSampled",
-            "ID": "Blue",
+            "Name": "Blue",
             "Texture": {
                 "Type": "texture.Image",
                 "Source": "data/grass.jpg",
@@ -22,7 +22,6 @@
                 "Filter": true
             }
         }
-
     ],
     "Sectors": [
         {

@@ -13,9 +13,9 @@ type ISerializable interface {
 }
 
 func IndexOf(s []ISerializable, obj ISerializable) int {
-	id := obj.GetBase().ID
+	name := obj.GetBase().Name
 	for i, e := range s {
-		if e.GetBase().ID == id && reflect.TypeOf(obj) == reflect.TypeOf(e) {
+		if e.GetBase().Name == name && reflect.TypeOf(obj) == reflect.TypeOf(e) {
 			return i
 		}
 	}

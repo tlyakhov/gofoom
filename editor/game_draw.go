@@ -42,7 +42,7 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.ShowText(fmt.Sprintf("Health: %.1f", player.Health))
 	if player.Sector != nil {
 		cr.MoveTo(10, 30)
-		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
+		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().Name))
 	}
 	cr.MoveTo(10, 40)
 	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", player.Force.StringHuman(), player.Vel.Render.StringHuman(), player.Pos.Render.StringHuman()))

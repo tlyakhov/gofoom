@@ -22,7 +22,7 @@ func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
 	if !wall {
 		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
 	} else {
-		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.ID, le.MapIndex, le.Segment.ID)
+		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
 		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
 	}
 	dbg := q.Mul(1.0 / 64.0)
@@ -45,7 +45,7 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 	if !wall {
 		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
 	} else {
-		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.ID, le.MapIndex, le.Segment.ID)
+		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
 		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
 	}
 	*result = le.Calculate(q)
@@ -85,7 +85,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalMob) b
 func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.PhysicalMob, sector *core.PhysicalSector) bool {
 	debugSectorID := "Starting" // "be4bqmfvn27mek306btg"
 	debugWallCheck := le.Normal[2] == 0
-	if constants.DebugLighting && debugWallCheck && sector.ID == debugSectorID {
+	if constants.DebugLighting && debugWallCheck && sector.Name == debugSectorID {
 		log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), e.Pos)
 	}
 	delta := &concepts.Vector3{e.Pos.Render[0], e.Pos.Render[1], e.Pos.Render[2]}
@@ -101,8 +101,8 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
 	for sector != nil {
-		if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
-			log.Printf("Sector: %v\n", sector.ID)
+		if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+			log.Printf("Sector: %v\n", sector.Name)
 		}
 		var next *core.PhysicalSector
 		// Since our sectors can be concave, we can't just go through the first portal we find,
@@ -112,7 +112,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
 			if (le.Normal[2] == 0 && seg == le.Segment) || delta.To2D().Dot(&seg.Normal) > 0 {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 					log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				continue
@@ -122,18 +122,18 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			isect := new(concepts.Vector3)
 			ok := seg.Intersect3D(p, &e.Pos.Render, isect)
 			if !ok {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 					log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				continue // No intersection, skip it!
 			}
 
-			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 				log.Printf("Intersection for seg %v|%v = %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman(), isect.StringHuman())
 			}
 
 			if seg.AdjacentSector == nil {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 					log.Printf("Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				return false // This is a wall, that means the light is occluded for sure.
@@ -143,11 +143,11 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			// bottom/top portions could be in the way.
 			floorZ, ceilZ := sector.SlopedZRender(isect.To2D())
 			floorZ2, ceilZ2 := seg.AdjacentSector.Physical().SlopedZRender(isect.To2D())
-			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}
 			if isect[2] < floorZ2 || isect[2] > ceilZ2 || isect[2] < floorZ || isect[2] > ceilZ {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 					log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				return false // Same as wall, we're occluded.
@@ -163,7 +163,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			}
 
 			if idist2-dist2 > constants.IntersectEpsilon {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 					log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
 				}
 				// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
@@ -171,7 +171,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			}
 
 			if prevDist-idist2 > constants.IntersectEpsilon {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 					log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
 				}
 				// If the current intersection point is BEHIND the last one, we went backwards?
@@ -185,12 +185,12 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 		prevDist = dist2
 		depth++
 		if depth > constants.MaxPortals { // Avoid infinite looping.
-			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, e.ID)
+			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, e.Name)
 			le.DebugNotices.Push(dbg)
 			return false
 		}
 		if next == nil && e.Sector != nil && sector != e.Sector.Physical() {
-			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}
 			return false
@@ -198,7 +198,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 		sector = next
 	}
 
-	if constants.DebugLighting && debugWallCheck && le.PhysicalSector.ID == debugSectorID {
+	if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
 		log.Printf("Lit!\n")
 	}
 	return true
