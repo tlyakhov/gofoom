@@ -15,7 +15,7 @@ type PhysicalSector struct {
 	Simulation    *Simulation
 	Map           *Map
 	Segments      []*Segment
-	Entities      map[string]AbstractEntity
+	Mobs          map[string]AbstractMob
 	BottomZ       SimScalar      `editable:"Floor Height"`
 	TopZ          SimScalar      `editable:"Ceiling Height"`
 	FloorScale    float64        `editable:"Floor Material Scale"`
@@ -35,8 +35,8 @@ type PhysicalSector struct {
 	FloorLightmap, CeilLightmap       []concepts.Vector3
 	FloorLightmapAge, CeilLightmapAge []int
 	PVS                               map[string]AbstractSector
-	PVSEntity                         map[string]AbstractSector
-	PVL                               map[string]AbstractEntity
+	PVSMob                            map[string]AbstractSector
+	PVL                               map[string]AbstractMob
 
 	// RoomImpulse
 }
@@ -69,7 +69,7 @@ func (s *PhysicalSector) Attach(sim *Simulation) {
 	s.Simulation = sim
 	s.TopZ.Attach(sim)
 	s.BottomZ.Attach(sim)
-	for _, e := range s.Entities {
+	for _, e := range s.Mobs {
 		if simmed, ok := e.(Simulated); ok {
 			simmed.Attach(sim)
 		}
@@ -81,7 +81,7 @@ func (s *PhysicalSector) Detach() {
 	}
 	s.TopZ.Detach(s.Simulation)
 	s.BottomZ.Detach(s.Simulation)
-	for _, e := range s.Entities {
+	for _, e := range s.Mobs {
 		if simmed, ok := e.(Simulated); ok {
 			simmed.Detach()
 		}
@@ -106,7 +106,7 @@ func (s *PhysicalSector) Construct(data map[string]interface{}) {
 	s.Base.Construct(data)
 	s.Model = s
 	s.Segments = make([]*Segment, 0)
-	s.Entities = make(map[string]AbstractEntity)
+	s.Mobs = make(map[string]AbstractMob)
 	s.BottomZ.Set(0.0)
 	s.TopZ.Set(64.0)
 	s.FloorScale = 64.0
@@ -145,8 +145,8 @@ func (s *PhysicalSector) Construct(data map[string]interface{}) {
 	if v, ok := data["Segments"]; ok {
 		concepts.MapArray(s, &s.Segments, v)
 	}
-	if v, ok := data["Entities"]; ok {
-		concepts.MapCollection(s, &s.Entities, v)
+	if v, ok := data["Mobs"]; ok {
+		concepts.MapCollection(s, &s.Mobs, v)
 	}
 	if v, ok := data["FloorTarget"]; ok {
 		s.FloorTarget = &PlaceholderSector{Base: concepts.Base{ID: v.(string)}}
@@ -188,15 +188,15 @@ func (s *PhysicalSector) Serialize() map[string]interface{} {
 		result["CeilMaterial"] = s.CeilMaterial.GetBase().ID
 	}
 
-	entities := []interface{}{}
-	for _, e := range s.Entities {
+	mobs := []interface{}{}
+	for _, e := range s.Mobs {
 		// Don't serialize player
-		if reflect.TypeOf(e).String() == "*entities.Player" {
+		if reflect.TypeOf(e).String() == "*mobs.Player" {
 			continue
 		}
-		entities = append(entities, e.Serialize())
+		mobs = append(mobs, e.Serialize())
 	}
-	result["Entities"] = entities
+	result["Mobs"] = mobs
 
 	segments := []interface{}{}
 	for _, seg := range s.Segments {

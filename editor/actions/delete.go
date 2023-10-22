@@ -48,12 +48,12 @@ func (a *Delete) Act() {
 					}
 				}
 			}
-		case core.AbstractEntity:
+		case core.AbstractMob:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...
 				continue
 			}
-			delete(target.GetSector().Physical().Entities, target.GetBase().ID)
+			delete(target.GetSector().Physical().Mobs, target.GetBase().ID)
 		case core.AbstractSector:
 			delete(target.Physical().Map.Sectors, target.GetBase().ID)
 		}

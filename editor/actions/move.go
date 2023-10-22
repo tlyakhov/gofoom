@@ -37,7 +37,7 @@ func (a *Move) OnMouseDown(button *gdk.EventButton) {
 		switch target := obj.(type) {
 		case *state.MapPoint:
 			target.P.To3D(&a.Original[i])
-		case core.AbstractEntity:
+		case core.AbstractMob:
 			a.Original[i] = target.Physical().Pos.Original
 		}
 	}
@@ -59,7 +59,7 @@ func (a *Move) Act() {
 		case *state.MapPoint:
 			target.P = *a.WorldGrid(a.Original[i].To2D().Add(&a.Delta))
 			provide.Passer.For(target.Sector).Recalculate()
-		case core.AbstractEntity:
+		case core.AbstractMob:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...
 				continue
@@ -79,7 +79,7 @@ func (a *Move) Undo() {
 		case *state.MapPoint:
 			target.P = *a.Original[i].To2D()
 			provide.Passer.For(target.Sector).Recalculate()
-		case core.AbstractEntity:
+		case core.AbstractMob:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...
 				continue

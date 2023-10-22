@@ -79,7 +79,7 @@ func GameButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 	press := gdk.EventButtonNewFromEvent(ev)
 	da.GrabFocus()
 
-	// TODO: make this more granular, and also support entities
+	// TODO: make this more granular, and also support mobs
 	if press.Button() == 1 {
 		daw := da.GetAllocatedWidth()
 		dah := da.GetAllocatedHeight()

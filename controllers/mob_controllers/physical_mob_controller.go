@@ -1,4 +1,4 @@
-package entity
+package mob_controllers
 
 import (
 	"fmt"
@@ -11,15 +11,15 @@ import (
 	"tlyakhov/gofoom/core"
 )
 
-type PhysicalEntityController struct {
-	*core.PhysicalEntity
+type PhysicalMobController struct {
+	*core.PhysicalMob
 }
 
-func NewPhysicalEntityController(pe *core.PhysicalEntity) *PhysicalEntityController {
-	return &PhysicalEntityController{PhysicalEntity: pe}
+func NewPhysicalMobController(pe *core.PhysicalMob) *PhysicalMobController {
+	return &PhysicalMobController{PhysicalMob: pe}
 }
 
-func (e *PhysicalEntityController) PushBack(segment *core.Segment) bool {
+func (e *PhysicalMobController) PushBack(segment *core.Segment) bool {
 	p2d := e.Pos.Now.To2D()
 	d := segment.DistanceToPoint2(p2d)
 	if d > e.BoundingRadius*e.BoundingRadius {
@@ -33,7 +33,7 @@ func (e *PhysicalEntityController) PushBack(segment *core.Segment) bool {
 	if side > 0 {
 		delta.MulSelf(e.BoundingRadius - d)
 	} else {
-		log.Printf("PushBack: entity is on the front-facing side of segment (%v units)\n", d)
+		log.Printf("PushBack: mob is on the front-facing side of segment (%v units)\n", d)
 		delta.MulSelf(-e.BoundingRadius - d)
 	}
 	// Apply the impulse at the same time
@@ -43,17 +43,17 @@ func (e *PhysicalEntityController) PushBack(segment *core.Segment) bool {
 	return true
 }
 
-func (e *PhysicalEntityController) Collide() []*core.Segment {
+func (e *PhysicalMobController) Collide() []*core.Segment {
 	if e.Map == nil {
 		return nil
 	}
 	// We've got several possibilities we need to handle:
-	// 1.   The entity is outside of all sectors. Put it into the nearest sector.
-	// 2.   The entity has an un-initialized sector, but it's within a sector and doesn't need to be moved.
-	// 3.   The entity is still in its current sector, but it's gotten too close to a wall and needs to be pushed back.
-	// 4.   The entity is outside of the current sector because it's gone past a wall and needs to be pushed back.
-	// 5.   The entity is outside of the current sector because it's gone through a portal and needs to change sectors.
-	// 6.   The entity is outside of the current sector because it's gone through a portal, but it winds up outside of
+	// 1.   The mob is outside of all sectors. Put it into the nearest sector.
+	// 2.   The mob has an un-initialized sector, but it's within a sector and doesn't need to be moved.
+	// 3.   The mob is still in its current sector, but it's gotten too close to a wall and needs to be pushed back.
+	// 4.   The mob is outside of the current sector because it's gone past a wall and needs to be pushed back.
+	// 5.   The mob is outside of the current sector because it's gone through a portal and needs to change sectors.
+	// 6.   The mob is outside of the current sector because it's gone through a portal, but it winds up outside of
 	//      any sectors and needs to be pushed back into a valid sector using any walls within bounds.
 	// 7.   No collision occured.
 
@@ -62,7 +62,7 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 	// Assume we haven't collided.
 	var collided []*core.Segment
 	p := &e.Pos.Now
-	model := e.Model.(core.AbstractEntity)
+	model := e.Model.(core.AbstractMob)
 
 	// Cases 1 & 2.
 	if e.Sector == nil {
@@ -88,7 +88,7 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 
 		floorZ, ceilZ := closestSector.Physical().SlopedZNow(p.To2D())
 		if p[2] < floorZ || p[2]+e.Height > ceilZ {
-			log.Printf("Moved entity %v to closest sector and adjusted Z from %v to %v", e.ID, p[2], floorZ)
+			log.Printf("Moved mob %v to closest sector and adjusted Z from %v to %v", e.ID, p[2], floorZ)
 			p[2] = floorZ
 		}
 
@@ -135,7 +135,7 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 				p[2]+e.Height < ceilZ &&
 				adj.IsPointInside2D(ePosition2D) {
 				// Hooray, we've handled case 5! Make sure Z is good.
-				fmt.Printf("Case 5! entity = %v, floor z = %v\n", p, floorZ)
+				fmt.Printf("Case 5! mob = %v, floor z = %v\n", p, floorZ)
 				if p[2] < floorZ {
 					//e.Pos[2] = floorZ
 					fmt.Println("goop2?")
@@ -185,26 +185,26 @@ func (e *PhysicalEntityController) Collide() []*core.Segment {
 		}
 	}
 
-	if e.Sector != nil && e.Sector.Physical().Entities[e.ID] == nil {
-		e.Sector.Physical().Entities[e.ID] = model
+	if e.Sector != nil && e.Sector.Physical().Mobs[e.ID] == nil {
+		e.Sector.Physical().Mobs[e.ID] = model
 	}
 
 	return collided
 }
 
-func (e *PhysicalEntityController) Remove() {
+func (e *PhysicalMobController) Remove() {
 	if e.Sector != nil {
-		delete(e.Sector.Physical().Entities, e.ID)
+		delete(e.Sector.Physical().Mobs, e.ID)
 		e.Sector = nil
 		return
 	}
 
 	for _, sector := range e.Map.Sectors {
-		delete(sector.Physical().Entities, e.ID)
+		delete(sector.Physical().Mobs, e.ID)
 	}
 }
 
-func (e *PhysicalEntityController) Frame() {
+func (e *PhysicalMobController) Frame() {
 	if !e.Active {
 		return
 	}

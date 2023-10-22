@@ -9,7 +9,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-type PhysicalEntity struct {
+type PhysicalMob struct {
 	concepts.Base     `editable:"^"`
 	Simulation        *Simulation
 	Pos               SimVector3 `editable:"Position"`
@@ -31,15 +31,15 @@ type PhysicalEntity struct {
 }
 
 func init() {
-	registry.Instance().Register(PhysicalEntity{})
+	registry.Instance().Register(PhysicalMob{})
 }
 
-func (e *PhysicalEntity) Attach(sim *Simulation) {
+func (e *PhysicalMob) Attach(sim *Simulation) {
 	e.Simulation = sim
 	e.Pos.Attach(sim)
 	e.Vel.Attach(sim)
 }
-func (e *PhysicalEntity) Detach() {
+func (e *PhysicalMob) Detach() {
 	if e.Simulation == nil {
 		return
 	}
@@ -48,25 +48,25 @@ func (e *PhysicalEntity) Detach() {
 	e.Simulation = nil
 }
 
-func (e *PhysicalEntity) Sim() *Simulation {
+func (e *PhysicalMob) Sim() *Simulation {
 	return e.Simulation
 }
 
-func (e *PhysicalEntity) Physical() *PhysicalEntity {
+func (e *PhysicalMob) Physical() *PhysicalMob {
 	return e
 }
 
-func (e *PhysicalEntity) GetSector() AbstractSector {
+func (e *PhysicalMob) GetSector() AbstractSector {
 	return e.Sector
 }
 
-func (e *PhysicalEntity) Angle2DTo(p *concepts.Vector3) float64 {
+func (e *PhysicalMob) Angle2DTo(p *concepts.Vector3) float64 {
 	dx := e.Pos.Now[0] - p[0]
 	dy := e.Pos.Now[1] - p[1]
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
-func (e *PhysicalEntity) SetParent(parent interface{}) {
+func (e *PhysicalMob) SetParent(parent interface{}) {
 	if sector, ok := parent.(AbstractSector); ok {
 		e.Sector = sector
 		e.Map = sector.Physical().Map
@@ -74,11 +74,11 @@ func (e *PhysicalEntity) SetParent(parent interface{}) {
 			e.Attach(e.Map.Sim())
 		}
 	} else {
-		panic("Tried mapping.PhysicalEntity.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
+		panic("Tried mapping.PhysicalMob.SetParent with a parameter that wasn't a *mapping.PhysicalSector")
 	}
 }
 
-func (e *PhysicalEntity) Construct(data map[string]interface{}) {
+func (e *PhysicalMob) Construct(data map[string]interface{}) {
 	e.Base.Construct(data)
 	e.Model = e
 	e.Pos.Set(0, 0, 0)
@@ -127,9 +127,9 @@ func (e *PhysicalEntity) Construct(data map[string]interface{}) {
 	}
 }
 
-func (e *PhysicalEntity) Serialize() map[string]interface{} {
+func (e *PhysicalMob) Serialize() map[string]interface{} {
 	result := e.Base.Serialize()
-	result["Type"] = "core.PhysicalEntity"
+	result["Type"] = "core.PhysicalMob"
 	result["Active"] = e.Active
 	result["Pos"] = e.Pos.Serialize()
 	result["Vel"] = e.Vel.Serialize()

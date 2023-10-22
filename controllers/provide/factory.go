@@ -20,7 +20,7 @@ type collider interface {
 }
 
 var SectorAnimator animator
-var EntityAnimator animator
+var MobAnimator animator
 var Interactor interactor
 var Passer passer
 var Hurter hurter

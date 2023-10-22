@@ -9,13 +9,13 @@ import (
 type Map struct {
 	concepts.Base
 
-	Simulation     *Simulation
-	Sectors        map[string]AbstractSector
-	Materials      map[string]Sampleable `editable:"Materials" edit_type:"Material"`
-	Player         AbstractEntity
-	Spawn          concepts.Vector3 `editable:"Spawn"`
-	EntitiesPaused bool
-	RenderLock     sync.Mutex
+	Simulation *Simulation
+	Sectors    map[string]AbstractSector
+	Materials  map[string]Sampleable `editable:"Materials" edit_type:"Material"`
+	Player     AbstractMob
+	Spawn      concepts.Vector3 `editable:"Spawn"`
+	MobsPaused bool
+	RenderLock sync.Mutex
 }
 
 func init() {
@@ -77,8 +77,8 @@ func (m *Map) Construct(data map[string]interface{}) {
 		return
 	}
 
-	if v, ok := data["EntitiesPaused"]; ok {
-		m.EntitiesPaused = v.(bool)
+	if v, ok := data["MobsPaused"]; ok {
+		m.MobsPaused = v.(bool)
 	}
 	if v, ok := data["SpawnX"]; ok {
 		m.Spawn[0] = v.(float64)
@@ -101,7 +101,7 @@ func (m *Map) Construct(data map[string]interface{}) {
 
 func (m *Map) Serialize() map[string]interface{} {
 	result := m.Base.Serialize()
-	result["EntitiesPaused"] = m.EntitiesPaused
+	result["MobsPaused"] = m.MobsPaused
 	result["SpawnX"] = m.Spawn[0]
 	result["SpawnY"] = m.Spawn[1]
 	materials := []interface{}{}

@@ -69,41 +69,41 @@ func (a *SplitSector) Cancel() {
 }
 
 func (a *SplitSector) Undo() {
-	entities := []core.AbstractEntity{}
+	mobs := []core.AbstractMob{}
 
 	for _, splitter := range a.Splitters {
 		if splitter.Result == nil {
 			continue
 		}
 		for _, added := range splitter.Result {
-			for _, e := range added.Physical().Entities {
-				entities = append(entities, e)
+			for _, e := range added.Physical().Mobs {
+				mobs = append(mobs, e)
 				e.Physical().Sector = nil
 			}
-			added.Physical().Entities = make(map[string]core.AbstractEntity)
+			added.Physical().Mobs = make(map[string]core.AbstractMob)
 			delete(a.State().World.Sectors, added.GetBase().ID)
 		}
 	}
 	for _, original := range a.Original {
 		a.State().World.Sectors[original.GetBase().ID] = original
-		for _, e := range entities {
+		for _, e := range mobs {
 			if original.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
-				original.Physical().Entities[e.GetBase().ID] = e
+				original.Physical().Mobs[e.GetBase().ID] = e
 				e.SetParent(original)
 			}
 		}
 	}
 }
 func (a *SplitSector) Redo() {
-	entities := []core.AbstractEntity{}
+	mobs := []core.AbstractMob{}
 
 	for _, original := range a.Original {
 		delete(a.State().World.Sectors, original.GetBase().ID)
-		for _, e := range original.Physical().Entities {
-			entities = append(entities, e)
+		for _, e := range original.Physical().Mobs {
+			mobs = append(mobs, e)
 			e.Physical().Sector = nil
 		}
-		original.Physical().Entities = make(map[string]core.AbstractEntity)
+		original.Physical().Mobs = make(map[string]core.AbstractMob)
 	}
 
 	for _, splitter := range a.Splitters {
@@ -112,9 +112,9 @@ func (a *SplitSector) Redo() {
 		}
 		for _, added := range splitter.Result {
 			a.State().World.Sectors[added.GetBase().ID] = added
-			for _, e := range entities {
+			for _, e := range mobs {
 				if added.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
-					added.Physical().Entities[e.GetBase().ID] = e
+					added.Physical().Mobs[e.GetBase().ID] = e
 					e.SetParent(added)
 				}
 			}

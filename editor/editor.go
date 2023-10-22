@@ -16,11 +16,11 @@ import (
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 
-	"tlyakhov/gofoom/controllers/entity"
+	"tlyakhov/gofoom/controllers/mob_controllers"
 	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/mobs"
 	"tlyakhov/gofoom/registry"
 	"tlyakhov/gofoom/render"
 
@@ -33,7 +33,7 @@ type EditorWidgets struct {
 	Window      *gtk.ApplicationWindow
 	GameArea    *gtk.DrawingArea
 	MapArea     *gtk.DrawingArea
-	EntityTypes *gtk.ComboBoxText
+	MobTypes    *gtk.ComboBoxText
 	SectorTypes *gtk.ComboBoxText
 	StatusBar   *gtk.Label
 }
@@ -47,9 +47,9 @@ type Editor struct {
 	properties.Grid
 
 	// Map view filters
-	EntitiesVisible    bool
+	MobsVisible        bool
 	SectorTypesVisible bool
-	EntityTypesVisible bool
+	MobTypesVisible    bool
 
 	// Game View state
 	Renderer        *render.Renderer
@@ -72,9 +72,9 @@ func NewEditor() *Editor {
 			Modified: false,
 		},
 		MapViewGrid:        MapViewGrid{Visible: true},
-		EntitiesVisible:    true,
+		MobsVisible:        true,
 		SectorTypesVisible: false,
-		EntityTypesVisible: true,
+		MobTypesVisible:    true,
 	}
 	e.Grid.IEditor = e
 	e.MapViewGrid.Current = &e.Edit.MapView
@@ -132,8 +132,8 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) Integrate() {
-	player := editor.World.Player.(*entities.Player)
-	ps := entity.NewPlayerController(player)
+	player := editor.World.Player.(*mobs.Player)
+	ps := mob_controllers.NewPlayerController(player)
 
 	if gameKeyMap[gdk.KEY_w] {
 		ps.Move(ps.Angle)
@@ -191,7 +191,7 @@ func (e *Editor) Load(filename string) {
 	}
 	e.World = world
 	e.World.Attach(sim)
-	ps := entity.NewPlayerController(e.World.Player.(*entities.Player))
+	ps := mob_controllers.NewPlayerController(e.World.Player.(*mobs.Player))
 	ps.Collide()
 	e.SelectObjects([]concepts.ISerializable{})
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
@@ -208,7 +208,7 @@ func (e *Editor) Test() {
 	e.World.Construct(nil)
 	e.World.Attach(sim)
 	e.World.CreateTest()
-	ps := entity.NewPlayerController(e.World.Player.(*entities.Player))
+	ps := mob_controllers.NewPlayerController(e.World.Player.(*mobs.Player))
 	ps.Collide()
 	e.SelectObjects([]concepts.ISerializable{})
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
@@ -254,15 +254,15 @@ func (e *Editor) ActTool() {
 		s.Physical().CeilMaterial = e.World.DefaultMaterial()
 		s.SetParent(e.World.Map)
 		e.NewAction(&actions.AddSector{IEditor: e, Sector: s})
-	case state.ToolAddEntity:
-		typeId := e.EntityTypes.GetActiveID()
+	case state.ToolAddMob:
+		typeId := e.MobTypes.GetActiveID()
 		t := registry.Instance().All[typeId]
-		ae := reflect.New(t).Interface().(core.AbstractEntity)
+		ae := reflect.New(t).Interface().(core.AbstractMob)
 		ae.Construct(nil)
 		if simmed, ok := ae.(core.Simulated); ok {
 			simmed.Attach(e.World.Sim())
 		}
-		e.NewAction(&actions.AddEntity{IEditor: e, Entity: ae})
+		e.NewAction(&actions.AddMob{IEditor: e, Mob: ae})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:
@@ -380,13 +380,13 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 
 		if e.Selecting() {
-			for _, entity := range sector.Physical().Entities {
-				pe := entity.Physical()
+			for _, mob := range sector.Physical().Mobs {
+				pe := mob.Physical()
 				p := pe.Pos.Original
 				if p[0]+pe.BoundingRadius >= v1[0] && p[0]-pe.BoundingRadius <= v2[0] &&
 					p[1]+pe.BoundingRadius >= v1[1] && p[1]-pe.BoundingRadius <= v2[1] {
-					if concepts.IndexOf(e.HoveringObjects, entity) == -1 {
-						e.HoveringObjects = append(e.HoveringObjects, entity)
+					if concepts.IndexOf(e.HoveringObjects, mob) == -1 {
+						e.HoveringObjects = append(e.HoveringObjects, mob)
 					}
 				}
 			}

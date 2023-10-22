@@ -30,9 +30,9 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 	sectorHovering := concepts.IndexOf(editor.HoveringObjects, sector) != -1
 	sectorSelected := concepts.IndexOf(editor.SelectedObjects, sector) != -1
 
-	if editor.EntitiesVisible {
-		for _, e := range phys.Entities {
-			DrawEntity(cr, e)
+	if editor.MobsVisible {
+		for _, e := range phys.Mobs {
+			DrawMob(cr, e)
 		}
 	}
 
@@ -68,7 +68,7 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 			if !ok || s2 == sector {
 				continue
 			}
-			if s2.Physical().PVSEntity[sector.GetBase().ID] != nil {
+			if s2.Physical().PVSMob[sector.GetBase().ID] != nil {
 				cr.SetSourceRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
 			}
 		}

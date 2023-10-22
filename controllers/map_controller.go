@@ -10,8 +10,8 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers/provide"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/entities"
 	"tlyakhov/gofoom/materials"
+	"tlyakhov/gofoom/mobs"
 	"tlyakhov/gofoom/texture"
 )
 
@@ -38,7 +38,7 @@ func LoadMap(filename string) (*MapController, error) {
 
 	m := NewMapController(new(core.Map))
 	m.Construct(parsed.(map[string]interface{}))
-	m.Player = entities.NewPlayer(m.Map)
+	m.Player = mobs.NewPlayer(m.Map)
 	m.Recalculate()
 	return m, nil
 }
@@ -58,7 +58,7 @@ func (m *MapController) Recalculate() {
 	m.Map.Recalculate()
 	for _, s := range m.Sectors {
 		provide.Passer.For(s).Recalculate()
-		for _, e := range s.Physical().Entities {
+		for _, e := range s.Physical().Mobs {
 			if c := provide.Collider.For(e); c != nil {
 				c.Collide()
 			}
@@ -67,19 +67,19 @@ func (m *MapController) Recalculate() {
 }
 
 func (m *MapController) Frame() {
-	/*player := provide.EntityAnimator.For(m.Player)
+	/*player := provide.MobAnimator.For(m.Player)
 	player.Frame()*/
 
 	for _, s := range m.Sectors {
-		for _, e := range s.Physical().Entities {
+		for _, e := range s.Physical().Mobs {
 			if !e.Physical().Active {
 				continue
 			}
-			for _, pvs := range s.Physical().PVSEntity {
+			for _, pvs := range s.Physical().PVSMob {
 				_ = pvs
-				provide.Interactor.For(pvs).ActOnEntity(e)
+				provide.Interactor.For(pvs).ActOnMob(e)
 			}
-			provide.EntityAnimator.For(e).Frame()
+			provide.MobAnimator.For(e).Frame()
 		}
 		provide.SectorAnimator.For(s).Frame()
 	}
@@ -158,7 +158,7 @@ func (ms *MapController) CreateTestSector(id string, x, y, size float64) *core.P
 }
 
 func (ms *MapController) CreateTest() {
-	ms.Player = entities.NewPlayer(ms.Map)
+	ms.Player = mobs.NewPlayer(ms.Map)
 	ms.Spawn[0] = 50
 	ms.Spawn[1] = 50
 	ms.Spawn[2] = 32
@@ -194,12 +194,12 @@ func (ms *MapController) CreateTest() {
 			}
 
 			if rand.Uint32()%40 == 0 {
-				light := &entities.Light{}
+				light := &mobs.Light{}
 				light.Construct(nil)
 				light.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				light.Pos.Reset()
 				light.SetParent(sector)
-				sector.Entities[light.ID] = light
+				sector.Mobs[light.ID] = light
 				log.Println("Generated light")
 			}
 		}

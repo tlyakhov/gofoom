@@ -265,8 +265,8 @@ func (a *SectorSplitter) collect() {
 		added.GetBase().ID = xid.New().String()
 		a.Result = append(a.Result, added)
 		phys := added.Physical()
-		// Don't clone the entities.
-		phys.Entities = make(map[string]AbstractEntity)
+		// Don't clone the mobs.
+		phys.Mobs = make(map[string]AbstractMob)
 		// Clear segments
 		phys.Segments = []*Segment{}
 
@@ -303,13 +303,13 @@ func (a *SectorSplitter) collect() {
 		return
 	}
 
-	for id, e := range a.Sector.Physical().Entities {
+	for id, e := range a.Sector.Physical().Mobs {
 		e.Physical().Sector = nil
 		for _, added := range a.Result {
 			phys := added.Physical()
 			phys.Recalculate()
 			if phys.IsPointInside2D(&concepts.Vector2{e.Physical().Pos.Original[0], e.Physical().Pos.Original[1]}) {
-				phys.Entities[id] = e
+				phys.Mobs[id] = e
 				e.SetParent(added)
 			}
 		}

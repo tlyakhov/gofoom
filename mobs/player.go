@@ -1,4 +1,4 @@
-package entities
+package mobs
 
 import (
 	"image/color"
@@ -9,11 +9,11 @@ import (
 )
 
 type Player struct {
-	AliveEntity `editable:"^"`
+	AliveMob `editable:"^"`
 
 	FrameTint color.NRGBA
 	Crouching bool
-	Inventory []core.AbstractEntity
+	Inventory []core.AbstractMob
 	Bob       float64
 }
 
@@ -31,7 +31,7 @@ func NewPlayer(m *core.Map) *Player {
 }
 
 func (p *Player) Construct(data map[string]interface{}) {
-	p.AliveEntity.Construct(data)
+	p.AliveMob.Construct(data)
 	p.Model = p
 	p.Height = constants.PlayerHeight
 	p.BoundingRadius = constants.PlayerBoundingRadius

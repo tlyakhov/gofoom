@@ -7,16 +7,16 @@ import (
 
 type AnimatedBehavior struct {
 	concepts.Base `editable:"^"`
-	Entity        core.AbstractEntity
+	Mob           core.AbstractMob
 
 	Active bool `editable:"Active?"`
 }
 
 func (b *AnimatedBehavior) SetParent(parent interface{}) {
-	if e, ok := parent.(core.AbstractEntity); ok {
-		b.Entity = e
+	if e, ok := parent.(core.AbstractMob); ok {
+		b.Mob = e
 	} else {
-		panic("Tried core.AnimatedBehavior.SetParent with a parameter that wasn't a core.AbstractEntity")
+		panic("Tried core.AnimatedBehavior.SetParent with a parameter that wasn't a core.AbstractMob")
 	}
 }
 

@@ -8,31 +8,31 @@ import (
 	"github.com/gotk3/gotk3/gdk"
 )
 
-type AddEntity struct {
+type AddMob struct {
 	state.IEditor
 
 	Mode   string
-	Entity core.AbstractEntity
+	Mob    core.AbstractMob
 	Sector core.AbstractSector
 }
 
-func (a *AddEntity) RemoveFromMap() {
-	phys := a.Entity.Physical()
+func (a *AddMob) RemoveFromMap() {
+	phys := a.Mob.Physical()
 	if phys.Sector != nil {
-		delete(phys.Sector.Physical().Entities, a.Entity.GetBase().ID)
+		delete(phys.Sector.Physical().Mobs, a.Mob.GetBase().ID)
 	}
 }
 
-func (a *AddEntity) AddToMap(sector core.AbstractSector) {
-	a.Entity.Physical().Sector = sector
-	a.Entity.Physical().Map = a.State().World.Map
-	sector.Physical().Entities[a.Entity.GetBase().ID] = a.Entity
+func (a *AddMob) AddToMap(sector core.AbstractSector) {
+	a.Mob.Physical().Sector = sector
+	a.Mob.Physical().Map = a.State().World.Map
+	sector.Physical().Mobs[a.Mob.GetBase().ID] = a.Mob
 	a.State().World.Recalculate()
 }
 
-func (a *AddEntity) OnMouseDown(button *gdk.EventButton) {}
+func (a *AddMob) OnMouseDown(button *gdk.EventButton) {}
 
-func (a *AddEntity) OnMouseMove() {
+func (a *AddMob) OnMouseMove() {
 	wg := a.WorldGrid(&a.State().MouseWorld)
 	var sector core.AbstractSector
 
@@ -49,30 +49,30 @@ func (a *AddEntity) OnMouseMove() {
 	a.RemoveFromMap()
 	a.AddToMap(sector)
 	a.Sector = sector
-	wg.To3D(&a.Entity.Physical().Pos.Original)
+	wg.To3D(&a.Mob.Physical().Pos.Original)
 	floorZ, ceilZ := a.Sector.Physical().SlopedZOriginal(wg)
-	a.Entity.Physical().Pos.Original[2] = (floorZ + ceilZ) / 2
-	a.Entity.Physical().Pos.Reset()
+	a.Mob.Physical().Pos.Original[2] = (floorZ + ceilZ) / 2
+	a.Mob.Physical().Pos.Reset()
 }
 
-func (a *AddEntity) OnMouseUp() {
+func (a *AddMob) OnMouseUp() {
 	a.State().Modified = true
 	a.ActionFinished(false)
 }
-func (a *AddEntity) Act() {
-	a.Mode = "AddEntity"
-	a.SelectObjects([]concepts.ISerializable{a.Entity})
+func (a *AddMob) Act() {
+	a.Mode = "AddMob"
+	a.SelectObjects([]concepts.ISerializable{a.Mob})
 }
-func (a *AddEntity) Cancel() {
+func (a *AddMob) Cancel() {
 	a.RemoveFromMap()
 	a.SelectObjects(nil)
 	a.ActionFinished(true)
 }
-func (a *AddEntity) Undo() {
+func (a *AddMob) Undo() {
 	a.RemoveFromMap()
 }
-func (a *AddEntity) Redo() {
+func (a *AddMob) Redo() {
 	a.AddToMap(a.Sector)
 }
 
-func (a *AddEntity) Frame() {}
+func (a *AddMob) Frame() {}

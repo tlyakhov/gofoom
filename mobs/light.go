@@ -1,4 +1,4 @@
-package entities
+package mobs
 
 import (
 	"tlyakhov/gofoom/behaviors"
@@ -7,7 +7,7 @@ import (
 )
 
 type Light struct {
-	core.PhysicalEntity `editable:"^"`
+	core.PhysicalMob `editable:"^"`
 }
 
 func init() {
@@ -15,13 +15,13 @@ func init() {
 }
 
 func (l *Light) Serialize() map[string]interface{} {
-	result := l.PhysicalEntity.Serialize()
-	result["Type"] = "entities.Light"
+	result := l.PhysicalMob.Serialize()
+	result["Type"] = "mobs.Light"
 	return result
 }
 
 func (l *Light) Construct(data map[string]interface{}) {
-	l.PhysicalEntity.Construct(data)
+	l.PhysicalMob.Construct(data)
 	l.Model = l
 	l.BoundingRadius = 10.0
 	if data == nil {

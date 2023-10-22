@@ -1,34 +1,34 @@
-package entity
+package mob_controllers
 
 import (
 	"image/color"
 	"math"
 
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/mobs"
 
 	"tlyakhov/gofoom/constants"
 )
 
 type PlayerController struct {
-	*PhysicalEntityController
-	*AliveEntityController
+	*PhysicalMobController
+	*AliveMobController
 }
 
-func NewPlayerController(p *entities.Player) *PlayerController {
+func NewPlayerController(p *mobs.Player) *PlayerController {
 	return &PlayerController{
-		PhysicalEntityController: NewPhysicalEntityController(&p.PhysicalEntity),
-		AliveEntityController:    NewAliveEntityController(&p.AliveEntity),
+		PhysicalMobController: NewPhysicalMobController(&p.PhysicalMob),
+		AliveMobController:    NewAliveMobController(&p.AliveMob),
 	}
 }
 
 func (pc *PlayerController) Frame() {
-	p := pc.Model.(*entities.Player)
+	p := pc.Model.(*mobs.Player)
 	p.Bob += p.Vel.Now.Length() / 100.0
 	for p.Bob > math.Pi*2 {
 		p.Bob -= math.Pi * 2
 	}
-	pc.PhysicalEntityController.Frame()
+	pc.PhysicalMobController.Frame()
 	if p.Sector == nil {
 		return
 	}
@@ -46,13 +46,13 @@ func (pc *PlayerController) Frame() {
 }
 
 func (pc *PlayerController) Hurt(amount float64) {
-	p := pc.Model.(*entities.Player)
-	pc.AliveEntityController.Hurt(amount)
+	p := pc.Model.(*mobs.Player)
+	pc.AliveMobController.Hurt(amount)
 	p.HurtTime = constants.PlayerHurtTime
 }
 
 func (pc *PlayerController) HurtTime() float64 {
-	return pc.AliveEntity.HurtTime
+	return pc.AliveMob.HurtTime
 }
 
 func (p *PlayerController) Move(angle float64) {

@@ -2,8 +2,8 @@ package core
 
 import "tlyakhov/gofoom/concepts"
 
-type AbstractEntity interface {
+type AbstractMob interface {
 	concepts.ISerializable
 	GetSector() AbstractSector
-	Physical() *PhysicalEntity
+	Physical() *PhysicalMob
 }

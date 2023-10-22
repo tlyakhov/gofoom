@@ -15,8 +15,8 @@ func NewVerticalDoorController(s *sectors.VerticalDoor) *VerticalDoorController 
 	return &VerticalDoorController{VerticalDoor: s, PhysicalSectorController: NewPhysicalSectorController(&s.PhysicalSector)}
 }
 
-func (s *VerticalDoorController) ActOnEntity(e core.AbstractEntity) {
-	s.PhysicalSectorController.ActOnEntity(e)
+func (s *VerticalDoorController) ActOnMob(e core.AbstractMob) {
+	s.PhysicalSectorController.ActOnMob(e)
 
 	ps := s.PhysicalSectorController
 
