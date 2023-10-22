@@ -62,24 +62,24 @@ func processInput() {
 		ps.Move(player.Angle + 270.0)
 	}
 	if win.Pressed(pixelgl.KeyA) {
-		player.Angle -= constants.PlayerTurnSpeed * constants.TimeStep
+		player.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
 		player.Angle = concepts.NormalizeAngle(player.Angle)
 	}
 	if win.Pressed(pixelgl.KeyD) {
-		player.Angle += constants.PlayerTurnSpeed * constants.TimeStep
+		player.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
 		player.Angle = concepts.NormalizeAngle(player.Angle)
 	}
 	if win.Pressed(pixelgl.KeySpace) {
 		if _, ok := player.Sector.(*sectors.Underwater); ok {
-			player.Vel.Now[2] += constants.PlayerSwimStrength * constants.TimeStep
+			player.Force[2] += constants.PlayerSwimStrength
 		} else if player.OnGround {
-			player.Vel.Now[2] += constants.PlayerJumpForce * constants.TimeStep
+			player.Force[2] += constants.PlayerJumpForce
 			player.OnGround = false
 		}
 	}
 	if win.Pressed(pixelgl.KeyC) {
 		if _, ok := player.Sector.(*sectors.Underwater); ok {
-			player.Vel.Now[2] -= constants.PlayerSwimStrength * constants.TimeStep
+			player.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
 		}
@@ -104,7 +104,9 @@ func renderGame() {
 	canvas.Draw(win, mat)
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", sim.FPS))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", player.Health))
-	mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
+	if player.Sector != nil {
+		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().ID))
+	}
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {
 		msg := renderer.DebugNotices.Pop().(string)
