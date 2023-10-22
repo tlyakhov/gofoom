@@ -5,8 +5,8 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/entities"
 	"tlyakhov/gofoom/materials"
+	"tlyakhov/gofoom/mobs"
 )
 
 type Ray struct {
@@ -14,7 +14,7 @@ type Ray struct {
 }
 
 type PickedElement struct {
-	Type string // ceil, floor, mid, hi, lo, entity
+	Type string // ceil, floor, mid, hi, lo, mob
 	concepts.ISerializable
 }
 
@@ -67,7 +67,7 @@ func (s *Slice) CalcScreen() {
 	s.ClippedStart = concepts.IntClamp(s.ScreenStart, s.YStart, s.YEnd)
 	s.ClippedEnd = concepts.IntClamp(s.ScreenEnd, s.YStart, s.YEnd)
 	// Frame Tint precalculation
-	tint := s.Map.Player.(*entities.Player).FrameTint
+	tint := s.Map.Player.(*mobs.Player).FrameTint
 	s.FrameTint[0] = uint32(tint.R) * uint32(tint.A)
 	s.FrameTint[1] = uint32(tint.G) * uint32(tint.A)
 	s.FrameTint[2] = uint32(tint.B) * uint32(tint.A)

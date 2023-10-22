@@ -1,5 +1,5 @@
 {
-  "EntitiesPaused": false,
+  "MobsPaused": false,
   "ID": "be3h6pnvn27in35ekqj0",
   "Materials": [
     {
@@ -30,7 +30,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "FloorSlope": 0.15000000000000002,
@@ -78,7 +78,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -106,7 +106,7 @@
             "Y": -110,
             "Z": 40
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -160,7 +160,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "lower",
@@ -207,7 +207,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "Starting",

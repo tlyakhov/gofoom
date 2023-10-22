@@ -1,5 +1,5 @@
 {
-  "EntitiesPaused": false,
+  "MobsPaused": false,
   "ID": "be3h6pnvn27in35ekqj0",
   "Materials": [
     {
@@ -31,7 +31,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "ckmr71tmdsri8tolfq30",
@@ -78,7 +78,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -106,7 +106,7 @@
             "Y": -80,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -176,7 +176,7 @@
       "BottomZ": 2,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -204,7 +204,7 @@
             "Y": 370,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -257,7 +257,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "ckmr7dtmdsri8tolfq8g",
@@ -312,7 +312,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "ckmr7f5mdsri8tolfqc0",
@@ -375,7 +375,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "ckmr6tlmdsri8tolfoq0",
@@ -421,7 +421,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -449,7 +449,7 @@
             "Y": -20,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -504,7 +504,7 @@
       "BottomZ": -22,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -532,7 +532,7 @@
             "Y": 210,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -594,7 +594,7 @@
       "BottomZ": -22,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "FloorSlope": 0.2,
@@ -642,7 +642,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "ckmr6vtmdsri8tolfpsg",
@@ -688,7 +688,7 @@
       "BottomZ": 22,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "ckmr7ilmdsri8tolfqk0",
@@ -744,7 +744,7 @@
       "BottomZ": 22,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -772,7 +772,7 @@
             "Y": 150,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,

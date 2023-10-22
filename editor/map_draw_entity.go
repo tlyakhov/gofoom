@@ -8,12 +8,12 @@ import (
 
 	"tlyakhov/gofoom/behaviors"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/mobs"
 
 	"github.com/gotk3/gotk3/cairo"
 )
 
-func DrawEntityAngle(cr *cairo.Context, e *core.PhysicalEntity) {
+func DrawMobAngle(cr *cairo.Context, e *core.PhysicalMob) {
 	astart := (e.Angle - editor.Renderer.FOV/2) * math.Pi / 180.0
 	aend := (e.Angle + editor.Renderer.FOV/2) * math.Pi / 180.0
 	cr.SetLineWidth(2)
@@ -27,11 +27,11 @@ func DrawEntityAngle(cr *cairo.Context, e *core.PhysicalEntity) {
 	cr.Stroke()
 }
 
-func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
+func DrawMob(cr *cairo.Context, e core.AbstractMob) {
 	phys := e.Physical()
 
 	cr.SetSourceRGB(0.6, 0.6, 0.6)
-	if _, ok := e.(*entities.Player); ok {
+	if _, ok := e.(*mobs.Player); ok {
 		// Let's get fancy:
 		cr.SetSourceRGB(0.6, 0.6, 0.6)
 		cr.SetLineWidth(1)
@@ -40,8 +40,8 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 		cr.ClosePath()
 		cr.Stroke()
 		cr.SetSourceRGB(0.33, 0.33, 0.33)
-		DrawEntityAngle(cr, phys)
-	} else if _, ok := e.(*entities.Light); ok {
+		DrawMobAngle(cr, phys)
+	} else if _, ok := e.(*mobs.Light); ok {
 		for _, b := range e.Physical().Behaviors {
 			if lb, ok := b.(*behaviors.Light); ok {
 				cr.SetSourceRGB(lb.Diffuse[0], lb.Diffuse[1], lb.Diffuse[2])
@@ -63,7 +63,7 @@ func DrawEntity(cr *cairo.Context, e core.AbstractEntity) {
 	cr.ClosePath()
 	cr.Stroke()
 
-	if editor.EntityTypesVisible {
+	if editor.MobTypesVisible {
 		text := reflect.TypeOf(e).String()
 		extents := cr.TextExtents(text)
 		cr.Save()

@@ -5,7 +5,7 @@ import (
 
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/mobs"
 	"tlyakhov/gofoom/sectors"
 )
 
@@ -18,7 +18,7 @@ func NewUnderwaterController(s *sectors.Underwater) *UnderwaterController {
 	return &UnderwaterController{Underwater: s, PhysicalSectorController: NewPhysicalSectorController(&s.PhysicalSector)}
 }
 
-func (s *UnderwaterController) ActOnEntity(e core.AbstractEntity) {
+func (s *UnderwaterController) ActOnMob(e core.AbstractMob) {
 	if e.GetSector() == nil || e.GetSector().GetBase().ID != s.PhysicalSectorController.ID {
 		return
 	}
@@ -28,16 +28,16 @@ func (s *UnderwaterController) ActOnEntity(e core.AbstractEntity) {
 	s.Collide(e)
 }
 
-func (s *UnderwaterController) OnEnter(e core.AbstractEntity) {
+func (s *UnderwaterController) OnEnter(e core.AbstractMob) {
 	s.PhysicalSectorController.OnEnter(e)
-	if p, ok := e.(*entities.Player); ok {
+	if p, ok := e.(*mobs.Player); ok {
 		p.FrameTint = color.NRGBA{75, 147, 255, 90}
 	}
 }
 
-func (s *UnderwaterController) OnExit(e core.AbstractEntity) {
+func (s *UnderwaterController) OnExit(e core.AbstractMob) {
 	s.PhysicalSectorController.OnExit(e)
-	if p, ok := e.(*entities.Player); ok {
+	if p, ok := e.(*mobs.Player); ok {
 		p.FrameTint = color.NRGBA{}
 	}
 }

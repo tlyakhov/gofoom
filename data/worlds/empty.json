@@ -1,5 +1,5 @@
 {
-  "EntitiesPaused": false,
+  "MobsPaused": false,
   "ID": "be3h6pnvn27in35ekqj0",
   "Materials": [
     {
@@ -31,7 +31,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -59,7 +59,7 @@
             "Y": -70,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,

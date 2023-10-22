@@ -17,7 +17,7 @@ func NewToxicSectorController(s *sectors.ToxicSector) *ToxicSectorController {
 	return &ToxicSectorController{ToxicSector: s, PhysicalSectorController: NewPhysicalSectorController(&s.PhysicalSector)}
 }
 
-func (s *ToxicSectorController) Collide(e core.AbstractEntity) {
+func (s *ToxicSectorController) Collide(e core.AbstractMob) {
 	if e.GetSector() == nil || e.GetSector().GetBase().ID != s.PhysicalSectorController.ID {
 		return
 	}
@@ -30,17 +30,17 @@ func (s *ToxicSectorController) Collide(e core.AbstractEntity) {
 
 	if model.FloorMaterial != nil && e.Physical().Pos.Now[2] <= model.BottomZ.Now {
 		if p, ok := model.FloorMaterial.(*materials.PainfulLitSampled); ok {
-			material.NewPainfulController(&p.Painful).ActOnEntity(e)
+			material.NewPainfulController(&p.Painful).ActOnMob(e)
 		}
 	}
 	if model.CeilMaterial != nil && e.Physical().Pos.Now[2] >= model.TopZ.Now {
 		if p, ok := model.CeilMaterial.(*materials.PainfulLitSampled); ok {
-			material.NewPainfulController(&p.Painful).ActOnEntity(e)
+			material.NewPainfulController(&p.Painful).ActOnMob(e)
 		}
 	}
 }
 
-func (s *ToxicSectorController) ActOnEntity(e core.AbstractEntity) {
+func (s *ToxicSectorController) ActOnMob(e core.AbstractMob) {
 	s.Collide(e)
-	s.PhysicalSectorController.ActOnEntity(e)
+	s.PhysicalSectorController.ActOnMob(e)
 }

@@ -260,9 +260,9 @@
             "TopZ": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "GameEntityFlub",
+                    "Type": "GameMobFlub",
                     "Pos": {
                         "X": -17,
                         "Y": 68,
@@ -270,7 +270,7 @@
                     }
                 },
                 {
-                    "Type": "GameEntityPluk",
+                    "Type": "GameMobPluk",
                     "Pos": {
                         "X": 45,
                         "Y": 68,
@@ -278,7 +278,7 @@
                     }
                 },
                 {
-                    "Type": "GameEntityPluk",
+                    "Type": "GameMobPluk",
                     "Pos": {
                         "X": 85,
                         "Y": 68,
@@ -286,7 +286,7 @@
                     }
                 },
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": 0,
                         "Y": 68,
@@ -568,9 +568,9 @@
             "TopZ": -6,
             "FloorMaterial": "Painful Slime",
             "CeilMaterial": "Default Floor",
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": -240,
                         "Y": 0,
@@ -646,9 +646,9 @@
             "TopZ": -6,
             "FloorMaterial": "Painful Slime",
             "CeilMaterial": "Default Floor",
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": -240,
                         "Y": -100,
@@ -708,9 +708,9 @@
             "TopZ": -6,
             "FloorMaterial": "Painful Slime",
             "CeilMaterial": "Default Floor",
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": -240,
                         "Y": 100,
@@ -913,9 +913,9 @@
             "FloorMaterial": "Water",
             "CeilMaterial": "Sky",
             "FloorTarget": "sector17",
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": 350,
                         "Y": 80,
@@ -1091,9 +1091,9 @@
             "tags": [
                 "underwater"
             ],
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": 340,
                         "Y": 260,
@@ -1324,9 +1324,9 @@
             "tags": [
                 "underwater"
             ],
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": 610,
                         "Y": 175,
@@ -1430,9 +1430,9 @@
             "TopZ": 70,
             "FloorMaterial": "mat1",
             "CeilMaterial": "Default",
-            "Entities": [
+            "Mobs": [
                 {
-                    "Type": "entities.Light",
+                    "Type": "mobs.Light",
                     "Pos": {
                         "X": 700,
                         "Y": 175,
@@ -1529,7 +1529,7 @@
             "TopZ": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
-            "Entities": [],
+            "Mobs": [],
             "Segments": [
                 {
                     "X": -100,
@@ -1572,7 +1572,7 @@
             "TopZ": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
-            "Entities": [],
+            "Mobs": [],
             "Segments": [
                 {
                     "X": -100,

@@ -3,13 +3,13 @@ package provide
 import "tlyakhov/gofoom/core"
 
 type Interactable interface {
-	ActOnEntity(e core.AbstractEntity)
+	ActOnMob(e core.AbstractMob)
 }
 
 type Passable interface {
-	OnEnter(e core.AbstractEntity)
-	OnExit(e core.AbstractEntity)
-	Collide(e core.AbstractEntity)
+	OnEnter(e core.AbstractMob)
+	OnExit(e core.AbstractMob)
+	Collide(e core.AbstractMob)
 	Recalculate()
 	UpdatePVS()
 }

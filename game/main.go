@@ -11,9 +11,9 @@ import (
 
 	_ "tlyakhov/gofoom/behaviors"
 	"tlyakhov/gofoom/controllers"
-	"tlyakhov/gofoom/controllers/entity"
+	"tlyakhov/gofoom/controllers/mob_controllers"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/mobs"
 	"tlyakhov/gofoom/sectors"
 
 	"tlyakhov/gofoom/concepts"
@@ -35,7 +35,7 @@ import (
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var win *pixelgl.Window
-var ps *entity.PlayerController
+var ps *mob_controllers.PlayerController
 var sim *core.Simulation
 var renderer *render.Renderer
 var gameMap *controllers.MapController
@@ -44,7 +44,7 @@ var buffer *image.RGBA
 var mainFont *render.Font
 
 func processInput() {
-	player := gameMap.Player.(*entities.Player)
+	player := gameMap.Player.(*mobs.Player)
 	win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
@@ -94,7 +94,7 @@ func integrateGame() {
 }
 
 func renderGame() {
-	player := gameMap.Player.(*entities.Player)
+	player := gameMap.Player.(*mobs.Player)
 
 	renderer.Render(buffer.Pix)
 	canvas.SetPixels(buffer.Pix)
@@ -166,7 +166,7 @@ func run() {
 		return
 	}
 	gameMap.Attach(sim)
-	ps = entity.NewPlayerController(gameMap.Player.(*entities.Player))
+	ps = mob_controllers.NewPlayerController(gameMap.Player.(*mobs.Player))
 	ps.Collide()
 	renderer.Map = gameMap.Map
 

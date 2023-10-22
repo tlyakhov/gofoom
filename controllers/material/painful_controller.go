@@ -14,7 +14,7 @@ func NewPainfulController(m *materials.Painful) *PainfulController {
 	return &PainfulController{Painful: m}
 }
 
-func (m *PainfulController) ActOnEntity(e core.AbstractEntity) {
+func (m *PainfulController) ActOnMob(e core.AbstractMob) {
 	if m.Hurt == 0 {
 		return
 	}

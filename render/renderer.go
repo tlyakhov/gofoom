@@ -8,7 +8,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/entities"
+	"tlyakhov/gofoom/mobs"
 	"tlyakhov/gofoom/render/state"
 )
 
@@ -38,8 +38,8 @@ func NewRenderer() *Renderer {
 }
 
 // Player is a convenience function to get the player this renderer links to.
-func (r *Renderer) Player() *entities.Player {
-	return r.Map.Player.(*entities.Player)
+func (r *Renderer) Player() *mobs.Player {
+	return r.Map.Player.(*mobs.Player)
 }
 
 // RenderSlice draws or picks a single pixel vertical column given a particular segment intersection.
@@ -229,7 +229,7 @@ func (r *Renderer) Render(buffer []uint8) {
 			r.RenderColumn(buffer, x, 0, false)
 		}
 	}
-	// Entities...
+	// Mobs...
 }
 
 func (r *Renderer) Pick(x, y int) []state.PickedElement {

@@ -1,5 +1,5 @@
 {
-  "EntitiesPaused": false,
+  "MobsPaused": false,
   "ID": "be25rlnvn27v99df1ckg",
   "Materials": [
     {
@@ -286,7 +286,7 @@
       "BottomZ": -20,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
       "ID": "sector5",
@@ -333,7 +333,7 @@
       "BottomZ": 10,
       "CeilMaterial": "f1",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector16",
@@ -380,7 +380,7 @@
       "BottomZ": 0,
       "CeilMaterial": "f1",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector14",
@@ -427,7 +427,7 @@
       "BottomZ": -20,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -455,7 +455,7 @@
             "Y": 80,
             "Z": 90
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -536,7 +536,7 @@
       "BottomZ": -10,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector2",
@@ -585,7 +585,7 @@
       "BottomZ": -60,
       "CeilMaterial": "Default Floor",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -613,7 +613,7 @@
             "Y": 0,
             "Z": -30
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -685,7 +685,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "be25rp7vn27v99df1mgg",
@@ -733,7 +733,7 @@
       "BottomZ": -20,
       "CeilMaterial": "f1",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Water",
       "FloorScale": 64,
       "FloorTarget": "sector21",
@@ -799,7 +799,7 @@
       "BottomZ": 0,
       "CeilMaterial": "mat6",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "sector25",
@@ -846,7 +846,7 @@
       "BottomZ": -50,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
       "ID": "sector8",
@@ -893,7 +893,7 @@
       "BottomZ": -30,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
       "ID": "sector6",
@@ -940,7 +940,7 @@
       "BottomZ": -40,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
       "ID": "sector7",
@@ -987,7 +987,7 @@
       "BottomZ": -60,
       "CeilMaterial": "Default Floor",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -1015,7 +1015,7 @@
             "Y": 100,
             "Z": -30
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -1070,7 +1070,7 @@
       "CeilMaterial": "Water",
       "CeilScale": 64,
       "CeilTarget": "sector20",
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector21",
@@ -1119,7 +1119,7 @@
       "BottomZ": -20,
       "CeilMaterial": "Default Floor",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Water",
       "FloorScale": 64,
       "FloorTarget": "sector22",
@@ -1169,7 +1169,7 @@
       "BottomZ": 15,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector26",
@@ -1216,7 +1216,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector1",
@@ -1265,7 +1265,7 @@
       "BottomZ": -3,
       "CeilMaterial": "f5",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "f1",
       "FloorScale": 64,
       "ID": "sector4",
@@ -1314,7 +1314,7 @@
       "BottomZ": -10,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -1342,7 +1342,7 @@
             "Y": 175,
             "Z": 50
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -1395,7 +1395,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "be25rp7vn27v99df1n7g",
@@ -1442,7 +1442,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -1470,7 +1470,7 @@
             "Y": 68,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -1542,7 +1542,7 @@
       "BottomZ": 0,
       "CeilMaterial": "f6",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector13",
@@ -1597,7 +1597,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector27",
@@ -1643,7 +1643,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "be25rpfvn27v99df1ofg",
@@ -1691,7 +1691,7 @@
       "BottomZ": 0,
       "CeilMaterial": "f6",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector12",
@@ -1746,7 +1746,7 @@
       "BottomZ": -230,
       "CeilMaterial": "Default Floor",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -1774,7 +1774,7 @@
             "Y": 260,
             "Z": -125
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -1845,7 +1845,7 @@
       "BottomZ": -50,
       "CeilMaterial": "Default Floor",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector19",
@@ -1893,7 +1893,7 @@
       "CeilMaterial": "Water",
       "CeilScale": 64,
       "CeilTarget": "sector23",
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -1921,7 +1921,7 @@
             "Y": 175,
             "Z": -50
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -1977,7 +1977,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 292.73134280000005,
@@ -1993,7 +1993,7 @@
             "Y": -70,
             "Z": 0
           },
-          "Type": "entities.AliveEntity",
+          "Type": "mobs.AliveMob",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -2066,7 +2066,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Sky",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "be25rpfvn27v99df1or0",
@@ -2113,7 +2113,7 @@
       "BottomZ": -60,
       "CeilMaterial": "Default Floor",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -2128,7 +2128,7 @@
             "Y": -100,
             "Z": -30
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -2183,7 +2183,7 @@
       "CeilMaterial": "Water",
       "CeilScale": 64,
       "CeilTarget": "sector15",
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default Floor",
       "FloorScale": 64,
       "ID": "sector17",

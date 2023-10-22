@@ -1,5 +1,5 @@
 {
-  "EntitiesPaused": false,
+  "MobsPaused": false,
   "ID": "be3h6pnvn27in35ekqj0",
   "Materials": [
     {
@@ -30,7 +30,7 @@
       "BottomZ": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [
+      "Mobs": [
         {
           "Active": true,
           "Angle": 0,
@@ -58,7 +58,7 @@
             "Y": 20,
             "Z": 32
           },
-          "Type": "entities.Light",
+          "Type": "mobs.Light",
           "Vel": {
             "X": 0,
             "Y": 0,
@@ -111,7 +111,7 @@
       "BottomZ": -60,
       "CeilMaterial": "Default",
       "CeilScale": 64,
-      "Entities": [],
+      "Mobs": [],
       "FloorMaterial": "Default",
       "FloorScale": 64,
       "ID": "tallBoy",

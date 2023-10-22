@@ -54,7 +54,7 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 }
 
 // lightVisible determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity) bool {
+func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalMob) bool {
 	// Always check the starting sector
 	if le.lightVisibleFromSector(p, e, le.PhysicalSector) {
 		return true
@@ -82,7 +82,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalEntity
 }
 
 // lightVisibleEx determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.PhysicalEntity, sector *core.PhysicalSector) bool {
+func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.PhysicalMob, sector *core.PhysicalSector) bool {
 	debugSectorID := "Starting" // "be4bqmfvn27mek306btg"
 	debugWallCheck := le.Normal[2] == 0
 	if constants.DebugLighting && debugWallCheck && sector.ID == debugSectorID {
@@ -207,17 +207,17 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 func (le *LightElement) Calculate(world *concepts.Vector3) concepts.Vector3 {
 	diffuseSum := concepts.Vector3{}
 
-	for _, lightEntity := range le.PhysicalSector.PVL {
-		if !lightEntity.Physical().Active {
+	for _, lightMob := range le.PhysicalSector.PVL {
+		if !lightMob.Physical().Active {
 			continue
 		}
 
-		for _, b := range lightEntity.Physical().Behaviors {
+		for _, b := range lightMob.Physical().Behaviors {
 			lb, ok := b.(*behaviors.Light)
 			if !ok {
 				continue
 			}
-			delta := &lightEntity.Physical().Pos.Render
+			delta := &lightMob.Physical().Pos.Render
 			delta = &concepts.Vector3{delta[0], delta[1], delta[2]}
 			delta.SubSelf(world)
 			dist := delta.Length()
@@ -228,7 +228,7 @@ func (le *LightElement) Calculate(world *concepts.Vector3) concepts.Vector3 {
 				// Calculate light strength.
 				if lb.Attenuation > 0.0 {
 					//log.Printf("%v\n", dist)
-					attenuation = lb.Strength / math.Pow(dist/lightEntity.Physical().BoundingRadius+1.0, lb.Attenuation)
+					attenuation = lb.Strength / math.Pow(dist/lightMob.Physical().BoundingRadius+1.0, lb.Attenuation)
 					//attenuation = 100.0 / dist
 				}
 				// If it's too far away/dark, ignore it.
@@ -236,7 +236,7 @@ func (le *LightElement) Calculate(world *concepts.Vector3) concepts.Vector3 {
 					//log.Printf("Too far: %v\n", world.StringHuman())
 					continue
 				}
-				if !le.lightVisible(world, lightEntity.Physical()) {
+				if !le.lightVisible(world, lightMob.Physical()) {
 					//log.Printf("Shadowed: %v\n", world.StringHuman())
 					continue
 				}
