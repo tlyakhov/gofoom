@@ -8,18 +8,18 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/components/core"
 
 	"github.com/gotk3/gotk3/gtk"
 )
 
 type pgState struct {
 	Fields           map[string]*state.PropertyGridField
-	Visited          map[interface{}]bool
+	Visited          map[any]bool
 	Depth            int
 	ParentName       string
 	ParentCollection *reflect.Value
-	Parent           interface{}
+	Parent           any
 }
 
 type Grid struct {
@@ -28,7 +28,7 @@ type Grid struct {
 }
 
 func (g *Grid) childFields(parentName string, childValue reflect.Value, state pgState, updateParent bool) {
-	var child interface{}
+	var child any
 	if childValue.Type().Kind() == reflect.Struct {
 		child = childValue.Addr().Interface()
 	} else if childValue.Type().Kind() == reflect.Ptr || childValue.Type().Kind() == reflect.Interface {
@@ -45,7 +45,7 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state pg
 	}
 }
 
-func (g *Grid) gatherFields(obj interface{}, pgs pgState) {
+func (g *Grid) gatherFields(obj any, pgs pgState) {
 	v := reflect.ValueOf(obj)
 	t := v.Type().Elem()
 	if v.IsNil() || t.String() == "main.MapPoint" {
@@ -115,12 +115,12 @@ func (g *Grid) gatherFields(obj interface{}, pgs pgState) {
 	}
 }
 
-func (g *Grid) Refresh(selection []concepts.ISerializable) {
-	g.Container.GetChildren().Foreach(func(child interface{}) {
+func (g *Grid) Refresh(selection []any) {
+	g.Container.GetChildren().Foreach(func(child any) {
 		g.Container.Remove(child.(gtk.IWidget))
 	})
 
-	state := pgState{Visited: make(map[interface{}]bool), Fields: make(map[string]*state.PropertyGridField)}
+	state := pgState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
 	for _, obj := range selection {
 		state.Parent = obj
 		g.gatherFields(obj, state)
@@ -182,8 +182,8 @@ func (g *Grid) Refresh(selection []concepts.ISerializable) {
 			g.fieldEnum(index, field, core.MaterialScaleValues())
 		case *core.CollisionResponse:
 			g.fieldEnum(index, field, core.CollisionResponseValues())
-		case *concepts.ISerializable:
-			g.fieldSerializable(index, field)
+		case *concepts.EntityRef:
+			g.fieldEntityRef(index, field)
 		case *map[string]core.Sampleable:
 			g.fieldMaterials(index, field)
 		}

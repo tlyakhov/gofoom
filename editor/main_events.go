@@ -19,7 +19,7 @@ func MainSave(obj *glib.Object) {
 		MainSaveAs(obj)
 		return
 	}
-	editor.World.Save(editor.OpenFile)
+	editor.DB.Save(editor.OpenFile)
 	editor.Modified = false
 	editor.UpdateTitle()
 }
@@ -36,7 +36,7 @@ func MainSaveAs(obj *glib.Object) {
 
 	res := gtk.ResponseType(native.Run())
 	if res == gtk.RESPONSE_ACCEPT {
-		editor.World.Save(native.GetFilename())
+		editor.DB.Save(native.GetFilename())
 		editor.OpenFile = native.GetFilename()
 		editor.Modified = false
 		editor.UpdateTitle()

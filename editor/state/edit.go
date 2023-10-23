@@ -1,8 +1,8 @@
 package state
 
 import (
+	"reflect"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/controllers"
 )
 
 type EditorTool int
@@ -18,7 +18,7 @@ const (
 
 type Edit struct {
 	MapView
-	World *controllers.MapController
+	DB *concepts.EntityComponentDB
 
 	// Map view positions in world/screen space.
 	Mouse          concepts.Vector2 // Screen
@@ -27,8 +27,8 @@ type Edit struct {
 	MouseDownWorld concepts.Vector2
 	MousePressed   bool
 
-	SelectedObjects []concepts.ISerializable
-	HoveringObjects []concepts.ISerializable
+	SelectedObjects []any
+	HoveringObjects []any
 
 	Tool          EditorTool
 	OpenFile      string
@@ -53,8 +53,18 @@ type IEditor interface {
 	SwitchTool(tool EditorTool)
 	Undo()
 	Redo()
-	SelectObjects(objects []concepts.ISerializable)
+	SelectObjects(objects []any)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)
+}
+
+func IndexOf(s []any, obj any) int {
+	//v := reflect.ValueOf(obj)
+	for i, e := range s {
+		if obj == e && reflect.TypeOf(obj) == reflect.TypeOf(e) {
+			return i
+		}
+	}
+	return -1
 }

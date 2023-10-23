@@ -1,0 +1,47 @@
+package materials
+
+import (
+	"tlyakhov/gofoom/concepts"
+)
+
+type Lit struct {
+	concepts.Named `editable:"^"`
+
+	Ambient concepts.Vector3 `editable:"Ambient Color" edit_type:"color"`
+	Diffuse concepts.Vector3 `editable:"Diffuse Color" edit_type:"color"`
+}
+
+var LitComponentIndex int
+
+func init() {
+	LitComponentIndex = concepts.DbTypes().Register(Lit{})
+}
+
+func LitFromDb(entity *concepts.EntityRef) *Lit {
+	return entity.Component(LitComponentIndex).(*Lit)
+}
+
+func (m *Lit) Construct(data map[string]any) {
+	m.Named.Construct(data)
+
+	m.Ambient = concepts.Vector3{0.1, 0.1, 0.1}
+	m.Diffuse = concepts.Vector3{1, 1, 1}
+
+	if data == nil {
+		return
+	}
+
+	if v, ok := data["Ambient"]; ok {
+		m.Ambient.Deserialize(v.(map[string]any))
+	}
+	if v, ok := data["Diffuse"]; ok {
+		m.Diffuse.Deserialize(v.(map[string]any))
+	}
+}
+
+func (m *Lit) Serialize() map[string]any {
+	result := m.Named.Serialize()
+	result["Ambient"] = m.Ambient.Serialize()
+	result["Diffuse"] = m.Diffuse.Serialize()
+	return result
+}

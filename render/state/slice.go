@@ -2,11 +2,10 @@ package state
 
 import (
 	"math"
+	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/materials"
-	"tlyakhov/gofoom/mobs"
 )
 
 type Ray struct {
@@ -15,15 +14,14 @@ type Ray struct {
 
 type PickedElement struct {
 	Type string // ceil, floor, mid, hi, lo, mob
-	concepts.ISerializable
+	concepts.Attachable
 }
 
 type Slice struct {
 	*Config
 	RenderTarget       []uint8
 	X, Y, YStart, YEnd int
-	Map                *core.Map
-	PhysicalSector     *core.PhysicalSector
+	Sector             *core.Sector
 	Segment            *core.Segment
 	Ray                *Ray
 	Angle              float64
@@ -58,7 +56,7 @@ func (s *Slice) ProjectZ(z float64) float64 {
 
 func (s *Slice) CalcScreen() {
 	// Screen slice precalculation
-	s.FloorZ, s.CeilZ = s.PhysicalSector.SlopedZRender(s.Intersection.To2D())
+	s.FloorZ, s.CeilZ = s.Sector.SlopedZRender(s.Intersection.To2D())
 	s.ProjHeightTop = s.ProjectZ(s.CeilZ - s.CameraZ)
 	s.ProjHeightBottom = s.ProjectZ(s.FloorZ - s.CameraZ)
 
@@ -67,7 +65,7 @@ func (s *Slice) CalcScreen() {
 	s.ClippedStart = concepts.IntClamp(s.ScreenStart, s.YStart, s.YEnd)
 	s.ClippedEnd = concepts.IntClamp(s.ScreenEnd, s.YStart, s.YEnd)
 	// Frame Tint precalculation
-	tint := s.Map.Player.(*mobs.Player).FrameTint
+	tint := s.Player().FrameTint
 	s.FrameTint[0] = uint32(tint.R) * uint32(tint.A)
 	s.FrameTint[1] = uint32(tint.G) * uint32(tint.A)
 	s.FrameTint[2] = uint32(tint.B) * uint32(tint.A)
@@ -87,15 +85,25 @@ func (s *Slice) Write(screenIndex uint32, c uint32) {
 	s.RenderTarget[screenIndex*4+3] = uint8(c & 0xFF)
 }
 
-func (s *Slice) SampleMaterial(m core.Sampleable, u, v float64, light *concepts.Vector3, scale float64) uint32 {
-	if sampled, ok := m.(*materials.Sampled); ok {
-		if sampled.IsLiquid {
+func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *concepts.Vector3, scale float64) uint32 {
+	// Should refactor this scale thing, it's weird
+	scaleDivisor := 1.0
+
+	if tiled := materials.TiledFromDb(m); tiled != nil {
+		if tiled.IsLiquid {
 			u += math.Cos(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
 			v += math.Sin(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
 		}
+
+		u -= math.Floor(u)
+		v -= math.Floor(v)
+		u = math.Abs(u)
+		v = math.Abs(v)
+
+		scaleDivisor *= tiled.Scale
 	}
 
-	if sky, ok := m.(*materials.Sky); ok {
+	if sky := materials.SkyFromDb(m); sky != nil {
 		v = float64(s.Y) / (float64(s.ScreenHeight) - 1)
 
 		if sky.StaticBackground {
@@ -109,9 +117,27 @@ func (s *Slice) SampleMaterial(m core.Sampleable, u, v float64, light *concepts.
 		}
 	}
 
-	return m.Sample(u, v, light, scale)
+	result := concepts.Vector3{0.5, 0.5, 0.5}
 
+	if solid := materials.SolidFromDb(m); solid != nil {
+		result[0] = float64(solid.Diffuse.R) / 255.0
+		result[1] = float64(solid.Diffuse.G) / 255.0
+		result[2] = float64(solid.Diffuse.B) / 255.0
+	}
+
+	if image := materials.ImageFromDb(m); image != nil {
+		result = concepts.Int32ToVector3(image.Sample(u/scaleDivisor, v/scaleDivisor, scale/scaleDivisor))
+	}
+
+	if lit := materials.LitFromDb(m); lit != nil {
+		// result = Texture * Diffuse * (Ambient + Lightmap)
+		amb := *light
+		amb.AddSelf(&lit.Ambient)
+		result.Mul3Self(&lit.Diffuse).Mul3Self(&amb).ClampSelf(0.0, 255.0)
+	}
+	return result.ToInt32Color()
 }
+
 func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *concepts.Vector3 {
 	/*// testing...
 	result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
@@ -134,18 +160,18 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *conc
 
 	if !wall {
 		if s.Normal[2] < 0 {
-			s.Lightmap = s.PhysicalSector.CeilLightmap
-			s.LightmapAge = s.PhysicalSector.CeilLightmapAge
+			s.Lightmap = s.Sector.CeilLightmap
+			s.LightmapAge = s.Sector.CeilLightmapAge
 		} else {
-			s.Lightmap = s.PhysicalSector.FloorLightmap
-			s.LightmapAge = s.PhysicalSector.FloorLightmapAge
+			s.Lightmap = s.Sector.FloorLightmap
+			s.LightmapAge = s.Sector.FloorLightmapAge
 		}
-		le00.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
+		le00.MapIndex = s.Sector.LightmapAddress(world.To2D())
 		le10.MapIndex = le00.MapIndex + 1
-		le11.MapIndex = le10.MapIndex + s.PhysicalSector.LightmapWidth
+		le11.MapIndex = le10.MapIndex + s.Sector.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
 		q := &concepts.Vector3{world[0], world[1], world[2]}
-		s.PhysicalSector.ToLightmapWorld(q, s.Normal[2] > 0)
+		s.Sector.ToLightmapWorld(q, s.Normal[2] > 0)
 		wu = 1.0 - (world[0]-q[0])/constants.LightGrid
 		wv = 1.0 - (world[1]-q[1])/constants.LightGrid
 	} else {
@@ -178,13 +204,13 @@ func (s *Slice) LightUnfiltered(result, world *concepts.Vector3, u, v float64) *
 
 	if !wall {
 		if s.Normal[2] < 0 {
-			s.Lightmap = s.PhysicalSector.CeilLightmap
-			s.LightmapAge = s.PhysicalSector.CeilLightmapAge
+			s.Lightmap = s.Sector.CeilLightmap
+			s.LightmapAge = s.Sector.CeilLightmapAge
 		} else {
-			s.Lightmap = s.PhysicalSector.FloorLightmap
-			s.LightmapAge = s.PhysicalSector.FloorLightmapAge
+			s.Lightmap = s.Sector.FloorLightmap
+			s.LightmapAge = s.Sector.FloorLightmapAge
 		}
-		le.MapIndex = s.PhysicalSector.LightmapAddress(world.To2D())
+		le.MapIndex = s.Sector.LightmapAddress(world.To2D())
 	} else {
 		s.Lightmap = s.Segment.Lightmap
 		s.LightmapAge = s.Segment.LightmapAge

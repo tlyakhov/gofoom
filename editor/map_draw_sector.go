@@ -3,8 +3,8 @@ package main
 import (
 	"reflect"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/cairo"
@@ -18,40 +18,38 @@ func DrawHandle(cr *cairo.Context, v *concepts.Vector2) {
 	cr.Stroke()
 }
 
-func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
-	phys := sector.Physical()
-
-	if len(phys.Segments) == 0 {
+func DrawSector(cr *cairo.Context, sector *core.Sector) {
+	if len(sector.Segments) == 0 {
 		return
 	}
 
 	cr.Save()
 
-	sectorHovering := concepts.IndexOf(editor.HoveringObjects, sector) != -1
-	sectorSelected := concepts.IndexOf(editor.SelectedObjects, sector) != -1
+	sectorHovering := state.IndexOf(editor.HoveringObjects, sector) != -1
+	sectorSelected := state.IndexOf(editor.SelectedObjects, sector) != -1
 
 	if editor.MobsVisible {
-		for _, e := range phys.Mobs {
-			DrawMob(cr, e)
+		for _, mober := range sector.Mobs {
+			DrawMob(cr, &mober)
 		}
 	}
 
-	for _, segment := range phys.Segments {
+	for _, segment := range sector.Segments {
 		if segment.P == segment.Next.P {
 			continue
 		}
 
-		segmentHovering := concepts.IndexOf(editor.HoveringObjects, segment) != -1
-		segmentSelected := concepts.IndexOf(editor.SelectedObjects, segment) != -1
+		segmentHovering := state.IndexOf(editor.HoveringObjects, segment) != -1
+		segmentSelected := state.IndexOf(editor.SelectedObjects, segment) != -1
 
-		if segment.AdjacentSector == nil {
+		if segment.AdjacentSector.Nil() {
 			cr.SetSourceRGB(1, 1, 1)
 		} else {
 			cr.SetSourceRGB(1, 1, 0)
 		}
 
 		if sectorHovering || sectorSelected {
-			if segment.AdjacentSector == nil {
+			if segment.AdjacentSector.Nil() {
 				cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 			} else {
 				cr.SetSourceRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
@@ -64,11 +62,11 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 
 		// Highlight PVS sectors...
 		for _, obj := range editor.SelectedObjects {
-			s2, ok := obj.(core.AbstractSector)
+			s2, ok := obj.(*core.Sector)
 			if !ok || s2 == sector {
 				continue
 			}
-			if s2.Physical().PVSMob[sector.GetBase().Name] != nil {
+			if s2.PVSMob[sector.Entity] != nil {
 				cr.SetSourceRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
 			}
 		}
@@ -89,8 +87,8 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 		cr.ClosePath()
 		cr.Stroke()
 
-		mapPointHovering := concepts.IndexOf(editor.HoveringObjects, &state.MapPoint{Segment: segment}) != -1
-		mapPointSelected := concepts.IndexOf(editor.SelectedObjects, &state.MapPoint{Segment: segment}) != -1
+		mapPointHovering := state.IndexOf(editor.HoveringObjects, segment) != -1
+		mapPointSelected := state.IndexOf(editor.SelectedObjects, segment) != -1
 
 		if mapPointSelected {
 			cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
@@ -109,7 +107,7 @@ func DrawSector(cr *cairo.Context, sector core.AbstractSector) {
 		extents := cr.TextExtents(text)
 		cr.Save()
 		cr.SetSourceRGB(0.3, 0.3, 0.3)
-		cr.Translate(phys.Center[0]-extents.Width/2, phys.Center[1]-extents.Height/2+extents.YBearing)
+		cr.Translate(sector.Center[0]-extents.Width/2, sector.Center[1]-extents.Height/2+extents.YBearing)
 		cr.ShowText(text)
 		cr.Restore()
 	}

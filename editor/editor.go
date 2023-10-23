@@ -16,12 +16,9 @@ import (
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 
-	"tlyakhov/gofoom/controllers/mob_controllers"
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/mobs"
-	"tlyakhov/gofoom/registry"
 	"tlyakhov/gofoom/render"
 
 	"tlyakhov/gofoom/concepts"
@@ -70,12 +67,15 @@ func NewEditor() *Editor {
 				GridB: concepts.Vector2{1, 0},
 			},
 			Modified: false,
+			DB:       concepts.NewEntityComponentDB(),
 		},
 		MapViewGrid:        MapViewGrid{Visible: true},
 		MobsVisible:        true,
 		SectorTypesVisible: false,
 		MobTypesVisible:    true,
 	}
+	e.DB.Simulation.Integrate = e.Integrate
+	e.DB.Simulation.Render = e.Window.QueueDraw
 	e.Grid.IEditor = e
 	e.MapViewGrid.Current = &e.Edit.MapView
 	return e
@@ -125,47 +125,47 @@ func (e *Editor) UpdateStatus() {
 		if len(list) > 0 {
 			list += ", "
 		}
-		list += obj.GetBase().Name
+		list += obj.Entity
 	}
 	text = list + " ( " + text + " )"
 	e.StatusBar.SetText(text)
 }
 
 func (e *Editor) Integrate() {
-	player := editor.World.Player.(*mobs.Player)
-	ps := mob_controllers.NewPlayerController(player)
+	player := e.Renderer.Player()
+	playerMob := core.MobFromDb(player.EntityRef())
 
 	if gameKeyMap[gdk.KEY_w] {
-		ps.Move(ps.Angle)
+		controllers.MovePlayer(playerMob, playerMob.Angle)
 	}
 	if gameKeyMap[gdk.KEY_s] {
-		ps.Move(ps.Angle + 180.0)
+		controllers.MovePlayer(playerMob, playerMob.Angle+180.0)
 	}
 	if gameKeyMap[gdk.KEY_e] {
-		ps.Move(ps.Angle + 90.0)
+		controllers.MovePlayer(playerMob, playerMob.Angle+90.0)
 	}
 	if gameKeyMap[gdk.KEY_q] {
-		ps.Move(ps.Angle + 270.0)
+		controllers.MovePlayer(playerMob, playerMob.Angle+270.0)
 	}
 	if gameKeyMap[gdk.KEY_a] {
-		ps.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
-		ps.Angle = concepts.NormalizeAngle(ps.Angle)
+		playerMob.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
+		playerMob.Angle = concepts.NormalizeAngle(playerMob.Angle)
 	}
 	if gameKeyMap[gdk.KEY_d] {
-		ps.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
-		ps.Angle = concepts.NormalizeAngle(ps.Angle)
+		playerMob.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
+		playerMob.Angle = concepts.NormalizeAngle(playerMob.Angle)
 	}
 	if gameKeyMap[gdk.KEY_space] {
-		if _, ok := ps.Sector.(*sectors.Underwater); ok {
-			ps.Force[2] += constants.PlayerSwimStrength
-		} else if ps.OnGround {
-			ps.Force[2] += constants.PlayerJumpForce
-			ps.OnGround = false
+		if playerMob.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			playerMob.Force[2] += constants.PlayerSwimStrength
+		} else if playerMob.OnGround {
+			playerMob.Force[2] += constants.PlayerJumpForce
+			playerMob.OnGround = false
 		}
 	}
 	if gameKeyMap[gdk.KEY_c] {
-		if _, ok := ps.Sector.(*sectors.Underwater); ok {
-			ps.Force[2] -= constants.PlayerSwimStrength
+		if playerMob.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			playerMob.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
 		}
@@ -173,27 +173,22 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	editor.World.Frame()
-	editor.GatherHoveringObjects()
+	e.DB.NewControllerSet().ActGlobal("Always")
+	e.GatherHoveringObjects()
 }
 
 func (e *Editor) Load(filename string) {
 	e.OpenFile = filename
 	e.Modified = false
 	e.UpdateTitle()
-	sim := core.NewSimulation()
-	sim.Integrate = e.Integrate
-	sim.Render = e.Window.QueueDraw
-	world, err := controllers.LoadMap(e.OpenFile)
+	e.DB.Clear()
+	err := e.DB.Load(e.OpenFile)
 	if err != nil {
 		e.Alert(fmt.Sprintf("Error loading world: %v", err))
 		return
 	}
-	e.World = world
-	e.World.Attach(sim)
-	ps := mob_controllers.NewPlayerController(e.World.Player.(*mobs.Player))
-	ps.Collide()
-	e.SelectObjects([]concepts.ISerializable{})
+
+	e.SelectObjects([]any{})
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
 }
@@ -201,16 +196,11 @@ func (e *Editor) Load(filename string) {
 func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
-	sim := core.NewSimulation()
-	sim.Integrate = e.Integrate
-	sim.Render = e.Window.QueueDraw
-	e.World = controllers.NewMapController(new(core.Map))
-	e.World.Construct(nil)
-	e.World.Attach(sim)
-	e.World.CreateTest()
-	ps := mob_controllers.NewPlayerController(e.World.Player.(*mobs.Player))
-	ps.Collide()
-	e.SelectObjects([]concepts.ISerializable{})
+
+	e.SelectObjects([]any{})
+
+	e.DB.Clear()
+	controllers.CreateTestWorld(e.DB)
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
 
@@ -218,7 +208,7 @@ func (e *Editor) Test() {
 
 func (e *Editor) ActionFinished(canceled bool) {
 	e.UpdateTitle()
-	e.World.AutoPortal()
+	controllers.AutoPortal(e.DB)
 	if !canceled {
 		e.UndoHistory = append(e.UndoHistory, e.CurrentAction)
 		if len(e.UndoHistory) > 100 {
@@ -244,25 +234,25 @@ func (e *Editor) ActTool() {
 		e.NewAction(&actions.SplitSector{IEditor: e})
 	case state.ToolAddSector:
 		typeId := e.SectorTypes.GetActiveID()
-		t := registry.Instance().All[typeId]
-		s := reflect.New(t).Interface().(core.AbstractSector)
+		t := concepts.DB().AllTypes[typeId]
+		s := reflect.New(t).Interface().(core.Sector)
 		s.Construct(nil)
 		if simmed, ok := s.(core.Simulated); ok {
 			simmed.Attach(e.World.Sim())
 		}
-		s.Physical().FloorMaterial = e.World.DefaultMaterial()
-		s.Physical().CeilMaterial = e.World.DefaultMaterial()
+		s.FloorMaterial = e.World.DefaultMaterial()
+		s.CeilMaterial = e.World.DefaultMaterial()
 		s.SetParent(e.World.Map)
 		e.NewAction(&actions.AddSector{IEditor: e, Sector: s})
 	case state.ToolAddMob:
 		typeId := e.MobTypes.GetActiveID()
-		t := registry.Instance().All[typeId]
-		ae := reflect.New(t).Interface().(core.AbstractMob)
+		t := concepts.DB().AllTypes[typeId]
+		ae := reflect.New(t).Interface().(core.Mob)
 		ae.Construct(nil)
 		if simmed, ok := ae.(core.Simulated); ok {
 			simmed.Attach(e.World.Sim())
 		}
-		e.NewAction(&actions.AddMob{IEditor: e, Mob: ae})
+		e.NewAction(&actions.AddEntity{IEditor: e, Mob: ae})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:
@@ -295,7 +285,7 @@ func (e *Editor) Undo() {
 		return
 	}
 	a.Undo()
-	e.World.AutoPortal()
+	controllers.AutoPortal(e.DB)
 	e.Grid.Refresh(e.SelectedObjects)
 	e.RedoHistory = append(e.RedoHistory, a)
 }
@@ -315,14 +305,14 @@ func (e *Editor) Redo() {
 		return
 	}
 	a.Redo()
-	e.World.AutoPortal()
+	controllers.AutoPortal(e.DB)
 	e.Grid.Refresh(e.SelectedObjects)
 	e.UndoHistory = append(e.UndoHistory, a)
 }
 
-func (e *Editor) SelectObjects(objects []concepts.ISerializable) {
+func (e *Editor) SelectObjects(objects []any) {
 	if len(objects) == 0 {
-		objects = append(objects, e.World.Map)
+		objects = append(objects, e.World)
 	}
 
 	e.SelectedObjects = objects
@@ -354,12 +344,12 @@ func (e *Editor) GatherHoveringObjects() {
 	// Hovering
 	v1, v2 := e.SelectionBox()
 
-	e.HoveringObjects = []concepts.ISerializable{}
+	e.HoveringObjects = []any{}
 
-	for _, sector := range e.World.Sectors {
-		phys := sector.Physical()
+	for _, isector := range e.DB.All(core.SectorComponentIndex) {
+		sector := isector.(*core.Sector)
 
-		for _, segment := range phys.Segments {
+		for _, segment := range sector.Segments {
 			if e.CurrentAction == nil {
 				if e.Mouse.Sub(e.WorldToScreen(&segment.P)).Length() < state.SegmentSelectionEpsilon {
 					e.HoveringObjects = append(e.HoveringObjects, segment)
@@ -380,8 +370,8 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 
 		if e.Selecting() {
-			for _, mob := range sector.Physical().Mobs {
-				pe := mob.Physical()
+			for _, mob := range sector.Mobs {
+				pe := mob
 				p := pe.Pos.Original
 				if p[0]+pe.BoundingRadius >= v1[0] && p[0]-pe.BoundingRadius <= v2[0] &&
 					p[1]+pe.BoundingRadius >= v1[1] && p[1]-pe.BoundingRadius <= v2[1] {
@@ -399,7 +389,6 @@ func (e *Editor) GameView(w, h int) {
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h
 	e.Renderer.Initialize()
-	e.Renderer.Map = e.World.Map
 	_, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 	e.GameViewSurface = cairo.CreateImageSurface(cairo.FORMAT_ARGB32, w, h)
 	// We'll need the raw buffer to draw into, but we'll use

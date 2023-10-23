@@ -17,7 +17,7 @@ func (a *RotateSegments) OnMouseUp()                          {}
 func (a *RotateSegments) Cancel()                             {}
 func (a *RotateSegments) Frame()                              {}
 
-func (a *RotateSegments) Rotate(sector *core.PhysicalSector, backward bool) {
+func (a *RotateSegments) Rotate(sector *core.Sector, backward bool) {
 	length := len(sector.Segments)
 	if length <= 1 {
 		return
@@ -37,20 +37,20 @@ func (a *RotateSegments) Act() {
 
 func (a *RotateSegments) Undo() {
 	for _, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.AbstractSector); ok {
-			a.Rotate(sector.Physical(), true)
+		if sector, ok := obj.(core.Sector); ok {
+			a.Rotate(sector, true)
 		} else if p, ok := obj.(state.MapPoint); ok {
-			a.Rotate(p.Sector.Physical(), true)
+			a.Rotate(p.Sector, true)
 		}
 	}
 	a.State().World.Recalculate()
 }
 func (a *RotateSegments) Redo() {
 	for _, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.AbstractSector); ok {
-			a.Rotate(sector.Physical(), false)
+		if sector, ok := obj.(core.Sector); ok {
+			a.Rotate(sector, false)
 		} else if p, ok := obj.(state.MapPoint); ok {
-			a.Rotate(p.Sector.Physical(), false)
+			a.Rotate(p.Sector, false)
 		}
 	}
 	a.State().World.Recalculate()

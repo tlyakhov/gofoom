@@ -3,7 +3,6 @@ package main
 import (
 	"math"
 
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -88,9 +87,9 @@ func GameButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 		x := press.X() * float64(rw) / float64(daw)
 		y := press.Y() * float64(rh) / float64(dah)
 		picked := editor.Renderer.Pick(int(x), int(y))
-		objects := make([]concepts.ISerializable, 0)
+		objects := make([]any, 0)
 		for _, p := range picked {
-			objects = append(objects, p.ISerializable)
+			objects = append(objects, p.Attachable)
 		}
 		editor.SelectObjects(objects)
 	}

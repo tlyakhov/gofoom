@@ -10,32 +10,32 @@ import (
 
 func FloorPick(s *state.Slice) {
 	if s.Y >= s.ClippedEnd && s.Y < s.YEnd {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "floor", ISerializable: s.PhysicalSector})
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "floor", Attachable: s.Sector})
 	}
 }
 
 // Floor renders the floor portion of a slice.
 func Floor(s *state.Slice) {
-	mat := s.PhysicalSector.FloorMaterial
+	mat := s.Sector.FloorMaterial
 
 	// Because of our sloped floors, we can't use simple linear interpolation to calculate the distance
 	// or world position of the floor sample, we have to do a ray-plane intersection.
 	// Thankfully, the only expensive operation is a square root to get the distance.
-	planeRayDelta := &concepts.Vector3{s.PhysicalSector.Segments[0].P[0] - s.Ray.Start[0], s.PhysicalSector.Segments[0].P[1] - s.Ray.Start[1], s.PhysicalSector.BottomZ.Render - s.CameraZ}
+	planeRayDelta := &concepts.Vector3{s.Sector.Segments[0].P[0] - s.Ray.Start[0], s.Sector.Segments[0].P[1] - s.Ray.Start[1], s.Sector.BottomZ.Render - s.CameraZ}
 	rayDir := &concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], 0}
 	light := concepts.Vector3{}
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
 		rayDir[2] = float64(s.ScreenHeight/2 - s.Y)
-		denom := s.PhysicalSector.FloorNormal.Dot(rayDir)
+		denom := s.Sector.FloorNormal.Dot(rayDir)
 
 		if math.Abs(denom) == 0 {
 			continue
 		}
 
-		t := planeRayDelta.Dot(&s.PhysicalSector.FloorNormal) / denom
+		t := planeRayDelta.Dot(&s.Sector.FloorNormal) / denom
 		if t <= 0 {
 			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
-			dbg := fmt.Sprintf("%v floor t <= 0", s.PhysicalSector.Name)
+			dbg := fmt.Sprintf("%v floor t <= 0", s.Sector.Entity)
 			s.DebugNotices.Push(dbg)
 			continue
 		}
@@ -44,17 +44,17 @@ func Floor(s *state.Slice) {
 		world[0] += s.Ray.Start[0]
 		world[1] += s.Ray.Start[1]
 		world[2] += s.CameraZ
-		scaler := s.PhysicalSector.FloorScale / distToFloor
+		scaler := s.Sector.FloorScale / distToFloor
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToFloor >= s.ZBuffer[screenIndex] {
 			continue
 		}
 
-		tx := world[0] / s.PhysicalSector.FloorScale
-		ty := world[1] / s.PhysicalSector.FloorScale
+		tx := world[0] / s.Sector.FloorScale
+		ty := world[1] / s.Sector.FloorScale
 
-		if mat != nil {
+		if mat.Entity != 0 {
 			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToFloor), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor

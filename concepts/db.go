@@ -1,0 +1,266 @@
+package concepts
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+	"reflect"
+	"sync"
+	"sync/atomic"
+)
+
+// The architecture is like this:
+// * An entity is a globally unique uint64, e.g. primary key
+// * A component is a named (string) table with columns of fields, rows of
+// entities
+// * A system is code that queries and operates on components and entities
+type EntityComponentDB struct {
+	*Simulation
+	Components       []map[uint64]Attachable
+	EntityComponents sync.Map
+	currentEntity    uint64
+	lock             sync.RWMutex
+}
+
+func NewEntityComponentDB() *EntityComponentDB {
+	db := &EntityComponentDB{}
+	db.Clear()
+
+	return db
+}
+
+func (db *EntityComponentDB) Clear() {
+	db.Components = make([]map[uint64]Attachable, len(DbTypes().Indexes))
+	db.Simulation = NewSimulation()
+	for i := 0; i < len(DbTypes().Indexes); i++ {
+		db.Components[i] = make(map[uint64]Attachable)
+	}
+}
+
+func (db *EntityComponentDB) NewEntity() uint64 {
+	return atomic.AddUint64(&db.currentEntity, 1)
+}
+
+func (db *EntityComponentDB) NewEntityRef() *EntityRef {
+	return &EntityRef{Entity: db.NewEntity(), DB: db}
+}
+
+func (db *EntityComponentDB) EntityRef(entity uint64) *EntityRef {
+	return &EntityRef{DB: db, Entity: entity}
+}
+
+func (db *EntityComponentDB) All(index int) map[uint64]Attachable {
+	return db.Components[index]
+}
+
+func (db *EntityComponentDB) AllForType(cType string) map[uint64]Attachable {
+	if index, ok := DbTypes().Indexes[cType]; ok {
+		return db.Components[index]
+	}
+	return nil
+}
+
+func (db *EntityComponentDB) First(index int) Attachable {
+	for _, c := range db.Components[index] {
+		return c
+	}
+	return nil
+}
+
+func (db *EntityComponentDB) attach(entity uint64, component Attachable, index int) {
+	component.SetEntity(entity)
+	component.SetDB(db)
+	db.Components[index][entity] = component
+	v, _ := db.EntityComponents.LoadOrStore(entity, make(map[int]Attachable))
+	ec := v.(map[int]Attachable)
+	ec[index] = component
+}
+
+func (db *EntityComponentDB) NewComponent(entity uint64, index int) Attachable {
+	t := DbTypes().Types[index]
+	newc := reflect.New(t).Interface()
+	attached := newc.(Attachable)
+	db.attach(entity, attached, index)
+	attached.Construct(nil)
+	return attached
+}
+
+func (db *EntityComponentDB) LoadComponent(index int, data map[string]any) Attachable {
+	var entity uint64
+	if entity = data["Entity"].(uint64); entity == 0 {
+		entity = db.NewEntity()
+	}
+
+	if db.currentEntity < entity {
+		db.currentEntity = entity
+	}
+
+	t := DbTypes().Types[index]
+	newc := reflect.New(t).Interface()
+	attached := newc.(Attachable)
+	db.attach(entity, attached, index)
+	attached.Construct(data)
+	return attached
+}
+
+func (db *EntityComponentDB) NewComponentTyped(entity uint64, cType string) Attachable {
+	if index, ok := DbTypes().Indexes[cType]; ok {
+		return db.NewComponent(entity, index)
+	}
+
+	log.Printf("NewComponent: unregistered type %v for entity %v\n", cType, entity)
+	return nil
+}
+
+func (db *EntityComponentDB) Attach(componentIndex int, entity uint64, component Attachable) {
+	db.attach(entity, component, componentIndex)
+}
+
+// This seems expensive. Need to profile
+func (db *EntityComponentDB) AttachTyped(entity uint64, component Attachable) {
+	t := reflect.ValueOf(component).Type()
+
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	if index, ok := DbTypes().Indexes[t.String()]; ok {
+		db.attach(entity, component, index)
+	}
+}
+
+func (db *EntityComponentDB) Detach(index int, entity uint64) {
+	if entity == 0 || index == 0 {
+		return
+	}
+
+	delete(db.Components[index], entity)
+	if v, ok := db.EntityComponents.Load(entity); ok {
+		ec := v.(map[int]Attachable)
+		delete(ec, index)
+		if len(ec) == 0 {
+			db.EntityComponents.Delete(entity)
+		}
+	}
+}
+
+func (db *EntityComponentDB) DetachByType(component Attachable) {
+	if component == nil {
+
+		return
+	}
+	entity := component.GetEntity()
+
+	if entity == 0 {
+		return
+	}
+
+	tLocal := reflect.ValueOf(component).Type()
+
+	if tLocal.Kind() == reflect.Ptr {
+		tLocal = tLocal.Elem()
+	}
+
+	index := DbTypes().Indexes[tLocal.String()]
+	if index < 0 {
+		return
+	}
+
+	db.Detach(index, entity)
+
+	component.SetEntity(0)
+}
+
+func (db *EntityComponentDB) DetachAll(entity uint64) {
+	if entity == 0 {
+		return
+	}
+
+	for index := range db.Components {
+		delete(db.Components[index], entity)
+	}
+
+	db.EntityComponents.Delete(entity)
+}
+
+func (db *EntityComponentDB) GetEntityRefByName(name string) *EntityRef {
+	if allNamed := db.All(NamedComponentIndex); allNamed != nil {
+		for entity, c := range allNamed {
+			named := c.(*Named)
+			if named.Name == name {
+				return db.EntityRef(entity)
+			}
+		}
+	}
+	return &EntityRef{}
+}
+
+func (db *EntityComponentDB) Load(filename string) error {
+	db.lock.Lock()
+	defer db.lock.Unlock()
+
+	// TODO: Streaming loads?
+	fileContents, err := os.ReadFile(filename)
+
+	if err != nil {
+		return err
+	}
+
+	var parsed any
+	err = json.Unmarshal(fileContents, &parsed)
+	if err != nil {
+		return err
+	}
+
+	jsonEntities := parsed.([]any)
+	if jsonEntities == nil {
+		return fmt.Errorf("ECS JSON root must be an array")
+	}
+
+	for _, jsonData := range jsonEntities {
+		jsonEntity := jsonData.(map[string]any)
+		if jsonEntity == nil {
+			log.Printf("ECS JSON array element should be an object\n")
+			continue
+		}
+		for name, index := range DbTypes().Indexes {
+			jsonData := jsonEntity[name]
+			if jsonData == nil {
+				continue
+			}
+			jsonComponent := jsonData.(map[string]any)
+			db.LoadComponent(index, jsonComponent)
+		}
+	}
+
+	// After everything's loaded, trigger the controllers
+	set := db.NewControllerSet()
+	set.ActGlobal("Loaded")
+	set.ActGlobal("Recalculate")
+
+	return nil
+}
+
+func (db *EntityComponentDB) Save(filename string) {
+	db.lock.Lock()
+	defer db.lock.Unlock()
+	jsonDB := make([]any, 0)
+
+	db.EntityComponents.Range(func(ientity, icomponents any) bool {
+		components := icomponents.(map[int]Attachable)
+		jsonEntity := make(map[string]any)
+		jsonDB = append(jsonDB, jsonEntity)
+		for index, component := range components {
+			jsonEntity[DbTypes().Types[index].String()] = component.Serialize()
+		}
+		return true
+	})
+
+	bytes, err := json.MarshalIndent(jsonDB, "", "  ")
+
+	if err != nil {
+		panic(err)
+	}
+
+	os.WriteFile(filename, bytes, os.ModePerm)
+}

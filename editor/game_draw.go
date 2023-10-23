@@ -2,15 +2,18 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"time"
-	"tlyakhov/gofoom/mobs"
+	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
 
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gtk"
 )
 
 func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
+	playerMob := core.MobFromDb(editor.Renderer.Player().EntityRef())
+	playerAlive := behaviors.AliveFromDb(playerMob.EntityRef())
+	// player := mobs.PlayerFromDb(&gameMap.Player)
 	w := 640
 	h := 360
 
@@ -31,21 +34,19 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.SetSourceSurface(editor.GameViewSurface, 0, 0)
 	cr.Paint()
 
-	player := editor.World.Player.(*mobs.Player)
-
 	cr.SetSourceRGB(1, 0, 1)
 	cr.SelectFontFace("Courier", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
 	cr.SetFontSize(13)
 	cr.MoveTo(10, 10)
-	cr.ShowText(fmt.Sprintf("FPS: %.1f", editor.World.Sim().FPS))
+	cr.ShowText(fmt.Sprintf("FPS: %.1f", editor.DB.Simulation.FPS))
 	cr.MoveTo(10, 20)
-	cr.ShowText(fmt.Sprintf("Health: %.1f", player.Health))
-	if player.Sector != nil {
+	cr.ShowText(fmt.Sprintf("Health: %.1f", playerAlive.Health))
+	if !playerMob.SectorEntityRef.Nil() {
 		cr.MoveTo(10, 30)
-		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().Name))
+		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", playerMob.SectorEntityRef.All(), playerMob.SectorEntityRef.Entity))
 	}
 	cr.MoveTo(10, 40)
-	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", player.Force.StringHuman(), player.Vel.Render.StringHuman(), player.Pos.Render.StringHuman()))
+	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMob.Force.StringHuman(), playerMob.Vel.Render.StringHuman(), playerMob.Pos.Render.StringHuman()))
 
 	cr.SetSourceRGB(1, 0, 0)
 
