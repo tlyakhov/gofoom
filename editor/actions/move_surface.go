@@ -22,7 +22,7 @@ func (a *MoveSurface) OnMouseUp()                          {}
 func (a *MoveSurface) Cancel()                             {}
 func (a *MoveSurface) Frame()                              {}
 
-func (a *MoveSurface) Get(sector *core.PhysicalSector) *float64 {
+func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 	if a.Slope {
 		if a.Floor {
 			return &sector.FloorSlope
@@ -42,12 +42,12 @@ func (a *MoveSurface) Act() {
 	a.Original = make([]float64, len(a.State().SelectedObjects))
 	for i, obj := range a.State().SelectedObjects {
 		switch p := obj.(type) {
-		case core.AbstractSector:
-			a.Original[i] = *a.Get(p.Physical())
-			*a.Get(p.Physical()) += a.Delta
+		case core.Sector:
+			a.Original[i] = *a.Get(p)
+			*a.Get(p) += a.Delta
 		case *state.MapPoint:
-			a.Original[i] = *a.Get(p.Sector.Physical())
-			*a.Get(p.Sector.Physical()) += a.Delta
+			a.Original[i] = *a.Get(p.Sector)
+			*a.Get(p.Sector) += a.Delta
 		}
 
 	}
@@ -58,20 +58,20 @@ func (a *MoveSurface) Act() {
 
 func (a *MoveSurface) Undo() {
 	for i, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.AbstractSector); ok {
-			*a.Get(sector.Physical()) = a.Original[i]
+		if sector, ok := obj.(core.Sector); ok {
+			*a.Get(sector) = a.Original[i]
 		} else if p, ok := obj.(state.MapPoint); ok {
-			*a.Get(p.Sector.Physical()) = a.Original[i]
+			*a.Get(p.Sector) = a.Original[i]
 		}
 	}
 	a.State().World.Recalculate()
 }
 func (a *MoveSurface) Redo() {
 	for _, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.AbstractSector); ok {
-			*a.Get(sector.Physical()) += a.Delta
+		if sector, ok := obj.(core.Sector); ok {
+			*a.Get(sector) += a.Delta
 		} else if p, ok := obj.(state.MapPoint); ok {
-			*a.Get(p.Sector.Physical()) += a.Delta
+			*a.Get(p.Sector) += a.Delta
 		}
 	}
 	a.State().World.Recalculate()

@@ -5,22 +5,20 @@ import (
 	"log"
 	"math"
 
-	"tlyakhov/gofoom/behaviors"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/core"
 )
 
 type LightElement struct {
 	*Slice
-	MapIndex   uint32
-	allSectors []*core.PhysicalSector
+	MapIndex uint32
 }
 
 func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
 	var q = new(concepts.Vector3)
 	if !wall {
-		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
+		le.Sector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
 	} else {
 		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
 		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
@@ -43,7 +41,7 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 
 	var q = new(concepts.Vector3)
 	if !wall {
-		le.PhysicalSector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
+		le.Sector.LightmapAddressToWorld(q, le.MapIndex, le.Normal[2] > 0)
 	} else {
 		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
 		le.Segment.LightmapAddressToWorld(q, le.MapIndex)
@@ -54,14 +52,14 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 }
 
 // lightVisible determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalMob) bool {
+func (le *LightElement) lightVisible(p *concepts.Vector3, mob *core.Mob) bool {
 	// Always check the starting sector
-	if le.lightVisibleFromSector(p, e, le.PhysicalSector) {
+	if le.lightVisibleFromSector(p, mob, le.Sector) {
 		return true
 	}
 
-	for _, seg := range le.PhysicalSector.Segments {
-		if seg.AdjacentSector == nil {
+	for _, seg := range le.Sector.Segments {
+		if seg.AdjacentSector.Nil() {
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
@@ -69,11 +67,11 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalMob) b
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSector.Physical().SlopedZRender(p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.SlopedZRender(p.To2D())
 		if p[2]-ceilZ > constants.LightGrid || floorZ-p[2] > constants.LightGrid {
 			continue
 		}
-		if le.lightVisibleFromSector(p, e, seg.AdjacentSector.Physical()) {
+		if le.lightVisibleFromSector(p, mob, seg.AdjacentSegment.Sector) {
 			return true
 		}
 	}
@@ -81,18 +79,28 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, e *core.PhysicalMob) b
 	return false
 }
 
-// lightVisibleEx determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.PhysicalMob, sector *core.PhysicalSector) bool {
-	debugSectorID := "Starting" // "be4bqmfvn27mek306btg"
-	debugWallCheck := le.Normal[2] == 0
-	if constants.DebugLighting && debugWallCheck && sector.Name == debugSectorID {
-		log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), e.Pos)
+var debugSectorName string = "Starting" // "be4bqmfvn27mek306btg"
+
+// TODO: Make more general
+// lightVisibleFromSector determines whether a given light is visible from a world location.
+func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, mob *core.Mob, sector *core.Sector) bool {
+	lightPos := &mob.Pos.Render
+
+	debugLighting := false
+	if constants.DebugLighting {
+		dbgName := concepts.NamedFromDb(le.DB.EntityRef(sector.Entity)).Name
+		debugWallCheck := le.Normal[2] == 0
+		debugLighting = constants.DebugLighting && debugWallCheck && dbgName == debugSectorName
 	}
-	delta := &concepts.Vector3{e.Pos.Render[0], e.Pos.Render[1], e.Pos.Render[2]}
+
+	if debugLighting {
+		log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), lightPos)
+	}
+	delta := &concepts.Vector3{lightPos[0], lightPos[1], lightPos[2]}
 	delta.SubSelf(p)
 	maxDist2 := delta.Length2()
 	// Is the point right next to the light? Visible by definition.
-	if maxDist2 <= e.BoundingRadius*e.BoundingRadius {
+	if maxDist2 <= mob.BoundingRadius*mob.BoundingRadius {
 		return true
 	}
 
@@ -101,10 +109,10 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
 	for sector != nil {
-		if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
-			log.Printf("Sector: %v\n", sector.Name)
+		if debugLighting {
+			log.Printf("Sector: %v\n", sector.Entity)
 		}
-		var next *core.PhysicalSector
+		var next *core.Sector
 		// Since our sectors can be concave, we can't just go through the first portal we find,
 		// we have to go through the NEAREST one. Use dist2 to keep track...
 		dist2 := maxDist2
@@ -112,7 +120,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
 			if (le.Normal[2] == 0 && seg == le.Segment) || delta.To2D().Dot(&seg.Normal) > 0 {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+				if debugLighting {
 					log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				continue
@@ -120,20 +128,20 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 
 			// Find the intersection with this segment.
 			isect := new(concepts.Vector3)
-			ok := seg.Intersect3D(p, &e.Pos.Render, isect)
+			ok := seg.Intersect3D(p, lightPos, isect)
 			if !ok {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+				if debugLighting {
 					log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				continue // No intersection, skip it!
 			}
 
-			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+			if debugLighting {
 				log.Printf("Intersection for seg %v|%v = %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman(), isect.StringHuman())
 			}
 
-			if seg.AdjacentSector == nil {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+			if seg.AdjacentSector.Nil() {
+				if debugLighting {
 					log.Printf("Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				return false // This is a wall, that means the light is occluded for sure.
@@ -142,12 +150,12 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
 			floorZ, ceilZ := sector.SlopedZRender(isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSector.Physical().SlopedZRender(isect.To2D())
-			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.SlopedZRender(isect.To2D())
+			if debugLighting {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}
 			if isect[2] < floorZ2 || isect[2] > ceilZ2 || isect[2] < floorZ || isect[2] > ceilZ {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+				if debugLighting {
 					log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
 				return false // Same as wall, we're occluded.
@@ -158,12 +166,12 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 
 			// If the difference between the intersected distance and the light distance is
 			// within the bounding radius of our light, our light is right on a portal boundary and visible.
-			if math.Abs(idist2-maxDist2) < e.BoundingRadius {
+			if math.Abs(idist2-maxDist2) < mob.BoundingRadius {
 				return true
 			}
 
 			if idist2-dist2 > constants.IntersectEpsilon {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+				if debugLighting {
 					log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
 				}
 				// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
@@ -171,7 +179,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 			}
 
 			if prevDist-idist2 > constants.IntersectEpsilon {
-				if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+				if debugLighting {
 					log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
 				}
 				// If the current intersection point is BEHIND the last one, we went backwards?
@@ -180,17 +188,17 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 
 			// We're in the clear! Move to the next adjacent sector.
 			dist2 = idist2
-			next = seg.AdjacentSector.Physical()
+			next = seg.AdjacentSegment.Sector
 		}
 		prevDist = dist2
 		depth++
 		if depth > constants.MaxPortals { // Avoid infinite looping.
-			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, e.Name)
+			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, mob.Entity)
 			le.DebugNotices.Push(dbg)
 			return false
 		}
-		if next == nil && e.Sector != nil && sector != e.Sector.Physical() {
-			if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+		if next == nil && mob.SectorEntityRef.Nil() && sector.Entity != mob.SectorEntityRef.Entity {
+			if debugLighting {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}
 			return false
@@ -198,7 +206,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 		sector = next
 	}
 
-	if constants.DebugLighting && debugWallCheck && le.PhysicalSector.Name == debugSectorID {
+	if debugLighting {
 		log.Printf("Lit!\n")
 	}
 	return true
@@ -207,17 +215,16 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, e *core.Phys
 func (le *LightElement) Calculate(world *concepts.Vector3) concepts.Vector3 {
 	diffuseSum := concepts.Vector3{}
 
-	for _, lightMob := range le.PhysicalSector.PVL {
-		if !lightMob.Physical().Active {
+	for _, er := range le.Sector.PVL {
+		light := core.LightFromDb(er)
+		if light == nil || !light.Active {
 			continue
 		}
 
-		for _, b := range lightMob.Physical().Behaviors {
-			lb, ok := b.(*behaviors.Light)
-			if !ok {
-				continue
-			}
-			delta := &lightMob.Physical().Pos.Render
+		mob := core.MobFromDb(er)
+		diffuseLight := 1.0
+		if mob != nil && mob.Active {
+			delta := &mob.Pos.Render
 			delta = &concepts.Vector3{delta[0], delta[1], delta[2]}
 			delta.SubSelf(world)
 			dist := delta.Length()
@@ -226,9 +233,9 @@ func (le *LightElement) Calculate(world *concepts.Vector3) concepts.Vector3 {
 				// Normalize
 				delta.MulSelf(1.0 / dist)
 				// Calculate light strength.
-				if lb.Attenuation > 0.0 {
+				if light.Attenuation > 0.0 {
 					//log.Printf("%v\n", dist)
-					attenuation = lb.Strength / math.Pow(dist/lightMob.Physical().BoundingRadius+1.0, lb.Attenuation)
+					attenuation = light.Strength / math.Pow(dist/mob.BoundingRadius+1.0, light.Attenuation)
 					//attenuation = 100.0 / dist
 				}
 				// If it's too far away/dark, ignore it.
@@ -236,16 +243,16 @@ func (le *LightElement) Calculate(world *concepts.Vector3) concepts.Vector3 {
 					//log.Printf("Too far: %v\n", world.StringHuman())
 					continue
 				}
-				if !le.lightVisible(world, lightMob.Physical()) {
+				if !le.lightVisible(world, mob) {
 					//log.Printf("Shadowed: %v\n", world.StringHuman())
 					continue
 				}
 			}
+			diffuseLight = le.Normal.Dot(delta) * attenuation
+		}
 
-			diffuseLight := le.Normal.Dot(delta) * attenuation
-			if diffuseLight > 0 {
-				diffuseSum.AddSelf(lb.Diffuse.Mul(diffuseLight))
-			}
+		if diffuseLight > 0 {
+			diffuseSum.AddSelf(light.Diffuse.Mul(diffuseLight))
 		}
 	}
 	return diffuseSum

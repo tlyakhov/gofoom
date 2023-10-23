@@ -1,7 +1,7 @@
 package actions
 
 import (
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -9,12 +9,12 @@ import (
 
 type AddMaterial struct {
 	state.IEditor
-	core.Sampleable
+	materials.Texturable
 }
 
 func (a *AddMaterial) Act() {
 	state := a.IEditor.State()
-	name := a.GetBase().Name
+	name := a.GetEntity().Name
 	state.World.Materials[name] = a.Sampleable
 	a.ActionFinished(false)
 }
@@ -23,7 +23,7 @@ func (a *AddMaterial) Cancel() {
 }
 func (a *AddMaterial) Undo() {
 	state := a.IEditor.State()
-	name := a.GetBase().Name
+	name := a.GetEntity().Name
 	delete(state.World.Materials, name)
 }
 func (a *AddMaterial) Redo() {

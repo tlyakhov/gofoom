@@ -48,7 +48,7 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	*ss.segments = append(*ss.segments, nil)
 	copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])
 	(*ss.segments)[ss.index] = ss.added
-	ss.added.Sector.Physical().Recalculate()
+	ss.added.Sector.Recalculate()
 	a.NewSegments = append(a.NewSegments, ss)
 	return true
 }
@@ -59,7 +59,7 @@ func (a *SplitSegment) OnMouseUp() {
 	// Split only selected if any, otherwise all sectors/segments.
 	all := a.State().SelectedObjects
 	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
-		all = make([]concepts.ISerializable, len(a.State().World.Sectors))
+		all = make([]concepts.Attachable, len(a.State().World.Sectors))
 		i := 0
 		for _, s := range a.State().World.Sectors {
 			all[i] = s
@@ -68,11 +68,11 @@ func (a *SplitSegment) OnMouseUp() {
 	}
 
 	for _, obj := range all {
-		if sector, ok := obj.(core.AbstractSector); ok {
-			for j := 0; j < len(sector.Physical().Segments); j++ {
+		if sector, ok := obj.(core.Sector); ok {
+			for j := 0; j < len(sector.Segments); j++ {
 				if a.Split(&segmentSplitter{
-					segments: &sector.Physical().Segments,
-					split:    sector.Physical().Segments[j],
+					segments: &sector.Segments,
+					split:    sector.Segments[j],
 					index:    j + 1}) {
 					j++ // Avoid infinite splitting.
 				}
@@ -98,7 +98,7 @@ func (a *SplitSegment) Undo() {
 			}
 		}
 		*ss.segments = reset
-		ss.added.Sector.Physical().Recalculate()
+		ss.added.Sector.Recalculate()
 	}
 }
 func (a *SplitSegment) Redo() {
@@ -106,6 +106,6 @@ func (a *SplitSegment) Redo() {
 		*ss.segments = append(*ss.segments, nil)
 		copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])
 		(*ss.segments)[ss.index] = ss.added
-		ss.added.Sector.Physical().Recalculate()
+		ss.added.Sector.Recalculate()
 	}
 }

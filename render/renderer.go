@@ -5,17 +5,15 @@ import (
 	"math"
 	"sync"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/mobs"
 	"tlyakhov/gofoom/render/state"
 )
 
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*state.Config
-	Map         *core.Map
 	columnGroup *sync.WaitGroup
 }
 
@@ -37,21 +35,16 @@ func NewRenderer() *Renderer {
 	return &r
 }
 
-// Player is a convenience function to get the player this renderer links to.
-func (r *Renderer) Player() *mobs.Player {
-	return r.Map.Player.(*mobs.Player)
-}
-
 // RenderSlice draws or picks a single pixel vertical column given a particular segment intersection.
 func (r *Renderer) RenderSlice(slice *state.Slice) {
 	slice.CalcScreen()
-	slice.Normal = slice.PhysicalSector.CeilNormal
+	slice.Normal = slice.Sector.CeilNormal
 	if slice.Pick {
 		CeilingPick(slice)
 	} else {
 		Ceiling(slice)
 	}
-	slice.Normal = slice.PhysicalSector.FloorNormal
+	slice.Normal = slice.Sector.FloorNormal
 	if slice.Pick {
 		FloorPick(slice)
 	} else {
@@ -60,7 +53,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 
 	slice.Segment.Normal.To3D(&slice.Normal)
 
-	if slice.Segment.AdjacentSector == nil {
+	if slice.Segment.AdjacentSector.Nil() {
 		if slice.Pick {
 			WallMidPick(slice)
 		} else {
@@ -69,7 +62,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 		return
 	}
 	if slice.Depth > constants.MaxPortals {
-		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.PhysicalSector.Name)
+		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.Sector.Entity)
 		slice.DebugNotices.Push(dbg)
 		return
 	}
@@ -90,7 +83,7 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	portalSlice.LightElements[1].Slice = &portalSlice
 	portalSlice.LightElements[2].Slice = &portalSlice
 	portalSlice.LightElements[3].Slice = &portalSlice
-	portalSlice.PhysicalSector = sp.Adj.Physical()
+	portalSlice.Sector = sp.Adj
 	portalSlice.YStart = sp.AdjClippedTop
 	portalSlice.YEnd = sp.AdjClippedBottom
 	portalSlice.LastPortalDistance = slice.Distance
@@ -109,7 +102,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	isect := new(concepts.Vector2)
 	ray := new(concepts.Vector2)
 	ray.From(&slice.Ray.End).SubSelf(&slice.Ray.Start)
-	for _, segment := range slice.PhysicalSector.Segments {
+	for _, segment := range slice.Sector.Segments {
 		// Wall is facing away from us
 		if ray.Dot(&segment.Normal) > 0 {
 			continue
@@ -140,7 +133,7 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 	if dist != math.MaxFloat64 {
 		r.RenderSlice(slice)
 	} else {
-		dbg := fmt.Sprintf("No intersections for sector %s at depth: %v", slice.PhysicalSector.Name, slice.Depth)
+		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", slice.Sector.Entity, slice.Depth)
 		r.DebugNotices.Push(dbg)
 	}
 }
@@ -152,20 +145,22 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 		r.ZBuffer[i] = r.MaxViewDist
 	}
 
-	bob := math.Sin(r.Player().Bob)
+	player := r.Player()
+	mob := core.MobFromDb(player.EntityRef())
+
+	bob := math.Sin(player.Bob)
 	// Initialize a slice...
 	slice := &state.Slice{
-		Config:         r.Config,
-		Map:            r.Map,
-		RenderTarget:   buffer,
-		Pick:           pick,
-		X:              x,
-		Y:              y,
-		YStart:         0,
-		YEnd:           r.ScreenHeight,
-		Angle:          r.Player().Angle*concepts.Deg2rad + r.ViewRadians[x],
-		PhysicalSector: r.Player().Sector.Physical(),
-		CameraZ:        r.Player().Pos.Render[2] + r.Player().Height + bob,
+		Config:       r.Config,
+		RenderTarget: buffer,
+		Pick:         pick,
+		X:            x,
+		Y:            y,
+		YStart:       0,
+		YEnd:         r.ScreenHeight,
+		Angle:        mob.Angle*concepts.Deg2rad + r.ViewRadians[x],
+		Sector:       mob.Sector(),
+		CameraZ:      mob.Pos.Render[2] + mob.Height + bob,
 	}
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)
@@ -175,10 +170,10 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 	slice.LightElements[3].Slice = slice
 
 	slice.Ray = &state.Ray{
-		Start: *r.Player().Pos.Render.To2D(),
+		Start: *mob.Pos.Render.To2D(),
 		End: concepts.Vector2{
-			r.Player().Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
-			r.Player().Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
+			mob.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
+			mob.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
 		},
 	}
 
@@ -206,12 +201,13 @@ func (r *Renderer) Render(buffer []uint8) {
 		r.DebugNotices.Pop()
 	}
 
-	if r.Player().Sector == nil {
+	mob := core.MobFromDb(r.Player().EntityRef())
+	if mob.SectorEntityRef.Nil() {
 		r.DebugNotices.Push("Player is not in a sector")
 		return
 	}
-	r.Map.RenderLock.Lock()
-	defer r.Map.RenderLock.Unlock()
+	r.RenderLock.Lock()
+	defer r.RenderLock.Unlock()
 
 	r.Frame++
 	r.Counter = 0

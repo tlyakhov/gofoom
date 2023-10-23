@@ -1,13 +1,13 @@
 package state
 
 import (
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/core"
 )
 
 type SlicePortal struct {
 	*Slice
-	Adj                 core.AbstractSector
+	Adj                 *core.Sector
 	AdjSegment          *core.Segment
 	AdjProjHeightTop    float64
 	AdjProjHeightBottom float64
@@ -20,9 +20,9 @@ type SlicePortal struct {
 }
 
 func (s *SlicePortal) CalcScreen() {
-	s.Adj = s.Segment.AdjacentSector
+	s.Adj = core.SectorFromDb(s.Segment.AdjacentSector)
 	s.AdjSegment = s.Segment.AdjacentSegment
-	s.AdjFloorZ, s.AdjCeilZ = s.Adj.Physical().SlopedZRender(s.Intersection.To2D())
+	s.AdjFloorZ, s.AdjCeilZ = s.Adj.SlopedZRender(s.Intersection.To2D())
 	s.AdjProjHeightTop = s.ProjectZ(s.AdjCeilZ - s.CameraZ)
 	s.AdjProjHeightBottom = s.ProjectZ(s.AdjFloorZ - s.CameraZ)
 	s.AdjScreenTop = s.ScreenHeight/2 - int(s.AdjProjHeightTop)

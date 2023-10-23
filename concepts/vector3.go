@@ -170,7 +170,7 @@ func (v *Vector3) ClampSelf(min, max float64) *Vector3 {
 }
 
 // Deserialize assigns this vector's fields from a parsed JSON map.
-func (v *Vector3) Deserialize(data map[string]interface{}) {
+func (v *Vector3) Deserialize(data map[string]any) {
 	if val, ok := data["X"]; ok {
 		v[0] = val.(float64)
 	}
@@ -214,8 +214,8 @@ func (v *Vector3) StringHuman() string {
 }
 
 // Serialize formats the vector as a JSON key-value map.
-func (v *Vector3) Serialize() map[string]interface{} {
-	return map[string]interface{}{"X": v[0], "Y": v[1], "Z": v[2]}
+func (v *Vector3) Serialize() map[string]any {
+	return map[string]any{"X": v[0], "Y": v[1], "Z": v[2]}
 }
 
 // ParseVector3 parses strings in the form "X, Y, Z" into vectors.

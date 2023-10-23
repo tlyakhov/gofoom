@@ -12,30 +12,30 @@ import (
 
 	"github.com/gotk3/gotk3/glib"
 
-	_ "tlyakhov/gofoom/behaviors"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/gtk"
-
-	_ "tlyakhov/gofoom/controllers/provide"
-	_ "tlyakhov/gofoom/controllers/sector"
 )
 
 var (
 	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
 	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
 	ColorPVS                = concepts.Vector3{0.6, 1, 0.6}
-	editor                  = NewEditor()
 	gameKeyMap              = make(map[uint]bool)
+	editor                  *Editor
 )
 
+func init() {
+	editor = NewEditor()
+}
+
 func EditorTimer() bool {
-	if editor.World == nil {
+	if editor.DB == nil {
 		return true
 	}
-	editor.World.Sim().Step()
+	editor.DB.Simulation.Step()
 
 	return true
 }
@@ -142,7 +142,7 @@ func onActivate() {
 	editor.Window.Maximize()
 
 	// Event handlers
-	signals := make(map[string]interface{})
+	signals := make(map[string]any)
 	signals["Menu.File.Quit"] = func(obj *glib.Object) {
 		editor.App.Quit()
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/actions"
 
@@ -22,8 +23,8 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	editor.MapViewGrid.Draw(&editor.Edit, cr)
 	TransformContext(cr)
 
-	for _, sector := range editor.World.Sectors {
-		DrawSector(cr, sector)
+	for _, isector := range editor.DB.All(core.SectorComponentIndex) {
+		DrawSector(cr, isector.(*core.Sector))
 	}
 
 	switch editor.CurrentAction.(type) {

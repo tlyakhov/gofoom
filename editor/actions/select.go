@@ -20,8 +20,8 @@ type Select struct {
 
 	Mode     string
 	Modifier SelectModifier
-	Original []concepts.ISerializable
-	Selected []concepts.ISerializable
+	Original []concepts.Attachable
+	Selected []concepts.Attachable
 }
 
 func (a *Select) OnMouseDown(button *gdk.EventButton) {
@@ -31,7 +31,7 @@ func (a *Select) OnMouseDown(button *gdk.EventButton) {
 		a.Modifier = SelectSub
 	}
 
-	a.Original = make([]concepts.ISerializable, len(a.State().SelectedObjects))
+	a.Original = make([]concepts.Attachable, len(a.State().SelectedObjects))
 	for i, o := range a.State().SelectedObjects {
 		a.Original[i] = o
 	}
@@ -48,7 +48,7 @@ func (a *Select) OnMouseUp() {
 	hovering := a.State().HoveringObjects
 
 	if len(hovering) == 0 { // User is trying to select a sector?
-		hovering = []concepts.ISerializable{}
+		hovering = []concepts.Attachable{}
 		for _, sector := range a.State().World.Sectors {
 			if sector.IsPointInside2D(&a.State().MouseWorld) {
 				hovering = append(hovering, sector)
@@ -57,18 +57,18 @@ func (a *Select) OnMouseUp() {
 	}
 
 	if a.Modifier == SelectAdd {
-		a.Selected = make([]concepts.ISerializable, len(a.Original))
+		a.Selected = make([]concepts.Attachable, len(a.Original))
 		copy(a.Selected, a.Original)
 		a.Selected = append(a.Selected, hovering...)
 	} else if a.Modifier == SelectSub {
-		a.Selected = []concepts.ISerializable{}
+		a.Selected = []concepts.Attachable{}
 		for _, obj := range a.Original {
 			if concepts.IndexOf(hovering, obj) == -1 {
 				a.Selected = append(a.Selected, obj)
 			}
 		}
 	} else {
-		a.Selected = make([]concepts.ISerializable, len(hovering))
+		a.Selected = make([]concepts.Attachable, len(hovering))
 		copy(a.Selected, hovering)
 	}
 	a.SelectObjects(a.Selected)

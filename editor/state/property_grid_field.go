@@ -14,7 +14,7 @@ type PropertyGridField struct {
 	Depth            int
 	Source           *reflect.StructField
 	ParentCollection *reflect.Value
-	Parent           interface{}
+	Parent           any
 }
 
 func (f *PropertyGridField) Short() string {

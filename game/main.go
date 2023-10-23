@@ -6,20 +6,15 @@ import (
 	"image"
 	"log"
 	"os"
-	"reflect"
 	"runtime/pprof"
 
-	_ "tlyakhov/gofoom/behaviors"
+	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/controllers"
-	"tlyakhov/gofoom/controllers/mob_controllers"
-	"tlyakhov/gofoom/core"
-	"tlyakhov/gofoom/mobs"
-	"tlyakhov/gofoom/sectors"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	_ "tlyakhov/gofoom/controllers/provide"
-	_ "tlyakhov/gofoom/controllers/sector"
 	"tlyakhov/gofoom/render"
 
 	// "math"
@@ -35,51 +30,52 @@ import (
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var win *pixelgl.Window
-var ps *mob_controllers.PlayerController
-var sim *core.Simulation
+var db *concepts.EntityComponentDB
 var renderer *render.Renderer
-var gameMap *controllers.MapController
+var gameMap *core.Spawn
 var canvas *pixelgl.Canvas
 var buffer *image.RGBA
 var mainFont *render.Font
 
 func processInput() {
-	player := gameMap.Player.(*mobs.Player)
+	playerMob := core.MobFromDb(renderer.Player().EntityRef())
+	player := behaviors.PlayerFromDb(renderer.Player().EntityRef())
 	win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 	}
 	if win.Pressed(pixelgl.KeyW) {
-		ps.Move(player.Angle)
+		controllers.MovePlayer(playerMob, playerMob.Angle)
 	}
 	if win.Pressed(pixelgl.KeyS) {
-		ps.Move(player.Angle + 180.0)
+		controllers.MovePlayer(playerMob, playerMob.Angle+180.0)
 	}
 	if win.Pressed(pixelgl.KeyE) {
-		ps.Move(player.Angle + 90.0)
+		controllers.MovePlayer(playerMob, playerMob.Angle+90.0)
 	}
 	if win.Pressed(pixelgl.KeyQ) {
-		ps.Move(player.Angle + 270.0)
+		controllers.MovePlayer(playerMob, playerMob.Angle+270.0)
 	}
 	if win.Pressed(pixelgl.KeyA) {
-		player.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
-		player.Angle = concepts.NormalizeAngle(player.Angle)
+		playerMob.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
+		playerMob.Angle = concepts.NormalizeAngle(playerMob.Angle)
 	}
 	if win.Pressed(pixelgl.KeyD) {
-		player.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
-		player.Angle = concepts.NormalizeAngle(player.Angle)
+		playerMob.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
+		playerMob.Angle = concepts.NormalizeAngle(playerMob.Angle)
 	}
 	if win.Pressed(pixelgl.KeySpace) {
-		if _, ok := player.Sector.(*sectors.Underwater); ok {
-			player.Force[2] += constants.PlayerSwimStrength
-		} else if player.OnGround {
-			player.Force[2] += constants.PlayerJumpForce
-			player.OnGround = false
+
+		if playerMob.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			playerMob.Force[2] += constants.PlayerSwimStrength
+		} else if playerMob.OnGround {
+			playerMob.Force[2] += constants.PlayerJumpForce
+			playerMob.OnGround = false
 		}
 	}
 	if win.Pressed(pixelgl.KeyC) {
-		if _, ok := player.Sector.(*sectors.Underwater); ok {
-			player.Force[2] -= constants.PlayerSwimStrength
+		if playerMob.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			playerMob.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
 		}
@@ -90,11 +86,13 @@ func processInput() {
 
 func integrateGame() {
 	processInput()
-	gameMap.Frame()
+	db.NewControllerSet().ActGlobal("Always")
 }
 
 func renderGame() {
-	player := gameMap.Player.(*mobs.Player)
+	playerMob := core.MobFromDb(renderer.Player().EntityRef())
+	playerAlive := behaviors.AliveFromDb(playerMob.EntityRef())
+	// player := mobs.PlayerFromDb(&gameMap.Player)
 
 	renderer.Render(buffer.Pix)
 	canvas.SetPixels(buffer.Pix)
@@ -102,10 +100,10 @@ func renderGame() {
 	winh := win.Bounds().H()
 	mat := pixel.IM.ScaledXY(pixel.Vec{X: 0, Y: 0}, pixel.Vec{X: winw / float64(renderer.ScreenWidth), Y: -winh / float64(renderer.ScreenHeight)}).Moved(win.Bounds().Center())
 	canvas.Draw(win, mat)
-	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", sim.FPS))
-	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", player.Health))
-	if player.Sector != nil {
-		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", reflect.TypeOf(player.Sector), player.Sector.GetBase().Name))
+	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", db.Simulation.FPS))
+	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
+	if !playerMob.SectorEntityRef.Nil() {
+		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", playerMob.SectorEntityRef.All(), playerMob.SectorEntityRef.Entity))
 	}
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {
@@ -157,23 +155,20 @@ func run() {
 	gameMap.Initialize()
 	gameMap.CreateTest()*/
 
-	sim = core.NewSimulation()
-	sim.Integrate = integrateGame
-	sim.Render = renderGame
-	gameMap, err = controllers.LoadMap("data/worlds/hall.json")
-	if err != nil {
+	db = concepts.NewEntityComponentDB()
+	db.Simulation.Integrate = integrateGame
+	db.Simulation.Render = renderGame
+
+	if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
-	gameMap.Attach(sim)
-	ps = mob_controllers.NewPlayerController(gameMap.Player.(*mobs.Player))
-	ps.Collide()
-	renderer.Map = gameMap.Map
+	renderer.DB = db
 
 	mainFont, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 
 	for !win.Closed() {
-		sim.Step()
+		db.Simulation.Step()
 		//runtime.GC()
 	}
 }

@@ -13,7 +13,7 @@ import (
 type Move struct {
 	state.IEditor
 
-	Selected []concepts.ISerializable
+	Selected []concepts.Constructed
 	Original []concepts.Vector3
 	Delta    concepts.Vector2
 }
@@ -21,10 +21,10 @@ type Move struct {
 func (a *Move) OnMouseDown(button *gdk.EventButton) {
 	a.SetMapCursor("move")
 
-	a.Selected = []concepts.ISerializable{}
+	a.Selected = []concepts.Attachable{}
 	for _, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.AbstractSector); ok {
-			for _, seg := range sector.Physical().Segments {
+		if sector, ok := obj.(core.Sector); ok {
+			for _, seg := range sector.Segments {
 				a.Selected = append(a.Selected, &state.MapPoint{Segment: seg})
 			}
 		} else {
@@ -37,8 +37,8 @@ func (a *Move) OnMouseDown(button *gdk.EventButton) {
 		switch target := obj.(type) {
 		case *state.MapPoint:
 			target.P.To3D(&a.Original[i])
-		case core.AbstractMob:
-			a.Original[i] = target.Physical().Pos.Original
+		case core.Mob:
+			a.Original[i] = target.Pos.Original
 		}
 	}
 }
@@ -59,13 +59,13 @@ func (a *Move) Act() {
 		case *state.MapPoint:
 			target.P = *a.WorldGrid(a.Original[i].To2D().Add(&a.Delta))
 			provide.Passer.For(target.Sector).Recalculate()
-		case core.AbstractMob:
+		case core.Mob:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...
 				continue
 			}
-			target.Physical().Pos.Original = *a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D(new(concepts.Vector3))))
-			target.Physical().Pos.Reset()
+			target.Pos.Original = *a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D(new(concepts.Vector3))))
+			target.Pos.Reset()
 			a.State().World.Recalculate()
 		}
 	}
@@ -79,13 +79,13 @@ func (a *Move) Undo() {
 		case *state.MapPoint:
 			target.P = *a.Original[i].To2D()
 			provide.Passer.For(target.Sector).Recalculate()
-		case core.AbstractMob:
+		case core.Mob:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...
 				continue
 			}
-			target.Physical().Pos.Original = a.Original[i]
-			target.Physical().Pos.Reset()
+			target.Pos.Original = a.Original[i]
+			target.Pos.Reset()
 			a.State().World.Recalculate()
 		}
 	}

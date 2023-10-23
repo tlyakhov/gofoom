@@ -1,9 +1,10 @@
 package properties
 
 import (
+	"tlyakhov/gofoom/archetypes"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/materials"
 
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -16,8 +17,7 @@ func (g *Grid) fieldMaterials(index int, field *state.PropertyGridField) {
 	button.SetHExpand(true)
 	button.SetLabel("Add Material")
 	button.Connect("clicked", func(_ *gtk.Button) {
-		mat := &materials.LitSampled{}
-		mat.Construct(nil)
+		mat := archetypes.CreateBasic(g.State().DB, materials.SolidComponentIndex)
 		action := &actions.AddMaterial{IEditor: g.IEditor, Sampleable: mat}
 		g.NewAction(action)
 		action.Act()

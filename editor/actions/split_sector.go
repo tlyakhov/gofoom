@@ -13,7 +13,7 @@ type SplitSector struct {
 	state.IEditor
 
 	Splitters []*core.SectorSplitter
-	Original  []core.AbstractSector
+	Original  []core.Sector
 }
 
 func (a *SplitSector) OnMouseDown(button *gdk.EventButton) {}
@@ -21,7 +21,7 @@ func (a *SplitSector) OnMouseMove()                        {}
 func (a *SplitSector) Frame()                              {}
 func (a *SplitSector) Act()                                {}
 
-func (a *SplitSector) Split(sector core.AbstractSector) {
+func (a *SplitSector) Split(sector core.Sector) {
 	s := &core.SectorSplitter{
 		Splitter1: *a.WorldGrid(&a.State().MouseDownWorld),
 		Splitter2: *a.WorldGrid(&a.State().MouseWorld),
@@ -32,10 +32,10 @@ func (a *SplitSector) Split(sector core.AbstractSector) {
 	if s.Result == nil || len(s.Result) == 0 {
 		return
 	}
-	delete(a.State().World.Sectors, sector.GetBase().Name)
+	delete(a.State().World.Sectors, sector.GetEntity().Name)
 	a.Original = append(a.Original, sector)
 	for _, added := range s.Result {
-		a.State().World.Sectors[added.GetBase().Name] = added
+		a.State().World.Sectors[added.GetEntity().Name] = added
 	}
 }
 
@@ -45,7 +45,7 @@ func (a *SplitSector) OnMouseUp() {
 	// Split only selected if any, otherwise all sectors/segments.
 	all := a.State().SelectedObjects
 	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
-		all = make([]concepts.ISerializable, len(a.State().World.Sectors))
+		all = make([]concepts.Constructed, len(a.State().World.Sectors))
 		i := 0
 		for _, s := range a.State().World.Sectors {
 			all[i] = s
@@ -54,7 +54,7 @@ func (a *SplitSector) OnMouseUp() {
 	}
 
 	for _, obj := range all {
-		if sector, ok := obj.(core.AbstractSector); ok {
+		if sector, ok := obj.(core.Sector); ok {
 			a.Split(sector)
 		} else if mp, ok := obj.(state.MapPoint); ok {
 			a.Split(mp.Segment.Sector)
@@ -69,41 +69,41 @@ func (a *SplitSector) Cancel() {
 }
 
 func (a *SplitSector) Undo() {
-	mobs := []core.AbstractMob{}
+	mobs := []core.Mob{}
 
 	for _, splitter := range a.Splitters {
 		if splitter.Result == nil {
 			continue
 		}
 		for _, added := range splitter.Result {
-			for _, e := range added.Physical().Mobs {
+			for _, e := range added.Mobs {
 				mobs = append(mobs, e)
-				e.Physical().Sector = nil
+				e.Sector = nil
 			}
-			added.Physical().Mobs = make(map[string]core.AbstractMob)
-			delete(a.State().World.Sectors, added.GetBase().Name)
+			added.Mobs = make(map[string]core.Mob)
+			delete(a.State().World.Sectors, added.GetEntity().Name)
 		}
 	}
 	for _, original := range a.Original {
-		a.State().World.Sectors[original.GetBase().Name] = original
+		a.State().World.Sectors[original.GetEntity().Name] = original
 		for _, e := range mobs {
-			if original.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
-				original.Physical().Mobs[e.GetBase().Name] = e
+			if original.IsPointInside2D(e.Pos.Original.To2D()) {
+				original.Mobs[e.GetEntity().Name] = e
 				e.SetParent(original)
 			}
 		}
 	}
 }
 func (a *SplitSector) Redo() {
-	mobs := []core.AbstractMob{}
+	mobs := []core.Mob{}
 
 	for _, original := range a.Original {
-		delete(a.State().World.Sectors, original.GetBase().Name)
-		for _, e := range original.Physical().Mobs {
+		delete(a.State().World.Sectors, original.GetEntity().Name)
+		for _, e := range original.Mobs {
 			mobs = append(mobs, e)
-			e.Physical().Sector = nil
+			e.Sector = nil
 		}
-		original.Physical().Mobs = make(map[string]core.AbstractMob)
+		original.Mobs = make(map[string]core.Mob)
 	}
 
 	for _, splitter := range a.Splitters {
@@ -111,10 +111,10 @@ func (a *SplitSector) Redo() {
 			continue
 		}
 		for _, added := range splitter.Result {
-			a.State().World.Sectors[added.GetBase().Name] = added
+			a.State().World.Sectors[added.GetEntity().Name] = added
 			for _, e := range mobs {
-				if added.Physical().IsPointInside2D(e.Physical().Pos.Original.To2D()) {
-					added.Physical().Mobs[e.GetBase().Name] = e
+				if added.IsPointInside2D(e.Pos.Original.To2D()) {
+					added.Mobs[e.GetEntity().Name] = e
 					e.SetParent(added)
 				}
 			}

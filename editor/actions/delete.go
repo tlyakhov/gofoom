@@ -12,19 +12,19 @@ import (
 type Delete struct {
 	state.IEditor
 
-	Selected []concepts.ISerializable
-	Indices  map[concepts.ISerializable]int
+	Selected []concepts.Attachable
+	Indices  map[concepts.Attachable]int
 }
 
 func (a *Delete) Act() {
-	a.Indices = make(map[concepts.ISerializable]int)
-	a.Selected = make([]concepts.ISerializable, len(a.State().SelectedObjects))
+	a.Indices = make(map[concepts.Attachable]int)
+	a.Selected = make([]concepts.Attachable, len(a.State().SelectedObjects))
 	copy(a.Selected, a.State().SelectedObjects)
 
 	for _, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *state.MapPoint:
-			for index, seg := range target.Sector.Physical().Segments {
+			for index, seg := range target.Sector.Segments {
 				if seg == target.Segment {
 					a.Indices[target] = index
 				}
@@ -35,12 +35,12 @@ func (a *Delete) Act() {
 	for _, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *state.MapPoint:
-			phys := target.Sector.Physical()
+			phys := target.Sector
 			indexToDelete := a.Indices[target]
 			phys.Segments = append(phys.Segments[:indexToDelete], phys.Segments[indexToDelete+1:]...)
 			for _, obj2 := range a.Selected {
 				if mp2, ok := obj2.(*state.MapPoint); ok {
-					if mp2.Sector.Physical() != phys {
+					if mp2.Sector != phys {
 						continue
 					}
 					if a.Indices[mp2] >= indexToDelete {
@@ -48,14 +48,14 @@ func (a *Delete) Act() {
 					}
 				}
 			}
-		case core.AbstractMob:
+		case core.Mob:
 			if target == a.State().World.Player {
 				// Otherwise weird things happen...
 				continue
 			}
-			delete(target.GetSector().Physical().Mobs, target.GetBase().Name)
-		case core.AbstractSector:
-			delete(target.Physical().Map.Sectors, target.GetBase().Name)
+			delete(target.GetSector().Mobs, target.GetEntity().Name)
+		case core.Sector:
+			delete(target.Map.Sectors, target.GetEntity().Name)
 		}
 	}
 	a.State().World.Recalculate()

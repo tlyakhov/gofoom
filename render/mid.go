@@ -1,14 +1,14 @@
 package render
 
 import (
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/core"
 	"tlyakhov/gofoom/render/state"
 )
 
 func WallMidPick(s *state.Slice) {
 	if s.Y >= s.ClippedStart && s.Y < s.ClippedEnd {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "mid", ISerializable: s.Segment})
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "mid", Attachable: s.Segment})
 	}
 }
 
@@ -17,7 +17,7 @@ func WallMid(s *state.Slice) {
 	mat := s.Segment.MidMaterial
 	u := s.U
 	if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleNone {
-		if s.PhysicalSector.Winding < 0 {
+		if s.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
 		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
@@ -32,8 +32,8 @@ func WallMid(s *state.Slice) {
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
 		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.FloorZ
 		lightV := v
-		if s.PhysicalSector.FloorSlope != 0 || s.PhysicalSector.CeilSlope != 0 {
-			lightV = (s.PhysicalSector.Max[2] - s.Intersection[2]) / (s.PhysicalSector.Max[2] - s.PhysicalSector.Min[2])
+		if s.Sector.FloorSlope != 0 || s.Sector.CeilSlope != 0 {
+			lightV = (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 		}
 		s.Light(&light, &s.Intersection, s.U, lightV, s.Distance)
 
@@ -42,7 +42,7 @@ func WallMid(s *state.Slice) {
 		}
 
 		//fmt.Printf("%v\n", screenIndex)
-		if mat != nil {
+		if mat.Entity != 0 {
 			s.Write(screenIndex, s.SampleMaterial(mat, u, v, &light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
