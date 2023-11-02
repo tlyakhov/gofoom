@@ -1,11 +1,10 @@
 package actions
 
 import (
-	"tlyakhov/gofoom/controllers/provide"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/core"
 
 	"github.com/gotk3/gotk3/gdk"
 )
@@ -13,7 +12,7 @@ import (
 type Move struct {
 	state.IEditor
 
-	Selected []concepts.Constructed
+	Selected []any
 	Original []concepts.Vector3
 	Delta    concepts.Vector2
 }
@@ -21,11 +20,11 @@ type Move struct {
 func (a *Move) OnMouseDown(button *gdk.EventButton) {
 	a.SetMapCursor("move")
 
-	a.Selected = []concepts.Attachable{}
+	a.Selected = []any{}
 	for _, obj := range a.State().SelectedObjects {
 		if sector, ok := obj.(core.Sector); ok {
 			for _, seg := range sector.Segments {
-				a.Selected = append(a.Selected, &state.MapPoint{Segment: seg})
+				a.Selected = append(a.Selected, seg)
 			}
 		} else {
 			a.Selected = append(a.Selected, obj)
@@ -35,9 +34,9 @@ func (a *Move) OnMouseDown(button *gdk.EventButton) {
 	a.Original = make([]concepts.Vector3, len(a.Selected))
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
-		case *state.MapPoint:
+		case *core.Segment:
 			target.P.To3D(&a.Original[i])
-		case core.Mob:
+		case core.Body:
 			a.Original[i] = target.Pos.Original
 		}
 	}
@@ -56,17 +55,13 @@ func (a *Move) OnMouseUp() {
 func (a *Move) Act() {
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
-		case *state.MapPoint:
+		case *core.Segment:
 			target.P = *a.WorldGrid(a.Original[i].To2D().Add(&a.Delta))
-			provide.Passer.For(target.Sector).Recalculate()
-		case core.Mob:
-			if target == a.State().World.Player {
-				// Otherwise weird things happen...
-				continue
-			}
+			a.State().DB.NewControllerSet().Act(target.Sector.Ref(), nil, concepts.ControllerRecalculate)
+		case core.Body:
 			target.Pos.Original = *a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D(new(concepts.Vector3))))
 			target.Pos.Reset()
-			a.State().World.Recalculate()
+			a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 		}
 	}
 }
@@ -76,17 +71,13 @@ func (a *Move) Frame()  {}
 func (a *Move) Undo() {
 	for i, obj := range a.Selected {
 		switch target := obj.(type) {
-		case *state.MapPoint:
+		case *core.Segment:
 			target.P = *a.Original[i].To2D()
-			provide.Passer.For(target.Sector).Recalculate()
-		case core.Mob:
-			if target == a.State().World.Player {
-				// Otherwise weird things happen...
-				continue
-			}
+			a.State().DB.NewControllerSet().Act(target.Sector.Ref(), nil, concepts.ControllerRecalculate)
+		case core.Body:
 			target.Pos.Original = a.Original[i]
 			target.Pos.Reset()
-			a.State().World.Recalculate()
+			a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 		}
 	}
 }

@@ -12,7 +12,7 @@ const (
 	ToolSplitSegment
 	ToolSplitSector
 	ToolAddSector
-	ToolAddMob
+	ToolAddBody
 	ToolAlignGrid
 )
 

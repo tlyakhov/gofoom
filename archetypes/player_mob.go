@@ -7,21 +7,21 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-func IsPlayerMob(er concepts.EntityRef) bool {
-	return er.Component(core.MobComponentIndex) != nil &&
+func IsPlayerBody(er concepts.EntityRef) bool {
+	return er.Component(core.BodyComponentIndex) != nil &&
 		er.Component(behaviors.PlayerComponentIndex) != nil &&
 		er.Component(behaviors.AliveComponentIndex) != nil
 }
 
-func CreatePlayerMob(db *concepts.EntityComponentDB) *concepts.EntityRef {
+func CreatePlayerBody(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	er := db.NewEntityRef()
-	mob := db.NewComponent(er.Entity, core.MobComponentIndex).(*core.Mob)
+	body := db.NewComponent(er.Entity, core.BodyComponentIndex).(*core.Body)
 	_ = db.NewComponent(er.Entity, behaviors.PlayerComponentIndex).(*behaviors.Player)
 	_ = db.NewComponent(er.Entity, behaviors.AliveComponentIndex).(*behaviors.Alive)
 
-	mob.Height = constants.PlayerHeight
-	mob.BoundingRadius = constants.PlayerBoundingRadius
-	mob.Mass = constants.PlayerMass // kg
+	body.Height = constants.PlayerHeight
+	body.BoundingRadius = constants.PlayerBoundingRadius
+	body.Mass = constants.PlayerMass // kg
 
 	return er
 }

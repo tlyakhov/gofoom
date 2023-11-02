@@ -1,7 +1,8 @@
 package actions
 
 import (
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -37,21 +38,21 @@ func (a *RotateSegments) Act() {
 
 func (a *RotateSegments) Undo() {
 	for _, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.Sector); ok {
+		if sector, ok := obj.(*core.Sector); ok {
 			a.Rotate(sector, true)
-		} else if p, ok := obj.(state.MapPoint); ok {
+		} else if p, ok := obj.(*core.Segment); ok {
 			a.Rotate(p.Sector, true)
 		}
 	}
-	a.State().World.Recalculate()
+	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 func (a *RotateSegments) Redo() {
 	for _, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.Sector); ok {
+		if sector, ok := obj.(*core.Sector); ok {
 			a.Rotate(sector, false)
-		} else if p, ok := obj.(state.MapPoint); ok {
+		} else if p, ok := obj.(*core.Segment); ok {
 			a.Rotate(p.Sector, false)
 		}
 	}
-	a.State().World.Recalculate()
+	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }

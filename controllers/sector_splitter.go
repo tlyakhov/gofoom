@@ -1,9 +1,10 @@
-package core
+package controllers
 
 import (
 	"fmt"
 	"sort"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -22,13 +23,13 @@ type SectorSplitter struct {
 	SplitSector          []*splitEdge
 	EdgesOnLine          []*splitEdge
 	Splitter1, Splitter2 concepts.Vector2
-	Sector               *Sector
-	Result               []*Sector
+	Sector               *core.Sector
+	Result               [][]concepts.Attachable
 }
 
 type splitEdge struct {
 	*SectorSplitter
-	Source           *Segment
+	Source           *core.Segment
 	Start            concepts.Vector2
 	Side             splitSide
 	Next             *splitEdge
@@ -251,68 +252,81 @@ func (a *SectorSplitter) verifyCycles() {
 }
 
 func (a *SectorSplitter) collect() {
-	er := a.Sector.EntityRef()
-	a.Result = make([]*Sector, len(a.SplitSector))
+	a.Result = make([][]concepts.Attachable, len(a.SplitSector))
 
 	for i, edge := range a.SplitSector {
 		if edge.Visited {
 			continue
 		}
 
-		// Clone the original a.Sector using serialization.
-		added := &Sector{}
-		a.Result[i] = added
-		added.Entity = a.Sector.DB.NewEntity()
-		added.Construct(a.Sector.Serialize())
-		if named := concepts.NamedFromDb(er); named != nil {
-			named.Construct(nil)
-		}
-		// Don't clone the mobs.
-		added.Mobs = make(map[uint64]concepts.EntityRef)
-		// Clear segments
-		added.Segments = []*Segment{}
+		// Clone all the original components using serialization.
+		db := a.Sector.DB
+		newEntity := db.NewEntity()
+		a.Result[i] = make([]concepts.Attachable, len(a.Sector.EntityRef.All()))
+		for index, origComponent := range a.Sector.EntityRef.All() {
+			if origComponent == nil {
+				continue
+			}
+			addedComponent := db.LoadComponent(i, origComponent.Serialize())
+			addedComponent.Ref().Entity = newEntity
+			a.Result[i][index] = addedComponent
+			switch target := addedComponent.(type) {
+			case *concepts.Named:
+				target.Name = fmt.Sprintf("Split %v (%v of %v)", target.Name, i, len(a.SplitSector))
+			case *core.Sector:
+				// Don't clone the bodys.
+				target.Bodies = make(map[uint64]concepts.EntityRef)
+				// Clear segments
+				target.Segments = []*core.Segment{}
 
-		visitor := edge
-		for {
-			visitor.Visited = true
-			addedSegment := &Segment{}
-			addedSegment.SetParent(added)
-			addedSegment.Construct(visitor.Source.Serialize())
-			addedSegment.P = visitor.Start
-			addedSegment.AdjacentSegment = nil
-			addedSegment.AdjacentSector.Reset()
-			if len(added.Segments) > 0 {
-				addedSegment.Next = added.Segments[0]
-				addedSegment.Prev = added.Segments[len(added.Segments)-1]
-				addedSegment.Next.Prev = addedSegment
-				addedSegment.Prev.Next = addedSegment
-			}
-			added.Segments = append(added.Segments, addedSegment)
-			if visitor.Source.AdjacentSegment != nil {
-				visitor.Source.AdjacentSegment.AdjacentSector.Reset()
-				visitor.Source.AdjacentSegment.AdjacentSegment = nil
-			}
-			visitor = visitor.Next
-			if visitor == edge {
-				break
+				visitor := edge
+				for {
+					visitor.Visited = true
+					addedSegment := &core.Segment{}
+					addedSegment.Sector = target
+					addedSegment.Construct(visitor.Source.Serialize())
+					addedSegment.P = visitor.Start
+					addedSegment.AdjacentSegment = nil
+					addedSegment.AdjacentSector.Reset()
+					if len(target.Segments) > 0 {
+						addedSegment.Next = target.Segments[0]
+						addedSegment.Prev = target.Segments[len(target.Segments)-1]
+						addedSegment.Next.Prev = addedSegment
+						addedSegment.Prev.Next = addedSegment
+					}
+					target.Segments = append(target.Segments, addedSegment)
+					if visitor.Source.AdjacentSegment != nil {
+						visitor.Source.AdjacentSegment.AdjacentSector.Reset()
+						visitor.Source.AdjacentSegment.AdjacentSegment = nil
+					}
+					visitor = visitor.Next
+					if visitor == edge {
+						break
+					}
+				}
+				target.Recalculate()
 			}
 		}
-		added.Recalculate()
+
 	}
 	// Only one a.Sector means we didn't split anything
-	if len(a.Result) == 1 && len(a.Result[0].Segments) == len(a.Sector.Segments) {
-		a.Result = nil
-		return
+	if len(a.Result) == 1 {
+		added := a.Result[0][core.SectorComponentIndex].(*core.Sector)
+		if len(added.Segments) == len(a.Sector.Segments) {
+			a.Result = nil
+			return
+		}
 	}
 
-	for _, c := range a.Sector.DB.Components[MobComponentIndex] {
-		mob := c.(*Mob)
-		if mob.SectorEntityRef.Entity != a.Sector.Entity {
+	for _, ibody := range a.Sector.DB.Components[core.BodyComponentIndex] {
+		body := ibody.(*core.Body)
+		if body.SectorEntityRef.Entity != a.Sector.Entity {
 			continue
 		}
-		for _, added := range a.Result {
-			if added.IsPointInside2D(&concepts.Vector2{mob.Pos.Original[0], mob.Pos.Original[1]}) {
-				mob.SectorEntityRef = added.EntityRef()
+		for _, components := range a.Result {
+			added := components[core.SectorComponentIndex].(*core.Sector)
+			if added.IsPointInside2D(&concepts.Vector2{body.Pos.Original[0], body.Pos.Original[1]}) {
+				body.SectorEntityRef = added.Ref()
 			}
 		}
 	}

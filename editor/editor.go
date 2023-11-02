@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 	"unsafe"
 
+	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/editor/actions"
-	"tlyakhov/gofoom/sectors"
 
 	"github.com/gotk3/gotk3/gdk"
 
@@ -17,6 +16,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
@@ -30,7 +30,7 @@ type EditorWidgets struct {
 	Window      *gtk.ApplicationWindow
 	GameArea    *gtk.DrawingArea
 	MapArea     *gtk.DrawingArea
-	MobTypes    *gtk.ComboBoxText
+	BodyTypes   *gtk.ComboBoxText
 	SectorTypes *gtk.ComboBoxText
 	StatusBar   *gtk.Label
 }
@@ -44,9 +44,9 @@ type Editor struct {
 	properties.Grid
 
 	// Map view filters
-	MobsVisible        bool
+	BodysVisible       bool
 	SectorTypesVisible bool
-	MobTypesVisible    bool
+	BodyTypesVisible   bool
 
 	// Game View state
 	Renderer        *render.Renderer
@@ -70,9 +70,9 @@ func NewEditor() *Editor {
 			DB:       concepts.NewEntityComponentDB(),
 		},
 		MapViewGrid:        MapViewGrid{Visible: true},
-		MobsVisible:        true,
+		BodysVisible:       true,
 		SectorTypesVisible: false,
-		MobTypesVisible:    true,
+		BodyTypesVisible:   true,
 	}
 	e.DB.Simulation.Integrate = e.Integrate
 	e.DB.Simulation.Render = e.Window.QueueDraw
@@ -125,7 +125,14 @@ func (e *Editor) UpdateStatus() {
 		if len(list) > 0 {
 			list += ", "
 		}
-		list += obj.Entity
+		switch v := obj.(type) {
+		case *concepts.EntityRef:
+			list += strconv.FormatUint(v.Entity, 10)
+		case *core.Segment:
+			list += v.P.String()
+		case *concepts.EntityComponentDB:
+			list += "DB"
+		}
 	}
 	text = list + " ( " + text + " )"
 	e.StatusBar.SetText(text)
@@ -133,39 +140,39 @@ func (e *Editor) UpdateStatus() {
 
 func (e *Editor) Integrate() {
 	player := e.Renderer.Player()
-	playerMob := core.MobFromDb(player.EntityRef())
+	playerBody := core.BodyFromDb(player.Ref())
 
 	if gameKeyMap[gdk.KEY_w] {
-		controllers.MovePlayer(playerMob, playerMob.Angle)
+		controllers.MovePlayer(playerBody, playerBody.Angle)
 	}
 	if gameKeyMap[gdk.KEY_s] {
-		controllers.MovePlayer(playerMob, playerMob.Angle+180.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle+180.0)
 	}
 	if gameKeyMap[gdk.KEY_e] {
-		controllers.MovePlayer(playerMob, playerMob.Angle+90.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle+90.0)
 	}
 	if gameKeyMap[gdk.KEY_q] {
-		controllers.MovePlayer(playerMob, playerMob.Angle+270.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle+270.0)
 	}
 	if gameKeyMap[gdk.KEY_a] {
-		playerMob.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
-		playerMob.Angle = concepts.NormalizeAngle(playerMob.Angle)
+		playerBody.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
+		playerBody.Angle = concepts.NormalizeAngle(playerBody.Angle)
 	}
 	if gameKeyMap[gdk.KEY_d] {
-		playerMob.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
-		playerMob.Angle = concepts.NormalizeAngle(playerMob.Angle)
+		playerBody.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
+		playerBody.Angle = concepts.NormalizeAngle(playerBody.Angle)
 	}
 	if gameKeyMap[gdk.KEY_space] {
-		if playerMob.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
-			playerMob.Force[2] += constants.PlayerSwimStrength
-		} else if playerMob.OnGround {
-			playerMob.Force[2] += constants.PlayerJumpForce
-			playerMob.OnGround = false
+		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			playerBody.Force[2] += constants.PlayerSwimStrength
+		} else if playerBody.OnGround {
+			playerBody.Force[2] += constants.PlayerJumpForce
+			playerBody.OnGround = false
 		}
 	}
 	if gameKeyMap[gdk.KEY_c] {
-		if playerMob.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
-			playerMob.Force[2] -= constants.PlayerSwimStrength
+		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
 		}
@@ -173,7 +180,7 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	e.DB.NewControllerSet().ActGlobal("Always")
+	e.DB.NewControllerSet().ActGlobal(concepts.ControllerAlways)
 	e.GatherHoveringObjects()
 }
 
@@ -233,26 +240,14 @@ func (e *Editor) ActTool() {
 	case state.ToolSplitSector:
 		e.NewAction(&actions.SplitSector{IEditor: e})
 	case state.ToolAddSector:
-		typeId := e.SectorTypes.GetActiveID()
-		t := concepts.DB().AllTypes[typeId]
-		s := reflect.New(t).Interface().(core.Sector)
-		s.Construct(nil)
-		if simmed, ok := s.(core.Simulated); ok {
-			simmed.Attach(e.World.Sim())
-		}
-		s.FloorMaterial = e.World.DefaultMaterial()
-		s.CeilMaterial = e.World.DefaultMaterial()
-		s.SetParent(e.World.Map)
+		sectorer := archetypes.CreateSector(e.DB)
+		s := core.SectorFromDb(sectorer)
+		s.FloorMaterial = controllers.DefaultMaterial(e.DB)
+		s.CeilMaterial = controllers.DefaultMaterial(e.DB)
 		e.NewAction(&actions.AddSector{IEditor: e, Sector: s})
-	case state.ToolAddMob:
-		typeId := e.MobTypes.GetActiveID()
-		t := concepts.DB().AllTypes[typeId]
-		ae := reflect.New(t).Interface().(core.Mob)
-		ae.Construct(nil)
-		if simmed, ok := ae.(core.Simulated); ok {
-			simmed.Attach(e.World.Sim())
-		}
-		e.NewAction(&actions.AddEntity{IEditor: e, Mob: ae})
+	case state.ToolAddBody:
+		body := archetypes.CreateLightBody(e.DB)
+		e.NewAction(&actions.AddEntity{IEditor: e, EntityRef: body})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:
@@ -312,7 +307,7 @@ func (e *Editor) Redo() {
 
 func (e *Editor) SelectObjects(objects []any) {
 	if len(objects) == 0 {
-		objects = append(objects, e.World)
+		objects = append(objects, e.DB)
 	}
 
 	e.SelectedObjects = objects
@@ -356,13 +351,12 @@ func (e *Editor) GatherHoveringObjects() {
 				}
 			} else if editor.Selecting() {
 				if segment.P[0] >= v1[0] && segment.P[1] >= v1[1] && segment.P[0] <= v2[0] && segment.P[1] <= v2[1] {
-					mp := &state.MapPoint{Segment: segment}
-					if concepts.IndexOf(e.HoveringObjects, mp) == -1 {
-						e.HoveringObjects = append(e.HoveringObjects, mp)
+					if state.IndexOf(e.HoveringObjects, segment) == -1 {
+						e.HoveringObjects = append(e.HoveringObjects, segment)
 					}
 				}
 				if segment.AABBIntersect(v1[0], v1[1], v2[0], v2[1]) {
-					if concepts.IndexOf(e.HoveringObjects, segment) == -1 {
+					if state.IndexOf(e.HoveringObjects, segment) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, segment)
 					}
 				}
@@ -370,13 +364,13 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 
 		if e.Selecting() {
-			for _, mob := range sector.Mobs {
-				pe := mob
-				p := pe.Pos.Original
-				if p[0]+pe.BoundingRadius >= v1[0] && p[0]-pe.BoundingRadius <= v2[0] &&
-					p[1]+pe.BoundingRadius >= v1[1] && p[1]-pe.BoundingRadius <= v2[1] {
-					if concepts.IndexOf(e.HoveringObjects, mob) == -1 {
-						e.HoveringObjects = append(e.HoveringObjects, mob)
+			for _, bodyer := range sector.Bodies {
+				body := core.BodyFromDb(&bodyer)
+				p := body.Pos.Original
+				if p[0]+body.BoundingRadius >= v1[0] && p[0]-body.BoundingRadius <= v2[0] &&
+					p[1]+body.BoundingRadius >= v1[1] && p[1]-body.BoundingRadius <= v2[1] {
+					if state.IndexOf(e.HoveringObjects, bodyer) == -1 {
+						e.HoveringObjects = append(e.HoveringObjects, bodyer)
 					}
 				}
 			}

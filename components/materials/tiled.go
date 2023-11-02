@@ -17,7 +17,10 @@ func init() {
 }
 
 func TiledFromDb(entity *concepts.EntityRef) *Tiled {
-	return entity.Component(TiledComponentIndex).(*Tiled)
+	if asserted, ok := entity.Component(TiledComponentIndex).(*Tiled); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (m *Tiled) Construct(data map[string]any) {

@@ -13,7 +13,7 @@ type Ray struct {
 }
 
 type PickedElement struct {
-	Type string // ceil, floor, mid, hi, lo, mob
+	Type string // ceil, floor, mid, hi, lo, body
 	concepts.Attachable
 }
 
@@ -126,7 +126,7 @@ func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *conce
 	}
 
 	if image := materials.ImageFromDb(m); image != nil {
-		result = concepts.Int32ToVector3(image.Sample(u/scaleDivisor, v/scaleDivisor, scale/scaleDivisor))
+		result = concepts.Int32ToVector3(image.Sample(u/scaleDivisor, v/scaleDivisor, scale))
 	}
 
 	if lit := materials.LitFromDb(m); lit != nil {

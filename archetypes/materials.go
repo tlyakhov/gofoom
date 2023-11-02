@@ -6,7 +6,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-func EntityMapIsMaterial(components map[int]concepts.Attachable) bool {
+func EntityMapIsMaterial(components []concepts.Attachable) bool {
 	return components[materials.LitComponentIndex] != nil ||
 		components[materials.TiledComponentIndex] != nil ||
 		components[materials.SkyComponentIndex] != nil ||
@@ -19,7 +19,7 @@ func EntityRefIsMaterial(er *concepts.EntityRef) bool {
 }
 
 func AttachableIsMaterial(a concepts.Attachable) bool {
-	return EntityMapIsMaterial(a.EntityRef().All())
+	return EntityMapIsMaterial(a.Ref().All())
 }
 
 func CreateBasicMaterial(db *concepts.EntityComponentDB, textured bool) *concepts.EntityRef {

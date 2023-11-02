@@ -37,7 +37,10 @@ func init() {
 }
 
 func ImageFromDb(entity *concepts.EntityRef) *Image {
-	return entity.Component(ImageComponentIndex).(*Image)
+	if asserted, ok := entity.Component(ImageComponentIndex).(*Image); ok {
+		return asserted
+	}
+	return nil
 }
 
 // Load a texture from a file (pre-processing mipmaps if set)

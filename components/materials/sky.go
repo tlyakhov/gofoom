@@ -15,7 +15,10 @@ func init() {
 }
 
 func SkyFromDb(entity *concepts.EntityRef) *Sky {
-	return entity.Component(SkyComponentIndex).(*Sky)
+	if asserted, ok := entity.Component(SkyComponentIndex).(*Sky); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (m *Sky) Construct(data map[string]any) {

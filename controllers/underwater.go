@@ -13,11 +13,11 @@ type UnderwaterController struct {
 	concepts.BaseController
 	Underwater *sectors.Underwater
 	Alive      *behaviors.Alive
-	Mob        *core.Mob
+	Body       *core.Body
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(UnderwaterController{})
+	concepts.DbTypes().RegisterController(&UnderwaterController{})
 }
 
 func (uc *UnderwaterController) Source(er *concepts.EntityRef) bool {
@@ -30,13 +30,13 @@ func (uc *UnderwaterController) Source(er *concepts.EntityRef) bool {
 
 func (uc *UnderwaterController) Target(target *concepts.EntityRef) bool {
 	uc.TargetEntity = target
-	uc.Mob = core.MobFromDb(target)
-	return uc.Mob != nil && uc.Mob.Active
+	uc.Body = core.BodyFromDb(target)
+	return uc.Body != nil && uc.Body.Active
 }
 
 func (uc *UnderwaterController) Containment() {
-	uc.Mob.Vel.Now.MulSelf(1.0 / constants.SwimDamping)
-	uc.Mob.Vel.Now[2] -= constants.GravitySwim
+	uc.Body.Vel.Now.MulSelf(1.0 / constants.SwimDamping)
+	uc.Body.Vel.Now[2] -= constants.GravitySwim
 }
 
 func (uc *UnderwaterController) Enter() {

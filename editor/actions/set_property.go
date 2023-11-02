@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -34,11 +34,11 @@ func (a *SetProperty) Act() {
 		}
 		v.Elem().Set(a.ToSet)
 		switch sim := a.Parent.(type) {
-		case *core.SimScalar:
+		case *concepts.SimScalar:
 			sim.Reset()
-		case *core.SimVector2:
+		case *concepts.SimVector2:
 			sim.Reset()
-		case *core.SimVector3:
+		case *concepts.SimVector3:
 			sim.Reset()
 		}
 	}

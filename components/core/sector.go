@@ -11,7 +11,7 @@ type Sector struct {
 	concepts.Attached `editable:"^"`
 
 	Segments      []*Segment
-	Mobs          map[uint64]concepts.EntityRef
+	Bodies        map[uint64]concepts.EntityRef
 	BottomZ       concepts.SimScalar  `editable:"Floor Height"`
 	TopZ          concepts.SimScalar  `editable:"Ceiling Height"`
 	FloorScale    float64             `editable:"Floor Material Scale"`
@@ -31,7 +31,7 @@ type Sector struct {
 	FloorLightmap, CeilLightmap       []concepts.Vector3
 	FloorLightmapAge, CeilLightmapAge []int
 	PVS                               map[uint64]*Sector
-	PVSMob                            map[uint64]*Sector
+	PVSBody                           map[uint64]*Sector
 	PVL                               map[uint64]*concepts.EntityRef
 
 	// RoomImpulse
@@ -44,7 +44,10 @@ func init() {
 }
 
 func SectorFromDb(entity *concepts.EntityRef) *Sector {
-	return entity.Component(SectorComponentIndex).(*Sector)
+	if asserted, ok := entity.Component(SectorComponentIndex).(*Sector); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (ms *Sector) IsPointInside2D(p *concepts.Vector2) bool {
@@ -76,7 +79,7 @@ func (s *Sector) SetDB(db *concepts.EntityComponentDB) {
 func (s *Sector) AddSegment(x float64, y float64) *Segment {
 	segment := &Segment{}
 	segment.Construct(nil)
-	segment.SetParent(s)
+	segment.Sector = s
 	segment.P = concepts.Vector2{x, y}
 	s.Segments = append(s.Segments, segment)
 	return segment
@@ -85,7 +88,7 @@ func (s *Sector) AddSegment(x float64, y float64) *Segment {
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Segments = make([]*Segment, 0)
-	s.Mobs = make(map[uint64]concepts.EntityRef)
+	s.Bodies = make(map[uint64]concepts.EntityRef)
 	s.BottomZ.Set(0.0)
 	s.TopZ.Set(64.0)
 	s.FloorScale = 64.0
@@ -125,8 +128,8 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["Segments"]; ok {
 		concepts.MapArray(s, &s.Segments, v)
 	}
-	if v, ok := data["Mobs"]; ok {
-		s.Mobs = concepts.DeserializeEntityRefs(v.([]any))
+	if v, ok := data["Bodys"]; ok {
+		s.Bodies = concepts.DeserializeEntityRefs(v.([]any))
 	}
 	if v, ok := data["FloorTarget"]; ok {
 		s.FloorTarget = s.DB.EntityRef(v.(uint64))
@@ -154,20 +157,20 @@ func (s *Sector) Serialize() map[string]any {
 		result["CeilSlope"] = s.CeilSlope
 	}
 
-	if s.FloorTarget.Entity != 0 {
+	if !s.FloorTarget.Nil() {
 		result["FloorTarget"] = s.FloorTarget.Entity
 	}
-	if s.CeilTarget.Entity != 0 {
+	if !s.CeilTarget.Nil() {
 		result["CeilTarget"] = s.CeilTarget.Entity
 	}
-	if s.FloorMaterial.Entity != 0 {
+	if !s.FloorMaterial.Nil() {
 		result["FloorMaterial"] = s.FloorMaterial.Entity
 	}
-	if s.CeilMaterial.Entity != 0 {
+	if !s.CeilMaterial.Nil() {
 		result["CeilMaterial"] = s.CeilMaterial.Entity
 	}
 
-	result["Mobs"] = concepts.SerializeEntityRefMap(s.Mobs)
+	result["Bodys"] = concepts.SerializeEntityRefMap(s.Bodies)
 
 	segments := []any{}
 	for _, seg := range s.Segments {
@@ -195,7 +198,7 @@ func (s *Sector) Recalculate() {
 		s.Winding = -1
 	}
 
-	filtered := s.Segments[:0]
+	filtered := make([]*Segment, 0)
 	var prev *Segment
 	for i, segment := range s.Segments {
 		next := s.Segments[(i+1)%len(s.Segments)]

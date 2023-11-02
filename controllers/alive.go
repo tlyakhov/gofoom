@@ -11,7 +11,11 @@ type AliveController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(AliveController{})
+	concepts.DbTypes().RegisterController(&AliveController{})
+}
+
+func (a *AliveController) Methods() concepts.ControllerMethod {
+	return concepts.ControllerAlways
 }
 
 func (a *AliveController) Target(target *concepts.EntityRef) bool {

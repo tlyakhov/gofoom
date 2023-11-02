@@ -42,7 +42,7 @@ func WallMid(s *state.Slice) {
 		}
 
 		//fmt.Printf("%v\n", screenIndex)
-		if mat.Entity != 0 {
+		if !mat.Nil() {
 			s.Write(screenIndex, s.SampleMaterial(mat, u, v, &light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance

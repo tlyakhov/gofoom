@@ -1,8 +1,9 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/editor/state"
 
 	"github.com/gotk3/gotk3/gdk"
@@ -18,30 +19,25 @@ type AddSector struct {
 func (a *AddSector) Act() {
 	a.SetMapCursor("crosshair")
 	a.Mode = "AddSector"
-	a.SelectObjects([]concepts.Constructed{a.Sector})
+	a.SelectObjects([]any{a.Sector})
 	//set cursor
 }
 
 func (a *AddSector) Cancel() {
 	a.RemoveFromMap()
 	a.Sector.Segments = []*core.Segment{}
-	a.SelectObjects([]concepts.Constructed{})
+	a.SelectObjects([]any{})
 	a.ActionFinished(true)
 }
 
 func (a *AddSector) RemoveFromMap() {
-	name := a.Sector.GetEntity().Name
-	if a.State().World.Sectors[name] != nil {
-		delete(a.State().World.Sectors, name)
-	}
-	a.State().World.Recalculate()
+	// remove sector
+	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
 func (a *AddSector) AddToMap() {
-	name := a.Sector.GetEntity().Name
-	a.Sector.Map = a.State().World.Map
-	a.State().World.Sectors[name] = a.Sector
-	// Recalculate
+	// Add sector
+	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
 func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
@@ -49,10 +45,10 @@ func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
 
 	seg := core.Segment{}
 	seg.Construct(nil)
-	seg.SetParent(a.Sector)
-	seg.HiMaterial = a.State().World.DefaultMaterial()
-	seg.LoMaterial = a.State().World.DefaultMaterial()
-	seg.MidMaterial = a.State().World.DefaultMaterial()
+	seg.Sector = a.Sector
+	seg.HiMaterial = controllers.DefaultMaterial(a.State().DB)
+	seg.LoMaterial = controllers.DefaultMaterial(a.State().DB)
+	seg.MidMaterial = controllers.DefaultMaterial(a.State().DB)
 	seg.P = *a.WorldGrid(&a.State().MouseDownWorld)
 
 	segs := a.Sector.Segments

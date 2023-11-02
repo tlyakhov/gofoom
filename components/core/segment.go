@@ -43,14 +43,6 @@ func init() {
 	SegmentComponentIndex = concepts.DbTypes().Register(Segment{})
 }
 
-func (s *Segment) SetParent(parent any) {
-	if sector, ok := parent.(*Sector); ok {
-		s.Sector = sector
-	} else {
-		panic("Tried core.Segment.SetParent with a parameter that wasn't a *core.Sector")
-	}
-}
-
 func (s *Segment) RealizeAdjacentSector() {
 	if s.AdjacentSector.Nil() {
 		return
@@ -325,7 +317,7 @@ func (s *Segment) Serialize() map[string]any {
 		result["MidBehavior"] = s.MidBehavior.String()
 	}
 
-	if s.AdjacentSector.Entity != 0 {
+	if !s.AdjacentSector.Nil() {
 		result["AdjacentSector"] = s.AdjacentSector.Entity
 	}
 	return result

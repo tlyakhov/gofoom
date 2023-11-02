@@ -2,9 +2,10 @@ package actions
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/editor/state"
 
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/components/core"
 
 	"github.com/gotk3/gotk3/gdk"
 )
@@ -12,8 +13,8 @@ import (
 type SplitSector struct {
 	state.IEditor
 
-	Splitters []*core.SectorSplitter
-	Original  []core.Sector
+	Splitters []*controllers.SectorSplitter
+	Original  map[uint64][]concepts.Attachable
 }
 
 func (a *SplitSector) OnMouseDown(button *gdk.EventButton) {}
@@ -21,8 +22,8 @@ func (a *SplitSector) OnMouseMove()                        {}
 func (a *SplitSector) Frame()                              {}
 func (a *SplitSector) Act()                                {}
 
-func (a *SplitSector) Split(sector core.Sector) {
-	s := &core.SectorSplitter{
+func (a *SplitSector) Split(sector *core.Sector) {
+	s := &controllers.SectorSplitter{
 		Splitter1: *a.WorldGrid(&a.State().MouseDownWorld),
 		Splitter2: *a.WorldGrid(&a.State().MouseWorld),
 		Sector:    sector,
@@ -32,32 +33,41 @@ func (a *SplitSector) Split(sector core.Sector) {
 	if s.Result == nil || len(s.Result) == 0 {
 		return
 	}
-	delete(a.State().World.Sectors, sector.GetEntity().Name)
-	a.Original = append(a.Original, sector)
+	// Copy original sector's components to preserve them
+	copy(a.Original[sector.Entity], sector.DB.EntityComponents[sector.Entity])
+	// Detach the original from the DB
+	sector.DB.DetachAll(sector.Entity)
+	// Attach the cloned entities/components
 	for _, added := range s.Result {
-		a.State().World.Sectors[added.GetEntity().Name] = added
+		for index, component := range added {
+			a.State().DB.Attach(index, component.Ref().Entity, component)
+		}
 	}
 }
 
 func (a *SplitSector) OnMouseUp() {
-	a.Splitters = []*core.SectorSplitter{}
+	a.Splitters = []*controllers.SectorSplitter{}
 
 	// Split only selected if any, otherwise all sectors/segments.
 	all := a.State().SelectedObjects
-	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
-		all = make([]concepts.Constructed, len(a.State().World.Sectors))
+	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().DB) {
+		allSectors := a.State().DB.Components[core.SectorComponentIndex]
+		all = make([]any, len(allSectors))
 		i := 0
-		for _, s := range a.State().World.Sectors {
-			all[i] = s
+		for _, s := range allSectors {
+			all[i] = s.Ref()
 			i++
 		}
 	}
 
 	for _, obj := range all {
-		if sector, ok := obj.(core.Sector); ok {
-			a.Split(sector)
-		} else if mp, ok := obj.(state.MapPoint); ok {
-			a.Split(mp.Segment.Sector)
+		switch target := obj.(type) {
+		case *concepts.EntityRef:
+			if sector := core.SectorFromDb(target); sector != nil {
+				a.Split(sector)
+			}
+		case *core.Segment:
+			a.Split(target.Sector)
 		}
 	}
 	a.State().Modified = true
@@ -69,41 +79,41 @@ func (a *SplitSector) Cancel() {
 }
 
 func (a *SplitSector) Undo() {
-	mobs := []core.Mob{}
+	bodys := []core.Body{}
 
 	for _, splitter := range a.Splitters {
 		if splitter.Result == nil {
 			continue
 		}
 		for _, added := range splitter.Result {
-			for _, e := range added.Mobs {
-				mobs = append(mobs, e)
+			for _, e := range added.Bodies {
+				bodys = append(bodys, e)
 				e.Sector = nil
 			}
-			added.Mobs = make(map[string]core.Mob)
+			added.Bodies = make(map[string]core.Body)
 			delete(a.State().World.Sectors, added.GetEntity().Name)
 		}
 	}
 	for _, original := range a.Original {
 		a.State().World.Sectors[original.GetEntity().Name] = original
-		for _, e := range mobs {
+		for _, e := range bodys {
 			if original.IsPointInside2D(e.Pos.Original.To2D()) {
-				original.Mobs[e.GetEntity().Name] = e
+				original.Bodys[e.GetEntity().Name] = e
 				e.SetParent(original)
 			}
 		}
 	}
 }
 func (a *SplitSector) Redo() {
-	mobs := []core.Mob{}
+	bodys := []core.Body{}
 
 	for _, original := range a.Original {
 		delete(a.State().World.Sectors, original.GetEntity().Name)
-		for _, e := range original.Mobs {
-			mobs = append(mobs, e)
+		for _, e := range original.Bodys {
+			bodys = append(bodys, e)
 			e.Sector = nil
 		}
-		original.Mobs = make(map[string]core.Mob)
+		original.Bodys = make(map[string]core.Body)
 	}
 
 	for _, splitter := range a.Splitters {
@@ -112,9 +122,9 @@ func (a *SplitSector) Redo() {
 		}
 		for _, added := range splitter.Result {
 			a.State().World.Sectors[added.GetEntity().Name] = added
-			for _, e := range mobs {
+			for _, e := range bodys {
 				if added.IsPointInside2D(e.Pos.Original.To2D()) {
-					added.Mobs[e.GetEntity().Name] = e
+					added.Bodys[e.GetEntity().Name] = e
 					e.SetParent(added)
 				}
 			}

@@ -12,7 +12,7 @@ type Player struct {
 
 	FrameTint color.NRGBA
 	Crouching bool
-	Inventory []core.Mob
+	Inventory []core.Body
 	Bob       float64
 }
 
@@ -23,5 +23,8 @@ func init() {
 }
 
 func PlayerFromDb(entity *concepts.EntityRef) *Player {
-	return entity.Component(PlayerComponentIndex).(*Player)
+	if asserted, ok := entity.Component(PlayerComponentIndex).(*Player); ok {
+		return asserted
+	}
+	return nil
 }
