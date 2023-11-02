@@ -11,19 +11,19 @@ import (
 type AddEntity struct {
 	state.IEditor
 
-	Mode       string
-	EntityRef  concepts.EntityRef
-	Components map[int]concepts.Attachable
+	Mode             string
+	EntityRef        *concepts.EntityRef
+	Components       map[int]concepts.Attachable
+	ContainingSector *core.Sector
 }
 
 func (a *AddEntity) RemoveFromMap() {
-	if mob := core.MobFromDb(&a.EntityRef); mob != nil {
-		if mob.SectorEntityRef.Nil() {
+	if body := core.BodyFromDb(a.EntityRef); body != nil {
+		if body.SectorEntityRef.Nil() {
 			return
 		}
-		delete(mob.Sector().Mobs, a.EntityRef.Entity)
+		delete(body.Sector().Bodies, a.EntityRef.Entity)
 	}
-
 }
 
 func (a *AddEntity) AttachAll() {
@@ -32,14 +32,14 @@ func (a *AddEntity) AttachAll() {
 	}
 }
 
-func (a *AddEntity) AddToMap(sector *core.Sector) {
-	if c := a.Components[core.MobComponentIndex]; c != nil {
-		mob := c.(*core.Mob)
-		if sector != nil {
-			mob.SectorEntityRef = sector.EntityRef()
-			sector.Mobs[a.EntityRef.Entity] = a.EntityRef
+func (a *AddEntity) AddToMap() {
+	if c := a.Components[core.BodyComponentIndex]; c != nil {
+		body := c.(*core.Body)
+		if a.ContainingSector != nil {
+			body.SectorEntityRef = a.ContainingSector.Ref()
+			a.ContainingSector.Bodies[a.EntityRef.Entity] = *a.EntityRef
 		}
-		a.State().DB.NewControllerSet().ActGlobal("Recalculate")
+		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 	}
 }
 
@@ -47,31 +47,27 @@ func (a *AddEntity) OnMouseDown(button *gdk.EventButton) {}
 
 func (a *AddEntity) OnMouseMove() {
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
-	var sector *core.Sector
 
 	for _, isector := range a.State().DB.All(core.SectorComponentIndex) {
-		sector = isector.(*core.Sector)
+		sector := isector.(*core.Sector)
 		if sector.IsPointInside2D(worldGrid) {
+			a.ContainingSector = sector
 			break
 		}
 	}
 
-	if sector == nil {
-		return
-	}
-
 	a.RemoveFromMap()
-	a.AddToMap(sector)
-	if c := a.Components[core.MobComponentIndex]; c != nil {
-		mob := c.(*core.Mob)
-		mob.Pos.Original[0] = worldGrid[0]
-		mob.Pos.Original[1] = worldGrid[1]
-		if !mob.SectorEntityRef.Nil() {
-			floorZ, ceilZ := sector.SlopedZOriginal(worldGrid)
-			mob.Pos.Original[2] = (floorZ + ceilZ) / 2
+	a.AddToMap()
+	if c := a.Components[core.BodyComponentIndex]; c != nil {
+		body := c.(*core.Body)
+		body.Pos.Original[0] = worldGrid[0]
+		body.Pos.Original[1] = worldGrid[1]
+		if a.ContainingSector != nil {
+			floorZ, ceilZ := a.ContainingSector.SlopedZOriginal(worldGrid)
+			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
-		mob.Pos.Reset()
-		//a.State().World.Recalculate()
+		body.Pos.Reset()
+		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 	}
 }
 
@@ -80,7 +76,7 @@ func (a *AddEntity) OnMouseUp() {
 	a.ActionFinished(false)
 }
 func (a *AddEntity) Act() {
-	a.Mode = "AddMob"
+	a.Mode = "AddBody"
 	a.SelectObjects([]any{a.EntityRef})
 }
 func (a *AddEntity) Cancel() {
@@ -94,7 +90,7 @@ func (a *AddEntity) Undo() {
 	a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
 }
 func (a *AddEntity) Redo() {
-	a.AddToMap(a.Sector)
+	a.AddToMap()
 	a.AttachAll()
 }
 

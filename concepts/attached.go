@@ -1,17 +1,13 @@
 package concepts
 
 type Attached struct {
-	Entity uint64
-	DB     *EntityComponentDB
+	EntityRef
 	Active bool `editable:"Active?"`
 }
 
 type Attachable interface {
-	GetEntity() uint64
-	SetEntity(uint64)
-	GetDB() *EntityComponentDB
+	Ref() *EntityRef
 	SetDB(db *EntityComponentDB)
-	EntityRef() *EntityRef
 	Construct(data map[string]any)
 	Serialize() map[string]any
 }
@@ -22,27 +18,17 @@ func init() {
 	AttachedComponentIndex = DbTypes().Register(Attached{})
 }
 
-func (a *Attached) GetEntity() uint64 {
-	return a.Entity
-}
-
-func (a *Attached) SetEntity(e uint64) {
-	a.Entity = e
-}
-
-func (a *Attached) GetDB() *EntityComponentDB {
-	return a.DB
+func (a *Attached) Ref() *EntityRef {
+	return &a.EntityRef
 }
 
 func (a *Attached) SetDB(db *EntityComponentDB) {
-	a.DB = db
-}
-
-func (a *Attached) EntityRef() *EntityRef {
-	return &EntityRef{DB: a.DB, Entity: a.Entity}
+	a.EntityRef.DB = db
 }
 
 func (a *Attached) Construct(data map[string]any) {
+	a.Active = true
+
 	if data == nil {
 		return
 	}

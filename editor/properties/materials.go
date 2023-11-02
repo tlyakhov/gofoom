@@ -18,7 +18,7 @@ func (g *Grid) fieldMaterials(index int, field *state.PropertyGridField) {
 	button.SetLabel("Add Material")
 	button.Connect("clicked", func(_ *gtk.Button) {
 		mat := archetypes.CreateBasic(g.State().DB, materials.SolidComponentIndex)
-		action := &actions.AddMaterial{IEditor: g.IEditor, Sampleable: mat}
+		action := &actions.AddEntity{IEditor: g.IEditor, EntityRef: mat}
 		g.NewAction(action)
 		action.Act()
 		g.Container.GrabFocus()

@@ -18,7 +18,10 @@ func init() {
 }
 
 func LitFromDb(entity *concepts.EntityRef) *Lit {
-	return entity.Component(LitComponentIndex).(*Lit)
+	if asserted, ok := entity.Component(LitComponentIndex).(*Lit); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (m *Lit) Construct(data map[string]any) {

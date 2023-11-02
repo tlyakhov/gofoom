@@ -16,7 +16,10 @@ func init() {
 }
 
 func ToxicFromDb(entity *concepts.EntityRef) *Toxic {
-	return entity.Component(ToxicComponentIndex).(*Toxic)
+	if asserted, ok := entity.Component(ToxicComponentIndex).(*Toxic); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (s *Toxic) Construct(data map[string]any) {

@@ -14,7 +14,7 @@ type VerticalDoorController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(VerticalDoorController{})
+	concepts.DbTypes().RegisterController(&VerticalDoorController{})
 }
 
 func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
@@ -25,7 +25,7 @@ func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
 		vd.Sector != nil && vd.Sector.Active
 }
 
-func (vd *VerticalDoorController) ActOnMob(e core.Mob) {
+func (vd *VerticalDoorController) ActOnBody(e core.Body) {
 	if vd.Sector.Center.Dist(&e.Pos.Now) < 100 {
 		if vd.VerticalDoor.State == sectors.Closed || vd.State == sectors.Closing {
 			vd.State = sectors.Opening

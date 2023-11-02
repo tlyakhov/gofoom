@@ -1,29 +1,31 @@
 package concepts
 
 type EntityRef struct {
-	components map[int]Attachable
+	components []Attachable
 	Entity     uint64
 	DB         *EntityComponentDB
 }
 
 func (er *EntityRef) Nil() bool {
-	return er.DB == nil || er.Entity == 0
+	return er == nil || er.DB == nil || er.Entity == 0
 }
 
 func (er *EntityRef) Reset() {
+	if er == nil {
+		return
+	}
 	er.Entity = 0
-	er.components = make(map[int]Attachable)
+	er.components = nil
 }
 
-func (er *EntityRef) All() map[int]Attachable {
-	if er.components == nil {
-		c, _ := er.DB.EntityComponents.Load(er.Entity)
-		er.components = c.(map[int]Attachable)
+func (er *EntityRef) All() []Attachable {
+	if er != nil && er.Entity != 0 && er.components == nil {
+		er.components = er.DB.EntityComponents[er.Entity]
 	}
 	return er.components
 }
 func (er *EntityRef) Component(index int) Attachable {
-	if index == 0 {
+	if er == nil || er.Entity == 0 || index == 0 {
 		return nil
 	}
 	return er.All()[index]

@@ -2,6 +2,7 @@ package concepts
 
 import (
 	"reflect"
+	"sort"
 )
 
 type ControllerSet struct {
@@ -15,15 +16,10 @@ func (db *dbTypes) RegisterController(local any) {
 	defer db.lock.Unlock()
 	tLocal := reflect.ValueOf(local).Type()
 
-	if tLocal.Kind() == reflect.Ptr {
-		tLocal = tLocal.Elem()
+	if tLocal.Kind() != reflect.Ptr {
+		panic("Attempt to register controller with a value type (should be a pointer)")
 	}
-	cm := ControllerMetadata{Type: tLocal, Methods: make(map[string]reflect.Value)}
-	db.Controllers[tLocal.String()] = &cm
-	for i := 0; i < tLocal.NumMethod(); i++ {
-		m := tLocal.Method(i)
-		cm.Methods[m.Name] = m.Func
-	}
+	db.Controllers[tLocal.String()] = tLocal
 }
 
 func (db *EntityComponentDB) NewControllerSet() *ControllerSet {
@@ -35,33 +31,60 @@ func (db *EntityComponentDB) NewControllerSet() *ControllerSet {
 
 	i := 0
 	for _, t := range DbTypes().Controllers {
-		c := reflect.New(t).Interface().(Controller)
+		c := reflect.New(t.Elem()).Interface().(Controller)
 		c.Parent(result)
 		result.ByName[t.String()] = c
 		result.All[i] = c
 		i++
 	}
-
+	sort.Slice(result.All, func(i, j int) bool {
+		return result.All[i].Priority() < result.All[j].Priority()
+	})
 	return result
 }
 
-func (set *ControllerSet) Act(target *EntityRef, source *EntityRef, method string) {
+func act(controller Controller, method ControllerMethod) {
+	switch method {
+	case ControllerAlways:
+		controller.Always()
+	case ControllerContainment:
+		controller.Containment()
+	case ControllerContact:
+		controller.Contact()
+	case ControllerEnter:
+		controller.Enter()
+	case ControllerExit:
+		controller.Exit()
+	case ControllerLoaded:
+		controller.Loaded()
+	case ControllerRecalculate:
+		controller.Recalculate()
+	case ControllerProximity:
+		controller.Proximity()
+	}
+}
+
+func (set *ControllerSet) Act(target *EntityRef, source *EntityRef, method ControllerMethod) {
 	for _, c := range set.All {
+		if c.Methods()&method == 0 {
+			continue
+		}
 		if c.Target(target) && c.Source(source) {
-			t := reflect.ValueOf(c).Type().String()
-			DbTypes().Controllers[t].Methods[method].Call([]reflect.Value{reflect.ValueOf(c)})
+			act(c, method)
 		}
 	}
 }
 
-func (set *ControllerSet) ActGlobal(method string) {
-	for _, allComponents := range set.Components {
-		for _, c := range allComponents {
-			er := c.EntityRef()
-			for _, controller := range set.All {
+func (set *ControllerSet) ActGlobal(method ControllerMethod) {
+	for _, controller := range set.All {
+		if controller.Methods()&method == 0 {
+			continue
+		}
+		for _, allComponents := range set.Components {
+			for _, component := range allComponents {
+				er := component.Ref()
 				if controller.Target(er) {
-					t := reflect.ValueOf(controller).Type().String()
-					DbTypes().Controllers[t].Methods[method].Call([]reflect.Value{reflect.ValueOf(controller)})
+					act(controller, method)
 				}
 			}
 		}

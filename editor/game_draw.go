@@ -11,9 +11,9 @@ import (
 )
 
 func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
-	playerMob := core.MobFromDb(editor.Renderer.Player().EntityRef())
-	playerAlive := behaviors.AliveFromDb(playerMob.EntityRef())
-	// player := mobs.PlayerFromDb(&gameMap.Player)
+	playerBody := core.BodyFromDb(editor.Renderer.Player().Ref())
+	playerAlive := behaviors.AliveFromDb(playerBody.Ref())
+	// player := bodys.PlayerFromDb(&gameMap.Player)
 	w := 640
 	h := 360
 
@@ -41,12 +41,12 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.ShowText(fmt.Sprintf("FPS: %.1f", editor.DB.Simulation.FPS))
 	cr.MoveTo(10, 20)
 	cr.ShowText(fmt.Sprintf("Health: %.1f", playerAlive.Health))
-	if !playerMob.SectorEntityRef.Nil() {
+	if !playerBody.SectorEntityRef.Nil() {
 		cr.MoveTo(10, 30)
-		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", playerMob.SectorEntityRef.All(), playerMob.SectorEntityRef.Entity))
+		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", playerBody.SectorEntityRef.All(), playerBody.SectorEntityRef.Entity))
 	}
 	cr.MoveTo(10, 40)
-	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMob.Force.StringHuman(), playerMob.Vel.Render.StringHuman(), playerMob.Pos.Render.StringHuman()))
+	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", playerBody.Force.StringHuman(), playerBody.Vel.Render.StringHuman(), playerBody.Pos.Render.StringHuman()))
 
 	cr.SetSourceRGB(1, 0, 0)
 

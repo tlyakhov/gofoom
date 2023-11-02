@@ -16,7 +16,10 @@ func init() {
 }
 
 func SpawnFromDb(entity *concepts.EntityRef) *Spawn {
-	return entity.Component(SpawnComponentIndex).(*Spawn)
+	if asserted, ok := entity.Component(SpawnComponentIndex).(*Spawn); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (w *Spawn) Construct(data map[string]any) {

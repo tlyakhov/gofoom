@@ -28,9 +28,9 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 	sectorHovering := state.IndexOf(editor.HoveringObjects, sector) != -1
 	sectorSelected := state.IndexOf(editor.SelectedObjects, sector) != -1
 
-	if editor.MobsVisible {
-		for _, mober := range sector.Mobs {
-			DrawMob(cr, &mober)
+	if editor.BodysVisible {
+		for _, bodyer := range sector.Bodies {
+			DrawBody(cr, &bodyer)
 		}
 	}
 
@@ -66,7 +66,7 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 			if !ok || s2 == sector {
 				continue
 			}
-			if s2.PVSMob[sector.Entity] != nil {
+			if s2.PVSBody[sector.Entity] != nil {
 				cr.SetSourceRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
 			}
 		}

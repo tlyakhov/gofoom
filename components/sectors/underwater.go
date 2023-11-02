@@ -15,5 +15,8 @@ func init() {
 }
 
 func UnderwaterFromDb(entity *concepts.EntityRef) *Underwater {
-	return entity.Component(UnderwaterComponentIndex).(*Underwater)
+	if asserted, ok := entity.Component(UnderwaterComponentIndex).(*Underwater); ok {
+		return asserted
+	}
+	return nil
 }

@@ -18,7 +18,7 @@ import (
 type EntityComponentDB struct {
 	*Simulation
 	Components       []map[uint64]Attachable
-	EntityComponents sync.Map
+	EntityComponents map[uint64][]Attachable
 	currentEntity    uint64
 	lock             sync.RWMutex
 }
@@ -31,6 +31,7 @@ func NewEntityComponentDB() *EntityComponentDB {
 }
 
 func (db *EntityComponentDB) Clear() {
+	db.EntityComponents = make(map[uint64][]Attachable)
 	db.Components = make([]map[uint64]Attachable, len(DbTypes().Indexes))
 	db.Simulation = NewSimulation()
 	for i := 0; i < len(DbTypes().Indexes); i++ {
@@ -69,12 +70,17 @@ func (db *EntityComponentDB) First(index int) Attachable {
 }
 
 func (db *EntityComponentDB) attach(entity uint64, component Attachable, index int) {
-	component.SetEntity(entity)
+	component.Ref().Reset()
+	component.Ref().Entity = entity
 	component.SetDB(db)
 	db.Components[index][entity] = component
-	v, _ := db.EntityComponents.LoadOrStore(entity, make(map[int]Attachable))
-	ec := v.(map[int]Attachable)
-	ec[index] = component
+	if ec, ok := db.EntityComponents[entity]; ok {
+		ec[index] = component
+	} else {
+		ec := make([]Attachable, len(DbTypes().Types))
+		ec[index] = component
+		db.EntityComponents[entity] = ec
+	}
 }
 
 func (db *EntityComponentDB) NewComponent(entity uint64, index int) Attachable {
@@ -135,12 +141,8 @@ func (db *EntityComponentDB) Detach(index int, entity uint64) {
 	}
 
 	delete(db.Components[index], entity)
-	if v, ok := db.EntityComponents.Load(entity); ok {
-		ec := v.(map[int]Attachable)
-		delete(ec, index)
-		if len(ec) == 0 {
-			db.EntityComponents.Delete(entity)
-		}
+	if ec, ok := db.EntityComponents[entity]; ok {
+		ec[index] = nil
 	}
 }
 
@@ -149,7 +151,7 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 
 		return
 	}
-	entity := component.GetEntity()
+	entity := component.Ref().Entity
 
 	if entity == 0 {
 		return
@@ -168,7 +170,7 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 
 	db.Detach(index, entity)
 
-	component.SetEntity(0)
+	component.Ref().Reset()
 }
 
 func (db *EntityComponentDB) DetachAll(entity uint64) {
@@ -180,7 +182,7 @@ func (db *EntityComponentDB) DetachAll(entity uint64) {
 		delete(db.Components[index], entity)
 	}
 
-	db.EntityComponents.Delete(entity)
+	delete(db.EntityComponents, entity)
 }
 
 func (db *EntityComponentDB) GetEntityRefByName(name string) *EntityRef {
@@ -235,9 +237,8 @@ func (db *EntityComponentDB) Load(filename string) error {
 
 	// After everything's loaded, trigger the controllers
 	set := db.NewControllerSet()
-	set.ActGlobal("Loaded")
-	set.ActGlobal("Recalculate")
-
+	set.ActGlobal(ControllerRecalculate)
+	set.ActGlobal(ControllerLoaded)
 	return nil
 }
 
@@ -246,15 +247,13 @@ func (db *EntityComponentDB) Save(filename string) {
 	defer db.lock.Unlock()
 	jsonDB := make([]any, 0)
 
-	db.EntityComponents.Range(func(ientity, icomponents any) bool {
-		components := icomponents.(map[int]Attachable)
+	for _, components := range db.EntityComponents {
 		jsonEntity := make(map[string]any)
 		jsonDB = append(jsonDB, jsonEntity)
 		for index, component := range components {
 			jsonEntity[DbTypes().Types[index].String()] = component.Serialize()
 		}
-		return true
-	})
+	}
 
 	bytes, err := json.MarshalIndent(jsonDB, "", "  ")
 

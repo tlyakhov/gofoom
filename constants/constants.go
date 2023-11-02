@@ -7,7 +7,7 @@ const (
 	MinMillisPerFrame = 1000.0 / 15.0 // Ensure we don't do a spiral of death at framerates < 15
 
 	// Rendering constants
-	MaxPortals              = 30 // avoid infinite portal traversal
+	MaxPortals              = 100 // avoid infinite portal traversal
 	IntersectEpsilon        = 1e-10
 	LightGrid               = 6.0
 	LightSafety             = 2
@@ -47,7 +47,7 @@ const (
 	PlayerCrouchHeight   = 16.0
 	PlayerWalkForce      = 10.0 * PlayerMass * TimeStep // Newtons (we work backwards and aim for X meters/time step)
 	PlayerTurnSpeed      = 180.0                        // Degrees per second
-	PlayerJumpForce      = 30.0 * PlayerMass * TimeStep // Newtons
+	PlayerJumpForce      = 80.0 * PlayerMass * TimeStep // Newtons
 	PlayerSwimStrength   = 0.005
 	PlayerHurtTime       = 30
 	PlayerMountHeight    = 15.0

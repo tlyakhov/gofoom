@@ -17,7 +17,10 @@ func init() {
 }
 
 func AliveFromDb(entity *concepts.EntityRef) *Alive {
-	return entity.Component(AliveComponentIndex).(*Alive)
+	if asserted, ok := entity.Component(AliveComponentIndex).(*Alive); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (e *Alive) Construct(data map[string]any) {

@@ -7,7 +7,7 @@ https://github.com/tlyakhov/jsfoom.
 ## Motivation
 
 Constraints are fun :). This project has the following goals:
-* No GPU involvement in rendering.
+* No GPU involvement in rendering (preferably anything else either).
 * High quality editing tools.
 * High degree of flexibility and expandability. Game code separate from engine
   code.
@@ -20,7 +20,8 @@ Constraints are fun :). This project has the following goals:
 This project takes inspiration from Ken Silverman's BUILD engine used for Duke
 Nukem 3D for the portal concept and Doom of course, but unlike BUILD and Doom it
 aims to be a fully dynamic raycaster, avoiding pre-processing steps or
-multi-pass rendering.
+multi-pass rendering. This simplicity gives a lot of benefits as far as dynamic
+sectors, lighting, etc...
 
 ## Features
 
@@ -48,25 +49,20 @@ multi-pass rendering.
 
 ## Repository Structure
 
-* [/behaviors](/behaviors/) - these are components that entities can include.
-* [/concepts](/concepts/) - non-engine general types, interfaces, and functions.
-  Math, serialization, etc...
+* [/archetypes](/archetypes/) - these are preset or template combinations of
+  components to build up more complex entities.
+* [/concepts](/concepts/) - general types, interfaces, and functions.
+  Math, serialization, etc... Includes the ECS database and associated storage
+  methods for holding components.
 * [/constants](/constants/) - self-explanatory. Currently a mix of game and
   engine constants.
 * [/controllers](/controllers/) - the "systems" in the ECS architecture.
-  Basically all the logic, and simulation.
-* [/core](/core/) - the fundamental engine models and interfaces. As a general
+  Basically all the logic, and simulation. I prefer the name "controllers".
+* [/components](/components/) - the  engine models and interfaces. As a general
   rule, code that changes model state based on another model belongs in
   [/controllers](/controllers/) rather than here.
 * [/data](/data/) - a bunch of test data.
 * [/editor](/editor/) - all the code for the world editor.
-* [/entities](/entities/) - models for game objects, creatures, and
-  the player.
 * [/game](/game/) - the game executable.
-* [/materials](/materials/) - models for materials in the game world.
-* [/registry](/registry/) - stores all the types used by the engine. Primarily
-  for instantiation when loading from disk.
 * [/render](/render/) - the renderer and its state.
-* [/sectors](/sectors/) - world geometry models.
-* [/texture](/texture/) - sampled image models. Also includes procedurally
-  generated 2D stuff. 
+* 

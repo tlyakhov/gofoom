@@ -37,7 +37,7 @@ func WallHi(s *state.SlicePortal) {
 			v = s.Intersection[2] / 64.0
 		}
 
-		if mat.Entity != 0 {
+		if !mat.Nil() {
 			s.Write(screenIndex, s.SampleMaterial(mat, u, v, light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance
@@ -75,7 +75,7 @@ func WallLow(s *state.SlicePortal) {
 			v = s.Intersection[2] / 64.0
 		}
 
-		if mat.Entity != 0 {
+		if !mat.Nil() {
 			s.Write(screenIndex, s.SampleMaterial(mat, u, v, &light, s.ProjectZ(1.0)))
 		}
 		s.ZBuffer[screenIndex] = s.Distance

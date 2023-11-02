@@ -146,7 +146,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 	}
 
 	player := r.Player()
-	mob := core.MobFromDb(player.EntityRef())
+	body := core.BodyFromDb(player.Ref())
 
 	bob := math.Sin(player.Bob)
 	// Initialize a slice...
@@ -158,9 +158,9 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 		Y:            y,
 		YStart:       0,
 		YEnd:         r.ScreenHeight,
-		Angle:        mob.Angle*concepts.Deg2rad + r.ViewRadians[x],
-		Sector:       mob.Sector(),
-		CameraZ:      mob.Pos.Render[2] + mob.Height + bob,
+		Angle:        body.Angle*concepts.Deg2rad + r.ViewRadians[x],
+		Sector:       body.Sector(),
+		CameraZ:      body.Pos.Render[2] + body.Height + bob,
 	}
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)
@@ -170,10 +170,10 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 	slice.LightElements[3].Slice = slice
 
 	slice.Ray = &state.Ray{
-		Start: *mob.Pos.Render.To2D(),
+		Start: *body.Pos.Render.To2D(),
 		End: concepts.Vector2{
-			mob.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
-			mob.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
+			body.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
+			body.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
 		},
 	}
 
@@ -201,8 +201,8 @@ func (r *Renderer) Render(buffer []uint8) {
 		r.DebugNotices.Pop()
 	}
 
-	mob := core.MobFromDb(r.Player().EntityRef())
-	if mob.SectorEntityRef.Nil() {
+	body := core.BodyFromDb(r.Player().Ref())
+	if body.SectorEntityRef.Nil() {
 		r.DebugNotices.Push("Player is not in a sector")
 		return
 	}
@@ -225,7 +225,7 @@ func (r *Renderer) Render(buffer []uint8) {
 			r.RenderColumn(buffer, x, 0, false)
 		}
 	}
-	// Mobs...
+	// Bodys...
 }
 
 func (r *Renderer) Pick(x, y int) []state.PickedElement {

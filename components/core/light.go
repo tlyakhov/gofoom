@@ -20,7 +20,10 @@ func init() {
 }
 
 func LightFromDb(entity *concepts.EntityRef) *Light {
-	return entity.Component(LightComponentIndex).(*Light)
+	if asserted, ok := entity.Component(LightComponentIndex).(*Light); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (l *Light) Construct(data map[string]any) {

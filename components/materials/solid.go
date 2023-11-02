@@ -19,7 +19,10 @@ func init() {
 }
 
 func SolidFromDb(entity *concepts.EntityRef) *Solid {
-	return entity.Component(SolidComponentIndex).(*Solid)
+	if asserted, ok := entity.Component(SolidComponentIndex).(*Solid); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (s *Solid) Construct(data map[string]any) {

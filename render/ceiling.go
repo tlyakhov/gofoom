@@ -54,7 +54,7 @@ func Ceiling(s *state.Slice) {
 		tx := world[0] / s.Sector.CeilScale
 		ty := world[1] / s.Sector.CeilScale
 
-		if mat.Entity != 0 {
+		if !mat.Nil() {
 			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToCeil), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToCeil

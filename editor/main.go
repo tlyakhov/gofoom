@@ -86,11 +86,11 @@ func onActivate() {
 		log.Fatal("Can't find PropertyGrid object in GTK+ UI file.", err)
 	}
 	editor.Grid.Container = obj.(*gtk.Grid)
-	obj, err = builder.GetObject("MobTypes")
+	obj, err = builder.GetObject("BodyTypes")
 	if err != nil {
-		log.Fatal("Can't find MobTypes object in GTK+ UI file.", err)
+		log.Fatal("Can't find BodyTypes object in GTK+ UI file.", err)
 	}
-	editor.MobTypes = obj.(*gtk.ComboBoxText)
+	editor.BodyTypes = obj.(*gtk.ComboBoxText)
 	obj, err = builder.GetObject("SectorTypes")
 	if err != nil {
 		log.Fatal("Can't find SectorTypes object in GTK+ UI file.", err)
@@ -178,8 +178,8 @@ func onActivate() {
 			editor.SwitchTool(state.ToolSplitSector)
 		case "Add Sector":
 			editor.SwitchTool(state.ToolAddSector)
-		case "Add Mob":
-			editor.SwitchTool(state.ToolAddMob)
+		case "Add Body":
+			editor.SwitchTool(state.ToolAddBody)
 		case "Align Grid":
 			editor.SwitchTool(state.ToolAlignGrid)
 		}

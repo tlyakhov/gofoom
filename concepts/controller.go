@@ -1,8 +1,22 @@
 package concepts
 
+type ControllerMethod uint32
+
+const (
+	ControllerAlways ControllerMethod = 1 << iota
+	ControllerContainment
+	ControllerContact
+	ControllerEnter
+	ControllerExit
+	ControllerLoaded
+	ControllerRecalculate
+	ControllerProximity
+)
+
 type Controller interface {
 	Parent(*ControllerSet)
 	Priority() int
+	Methods() ControllerMethod
 	// Return false if controller shouldn't run for this entity
 	Source(source *EntityRef) bool
 	// Return false if controller shouldn't run for this entity
@@ -25,6 +39,10 @@ type BaseController struct {
 
 func (c *BaseController) Priority() int {
 	return 100
+}
+
+func (c *BaseController) Methods() ControllerMethod {
+	return 0
 }
 
 func (c *BaseController) Parent(s *ControllerSet) {

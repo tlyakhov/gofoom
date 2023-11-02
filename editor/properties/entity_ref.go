@@ -77,8 +77,8 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 	box.AddAttribute(rendPix, "pixbuf", 2)
 	box.AddAttribute(rendText, "text", 1)
 
-	g.State().DB.EntityComponents.Range(func(ientity, icomponents any) bool {
-		er := g.State().DB.EntityRef(ientity.(uint64))
+	for entity := range g.State().DB.EntityComponents {
+		er := g.State().DB.EntityRef(entity)
 		if archetypes.EntityRefIsMaterial(er) {
 			listItem := opts.Append()
 			pixbuf := g.pixbuf(er)
@@ -91,8 +91,7 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 				box.SetActiveIter(listItem)
 			}
 		}
-		return true
-	})
+	}
 
 	box.Connect("changed", func(_ *gtk.ComboBox) {
 		selected, _ := box.GetActiveIter()

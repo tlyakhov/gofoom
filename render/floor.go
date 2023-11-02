@@ -54,7 +54,7 @@ func Floor(s *state.Slice) {
 		tx := world[0] / s.Sector.FloorScale
 		ty := world[1] / s.Sector.FloorScale
 
-		if mat.Entity != 0 {
+		if !mat.Nil() {
 			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToFloor), scaler))
 		}
 		s.ZBuffer[screenIndex] = distToFloor

@@ -16,7 +16,10 @@ func init() {
 }
 
 func NamedFromDb(entity *EntityRef) *Named {
-	return entity.Component(NamedComponentIndex).(*Named)
+	if asserted, ok := entity.Component(NamedComponentIndex).(*Named); ok {
+		return asserted
+	}
+	return nil
 }
 
 func (n *Named) Construct(data map[string]any) {

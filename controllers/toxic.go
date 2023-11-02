@@ -13,7 +13,7 @@ type ToxicController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(ToxicController{})
+	concepts.DbTypes().RegisterController(&ToxicController{})
 }
 
 func (t *ToxicController) Source(er *concepts.EntityRef) bool {
