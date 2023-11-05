@@ -42,7 +42,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="MobTypes">
+              <object class="GtkComboBoxText" id="BodyTypes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="active">0</property>
@@ -155,7 +155,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkRadioToolButton" id="AddMob">
+                      <object class="GtkRadioToolButton" id="AddEntity">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text">Add Mob</property>

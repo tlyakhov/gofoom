@@ -225,7 +225,7 @@ func (r *Renderer) Render(buffer []uint8) {
 			r.RenderColumn(buffer, x, 0, false)
 		}
 	}
-	// Bodys...
+	// Bodies...
 }
 
 func (r *Renderer) Pick(x, y int) []state.PickedElement {

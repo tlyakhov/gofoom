@@ -12,9 +12,21 @@ type Ray struct {
 	Start, End concepts.Vector2
 }
 
+type PickedType int
+
+//go:generate go run github.com/dmarkham/enumer -type=PickedType -json
+const (
+	PickCeiling PickedType = iota
+	PickHigh
+	PickMid
+	PickLow
+	PickFloor
+	PickBody
+)
+
 type PickedElement struct {
-	Type string // ceil, floor, mid, hi, lo, body
-	concepts.Attachable
+	Type    PickedType // ceil, floor, mid, hi, lo, body
+	Element any
 }
 
 type Slice struct {

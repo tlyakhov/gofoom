@@ -2,7 +2,6 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/editor/state"
 
@@ -10,34 +9,15 @@ import (
 )
 
 type AddSector struct {
-	state.IEditor
-
-	Mode   string
+	AddEntity
 	Sector *core.Sector
 }
 
 func (a *AddSector) Act() {
 	a.SetMapCursor("crosshair")
 	a.Mode = "AddSector"
-	a.SelectObjects([]any{a.Sector})
+	a.SelectObjects([]any{a.EntityRef})
 	//set cursor
-}
-
-func (a *AddSector) Cancel() {
-	a.RemoveFromMap()
-	a.Sector.Segments = []*core.Segment{}
-	a.SelectObjects([]any{})
-	a.ActionFinished(true)
-}
-
-func (a *AddSector) RemoveFromMap() {
-	// remove sector
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
-}
-
-func (a *AddSector) AddToMap() {
-	// Add sector
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
 func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
@@ -82,18 +62,9 @@ func (a *AddSector) OnMouseUp() {
 		if last.P.Sub(&first.P).Length() < state.SegmentSelectionEpsilon {
 			a.Sector.Segments = segs[:(len(segs) - 1)]
 			a.State().Modified = true
+			a.Sector.Recalculate()
 			a.ActionFinished(false)
-			// Recalculate
 		}
 	}
 	// TODO: right-mouse button end
-}
-
-func (a *AddSector) Frame() {}
-
-func (a *AddSector) Undo() {
-	a.RemoveFromMap()
-}
-func (a *AddSector) Redo() {
-	a.AddToMap()
 }

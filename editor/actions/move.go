@@ -17,29 +17,48 @@ type Move struct {
 	Delta    concepts.Vector2
 }
 
+func (a *Move) Iterate(arr []any,
+	bodyFunc func(*core.Body),
+	sectorFunc func(*core.Sector),
+	segmentFunc func(*core.Segment)) {
+	for _, obj := range arr {
+		switch target := obj.(type) {
+		case *concepts.EntityRef:
+			if body := core.BodyFromDb(target); body != nil {
+				bodyFunc(body)
+			}
+			if sector := core.SectorFromDb(target); sector != nil {
+				sectorFunc(sector)
+			}
+
+		case *core.Segment:
+			segmentFunc(target)
+		}
+	}
+}
+
 func (a *Move) OnMouseDown(button *gdk.EventButton) {
 	a.SetMapCursor("move")
 
-	a.Selected = []any{}
-	for _, obj := range a.State().SelectedObjects {
-		if sector, ok := obj.(core.Sector); ok {
-			for _, seg := range sector.Segments {
-				a.Selected = append(a.Selected, seg)
-			}
-		} else {
-			a.Selected = append(a.Selected, obj)
-		}
-	}
-
+	a.Selected = make([]any, len(a.State().SelectedObjects))
+	copy(a.Selected, a.State().SelectedObjects)
 	a.Original = make([]concepts.Vector3, len(a.Selected))
-	for i, obj := range a.Selected {
-		switch target := obj.(type) {
-		case *core.Segment:
-			target.P.To3D(&a.Original[i])
-		case core.Body:
-			a.Original[i] = target.Pos.Original
-		}
+
+	j := 0
+	segmentFunc := func(seg *core.Segment) {
+		a.Original = append(a.Original, concepts.Vector3{})
+		seg.P.To3D(&a.Original[j])
+		j++
 	}
+	a.Iterate(a.Selected, func(body *core.Body) {
+		a.Original = append(a.Original, concepts.Vector3{})
+		a.Original[j] = body.Pos.Original
+		j++
+	}, func(sector *core.Sector) {
+		for _, segment := range sector.Segments {
+			segmentFunc(segment)
+		}
+	}, segmentFunc)
 }
 
 func (a *Move) OnMouseMove() {
@@ -53,33 +72,43 @@ func (a *Move) OnMouseUp() {
 	a.ActionFinished(false)
 }
 func (a *Move) Act() {
-	for i, obj := range a.Selected {
-		switch target := obj.(type) {
-		case *core.Segment:
-			target.P = *a.WorldGrid(a.Original[i].To2D().Add(&a.Delta))
-			a.State().DB.NewControllerSet().Act(target.Sector.Ref(), nil, concepts.ControllerRecalculate)
-		case core.Body:
-			target.Pos.Original = *a.WorldGrid3D(a.Original[i].Add(a.Delta.To3D(new(concepts.Vector3))))
-			target.Pos.Reset()
-			a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
-		}
+	j := 0
+	segmentFunc := func(seg *core.Segment) {
+		seg.P = *a.WorldGrid(a.Original[j].To2D().Add(&a.Delta))
+		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), nil, concepts.ControllerRecalculate)
+		j++
 	}
+	a.Iterate(a.Selected, func(body *core.Body) {
+		body.Pos.Original = *a.WorldGrid3D(a.Original[j].Add(a.Delta.To3D(new(concepts.Vector3))))
+		body.Pos.Reset()
+		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+		j++
+	}, func(sector *core.Sector) {
+		for _, segment := range sector.Segments {
+			segmentFunc(segment)
+		}
+	}, segmentFunc)
 }
 func (a *Move) Cancel() {}
 func (a *Move) Frame()  {}
 
 func (a *Move) Undo() {
-	for i, obj := range a.Selected {
-		switch target := obj.(type) {
-		case *core.Segment:
-			target.P = *a.Original[i].To2D()
-			a.State().DB.NewControllerSet().Act(target.Sector.Ref(), nil, concepts.ControllerRecalculate)
-		case core.Body:
-			target.Pos.Original = a.Original[i]
-			target.Pos.Reset()
-			a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
-		}
+	j := 0
+	segmentFunc := func(seg *core.Segment) {
+		seg.P = *a.Original[j].To2D()
+		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), nil, concepts.ControllerRecalculate)
+		j++
 	}
+	a.Iterate(a.Selected, func(body *core.Body) {
+		body.Pos.Original = a.Original[j]
+		body.Pos.Reset()
+		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+		j++
+	}, func(sector *core.Sector) {
+		for _, segment := range sector.Segments {
+			segmentFunc(segment)
+		}
+	}, segmentFunc)
 }
 func (a *Move) Redo() {
 	a.Act()

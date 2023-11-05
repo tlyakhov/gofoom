@@ -40,6 +40,9 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	// Attach the cloned entities/components
 	for _, added := range s.Result {
 		for index, component := range added {
+			if component == nil {
+				continue
+			}
 			a.State().DB.Attach(index, component.Ref().Entity, component)
 		}
 	}
@@ -60,14 +63,20 @@ func (a *SplitSector) OnMouseUp() {
 		}
 	}
 
+	visited := make(map[uint64]bool)
 	for _, obj := range all {
 		switch target := obj.(type) {
 		case *concepts.EntityRef:
+			if _, ok := visited[target.Entity]; ok {
+				continue
+			}
 			if sector := core.SectorFromDb(target); sector != nil {
 				a.Split(sector)
 			}
+			visited[target.Entity] = true
 		case *core.Segment:
 			a.Split(target.Sector)
+			visited[target.Sector.Entity] = true
 		}
 	}
 	a.State().Modified = true
@@ -79,53 +88,79 @@ func (a *SplitSector) Cancel() {
 }
 
 func (a *SplitSector) Undo() {
-	bodys := []core.Body{}
+	bodies := make([]*concepts.EntityRef, 0)
 
 	for _, splitter := range a.Splitters {
 		if splitter.Result == nil {
 			continue
 		}
-		for _, added := range splitter.Result {
-			for _, e := range added.Bodies {
-				bodys = append(bodys, e)
-				e.Sector = nil
+		for _, addedComponents := range splitter.Result {
+			sector := addedComponents[core.SectorComponentIndex].(*core.Sector)
+			for _, ibody := range sector.Bodies {
+				bodies = append(bodies, ibody)
+				if body := core.BodyFromDb(ibody); body != nil {
+					body.SectorEntityRef = nil
+				}
 			}
-			added.Bodies = make(map[string]core.Body)
-			delete(a.State().World.Sectors, added.GetEntity().Name)
+			sector.Bodies = make(map[uint64]*concepts.EntityRef)
+			a.State().DB.DetachAll(sector.Entity)
 		}
 	}
-	for _, original := range a.Original {
-		a.State().World.Sectors[original.GetEntity().Name] = original
-		for _, e := range bodys {
-			if original.IsPointInside2D(e.Pos.Original.To2D()) {
-				original.Bodys[e.GetEntity().Name] = e
-				e.SetParent(original)
+	for entity, originalComponents := range a.Original {
+		for index, component := range originalComponents {
+			if component == nil {
+				continue
+			}
+			a.State().DB.Attach(index, entity, component)
+			if sector, ok := component.(*core.Sector); ok {
+				for _, ibody := range bodies {
+					if body := core.BodyFromDb(ibody); body != nil {
+						if sector.IsPointInside2D(body.Pos.Original.To2D()) {
+							body.SectorEntityRef = &sector.EntityRef
+							sector.Bodies[ibody.Entity] = &body.EntityRef
+						}
+
+					}
+				}
 			}
 		}
 	}
 }
 func (a *SplitSector) Redo() {
-	bodys := []core.Body{}
+	bodies := make([]*concepts.EntityRef, 0)
 
-	for _, original := range a.Original {
-		delete(a.State().World.Sectors, original.GetEntity().Name)
-		for _, e := range original.Bodys {
-			bodys = append(bodys, e)
-			e.Sector = nil
+	for entity, originalComponents := range a.Original {
+		sector := originalComponents[core.SectorComponentIndex].(*core.Sector)
+		for _, ibody := range sector.Bodies {
+			bodies = append(bodies, ibody)
+			if body := core.BodyFromDb(ibody); body != nil {
+				body.SectorEntityRef = nil
+			}
 		}
-		original.Bodys = make(map[string]core.Body)
+		sector.Bodies = make(map[uint64]*concepts.EntityRef)
+		a.State().DB.DetachAll(entity)
 	}
 
 	for _, splitter := range a.Splitters {
 		if splitter.Result == nil {
 			continue
 		}
-		for _, added := range splitter.Result {
-			a.State().World.Sectors[added.GetEntity().Name] = added
-			for _, e := range bodys {
-				if added.IsPointInside2D(e.Pos.Original.To2D()) {
-					added.Bodys[e.GetEntity().Name] = e
-					e.SetParent(added)
+		for _, addedComponents := range splitter.Result {
+			for index, component := range addedComponents {
+				if component == nil {
+					continue
+				}
+				a.State().DB.Attach(index, component.Ref().Entity, component)
+				if sector, ok := component.(*core.Sector); ok {
+					for _, ibody := range bodies {
+						if body := core.BodyFromDb(ibody); body != nil {
+							if sector.IsPointInside2D(body.Pos.Original.To2D()) {
+								body.SectorEntityRef = &sector.EntityRef
+								sector.Bodies[ibody.Entity] = &body.EntityRef
+							}
+
+						}
+					}
 				}
 			}
 		}

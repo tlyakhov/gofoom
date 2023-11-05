@@ -12,7 +12,7 @@ const (
 	ToolSplitSegment
 	ToolSplitSector
 	ToolAddSector
-	ToolAddBody
+	ToolAddEntity
 	ToolAlignGrid
 )
 
@@ -51,8 +51,8 @@ type IEditor interface {
 	NewAction(a IAction)
 	ActTool()
 	SwitchTool(tool EditorTool)
-	Undo()
-	Redo()
+	UndoCurrent()
+	RedoCurrent()
 	SelectObjects(objects []any)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)

@@ -37,7 +37,7 @@ const (
 	CollisionCheck        = 2.0
 	LiquidChurnSpeed      = 2.0
 	LiquidChurnSize       = 0.03
-	DoorSpeed             = 0.1
+	DoorSpeed             = 0.04
 
 	// Player constants
 	// Some of these are loosely based on Doom constants, see https://doomwiki.org/wiki/Player

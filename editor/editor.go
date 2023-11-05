@@ -44,9 +44,9 @@ type Editor struct {
 	properties.Grid
 
 	// Map view filters
-	BodysVisible       bool
-	SectorTypesVisible bool
-	BodyTypesVisible   bool
+	BodiesVisible         bool
+	SectorTypesVisible    bool
+	ComponentNamesVisible bool
 
 	// Game View state
 	Renderer        *render.Renderer
@@ -69,13 +69,11 @@ func NewEditor() *Editor {
 			Modified: false,
 			DB:       concepts.NewEntityComponentDB(),
 		},
-		MapViewGrid:        MapViewGrid{Visible: true},
-		BodysVisible:       true,
-		SectorTypesVisible: false,
-		BodyTypesVisible:   true,
+		MapViewGrid:           MapViewGrid{Visible: true},
+		BodiesVisible:         true,
+		SectorTypesVisible:    false,
+		ComponentNamesVisible: true,
 	}
-	e.DB.Simulation.Integrate = e.Integrate
-	e.DB.Simulation.Render = e.Window.QueueDraw
 	e.Grid.IEditor = e
 	e.MapViewGrid.Current = &e.Edit.MapView
 	return e
@@ -127,7 +125,7 @@ func (e *Editor) UpdateStatus() {
 		}
 		switch v := obj.(type) {
 		case *concepts.EntityRef:
-			list += strconv.FormatUint(v.Entity, 10)
+			list += v.String()
 		case *core.Segment:
 			list += v.P.String()
 		case *concepts.EntityComponentDB:
@@ -140,6 +138,9 @@ func (e *Editor) UpdateStatus() {
 
 func (e *Editor) Integrate() {
 	player := e.Renderer.Player()
+	if player == nil {
+		return
+	}
 	playerBody := core.BodyFromDb(player.Ref())
 
 	if gameKeyMap[gdk.KEY_w] {
@@ -188,13 +189,15 @@ func (e *Editor) Load(filename string) {
 	e.OpenFile = filename
 	e.Modified = false
 	e.UpdateTitle()
-	e.DB.Clear()
-	err := e.DB.Load(e.OpenFile)
+	db := concepts.NewEntityComponentDB()
+	err := db.Load(e.OpenFile)
 	if err != nil {
 		e.Alert(fmt.Sprintf("Error loading world: %v", err))
 		return
 	}
-
+	db.Simulation.Integrate = e.Integrate
+	db.Simulation.Render = e.Window.QueueDraw
+	e.DB = db
 	e.SelectObjects([]any{})
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
@@ -207,7 +210,10 @@ func (e *Editor) Test() {
 	e.SelectObjects([]any{})
 
 	e.DB.Clear()
-	controllers.CreateTestWorld(e.DB)
+	controllers.CreateTestWorld2(e.DB)
+	e.DB.Simulation.Integrate = e.Integrate
+	e.DB.Simulation.Render = e.Window.QueueDraw
+
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
 
@@ -240,12 +246,15 @@ func (e *Editor) ActTool() {
 	case state.ToolSplitSector:
 		e.NewAction(&actions.SplitSector{IEditor: e})
 	case state.ToolAddSector:
-		sectorer := archetypes.CreateSector(e.DB)
-		s := core.SectorFromDb(sectorer)
+		isector := archetypes.CreateSector(e.DB)
+		s := core.SectorFromDb(isector)
 		s.FloorMaterial = controllers.DefaultMaterial(e.DB)
 		s.CeilMaterial = controllers.DefaultMaterial(e.DB)
-		e.NewAction(&actions.AddSector{IEditor: e, Sector: s})
-	case state.ToolAddBody:
+		a := &actions.AddSector{Sector: s}
+		a.AddEntity.IEditor = e
+		a.AddEntity.EntityRef = isector
+		e.NewAction(a)
+	case state.ToolAddEntity:
 		body := archetypes.CreateLightBody(e.DB)
 		e.NewAction(&actions.AddEntity{IEditor: e, EntityRef: body})
 	case state.ToolAlignGrid:
@@ -265,7 +274,7 @@ func (e *Editor) SwitchTool(tool state.EditorTool) {
 	}
 }
 
-func (e *Editor) Undo() {
+func (e *Editor) UndoCurrent() {
 	index := len(e.UndoHistory) - 1
 	if index < 0 {
 		return
@@ -285,7 +294,7 @@ func (e *Editor) Undo() {
 	e.RedoHistory = append(e.RedoHistory, a)
 }
 
-func (e *Editor) Redo() {
+func (e *Editor) RedoCurrent() {
 	index := len(e.RedoHistory) - 1
 	if index < 0 {
 		return
@@ -355,22 +364,22 @@ func (e *Editor) GatherHoveringObjects() {
 						e.HoveringObjects = append(e.HoveringObjects, segment)
 					}
 				}
-				if segment.AABBIntersect(v1[0], v1[1], v2[0], v2[1]) {
+				/*if segment.AABBIntersect(v1[0], v1[1], v2[0], v2[1]) {
 					if state.IndexOf(e.HoveringObjects, segment) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, segment)
 					}
-				}
+				}*/
 			}
 		}
 
 		if e.Selecting() {
-			for _, bodyer := range sector.Bodies {
-				body := core.BodyFromDb(&bodyer)
+			for _, ibody := range sector.Bodies {
+				body := core.BodyFromDb(ibody)
 				p := body.Pos.Original
 				if p[0]+body.BoundingRadius >= v1[0] && p[0]-body.BoundingRadius <= v2[0] &&
 					p[1]+body.BoundingRadius >= v1[1] && p[1]-body.BoundingRadius <= v2[1] {
-					if state.IndexOf(e.HoveringObjects, bodyer) == -1 {
-						e.HoveringObjects = append(e.HoveringObjects, bodyer)
+					if state.IndexOf(e.HoveringObjects, ibody) == -1 {
+						e.HoveringObjects = append(e.HoveringObjects, ibody)
 					}
 				}
 			}
@@ -380,6 +389,7 @@ func (e *Editor) GatherHoveringObjects() {
 
 func (e *Editor) GameView(w, h int) {
 	e.Renderer = render.NewRenderer()
+	e.Renderer.DB = e.DB
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h
 	e.Renderer.Initialize()

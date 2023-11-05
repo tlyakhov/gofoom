@@ -130,9 +130,9 @@ func (a *SectorSplitter) splitEdges() {
 			se := &splitEdge{SectorSplitter: a, Source: segment, Start: *isect, Side: sideOn}
 			a.SplitSector = append(a.SplitSector, se)
 			a.EdgesOnLine = append(a.EdgesOnLine, se)
-		} else {
-			// fmt.Printf("Edge doesn't intersect split line (or end point is on the line).\n")
-		}
+		} /*else {
+			fmt.Printf("Edge doesn't intersect split line (or end point is on the line).\n")
+		}*/
 	}
 
 	// fmt.Println("Final constructed splitter:")
@@ -267,15 +267,15 @@ func (a *SectorSplitter) collect() {
 			if origComponent == nil {
 				continue
 			}
-			addedComponent := db.LoadComponent(i, origComponent.Serialize())
+			addedComponent := db.LoadComponent(index, origComponent.Serialize())
 			addedComponent.Ref().Entity = newEntity
 			a.Result[i][index] = addedComponent
 			switch target := addedComponent.(type) {
 			case *concepts.Named:
 				target.Name = fmt.Sprintf("Split %v (%v of %v)", target.Name, i, len(a.SplitSector))
 			case *core.Sector:
-				// Don't clone the bodys.
-				target.Bodies = make(map[uint64]concepts.EntityRef)
+				// Don't clone the bodies.
+				target.Bodies = make(map[uint64]*concepts.EntityRef)
 				// Clear segments
 				target.Segments = []*core.Segment{}
 
@@ -288,12 +288,13 @@ func (a *SectorSplitter) collect() {
 					addedSegment.P = visitor.Start
 					addedSegment.AdjacentSegment = nil
 					addedSegment.AdjacentSector.Reset()
-					if len(target.Segments) > 0 {
+					// Is this necessary? We recalculate anyway
+					/*if len(target.Segments) > 0 {
 						addedSegment.Next = target.Segments[0]
 						addedSegment.Prev = target.Segments[len(target.Segments)-1]
 						addedSegment.Next.Prev = addedSegment
 						addedSegment.Prev.Next = addedSegment
-					}
+					}*/
 					target.Segments = append(target.Segments, addedSegment)
 					if visitor.Source.AdjacentSegment != nil {
 						visitor.Source.AdjacentSegment.AdjacentSector.Reset()
@@ -325,7 +326,7 @@ func (a *SectorSplitter) collect() {
 		}
 		for _, components := range a.Result {
 			added := components[core.SectorComponentIndex].(*core.Sector)
-			if added.IsPointInside2D(&concepts.Vector2{body.Pos.Original[0], body.Pos.Original[1]}) {
+			if added.IsPointInside2D(body.Pos.Original.To2D()) {
 				body.SectorEntityRef = added.Ref()
 			}
 		}

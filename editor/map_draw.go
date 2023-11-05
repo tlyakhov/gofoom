@@ -23,6 +23,8 @@ func DrawMap(da *gtk.DrawingArea, cr *cairo.Context) {
 	editor.MapViewGrid.Draw(&editor.Edit, cr)
 	TransformContext(cr)
 
+	cr.SetFontSize(14.0 / editor.Scale)
+
 	for _, isector := range editor.DB.All(core.SectorComponentIndex) {
 		DrawSector(cr, isector.(*core.Sector))
 	}

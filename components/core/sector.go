@@ -1,6 +1,7 @@
 package core
 
 import (
+	"log"
 	"math"
 
 	"tlyakhov/gofoom/concepts"
@@ -11,7 +12,7 @@ type Sector struct {
 	concepts.Attached `editable:"^"`
 
 	Segments      []*Segment
-	Bodies        map[uint64]concepts.EntityRef
+	Bodies        map[uint64]*concepts.EntityRef
 	BottomZ       concepts.SimScalar  `editable:"Floor Height"`
 	TopZ          concepts.SimScalar  `editable:"Ceiling Height"`
 	FloorScale    float64             `editable:"Floor Material Scale"`
@@ -77,7 +78,7 @@ func (s *Sector) SetDB(db *concepts.EntityComponentDB) {
 }
 
 func (s *Sector) AddSegment(x float64, y float64) *Segment {
-	segment := &Segment{}
+	segment := new(Segment)
 	segment.Construct(nil)
 	segment.Sector = s
 	segment.P = concepts.Vector2{x, y}
@@ -88,7 +89,7 @@ func (s *Sector) AddSegment(x float64, y float64) *Segment {
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Segments = make([]*Segment, 0)
-	s.Bodies = make(map[uint64]concepts.EntityRef)
+	s.Bodies = make(map[uint64]*concepts.EntityRef)
 	s.BottomZ.Set(0.0)
 	s.TopZ.Set(64.0)
 	s.FloorScale = 64.0
@@ -120,22 +121,32 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["FloorMaterial"]; ok {
-		s.FloorMaterial = s.DB.EntityRef(v.(uint64))
+		s.FloorMaterial = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["CeilMaterial"]; ok {
-		s.CeilMaterial = s.DB.EntityRef(v.(uint64))
+		s.CeilMaterial = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["Segments"]; ok {
-		concepts.MapArray(s, &s.Segments, v)
+		jsonSegments := v.([]any)
+		s.Segments = make([]*Segment, len(jsonSegments))
+		for i, jsonSegment := range jsonSegments {
+			segment := new(Segment)
+			segment.Sector = s
+			segment.DB = s.DB
+			segment.Construct(jsonSegment.(map[string]any))
+			s.Segments[i] = segment
+		}
 	}
-	if v, ok := data["Bodys"]; ok {
-		s.Bodies = concepts.DeserializeEntityRefs(v.([]any))
+	if v, ok := data["Bodies"]; ok {
+		if ers, ok := v.([]any); ok {
+			s.Bodies = s.DB.DeserializeEntityRefs(ers)
+		}
 	}
 	if v, ok := data["FloorTarget"]; ok {
-		s.FloorTarget = s.DB.EntityRef(v.(uint64))
+		s.FloorTarget = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["CeilTarget"]; ok {
-		s.CeilTarget = s.DB.EntityRef(v.(uint64))
+		s.CeilTarget = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["FloorFriction"]; ok {
 		s.FloorFriction = v.(float64)
@@ -158,19 +169,21 @@ func (s *Sector) Serialize() map[string]any {
 	}
 
 	if !s.FloorTarget.Nil() {
-		result["FloorTarget"] = s.FloorTarget.Entity
+		result["FloorTarget"] = s.FloorTarget.Serialize()
 	}
 	if !s.CeilTarget.Nil() {
-		result["CeilTarget"] = s.CeilTarget.Entity
+		result["CeilTarget"] = s.CeilTarget.Serialize()
 	}
 	if !s.FloorMaterial.Nil() {
-		result["FloorMaterial"] = s.FloorMaterial.Entity
+		result["FloorMaterial"] = s.FloorMaterial.Serialize()
 	}
 	if !s.CeilMaterial.Nil() {
-		result["CeilMaterial"] = s.CeilMaterial.Entity
+		result["CeilMaterial"] = s.CeilMaterial.Serialize()
 	}
 
-	result["Bodys"] = concepts.SerializeEntityRefMap(s.Bodies)
+	if len(s.Bodies) > 0 {
+		result["Bodies"] = concepts.SerializeEntityRefMap(s.Bodies)
+	}
 
 	segments := []any{}
 	for _, seg := range s.Segments {
@@ -376,4 +389,11 @@ func (s *Sector) AABBIntersect(min, max *concepts.Vector3) bool {
 	py := (s.Max[1] - s.Min[1] + max[1] - min[1]) - math.Abs(dy)
 
 	return py > 0
+}
+
+func (s *Sector) DbgPrintSegments() {
+	log.Printf("Segments:")
+	for i, seg := range s.Segments {
+		log.Printf("%v: %v", i, seg.P.StringHuman())
+	}
 }

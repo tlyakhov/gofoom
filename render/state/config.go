@@ -36,6 +36,9 @@ func (c *Config) Initialize() {
 
 // Player is a convenience function to get the player this renderer links to.
 func (c *Config) Player() *behaviors.Player {
+	if c == nil {
+		return nil
+	}
 	if asserted, ok := c.DB.First(behaviors.PlayerComponentIndex).(*behaviors.Player); ok {
 		return asserted
 	}

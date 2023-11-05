@@ -1,5 +1,10 @@
 package concepts
 
+import (
+	"strconv"
+	"strings"
+)
+
 type Attached struct {
 	EntityRef
 	Active bool `editable:"Active?"`
@@ -33,7 +38,7 @@ func (a *Attached) Construct(data map[string]any) {
 		return
 	}
 	if v, ok := data["Entity"]; ok {
-		a.Entity = v.(uint64)
+		a.Entity, _ = strconv.ParseUint(v.(string), 10, 64)
 	}
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
@@ -41,5 +46,36 @@ func (a *Attached) Construct(data map[string]any) {
 }
 
 func (a *Attached) Serialize() map[string]any {
-	return map[string]any{"Entity": a.Entity, "Active": a.Active}
+	return map[string]any{"Entity": strconv.FormatUint(a.Entity, 10), "Active": a.Active}
+}
+
+func (a *Attached) DeserializeComponentList(list *map[int]bool, name string, data map[string]any) {
+	v, ok := data[name]
+	if !ok {
+		return
+	}
+	listString, ok := v.(string)
+	if !ok {
+		return
+	}
+	split := strings.Split(listString, ",")
+	*list = make(map[int]bool)
+	for _, typeName := range split {
+		componentIndex := DbTypes().Indexes[typeName]
+		if componentIndex != 0 {
+			(*list)[componentIndex] = true
+		}
+	}
+}
+
+func (a *Attached) SerializeComponentList(list map[int]bool, name string, result map[string]any) {
+	if len(list) == 0 {
+		return
+	}
+
+	types := make([]string, 0)
+	for index := range list {
+		types = append(types, DbTypes().Types[index].String())
+	}
+	result[name] = strings.Join(types, ",")
 }

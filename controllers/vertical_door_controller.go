@@ -17,6 +17,10 @@ func init() {
 	concepts.DbTypes().RegisterController(&VerticalDoorController{})
 }
 
+func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
+	return concepts.ControllerAlways | concepts.ControllerTrigger
+}
+
 func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
 	vd.TargetEntity = target
 	vd.VerticalDoor = sectors.VerticalDoorFromDb(target)
@@ -25,21 +29,15 @@ func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
 		vd.Sector != nil && vd.Sector.Active
 }
 
-func (vd *VerticalDoorController) ActOnBody(e core.Body) {
-	if vd.Sector.Center.Dist(&e.Pos.Now) < 100 {
-		if vd.VerticalDoor.State == sectors.Closed || vd.State == sectors.Closing {
-			vd.State = sectors.Opening
-			vd.VelZ = constants.DoorSpeed
-		}
-	} else if vd.State == sectors.Open {
-		vd.State = sectors.Closing
-		vd.VelZ = -constants.DoorSpeed
+func (vd *VerticalDoorController) Trigger() {
+	if vd.VerticalDoor.State == sectors.Closed || vd.State == sectors.Closing {
+		vd.State = sectors.Opening
+		vd.VelZ = constants.DoorSpeed
 	}
 }
 
 func (vd *VerticalDoorController) Always() {
 	z := vd.Sector.TopZ.Now + vd.VelZ*constants.TimeStep
-
 	if z < vd.Sector.BottomZ.Now {
 		z = vd.Sector.BottomZ.Now
 		vd.VelZ = 0
@@ -51,12 +49,8 @@ func (vd *VerticalDoorController) Always() {
 		vd.State = sectors.Open
 	}
 	vd.Sector.TopZ.Now = z
+	if vd.State == sectors.Open {
+		vd.State = sectors.Closing
+		vd.VelZ = -constants.DoorSpeed
+	}
 }
-
-/*
-func (s *VerticalDoorController) Recalculate() {
-	s.PhysicalSectorController.Sector.Recalculate()
-	s.PhysicalSectorController.Max[2] = s.PhysicalSectorController.TopZ.Original
-	s.UpdatePVS()
-}
-*/

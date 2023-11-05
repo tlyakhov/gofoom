@@ -78,7 +78,7 @@ func GameButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 	press := gdk.EventButtonNewFromEvent(ev)
 	da.GrabFocus()
 
-	// TODO: make this more granular, and also support bodys
+	// TODO: make this more granular, and also support bodies
 	if press.Button() == 1 {
 		daw := da.GetAllocatedWidth()
 		dah := da.GetAllocatedHeight()
@@ -89,7 +89,7 @@ func GameButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 		picked := editor.Renderer.Pick(int(x), int(y))
 		objects := make([]any, 0)
 		for _, p := range picked {
-			objects = append(objects, p.Attachable)
+			objects = append(objects, p.Element)
 		}
 		editor.SelectObjects(objects)
 	}

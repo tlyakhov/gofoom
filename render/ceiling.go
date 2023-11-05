@@ -10,7 +10,7 @@ import (
 
 func CeilingPick(s *state.Slice) {
 	if s.Y >= s.YStart && s.Y < s.ClippedStart {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "ceiling", Attachable: s.Sector})
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickCeiling, Element: s.Sector.Ref()})
 	}
 }
 

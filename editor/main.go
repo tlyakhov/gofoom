@@ -106,8 +106,8 @@ func onActivate() {
 	editor.AddSimpleMenuAction("save", MainSave)
 	editor.AddSimpleMenuAction("saveas", MainSaveAs)
 	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
-	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.Undo() })
-	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.Redo() })
+	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.UndoCurrent() })
+	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.RedoCurrent() })
 	editor.AddSimpleMenuAction("delete", func(obj *glib.Object) {
 		action := &actions.Delete{IEditor: editor}
 		editor.NewAction(action)
@@ -178,8 +178,8 @@ func onActivate() {
 			editor.SwitchTool(state.ToolSplitSector)
 		case "Add Sector":
 			editor.SwitchTool(state.ToolAddSector)
-		case "Add Body":
-			editor.SwitchTool(state.ToolAddBody)
+		case "Add Entity":
+			editor.SwitchTool(state.ToolAddEntity)
 		case "Align Grid":
 			editor.SwitchTool(state.ToolAlignGrid)
 		}

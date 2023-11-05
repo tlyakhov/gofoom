@@ -43,7 +43,7 @@ func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
 }
 
 func (g *MapViewGrid) Draw(e *state.Edit, cr *cairo.Context) {
-	if !g.Visible || e.Scale*g.Current.Step < 5.0 {
+	if !g.Visible || e.Scale*g.Current.Step < 10.0 {
 		cr.SetSourceRGB(0, 0, 0)
 		cr.Paint()
 		return

@@ -14,7 +14,7 @@ func (bc *BodyController) Enter() {
 		return
 	}
 	bc.Sector = core.SectorFromDb(bc.SourceEntity)
-	bc.Sector.Bodies[bc.TargetEntity.Entity] = *bc.TargetEntity
+	bc.Sector.Bodies[bc.TargetEntity.Entity] = bc.TargetEntity
 	bc.Body.SectorEntityRef = bc.SourceEntity
 
 	if bc.Body.OnGround {

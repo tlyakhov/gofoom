@@ -1,9 +1,10 @@
 package properties
 
 import (
-	"fmt"
+	"log"
 	"reflect"
 	"sort"
+	"strings"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
@@ -13,7 +14,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-type pgState struct {
+type PropertyGridState struct {
 	Fields           map[string]*state.PropertyGridField
 	Visited          map[any]bool
 	Depth            int
@@ -27,14 +28,14 @@ type Grid struct {
 	Container *gtk.Grid
 }
 
-func (g *Grid) childFields(parentName string, childValue reflect.Value, state pgState, updateParent bool) {
+func (g *Grid) childFields(parentName string, childValue reflect.Value, state PropertyGridState, updateParent bool) {
 	var child any
 	if childValue.Type().Kind() == reflect.Struct {
 		child = childValue.Addr().Interface()
 	} else if childValue.Type().Kind() == reflect.Ptr || childValue.Type().Kind() == reflect.Interface {
 		child = childValue.Interface()
 	} else {
-		fmt.Printf("%v, %v", childValue.String(), childValue.Type())
+		log.Printf("%v, %v", childValue.String(), childValue.Type())
 	}
 	if !state.Visited[child] {
 		state.ParentName = parentName
@@ -45,19 +46,19 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state pg
 	}
 }
 
-func (g *Grid) gatherFields(obj any, pgs pgState) {
-	v := reflect.ValueOf(obj)
-	t := v.Type().Elem()
-	if v.IsNil() || t.String() == "main.MapPoint" {
+func (g *Grid) gatherFields(obj any, pgs PropertyGridState) {
+	objValue := reflect.ValueOf(obj)
+	objType := objValue.Type().Elem()
+	if objValue.IsNil() {
 		return
 	}
 
 	pgs.Depth++
 	pgs.Visited[obj] = true
 
-	for i := 0; i < t.NumField(); i++ {
-		field := t.FieldByIndex([]int{i})
-		fieldValue := v.Elem().Field(i)
+	for i := 0; i < objType.NumField(); i++ {
+		field := objType.FieldByIndex([]int{i})
+		fieldValue := objValue.Elem().Field(i)
 		tag, ok := field.Tag.Lookup("editable")
 		if !ok {
 			continue
@@ -107,9 +108,9 @@ func (g *Grid) gatherFields(obj any, pgs pgState) {
 		} else if field.Type.Name() == "SimScalar" || field.Type.Name() == "SimVector2" || field.Type.Name() == "SimVector3" {
 			delete(pgs.Fields, display)
 			name := display
-			if pgs.ParentName != "" {
+			/*if pgs.ParentName != "" {
 				name = pgs.ParentName + "." + name
-			}
+			}*/
 			g.childFields(name, fieldValue, pgs, true)
 		}
 	}
@@ -120,10 +121,24 @@ func (g *Grid) Refresh(selection []any) {
 		g.Container.Remove(child.(gtk.IWidget))
 	})
 
-	state := pgState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
+	state := PropertyGridState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
 	for _, obj := range selection {
-		state.Parent = obj
-		g.gatherFields(obj, state)
+		switch target := obj.(type) {
+		case *concepts.EntityRef:
+			for _, c := range target.All() {
+				if c == nil {
+					continue
+				}
+				state.Parent = c
+				n := strings.Split(reflect.TypeOf(c).String(), ".")
+				state.ParentName = n[len(n)-1]
+				g.gatherFields(c, state)
+			}
+		case *core.Segment:
+			state.Parent = nil
+			state.ParentName = "Segment"
+			g.gatherFields(target, state)
+		}
 	}
 
 	sorted := make([]string, len(state.Fields))
@@ -133,29 +148,12 @@ func (g *Grid) Refresh(selection []any) {
 		i++
 	}
 	sort.SliceStable(sorted, func(i, j int) bool {
-		f1 := state.Fields[sorted[i]]
-		f2 := state.Fields[sorted[j]]
-		/*if f1.Depth > f2.Depth {
-			return true
-		} else if f1.Depth < f2.Depth {
-			return false
-		}*/
-		return f1.Name < f2.Name
+		return sorted[i] < sorted[j]
 	})
 
-	var lastParentName string
 	index := 1
 	for _, display := range sorted {
 		field := state.Fields[display]
-		if field.ParentName != lastParentName {
-			label, _ := gtk.LabelNew(field.ParentName)
-			label.SetJustify(gtk.JUSTIFY_FILL)
-			label.SetHExpand(true)
-			label.SetHAlign(gtk.ALIGN_CENTER)
-			g.Container.Attach(label, 1, index, 2, 1)
-			lastParentName = field.ParentName
-			index++
-		}
 
 		if !field.Values[0].CanInterface() {
 			continue
@@ -182,7 +180,7 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(index, field, core.MaterialScaleValues())
 		case *core.CollisionResponse:
 			g.fieldEnum(index, field, core.CollisionResponseValues())
-		case *concepts.EntityRef:
+		case **concepts.EntityRef:
 			g.fieldEntityRef(index, field)
 		case *map[string]core.Sampleable:
 			g.fieldMaterials(index, field)

@@ -92,7 +92,7 @@ func integrateGame() {
 func renderGame() {
 	playerBody := core.BodyFromDb(renderer.Player().Ref())
 	playerAlive := behaviors.AliveFromDb(playerBody.Ref())
-	// player := bodys.PlayerFromDb(&gameMap.Player)
+	// player := bodies.PlayerFromDb(&gameMap.Player)
 
 	renderer.Render(buffer.Pix)
 	canvas.SetPixels(buffer.Pix)
@@ -103,7 +103,7 @@ func renderGame() {
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", db.Simulation.FPS))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	if !playerBody.SectorEntityRef.Nil() {
-		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v[%v]", playerBody.SectorEntityRef.All(), playerBody.SectorEntityRef.Entity))
+		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v", playerBody.SectorEntityRef.String()))
 	}
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {
@@ -155,12 +155,12 @@ func run() {
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
 
-	controllers.CreateTestWorld(db)
+	//controllers.CreateTestWorld2(db)
 	//db.Save("data/worlds/exported_test.json")
-	/*if err = db.Load("data/worlds/hall.json"); err != nil {
+	if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
-	}*/
+	}
 	renderer.DB = db
 
 	mainFont, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)

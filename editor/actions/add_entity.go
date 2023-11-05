@@ -24,6 +24,7 @@ func (a *AddEntity) RemoveFromMap() {
 		}
 		delete(body.Sector().Bodies, a.EntityRef.Entity)
 	}
+	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
 func (a *AddEntity) AttachAll() {
@@ -37,10 +38,10 @@ func (a *AddEntity) AddToMap() {
 		body := c.(*core.Body)
 		if a.ContainingSector != nil {
 			body.SectorEntityRef = a.ContainingSector.Ref()
-			a.ContainingSector.Bodies[a.EntityRef.Entity] = *a.EntityRef
+			a.ContainingSector.Bodies[a.EntityRef.Entity] = a.EntityRef
 		}
-		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 	}
+	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
 func (a *AddEntity) OnMouseDown(button *gdk.EventButton) {}
@@ -81,7 +82,9 @@ func (a *AddEntity) Act() {
 }
 func (a *AddEntity) Cancel() {
 	a.RemoveFromMap()
-	a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
+	if a.EntityRef != nil {
+		a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
+	}
 	a.SelectObjects(nil)
 	a.ActionFinished(true)
 }
