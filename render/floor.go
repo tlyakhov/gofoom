@@ -10,7 +10,7 @@ import (
 
 func FloorPick(s *state.Slice) {
 	if s.Y >= s.ClippedEnd && s.Y < s.YEnd {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "floor", Attachable: s.Sector})
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickFloor, Element: s.Sector.Ref()})
 	}
 }
 

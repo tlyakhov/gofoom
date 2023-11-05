@@ -1,5 +1,11 @@
 package concepts
 
+import (
+	"reflect"
+	"strconv"
+	"strings"
+)
+
 type EntityRef struct {
 	components []Attachable
 	Entity     uint64
@@ -28,25 +34,45 @@ func (er *EntityRef) Component(index int) Attachable {
 	if er == nil || er.Entity == 0 || index == 0 {
 		return nil
 	}
-	return er.All()[index]
-}
-
-func DeserializeEntityRefs(data []any) map[uint64]EntityRef {
-	result := make(map[uint64]EntityRef)
-
-	for _, v := range data {
-		entity := v.(uint64)
-		result[entity] = EntityRef{Entity: entity}
+	all := er.All()
+	if all == nil {
+		return nil
 	}
-	return result
+	return all[index]
 }
 
-func SerializeEntityRefMap(data map[uint64]EntityRef) []uint64 {
-	result := make([]uint64, len(data))
+func (er *EntityRef) String() string {
+	var sb strings.Builder
+
+	sb.WriteString("[")
+	sb.WriteString(strconv.FormatUint(er.Entity, 10))
+	sb.WriteString("] ")
+	first := true
+	for _, c := range er.All() {
+		if c == nil {
+			continue
+		}
+		if !first {
+			sb.WriteString("|")
+		}
+		first = false
+		t := reflect.TypeOf(c).Elem().String()
+		split := strings.Split(t, ".")
+		sb.WriteString(split[len(split)-1])
+	}
+	return sb.String()
+}
+
+func (er *EntityRef) Serialize() string {
+	return strconv.FormatUint(er.Entity, 10)
+}
+
+func SerializeEntityRefMap(data map[uint64]*EntityRef) []string {
+	result := make([]string, len(data))
 
 	i := 0
 	for entity := range data {
-		result[i] = entity
+		result[i] = strconv.FormatUint(entity, 10)
 		i++
 	}
 	return result

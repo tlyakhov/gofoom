@@ -24,16 +24,30 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "buildFlags": "-gcflags=-B",            
+            "buildFlags": "-gcflags=-B",
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Convert Worlds",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "buildFlags": "-gcflags=-B",
+            "program": "${workspaceFolder}/tools/world_converter",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--input=data/oldworlds/*.json"
+            ]
         },
         {
             "name": "Profile Editor",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "args": ["-cpuprofile=editor.prof"],
+            "args": [
+                "-cpuprofile=editor.prof"
+            ],
             "program": "${workspaceFolder}/editor/",
             "cwd": "${workspaceFolder}"
         },
@@ -43,7 +57,9 @@
             "request": "launch",
             "mode": "auto",
             "buildFlags": "-gcflags=-B",
-            "args": ["-cpuprofile=game.prof"],
+            "args": [
+                "-cpuprofile=game.prof"
+            ],
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}"
         }

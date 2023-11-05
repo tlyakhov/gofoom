@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"slices"
+	"strconv"
 	"sync"
 	"sync/atomic"
 )
@@ -31,6 +33,7 @@ func NewEntityComponentDB() *EntityComponentDB {
 }
 
 func (db *EntityComponentDB) Clear() {
+	db.currentEntity = 0
 	db.EntityComponents = make(map[uint64][]Attachable)
 	db.Components = make([]map[uint64]Attachable, len(DbTypes().Indexes))
 	db.Simulation = NewSimulation()
@@ -70,6 +73,9 @@ func (db *EntityComponentDB) First(index int) Attachable {
 }
 
 func (db *EntityComponentDB) attach(entity uint64, component Attachable, index int) {
+	if entity == 0 {
+		log.Printf("Tried to attach 0 entity!")
+	}
 	component.Ref().Reset()
 	component.Ref().Entity = entity
 	component.SetDB(db)
@@ -94,7 +100,10 @@ func (db *EntityComponentDB) NewComponent(entity uint64, index int) Attachable {
 
 func (db *EntityComponentDB) LoadComponent(index int, data map[string]any) Attachable {
 	var entity uint64
-	if entity = data["Entity"].(uint64); entity == 0 {
+	var err error
+	if data["Entity"] == nil {
+		entity = db.NewEntity()
+	} else if entity, err = strconv.ParseUint(data["Entity"].(string), 10, 64); entity == 0 || err != nil {
 		entity = db.NewEntity()
 	}
 
@@ -197,6 +206,16 @@ func (db *EntityComponentDB) GetEntityRefByName(name string) *EntityRef {
 	return &EntityRef{}
 }
 
+func (db *EntityComponentDB) DeserializeEntity(jsonEntity map[string]any) {
+	for name, index := range DbTypes().Indexes {
+		jsonData := jsonEntity[name]
+		if jsonData == nil {
+			continue
+		}
+		jsonComponent := jsonData.(map[string]any)
+		db.LoadComponent(index, jsonComponent)
+	}
+}
 func (db *EntityComponentDB) Load(filename string) error {
 	db.lock.Lock()
 	defer db.lock.Unlock()
@@ -214,8 +233,9 @@ func (db *EntityComponentDB) Load(filename string) error {
 		return err
 	}
 
-	jsonEntities := parsed.([]any)
-	if jsonEntities == nil {
+	var jsonEntities []any
+	var ok bool
+	if jsonEntities, ok = parsed.([]any); !ok || jsonEntities == nil {
 		return fmt.Errorf("ECS JSON root must be an array")
 	}
 
@@ -225,14 +245,7 @@ func (db *EntityComponentDB) Load(filename string) error {
 			log.Printf("ECS JSON array element should be an object\n")
 			continue
 		}
-		for name, index := range DbTypes().Indexes {
-			jsonData := jsonEntity[name]
-			if jsonData == nil {
-				continue
-			}
-			jsonComponent := jsonData.(map[string]any)
-			db.LoadComponent(index, jsonComponent)
-		}
+		db.DeserializeEntity(jsonEntity)
 	}
 
 	// After everything's loaded, trigger the controllers
@@ -242,17 +255,34 @@ func (db *EntityComponentDB) Load(filename string) error {
 	return nil
 }
 
+func (db *EntityComponentDB) SerializeEntity(entity uint64) map[string]any {
+	components := db.EntityComponents[entity]
+	jsonEntity := make(map[string]any)
+	jsonEntity["Entity"] = strconv.FormatUint(entity, 10)
+	for index, component := range components {
+		if component == nil {
+			continue
+		}
+		jsonEntity[DbTypes().Types[index].String()] = component.Serialize()
+	}
+	return jsonEntity
+}
+
 func (db *EntityComponentDB) Save(filename string) {
 	db.lock.Lock()
 	defer db.lock.Unlock()
 	jsonDB := make([]any, 0)
 
-	for _, components := range db.EntityComponents {
-		jsonEntity := make(map[string]any)
-		jsonDB = append(jsonDB, jsonEntity)
-		for index, component := range components {
-			jsonEntity[DbTypes().Types[index].String()] = component.Serialize()
-		}
+	sortedEntities := make([]uint64, len(db.EntityComponents))
+	i := 0
+	for entity := range db.EntityComponents {
+		sortedEntities[i] = entity
+		i++
+	}
+	slices.Sort(sortedEntities)
+
+	for _, entity := range sortedEntities {
+		jsonDB = append(jsonDB, db.SerializeEntity(entity))
 	}
 
 	bytes, err := json.MarshalIndent(jsonDB, "", "  ")
@@ -262,4 +292,26 @@ func (db *EntityComponentDB) Save(filename string) {
 	}
 
 	os.WriteFile(filename, bytes, os.ModePerm)
+}
+
+func (db *EntityComponentDB) DeserializeEntityRefs(data []any) map[uint64]*EntityRef {
+	result := make(map[uint64]*EntityRef)
+
+	for _, v := range data {
+		if entity, err := strconv.ParseUint(v.(string), 10, 64); err == nil {
+			result[entity] = db.EntityRef(entity)
+		}
+	}
+	return result
+}
+
+func (db *EntityComponentDB) DeserializeEntityRef(data any) *EntityRef {
+	if data == nil {
+		return nil
+	}
+
+	if entity, err := strconv.ParseUint(data.(string), 10, 64); err == nil {
+		return db.EntityRef(entity)
+	}
+	return nil
 }

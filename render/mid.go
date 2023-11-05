@@ -8,7 +8,7 @@ import (
 
 func WallMidPick(s *state.Slice) {
 	if s.Y >= s.ClippedStart && s.Y < s.ClippedEnd {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: "mid", Attachable: s.Segment})
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickMid, Element: s.Segment})
 	}
 }
 

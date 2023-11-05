@@ -1,1612 +1,2390 @@
-{
-    "SpawnX": 0,
-    "SpawnY": -70,
-    "Materials": [
+[
+  {
+    "Entity": "1",
+    "core.Spawn": {
+      "Active": true,
+      "Entity": "1",
+      "X": 0,
+      "Y": -70
+    }
+  },
+  {
+    "Entity": "2",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "2",
+      "Name": "Default"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "2",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/WDef.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "2"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "2",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "3",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "3",
+      "Name": "mat1"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "3",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/WSlimy.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "3"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "3",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "4",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "4",
+      "Name": "mat2"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "4",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/WMetal.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "4"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "4",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "5",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "5",
+      "Name": "mat3"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "5",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/WSlimeGrate.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "5"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "5",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "6",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "6",
+      "Name": "mat6"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "6",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/WDirty.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "6"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "6",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "7",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "7",
+      "Name": "Doom Garage Door"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "7",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/DGarage.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "7"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "7",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "8",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "8",
+      "Name": "Default Floor"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "8",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/FDef.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "8"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "8",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "9",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "9",
+      "Name": "f1"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "9",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/FGrayTile.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "9"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "9",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "10",
+    "behaviors.Toxic": {
+      "Active": true,
+      "Entity": "10",
+      "Hurt": 5
+    },
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "10",
+      "Name": "Painful Slime"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "10",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/FSlime.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "10"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "10",
+      "IsLiquid": true,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "11",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "11",
+      "Name": "f5"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "11",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/FRedLight.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "11"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "11",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "12",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "12",
+      "Name": "f6"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "12",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/FHexMetal.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "12"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "12",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "13",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "13",
+      "Name": "Water"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "13",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/Water.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "13"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "13",
+      "IsLiquid": true,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "14",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "14",
+      "Name": "Sky"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "14",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/sky.png"
+    },
+    "materials.Sky": {
+      "Active": true,
+      "Entity": "14",
+      "StaticBackground": false
+    }
+  },
+  {
+    "Entity": "15",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "15",
+      "Name": "sector0"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "15",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
         {
-            "Type": "materials.LitSampled",
-            "Name": "Default",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/WDef.png"
-            }
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "14",
+          "X": -100,
+          "Y": -100
         },
         {
-            "Type": "materials.LitSampled",
-            "Name": "mat1",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/WSlimy.png"
-            }
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "4",
+          "X": 100,
+          "Y": -100
         },
         {
-            "Type": "materials.LitSampled",
-            "Name": "mat2",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/WMetal.png"
-            }
+          "AdjacentSector": "16",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 100,
+          "Y": -30
         },
         {
-            "Type": "materials.LitSampled",
-            "Name": "mat3",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/WSlimeGrate.png"
-            }
+          "AdjacentSector": "23",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 30,
+          "Y": -30
         },
         {
-            "Type": "materials.LitSampled",
-            "Name": "mat6",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/WDirty.png"
-            }
+          "AdjacentSector": "17",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -30,
+          "Y": -30
         },
         {
-            "Type": "materials.LitSampled",
-            "Name": "Doom Garage Door",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/DGarage.png"
-            }
-        },
-        {
-            "Type": "materials.LitSampled",
-            "Name": "Default Floor",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/FDef.png"
-            }
-        },
-        {
-            "Type": "materials.LitSampled",
-            "Name": "f1",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/FGrayTile.png"
-            }
-        },
-        {
-            "Type": "materials.PainfulLitSampled",
-            "Name": "Painful Slime",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/FSlime.png"
-            },
-            "IsLiquid": true,
-            "Hurt": 5
-        },
-        {
-            "Type": "materials.LitSampled",
-            "Name": "f5",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/FRedLight.png"
-            }
-        },
-        {
-            "Type": "materials.LitSampled",
-            "Name": "f6",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/FHexMetal.png"
-            }
-        },
-        {
-            "Type": "materials.LitSampled",
-            "Name": "Water",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/Water.png"
-            },
-            "IsLiquid": true
-        },
-        {
-            "Type": "materials.Sky",
-            "Name": "Sky",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/game/sky.png"
-            }
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "4",
+          "X": -100,
+          "Y": -30
         }
-    ],
-    "Sectors": [
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "16",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "16",
+      "Name": "sector1"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "16",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
         {
-            "Type": "core.PhysicalSector",
-            "Name": "sector0",
-            "BottomZ": 0,
-            "TopZ": 64,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Sky",
-            "Segments": [
-                {
-                    "X": -100,
-                    "Y": -100,
-                    "MidMaterial": "Sky",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": -100,
-                    "MidMaterial": "mat2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": -30,
-                    "AdjacentSector": "sector1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 30,
-                    "Y": -30,
-                    "AdjacentSector": "sector4",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -30,
-                    "Y": -30,
-                    "AdjacentSector": "sector2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -100,
-                    "Y": -30,
-                    "MidMaterial": "mat2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
+          "AdjacentSector": "51",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 100,
+          "Y": -30
         },
         {
-            "Type": "core.PhysicalSector",
-            "Name": "sector1",
-            "BottomZ": 0,
-            "TopZ": 64,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Sky",
-            "Segments": [
-                {
-                    "X": 100,
-                    "Y": -30,
-                    "AdjacentSector": "sector25",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 30,
-                    "AdjacentSector": "sector3",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 30,
-                    "Y": 30,
-                    "AdjacentSector": "sector4",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 30,
-                    "Y": -30,
-                    "AdjacentSector": "sector0",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
+          "AdjacentSector": "18",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 100,
+          "Y": 30
         },
         {
-            "Type": "core.PhysicalSector",
-            "Name": "sector2",
-            "BottomZ": -10,
-            "TopZ": 64,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Sky",
-            "Segments": [
-                {
-                    "X": -100,
-                    "Y": -30,
-                    "AdjacentSector": "sector5",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -100,
-                    "Y": 30,
-                    "AdjacentSector": "sector3",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -30,
-                    "Y": 30,
-                    "AdjacentSector": "sector4",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -30,
-                    "Y": -30,
-                    "AdjacentSector": "sector0",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
+          "AdjacentSector": "23",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 30,
+          "Y": 30
         },
         {
-            "Type": "core.PhysicalSector",
-            "Name": "sector3",
-            "BottomZ": 0,
-            "TopZ": 64,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Sky",
-            "Mobs": [
-                {
-                    "Type": "GameMobFlub",
-                    "Pos": {
-                        "X": -17,
-                        "Y": 68,
-                        "Z": 0
-                    }
-                },
-                {
-                    "Type": "GameMobPluk",
-                    "Pos": {
-                        "X": 45,
-                        "Y": 68,
-                        "Z": 0
-                    }
-                },
-                {
-                    "Type": "GameMobPluk",
-                    "Pos": {
-                        "X": 85,
-                        "Y": 68,
-                        "Z": 0
-                    }
-                },
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": 0,
-                        "Y": 68,
-                        "Z": 32
-                    },
-                    "Behaviors": [
-                        {
-                            "Type": "behaviors.Light",
-                            "Attenuation": 0
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": -100,
-                    "Y": 100,
-                    "AdjacentSector": "sector26",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 100,
-                    "MidMaterial": "mat2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 30,
-                    "AdjacentSector": "sector1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 30,
-                    "Y": 30,
-                    "AdjacentSector": "sector4",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -30,
-                    "Y": 30,
-                    "AdjacentSector": "sector2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -100,
-                    "Y": 30,
-                    "MidMaterial": "mat2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector4",
-            "BottomZ": -3,
-            "TopZ": 50,
-            "FloorMaterial": "f1",
-            "CeilMaterial": "f5",
-            "Segments": [
-                {
-                    "X": -30,
-                    "Y": -30,
-                    "AdjacentSector": "sector0",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 30,
-                    "Y": -30,
-                    "AdjacentSector": "sector1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 30,
-                    "Y": 30,
-                    "AdjacentSector": "sector3",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -30,
-                    "Y": 30,
-                    "AdjacentSector": "sector2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector5",
-            "BottomZ": -20,
-            "TopZ": 64,
-            "FloorMaterial": "f1",
-            "CeilMaterial": "Sky",
-            "Segments": [
-                {
-                    "X": -100,
-                    "Y": -30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -120,
-                    "Y": -30,
-                    "AdjacentSector": "sector6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -120,
-                    "Y": 30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -100,
-                    "Y": 30,
-                    "AdjacentSector": "sector2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector6",
-            "BottomZ": -30,
-            "TopZ": 64,
-            "FloorMaterial": "f1",
-            "CeilMaterial": "Sky",
-            "Segments": [
-                {
-                    "X": -120,
-                    "Y": -30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -140,
-                    "Y": -30,
-                    "AdjacentSector": "sector7",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -140,
-                    "Y": 30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -120,
-                    "Y": 30,
-                    "AdjacentSector": "sector5",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector7",
-            "BottomZ": -40,
-            "TopZ": 64,
-            "FloorMaterial": "f1",
-            "CeilMaterial": "Sky",
-            "Segments": [
-                {
-                    "X": -140,
-                    "Y": -30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -160,
-                    "Y": -30,
-                    "AdjacentSector": "sector8",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -160,
-                    "Y": 30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -140,
-                    "Y": 30,
-                    "AdjacentSector": "sector6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector8",
-            "BottomZ": -50,
-            "TopZ": 64,
-            "FloorMaterial": "f1",
-            "CeilMaterial": "Sky",
-            "Segments": [
-                {
-                    "X": -160,
-                    "Y": -30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -180,
-                    "Y": -30,
-                    "AdjacentSector": "sector9",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -180,
-                    "Y": 30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -160,
-                    "Y": 30,
-                    "AdjacentSector": "sector7",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.ToxicSector",
-            "Name": "sector9",
-            "BottomZ": -60,
-            "TopZ": -6,
-            "FloorMaterial": "Painful Slime",
-            "CeilMaterial": "Default Floor",
-            "Mobs": [
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": -240,
-                        "Y": 0,
-                        "Z": -30
-                    },
-                    "Behaviors": [
-                        {
-                            "Type": "behaviors.Light",
-                            "Diffuse": {
-                                "X": 0.1,
-                                "Y": 1.0,
-                                "Z": 0.1
-                            }
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": -180,
-                    "Y": -30,
-                    "AdjacentSector": "sector10",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": -30,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": -10,
-                    "MidMaterial": "mat3",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": 10,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": 30,
-                    "AdjacentSector": "sector11",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -180,
-                    "Y": 30,
-                    "AdjacentSector": "sector8",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.ToxicSector",
-            "Name": "sector10",
-            "BottomZ": -60,
-            "TopZ": -6,
-            "FloorMaterial": "Painful Slime",
-            "CeilMaterial": "Default Floor",
-            "Mobs": [
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": -240,
-                        "Y": -100,
-                        "Z": -30
-                    },
-                    "behaviors": [
-                        {
-                            "Type": "behaviors.Light",
-                            "diffuse": {
-                                "X": 0.1,
-                                "Y": 1.0,
-                                "Z": 0.1
-                            }
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": -180,
-                    "Y": -30,
-                    "AdjacentSector": "sector9",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": -30,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": -140,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -180,
-                    "Y": -140,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.ToxicSector",
-            "Name": "sector11",
-            "BottomZ": -60,
-            "TopZ": -6,
-            "FloorMaterial": "Painful Slime",
-            "CeilMaterial": "Default Floor",
-            "Mobs": [
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": -240,
-                        "Y": 100,
-                        "Z": -30
-                    },
-                    "Behaviors": [
-                        {
-                            "Type": "behaviors.Light",
-                            "Diffuse": {
-                                "X": 0.1,
-                                "Y": 1.0,
-                                "Z": 0.1
-                            }
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": -180,
-                    "Y": 30,
-                    "AdjacentSector": "sector9",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": 30,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -300,
-                    "Y": 140,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -180,
-                    "Y": 140,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector12",
-            "BottomZ": 0,
-            "TopZ": 60,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "f6",
-            "Segments": [
-                {
-                    "X": 105,
-                    "Y": -30,
-                    "AdjacentSector": "sector25",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 105,
-                    "Y": 30,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 115,
-                    "Y": 30,
-                    "AdjacentSector": "sector13",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 150,
-                    "Y": 30,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 150,
-                    "Y": -30,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector13",
-            "BottomZ": 0,
-            "TopZ": 60,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "f6",
-            "Segments": [
-                {
-                    "X": 115,
-                    "Y": 30,
-                    "AdjacentSector": "sector12",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 150,
-                    "Y": 30,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 150,
-                    "Y": 70,
-                    "AdjacentSector": "sector14",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 150,
-                    "Y": 100,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 115,
-                    "Y": 100,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector14",
-            "BottomZ": 0,
-            "TopZ": 60,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "f1",
-            "Segments": [
-                {
-                    "X": 150,
-                    "Y": 100,
-                    "AdjacentSector": "sector13",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 150,
-                    "Y": 70,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 70,
-                    "AdjacentSector": "sector15",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 100,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector15",
-            "BottomZ": -20,
-            "TopZ": 100,
-            "FloorMaterial": "Water",
-            "CeilMaterial": "Sky",
-            "FloorTarget": "sector17",
-            "Mobs": [
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": 350,
-                        "Y": 80,
-                        "Z": 90
-                    },
-                    "Behaviors": [
-                        {
-                            "Type": "behaviors.Light",
-                            "Diffuse": {
-                                "X": 0.4,
-                                "Y": 0.6,
-                                "Z": 1.0
-                            },
-                            "Strength": 25
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": 300,
-                    "Y": 20,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 70,
-                    "AdjacentSector": "sector14",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 100,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 380,
-                    "Y": 150,
-                    "AdjacentSector": "sector16",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 20,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector16",
-            "BottomZ": 10,
-            "TopZ": 60,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "f1",
-            "Segments": [
-                {
-                    "X": 380,
-                    "Y": 150,
-                    "AdjacentSector": "sector15",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 150,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 400,
-                    "AdjacentSector": "sector20",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 380,
-                    "Y": 400,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.Underwater",
-            "Name": "sector17",
-            "BottomZ": -170,
-            "TopZ": -20,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Water",
-            "CeilTarget": "sector15",
-            "tags": [
-                "underwater"
-            ],
-            "Segments": [
-                {
-                    "X": 300,
-                    "Y": 150,
-                    "AdjacentSector": "sector18",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 20,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 20,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.Underwater",
-            "Name": "sector18",
-            "BottomZ": -230,
-            "TopZ": -20,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Default Floor",
-            "tags": [
-                "underwater"
-            ],
-            "Mobs": [
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": 340,
-                        "Y": 260,
-                        "Z": -125
-                    },
-                    "Behaviors": [
-                        {
-                            "Type": "behaviors.Light",
-                            "Diffuse": {
-                                "X": 0.8,
-                                "Y": 0.8,
-                                "Z": 1.0
-                            },
-                            "Attenuation": 0
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": 300,
-                    "Y": 150,
-                    "AdjacentSector": "sector17",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 150,
-                    "AdjacentSector": "sector19",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 200,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 480,
-                    "Y": 400,
-                    "AdjacentSector": "sector21",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 400,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 200,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.Underwater",
-            "Name": "sector19",
-            "BottomZ": -50,
-            "TopZ": -20,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Default Floor",
-            "tags": [
-                "underwater"
-            ],
-            "Segments": [
-                {
-                    "X": 600,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 150,
-                    "AdjacentSector": "sector18",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 400,
-                    "Y": 200,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 600,
-                    "Y": 200,
-                    "AdjacentSector": "sector22",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector20",
-            "BottomZ": -20,
-            "TopZ": 60,
-            "FloorMaterial": "Water",
-            "CeilMaterial": "f1",
-            "FloorTarget": "sector21",
-            "Segments": [
-                {
-                    "X": 400,
-                    "Y": 400,
-                    "AdjacentSector": "sector16",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 380,
-                    "Y": 400,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 400,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 450,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 480,
-                    "Y": 450,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 480,
-                    "Y": 400,
-                    "MidMaterial": "mat1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.Underwater",
-            "Name": "sector21",
-            "BottomZ": -200,
-            "TopZ": -20,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Water",
-            "CeilTarget": "sector20",
-            "tags": [
-                "underwater"
-            ],
-            "Segments": [
-                {
-                    "X": 300,
-                    "Y": 400,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 300,
-                    "Y": 450,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 480,
-                    "Y": 450,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 480,
-                    "Y": 400,
-                    "AdjacentSector": "sector18",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.Underwater",
-            "Name": "sector22",
-            "BottomZ": -70,
-            "TopZ": -20,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Water",
-            "CeilTarget": "sector23",
-            "tags": [
-                "underwater"
-            ],
-            "Mobs": [
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": 610,
-                        "Y": 175,
-                        "Z": -50
-                    },
-                    "Behaviors": [
-                        {
-                            "Type": "behaviors.Light",
-                            "Diffuse": {
-                                "X": 0.8,
-                                "Y": 0.8,
-                                "Z": 1.0
-                            },
-                            "Attenuation": 0
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": 620,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 600,
-                    "Y": 150,
-                    "AdjacentSector": "sector19",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 600,
-                    "Y": 200,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 620,
-                    "Y": 200,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector23",
-            "BottomZ": -20,
-            "TopZ": 50,
-            "FloorMaterial": "Water",
-            "CeilMaterial": "Default Floor",
-            "FloorTarget": "sector22",
-            "Segments": [
-                {
-                    "X": 620,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 600,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 600,
-                    "Y": 200,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 620,
-                    "Y": 200,
-                    "AdjacentSector": "sector24",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector24",
-            "BottomZ": -10,
-            "TopZ": 70,
-            "FloorMaterial": "mat1",
-            "CeilMaterial": "Default",
-            "Mobs": [
-                {
-                    "Type": "mobs.Light",
-                    "Pos": {
-                        "X": 700,
-                        "Y": 175,
-                        "Z": 50
-                    },
-                    "Behaviors": [
-                        {
-                            "Type": "behaviors.Light"
-                        }
-                    ]
-                }
-            ],
-            "Segments": [
-                {
-                    "X": 620,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 740,
-                    "Y": 150,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 740,
-                    "Y": 200,
-                    "MidMaterial": "mat6",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 620,
-                    "Y": 200,
-                    "AdjacentSector": "sector23",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "sectors.VerticalDoor",
-            "Name": "sector25",
-            "BottomZ": 0,
-            "TopZ": 64,
-            "FloorMaterial": "Default",
-            "CeilMaterial": "mat6",
-            "Segments": [
-                {
-                    "X": 105,
-                    "Y": -30,
-                    "AdjacentSector": "sector12",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Doom Garage Door",
-                    "Flags": 0
-                },
-                {
-                    "X": 105,
-                    "Y": 30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Doom Garage Door",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 30,
-                    "AdjacentSector": "sector1",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Doom Garage Door",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": -30,
-                    "MidMaterial": "Default",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Doom Garage Door",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector26",
-            "BottomZ": 15,
-            "TopZ": 64,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Sky",
-            "Mobs": [],
-            "Segments": [
-                {
-                    "X": -100,
-                    "Y": 100,
-                    "AdjacentSector": "sector3",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 100,
-                    "MidMaterial": "mat2",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 120,
-                    "AdjacentSector": "sector27",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -100,
-                    "Y": 120,
-                    "MidMaterial": "Sky",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
-        },
-        {
-            "Type": "core.PhysicalSector",
-            "Name": "sector27",
-            "BottomZ": 0,
-            "TopZ": 64,
-            "FloorMaterial": "Default Floor",
-            "CeilMaterial": "Sky",
-            "Mobs": [],
-            "Segments": [
-                {
-                    "X": -100,
-                    "Y": 120,
-                    "AdjacentSector": "sector26",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 120,
-                    "MidMaterial": "Sky",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": 100,
-                    "Y": 3000,
-                    "MidMaterial": "Sky",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                },
-                {
-                    "X": -100,
-                    "Y": 3000,
-                    "MidMaterial": "Sky",
-                    "LoMaterial": "Default",
-                    "HiMaterial": "Default",
-                    "Flags": 0
-                }
-            ]
+          "AdjacentSector": "15",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 30,
+          "Y": -30
         }
-    ]
-}
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "17",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "17",
+      "Name": "sector2"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -10,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "17",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "24",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -100,
+          "Y": -30
+        },
+        {
+          "AdjacentSector": "18",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -100,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "23",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -30,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "15",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -30,
+          "Y": -30
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "18",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "18",
+      "Name": "sector3"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "19",
+        "20",
+        "21",
+        "22"
+      ],
+      "BottomZ": 0,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "18",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "52",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "4",
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "16",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 100,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "23",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 30,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "17",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -30,
+          "Y": 30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "4",
+          "X": -100,
+          "Y": 30
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "19",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "19",
+      "Name": "cl5anh5mdsrmm6mqttk0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "19",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -17,
+        "Y": 68,
+        "Z": 0
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    }
+  },
+  {
+    "Entity": "20",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "20",
+      "Name": "cl5anh5mdsrmm6mqttl0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "20",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 45,
+        "Y": 68,
+        "Z": 0
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    }
+  },
+  {
+    "Entity": "21",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "21",
+      "Name": "cl5anh5mdsrmm6mqttm0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "21",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 85,
+        "Y": 68,
+        "Z": 0
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    }
+  },
+  {
+    "Entity": "22",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "22",
+      "Name": "cl5anh5mdsrmm6mqttn0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "22",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 0,
+        "Y": 68,
+        "Z": 32
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "22",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "23",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "23",
+      "Name": "sector4"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -3,
+      "CeilMaterial": "11",
+      "CeilScale": 64,
+      "Entity": "23",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "9",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "15",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -30,
+          "Y": -30
+        },
+        {
+          "AdjacentSector": "16",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 30,
+          "Y": -30
+        },
+        {
+          "AdjacentSector": "18",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 30,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "17",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -30,
+          "Y": 30
+        }
+      ],
+      "TopZ": 50
+    }
+  },
+  {
+    "Entity": "24",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "24",
+      "Name": "sector5"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -20,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "24",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "9",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -100,
+          "Y": -30
+        },
+        {
+          "AdjacentSector": "25",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -120,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -120,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "17",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -100,
+          "Y": 30
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "25",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "25",
+      "Name": "sector6"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -30,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "25",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "9",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -120,
+          "Y": -30
+        },
+        {
+          "AdjacentSector": "26",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -140,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -140,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "24",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -120,
+          "Y": 30
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "26",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "26",
+      "Name": "sector7"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -40,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "26",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "9",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -140,
+          "Y": -30
+        },
+        {
+          "AdjacentSector": "27",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -160,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -160,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "25",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -140,
+          "Y": 30
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "27",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "27",
+      "Name": "sector8"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -50,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "27",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "9",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -160,
+          "Y": -30
+        },
+        {
+          "AdjacentSector": "28",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -180,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": -180,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "26",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -160,
+          "Y": 30
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "28",
+    "behaviors.Toxic": {
+      "Active": true,
+      "Entity": "28",
+      "Hurt": 0
+    },
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "28",
+      "Name": "sector9"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "29"
+      ],
+      "BottomZ": -60,
+      "CeilMaterial": "8",
+      "CeilScale": 64,
+      "Entity": "28",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "10",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "30",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -180,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -300,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "5",
+          "X": -300,
+          "Y": -10
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -300,
+          "Y": 10
+        },
+        {
+          "AdjacentSector": "32",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -300,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "27",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -180,
+          "Y": 30
+        }
+      ],
+      "TopZ": -6
+    }
+  },
+  {
+    "Entity": "29",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "29",
+      "Name": "cl5anh5mdsrmm6mqttu0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "29",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -240,
+        "Y": 0,
+        "Z": -30
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 0.1,
+        "Y": 1,
+        "Z": 0.1
+      },
+      "Entity": "29",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "30",
+    "behaviors.Toxic": {
+      "Active": true,
+      "Entity": "30",
+      "Hurt": 0
+    },
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "30",
+      "Name": "sector10"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "31"
+      ],
+      "BottomZ": -60,
+      "CeilMaterial": "8",
+      "CeilScale": 64,
+      "Entity": "30",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "10",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "28",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -180,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -300,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -300,
+          "Y": -140
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -180,
+          "Y": -140
+        }
+      ],
+      "TopZ": -6
+    }
+  },
+  {
+    "Entity": "31",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "31",
+      "Name": "cl5anh5mdsrmm6mqtu00"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "31",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -240,
+        "Y": -100,
+        "Z": -30
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "31",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "32",
+    "behaviors.Toxic": {
+      "Active": true,
+      "Entity": "32",
+      "Hurt": 0
+    },
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "32",
+      "Name": "sector11"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "33"
+      ],
+      "BottomZ": -60,
+      "CeilMaterial": "8",
+      "CeilScale": 64,
+      "Entity": "32",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "10",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "28",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -180,
+          "Y": 30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -300,
+          "Y": 30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -300,
+          "Y": 140
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": -180,
+          "Y": 140
+        }
+      ],
+      "TopZ": -6
+    }
+  },
+  {
+    "Entity": "33",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "33",
+      "Name": "cl5anh5mdsrmm6mqtu20"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "33",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -240,
+        "Y": 100,
+        "Z": -30
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 0.1,
+        "Y": 1,
+        "Z": 0.1
+      },
+      "Entity": "33",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "34",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "34",
+      "Name": "sector12"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "12",
+      "CeilScale": 64,
+      "Entity": "34",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "51",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 105,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 105,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "35",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 115,
+          "Y": 30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 150,
+          "Y": 30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 150,
+          "Y": -30
+        }
+      ],
+      "TopZ": 60
+    }
+  },
+  {
+    "Entity": "35",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "35",
+      "Name": "sector13"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "12",
+      "CeilScale": 64,
+      "Entity": "35",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "34",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 115,
+          "Y": 30
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 150,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "36",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 150,
+          "Y": 70
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 150,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 115,
+          "Y": 100
+        }
+      ],
+      "TopZ": 60
+    }
+  },
+  {
+    "Entity": "36",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "36",
+      "Name": "sector14"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "9",
+      "CeilScale": 64,
+      "Entity": "36",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "35",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 150,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 150,
+          "Y": 70
+        },
+        {
+          "AdjacentSector": "37",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 300,
+          "Y": 70
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 100
+        }
+      ],
+      "TopZ": 60
+    }
+  },
+  {
+    "Entity": "37",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "37",
+      "Name": "sector15"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "38"
+      ],
+      "BottomZ": -20,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "37",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "13",
+      "FloorScale": 64,
+      "FloorTarget": "40",
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 20
+        },
+        {
+          "AdjacentSector": "36",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 300,
+          "Y": 70
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 150
+        },
+        {
+          "AdjacentSector": "39",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 380,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 400,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 400,
+          "Y": 20
+        }
+      ],
+      "TopZ": 100
+    }
+  },
+  {
+    "Entity": "38",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "38",
+      "Name": "cl5anh5mdsrmm6mqtu70"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "38",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 350,
+        "Y": 80,
+        "Z": 90
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 0.4,
+        "Y": 0.6,
+        "Z": 1
+      },
+      "Entity": "38",
+      "Strength": 25
+    }
+  },
+  {
+    "Entity": "39",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "39",
+      "Name": "sector16"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 10,
+      "CeilMaterial": "9",
+      "CeilScale": 64,
+      "Entity": "39",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "37",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 380,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": 400,
+          "Y": 150
+        },
+        {
+          "AdjacentSector": "44",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 400,
+          "Y": 400
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": 380,
+          "Y": 400
+        }
+      ],
+      "TopZ": 60
+    }
+  },
+  {
+    "Entity": "40",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "40",
+      "Name": "sector17"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -170,
+      "CeilMaterial": "13",
+      "CeilScale": 64,
+      "CeilTarget": "37",
+      "Entity": "40",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "41",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 300,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 400,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 400,
+          "Y": 20
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 20
+        }
+      ],
+      "TopZ": -20
+    }
+  },
+  {
+    "Entity": "41",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "41",
+      "Name": "sector18"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "42"
+      ],
+      "BottomZ": -230,
+      "CeilMaterial": "8",
+      "CeilScale": 64,
+      "Entity": "41",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "40",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 300,
+          "Y": 150
+        },
+        {
+          "AdjacentSector": "43",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 400,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 400,
+          "Y": 200
+        },
+        {
+          "AdjacentSector": "45",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 480,
+          "Y": 400
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 400
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 200
+        }
+      ],
+      "TopZ": -20
+    }
+  },
+  {
+    "Entity": "42",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "42",
+      "Name": "cl5anh5mdsrmm6mqtub0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "42",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 340,
+        "Y": 260,
+        "Z": -125
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0,
+      "Diffuse": {
+        "X": 0.8,
+        "Y": 0.8,
+        "Z": 1
+      },
+      "Entity": "42",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "43",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "43",
+      "Name": "sector19"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -50,
+      "CeilMaterial": "8",
+      "CeilScale": 64,
+      "Entity": "43",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 600,
+          "Y": 150
+        },
+        {
+          "AdjacentSector": "41",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 400,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 400,
+          "Y": 200
+        },
+        {
+          "AdjacentSector": "46",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 600,
+          "Y": 200
+        }
+      ],
+      "TopZ": -20
+    }
+  },
+  {
+    "Entity": "44",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "44",
+      "Name": "sector20"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -20,
+      "CeilMaterial": "9",
+      "CeilScale": 64,
+      "Entity": "44",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "13",
+      "FloorScale": 64,
+      "FloorTarget": "45",
+      "Segments": [
+        {
+          "AdjacentSector": "39",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 400,
+          "Y": 400
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": 380,
+          "Y": 400
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": 300,
+          "Y": 400
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": 300,
+          "Y": 450
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": 480,
+          "Y": 450
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "3",
+          "X": 480,
+          "Y": 400
+        }
+      ],
+      "TopZ": 60
+    }
+  },
+  {
+    "Entity": "45",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "45",
+      "Name": "sector21"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -200,
+      "CeilMaterial": "13",
+      "CeilScale": 64,
+      "CeilTarget": "44",
+      "Entity": "45",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 400
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 300,
+          "Y": 450
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 480,
+          "Y": 450
+        },
+        {
+          "AdjacentSector": "41",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 480,
+          "Y": 400
+        }
+      ],
+      "TopZ": -20
+    }
+  },
+  {
+    "Entity": "46",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "46",
+      "Name": "sector22"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "47"
+      ],
+      "BottomZ": -70,
+      "CeilMaterial": "13",
+      "CeilScale": 64,
+      "CeilTarget": "48",
+      "Entity": "46",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 620,
+          "Y": 150
+        },
+        {
+          "AdjacentSector": "43",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 600,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 600,
+          "Y": 200
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 620,
+          "Y": 200
+        }
+      ],
+      "TopZ": -20
+    }
+  },
+  {
+    "Entity": "47",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "47",
+      "Name": "cl5anh5mdsrmm6mqtug0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "47",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 610,
+        "Y": 175,
+        "Z": -50
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0,
+      "Diffuse": {
+        "X": 0.8,
+        "Y": 0.8,
+        "Z": 1
+      },
+      "Entity": "47",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "48",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "48",
+      "Name": "sector23"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": -20,
+      "CeilMaterial": "8",
+      "CeilScale": 64,
+      "Entity": "48",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "13",
+      "FloorScale": 64,
+      "FloorTarget": "46",
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 620,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 600,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 600,
+          "Y": 200
+        },
+        {
+          "AdjacentSector": "49",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 620,
+          "Y": 200
+        }
+      ],
+      "TopZ": 50
+    }
+  },
+  {
+    "Entity": "49",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "49",
+      "Name": "sector24"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "50"
+      ],
+      "BottomZ": -10,
+      "CeilMaterial": "2",
+      "CeilScale": 64,
+      "Entity": "49",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "3",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 620,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 740,
+          "Y": 150
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "6",
+          "X": 740,
+          "Y": 200
+        },
+        {
+          "AdjacentSector": "48",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 620,
+          "Y": 200
+        }
+      ],
+      "TopZ": 70
+    }
+  },
+  {
+    "Entity": "50",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "50",
+      "Name": "cl5anh5mdsrmm6mqtuj0"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "50",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 700,
+        "Y": 175,
+        "Z": 50
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "50",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "51",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "51",
+      "Name": "sector25"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "6",
+      "CeilScale": 64,
+      "Entity": "51",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "34",
+          "HiMaterial": "7",
+          "LoMaterial": "2",
+          "X": 105,
+          "Y": -30
+        },
+        {
+          "HiMaterial": "7",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": 105,
+          "Y": 30
+        },
+        {
+          "AdjacentSector": "16",
+          "HiMaterial": "7",
+          "LoMaterial": "2",
+          "X": 100,
+          "Y": 30
+        },
+        {
+          "HiMaterial": "7",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
+          "X": 100,
+          "Y": -30
+        }
+      ],
+      "TopZ": 64
+    },
+    "sectors.VerticalDoor": {
+      "Active": true,
+      "Entity": "51"
+    }
+  },
+  {
+    "Entity": "52",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "52",
+      "Name": "sector26"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 15,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "52",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "18",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "4",
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "53",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": 100,
+          "Y": 120
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "14",
+          "X": -100,
+          "Y": 120
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "53",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "53",
+      "Name": "sector27"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "14",
+      "CeilScale": 64,
+      "Entity": "53",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "8",
+      "FloorScale": 64,
+      "Segments": [
+        {
+          "AdjacentSector": "52",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "X": -100,
+          "Y": 120
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "14",
+          "X": 100,
+          "Y": 120
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "14",
+          "X": 100,
+          "Y": 3000
+        },
+        {
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "14",
+          "X": -100,
+          "Y": 3000
+        }
+      ],
+      "TopZ": 64
+    }
+  }
+]

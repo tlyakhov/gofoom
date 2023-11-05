@@ -47,10 +47,15 @@ func (a *MoveSurface) Act() {
 			if sector := core.SectorFromDb(target); sector != nil {
 				a.Original[i] = *a.Get(sector)
 				*a.Get(sector) += a.Delta
+				sector.BottomZ.Reset()
+				sector.TopZ.Reset()
 			}
 		case *core.Segment:
 			a.Original[i] = *a.Get(target.Sector)
 			*a.Get(target.Sector) += a.Delta
+			target.Sector.BottomZ.Reset()
+			target.Sector.TopZ.Reset()
+
 		}
 
 	}
@@ -65,9 +70,13 @@ func (a *MoveSurface) Undo() {
 		case *concepts.EntityRef:
 			if sector := core.SectorFromDb(target); sector != nil {
 				*a.Get(sector) = a.Original[i]
+				sector.BottomZ.Reset()
+				sector.TopZ.Reset()
 			}
 		case *core.Segment:
 			*a.Get(target.Sector) = a.Original[i]
+			target.Sector.BottomZ.Reset()
+			target.Sector.TopZ.Reset()
 		}
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
@@ -78,9 +87,13 @@ func (a *MoveSurface) Redo() {
 		case *concepts.EntityRef:
 			if sector := core.SectorFromDb(target); sector != nil {
 				*a.Get(sector) += a.Delta
+				sector.BottomZ.Reset()
+				sector.TopZ.Reset()
 			}
 		case *core.Segment:
 			*a.Get(target.Sector) += a.Delta
+			target.Sector.BottomZ.Reset()
+			target.Sector.TopZ.Reset()
 		}
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)

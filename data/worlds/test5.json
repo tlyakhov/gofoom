@@ -1,8 +1,29 @@
-{
-  "MobsPaused": false,
-  "Name": "be3h6pnvn27in35ekqj0",
-  "Materials": [
-    {
+[
+  {
+    "Entity": "1",
+    "core.Spawn": {
+      "Active": true,
+      "Entity": "1",
+      "X": 0,
+      "Y": 0
+    }
+  },
+  {
+    "Entity": "2",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "2",
+      "Name": "Default"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "2",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/WDef.png"
+    },
+    "materials.Lit": {
+      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -13,815 +34,885 @@
         "Y": 1,
         "Z": 1
       },
-      "Name": "Default",
+      "Entity": "2"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "2",
       "IsLiquid": false,
-      "Scale": 1,
-      "Texture": {
-        "Filter": false,
-        "GenerateMipMaps": true,
-        "Name": "be3h6pnvn27in35ekqn0",
-        "Source": "data/WDef.png",
-        "Type": "texture.Image"
-      },
-      "Type": "materials.LitSampled"
+      "Scale": 1
     }
-  ],
-  "Sectors": [
-    {
+  },
+  {
+    "Entity": "3",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "3",
+      "Name": "ckmr71tmdsri8tolfq30"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
       "BottomZ": 0,
-      "CeilMaterial": "Default",
+      "CeilMaterial": "2",
       "CeilScale": 64,
-      "Mobs": [],
-      "FloorMaterial": "Default",
+      "Entity": "3",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr71tmdsri8tolfq30",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr72dmdsri8tolfq3g",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -40,
           "Y": -100
         },
         {
-          "AdjacentSector": "ckmr7dtmdsri8tolfq8g",
-          "HiMaterial": "Default",
-          "Name": "ckmr72lmdsri8tolfq40",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "8",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -30,
           "Y": -200
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr72lmdsri8tolfq4g",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 30,
           "Y": -210
         },
         {
-          "AdjacentSector": "ckmr6vtmdsri8tolfph0",
-          "HiMaterial": "Default",
-          "Name": "ckmr72tmdsri8tolfq50",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "11",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 60,
           "Y": -100
         }
       ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "4",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "4",
+      "Name": "ckmr7gdmdsri8tolfqg0"
     },
-    {
-      "BottomZ": 0,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "Mobs": [
-        {
-          "Active": true,
-          "Angle": 0,
-          "Behaviors": [
-            {
-              "Active": true,
-              "Attenuation": 0.4,
-              "Diffuse": {
-                "X": 1,
-                "Y": 1,
-                "Z": 1
-              },
-              "Name": "Light",
-              "Strength": 2,
-              "Type": "behaviors.Light"
-            }
-          ],
-          "BoundingRadius": 10,
-          "CollisionResponse": "Slide",
-          "Height": 0,
-          "Name": "ckmr7odmdsri8tolfqu0",
-          "MountHeight": 15,
-          "Pos": {
-            "X": -210,
-            "Y": -80,
-            "Z": 32
-          },
-          "Type": "mobs.Light",
-          "Vel": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          }
-        }
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "5"
       ],
-      "FloorMaterial": "Default",
+      "BottomZ": 0,
+      "CeilMaterial": "2",
+      "CeilScale": 64,
+      "Entity": "4",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr7gdmdsri8tolfqg0",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7h5mdsri8tolfqgg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -220,
           "Y": -150
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7hdmdsri8tolfqh0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -150,
           "Y": -90
         },
         {
-          "AdjacentSector": "ckmr7ilmdsri8tolfqk0",
-          "HiMaterial": "Default",
-          "Name": "ckmr7hdmdsri8tolfqhg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "17",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -130,
           "Y": -10
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7htmdsri8tolfqi0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -290,
           "Y": -30
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7i5mdsri8tolfqig",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -380,
           "Y": -60
         },
         {
-          "AdjacentSector": "ckmr7f5mdsri8tolfqc0",
-          "HiMaterial": "Default",
-          "Name": "ckmr7idmdsri8tolfqj0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "9",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -290,
           "Y": -190
         }
       ],
-      "TopZ": 94,
-      "Type": "core.PhysicalSector"
+      "TopZ": 94
+    }
+  },
+  {
+    "Entity": "5",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "5",
+      "Name": "ckmr7odmdsri8tolfqu0"
     },
-    {
-      "BottomZ": 2,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "Mobs": [
-        {
-          "Active": true,
-          "Angle": 0,
-          "Behaviors": [
-            {
-              "Active": true,
-              "Attenuation": 0.4,
-              "Diffuse": {
-                "X": 1,
-                "Y": 1,
-                "Z": 1
-              },
-              "Name": "Light",
-              "Strength": 2,
-              "Type": "behaviors.Light"
-            }
-          ],
-          "BoundingRadius": 10,
-          "CollisionResponse": "Slide",
-          "Height": 0,
-          "Name": "cknes7dmdsru23m3nitg",
-          "MountHeight": 15,
-          "Pos": {
-            "X": 170,
-            "Y": 370,
-            "Z": 32
-          },
-          "Type": "mobs.Light",
-          "Vel": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          }
-        }
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "5",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -210,
+        "Y": -80,
+        "Z": 32
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "5",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "6",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "6",
+      "Name": "cknes4tmdsru23m3nip0"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "7"
       ],
-      "FloorMaterial": "Default",
+      "BottomZ": 2,
+      "CeilMaterial": "2",
+      "CeilScale": 64,
+      "Entity": "6",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "cknes4tmdsru23m3nip0",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "cknes5tmdsru23m3nipg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 70,
           "Y": 280
         },
         {
-          "HiMaterial": "Default",
-          "Name": "cknes65mdsru23m3niq0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 80,
           "Y": 450
         },
         {
-          "HiMaterial": "Default",
-          "Name": "cknes65mdsru23m3niqg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 260,
           "Y": 430
         },
         {
-          "AdjacentSector": "cknes35mdsru23m3nilg",
-          "HiMaterial": "Default",
-          "Name": "cknes6lmdsru23m3nir0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "13",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 460,
           "Y": 260
         }
       ],
-      "TopZ": 80,
-      "Type": "core.PhysicalSector"
+      "TopZ": 80
+    }
+  },
+  {
+    "Entity": "7",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "7",
+      "Name": "cknes7dmdsru23m3nitg"
     },
-    {
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "7",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 170,
+        "Y": 370,
+        "Z": 32
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "7",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "8",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "8",
+      "Name": "ckmr7dtmdsri8tolfq8g"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
       "BottomZ": 0,
-      "CeilMaterial": "Default",
+      "CeilMaterial": "2",
       "CeilScale": 64,
-      "Mobs": [],
-      "FloorMaterial": "Default",
+      "Entity": "8",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr7dtmdsri8tolfq8g",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7edmdsri8tolfq90",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -30,
           "Y": -200
         },
         {
-          "AdjacentSector": "ckmr7f5mdsri8tolfqc0",
-          "HiMaterial": "Default",
-          "Name": "ckmr7edmdsri8tolfq9g",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "9",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -90,
           "Y": -230
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7elmdsri8tolfqa0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -60,
           "Y": -280
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7elmdsri8tolfqag",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 10,
           "Y": -260
         },
         {
-          "AdjacentSector": "ckmr71tmdsri8tolfq30",
-          "HiMaterial": "Default",
-          "Name": "ckmr7etmdsri8tolfqb0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "3",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 30,
           "Y": -210
         }
       ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "9",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "9",
+      "Name": "ckmr7f5mdsri8tolfqc0"
     },
-    {
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
       "BottomZ": 0,
-      "CeilMaterial": "Default",
+      "CeilMaterial": "2",
       "CeilScale": 64,
-      "Mobs": [],
-      "FloorMaterial": "Default",
+      "Entity": "9",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr7f5mdsri8tolfqc0",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7fdmdsri8tolfqcg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -90,
           "Y": -230
         },
         {
-          "AdjacentSector": "ckmr7gdmdsri8tolfqg0",
-          "HiMaterial": "Default",
-          "Name": "ckmr7fdmdsri8tolfqd0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "4",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -220,
           "Y": -150
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7flmdsri8tolfqdg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -290,
           "Y": -190
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7flmdsri8tolfqe0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -230,
           "Y": -230
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7ftmdsri8tolfqeg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -180,
           "Y": -280
         },
         {
-          "AdjacentSector": "ckmr7dtmdsri8tolfq8g",
-          "HiMaterial": "Default",
-          "Name": "ckmr7g5mdsri8tolfqf0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "8",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -60,
           "Y": -280
         }
       ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "10",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "10",
+      "Name": "ckmr6tlmdsri8tolfoq0"
     },
-    {
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
       "BottomZ": 0,
-      "CeilMaterial": "Default",
+      "CeilMaterial": "2",
       "CeilScale": 64,
-      "Mobs": [],
-      "FloorMaterial": "Default",
+      "Entity": "10",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr6tlmdsri8tolfoq0",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr6tlmdsri8tolforg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -100,
           "Y": -100
         },
         {
-          "AdjacentSector": "ckmr6vtmdsri8tolfph0",
-          "HiMaterial": "Default",
-          "Name": "ckmr6tlmdsri8tolfot0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "11",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -40,
           "Y": -100
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr6tlmdsri8tolfoug",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -13.25,
           "Y": 100
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr6tlmdsri8tolfp00",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -100,
           "Y": 100
         }
       ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "11",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "11",
+      "Name": "ckmr6vtmdsri8tolfph0"
     },
-    {
-      "BottomZ": 0,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "Mobs": [
-        {
-          "Active": true,
-          "Angle": 0,
-          "Behaviors": [
-            {
-              "Active": true,
-              "Attenuation": 0.4,
-              "Diffuse": {
-                "X": 1,
-                "Y": 1,
-                "Z": 1
-              },
-              "Name": "Light",
-              "Strength": 2,
-              "Type": "behaviors.Light"
-            }
-          ],
-          "BoundingRadius": 10,
-          "CollisionResponse": "Slide",
-          "Height": 0,
-          "Name": "ckmr7b5mdsri8tolfq6g",
-          "MountHeight": 15,
-          "Pos": {
-            "X": 40,
-            "Y": -20,
-            "Z": 32
-          },
-          "Type": "mobs.Light",
-          "Vel": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          }
-        }
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "12"
       ],
-      "FloorMaterial": "Default",
+      "BottomZ": 0,
+      "CeilMaterial": "2",
+      "CeilScale": 64,
+      "Entity": "11",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr6vtmdsri8tolfph0",
       "Segments": [
         {
-          "AdjacentSector": "ckmr71tmdsri8tolfq30",
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfpig",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "3",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -40,
           "Y": -100
         },
         {
-          "AdjacentSector": "ckmr6vtmdsri8tolfpsg",
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfpk0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "16",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 60,
           "Y": -100
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfplg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 71.66666666666667,
           "Y": 100
         },
         {
-          "AdjacentSector": "ckmr6tlmdsri8tolfoq0",
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfpn0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "10",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -13.25,
           "Y": 100
         }
       ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "12",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "12",
+      "Name": "ckmr7b5mdsri8tolfq6g"
     },
-    {
-      "BottomZ": -22,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "Mobs": [
-        {
-          "Active": true,
-          "Angle": 0,
-          "Behaviors": [
-            {
-              "Active": true,
-              "Attenuation": 0.4,
-              "Diffuse": {
-                "X": 1,
-                "Y": 1,
-                "Z": 1
-              },
-              "Name": "Light",
-              "Strength": 2,
-              "Type": "behaviors.Light"
-            }
-          ],
-          "BoundingRadius": 10,
-          "CollisionResponse": "Slide",
-          "Height": 0,
-          "Name": "cknes75mdsru23m3nisg",
-          "MountHeight": 15,
-          "Pos": {
-            "X": 130,
-            "Y": 210,
-            "Z": 32
-          },
-          "Type": "mobs.Light",
-          "Vel": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          }
-        }
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "12",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 40,
+        "Y": -20,
+        "Z": 32
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "12",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "13",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "13",
+      "Name": "cknes35mdsru23m3nilg"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "14"
       ],
-      "FloorMaterial": "Default",
+      "BottomZ": -22,
+      "CeilMaterial": "2",
+      "CeilScale": 64,
+      "Entity": "13",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "cknes35mdsru23m3nilg",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "cknes3lmdsru23m3nim0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 60,
           "Y": 180
         },
         {
-          "HiMaterial": "Default",
-          "Name": "cknes3tmdsru23m3nimg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 320,
           "Y": 130
         },
         {
-          "AdjacentSector": "cknes4tmdsru23m3nip0",
-          "HiMaterial": "Default",
-          "Name": "cknes45mdsru23m3nin0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "6",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 460,
           "Y": 260
         },
         {
-          "HiMaterial": "Default",
-          "Name": "cknes45mdsru23m3ning",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 70,
           "Y": 280
         },
         {
-          "AdjacentSector": "ckmr7kdmdsri8tolfqng",
-          "HiMaterial": "Default",
-          "Name": "cknes4lmdsru23m3nio0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "15",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 60,
           "Y": 260
         }
       ],
-      "TopZ": 80,
-      "Type": "core.PhysicalSector"
+      "TopZ": 80
+    }
+  },
+  {
+    "Entity": "14",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "14",
+      "Name": "cknes75mdsru23m3nisg"
     },
-    {
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "14",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 130,
+        "Y": 210,
+        "Z": 32
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "14",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "15",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "15",
+      "Name": "ckmr7kdmdsri8tolfqng"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
       "BottomZ": -22,
-      "CeilMaterial": "Default",
+      "CeilMaterial": "2",
       "CeilScale": 64,
-      "Mobs": [],
-      "FloorMaterial": "Default",
+      "Entity": "15",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
       "FloorSlope": 0.2,
-      "Name": "ckmr7kdmdsri8tolfqng",
       "Segments": [
         {
-          "AdjacentSector": "cknes35mdsru23m3nilg",
-          "HiMaterial": "Default",
-          "Name": "ckmr7l5mdsri8tolfqog",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "13",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 60,
           "Y": 180
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7l5mdsri8tolfqp0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 60,
           "Y": 260
         },
         {
-          "AdjacentSector": "ckmr7ilmdsri8tolfqk0",
-          "HiMaterial": "Default",
-          "Name": "ckmr7llmdsri8tolfqpg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "17",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -160,
           "Y": 160
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7ktmdsri8tolfqo0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -160,
           "Y": 90
         }
       ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "16",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "16",
+      "Name": "ckmr6vtmdsri8tolfpsg"
     },
-    {
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
       "BottomZ": 0,
-      "CeilMaterial": "Default",
+      "CeilMaterial": "2",
       "CeilScale": 64,
-      "Mobs": [],
-      "FloorMaterial": "Default",
+      "Entity": "16",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr6vtmdsri8tolfpsg",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfpu0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 60,
           "Y": -100
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfpvg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 100,
           "Y": -100
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfq10",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 100,
           "Y": 100
         },
         {
-          "AdjacentSector": "ckmr6vtmdsri8tolfph0",
-          "HiMaterial": "Default",
-          "Name": "ckmr6vtmdsri8tolfq2g",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "11",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": 71.66666666666667,
           "Y": 100
         }
       ],
-      "TopZ": 64,
-      "Type": "core.PhysicalSector"
+      "TopZ": 64
+    }
+  },
+  {
+    "Entity": "17",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "17",
+      "Name": "ckmr7ilmdsri8tolfqk0"
     },
-    {
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
       "BottomZ": 22,
-      "CeilMaterial": "Default",
+      "CeilMaterial": "2",
       "CeilScale": 64,
-      "Mobs": [],
-      "FloorMaterial": "Default",
+      "Entity": "17",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr7ilmdsri8tolfqk0",
       "Segments": [
         {
-          "AdjacentSector": "ckmr7gdmdsri8tolfqg0",
-          "HiMaterial": "Default",
-          "Name": "ckmr7j5mdsri8tolfqkg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "4",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -130,
           "Y": -10
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7jlmdsri8tolfql0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -290,
           "Y": -30
         },
         {
-          "AdjacentSector": "ckmr7ltmdsri8tolfqqg",
-          "HiMaterial": "Default",
-          "Name": "ckmr7jlmdsri8tolfqlg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "18",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -240,
           "Y": 60
         },
         {
-          "AdjacentSector": "ckmr7kdmdsri8tolfqng",
-          "HiMaterial": "Default",
-          "Name": "ckmr7jtmdsri8tolfqm0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "15",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -160,
           "Y": 160
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7k5mdsri8tolfqmg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -160,
           "Y": 90
         }
       ],
-      "TopZ": 116,
-      "Type": "core.PhysicalSector"
+      "TopZ": 116
+    }
+  },
+  {
+    "Entity": "18",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "18",
+      "Name": "ckmr7ltmdsri8tolfqqg"
     },
-    {
-      "BottomZ": 22,
-      "CeilMaterial": "Default",
-      "CeilScale": 64,
-      "Mobs": [
-        {
-          "Active": true,
-          "Angle": 0,
-          "Behaviors": [
-            {
-              "Active": true,
-              "Attenuation": 0.4,
-              "Diffuse": {
-                "X": 1,
-                "Y": 1,
-                "Z": 1
-              },
-              "Name": "Light",
-              "Strength": 2,
-              "Type": "behaviors.Light"
-            }
-          ],
-          "BoundingRadius": 10,
-          "CollisionResponse": "Slide",
-          "Height": 0,
-          "Name": "cknes7lmdsru23m3niug",
-          "MountHeight": 15,
-          "Pos": {
-            "X": -260,
-            "Y": 150,
-            "Z": 32
-          },
-          "Type": "mobs.Light",
-          "Vel": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          }
-        }
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "19"
       ],
-      "FloorMaterial": "Default",
+      "BottomZ": 22,
+      "CeilMaterial": "2",
+      "CeilScale": 64,
+      "Entity": "18",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "2",
       "FloorScale": 64,
-      "Name": "ckmr7ltmdsri8tolfqqg",
       "Segments": [
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7ltmdsri8tolfqr0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -160,
           "Y": 160
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7m5mdsri8tolfqrg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -300,
           "Y": 240
         },
         {
-          "HiMaterial": "Default",
-          "Name": "ckmr7m5mdsri8tolfqs0",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -330,
           "Y": 160
         },
         {
-          "AdjacentSector": "ckmr7ilmdsri8tolfqk0",
-          "HiMaterial": "Default",
-          "Name": "ckmr7mdmdsri8tolfqsg",
-          "LoMaterial": "Default",
-          "MidMaterial": "Default",
+          "AdjacentSector": "17",
+          "HiMaterial": "2",
+          "LoMaterial": "2",
+          "MidMaterial": "2",
           "X": -240,
           "Y": 60
         }
       ],
-      "TopZ": 116,
-      "Type": "core.PhysicalSector"
+      "TopZ": 116
     }
-  ],
-  "SpawnX": 0,
-  "SpawnY": 0
-}
+  },
+  {
+    "Entity": "19",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "19",
+      "Name": "cknes7lmdsru23m3niug"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "19",
+      "Height": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -260,
+        "Y": 150,
+        "Z": 32
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "19",
+      "Strength": 2
+    }
+  }
+]

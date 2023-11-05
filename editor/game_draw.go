@@ -11,9 +11,12 @@ import (
 )
 
 func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
-	playerBody := core.BodyFromDb(editor.Renderer.Player().Ref())
+	iplayer := editor.Renderer.Player()
+	if iplayer == nil {
+		return
+	}
+	playerBody := core.BodyFromDb(iplayer.Ref())
 	playerAlive := behaviors.AliveFromDb(playerBody.Ref())
-	// player := bodys.PlayerFromDb(&gameMap.Player)
 	w := 640
 	h := 360
 
@@ -43,7 +46,7 @@ func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
 	cr.ShowText(fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	if !playerBody.SectorEntityRef.Nil() {
 		cr.MoveTo(10, 30)
-		cr.ShowText(fmt.Sprintf("Sector: %v[%v]", playerBody.SectorEntityRef.All(), playerBody.SectorEntityRef.Entity))
+		cr.ShowText(fmt.Sprintf("Sector: %v", playerBody.SectorEntityRef.String()))
 	}
 	cr.MoveTo(10, 40)
 	cr.ShowText(fmt.Sprintf("f: %v, v: %v, p: %v\n", playerBody.Force.StringHuman(), playerBody.Vel.Render.StringHuman(), playerBody.Pos.Render.StringHuman()))

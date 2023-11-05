@@ -59,8 +59,8 @@ func act(controller Controller, method ControllerMethod) {
 		controller.Loaded()
 	case ControllerRecalculate:
 		controller.Recalculate()
-	case ControllerProximity:
-		controller.Proximity()
+	case ControllerTrigger:
+		controller.Trigger()
 	}
 }
 

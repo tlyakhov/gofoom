@@ -1,57 +1,83 @@
-{
-    "SpawnX": 0,
-    "SpawnY": 0,
-    "Materials": [
+[
+  {
+    "Entity": "1",
+    "core.Spawn": {
+      "Active": true,
+      "Entity": "1",
+      "X": 0,
+      "Y": 0
+    }
+  },
+  {
+    "Entity": "2",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "2",
+      "Name": "Default"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "2",
+      "Filter": true,
+      "GenerateMipMaps": true,
+      "Source": "data/WDef.png"
+    }
+  },
+  {
+    "Entity": "3",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "3",
+      "Name": "Blue"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "3",
+      "Filter": true,
+      "GenerateMipMaps": true,
+      "Source": "data/grass.jpg"
+    }
+  },
+  {
+    "Entity": "4",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "4",
+      "Name": "cl5anh5mdsrmm6mqu5d0"
+    },
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [],
+      "BottomZ": 0,
+      "CeilMaterial": "3",
+      "CeilScale": 64,
+      "Entity": "4",
+      "FloorFriction": 0.85,
+      "FloorMaterial": "3",
+      "FloorScale": 64,
+      "Segments": [
         {
-            "Type": "material.LitSampled",
-            "Name": "Default",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/WDef.png",
-                "GenerateMipMaps": true,
-                "Filter": true
-            }
+          "MidMaterial": "2",
+          "X": -300,
+          "Y": -300
         },
         {
-            "Type": "material.LitSampled",
-            "Name": "Blue",
-            "Texture": {
-                "Type": "texture.Image",
-                "Source": "data/grass.jpg",
-                "GenerateMipMaps": true,
-                "Filter": true
-            }
-        }
-    ],
-    "Sectors": [
+          "MidMaterial": "2",
+          "X": 300,
+          "Y": -300
+        },
         {
-            "Type": "mapping.PhysicalSector",
-            "BottomZ": 0,
-            "TopZ": 64,
-            "FloorMaterial": "Blue",
-            "CeilMaterial": "Blue",
-            "Segments": [
-                {
-                    "X": -300,
-                    "Y": -300,
-                    "MidMaterial": "Default"
-                },
-                {
-                    "X": 300,
-                    "Y": -300,
-                    "MidMaterial": "Default"
-                },
-                {
-                    "X": 300,
-                    "Y": 300,
-                    "MidMaterial": "Default"
-                },
-                {
-                    "X": -300,
-                    "Y": 300,
-                    "MidMaterial": "Default"
-                }
-            ]
+          "MidMaterial": "2",
+          "X": 300,
+          "Y": 300
+        },
+        {
+          "MidMaterial": "2",
+          "X": -300,
+          "Y": 300
         }
-    ]
-}
+      ],
+      "TopZ": 64
+    }
+  }
+]

@@ -154,7 +154,9 @@ func (s *Simulation) Step() {
 			v.Prev = v.Now
 		}
 
-		s.Integrate()
+		if s.Integrate != nil {
+			s.Integrate()
+		}
 		s.RenderTime -= constants.TimeStep
 		s.SimTime += constants.TimeStep
 	}
@@ -184,5 +186,7 @@ func (s *Simulation) Step() {
 		}
 	}
 
-	s.Render()
+	if s.Render != nil {
+		s.Render()
+	}
 }

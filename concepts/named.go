@@ -23,6 +23,8 @@ func NamedFromDb(entity *EntityRef) *Named {
 }
 
 func (n *Named) Construct(data map[string]any) {
+	n.Attached.Construct(data)
+
 	n.Name = xid.New().String()
 
 	if data == nil {
@@ -34,5 +36,7 @@ func (n *Named) Construct(data map[string]any) {
 }
 
 func (n *Named) Serialize() map[string]any {
-	return map[string]any{"Name": n.Name}
+	result := n.Attached.Serialize()
+	result["Name"] = n.Name
+	return result
 }

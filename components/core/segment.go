@@ -12,7 +12,7 @@ const (
 )
 
 type Segment struct {
-	concepts.Named `editable:"^"`
+	DB *concepts.EntityComponentDB
 
 	P           concepts.Vector2    `editable:"X/Y"`
 	LoMaterial  *concepts.EntityRef `editable:"Low Material" edit_type:"Material"`
@@ -47,15 +47,14 @@ func (s *Segment) RealizeAdjacentSector() {
 	if s.AdjacentSector.Nil() {
 		return
 	}
-	adj := s.AdjacentSector.Component(SectorComponentIndex).(*Sector)
-	if adj == nil {
-		return
-	}
-	// Get the actual segment
-	for _, s2 := range adj.Segments {
-		if s2.Matches(s) {
-			s.AdjacentSegment = s2
-			break
+
+	if adj, ok := s.AdjacentSector.Component(SectorComponentIndex).(*Sector); ok {
+		// Get the actual segment
+		for _, s2 := range adj.Segments {
+			if s2.Matches(s) {
+				s.AdjacentSegment = s2
+				break
+			}
 		}
 	}
 }
@@ -245,9 +244,32 @@ func (s *Segment) LightmapAddressToWorld(result *concepts.Vector3, mapIndex uint
 	return s.UVToWorld(result, u, v)
 }
 
-func (s *Segment) Construct(data map[string]any) {
-	s.Named.Construct(data)
+func (s *Segment) Split(p concepts.Vector2) *Segment {
+	// Segments are linked list where the line goes from `s.P` -> `s.Next.P`
+	// The insertion index for the split should therefore be such that `s` is
+	// the _previous_ segment
+	index := 0
+	for index < len(s.Sector.Segments) &&
+		s.Sector.Segments[index].Prev != s {
+		index++
+	}
+	// Make a copy to preserve everything other than the point.
+	copied := new(Segment)
+	copied.Sector = s.Sector
+	copied.DB = s.DB
+	copied.Construct(s.Serialize())
+	copied.P = p
+	// Insert into the sector
+	s.Sector.Segments = append(s.Sector.Segments[:index+1], s.Sector.Segments[index:]...)
+	s.Sector.Segments[index] = copied
+	// Recalculate metadata
+	//DbgPrintSegments(seg.Sector)
+	s.Sector.Recalculate()
+	//DbgPrintSegments(seg.Sector)
+	return copied
+}
 
+func (s *Segment) Construct(data map[string]any) {
 	s.P = concepts.Vector2{}
 	s.Normal = concepts.Vector2{}
 
@@ -262,16 +284,16 @@ func (s *Segment) Construct(data map[string]any) {
 		s.P[1] = v.(float64)
 	}
 	if v, ok := data["AdjacentSector"]; ok {
-		s.AdjacentSector = s.DB.EntityRef(v.(uint64))
+		s.AdjacentSector = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["LoMaterial"]; ok {
-		s.LoMaterial = s.DB.EntityRef(v.(uint64))
+		s.LoMaterial = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["MidMaterial"]; ok {
-		s.MidMaterial = s.DB.EntityRef(v.(uint64))
+		s.MidMaterial = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["HiMaterial"]; ok {
-		s.HiMaterial = s.DB.EntityRef(v.(uint64))
+		s.HiMaterial = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["LoBehavior"]; ok {
 		mb, error := MaterialScaleString(v.(string))
@@ -300,12 +322,18 @@ func (s *Segment) Construct(data map[string]any) {
 }
 
 func (s *Segment) Serialize() map[string]any {
-	result := s.Named.Serialize()
+	result := make(map[string]any)
 	result["X"] = s.P[0]
 	result["Y"] = s.P[1]
-	result["HiMaterial"] = s.HiMaterial.Entity
-	result["LoMaterial"] = s.LoMaterial.Entity
-	result["MidMaterial"] = s.MidMaterial.Entity
+	if !s.HiMaterial.Nil() {
+		result["HiMaterial"] = s.HiMaterial.Serialize()
+	}
+	if !s.LoMaterial.Nil() {
+		result["LoMaterial"] = s.LoMaterial.Serialize()
+	}
+	if !s.MidMaterial.Nil() {
+		result["MidMaterial"] = s.MidMaterial.Serialize()
+	}
 
 	if s.HiBehavior != ScaleNone {
 		result["HiBehavior"] = s.HiBehavior.String()
@@ -318,7 +346,7 @@ func (s *Segment) Serialize() map[string]any {
 	}
 
 	if !s.AdjacentSector.Nil() {
-		result["AdjacentSector"] = s.AdjacentSector.Entity
+		result["AdjacentSector"] = s.AdjacentSector.Serialize()
 	}
 	return result
 }

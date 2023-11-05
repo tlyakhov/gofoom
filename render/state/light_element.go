@@ -268,7 +268,9 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		}
 
 		if diffuseLight > 0 {
-			le.Output.AddSelf(light.Diffuse.Mul(diffuseLight))
+			le.Output[0] += light.Diffuse[0] * diffuseLight
+			le.Output[1] += light.Diffuse[1] * diffuseLight
+			le.Output[2] += light.Diffuse[2] * diffuseLight
 		}
 	}
 	return &le.Output

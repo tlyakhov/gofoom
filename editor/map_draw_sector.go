@@ -25,12 +25,12 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 
 	cr.Save()
 
-	sectorHovering := state.IndexOf(editor.HoveringObjects, sector) != -1
-	sectorSelected := state.IndexOf(editor.SelectedObjects, sector) != -1
+	sectorHovering := state.IndexOf(editor.HoveringObjects, &sector.EntityRef) != -1
+	sectorSelected := state.IndexOf(editor.SelectedObjects, &sector.EntityRef) != -1
 
-	if editor.BodysVisible {
-		for _, bodyer := range sector.Bodies {
-			DrawBody(cr, &bodyer)
+	if editor.BodiesVisible {
+		for _, ibody := range sector.Bodies {
+			DrawBody(cr, ibody)
 		}
 	}
 
@@ -62,12 +62,14 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 
 		// Highlight PVS sectors...
 		for _, obj := range editor.SelectedObjects {
-			s2, ok := obj.(*core.Sector)
-			if !ok || s2 == sector {
-				continue
-			}
-			if s2.PVSBody[sector.Entity] != nil {
-				cr.SetSourceRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
+			switch selected := obj.(type) {
+			case *concepts.EntityRef:
+				if s2 := core.SectorFromDb(selected); s2 != nil && sector != s2 {
+					if s2.PVSBody[sector.Entity] != nil {
+						cr.SetSourceRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
+					}
+				}
+
 			}
 		}
 

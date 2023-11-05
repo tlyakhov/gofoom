@@ -2,7 +2,6 @@ package main
 
 import (
 	"math"
-	"reflect"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -27,11 +26,15 @@ func DrawBodyAngle(cr *cairo.Context, e *core.Body) {
 	cr.Stroke()
 }
 
-func DrawBody(cr *cairo.Context, bodyer *concepts.EntityRef) {
-	body := core.BodyFromDb(bodyer)
+func DrawBody(cr *cairo.Context, ibody *concepts.EntityRef) {
+	body := core.BodyFromDb(ibody)
+
+	if body == nil {
+		return
+	}
 
 	cr.SetSourceRGB(0.6, 0.6, 0.6)
-	if player := behaviors.PlayerFromDb(bodyer); player != nil {
+	if player := behaviors.PlayerFromDb(ibody); player != nil {
 		// Let's get fancy:
 		cr.SetSourceRGB(0.6, 0.6, 0.6)
 		cr.SetLineWidth(1)
@@ -41,12 +44,12 @@ func DrawBody(cr *cairo.Context, bodyer *concepts.EntityRef) {
 		cr.Stroke()
 		cr.SetSourceRGB(0.33, 0.33, 0.33)
 		DrawBodyAngle(cr, body)
-	} else if light := core.LightFromDb(bodyer); light != nil {
+	} else if light := core.LightFromDb(ibody); light != nil {
 		cr.SetSourceRGB(light.Diffuse[0], light.Diffuse[1], light.Diffuse[2])
 	} // Sprite...
 
-	hovering := state.IndexOf(editor.HoveringObjects, body) != -1
-	selected := state.IndexOf(editor.SelectedObjects, body) != -1
+	hovering := state.IndexOf(editor.HoveringObjects, ibody) != -1
+	selected := state.IndexOf(editor.SelectedObjects, ibody) != -1
 	if selected {
 		cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 	} else if hovering {
@@ -59,11 +62,11 @@ func DrawBody(cr *cairo.Context, bodyer *concepts.EntityRef) {
 	cr.ClosePath()
 	cr.Stroke()
 
-	if editor.BodyTypesVisible {
-		text := reflect.TypeOf(body).String()
+	if editor.ComponentNamesVisible {
+		text := ibody.String()
 		extents := cr.TextExtents(text)
 		cr.Save()
-		cr.SetSourceRGB(0.3, 0.3, 0.3)
+		cr.SetSourceRGB(0.3, 0.3, 0.5)
 		cr.Translate(body.Pos.Now[0]-extents.Width/2, body.Pos.Now[1]-extents.Height/2-extents.YBearing)
 		cr.ShowText(text)
 		cr.Restore()

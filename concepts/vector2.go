@@ -125,6 +125,11 @@ func (v *Vector2) Dot(v2 *Vector2) float64 {
 	return v[0]*v2[0] + v[1]*v2[1]
 }
 
+// Cross calculates the cross product of two vectors.
+func (v *Vector2) Cross(v2 *Vector2) float64 {
+	return v[0]*v2[1] - v[1]*v2[0]
+}
+
 // Reflect reflects a vector around another vector.
 func (v *Vector2) Reflect(normal *Vector2) *Vector2 {
 	m := 2.0 * v.Dot(normal)

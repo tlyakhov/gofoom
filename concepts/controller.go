@@ -10,7 +10,7 @@ const (
 	ControllerExit
 	ControllerLoaded
 	ControllerRecalculate
-	ControllerProximity
+	ControllerTrigger
 )
 
 type Controller interface {
@@ -28,7 +28,7 @@ type Controller interface {
 	Exit()
 	Loaded()
 	Recalculate()
-	Proximity()
+	Trigger()
 }
 
 type BaseController struct {
@@ -66,4 +66,4 @@ func (c *BaseController) Enter()       {}
 func (c *BaseController) Exit()        {}
 func (c *BaseController) Loaded()      {}
 func (c *BaseController) Recalculate() {}
-func (c *BaseController) Proximity()   {}
+func (c *BaseController) Trigger()     {}

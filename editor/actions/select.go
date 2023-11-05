@@ -32,9 +32,7 @@ func (a *Select) OnMouseDown(button *gdk.EventButton) {
 	}
 
 	a.Original = make([]any, len(a.State().SelectedObjects))
-	for i, o := range a.State().SelectedObjects {
-		a.Original[i] = o
-	}
+	copy(a.Original, a.State().SelectedObjects)
 
 	a.Mode = "SelectionStart"
 	a.SetMapCursor("cell")
@@ -52,7 +50,7 @@ func (a *Select) OnMouseUp() {
 		for _, isector := range a.State().DB.All(core.SectorComponentIndex) {
 			sector := isector.(*core.Sector)
 			if sector.IsPointInside2D(&a.State().MouseWorld) {
-				hovering = append(hovering, sector)
+				hovering = append(hovering, sector.Ref())
 			}
 		}
 	}

@@ -90,6 +90,9 @@ func (b *Body) Construct(data map[string]any) {
 	if v, ok := data["MountHeight"]; ok {
 		b.MountHeight = v.(float64)
 	}
+	if v, ok := data["Mass"]; ok {
+		b.Mass = v.(float64)
+	}
 	if v, ok := data["CollisionResponse"]; ok {
 		c, err := CollisionResponseString(v.(string))
 		if err == nil {
@@ -108,6 +111,7 @@ func (b *Body) Serialize() map[string]any {
 	result["Angle"] = b.Angle
 	result["BoundingRadius"] = b.BoundingRadius
 	result["Height"] = b.Height
+	result["Mass"] = b.Mass
 	result["MountHeight"] = b.MountHeight
 	result["CollisionResponse"] = b.CollisionResponse.String()
 	return result

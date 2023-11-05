@@ -4,17 +4,13 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/rs/xid"
-
-	"tlyakhov/gofoom/core"
+	"tlyakhov/gofoom/components/core"
 
 	"github.com/gotk3/gotk3/gdk"
 )
 
 type segmentSplitter struct {
-	segments *[]*core.Segment
-	index    int
-	split    *core.Segment
+	original *core.Segment
 	added    *core.Segment
 }
 
@@ -33,21 +29,14 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	md := a.WorldGrid(&a.State().MouseDownWorld)
 	m := a.WorldGrid(&a.State().MouseWorld)
 	isect := new(concepts.Vector2)
-	exists := ss.split.Intersect2D(md, m, isect)
+	exists := ss.original.Intersect2D(md, m, isect)
 
-	if !exists || *isect == ss.split.P || *isect == ss.split.Next.P {
+	if !exists || *isect == ss.original.P || *isect == ss.original.Next.P {
 		return false
 	}
 
-	copied := &core.Segment{}
-	copied.SetParent(ss.split.Sector)
-	copied.Construct(ss.split.Serialize())
-	ss.added = copied
-	ss.added.Name = xid.New().String()
+	ss.added = ss.original.Split(*isect)
 	ss.added.P = *isect
-	*ss.segments = append(*ss.segments, nil)
-	copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])
-	(*ss.segments)[ss.index] = ss.added
 	ss.added.Sector.Recalculate()
 	a.NewSegments = append(a.NewSegments, ss)
 	return true
@@ -58,28 +47,31 @@ func (a *SplitSegment) OnMouseUp() {
 
 	// Split only selected if any, otherwise all sectors/segments.
 	all := a.State().SelectedObjects
-	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().World.Map) {
-		all = make([]concepts.Attachable, len(a.State().World.Sectors))
+	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().DB) {
+		allSectors := a.State().DB.Components[core.SectorComponentIndex]
+		all = make([]any, len(allSectors))
 		i := 0
-		for _, s := range a.State().World.Sectors {
-			all[i] = s
+		for _, s := range allSectors {
+			all[i] = s.Ref()
 			i++
 		}
 	}
 
-	for _, obj := range all {
-		if sector, ok := obj.(core.Sector); ok {
-			for j := 0; j < len(sector.Segments); j++ {
-				if a.Split(&segmentSplitter{
-					segments: &sector.Segments,
-					split:    sector.Segments[j],
-					index:    j + 1}) {
-					j++ // Avoid infinite splitting.
+	for _, selected := range all {
+		switch target := selected.(type) {
+		case *concepts.EntityRef:
+			if sector := core.SectorFromDb(target); sector != nil {
+				for j := 0; j < len(sector.Segments); j++ {
+					if a.Split(&segmentSplitter{
+						original: sector.Segments[j]}) {
+						j++ // Avoid infinite splitting.
+					}
 				}
 			}
-		} else if _, ok := obj.(state.MapPoint); ok {
-			// TODO...
+		case *core.Segment:
+			a.Split(&segmentSplitter{original: target})
 		}
+
 	}
 	a.State().Modified = true
 	a.ActionFinished(false)
@@ -91,21 +83,21 @@ func (a *SplitSegment) Cancel() {
 
 func (a *SplitSegment) Undo() {
 	for _, ss := range a.NewSegments {
-		reset := (*ss.segments)[:0]
-		for _, seg := range *ss.segments {
-			if seg.Name != ss.added.Name {
+		reset := make([]*core.Segment, 0)
+		segments := ss.original.Sector.Segments
+		for _, seg := range segments {
+			if seg != ss.added {
 				reset = append(reset, seg)
 			}
 		}
-		*ss.segments = reset
+		ss.original.Sector.Segments = reset
 		ss.added.Sector.Recalculate()
 	}
 }
 func (a *SplitSegment) Redo() {
+	panic("unimplemented redo:splitsegment")
 	for _, ss := range a.NewSegments {
-		*ss.segments = append(*ss.segments, nil)
-		copy((*ss.segments)[ss.index+1:], (*ss.segments)[ss.index:])
-		(*ss.segments)[ss.index] = ss.added
+		// TODO
 		ss.added.Sector.Recalculate()
 	}
 }

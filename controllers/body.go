@@ -203,9 +203,9 @@ func (bc *BodyController) Collide() []*core.Segment {
 		}
 	}
 
-	/*body := mc.Sector.Bodys[mc.Body.Entity]
+	/*body := mc.Sector.Bodies[mc.Body.Entity]
 	if mc.Sector != nil && body.Nil() {
-		mc.Sector.Bodys[mc.Body.Entity] = *mc.TargetEntity
+		mc.Sector.Bodies[mc.Body.Entity] = *mc.TargetEntity
 	}*/
 
 	return collided

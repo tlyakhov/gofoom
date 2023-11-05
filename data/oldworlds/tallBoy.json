@@ -1,0 +1,175 @@
+{
+  "MobsPaused": false,
+  "Name": "be3h6pnvn27in35ekqj0",
+  "Materials": [
+    {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Name": "Default",
+      "IsLiquid": false,
+      "Texture": {
+        "Filter": false,
+        "GenerateMipMaps": true,
+        "Name": "be3h6pnvn27in35ekqn0",
+        "Source": "data/WDef.png",
+        "Type": "texture.Image"
+      },
+      "Type": "materials.LitSampled"
+    }
+  ],
+  "Sectors": [
+    {
+      "BottomZ": 0,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Mobs": [
+        {
+          "Active": true,
+          "Angle": 0,
+          "Behaviors": [
+            {
+              "Active": true,
+              "Attenuation": 0.2,
+              "Diffuse": {
+                "X": 1,
+                "Y": 1,
+                "Z": 1
+              },
+              "Name": "Light",
+              "Strength": 2,
+              "Type": "behaviors.Light"
+            }
+          ],
+          "BoundingRadius": 10,
+          "CollisionResponse": "Slide",
+          "Height": 0,
+          "Name": "ckdpqi5mdsrj7p6jt8eg",
+          "MountHeight": 15,
+          "Pos": {
+            "X": 80,
+            "Y": 20,
+            "Z": 32
+          },
+          "Type": "mobs.Light",
+          "Vel": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          }
+        }
+      ],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "Name": "Starting",
+      "Segments": [
+        {
+          "HiMaterial": "Default",
+          "Name": "be3h6pnvn27in35ekqp0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -320,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "tallBoy",
+          "HiMaterial": "Default",
+          "Name": "be3h6pnvn27in35ekqq0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": -100
+        },
+        {
+          "HiMaterial": "Default",
+          "Name": "be3h6pnvn27in35ekqr0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "HiMaterial": "Default",
+          "Name": "be3h6pnvn27in35ekqs0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": -320,
+          "Y": 100
+        }
+      ],
+      "TopZ": 64,
+      "Type": "core.PhysicalSector"
+    },
+    {
+      "BottomZ": -60,
+      "CeilMaterial": "Default",
+      "CeilScale": 64,
+      "Mobs": [],
+      "FloorMaterial": "Default",
+      "FloorScale": 64,
+      "Name": "tallBoy",
+      "Segments": [
+        {
+          "HiMaterial": "Default",
+          "Name": "ckdpqk5mdsrj7p6jt8h0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": -100
+        },
+        {
+          "HiMaterial": "Default",
+          "Name": "ckdpqklmdsrj7p6jt8hg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": -260
+        },
+        {
+          "HiMaterial": "Default",
+          "Name": "ckdpql5mdsrj7p6jt8i0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 190,
+          "Y": -260
+        },
+        {
+          "HiMaterial": "Default",
+          "Name": "ckdpqltmdsrj7p6jt8ig",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 190,
+          "Y": 170
+        },
+        {
+          "HiMaterial": "Default",
+          "Name": "ckdpqm5mdsrj7p6jt8j0",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 170
+        },
+        {
+          "AdjacentSector": "Starting",
+          "HiMaterial": "Default",
+          "Name": "ckdpqmlmdsrj7p6jt8jg",
+          "LoMaterial": "Default",
+          "MidMaterial": "Default",
+          "X": 100,
+          "Y": 100
+        }
+      ],
+      "TopZ": 112,
+      "Type": "core.PhysicalSector"
+    }
+  ],
+  "SpawnX": 0,
+  "SpawnY": 0
+}

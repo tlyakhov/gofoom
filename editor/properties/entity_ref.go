@@ -69,7 +69,7 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 	// Create our combo box with pixbuf/string enum entries.
 	rendText, _ := gtk.CellRendererTextNew()
 	rendPix, _ := gtk.CellRendererPixbufNew()
-	opts, _ := gtk.ListStoreNew(glib.TYPE_INT64, glib.TYPE_STRING, glib.TYPE_OBJECT)
+	opts, _ := gtk.ListStoreNew(glib.TYPE_UINT64, glib.TYPE_STRING, glib.TYPE_OBJECT)
 	box, _ := gtk.ComboBoxNewWithModel(opts)
 	box.SetHExpand(true)
 	box.PackStart(rendPix, true)

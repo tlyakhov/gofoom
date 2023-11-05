@@ -112,7 +112,7 @@ func (pvs *PvsController) buildPVS(visitor *core.Sector) {
 
 	for entity, body := range visitor.Bodies {
 		if body.Component(core.LightComponentIndex) != nil {
-			pvs.Sector.PVL[entity] = &body
+			pvs.Sector.PVL[entity] = body
 		}
 	}
 
