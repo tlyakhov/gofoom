@@ -6,12 +6,13 @@ import (
 )
 
 type Attached struct {
-	EntityRef
-	Active bool `editable:"Active?"`
+	*EntityRef `editable:"Component" edit_type:"Component"`
+	Active     bool `editable:"Active?"`
 }
 
 type Attachable interface {
 	Ref() *EntityRef
+	ResetRef()
 	SetDB(db *EntityComponentDB)
 	Construct(data map[string]any)
 	Serialize() map[string]any
@@ -24,7 +25,15 @@ func init() {
 }
 
 func (a *Attached) Ref() *EntityRef {
-	return &a.EntityRef
+	return a.EntityRef
+}
+
+func (a *Attached) ResetRef() {
+	var db *EntityComponentDB
+	if a.EntityRef != nil {
+		db = a.EntityRef.DB
+	}
+	a.EntityRef = &EntityRef{DB: db}
 }
 
 func (a *Attached) SetDB(db *EntityComponentDB) {

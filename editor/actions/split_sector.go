@@ -116,8 +116,8 @@ func (a *SplitSector) Undo() {
 				for _, ibody := range bodies {
 					if body := core.BodyFromDb(ibody); body != nil {
 						if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-							body.SectorEntityRef = &sector.EntityRef
-							sector.Bodies[ibody.Entity] = &body.EntityRef
+							body.SectorEntityRef = sector.EntityRef
+							sector.Bodies[ibody.Entity] = body.EntityRef
 						}
 
 					}
@@ -155,8 +155,8 @@ func (a *SplitSector) Redo() {
 					for _, ibody := range bodies {
 						if body := core.BodyFromDb(ibody); body != nil {
 							if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-								body.SectorEntityRef = &sector.EntityRef
-								sector.Bodies[ibody.Entity] = &body.EntityRef
+								body.SectorEntityRef = sector.EntityRef
+								sector.Bodies[ibody.Entity] = body.EntityRef
 							}
 
 						}

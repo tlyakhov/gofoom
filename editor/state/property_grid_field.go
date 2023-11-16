@@ -10,6 +10,7 @@ type PropertyGridField struct {
 	Values           []reflect.Value
 	Unique           map[string]reflect.Value
 	Type             reflect.Type
+	EditType         string
 	ParentName       string
 	Depth            int
 	Source           *reflect.StructField

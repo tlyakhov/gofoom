@@ -287,7 +287,7 @@ func (a *SectorSplitter) collect() {
 					addedSegment.Construct(visitor.Source.Serialize())
 					addedSegment.P = visitor.Start
 					addedSegment.AdjacentSegment = nil
-					addedSegment.AdjacentSector.Reset()
+					addedSegment.AdjacentSector = nil
 					// Is this necessary? We recalculate anyway
 					/*if len(target.Segments) > 0 {
 						addedSegment.Next = target.Segments[0]
@@ -297,7 +297,7 @@ func (a *SectorSplitter) collect() {
 					}*/
 					target.Segments = append(target.Segments, addedSegment)
 					if visitor.Source.AdjacentSegment != nil {
-						visitor.Source.AdjacentSegment.AdjacentSector.Reset()
+						visitor.Source.AdjacentSegment.AdjacentSector = nil
 						visitor.Source.AdjacentSegment.AdjacentSegment = nil
 					}
 					visitor = visitor.Next

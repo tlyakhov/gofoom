@@ -5,8 +5,8 @@ import (
 )
 
 type Named struct {
-	Attached
-	Name string `editable:"Name"`
+	Attached `editable:"^"`
+	Name     string `editable:"Name"`
 }
 
 var NamedComponentIndex int

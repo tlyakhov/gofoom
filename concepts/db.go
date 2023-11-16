@@ -76,7 +76,7 @@ func (db *EntityComponentDB) attach(entity uint64, component Attachable, index i
 	if entity == 0 {
 		log.Printf("Tried to attach 0 entity!")
 	}
-	component.Ref().Reset()
+	component.ResetRef()
 	component.Ref().Entity = entity
 	component.SetDB(db)
 	db.Components[index][entity] = component
@@ -179,7 +179,7 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 
 	db.Detach(index, entity)
 
-	component.Ref().Reset()
+	component.ResetRef()
 }
 
 func (db *EntityComponentDB) DetachAll(entity uint64) {

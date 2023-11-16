@@ -42,11 +42,11 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state Pr
 		if updateParent {
 			state.Parent = child
 		}
-		g.gatherFields(child, state)
+		g.fieldsFromObject(child, state)
 	}
 }
 
-func (g *Grid) gatherFields(obj any, pgs PropertyGridState) {
+func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 	objValue := reflect.ValueOf(obj)
 	objType := objValue.Type().Elem()
 	if objValue.IsNil() {
@@ -89,6 +89,9 @@ func (g *Grid) gatherFields(obj any, pgs PropertyGridState) {
 				Parent:           pgs.Parent,
 			}
 			pgs.Fields[display] = gf
+			if editTypeTag, ok := field.Tag.Lookup("edit_type"); ok {
+				gf.EditType = editTypeTag
+			}
 		}
 
 		gf.Values = append(gf.Values, fieldValue.Addr())
@@ -116,11 +119,7 @@ func (g *Grid) gatherFields(obj any, pgs PropertyGridState) {
 	}
 }
 
-func (g *Grid) Refresh(selection []any) {
-	g.Container.GetChildren().Foreach(func(child any) {
-		g.Container.Remove(child.(gtk.IWidget))
-	})
-
+func (g *Grid) fieldsFromSelection(selection []any) *PropertyGridState {
 	state := PropertyGridState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
 	for _, obj := range selection {
 		switch target := obj.(type) {
@@ -132,14 +131,23 @@ func (g *Grid) Refresh(selection []any) {
 				state.Parent = c
 				n := strings.Split(reflect.TypeOf(c).String(), ".")
 				state.ParentName = n[len(n)-1]
-				g.gatherFields(c, state)
+				g.fieldsFromObject(c, state)
 			}
 		case *core.Segment:
 			state.Parent = nil
 			state.ParentName = "Segment"
-			g.gatherFields(target, state)
+			g.fieldsFromObject(target, state)
 		}
 	}
+	return &state
+}
+
+func (g *Grid) Refresh(selection []any) {
+	g.Container.GetChildren().Foreach(func(child any) {
+		g.Container.Remove(child.(gtk.IWidget))
+	})
+
+	state := g.fieldsFromSelection(selection)
 
 	sorted := make([]string, len(state.Fields))
 	i := 0
@@ -165,6 +173,12 @@ func (g *Grid) Refresh(selection []any) {
 		label.SetHAlign(gtk.ALIGN_START)
 		g.Container.Attach(label, 1, index, 1, 1)
 
+		if field.EditType == "Component" {
+			g.fieldComponent(index, field)
+			index++
+			continue
+		}
+
 		switch field.Values[0].Interface().(type) {
 		case *bool:
 			g.fieldBool(index, field)
@@ -182,8 +196,6 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(index, field, core.CollisionResponseValues())
 		case **concepts.EntityRef:
 			g.fieldEntityRef(index, field)
-		case *map[string]core.Sampleable:
-			g.fieldMaterials(index, field)
 		}
 		index++
 	}
