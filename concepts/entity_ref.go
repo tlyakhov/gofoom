@@ -16,14 +16,6 @@ func (er *EntityRef) Nil() bool {
 	return er == nil || er.DB == nil || er.Entity == 0
 }
 
-func (er *EntityRef) Reset() {
-	if er == nil {
-		return
-	}
-	er.Entity = 0
-	er.components = nil
-}
-
 func (er *EntityRef) All() []Attachable {
 	if er != nil && er.Entity != 0 && er.components == nil {
 		er.components = er.DB.EntityComponents[er.Entity]

@@ -216,7 +216,7 @@ func (bc *BodyController) RemoveBody() {
 	if bc.Sector != nil {
 		delete(bc.Sector.Bodies, bc.Body.Entity)
 		bc.Sector = nil
-		bc.Body.SectorEntityRef.Reset()
+		bc.Body.SectorEntityRef = nil
 		//return
 	}
 	panic("BodyController.RemoveBody is broken")
