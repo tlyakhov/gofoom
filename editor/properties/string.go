@@ -38,5 +38,5 @@ func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
 		origValue = text
 		g.Container.GrabFocus()
 	})
-	g.Container.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 2, 1)
 }

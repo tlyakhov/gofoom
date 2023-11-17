@@ -103,5 +103,5 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 		action.Act()
 	})
 
-	g.Container.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 2, 1)
 }

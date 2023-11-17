@@ -40,5 +40,5 @@ func (g *Grid) fieldComponent(index int, field *state.PropertyGridField) {
 		action.Act()
 		g.Container.GrabFocus()
 	})
-	g.Container.Attach(button, 2, index, 1, 1)
+	g.Container.Attach(button, 2, index, 2, 1)
 }

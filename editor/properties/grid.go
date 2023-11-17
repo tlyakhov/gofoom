@@ -1,16 +1,20 @@
 package properties
 
 import (
+	"fmt"
 	"log"
 	"reflect"
 	"sort"
+	"strconv"
 	"strings"
 
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
 
+	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
@@ -142,6 +146,66 @@ func (g *Grid) fieldsFromSelection(selection []any) *PropertyGridState {
 	return &state
 }
 
+func (g *Grid) AddEntityControls(selection []any) {
+	index := 1
+	entities := make([]uint64, 0)
+	entityList := ""
+	for _, obj := range selection {
+		if len(entityList) > 0 {
+			entityList += ", "
+		}
+		switch target := obj.(type) {
+		case *concepts.EntityRef:
+			entities = append(entities, target.Entity)
+			entityList += strconv.FormatUint(target.Entity, 10)
+		case *core.Segment:
+			entities = append(entities, target.Sector.Entity)
+			entityList += strconv.FormatUint(target.Sector.Entity, 10)
+		}
+	}
+
+	label, _ := gtk.LabelNew("")
+	label.SetMarkup(fmt.Sprintf("<b>Entity [%v]</b>", entityList))
+	label.SetTooltipText(entityList)
+	label.SetJustify(gtk.JUSTIFY_LEFT)
+	label.SetHExpand(true)
+	label.SetHAlign(gtk.ALIGN_START)
+	g.Container.Attach(label, 1, index, 1, 1)
+
+	rendText, _ := gtk.CellRendererTextNew()
+	opts, _ := gtk.ListStoreNew(glib.TYPE_INT, glib.TYPE_STRING)
+	box, _ := gtk.ComboBoxNewWithModel(opts)
+	box.SetHExpand(true)
+	box.PackStart(rendText, true)
+	box.AddAttribute(rendText, "text", 1)
+	for index, t := range concepts.DbTypes().Types {
+		if t == nil {
+			continue
+		}
+		listItem := opts.Append()
+		opts.Set(listItem, []int{0, 1}, []any{index, t.String()})
+		if t.String() == "behaviors.Proximity" {
+			box.SetActiveIter(listItem)
+		}
+	}
+	g.Container.Attach(box, 2, index, 1, 1)
+
+	button, _ := gtk.ButtonNew()
+	button.SetHExpand(true)
+	button.SetLabel("Add")
+	button.Connect("clicked", func(_ *gtk.Button) {
+		selected, _ := box.GetActiveIter()
+		value, _ := opts.GetValue(selected, 0)
+		componentIndex, _ := value.GoValue()
+
+		action := &actions.AddComponent{IEditor: g.IEditor, Index: componentIndex.(int), Entities: entities}
+		g.NewAction(action)
+		action.Act()
+		g.Container.GrabFocus()
+	})
+	g.Container.Attach(button, 3, index, 1, 1)
+}
+
 func (g *Grid) Refresh(selection []any) {
 	g.Container.GetChildren().Foreach(func(child any) {
 		g.Container.Remove(child.(gtk.IWidget))
@@ -158,8 +222,11 @@ func (g *Grid) Refresh(selection []any) {
 	sort.SliceStable(sorted, func(i, j int) bool {
 		return sorted[i] < sorted[j]
 	})
-
 	index := 1
+	if len(selection) > 0 {
+		g.AddEntityControls(selection)
+		index++
+	}
 	for _, display := range sorted {
 		field := state.Fields[display]
 

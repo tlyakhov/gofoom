@@ -25,5 +25,5 @@ func (g *Grid) fieldBool(index int, field *state.PropertyGridField) {
 		origValue = cb.GetActive()
 		g.Container.GrabFocus()
 	})
-	g.Container.Attach(cb, 2, index, 1, 1)
+	g.Container.Attach(cb, 2, index, 2, 1)
 }
