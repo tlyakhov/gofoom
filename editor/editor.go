@@ -315,9 +315,9 @@ func (e *Editor) RedoCurrent() {
 }
 
 func (e *Editor) SelectObjects(objects []any) {
-	if len(objects) == 0 {
+	/*if len(objects) == 0 {
 		objects = append(objects, e.DB)
-	}
+	}*/
 
 	e.SelectedObjects = objects
 	e.Grid.Refresh(e.SelectedObjects)

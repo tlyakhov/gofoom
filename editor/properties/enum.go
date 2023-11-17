@@ -44,5 +44,5 @@ func (g *Grid) fieldEnum(index int, field *state.PropertyGridField, enumValues a
 		action.Act()
 	})
 
-	g.Container.Attach(box, 2, index, 1, 1)
+	g.Container.Attach(box, 2, index, 2, 1)
 }

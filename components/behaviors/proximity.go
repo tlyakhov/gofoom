@@ -27,6 +27,8 @@ func ProximityFromDb(entity *concepts.EntityRef) *Proximity {
 func (s *Proximity) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
+	s.Range = 100
+
 	if data == nil {
 		return
 	}
