@@ -22,6 +22,10 @@ func NamedFromDb(entity *EntityRef) *Named {
 	return nil
 }
 
+func (n *Named) String() string {
+	return n.Name
+}
+
 func (n *Named) Construct(data map[string]any) {
 	n.Attached.Construct(data)
 

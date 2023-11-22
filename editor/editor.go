@@ -26,13 +26,13 @@ import (
 )
 
 type EditorWidgets struct {
-	App         *gtk.Application
-	Window      *gtk.ApplicationWindow
-	GameArea    *gtk.DrawingArea
-	MapArea     *gtk.DrawingArea
-	BodyTypes   *gtk.ComboBoxText
-	SectorTypes *gtk.ComboBoxText
-	StatusBar   *gtk.Label
+	App               *gtk.Application
+	Window            *gtk.ApplicationWindow
+	GameArea          *gtk.DrawingArea
+	MapArea           *gtk.DrawingArea
+	EntitySearchBar   *gtk.SearchBar
+	EntitySearchEntry *gtk.SearchEntry
+	StatusBar         *gtk.Label
 }
 
 type Editor struct {
@@ -42,6 +42,7 @@ type Editor struct {
 	MapViewGrid
 	EditorWidgets
 	properties.Grid
+	properties.EntityTree
 
 	// Map view filters
 	BodiesVisible         bool
@@ -75,6 +76,7 @@ func NewEditor() *Editor {
 		ComponentNamesVisible: true,
 	}
 	e.Grid.IEditor = e
+	e.EntityTree.IEditor = e
 	e.MapViewGrid.Current = &e.Edit.MapView
 	return e
 }
@@ -201,6 +203,7 @@ func (e *Editor) Load(filename string) {
 	e.SelectObjects([]any{})
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
+	e.EntityTree.Update()
 }
 
 func (e *Editor) Test() {
@@ -216,7 +219,7 @@ func (e *Editor) Test() {
 
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
-
+	e.EntityTree.Update()
 }
 
 func (e *Editor) ActionFinished(canceled bool) {
@@ -230,6 +233,7 @@ func (e *Editor) ActionFinished(canceled bool) {
 		e.RedoHistory = []state.IAction{}
 	}
 	e.Grid.Refresh(e.SelectedObjects)
+	e.EntityTree.Update()
 	e.SetMapCursor("")
 	e.CurrentAction = nil
 	e.ActTool()

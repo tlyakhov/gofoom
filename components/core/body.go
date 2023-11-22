@@ -37,6 +37,10 @@ func BodyFromDb(entity *concepts.EntityRef) *Body {
 	return nil
 }
 
+func (b *Body) String() string {
+	return "Body: " + b.Pos.Now.StringHuman()
+}
+
 func (b *Body) SetDB(db *concepts.EntityComponentDB) {
 	if b.DB != nil {
 		b.Pos.Detach(b.DB.Simulation)
