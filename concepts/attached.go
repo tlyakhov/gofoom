@@ -16,12 +16,17 @@ type Attachable interface {
 	SetDB(db *EntityComponentDB)
 	Construct(data map[string]any)
 	Serialize() map[string]any
+	String() string
 }
 
 var AttachedComponentIndex int
 
 func init() {
 	AttachedComponentIndex = DbTypes().Register(Attached{})
+}
+
+func (a *Attached) String() string {
+	return a.EntityRef.String()
 }
 
 func (a *Attached) Ref() *EntityRef {

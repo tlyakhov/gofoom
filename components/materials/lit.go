@@ -24,6 +24,10 @@ func LitFromDb(entity *concepts.EntityRef) *Lit {
 	return nil
 }
 
+func (m *Lit) String() string {
+	return "Lit: " + m.Diffuse.String()
+}
+
 func (m *Lit) Construct(data map[string]any) {
 	m.Attached.Construct(data)
 

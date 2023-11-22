@@ -29,6 +29,7 @@ type Edit struct {
 
 	SelectedObjects []any
 	HoveringObjects []any
+	Filter          string
 
 	Tool          EditorTool
 	OpenFile      string

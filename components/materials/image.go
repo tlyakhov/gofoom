@@ -43,6 +43,10 @@ func ImageFromDb(entity *concepts.EntityRef) *Image {
 	return nil
 }
 
+func (t *Image) String() string {
+	return "Image: " + t.Source
+}
+
 // Load a texture from a file (pre-processing mipmaps if set)
 func (t *Image) Load() error {
 	if t.Source == "" {

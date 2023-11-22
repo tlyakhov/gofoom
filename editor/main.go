@@ -86,21 +86,33 @@ func onActivate() {
 		log.Fatal("Can't find PropertyGrid object in GTK+ UI file.", err)
 	}
 	editor.Grid.Container = obj.(*gtk.Grid)
-	obj, err = builder.GetObject("BodyTypes")
+	obj, err = builder.GetObject("EntitySearchBar")
 	if err != nil {
-		log.Fatal("Can't find BodyTypes object in GTK+ UI file.", err)
+		log.Fatal("Can't find EntitySearchBar object in GTK+ UI file.", err)
 	}
-	editor.BodyTypes = obj.(*gtk.ComboBoxText)
-	obj, err = builder.GetObject("SectorTypes")
+	editor.EntitySearchBar = obj.(*gtk.SearchBar)
+	obj, err = builder.GetObject("EntitySearchEntry")
 	if err != nil {
-		log.Fatal("Can't find SectorTypes object in GTK+ UI file.", err)
+		log.Fatal("Can't find EntitySearchEntry object in GTK+ UI file.", err)
 	}
-	editor.SectorTypes = obj.(*gtk.ComboBoxText)
+	editor.EntitySearchEntry = obj.(*gtk.SearchEntry)
+	editor.EntitySearchEntry.Connect("search-changed", func(entry *gtk.SearchEntry) {
+		editor.State().Filter, _ = editor.EntitySearchEntry.GetText()
+		editor.EntityTree.Filter()
+	})
+
 	obj, err = builder.GetObject("StatusBar")
 	if err != nil {
 		log.Fatal("Can't find StatusBar object in GTK+ UI file.", err)
 	}
 	editor.StatusBar = obj.(*gtk.Label)
+
+	obj, err = builder.GetObject("EntityTree")
+	if err != nil {
+		log.Fatal("Can't find TreeView object in GTK+ UI file.", err)
+	}
+	editor.EntityTree.View = obj.(*gtk.TreeView)
+	editor.EntityTree.Construct()
 
 	editor.AddSimpleMenuAction("open", MainOpen)
 	editor.AddSimpleMenuAction("save", MainSave)

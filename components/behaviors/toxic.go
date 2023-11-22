@@ -22,6 +22,10 @@ func ToxicFromDb(entity *concepts.EntityRef) *Toxic {
 	return nil
 }
 
+func (t *Toxic) String() string {
+	return "Toxic"
+}
+
 func (s *Toxic) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 

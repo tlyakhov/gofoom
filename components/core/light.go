@@ -26,6 +26,10 @@ func LightFromDb(entity *concepts.EntityRef) *Light {
 	return nil
 }
 
+func (l *Light) String() string {
+	return "Light: " + l.Diffuse.StringHuman()
+}
+
 func (l *Light) Construct(data map[string]any) {
 	l.Attached.Construct(data)
 	l.Diffuse = concepts.Vector3{1, 1, 1}

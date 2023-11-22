@@ -1,6 +1,7 @@
 package materials
 
 import (
+	"fmt"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -21,6 +22,15 @@ func TiledFromDb(entity *concepts.EntityRef) *Tiled {
 		return asserted
 	}
 	return nil
+}
+
+func (m *Tiled) String() string {
+	s := "Tiled"
+	if m.IsLiquid {
+		s += "(Liquid)"
+	}
+	s += fmt.Sprintf(": %.2f", m.Scale)
+	return s
 }
 
 func (m *Tiled) Construct(data map[string]any) {

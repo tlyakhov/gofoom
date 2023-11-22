@@ -51,6 +51,10 @@ func SectorFromDb(entity *concepts.EntityRef) *Sector {
 	return nil
 }
 
+func (s *Sector) String() string {
+	return "Sector: " + s.Center.StringHuman()
+}
+
 func (ms *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	inside := false
 	flag1 := (p[1] >= ms.Segments[0].P[1])

@@ -22,6 +22,9 @@ func SpawnFromDb(entity *concepts.EntityRef) *Spawn {
 	return nil
 }
 
+func (w *Spawn) String() string {
+	return "Spawn: " + w.Spawn.StringHuman()
+}
 func (w *Spawn) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 	w.Spawn = concepts.Vector3{}
