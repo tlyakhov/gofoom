@@ -250,7 +250,11 @@ func (g *Grid) Refresh(selection []any) {
 		case *bool:
 			g.fieldBool(index, field)
 		case *string:
-			g.fieldString(index, field)
+			if field.EditType == "file" {
+				g.fieldFile(index, field)
+			} else {
+				g.fieldString(index, field)
+			}
 		case *float64:
 			g.fieldFloat64(index, field)
 		case *concepts.Vector2:

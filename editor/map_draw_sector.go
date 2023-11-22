@@ -25,8 +25,8 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 
 	cr.Save()
 
-	sectorHovering := state.IndexOf(editor.HoveringObjects, &sector.EntityRef) != -1
-	sectorSelected := state.IndexOf(editor.SelectedObjects, &sector.EntityRef) != -1
+	sectorHovering := state.IndexOf(editor.HoveringObjects, sector.EntityRef) != -1
+	sectorSelected := state.IndexOf(editor.SelectedObjects, sector.EntityRef) != -1
 
 	if editor.BodiesVisible {
 		for _, ibody := range sector.Bodies {
@@ -89,13 +89,10 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 		cr.ClosePath()
 		cr.Stroke()
 
-		mapPointHovering := state.IndexOf(editor.HoveringObjects, segment) != -1
-		mapPointSelected := state.IndexOf(editor.SelectedObjects, segment) != -1
-
-		if mapPointSelected {
+		if segmentSelected {
 			cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 			DrawHandle(cr, &segment.P)
-		} else if mapPointHovering {
+		} else if segmentHovering {
 			cr.SetSourceRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
 			DrawHandle(cr, &segment.P)
 		} else {

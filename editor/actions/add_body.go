@@ -8,16 +8,16 @@ import (
 	"github.com/gotk3/gotk3/gdk"
 )
 
-type AddEntity struct {
+type AddBody struct {
 	state.IEditor
 
 	Mode             string
 	EntityRef        *concepts.EntityRef
-	Components       map[int]concepts.Attachable
+	Components       []concepts.Attachable
 	ContainingSector *core.Sector
 }
 
-func (a *AddEntity) RemoveFromMap() {
+func (a *AddBody) DetachFromSector() {
 	if body := core.BodyFromDb(a.EntityRef); body != nil {
 		if body.SectorEntityRef.Nil() {
 			return
@@ -27,13 +27,13 @@ func (a *AddEntity) RemoveFromMap() {
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
-func (a *AddEntity) AttachAll() {
+func (a *AddBody) AttachAll() {
 	for index, component := range a.Components {
 		a.EntityRef.DB.Attach(index, a.EntityRef.Entity, component)
 	}
 }
 
-func (a *AddEntity) AddToMap() {
+func (a *AddBody) AttachToSector() {
 	if c := a.Components[core.BodyComponentIndex]; c != nil {
 		body := c.(*core.Body)
 		if a.ContainingSector != nil {
@@ -44,9 +44,9 @@ func (a *AddEntity) AddToMap() {
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
-func (a *AddEntity) OnMouseDown(button *gdk.EventButton) {}
+func (a *AddBody) OnMouseDown(button *gdk.EventButton) {}
 
-func (a *AddEntity) OnMouseMove() {
+func (a *AddBody) OnMouseMove() {
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
 	for _, isector := range a.State().DB.All(core.SectorComponentIndex) {
@@ -57,8 +57,8 @@ func (a *AddEntity) OnMouseMove() {
 		}
 	}
 
-	a.RemoveFromMap()
-	a.AddToMap()
+	a.DetachFromSector()
+	a.AttachToSector()
 	if c := a.Components[core.BodyComponentIndex]; c != nil {
 		body := c.(*core.Body)
 		body.Pos.Original[0] = worldGrid[0]
@@ -72,29 +72,29 @@ func (a *AddEntity) OnMouseMove() {
 	}
 }
 
-func (a *AddEntity) OnMouseUp() {
+func (a *AddBody) OnMouseUp() {
 	a.State().Modified = true
 	a.ActionFinished(false)
 }
-func (a *AddEntity) Act() {
+func (a *AddBody) Act() {
 	a.Mode = "AddBody"
 	a.SelectObjects([]any{a.EntityRef})
 }
-func (a *AddEntity) Cancel() {
-	a.RemoveFromMap()
+func (a *AddBody) Cancel() {
+	a.DetachFromSector()
 	if a.EntityRef != nil {
 		a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
 	}
 	a.SelectObjects(nil)
 	a.ActionFinished(true)
 }
-func (a *AddEntity) Undo() {
-	a.RemoveFromMap()
+func (a *AddBody) Undo() {
+	a.DetachFromSector()
 	a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
 }
-func (a *AddEntity) Redo() {
-	a.AddToMap()
+func (a *AddBody) Redo() {
+	a.AttachToSector()
 	a.AttachAll()
 }
 
-func (a *AddEntity) Frame() {}
+func (a *AddBody) Frame() {}

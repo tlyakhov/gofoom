@@ -9,7 +9,7 @@ import (
 )
 
 type AddSector struct {
-	AddEntity
+	AddBody
 	Sector *core.Sector
 }
 
@@ -40,7 +40,7 @@ func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
 	}
 
 	a.Sector.Segments = append(segs, &seg)
-	a.AddToMap()
+	a.AttachToSector()
 }
 func (a *AddSector) OnMouseMove() {
 	if a.Mode != "AddSectorSegment" {

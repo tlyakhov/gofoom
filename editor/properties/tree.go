@@ -31,23 +31,23 @@ type EntityTree struct {
 	Columns   []*gtk.TreeViewColumn
 }
 
-func (et *EntityTree) Filter() {
-	et.UpdateSearch()
-}
-
-func (et *EntityTree) SelectionChanged(sel *gtk.TreeSelection) {
+func (et *EntityTree) Selection() []any {
+	sel, _ := et.View.GetSelection()
 	list := sel.GetSelectedRows(et.SortModel)
 	iter := list.First()
-	ers := make([]any, 0)
+	result := make([]any, 0)
 	for iter != nil {
 		treePath := iter.Data().(*gtk.TreePath)
 		iter2, _ := et.SortModel.GetIter(treePath)
-		v, _ := et.SortModel.GetValue(iter2, int(etcEntity))
-		gv, _ := v.GoValue()
-		ers = append(ers, et.State().DB.EntityRef(gv.(uint64)))
+		entity := et.sortModelValue(iter2, etcEntity).(uint64)
+		result = append(result, et.State().DB.EntityRef(entity))
 		iter = iter.Next()
 	}
-	et.IEditor.SelectObjects(ers)
+	return result
+}
+
+func (et *EntityTree) SelectionChanged(sel *gtk.TreeSelection) {
+	et.IEditor.SelectObjects(et.Selection())
 }
 
 func (et *EntityTree) ColumnClicked(col *gtk.TreeViewColumn) {
@@ -96,16 +96,16 @@ func (et *EntityTree) Construct() {
 	sel.Connect("changed", et.SelectionChanged)
 
 	et.SortModel.SetSortFunc(int(etcEntity), func(model *gtk.TreeModel, a, b *gtk.TreeIter) int {
-		return int(et.nodeValue(a, etcEntity).(uint64) - et.nodeValue(b, etcEntity).(uint64))
+		return int(et.storeValue(a, etcEntity).(uint64) - et.storeValue(b, etcEntity).(uint64))
 	})
 
 	et.SortModel.SetSortFunc(int(etcIndex), func(model *gtk.TreeModel, a, b *gtk.TreeIter) int {
-		return et.nodeValue(a, etcIndex).(int) - et.nodeValue(b, etcIndex).(int)
+		return et.storeValue(a, etcIndex).(int) - et.storeValue(b, etcIndex).(int)
 	})
 
 	et.SortModel.SetSortFunc(int(etcDesc), func(model *gtk.TreeModel, a, b *gtk.TreeIter) int {
-		sa := et.nodeValue(a, etcDesc).(string)
-		sb := et.nodeValue(b, etcDesc).(string)
+		sa := et.storeValue(a, etcDesc).(string)
+		sb := et.storeValue(b, etcDesc).(string)
 		if sa < sb {
 			return -1
 		} else if sb > sa {
@@ -115,7 +115,7 @@ func (et *EntityTree) Construct() {
 	})
 
 	et.SortModel.SetSortFunc(int(etcRank), func(model *gtk.TreeModel, a, b *gtk.TreeIter) int {
-		return et.nodeValue(a, etcRank).(int) - et.nodeValue(b, etcRank).(int)
+		return et.storeValue(a, etcRank).(int) - et.storeValue(b, etcRank).(int)
 	})
 
 	et.Columns = make([]*gtk.TreeViewColumn, 3)
@@ -133,7 +133,7 @@ func (et *EntityTree) Construct() {
 	et.Columns[2], _ = gtk.TreeViewColumnNewWithAttribute("Search Rank", rend3, "value", int(etcRank))
 	et.Columns[2].SetSortColumnID(int(etcRank))
 	et.addColumn(2, rend3)
-	et.Columns[2].SetMaxWidth(90)
+	et.Columns[2].SetMaxWidth(95)
 	et.Columns[2].SetExpand(false)
 	et.Columns[2].SetSizing(gtk.TREE_VIEW_COLUMN_FIXED)
 
@@ -141,8 +141,14 @@ func (et *EntityTree) Construct() {
 	et.ColumnClicked(et.Columns[2])
 }
 
-func (et *EntityTree) nodeValue(iter *gtk.TreeIter, col EntityTreeColumnID) interface{} {
+func (et *EntityTree) storeValue(iter *gtk.TreeIter, col EntityTreeColumnID) interface{} {
 	v, _ := et.Store.GetValue(iter, int(col))
+	gv, _ := v.GoValue()
+	return gv
+}
+
+func (et *EntityTree) sortModelValue(iter *gtk.TreeIter, col EntityTreeColumnID) interface{} {
+	v, _ := et.SortModel.GetValue(iter, int(col))
 	gv, _ := v.GoValue()
 	return gv
 }
@@ -150,10 +156,11 @@ func (et *EntityTree) nodeValue(iter *gtk.TreeIter, col EntityTreeColumnID) inte
 func (et *EntityTree) updateSearchChild(iter *gtk.TreeIter) int {
 	valid := true
 	totalRank := 0
+	filterValid := len(et.State().Filter) > 0
 	for valid {
-		desc := et.nodeValue(iter, etcDesc).(string)
+		desc := et.storeValue(iter, etcDesc).(string)
 		rank := 0
-		if len(et.State().Filter) > 0 {
+		if filterValid {
 			rank = fuzzy.RankMatchFold(et.State().Filter, desc)
 		}
 		n := et.Store.IterNChildren(iter)
@@ -163,9 +170,13 @@ func (et *EntityTree) updateSearchChild(iter *gtk.TreeIter) int {
 			rank += et.updateSearchChild(child)
 		}
 
-		dispRank := concepts.Max(concepts.Min(rank+50, 100), 0)
-		et.Store.SetValue(iter, int(etcRank), dispRank)
-		totalRank += rank
+		if filterValid {
+			dispRank := concepts.Max(concepts.Min(rank+50, 100), 0)
+			et.Store.SetValue(iter, int(etcRank), dispRank)
+			totalRank += rank
+		} else {
+			et.Store.SetValue(iter, int(etcRank), 100)
+		}
 		valid = et.Store.IterNext(iter)
 	}
 	return totalRank
@@ -179,13 +190,14 @@ func (et *EntityTree) UpdateSearch() {
 }
 
 func (et *EntityTree) Update() {
+	selection := et.Selection()
 	et.Store.Clear()
 	index := 0
 	for entity, components := range et.State().DB.EntityComponents {
 		iter := et.Store.Append(nil)
 		et.Store.SetValue(iter, int(etcEntity), entity)
-		parentDesc := ""
 
+		parentDesc := ""
 		for index, c := range components {
 			if c == nil {
 				continue
@@ -217,4 +229,16 @@ func (et *EntityTree) Update() {
 		index++
 	}
 	et.UpdateSearch()
+	sel, _ := et.View.GetSelection()
+	iter, valid := et.SortModel.GetIterFirst()
+
+	for valid {
+		entity := et.sortModelValue(iter, etcEntity)
+		for _, selected := range selection {
+			if selected.(*concepts.EntityRef).Entity == entity {
+				sel.SelectIter(iter)
+			}
+		}
+		valid = et.SortModel.IterNext(iter)
+	}
 }

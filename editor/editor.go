@@ -255,12 +255,12 @@ func (e *Editor) ActTool() {
 		s.FloorMaterial = controllers.DefaultMaterial(e.DB)
 		s.CeilMaterial = controllers.DefaultMaterial(e.DB)
 		a := &actions.AddSector{Sector: s}
-		a.AddEntity.IEditor = e
-		a.AddEntity.EntityRef = isector
+		a.AddBody.IEditor = e
+		a.AddBody.EntityRef = isector
 		e.NewAction(a)
-	case state.ToolAddEntity:
-		body := archetypes.CreateLightBody(e.DB)
-		e.NewAction(&actions.AddEntity{IEditor: e, EntityRef: body})
+	case state.ToolAddBody:
+		body := archetypes.CreateBasic(e.DB, core.BodyComponentIndex)
+		e.NewAction(&actions.AddBody{IEditor: e, EntityRef: body, Components: body.All()})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:

@@ -22,7 +22,7 @@ type Image struct {
 	concepts.Attached `editable:"^"`
 
 	Width, Height   uint32
-	Source          string `editable:"Texture Source" edit_type:"string"`
+	Source          string `editable:"Texture Source" edit_type:"file"`
 	GenerateMipMaps bool   `editable:"Generate Mip Maps?" edit_type:"bool"`
 	Filter          bool   `editable:"Filter?" edit_type:"bool"`
 	Data            []uint32
@@ -43,51 +43,51 @@ func ImageFromDb(entity *concepts.EntityRef) *Image {
 	return nil
 }
 
-func (t *Image) String() string {
-	return "Image: " + t.Source
+func (img *Image) String() string {
+	return "Image: " + img.Source
 }
 
 // Load a texture from a file (pre-processing mipmaps if set)
-func (t *Image) Load() error {
-	if t.Source == "" {
+func (img *Image) Load() error {
+	if img.Source == "" {
 		return nil
 	}
 
 	// Load the image from a file...
-	file, err := os.Open(t.Source)
+	file, err := os.Open(img.Source)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	img, _, err := image.Decode(file)
+	decoded, _, err := image.Decode(file)
 	if err != nil {
 		return err
 	}
 
 	// Let's convert to 0-based NRGBA for speed/convenience.
-	bounds := img.Bounds()
-	t.Width = uint32(bounds.Dx())
-	t.Height = uint32(bounds.Dy())
-	t.Data = make([]uint32, int(t.Width)*int(t.Height))
+	bounds := decoded.Bounds()
+	img.Width = uint32(bounds.Dx())
+	img.Height = uint32(bounds.Dy())
+	img.Data = make([]uint32, int(img.Width)*int(img.Height))
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			index := uint32(x-bounds.Min.X) + uint32(y-bounds.Min.Y)*t.Width
-			t.Data[index] = concepts.ColorToInt32(img.At(x, y))
+			index := uint32(x-bounds.Min.X) + uint32(y-bounds.Min.Y)*img.Width
+			img.Data[index] = concepts.ColorToInt32(decoded.At(x, y))
 		}
 	}
-	t.generateMipMaps()
+	img.generateMipMaps()
 	return nil
 }
 
-func (t *Image) generateMipMaps() {
-	t.MipMaps = make(map[uint32]*mipMap)
+func (img *Image) generateMipMaps() {
+	img.MipMaps = make(map[uint32]*mipMap)
 
-	index := concepts.NearestPow2(uint32(t.Height))
-	t.MipMaps[index] = &mipMap{Width: t.Width, Height: t.Height, Data: t.Data}
-	prev := t.MipMaps[index]
+	index := concepts.NearestPow2(uint32(img.Height))
+	img.MipMaps[index] = &mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
+	prev := img.MipMaps[index]
 
-	w := t.Width / 2
-	h := t.Height / 2
+	w := img.Width / 2
+	h := img.Height / 2
 
 	var x, y, px, py, pcx, pcy uint32
 
@@ -116,7 +116,7 @@ func (t *Image) generateMipMaps() {
 			}
 		}
 		index := concepts.NearestPow2(uint32(mm.Height))
-		t.MipMaps[index] = &mm
+		img.MipMaps[index] = &mm
 		prev = &mm
 		if w > 1 {
 			w = concepts.UMax(1, w/2)
@@ -125,24 +125,24 @@ func (t *Image) generateMipMaps() {
 			h = concepts.UMax(1, h/2)
 		}
 	}
-	t.SmallestMipMap = prev
+	img.SmallestMipMap = prev
 }
 
-func (t *Image) Sample(x, y float64, scale float64) uint32 {
+func (img *Image) Sample(x, y float64, scale float64) uint32 {
 	// Testing:
 	// return (0xAF << 24) | 0xFF
-	data := t.Data
-	w := t.Width
-	h := t.Height
+	data := img.Data
+	w := img.Width
+	h := img.Height
 	scaledHeight := uint32(float64(h) * scale)
 
-	if scaledHeight > 0 && t.GenerateMipMaps && t.SmallestMipMap != nil {
-		if scaledHeight < t.SmallestMipMap.Height {
-			data = t.SmallestMipMap.Data
-			w = t.SmallestMipMap.Width
-			h = t.SmallestMipMap.Height
-		} else if scaledHeight < t.Height {
-			mm := t.MipMaps[concepts.NearestPow2(scaledHeight)]
+	if scaledHeight > 0 && img.GenerateMipMaps && img.SmallestMipMap != nil {
+		if scaledHeight < img.SmallestMipMap.Height {
+			data = img.SmallestMipMap.Data
+			w = img.SmallestMipMap.Width
+			h = img.SmallestMipMap.Height
+		} else if scaledHeight < img.Height {
+			mm := img.MipMaps[concepts.NearestPow2(scaledHeight)]
 			data = mm.Data
 			w = mm.Width
 			h = mm.Height
@@ -166,7 +166,7 @@ func (t *Image) Sample(x, y float64, scale float64) uint32 {
 	fx := uint32(x * float64(w))
 	fy := uint32(y * float64(h))
 
-	if !t.Filter {
+	if !img.Filter {
 		index := concepts.UMin(fy, h-1)*w + concepts.UMin(fx, w-1)
 		return data[index]
 	}
@@ -222,31 +222,31 @@ func (t *Image) Sample(x, y float64, scale float64) uint32 {
 	return ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | (a & 0xFF)
 }
 
-func (t *Image) Construct(data map[string]any) {
-	t.Attached.Construct(data)
-	t.Filter = false
-	t.GenerateMipMaps = true
+func (img *Image) Construct(data map[string]any) {
+	img.Attached.Construct(data)
+	img.Filter = false
+	img.GenerateMipMaps = true
 
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Source"]; ok {
-		t.Source = v.(string)
+		img.Source = v.(string)
 	}
 	if v, ok := data["GenerateMipMaps"]; ok {
-		t.GenerateMipMaps = v.(bool)
+		img.GenerateMipMaps = v.(bool)
 	}
 	if v, ok := data["Filter"]; ok {
-		t.Filter = v.(bool)
+		img.Filter = v.(bool)
 	}
-	t.Load()
+	img.Load()
 }
 
-func (t *Image) Serialize() map[string]any {
-	result := t.Attached.Serialize()
-	result["Source"] = t.Source
-	result["GenerateMipMaps"] = t.GenerateMipMaps
-	result["Filter"] = t.Filter
+func (img *Image) Serialize() map[string]any {
+	result := img.Attached.Serialize()
+	result["Source"] = img.Source
+	result["GenerateMipMaps"] = img.GenerateMipMaps
+	result["Filter"] = img.Filter
 	return result
 }

@@ -26,20 +26,20 @@ func (t *Toxic) String() string {
 	return "Toxic"
 }
 
-func (s *Toxic) Construct(data map[string]any) {
-	s.Attached.Construct(data)
+func (t *Toxic) Construct(data map[string]any) {
+	t.Attached.Construct(data)
 
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Hurt"]; ok {
-		s.Hurt = v.(float64)
+		t.Hurt = v.(float64)
 	}
 }
 
-func (s *Toxic) Serialize() map[string]any {
-	result := s.Attached.Serialize()
-	result["Hurt"] = s.Hurt
+func (t *Toxic) Serialize() map[string]any {
+	result := t.Attached.Serialize()
+	result["Hurt"] = t.Hurt
 	return result
 }
