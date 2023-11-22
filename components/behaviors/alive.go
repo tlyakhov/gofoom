@@ -1,6 +1,7 @@
 package behaviors
 
 import (
+	"fmt"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -23,23 +24,27 @@ func AliveFromDb(entity *concepts.EntityRef) *Alive {
 	return nil
 }
 
-func (e *Alive) Construct(data map[string]any) {
-	e.Attached.Construct(data)
+func (a *Alive) String() string {
+	return fmt.Sprintf("Alive: %.2f", a.Health)
+}
 
-	e.Health = 100
+func (a *Alive) Construct(data map[string]any) {
+	a.Attached.Construct(data)
+
+	a.Health = 100
 
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Health"]; ok {
-		e.Health = v.(float64)
+		a.Health = v.(float64)
 	}
 }
 
-func (e *Alive) Serialize() map[string]any {
-	result := e.Attached.Serialize()
-	result["Health"] = e.Health
+func (a *Alive) Serialize() map[string]any {
+	result := a.Attached.Serialize()
+	result["Health"] = a.Health
 
 	return result
 }

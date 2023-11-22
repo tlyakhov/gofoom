@@ -12,7 +12,7 @@ const (
 	ToolSplitSegment
 	ToolSplitSector
 	ToolAddSector
-	ToolAddEntity
+	ToolAddBody
 	ToolAlignGrid
 )
 
@@ -61,7 +61,14 @@ type IEditor interface {
 }
 
 func IndexOf(s []any, obj any) int {
-	//v := reflect.ValueOf(obj)
+	if er, ok := obj.(*concepts.EntityRef); ok {
+		for i, e := range s {
+			if er2, ok2 := e.(*concepts.EntityRef); ok2 && er2.Entity == er.Entity {
+				return i
+			}
+		}
+		return -1
+	}
 	for i, e := range s {
 		if obj == e && reflect.TypeOf(obj) == reflect.TypeOf(e) {
 			return i

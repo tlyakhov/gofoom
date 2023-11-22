@@ -98,7 +98,7 @@ func onActivate() {
 	editor.EntitySearchEntry = obj.(*gtk.SearchEntry)
 	editor.EntitySearchEntry.Connect("search-changed", func(entry *gtk.SearchEntry) {
 		editor.State().Filter, _ = editor.EntitySearchEntry.GetText()
-		editor.EntityTree.Filter()
+		editor.EntityTree.UpdateSearch()
 	})
 
 	obj, err = builder.GetObject("StatusBar")
@@ -190,8 +190,8 @@ func onActivate() {
 			editor.SwitchTool(state.ToolSplitSector)
 		case "Add Sector":
 			editor.SwitchTool(state.ToolAddSector)
-		case "Add Entity":
-			editor.SwitchTool(state.ToolAddEntity)
+		case "Add Body":
+			editor.SwitchTool(state.ToolAddBody)
 		case "Align Grid":
 			editor.SwitchTool(state.ToolAlignGrid)
 		}

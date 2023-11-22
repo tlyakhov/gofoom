@@ -10,7 +10,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
+func (g *Grid) originalStrings(field *state.PropertyGridField) string {
 	origValue := ""
 	i := 0
 	for _, v := range field.Unique {
@@ -20,6 +20,11 @@ func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
 		origValue += v.Elem().String()
 		i++
 	}
+	return origValue
+}
+
+func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
+	origValue := g.originalStrings(field)
 
 	box, _ := gtk.EntryNew()
 	box.SetHExpand(true)
