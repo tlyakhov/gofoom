@@ -11,7 +11,7 @@ type Underwater struct {
 var UnderwaterComponentIndex int
 
 func init() {
-	UnderwaterComponentIndex = concepts.DbTypes().Register(Underwater{})
+	UnderwaterComponentIndex = concepts.DbTypes().Register(Underwater{}, UnderwaterFromDb)
 }
 
 func UnderwaterFromDb(entity *concepts.EntityRef) *Underwater {

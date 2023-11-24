@@ -44,6 +44,20 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkRadioToolButton" id="ToolAlignGrid">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text">Align Grid</property>
+                        <property name="label">Align Grid</property>
+                        <property name="icon-name">format-justify-fill</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkRadioToolButton" id="ToolSplitSegment">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -69,20 +83,6 @@
                       </object>
                       <packing>
                         <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioToolButton" id="ToolAlignGrid">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text">Align Grid</property>
-                        <property name="label">Align Grid</property>
-                        <property name="icon-name">format-justify-fill</property>
-                        <property name="group">ToolSelect</property>
-                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -168,7 +168,6 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="double-buffered">False</property>
                         <signal name="button-press-event" handler="GameArea.ButtonPress" swapped="no"/>
                         <signal name="button-release-event" handler="GameArea.ButtonRelease" swapped="no"/>
                         <signal name="draw" handler="GameArea.Draw" swapped="no"/>
@@ -185,6 +184,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">4</property>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>

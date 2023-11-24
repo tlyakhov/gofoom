@@ -11,7 +11,7 @@ type Sky struct {
 var SkyComponentIndex int
 
 func init() {
-	SkyComponentIndex = concepts.DbTypes().Register(Sky{})
+	SkyComponentIndex = concepts.DbTypes().Register(Sky{}, SkyFromDb)
 }
 
 func SkyFromDb(entity *concepts.EntityRef) *Sky {

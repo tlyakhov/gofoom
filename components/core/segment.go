@@ -40,7 +40,7 @@ type Segment struct {
 var SegmentComponentIndex int
 
 func init() {
-	SegmentComponentIndex = concepts.DbTypes().Register(Segment{})
+	SegmentComponentIndex = concepts.DbTypes().Register(Segment{}, SectorFromDb)
 }
 
 func (s *Segment) RealizeAdjacentSector() {

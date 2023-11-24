@@ -27,7 +27,7 @@ type Body struct {
 var BodyComponentIndex int
 
 func init() {
-	BodyComponentIndex = concepts.DbTypes().Register(Body{})
+	BodyComponentIndex = concepts.DbTypes().Register(Body{}, BodyFromDb)
 }
 
 func BodyFromDb(entity *concepts.EntityRef) *Body {

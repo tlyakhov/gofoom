@@ -91,6 +91,6 @@ func GameButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 		for _, p := range picked {
 			objects = append(objects, p.Element)
 		}
-		editor.SelectObjects(objects)
+		editor.SelectObjects(objects, true)
 	}
 }

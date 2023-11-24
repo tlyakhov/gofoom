@@ -1,20 +1,21 @@
 package behaviors
 
 import (
+	"tlyakhov/gofoom/components/triggers"
 	"tlyakhov/gofoom/concepts"
 )
 
 type Proximity struct {
 	concepts.Attached `editable:"^"`
-	Range             float64      `editable:"Range"`
-	TriggerSources    map[int]bool `editable:"Triggering Components"`
-	TargetTriggers    map[int]bool `editable:"Components to Trigger"`
+	Range             float64             `editable:"Range"`
+	Condition         triggers.Expression `editable:"Trigger Condition"`
+	TargetTriggers    map[int]bool        `editable:"Components to Trigger"`
 }
 
 var ProximityComponentIndex int
 
 func init() {
-	ProximityComponentIndex = concepts.DbTypes().Register(Proximity{})
+	ProximityComponentIndex = concepts.DbTypes().Register(Proximity{}, ProximityFromDb)
 }
 
 func ProximityFromDb(entity *concepts.EntityRef) *Proximity {
@@ -37,14 +38,16 @@ func (s *Proximity) Construct(data map[string]any) {
 		s.Range = v.(float64)
 	}
 
-	s.DeserializeComponentList(&s.TriggerSources, "TriggerSources", data)
+	if v, ok := data["Condition"]; ok {
+		s.Condition.Construct(v.(string))
+	}
 	s.DeserializeComponentList(&s.TargetTriggers, "TargetTriggers", data)
 }
 
 func (s *Proximity) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	result["Range"] = s.Range
-	s.SerializeComponentList(s.TriggerSources, "TriggerSources", result)
+	result["Condition"] = s.Condition.Serialize()
 	s.SerializeComponentList(s.TargetTriggers, "TargetTriggers", result)
 	return result
 }

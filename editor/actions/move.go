@@ -67,7 +67,7 @@ func (a *Move) OnMouseMove() {
 }
 
 func (a *Move) OnMouseUp() {
-	a.SelectObjects(a.State().SelectedObjects) // Updates properties.
+	a.SelectObjects(a.State().SelectedObjects, true) // Updates properties.
 	a.State().Modified = true
 	a.ActionFinished(false)
 }

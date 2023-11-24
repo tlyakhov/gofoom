@@ -14,7 +14,7 @@ type Alive struct {
 var AliveComponentIndex int
 
 func init() {
-	AliveComponentIndex = concepts.DbTypes().Register(Alive{})
+	AliveComponentIndex = concepts.DbTypes().Register(Alive{}, AliveFromDb)
 }
 
 func AliveFromDb(entity *concepts.EntityRef) *Alive {

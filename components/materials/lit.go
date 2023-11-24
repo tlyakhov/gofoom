@@ -14,7 +14,7 @@ type Lit struct {
 var LitComponentIndex int
 
 func init() {
-	LitComponentIndex = concepts.DbTypes().Register(Lit{})
+	LitComponentIndex = concepts.DbTypes().Register(Lit{}, LitFromDb)
 }
 
 func LitFromDb(entity *concepts.EntityRef) *Lit {

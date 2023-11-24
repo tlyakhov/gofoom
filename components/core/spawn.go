@@ -12,7 +12,7 @@ type Spawn struct {
 var SpawnComponentIndex int
 
 func init() {
-	SpawnComponentIndex = concepts.DbTypes().Register(Spawn{})
+	SpawnComponentIndex = concepts.DbTypes().Register(Spawn{}, SpawnFromDb)
 }
 
 func SpawnFromDb(entity *concepts.EntityRef) *Spawn {

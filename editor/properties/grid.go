@@ -101,7 +101,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		gf.Values = append(gf.Values, fieldValue.Addr())
 		gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
-		if field.Type.Kind() == reflect.Map {
+		if field.Type.Kind() == reflect.Map && false {
 			keys := fieldValue.MapKeys()
 			for _, key := range keys {
 				name := field.Name + "[" + key.String() + "]"
@@ -165,7 +165,7 @@ func (g *Grid) AddEntityControls(selection []any) {
 	}
 
 	label, _ := gtk.LabelNew("")
-	label.SetMarkup(fmt.Sprintf("<b>Entity [%v]</b>", entityList))
+	label.SetMarkup(fmt.Sprintf("<b>Entity [%v]</b>", concepts.TruncateString(entityList, 10)))
 	label.SetTooltipText(entityList)
 	label.SetJustify(gtk.JUSTIFY_LEFT)
 	label.SetHExpand(true)
