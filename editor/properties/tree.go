@@ -25,10 +25,36 @@ const (
 
 type EntityTree struct {
 	state.IEditor
-	View      *gtk.TreeView
-	Store     *gtk.TreeStore
-	SortModel *gtk.TreeModelSort
-	Columns   []*gtk.TreeViewColumn
+	View                   *gtk.TreeView
+	Store                  *gtk.TreeStore
+	SortModel              *gtk.TreeModelSort
+	Columns                []*gtk.TreeViewColumn
+	SelectionChangedHandle glib.SignalHandle
+}
+
+func (et *EntityTree) SetSelection(selection []any) {
+	sel, _ := et.View.GetSelection()
+	if et.SelectionChangedHandle != 0 {
+		sel.HandlerDisconnect(et.SelectionChangedHandle)
+	}
+	iter, valid := et.SortModel.GetIterFirst()
+
+	for valid {
+		entity := et.sortModelValue(iter, etcEntity)
+		didSelect := false
+		for _, selected := range selection {
+			if er, ok := selected.(*concepts.EntityRef); ok && er.Entity == entity {
+				sel.SelectIter(iter)
+				didSelect = true
+				break
+			}
+		}
+		if !didSelect {
+			sel.UnselectIter(iter)
+		}
+		valid = et.SortModel.IterNext(iter)
+	}
+	et.SelectionChangedHandle = sel.Connect("changed", et.selectionChanged)
 }
 
 func (et *EntityTree) Selection() []any {
@@ -46,8 +72,8 @@ func (et *EntityTree) Selection() []any {
 	return result
 }
 
-func (et *EntityTree) SelectionChanged(sel *gtk.TreeSelection) {
-	et.IEditor.SelectObjects(et.Selection())
+func (et *EntityTree) selectionChanged(sel *gtk.TreeSelection) {
+	et.IEditor.SelectObjects(et.Selection(), false)
 }
 
 func (et *EntityTree) ColumnClicked(col *gtk.TreeViewColumn) {
@@ -93,7 +119,7 @@ func (et *EntityTree) Construct() {
 	et.View.SetModel(et.SortModel)
 	sel, _ := et.View.GetSelection()
 	sel.SetMode(gtk.SELECTION_MULTIPLE)
-	sel.Connect("changed", et.SelectionChanged)
+	et.SelectionChangedHandle = sel.Connect("changed", et.selectionChanged)
 
 	et.SortModel.SetSortFunc(int(etcEntity), func(model *gtk.TreeModel, a, b *gtk.TreeIter) int {
 		return int(et.storeValue(a, etcEntity).(uint64) - et.storeValue(b, etcEntity).(uint64))
@@ -190,6 +216,9 @@ func (et *EntityTree) UpdateSearch() {
 }
 
 func (et *EntityTree) Update() {
+	sel, _ := et.View.GetSelection()
+	sel.HandlerDisconnect(et.SelectionChangedHandle)
+	et.SelectionChangedHandle = 0
 	selection := et.Selection()
 	et.Store.Clear()
 	index := 0
@@ -229,16 +258,5 @@ func (et *EntityTree) Update() {
 		index++
 	}
 	et.UpdateSearch()
-	sel, _ := et.View.GetSelection()
-	iter, valid := et.SortModel.GetIterFirst()
-
-	for valid {
-		entity := et.sortModelValue(iter, etcEntity)
-		for _, selected := range selection {
-			if selected.(*concepts.EntityRef).Entity == entity {
-				sel.SelectIter(iter)
-			}
-		}
-		valid = et.SortModel.IterNext(iter)
-	}
+	et.SetSelection(selection)
 }

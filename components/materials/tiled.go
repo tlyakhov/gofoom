@@ -14,7 +14,7 @@ type Tiled struct {
 var TiledComponentIndex int
 
 func init() {
-	TiledComponentIndex = concepts.DbTypes().Register(Tiled{})
+	TiledComponentIndex = concepts.DbTypes().Register(Tiled{}, TiledFromDb)
 }
 
 func TiledFromDb(entity *concepts.EntityRef) *Tiled {

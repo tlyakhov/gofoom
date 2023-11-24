@@ -19,7 +19,7 @@ type Player struct {
 var PlayerComponentIndex int
 
 func init() {
-	PlayerComponentIndex = concepts.DbTypes().Register(Player{})
+	PlayerComponentIndex = concepts.DbTypes().Register(Player{}, PlayerFromDb)
 }
 
 func PlayerFromDb(entity *concepts.EntityRef) *Player {

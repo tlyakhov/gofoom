@@ -22,7 +22,7 @@ type Attachable interface {
 var AttachedComponentIndex int
 
 func init() {
-	AttachedComponentIndex = DbTypes().Register(Attached{})
+	AttachedComponentIndex = DbTypes().Register(Attached{}, nil)
 }
 
 func (a *Attached) String() string {

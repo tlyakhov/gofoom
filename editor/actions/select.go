@@ -70,7 +70,7 @@ func (a *Select) OnMouseUp() {
 		a.Selected = make([]any, len(hovering))
 		copy(a.Selected, hovering)
 	}
-	a.SelectObjects(a.Selected)
+	a.SelectObjects(a.Selected, true)
 	a.ActionFinished(false)
 }
 func (a *Select) Act()    {}
@@ -78,8 +78,8 @@ func (a *Select) Cancel() {}
 func (a *Select) Frame()  {}
 
 func (a *Select) Undo() {
-	a.SelectObjects(a.Original)
+	a.SelectObjects(a.Original, true)
 }
 func (a *Select) Redo() {
-	a.SelectObjects(a.Selected)
+	a.SelectObjects(a.Selected, true)
 }

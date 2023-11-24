@@ -50,18 +50,18 @@ func (wc *WorldController) Always() {
 		}
 		for _, pvs := range body.Sector().PVSBody {
 			// First, consider the case where the sector entity has a proximity
-			// component that includes "body" as a valid triggering source
+			// component that includes the body as a valid triggering source
 			if proximity := behaviors.ProximityFromDb(pvs.Ref()); proximity != nil && proximity.Active {
-				if proximity.TriggerSources[core.BodyComponentIndex] &&
+				if proximity.Condition.Valid(body.Ref()) &&
 					pvs.Center.Dist2(&body.Pos.Now) < proximity.Range*proximity.Range {
 					set.Act(pvs.Ref(), body.Ref(), concepts.ControllerTrigger)
 				}
 			}
 
 			// Next, consider the case where the body entity has a proximity
-			// component that includes "sector" as a valid triggering source
+			// component that includes the sector as a valid triggering source
 			if proximity := behaviors.ProximityFromDb(body.Ref()); proximity != nil && proximity.Active {
-				if proximity.TriggerSources[core.SectorComponentIndex] &&
+				if proximity.Condition.Valid(pvs.Ref()) &&
 					pvs.Center.Dist2(&body.Pos.Now) < proximity.Range*proximity.Range {
 					set.Act(body.Ref(), pvs.Ref(), concepts.ControllerTrigger)
 				}

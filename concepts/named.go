@@ -12,7 +12,7 @@ type Named struct {
 var NamedComponentIndex int
 
 func init() {
-	NamedComponentIndex = DbTypes().Register(Named{})
+	NamedComponentIndex = DbTypes().Register(Named{}, NamedFromDb)
 }
 
 func NamedFromDb(entity *EntityRef) *Named {

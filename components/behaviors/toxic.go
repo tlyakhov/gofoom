@@ -12,7 +12,7 @@ type Toxic struct {
 var ToxicComponentIndex int
 
 func init() {
-	ToxicComponentIndex = concepts.DbTypes().Register(Toxic{})
+	ToxicComponentIndex = concepts.DbTypes().Register(Toxic{}, ToxicFromDb)
 }
 
 func ToxicFromDb(entity *concepts.EntityRef) *Toxic {

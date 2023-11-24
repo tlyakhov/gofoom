@@ -8,7 +8,7 @@ import (
 
 func WallHiPick(s *state.SlicePortal) {
 	if s.Y >= s.ClippedStart && s.Y < s.AdjClippedTop {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickHigh, Element: s.Segment})
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickHigh, Element: s.AdjSegment})
 	}
 }
 
@@ -46,7 +46,7 @@ func WallHi(s *state.SlicePortal) {
 
 func WallLowPick(s *state.SlicePortal) {
 	if s.Y >= s.AdjClippedBottom && s.Y < s.ClippedEnd {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickLow, Element: s.Segment})
+		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickLow, Element: s.AdjSegment})
 	}
 }
 

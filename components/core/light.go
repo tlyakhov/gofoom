@@ -16,7 +16,7 @@ type Light struct {
 var LightComponentIndex int
 
 func init() {
-	LightComponentIndex = concepts.DbTypes().Register(Light{})
+	LightComponentIndex = concepts.DbTypes().Register(Light{}, LightFromDb)
 }
 
 func LightFromDb(entity *concepts.EntityRef) *Light {

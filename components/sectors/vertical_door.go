@@ -23,7 +23,7 @@ type VerticalDoor struct {
 var VerticalDoorComponentIndex int
 
 func init() {
-	VerticalDoorComponentIndex = concepts.DbTypes().Register(VerticalDoor{})
+	VerticalDoorComponentIndex = concepts.DbTypes().Register(VerticalDoor{}, VerticalDoorFromDb)
 }
 
 func VerticalDoorFromDb(entity *concepts.EntityRef) *VerticalDoor {

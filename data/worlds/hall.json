@@ -20,7 +20,7 @@
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "data/WDef.png"
+      "Source": "data/space_tiles_hyptosis/wool_colored_white.png"
     },
     "materials.Lit": {
       "Active": true,
@@ -53,11 +53,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 20,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -106,12 +106,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "4",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
@@ -160,11 +160,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -44,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "5",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -211,11 +211,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "6",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
@@ -260,11 +260,11 @@
         "9"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "7",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -391,11 +391,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "10",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -444,12 +444,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "11",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
@@ -498,12 +498,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "12",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -552,11 +552,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "13",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
@@ -630,11 +630,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "14",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -715,11 +715,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -4,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "15",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -766,11 +766,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "17",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -817,11 +817,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "18",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
@@ -873,11 +873,11 @@
         "20"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "19",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
@@ -948,55 +948,6 @@
     }
   },
   {
-    "Entity": "21",
-    "concepts.Named": {
-      "Active": true,
-      "Entity": "21",
-      "Name": "be3ercnvn27i2m3saspg"
-    },
-    "core.Sector": {
-      "Active": true,
-      "BottomZ": 0,
-      "CeilMaterial": "2",
-      "CeilScale": 64,
-      "Entity": "21",
-      "FloorFriction": 0.85,
-      "FloorMaterial": "2",
-      "FloorScale": 64,
-      "Segments": [
-        {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
-          "X": 290,
-          "Y": -60
-        },
-        {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
-          "X": 430.5563856997455,
-          "Y": -172.44510855979638
-        },
-        {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
-          "X": 505.5197914062764,
-          "Y": -78.74085142663272
-        },
-        {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
-          "X": 364.9634057065309,
-          "Y": 33.70425713316365
-        }
-      ],
-      "TopZ": 64
-    }
-  },
-  {
     "Entity": "22",
     "concepts.Named": {
       "Active": true,
@@ -1006,11 +957,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "22",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1059,11 +1010,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -100,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "23",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1138,11 +1089,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "24",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1188,7 +1139,7 @@
       "Entity": "25",
       "Range": 100,
       "TargetTriggers": "sectors.VerticalDoor",
-      "TriggerSources": "core.Body"
+      "Condition": "Body(Ref)?.Mass>0"
     },
     "concepts.Named": {
       "Active": true,
@@ -1198,11 +1149,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "25",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1333,12 +1284,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "26",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
@@ -1387,11 +1338,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -100,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "27",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1466,12 +1417,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "28",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
@@ -1523,11 +1474,11 @@
         "30"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "29",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1620,11 +1571,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "33",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1671,12 +1622,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 20,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "34",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1724,12 +1675,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "35",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -1778,11 +1729,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "36",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1839,12 +1790,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "37",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -1893,11 +1844,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -48,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "38",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -1946,11 +1897,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "39",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
@@ -2000,12 +1951,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "40",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -2054,14 +2005,15 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
+        "107",
         "42"
       ],
       "BottomZ": -64,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "41",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2161,9 +2113,9 @@
         },
         {
           "AdjacentSector": "81",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "HiMaterial": "123",
+          "LoMaterial": "123",
+          "MidMaterial": "123",
           "X": -360,
           "Y": 30
         }
@@ -2220,11 +2172,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -8,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "43",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2271,11 +2223,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 30,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "44",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2324,11 +2276,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -64,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "45",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2340,9 +2292,9 @@
         },
         {
           "AdjacentSector": "81",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "HiMaterial": "123",
+          "LoMaterial": "123",
+          "MidMaterial": "123",
           "X": -280,
           "Y": 20
         },
@@ -2375,11 +2327,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -24,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "46",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2426,11 +2378,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -20,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "47",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2477,11 +2429,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "48",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2528,12 +2480,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "49",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -2582,11 +2534,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -12,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "50",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2636,11 +2588,11 @@
         "52"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "51",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
@@ -2720,11 +2672,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "53",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2743,9 +2695,9 @@
         },
         {
           "AdjacentSector": "80",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "HiMaterial": "123",
+          "LoMaterial": "123",
+          "MidMaterial": "123",
           "X": -110,
           "Y": -160
         },
@@ -2785,12 +2737,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "54",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
@@ -2839,11 +2791,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "56",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -2895,11 +2847,11 @@
         "59"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "58",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3005,11 +2957,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -52,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "60",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3059,11 +3011,11 @@
         "62"
       ],
       "BottomZ": -34,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "61",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3162,11 +3114,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -56,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "63",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3213,12 +3165,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "64",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
@@ -3266,12 +3218,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "65",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
@@ -3320,11 +3272,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "66",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3374,12 +3326,12 @@
         "68"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.2,
       "Entity": "67",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.2,
       "Segments": [
@@ -3466,12 +3418,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "69",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
@@ -3519,11 +3471,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "70",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3572,11 +3524,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "71",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3640,12 +3592,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "72",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
@@ -3694,11 +3646,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -40,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "73",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3745,11 +3697,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -36,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "74",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3796,12 +3748,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "75",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -3850,11 +3802,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "76",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -3917,12 +3869,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "77",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
@@ -3968,7 +3920,7 @@
       "Entity": "79",
       "Range": 100,
       "TargetTriggers": "sectors.VerticalDoor",
-      "TriggerSources": "core.Body"
+      "Condition": "Body(Ref)?.Mass>0"
     },
     "concepts.Named": {
       "Active": true,
@@ -3978,11 +3930,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "79",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4030,7 +3982,7 @@
       "Entity": "80",
       "Range": 100,
       "TargetTriggers": "sectors.VerticalDoor",
-      "TriggerSources": "core.Body"
+      "Condition": "Body(Ref)?.Mass>0"
     },
     "concepts.Named": {
       "Active": true,
@@ -4040,11 +3992,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "80",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4092,7 +4044,7 @@
       "Entity": "81",
       "Range": 100,
       "TargetTriggers": "sectors.VerticalDoor",
-      "TriggerSources": "core.Body"
+      "Condition": "(Body(Ref)?.Mass ?? 0)>20"
     },
     "concepts.Named": {
       "Active": true,
@@ -4102,11 +4054,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -64,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "81",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4118,7 +4070,7 @@
         },
         {
           "AdjacentSector": "41",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": -360,
@@ -4133,7 +4085,7 @@
         },
         {
           "AdjacentSector": "45",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": -280,
@@ -4157,11 +4109,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -48,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "82",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4208,11 +4160,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -28,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "83",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4262,11 +4214,11 @@
         "85"
       ],
       "BottomZ": -32,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "84",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4352,12 +4304,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "86",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -4405,11 +4357,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "87",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4490,11 +4442,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "88",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4543,12 +4495,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "89",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
@@ -4597,11 +4549,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "90",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
@@ -4650,12 +4602,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "91",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -4704,11 +4656,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "92",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4755,11 +4707,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "93",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -4806,12 +4758,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.25,
       "Entity": "94",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.10000000000000002,
       "Segments": [
@@ -4946,11 +4898,11 @@
         "96"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "95",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
@@ -5030,12 +4982,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "97",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
@@ -5084,11 +5036,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "99",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5137,15 +5089,15 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "102",
-        "101"
+        "101",
+        "102"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "100",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5281,14 +5233,15 @@
       "Active": true,
       "Bodies": [
         "104",
-        "105"
+        "105",
+        "107"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "103",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5431,11 +5384,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -16,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "106",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5485,7 +5438,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 352.5,
+      "Angle": 271.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -5514,11 +5467,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "108",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5578,12 +5531,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "109",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
@@ -5632,11 +5585,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "110",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5685,12 +5638,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "111",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
@@ -5738,11 +5691,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 5,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "112",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5782,11 +5735,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 10,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "114",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5826,11 +5779,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 15,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "115",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5870,11 +5823,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 20,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "116",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5914,11 +5867,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 25,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "117",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -5958,11 +5911,11 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 30,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "118",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -6009,15 +5962,14 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "121",
-        "107"
+        "121"
       ],
       "BottomZ": 35,
-      "CeilMaterial": "2",
+      "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "120",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorMaterial": "122",
       "FloorScale": 64,
       "Segments": [
         {
@@ -6085,6 +6037,76 @@
       },
       "Entity": "121",
       "Strength": 2
+    }
+  },
+  {
+    "Entity": "122",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "122",
+      "Name": "Floo"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "122",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/space_tiles_hyptosis/ggrass_top.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "122"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "122",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "123",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "123",
+      "Name": "Doop"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "123",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/space_tiles_hyptosis/wool_colored_gray.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "123"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "123",
+      "IsLiquid": false,
+      "Scale": 1
     }
   }
 ]

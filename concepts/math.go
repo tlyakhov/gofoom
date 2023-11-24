@@ -6,6 +6,7 @@ import (
 	"math"
 	"strconv"
 	"time"
+	"unicode"
 )
 
 const (
@@ -152,4 +153,24 @@ func RngXorShift64() uint64 {
 	x ^= x << 17
 	xorSeed = x
 	return x
+}
+
+func TruncateString(str string, max int) string {
+	lastSpaceIx := -1
+	len := 0
+	for i, r := range str {
+		if unicode.IsSpace(r) {
+			lastSpaceIx = i
+		}
+		len++
+		if len >= max {
+			if lastSpaceIx != -1 {
+				return str[:lastSpaceIx] + "..."
+			}
+			// If here, string is longer than max, but has no spaces
+			return str[:max] + "..."
+		}
+	}
+	// If here, string is shorter than max
+	return str
 }

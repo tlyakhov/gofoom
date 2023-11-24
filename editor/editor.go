@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"unsafe"
 
@@ -17,6 +18,7 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/sectors"
+	"tlyakhov/gofoom/components/triggers"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
@@ -200,17 +202,20 @@ func (e *Editor) Load(filename string) {
 	db.Simulation.Integrate = e.Integrate
 	db.Simulation.Render = e.Window.QueueDraw
 	e.DB = db
-	e.SelectObjects([]any{})
+	e.SelectObjects([]any{}, true)
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
 	e.EntityTree.Update()
+	f := triggers.Expression{}
+	f.Construct("Sector(Ref)?.TopZ.Original > 32")
+	log.Printf("Valid? %v", f.Valid(db.GetEntityRefByName("Starting")))
 }
 
 func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
 
-	e.SelectObjects([]any{})
+	e.SelectObjects([]any{}, true)
 
 	e.DB.Clear()
 	controllers.CreateTestWorld2(e.DB)
@@ -318,13 +323,12 @@ func (e *Editor) RedoCurrent() {
 	e.UndoHistory = append(e.UndoHistory, a)
 }
 
-func (e *Editor) SelectObjects(objects []any) {
-	/*if len(objects) == 0 {
-		objects = append(objects, e.DB)
-	}*/
-
+func (e *Editor) SelectObjects(objects []any, updateTree bool) {
 	e.SelectedObjects = objects
 	e.Grid.Refresh(e.SelectedObjects)
+	if updateTree {
+		e.EntityTree.SetSelection(objects)
+	}
 }
 
 func (e *Editor) Selecting() bool {

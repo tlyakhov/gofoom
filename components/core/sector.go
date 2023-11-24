@@ -41,7 +41,7 @@ type Sector struct {
 var SectorComponentIndex int
 
 func init() {
-	SectorComponentIndex = concepts.DbTypes().Register(Sector{})
+	SectorComponentIndex = concepts.DbTypes().Register(Sector{}, SectorFromDb)
 }
 
 func SectorFromDb(entity *concepts.EntityRef) *Sector {

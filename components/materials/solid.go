@@ -15,7 +15,7 @@ type Solid struct {
 var SolidComponentIndex int
 
 func init() {
-	SolidComponentIndex = concepts.DbTypes().Register(Solid{})
+	SolidComponentIndex = concepts.DbTypes().Register(Solid{}, SolidFromDb)
 }
 
 func SolidFromDb(entity *concepts.EntityRef) *Solid {

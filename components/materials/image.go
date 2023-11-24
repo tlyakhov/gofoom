@@ -33,7 +33,7 @@ type Image struct {
 var ImageComponentIndex int
 
 func init() {
-	ImageComponentIndex = concepts.DbTypes().Register(Image{})
+	ImageComponentIndex = concepts.DbTypes().Register(Image{}, ImageFromDb)
 }
 
 func ImageFromDb(entity *concepts.EntityRef) *Image {
