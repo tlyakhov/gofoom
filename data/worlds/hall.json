@@ -1136,10 +1136,10 @@
     "Entity": "25",
     "behaviors.Proximity": {
       "Active": true,
+      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "25",
       "Range": 100,
-      "TargetTriggers": "sectors.VerticalDoor",
-      "Condition": "Body(Ref)?.Mass>0"
+      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
     },
     "concepts.Named": {
       "Active": true,
@@ -1204,7 +1204,7 @@
         },
         {
           "AdjacentSector": "54",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 840,
@@ -1212,7 +1212,7 @@
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 820,
@@ -1220,7 +1220,7 @@
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 780,
@@ -1228,7 +1228,7 @@
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 760,
@@ -1236,7 +1236,7 @@
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 740,
@@ -1244,7 +1244,7 @@
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 720,
@@ -1252,7 +1252,7 @@
         },
         {
           "AdjacentSector": "56",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 700,
@@ -1260,7 +1260,7 @@
         },
         {
           "AdjacentSector": "12",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 660,
@@ -2005,7 +2005,6 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "107",
         "42"
       ],
       "BottomZ": -64,
@@ -2241,7 +2240,7 @@
         {
           "AdjacentSector": "99",
           "HiMaterial": "2",
-          "LoMaterial": "2",
+          "LoMaterial": "123",
           "MidMaterial": "2",
           "X": -14.14213562373095,
           "Y": 50
@@ -2249,7 +2248,7 @@
         {
           "AdjacentSector": "103",
           "HiMaterial": "2",
-          "LoMaterial": "2",
+          "LoMaterial": "123",
           "MidMaterial": "2",
           "X": 28.284271247461895,
           "Y": 7.573593128807154
@@ -3917,10 +3916,10 @@
     "Entity": "79",
     "behaviors.Proximity": {
       "Active": true,
+      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "79",
       "Range": 100,
-      "TargetTriggers": "sectors.VerticalDoor",
-      "Condition": "Body(Ref)?.Mass>0"
+      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
     },
     "concepts.Named": {
       "Active": true,
@@ -3946,7 +3945,7 @@
         },
         {
           "AdjacentSector": "70",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 330,
@@ -3979,10 +3978,10 @@
     "Entity": "80",
     "behaviors.Proximity": {
       "Active": true,
+      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "80",
       "Range": 100,
-      "TargetTriggers": "sectors.VerticalDoor",
-      "Condition": "Body(Ref)?.Mass>0"
+      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
     },
     "concepts.Named": {
       "Active": true,
@@ -4001,7 +4000,7 @@
       "Segments": [
         {
           "AdjacentSector": "88",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": -100,
@@ -4041,10 +4040,10 @@
     "Entity": "81",
     "behaviors.Proximity": {
       "Active": true,
+      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "81",
       "Range": 100,
-      "TargetTriggers": "sectors.VerticalDoor",
-      "Condition": "(Body(Ref)?.Mass ?? 0)>20"
+      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
     },
     "concepts.Named": {
       "Active": true,
@@ -5090,7 +5089,8 @@
       "Active": true,
       "Bodies": [
         "101",
-        "102"
+        "102",
+        "107"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5233,8 +5233,7 @@
       "Active": true,
       "Bodies": [
         "104",
-        "105",
-        "107"
+        "105"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5438,7 +5437,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 271.5,
+      "Angle": 274.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",

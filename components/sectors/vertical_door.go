@@ -18,6 +18,7 @@ type VerticalDoor struct {
 	concepts.Attached `editable:"^"`
 	VelZ              float64
 	State             DoorBehavior
+	Intent            string
 }
 
 var VerticalDoorComponentIndex int

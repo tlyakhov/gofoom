@@ -115,9 +115,10 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		} else if field.Type.Name() == "SimScalar" || field.Type.Name() == "SimVector2" || field.Type.Name() == "SimVector3" {
 			delete(pgs.Fields, display)
 			name := display
-			/*if pgs.ParentName != "" {
-				name = pgs.ParentName + "." + name
-			}*/
+			g.childFields(name, fieldValue, pgs, true)
+		} else if field.Type.Name() == "Expression" {
+			delete(pgs.Fields, display)
+			name := display
 			g.childFields(name, fieldValue, pgs, true)
 		}
 	}
