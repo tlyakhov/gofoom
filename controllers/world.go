@@ -41,6 +41,28 @@ func (wc *WorldController) Loaded() {
 	}
 }
 
+func (wc *WorldController) proximity(sector *core.Sector, body *core.Body, set *concepts.ControllerSet) {
+	// Consider the case where the sector entity has a p
+	// component that includes the body as a valid triggering source
+	if p := behaviors.ProximityFromDb(sector.Ref()); p != nil && p.Active {
+		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range &&
+			p.Condition.Valid(body.Ref()) {
+			//	set.Act(sector.Ref(), body.Ref(), concepts.ControllerTrigger)
+			p.Trigger.Act(sector.Ref())
+		}
+	}
+
+	// Consider the case where the body entity has a p
+	// component that includes the sector as a valid triggering source
+	if p := behaviors.ProximityFromDb(body.Ref()); p != nil && p.Active {
+		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range &&
+			p.Condition.Valid(sector.Ref()) {
+			p.Trigger.Act(body.Ref())
+			//	set.Act(body.Ref(), sector.Ref(), concepts.ControllerTrigger)
+		}
+	}
+}
+
 func (wc *WorldController) Always() {
 	set := wc.NewControllerSet()
 	for _, c := range wc.DB.Components[core.BodyComponentIndex] {
@@ -49,23 +71,7 @@ func (wc *WorldController) Always() {
 			continue
 		}
 		for _, pvs := range body.Sector().PVSBody {
-			// First, consider the case where the sector entity has a proximity
-			// component that includes the body as a valid triggering source
-			if proximity := behaviors.ProximityFromDb(pvs.Ref()); proximity != nil && proximity.Active {
-				if proximity.Condition.Valid(body.Ref()) &&
-					pvs.Center.Dist2(&body.Pos.Now) < proximity.Range*proximity.Range {
-					set.Act(pvs.Ref(), body.Ref(), concepts.ControllerTrigger)
-				}
-			}
-
-			// Next, consider the case where the body entity has a proximity
-			// component that includes the sector as a valid triggering source
-			if proximity := behaviors.ProximityFromDb(body.Ref()); proximity != nil && proximity.Active {
-				if proximity.Condition.Valid(pvs.Ref()) &&
-					pvs.Center.Dist2(&body.Pos.Now) < proximity.Range*proximity.Range {
-					set.Act(body.Ref(), pvs.Ref(), concepts.ControllerTrigger)
-				}
-			}
+			wc.proximity(pvs, body, set)
 		}
 	}
 }

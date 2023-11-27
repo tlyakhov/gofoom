@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
@@ -39,6 +40,8 @@ func (a *SetProperty) FireHooks() {
 			if a.Source.Name == "Source" {
 				target.Load()
 			}
+		case *core.Expression:
+			target.Construct(target.Code)
 		}
 	}
 }

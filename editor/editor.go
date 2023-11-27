@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"unsafe"
 
@@ -18,7 +17,6 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/sectors"
-	"tlyakhov/gofoom/components/triggers"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
@@ -206,9 +204,6 @@ func (e *Editor) Load(filename string) {
 	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
 	e.EntityTree.Update()
-	f := triggers.Expression{}
-	f.Construct("Sector(Ref)?.TopZ.Original > 32")
-	log.Printf("Valid? %v", f.Valid(db.GetEntityRefByName("Starting")))
 }
 
 func (e *Editor) Test() {

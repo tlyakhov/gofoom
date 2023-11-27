@@ -18,7 +18,7 @@ func init() {
 }
 
 func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways | concepts.ControllerTrigger
+	return concepts.ControllerAlways
 }
 
 func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
@@ -29,14 +29,12 @@ func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
 		vd.Sector != nil && vd.Sector.Active
 }
 
-func (vd *VerticalDoorController) Trigger() {
-	if vd.VerticalDoor.State == sectors.Closed || vd.State == sectors.Closing {
+func (vd *VerticalDoorController) Always() {
+	if vd.Intent == "open" && (vd.State == sectors.Closed || vd.State == sectors.Closing) {
 		vd.State = sectors.Opening
 		vd.VelZ = constants.DoorSpeed
+		vd.Intent = "closed"
 	}
-}
-
-func (vd *VerticalDoorController) Always() {
 	z := vd.Sector.TopZ.Now + vd.VelZ*constants.TimeStep
 	if z < vd.Sector.BottomZ.Now {
 		z = vd.Sector.BottomZ.Now

@@ -1,15 +1,15 @@
 package behaviors
 
 import (
-	"tlyakhov/gofoom/components/triggers"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
 
 type Proximity struct {
 	concepts.Attached `editable:"^"`
-	Range             float64             `editable:"Range"`
-	Condition         triggers.Expression `editable:"Trigger Condition"`
-	TargetTriggers    map[int]bool        `editable:"Components to Trigger"`
+	Range             float64         `editable:"Range"`
+	Condition         core.Expression `editable:"Trigger Condition"`
+	Trigger           core.Expression `editable:"Trigger"`
 }
 
 var ProximityComponentIndex int
@@ -41,13 +41,16 @@ func (s *Proximity) Construct(data map[string]any) {
 	if v, ok := data["Condition"]; ok {
 		s.Condition.Construct(v.(string))
 	}
-	s.DeserializeComponentList(&s.TargetTriggers, "TargetTriggers", data)
+	if v, ok := data["Trigger"]; ok {
+		s.Trigger.Construct(v.(string))
+	}
 }
 
 func (s *Proximity) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	result["Range"] = s.Range
 	result["Condition"] = s.Condition.Serialize()
-	s.SerializeComponentList(s.TargetTriggers, "TargetTriggers", result)
+	result["Trigger"] = s.Trigger.Serialize()
+
 	return result
 }

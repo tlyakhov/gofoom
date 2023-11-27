@@ -139,7 +139,7 @@
                 <item>
                     <attribute name="label" translatable="yes">Rotate Slope Anchor</attribute>
                     <attribute name="icon">go-jump</attribute>
-                    <attribute name="accel">r</attribute>
+                    <attribute name="accel">&lt;Primary&gt;r</attribute>
                     <attribute name="action">app.tool.rotate.slope</attribute>
                 </item>
             </section>
