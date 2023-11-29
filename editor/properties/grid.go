@@ -105,21 +105,21 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			keys := fieldValue.MapKeys()
 			for _, key := range keys {
 				name := field.Name + "[" + key.String() + "]"
-				if pgs.ParentName != "" {
-					name = pgs.ParentName + "." + name
-				}
-				pgs2 := pgs
-				pgs2.ParentCollection = &fieldValue
-				g.childFields(name, fieldValue.MapIndex(key), pgs2, true)
+				pgsChild := pgs
+				pgsChild.ParentCollection = &fieldValue
+				g.childFields(name, fieldValue.MapIndex(key), pgsChild, true)
 			}
-		} else if field.Type.Name() == "SimScalar" || field.Type.Name() == "SimVector2" || field.Type.Name() == "SimVector3" {
+		} else if field.Type.Name() == "SimScalar" || field.Type.Name() == "SimVector2" || field.Type.Name() == "SimVector3" || field.Type.Name() == "Expression" {
 			delete(pgs.Fields, display)
 			name := display
 			g.childFields(name, fieldValue, pgs, true)
-		} else if field.Type.Name() == "Expression" {
-			delete(pgs.Fields, display)
-			name := display
-			g.childFields(name, fieldValue, pgs, true)
+		} else if field.Type.Kind() == reflect.Slice {
+			for i := 0; i < fieldValue.Len(); i++ {
+				name := fmt.Sprintf("%v[%v]", display, i)
+				pgsChild := pgs
+				pgsChild.ParentCollection = &fieldValue
+				g.childFields(name, fieldValue.Index(i), pgsChild, true)
+			}
 		}
 	}
 }
@@ -268,6 +268,8 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(index, field, core.CollisionResponseValues())
 		case **concepts.EntityRef:
 			g.fieldEntityRef(index, field)
+		case *[]core.Trigger:
+			g.fieldSlice(index, field)
 		}
 		index++
 	}

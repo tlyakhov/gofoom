@@ -124,13 +124,25 @@ func run() {
 		}
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
+
+		/*	// Start tracing
+			traceFile, err := os.Create("trace.out")
+			if err != nil {
+				panic(err)
+			}
+			defer traceFile.Close()
+
+			if err := trace.Start(traceFile); err != nil {
+				panic(err)
+			}
+			defer trace.Stop()*/
 	}
 
 	w := 640
 	h := 360
 	cfg := pixelgl.WindowConfig{
 		Title:     "Foom",
-		Bounds:    pixel.R(0, 0, 3840, 2160),
+		Bounds:    pixel.R(0, 0, 1920, 1080),
 		VSync:     true,
 		Resizable: true,
 		//Undecorated: true,

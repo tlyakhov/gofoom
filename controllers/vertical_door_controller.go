@@ -30,25 +30,30 @@ func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
 }
 
 func (vd *VerticalDoorController) Always() {
-	if vd.Intent == "open" && (vd.State == sectors.Closed || vd.State == sectors.Closing) {
-		vd.State = sectors.Opening
+	if vd.Intent == sectors.DoorIntentOpen && (vd.State == sectors.DoorStateClosed || vd.State == sectors.DoorStateClosing) {
+		vd.State = sectors.DoorStateOpening
 		vd.VelZ = constants.DoorSpeed
-		vd.Intent = "closed"
+		vd.Intent = sectors.DoorIntentReset
+	} else if vd.Intent == sectors.DoorIntentClosed && (vd.State == sectors.DoorStateOpen || vd.State == sectors.DoorStateOpening) {
+		vd.State = sectors.DoorStateClosing
+		vd.VelZ = -constants.DoorSpeed
+		vd.Intent = sectors.DoorIntentReset
 	}
+
 	z := vd.Sector.TopZ.Now + vd.VelZ*constants.TimeStep
 	if z < vd.Sector.BottomZ.Now {
 		z = vd.Sector.BottomZ.Now
 		vd.VelZ = 0
-		vd.State = sectors.Closed
+		vd.State = sectors.DoorStateClosed
 	}
 	if z > vd.Sector.TopZ.Original {
 		z = vd.Sector.TopZ.Original
 		vd.VelZ = 0
-		vd.State = sectors.Open
+		vd.State = sectors.DoorStateOpen
 	}
 	vd.Sector.TopZ.Now = z
-	if vd.State == sectors.Open {
-		vd.State = sectors.Closing
+	if vd.State == sectors.DoorStateOpen {
+		vd.State = sectors.DoorStateClosing
 		vd.VelZ = -constants.DoorSpeed
 	}
 }

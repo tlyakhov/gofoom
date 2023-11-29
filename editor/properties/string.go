@@ -4,6 +4,7 @@ import (
 	"log"
 	"reflect"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -26,14 +27,14 @@ func (g *Grid) originalStrings(field *state.PropertyGridField) string {
 func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
 	origValue := g.originalStrings(field)
 
-	box, _ := gtk.EntryNew()
-	box.SetHExpand(true)
-	box.SetText(origValue)
-	box.Connect("activate", func(_ *gtk.Entry) {
-		text, err := box.GetText()
+	entry, _ := gtk.EntryNew()
+	entry.SetHExpand(true)
+	entry.SetText(origValue)
+	entry.Connect("activate", func(_ *gtk.Entry) {
+		text, err := entry.GetText()
 		if err != nil {
 			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
-			box.SetText(origValue)
+			entry.SetText(origValue)
 			g.Container.GrabFocus()
 			return
 		}
@@ -43,5 +44,14 @@ func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
 		origValue = text
 		g.Container.GrabFocus()
 	})
-	g.Container.Attach(box, 2, index, 2, 1)
+
+	if exp, ok := field.Parent.(*core.Expression); ok {
+		if exp.ErrorMessage != "" {
+			entry.SetTooltipText(exp.ErrorMessage)
+		} else {
+			entry.SetTooltipText("Success")
+		}
+	}
+
+	g.Container.Attach(entry, 2, index, 2, 1)
 }

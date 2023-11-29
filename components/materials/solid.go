@@ -9,7 +9,7 @@ import (
 
 type Solid struct {
 	concepts.Attached `editable:"^"`
-	Diffuse           color.NRGBA
+	Diffuse           color.NRGBA `editable:"Color"`
 }
 
 var SolidComponentIndex int

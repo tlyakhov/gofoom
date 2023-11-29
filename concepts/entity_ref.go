@@ -26,11 +26,13 @@ func (er *EntityRef) Component(index int) Attachable {
 	if er == nil || er.Entity == 0 || index == 0 {
 		return nil
 	}
-	all := er.All()
-	if all == nil {
+	if er.components == nil {
+		er.components = er.DB.EntityComponents[er.Entity]
+	}
+	if er.components == nil {
 		return nil
 	}
-	return all[index]
+	return er.components[index]
 }
 
 func (er *EntityRef) String() string {
