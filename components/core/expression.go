@@ -1,7 +1,7 @@
 package core
 
 import (
-	"log"
+	"fmt"
 	"maps"
 	"reflect"
 	"strings"
@@ -12,18 +12,24 @@ import (
 )
 
 type Expression struct {
-	Code     string `editable:"Code"`
-	compiled *vm.Program
-	env      map[string]any
+	Code         string `editable:"Code"`
+	ErrorMessage string
+	compiled     *vm.Program
+	env          map[string]any
+}
+
+type Trigger struct {
+	Condition Expression `editable:"Condition"`
+	Action    Expression `editable:"Action"`
 }
 
 func (e *Expression) setterWithList(components []concepts.Attachable, path string, v any) bool {
-	if components == nil {
+	if components == nil || e.ErrorMessage != "" {
 		return false
 	}
 	sPath := strings.Split(path, ".")
 	if len(sPath) < 2 {
-		log.Printf("Expression::setterWithList error: path should have at least a component and field")
+		e.ErrorMessage = "Expression::setterWithList error: path should have at least a component and field"
 		return false
 	}
 	if index, ok := concepts.DbTypes().IndexesNoPackage[sPath[0]]; ok {
@@ -35,7 +41,7 @@ func (e *Expression) setterWithList(components []concepts.Attachable, path strin
 		for i := 1; i < len(sPath); i++ {
 			trav = trav.FieldByName(sPath[i])
 			if !trav.IsValid() {
-				log.Printf("Expression::setterWithList error: path %v had an invalid field %v", path, sPath[i])
+				e.ErrorMessage = fmt.Sprintf("Expression::setterWithList error: path %v had an invalid field %v", path, sPath[i])
 				return false
 			}
 			if trav.Kind() == reflect.Ptr || trav.Kind() == reflect.Interface {
@@ -71,38 +77,59 @@ func (e *Expression) Construct(code string) {
 	e.Code = code
 	c, err := expr.Compile(code, expr.Env(e.env), expr.AsBool())
 	if err != nil {
-		log.Printf("Error compiling expression: %v", err)
+		e.ErrorMessage = fmt.Sprintf("Error compiling expression: %v", err)
 		return
 	}
 	e.compiled = c
 }
 
-func (f *Expression) Serialize() string {
-	return f.Code
+func (e *Expression) Serialize() string {
+	return e.Code
 }
 
-func (f *Expression) Valid(ref *concepts.EntityRef) bool {
-	if f.compiled == nil {
+func (e *Expression) Valid(ref *concepts.EntityRef) bool {
+	if e.compiled == nil {
 		return false
 	}
-	f.env["Ref"] = ref
-	result, err := expr.Run(f.compiled, f.env)
+	e.env["Ref"] = ref
+	result, err := expr.Run(e.compiled, e.env)
 	if err != nil {
-		log.Printf("Expression error: %v", err)
+		e.ErrorMessage = fmt.Sprintf("Expression error: %v", err)
 		return false
 	}
 	return result.(bool)
 }
 
-func (f *Expression) Act(ref *concepts.EntityRef) bool {
-	if f.compiled == nil {
+func (e *Expression) Act(ref *concepts.EntityRef) bool {
+	if e.compiled == nil {
 		return false
 	}
-	f.env["Ref"] = ref
-	result, err := expr.Run(f.compiled, f.env)
+	e.env["Ref"] = ref
+	result, err := expr.Run(e.compiled, e.env)
 	if err != nil {
-		log.Printf("Expression error: %v", err)
+		e.ErrorMessage = fmt.Sprintf("Expression error: %v", err)
 		return false
 	}
 	return result.(bool)
+}
+
+func (t *Trigger) Construct(data map[string]any) {
+	if data == nil {
+		return
+	}
+
+	if v, ok := data["Condition"]; ok {
+		t.Condition.Construct(v.(string))
+	}
+	if v, ok := data["Action"]; ok {
+		t.Action.Construct(v.(string))
+	}
+}
+
+func (t *Trigger) Serialize() map[string]any {
+	result := make(map[string]any)
+	result["Condition"] = t.Condition.Serialize()
+	result["Action"] = t.Action.Serialize()
+
+	return result
 }

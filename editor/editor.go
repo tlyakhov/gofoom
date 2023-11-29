@@ -257,6 +257,7 @@ func (e *Editor) ActTool() {
 		a := &actions.AddSector{Sector: s}
 		a.AddBody.IEditor = e
 		a.AddBody.EntityRef = isector
+		a.AddBody.Components = isector.All()
 		e.NewAction(a)
 	case state.ToolAddBody:
 		body := archetypes.CreateBasic(e.DB, core.BodyComponentIndex)

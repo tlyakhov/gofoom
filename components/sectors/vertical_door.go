@@ -4,27 +4,41 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-type DoorBehavior int
+type DoorState int
 
-//go:generate go run github.com/dmarkham/enumer -type=DoorBehavior -json
+//go:generate go run github.com/dmarkham/enumer -type=DoorState -json
 const (
-	Open DoorBehavior = iota
-	Opening
-	Closing
-	Closed
+	DoorStateOpen DoorState = iota
+	DoorStateOpening
+	DoorStateClosing
+	DoorStateClosed
+)
+
+type DoorIntent int
+
+//go:generate go run github.com/dmarkham/enumer -type=DoorIntent -json
+const (
+	DoorIntentReset DoorIntent = iota
+	DoorIntentOpen
+	DoorIntentClosed
 )
 
 type VerticalDoor struct {
 	concepts.Attached `editable:"^"`
 	VelZ              float64
-	State             DoorBehavior
-	Intent            string
+	State             DoorState
+	Intent            DoorIntent
 }
 
 var VerticalDoorComponentIndex int
 
 func init() {
 	VerticalDoorComponentIndex = concepts.DbTypes().Register(VerticalDoor{}, VerticalDoorFromDb)
+	dis := DoorIntentStrings()
+	div := DoorIntentValues()
+	for i, s := range dis {
+		concepts.DbTypes().ExprEnv[s] = div[i]
+	}
 }
 
 func VerticalDoorFromDb(entity *concepts.EntityRef) *VerticalDoor {
@@ -32,4 +46,8 @@ func VerticalDoorFromDb(entity *concepts.EntityRef) *VerticalDoor {
 		return asserted
 	}
 	return nil
+}
+
+func (vd *VerticalDoor) String() string {
+	return "VerticalDoor"
 }

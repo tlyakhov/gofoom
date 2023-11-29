@@ -256,8 +256,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "8",
-        "9"
+        "9",
+        "8"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -1136,10 +1136,14 @@
     "Entity": "25",
     "behaviors.Proximity": {
       "Active": true,
-      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "25",
       "Range": 100,
-      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
+      "Triggers": [
+        {
+          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+        }
+      ]
     },
     "concepts.Named": {
       "Active": true,
@@ -1728,6 +1732,9 @@
     },
     "core.Sector": {
       "Active": true,
+      "Bodies": [
+        "107"
+      ],
       "BottomZ": 0,
       "CeilMaterial": "122",
       "CeilScale": 64,
@@ -2062,7 +2069,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "124",
           "X": -200,
           "Y": 250
         },
@@ -2106,7 +2113,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "124",
           "X": -440,
           "Y": 30
         },
@@ -2351,7 +2358,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "124",
           "X": -260,
           "Y": -220
         },
@@ -2402,7 +2409,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "124",
           "X": -240,
           "Y": -220
         },
@@ -2856,7 +2863,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 610,
           "Y": -230
         },
@@ -2899,7 +2906,7 @@
           "AdjacentSector": "66",
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 570,
           "Y": -180
         }
@@ -3282,14 +3289,14 @@
           "AdjacentSector": "94",
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 570,
           "Y": -190
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 600,
           "Y": -230
         },
@@ -3297,14 +3304,14 @@
           "AdjacentSector": "58",
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 610,
           "Y": -230
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 570,
           "Y": -180
         }
@@ -3916,10 +3923,14 @@
     "Entity": "79",
     "behaviors.Proximity": {
       "Active": true,
-      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "79",
       "Range": 100,
-      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
+      "Triggers": [
+        {
+          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+        }
+      ]
     },
     "concepts.Named": {
       "Active": true,
@@ -3978,10 +3989,14 @@
     "Entity": "80",
     "behaviors.Proximity": {
       "Active": true,
-      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "80",
       "Range": 100,
-      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
+      "Triggers": [
+        {
+          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+        }
+      ]
     },
     "concepts.Named": {
       "Active": true,
@@ -4040,10 +4055,14 @@
     "Entity": "81",
     "behaviors.Proximity": {
       "Active": true,
-      "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10",
       "Entity": "81",
       "Range": 100,
-      "Trigger": "Set(\"VerticalDoor.Intent\",\"open\")"
+      "Triggers": [
+        {
+          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+        }
+      ]
     },
     "concepts.Named": {
       "Active": true,
@@ -4184,7 +4203,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "124",
           "X": -280,
           "Y": -220
         },
@@ -4238,7 +4257,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "124",
           "X": -360,
           "Y": -220
         },
@@ -4757,12 +4776,12 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilMaterial": "123",
       "CeilScale": 64,
       "CeilSlope": -0.25,
       "Entity": "94",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorMaterial": "123",
       "FloorScale": 64,
       "FloorSlope": 0.10000000000000002,
       "Segments": [
@@ -4776,63 +4795,63 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 490,
           "Y": -280
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 500,
           "Y": -250
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 520,
           "Y": -270
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 530,
           "Y": -250
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 490,
           "Y": -220
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 460,
           "Y": -250
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 460,
           "Y": -200
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 510,
           "Y": -190
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 560,
           "Y": -230
         },
@@ -4840,35 +4859,35 @@
           "AdjacentSector": "66",
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 570,
           "Y": -190
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 600,
           "Y": -230
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 610,
           "Y": -270
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 630,
           "Y": -250
         },
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "123",
           "X": 640,
           "Y": -290
         },
@@ -5089,8 +5108,7 @@
       "Active": true,
       "Bodies": [
         "101",
-        "102",
-        "107"
+        "102"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5232,8 +5250,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "104",
-        "105"
+        "105",
+        "104"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5437,7 +5455,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 274.5,
+      "Angle": 100.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6043,7 +6061,7 @@
     "concepts.Named": {
       "Active": true,
       "Entity": "122",
-      "Name": "Floo"
+      "Name": "Floor"
     },
     "materials.Image": {
       "Active": true,
@@ -6078,7 +6096,7 @@
     "concepts.Named": {
       "Active": true,
       "Entity": "123",
-      "Name": "Doop"
+      "Name": "Door Metal"
     },
     "materials.Image": {
       "Active": true,
@@ -6104,6 +6122,41 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "123",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "124",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "124",
+      "Name": "Wall Variation"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "124",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/space_tiles_hyptosis/wool_colored_red.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "124"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "124",
       "IsLiquid": false,
       "Scale": 1
     }

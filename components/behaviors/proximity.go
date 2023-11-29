@@ -1,15 +1,15 @@
 package behaviors
 
 import (
+	"fmt"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
 
 type Proximity struct {
 	concepts.Attached `editable:"^"`
-	Range             float64         `editable:"Range"`
-	Condition         core.Expression `editable:"Trigger Condition"`
-	Trigger           core.Expression `editable:"Trigger"`
+	Range             float64        `editable:"Range"`
+	Triggers          []core.Trigger `editable:"Triggers"`
 }
 
 var ProximityComponentIndex int
@@ -25,6 +25,10 @@ func ProximityFromDb(entity *concepts.EntityRef) *Proximity {
 	return nil
 }
 
+func (s *Proximity) String() string {
+	return fmt.Sprintf("Proximity: %.2f", s.Range)
+}
+
 func (s *Proximity) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
@@ -38,19 +42,24 @@ func (s *Proximity) Construct(data map[string]any) {
 		s.Range = v.(float64)
 	}
 
-	if v, ok := data["Condition"]; ok {
-		s.Condition.Construct(v.(string))
-	}
-	if v, ok := data["Trigger"]; ok {
-		s.Trigger.Construct(v.(string))
+	if v, ok := data["Triggers"]; ok {
+		if triggers, ok := v.([]any); ok {
+			s.Triggers = make([]core.Trigger, len(triggers))
+			for i, tdata := range triggers {
+				s.Triggers[i].Construct(tdata.(map[string]any))
+			}
+		}
 	}
 }
 
 func (s *Proximity) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	result["Range"] = s.Range
-	result["Condition"] = s.Condition.Serialize()
-	result["Trigger"] = s.Trigger.Serialize()
+	triggers := make([]map[string]any, len(s.Triggers))
+	for i, trigger := range s.Triggers {
+		triggers[i] = trigger.Serialize()
+	}
+	result["Triggers"] = triggers
 
 	return result
 }

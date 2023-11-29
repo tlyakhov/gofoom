@@ -213,8 +213,8 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.Counter = 0
 
 	if constants.RenderMultiThreaded {
-		blockSize := r.ScreenWidth / 48
-		blocks := 48
+		blocks := 24
+		blockSize := r.ScreenWidth / blocks
 		r.columnGroup.Add(blocks)
 		for x := 0; x < blocks; x++ {
 			go r.RenderBlock(buffer, x*blockSize, x*blockSize+blockSize)

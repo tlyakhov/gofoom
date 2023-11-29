@@ -70,7 +70,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 	}
 
 	for _, seg := range le.Sector.Segments {
-		if seg.AdjacentSector.Nil() {
+		if seg.AdjacentSector.Nil() || seg.AdjacentSegment == nil {
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
