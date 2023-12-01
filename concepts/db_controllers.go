@@ -49,8 +49,6 @@ func act(controller Controller, method ControllerMethod) {
 		controller.Always()
 	case ControllerContainment:
 		controller.Containment()
-	case ControllerContact:
-		controller.Contact()
 	case ControllerEnter:
 		controller.Enter()
 	case ControllerExit:
@@ -59,8 +57,6 @@ func act(controller Controller, method ControllerMethod) {
 		controller.Loaded()
 	case ControllerRecalculate:
 		controller.Recalculate()
-	case ControllerTrigger:
-		controller.Trigger()
 	}
 }
 

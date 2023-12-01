@@ -63,10 +63,18 @@ func (bc *BodyController) Containment() {
 	set := bc.NewControllerSet()
 
 	if !bc.Sector.FloorMaterial.Nil() && bc.Body.Pos.Now[2] <= bc.Sector.BottomZ.Now {
-		set.Act(bc.TargetEntity, bc.Sector.FloorMaterial, concepts.ControllerContact)
+		for _, t := range bc.Sector.FloorTriggers {
+			if t.Condition.Valid(bc.Body.Ref()) {
+				t.Action.Act(bc.Sector.Ref())
+			}
+		}
 	}
 	if !bc.Sector.CeilMaterial.Nil() && bc.Body.Pos.Now[2] >= bc.Sector.TopZ.Now {
-		set.Act(bc.TargetEntity, bc.Sector.CeilMaterial, concepts.ControllerContact)
+		for _, t := range bc.Sector.CeilTriggers {
+			if t.Condition.Valid(bc.Body.Ref()) {
+				t.Action.Act(bc.Sector.Ref())
+			}
+		}
 	}
 
 	bodyTop := bc.Body.Pos.Now[2] + bc.Body.Height
