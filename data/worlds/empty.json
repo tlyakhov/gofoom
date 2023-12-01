@@ -53,6 +53,7 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
+        "5",
         "4"
       ],
       "BottomZ": 0,
@@ -109,6 +110,7 @@
       "CollisionResponse": "Slide",
       "Entity": "4",
       "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
         "X": -60,
@@ -131,6 +133,38 @@
       },
       "Entity": "4",
       "Strength": 2
+    }
+  },
+  {
+    "Entity": "5",
+    "behaviors.Alive": {
+      "Active": true,
+      "Entity": "5",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Active": true,
+      "Entity": "5"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "5",
+      "Height": 32,
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
     }
   }
 ]

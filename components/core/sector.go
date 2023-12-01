@@ -24,6 +24,8 @@ type Sector struct {
 	FloorMaterial *concepts.EntityRef `editable:"Floor Material" edit_type:"Material"`
 	CeilMaterial  *concepts.EntityRef `editable:"Ceiling Material" edit_type:"Material"`
 	FloorFriction float64             `editable:"Floor Friction"`
+	FloorTriggers []Trigger           `editable:"Floor Triggers"`
+	CeilTriggers  []Trigger           `editable:"Ceil Triggers"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3
@@ -155,6 +157,13 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["FloorFriction"]; ok {
 		s.FloorFriction = v.(float64)
 	}
+	if v, ok := data["FloorTriggers"]; ok {
+		s.FloorTriggers = ConstructTriggers(v)
+	}
+	if v, ok := data["CeilTriggers"]; ok {
+		s.CeilTriggers = ConstructTriggers(v)
+	}
+
 	s.Recalculate()
 }
 
@@ -183,6 +192,12 @@ func (s *Sector) Serialize() map[string]any {
 	}
 	if !s.CeilMaterial.Nil() {
 		result["CeilMaterial"] = s.CeilMaterial.Serialize()
+	}
+	if len(s.FloorTriggers) > 0 {
+		result["FloorTriggers"] = SerializeTriggers(s.FloorTriggers)
+	}
+	if len(s.CeilTriggers) > 0 {
+		result["CeilTriggers"] = SerializeTriggers(s.CeilTriggers)
 	}
 
 	if len(s.Bodies) > 0 {

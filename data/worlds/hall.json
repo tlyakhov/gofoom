@@ -1169,7 +1169,7 @@
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 640,
@@ -1177,7 +1177,7 @@
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 720,
@@ -1185,7 +1185,7 @@
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 760,
@@ -1193,7 +1193,7 @@
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "2",
+          "HiMaterial": "123",
           "LoMaterial": "2",
           "MidMaterial": "2",
           "X": 820,
@@ -1732,9 +1732,6 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [
-        "107"
-      ],
       "BottomZ": 0,
       "CeilMaterial": "122",
       "CeilScale": 64,
@@ -1850,6 +1847,9 @@
     },
     "core.Sector": {
       "Active": true,
+      "Bodies": [
+        "107"
+      ],
       "BottomZ": -48,
       "CeilMaterial": "122",
       "CeilScale": 64,
@@ -5107,8 +5107,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "101",
-        "102"
+        "102",
+        "101"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5455,7 +5455,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 100.5,
+      "Angle": 88.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",

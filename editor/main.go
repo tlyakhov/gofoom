@@ -220,7 +220,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		pprof.StartCPUProfile(f)
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Fatal(err)
+		}
 		defer pprof.StopCPUProfile()
 	}
 
@@ -233,5 +235,5 @@ func main() {
 	}
 
 	editor.App.Connect("activate", onActivate)
-	os.Exit(editor.App.Run(os.Args))
+	editor.App.Run([]string{})
 }

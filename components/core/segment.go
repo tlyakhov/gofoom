@@ -14,13 +14,14 @@ const (
 type Segment struct {
 	DB *concepts.EntityComponentDB
 
-	P           concepts.Vector2    `editable:"X/Y"`
-	LoMaterial  *concepts.EntityRef `editable:"Low Material" edit_type:"Material"`
-	MidMaterial *concepts.EntityRef `editable:"Mid Material" edit_type:"Material"`
-	HiMaterial  *concepts.EntityRef `editable:"High Material" edit_type:"Material"`
-	LoBehavior  MaterialScale       `editable:"Low Behavior"`
-	MidBehavior MaterialScale       `editable:"Mid Behavior"`
-	HiBehavior  MaterialScale       `editable:"High Behavior"`
+	P               concepts.Vector2    `editable:"X/Y"`
+	LoMaterial      *concepts.EntityRef `editable:"Low Material" edit_type:"Material"`
+	MidMaterial     *concepts.EntityRef `editable:"Mid Material" edit_type:"Material"`
+	HiMaterial      *concepts.EntityRef `editable:"High Material" edit_type:"Material"`
+	LoBehavior      MaterialScale       `editable:"Low Behavior"`
+	MidBehavior     MaterialScale       `editable:"Mid Behavior"`
+	HiBehavior      MaterialScale       `editable:"High Behavior"`
+	ContactTriggers []Trigger           `editable:"Contact Triggers"`
 
 	AdjacentSector  *concepts.EntityRef
 	AdjacentSegment *Segment
@@ -319,6 +320,9 @@ func (s *Segment) Construct(data map[string]any) {
 			panic(error)
 		}
 	}
+	if v, ok := data["ContactTriggers"]; ok {
+		s.ContactTriggers = ConstructTriggers(v)
+	}
 }
 
 func (s *Segment) Serialize() map[string]any {
@@ -348,5 +352,9 @@ func (s *Segment) Serialize() map[string]any {
 	if !s.AdjacentSector.Nil() {
 		result["AdjacentSector"] = s.AdjacentSector.Serialize()
 	}
+	if len(s.ContactTriggers) > 0 {
+		result["ContactTriggers"] = SerializeTriggers(s.ContactTriggers)
+	}
+
 	return result
 }

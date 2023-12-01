@@ -187,18 +187,24 @@ func (bc *BodyController) Collide() []*core.Segment {
 	}
 
 	if len(collided) > 0 {
-		response := bc.Body.CollisionResponse
-		bc.NewControllerSet().Act(bc.TargetEntity, bc.Body.SectorEntityRef, concepts.ControllerContact)
+		for _, seg := range collided {
+			for _, t := range seg.ContactTriggers {
+				if t.Condition.Valid(bc.Body.Ref()) {
+					t.Action.Act(bc.Sector.Ref())
+				}
+			}
+		}
 
-		if response == core.Stop {
+		switch bc.Body.CollisionResponse {
+		case core.Stop:
 			bc.Body.Vel.Now[0] = 0
 			bc.Body.Vel.Now[1] = 0
-		} else if response == core.Bounce {
+		case core.Bounce:
 			for _, segment := range collided {
 				n := segment.Normal.To3D(new(concepts.Vector3))
 				bc.Body.Vel.Now.SubSelf(n.Mul(2 * bc.Body.Vel.Now.Dot(n)))
 			}
-		} else if response == core.Remove {
+		case core.Remove:
 			bc.RemoveBody()
 		}
 	}

@@ -18,11 +18,6 @@ type Expression struct {
 	env          map[string]any
 }
 
-type Trigger struct {
-	Condition Expression `editable:"Condition"`
-	Action    Expression `editable:"Action"`
-}
-
 func (e *Expression) setterWithList(components []concepts.Attachable, path string, v any) bool {
 	if components == nil || e.ErrorMessage != "" {
 		return false
@@ -111,25 +106,4 @@ func (e *Expression) Act(ref *concepts.EntityRef) bool {
 		return false
 	}
 	return result.(bool)
-}
-
-func (t *Trigger) Construct(data map[string]any) {
-	if data == nil {
-		return
-	}
-
-	if v, ok := data["Condition"]; ok {
-		t.Condition.Construct(v.(string))
-	}
-	if v, ok := data["Action"]; ok {
-		t.Action.Construct(v.(string))
-	}
-}
-
-func (t *Trigger) Serialize() map[string]any {
-	result := make(map[string]any)
-	result["Condition"] = t.Condition.Serialize()
-	result["Action"] = t.Action.Serialize()
-
-	return result
 }

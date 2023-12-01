@@ -43,23 +43,18 @@ func (s *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Triggers"]; ok {
-		if triggers, ok := v.([]any); ok {
-			s.Triggers = make([]core.Trigger, len(triggers))
-			for i, tdata := range triggers {
-				s.Triggers[i].Construct(tdata.(map[string]any))
-			}
-		}
+		s.Triggers = core.ConstructTriggers(v)
 	}
+
 }
 
 func (s *Proximity) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	result["Range"] = s.Range
-	triggers := make([]map[string]any, len(s.Triggers))
-	for i, trigger := range s.Triggers {
-		triggers[i] = trigger.Serialize()
+
+	if len(s.Triggers) > 0 {
+		result["Triggers"] = core.SerializeTriggers(s.Triggers)
 	}
-	result["Triggers"] = triggers
 
 	return result
 }

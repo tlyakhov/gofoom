@@ -5,12 +5,10 @@ type ControllerMethod uint32
 const (
 	ControllerAlways ControllerMethod = 1 << iota
 	ControllerContainment
-	ControllerContact
 	ControllerEnter
 	ControllerExit
 	ControllerLoaded
 	ControllerRecalculate
-	ControllerTrigger
 )
 
 type Controller interface {
@@ -23,12 +21,10 @@ type Controller interface {
 	Target(source *EntityRef) bool
 	Always()
 	Containment()
-	Contact()
 	Enter()
 	Exit()
 	Loaded()
 	Recalculate()
-	Trigger()
 }
 
 type BaseController struct {
@@ -61,9 +57,7 @@ func (c *BaseController) Source(source *EntityRef) bool {
 
 func (c *BaseController) Always()      {}
 func (c *BaseController) Containment() {}
-func (c *BaseController) Contact()     {}
 func (c *BaseController) Enter()       {}
 func (c *BaseController) Exit()        {}
 func (c *BaseController) Loaded()      {}
 func (c *BaseController) Recalculate() {}
-func (c *BaseController) Trigger()     {}
