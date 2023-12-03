@@ -75,7 +75,7 @@ func (a *Move) Act() {
 	j := 0
 	segmentFunc := func(seg *core.Segment) {
 		seg.P = *a.WorldGrid(a.Original[j].To2D().Add(&a.Delta))
-		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), nil, concepts.ControllerRecalculate)
+		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), concepts.ControllerRecalculate)
 		j++
 	}
 	a.Iterate(a.Selected, func(body *core.Body) {
@@ -96,7 +96,7 @@ func (a *Move) Undo() {
 	j := 0
 	segmentFunc := func(seg *core.Segment) {
 		seg.P = *a.Original[j].To2D()
-		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), nil, concepts.ControllerRecalculate)
+		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), concepts.ControllerRecalculate)
 		j++
 	}
 	a.Iterate(a.Selected, func(body *core.Body) {

@@ -55,8 +55,16 @@ func (pc *PlayerController) Always() {
 		pc.Body.Height = constants.PlayerHeight
 	}
 
-	if pc.Alive.HurtTime > 0 {
-		pc.FrameTint = color.NRGBA{0xFF, 0, 0, uint8(pc.Alive.HurtTime * 200 / constants.PlayerHurtTime)}
+	allCooldowns := 0.0
+	maxCooldown := 0.0
+	for _, d := range pc.Alive.Damages {
+		allCooldowns += d.Cooldown.Render
+		maxCooldown += d.Cooldown.Original
+	}
+	if allCooldowns > 0 && maxCooldown > 0 {
+		pc.FrameTint = color.NRGBA{0xFF, 0, 0, uint8(allCooldowns * 200 / maxCooldown)}
+	} else {
+		pc.FrameTint = color.NRGBA{}
 	}
 }
 

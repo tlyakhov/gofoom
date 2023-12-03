@@ -43,8 +43,12 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 		return &le.Output
 	}
 	result := &le.Lightmap[le.MapIndex]
+	ditherHeuristic := constants.LightmapRefreshDither
+	/*if le.Distance > 0 {
+		ditherHeuristic = ditherHeuristic * 200 / int(le.Slice.Distance)
+	}*/
 	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame ||
-		concepts.RngXorShift64()%constants.LightmapRefreshDither > 0 {
+		concepts.RngXorShift64()%uint64(ditherHeuristic) > 0 {
 		return result
 	}
 
