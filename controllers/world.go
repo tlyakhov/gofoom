@@ -46,11 +46,7 @@ func (wc *WorldController) proximity(sector *core.Sector, body *core.Body, set *
 	// component that includes the body as a valid triggering source
 	if p := behaviors.ProximityFromDb(sector.Ref()); p != nil && p.Active {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
-			for _, t := range p.Triggers {
-				if t.Condition.Valid(body.Ref()) {
-					t.Action.Act(sector.Ref())
-				}
-			}
+			BodySectorTrigger(p.Triggers, body.Ref(), sector.Ref())
 		}
 	}
 
@@ -58,11 +54,7 @@ func (wc *WorldController) proximity(sector *core.Sector, body *core.Body, set *
 	// component that includes the sector as a valid triggering source
 	if p := behaviors.ProximityFromDb(body.Ref()); p != nil && p.Active {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
-			for _, t := range p.Triggers {
-				if t.Condition.Valid(sector.Ref()) {
-					t.Action.Act(body.Ref())
-				}
-			}
+			BodySectorTrigger(p.Triggers, body.Ref(), sector.Ref())
 		}
 	}
 }

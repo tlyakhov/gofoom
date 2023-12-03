@@ -26,6 +26,8 @@ type Sector struct {
 	FloorFriction float64             `editable:"Floor Friction"`
 	FloorTriggers []Trigger           `editable:"Floor Triggers"`
 	CeilTriggers  []Trigger           `editable:"Ceil Triggers"`
+	EnterTriggers []Trigger           `editable:"Enter Triggers"`
+	ExitTriggers  []Trigger           `editable:"Exit Triggers"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3
@@ -158,10 +160,16 @@ func (s *Sector) Construct(data map[string]any) {
 		s.FloorFriction = v.(float64)
 	}
 	if v, ok := data["FloorTriggers"]; ok {
-		s.FloorTriggers = ConstructTriggers(v)
+		s.FloorTriggers = ConstructTriggers(s.DB, v)
 	}
 	if v, ok := data["CeilTriggers"]; ok {
-		s.CeilTriggers = ConstructTriggers(v)
+		s.CeilTriggers = ConstructTriggers(s.DB, v)
+	}
+	if v, ok := data["EnterTriggers"]; ok {
+		s.EnterTriggers = ConstructTriggers(s.DB, v)
+	}
+	if v, ok := data["ExitTriggers"]; ok {
+		s.ExitTriggers = ConstructTriggers(s.DB, v)
 	}
 
 	s.Recalculate()
@@ -198,6 +206,12 @@ func (s *Sector) Serialize() map[string]any {
 	}
 	if len(s.CeilTriggers) > 0 {
 		result["CeilTriggers"] = SerializeTriggers(s.CeilTriggers)
+	}
+	if len(s.EnterTriggers) > 0 {
+		result["EnterTriggers"] = SerializeTriggers(s.EnterTriggers)
+	}
+	if len(s.ExitTriggers) > 0 {
+		result["ExitTriggers"] = SerializeTriggers(s.ExitTriggers)
 	}
 
 	if len(s.Bodies) > 0 {

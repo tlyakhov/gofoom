@@ -49,10 +49,6 @@ func act(controller Controller, method ControllerMethod) {
 		controller.Always()
 	case ControllerContainment:
 		controller.Containment()
-	case ControllerEnter:
-		controller.Enter()
-	case ControllerExit:
-		controller.Exit()
 	case ControllerLoaded:
 		controller.Loaded()
 	case ControllerRecalculate:

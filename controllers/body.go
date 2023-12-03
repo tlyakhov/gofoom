@@ -25,8 +25,6 @@ func (bc *BodyController) Priority() int {
 
 func (bc *BodyController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerAlways |
-		concepts.ControllerEnter |
-		concepts.ControllerExit |
 		concepts.ControllerContainment |
 		concepts.ControllerRecalculate |
 		concepts.ControllerLoaded
@@ -112,8 +110,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 			log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
 			p[2] = floorZ
 		}
-		bc.Sector = closestSector
-		bc.NewControllerSet().Act(bc.TargetEntity, closestSector.Ref(), concepts.ControllerEnter)
+		bc.Enter(closestSector.Ref())
 		// Don't mark as collided because this is probably an initialization.
 	}
 
@@ -143,7 +140,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 		// Cases 5 & 6
 
 		// Exit the current sector.
-		bc.NewControllerSet().Act(bc.TargetEntity, bc.Body.SectorEntityRef, concepts.ControllerExit)
+		bc.Exit()
 
 		for _, segment := range sector.Segments {
 			if segment.AdjacentSector.Nil() {
@@ -160,9 +157,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 					//e.Pos[2] = floorZ
 					log.Println("Entity entering adjacent sector is lower than floorZ")
 				}
-				bc.Body.SectorEntityRef = segment.AdjacentSector
-				bc.Sector = adj
-				bc.NewControllerSet().Act(bc.TargetEntity, bc.Body.SectorEntityRef, concepts.ControllerEnter)
+				bc.Enter(segment.AdjacentSector)
 				break
 			}
 		}
@@ -188,11 +183,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 
 	if len(collided) > 0 {
 		for _, seg := range collided {
-			for _, t := range seg.ContactTriggers {
-				if t.Condition.Valid(bc.Body.Ref()) {
-					t.Action.Act(bc.Sector.Ref())
-				}
-			}
+			BodySectorTrigger(seg.ContactTriggers, bc.TargetEntity, bc.Sector.Ref())
 		}
 
 		switch bc.Body.CollisionResponse {
@@ -208,11 +199,6 @@ func (bc *BodyController) Collide() []*core.Segment {
 			bc.RemoveBody()
 		}
 	}
-
-	/*body := mc.Sector.Bodies[mc.Body.Entity]
-	if mc.Sector != nil && body.Nil() {
-		mc.Sector.Bodies[mc.Body.Entity] = *mc.TargetEntity
-	}*/
 
 	return collided
 }

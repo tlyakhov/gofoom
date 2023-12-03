@@ -44,20 +44,6 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkRadioToolButton" id="ToolAlignGrid">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text">Align Grid</property>
-                        <property name="label">Align Grid</property>
-                        <property name="icon-name">format-justify-fill</property>
-                        <property name="group">ToolSelect</property>
-                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkRadioToolButton" id="ToolSplitSegment">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -83,6 +69,20 @@
                       </object>
                       <packing>
                         <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="ToolAlignGrid">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text">Align Grid</property>
+                        <property name="label">Align Grid</property>
+                        <property name="icon-name">format-justify-fill</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -265,6 +265,7 @@
                                       <object class="GtkGrid" id="PropertyGrid">
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
+                                        <property name="valign">start</property>
                                         <property name="margin-top">4</property>
                                         <property name="margin-bottom">4</property>
                                         <property name="orientation">vertical</property>

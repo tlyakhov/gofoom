@@ -25,35 +25,35 @@ func ProximityFromDb(entity *concepts.EntityRef) *Proximity {
 	return nil
 }
 
-func (s *Proximity) String() string {
-	return fmt.Sprintf("Proximity: %.2f", s.Range)
+func (p *Proximity) String() string {
+	return fmt.Sprintf("Proximity: %.2f", p.Range)
 }
 
-func (s *Proximity) Construct(data map[string]any) {
-	s.Attached.Construct(data)
+func (p *Proximity) Construct(data map[string]any) {
+	p.Attached.Construct(data)
 
-	s.Range = 100
+	p.Range = 100
 
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Range"]; ok {
-		s.Range = v.(float64)
+		p.Range = v.(float64)
 	}
 
 	if v, ok := data["Triggers"]; ok {
-		s.Triggers = core.ConstructTriggers(v)
+		p.Triggers = core.ConstructTriggers(p.DB, v)
 	}
 
 }
 
-func (s *Proximity) Serialize() map[string]any {
-	result := s.Attached.Serialize()
-	result["Range"] = s.Range
+func (p *Proximity) Serialize() map[string]any {
+	result := p.Attached.Serialize()
+	result["Range"] = p.Range
 
-	if len(s.Triggers) > 0 {
-		result["Triggers"] = core.SerializeTriggers(s.Triggers)
+	if len(p.Triggers) > 0 {
+		result["Triggers"] = core.SerializeTriggers(p.Triggers)
 	}
 
 	return result

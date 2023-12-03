@@ -5,8 +5,6 @@ type ControllerMethod uint32
 const (
 	ControllerAlways ControllerMethod = 1 << iota
 	ControllerContainment
-	ControllerEnter
-	ControllerExit
 	ControllerLoaded
 	ControllerRecalculate
 )
@@ -21,8 +19,6 @@ type Controller interface {
 	Target(source *EntityRef) bool
 	Always()
 	Containment()
-	Enter()
-	Exit()
 	Loaded()
 	Recalculate()
 }
@@ -57,7 +53,5 @@ func (c *BaseController) Source(source *EntityRef) bool {
 
 func (c *BaseController) Always()      {}
 func (c *BaseController) Containment() {}
-func (c *BaseController) Enter()       {}
-func (c *BaseController) Exit()        {}
 func (c *BaseController) Loaded()      {}
 func (c *BaseController) Recalculate() {}

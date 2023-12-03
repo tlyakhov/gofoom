@@ -28,7 +28,7 @@ func (a *SetProperty) Frame()                              {}
 func (a *SetProperty) FireHooks() {
 	// TODO: this has a bug - all these fire for the same parent. We need to
 	// be able to handle multiple chains of properties
-	for _ = range a.Values {
+	for range a.Values {
 		switch target := a.Parent.(type) {
 		case *concepts.SimScalar:
 			target.Reset()
@@ -41,7 +41,7 @@ func (a *SetProperty) FireHooks() {
 				target.Load()
 			}
 		case *core.Expression:
-			target.Construct(target.Code)
+			target.Construct(target.DB, target.Code)
 		}
 	}
 }
