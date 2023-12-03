@@ -25,7 +25,18 @@ func (a *AliveController) Target(target *concepts.EntityRef) bool {
 }
 
 func (a *AliveController) Always() {
-	if a.HurtTime > 0 {
-		a.HurtTime-- // Should account for frame time here.
+	for source, d := range a.Damages {
+		if d.Cooldown.Now <= 0 {
+			d.Cooldown.Detach(a.Simulation)
+			delete(a.Damages, source)
+			continue
+		}
+		if d.Amount > 0 {
+			if a.Health > 0 {
+				a.Health -= d.Amount
+			}
+			d.Amount = 0
+		}
+		d.Cooldown.Now--
 	}
 }

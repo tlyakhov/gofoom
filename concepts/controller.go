@@ -14,8 +14,6 @@ type Controller interface {
 	Priority() int
 	Methods() ControllerMethod
 	// Return false if controller shouldn't run for this entity
-	Source(source *EntityRef) bool
-	// Return false if controller shouldn't run for this entity
 	Target(source *EntityRef) bool
 	Always()
 	Containment()
@@ -25,7 +23,6 @@ type Controller interface {
 
 type BaseController struct {
 	*ControllerSet
-	SourceEntity *EntityRef
 	TargetEntity *EntityRef
 }
 
@@ -43,11 +40,6 @@ func (c *BaseController) Parent(s *ControllerSet) {
 
 func (c *BaseController) Target(target *EntityRef) bool {
 	c.TargetEntity = target
-	return true
-}
-
-func (c *BaseController) Source(source *EntityRef) bool {
-	c.SourceEntity = source
 	return true
 }
 

@@ -105,9 +105,9 @@ func (bc *BodyController) Collide() []*core.Segment {
 		}
 
 		floorZ, ceilZ := closestSector.SlopedZNow(p.To2D())
-		log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
+		//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
 		if p[2] < floorZ || p[2]+bc.Body.Height > ceilZ {
-			log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
+			//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
 			p[2] = floorZ
 		}
 		bc.Enter(closestSector.Ref())
@@ -152,11 +152,11 @@ func (bc *BodyController) Collide() []*core.Segment {
 				p[2]+bc.Body.Height < ceilZ &&
 				adj.IsPointInside2D(ePosition2D) {
 				// Hooray, we've handled case 5! Make sure Z is good.
-				log.Printf("Case 5! body = %v in sector %v, floor z = %v\n", p.StringHuman(), adj.Entity, floorZ)
-				if p[2] < floorZ {
-					//e.Pos[2] = floorZ
+				//log.Printf("Case 5! body = %v in sector %v, floor z = %v\n", p.StringHuman(), adj.Entity, floorZ)
+				/*if p[2] < floorZ {
+					e.Pos[2] = floorZ
 					log.Println("Entity entering adjacent sector is lower than floorZ")
-				}
+				}*/
 				bc.Enter(segment.AdjacentSector)
 				break
 			}

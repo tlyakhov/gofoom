@@ -20,14 +20,6 @@ func init() {
 	concepts.DbTypes().RegisterController(&UnderwaterController{})
 }
 
-func (uc *UnderwaterController) Source(er *concepts.EntityRef) bool {
-	uc.SourceEntity = er
-	uc.Underwater = sectors.UnderwaterFromDb(er)
-	uc.Alive = behaviors.AliveFromDb(er)
-	return uc.Underwater != nil && uc.Underwater.Active &&
-		uc.Alive != nil && uc.Alive.Active
-}
-
 func (uc *UnderwaterController) Target(target *concepts.EntityRef) bool {
 	uc.TargetEntity = target
 	uc.Body = core.BodyFromDb(target)

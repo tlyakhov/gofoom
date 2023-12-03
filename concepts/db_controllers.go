@@ -56,12 +56,12 @@ func act(controller Controller, method ControllerMethod) {
 	}
 }
 
-func (set *ControllerSet) Act(target *EntityRef, source *EntityRef, method ControllerMethod) {
+func (set *ControllerSet) Act(target *EntityRef, method ControllerMethod) {
 	for _, c := range set.All {
 		if c.Methods()&method == 0 {
 			continue
 		}
-		if c.Target(target) && c.Source(source) {
+		if c.Target(target) {
 			act(c, method)
 		}
 	}

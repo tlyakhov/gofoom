@@ -102,6 +102,9 @@ func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *conce
 	scaleDivisor := 1.0
 
 	if tiled := materials.TiledFromDb(m); tiled != nil {
+		scaleDivisor *= tiled.Scale
+		u *= scaleDivisor
+		v *= scaleDivisor
 		if tiled.IsLiquid {
 			u += math.Cos(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
 			v += math.Sin(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
@@ -111,8 +114,6 @@ func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *conce
 		v -= math.Floor(v)
 		u = math.Abs(u)
 		v = math.Abs(v)
-
-		scaleDivisor *= tiled.Scale
 	}
 
 	if sky := materials.SkyFromDb(m); sky != nil {
@@ -138,7 +139,7 @@ func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *conce
 	}
 
 	if image := materials.ImageFromDb(m); image != nil {
-		result = concepts.Int32ToVector3(image.Sample(u/scaleDivisor, v/scaleDivisor, scale))
+		result = concepts.Int32ToVector3(image.Sample(u, v, scale))
 	}
 
 	if lit := materials.LitFromDb(m); lit != nil {

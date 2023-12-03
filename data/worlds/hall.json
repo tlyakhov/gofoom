@@ -1341,13 +1341,22 @@
     },
     "core.Sector": {
       "Active": true,
+      "Bodies": [
+        "125"
+      ],
       "BottomZ": -100,
       "CeilMaterial": "122",
       "CeilScale": 64,
       "Entity": "27",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorMaterial": "127",
       "FloorScale": 64,
+      "FloorTriggers": [
+        {
+          "Action": "Alive(ibody)?.Hurt(\"toxic sludge\", 5, 500)",
+          "Condition": "true"
+        }
+      ],
       "Segments": [
         {
           "HiMaterial": "2",
@@ -2012,7 +2021,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "42"
+        "42",
+        "107"
       ],
       "BottomZ": -64,
       "CeilMaterial": "122",
@@ -5107,8 +5117,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "102",
-        "101"
+        "101",
+        "102"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5447,7 +5457,7 @@
     "behaviors.Alive": {
       "Active": true,
       "Entity": "107",
-      "Health": 100
+      "Health": 85
     },
     "behaviors.Player": {
       "Active": true,
@@ -5455,7 +5465,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 88.5,
+      "Angle": 217.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6159,6 +6169,75 @@
       "Entity": "124",
       "IsLiquid": false,
       "Scale": 1
+    }
+  },
+  {
+    "Entity": "125",
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "125",
+      "Height": 0,
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -520,
+        "Y": 140,
+        "Z": -80
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.9,
+      "Diffuse": {
+        "X": 0,
+        "Y": 0.5,
+        "Z": 0
+      },
+      "Entity": "125",
+      "Strength": 10
+    }
+  },
+  {
+    "Entity": "127",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "127",
+      "Name": "Toxic"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "127",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "/Users/tim/Documents/gofoom/data/FSlime.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "127"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "127",
+      "IsLiquid": true,
+      "Scale": 2
     }
   }
 ]

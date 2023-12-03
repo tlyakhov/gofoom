@@ -103,5 +103,17 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 		action.Act()
 	})
 
-	g.Container.Attach(box, 2, index, 2, 1)
+	g.Container.Attach(box, 2, index, 1, 1)
+
+	button, _ := gtk.ButtonNew()
+	button.SetHExpand(false)
+	button.SetLabel("...")
+	button.Connect("clicked", func(_ *gtk.Button) {
+		selected, _ := box.GetActiveIter()
+		value, _ := opts.GetValue(selected, 0)
+		entity, _ := value.GoValue()
+		er := g.State().DB.EntityRef(entity.(uint64))
+		g.IEditor.SelectObjects([]any{er}, true)
+	})
+	g.Container.Attach(button, 3, index, 1, 1)
 }

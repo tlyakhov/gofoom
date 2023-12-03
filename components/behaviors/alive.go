@@ -5,10 +5,15 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
+type Damage struct {
+	Amount   float64
+	Cooldown concepts.SimScalar
+}
+
 type Alive struct {
 	concepts.Attached `editable:"^"`
 	Health            float64 `editable:"Health"`
-	HurtTime          float64
+	Damages           map[string]*Damage
 }
 
 var AliveComponentIndex int
@@ -32,6 +37,7 @@ func (a *Alive) Construct(data map[string]any) {
 	a.Attached.Construct(data)
 
 	a.Health = 100
+	a.Damages = make(map[string]*Damage)
 
 	if data == nil {
 		return
@@ -40,6 +46,18 @@ func (a *Alive) Construct(data map[string]any) {
 	if v, ok := data["Health"]; ok {
 		a.Health = v.(float64)
 	}
+}
+
+func (a *Alive) Hurt(source string, amount, cooldown float64) bool {
+	if _, ok := a.Damages[source]; ok {
+		return false
+	}
+	d := Damage{Amount: amount}
+	d.Cooldown.Attach(a.DB.Simulation)
+	d.Cooldown.Set(cooldown)
+	a.Damages[source] = &d
+
+	return true
 }
 
 func (a *Alive) Serialize() map[string]any {
