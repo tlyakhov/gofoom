@@ -1140,8 +1140,8 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
         }
       ]
     },
@@ -3927,8 +3927,8 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
         }
       ]
     },
@@ -3993,8 +3993,8 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
         }
       ]
     },
@@ -4059,8 +4059,8 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(Ref)?.Mass ?? 0)\u003e10"
+          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
+          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
         }
       ]
     },

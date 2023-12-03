@@ -321,7 +321,7 @@ func (s *Segment) Construct(data map[string]any) {
 		}
 	}
 	if v, ok := data["ContactTriggers"]; ok {
-		s.ContactTriggers = ConstructTriggers(v)
+		s.ContactTriggers = ConstructTriggers(s.DB, v)
 	}
 }
 

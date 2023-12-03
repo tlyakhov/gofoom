@@ -87,7 +87,7 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 				name = named.Name
 			}
 			opts.Set(listItem, []int{0, 1, 2}, []any{er.Entity, name, pixbuf})
-			if er.Entity == origValue.Entity {
+			if !origValue.Nil() && er.Entity == origValue.Entity {
 				box.SetActiveIter(listItem)
 			}
 		}

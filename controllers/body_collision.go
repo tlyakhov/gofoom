@@ -8,14 +8,31 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-func (bc *BodyController) Enter() {
-	if bc.SourceEntity.Nil() {
+func BodySectorTrigger(triggers []core.Trigger, ibody, isector *concepts.EntityRef) {
+	for _, trigger := range triggers {
+		trigger.Condition.Env["ibody"] = ibody
+		trigger.Condition.Env["isector"] = isector
+		if trigger.Condition.Valid() {
+			trigger.Action.Env["ibody"] = ibody
+			trigger.Action.Env["isector"] = isector
+			trigger.Action.Act()
+		}
+	}
+}
+
+func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
+	if sectorRef.Nil() {
 		log.Printf("%v tried to enter nil sector", bc.TargetEntity.Entity)
 		return
 	}
-	bc.Sector = core.SectorFromDb(bc.SourceEntity)
+	sector := core.SectorFromDb(sectorRef)
+	if sector == nil {
+		log.Printf("%v tried to enter entity %v that's not a sector", bc.TargetEntity.Entity, sectorRef.String())
+		return
+	}
+	bc.Sector = sector
 	bc.Sector.Bodies[bc.TargetEntity.Entity] = bc.TargetEntity
-	bc.Body.SectorEntityRef = bc.SourceEntity
+	bc.Body.SectorEntityRef = sectorRef
 
 	if bc.Body.OnGround {
 		floorZ, _ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
@@ -24,6 +41,7 @@ func (bc *BodyController) Enter() {
 			p[2] = floorZ
 		}
 	}
+	BodySectorTrigger(bc.Sector.EnterTriggers, bc.TargetEntity, bc.Sector.Ref())
 }
 
 func (bc *BodyController) Exit() {
@@ -31,6 +49,7 @@ func (bc *BodyController) Exit() {
 		log.Printf("%v tried to exit nil sector", bc.TargetEntity.Entity)
 		return
 	}
+	BodySectorTrigger(bc.Sector.ExitTriggers, bc.TargetEntity, bc.Sector.Ref())
 	delete(bc.Sector.Bodies, bc.Body.Entity)
 	bc.Body.SectorEntityRef = nil
 }
@@ -60,31 +79,13 @@ func (bc *BodyController) Containment() {
 		}
 	}
 
-	set := bc.NewControllerSet()
-
-	if !bc.Sector.FloorMaterial.Nil() && bc.Body.Pos.Now[2] <= bc.Sector.BottomZ.Now {
-		for _, t := range bc.Sector.FloorTriggers {
-			if t.Condition.Valid(bc.Body.Ref()) {
-				t.Action.Act(bc.Sector.Ref())
-			}
-		}
-	}
-	if !bc.Sector.CeilMaterial.Nil() && bc.Body.Pos.Now[2] >= bc.Sector.TopZ.Now {
-		for _, t := range bc.Sector.CeilTriggers {
-			if t.Condition.Valid(bc.Body.Ref()) {
-				t.Action.Act(bc.Sector.Ref())
-			}
-		}
-	}
-
 	bodyTop := bc.Body.Pos.Now[2] + bc.Body.Height
 	floorZ, ceilZ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 
 	bc.Body.OnGround = false
 	if !bc.Sector.FloorTarget.Nil() && bodyTop < floorZ {
-		set.Act(bc.TargetEntity, nil, concepts.ControllerExit)
-		set.Act(bc.TargetEntity, bc.Sector.FloorTarget, concepts.ControllerEnter)
-		bc.Sector = core.SectorFromDb(bc.Sector.FloorTarget)
+		bc.Exit()
+		bc.Enter(bc.Sector.FloorTarget)
 		_, ceilZ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = ceilZ - bc.Body.Height - 1.0
 	} else if !bc.Sector.FloorTarget.Nil() && bc.Body.Pos.Now[2] <= floorZ && bc.Body.Vel.Now[2] > 0 {
@@ -95,11 +96,12 @@ func (bc *BodyController) Containment() {
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
 		bc.Body.OnGround = true
+		BodySectorTrigger(bc.Sector.FloorTriggers, bc.TargetEntity, bc.Sector.Ref())
 	}
 
 	if !bc.Sector.CeilTarget.Nil() && bodyTop > ceilZ {
-		set.Act(bc.TargetEntity, nil, concepts.ControllerExit)
-		set.Act(bc.TargetEntity, bc.Sector.CeilTarget, concepts.ControllerEnter)
+		bc.Exit()
+		bc.Enter(bc.Sector.CeilTarget)
 		bc.Sector = core.SectorFromDb(bc.Sector.CeilTarget)
 		floorZ, _ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = floorZ - bc.Body.Height + 1.0
@@ -108,5 +110,6 @@ func (bc *BodyController) Containment() {
 		delta := bc.Sector.CeilNormal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
+		BodySectorTrigger(bc.Sector.CeilTriggers, bc.TargetEntity, bc.Sector.Ref())
 	}
 }

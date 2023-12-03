@@ -15,7 +15,8 @@ type Expression struct {
 	Code         string `editable:"Code"`
 	ErrorMessage string
 	compiled     *vm.Program
-	env          map[string]any
+	Env          map[string]any
+	DB           *concepts.EntityComponentDB
 }
 
 func (e *Expression) setterWithList(components []concepts.Attachable, path string, v any) bool {
@@ -50,27 +51,23 @@ func (e *Expression) setterWithList(components []concepts.Attachable, path strin
 }
 
 func (e *Expression) setterWithEntity(entity uint64, path string, v any) bool {
-	ref := e.env["Ref"].(*concepts.EntityRef)
-	if ref.Nil() {
-		return false
-	}
-	return e.setterWithList(ref.DB.EntityComponents[entity], path, v)
+	return e.setterWithList(e.DB.EntityComponents[entity], path, v)
 }
-func (e *Expression) setter(path string, v any) bool {
-	ref := e.env["Ref"].(*concepts.EntityRef)
+func (e *Expression) setterWithRef(ref *concepts.EntityRef, path string, v any) bool {
 	if ref.Nil() {
 		return false
 	}
 	return e.setterWithList(ref.All(), path, v)
 }
 
-func (e *Expression) Construct(code string) {
-	e.env = maps.Clone(concepts.DbTypes().ExprEnv)
-	e.env["Ref"] = (*concepts.EntityRef)(nil)
-	e.env["Set"] = e.setter
-	e.env["EntitySet"] = e.setterWithEntity
+func (e *Expression) Construct(db *concepts.EntityComponentDB, code string) {
+	e.DB = db
+	e.ErrorMessage = ""
+	e.Env = maps.Clone(concepts.DbTypes().ExprEnv)
+	e.Env["Set"] = e.setterWithRef
+	e.Env["SetEntity"] = e.setterWithEntity
 	e.Code = code
-	c, err := expr.Compile(code, expr.Env(e.env), expr.AsBool())
+	c, err := expr.Compile(code, expr.Env(e.Env), expr.AsBool())
 	if err != nil {
 		e.ErrorMessage = fmt.Sprintf("Error compiling expression: %v", err)
 		return
@@ -82,12 +79,11 @@ func (e *Expression) Serialize() string {
 	return e.Code
 }
 
-func (e *Expression) Valid(ref *concepts.EntityRef) bool {
+func (e *Expression) Valid() bool {
 	if e.compiled == nil {
 		return false
 	}
-	e.env["Ref"] = ref
-	result, err := expr.Run(e.compiled, e.env)
+	result, err := expr.Run(e.compiled, e.Env)
 	if err != nil {
 		e.ErrorMessage = fmt.Sprintf("Expression error: %v", err)
 		return false
@@ -95,12 +91,11 @@ func (e *Expression) Valid(ref *concepts.EntityRef) bool {
 	return result.(bool)
 }
 
-func (e *Expression) Act(ref *concepts.EntityRef) bool {
+func (e *Expression) Act() bool {
 	if e.compiled == nil {
 		return false
 	}
-	e.env["Ref"] = ref
-	result, err := expr.Run(e.compiled, e.env)
+	result, err := expr.Run(e.compiled, e.Env)
 	if err != nil {
 		e.ErrorMessage = fmt.Sprintf("Expression error: %v", err)
 		return false

@@ -39,7 +39,7 @@ func (uc *UnderwaterController) Containment() {
 	uc.Body.Vel.Now[2] -= constants.GravitySwim
 }
 
-func (uc *UnderwaterController) Enter() {
+func (uc *UnderwaterController) Always() {
 	if p := behaviors.PlayerFromDb(uc.TargetEntity); p != nil {
 		p.FrameTint = color.NRGBA{75, 147, 255, 90}
 	}

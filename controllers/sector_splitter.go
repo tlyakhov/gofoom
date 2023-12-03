@@ -252,27 +252,33 @@ func (a *SectorSplitter) verifyCycles() {
 }
 
 func (a *SectorSplitter) collect() {
-	a.Result = make([][]concepts.Attachable, len(a.SplitSector))
-
-	for i, edge := range a.SplitSector {
+	a.Result = make([][]concepts.Attachable, 0)
+	newSectorCount := 0
+	for _, edge := range a.SplitSector {
 		if edge.Visited {
 			continue
 		}
 
 		// Clone all the original components using serialization.
+		newSectorCount++
 		db := a.Sector.DB
 		newEntity := db.NewEntity()
-		a.Result[i] = make([]concepts.Attachable, len(a.Sector.EntityRef.All()))
-		for index, origComponent := range a.Sector.EntityRef.All() {
+		clonedComponents := make([]concepts.Attachable, len(a.Sector.EntityRef.All()))
+		a.Result = append(a.Result, clonedComponents)
+		for componentIndex, origComponent := range a.Sector.EntityRef.All() {
 			if origComponent == nil {
 				continue
 			}
-			addedComponent := db.LoadComponent(index, origComponent.Serialize())
+			addedComponent := db.NewComponent(newEntity, componentIndex)
+			// This will override the entity field with the original component's
+			// entity, so we'll fix it up afterwards.
+			addedComponent.Construct(origComponent.Serialize())
 			addedComponent.Ref().Entity = newEntity
-			a.Result[i][index] = addedComponent
+
+			clonedComponents[componentIndex] = addedComponent
 			switch target := addedComponent.(type) {
 			case *concepts.Named:
-				target.Name = fmt.Sprintf("Split %v (%v of %v)", target.Name, i, len(a.SplitSector))
+				target.Name = fmt.Sprintf("Split %v (%v)", target.Name, newSectorCount)
 			case *core.Sector:
 				// Don't clone the bodies.
 				target.Bodies = make(map[uint64]*concepts.EntityRef)
@@ -288,13 +294,6 @@ func (a *SectorSplitter) collect() {
 					addedSegment.P = visitor.Start
 					addedSegment.AdjacentSegment = nil
 					addedSegment.AdjacentSector = nil
-					// Is this necessary? We recalculate anyway
-					/*if len(target.Segments) > 0 {
-						addedSegment.Next = target.Segments[0]
-						addedSegment.Prev = target.Segments[len(target.Segments)-1]
-						addedSegment.Next.Prev = addedSegment
-						addedSegment.Prev.Next = addedSegment
-					}*/
 					target.Segments = append(target.Segments, addedSegment)
 					if visitor.Source.AdjacentSegment != nil {
 						visitor.Source.AdjacentSegment.AdjacentSector = nil
@@ -308,7 +307,6 @@ func (a *SectorSplitter) collect() {
 				target.Recalculate()
 			}
 		}
-
 	}
 	// Only one a.Sector means we didn't split anything
 	if len(a.Result) == 1 {
@@ -325,9 +323,13 @@ func (a *SectorSplitter) collect() {
 			continue
 		}
 		for _, components := range a.Result {
-			added := components[core.SectorComponentIndex].(*core.Sector)
-			if added.IsPointInside2D(body.Pos.Original.To2D()) {
+			if components[core.SectorComponentIndex] == nil {
+				continue
+			}
+			if added, ok := components[core.SectorComponentIndex].(*core.Sector); ok &&
+				added.IsPointInside2D(body.Pos.Original.To2D()) {
 				body.SectorEntityRef = added.Ref()
+				added.Bodies[body.Ref().Entity] = body.Ref()
 			}
 		}
 	}
