@@ -2,6 +2,7 @@ package actions
 
 import (
 	"reflect"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
@@ -33,7 +34,14 @@ func (a *AddSliceElement) Undo() {
 }
 func (a *AddSliceElement) Redo() {
 	// SlicePtr is something like: *[]<some type>
-	s := reflect.Append(a.SlicePtr.Elem(), reflect.Zero(a.SlicePtr.Elem().Type().Elem()))
-	a.SlicePtr.Elem().Set(s)
+	sliceElem := a.SlicePtr.Elem()
+	newValue := reflect.Zero(sliceElem.Type().Elem())
+	s := reflect.Append(sliceElem, newValue)
+	sliceElem.Set(s)
+	// Add more types?
+	switch target := newValue.Interface().(type) {
+	case core.Trigger:
+		target.Construct(a.State().DB, nil)
+	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }

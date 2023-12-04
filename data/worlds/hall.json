@@ -5467,7 +5467,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 192,
+      "Angle": 186,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6244,6 +6244,11 @@
   },
   {
     "Entity": "128",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "128",
+      "Name": "Glass"
+    },
     "materials.Image": {
       "Active": true,
       "Entity": "128",
@@ -6268,6 +6273,41 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "128",
+      "IsLiquid": false,
+      "Scale": 1
+    }
+  },
+  {
+    "Entity": "129",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "129",
+      "Name": "Ladder"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "129",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/space_tiles_hyptosis/ladder.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "129"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "129",
       "IsLiquid": false,
       "Scale": 1
     }

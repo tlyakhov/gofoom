@@ -189,6 +189,10 @@ func onActivate() {
 		delete(gameKeyMap, key.KeyVal())
 	}
 	signals["MapArea.Scroll"] = MapScroll
+	signals["Tools.AddEmptyEntity"] = func(button *gtk.Button) {
+		ref := editor.DB.NewEntityRef()
+		editor.SelectObjects([]any{ref}, true)
+	}
 	signals["Tools.Toggled"] = func(obj *glib.Object) {
 		active, _ := obj.GetProperty("active")
 		if !active.(bool) {

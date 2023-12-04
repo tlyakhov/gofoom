@@ -44,6 +44,20 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkRadioToolButton" id="ToolAlignGrid">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text">Align Grid</property>
+                        <property name="label">Align Grid</property>
+                        <property name="icon-name">format-justify-fill</property>
+                        <property name="group">ToolSelect</property>
+                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkRadioToolButton" id="ToolSplitSegment">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -69,20 +83,6 @@
                       </object>
                       <packing>
                         <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioToolButton" id="ToolAlignGrid">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text">Align Grid</property>
-                        <property name="label">Align Grid</property>
-                        <property name="icon-name">format-justify-fill</property>
-                        <property name="group">ToolSelect</property>
-                        <signal name="toggled" handler="Tools.Toggled" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -196,6 +196,7 @@
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="tooltip-text" translatable="yes">Add Empty Entity</property>
+                                <signal name="clicked" handler="Tools.AddEmptyEntity" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

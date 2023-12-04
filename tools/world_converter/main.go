@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
-	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/sectors"
@@ -108,7 +107,7 @@ func convert(filename, output string) {
 		case "materials.PainfulLitSampled":
 			db.NewComponent(imat.Entity, materials.LitComponentIndex)
 			db.NewComponent(imat.Entity, materials.TiledComponentIndex)
-			db.NewComponent(imat.Entity, behaviors.ToxicComponentIndex)
+			//db.NewComponent(imat.Entity, behaviors.ToxicComponentIndex)
 		case "materials.Sky":
 			db.NewComponent(imat.Entity, materials.SkyComponentIndex)
 		}
@@ -139,7 +138,7 @@ func convert(filename, output string) {
 		case "sectors.VerticalDoor":
 			db.NewComponent(isector.Entity, sectors.VerticalDoorComponentIndex)
 		case "sectors.ToxicSector":
-			db.NewComponent(isector.Entity, behaviors.ToxicComponentIndex)
+			//db.NewComponent(isector.Entity, behaviors.ToxicComponentIndex)
 		}
 		for _, c := range isector.All() {
 			if c == nil {

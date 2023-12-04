@@ -72,6 +72,7 @@ func (img *Image) Load() error {
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			index := uint32(x-bounds.Min.X) + uint32(y-bounds.Min.Y)*img.Width
+			// Premultiplied alpha
 			img.Data[index] = concepts.ColorToInt32(decoded.At(x, y))
 		}
 	}
@@ -100,19 +101,19 @@ func (img *Image) generateMipMaps() {
 				py = y * (prev.Height - 1) / (h - 1)
 				pcx = concepts.UMin(px+1, prev.Width-1)
 				pcy = concepts.UMin(py+1, prev.Height-1)
-				c := [16]color.NRGBA{
-					concepts.Int32ToNRGBA(prev.Data[py*prev.Width+px]),
-					concepts.Int32ToNRGBA(prev.Data[py*prev.Width+pcx]),
-					concepts.Int32ToNRGBA(prev.Data[pcy*prev.Width+pcx]),
-					concepts.Int32ToNRGBA(prev.Data[pcy*prev.Width+px]),
+				c := [16]color.RGBA{
+					concepts.Int32ToRGBA(prev.Data[py*prev.Width+px]),
+					concepts.Int32ToRGBA(prev.Data[py*prev.Width+pcx]),
+					concepts.Int32ToRGBA(prev.Data[pcy*prev.Width+pcx]),
+					concepts.Int32ToRGBA(prev.Data[pcy*prev.Width+px]),
 				}
-				avg := color.NRGBA{
+				avg := color.RGBA{
 					uint8((uint32(c[0].R) + uint32(c[1].R) + uint32(c[2].R) + uint32(c[3].R)) / 4),
 					uint8((uint32(c[0].G) + uint32(c[1].G) + uint32(c[2].G) + uint32(c[3].G)) / 4),
 					uint8((uint32(c[0].B) + uint32(c[1].B) + uint32(c[2].B) + uint32(c[3].B)) / 4),
 					uint8((uint32(c[0].A) + uint32(c[1].A) + uint32(c[2].A) + uint32(c[3].A)) / 4),
 				}
-				mm.Data[y*mm.Width+x] = concepts.NRGBAToInt32(avg)
+				mm.Data[y*mm.Width+x] = concepts.RGBAToInt32(avg)
 			}
 		}
 		index := concepts.NearestPow2(uint32(mm.Height))
@@ -218,9 +219,9 @@ func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
 		a = float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy
 	}
 	a /= 255.0
-	r = r * a / 255.0
-	g = g * a / 255.0
-	b = b * a / 255.0
+	r = r / 255.0
+	g = g / 255.0
+	b = b / 255.0
 	return concepts.Vector4{r, g, b, a}
 }
 
