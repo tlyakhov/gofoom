@@ -35,32 +35,7 @@ func NewRenderer() *Renderer {
 	return &r
 }
 
-// RenderSlice draws or picks a single pixel vertical column given a particular segment intersection.
-func (r *Renderer) RenderSlice(slice *state.Slice) {
-	slice.CalcScreen()
-	slice.Normal = slice.Sector.CeilNormal
-	if slice.Pick {
-		CeilingPick(slice)
-	} else {
-		Ceiling(slice)
-	}
-	slice.Normal = slice.Sector.FloorNormal
-	if slice.Pick {
-		FloorPick(slice)
-	} else {
-		Floor(slice)
-	}
-
-	slice.Segment.Normal.To3D(&slice.Normal)
-
-	if slice.Segment.AdjacentSector.Nil() {
-		if slice.Pick {
-			WallMidPick(slice)
-		} else {
-			WallMid(slice)
-		}
-		return
-	}
+func (r *Renderer) RenderPortal(slice *state.Slice) {
 	if slice.Depth > constants.MaxPortals {
 		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.Sector.Entity)
 		slice.DebugNotices.Push(dbg)
@@ -92,6 +67,38 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 	if slice.Pick {
 		slice.PickedElements = portalSlice.PickedElements
 	}
+}
+
+// RenderSlice draws or picks a single pixel vertical column given a particular segment intersection.
+func (r *Renderer) RenderSlice(slice *state.Slice) {
+	slice.CalcScreen()
+	slice.Normal = slice.Sector.CeilNormal
+	if slice.Pick {
+		CeilingPick(slice)
+	} else {
+		Ceiling(slice)
+	}
+	slice.Normal = slice.Sector.FloorNormal
+	if slice.Pick {
+		FloorPick(slice)
+	} else {
+		Floor(slice)
+	}
+
+	slice.Segment.Normal.To3D(&slice.Normal)
+
+	noPortal := slice.Segment.AdjacentSector.Nil()
+	if !noPortal {
+		r.RenderPortal(slice)
+	}
+	if noPortal || slice.Segment.PortalHasMaterial {
+		if slice.Pick {
+			WallMidPick(slice)
+		} else {
+			WallMid(slice)
+		}
+	}
+
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
@@ -187,6 +194,23 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 			break
 		}
 		r.RenderColumn(buffer, x, 0, false)
+		for y := 0; y < r.ScreenHeight; y++ {
+			screenIndex := (x + y*r.ScreenWidth)
+			fb := &r.FrameBuffer[screenIndex]
+			screenIndex *= 4
+			if r.FrameTint[3] != 0 {
+				a := 1.0 - r.FrameTint[3]
+				buffer[screenIndex+0] = uint8((fb[0]*a + r.FrameTint[0]) * 255)
+				buffer[screenIndex+1] = uint8((fb[1]*a + r.FrameTint[1]) * 255)
+				buffer[screenIndex+2] = uint8((fb[2]*a + r.FrameTint[2]) * 255)
+				buffer[screenIndex+3] = 0xFF
+			} else {
+				buffer[screenIndex+0] = uint8(fb[0] * 255)
+				buffer[screenIndex+1] = uint8(fb[1] * 255)
+				buffer[screenIndex+2] = uint8(fb[2] * 255)
+				buffer[screenIndex+3] = 0xFF //uint8(r.FrameBuffer[screenIndex+3])
+			}
+		}
 	}
 
 	if constants.RenderMultiThreaded {
@@ -196,6 +220,12 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
+	// Frame Tint precalculation
+	r.FrameTint = r.Player().FrameTint
+	r.FrameTint[0] *= r.FrameTint[3]
+	r.FrameTint[1] *= r.FrameTint[3]
+	r.FrameTint[2] *= r.FrameTint[3]
+
 	// Make sure we don't have too many debug notices
 	for r.DebugNotices.Length() > 30 {
 		r.DebugNotices.Pop()

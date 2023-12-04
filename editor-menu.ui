@@ -85,6 +85,13 @@
                     <attribute name="accel">Escape</attribute>
                     <attribute name="action">app.tool.select</attribute>
                 </item>
+                <item>
+                    <attribute name="label" translatable="yes">Select First/Next
+                    Segment</attribute>
+                    <attribute name="icon">format-text-strikethrough</attribute>
+                    <attribute name="accel">&lt;Primary&gt;apostrophe</attribute>
+                    <attribute name="action">app.tool.select.segment</attribute>
+                </item>
             </section>
             <section>
                 <item>
