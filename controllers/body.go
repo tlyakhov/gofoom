@@ -119,7 +119,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 	// Case 3 & 4
 	// See if we need to push back into the current sector.
 	for _, segment := range sector.Segments {
-		if !segment.AdjacentSector.Nil() {
+		if !segment.AdjacentSector.Nil() && segment.PortalIsPassable {
 			adj := core.SectorFromDb(segment.AdjacentSector)
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.

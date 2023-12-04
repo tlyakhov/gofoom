@@ -8,6 +8,7 @@ import (
 	"os"
 	"runtime/pprof"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/actions"
 
 	"github.com/gotk3/gotk3/glib"
@@ -129,6 +130,20 @@ func onActivate() {
 		editor.SwitchTool(state.ToolSelect)
 		tool, _ := builder.GetObject("ToolSelect")
 		tool.(*gtk.RadioButton).SetProperty("active", true)
+	})
+	editor.AddSimpleMenuAction("tool.select.segment", func(obj *glib.Object) {
+		for _, s := range editor.SelectedObjects {
+			switch target := s.(type) {
+			case *concepts.EntityRef:
+				if sector := core.SectorFromDb(target); sector != nil {
+					editor.SelectObjects([]any{sector.Segments[0]}, true)
+					break
+				}
+			case *core.Segment:
+				editor.SelectObjects([]any{target.Next}, true)
+				break
+			}
+		}
 	})
 	editor.AddSimpleMenuAction("tool.raise.ceil", func(obj *glib.Object) { editor.MoveSurface(2, false, false) })
 	editor.AddSimpleMenuAction("tool.lower.ceil", func(obj *glib.Object) { editor.MoveSurface(-2, false, false) })

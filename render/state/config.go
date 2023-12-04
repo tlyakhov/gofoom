@@ -16,8 +16,11 @@ type Config struct {
 	ViewRadians               []float64
 	ViewFix                   []float64
 	ZBuffer                   []float64
-	DebugNotices              concepts.SyncUniqueQueue
-	RenderLock                sync.Mutex
+	FrameBuffer               []concepts.Vector4
+	FrameTint                 [4]float64
+
+	DebugNotices concepts.SyncUniqueQueue
+	RenderLock   sync.Mutex
 }
 
 func (c *Config) Initialize() {
@@ -32,6 +35,7 @@ func (c *Config) Initialize() {
 	}
 
 	c.ZBuffer = make([]float64, c.ScreenWidth*c.ScreenHeight)
+	c.FrameBuffer = make([]concepts.Vector4, c.ScreenWidth*c.ScreenHeight)
 }
 
 // Player is a convenience function to get the player this renderer links to.

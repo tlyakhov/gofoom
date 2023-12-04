@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"image/color"
 	"math"
 
 	"tlyakhov/gofoom/components/behaviors"
@@ -62,9 +61,9 @@ func (pc *PlayerController) Always() {
 		maxCooldown += d.Cooldown.Original
 	}
 	if allCooldowns > 0 && maxCooldown > 0 {
-		pc.FrameTint = color.NRGBA{0xFF, 0, 0, uint8(allCooldowns * 200 / maxCooldown)}
+		pc.FrameTint = concepts.Vector4{1, 0, 0, allCooldowns * 0.6 / maxCooldown}
 	} else {
-		pc.FrameTint = color.NRGBA{}
+		pc.FrameTint = concepts.Vector4{}
 	}
 }
 

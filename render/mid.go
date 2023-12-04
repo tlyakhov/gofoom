@@ -12,7 +12,7 @@ func WallMidPick(s *state.Slice) {
 	}
 }
 
-// WallMid renders the wall portion of a non-portal segment.
+// WallMid renders the wall portion (potentially over a portal).
 func WallMid(s *state.Slice) {
 	mat := s.Segment.MidMaterial
 	u := s.U

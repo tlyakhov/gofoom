@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"image/color"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/sectors"
@@ -33,12 +32,12 @@ func (uc *UnderwaterController) Containment() {
 
 func (uc *UnderwaterController) Always() {
 	if p := behaviors.PlayerFromDb(uc.TargetEntity); p != nil {
-		p.FrameTint = color.NRGBA{75, 147, 255, 90}
+		p.FrameTint = concepts.Vector4{75.0 / 255.0, 147.0 / 255.0, 1, 90.0 / 255.0}
 	}
 }
 
 func (uc *UnderwaterController) Exit() {
 	if p := behaviors.PlayerFromDb(uc.TargetEntity); p != nil {
-		p.FrameTint = color.NRGBA{}
+		p.FrameTint = concepts.Vector4{}
 	}
 }

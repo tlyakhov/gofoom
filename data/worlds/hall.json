@@ -2094,7 +2094,9 @@
           "AdjacentSector": "48",
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "128",
+          "PortalHasMaterial": true,
+          "PortalIsPassable": false,
           "X": -440,
           "Y": 240
         },
@@ -5465,7 +5467,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 217.5,
+      "Angle": 192,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6238,6 +6240,36 @@
       "Entity": "127",
       "IsLiquid": true,
       "Scale": 2
+    }
+  },
+  {
+    "Entity": "128",
+    "materials.Image": {
+      "Active": true,
+      "Entity": "128",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/glass-test.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "128"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "128",
+      "IsLiquid": false,
+      "Scale": 1
     }
   }
 ]

@@ -241,35 +241,36 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		}
 
 		body := core.BodyFromDb(er)
-		diffuseLight := 1.0
-		if body != nil && body.Active {
-			le.LightWorld[0] = body.Pos.Render[0]
-			le.LightWorld[1] = body.Pos.Render[1]
-			le.LightWorld[2] = body.Pos.Render[2]
-			le.LightWorld.SubSelf(world)
-			dist := le.LightWorld.Length()
-			attenuation := 1.0
-			if dist != 0 {
-				// Normalize
-				le.LightWorld.MulSelf(1.0 / dist)
-				// Calculate light strength.
-				if light.Attenuation > 0.0 {
-					//log.Printf("%v\n", dist)
-					attenuation = light.Strength / math.Pow(dist/body.BoundingRadius+1.0, light.Attenuation)
-					//attenuation = 100.0 / dist
-				}
-				// If it's too far away/dark, ignore it.
-				if attenuation < constants.LightAttenuationEpsilon {
-					//log.Printf("Too far: %v\n", world.StringHuman())
-					continue
-				}
-				if !le.lightVisible(world, body) {
-					//log.Printf("Shadowed: %v\n", world.StringHuman())
-					continue
-				}
-			}
-			diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation
+		if body == nil || !body.Active {
+			continue
 		}
+		le.LightWorld[0] = body.Pos.Render[0]
+		le.LightWorld[1] = body.Pos.Render[1]
+		le.LightWorld[2] = body.Pos.Render[2]
+		le.LightWorld.SubSelf(world)
+		dist := le.LightWorld.Length()
+		diffuseLight := 1.0
+		attenuation := 1.0
+		if dist != 0 {
+			// Normalize
+			le.LightWorld.MulSelf(1.0 / dist)
+			// Calculate light strength.
+			if light.Attenuation > 0.0 {
+				//log.Printf("%v\n", dist)
+				attenuation = light.Strength / math.Pow(dist/body.BoundingRadius+1.0, light.Attenuation)
+				//attenuation = 100.0 / dist
+			}
+			// If it's too far away/dark, ignore it.
+			if attenuation < constants.LightAttenuationEpsilon {
+				//log.Printf("Too far: %v\n", world.StringHuman())
+				continue
+			}
+			if !le.lightVisible(world, body) {
+				//log.Printf("Shadowed: %v\n", world.StringHuman())
+				continue
+			}
+		}
+		diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation
 
 		if diffuseLight > 0 {
 			le.Output[0] += light.Diffuse[0] * diffuseLight

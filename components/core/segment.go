@@ -14,14 +14,16 @@ const (
 type Segment struct {
 	DB *concepts.EntityComponentDB
 
-	P               concepts.Vector2    `editable:"X/Y"`
-	LoMaterial      *concepts.EntityRef `editable:"Low Material" edit_type:"Material"`
-	MidMaterial     *concepts.EntityRef `editable:"Mid Material" edit_type:"Material"`
-	HiMaterial      *concepts.EntityRef `editable:"High Material" edit_type:"Material"`
-	LoBehavior      MaterialScale       `editable:"Low Behavior"`
-	MidBehavior     MaterialScale       `editable:"Mid Behavior"`
-	HiBehavior      MaterialScale       `editable:"High Behavior"`
-	ContactTriggers []Trigger           `editable:"Contact Triggers"`
+	P                 concepts.Vector2    `editable:"X/Y"`
+	LoMaterial        *concepts.EntityRef `editable:"Low Material" edit_type:"Material"`
+	MidMaterial       *concepts.EntityRef `editable:"Mid Material" edit_type:"Material"`
+	HiMaterial        *concepts.EntityRef `editable:"High Material" edit_type:"Material"`
+	LoBehavior        MaterialScale       `editable:"Low Behavior"`
+	MidBehavior       MaterialScale       `editable:"Mid Behavior"`
+	HiBehavior        MaterialScale       `editable:"High Behavior"`
+	PortalHasMaterial bool                `editable:"Portal has material"`
+	PortalIsPassable  bool                `editable:"Portal is passable"`
+	ContactTriggers   []Trigger           `editable:"Contact Triggers"`
 
 	AdjacentSector  *concepts.EntityRef
 	AdjacentSegment *Segment
@@ -273,6 +275,8 @@ func (s *Segment) Split(p concepts.Vector2) *Segment {
 func (s *Segment) Construct(data map[string]any) {
 	s.P = concepts.Vector2{}
 	s.Normal = concepts.Vector2{}
+	s.PortalHasMaterial = false
+	s.PortalIsPassable = true
 
 	if data == nil {
 		return
@@ -284,6 +288,13 @@ func (s *Segment) Construct(data map[string]any) {
 	if v, ok := data["Y"]; ok {
 		s.P[1] = v.(float64)
 	}
+	if v, ok := data["PortalHasMaterial"]; ok {
+		s.PortalHasMaterial = v.(bool)
+	}
+	if v, ok := data["PortalIsPassable"]; ok {
+		s.PortalIsPassable = v.(bool)
+	}
+
 	if v, ok := data["AdjacentSector"]; ok {
 		s.AdjacentSector = s.DB.DeserializeEntityRef(v)
 	}
@@ -329,6 +340,14 @@ func (s *Segment) Serialize() map[string]any {
 	result := make(map[string]any)
 	result["X"] = s.P[0]
 	result["Y"] = s.P[1]
+
+	if s.PortalHasMaterial {
+		result["PortalHasMaterial"] = true
+	}
+	if !s.PortalIsPassable {
+		result["PortalIsPassable"] = false
+	}
+
 	if !s.HiMaterial.Nil() {
 		result["HiMaterial"] = s.HiMaterial.Serialize()
 	}

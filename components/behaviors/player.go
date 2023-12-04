@@ -1,8 +1,6 @@
 package behaviors
 
 import (
-	"image/color"
-
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
@@ -10,7 +8,7 @@ import (
 type Player struct {
 	concepts.Attached `editable:"^"`
 
-	FrameTint color.NRGBA
+	FrameTint concepts.Vector4
 	Crouching bool
 	Inventory []core.Body
 	Bob       float64
