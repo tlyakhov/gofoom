@@ -126,10 +126,13 @@ func ParseHexColor(hex string) (color.NRGBA, error) {
 
 func ColorToInt32(c color.Color) uint32 {
 	r, g, b, a := c.RGBA()
-	return (((r * 0xFF / a) & 0xFF) << 24) | (((g * 0xFF / a) & 0xFF) << 16) | (((b * 0xFF / a) & 0xFF) << 8) | (a & 0xff)
+	return ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | (a & 0xFF)
 }
 
 func NRGBAToInt32(c color.NRGBA) uint32 {
+	return uint32(c.R)<<24 | uint32(c.G)<<16 | uint32(c.B)<<8 | uint32(c.A)
+}
+func RGBAToInt32(c color.RGBA) uint32 {
 	return uint32(c.R)<<24 | uint32(c.G)<<16 | uint32(c.B)<<8 | uint32(c.A)
 }
 
@@ -137,12 +140,18 @@ func Int32ToNRGBA(c uint32) color.NRGBA {
 	return color.NRGBA{uint8((c >> 24) & 0xFF), uint8((c >> 16) & 0xFF), uint8((c >> 8) & 0xFF), uint8(c & 0xFF)}
 }
 
+func Int32ToRGBA(c uint32) color.RGBA {
+	return color.RGBA{uint8((c >> 24) & 0xFF), uint8((c >> 16) & 0xFF), uint8((c >> 8) & 0xFF), uint8(c & 0xFF)}
+}
+
 func Int32ToVector3(c uint32) Vector3 {
 	return Vector3{float64((c >> 24) & 0xFF), float64((c >> 16) & 0xFF), float64((c >> 8) & 0xFF)}
 }
 
 func Int32ToVector4(c uint32) Vector4 {
-	return Vector4{float64((c >> 24) & 0xFF), float64((c >> 16) & 0xFF), float64((c >> 8) & 0xFF), float64(c & 0xFF)}
+	return Vector4{
+		float64((c>>24)&0xFF) / 255.0, float64((c>>16)&0xFF) / 255.0,
+		float64((c>>8)&0xFF) / 255.0, float64(c&0xFF) / 255.0}
 }
 
 func Int32ToVector4PreMul(c uint32) Vector4 {

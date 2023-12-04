@@ -151,6 +151,7 @@ func (g *Grid) AddEntityControls(selection []any) {
 	index := 1
 	entities := make([]uint64, 0)
 	entityList := ""
+	componentList := make([]bool, len(concepts.DbTypes().Indexes))
 	for _, obj := range selection {
 		if len(entityList) > 0 {
 			entityList += ", "
@@ -159,9 +160,15 @@ func (g *Grid) AddEntityControls(selection []any) {
 		case *concepts.EntityRef:
 			entities = append(entities, target.Entity)
 			entityList += strconv.FormatUint(target.Entity, 10)
+			for index, c := range target.All() {
+				componentList[index] = (c != nil)
+			}
 		case *core.Segment:
 			entities = append(entities, target.Sector.Entity)
 			entityList += strconv.FormatUint(target.Sector.Entity, 10)
+			for index, c := range target.Sector.All() {
+				componentList[index] = (c != nil)
+			}
 		}
 	}
 
@@ -180,7 +187,7 @@ func (g *Grid) AddEntityControls(selection []any) {
 	box.PackStart(rendText, true)
 	box.AddAttribute(rendText, "text", 1)
 	for index, t := range concepts.DbTypes().Types {
-		if t == nil {
+		if t == nil || componentList[index] || index == concepts.AttachedComponentIndex {
 			continue
 		}
 		listItem := opts.Append()
