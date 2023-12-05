@@ -87,14 +87,18 @@ func (r *Renderer) RenderSlice(slice *state.Slice) {
 
 	slice.Segment.Normal.To3D(&slice.Normal)
 
-	noPortal := slice.Segment.AdjacentSector.Nil()
-	if !noPortal {
-		r.RenderPortal(slice)
-	}
-	if noPortal || slice.Segment.PortalHasMaterial {
-		if slice.Pick {
+	hasPortal := !slice.Segment.AdjacentSector.Nil()
+	if slice.Pick {
+		if !hasPortal || slice.Segment.PortalHasMaterial {
 			WallMidPick(slice)
-		} else {
+			return
+		}
+		r.RenderPortal(slice)
+	} else {
+		if hasPortal {
+			r.RenderPortal(slice)
+		}
+		if !hasPortal || slice.Segment.PortalHasMaterial {
 			WallMid(slice)
 		}
 	}
@@ -200,16 +204,15 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 			screenIndex *= 4
 			if r.FrameTint[3] != 0 {
 				a := 1.0 - r.FrameTint[3]
-				buffer[screenIndex+0] = uint8((fb[0]*a + r.FrameTint[0]) * 255)
-				buffer[screenIndex+1] = uint8((fb[1]*a + r.FrameTint[1]) * 255)
-				buffer[screenIndex+2] = uint8((fb[2]*a + r.FrameTint[2]) * 255)
-				buffer[screenIndex+3] = 0xFF
+				buffer[screenIndex+0] = uint8(concepts.Clamp((fb[0]*a+r.FrameTint[0])*255, 0, 255))
+				buffer[screenIndex+1] = uint8(concepts.Clamp((fb[1]*a+r.FrameTint[1])*255, 0, 255))
+				buffer[screenIndex+2] = uint8(concepts.Clamp((fb[2]*a+r.FrameTint[2])*255, 0, 255))
 			} else {
-				buffer[screenIndex+0] = uint8(fb[0] * 255)
-				buffer[screenIndex+1] = uint8(fb[1] * 255)
-				buffer[screenIndex+2] = uint8(fb[2] * 255)
-				buffer[screenIndex+3] = 0xFF //uint8(r.FrameBuffer[screenIndex+3])
+				buffer[screenIndex+0] = uint8(concepts.Clamp(fb[0]*255, 0, 255))
+				buffer[screenIndex+1] = uint8(concepts.Clamp(fb[1]*255, 0, 255))
+				buffer[screenIndex+2] = uint8(concepts.Clamp(fb[2]*255, 0, 255))
 			}
+			buffer[screenIndex+3] = 0xFF
 		}
 	}
 

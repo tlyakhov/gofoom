@@ -54,11 +54,13 @@ func (bc *BodyController) Exit() {
 	bc.Body.SectorEntityRef = nil
 }
 
-func (bc *BodyController) Containment() {
+func (bc *BodyController) Physics() {
 	f := &bc.Body.Force
 	if bc.Body.Mass > 0 {
 		// Weight = g*m
-		f[2] -= constants.Gravity * bc.Body.Mass
+		g := bc.Sector.Gravity
+		g.MulSelf(bc.Body.Mass)
+		f.AddSelf(&g)
 		v := &bc.Body.Vel.Now
 		if !v.Zero() {
 			// Air drag
@@ -71,8 +73,7 @@ func (bc *BodyController) Containment() {
 			if bc.Body.OnGround {
 				// Kinetic friction
 				drag.From(v)
-				g := concepts.Vector3{0, 0, constants.Gravity * bc.Body.Mass}
-				drag.MulSelf(-bc.Sector.FloorFriction * bc.Sector.FloorNormal.Dot(&g))
+				drag.MulSelf(-bc.Sector.FloorFriction * bc.Sector.FloorNormal.Dot(g.MulSelf(-1)))
 				f.AddSelf(&drag)
 			}
 			//log.Printf("%v\n", drag)

@@ -78,7 +78,7 @@ func (s *Slice) CalcScreen() {
 }
 
 func (s *Slice) Write(screenIndex uint32, c concepts.Vector4) {
-	s.FrameBuffer[screenIndex].MulSelf(1.0 - c[3]).To3D().AddSelf(c.To3D())
+	s.FrameBuffer[screenIndex].AddPreMulColorSelf(&c)
 }
 
 func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *concepts.Vector3, scale float64) concepts.Vector4 {
@@ -128,9 +128,12 @@ func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *conce
 
 	if lit := materials.LitFromDb(m); lit != nil {
 		// result = Texture * Diffuse * (Ambient + Lightmap)
-		amb := *light
+		amb := concepts.Vector3{1, 1, 1}
+		if light != nil {
+			amb = *light
+		}
 		amb.AddSelf(&lit.Ambient)
-		result.To3D().Mul3Self(&lit.Diffuse).Mul3Self(&amb).ClampSelf(0.0, 1.0)
+		result.Mul4Self(&lit.Diffuse).To3D().Mul3Self(&amb).ClampSelf(0.0, 1.0)
 	}
 	return result
 }

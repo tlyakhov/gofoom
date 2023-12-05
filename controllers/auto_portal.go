@@ -154,9 +154,9 @@ func AutoPortal(db *concepts.EntityComponentDB) {
 
 			sector := c.(*core.Sector)
 			sector2 := c2.(*core.Sector)
-			//if !sector.AABBIntersect(&sector2.Min, &sector2.Max) {
-			//	continue
-			//}
+			if !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
+				continue
+			}
 
 			split := true
 			for split {

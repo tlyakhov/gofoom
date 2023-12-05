@@ -2,6 +2,7 @@ package behaviors
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -25,4 +26,13 @@ func PlayerFromDb(entity *concepts.EntityRef) *Player {
 		return asserted
 	}
 	return nil
+}
+
+func (p *Player) Underwater() bool {
+	if b := core.BodyFromDb(p.EntityRef); b != nil {
+		if u := sectors.UnderwaterFromDb(b.SectorEntityRef); u != nil {
+			return true
+		}
+	}
+	return false
 }

@@ -23,6 +23,7 @@ type Sector struct {
 	CeilTarget    *concepts.EntityRef `editable:"Ceiling Target"`
 	FloorMaterial *concepts.EntityRef `editable:"Floor Material" edit_type:"Material"`
 	CeilMaterial  *concepts.EntityRef `editable:"Ceiling Material" edit_type:"Material"`
+	Gravity       concepts.Vector3    `editable:"Gravity"`
 	FloorFriction float64             `editable:"Floor Friction"`
 	FloorTriggers []Trigger           `editable:"Floor Triggers"`
 	CeilTriggers  []Trigger           `editable:"Ceil Triggers"`
@@ -38,8 +39,6 @@ type Sector struct {
 	PVS                               map[uint64]*Sector
 	PVSBody                           map[uint64]*Sector
 	PVL                               map[uint64]*concepts.EntityRef
-
-	// RoomImpulse
 }
 
 var SectorComponentIndex int
@@ -98,6 +97,9 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Segments = make([]*Segment, 0)
 	s.Bodies = make(map[uint64]*concepts.EntityRef)
+	s.Gravity[0] = 0
+	s.Gravity[1] = 0
+	s.Gravity[2] = -constants.Gravity
 	s.BottomZ.Set(0.0)
 	s.TopZ.Set(64.0)
 	s.FloorScale = 64.0
@@ -156,6 +158,9 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["CeilTarget"]; ok {
 		s.CeilTarget = s.DB.DeserializeEntityRef(v)
 	}
+	if v, ok := data["Gravity"]; ok {
+		s.Gravity.Deserialize(v.(map[string]any))
+	}
 	if v, ok := data["FloorFriction"]; ok {
 		s.FloorFriction = v.(float64)
 	}
@@ -181,6 +186,9 @@ func (s *Sector) Serialize() map[string]any {
 	result["BottomZ"] = s.BottomZ.Original
 	result["FloorScale"] = s.FloorScale
 	result["CeilScale"] = s.CeilScale
+	if s.Gravity[0] != 0 || s.Gravity[1] != 0 || s.Gravity[2] != -constants.Gravity {
+		result["Gravity"] = s.Gravity.Serialize()
+	}
 	result["FloorFriction"] = s.FloorFriction
 	if s.FloorSlope != 0 {
 		result["FloorSlope"] = s.FloorSlope
@@ -411,17 +419,22 @@ func (s *Sector) InBounds(world *concepts.Vector3) bool {
 		world[2] >= s.Min[2]-constants.IntersectEpsilon && world[2] <= s.Max[2]+constants.IntersectEpsilon)
 }
 
-func (s *Sector) AABBIntersect(min, max *concepts.Vector3) bool {
-	dx := (s.Min[0] + s.Max[0] - min[0] - max[0]) * 0.5
-	px := (s.Max[0]-s.Min[0]+max[0]-min[0])*0.5 - math.Abs(dx)
-	if px <= 0 {
-		return false
+func (s *Sector) AABBIntersect(min, max *concepts.Vector3, includeEdges bool) bool {
+	if includeEdges {
+		return (s.Min[0] <= max[0] &&
+			s.Max[0] >= min[0] &&
+			s.Min[1] <= max[1] &&
+			s.Max[1] >= min[1] &&
+			s.Min[2] <= max[2] &&
+			s.Max[2] >= min[2])
+	} else {
+		return (s.Min[0] < max[0] &&
+			s.Max[0] > min[0] &&
+			s.Min[1] < max[1] &&
+			s.Max[1] > min[1] &&
+			s.Min[2] < max[2] &&
+			s.Max[2] > min[2])
 	}
-
-	dy := (s.Min[1] + s.Max[1] - min[1] - max[1]) * 0.5
-	py := (s.Max[1] - s.Min[1] + max[1] - min[1]) - math.Abs(dy)
-
-	return py > 0
 }
 
 func (s *Sector) DbgPrintSegments() {

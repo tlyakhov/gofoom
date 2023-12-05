@@ -25,7 +25,6 @@ func (bc *BodyController) Priority() int {
 
 func (bc *BodyController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerAlways |
-		concepts.ControllerContainment |
 		concepts.ControllerRecalculate |
 		concepts.ControllerLoaded
 }
@@ -227,7 +226,7 @@ func (bc *BodyController) Always() {
 		return
 	}
 	if bc.Sector != nil {
-		bc.Containment()
+		bc.Physics()
 	}
 	// Our physics are impulse-based. We do semi-implicit Euler calculations
 	// at each time step, and apply constraints (e.g. collision) directly to the velocities

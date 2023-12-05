@@ -30,9 +30,10 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "2"
     },
@@ -2111,7 +2112,8 @@
           "AdjacentSector": "93",
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "130",
+          "PortalHasMaterial": true,
           "X": -440,
           "Y": 110
         },
@@ -5262,8 +5264,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "105",
-        "104"
+        "104",
+        "105"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5459,7 +5461,7 @@
     "behaviors.Alive": {
       "Active": true,
       "Entity": "107",
-      "Health": 85
+      "Health": 70
     },
     "behaviors.Player": {
       "Active": true,
@@ -5467,7 +5469,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 186,
+      "Angle": 246,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -5475,8 +5477,8 @@
       "Mass": 80,
       "MountHeight": 15,
       "Pos": {
-        "X": -320,
-        "Y": 205,
+        "X": -280,
+        "Y": 140,
         "Z": 0
       },
       "Vel": {
@@ -6090,9 +6092,10 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "122"
     },
@@ -6125,9 +6128,10 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "123"
     },
@@ -6160,9 +6164,10 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "124"
     },
@@ -6219,7 +6224,7 @@
       "Entity": "127",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/FSlime.png"
+      "Source": "data/FSlime.png"
     },
     "materials.Lit": {
       "Active": true,
@@ -6229,9 +6234,10 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "127"
     },
@@ -6264,9 +6270,10 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "128"
     },
@@ -6299,9 +6306,10 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "129"
     },
@@ -6310,6 +6318,42 @@
       "Entity": "129",
       "IsLiquid": false,
       "Scale": 1
+    }
+  },
+  {
+    "Entity": "130",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "130",
+      "Name": "Stained Glass"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "130",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/stained-glass.jpeg"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 0.1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "130"
+    },
+    "materials.Tiled": {
+      "Active": true,
+      "Entity": "130",
+      "IsLiquid": false,
+      "Scale": 0.1
     }
   }
 ]

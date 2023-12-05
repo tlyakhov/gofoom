@@ -4,7 +4,6 @@ type ControllerMethod uint32
 
 const (
 	ControllerAlways ControllerMethod = 1 << iota
-	ControllerContainment
 	ControllerLoaded
 	ControllerRecalculate
 )
@@ -16,7 +15,6 @@ type Controller interface {
 	// Return false if controller shouldn't run for this entity
 	Target(source *EntityRef) bool
 	Always()
-	Containment()
 	Loaded()
 	Recalculate()
 }
@@ -44,6 +42,5 @@ func (c *BaseController) Target(target *EntityRef) bool {
 }
 
 func (c *BaseController) Always()      {}
-func (c *BaseController) Containment() {}
 func (c *BaseController) Loaded()      {}
 func (c *BaseController) Recalculate() {}
