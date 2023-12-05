@@ -269,6 +269,8 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldVector2(index, field)
 		case *concepts.Vector3:
 			g.fieldVector3(index, field)
+		case *concepts.Vector4:
+			g.fieldVector4(index, field)
 		case *core.MaterialScale:
 			g.fieldEnum(index, field, core.MaterialScaleValues())
 		case *core.CollisionResponse:

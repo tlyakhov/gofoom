@@ -60,10 +60,17 @@ func (pc *PlayerController) Always() {
 		allCooldowns += d.Cooldown.Render
 		maxCooldown += d.Cooldown.Original
 	}
-	if allCooldowns > 0 && maxCooldown > 0 {
-		pc.FrameTint = concepts.Vector4{1, 0, 0, allCooldowns * 0.6 / maxCooldown}
+
+	if pc.Underwater() {
+		pc.FrameTint = concepts.Vector4{75.0 / 255.0, 147.0 / 255.0, 1, 90.0 / 255.0}
 	} else {
 		pc.FrameTint = concepts.Vector4{}
+	}
+
+	if allCooldowns > 0 && maxCooldown > 0 {
+		a := allCooldowns * 0.6 / maxCooldown
+		pc.FrameTint.MulSelf(1.0 - a)
+		pc.FrameTint.AddSelf(&concepts.Vector4{1, 0, 0, a})
 	}
 }
 

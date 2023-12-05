@@ -8,7 +8,7 @@ type Lit struct {
 	concepts.Attached `editable:"^"`
 
 	Ambient concepts.Vector3 `editable:"Ambient Color" edit_type:"color"`
-	Diffuse concepts.Vector3 `editable:"Diffuse Color" edit_type:"color"`
+	Diffuse concepts.Vector4 `editable:"Diffuse Color" edit_type:"color"`
 }
 
 var LitComponentIndex int
@@ -32,7 +32,7 @@ func (m *Lit) Construct(data map[string]any) {
 	m.Attached.Construct(data)
 
 	m.Ambient = concepts.Vector3{0.1, 0.1, 0.1}
-	m.Diffuse = concepts.Vector3{1, 1, 1}
+	m.Diffuse = concepts.Vector4{1, 1, 1, 1}
 
 	if data == nil {
 		return
@@ -42,13 +42,18 @@ func (m *Lit) Construct(data map[string]any) {
 		m.Ambient.Deserialize(v.(map[string]any))
 	}
 	if v, ok := data["Diffuse"]; ok {
-		m.Diffuse.Deserialize(v.(map[string]any))
+		vmap := v.(map[string]any)
+		if len(vmap) == 4 {
+			m.Diffuse.Deserialize(vmap, true)
+		} else if len(vmap) == 3 {
+			m.Diffuse.To3D().Deserialize(vmap)
+		}
 	}
 }
 
 func (m *Lit) Serialize() map[string]any {
 	result := m.Attached.Serialize()
 	result["Ambient"] = m.Ambient.Serialize()
-	result["Diffuse"] = m.Diffuse.Serialize()
+	result["Diffuse"] = m.Diffuse.Serialize(true)
 	return result
 }

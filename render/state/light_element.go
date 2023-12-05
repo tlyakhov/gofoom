@@ -15,6 +15,7 @@ type LightElement struct {
 	MapIndex     uint32
 	Delta        concepts.Vector3
 	Output       concepts.Vector3
+	Filter       concepts.Vector4
 	Intersection concepts.Vector3
 	Q            concepts.Vector3
 	LightWorld   concepts.Vector3
@@ -74,7 +75,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 	}
 
 	for _, seg := range le.Sector.Segments {
-		if seg.AdjacentSector.Nil() || seg.AdjacentSegment == nil {
+		if seg.AdjacentSector.Nil() || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
@@ -178,6 +179,17 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 				return false // Same as wall, we're occluded.
 			}
 
+			// If the portal has a transparent material, we need to filter the light
+			if seg.PortalHasMaterial {
+				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
+				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
+				c := le.SampleMaterial(seg.MidMaterial, u, v, nil, le.ProjectZ(1.0))
+				if c[3] >= 0.99 {
+					return false
+				}
+				le.Filter.AddPreMulColorSelf(&c)
+			}
+
 			// Get the square of the distance to the intersection (from the target point)
 			idist2 := le.Intersection.Dist2(p)
 
@@ -235,6 +247,10 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	le.Output[2] = 0
 
 	for _, er := range le.Sector.PVL {
+		le.Filter[0] = 0
+		le.Filter[1] = 0
+		le.Filter[2] = 0
+		le.Filter[3] = 0
 		light := core.LightFromDb(er)
 		if light == nil || !light.Active {
 			continue
@@ -273,9 +289,10 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation
 
 		if diffuseLight > 0 {
-			le.Output[0] += light.Diffuse[0] * diffuseLight
-			le.Output[1] += light.Diffuse[1] * diffuseLight
-			le.Output[2] += light.Diffuse[2] * diffuseLight
+			a := 1.0 - le.Filter[3]
+			le.Output[0] += light.Diffuse[0]*diffuseLight*a + le.Filter[0]
+			le.Output[1] += light.Diffuse[1]*diffuseLight*a + le.Filter[1]
+			le.Output[2] += light.Diffuse[2]*diffuseLight*a + le.Filter[2]
 		}
 	}
 	return &le.Output

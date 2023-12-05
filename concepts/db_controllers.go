@@ -47,8 +47,6 @@ func act(controller Controller, method ControllerMethod) {
 	switch method {
 	case ControllerAlways:
 		controller.Always()
-	case ControllerContainment:
-		controller.Containment()
 	case ControllerLoaded:
 		controller.Loaded()
 	case ControllerRecalculate:

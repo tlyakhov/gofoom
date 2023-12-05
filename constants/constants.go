@@ -43,7 +43,7 @@ const (
 	// Some of these are loosely based on Doom constants, see https://doomwiki.org/wiki/Player
 	PlayerMass           = 80.0 // kg
 	PlayerBoundingRadius = 10.0
-	PlayerHeight         = 32.0
+	PlayerHeight         = 40.0
 	PlayerCrouchHeight   = 16.0
 	PlayerWalkForce      = 10.0 * PlayerMass * TimeStep // Newtons (we work backwards and aim for X meters/time step)
 	PlayerTurnSpeed      = 180.0                        // Degrees per second
