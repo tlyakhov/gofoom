@@ -2156,13 +2156,13 @@
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "42",
-      "Height": 0,
+      "Height": 30,
       "Mass": 0,
       "MountHeight": 30,
       "Pos": {
-        "X": -380,
+        "X": -370,
         "Y": 190,
-        "Z": 0
+        "Z": -50
       },
       "Vel": {
         "X": 0,
@@ -2180,6 +2180,28 @@
       },
       "Entity": "42",
       "Strength": 2
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "42",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "/Users/tim/Documents/gofoom/data/game/flub/flub-back-left.png"
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "42"
     }
   },
   {
@@ -5121,8 +5143,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "101",
-        "102"
+        "102",
+        "101"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5469,11 +5491,11 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 246,
+      "Angle": 141,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
-      "Height": 32,
+      "Height": 40,
       "Mass": 80,
       "MountHeight": 15,
       "Pos": {

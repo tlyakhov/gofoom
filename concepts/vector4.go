@@ -61,6 +61,9 @@ func (a *Vector4) AddSelf(b *Vector4) *Vector4 {
 
 // Add a premul alpha color to self
 func (a *Vector4) AddPreMulColorSelf(b *Vector4) *Vector4 {
+	if b[3] == 0 {
+		return a
+	}
 	inva := 1.0 - b[3]
 	a[0] = a[0]*inva + b[0]
 	a[1] = a[1]*inva + b[1]
