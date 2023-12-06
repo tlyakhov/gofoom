@@ -11,7 +11,7 @@ import (
 )
 
 func DrawGame(da *gtk.DrawingArea, cr *cairo.Context) {
-	iplayer := editor.Renderer.Player()
+	iplayer := editor.Renderer.Player
 	if iplayer == nil {
 		return
 	}

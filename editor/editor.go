@@ -139,7 +139,7 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) Integrate() {
-	player := e.Renderer.Player()
+	player := e.Renderer.Player
 	if player == nil {
 		return
 	}
@@ -392,8 +392,7 @@ func (e *Editor) GatherHoveringObjects() {
 }
 
 func (e *Editor) GameView(w, h int) {
-	e.Renderer = render.NewRenderer()
-	e.Renderer.DB = e.DB
+	e.Renderer = render.NewRenderer(e.DB)
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h
 	e.Renderer.Initialize()

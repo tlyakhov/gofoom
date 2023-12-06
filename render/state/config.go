@@ -4,6 +4,7 @@ import (
 	"math"
 	"sync"
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -18,6 +19,8 @@ type Config struct {
 	ZBuffer                   []float64
 	FrameBuffer               []concepts.Vector4
 	FrameTint                 [4]float64
+	Player                    *behaviors.Player
+	PlayerBody                *core.Body
 
 	DebugNotices concepts.SyncUniqueQueue
 	RenderLock   sync.Mutex
@@ -36,15 +39,15 @@ func (c *Config) Initialize() {
 
 	c.ZBuffer = make([]float64, c.ScreenWidth*c.ScreenHeight)
 	c.FrameBuffer = make([]concepts.Vector4, c.ScreenWidth*c.ScreenHeight)
+
+	c.RefreshPlayer()
 }
 
-// Player is a convenience function to get the player this renderer links to.
-func (c *Config) Player() *behaviors.Player {
-	if c == nil {
-		return nil
+func (c *Config) RefreshPlayer() {
+	var ok bool
+	a := c.DB.First(behaviors.PlayerComponentIndex)
+	if c.Player, ok = a.(*behaviors.Player); !ok {
+		return
 	}
-	if asserted, ok := c.DB.First(behaviors.PlayerComponentIndex).(*behaviors.Player); ok {
-		return asserted
-	}
-	return nil
+	c.PlayerBody = core.BodyFromDb(c.Player.EntityRef)
 }

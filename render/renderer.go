@@ -5,7 +5,6 @@ import (
 	"math"
 	"sync"
 
-	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/render/state"
@@ -18,7 +17,7 @@ type Renderer struct {
 }
 
 // NewRenderer constructs a new Renderer.
-func NewRenderer() *Renderer {
+func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 	r := Renderer{
 		Config: &state.Config{
 			ScreenWidth:  640,
@@ -27,6 +26,7 @@ func NewRenderer() *Renderer {
 			MaxViewDist:  constants.MaxViewDistance,
 			Frame:        0,
 			Counter:      0,
+			DB:           db,
 		},
 		columnGroup: new(sync.WaitGroup),
 	}
@@ -147,6 +147,10 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", slice.Sector.Entity, slice.Depth)
 		r.DebugNotices.Push(dbg)
 	}
+
+	for _, ref := range slice.Sector.Bodies {
+		r.RenderBody(ref, slice)
+	}
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
@@ -156,10 +160,7 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 		r.ZBuffer[i] = r.MaxViewDist
 	}
 
-	player := r.Player()
-	body := core.BodyFromDb(player.Ref())
-
-	bob := math.Sin(player.Bob)
+	bob := math.Sin(r.Player.Bob)
 	// Initialize a slice...
 	slice := &state.Slice{
 		Config:       r.Config,
@@ -169,9 +170,9 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 		Y:            y,
 		YStart:       0,
 		YEnd:         r.ScreenHeight,
-		Angle:        body.Angle*concepts.Deg2rad + r.ViewRadians[x],
-		Sector:       body.Sector(),
-		CameraZ:      body.Pos.Render[2] + body.Height + bob,
+		Angle:        r.PlayerBody.Angle*concepts.Deg2rad + r.ViewRadians[x],
+		Sector:       r.PlayerBody.Sector(),
+		CameraZ:      r.PlayerBody.Pos.Render[2] + r.PlayerBody.Height + bob,
 	}
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)
@@ -181,10 +182,10 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 	slice.LightElements[3].Slice = slice
 
 	slice.Ray = &state.Ray{
-		Start: *body.Pos.Render.To2D(),
+		Start: *r.PlayerBody.Pos.Render.To2D(),
 		End: concepts.Vector2{
-			body.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
-			body.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
+			r.PlayerBody.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
+			r.PlayerBody.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
 		},
 	}
 
@@ -223,8 +224,10 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
+	r.RefreshPlayer()
+
 	// Frame Tint precalculation
-	r.FrameTint = r.Player().FrameTint
+	r.FrameTint = r.Player.FrameTint
 	r.FrameTint[0] *= r.FrameTint[3]
 	r.FrameTint[1] *= r.FrameTint[3]
 	r.FrameTint[2] *= r.FrameTint[3]
@@ -233,9 +236,7 @@ func (r *Renderer) Render(buffer []uint8) {
 	for r.DebugNotices.Length() > 30 {
 		r.DebugNotices.Pop()
 	}
-
-	body := core.BodyFromDb(r.Player().Ref())
-	if body.SectorEntityRef.Nil() {
+	if r.PlayerBody.SectorEntityRef.Nil() {
 		r.DebugNotices.Push("Player is not in a sector")
 		return
 	}

@@ -38,49 +38,47 @@ var buffer *image.RGBA
 var mainFont *render.Font
 
 func processInput() {
-	playerBody := core.BodyFromDb(renderer.Player().Ref())
-	player := behaviors.PlayerFromDb(renderer.Player().Ref())
 	win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 	}
 	if win.Pressed(pixelgl.KeyW) {
-		controllers.MovePlayer(playerBody, playerBody.Angle)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle)
 	}
 	if win.Pressed(pixelgl.KeyS) {
-		controllers.MovePlayer(playerBody, playerBody.Angle+180.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle+180.0)
 	}
 	if win.Pressed(pixelgl.KeyE) {
-		controllers.MovePlayer(playerBody, playerBody.Angle+90.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle+90.0)
 	}
 	if win.Pressed(pixelgl.KeyQ) {
-		controllers.MovePlayer(playerBody, playerBody.Angle+270.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle+270.0)
 	}
 	if win.Pressed(pixelgl.KeyA) {
-		playerBody.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
-		playerBody.Angle = concepts.NormalizeAngle(playerBody.Angle)
+		renderer.PlayerBody.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
+		renderer.PlayerBody.Angle = concepts.NormalizeAngle(renderer.PlayerBody.Angle)
 	}
 	if win.Pressed(pixelgl.KeyD) {
-		playerBody.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
-		playerBody.Angle = concepts.NormalizeAngle(playerBody.Angle)
+		renderer.PlayerBody.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
+		renderer.PlayerBody.Angle = concepts.NormalizeAngle(renderer.PlayerBody.Angle)
 	}
 	if win.Pressed(pixelgl.KeySpace) {
 
-		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
-			playerBody.Force[2] += constants.PlayerSwimStrength
-		} else if playerBody.OnGround {
-			playerBody.Force[2] += constants.PlayerJumpForce
-			playerBody.OnGround = false
+		if renderer.PlayerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			renderer.PlayerBody.Force[2] += constants.PlayerSwimStrength
+		} else if renderer.PlayerBody.OnGround {
+			renderer.PlayerBody.Force[2] += constants.PlayerJumpForce
+			renderer.PlayerBody.OnGround = false
 		}
 	}
 	if win.Pressed(pixelgl.KeyC) {
-		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
-			playerBody.Force[2] -= constants.PlayerSwimStrength
+		if renderer.PlayerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+			renderer.PlayerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
-			player.Crouching = true
+			renderer.Player.Crouching = true
 		}
 	} else {
-		player.Crouching = false
+		renderer.Player.Crouching = false
 	}
 }
 
@@ -90,8 +88,7 @@ func integrateGame() {
 }
 
 func renderGame() {
-	playerBody := core.BodyFromDb(renderer.Player().Ref())
-	playerAlive := behaviors.AliveFromDb(playerBody.Ref())
+	playerAlive := behaviors.AliveFromDb(renderer.PlayerBody.EntityRef)
 	// player := bodies.PlayerFromDb(&gameMap.Player)
 
 	renderer.Render(buffer.Pix)
@@ -102,8 +99,8 @@ func renderGame() {
 	canvas.Draw(win, mat)
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", db.Simulation.FPS))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
-	if !playerBody.SectorEntityRef.Nil() {
-		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v", playerBody.SectorEntityRef.String()))
+	if !renderer.PlayerBody.SectorEntityRef.Nil() {
+		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v", renderer.PlayerBody.SectorEntityRef.String()))
 	}
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {
@@ -156,16 +153,16 @@ func run() {
 
 	win.SetSmooth(false)
 
-	canvas = pixelgl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
-	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
-	renderer = render.NewRenderer()
-	renderer.ScreenWidth = w
-	renderer.ScreenHeight = h
-	renderer.Initialize()
-
 	db = concepts.NewEntityComponentDB()
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
+
+	canvas = pixelgl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
+	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
+	renderer = render.NewRenderer(db)
+	renderer.ScreenWidth = w
+	renderer.ScreenHeight = h
+	renderer.Initialize()
 
 	//controllers.CreateTestWorld2(db)
 	//db.Save("data/worlds/exported_test.json")
