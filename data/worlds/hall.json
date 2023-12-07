@@ -2023,7 +2023,8 @@
       "Active": true,
       "Bodies": [
         "42",
-        "107"
+        "107",
+        "131"
       ],
       "BottomZ": -64,
       "CeilMaterial": "122",
@@ -2156,8 +2157,8 @@
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "42",
-      "Height": 30,
-      "Mass": 0,
+      "Height": 42,
+      "Mass": 10,
       "MountHeight": 30,
       "Pos": {
         "X": -370,
@@ -2169,17 +2170,6 @@
         "Y": 0,
         "Z": 0
       }
-    },
-    "core.Light": {
-      "Active": true,
-      "Attenuation": 0.4,
-      "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
-      },
-      "Entity": "42",
-      "Strength": 2
     },
     "materials.Image": {
       "Active": true,
@@ -5143,8 +5133,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "102",
-        "101"
+        "101",
+        "102"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5491,7 +5481,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 141,
+      "Angle": 229.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6376,6 +6366,40 @@
       "Entity": "130",
       "IsLiquid": false,
       "Scale": 0.1
+    }
+  },
+  {
+    "Entity": "131",
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "131",
+      "Height": 0,
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -280,
+        "Y": 200,
+        "Z": -32
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.3,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "131",
+      "Strength": 1.5
     }
   }
 ]
