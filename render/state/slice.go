@@ -149,16 +149,33 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *conc
 	if dist > float64(s.ScreenWidth)*constants.LightGrid*0.2 {
 		return s.LightUnfiltered(result, world, u, v)
 	}
+	var wu, wv float64
 
 	le00 := &s.LightElements[0]
 	le10 := &s.LightElements[1]
 	le11 := &s.LightElements[2]
 	le01 := &s.LightElements[3]
 
-	wall := s.Segment != nil && s.Normal[2] == 0
-	var wu, wv float64
-
-	if !wall {
+	if s.Segment != nil && s.Normal[2] == 0 {
+		le00.Type = LightElementWall
+		le10.Type = LightElementWall
+		le11.Type = LightElementWall
+		le01.Type = LightElementWall
+		s.Lightmap = s.Segment.Lightmap
+		s.LightmapAge = s.Segment.LightmapAge
+		le00.MapIndex = s.Segment.LightmapAddress(u, v)
+		le10.MapIndex = le00.MapIndex + 1
+		le11.MapIndex = le10.MapIndex + s.Segment.LightmapWidth
+		le01.MapIndex = le11.MapIndex - 1
+		wu = u * float64(s.Segment.LightmapWidth-constants.LightSafety*2)
+		wv = v * float64(s.Segment.LightmapHeight-constants.LightSafety*2)
+		wu = 1.0 - (wu - math.Floor(wu))
+		wv = 1.0 - (wv - math.Floor(wv))
+	} else {
+		le00.Type = LightElementPlane
+		le10.Type = LightElementPlane
+		le11.Type = LightElementPlane
+		le01.Type = LightElementPlane
 		if s.Normal[2] < 0 {
 			s.Lightmap = s.Sector.CeilLightmap
 			s.LightmapAge = s.Sector.CeilLightmapAge
@@ -174,23 +191,12 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *conc
 		s.Sector.ToLightmapWorld(q, s.Normal[2] > 0)
 		wu = 1.0 - (world[0]-q[0])/constants.LightGrid
 		wv = 1.0 - (world[1]-q[1])/constants.LightGrid
-	} else {
-		s.Lightmap = s.Segment.Lightmap
-		s.LightmapAge = s.Segment.LightmapAge
-		le00.MapIndex = s.Segment.LightmapAddress(u, v)
-		le10.MapIndex = le00.MapIndex + 1
-		le11.MapIndex = le10.MapIndex + s.Segment.LightmapWidth
-		le01.MapIndex = le11.MapIndex - 1
-		wu = u * float64(s.Segment.LightmapWidth-constants.LightSafety*2)
-		wv = v * float64(s.Segment.LightmapHeight-constants.LightSafety*2)
-		wu = 1.0 - (wu - math.Floor(wu))
-		wv = 1.0 - (wv - math.Floor(wv))
 	}
 
-	r00 := le00.Get(wall)
-	r10 := le10.Get(wall)
-	r11 := le11.Get(wall)
-	r01 := le01.Get(wall)
+	r00 := le00.Get()
+	r10 := le10.Get()
+	r11 := le11.Get()
+	r01 := le01.Get()
 	result[0] = r00[0]*(wu*wv) + r10[0]*((1.0-wu)*wv) + r11[0]*(1.0-wu)*(1.0-wv) + r01[0]*wu*(1.0-wv)
 	result[1] = r00[1]*(wu*wv) + r10[1]*((1.0-wu)*wv) + r11[1]*(1.0-wu)*(1.0-wv) + r01[1]*wu*(1.0-wv)
 	result[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
@@ -200,9 +206,14 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *conc
 
 func (s *Slice) LightUnfiltered(result, world *concepts.Vector3, u, v float64) *concepts.Vector3 {
 	le := &s.LightElements[0]
-	wall := s.Segment != nil && s.Normal[2] == 0
 
-	if !wall {
+	if s.Segment != nil && s.Normal[2] == 0 {
+		le.Type = LightElementWall
+		s.Lightmap = s.Segment.Lightmap
+		s.LightmapAge = s.Segment.LightmapAge
+		le.MapIndex = s.Segment.LightmapAddress(u, v)
+	} else {
+		le.Type = LightElementPlane
 		if s.Normal[2] < 0 {
 			s.Lightmap = s.Sector.CeilLightmap
 			s.LightmapAge = s.Sector.CeilLightmapAge
@@ -211,13 +222,9 @@ func (s *Slice) LightUnfiltered(result, world *concepts.Vector3, u, v float64) *
 			s.LightmapAge = s.Sector.FloorLightmapAge
 		}
 		le.MapIndex = s.Sector.LightmapAddress(world.To2D())
-	} else {
-		s.Lightmap = s.Segment.Lightmap
-		s.LightmapAge = s.Segment.LightmapAge
-		le.MapIndex = s.Segment.LightmapAddress(u, v)
 	}
 
-	r00 := le.Get(wall)
+	r00 := le.Get()
 	result[0] = r00[0]
 	result[1] = r00[1]
 	result[2] = r00[2]

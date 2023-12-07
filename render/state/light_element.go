@@ -10,8 +10,18 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
+type LightElementType int
+
+//go:generate go run github.com/dmarkham/enumer -type=LightElementType -json
+const (
+	LightElementPlane LightElementType = iota
+	LightElementWall
+	LightElementBody
+)
+
 type LightElement struct {
 	*Slice
+	Type         LightElementType
 	MapIndex     uint32
 	Delta        concepts.Vector3
 	Output       concepts.Vector3
@@ -35,7 +45,11 @@ func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
 	return &le.Output
 }
 
-func (le *LightElement) Get(wall bool) *concepts.Vector3 {
+func (le *LightElement) Get() *concepts.Vector3 {
+	if le.Type == LightElementBody {
+		le.Calculate(&le.Q)
+		return &le.Output
+	}
 	//return le.Debug(wall)
 	if int(le.MapIndex) >= len(le.Lightmap) {
 		le.Output[0] = 1
@@ -53,9 +67,9 @@ func (le *LightElement) Get(wall bool) *concepts.Vector3 {
 		return result
 	}
 
-	if !wall {
+	if le.Type == LightElementPlane {
 		le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex, le.Normal[2] > 0)
-	} else {
+	} else if le.Type == LightElementWall {
 		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
 		le.Segment.LightmapAddressToWorld(&le.Q, le.MapIndex)
 	}
@@ -72,6 +86,11 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 	// Always check the starting sector
 	if le.lightVisibleFromSector(p, body, le.Sector) {
 		return true
+	}
+
+	// For bodies, don't need to check adjacent sectors
+	if le.Type == LightElementBody {
+		return false
 	}
 
 	for _, seg := range le.Sector.Segments {
@@ -105,7 +124,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 	debugLighting := false
 	if constants.DebugLighting {
 		dbgName := concepts.NamedFromDb(le.DB.EntityRef(sector.Entity)).Name
-		debugWallCheck := le.Normal[2] == 0
+		debugWallCheck := le.Type == LightElementWall
 		debugLighting = constants.DebugLighting && debugWallCheck && dbgName == debugSectorName
 	}
 
@@ -137,7 +156,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 		for _, seg := range sector.Segments {
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
-			if (le.Normal[2] == 0 && seg == le.Segment) || le.Delta.To2D().Dot(&seg.Normal) > 0 {
+			if (le.Type == LightElementWall && seg == le.Segment) || le.Delta.To2D().Dot(&seg.Normal) > 0 {
 				if debugLighting {
 					log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
@@ -286,7 +305,11 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 				continue
 			}
 		}
-		diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation
+		if le.Type == LightElementBody {
+			diffuseLight = attenuation
+		} else {
+			diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation
+		}
 
 		if diffuseLight > 0 {
 			a := 1.0 - le.Filter[3]
