@@ -13,10 +13,13 @@ import (
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
+
+var EmbeddedTypes = [...]string{"SimScalar", "SimVector2", "SimVector3", "Expression"}
 
 type PropertyGridState struct {
 	Fields           map[string]*state.PropertyGridField
@@ -101,6 +104,13 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		gf.Values = append(gf.Values, fieldValue.Addr())
 		gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
+		isEmbeddedType := false
+		for _, t := range EmbeddedTypes {
+			if field.Type.Name() == t {
+				isEmbeddedType = true
+				break
+			}
+		}
 		if field.Type.Kind() == reflect.Map && false {
 			keys := fieldValue.MapKeys()
 			for _, key := range keys {
@@ -109,7 +119,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 				pgsChild.ParentCollection = &fieldValue
 				g.childFields(name, fieldValue.MapIndex(key), pgsChild, true)
 			}
-		} else if field.Type.Name() == "SimScalar" || field.Type.Name() == "SimVector2" || field.Type.Name() == "SimVector3" || field.Type.Name() == "Expression" {
+		} else if isEmbeddedType {
 			delete(pgs.Fields, display)
 			name := display
 			g.childFields(name, fieldValue, pgs, true)
@@ -264,7 +274,9 @@ func (g *Grid) Refresh(selection []any) {
 				g.fieldString(index, field)
 			}
 		case *float64:
-			g.fieldFloat64(index, field)
+			g.fieldNumber(index, field)
+		case *int:
+			g.fieldNumber(index, field)
 		case *concepts.Vector2:
 			g.fieldVector2(index, field)
 		case *concepts.Vector3:
@@ -278,6 +290,8 @@ func (g *Grid) Refresh(selection []any) {
 		case **concepts.EntityRef:
 			g.fieldEntityRef(index, field)
 		case *[]core.Trigger:
+			g.fieldSlice(index, field)
+		case *[]materials.Sprite:
 			g.fieldSlice(index, field)
 		}
 		index++

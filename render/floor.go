@@ -23,7 +23,6 @@ func Floor(s *state.Slice) {
 	// Thankfully, the only expensive operation is a square root to get the distance.
 	planeRayDelta := &concepts.Vector3{s.Sector.Segments[0].P[0] - s.Ray.Start[0], s.Sector.Segments[0].P[1] - s.Ray.Start[1], s.Sector.BottomZ.Render - s.CameraZ}
 	rayDir := &concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], 0}
-	light := concepts.Vector3{}
 	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
 		rayDir[2] = float64(s.ScreenHeight/2 - s.Y)
 		denom := s.Sector.FloorNormal.Dot(rayDir)
@@ -54,9 +53,12 @@ func Floor(s *state.Slice) {
 		tx := world[0] / s.Sector.FloorScale
 		ty := world[1] / s.Sector.FloorScale
 
+		c := &concepts.Vector4{0.5, 0.5, 0.5, 1}
 		if !mat.Nil() {
-			s.Write(screenIndex, s.SampleMaterial(mat, tx, ty, s.Light(&light, world, 0, 0, distToFloor), scaler))
+			*c = s.SampleMaterial(mat, tx, ty, scaler)
+			s.SampleLight(c, mat, world, 0, 0, distToFloor)
 		}
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(c)
 		s.ZBuffer[screenIndex] = distToFloor
 	}
 }

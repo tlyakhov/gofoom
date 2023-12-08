@@ -2022,9 +2022,9 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "42",
         "107",
-        "131"
+        "131",
+        "42"
       ],
       "BottomZ": -64,
       "CeilMaterial": "122",
@@ -2149,7 +2149,7 @@
     "concepts.Named": {
       "Active": true,
       "Entity": "42",
-      "Name": "be46mfvvn27lk1decl30"
+      "Name": "FlubTest"
     },
     "core.Body": {
       "Active": true,
@@ -2161,8 +2161,8 @@
       "Mass": 10,
       "MountHeight": 30,
       "Pos": {
-        "X": -370,
-        "Y": 190,
+        "X": -340,
+        "Y": 160,
         "Z": -50
       },
       "Vel": {
@@ -2170,13 +2170,6 @@
         "Y": 0,
         "Z": 0
       }
-    },
-    "materials.Image": {
-      "Active": true,
-      "Entity": "42",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/game/flub/flub-back-left.png"
     },
     "materials.Lit": {
       "Active": true,
@@ -2192,6 +2185,52 @@
         "R": 1
       },
       "Entity": "42"
+    },
+    "materials.SpriteSheet": {
+      "Active": true,
+      "Entity": "42",
+      "Sprites": [
+        {
+          "Angle": 0,
+          "Frame": 0,
+          "Image": "134"
+        },
+        {
+          "Angle": 315,
+          "Frame": 0,
+          "Image": "132"
+        },
+        {
+          "Angle": 45,
+          "Frame": 0,
+          "Image": "133"
+        },
+        {
+          "Angle": 90,
+          "Frame": 0,
+          "Image": "135"
+        },
+        {
+          "Angle": 270,
+          "Frame": 0,
+          "Image": "136"
+        },
+        {
+          "Angle": 135,
+          "Frame": 0,
+          "Image": "138"
+        },
+        {
+          "Angle": 225,
+          "Frame": 0,
+          "Image": "137"
+        },
+        {
+          "Angle": 180,
+          "Frame": 0,
+          "Image": "139"
+        }
+      ]
     }
   },
   {
@@ -5276,8 +5315,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "104",
-        "105"
+        "105",
+        "104"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5481,7 +5520,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 229.5,
+      "Angle": 226.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6400,6 +6439,126 @@
       },
       "Entity": "131",
       "Strength": 1.5
+    }
+  },
+  {
+    "Entity": "132",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "132",
+      "Name": "flub-back-left"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "132",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-back-left.png"
+    }
+  },
+  {
+    "Entity": "133",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "133",
+      "Name": "flub-back-right"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "133",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-back-right.png"
+    }
+  },
+  {
+    "Entity": "134",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "134",
+      "Name": "flub-back"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "134",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-back.png"
+    }
+  },
+  {
+    "Entity": "135",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "135",
+      "Name": "flub-right"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "135",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-right.png"
+    }
+  },
+  {
+    "Entity": "136",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "136",
+      "Name": "flub-left"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "136",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-left.png"
+    }
+  },
+  {
+    "Entity": "137",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "137",
+      "Name": "flub-front-left"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "137",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-front-left.png"
+    }
+  },
+  {
+    "Entity": "138",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "138",
+      "Name": "flub-front-right"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "138",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-front-right.png"
+    }
+  },
+  {
+    "Entity": "139",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "139",
+      "Name": "flub-front"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "139",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub-front.png"
     }
   }
 ]

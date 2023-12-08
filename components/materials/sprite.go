@@ -5,46 +5,94 @@ import (
 )
 
 type Sprite struct {
-	concepts.Attached `editable:"^"`
-	Texture           *concepts.EntityRef `editable:"Texture" edit_type:"Material"`
-	Frame             int
-	Angle             int
+	DB *concepts.EntityComponentDB
+
+	Image *concepts.EntityRef `editable:"Image" edit_type:"Material"`
+	Frame int                 `editable:"Frame"`
+	Angle int                 `editable:"Angle"`
 }
 
-var SpriteComponentIndex int
+type SpriteSheet struct {
+	concepts.Attached `editable:"^"`
+
+	Sprites []Sprite `editable:"Sprites"`
+}
+
+var SpriteSheetComponentIndex int
 
 func init() {
-	SpriteComponentIndex = concepts.DbTypes().Register(Sprite{}, SpriteFromDb)
+	SpriteSheetComponentIndex = concepts.DbTypes().Register(SpriteSheet{}, SpriteSheetFromDb)
 }
 
-func SpriteFromDb(entity *concepts.EntityRef) *Sprite {
-	if asserted, ok := entity.Component(SpriteComponentIndex).(*Sprite); ok {
+func SpriteSheetFromDb(entity *concepts.EntityRef) *SpriteSheet {
+	if asserted, ok := entity.Component(SpriteSheetComponentIndex).(*SpriteSheet); ok {
 		return asserted
 	}
 	return nil
 }
 
-func (s *Sprite) Construct(data map[string]any) {
+func (s *SpriteSheet) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
 	if data == nil {
 		return
 	}
-	if v, ok := data["Texture"]; ok {
-		s.Texture = s.DB.DeserializeEntityRef(v)
+	if v, ok := data["Sprites"]; ok {
+		s.Sprites = ConstructSprites(s.DB, v)
+	}
+}
+
+func (s *SpriteSheet) Serialize() map[string]any {
+	result := s.Attached.Serialize()
+	if s.Sprites != nil {
+		result["Sprites"] = SerializeSprites(s.Sprites)
+	}
+	return result
+}
+
+func ConstructSprites(db *concepts.EntityComponentDB, data any) []Sprite {
+	var result []Sprite
+
+	if Sprites, ok := data.([]any); ok {
+		result = make([]Sprite, len(Sprites))
+		for i, tdata := range Sprites {
+			result[i].Construct(db, tdata.(map[string]any))
+		}
+	}
+	return result
+}
+
+func SerializeSprites(Sprites []Sprite) []map[string]any {
+	result := make([]map[string]any, len(Sprites))
+	for i, Sprite := range Sprites {
+		result[i] = Sprite.Serialize()
+	}
+	return result
+}
+
+func (s *Sprite) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+	s.DB = db
+	s.Frame = 0
+	s.Angle = 0
+
+	if data == nil {
+		return
+	}
+	if v, ok := data["Image"]; ok {
+		s.Image = s.DB.DeserializeEntityRef(v)
 	}
 	if v, ok := data["Frame"]; ok {
-		s.Frame = v.(int)
+		s.Frame = int(v.(float64))
 	}
 	if v, ok := data["Angle"]; ok {
-		s.Angle = v.(int)
+		s.Angle = int(v.(float64))
 	}
 }
 
 func (s *Sprite) Serialize() map[string]any {
-	result := s.Attached.Serialize()
-	if !s.Texture.Nil() {
-		result["Texture"] = s.Texture.Serialize()
+	result := make(map[string]any)
+	if !s.Image.Nil() {
+		result["Image"] = s.Image.Serialize()
 	}
 	result["Frame"] = s.Frame
 	result["Angle"] = s.Angle
