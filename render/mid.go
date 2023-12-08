@@ -22,7 +22,6 @@ func WallMid(s *state.Slice) {
 		}
 		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
 	}
-	light := concepts.Vector3{}
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
@@ -35,16 +34,17 @@ func WallMid(s *state.Slice) {
 		if s.Sector.FloorSlope != 0 || s.Sector.CeilSlope != 0 {
 			lightV = (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 		}
-		s.Light(&light, &s.Intersection, s.U, lightV, s.Distance)
 
 		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
 			v = s.Intersection[2] / 64.0
 		}
 
-		//fmt.Printf("%v\n", screenIndex)
+		c := &concepts.Vector4{0.5, 0.5, 0.5, 1}
 		if !mat.Nil() {
-			s.Write(screenIndex, s.SampleMaterial(mat, u, v, &light, s.ProjectZ(1.0)))
+			*c = s.SampleMaterial(mat, u, v, s.ProjectZ(1.0))
+			s.SampleLight(c, mat, &s.Intersection, s.U, lightV, s.Distance)
 		}
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(c)
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }

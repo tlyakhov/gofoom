@@ -31,7 +31,6 @@ type PickedElement struct {
 
 type Slice struct {
 	*Config
-	RenderTarget       []uint8
 	X, Y, YStart, YEnd int
 	Sector             *core.Sector
 	Segment            *core.Segment
@@ -55,6 +54,7 @@ type Slice struct {
 	ClippedEnd         int
 	LightElements      [4]LightElement
 	Normal             concepts.Vector3
+	Light              concepts.Vector4
 	Lightmap           []concepts.Vector3
 	LightmapAge        []int
 	Pick               bool
@@ -77,15 +77,11 @@ func (s *Slice) CalcScreen() {
 	s.ClippedEnd = concepts.IntClamp(s.ScreenEnd, s.YStart, s.YEnd)
 }
 
-func (s *Slice) Write(screenIndex uint32, c concepts.Vector4) {
-	s.FrameBuffer[screenIndex].AddPreMulColorSelf(&c)
-}
-
-func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *concepts.Vector3, scale float64) concepts.Vector4 {
+func (s *Slice) SampleMaterial(material *concepts.EntityRef, u, v float64, scale float64) concepts.Vector4 {
 	// Should refactor this scale thing, it's weird
 	scaleDivisor := 1.0
 
-	if tiled := materials.TiledFromDb(m); tiled != nil {
+	if tiled := materials.TiledFromDb(material); tiled != nil {
 		scaleDivisor *= tiled.Scale
 		u *= scaleDivisor
 		v *= scaleDivisor
@@ -100,7 +96,7 @@ func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *conce
 		v = math.Abs(v)
 	}
 
-	if sky := materials.SkyFromDb(m); sky != nil {
+	if sky := materials.SkyFromDb(material); sky != nil {
 		v = float64(s.Y) / (float64(s.ScreenHeight) - 1)
 
 		if sky.StaticBackground {
@@ -116,29 +112,26 @@ func (s *Slice) SampleMaterial(m *concepts.EntityRef, u, v float64, light *conce
 
 	result := concepts.Vector4{0.5, 0.5, 0.5, 1.0}
 
-	if solid := materials.SolidFromDb(m); solid != nil {
+	if solid := materials.SolidFromDb(material); solid != nil {
 		result[0] = float64(solid.Diffuse.R) / 255.0
 		result[1] = float64(solid.Diffuse.G) / 255.0
 		result[2] = float64(solid.Diffuse.B) / 255.0
 	}
 
-	if image := materials.ImageFromDb(m); image != nil {
+	if image := materials.ImageFromDb(material); image != nil {
 		result = image.Sample(u, v, scale)
 	}
 
-	if lit := materials.LitFromDb(m); lit != nil {
-		// result = Texture * Diffuse * (Ambient + Lightmap)
-		amb := concepts.Vector3{1, 1, 1}
-		if light != nil {
-			amb = *light
-		}
-		amb.AddSelf(&lit.Ambient)
-		result.Mul4Self(&lit.Diffuse).To3D().Mul3Self(&amb).ClampSelf(0.0, 1.0)
-	}
 	return result
 }
 
-func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *concepts.Vector3 {
+func (s *Slice) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {
+	lit := materials.LitFromDb(material)
+
+	if lit == nil {
+		return result
+	}
+
 	/*// testing...
 	result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
 	result[1] = result[0]
@@ -147,7 +140,12 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *conc
 
 	// Don't filter far away lightmaps. Tolerate a ~5px snap-in
 	if dist > float64(s.ScreenWidth)*constants.LightGrid*0.2 {
-		return s.LightUnfiltered(result, world, u, v)
+		// result = Surface * Diffuse * (Ambient + Lightmap)
+		s.LightUnfiltered(&s.Light, world, u, v)
+		s.Light.To3D().AddSelf(&lit.Ambient)
+		s.Light.Mul4Self(&lit.Diffuse)
+		result.Mul4Self(&s.Light)
+		return result
 	}
 	var wu, wv float64
 
@@ -197,14 +195,19 @@ func (s *Slice) Light(result, world *concepts.Vector3, u, v, dist float64) *conc
 	r10 := le10.Get()
 	r11 := le11.Get()
 	r01 := le01.Get()
-	result[0] = r00[0]*(wu*wv) + r10[0]*((1.0-wu)*wv) + r11[0]*(1.0-wu)*(1.0-wv) + r01[0]*wu*(1.0-wv)
-	result[1] = r00[1]*(wu*wv) + r10[1]*((1.0-wu)*wv) + r11[1]*(1.0-wu)*(1.0-wv) + r01[1]*wu*(1.0-wv)
-	result[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
+	s.Light[0] = r00[0]*(wu*wv) + r10[0]*((1.0-wu)*wv) + r11[0]*(1.0-wu)*(1.0-wv) + r01[0]*wu*(1.0-wv)
+	s.Light[1] = r00[1]*(wu*wv) + r10[1]*((1.0-wu)*wv) + r11[1]*(1.0-wu)*(1.0-wv) + r01[1]*wu*(1.0-wv)
+	s.Light[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
+	s.Light[3] = 1
 
+	// result = Surface * Diffuse * (Ambient + Lightmap)
+	s.Light.To3D().AddSelf(&lit.Ambient)
+	s.Light.Mul4Self(&lit.Diffuse)
+	result.Mul4Self(&s.Light)
 	return result
 }
 
-func (s *Slice) LightUnfiltered(result, world *concepts.Vector3, u, v float64) *concepts.Vector3 {
+func (s *Slice) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3, u, v float64) *concepts.Vector4 {
 	le := &s.LightElements[0]
 
 	if s.Segment != nil && s.Normal[2] == 0 {
@@ -228,5 +231,6 @@ func (s *Slice) LightUnfiltered(result, world *concepts.Vector3, u, v float64) *
 	result[0] = r00[0]
 	result[1] = r00[1]
 	result[2] = r00[2]
+	result[3] = 1
 	return result
 }

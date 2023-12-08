@@ -202,7 +202,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 			if seg.PortalHasMaterial {
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				c := le.SampleMaterial(seg.MidMaterial, u, v, nil, le.ProjectZ(1.0))
+				c := le.SampleMaterial(seg.MidMaterial, u, v, le.ProjectZ(1.0))
 				if c[3] >= 0.99 {
 					return false
 				}

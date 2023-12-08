@@ -154,39 +154,23 @@ func (r *Renderer) RenderSector(slice *state.Slice) {
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state.PickedElement {
+func (r *Renderer) RenderColumn(slice *state.Slice, x int, y int, pick bool) []state.PickedElement {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
 	}
 
-	bob := math.Sin(r.Player.Bob)
-	// Initialize a slice...
-	slice := &state.Slice{
-		Config:       r.Config,
-		RenderTarget: buffer,
-		Pick:         pick,
-		X:            x,
-		Y:            y,
-		YStart:       0,
-		YEnd:         r.ScreenHeight,
-		Angle:        r.PlayerBody.Angle*concepts.Deg2rad + r.ViewRadians[x],
-		Sector:       r.PlayerBody.Sector(),
-		CameraZ:      r.PlayerBody.Pos.Render[2] + r.PlayerBody.Height + bob,
-	}
+	// Reset the slice
+	slice.Pick = pick
+	slice.X = x
+	slice.Y = y
+	slice.Angle = r.PlayerBody.Angle*concepts.Deg2rad + r.ViewRadians[x]
+	slice.Sector = r.PlayerBody.Sector()
 	slice.AngleCos = math.Cos(slice.Angle)
 	slice.AngleSin = math.Sin(slice.Angle)
-	slice.LightElements[0].Slice = slice
-	slice.LightElements[1].Slice = slice
-	slice.LightElements[2].Slice = slice
-	slice.LightElements[3].Slice = slice
-
-	slice.Ray = &state.Ray{
-		Start: *r.PlayerBody.Pos.Render.To2D(),
-		End: concepts.Vector2{
-			r.PlayerBody.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
-			r.PlayerBody.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
-		},
+	slice.Ray.End = concepts.Vector2{
+		r.PlayerBody.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
+		r.PlayerBody.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
 	}
 
 	r.RenderSector(slice)
@@ -194,11 +178,26 @@ func (r *Renderer) RenderColumn(buffer []uint8, x int, y int, pick bool) []state
 }
 
 func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
+	bob := math.Sin(r.Player.Bob)
+	// Initialize a slice...
+	slice := &state.Slice{
+		Config:  r.Config,
+		YStart:  0,
+		YEnd:    r.ScreenHeight,
+		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Height + bob,
+	}
+	slice.LightElements[0].Slice = slice
+	slice.LightElements[1].Slice = slice
+	slice.LightElements[2].Slice = slice
+	slice.LightElements[3].Slice = slice
+
+	slice.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+
 	for x := xStart; x < xEnd; x++ {
 		if x >= xEnd {
 			break
 		}
-		r.RenderColumn(buffer, x, 0, false)
+		r.RenderColumn(slice, x, 0, false)
 		for y := 0; y < r.ScreenHeight; y++ {
 			screenIndex := (x + y*r.ScreenWidth)
 			fb := &r.FrameBuffer[screenIndex]
@@ -255,9 +254,7 @@ func (r *Renderer) Render(buffer []uint8) {
 		}
 		r.columnGroup.Wait()
 	} else {
-		for x := 0; x < r.ScreenWidth; x++ {
-			r.RenderColumn(buffer, x, 0, false)
-		}
+		r.RenderBlock(buffer, 0, r.ScreenWidth)
 	}
 	// Bodies...
 }
@@ -266,5 +263,19 @@ func (r *Renderer) Pick(x, y int) []state.PickedElement {
 	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
 		return nil
 	}
-	return r.RenderColumn(nil, x, y, true)
+	bob := math.Sin(r.Player.Bob)
+	// Initialize a slice...
+	slice := &state.Slice{
+		Config:  r.Config,
+		YStart:  0,
+		YEnd:    r.ScreenHeight,
+		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Height + bob,
+	}
+	slice.LightElements[0].Slice = slice
+	slice.LightElements[1].Slice = slice
+	slice.LightElements[2].Slice = slice
+	slice.LightElements[3].Slice = slice
+
+	slice.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	return r.RenderColumn(slice, x, y, true)
 }

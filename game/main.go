@@ -9,7 +9,6 @@ import (
 	"runtime/pprof"
 
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/controllers"
 
@@ -32,12 +31,14 @@ var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var win *pixelgl.Window
 var db *concepts.EntityComponentDB
 var renderer *render.Renderer
-var gameMap *core.Spawn
 var canvas *pixelgl.Canvas
 var buffer *image.RGBA
 var mainFont *render.Font
 
 func processInput() {
+	if renderer.Player == nil {
+		return
+	}
 	win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
 
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
@@ -156,21 +157,18 @@ func run() {
 	db = concepts.NewEntityComponentDB()
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
-
-	canvas = pixelgl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
-	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
-	renderer = render.NewRenderer(db)
-	renderer.ScreenWidth = w
-	renderer.ScreenHeight = h
-	renderer.Initialize()
-
 	//controllers.CreateTestWorld2(db)
 	//db.Save("data/worlds/exported_test.json")
 	if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
-	renderer.DB = db
+	canvas = pixelgl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
+	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
+	renderer = render.NewRenderer(db)
+	renderer.ScreenWidth = w
+	renderer.ScreenHeight = h
+	renderer.Initialize()
 
 	mainFont, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 

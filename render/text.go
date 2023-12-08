@@ -58,5 +58,5 @@ func (f *Font) Draw(win *pixelgl.Window, x, y float64, c color.Color, s string) 
 	txt.Color = c
 
 	txt.WriteString(s)
-	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 4))
+	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 2))
 }
