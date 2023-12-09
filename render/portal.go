@@ -6,14 +6,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func WallHiPick(s *state.SlicePortal) {
+func WallHiPick(s *state.ColumnPortal) {
 	if s.Y >= s.ClippedStart && s.Y < s.AdjClippedTop {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickHigh, Element: s.AdjSegment})
 	}
 }
 
 // WallHi renders the top portion of a portal segment.
-func WallHi(s *state.SlicePortal) {
+func WallHi(s *state.ColumnPortal) {
 	mat := s.AdjSegment.HiMaterial
 	u := s.U
 	if s.Segment.HiBehavior == core.ScaleHeight || s.Segment.HiBehavior == core.ScaleNone {
@@ -45,14 +45,14 @@ func WallHi(s *state.SlicePortal) {
 	}
 }
 
-func WallLowPick(s *state.SlicePortal) {
+func WallLowPick(s *state.ColumnPortal) {
 	if s.Y >= s.AdjClippedBottom && s.Y < s.ClippedEnd {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickLow, Element: s.AdjSegment})
 	}
 }
 
 // WallLow renders the bottom portion of a portal segment.
-func WallLow(s *state.SlicePortal) {
+func WallLow(s *state.ColumnPortal) {
 	mat := s.AdjSegment.LoMaterial
 	u := s.U
 	if s.Segment.LoBehavior == core.ScaleHeight || s.Segment.LoBehavior == core.ScaleNone {

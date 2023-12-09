@@ -8,7 +8,7 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Slice) {
+func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 	b := core.BodyFromDb(ref)
 	sheet := materials.SpriteSheetFromDb(ref)
 	if b == nil || sheet == nil {
@@ -89,6 +89,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Slice) {
 		le.MapIndex = 0
 		le.Segment = nil
 		le.Type = state.LightElementBody
+		le.InputBody = ref
 		le.Get()
 		s.Light.To3D().From(&le.Output)
 		s.Light[3] = 1

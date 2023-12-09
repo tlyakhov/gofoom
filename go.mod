@@ -20,6 +20,8 @@ require (
 	github.com/go-gl/gl v0.0.0-20231021071112-07e5d0ea2e71 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20231124074035-2de0cf0c80af // indirect
 	github.com/go-gl/mathgl v1.1.0 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.6
+	github.com/mmcloughlin/avo v0.5.0 // indirect
 	github.com/pascaldekloe/name v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/mod v0.14.0 // indirect

@@ -57,3 +57,17 @@ func (m *Lit) Serialize() map[string]any {
 	result["Diffuse"] = m.Diffuse.Serialize(true)
 	return result
 }
+
+func (m *Lit) Apply(result, light *concepts.Vector4) *concepts.Vector4 {
+	if light != nil {
+		// result = Surface * Diffuse * (Ambient + Lightmap)
+		light.To3D().AddSelf(&m.Ambient)
+		light.Mul4Self(&m.Diffuse)
+		return result.Mul4Self(light)
+	} else {
+		// result = Surface * (Diffuse + Ambient)
+		a := m.Diffuse
+		a.To3D().AddSelf(&m.Ambient)
+		return result.Mul4Self(&a)
+	}
+}
