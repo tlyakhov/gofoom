@@ -29,7 +29,7 @@ type PickedElement struct {
 	Element any
 }
 
-type Slice struct {
+type Column struct {
 	*Config
 	X, Y, YStart, YEnd int
 	Sector             *core.Sector
@@ -61,23 +61,23 @@ type Slice struct {
 	PickedElements     []PickedElement
 }
 
-func (s *Slice) ProjectZ(z float64) float64 {
-	return z * s.ViewFix[s.X] / s.Distance
+func (c *Column) ProjectZ(z float64) float64 {
+	return z * c.ViewFix[c.X] / c.Distance
 }
 
-func (s *Slice) CalcScreen() {
+func (c *Column) CalcScreen() {
 	// Screen slice precalculation
-	s.FloorZ, s.CeilZ = s.Sector.SlopedZRender(s.Intersection.To2D())
-	s.ProjHeightTop = s.ProjectZ(s.CeilZ - s.CameraZ)
-	s.ProjHeightBottom = s.ProjectZ(s.FloorZ - s.CameraZ)
+	c.FloorZ, c.CeilZ = c.Sector.SlopedZRender(c.Intersection.To2D())
+	c.ProjHeightTop = c.ProjectZ(c.CeilZ - c.CameraZ)
+	c.ProjHeightBottom = c.ProjectZ(c.FloorZ - c.CameraZ)
 
-	s.ScreenStart = s.ScreenHeight/2 - int(s.ProjHeightTop)
-	s.ScreenEnd = s.ScreenHeight/2 - int(s.ProjHeightBottom)
-	s.ClippedStart = concepts.IntClamp(s.ScreenStart, s.YStart, s.YEnd)
-	s.ClippedEnd = concepts.IntClamp(s.ScreenEnd, s.YStart, s.YEnd)
+	c.ScreenStart = c.ScreenHeight/2 - int(c.ProjHeightTop)
+	c.ScreenEnd = c.ScreenHeight/2 - int(c.ProjHeightBottom)
+	c.ClippedStart = concepts.IntClamp(c.ScreenStart, c.YStart, c.YEnd)
+	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
-func (s *Slice) SampleMaterial(material *concepts.EntityRef, u, v float64, scale float64) concepts.Vector4 {
+func (c *Column) SampleMaterial(material *concepts.EntityRef, u, v float64, scale float64) concepts.Vector4 {
 	// Should refactor this scale thing, it's weird
 	scaleDivisor := 1.0
 
@@ -86,8 +86,8 @@ func (s *Slice) SampleMaterial(material *concepts.EntityRef, u, v float64, scale
 		u *= scaleDivisor
 		v *= scaleDivisor
 		if tiled.IsLiquid {
-			u += math.Cos(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
-			v += math.Sin(float64(s.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
+			u += math.Cos(float64(c.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
+			v += math.Sin(float64(c.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
 		}
 
 		u -= math.Floor(u)
@@ -97,12 +97,12 @@ func (s *Slice) SampleMaterial(material *concepts.EntityRef, u, v float64, scale
 	}
 
 	if sky := materials.SkyFromDb(material); sky != nil {
-		v = float64(s.Y) / (float64(s.ScreenHeight) - 1)
+		v = float64(c.Y) / (float64(c.ScreenHeight) - 1)
 
 		if sky.StaticBackground {
-			u = float64(s.X) / (float64(s.ScreenWidth) - 1)
+			u = float64(c.X) / (float64(c.ScreenWidth) - 1)
 		} else {
-			u = s.Angle / (2.0 * math.Pi)
+			u = c.Angle / (2.0 * math.Pi)
 			for ; u < 0; u++ {
 			}
 			for ; u > 1; u-- {
@@ -125,7 +125,7 @@ func (s *Slice) SampleMaterial(material *concepts.EntityRef, u, v float64, scale
 	return result
 }
 
-func (s *Slice) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {
+func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {
 	lit := materials.LitFromDb(material)
 
 	if lit == nil {
@@ -139,34 +139,30 @@ func (s *Slice) SampleLight(result *concepts.Vector4, material *concepts.EntityR
 	return result*/
 
 	// Don't filter far away lightmaps. Tolerate a ~5px snap-in
-	if dist > float64(s.ScreenWidth)*constants.LightGrid*0.2 {
-		// result = Surface * Diffuse * (Ambient + Lightmap)
-		s.LightUnfiltered(&s.Light, world, u, v)
-		s.Light.To3D().AddSelf(&lit.Ambient)
-		s.Light.Mul4Self(&lit.Diffuse)
-		result.Mul4Self(&s.Light)
-		return result
+	if dist > float64(c.ScreenWidth)*constants.LightGrid*0.2 {
+		c.LightUnfiltered(&c.Light, world, u, v)
+		return lit.Apply(result, &c.Light)
 	}
 	var wu, wv float64
 
-	le00 := &s.LightElements[0]
-	le10 := &s.LightElements[1]
-	le11 := &s.LightElements[2]
-	le01 := &s.LightElements[3]
+	le00 := &c.LightElements[0]
+	le10 := &c.LightElements[1]
+	le11 := &c.LightElements[2]
+	le01 := &c.LightElements[3]
 
-	if s.Segment != nil && s.Normal[2] == 0 {
+	if c.Segment != nil && c.Normal[2] == 0 {
 		le00.Type = LightElementWall
 		le10.Type = LightElementWall
 		le11.Type = LightElementWall
 		le01.Type = LightElementWall
-		s.Lightmap = s.Segment.Lightmap
-		s.LightmapAge = s.Segment.LightmapAge
-		le00.MapIndex = s.Segment.LightmapAddress(u, v)
+		c.Lightmap = c.Segment.Lightmap
+		c.LightmapAge = c.Segment.LightmapAge
+		le00.MapIndex = c.Segment.LightmapAddress(u, v)
 		le10.MapIndex = le00.MapIndex + 1
-		le11.MapIndex = le10.MapIndex + s.Segment.LightmapWidth
+		le11.MapIndex = le10.MapIndex + c.Segment.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
-		wu = u * float64(s.Segment.LightmapWidth-constants.LightSafety*2)
-		wv = v * float64(s.Segment.LightmapHeight-constants.LightSafety*2)
+		wu = u * float64(c.Segment.LightmapWidth-constants.LightSafety*2)
+		wv = v * float64(c.Segment.LightmapHeight-constants.LightSafety*2)
 		wu = 1.0 - (wu - math.Floor(wu))
 		wv = 1.0 - (wv - math.Floor(wv))
 	} else {
@@ -174,19 +170,19 @@ func (s *Slice) SampleLight(result *concepts.Vector4, material *concepts.EntityR
 		le10.Type = LightElementPlane
 		le11.Type = LightElementPlane
 		le01.Type = LightElementPlane
-		if s.Normal[2] < 0 {
-			s.Lightmap = s.Sector.CeilLightmap
-			s.LightmapAge = s.Sector.CeilLightmapAge
+		if c.Normal[2] < 0 {
+			c.Lightmap = c.Sector.CeilLightmap
+			c.LightmapAge = c.Sector.CeilLightmapAge
 		} else {
-			s.Lightmap = s.Sector.FloorLightmap
-			s.LightmapAge = s.Sector.FloorLightmapAge
+			c.Lightmap = c.Sector.FloorLightmap
+			c.LightmapAge = c.Sector.FloorLightmapAge
 		}
-		le00.MapIndex = s.Sector.LightmapAddress(world.To2D())
+		le00.MapIndex = c.Sector.LightmapAddress(world.To2D())
 		le10.MapIndex = le00.MapIndex + 1
-		le11.MapIndex = le10.MapIndex + s.Sector.LightmapWidth
+		le11.MapIndex = le10.MapIndex + c.Sector.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
 		q := &concepts.Vector3{world[0], world[1], world[2]}
-		s.Sector.ToLightmapWorld(q, s.Normal[2] > 0)
+		c.Sector.ToLightmapWorld(q, c.Normal[2] > 0)
 		wu = 1.0 - (world[0]-q[0])/constants.LightGrid
 		wv = 1.0 - (world[1]-q[1])/constants.LightGrid
 	}
@@ -195,36 +191,32 @@ func (s *Slice) SampleLight(result *concepts.Vector4, material *concepts.EntityR
 	r10 := le10.Get()
 	r11 := le11.Get()
 	r01 := le01.Get()
-	s.Light[0] = r00[0]*(wu*wv) + r10[0]*((1.0-wu)*wv) + r11[0]*(1.0-wu)*(1.0-wv) + r01[0]*wu*(1.0-wv)
-	s.Light[1] = r00[1]*(wu*wv) + r10[1]*((1.0-wu)*wv) + r11[1]*(1.0-wu)*(1.0-wv) + r01[1]*wu*(1.0-wv)
-	s.Light[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
-	s.Light[3] = 1
+	c.Light[0] = r00[0]*(wu*wv) + r10[0]*((1.0-wu)*wv) + r11[0]*(1.0-wu)*(1.0-wv) + r01[0]*wu*(1.0-wv)
+	c.Light[1] = r00[1]*(wu*wv) + r10[1]*((1.0-wu)*wv) + r11[1]*(1.0-wu)*(1.0-wv) + r01[1]*wu*(1.0-wv)
+	c.Light[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
+	c.Light[3] = 1
 
-	// result = Surface * Diffuse * (Ambient + Lightmap)
-	s.Light.To3D().AddSelf(&lit.Ambient)
-	s.Light.Mul4Self(&lit.Diffuse)
-	result.Mul4Self(&s.Light)
-	return result
+	return lit.Apply(result, &c.Light)
 }
 
-func (s *Slice) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3, u, v float64) *concepts.Vector4 {
-	le := &s.LightElements[0]
+func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3, u, v float64) *concepts.Vector4 {
+	le := &c.LightElements[0]
 
-	if s.Segment != nil && s.Normal[2] == 0 {
+	if c.Segment != nil && c.Normal[2] == 0 {
 		le.Type = LightElementWall
-		s.Lightmap = s.Segment.Lightmap
-		s.LightmapAge = s.Segment.LightmapAge
-		le.MapIndex = s.Segment.LightmapAddress(u, v)
+		c.Lightmap = c.Segment.Lightmap
+		c.LightmapAge = c.Segment.LightmapAge
+		le.MapIndex = c.Segment.LightmapAddress(u, v)
 	} else {
 		le.Type = LightElementPlane
-		if s.Normal[2] < 0 {
-			s.Lightmap = s.Sector.CeilLightmap
-			s.LightmapAge = s.Sector.CeilLightmapAge
+		if c.Normal[2] < 0 {
+			c.Lightmap = c.Sector.CeilLightmap
+			c.LightmapAge = c.Sector.CeilLightmapAge
 		} else {
-			s.Lightmap = s.Sector.FloorLightmap
-			s.LightmapAge = s.Sector.FloorLightmapAge
+			c.Lightmap = c.Sector.FloorLightmap
+			c.LightmapAge = c.Sector.FloorLightmapAge
 		}
-		le.MapIndex = s.Sector.LightmapAddress(world.To2D())
+		le.MapIndex = c.Sector.LightmapAddress(world.To2D())
 	}
 
 	r00 := le.Get()

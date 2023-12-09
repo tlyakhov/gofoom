@@ -6,14 +6,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func WallMidPick(s *state.Slice) {
+func WallMidPick(s *state.Column) {
 	if s.Y >= s.ClippedStart && s.Y < s.ClippedEnd {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickMid, Element: s.Segment})
 	}
 }
 
 // WallMid renders the wall portion (potentially over a portal).
-func WallMid(s *state.Slice) {
+func WallMid(s *state.Column) {
 	mat := s.Segment.MidMaterial
 	u := s.U
 	if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleNone {

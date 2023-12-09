@@ -35,13 +35,13 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 	return &r
 }
 
-func (r *Renderer) RenderPortal(slice *state.Slice) {
+func (r *Renderer) RenderPortal(slice *state.Column) {
 	if slice.Depth > constants.MaxPortals {
 		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.Sector.Entity)
 		slice.DebugNotices.Push(dbg)
 		return
 	}
-	sp := &state.SlicePortal{Slice: slice}
+	sp := &state.ColumnPortal{Column: slice}
 	sp.CalcScreen()
 	if sp.AdjSegment != nil {
 		if slice.Pick {
@@ -54,10 +54,10 @@ func (r *Renderer) RenderPortal(slice *state.Slice) {
 	}
 
 	portalSlice := *slice
-	portalSlice.LightElements[0].Slice = &portalSlice
-	portalSlice.LightElements[1].Slice = &portalSlice
-	portalSlice.LightElements[2].Slice = &portalSlice
-	portalSlice.LightElements[3].Slice = &portalSlice
+	portalSlice.LightElements[0].Column = &portalSlice
+	portalSlice.LightElements[1].Column = &portalSlice
+	portalSlice.LightElements[2].Column = &portalSlice
+	portalSlice.LightElements[3].Column = &portalSlice
 	portalSlice.Sector = sp.Adj
 	portalSlice.YStart = sp.AdjClippedTop
 	portalSlice.YEnd = sp.AdjClippedBottom
@@ -69,135 +69,136 @@ func (r *Renderer) RenderPortal(slice *state.Slice) {
 	}
 }
 
-// RenderSlice draws or picks a single pixel vertical column given a particular segment intersection.
-func (r *Renderer) RenderSlice(slice *state.Slice) {
-	slice.CalcScreen()
-	slice.Normal = slice.Sector.CeilNormal
-	if slice.Pick {
-		CeilingPick(slice)
+// RenderSegmentColumn draws or picks a single pixel vertical column given a particular
+// segment intersection.
+func (r *Renderer) RenderSegmentColumn(column *state.Column) {
+	column.CalcScreen()
+	column.Normal = column.Sector.CeilNormal
+	if column.Pick {
+		CeilingPick(column)
 	} else {
-		Ceiling(slice)
+		Ceiling(column)
 	}
-	slice.Normal = slice.Sector.FloorNormal
-	if slice.Pick {
-		FloorPick(slice)
+	column.Normal = column.Sector.FloorNormal
+	if column.Pick {
+		FloorPick(column)
 	} else {
-		Floor(slice)
+		Floor(column)
 	}
 
-	slice.Segment.Normal.To3D(&slice.Normal)
+	column.Segment.Normal.To3D(&column.Normal)
 
-	hasPortal := !slice.Segment.AdjacentSector.Nil()
-	if slice.Pick {
-		if !hasPortal || slice.Segment.PortalHasMaterial {
-			WallMidPick(slice)
+	hasPortal := !column.Segment.AdjacentSector.Nil()
+	if column.Pick {
+		if !hasPortal || column.Segment.PortalHasMaterial {
+			WallMidPick(column)
 			return
 		}
-		r.RenderPortal(slice)
+		r.RenderPortal(column)
 	} else {
 		if hasPortal {
-			r.RenderPortal(slice)
+			r.RenderPortal(column)
 		}
-		if !hasPortal || slice.Segment.PortalHasMaterial {
-			WallMid(slice)
+		if !hasPortal || column.Segment.PortalHasMaterial {
+			WallMid(column)
 		}
 	}
 
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
-func (r *Renderer) RenderSector(slice *state.Slice) {
-	slice.Distance = constants.MaxViewDistance
+func (r *Renderer) RenderSector(column *state.Column) {
+	column.Distance = constants.MaxViewDistance
 
 	dist := math.MaxFloat64
 	isect := new(concepts.Vector2)
 	ray := new(concepts.Vector2)
-	ray.From(&slice.Ray.End).SubSelf(&slice.Ray.Start)
-	for _, segment := range slice.Sector.Segments {
+	ray.From(&column.Ray.End).SubSelf(&column.Ray.Start)
+	for _, segment := range column.Sector.Segments {
 		// Wall is facing away from us
 		if ray.Dot(&segment.Normal) > 0 {
 			continue
 		}
 
 		// Ray intersects?
-		if ok := segment.Intersect2D(&slice.Ray.Start, &slice.Ray.End, isect); !ok {
+		if ok := segment.Intersect2D(&column.Ray.Start, &column.Ray.End, isect); !ok {
 			continue
 		}
 
-		delta := concepts.Vector2{math.Abs(isect[0] - slice.Ray.Start[0]), math.Abs(isect[1] - slice.Ray.Start[1])}
+		delta := concepts.Vector2{math.Abs(isect[0] - column.Ray.Start[0]), math.Abs(isect[1] - column.Ray.Start[1])}
 		if delta[1] > delta[0] {
-			dist = math.Abs(delta[1] / slice.AngleSin)
+			dist = math.Abs(delta[1] / column.AngleSin)
 		} else {
-			dist = math.Abs(delta[0] / slice.AngleCos)
+			dist = math.Abs(delta[0] / column.AngleCos)
 		}
 
-		if dist > slice.Distance || dist < slice.LastPortalDistance {
+		if dist > column.Distance || dist < column.LastPortalDistance {
 			continue
 		}
 
-		slice.Segment = segment
-		slice.Distance = dist
-		isect.To3D(&slice.Intersection)
-		slice.U = isect.Dist(&segment.P) / segment.Length
+		column.Segment = segment
+		column.Distance = dist
+		isect.To3D(&column.Intersection)
+		column.U = isect.Dist(&segment.P) / segment.Length
 	}
 
 	if dist != math.MaxFloat64 {
-		r.RenderSlice(slice)
+		r.RenderSegmentColumn(column)
 	} else {
-		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", slice.Sector.Entity, slice.Depth)
+		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", column.Sector.Entity, column.Depth)
 		r.DebugNotices.Push(dbg)
 	}
 
-	for _, ref := range slice.Sector.Bodies {
-		r.RenderBody(ref, slice)
+	for _, ref := range column.Sector.Bodies {
+		r.RenderBody(ref, column)
 	}
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(slice *state.Slice, x int, y int, pick bool) []state.PickedElement {
+func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) []state.PickedElement {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
 	}
 
-	// Reset the slice
-	slice.Pick = pick
-	slice.X = x
-	slice.Y = y
-	slice.Angle = r.PlayerBody.Angle*concepts.Deg2rad + r.ViewRadians[x]
-	slice.Sector = r.PlayerBody.Sector()
-	slice.AngleCos = math.Cos(slice.Angle)
-	slice.AngleSin = math.Sin(slice.Angle)
-	slice.Ray.End = concepts.Vector2{
-		r.PlayerBody.Pos.Render[0] + r.MaxViewDist*slice.AngleCos,
-		r.PlayerBody.Pos.Render[1] + r.MaxViewDist*slice.AngleSin,
+	// Reset the column
+	column.Pick = pick
+	column.X = x
+	column.Y = y
+	column.Angle = r.PlayerBody.Angle*concepts.Deg2rad + r.ViewRadians[x]
+	column.Sector = r.PlayerBody.Sector()
+	column.AngleCos = math.Cos(column.Angle)
+	column.AngleSin = math.Sin(column.Angle)
+	column.Ray.End = concepts.Vector2{
+		r.PlayerBody.Pos.Render[0] + r.MaxViewDist*column.AngleCos,
+		r.PlayerBody.Pos.Render[1] + r.MaxViewDist*column.AngleSin,
 	}
 
-	r.RenderSector(slice)
-	return slice.PickedElements
+	r.RenderSector(column)
+	return column.PickedElements
 }
 
 func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 	bob := math.Sin(r.Player.Bob)
-	// Initialize a slice...
-	slice := &state.Slice{
+	// Initialize a column...
+	column := &state.Column{
 		Config:  r.Config,
 		YStart:  0,
 		YEnd:    r.ScreenHeight,
 		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Height + bob,
 	}
-	slice.LightElements[0].Slice = slice
-	slice.LightElements[1].Slice = slice
-	slice.LightElements[2].Slice = slice
-	slice.LightElements[3].Slice = slice
+	column.LightElements[0].Column = column
+	column.LightElements[1].Column = column
+	column.LightElements[2].Column = column
+	column.LightElements[3].Column = column
 
-	slice.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 
 	for x := xStart; x < xEnd; x++ {
 		if x >= xEnd {
 			break
 		}
-		r.RenderColumn(slice, x, 0, false)
+		r.RenderColumn(column, x, 0, false)
 		for y := 0; y < r.ScreenHeight; y++ {
 			screenIndex := (x + y*r.ScreenWidth)
 			fb := &r.FrameBuffer[screenIndex]
@@ -264,18 +265,18 @@ func (r *Renderer) Pick(x, y int) []state.PickedElement {
 		return nil
 	}
 	bob := math.Sin(r.Player.Bob)
-	// Initialize a slice...
-	slice := &state.Slice{
+	// Initialize a column...
+	column := &state.Column{
 		Config:  r.Config,
 		YStart:  0,
 		YEnd:    r.ScreenHeight,
 		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Height + bob,
 	}
-	slice.LightElements[0].Slice = slice
-	slice.LightElements[1].Slice = slice
-	slice.LightElements[2].Slice = slice
-	slice.LightElements[3].Slice = slice
+	column.LightElements[0].Column = column
+	column.LightElements[1].Column = column
+	column.LightElements[2].Column = column
+	column.LightElements[3].Column = column
 
-	slice.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
-	return r.RenderColumn(slice, x, y, true)
+	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	return r.RenderColumn(column, x, y, true)
 }

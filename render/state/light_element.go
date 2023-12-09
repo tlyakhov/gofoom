@@ -6,6 +6,7 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
@@ -20,7 +21,7 @@ const (
 )
 
 type LightElement struct {
-	*Slice
+	*Column
 	Type         LightElementType
 	MapIndex     uint32
 	Delta        concepts.Vector3
@@ -29,6 +30,7 @@ type LightElement struct {
 	Intersection concepts.Vector3
 	Q            concepts.Vector3
 	LightWorld   concepts.Vector3
+	InputBody    *concepts.EntityRef
 }
 
 func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
@@ -118,8 +120,8 @@ var debugSectorName string = "Starting" // "be4bqmfvn27mek306btg"
 
 // TODO: Make more general
 // lightVisibleFromSector determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.Body, sector *core.Sector) bool {
-	lightPos := &body.Pos.Render
+func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
+	lightPos := &lightBody.Pos.Render
 
 	debugLighting := false
 	if constants.DebugLighting {
@@ -137,7 +139,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 	le.Delta.SubSelf(p)
 	maxDist2 := le.Delta.Length2()
 	// Is the point right next to the light? Visible by definition.
-	if maxDist2 <= body.BoundingRadius*body.BoundingRadius {
+	if maxDist2 <= lightBody.BoundingRadius*lightBody.BoundingRadius {
 		return true
 	}
 
@@ -145,10 +147,25 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
+	bodyPos := concepts.Vector3{}
 	for sector != nil {
 		if debugLighting {
 			log.Printf("Sector: %v\n", sector.Entity)
 		}
+		// Generate entity shadows
+		for _, bodyRef := range sector.Bodies {
+			if bodyRef.Entity == lightBody.Entity || (le.Type == LightElementBody && le.InputBody.Entity == bodyRef.Entity) {
+				continue
+			}
+			if b := core.BodyFromDb(bodyRef); b != nil && b.Mass > 0 {
+				bodyPos = b.Pos.Render
+				bodyPos[2] += b.Height * 0.5
+				if concepts.IntersectLineSphere(p, lightPos, &bodyPos, b.BoundingRadius) {
+					return false
+				}
+			}
+		}
+
 		var next *core.Sector
 		// Since our sectors can be concave, we can't just go through the first portal we find,
 		// we have to go through the NEAREST one. Use dist2 to keep track...
@@ -202,7 +219,10 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 			if seg.PortalHasMaterial {
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				c := le.SampleMaterial(seg.MidMaterial, u, v, le.ProjectZ(1.0))
+				c := le.SampleMaterial(seg.MidMaterial, u, v, 1)
+				if lit := materials.LitFromDb(seg.MidMaterial); lit != nil {
+					lit.Apply(&c, nil)
+				}
 				if c[3] >= 0.99 {
 					return false
 				}
@@ -214,7 +234,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 
 			// If the difference between the intersected distance and the light distance is
 			// within the bounding radius of our light, our light is right on a portal boundary and visible.
-			if math.Abs(idist2-maxDist2) < body.BoundingRadius {
+			if math.Abs(idist2-maxDist2) < lightBody.BoundingRadius {
 				return true
 			}
 
@@ -241,11 +261,11 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, body *core.B
 		prevDist = dist2
 		depth++
 		if depth > constants.MaxPortals { // Avoid infinite looping.
-			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, body.Entity)
+			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
 			le.DebugNotices.Push(dbg)
 			return false
 		}
-		if next == nil && !body.SectorEntityRef.Nil() && sector.Entity != body.SectorEntityRef.Entity {
+		if next == nil && !lightBody.SectorEntityRef.Nil() && sector.Entity != lightBody.SectorEntityRef.Entity {
 			if debugLighting {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}

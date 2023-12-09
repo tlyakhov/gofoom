@@ -8,14 +8,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func CeilingPick(s *state.Slice) {
+func CeilingPick(s *state.Column) {
 	if s.Y >= s.YStart && s.Y < s.ClippedStart {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickCeiling, Element: s.Sector.Ref()})
 	}
 }
 
 // Ceiling renders the ceiling portion of a slice.
-func Ceiling(s *state.Slice) {
+func Ceiling(s *state.Column) {
 	mat := s.Sector.CeilMaterial
 
 	// Because of our sloped ceilings, we can't use simple linear interpolation to calculate the distance

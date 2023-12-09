@@ -8,14 +8,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func FloorPick(s *state.Slice) {
+func FloorPick(s *state.Column) {
 	if s.Y >= s.ClippedEnd && s.Y < s.YEnd {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickFloor, Element: s.Sector.Ref()})
 	}
 }
 
 // Floor renders the floor portion of a slice.
-func Floor(s *state.Slice) {
+func Floor(s *state.Column) {
 	mat := s.Sector.FloorMaterial
 
 	// Because of our sloped floors, we can't use simple linear interpolation to calculate the distance

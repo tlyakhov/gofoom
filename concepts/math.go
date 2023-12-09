@@ -195,3 +195,29 @@ func TruncateString(str string, max int) string {
 	// If here, string is shorter than max
 	return str
 }
+
+// https://gamedev.stackexchange.com/questions/96459/fast-ray-sphere-collision-code
+func IntersectLineSphere(a, b, c *Vector3, r float64) bool {
+	delta := b.Sub(a)
+	t := delta.Length2()
+	delta.NormSelf()
+	m := a.Sub(c)
+	bb := m.Dot(delta)
+	cc := m.Length2() - r*r
+	if cc > 0 && bb > 0 {
+		return false
+	}
+	discr := bb*bb - cc
+	if discr < 0 {
+		return false
+	}
+	tResult := -bb - math.Sqrt(discr)
+
+	if tResult*tResult > t {
+		return false
+	}
+	if tResult < 0 {
+		tResult = 0
+	}
+	return true
+}
