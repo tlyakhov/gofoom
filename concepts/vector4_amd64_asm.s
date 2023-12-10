@@ -2,18 +2,69 @@
 
 #include "textflag.h"
 
-// func asmAddPreMulColorSelf(a *[4]float64, b *[4]float64)
+DATA data<>+0(SB)/8, $0x3ff0000000000000
+DATA data<>+8(SB)/8, $0x0000000000010203
+DATA data<>+16(SB)/8, $0x3f70101010101010
+GLOBL data<>(SB), RODATA|NOPTR, $24
+
+// func asmVector4AddSelf(a *[4]float64, b *[4]float64)
 // Requires: AVX
-TEXT ·asmAddPreMulColorSelf(SB), NOSPLIT, $0-16
+TEXT ·asmVector4AddSelf(SB), NOSPLIT, $0-16
+	MOVQ    a+0(FP), AX
+	MOVQ    b+8(FP), CX
+	VMOVUPD (AX), Y0
+	VADDPD  (CX), Y0, Y0
+	VMOVUPD Y0, (AX)
+	RET
+
+// func asmVector4AddPreMulColorSelf(a *[4]float64, b *[4]float64)
+// Requires: AVX
+TEXT ·asmVector4AddPreMulColorSelf(SB), NOSPLIT, $0-16
 	MOVQ         a+0(FP), AX
 	MOVQ         b+8(FP), CX
 	VBROADCASTSD 24(CX), Y0
-	VBROADCASTSD one<>+0(SB), Y1
+	VBROADCASTSD data<>+0(SB), Y1
 	VSUBPD       Y0, Y1, Y0
 	VMULPD       (AX), Y0, Y0
 	VADDPD       (CX), Y0, Y0
 	VMOVUPD      Y0, (AX)
 	RET
 
-DATA one<>+0(SB)/8, $0x3ff0000000000000
-GLOBL one<>(SB), RODATA|NOPTR, $8
+// func asmVector4Mul4Self(a *[4]float64, b *[4]float64)
+// Requires: AVX
+TEXT ·asmVector4Mul4Self(SB), NOSPLIT, $0-16
+	MOVQ    a+0(FP), AX
+	MOVQ    b+8(FP), CX
+	VMOVUPD (AX), Y0
+	VMOVUPD (CX), Y1
+	VMULPD  Y1, Y0, Y0
+	VMOVUPD Y0, (AX)
+	RET
+
+// func asmInt32ToVector4(c uint32, a *[4]float64)
+// Requires: AVX, SSE2, SSE4.1, SSSE3
+TEXT ·asmInt32ToVector4(SB), NOSPLIT, $0-16
+	MOVQ         c+0(FP), X0
+	MOVQ         a+8(FP), AX
+	VMOVQ        data<>+8(SB), X1
+	VBROADCASTSD data<>+16(SB), Y2
+	PSHUFB       X1, X0
+	PMOVZXBD     X0, X0
+	VCVTDQ2PD    X0, Y0
+	VMULPD       Y0, Y2, Y0
+	VMOVUPD      Y0, (AX)
+	RET
+
+// func asmInt32ToVector4PreMul(c uint32, a *[4]float64)
+// Requires: AVX, SSE2, SSE4.1, SSSE3
+TEXT ·asmInt32ToVector4PreMul(SB), NOSPLIT, $0-16
+	MOVQ         c+0(FP), X0
+	MOVQ         a+8(FP), AX
+	VMOVQ        data<>+8(SB), X1
+	VBROADCASTSD data<>+16(SB), Y2
+	PSHUFB       X1, X0
+	PMOVZXBD     X0, X0
+	VCVTDQ2PD    X0, Y0
+	VMULPD       Y0, Y2, Y0
+	VMOVUPD      Y0, (AX)
+	RET

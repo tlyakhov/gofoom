@@ -112,7 +112,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 		c := s.SampleMaterial(refMaterial, u, v, scaler)
 		c.Mul4Self(&s.Light)
 		if c[3] > 0 {
-			s.FrameBuffer[screenIndex].AddPreMulColorSelf(&c)
+			s.FrameBuffer[screenIndex].AddPreMulColorSelf(c)
 			r.ZBuffer[screenIndex] = d
 		}
 	}

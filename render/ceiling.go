@@ -53,12 +53,11 @@ func Ceiling(s *state.Column) {
 		tx := world[0] / s.Sector.CeilScale
 		ty := world[1] / s.Sector.CeilScale
 
-		c := &concepts.Vector4{0.5, 0.5, 0.5, 1}
 		if !mat.Nil() {
-			*c = s.SampleMaterial(mat, tx, ty, scaler)
-			s.SampleLight(c, mat, world, 0, 0, distToCeil)
+			s.SampleMaterial(mat, tx, ty, scaler)
+			s.SampleLight(&s.Material, mat, world, 0, 0, distToCeil)
 		}
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(c)
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.Material)
 		s.ZBuffer[screenIndex] = distToCeil
 	}
 }

@@ -2,5 +2,27 @@
 
 package concepts
 
-// asmAddPreMulColorSelf adds a and b with pre-multiplied alpha.
-func asmAddPreMulColorSelf(a *[4]float64, b *[4]float64)
+// asmVector4AddSelf adds a and b.
+//
+//go:noescape
+func asmVector4AddSelf(a *[4]float64, b *[4]float64)
+
+// asmVector4AddPreMulColorSelf adds a and b with pre-multiplied alpha.
+//
+//go:noescape
+func asmVector4AddPreMulColorSelf(a *[4]float64, b *[4]float64)
+
+// asmVector4Mul4Self multiplies a and b.
+//
+//go:noescape
+func asmVector4Mul4Self(a *[4]float64, b *[4]float64)
+
+// asmInt32ToVector4 converts a uint32 color to a vector.
+//
+//go:noescape
+func asmInt32ToVector4(c uint32, a *[4]float64)
+
+// asmInt32ToVector4PreMul converts a uint32 color to a vector with pre-multiplied alpha.
+//
+//go:noescape
+func asmInt32ToVector4PreMul(c uint32, a *[4]float64)

@@ -56,16 +56,13 @@ func (a *Vector4) Add(b *Vector4) *Vector4 {
 
 // Add a vector to a vector.
 func (a *Vector4) AddSelf(b *Vector4) *Vector4 {
-	a[0] += b[0]
-	a[1] += b[1]
-	a[2] += b[2]
-	a[3] += b[3]
+	asmVector4AddSelf((*[4]float64)(a), (*[4]float64)(b))
 	return a
 }
 
 // Add a premul alpha color to self
 func (a *Vector4) AddPreMulColorSelf(b *Vector4) *Vector4 {
-	asmAddPreMulColorSelf((*[4]float64)(a), (*[4]float64)(b))
+	asmVector4AddPreMulColorSelf((*[4]float64)(a), (*[4]float64)(b))
 	return a
 }
 
@@ -90,10 +87,7 @@ func (a *Vector4) Mul4(b *Vector4) *Vector4 {
 
 // Mul3 multiplies a vector by a vector.
 func (a *Vector4) Mul4Self(b *Vector4) *Vector4 {
-	a[0] *= b[0]
-	a[1] *= b[1]
-	a[2] *= b[2]
-	a[3] *= b[3]
+	asmVector4Mul4Self((*[4]float64)(a), (*[4]float64)(b))
 	return a
 }
 
@@ -264,4 +258,19 @@ func ParseVector4(s string) (*Vector4, error) {
 		return nil, err
 	}
 	return result, nil
+}
+
+func Int32ToVector4(c uint32) Vector4 {
+	r := Vector4{}
+	asmInt32ToVector4(c, (*[4]float64)(&r))
+	return r
+}
+
+func Int32ToVector4PreMul(c uint32) Vector4 {
+	r := Vector4{}
+	asmInt32ToVector4(c, (*[4]float64)(&r))
+	r[0] *= r[3]
+	r[1] *= r[3]
+	r[2] *= r[3]
+	return r
 }
