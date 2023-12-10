@@ -17,7 +17,8 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/editor/",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "output": "${workspaceFolder}/bin/editor"
         },
         {
             "name": "Launch Game",
@@ -26,7 +27,8 @@
             "mode": "auto",
             "buildFlags": "-gcflags=-B",
             "program": "${workspaceFolder}/game/",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "output": "${workspaceFolder}/bin/game"
         },
         {
             "name": "Convert Worlds",
@@ -49,7 +51,8 @@
                 "-cpuprofile=editor.prof"
             ],
             "program": "${workspaceFolder}/editor/",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "output": "${workspaceFolder}/bin/editor"
         },
         {
             "name": "Profile Game",
@@ -61,7 +64,8 @@
                 "-cpuprofile=game.prof"
             ],
             "program": "${workspaceFolder}/game/",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "output": "${workspaceFolder}/bin/game"
         }
     ]
 }

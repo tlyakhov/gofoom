@@ -54,6 +54,7 @@ type Column struct {
 	ClippedEnd         int
 	LightElements      [4]LightElement
 	Normal             concepts.Vector3
+	Material           concepts.Vector4
 	Light              concepts.Vector4
 	Lightmap           []concepts.Vector3
 	LightmapAge        []int
@@ -77,7 +78,7 @@ func (c *Column) CalcScreen() {
 	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
-func (c *Column) SampleMaterial(material *concepts.EntityRef, u, v float64, scale float64) concepts.Vector4 {
+func (c *Column) SampleMaterial(material *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {
 	// Should refactor this scale thing, it's weird
 	scaleDivisor := 1.0
 
@@ -110,19 +111,20 @@ func (c *Column) SampleMaterial(material *concepts.EntityRef, u, v float64, scal
 		}
 	}
 
-	result := concepts.Vector4{0.5, 0.5, 0.5, 1.0}
-
-	if solid := materials.SolidFromDb(material); solid != nil {
-		result[0] = float64(solid.Diffuse.R) / 255.0
-		result[1] = float64(solid.Diffuse.G) / 255.0
-		result[2] = float64(solid.Diffuse.B) / 255.0
-	}
-
 	if image := materials.ImageFromDb(material); image != nil {
-		result = image.Sample(u, v, scale)
+		c.Material = image.Sample(u, v, scale)
+	} else if solid := materials.SolidFromDb(material); solid != nil {
+		c.Material[0] = float64(solid.Diffuse.R) / 255.0
+		c.Material[1] = float64(solid.Diffuse.G) / 255.0
+		c.Material[2] = float64(solid.Diffuse.B) / 255.0
+	} else {
+		c.Material[0] = 0.5
+		c.Material[1] = 0.5
+		c.Material[2] = 0.5
+		c.Material[3] = 1.0
 	}
 
-	return result
+	return &c.Material
 }
 
 func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {

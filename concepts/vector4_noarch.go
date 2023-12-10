@@ -10,8 +10,6 @@ import (
 	"unsafe"
 )
 
-//go:generate go run vector4_asm.go -out vector4_asm.s -stubs vector4_stub.go
-
 // Vector4 is a simple 4d vector type.
 type Vector4 [4]float64
 
@@ -271,4 +269,18 @@ func ParseVector4(s string) (*Vector4, error) {
 		return nil, err
 	}
 	return result, nil
+}
+
+func Int32ToVector4(c uint32) Vector4 {
+	return Vector4{
+		float64((c>>24)&0xFF) / 255.0, float64((c>>16)&0xFF) / 255.0,
+		float64((c>>8)&0xFF) / 255.0, float64(c&0xFF) / 255.0}
+}
+
+func Int32ToVector4PreMul(c uint32) Vector4 {
+	r := float64((c>>24)&0xFF) / 255.0
+	g := float64((c>>16)&0xFF) / 255.0
+	b := float64((c>>8)&0xFF) / 255.0
+	a := float64(c&0xFF) / 255.0
+	return Vector4{r * a, g * a, b * a, a}
 }

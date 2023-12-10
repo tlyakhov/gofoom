@@ -219,14 +219,17 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if seg.PortalHasMaterial {
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				c := le.SampleMaterial(seg.MidMaterial, u, v, 1)
+				c := le.Material
+				le.SampleMaterial(seg.MidMaterial, u, v, 1)
 				if lit := materials.LitFromDb(seg.MidMaterial); lit != nil {
-					lit.Apply(&c, nil)
+					lit.Apply(&le.Material, nil)
 				}
-				if c[3] >= 0.99 {
+				if le.Material[3] >= 0.99 {
+					le.Material.From(&c)
 					return false
 				}
-				le.Filter.AddPreMulColorSelf(&c)
+				le.Filter.AddPreMulColorSelf(&le.Material)
+				le.Material.From(&c)
 			}
 
 			// Get the square of the distance to the intersection (from the target point)

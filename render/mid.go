@@ -2,7 +2,6 @@ package render
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
 )
 
@@ -39,12 +38,11 @@ func WallMid(s *state.Column) {
 			v = s.Intersection[2] / 64.0
 		}
 
-		c := &concepts.Vector4{0.5, 0.5, 0.5, 1}
 		if !mat.Nil() {
-			*c = s.SampleMaterial(mat, u, v, s.ProjectZ(1.0))
-			s.SampleLight(c, mat, &s.Intersection, s.U, lightV, s.Distance)
+			s.SampleMaterial(mat, u, v, s.ProjectZ(1.0))
+			s.SampleLight(&s.Material, mat, &s.Intersection, s.U, lightV, s.Distance)
 		}
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(c)
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.Material)
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }

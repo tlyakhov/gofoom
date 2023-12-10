@@ -53,12 +53,11 @@ func Floor(s *state.Column) {
 		tx := world[0] / s.Sector.FloorScale
 		ty := world[1] / s.Sector.FloorScale
 
-		c := &concepts.Vector4{0.5, 0.5, 0.5, 1}
 		if !mat.Nil() {
-			*c = s.SampleMaterial(mat, tx, ty, scaler)
-			s.SampleLight(c, mat, world, 0, 0, distToFloor)
+			s.SampleMaterial(mat, tx, ty, scaler)
+			s.SampleLight(&s.Material, mat, world, 0, 0, distToFloor)
 		}
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(c)
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.Material)
 		s.ZBuffer[screenIndex] = distToFloor
 	}
 }
