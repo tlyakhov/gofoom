@@ -1,5 +1,3 @@
-//go:build !amd64
-
 package concepts
 
 import (
@@ -9,6 +7,8 @@ import (
 	"strings"
 	"unsafe"
 )
+
+//go:generate go run vector4_amd64_asm.go -out vector4_amd64_asm.s -stubs vector4_amd64_stub.go
 
 // Vector4 is a simple 4d vector type.
 type Vector4 [4]float64

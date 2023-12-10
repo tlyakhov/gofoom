@@ -228,6 +228,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 					le.Material.From(&c)
 					return false
 				}
+				//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&le.Filter), (*[4]float64)(&le.Material))
 				le.Filter.AddPreMulColorSelf(&le.Material)
 				le.Material.From(&c)
 			}
