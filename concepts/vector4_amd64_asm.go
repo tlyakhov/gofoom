@@ -13,9 +13,9 @@ var dataSection Mem
 var idxOne, idxUint32Shuffle, idxReciprocal255 int
 
 func genAddSelf() {
-	TEXT("asmVector4AddSelf", NOSPLIT, "func(a, b *[4]float64)")
+	TEXT("AsmVector4AddSelf", NOSPLIT, "func(a, b *[4]float64)")
 	Pragma("noescape")
-	Doc("asmVector4AddSelf adds a and b.")
+	Doc("AsmVector4AddSelf adds a and b.")
 	aptr := Mem{Base: Load(Param("a"), GP64())}
 	bptr := Mem{Base: Load(Param("b"), GP64())}
 	// a = *aptr
@@ -28,9 +28,9 @@ func genAddSelf() {
 }
 
 func genMul4Self() {
-	TEXT("asmVector4Mul4Self", NOSPLIT, "func(a, b *[4]float64)")
+	TEXT("AsmVector4Mul4Self", NOSPLIT, "func(a, b *[4]float64)")
 	Pragma("noescape")
-	Doc("asmVector4Mul4Self multiplies a and b.")
+	Doc("AsmVector4Mul4Self multiplies a and b.")
 	aptr := Mem{Base: Load(Param("a"), GP64())}
 	bptr := Mem{Base: Load(Param("b"), GP64())}
 	// a = *aptr
@@ -45,9 +45,9 @@ func genMul4Self() {
 }
 
 func genAddPreMulColorSelf() {
-	TEXT("asmVector4AddPreMulColorSelf", NOSPLIT, "func(a, b *[4]float64)")
+	TEXT("AsmVector4AddPreMulColorSelf", NOSPLIT, "func(a, b *[4]float64)")
 	Pragma("noescape")
-	Doc("asmVector4AddPreMulColorSelf adds a and b with pre-multiplied alpha.")
+	Doc("AsmVector4AddPreMulColorSelf adds a and b with pre-multiplied alpha.")
 	aptr := Mem{Base: Load(Param("a"), GP64())}
 	bptr := Mem{Base: Load(Param("b"), GP64())}
 	// Put the alpha value b[3] into a register
@@ -70,9 +70,9 @@ func genAddPreMulColorSelf() {
 }
 
 func genInt32ToVector4() {
-	TEXT("asmInt32ToVector4", NOSPLIT, "func(c uint32, a *[4]float64)")
+	TEXT("AsmInt32ToVector4", NOSPLIT, "func(c uint32, a *[4]float64)")
 	Pragma("noescape")
-	Doc("asmInt32ToVector4 converts a uint32 color to a vector.")
+	Doc("AsmInt32ToVector4 converts a uint32 color to a vector.")
 	c := Load(Param("c"), XMM())
 	aptr := Mem{Base: Load(Param("a"), GP64())}
 	a := YMM()
@@ -97,9 +97,9 @@ func genInt32ToVector4() {
 }
 
 func genInt32ToVector4PreMul() {
-	TEXT("asmInt32ToVector4PreMul", NOSPLIT, "func(c uint32, a *[4]float64)")
+	TEXT("AsmInt32ToVector4PreMul", NOSPLIT, "func(c uint32, a *[4]float64)")
 	Pragma("noescape")
-	Doc("asmInt32ToVector4PreMul converts a uint32 color to a vector with pre-multiplied alpha.")
+	Doc("AsmInt32ToVector4PreMul converts a uint32 color to a vector with pre-multiplied alpha.")
 	c := Load(Param("c"), XMM())
 	aptr := Mem{Base: Load(Param("a"), GP64())}
 	a := YMM()

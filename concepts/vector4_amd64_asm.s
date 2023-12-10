@@ -7,9 +7,9 @@ DATA data<>+8(SB)/8, $0x0000000000010203
 DATA data<>+16(SB)/8, $0x3f70101010101010
 GLOBL data<>(SB), RODATA|NOPTR, $24
 
-// func asmVector4AddSelf(a *[4]float64, b *[4]float64)
+// func AsmVector4AddSelf(a *[4]float64, b *[4]float64)
 // Requires: AVX
-TEXT ·asmVector4AddSelf(SB), NOSPLIT, $0-16
+TEXT ·AsmVector4AddSelf(SB), NOSPLIT, $0-16
 	MOVQ    a+0(FP), AX
 	MOVQ    b+8(FP), CX
 	VMOVUPD (AX), Y0
@@ -17,9 +17,9 @@ TEXT ·asmVector4AddSelf(SB), NOSPLIT, $0-16
 	VMOVUPD Y0, (AX)
 	RET
 
-// func asmVector4AddPreMulColorSelf(a *[4]float64, b *[4]float64)
+// func AsmVector4AddPreMulColorSelf(a *[4]float64, b *[4]float64)
 // Requires: AVX
-TEXT ·asmVector4AddPreMulColorSelf(SB), NOSPLIT, $0-16
+TEXT ·AsmVector4AddPreMulColorSelf(SB), NOSPLIT, $0-16
 	MOVQ         a+0(FP), AX
 	MOVQ         b+8(FP), CX
 	VBROADCASTSD 24(CX), Y0
@@ -30,9 +30,9 @@ TEXT ·asmVector4AddPreMulColorSelf(SB), NOSPLIT, $0-16
 	VMOVUPD      Y0, (AX)
 	RET
 
-// func asmVector4Mul4Self(a *[4]float64, b *[4]float64)
+// func AsmVector4Mul4Self(a *[4]float64, b *[4]float64)
 // Requires: AVX
-TEXT ·asmVector4Mul4Self(SB), NOSPLIT, $0-16
+TEXT ·AsmVector4Mul4Self(SB), NOSPLIT, $0-16
 	MOVQ    a+0(FP), AX
 	MOVQ    b+8(FP), CX
 	VMOVUPD (AX), Y0
@@ -41,9 +41,9 @@ TEXT ·asmVector4Mul4Self(SB), NOSPLIT, $0-16
 	VMOVUPD Y0, (AX)
 	RET
 
-// func asmInt32ToVector4(c uint32, a *[4]float64)
+// func AsmInt32ToVector4(c uint32, a *[4]float64)
 // Requires: AVX, SSE2, SSE4.1, SSSE3
-TEXT ·asmInt32ToVector4(SB), NOSPLIT, $0-16
+TEXT ·AsmInt32ToVector4(SB), NOSPLIT, $0-16
 	MOVQ         c+0(FP), X0
 	MOVQ         a+8(FP), AX
 	VMOVQ        data<>+8(SB), X1
@@ -55,9 +55,9 @@ TEXT ·asmInt32ToVector4(SB), NOSPLIT, $0-16
 	VMOVUPD      Y0, (AX)
 	RET
 
-// func asmInt32ToVector4PreMul(c uint32, a *[4]float64)
+// func AsmInt32ToVector4PreMul(c uint32, a *[4]float64)
 // Requires: AVX, SSE2, SSE4.1, SSSE3
-TEXT ·asmInt32ToVector4PreMul(SB), NOSPLIT, $0-16
+TEXT ·AsmInt32ToVector4PreMul(SB), NOSPLIT, $0-16
 	MOVQ         c+0(FP), X0
 	MOVQ         a+8(FP), AX
 	VMOVQ        data<>+8(SB), X1

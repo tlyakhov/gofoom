@@ -57,6 +57,7 @@ func Ceiling(s *state.Column) {
 			s.SampleMaterial(mat, tx, ty, scaler)
 			s.SampleLight(&s.Material, mat, world, 0, 0, distToCeil)
 		}
+		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
 		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.Material)
 		s.ZBuffer[screenIndex] = distToCeil
 	}
