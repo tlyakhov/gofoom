@@ -207,3 +207,29 @@ func IntersectLineSphere(a, b, c *Vector3, r float64) bool {
 	}
 	return true
 }
+func IntersectLineAABB(a, b, c, ext *Vector3) bool {
+	d := Vector3{b[0] - a[0], b[1] - a[1], b[2] - a[2]}
+	dl := d.Length()
+	d[0] = dl / d[0]
+	d[1] = dl / d[1]
+	d[2] = dl / d[2]
+
+	tx1 := (c[0] - ext[0]*0.5 - a[0]) * d[0]
+	ty1 := (c[1] - ext[1]*0.5 - a[1]) * d[1]
+	tz1 := (c[2] - ext[2]*0.5 - a[2]) * d[2]
+	tx2 := (c[0] + ext[0]*0.5 - a[0]) * d[0]
+	ty2 := (c[1] + ext[1]*0.5 - a[1]) * d[1]
+	tz2 := (c[2] + ext[2]*0.5 - a[2]) * d[2]
+	tmin := math.Max(math.Min(tx1, tx2), math.Min(ty1, ty2))
+	tmin = math.Max(tmin, math.Min(tz1, tz2))
+	tmax := math.Min(math.Max(tx1, tx2), math.Max(ty1, ty2))
+	tmax = math.Min(tmax, math.Max(tz1, tz2))
+
+	if tmax < 0 {
+		return false
+	}
+	if tmin > tmax || tmin > dl {
+		return false
+	}
+	return true
+}

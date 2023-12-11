@@ -12,12 +12,13 @@ type Body struct {
 	concepts.Attached `editable:"^"`
 	Pos               concepts.SimVector3 `editable:"Position"`
 	Vel               concepts.SimVector3
+	Size              concepts.SimVector3 `editable:"Size"`
 	Force             concepts.Vector3
 	Angle             float64           `editable:"Angle"`
 	BoundingRadius    float64           `editable:"Bounding Radius"`
 	Mass              float64           `editable:"Mass"`
 	CollisionResponse CollisionResponse `editable:"Collision Response"`
-	Height            float64           `editable:"Height"`
+	Shadow            BodyShadow        `editable:"Shadow Type"`
 	MountHeight       float64           `editable:"Mount Height"`
 	Active            bool              `editable:"Active?"`
 	OnGround          bool
@@ -45,10 +46,12 @@ func (b *Body) SetDB(db *concepts.EntityComponentDB) {
 	if b.DB != nil {
 		b.Pos.Detach(b.DB.Simulation)
 		b.Vel.Detach(b.DB.Simulation)
+		b.Size.Detach(b.DB.Simulation)
 	}
 	b.Attached.SetDB(db)
 	b.Pos.Attach(db.Simulation)
 	b.Vel.Attach(db.Simulation)
+	b.Size.Attach(db.Simulation)
 }
 
 func (b *Body) Sector() *Sector {
@@ -64,10 +67,12 @@ func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 func (b *Body) Construct(data map[string]any) {
 	b.Pos.Set(0, 0, 0)
 	b.Vel.Set(0, 0, 0)
+	b.Size.Set(10, 10, 10)
 	b.BoundingRadius = 10
 	b.CollisionResponse = Slide
 	b.MountHeight = constants.PlayerMountHeight
 	b.Active = true
+	b.Shadow = BodyShadowAABB
 
 	if data == nil {
 		return
@@ -88,8 +93,8 @@ func (b *Body) Construct(data map[string]any) {
 	if v, ok := data["BoundingRadius"]; ok {
 		b.BoundingRadius = v.(float64)
 	}
-	if v, ok := data["Height"]; ok {
-		b.Height = v.(float64)
+	if v, ok := data["Size"]; ok {
+		b.Size.Deserialize(v.(map[string]any))
 	}
 	if v, ok := data["MountHeight"]; ok {
 		b.MountHeight = v.(float64)
@@ -105,6 +110,14 @@ func (b *Body) Construct(data map[string]any) {
 			panic(err)
 		}
 	}
+	if v, ok := data["Shadow"]; ok {
+		c, err := BodyShadowString(v.(string))
+		if err == nil {
+			b.Shadow = c
+		} else {
+			panic(err)
+		}
+	}
 }
 
 func (b *Body) Serialize() map[string]any {
@@ -112,11 +125,12 @@ func (b *Body) Serialize() map[string]any {
 	result["Active"] = b.Active
 	result["Pos"] = b.Pos.Serialize()
 	result["Vel"] = b.Vel.Serialize()
+	result["Size"] = b.Size.Serialize()
 	result["Angle"] = b.Angle
 	result["BoundingRadius"] = b.BoundingRadius
-	result["Height"] = b.Height
 	result["Mass"] = b.Mass
 	result["MountHeight"] = b.MountHeight
 	result["CollisionResponse"] = b.CollisionResponse.String()
+	result["Shadow"] = b.Shadow
 	return result
 }
