@@ -287,6 +287,8 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(index, field, core.MaterialScaleValues())
 		case *core.CollisionResponse:
 			g.fieldEnum(index, field, core.CollisionResponseValues())
+		case *core.BodyShadow:
+			g.fieldEnum(index, field, core.BodyShadowValues())
 		case **concepts.EntityRef:
 			g.fieldEntityRef(index, field)
 		case *[]core.Trigger:

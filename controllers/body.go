@@ -105,7 +105,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 
 		floorZ, ceilZ := closestSector.SlopedZNow(p.To2D())
 		//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
-		if p[2] < floorZ || p[2]+bc.Body.Height > ceilZ {
+		if p[2] < floorZ || p[2]+bc.Body.Size.Now[2] > ceilZ {
 			//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
 			p[2] = floorZ
 		}
@@ -124,7 +124,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 			// If we're within limits, ignore the portal.
 			floorZ, ceilZ := adj.SlopedZNow(p.To2D())
 			if p[2]+bc.Body.MountHeight >= floorZ &&
-				p[2]+bc.Body.Height < ceilZ {
+				p[2]+bc.Body.Size.Now[2] < ceilZ {
 				continue
 			}
 		}
@@ -148,7 +148,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 			adj := core.SectorFromDb(segment.AdjacentSector)
 			floorZ, ceilZ := adj.SlopedZNow(ePosition2D)
 			if p[2]+bc.Body.MountHeight >= floorZ &&
-				p[2]+bc.Body.Height < ceilZ &&
+				p[2]+bc.Body.Size.Now[2] < ceilZ &&
 				adj.IsPointInside2D(ePosition2D) {
 				// Hooray, we've handled case 5! Make sure Z is good.
 				//log.Printf("Case 5! body = %v in sector %v, floor z = %v\n", p.StringHuman(), adj.Entity, floorZ)
@@ -167,7 +167,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 				sector := component.(*core.Sector)
 				floorZ, ceilZ := sector.SlopedZNow(p.To2D())
 				if p[2]+bc.Body.MountHeight >= floorZ &&
-					p[2]+bc.Body.Height < ceilZ {
+					p[2]+bc.Body.Size.Now[2] < ceilZ {
 					for _, segment := range sector.Segments {
 						if bc.PushBack(segment) {
 							collided = append(collided, segment)

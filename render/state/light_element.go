@@ -159,9 +159,16 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			}
 			if b := core.BodyFromDb(bodyRef); b != nil && b.Mass > 0 {
 				bodyPos = b.Pos.Render
-				bodyPos[2] += b.Height * 0.5
-				if concepts.IntersectLineSphere(p, lightPos, &bodyPos, b.BoundingRadius) {
-					return false
+				bodyPos[2] += b.Size.Now[2] * 0.5
+				switch b.Shadow {
+				case core.BodyShadowSphere:
+					if concepts.IntersectLineSphere(p, lightPos, &bodyPos, b.BoundingRadius) {
+						return false
+					}
+				case core.BodyShadowAABB:
+					if concepts.IntersectLineAABB(p, lightPos, &bodyPos, &b.Size.Render) {
+						return false
+					}
 				}
 			}
 		}

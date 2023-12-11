@@ -49,9 +49,9 @@ func (pc *PlayerController) Always() {
 	}
 
 	if pc.Crouching {
-		pc.Body.Height = constants.PlayerCrouchHeight
+		pc.Body.Size.Now[2] = constants.PlayerCrouchHeight
 	} else {
-		pc.Body.Height = constants.PlayerHeight
+		pc.Body.Size.Now[2] = constants.PlayerHeight
 	}
 
 	allCooldowns := 0.0

@@ -31,7 +31,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 	vfixindex := concepts.IntClamp(int(x), 0, r.ScreenWidth-1)
 	scaler := r.ViewFix[vfixindex] / d
 	y2 := (float64(r.ScreenHeight)*0.5 - (b.Pos.Render[2]-s.CameraZ)*scaler)
-	y1 := y2 - b.Height*scaler
+	y1 := y2 - b.Size.Render[2]*scaler
 
 	if len(sheet.Sprites) == 0 {
 		return
@@ -62,8 +62,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 	if img == nil {
 		return
 	}
-	bodyWidth := float64(img.Width) * b.Height / float64(img.Height)
-	scale := scaler * bodyWidth
+	scale := scaler * b.Size.Render[0]
 	x1 := (x - scale*0.5)
 	x2 := x1 + scale
 
@@ -83,7 +82,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 	if lit := materials.LitFromDb(ref); lit != nil {
 		le := &s.LightElements[0]
 		le.Q.From(&b.Pos.Render)
-		le.Q[2] += b.Height * 0.5
+		le.Q[2] += b.Size.Render[2] * 0.5
 		le.Lightmap = nil
 		le.LightmapAge = nil
 		le.MapIndex = 0
