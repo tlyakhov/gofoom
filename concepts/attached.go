@@ -11,12 +11,16 @@ type Attached struct {
 }
 
 type Attachable interface {
+	Serializable
 	Ref() *EntityRef
 	ResetRef()
 	SetDB(db *EntityComponentDB)
+	String() string
+}
+
+type Serializable interface {
 	Construct(data map[string]any)
 	Serialize() map[string]any
-	String() string
 }
 
 var AttachedComponentIndex int

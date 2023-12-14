@@ -25,9 +25,9 @@ const (
 
 type VerticalDoor struct {
 	concepts.Attached `editable:"^"`
-	VelZ              float64
 	State             DoorState
 	Intent            DoorIntent
+	Animation         *concepts.Animation[float64]
 }
 
 var VerticalDoorComponentIndex int
@@ -50,4 +50,20 @@ func VerticalDoorFromDb(entity *concepts.EntityRef) *VerticalDoor {
 
 func (vd *VerticalDoor) String() string {
 	return "VerticalDoor"
+}
+
+func (vd *VerticalDoor) Construct(data map[string]any) {
+	vd.Attached.Construct(data)
+
+	if data == nil {
+		return
+	}
+
+	if v, ok := data["Intent"]; ok {
+		if intent, err := DoorIntentString(v.(string)); err == nil {
+			vd.Intent = intent
+		} else {
+			panic(err)
+		}
+	}
 }

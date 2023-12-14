@@ -11,147 +11,45 @@ import (
 type Simulation struct {
 	SimTime          float64
 	RenderTime       float64
+	FrameMillis      float64
 	RenderStateBlend float64
 	FPS              float64
 	PrevTimestamp    int64
 	Integrate        func()
 	Render           func()
-	AllScalars       map[*SimScalar]bool
-	AllVector2s      map[*SimVector2]bool
-	AllVector3s      map[*SimVector3]bool
-}
-
-type SimScalar struct {
-	Now            float64
-	Prev           float64
-	Original       float64 `editable:"Initial Value"`
-	Render         float64
-	RenderCallback func()
-}
-
-type SimVector2 struct {
-	Now            Vector2
-	Prev           Vector2
-	Original       Vector2 `editable:"Initial Value"`
-	Render         Vector2
-	RenderCallback func()
-}
-
-type SimVector3 struct {
-	Now            Vector3
-	Prev           Vector3
-	Original       Vector3 `editable:"Initial Value"`
-	Render         Vector3
-	RenderCallback func()
-}
-
-func (s *SimScalar) Reset() {
-	s.Prev = s.Original
-	s.Now = s.Original
-}
-
-func (s *SimScalar) Set(v float64) {
-	s.Original = v
-	s.Reset()
-}
-
-func (s *SimScalar) Attach(sim *Simulation) {
-	sim.AllScalars[s] = true
-}
-
-func (s *SimScalar) Detach(sim *Simulation) {
-	delete(sim.AllScalars, s)
-}
-
-func (s *SimVector2) Reset() {
-	s.Prev = s.Original
-	s.Now = s.Original
-}
-
-func (s *SimVector2) Set(x float64, y float64) {
-	s.Original[1] = y
-	s.Original[0] = x
-	s.Reset()
-}
-
-func (s *SimVector2) Attach(sim *Simulation) {
-	sim.AllVector2s[s] = true
-}
-
-func (s *SimVector2) Detach(sim *Simulation) {
-	delete(sim.AllVector2s, s)
-}
-
-func (v *SimVector2) Serialize() map[string]any {
-	return v.Original.Serialize()
-}
-
-func (v *SimVector2) Deserialize(data map[string]any) {
-	v.Original.Deserialize(data)
-	v.Reset()
-}
-
-func (s *SimVector3) Reset() {
-	s.Prev = s.Original
-	s.Now = s.Original
-}
-
-func (s *SimVector3) Set(x float64, y float64, z float64) {
-	s.Original[2] = z
-	s.Original[1] = y
-	s.Original[0] = x
-	s.Reset()
-}
-
-func (s *SimVector3) Attach(sim *Simulation) {
-	sim.AllVector3s[s] = true
-}
-
-func (s *SimVector3) Detach(sim *Simulation) {
-	delete(sim.AllVector3s, s)
-}
-
-func (v *SimVector3) Serialize() map[string]any {
-	return v.Original.Serialize()
-}
-
-func (v *SimVector3) Deserialize(data map[string]any) {
-	v.Original.Deserialize(data)
-	v.Reset()
+	All              map[Simulated]bool
+	Animations       map[string]Animated
 }
 
 func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
-		AllScalars:    make(map[*SimScalar]bool),
-		AllVector2s:   make(map[*SimVector2]bool),
-		AllVector3s:   make(map[*SimVector3]bool),
+		All:           make(map[Simulated]bool),
+		Animations:    make(map[string]Animated),
 	}
 }
 
 func (s *Simulation) Step() {
 	newTimestamp := hrtime.Now().Milliseconds()
-	frameMillis := float64(newTimestamp - s.PrevTimestamp)
+	s.FrameMillis = float64(newTimestamp - s.PrevTimestamp)
 	s.PrevTimestamp = newTimestamp
-	if frameMillis != 0 {
-		s.FPS = 1000.0 / frameMillis
+	if s.FrameMillis != 0 {
+		s.FPS = 1000.0 / s.FrameMillis
 	}
 
-	if frameMillis > constants.MinMillisPerFrame {
-		frameMillis = constants.MinMillisPerFrame
+	if s.FrameMillis > constants.MinMillisPerFrame {
+		s.FrameMillis = constants.MinMillisPerFrame
 	}
 
-	s.RenderTime += frameMillis
+	s.RenderTime += s.FrameMillis
 
 	for s.RenderTime >= constants.TimeStep {
-		for v := range s.AllScalars {
-			v.Prev = v.Now
+		for v := range s.All {
+			v.NewFrame()
 		}
-		for v := range s.AllVector2s {
-			v.Prev = v.Now
-		}
-		for v := range s.AllVector3s {
-			v.Prev = v.Now
+
+		for _, a := range s.Animations {
+			a.Animate()
 		}
 
 		if s.Integrate != nil {
@@ -164,29 +62,19 @@ func (s *Simulation) Step() {
 	// Update the blended values
 	s.RenderStateBlend = s.RenderTime / constants.TimeStep
 
-	for v := range s.AllScalars {
-		v.Render = v.Now*s.RenderStateBlend + v.Prev*(1.0-s.RenderStateBlend)
-		if v.RenderCallback != nil {
-			v.RenderCallback()
-		}
-	}
-	for v := range s.AllVector2s {
-		v.Render[1] = v.Now[1]*s.RenderStateBlend + v.Prev[1]*(1.0-s.RenderStateBlend)
-		v.Render[0] = v.Now[0]*s.RenderStateBlend + v.Prev[0]*(1.0-s.RenderStateBlend)
-		if v.RenderCallback != nil {
-			v.RenderCallback()
-		}
-	}
-	for v := range s.AllVector3s {
-		v.Render[2] = v.Now[2]*s.RenderStateBlend + v.Prev[2]*(1.0-s.RenderStateBlend)
-		v.Render[1] = v.Now[1]*s.RenderStateBlend + v.Prev[1]*(1.0-s.RenderStateBlend)
-		v.Render[0] = v.Now[0]*s.RenderStateBlend + v.Prev[0]*(1.0-s.RenderStateBlend)
-		if v.RenderCallback != nil {
-			v.RenderCallback()
-		}
+	for v := range s.All {
+		v.Blend(s.RenderStateBlend)
 	}
 
 	if s.Render != nil {
 		s.Render()
 	}
+}
+
+func (s *Simulation) Animate(name string, a Animated) bool {
+	if s.Animations[name] != nil {
+		return false
+	}
+	s.Animations[name] = a
+	return true
 }

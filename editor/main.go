@@ -8,6 +8,7 @@ import (
 	"os"
 	"runtime/pprof"
 
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/actions"
 
@@ -218,6 +219,13 @@ func onActivate() {
 	builder.ConnectSignals(signals)
 
 	editor.Load("data/worlds/hall.json")
+	refDoor := editor.DB.EntityRef(81)
+	p := behaviors.ProximityFromDb(refDoor)
+	t := core.Trigger{}
+	t.Condition.Construct(editor.DB, "true")
+	t.Action.Construct(editor.DB, "AnimateFloat64(\"test\",ptr(Sector(DB.EntityRef(93)).BottomZ),-24.0,500.0)")
+	p.Triggers = append(p.Triggers, t)
+
 	//editor.Test()
 	glib.TimeoutAdd(15, EditorTimer)
 }

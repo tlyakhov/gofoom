@@ -7,8 +7,8 @@ import (
 	"strings"
 	"tlyakhov/gofoom/concepts"
 
-	"github.com/antonmedv/expr"
-	"github.com/antonmedv/expr/vm"
+	"github.com/expr-lang/expr"
+	"github.com/expr-lang/expr/vm"
 )
 
 type Expression struct {
@@ -60,12 +60,26 @@ func (e *Expression) setterWithRef(ref *concepts.EntityRef, path string, v any) 
 	return e.setterWithList(ref.All(), path, v)
 }
 
+func (e *Expression) animateFloat64(name string, target any, end float64, duration float64) bool {
+	if e.DB.Animations[name] != nil {
+		return false
+	}
+	sv := target.(*concepts.SimVariable[float64])
+	a := concepts.NewAnimation[float64](e.DB.Simulation, name, sv, sv.Now, end, duration)
+	e.DB.Animations[name] = a
+	return true
+}
+
 func (e *Expression) Construct(db *concepts.EntityComponentDB, code string) {
 	e.DB = db
 	e.ErrorMessage = ""
 	e.Env = maps.Clone(concepts.DbTypes().ExprEnv)
+	e.Env["ptr"] = func(x any) any { return &x }
+	e.Env["DB"] = db
 	e.Env["Set"] = e.setterWithRef
 	e.Env["SetEntity"] = e.setterWithEntity
+	e.Env["AnimateFloat64"] = e.animateFloat64
+
 	e.Code = code
 	c, err := expr.Compile(code, expr.Env(e.Env), expr.AsBool())
 	if err != nil {
