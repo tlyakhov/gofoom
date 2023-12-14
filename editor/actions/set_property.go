@@ -30,11 +30,7 @@ func (a *SetProperty) FireHooks() {
 	// be able to handle multiple chains of properties
 	for range a.Values {
 		switch target := a.Parent.(type) {
-		case *concepts.SimScalar:
-			target.Reset()
-		case *concepts.SimVector2:
-			target.Reset()
-		case *concepts.SimVector3:
+		case concepts.Simulated:
 			target.Reset()
 		case *materials.Image:
 			if a.Source.Name == "Source" {

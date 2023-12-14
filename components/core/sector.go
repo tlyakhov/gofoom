@@ -13,22 +13,22 @@ type Sector struct {
 
 	Segments      []*Segment
 	Bodies        map[uint64]*concepts.EntityRef
-	BottomZ       concepts.SimScalar  `editable:"Floor Height"`
-	TopZ          concepts.SimScalar  `editable:"Ceiling Height"`
-	FloorScale    float64             `editable:"Floor Material Scale"`
-	CeilScale     float64             `editable:"Ceiling Material Scale"`
-	FloorSlope    float64             `editable:"Floor Slope"`
-	CeilSlope     float64             `editable:"Ceiling Slope"`
-	FloorTarget   *concepts.EntityRef `editable:"Floor Target"`
-	CeilTarget    *concepts.EntityRef `editable:"Ceiling Target"`
-	FloorMaterial *concepts.EntityRef `editable:"Floor Material" edit_type:"Material"`
-	CeilMaterial  *concepts.EntityRef `editable:"Ceiling Material" edit_type:"Material"`
-	Gravity       concepts.Vector3    `editable:"Gravity"`
-	FloorFriction float64             `editable:"Floor Friction"`
-	FloorTriggers []Trigger           `editable:"Floor Triggers"`
-	CeilTriggers  []Trigger           `editable:"Ceil Triggers"`
-	EnterTriggers []Trigger           `editable:"Enter Triggers"`
-	ExitTriggers  []Trigger           `editable:"Exit Triggers"`
+	BottomZ       concepts.SimVariable[float64] `editable:"Floor Height"`
+	TopZ          concepts.SimVariable[float64] `editable:"Ceiling Height"`
+	FloorScale    float64                       `editable:"Floor Material Scale"`
+	CeilScale     float64                       `editable:"Ceiling Material Scale"`
+	FloorSlope    float64                       `editable:"Floor Slope"`
+	CeilSlope     float64                       `editable:"Ceiling Slope"`
+	FloorTarget   *concepts.EntityRef           `editable:"Floor Target"`
+	CeilTarget    *concepts.EntityRef           `editable:"Ceiling Target"`
+	FloorMaterial *concepts.EntityRef           `editable:"Floor Material" edit_type:"Material"`
+	CeilMaterial  *concepts.EntityRef           `editable:"Ceiling Material" edit_type:"Material"`
+	Gravity       concepts.Vector3              `editable:"Gravity"`
+	FloorFriction float64                       `editable:"Floor Friction"`
+	FloorTriggers []Trigger                     `editable:"Floor Triggers"`
+	CeilTriggers  []Trigger                     `editable:"Ceil Triggers"`
+	EnterTriggers []Trigger                     `editable:"Enter Triggers"`
+	ExitTriggers  []Trigger                     `editable:"Exit Triggers"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3
@@ -110,12 +110,10 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["TopZ"]; ok {
-		s.TopZ.Original = v.(float64)
-		s.TopZ.Reset()
+		s.TopZ.Deserialize(v)
 	}
 	if v, ok := data["BottomZ"]; ok {
-		s.BottomZ.Original = v.(float64)
-		s.BottomZ.Reset()
+		s.BottomZ.Deserialize(v)
 	}
 	if v, ok := data["FloorScale"]; ok {
 		s.FloorScale = v.(float64)
@@ -182,8 +180,8 @@ func (s *Sector) Construct(data map[string]any) {
 
 func (s *Sector) Serialize() map[string]any {
 	result := s.Attached.Serialize()
-	result["TopZ"] = s.TopZ.Original
-	result["BottomZ"] = s.BottomZ.Original
+	result["TopZ"] = s.TopZ.Serialize()
+	result["BottomZ"] = s.BottomZ.Serialize()
 	result["FloorScale"] = s.FloorScale
 	result["CeilScale"] = s.CeilScale
 	if s.Gravity[0] != 0 || s.Gravity[1] != 0 || s.Gravity[2] != -constants.Gravity {

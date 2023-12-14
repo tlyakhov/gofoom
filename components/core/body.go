@@ -10,9 +10,9 @@ import (
 
 type Body struct {
 	concepts.Attached `editable:"^"`
-	Pos               concepts.SimVector3 `editable:"Position"`
-	Vel               concepts.SimVector3
-	Size              concepts.SimVector3 `editable:"Size"`
+	Pos               concepts.SimVariable[concepts.Vector3] `editable:"Position"`
+	Vel               concepts.SimVariable[concepts.Vector3]
+	Size              concepts.SimVariable[concepts.Vector3] `editable:"Size"`
 	Force             concepts.Vector3
 	Angle             float64           `editable:"Angle"`
 	BoundingRadius    float64           `editable:"Bounding Radius"`
@@ -65,9 +65,9 @@ func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 }
 
 func (b *Body) Construct(data map[string]any) {
-	b.Pos.Set(0, 0, 0)
-	b.Vel.Set(0, 0, 0)
-	b.Size.Set(10, 10, 10)
+	b.Pos.Set(concepts.Vector3{0, 0, 0})
+	b.Vel.Set(concepts.Vector3{0, 0, 0})
+	b.Size.Set(concepts.Vector3{10, 10, 10})
 	b.BoundingRadius = 10
 	b.CollisionResponse = Slide
 	b.MountHeight = constants.PlayerMountHeight
@@ -82,19 +82,19 @@ func (b *Body) Construct(data map[string]any) {
 		b.Active = v.(bool)
 	}
 	if v, ok := data["Pos"]; ok {
-		b.Pos.Deserialize(v.(map[string]any))
+		b.Pos.Deserialize(v)
 	}
 	if v, ok := data["Vel"]; ok {
-		b.Vel.Deserialize(v.(map[string]any))
+		b.Vel.Deserialize(v)
+	}
+	if v, ok := data["Size"]; ok {
+		b.Size.Deserialize(v)
 	}
 	if v, ok := data["Angle"]; ok {
 		b.Angle = v.(float64)
 	}
 	if v, ok := data["BoundingRadius"]; ok {
 		b.BoundingRadius = v.(float64)
-	}
-	if v, ok := data["Size"]; ok {
-		b.Size.Deserialize(v.(map[string]any))
 	}
 	if v, ok := data["MountHeight"]; ok {
 		b.MountHeight = v.(float64)

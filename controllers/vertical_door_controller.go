@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
 )
 
 type VerticalDoorController struct {
@@ -29,31 +29,39 @@ func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
 		vd.Sector != nil && vd.Sector.Active
 }
 
+func (vd *VerticalDoorController) setupAnimation() {
+	if vd.Animation != nil {
+		return
+	}
+	name := "vd_" + strconv.FormatUint(vd.TargetEntity.Entity, 10)
+	vd.Animation = concepts.NewAnimation[float64](vd.Simulation, name, &vd.Sector.TopZ, vd.Sector.TopZ.Original, vd.Sector.BottomZ.Original, 1000)
+	vd.Animation.EasingFunc = concepts.EaseInOut4
+	vd.Animation.Style = concepts.AnimationStyleHold
+	vd.Animate(name, vd.Animation)
+}
+
 func (vd *VerticalDoorController) Always() {
-	if vd.Intent == sectors.DoorIntentOpen && (vd.State == sectors.DoorStateClosed || vd.State == sectors.DoorStateClosing) {
-		vd.State = sectors.DoorStateOpening
-		vd.VelZ = constants.DoorSpeed
-		vd.Intent = sectors.DoorIntentReset
-	} else if vd.Intent == sectors.DoorIntentClosed && (vd.State == sectors.DoorStateOpen || vd.State == sectors.DoorStateOpening) {
-		vd.State = sectors.DoorStateClosing
-		vd.VelZ = -constants.DoorSpeed
-		vd.Intent = sectors.DoorIntentReset
+	vd.setupAnimation()
+
+	if vd.Animation.Percent <= 0 {
+		vd.State = sectors.DoorStateOpen
+		if vd.Intent == sectors.DoorIntentOpen {
+			vd.Intent = sectors.DoorIntentClosed
+		}
+	}
+	if vd.Animation.Percent >= 1 {
+		vd.State = sectors.DoorStateClosed
+		if vd.Intent == sectors.DoorIntentClosed {
+			vd.Intent = sectors.DoorIntentReset
+		}
 	}
 
-	z := vd.Sector.TopZ.Now + vd.VelZ*constants.TimeStep
-	if z < vd.Sector.BottomZ.Now {
-		z = vd.Sector.BottomZ.Now
-		vd.VelZ = 0
-		vd.State = sectors.DoorStateClosed
-	}
-	if z > vd.Sector.TopZ.Original {
-		z = vd.Sector.TopZ.Original
-		vd.VelZ = 0
-		vd.State = sectors.DoorStateOpen
-	}
-	vd.Sector.TopZ.Now = z
-	if vd.State == sectors.DoorStateOpen {
+	if vd.Intent == sectors.DoorIntentOpen && vd.State != sectors.DoorStateOpen {
+		vd.State = sectors.DoorStateOpening
+		vd.Animation.Reverse = true
+	} else if vd.Intent == sectors.DoorIntentClosed && vd.State != sectors.DoorStateClosed {
 		vd.State = sectors.DoorStateClosing
-		vd.VelZ = -constants.DoorSpeed
+		vd.Animation.Reverse = false
 	}
+
 }
