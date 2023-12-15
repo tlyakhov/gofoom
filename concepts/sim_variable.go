@@ -104,3 +104,8 @@ func (s *SimVariable[T]) Deserialize(data any) {
 	}
 	s.Reset()
 }
+
+// For scripting
+func (s *SimVariable[T]) Ptr() *SimVariable[T] {
+	return s
+}

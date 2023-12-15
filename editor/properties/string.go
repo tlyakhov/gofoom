@@ -45,7 +45,7 @@ func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
 		g.Container.GrabFocus()
 	})
 
-	if exp, ok := field.Parent.(*core.Expression); ok {
+	if exp, ok := field.Parent.(*core.Script); ok {
 		if exp.ErrorMessage != "" {
 			entry.SetTooltipText(exp.ErrorMessage)
 		} else {

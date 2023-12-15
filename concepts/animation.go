@@ -29,22 +29,6 @@ type Animation[T Simulatable] struct {
 	Style      AnimationStyle
 }
 
-func NewAnimation[T Simulatable](s *Simulation, name string, target *SimVariable[T], start, end T, duration float64) *Animation[T] {
-	a := Animation[T]{
-		Active:     true,
-		Reverse:    false,
-		Simulation: s,
-		Name:       name,
-		Target:     target,
-		Start:      start,
-		End:        end,
-		Duration:   duration,
-		EasingFunc: Lerp,
-		Style:      AnimationStyleOnce,
-	}
-	return &a
-}
-
 func (a *Animation[T]) SetEasingFunc(name string) EasingFunc {
 	a.EasingFunc = EasingFuncs[name]
 	if a.EasingFunc == nil {
@@ -85,4 +69,13 @@ func (a *Animation[T]) Animate() {
 	} else {
 		a.Percent += constants.TimeStep / a.Duration
 	}
+}
+
+// TODO: Add serialization?
+func (a *Animation[T]) Construct(s *Simulation) {
+	a.Simulation = s
+	a.Active = true
+	a.Reverse = false
+	a.EasingFunc = Lerp
+	a.Style = AnimationStyleOnce
 }

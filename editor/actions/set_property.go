@@ -36,8 +36,8 @@ func (a *SetProperty) FireHooks() {
 			if a.Source.Name == "Source" {
 				target.Load()
 			}
-		case *core.Expression:
-			target.Construct(target.DB, target.Code)
+		case *core.Script:
+			target.Compile()
 		}
 	}
 }

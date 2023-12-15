@@ -3,20 +3,23 @@ package core
 import "tlyakhov/gofoom/concepts"
 
 type Trigger struct {
-	Condition Expression `editable:"Condition"`
-	Action    Expression `editable:"Action"`
+	Condition Script `editable:"Condition"`
+	Action    Script `editable:"Action"`
 }
 
 func (t *Trigger) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+	t.Condition.Construct(db, nil)
+	t.Action.Construct(db, nil)
+
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Condition"]; ok {
-		t.Condition.Construct(db, v.(string))
+		t.Condition.Construct(db, v.(map[string]any))
 	}
 	if v, ok := data["Action"]; ok {
-		t.Action.Construct(db, v.(string))
+		t.Action.Construct(db, v.(map[string]any))
 	}
 }
 

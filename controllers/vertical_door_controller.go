@@ -34,8 +34,14 @@ func (vd *VerticalDoorController) setupAnimation() {
 		return
 	}
 	name := "vd_" + strconv.FormatUint(vd.TargetEntity.Entity, 10)
-	vd.Animation = concepts.NewAnimation[float64](vd.Simulation, name, &vd.Sector.TopZ, vd.Sector.TopZ.Original, vd.Sector.BottomZ.Original, 1000)
-	vd.Animation.EasingFunc = concepts.EaseInOut4
+	vd.Animation = new(concepts.Animation[float64])
+	vd.Animation.Construct(vd.Simulation)
+	vd.Animation.Name = name
+	vd.Animation.Target = &vd.Sector.TopZ
+	vd.Animation.Start = vd.Sector.TopZ.Original
+	vd.Animation.End = vd.Sector.BottomZ.Original
+	vd.Animation.Duration = 5000
+	vd.Animation.EasingFunc = concepts.ElasticInOut
 	vd.Animation.Style = concepts.AnimationStyleHold
 	vd.Animate(name, vd.Animation)
 }
