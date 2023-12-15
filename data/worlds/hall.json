@@ -1156,8 +1156,14 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
+          "Action": {
+            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
+            "Style": "ScriptStyleStatement"
+          },
+          "Condition": {
+            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
+            "Style": "ScriptStyleBoolExpr"
+          }
         }
       ]
     },
@@ -1369,8 +1375,14 @@
       "FloorScale": 64,
       "FloorTriggers": [
         {
-          "Action": "Alive(ibody)?.Hurt(\"toxic sludge\", 5, 500)",
-          "Condition": "true"
+          "Action": {
+            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
+            "Style": "ScriptStyleStatement"
+          },
+          "Condition": {
+            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
+            "Style": "ScriptStyleBoolExpr"
+          }
         }
       ],
       "Segments": [
@@ -2040,7 +2052,8 @@
       "Active": true,
       "Bodies": [
         "131",
-        "42"
+        "42",
+        "107"
       ],
       "BottomZ": -64,
       "CeilMaterial": "122",
@@ -4033,8 +4046,14 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
+          "Action": {
+            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
+            "Style": "ScriptStyleStatement"
+          },
+          "Condition": {
+            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
+            "Style": "ScriptStyleBoolExpr"
+          }
         }
       ]
     },
@@ -4099,8 +4118,14 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
+          "Action": {
+            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
+            "Style": "ScriptStyleStatement"
+          },
+          "Condition": {
+            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
+            "Style": "ScriptStyleBoolExpr"
+          }
         }
       ]
     },
@@ -4165,8 +4190,24 @@
       "Range": 100,
       "Triggers": [
         {
-          "Action": "Set(isector,\"VerticalDoor.Intent\",DoorIntentOpen)",
-          "Condition": "(Body(ibody)?.Mass ?? 0)\u003e10"
+          "Action": {
+            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
+            "Style": "ScriptStyleStatement"
+          },
+          "Condition": {
+            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
+            "Style": "ScriptStyleBoolExpr"
+          }
+        },
+        {
+          "Action": {
+            "Code": "",
+            "Style": "ScriptStyleRaw"
+          },
+          "Condition": {
+            "Code": "true",
+            "Style": "ScriptStyleRaw"
+          }
         }
       ]
     },
@@ -5591,7 +5632,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 3,
+      "Angle": 169.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",

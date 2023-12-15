@@ -15,6 +15,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/render"
+	_ "tlyakhov/gofoom/scripting_symbols"
 
 	// "math"
 	// "math/rand"

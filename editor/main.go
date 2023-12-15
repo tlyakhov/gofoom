@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/actions"
+	_ "tlyakhov/gofoom/scripting_symbols"
 
 	"github.com/gotk3/gotk3/glib"
 
@@ -222,8 +223,8 @@ func onActivate() {
 	refDoor := editor.DB.EntityRef(81)
 	p := behaviors.ProximityFromDb(refDoor)
 	t := core.Trigger{}
-	t.Condition.Construct(editor.DB, "true")
-	t.Action.Construct(editor.DB, "AnimateFloat64(\"test\",ptr(Sector(DB.EntityRef(93)).BottomZ),-24.0,500.0)")
+	t.Condition.Construct(editor.DB, map[string]any{"Code": "true", "Style": "ScriptStyleBoolExpr"})
+	t.Action.Construct(editor.DB, map[string]any{"Code": "", "Style": "ScriptStyleStatement"})
 	p.Triggers = append(p.Triggers, t)
 
 	//editor.Test()

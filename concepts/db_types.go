@@ -5,6 +5,8 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+
+	"github.com/traefik/yaegi/interp"
 )
 
 type dbTypes struct {
@@ -15,6 +17,7 @@ type dbTypes struct {
 	nextFreeComponent uint32
 	Controllers       map[string]reflect.Type
 	ExprEnv           map[string]any
+	InterpSymbols     interp.Exports
 	lock              sync.RWMutex
 }
 

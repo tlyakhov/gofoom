@@ -10,11 +10,11 @@ import (
 
 func BodySectorTrigger(triggers []core.Trigger, ibody, isector *concepts.EntityRef) {
 	for _, trigger := range triggers {
-		trigger.Condition.Env["ibody"] = ibody
-		trigger.Condition.Env["isector"] = isector
+		trigger.Condition.Vars["body"] = ibody
+		trigger.Condition.Vars["sector"] = isector
 		if trigger.Condition.Valid() {
-			trigger.Action.Env["ibody"] = ibody
-			trigger.Action.Env["isector"] = isector
+			trigger.Action.Vars["body"] = ibody
+			trigger.Action.Vars["sector"] = isector
 			trigger.Action.Act()
 		}
 	}
