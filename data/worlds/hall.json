@@ -1154,16 +1154,10 @@
       "Active": true,
       "Entity": "25",
       "Range": 100,
-      "Triggers": [
+      "Scripts": [
         {
-          "Action": {
-            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
-            "Style": "ScriptStyleStatement"
-          },
-          "Condition": {
-            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
-            "Style": "ScriptStyleBoolExpr"
-          }
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Style": "ScriptStyleStatement"
         }
       ]
     },
@@ -1373,16 +1367,10 @@
       "FloorFriction": 0.85,
       "FloorMaterial": "127",
       "FloorScale": 64,
-      "FloorTriggers": [
+      "FloorScripts": [
         {
-          "Action": {
-            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
-            "Style": "ScriptStyleStatement"
-          },
-          "Condition": {
-            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
-            "Style": "ScriptStyleBoolExpr"
-          }
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Style": "ScriptStyleStatement"
         }
       ],
       "Segments": [
@@ -4044,16 +4032,10 @@
       "Active": true,
       "Entity": "79",
       "Range": 100,
-      "Triggers": [
+      "Scripts": [
         {
-          "Action": {
-            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
-            "Style": "ScriptStyleStatement"
-          },
-          "Condition": {
-            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
-            "Style": "ScriptStyleBoolExpr"
-          }
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Style": "ScriptStyleStatement"
         }
       ]
     },
@@ -4116,16 +4098,10 @@
       "Active": true,
       "Entity": "80",
       "Range": 100,
-      "Triggers": [
+      "Scripts": [
         {
-          "Action": {
-            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
-            "Style": "ScriptStyleStatement"
-          },
-          "Condition": {
-            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
-            "Style": "ScriptStyleBoolExpr"
-          }
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Style": "ScriptStyleStatement"
         }
       ]
     },
@@ -4188,26 +4164,10 @@
       "Active": true,
       "Entity": "81",
       "Range": 100,
-      "Triggers": [
+      "Scripts": [
         {
-          "Action": {
-            "Code": "sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
-            "Style": "ScriptStyleStatement"
-          },
-          "Condition": {
-            "Code": "core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10",
-            "Style": "ScriptStyleBoolExpr"
-          }
-        },
-        {
-          "Action": {
-            "Code": "",
-            "Style": "ScriptStyleRaw"
-          },
-          "Condition": {
-            "Code": "true",
-            "Style": "ScriptStyleRaw"
-          }
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Style": "ScriptStyleStatement"
         }
       ]
     },

@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
@@ -17,7 +18,7 @@ type AddComponent struct {
 
 func (a *AddComponent) Act() {
 	a.Redo()
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, a.Index == core.SectorComponentIndex)
 }
 func (a *AddComponent) Cancel()                             {}
 func (a *AddComponent) Frame()                              {}

@@ -222,9 +222,11 @@ func (e *Editor) Test() {
 	e.EntityTree.Update()
 }
 
-func (e *Editor) ActionFinished(canceled bool) {
+func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	e.UpdateTitle()
-	controllers.AutoPortal(e.DB)
+	if autoPortal {
+		controllers.AutoPortal(e.DB)
+	}
 	if !canceled {
 		e.UndoHistory = append(e.UndoHistory, e.CurrentAction)
 		if len(e.UndoHistory) > 100 {
@@ -232,8 +234,10 @@ func (e *Editor) ActionFinished(canceled bool) {
 		}
 		e.RedoHistory = []state.IAction{}
 	}
-	e.Grid.Refresh(e.SelectedObjects)
-	e.EntityTree.Update()
+	if refreshProperties {
+		e.Grid.Refresh(e.SelectedObjects)
+		e.EntityTree.Update()
+	}
 	e.SetMapCursor("")
 	e.CurrentAction = nil
 	e.ActTool()

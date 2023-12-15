@@ -8,15 +8,11 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-func BodySectorTrigger(triggers []core.Trigger, ibody, isector *concepts.EntityRef) {
-	for _, trigger := range triggers {
-		trigger.Condition.Vars["body"] = ibody
-		trigger.Condition.Vars["sector"] = isector
-		if trigger.Condition.Valid() {
-			trigger.Action.Vars["body"] = ibody
-			trigger.Action.Vars["sector"] = isector
-			trigger.Action.Act()
-		}
+func BodySectorScript(scripts []core.Script, ibody, isector *concepts.EntityRef) {
+	for _, script := range scripts {
+		script.Vars["body"] = ibody
+		script.Vars["sector"] = isector
+		script.Act()
 	}
 }
 
@@ -41,7 +37,7 @@ func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
 			p[2] = floorZ
 		}
 	}
-	BodySectorTrigger(bc.Sector.EnterTriggers, bc.TargetEntity, bc.Sector.Ref())
+	BodySectorScript(bc.Sector.EnterScripts, bc.TargetEntity, bc.Sector.Ref())
 }
 
 func (bc *BodyController) Exit() {
@@ -49,7 +45,7 @@ func (bc *BodyController) Exit() {
 		log.Printf("%v tried to exit nil sector", bc.TargetEntity.Entity)
 		return
 	}
-	BodySectorTrigger(bc.Sector.ExitTriggers, bc.TargetEntity, bc.Sector.Ref())
+	BodySectorScript(bc.Sector.ExitScripts, bc.TargetEntity, bc.Sector.Ref())
 	delete(bc.Sector.Bodies, bc.Body.Entity)
 	bc.Body.SectorEntityRef = nil
 }
@@ -97,7 +93,7 @@ func (bc *BodyController) Physics() {
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
 		bc.Body.OnGround = true
-		BodySectorTrigger(bc.Sector.FloorTriggers, bc.TargetEntity, bc.Sector.Ref())
+		BodySectorScript(bc.Sector.FloorScripts, bc.TargetEntity, bc.Sector.Ref())
 	}
 
 	if !bc.Sector.CeilTarget.Nil() && bodyTop > ceilZ {
@@ -111,6 +107,6 @@ func (bc *BodyController) Physics() {
 		delta := bc.Sector.CeilNormal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
-		BodySectorTrigger(bc.Sector.CeilTriggers, bc.TargetEntity, bc.Sector.Ref())
+		BodySectorScript(bc.Sector.CeilScripts, bc.TargetEntity, bc.Sector.Ref())
 	}
 }

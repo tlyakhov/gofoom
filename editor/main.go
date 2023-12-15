@@ -222,10 +222,9 @@ func onActivate() {
 	editor.Load("data/worlds/hall.json")
 	refDoor := editor.DB.EntityRef(81)
 	p := behaviors.ProximityFromDb(refDoor)
-	t := core.Trigger{}
-	t.Condition.Construct(editor.DB, map[string]any{"Code": "true", "Style": "ScriptStyleBoolExpr"})
-	t.Action.Construct(editor.DB, map[string]any{"Code": "", "Style": "ScriptStyleStatement"})
-	p.Triggers = append(p.Triggers, t)
+	s := core.Script{}
+	s.Construct(editor.DB, map[string]any{"Code": "true", "Style": "ScriptStyleStatement"})
+	p.Scripts = append(p.Scripts, s)
 
 	//editor.Test()
 	glib.TimeoutAdd(15, EditorTimer)

@@ -37,6 +37,8 @@ func (a *SetProperty) FireHooks() {
 				target.Load()
 			}
 		case *core.Script:
+			// TODO: use https://github.com/hfmrow/gotk3_gtksource to have a
+			// better source editor for scripts
 			target.Compile()
 		}
 	}
@@ -50,7 +52,7 @@ func (a *SetProperty) Act() {
 	}
 	a.FireHooks()
 	a.State().Modified = true
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, false)
 }
 
 func (a *SetProperty) Undo() {

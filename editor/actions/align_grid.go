@@ -26,11 +26,11 @@ func (a *AlignGrid) OnMouseUp() {
 		a.B = concepts.Vector2{0, 1}
 	}
 	a.State().MapView.GridA, a.State().MapView.GridB = a.A, a.B
-	a.ActionFinished(false)
+	a.ActionFinished(false, false, false)
 }
 
 func (a *AlignGrid) Cancel() {
-	a.ActionFinished(true)
+	a.ActionFinished(true, false, false)
 }
 
 func (a *AlignGrid) Undo() {

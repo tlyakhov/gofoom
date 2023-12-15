@@ -25,10 +25,10 @@ type Sector struct {
 	CeilMaterial  *concepts.EntityRef           `editable:"Ceiling Material" edit_type:"Material"`
 	Gravity       concepts.Vector3              `editable:"Gravity"`
 	FloorFriction float64                       `editable:"Floor Friction"`
-	FloorTriggers []Trigger                     `editable:"Floor Triggers"`
-	CeilTriggers  []Trigger                     `editable:"Ceil Triggers"`
-	EnterTriggers []Trigger                     `editable:"Enter Triggers"`
-	ExitTriggers  []Trigger                     `editable:"Exit Triggers"`
+	FloorScripts  []Script                      `editable:"Floor Scripts"`
+	CeilScripts   []Script                      `editable:"Ceil Scripts"`
+	EnterScripts  []Script                      `editable:"Enter Scripts"`
+	ExitScripts   []Script                      `editable:"Exit Scripts"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3
@@ -162,17 +162,17 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["FloorFriction"]; ok {
 		s.FloorFriction = v.(float64)
 	}
-	if v, ok := data["FloorTriggers"]; ok {
-		s.FloorTriggers = ConstructTriggers(s.DB, v)
+	if v, ok := data["FloorScripts"]; ok {
+		s.FloorScripts = ConstructScripts(s.DB, v)
 	}
-	if v, ok := data["CeilTriggers"]; ok {
-		s.CeilTriggers = ConstructTriggers(s.DB, v)
+	if v, ok := data["CeilScripts"]; ok {
+		s.CeilScripts = ConstructScripts(s.DB, v)
 	}
-	if v, ok := data["EnterTriggers"]; ok {
-		s.EnterTriggers = ConstructTriggers(s.DB, v)
+	if v, ok := data["EnterScripts"]; ok {
+		s.EnterScripts = ConstructScripts(s.DB, v)
 	}
-	if v, ok := data["ExitTriggers"]; ok {
-		s.ExitTriggers = ConstructTriggers(s.DB, v)
+	if v, ok := data["ExitScripts"]; ok {
+		s.ExitScripts = ConstructScripts(s.DB, v)
 	}
 
 	s.Recalculate()
@@ -207,17 +207,17 @@ func (s *Sector) Serialize() map[string]any {
 	if !s.CeilMaterial.Nil() {
 		result["CeilMaterial"] = s.CeilMaterial.Serialize()
 	}
-	if len(s.FloorTriggers) > 0 {
-		result["FloorTriggers"] = SerializeTriggers(s.FloorTriggers)
+	if len(s.FloorScripts) > 0 {
+		result["FloorScripts"] = SerializeScripts(s.FloorScripts)
 	}
-	if len(s.CeilTriggers) > 0 {
-		result["CeilTriggers"] = SerializeTriggers(s.CeilTriggers)
+	if len(s.CeilScripts) > 0 {
+		result["CeilScripts"] = SerializeScripts(s.CeilScripts)
 	}
-	if len(s.EnterTriggers) > 0 {
-		result["EnterTriggers"] = SerializeTriggers(s.EnterTriggers)
+	if len(s.EnterScripts) > 0 {
+		result["EnterScripts"] = SerializeScripts(s.EnterScripts)
 	}
-	if len(s.ExitTriggers) > 0 {
-		result["ExitTriggers"] = SerializeTriggers(s.ExitTriggers)
+	if len(s.ExitScripts) > 0 {
+		result["ExitScripts"] = SerializeScripts(s.ExitScripts)
 	}
 
 	if len(s.Bodies) > 0 {

@@ -40,8 +40,8 @@ func (vd *VerticalDoorController) setupAnimation() {
 	vd.Animation.Target = &vd.Sector.TopZ
 	vd.Animation.Start = vd.Sector.TopZ.Original
 	vd.Animation.End = vd.Sector.BottomZ.Original
-	vd.Animation.Duration = 5000
-	vd.Animation.EasingFunc = concepts.ElasticInOut
+	vd.Animation.Duration = 1000
+	vd.Animation.EasingFunc = concepts.EaseInOut
 	vd.Animation.Style = concepts.AnimationStyleHold
 	vd.Animate(name, vd.Animation)
 }

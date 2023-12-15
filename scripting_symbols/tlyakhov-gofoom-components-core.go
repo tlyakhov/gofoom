@@ -25,7 +25,7 @@ func init() {
 		"CollisionResponseString":  reflect.ValueOf(core.CollisionResponseString),
 		"CollisionResponseStrings": reflect.ValueOf(core.CollisionResponseStrings),
 		"CollisionResponseValues":  reflect.ValueOf(core.CollisionResponseValues),
-		"ConstructTriggers":        reflect.ValueOf(core.ConstructTriggers),
+		"ConstructScripts":         reflect.ValueOf(core.ConstructScripts),
 		"LightComponentIndex":      reflect.ValueOf(&core.LightComponentIndex).Elem(),
 		"LightFromDb":              reflect.ValueOf(core.LightFromDb),
 		"MaterialScaleString":      reflect.ValueOf(core.MaterialScaleString),
@@ -45,7 +45,7 @@ func init() {
 		"SectorComponentIndex":     reflect.ValueOf(&core.SectorComponentIndex).Elem(),
 		"SectorFromDb":             reflect.ValueOf(core.SectorFromDb),
 		"SegmentComponentIndex":    reflect.ValueOf(&core.SegmentComponentIndex).Elem(),
-		"SerializeTriggers":        reflect.ValueOf(core.SerializeTriggers),
+		"SerializeScripts":         reflect.ValueOf(core.SerializeScripts),
 		"Slide":                    reflect.ValueOf(core.Slide),
 		"SpawnComponentIndex":      reflect.ValueOf(&core.SpawnComponentIndex).Elem(),
 		"SpawnFromDb":              reflect.ValueOf(core.SpawnFromDb),
@@ -62,6 +62,5 @@ func init() {
 		"Sector":            reflect.ValueOf((*core.Sector)(nil)),
 		"Segment":           reflect.ValueOf((*core.Segment)(nil)),
 		"Spawn":             reflect.ValueOf((*core.Spawn)(nil)),
-		"Trigger":           reflect.ValueOf((*core.Trigger)(nil)),
 	}
 }

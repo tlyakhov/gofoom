@@ -13,7 +13,7 @@ import (
 func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size float64) *core.Sector {
 	isector := archetypes.CreateSector(db)
 	sector := core.SectorFromDb(isector)
-	named := concepts.NamedFromDb(isector)
+	named := db.NewComponent(isector.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	named.Name = name
 
 	mat := DefaultMaterial(db)
@@ -42,7 +42,7 @@ func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size fl
 
 func CreateTestGrass(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	igrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := concepts.NamedFromDb(igrass)
+	nmat := db.NewComponent(igrass.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	tex := materials.ImageFromDb(igrass)
@@ -56,7 +56,7 @@ func CreateTestGrass(db *concepts.EntityComponentDB) *concepts.EntityRef {
 }
 func CreateTestSky(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	isky := archetypes.CreateBasic(db, materials.SkyComponentIndex)
-	nmat := concepts.NamedFromDb(isky)
+	nmat := db.NewComponent(isky.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Sky"
 	tex := db.NewComponent(isky.Entity, materials.ImageComponentIndex).(*materials.Image)
 	tex.Source = "data/Sky.png"
@@ -68,7 +68,7 @@ func CreateTestSky(db *concepts.EntityComponentDB) *concepts.EntityRef {
 
 func CreateTestDirt(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	idirt := archetypes.CreateBasicMaterial(db, true)
-	nmat := concepts.NamedFromDb(idirt)
+	nmat := db.NewComponent(idirt.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Dirt"
 	tex := materials.ImageFromDb(idirt)
 	tex.Source = "data/FDef.png"
@@ -89,7 +89,7 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 	spawn.Spawn[2] = 100
 
 	igrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := concepts.NamedFromDb(igrass)
+	nmat := db.NewComponent(igrass.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	tex := materials.ImageFromDb(igrass)
