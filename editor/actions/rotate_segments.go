@@ -33,7 +33,7 @@ func (a *RotateSegments) Rotate(sector *core.Sector, backward bool) {
 func (a *RotateSegments) Act() {
 	a.Redo()
 	a.State().Modified = true
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, true)
 }
 
 func (a *RotateSegments) Undo() {

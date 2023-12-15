@@ -42,7 +42,7 @@ func (a *Delete) Act() {
 		}
 	}
 	a.Redo()
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, true)
 }
 func (a *Delete) Cancel()                             {}
 func (a *Delete) Frame()                              {}

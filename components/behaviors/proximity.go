@@ -8,8 +8,8 @@ import (
 
 type Proximity struct {
 	concepts.Attached `editable:"^"`
-	Range             float64        `editable:"Range"`
-	Triggers          []core.Trigger `editable:"Triggers"`
+	Range             float64       `editable:"Range"`
+	Scripts           []core.Script `editable:"Scripts"`
 }
 
 var ProximityComponentIndex int
@@ -42,8 +42,8 @@ func (p *Proximity) Construct(data map[string]any) {
 		p.Range = v.(float64)
 	}
 
-	if v, ok := data["Triggers"]; ok {
-		p.Triggers = core.ConstructTriggers(p.DB, v)
+	if v, ok := data["Scripts"]; ok {
+		p.Scripts = core.ConstructScripts(p.DB, v)
 	}
 
 }
@@ -52,8 +52,8 @@ func (p *Proximity) Serialize() map[string]any {
 	result := p.Attached.Serialize()
 	result["Range"] = p.Range
 
-	if len(p.Triggers) > 0 {
-		result["Triggers"] = core.SerializeTriggers(p.Triggers)
+	if len(p.Scripts) > 0 {
+		result["Scripts"] = core.SerializeScripts(p.Scripts)
 	}
 
 	return result

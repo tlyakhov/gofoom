@@ -48,7 +48,7 @@ type IEditor interface {
 	SetMapCursor(name string)
 	UpdateTitle()
 	Load(filename string)
-	ActionFinished(canceled bool)
+	ActionFinished(canceled, refreshProperties, autoPortal bool)
 	NewAction(a IAction)
 	ActTool()
 	SwitchTool(tool EditorTool)

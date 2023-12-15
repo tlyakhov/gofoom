@@ -63,7 +63,7 @@ func (a *AddSector) OnMouseUp() {
 			a.Sector.Segments = segs[:(len(segs) - 1)]
 			a.State().Modified = true
 			a.Sector.Recalculate()
-			a.ActionFinished(false)
+			a.ActionFinished(false, true, true)
 		}
 	}
 	// TODO: right-mouse button end

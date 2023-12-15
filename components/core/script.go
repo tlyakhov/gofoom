@@ -111,18 +111,6 @@ func (s *Script) Ref(name string) *concepts.EntityRef {
 	return nil
 }
 
-func (s *Script) Valid() bool {
-	if s.interp == nil || s.runFunc == nil {
-		return false
-	}
-	if f, ok := s.runFunc.(func(*Script) bool); ok {
-		return f(s)
-	} else {
-		s.ErrorMessage = "Error running script, 'Run' function has the wrong signature."
-		return false
-	}
-}
-
 func (s *Script) Act() bool {
 	if s.interp == nil || s.runFunc == nil {
 		return false
@@ -134,4 +122,24 @@ func (s *Script) Act() bool {
 		s.ErrorMessage = "Error running script, 'Run' function has the wrong signature."
 		return false
 	}
+}
+
+func ConstructScripts(db *concepts.EntityComponentDB, data any) []Script {
+	var result []Script
+
+	if scripts, ok := data.([]any); ok {
+		result = make([]Script, len(scripts))
+		for i, tdata := range scripts {
+			result[i].Construct(db, tdata.(map[string]any))
+		}
+	}
+	return result
+}
+
+func SerializeScripts(scripts []Script) []map[string]any {
+	result := make([]map[string]any, len(scripts))
+	for i, script := range scripts {
+		result[i] = script.Serialize()
+	}
+	return result
 }

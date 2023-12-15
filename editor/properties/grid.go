@@ -293,7 +293,7 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(index, field, core.ScriptStyleValues())
 		case **concepts.EntityRef:
 			g.fieldEntityRef(index, field)
-		case *[]core.Trigger:
+		case *[]core.Script:
 			g.fieldSlice(index, field)
 		case *[]materials.Sprite:
 			g.fieldSlice(index, field)

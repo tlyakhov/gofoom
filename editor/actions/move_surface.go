@@ -61,7 +61,7 @@ func (a *MoveSurface) Act() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 	a.State().Modified = true
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, false)
 }
 
 func (a *MoveSurface) Undo() {

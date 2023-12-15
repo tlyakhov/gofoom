@@ -80,11 +80,11 @@ func (a *SplitSector) OnMouseUp() {
 		}
 	}
 	a.State().Modified = true
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, true)
 }
 
 func (a *SplitSector) Cancel() {
-	a.ActionFinished(true)
+	a.ActionFinished(true, true, true)
 }
 
 func (a *SplitSector) Undo() {

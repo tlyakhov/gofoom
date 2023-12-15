@@ -23,7 +23,7 @@ type Segment struct {
 	HiBehavior        MaterialScale       `editable:"High Behavior"`
 	PortalHasMaterial bool                `editable:"Portal has material"`
 	PortalIsPassable  bool                `editable:"Portal is passable"`
-	ContactTriggers   []Trigger           `editable:"Contact Triggers"`
+	ContactScripts    []Script            `editable:"Contact Scripts"`
 
 	AdjacentSector  *concepts.EntityRef
 	AdjacentSegment *Segment
@@ -331,8 +331,8 @@ func (s *Segment) Construct(data map[string]any) {
 			panic(error)
 		}
 	}
-	if v, ok := data["ContactTriggers"]; ok {
-		s.ContactTriggers = ConstructTriggers(s.DB, v)
+	if v, ok := data["ContactScripts"]; ok {
+		s.ContactScripts = ConstructScripts(s.DB, v)
 	}
 }
 
@@ -371,8 +371,8 @@ func (s *Segment) Serialize() map[string]any {
 	if !s.AdjacentSector.Nil() {
 		result["AdjacentSector"] = s.AdjacentSector.Serialize()
 	}
-	if len(s.ContactTriggers) > 0 {
-		result["ContactTriggers"] = SerializeTriggers(s.ContactTriggers)
+	if len(s.ContactScripts) > 0 {
+		result["ContactScripts"] = SerializeScripts(s.ContactScripts)
 	}
 
 	return result

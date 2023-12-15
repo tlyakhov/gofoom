@@ -18,7 +18,7 @@ type AddSliceElement struct {
 
 func (a *AddSliceElement) Act() {
 	a.Redo()
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, false)
 }
 func (a *AddSliceElement) Cancel()                             {}
 func (a *AddSliceElement) Frame()                              {}
@@ -40,7 +40,7 @@ func (a *AddSliceElement) Redo() {
 	sliceElem.Set(s)
 	// Add more types?
 	switch target := newValue.Interface().(type) {
-	case core.Trigger:
+	case core.Script:
 		target.Construct(a.State().DB, nil)
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)

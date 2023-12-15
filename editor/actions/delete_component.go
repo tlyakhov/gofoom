@@ -19,7 +19,7 @@ type DeleteComponent struct {
 func (a *DeleteComponent) Act() {
 	a.SectorForEntity = make(map[uint64]*core.Sector)
 	a.Redo()
-	a.ActionFinished(false)
+	a.ActionFinished(false, true, false)
 }
 func (a *DeleteComponent) Cancel()                             {}
 func (a *DeleteComponent) Frame()                              {}

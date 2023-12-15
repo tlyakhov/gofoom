@@ -182,7 +182,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 
 	if len(collided) > 0 {
 		for _, seg := range collided {
-			BodySectorTrigger(seg.ContactTriggers, bc.TargetEntity, bc.Sector.Ref())
+			BodySectorScript(seg.ContactScripts, bc.TargetEntity, bc.Sector.Ref())
 		}
 
 		switch bc.Body.CollisionResponse {
