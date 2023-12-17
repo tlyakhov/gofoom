@@ -48,6 +48,11 @@ func (g *Grid) pixbuf(er *concepts.EntityRef) *gdk.Pixbuf {
 		return g.pixbufFromFile(img.Source)
 	} else if solid := materials.SolidFromDb(er); solid != nil {
 		return g.pixbufFromColor(solid.Diffuse)
+	} else if shader := materials.ShaderFromDb(er); shader != nil {
+		if len(shader.Stages) == 0 {
+			return nil
+		}
+		return g.pixbuf(shader.Stages[0].Texture)
 	}
 
 	return nil

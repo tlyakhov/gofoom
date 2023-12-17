@@ -7,7 +7,8 @@ import (
 )
 
 func EntityMapIsMaterial(components []concepts.Attachable) bool {
-	return components[materials.LitComponentIndex] != nil ||
+	return components[materials.ShaderComponentIndex] != nil ||
+		components[materials.LitComponentIndex] != nil ||
 		components[materials.TiledComponentIndex] != nil ||
 		components[materials.SkyComponentIndex] != nil ||
 		components[materials.ImageComponentIndex] != nil ||

@@ -19,7 +19,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-var EmbeddedTypes = [...]string{"SimScalar", "SimVector2", "SimVector3", "Script"}
+var EmbeddedTypes = [...]string{"SimScalar", "SimVector2", "SimVector3", "Script", "ShaderStage"}
 
 type PropertyGridState struct {
 	Fields           map[string]*state.PropertyGridField
@@ -278,11 +278,13 @@ func (g *Grid) Refresh(selection []any) {
 		case *int:
 			g.fieldNumber(index, field)
 		case *concepts.Vector2:
-			g.fieldVector2(index, field)
+			fieldStringLikeType[*concepts.Vector2](g, index, field)
 		case *concepts.Vector3:
-			g.fieldVector3(index, field)
+			fieldStringLikeType[*concepts.Vector3](g, index, field)
 		case *concepts.Vector4:
-			g.fieldVector4(index, field)
+			fieldStringLikeType[*concepts.Vector4](g, index, field)
+		case *concepts.Matrix2:
+			fieldStringLikeType[*concepts.Matrix2](g, index, field)
 		case *core.MaterialScale:
 			g.fieldEnum(index, field, core.MaterialScaleValues())
 		case *core.CollisionResponse:
@@ -296,6 +298,8 @@ func (g *Grid) Refresh(selection []any) {
 		case *[]core.Script:
 			g.fieldSlice(index, field)
 		case *[]materials.Sprite:
+			g.fieldSlice(index, field)
+		case *[]materials.ShaderStage:
 			g.fieldSlice(index, field)
 		}
 		index++

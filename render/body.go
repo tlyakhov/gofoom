@@ -108,7 +108,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 			continue
 		}
 		v := (float64(y) - y1) / (y2 - y1)
-		c := s.SampleMaterial(refMaterial, u, v, scaler)
+		c := s.SampleShader(refMaterial, u, v, scaler)
 		c.Mul4Self(&s.Light)
 		if c[3] > 0 {
 			s.FrameBuffer[screenIndex].AddPreMulColorSelf(c)

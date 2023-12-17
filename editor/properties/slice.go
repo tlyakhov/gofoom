@@ -15,7 +15,7 @@ func (g *Grid) fieldSlice(index int, field *state.PropertyGridField) {
 	button.SetHExpand(true)
 	button.SetLabel(fmt.Sprintf("Add %v", elemType.String()))
 	button.Connect("clicked", func(_ *gtk.Button) {
-		action := &actions.AddSliceElement{IEditor: g.IEditor, SlicePtr: field.Values[0]}
+		action := &actions.AddSliceElement{IEditor: g.IEditor, SlicePtr: field.Values[0], Parent: field.Parent}
 		g.NewAction(action)
 		action.Act()
 		g.Container.GrabFocus()
