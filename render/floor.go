@@ -54,7 +54,7 @@ func Floor(s *state.Column) {
 		ty := world[1] / s.Sector.FloorScale
 
 		if !mat.Nil() {
-			s.SampleMaterial(mat, tx, ty, scaler)
+			s.SampleShader(mat, tx, ty, scaler)
 			s.SampleLight(&s.Material, mat, world, 0, 0, distToFloor)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))

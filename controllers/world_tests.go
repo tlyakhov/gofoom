@@ -50,8 +50,8 @@ func CreateTestGrass(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	tex.Filter = true
 	tex.GenerateMipMaps = true
 	tex.Load()
-	tiled := materials.TiledFromDb(igrass)
-	tiled.Scale = 5.0
+	//tiled := materials.TiledFromDb(igrass)
+	//tiled.Scale = 5.0
 	return igrass
 }
 func CreateTestSky(db *concepts.EntityComponentDB) *concepts.EntityRef {
@@ -97,8 +97,8 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.Load()
-	tiled := materials.TiledFromDb(igrass)
-	tiled.Scale = 5.0
+	//tiled := materials.TiledFromDb(igrass)
+	//tiled.Scale = 5.0
 
 	CreateTestGrass(db)
 	isky := CreateTestSky(db)

@@ -78,12 +78,25 @@ func (c *Column) CalcScreen() {
 	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
-func (c *Column) SampleMaterial(material *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {
-	// Should refactor this scale thing, it's weird
+func (c *Column) SampleShader(ishader *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {
+	shader := materials.ShaderFromDb(ishader)
+	if shader == nil {
+		return c.sampleTexture(&c.Material, ishader, u, v, scale)
+	}
+
+	for _, stage := range shader.Stages {
+		tu := stage.Transform[0]*u + stage.Transform[2]*v + stage.Transform[4]
+		tv := stage.Transform[1]*u + stage.Transform[3]*v + stage.Transform[5]
+		c.sampleTexture(&c.Material, stage.Texture, tu, tv, scale)
+	}
+	return &c.Material
+}
+
+func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {
+	// Should refactor this scale thing, it's hard to reason about
 	scaleDivisor := 1.0
 
 	if tiled := materials.TiledFromDb(material); tiled != nil {
-		scaleDivisor *= tiled.Scale
 		u *= scaleDivisor
 		v *= scaleDivisor
 		if tiled.IsLiquid {
@@ -112,19 +125,20 @@ func (c *Column) SampleMaterial(material *concepts.EntityRef, u, v float64, scal
 	}
 
 	if image := materials.ImageFromDb(material); image != nil {
-		c.Material = image.Sample(u, v, scale)
+		c := image.Sample(u, v, scale)
+		result.AddPreMulColorSelf(&c)
 	} else if solid := materials.SolidFromDb(material); solid != nil {
-		c.Material[0] = float64(solid.Diffuse.R) / 255.0
-		c.Material[1] = float64(solid.Diffuse.G) / 255.0
-		c.Material[2] = float64(solid.Diffuse.B) / 255.0
+		result[0] = float64(solid.Diffuse.R) / 255.0
+		result[1] = float64(solid.Diffuse.G) / 255.0
+		result[2] = float64(solid.Diffuse.B) / 255.0
 	} else {
-		c.Material[0] = 0.5
-		c.Material[1] = 0.5
-		c.Material[2] = 0.5
-		c.Material[3] = 1.0
+		result[0] = 0.5
+		result[1] = 0
+		result[2] = 0.5
+		result[3] = 1.0
 	}
 
-	return &c.Material
+	return result
 }
 
 func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {
