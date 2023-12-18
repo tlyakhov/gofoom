@@ -183,8 +183,43 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
+	if gameKeyMap[gdk.KEY_i] {
+		t := concepts.IdentityMatrix2
+		t.Translate(&concepts.Vector2{0, -0.005})
+		e.ChangeSelectedTransformables(&t)
+	}
+
+	if gameKeyMap[gdk.KEY_k] {
+		t := concepts.IdentityMatrix2
+		t.Translate(&concepts.Vector2{0, 0.005})
+		e.ChangeSelectedTransformables(&t)
+	}
+
+	if gameKeyMap[gdk.KEY_j] {
+		t := concepts.IdentityMatrix2
+		t.Translate(&concepts.Vector2{0.005, 0})
+		e.ChangeSelectedTransformables(&t)
+	}
+
+	if gameKeyMap[gdk.KEY_l] {
+		t := concepts.IdentityMatrix2
+		t.Translate(&concepts.Vector2{-0.005, 0})
+		e.ChangeSelectedTransformables(&t)
+	}
+
 	e.DB.NewControllerSet().ActGlobal(concepts.ControllerAlways)
 	e.GatherHoveringObjects()
+}
+
+func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
+	for _, t := range e.State().SelectedTransformables {
+		switch target := t.(type) {
+		case *concepts.Vector2:
+			m.Project(target)
+		case *concepts.Matrix2:
+			target.MulSelf(m)
+		}
+	}
 }
 
 func (e *Editor) Load(filename string) {

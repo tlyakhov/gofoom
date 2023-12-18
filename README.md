@@ -9,8 +9,9 @@ https://github.com/tlyakhov/jsfoom.
 Constraints are fun :). This project has the following goals:
 * No GPU involvement in rendering (preferably anything else either).
 * High quality editing tools.
-* High degree of flexibility and expandability. Game code separate from engine
-  code.
+* High degree of flexibility and expandability:
+    * Game code separate from engine code.
+    * User scripting
     * Corrolary: lots of knobs to tweak. Examples include per-sector
       gravity/friction, entities can have different collision response, etc...
 * Scalability. While the number of sectors/segments/entities on screen at once
@@ -28,7 +29,9 @@ sectors, lighting, etc...
 * Multi-threaded rendering using goroutines.
 * Sectors with non-orthogonal walls of variable height.
 * Texture mapped floors, ceilings, and walls.
+  * Layered texture shaders
 * Sloped floors and ceilings.
+* Objects represented as sprites with multiple angles.
 * No limits to sector/entity counts
 * Fully dynamic lighting with dynamic shadow maps.
 * Bilinear filtering & mipmapping for images and shadow maps.
@@ -45,7 +48,7 @@ sectors, lighting, etc...
 
 ### Soon:
 
-* Objects represented as sprites with multiple angles.
+* More interactivity: inventory, weapons/projectiles, NPC movement
 
 ## Repository Structure
 
@@ -65,4 +68,3 @@ sectors, lighting, etc...
 * [/editor](/editor/) - all the code for the world editor.
 * [/game](/game/) - the game executable.
 * [/render](/render/) - the renderer and its state.
-* 

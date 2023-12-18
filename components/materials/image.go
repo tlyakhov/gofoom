@@ -73,7 +73,7 @@ func (img *Image) Load() error {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			index := uint32(x-bounds.Min.X) + uint32(y-bounds.Min.Y)*img.Width
 			// Premultiplied alpha
-			img.Data[index] = concepts.ColorToInt32(decoded.At(x, y))
+			img.Data[index] = concepts.ColorToInt32PreMul(decoded.At(x, y))
 		}
 	}
 	img.generateMipMaps()
@@ -170,7 +170,7 @@ func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
 		//r := concepts.Vector4{}
 		//concepts.AsmInt32ToVector4PreMul(data[index], (*[4]float64)(&r))
 		//return r
-		return concepts.Int32ToVector4PreMul(data[index])
+		return concepts.Int32ToVector4(data[index]) //concepts.Int32ToVector4PreMul(data[index])
 	}
 
 	fx = concepts.UMin(fx, w-1)

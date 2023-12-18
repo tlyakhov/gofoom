@@ -28,14 +28,14 @@ func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.Prop
 		origValue += currentValue.String()
 	}
 
-	box, _ := gtk.EntryNew()
-	box.SetHExpand(true)
-	box.SetText(origValue)
-	box.Connect("activate", func(_ *gtk.Entry) {
-		text, err := box.GetText()
+	entry, _ := gtk.EntryNew()
+	entry.SetHExpand(true)
+	entry.SetText(origValue)
+	entry.Connect("activate", func(_ *gtk.Entry) {
+		text, err := entry.GetText()
 		if err != nil {
 			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
-			box.SetText(origValue)
+			entry.SetText(origValue)
 			g.Container.GrabFocus()
 			return
 		}
@@ -54,7 +54,7 @@ func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.Prop
 		}
 		if err != nil {
 			log.Printf("Couldn't parse %v from user entry. %v\n", reflect.TypeOf(typedValue).Name(), err)
-			box.SetText(origValue)
+			entry.SetText(origValue)
 			g.Container.GrabFocus()
 			return
 		}
@@ -69,5 +69,24 @@ func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.Prop
 		origValue = currentValue.String()
 		g.Container.GrabFocus()
 	})
-	g.Container.Attach(box, 2, index, 2, 1)
+	g.Container.Attach(entry, 2, index, 1, 1)
+
+	cb, _ := gtk.CheckButtonNew()
+	cb.SetLabel("Tweak")
+	cb.Connect("toggled", func(_ *gtk.CheckButton) {
+		active := cb.GetActive()
+		for i, v := range g.State().SelectedTransformables {
+			if typed, ok := v.(T); ok && typed == field.Values[0].Interface() {
+				if !active {
+					s := g.State().SelectedTransformables
+					g.State().SelectedTransformables = append(s[:i], s[i+1:]...)
+				}
+				return
+			}
+		}
+		if active {
+			g.State().SelectedTransformables = append(g.State().SelectedTransformables, field.Values[0].Interface())
+		}
+	})
+	g.Container.Attach(cb, 3, index, 1, 1)
 }

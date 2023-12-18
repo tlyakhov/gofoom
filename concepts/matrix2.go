@@ -94,6 +94,13 @@ func (m *Matrix2) Mul(next *Matrix2) *Matrix2 {
 	}
 }
 
+func (m *Matrix2) MulSelf(next *Matrix2) *Matrix2 {
+	m[0], m[1] = next[0]*m[0]+next[2]*m[1], next[1]*m[0]+next[3]*m[1]
+	m[2], m[3] = next[0]*m[2]+next[2]*m[3], next[1]*m[2]+next[3]*m[3]
+	m[4], m[5] = next[0]*m[4]+next[2]*m[5]+next[4], next[1]*m[4]+next[3]*m[5]+next[5]
+	return m
+}
+
 func (m Matrix2) Project(u *Vector2) *Vector2 {
 	return &Vector2{
 		m[0]*u[0] + m[2]*u[1] + m[4],

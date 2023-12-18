@@ -40,8 +40,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "2",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -257,8 +256,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "8",
-        "9"
+        "9",
+        "8"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -765,6 +764,37 @@
         }
       ],
       "TopZ": 64
+    }
+  },
+  {
+    "Entity": "16",
+    "materials.Shader": {
+      "Active": true,
+      "Entity": "16",
+      "Stages": [
+        {
+          "Texture": "123",
+          "Transform": [
+            1,
+            0,
+            0,
+            1,
+            0.3,
+            0
+          ]
+        },
+        {
+          "Texture": "129",
+          "Transform": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            -0.1
+          ]
+        }
+      ]
     }
   },
   {
@@ -2039,9 +2069,9 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
+        "107",
         "131",
-        "42",
-        "107"
+        "42"
       ],
       "BottomZ": -64,
       "CeilMaterial": "122",
@@ -2076,7 +2106,7 @@
         {
           "HiMaterial": "2",
           "LoMaterial": "2",
-          "MidMaterial": "2",
+          "MidMaterial": "16",
           "X": -200,
           "Y": 110
         },
@@ -5592,7 +5622,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 169.5,
+      "Angle": 325.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6238,8 +6268,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "122",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -6274,8 +6303,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "123",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -6310,8 +6338,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "124",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -6385,8 +6412,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "127",
-      "IsLiquid": true,
-      "Scale": 2
+      "IsLiquid": true
     }
   },
   {
@@ -6421,8 +6447,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "128",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -6457,8 +6482,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "129",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -6493,8 +6517,7 @@
     "materials.Tiled": {
       "Active": true,
       "Entity": "130",
-      "IsLiquid": false,
-      "Scale": 0.5
+      "IsLiquid": false
     }
   },
   {

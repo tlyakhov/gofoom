@@ -9,7 +9,8 @@ import (
 	"slices"
 	"strconv"
 	"sync"
-	"sync/atomic"
+
+	"github.com/kelindar/bitmap"
 )
 
 // The architecture is like this:
@@ -20,8 +21,8 @@ import (
 type EntityComponentDB struct {
 	*Simulation
 	Components       []map[uint64]Attachable
-	EntityComponents map[uint64][]Attachable
-	currentEntity    uint64
+	EntityComponents [][]Attachable
+	usedEntities     bitmap.Bitmap
 	lock             sync.RWMutex
 }
 
@@ -33,8 +34,9 @@ func NewEntityComponentDB() *EntityComponentDB {
 }
 
 func (db *EntityComponentDB) Clear() {
-	db.currentEntity = 0
-	db.EntityComponents = make(map[uint64][]Attachable)
+	db.usedEntities = bitmap.Bitmap{}
+	db.usedEntities.Set(0) // 0 is reserved
+	db.EntityComponents = make([][]Attachable, 1)
 	db.Components = make([]map[uint64]Attachable, len(DbTypes().Indexes))
 	db.Simulation = NewSimulation()
 	for i := 0; i < len(DbTypes().Indexes); i++ {
@@ -43,7 +45,14 @@ func (db *EntityComponentDB) Clear() {
 }
 
 func (db *EntityComponentDB) NewEntity() uint64 {
-	return atomic.AddUint64(&db.currentEntity, 1)
+	if free, found := db.usedEntities.MinZero(); found {
+		db.usedEntities.Set(free)
+		return uint64(free)
+	}
+	nextFree := len(db.EntityComponents)
+	db.EntityComponents = append(db.EntityComponents, nil)
+	db.usedEntities.Set(uint32(nextFree))
+	return uint64(nextFree)
 }
 
 func (db *EntityComponentDB) NewEntityRef() *EntityRef {
@@ -80,7 +89,11 @@ func (db *EntityComponentDB) attach(entity uint64, component Attachable, index i
 	component.Ref().Entity = entity
 	component.SetDB(db)
 	db.Components[index][entity] = component
-	if ec, ok := db.EntityComponents[entity]; ok {
+
+	for len(db.EntityComponents) <= int(entity) {
+		db.EntityComponents = append(db.EntityComponents, nil)
+	}
+	if ec := db.EntityComponents[entity]; ec != nil {
 		ec[index] = component
 	} else {
 		ec := make([]Attachable, len(DbTypes().Types))
@@ -107,9 +120,7 @@ func (db *EntityComponentDB) LoadComponent(index int, data map[string]any) Attac
 		entity = db.NewEntity()
 	}
 
-	if db.currentEntity < entity {
-		db.currentEntity = entity
-	}
+	db.usedEntities.Set(uint32(entity))
 
 	t := DbTypes().Types[index]
 	newc := reflect.New(t).Interface()
@@ -150,8 +161,10 @@ func (db *EntityComponentDB) Detach(index int, entity uint64) {
 	}
 
 	delete(db.Components[index], entity)
-	if ec, ok := db.EntityComponents[entity]; ok {
-		ec[index] = nil
+	if len(db.EntityComponents) > int(entity) {
+		if ec := db.EntityComponents[entity]; ec != nil {
+			ec[index] = nil
+		}
 	}
 }
 
@@ -191,7 +204,7 @@ func (db *EntityComponentDB) DetachAll(entity uint64) {
 		delete(db.Components[index], entity)
 	}
 
-	delete(db.EntityComponents, entity)
+	db.EntityComponents[entity] = nil
 }
 
 func (db *EntityComponentDB) GetEntityRefByName(name string) *EntityRef {
@@ -273,10 +286,13 @@ func (db *EntityComponentDB) Save(filename string) {
 	defer db.lock.Unlock()
 	jsonDB := make([]any, 0)
 
-	sortedEntities := make([]uint64, len(db.EntityComponents))
+	sortedEntities := make([]uint64, db.usedEntities.Count())
 	i := 0
-	for entity := range db.EntityComponents {
-		sortedEntities[i] = entity
+	for entity, c := range db.EntityComponents {
+		if c == nil {
+			continue
+		}
+		sortedEntities[i] = uint64(entity)
 		i++
 	}
 	slices.Sort(sortedEntities)
