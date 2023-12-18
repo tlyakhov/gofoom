@@ -27,9 +27,10 @@ type Edit struct {
 	MouseDownWorld concepts.Vector2
 	MousePressed   bool
 
-	SelectedObjects []any
-	HoveringObjects []any
-	Filter          string
+	SelectedObjects        []any
+	HoveringObjects        []any
+	SearchTerms            string
+	SelectedTransformables []any
 
 	Tool          EditorTool
 	OpenFile      string

@@ -100,7 +100,7 @@ func onActivate() {
 	}
 	editor.EntitySearchEntry = obj.(*gtk.SearchEntry)
 	editor.EntitySearchEntry.Connect("search-changed", func(entry *gtk.SearchEntry) {
-		editor.State().Filter, _ = editor.EntitySearchEntry.GetText()
+		editor.State().SearchTerms, _ = editor.EntitySearchEntry.GetText()
 		editor.EntityTree.UpdateSearch()
 	})
 

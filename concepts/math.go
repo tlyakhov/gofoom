@@ -124,8 +124,13 @@ func ParseHexColor(hex string) (color.NRGBA, error) {
 	return color.NRGBA{r * factor, g * factor, b * factor, 255}, nil
 }
 
-func ColorToInt32(c color.Color) uint32 {
+func ColorToInt32PreMul(c color.Color) uint32 {
 	r, g, b, a := c.RGBA()
+	r = r >> 8
+	g = g >> 8
+	b = b >> 8
+	a = a >> 8
+
 	return ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | (a & 0xFF)
 }
 

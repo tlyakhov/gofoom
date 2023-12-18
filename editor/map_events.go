@@ -79,7 +79,7 @@ func GameButtonPress(da *gtk.DrawingArea, ev *gdk.Event) {
 	da.GrabFocus()
 
 	// TODO: make this more granular, and also support bodies
-	if press.Button() == 1 {
+	if press.Button() == 3 {
 		daw := da.GetAllocatedWidth()
 		dah := da.GetAllocatedHeight()
 		rw := editor.Renderer.ScreenWidth

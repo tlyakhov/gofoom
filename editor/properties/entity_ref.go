@@ -82,8 +82,11 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 	box.AddAttribute(rendPix, "pixbuf", 2)
 	box.AddAttribute(rendText, "text", 1)
 
-	for entity := range g.State().DB.EntityComponents {
-		er := g.State().DB.EntityRef(entity)
+	for entity, c := range g.State().DB.EntityComponents {
+		if c == nil {
+			continue
+		}
+		er := g.State().DB.EntityRef(uint64(entity))
 		if archetypes.EntityRefIsMaterial(er) {
 			listItem := opts.Append()
 			pixbuf := g.pixbuf(er)

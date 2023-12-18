@@ -6,6 +6,7 @@ require (
 	github.com/dmarkham/enumer v1.5.9
 	github.com/faiface/pixel v0.10.0
 	github.com/gotk3/gotk3 v0.6.2
+	github.com/kelindar/bitmap v1.5.2
 	github.com/klauspost/cpuid/v2 v2.2.6
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/loov/hrtime v1.0.3
@@ -24,6 +25,7 @@ require (
 	github.com/go-gl/gl v0.0.0-20231021071112-07e5d0ea2e71 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20231124074035-2de0cf0c80af // indirect
 	github.com/go-gl/mathgl v1.1.0 // indirect
+	github.com/kelindar/simd v1.1.2 // indirect
 	github.com/pascaldekloe/name v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/mod v0.14.0 // indirect

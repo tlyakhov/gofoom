@@ -182,12 +182,12 @@ func (et *EntityTree) sortModelValue(iter *gtk.TreeIter, col EntityTreeColumnID)
 func (et *EntityTree) updateSearchChild(iter *gtk.TreeIter) int {
 	valid := true
 	totalRank := 0
-	filterValid := len(et.State().Filter) > 0
+	searchValid := len(et.State().SearchTerms) > 0
 	for valid {
 		desc := et.storeValue(iter, etcDesc).(string)
 		rank := 0
-		if filterValid {
-			rank = fuzzy.RankMatchFold(et.State().Filter, desc)
+		if searchValid {
+			rank = fuzzy.RankMatchFold(et.State().SearchTerms, desc)
 		}
 		n := et.Store.IterNChildren(iter)
 		if n > 0 {
@@ -196,7 +196,7 @@ func (et *EntityTree) updateSearchChild(iter *gtk.TreeIter) int {
 			rank += et.updateSearchChild(child)
 		}
 
-		if filterValid {
+		if searchValid {
 			dispRank := concepts.Max(concepts.Min(rank+50, 100), 0)
 			et.Store.SetValue(iter, int(etcRank), dispRank)
 			totalRank += rank

@@ -79,6 +79,10 @@ func (c *Column) CalcScreen() {
 }
 
 func (c *Column) SampleShader(ishader *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {
+	c.Material[0] = 0
+	c.Material[1] = 0
+	c.Material[2] = 0
+	c.Material[3] = 0
 	shader := materials.ShaderFromDb(ishader)
 	if shader == nil {
 		return c.sampleTexture(&c.Material, ishader, u, v, scale)

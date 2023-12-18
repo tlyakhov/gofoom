@@ -22,7 +22,7 @@ func init() {
 		"AsmVector4Mul4Self":           reflect.ValueOf(concepts.AsmVector4Mul4Self),
 		"AttachedComponentIndex":       reflect.ValueOf(&concepts.AttachedComponentIndex).Elem(),
 		"Clamp":                        reflect.ValueOf(concepts.Clamp),
-		"ColorToInt32":                 reflect.ValueOf(concepts.ColorToInt32),
+		"ColorToInt32":                 reflect.ValueOf(concepts.ColorToInt32PreMul),
 		"ControllerAlways":             reflect.ValueOf(concepts.ControllerAlways),
 		"ControllerLoaded":             reflect.ValueOf(concepts.ControllerLoaded),
 		"ControllerRecalculate":        reflect.ValueOf(concepts.ControllerRecalculate),
