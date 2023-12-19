@@ -3,7 +3,19 @@ package state
 import (
 	"reflect"
 	"strings"
+	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/concepts"
 )
+
+var EmbeddedTypes = [...]string{
+	reflect.TypeOf(&concepts.SimVariable[concepts.Vector2]{}).String(),
+	reflect.TypeOf(&concepts.SimVariable[concepts.Vector3]{}).String(),
+	reflect.TypeOf(&concepts.SimVariable[concepts.Vector4]{}).String(),
+	reflect.TypeOf(&concepts.SimVariable[float64]{}).String(),
+	reflect.TypeOf(&core.Script{}).String(),
+	reflect.TypeOf(&materials.ShaderStage{}).String(),
+}
 
 type PropertyGridField struct {
 	Name             string
@@ -38,4 +50,14 @@ func (f *PropertyGridField) Short() string {
 		return "[" + split[len(split)-1]
 	}
 	return f.Name*/
+}
+
+func (f *PropertyGridField) IsEmbeddedType() bool {
+	for _, t := range EmbeddedTypes {
+		//log.Printf("%v - %v", f.Short(), f.Type.String())
+		if f.Type.String() == t {
+			return true
+		}
+	}
+	return false
 }

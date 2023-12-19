@@ -2,7 +2,6 @@ package render
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
 )
 
@@ -39,8 +38,8 @@ func WallHi(s *state.ColumnPortal) {
 			s.SampleShader(mat, u, v, s.ProjectZ(1.0))
 			s.SampleLight(&s.Material, mat, &s.Intersection, s.U, lightV, s.Distance)
 		}
-		concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		//s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.Material)
+		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.Material)
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }

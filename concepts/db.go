@@ -20,7 +20,7 @@ import (
 // * A system is code that queries and operates on components and entities
 type EntityComponentDB struct {
 	*Simulation
-	Components       []map[uint64]Attachable
+	Components       [][]Attachable
 	EntityComponents [][]Attachable
 	usedEntities     bitmap.Bitmap
 	lock             sync.RWMutex
@@ -37,10 +37,10 @@ func (db *EntityComponentDB) Clear() {
 	db.usedEntities = bitmap.Bitmap{}
 	db.usedEntities.Set(0) // 0 is reserved
 	db.EntityComponents = make([][]Attachable, 1)
-	db.Components = make([]map[uint64]Attachable, len(DbTypes().Indexes))
+	db.Components = make([][]Attachable, len(DbTypes().Types))
 	db.Simulation = NewSimulation()
-	for i := 0; i < len(DbTypes().Indexes); i++ {
-		db.Components[i] = make(map[uint64]Attachable)
+	for i := 0; i < len(DbTypes().Types); i++ {
+		db.Components[i] = make([]Attachable, 0)
 	}
 }
 
@@ -63,11 +63,11 @@ func (db *EntityComponentDB) EntityRef(entity uint64) *EntityRef {
 	return &EntityRef{DB: db, Entity: entity}
 }
 
-func (db *EntityComponentDB) All(index int) map[uint64]Attachable {
+func (db *EntityComponentDB) All(index int) []Attachable {
 	return db.Components[index]
 }
 
-func (db *EntityComponentDB) AllForType(cType string) map[uint64]Attachable {
+func (db *EntityComponentDB) AllForType(cType string) []Attachable {
 	if index, ok := DbTypes().Indexes[cType]; ok {
 		return db.Components[index]
 	}
@@ -84,15 +84,18 @@ func (db *EntityComponentDB) First(index int) Attachable {
 func (db *EntityComponentDB) attach(entity uint64, component Attachable, index int) {
 	if entity == 0 {
 		log.Printf("Tried to attach 0 entity!")
+		return
 	}
 	component.ResetRef()
 	component.Ref().Entity = entity
 	component.SetDB(db)
-	db.Components[index][entity] = component
+
+	db.Components[index] = append(db.Components[index], component)
 
 	for len(db.EntityComponents) <= int(entity) {
 		db.EntityComponents = append(db.EntityComponents, nil)
 	}
+
 	if ec := db.EntityComponents[entity]; ec != nil {
 		ec[index] = component
 	} else {
@@ -157,20 +160,39 @@ func (db *EntityComponentDB) AttachTyped(entity uint64, component Attachable) {
 
 func (db *EntityComponentDB) Detach(index int, entity uint64) {
 	if entity == 0 || index == 0 {
+		log.Printf("EntityComponentDB.Detach: tried to detach 0 entity/index.")
 		return
 	}
 
-	delete(db.Components[index], entity)
-	if len(db.EntityComponents) > int(entity) {
-		if ec := db.EntityComponents[entity]; ec != nil {
-			ec[index] = nil
-		}
+	if len(db.EntityComponents) <= int(entity) {
+		log.Printf("EntityComponentDB.Detach: entity %v is >= length of list %v.", entity, len(db.EntityComponents))
+		return
 	}
+	ec := db.EntityComponents[entity]
+	if ec == nil {
+		log.Printf("EntityComponentDB.Detach: entity %v has no components.", entity)
+		return
+	}
+
+	if ec[index] == nil {
+		log.Printf("EntityComponentDB.Detach: entity %v component %v is nil.", entity, index)
+		return
+	}
+	i := ec[index].IndexInDB()
+	components := db.Components[index]
+	size := len(components)
+	if size > i {
+		components[i] = components[size-1]
+		components[i].SetIndexInDB(i)
+		db.Components[index] = components[:size-1]
+	} else {
+		log.Printf("EntityComponentDB.Detach: found entity %v component index %v, but component list is too short.", entity, index)
+	}
+	ec[index] = nil
 }
 
 func (db *EntityComponentDB) DetachByType(component Attachable) {
 	if component == nil {
-
 		return
 	}
 	entity := component.Ref().Entity
@@ -201,7 +223,7 @@ func (db *EntityComponentDB) DetachAll(entity uint64) {
 	}
 
 	for index := range db.Components {
-		delete(db.Components[index], entity)
+		db.Detach(index, entity)
 	}
 
 	db.EntityComponents[entity] = nil
@@ -209,14 +231,14 @@ func (db *EntityComponentDB) DetachAll(entity uint64) {
 
 func (db *EntityComponentDB) GetEntityRefByName(name string) *EntityRef {
 	if allNamed := db.All(NamedComponentIndex); allNamed != nil {
-		for entity, c := range allNamed {
+		for _, c := range allNamed {
 			named := c.(*Named)
 			if named.Name == name {
-				return db.EntityRef(entity)
+				return named.EntityRef
 			}
 		}
 	}
-	return &EntityRef{}
+	return nil
 }
 
 func (db *EntityComponentDB) DeserializeEntity(jsonEntity map[string]any) {
@@ -289,7 +311,7 @@ func (db *EntityComponentDB) Save(filename string) {
 	sortedEntities := make([]uint64, db.usedEntities.Count())
 	i := 0
 	for entity, c := range db.EntityComponents {
-		if c == nil {
+		if entity == 0 || c == nil {
 			continue
 		}
 		sortedEntities[i] = uint64(entity)

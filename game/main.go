@@ -45,24 +45,24 @@ func processInput() {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 	}
 	if win.Pressed(pixelgl.KeyW) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now)
 	}
 	if win.Pressed(pixelgl.KeyS) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle+180.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+180.0)
 	}
 	if win.Pressed(pixelgl.KeyE) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle+90.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+90.0)
 	}
 	if win.Pressed(pixelgl.KeyQ) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle+270.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+270.0)
 	}
 	if win.Pressed(pixelgl.KeyA) {
-		renderer.PlayerBody.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
-		renderer.PlayerBody.Angle = concepts.NormalizeAngle(renderer.PlayerBody.Angle)
+		renderer.PlayerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
+		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
 	if win.Pressed(pixelgl.KeyD) {
-		renderer.PlayerBody.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
-		renderer.PlayerBody.Angle = concepts.NormalizeAngle(renderer.PlayerBody.Angle)
+		renderer.PlayerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
+		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
 	if win.Pressed(pixelgl.KeySpace) {
 

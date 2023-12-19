@@ -15,6 +15,8 @@ type Simulation struct {
 	RenderStateBlend float64
 	FPS              float64
 	PrevTimestamp    int64
+	Timestamp        int64
+	Counter          uint64
 	Integrate        func()
 	Render           func()
 	All              map[Simulated]bool
@@ -30,9 +32,9 @@ func NewSimulation() *Simulation {
 }
 
 func (s *Simulation) Step() {
-	newTimestamp := hrtime.Now().Milliseconds()
-	s.FrameMillis = float64(newTimestamp - s.PrevTimestamp)
-	s.PrevTimestamp = newTimestamp
+	s.Timestamp = hrtime.Now().Milliseconds()
+	s.FrameMillis = float64(s.Timestamp - s.PrevTimestamp)
+	s.PrevTimestamp = s.Timestamp
 	if s.FrameMillis != 0 {
 		s.FPS = 1000.0 / s.FrameMillis
 	}
@@ -55,6 +57,7 @@ func (s *Simulation) Step() {
 		if s.Integrate != nil {
 			s.Integrate()
 		}
+		s.Counter++
 		s.RenderTime -= constants.TimeStep
 		s.SimTime += constants.TimeStep
 	}
@@ -63,7 +66,7 @@ func (s *Simulation) Step() {
 	s.RenderStateBlend = s.RenderTime / constants.TimeStep
 
 	for v := range s.All {
-		v.Blend(s.RenderStateBlend)
+		v.RenderBlend(s.RenderStateBlend)
 	}
 
 	if s.Render != nil {

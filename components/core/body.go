@@ -14,13 +14,13 @@ type Body struct {
 	Vel               concepts.SimVariable[concepts.Vector3]
 	Size              concepts.SimVariable[concepts.Vector3] `editable:"Size"`
 	Force             concepts.Vector3
-	Angle             float64           `editable:"Angle"`
-	BoundingRadius    float64           `editable:"Bounding Radius"`
-	Mass              float64           `editable:"Mass"`
-	CollisionResponse CollisionResponse `editable:"Collision Response"`
-	Shadow            BodyShadow        `editable:"Shadow Type"`
-	MountHeight       float64           `editable:"Mount Height"`
-	Active            bool              `editable:"Active?"`
+	Angle             concepts.SimVariable[float64] `editable:"Angle"`
+	BoundingRadius    float64                       `editable:"Bounding Radius"`
+	Mass              float64                       `editable:"Mass"`
+	CollisionResponse CollisionResponse             `editable:"Collision Response"`
+	Shadow            BodyShadow                    `editable:"Shadow Type"`
+	MountHeight       float64                       `editable:"Mount Height"`
+	Active            bool                          `editable:"Active?"`
 	OnGround          bool
 	SectorEntityRef   *concepts.EntityRef
 }
@@ -47,11 +47,13 @@ func (b *Body) SetDB(db *concepts.EntityComponentDB) {
 		b.Pos.Detach(b.DB.Simulation)
 		b.Vel.Detach(b.DB.Simulation)
 		b.Size.Detach(b.DB.Simulation)
+		b.Angle.Detach(b.DB.Simulation)
 	}
 	b.Attached.SetDB(db)
 	b.Pos.Attach(db.Simulation)
 	b.Vel.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
+	b.Angle.Attach(b.DB.Simulation)
 }
 
 func (b *Body) Sector() *Sector {
@@ -91,7 +93,7 @@ func (b *Body) Construct(data map[string]any) {
 		b.Size.Deserialize(v)
 	}
 	if v, ok := data["Angle"]; ok {
-		b.Angle = v.(float64)
+		b.Angle.Deserialize(v)
 	}
 	if v, ok := data["BoundingRadius"]; ok {
 		b.BoundingRadius = v.(float64)
@@ -126,7 +128,7 @@ func (b *Body) Serialize() map[string]any {
 	result["Pos"] = b.Pos.Serialize()
 	result["Vel"] = b.Vel.Serialize()
 	result["Size"] = b.Size.Serialize()
-	result["Angle"] = b.Angle
+	result["Angle"] = b.Angle.Serialize()
 	result["BoundingRadius"] = b.BoundingRadius
 	result["Mass"] = b.Mass
 	result["MountHeight"] = b.MountHeight
