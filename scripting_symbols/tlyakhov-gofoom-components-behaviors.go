@@ -19,11 +19,14 @@ func init() {
 		"PlayerFromDb":            reflect.ValueOf(behaviors.PlayerFromDb),
 		"ProximityComponentIndex": reflect.ValueOf(&behaviors.ProximityComponentIndex).Elem(),
 		"ProximityFromDb":         reflect.ValueOf(behaviors.ProximityFromDb),
+		"WanderComponentIndex":    reflect.ValueOf(&behaviors.WanderComponentIndex).Elem(),
+		"WanderFromDb":            reflect.ValueOf(behaviors.WanderFromDb),
 
 		// type definitions
 		"Alive":     reflect.ValueOf((*behaviors.Alive)(nil)),
 		"Damage":    reflect.ValueOf((*behaviors.Damage)(nil)),
 		"Player":    reflect.ValueOf((*behaviors.Player)(nil)),
 		"Proximity": reflect.ValueOf((*behaviors.Proximity)(nil)),
+		"Wander":    reflect.ValueOf((*behaviors.Wander)(nil)),
 	}
 }

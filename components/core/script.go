@@ -29,6 +29,7 @@ func (e *Script) codeCommonHeader() string {
 	import "tlyakhov/gofoom/components/sectors"
 	import "tlyakhov/gofoom/concepts"
 	import "tlyakhov/gofoom/constants"
+	import "log"
 	`
 }
 func (e *Script) codeBoolExpr() string {
@@ -59,6 +60,7 @@ func (e *Script) Compile() {
 	case ScriptStyleStatement:
 		codeTemplate = e.codeStatement()
 	}
+
 	_, err := e.interp.Eval(codeTemplate)
 	if err != nil {
 		e.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", e.Code, err)
@@ -115,6 +117,19 @@ func (s *Script) Act() bool {
 	if s.interp == nil || s.runFunc == nil {
 		return false
 	}
+	// This handles panics inside the interpreter. It's a bit aggressive, but
+	// saves the game from crashing due to bad scripting
+	defer func() {
+		recovered := recover()
+		if recovered == nil {
+			return
+		}
+
+		s.ErrorMessage = fmt.Sprintf("Script error: %v", recovered)
+		s.interp = nil
+		s.runFunc = nil
+	}()
+
 	if f, ok := s.runFunc.(func(*Script)); ok {
 		f(s)
 		return true

@@ -103,7 +103,10 @@ func (et *EntityTree) ColumnClicked(col *gtk.TreeViewColumn) {
 	}
 }
 func (et *EntityTree) addColumn(col int, rend gtk.ICellRenderer) {
-	et.Columns[col].AddAttribute(rend, "foreground", int(etcColor))
+	// The progress bars don't have a foreground property
+	if _, p := rend.(*gtk.CellRendererProgress); !p {
+		et.Columns[col].AddAttribute(rend, "foreground", int(etcColor))
+	}
 	et.Columns[col].SetClickable(true)
 	if col == 1 {
 		et.Columns[col].SetExpand(true)
@@ -223,6 +226,9 @@ func (et *EntityTree) Update() {
 	et.Store.Clear()
 	index := 0
 	for entity, components := range et.State().DB.EntityComponents {
+		if entity == 0 || components == nil {
+			continue
+		}
 		iter := et.Store.Append(nil)
 		et.Store.SetValue(iter, int(etcEntity), entity)
 
@@ -248,7 +254,9 @@ func (et *EntityTree) Update() {
 			} else if index == core.SectorComponentIndex {
 				et.Store.SetValue(iter, int(etcColor), "lightgreen")
 				et.Store.SetValue(child, int(etcColor), "lightgreen")
-			} else if index == materials.ImageComponentIndex || index == materials.SolidComponentIndex {
+			} else if index == materials.ImageComponentIndex ||
+				index == materials.SolidComponentIndex ||
+				index == materials.ShaderComponentIndex {
 				et.Store.SetValue(iter, int(etcColor), "lightpink")
 				et.Store.SetValue(child, int(etcColor), "lightpink")
 			}

@@ -66,8 +66,8 @@ func (pvs *PvsController) occludedBy(visitor *core.Sector) bool {
 
 			occluded := false
 
-			for entity, isector := range pvs.DB.All(core.SectorComponentIndex) {
-				if entity == pvs.Sector.Entity || entity == visitor.Entity {
+			for _, isector := range pvs.DB.All(core.SectorComponentIndex) {
+				if isector.Ref().Entity == pvs.Sector.Entity || isector.Ref().Entity == visitor.Entity {
 					continue
 				}
 				sector := isector.(*core.Sector)

@@ -13,8 +13,8 @@ import (
 )
 
 func DrawBodyAngle(cr *cairo.Context, e *core.Body) {
-	astart := (e.Angle - editor.Renderer.FOV/2) * math.Pi / 180.0
-	aend := (e.Angle + editor.Renderer.FOV/2) * math.Pi / 180.0
+	astart := (e.Angle.Now - editor.Renderer.FOV/2) * math.Pi / 180.0
+	aend := (e.Angle.Now + editor.Renderer.FOV/2) * math.Pi / 180.0
 	cr.SetLineWidth(2)
 	cr.NewPath()
 	cr.MoveTo(e.Pos.Now[0], e.Pos.Now[1])
@@ -42,8 +42,6 @@ func DrawBody(cr *cairo.Context, ibody *concepts.EntityRef) {
 		cr.Arc(body.Pos.Now[0], body.Pos.Now[1], body.BoundingRadius/2, 0, math.Pi*2)
 		cr.ClosePath()
 		cr.Stroke()
-		cr.SetSourceRGB(0.33, 0.33, 0.33)
-		DrawBodyAngle(cr, body)
 	} else if light := core.LightFromDb(ibody); light != nil {
 		cr.SetSourceRGB(light.Diffuse[0], light.Diffuse[1], light.Diffuse[2])
 	} // Sprite...
@@ -61,6 +59,8 @@ func DrawBody(cr *cairo.Context, ibody *concepts.EntityRef) {
 	cr.Arc(body.Pos.Now[0], body.Pos.Now[1], body.BoundingRadius, 0, math.Pi*2)
 	cr.ClosePath()
 	cr.Stroke()
+	cr.SetSourceRGB(0.33, 0.33, 0.33)
+	DrawBodyAngle(cr, body)
 
 	if editor.ComponentNamesVisible {
 		text := ibody.String()

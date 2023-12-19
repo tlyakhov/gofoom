@@ -256,8 +256,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "9",
-        "8"
+        "8",
+        "9"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -768,6 +768,11 @@
   },
   {
     "Entity": "16",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "16",
+      "Name": "Test Shader"
+    },
     "materials.Shader": {
       "Active": true,
       "Entity": "16",
@@ -790,8 +795,8 @@
             0,
             0,
             1,
-            0,
-            -0.1
+            0.43500000000000033,
+            0.13500000000000006
           ]
         }
       ]
@@ -991,6 +996,45 @@
       },
       "Entity": "20",
       "Strength": 1
+    }
+  },
+  {
+    "Entity": "21",
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "21",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -220,
+        "Y": 60,
+        "Z": -32
+      },
+      "Shadow": "BodyShadowAABB",
+      "Size": {
+        "X": 10,
+        "Y": 10,
+        "Z": 10
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.1,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "21",
+      "Strength": 0.2
     }
   },
   {
@@ -1399,7 +1443,7 @@
       "FloorScale": 64,
       "FloorScripts": [
         {
-          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.DB.EntityRef(81)).Intent = sectors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ],
@@ -2071,7 +2115,8 @@
       "Bodies": [
         "107",
         "131",
-        "42"
+        "42",
+        "21"
       ],
       "BottomZ": -64,
       "CeilMaterial": "122",
@@ -2193,6 +2238,11 @@
   },
   {
     "Entity": "42",
+    "behaviors.Wander": {
+      "Active": true,
+      "Entity": "42",
+      "Force": 10
+    },
     "concepts.Named": {
       "Active": true,
       "Entity": "42",
@@ -2200,11 +2250,11 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": 155.9558816022554,
       "BoundingRadius": 15,
       "CollisionResponse": "Slide",
       "Entity": "42",
-      "Mass": 10,
+      "Mass": 15,
       "MountHeight": 30,
       "Pos": {
         "X": -400,
@@ -4198,6 +4248,18 @@
         {
           "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
+        },
+        {
+          "Code": "true",
+          "Style": "ScriptStyleStatement"
+        },
+        {
+          "Code": "true",
+          "Style": "ScriptStyleStatement"
+        },
+        {
+          "Code": "true",
+          "Style": "ScriptStyleStatement"
         }
       ]
     },
@@ -5254,8 +5316,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "102",
-        "101"
+        "101",
+        "102"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5407,8 +5469,8 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "105",
-        "104"
+        "104",
+        "105"
       ],
       "BottomZ": 0,
       "CeilMaterial": "122",
@@ -5622,7 +5684,7 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 325.5,
+      "Angle": 262.5,
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
@@ -6531,8 +6593,8 @@
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -280,
-        "Y": 200,
+        "X": -230,
+        "Y": 220,
         "Z": -32
       },
       "Shadow": "BodyShadowAABB",

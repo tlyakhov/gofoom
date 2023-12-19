@@ -22,7 +22,7 @@ func init() {
 		"AsmVector4Mul4Self":           reflect.ValueOf(concepts.AsmVector4Mul4Self),
 		"AttachedComponentIndex":       reflect.ValueOf(&concepts.AttachedComponentIndex).Elem(),
 		"Clamp":                        reflect.ValueOf(concepts.Clamp),
-		"ColorToInt32":                 reflect.ValueOf(concepts.ColorToInt32PreMul),
+		"ColorToInt32PreMul":           reflect.ValueOf(concepts.ColorToInt32PreMul),
 		"ControllerAlways":             reflect.ValueOf(concepts.ControllerAlways),
 		"ControllerLoaded":             reflect.ValueOf(concepts.ControllerLoaded),
 		"ControllerRecalculate":        reflect.ValueOf(concepts.ControllerRecalculate),
@@ -41,6 +41,7 @@ func init() {
 		"ElasticIn":                    reflect.ValueOf(concepts.ElasticIn),
 		"ElasticInOut":                 reflect.ValueOf(concepts.ElasticInOut),
 		"ElasticOut":                   reflect.ValueOf(concepts.ElasticOut),
+		"IdentityMatrix2":              reflect.ValueOf(&concepts.IdentityMatrix2).Elem(),
 		"Int32ToNRGBA":                 reflect.ValueOf(concepts.Int32ToNRGBA),
 		"Int32ToRGBA":                  reflect.ValueOf(concepts.Int32ToRGBA),
 		"Int32ToVector3":               reflect.ValueOf(concepts.Int32ToVector3),
@@ -62,6 +63,7 @@ func init() {
 		"NewSimulation":                reflect.ValueOf(concepts.NewSimulation),
 		"NormalizeAngle":               reflect.ValueOf(concepts.NormalizeAngle),
 		"ParseHexColor":                reflect.ValueOf(concepts.ParseHexColor),
+		"ParseMatrix2":                 reflect.ValueOf(concepts.ParseMatrix2),
 		"ParseVector2":                 reflect.ValueOf(concepts.ParseVector2),
 		"ParseVector3":                 reflect.ValueOf(concepts.ParseVector3),
 		"ParseVector4":                 reflect.ValueOf(concepts.ParseVector4),
@@ -92,6 +94,7 @@ func init() {
 		"EasingFunc":        reflect.ValueOf((*concepts.EasingFunc)(nil)),
 		"EntityComponentDB": reflect.ValueOf((*concepts.EntityComponentDB)(nil)),
 		"EntityRef":         reflect.ValueOf((*concepts.EntityRef)(nil)),
+		"Matrix2":           reflect.ValueOf((*concepts.Matrix2)(nil)),
 		"Named":             reflect.ValueOf((*concepts.Named)(nil)),
 		"Serializable":      reflect.ValueOf((*concepts.Serializable)(nil)),
 		"Simulated":         reflect.ValueOf((*concepts.Simulated)(nil)),
@@ -124,17 +127,22 @@ func (W _tlyakhov_gofoom_concepts_Animated) Animate() {
 
 // _tlyakhov_gofoom_concepts_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_concepts_Attachable struct {
-	IValue     interface{}
-	WConstruct func(data map[string]any)
-	WRef       func() *concepts.EntityRef
-	WResetRef  func()
-	WSerialize func() map[string]any
-	WSetDB     func(db *concepts.EntityComponentDB)
-	WString    func() string
+	IValue        interface{}
+	WConstruct    func(data map[string]any)
+	WIndexInDB    func() int
+	WRef          func() *concepts.EntityRef
+	WResetRef     func()
+	WSerialize    func() map[string]any
+	WSetDB        func(db *concepts.EntityComponentDB)
+	WSetIndexInDB func(a0 int)
+	WString       func() string
 }
 
 func (W _tlyakhov_gofoom_concepts_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
+}
+func (W _tlyakhov_gofoom_concepts_Attachable) IndexInDB() int {
+	return W.WIndexInDB()
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) Ref() *concepts.EntityRef {
 	return W.WRef()
@@ -147,6 +155,9 @@ func (W _tlyakhov_gofoom_concepts_Attachable) Serialize() map[string]any {
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) SetDB(db *concepts.EntityComponentDB) {
 	W.WSetDB(db)
+}
+func (W _tlyakhov_gofoom_concepts_Attachable) SetIndexInDB(a0 int) {
+	W.WSetIndexInDB(a0)
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) String() string {
 	if W.WString == nil {
@@ -210,25 +221,25 @@ type _tlyakhov_gofoom_concepts_Simulatable struct {
 
 // _tlyakhov_gofoom_concepts_Simulated is an interface wrapper for Simulated type
 type _tlyakhov_gofoom_concepts_Simulated struct {
-	IValue    interface{}
-	WAttach   func(sim *concepts.Simulation)
-	WBlend    func(a0 float64)
-	WDetach   func(sim *concepts.Simulation)
-	WNewFrame func()
-	WReset    func()
+	IValue       interface{}
+	WAttach      func(sim *concepts.Simulation)
+	WDetach      func(sim *concepts.Simulation)
+	WNewFrame    func()
+	WRenderBlend func(a0 float64)
+	WReset       func()
 }
 
 func (W _tlyakhov_gofoom_concepts_Simulated) Attach(sim *concepts.Simulation) {
 	W.WAttach(sim)
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) Blend(a0 float64) {
-	W.WBlend(a0)
 }
 func (W _tlyakhov_gofoom_concepts_Simulated) Detach(sim *concepts.Simulation) {
 	W.WDetach(sim)
 }
 func (W _tlyakhov_gofoom_concepts_Simulated) NewFrame() {
 	W.WNewFrame()
+}
+func (W _tlyakhov_gofoom_concepts_Simulated) RenderBlend(a0 float64) {
+	W.WRenderBlend(a0)
 }
 func (W _tlyakhov_gofoom_concepts_Simulated) Reset() {
 	W.WReset()

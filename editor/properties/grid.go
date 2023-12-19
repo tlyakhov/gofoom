@@ -19,8 +19,6 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-var EmbeddedTypes = [...]string{"SimScalar", "SimVector2", "SimVector3", "Script", "ShaderStage"}
-
 type PropertyGridState struct {
 	Fields           map[string]*state.PropertyGridField
 	Visited          map[any]bool
@@ -104,22 +102,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		gf.Values = append(gf.Values, fieldValue.Addr())
 		gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
-		isEmbeddedType := false
-		for _, t := range EmbeddedTypes {
-			if field.Type.Name() == t {
-				isEmbeddedType = true
-				break
-			}
-		}
-		if field.Type.Kind() == reflect.Map && false {
-			keys := fieldValue.MapKeys()
-			for _, key := range keys {
-				name := field.Name + "[" + key.String() + "]"
-				pgsChild := pgs
-				pgsChild.ParentCollection = &fieldValue
-				g.childFields(name, fieldValue.MapIndex(key), pgsChild, true)
-			}
-		} else if isEmbeddedType {
+		if gf.IsEmbeddedType() {
 			delete(pgs.Fields, display)
 			name := display
 			g.childFields(name, fieldValue, pgs, true)

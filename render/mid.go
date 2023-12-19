@@ -28,7 +28,7 @@ func WallMid(s *state.Column) {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.FloorZ
+		s.Intersection[2] = s.CeilZ + v*(s.FloorZ-s.CeilZ)
 		lightV := v
 		if s.Sector.FloorSlope != 0 || s.Sector.CeilSlope != 0 {
 			lightV = (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])

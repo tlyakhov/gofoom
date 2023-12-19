@@ -165,7 +165,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.Pick = pick
 	column.X = x
 	column.Y = y
-	column.Angle = r.PlayerBody.Angle*concepts.Deg2rad + r.ViewRadians[x]
+	column.Angle = r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x]
 	column.Sector = r.PlayerBody.Sector()
 	column.AngleCos = math.Cos(column.Angle)
 	column.AngleSin = math.Sin(column.Angle)

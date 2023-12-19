@@ -8,6 +8,7 @@ import (
 type Attached struct {
 	*EntityRef `editable:"Component" edit_type:"Component"`
 	Active     bool `editable:"Active?"`
+	indexInDB  int
 }
 
 type Attachable interface {
@@ -16,6 +17,8 @@ type Attachable interface {
 	ResetRef()
 	SetDB(db *EntityComponentDB)
 	String() string
+	IndexInDB() int
+	SetIndexInDB(int)
 }
 
 type Serializable interface {
@@ -35,6 +38,14 @@ func (a *Attached) String() string {
 
 func (a *Attached) Ref() *EntityRef {
 	return a.EntityRef
+}
+
+func (a *Attached) IndexInDB() int {
+	return a.indexInDB
+}
+
+func (a *Attached) SetIndexInDB(i int) {
+	a.indexInDB = i
 }
 
 func (a *Attached) ResetRef() {

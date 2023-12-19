@@ -146,24 +146,24 @@ func (e *Editor) Integrate() {
 	playerBody := core.BodyFromDb(player.Ref())
 
 	if gameKeyMap[gdk.KEY_w] {
-		controllers.MovePlayer(playerBody, playerBody.Angle)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now)
 	}
 	if gameKeyMap[gdk.KEY_s] {
-		controllers.MovePlayer(playerBody, playerBody.Angle+180.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0)
 	}
 	if gameKeyMap[gdk.KEY_e] {
-		controllers.MovePlayer(playerBody, playerBody.Angle+90.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0)
 	}
 	if gameKeyMap[gdk.KEY_q] {
-		controllers.MovePlayer(playerBody, playerBody.Angle+270.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0)
 	}
 	if gameKeyMap[gdk.KEY_a] {
-		playerBody.Angle -= constants.PlayerTurnSpeed * constants.TimeStepS
-		playerBody.Angle = concepts.NormalizeAngle(playerBody.Angle)
+		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
+		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if gameKeyMap[gdk.KEY_d] {
-		playerBody.Angle += constants.PlayerTurnSpeed * constants.TimeStepS
-		playerBody.Angle = concepts.NormalizeAngle(playerBody.Angle)
+		playerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
+		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if gameKeyMap[gdk.KEY_space] {
 		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {

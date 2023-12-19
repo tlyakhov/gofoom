@@ -10,7 +10,7 @@ type Simulated interface {
 	Attach(sim *Simulation)
 	Detach(sim *Simulation)
 	Reset()
-	Blend(float64)
+	RenderBlend(float64)
 	NewFrame()
 }
 
@@ -44,7 +44,7 @@ func (s *SimVariable[T]) NewFrame() {
 	s.Prev = s.Now
 }
 
-func (s *SimVariable[T]) Blend(blend float64) {
+func (s *SimVariable[T]) RenderBlend(blend float64) {
 	switch sc := any(s).(type) {
 	case *SimVariable[int]:
 		sc.Render = int(Lerp(float64(sc.Prev), float64(sc.Now), blend))
@@ -103,9 +103,4 @@ func (s *SimVariable[T]) Deserialize(data any) {
 		log.Panicf("Tried to deserialize SimVar[T] %v where T has no serializer", s)
 	}
 	s.Reset()
-}
-
-// For scripting
-func (s *SimVariable[T]) Ptr() *SimVariable[T] {
-	return s
 }

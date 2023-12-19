@@ -15,8 +15,8 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 		return
 	}
 	angleFromPlayer := r.PlayerBody.Angle2DTo(&b.Pos.Render)
-	angleRender := angleFromPlayer - r.PlayerBody.Angle
-	angleSprite := 360 - angleFromPlayer + b.Angle
+	angleRender := angleFromPlayer - r.PlayerBody.Angle.Render
+	angleSprite := 360 - angleFromPlayer + b.Angle.Render
 
 	if angleRender < -180.0 {
 		angleRender += 360.0
