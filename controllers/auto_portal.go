@@ -135,9 +135,6 @@ func AutoPortal(db *concepts.EntityComponentDB) {
 		for _, segment := range sector.Segments {
 			segment.AdjacentSector = nil
 			segment.AdjacentSegment = nil
-			if segment.MidMaterial.Nil() {
-				segment.MidMaterial = DefaultMaterial(db)
-			}
 		}
 	}
 	for _, c := range db.All(core.SectorComponentIndex) {

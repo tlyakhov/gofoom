@@ -1,7 +1,7 @@
 package render
 
 import (
-	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/render/state"
 )
 
@@ -13,9 +13,9 @@ func WallHiPick(s *state.ColumnPortal) {
 
 // WallHi renders the top portion of a portal segment.
 func WallHi(s *state.ColumnPortal) {
-	mat := s.AdjSegment.HiMaterial
+	mat := s.AdjSegment.HiSurface.Material
 	u := s.U
-	if s.Segment.HiBehavior == core.ScaleHeight || s.Segment.HiBehavior == core.ScaleNone {
+	if s.Segment.HiSurface.Scale == materials.ScaleHeight || s.Segment.HiSurface.Scale == materials.ScaleNone {
 		if s.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
@@ -30,7 +30,7 @@ func WallHi(s *state.ColumnPortal) {
 		s.Intersection[2] = (1.0-v)*s.CeilZ + v*s.AdjCeilZ
 		lightV := (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
-		if s.Segment.HiBehavior == core.ScaleWidth || s.Segment.HiBehavior == core.ScaleNone {
+		if s.Segment.HiSurface.Scale == materials.ScaleWidth || s.Segment.HiSurface.Scale == materials.ScaleNone {
 			v = s.Intersection[2] / 64.0
 		}
 
@@ -52,9 +52,9 @@ func WallLowPick(s *state.ColumnPortal) {
 
 // WallLow renders the bottom portion of a portal segment.
 func WallLow(s *state.ColumnPortal) {
-	mat := s.AdjSegment.LoMaterial
+	mat := s.AdjSegment.LoSurface.Material
 	u := s.U
-	if s.Segment.LoBehavior == core.ScaleHeight || s.Segment.LoBehavior == core.ScaleNone {
+	if s.Segment.LoSurface.Scale == materials.ScaleHeight || s.Segment.LoSurface.Scale == materials.ScaleNone {
 		if s.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
@@ -69,7 +69,7 @@ func WallLow(s *state.ColumnPortal) {
 		s.Intersection[2] = (1.0-v)*s.AdjFloorZ + v*s.FloorZ
 		lightV := (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
-		if s.Segment.LoBehavior == core.ScaleWidth || s.Segment.LoBehavior == core.ScaleNone {
+		if s.Segment.LoSurface.Scale == materials.ScaleWidth || s.Segment.LoSurface.Scale == materials.ScaleNone {
 			v = s.Intersection[2] / 64.0
 		}
 

@@ -3,6 +3,7 @@ package controllers
 import (
 	"math"
 	"math/rand"
+	"strconv"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -30,15 +31,27 @@ func (wc *WanderController) Target(target *concepts.EntityRef) bool {
 }
 
 func (wc *WanderController) Always() {
-	f := wc.Wander.Dir
+	f := concepts.Vector3{}
+	f[1], f[0] = math.Sincos(wc.Body.Angle.Now * concepts.Deg2rad)
 	f.MulSelf(wc.Force)
 	wc.Body.Force.AddSelf(&f)
 
-	if wc.Timestamp-wc.LastChange > int64(2000+rand.Intn(1000)) {
-		wc.Dir[0] = rand.Float64() - 0.5
-		wc.Dir[1] = rand.Float64() - 0.5
+	if wc.Timestamp-wc.LastChange > int64(300+rand.Intn(100)) {
+		name := "wc_" + strconv.FormatUint(wc.TargetEntity.Entity, 10)
+		a := new(concepts.Animation[float64])
+		a.Construct(wc.Simulation)
+		a.Name = name
+		a.Target = &wc.Body.Angle
+		a.Start = wc.Body.Angle.Now
+		// Bias towards the center of the sector
+		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
+		end := wc.Body.Angle2DTo(&wc.Body.Sector().Center)
+		a.End = concepts.TweenAngles(start, end, 0.2, concepts.Lerp)
+
+		a.Duration = 300
+		a.TweeningFunc = concepts.EaseInOut
+		a.Style = concepts.AnimationStyleOnce
+		wc.Animate(name, a)
 		wc.LastChange = wc.Timestamp
-		wc.Dir.NormSelf()
-		wc.Body.Angle.Now = math.Atan2(wc.Dir[1], wc.Dir[0]) * concepts.Rad2deg
 	}
 }

@@ -3,6 +3,7 @@ package core
 import (
 	"math"
 
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
@@ -14,16 +15,13 @@ const (
 type Segment struct {
 	DB *concepts.EntityComponentDB
 
-	P                 concepts.Vector2    `editable:"X/Y"`
-	LoMaterial        *concepts.EntityRef `editable:"Low Material" edit_type:"Material"`
-	MidMaterial       *concepts.EntityRef `editable:"Mid Material" edit_type:"Material"`
-	HiMaterial        *concepts.EntityRef `editable:"High Material" edit_type:"Material"`
-	LoBehavior        MaterialScale       `editable:"Low Behavior"`
-	MidBehavior       MaterialScale       `editable:"Mid Behavior"`
-	HiBehavior        MaterialScale       `editable:"High Behavior"`
-	PortalHasMaterial bool                `editable:"Portal has material"`
-	PortalIsPassable  bool                `editable:"Portal is passable"`
-	ContactScripts    []Script            `editable:"Contact Scripts"`
+	P                 concepts.Vector2  `editable:"X/Y"`
+	LoSurface         materials.Surface `editable:"Low Surface"`
+	MidSurface        materials.Surface `editable:"Mid Surface"`
+	HiSurface         materials.Surface `editable:"High Surface"`
+	PortalHasMaterial bool              `editable:"Portal has material"`
+	PortalIsPassable  bool              `editable:"Portal is passable"`
+	ContactScripts    []Script          `editable:"Contact Scripts"`
 
 	AdjacentSector  *concepts.EntityRef
 	AdjacentSegment *Segment
@@ -298,38 +296,14 @@ func (s *Segment) Construct(data map[string]any) {
 	if v, ok := data["AdjacentSector"]; ok {
 		s.AdjacentSector = s.DB.DeserializeEntityRef(v)
 	}
-	if v, ok := data["LoMaterial"]; ok {
-		s.LoMaterial = s.DB.DeserializeEntityRef(v)
+	if v, ok := data["Lo"]; ok {
+		s.LoSurface.Construct(s.DB, v.(map[string]any))
 	}
-	if v, ok := data["MidMaterial"]; ok {
-		s.MidMaterial = s.DB.DeserializeEntityRef(v)
+	if v, ok := data["Mid"]; ok {
+		s.MidSurface.Construct(s.DB, v.(map[string]any))
 	}
-	if v, ok := data["HiMaterial"]; ok {
-		s.HiMaterial = s.DB.DeserializeEntityRef(v)
-	}
-	if v, ok := data["LoBehavior"]; ok {
-		mb, error := MaterialScaleString(v.(string))
-		if error == nil {
-			s.LoBehavior = mb
-		} else {
-			panic(error)
-		}
-	}
-	if v, ok := data["MidBehavior"]; ok {
-		mb, error := MaterialScaleString(v.(string))
-		if error == nil {
-			s.MidBehavior = mb
-		} else {
-			panic(error)
-		}
-	}
-	if v, ok := data["HiBehavior"]; ok {
-		mb, error := MaterialScaleString(v.(string))
-		if error == nil {
-			s.HiBehavior = mb
-		} else {
-			panic(error)
-		}
+	if v, ok := data["Hi"]; ok {
+		s.HiSurface.Construct(s.DB, v.(map[string]any))
 	}
 	if v, ok := data["ContactScripts"]; ok {
 		s.ContactScripts = ConstructScripts(s.DB, v)
@@ -348,25 +322,9 @@ func (s *Segment) Serialize() map[string]any {
 		result["PortalIsPassable"] = false
 	}
 
-	if !s.HiMaterial.Nil() {
-		result["HiMaterial"] = s.HiMaterial.Serialize()
-	}
-	if !s.LoMaterial.Nil() {
-		result["LoMaterial"] = s.LoMaterial.Serialize()
-	}
-	if !s.MidMaterial.Nil() {
-		result["MidMaterial"] = s.MidMaterial.Serialize()
-	}
-
-	if s.HiBehavior != ScaleNone {
-		result["HiBehavior"] = s.HiBehavior.String()
-	}
-	if s.LoBehavior != ScaleNone {
-		result["LoBehavior"] = s.LoBehavior.String()
-	}
-	if s.MidBehavior != ScaleNone {
-		result["MidBehavior"] = s.MidBehavior.String()
-	}
+	result["Lo"] = s.LoSurface.Serialize()
+	result["Mid"] = s.MidSurface.Serialize()
+	result["Hi"] = s.HiSurface.Serialize()
 
 	if !s.AdjacentSector.Nil() {
 		result["AdjacentSector"] = s.AdjacentSector.Serialize()

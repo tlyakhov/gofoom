@@ -4,6 +4,7 @@ import (
 	"log"
 	"math"
 
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
@@ -15,14 +16,12 @@ type Sector struct {
 	Bodies        map[uint64]*concepts.EntityRef
 	BottomZ       concepts.SimVariable[float64] `editable:"Floor Height"`
 	TopZ          concepts.SimVariable[float64] `editable:"Ceiling Height"`
-	FloorScale    float64                       `editable:"Floor Material Scale"`
-	CeilScale     float64                       `editable:"Ceiling Material Scale"`
 	FloorSlope    float64                       `editable:"Floor Slope"`
 	CeilSlope     float64                       `editable:"Ceiling Slope"`
 	FloorTarget   *concepts.EntityRef           `editable:"Floor Target"`
 	CeilTarget    *concepts.EntityRef           `editable:"Ceiling Target"`
-	FloorMaterial *concepts.EntityRef           `editable:"Floor Material" edit_type:"Material"`
-	CeilMaterial  *concepts.EntityRef           `editable:"Ceiling Material" edit_type:"Material"`
+	FloorSurface  materials.Surface             `editable:"Floor Surface"`
+	CeilSurface   materials.Surface             `editable:"Ceiling Surface"`
 	Gravity       concepts.Vector3              `editable:"Gravity"`
 	FloorFriction float64                       `editable:"Floor Friction"`
 	FloorScripts  []Script                      `editable:"Floor Scripts"`
@@ -102,8 +101,6 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Gravity[2] = -constants.Gravity
 	s.BottomZ.Set(0.0)
 	s.TopZ.Set(64.0)
-	s.FloorScale = 64.0
-	s.CeilScale = 64.0
 	s.FloorFriction = 0.85
 	if data == nil {
 		return
@@ -115,12 +112,6 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["BottomZ"]; ok {
 		s.BottomZ.Deserialize(v)
 	}
-	if v, ok := data["FloorScale"]; ok {
-		s.FloorScale = v.(float64)
-	}
-	if v, ok := data["CeilScale"]; ok {
-		s.CeilScale = v.(float64)
-	}
 	if v, ok := data["FloorSlope"]; ok {
 		s.FloorSlope = v.(float64)
 	}
@@ -128,11 +119,11 @@ func (s *Sector) Construct(data map[string]any) {
 		s.CeilSlope = v.(float64)
 	}
 
-	if v, ok := data["FloorMaterial"]; ok {
-		s.FloorMaterial = s.DB.DeserializeEntityRef(v)
+	if v, ok := data["FloorSurface"]; ok {
+		s.FloorSurface.Construct(s.DB, v.(map[string]any))
 	}
-	if v, ok := data["CeilMaterial"]; ok {
-		s.CeilMaterial = s.DB.DeserializeEntityRef(v)
+	if v, ok := data["CeilSurface"]; ok {
+		s.CeilSurface.Construct(s.DB, v.(map[string]any))
 	}
 	if v, ok := data["Segments"]; ok {
 		jsonSegments := v.([]any)
@@ -182,8 +173,9 @@ func (s *Sector) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	result["TopZ"] = s.TopZ.Serialize()
 	result["BottomZ"] = s.BottomZ.Serialize()
-	result["FloorScale"] = s.FloorScale
-	result["CeilScale"] = s.CeilScale
+	result["FloorSurface"] = s.FloorSurface.Serialize()
+	result["CeilSurface"] = s.CeilSurface.Serialize()
+
 	if s.Gravity[0] != 0 || s.Gravity[1] != 0 || s.Gravity[2] != -constants.Gravity {
 		result["Gravity"] = s.Gravity.Serialize()
 	}
@@ -200,12 +192,6 @@ func (s *Sector) Serialize() map[string]any {
 	}
 	if !s.CeilTarget.Nil() {
 		result["CeilTarget"] = s.CeilTarget.Serialize()
-	}
-	if !s.FloorMaterial.Nil() {
-		result["FloorMaterial"] = s.FloorMaterial.Serialize()
-	}
-	if !s.CeilMaterial.Nil() {
-		result["CeilMaterial"] = s.CeilMaterial.Serialize()
 	}
 	if len(s.FloorScripts) > 0 {
 		result["FloorScripts"] = SerializeScripts(s.FloorScripts)

@@ -268,8 +268,8 @@ func (g *Grid) Refresh(selection []any) {
 			fieldStringLikeType[*concepts.Vector4](g, index, field)
 		case *concepts.Matrix2:
 			fieldStringLikeType[*concepts.Matrix2](g, index, field)
-		case *core.MaterialScale:
-			g.fieldEnum(index, field, core.MaterialScaleValues())
+		case *materials.SurfaceScale:
+			g.fieldEnum(index, field, materials.SurfaceScaleValues())
 		case *core.CollisionResponse:
 			g.fieldEnum(index, field, core.CollisionResponseValues())
 		case *core.BodyShadow:

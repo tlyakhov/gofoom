@@ -3,7 +3,7 @@ package materials
 import "tlyakhov/gofoom/concepts"
 
 type ShaderStage struct {
-	*Shader
+	DB        *concepts.EntityComponentDB
 	Texture   *concepts.EntityRef `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2    `editable:"Transform"`
 	// TODO: implement
@@ -38,39 +38,39 @@ func (s *Shader) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Stages"]; ok {
-		s.Stages = s.constructShaderStages(v)
+		s.Stages = constructShaderStages(s.DB, v)
 	}
 }
 
 func (s *Shader) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 
-	result["Stages"] = s.serializeShaderStages()
+	result["Stages"] = serializeShaderStages(s.Stages)
 	return result
 }
 
-func (s *Shader) constructShaderStages(data any) []ShaderStage {
+func constructShaderStages(db *concepts.EntityComponentDB, data any) []ShaderStage {
 	var result []ShaderStage
 
 	if stages, ok := data.([]any); ok {
 		result = make([]ShaderStage, len(stages))
 		for i, child := range stages {
-			result[i].Construct(s, child.(map[string]any))
+			result[i].Construct(db, child.(map[string]any))
 		}
 	}
 	return result
 }
 
-func (s *Shader) serializeShaderStages() []map[string]any {
-	result := make([]map[string]any, len(s.Stages))
-	for i, stage := range s.Stages {
+func serializeShaderStages(stages []ShaderStage) []map[string]any {
+	result := make([]map[string]any, len(stages))
+	for i, stage := range stages {
 		result[i] = stage.Serialize()
 	}
 	return result
 }
 
-func (s *ShaderStage) Construct(shader *Shader, data map[string]any) {
-	s.Shader = shader
+func (s *ShaderStage) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+	s.DB = db
 	s.Transform = concepts.IdentityMatrix2
 
 	if data == nil {

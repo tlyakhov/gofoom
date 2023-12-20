@@ -53,42 +53,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 20,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "100",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -760
         },
         {
           "AdjacentSector": "34",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -760
         },
         {
           "AdjacentSector": "56",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -770
         },
         {
           "AdjacentSector": "24",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -770
         }
@@ -106,43 +134,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "4",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "10",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 90
         },
         {
           "AdjacentSector": "28",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 50
         },
         {
           "AdjacentSector": "64",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 90
         }
@@ -160,40 +216,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -44,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "5",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -110
         },
         {
           "AdjacentSector": "82",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -90
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -90
         },
         {
           "AdjacentSector": "73",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -110
         }
@@ -211,34 +295,56 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "6",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1000,
           "Y": -1040
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -880
         },
         {
           "AdjacentSector": "39",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1040
         }
@@ -260,42 +366,70 @@
         "9"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "7",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "89",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -330
         },
         {
           "AdjacentSector": "36",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -330
         },
         {
           "AdjacentSector": "49",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -490
         },
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -490
         }
@@ -401,42 +535,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "10",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "4",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 50
         },
         {
           "AdjacentSector": "71",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 90
         },
         {
           "AdjacentSector": "44",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 21.213203435596423,
           "Y": 85.35533905932738
         },
         {
           "AdjacentSector": "103",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 63.639610306789265,
           "Y": 42.928932188134524
         }
@@ -454,43 +616,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "11",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "24",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -760
         },
         {
           "AdjacentSector": "54",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -770
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -770
         },
         {
           "AdjacentSector": "72",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -760
         }
@@ -508,43 +698,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "12",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "56",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -860
         },
         {
           "AdjacentSector": "34",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -770
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -770
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -860
         }
@@ -562,67 +780,113 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "13",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -880
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -880
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 760,
           "Y": -890
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 720,
           "Y": -890
         },
         {
           "AdjacentSector": "51",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -880
         },
         {
           "AdjacentSector": "38",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1040
         },
         {
           "AdjacentSector": "6",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1040
         }
@@ -640,74 +904,126 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "14",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "54",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -860
         },
         {
           "AdjacentSector": "24",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -770
         },
         {
           "AdjacentSector": "56",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -770
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -860
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 720,
           "Y": -850
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 740,
           "Y": -860
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 760,
           "Y": -850
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 780,
           "Y": -860
         }
@@ -725,40 +1041,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -4,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "15",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -140,
           "Y": -150
         },
         {
           "AdjacentSector": "43",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -160,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -160,
           "Y": -220
         },
         {
           "AdjacentSector": "53",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -140,
           "Y": -220
         }
@@ -812,40 +1156,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "17",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 50
         },
         {
           "AdjacentSector": "23",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 110
         },
         {
           "AdjacentSector": "41",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 110
         }
@@ -863,42 +1235,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "18",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 480,
           "Y": -1040
         },
         {
           "AdjacentSector": "95",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 480,
           "Y": -1220
         },
         {
           "AdjacentSector": "38",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1220
         },
         {
           "AdjacentSector": "51",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1040
         }
@@ -919,34 +1319,56 @@
         "20"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "19",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1380
         },
         {
           "AdjacentSector": "39",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1000,
           "Y": -1220
         },
         {
           "AdjacentSector": "90",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1220
         }
@@ -1047,42 +1469,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "22",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 460,
           "Y": -330
         },
         {
           "AdjacentSector": "26",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 690,
           "Y": -330
         },
         {
           "AdjacentSector": "94",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 630,
           "Y": -310
         },
         {
           "AdjacentSector": "65",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 530,
           "Y": -310
         }
@@ -1100,68 +1550,120 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -100,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "23",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 30
         },
         {
           "AdjacentSector": "17",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 110
         },
         {
           "AdjacentSector": "33",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 170
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 240
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 260
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -110,
           "Y": 260
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -110,
           "Y": 30
         }
@@ -1179,42 +1681,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "24",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "11",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -770
         },
         {
           "AdjacentSector": "100",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -760
         },
         {
           "AdjacentSector": "3",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -760
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -770
         }
@@ -1243,120 +1773,208 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "25",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -860
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -880
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 720,
           "Y": -890
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 760,
           "Y": -890
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -880
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -880
         },
         {
           "AdjacentSector": "54",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -860
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -860
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 780,
           "Y": -860
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 760,
           "Y": -850
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 740,
           "Y": -860
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 720,
           "Y": -850
         },
         {
           "AdjacentSector": "56",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -860
         },
         {
           "AdjacentSector": "12",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -860
         }
@@ -1378,43 +1996,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "26",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 690,
           "Y": -330
         },
         {
           "AdjacentSector": "72",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -330
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -310
         },
         {
           "AdjacentSector": "22",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 630,
           "Y": -310
         }
@@ -1435,11 +2081,15 @@
         "125"
       ],
       "BottomZ": -100,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "27",
       "FloorFriction": 0.85,
-      "FloorMaterial": "127",
+      "FloorSurface": {
+        "Material": "127"
+      },
       "FloorScale": 64,
       "FloorScripts": [
         {
@@ -1449,60 +2099,108 @@
       ],
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 30
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -600,
           "Y": 30
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -600,
           "Y": 260
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 260
         },
         {
           "AdjacentSector": "48",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 240
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 170
         },
         {
           "AdjacentSector": "93",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 110
         }
@@ -1520,43 +2218,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "28",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "103",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 50
         },
         {
           "AdjacentSector": "77",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -160
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": -160
         },
         {
           "AdjacentSector": "4",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 50
         }
@@ -1577,47 +2303,81 @@
         "30"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "29",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1220
         },
         {
           "AdjacentSector": "112",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1350
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1400
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1430,
           "Y": -1400
         },
         {
           "AdjacentSector": "110",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1430,
           "Y": -1220
         }
@@ -1679,40 +2439,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "33",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 170
         },
         {
           "AdjacentSector": "23",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 170
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -190,
           "Y": 240
         },
         {
           "AdjacentSector": "41",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 240
         }
@@ -1730,42 +2518,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 20,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "34",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "3",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -770
         },
         {
           "AdjacentSector": "97",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -760
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -760
         },
         {
           "AdjacentSector": "12",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -770
         }
@@ -1783,43 +2599,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "35",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -490
         },
         {
           "AdjacentSector": "49",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -490
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -510
         },
         {
           "AdjacentSector": "70",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -510
         }
@@ -1837,50 +2681,84 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "36",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "77",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -330
         },
         {
           "AdjacentSector": "103",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -160
         },
         {
           "AdjacentSector": "88",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -160
         },
         {
           "AdjacentSector": "40",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -210
         },
         {
           "AdjacentSector": "7",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -490
         }
@@ -1898,43 +2776,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "37",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "99",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 10
         },
         {
           "AdjacentSector": "86",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": 50
         },
         {
           "AdjacentSector": "91",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": 10
         }
@@ -1952,42 +2858,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -48,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "38",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "39",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1220
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1040
         },
         {
           "AdjacentSector": "18",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1040
         },
         {
           "AdjacentSector": "90",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1220
         }
@@ -2005,43 +2939,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "39",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
         {
           "AdjacentSector": "76",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1000,
           "Y": -1220
         },
         {
           "AdjacentSector": "6",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1000,
           "Y": -1040
         },
         {
           "AdjacentSector": "38",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1040
         },
         {
           "AdjacentSector": "19",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1220
         }
@@ -2059,43 +3021,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "40",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "36",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -490
         },
         {
           "AdjacentSector": "88",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -210
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -210
         },
         {
           "AdjacentSector": "49",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -510
         }
@@ -2119,116 +3109,204 @@
         "21"
       ],
       "BottomZ": -64,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "41",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": 30
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 30
         },
         {
           "AdjacentSector": "17",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "16",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "16"
+          },
           "X": -200,
           "Y": 110
         },
         {
           "AdjacentSector": "33",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 170
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": 240
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "124",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "124"
+          },
           "X": -200,
           "Y": 250
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -440,
           "Y": 250
         },
         {
           "AdjacentSector": "48",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "128",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "128"
+          },
           "PortalHasMaterial": true,
           "PortalIsPassable": false,
           "X": -440,
           "Y": 240
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -440,
           "Y": 170
         },
         {
           "AdjacentSector": "93",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "130",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "130"
+          },
           "PortalHasMaterial": true,
           "X": -440,
           "Y": 110
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -440,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "124",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "124"
+          },
           "X": -440,
           "Y": 30
         },
         {
           "AdjacentSector": "81",
-          "HiMaterial": "123",
-          "LoMaterial": "123",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "123"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": -360,
           "Y": 30
         }
@@ -2345,40 +3423,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -8,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "43",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -160,
           "Y": -150
         },
         {
           "AdjacentSector": "50",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -180,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -180,
           "Y": -220
         },
         {
           "AdjacentSector": "15",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -160,
           "Y": -220
         }
@@ -2396,42 +3502,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 30,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "44",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "71",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 21.213203435596423,
           "Y": 85.35533905932738
         },
         {
           "AdjacentSector": "99",
-          "HiMaterial": "2",
-          "LoMaterial": "123",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "123"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -14.14213562373095,
           "Y": 50
         },
         {
           "AdjacentSector": "103",
-          "HiMaterial": "2",
-          "LoMaterial": "123",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "123"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 28.284271247461895,
           "Y": 7.573593128807154
         },
         {
           "AdjacentSector": "10",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 63.639610306789265,
           "Y": 42.928932188134524
         }
@@ -2449,40 +3583,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -64,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "45",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -10
         },
         {
           "AdjacentSector": "81",
-          "HiMaterial": "123",
-          "LoMaterial": "123",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "123"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": -280,
           "Y": 20
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": 20
         },
         {
           "AdjacentSector": "92",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -10
         }
@@ -2500,40 +3662,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -24,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "46",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -240,
           "Y": -150
         },
         {
           "AdjacentSector": "83",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -260,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "124",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "124"
+          },
           "X": -260,
           "Y": -220
         },
         {
           "AdjacentSector": "47",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -240,
           "Y": -220
         }
@@ -2551,40 +3741,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -20,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "47",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -220,
           "Y": -150
         },
         {
           "AdjacentSector": "46",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -240,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "124",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "124"
+          },
           "X": -240,
           "Y": -220
         },
         {
           "AdjacentSector": "106",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -220,
           "Y": -220
         }
@@ -2602,40 +3820,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "48",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -440,
           "Y": 170
         },
         {
           "AdjacentSector": "27",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 170
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 240
         },
         {
           "AdjacentSector": "41",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -440,
           "Y": 240
         }
@@ -2653,43 +3899,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "49",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "7",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -490
         },
         {
           "AdjacentSector": "40",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -490
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -510
         },
         {
           "AdjacentSector": "35",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -510
         }
@@ -2707,40 +3981,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -12,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "50",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -180,
           "Y": -150
         },
         {
           "AdjacentSector": "106",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": -220
         },
         {
           "AdjacentSector": "43",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -180,
           "Y": -220
         }
@@ -2761,34 +4063,56 @@
         "52"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "51",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -880
         },
         {
           "AdjacentSector": "18",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 480,
           "Y": -1040
         },
         {
           "AdjacentSector": "13",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1040
         }
@@ -2850,54 +4174,94 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "53",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -140,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -110,
           "Y": -150
         },
         {
           "AdjacentSector": "80",
-          "HiMaterial": "123",
-          "LoMaterial": "123",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "123"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": -110,
           "Y": -160
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -110,
           "Y": -210
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -110,
           "Y": -220
         },
         {
           "AdjacentSector": "15",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -140,
           "Y": -220
         }
@@ -2915,43 +4279,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "54",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -770
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -860
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -860
         },
         {
           "AdjacentSector": "11",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -770
         }
@@ -2969,42 +4361,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "56",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "3",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -770
         },
         {
           "AdjacentSector": "12",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -770
         },
         {
           "AdjacentSector": "25",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -860
         },
         {
           "AdjacentSector": "14",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -860
         }
@@ -3025,60 +4445,106 @@
         "59"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "58",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 610,
           "Y": -230
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 740,
           "Y": -270
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 860,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 780,
           "Y": 10
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 590,
           "Y": -100
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 540,
           "Y": -120
         },
         {
           "AdjacentSector": "66",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 570,
           "Y": -180
         }
@@ -3140,40 +4606,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -52,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "60",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -70
         },
         {
           "AdjacentSector": "63",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -50
         },
         {
           "AdjacentSector": "82",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -70
         }
@@ -3194,53 +4688,93 @@
         "62"
       ],
       "BottomZ": -34,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "61",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -690
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 510,
           "Y": -690
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 510,
           "Y": -840
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 190,
           "Y": -910
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 190,
           "Y": -760
         },
         {
           "AdjacentSector": "67",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -690
         }
@@ -3302,40 +4836,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -56,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "63",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -50
         },
         {
           "AdjacentSector": "92",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -30
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -30
         },
         {
           "AdjacentSector": "60",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -50
         }
@@ -3353,42 +4915,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "64",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "71",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 100
         },
         {
           "AdjacentSector": "4",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 90
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 90
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 100
         }
@@ -3406,43 +4996,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "65",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -330
         },
         {
           "AdjacentSector": "22",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 460,
           "Y": -330
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 530,
           "Y": -310
         },
         {
           "AdjacentSector": "89",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -310
         }
@@ -3460,40 +5078,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "66",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "94",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 570,
           "Y": -190
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 600,
           "Y": -230
         },
         {
           "AdjacentSector": "58",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 610,
           "Y": -230
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 570,
           "Y": -180
         }
@@ -3514,42 +5160,70 @@
         "68"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.2,
       "Entity": "67",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.2,
       "Segments": [
         {
           "AdjacentSector": "79",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -520
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -520
         },
         {
           "AdjacentSector": "61",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -690
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -690
         }
@@ -3611,42 +5285,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "69",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "108",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1720,
           "Y": -1060
         },
         {
           "AdjacentSector": "76",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1060
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1040
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1720,
           "Y": -1040
         }
@@ -3664,42 +5366,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "70",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -490
         },
         {
           "AdjacentSector": "35",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -490
         },
         {
           "AdjacentSector": "79",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -510
         },
         {
           "AdjacentSector": "75",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -510
         }
@@ -3717,57 +5447,97 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "71",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "64",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 90
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 100
         },
         {
           "AdjacentSector": "86",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 100
         },
         {
           "AdjacentSector": "99",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 50
         },
         {
           "AdjacentSector": "44",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -14.14213562373095,
           "Y": 50
         },
         {
           "AdjacentSector": "10",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 21.213203435596423,
           "Y": 85.35533905932738
         }
@@ -3785,43 +5555,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "72",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "100",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -330
         },
         {
           "AdjacentSector": "11",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -760
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -760
         },
         {
           "AdjacentSector": "26",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -310
         }
@@ -3839,40 +5637,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -40,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "73",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -130
         },
         {
           "AdjacentSector": "5",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -110
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -110
         },
         {
           "AdjacentSector": "74",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -130
         }
@@ -3890,40 +5716,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -36,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "74",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -150
         },
         {
           "AdjacentSector": "73",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -130
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -130
         },
         {
           "AdjacentSector": "84",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -150
         }
@@ -3941,43 +5795,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "75",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -490
         },
         {
           "AdjacentSector": "70",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -490
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -510
         },
         {
           "AdjacentSector": "97",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -510
         }
@@ -3995,56 +5877,96 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "76",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "39",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1000,
           "Y": -1220
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1000,
           "Y": -1040
         },
         {
           "AdjacentSector": "69",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1040
         },
         {
           "AdjacentSector": "108",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1060
         },
         {
           "AdjacentSector": "109",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1200
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1220
         }
@@ -4062,43 +5984,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "77",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "36",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -160
         },
         {
           "AdjacentSector": "89",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -330
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": -310
         },
         {
           "AdjacentSector": "28",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": -160
         }
@@ -4127,40 +6077,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "79",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -520
         },
         {
           "AdjacentSector": "70",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -510
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -510
         },
         {
           "AdjacentSector": "67",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -520
         }
@@ -4193,40 +6171,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "80",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "88",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -160
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -210
         },
         {
           "AdjacentSector": "53",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -110,
           "Y": -210
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -110,
           "Y": -160
         }
@@ -4271,40 +6277,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -64,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "81",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": 20
         },
         {
           "AdjacentSector": "41",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": 30
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": 30
         },
         {
           "AdjacentSector": "45",
-          "HiMaterial": "123",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "123"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": 20
         }
@@ -4326,40 +6360,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -48,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "82",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -90
         },
         {
           "AdjacentSector": "60",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -70
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -70
         },
         {
           "AdjacentSector": "5",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -90
         }
@@ -4377,40 +6439,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -28,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "83",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -260,
           "Y": -150
         },
         {
           "AdjacentSector": "84",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "124",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "124"
+          },
           "X": -280,
           "Y": -220
         },
         {
           "AdjacentSector": "46",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -260,
           "Y": -220
         }
@@ -4431,40 +6521,68 @@
         "85"
       ],
       "BottomZ": -32,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "84",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "74",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "124",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "124"
+          },
           "X": -360,
           "Y": -220
         },
         {
           "AdjacentSector": "83",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -220
         }
@@ -4526,42 +6644,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "86",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "71",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 100
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": 100
         },
         {
           "AdjacentSector": "37",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": 50
         }
@@ -4579,74 +6725,126 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "87",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "26",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -330
         },
         {
           "AdjacentSector": "22",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 690,
           "Y": -330
         },
         {
           "AdjacentSector": "65",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 460,
           "Y": -330
         },
         {
           "AdjacentSector": "7",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -330
         },
         {
           "AdjacentSector": "35",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -490
         },
         {
           "AdjacentSector": "70",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 330,
           "Y": -490
         },
         {
           "AdjacentSector": "75",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 410,
           "Y": -490
         },
         {
           "AdjacentSector": "100",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -490
         }
@@ -4664,42 +6862,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "88",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "36",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -210
         },
         {
           "AdjacentSector": "91",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -160
         },
         {
           "AdjacentSector": "80",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -160
         },
         {
           "AdjacentSector": "40",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -210
         }
@@ -4717,43 +6943,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "89",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "7",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -330
         },
         {
           "AdjacentSector": "65",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -330
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 200,
           "Y": -310
         },
         {
           "AdjacentSector": "77",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": -310
         }
@@ -4771,42 +7025,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "90",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.3,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1380
         },
         {
           "AdjacentSector": "19",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1380
         },
         {
           "AdjacentSector": "38",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 840,
           "Y": -1220
         },
         {
           "AdjacentSector": "95",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1220
         }
@@ -4824,43 +7106,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "91",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "103",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -160
         },
         {
           "AdjacentSector": "37",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 10
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": 10
         },
         {
           "AdjacentSector": "88",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -100,
           "Y": -160
         }
@@ -4878,40 +7188,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "92",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -30
         },
         {
           "AdjacentSector": "45",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -280,
           "Y": -10
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -10
         },
         {
           "AdjacentSector": "63",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -360,
           "Y": -30
         }
@@ -4929,40 +7267,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -60,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "93",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "41",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -440,
           "Y": 110
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -440,
           "Y": 50
         },
         {
           "AdjacentSector": "27",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 50
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -450,
           "Y": 110
         }
@@ -4980,126 +7346,226 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "123",
+      "CeilSurface": {
+        "Material": "123"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.25,
       "Entity": "94",
       "FloorFriction": 0.85,
-      "FloorMaterial": "123",
+      "FloorSurface": {
+        "Material": "123"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.10000000000000002,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 530,
           "Y": -310
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 490,
           "Y": -280
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 500,
           "Y": -250
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 520,
           "Y": -270
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 530,
           "Y": -250
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 490,
           "Y": -220
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 460,
           "Y": -250
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 460,
           "Y": -200
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 510,
           "Y": -190
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 560,
           "Y": -230
         },
         {
           "AdjacentSector": "66",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 570,
           "Y": -190
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 600,
           "Y": -230
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 610,
           "Y": -270
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 630,
           "Y": -250
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "123",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "123"
+          },
           "X": 640,
           "Y": -290
         },
         {
           "AdjacentSector": "22",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 630,
           "Y": -310
         }
@@ -5120,34 +7586,56 @@
         "96"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "95",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": -0.425,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 480,
           "Y": -1220
         },
         {
           "AdjacentSector": "90",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1380
         },
         {
           "AdjacentSector": "18",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -1220
         }
@@ -5209,43 +7697,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
       "Entity": "97",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "100",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -760
         },
         {
           "AdjacentSector": "75",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -490
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -510
         },
         {
           "AdjacentSector": "34",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 640,
           "Y": -760
         }
@@ -5263,42 +7779,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "99",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "71",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -14.14213562373095,
           "Y": 50
         },
         {
           "AdjacentSector": "37",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 50
         },
         {
           "AdjacentSector": "103",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 10
         },
         {
           "AdjacentSector": "44",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 28.284271247461895,
           "Y": 7.573593128807154
         }
@@ -5320,50 +7864,84 @@
         "102"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "100",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "72",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -760
         },
         {
           "AdjacentSector": "87",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 820,
           "Y": -330
         },
         {
           "AdjacentSector": "97",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -490
         },
         {
           "AdjacentSector": "3",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 660,
           "Y": -760
         },
         {
           "AdjacentSector": "24",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 700,
           "Y": -760
         }
@@ -5473,58 +8051,98 @@
         "105"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "103",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "28",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": -160
         },
         {
           "AdjacentSector": "10",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 80,
           "Y": 50
         },
         {
           "AdjacentSector": "44",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 63.639610306789265,
           "Y": 42.928932188134524
         },
         {
           "AdjacentSector": "99",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 28.284271247461895,
           "Y": 7.573593128807154
         },
         {
           "AdjacentSector": "91",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": 10
         },
         {
           "AdjacentSector": "36",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -80,
           "Y": -160
         }
@@ -5630,40 +8248,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": -16,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "106",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": -150
         },
         {
           "AdjacentSector": "47",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -220,
           "Y": -150
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -220,
           "Y": -220
         },
         {
           "AdjacentSector": "50",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -200,
           "Y": -220
         }
@@ -5721,53 +8367,85 @@
         "107"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "108",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "109",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1200
         },
         {
           "AdjacentSector": "110",
-          "MidMaterial": "2",
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1200
         },
         {
           "AdjacentSector": "111",
-          "MidMaterial": "2",
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1430,
           "Y": -1200
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1720,
           "Y": -1200
         },
         {
           "AdjacentSector": "69",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1720,
           "Y": -1060
         },
         {
           "AdjacentSector": "76",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1060
         }
@@ -5785,43 +8463,71 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "109",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "108",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1200
         },
         {
           "AdjacentSector": "76",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1200
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1020,
           "Y": -1220
         },
         {
           "AdjacentSector": "110",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1220
         }
@@ -5839,42 +8545,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "110",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "111",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1430,
           "Y": -1200
         },
         {
           "AdjacentSector": "29",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1430,
           "Y": -1220
         },
         {
           "AdjacentSector": "109",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1220
         },
         {
           "AdjacentSector": "108",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1200
         }
@@ -5892,42 +8626,70 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "CeilSlope": -0.7,
       "Entity": "111",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "108",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1720,
           "Y": -1200
         },
         {
           "AdjacentSector": "110",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1430,
           "Y": -1200
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1430,
           "Y": -1220
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1720,
           "Y": -1220
         }
@@ -5945,33 +8707,55 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 5,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "112",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "114",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1400
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1260,
           "Y": -1350
         },
         {
           "AdjacentSector": "29",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1350
         }
@@ -5989,33 +8773,55 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 10,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "114",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1260,
           "Y": -1350
         },
         {
           "AdjacentSector": "115",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1240,
           "Y": -1370
         },
         {
           "AdjacentSector": "112",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1400
         }
@@ -6033,33 +8839,55 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 15,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "115",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1240,
           "Y": -1370
         },
         {
           "AdjacentSector": "116",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1230,
           "Y": -1390
         },
         {
           "AdjacentSector": "114",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1400
         }
@@ -6077,33 +8905,55 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 20,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "116",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1230,
           "Y": -1390
         },
         {
           "AdjacentSector": "117",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1230,
           "Y": -1410
         },
         {
           "AdjacentSector": "115",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1400
         }
@@ -6121,33 +8971,55 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 25,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "117",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1230,
           "Y": -1410
         },
         {
           "AdjacentSector": "118",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1240,
           "Y": -1430
         },
         {
           "AdjacentSector": "116",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1400
         }
@@ -6165,40 +9037,68 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 30,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "118",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1300,
           "Y": -1400
         },
         {
           "AdjacentSector": "120",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1330,
           "Y": -1460
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1330,
           "Y": -1610
         },
         {
           "AdjacentSector": "117",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1240,
           "Y": -1430
         }
@@ -6219,39 +9119,67 @@
         "121"
       ],
       "BottomZ": 35,
-      "CeilMaterial": "122",
+      "CeilSurface": {
+        "Material": "122"
+      },
       "CeilScale": 64,
       "Entity": "120",
       "FloorFriction": 0.85,
-      "FloorMaterial": "122",
+      "FloorSurface": {
+        "Material": "122"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1330,
           "Y": -1460
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1500,
           "Y": -1460
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1500,
           "Y": -1610
         },
         {
           "AdjacentSector": "118",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 1330,
           "Y": -1610
         }

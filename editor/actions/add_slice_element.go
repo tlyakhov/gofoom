@@ -44,7 +44,7 @@ func (a *AddSliceElement) Redo() {
 	case *core.Script:
 		target.Construct(a.State().DB, nil)
 	case *materials.ShaderStage:
-		target.Construct(a.Parent.(*materials.Shader), nil)
+		target.Construct(a.State().DB, nil)
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }

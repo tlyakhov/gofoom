@@ -4,9 +4,9 @@ import (
 	"math"
 )
 
-type EasingFunc func(start, end, t float64) float64
+type TweeningFunc func(start, end, t float64) float64
 
-var EasingFuncs = map[string]EasingFunc{
+var TweeningFuncs = map[string]TweeningFunc{
 	"Lerp":         Lerp,
 	"EaseIn":       EaseIn,
 	"EaseIn3":      EaseIn3,
@@ -119,4 +119,14 @@ func ElasticOut(start, end, t float64) float64 {
 
 func ElasticInOut(start, end, t float64) float64 {
 	return Lerp(start, end, Lerp(ElasticIn(0, 1, t), ElasticOut(0, 1, t), t))
+}
+
+func TweenAngles(start, end, t float64, f TweeningFunc) float64 {
+	// Simple way to do this is
+	// to convert to cartesian space, blend, convert back
+	y1, x1 := math.Sincos(start * Deg2rad)
+	y2, x2 := math.Sincos(end * Deg2rad)
+	x := f(x1, x2, t)
+	y := f(y1, y2, t)
+	return math.Atan2(y, x) * Rad2deg
 }

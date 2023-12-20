@@ -26,9 +26,9 @@ func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
 	seg := core.Segment{}
 	seg.Construct(nil)
 	seg.Sector = a.Sector
-	seg.HiMaterial = controllers.DefaultMaterial(a.State().DB)
-	seg.LoMaterial = controllers.DefaultMaterial(a.State().DB)
-	seg.MidMaterial = controllers.DefaultMaterial(a.State().DB)
+	seg.HiSurface.Material = controllers.DefaultMaterial(a.State().DB)
+	seg.LoSurface.Material = controllers.DefaultMaterial(a.State().DB)
+	seg.MidSurface.Material = controllers.DefaultMaterial(a.State().DB)
 	seg.P = *a.WorldGrid(&a.State().MouseDownWorld)
 
 	segs := a.Sector.Segments

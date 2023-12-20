@@ -16,7 +16,7 @@ func FloorPick(s *state.Column) {
 
 // Floor renders the floor portion of a slice.
 func Floor(s *state.Column) {
-	mat := s.Sector.FloorMaterial
+	mat := s.Sector.FloorSurface.Material
 
 	// Because of our sloped floors, we can't use simple linear interpolation to calculate the distance
 	// or world position of the floor sample, we have to do a ray-plane intersection.
@@ -43,15 +43,15 @@ func Floor(s *state.Column) {
 		world[0] += s.Ray.Start[0]
 		world[1] += s.Ray.Start[1]
 		world[2] += s.CameraZ
-		scaler := s.Sector.FloorScale / distToFloor
+		scaler := 64.0 / distToFloor
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToFloor >= s.ZBuffer[screenIndex] {
 			continue
 		}
 
-		tx := world[0] / s.Sector.FloorScale
-		ty := world[1] / s.Sector.FloorScale
+		tx := world[0] / 64.0
+		ty := world[1] / 64.0
 
 		if !mat.Nil() {
 			s.SampleShader(mat, tx, ty, scaler)
