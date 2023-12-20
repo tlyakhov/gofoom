@@ -19,6 +19,7 @@ type SimVariable[T Simulatable] struct {
 	Prev           T
 	Original       T `editable:"Initial Value"`
 	Render         T
+	NoRenderBlend  bool // For things like angles
 	RenderCallback func()
 }
 
@@ -45,6 +46,10 @@ func (s *SimVariable[T]) NewFrame() {
 }
 
 func (s *SimVariable[T]) RenderBlend(blend float64) {
+	if s.NoRenderBlend {
+		s.Render = s.Now
+		return
+	}
 	switch sc := any(s).(type) {
 	case *SimVariable[int]:
 		sc.Render = int(Lerp(float64(sc.Prev), float64(sc.Now), blend))

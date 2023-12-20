@@ -418,7 +418,7 @@ func (e *Editor) GatherHoveringObjects() {
 		if e.Selecting() {
 			for _, ibody := range sector.Bodies {
 				body := core.BodyFromDb(ibody)
-				p := body.Pos.Original
+				p := body.Pos.Now
 				if p[0]+body.BoundingRadius >= v1[0] && p[0]-body.BoundingRadius <= v2[0] &&
 					p[1]+body.BoundingRadius >= v1[1] && p[1]-body.BoundingRadius <= v2[1] {
 					if state.IndexOf(e.HoveringObjects, ibody) == -1 {

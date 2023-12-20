@@ -56,13 +56,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "100",
@@ -134,18 +132,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "4",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7000000000000001,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "10",
@@ -219,13 +215,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "5",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -298,14 +292,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "6",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.425,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.425,
       "Segments": [
         {
           "Hi": {
@@ -362,20 +354,18 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "8",
-        "9"
+        "9",
+        "8"
       ],
       "BottomZ": 0,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "7",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "89",
@@ -457,7 +447,6 @@
         "Y": -480,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -501,7 +490,6 @@
         "Y": -340,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -538,13 +526,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "10",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "4",
@@ -616,18 +602,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7,
       "Entity": "11",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "24",
@@ -698,18 +682,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "12",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "56",
@@ -783,14 +765,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "13",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.3,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.3,
       "Segments": [
         {
           "AdjacentSector": "25",
@@ -907,13 +887,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "14",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "54",
@@ -1044,13 +1022,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "15",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1159,13 +1135,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "17",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1238,14 +1212,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "18",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.3,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.3,
       "Segments": [
         {
           "Hi": {
@@ -1322,14 +1294,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "19",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.425,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.425,
       "Segments": [
         {
           "Hi": {
@@ -1396,7 +1366,6 @@
         "Y": -1280,
         "Z": 68.63603896932108
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -1435,7 +1404,6 @@
         "Y": 60,
         "Z": -32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -1472,13 +1440,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "22",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -1553,13 +1519,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "23",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1684,13 +1648,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "24",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "11",
@@ -1776,13 +1738,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "25",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1996,18 +1956,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "26",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7000000000000001,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -2078,25 +2036,24 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "125"
+        "125",
+        "42"
       ],
       "BottomZ": -100,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "27",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "127"
-      },
-      "FloorScale": 64,
       "FloorScripts": [
         {
           "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.DB.EntityRef(81)).Intent = sectors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ],
+      "FloorSurface": {
+        "Material": "127"
+      },
       "Segments": [
         {
           "Hi": {
@@ -2218,18 +2175,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "28",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7000000000000001,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "103",
@@ -2306,13 +2261,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "29",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -2405,7 +2358,6 @@
         "Y": -1340,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -2430,6 +2382,108 @@
     }
   },
   {
+    "Entity": "31",
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "107"
+      ],
+      "BottomZ": -32,
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "31",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "122",
+        "Scale": "ScaleHeight"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -360,
+          "Y": -150
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -570,
+          "Y": -150
+        },
+        {
+          "AdjacentSector": "55",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -570,
+          "Y": -430
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -470,
+          "Y": -430
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -470,
+          "Y": -220
+        },
+        {
+          "AdjacentSector": "84",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -360,
+          "Y": -220
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
     "Entity": "33",
     "concepts.Named": {
       "Active": true,
@@ -2442,13 +2496,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "33",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -2518,17 +2570,15 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 20,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "34",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -2599,18 +2649,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "35",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -2684,13 +2732,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "36",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "77",
@@ -2776,18 +2822,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "37",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "99",
@@ -2861,13 +2905,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "38",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "39",
@@ -2942,14 +2984,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "39",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.3,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.3,
       "Segments": [
         {
           "AdjacentSector": "76",
@@ -3021,18 +3061,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "40",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "36",
@@ -3103,22 +3141,20 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "107",
         "131",
-        "42",
-        "21"
+        "21",
+        "107",
+        "42"
       ],
       "BottomZ": -64,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "41",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -3426,13 +3462,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "43",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -3505,13 +3539,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "44",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -3586,13 +3618,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "45",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -3665,13 +3695,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "46",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -3744,13 +3772,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "47",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -3823,13 +3849,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "48",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -3899,18 +3923,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "49",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "7",
@@ -3984,13 +4006,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "50",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -4066,14 +4086,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "51",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.425,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.425,
       "Segments": [
         {
           "Hi": {
@@ -4140,7 +4158,6 @@
         "Y": -980,
         "Z": 68.63603896932108
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -4177,13 +4194,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "53",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -4279,18 +4294,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7,
       "Entity": "54",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "14",
@@ -4352,6 +4365,119 @@
     }
   },
   {
+    "Entity": "55",
+    "core.Sector": {
+      "Active": true,
+      "Bodies": [
+        "78"
+      ],
+      "BottomZ": -46,
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "55",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -470,
+          "Y": -430
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -580
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -300,
+          "Y": -620
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -610,
+          "Y": -600
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -660,
+          "Y": -450
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -610,
+          "Y": -430
+        },
+        {
+          "AdjacentSector": "31",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
+          "X": -570,
+          "Y": -430
+        }
+      ],
+      "TopZ": 64
+    }
+  },
+  {
     "Entity": "56",
     "concepts.Named": {
       "Active": true,
@@ -4364,13 +4490,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "56",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -4448,13 +4572,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "58",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -4572,7 +4694,6 @@
         "Y": -120,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -4609,13 +4730,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "60",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -4691,13 +4810,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "61",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -4802,7 +4919,6 @@
         "Y": -790,
         "Z": 6
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -4839,13 +4955,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "63",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -4915,18 +5029,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "64",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7000000000000001,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -4996,18 +5108,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "65",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7000000000000001,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -5081,13 +5191,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "66",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "94",
@@ -5160,18 +5268,16 @@
         "68"
       ],
       "BottomZ": 0,
+      "CeilSlope": -0.2,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.2,
       "Entity": "67",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.2,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.2,
       "Segments": [
         {
           "AdjacentSector": "79",
@@ -5251,7 +5357,6 @@
         "Y": -630,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -5285,18 +5390,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7,
       "Entity": "69",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "108",
@@ -5369,13 +5472,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "70",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -5450,13 +5551,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "71",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "64",
@@ -5555,18 +5654,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7,
       "Entity": "72",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "100",
@@ -5640,13 +5737,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "73",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -5719,13 +5814,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "74",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -5795,18 +5888,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "75",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -5880,13 +5971,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "76",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "39",
@@ -5984,18 +6073,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "77",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7000000000000001,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "36",
@@ -6057,6 +6144,44 @@
     }
   },
   {
+    "Entity": "78",
+    "core.Body": {
+      "Active": true,
+      "Angle": 0,
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "78",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "X": -470,
+        "Y": -530,
+        "Z": 9
+      },
+      "Size": {
+        "X": 10,
+        "Y": 10,
+        "Z": 10
+      },
+      "Vel": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "core.Light": {
+      "Active": true,
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "78",
+      "Strength": 2
+    }
+  },
+  {
     "Entity": "79",
     "behaviors.Proximity": {
       "Active": true,
@@ -6080,13 +6205,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "79",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -6174,13 +6297,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "80",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "88",
@@ -6266,6 +6387,18 @@
         {
           "Code": "true",
           "Style": "ScriptStyleStatement"
+        },
+        {
+          "Code": "true",
+          "Style": "ScriptStyleStatement"
+        },
+        {
+          "Code": "true",
+          "Style": "ScriptStyleStatement"
+        },
+        {
+          "Code": "true",
+          "Style": "ScriptStyleStatement"
         }
       ]
     },
@@ -6280,13 +6413,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "81",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -6363,13 +6494,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "82",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -6442,13 +6571,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "83",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -6524,13 +6651,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "84",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "74",
@@ -6547,6 +6672,7 @@
           "Y": -150
         },
         {
+          "AdjacentSector": "31",
           "Hi": {
             "Material": "2"
           },
@@ -6610,7 +6736,6 @@
         "Y": -200,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -6644,18 +6769,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "86",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -6728,13 +6851,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "87",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "26",
@@ -6865,13 +6986,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "88",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "36",
@@ -6943,18 +7062,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "89",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7000000000000001,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7000000000000001,
       "Segments": [
         {
           "AdjacentSector": "7",
@@ -7028,14 +7145,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "90",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.3,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.3,
       "Segments": [
         {
           "Hi": {
@@ -7106,18 +7221,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "91",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "103",
@@ -7191,13 +7304,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "92",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -7270,13 +7381,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "93",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "41",
@@ -7346,18 +7455,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.25,
       "CeilSurface": {
         "Material": "123"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.25,
       "Entity": "94",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.10000000000000002,
       "FloorSurface": {
         "Material": "123"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.10000000000000002,
       "Segments": [
         {
           "Hi": {
@@ -7589,14 +7696,12 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "95",
       "FloorFriction": 0.85,
+      "FloorSlope": -0.425,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": -0.425,
       "Segments": [
         {
           "Hi": {
@@ -7663,7 +7768,6 @@
         "Y": -1280,
         "Z": 68.63603896932108
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -7697,18 +7801,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7000000000000001,
       "Entity": "97",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.8500000000000002,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.8500000000000002,
       "Segments": [
         {
           "AdjacentSector": "100",
@@ -7782,13 +7884,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "99",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -7867,13 +7967,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "100",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "72",
@@ -7969,7 +8067,6 @@
         "Y": -630,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -8013,7 +8110,6 @@
         "Y": -630,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -8047,20 +8143,18 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "104",
-        "105"
+        "105",
+        "104"
       ],
       "BottomZ": 0,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "103",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "28",
@@ -8170,7 +8264,6 @@
         "Y": -50,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -8214,7 +8307,6 @@
         "Y": -50,
         "Z": 32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -8251,13 +8343,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "106",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -8341,7 +8431,6 @@
         "Y": 140,
         "Z": 0
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 15,
         "Y": 15,
@@ -8370,13 +8459,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "108",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "109",
@@ -8394,6 +8481,8 @@
         },
         {
           "AdjacentSector": "110",
+          "Hi": {},
+          "Lo": {},
           "Mid": {
             "Material": "2"
           },
@@ -8402,6 +8491,8 @@
         },
         {
           "AdjacentSector": "111",
+          "Hi": {},
+          "Lo": {},
           "Mid": {
             "Material": "2"
           },
@@ -8463,18 +8554,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7,
       "Entity": "109",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "108",
@@ -8548,13 +8637,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "110",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "111",
@@ -8626,18 +8713,16 @@
     "core.Sector": {
       "Active": true,
       "BottomZ": 0,
+      "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
-      "CeilSlope": -0.7,
       "Entity": "111",
       "FloorFriction": 0.85,
+      "FloorSlope": 0.7,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.7,
       "Segments": [
         {
           "AdjacentSector": "108",
@@ -8710,13 +8795,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "112",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "114",
@@ -8776,13 +8859,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "114",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -8842,13 +8923,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "115",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -8908,13 +8987,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "116",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -8974,13 +9051,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "117",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -9040,13 +9115,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "118",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -9122,13 +9195,11 @@
       "CeilSurface": {
         "Material": "122"
       },
-      "CeilScale": 64,
       "Entity": "120",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "122"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -9202,7 +9273,6 @@
         "Y": -1520,
         "Z": 60
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -9346,7 +9416,6 @@
         "Y": 140,
         "Z": -80
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,
@@ -9525,7 +9594,6 @@
         "Y": 220,
         "Z": -32
       },
-      "Shadow": "BodyShadowAABB",
       "Size": {
         "X": 10,
         "Y": 10,

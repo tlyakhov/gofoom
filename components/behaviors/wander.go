@@ -7,9 +7,13 @@ import (
 type Wander struct {
 	concepts.Attached `editable:"^"`
 
-	Force      float64 `editable:"Force"`
-	Dir        concepts.Vector3
-	LastChange int64
+	Force     float64 `editable:"Force"`
+	AsImpulse bool    `editable:"Apply as impulse"`
+
+	// Internal state
+	LastTurn   int64
+	LastTarget int64
+	NextSector *concepts.EntityRef
 }
 
 var WanderComponentIndex int
@@ -33,7 +37,7 @@ func (w *Wander) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 
 	w.Force = 10
-	w.LastChange = w.DB.Timestamp
+	w.LastTurn = w.DB.Timestamp
 
 	if data == nil {
 		return
@@ -42,12 +46,17 @@ func (w *Wander) Construct(data map[string]any) {
 	if v, ok := data["Force"]; ok {
 		w.Force = v.(float64)
 	}
-
+	if v, ok := data["AsImpulse"]; ok {
+		w.AsImpulse = v.(bool)
+	}
 }
 
 func (w *Wander) Serialize() map[string]any {
 	result := w.Attached.Serialize()
 
 	result["Force"] = w.Force
+	if w.AsImpulse {
+		result["AsImpulse"] = true
+	}
 	return result
 }

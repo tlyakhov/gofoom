@@ -63,7 +63,7 @@ func DrawBody(cr *cairo.Context, ibody *concepts.EntityRef) {
 	DrawBodyAngle(cr, body)
 
 	if editor.ComponentNamesVisible {
-		text := ibody.String()
+		text := ibody.NameString()
 		extents := cr.TextExtents(text)
 		cr.Save()
 		cr.SetSourceRGB(0.3, 0.3, 0.5)

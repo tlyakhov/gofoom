@@ -15,7 +15,8 @@ const (
 type BodyShadow int
 
 const (
-	BodyShadowSphere BodyShadow = iota
+	BodyShadowNone BodyShadow = iota
+	BodyShadowSphere
 	BodyShadowAABB
 )
 

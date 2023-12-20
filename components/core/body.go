@@ -74,7 +74,8 @@ func (b *Body) Construct(data map[string]any) {
 	b.CollisionResponse = Slide
 	b.MountHeight = constants.PlayerMountHeight
 	b.Active = true
-	b.Shadow = BodyShadowAABB
+	b.Shadow = BodyShadowNone
+	b.Angle.NoRenderBlend = true
 
 	if data == nil {
 		return
@@ -133,6 +134,8 @@ func (b *Body) Serialize() map[string]any {
 	result["Mass"] = b.Mass
 	result["MountHeight"] = b.MountHeight
 	result["CollisionResponse"] = b.CollisionResponse.String()
-	result["Shadow"] = b.Shadow
+	if b.Shadow != BodyShadowNone {
+		result["Shadow"] = b.Shadow.String()
+	}
 	return result
 }
