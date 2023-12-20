@@ -16,7 +16,7 @@ func CeilingPick(s *state.Column) {
 
 // Ceiling renders the ceiling portion of a slice.
 func Ceiling(s *state.Column) {
-	mat := s.Sector.CeilMaterial
+	mat := s.Sector.CeilSurface.Material
 
 	// Because of our sloped ceilings, we can't use simple linear interpolation to calculate the distance
 	// or world position of the ceiling sample, we have to do a ray-plane intersection.
@@ -43,15 +43,15 @@ func Ceiling(s *state.Column) {
 		world[0] += s.Ray.Start[0]
 		world[1] += s.Ray.Start[1]
 		world[2] += s.CameraZ
-		scaler := s.Sector.CeilScale / distToCeil
+		scaler := 64.0 / distToCeil
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToCeil >= s.ZBuffer[screenIndex] {
 			continue
 		}
 
-		tx := world[0] / s.Sector.CeilScale
-		ty := world[1] / s.Sector.CeilScale
+		tx := world[0] / 64.0
+		ty := world[1] / 64.0
 
 		if !mat.Nil() {
 			s.SampleShader(mat, tx, ty, scaler)

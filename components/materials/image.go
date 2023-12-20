@@ -80,6 +80,8 @@ func (img *Image) Load() error {
 	return nil
 }
 
+// TODO: Use https://github.com/disintegration/imaging for this, one of the
+// nicer filters.
 func (img *Image) generateMipMaps() {
 	img.MipMaps = make(map[uint32]*mipMap)
 
@@ -155,11 +157,8 @@ func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
 		return concepts.Vector4{x, y, 0, 1} // full alpha
 	}
 
-	if x < 0 {
-		x = 0
-	}
-	if y < 0 {
-		y = 0
+	if x < 0 || y < 0 {
+		return concepts.Vector4{0, 0, 0, 0}
 	}
 
 	fx := uint32(x * float64(w))

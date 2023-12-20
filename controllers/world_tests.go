@@ -17,24 +17,24 @@ func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size fl
 	named.Name = name
 
 	mat := DefaultMaterial(db)
-	sector.FloorMaterial = mat
-	sector.CeilMaterial = mat
+	sector.FloorSurface.Material = mat
+	sector.CeilSurface.Material = mat
 	seg := sector.AddSegment(x, y)
-	seg.MidMaterial = mat
-	seg.HiMaterial = mat
-	seg.LoMaterial = mat
+	seg.MidSurface.Material = mat
+	seg.HiSurface.Material = mat
+	seg.LoSurface.Material = mat
 	seg = sector.AddSegment(x+size, y)
-	seg.MidMaterial = mat
-	seg.HiMaterial = mat
-	seg.LoMaterial = mat
+	seg.MidSurface.Material = mat
+	seg.HiSurface.Material = mat
+	seg.LoSurface.Material = mat
 	seg = sector.AddSegment(x+size, y+size)
-	seg.MidMaterial = mat
-	seg.HiMaterial = mat
-	seg.LoMaterial = mat
+	seg.MidSurface.Material = mat
+	seg.HiSurface.Material = mat
+	seg.LoSurface.Material = mat
 	seg = sector.AddSegment(x, y+size)
-	seg.MidMaterial = mat
-	seg.HiMaterial = mat
-	seg.LoMaterial = mat
+	seg.MidSurface.Material = mat
+	seg.HiSurface.Material = mat
+	seg.LoSurface.Material = mat
 
 	sector.Recalculate()
 	return sector
@@ -111,10 +111,10 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 			sector.TopZ.Set(300)
 			sector.BottomZ.Set(rand.Float64() * 30)
 			sector.FloorSlope = rand.Float64() * 0.2
-			sector.CeilMaterial = isky
+			sector.CeilSurface.Material = isky
 			for i := 0; i < len(sector.Segments); i++ {
-				sector.Segments[i].MidMaterial = isky
-				sector.Segments[i].LoMaterial = idirt
+				sector.Segments[i].MidSurface.Material = isky
+				sector.Segments[i].LoSurface.Material = idirt
 			}
 
 			if rand.Uint32()%45 == 0 {
@@ -164,9 +164,9 @@ func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	sector3 := CreateTestSector(db, "sector3", 300, -100, 200)
 	sector3.TopZ.Set(100)
 	sector3.BottomZ.Set(0)
-	sector3.FloorMaterial = idirt
-	sector3.CeilMaterial = isky
-	sector3.Segments[1].MidMaterial = isky
+	sector3.FloorSurface.Material = idirt
+	sector3.CeilSurface.Material = isky
+	sector3.Segments[1].MidSurface.Material = isky
 
 	ilight := archetypes.CreateLightBody(db)
 	lightBody := core.BodyFromDb(ilight)

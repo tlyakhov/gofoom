@@ -14,6 +14,7 @@ var EmbeddedTypes = [...]string{
 	reflect.TypeOf(&concepts.SimVariable[concepts.Vector4]{}).String(),
 	reflect.TypeOf(&concepts.SimVariable[float64]{}).String(),
 	reflect.TypeOf(&core.Script{}).String(),
+	reflect.TypeOf(&materials.Surface{}).String(),
 	reflect.TypeOf(&materials.ShaderStage{}).String(),
 }
 

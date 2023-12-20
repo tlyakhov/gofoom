@@ -18,7 +18,7 @@ type Animated interface {
 
 type Animation[T Simulatable] struct {
 	*Simulation
-	EasingFunc
+	TweeningFunc
 	Name       string
 	Target     *SimVariable[T]
 	Start, End T
@@ -29,12 +29,12 @@ type Animation[T Simulatable] struct {
 	Style      AnimationStyle
 }
 
-func (a *Animation[T]) SetEasingFunc(name string) EasingFunc {
-	a.EasingFunc = EasingFuncs[name]
-	if a.EasingFunc == nil {
-		a.EasingFunc = Lerp
+func (a *Animation[T]) SetEasingFunc(name string) TweeningFunc {
+	a.TweeningFunc = TweeningFuncs[name]
+	if a.TweeningFunc == nil {
+		a.TweeningFunc = Lerp
 	}
-	return a.EasingFunc
+	return a.TweeningFunc
 }
 
 func (a *Animation[T]) Animate() {
@@ -44,21 +44,21 @@ func (a *Animation[T]) Animate() {
 	a.Percent = Clamp(a.Percent, 0, 1)
 	switch c := any(a).(type) {
 	case *Animation[int]:
-		c.Target.Now = int(c.EasingFunc(float64(c.Start), float64(c.End), c.Percent))
+		c.Target.Now = int(c.TweeningFunc(float64(c.Start), float64(c.End), c.Percent))
 	case *Animation[float64]:
-		c.Target.Now = c.EasingFunc(c.Start, c.End, c.Percent)
+		c.Target.Now = c.TweeningFunc(c.Start, c.End, c.Percent)
 	case *Animation[Vector2]:
-		c.Target.Now[0] = c.EasingFunc(c.Start[0], c.End[0], c.Percent)
-		c.Target.Now[1] = c.EasingFunc(c.Start[1], c.End[1], c.Percent)
+		c.Target.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], c.Percent)
+		c.Target.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], c.Percent)
 	case *Animation[Vector3]:
-		c.Target.Now[0] = c.EasingFunc(c.Start[0], c.End[0], c.Percent)
-		c.Target.Now[1] = c.EasingFunc(c.Start[1], c.End[1], c.Percent)
-		c.Target.Now[2] = c.EasingFunc(c.Start[2], c.End[2], c.Percent)
+		c.Target.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], c.Percent)
+		c.Target.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], c.Percent)
+		c.Target.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], c.Percent)
 	case *Animation[Vector4]:
-		c.Target.Now[0] = c.EasingFunc(c.Start[0], c.End[0], c.Percent)
-		c.Target.Now[1] = c.EasingFunc(c.Start[1], c.End[1], c.Percent)
-		c.Target.Now[2] = c.EasingFunc(c.Start[2], c.End[2], c.Percent)
-		c.Target.Now[3] = c.EasingFunc(c.Start[3], c.End[3], c.Percent)
+		c.Target.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], c.Percent)
+		c.Target.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], c.Percent)
+		c.Target.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], c.Percent)
+		c.Target.Now[3] = c.TweeningFunc(c.Start[3], c.End[3], c.Percent)
 	}
 
 	if a.Percent >= 1 && a.Style == AnimationStyleOnce {
@@ -76,6 +76,6 @@ func (a *Animation[T]) Construct(s *Simulation) {
 	a.Simulation = s
 	a.Active = true
 	a.Reverse = false
-	a.EasingFunc = Lerp
+	a.TweeningFunc = Lerp
 	a.Style = AnimationStyleOnce
 }

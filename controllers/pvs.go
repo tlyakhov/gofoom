@@ -31,7 +31,7 @@ func (pvs *PvsController) Target(target *concepts.EntityRef) bool {
 
 func (pvs *PvsController) Recalculate() {
 	pvs.buildPVS(nil)
-	pvs.updateBodyPVS(new(concepts.Vector2), nil)
+	pvs.updateBodyPVS(new(concepts.Vector2), nil, nil, nil)
 }
 
 func (pvs *PvsController) Loaded() {
@@ -134,11 +134,14 @@ func (pvs *PvsController) buildPVS(visitor *core.Sector) {
 	}
 }
 
-func (pvs *PvsController) updateBodyPVS(normal *concepts.Vector2, visitor *core.Sector) {
+func (pvs *PvsController) updateBodyPVS(normal *concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
 	if visitor == nil {
 		pvs.Sector.PVSBody = make(map[uint64]*core.Sector)
 		pvs.Sector.PVSBody[pvs.Entity] = pvs.Sector
 		visitor = pvs.Sector
+	}
+	if min == nil || max == nil {
+		min, max = &pvs.Sector.Min, &pvs.Sector.Max
 	}
 
 	for _, seg := range visitor.Segments {
@@ -150,14 +153,25 @@ func (pvs *PvsController) updateBodyPVS(normal *concepts.Vector2, visitor *core.
 		if !correctSide || pvs.Sector.PVSBody[adj.Sector.Entity] != nil {
 			continue
 		}
+		if adj.Sector.Min[2] >= max[2] || adj.Sector.Max[2] <= min[2] {
+			continue
+		}
+		adjmax := max
+		adjmin := min
+		if adj.Sector.Max[2] < max[2] {
+			adjmax = &adj.Sector.Max
+		}
+		if adj.Sector.Min[2] > min[2] {
+			adjmin = &adj.Sector.Min
+		}
 
 		adjsec := core.SectorFromDb(seg.AdjacentSector)
 		pvs.Sector.PVSBody[seg.AdjacentSector.Entity] = adjsec
 
 		if normal.Zero() {
-			pvs.updateBodyPVS(&seg.Normal, adjsec)
+			pvs.updateBodyPVS(&seg.Normal, adjsec, adjmin, adjmax)
 		} else {
-			pvs.updateBodyPVS(normal, adjsec)
+			pvs.updateBodyPVS(normal, adjsec, adjmin, adjmax)
 		}
 	}
 }

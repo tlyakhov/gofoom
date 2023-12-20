@@ -291,8 +291,8 @@ func (e *Editor) ActTool() {
 	case state.ToolAddSector:
 		isector := archetypes.CreateSector(e.DB)
 		s := core.SectorFromDb(isector)
-		s.FloorMaterial = controllers.DefaultMaterial(e.DB)
-		s.CeilMaterial = controllers.DefaultMaterial(e.DB)
+		s.FloorSurface.Material = controllers.DefaultMaterial(e.DB)
+		s.CeilSurface.Material = controllers.DefaultMaterial(e.DB)
 		a := &actions.AddSector{Sector: s}
 		a.AddBody.IEditor = e
 		a.AddBody.EntityRef = isector

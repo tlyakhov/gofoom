@@ -1,7 +1,7 @@
 package render
 
 import (
-	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/render/state"
 )
 
@@ -13,9 +13,9 @@ func WallMidPick(s *state.Column) {
 
 // WallMid renders the wall portion (potentially over a portal).
 func WallMid(s *state.Column) {
-	mat := s.Segment.MidMaterial
+	mat := s.Segment.MidSurface.Material
 	u := s.U
-	if s.Segment.MidBehavior == core.ScaleHeight || s.Segment.MidBehavior == core.ScaleNone {
+	if s.Segment.MidSurface.Scale == materials.ScaleHeight || s.Segment.MidSurface.Scale == materials.ScaleNone {
 		if s.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
@@ -34,7 +34,7 @@ func WallMid(s *state.Column) {
 			lightV = (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 		}
 
-		if s.Segment.MidBehavior == core.ScaleWidth || s.Segment.MidBehavior == core.ScaleNone {
+		if s.Segment.MidSurface.Scale == materials.ScaleWidth || s.Segment.MidSurface.Scale == materials.ScaleNone {
 			v = s.Intersection[2] / 64.0
 		}
 
