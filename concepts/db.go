@@ -91,6 +91,7 @@ func (db *EntityComponentDB) attach(entity uint64, component Attachable, index i
 	component.SetDB(db)
 
 	db.Components[index] = append(db.Components[index], component)
+	component.SetIndexInDB(len(db.Components[index]) - 1)
 
 	for len(db.EntityComponents) <= int(entity) {
 		db.EntityComponents = append(db.EntityComponents, nil)
@@ -308,14 +309,12 @@ func (db *EntityComponentDB) Save(filename string) {
 	defer db.lock.Unlock()
 	jsonDB := make([]any, 0)
 
-	sortedEntities := make([]uint64, db.usedEntities.Count())
-	i := 0
+	sortedEntities := make([]uint64, 0)
 	for entity, c := range db.EntityComponents {
 		if entity == 0 || c == nil {
 			continue
 		}
-		sortedEntities[i] = uint64(entity)
-		i++
+		sortedEntities = append(sortedEntities, uint64(entity))
 	}
 	slices.Sort(sortedEntities)
 

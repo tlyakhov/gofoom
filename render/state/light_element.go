@@ -157,7 +157,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if bodyRef.Entity == lightBody.Entity || (le.Type == LightElementBody && le.InputBody.Entity == bodyRef.Entity) {
 				continue
 			}
-			if b := core.BodyFromDb(bodyRef); b != nil && b.Mass > 0 {
+			if b := core.BodyFromDb(bodyRef); b != nil && b.Shadow != core.BodyShadowNone && b.Mass > 0 {
 				bodyPos = b.Pos.Render
 				bodyPos[2] += b.Size.Now[2] * 0.5
 				switch b.Shadow {

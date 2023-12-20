@@ -104,8 +104,9 @@ func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.Enti
 		u *= scaleDivisor
 		v *= scaleDivisor
 		if tiled.IsLiquid {
-			u += math.Cos(float64(c.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
-			v += math.Sin(float64(c.Frame)*constants.LiquidChurnSpeed*concepts.Deg2rad) * constants.LiquidChurnSize
+			lv, lu := math.Sincos(float64(c.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
+			u += lu * constants.LiquidChurnSize
+			v += lv * constants.LiquidChurnSize
 		}
 
 		u -= math.Floor(u)

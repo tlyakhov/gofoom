@@ -57,7 +57,9 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 func (s *Surface) Serialize() map[string]any {
 	result := make(map[string]any)
 
-	result["ExtraStages"] = serializeShaderStages(s.ExtraStages)
+	if len(s.ExtraStages) > 0 {
+		result["ExtraStages"] = serializeShaderStages(s.ExtraStages)
+	}
 
 	if !s.Material.Nil() {
 		result["Material"] = s.Material.Serialize()

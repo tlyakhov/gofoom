@@ -57,6 +57,13 @@ func (er *EntityRef) String() string {
 	return sb.String()
 }
 
+func (er *EntityRef) NameString() string {
+	if named := NamedFromDb(er); named != nil {
+		return named.Name
+	}
+	return strconv.FormatUint(er.Entity, 10)
+}
+
 func (er *EntityRef) Serialize() string {
 	return strconv.FormatUint(er.Entity, 10)
 }
