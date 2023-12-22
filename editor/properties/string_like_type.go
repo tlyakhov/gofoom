@@ -9,7 +9,8 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
-	"github.com/gotk3/gotk3/gtk"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
 )
 
 type StringLikeType interface {
@@ -18,7 +19,7 @@ type StringLikeType interface {
 	String() string
 }
 
-func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.PropertyGridField) {
+func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridField) {
 	origValue := ""
 	for i, v := range field.Values {
 		if i != 0 {
@@ -28,17 +29,10 @@ func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.Prop
 		origValue += currentValue.String()
 	}
 
-	entry, _ := gtk.EntryNew()
-	entry.SetHExpand(true)
+	entry := widget.NewEntry()
 	entry.SetText(origValue)
-	entry.Connect("activate", func(_ *gtk.Entry) {
-		text, err := entry.GetText()
-		if err != nil {
-			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
-			entry.SetText(origValue)
-			g.Container.GrabFocus()
-			return
-		}
+	entry.OnChanged = func(text string) {
+		var err error
 		var parsed any
 		// This is a hack to switch on type of T
 		var typedValue T
@@ -55,7 +49,7 @@ func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.Prop
 		if err != nil {
 			log.Printf("Couldn't parse %v from user entry. %v\n", reflect.TypeOf(typedValue).Name(), err)
 			entry.SetText(origValue)
-			g.Container.GrabFocus()
+			g.Focus(g.FContainer)
 			return
 		}
 		currentValue := parsed.(T)
@@ -67,14 +61,9 @@ func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.Prop
 		g.NewAction(action)
 		action.Act()
 		origValue = currentValue.String()
-		g.Container.GrabFocus()
-	})
-	g.Container.Attach(entry, 2, index, 1, 1)
-
-	cb, _ := gtk.CheckButtonNew()
-	cb.SetLabel("Tweak")
-	cb.Connect("toggled", func(_ *gtk.CheckButton) {
-		active := cb.GetActive()
+		g.Focus(g.FContainer)
+	}
+	cb := widget.NewCheck("Tweak", func(active bool) {
 		for i, v := range g.State().SelectedTransformables {
 			if typed, ok := v.(T); ok && typed == field.Values[0].Interface() {
 				if !active {
@@ -87,6 +76,7 @@ func fieldStringLikeType[T StringLikeType](g *Grid, index int, field *state.Prop
 		if active {
 			g.State().SelectedTransformables = append(g.State().SelectedTransformables, field.Values[0].Interface())
 		}
+
 	})
-	g.Container.Attach(cb, 3, index, 1, 1)
+	g.FContainer.Add(container.NewBorder(nil, nil, nil, cb, entry))
 }

@@ -7,7 +7,7 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type SplitSector struct {
@@ -17,7 +17,7 @@ type SplitSector struct {
 	Original  map[uint64][]concepts.Attachable
 }
 
-func (a *SplitSector) OnMouseDown(button *gdk.EventButton) {}
+func (a *SplitSector) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *SplitSector) OnMouseMove()                        {}
 func (a *SplitSector) Frame()                              {}
 func (a *SplitSector) Act()                                {}

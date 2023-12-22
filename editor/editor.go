@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	"image"
 	"strconv"
-	"unsafe"
 
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/editor/actions"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/driver/desktop"
+	"fyne.io/fyne/v2/widget"
 
-	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 
@@ -26,13 +27,20 @@ import (
 )
 
 type EditorWidgets struct {
-	App               *gtk.Application
-	Window            *gtk.ApplicationWindow
-	GameArea          *gtk.DrawingArea
-	MapArea           *gtk.DrawingArea
-	EntitySearchBar   *gtk.SearchBar
-	EntitySearchEntry *gtk.SearchEntry
-	StatusBar         *gtk.Label
+	GApp               *gtk.Application
+	GWindow            *gtk.ApplicationWindow
+	GGameArea          *gtk.DrawingArea
+	GMapArea           *gtk.DrawingArea
+	GEntitySearchBar   *gtk.SearchBar
+	GEntitySearchEntry *gtk.SearchEntry
+	GStatusBar         *gtk.Label
+
+	App          fyne.App
+	Window       fyne.Window
+	LabelStatus  *widget.Label
+	PropertyGrid *fyne.Container
+	GameWidget   *GameWidget
+	MapWidget    *MapWidget
 }
 
 type Editor struct {
@@ -50,9 +58,8 @@ type Editor struct {
 	ComponentNamesVisible bool
 
 	// Game View state
-	Renderer        *render.Renderer
-	GameViewSurface *cairo.Surface
-	GameViewBuffer  []uint8
+	Renderer       *render.Renderer
+	MapViewSurface *image.RGBA
 }
 
 func (e *Editor) State() *state.Edit {
@@ -89,15 +96,8 @@ func (e *Editor) WorldToScreen(p *concepts.Vector2) *concepts.Vector2 {
 	return p.Sub(&e.Pos).MulSelf(e.Scale).AddSelf(e.Size.Mul(0.5))
 }
 
-func (e *Editor) SetMapCursor(name string) {
-	win, _ := e.MapArea.GetWindow()
-	if name == "" {
-		win.SetCursor(nil)
-		return
-	}
-	dis, _ := gdk.DisplayGetDefault()
-	cursor, _ := gdk.CursorNewFromName(dis, name)
-	win.SetCursor(cursor)
+func (e *Editor) SetMapCursor(cursor desktop.Cursor) {
+	e.MapWidget.MapCursor = cursor
 }
 
 func (e *Editor) UpdateTitle() {
@@ -135,7 +135,7 @@ func (e *Editor) UpdateStatus() {
 		}
 	}
 	text = list + " ( " + text + " )"
-	e.StatusBar.SetText(text)
+	e.LabelStatus.SetText(text)
 }
 
 func (e *Editor) Integrate() {
@@ -145,27 +145,27 @@ func (e *Editor) Integrate() {
 	}
 	playerBody := core.BodyFromDb(player.Ref())
 
-	if gameKeyMap[gdk.KEY_w] {
+	if e.GameWidget.KeyMap["W"] {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now)
 	}
-	if gameKeyMap[gdk.KEY_s] {
+	if e.GameWidget.KeyMap["S"] {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0)
 	}
-	if gameKeyMap[gdk.KEY_e] {
+	if e.GameWidget.KeyMap["E"] {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0)
 	}
-	if gameKeyMap[gdk.KEY_q] {
+	if e.GameWidget.KeyMap["Q"] {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0)
 	}
-	if gameKeyMap[gdk.KEY_a] {
+	if e.GameWidget.KeyMap["A"] {
 		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
-	if gameKeyMap[gdk.KEY_d] {
+	if e.GameWidget.KeyMap["D"] {
 		playerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
-	if gameKeyMap[gdk.KEY_space] {
+	if e.GameWidget.KeyMap["Space"] {
 		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
@@ -173,7 +173,7 @@ func (e *Editor) Integrate() {
 			playerBody.OnGround = false
 		}
 	}
-	if gameKeyMap[gdk.KEY_c] {
+	if e.GameWidget.KeyMap["C"] {
 		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
@@ -183,25 +183,25 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	if gameKeyMap[gdk.KEY_i] {
+	if e.GameWidget.KeyMap["I"] {
 		t := concepts.IdentityMatrix2
 		t.Translate(&concepts.Vector2{0, -0.005})
 		e.ChangeSelectedTransformables(&t)
 	}
 
-	if gameKeyMap[gdk.KEY_k] {
+	if e.GameWidget.KeyMap["K"] {
 		t := concepts.IdentityMatrix2
 		t.Translate(&concepts.Vector2{0, 0.005})
 		e.ChangeSelectedTransformables(&t)
 	}
 
-	if gameKeyMap[gdk.KEY_j] {
+	if e.GameWidget.KeyMap["J"] {
 		t := concepts.IdentityMatrix2
 		t.Translate(&concepts.Vector2{0.005, 0})
 		e.ChangeSelectedTransformables(&t)
 	}
 
-	if gameKeyMap[gdk.KEY_l] {
+	if e.GameWidget.KeyMap["L"] {
 		t := concepts.IdentityMatrix2
 		t.Translate(&concepts.Vector2{-0.005, 0})
 		e.ChangeSelectedTransformables(&t)
@@ -233,10 +233,11 @@ func (e *Editor) Load(filename string) {
 		return
 	}
 	db.Simulation.Integrate = e.Integrate
-	db.Simulation.Render = e.Window.QueueDraw
+	db.Simulation.Render = e.GameWidget.Draw
 	e.DB = db
 	e.SelectObjects([]any{}, true)
-	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
+	editor.ResizeRenderer(640, 360)
+	return
 	e.Grid.Refresh(e.SelectedObjects)
 	e.EntityTree.Update()
 }
@@ -250,9 +251,9 @@ func (e *Editor) Test() {
 	e.DB.Clear()
 	controllers.CreateTestWorld2(e.DB)
 	e.DB.Simulation.Integrate = e.Integrate
-	e.DB.Simulation.Render = e.Window.QueueDraw
+	e.DB.Simulation.Render = e.GWindow.QueueDraw
 
-	e.GameView(e.GameArea.GetAllocatedWidth(), e.GameArea.GetAllocatedHeight())
+	e.ResizeRenderer(e.GGameArea.GetAllocatedWidth(), e.GGameArea.GetAllocatedHeight())
 	e.Grid.Refresh(e.SelectedObjects)
 	e.EntityTree.Update()
 }
@@ -270,10 +271,10 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 		e.RedoHistory = []state.IAction{}
 	}
 	if refreshProperties {
-		e.Grid.Refresh(e.SelectedObjects)
-		e.EntityTree.Update()
+		//e.Grid.Refresh(e.SelectedObjects)
+		//e.EntityTree.Update()
 	}
-	e.SetMapCursor("")
+	e.SetMapCursor(desktop.DefaultCursor)
 	e.CurrentAction = nil
 	e.ActTool()
 }
@@ -430,26 +431,17 @@ func (e *Editor) GatherHoveringObjects() {
 	}
 }
 
-func (e *Editor) GameView(w, h int) {
+func (e *Editor) ResizeRenderer(w, h int) {
 	e.Renderer = render.NewRenderer(e.DB)
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h
 	e.Renderer.Initialize()
-	_, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
-	e.GameViewSurface = cairo.CreateImageSurface(cairo.FORMAT_ARGB32, w, h)
-	// We'll need the raw buffer to draw into, but we'll use
-	// a bit of Go magic to get some type safety back...
-	length := w * h * 4
-	e.GameViewSurface.Flush() // necessary?
-	pBuffer := e.GameViewSurface.GetData()
-	// Make a new slice
-	e.GameViewBuffer = unsafe.Slice((*uint8)(pBuffer), length)
 }
 
 func (e *Editor) AddSimpleMenuAction(name string, cb func(obj *glib.Object)) {
 	action := glib.SimpleActionNew(name, nil)
 	action.Connect("activate", func(sa *glib.SimpleAction) { cb(sa.Object) })
-	e.App.AddAction(action)
+	e.GApp.AddAction(action)
 }
 
 func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {

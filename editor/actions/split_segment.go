@@ -6,7 +6,7 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type segmentSplitter struct {
@@ -20,7 +20,7 @@ type SplitSegment struct {
 	NewSegments []*segmentSplitter
 }
 
-func (a *SplitSegment) OnMouseDown(button *gdk.EventButton) {}
+func (a *SplitSegment) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *SplitSegment) OnMouseMove()                        {}
 func (a *SplitSegment) Frame()                              {}
 func (a *SplitSegment) Act()                                {}

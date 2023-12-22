@@ -8,7 +8,7 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type AddSliceElement struct {
@@ -23,7 +23,7 @@ func (a *AddSliceElement) Act() {
 }
 func (a *AddSliceElement) Cancel()                             {}
 func (a *AddSliceElement) Frame()                              {}
-func (a *AddSliceElement) OnMouseDown(button *gdk.EventButton) {}
+func (a *AddSliceElement) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *AddSliceElement) OnMouseMove()                        {}
 func (a *AddSliceElement) OnMouseUp()                          {}
 

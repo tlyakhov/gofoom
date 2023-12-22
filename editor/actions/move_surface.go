@@ -5,7 +5,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type MoveSurface struct {
@@ -17,7 +17,7 @@ type MoveSurface struct {
 	Delta    float64
 }
 
-func (a *MoveSurface) OnMouseDown(button *gdk.EventButton) {}
+func (a *MoveSurface) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *MoveSurface) OnMouseMove()                        {}
 func (a *MoveSurface) OnMouseUp()                          {}
 func (a *MoveSurface) Cancel()                             {}

@@ -6,31 +6,29 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
-
-	"github.com/gotk3/gotk3/cairo"
 )
 
-func DrawHandle(cr *cairo.Context, v *concepts.Vector2) {
+func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 	v = editor.WorldToScreen(v)
 	v1 := editor.ScreenToWorld(v.Sub(&concepts.Vector2{3, 3}))
 	v2 := editor.ScreenToWorld(v.Add(&concepts.Vector2{3, 3}))
-	cr.Rectangle(v1[0], v1[1], v2[0]-v1[0], v2[1]-v1[1])
-	cr.Stroke()
+	mw.Context.DrawRectangle(v1[0], v1[1], v2[0]-v1[0], v2[1]-v1[1])
+	mw.Context.Stroke()
 }
 
-func DrawSector(cr *cairo.Context, sector *core.Sector) {
+func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	if len(sector.Segments) == 0 {
 		return
 	}
 
-	cr.Save()
+	mw.Context.Push()
 
 	sectorHovering := state.IndexOf(editor.HoveringObjects, sector.EntityRef) != -1
 	sectorSelected := state.IndexOf(editor.SelectedObjects, sector.EntityRef) != -1
 
 	if editor.BodiesVisible {
 		for _, ibody := range sector.Bodies {
-			DrawBody(cr, ibody)
+			mw.DrawBody(ibody)
 		}
 	}
 
@@ -43,21 +41,21 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 		segmentSelected := state.IndexOf(editor.SelectedObjects, segment) != -1
 
 		if segment.AdjacentSector.Nil() {
-			cr.SetSourceRGB(1, 1, 1)
+			mw.Context.SetRGB(1, 1, 1)
 		} else {
-			cr.SetSourceRGB(1, 1, 0)
+			mw.Context.SetRGB(1, 1, 0)
 		}
 
 		if sectorHovering || sectorSelected {
 			if segment.AdjacentSector.Nil() {
-				cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+				mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 			} else {
-				cr.SetSourceRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+				mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
 			}
 		} else if segmentHovering {
-			cr.SetSourceRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+			mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
 		} else if segmentSelected {
-			cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+			mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 		}
 
 		// Highlight PVS sectors...
@@ -66,7 +64,7 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 			case *concepts.EntityRef:
 				if s2 := core.SectorFromDb(selected); s2 != nil && sector != s2 {
 					if s2.PVSBody[sector.Entity] != nil {
-						cr.SetSourceRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
+						mw.Context.SetRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
 					}
 				}
 
@@ -74,42 +72,40 @@ func DrawSector(cr *cairo.Context, sector *core.Sector) {
 		}
 
 		// Draw segment
-		cr.SetLineWidth(1)
-		cr.NewPath()
-		cr.MoveTo(segment.P[0], segment.P[1])
-		cr.LineTo(segment.Next.P[0], segment.Next.P[1])
-		cr.ClosePath()
-		cr.Stroke()
+		mw.Context.SetLineWidth(1)
+		mw.Context.NewSubPath()
+		mw.Context.MoveTo(segment.P[0], segment.P[1])
+		mw.Context.LineTo(segment.Next.P[0], segment.Next.P[1])
+		mw.Context.ClosePath()
+		mw.Context.Stroke()
 		// Draw normal
-		cr.NewPath()
+		mw.Context.NewSubPath()
 		ns := segment.Next.P.Add(&segment.P).Mul(0.5)
 		ne := ns.Add(segment.Normal.Mul(4.0))
-		cr.MoveTo(ns[0], ns[1])
-		cr.LineTo(ne[0], ne[1])
-		cr.ClosePath()
-		cr.Stroke()
+		mw.Context.MoveTo(ns[0], ns[1])
+		mw.Context.LineTo(ne[0], ne[1])
+		mw.Context.ClosePath()
+		mw.Context.Stroke()
 
 		if segmentSelected {
-			cr.SetSourceRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
-			DrawHandle(cr, &segment.P)
+			mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+			mw.DrawHandle(&segment.P)
 		} else if segmentHovering {
-			cr.SetSourceRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
-			DrawHandle(cr, &segment.P)
+			mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+			mw.DrawHandle(&segment.P)
 		} else {
-			cr.Rectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
-			cr.Stroke()
+			mw.Context.DrawRectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
+			mw.Context.Stroke()
 		}
 	}
 
 	if editor.SectorTypesVisible {
 		text := reflect.TypeOf(sector).String()
-		extents := cr.TextExtents(text)
-		cr.Save()
-		cr.SetSourceRGB(0.3, 0.3, 0.3)
-		cr.Translate(sector.Center[0]-extents.Width/2, sector.Center[1]-extents.Height/2+extents.YBearing)
-		cr.ShowText(text)
-		cr.Restore()
+		mw.Context.Push()
+		mw.Context.SetRGB(0.3, 0.3, 0.3)
+		mw.Context.DrawStringAnchored(text, sector.Center[0], sector.Center[1], 0.5, 0.5)
+		mw.Context.Pop()
 	}
 
-	cr.Restore()
+	mw.Context.Pop()
 }

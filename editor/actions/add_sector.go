@@ -5,7 +5,7 @@ import (
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type AddSector struct {
@@ -14,13 +14,13 @@ type AddSector struct {
 }
 
 func (a *AddSector) Act() {
-	a.SetMapCursor("crosshair")
+	a.SetMapCursor(desktop.CrosshairCursor)
 	a.Mode = "AddSector"
 	a.SelectObjects([]any{a.EntityRef}, true)
 	//set cursor
 }
 
-func (a *AddSector) OnMouseDown(button *gdk.EventButton) {
+func (a *AddSector) OnMouseDown(evt *desktop.MouseEvent) {
 	a.Mode = "AddSectorSegment"
 
 	seg := core.Segment{}

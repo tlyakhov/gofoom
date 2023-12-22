@@ -15,7 +15,10 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 
-	"github.com/gotk3/gotk3/glib"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 	"github.com/gotk3/gotk3/gtk"
 )
 
@@ -30,7 +33,8 @@ type PropertyGridState struct {
 
 type Grid struct {
 	state.IEditor
-	Container *gtk.Grid
+	Container  *gtk.Grid
+	FContainer *fyne.Container
 }
 
 func (g *Grid) childFields(parentName string, childValue reflect.Value, state PropertyGridState, updateParent bool) {
@@ -141,7 +145,6 @@ func (g *Grid) fieldsFromSelection(selection []any) *PropertyGridState {
 }
 
 func (g *Grid) AddEntityControls(selection []any) {
-	index := 1
 	entities := make([]uint64, 0)
 	entityList := ""
 	componentList := make([]bool, len(concepts.DbTypes().Indexes))
@@ -164,53 +167,36 @@ func (g *Grid) AddEntityControls(selection []any) {
 			}
 		}
 	}
+	label := widget.NewLabel(fmt.Sprintf("Entity [%v]", concepts.TruncateString(entityList, 10)))
+	label.TextStyle.Bold = true
+	//label.SetTooltipText(entityList)
+	label.Alignment = fyne.TextAlignLeading
+	g.FContainer.Add(label)
 
-	label, _ := gtk.LabelNew("")
-	label.SetMarkup(fmt.Sprintf("<b>Entity [%v]</b>", concepts.TruncateString(entityList, 10)))
-	label.SetTooltipText(entityList)
-	label.SetJustify(gtk.JUSTIFY_LEFT)
-	label.SetHExpand(true)
-	label.SetHAlign(gtk.ALIGN_START)
-	g.Container.Attach(label, 1, index, 1, 1)
-
-	rendText, _ := gtk.CellRendererTextNew()
-	opts, _ := gtk.ListStoreNew(glib.TYPE_INT, glib.TYPE_STRING)
-	box, _ := gtk.ComboBoxNewWithModel(opts)
-	box.SetHExpand(true)
-	box.PackStart(rendText, true)
-	box.AddAttribute(rendText, "text", 1)
+	opts := make([]string, 0)
+	optsIndices := make([]int, 0)
 	for index, t := range concepts.DbTypes().Types {
 		if t == nil || componentList[index] || index == concepts.AttachedComponentIndex {
 			continue
 		}
-		listItem := opts.Append()
-		opts.Set(listItem, []int{0, 1}, []any{index, t.String()})
-		if t.String() == "behaviors.Proximity" {
-			box.SetActiveIter(listItem)
-		}
+		opts = append(opts, t.String())
+		optsIndices = append(optsIndices, index)
 	}
-	g.Container.Attach(box, 2, index, 1, 1)
+	selectComponent := widget.NewSelect(opts, func(s string) {
 
-	button, _ := gtk.ButtonNew()
-	button.SetHExpand(true)
-	button.SetLabel("Add")
-	button.Connect("clicked", func(_ *gtk.Button) {
-		selected, _ := box.GetActiveIter()
-		value, _ := opts.GetValue(selected, 0)
-		componentIndex, _ := value.GoValue()
+	})
 
-		action := &actions.AddComponent{IEditor: g.IEditor, Index: componentIndex.(int), Entities: entities}
+	button := widget.NewButtonWithIcon("Add", theme.ContentAddIcon(), func() {
+		optsIndex := selectComponent.SelectedIndex()
+		action := &actions.AddComponent{IEditor: g.IEditor, Index: optsIndices[optsIndex], Entities: entities}
 		g.NewAction(action)
 		action.Act()
-		g.Container.GrabFocus()
 	})
-	g.Container.Attach(button, 3, index, 1, 1)
+	g.FContainer.Add(container.NewBorder(nil, nil, nil, button, selectComponent))
 }
 
 func (g *Grid) Refresh(selection []any) {
-	g.Container.GetChildren().Foreach(func(child any) {
-		g.Container.Remove(child.(gtk.IWidget))
-	})
+	g.FContainer.RemoveAll()
 
 	state := g.fieldsFromSelection(selection)
 
@@ -223,10 +209,8 @@ func (g *Grid) Refresh(selection []any) {
 	sort.SliceStable(sorted, func(i, j int) bool {
 		return sorted[i] < sorted[j]
 	})
-	index := 1
 	if len(selection) > 0 {
 		g.AddEntityControls(selection)
-		index++
 	}
 	for _, display := range sorted {
 		field := state.Fields[display]
@@ -234,58 +218,61 @@ func (g *Grid) Refresh(selection []any) {
 		if !field.Values[0].CanInterface() {
 			continue
 		}
-		label, _ := gtk.LabelNew(field.Short())
-		label.SetTooltipText(field.Name)
-		label.SetJustify(gtk.JUSTIFY_LEFT)
-		label.SetHExpand(true)
-		label.SetHAlign(gtk.ALIGN_START)
-		g.Container.Attach(label, 1, index, 1, 1)
+		label := widget.NewLabel(field.Short())
+		//label.SetTooltipText(field.Name)
+		label.Alignment = fyne.TextAlignLeading
+		g.FContainer.Add(label)
 
 		if field.EditType == "Component" {
-			g.fieldComponent(index, field)
-			index++
+			g.fieldComponent(field)
 			continue
 		}
 
 		switch field.Values[0].Interface().(type) {
 		case *bool:
-			g.fieldBool(index, field)
+			g.fieldBool(field)
 		case *string:
 			if field.EditType == "file" {
-				g.fieldFile(index, field)
+				g.fieldFile(field)
 			} else {
-				g.fieldString(index, field)
+				//g.fieldString(field)
 			}
 		case *float64:
-			g.fieldNumber(index, field)
+			g.fieldNumber(field)
 		case *int:
-			g.fieldNumber(index, field)
+			g.fieldNumber(field)
 		case *concepts.Vector2:
-			fieldStringLikeType[*concepts.Vector2](g, index, field)
+			fieldStringLikeType[*concepts.Vector2](g, field)
 		case *concepts.Vector3:
-			fieldStringLikeType[*concepts.Vector3](g, index, field)
+			fieldStringLikeType[*concepts.Vector3](g, field)
 		case *concepts.Vector4:
-			fieldStringLikeType[*concepts.Vector4](g, index, field)
+			fieldStringLikeType[*concepts.Vector4](g, field)
 		case *concepts.Matrix2:
-			fieldStringLikeType[*concepts.Matrix2](g, index, field)
+			fieldStringLikeType[*concepts.Matrix2](g, field)
 		case *materials.SurfaceScale:
-			g.fieldEnum(index, field, materials.SurfaceScaleValues())
+			g.fieldEnum(field, materials.SurfaceScaleValues())
 		case *core.CollisionResponse:
-			g.fieldEnum(index, field, core.CollisionResponseValues())
+			g.fieldEnum(field, core.CollisionResponseValues())
 		case *core.BodyShadow:
-			g.fieldEnum(index, field, core.BodyShadowValues())
+			g.fieldEnum(field, core.BodyShadowValues())
 		case *core.ScriptStyle:
-			g.fieldEnum(index, field, core.ScriptStyleValues())
+			g.fieldEnum(field, core.ScriptStyleValues())
 		case **concepts.EntityRef:
-			g.fieldEntityRef(index, field)
+			g.fieldEntityRef(field)
 		case *[]core.Script:
-			g.fieldSlice(index, field)
+			g.fieldSlice(field)
 		case *[]materials.Sprite:
-			g.fieldSlice(index, field)
+			g.fieldSlice(field)
 		case *[]materials.ShaderStage:
-			g.fieldSlice(index, field)
+			g.fieldSlice(field)
 		}
-		index++
 	}
-	g.Container.ShowAll()
+}
+
+func (g *Grid) Focus(o fyne.CanvasObject) {
+	/*
+		if c := fyne.CurrentApp().Driver().CanvasForObject(o); c != nil {
+			c.Focus(o.(fyne.Focusable))
+		}
+	*/
 }

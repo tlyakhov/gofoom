@@ -3,6 +3,8 @@ package state
 import (
 	"reflect"
 	"tlyakhov/gofoom/concepts"
+
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type EditorTool int
@@ -46,7 +48,7 @@ type IEditor interface {
 	WorldToScreen(p *concepts.Vector2) *concepts.Vector2
 	WorldGrid(p *concepts.Vector2) *concepts.Vector2
 	WorldGrid3D(p *concepts.Vector3) *concepts.Vector3
-	SetMapCursor(name string)
+	SetMapCursor(cursor desktop.Cursor)
 	UpdateTitle()
 	Load(filename string)
 	ActionFinished(canceled, refreshProperties, autoPortal bool)

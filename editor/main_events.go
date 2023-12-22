@@ -6,7 +6,7 @@ import (
 )
 
 func MainOpen(obj *glib.Object) {
-	native, _ := gtk.FileChooserNativeDialogNew("Open world...", &editor.Window.Window, gtk.FILE_CHOOSER_ACTION_OPEN, "_Open", "_Cancel")
+	native, _ := gtk.FileChooserNativeDialogNew("Open world...", &editor.GWindow.Window, gtk.FILE_CHOOSER_ACTION_OPEN, "_Open", "_Cancel")
 	res := gtk.ResponseType(native.Run())
 
 	if res == gtk.RESPONSE_ACCEPT {
@@ -25,7 +25,7 @@ func MainSave(obj *glib.Object) {
 }
 
 func MainSaveAs(obj *glib.Object) {
-	native, _ := gtk.FileChooserNativeDialogNew("Save world...", &editor.Window.Window, gtk.FILE_CHOOSER_ACTION_SAVE, "_Save", "_Cancel")
+	native, _ := gtk.FileChooserNativeDialogNew("Save world...", &editor.GWindow.Window, gtk.FILE_CHOOSER_ACTION_SAVE, "_Save", "_Cancel")
 	native.SetDoOverwriteConfirmation(true)
 
 	if editor.OpenFile != "" {

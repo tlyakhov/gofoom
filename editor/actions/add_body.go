@@ -5,7 +5,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type AddBody struct {
@@ -44,7 +44,7 @@ func (a *AddBody) AttachToSector() {
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 
-func (a *AddBody) OnMouseDown(button *gdk.EventButton) {}
+func (a *AddBody) OnMouseDown(evt *desktop.MouseEvent) {}
 
 func (a *AddBody) OnMouseMove() {
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)

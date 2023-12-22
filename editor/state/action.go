@@ -1,12 +1,10 @@
 package state
 
-import (
-	"github.com/gotk3/gotk3/gdk"
-)
+import "fyne.io/fyne/v2/driver/desktop"
 
 // IAction represents a generic editor action.
 type IAction interface {
-	OnMouseDown(button *gdk.EventButton)
+	OnMouseDown(evt *desktop.MouseEvent)
 	OnMouseUp()
 	OnMouseMove()
 	Act()
