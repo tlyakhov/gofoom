@@ -5,14 +5,14 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type RotateSegments struct {
 	state.IEditor
 }
 
-func (a *RotateSegments) OnMouseDown(button *gdk.EventButton) {}
+func (a *RotateSegments) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *RotateSegments) OnMouseMove()                        {}
 func (a *RotateSegments) OnMouseUp()                          {}
 func (a *RotateSegments) Cancel()                             {}

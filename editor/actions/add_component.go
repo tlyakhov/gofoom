@@ -6,7 +6,7 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type AddComponent struct {
@@ -22,7 +22,7 @@ func (a *AddComponent) Act() {
 }
 func (a *AddComponent) Cancel()                             {}
 func (a *AddComponent) Frame()                              {}
-func (a *AddComponent) OnMouseDown(button *gdk.EventButton) {}
+func (a *AddComponent) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *AddComponent) OnMouseMove()                        {}
 func (a *AddComponent) OnMouseUp()                          {}
 

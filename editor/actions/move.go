@@ -6,7 +6,7 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type Move struct {
@@ -37,8 +37,8 @@ func (a *Move) Iterate(arr []any,
 	}
 }
 
-func (a *Move) OnMouseDown(button *gdk.EventButton) {
-	a.SetMapCursor("move")
+func (a *Move) OnMouseDown(evt *desktop.MouseEvent) {
+	a.SetMapCursor(desktop.PointerCursor)
 
 	a.Selected = make([]any, len(a.State().SelectedObjects))
 	copy(a.Selected, a.State().SelectedObjects)

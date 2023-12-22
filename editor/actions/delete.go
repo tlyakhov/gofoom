@@ -7,7 +7,7 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type Delete struct {
@@ -46,7 +46,7 @@ func (a *Delete) Act() {
 }
 func (a *Delete) Cancel()                             {}
 func (a *Delete) Frame()                              {}
-func (a *Delete) OnMouseDown(button *gdk.EventButton) {}
+func (a *Delete) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *Delete) OnMouseMove()                        {}
 func (a *Delete) OnMouseUp()                          {}
 

@@ -1,0 +1,17 @@
+[Details]
+  Name = "Foom Editor"
+  ID = "com.foom.editor"
+  Version = "1.0.0"
+  Build = 1
+
+[Development]
+  HelperText = "This binary was built with debug symbols"
+
+[Release]
+  HelperText = "This binary was built without debug symbols"
+
+[LinuxAndBSD]
+  GenericName = "Foom Editor"
+  Categories = ["Games"]
+  Comment = "The world editor for the Foom engine"
+  Keywords = ["editor", "foom"]

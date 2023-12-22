@@ -13,10 +13,12 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 	"github.com/gotk3/gotk3/gdk"
-
-	"github.com/gotk3/gotk3/glib"
-	"github.com/gotk3/gotk3/gtk"
 )
 
 func (g *Grid) pixbufFromFile(filename string) *gdk.Pixbuf {
@@ -58,7 +60,58 @@ func (g *Grid) pixbuf(er *concepts.EntityRef) *gdk.Pixbuf {
 	return nil
 }
 
-func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
+func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
+	// The value of this property is an EntityRef or pointer to EntityRef
+	/*var origValue *concepts.EntityRef
+	if !field.Values[0].Elem().IsNil() {
+		origValue = field.Values[0].Elem().Interface().(*concepts.EntityRef)
+	}*/
+
+	_, ok := field.Source.Tag.Lookup("edit_type")
+
+	if !ok {
+		return
+	}
+
+	// Create our combo box with pixbuf/string enum entries.
+	refs := make([]widget.TreeNodeID, 0)
+
+	for entity, c := range g.State().DB.EntityComponents {
+		if c == nil {
+			continue
+		}
+		er := g.State().DB.EntityRef(uint64(entity))
+		if archetypes.EntityRefIsMaterial(er) {
+			refs = append(refs, strconv.Itoa(entity))
+		}
+	}
+	tree := widget.NewTree(func(tni widget.TreeNodeID) []widget.TreeNodeID {
+		if tni != "" {
+			return nil
+		}
+		return refs
+	}, func(tni widget.TreeNodeID) bool {
+		return false
+	}, func(b bool) fyne.CanvasObject {
+		return container.NewHBox(canvas.NewRasterFromImage(nil), widget.NewLabel("Template"))
+	}, func(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
+		entity, _ := strconv.ParseUint(tni, 10, 64)
+		ref := g.State().DB.EntityRef(entity)
+		name := string(tni)
+		if named := concepts.NamedFromDb(ref); named != nil {
+			name = named.Name
+		}
+		box := co.(*fyne.Container)
+		//		raster := box.Objects[0].(*canvas.Raster)
+		label := box.Objects[1].(*widget.Label)
+		label.SetText(name)
+	})
+	aitem := widget.NewAccordionItem("Test", tree)
+	accordion := widget.NewAccordion(aitem)
+	g.FContainer.Add(accordion)
+}
+
+func (g *Grid) fieldEntityRef2(field *state.PropertyGridField) {
 	// The value of this property is an EntityRef or pointer to EntityRef
 	var origValue *concepts.EntityRef
 	if !field.Values[0].Elem().IsNil() {
@@ -72,15 +125,9 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 	}
 
 	// Create our combo box with pixbuf/string enum entries.
-	rendText, _ := gtk.CellRendererTextNew()
-	rendPix, _ := gtk.CellRendererPixbufNew()
-	opts, _ := gtk.ListStoreNew(glib.TYPE_UINT64, glib.TYPE_STRING, glib.TYPE_OBJECT)
-	box, _ := gtk.ComboBoxNewWithModel(opts)
-	box.SetHExpand(true)
-	box.PackStart(rendPix, true)
-	box.PackStart(rendText, true)
-	box.AddAttribute(rendPix, "pixbuf", 2)
-	box.AddAttribute(rendText, "text", 1)
+	opts := make([]string, 0)
+	optsValues := make([]uint64, 0)
+	selected := 0
 
 	for entity, c := range g.State().DB.EntityComponents {
 		if c == nil {
@@ -88,40 +135,31 @@ func (g *Grid) fieldEntityRef(index int, field *state.PropertyGridField) {
 		}
 		er := g.State().DB.EntityRef(uint64(entity))
 		if archetypes.EntityRefIsMaterial(er) {
-			listItem := opts.Append()
-			pixbuf := g.pixbuf(er)
+			//pixbuf := g.pixbuf(er)
 			name := strconv.FormatUint(er.Entity, 10)
 			if named := concepts.NamedFromDb(er); named != nil {
 				name = named.Name
 			}
-			opts.Set(listItem, []int{0, 1, 2}, []any{er.Entity, name, pixbuf})
+			opts = append(opts, name)
+			optsValues = append(optsValues, er.Entity)
 			if !origValue.Nil() && er.Entity == origValue.Entity {
-				box.SetActiveIter(listItem)
+				selected = len(opts) - 1
 			}
 		}
 	}
 
-	box.Connect("changed", func(_ *gtk.ComboBox) {
-		selected, _ := box.GetActiveIter()
-		value, _ := opts.GetValue(selected, 0)
-		entity, _ := value.GoValue()
-		er := g.State().DB.EntityRef(entity.(uint64))
+	selectEntry := widget.NewSelect(opts, nil)
+	selectEntry.OnChanged = func(selected string) {
+		er := g.State().DB.EntityRef(optsValues[selectEntry.SelectedIndex()])
 		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(er).Convert(field.Type.Elem())}
 		g.NewAction(action)
 		action.Act()
-	})
+	}
+	selectEntry.SetSelectedIndex(selected)
 
-	g.Container.Attach(box, 2, index, 1, 1)
-
-	button, _ := gtk.ButtonNew()
-	button.SetHExpand(false)
-	button.SetLabel("...")
-	button.Connect("clicked", func(_ *gtk.Button) {
-		selected, _ := box.GetActiveIter()
-		value, _ := opts.GetValue(selected, 0)
-		entity, _ := value.GoValue()
-		er := g.State().DB.EntityRef(entity.(uint64))
+	button := widget.NewButtonWithIcon("", theme.MoreHorizontalIcon(), func() {
+		er := g.State().DB.EntityRef(optsValues[selectEntry.SelectedIndex()])
 		g.IEditor.SelectObjects([]any{er}, true)
 	})
-	g.Container.Attach(button, 3, index, 1, 1)
+	g.FContainer.Add(container.NewBorder(nil, nil, nil, button, selectEntry))
 }

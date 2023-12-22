@@ -4,7 +4,8 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type SelectModifier int
@@ -24,10 +25,11 @@ type Select struct {
 	Selected []any
 }
 
-func (a *Select) OnMouseDown(button *gdk.EventButton) {
-	if button.State()&uint(gdk.SHIFT_MASK) != 0 {
+func (a *Select) OnMouseDown(evt *desktop.MouseEvent) {
+
+	if evt.Modifier&fyne.KeyModifierShift != 0 {
 		a.Modifier = SelectAdd
-	} else if button.State()&uint(gdk.META_MASK) != 0 {
+	} else if evt.Modifier&fyne.KeyModifierSuper != 0 {
 		a.Modifier = SelectSub
 	}
 
@@ -35,7 +37,7 @@ func (a *Select) OnMouseDown(button *gdk.EventButton) {
 	copy(a.Original, a.State().SelectedObjects)
 
 	a.Mode = "SelectionStart"
-	a.SetMapCursor("cell")
+	a.SetMapCursor(desktop.TextCursor)
 }
 
 func (a *Select) OnMouseMove() {

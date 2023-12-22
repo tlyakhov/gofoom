@@ -60,3 +60,12 @@ func (f *Font) Draw(win *pixelgl.Window, x, y float64, c color.Color, s string) 
 	txt.WriteString(s)
 	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 2))
 }
+
+func (f *Font) DrawCanvas(canvas *pixelgl.Canvas, x, y float64, c color.Color, s string) {
+	// log.Printf("Font draw: %v\n", f.atlas.Glyph(text.ASCII[65]))
+	txt := text.New(pixel.V(x, y), f.atlas)
+	txt.Color = c
+
+	txt.WriteString(s)
+	txt.Draw(canvas, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 2))
+}

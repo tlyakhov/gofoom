@@ -5,20 +5,19 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gtk"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 )
 
-func (g *Grid) fieldSlice(index int, field *state.PropertyGridField) {
+func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 	// field.Type is *[]<something>
 	elemType := field.Type.Elem().Elem()
-	button, _ := gtk.ButtonNew()
-	button.SetHExpand(true)
-	button.SetLabel(fmt.Sprintf("Add %v", elemType.String()))
-	button.Connect("clicked", func(_ *gtk.Button) {
+	bLabel := fmt.Sprintf("Add %v", elemType.String())
+	button := widget.NewButtonWithIcon(bLabel, theme.ContentAddIcon(), func() {
 		action := &actions.AddSliceElement{IEditor: g.IEditor, SlicePtr: field.Values[0], Parent: field.Parent}
 		g.NewAction(action)
 		action.Act()
 		g.Container.GrabFocus()
 	})
-	g.Container.Attach(button, 2, index, 2, 1)
+	g.FContainer.Add(button)
 }

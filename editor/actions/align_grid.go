@@ -4,7 +4,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type AlignGrid struct {
@@ -12,7 +12,7 @@ type AlignGrid struct {
 	PrevA, PrevB, A, B concepts.Vector2
 }
 
-func (a *AlignGrid) OnMouseDown(button *gdk.EventButton) {}
+func (a *AlignGrid) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *AlignGrid) OnMouseMove()                        {}
 func (a *AlignGrid) Frame()                              {}
 func (a *AlignGrid) Act()                                {}

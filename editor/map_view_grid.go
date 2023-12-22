@@ -5,15 +5,12 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
-
-	"github.com/gotk3/gotk3/cairo"
 )
 
 type MapViewGrid struct {
 	Current *state.MapView
 	Prev    *state.MapView
 	Visible bool
-	Surface *cairo.Surface
 }
 
 func (g *MapViewGrid) WorldGrid(p *concepts.Vector2) *concepts.Vector2 {
@@ -42,32 +39,28 @@ func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
 	return r
 }
 
-func (g *MapViewGrid) Draw(e *state.Edit, cr *cairo.Context) {
+func (g *MapViewGrid) Draw(e *state.Edit, w *MapWidget) {
 	if !g.Visible || e.Scale*g.Current.Step < 10.0 {
-		cr.SetSourceRGB(0, 0, 0)
-		cr.Paint()
+		w.Context.SetRGB(0, 0, 0)
+		w.Context.DrawRectangle(0, 0, float64(w.Context.Width()), float64(w.Context.Height()))
+		w.Context.Fill()
 		return
 	}
 
 	if g.Prev == nil || *g.Prev != *g.Current {
-		g.Refresh(e, cr)
+		g.Refresh(e, w)
 		mv := *g.Current
 		g.Prev = &mv
 	}
-
-	cr.Save()
-	cr.IdentityMatrix()
-	cr.SetSourceSurface(editor.MapViewGrid.Surface, 0, 0)
-	cr.Paint()
-	cr.Restore()
 }
 
-func (g *MapViewGrid) Refresh(e *state.Edit, cr *cairo.Context) {
-	cr.PushGroup()
-	cr.SetSourceRGB(0, 0, 0)
-	cr.Paint()
-	TransformContext(cr)
-	cr.SetSourceRGB(0.5, 0.5, 0.5)
+func (g *MapViewGrid) Refresh(e *state.Edit, w *MapWidget) {
+	w.Context.Push()
+	w.Context.DrawRectangle(0, 0, e.Size[0], e.Size[1])
+	w.Context.SetRGB(0, 0, 0)
+	w.Context.Fill()
+	w.TransformContext()
+	w.Context.SetRGB(0.5, 0.5, 0.5)
 
 	down := g.Current.GridB.Sub(&g.Current.GridA).Norm().Mul(g.Current.Step)
 	right := &concepts.Vector2{down[1], -down[0]}
@@ -98,10 +91,9 @@ func (g *MapViewGrid) Refresh(e *state.Edit, cr *cairo.Context) {
 			if pos[0] < start[0] || pos[0] > end[0] || pos[1] < start[1] || pos[1] > end[1] {
 				continue
 			}
-			cr.Rectangle(pos[0]-d*0.5, pos[1]-d*0.5, d, d)
+			w.Context.DrawRectangle(pos[0]-d*0.5, pos[1]-d*0.5, d, d)
 		}
+		w.Context.Fill()
 	}
-	cr.Fill()
-	editor.MapViewGrid.Surface = cr.GetGroupTarget()
-	cr.PopGroupToSource()
+	w.Context.Pop()
 }

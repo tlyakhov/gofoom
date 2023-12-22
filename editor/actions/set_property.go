@@ -9,7 +9,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type SetProperty struct {
@@ -19,7 +19,7 @@ type SetProperty struct {
 	ToSet    reflect.Value
 }
 
-func (a *SetProperty) OnMouseDown(button *gdk.EventButton) {}
+func (a *SetProperty) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *SetProperty) OnMouseMove()                        {}
 func (a *SetProperty) OnMouseUp()                          {}
 func (a *SetProperty) Cancel()                             {}

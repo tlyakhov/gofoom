@@ -33,6 +33,7 @@ type EntityTree struct {
 }
 
 func (et *EntityTree) SetSelection(selection []any) {
+	return
 	sel, _ := et.View.GetSelection()
 	if et.SelectionChangedHandle != 0 {
 		sel.HandlerDisconnect(et.SelectionChangedHandle)

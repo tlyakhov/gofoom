@@ -9,10 +9,11 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gtk"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 )
 
-func (g *Grid) fieldComponent(index int, field *state.PropertyGridField) {
+func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	// This will be a pointer
 	parentType := reflect.TypeOf(field.Parent)
 	entityList := ""
@@ -25,11 +26,8 @@ func (g *Grid) fieldComponent(index int, field *state.PropertyGridField) {
 		entityList += strconv.FormatUint(entity, 10)
 	}
 
-	button, _ := gtk.ButtonNew()
-	button.SetHExpand(true)
-	button.SetLabel(fmt.Sprintf("Remove %v from [%v]", parentType.Elem().String(), entityList))
-	button.Connect("clicked", func(_ *gtk.Button) {
-
+	bLabel := fmt.Sprintf("Remove %v from [%v]", parentType.Elem().String(), entityList)
+	button := widget.NewButtonWithIcon(bLabel, theme.ContentRemoveIcon(), func() {
 		action := &actions.DeleteComponent{IEditor: g.IEditor, Components: make(map[uint64]concepts.Attachable)}
 		for _, v := range field.Values {
 			entity := v.Elem().Interface().(*concepts.EntityRef).Entity
@@ -38,7 +36,8 @@ func (g *Grid) fieldComponent(index int, field *state.PropertyGridField) {
 		}
 		g.NewAction(action)
 		action.Act()
-		g.Container.GrabFocus()
+		g.Focus(g.FContainer)
+
 	})
-	g.Container.Attach(button, 2, index, 2, 1)
+	g.FContainer.Add(button)
 }

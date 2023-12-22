@@ -9,10 +9,10 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gtk"
+	"fyne.io/fyne/v2/widget"
 )
 
-func (g *Grid) fieldNumber(index int, field *state.PropertyGridField) {
+func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 	origValue := ""
 	for i, v := range field.Values {
 		if i != 0 {
@@ -25,24 +25,15 @@ func (g *Grid) fieldNumber(index int, field *state.PropertyGridField) {
 		}
 	}
 
-	box, _ := gtk.EntryNew()
-	box.SetHExpand(true)
-	box.SetText(origValue)
-	box.Connect("activate", func(_ *gtk.Entry) {
-		text, err := box.GetText()
-		if err != nil {
-			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
-			box.SetText(origValue)
-			g.Container.GrabFocus()
-			return
-		}
+	entry := widget.NewEntry()
+	entry.SetText(origValue)
+	entry.OnChanged = func(text string) {
 		var toSet reflect.Value
 		if field.Type.String() == "*float64" {
 			f, err := strconv.ParseFloat(strings.TrimSpace(text), 64)
 			if err != nil {
 				log.Printf("Couldn't parse float64 from user entry. %v\n", err)
-				box.SetText(origValue)
-				g.Container.GrabFocus()
+				entry.SetText(origValue)
 				return
 			}
 			toSet = reflect.ValueOf(f)
@@ -50,8 +41,7 @@ func (g *Grid) fieldNumber(index int, field *state.PropertyGridField) {
 			i, err := strconv.Atoi(strings.TrimSpace(text))
 			if err != nil {
 				log.Printf("Couldn't parse int from user entry. %v\n", err)
-				box.SetText(origValue)
-				g.Container.GrabFocus()
+				entry.SetText(origValue)
 				return
 			}
 			toSet = reflect.ValueOf(i)
@@ -61,7 +51,6 @@ func (g *Grid) fieldNumber(index int, field *state.PropertyGridField) {
 		g.NewAction(action)
 		action.Act()
 		origValue = text
-		g.Container.GrabFocus()
-	})
-	g.Container.Attach(box, 2, index, 2, 1)
+	}
+	g.FContainer.Add(entry)
 }

@@ -7,26 +7,24 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"runtime/pprof"
+	"time"
 
-	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/editor/actions"
 	_ "tlyakhov/gofoom/scripting_symbols"
 
-	"github.com/gotk3/gotk3/glib"
-
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/gtk"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/widget"
 )
 
 var (
 	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
 	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
 	ColorPVS                = concepts.Vector3{0.6, 1, 0.6}
-	gameKeyMap              = make(map[uint]bool)
 	editor                  *Editor
 )
 
@@ -43,193 +41,6 @@ func EditorTimer() bool {
 	return true
 }
 
-func setupMenu() {
-	menuBuilder, err := gtk.BuilderNew()
-	if err != nil {
-		log.Fatal("Can't create GTK+ builder.", err)
-	}
-	err = menuBuilder.AddFromFile("editor-menu.ui")
-	if err != nil {
-		log.Fatal("Can't load GTK+ Menu UI from file editor-menu.ui.", err)
-	}
-	menu, err := menuBuilder.GetObject("Menu")
-	if err != nil {
-		log.Fatal("Can't find Menu object in GTK+ menu UI file.", err)
-	}
-
-	editor.App.SetMenubar(menu.(*glib.MenuModel))
-}
-
-func onActivate() {
-	builder, err := gtk.BuilderNew()
-	if err != nil {
-		log.Fatal("Can't create GTK+ builder.", err)
-	}
-	err = builder.AddFromFile("editor-glade.glade")
-	if err != nil {
-		log.Fatal("Can't load GTK+ UI from file.", err)
-	}
-	obj, err := builder.GetObject("MainWindow")
-	if err != nil {
-		log.Fatal("Can't find MainWindow object in GTK+ UI file.", err)
-	}
-	editor.Window = obj.(*gtk.ApplicationWindow)
-	obj, err = builder.GetObject("MapArea")
-	if err != nil {
-		log.Fatal("Can't find MapArea object in GTK+ UI file.", err)
-	}
-	editor.MapArea = obj.(*gtk.DrawingArea)
-	obj, err = builder.GetObject("GameArea")
-	if err != nil {
-		log.Fatal("Can't find GameArea object in GTK+ UI file.", err)
-	}
-	editor.GameArea = obj.(*gtk.DrawingArea)
-	obj, err = builder.GetObject("PropertyGrid")
-	if err != nil {
-		log.Fatal("Can't find PropertyGrid object in GTK+ UI file.", err)
-	}
-	editor.Grid.Container = obj.(*gtk.Grid)
-	obj, err = builder.GetObject("EntitySearchBar")
-	if err != nil {
-		log.Fatal("Can't find EntitySearchBar object in GTK+ UI file.", err)
-	}
-	editor.EntitySearchBar = obj.(*gtk.SearchBar)
-	obj, err = builder.GetObject("EntitySearchEntry")
-	if err != nil {
-		log.Fatal("Can't find EntitySearchEntry object in GTK+ UI file.", err)
-	}
-	editor.EntitySearchEntry = obj.(*gtk.SearchEntry)
-	editor.EntitySearchEntry.Connect("search-changed", func(entry *gtk.SearchEntry) {
-		editor.State().SearchTerms, _ = editor.EntitySearchEntry.GetText()
-		editor.EntityTree.UpdateSearch()
-	})
-
-	obj, err = builder.GetObject("StatusBar")
-	if err != nil {
-		log.Fatal("Can't find StatusBar object in GTK+ UI file.", err)
-	}
-	editor.StatusBar = obj.(*gtk.Label)
-
-	obj, err = builder.GetObject("EntityTree")
-	if err != nil {
-		log.Fatal("Can't find TreeView object in GTK+ UI file.", err)
-	}
-	editor.EntityTree.View = obj.(*gtk.TreeView)
-	editor.EntityTree.Construct()
-
-	editor.AddSimpleMenuAction("open", MainOpen)
-	editor.AddSimpleMenuAction("save", MainSave)
-	editor.AddSimpleMenuAction("saveas", MainSaveAs)
-	editor.AddSimpleMenuAction("quit", func(obj *glib.Object) { editor.App.Quit() })
-	editor.AddSimpleMenuAction("undo", func(obj *glib.Object) { editor.UndoCurrent() })
-	editor.AddSimpleMenuAction("redo", func(obj *glib.Object) { editor.RedoCurrent() })
-	editor.AddSimpleMenuAction("delete", func(obj *glib.Object) {
-		action := &actions.Delete{IEditor: editor}
-		editor.NewAction(action)
-		action.Act()
-	})
-	editor.AddSimpleMenuAction("tool.select", func(obj *glib.Object) {
-		editor.SwitchTool(state.ToolSelect)
-		tool, _ := builder.GetObject("ToolSelect")
-		tool.(*gtk.RadioButton).SetProperty("active", true)
-	})
-	editor.AddSimpleMenuAction("tool.select.segment", func(obj *glib.Object) {
-		for _, s := range editor.SelectedObjects {
-			switch target := s.(type) {
-			case *concepts.EntityRef:
-				if sector := core.SectorFromDb(target); sector != nil {
-					editor.SelectObjects([]any{sector.Segments[0]}, true)
-					break
-				}
-			case *core.Segment:
-				editor.SelectObjects([]any{target.Next}, true)
-				break
-			}
-		}
-	})
-	editor.AddSimpleMenuAction("tool.raise.ceil", func(obj *glib.Object) { editor.MoveSurface(2, false, false) })
-	editor.AddSimpleMenuAction("tool.lower.ceil", func(obj *glib.Object) { editor.MoveSurface(-2, false, false) })
-	editor.AddSimpleMenuAction("tool.raise.floor", func(obj *glib.Object) { editor.MoveSurface(2, true, false) })
-	editor.AddSimpleMenuAction("tool.lower.floor", func(obj *glib.Object) { editor.MoveSurface(-2, true, false) })
-	editor.AddSimpleMenuAction("tool.raise.ceil.slope", func(obj *glib.Object) { editor.MoveSurface(0.05, false, true) })
-	editor.AddSimpleMenuAction("tool.lower.ceil.slope", func(obj *glib.Object) { editor.MoveSurface(-0.05, false, true) })
-	editor.AddSimpleMenuAction("tool.raise.floor.slope", func(obj *glib.Object) { editor.MoveSurface(0.05, true, true) })
-	editor.AddSimpleMenuAction("tool.lower.floor.slope", func(obj *glib.Object) { editor.MoveSurface(-0.05, true, true) })
-	editor.AddSimpleMenuAction("tool.rotate.slope", func(obj *glib.Object) {
-		action := &actions.RotateSegments{IEditor: editor}
-		editor.NewAction(action)
-		action.Act()
-	})
-	editor.AddSimpleMenuAction("tool.grid.up", func(obj *glib.Object) {
-		editor.Current.Step *= 2
-	})
-	editor.AddSimpleMenuAction("tool.grid.down", func(obj *glib.Object) { editor.Current.Step /= 2 })
-
-	setupMenu()
-	editor.Window.SetApplication(editor.App)
-	editor.Window.ShowAll()
-	editor.Window.Maximize()
-
-	// Event handlers
-	signals := make(map[string]any)
-	signals["Menu.File.Quit"] = func(obj *glib.Object) {
-		editor.App.Quit()
-	}
-	signals["MapArea.Draw"] = DrawMap
-	signals["MapArea.MotionNotify"] = MapMotionNotify
-	signals["MapArea.ButtonPress"] = MapButtonPress
-	signals["MapArea.ButtonRelease"] = MapButtonRelease
-	signals["GameArea.ButtonRelease"] = GameButtonPress
-	signals["GameArea.Draw"] = DrawGame
-	signals["GameArea.ButtonPress"] = GameButtonPress
-	signals["GameArea.KeyPress"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
-		key := gdk.EventKeyNewFromEvent(ev)
-		gameKeyMap[key.KeyVal()] = true
-	}
-	signals["GameArea.KeyRelease"] = func(da *gtk.DrawingArea, ev *gdk.Event) {
-		key := gdk.EventKeyNewFromEvent(ev)
-		delete(gameKeyMap, key.KeyVal())
-	}
-	signals["MapArea.Scroll"] = MapScroll
-	signals["Tools.AddEmptyEntity"] = func(button *gtk.Button) {
-		ref := editor.DB.NewEntityRef()
-		editor.SelectObjects([]any{ref}, true)
-	}
-	signals["Tools.Toggled"] = func(obj *glib.Object) {
-		active, _ := obj.GetProperty("active")
-		if !active.(bool) {
-			return
-		}
-
-		// We don't have gtk.Buildable available so we can't get the ids. :(
-		switch label, _ := obj.GetProperty("label"); label {
-		case "Select/Move":
-			editor.SwitchTool(state.ToolSelect)
-		case "Split Segment":
-			editor.SwitchTool(state.ToolSplitSegment)
-		case "Split Sector":
-			editor.SwitchTool(state.ToolSplitSector)
-		case "Add Sector":
-			editor.SwitchTool(state.ToolAddSector)
-		case "Add Body":
-			editor.SwitchTool(state.ToolAddBody)
-		case "Align Grid":
-			editor.SwitchTool(state.ToolAlignGrid)
-		}
-	}
-	builder.ConnectSignals(signals)
-
-	editor.Load("data/worlds/hall.json")
-	refDoor := editor.DB.EntityRef(81)
-	p := behaviors.ProximityFromDb(refDoor)
-	s := core.Script{}
-	s.Construct(editor.DB, map[string]any{"Code": "true", "Style": "ScriptStyleStatement"})
-	p.Scripts = append(p.Scripts, s)
-
-	//editor.Test()
-	glib.TimeoutAdd(15, EditorTimer)
-}
-
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 
 func main() {
@@ -237,9 +48,6 @@ func main() {
 		http.ListenAndServe("localhost:8080", nil)
 	}()
 
-	gtk.Init(&os.Args)
-	// Gtk bindings are missing this widget in builders. Add it in manually.
-	gtk.WrapMap["GtkRadioToolButton"] = gtk.WrapMap["GtkRadioButton"]
 	flag.Parse()
 
 	if *cpuProfile != "" {
@@ -253,14 +61,49 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	const appID = "com.foom.editor"
-	var err error
-	editor.App, err = gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
+	editor.App = app.NewWithID("com.foom.editor")
+	editor.Window = editor.App.NewWindow("Foom Editor")
+	editor.Window.Resize(fyne.NewSize(1920, 1000))
+	editor.Window.CenterOnScreen()
 
-	if err != nil {
-		log.Fatal("Could not create application.", err)
-	}
+	editor.App.Lifecycle().SetOnStarted(func() {
+		editor.Load("data/worlds/hall.json")
+	})
 
-	editor.App.Connect("activate", onActivate)
-	editor.App.Run([]string{})
+	editor.PropertyGrid = container.New(layout.NewFormLayout())
+	editor.FContainer = editor.PropertyGrid
+
+	entities := []any{}
+	dataEntities := binding.BindUntypedList(&entities)
+	listEntities := widget.NewListWithData(dataEntities, func() fyne.CanvasObject {
+		return widget.NewLabel("test")
+	}, func(di binding.DataItem, co fyne.CanvasObject) {})
+
+	scrollProperties := container.NewScroll(editor.PropertyGrid)
+	editor.GameWidget = NewGameWidget()
+	editor.MapWidget = NewMapWidget()
+	splitGameProperties := container.NewVSplit(editor.GameWidget, scrollProperties)
+	scrollEntities := container.NewScroll(listEntities)
+	splitMapGame := container.NewHSplit(editor.MapWidget, splitGameProperties)
+	splitMapGame.Refresh()
+	splitEntitiesMap := container.NewHSplit(scrollEntities, splitMapGame)
+	splitEntitiesMap.SetOffset(0)
+	editor.LabelStatus = widget.NewLabel("")
+	mainBorder := container.NewBorder(nil, editor.LabelStatus, nil, nil, splitEntitiesMap)
+	editor.Window.SetContent(mainBorder)
+
+	go func() {
+		for range time.Tick(time.Millisecond * 15) {
+			if editor.DB == nil {
+				return
+			}
+			editor.DB.Simulation.Step()
+			if editor.MapWidget.NeedsRefresh {
+				editor.MapWidget.Raster.Refresh()
+				editor.MapWidget.NeedsRefresh = false
+			}
+		}
+	}()
+
+	editor.Window.ShowAndRun()
 }

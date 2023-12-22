@@ -4,7 +4,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gdk"
+	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type Pan struct {
@@ -15,10 +15,10 @@ type Pan struct {
 	Delta       concepts.Vector2
 }
 
-func (a *Pan) OnMouseDown(button *gdk.EventButton) {
+func (a *Pan) OnMouseDown(evt *desktop.MouseEvent) {
 	a.Mode = "PanStart"
 	a.OriginalPos = a.State().Pos
-	a.SetMapCursor("all-scroll")
+	a.SetMapCursor(desktop.VResizeCursor)
 }
 
 func (a *Pan) OnMouseMove() {
