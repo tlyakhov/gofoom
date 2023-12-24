@@ -1,8 +1,7 @@
 package properties
 
 import (
-	"image/color"
-	"log"
+	"image"
 	"reflect"
 	"strconv"
 
@@ -16,58 +15,78 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/gotk3/gotk3/gdk"
 )
 
-func (g *Grid) pixbufFromFile(filename string) *gdk.Pixbuf {
-	pixbuf, err := gdk.PixbufNewFromFileAtSize(filename, 16, 16)
-	if err != nil {
-		log.Printf("Warning: %v", err)
-		return nil
-	}
-	return pixbuf
+type entityRefLayout struct {
+	Child fyne.Layout
 }
 
-func (g *Grid) pixbufFromColor(c color.NRGBA) *gdk.Pixbuf {
-	pixbuf, err := gdk.PixbufNew(gdk.COLORSPACE_RGB, false, 8, 16, 16)
-	if err != nil {
-		log.Printf("Warning: %v", err)
-		return nil
+func (erl *entityRefLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+	s := erl.Child.MinSize(objects)
+	if s.Height < 200 {
+		s.Height = 200
 	}
-	pixels := pixbuf.GetPixels()
-	for i := 0; i < len(pixels)-2; i += 3 {
-		pixels[i] = c.R
-		pixels[i+1] = c.G
-		pixels[i+2] = c.B
-	}
-	return pixbuf
+	return s
 }
 
-func (g *Grid) pixbuf(er *concepts.EntityRef) *gdk.Pixbuf {
-	if img := materials.ImageFromDb(er); img != nil {
-		return g.pixbufFromFile(img.Source)
-	} else if solid := materials.SolidFromDb(er); solid != nil {
-		return g.pixbufFromColor(solid.Diffuse)
-	} else if shader := materials.ShaderFromDb(er); shader != nil {
+func (erl *entityRefLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
+	erl.Child.Layout(objects, containerSize)
+}
+
+func (g *Grid) imageForRef(ref *concepts.EntityRef) image.Image {
+	w, h := 64, 64
+	if img := materials.ImageFromDb(ref); img != nil {
+		return img.Image
+	} else if solid := materials.SolidFromDb(ref); solid != nil {
+		img := image.NewNRGBA(image.Rect(0, 0, w, h))
+		for i := 0; i < w*h; i++ {
+			img.Pix[i*4+0] = solid.Diffuse.R
+			img.Pix[i*4+1] = solid.Diffuse.G
+			img.Pix[i*4+2] = solid.Diffuse.B
+			img.Pix[i*4+3] = solid.Diffuse.A
+		}
+		return img
+	} else if shader := materials.ShaderFromDb(ref); shader != nil {
 		if len(shader.Stages) == 0 {
 			return nil
 		}
-		return g.pixbuf(shader.Stages[0].Texture)
+		return g.imageForRef(shader.Stages[0].Texture)
 	}
+	return image.NewRGBA(image.Rect(0, 0, w, h))
+}
 
-	return nil
+func (g *Grid) updateTreeNodeEntityRef(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
+	entity, _ := strconv.ParseUint(tni, 10, 64)
+	ref := g.State().DB.EntityRef(entity)
+	name := string(tni)
+	if named := concepts.NamedFromDb(ref); named != nil {
+		name += " - " + named.Name
+	}
+	box := co.(*fyne.Container)
+	img := box.Objects[0].(*canvas.Image)
+	img.ScaleMode = canvas.ImageScaleSmooth
+	img.FillMode = canvas.ImageFillContain
+	img.Image = g.imageForRef(ref)
+	img.SetMinSize(fyne.NewSquareSize(64))
+	label := box.Objects[1].(*widget.Label)
+	label.SetText(name)
+	button := box.Objects[2].(*widget.Button)
+	button.OnTapped = func() {
+		g.IEditor.SelectObjects([]any{ref}, true)
+	}
 }
 
 func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 	// The value of this property is an EntityRef or pointer to EntityRef
-	/*var origValue *concepts.EntityRef
+	var origValue *concepts.EntityRef
 	if !field.Values[0].Elem().IsNil() {
 		origValue = field.Values[0].Elem().Interface().(*concepts.EntityRef)
-	}*/
+	}
 
-	_, ok := field.Source.Tag.Lookup("edit_type")
+	editTypeTag, ok := field.Source.Tag.Lookup("edit_type")
 
 	if !ok {
 		return
@@ -87,79 +106,33 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 	}
 	tree := widget.NewTree(func(tni widget.TreeNodeID) []widget.TreeNodeID {
 		if tni != "" {
-			return nil
+			return []string{}
 		}
 		return refs
 	}, func(tni widget.TreeNodeID) bool {
-		return false
+		return tni == ""
 	}, func(b bool) fyne.CanvasObject {
-		return container.NewHBox(canvas.NewRasterFromImage(nil), widget.NewLabel("Template"))
-	}, func(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
+		return container.NewHBox(
+			canvas.NewImageFromImage(nil),
+			widget.NewLabel("Template"),
+			widget.NewButtonWithIcon("", theme.MoreHorizontalIcon(), nil),
+		)
+	}, g.updateTreeNodeEntityRef)
+	if !origValue.Nil() {
+		tree.Select(strconv.FormatUint(origValue.Entity, 10))
+	}
+	tree.OnSelected = func(tni widget.TreeNodeID) {
 		entity, _ := strconv.ParseUint(tni, 10, 64)
 		ref := g.State().DB.EntityRef(entity)
-		name := string(tni)
-		if named := concepts.NamedFromDb(ref); named != nil {
-			name = named.Name
+		action := &actions.SetProperty{IEditor: g.IEditor,
+			PropertyGridField: field,
+			ToSet:             reflect.ValueOf(ref).Convert(field.Type.Elem()),
 		}
-		box := co.(*fyne.Container)
-		//		raster := box.Objects[0].(*canvas.Raster)
-		label := box.Objects[1].(*widget.Label)
-		label.SetText(name)
-	})
-	aitem := widget.NewAccordionItem("Test", tree)
-	accordion := widget.NewAccordion(aitem)
-	g.FContainer.Add(accordion)
-}
-
-func (g *Grid) fieldEntityRef2(field *state.PropertyGridField) {
-	// The value of this property is an EntityRef or pointer to EntityRef
-	var origValue *concepts.EntityRef
-	if !field.Values[0].Elem().IsNil() {
-		origValue = field.Values[0].Elem().Interface().(*concepts.EntityRef)
-	}
-
-	_, ok := field.Source.Tag.Lookup("edit_type")
-
-	if !ok {
-		return
-	}
-
-	// Create our combo box with pixbuf/string enum entries.
-	opts := make([]string, 0)
-	optsValues := make([]uint64, 0)
-	selected := 0
-
-	for entity, c := range g.State().DB.EntityComponents {
-		if c == nil {
-			continue
-		}
-		er := g.State().DB.EntityRef(uint64(entity))
-		if archetypes.EntityRefIsMaterial(er) {
-			//pixbuf := g.pixbuf(er)
-			name := strconv.FormatUint(er.Entity, 10)
-			if named := concepts.NamedFromDb(er); named != nil {
-				name = named.Name
-			}
-			opts = append(opts, name)
-			optsValues = append(optsValues, er.Entity)
-			if !origValue.Nil() && er.Entity == origValue.Entity {
-				selected = len(opts) - 1
-			}
-		}
-	}
-
-	selectEntry := widget.NewSelect(opts, nil)
-	selectEntry.OnChanged = func(selected string) {
-		er := g.State().DB.EntityRef(optsValues[selectEntry.SelectedIndex()])
-		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(er).Convert(field.Type.Elem())}
 		g.NewAction(action)
 		action.Act()
 	}
-	selectEntry.SetSelectedIndex(selected)
-
-	button := widget.NewButtonWithIcon("", theme.MoreHorizontalIcon(), func() {
-		er := g.State().DB.EntityRef(optsValues[selectEntry.SelectedIndex()])
-		g.IEditor.SelectObjects([]any{er}, true)
-	})
-	g.FContainer.Add(container.NewBorder(nil, nil, nil, button, selectEntry))
+	c := container.New(&entityRefLayout{Child: layout.NewStackLayout()}, tree)
+	aitem := widget.NewAccordionItem("Select "+editTypeTag, c)
+	accordion := widget.NewAccordion(aitem)
+	g.FContainer.Add(accordion)
 }

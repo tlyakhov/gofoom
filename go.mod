@@ -3,10 +3,10 @@ module tlyakhov/gofoom
 go 1.21.1
 
 require (
-	github.com/fogleman/gg v1.3.0
 	fyne.io/fyne/v2 v2.4.2
 	github.com/dmarkham/enumer v1.5.9
 	github.com/faiface/pixel v0.10.0
+	github.com/fogleman/gg v1.3.0
 	github.com/gotk3/gotk3 v0.6.2
 	github.com/kelindar/bitmap v1.5.2
 	github.com/klauspost/cpuid/v2 v2.2.6
@@ -26,7 +26,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/faiface/glhf v0.0.0-20231008131257-c8034b63022b // indirect
 	github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3 // indirect
-	github.com/fogleman/gg v1.3.0 // indirect
 	github.com/fredbi/uri v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/fyne-io/gl-js v0.0.0-20220119005834-d2da28d9ccfe // indirect

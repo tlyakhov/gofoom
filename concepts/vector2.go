@@ -250,3 +250,17 @@ func ParseVector2(s string) (*Vector2, error) {
 	}
 	return result, nil
 }
+
+func Vector2AABBIntersect(amin, amax, bmin, bmax *Vector2, includeEdges bool) bool {
+	if includeEdges {
+		return (amin[0] <= bmax[0] &&
+			amax[0] >= bmin[0] &&
+			amin[1] <= bmax[1] &&
+			amax[1] >= bmin[1])
+	} else {
+		return (amin[0] < bmax[0] &&
+			amax[0] > bmin[0] &&
+			amin[1] < bmax[1] &&
+			amax[1] > bmin[1])
+	}
+}

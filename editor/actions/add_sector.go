@@ -68,3 +68,5 @@ func (a *AddSector) OnMouseUp() {
 	}
 	// TODO: right-mouse button end
 }
+
+func (a *AddSector) RequiresLock() bool { return true }

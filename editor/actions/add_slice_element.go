@@ -48,3 +48,5 @@ func (a *AddSliceElement) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
+
+func (a *AddSliceElement) RequiresLock() bool { return true }

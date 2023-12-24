@@ -6,10 +6,11 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/gotk3/gotk3/gtk"
 )
 
 func (g *Grid) setFieldFile(entry *widget.Entry, field *state.PropertyGridField) {
@@ -28,15 +29,14 @@ func (g *Grid) fieldFile(field *state.PropertyGridField) {
 	}
 
 	button := widget.NewButtonWithIcon("...", theme.FolderOpenIcon(), func() {
-		window, _ := g.Container.GetToplevel()
-		native, _ := gtk.FileChooserNativeDialogNew("Load File...", window.(gtk.IWindow), gtk.FILE_CHOOSER_ACTION_OPEN, "_Load", "_Cancel")
-		res := gtk.ResponseType(native.Run())
-
-		if res == gtk.RESPONSE_ACCEPT {
-			entry.SetText(native.GetFilename())
+		dlg := dialog.NewFileOpen(func(uc fyne.URIReadCloser, err error) {
+			entry.SetText(uc.URI().Path())
 			g.setFieldFile(entry, field)
-		}
-
+		}, g.GridWindow)
+		dlg.SetFileName(entry.Text)
+		dlg.SetConfirmText("Load file")
+		dlg.SetDismissText("Cancel")
+		dlg.Show()
 	})
 	g.FContainer.Add(container.NewBorder(nil, nil, nil, button, entry))
 }

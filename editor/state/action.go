@@ -12,4 +12,5 @@ type IAction interface {
 	Frame()
 	Undo()
 	Redo()
+	RequiresLock() bool
 }

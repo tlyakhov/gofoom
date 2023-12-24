@@ -1,16 +1,20 @@
 package main
 
 import (
+	"image"
 	"math"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
+
+	"github.com/fogleman/gg"
 )
 
 type MapViewGrid struct {
-	Current *state.MapView
-	Prev    *state.MapView
-	Visible bool
+	Current     *state.MapView
+	Prev        *state.MapView
+	Visible     bool
+	GridContext *gg.Context
 }
 
 func (g *MapViewGrid) WorldGrid(p *concepts.Vector2) *concepts.Vector2 {
@@ -39,29 +43,40 @@ func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
 	return r
 }
 
-func (g *MapViewGrid) Draw(e *state.Edit, w *MapWidget) {
-	if !g.Visible || e.Scale*g.Current.Step < 10.0 {
-		w.Context.SetRGB(0, 0, 0)
-		w.Context.DrawRectangle(0, 0, float64(w.Context.Width()), float64(w.Context.Height()))
-		w.Context.Fill()
+func (g *MapViewGrid) Draw(e *state.Edit) {
+	if !g.Visible || e.Scale*g.Current.Step < 5.0 {
+		g.Clear()
 		return
 	}
 
 	if g.Prev == nil || *g.Prev != *g.Current {
-		g.Refresh(e, w)
+		g.Refresh(e)
 		mv := *g.Current
 		g.Prev = &mv
 	}
 }
 
-func (g *MapViewGrid) Refresh(e *state.Edit, w *MapWidget) {
-	w.Context.Push()
-	w.Context.DrawRectangle(0, 0, e.Size[0], e.Size[1])
-	w.Context.SetRGB(0, 0, 0)
-	w.Context.Fill()
-	w.TransformContext()
-	w.Context.SetRGB(0.5, 0.5, 0.5)
+func (g *MapViewGrid) pixels() []uint8 {
+	return g.GridContext.Image().(*image.RGBA).Pix
+}
 
+func (g *MapViewGrid) size() (int, int) {
+	img := g.GridContext.Image().(*image.RGBA)
+	return img.Rect.Dx(), img.Rect.Dy()
+}
+
+func (g *MapViewGrid) Clear() {
+	pix := g.pixels()
+
+	for i := 0; i < len(pix)/4; i++ {
+		pix[i*4+0] = 0
+		pix[i*4+1] = 0
+		pix[i*4+2] = 0
+		pix[i*4+3] = 0xFF
+	}
+}
+
+func (g *MapViewGrid) Refresh(e *state.Edit) {
 	down := g.Current.GridB.Sub(&g.Current.GridA).Norm().Mul(g.Current.Step)
 	right := &concepts.Vector2{down[1], -down[0]}
 	if math.Abs(down[0]) > math.Abs(right[0]) {
@@ -83,17 +98,27 @@ func (g *MapViewGrid) Refresh(e *state.Edit, w *MapWidget) {
 	qstart = qstart.Sub(right.Mul(delta[0])).Sub(down.Mul(delta[1]))
 	// qend = qend.Add(right.Mul(delta[0])).Add(down.Mul(delta[1]))
 
-	d := 3.0 / (g.Current.Scale + 1)
-
+	//	d := 3.0 / (g.Current.Scale + 1)
+	g.Clear()
+	pix := g.pixels()
+	w, h := g.size()
 	for x := 0.0; x < delta[0]*3; x++ {
 		for y := 0.0; y < delta[1]*3; y++ {
 			pos := qstart.Add(right.Mul(x)).Add(down.Mul(y))
-			if pos[0] < start[0] || pos[0] > end[0] || pos[1] < start[1] || pos[1] > end[1] {
+			/*if pos[0] < start[0] || pos[0] > end[0] || pos[1] < start[1] || pos[1] > end[1] {
 				continue
+			}*/
+			v := editor.WorldToScreen(pos)
+			ix := int(v[0])
+			iy := int(v[1])
+			if ix >= 0 && ix < w &&
+				iy >= 0 && iy < h {
+				index := ix + iy*w
+				pix[index*4+0] = 0x80
+				pix[index*4+1] = 0x80
+				pix[index*4+2] = 0x80
+				pix[index*4+3] = 0xFF
 			}
-			w.Context.DrawRectangle(pos[0]-d*0.5, pos[1]-d*0.5, d, d)
 		}
-		w.Context.Fill()
 	}
-	w.Context.Pop()
 }

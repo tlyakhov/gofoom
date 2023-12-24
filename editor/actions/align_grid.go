@@ -39,3 +39,5 @@ func (a *AlignGrid) Undo() {
 func (a *AlignGrid) Redo() {
 	a.State().MapView.GridA, a.State().MapView.GridB = a.A, a.B
 }
+
+func (a *AlignGrid) RequiresLock() bool { return false }

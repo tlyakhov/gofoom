@@ -97,4 +97,5 @@ func (a *AddBody) Redo() {
 	a.AttachAll()
 }
 
-func (a *AddBody) Frame() {}
+func (a *AddBody) Frame()             {}
+func (a *AddBody) RequiresLock() bool { return true }

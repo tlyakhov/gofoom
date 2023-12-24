@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
 
@@ -212,6 +213,7 @@ func (e *Editor) Integrate() {
 }
 
 func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
+	e.Lock.Lock()
 	for _, t := range e.State().SelectedTransformables {
 		switch target := t.(type) {
 		case *concepts.Vector2:
@@ -220,9 +222,12 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 			target.MulSelf(m)
 		}
 	}
+	e.Lock.Unlock()
 }
 
 func (e *Editor) Load(filename string) {
+	e.Lock.Lock()
+	defer e.Lock.Unlock()
 	e.OpenFile = filename
 	e.Modified = false
 	e.UpdateTitle()
@@ -237,12 +242,14 @@ func (e *Editor) Load(filename string) {
 	e.DB = db
 	e.SelectObjects([]any{}, true)
 	editor.ResizeRenderer(640, 360)
-	return
 	e.Grid.Refresh(e.SelectedObjects)
-	e.EntityTree.Update()
+	//e.EntityTree.Update()
 }
 
 func (e *Editor) Test() {
+	e.Lock.Lock()
+	defer e.Lock.Unlock()
+
 	e.Modified = false
 	e.UpdateTitle()
 
@@ -271,12 +278,12 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 		e.RedoHistory = []state.IAction{}
 	}
 	if refreshProperties {
-		//e.Grid.Refresh(e.SelectedObjects)
+		e.Grid.Refresh(e.SelectedObjects)
 		//e.EntityTree.Update()
 	}
 	e.SetMapCursor(desktop.DefaultCursor)
 	e.CurrentAction = nil
-	e.ActTool()
+	go e.ActTool()
 }
 
 func (e *Editor) NewAction(a state.IAction) {
@@ -307,19 +314,35 @@ func (e *Editor) ActTool() {
 	default:
 		return
 	}
+	if e.CurrentAction.RequiresLock() {
+		e.Lock.Lock()
+	}
 	e.CurrentAction.Act()
+	if e.CurrentAction.RequiresLock() {
+		e.Lock.Unlock()
+	}
 }
 
 func (e *Editor) SwitchTool(tool state.EditorTool) {
 	e.Tool = tool
 	if e.CurrentAction != nil {
+		locked := false
+		if e.CurrentAction.RequiresLock() {
+			e.Lock.Lock()
+			locked = true
+		}
 		e.CurrentAction.Cancel()
+		if locked {
+			e.Lock.Unlock()
+		}
 	} else {
 		e.ActTool()
 	}
 }
 
 func (e *Editor) UndoCurrent() {
+	e.Lock.Lock()
+	defer e.Lock.Unlock()
 	index := len(e.UndoHistory) - 1
 	if index < 0 {
 		return
@@ -340,6 +363,9 @@ func (e *Editor) UndoCurrent() {
 }
 
 func (e *Editor) RedoCurrent() {
+	e.Lock.Lock()
+	defer e.Lock.Unlock()
+
 	index := len(e.RedoHistory) - 1
 	if index < 0 {
 		return
@@ -447,15 +473,12 @@ func (e *Editor) AddSimpleMenuAction(name string, cb func(obj *glib.Object)) {
 func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
 	action := &actions.MoveSurface{IEditor: e, Delta: delta, Floor: floor, Slope: slope}
 	e.NewAction(action)
+	e.Lock.Lock()
 	action.Act()
+	e.Lock.Unlock()
 }
 
 func (e *Editor) Alert(text string) {
-	if win, err := e.Container.GetToplevel(); err == nil {
-		dlg := gtk.MessageDialogNew(win.(gtk.IWindow), gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, text)
-		dlg.Connect("response", func() {
-			dlg.Destroy()
-		})
-		dlg.ShowAll()
-	}
+	dlg := dialog.NewInformation("Foom Editor", text, e.Window)
+	dlg.Show()
 }

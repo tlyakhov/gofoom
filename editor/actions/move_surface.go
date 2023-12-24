@@ -98,3 +98,5 @@ func (a *MoveSurface) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
+
+func (a *MoveSurface) RequiresLock() bool { return true }

@@ -85,3 +85,4 @@ func (a *Select) Undo() {
 func (a *Select) Redo() {
 	a.SelectObjects(a.Selected, true)
 }
+func (a *Select) RequiresLock() bool { return false }
