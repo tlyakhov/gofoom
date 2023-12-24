@@ -9,6 +9,8 @@ import (
 	"runtime/pprof"
 	"time"
 
+	"tlyakhov/gofoom/editor/resources"
+	"tlyakhov/gofoom/editor/state"
 	_ "tlyakhov/gofoom/scripting_symbols"
 
 	"tlyakhov/gofoom/concepts"
@@ -18,6 +20,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -30,15 +33,6 @@ var (
 
 func init() {
 	editor = NewEditor()
-}
-
-func EditorTimer() bool {
-	if editor.DB == nil {
-		return true
-	}
-	editor.DB.Simulation.Step()
-
-	return true
 }
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
@@ -72,6 +66,7 @@ func main() {
 
 	editor.PropertyGrid = container.New(layout.NewFormLayout())
 	editor.FContainer = editor.PropertyGrid
+	editor.GridWindow = editor.Window
 
 	entities := []any{}
 	dataEntities := binding.BindUntypedList(&entities)
@@ -89,7 +84,36 @@ func main() {
 	splitEntitiesMap := container.NewHSplit(scrollEntities, splitMapGame)
 	splitEntitiesMap.SetOffset(0)
 	editor.LabelStatus = widget.NewLabel("")
-	mainBorder := container.NewBorder(nil, editor.LabelStatus, nil, nil, splitEntitiesMap)
+	editor.LabelStatus.Truncation = fyne.TextTruncateEllipsis
+
+	var item widget.ToolbarItem
+	toolbarItems := make([]widget.ToolbarItem, 0)
+	item = widget.NewToolbarAction(theme.HomeIcon(), func() {
+		editor.SwitchTool(state.ToolSelect)
+	})
+	toolbarItems = append(toolbarItems, item)
+	item = widget.NewToolbarAction(resources.ResourceIconEntityAdd, func() {
+		editor.SwitchTool(state.ToolAddBody)
+	})
+	toolbarItems = append(toolbarItems, item)
+	item = widget.NewToolbarAction(resources.ResourceIconSectorAdd, func() {
+		editor.SwitchTool(state.ToolAddSector)
+	})
+	toolbarItems = append(toolbarItems, item)
+	item = widget.NewToolbarAction(theme.GridIcon(), func() {
+		editor.SwitchTool(state.ToolAlignGrid)
+	})
+	toolbarItems = append(toolbarItems, item)
+	toolbarItems = append(toolbarItems, widget.NewToolbarSeparator())
+	item = widget.NewToolbarAction(theme.ContentCutIcon(), func() {})
+	toolbarItems = append(toolbarItems, item)
+	item = widget.NewToolbarAction(theme.ContentCopyIcon(), func() {})
+	toolbarItems = append(toolbarItems, item)
+	item = widget.NewToolbarAction(theme.ContentPasteIcon(), func() {})
+	toolbarItems = append(toolbarItems, item)
+	toolbar := widget.NewToolbar(toolbarItems...)
+
+	mainBorder := container.NewBorder(toolbar, editor.LabelStatus, nil, nil, splitEntitiesMap)
 	editor.Window.SetContent(mainBorder)
 
 	go func() {
@@ -97,10 +121,13 @@ func main() {
 			if editor.DB == nil {
 				return
 			}
-			editor.DB.Simulation.Step()
+			if editor.Lock.TryRLock() {
+				editor.DB.Simulation.Step()
+				editor.Lock.RUnlock()
+			}
 			if editor.MapWidget.NeedsRefresh {
 				editor.MapWidget.Raster.Refresh()
-				editor.MapWidget.NeedsRefresh = false
+				//editor.MapWidget.NeedsRefresh = false
 			}
 		}
 	}()

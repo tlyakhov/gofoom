@@ -21,16 +21,16 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		return
 	}
 
+	start := editor.ScreenToWorld(new(concepts.Vector2))
+	end := editor.ScreenToWorld(&editor.Size)
+	if !concepts.Vector2AABBIntersect(sector.Min.To2D(), sector.Max.To2D(), start, end, true) {
+		return
+	}
+
 	mw.Context.Push()
 
 	sectorHovering := state.IndexOf(editor.HoveringObjects, sector.EntityRef) != -1
 	sectorSelected := state.IndexOf(editor.SelectedObjects, sector.EntityRef) != -1
-
-	if editor.BodiesVisible {
-		for _, ibody := range sector.Bodies {
-			mw.DrawBody(ibody)
-		}
-	}
 
 	for _, segment := range sector.Segments {
 		if segment.P == segment.Next.P {
@@ -105,6 +105,12 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		mw.Context.SetRGB(0.3, 0.3, 0.3)
 		mw.Context.DrawStringAnchored(text, sector.Center[0], sector.Center[1], 0.5, 0.5)
 		mw.Context.Pop()
+	}
+
+	if editor.BodiesVisible {
+		for _, ibody := range sector.Bodies {
+			mw.DrawBody(ibody)
+		}
 	}
 
 	mw.Context.Pop()

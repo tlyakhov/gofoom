@@ -101,3 +101,5 @@ func (a *SplitSegment) Redo() {
 		ss.added.Sector.Recalculate()
 	}
 }
+
+func (a *SplitSegment) RequiresLock() bool { return true }

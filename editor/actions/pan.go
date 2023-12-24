@@ -40,3 +40,5 @@ func (a *Pan) Undo() {
 func (a *Pan) Redo() {
 	a.State().Pos = *a.OriginalPos.Sub(&a.Delta)
 }
+
+func (a *Pan) RequiresLock() bool { return true }

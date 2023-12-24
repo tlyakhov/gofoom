@@ -86,3 +86,5 @@ func (a *Delete) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
+
+func (a *Delete) RequiresLock() bool { return true }

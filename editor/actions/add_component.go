@@ -38,3 +38,5 @@ func (a *AddComponent) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
+
+func (a *AddComponent) RequiresLock() bool { return true }

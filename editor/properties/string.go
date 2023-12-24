@@ -1,14 +1,13 @@
 package properties
 
 import (
-	"log"
 	"reflect"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/gotk3/gotk3/gtk"
+	"fyne.io/fyne/v2/widget"
 )
 
 func (g *Grid) originalStrings(field *state.PropertyGridField) string {
@@ -24,34 +23,25 @@ func (g *Grid) originalStrings(field *state.PropertyGridField) string {
 	return origValue
 }
 
-func (g *Grid) fieldString(index int, field *state.PropertyGridField) {
+func (g *Grid) fieldString(field *state.PropertyGridField) {
 	origValue := g.originalStrings(field)
 
-	entry, _ := gtk.EntryNew()
-	entry.SetHExpand(true)
+	entry := widget.NewEntry()
 	entry.SetText(origValue)
-	entry.Connect("activate", func(_ *gtk.Entry) {
-		text, err := entry.GetText()
-		if err != nil {
-			log.Printf("Couldn't get text from gtk.Entry. %v\n", err)
-			entry.SetText(origValue)
-			g.Container.GrabFocus()
-			return
-		}
+	entry.OnChanged = func(text string) {
 		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(text)}
 		g.NewAction(action)
 		action.Act()
 		origValue = text
-		g.Container.GrabFocus()
-	})
+	}
 
 	if exp, ok := field.Parent.(*core.Script); ok {
 		if exp.ErrorMessage != "" {
-			entry.SetTooltipText(exp.ErrorMessage)
+			//entry.SetTooltipText(exp.ErrorMessage)
 		} else {
-			entry.SetTooltipText("Success")
+			//entry.SetTooltipText("Success")
 		}
 	}
 
-	g.Container.Attach(entry, 2, index, 2, 1)
+	g.FContainer.Add(entry)
 }

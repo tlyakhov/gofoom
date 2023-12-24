@@ -112,3 +112,5 @@ func (a *Move) Undo() {
 func (a *Move) Redo() {
 	a.Act()
 }
+
+func (a *Move) RequiresLock() bool { return true }

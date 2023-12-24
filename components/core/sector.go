@@ -18,8 +18,8 @@ type Sector struct {
 	TopZ          concepts.SimVariable[float64] `editable:"Ceiling Height"`
 	FloorSlope    float64                       `editable:"Floor Slope"`
 	CeilSlope     float64                       `editable:"Ceiling Slope"`
-	FloorTarget   *concepts.EntityRef           `editable:"Floor Target"`
-	CeilTarget    *concepts.EntityRef           `editable:"Ceiling Target"`
+	FloorTarget   *concepts.EntityRef           `editable:"Floor Target" edit_type:"Sector"`
+	CeilTarget    *concepts.EntityRef           `editable:"Ceiling Target" edit_type:"Sector"`
 	FloorSurface  materials.Surface             `editable:"Floor Surface"`
 	CeilSurface   materials.Surface             `editable:"Ceiling Surface"`
 	Gravity       concepts.Vector3              `editable:"Gravity"`

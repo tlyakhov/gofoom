@@ -19,7 +19,6 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/gotk3/gotk3/gtk"
 )
 
 type PropertyGridState struct {
@@ -33,8 +32,8 @@ type PropertyGridState struct {
 
 type Grid struct {
 	state.IEditor
-	Container  *gtk.Grid
 	FContainer *fyne.Container
+	GridWindow fyne.Window
 }
 
 func (g *Grid) childFields(parentName string, childValue reflect.Value, state PropertyGridState, updateParent bool) {
@@ -235,7 +234,7 @@ func (g *Grid) Refresh(selection []any) {
 			if field.EditType == "file" {
 				g.fieldFile(field)
 			} else {
-				//g.fieldString(field)
+				g.fieldString(field)
 			}
 		case *float64:
 			g.fieldNumber(field)
@@ -265,6 +264,8 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldSlice(field)
 		case *[]materials.ShaderStage:
 			g.fieldSlice(field)
+		default:
+			g.FContainer.Add(widget.NewLabel("Unavailable"))
 		}
 	}
 }

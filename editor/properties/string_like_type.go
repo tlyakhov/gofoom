@@ -63,7 +63,15 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 		origValue = currentValue.String()
 		g.Focus(g.FContainer)
 	}
-	cb := widget.NewCheck("Tweak", func(active bool) {
+
+	cb := widget.NewCheck("Tweak", nil)
+	for _, v := range g.State().SelectedTransformables {
+		if typed, ok := v.(T); ok && typed == field.Values[0].Interface() {
+			cb.SetChecked(true)
+			break
+		}
+	}
+	cb.OnChanged = func(active bool) {
 		for i, v := range g.State().SelectedTransformables {
 			if typed, ok := v.(T); ok && typed == field.Values[0].Interface() {
 				if !active {
@@ -77,6 +85,6 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 			g.State().SelectedTransformables = append(g.State().SelectedTransformables, field.Values[0].Interface())
 		}
 
-	})
+	}
 	g.FContainer.Add(container.NewBorder(nil, nil, nil, cb, entry))
 }

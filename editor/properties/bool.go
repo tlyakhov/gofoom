@@ -15,13 +15,14 @@ func (g *Grid) fieldBool(field *state.PropertyGridField) {
 		origValue = origValue || v.Elem().Bool()
 	}
 
-	cb := widget.NewCheck("", func(active bool) {
+	cb := widget.NewCheck("", nil)
+	cb.SetChecked(origValue)
+	cb.OnChanged = func(active bool) {
 		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(active)}
 		g.NewAction(action)
 		action.Act()
 		origValue = active
 		g.Focus(g.FContainer)
-	})
-	cb.SetChecked(origValue)
+	}
 	g.FContainer.Add(cb)
 }

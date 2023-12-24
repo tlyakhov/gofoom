@@ -55,3 +55,5 @@ func (a *DeleteComponent) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
+
+func (a *DeleteComponent) RequiresLock() bool { return true }

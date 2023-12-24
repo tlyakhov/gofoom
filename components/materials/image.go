@@ -28,6 +28,7 @@ type Image struct {
 	Data            []uint32
 	MipMaps         map[uint32]*mipMap
 	SmallestMipMap  *mipMap
+	Image           image.Image
 }
 
 var ImageComponentIndex int
@@ -59,13 +60,13 @@ func (img *Image) Load() error {
 		return err
 	}
 	defer file.Close()
-	decoded, _, err := image.Decode(file)
+	img.Image, _, err = image.Decode(file)
 	if err != nil {
 		return err
 	}
 
 	// Let's convert to 0-based NRGBA for speed/convenience.
-	bounds := decoded.Bounds()
+	bounds := img.Image.Bounds()
 	img.Width = uint32(bounds.Dx())
 	img.Height = uint32(bounds.Dy())
 	img.Data = make([]uint32, int(img.Width)*int(img.Height))
@@ -73,7 +74,7 @@ func (img *Image) Load() error {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			index := uint32(x-bounds.Min.X) + uint32(y-bounds.Min.Y)*img.Width
 			// Premultiplied alpha
-			img.Data[index] = concepts.ColorToInt32PreMul(decoded.At(x, y))
+			img.Data[index] = concepts.ColorToInt32PreMul(img.Image.At(x, y))
 		}
 	}
 	img.generateMipMaps()

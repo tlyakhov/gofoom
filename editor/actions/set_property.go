@@ -69,3 +69,5 @@ func (a *SetProperty) Redo() {
 	}
 	a.FireHooks()
 }
+
+func (a *SetProperty) RequiresLock() bool { return true }

@@ -62,3 +62,5 @@ func (a *RotateSegments) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
+
+func (a *RotateSegments) RequiresLock() bool { return true }

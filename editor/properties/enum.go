@@ -30,17 +30,17 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		}
 	}
 
-	box := widget.NewSelect(opts, nil)
-	box.SetSelectedIndex(selectedIndex)
-	box.OnChanged = func(opt string) {
+	selectEntry := widget.NewSelect(opts, nil)
+	selectEntry.SetSelectedIndex(selectedIndex)
+	selectEntry.OnChanged = func(opt string) {
 		action := &actions.SetProperty{
 			IEditor:           g.IEditor,
 			PropertyGridField: field,
-			ToSet:             optsValues[box.SelectedIndex()], //reflect.ValueOf(value2).Convert(field.Type.Elem()),
+			ToSet:             optsValues[selectEntry.SelectedIndex()], //reflect.ValueOf(value2).Convert(field.Type.Elem()),
 		}
 		g.NewAction(action)
 		action.Act()
 	}
 
-	g.FContainer.Add(box)
+	g.FContainer.Add(selectEntry)
 }

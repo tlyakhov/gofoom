@@ -6,6 +6,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
 
 	"fyne.io/fyne/v2"
@@ -40,22 +41,26 @@ func NewMapWidget() *MapWidget {
 	return mw
 }
 
-func (mw *MapWidget) TransformContext() {
+func TransformContext(context *gg.Context) {
 	t := editor.Pos.Mul(-editor.Scale).Add(editor.Size.Mul(0.5))
-	mw.Context.Translate(t[0], t[1])
-	mw.Context.Scale(editor.Scale, editor.Scale)
+	context.Translate(t[0], t[1])
+	context.Scale(editor.Scale, editor.Scale)
 }
 
 func (mw *MapWidget) Draw(w, h int) image.Image {
+	w /= state.MapViewRenderScale
+	h /= state.MapViewRenderScale
 	if mw.Context == nil || mw.Surface.Rect.Max.X != w || mw.Surface.Rect.Max.Y != h {
 		mw.Surface = image.NewRGBA(image.Rect(0, 0, w, h))
 		mw.Context = gg.NewContext(w, h)
+		editor.MapViewGrid.GridContext = gg.NewContext(w, h)
+		editor.Size = concepts.Vector2{float64(w), float64(h)}
 	}
-	editor.Size = concepts.Vector2{float64(w), float64(h)}
 
 	mw.Context.Identity()
-	editor.MapViewGrid.Draw(&editor.Edit, mw)
-	mw.TransformContext()
+	editor.MapViewGrid.Draw(&editor.Edit)
+	copy(mw.Context.Image().(*image.RGBA).Pix, editor.MapViewGrid.pixels())
+	TransformContext(mw.Context)
 	mw.Context.FontHeight()
 
 	for _, isector := range editor.DB.All(core.SectorComponentIndex) {
@@ -68,7 +73,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 			v1, v2 := editor.SelectionBox()
 			mw.Context.DrawRectangle(v1[0], v1[1], v2[0]-v1[0], v2[1]-v1[1])
 			mw.Context.SetRGBA(0.2, 0.2, 1.0, 0.3)
-			mw.Context.Fill()
+			mw.Context.FillPreserve()
 			mw.Context.SetRGBA(0.67, 0.67, 1.0, 0.3)
 			mw.Context.Stroke()
 		}
@@ -122,7 +127,8 @@ func (mw *MapWidget) TypedKey(evt *fyne.KeyEvent) {
 func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 	mw.requestFocus()
 	editor.MousePressed = true
-	editor.MouseDown[0], editor.MouseDown[1] = float64(evt.Position.X), float64(evt.Position.Y)
+	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
+	editor.MouseDown[0], editor.MouseDown[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
 	editor.MouseDownWorld = *editor.ScreenToWorld(&editor.MouseDown)
 
 	if evt.Button == desktop.MouseButtonSecondary && editor.CurrentAction == nil {
@@ -134,7 +140,9 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 	}
 
 	if editor.CurrentAction != nil {
+		editor.Lock.Lock()
 		editor.CurrentAction.OnMouseDown(evt)
+		editor.Lock.Unlock()
 	}
 	mw.NeedsRefresh = true
 }
@@ -142,7 +150,9 @@ func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	editor.MousePressed = false
 
 	if editor.CurrentAction != nil {
+		editor.Lock.Lock()
 		editor.CurrentAction.OnMouseUp()
+		editor.Lock.Unlock()
 	}
 	mw.NeedsRefresh = true
 }
@@ -157,7 +167,7 @@ func (mw *MapWidget) Scrolled(ev *fyne.ScrollEvent) {
 	delta := 0.0
 	if ev.Scrolled.DY != 0 {
 		delta = float64(ev.Scrolled.DY)
-		delta = math.Sqrt(math.Abs(delta))
+		delta = math.Log(math.Abs(delta))
 		delta *= 0.1
 		if ev.Scrolled.DY < 0 {
 			delta = -delta
@@ -183,17 +193,25 @@ func (mw *MapWidget) MouseOut() {
 }
 
 func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
-	x, y := float64(ev.Position.X), float64(ev.Position.Y)
+	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
+	x, y := float64(ev.Position.X)*scale, float64(ev.Position.Y)*scale
 	if x == editor.Mouse[0] && y == editor.Mouse[1] {
 		return
 	}
 	editor.Mouse[0] = x
 	editor.Mouse[1] = y
 	editor.MouseWorld = *editor.ScreenToWorld(&editor.Mouse)
+	//log.Printf("scale:%v, x,y: %v, %v - world: %v, %v", scale, x, y, editor.MouseWorld[0], editor.MouseWorld[1])
 	editor.UpdateStatus()
 
 	if editor.CurrentAction != nil {
+		if editor.CurrentAction.RequiresLock() {
+			editor.Lock.Lock()
+		}
 		editor.CurrentAction.OnMouseMove()
+		if editor.CurrentAction.RequiresLock() {
+			editor.Lock.Unlock()
+		}
 		mw.NeedsRefresh = true
 	}
 }

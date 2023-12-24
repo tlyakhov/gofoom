@@ -2,6 +2,7 @@ package state
 
 import (
 	"reflect"
+	"sync"
 	"tlyakhov/gofoom/concepts"
 
 	"fyne.io/fyne/v2/driver/desktop"
@@ -20,7 +21,8 @@ const (
 
 type Edit struct {
 	MapView
-	DB *concepts.EntityComponentDB
+	DB   *concepts.EntityComponentDB
+	Lock sync.RWMutex
 
 	// Map view positions in world/screen space.
 	Mouse          concepts.Vector2 // Screen
