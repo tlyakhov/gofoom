@@ -27,7 +27,7 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 
 	entry := widget.NewEntry()
 	entry.SetText(origValue)
-	entry.OnChanged = func(text string) {
+	entry.OnSubmitted = func(text string) {
 		var toSet reflect.Value
 		if field.Type.String() == "*float64" {
 			f, err := strconv.ParseFloat(strings.TrimSpace(text), 64)

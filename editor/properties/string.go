@@ -28,7 +28,7 @@ func (g *Grid) fieldString(field *state.PropertyGridField) {
 
 	entry := widget.NewEntry()
 	entry.SetText(origValue)
-	entry.OnChanged = func(text string) {
+	entry.OnSubmitted = func(text string) {
 		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(text)}
 		g.NewAction(action)
 		action.Act()

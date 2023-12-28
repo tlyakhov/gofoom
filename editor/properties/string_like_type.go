@@ -31,7 +31,7 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 
 	entry := widget.NewEntry()
 	entry.SetText(origValue)
-	entry.OnChanged = func(text string) {
+	entry.OnSubmitted = func(text string) {
 		var err error
 		var parsed any
 		// This is a hack to switch on type of T

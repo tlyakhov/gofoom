@@ -18,7 +18,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -60,6 +59,8 @@ func main() {
 	editor.Window.Resize(fyne.NewSize(1920, 1000))
 	editor.Window.CenterOnScreen()
 
+	CreateMainMenu()
+
 	editor.App.Lifecycle().SetOnStarted(func() {
 		editor.Load("data/worlds/hall.json")
 	})
@@ -68,21 +69,18 @@ func main() {
 	editor.FContainer = editor.PropertyGrid
 	editor.GridWindow = editor.Window
 
-	entities := []any{}
-	dataEntities := binding.BindUntypedList(&entities)
-	listEntities := widget.NewListWithData(dataEntities, func() fyne.CanvasObject {
-		return widget.NewLabel("test")
-	}, func(di binding.DataItem, co fyne.CanvasObject) {})
+	editor.EntityList.IEditor = editor
+	editor.EntityList.Build()
 
 	scrollProperties := container.NewScroll(editor.PropertyGrid)
 	editor.GameWidget = NewGameWidget()
 	editor.MapWidget = NewMapWidget()
 	splitGameProperties := container.NewVSplit(editor.GameWidget, scrollProperties)
-	scrollEntities := container.NewScroll(listEntities)
+
 	splitMapGame := container.NewHSplit(editor.MapWidget, splitGameProperties)
 	splitMapGame.Refresh()
-	splitEntitiesMap := container.NewHSplit(scrollEntities, splitMapGame)
-	splitEntitiesMap.SetOffset(0)
+	splitEntitiesMap := container.NewHSplit(editor.EntityList.Container, splitMapGame)
+	splitEntitiesMap.SetOffset(0.25)
 	editor.LabelStatus = widget.NewLabel("")
 	editor.LabelStatus.Truncation = fyne.TextTruncateEllipsis
 
