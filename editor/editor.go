@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"image"
+	"log"
+	"os"
+	"path/filepath"
 	"strconv"
 
 	"tlyakhov/gofoom/archetypes"
@@ -12,10 +15,8 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
+	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
-
-	"github.com/gotk3/gotk3/glib"
-	"github.com/gotk3/gotk3/gtk"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/sectors"
@@ -28,14 +29,6 @@ import (
 )
 
 type EditorWidgets struct {
-	GApp               *gtk.Application
-	GWindow            *gtk.ApplicationWindow
-	GGameArea          *gtk.DrawingArea
-	GMapArea           *gtk.DrawingArea
-	GEntitySearchBar   *gtk.SearchBar
-	GEntitySearchEntry *gtk.SearchEntry
-	GStatusBar         *gtk.Label
-
 	App          fyne.App
 	Window       fyne.Window
 	LabelStatus  *widget.Label
@@ -50,8 +43,8 @@ type Editor struct {
 
 	MapViewGrid
 	EditorWidgets
+	EntityList
 	properties.Grid
-	properties.EntityTree
 
 	// Map view filters
 	BodiesVisible         bool
@@ -84,7 +77,6 @@ func NewEditor() *Editor {
 		ComponentNamesVisible: true,
 	}
 	e.Grid.IEditor = e
-	e.EntityTree.IEditor = e
 	e.MapViewGrid.Current = &e.Edit.MapView
 	return e
 }
@@ -243,7 +235,7 @@ func (e *Editor) Load(filename string) {
 	e.SelectObjects([]any{}, true)
 	editor.ResizeRenderer(640, 360)
 	e.Grid.Refresh(e.SelectedObjects)
-	//e.EntityTree.Update()
+	e.EntityList.Update()
 }
 
 func (e *Editor) Test() {
@@ -258,11 +250,11 @@ func (e *Editor) Test() {
 	e.DB.Clear()
 	controllers.CreateTestWorld2(e.DB)
 	e.DB.Simulation.Integrate = e.Integrate
-	e.DB.Simulation.Render = e.GWindow.QueueDraw
+	e.DB.Simulation.Render = e.GameWidget.Draw
 
-	e.ResizeRenderer(e.GGameArea.GetAllocatedWidth(), e.GGameArea.GetAllocatedHeight())
+	e.ResizeRenderer(640, 360)
 	e.Grid.Refresh(e.SelectedObjects)
-	e.EntityTree.Update()
+	e.EntityList.Update()
 }
 
 func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
@@ -279,7 +271,7 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	}
 	if refreshProperties {
 		e.Grid.Refresh(e.SelectedObjects)
-		//e.EntityTree.Update()
+		e.EntityList.Update()
 	}
 	e.SetMapCursor(desktop.DefaultCursor)
 	e.CurrentAction = nil
@@ -316,24 +308,22 @@ func (e *Editor) ActTool() {
 	}
 	if e.CurrentAction.RequiresLock() {
 		e.Lock.Lock()
-	}
-	e.CurrentAction.Act()
-	if e.CurrentAction.RequiresLock() {
+		e.CurrentAction.Act()
 		e.Lock.Unlock()
+	} else {
+		e.CurrentAction.Act()
 	}
 }
 
 func (e *Editor) SwitchTool(tool state.EditorTool) {
 	e.Tool = tool
 	if e.CurrentAction != nil {
-		locked := false
 		if e.CurrentAction.RequiresLock() {
 			e.Lock.Lock()
-			locked = true
-		}
-		e.CurrentAction.Cancel()
-		if locked {
+			e.CurrentAction.Cancel()
 			e.Lock.Unlock()
+		} else {
+			e.CurrentAction.Cancel()
 		}
 	} else {
 		e.ActTool()
@@ -389,7 +379,7 @@ func (e *Editor) SelectObjects(objects []any, updateTree bool) {
 	e.SelectedObjects = objects
 	e.Grid.Refresh(e.SelectedObjects)
 	if updateTree {
-		e.EntityTree.SetSelection(objects)
+		//e.EntityTree.SetSelection(objects)
 	}
 }
 
@@ -464,12 +454,6 @@ func (e *Editor) ResizeRenderer(w, h int) {
 	e.Renderer.Initialize()
 }
 
-func (e *Editor) AddSimpleMenuAction(name string, cb func(obj *glib.Object)) {
-	action := glib.SimpleActionNew(name, nil)
-	action.Connect("activate", func(sa *glib.SimpleAction) { cb(sa.Object) })
-	e.GApp.AddAction(action)
-}
-
 func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
 	action := &actions.MoveSurface{IEditor: e, Delta: delta, Floor: floor, Slope: slope}
 	e.NewAction(action)
@@ -481,4 +465,24 @@ func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
 func (e *Editor) Alert(text string) {
 	dlg := dialog.NewInformation("Foom Editor", text, e.Window)
 	dlg.Show()
+}
+
+func (e *Editor) SetDialogLocation(dlg *dialog.FileDialog, target string) {
+	if target == "" {
+		target, _ = os.Getwd()
+	}
+	dlg.SetFileName(target)
+	absPath, err := filepath.Abs(target)
+	if err != nil {
+		log.Printf("SetDialogLocation: error making absolute path from %v", target)
+		absPath, _ = os.Getwd()
+	}
+	dir := filepath.Dir(absPath)
+	uri := storage.NewFileURI(dir)
+	lister, err := storage.ListerForURI(uri)
+	if err != nil {
+		log.Printf("SetDialogLocation: error making lister from %v", dir)
+	} else {
+		dlg.SetLocation(lister)
+	}
 }

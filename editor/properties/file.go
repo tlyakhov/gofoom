@@ -1,6 +1,10 @@
 package properties
 
 import (
+	"fmt"
+	"log"
+	"os"
+	"path/filepath"
 	"reflect"
 
 	"tlyakhov/gofoom/editor/actions"
@@ -9,6 +13,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
@@ -24,16 +29,41 @@ func (g *Grid) fieldFile(field *state.PropertyGridField) {
 
 	entry := widget.NewEntry()
 	entry.SetText(origValue)
-	entry.OnChanged = func(s string) {
+	entry.OnSubmitted = func(s string) {
 		g.setFieldFile(entry, field)
 	}
 
 	button := widget.NewButtonWithIcon("...", theme.FolderOpenIcon(), func() {
 		dlg := dialog.NewFileOpen(func(uc fyne.URIReadCloser, err error) {
+			if err != nil {
+				g.Alert(fmt.Sprintf("Error loading file: %v", err))
+				return
+			}
+			if uc == nil {
+				return
+			}
 			entry.SetText(uc.URI().Path())
 			g.setFieldFile(entry, field)
 		}, g.GridWindow)
-		dlg.SetFileName(entry.Text)
+		g.SetDialogLocation(dlg, entry.Text)
+
+		if entry.Text != "" {
+			dlg.SetFileName(entry.Text)
+			absPath, err := filepath.Abs(entry.Text)
+			if err != nil {
+				log.Printf("Load file: error making absolute path from %v", entry.Text)
+				absPath, _ = os.Getwd()
+			}
+			dir := filepath.Dir(absPath)
+			uri := storage.NewFileURI(dir)
+			lister, err := storage.ListerForURI(uri)
+			if err != nil {
+				log.Printf("Load file: error making lister from %v", dir)
+			} else {
+				dlg.SetLocation(lister)
+			}
+		}
+		dlg.Resize(fyne.NewSize(1000, 700))
 		dlg.SetConfirmText("Load file")
 		dlg.SetDismissText("Cancel")
 		dlg.Show()

@@ -23,7 +23,7 @@ type EntityComponentDB struct {
 	Components       [][]Attachable
 	EntityComponents [][]Attachable
 	usedEntities     bitmap.Bitmap
-	lock             sync.RWMutex
+	Lock             sync.RWMutex
 }
 
 func NewEntityComponentDB() *EntityComponentDB {
@@ -253,8 +253,8 @@ func (db *EntityComponentDB) DeserializeEntity(jsonEntity map[string]any) {
 	}
 }
 func (db *EntityComponentDB) Load(filename string) error {
-	db.lock.Lock()
-	defer db.lock.Unlock()
+	db.Lock.Lock()
+	defer db.Lock.Unlock()
 
 	// TODO: Streaming loads?
 	fileContents, err := os.ReadFile(filename)
@@ -305,8 +305,8 @@ func (db *EntityComponentDB) SerializeEntity(entity uint64) map[string]any {
 }
 
 func (db *EntityComponentDB) Save(filename string) {
-	db.lock.Lock()
-	defer db.lock.Unlock()
+	db.Lock.Lock()
+	defer db.Lock.Unlock()
 	jsonDB := make([]any, 0)
 
 	sortedEntities := make([]uint64, 0)

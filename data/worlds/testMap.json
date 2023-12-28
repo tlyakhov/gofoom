@@ -49,30 +49,42 @@
       "Active": true,
       "Bodies": [],
       "BottomZ": 0,
-      "CeilMaterial": "3",
+      "CeilSurface": {
+        "Material": "3"
+      },
       "CeilScale": 64,
       "Entity": "4",
       "FloorFriction": 0.85,
-      "FloorMaterial": "3",
+      "FloorSurface": {
+        "Material": "3"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "MidMaterial": "2",
+          "Mid": {
+            "Material": "2"
+          },
           "X": -300,
           "Y": -300
         },
         {
-          "MidMaterial": "2",
+          "Mid": {
+            "Material": "2"
+          },
           "X": 300,
           "Y": -300
         },
         {
-          "MidMaterial": "2",
+          "Mid": {
+            "Material": "2"
+          },
           "X": 300,
           "Y": 300
         },
         {
-          "MidMaterial": "2",
+          "Mid": {
+            "Material": "2"
+          },
           "X": -300,
           "Y": 300
         }

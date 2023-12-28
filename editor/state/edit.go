@@ -5,6 +5,7 @@ import (
 	"sync"
 	"tlyakhov/gofoom/concepts"
 
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
@@ -63,6 +64,7 @@ type IEditor interface {
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)
+	SetDialogLocation(dlg *dialog.FileDialog, target string)
 }
 
 func IndexOf(s []any, obj any) int {

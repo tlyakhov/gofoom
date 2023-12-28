@@ -189,7 +189,14 @@ func (g *Grid) AddEntityControls(selection []any) {
 		optsIndex := selectComponent.SelectedIndex()
 		action := &actions.AddComponent{IEditor: g.IEditor, Index: optsIndices[optsIndex], Entities: entities}
 		g.NewAction(action)
-		action.Act()
+		if action.RequiresLock() {
+			g.State().Lock.Lock()
+			action.Act()
+			g.State().Lock.Unlock()
+		} else {
+			action.Act()
+		}
+
 	})
 	g.FContainer.Add(container.NewBorder(nil, nil, nil, button, selectComponent))
 }

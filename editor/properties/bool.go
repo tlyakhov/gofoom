@@ -20,7 +20,13 @@ func (g *Grid) fieldBool(field *state.PropertyGridField) {
 	cb.OnChanged = func(active bool) {
 		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(active)}
 		g.NewAction(action)
-		action.Act()
+		if action.RequiresLock() {
+			g.State().Lock.Lock()
+			action.Act()
+			g.State().Lock.Unlock()
+		} else {
+			action.Act()
+		}
 		origValue = active
 		g.Focus(g.FContainer)
 	}

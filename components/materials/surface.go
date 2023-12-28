@@ -9,6 +9,9 @@ import (
 
 ["](Floor|Ceil|Mid|Lo|Hi)Material["][:] (["]\d+["])
 "$1Surface": { "Material": $2 }
+
+["](Mid|Lo|Hi)Surface["]
+"$1"
 */
 type SurfaceScale int
 

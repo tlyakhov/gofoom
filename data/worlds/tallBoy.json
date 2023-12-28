@@ -56,39 +56,67 @@
         "4"
       ],
       "BottomZ": 0,
-      "CeilMaterial": "2",
+      "CeilSurface": {
+        "Material": "2"
+      },
       "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorSurface": {
+        "Material": "2"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -320,
           "Y": -100
         },
         {
           "AdjacentSector": "5",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": -100
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 100
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": -320,
           "Y": 100
         }
@@ -145,53 +173,93 @@
       "Active": true,
       "Bodies": [],
       "BottomZ": -60,
-      "CeilMaterial": "2",
+      "CeilSurface": {
+        "Material": "2"
+      },
       "CeilScale": 64,
       "Entity": "5",
       "FloorFriction": 0.85,
-      "FloorMaterial": "2",
+      "FloorSurface": {
+        "Material": "2"
+      },
       "FloorScale": 64,
       "Segments": [
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": -100
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": -260
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 190,
           "Y": -260
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 190,
           "Y": 170
         },
         {
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 170
         },
         {
           "AdjacentSector": "3",
-          "HiMaterial": "2",
-          "LoMaterial": "2",
-          "MidMaterial": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Mid": {
+            "Material": "2"
+          },
           "X": 100,
           "Y": 100
         }
