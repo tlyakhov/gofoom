@@ -36,8 +36,9 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		}
 		g.NewAction(action)
 		action.Act()
-		g.Focus(g.FContainer)
+		g.Focus(g.GridWidget)
 
 	})
-	g.FContainer.Add(button)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, button)
+
 }

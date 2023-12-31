@@ -167,5 +167,3 @@ func (a *SplitSector) Redo() {
 	}
 
 }
-
-func (a *SplitSector) RequiresLock() bool { return true }

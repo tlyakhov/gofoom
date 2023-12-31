@@ -118,7 +118,13 @@ func (g *GameWidget) FocusLost()       {}
 func (g *GameWidget) FocusGained()     {}
 func (g *GameWidget) TypedRune(r rune) {}
 func (g *GameWidget) TypedKey(evt *fyne.KeyEvent) {
+	for _, action := range editor.MenuActions {
+		if action.NoModifier && evt.Name == action.Shortcut.KeyName {
+			action.Menu.Action()
+		}
+	}
 }
+
 func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 	g.requestFocus()
 

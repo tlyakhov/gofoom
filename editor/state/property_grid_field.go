@@ -34,7 +34,7 @@ type PropertyGridField struct {
 func (f *PropertyGridField) Short() string {
 	result := f.Name
 	reduced := false
-	for len(result) > 60 {
+	for len(result) > 40 {
 		reduced = true
 		split := strings.Split(result, ".")
 		if len(split) == 1 {

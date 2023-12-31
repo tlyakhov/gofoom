@@ -63,7 +63,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 			switch selected := obj.(type) {
 			case *concepts.EntityRef:
 				if s2 := core.SectorFromDb(selected); s2 != nil && sector != s2 {
-					if s2.PVSBody[sector.Entity] != nil {
+					if s2.PVS[sector.Entity] != nil {
 						mw.Context.SetRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
 					}
 				}

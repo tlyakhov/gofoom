@@ -52,5 +52,5 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 		action.Act()
 		origValue = text
 	}
-	g.FContainer.Add(entry)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, entry)
 }

@@ -32,7 +32,7 @@ type PropertyGridState struct {
 
 type Grid struct {
 	state.IEditor
-	FContainer *fyne.Container
+	GridWidget *fyne.Container
 	GridWindow fyne.Window
 }
 
@@ -170,7 +170,7 @@ func (g *Grid) AddEntityControls(selection []any) {
 	label.TextStyle.Bold = true
 	//label.SetTooltipText(entityList)
 	label.Alignment = fyne.TextAlignLeading
-	g.FContainer.Add(label)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, label)
 
 	opts := make([]string, 0)
 	optsIndices := make([]int, 0)
@@ -189,20 +189,14 @@ func (g *Grid) AddEntityControls(selection []any) {
 		optsIndex := selectComponent.SelectedIndex()
 		action := &actions.AddComponent{IEditor: g.IEditor, Index: optsIndices[optsIndex], Entities: entities}
 		g.NewAction(action)
-		if action.RequiresLock() {
-			g.State().Lock.Lock()
-			action.Act()
-			g.State().Lock.Unlock()
-		} else {
-			action.Act()
-		}
+		action.Act()
 
 	})
-	g.FContainer.Add(container.NewBorder(nil, nil, nil, button, selectComponent))
+	g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewBorder(nil, nil, nil, button, selectComponent))
 }
 
 func (g *Grid) Refresh(selection []any) {
-	g.FContainer.RemoveAll()
+	g.GridWidget.Objects = nil
 
 	state := g.fieldsFromSelection(selection)
 
@@ -227,7 +221,7 @@ func (g *Grid) Refresh(selection []any) {
 		label := widget.NewLabel(field.Short())
 		//label.SetTooltipText(field.Name)
 		label.Alignment = fyne.TextAlignLeading
-		g.FContainer.Add(label)
+		g.GridWidget.Objects = append(g.GridWidget.Objects, label)
 
 		if field.EditType == "Component" {
 			g.fieldComponent(field)
@@ -272,7 +266,7 @@ func (g *Grid) Refresh(selection []any) {
 		case *[]materials.ShaderStage:
 			g.fieldSlice(field)
 		default:
-			g.FContainer.Add(widget.NewLabel("Unavailable"))
+			g.GridWidget.Add(widget.NewLabel("Unavailable"))
 		}
 	}
 }

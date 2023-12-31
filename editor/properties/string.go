@@ -7,6 +7,7 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -36,12 +37,15 @@ func (g *Grid) fieldString(field *state.PropertyGridField) {
 	}
 
 	if exp, ok := field.Parent.(*core.Script); ok {
+		label := widget.NewLabel("Compiled successfully")
 		if exp.ErrorMessage != "" {
-			//entry.SetTooltipText(exp.ErrorMessage)
+			label.Text = exp.ErrorMessage
+			label.Importance = widget.DangerImportance
 		} else {
-			//entry.SetTooltipText("Success")
+			label.Importance = widget.SuccessImportance
 		}
+		g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewVBox(entry, label))
+	} else {
+		g.GridWidget.Objects = append(g.GridWidget.Objects, entry)
 	}
-
-	g.FContainer.Add(entry)
 }

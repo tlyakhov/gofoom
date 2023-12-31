@@ -36,7 +36,6 @@ type Sector struct {
 	FloorLightmap, CeilLightmap       []concepts.Vector3
 	FloorLightmapAge, CeilLightmapAge []int
 	PVS                               map[uint64]*Sector
-	PVSBody                           map[uint64]*Sector
 	PVL                               map[uint64]*concepts.EntityRef
 }
 

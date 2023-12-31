@@ -123,6 +123,11 @@ func (mw *MapWidget) FocusLost()       {}
 func (mw *MapWidget) FocusGained()     {}
 func (mw *MapWidget) TypedRune(r rune) {}
 func (mw *MapWidget) TypedKey(evt *fyne.KeyEvent) {
+	for _, action := range editor.MenuActions {
+		if action.NoModifier && evt.Name == action.Shortcut.KeyName {
+			action.Menu.Action()
+		}
+	}
 }
 func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 	mw.requestFocus()
@@ -140,9 +145,7 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 	}
 
 	if editor.CurrentAction != nil {
-		editor.Lock.Lock()
 		editor.CurrentAction.OnMouseDown(evt)
-		editor.Lock.Unlock()
 	}
 	mw.NeedsRefresh = true
 }
@@ -150,9 +153,7 @@ func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	editor.MousePressed = false
 
 	if editor.CurrentAction != nil {
-		editor.Lock.Lock()
 		editor.CurrentAction.OnMouseUp()
-		editor.Lock.Unlock()
 	}
 	mw.NeedsRefresh = true
 }
@@ -208,13 +209,7 @@ func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
 	editor.UpdateStatus()
 
 	if editor.CurrentAction != nil {
-		if editor.CurrentAction.RequiresLock() {
-			editor.Lock.Lock()
-			editor.CurrentAction.OnMouseMove()
-			editor.Lock.Unlock()
-		} else {
-			editor.CurrentAction.OnMouseMove()
-		}
+		editor.CurrentAction.OnMouseMove()
 		mw.NeedsRefresh = true
 	}
 }

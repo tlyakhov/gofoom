@@ -7,7 +7,6 @@ require (
 	github.com/dmarkham/enumer v1.5.9
 	github.com/faiface/pixel v0.10.0
 	github.com/fogleman/gg v1.3.0
-	github.com/gotk3/gotk3 v0.6.2
 	github.com/kelindar/bitmap v1.5.2
 	github.com/klauspost/cpuid/v2 v2.2.6
 	github.com/lithammer/fuzzysearch v1.1.8

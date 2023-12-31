@@ -68,5 +68,5 @@ func (g *Grid) fieldFile(field *state.PropertyGridField) {
 		dlg.SetDismissText("Cancel")
 		dlg.Show()
 	})
-	g.FContainer.Add(container.NewBorder(nil, nil, nil, button, entry))
+	g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewBorder(nil, nil, nil, button, entry))
 }

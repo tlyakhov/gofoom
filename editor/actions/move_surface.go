@@ -40,6 +40,8 @@ func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 }
 
 func (a *MoveSurface) Act() {
+	a.State().Lock.Lock()
+
 	a.Original = make([]float64, len(a.State().SelectedObjects))
 	for i, obj := range a.State().SelectedObjects {
 		switch target := obj.(type) {
@@ -61,10 +63,14 @@ func (a *MoveSurface) Act() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 	a.State().Modified = true
+	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, false)
 }
 
 func (a *MoveSurface) Undo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	for i, obj := range a.State().SelectedObjects {
 		switch target := obj.(type) {
 		case *concepts.EntityRef:
@@ -82,6 +88,9 @@ func (a *MoveSurface) Undo() {
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 func (a *MoveSurface) Redo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	for _, obj := range a.State().SelectedObjects {
 		switch target := obj.(type) {
 		case *concepts.EntityRef:
@@ -98,5 +107,3 @@ func (a *MoveSurface) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
-
-func (a *MoveSurface) RequiresLock() bool { return true }

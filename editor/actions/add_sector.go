@@ -21,6 +21,8 @@ func (a *AddSector) Act() {
 }
 
 func (a *AddSector) OnMouseDown(evt *desktop.MouseEvent) {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
 	a.Mode = "AddSectorSegment"
 
 	seg := core.Segment{}
@@ -60,13 +62,13 @@ func (a *AddSector) OnMouseUp() {
 		first := segs[0]
 		last := segs[len(segs)-1]
 		if last.P.Sub(&first.P).Length() < state.SegmentSelectionEpsilon {
+			a.State().Lock.Lock()
 			a.Sector.Segments = segs[:(len(segs) - 1)]
 			a.State().Modified = true
 			a.Sector.Recalculate()
+			a.State().Lock.Unlock()
 			a.ActionFinished(false, true, true)
 		}
 	}
 	// TODO: right-mouse button end
 }
-
-func (a *AddSector) RequiresLock() bool { return true }

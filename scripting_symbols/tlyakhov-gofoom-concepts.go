@@ -82,6 +82,7 @@ func init() {
 		"V2":                           reflect.ValueOf(concepts.V2),
 		"V3":                           reflect.ValueOf(concepts.V3),
 		"V4":                           reflect.ValueOf(concepts.V4),
+		"Vector2AABBIntersect":         reflect.ValueOf(concepts.Vector2AABBIntersect),
 
 		// type definitions
 		"Animated":          reflect.ValueOf((*concepts.Animated)(nil)),

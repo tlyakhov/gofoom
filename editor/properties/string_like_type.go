@@ -49,7 +49,7 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 		if err != nil {
 			log.Printf("Couldn't parse %v from user entry. %v\n", reflect.TypeOf(typedValue).Name(), err)
 			entry.SetText(origValue)
-			g.Focus(g.FContainer)
+			g.Focus(g.GridWidget)
 			return
 		}
 		currentValue := parsed.(T)
@@ -61,7 +61,7 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 		g.NewAction(action)
 		action.Act()
 		origValue = currentValue.String()
-		g.Focus(g.FContainer)
+		g.Focus(g.GridWidget)
 	}
 
 	cb := widget.NewCheck("Tweak", nil)
@@ -86,5 +86,5 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 		}
 
 	}
-	g.FContainer.Add(container.NewBorder(nil, nil, nil, cb, entry))
+	g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewBorder(nil, nil, nil, cb, entry))
 }

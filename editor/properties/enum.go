@@ -42,5 +42,5 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		action.Act()
 	}
 
-	g.FContainer.Add(selectEntry)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, selectEntry)
 }
