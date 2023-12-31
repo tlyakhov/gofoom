@@ -22,6 +22,7 @@ func (a *Move) Iterate(arr []any,
 	sectorFunc func(*core.Sector),
 	segmentFunc func(*core.Segment)) {
 	for _, obj := range arr {
+		a.State().Lock.Lock()
 		switch target := obj.(type) {
 		case *concepts.EntityRef:
 			if body := core.BodyFromDb(target); body != nil {
@@ -34,6 +35,7 @@ func (a *Move) Iterate(arr []any,
 		case *core.Segment:
 			segmentFunc(target)
 		}
+		a.State().Lock.Unlock()
 	}
 }
 

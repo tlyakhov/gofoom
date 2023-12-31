@@ -66,7 +66,7 @@ func main() {
 	})
 
 	editor.PropertyGrid = container.New(layout.NewFormLayout())
-	editor.FContainer = editor.PropertyGrid
+	editor.GridWidget = editor.PropertyGrid
 	editor.GridWindow = editor.Window
 
 	editor.EntityList.IEditor = editor

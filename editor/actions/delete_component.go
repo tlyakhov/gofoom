@@ -41,6 +41,9 @@ func (a *DeleteComponent) Undo() {
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 func (a *DeleteComponent) Redo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	for _, component := range a.Components {
 		// TODO: Save material references
 		switch target := component.(type) {
@@ -55,5 +58,3 @@ func (a *DeleteComponent) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
-
-func (a *DeleteComponent) RequiresLock() bool { return true }

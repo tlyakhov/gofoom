@@ -47,6 +47,9 @@ func (a *AddBody) AttachToSector() {
 func (a *AddBody) OnMouseDown(evt *desktop.MouseEvent) {}
 
 func (a *AddBody) OnMouseMove() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
 	for _, isector := range a.State().DB.All(core.SectorComponentIndex) {
@@ -81,21 +84,28 @@ func (a *AddBody) Act() {
 	a.SelectObjects([]any{a.EntityRef}, true)
 }
 func (a *AddBody) Cancel() {
+	a.State().Lock.Lock()
 	a.DetachFromSector()
 	if a.EntityRef != nil {
 		a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
 	}
+	a.State().Lock.Unlock()
 	a.SelectObjects(nil, true)
 	a.ActionFinished(true, true, false)
 }
 func (a *AddBody) Undo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	a.DetachFromSector()
 	a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
 }
 func (a *AddBody) Redo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	a.AttachToSector()
 	a.AttachAll()
 }
 
-func (a *AddBody) Frame()             {}
-func (a *AddBody) RequiresLock() bool { return true }
+func (a *AddBody) Frame() {}

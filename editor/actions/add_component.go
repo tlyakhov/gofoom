@@ -27,16 +27,18 @@ func (a *AddComponent) OnMouseMove()                        {}
 func (a *AddComponent) OnMouseUp()                          {}
 
 func (a *AddComponent) Undo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
 		a.State().DB.Detach(a.Index, entity)
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 func (a *AddComponent) Redo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
 		a.State().DB.NewComponent(entity, a.Index)
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
-
-func (a *AddComponent) RequiresLock() bool { return true }

@@ -61,10 +61,7 @@ func (g *Grid) imageForRef(ref *concepts.EntityRef) image.Image {
 func (g *Grid) updateTreeNodeEntityRef(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
 	entity, _ := strconv.ParseUint(tni, 10, 64)
 	ref := g.State().DB.EntityRef(entity)
-	name := string(tni)
-	if named := concepts.NamedFromDb(ref); named != nil {
-		name += " - " + named.Name
-	}
+	name := ref.NameString()
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
 	img.ScaleMode = canvas.ImageScaleSmooth
@@ -118,8 +115,10 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 			widget.NewButtonWithIcon("", theme.MoreHorizontalIcon(), nil),
 		)
 	}, g.updateTreeNodeEntityRef)
+	title := "Select " + editTypeTag
 	if !origValue.Nil() {
 		tree.Select(strconv.FormatUint(origValue.Entity, 10))
+		title = editTypeTag + ": " + origValue.NameString()
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
 		entity, _ := strconv.ParseUint(tni, 10, 64)
@@ -132,7 +131,8 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 		action.Act()
 	}
 	c := container.New(&entityRefLayout{Child: layout.NewStackLayout()}, tree)
-	aitem := widget.NewAccordionItem("Select "+editTypeTag, c)
+	aitem := widget.NewAccordionItem(title, c)
 	accordion := widget.NewAccordion(aitem)
-	g.FContainer.Add(accordion)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, accordion)
+
 }

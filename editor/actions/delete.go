@@ -51,6 +51,9 @@ func (a *Delete) OnMouseMove()                        {}
 func (a *Delete) OnMouseUp()                          {}
 
 func (a *Delete) Undo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	for entity, saved := range a.Saved {
 		a.State().DB.DetachAll(entity)
 		a.State().DB.DeserializeEntity(saved.(map[string]any))
@@ -59,6 +62,9 @@ func (a *Delete) Undo() {
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 func (a *Delete) Redo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	for _, obj := range a.Selected {
 		switch target := obj.(type) {
 		case *core.Segment:
@@ -86,5 +92,3 @@ func (a *Delete) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
-
-func (a *Delete) RequiresLock() bool { return true }

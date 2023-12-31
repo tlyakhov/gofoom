@@ -16,6 +16,7 @@ func init() {
 		"BodyComponentIndex":       reflect.ValueOf(&core.BodyComponentIndex).Elem(),
 		"BodyFromDb":               reflect.ValueOf(core.BodyFromDb),
 		"BodyShadowAABB":           reflect.ValueOf(core.BodyShadowAABB),
+		"BodyShadowNone":           reflect.ValueOf(core.BodyShadowNone),
 		"BodyShadowSphere":         reflect.ValueOf(core.BodyShadowSphere),
 		"BodyShadowString":         reflect.ValueOf(core.BodyShadowString),
 		"BodyShadowStrings":        reflect.ValueOf(core.BodyShadowStrings),

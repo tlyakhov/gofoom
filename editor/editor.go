@@ -28,6 +28,11 @@ import (
 	"tlyakhov/gofoom/controllers"
 )
 
+type MenuAction struct {
+	Shortcut   *desktop.CustomShortcut
+	Menu       *fyne.MenuItem
+	NoModifier bool
+}
 type EditorWidgets struct {
 	App          fyne.App
 	Window       fyne.Window
@@ -35,6 +40,31 @@ type EditorWidgets struct {
 	PropertyGrid *fyne.Container
 	GameWidget   *GameWidget
 	MapWidget    *MapWidget
+
+	ActionFileOpen   MenuAction
+	ActionFileSaveAs MenuAction
+	ActionFileSave   MenuAction
+	ActionFileQuit   MenuAction
+
+	ActionEditUndo   MenuAction
+	ActionEditRedo   MenuAction
+	ActionEditDelete MenuAction
+
+	ActionEditToolSelect      MenuAction
+	ActionEditSelectSegment   MenuAction
+	ActionEditRaiseCeil       MenuAction
+	ActionEditLowerCeil       MenuAction
+	ActionEditRaiseFloor      MenuAction
+	ActionEditLowerFloor      MenuAction
+	ActionEditRaiseCeilSlope  MenuAction
+	ActionEditLowerCeilSlope  MenuAction
+	ActionEditRaiseFloorSlope MenuAction
+	ActionEditLowerFloorSlope MenuAction
+	ActionEditRotateAnchor    MenuAction
+	ActionEditIncreaseGrid    MenuAction
+	ActionEditDecreaseGrid    MenuAction
+
+	MenuActions map[string]*MenuAction
 }
 
 type Editor struct {
@@ -205,7 +235,6 @@ func (e *Editor) Integrate() {
 }
 
 func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
-	e.Lock.Lock()
 	for _, t := range e.State().SelectedTransformables {
 		switch target := t.(type) {
 		case *concepts.Vector2:
@@ -214,7 +243,6 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 			target.MulSelf(m)
 		}
 	}
-	e.Lock.Unlock()
 }
 
 func (e *Editor) Load(filename string) {
@@ -260,7 +288,9 @@ func (e *Editor) Test() {
 func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	e.UpdateTitle()
 	if autoPortal {
+		e.Lock.Lock()
 		controllers.AutoPortal(e.DB)
+		e.Lock.Unlock()
 	}
 	if !canceled {
 		e.UndoHistory = append(e.UndoHistory, e.CurrentAction)
@@ -306,25 +336,14 @@ func (e *Editor) ActTool() {
 	default:
 		return
 	}
-	if e.CurrentAction.RequiresLock() {
-		e.Lock.Lock()
-		e.CurrentAction.Act()
-		e.Lock.Unlock()
-	} else {
-		e.CurrentAction.Act()
-	}
+
+	e.CurrentAction.Act()
 }
 
 func (e *Editor) SwitchTool(tool state.EditorTool) {
 	e.Tool = tool
 	if e.CurrentAction != nil {
-		if e.CurrentAction.RequiresLock() {
-			e.Lock.Lock()
-			e.CurrentAction.Cancel()
-			e.Lock.Unlock()
-		} else {
-			e.CurrentAction.Cancel()
-		}
+		e.CurrentAction.Cancel()
 	} else {
 		e.ActTool()
 	}
@@ -435,6 +454,9 @@ func (e *Editor) GatherHoveringObjects() {
 		if e.Selecting() {
 			for _, ibody := range sector.Bodies {
 				body := core.BodyFromDb(ibody)
+				if body == nil {
+					continue
+				}
 				p := body.Pos.Now
 				if p[0]+body.BoundingRadius >= v1[0] && p[0]-body.BoundingRadius <= v2[0] &&
 					p[1]+body.BoundingRadius >= v1[1] && p[1]-body.BoundingRadius <= v2[1] {
@@ -457,9 +479,7 @@ func (e *Editor) ResizeRenderer(w, h int) {
 func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
 	action := &actions.MoveSurface{IEditor: e, Delta: delta, Floor: floor, Slope: slope}
 	e.NewAction(action)
-	e.Lock.Lock()
 	action.Act()
-	e.Lock.Unlock()
 }
 
 func (e *Editor) Alert(text string) {
@@ -484,5 +504,20 @@ func (e *Editor) SetDialogLocation(dlg *dialog.FileDialog, target string) {
 		log.Printf("SetDialogLocation: error making lister from %v", dir)
 	} else {
 		dlg.SetLocation(lister)
+	}
+}
+
+func (e *Editor) ToolSelectSegment() {
+	for _, s := range editor.SelectedObjects {
+		switch target := s.(type) {
+		case *concepts.EntityRef:
+			if sector := core.SectorFromDb(target); sector != nil {
+				editor.SelectObjects([]any{sector.Segments[0]}, true)
+				break
+			}
+		case *core.Segment:
+			editor.SelectObjects([]any{target.Next}, true)
+			break
+		}
 	}
 }

@@ -66,7 +66,7 @@ func (wc *WorldController) Always() {
 		if !body.Active || body.SectorEntityRef.Nil() {
 			continue
 		}
-		for _, pvs := range body.Sector().PVSBody {
+		for _, pvs := range body.Sector().PVS {
 			wc.proximity(pvs, body, set)
 		}
 	}

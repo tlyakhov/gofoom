@@ -28,12 +28,17 @@ func (a *AddSliceElement) OnMouseMove()                        {}
 func (a *AddSliceElement) OnMouseUp()                          {}
 
 func (a *AddSliceElement) Undo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
 	if a.SlicePtr.Elem().Len() > 0 {
 		a.SlicePtr.Elem().Slice(0, a.SlicePtr.Len()-1)
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
 func (a *AddSliceElement) Redo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
 	// SlicePtr is something like: *[]<some type>
 	sliceElem := a.SlicePtr.Elem()
 	s := reflect.Append(sliceElem, reflect.Zero(sliceElem.Type().Elem()))
@@ -48,5 +53,3 @@ func (a *AddSliceElement) Redo() {
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
-
-func (a *AddSliceElement) RequiresLock() bool { return true }

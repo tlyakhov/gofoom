@@ -33,7 +33,7 @@ func init() {
 }
 
 func (a *Attached) String() string {
-	return a.EntityRef.String()
+	return "Attached"
 }
 
 func (a *Attached) Ref() *EntityRef {

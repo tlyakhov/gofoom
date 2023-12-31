@@ -1,7 +1,6 @@
 package concepts
 
 import (
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -50,18 +49,20 @@ func (er *EntityRef) String() string {
 			sb.WriteString("|")
 		}
 		first = false
-		t := reflect.TypeOf(c).Elem().String()
+		sb.WriteString(c.String())
+		/*t := reflect.TypeOf(c).Elem().String()
 		split := strings.Split(t, ".")
-		sb.WriteString(split[len(split)-1])
+		sb.WriteString(split[len(split)-1])*/
 	}
 	return sb.String()
 }
 
 func (er *EntityRef) NameString() string {
+	entity := strconv.FormatUint(er.Entity, 10)
 	if named := NamedFromDb(er); named != nil {
-		return named.Name
+		return entity + " - " + named.Name
 	}
-	return strconv.FormatUint(er.Entity, 10)
+	return entity
 }
 
 func (er *EntityRef) Serialize() string {

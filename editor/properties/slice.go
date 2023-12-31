@@ -17,7 +17,7 @@ func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 		action := &actions.AddSliceElement{IEditor: g.IEditor, SlicePtr: field.Values[0], Parent: field.Parent}
 		g.NewAction(action)
 		action.Act()
-		g.Focus(g.FContainer)
+		g.Focus(g.GridWidget)
 	})
-	g.FContainer.Add(button)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, button)
 }
