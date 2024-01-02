@@ -8,7 +8,7 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-func BodySectorScript(scripts []core.Script, ibody, isector *concepts.EntityRef) {
+func BodySectorScript(scripts []*core.Script, ibody, isector *concepts.EntityRef) {
 	for _, script := range scripts {
 		script.Vars["body"] = ibody
 		script.Vars["sector"] = isector

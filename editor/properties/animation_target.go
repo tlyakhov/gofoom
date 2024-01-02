@@ -1,0 +1,56 @@
+package properties
+
+import (
+	"log"
+	"reflect"
+	"tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/state"
+
+	"fyne.io/fyne/v2/widget"
+)
+
+func (g *Grid) fieldAnimationTarget(field *state.PropertyGridField) {
+	origValue := field.Values[0].Elem()
+	log.Printf("%v", origValue.String())
+	opts := make([]string, 0)
+	optsValues := make([]reflect.Value, 0)
+	selectedIndex := -1
+
+	// **concepts.SimVariable[float64] -> concepts.SimVariable[float64]
+	searchType := field.Type.Elem().Elem()
+	for _, component := range field.Ref.All() {
+		if component == nil {
+			continue
+		}
+		vComponent := reflect.ValueOf(component).Elem()
+		for i := 0; i < vComponent.NumField(); i++ {
+			target := vComponent.Field(i)
+			name := reflect.TypeOf(component).Elem().Field(i).Name
+			//			log.Printf("%v - %v (%v?)", name, target.Type().String(), field.Type.Elem().String())
+			if target.Type() != searchType {
+				continue
+			}
+			opts = append(opts, reflect.TypeOf(component).Elem().Name()+"."+name)
+			optsValues = append(optsValues, target.Addr())
+			if origValue.Interface() == target.Addr().Interface() {
+				selectedIndex = len(optsValues) - 1
+			}
+		}
+	}
+
+	selectEntry := widget.NewSelect(opts, nil)
+	if selectedIndex >= 0 {
+		selectEntry.SetSelectedIndex(selectedIndex)
+	}
+	selectEntry.OnChanged = func(opt string) {
+		action := &actions.SetProperty{
+			IEditor:           g.IEditor,
+			PropertyGridField: field,
+			ToSet:             optsValues[selectEntry.SelectedIndex()],
+		}
+		g.NewAction(action)
+		action.Act()
+	}
+
+	g.GridWidget.Objects = append(g.GridWidget.Objects, selectEntry)
+}

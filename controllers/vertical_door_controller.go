@@ -35,7 +35,8 @@ func (vd *VerticalDoorController) setupAnimation() {
 	}
 	name := "vd_" + strconv.FormatUint(vd.TargetEntity.Entity, 10)
 	vd.Animation = new(concepts.Animation[float64])
-	vd.Animation.Construct(vd.Simulation)
+	vd.Animation.SetDB(vd.DB)
+	vd.Animation.Construct(nil)
 	vd.Animation.Name = name
 	vd.Animation.Target = &vd.Sector.TopZ
 	vd.Animation.Start = vd.Sector.TopZ.Original
@@ -43,7 +44,7 @@ func (vd *VerticalDoorController) setupAnimation() {
 	vd.Animation.Duration = 1000
 	vd.Animation.TweeningFunc = concepts.EaseInOut
 	vd.Animation.Style = concepts.AnimationStyleHold
-	vd.Animate(name, vd.Animation)
+	vd.AttachAnimation(name, vd.Animation)
 }
 
 func (vd *VerticalDoorController) Always() {

@@ -77,8 +77,11 @@ func (e *Script) Compile() {
 	e.runFunc = f.Interface()
 }
 
-func (s *Script) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+func (s *Script) SetDB(db *concepts.EntityComponentDB) {
 	s.DB = db
+}
+
+func (s *Script) Construct(data map[string]any) {
 	s.ErrorMessage = ""
 	s.Vars = maps.Clone(concepts.DbTypes().ExprEnv)
 
@@ -137,24 +140,4 @@ func (s *Script) Act() bool {
 		s.ErrorMessage = "Error running script, 'Run' function has the wrong signature."
 		return false
 	}
-}
-
-func ConstructScripts(db *concepts.EntityComponentDB, data any) []Script {
-	var result []Script
-
-	if scripts, ok := data.([]any); ok {
-		result = make([]Script, len(scripts))
-		for i, tdata := range scripts {
-			result[i].Construct(db, tdata.(map[string]any))
-		}
-	}
-	return result
-}
-
-func SerializeScripts(scripts []Script) []map[string]any {
-	result := make([]map[string]any, len(scripts))
-	for i, script := range scripts {
-		result[i] = script.Serialize()
-	}
-	return result
 }

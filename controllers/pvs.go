@@ -30,14 +30,14 @@ func (pvs *PvsController) Target(target *concepts.EntityRef) bool {
 }
 
 func (pvs *PvsController) Recalculate() {
-	pvs.updateBodyPVS(new(concepts.Vector2), nil, nil, nil)
+	pvs.updatePVS(make([]*concepts.Vector2, 0), nil, nil, nil)
 }
 
 func (pvs *PvsController) Loaded() {
 	pvs.Recalculate()
 }
 
-func (pvs *PvsController) updateBodyPVS(normal *concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
+func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
 	if visitor == nil {
 		pvs.Sector.PVS = make(map[uint64]*core.Sector)
 		pvs.Sector.PVL = make(map[uint64]*concepts.EntityRef)
@@ -54,13 +54,18 @@ func (pvs *PvsController) updateBodyPVS(normal *concepts.Vector2, visitor *core.
 	if min == nil || max == nil {
 		min, max = &pvs.Sector.Min, &pvs.Sector.Max
 	}
+	nNormals := len(normals)
+	normals = append(normals, nil)
 
 	for _, seg := range visitor.Segments {
 		adj := seg.AdjacentSegment
 		if adj == nil {
 			continue
 		}
-		correctSide := normal.Zero() || normal.Dot(&seg.Normal) >= 0
+		correctSide := true
+		for _, normal := range normals[:nNormals] {
+			correctSide = correctSide || normal.Dot(&seg.Normal) >= 0
+		}
 		if !correctSide || pvs.Sector.PVS[adj.Sector.Entity] != nil {
 			continue
 		}
@@ -79,10 +84,7 @@ func (pvs *PvsController) updateBodyPVS(normal *concepts.Vector2, visitor *core.
 		adjsec := core.SectorFromDb(seg.AdjacentSector)
 		pvs.Sector.PVS[seg.AdjacentSector.Entity] = adjsec
 
-		if normal.Zero() {
-			pvs.updateBodyPVS(&seg.Normal, adjsec, adjmin, adjmax)
-		} else {
-			pvs.updateBodyPVS(normal, adjsec, adjmin, adjmax)
-		}
+		normals[nNormals] = &seg.Normal
+		pvs.updatePVS(normals, adjsec, adjmin, adjmax)
 	}
 }

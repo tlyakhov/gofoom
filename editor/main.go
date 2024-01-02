@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"tlyakhov/gofoom/editor/resources"
-	"tlyakhov/gofoom/editor/state"
 	_ "tlyakhov/gofoom/scripting_symbols"
 
 	"tlyakhov/gofoom/concepts"
@@ -86,22 +85,15 @@ func main() {
 
 	var item widget.ToolbarItem
 	toolbarItems := make([]widget.ToolbarItem, 0)
-	item = widget.NewToolbarAction(theme.HomeIcon(), func() {
-		editor.SwitchTool(state.ToolSelect)
-	})
+	item = widget.NewToolbarAction(theme.HomeIcon(), editor.ToolsSelect.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
-	item = widget.NewToolbarAction(resources.ResourceIconEntityAdd, func() {
-		editor.SwitchTool(state.ToolAddBody)
-	})
+	item = widget.NewToolbarAction(resources.ResourceIconEntityAdd, editor.ToolsAddBody.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
-	item = widget.NewToolbarAction(resources.ResourceIconSectorAdd, func() {
-		editor.SwitchTool(state.ToolAddSector)
-	})
+	item = widget.NewToolbarAction(resources.ResourceIconSectorAdd, editor.ToolsAddSector.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
-	item = widget.NewToolbarAction(theme.GridIcon(), func() {
-		editor.SwitchTool(state.ToolAlignGrid)
-	})
+	item = widget.NewToolbarAction(theme.GridIcon(), editor.ToolsAlignGrid.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
+
 	toolbarItems = append(toolbarItems, widget.NewToolbarSeparator())
 	item = widget.NewToolbarAction(theme.ContentCutIcon(), func() {})
 	toolbarItems = append(toolbarItems, item)
@@ -121,11 +113,11 @@ func main() {
 			}
 			if editor.Lock.TryRLock() {
 				editor.DB.Simulation.Step()
+				if editor.MapWidget.NeedsRefresh {
+					editor.MapWidget.Raster.Refresh()
+					//editor.MapWidget.NeedsRefresh = false
+				}
 				editor.Lock.RUnlock()
-			}
-			if editor.MapWidget.NeedsRefresh {
-				editor.MapWidget.Raster.Refresh()
-				//editor.MapWidget.NeedsRefresh = false
 			}
 		}
 	}()

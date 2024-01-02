@@ -17,8 +17,8 @@ func setup() *concepts.EntityComponentDB {
 
 func BenchmarkScriptedCode(b *testing.B) {
 	db := setup()
-	s := core.Script{}
-	s.Construct(db, map[string]any{
+	s := core.Script{DB: db}
+	s.Construct(map[string]any{
 		"Code":  "core.SectorFromDb(s.Ref(\"sector\")).BottomZ.Original=5",
 		"Style": "ScriptStyleStatement",
 	})

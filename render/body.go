@@ -51,7 +51,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 		angleDelta = math.Abs(angleDelta)
 		if sprite == nil || angleDelta < bestDelta {
 			bestDelta = angleDelta
-			sprite = &sheet.Sprites[i]
+			sprite = sheet.Sprites[i]
 		}
 	}
 	/*dbg := fmt.Sprintf("%v - sprite:%.1f, delta:%.1f s:%v", ref.String(), angleSprite, bestDelta, sprite.Angle)

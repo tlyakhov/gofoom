@@ -28,6 +28,7 @@ type PropertyGridState struct {
 	ParentName       string
 	ParentCollection *reflect.Value
 	Parent           any
+	Ref              *concepts.EntityRef
 }
 
 type Grid struct {
@@ -95,6 +96,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 				ParentCollection: pgs.ParentCollection,
 				Unique:           make(map[string]reflect.Value),
 				Parent:           pgs.Parent,
+				Ref:              pgs.Ref,
 			}
 			pgs.Fields[display] = gf
 			if editTypeTag, ok := field.Tag.Lookup("edit_type"); ok {
@@ -132,11 +134,13 @@ func (g *Grid) fieldsFromSelection(selection []any) *PropertyGridState {
 				state.Parent = c
 				n := strings.Split(reflect.TypeOf(c).String(), ".")
 				state.ParentName = n[len(n)-1]
+				state.Ref = target
 				g.fieldsFromObject(c, state)
 			}
 		case *core.Segment:
 			state.Parent = nil
 			state.ParentName = "Segment"
+			state.Ref = target.Sector.Ref()
 			g.fieldsFromObject(target, state)
 		}
 	}
@@ -182,11 +186,13 @@ func (g *Grid) AddEntityControls(selection []any) {
 		optsIndices = append(optsIndices, index)
 	}
 	selectComponent := widget.NewSelect(opts, func(s string) {
-
 	})
 
 	button := widget.NewButtonWithIcon("Add", theme.ContentAddIcon(), func() {
 		optsIndex := selectComponent.SelectedIndex()
+		if optsIndex < 0 {
+			return
+		}
 		action := &actions.AddComponent{IEditor: g.IEditor, Index: optsIndices[optsIndex], Entities: entities}
 		g.NewAction(action)
 		action.Act()
@@ -224,6 +230,8 @@ func (g *Grid) Refresh(selection []any) {
 		g.GridWidget.Objects = append(g.GridWidget.Objects, label)
 
 		if field.EditType == "Component" {
+			label.Importance = widget.HighImportance
+			label.TextStyle.Bold = true
 			g.fieldComponent(field)
 			continue
 		}
@@ -257,14 +265,20 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(field, core.BodyShadowValues())
 		case *core.ScriptStyle:
 			g.fieldEnum(field, core.ScriptStyleValues())
+		case *concepts.AnimationStyle:
+			g.fieldEnum(field, concepts.AnimationStyleValues())
 		case **concepts.EntityRef:
 			g.fieldEntityRef(field)
-		case *[]core.Script:
+		case *[]*core.Script:
 			g.fieldSlice(field)
-		case *[]materials.Sprite:
+		case *[]*materials.Sprite:
 			g.fieldSlice(field)
-		case *[]materials.ShaderStage:
+		case *[]*materials.ShaderStage:
 			g.fieldSlice(field)
+		case *[]concepts.IAnimation:
+			g.fieldSlice(field)
+		case **concepts.SimVariable[float64]:
+			g.fieldAnimationTarget(field)
 		default:
 			g.GridWidget.Add(widget.NewLabel("Unavailable"))
 		}

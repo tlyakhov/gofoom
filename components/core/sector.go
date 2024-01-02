@@ -24,10 +24,10 @@ type Sector struct {
 	CeilSurface   materials.Surface             `editable:"Ceiling Surface"`
 	Gravity       concepts.Vector3              `editable:"Gravity"`
 	FloorFriction float64                       `editable:"Floor Friction"`
-	FloorScripts  []Script                      `editable:"Floor Scripts"`
-	CeilScripts   []Script                      `editable:"Ceil Scripts"`
-	EnterScripts  []Script                      `editable:"Enter Scripts"`
-	ExitScripts   []Script                      `editable:"Exit Scripts"`
+	FloorScripts  []*Script                     `editable:"Floor Scripts"`
+	CeilScripts   []*Script                     `editable:"Ceil Scripts"`
+	EnterScripts  []*Script                     `editable:"Enter Scripts"`
+	ExitScripts   []*Script                     `editable:"Exit Scripts"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3
@@ -153,16 +153,16 @@ func (s *Sector) Construct(data map[string]any) {
 		s.FloorFriction = v.(float64)
 	}
 	if v, ok := data["FloorScripts"]; ok {
-		s.FloorScripts = ConstructScripts(s.DB, v)
+		s.FloorScripts = concepts.ConstructSlice[*Script](s.DB, v)
 	}
 	if v, ok := data["CeilScripts"]; ok {
-		s.CeilScripts = ConstructScripts(s.DB, v)
+		s.CeilScripts = concepts.ConstructSlice[*Script](s.DB, v)
 	}
 	if v, ok := data["EnterScripts"]; ok {
-		s.EnterScripts = ConstructScripts(s.DB, v)
+		s.EnterScripts = concepts.ConstructSlice[*Script](s.DB, v)
 	}
 	if v, ok := data["ExitScripts"]; ok {
-		s.ExitScripts = ConstructScripts(s.DB, v)
+		s.ExitScripts = concepts.ConstructSlice[*Script](s.DB, v)
 	}
 
 	s.Recalculate()
@@ -193,16 +193,16 @@ func (s *Sector) Serialize() map[string]any {
 		result["CeilTarget"] = s.CeilTarget.Serialize()
 	}
 	if len(s.FloorScripts) > 0 {
-		result["FloorScripts"] = SerializeScripts(s.FloorScripts)
+		result["FloorScripts"] = concepts.SerializeSlice(s.FloorScripts)
 	}
 	if len(s.CeilScripts) > 0 {
-		result["CeilScripts"] = SerializeScripts(s.CeilScripts)
+		result["CeilScripts"] = concepts.SerializeSlice(s.CeilScripts)
 	}
 	if len(s.EnterScripts) > 0 {
-		result["EnterScripts"] = SerializeScripts(s.EnterScripts)
+		result["EnterScripts"] = concepts.SerializeSlice(s.EnterScripts)
 	}
 	if len(s.ExitScripts) > 0 {
-		result["ExitScripts"] = SerializeScripts(s.ExitScripts)
+		result["ExitScripts"] = concepts.SerializeSlice(s.ExitScripts)
 	}
 
 	if len(s.Bodies) > 0 {

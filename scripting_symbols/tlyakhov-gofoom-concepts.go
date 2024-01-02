@@ -14,7 +14,11 @@ func init() {
 	Symbols["tlyakhov/gofoom/concepts/concepts"] = map[string]reflect.Value{
 		// function, constant and variable definitions
 		"AnimationStyleHold":           reflect.ValueOf(concepts.AnimationStyleHold),
+		"AnimationStyleLoop":           reflect.ValueOf(concepts.AnimationStyleLoop),
 		"AnimationStyleOnce":           reflect.ValueOf(concepts.AnimationStyleOnce),
+		"AnimationStyleString":         reflect.ValueOf(concepts.AnimationStyleString),
+		"AnimationStyleStrings":        reflect.ValueOf(concepts.AnimationStyleStrings),
+		"AnimationStyleValues":         reflect.ValueOf(concepts.AnimationStyleValues),
 		"AsmInt32ToVector4":            reflect.ValueOf(concepts.AsmInt32ToVector4),
 		"AsmInt32ToVector4PreMul":      reflect.ValueOf(concepts.AsmInt32ToVector4PreMul),
 		"AsmVector4AddPreMulColorSelf": reflect.ValueOf(concepts.AsmVector4AddPreMulColorSelf),
@@ -85,7 +89,6 @@ func init() {
 		"Vector2AABBIntersect":         reflect.ValueOf(concepts.Vector2AABBIntersect),
 
 		// type definitions
-		"Animated":          reflect.ValueOf((*concepts.Animated)(nil)),
 		"AnimationStyle":    reflect.ValueOf((*concepts.AnimationStyle)(nil)),
 		"Attachable":        reflect.ValueOf((*concepts.Attachable)(nil)),
 		"Attached":          reflect.ValueOf((*concepts.Attached)(nil)),
@@ -95,6 +98,7 @@ func init() {
 		"ControllerSet":     reflect.ValueOf((*concepts.ControllerSet)(nil)),
 		"EntityComponentDB": reflect.ValueOf((*concepts.EntityComponentDB)(nil)),
 		"EntityRef":         reflect.ValueOf((*concepts.EntityRef)(nil)),
+		"IAnimation":        reflect.ValueOf((*concepts.IAnimation)(nil)),
 		"Matrix2":           reflect.ValueOf((*concepts.Matrix2)(nil)),
 		"Named":             reflect.ValueOf((*concepts.Named)(nil)),
 		"Serializable":      reflect.ValueOf((*concepts.Serializable)(nil)),
@@ -108,23 +112,13 @@ func init() {
 		"Vector4":           reflect.ValueOf((*concepts.Vector4)(nil)),
 
 		// interface wrapper definitions
-		"_Animated":     reflect.ValueOf((*_tlyakhov_gofoom_concepts_Animated)(nil)),
 		"_Attachable":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_Attachable)(nil)),
 		"_Controller":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_Controller)(nil)),
+		"_IAnimation":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_IAnimation)(nil)),
 		"_Serializable": reflect.ValueOf((*_tlyakhov_gofoom_concepts_Serializable)(nil)),
 		"_Simulatable":  reflect.ValueOf((*_tlyakhov_gofoom_concepts_Simulatable)(nil)),
 		"_Simulated":    reflect.ValueOf((*_tlyakhov_gofoom_concepts_Simulated)(nil)),
 	}
-}
-
-// _tlyakhov_gofoom_concepts_Animated is an interface wrapper for Animated type
-type _tlyakhov_gofoom_concepts_Animated struct {
-	IValue   interface{}
-	WAnimate func()
-}
-
-func (W _tlyakhov_gofoom_concepts_Animated) Animate() {
-	W.WAnimate()
 }
 
 // _tlyakhov_gofoom_concepts_Attachable is an interface wrapper for Attachable type
@@ -202,11 +196,22 @@ func (W _tlyakhov_gofoom_concepts_Controller) Target(source *concepts.EntityRef)
 	return W.WTarget(source)
 }
 
+// _tlyakhov_gofoom_concepts_IAnimation is an interface wrapper for IAnimation type
+type _tlyakhov_gofoom_concepts_IAnimation struct {
+	IValue   interface{}
+	WAnimate func()
+}
+
+func (W _tlyakhov_gofoom_concepts_IAnimation) Animate() {
+	W.WAnimate()
+}
+
 // _tlyakhov_gofoom_concepts_Serializable is an interface wrapper for Serializable type
 type _tlyakhov_gofoom_concepts_Serializable struct {
 	IValue     interface{}
 	WConstruct func(data map[string]any)
 	WSerialize func() map[string]any
+	WSetDB     func(db *concepts.EntityComponentDB)
 }
 
 func (W _tlyakhov_gofoom_concepts_Serializable) Construct(data map[string]any) {
@@ -214,6 +219,9 @@ func (W _tlyakhov_gofoom_concepts_Serializable) Construct(data map[string]any) {
 }
 func (W _tlyakhov_gofoom_concepts_Serializable) Serialize() map[string]any {
 	return W.WSerialize()
+}
+func (W _tlyakhov_gofoom_concepts_Serializable) SetDB(db *concepts.EntityComponentDB) {
+	W.WSetDB(db)
 }
 
 // _tlyakhov_gofoom_concepts_Simulatable is an interface wrapper for Simulatable type

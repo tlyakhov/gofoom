@@ -28,13 +28,13 @@ type Surface struct {
 	Material *concepts.EntityRef `editable:"Material" edit_type:"Material"`
 	// Do we need both this AND the transform? not sure
 	Scale       SurfaceScale     `editable:"Scale"`
-	ExtraStages []ShaderStage    `editable:"Extra Shader Stages"`
+	ExtraStages []*ShaderStage   `editable:"Extra Shader Stages"`
 	Transform   concepts.Matrix2 `editable:"Transform"`
 }
 
 func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any) {
 	s.DB = db
-	s.ExtraStages = make([]ShaderStage, 0)
+	s.ExtraStages = make([]*ShaderStage, 0)
 	s.Transform = concepts.IdentityMatrix2
 
 	if data == nil {
@@ -42,7 +42,7 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 	}
 
 	if v, ok := data["ExtraStages"]; ok {
-		s.ExtraStages = constructShaderStages(db, v)
+		s.ExtraStages = concepts.ConstructSlice[*ShaderStage](db, v)
 	}
 	if v, ok := data["Material"]; ok {
 		s.Material = s.DB.DeserializeEntityRef(v)
@@ -61,7 +61,7 @@ func (s *Surface) Serialize() map[string]any {
 	result := make(map[string]any)
 
 	if len(s.ExtraStages) > 0 {
-		result["ExtraStages"] = serializeShaderStages(s.ExtraStages)
+		result["ExtraStages"] = concepts.SerializeSlice(s.ExtraStages)
 	}
 
 	if !s.Material.Nil() {

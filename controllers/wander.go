@@ -45,7 +45,8 @@ func (wc *WanderController) Always() {
 	if wc.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
 		name := "wc_" + strconv.FormatUint(wc.TargetEntity.Entity, 10)
 		a := new(concepts.Animation[float64])
-		a.Construct(wc.Simulation)
+		a.SetDB(wc.DB)
+		a.Construct(nil)
 		a.Name = name
 		a.Target = &wc.Body.Angle
 		a.Start = wc.Body.Angle.Now
@@ -60,7 +61,7 @@ func (wc *WanderController) Always() {
 		a.Duration = 300
 		a.TweeningFunc = concepts.EaseInOut
 		a.Style = concepts.AnimationStyleOnce
-		wc.Animate(name, a)
+		wc.AttachAnimation(name, a)
 		wc.LastTurn = wc.Timestamp
 	}
 	if wc.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {

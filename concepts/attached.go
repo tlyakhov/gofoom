@@ -15,7 +15,6 @@ type Attachable interface {
 	Serializable
 	Ref() *EntityRef
 	ResetRef()
-	SetDB(db *EntityComponentDB)
 	String() string
 	IndexInDB() int
 	SetIndexInDB(int)
@@ -24,6 +23,7 @@ type Attachable interface {
 type Serializable interface {
 	Construct(data map[string]any)
 	Serialize() map[string]any
+	SetDB(db *EntityComponentDB)
 }
 
 var AttachedComponentIndex int
@@ -107,4 +107,31 @@ func (a *Attached) SerializeComponentList(list map[int]bool, name string, result
 		types = append(types, DbTypes().Types[index].String())
 	}
 	result[name] = strings.Join(types, ",")
+}
+
+// Confusing syntax. The constraint ensures that our underlying type has pointer
+// receiver methods that implement Serializable.
+func ConstructSlice[PT interface {
+	*T
+	Serializable
+}, T any](db *EntityComponentDB, data any) []PT {
+	var result []PT
+
+	if dataSlice, ok := data.([]any); ok {
+		result = make([]PT, len(dataSlice))
+		for i, dataElement := range dataSlice {
+			result[i] = new(T)
+			result[i].SetDB(db)
+			result[i].Construct(dataElement.(map[string]any))
+		}
+	}
+	return result
+}
+
+func SerializeSlice[T Serializable](elements []T) []map[string]any {
+	result := make([]map[string]any, len(elements))
+	for i, element := range elements {
+		result[i] = element.Serialize()
+	}
+	return result
 }

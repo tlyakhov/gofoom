@@ -15,6 +15,7 @@ type AddSliceElement struct {
 	state.IEditor
 	Parent   any
 	SlicePtr reflect.Value
+	Concrete reflect.Type
 }
 
 func (a *AddSliceElement) Act() {
@@ -46,10 +47,22 @@ func (a *AddSliceElement) Redo() {
 	newValue := sliceElem.Index(sliceElem.Len() - 1).Addr()
 	// Add more types?
 	switch target := newValue.Interface().(type) {
-	case *core.Script:
-		target.Construct(a.State().DB, nil)
-	case *materials.ShaderStage:
-		target.Construct(a.State().DB, nil)
+	case **core.Script:
+		*target = new(core.Script)
+		script := *target
+		script.SetDB(a.State().DB)
+		script.Construct(nil)
+	case **materials.ShaderStage:
+		*target = new(materials.ShaderStage)
+		stage := *target
+		stage.SetDB(a.State().DB)
+		stage.Construct(nil)
+	case *concepts.IAnimation:
+		reflect.ValueOf(target).Elem().Set(reflect.New(a.Concrete))
+		anim := *target
+		anim.SetDB(a.State().DB)
+		anim.Construct(nil)
+		a.State().DB.Simulation.AttachAnimation(anim.GetName(), anim)
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }

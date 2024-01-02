@@ -9,13 +9,15 @@ import (
 )
 
 var EmbeddedTypes = [...]string{
+	reflect.TypeOf(&concepts.SimVariable[float64]{}).String(),
+	reflect.TypeOf(&concepts.SimVariable[int]{}).String(),
 	reflect.TypeOf(&concepts.SimVariable[concepts.Vector2]{}).String(),
 	reflect.TypeOf(&concepts.SimVariable[concepts.Vector3]{}).String(),
 	reflect.TypeOf(&concepts.SimVariable[concepts.Vector4]{}).String(),
-	reflect.TypeOf(&concepts.SimVariable[float64]{}).String(),
 	reflect.TypeOf(&core.Script{}).String(),
 	reflect.TypeOf(&materials.Surface{}).String(),
 	reflect.TypeOf(&materials.ShaderStage{}).String(),
+	reflect.TypeOf(&materials.Sprite{}).String(),
 }
 
 type PropertyGridField struct {
@@ -29,6 +31,7 @@ type PropertyGridField struct {
 	Source           *reflect.StructField
 	ParentCollection *reflect.Value
 	Parent           any
+	Ref              *concepts.EntityRef
 }
 
 func (f *PropertyGridField) Short() string {
