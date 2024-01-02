@@ -28,11 +28,6 @@ import (
 	"tlyakhov/gofoom/controllers"
 )
 
-type MenuAction struct {
-	Shortcut   *desktop.CustomShortcut
-	Menu       *fyne.MenuItem
-	NoModifier bool
-}
 type EditorWidgets struct {
 	App          fyne.App
 	Window       fyne.Window
@@ -40,31 +35,6 @@ type EditorWidgets struct {
 	PropertyGrid *fyne.Container
 	GameWidget   *GameWidget
 	MapWidget    *MapWidget
-
-	ActionFileOpen   MenuAction
-	ActionFileSaveAs MenuAction
-	ActionFileSave   MenuAction
-	ActionFileQuit   MenuAction
-
-	ActionEditUndo   MenuAction
-	ActionEditRedo   MenuAction
-	ActionEditDelete MenuAction
-
-	ActionEditToolSelect      MenuAction
-	ActionEditSelectSegment   MenuAction
-	ActionEditRaiseCeil       MenuAction
-	ActionEditLowerCeil       MenuAction
-	ActionEditRaiseFloor      MenuAction
-	ActionEditLowerFloor      MenuAction
-	ActionEditRaiseCeilSlope  MenuAction
-	ActionEditLowerCeilSlope  MenuAction
-	ActionEditRaiseFloorSlope MenuAction
-	ActionEditLowerFloorSlope MenuAction
-	ActionEditRotateAnchor    MenuAction
-	ActionEditIncreaseGrid    MenuAction
-	ActionEditDecreaseGrid    MenuAction
-
-	MenuActions map[string]*MenuAction
 }
 
 type Editor struct {
@@ -73,13 +43,9 @@ type Editor struct {
 
 	MapViewGrid
 	EditorWidgets
+	EditorMenu
 	EntityList
 	properties.Grid
-
-	// Map view filters
-	BodiesVisible         bool
-	SectorTypesVisible    bool
-	ComponentNamesVisible bool
 
 	// Game View state
 	Renderer       *render.Renderer
@@ -93,18 +59,18 @@ func (e *Editor) State() *state.Edit {
 func NewEditor() *Editor {
 	e := &Editor{
 		Edit: state.Edit{
+			DB: concepts.NewEntityComponentDB(),
 			MapView: state.MapView{
 				Scale: 1.0,
 				Step:  10,
 				GridB: concepts.Vector2{1, 0},
 			},
-			Modified: false,
-			DB:       concepts.NewEntityComponentDB(),
+			Modified:              false,
+			BodiesVisible:         true,
+			SectorTypesVisible:    false,
+			ComponentNamesVisible: true,
 		},
-		MapViewGrid:           MapViewGrid{Visible: true},
-		BodiesVisible:         true,
-		SectorTypesVisible:    false,
-		ComponentNamesVisible: true,
+		MapViewGrid: MapViewGrid{Visible: true},
 	}
 	e.Grid.IEditor = e
 	e.MapViewGrid.Current = &e.Edit.MapView
@@ -206,30 +172,6 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	if e.GameWidget.KeyMap["I"] {
-		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{0, -0.005})
-		e.ChangeSelectedTransformables(&t)
-	}
-
-	if e.GameWidget.KeyMap["K"] {
-		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{0, 0.005})
-		e.ChangeSelectedTransformables(&t)
-	}
-
-	if e.GameWidget.KeyMap["J"] {
-		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{0.005, 0})
-		e.ChangeSelectedTransformables(&t)
-	}
-
-	if e.GameWidget.KeyMap["L"] {
-		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{-0.005, 0})
-		e.ChangeSelectedTransformables(&t)
-	}
-
 	e.DB.NewControllerSet().ActGlobal(concepts.ControllerAlways)
 	e.GatherHoveringObjects()
 }
@@ -241,6 +183,7 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 			m.Project(target)
 		case *concepts.Matrix2:
 			target.MulSelf(m)
+			log.Printf("CST: %v", target.StringHuman())
 		}
 	}
 }
@@ -394,10 +337,10 @@ func (e *Editor) RedoCurrent() {
 	e.UndoHistory = append(e.UndoHistory, a)
 }
 
-func (e *Editor) SelectObjects(objects []any, updateTree bool) {
+func (e *Editor) SelectObjects(objects []any, updateEntityList bool) {
 	e.SelectedObjects = objects
 	e.Grid.Refresh(e.SelectedObjects)
-	if updateTree {
+	if updateEntityList {
 		//e.EntityTree.SetSelection(objects)
 	}
 }
@@ -517,7 +460,7 @@ func (e *Editor) ToolSelectSegment() {
 			}
 		case *core.Segment:
 			editor.SelectObjects([]any{target.Next}, true)
-			break
+			return
 		}
 	}
 }

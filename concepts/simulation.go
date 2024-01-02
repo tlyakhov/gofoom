@@ -20,14 +20,14 @@ type Simulation struct {
 	Integrate        func()
 	Render           func()
 	All              map[Simulated]bool
-	Animations       map[string]Animated
+	Animations       map[string]IAnimation
 }
 
 func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
 		All:           make(map[Simulated]bool),
-		Animations:    make(map[string]Animated),
+		Animations:    make(map[string]IAnimation),
 	}
 }
 
@@ -74,7 +74,7 @@ func (s *Simulation) Step() {
 	}
 }
 
-func (s *Simulation) Animate(name string, a Animated) bool {
+func (s *Simulation) AttachAnimation(name string, a IAnimation) bool {
 	if s.Animations[name] != nil {
 		return false
 	}

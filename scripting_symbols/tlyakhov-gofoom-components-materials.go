@@ -13,7 +13,6 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/components/materials/materials"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"ConstructSprites":          reflect.ValueOf(materials.ConstructSprites),
 		"ImageComponentIndex":       reflect.ValueOf(&materials.ImageComponentIndex).Elem(),
 		"ImageFromDb":               reflect.ValueOf(materials.ImageFromDb),
 		"LitComponentIndex":         reflect.ValueOf(&materials.LitComponentIndex).Elem(),
@@ -22,7 +21,6 @@ func init() {
 		"ScaleHeight":               reflect.ValueOf(materials.ScaleHeight),
 		"ScaleNone":                 reflect.ValueOf(materials.ScaleNone),
 		"ScaleWidth":                reflect.ValueOf(materials.ScaleWidth),
-		"SerializeSprites":          reflect.ValueOf(materials.SerializeSprites),
 		"ShaderComponentIndex":      reflect.ValueOf(&materials.ShaderComponentIndex).Elem(),
 		"ShaderFromDb":              reflect.ValueOf(materials.ShaderFromDb),
 		"SkyComponentIndex":         reflect.ValueOf(&materials.SkyComponentIndex).Elem(),

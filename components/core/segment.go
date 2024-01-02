@@ -21,7 +21,7 @@ type Segment struct {
 	HiSurface         materials.Surface `editable:"High Surface"`
 	PortalHasMaterial bool              `editable:"Portal has material"`
 	PortalIsPassable  bool              `editable:"Portal is passable"`
-	ContactScripts    []Script          `editable:"Contact Scripts"`
+	ContactScripts    []*Script         `editable:"Contact Scripts"`
 
 	AdjacentSector  *concepts.EntityRef
 	AdjacentSegment *Segment
@@ -306,7 +306,7 @@ func (s *Segment) Construct(data map[string]any) {
 		s.HiSurface.Construct(s.DB, v.(map[string]any))
 	}
 	if v, ok := data["ContactScripts"]; ok {
-		s.ContactScripts = ConstructScripts(s.DB, v)
+		s.ContactScripts = concepts.ConstructSlice[*Script](s.DB, v)
 	}
 }
 
@@ -330,7 +330,7 @@ func (s *Segment) Serialize() map[string]any {
 		result["AdjacentSector"] = s.AdjacentSector.Serialize()
 	}
 	if len(s.ContactScripts) > 0 {
-		result["ContactScripts"] = SerializeScripts(s.ContactScripts)
+		result["ContactScripts"] = concepts.SerializeSlice(s.ContactScripts)
 	}
 
 	return result

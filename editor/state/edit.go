@@ -43,6 +43,13 @@ type Edit struct {
 	CurrentAction IAction
 	UndoHistory   []IAction
 	RedoHistory   []IAction
+
+	// Map view filters
+	BodiesVisible         bool
+	SectorTypesVisible    bool
+	ComponentNamesVisible bool
+
+	EntitiesPaused bool
 }
 
 type IEditor interface {

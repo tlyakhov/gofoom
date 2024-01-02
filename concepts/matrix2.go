@@ -70,8 +70,14 @@ func (m *Matrix2) ScaleBasis(basis *Vector2, scale float64) *Matrix2 {
 }
 
 func (m *Matrix2) Rotate(angle float64) *Matrix2 {
-	sint, cost := math.Sincos(angle)
+	sint, cost := math.Sincos(angle * Deg2rad)
 	m = m.Mul(&Matrix2{cost, sint, -sint, cost, 0, 0})
+	return m
+}
+
+func (m *Matrix2) RotateSelf(angle float64) *Matrix2 {
+	sint, cost := math.Sincos(angle * Deg2rad)
+	m.MulSelf(&Matrix2{cost, sint, -sint, cost, 0, 0})
 	return m
 }
 

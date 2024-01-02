@@ -42,12 +42,12 @@ func NewGameWidget() *GameWidget {
 	return g
 }
 
-func (g *GameWidget) generateRaster(w, h int) image.Image {
+func (g *GameWidget) generateRaster(requestedWidth, requestedHeight int) image.Image {
 	if g.Surface != nil && g.Context != nil {
 		return g.Surface
 	}
-	w = 640
-	h = 360
+	w := 640
+	h := 360
 	editor.ResizeRenderer(w, h)
 	g.Surface = image.NewRGBA(image.Rect(0, 0, w, h))
 	g.Context = gg.NewContext(w, h)
