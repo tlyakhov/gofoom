@@ -41,6 +41,9 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 	bestDelta := 1000.0
 	var sprite *materials.Sprite
 	for i, s := range sheet.Sprites {
+		if s == nil {
+			continue
+		}
 		angleDelta := float64(s.Angle) - angleSprite
 		for angleDelta < -180 {
 			angleDelta += 360
@@ -53,6 +56,10 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 			bestDelta = angleDelta
 			sprite = sheet.Sprites[i]
 		}
+	}
+
+	if sprite == nil {
+		return
 	}
 	/*dbg := fmt.Sprintf("%v - sprite:%.1f, delta:%.1f s:%v", ref.String(), angleSprite, bestDelta, sprite.Angle)
 	s.DebugNotices.Push(dbg)*/

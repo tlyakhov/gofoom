@@ -9,15 +9,20 @@ import (
 )
 
 var EmbeddedTypes = [...]string{
-	reflect.TypeOf(&concepts.SimVariable[float64]{}).String(),
-	reflect.TypeOf(&concepts.SimVariable[int]{}).String(),
-	reflect.TypeOf(&concepts.SimVariable[concepts.Vector2]{}).String(),
-	reflect.TypeOf(&concepts.SimVariable[concepts.Vector3]{}).String(),
-	reflect.TypeOf(&concepts.SimVariable[concepts.Vector4]{}).String(),
-	reflect.TypeOf(&core.Script{}).String(),
-	reflect.TypeOf(&materials.Surface{}).String(),
-	reflect.TypeOf(&materials.ShaderStage{}).String(),
-	reflect.TypeOf(&materials.Sprite{}).String(),
+	concepts.ReflectType[*concepts.SimVariable[float64]]().String(),
+	concepts.ReflectType[*concepts.SimVariable[int]]().String(),
+	concepts.ReflectType[*concepts.SimVariable[concepts.Vector2]]().String(),
+	concepts.ReflectType[*concepts.SimVariable[concepts.Vector3]]().String(),
+	concepts.ReflectType[*concepts.SimVariable[concepts.Vector4]]().String(),
+	concepts.ReflectType[*core.Script]().String(),
+	concepts.ReflectType[*materials.Surface]().String(),
+	concepts.ReflectType[*materials.ShaderStage]().String(),
+	concepts.ReflectType[*materials.Sprite]().String(),
+	concepts.ReflectType[**concepts.Animation[float64]]().String(),
+	concepts.ReflectType[**concepts.Animation[int]]().String(),
+	concepts.ReflectType[**concepts.Animation[concepts.Vector2]]().String(),
+	concepts.ReflectType[**concepts.Animation[concepts.Vector3]]().String(),
+	concepts.ReflectType[**concepts.Animation[concepts.Vector4]]().String(),
 }
 
 type PropertyGridField struct {

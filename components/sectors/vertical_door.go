@@ -27,7 +27,6 @@ type VerticalDoor struct {
 	concepts.Attached `editable:"^"`
 	State             DoorState
 	Intent            DoorIntent
-	Animation         *concepts.Animation[float64]
 }
 
 var VerticalDoorComponentIndex int

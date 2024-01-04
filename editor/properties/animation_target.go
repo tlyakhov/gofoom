@@ -9,9 +9,10 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+// This is actually not used anywhere, old way of handling animations
 func (g *Grid) fieldAnimationTarget(field *state.PropertyGridField) {
+	log.Printf("Someone called fieldAnimationTarget on %v, shouldn't happen.", field.Short())
 	origValue := field.Values[0].Elem()
-	log.Printf("%v", origValue.String())
 	opts := make([]string, 0)
 	optsValues := make([]reflect.Value, 0)
 	selectedIndex := -1

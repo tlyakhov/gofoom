@@ -30,7 +30,7 @@ var animationTypes = map[string]reflect.Type{
 func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 	// field.Type is *[]<something>
 	elemType := field.Type.Elem().Elem()
-	if elemType == concepts.ReflectType[concepts.IAnimation]() {
+	if elemType == concepts.ReflectType[concepts.Animated]() {
 		buttons := make([]fyne.CanvasObject, len(animationTypes))
 		i := 0
 		for name, t := range animationTypes {

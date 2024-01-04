@@ -57,12 +57,17 @@ func (a *AddSliceElement) Redo() {
 		stage := *target
 		stage.SetDB(a.State().DB)
 		stage.Construct(nil)
-	case *concepts.IAnimation:
+	case **materials.Sprite:
+		*target = new(materials.Sprite)
+		sprite := *target
+		sprite.SetDB(a.State().DB)
+		sprite.Construct(nil)
+		/*case *concepts.IAnimation:
 		reflect.ValueOf(target).Elem().Set(reflect.New(a.Concrete))
 		anim := *target
 		anim.SetDB(a.State().DB)
 		anim.Construct(nil)
-		a.State().DB.Simulation.AttachAnimation(anim.GetName(), anim)
+		a.State().DB.Simulation.AttachAnimation(anim.GetName(), anim)*/
 	}
 	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
 }
