@@ -30,17 +30,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "2"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "2",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -65,17 +65,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "3"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "3",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -100,17 +100,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "4"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "4",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -135,17 +135,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "5"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "5",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -170,17 +170,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "6"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "6",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -205,17 +205,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "7"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "7",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -240,17 +240,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "8"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "8",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -275,26 +275,21 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "9"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "9",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
     "Entity": "10",
-    "behaviors.Toxic": {
-      "Active": true,
-      "Entity": "10",
-      "Hurt": 5
-    },
     "concepts.Named": {
       "Active": true,
       "Entity": "10",
@@ -315,17 +310,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "10"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "10",
-      "IsLiquid": true,
-      "Scale": 1
+      "IsLiquid": true
     }
   },
   {
@@ -350,17 +345,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "11"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "11",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -385,17 +380,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "12"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "12",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -420,17 +415,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "13"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "13",
-      "IsLiquid": true,
-      "Scale": 1
+      "IsLiquid": true
     }
   },
   {
@@ -462,18 +457,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "15",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -509,6 +503,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 100,
           "Y": -30
         },
@@ -520,6 +515,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 30,
           "Y": -30
         },
@@ -531,6 +527,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -30,
           "Y": -30
         },
@@ -548,7 +545,9 @@
           "Y": -30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -560,18 +559,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "16",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "51",
@@ -581,6 +579,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 100,
           "Y": -30
         },
@@ -592,6 +591,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 100,
           "Y": 30
         },
@@ -603,6 +603,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 30,
           "Y": 30
         },
@@ -614,11 +615,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 30,
           "Y": -30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -630,18 +634,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -10,
+      "BottomZ": {
+        "Original": -10
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "17",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "24",
@@ -651,6 +654,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -100,
           "Y": -30
         },
@@ -662,6 +666,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -100,
           "Y": 30
         },
@@ -673,6 +678,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -30,
           "Y": 30
         },
@@ -684,11 +690,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -30,
           "Y": -30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -706,17 +715,17 @@
         "21",
         "22"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "18",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "52",
@@ -726,6 +735,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -100,
           "Y": 100
         },
@@ -750,6 +760,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 100,
           "Y": 30
         },
@@ -761,6 +772,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 30,
           "Y": 30
         },
@@ -772,6 +784,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -30,
           "Y": 30
         },
@@ -789,7 +802,9 @@
           "Y": 30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -801,21 +816,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "19",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -17,
-        "Y": 68,
-        "Z": 0
+        "Original": {
+          "X": -17,
+          "Y": 68,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     }
   },
@@ -828,21 +856,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "20",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 45,
-        "Y": 68,
-        "Z": 0
+        "Original": {
+          "X": 45,
+          "Y": 68,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     }
   },
@@ -855,21 +896,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "21",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 85,
-        "Y": 68,
-        "Z": 0
+        "Original": {
+          "X": 85,
+          "Y": 68,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     }
   },
@@ -882,21 +936,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "22",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 0,
-        "Y": 68,
-        "Z": 32
+        "Original": {
+          "X": 0,
+          "Y": 68,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -920,18 +987,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -3,
+      "BottomZ": {
+        "Original": -3
+      },
       "CeilSurface": {
         "Material": "11"
       },
-      "CeilScale": 64,
       "Entity": "23",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "9"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "15",
@@ -941,6 +1007,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -30,
           "Y": -30
         },
@@ -952,6 +1019,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 30,
           "Y": -30
         },
@@ -963,6 +1031,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 30,
           "Y": 30
         },
@@ -974,11 +1043,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -30,
           "Y": 30
         }
       ],
-      "TopZ": 50
+      "TopZ": {
+        "Original": 50
+      }
     }
   },
   {
@@ -990,18 +1062,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -20,
+      "BottomZ": {
+        "Original": -20
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "24",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "9"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1024,6 +1095,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -120,
           "Y": -30
         },
@@ -1048,11 +1120,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -100,
           "Y": 30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1064,18 +1139,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -30,
+      "BottomZ": {
+        "Original": -30
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "25",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "9"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1098,6 +1172,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -140,
           "Y": -30
         },
@@ -1122,11 +1197,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -120,
           "Y": 30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1138,18 +1216,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -40,
+      "BottomZ": {
+        "Original": -40
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "26",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "9"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1172,6 +1249,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -160,
           "Y": -30
         },
@@ -1196,11 +1274,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -140,
           "Y": 30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1212,18 +1293,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -50,
+      "BottomZ": {
+        "Original": -50
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "27",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "9"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1246,6 +1326,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -180,
           "Y": -30
         },
@@ -1270,20 +1351,18 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -160,
           "Y": 30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "28",
-    "behaviors.Toxic": {
-      "Active": true,
-      "Entity": "28",
-      "Hurt": 0
-    },
     "concepts.Named": {
       "Active": true,
       "Entity": "28",
@@ -1294,17 +1373,17 @@
       "Bodies": [
         "29"
       ],
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "8"
       },
-      "CeilScale": 64,
       "Entity": "28",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "10"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "30",
@@ -1314,6 +1393,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -180,
           "Y": -30
         },
@@ -1364,6 +1444,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -300,
           "Y": 30
         },
@@ -1375,11 +1456,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -180,
           "Y": 30
         }
       ],
-      "TopZ": -6
+      "TopZ": {
+        "Original": -6
+      }
     }
   },
   {
@@ -1391,21 +1475,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "29",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -240,
-        "Y": 0,
-        "Z": -30
+        "Original": {
+          "X": -240,
+          "Y": 0,
+          "Z": -30
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -1422,11 +1519,6 @@
   },
   {
     "Entity": "30",
-    "behaviors.Toxic": {
-      "Active": true,
-      "Entity": "30",
-      "Hurt": 0
-    },
     "concepts.Named": {
       "Active": true,
       "Entity": "30",
@@ -1437,17 +1529,17 @@
       "Bodies": [
         "31"
       ],
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "8"
       },
-      "CeilScale": 64,
       "Entity": "30",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "10"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "28",
@@ -1457,6 +1549,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -180,
           "Y": -30
         },
@@ -1500,7 +1593,9 @@
           "Y": -140
         }
       ],
-      "TopZ": -6
+      "TopZ": {
+        "Original": -6
+      }
     }
   },
   {
@@ -1512,21 +1607,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "31",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -240,
-        "Y": -100,
-        "Z": -30
+        "Original": {
+          "X": -240,
+          "Y": -100,
+          "Z": -30
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -1543,11 +1651,6 @@
   },
   {
     "Entity": "32",
-    "behaviors.Toxic": {
-      "Active": true,
-      "Entity": "32",
-      "Hurt": 0
-    },
     "concepts.Named": {
       "Active": true,
       "Entity": "32",
@@ -1558,17 +1661,17 @@
       "Bodies": [
         "33"
       ],
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "8"
       },
-      "CeilScale": 64,
       "Entity": "32",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "10"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "28",
@@ -1578,6 +1681,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -180,
           "Y": 30
         },
@@ -1621,7 +1725,9 @@
           "Y": 140
         }
       ],
-      "TopZ": -6
+      "TopZ": {
+        "Original": -6
+      }
     }
   },
   {
@@ -1633,21 +1739,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "33",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -240,
-        "Y": 100,
-        "Z": -30
+        "Original": {
+          "X": -240,
+          "Y": 100,
+          "Z": -30
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -1671,18 +1790,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "12"
       },
-      "CeilScale": 64,
       "Entity": "34",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "51",
@@ -1692,6 +1810,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 105,
           "Y": -30
         },
@@ -1716,6 +1835,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 115,
           "Y": 30
         },
@@ -1746,7 +1866,9 @@
           "Y": -30
         }
       ],
-      "TopZ": 60
+      "TopZ": {
+        "Original": 60
+      }
     }
   },
   {
@@ -1758,18 +1880,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "12"
       },
-      "CeilScale": 64,
       "Entity": "35",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "34",
@@ -1779,6 +1900,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 115,
           "Y": 30
         },
@@ -1803,6 +1925,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 150,
           "Y": 70
         },
@@ -1833,7 +1956,9 @@
           "Y": 100
         }
       ],
-      "TopZ": 60
+      "TopZ": {
+        "Original": 60
+      }
     }
   },
   {
@@ -1845,18 +1970,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "9"
       },
-      "CeilScale": 64,
       "Entity": "36",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "35",
@@ -1866,6 +1990,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 150,
           "Y": 100
         },
@@ -1890,6 +2015,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 300,
           "Y": 70
         },
@@ -1907,7 +2033,9 @@
           "Y": 100
         }
       ],
-      "TopZ": 60
+      "TopZ": {
+        "Original": 60
+      }
     }
   },
   {
@@ -1922,17 +2050,17 @@
       "Bodies": [
         "38"
       ],
-      "BottomZ": -20,
+      "BottomZ": {
+        "Original": -20
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "37",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "13"
       },
-      "FloorScale": 64,
       "FloorTarget": "40",
       "Segments": [
         {
@@ -1956,6 +2084,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 300,
           "Y": 70
         },
@@ -1993,6 +2122,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 380,
           "Y": 150
         },
@@ -2023,7 +2153,9 @@
           "Y": 20
         }
       ],
-      "TopZ": 100
+      "TopZ": {
+        "Original": 100
+      }
     }
   },
   {
@@ -2035,33 +2167,46 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "38",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 350,
-        "Y": 80,
-        "Z": 90
+        "Original": {
+          "X": 350,
+          "Y": 80,
+          "Z": 90
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
       "Active": true,
-      "Attenuation": 0.4,
+      "Attenuation": 0.1,
       "Diffuse": {
         "X": 0.4,
         "Y": 0.6,
         "Z": 1
       },
       "Entity": "38",
-      "Strength": 25
+      "Strength": 2
     }
   },
   {
@@ -2073,18 +2218,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 10,
+      "BottomZ": {
+        "Original": 10
+      },
       "CeilSurface": {
         "Material": "9"
       },
-      "CeilScale": 64,
       "Entity": "39",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "37",
@@ -2094,6 +2238,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 380,
           "Y": 150
         },
@@ -2118,6 +2263,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 400,
           "Y": 400
         },
@@ -2135,7 +2281,9 @@
           "Y": 400
         }
       ],
-      "TopZ": 60
+      "TopZ": {
+        "Original": 60
+      }
     }
   },
   {
@@ -2147,19 +2295,18 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -170,
+      "BottomZ": {
+        "Original": -170
+      },
       "CeilSurface": {
         "Material": "13"
       },
-      "CeilScale": 64,
       "CeilTarget": "37",
       "Entity": "40",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "41",
@@ -2169,6 +2316,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 300,
           "Y": 150
         },
@@ -2212,7 +2360,9 @@
           "Y": 20
         }
       ],
-      "TopZ": -20
+      "TopZ": {
+        "Original": -20
+      }
     }
   },
   {
@@ -2225,19 +2375,25 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "42"
+        "42",
+        "54"
       ],
-      "BottomZ": -230,
+      "BottomZ": {
+        "Original": -230
+      },
       "CeilSurface": {
         "Material": "8"
       },
-      "CeilScale": 64,
       "Entity": "41",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
+      "Gravity": {
+        "X": 0,
+        "Y": 0,
+        "Z": -0.1
+      },
       "Segments": [
         {
           "AdjacentSector": "40",
@@ -2247,6 +2403,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 300,
           "Y": 150
         },
@@ -2258,6 +2415,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 400,
           "Y": 150
         },
@@ -2282,6 +2440,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 480,
           "Y": 400
         },
@@ -2312,7 +2471,13 @@
           "Y": 200
         }
       ],
-      "TopZ": -20
+      "TopZ": {
+        "Original": -20
+      }
+    },
+    "sectors.Underwater": {
+      "Active": true,
+      "Entity": "41"
     }
   },
   {
@@ -2324,21 +2489,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "42",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 340,
-        "Y": 260,
-        "Z": -125
+        "Original": {
+          "X": 340,
+          "Y": 260,
+          "Z": -125
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -2362,18 +2540,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -50,
+      "BottomZ": {
+        "Original": -50
+      },
       "CeilSurface": {
         "Material": "8"
       },
-      "CeilScale": 64,
       "Entity": "43",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -2396,6 +2573,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 400,
           "Y": 150
         },
@@ -2420,11 +2598,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 600,
           "Y": 200
         }
       ],
-      "TopZ": -20
+      "TopZ": {
+        "Original": -20
+      }
     }
   },
   {
@@ -2436,18 +2617,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -20,
+      "BottomZ": {
+        "Original": -20
+      },
       "CeilSurface": {
         "Material": "9"
       },
-      "CeilScale": 64,
       "Entity": "44",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "13"
       },
-      "FloorScale": 64,
       "FloorTarget": "45",
       "Segments": [
         {
@@ -2458,6 +2638,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 400,
           "Y": 400
         },
@@ -2527,7 +2708,9 @@
           "Y": 400
         }
       ],
-      "TopZ": 60
+      "TopZ": {
+        "Original": 60
+      }
     }
   },
   {
@@ -2539,19 +2722,18 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -200,
+      "BottomZ": {
+        "Original": -200
+      },
       "CeilSurface": {
         "Material": "13"
       },
-      "CeilScale": 64,
       "CeilTarget": "44",
       "Entity": "45",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -2600,11 +2782,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 480,
           "Y": 400
         }
       ],
-      "TopZ": -20
+      "TopZ": {
+        "Original": -20
+      }
     }
   },
   {
@@ -2619,18 +2804,18 @@
       "Bodies": [
         "47"
       ],
-      "BottomZ": -70,
+      "BottomZ": {
+        "Original": -70
+      },
       "CeilSurface": {
         "Material": "13"
       },
-      "CeilScale": 64,
       "CeilTarget": "48",
       "Entity": "46",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -2653,6 +2838,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 600,
           "Y": 150
         },
@@ -2683,7 +2869,9 @@
           "Y": 200
         }
       ],
-      "TopZ": -20
+      "TopZ": {
+        "Original": -20
+      }
     }
   },
   {
@@ -2695,21 +2883,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "47",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 610,
-        "Y": 175,
-        "Z": -50
+        "Original": {
+          "X": 610,
+          "Y": 175,
+          "Z": -50
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -2733,18 +2934,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": -20,
+      "BottomZ": {
+        "Original": -20
+      },
       "CeilSurface": {
         "Material": "8"
       },
-      "CeilScale": 64,
       "Entity": "48",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "13"
       },
-      "FloorScale": 64,
       "FloorTarget": "46",
       "Segments": [
         {
@@ -2794,11 +2994,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 620,
           "Y": 200
         }
       ],
-      "TopZ": 50
+      "TopZ": {
+        "Original": 50
+      }
     }
   },
   {
@@ -2813,17 +3016,17 @@
       "Bodies": [
         "50"
       ],
-      "BottomZ": -10,
+      "BottomZ": {
+        "Original": -10
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "49",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "3"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -2872,11 +3075,14 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 620,
           "Y": 200
         }
       ],
-      "TopZ": 70
+      "TopZ": {
+        "Original": 70
+      }
     }
   },
   {
@@ -2888,21 +3094,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "50",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 700,
-        "Y": 175,
-        "Z": 50
+        "Original": {
+          "X": 700,
+          "Y": 175,
+          "Z": 50
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -2919,6 +3138,17 @@
   },
   {
     "Entity": "51",
+    "behaviors.Proximity": {
+      "Active": true,
+      "Entity": "51",
+      "Range": 100,
+      "Scripts": [
+        {
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Style": "ScriptStyleStatement"
+        }
+      ]
+    },
     "concepts.Named": {
       "Active": true,
       "Entity": "51",
@@ -2926,18 +3156,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "6"
       },
-      "CeilScale": 64,
       "Entity": "51",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "34",
@@ -2947,6 +3176,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 105,
           "Y": -30
         },
@@ -2971,6 +3201,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 100,
           "Y": 30
         },
@@ -2988,7 +3219,19 @@
           "Y": -30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Animation": {
+          "Acitve": true,
+          "Coordinates": "AnimationCoordinatesAbsolute",
+          "Duration": 1000,
+          "End": 0,
+          "Lifetime": "AnimationLifetimeHold",
+          "Percent": 1.0083333333333333,
+          "Reverse": false,
+          "Start": 64
+        },
+        "Original": 64
+      }
     },
     "sectors.VerticalDoor": {
       "Active": true,
@@ -3004,18 +3247,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 15,
+      "BottomZ": {
+        "Original": 15
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "52",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "18",
@@ -3025,6 +3267,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -100,
           "Y": 100
         },
@@ -3049,6 +3292,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": 100,
           "Y": 120
         },
@@ -3066,7 +3310,9 @@
           "Y": 120
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -3078,18 +3324,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "14"
       },
-      "CeilScale": 64,
       "Entity": "53",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "8"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "52",
@@ -3099,6 +3344,7 @@
           "Lo": {
             "Material": "2"
           },
+          "Mid": {},
           "X": -100,
           "Y": 120
         },
@@ -3142,7 +3388,53 @@
           "Y": 3000
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "54",
+    "behaviors.Alive": {
+      "Active": true,
+      "Entity": "54",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Active": true,
+      "Entity": "54"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": {
+        "Original": 0
+      },
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "54",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": -70,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 15,
+          "Y": 15,
+          "Z": 40
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
     }
   }
 ]

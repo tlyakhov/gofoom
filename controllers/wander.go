@@ -3,7 +3,6 @@ package controllers
 import (
 	"math"
 	"math/rand"
-	"strconv"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -43,12 +42,8 @@ func (wc *WanderController) Always() {
 	}
 
 	if wc.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
-		name := "wc_" + strconv.FormatUint(wc.TargetEntity.Entity, 10)
-		a := new(concepts.Animation[float64])
-		a.SetDB(wc.DB)
-		a.Construct(nil)
-		a.Name = name
-		a.Target = &wc.Body.Angle
+		a := wc.Body.Angle.NewAnimation()
+		a.Coordinates = concepts.AnimationCoordinatesAbsolute
 		a.Start = wc.Body.Angle.Now
 		// Bias towards the center of the sector
 		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
@@ -60,8 +55,7 @@ func (wc *WanderController) Always() {
 
 		a.Duration = 300
 		a.TweeningFunc = concepts.EaseInOut
-		a.Style = concepts.AnimationStyleOnce
-		wc.AttachAnimation(name, a)
+		a.Lifetime = concepts.AnimationLifetimeOnce
 		wc.LastTurn = wc.Timestamp
 	}
 	if wc.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {

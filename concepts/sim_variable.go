@@ -1,20 +1,29 @@
 package concepts
 
-import "log"
+import (
+	"log"
+	"reflect"
+	"regexp"
+	"strconv"
+)
 
 type Simulatable interface {
 	~int | ~float64 | Vector2 | Vector3 | Vector4
 }
 
 type Simulated interface {
+	Serializable
 	Attach(sim *Simulation)
 	Detach(sim *Simulation)
 	Reset()
 	RenderBlend(float64)
 	NewFrame()
+	GetAnimation() Animated
 }
 
 type SimVariable[T Simulatable] struct {
+	*Animation[T] `editable:"Animation"`
+
 	Now            T
 	Prev           T
 	Original       T `editable:"Initial Value"`
@@ -39,6 +48,13 @@ func (s *SimVariable[T]) Attach(sim *Simulation) {
 
 func (s *SimVariable[T]) Detach(sim *Simulation) {
 	delete(sim.All, s)
+}
+
+func (s *SimVariable[T]) NewAnimation() *Animation[T] {
+	s.Animation = new(Animation[T])
+	s.Animation.Construct(nil)
+	s.Animation.SimVariable = s
+	return s.Animation
 }
 
 func (s *SimVariable[T]) NewFrame() {
@@ -74,38 +90,90 @@ func (s *SimVariable[T]) RenderBlend(blend float64) {
 	}
 }
 
-func (s *SimVariable[T]) Serialize() any {
+func (s *SimVariable[T]) Serialize() map[string]any {
+	result := make(map[string]any)
+
 	switch sc := any(s).(type) {
 	case *SimVariable[int]:
-		return sc.Original
+		result["Original"] = sc.Original
 	case *SimVariable[float64]:
-		return sc.Original
+		result["Original"] = sc.Original
 	case *SimVariable[Vector2]:
-		return sc.Original.Serialize()
+		result["Original"] = sc.Original.Serialize()
 	case *SimVariable[Vector3]:
-		return sc.Original.Serialize()
+		result["Original"] = sc.Original.Serialize()
 	case *SimVariable[Vector4]:
-		return sc.Original.Serialize(false)
+		result["Original"] = sc.Original.Serialize(false)
 	default:
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", s)
 	}
-	return nil
+
+	if s.Animation != nil {
+		result["Animation"] = s.Animation.Serialize()
+	}
+	return result
 }
 
-func (s *SimVariable[T]) Deserialize(data any) {
-	switch sc := any(s).(type) {
-	case *SimVariable[int]:
-		sc.Original = data.(int)
-	case *SimVariable[float64]:
-		sc.Original = data.(float64)
-	case *SimVariable[Vector2]:
-		sc.Original.Deserialize(data.(map[string]any))
-	case *SimVariable[Vector3]:
-		sc.Original.Deserialize(data.(map[string]any))
-	case *SimVariable[Vector4]:
-		sc.Original.Deserialize(data.(map[string]any), false)
-	default:
-		log.Panicf("Tried to deserialize SimVar[T] %v where T has no serializer", s)
+func (s *SimVariable[T]) Construct(data map[string]any) {
+	if data == nil {
+		return
 	}
-	s.Reset()
+
+	if v, ok := data["Original"]; ok {
+		switch sc := any(s).(type) {
+		case *SimVariable[int]:
+			sc.Original = v.(int)
+		case *SimVariable[float64]:
+			sc.Original = v.(float64)
+		case *SimVariable[Vector2]:
+			sc.Original.Deserialize(v.(map[string]any))
+		case *SimVariable[Vector3]:
+			sc.Original.Deserialize(v.(map[string]any))
+		case *SimVariable[Vector4]:
+			sc.Original.Deserialize(v.(map[string]any), false)
+		default:
+			log.Panicf("Tried to deserialize SimVar[T] %v where T has no serializer", s)
+		}
+		s.Reset()
+	}
+
+	if v, ok := data["Animation"]; ok {
+		s.Animation = new(Animation[T])
+		s.Animation.Construct(v.(map[string]any))
+		s.Animation.SimVariable = s
+	}
+}
+
+func (s *SimVariable[T]) GetAnimation() Animated {
+	return s.Animation
+}
+
+// entity.component.field (e.g. "53.Body.Pos")
+var reSimVariableSource = regexp.MustCompile(`(\d+).(\w+).(\w+)`)
+
+func SimVariableFromString[T Simulatable](db *EntityComponentDB, source string) *SimVariable[T] {
+	matches := reSimVariableSource.FindStringSubmatch(source)
+	if len(matches) != 3 {
+		log.Printf("SimVariableFromString - target %v isn't entity.component.field", source)
+		return nil
+	}
+	entity, _ := strconv.ParseUint(matches[0], 10, 64)
+	index := DbTypes().Indexes[matches[1]]
+	field := matches[2]
+	component := db.EntityComponents[entity][index]
+	if component == nil {
+		log.Printf("SimVariableFromString - component %v on entity %v is nil", matches[1], entity)
+		return nil
+	}
+	fieldValue := reflect.ValueOf(component).Elem().FieldByName(field)
+	if fieldValue.IsZero() {
+		log.Printf("SimVariableFromString - no field %v on component %v", field, component.String())
+		return nil
+	}
+	if result, ok := fieldValue.Addr().Interface().(*SimVariable[T]); ok {
+		return result
+	} else {
+		log.Printf("SimVariableFromString - %v is not *SimVariable[T]", source)
+		return nil
+	}
 }

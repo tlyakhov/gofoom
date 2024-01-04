@@ -108,7 +108,10 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
 		if gf.IsEmbeddedType() {
-			delete(pgs.Fields, display)
+			// Animations are a special case
+			if !gf.Type.Elem().AssignableTo(concepts.ReflectType[concepts.Animated]()) {
+				delete(pgs.Fields, display)
+			}
 			name := display
 			g.childFields(name, fieldValue, pgs, true)
 		} else if field.Type.Kind() == reflect.Slice {
@@ -265,8 +268,10 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(field, core.BodyShadowValues())
 		case *core.ScriptStyle:
 			g.fieldEnum(field, core.ScriptStyleValues())
-		case *concepts.AnimationStyle:
-			g.fieldEnum(field, concepts.AnimationStyleValues())
+		case *concepts.AnimationLifetime:
+			g.fieldEnum(field, concepts.AnimationLifetimeValues())
+		case *concepts.AnimationCoordinates:
+			g.fieldEnum(field, concepts.AnimationCoordinatesValues())
 		case **concepts.EntityRef:
 			g.fieldEntityRef(field)
 		case *[]*core.Script:
@@ -275,9 +280,27 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldSlice(field)
 		case *[]*materials.ShaderStage:
 			g.fieldSlice(field)
-		case *[]concepts.IAnimation:
+		case *[]concepts.Animated:
 			g.fieldSlice(field)
+		case **concepts.Animation[int]:
+			g.fieldAnimation(field)
+		case **concepts.Animation[float64]:
+			g.fieldAnimation(field)
+		case **concepts.Animation[concepts.Vector2]:
+			g.fieldAnimation(field)
+		case **concepts.Animation[concepts.Vector3]:
+			g.fieldAnimation(field)
+		case **concepts.Animation[concepts.Vector4]:
+			g.fieldAnimation(field)
+		case **concepts.SimVariable[int]:
+			g.fieldAnimationTarget(field)
 		case **concepts.SimVariable[float64]:
+			g.fieldAnimationTarget(field)
+		case **concepts.SimVariable[concepts.Vector2]:
+			g.fieldAnimationTarget(field)
+		case **concepts.SimVariable[concepts.Vector3]:
+			g.fieldAnimationTarget(field)
+		case **concepts.SimVariable[concepts.Vector4]:
 			g.fieldAnimationTarget(field)
 		default:
 			g.GridWidget.Add(widget.NewLabel("Unavailable"))

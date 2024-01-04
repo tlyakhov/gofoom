@@ -52,7 +52,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 20,
+      "BottomZ": {
+        "Original": 20
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -119,7 +121,9 @@
           "Y": -770
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -131,7 +135,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -199,7 +205,9 @@
           "Y": 90
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -211,7 +219,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -44,
+      "BottomZ": {
+        "Original": -44
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -276,7 +286,9 @@
           "Y": -110
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -288,7 +300,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -341,7 +355,9 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -357,7 +373,9 @@
         "9",
         "8"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -424,7 +442,9 @@
           "Y": -490
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -436,26 +456,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "8",
       "Mass": 0,
       "MountHeight": 30,
       "Pos": {
-        "X": 140,
-        "Y": -480,
-        "Z": 32
+        "Original": {
+          "X": 140,
+          "Y": -480,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -479,26 +507,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "9",
       "Mass": 0,
       "MountHeight": 30,
       "Pos": {
-        "X": 140,
-        "Y": -340,
-        "Z": 32
+        "Original": {
+          "X": 140,
+          "Y": -340,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -522,7 +558,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -589,7 +627,9 @@
           "Y": 42.928932188134524
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -601,7 +641,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
@@ -669,7 +711,9 @@
           "Y": -760
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -681,7 +725,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -749,7 +795,9 @@
           "Y": -860
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -761,7 +809,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -871,7 +921,9 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -883,7 +935,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1006,7 +1060,9 @@
           "Y": -860
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1018,7 +1074,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -4,
+      "BottomZ": {
+        "Original": -4
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1083,7 +1141,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1131,7 +1191,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1196,7 +1258,9 @@
           "Y": 110
         }
       ],
-      "TopZ": -4
+      "TopZ": {
+        "Original": -4
+      }
     }
   },
   {
@@ -1208,7 +1272,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1275,7 +1341,9 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -1290,7 +1358,9 @@
       "Bodies": [
         "20"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1343,7 +1413,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -1355,26 +1427,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "20",
       "Mass": 0,
       "MountHeight": 20,
       "Pos": {
-        "X": 900,
-        "Y": -1280,
-        "Z": 68.63603896932108
+        "Original": {
+          "X": 900,
+          "Y": -1280,
+          "Z": 68.63603896932108
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -1393,26 +1473,34 @@
     "Entity": "21",
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "21",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -220,
-        "Y": 60,
-        "Z": -32
+        "Original": {
+          "X": -220,
+          "Y": 60,
+          "Z": -32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -1436,7 +1524,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1503,7 +1593,9 @@
           "Y": -310
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1515,7 +1607,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -100,
+      "BottomZ": {
+        "Original": -100
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1632,7 +1726,9 @@
           "Y": 30
         }
       ],
-      "TopZ": 100
+      "TopZ": {
+        "Original": 100
+      }
     }
   },
   {
@@ -1644,7 +1740,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1711,7 +1809,9 @@
           "Y": -770
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1734,7 +1834,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -1939,7 +2041,19 @@
           "Y": -860
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Animation": {
+          "Acitve": true,
+          "Coordinates": "AnimationCoordinatesAbsolute",
+          "Duration": 1000,
+          "End": 0,
+          "Lifetime": "AnimationLifetimeHold",
+          "Percent": 1.0083333333333333,
+          "Reverse": false,
+          "Start": 64
+        },
+        "Original": 64
+      }
     },
     "sectors.VerticalDoor": {
       "Active": true,
@@ -1955,7 +2069,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -2023,7 +2139,9 @@
           "Y": -310
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -2036,10 +2154,12 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "125",
-        "42"
+        "42",
+        "125"
       ],
-      "BottomZ": -100,
+      "BottomZ": {
+        "Original": -100
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -2162,7 +2282,9 @@
           "Y": 110
         }
       ],
-      "TopZ": 100
+      "TopZ": {
+        "Original": 100
+      }
     }
   },
   {
@@ -2174,7 +2296,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -2242,7 +2366,9 @@
           "Y": 50
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -2257,7 +2383,9 @@
       "Bodies": [
         "30"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -2335,7 +2463,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -2347,26 +2477,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "30",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 1370,
-        "Y": -1340,
-        "Z": 32
+        "Original": {
+          "X": 1370,
+          "Y": -1340,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -2388,7 +2526,9 @@
       "Bodies": [
         "107"
       ],
-      "BottomZ": -32,
+      "BottomZ": {
+        "Original": -32
+      },
       "CeilSurface": {
         "Material": "2"
       },
@@ -2480,7 +2620,92 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "32",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "32",
+      "Name": "Item Test"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": {
+        "Original": 0
+      },
+      "BoundingRadius": 5,
+      "CollisionResponse": "Slide",
+      "Entity": "32",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Animation": {
+          "Acitve": true,
+          "Duration": 1000,
+          "End": {
+            "X": 0,
+            "Y": 0,
+            "Z": 15
+          },
+          "Percent": 0.13333333333333436,
+          "Reverse": true,
+          "Start": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          }
+        },
+        "Original": {
+          "X": -290,
+          "Y": 70,
+          "Z": -64
+        }
+      },
+      "Shadow": "BodyShadowSphere",
+      "Size": {
+        "Original": {
+          "X": 20,
+          "Y": 20,
+          "Z": 25
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "32"
+    },
+    "materials.SpriteSheet": {
+      "Active": true,
+      "Entity": "32",
+      "Sprites": [
+        {
+          "Angle": 0,
+          "Frame": 0,
+          "Image": "98"
+        }
+      ]
     }
   },
   {
@@ -2492,7 +2717,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -2557,7 +2784,9 @@
           "Y": 240
         }
       ],
-      "TopZ": -4
+      "TopZ": {
+        "Original": -4
+      }
     }
   },
   {
@@ -2569,7 +2798,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 20,
+      "BottomZ": {
+        "Original": 20
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -2636,7 +2867,9 @@
           "Y": -770
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -2648,7 +2881,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -2716,7 +2951,9 @@
           "Y": -510
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -2728,7 +2965,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -2809,7 +3048,9 @@
           "Y": -490
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -2821,7 +3062,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -2889,7 +3132,9 @@
           "Y": 10
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -2901,7 +3146,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -48,
+      "BottomZ": {
+        "Original": -48
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -2968,7 +3215,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -2980,7 +3229,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3048,7 +3299,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -3060,7 +3313,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -3128,7 +3383,9 @@
           "Y": -510
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -3141,12 +3398,14 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
+        "32",
         "131",
         "21",
-        "107",
-        "42"
+        "107"
       ],
-      "BottomZ": -64,
+      "BottomZ": {
+        "Original": -64
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3347,7 +3606,24 @@
           "Y": 30
         }
       ],
-      "TopZ": 0
+      "TopZ": {
+        "Original": 0
+      }
+    },
+    "materials.Lit": {
+      "Active": true,
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "41"
     }
   },
   {
@@ -3364,27 +3640,45 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 155.9558816022554,
+      "Angle": {
+        "Animation": {
+          "Acitve": true,
+          "Coordinates": "AnimationCoordinatesAbsolute",
+          "Duration": 300,
+          "End": 8.016253332447064,
+          "Lifetime": "AnimationLifetimeOnce",
+          "Percent": 0.25000000000000006,
+          "Reverse": false,
+          "Start": -16.67106299359328
+        },
+        "Original": 155.9558816022554
+      },
       "BoundingRadius": 15,
       "CollisionResponse": "Slide",
       "Entity": "42",
       "Mass": 15,
       "MountHeight": 30,
       "Pos": {
-        "X": -400,
-        "Y": 150,
-        "Z": 0
+        "Original": {
+          "X": -400,
+          "Y": 150,
+          "Z": 0
+        }
       },
       "Shadow": "BodyShadowAABB",
       "Size": {
-        "X": 32,
-        "Y": 32,
-        "Z": 42
+        "Original": {
+          "X": 32,
+          "Y": 32,
+          "Z": 42
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "materials.Lit": {
@@ -3458,7 +3752,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -8,
+      "BottomZ": {
+        "Original": -8
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3523,7 +3819,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -3535,7 +3833,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 30,
+      "BottomZ": {
+        "Original": 30
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3602,7 +3902,9 @@
           "Y": 42.928932188134524
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -3614,7 +3916,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -64,
+      "BottomZ": {
+        "Original": -64
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3679,7 +3983,9 @@
           "Y": -10
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -3691,7 +3997,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -24,
+      "BottomZ": {
+        "Original": -24
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3756,7 +4064,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -3768,7 +4078,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -20,
+      "BottomZ": {
+        "Original": -20
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3833,7 +4145,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -3845,7 +4159,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -3910,7 +4226,9 @@
           "Y": 240
         }
       ],
-      "TopZ": -4
+      "TopZ": {
+        "Original": -4
+      }
     }
   },
   {
@@ -3922,7 +4240,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -3990,7 +4310,9 @@
           "Y": -510
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4002,7 +4324,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -12,
+      "BottomZ": {
+        "Original": -12
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -4067,7 +4391,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4082,7 +4408,9 @@
       "Bodies": [
         "52"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -4135,7 +4463,9 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -4147,26 +4477,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "52",
       "Mass": 0,
       "MountHeight": 20,
       "Pos": {
-        "X": 580,
-        "Y": -980,
-        "Z": 68.63603896932108
+        "Original": {
+          "X": 580,
+          "Y": -980,
+          "Z": 68.63603896932108
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -4190,7 +4528,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -4281,7 +4621,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4293,7 +4635,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
@@ -4361,7 +4705,9 @@
           "Y": -770
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4371,7 +4717,9 @@
       "Bodies": [
         "78"
       ],
-      "BottomZ": -46,
+      "BottomZ": {
+        "Original": -46
+      },
       "CeilSurface": {
         "Material": "2"
       },
@@ -4474,7 +4822,9 @@
           "Y": -430
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4486,7 +4836,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -4553,7 +4905,9 @@
           "Y": -860
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4568,7 +4922,9 @@
       "Bodies": [
         "59"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -4671,7 +5027,9 @@
           "Y": -180
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4683,26 +5041,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "59",
       "Mass": 0,
       "MountHeight": 20,
       "Pos": {
-        "X": 730,
-        "Y": -120,
-        "Z": 32
+        "Original": {
+          "X": 730,
+          "Y": -120,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -4726,7 +5092,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -52,
+      "BottomZ": {
+        "Original": -52
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -4791,7 +5159,9 @@
           "Y": -70
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -4806,7 +5176,9 @@
       "Bodies": [
         "62"
       ],
-      "BottomZ": -34,
+      "BottomZ": {
+        "Original": -34
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -4896,7 +5268,9 @@
           "Y": -690
         }
       ],
-      "TopZ": 46
+      "TopZ": {
+        "Original": 46
+      }
     }
   },
   {
@@ -4908,26 +5282,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "62",
       "Mass": 0,
       "MountHeight": 20,
       "Pos": {
-        "X": 380,
-        "Y": -790,
-        "Z": 6
+        "Original": {
+          "X": 380,
+          "Y": -790,
+          "Z": 6
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -4951,7 +5333,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -56,
+      "BottomZ": {
+        "Original": -56
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -5016,7 +5400,9 @@
           "Y": -50
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5028,7 +5414,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -5095,7 +5483,9 @@
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5107,7 +5497,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -5175,7 +5567,9 @@
           "Y": -310
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5187,7 +5581,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -5252,7 +5648,9 @@
           "Y": -180
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5267,7 +5665,9 @@
       "Bodies": [
         "68"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.2,
       "CeilSurface": {
         "Material": "122"
@@ -5334,7 +5734,9 @@
           "Y": -690
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5346,26 +5748,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "68",
       "Mass": 0,
       "MountHeight": 30,
       "Pos": {
-        "X": 370,
-        "Y": -630,
-        "Z": 32
+        "Original": {
+          "X": 370,
+          "Y": -630,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -5389,7 +5799,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
@@ -5456,7 +5868,9 @@
           "Y": -1040
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5468,7 +5882,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -5535,7 +5951,9 @@
           "Y": -510
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5547,7 +5965,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -5641,7 +6061,9 @@
           "Y": 85.35533905932738
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5653,7 +6075,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
@@ -5721,7 +6145,9 @@
           "Y": -310
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5733,7 +6159,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -40,
+      "BottomZ": {
+        "Original": -40
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -5798,7 +6226,9 @@
           "Y": -130
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5810,7 +6240,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -36,
+      "BottomZ": {
+        "Original": -36
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -5875,7 +6307,9 @@
           "Y": -150
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5887,7 +6321,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -5955,7 +6391,9 @@
           "Y": -510
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -5967,7 +6405,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6060,7 +6500,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -6072,7 +6514,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -6140,33 +6584,43 @@
           "Y": -160
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "78",
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "78",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -470,
-        "Y": -530,
-        "Z": 9
+        "Original": {
+          "X": -470,
+          "Y": -530,
+          "Z": 9
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -6201,7 +6655,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6266,7 +6722,19 @@
           "Y": -520
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Animation": {
+          "Acitve": true,
+          "Coordinates": "AnimationCoordinatesAbsolute",
+          "Duration": 1000,
+          "End": 0,
+          "Lifetime": "AnimationLifetimeHold",
+          "Percent": 1.0083333333333333,
+          "Reverse": false,
+          "Start": 64
+        },
+        "Original": 64
+      }
     },
     "sectors.VerticalDoor": {
       "Active": true,
@@ -6293,7 +6761,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6358,7 +6828,19 @@
           "Y": -160
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Animation": {
+          "Acitve": true,
+          "Coordinates": "AnimationCoordinatesAbsolute",
+          "Duration": 1000,
+          "End": 0,
+          "Lifetime": "AnimationLifetimeHold",
+          "Percent": 1.0083333333333333,
+          "Reverse": false,
+          "Start": 64
+        },
+        "Original": 64
+      }
     },
     "sectors.VerticalDoor": {
       "Active": true,
@@ -6375,30 +6857,6 @@
         {
           "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
-        },
-        {
-          "Code": "true",
-          "Style": "ScriptStyleStatement"
-        },
-        {
-          "Code": "true",
-          "Style": "ScriptStyleStatement"
-        },
-        {
-          "Code": "true",
-          "Style": "ScriptStyleStatement"
-        },
-        {
-          "Code": "true",
-          "Style": "ScriptStyleStatement"
-        },
-        {
-          "Code": "true",
-          "Style": "ScriptStyleStatement"
-        },
-        {
-          "Code": "true",
-          "Style": "ScriptStyleStatement"
         }
       ]
     },
@@ -6409,7 +6867,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -64,
+      "BottomZ": {
+        "Original": -64
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6474,7 +6934,19 @@
           "Y": 20
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Animation": {
+          "Acitve": true,
+          "Coordinates": "AnimationCoordinatesAbsolute",
+          "Duration": 1000,
+          "End": -64,
+          "Lifetime": "AnimationLifetimeHold",
+          "Percent": 0.008333333333333333,
+          "Reverse": true,
+          "Start": 64
+        },
+        "Original": 64
+      }
     },
     "sectors.VerticalDoor": {
       "Active": true,
@@ -6490,7 +6962,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -48,
+      "BottomZ": {
+        "Original": -48
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6555,7 +7029,9 @@
           "Y": -90
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -6567,7 +7043,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -28,
+      "BottomZ": {
+        "Original": -28
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6632,7 +7110,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -6647,7 +7127,9 @@
       "Bodies": [
         "85"
       ],
-      "BottomZ": -32,
+      "BottomZ": {
+        "Original": -32
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6713,7 +7195,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -6725,26 +7209,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "85",
       "Mass": 0,
       "MountHeight": 30,
       "Pos": {
-        "X": -340,
-        "Y": -200,
-        "Z": 32
+        "Original": {
+          "X": -340,
+          "Y": -200,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -6768,7 +7260,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -6835,7 +7329,9 @@
           "Y": 50
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -6847,7 +7343,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -6970,7 +7468,9 @@
           "Y": -490
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -6982,7 +7482,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -7049,7 +7551,9 @@
           "Y": -210
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -7061,7 +7565,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -7129,7 +7635,9 @@
           "Y": -310
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -7141,7 +7649,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -7208,7 +7718,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -7220,7 +7732,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -7288,7 +7802,9 @@
           "Y": -160
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -7300,7 +7816,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -7365,7 +7883,9 @@
           "Y": -30
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -7377,7 +7897,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -60,
+      "BottomZ": {
+        "Original": -60
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -7442,7 +7964,9 @@
           "Y": 110
         }
       ],
-      "TopZ": -4
+      "TopZ": {
+        "Original": -4
+      }
     }
   },
   {
@@ -7454,7 +7978,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.25,
       "CeilSurface": {
         "Material": "123"
@@ -7677,7 +8203,9 @@
           "Y": -310
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -7692,7 +8220,9 @@
       "Bodies": [
         "96"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -7745,7 +8275,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150
+      "TopZ": {
+        "Original": 150
+      }
     }
   },
   {
@@ -7757,26 +8289,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "96",
       "Mass": 0,
       "MountHeight": 20,
       "Pos": {
-        "X": 580,
-        "Y": -1280,
-        "Z": 68.63603896932108
+        "Original": {
+          "X": 580,
+          "Y": -1280,
+          "Z": 68.63603896932108
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -7800,7 +8340,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7000000000000001,
       "CeilSurface": {
         "Material": "122"
@@ -7868,7 +8410,24 @@
           "Y": -760
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "98",
+    "concepts.Named": {
+      "Active": true,
+      "Entity": "98",
+      "Name": "Pluk"
+    },
+    "materials.Image": {
+      "Active": true,
+      "Entity": "98",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/pluk.png"
     }
   },
   {
@@ -7880,7 +8439,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -7947,7 +8508,9 @@
           "Y": 7.573593128807154
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -7963,7 +8526,9 @@
         "101",
         "102"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8044,7 +8609,9 @@
           "Y": -760
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -8056,26 +8623,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "101",
       "Mass": 0,
       "MountHeight": 20,
       "Pos": {
-        "X": 810,
-        "Y": -630,
-        "Z": 32
+        "Original": {
+          "X": 810,
+          "Y": -630,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -8099,26 +8674,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "102",
       "Mass": 0,
       "MountHeight": 20,
       "Pos": {
-        "X": 670,
-        "Y": -630,
-        "Z": 32
+        "Original": {
+          "X": 670,
+          "Y": -630,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -8143,10 +8726,12 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "105",
-        "104"
+        "104",
+        "105"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8241,7 +8826,9 @@
           "Y": -160
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -8253,26 +8840,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "104",
       "Mass": 0,
       "MountHeight": 30,
       "Pos": {
-        "X": -70,
-        "Y": -50,
-        "Z": 32
+        "Original": {
+          "X": -70,
+          "Y": -50,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -8296,26 +8891,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "105",
       "Mass": 0,
       "MountHeight": 30,
       "Pos": {
-        "X": 70,
-        "Y": -50,
-        "Z": 32
+        "Original": {
+          "X": 70,
+          "Y": -50,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -8339,7 +8942,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": -16,
+      "BottomZ": {
+        "Original": -16
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8404,7 +9009,9 @@
           "Y": -220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -8420,26 +9027,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 262.5,
+      "Angle": {
+        "Original": 262.5
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "107",
       "Mass": 80,
       "MountHeight": 15,
       "Pos": {
-        "X": -280,
-        "Y": 140,
-        "Z": 0
+        "Original": {
+          "X": -280,
+          "Y": 140,
+          "Z": 0
+        }
       },
       "Size": {
-        "X": 15,
-        "Y": 15,
-        "Z": 42
+        "Original": {
+          "X": 15,
+          "Y": 15,
+          "Z": 42
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     }
   },
@@ -8455,7 +9070,9 @@
       "Bodies": [
         "107"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8541,7 +9158,9 @@
           "Y": -1060
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -8553,7 +9172,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
@@ -8621,7 +9242,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -8633,7 +9256,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8700,7 +9325,9 @@
           "Y": -1200
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -8712,7 +9339,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSlope": -0.7,
       "CeilSurface": {
         "Material": "122"
@@ -8779,7 +9408,9 @@
           "Y": -1220
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -8791,7 +9422,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 5,
+      "BottomZ": {
+        "Original": 5
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8843,7 +9476,9 @@
           "Y": -1350
         }
       ],
-      "TopZ": 80
+      "TopZ": {
+        "Original": 80
+      }
     }
   },
   {
@@ -8855,7 +9490,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 10,
+      "BottomZ": {
+        "Original": 10
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8907,7 +9544,9 @@
           "Y": -1400
         }
       ],
-      "TopZ": 85
+      "TopZ": {
+        "Original": 85
+      }
     }
   },
   {
@@ -8919,7 +9558,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 15,
+      "BottomZ": {
+        "Original": 15
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -8971,7 +9612,9 @@
           "Y": -1400
         }
       ],
-      "TopZ": 90
+      "TopZ": {
+        "Original": 90
+      }
     }
   },
   {
@@ -8983,7 +9626,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 20,
+      "BottomZ": {
+        "Original": 20
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -9035,7 +9680,9 @@
           "Y": -1400
         }
       ],
-      "TopZ": 95
+      "TopZ": {
+        "Original": 95
+      }
     }
   },
   {
@@ -9047,7 +9694,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 25,
+      "BottomZ": {
+        "Original": 25
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -9099,7 +9748,9 @@
           "Y": -1400
         }
       ],
-      "TopZ": 95
+      "TopZ": {
+        "Original": 95
+      }
     }
   },
   {
@@ -9111,7 +9762,9 @@
     },
     "core.Sector": {
       "Active": true,
-      "BottomZ": 30,
+      "BottomZ": {
+        "Original": 30
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -9176,7 +9829,9 @@
           "Y": -1430
         }
       ],
-      "TopZ": 100
+      "TopZ": {
+        "Original": 100
+      }
     }
   },
   {
@@ -9191,7 +9846,9 @@
       "Bodies": [
         "121"
       ],
-      "BottomZ": 35,
+      "BottomZ": {
+        "Original": 35
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -9255,33 +9912,43 @@
           "Y": -1610
         }
       ],
-      "TopZ": 110
+      "TopZ": {
+        "Original": 110
+      }
     }
   },
   {
     "Entity": "121",
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "121",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 1430,
-        "Y": -1520,
-        "Z": 60
+        "Original": {
+          "X": 1430,
+          "Y": -1520,
+          "Z": 60
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -9405,26 +10072,34 @@
     "Entity": "125",
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "125",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -520,
-        "Y": 140,
-        "Z": -80
+        "Original": {
+          "X": -520,
+          "Y": 140,
+          "Z": -80
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -9583,26 +10258,34 @@
     "Entity": "131",
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "131",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -230,
-        "Y": 220,
-        "Z": -32
+        "Original": {
+          "X": -230,
+          "Y": 220,
+          "Z": -32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {

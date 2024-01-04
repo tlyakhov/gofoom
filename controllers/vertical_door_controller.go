@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/concepts"
@@ -30,33 +29,31 @@ func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
 }
 
 func (vd *VerticalDoorController) setupAnimation() {
-	if vd.Animation != nil {
+	if vd.Sector.TopZ.Animation != nil {
 		return
 	}
-	name := "vd_" + strconv.FormatUint(vd.TargetEntity.Entity, 10)
-	vd.Animation = new(concepts.Animation[float64])
-	vd.Animation.SetDB(vd.DB)
-	vd.Animation.Construct(nil)
-	vd.Animation.Name = name
-	vd.Animation.Target = &vd.Sector.TopZ
-	vd.Animation.Start = vd.Sector.TopZ.Original
-	vd.Animation.End = vd.Sector.BottomZ.Original
-	vd.Animation.Duration = 1000
-	vd.Animation.TweeningFunc = concepts.EaseInOut
-	vd.Animation.Style = concepts.AnimationStyleHold
-	vd.AttachAnimation(name, vd.Animation)
+	a := vd.Sector.TopZ.NewAnimation()
+	a.SetDB(vd.DB)
+	a.Construct(nil)
+	a.Start = vd.Sector.TopZ.Original
+	a.End = vd.Sector.BottomZ.Original
+	a.Coordinates = concepts.AnimationCoordinatesAbsolute
+	a.Duration = 1000
+	a.TweeningFunc = concepts.EaseInOut
+	a.Lifetime = concepts.AnimationLifetimeHold
 }
 
 func (vd *VerticalDoorController) Always() {
 	vd.setupAnimation()
 
-	if vd.Animation.Percent <= 0 {
+	a := vd.Sector.TopZ.Animation
+	if a.Percent <= 0 {
 		vd.State = sectors.DoorStateOpen
 		if vd.Intent == sectors.DoorIntentOpen {
 			vd.Intent = sectors.DoorIntentClosed
 		}
 	}
-	if vd.Animation.Percent >= 1 {
+	if a.Percent >= 1 {
 		vd.State = sectors.DoorStateClosed
 		if vd.Intent == sectors.DoorIntentClosed {
 			vd.Intent = sectors.DoorIntentReset
@@ -65,10 +62,9 @@ func (vd *VerticalDoorController) Always() {
 
 	if vd.Intent == sectors.DoorIntentOpen && vd.State != sectors.DoorStateOpen {
 		vd.State = sectors.DoorStateOpening
-		vd.Animation.Reverse = true
+		a.Reverse = true
 	} else if vd.Intent == sectors.DoorIntentClosed && vd.State != sectors.DoorStateClosed {
 		vd.State = sectors.DoorStateClosing
-		vd.Animation.Reverse = false
+		a.Reverse = false
 	}
-
 }

@@ -20,14 +20,12 @@ type Simulation struct {
 	Integrate        func()
 	Render           func()
 	All              map[Simulated]bool
-	Animations       map[string]IAnimation
 }
 
 func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
 		All:           make(map[Simulated]bool),
-		Animations:    make(map[string]IAnimation),
 	}
 }
 
@@ -48,10 +46,10 @@ func (s *Simulation) Step() {
 	for s.RenderTime >= constants.TimeStep {
 		for v := range s.All {
 			v.NewFrame()
-		}
+			if a := v.GetAnimation(); a != nil {
+				a.Animate()
+			}
 
-		for _, a := range s.Animations {
-			a.Animate()
 		}
 
 		if s.Integrate != nil {
@@ -72,12 +70,4 @@ func (s *Simulation) Step() {
 	if s.Render != nil {
 		s.Render()
 	}
-}
-
-func (s *Simulation) AttachAnimation(name string, a IAnimation) bool {
-	if s.Animations[name] != nil {
-		return false
-	}
-	s.Animations[name] = a
-	return true
 }

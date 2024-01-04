@@ -180,7 +180,9 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 	for _, t := range e.State().SelectedTransformables {
 		switch target := t.(type) {
 		case *concepts.Vector2:
-			m.Project(target)
+			m.ProjectSelf(target)
+		case *concepts.Vector3:
+			m.ProjectXZSelf(target)
 		case *concepts.Matrix2:
 			target.MulSelf(m)
 			log.Printf("CST: %v", target.StringHuman())

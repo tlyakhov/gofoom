@@ -53,9 +53,12 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "4"
+        "4",
+        "5"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
@@ -119,7 +122,9 @@
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -131,26 +136,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "4",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -60,
-        "Y": -70,
-        "Z": 32
+        "Original": {
+          "X": -60,
+          "Y": -70,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -178,26 +191,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "5",
       "Mass": 80,
       "MountHeight": 15,
       "Pos": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     }
   },
@@ -206,10 +227,12 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
-        "10",
-        "5"
+        "5",
+        "10"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
@@ -312,7 +335,9 @@
           "Y": 420
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -322,7 +347,9 @@
       "Bodies": [
         "9"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
@@ -438,33 +465,43 @@
           "Y": -310
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "9",
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "9",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 530,
-        "Y": -360,
-        "Z": 32
+        "Original": {
+          "X": 530,
+          "Y": -360,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -483,26 +520,34 @@
     "Entity": "10",
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "10",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 170,
-        "Y": -220,
-        "Z": 32
+        "Original": {
+          "X": 170,
+          "Y": -220,
+          "Z": 32
+        }
       },
       "Size": {
-        "X": 10,
-        "Y": 10,
-        "Z": 10
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {

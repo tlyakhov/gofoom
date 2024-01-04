@@ -15,8 +15,6 @@ func init() {
 		// function, constant and variable definitions
 		"AliveComponentIndex":     reflect.ValueOf(&behaviors.AliveComponentIndex).Elem(),
 		"AliveFromDb":             reflect.ValueOf(behaviors.AliveFromDb),
-		"AnimatedComponentIndex":  reflect.ValueOf(&behaviors.AnimatedComponentIndex).Elem(),
-		"AnimatedFromDb":          reflect.ValueOf(behaviors.AnimatedFromDb),
 		"PlayerComponentIndex":    reflect.ValueOf(&behaviors.PlayerComponentIndex).Elem(),
 		"PlayerFromDb":            reflect.ValueOf(behaviors.PlayerFromDb),
 		"ProximityComponentIndex": reflect.ValueOf(&behaviors.ProximityComponentIndex).Elem(),
@@ -26,7 +24,6 @@ func init() {
 
 		// type definitions
 		"Alive":     reflect.ValueOf((*behaviors.Alive)(nil)),
-		"Animated":  reflect.ValueOf((*behaviors.Animated)(nil)),
 		"Damage":    reflect.ValueOf((*behaviors.Damage)(nil)),
 		"Player":    reflect.ValueOf((*behaviors.Player)(nil)),
 		"Proximity": reflect.ValueOf((*behaviors.Proximity)(nil)),

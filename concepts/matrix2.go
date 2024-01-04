@@ -113,6 +113,23 @@ func (m Matrix2) Project(u *Vector2) *Vector2 {
 		m[1]*u[0] + m[3]*u[1] + m[5]}
 }
 
+func (m Matrix2) ProjectXZ(u *Vector3) *Vector3 {
+	return &Vector3{
+		m[0]*u[0] + m[2]*u[2] + m[4],
+		u[1],
+		m[1]*u[0] + m[3]*u[2] + m[5]}
+}
+
+func (m Matrix2) ProjectSelf(u *Vector2) *Vector2 {
+	u[0], u[1] = m[0]*u[0]+m[2]*u[1]+m[4], m[1]*u[0]+m[3]*u[1]+m[5]
+	return u
+}
+
+func (m Matrix2) ProjectXZSelf(u *Vector3) *Vector3 {
+	u[0], u[2] = m[0]*u[0]+m[2]*u[2]+m[4], m[1]*u[0]+m[3]*u[2]+m[5]
+	return u
+}
+
 func (m Matrix2) Unproject(u *Vector2) *Vector2 {
 	det := m[0]*m[3] - m[2]*m[1]
 	return &Vector2{

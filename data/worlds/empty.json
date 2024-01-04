@@ -30,17 +30,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "2"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "2",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -56,17 +56,17 @@
         "5",
         "4"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -121,7 +121,9 @@
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -133,22 +135,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "4",
-      "Height": 0,
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -60,
-        "Y": -70,
-        "Z": 32
+        "Original": {
+          "X": -60,
+          "Y": -70,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -176,22 +190,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "5",
-      "Height": 32,
       "Mass": 80,
       "MountHeight": 15,
       "Pos": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     }
   }

@@ -30,17 +30,17 @@
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "2"
     },
     "materials.Tiled": {
       "Active": true,
       "Entity": "2",
-      "IsLiquid": false,
-      "Scale": 1
+      "IsLiquid": false
     }
   },
   {
@@ -53,19 +53,20 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [
+        "6",
         "4"
       ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "5",
@@ -121,7 +122,9 @@
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -133,21 +136,34 @@
     },
     "core.Body": {
       "Active": true,
-      "Angle": 0,
+      "Angle": {
+        "Original": 0
+      },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "4",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -60,
-        "Y": -70,
-        "Z": 32
+        "Original": {
+          "X": -60,
+          "Y": -70,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10,
+          "Z": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
@@ -171,18 +187,17 @@
     },
     "core.Sector": {
       "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "5",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -238,7 +253,53 @@
           "Y": -210
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "6",
+    "behaviors.Alive": {
+      "Active": true,
+      "Entity": "6",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Active": true,
+      "Entity": "6"
+    },
+    "core.Body": {
+      "Active": true,
+      "Angle": {
+        "Original": 0
+      },
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "6",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 15,
+          "Y": 15,
+          "Z": 40
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
     }
   }
 ]

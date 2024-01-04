@@ -85,16 +85,31 @@ func (b *Body) Construct(data map[string]any) {
 		b.Active = v.(bool)
 	}
 	if v, ok := data["Pos"]; ok {
-		b.Pos.Deserialize(v)
+		v3 := v.(map[string]any)
+		if _, ok2 := v3["X"]; ok2 {
+			v3 = map[string]any{"Original": v3}
+		}
+		b.Pos.Construct(v3)
 	}
 	if v, ok := data["Vel"]; ok {
-		b.Vel.Deserialize(v)
+		v3 := v.(map[string]any)
+		if _, ok2 := v3["X"]; ok2 {
+			v3 = map[string]any{"Original": v3}
+		}
+		b.Vel.Construct(v3)
 	}
 	if v, ok := data["Size"]; ok {
-		b.Size.Deserialize(v)
+		v3 := v.(map[string]any)
+		if _, ok2 := v3["X"]; ok2 {
+			v3 = map[string]any{"Original": v3}
+		}
+		b.Size.Construct(v3)
 	}
 	if v, ok := data["Angle"]; ok {
-		b.Angle.Deserialize(v)
+		if v2, ok2 := v.(float64); ok2 {
+			v = map[string]any{"Original": v2}
+		}
+		b.Angle.Construct(v.(map[string]any))
 	}
 	if v, ok := data["BoundingRadius"]; ok {
 		b.BoundingRadius = v.(float64)

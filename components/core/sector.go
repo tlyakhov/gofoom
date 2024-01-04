@@ -106,10 +106,16 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["TopZ"]; ok {
-		s.TopZ.Deserialize(v)
+		if v2, ok2 := v.(float64); ok2 {
+			v = map[string]any{"Original": v2}
+		}
+		s.TopZ.Construct(v.(map[string]any))
 	}
 	if v, ok := data["BottomZ"]; ok {
-		s.BottomZ.Deserialize(v)
+		if v2, ok2 := v.(float64); ok2 {
+			v = map[string]any{"Original": v2}
+		}
+		s.BottomZ.Construct(v.(map[string]any))
 	}
 	if v, ok := data["FloorSlope"]; ok {
 		s.FloorSlope = v.(float64)

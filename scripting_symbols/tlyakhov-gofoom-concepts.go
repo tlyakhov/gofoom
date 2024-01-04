@@ -13,12 +13,17 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/concepts/concepts"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"AnimationStyleHold":           reflect.ValueOf(concepts.AnimationStyleHold),
-		"AnimationStyleLoop":           reflect.ValueOf(concepts.AnimationStyleLoop),
-		"AnimationStyleOnce":           reflect.ValueOf(concepts.AnimationStyleOnce),
-		"AnimationStyleString":         reflect.ValueOf(concepts.AnimationStyleString),
-		"AnimationStyleStrings":        reflect.ValueOf(concepts.AnimationStyleStrings),
-		"AnimationStyleValues":         reflect.ValueOf(concepts.AnimationStyleValues),
+		"AnimationCoordinatesAbsolute": reflect.ValueOf(concepts.AnimationCoordinatesAbsolute),
+		"AnimationCoordinatesRelative": reflect.ValueOf(concepts.AnimationCoordinatesRelative),
+		"AnimationCoordinatesString":   reflect.ValueOf(concepts.AnimationCoordinatesString),
+		"AnimationCoordinatesStrings":  reflect.ValueOf(concepts.AnimationCoordinatesStrings),
+		"AnimationCoordinatesValues":   reflect.ValueOf(concepts.AnimationCoordinatesValues),
+		"AnimationLifetimeHold":        reflect.ValueOf(concepts.AnimationLifetimeHold),
+		"AnimationLifetimeLoop":        reflect.ValueOf(concepts.AnimationLifetimeLoop),
+		"AnimationLifetimeOnce":        reflect.ValueOf(concepts.AnimationLifetimeOnce),
+		"AnimationLifetimeString":      reflect.ValueOf(concepts.AnimationLifetimeString),
+		"AnimationLifetimeStrings":     reflect.ValueOf(concepts.AnimationLifetimeStrings),
+		"AnimationLifetimeValues":      reflect.ValueOf(concepts.AnimationLifetimeValues),
 		"AsmInt32ToVector4":            reflect.ValueOf(concepts.AsmInt32ToVector4),
 		"AsmInt32ToVector4PreMul":      reflect.ValueOf(concepts.AsmInt32ToVector4PreMul),
 		"AsmVector4AddPreMulColorSelf": reflect.ValueOf(concepts.AsmVector4AddPreMulColorSelf),
@@ -89,27 +94,28 @@ func init() {
 		"Vector2AABBIntersect":         reflect.ValueOf(concepts.Vector2AABBIntersect),
 
 		// type definitions
-		"AnimationStyle":    reflect.ValueOf((*concepts.AnimationStyle)(nil)),
-		"Attachable":        reflect.ValueOf((*concepts.Attachable)(nil)),
-		"Attached":          reflect.ValueOf((*concepts.Attached)(nil)),
-		"BaseController":    reflect.ValueOf((*concepts.BaseController)(nil)),
-		"Controller":        reflect.ValueOf((*concepts.Controller)(nil)),
-		"ControllerMethod":  reflect.ValueOf((*concepts.ControllerMethod)(nil)),
-		"ControllerSet":     reflect.ValueOf((*concepts.ControllerSet)(nil)),
-		"EntityComponentDB": reflect.ValueOf((*concepts.EntityComponentDB)(nil)),
-		"EntityRef":         reflect.ValueOf((*concepts.EntityRef)(nil)),
-		"IAnimation":        reflect.ValueOf((*concepts.IAnimation)(nil)),
-		"Matrix2":           reflect.ValueOf((*concepts.Matrix2)(nil)),
-		"Named":             reflect.ValueOf((*concepts.Named)(nil)),
-		"Serializable":      reflect.ValueOf((*concepts.Serializable)(nil)),
-		"Simulated":         reflect.ValueOf((*concepts.Simulated)(nil)),
-		"Simulation":        reflect.ValueOf((*concepts.Simulation)(nil)),
-		"SyncQueue":         reflect.ValueOf((*concepts.SyncQueue)(nil)),
-		"SyncUniqueQueue":   reflect.ValueOf((*concepts.SyncUniqueQueue)(nil)),
-		"TweeningFunc":      reflect.ValueOf((*concepts.TweeningFunc)(nil)),
-		"Vector2":           reflect.ValueOf((*concepts.Vector2)(nil)),
-		"Vector3":           reflect.ValueOf((*concepts.Vector3)(nil)),
-		"Vector4":           reflect.ValueOf((*concepts.Vector4)(nil)),
+		"AnimationCoordinates": reflect.ValueOf((*concepts.AnimationCoordinates)(nil)),
+		"AnimationLifetime":    reflect.ValueOf((*concepts.AnimationLifetime)(nil)),
+		"Attachable":           reflect.ValueOf((*concepts.Attachable)(nil)),
+		"Attached":             reflect.ValueOf((*concepts.Attached)(nil)),
+		"BaseController":       reflect.ValueOf((*concepts.BaseController)(nil)),
+		"Controller":           reflect.ValueOf((*concepts.Controller)(nil)),
+		"ControllerMethod":     reflect.ValueOf((*concepts.ControllerMethod)(nil)),
+		"ControllerSet":        reflect.ValueOf((*concepts.ControllerSet)(nil)),
+		"EntityComponentDB":    reflect.ValueOf((*concepts.EntityComponentDB)(nil)),
+		"EntityRef":            reflect.ValueOf((*concepts.EntityRef)(nil)),
+		"IAnimation":           reflect.ValueOf((*concepts.Animated)(nil)),
+		"Matrix2":              reflect.ValueOf((*concepts.Matrix2)(nil)),
+		"Named":                reflect.ValueOf((*concepts.Named)(nil)),
+		"Serializable":         reflect.ValueOf((*concepts.Serializable)(nil)),
+		"Simulated":            reflect.ValueOf((*concepts.Simulated)(nil)),
+		"Simulation":           reflect.ValueOf((*concepts.Simulation)(nil)),
+		"SyncQueue":            reflect.ValueOf((*concepts.SyncQueue)(nil)),
+		"SyncUniqueQueue":      reflect.ValueOf((*concepts.SyncUniqueQueue)(nil)),
+		"TweeningFunc":         reflect.ValueOf((*concepts.TweeningFunc)(nil)),
+		"Vector2":              reflect.ValueOf((*concepts.Vector2)(nil)),
+		"Vector3":              reflect.ValueOf((*concepts.Vector3)(nil)),
+		"Vector4":              reflect.ValueOf((*concepts.Vector4)(nil)),
 
 		// interface wrapper definitions
 		"_Attachable":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_Attachable)(nil)),
@@ -198,12 +204,24 @@ func (W _tlyakhov_gofoom_concepts_Controller) Target(source *concepts.EntityRef)
 
 // _tlyakhov_gofoom_concepts_IAnimation is an interface wrapper for IAnimation type
 type _tlyakhov_gofoom_concepts_IAnimation struct {
-	IValue   interface{}
-	WAnimate func()
+	IValue     interface{}
+	WAnimate   func()
+	WConstruct func(data map[string]any)
+	WSerialize func() map[string]any
+	WSetDB     func(db *concepts.EntityComponentDB)
 }
 
 func (W _tlyakhov_gofoom_concepts_IAnimation) Animate() {
 	W.WAnimate()
+}
+func (W _tlyakhov_gofoom_concepts_IAnimation) Construct(data map[string]any) {
+	W.WConstruct(data)
+}
+func (W _tlyakhov_gofoom_concepts_IAnimation) Serialize() map[string]any {
+	return W.WSerialize()
+}
+func (W _tlyakhov_gofoom_concepts_IAnimation) SetDB(db *concepts.EntityComponentDB) {
+	W.WSetDB(db)
 }
 
 // _tlyakhov_gofoom_concepts_Serializable is an interface wrapper for Serializable type
@@ -231,12 +249,13 @@ type _tlyakhov_gofoom_concepts_Simulatable struct {
 
 // _tlyakhov_gofoom_concepts_Simulated is an interface wrapper for Simulated type
 type _tlyakhov_gofoom_concepts_Simulated struct {
-	IValue       interface{}
-	WAttach      func(sim *concepts.Simulation)
-	WDetach      func(sim *concepts.Simulation)
-	WNewFrame    func()
-	WRenderBlend func(a0 float64)
-	WReset       func()
+	IValue        interface{}
+	WAttach       func(sim *concepts.Simulation)
+	WDetach       func(sim *concepts.Simulation)
+	WGetAnimation func() concepts.Animated
+	WNewFrame     func()
+	WRenderBlend  func(a0 float64)
+	WReset        func()
 }
 
 func (W _tlyakhov_gofoom_concepts_Simulated) Attach(sim *concepts.Simulation) {
@@ -244,6 +263,9 @@ func (W _tlyakhov_gofoom_concepts_Simulated) Attach(sim *concepts.Simulation) {
 }
 func (W _tlyakhov_gofoom_concepts_Simulated) Detach(sim *concepts.Simulation) {
 	W.WDetach(sim)
+}
+func (W _tlyakhov_gofoom_concepts_Simulated) GetAnimation() concepts.Animated {
+	return W.WGetAnimation()
 }
 func (W _tlyakhov_gofoom_concepts_Simulated) NewFrame() {
 	W.WNewFrame()
