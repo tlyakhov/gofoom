@@ -233,10 +233,24 @@ func CreateMainMenu() {
 	editor.ToolsAlignGrid.Menu = fyne.NewMenuItem("Align Grid", func() { editor.SwitchTool(state.ToolAlignGrid) })
 
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
-	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {})
+	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
+		for simVar := range editor.DB.Simulation.All {
+			simVar.Reset()
+			if a := simVar.GetAnimation(); a != nil {
+				a.Reset()
+			}
+		}
+	})
 	editor.BehaviorsPause.NoModifier = true
 	editor.BehaviorsPause.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5}
-	editor.BehaviorsPause.Menu = fyne.NewMenuItem("Pause all entities", func() {})
+	editor.BehaviorsPause.Menu = fyne.NewMenuItem("Pause simulation", func() {
+		editor.SimulationPaused = !editor.SimulationPaused
+		if editor.SimulationPaused {
+			editor.BehaviorsPause.Menu.Label = "Resume simulation"
+		} else {
+			editor.BehaviorsPause.Menu.Label = "Pause simulation"
+		}
+	})
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)
 	menuEdit := fyne.NewMenu("Edit", editor.EditUndo.Menu, editor.EditRedo.Menu, fyne.NewMenuItemSeparator(),

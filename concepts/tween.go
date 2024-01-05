@@ -2,6 +2,7 @@ package concepts
 
 import (
 	"math"
+	"reflect"
 )
 
 type TweeningFunc func(start, end, t float64) float64
@@ -24,6 +25,14 @@ var TweeningFuncs = map[string]TweeningFunc{
 	"ElasticIn":    ElasticIn,
 	"ElasticOut":   ElasticOut,
 	"ElasticInOut": ElasticInOut,
+}
+var TweeningFuncNames map[uintptr]string
+
+func init() {
+	TweeningFuncNames = make(map[uintptr]string)
+	for name, f := range TweeningFuncs {
+		TweeningFuncNames[reflect.ValueOf(f).Pointer()] = name
+	}
 }
 
 func Lerp(start, end, t float64) float64 {

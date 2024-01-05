@@ -49,7 +49,7 @@ type Edit struct {
 	SectorTypesVisible    bool
 	ComponentNamesVisible bool
 
-	EntitiesPaused bool
+	SimulationPaused bool
 }
 
 type IEditor interface {
