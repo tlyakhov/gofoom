@@ -282,6 +282,8 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldSlice(field)
 		case *[]concepts.Animated:
 			g.fieldSlice(field)
+		case *concepts.TweeningFunc:
+			g.fieldTweeningFunc(field)
 		case **concepts.Animation[int]:
 			g.fieldAnimation(field)
 		case **concepts.Animation[float64]:

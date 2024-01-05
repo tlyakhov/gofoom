@@ -1,6 +1,7 @@
 package concepts
 
 import (
+	"reflect"
 	"tlyakhov/gofoom/constants"
 )
 
@@ -24,6 +25,7 @@ const (
 type Animated interface {
 	Serializable
 	Animate()
+	Reset()
 }
 
 type Animation[T Simulatable] struct {
@@ -46,6 +48,17 @@ func (a *Animation[T]) SetEasingFunc(name string) TweeningFunc {
 		a.TweeningFunc = Lerp
 	}
 	return a.TweeningFunc
+}
+
+func (a *Animation[T]) Reset() {
+	if a == nil {
+		return
+	}
+	if a.Reverse {
+		a.Percent = 1
+	} else {
+		a.Percent = 0
+	}
 }
 
 func (a *Animation[T]) Animate() {
@@ -191,13 +204,14 @@ func (a *Animation[T]) Serialize() map[string]any {
 	result["Acitve"] = a.Active
 	result["Reverse"] = a.Reverse
 	result["Percent"] = a.Percent
+	result["TweeningFunc"] = TweeningFuncNames[reflect.ValueOf(a.TweeningFunc).Pointer()]
 	if a.Lifetime != AnimationLifetimeLoop {
 		result["Lifetime"] = a.Lifetime.String()
 	}
 	if a.Coordinates != AnimationCoordinatesRelative {
 		result["Coordinates"] = a.Coordinates.String()
 	}
-	//TweeningFunc `editable:"Tweening Function"`
+
 	switch c := any(a).(type) {
 	case *Animation[int]:
 		result["Start"] = c.Start

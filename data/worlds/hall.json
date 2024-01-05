@@ -2050,7 +2050,8 @@
           "Lifetime": "AnimationLifetimeHold",
           "Percent": 1.0083333333333333,
           "Reverse": false,
-          "Start": 64
+          "Start": 64,
+          "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
@@ -2645,19 +2646,20 @@
       "Pos": {
         "Animation": {
           "Acitve": true,
-          "Duration": 1000,
+          "Duration": 500,
           "End": {
             "X": 0,
             "Y": 0,
-            "Z": 15
+            "Z": 5
           },
-          "Percent": 0.13333333333333436,
+          "Percent": 0.7833333333333327,
           "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
             "Z": 0
-          }
+          },
+          "TweeningFunc": "EaseInOut3"
         },
         "Original": {
           "X": -290,
@@ -3645,11 +3647,12 @@
           "Acitve": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 8.016253332447064,
+          "End": -11.373228109372244,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.25000000000000006,
+          "Percent": 0.02777777777777778,
           "Reverse": false,
-          "Start": -16.67106299359328
+          "Start": -6.353007897099779,
+          "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
       },
@@ -6731,7 +6734,8 @@
           "Lifetime": "AnimationLifetimeHold",
           "Percent": 1.0083333333333333,
           "Reverse": false,
-          "Start": 64
+          "Start": 64,
+          "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
@@ -6837,7 +6841,8 @@
           "Lifetime": "AnimationLifetimeHold",
           "Percent": 1.0083333333333333,
           "Reverse": false,
-          "Start": 64
+          "Start": 64,
+          "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
@@ -6941,9 +6946,10 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0.008333333333333333,
-          "Reverse": true,
-          "Start": 64
+          "Percent": 0,
+          "Reverse": false,
+          "Start": 64,
+          "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
