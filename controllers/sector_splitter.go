@@ -15,8 +15,8 @@ type splitSide int
 
 const (
 	sideLeft  splitSide = -1
-	sideOn              = 0
-	sideRight           = 1
+	sideOn    splitSide = 0
+	sideRight splitSide = 1
 )
 
 type SectorSplitter struct {

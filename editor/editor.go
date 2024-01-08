@@ -135,16 +135,16 @@ func (e *Editor) Integrate() {
 	playerBody := core.BodyFromDb(player.Ref())
 
 	if e.GameWidget.KeyMap["W"] {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now, e.DB.EditorPaused)
 	}
 	if e.GameWidget.KeyMap["S"] {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0, e.DB.EditorPaused)
 	}
 	if e.GameWidget.KeyMap["E"] {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0, e.DB.EditorPaused)
 	}
 	if e.GameWidget.KeyMap["Q"] {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0, e.DB.EditorPaused)
 	}
 	if e.GameWidget.KeyMap["A"] {
 		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
@@ -172,7 +172,7 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	e.DB.NewControllerSet().ActGlobal(concepts.ControllerAlways)
+	e.DB.ActAllControllers(concepts.ControllerAlways)
 	e.GatherHoveringObjects()
 }
 

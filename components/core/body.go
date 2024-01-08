@@ -20,7 +20,6 @@ type Body struct {
 	CollisionResponse CollisionResponse             `editable:"Collision Response"`
 	Shadow            BodyShadow                    `editable:"Shadow Type"`
 	MountHeight       float64                       `editable:"Mount Height"`
-	Active            bool                          `editable:"Active?"`
 	OnGround          bool
 	SectorEntityRef   *concepts.EntityRef
 }
@@ -67,13 +66,14 @@ func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 }
 
 func (b *Body) Construct(data map[string]any) {
+	b.Attached.Construct(data)
+
 	b.Pos.Set(concepts.Vector3{0, 0, 0})
 	b.Vel.Set(concepts.Vector3{0, 0, 0})
 	b.Size.Set(concepts.Vector3{10, 10, 10})
 	b.BoundingRadius = 10
 	b.CollisionResponse = Slide
 	b.MountHeight = constants.PlayerMountHeight
-	b.Active = true
 	b.Shadow = BodyShadowNone
 	b.Angle.NoRenderBlend = true
 
@@ -81,9 +81,6 @@ func (b *Body) Construct(data map[string]any) {
 		return
 	}
 
-	if v, ok := data["Active"]; ok {
-		b.Active = v.(bool)
-	}
 	if v, ok := data["Pos"]; ok {
 		v3 := v.(map[string]any)
 		if _, ok2 := v3["X"]; ok2 {
@@ -140,7 +137,6 @@ func (b *Body) Construct(data map[string]any) {
 
 func (b *Body) Serialize() map[string]any {
 	result := b.Attached.Serialize()
-	result["Active"] = b.Active
 	result["Pos"] = b.Pos.Serialize()
 	result["Vel"] = b.Vel.Serialize()
 	result["Size"] = b.Size.Serialize()

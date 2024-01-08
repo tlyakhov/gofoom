@@ -139,10 +139,9 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 		}
 	}
 	// After everything's loaded, trigger the controllers
-	set := db.NewControllerSet()
-	set.ActGlobal(concepts.ControllerRecalculate)
+	db.ActAllControllers(concepts.ControllerRecalculate)
 	AutoPortal(db)
-	set.ActGlobal(concepts.ControllerLoaded)
+	db.ActAllControllers(concepts.ControllerLoaded)
 }
 func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	ispawn := archetypes.CreateBasic(db, core.SpawnComponentIndex)
@@ -176,8 +175,7 @@ func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	log.Println("Generated light")
 
 	// After everything's loaded, trigger the controllers
-	set := db.NewControllerSet()
-	set.ActGlobal(concepts.ControllerRecalculate)
+	db.ActAllControllers(concepts.ControllerRecalculate)
 	AutoPortal(db)
-	set.ActGlobal(concepts.ControllerLoaded)
+	db.ActAllControllers(concepts.ControllerLoaded)
 }

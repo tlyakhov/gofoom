@@ -14,6 +14,10 @@ func init() {
 	concepts.DbTypes().RegisterController(&PvsController{})
 }
 
+func (pvs *PvsController) ComponentIndex() int {
+	return core.SectorComponentIndex
+}
+
 // Should run after the SectorController, which recalculates normals etc
 func (pvs *PvsController) Priority() int {
 	return 60
@@ -23,10 +27,9 @@ func (pvs *PvsController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerRecalculate | concepts.ControllerLoaded
 }
 
-func (pvs *PvsController) Target(target *concepts.EntityRef) bool {
-	pvs.TargetEntity = target
-	pvs.Sector = core.SectorFromDb(target)
-	return pvs.Sector != nil && pvs.Sector.Active
+func (pvs *PvsController) Target(target concepts.Attachable) bool {
+	pvs.Sector = target.(*core.Sector)
+	return pvs.Sector.IsActive()
 }
 
 func (pvs *PvsController) Recalculate() {
@@ -64,7 +67,7 @@ func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.S
 		}
 		correctSide := true
 		for _, normal := range normals[:nNormals] {
-			correctSide = correctSide || normal.Dot(&seg.Normal) >= 0
+			correctSide = correctSide && normal.Dot(&seg.Normal) >= 0
 		}
 		if !correctSide || pvs.Sector.PVS[adj.Sector.Entity] != nil {
 			continue

@@ -24,7 +24,7 @@ func (a *AddBody) DetachFromSector() {
 		}
 		delete(body.Sector().Bodies, a.EntityRef.Entity)
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
 func (a *AddBody) AttachAll() {
@@ -41,7 +41,7 @@ func (a *AddBody) AttachToSector() {
 			a.ContainingSector.Bodies[a.EntityRef.Entity] = a.EntityRef
 		}
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
 func (a *AddBody) OnMouseDown(evt *desktop.MouseEvent) {}
@@ -71,7 +71,7 @@ func (a *AddBody) OnMouseMove() {
 			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
 		body.Pos.Reset()
-		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+		a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 	}
 }
 

@@ -18,16 +18,16 @@ func BodySectorScript(scripts []*core.Script, ibody, isector *concepts.EntityRef
 
 func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
 	if sectorRef.Nil() {
-		log.Printf("%v tried to enter nil sector", bc.TargetEntity.Entity)
+		log.Printf("%v tried to enter nil sector", bc.Body.Entity)
 		return
 	}
 	sector := core.SectorFromDb(sectorRef)
 	if sector == nil {
-		log.Printf("%v tried to enter entity %v that's not a sector", bc.TargetEntity.Entity, sectorRef.String())
+		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, sectorRef.String())
 		return
 	}
 	bc.Sector = sector
-	bc.Sector.Bodies[bc.TargetEntity.Entity] = bc.TargetEntity
+	bc.Sector.Bodies[bc.Body.Entity] = bc.Body.Ref()
 	bc.Body.SectorEntityRef = sectorRef
 
 	if bc.Body.OnGround {
@@ -37,15 +37,15 @@ func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
 			p[2] = floorZ
 		}
 	}
-	BodySectorScript(bc.Sector.EnterScripts, bc.TargetEntity, bc.Sector.Ref())
+	BodySectorScript(bc.Sector.EnterScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 }
 
 func (bc *BodyController) Exit() {
 	if bc.Sector == nil {
-		log.Printf("%v tried to exit nil sector", bc.TargetEntity.Entity)
+		log.Printf("%v tried to exit nil sector", bc.Body.Entity)
 		return
 	}
-	BodySectorScript(bc.Sector.ExitScripts, bc.TargetEntity, bc.Sector.Ref())
+	BodySectorScript(bc.Sector.ExitScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 	delete(bc.Sector.Bodies, bc.Body.Entity)
 	bc.Body.SectorEntityRef = nil
 }
@@ -93,7 +93,7 @@ func (bc *BodyController) Physics() {
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
 		bc.Body.OnGround = true
-		BodySectorScript(bc.Sector.FloorScripts, bc.TargetEntity, bc.Sector.Ref())
+		BodySectorScript(bc.Sector.FloorScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 	}
 
 	if !bc.Sector.CeilTarget.Nil() && bodyTop > ceilZ {
@@ -107,6 +107,6 @@ func (bc *BodyController) Physics() {
 		delta := bc.Sector.CeilNormal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
-		BodySectorScript(bc.Sector.CeilScripts, bc.TargetEntity, bc.Sector.Ref())
+		BodySectorScript(bc.Sector.CeilScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 	}
 }

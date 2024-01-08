@@ -74,15 +74,16 @@ func (a *Move) OnMouseUp() {
 }
 func (a *Move) Act() {
 	j := 0
+	set := a.State().DB.NewControllerSet()
 	segmentFunc := func(seg *core.Segment) {
 		seg.P = *a.WorldGrid(a.Original[j].To2D().Add(&a.Delta))
-		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), concepts.ControllerRecalculate)
+		set.Act(seg.Sector, core.SectorComponentIndex, concepts.ControllerRecalculate)
 		j++
 	}
 	a.Iterate(a.Selected, func(body *core.Body) {
 		body.Pos.Original = *a.WorldGrid3D(a.Original[j].Add(a.Delta.To3D(new(concepts.Vector3))))
 		body.Pos.Reset()
-		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+		a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 		j++
 	}, func(sector *core.Sector) {
 		for _, segment := range sector.Segments {
@@ -95,15 +96,16 @@ func (a *Move) Frame()  {}
 
 func (a *Move) Undo() {
 	j := 0
+	set := a.State().DB.NewControllerSet()
 	segmentFunc := func(seg *core.Segment) {
 		seg.P = *a.Original[j].To2D()
-		a.State().DB.NewControllerSet().Act(seg.Sector.Ref(), concepts.ControllerRecalculate)
+		set.Act(seg.Sector, core.SectorComponentIndex, concepts.ControllerRecalculate)
 		j++
 	}
 	a.Iterate(a.Selected, func(body *core.Body) {
 		body.Pos.Original = a.Original[j]
 		body.Pos.Reset()
-		a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+		a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 		j++
 	}, func(sector *core.Sector) {
 		for _, segment := range sector.Segments {

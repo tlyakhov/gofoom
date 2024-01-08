@@ -16,16 +16,18 @@ func init() {
 	concepts.DbTypes().RegisterController(&VerticalDoorController{})
 }
 
+func (vd *VerticalDoorController) ComponentIndex() int {
+	return sectors.VerticalDoorComponentIndex
+}
+
 func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerAlways
 }
 
-func (vd *VerticalDoorController) Target(target *concepts.EntityRef) bool {
-	vd.TargetEntity = target
-	vd.VerticalDoor = sectors.VerticalDoorFromDb(target)
-	vd.Sector = core.SectorFromDb(target)
-	return vd.VerticalDoor != nil && vd.VerticalDoor.Active &&
-		vd.Sector != nil && vd.Sector.Active
+func (vd *VerticalDoorController) Target(target concepts.Attachable) bool {
+	vd.VerticalDoor = target.(*sectors.VerticalDoor)
+	vd.Sector = core.SectorFromDb(target.Ref())
+	return vd.VerticalDoor.IsActive() && vd.Sector.IsActive()
 }
 
 func (vd *VerticalDoorController) setupAnimation() {

@@ -244,12 +244,13 @@ func CreateMainMenu() {
 	editor.BehaviorsPause.NoModifier = true
 	editor.BehaviorsPause.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5}
 	editor.BehaviorsPause.Menu = fyne.NewMenuItem("Pause simulation", func() {
-		editor.SimulationPaused = !editor.SimulationPaused
-		if editor.SimulationPaused {
+		editor.DB.EditorPaused = !editor.DB.EditorPaused
+		if editor.DB.EditorPaused {
 			editor.BehaviorsPause.Menu.Label = "Resume simulation"
 		} else {
 			editor.BehaviorsPause.Menu.Label = "Pause simulation"
 		}
+		editor.Window.MainMenu().Items[3].Refresh()
 	})
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)

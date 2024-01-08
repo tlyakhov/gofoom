@@ -112,9 +112,7 @@ func main() {
 				return
 			}
 			if editor.Lock.TryRLock() {
-				if !editor.SimulationPaused {
-					editor.DB.Simulation.Step()
-				}
+				editor.DB.Simulation.Step()
 				if editor.MapWidget.NeedsRefresh {
 					editor.MapWidget.Raster.Refresh()
 					//editor.MapWidget.NeedsRefresh = false

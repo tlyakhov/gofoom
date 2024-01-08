@@ -48,8 +48,6 @@ type Edit struct {
 	BodiesVisible         bool
 	SectorTypesVisible    bool
 	ComponentNamesVisible bool
-
-	SimulationPaused bool
 }
 
 type IEditor interface {

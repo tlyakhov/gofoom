@@ -17,6 +17,10 @@ func init() {
 	concepts.DbTypes().RegisterController(&WorldController{})
 }
 
+func (wc *WorldController) ComponentIndex() int {
+	return core.SpawnComponentIndex
+}
+
 func (wc *WorldController) Priority() int {
 	return 70
 }
@@ -25,10 +29,9 @@ func (wc *WorldController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerLoaded | concepts.ControllerAlways
 }
 
-func (wc *WorldController) Target(target *concepts.EntityRef) bool {
-	wc.TargetEntity = target
-	wc.Spawn = core.SpawnFromDb(target)
-	return wc.Spawn != nil && wc.Active
+func (wc *WorldController) Target(target concepts.Attachable) bool {
+	wc.Spawn = target.(*core.Spawn)
+	return wc.IsActive()
 }
 
 func (wc *WorldController) Loaded() {
@@ -41,10 +44,10 @@ func (wc *WorldController) Loaded() {
 	}
 }
 
-func (wc *WorldController) proximity(sector *core.Sector, body *core.Body, set *concepts.ControllerSet) {
+func (wc *WorldController) proximity(sector *core.Sector, body *core.Body) {
 	// Consider the case where the sector entity has a proximity
 	// component that includes the body as a valid scripting source
-	if p := behaviors.ProximityFromDb(sector.Ref()); p != nil && p.Active {
+	if p := behaviors.ProximityFromDb(sector.Ref()); p != nil && p.IsActive() {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
 			BodySectorScript(p.Scripts, body.Ref(), sector.Ref())
 		}
@@ -52,7 +55,7 @@ func (wc *WorldController) proximity(sector *core.Sector, body *core.Body, set *
 
 	// Consider the case where the body entity has a proximity
 	// component that includes the sector as a valid scripting source
-	if p := behaviors.ProximityFromDb(body.Ref()); p != nil && p.Active {
+	if p := behaviors.ProximityFromDb(body.Ref()); p != nil && p.IsActive() {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
 			BodySectorScript(p.Scripts, body.Ref(), sector.Ref())
 		}
@@ -60,14 +63,13 @@ func (wc *WorldController) proximity(sector *core.Sector, body *core.Body, set *
 }
 
 func (wc *WorldController) Always() {
-	set := wc.NewControllerSet()
 	for _, c := range wc.DB.Components[core.BodyComponentIndex] {
 		body := c.(*core.Body)
 		if !body.Active || body.SectorEntityRef.Nil() {
 			continue
 		}
 		for _, pvs := range body.Sector().PVS {
-			wc.proximity(pvs, body, set)
+			wc.proximity(pvs, body)
 		}
 	}
 }

@@ -45,16 +45,16 @@ func processInput() {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 	}
 	if win.Pressed(pixelgl.KeyW) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now, false)
 	}
 	if win.Pressed(pixelgl.KeyS) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+180.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+180.0, false)
 	}
 	if win.Pressed(pixelgl.KeyE) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+90.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+90.0, false)
 	}
 	if win.Pressed(pixelgl.KeyQ) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+270.0)
+		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+270.0, false)
 	}
 	if win.Pressed(pixelgl.KeyA) {
 		renderer.PlayerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
@@ -86,7 +86,7 @@ func processInput() {
 
 func integrateGame() {
 	processInput()
-	db.NewControllerSet().ActGlobal(concepts.ControllerAlways)
+	db.ActAllControllers(concepts.ControllerAlways)
 }
 
 func renderGame() {

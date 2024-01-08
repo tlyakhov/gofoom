@@ -21,25 +21,25 @@ func init() {
 	concepts.DbTypes().RegisterController(&PlayerController{})
 }
 
+func (pc *PlayerController) ComponentIndex() int {
+	return behaviors.PlayerComponentIndex
+}
+
 func (pc *PlayerController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerAlways
 }
 
-func (pc *PlayerController) Target(target *concepts.EntityRef) bool {
-	pc.TargetEntity = target
-	pc.Player = behaviors.PlayerFromDb(target)
-	if pc.Player == nil || !pc.Player.Active {
+func (pc *PlayerController) Target(target concepts.Attachable) bool {
+	pc.Player = target.(*behaviors.Player)
+	if !pc.Player.IsActive() {
 		return false
 	}
-	pc.Body = core.BodyFromDb(target)
-	if pc.Body == nil || !pc.Body.Active {
+	pc.Body = core.BodyFromDb(pc.Player.EntityRef)
+	if !pc.Body.IsActive() {
 		return false
 	}
-	pc.Alive = behaviors.AliveFromDb(target)
-	if pc.Alive == nil || !pc.Alive.Active {
-		return false
-	}
-	return true
+	pc.Alive = behaviors.AliveFromDb(pc.Player.EntityRef)
+	return pc.Alive.IsActive()
 }
 
 func (pc *PlayerController) Always() {
@@ -74,9 +74,18 @@ func (pc *PlayerController) Always() {
 	}
 }
 
-func MovePlayer(p *core.Body, angle float64) {
-	if p.OnGround {
-		p.Force[0] += math.Cos(angle*concepts.Deg2rad) * constants.PlayerWalkForce
-		p.Force[1] += math.Sin(angle*concepts.Deg2rad) * constants.PlayerWalkForce
+func MovePlayer(p *core.Body, angle float64, direct bool) {
+	dy, dx := math.Sincos(angle * concepts.Deg2rad)
+	dy *= constants.PlayerWalkForce
+	dx *= constants.PlayerWalkForce
+
+	if direct {
+		p.Pos.Now[0] += dx * 0.1 / p.Mass
+		p.Pos.Now[1] += dy * 0.1 / p.Mass
+	} else {
+		if p.OnGround {
+			p.Force[0] += dx
+			p.Force[1] += dy
+		}
 	}
 }
