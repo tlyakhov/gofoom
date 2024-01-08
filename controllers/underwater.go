@@ -17,15 +17,18 @@ func init() {
 	concepts.DbTypes().RegisterController(&UnderwaterController{})
 }
 
+func (uc *UnderwaterController) ComponentIndex() int {
+	return sectors.UnderwaterComponentIndex
+}
+
 func (uc *UnderwaterController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerAlways | concepts.ControllerLoaded
 }
 
-func (uc *UnderwaterController) Target(target *concepts.EntityRef) bool {
-	uc.TargetEntity = target
-	uc.Underwater = sectors.UnderwaterFromDb(target)
-	uc.Sector = core.SectorFromDb(target)
-	return uc.Underwater != nil && uc.Underwater.Active && uc.Sector != nil && uc.Sector.Active
+func (uc *UnderwaterController) Target(target concepts.Attachable) bool {
+	uc.Underwater = target.(*sectors.Underwater)
+	uc.Sector = core.SectorFromDb(target.Ref())
+	return uc.Underwater.IsActive() && uc.Sector.IsActive()
 }
 
 func (uc *UnderwaterController) Always() {

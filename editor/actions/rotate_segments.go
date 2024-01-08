@@ -47,7 +47,7 @@ func (a *RotateSegments) Undo() {
 			a.Rotate(target.Sector, true)
 		}
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *RotateSegments) Redo() {
 	for _, obj := range a.State().SelectedObjects {
@@ -60,7 +60,7 @@ func (a *RotateSegments) Redo() {
 			a.Rotate(target.Sector, false)
 		}
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
 func (a *RotateSegments) RequiresLock() bool { return true }

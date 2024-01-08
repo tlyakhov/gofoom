@@ -6,9 +6,10 @@ import (
 )
 
 type Attached struct {
-	*EntityRef `editable:"Component" edit_type:"Component"`
-	Active     bool `editable:"Active?"`
-	indexInDB  int
+	*EntityRef              `editable:"Component" edit_type:"Component"`
+	Active                  bool `editable:"Active?"`
+	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`
+	indexInDB               int
 }
 
 type Attachable interface {
@@ -30,6 +31,10 @@ var AttachedComponentIndex int
 
 func init() {
 	AttachedComponentIndex = DbTypes().Register(Attached{}, nil)
+}
+
+func (a *Attached) IsActive() bool {
+	return a != nil && a.Entity != 0 && a.Active && (a.ActiveWhileEditorPaused || !a.DB.Simulation.EditorPaused)
 }
 
 func (a *Attached) String() string {
@@ -62,6 +67,7 @@ func (a *Attached) SetDB(db *EntityComponentDB) {
 
 func (a *Attached) Construct(data map[string]any) {
 	a.Active = true
+	a.ActiveWhileEditorPaused = true
 
 	if data == nil {
 		return
@@ -72,10 +78,21 @@ func (a *Attached) Construct(data map[string]any) {
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
 	}
+	if v, ok := data["ActiveWhileEditorPaused"]; ok {
+		a.ActiveWhileEditorPaused = v.(bool)
+	}
 }
 
 func (a *Attached) Serialize() map[string]any {
-	return map[string]any{"Entity": strconv.FormatUint(a.Entity, 10), "Active": a.Active}
+	result := map[string]any{"Entity": strconv.FormatUint(a.Entity, 10)}
+	if !a.Active {
+		result["Active"] = a.Active
+	}
+	if !a.ActiveWhileEditorPaused {
+		result["ActiveWhileEditorPaused"] = a.ActiveWhileEditorPaused
+	}
+
+	return result
 }
 
 func (a *Attached) DeserializeComponentList(list *map[int]bool, name string, data map[string]any) {

@@ -32,7 +32,7 @@ func (a *AddComponent) Undo() {
 	for _, entity := range a.Entities {
 		a.State().DB.Detach(a.Index, entity)
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *AddComponent) Redo() {
 	a.State().Lock.Lock()
@@ -40,5 +40,5 @@ func (a *AddComponent) Redo() {
 	for _, entity := range a.Entities {
 		a.State().DB.NewComponent(entity, a.Index)
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

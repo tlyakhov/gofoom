@@ -10,8 +10,11 @@ import (
 
 func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 	b := core.BodyFromDb(ref)
+	if b == nil || !b.IsActive() {
+		return
+	}
 	sheet := materials.SpriteSheetFromDb(ref)
-	if b == nil || sheet == nil {
+	if sheet == nil || !sheet.IsActive() {
 		return
 	}
 	angleFromPlayer := r.PlayerBody.Angle2DTo(&b.Pos.Render)
@@ -32,7 +35,8 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, s *state.Column) {
 	scaler := r.ViewFix[vfixindex] / d
 	y2 := (float64(r.ScreenHeight)*0.5 - (b.Pos.Render[2]-s.CameraZ)*scaler)
 	y1 := y2 - b.Size.Render[2]*scaler
-
+	// TODO: Refactor body sizing to reflect 2D nature of sprites. 3D sizes are
+	// confusing and don't actually make sense.
 	if len(sheet.Sprites) == 0 {
 		return
 	}

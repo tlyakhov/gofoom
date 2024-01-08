@@ -11,9 +11,10 @@ const (
 type Controller interface {
 	Parent(*ControllerSet)
 	Priority() int
+	ComponentIndex() int
 	Methods() ControllerMethod
 	// Return false if controller shouldn't run for this entity
-	Target(source *EntityRef) bool
+	Target(Attachable) bool
 	Always()
 	Loaded()
 	Recalculate()
@@ -21,11 +22,14 @@ type Controller interface {
 
 type BaseController struct {
 	*ControllerSet
-	TargetEntity *EntityRef
 }
 
 func (c *BaseController) Priority() int {
 	return 100
+}
+
+func (c *BaseController) ComponentIndex() int {
+	return AttachedComponentIndex
 }
 
 func (c *BaseController) Methods() ControllerMethod {
@@ -36,9 +40,8 @@ func (c *BaseController) Parent(s *ControllerSet) {
 	c.ControllerSet = s
 }
 
-func (c *BaseController) Target(target *EntityRef) bool {
-	c.TargetEntity = target
-	return true
+func (c *BaseController) Target(a Attachable) bool {
+	return false
 }
 
 func (c *BaseController) Always()      {}

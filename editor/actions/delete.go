@@ -59,7 +59,7 @@ func (a *Delete) Undo() {
 		a.State().DB.DeserializeEntity(saved.(map[string]any))
 	}
 
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *Delete) Redo() {
 	a.State().Lock.Lock()
@@ -90,5 +90,5 @@ func (a *Delete) Redo() {
 			}
 		}
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

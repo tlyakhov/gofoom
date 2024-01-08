@@ -19,6 +19,10 @@ func init() {
 	concepts.DbTypes().RegisterController(&BodyController{})
 }
 
+func (bc *BodyController) ComponentIndex() int {
+	return core.BodyComponentIndex
+}
+
 func (bc *BodyController) Priority() int {
 	return 80
 }
@@ -29,10 +33,9 @@ func (bc *BodyController) Methods() concepts.ControllerMethod {
 		concepts.ControllerLoaded
 }
 
-func (bc *BodyController) Target(target *concepts.EntityRef) bool {
-	bc.TargetEntity = target
-	bc.Body = core.BodyFromDb(target)
-	if bc.Body == nil || !bc.Body.Active {
+func (bc *BodyController) Target(target concepts.Attachable) bool {
+	bc.Body = target.(*core.Body)
+	if !bc.Body.IsActive() {
 		return false
 	}
 	bc.Sector = bc.Body.Sector()
@@ -182,7 +185,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 
 	if len(collided) > 0 {
 		for _, seg := range collided {
-			BodySectorScript(seg.ContactScripts, bc.TargetEntity, bc.Sector.Ref())
+			BodySectorScript(seg.ContactScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 		}
 
 		switch bc.Body.CollisionResponse {

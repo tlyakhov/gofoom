@@ -14,6 +14,10 @@ func init() {
 	concepts.DbTypes().RegisterController(&SectorController{})
 }
 
+func (sc *SectorController) ComponentIndex() int {
+	return core.SectorComponentIndex
+}
+
 // Should run before everything
 func (a *SectorController) Priority() int {
 	return 50
@@ -23,10 +27,9 @@ func (a *SectorController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerRecalculate
 }
 
-func (a *SectorController) Target(target *concepts.EntityRef) bool {
-	a.TargetEntity = target
-	a.Sector = core.SectorFromDb(target)
-	return a.Sector != nil && a.Sector.Active
+func (a *SectorController) Target(target concepts.Attachable) bool {
+	a.Sector = target.(*core.Sector)
+	return a.Sector.IsActive()
 }
 
 func (a *SectorController) Recalculate() {

@@ -9,6 +9,7 @@ import (
 // This is based on the "Fix your timestep" blog post here:
 // https://gafferongames.com/post/fix_your_timestep/
 type Simulation struct {
+	EditorPaused     bool
 	SimTime          float64
 	RenderTime       float64
 	FrameMillis      float64
@@ -26,6 +27,7 @@ func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
 		All:           make(map[Simulated]bool),
+		EditorPaused:  false,
 	}
 }
 
@@ -55,6 +57,7 @@ func (s *Simulation) Step() {
 		if s.Integrate != nil {
 			s.Integrate()
 		}
+
 		s.Counter++
 		s.RenderTime -= constants.TimeStep
 		s.SimTime += constants.TimeStep

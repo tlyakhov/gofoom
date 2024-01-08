@@ -7,39 +7,38 @@ import (
 
 type ControllerSet struct {
 	*EntityComponentDB
-	ByName map[string]Controller
-	All    []Controller
+	All []Controller
 }
 
-func (db *dbTypes) RegisterController(local any) {
-	db.lock.Lock()
-	defer db.lock.Unlock()
+func (dbt *dbTypes) RegisterController(local Controller) {
+	dbt.lock.Lock()
+	defer dbt.lock.Unlock()
 	tLocal := reflect.ValueOf(local).Type()
 
 	if tLocal.Kind() != reflect.Ptr {
 		panic("Attempt to register controller with a value type (should be a pointer)")
 	}
-	db.Controllers[tLocal.String()] = tLocal
+	dbt.Controllers = append(dbt.Controllers, tLocal)
+	// This is incredibly inefficient, but our N count is so low it doesn't
+	// matter. Can refactor later if necessary
+	sort.Slice(dbt.Controllers, func(i, j int) bool {
+		ic := reflect.New(dbt.Controllers[i].Elem()).Interface().(Controller)
+		jc := reflect.New(dbt.Controllers[j].Elem()).Interface().(Controller)
+		return ic.Priority() < jc.Priority()
+	})
 }
 
 func (db *EntityComponentDB) NewControllerSet() *ControllerSet {
 	result := &ControllerSet{
 		EntityComponentDB: db,
-		ByName:            make(map[string]Controller),
 		All:               make([]Controller, len(DbTypes().Controllers)),
 	}
 
-	i := 0
-	for _, t := range DbTypes().Controllers {
+	for i, t := range DbTypes().Controllers {
 		c := reflect.New(t.Elem()).Interface().(Controller)
 		c.Parent(result)
-		result.ByName[t.String()] = c
 		result.All[i] = c
-		i++
 	}
-	sort.Slice(result.All, func(i, j int) bool {
-		return result.All[i].Priority() < result.All[j].Priority()
-	})
 	return result
 }
 
@@ -54,29 +53,29 @@ func act(controller Controller, method ControllerMethod) {
 	}
 }
 
-func (set *ControllerSet) Act(target *EntityRef, method ControllerMethod) {
-	for _, c := range set.All {
-		if c.Methods()&method == 0 {
+func (set *ControllerSet) Act(component Attachable, index int, method ControllerMethod) {
+	for _, controller := range set.All {
+		if controller.Methods()&method == 0 ||
+			controller.ComponentIndex() != index ||
+			!controller.Target(component) {
 			continue
 		}
-		if c.Target(target) {
-			act(c, method)
-		}
+		act(controller, method)
 	}
 }
 
-func (set *ControllerSet) ActGlobal(method ControllerMethod) {
+func (db *EntityComponentDB) ActAllControllers(method ControllerMethod) {
+	set := db.NewControllerSet()
 	for _, controller := range set.All {
-		if controller.Methods()&method == 0 {
+		if controller == nil || controller.Methods()&method == 0 {
 			continue
 		}
-		for _, allComponents := range set.Components {
-			for _, component := range allComponents {
-				er := component.Ref()
-				if controller.Target(er) {
-					act(controller, method)
-				}
+
+		for _, c := range db.Components[controller.ComponentIndex()] {
+			if !controller.Target(c) {
+				continue
 			}
+			act(controller, method)
 		}
 	}
 }

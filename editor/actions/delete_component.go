@@ -38,7 +38,7 @@ func (a *DeleteComponent) Undo() {
 			}
 		}
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *DeleteComponent) Redo() {
 	a.State().Lock.Lock()
@@ -56,5 +56,5 @@ func (a *DeleteComponent) Redo() {
 		}
 		a.State().DB.DetachByType(component)
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

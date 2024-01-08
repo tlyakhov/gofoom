@@ -61,7 +61,7 @@ func (a *MoveSurface) Act() {
 		}
 
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 	a.State().Modified = true
 	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, false)
@@ -85,7 +85,7 @@ func (a *MoveSurface) Undo() {
 			target.Sector.TopZ.Reset()
 		}
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *MoveSurface) Redo() {
 	a.State().Lock.Lock()
@@ -105,5 +105,5 @@ func (a *MoveSurface) Redo() {
 			target.Sector.TopZ.Reset()
 		}
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

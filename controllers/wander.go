@@ -19,15 +19,18 @@ func init() {
 	concepts.DbTypes().RegisterController(&WanderController{})
 }
 
+func (wc *WanderController) ComponentIndex() int {
+	return behaviors.WanderComponentIndex
+}
+
 func (wc *WanderController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerAlways
 }
 
-func (wc *WanderController) Target(target *concepts.EntityRef) bool {
-	wc.TargetEntity = target
-	wc.Wander = behaviors.WanderFromDb(target)
-	wc.Body = core.BodyFromDb(target)
-	return wc.Wander != nil && wc.Wander.Active && wc.Body != nil && wc.Body.Active
+func (wc *WanderController) Target(target concepts.Attachable) bool {
+	wc.Wander = target.(*behaviors.Wander)
+	wc.Body = core.BodyFromDb(target.Ref())
+	return wc.Wander.IsActive() && wc.Body.IsActive()
 }
 
 func (wc *WanderController) Always() {

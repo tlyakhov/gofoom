@@ -34,7 +34,7 @@ func (a *AddSliceElement) Undo() {
 	if a.SlicePtr.Elem().Len() > 0 {
 		a.SlicePtr.Elem().Slice(0, a.SlicePtr.Len()-1)
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *AddSliceElement) Redo() {
 	a.State().Lock.Lock()
@@ -69,5 +69,5 @@ func (a *AddSliceElement) Redo() {
 		anim.Construct(nil)
 		a.State().DB.Simulation.AttachAnimation(anim.GetName(), anim)*/
 	}
-	a.State().DB.NewControllerSet().ActGlobal(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

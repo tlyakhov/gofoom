@@ -157,7 +157,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if bodyRef.Entity == lightBody.Entity || (le.Type == LightElementBody && le.InputBody.Entity == bodyRef.Entity) {
 				continue
 			}
-			if b := core.BodyFromDb(bodyRef); b != nil && b.Shadow != core.BodyShadowNone && b.Mass > 0 {
+			if b := core.BodyFromDb(bodyRef); b != nil && b.Shadow != core.BodyShadowNone {
 				bodyPos = b.Pos.Render
 				bodyPos[2] += b.Size.Now[2] * 0.5
 				switch b.Shadow {
@@ -297,19 +297,19 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	le.Output[2] = 0
 
 	for _, er := range le.Sector.PVL {
-		le.Filter[0] = 0
-		le.Filter[1] = 0
-		le.Filter[2] = 0
-		le.Filter[3] = 0
 		light := core.LightFromDb(er)
-		if light == nil || !light.Active {
+		if !light.IsActive() {
 			continue
 		}
 
 		body := core.BodyFromDb(er)
-		if body == nil || !body.Active {
+		if !body.IsActive() {
 			continue
 		}
+		le.Filter[0] = 0
+		le.Filter[1] = 0
+		le.Filter[2] = 0
+		le.Filter[3] = 0
 		le.LightWorld[0] = body.Pos.Render[0]
 		le.LightWorld[1] = body.Pos.Render[1]
 		le.LightWorld[2] = body.Pos.Render[2]

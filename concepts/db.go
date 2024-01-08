@@ -285,9 +285,8 @@ func (db *EntityComponentDB) Load(filename string) error {
 	}
 
 	// After everything's loaded, trigger the controllers
-	set := db.NewControllerSet()
-	set.ActGlobal(ControllerRecalculate)
-	set.ActGlobal(ControllerLoaded)
+	db.ActAllControllers(ControllerRecalculate)
+	db.ActAllControllers(ControllerLoaded)
 	return nil
 }
 
