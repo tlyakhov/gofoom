@@ -7,7 +7,7 @@ import (
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
@@ -38,9 +38,13 @@ func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 			buttons[i] = widget.NewButtonWithIcon("Add "+name, theme.ContentAddIcon(), func() { g.fieldSliceAdd(field, t) })
 			i++
 		}
-		g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewVBox(buttons...))
+		c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
+		c.Layout = layout.NewVBoxLayout()
+		c.Objects = buttons
 	} else {
-		button := widget.NewButtonWithIcon("Add "+elemType.String(), theme.ContentAddIcon(), func() { g.fieldSliceAdd(field, nil) })
-		g.GridWidget.Objects = append(g.GridWidget.Objects, button)
+		button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
+		button.Text = "Add " + elemType.String()
+		button.Icon = theme.ContentAddIcon()
+		button.OnTapped = func() { g.fieldSliceAdd(field, nil) }
 	}
 }

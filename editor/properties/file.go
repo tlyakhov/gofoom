@@ -11,8 +11,8 @@ import (
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -68,5 +68,7 @@ func (g *Grid) fieldFile(field *state.PropertyGridField) {
 		dlg.SetDismissText("Cancel")
 		dlg.Show()
 	})
-	g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewBorder(nil, nil, nil, button, entry))
+	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
+	c.Layout = layout.NewBorderLayout(nil, nil, nil, button)
+	c.Objects = []fyne.CanvasObject{entry, button}
 }

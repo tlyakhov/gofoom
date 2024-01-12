@@ -14,7 +14,10 @@ import (
 func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 	origValue := field.Values[0].Elem()
 	if origValue.IsNil() {
-		button := widget.NewButtonWithIcon("Add Animation", theme.ContentAddIcon(), func() {
+		button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
+		button.Text = "Add Animation"
+		button.Icon = theme.ContentAddIcon()
+		button.OnTapped = func() {
 			parentValue := reflect.ValueOf(field.Parent)
 			m := parentValue.MethodByName("NewAnimation")
 			newAnimation := m.Call(nil)[0]
@@ -25,10 +28,12 @@ func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 			}
 			g.NewAction(action)
 			action.Act()
-		})
-		g.GridWidget.Objects = append(g.GridWidget.Objects, button)
+		}
 	} else {
-		button := widget.NewButtonWithIcon("Remove Animation", theme.ContentClearIcon(), func() {
+		button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
+		button.Text = "Remove Animation"
+		button.Icon = theme.ContentClearIcon()
+		button.OnTapped = func() {
 			action := &actions.SetProperty{
 				IEditor:           g.IEditor,
 				PropertyGridField: field,
@@ -36,8 +41,7 @@ func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 			}
 			g.NewAction(action)
 			action.Act()
-		})
-		g.GridWidget.Objects = append(g.GridWidget.Objects, button)
+		}
 	}
 }
 
@@ -59,7 +63,9 @@ func (g *Grid) fieldTweeningFunc(field *state.PropertyGridField) {
 		}
 	}
 
-	s := widget.NewSelect(opts, nil)
+	s := gridAddOrUpdateWidgetAtIndex[*widget.Select](g)
+	s.Options = opts
+	s.OnChanged = nil
 	s.SetSelectedIndex(selectedIndex)
 	s.PlaceHolder = "Select tweening function"
 	s.OnChanged = func(opt string) {
@@ -71,6 +77,4 @@ func (g *Grid) fieldTweeningFunc(field *state.PropertyGridField) {
 		g.NewAction(action)
 		action.Act()
 	}
-
-	g.GridWidget.Objects = append(g.GridWidget.Objects, s)
 }

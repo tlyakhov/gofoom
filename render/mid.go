@@ -14,6 +14,7 @@ func WallMidPick(s *state.Column) {
 // WallMid renders the wall portion (potentially over a portal).
 func WallMid(s *state.Column) {
 	mat := s.Segment.MidSurface.Material
+	extras := s.Segment.MidSurface.ExtraStages
 	transform := s.Segment.MidSurface.Transform
 	u := s.U
 	if s.Segment.MidSurface.Scale == materials.ScaleHeight || s.Segment.MidSurface.Scale == materials.ScaleNone {
@@ -42,7 +43,7 @@ func WallMid(s *state.Column) {
 		if !mat.Nil() {
 			tu := transform[0]*u + transform[2]*v + transform[4]
 			tv := transform[1]*u + transform[3]*v + transform[5]
-			s.SampleShader(mat, tu, tv, s.ProjectZ(1.0))
+			s.SampleShader(mat, extras, tu, tv, s.ProjectZ(1.0))
 			s.SampleLight(&s.Material, mat, &s.Intersection, s.U, lightV, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))

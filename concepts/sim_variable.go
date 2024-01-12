@@ -64,6 +64,9 @@ func (s *SimVariable[T]) NewFrame() {
 func (s *SimVariable[T]) RenderBlend(blend float64) {
 	if s.NoRenderBlend {
 		s.Render = s.Now
+		if s.RenderCallback != nil {
+			s.RenderCallback()
+		}
 		return
 	}
 	switch sc := any(s).(type) {

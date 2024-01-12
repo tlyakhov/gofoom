@@ -174,7 +174,7 @@ func CreateMainMenu() {
 	editor.EditTweakSurfaceLeft.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyJ}
 	editor.EditTweakSurfaceLeft.Menu = fyne.NewMenuItem("Tweak Surface (Left)", func() {
 		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{0.005, 0})
+		t.Translate(&concepts.Vector2{-0.005, 0})
 		editor.ChangeSelectedTransformables(&t)
 	})
 
@@ -182,7 +182,7 @@ func CreateMainMenu() {
 	editor.EditTweakSurfaceRight.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyL}
 	editor.EditTweakSurfaceRight.Menu = fyne.NewMenuItem("Tweak Surface (Right)", func() {
 		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{-0.005, 0})
+		t.Translate(&concepts.Vector2{0.005, 0})
 		editor.ChangeSelectedTransformables(&t)
 	})
 
@@ -190,7 +190,7 @@ func CreateMainMenu() {
 	editor.EditTweakSurfaceUp.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyI}
 	editor.EditTweakSurfaceUp.Menu = fyne.NewMenuItem("Tweak Surface (Up)", func() {
 		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{0, -0.005})
+		t.Translate(&concepts.Vector2{0, 0.005})
 		editor.ChangeSelectedTransformables(&t)
 	})
 
@@ -198,7 +198,7 @@ func CreateMainMenu() {
 	editor.EditTweakSurfaceDown.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyK}
 	editor.EditTweakSurfaceDown.Menu = fyne.NewMenuItem("Tweak Surface (Down)", func() {
 		t := concepts.IdentityMatrix2
-		t.Translate(&concepts.Vector2{0, 0.005})
+		t.Translate(&concepts.Vector2{0, -0.005})
 		editor.ChangeSelectedTransformables(&t)
 	})
 

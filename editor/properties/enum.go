@@ -30,7 +30,9 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		}
 	}
 
-	selectEntry := widget.NewSelect(opts, nil)
+	selectEntry := gridAddOrUpdateWidgetAtIndex[*widget.Select](g)
+	selectEntry.Options = opts
+	selectEntry.OnChanged = nil
 	selectEntry.SetSelectedIndex(selectedIndex)
 	selectEntry.OnChanged = func(opt string) {
 		action := &actions.SetProperty{
@@ -41,6 +43,4 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		g.NewAction(action)
 		action.Act()
 	}
-
-	g.GridWidget.Objects = append(g.GridWidget.Objects, selectEntry)
 }

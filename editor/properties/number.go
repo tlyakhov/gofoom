@@ -25,7 +25,8 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 		}
 	}
 
-	entry := widget.NewEntry()
+	entry := gridAddOrUpdateWidgetAtIndex[*widget.Entry](g)
+	entry.OnSubmitted = nil
 	entry.SetText(origValue)
 	entry.OnSubmitted = func(text string) {
 		var toSet reflect.Value
@@ -52,5 +53,4 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 		action.Act()
 		origValue = text
 	}
-	g.GridWidget.Objects = append(g.GridWidget.Objects, entry)
 }

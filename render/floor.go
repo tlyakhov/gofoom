@@ -17,6 +17,7 @@ func FloorPick(s *state.Column) {
 // Floor renders the floor portion of a slice.
 func Floor(s *state.Column) {
 	mat := s.Sector.FloorSurface.Material
+	extras := s.Sector.FloorSurface.ExtraStages
 	transform := s.Sector.FloorSurface.Transform
 
 	// Because of our sloped floors, we can't use simple linear interpolation to calculate the distance
@@ -56,7 +57,7 @@ func Floor(s *state.Column) {
 
 		if !mat.Nil() {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
-			s.SampleShader(mat, tx, ty, scaler)
+			s.SampleShader(mat, extras, tx, ty, scaler)
 			s.SampleLight(&s.Material, mat, world, 0, 0, distToFloor)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))

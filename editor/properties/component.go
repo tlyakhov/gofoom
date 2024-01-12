@@ -26,8 +26,10 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		entityList += strconv.FormatUint(entity, 10)
 	}
 
-	bLabel := fmt.Sprintf("Remove %v from [%v]", parentType.Elem().String(), entityList)
-	button := widget.NewButtonWithIcon(bLabel, theme.ContentRemoveIcon(), func() {
+	button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
+	button.Text = fmt.Sprintf("Remove %v from [%v]", parentType.Elem().String(), entityList)
+	button.Icon = theme.ContentRemoveIcon()
+	button.OnTapped = func() {
 		action := &actions.DeleteComponent{IEditor: g.IEditor, Components: make(map[uint64]concepts.Attachable)}
 		for _, v := range field.Values {
 			entity := v.Elem().Interface().(*concepts.EntityRef).Entity
@@ -37,8 +39,5 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		g.NewAction(action)
 		action.Act()
 		g.Focus(g.GridWidget)
-
-	})
-	g.GridWidget.Objects = append(g.GridWidget.Objects, button)
-
+	}
 }

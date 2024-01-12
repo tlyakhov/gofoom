@@ -227,7 +227,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
 				c := le.Material
-				le.SampleShader(seg.MidSurface.Material, u, v, 1)
+				le.SampleShader(seg.MidSurface.Material, seg.MidSurface.ExtraStages, u, v, 1)
 				if lit := materials.LitFromDb(seg.MidSurface.Material); lit != nil {
 					lit.Apply(&le.Material, nil)
 				}
