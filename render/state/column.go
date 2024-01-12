@@ -78,17 +78,23 @@ func (c *Column) CalcScreen() {
 	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
-func (c *Column) SampleShader(ishader *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {
+func (c *Column) SampleShader(ishader *concepts.EntityRef, extraStages []*materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {
 	c.Material[0] = 0
 	c.Material[1] = 0
 	c.Material[2] = 0
 	c.Material[3] = 0
 	shader := materials.ShaderFromDb(ishader)
 	if shader == nil {
-		return c.sampleTexture(&c.Material, ishader, u, v, scale)
+		c.sampleTexture(&c.Material, ishader, u, v, scale)
+	} else {
+		for _, stage := range shader.Stages {
+			tu := stage.Transform[0]*u + stage.Transform[2]*v + stage.Transform[4]
+			tv := stage.Transform[1]*u + stage.Transform[3]*v + stage.Transform[5]
+			c.sampleTexture(&c.Material, stage.Texture, tu, tv, scale)
+		}
 	}
 
-	for _, stage := range shader.Stages {
+	for _, stage := range extraStages {
 		tu := stage.Transform[0]*u + stage.Transform[2]*v + stage.Transform[4]
 		tv := stage.Transform[1]*u + stage.Transform[3]*v + stage.Transform[5]
 		c.sampleTexture(&c.Material, stage.Texture, tu, tv, scale)
@@ -131,6 +137,9 @@ func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.Enti
 
 	if image := materials.ImageFromDb(material); image != nil {
 		c := image.Sample(u, v, scale)
+		result.AddPreMulColorSelf(&c)
+	} else if text := materials.TextFromDb(material); text != nil {
+		c := text.Sample(u, v, scale)
 		result.AddPreMulColorSelf(&c)
 	} else if solid := materials.SolidFromDb(material); solid != nil {
 		result[0] = float64(solid.Diffuse.R) / 255.0

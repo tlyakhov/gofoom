@@ -2,7 +2,6 @@
   {
     "Entity": "1",
     "core.Spawn": {
-      "Active": true,
       "Entity": "1",
       "X": -320,
       "Y": 205
@@ -11,19 +10,16 @@
   {
     "Entity": "2",
     "concepts.Named": {
-      "Active": true,
       "Entity": "2",
       "Name": "Default"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/wool_colored_white.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -38,7 +34,6 @@
       "Entity": "2"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "2",
       "IsLiquid": false
     }
@@ -46,12 +41,10 @@
   {
     "Entity": "3",
     "concepts.Named": {
-      "Active": true,
       "Entity": "3",
       "Name": "be4pvnfvn27o06iak950"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 20
       },
@@ -129,12 +122,10 @@
   {
     "Entity": "4",
     "concepts.Named": {
-      "Active": true,
       "Entity": "4",
       "Name": "be26u9vvn27vmb5f7cp0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -213,12 +204,10 @@
   {
     "Entity": "5",
     "concepts.Named": {
-      "Active": true,
       "Entity": "5",
       "Name": "be46lsnvn27lk1dech50"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -44
       },
@@ -294,12 +283,10 @@
   {
     "Entity": "6",
     "concepts.Named": {
-      "Active": true,
       "Entity": "6",
       "Name": "be4pp37vn27o06iajn30"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -363,12 +350,10 @@
   {
     "Entity": "7",
     "concepts.Named": {
-      "Active": true,
       "Entity": "7",
       "Name": "be3eq5fvn27i2m3sajcg"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "9",
         "8"
@@ -450,12 +435,10 @@
   {
     "Entity": "8",
     "concepts.Named": {
-      "Active": true,
       "Entity": "8",
       "Name": "be49mvvvn27m6mdvjqq0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -487,7 +470,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -501,12 +483,10 @@
   {
     "Entity": "9",
     "concepts.Named": {
-      "Active": true,
       "Entity": "9",
       "Name": "be26tkvvn27vmb5f7710"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -538,7 +518,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -552,12 +531,10 @@
   {
     "Entity": "10",
     "concepts.Named": {
-      "Active": true,
       "Entity": "10",
       "Name": "be3dsc7vn27ho9jt57ig"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -635,12 +612,10 @@
   {
     "Entity": "11",
     "concepts.Named": {
-      "Active": true,
       "Entity": "11",
       "Name": "be4pvl7vn27o06iak35g"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -719,12 +694,10 @@
   {
     "Entity": "12",
     "concepts.Named": {
-      "Active": true,
       "Entity": "12",
       "Name": "be4pvjvvn27o06iak230"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -803,12 +776,10 @@
   {
     "Entity": "13",
     "concepts.Named": {
-      "Active": true,
       "Entity": "13",
       "Name": "be4pp37vn27o06iajotg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -929,12 +900,10 @@
   {
     "Entity": "14",
     "concepts.Named": {
-      "Active": true,
       "Entity": "14",
       "Name": "be4pvnfvn27o06iak75g"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -1068,12 +1037,10 @@
   {
     "Entity": "15",
     "concepts.Named": {
-      "Active": true,
       "Entity": "15",
       "Name": "be46jk7vn27lk1dec9s0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -4
       },
@@ -1149,12 +1116,10 @@
   {
     "Entity": "16",
     "concepts.Named": {
-      "Active": true,
       "Entity": "16",
       "Name": "Test Shader"
     },
     "materials.Shader": {
-      "Active": true,
       "Entity": "16",
       "Stages": [
         {
@@ -1185,12 +1150,10 @@
   {
     "Entity": "17",
     "concepts.Named": {
-      "Active": true,
       "Entity": "17",
       "Name": "be4bqjnvn27mek306bng"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -60
       },
@@ -1266,12 +1229,10 @@
   {
     "Entity": "18",
     "concepts.Named": {
-      "Active": true,
       "Entity": "18",
       "Name": "be4pp3vvn27o06iajq30"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -1349,12 +1310,10 @@
   {
     "Entity": "19",
     "concepts.Named": {
-      "Active": true,
       "Entity": "19",
       "Name": "be4pp3vvn27o06iajr40"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "20"
       ],
@@ -1421,12 +1380,10 @@
   {
     "Entity": "20",
     "concepts.Named": {
-      "Active": true,
       "Entity": "20",
       "Name": "be4pr0vvn27o06iajrd0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -1458,7 +1415,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.3,
       "Diffuse": {
         "X": 0.9,
@@ -1472,7 +1428,6 @@
   {
     "Entity": "21",
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -1504,7 +1459,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.1,
       "Diffuse": {
         "X": 1,
@@ -1518,12 +1472,10 @@
   {
     "Entity": "22",
     "concepts.Named": {
-      "Active": true,
       "Entity": "22",
       "Name": "be4eoifvn27mnbvee2gg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -1601,12 +1553,10 @@
   {
     "Entity": "23",
     "concepts.Named": {
-      "Active": true,
       "Entity": "23",
       "Name": "be4bqmfvn27mek306btg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -100
       },
@@ -1734,12 +1684,10 @@
   {
     "Entity": "24",
     "concepts.Named": {
-      "Active": true,
       "Entity": "24",
       "Name": "be4pvnfvn27o06iak8pg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -1817,7 +1765,6 @@
   {
     "Entity": "25",
     "behaviors.Proximity": {
-      "Active": true,
       "Entity": "25",
       "Range": 100,
       "Scripts": [
@@ -1828,12 +1775,10 @@
       ]
     },
     "concepts.Named": {
-      "Active": true,
       "Entity": "25",
       "Name": "be4pufvvn27o06iajuu0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -2057,19 +2002,16 @@
       }
     },
     "sectors.VerticalDoor": {
-      "Active": true,
       "Entity": "25"
     }
   },
   {
     "Entity": "26",
     "concepts.Named": {
-      "Active": true,
       "Entity": "26",
       "Name": "be4eoifvn27mnbvee2s0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -2148,15 +2090,13 @@
   {
     "Entity": "27",
     "concepts.Named": {
-      "Active": true,
       "Entity": "27",
       "Name": "be4bqb7vn27mek306bc0"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
-        "42",
-        "125"
+        "125",
+        "42"
       ],
       "BottomZ": {
         "Original": -100
@@ -2291,12 +2231,10 @@
   {
     "Entity": "28",
     "concepts.Named": {
-      "Active": true,
       "Entity": "28",
       "Name": "be26u9vvn27vmb5f7d4g"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -2375,12 +2313,10 @@
   {
     "Entity": "29",
     "concepts.Named": {
-      "Active": true,
       "Entity": "29",
       "Name": "ckqk9glmdsria0nrngq0"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "30"
       ],
@@ -2472,12 +2408,10 @@
   {
     "Entity": "30",
     "concepts.Named": {
-      "Active": true,
       "Entity": "30",
       "Name": "ckqka4lmdsria0nrnisg"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -2509,7 +2443,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -2523,7 +2456,6 @@
   {
     "Entity": "31",
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "107"
       ],
@@ -2629,12 +2561,10 @@
   {
     "Entity": "32",
     "concepts.Named": {
-      "Active": true,
       "Entity": "32",
       "Name": "Item Test"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -2652,8 +2582,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.7833333333333327,
-          "Reverse": true,
+          "Percent": 1.0000000000000013,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2684,7 +2614,6 @@
       }
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -2699,7 +2628,6 @@
       "Entity": "32"
     },
     "materials.SpriteSheet": {
-      "Active": true,
       "Entity": "32",
       "Sprites": [
         {
@@ -2713,12 +2641,10 @@
   {
     "Entity": "33",
     "concepts.Named": {
-      "Active": true,
       "Entity": "33",
       "Name": "be4bql7vn27mek306bqg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -60
       },
@@ -2794,12 +2720,10 @@
   {
     "Entity": "34",
     "concepts.Named": {
-      "Active": true,
       "Entity": "34",
       "Name": "be4pvl7vn27o06iak550"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 20
       },
@@ -2877,12 +2801,10 @@
   {
     "Entity": "35",
     "concepts.Named": {
-      "Active": true,
       "Entity": "35",
       "Name": "be3estnvn27i2m3satqg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -2961,12 +2883,10 @@
   {
     "Entity": "36",
     "concepts.Named": {
-      "Active": true,
       "Entity": "36",
       "Name": "be46jcvvn27lk1dec8k0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -3058,12 +2978,10 @@
   {
     "Entity": "37",
     "concepts.Named": {
-      "Active": true,
       "Entity": "37",
       "Name": "be26u9vvn27vmb5f7bcg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -3142,12 +3060,10 @@
   {
     "Entity": "38",
     "concepts.Named": {
-      "Active": true,
       "Entity": "38",
       "Name": "be4pp3vvn27o06iajpng"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -48
       },
@@ -3225,12 +3141,10 @@
   {
     "Entity": "39",
     "concepts.Named": {
-      "Active": true,
       "Entity": "39",
       "Name": "be4pp3vvn27o06iajqog"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -3309,12 +3223,10 @@
   {
     "Entity": "40",
     "concepts.Named": {
-      "Active": true,
       "Entity": "40",
       "Name": "be46jcvvn27lk1dec910"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -3393,17 +3305,15 @@
   {
     "Entity": "41",
     "concepts.Named": {
-      "Active": true,
       "Entity": "41",
       "Name": "be46m1fvn27lk1deckug"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
-        "32",
-        "131",
         "21",
-        "107"
+        "107",
+        "32",
+        "131"
       ],
       "BottomZ": {
         "Original": -64
@@ -3425,7 +3335,21 @@
             "Material": "2"
           },
           "Mid": {
-            "Material": "2"
+            "ExtraStages": [
+              {
+                "Texture": "57",
+                "Transform": [
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0
+                ]
+              }
+            ],
+            "Material": "2",
+            "Scale": "ScaleAll"
           },
           "X": -280,
           "Y": 30
@@ -3613,7 +3537,6 @@
       }
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -3631,27 +3554,24 @@
   {
     "Entity": "42",
     "behaviors.Wander": {
-      "Active": true,
       "Entity": "42",
       "Force": 10
     },
     "concepts.Named": {
-      "Active": true,
       "Entity": "42",
       "Name": "FlubTest"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Animation": {
-          "Acitve": true,
+          "Acitve": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -11.373228109372244,
+          "End": 23.410837371827085,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.02777777777777778,
+          "Percent": 1.0277777777777777,
           "Reverse": false,
-          "Start": -6.353007897099779,
+          "Start": 31.031995640180124,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -3685,7 +3605,6 @@
       }
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -3700,7 +3619,6 @@
       "Entity": "42"
     },
     "materials.SpriteSheet": {
-      "Active": true,
       "Entity": "42",
       "Sprites": [
         {
@@ -3749,12 +3667,10 @@
   {
     "Entity": "43",
     "concepts.Named": {
-      "Active": true,
       "Entity": "43",
       "Name": "be46jknvn27lk1decaj0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -8
       },
@@ -3830,12 +3746,10 @@
   {
     "Entity": "44",
     "concepts.Named": {
-      "Active": true,
       "Entity": "44",
       "Name": "be3dsc7vn27ho9jt57u0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 30
       },
@@ -3913,12 +3827,10 @@
   {
     "Entity": "45",
     "concepts.Named": {
-      "Active": true,
       "Entity": "45",
       "Name": "be4c2lnvn27mi9gdb850"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -64
       },
@@ -3994,12 +3906,10 @@
   {
     "Entity": "46",
     "concepts.Named": {
-      "Active": true,
       "Entity": "46",
       "Name": "be46jmfvn27lk1decdf0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -24
       },
@@ -4075,12 +3985,10 @@
   {
     "Entity": "47",
     "concepts.Named": {
-      "Active": true,
       "Entity": "47",
       "Name": "be46jm7vn27lk1decco0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -20
       },
@@ -4156,12 +4064,10 @@
   {
     "Entity": "48",
     "concepts.Named": {
-      "Active": true,
       "Entity": "48",
       "Name": "be4bq7vvn27mek306b60"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -60
       },
@@ -4237,12 +4143,10 @@
   {
     "Entity": "49",
     "concepts.Named": {
-      "Active": true,
       "Entity": "49",
       "Name": "be3eq5fvn27i2m3sahpg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -4321,12 +4225,10 @@
   {
     "Entity": "50",
     "concepts.Named": {
-      "Active": true,
       "Entity": "50",
       "Name": "be46jl7vn27lk1decba0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -12
       },
@@ -4402,12 +4304,10 @@
   {
     "Entity": "51",
     "concepts.Named": {
-      "Active": true,
       "Entity": "51",
       "Name": "be4pp37vn27o06iajnog"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "52"
       ],
@@ -4474,12 +4374,10 @@
   {
     "Entity": "52",
     "concepts.Named": {
-      "Active": true,
       "Entity": "52",
       "Name": "be4pr07vn27o06iajrb0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -4511,7 +4409,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.3,
       "Diffuse": {
         "X": 0.9,
@@ -4525,12 +4422,10 @@
   {
     "Entity": "53",
     "concepts.Named": {
-      "Active": true,
       "Entity": "53",
       "Name": "be49j2vvn27m4cr0h39g"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -4632,12 +4527,10 @@
   {
     "Entity": "54",
     "concepts.Named": {
-      "Active": true,
       "Entity": "54",
       "Name": "be4pvjvvn27o06iak1ng"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -4716,7 +4609,6 @@
   {
     "Entity": "55",
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "78"
       ],
@@ -4833,12 +4725,10 @@
   {
     "Entity": "56",
     "concepts.Named": {
-      "Active": true,
       "Entity": "56",
       "Name": "be4pvnfvn27o06iak7s0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -4914,14 +4804,32 @@
     }
   },
   {
+    "Entity": "57",
+    "concepts.Named": {
+      "Entity": "57",
+      "Name": "Text Test"
+    },
+    "materials.Text": {
+      "Color": {
+        "Original": {
+          "W": 1,
+          "X": 1,
+          "Y": 0,
+          "Z": 1
+        }
+      },
+      "Entity": "57",
+      "Label": "Testing an extra shader stage\nThat has a multi-line generated\nText material on top of a regular\nTexture",
+      "LineSpacing": 1.05
+    }
+  },
+  {
     "Entity": "58",
     "concepts.Named": {
-      "Active": true,
       "Entity": "58",
       "Name": "be4epdnvn27mnbvee43g"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "59"
       ],
@@ -5038,12 +4946,10 @@
   {
     "Entity": "59",
     "concepts.Named": {
-      "Active": true,
       "Entity": "59",
       "Name": "be4epmnvn27mnbvee48g"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -5075,7 +4981,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 0.5,
@@ -5089,12 +4994,10 @@
   {
     "Entity": "60",
     "concepts.Named": {
-      "Active": true,
       "Entity": "60",
       "Name": "be46ltvvn27lk1decij0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -52
       },
@@ -5170,12 +5073,10 @@
   {
     "Entity": "61",
     "concepts.Named": {
-      "Active": true,
       "Entity": "61",
       "Name": "be4c3ufvn27mi9gdb9q0"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "62"
       ],
@@ -5279,12 +5180,10 @@
   {
     "Entity": "62",
     "concepts.Named": {
-      "Active": true,
       "Entity": "62",
       "Name": "be4enjnvn27mnbvee10g"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -5316,7 +5215,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -5330,12 +5228,10 @@
   {
     "Entity": "63",
     "concepts.Named": {
-      "Active": true,
       "Entity": "63",
       "Name": "be46lufvn27lk1decjlg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -56
       },
@@ -5411,12 +5307,10 @@
   {
     "Entity": "64",
     "concepts.Named": {
-      "Active": true,
       "Entity": "64",
       "Name": "be26u7fvn27vmb5f7790"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -5494,12 +5388,10 @@
   {
     "Entity": "65",
     "concepts.Named": {
-      "Active": true,
       "Entity": "65",
       "Name": "be4eohnvn27mnbvee1pg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -5578,12 +5470,10 @@
   {
     "Entity": "66",
     "concepts.Named": {
-      "Active": true,
       "Entity": "66",
       "Name": "be4epb7vn27mnbvee40g"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -5659,12 +5549,10 @@
   {
     "Entity": "67",
     "concepts.Named": {
-      "Active": true,
       "Entity": "67",
       "Name": "be4c3m7vn27mi9gdb9g0"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "68"
       ],
@@ -5745,12 +5633,10 @@
   {
     "Entity": "68",
     "concepts.Named": {
-      "Active": true,
       "Entity": "68",
       "Name": "be3et4nvn27i2m3savb0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -5782,7 +5668,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -5796,12 +5681,10 @@
   {
     "Entity": "69",
     "concepts.Named": {
-      "Active": true,
       "Entity": "69",
       "Name": "ckqbdsdmdsrmu07rpqsg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -5879,12 +5762,10 @@
   {
     "Entity": "70",
     "concepts.Named": {
-      "Active": true,
       "Entity": "70",
       "Name": "be3esufvn27i2m3sav10"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -5962,12 +5843,10 @@
   {
     "Entity": "71",
     "concepts.Named": {
-      "Active": true,
       "Entity": "71",
       "Name": "be3dsc7vn27ho9jt56fg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -6072,12 +5951,10 @@
   {
     "Entity": "72",
     "concepts.Named": {
-      "Active": true,
       "Entity": "72",
       "Name": "be4pvl7vn27o06iak2q0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -6156,12 +6033,10 @@
   {
     "Entity": "73",
     "concepts.Named": {
-      "Active": true,
       "Entity": "73",
       "Name": "be46lr7vn27lk1decge0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -40
       },
@@ -6237,12 +6112,10 @@
   {
     "Entity": "74",
     "concepts.Named": {
-      "Active": true,
       "Entity": "74",
       "Name": "be46lqnvn27lk1decfn0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -36
       },
@@ -6318,12 +6191,10 @@
   {
     "Entity": "75",
     "concepts.Named": {
-      "Active": true,
       "Entity": "75",
       "Name": "be4bsjnvn27mek306eg0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -6402,12 +6273,10 @@
   {
     "Entity": "76",
     "concepts.Named": {
-      "Active": true,
       "Entity": "76",
       "Name": "ckqbdl5mdsrmu07rpql0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -6511,12 +6380,10 @@
   {
     "Entity": "77",
     "concepts.Named": {
-      "Active": true,
       "Entity": "77",
       "Name": "be3eq5fvn27i2m3saigg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -6595,7 +6462,6 @@
   {
     "Entity": "78",
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -6627,7 +6493,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -6641,7 +6506,6 @@
   {
     "Entity": "79",
     "behaviors.Proximity": {
-      "Active": true,
       "Entity": "79",
       "Range": 100,
       "Scripts": [
@@ -6652,12 +6516,10 @@
       ]
     },
     "concepts.Named": {
-      "Active": true,
       "Entity": "79",
       "Name": "be4c3pfvn27mi9gdb9mg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -6741,14 +6603,12 @@
       }
     },
     "sectors.VerticalDoor": {
-      "Active": true,
       "Entity": "79"
     }
   },
   {
     "Entity": "80",
     "behaviors.Proximity": {
-      "Active": true,
       "Entity": "80",
       "Range": 100,
       "Scripts": [
@@ -6759,12 +6619,10 @@
       ]
     },
     "concepts.Named": {
-      "Active": true,
       "Entity": "80",
       "Name": "be49hlvvn27m4cr0h360"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -6848,14 +6706,12 @@
       }
     },
     "sectors.VerticalDoor": {
-      "Active": true,
       "Entity": "80"
     }
   },
   {
     "Entity": "81",
     "behaviors.Proximity": {
-      "Active": true,
       "Entity": "81",
       "Range": 100,
       "Scripts": [
@@ -6866,12 +6722,10 @@
       ]
     },
     "concepts.Named": {
-      "Active": true,
       "Entity": "81",
       "Name": "be4c2p7vn27mi9gdb8n0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -64
       },
@@ -6946,7 +6800,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0,
+          "Percent": 1.0083333333333333,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -6955,19 +6809,16 @@
       }
     },
     "sectors.VerticalDoor": {
-      "Active": true,
       "Entity": "81"
     }
   },
   {
     "Entity": "82",
     "concepts.Named": {
-      "Active": true,
       "Entity": "82",
       "Name": "be46lt7vn27lk1dechs0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -48
       },
@@ -7043,12 +6894,10 @@
   {
     "Entity": "83",
     "concepts.Named": {
-      "Active": true,
       "Entity": "83",
       "Name": "be46kk7vn27lk1decesg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -28
       },
@@ -7124,12 +6973,10 @@
   {
     "Entity": "84",
     "concepts.Named": {
-      "Active": true,
       "Entity": "84",
       "Name": "be46kk7vn27lk1decfbg"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "85"
       ],
@@ -7209,12 +7056,10 @@
   {
     "Entity": "85",
     "concepts.Named": {
-      "Active": true,
       "Entity": "85",
       "Name": "be46k8vvn27lk1dece6g"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -7246,7 +7091,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -7260,12 +7104,10 @@
   {
     "Entity": "86",
     "concepts.Named": {
-      "Active": true,
       "Entity": "86",
       "Name": "be26u7fvn27vmb5f78bg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -7343,12 +7185,10 @@
   {
     "Entity": "87",
     "concepts.Named": {
-      "Active": true,
       "Entity": "87",
       "Name": "be4eoifvn27mnbvee3ag"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -7482,12 +7322,10 @@
   {
     "Entity": "88",
     "concepts.Named": {
-      "Active": true,
       "Entity": "88",
       "Name": "be46jcvvn27lk1dec9cg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -7565,12 +7403,10 @@
   {
     "Entity": "89",
     "concepts.Named": {
-      "Active": true,
       "Entity": "89",
       "Name": "be3eq5fvn27i2m3sais0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -7649,12 +7485,10 @@
   {
     "Entity": "90",
     "concepts.Named": {
-      "Active": true,
       "Entity": "90",
       "Name": "be4pp3vvn27o06iajpc0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -7732,12 +7566,10 @@
   {
     "Entity": "91",
     "concepts.Named": {
-      "Active": true,
       "Entity": "91",
       "Name": "be26u9vvn27vmb5f7b10"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -7816,12 +7648,10 @@
   {
     "Entity": "92",
     "concepts.Named": {
-      "Active": true,
       "Entity": "92",
       "Name": "be46luvvn27lk1deckcg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -60
       },
@@ -7897,12 +7727,13 @@
   {
     "Entity": "93",
     "concepts.Named": {
-      "Active": true,
       "Entity": "93",
       "Name": "be4bq9vvn27mek306b90"
     },
     "core.Sector": {
-      "Active": true,
+      "Bodies": [
+        "42"
+      ],
       "BottomZ": {
         "Original": -60
       },
@@ -7978,12 +7809,10 @@
   {
     "Entity": "94",
     "concepts.Named": {
-      "Active": true,
       "Entity": "94",
       "Name": "be4eojfvn27mnbvee3n0"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -8217,12 +8046,10 @@
   {
     "Entity": "95",
     "concepts.Named": {
-      "Active": true,
       "Entity": "95",
       "Name": "be4pp3vvn27o06iajqeg"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "96"
       ],
@@ -8289,12 +8116,10 @@
   {
     "Entity": "96",
     "concepts.Named": {
-      "Active": true,
       "Entity": "96",
       "Name": "be4pr0nvn27o06iajrc0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -8326,7 +8151,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.3,
       "Diffuse": {
         "X": 0.9,
@@ -8340,12 +8164,10 @@
   {
     "Entity": "97",
     "concepts.Named": {
-      "Active": true,
       "Entity": "97",
       "Name": "be4pvl7vn27o06iak5gg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -8424,12 +8246,10 @@
   {
     "Entity": "98",
     "concepts.Named": {
-      "Active": true,
       "Entity": "98",
       "Name": "Pluk"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "98",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -8439,12 +8259,10 @@
   {
     "Entity": "99",
     "concepts.Named": {
-      "Active": true,
       "Entity": "99",
       "Name": "be26uavvn27vmb5f7edg"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -8522,12 +8340,10 @@
   {
     "Entity": "100",
     "concepts.Named": {
-      "Active": true,
       "Entity": "100",
       "Name": "be4pvnfvn27o06iak8cg"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "101",
         "102"
@@ -8623,12 +8439,10 @@
   {
     "Entity": "101",
     "concepts.Named": {
-      "Active": true,
       "Entity": "101",
       "Name": "be4bv4vvn27mek306eq0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -8660,7 +8474,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -8674,12 +8487,10 @@
   {
     "Entity": "102",
     "concepts.Named": {
-      "Active": true,
       "Entity": "102",
       "Name": "be4bv6nvn27mek306er0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -8711,7 +8522,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -8725,12 +8535,10 @@
   {
     "Entity": "103",
     "concepts.Named": {
-      "Active": true,
       "Entity": "103",
       "Name": "be3dsc7vn27ho9jt5740"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "104",
         "105"
@@ -8840,12 +8648,10 @@
   {
     "Entity": "104",
     "concepts.Named": {
-      "Active": true,
       "Entity": "104",
       "Name": "be26s47vn27vmb5f72m0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -8877,7 +8683,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -8891,12 +8696,10 @@
   {
     "Entity": "105",
     "concepts.Named": {
-      "Active": true,
       "Entity": "105",
       "Name": "be26t9fvn27vmb5f74g0"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -8928,7 +8731,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -8942,12 +8744,10 @@
   {
     "Entity": "106",
     "concepts.Named": {
-      "Active": true,
       "Entity": "106",
       "Name": "be46jlnvn27lk1decc10"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": -16
       },
@@ -9023,16 +8823,13 @@
   {
     "Entity": "107",
     "behaviors.Alive": {
-      "Active": true,
       "Entity": "107",
       "Health": 50
     },
     "behaviors.Player": {
-      "Active": true,
       "Entity": "107"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 262.5
       },
@@ -9067,12 +8864,10 @@
   {
     "Entity": "108",
     "concepts.Named": {
-      "Active": true,
       "Entity": "108",
       "Name": "Sector 108"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "107"
       ],
@@ -9172,12 +8967,10 @@
   {
     "Entity": "109",
     "concepts.Named": {
-      "Active": true,
       "Entity": "109",
       "Name": "Sector 109"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -9256,12 +9049,10 @@
   {
     "Entity": "110",
     "concepts.Named": {
-      "Active": true,
       "Entity": "110",
       "Name": "Sector 110"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -9339,12 +9130,10 @@
   {
     "Entity": "111",
     "concepts.Named": {
-      "Active": true,
       "Entity": "111",
       "Name": "Sector 111"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 0
       },
@@ -9422,12 +9211,10 @@
   {
     "Entity": "112",
     "concepts.Named": {
-      "Active": true,
       "Entity": "112",
       "Name": "Sector 112"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 5
       },
@@ -9490,12 +9277,10 @@
   {
     "Entity": "114",
     "concepts.Named": {
-      "Active": true,
       "Entity": "114",
       "Name": "Sector 114"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 10
       },
@@ -9558,12 +9343,10 @@
   {
     "Entity": "115",
     "concepts.Named": {
-      "Active": true,
       "Entity": "115",
       "Name": "Sector 115"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 15
       },
@@ -9626,12 +9409,10 @@
   {
     "Entity": "116",
     "concepts.Named": {
-      "Active": true,
       "Entity": "116",
       "Name": "Sector 116"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 20
       },
@@ -9694,12 +9475,10 @@
   {
     "Entity": "117",
     "concepts.Named": {
-      "Active": true,
       "Entity": "117",
       "Name": "Sector 117"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 25
       },
@@ -9762,12 +9541,10 @@
   {
     "Entity": "118",
     "concepts.Named": {
-      "Active": true,
       "Entity": "118",
       "Name": "Sector 118"
     },
     "core.Sector": {
-      "Active": true,
       "BottomZ": {
         "Original": 30
       },
@@ -9843,12 +9620,10 @@
   {
     "Entity": "120",
     "concepts.Named": {
-      "Active": true,
       "Entity": "120",
       "Name": "Sector 120"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "121"
       ],
@@ -9926,7 +9701,6 @@
   {
     "Entity": "121",
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -9958,7 +9732,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -9972,19 +9745,16 @@
   {
     "Entity": "122",
     "concepts.Named": {
-      "Active": true,
       "Entity": "122",
       "Name": "Floor"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "122",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/ggrass_top.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -9999,7 +9769,6 @@
       "Entity": "122"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "122",
       "IsLiquid": false
     }
@@ -10007,19 +9776,16 @@
   {
     "Entity": "123",
     "concepts.Named": {
-      "Active": true,
       "Entity": "123",
       "Name": "Door Metal"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "123",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/wool_colored_gray.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -10034,7 +9800,6 @@
       "Entity": "123"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "123",
       "IsLiquid": false
     }
@@ -10042,19 +9807,16 @@
   {
     "Entity": "124",
     "concepts.Named": {
-      "Active": true,
       "Entity": "124",
       "Name": "Wall Variation"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "124",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/wool_colored_red.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -10069,7 +9831,6 @@
       "Entity": "124"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "124",
       "IsLiquid": false
     }
@@ -10077,7 +9838,6 @@
   {
     "Entity": "125",
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -10109,7 +9869,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.9,
       "Diffuse": {
         "X": 0,
@@ -10123,19 +9882,16 @@
   {
     "Entity": "127",
     "concepts.Named": {
-      "Active": true,
       "Entity": "127",
       "Name": "Toxic"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "127",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/FSlime.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -10150,7 +9906,6 @@
       "Entity": "127"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "127",
       "IsLiquid": true
     }
@@ -10158,19 +9913,16 @@
   {
     "Entity": "128",
     "concepts.Named": {
-      "Active": true,
       "Entity": "128",
       "Name": "Glass"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "128",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/glass-test.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -10185,7 +9937,6 @@
       "Entity": "128"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "128",
       "IsLiquid": false
     }
@@ -10193,19 +9944,16 @@
   {
     "Entity": "129",
     "concepts.Named": {
-      "Active": true,
       "Entity": "129",
       "Name": "Ladder"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "129",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/ladder.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -10220,7 +9968,6 @@
       "Entity": "129"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "129",
       "IsLiquid": false
     }
@@ -10228,19 +9975,16 @@
   {
     "Entity": "130",
     "concepts.Named": {
-      "Active": true,
       "Entity": "130",
       "Name": "Stained Glass"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "130",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/stained-glass.jpeg"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -10255,7 +9999,6 @@
       "Entity": "130"
     },
     "materials.Tiled": {
-      "Active": true,
       "Entity": "130",
       "IsLiquid": false
     }
@@ -10263,7 +10006,6 @@
   {
     "Entity": "131",
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
@@ -10295,7 +10037,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.3,
       "Diffuse": {
         "X": 1,
@@ -10309,12 +10050,10 @@
   {
     "Entity": "132",
     "concepts.Named": {
-      "Active": true,
       "Entity": "132",
       "Name": "flub-back-left"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "132",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -10324,12 +10063,10 @@
   {
     "Entity": "133",
     "concepts.Named": {
-      "Active": true,
       "Entity": "133",
       "Name": "flub-back-right"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "133",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -10339,12 +10076,10 @@
   {
     "Entity": "134",
     "concepts.Named": {
-      "Active": true,
       "Entity": "134",
       "Name": "flub-back"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "134",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -10354,12 +10089,10 @@
   {
     "Entity": "135",
     "concepts.Named": {
-      "Active": true,
       "Entity": "135",
       "Name": "flub-right"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "135",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -10369,12 +10102,10 @@
   {
     "Entity": "136",
     "concepts.Named": {
-      "Active": true,
       "Entity": "136",
       "Name": "flub-left"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "136",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -10384,12 +10115,10 @@
   {
     "Entity": "137",
     "concepts.Named": {
-      "Active": true,
       "Entity": "137",
       "Name": "flub-front-left"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "137",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -10399,12 +10128,10 @@
   {
     "Entity": "138",
     "concepts.Named": {
-      "Active": true,
       "Entity": "138",
       "Name": "flub-front-right"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "138",
       "Filter": false,
       "GenerateMipMaps": true,
@@ -10414,12 +10141,10 @@
   {
     "Entity": "139",
     "concepts.Named": {
-      "Active": true,
       "Entity": "139",
       "Name": "flub-front"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "139",
       "Filter": false,
       "GenerateMipMaps": true,

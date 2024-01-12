@@ -16,7 +16,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
@@ -35,6 +35,8 @@ type Grid struct {
 	state.IEditor
 	GridWidget *fyne.Container
 	GridWindow fyne.Window
+
+	refreshIndex int
 }
 
 func (g *Grid) childFields(parentName string, childValue reflect.Value, state PropertyGridState, updateParent bool) {
@@ -150,6 +152,29 @@ func (g *Grid) fieldsFromSelection(selection []any) *PropertyGridState {
 	return &state
 }
 
+// Confusing syntax. The constraint ensures that our underlying type has pointer
+// receiver methods that implement fyne.CanvasObject
+func gridAddOrUpdateWidgetAtIndex[PT interface {
+	*T
+	fyne.CanvasObject
+}, T any](g *Grid) PT {
+	if g.refreshIndex < len(g.GridWidget.Objects) {
+		if element, ok := g.GridWidget.Objects[g.refreshIndex].(PT); ok {
+			g.refreshIndex++
+			return element
+		}
+		var ptr PT = new(T)
+		g.GridWidget.Objects[g.refreshIndex] = ptr
+		g.refreshIndex++
+		return ptr
+	}
+
+	var ptr PT = new(T)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, ptr)
+	g.refreshIndex++
+	return ptr
+}
+
 func (g *Grid) AddEntityControls(selection []any) {
 	entities := make([]uint64, 0)
 	entityList := ""
@@ -173,11 +198,12 @@ func (g *Grid) AddEntityControls(selection []any) {
 			}
 		}
 	}
-	label := widget.NewLabel(fmt.Sprintf("Entity [%v]", concepts.TruncateString(entityList, 10)))
+
+	label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
+	label.Text = fmt.Sprintf("Entity [%v]", concepts.TruncateString(entityList, 10))
 	label.TextStyle.Bold = true
 	//label.SetTooltipText(entityList)
 	label.Alignment = fyne.TextAlignLeading
-	g.GridWidget.Objects = append(g.GridWidget.Objects, label)
 
 	opts := make([]string, 0)
 	optsIndices := make([]int, 0)
@@ -188,8 +214,7 @@ func (g *Grid) AddEntityControls(selection []any) {
 		opts = append(opts, t.String())
 		optsIndices = append(optsIndices, index)
 	}
-	selectComponent := widget.NewSelect(opts, func(s string) {
-	})
+	selectComponent := widget.NewSelect(opts, func(s string) {})
 
 	button := widget.NewButtonWithIcon("Add", theme.ContentAddIcon(), func() {
 		optsIndex := selectComponent.SelectedIndex()
@@ -201,14 +226,13 @@ func (g *Grid) AddEntityControls(selection []any) {
 		action.Act()
 
 	})
-	g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewBorder(nil, nil, nil, button, selectComponent))
+	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
+	c.Layout = layout.NewBorderLayout(nil, nil, nil, button)
+	c.Objects = []fyne.CanvasObject{selectComponent, button}
+	c.Refresh()
 }
 
-func (g *Grid) Refresh(selection []any) {
-	g.GridWidget.Objects = nil
-
-	state := g.fieldsFromSelection(selection)
-
+func (g *Grid) sortedFields(state *PropertyGridState) []string {
 	sorted := make([]string, len(state.Fields))
 	i := 0
 	for display := range state.Fields {
@@ -218,19 +242,27 @@ func (g *Grid) Refresh(selection []any) {
 	sort.SliceStable(sorted, func(i, j int) bool {
 		return sorted[i] < sorted[j]
 	})
+	return sorted
+}
+
+func (g *Grid) Refresh(selection []any) {
+	g.refreshIndex = 0
+
 	if len(selection) > 0 {
 		g.AddEntityControls(selection)
 	}
-	for _, display := range sorted {
+
+	state := g.fieldsFromSelection(selection)
+	for _, display := range g.sortedFields(state) {
 		field := state.Fields[display]
 
 		if !field.Values[0].CanInterface() {
 			continue
 		}
-		label := widget.NewLabel(field.Short())
+		label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
+		label.Text = field.Short()
 		//label.SetTooltipText(field.Name)
 		label.Alignment = fyne.TextAlignLeading
-		g.GridWidget.Objects = append(g.GridWidget.Objects, label)
 
 		if field.EditType == "Component" {
 			label.Importance = widget.HighImportance
@@ -238,15 +270,20 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldComponent(field)
 			continue
 		}
+		label.Importance = widget.MediumImportance
+		label.TextStyle.Bold = false
 
 		switch field.Values[0].Interface().(type) {
 		case *bool:
 			g.fieldBool(field)
 		case *string:
-			if field.EditType == "file" {
+			switch field.EditType {
+			case "file":
 				g.fieldFile(field)
-			} else {
-				g.fieldString(field)
+			case "multi-line-string":
+				g.fieldString(field, true)
+			default:
+				g.fieldString(field, false)
 			}
 		case *float64:
 			g.fieldNumber(field)
@@ -305,9 +342,14 @@ func (g *Grid) Refresh(selection []any) {
 		case **concepts.SimVariable[concepts.Vector4]:
 			g.fieldAnimationTarget(field)
 		default:
+			g.refreshIndex++
 			g.GridWidget.Add(widget.NewLabel("Unavailable"))
 		}
 	}
+	if len(g.GridWidget.Objects) > g.refreshIndex {
+		g.GridWidget.Objects = g.GridWidget.Objects[:g.refreshIndex]
+	}
+	g.GridWidget.Refresh()
 }
 
 func (g *Grid) Focus(o fyne.CanvasObject) {

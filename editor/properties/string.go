@@ -7,7 +7,8 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
-	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -24,17 +25,10 @@ func (g *Grid) originalStrings(field *state.PropertyGridField) string {
 	return origValue
 }
 
-func (g *Grid) fieldString(field *state.PropertyGridField) {
+func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 	origValue := g.originalStrings(field)
 
-	entry := widget.NewEntry()
-	entry.SetText(origValue)
-	entry.OnSubmitted = func(text string) {
-		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(text)}
-		g.NewAction(action)
-		action.Act()
-		origValue = text
-	}
+	var entry *widget.Entry
 
 	if exp, ok := field.Parent.(*core.Script); ok {
 		label := widget.NewLabel("Compiled successfully")
@@ -44,8 +38,21 @@ func (g *Grid) fieldString(field *state.PropertyGridField) {
 		} else {
 			label.Importance = widget.SuccessImportance
 		}
-		g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewVBox(entry, label))
+		entry = widget.NewEntry()
+		c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
+		c.Layout = layout.NewVBoxLayout()
+		c.Objects = []fyne.CanvasObject{entry, label}
 	} else {
-		g.GridWidget.Objects = append(g.GridWidget.Objects, entry)
+		entry = gridAddOrUpdateWidgetAtIndex[*widget.Entry](g)
+	}
+
+	entry.MultiLine = multiline
+	entry.OnSubmitted = nil
+	entry.SetText(origValue)
+	entry.OnSubmitted = func(text string) {
+		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(text)}
+		g.NewAction(action)
+		action.Act()
+		origValue = text
 	}
 }

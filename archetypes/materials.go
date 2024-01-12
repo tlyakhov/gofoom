@@ -12,6 +12,7 @@ func EntityMapIsMaterial(components []concepts.Attachable) bool {
 		components[materials.TiledComponentIndex] != nil ||
 		components[materials.SkyComponentIndex] != nil ||
 		components[materials.ImageComponentIndex] != nil ||
+		components[materials.TextComponentIndex] != nil ||
 		components[materials.SolidComponentIndex] != nil
 }
 

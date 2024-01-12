@@ -40,6 +40,8 @@ func (a *SetProperty) FireHooks() {
 			// TODO: use https://github.com/hfmrow/gotk3_gtksource to have a
 			// better source editor for scripts
 			target.Compile()
+		case *materials.Text:
+			target.RasterizeText()
 		}
 	}
 }

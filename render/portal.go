@@ -14,6 +14,7 @@ func WallHiPick(s *state.ColumnPortal) {
 // WallHi renders the top portion of a portal segment.
 func WallHi(s *state.ColumnPortal) {
 	mat := s.AdjSegment.HiSurface.Material
+	extras := s.AdjSegment.HiSurface.ExtraStages
 	transform := s.AdjSegment.HiSurface.Transform
 	u := s.U
 	if s.Segment.HiSurface.Scale == materials.ScaleHeight || s.Segment.HiSurface.Scale == materials.ScaleNone {
@@ -38,7 +39,7 @@ func WallHi(s *state.ColumnPortal) {
 		if !mat.Nil() {
 			tu := transform[0]*u + transform[2]*v + transform[4]
 			tv := transform[1]*u + transform[3]*v + transform[5]
-			s.SampleShader(mat, tu, tv, s.ProjectZ(1.0))
+			s.SampleShader(mat, extras, tu, tv, s.ProjectZ(1.0))
 			s.SampleLight(&s.Material, mat, &s.Intersection, s.U, lightV, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
@@ -56,6 +57,7 @@ func WallLowPick(s *state.ColumnPortal) {
 // WallLow renders the bottom portion of a portal segment.
 func WallLow(s *state.ColumnPortal) {
 	mat := s.AdjSegment.LoSurface.Material
+	extras := s.AdjSegment.LoSurface.ExtraStages
 	transform := s.AdjSegment.LoSurface.Transform
 	u := s.U
 	if s.Segment.LoSurface.Scale == materials.ScaleHeight || s.Segment.LoSurface.Scale == materials.ScaleNone {
@@ -80,7 +82,7 @@ func WallLow(s *state.ColumnPortal) {
 		if !mat.Nil() {
 			tu := transform[0]*u + transform[2]*v + transform[4]
 			tv := transform[1]*u + transform[3]*v + transform[5]
-			s.SampleShader(mat, tu, tv, s.ProjectZ(1.0))
+			s.SampleShader(mat, extras, tu, tv, s.ProjectZ(1.0))
 			s.SampleLight(&s.Material, mat, &s.Intersection, s.U, lightV, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))

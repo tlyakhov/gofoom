@@ -9,7 +9,8 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
-	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -86,5 +87,8 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 		}
 
 	}
-	g.GridWidget.Objects = append(g.GridWidget.Objects, container.NewBorder(nil, nil, nil, cb, entry))
+
+	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
+	c.Layout = layout.NewBorderLayout(nil, nil, nil, cb)
+	c.Objects = []fyne.CanvasObject{entry, cb}
 }

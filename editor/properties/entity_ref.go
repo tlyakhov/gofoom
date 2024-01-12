@@ -40,6 +40,8 @@ func (g *Grid) imageForRef(ref *concepts.EntityRef) image.Image {
 	w, h := 64, 64
 	if img := materials.ImageFromDb(ref); img != nil {
 		return img.Image
+	} else if text := materials.TextFromDb(ref); text != nil && text.Rendered != nil {
+		return text.Rendered.Image
 	} else if solid := materials.SolidFromDb(ref); solid != nil {
 		img := image.NewNRGBA(image.Rect(0, 0, w, h))
 		for i := 0; i < w*h; i++ {
@@ -132,7 +134,6 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 	}
 	c := container.New(&entityRefLayout{Child: layout.NewStackLayout()}, tree)
 	aitem := widget.NewAccordionItem(title, c)
-	accordion := widget.NewAccordion(aitem)
-	g.GridWidget.Objects = append(g.GridWidget.Objects, accordion)
-
+	accordion := gridAddOrUpdateWidgetAtIndex[*widget.Accordion](g)
+	accordion.Items = []*widget.AccordionItem{aitem}
 }

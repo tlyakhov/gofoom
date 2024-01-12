@@ -184,8 +184,8 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 		case *concepts.Vector3:
 			m.ProjectXZSelf(target)
 		case *concepts.Matrix2:
-			target.MulSelf(m)
-			log.Printf("CST: %v", target.StringHuman())
+			*target = *m.Mul(target)
+			//			log.Printf("CST: %v", target.StringHuman())
 		}
 	}
 }

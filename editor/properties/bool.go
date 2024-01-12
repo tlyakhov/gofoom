@@ -15,7 +15,8 @@ func (g *Grid) fieldBool(field *state.PropertyGridField) {
 		origValue = origValue || v.Elem().Bool()
 	}
 
-	cb := widget.NewCheck("", nil)
+	cb := gridAddOrUpdateWidgetAtIndex[*widget.Check](g)
+	cb.OnChanged = nil
 	cb.SetChecked(origValue)
 	cb.OnChanged = func(active bool) {
 		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(active)}
@@ -24,6 +25,4 @@ func (g *Grid) fieldBool(field *state.PropertyGridField) {
 		origValue = active
 		g.Focus(g.GridWidget)
 	}
-	g.GridWidget.Objects = append(g.GridWidget.Objects, cb)
-
 }
