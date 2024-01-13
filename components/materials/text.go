@@ -6,6 +6,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 
 	"github.com/fogleman/gg"
+	"golang.org/x/image/font/inconsolata"
 )
 
 type Text struct {
@@ -43,11 +44,13 @@ func (t *Text) RasterizeText() {
 	padding := 4.0
 	// For measuring text
 	c := gg.NewContext(1, 1)
-	w, h := c.MeasureMultilineString(t.Label, 1.0)
+	c.SetFontFace(inconsolata.Regular8x16)
+	w, h := c.MeasureMultilineString(t.Label, t.LineSpacing)
 	w += padding * 2
 	h += padding * 2
 	// Actual image & context
 	c = gg.NewContext(int(w), int(h))
+	c.SetFontFace(inconsolata.Regular8x16)
 	// Color gets applied at render time
 	c.SetRGBA255(255, 255, 255, 255)
 	split := strings.Split(t.Label, "\n")
@@ -63,7 +66,7 @@ func (t *Text) RasterizeText() {
 	img.Height = uint32(h)
 	img.Data = make([]uint32, int(img.Width)*int(img.Height))
 	img.GenerateMipMaps = false
-	img.Filter = false
+	img.Filter = true
 	rgba := c.Image().(*image.RGBA)
 	for i := 0; i < len(rgba.Pix)/4; i++ {
 		// Only need the alpha, the rest is for editing/debugging

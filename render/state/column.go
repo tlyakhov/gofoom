@@ -54,7 +54,7 @@ type Column struct {
 	ClippedEnd         int
 	LightElements      [4]LightElement
 	Normal             concepts.Vector3
-	Material           concepts.Vector4
+	MaterialColor      concepts.Vector4
 	Light              concepts.Vector4
 	Lightmap           []concepts.Vector3
 	LightmapAge        []int
@@ -79,27 +79,27 @@ func (c *Column) CalcScreen() {
 }
 
 func (c *Column) SampleShader(ishader *concepts.EntityRef, extraStages []*materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {
-	c.Material[0] = 0
-	c.Material[1] = 0
-	c.Material[2] = 0
-	c.Material[3] = 0
+	c.MaterialColor[0] = 0
+	c.MaterialColor[1] = 0
+	c.MaterialColor[2] = 0
+	c.MaterialColor[3] = 0
 	shader := materials.ShaderFromDb(ishader)
 	if shader == nil {
-		c.sampleTexture(&c.Material, ishader, u, v, scale)
+		c.sampleTexture(&c.MaterialColor, ishader, u, v, scale)
 	} else {
 		for _, stage := range shader.Stages {
 			tu := stage.Transform[0]*u + stage.Transform[2]*v + stage.Transform[4]
 			tv := stage.Transform[1]*u + stage.Transform[3]*v + stage.Transform[5]
-			c.sampleTexture(&c.Material, stage.Texture, tu, tv, scale)
+			c.sampleTexture(&c.MaterialColor, stage.Texture, tu, tv, scale)
 		}
 	}
 
 	for _, stage := range extraStages {
 		tu := stage.Transform[0]*u + stage.Transform[2]*v + stage.Transform[4]
 		tv := stage.Transform[1]*u + stage.Transform[3]*v + stage.Transform[5]
-		c.sampleTexture(&c.Material, stage.Texture, tu, tv, scale)
+		c.sampleTexture(&c.MaterialColor, stage.Texture, tu, tv, scale)
 	}
-	return &c.Material
+	return &c.MaterialColor
 }
 
 func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {

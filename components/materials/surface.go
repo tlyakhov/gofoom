@@ -13,21 +13,20 @@ import (
 ["](Mid|Lo|Hi)Surface["]
 "$1"
 */
-type SurfaceScale int
+type SurfaceStretch int
 
-//go:generate go run github.com/dmarkham/enumer -type=SurfaceScale -json
+//go:generate go run github.com/dmarkham/enumer -type=SurfaceStretch -json
 const (
-	ScaleNone SurfaceScale = iota
-	ScaleHeight
-	ScaleWidth
-	ScaleAll
+	StretchNone SurfaceStretch = iota
+	StretchAspect
+	StretchFill
 )
 
 type Surface struct {
 	DB       *concepts.EntityComponentDB
 	Material *concepts.EntityRef `editable:"Material" edit_type:"Material"`
 	// Do we need both this AND the transform? not sure
-	Scale       SurfaceScale     `editable:"Scale"`
+	Stretch     SurfaceStretch   `editable:"Stretch"`
 	ExtraStages []*ShaderStage   `editable:"Extra Shader Stages"`
 	Transform   concepts.Matrix2 `editable:"Transform"`
 }
@@ -47,10 +46,10 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 	if v, ok := data["Material"]; ok {
 		s.Material = s.DB.DeserializeEntityRef(v)
 	}
-	if v, ok := data["Scale"]; ok {
-		ms, err := SurfaceScaleString(v.(string))
+	if v, ok := data["Stretch"]; ok {
+		ms, err := SurfaceStretchString(v.(string))
 		if err == nil {
-			s.Scale = ms
+			s.Stretch = ms
 		} else {
 			panic(err)
 		}
@@ -68,8 +67,8 @@ func (s *Surface) Serialize() map[string]any {
 		result["Material"] = s.Material.Serialize()
 	}
 
-	if s.Scale != ScaleNone {
-		result["Scale"] = s.Scale.String()
+	if s.Stretch != StretchNone {
+		result["Stretch"] = s.Stretch.String()
 	}
 
 	return result
