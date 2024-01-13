@@ -13,11 +13,11 @@ func WallMidPick(s *state.Column) {
 
 // WallMid renders the wall portion (potentially over a portal).
 func WallMid(s *state.Column) {
-	mat := s.Segment.MidSurface.Material
+	material := s.Segment.MidSurface.Material
 	extras := s.Segment.MidSurface.ExtraStages
 	transform := s.Segment.MidSurface.Transform
 	u := s.U
-	if s.Segment.MidSurface.Scale == materials.ScaleHeight || s.Segment.MidSurface.Scale == materials.ScaleNone {
+	if s.Segment.MidSurface.Stretch == materials.StretchNone {
 		if s.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
@@ -36,18 +36,20 @@ func WallMid(s *state.Column) {
 			lightV = (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 		}
 
-		if s.Segment.MidSurface.Scale == materials.ScaleWidth || s.Segment.MidSurface.Scale == materials.ScaleNone {
+		if s.Segment.MidSurface.Stretch == materials.StretchNone {
 			v = s.Intersection[2] / 64.0
+		} else if s.Segment.MidSurface.Stretch == materials.StretchAspect {
+			v *= (s.Sector.Max[2] - s.Sector.Min[2]) / s.Segment.Length
 		}
 
-		if !mat.Nil() {
+		if !material.Nil() {
 			tu := transform[0]*u + transform[2]*v + transform[4]
 			tv := transform[1]*u + transform[3]*v + transform[5]
-			s.SampleShader(mat, extras, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.Material, mat, &s.Intersection, s.U, lightV, s.Distance)
+			s.SampleShader(material, extras, tu, tv, s.ProjectZ(1.0))
+			s.SampleLight(&s.MaterialColor, material, &s.Intersection, s.U, lightV, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.Material)
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialColor)
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }

@@ -226,18 +226,18 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if seg.PortalHasMaterial {
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				c := le.Material
+				c := le.MaterialColor
 				le.SampleShader(seg.MidSurface.Material, seg.MidSurface.ExtraStages, u, v, 1)
 				if lit := materials.LitFromDb(seg.MidSurface.Material); lit != nil {
-					lit.Apply(&le.Material, nil)
+					lit.Apply(&le.MaterialColor, nil)
 				}
-				if le.Material[3] >= 0.99 {
-					le.Material.From(&c)
+				if le.MaterialColor[3] >= 0.99 {
+					le.MaterialColor.From(&c)
 					return false
 				}
 				//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&le.Filter), (*[4]float64)(&le.Material))
-				le.Filter.AddPreMulColorSelf(&le.Material)
-				le.Material.From(&c)
+				le.Filter.AddPreMulColorSelf(&le.MaterialColor)
+				le.MaterialColor.From(&c)
 			}
 
 			// Get the square of the distance to the intersection (from the target point)
