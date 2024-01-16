@@ -167,8 +167,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.Y = y
 	column.Angle = r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x]
 	column.Sector = r.PlayerBody.Sector()
-	column.AngleCos = math.Cos(column.Angle)
-	column.AngleSin = math.Sin(column.Angle)
+	column.AngleSin, column.AngleCos = math.Sincos(column.Angle)
 	column.Ray.End = concepts.Vector2{
 		r.PlayerBody.Pos.Render[0] + r.MaxViewDist*column.AngleCos,
 		r.PlayerBody.Pos.Render[1] + r.MaxViewDist*column.AngleSin,
@@ -185,7 +184,7 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 		Config:  r.Config,
 		YStart:  0,
 		YEnd:    r.ScreenHeight,
-		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[2] + bob,
+		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1] + bob,
 	}
 	column.LightElements[0].Column = column
 	column.LightElements[1].Column = column
@@ -270,7 +269,7 @@ func (r *Renderer) Pick(x, y int) []state.PickedElement {
 		Config:  r.Config,
 		YStart:  0,
 		YEnd:    r.ScreenHeight,
-		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[2] + bob,
+		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1] + bob,
 	}
 	column.LightElements[0].Column = column
 	column.LightElements[1].Column = column

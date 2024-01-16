@@ -6,6 +6,7 @@ import (
 	"math"
 	"strconv"
 	"time"
+	"tlyakhov/gofoom/constants"
 	"unicode"
 )
 
@@ -236,5 +237,43 @@ func IntersectLineAABB(a, b, c, ext *Vector3) bool {
 	if tmin > tmax || tmin > dl {
 		return false
 	}
+	return true
+}
+
+func IntersectSegmentsRaw(s1A, s1B, s2A, s2B *Vector2) (float64, float64, float64, float64) {
+	s1dx := s1B[0] - s1A[0]
+	s1dy := s1B[1] - s1A[1]
+	s2dx := s2B[0] - s2A[0]
+	s2dy := s2B[1] - s2A[1]
+
+	denom := s1dx*s2dy - s2dx*s1dy
+	if denom == 0 {
+		return -1, -1, -1, -1
+	}
+	r := (s1A[1]-s2A[1])*s2dx - (s1A[0]-s2A[0])*s2dy
+	if (denom < 0 && r >= constants.IntersectEpsilon) ||
+		(denom > 0 && r < -constants.IntersectEpsilon) {
+		return -1, -1, -1, -1
+	}
+	s := (s1A[1]-s2A[1])*s1dx - (s1A[0]-s2A[0])*s1dy
+	if (denom < 0 && s >= constants.IntersectEpsilon) ||
+		(denom > 0 && s < -constants.IntersectEpsilon) {
+		return -1, -1, -1, -1
+	}
+	r /= denom
+	s /= denom
+	if r > 1.0+constants.IntersectEpsilon || s > 1.0+constants.IntersectEpsilon {
+		return -1, -1, -1, -1
+	}
+	return Clamp(r, 0.0, 1.0), Clamp(s, 0.0, 1.0), s1dx, s1dy
+}
+
+func IntersectSegments(s1A, s1B, s2A, s2B, result *Vector2) bool {
+	r, _, s1dx, s1dy := IntersectSegmentsRaw(s1A, s1B, s2A, s2B)
+	if r < 0 {
+		return false
+	}
+	result[0] = s1A[0] + r*s1dx
+	result[1] = s1A[1] + r*s1dy
 	return true
 }

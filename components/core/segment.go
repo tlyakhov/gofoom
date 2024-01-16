@@ -82,46 +82,12 @@ func (s *Segment) Matches(s2 *Segment) bool {
 	return d1 || d2
 }
 
-func (s1 *Segment) intersect(s2A, s2B *concepts.Vector2) (float64, float64, float64, float64) {
-	s1dx := s1.Next.P[0] - s1.P[0]
-	s1dy := s1.Next.P[1] - s1.P[1]
-	s2dx := s2B[0] - s2A[0]
-	s2dy := s2B[1] - s2A[1]
-
-	denom := s1dx*s2dy - s2dx*s1dy
-	if denom == 0 {
-		return -1, -1, -1, -1
-	}
-	r := (s1.P[1]-s2A[1])*s2dx - (s1.P[0]-s2A[0])*s2dy
-	if (denom < 0 && r >= constants.IntersectEpsilon) ||
-		(denom > 0 && r < -constants.IntersectEpsilon) {
-		return -1, -1, -1, -1
-	}
-	s := (s1.P[1]-s2A[1])*s1dx - (s1.P[0]-s2A[0])*s1dy
-	if (denom < 0 && s >= constants.IntersectEpsilon) ||
-		(denom > 0 && s < -constants.IntersectEpsilon) {
-		return -1, -1, -1, -1
-	}
-	r /= denom
-	s /= denom
-	if r > 1.0+constants.IntersectEpsilon || s > 1.0+constants.IntersectEpsilon {
-		return -1, -1, -1, -1
-	}
-	return concepts.Clamp(r, 0.0, 1.0), concepts.Clamp(s, 0.0, 1.0), s1dx, s1dy
-}
-
 func (s1 *Segment) Intersect2D(s2A, s2B, result *concepts.Vector2) bool {
-	r, _, s1dx, s1dy := s1.intersect(s2A, s2B)
-	if r < 0 {
-		return false
-	}
-	result[0] = s1.P[0] + r*s1dx
-	result[1] = s1.P[1] + r*s1dy
-	return true
+	return concepts.IntersectSegments(&s1.P, &s1.Next.P, s2A, s2B, result)
 }
 
 func (s1 *Segment) Intersect3D(s2A, s2B, result *concepts.Vector3) bool {
-	r, s, s1dx, s1dy := s1.intersect(s2A.To2D(), s2B.To2D())
+	r, s, s1dx, s1dy := concepts.IntersectSegmentsRaw(&s1.P, &s1.Next.P, s2A.To2D(), s2B.To2D())
 	if r < 0 {
 		return false
 	}

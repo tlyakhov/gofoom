@@ -356,7 +356,8 @@
     "core.Sector": {
       "Bodies": [
         "9",
-        "8"
+        "8",
+        "107"
       ],
       "BottomZ": {
         "Original": 0
@@ -457,8 +458,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -505,8 +505,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -1402,8 +1401,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -1446,8 +1444,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -2430,8 +2427,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -2468,8 +2464,7 @@
       "Entity": "31",
       "FloorFriction": 0.85,
       "FloorSurface": {
-        "Material": "122",
-        "Scale": "ScaleHeight"
+        "Material": "122"
       },
       "Segments": [
         {
@@ -2582,8 +2577,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 1.0000000000000013,
-          "Reverse": false,
+          "Percent": 0.2666666666666652,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2601,8 +2596,7 @@
       "Size": {
         "Original": {
           "X": 20,
-          "Y": 20,
-          "Z": 25
+          "Y": 20
         }
       },
       "Vel": {
@@ -2887,6 +2881,12 @@
       "Name": "be46jcvvn27lk1dec8k0"
     },
     "core.Sector": {
+      "Bodies": [
+        "126",
+        "140",
+        "113",
+        "119"
+      ],
       "BottomZ": {
         "Original": 0
       },
@@ -3311,7 +3311,6 @@
     "core.Sector": {
       "Bodies": [
         "21",
-        "107",
         "32",
         "131"
       ],
@@ -3348,8 +3347,7 @@
                 ]
               }
             ],
-            "Material": "2",
-            "Scale": "ScaleAll"
+            "Material": "2"
           },
           "X": -280,
           "Y": 30
@@ -3564,14 +3562,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Acitve": false,
+          "Acitve": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 23.410837371827085,
+          "End": -16.17886036657332,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1.0277777777777777,
+          "Percent": 0.7222222222222224,
           "Reverse": false,
-          "Start": 31.031995640180124,
+          "Start": -20.41170479216458,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -3592,8 +3590,7 @@
       "Size": {
         "Original": {
           "X": 32,
-          "Y": 32,
-          "Z": 42
+          "Y": 32
         }
       },
       "Vel": {
@@ -4396,8 +4393,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -4968,8 +4964,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -5202,8 +5197,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -5655,8 +5649,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -6480,8 +6473,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -6800,8 +6792,8 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0083333333333333,
-          "Reverse": false,
+          "Percent": 0.008333333333333333,
+          "Reverse": true,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
@@ -7078,8 +7070,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -7731,9 +7722,6 @@
       "Name": "be4bq9vvn27mek306b90"
     },
     "core.Sector": {
-      "Bodies": [
-        "42"
-      ],
       "BottomZ": {
         "Original": -60
       },
@@ -8138,8 +8126,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -8461,8 +8448,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -8509,8 +8495,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -8670,8 +8655,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -8718,8 +8702,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -8848,8 +8831,7 @@
       "Size": {
         "Original": {
           "X": 15,
-          "Y": 15,
-          "Z": 42
+          "Y": 15
         }
       },
       "Vel": {
@@ -9275,6 +9257,64 @@
     }
   },
   {
+    "Entity": "113",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "113",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 16,
+          "Y": -266,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 32,
+          "Y": 32
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "113"
+    },
+    "materials.SpriteSheet": {
+      "Billboard": false,
+      "Entity": "113",
+      "Sprites": [
+        {
+          "Angle": 0,
+          "Frame": 0,
+          "Image": "129"
+        }
+      ]
+    }
+  },
+  {
     "Entity": "114",
     "concepts.Named": {
       "Entity": "114",
@@ -9618,6 +9658,64 @@
     }
   },
   {
+    "Entity": "119",
+    "core.Body": {
+      "Angle": {
+        "Original": -90
+      },
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "119",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": -282,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 32,
+          "Y": 32
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "119"
+    },
+    "materials.SpriteSheet": {
+      "Billboard": false,
+      "Entity": "119",
+      "Sprites": [
+        {
+          "Angle": 0,
+          "Frame": 0,
+          "Image": "129"
+        }
+      ]
+    }
+  },
+  {
     "Entity": "120",
     "concepts.Named": {
       "Entity": "120",
@@ -9719,8 +9817,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -9856,8 +9953,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -9877,6 +9973,64 @@
       },
       "Entity": "125",
       "Strength": 10
+    }
+  },
+  {
+    "Entity": "126",
+    "core.Body": {
+      "Angle": {
+        "Original": 90
+      },
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "126",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": -250,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 32,
+          "Y": 32
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "126"
+    },
+    "materials.SpriteSheet": {
+      "Billboard": false,
+      "Entity": "126",
+      "Sprites": [
+        {
+          "Angle": 0,
+          "Frame": 0,
+          "Image": "129"
+        }
+      ]
     }
   },
   {
@@ -10024,8 +10178,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -10149,6 +10302,64 @@
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/game/flub/flub-front.png"
+    }
+  },
+  {
+    "Entity": "140",
+    "core.Body": {
+      "Angle": {
+        "Original": 180
+      },
+      "BoundingRadius": 10,
+      "CollisionResponse": "Slide",
+      "Entity": "140",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -16,
+          "Y": -266,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 32,
+          "Y": 32
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "140"
+    },
+    "materials.SpriteSheet": {
+      "Billboard": false,
+      "Entity": "140",
+      "Sprites": [
+        {
+          "Angle": 0,
+          "Frame": 0,
+          "Image": "129"
+        }
+      ]
     }
   }
 ]

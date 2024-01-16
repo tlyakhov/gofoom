@@ -12,7 +12,7 @@ type Body struct {
 	concepts.Attached `editable:"^"`
 	Pos               concepts.SimVariable[concepts.Vector3] `editable:"Position"`
 	Vel               concepts.SimVariable[concepts.Vector3]
-	Size              concepts.SimVariable[concepts.Vector3] `editable:"Size"`
+	Size              concepts.SimVariable[concepts.Vector2] `editable:"Size"`
 	Force             concepts.Vector3
 	Angle             concepts.SimVariable[float64] `editable:"Angle"`
 	BoundingRadius    float64                       `editable:"Bounding Radius"`
@@ -70,7 +70,7 @@ func (b *Body) Construct(data map[string]any) {
 
 	b.Pos.Set(concepts.Vector3{0, 0, 0})
 	b.Vel.Set(concepts.Vector3{0, 0, 0})
-	b.Size.Set(concepts.Vector3{10, 10, 10})
+	b.Size.Set(concepts.Vector2{10, 10})
 	b.BoundingRadius = 10
 	b.CollisionResponse = Slide
 	b.MountHeight = constants.PlayerMountHeight
@@ -96,11 +96,11 @@ func (b *Body) Construct(data map[string]any) {
 		b.Vel.Construct(v3)
 	}
 	if v, ok := data["Size"]; ok {
-		v3 := v.(map[string]any)
-		if _, ok2 := v3["X"]; ok2 {
-			v3 = map[string]any{"Original": v3}
+		v2 := v.(map[string]any)
+		if _, ok2 := v2["X"]; ok2 {
+			v2 = map[string]any{"Original": v2}
 		}
-		b.Size.Construct(v3)
+		b.Size.Construct(v2)
 	}
 	if v, ok := data["Angle"]; ok {
 		if v2, ok2 := v.(float64); ok2 {
