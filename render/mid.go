@@ -48,8 +48,6 @@ func WallMid(s *state.Column) {
 			s.SampleShader(material, extras, tu, tv, s.ProjectZ(1.0))
 			s.SampleLight(&s.MaterialColor, material, &s.Intersection, s.U, lightV, s.Distance)
 		}
-		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialColor)
-		s.ZBuffer[screenIndex] = s.Distance
+		s.ApplySample(&s.MaterialColor, int(screenIndex), s.Distance)
 	}
 }

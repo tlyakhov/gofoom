@@ -155,9 +155,6 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		v := float64(y-c.ScreenStart) / float64(c.ScreenEnd-c.ScreenStart)
 		sample := c.SampleShader(refMaterial, nil, c.U, v, scaler)
 		sample.Mul4Self(&c.Light)
-		if sample[3] > 0 {
-			c.FrameBuffer[screenIndex].AddPreMulColorSelf(sample)
-			r.ZBuffer[screenIndex] = c.Distance
-		}
+		c.ApplySample(sample, screenIndex, c.Distance)
 	}
 }
