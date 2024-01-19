@@ -201,6 +201,12 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 		for y := 0; y < r.ScreenHeight; y++ {
 			screenIndex := (x + y*r.ScreenWidth)
 			fb := &r.FrameBuffer[screenIndex]
+			if r.AlphaAccum[screenIndex][3] > 0 {
+				invAlpha := (1.0 - r.AlphaReveal[screenIndex]) / r.AlphaAccum[screenIndex][3]
+				fb[0] = fb[0]*r.AlphaReveal[screenIndex] + r.AlphaAccum[screenIndex][0]*invAlpha
+				fb[1] = fb[1]*r.AlphaReveal[screenIndex] + r.AlphaAccum[screenIndex][1]*invAlpha
+				fb[2] = fb[2]*r.AlphaReveal[screenIndex] + r.AlphaAccum[screenIndex][2]*invAlpha
+			}
 			screenIndex *= 4
 			if r.FrameTint[3] != 0 {
 				a := 1.0 - r.FrameTint[3]
@@ -231,6 +237,14 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.FrameTint[1] *= r.FrameTint[3]
 	r.FrameTint[2] *= r.FrameTint[3]
 
+	for i := 0; i < r.ScreenWidth*r.ScreenHeight; i++ {
+		r.AlphaAccum[i][0] = 0
+		r.AlphaAccum[i][1] = 0
+		r.AlphaAccum[i][2] = 0
+		r.AlphaAccum[i][3] = 0
+		r.AlphaReveal[i] = 1
+	}
+
 	// Make sure we don't have too many debug notices
 	for r.DebugNotices.Length() > 30 {
 		r.DebugNotices.Pop()
@@ -256,7 +270,6 @@ func (r *Renderer) Render(buffer []uint8) {
 	} else {
 		r.RenderBlock(buffer, 0, r.ScreenWidth)
 	}
-	// Bodies...
 }
 
 func (r *Renderer) Pick(x, y int) []state.PickedElement {
