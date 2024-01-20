@@ -3,8 +3,10 @@ package render
 import (
 	"fmt"
 	"math"
+	"slices"
 	"sync"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/render/state"
@@ -14,6 +16,11 @@ import (
 type Renderer struct {
 	*state.Config
 	columnGroup *sync.WaitGroup
+}
+
+type bodyWithDist2 struct {
+	*concepts.EntityRef
+	Dist2 float64
 }
 
 // NewRenderer constructs a new Renderer.
@@ -149,8 +156,20 @@ func (r *Renderer) RenderSector(column *state.Column) {
 		r.DebugNotices.Push(dbg)
 	}
 
+	sorted := make([]bodyWithDist2, len(column.Sector.Bodies))
+	i := 0
 	for _, ref := range column.Sector.Bodies {
-		r.RenderBody(ref, column)
+		b := core.BodyFromDb(ref)
+		sorted[i].EntityRef = ref
+		sorted[i].Dist2 = column.Ray.Start.Dist2(b.Pos.Render.To2D())
+		i++
+	}
+
+	slices.SortFunc(sorted, func(a bodyWithDist2, b bodyWithDist2) int {
+		return int(b.Dist2 - a.Dist2)
+	})
+	for _, b := range sorted {
+		r.RenderBody(b.EntityRef, column)
 	}
 }
 
@@ -201,12 +220,6 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 		for y := 0; y < r.ScreenHeight; y++ {
 			screenIndex := (x + y*r.ScreenWidth)
 			fb := &r.FrameBuffer[screenIndex]
-			if r.AlphaAccum[screenIndex][3] > 0 {
-				invAlpha := (1.0 - r.AlphaReveal[screenIndex]) / r.AlphaAccum[screenIndex][3]
-				fb[0] = fb[0]*r.AlphaReveal[screenIndex] + r.AlphaAccum[screenIndex][0]*invAlpha
-				fb[1] = fb[1]*r.AlphaReveal[screenIndex] + r.AlphaAccum[screenIndex][1]*invAlpha
-				fb[2] = fb[2]*r.AlphaReveal[screenIndex] + r.AlphaAccum[screenIndex][2]*invAlpha
-			}
 			screenIndex *= 4
 			if r.FrameTint[3] != 0 {
 				a := 1.0 - r.FrameTint[3]
@@ -236,14 +249,6 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.FrameTint[0] *= r.FrameTint[3]
 	r.FrameTint[1] *= r.FrameTint[3]
 	r.FrameTint[2] *= r.FrameTint[3]
-
-	for i := 0; i < r.ScreenWidth*r.ScreenHeight; i++ {
-		r.AlphaAccum[i][0] = 0
-		r.AlphaAccum[i][1] = 0
-		r.AlphaAccum[i][2] = 0
-		r.AlphaAccum[i][3] = 0
-		r.AlphaReveal[i] = 1
-	}
 
 	// Make sure we don't have too many debug notices
 	for r.DebugNotices.Length() > 30 {

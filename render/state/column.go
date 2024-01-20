@@ -135,22 +135,20 @@ func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.Enti
 		}
 	}
 
+	var sample concepts.Vector4
 	if image := materials.ImageFromDb(material); image != nil {
-		sample := image.Sample(u, v, scale)
-		result.AddPreMulColorSelf(&sample)
+		sample = image.Sample(u, v, scale)
 	} else if text := materials.TextFromDb(material); text != nil {
-		sample := text.Sample(u, v, scale)
-		result.AddPreMulColorSelf(&sample)
+		sample = text.Sample(u, v, scale)
 	} else if solid := materials.SolidFromDb(material); solid != nil {
-		result[0] = float64(solid.Diffuse.R) / 255.0
-		result[1] = float64(solid.Diffuse.G) / 255.0
-		result[2] = float64(solid.Diffuse.B) / 255.0
+		sample = solid.Diffuse.Render
 	} else {
-		result[0] = 0.5
-		result[1] = 0
-		result[2] = 0.5
-		result[3] = 1.0
+		sample[0] = 0.5
+		sample[1] = 0
+		sample[2] = 0.5
+		sample[3] = 1.0
 	}
+	result.AddPreMulColorSelf(&sample)
 
 	return result
 }
@@ -267,14 +265,13 @@ func (c *Column) ApplySample(sample *concepts.Vector4, screenIndex int, z float6
 		c.ZBuffer[screenIndex] = z
 		return
 	}
-	// https://casual-effects.blogspot.com/2014/03/weighted-blended-order-independent.html
-	w := WeightBlendedOIT(sample, z)
-	aa := &c.AlphaAccum[screenIndex]
-	aa[0] += sample[0] * w
-	aa[1] += sample[1] * w
-	aa[2] += sample[2] * w
-	aa[3] += sample[3] * w
-	c.AlphaReveal[screenIndex] *= (1.0 - sample[3])
+	dst := &c.FrameBuffer[screenIndex]
+	dst[0] = dst[0]*(1.0-sample[3]) + sample[0]
+	dst[1] = dst[1]*(1.0-sample[3]) + sample[1]
+	dst[2] = dst[2]*(1.0-sample[3]) + sample[2]
+	if sample[3] > 0.8 {
+		c.ZBuffer[screenIndex] = z
+	}
 }
 
 func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {
@@ -286,6 +283,6 @@ func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {
 		w = c[2]
 	}
 	w = concepts.Clamp(w*c[3], c[3], 1.0)
-	w *= concepts.Clamp(0.03/(1e-5+math.Pow(z/200, 4.0)), 1e-2, 3e3)
+	w *= concepts.Clamp(0.03/(1e-5+math.Pow(z/500, 4.0)), 1e-2, 3e3)
 	return w
 }

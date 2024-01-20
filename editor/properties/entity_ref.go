@@ -45,10 +45,10 @@ func (g *Grid) imageForRef(ref *concepts.EntityRef) image.Image {
 	} else if solid := materials.SolidFromDb(ref); solid != nil {
 		img := image.NewNRGBA(image.Rect(0, 0, w, h))
 		for i := 0; i < w*h; i++ {
-			img.Pix[i*4+0] = solid.Diffuse.R
-			img.Pix[i*4+1] = solid.Diffuse.G
-			img.Pix[i*4+2] = solid.Diffuse.B
-			img.Pix[i*4+3] = solid.Diffuse.A
+			img.Pix[i*4+0] = uint8(solid.Diffuse.Now[0] * 255)
+			img.Pix[i*4+1] = uint8(solid.Diffuse.Now[1] * 255)
+			img.Pix[i*4+2] = uint8(solid.Diffuse.Now[2] * 255)
+			img.Pix[i*4+3] = uint8(solid.Diffuse.Now[3] * 255)
 		}
 		return img
 	} else if shader := materials.ShaderFromDb(ref); shader != nil {

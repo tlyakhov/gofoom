@@ -47,7 +47,7 @@ const (
 	PlayerCrouchHeight   = 16.0
 	PlayerWalkForce      = 10.0 * PlayerMass * TimeStep // Newtons (we work backwards and aim for X meters/time step)
 	PlayerTurnSpeed      = 180.0                        // Degrees per second
-	PlayerJumpForce      = 80.0 * PlayerMass * TimeStep // Newtons
+	PlayerJumpForce      = 30.0 * PlayerMass * TimeStep // Newtons
 	PlayerSwimStrength   = 0.005
 	PlayerHurtTime       = 30
 	PlayerMountHeight    = 15.0

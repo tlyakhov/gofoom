@@ -113,10 +113,7 @@ func main() {
 			}
 			if editor.Lock.TryRLock() {
 				editor.DB.Simulation.Step()
-				if editor.MapWidget.NeedsRefresh {
-					editor.MapWidget.Raster.Refresh()
-					//editor.MapWidget.NeedsRefresh = false
-				}
+				editor.MapWidget.Raster.Refresh()
 				editor.Lock.RUnlock()
 			}
 		}

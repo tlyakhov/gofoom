@@ -18,8 +18,6 @@ type Config struct {
 	ViewFix                   []float64
 	ZBuffer                   []float64
 	FrameBuffer               []concepts.Vector4
-	AlphaAccum                []concepts.Vector4
-	AlphaReveal               []float64
 	FrameTint                 [4]float64
 	Player                    *behaviors.Player
 	PlayerBody                *core.Body
@@ -41,8 +39,6 @@ func (c *Config) Initialize() {
 
 	c.ZBuffer = make([]float64, c.ScreenWidth*c.ScreenHeight)
 	c.FrameBuffer = make([]concepts.Vector4, c.ScreenWidth*c.ScreenHeight)
-	c.AlphaAccum = make([]concepts.Vector4, c.ScreenWidth*c.ScreenHeight)
-	c.AlphaReveal = make([]float64, c.ScreenWidth*c.ScreenHeight)
 
 	c.RefreshPlayer()
 }

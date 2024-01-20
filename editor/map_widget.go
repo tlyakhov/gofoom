@@ -25,12 +25,11 @@ var _ desktop.Keyable = (*MapWidget)(nil)
 type MapWidget struct {
 	widget.BaseWidget
 
-	Raster       *canvas.Raster
-	Context      *gg.Context
-	Surface      *image.RGBA
-	Font         *render.Font
-	MapCursor    desktop.Cursor
-	NeedsRefresh bool
+	Raster    *canvas.Raster
+	Context   *gg.Context
+	Surface   *image.RGBA
+	Font      *render.Font
+	MapCursor desktop.Cursor
 }
 
 func NewMapWidget() *MapWidget {
@@ -147,7 +146,6 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 	if editor.CurrentAction != nil {
 		editor.CurrentAction.OnMouseDown(evt)
 	}
-	mw.NeedsRefresh = true
 }
 func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	editor.MousePressed = false
@@ -155,7 +153,6 @@ func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	if editor.CurrentAction != nil {
 		editor.CurrentAction.OnMouseUp()
 	}
-	mw.NeedsRefresh = true
 }
 
 func (mw *MapWidget) requestFocus() {
@@ -184,8 +181,6 @@ func (mw *MapWidget) Scrolled(ev *fyne.ScrollEvent) {
 	} else {
 		editor.Scale += delta * 0.0002
 	}
-
-	mw.NeedsRefresh = true
 }
 
 func (mw *MapWidget) MouseIn(ev *desktop.MouseEvent) {
@@ -210,7 +205,6 @@ func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
 
 	if editor.CurrentAction != nil {
 		editor.CurrentAction.OnMouseMove()
-		mw.NeedsRefresh = true
 	}
 }
 
