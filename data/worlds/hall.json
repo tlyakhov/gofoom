@@ -2092,8 +2092,8 @@
     },
     "core.Sector": {
       "Bodies": [
-        "125",
-        "42"
+        "42",
+        "125"
       ],
       "BottomZ": {
         "Original": -100
@@ -2577,7 +2577,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.2666666666666652,
+          "Percent": 0.6499999999999989,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -2885,7 +2885,8 @@
         "126",
         "140",
         "113",
-        "119"
+        "119",
+        "107"
       ],
       "BottomZ": {
         "Original": 0
@@ -3312,7 +3313,9 @@
       "Bodies": [
         "21",
         "32",
-        "131"
+        "131",
+        "42",
+        "107"
       ],
       "BottomZ": {
         "Original": -64
@@ -3565,11 +3568,11 @@
           "Acitve": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -16.17886036657332,
+          "End": -92.68759895198619,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.7222222222222224,
+          "Percent": 0.1388888888888889,
           "Reverse": false,
-          "Start": -20.41170479216458,
+          "Start": -98.75432245716055,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -6792,8 +6795,8 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0.008333333333333333,
-          "Reverse": true,
+          "Percent": 1.0083333333333333,
+          "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
@@ -8525,8 +8528,8 @@
     },
     "core.Sector": {
       "Bodies": [
-        "104",
-        "105"
+        "105",
+        "104"
       ],
       "BottomZ": {
         "Original": 0
@@ -8816,7 +8819,7 @@
       "Angle": {
         "Original": 262.5
       },
-      "BoundingRadius": 10,
+      "BoundingRadius": 0.5,
       "CollisionResponse": "Slide",
       "Entity": "107",
       "Mass": 80,

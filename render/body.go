@@ -2,6 +2,7 @@ package render
 
 import (
 	"math"
+	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
@@ -55,6 +56,10 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		billboard = sheet.Billboard
 	}
 
+	if !archetypes.EntityRefIsMaterial(refMaterial) {
+		return
+	}
+
 	var scaler float64
 	if billboard {
 		angleRender := angleFromPlayer - r.PlayerBody.Angle.Render
@@ -105,11 +110,6 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		}
 		isect.To3D(&c.Intersection)
 		c.U = isect.Dist(sx1) / b.Size.Render[0]
-	}
-
-	img := materials.ImageFromDb(refMaterial)
-	if img == nil {
-		return
 	}
 
 	c.ProjHeightTop = c.ProjectZ(b.Pos.Render[2] + b.Size.Render[1] - c.CameraZ)

@@ -108,9 +108,13 @@ func (g *GameWidget) Draw() {
 }
 
 func (g *GameWidget) KeyDown(evt *fyne.KeyEvent) {
+	editor.Lock.Lock()
+	defer editor.Lock.Unlock()
 	g.KeyMap[evt.Name] = true
 }
 func (g *GameWidget) KeyUp(evt *fyne.KeyEvent) {
+	editor.Lock.Lock()
+	defer editor.Lock.Unlock()
 	g.KeyMap[evt.Name] = false
 }
 
@@ -142,7 +146,6 @@ func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 			objects = append(objects, p.Element)
 		}
 		editor.SelectObjects(objects, true)
-		editor.MapWidget.NeedsRefresh = true
 	}
 }
 func (g *GameWidget) MouseUp(evt *desktop.MouseEvent) {}

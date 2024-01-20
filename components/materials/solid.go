@@ -1,15 +1,12 @@
 package materials
 
 import (
-	"fmt"
-	"image/color"
-
 	"tlyakhov/gofoom/concepts"
 )
 
 type Solid struct {
 	concepts.Attached `editable:"^"`
-	Diffuse           color.NRGBA `editable:"Color"`
+	Diffuse           concepts.SimVariable[concepts.Vector4] `editable:"Color"`
 }
 
 var SolidComponentIndex int
@@ -25,6 +22,14 @@ func SolidFromDb(entity *concepts.EntityRef) *Solid {
 	return nil
 }
 
+func (s *Solid) SetDB(db *concepts.EntityComponentDB) {
+	if s.DB != nil {
+		s.Diffuse.Detach(s.DB.Simulation)
+	}
+	s.Attached.SetDB(db)
+	s.Diffuse.Attach(s.DB.Simulation)
+}
+
 func (s *Solid) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
@@ -33,20 +38,12 @@ func (s *Solid) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Diffuse"]; ok {
-		var err error
-		s.Diffuse, err = concepts.ParseHexColor(v.(string))
-		if err != nil {
-			fmt.Printf("Error deserializing Solid texture: %v\n", err)
-		}
+		s.Diffuse.Construct(v.(map[string]any))
 	}
 }
 
 func (s *Solid) Serialize() map[string]any {
 	result := s.Attached.Serialize()
-	if s.Diffuse.A == 255 {
-		result["Diffuse"] = fmt.Sprintf("#%02X%02X%02X", s.Diffuse.R, s.Diffuse.G, s.Diffuse.B)
-	} else {
-		result["Diffuse"] = fmt.Sprintf("#%02X%02X%02X%02X", s.Diffuse.R, s.Diffuse.G, s.Diffuse.B, s.Diffuse.A)
-	}
+	result["Diffuse"] = s.Diffuse.Serialize()
 	return result
 }
