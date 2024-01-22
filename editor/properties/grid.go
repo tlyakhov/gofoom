@@ -309,6 +309,8 @@ func (g *Grid) Refresh(selection []any) {
 			g.fieldEnum(field, concepts.AnimationLifetimeValues())
 		case *concepts.AnimationCoordinates:
 			g.fieldEnum(field, concepts.AnimationCoordinatesValues())
+		case *materials.ShaderFlags:
+			g.fieldEnum(field, materials.ShaderFlagsValues())
 		case **concepts.EntityRef:
 			g.fieldEntityRef(field)
 		case *[]*core.Script:

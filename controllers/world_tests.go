@@ -55,7 +55,7 @@ func CreateTestGrass(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	return igrass
 }
 func CreateTestSky(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	isky := archetypes.CreateBasic(db, materials.SkyComponentIndex)
+	isky := archetypes.CreateBasic(db, materials.SolidComponentIndex) //materials.SkyComponentIndex)
 	nmat := db.NewComponent(isky.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Sky"
 	tex := db.NewComponent(isky.Entity, materials.ImageComponentIndex).(*materials.Image)
@@ -75,7 +75,7 @@ func CreateTestDirt(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.Load()
-	materials.TiledFromDb(idirt)
+	//materials.TiledFromDb(idirt)
 	return idirt
 }
 

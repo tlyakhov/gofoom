@@ -119,11 +119,10 @@ func (r *Renderer) RenderSector(column *state.Column) {
 
 	dist := math.MaxFloat64
 	isect := new(concepts.Vector2)
-	ray := new(concepts.Vector2)
-	ray.From(&column.Ray.End).SubSelf(&column.Ray.Start)
+	column.Ray.Delta.From(&column.Ray.End).SubSelf(&column.Ray.Start)
 	for _, segment := range column.Sector.Segments {
 		// Wall is facing away from us
-		if ray.Dot(&segment.Normal) > 0 {
+		if column.Ray.Delta.Dot(&segment.Normal) > 0 {
 			continue
 		}
 

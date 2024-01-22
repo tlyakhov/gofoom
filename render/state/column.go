@@ -9,7 +9,7 @@ import (
 )
 
 type Ray struct {
-	Start, End concepts.Vector2
+	Start, End, Delta concepts.Vector2
 }
 
 type PickedType int
@@ -85,31 +85,40 @@ func (c *Column) SampleShader(ishader *concepts.EntityRef, extraStages []*materi
 	c.MaterialColor[3] = 0
 	shader := materials.ShaderFromDb(ishader)
 	if shader == nil {
-		c.sampleTexture(&c.MaterialColor, ishader, u, v, scale)
+		c.sampleTexture(&c.MaterialColor, ishader, nil, u, v, scale)
 	} else {
 		for _, stage := range shader.Stages {
-			tu := stage.Transform[0]*u + stage.Transform[2]*v + stage.Transform[4]
-			tv := stage.Transform[1]*u + stage.Transform[3]*v + stage.Transform[5]
-			c.sampleTexture(&c.MaterialColor, stage.Texture, tu, tv, scale)
+			c.sampleTexture(&c.MaterialColor, stage.Texture, stage, u, v, scale)
 		}
 	}
 
 	for _, stage := range extraStages {
-		tu := stage.Transform[0]*u + stage.Transform[2]*v + stage.Transform[4]
-		tv := stage.Transform[1]*u + stage.Transform[3]*v + stage.Transform[5]
-		c.sampleTexture(&c.MaterialColor, stage.Texture, tu, tv, scale)
+		c.sampleTexture(&c.MaterialColor, stage.Texture, stage, u, v, scale)
 	}
 	return &c.MaterialColor
 }
 
-func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.EntityRef, u, v float64, scale float64) *concepts.Vector4 {
+func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.EntityRef, stage *materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {
 	// Should refactor this scale thing, it's hard to reason about
 	scaleDivisor := 1.0
 
-	if tiled := materials.TiledFromDb(material); tiled != nil {
+	if stage != nil {
+		u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
+		if (stage.Flags & materials.ShaderSky) != 0 {
+			v = float64(c.Y) / (float64(c.ScreenHeight) - 1)
+
+			if (stage.Flags & materials.ShaderStaticBackground) != 0 {
+				u = float64(c.X) / (float64(c.ScreenWidth) - 1)
+			} else {
+				u = c.Angle / (2.0 * math.Pi)
+			}
+		}
+	}
+
+	if stage == nil || (stage.Flags&materials.ShaderTiled) != 0 {
 		u *= scaleDivisor
 		v *= scaleDivisor
-		if tiled.IsLiquid {
+		if stage != nil && (stage.Flags&materials.ShaderLiquid) != 0 {
 			lv, lu := math.Sincos(float64(c.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
 			u += lu * constants.LiquidChurnSize
 			v += lv * constants.LiquidChurnSize
@@ -117,22 +126,6 @@ func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.Enti
 
 		u -= math.Floor(u)
 		v -= math.Floor(v)
-		u = math.Abs(u)
-		v = math.Abs(v)
-	}
-
-	if sky := materials.SkyFromDb(material); sky != nil {
-		v = float64(c.Y) / (float64(c.ScreenHeight) - 1)
-
-		if sky.StaticBackground {
-			u = float64(c.X) / (float64(c.ScreenWidth) - 1)
-		} else {
-			u = c.Angle / (2.0 * math.Pi)
-			for ; u < 0; u++ {
-			}
-			for ; u > 1; u-- {
-			}
-		}
 	}
 
 	var sample concepts.Vector4

@@ -50,7 +50,7 @@ func init() {
 		"PlayerCrouchHeight":       reflect.ValueOf(constant.MakeFromLiteral("16", token.FLOAT, 0)),
 		"PlayerHeight":             reflect.ValueOf(constant.MakeFromLiteral("40", token.FLOAT, 0)),
 		"PlayerHurtTime":           reflect.ValueOf(constant.MakeFromLiteral("30", token.INT, 0)),
-		"PlayerJumpForce":          reflect.ValueOf(constant.MakeFromLiteral("53333.333333333333332149095440399833023548126220703125", token.FLOAT, 0)),
+		"PlayerJumpForce":          reflect.ValueOf(constant.MakeFromLiteral("20000", token.FLOAT, 0)),
 		"PlayerMass":               reflect.ValueOf(constant.MakeFromLiteral("80", token.FLOAT, 0)),
 		"PlayerMaxHealth":          reflect.ValueOf(constant.MakeFromLiteral("100", token.INT, 0)),
 		"PlayerMountHeight":        reflect.ValueOf(constant.MakeFromLiteral("15", token.FLOAT, 0)),

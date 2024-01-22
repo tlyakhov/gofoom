@@ -224,7 +224,7 @@ func CreateMainMenu() {
 	editor.ToolsAddBody.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyB, Modifier: fyne.KeyModifierAlt}
 	editor.ToolsAddBody.Menu = fyne.NewMenuItem("Add Body", func() { editor.SwitchTool(state.ToolAddBody) })
 	editor.ToolsAddSector.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyS, Modifier: fyne.KeyModifierAlt}
-	editor.ToolsAddSector.Menu = fyne.NewMenuItem("Add Sector", func() { editor.SwitchTool(state.ToolAddBody) })
+	editor.ToolsAddSector.Menu = fyne.NewMenuItem("Add Sector", func() { editor.SwitchTool(state.ToolAddSector) })
 	editor.ToolsSplitSegment.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyZ, Modifier: fyne.KeyModifierAlt}
 	editor.ToolsSplitSegment.Menu = fyne.NewMenuItem("Split Segment", func() { editor.SwitchTool(state.ToolSplitSegment) })
 	editor.ToolsSplitSector.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyX, Modifier: fyne.KeyModifierAlt}

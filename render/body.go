@@ -63,10 +63,10 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	var scaler float64
 	if billboard {
 		angleRender := angleFromPlayer - r.PlayerBody.Angle.Render
-		if angleRender < -180.0 {
+		for angleRender < -180.0 {
 			angleRender += 360.0
 		}
-		if angleRender > 180.0 {
+		for angleRender > 180.0 {
 			angleRender -= 360.0
 		}
 		c.Distance = c.Ray.Start.Dist(b.Pos.Render.To2D())
@@ -83,11 +83,10 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		}
 	} else {
 		isect := new(concepts.Vector2)
-		ray := new(concepts.Vector2)
-		ray.From(&c.Ray.End).SubSelf(&c.Ray.Start)
-		sx1 := &concepts.Vector2{
-			-math.Sin(b.Angle.Render*concepts.Deg2rad) * b.Size.Render[0] * 0.5,
-			math.Cos(b.Angle.Render*concepts.Deg2rad) * b.Size.Render[0] * 0.5}
+		sx1 := &concepts.Vector2{}
+		sx1[0], sx1[1] = math.Sincos(b.Angle.Render * concepts.Deg2rad)
+		sx1[0] *= b.Size.Render[0] * 0.5
+		sx1[1] *= b.Size.Render[0] * 0.5
 		sx2 := &concepts.Vector2{b.Pos.Render[0] + sx1[0], b.Pos.Render[1] + sx1[1]}
 		sx1[0] = b.Pos.Render[0] - sx1[0]
 		sx1[1] = b.Pos.Render[1] - sx1[1]

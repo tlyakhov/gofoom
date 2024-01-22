@@ -103,13 +103,11 @@ func convert(filename, output string) {
 		switch matType {
 		case "materials.LitSampled":
 			db.NewComponent(imat.Entity, materials.LitComponentIndex)
-			db.NewComponent(imat.Entity, materials.TiledComponentIndex)
 		case "materials.PainfulLitSampled":
 			db.NewComponent(imat.Entity, materials.LitComponentIndex)
-			db.NewComponent(imat.Entity, materials.TiledComponentIndex)
 			//db.NewComponent(imat.Entity, behaviors.ToxicComponentIndex)
 		case "materials.Sky":
-			db.NewComponent(imat.Entity, materials.SkyComponentIndex)
+			//			db.NewComponent(imat.Entity, materials.SkyComponentIndex)
 		}
 		for index, c := range imat.All() {
 			if c == nil {

@@ -60,7 +60,7 @@ func (bc *BodyController) Physics() {
 		v := &bc.Body.Vel.Now
 		if !v.Zero() {
 			// Air drag
-			r := bc.Body.BoundingRadius * constants.MetersPerUnit
+			r := bc.Body.Size.Now[0] * 0.5 * constants.MetersPerUnit
 			crossSectionArea := math.Pi * r * r
 			drag := concepts.Vector3{v[0], v[1], v[2]}
 			drag.MulSelf(drag.Length())
