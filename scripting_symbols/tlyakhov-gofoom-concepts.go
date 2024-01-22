@@ -59,6 +59,8 @@ func init() {
 		"Intersect":                    reflect.ValueOf(concepts.Intersect),
 		"IntersectLineAABB":            reflect.ValueOf(concepts.IntersectLineAABB),
 		"IntersectLineSphere":          reflect.ValueOf(concepts.IntersectLineSphere),
+		"IntersectSegments":            reflect.ValueOf(concepts.IntersectSegments),
+		"IntersectSegmentsRaw":         reflect.ValueOf(concepts.IntersectSegmentsRaw),
 		"Lerp":                         reflect.ValueOf(concepts.Lerp),
 		"MapArray":                     reflect.ValueOf(concepts.MapArray),
 		"Max":                          reflect.ValueOf(concepts.Max),

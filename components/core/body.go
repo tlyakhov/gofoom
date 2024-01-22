@@ -15,7 +15,6 @@ type Body struct {
 	Size              concepts.SimVariable[concepts.Vector2] `editable:"Size"`
 	Force             concepts.Vector3
 	Angle             concepts.SimVariable[float64] `editable:"Angle"`
-	BoundingRadius    float64                       `editable:"Bounding Radius"`
 	Mass              float64                       `editable:"Mass"`
 	CollisionResponse CollisionResponse             `editable:"Collision Response"`
 	Shadow            BodyShadow                    `editable:"Shadow Type"`
@@ -59,6 +58,16 @@ func (b *Body) Sector() *Sector {
 	return SectorFromDb(b.SectorEntityRef)
 }
 
+func (b *Body) P0() *concepts.Vector2 {
+	dy, dx := math.Sincos(b.Angle.Render * concepts.Deg2rad)
+	return &concepts.Vector2{b.Pos.Render[0] + dy*b.Size.Render[0]*0.5, b.Pos.Render[1] - dx*b.Size.Render[1]*0.5}
+}
+
+func (b *Body) P1() *concepts.Vector2 {
+	dy, dx := math.Sincos(b.Angle.Render * concepts.Deg2rad)
+	return &concepts.Vector2{b.Pos.Render[0] - dy*b.Size.Render[0]*0.5, b.Pos.Render[1] + dx*b.Size.Render[1]*0.5}
+}
+
 func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 	dx := b.Pos.Now[0] - p[0]
 	dy := b.Pos.Now[1] - p[1]
@@ -71,7 +80,6 @@ func (b *Body) Construct(data map[string]any) {
 	b.Pos.Set(concepts.Vector3{0, 0, 0})
 	b.Vel.Set(concepts.Vector3{0, 0, 0})
 	b.Size.Set(concepts.Vector2{10, 10})
-	b.BoundingRadius = 10
 	b.CollisionResponse = Slide
 	b.MountHeight = constants.PlayerMountHeight
 	b.Shadow = BodyShadowNone
@@ -108,9 +116,6 @@ func (b *Body) Construct(data map[string]any) {
 		}
 		b.Angle.Construct(v.(map[string]any))
 	}
-	if v, ok := data["BoundingRadius"]; ok {
-		b.BoundingRadius = v.(float64)
-	}
 	if v, ok := data["MountHeight"]; ok {
 		b.MountHeight = v.(float64)
 	}
@@ -141,7 +146,6 @@ func (b *Body) Serialize() map[string]any {
 	result["Vel"] = b.Vel.Serialize()
 	result["Size"] = b.Size.Serialize()
 	result["Angle"] = b.Angle.Serialize()
-	result["BoundingRadius"] = b.BoundingRadius
 	result["Mass"] = b.Mass
 	result["MountHeight"] = b.MountHeight
 	result["CollisionResponse"] = b.CollisionResponse.String()

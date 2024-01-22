@@ -33,7 +33,7 @@ func WallHi(s *state.ColumnPortal) {
 		lightV := (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
 		if s.Segment.HiSurface.Stretch == materials.StretchNone {
-			v = s.Intersection[2] / 64.0
+			v = -s.Intersection[2] / 64.0
 		} else if s.Segment.HiSurface.Stretch == materials.StretchAspect {
 			v *= (s.Sector.Max[2] - s.Sector.Min[2]) / s.Segment.Length
 		}
@@ -78,7 +78,7 @@ func WallLow(s *state.ColumnPortal) {
 		lightV := (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
 		if s.Segment.LoSurface.Stretch == materials.StretchNone {
-			v = s.Intersection[2] / 64.0
+			v = -s.Intersection[2] / 64.0
 		} else if s.Segment.LoSurface.Stretch == materials.StretchAspect {
 			v *= (s.Sector.Max[2] - s.Sector.Min[2]) / s.Segment.Length
 		}

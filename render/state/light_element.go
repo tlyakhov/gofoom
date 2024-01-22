@@ -139,7 +139,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	le.Delta.SubSelf(p)
 	maxDist2 := le.Delta.Length2()
 	// Is the point right next to the light? Visible by definition.
-	if maxDist2 <= lightBody.BoundingRadius*lightBody.BoundingRadius {
+	if maxDist2 <= lightBody.Size.Render[0]*lightBody.Size.Render[0]*0.25 {
 		return true
 	}
 
@@ -162,7 +162,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				bodyPos[2] += b.Size.Now[1] * 0.5
 				switch b.Shadow {
 				case core.BodyShadowSphere:
-					if concepts.IntersectLineSphere(p, lightPos, &bodyPos, b.BoundingRadius) {
+					if concepts.IntersectLineSphere(p, lightPos, &bodyPos, lightBody.Size.Render[0]*0.5) {
 						return false
 					}
 				case core.BodyShadowAABB:
@@ -246,7 +246,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// If the difference between the intersected distance and the light distance is
 			// within the bounding radius of our light, our light is right on a portal boundary and visible.
-			if math.Abs(idist2-maxDist2) < lightBody.BoundingRadius {
+			if math.Abs(idist2-maxDist2) < lightBody.Size.Render[0]*0.5 {
 				return true
 			}
 
@@ -324,7 +324,7 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
 				//log.Printf("%v\n", dist)
-				attenuation = light.Strength / math.Pow(dist/body.BoundingRadius+1.0, light.Attenuation)
+				attenuation = light.Strength / math.Pow(dist*2/body.Size.Render[0]+1.0, light.Attenuation)
 				//attenuation = 100.0 / dist
 			}
 			// If it's too far away/dark, ignore it.

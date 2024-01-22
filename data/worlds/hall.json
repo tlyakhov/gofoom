@@ -32,10 +32,6 @@
         "R": 1
       },
       "Entity": "2"
-    },
-    "materials.Tiled": {
-      "Entity": "2",
-      "IsLiquid": false
     }
   },
   {
@@ -443,7 +439,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "8",
       "Mass": 0,
@@ -490,7 +485,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "9",
       "Mass": 0,
@@ -1386,7 +1380,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "20",
       "Mass": 0,
@@ -1429,7 +1422,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "21",
       "Mass": 0,
@@ -2412,7 +2404,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "30",
       "Mass": 0,
@@ -2563,7 +2554,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 5,
       "CollisionResponse": "Slide",
       "Entity": "32",
       "Mass": 0,
@@ -2577,7 +2567,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.6499999999999989,
+          "Percent": 0.21666666666666523,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -2882,11 +2872,10 @@
     },
     "core.Sector": {
       "Bodies": [
-        "126",
         "140",
         "113",
         "119",
-        "107"
+        "126"
       ],
       "BottomZ": {
         "Original": 0
@@ -3314,7 +3303,6 @@
         "21",
         "32",
         "131",
-        "42",
         "107"
       ],
       "BottomZ": {
@@ -3350,7 +3338,8 @@
                 ]
               }
             ],
-            "Material": "2"
+            "Material": "2",
+            "Stretch": "StretchFill"
           },
           "X": -280,
           "Y": 30
@@ -3536,20 +3525,6 @@
       "TopZ": {
         "Original": 0
       }
-    },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
-      "Entity": "41"
     }
   },
   {
@@ -3568,16 +3543,15 @@
           "Acitve": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -92.68759895198619,
+          "End": 17.7552780092437,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.1388888888888889,
+          "Percent": 0.388888888888889,
           "Reverse": false,
-          "Start": -98.75432245716055,
+          "Start": 14.349828108730742,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
       },
-      "BoundingRadius": 15,
       "CollisionResponse": "Slide",
       "Entity": "42",
       "Mass": 15,
@@ -4381,7 +4355,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "52",
       "Mass": 0,
@@ -4952,7 +4925,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "59",
       "Mass": 0,
@@ -5185,7 +5157,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "62",
       "Mass": 0,
@@ -5637,7 +5608,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "68",
       "Mass": 0,
@@ -6461,7 +6431,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "78",
       "Mass": 0,
@@ -6795,8 +6764,8 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0083333333333333,
-          "Reverse": false,
+          "Percent": 0.008333333333333333,
+          "Reverse": true,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
@@ -7058,7 +7027,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "85",
       "Mass": 0,
@@ -8114,7 +8082,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "96",
       "Mass": 0,
@@ -8436,7 +8403,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "101",
       "Mass": 0,
@@ -8483,7 +8449,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "102",
       "Mass": 0,
@@ -8643,7 +8608,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "104",
       "Mass": 0,
@@ -8690,7 +8654,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "105",
       "Mass": 0,
@@ -8819,7 +8782,6 @@
       "Angle": {
         "Original": 262.5
       },
-      "BoundingRadius": 0.5,
       "CollisionResponse": "Slide",
       "Entity": "107",
       "Mass": 80,
@@ -9265,7 +9227,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "113",
       "Mass": 0,
@@ -9666,7 +9627,6 @@
       "Angle": {
         "Original": -90
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "119",
       "Mass": 0,
@@ -9805,7 +9765,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "121",
       "Mass": 0,
@@ -9867,10 +9826,6 @@
         "R": 1
       },
       "Entity": "122"
-    },
-    "materials.Tiled": {
-      "Entity": "122",
-      "IsLiquid": false
     }
   },
   {
@@ -9898,10 +9853,6 @@
         "R": 1
       },
       "Entity": "123"
-    },
-    "materials.Tiled": {
-      "Entity": "123",
-      "IsLiquid": false
     }
   },
   {
@@ -9929,10 +9880,6 @@
         "R": 1
       },
       "Entity": "124"
-    },
-    "materials.Tiled": {
-      "Entity": "124",
-      "IsLiquid": false
     }
   },
   {
@@ -9941,7 +9888,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "125",
       "Mass": 0,
@@ -9984,7 +9930,6 @@
       "Angle": {
         "Original": 90
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "126",
       "Mass": 0,
@@ -10061,10 +10006,6 @@
         "R": 1
       },
       "Entity": "127"
-    },
-    "materials.Tiled": {
-      "Entity": "127",
-      "IsLiquid": true
     }
   },
   {
@@ -10092,10 +10033,6 @@
         "R": 1
       },
       "Entity": "128"
-    },
-    "materials.Tiled": {
-      "Entity": "128",
-      "IsLiquid": false
     }
   },
   {
@@ -10123,10 +10060,6 @@
         "R": 1
       },
       "Entity": "129"
-    },
-    "materials.Tiled": {
-      "Entity": "129",
-      "IsLiquid": false
     }
   },
   {
@@ -10154,10 +10087,6 @@
         "R": 0.5
       },
       "Entity": "130"
-    },
-    "materials.Tiled": {
-      "Entity": "130",
-      "IsLiquid": false
     }
   },
   {
@@ -10166,7 +10095,6 @@
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "131",
       "Mass": 0,
@@ -10313,7 +10241,6 @@
       "Angle": {
         "Original": 180
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "140",
       "Mass": 0,

@@ -45,7 +45,7 @@ func (bc *BodyController) Target(target concepts.Attachable) bool {
 func (bc *BodyController) PushBack(segment *core.Segment) bool {
 	p2d := bc.Body.Pos.Now.To2D()
 	d := segment.DistanceToPoint2(p2d)
-	if d > bc.Body.BoundingRadius*bc.Body.BoundingRadius {
+	if d > bc.Body.Size.Now[0]*bc.Body.Size.Now[0]*0.25 {
 		return false
 	}
 	side := segment.WhichSide(p2d)
@@ -54,10 +54,10 @@ func (bc *BodyController) PushBack(segment *core.Segment) bool {
 	d = delta.Length()
 	delta.NormSelf()
 	if side > 0 {
-		delta.MulSelf(bc.Body.BoundingRadius - d)
+		delta.MulSelf(bc.Body.Size.Now[0]*0.5 - d)
 	} else {
 		log.Printf("PushBack: body is on the front-facing side of segment (%v units)\n", d)
-		delta.MulSelf(-bc.Body.BoundingRadius - d)
+		delta.MulSelf(-bc.Body.Size.Now[0]*0.5 - d)
 	}
 	// Apply the impulse at the same time
 	bc.Body.Pos.Now.To2D().AddSelf(delta)

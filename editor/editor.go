@@ -403,8 +403,8 @@ func (e *Editor) GatherHoveringObjects() {
 					continue
 				}
 				p := body.Pos.Now
-				if p[0]+body.BoundingRadius >= v1[0] && p[0]-body.BoundingRadius <= v2[0] &&
-					p[1]+body.BoundingRadius >= v1[1] && p[1]-body.BoundingRadius <= v2[1] {
+				if p[0]+body.Size.Render[0]*0.5 >= v1[0] && p[0]-body.Size.Render[0]*0.5 <= v2[0] &&
+					p[1]+body.Size.Render[0]*0.5 >= v1[1] && p[1]-body.Size.Render[0]*0.5 <= v2[1] {
 					if state.IndexOf(e.HoveringObjects, ibody) == -1 {
 						e.HoveringObjects = append(e.HoveringObjects, ibody)
 					}

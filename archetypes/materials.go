@@ -9,8 +9,6 @@ import (
 func EntityMapIsMaterial(components []concepts.Attachable) bool {
 	return components[materials.ShaderComponentIndex] != nil ||
 		components[materials.LitComponentIndex] != nil ||
-		components[materials.TiledComponentIndex] != nil ||
-		components[materials.SkyComponentIndex] != nil ||
 		components[materials.ImageComponentIndex] != nil ||
 		components[materials.TextComponentIndex] != nil ||
 		components[materials.SolidComponentIndex] != nil
@@ -30,7 +28,6 @@ func CreateBasicMaterial(db *concepts.EntityComponentDB, textured bool) *concept
 	named.Name = "Material " + strconv.FormatUint(er.Entity, 10)
 	db.NewComponent(er.Entity, materials.LitComponentIndex)
 	if textured {
-		db.NewComponent(er.Entity, materials.TiledComponentIndex)
 		db.NewComponent(er.Entity, materials.ImageComponentIndex)
 	} else {
 		db.NewComponent(er.Entity, materials.SolidComponentIndex)

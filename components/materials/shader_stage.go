@@ -1,17 +1,32 @@
 package materials
 
-import "tlyakhov/gofoom/concepts"
+import (
+	"strings"
+	"tlyakhov/gofoom/concepts"
+)
+
+//go:generate go run github.com/dmarkham/enumer -type=ShaderFlags -json
+type ShaderFlags int
+
+const (
+	ShaderTiled ShaderFlags = 1 << iota
+	ShaderSky
+	ShaderStaticBackground
+	ShaderLiquid
+)
 
 type ShaderStage struct {
 	DB        *concepts.EntityComponentDB
 	Texture   *concepts.EntityRef `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2    `editable:"Transform"`
+	Flags     ShaderFlags         `editable:"Flags"`
 	// TODO: implement
 	Blend any
 }
 
 func (s *ShaderStage) Construct(data map[string]any) {
 	s.Transform = concepts.IdentityMatrix2
+	s.Flags = ShaderTiled
 
 	if data == nil {
 		return
@@ -24,6 +39,16 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	if v, ok := data["Transform"]; ok {
 		s.Transform.Deserialize(v.([]any))
 	}
+
+	if v, ok := data["Flags"]; ok {
+		parsedFlags := strings.Split(v.(string), "|")
+		s.Flags = 0
+		for _, parsedFlag := range parsedFlags {
+			if f, err := ShaderFlagsString(parsedFlag); err == nil {
+				s.Flags |= f
+			}
+		}
+	}
 }
 
 func (s *ShaderStage) Serialize() map[string]any {
@@ -31,6 +56,19 @@ func (s *ShaderStage) Serialize() map[string]any {
 
 	if !s.Texture.Nil() {
 		result["Texture"] = s.Texture.Serialize()
+	}
+	if s.Flags != ShaderTiled {
+		flags := ""
+		for _, f := range ShaderFlagsValues() {
+			if s.Flags&f == 0 {
+				continue
+			}
+			if len(flags) > 0 {
+				flags += "|"
+			}
+			flags += f.String()
+			result["Flags"] = flags
+		}
 	}
 	result["Transform"] = s.Transform.Serialize()
 	return result

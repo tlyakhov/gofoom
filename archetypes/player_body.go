@@ -19,8 +19,7 @@ func CreatePlayerBody(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	_ = db.NewComponent(er.Entity, behaviors.PlayerComponentIndex).(*behaviors.Player)
 	_ = db.NewComponent(er.Entity, behaviors.AliveComponentIndex).(*behaviors.Alive)
 
-	body.Size.Set(concepts.Vector2{15, constants.PlayerHeight})
-	body.BoundingRadius = constants.PlayerBoundingRadius
+	body.Size.Set(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
 	body.Mass = constants.PlayerMass // kg
 
 	return er

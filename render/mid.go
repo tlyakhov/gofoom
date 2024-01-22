@@ -37,7 +37,7 @@ func WallMid(s *state.Column) {
 		}
 
 		if s.Segment.MidSurface.Stretch == materials.StretchNone {
-			v = s.Intersection[2] / 64.0
+			v = -s.Intersection[2] / 64.0
 		} else if s.Segment.MidSurface.Stretch == materials.StretchAspect {
 			v *= (s.Sector.Max[2] - s.Sector.Min[2]) / s.Segment.Length
 		}

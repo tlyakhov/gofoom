@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 
 	"tlyakhov/gofoom/components/core"
@@ -33,7 +34,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	sectorSelected := state.IndexOf(editor.SelectedObjects, sector.EntityRef) != -1
 
 	for _, segment := range sector.Segments {
-		if segment.P == segment.Next.P {
+		if segment.Next == nil || segment.P == segment.Next.P {
 			continue
 		}
 
@@ -86,6 +87,12 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		mw.Context.LineTo(ne[0], ne[1])
 		mw.Context.ClosePath()
 		mw.Context.Stroke()
+
+		if sectorHovering || sectorSelected || segmentHovering || segmentSelected {
+			ne = ns.Add(segment.Normal.Mul(20.0))
+			txtLength := fmt.Sprintf("%.0f", segment.Length)
+			mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
+		}
 
 		if segmentSelected {
 			mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
