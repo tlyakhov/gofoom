@@ -158,7 +158,7 @@ func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
 		return concepts.Vector4{x, y, 0, 1} // full alpha
 	}
 
-	if x < 0 || y < 0 {
+	if x < 0 || y < 0 || x >= 1 || y >= 1 {
 		return concepts.Vector4{0, 0, 0, 0}
 	}
 
@@ -166,7 +166,7 @@ func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
 	fy := uint32(y * float64(h))
 
 	if !img.Filter {
-		index := concepts.UMin(fy, h-1)*w + concepts.UMin(fx, w-1)
+		index := fy*w + fx
 		//r := concepts.Vector4{}
 		//concepts.AsmInt32ToVector4PreMul(data[index], (*[4]float64)(&r))
 		//return r

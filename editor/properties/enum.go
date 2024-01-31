@@ -12,10 +12,13 @@ import (
 func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 	// This is the actual value of this property converted to an int.
 	origValue := field.Values[0].Elem().Int()
+	isFlags := field.EditType == "Flags"
 
 	selectedIndex := 0
+	selectedOpts := make([]string, 0)
 	opts := make([]string, 0)
 	optsValues := make([]reflect.Value, 0)
+	optsMap := make(map[string]int64)
 	// Iterate through all the values of the enum type.
 	refEnumValues := reflect.ValueOf(enumValues)
 	for i := 0; i < refEnumValues.Len(); i++ {
@@ -25,22 +28,45 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		// Set the GTK+ list entry.
 		opts = append(opts, enumName)
 		optsValues = append(optsValues, enumValue)
-		if enumValue.Int() == origValue {
+		optsMap[enumName] = enumValue.Int()
+		if !isFlags && enumValue.Int() == origValue {
 			selectedIndex = i
+		} else if isFlags && (enumValue.Int()&origValue) != 0 {
+			selectedOpts = append(selectedOpts, enumName)
 		}
 	}
 
-	selectEntry := gridAddOrUpdateWidgetAtIndex[*widget.Select](g)
-	selectEntry.Options = opts
-	selectEntry.OnChanged = nil
-	selectEntry.SetSelectedIndex(selectedIndex)
-	selectEntry.OnChanged = func(opt string) {
-		action := &actions.SetProperty{
-			IEditor:           g.IEditor,
-			PropertyGridField: field,
-			ToSet:             optsValues[selectEntry.SelectedIndex()], //reflect.ValueOf(value2).Convert(field.Type.Elem()),
+	if isFlags {
+		checkGroup := gridAddOrUpdateWidgetAtIndex[*widget.CheckGroup](g)
+		checkGroup.Options = opts
+		checkGroup.OnChanged = nil
+		checkGroup.SetSelected(selectedOpts)
+		checkGroup.OnChanged = func(s []string) {
+			flags := int64(0)
+			for _, v := range s {
+				flags = flags | optsMap[v]
+			}
+			action := &actions.SetProperty{
+				IEditor:           g.IEditor,
+				PropertyGridField: field,
+				ToSet:             reflect.ValueOf(flags).Convert(field.Type.Elem()),
+			}
+			g.NewAction(action)
+			action.Act()
 		}
-		g.NewAction(action)
-		action.Act()
+	} else {
+		selectEntry := gridAddOrUpdateWidgetAtIndex[*widget.Select](g)
+		selectEntry.Options = opts
+		selectEntry.OnChanged = nil
+		selectEntry.SetSelectedIndex(selectedIndex)
+		selectEntry.OnChanged = func(opt string) {
+			action := &actions.SetProperty{
+				IEditor:           g.IEditor,
+				PropertyGridField: field,
+				ToSet:             optsValues[selectEntry.SelectedIndex()],
+			}
+			g.NewAction(action)
+			action.Act()
+		}
 	}
 }

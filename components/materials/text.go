@@ -42,15 +42,16 @@ func (t *Text) SetDB(db *concepts.EntityComponentDB) {
 
 func (t *Text) RasterizeText() {
 	padding := 4.0
+	face := inconsolata.Regular8x16
 	// For measuring text
-	c := gg.NewContext(1, 1)
-	c.SetFontFace(inconsolata.Regular8x16)
+	c := gg.NewContext(0, 0)
+	c.SetFontFace(face)
 	w, h := c.MeasureMultilineString(t.Label, t.LineSpacing)
 	w += padding * 2
 	h += padding * 2
 	// Actual image & context
 	c = gg.NewContext(int(w), int(h))
-	c.SetFontFace(inconsolata.Regular8x16)
+	c.SetFontFace(face)
 	// Color gets applied at render time
 	c.SetRGBA255(255, 255, 255, 255)
 	split := strings.Split(t.Label, "\n")

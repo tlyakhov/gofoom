@@ -191,6 +191,10 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 		r.PlayerBody.Pos.Render[1] + r.MaxViewDist*column.AngleSin,
 	}
 
+	if column.Sector == nil {
+		return nil
+	}
+
 	r.RenderSector(column)
 	return column.PickedElements
 }

@@ -82,7 +82,10 @@ func (e *Editor) ScreenToWorld(p *concepts.Vector2) *concepts.Vector2 {
 }
 
 func (e *Editor) WorldToScreen(p *concepts.Vector2) *concepts.Vector2 {
-	return p.Sub(&e.Pos).MulSelf(e.Scale).AddSelf(e.Size.Mul(0.5))
+	return &concepts.Vector2{
+		(p[0]-e.Pos[0])*e.Scale + e.Size[0]*0.5,
+		(p[1]-e.Pos[1])*e.Scale + e.Size[1]*0.5,
+	}
 }
 
 func (e *Editor) SetMapCursor(cursor desktop.Cursor) {
