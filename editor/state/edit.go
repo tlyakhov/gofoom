@@ -23,7 +23,7 @@ const (
 type Edit struct {
 	MapView
 	DB   *concepts.EntityComponentDB
-	Lock sync.RWMutex
+	Lock sync.Mutex
 
 	// Map view positions in world/screen space.
 	Mouse          concepts.Vector2 // Screen

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"image/color"
 	"math"
-	"strconv"
 	"time"
 	"tlyakhov/gofoom/constants"
 	"unicode"
@@ -38,33 +37,15 @@ func IntClamp(x, min, max int) int {
 }
 
 func NearestPow2(n uint32) uint32 {
-	// Invalid input
-	if n < 1 {
+	if n == 0 {
 		return 0
 	}
-	var res, curr uint32
-	res = 1
-	// Try all powers starting from 2^1
-	for i := 0; i < 8*strconv.IntSize; i++ {
-		curr = 1 << i
-		// If current power is more than n, break
-		if curr > n {
-			break
-		}
-		res = curr
-	}
-	return res
-	/*n--
-
-	n |= n >> 1
-	n |= n >> 2
-	n |= n >> 4
-	n |= n >> 8
-	n |= n >> 16
-
-	n++
-
-	return n*/
+	n |= (n >> 1)
+	n |= (n >> 2)
+	n |= (n >> 4)
+	n |= (n >> 8)
+	n |= (n >> 16)
+	return n - (n >> 1)
 }
 
 func Min(x, y int) int {

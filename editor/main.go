@@ -107,15 +107,15 @@ func main() {
 	editor.Window.SetContent(mainBorder)
 
 	go func() {
-		for range time.Tick(time.Millisecond * 15) {
+		t := time.NewTicker(time.Second / 60)
+		for range t.C {
 			if editor.DB == nil {
 				return
 			}
-			if editor.Lock.TryRLock() {
-				editor.DB.Simulation.Step()
-				editor.MapWidget.Raster.Refresh()
-				editor.Lock.RUnlock()
-			}
+			editor.Lock.Lock()
+			editor.DB.Simulation.Step()
+			editor.MapWidget.Raster.Refresh()
+			editor.Lock.Unlock()
 		}
 	}()
 

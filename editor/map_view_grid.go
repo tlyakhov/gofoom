@@ -99,16 +99,18 @@ func (g *MapViewGrid) Refresh(e *state.Edit) {
 	// qend = qend.Add(right.Mul(delta[0])).Add(down.Mul(delta[1]))
 
 	//	d := 3.0 / (g.Current.Scale + 1)
+	var pos concepts.Vector2
 	g.Clear()
 	pix := g.pixels()
 	w, h := g.size()
 	for x := 0.0; x < delta[0]*3; x++ {
 		for y := 0.0; y < delta[1]*3; y++ {
-			pos := qstart.Add(right.Mul(x)).Add(down.Mul(y))
+			pos[0] = qstart[0] + right[0]*x + down[0]*y
+			pos[1] = qstart[1] + right[1]*x + down[1]*y
 			/*if pos[0] < start[0] || pos[0] > end[0] || pos[1] < start[1] || pos[1] > end[1] {
 				continue
 			}*/
-			v := editor.WorldToScreen(pos)
+			v := editor.WorldToScreen(&pos)
 			ix := int(v[0])
 			iy := int(v[1])
 			if ix >= 0 && ix < w &&

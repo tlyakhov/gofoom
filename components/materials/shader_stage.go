@@ -19,7 +19,7 @@ type ShaderStage struct {
 	DB        *concepts.EntityComponentDB
 	Texture   *concepts.EntityRef `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2    `editable:"Transform"`
-	Flags     ShaderFlags         `editable:"Flags"`
+	Flags     ShaderFlags         `editable:"Flags" edit_type:"Flags"`
 	// TODO: implement
 	Blend any
 }
