@@ -44,6 +44,7 @@ func (db *EntityComponentDB) Clear() {
 	}
 }
 
+// Reserves an entity ID in the database (no components attached)
 func (db *EntityComponentDB) NewEntity() uint64 {
 	if free, found := db.usedEntities.MinZero(); found {
 		db.usedEntities.Set(free)
@@ -55,7 +56,8 @@ func (db *EntityComponentDB) NewEntity() uint64 {
 	return uint64(nextFree)
 }
 
-func (db *EntityComponentDB) NewEntityRef() *EntityRef {
+// Reserves an entity ID in the database and returns a reference to it
+func (db *EntityComponentDB) RefForNewEntity() *EntityRef {
 	return &EntityRef{Entity: db.NewEntity(), DB: db}
 }
 
@@ -81,6 +83,8 @@ func (db *EntityComponentDB) First(index int) Attachable {
 	return nil
 }
 
+// Attach a component to an entity. If a component with this type is already
+// attached, this method will overwrite it.
 func (db *EntityComponentDB) attach(entity uint64, component Attachable, index int) {
 	if entity == 0 {
 		log.Printf("Tried to attach 0 entity!")
@@ -90,23 +94,33 @@ func (db *EntityComponentDB) attach(entity uint64, component Attachable, index i
 	component.Ref().Entity = entity
 	component.SetDB(db)
 
-	db.Components[index] = append(db.Components[index], component)
-	component.SetIndexInDB(len(db.Components[index]) - 1)
-
 	for len(db.EntityComponents) <= int(entity) {
 		db.EntityComponents = append(db.EntityComponents, nil)
 	}
 
-	if ec := db.EntityComponents[entity]; ec != nil {
-		ec[index] = component
+	var ec []Attachable
+	if ec = db.EntityComponents[entity]; ec != nil {
+		if ec[index] != nil {
+			// A component with this index is already attached to this entity, overwrite it.
+			componentsIndex := ec[index].IndexInDB()
+			component.SetIndexInDB(componentsIndex)
+			db.Components[index][componentsIndex] = component
+			ec[index] = component
+			return
+		}
 	} else {
-		ec := make([]Attachable, len(DbTypes().Types))
-		ec[index] = component
+		ec = make([]Attachable, len(DbTypes().Types))
 		db.EntityComponents[entity] = ec
 	}
+	// This entity doesn't have a component with this index attached. Extend the
+	// slice.
+	ec[index] = component
+	db.Components[index] = append(db.Components[index], component)
+	component.SetIndexInDB(len(db.Components[index]) - 1)
 }
 
-func (db *EntityComponentDB) NewComponent(entity uint64, index int) Attachable {
+// Create a new component with the given index and attach it.
+func (db *EntityComponentDB) NewAttachedComponent(entity uint64, index int) Attachable {
 	t := DbTypes().Types[index]
 	newc := reflect.New(t).Interface()
 	attached := newc.(Attachable)
@@ -115,10 +129,10 @@ func (db *EntityComponentDB) NewComponent(entity uint64, index int) Attachable {
 	return attached
 }
 
-func (db *EntityComponentDB) LoadComponent(index int, data map[string]any) Attachable {
+func (db *EntityComponentDB) LoadAttachComponent(index int, data map[string]any, ignoreSerializedEntity bool) Attachable {
 	var entity uint64
 	var err error
-	if data["Entity"] == nil {
+	if ignoreSerializedEntity || data["Entity"] == nil {
 		entity = db.NewEntity()
 	} else if entity, err = strconv.ParseUint(data["Entity"].(string), 10, 64); entity == 0 || err != nil {
 		entity = db.NewEntity()
@@ -134,9 +148,23 @@ func (db *EntityComponentDB) LoadComponent(index int, data map[string]any) Attac
 	return attached
 }
 
-func (db *EntityComponentDB) NewComponentTyped(entity uint64, cType string) Attachable {
+func (db *EntityComponentDB) LoadComponentWithoutAttaching(index int, data map[string]any) Attachable {
+	if data == nil {
+		return nil
+	}
+	t := DbTypes().Types[index]
+	newc := reflect.New(t).Interface()
+	component := newc.(Attachable)
+	component.ResetRef()
+	component.Ref().Entity = 0
+	component.SetDB(db)
+	component.Construct(data)
+	return component
+}
+
+func (db *EntityComponentDB) NewAttachedComponentTyped(entity uint64, cType string) Attachable {
 	if index, ok := DbTypes().Indexes[cType]; ok {
-		return db.NewComponent(entity, index)
+		return db.NewAttachedComponent(entity, index)
 	}
 
 	log.Printf("NewComponent: unregistered type %v for entity %v\n", cType, entity)
@@ -176,7 +204,7 @@ func (db *EntityComponentDB) Detach(index int, entity uint64) {
 	}
 
 	if ec[index] == nil {
-		log.Printf("EntityComponentDB.Detach: entity %v component %v is nil.", entity, index)
+		// log.Printf("EntityComponentDB.Detach: entity %v component %v is nil.", entity, index)
 		return
 	}
 	i := ec[index].IndexInDB()
@@ -242,14 +270,14 @@ func (db *EntityComponentDB) GetEntityRefByName(name string) *EntityRef {
 	return nil
 }
 
-func (db *EntityComponentDB) DeserializeEntity(jsonEntity map[string]any) {
+func (db *EntityComponentDB) DeserializeAndAttachEntity(jsonEntity map[string]any) {
 	for name, index := range DbTypes().Indexes {
 		jsonData := jsonEntity[name]
 		if jsonData == nil {
 			continue
 		}
 		jsonComponent := jsonData.(map[string]any)
-		db.LoadComponent(index, jsonComponent)
+		db.LoadAttachComponent(index, jsonComponent, false)
 	}
 }
 func (db *EntityComponentDB) Load(filename string) error {
@@ -281,7 +309,7 @@ func (db *EntityComponentDB) Load(filename string) error {
 			log.Printf("ECS JSON array element should be an object\n")
 			continue
 		}
-		db.DeserializeEntity(jsonEntity)
+		db.DeserializeAndAttachEntity(jsonEntity)
 	}
 
 	// After everything's loaded, trigger the controllers

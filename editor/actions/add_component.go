@@ -38,7 +38,7 @@ func (a *AddComponent) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
-		a.State().DB.NewComponent(entity, a.Index)
+		a.State().DB.NewAttachedComponent(entity, a.Index)
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

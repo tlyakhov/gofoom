@@ -23,14 +23,14 @@ func AttachableIsMaterial(a concepts.Attachable) bool {
 }
 
 func CreateBasicMaterial(db *concepts.EntityComponentDB, textured bool) *concepts.EntityRef {
-	er := db.NewEntityRef()
-	named := db.NewComponent(er.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+	er := db.RefForNewEntity()
+	named := db.NewAttachedComponent(er.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	named.Name = "Material " + strconv.FormatUint(er.Entity, 10)
-	db.NewComponent(er.Entity, materials.LitComponentIndex)
+	db.NewAttachedComponent(er.Entity, materials.LitComponentIndex)
 	if textured {
-		db.NewComponent(er.Entity, materials.ImageComponentIndex)
+		db.NewAttachedComponent(er.Entity, materials.ImageComponentIndex)
 	} else {
-		db.NewComponent(er.Entity, materials.SolidComponentIndex)
+		db.NewAttachedComponent(er.Entity, materials.SolidComponentIndex)
 	}
 	return er
 }

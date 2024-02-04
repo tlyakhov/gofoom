@@ -269,7 +269,7 @@ func (a *SectorSplitter) collect() {
 			if origComponent == nil {
 				continue
 			}
-			addedComponent := db.NewComponent(newEntity, componentIndex)
+			addedComponent := db.NewAttachedComponent(newEntity, componentIndex)
 			// This will override the entity field with the original component's
 			// entity, so we'll fix it up afterwards.
 			addedComponent.Construct(origComponent.Serialize())
