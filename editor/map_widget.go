@@ -192,6 +192,7 @@ func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
 	if mw.Context == nil {
 		return
 	}
+
 	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
 	x, y := float64(ev.Position.X)*scale, float64(ev.Position.Y)*scale
 	if x == editor.Mouse[0] && y == editor.Mouse[1] {

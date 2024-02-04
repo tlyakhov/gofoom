@@ -37,8 +37,7 @@ func (a *SetProperty) FireHooks() {
 				target.Load()
 			}
 		case *core.Script:
-			// TODO: use https://github.com/hfmrow/gotk3_gtksource to have a
-			// better source editor for scripts
+			// TODO: use a nicer source code editor for script properties.
 			target.Compile()
 		case *materials.Text:
 			target.RasterizeText()

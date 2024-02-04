@@ -3,6 +3,7 @@ package concepts
 import (
 	"fmt"
 	"image/color"
+	"log"
 	"math"
 	"time"
 	"tlyakhov/gofoom/constants"
@@ -257,4 +258,13 @@ func IntersectSegments(s1A, s1B, s2A, s2B, result *Vector2) bool {
 	result[0] = s1A[0] + r*s1dx
 	result[1] = s1A[1] + r*s1dy
 	return true
+}
+
+// Use the below like: `defer ExecutionDuration(ExecutionTrack("blah"))`
+func ExecutionTrack(msg string) (string, time.Time) {
+	return msg, time.Now()
+}
+
+func ExecutionDuration(msg string, start time.Time) {
+	log.Printf("%v: %v\n", msg, time.Since(start))
 }
