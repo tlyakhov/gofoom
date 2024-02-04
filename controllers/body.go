@@ -13,6 +13,11 @@ type BodyController struct {
 	concepts.BaseController
 	Body   *core.Body
 	Sector *core.Sector
+
+	collided   []*core.Segment
+	pos        *concepts.Vector3
+	pos2d      *concepts.Vector2
+	halfHeight float64
 }
 
 func init() {
@@ -39,18 +44,22 @@ func (bc *BodyController) Target(target concepts.Attachable) bool {
 		return false
 	}
 	bc.Sector = bc.Body.Sector()
+	bc.pos = &bc.Body.Pos.Now
+	bc.pos2d = bc.pos.To2D()
+	bc.halfHeight = bc.Body.Size.Now[1] * 0.5
+	// Avoid GC thrash
+	bc.collided = bc.collided[:0]
 	return true
 }
 
 func (bc *BodyController) PushBack(segment *core.Segment) bool {
-	p2d := bc.Body.Pos.Now.To2D()
-	d := segment.DistanceToPoint2(p2d)
+	d := segment.DistanceToPoint2(bc.pos2d)
 	if d > bc.Body.Size.Now[0]*bc.Body.Size.Now[0]*0.25 {
 		return false
 	}
-	side := segment.WhichSide(p2d)
-	closest := segment.ClosestToPoint(p2d)
-	delta := p2d.Sub(closest)
+	side := segment.WhichSide(bc.pos2d)
+	closest := segment.ClosestToPoint(bc.pos2d)
+	delta := bc.pos2d.Sub(closest)
 	d = delta.Length()
 	delta.NormSelf()
 	if side > 0 {
@@ -60,13 +69,107 @@ func (bc *BodyController) PushBack(segment *core.Segment) bool {
 		delta.MulSelf(-bc.Body.Size.Now[0]*0.5 - d)
 	}
 	// Apply the impulse at the same time
-	bc.Body.Pos.Now.To2D().AddSelf(delta)
+	bc.pos.To2D().AddSelf(delta)
 	bc.Body.Vel.Now.To2D().AddSelf(delta)
 
 	return true
 }
 
-func (bc *BodyController) Collide() []*core.Segment {
+func (bc *BodyController) findBodySector() {
+	var closestSector *core.Sector
+	closestDistance2 := math.MaxFloat64
+
+	for _, isector := range bc.EntityComponentDB.All(core.SectorComponentIndex) {
+		sector := isector.(*core.Sector)
+		d2 := bc.pos.Dist2(&sector.Center)
+
+		if closestSector == nil || d2 < closestDistance2 {
+			closestDistance2 = d2
+			closestSector = sector
+		}
+		if sector.IsPointInside2D(bc.pos2d) {
+			closestDistance2 = 0
+			break
+		}
+	}
+
+	if closestDistance2 > 0 {
+		bc.Body.Pos.Now = closestSector.Center
+	}
+
+	floorZ, ceilZ := closestSector.SlopedZNow(bc.pos2d)
+	//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
+	if bc.pos[2]-bc.halfHeight < floorZ || bc.pos[2]+bc.halfHeight > ceilZ {
+		//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
+		bc.pos[2] = floorZ + bc.halfHeight
+	}
+	bc.Enter(closestSector.Ref())
+	// Don't mark as collided because this is probably an initialization.
+}
+
+func (bc *BodyController) checkBodySegmentCollisions() {
+	// See if we need to push back into the current sector.
+	for _, segment := range bc.Sector.Segments {
+		if !segment.AdjacentSector.Nil() && segment.PortalIsPassable {
+			adj := core.SectorFromDb(segment.AdjacentSector)
+			// We can still collide with a portal if the heights don't match.
+			// If we're within limits, ignore the portal.
+			floorZ, ceilZ := adj.SlopedZNow(bc.pos2d)
+			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
+				bc.pos[2]+bc.halfHeight < ceilZ {
+				continue
+			}
+		}
+		if bc.PushBack(segment) {
+			bc.collided = append(bc.collided, segment)
+		}
+	}
+}
+
+func (bc *BodyController) bodyExitsSector() {
+	// Exit the current sector.
+	bc.Exit()
+
+	for _, segment := range bc.Sector.Segments {
+		if segment.AdjacentSector.Nil() {
+			continue
+		}
+		adj := core.SectorFromDb(segment.AdjacentSector)
+		floorZ, ceilZ := adj.SlopedZNow(bc.pos2d)
+		if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
+			bc.pos[2]+bc.halfHeight < ceilZ &&
+			adj.IsPointInside2D(bc.pos2d) {
+			// Hooray, we've handled case 5! Make sure Z is good.
+			//log.Printf("Case 5! body = %v in sector %v, floor z = %v\n", p.StringHuman(), adj.Entity, floorZ)
+			/*if p[2] < floorZ {
+				e.Pos[2] = floorZ
+				log.Println("Entity entering adjacent sector is lower than floorZ")
+			}*/
+			bc.Enter(segment.AdjacentSector)
+			break
+		}
+	}
+
+	if bc.Sector == nil {
+		// Case 6! This is the worst.
+		for _, component := range bc.Body.DB.All(core.SectorComponentIndex) {
+			sector := component.(*core.Sector)
+			floorZ, ceilZ := sector.SlopedZNow(bc.pos2d)
+			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
+				bc.pos[2]+bc.halfHeight < ceilZ {
+				for _, segment := range sector.Segments {
+					if bc.PushBack(segment) {
+						bc.collided = append(bc.collided, segment)
+					}
+				}
+			}
+		}
+		//children := e.Collide() // RECURSIVE! Can be infinite, I suppose?
+		//collided = append(collided, children...)
+	}
+}
+
+func (bc *BodyController) Collide() {
 	// We've got several possibilities we need to handle:
 	// 1.   The body is outside of all sectors. Put it into the nearest sector.
 	// 2.   The body has an un-initialized sector, but it's within a sector and doesn't need to be moved.
@@ -79,113 +182,21 @@ func (bc *BodyController) Collide() []*core.Segment {
 
 	// The central method here is to push back, but the wall that's doing the pushing requires some logic to get.
 
-	// Assume we haven't collided.
-	var collided []*core.Segment
-	p := &bc.Body.Pos.Now
-	halfHeight := bc.Body.Size.Now[1] * 0.5
-
 	// Cases 1 & 2.
 	if bc.Sector == nil {
-		var closestSector *core.Sector
-		closestDistance2 := math.MaxFloat64
-
-		for _, isector := range bc.EntityComponentDB.All(core.SectorComponentIndex) {
-			sector := isector.(*core.Sector)
-			d2 := p.Dist2(&sector.Center)
-
-			if closestSector == nil || d2 < closestDistance2 {
-				closestDistance2 = d2
-				closestSector = sector
-			}
-			if sector.IsPointInside2D(p.To2D()) {
-				closestDistance2 = 0
-				break
-			}
-		}
-
-		if closestDistance2 > 0 {
-			bc.Body.Pos.Now = closestSector.Center
-		}
-
-		floorZ, ceilZ := closestSector.SlopedZNow(p.To2D())
-		//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
-		if p[2]-halfHeight < floorZ || p[2]+halfHeight > ceilZ {
-			//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
-			p[2] = floorZ + halfHeight
-		}
-		bc.Enter(closestSector.Ref())
-		// Don't mark as collided because this is probably an initialization.
+		bc.findBodySector()
 	}
-
-	sector := bc.Sector
 
 	// Case 3 & 4
-	// See if we need to push back into the current sector.
-	for _, segment := range sector.Segments {
-		if !segment.AdjacentSector.Nil() && segment.PortalIsPassable {
-			adj := core.SectorFromDb(segment.AdjacentSector)
-			// We can still collide with a portal if the heights don't match.
-			// If we're within limits, ignore the portal.
-			floorZ, ceilZ := adj.SlopedZNow(p.To2D())
-			if p[2]-halfHeight+bc.Body.MountHeight >= floorZ &&
-				p[2]+halfHeight < ceilZ {
-				continue
-			}
-		}
-		if bc.PushBack(segment) {
-			collided = append(collided, segment)
-		}
-	}
+	bc.checkBodySegmentCollisions()
 
-	ePosition2D := p.To2D()
-	inSector := sector.IsPointInside2D(ePosition2D)
-	if !inSector {
+	if !bc.Sector.IsPointInside2D(bc.pos2d) {
 		// Cases 5 & 6
-
-		// Exit the current sector.
-		bc.Exit()
-
-		for _, segment := range sector.Segments {
-			if segment.AdjacentSector.Nil() {
-				continue
-			}
-			adj := core.SectorFromDb(segment.AdjacentSector)
-			floorZ, ceilZ := adj.SlopedZNow(ePosition2D)
-			if p[2]-halfHeight+bc.Body.MountHeight >= floorZ &&
-				p[2]+halfHeight < ceilZ &&
-				adj.IsPointInside2D(ePosition2D) {
-				// Hooray, we've handled case 5! Make sure Z is good.
-				//log.Printf("Case 5! body = %v in sector %v, floor z = %v\n", p.StringHuman(), adj.Entity, floorZ)
-				/*if p[2] < floorZ {
-					e.Pos[2] = floorZ
-					log.Println("Entity entering adjacent sector is lower than floorZ")
-				}*/
-				bc.Enter(segment.AdjacentSector)
-				break
-			}
-		}
-
-		if bc.Sector == nil {
-			// Case 6! This is the worst.
-			for _, component := range bc.Body.DB.All(core.SectorComponentIndex) {
-				sector := component.(*core.Sector)
-				floorZ, ceilZ := sector.SlopedZNow(p.To2D())
-				if p[2]-halfHeight+bc.Body.MountHeight >= floorZ &&
-					p[2]+halfHeight < ceilZ {
-					for _, segment := range sector.Segments {
-						if bc.PushBack(segment) {
-							collided = append(collided, segment)
-						}
-					}
-				}
-			}
-			//children := e.Collide() // RECURSIVE! Can be infinite, I suppose?
-			//collided = append(collided, children...)
-		}
+		bc.bodyExitsSector()
 	}
 
-	if len(collided) > 0 {
-		for _, seg := range collided {
+	if len(bc.collided) > 0 {
+		for _, seg := range bc.collided {
 			BodySectorScript(seg.ContactScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 		}
 
@@ -194,7 +205,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 			bc.Body.Vel.Now[0] = 0
 			bc.Body.Vel.Now[1] = 0
 		case core.Bounce:
-			for _, segment := range collided {
+			for _, segment := range bc.collided {
 				n := segment.Normal.To3D(new(concepts.Vector3))
 				bc.Body.Vel.Now.SubSelf(n.Mul(2 * bc.Body.Vel.Now.Dot(n)))
 			}
@@ -202,8 +213,6 @@ func (bc *BodyController) Collide() []*core.Segment {
 			bc.RemoveBody()
 		}
 	}
-
-	return collided
 }
 
 func (bc *BodyController) RemoveBody() {

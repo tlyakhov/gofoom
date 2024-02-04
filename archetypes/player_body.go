@@ -14,10 +14,10 @@ func IsPlayerBody(er concepts.EntityRef) bool {
 }
 
 func CreatePlayerBody(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	er := db.NewEntityRef()
-	body := db.NewComponent(er.Entity, core.BodyComponentIndex).(*core.Body)
-	_ = db.NewComponent(er.Entity, behaviors.PlayerComponentIndex).(*behaviors.Player)
-	_ = db.NewComponent(er.Entity, behaviors.AliveComponentIndex).(*behaviors.Alive)
+	er := db.RefForNewEntity()
+	body := db.NewAttachedComponent(er.Entity, core.BodyComponentIndex).(*core.Body)
+	_ = db.NewAttachedComponent(er.Entity, behaviors.PlayerComponentIndex).(*behaviors.Player)
+	_ = db.NewAttachedComponent(er.Entity, behaviors.AliveComponentIndex).(*behaviors.Alive)
 
 	body.Size.Set(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
 	body.Mass = constants.PlayerMass // kg

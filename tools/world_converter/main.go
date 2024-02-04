@@ -43,13 +43,13 @@ func convertBodies(db *concepts.EntityComponentDB, sector *core.Sector, jsonBodi
 		jsonBody := jsonData.(map[string]any)
 		bodyType := jsonBody["Type"].(string)
 		log.Printf("Converting body %v", jsonBody["Name"])
-		ibody := db.NewEntityRef()
+		ibody := db.RefForNewEntity()
 		sector.Bodies[ibody.Entity] = ibody
-		db.NewComponent(ibody.Entity, concepts.NamedComponentIndex)
-		db.NewComponent(ibody.Entity, core.BodyComponentIndex)
+		db.NewAttachedComponent(ibody.Entity, concepts.NamedComponentIndex)
+		db.NewAttachedComponent(ibody.Entity, core.BodyComponentIndex)
 		switch bodyType {
 		case "mobs.Light":
-			db.NewComponent(ibody.Entity, core.LightComponentIndex)
+			db.NewAttachedComponent(ibody.Entity, core.LightComponentIndex)
 		}
 		for index, c := range ibody.All() {
 			if c == nil {
@@ -86,8 +86,8 @@ func convert(filename, output string) {
 	json := parsed.(map[string]any)
 
 	// Spawn
-	ispawn := db.NewEntityRef()
-	spawn := db.NewComponent(ispawn.Entity, core.SpawnComponentIndex).(*core.Spawn)
+	ispawn := db.RefForNewEntity()
+	spawn := db.NewAttachedComponent(ispawn.Entity, core.SpawnComponentIndex).(*core.Spawn)
 	spawn.Spawn[0] = json["SpawnX"].(float64)
 	spawn.Spawn[1] = json["SpawnY"].(float64)
 
@@ -96,15 +96,15 @@ func convert(filename, output string) {
 	for _, jsonData := range jsonMaterials {
 		jsonMaterial := jsonData.(map[string]any)
 		log.Printf("Converting material %v", jsonMaterial["Name"])
-		imat := db.NewEntityRef()
+		imat := db.RefForNewEntity()
 		matType := jsonMaterial["Type"].(string)
-		db.NewComponent(imat.Entity, concepts.NamedComponentIndex)
-		db.NewComponent(imat.Entity, materials.ImageComponentIndex)
+		db.NewAttachedComponent(imat.Entity, concepts.NamedComponentIndex)
+		db.NewAttachedComponent(imat.Entity, materials.ImageComponentIndex)
 		switch matType {
 		case "materials.LitSampled":
-			db.NewComponent(imat.Entity, materials.LitComponentIndex)
+			db.NewAttachedComponent(imat.Entity, materials.LitComponentIndex)
 		case "materials.PainfulLitSampled":
-			db.NewComponent(imat.Entity, materials.LitComponentIndex)
+			db.NewAttachedComponent(imat.Entity, materials.LitComponentIndex)
 			//db.NewComponent(imat.Entity, behaviors.ToxicComponentIndex)
 		case "materials.Sky":
 			//			db.NewComponent(imat.Entity, materials.SkyComponentIndex)
@@ -127,14 +127,14 @@ func convert(filename, output string) {
 	for index, jsonData := range jsonSectors {
 		jsonSector := jsonData.(map[string]any)
 		log.Printf("Converting sector %v", jsonSector["Name"])
-		isector := db.NewEntityRef()
+		isector := db.RefForNewEntity()
 		sectorIndexes[index] = isector.Entity
 		sectorType := jsonSector["Type"].(string)
-		db.NewComponent(isector.Entity, concepts.NamedComponentIndex)
-		db.NewComponent(isector.Entity, core.SectorComponentIndex)
+		db.NewAttachedComponent(isector.Entity, concepts.NamedComponentIndex)
+		db.NewAttachedComponent(isector.Entity, core.SectorComponentIndex)
 		switch sectorType {
 		case "sectors.VerticalDoor":
-			db.NewComponent(isector.Entity, sectors.VerticalDoorComponentIndex)
+			db.NewAttachedComponent(isector.Entity, sectors.VerticalDoorComponentIndex)
 		case "sectors.ToxicSector":
 			//db.NewComponent(isector.Entity, behaviors.ToxicComponentIndex)
 		}

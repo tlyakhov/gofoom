@@ -56,7 +56,7 @@ func (a *Delete) Undo() {
 
 	for entity, saved := range a.Saved {
 		a.State().DB.DetachAll(entity)
-		a.State().DB.DeserializeEntity(saved.(map[string]any))
+		a.State().DB.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
