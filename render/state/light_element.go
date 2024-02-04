@@ -147,7 +147,6 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
-	bodyPos := concepts.Vector3{}
 	for sector != nil {
 		if debugLighting {
 			log.Printf("Sector: %v\n", sector.Entity)
@@ -157,17 +156,15 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if bodyRef.Entity == lightBody.Entity || (le.Type == LightElementBody && le.InputBody.Entity == bodyRef.Entity) {
 				continue
 			}
-			if b := core.BodyFromDb(bodyRef); b != nil && b.Shadow != core.BodyShadowNone {
-				bodyPos = b.Pos.Render
-				bodyPos[2] += b.Size.Now[1] * 0.5
+			if b := core.BodyFromDb(bodyRef); b != nil && b.Active && b.Shadow != core.BodyShadowNone {
 				switch b.Shadow {
 				case core.BodyShadowSphere:
-					if concepts.IntersectLineSphere(p, lightPos, &bodyPos, lightBody.Size.Render[0]*0.5) {
+					if concepts.IntersectLineSphere(p, lightPos, &b.Pos.Render, lightBody.Size.Render[0]*0.5) {
 						return false
 					}
 				case core.BodyShadowAABB:
 					ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
-					if concepts.IntersectLineAABB(p, lightPos, &bodyPos, ext) {
+					if concepts.IntersectLineAABB(p, lightPos, &b.Pos.Render, ext) {
 						return false
 					}
 				}

@@ -82,6 +82,7 @@ func (bc *BodyController) Collide() []*core.Segment {
 	// Assume we haven't collided.
 	var collided []*core.Segment
 	p := &bc.Body.Pos.Now
+	halfHeight := bc.Body.Size.Now[1] * 0.5
 
 	// Cases 1 & 2.
 	if bc.Sector == nil {
@@ -108,9 +109,9 @@ func (bc *BodyController) Collide() []*core.Segment {
 
 		floorZ, ceilZ := closestSector.SlopedZNow(p.To2D())
 		//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
-		if p[2] < floorZ || p[2]+bc.Body.Size.Now[1] > ceilZ {
+		if p[2]-halfHeight < floorZ || p[2]+halfHeight > ceilZ {
 			//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
-			p[2] = floorZ
+			p[2] = floorZ + halfHeight
 		}
 		bc.Enter(closestSector.Ref())
 		// Don't mark as collided because this is probably an initialization.
@@ -126,8 +127,8 @@ func (bc *BodyController) Collide() []*core.Segment {
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
 			floorZ, ceilZ := adj.SlopedZNow(p.To2D())
-			if p[2]+bc.Body.MountHeight >= floorZ &&
-				p[2]+bc.Body.Size.Now[1] < ceilZ {
+			if p[2]-halfHeight+bc.Body.MountHeight >= floorZ &&
+				p[2]+halfHeight < ceilZ {
 				continue
 			}
 		}
@@ -150,8 +151,8 @@ func (bc *BodyController) Collide() []*core.Segment {
 			}
 			adj := core.SectorFromDb(segment.AdjacentSector)
 			floorZ, ceilZ := adj.SlopedZNow(ePosition2D)
-			if p[2]+bc.Body.MountHeight >= floorZ &&
-				p[2]+bc.Body.Size.Now[1] < ceilZ &&
+			if p[2]-halfHeight+bc.Body.MountHeight >= floorZ &&
+				p[2]+halfHeight < ceilZ &&
 				adj.IsPointInside2D(ePosition2D) {
 				// Hooray, we've handled case 5! Make sure Z is good.
 				//log.Printf("Case 5! body = %v in sector %v, floor z = %v\n", p.StringHuman(), adj.Entity, floorZ)
@@ -169,8 +170,8 @@ func (bc *BodyController) Collide() []*core.Segment {
 			for _, component := range bc.Body.DB.All(core.SectorComponentIndex) {
 				sector := component.(*core.Sector)
 				floorZ, ceilZ := sector.SlopedZNow(p.To2D())
-				if p[2]+bc.Body.MountHeight >= floorZ &&
-					p[2]+bc.Body.Size.Now[1] < ceilZ {
+				if p[2]-halfHeight+bc.Body.MountHeight >= floorZ &&
+					p[2]+halfHeight < ceilZ {
 					for _, segment := range sector.Segments {
 						if bc.PushBack(segment) {
 							collided = append(collided, segment)

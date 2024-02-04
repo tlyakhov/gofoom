@@ -33,8 +33,9 @@ func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
 	if bc.Body.OnGround {
 		floorZ, _ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		p := &bc.Body.Pos.Now
-		if bc.Sector.FloorTarget.Nil() && p[2] < floorZ {
-			p[2] = floorZ
+		h := bc.Body.Size.Now[1] * 0.5
+		if bc.Sector.FloorTarget.Nil() && p[2]-h < floorZ {
+			p[2] = floorZ + h
 		}
 	}
 	BodySectorScript(bc.Sector.EnterScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
@@ -76,7 +77,8 @@ func (bc *BodyController) Physics() {
 		}
 	}
 
-	bodyTop := bc.Body.Pos.Now[2] + bc.Body.Size.Now[1]
+	halfHeight := bc.Body.Size.Now[1] * 0.5
+	bodyTop := bc.Body.Pos.Now[2] + halfHeight
 	floorZ, ceilZ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 
 	bc.Body.OnGround = false
@@ -84,11 +86,11 @@ func (bc *BodyController) Physics() {
 		bc.Exit()
 		bc.Enter(bc.Sector.FloorTarget)
 		_, ceilZ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
-		bc.Body.Pos.Now[2] = ceilZ - bc.Body.Size.Now[1] - 1.0
-	} else if !bc.Sector.FloorTarget.Nil() && bc.Body.Pos.Now[2] <= floorZ && bc.Body.Vel.Now[2] > 0 {
+		bc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
+	} else if !bc.Sector.FloorTarget.Nil() && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
 		bc.Body.Vel.Now[2] = constants.PlayerJumpForce
-	} else if bc.Sector.FloorTarget.Nil() && bc.Body.Pos.Now[2] <= floorZ {
-		dist := bc.Sector.FloorNormal[2] * (floorZ - bc.Body.Pos.Now[2])
+	} else if bc.Sector.FloorTarget.Nil() && bc.Body.Pos.Now[2]-halfHeight <= floorZ {
+		dist := bc.Sector.FloorNormal[2] * (floorZ - (bc.Body.Pos.Now[2] - halfHeight))
 		delta := bc.Sector.FloorNormal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
@@ -101,7 +103,7 @@ func (bc *BodyController) Physics() {
 		bc.Enter(bc.Sector.CeilTarget)
 		bc.Sector = core.SectorFromDb(bc.Sector.CeilTarget)
 		floorZ, _ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
-		bc.Body.Pos.Now[2] = floorZ - bc.Body.Size.Now[1] + 1.0
+		bc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
 	} else if bc.Sector.CeilTarget.Nil() && bodyTop >= ceilZ {
 		dist := -bc.Sector.CeilNormal[2] * (bodyTop - ceilZ + 1.0)
 		delta := bc.Sector.CeilNormal.Mul(dist)

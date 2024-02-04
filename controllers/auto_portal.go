@@ -128,6 +128,11 @@ func autoCheckSegment(a, b *core.Segment) bool {
 	return split
 }
 
+// Automatically connects adjacent sectors, potentially splitting segments
+// as necessary. This is a really expensive function O(n^2 + n), although for
+// most cases each comparison is pretty cheap. For really large worlds, we could
+// give the user the option of disabling auto-portalling in the editor and only
+// doing it manually every once in a while.
 func AutoPortal(db *concepts.EntityComponentDB) {
 	seen := map[string]bool{}
 	for _, c := range db.All(core.SectorComponentIndex) {

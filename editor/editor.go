@@ -210,8 +210,7 @@ func (e *Editor) Load(filename string) {
 	e.DB = db
 	e.SelectObjects([]any{}, true)
 	editor.ResizeRenderer(640, 360)
-	e.Grid.Refresh(e.SelectedObjects)
-	e.EntityList.Update()
+	e.refreshProperties()
 }
 
 func (e *Editor) Test() {
@@ -229,6 +228,18 @@ func (e *Editor) Test() {
 	e.DB.Simulation.Render = e.GameWidget.Draw
 
 	e.ResizeRenderer(640, 360)
+	e.refreshProperties()
+}
+
+func (e *Editor) autoPortal() {
+	defer concepts.ExecutionDuration(concepts.ExecutionTrack("AutoPortal"))
+	e.Lock.Lock()
+	controllers.AutoPortal(e.DB)
+	e.Lock.Unlock()
+}
+
+func (e *Editor) refreshProperties() {
+	defer concepts.ExecutionDuration(concepts.ExecutionTrack("RefreshProperties"))
 	e.Grid.Refresh(e.SelectedObjects)
 	e.EntityList.Update()
 }
@@ -236,9 +247,7 @@ func (e *Editor) Test() {
 func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	e.UpdateTitle()
 	if autoPortal {
-		e.Lock.Lock()
-		controllers.AutoPortal(e.DB)
-		e.Lock.Unlock()
+		e.autoPortal()
 	}
 	if !canceled {
 		e.UndoHistory = append(e.UndoHistory, e.CurrentAction)
@@ -248,8 +257,7 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 		e.RedoHistory = []state.IAction{}
 	}
 	if refreshProperties {
-		e.Grid.Refresh(e.SelectedObjects)
-		e.EntityList.Update()
+		e.refreshProperties()
 	}
 	e.SetMapCursor(desktop.DefaultCursor)
 	e.CurrentAction = nil
@@ -315,7 +323,7 @@ func (e *Editor) UndoCurrent() {
 	}
 	a.Undo()
 	controllers.AutoPortal(e.DB)
-	e.Grid.Refresh(e.SelectedObjects)
+	e.refreshProperties()
 	e.RedoHistory = append(e.RedoHistory, a)
 }
 
@@ -338,13 +346,13 @@ func (e *Editor) RedoCurrent() {
 	}
 	a.Redo()
 	controllers.AutoPortal(e.DB)
-	e.Grid.Refresh(e.SelectedObjects)
+	e.refreshProperties()
 	e.UndoHistory = append(e.UndoHistory, a)
 }
 
 func (e *Editor) SelectObjects(objects []any, updateEntityList bool) {
 	e.SelectedObjects = objects
-	e.Grid.Refresh(e.SelectedObjects)
+	e.refreshProperties()
 	if updateEntityList {
 		//e.EntityTree.SetSelection(objects)
 	}

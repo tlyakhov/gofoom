@@ -10,7 +10,6 @@ type Light struct {
 	Diffuse     concepts.Vector3 `editable:"Diffuse"`
 	Strength    float64          `editable:"Strength"`
 	Attenuation float64          `editable:"Attenuation"`
-	LastPos     concepts.Vector3
 }
 
 var LightComponentIndex int

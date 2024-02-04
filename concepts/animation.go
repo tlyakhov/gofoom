@@ -201,7 +201,7 @@ func (a *Animation[T]) Construct(data map[string]any) {
 func (a *Animation[T]) Serialize() map[string]any {
 	result := make(map[string]any)
 	result["Duration"] = a.Duration
-	result["Acitve"] = a.Active
+	result["Active"] = a.Active
 	result["Reverse"] = a.Reverse
 	result["Percent"] = a.Percent
 	result["TweeningFunc"] = TweeningFuncNames[reflect.ValueOf(a.TweeningFunc).Pointer()]

@@ -206,7 +206,7 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 		Config:  r.Config,
 		YStart:  0,
 		YEnd:    r.ScreenHeight,
-		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1] + bob,
+		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
 	}
 	column.LightElements[0].Column = column
 	column.LightElements[1].Column = column
@@ -290,7 +290,7 @@ func (r *Renderer) Pick(x, y int) []state.PickedElement {
 		Config:  r.Config,
 		YStart:  0,
 		YEnd:    r.ScreenHeight,
-		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1] + bob,
+		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
 	}
 	column.LightElements[0].Column = column
 	column.LightElements[1].Column = column

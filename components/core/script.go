@@ -11,7 +11,7 @@ import (
 )
 
 type Script struct {
-	Code  string      `editable:"Code"`
+	Code  string      `editable:"Code" edit_type:"multi-line-string"`
 	Style ScriptStyle `editable:"Style"`
 
 	ErrorMessage string
