@@ -63,6 +63,7 @@ func main() {
 	editor.App.Lifecycle().SetOnStarted(func() {
 		editor.Load("data/worlds/hall.json")
 	})
+	editor.App.Lifecycle().SetOnStopped(func() {})
 
 	editor.PropertyGrid = container.New(layout.NewFormLayout())
 	editor.GridWidget = editor.PropertyGrid

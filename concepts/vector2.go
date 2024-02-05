@@ -136,6 +136,10 @@ func (v *Vector2) Reflect(normal *Vector2) *Vector2 {
 	return &Vector2{normal[0]*m - v[0], normal[1]*m - v[1]}
 }
 
+func (v *Vector2) AngularCross(amount float64) *Vector2 {
+	return &Vector2{-amount * v[1], amount * v[0]}
+}
+
 // Reflect reflects a vector around another vector.
 func (v *Vector2) ReflectSelf(normal *Vector2) *Vector2 {
 	m := 2.0 * v.Dot(normal)
