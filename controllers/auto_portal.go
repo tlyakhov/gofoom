@@ -11,7 +11,7 @@ import (
 
 // TODO: Fix situations where sectors are on top of each other and shouldn't be
 // connected up
-func autoCheckSegment(a, b *core.Segment) bool {
+func autoCheckSegment(a, b *core.SectorSegment) bool {
 	/* We have multiple cases:
 	1. The segments match, in which case their adjacencies should be wired up.
 	2. Segments a & b are not collinear
@@ -20,7 +20,7 @@ func autoCheckSegment(a, b *core.Segment) bool {
 	5. Segment a encloses segment b */
 
 	// Case 1:
-	if a.Matches(b) {
+	if a.Matches(&b.Segment) {
 		b.AdjacentSector = a.Sector.Ref()
 		b.AdjacentSegment = a
 		a.AdjacentSector = b.Sector.Ref()

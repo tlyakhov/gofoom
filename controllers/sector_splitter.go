@@ -29,7 +29,7 @@ type SectorSplitter struct {
 
 type splitEdge struct {
 	*SectorSplitter
-	Source           *core.Segment
+	Source           *core.SectorSegment
 	Start            concepts.Vector2
 	Side             splitSide
 	Next             *splitEdge
@@ -283,12 +283,12 @@ func (a *SectorSplitter) collect() {
 				// Don't clone the bodies.
 				target.Bodies = make(map[uint64]*concepts.EntityRef)
 				// Clear segments
-				target.Segments = []*core.Segment{}
+				target.Segments = []*core.SectorSegment{}
 
 				visitor := edge
 				for {
 					visitor.Visited = true
-					addedSegment := &core.Segment{}
+					addedSegment := &core.SectorSegment{}
 					addedSegment.Sector = target
 					addedSegment.Construct(visitor.Source.Serialize())
 					addedSegment.P = visitor.Start

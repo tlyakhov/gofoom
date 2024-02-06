@@ -12,7 +12,7 @@ import (
 type Sector struct {
 	concepts.Attached `editable:"^"`
 
-	Segments      []*Segment
+	Segments      []*SectorSegment
 	Bodies        map[uint64]*concepts.EntityRef
 	BottomZ       concepts.SimVariable[float64] `editable:"Floor Height"`
 	TopZ          concepts.SimVariable[float64] `editable:"Ceiling Height"`
@@ -82,8 +82,8 @@ func (s *Sector) SetDB(db *concepts.EntityComponentDB) {
 	s.BottomZ.Attach(db.Simulation)
 }
 
-func (s *Sector) AddSegment(x float64, y float64) *Segment {
-	segment := new(Segment)
+func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
+	segment := new(SectorSegment)
 	segment.Construct(nil)
 	segment.Sector = s
 	segment.P = concepts.Vector2{x, y}
@@ -93,7 +93,7 @@ func (s *Sector) AddSegment(x float64, y float64) *Segment {
 
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
-	s.Segments = make([]*Segment, 0)
+	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[uint64]*concepts.EntityRef)
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0
@@ -132,9 +132,9 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 	if v, ok := data["Segments"]; ok {
 		jsonSegments := v.([]any)
-		s.Segments = make([]*Segment, len(jsonSegments))
+		s.Segments = make([]*SectorSegment, len(jsonSegments))
 		for i, jsonSegment := range jsonSegments {
-			segment := new(Segment)
+			segment := new(SectorSegment)
 			segment.Sector = s
 			segment.DB = s.DB
 			segment.Construct(jsonSegment.(map[string]any))
@@ -241,8 +241,8 @@ func (s *Sector) Recalculate() {
 		s.Winding = -1
 	}
 
-	filtered := make([]*Segment, 0)
-	var prev *Segment
+	filtered := make([]*SectorSegment, 0)
+	var prev *SectorSegment
 	for i, segment := range s.Segments {
 		next := s.Segments[(i+1)%len(s.Segments)]
 		// Filter out degenerate segments.

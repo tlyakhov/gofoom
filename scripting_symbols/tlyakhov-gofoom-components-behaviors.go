@@ -13,20 +13,23 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/components/behaviors/behaviors"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"AliveComponentIndex":     reflect.ValueOf(&behaviors.AliveComponentIndex).Elem(),
-		"AliveFromDb":             reflect.ValueOf(behaviors.AliveFromDb),
-		"PlayerComponentIndex":    reflect.ValueOf(&behaviors.PlayerComponentIndex).Elem(),
-		"PlayerFromDb":            reflect.ValueOf(behaviors.PlayerFromDb),
-		"ProximityComponentIndex": reflect.ValueOf(&behaviors.ProximityComponentIndex).Elem(),
-		"ProximityFromDb":         reflect.ValueOf(behaviors.ProximityFromDb),
-		"WanderComponentIndex":    reflect.ValueOf(&behaviors.WanderComponentIndex).Elem(),
-		"WanderFromDb":            reflect.ValueOf(behaviors.WanderFromDb),
+		"AliveComponentIndex":         reflect.ValueOf(&behaviors.AliveComponentIndex).Elem(),
+		"AliveFromDb":                 reflect.ValueOf(behaviors.AliveFromDb),
+		"InventoryItemComponentIndex": reflect.ValueOf(&behaviors.InventoryItemComponentIndex).Elem(),
+		"InventoryItemFromDb":         reflect.ValueOf(behaviors.InventoryItemFromDb),
+		"PlayerComponentIndex":        reflect.ValueOf(&behaviors.PlayerComponentIndex).Elem(),
+		"PlayerFromDb":                reflect.ValueOf(behaviors.PlayerFromDb),
+		"ProximityComponentIndex":     reflect.ValueOf(&behaviors.ProximityComponentIndex).Elem(),
+		"ProximityFromDb":             reflect.ValueOf(behaviors.ProximityFromDb),
+		"WanderComponentIndex":        reflect.ValueOf(&behaviors.WanderComponentIndex).Elem(),
+		"WanderFromDb":                reflect.ValueOf(behaviors.WanderFromDb),
 
 		// type definitions
-		"Alive":     reflect.ValueOf((*behaviors.Alive)(nil)),
-		"Damage":    reflect.ValueOf((*behaviors.Damage)(nil)),
-		"Player":    reflect.ValueOf((*behaviors.Player)(nil)),
-		"Proximity": reflect.ValueOf((*behaviors.Proximity)(nil)),
-		"Wander":    reflect.ValueOf((*behaviors.Wander)(nil)),
+		"Alive":         reflect.ValueOf((*behaviors.Alive)(nil)),
+		"Damage":        reflect.ValueOf((*behaviors.Damage)(nil)),
+		"InventoryItem": reflect.ValueOf((*behaviors.InventoryItem)(nil)),
+		"Player":        reflect.ValueOf((*behaviors.Player)(nil)),
+		"Proximity":     reflect.ValueOf((*behaviors.Proximity)(nil)),
+		"Wander":        reflect.ValueOf((*behaviors.Wander)(nil)),
 	}
 }

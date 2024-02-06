@@ -30,7 +30,7 @@ func (a *Delete) Act() {
 
 	for _, obj := range a.Selected {
 		switch target := obj.(type) {
-		case *core.Segment:
+		case *core.SectorSegment:
 			a.Save(target.Sector.Ref())
 		case *concepts.EntityRef:
 			if sector := core.SectorFromDb(target); sector != nil {
@@ -67,7 +67,7 @@ func (a *Delete) Redo() {
 
 	for _, obj := range a.Selected {
 		switch target := obj.(type) {
-		case *core.Segment:
+		case *core.SectorSegment:
 			for i, seg := range target.Sector.Segments {
 				if seg != target {
 					continue

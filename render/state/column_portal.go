@@ -8,7 +8,7 @@ import (
 type ColumnPortal struct {
 	*Column
 	Adj                 *core.Sector
-	AdjSegment          *core.Segment
+	AdjSegment          *core.SectorSegment
 	AdjProjHeightTop    float64
 	AdjProjHeightBottom float64
 	AdjFloorZ           float64

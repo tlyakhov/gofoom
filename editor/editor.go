@@ -120,7 +120,7 @@ func (e *Editor) UpdateStatus() {
 		switch v := obj.(type) {
 		case *concepts.EntityRef:
 			list += v.String()
-		case *core.Segment:
+		case *core.SectorSegment:
 			list += v.P.String()
 		case *concepts.EntityComponentDB:
 			list += "DB"
@@ -471,7 +471,7 @@ func (e *Editor) ToolSelectSegment() {
 				editor.SelectObjects([]any{sector.Segments[0]}, true)
 				break
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			editor.SelectObjects([]any{target.Next}, true)
 			return
 		}

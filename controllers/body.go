@@ -13,7 +13,7 @@ type BodyController struct {
 	Body   *core.Body
 	Sector *core.Sector
 
-	collidedSegments []*core.Segment
+	collidedSegments []*core.SectorSegment
 	pos              *concepts.Vector3
 	pos2d            *concepts.Vector2
 	halfHeight       float64

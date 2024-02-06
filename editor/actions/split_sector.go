@@ -74,7 +74,7 @@ func (a *SplitSector) OnMouseUp() {
 				a.Split(sector)
 			}
 			visited[target.Entity] = true
-		case *core.Segment:
+		case *core.SectorSegment:
 			a.Split(target.Sector)
 			visited[target.Sector.Entity] = true
 		}

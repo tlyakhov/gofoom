@@ -25,12 +25,12 @@ func (a *AddSector) OnMouseDown(evt *desktop.MouseEvent) {
 	defer a.State().Lock.Unlock()
 	a.Mode = "AddSectorSegment"
 
-	seg := core.Segment{}
+	seg := core.SectorSegment{}
 	seg.Construct(nil)
 	seg.Sector = a.Sector
 	seg.HiSurface.Material = controllers.DefaultMaterial(a.State().DB)
 	seg.LoSurface.Material = controllers.DefaultMaterial(a.State().DB)
-	seg.MidSurface.Material = controllers.DefaultMaterial(a.State().DB)
+	seg.Surface.Material = controllers.DefaultMaterial(a.State().DB)
 	seg.P = *a.WorldGrid(&a.State().MouseDownWorld)
 
 	segs := a.Sector.Segments
