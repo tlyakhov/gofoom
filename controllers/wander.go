@@ -63,7 +63,7 @@ func (wc *WanderController) Always() {
 	}
 	if wc.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {
 		sector := wc.Body.Sector()
-		var closestSegment *core.Segment
+		var closestSegment *core.SectorSegment
 		closestDist := constants.MaxViewDistance
 		for _, seg := range sector.Segments {
 			if seg.AdjacentSector.Nil() || !seg.PortalIsPassable {

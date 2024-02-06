@@ -49,6 +49,8 @@ func init() {
 		"ElasticIn":                    reflect.ValueOf(concepts.ElasticIn),
 		"ElasticInOut":                 reflect.ValueOf(concepts.ElasticInOut),
 		"ElasticOut":                   reflect.ValueOf(concepts.ElasticOut),
+		"ExecutionDuration":            reflect.ValueOf(concepts.ExecutionDuration),
+		"ExecutionTrack":               reflect.ValueOf(concepts.ExecutionTrack),
 		"IdentityMatrix2":              reflect.ValueOf(&concepts.IdentityMatrix2).Elem(),
 		"Int32ToNRGBA":                 reflect.ValueOf(concepts.Int32ToNRGBA),
 		"Int32ToRGBA":                  reflect.ValueOf(concepts.Int32ToRGBA),

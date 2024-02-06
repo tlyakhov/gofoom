@@ -10,8 +10,8 @@ import (
 )
 
 type segmentSplitter struct {
-	original *core.Segment
-	added    *core.Segment
+	original *core.SectorSegment
+	added    *core.SectorSegment
 }
 
 type SplitSegment struct {
@@ -68,7 +68,7 @@ func (a *SplitSegment) OnMouseUp() {
 					}
 				}
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			a.Split(&segmentSplitter{original: target})
 		}
 
@@ -83,7 +83,7 @@ func (a *SplitSegment) Cancel() {
 
 func (a *SplitSegment) Undo() {
 	for _, ss := range a.NewSegments {
-		reset := make([]*core.Segment, 0)
+		reset := make([]*core.SectorSegment, 0)
 		segments := ss.original.Sector.Segments
 		for _, seg := range segments {
 			if seg != ss.added {

@@ -20,7 +20,7 @@ type Move struct {
 func (a *Move) Iterate(arr []any,
 	bodyFunc func(*core.Body),
 	sectorFunc func(*core.Sector),
-	segmentFunc func(*core.Segment)) {
+	segmentFunc func(*core.SectorSegment)) {
 	for _, obj := range arr {
 		a.State().Lock.Lock()
 		switch target := obj.(type) {
@@ -32,7 +32,7 @@ func (a *Move) Iterate(arr []any,
 				sectorFunc(sector)
 			}
 
-		case *core.Segment:
+		case *core.SectorSegment:
 			segmentFunc(target)
 		}
 		a.State().Lock.Unlock()
@@ -47,7 +47,7 @@ func (a *Move) OnMouseDown(evt *desktop.MouseEvent) {
 	a.Original = make([]concepts.Vector3, len(a.Selected))
 
 	j := 0
-	segmentFunc := func(seg *core.Segment) {
+	segmentFunc := func(seg *core.SectorSegment) {
 		a.Original = append(a.Original, concepts.Vector3{})
 		seg.P.To3D(&a.Original[j])
 		j++
@@ -75,7 +75,7 @@ func (a *Move) OnMouseUp() {
 func (a *Move) Act() {
 	j := 0
 	//set := a.State().DB.NewControllerSet()
-	segmentFunc := func(seg *core.Segment) {
+	segmentFunc := func(seg *core.SectorSegment) {
 		seg.P = *a.WorldGrid(a.Original[j].To2D().Add(&a.Delta))
 		//set.Act(seg.Sector, core.SectorComponentIndex, concepts.ControllerRecalculate)
 		j++
@@ -97,7 +97,7 @@ func (a *Move) Frame()  {}
 func (a *Move) Undo() {
 	j := 0
 	set := a.State().DB.NewControllerSet()
-	segmentFunc := func(seg *core.Segment) {
+	segmentFunc := func(seg *core.SectorSegment) {
 		seg.P = *a.Original[j].To2D()
 		set.Act(seg.Sector, core.SectorComponentIndex, concepts.ControllerRecalculate)
 		j++

@@ -20,19 +20,19 @@ func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size fl
 	sector.FloorSurface.Material = mat
 	sector.CeilSurface.Material = mat
 	seg := sector.AddSegment(x, y)
-	seg.MidSurface.Material = mat
+	seg.Surface.Material = mat
 	seg.HiSurface.Material = mat
 	seg.LoSurface.Material = mat
 	seg = sector.AddSegment(x+size, y)
-	seg.MidSurface.Material = mat
+	seg.Surface.Material = mat
 	seg.HiSurface.Material = mat
 	seg.LoSurface.Material = mat
 	seg = sector.AddSegment(x+size, y+size)
-	seg.MidSurface.Material = mat
+	seg.Surface.Material = mat
 	seg.HiSurface.Material = mat
 	seg.LoSurface.Material = mat
 	seg = sector.AddSegment(x, y+size)
-	seg.MidSurface.Material = mat
+	seg.Surface.Material = mat
 	seg.HiSurface.Material = mat
 	seg.LoSurface.Material = mat
 
@@ -113,7 +113,7 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 			sector.FloorSlope = rand.Float64() * 0.2
 			sector.CeilSurface.Material = isky
 			for i := 0; i < len(sector.Segments); i++ {
-				sector.Segments[i].MidSurface.Material = isky
+				sector.Segments[i].Surface.Material = isky
 				sector.Segments[i].LoSurface.Material = idirt
 			}
 
@@ -165,7 +165,7 @@ func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	sector3.BottomZ.Set(0)
 	sector3.FloorSurface.Material = idirt
 	sector3.CeilSurface.Material = isky
-	sector3.Segments[1].MidSurface.Material = isky
+	sector3.Segments[1].Surface.Material = isky
 
 	ilight := archetypes.CreateLightBody(db)
 	lightBody := core.BodyFromDb(ilight)

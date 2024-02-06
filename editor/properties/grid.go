@@ -142,7 +142,7 @@ func (g *Grid) fieldsFromSelection(selection []any) *PropertyGridState {
 				state.Ref = target
 				g.fieldsFromObject(c, state)
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			state.Parent = nil
 			state.ParentName = "Segment"
 			state.Ref = target.Sector.Ref()
@@ -190,7 +190,7 @@ func (g *Grid) AddEntityControls(selection []any) {
 			for index, c := range target.All() {
 				componentList[index] = (c != nil)
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			entities = append(entities, target.Sector.Entity)
 			entityList += strconv.FormatUint(target.Sector.Entity, 10)
 			for index, c := range target.Sector.All() {

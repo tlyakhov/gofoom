@@ -52,7 +52,7 @@ func (a *MoveSurface) Act() {
 				sector.BottomZ.Reset()
 				sector.TopZ.Reset()
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			a.Original[i] = *a.Get(target.Sector)
 			*a.Get(target.Sector) += a.Delta
 			target.Sector.BottomZ.Reset()
@@ -79,7 +79,7 @@ func (a *MoveSurface) Undo() {
 				sector.BottomZ.Reset()
 				sector.TopZ.Reset()
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			*a.Get(target.Sector) = a.Original[i]
 			target.Sector.BottomZ.Reset()
 			target.Sector.TopZ.Reset()
@@ -99,7 +99,7 @@ func (a *MoveSurface) Redo() {
 				sector.BottomZ.Reset()
 				sector.TopZ.Reset()
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			*a.Get(target.Sector) += a.Delta
 			target.Sector.BottomZ.Reset()
 			target.Sector.TopZ.Reset()

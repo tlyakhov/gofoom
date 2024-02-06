@@ -50,7 +50,7 @@ func (bc *BodyController) Exit() {
 	bc.Body.SectorEntityRef = nil
 }
 
-func (bc *BodyController) PushBack(segment *core.Segment) bool {
+func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 	d := segment.DistanceToPoint2(bc.pos2d)
 	if d > bc.Body.Size.Now[0]*bc.Body.Size.Now[0]*0.25 {
 		return false
@@ -171,17 +171,16 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		if body == nil || body == bc.Body {
 			continue
 		}
+		// From https://www.myphysicslab.com/engine2D/collision-en.html
 		d2 := bc.pos.Dist2(&body.Pos.Now)
 		r_a := bc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
-		/*if bc.Body.Entity == 107 && body.Entity == 113 {
-			fmt.Printf("Testing %v <-> %v is %v ? %v\n", bc.Body.String(), body.String(), d2, r2)
-		}*/
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			// From https://www.myphysicslab.com/engine2D/collision-en.html
 			n := bc.pos.Sub(&body.Pos.Now).NormSelf()
 			r_ap := n.Mul(-r_a)
 			r_bp := n.Mul(r_b)
+			// For now, assume no angular velocity. In the future, this may
+			// change.
 			vang_a1, vang_b1 := new(concepts.Vector3), new(concepts.Vector3)
 			v_a1, v_b1 := &bc.Body.Vel.Now, &body.Vel.Now
 
@@ -194,7 +193,7 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 			// Solid spheres
 			i_a := bc.Body.Mass * r_a * r_a * 2.0 / 5.0
 			i_b := body.Mass * r_b * r_b * 2.0 / 5.0
-			e := 0.7
+			e := 0.3
 			if i_a > 0 && i_b > 0 {
 				j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + 1.0/body.Mass + c_a.Dot(c_a)/i_a + c_b.Dot(c_b)/i_b)
 				bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))

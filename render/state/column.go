@@ -33,7 +33,7 @@ type Column struct {
 	*Config
 	X, Y, YStart, YEnd int
 	Sector             *core.Sector
-	Segment            *core.Segment
+	Segment            *core.SectorSegment
 	Ray                *Ray
 	Angle              float64
 	AngleCos           float64

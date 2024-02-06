@@ -68,6 +68,11 @@ func (b *Body) P1() *concepts.Vector2 {
 	return &concepts.Vector2{b.Pos.Render[0] - dy*b.Size.Render[0]*0.5, b.Pos.Render[1] + dx*b.Size.Render[1]*0.5}
 }
 
+func (b *Body) Normal() *concepts.Vector2 {
+	dy, dx := math.Sincos(b.Angle.Render * concepts.Deg2rad)
+	return &concepts.Vector2{dx, dy}
+}
+
 func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 	dx := b.Pos.Now[0] - p[0]
 	dy := b.Pos.Now[1] - p[1]

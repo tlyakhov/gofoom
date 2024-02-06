@@ -27,7 +27,7 @@ func (a *RotateSegments) Rotate(sector *core.Sector, backward bool) {
 	if backward {
 		sector.Segments = append(sector.Segments[1:], sector.Segments[0])
 	} else {
-		sector.Segments = append([]*core.Segment{sector.Segments[length-1]}, sector.Segments[:(length-1)]...)
+		sector.Segments = append([]*core.SectorSegment{sector.Segments[length-1]}, sector.Segments[:(length-1)]...)
 	}
 }
 func (a *RotateSegments) Act() {
@@ -43,7 +43,7 @@ func (a *RotateSegments) Undo() {
 			if sector := core.SectorFromDb(target); sector != nil {
 				a.Rotate(sector, true)
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			a.Rotate(target.Sector, true)
 		}
 	}
@@ -56,7 +56,7 @@ func (a *RotateSegments) Redo() {
 			if sector := core.SectorFromDb(target); sector != nil {
 				a.Rotate(sector, false)
 			}
-		case *core.Segment:
+		case *core.SectorSegment:
 			a.Rotate(target.Sector, false)
 		}
 	}

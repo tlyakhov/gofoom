@@ -61,7 +61,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -75,7 +75,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -89,7 +89,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -103,7 +103,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -144,7 +144,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -158,7 +158,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -171,7 +171,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -185,7 +185,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -223,7 +223,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -237,7 +237,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -250,7 +250,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -264,7 +264,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -303,7 +303,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1000,
@@ -317,7 +317,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -331,7 +331,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -351,9 +351,9 @@
     },
     "core.Sector": {
       "Bodies": [
-        "9",
         "8",
-        "107"
+        "107",
+        "9"
       ],
       "BottomZ": {
         "Original": 0
@@ -375,7 +375,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -389,7 +389,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -403,7 +403,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -417,7 +417,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -548,7 +548,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -562,7 +562,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -576,7 +576,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 21.213203435596423,
@@ -590,7 +590,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 63.639610306789265,
@@ -631,7 +631,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -645,7 +645,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -658,7 +658,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -672,7 +672,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -713,7 +713,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -727,7 +727,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -740,7 +740,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -754,7 +754,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -794,7 +794,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -808,7 +808,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -822,7 +822,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 760,
@@ -836,7 +836,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 720,
@@ -850,7 +850,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -864,7 +864,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -878,7 +878,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -917,7 +917,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -931,7 +931,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -945,7 +945,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -959,7 +959,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -973,7 +973,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 720,
@@ -987,7 +987,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 740,
@@ -1001,7 +1001,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 760,
@@ -1015,7 +1015,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 780,
@@ -1053,7 +1053,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -140,
@@ -1067,7 +1067,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
@@ -1080,7 +1080,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
@@ -1094,7 +1094,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -140,
@@ -1166,7 +1166,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -1180,7 +1180,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1193,7 +1193,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1207,7 +1207,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -1246,7 +1246,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 480,
@@ -1260,7 +1260,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 480,
@@ -1274,7 +1274,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -1288,7 +1288,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -1330,7 +1330,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -1344,7 +1344,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1000,
@@ -1358,7 +1358,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -1485,7 +1485,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 460,
@@ -1499,7 +1499,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 690,
@@ -1513,7 +1513,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 630,
@@ -1527,7 +1527,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 530,
@@ -1565,7 +1565,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1579,7 +1579,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1592,7 +1592,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1606,7 +1606,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1619,7 +1619,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1632,7 +1632,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -1645,7 +1645,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -110,
@@ -1658,7 +1658,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -110,
@@ -1697,7 +1697,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -1711,7 +1711,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -1725,7 +1725,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -1739,7 +1739,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -1787,7 +1787,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -1801,7 +1801,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -1815,7 +1815,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 720,
@@ -1829,7 +1829,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 760,
@@ -1843,7 +1843,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -1856,7 +1856,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -1870,7 +1870,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -1884,7 +1884,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -1898,7 +1898,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 780,
@@ -1912,7 +1912,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 760,
@@ -1926,7 +1926,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 740,
@@ -1940,7 +1940,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 720,
@@ -1954,7 +1954,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -1968,7 +1968,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -1977,7 +1977,7 @@
       ],
       "TopZ": {
         "Animation": {
-          "Acitve": true,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
@@ -2023,7 +2023,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 690,
@@ -2037,7 +2037,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -2050,7 +2050,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -2064,7 +2064,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 630,
@@ -2112,7 +2112,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -2125,7 +2125,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -2138,7 +2138,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -600,
@@ -2151,7 +2151,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -600,
@@ -2164,7 +2164,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -2178,7 +2178,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -2191,7 +2191,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -2205,7 +2205,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -2246,7 +2246,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -2260,7 +2260,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -2273,7 +2273,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -2287,7 +2287,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -2328,7 +2328,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -2342,7 +2342,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -2355,7 +2355,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -2368,7 +2368,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1430,
@@ -2382,7 +2382,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1430,
@@ -2465,7 +2465,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -2478,7 +2478,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -570,
@@ -2492,7 +2492,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -570,
@@ -2505,7 +2505,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -470,
@@ -2518,7 +2518,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -470,
@@ -2532,7 +2532,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -2560,14 +2560,14 @@
       "MountHeight": 15,
       "Pos": {
         "Animation": {
-          "Acitve": true,
+          "Active": true,
           "Duration": 500,
           "End": {
             "X": 0,
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.21666666666666523,
+          "Percent": 0.38333333333333186,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -2648,7 +2648,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -2662,7 +2662,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -2675,7 +2675,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -190,
@@ -2689,7 +2689,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -2729,7 +2729,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -2743,7 +2743,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -2756,7 +2756,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -2770,7 +2770,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -2811,7 +2811,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -2825,7 +2825,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -2838,7 +2838,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -2852,7 +2852,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -2897,7 +2897,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -2911,7 +2911,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -2925,7 +2925,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -2939,7 +2939,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -2953,7 +2953,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -2994,7 +2994,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -3008,7 +3008,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -3021,7 +3021,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -3035,7 +3035,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -3074,7 +3074,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -3088,7 +3088,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -3102,7 +3102,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -3116,7 +3116,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -3156,7 +3156,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1000,
@@ -3170,7 +3170,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1000,
@@ -3184,7 +3184,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -3198,7 +3198,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -3239,7 +3239,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -3253,7 +3253,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -3266,7 +3266,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -3280,7 +3280,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -3303,7 +3303,8 @@
         "21",
         "32",
         "131",
-        "107"
+        "107",
+        "42"
       ],
       "BottomZ": {
         "Original": -64
@@ -3324,7 +3325,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "ExtraStages": [
               {
                 "Texture": "57",
@@ -3351,7 +3352,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -3365,7 +3366,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -3378,7 +3379,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "16"
           },
           "X": -200,
@@ -3392,7 +3393,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -3405,7 +3406,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -3418,7 +3419,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "124"
           },
           "X": -200,
@@ -3431,7 +3432,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -440,
@@ -3445,11 +3446,11 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
-            "Material": "128"
-          },
           "PortalHasMaterial": true,
           "PortalIsPassable": false,
+          "Surface": {
+            "Material": "128"
+          },
           "X": -440,
           "Y": 240
         },
@@ -3460,7 +3461,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -440,
@@ -3474,10 +3475,10 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "PortalHasMaterial": true,
+          "Surface": {
             "Material": "130"
           },
-          "PortalHasMaterial": true,
           "X": -440,
           "Y": 110
         },
@@ -3488,7 +3489,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -440,
@@ -3501,7 +3502,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "124"
           },
           "X": -440,
@@ -3515,7 +3516,7 @@
           "Lo": {
             "Material": "123"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": -360,
@@ -3540,14 +3541,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Acitve": true,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 17.7552780092437,
+          "End": -159.76775447914162,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.388888888888889,
+          "Percent": 0.5555555555555557,
           "Reverse": false,
-          "Start": 14.349828108730742,
+          "Start": -149.52543852353358,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -3664,7 +3665,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
@@ -3678,7 +3679,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -180,
@@ -3691,7 +3692,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -180,
@@ -3705,7 +3706,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
@@ -3744,7 +3745,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 21.213203435596423,
@@ -3758,7 +3759,7 @@
           "Lo": {
             "Material": "123"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -14.14213562373095,
@@ -3772,7 +3773,7 @@
           "Lo": {
             "Material": "123"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 28.284271247461895,
@@ -3786,7 +3787,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 63.639610306789265,
@@ -3824,7 +3825,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -3838,7 +3839,7 @@
           "Lo": {
             "Material": "123"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": -280,
@@ -3851,7 +3852,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -3865,7 +3866,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -3903,7 +3904,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -240,
@@ -3917,7 +3918,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -260,
@@ -3930,7 +3931,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "124"
           },
           "X": -260,
@@ -3944,7 +3945,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -240,
@@ -3982,7 +3983,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -220,
@@ -3996,7 +3997,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -240,
@@ -4009,7 +4010,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "124"
           },
           "X": -240,
@@ -4023,7 +4024,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -220,
@@ -4061,7 +4062,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -440,
@@ -4075,7 +4076,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -4088,7 +4089,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -4102,7 +4103,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -440,
@@ -4143,7 +4144,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -4157,7 +4158,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -4170,7 +4171,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -4184,7 +4185,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -4222,7 +4223,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -180,
@@ -4236,7 +4237,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -4249,7 +4250,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -4263,7 +4264,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -180,
@@ -4305,7 +4306,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -4319,7 +4320,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 480,
@@ -4333,7 +4334,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -4417,7 +4418,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -140,
@@ -4430,7 +4431,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -110,
@@ -4444,7 +4445,7 @@
           "Lo": {
             "Material": "123"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": -110,
@@ -4457,7 +4458,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -110,
@@ -4470,7 +4471,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -110,
@@ -4484,7 +4485,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -140,
@@ -4525,7 +4526,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -4539,7 +4540,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -4552,7 +4553,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -4566,7 +4567,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -4603,7 +4604,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -470,
@@ -4616,7 +4617,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -4629,7 +4630,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -300,
@@ -4642,7 +4643,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -610,
@@ -4655,7 +4656,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -660,
@@ -4668,7 +4669,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -610,
@@ -4682,7 +4683,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -570,
@@ -4721,7 +4722,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -4735,7 +4736,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -4749,7 +4750,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -4763,7 +4764,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -4824,7 +4825,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 610,
@@ -4837,7 +4838,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 740,
@@ -4850,7 +4851,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 860,
@@ -4863,7 +4864,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 780,
@@ -4876,7 +4877,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 590,
@@ -4889,7 +4890,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 540,
@@ -4903,7 +4904,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 570,
@@ -4987,7 +4988,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -5001,7 +5002,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -5014,7 +5015,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -5028,7 +5029,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -5069,7 +5070,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -5082,7 +5083,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 510,
@@ -5095,7 +5096,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 510,
@@ -5108,7 +5109,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 190,
@@ -5121,7 +5122,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 190,
@@ -5135,7 +5136,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -5219,7 +5220,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -5233,7 +5234,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -5246,7 +5247,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -5260,7 +5261,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -5301,7 +5302,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -5315,7 +5316,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -5328,7 +5329,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -5341,7 +5342,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -5382,7 +5383,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -5396,7 +5397,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 460,
@@ -5409,7 +5410,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 530,
@@ -5423,7 +5424,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -5462,7 +5463,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 570,
@@ -5475,7 +5476,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 600,
@@ -5489,7 +5490,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 610,
@@ -5502,7 +5503,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 570,
@@ -5546,7 +5547,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -5559,7 +5560,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -5573,7 +5574,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -5586,7 +5587,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -5673,7 +5674,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1720,
@@ -5687,7 +5688,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -5700,7 +5701,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -5713,7 +5714,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1720,
@@ -5752,7 +5753,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -5766,7 +5767,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -5780,7 +5781,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -5794,7 +5795,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -5833,7 +5834,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -5846,7 +5847,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -5860,7 +5861,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -5874,7 +5875,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -5888,7 +5889,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -14.14213562373095,
@@ -5902,7 +5903,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 21.213203435596423,
@@ -5943,7 +5944,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -5957,7 +5958,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -5970,7 +5971,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -5984,7 +5985,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -6022,7 +6023,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6036,7 +6037,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6049,7 +6050,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6063,7 +6064,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6101,7 +6102,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6115,7 +6116,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6128,7 +6129,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6142,7 +6143,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6183,7 +6184,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -6197,7 +6198,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -6210,7 +6211,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -6224,7 +6225,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -6263,7 +6264,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1000,
@@ -6276,7 +6277,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1000,
@@ -6290,7 +6291,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -6304,7 +6305,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -6318,7 +6319,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -6331,7 +6332,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -6372,7 +6373,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -6386,7 +6387,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -6399,7 +6400,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -6413,7 +6414,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -6503,7 +6504,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -6517,7 +6518,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -6530,7 +6531,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -6544,7 +6545,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -6553,7 +6554,7 @@
       ],
       "TopZ": {
         "Animation": {
-          "Acitve": true,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
@@ -6607,7 +6608,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -6620,7 +6621,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -6634,7 +6635,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -110,
@@ -6647,7 +6648,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -110,
@@ -6656,7 +6657,7 @@
       ],
       "TopZ": {
         "Animation": {
-          "Acitve": true,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
@@ -6709,7 +6710,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6723,7 +6724,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6736,7 +6737,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6750,7 +6751,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6759,12 +6760,12 @@
       ],
       "TopZ": {
         "Animation": {
-          "Acitve": true,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0.008333333333333333,
+          "Percent": -0.008333333333333333,
           "Reverse": true,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -6802,7 +6803,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6816,7 +6817,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6829,7 +6830,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6843,7 +6844,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6881,7 +6882,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -260,
@@ -6895,7 +6896,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6908,7 +6909,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "124"
           },
           "X": -280,
@@ -6922,7 +6923,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -260,
@@ -6964,7 +6965,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -6978,7 +6979,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -6991,7 +6992,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "124"
           },
           "X": -360,
@@ -7005,7 +7006,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -7092,7 +7093,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -7105,7 +7106,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -7118,7 +7119,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -7132,7 +7133,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -7171,7 +7172,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -7185,7 +7186,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 690,
@@ -7199,7 +7200,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 460,
@@ -7213,7 +7214,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -7227,7 +7228,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -7241,7 +7242,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 330,
@@ -7255,7 +7256,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 410,
@@ -7269,7 +7270,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -7308,7 +7309,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -7322,7 +7323,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -7336,7 +7337,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -7350,7 +7351,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -7391,7 +7392,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -7405,7 +7406,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -7418,7 +7419,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 200,
@@ -7432,7 +7433,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -7471,7 +7472,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -7485,7 +7486,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -7499,7 +7500,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 840,
@@ -7513,7 +7514,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -7554,7 +7555,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -7568,7 +7569,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -7581,7 +7582,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -7595,7 +7596,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -7633,7 +7634,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -7647,7 +7648,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -280,
@@ -7660,7 +7661,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -7674,7 +7675,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -360,
@@ -7713,7 +7714,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -440,
@@ -7726,7 +7727,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -440,
@@ -7740,7 +7741,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -7753,7 +7754,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -450,
@@ -7793,7 +7794,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 530,
@@ -7806,7 +7807,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 490,
@@ -7819,7 +7820,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 500,
@@ -7832,7 +7833,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 520,
@@ -7845,7 +7846,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 530,
@@ -7858,7 +7859,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 490,
@@ -7871,7 +7872,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 460,
@@ -7884,7 +7885,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 460,
@@ -7897,7 +7898,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 510,
@@ -7910,7 +7911,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 560,
@@ -7924,7 +7925,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 570,
@@ -7937,7 +7938,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 600,
@@ -7950,7 +7951,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 610,
@@ -7963,7 +7964,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 630,
@@ -7976,7 +7977,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "123"
           },
           "X": 640,
@@ -7990,7 +7991,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 630,
@@ -8032,7 +8033,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 480,
@@ -8046,7 +8047,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -8060,7 +8061,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -8147,7 +8148,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -8161,7 +8162,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -8174,7 +8175,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -8188,7 +8189,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 640,
@@ -8240,7 +8241,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -14.14213562373095,
@@ -8254,7 +8255,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -8268,7 +8269,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -8282,7 +8283,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 28.284271247461895,
@@ -8325,7 +8326,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -8339,7 +8340,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 820,
@@ -8353,7 +8354,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -8367,7 +8368,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 660,
@@ -8381,7 +8382,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 700,
@@ -8516,7 +8517,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -8530,7 +8531,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -8544,7 +8545,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 63.639610306789265,
@@ -8558,7 +8559,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 28.284271247461895,
@@ -8572,7 +8573,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -8586,7 +8587,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -80,
@@ -8716,7 +8717,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -8730,7 +8731,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -220,
@@ -8743,7 +8744,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -220,
@@ -8757,7 +8758,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -200,
@@ -8838,7 +8839,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -8848,7 +8849,7 @@
           "AdjacentSector": "110",
           "Hi": {},
           "Lo": {},
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -8858,7 +8859,7 @@
           "AdjacentSector": "111",
           "Hi": {},
           "Lo": {},
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1430,
@@ -8871,7 +8872,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1720,
@@ -8885,7 +8886,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1720,
@@ -8899,7 +8900,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -8940,7 +8941,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -8954,7 +8955,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -8967,7 +8968,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1020,
@@ -8981,7 +8982,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9020,7 +9021,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1430,
@@ -9034,7 +9035,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1430,
@@ -9048,7 +9049,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9062,7 +9063,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9103,7 +9104,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1720,
@@ -9117,7 +9118,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1430,
@@ -9130,7 +9131,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1430,
@@ -9143,7 +9144,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1720,
@@ -9182,7 +9183,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9195,7 +9196,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1260,
@@ -9209,7 +9210,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9304,7 +9305,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1260,
@@ -9318,7 +9319,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1240,
@@ -9332,7 +9333,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9370,7 +9371,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1240,
@@ -9384,7 +9385,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1230,
@@ -9398,7 +9399,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9436,7 +9437,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1230,
@@ -9450,7 +9451,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1230,
@@ -9464,7 +9465,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9502,7 +9503,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1230,
@@ -9516,7 +9517,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1240,
@@ -9530,7 +9531,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9568,7 +9569,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1300,
@@ -9582,7 +9583,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1330,
@@ -9595,7 +9596,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1330,
@@ -9609,7 +9610,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1240,
@@ -9707,7 +9708,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1330,
@@ -9720,7 +9721,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1500,
@@ -9733,7 +9734,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1500,
@@ -9747,7 +9748,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 1330,
