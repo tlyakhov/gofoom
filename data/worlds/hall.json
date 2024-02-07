@@ -2546,6 +2546,10 @@
   },
   {
     "Entity": "32",
+    "behaviors.InventoryItem": {
+      "Class": "Flower",
+      "Entity": "32"
+    },
     "concepts.Named": {
       "Entity": "32",
       "Name": "Item Test"
@@ -2567,8 +2571,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.38333333333333186,
-          "Reverse": true,
+          "Percent": 0.5166666666666666,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3544,11 +3548,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -159.76775447914162,
+          "End": -159.8891549624274,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.5555555555555557,
+          "Percent": 0.3333333333333334,
           "Reverse": false,
-          "Start": -149.52543852353358,
+          "Start": -169.01169832888436,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
