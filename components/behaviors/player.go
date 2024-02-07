@@ -11,7 +11,7 @@ type Player struct {
 
 	FrameTint concepts.Vector4
 	Crouching bool
-	Inventory []*concepts.EntityRef
+	Inventory []*InventoryItem
 	Bob       float64
 }
 

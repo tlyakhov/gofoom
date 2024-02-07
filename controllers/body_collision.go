@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"math"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
@@ -165,10 +166,45 @@ func (bc *BodyController) bodyExitsSector() {
 	}
 }
 
+func (bc *BodyController) bodyBounce(body *core.Body) {
+	r_a := bc.Body.Size.Now[0] * 0.5
+	r_b := body.Size.Now[0] * 0.5
+	n := bc.pos.Sub(&body.Pos.Now).NormSelf()
+	r_ap := n.Mul(-r_a)
+	r_bp := n.Mul(r_b)
+	// For now, assume no angular velocity. In the future, this may
+	// change.
+	vang_a1, vang_b1 := new(concepts.Vector3), new(concepts.Vector3)
+	v_a1, v_b1 := &bc.Body.Vel.Now, &body.Vel.Now
+
+	v_ap1 := v_a1.Add(vang_a1.Cross(r_ap))
+	v_bp1 := v_b1.Add(vang_b1.Cross(r_bp))
+	v_p1 := v_ap1.Sub(v_bp1)
+
+	c_a := r_ap.Cross(n)
+	c_b := r_bp.Cross(n)
+	// Solid spheres
+	i_a := bc.Body.Mass * r_a * r_a * 2.0 / 5.0
+	i_b := body.Mass * r_b * r_b * 2.0 / 5.0
+	e := 0.3
+	if i_a > 0 && i_b > 0 {
+		j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + 1.0/body.Mass + c_a.Dot(c_a)/i_a + c_b.Dot(c_b)/i_b)
+		bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))
+		body.Vel.Now.AddSelf(n.Mul(-j / body.Mass))
+	} else if i_a > 0 {
+		j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/i_a)
+		bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))
+	} else if i_b > 0 {
+		j := -(1.0 + e) * v_p1.Dot(n) / (1.0/body.Mass + c_b.Dot(c_b)/i_b)
+		body.Vel.Now.AddSelf(n.Mul(-j / body.Mass))
+	}
+	//fmt.Printf("%v <-> %v = %v\n", bc.Body.String(), body.String(), diff)
+}
+
 func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 	for _, ref := range sector.Bodies {
 		body := core.BodyFromDb(ref)
-		if body == nil || body == bc.Body {
+		if body == nil || body == bc.Body || !body.IsActive() {
 			continue
 		}
 		// From https://www.myphysicslab.com/engine2D/collision-en.html
@@ -176,36 +212,14 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		r_a := bc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			n := bc.pos.Sub(&body.Pos.Now).NormSelf()
-			r_ap := n.Mul(-r_a)
-			r_bp := n.Mul(r_b)
-			// For now, assume no angular velocity. In the future, this may
-			// change.
-			vang_a1, vang_b1 := new(concepts.Vector3), new(concepts.Vector3)
-			v_a1, v_b1 := &bc.Body.Vel.Now, &body.Vel.Now
-
-			v_ap1 := v_a1.Add(vang_a1.Cross(r_ap))
-			v_bp1 := v_b1.Add(vang_b1.Cross(r_bp))
-			v_p1 := v_ap1.Sub(v_bp1)
-
-			c_a := r_ap.Cross(n)
-			c_b := r_bp.Cross(n)
-			// Solid spheres
-			i_a := bc.Body.Mass * r_a * r_a * 2.0 / 5.0
-			i_b := body.Mass * r_b * r_b * 2.0 / 5.0
-			e := 0.3
-			if i_a > 0 && i_b > 0 {
-				j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + 1.0/body.Mass + c_a.Dot(c_a)/i_a + c_b.Dot(c_b)/i_b)
-				bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))
-				body.Vel.Now.AddSelf(n.Mul(-j / body.Mass))
-			} else if i_a > 0 {
-				j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/i_a)
-				bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))
-			} else if i_b > 0 {
-				j := -(1.0 + e) * v_p1.Dot(n) / (1.0/body.Mass + c_b.Dot(c_b)/i_b)
-				body.Vel.Now.AddSelf(n.Mul(-j / body.Mass))
+			item := behaviors.InventoryItemFromDb(body.EntityRef)
+			if item != nil && bc.Player != nil {
+				itemClone := item.DB.LoadComponentWithoutAttaching(behaviors.InventoryItemComponentIndex, item.Serialize())
+				bc.Player.Inventory = append(bc.Player.Inventory, itemClone.(*behaviors.InventoryItem))
+				body.Active = false
+				continue
 			}
-			//fmt.Printf("%v <-> %v = %v\n", bc.Body.String(), body.String(), diff)
+			bc.bodyBounce(body)
 		}
 	}
 }

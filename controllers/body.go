@@ -3,6 +3,7 @@ package controllers
 import (
 	"math"
 
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -12,6 +13,7 @@ type BodyController struct {
 	concepts.BaseController
 	Body   *core.Body
 	Sector *core.Sector
+	Player *behaviors.Player
 
 	collidedSegments []*core.SectorSegment
 	pos              *concepts.Vector3
@@ -43,6 +45,7 @@ func (bc *BodyController) Target(target concepts.Attachable) bool {
 		return false
 	}
 	bc.Sector = bc.Body.Sector()
+	bc.Player = behaviors.PlayerFromDb(bc.Body.EntityRef)
 	bc.pos = &bc.Body.Pos.Now
 	bc.pos2d = bc.pos.To2D()
 	bc.halfHeight = bc.Body.Size.Now[1] * 0.5
