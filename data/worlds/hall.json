@@ -2548,7 +2548,8 @@
     "Entity": "32",
     "behaviors.InventoryItem": {
       "Class": "Flower",
-      "Entity": "32"
+      "Entity": "32",
+      "Image": "98"
     },
     "concepts.Named": {
       "Entity": "32",
@@ -2571,8 +2572,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.5166666666666666,
-          "Reverse": false,
+          "Percent": 0.6999999999999991,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3304,11 +3305,11 @@
     },
     "core.Sector": {
       "Bodies": [
+        "107",
+        "42",
         "21",
         "32",
-        "131",
-        "107",
-        "42"
+        "131"
       ],
       "BottomZ": {
         "Original": -64
@@ -3548,11 +3549,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -159.8891549624274,
+          "End": -149.44335826228777,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.3333333333333334,
+          "Percent": 0.22222222222222227,
           "Reverse": false,
-          "Start": -169.01169832888436,
+          "Start": -151.75725766418634,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554

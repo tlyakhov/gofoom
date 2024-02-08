@@ -43,7 +43,7 @@ func (pc *PlayerController) Target(target concepts.Attachable) bool {
 }
 
 func (pc *PlayerController) Always() {
-	pc.Bob += pc.Body.Vel.Now.To2D().Length() / 100.0
+	pc.Bob += pc.Body.Vel.Now.To2D().Length() / 64.0
 	for pc.Bob > math.Pi*2 {
 		pc.Bob -= math.Pi * 2
 	}

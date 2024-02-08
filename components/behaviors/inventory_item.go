@@ -7,8 +7,9 @@ import (
 type InventoryItem struct {
 	concepts.Attached `editable:"^"`
 
-	Class string `editable:"Class"`
-	Count int    `editable:"Count"`
+	Class string              `editable:"Class"`
+	Count int                 `editable:"Count"`
+	Image *concepts.EntityRef `editable:"Image" edit_type:"Material"`
 }
 
 var InventoryItemComponentIndex int
@@ -43,6 +44,9 @@ func (item *InventoryItem) Construct(data map[string]any) {
 	if v, ok := data["Count"]; ok {
 		item.Count = v.(int)
 	}
+	if v, ok := data["Image"]; ok {
+		item.Image = item.DB.DeserializeEntityRef(v)
+	}
 }
 
 func (item *InventoryItem) Serialize() map[string]any {
@@ -53,6 +57,9 @@ func (item *InventoryItem) Serialize() map[string]any {
 	}
 	if item.Count > 1 {
 		result["Count"] = item.Count
+	}
+	if !item.Image.Nil() {
+		result["Image"] = item.Image.Serialize()
 	}
 
 	return result

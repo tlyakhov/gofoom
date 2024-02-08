@@ -2,11 +2,15 @@ package render
 
 import (
 	"fmt"
+	"image"
 	"math"
 	"slices"
 	"sync"
 
+	"github.com/disintegration/imaging"
+
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/render/state"
@@ -278,13 +282,46 @@ func (r *Renderer) Render(buffer []uint8) {
 	} else {
 		r.RenderBlock(buffer, 0, r.ScreenWidth)
 	}
+	r.RenderHud(buffer)
+}
+
+func (r *Renderer) Blit(dst []uint8, src *image.NRGBA, dstx, dsty int) {
+	w := src.Rect.Dx()
+	h := src.Rect.Dy()
+	idst := (dstx + dsty*r.ScreenWidth) * 4
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			isrc := x*4 + y*src.Stride
+			a := int(src.Pix[isrc+3])
+			da := 255 - a
+			dst[idst+0] = uint8((int(dst[idst+0]) * da / 255) + int(src.Pix[isrc+0])*a/255)
+			dst[idst+1] = uint8((int(dst[idst+1]) * da / 255) + int(src.Pix[isrc+1])*a/255)
+			dst[idst+2] = uint8((int(dst[idst+2]) * da / 255) + int(src.Pix[isrc+2])*a/255)
+			idst += 4
+		}
+		idst = (dstx + (dsty+y)*r.ScreenWidth) * 4
+	}
+}
+
+func (r *Renderer) RenderHud(buffer []uint8) {
+	if r.Player == nil {
+		return
+	}
+	for _, item := range r.Player.Inventory {
+		img := materials.ImageFromDb(item.Image)
+		if img == nil {
+			return
+		}
+		rimg := imaging.Resize(img.Image, 32, 0, imaging.CatmullRom)
+		r.Blit(buffer, rimg, 10, r.ScreenHeight-42)
+	}
 }
 
 func (r *Renderer) Pick(x, y int) []state.PickedElement {
 	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
 		return nil
 	}
-	bob := math.Sin(r.Player.Bob)
+	bob := math.Sin(r.Player.Bob) * 2
 	// Initialize a column...
 	column := &state.Column{
 		Config:  r.Config,
