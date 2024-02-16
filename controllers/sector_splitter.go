@@ -319,7 +319,7 @@ func (a *SectorSplitter) collect() {
 
 	for _, ibody := range a.Sector.DB.Components[core.BodyComponentIndex] {
 		body := ibody.(*core.Body)
-		if body.SectorEntityRef.Entity != a.Sector.Entity {
+		if body.SectorEntityRef.Now.Entity != a.Sector.Entity {
 			continue
 		}
 		for _, components := range a.Result {
@@ -328,7 +328,7 @@ func (a *SectorSplitter) collect() {
 			}
 			if added, ok := components[core.SectorComponentIndex].(*core.Sector); ok &&
 				added.IsPointInside2D(body.Pos.Original.To2D()) {
-				body.SectorEntityRef = added.Ref()
+				body.SectorEntityRef.Now = added.Ref()
 				added.Bodies[body.Ref().Entity] = body.Ref()
 			}
 		}

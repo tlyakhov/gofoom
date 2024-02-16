@@ -12,23 +12,23 @@ import (
 type Sector struct {
 	concepts.Attached `editable:"^"`
 
-	Segments       []*SectorSegment
-	Bodies         map[uint64]*concepts.EntityRef
-	StaticSegments map[uint64]*concepts.EntityRef
-	BottomZ        concepts.SimVariable[float64] `editable:"Floor Height"`
-	TopZ           concepts.SimVariable[float64] `editable:"Ceiling Height"`
-	FloorSlope     float64                       `editable:"Floor Slope"`
-	CeilSlope      float64                       `editable:"Ceiling Slope"`
-	FloorTarget    *concepts.EntityRef           `editable:"Floor Target" edit_type:"Sector"`
-	CeilTarget     *concepts.EntityRef           `editable:"Ceiling Target" edit_type:"Sector"`
-	FloorSurface   materials.Surface             `editable:"Floor Surface"`
-	CeilSurface    materials.Surface             `editable:"Ceiling Surface"`
-	Gravity        concepts.Vector3              `editable:"Gravity"`
-	FloorFriction  float64                       `editable:"Floor Friction"`
-	FloorScripts   []*Script                     `editable:"Floor Scripts"`
-	CeilScripts    []*Script                     `editable:"Ceil Scripts"`
-	EnterScripts   []*Script                     `editable:"Enter Scripts"`
-	ExitScripts    []*Script                     `editable:"Exit Scripts"`
+	Segments         []*SectorSegment
+	Bodies           map[uint64]*concepts.EntityRef
+	InternalSegments map[uint64]*concepts.EntityRef
+	BottomZ          concepts.SimVariable[float64] `editable:"Floor Height"`
+	TopZ             concepts.SimVariable[float64] `editable:"Ceiling Height"`
+	FloorSlope       float64                       `editable:"Floor Slope"`
+	CeilSlope        float64                       `editable:"Ceiling Slope"`
+	FloorTarget      *concepts.EntityRef           `editable:"Floor Target" edit_type:"Sector"`
+	CeilTarget       *concepts.EntityRef           `editable:"Ceiling Target" edit_type:"Sector"`
+	FloorSurface     materials.Surface             `editable:"Floor Surface"`
+	CeilSurface      materials.Surface             `editable:"Ceiling Surface"`
+	Gravity          concepts.Vector3              `editable:"Gravity"`
+	FloorFriction    float64                       `editable:"Floor Friction"`
+	FloorScripts     []*Script                     `editable:"Floor Scripts"`
+	CeilScripts      []*Script                     `editable:"Ceil Scripts"`
+	EnterScripts     []*Script                     `editable:"Enter Scripts"`
+	ExitScripts      []*Script                     `editable:"Exit Scripts"`
 
 	Winding                           int8
 	Min, Max, Center                  concepts.Vector3
@@ -96,12 +96,14 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[uint64]*concepts.EntityRef)
+	s.InternalSegments = make(map[uint64]*concepts.EntityRef)
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0
 	s.Gravity[2] = -constants.Gravity
 	s.BottomZ.Set(0.0)
 	s.TopZ.Set(64.0)
 	s.FloorFriction = 0.85
+
 	if data == nil {
 		return
 	}
@@ -143,8 +145,13 @@ func (s *Sector) Construct(data map[string]any) {
 		}
 	}
 	if v, ok := data["Bodies"]; ok {
-		if ers, ok := v.([]any); ok {
-			s.Bodies = s.DB.DeserializeEntityRefs(ers)
+		if refs, ok := v.([]any); ok {
+			s.Bodies = s.DB.DeserializeEntityRefs(refs)
+		}
+	}
+	if v, ok := data["InternalSegments"]; ok {
+		if refs, ok := v.([]any); ok {
+			s.InternalSegments = s.DB.DeserializeEntityRefs(refs)
 		}
 	}
 	if v, ok := data["FloorTarget"]; ok {
@@ -214,6 +221,10 @@ func (s *Sector) Serialize() map[string]any {
 
 	if len(s.Bodies) > 0 {
 		result["Bodies"] = concepts.SerializeEntityRefMap(s.Bodies)
+	}
+
+	if len(s.InternalSegments) > 0 {
+		result["InternalSegments"] = concepts.SerializeEntityRefMap(s.InternalSegments)
 	}
 
 	segments := []any{}

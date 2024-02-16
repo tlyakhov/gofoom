@@ -18,7 +18,6 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	}
 
 	refMaterial := ref
-	billboard := false
 	angleFromPlayer := r.PlayerBody.Angle2DTo(&b.Pos.Render)
 
 	sheet := materials.SpriteSheetFromDb(ref)
@@ -53,66 +52,34 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 			return
 		}
 		refMaterial = sprite.Image
-		billboard = sheet.Billboard
 	}
 
 	if !archetypes.EntityRefIsMaterial(refMaterial) {
 		return
 	}
 
-	var scaler float64
-	if billboard {
-		angleRender := angleFromPlayer - r.PlayerBody.Angle.Render
-		for angleRender < -180.0 {
-			angleRender += 360.0
-		}
-		for angleRender > 180.0 {
-			angleRender -= 360.0
-		}
-		c.Distance = c.Ray.Start.Dist(b.Pos.Render.To2D())
-		x := (angleRender + r.FOV*0.5) * float64(r.ScreenWidth) / r.FOV
+	angleRender := angleFromPlayer - r.PlayerBody.Angle.Render
+	for angleRender < -180.0 {
+		angleRender += 360.0
+	}
+	for angleRender > 180.0 {
+		angleRender -= 360.0
+	}
+	c.Distance = c.Ray.Start.Dist(b.Pos.Render.To2D())
+	x := (angleRender + r.FOV*0.5) * float64(r.ScreenWidth) / r.FOV
 
-		vfixindex := concepts.IntClamp(int(x), 0, r.ScreenWidth-1)
-		scaler = r.ViewFix[vfixindex] / c.Distance
-		scale := scaler * b.Size.Render[0]
-		x1 := (x - scale*0.5)
-		x2 := x1 + scale
-		c.U = 0.5 + (float64(c.X)-x)/scale
-		if x1 > float64(c.X) || x2 < float64(c.X) {
-			return
-		}
-	} else {
-		isect := new(concepts.Vector2)
-		sx1 := &concepts.Vector2{}
-		sx1[0], sx1[1] = math.Sincos(b.Angle.Render * concepts.Deg2rad)
-		sx1[0] *= b.Size.Render[0] * 0.5
-		sx1[1] *= b.Size.Render[0] * 0.5
-		sx2 := &concepts.Vector2{b.Pos.Render[0] + sx1[0], b.Pos.Render[1] + sx1[1]}
-		sx1[0] = b.Pos.Render[0] - sx1[0]
-		sx1[1] = b.Pos.Render[1] - sx1[1]
-
-		/*// Wall is facing away from us
-		if ray.Dot(&segment.Normal) > 0 {
-			continue
-		}*/
-
-		// Ray intersects?
-		if ok := concepts.IntersectSegments(sx1, sx2, &c.Ray.Start, &c.Ray.End, isect); !ok {
-			return
-		}
-
-		delta := concepts.Vector2{math.Abs(isect[0] - c.Ray.Start[0]), math.Abs(isect[1] - c.Ray.Start[1])}
-		if delta[1] > delta[0] {
-			c.Distance = math.Abs(delta[1] / c.AngleSin)
-		} else {
-			c.Distance = math.Abs(delta[0] / c.AngleCos)
-		}
-		isect.To3D(&c.Intersection)
-		c.U = isect.Dist(sx1) / b.Size.Render[0]
+	vfixindex := concepts.IntClamp(int(x), 0, r.ScreenWidth-1)
+	depthScale := r.ViewFix[vfixindex] / c.Distance
+	xScale := depthScale * b.Size.Render[0]
+	x1 := (x - xScale*0.5)
+	x2 := x1 + xScale
+	c.U = 0.5 + (float64(c.X)-x)/xScale
+	if x1 > float64(c.X) || x2 < float64(c.X) {
+		return
 	}
 
-	c.ProjHeightTop = c.ProjectZ(b.Pos.Render[2] + b.Size.Render[1] - c.CameraZ)
-	c.ProjHeightBottom = c.ProjectZ(b.Pos.Render[2] - c.CameraZ)
+	c.ProjHeightTop = (b.Pos.Render[2] + b.Size.Render[1] - c.CameraZ) * depthScale
+	c.ProjHeightBottom = (b.Pos.Render[2] - c.CameraZ) * depthScale
 	c.ScreenStart = c.ScreenHeight/2 - int(c.ProjHeightTop)
 	c.ScreenEnd = c.ScreenHeight/2 - int(c.ProjHeightBottom)
 	c.ClippedStart = concepts.IntClamp(c.ScreenStart, c.YStart, c.YEnd)
@@ -152,7 +119,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 			continue
 		}
 		v := float64(y-c.ScreenStart) / float64(c.ScreenEnd-c.ScreenStart)
-		sample := c.SampleShader(refMaterial, nil, c.U, v, scaler)
+		sample := c.SampleShader(refMaterial, nil, c.U, v, depthScale)
 		sample.Mul4Self(&c.Light)
 		c.ApplySample(sample, screenIndex, c.Distance)
 	}

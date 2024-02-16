@@ -41,7 +41,7 @@ func (wc *WanderController) Always() {
 	wc.Body.Force.AddSelf(&f)
 
 	if wc.NextSector.Nil() {
-		wc.NextSector = wc.Body.SectorEntityRef
+		wc.NextSector = wc.Body.SectorEntityRef.Now
 	}
 
 	if wc.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {

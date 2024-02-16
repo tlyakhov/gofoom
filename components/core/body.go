@@ -20,7 +20,7 @@ type Body struct {
 	Shadow            BodyShadow                    `editable:"Shadow Type"`
 	MountHeight       float64                       `editable:"Mount Height"`
 	OnGround          bool
-	SectorEntityRef   *concepts.EntityRef
+	SectorEntityRef   concepts.SimVariable[*concepts.EntityRef]
 }
 
 var BodyComponentIndex int
@@ -40,22 +40,45 @@ func (b *Body) String() string {
 	return "Body: " + b.Pos.Now.StringHuman()
 }
 
+func (b *Body) sectorRenderBlend(blend float64) {
+	if b.SectorEntityRef.Now == nil {
+		b.SectorEntityRef.Render = b.SectorEntityRef.Prev
+		return
+	}
+	if b.SectorEntityRef.Prev == nil {
+		b.SectorEntityRef.Render = b.SectorEntityRef.Now
+		return
+	}
+
+	if sector := SectorFromDb(b.SectorEntityRef.Prev); sector != nil {
+		b.Pos.RenderBlend(blend)
+		if sector.IsPointInside2D(b.Pos.Render.To2D()) {
+			b.SectorEntityRef.Render = b.SectorEntityRef.Prev
+			return
+		}
+	}
+	b.SectorEntityRef.Render = b.SectorEntityRef.Now
+}
+
 func (b *Body) SetDB(db *concepts.EntityComponentDB) {
 	if b.DB != nil {
 		b.Pos.Detach(b.DB.Simulation)
 		b.Vel.Detach(b.DB.Simulation)
 		b.Size.Detach(b.DB.Simulation)
 		b.Angle.Detach(b.DB.Simulation)
+		b.SectorEntityRef.Detach(b.DB.Simulation)
 	}
 	b.Attached.SetDB(db)
 	b.Pos.Attach(db.Simulation)
 	b.Vel.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
 	b.Angle.Attach(b.DB.Simulation)
+	b.SectorEntityRef.Attach(b.DB.Simulation)
+	b.SectorEntityRef.RenderCallback = b.sectorRenderBlend
 }
 
 func (b *Body) Sector() *Sector {
-	return SectorFromDb(b.SectorEntityRef)
+	return SectorFromDb(b.SectorEntityRef.Now)
 }
 
 func (b *Body) P0() *concepts.Vector2 {

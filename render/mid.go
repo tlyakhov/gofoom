@@ -12,14 +12,14 @@ func WallMidPick(s *state.Column) {
 }
 
 // WallMid renders the wall portion (potentially over a portal).
-func WallMid(s *state.Column) {
+func WallMid(s *state.Column, internalSegment bool) {
 	surf := s.Segment.Surface
 	u := s.U
 	if surf.Stretch == materials.StretchNone {
-		if s.Sector.Winding < 0 {
+		if !internalSegment && s.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
-		u = (s.Segment.P[0] + s.Segment.P[1] + u*s.Segment.Length) / 64.0
+		u = (s.Segment.A[0] + s.Segment.A[1] + u*s.Segment.Length) / 64.0
 	}
 	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
@@ -28,16 +28,16 @@ func WallMid(s *state.Column) {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		s.Intersection[2] = s.CeilZ + v*(s.FloorZ-s.CeilZ)
+		s.Intersection[2] = s.TopZ + v*(s.BottomZ-s.TopZ)
 		lightV := v
-		if s.Sector.FloorSlope != 0 || s.Sector.CeilSlope != 0 {
+		if !internalSegment && (s.Sector.FloorSlope != 0 || s.Sector.CeilSlope != 0) {
 			lightV = (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 		}
 
 		if surf.Stretch == materials.StretchNone {
 			v = -s.Intersection[2] / 64.0
 		} else if surf.Stretch == materials.StretchAspect {
-			v *= (s.Sector.Max[2] - s.Sector.Min[2]) / s.Segment.Length
+			v *= (s.Segment.Top - s.Segment.Bottom) / s.Segment.Length
 		}
 
 		if !surf.Material.Nil() {

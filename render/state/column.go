@@ -22,6 +22,7 @@ const (
 	PickLow
 	PickFloor
 	PickBody
+	PickInternalSegment
 )
 
 type PickedElement struct {
@@ -33,7 +34,8 @@ type Column struct {
 	*Config
 	X, Y, YStart, YEnd int
 	Sector             *core.Sector
-	Segment            *core.SectorSegment
+	Segment            *core.Segment
+	SectorSegment      *core.SectorSegment
 	Ray                *Ray
 	Angle              float64
 	AngleCos           float64
@@ -44,8 +46,8 @@ type Column struct {
 	U                  float64
 	Depth              int
 	CameraZ            float64
-	FloorZ             float64
-	CeilZ              float64
+	BottomZ            float64
+	TopZ               float64
 	ProjHeightTop      float64
 	ProjHeightBottom   float64
 	ScreenStart        int
@@ -62,15 +64,48 @@ type Column struct {
 	PickedElements     []PickedElement
 }
 
+func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
+	// Wall is facing away from us
+	if c.Ray.Delta.Dot(&segment.Normal) > 0 {
+		return false
+	}
+
+	// Ray intersects?
+	isect := c.Intersection.To2D()
+	if ok := segment.Intersect2D(&c.Ray.Start, &c.Ray.End, isect); !ok {
+		/*	if c.Sector.Entity == 82 {
+			dbg := fmt.Sprintf("No intersection %v <-> %v", segment.A.StringHuman(), segment.B.StringHuman())
+			c.DebugNotices.Push(dbg)
+		}*/
+		return false
+	}
+
+	var dist float64
+	delta := concepts.Vector2{math.Abs(c.Intersection[0] - c.Ray.Start[0]), math.Abs(c.Intersection[1] - c.Ray.Start[1])}
+	if delta[1] > delta[0] {
+		dist = math.Abs(delta[1] / c.AngleSin)
+	} else {
+		dist = math.Abs(delta[0] / c.AngleCos)
+	}
+
+	if checkDist && (dist > c.Distance || dist < c.LastPortalDistance) {
+		return false
+	}
+
+	c.Segment = segment
+	c.Distance = dist
+	c.U = isect.Dist(segment.A) / segment.Length
+	return true
+}
+
 func (c *Column) ProjectZ(z float64) float64 {
 	return z * c.ViewFix[c.X] / c.Distance
 }
 
 func (c *Column) CalcScreen() {
 	// Screen slice precalculation
-	c.FloorZ, c.CeilZ = c.Sector.SlopedZRender(c.Intersection.To2D())
-	c.ProjHeightTop = c.ProjectZ(c.CeilZ - c.CameraZ)
-	c.ProjHeightBottom = c.ProjectZ(c.FloorZ - c.CameraZ)
+	c.ProjHeightTop = c.ProjectZ(c.TopZ - c.CameraZ)
+	c.ProjHeightBottom = c.ProjectZ(c.BottomZ - c.CameraZ)
 
 	c.ScreenStart = c.ScreenHeight/2 - int(c.ProjHeightTop)
 	c.ScreenEnd = c.ScreenHeight/2 - int(c.ProjHeightBottom)

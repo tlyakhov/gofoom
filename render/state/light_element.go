@@ -178,7 +178,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, seg := range sector.Segments {
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
-			if (le.Type == LightElementWall && seg == le.Segment) || le.Delta.To2D().Dot(&seg.Normal) > 0 {
+			if (le.Type == LightElementWall && &seg.Segment == le.Segment) || le.Delta.To2D().Dot(&seg.Normal) > 0 {
 				if debugLighting {
 					log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
@@ -274,7 +274,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			le.DebugNotices.Push(dbg)
 			return false
 		}
-		if next == nil && !lightBody.SectorEntityRef.Nil() && sector.Entity != lightBody.SectorEntityRef.Entity {
+		if next == nil && !lightBody.SectorEntityRef.Render.Nil() && sector.Entity != lightBody.SectorEntityRef.Render.Entity {
 			if debugLighting {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}

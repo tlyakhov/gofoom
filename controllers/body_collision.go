@@ -28,7 +28,7 @@ func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
 	}
 	bc.Sector = sector
 	bc.Sector.Bodies[bc.Body.Entity] = bc.Body.Ref()
-	bc.Body.SectorEntityRef = sectorRef
+	bc.Body.SectorEntityRef.Now = sectorRef
 
 	if bc.Body.OnGround {
 		floorZ, _ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
@@ -48,7 +48,7 @@ func (bc *BodyController) Exit() {
 	}
 	BodySectorScript(bc.Sector.ExitScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 	delete(bc.Sector.Bodies, bc.Body.Entity)
-	bc.Body.SectorEntityRef = nil
+	bc.Body.SectorEntityRef.Now = nil
 }
 
 func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {

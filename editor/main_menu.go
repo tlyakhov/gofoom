@@ -50,12 +50,13 @@ type EditorMenu struct {
 	EditTweakSurfaceLarger  MenuAction
 	EditTweakSurfaceSmaller MenuAction
 
-	ToolsSelect       MenuAction
-	ToolsAddBody      MenuAction
-	ToolsAddSector    MenuAction
-	ToolsSplitSegment MenuAction
-	ToolsSplitSector  MenuAction
-	ToolsAlignGrid    MenuAction
+	ToolsSelect             MenuAction
+	ToolsAddBody            MenuAction
+	ToolsAddSector          MenuAction
+	ToolsAddInternalSegment MenuAction
+	ToolsSplitSegment       MenuAction
+	ToolsSplitSector        MenuAction
+	ToolsAlignGrid          MenuAction
 
 	BehaviorsPause MenuAction
 	BehaviorsReset MenuAction
@@ -225,6 +226,8 @@ func CreateMainMenu() {
 	editor.ToolsAddBody.Menu = fyne.NewMenuItem("Add Body", func() { editor.SwitchTool(state.ToolAddBody) })
 	editor.ToolsAddSector.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyS, Modifier: fyne.KeyModifierAlt}
 	editor.ToolsAddSector.Menu = fyne.NewMenuItem("Add Sector", func() { editor.SwitchTool(state.ToolAddSector) })
+	editor.ToolsAddInternalSegment.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyS, Modifier: fyne.KeyModifierAlt | fyne.KeyModifierShift}
+	editor.ToolsAddInternalSegment.Menu = fyne.NewMenuItem("Add Internal Segment", func() { editor.SwitchTool(state.ToolAddInternalSegment) })
 	editor.ToolsSplitSegment.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyZ, Modifier: fyne.KeyModifierAlt}
 	editor.ToolsSplitSegment.Menu = fyne.NewMenuItem("Split Segment", func() { editor.SwitchTool(state.ToolSplitSegment) })
 	editor.ToolsSplitSector.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyX, Modifier: fyne.KeyModifierAlt}
@@ -263,7 +266,7 @@ func CreateMainMenu() {
 		editor.EditTweakSurfaceLeft.Menu, editor.EditTweakSurfaceRight.Menu, editor.EditTweakSurfaceUp.Menu, editor.EditTweakSurfaceDown.Menu,
 	)
 	menuTools := fyne.NewMenu("Tools", editor.ToolsSelect.Menu,
-		editor.ToolsAddBody.Menu, editor.ToolsAddSector.Menu, editor.ToolsSplitSegment.Menu,
+		editor.ToolsAddBody.Menu, editor.ToolsAddSector.Menu, editor.ToolsAddInternalSegment.Menu, editor.ToolsSplitSegment.Menu,
 		editor.ToolsSplitSector.Menu, editor.ToolsAlignGrid.Menu)
 	menuBehaviors := fyne.NewMenu("Behaviors", editor.BehaviorsReset.Menu, editor.BehaviorsPause.Menu)
 	mainMenu := fyne.NewMainMenu(menuFile, menuEdit, menuTools, menuBehaviors)

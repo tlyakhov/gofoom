@@ -15,8 +15,7 @@ type Sprite struct {
 type SpriteSheet struct {
 	concepts.Attached `editable:"^"`
 
-	Billboard bool      `editable:"Billboard"`
-	Sprites   []*Sprite `editable:"Sprites"`
+	Sprites []*Sprite `editable:"Sprites"`
 }
 
 var SpriteSheetComponentIndex int
@@ -34,14 +33,9 @@ func SpriteSheetFromDb(entity *concepts.EntityRef) *SpriteSheet {
 
 func (s *SpriteSheet) Construct(data map[string]any) {
 	s.Attached.Construct(data)
-	s.Billboard = true
 
 	if data == nil {
 		return
-	}
-
-	if v, ok := data["Billboard"]; ok {
-		s.Billboard = v.(bool)
 	}
 
 	if v, ok := data["Sprites"]; ok {
@@ -54,9 +48,7 @@ func (s *SpriteSheet) Serialize() map[string]any {
 	if s.Sprites != nil {
 		result["Sprites"] = concepts.SerializeSlice(s.Sprites)
 	}
-	if !s.Billboard {
-		result["Billboard"] = false
-	}
+
 	return result
 }
 
