@@ -37,7 +37,7 @@ func (a *Delete) Act() {
 				a.Save(target)
 			}
 			if body := core.BodyFromDb(target); body != nil {
-				a.Save(body.SectorEntityRef)
+				a.Save(body.SectorEntityRef.Now)
 			}
 		}
 	}

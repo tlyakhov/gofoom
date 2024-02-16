@@ -19,12 +19,18 @@ type AddBody struct {
 
 func (a *AddBody) DetachFromSector() {
 	if body := core.BodyFromDb(a.EntityRef); body != nil {
-		if body.SectorEntityRef.Nil() {
+		if body.SectorEntityRef.Now.Nil() {
 			return
 		}
 		delete(body.Sector().Bodies, a.EntityRef.Entity)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	if seg := core.InternalSegmentFromDb(a.EntityRef); seg != nil {
+		if seg.SectorEntityRef.Nil() {
+			return
+		}
+		delete(seg.Sector().InternalSegments, a.EntityRef.Entity)
+	}
+	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
 func (a *AddBody) AttachAll() {
@@ -34,14 +40,19 @@ func (a *AddBody) AttachAll() {
 }
 
 func (a *AddBody) AttachToSector() {
-	if c := a.Components[core.BodyComponentIndex]; c != nil {
-		body := c.(*core.Body)
+	if body := core.BodyFromDb(a.EntityRef); body != nil {
 		if a.ContainingSector != nil {
-			body.SectorEntityRef = a.ContainingSector.Ref()
+			body.SectorEntityRef.Set(a.ContainingSector.Ref())
 			a.ContainingSector.Bodies[a.EntityRef.Entity] = a.EntityRef
 		}
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	if seg := core.InternalSegmentFromDb(a.EntityRef); seg != nil {
+		if a.ContainingSector != nil {
+			seg.SectorEntityRef = a.ContainingSector.Ref()
+			a.ContainingSector.InternalSegments[a.EntityRef.Entity] = a.EntityRef
+		}
+	}
+	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
 func (a *AddBody) OnMouseDown(evt *desktop.MouseEvent) {}

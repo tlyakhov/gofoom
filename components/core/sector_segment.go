@@ -10,8 +10,8 @@ const (
 )
 
 type SectorSegment struct {
-	DB *concepts.EntityComponentDB
-	Segment
+	DB      *concepts.EntityComponentDB
+	Segment `editable:"^"`
 
 	P                 concepts.Vector2  `editable:"X/Y"`
 	LoSurface         materials.Surface `editable:"Low Surface"`

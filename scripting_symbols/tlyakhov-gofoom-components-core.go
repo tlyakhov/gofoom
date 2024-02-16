@@ -40,8 +40,8 @@ func init() {
 		"Slide":                       reflect.ValueOf(core.Slide),
 		"SpawnComponentIndex":         reflect.ValueOf(&core.SpawnComponentIndex).Elem(),
 		"SpawnFromDb":                 reflect.ValueOf(core.SpawnFromDb),
-		"StaticSegmentComponentIndex": reflect.ValueOf(&core.StaticSegmentComponentIndex).Elem(),
-		"StaticSegmentFromDb":         reflect.ValueOf(core.StaticSegmentFromDb),
+		"StaticSegmentComponentIndex": reflect.ValueOf(&core.InternalSegmentComponentIndex).Elem(),
+		"StaticSegmentFromDb":         reflect.ValueOf(core.InternalSegmentFromDb),
 		"Stop":                        reflect.ValueOf(core.Stop),
 
 		// type definitions
@@ -55,6 +55,6 @@ func init() {
 		"SectorSegment":     reflect.ValueOf((*core.SectorSegment)(nil)),
 		"Segment":           reflect.ValueOf((*core.Segment)(nil)),
 		"Spawn":             reflect.ValueOf((*core.Spawn)(nil)),
-		"StaticSegment":     reflect.ValueOf((*core.StaticSegment)(nil)),
+		"StaticSegment":     reflect.ValueOf((*core.InternalSegment)(nil)),
 	}
 }

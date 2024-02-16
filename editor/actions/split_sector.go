@@ -99,7 +99,7 @@ func (a *SplitSector) Undo() {
 			for _, ibody := range sector.Bodies {
 				bodies = append(bodies, ibody)
 				if body := core.BodyFromDb(ibody); body != nil {
-					body.SectorEntityRef = nil
+					body.SectorEntityRef.Set(nil)
 				}
 			}
 			sector.Bodies = make(map[uint64]*concepts.EntityRef)
@@ -116,7 +116,7 @@ func (a *SplitSector) Undo() {
 				for _, ibody := range bodies {
 					if body := core.BodyFromDb(ibody); body != nil {
 						if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-							body.SectorEntityRef = sector.EntityRef
+							body.SectorEntityRef.Set(sector.EntityRef)
 							sector.Bodies[ibody.Entity] = body.EntityRef
 						}
 
@@ -134,7 +134,7 @@ func (a *SplitSector) Redo() {
 		for _, ibody := range sector.Bodies {
 			bodies = append(bodies, ibody)
 			if body := core.BodyFromDb(ibody); body != nil {
-				body.SectorEntityRef = nil
+				body.SectorEntityRef.Set(nil)
 			}
 		}
 		sector.Bodies = make(map[uint64]*concepts.EntityRef)
@@ -155,7 +155,7 @@ func (a *SplitSector) Redo() {
 					for _, ibody := range bodies {
 						if body := core.BodyFromDb(ibody); body != nil {
 							if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-								body.SectorEntityRef = sector.EntityRef
+								body.SectorEntityRef.Set(sector.EntityRef)
 								sector.Bodies[ibody.Entity] = body.EntityRef
 							}
 

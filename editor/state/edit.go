@@ -17,6 +17,7 @@ const (
 	ToolSplitSector
 	ToolAddSector
 	ToolAddBody
+	ToolAddInternalSegment
 	ToolAlignGrid
 )
 

@@ -2,7 +2,7 @@ package constants
 
 const (
 	// Simulation constants
-	TimeStep          = 1000.0 / 120.0 // calibrate to 120 frames per second
+	TimeStep          = 1000.0 / 128.0 // calibrate to 128 frames per second
 	TimeStepS         = TimeStep / 1000.0
 	MinMillisPerFrame = 1000.0 / 10.0 // Ensure we don't do a spiral of death at framerates < 10
 
@@ -13,7 +13,7 @@ const (
 	LightSafety             = 2
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.001
-	MaxViewDistance         = 100000.0
+	MaxViewDistance         = 10000.0
 	FieldOfView             = 90
 	DebugLevel              = 1
 	CollisionSteps          = 10

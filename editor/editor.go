@@ -158,7 +158,7 @@ func (e *Editor) Integrate() {
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap["Space"] {
-		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+		if playerBody.SectorEntityRef.Now.Component(sectors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
 			playerBody.Force[2] += constants.PlayerJumpForce
@@ -166,7 +166,7 @@ func (e *Editor) Integrate() {
 		}
 	}
 	if e.GameWidget.KeyMap["C"] {
-		if playerBody.SectorEntityRef.Component(sectors.UnderwaterComponentIndex) != nil {
+		if playerBody.SectorEntityRef.Now.Component(sectors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
@@ -275,14 +275,22 @@ func (e *Editor) ActTool() {
 	case state.ToolSplitSector:
 		e.NewAction(&actions.SplitSector{IEditor: e})
 	case state.ToolAddSector:
-		isector := archetypes.CreateSector(e.DB)
-		s := core.SectorFromDb(isector)
+		ref := archetypes.CreateSector(e.DB)
+		s := core.SectorFromDb(ref)
 		s.FloorSurface.Material = controllers.DefaultMaterial(e.DB)
 		s.CeilSurface.Material = controllers.DefaultMaterial(e.DB)
 		a := &actions.AddSector{Sector: s}
 		a.AddBody.IEditor = e
-		a.AddBody.EntityRef = isector
-		a.AddBody.Components = isector.All()
+		a.AddBody.EntityRef = ref
+		a.AddBody.Components = ref.All()
+		e.NewAction(a)
+	case state.ToolAddInternalSegment:
+		ref := archetypes.CreateBasic(e.DB, core.InternalSegmentComponentIndex)
+		seg := core.InternalSegmentFromDb(ref)
+		a := &actions.AddInternalSegment{InternalSegment: seg}
+		a.AddBody.IEditor = e
+		a.AddBody.EntityRef = ref
+		a.AddBody.Components = ref.All()
 		e.NewAction(a)
 	case state.ToolAddBody:
 		body := archetypes.CreateBasic(e.DB, core.BodyComponentIndex)

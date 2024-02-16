@@ -22,9 +22,10 @@ type Renderer struct {
 	columnGroup *sync.WaitGroup
 }
 
-type bodyWithDist2 struct {
+type entityRefWithDist2 struct {
 	*concepts.EntityRef
-	Dist2 float64
+	Dist2     float64
+	isSegment bool
 }
 
 // NewRenderer constructs a new Renderer.
@@ -99,9 +100,9 @@ func (r *Renderer) RenderSegmentColumn(column *state.Column) {
 
 	column.Segment.Normal.To3D(&column.Normal)
 
-	hasPortal := !column.Segment.AdjacentSector.Nil()
+	hasPortal := !column.SectorSegment.AdjacentSector.Nil()
 	if column.Pick {
-		if !hasPortal || column.Segment.PortalHasMaterial {
+		if !hasPortal || column.SectorSegment.PortalHasMaterial {
 			WallMidPick(column)
 			return
 		}
@@ -110,69 +111,81 @@ func (r *Renderer) RenderSegmentColumn(column *state.Column) {
 		if hasPortal {
 			r.RenderPortal(column)
 		}
-		if !hasPortal || column.Segment.PortalHasMaterial {
-			WallMid(column)
+		if !hasPortal || column.SectorSegment.PortalHasMaterial {
+			WallMid(column, false)
 		}
 	}
 
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
-func (r *Renderer) RenderSector(column *state.Column) {
-	column.Distance = constants.MaxViewDistance
-
-	dist := math.MaxFloat64
-	isect := new(concepts.Vector2)
-	column.Ray.Delta.From(&column.Ray.End).SubSelf(&column.Ray.Start)
-	for _, segment := range column.Sector.Segments {
-		// Wall is facing away from us
-		if column.Ray.Delta.Dot(&segment.Normal) > 0 {
+func (r *Renderer) RenderSector(c *state.Column) {
+	c.Distance = constants.MaxViewDistance
+	c.Ray.Delta.From(&c.Ray.End).SubSelf(&c.Ray.Start)
+	for _, sectorSeg := range c.Sector.Segments {
+		if !c.IntersectSegment(&sectorSeg.Segment, true) {
 			continue
 		}
-
-		// Ray intersects?
-		if ok := segment.Intersect2D(&column.Ray.Start, &column.Ray.End, isect); !ok {
-			continue
-		}
-
-		delta := concepts.Vector2{math.Abs(isect[0] - column.Ray.Start[0]), math.Abs(isect[1] - column.Ray.Start[1])}
-		if delta[1] > delta[0] {
-			dist = math.Abs(delta[1] / column.AngleSin)
-		} else {
-			dist = math.Abs(delta[0] / column.AngleCos)
-		}
-
-		if dist > column.Distance || dist < column.LastPortalDistance {
-			continue
-		}
-
-		column.Segment = segment
-		column.Distance = dist
-		isect.To3D(&column.Intersection)
-		column.U = isect.Dist(&segment.P) / segment.Length
+		c.SectorSegment = sectorSeg
+		c.BottomZ, c.TopZ = c.Sector.SlopedZRender(c.Intersection.To2D())
 	}
 
-	if dist != math.MaxFloat64 {
-		r.RenderSegmentColumn(column)
+	if c.Segment != nil {
+		r.RenderSegmentColumn(c)
 	} else {
-		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", column.Sector.Entity, column.Depth)
+		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
 		r.DebugNotices.Push(dbg)
 	}
 
-	sorted := make([]bodyWithDist2, len(column.Sector.Bodies))
+	sorted := make([]entityRefWithDist2, len(c.Sector.Bodies)+len(c.Sector.InternalSegments))
 	i := 0
-	for _, ref := range column.Sector.Bodies {
+	for _, ref := range c.Sector.Bodies {
 		b := core.BodyFromDb(ref)
 		sorted[i].EntityRef = ref
-		sorted[i].Dist2 = column.Ray.Start.Dist2(b.Pos.Render.To2D())
+		sorted[i].Dist2 = c.Ray.Start.Dist2(b.Pos.Render.To2D())
+		sorted[i].isSegment = false
+		i++
+	}
+	for _, ref := range c.Sector.InternalSegments {
+		s := core.InternalSegmentFromDb(ref)
+		// TODO: we do this again later. Should we optimize this?
+		if !c.IntersectSegment(&s.Segment, false) {
+			continue
+		}
+		sorted[i].EntityRef = ref
+		sorted[i].Dist2 = c.Distance * c.Distance
+		sorted[i].isSegment = true
 		i++
 	}
 
-	slices.SortFunc(sorted, func(a bodyWithDist2, b bodyWithDist2) int {
+	slices.SortFunc(sorted, func(a entityRefWithDist2, b entityRefWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
-	for _, b := range sorted {
-		r.RenderBody(b.EntityRef, column)
+	for _, erwd := range sorted {
+		if erwd.EntityRef == nil {
+			continue
+		}
+		if erwd.isSegment {
+			s := core.InternalSegmentFromDb(erwd.EntityRef)
+			if s == nil || !s.IsActive() {
+				continue
+			}
+			if !c.IntersectSegment(&s.Segment, false) {
+				continue
+			}
+			c.SectorSegment = nil
+			c.TopZ = s.Top
+			c.BottomZ = s.Bottom
+			c.CalcScreen()
+
+			if c.Pick && c.Y >= c.ClippedStart && c.Y <= c.ClippedEnd {
+				c.PickedElements = append(c.PickedElements, state.PickedElement{Type: state.PickInternalSegment, Element: erwd.EntityRef})
+				return
+			}
+			WallMid(c, true)
+		} else {
+			r.RenderBody(erwd.EntityRef, c)
+		}
 	}
 }
 
@@ -184,6 +197,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	}
 
 	// Reset the column
+	column.LastPortalDistance = 0
 	column.Pick = pick
 	column.X = x
 	column.Y = y
@@ -261,7 +275,7 @@ func (r *Renderer) Render(buffer []uint8) {
 	for r.DebugNotices.Length() > 30 {
 		r.DebugNotices.Pop()
 	}
-	if r.PlayerBody.SectorEntityRef.Nil() {
+	if r.PlayerBody.SectorEntityRef.Render.Nil() {
 		r.DebugNotices.Push("Player is not in a sector")
 		return
 	}

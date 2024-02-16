@@ -17,6 +17,55 @@ func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 	mw.Context.Stroke()
 }
 
+func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
+	mw.Context.Push()
+	segmentHovering := state.IndexOf(editor.HoveringObjects, segment.EntityRef) != -1
+	segmentSelected := state.IndexOf(editor.SelectedObjects, segment.EntityRef) != -1
+
+	mw.Context.SetRGB(1, 1, 1)
+
+	if segmentHovering {
+		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+	} else if segmentSelected {
+		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+	}
+
+	// Draw segment
+	mw.Context.SetLineWidth(1)
+	mw.Context.NewSubPath()
+	mw.Context.MoveTo(segment.A[0], segment.A[1])
+	mw.Context.LineTo(segment.B[0], segment.B[1])
+	mw.Context.ClosePath()
+	mw.Context.Stroke()
+	// Draw normal
+	mw.Context.NewSubPath()
+	ns := segment.B.Add(segment.A).Mul(0.5)
+	ne := ns.Add(segment.Normal.Mul(4.0))
+	mw.Context.MoveTo(ns[0], ns[1])
+	mw.Context.LineTo(ne[0], ne[1])
+	mw.Context.ClosePath()
+	mw.Context.Stroke()
+
+	if segmentHovering || segmentSelected {
+		ne = ns.Add(segment.Normal.Mul(20.0))
+		txtLength := fmt.Sprintf("%.0f", segment.Length)
+		mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
+	}
+
+	if segmentSelected {
+		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+		mw.DrawHandle(segment.A)
+	} else if segmentHovering {
+		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+		mw.DrawHandle(segment.B)
+	} else {
+		mw.Context.DrawRectangle(segment.A[0]-1, segment.A[1]-1, 2, 2)
+		mw.Context.DrawRectangle(segment.B[0]-1, segment.B[1]-1, 2, 2)
+		mw.Context.Stroke()
+	}
+	mw.Context.Pop()
+}
+
 func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	if len(sector.Segments) == 0 {
 		return
@@ -115,9 +164,13 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	}
 
 	if editor.BodiesVisible {
-		for _, ibody := range sector.Bodies {
-			mw.DrawBody(ibody)
+		for _, ref := range sector.Bodies {
+			mw.DrawBody(ref)
 		}
+	}
+
+	for _, ref := range sector.InternalSegments {
+		mw.DrawInternalSegment(core.InternalSegmentFromDb(ref))
 	}
 
 	mw.Context.Pop()

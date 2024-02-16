@@ -8,7 +8,7 @@ import (
 )
 
 type Simulatable interface {
-	~int | ~float64 | Vector2 | Vector3 | Vector4
+	~int | ~float64 | Vector2 | Vector3 | Vector4 | *EntityRef
 }
 
 type Simulated interface {
@@ -29,7 +29,7 @@ type SimVariable[T Simulatable] struct {
 	Original       T `editable:"Initial Value"`
 	Render         T
 	NoRenderBlend  bool // For things like angles
-	RenderCallback func()
+	RenderCallback func(blend float64)
 }
 
 func (s *SimVariable[T]) Reset() {
@@ -65,7 +65,7 @@ func (s *SimVariable[T]) RenderBlend(blend float64) {
 	if s.NoRenderBlend {
 		s.Render = s.Now
 		if s.RenderCallback != nil {
-			s.RenderCallback()
+			s.RenderCallback(blend)
 		}
 		return
 	}
@@ -86,10 +86,15 @@ func (s *SimVariable[T]) RenderBlend(blend float64) {
 		sc.Render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
 		sc.Render[2] = Lerp(sc.Prev[2], sc.Now[2], blend)
 		sc.Render[3] = Lerp(sc.Prev[3], sc.Now[3], blend)
+	case *SimVariable[*EntityRef]:
+		sc.Render = sc.Prev
+		if blend > 0.5 {
+			sc.Render = sc.Now
+		}
 	}
 
 	if s.RenderCallback != nil {
-		s.RenderCallback()
+		s.RenderCallback(blend)
 	}
 }
 
@@ -107,6 +112,8 @@ func (s *SimVariable[T]) Serialize() map[string]any {
 		result["Original"] = sc.Original.Serialize()
 	case *SimVariable[Vector4]:
 		result["Original"] = sc.Original.Serialize(false)
+	case *SimVariable[*EntityRef]:
+		result["Original"] = sc.Original.Serialize()
 	default:
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", s)
 	}
