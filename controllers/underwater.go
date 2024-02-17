@@ -1,15 +1,15 @@
 package controllers
 
 import (
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
 
 type UnderwaterController struct {
 	concepts.BaseController
-	Underwater *sectors.Underwater
+	Underwater *behaviors.Underwater
 	Sector     *core.Sector
 }
 
@@ -18,7 +18,7 @@ func init() {
 }
 
 func (uc *UnderwaterController) ComponentIndex() int {
-	return sectors.UnderwaterComponentIndex
+	return behaviors.UnderwaterComponentIndex
 }
 
 func (uc *UnderwaterController) Methods() concepts.ControllerMethod {
@@ -26,7 +26,7 @@ func (uc *UnderwaterController) Methods() concepts.ControllerMethod {
 }
 
 func (uc *UnderwaterController) Target(target concepts.Attachable) bool {
-	uc.Underwater = target.(*sectors.Underwater)
+	uc.Underwater = target.(*behaviors.Underwater)
 	uc.Sector = core.SectorFromDb(target.Ref())
 	return uc.Underwater.IsActive() && uc.Sector.IsActive()
 }

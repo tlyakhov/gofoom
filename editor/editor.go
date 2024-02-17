@@ -18,8 +18,8 @@ import (
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
 
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
@@ -158,7 +158,7 @@ func (e *Editor) Integrate() {
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap["Space"] {
-		if playerBody.SectorEntityRef.Now.Component(sectors.UnderwaterComponentIndex) != nil {
+		if playerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
 			playerBody.Force[2] += constants.PlayerJumpForce
@@ -166,7 +166,7 @@ func (e *Editor) Integrate() {
 		}
 	}
 	if e.GameWidget.KeyMap["C"] {
-		if playerBody.SectorEntityRef.Now.Component(sectors.UnderwaterComponentIndex) != nil {
+		if playerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
