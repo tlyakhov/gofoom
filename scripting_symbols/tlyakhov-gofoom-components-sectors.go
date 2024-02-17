@@ -7,34 +7,34 @@ package scripting_symbols
 
 import (
 	"reflect"
-	"tlyakhov/gofoom/components/sectors"
+	"tlyakhov/gofoom/components/behaviors"
 )
 
 func init() {
 	Symbols["tlyakhov/gofoom/components/sectors/sectors"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"DoorIntentClosed":           reflect.ValueOf(sectors.DoorIntentClosed),
-		"DoorIntentOpen":             reflect.ValueOf(sectors.DoorIntentOpen),
-		"DoorIntentReset":            reflect.ValueOf(sectors.DoorIntentReset),
-		"DoorIntentString":           reflect.ValueOf(sectors.DoorIntentString),
-		"DoorIntentStrings":          reflect.ValueOf(sectors.DoorIntentStrings),
-		"DoorIntentValues":           reflect.ValueOf(sectors.DoorIntentValues),
-		"DoorStateClosed":            reflect.ValueOf(sectors.DoorStateClosed),
-		"DoorStateClosing":           reflect.ValueOf(sectors.DoorStateClosing),
-		"DoorStateOpen":              reflect.ValueOf(sectors.DoorStateOpen),
-		"DoorStateOpening":           reflect.ValueOf(sectors.DoorStateOpening),
-		"DoorStateString":            reflect.ValueOf(sectors.DoorStateString),
-		"DoorStateStrings":           reflect.ValueOf(sectors.DoorStateStrings),
-		"DoorStateValues":            reflect.ValueOf(sectors.DoorStateValues),
-		"UnderwaterComponentIndex":   reflect.ValueOf(&sectors.UnderwaterComponentIndex).Elem(),
-		"UnderwaterFromDb":           reflect.ValueOf(sectors.UnderwaterFromDb),
-		"VerticalDoorComponentIndex": reflect.ValueOf(&sectors.VerticalDoorComponentIndex).Elem(),
-		"VerticalDoorFromDb":         reflect.ValueOf(sectors.VerticalDoorFromDb),
+		"DoorIntentClosed":           reflect.ValueOf(behaviors.DoorIntentClosed),
+		"DoorIntentOpen":             reflect.ValueOf(behaviors.DoorIntentOpen),
+		"DoorIntentReset":            reflect.ValueOf(behaviors.DoorIntentReset),
+		"DoorIntentString":           reflect.ValueOf(behaviors.DoorIntentString),
+		"DoorIntentStrings":          reflect.ValueOf(behaviors.DoorIntentStrings),
+		"DoorIntentValues":           reflect.ValueOf(behaviors.DoorIntentValues),
+		"DoorStateClosed":            reflect.ValueOf(behaviors.DoorStateClosed),
+		"DoorStateClosing":           reflect.ValueOf(behaviors.DoorStateClosing),
+		"DoorStateOpen":              reflect.ValueOf(behaviors.DoorStateOpen),
+		"DoorStateOpening":           reflect.ValueOf(behaviors.DoorStateOpening),
+		"DoorStateString":            reflect.ValueOf(behaviors.DoorStateString),
+		"DoorStateStrings":           reflect.ValueOf(behaviors.DoorStateStrings),
+		"DoorStateValues":            reflect.ValueOf(behaviors.DoorStateValues),
+		"UnderwaterComponentIndex":   reflect.ValueOf(&behaviors.UnderwaterComponentIndex).Elem(),
+		"UnderwaterFromDb":           reflect.ValueOf(behaviors.UnderwaterFromDb),
+		"VerticalDoorComponentIndex": reflect.ValueOf(&behaviors.VerticalDoorComponentIndex).Elem(),
+		"VerticalDoorFromDb":         reflect.ValueOf(behaviors.VerticalDoorFromDb),
 
 		// type definitions
-		"DoorIntent":   reflect.ValueOf((*sectors.DoorIntent)(nil)),
-		"DoorState":    reflect.ValueOf((*sectors.DoorState)(nil)),
-		"Underwater":   reflect.ValueOf((*sectors.Underwater)(nil)),
-		"VerticalDoor": reflect.ValueOf((*sectors.VerticalDoor)(nil)),
+		"DoorIntent":   reflect.ValueOf((*behaviors.DoorIntent)(nil)),
+		"DoorState":    reflect.ValueOf((*behaviors.DoorState)(nil)),
+		"Underwater":   reflect.ValueOf((*behaviors.Underwater)(nil)),
+		"VerticalDoor": reflect.ValueOf((*behaviors.VerticalDoor)(nil)),
 	}
 }

@@ -1,14 +1,14 @@
 package controllers
 
 import (
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/concepts"
 )
 
 type VerticalDoorController struct {
 	concepts.BaseController
-	*sectors.VerticalDoor
+	*behaviors.VerticalDoor
 	Sector *core.Sector
 }
 
@@ -17,7 +17,7 @@ func init() {
 }
 
 func (vd *VerticalDoorController) ComponentIndex() int {
-	return sectors.VerticalDoorComponentIndex
+	return behaviors.VerticalDoorComponentIndex
 }
 
 func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
@@ -25,7 +25,7 @@ func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
 }
 
 func (vd *VerticalDoorController) Target(target concepts.Attachable) bool {
-	vd.VerticalDoor = target.(*sectors.VerticalDoor)
+	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
 	vd.Sector = core.SectorFromDb(target.Ref())
 	return vd.VerticalDoor.IsActive() && vd.Sector.IsActive()
 }
@@ -50,23 +50,23 @@ func (vd *VerticalDoorController) Always() {
 
 	a := vd.Sector.TopZ.Animation
 	if a.Percent <= 0 {
-		vd.State = sectors.DoorStateOpen
-		if vd.Intent == sectors.DoorIntentOpen {
-			vd.Intent = sectors.DoorIntentClosed
+		vd.State = behaviors.DoorStateOpen
+		if vd.Intent == behaviors.DoorIntentOpen {
+			vd.Intent = behaviors.DoorIntentClosed
 		}
 	}
 	if a.Percent >= 1 {
-		vd.State = sectors.DoorStateClosed
-		if vd.Intent == sectors.DoorIntentClosed {
-			vd.Intent = sectors.DoorIntentReset
+		vd.State = behaviors.DoorStateClosed
+		if vd.Intent == behaviors.DoorIntentClosed {
+			vd.Intent = behaviors.DoorIntentReset
 		}
 	}
 
-	if vd.Intent == sectors.DoorIntentOpen && vd.State != sectors.DoorStateOpen {
-		vd.State = sectors.DoorStateOpening
+	if vd.Intent == behaviors.DoorIntentOpen && vd.State != behaviors.DoorStateOpen {
+		vd.State = behaviors.DoorStateOpening
 		a.Reverse = true
-	} else if vd.Intent == sectors.DoorIntentClosed && vd.State != sectors.DoorStateClosed {
-		vd.State = sectors.DoorStateClosing
+	} else if vd.Intent == behaviors.DoorIntentClosed && vd.State != behaviors.DoorStateClosed {
+		vd.State = behaviors.DoorStateClosing
 		a.Reverse = false
 	}
 }

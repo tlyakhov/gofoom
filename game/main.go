@@ -9,7 +9,7 @@ import (
 	"runtime/pprof"
 
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/sectors"
+	behaviors1 "tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/controllers"
 
 	"tlyakhov/gofoom/concepts"
@@ -66,7 +66,7 @@ func processInput() {
 	}
 	if win.Pressed(pixelgl.KeySpace) {
 
-		if renderer.PlayerBody.SectorEntityRef.Now.Component(sectors.UnderwaterComponentIndex) != nil {
+		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors1.UnderwaterComponentIndex) != nil {
 			renderer.PlayerBody.Force[2] += constants.PlayerSwimStrength
 		} else if renderer.PlayerBody.OnGround {
 			renderer.PlayerBody.Force[2] += constants.PlayerJumpForce
@@ -74,7 +74,7 @@ func processInput() {
 		}
 	}
 	if win.Pressed(pixelgl.KeyC) {
-		if renderer.PlayerBody.SectorEntityRef.Now.Component(sectors.UnderwaterComponentIndex) != nil {
+		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors1.UnderwaterComponentIndex) != nil {
 			renderer.PlayerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			renderer.Player.Crouching = true

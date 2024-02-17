@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/components/sectors"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -134,7 +134,7 @@ func convert(filename, output string) {
 		db.NewAttachedComponent(isector.Entity, core.SectorComponentIndex)
 		switch sectorType {
 		case "sectors.VerticalDoor":
-			db.NewAttachedComponent(isector.Entity, sectors.VerticalDoorComponentIndex)
+			db.NewAttachedComponent(isector.Entity, behaviors.VerticalDoorComponentIndex)
 		case "sectors.ToxicSector":
 			//db.NewComponent(isector.Entity, behaviors.ToxicComponentIndex)
 		}

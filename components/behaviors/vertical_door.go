@@ -1,4 +1,4 @@
-package sectors
+package behaviors
 
 import (
 	"tlyakhov/gofoom/concepts"
