@@ -21,11 +21,30 @@
             "output": "${workspaceFolder}/bin/editor"
         },
         {
+            "name": "Launch Editor [check for races]",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "buildFlags": "-race",
+            "program": "${workspaceFolder}/editor/",
+            "cwd": "${workspaceFolder}",
+            "output": "${workspaceFolder}/bin/editor"
+        },
+        {
             "name": "Launch Game",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "buildFlags": "-gcflags=-B",
+            "program": "${workspaceFolder}/game/",
+            "cwd": "${workspaceFolder}",
+            "output": "${workspaceFolder}/bin/game"
+        },
+        {
+            "name": "Launch Game [check for races]",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "buildFlags": "-gcflags=-B -race",
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}",
             "output": "${workspaceFolder}/bin/game"

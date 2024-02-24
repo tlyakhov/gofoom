@@ -32,6 +32,7 @@ type PickedElement struct {
 
 type Column struct {
 	*Config
+	MaterialSampler
 	X, Y, YStart, YEnd int
 	Sector             *core.Sector
 	Segment            *core.Segment
@@ -55,11 +56,7 @@ type Column struct {
 	ClippedStart       int
 	ClippedEnd         int
 	LightElements      [4]LightElement
-	Normal             concepts.Vector3
-	MaterialColor      concepts.Vector4
 	Light              concepts.Vector4
-	Lightmap           []concepts.Vector3
-	LightmapAge        []int
 	Pick               bool
 	PickedElements     []PickedElement
 }
@@ -113,74 +110,6 @@ func (c *Column) CalcScreen() {
 	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
-func (c *Column) SampleShader(ishader *concepts.EntityRef, extraStages []*materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {
-	c.MaterialColor[0] = 0
-	c.MaterialColor[1] = 0
-	c.MaterialColor[2] = 0
-	c.MaterialColor[3] = 0
-	shader := materials.ShaderFromDb(ishader)
-	if shader == nil {
-		c.sampleTexture(&c.MaterialColor, ishader, nil, u, v, scale)
-	} else {
-		for _, stage := range shader.Stages {
-			c.sampleTexture(&c.MaterialColor, stage.Texture, stage, u, v, scale)
-		}
-	}
-
-	for _, stage := range extraStages {
-		c.sampleTexture(&c.MaterialColor, stage.Texture, stage, u, v, scale)
-	}
-	return &c.MaterialColor
-}
-
-func (c *Column) sampleTexture(result *concepts.Vector4, material *concepts.EntityRef, stage *materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {
-	// Should refactor this scale thing, it's hard to reason about
-	scaleDivisor := 1.0
-
-	if stage != nil {
-		u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
-		if (stage.Flags & materials.ShaderSky) != 0 {
-			v = float64(c.Y) / (float64(c.ScreenHeight) - 1)
-
-			if (stage.Flags & materials.ShaderStaticBackground) != 0 {
-				u = float64(c.X) / (float64(c.ScreenWidth) - 1)
-			} else {
-				u = c.Angle / (2.0 * math.Pi)
-			}
-		}
-	}
-
-	if stage == nil || (stage.Flags&materials.ShaderTiled) != 0 {
-		u *= scaleDivisor
-		v *= scaleDivisor
-		if stage != nil && (stage.Flags&materials.ShaderLiquid) != 0 {
-			lv, lu := math.Sincos(float64(c.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
-			u += lu * constants.LiquidChurnSize
-			v += lv * constants.LiquidChurnSize
-		}
-
-		u -= math.Floor(u)
-		v -= math.Floor(v)
-	}
-
-	var sample concepts.Vector4
-	if image := materials.ImageFromDb(material); image != nil {
-		sample = image.Sample(u, v, scale)
-	} else if text := materials.TextFromDb(material); text != nil {
-		sample = text.Sample(u, v, scale)
-	} else if solid := materials.SolidFromDb(material); solid != nil {
-		sample = solid.Diffuse.Render
-	} else {
-		sample[0] = 0.5
-		sample[1] = 0
-		sample[2] = 0.5
-		sample[3] = 1.0
-	}
-	result.AddPreMulColorSelf(&sample)
-
-	return result
-}
-
 func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {
 	lit := materials.LitFromDb(material)
 
@@ -206,13 +135,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	le11 := &c.LightElements[2]
 	le01 := &c.LightElements[3]
 
-	if c.Segment != nil && c.Normal[2] == 0 {
-		le00.Type = LightElementWall
-		le10.Type = LightElementWall
-		le11.Type = LightElementWall
-		le01.Type = LightElementWall
-		c.Lightmap = c.Segment.Lightmap
-		c.LightmapAge = c.Segment.LightmapAge
+	if c.Segment != nil && le00.Type == LightElementWall {
 		le00.MapIndex = c.Segment.LightmapAddress(u, v)
 		le10.MapIndex = le00.MapIndex + 1
 		le11.MapIndex = le10.MapIndex + c.Segment.LightmapWidth
@@ -222,23 +145,12 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		wu = 1.0 - (wu - math.Floor(wu))
 		wv = 1.0 - (wv - math.Floor(wv))
 	} else {
-		le00.Type = LightElementPlane
-		le10.Type = LightElementPlane
-		le11.Type = LightElementPlane
-		le01.Type = LightElementPlane
-		if c.Normal[2] < 0 {
-			c.Lightmap = c.Sector.CeilLightmap
-			c.LightmapAge = c.Sector.CeilLightmapAge
-		} else {
-			c.Lightmap = c.Sector.FloorLightmap
-			c.LightmapAge = c.Sector.FloorLightmapAge
-		}
 		le00.MapIndex = c.Sector.LightmapAddress(world.To2D())
 		le10.MapIndex = le00.MapIndex + 1
 		le11.MapIndex = le10.MapIndex + c.Sector.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
 		q := &concepts.Vector3{world[0], world[1], world[2]}
-		c.Sector.ToLightmapWorld(q, c.Normal[2] > 0)
+		c.Sector.ToLightmapWorld(q, le00.Type == LightElementWall)
 		wu = 1.0 - (world[0]-q[0])/constants.LightGrid
 		wv = 1.0 - (world[1]-q[1])/constants.LightGrid
 	}
@@ -258,20 +170,9 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3, u, v float64) *concepts.Vector4 {
 	le := &c.LightElements[0]
 
-	if c.Segment != nil && c.Normal[2] == 0 {
-		le.Type = LightElementWall
-		c.Lightmap = c.Segment.Lightmap
-		c.LightmapAge = c.Segment.LightmapAge
+	if c.Segment != nil && le.Type == LightElementWall {
 		le.MapIndex = c.Segment.LightmapAddress(u, v)
 	} else {
-		le.Type = LightElementPlane
-		if c.Normal[2] < 0 {
-			c.Lightmap = c.Sector.CeilLightmap
-			c.LightmapAge = c.Sector.CeilLightmapAge
-		} else {
-			c.Lightmap = c.Sector.FloorLightmap
-			c.LightmapAge = c.Sector.FloorLightmapAge
-		}
 		le.MapIndex = c.Sector.LightmapAddress(world.To2D())
 	}
 
@@ -300,17 +201,4 @@ func (c *Column) ApplySample(sample *concepts.Vector4, screenIndex int, z float6
 	if sample[3] > 0.8 {
 		c.ZBuffer[screenIndex] = z
 	}
-}
-
-func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {
-	w := c[0]
-	if c[1] > c[0] {
-		w = c[1]
-	}
-	if c[2] > c[0] {
-		w = c[2]
-	}
-	w = concepts.Clamp(w*c[3], c[3], 1.0)
-	w *= concepts.Clamp(0.03/(1e-5+math.Pow(z/500, 4.0)), 1e-2, 3e3)
-	return w
 }

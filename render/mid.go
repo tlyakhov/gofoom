@@ -44,8 +44,8 @@ func WallMid(s *state.Column, internalSegment bool) {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialColor, surf.Material, &s.Intersection, s.U, lightV, s.Distance)
+			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.Intersection, s.U, lightV, s.Distance)
 		}
-		s.ApplySample(&s.MaterialColor, int(screenIndex), s.Distance)
+		s.ApplySample(&s.MaterialSampler.Output, int(screenIndex), s.Distance)
 	}
 }

@@ -136,17 +136,17 @@ func Int32ToVector3(c uint32) Vector3 {
 	return Vector3{float64((c >> 24) & 0xFF), float64((c >> 16) & 0xFF), float64((c >> 8) & 0xFF)}
 }
 
-var xorSeed uint64
-
-func RngXorShift64() uint64 {
+func RngXorShift64(xorSeed uint64) uint64 {
 	if xorSeed == 0 {
 		xorSeed = uint64(time.Now().UnixNano())
 	}
-	x := xorSeed
-	x ^= x << 13
+	x := xorSeed * uint64(2685821657736338717)
+	x ^= x >> 12
+	x ^= x << 25
+	x ^= x >> 27
+	/*x ^= x << 13
 	x ^= x >> 7
-	x ^= x << 17
-	xorSeed = x
+	x ^= x << 17*/
 	return x
 }
 

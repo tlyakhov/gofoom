@@ -58,10 +58,10 @@ func Ceiling(s *state.Column) {
 		if !mat.Nil() {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
 			s.SampleShader(mat, extras, tx, ty, scaler)
-			s.SampleLight(&s.MaterialColor, mat, world, 0, 0, distToCeil)
+			s.SampleLight(&s.MaterialSampler.Output, mat, world, 0, 0, distToCeil)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialColor)
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
 		s.ZBuffer[screenIndex] = distToCeil
 	}
 }

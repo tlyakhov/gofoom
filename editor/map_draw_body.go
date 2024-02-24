@@ -3,7 +3,6 @@ package main
 import (
 	"math"
 
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
@@ -55,28 +54,12 @@ func (mw *MapWidget) DrawBody(ibody *concepts.EntityRef) {
 	}
 
 	mw.Context.SetLineWidth(1)
-	if archetypes.EntityRefIsMaterial(ibody) {
-		mw.Context.NewSubPath()
-		p0 := body.P0()
-		p1 := body.P1()
-		mw.Context.MoveTo(p0[0], p0[1])
-		mw.Context.LineTo(p1[0], p1[1])
-		mw.Context.ClosePath()
-		mw.Context.MoveTo(body.Pos.Now[0], body.Pos.Now[1])
-		dy, dx := math.Sincos(body.Angle.Now * concepts.Deg2rad)
-		mw.Context.LineTo(body.Pos.Now[0]+dx*4, body.Pos.Now[1]+dy*4)
-		mw.Context.ClosePath()
-		mw.Context.Stroke()
-		mw.DrawHandle(p0)
-		mw.DrawHandle(p1)
-	} else {
-		mw.Context.NewSubPath()
-		mw.Context.DrawArc(body.Pos.Now[0], body.Pos.Now[1], body.Size.Now[0]*0.5, 0, math.Pi*2)
-		mw.Context.ClosePath()
-		mw.Context.Stroke()
-		mw.Context.SetRGB(0.33, 0.33, 0.33)
-		mw.DrawBodyAngle(body)
-	}
+	mw.Context.NewSubPath()
+	mw.Context.DrawArc(body.Pos.Now[0], body.Pos.Now[1], body.Size.Now[0]*0.5, 0, math.Pi*2)
+	mw.Context.ClosePath()
+	mw.Context.Stroke()
+	mw.Context.SetRGB(0.33, 0.33, 0.33)
+	mw.DrawBodyAngle(body)
 
 	if editor.ComponentNamesVisible {
 		text := ibody.NameString()

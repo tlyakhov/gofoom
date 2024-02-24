@@ -100,6 +100,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		le.Segment = nil
 		le.Type = state.LightElementBody
 		le.InputBody = ref
+		le.Sector = b.Sector()
 		le.Get()
 		c.Light.To3D().From(&le.Output)
 		c.Light[3] = 1

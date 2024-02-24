@@ -115,8 +115,8 @@ func main() {
 			}
 			editor.Lock.Lock()
 			editor.DB.Simulation.Step()
-			editor.MapWidget.Raster.Refresh()
 			editor.Lock.Unlock()
+			editor.MapWidget.Raster.Refresh()
 		}
 	}()
 
