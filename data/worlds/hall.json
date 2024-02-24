@@ -1758,7 +1758,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -1990,7 +1990,7 @@
         "Original": 64
       }
     },
-    "sectors.VerticalDoor": {
+    "behaviors.VerticalDoor": {
       "Entity": "25"
     }
   },
@@ -2097,7 +2097,7 @@
       "FloorFriction": 0.85,
       "FloorScripts": [
         {
-          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.DB.EntityRef(81)).Intent = sectors.DoorIntentOpen }",
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB.EntityRef(81)).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ],
@@ -6480,7 +6480,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6572,7 +6572,7 @@
         "Original": 64
       }
     },
-    "sectors.VerticalDoor": {
+    "behaviors.VerticalDoor": {
       "Entity": "79"
     }
   },
@@ -6583,7 +6583,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6675,7 +6675,7 @@
         "Original": 64
       }
     },
-    "sectors.VerticalDoor": {
+    "behaviors.VerticalDoor": {
       "Entity": "80"
     }
   },
@@ -6686,7 +6686,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { sectors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen }",
+          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6778,7 +6778,7 @@
         "Original": 64
       }
     },
-    "sectors.VerticalDoor": {
+    "behaviors.VerticalDoor": {
       "Entity": "81"
     }
   },

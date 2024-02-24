@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"math"
 
 	"tlyakhov/gofoom/constants"
@@ -12,15 +13,19 @@ type Body struct {
 	concepts.Attached `editable:"^"`
 	Pos               concepts.SimVariable[concepts.Vector3] `editable:"Position"`
 	Vel               concepts.SimVariable[concepts.Vector3]
-	Size              concepts.SimVariable[concepts.Vector2] `editable:"Size"`
 	Force             concepts.Vector3
+	Size              concepts.SimVariable[concepts.Vector2] `editable:"Size"`
+	SectorEntityRef   concepts.SimVariable[*concepts.EntityRef]
 	Angle             concepts.SimVariable[float64] `editable:"Angle"`
 	Mass              float64                       `editable:"Mass"`
 	CollisionResponse CollisionResponse             `editable:"Collision Response"`
 	Shadow            BodyShadow                    `editable:"Shadow Type"`
 	MountHeight       float64                       `editable:"Mount Height"`
 	OnGround          bool
-	SectorEntityRef   concepts.SimVariable[*concepts.EntityRef]
+
+	// For rendering - we can figure out which side of this our render
+	// position is on so we end up in the right sector when render blending
+	LastEnteredPortal *SectorSegment
 }
 
 var BodyComponentIndex int
@@ -41,21 +46,20 @@ func (b *Body) String() string {
 }
 
 func (b *Body) sectorRenderBlend(blend float64) {
-	if b.SectorEntityRef.Now == nil {
+	if b.SectorEntityRef.Now == nil || b.SectorEntityRef.Now == b.SectorEntityRef.Prev {
 		b.SectorEntityRef.Render = b.SectorEntityRef.Prev
 		return
 	}
-	if b.SectorEntityRef.Prev == nil {
+	if b.SectorEntityRef.Prev == nil || b.LastEnteredPortal == nil {
 		b.SectorEntityRef.Render = b.SectorEntityRef.Now
 		return
 	}
 
-	if sector := SectorFromDb(b.SectorEntityRef.Prev); sector != nil {
-		b.Pos.RenderBlend(blend)
-		if sector.IsPointInside2D(b.Pos.Render.To2D()) {
-			b.SectorEntityRef.Render = b.SectorEntityRef.Prev
-			return
-		}
+	b.Pos.RenderBlend(blend)
+	fmt.Printf("WhichSide: %v, Winding: %v\n", b.LastEnteredPortal.WhichSide(b.Pos.Render.To2D()), b.LastEnteredPortal.Sector.Winding)
+	if b.LastEnteredPortal.WhichSide(b.Pos.Render.To2D())*float64(b.LastEnteredPortal.Sector.Winding) <= 0 {
+		b.SectorEntityRef.Render = b.SectorEntityRef.Prev
+		return
 	}
 	b.SectorEntityRef.Render = b.SectorEntityRef.Now
 }
@@ -79,16 +83,6 @@ func (b *Body) SetDB(db *concepts.EntityComponentDB) {
 
 func (b *Body) Sector() *Sector {
 	return SectorFromDb(b.SectorEntityRef.Now)
-}
-
-func (b *Body) P0() *concepts.Vector2 {
-	dy, dx := math.Sincos(b.Angle.Render * concepts.Deg2rad)
-	return &concepts.Vector2{b.Pos.Render[0] + dy*b.Size.Render[0]*0.5, b.Pos.Render[1] - dx*b.Size.Render[1]*0.5}
-}
-
-func (b *Body) P1() *concepts.Vector2 {
-	dy, dx := math.Sincos(b.Angle.Render * concepts.Deg2rad)
-	return &concepts.Vector2{b.Pos.Render[0] - dy*b.Size.Render[0]*0.5, b.Pos.Render[1] + dx*b.Size.Render[1]*0.5}
 }
 
 func (b *Body) Normal() *concepts.Vector2 {

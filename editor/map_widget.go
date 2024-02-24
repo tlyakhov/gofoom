@@ -47,6 +47,9 @@ func TransformContext(context *gg.Context) {
 }
 
 func (mw *MapWidget) Draw(w, h int) image.Image {
+	editor.Lock.Lock()
+	defer editor.Lock.Unlock()
+
 	w /= state.MapViewRenderScale
 	h /= state.MapViewRenderScale
 	if mw.Context == nil || mw.Surface.Rect.Max.X != w || mw.Surface.Rect.Max.Y != h {

@@ -3,9 +3,9 @@ package render
 import (
 	"image/color"
 
-	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
-	"github.com/faiface/pixel/text"
+	"github.com/gopxl/pixel/v2"
+	"github.com/gopxl/pixel/v2/backends/opengl"
+	"github.com/gopxl/pixel/v2/ext/text"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
@@ -52,7 +52,7 @@ func NewFont(path string, size float64) (*Font, error) {
 	*/
 }
 
-func (f *Font) Draw(win *pixelgl.Window, x, y float64, c color.Color, s string) {
+func (f *Font) Draw(win *opengl.Window, x, y float64, c color.Color, s string) {
 	// log.Printf("Font draw: %v\n", f.atlas.Glyph(text.ASCII[65]))
 	txt := text.New(pixel.V(x, y), f.atlas)
 	txt.Color = c
@@ -61,7 +61,7 @@ func (f *Font) Draw(win *pixelgl.Window, x, y float64, c color.Color, s string) 
 	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 2))
 }
 
-func (f *Font) DrawCanvas(canvas *pixelgl.Canvas, x, y float64, c color.Color, s string) {
+func (f *Font) DrawCanvas(canvas *opengl.Canvas, x, y float64, c color.Color, s string) {
 	// log.Printf("Font draw: %v\n", f.atlas.Glyph(text.ASCII[65]))
 	txt := text.New(pixel.V(x, y), f.atlas)
 	txt.Color = c

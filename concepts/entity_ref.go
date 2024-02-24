@@ -6,9 +6,8 @@ import (
 )
 
 type EntityRef struct {
-	components []Attachable
-	Entity     uint64
-	DB         *EntityComponentDB
+	Entity uint64
+	DB     *EntityComponentDB
 }
 
 func (er *EntityRef) Nil() bool {
@@ -16,22 +15,16 @@ func (er *EntityRef) Nil() bool {
 }
 
 func (er *EntityRef) All() []Attachable {
-	if er != nil && er.Entity != 0 && er.components == nil {
-		er.components = er.DB.EntityComponents[er.Entity]
+	if er == nil || er.Entity == 0 || len(er.DB.EntityComponents) <= int(er.Entity) {
+		return nil
 	}
-	return er.components
+	return er.DB.EntityComponents[er.Entity]
 }
 func (er *EntityRef) Component(index int) Attachable {
-	if er == nil || er.Entity == 0 || index == 0 {
+	if er == nil || er.Entity == 0 || index == 0 || len(er.DB.EntityComponents) <= int(er.Entity) {
 		return nil
 	}
-	if er.components == nil && len(er.DB.EntityComponents) > int(er.Entity) {
-		er.components = er.DB.EntityComponents[er.Entity]
-	}
-	if er.components == nil {
-		return nil
-	}
-	return er.components[index]
+	return er.DB.EntityComponents[er.Entity][index]
 }
 
 func (er *EntityRef) String() string {

@@ -23,10 +23,10 @@ type Script struct {
 
 func (e *Script) codeCommonHeader() string {
 	return `package main
+	import "tlyakhov/gofoom/archetypes"
 	import "tlyakhov/gofoom/components/behaviors"
 	import "tlyakhov/gofoom/components/core"
 	import "tlyakhov/gofoom/components/materials"
-	import "tlyakhov/gofoom/components/sectors"
 	import "tlyakhov/gofoom/concepts"
 	import "tlyakhov/gofoom/constants"
 	import "log"

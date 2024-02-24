@@ -9,7 +9,6 @@ import (
 	"runtime/pprof"
 
 	"tlyakhov/gofoom/components/behaviors"
-	behaviors1 "tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/controllers"
 
 	"tlyakhov/gofoom/concepts"
@@ -24,15 +23,15 @@ import (
 	"image/color"
 	_ "image/png"
 
-	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
+	"github.com/gopxl/pixel/v2"
+	"github.com/gopxl/pixel/v2/backends/opengl"
 )
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
-var win *pixelgl.Window
+var win *opengl.Window
 var db *concepts.EntityComponentDB
 var renderer *render.Renderer
-var canvas *pixelgl.Canvas
+var canvas *opengl.Canvas
 var buffer *image.RGBA
 var mainFont *render.Font
 
@@ -40,41 +39,41 @@ func processInput() {
 	if renderer.Player == nil {
 		return
 	}
-	win.SetClosed(win.JustPressed(pixelgl.KeyEscape))
+	win.SetClosed(win.JustPressed(pixel.KeyEscape))
 
-	if win.JustPressed(pixelgl.MouseButtonLeft) {
+	if win.JustPressed(pixel.MouseButtonLeft) {
 	}
-	if win.Pressed(pixelgl.KeyW) {
+	if win.Pressed(pixel.KeyW) {
 		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now, false)
 	}
-	if win.Pressed(pixelgl.KeyS) {
+	if win.Pressed(pixel.KeyS) {
 		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+180.0, false)
 	}
-	if win.Pressed(pixelgl.KeyE) {
+	if win.Pressed(pixel.KeyE) {
 		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+90.0, false)
 	}
-	if win.Pressed(pixelgl.KeyQ) {
+	if win.Pressed(pixel.KeyQ) {
 		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+270.0, false)
 	}
-	if win.Pressed(pixelgl.KeyA) {
+	if win.Pressed(pixel.KeyA) {
 		renderer.PlayerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
 		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
-	if win.Pressed(pixelgl.KeyD) {
+	if win.Pressed(pixel.KeyD) {
 		renderer.PlayerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
 		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
-	if win.Pressed(pixelgl.KeySpace) {
+	if win.Pressed(pixel.KeySpace) {
 
-		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors1.UnderwaterComponentIndex) != nil {
+		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
 			renderer.PlayerBody.Force[2] += constants.PlayerSwimStrength
 		} else if renderer.PlayerBody.OnGround {
 			renderer.PlayerBody.Force[2] += constants.PlayerJumpForce
 			renderer.PlayerBody.OnGround = false
 		}
 	}
-	if win.Pressed(pixelgl.KeyC) {
-		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors1.UnderwaterComponentIndex) != nil {
+	if win.Pressed(pixel.KeyC) {
+		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
 			renderer.PlayerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			renderer.Player.Crouching = true
@@ -139,16 +138,16 @@ func run() {
 
 	w := 640
 	h := 360
-	cfg := pixelgl.WindowConfig{
+	cfg := opengl.WindowConfig{
 		Title:     "Foom",
 		Bounds:    pixel.R(0, 0, 1920, 1080),
 		VSync:     true,
 		Resizable: true,
 		//Undecorated: true,
-		//Monitor:     pixelgl.PrimaryMonitor(),
+		//Monitor:     opengl.PrimaryMonitor(),
 	}
 	var err error
-	win, err = pixelgl.NewWindow(cfg)
+	win, err = opengl.NewWindow(cfg)
 	if err != nil {
 		panic(err)
 	}
@@ -164,7 +163,7 @@ func run() {
 		log.Printf("Error loading world %v", err)
 		return
 	}
-	canvas = pixelgl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
+	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
 	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
 	renderer = render.NewRenderer(db)
 	renderer.ScreenWidth = w
@@ -182,5 +181,5 @@ func run() {
 func main() {
 	flag.Parse()
 
-	pixelgl.Run(run)
+	opengl.Run(run)
 }

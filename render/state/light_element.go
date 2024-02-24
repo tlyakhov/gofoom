@@ -20,8 +20,9 @@ const (
 	LightElementBody
 )
 
+// All the data and state required to retrieve/calculate a lightmap texel
 type LightElement struct {
-	*Column
+	*Config
 	Type         LightElementType
 	MapIndex     uint32
 	Delta        concepts.Vector3
@@ -31,10 +32,17 @@ type LightElement struct {
 	Q            concepts.Vector3
 	LightWorld   concepts.Vector3
 	InputBody    *concepts.EntityRef
+	xorSeed      uint64
+
+	Sector      *core.Sector
+	Segment     *core.Segment
+	Normal      concepts.Vector3
+	Lightmap    []concepts.Vector3
+	LightmapAge []int
 }
 
-func (le *LightElement) Debug(wall bool) *concepts.Vector3 {
-	if !wall {
+func (le *LightElement) Debug() *concepts.Vector3 {
+	if le.Type != LightElementWall {
 		le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex, le.Normal[2] > 0)
 	} else {
 		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
@@ -59,14 +67,19 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		le.Output[2] = 0
 		return &le.Output
 	}
-	result := &le.Lightmap[le.MapIndex]
+	lmResult := &le.Lightmap[le.MapIndex]
 	ditherHeuristic := constants.LightmapRefreshDither
 	/*if le.Distance > 0 {
 		ditherHeuristic = ditherHeuristic * 200 / int(le.Slice.Distance)
 	}*/
+	r := concepts.RngXorShift64(le.xorSeed)
+	le.xorSeed = r
 	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame ||
-		concepts.RngXorShift64()%uint64(ditherHeuristic) > 0 {
-		return result
+		r%uint64(ditherHeuristic) > 0 {
+		le.Output[0] = lmResult[0]
+		le.Output[1] = lmResult[1]
+		le.Output[2] = lmResult[2]
+		return &le.Output
 	}
 
 	if le.Type == LightElementPlane {
@@ -76,11 +89,11 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		le.Segment.LightmapAddressToWorld(&le.Q, le.MapIndex)
 	}
 	le.Calculate(&le.Q)
-	result[0] = le.Output[0]
-	result[1] = le.Output[1]
-	result[2] = le.Output[2]
 	le.LightmapAge[le.MapIndex] = le.Config.Frame
-	return result
+	lmResult[0] = le.Output[0]
+	lmResult[1] = le.Output[1]
+	lmResult[2] = le.Output[2]
+	return &le.Output
 }
 
 // lightVisible determines whether a given light is visible from a world location.
@@ -222,20 +235,18 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// If the portal has a transparent material, we need to filter the light
 			if seg.PortalHasMaterial {
+				sampler := &MaterialSampler{Config: le.Config}
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				c := le.MaterialColor
-				le.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1)
+				sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1)
 				if lit := materials.LitFromDb(seg.Surface.Material); lit != nil {
-					lit.Apply(&le.MaterialColor, nil)
+					lit.Apply(&sampler.Output, nil)
 				}
-				if le.MaterialColor[3] >= 0.99 {
-					le.MaterialColor.From(&c)
+				if sampler.Output[3] >= 0.99 {
 					return false
 				}
 				//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&le.Filter), (*[4]float64)(&le.Material))
-				le.Filter.AddPreMulColorSelf(&le.MaterialColor)
-				le.MaterialColor.From(&c)
+				le.Filter.AddPreMulColorSelf(&sampler.Output)
 			}
 
 			// Get the square of the distance to the intersection (from the target point)

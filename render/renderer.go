@@ -66,10 +66,6 @@ func (r *Renderer) RenderPortal(slice *state.Column) {
 	}
 
 	portalSlice := *slice
-	portalSlice.LightElements[0].Column = &portalSlice
-	portalSlice.LightElements[1].Column = &portalSlice
-	portalSlice.LightElements[2].Column = &portalSlice
-	portalSlice.LightElements[3].Column = &portalSlice
 	portalSlice.Sector = sp.Adj
 	portalSlice.YStart = sp.AdjClippedTop
 	portalSlice.YEnd = sp.AdjClippedBottom
@@ -85,20 +81,39 @@ func (r *Renderer) RenderPortal(slice *state.Column) {
 // segment intersection.
 func (r *Renderer) RenderSegmentColumn(column *state.Column) {
 	column.CalcScreen()
-	column.Normal = column.Sector.CeilNormal
+	le := &column.LightElements
+
+	for i := range 4 {
+		le[i].Config = r.Config
+		le[i].Type = state.LightElementPlane
+		le[i].Lightmap = column.Sector.CeilLightmap
+		le[i].LightmapAge = column.Sector.CeilLightmapAge
+		le[i].Normal = column.Sector.CeilNormal
+		le[i].Sector = column.Sector
+		le[i].Segment = column.Segment
+	}
 	if column.Pick {
 		CeilingPick(column)
 	} else {
 		Ceiling(column)
 	}
-	column.Normal = column.Sector.FloorNormal
+	for i := range 4 {
+		le[i].Lightmap = column.Sector.FloorLightmap
+		le[i].LightmapAge = column.Sector.FloorLightmapAge
+		le[i].Normal = column.Sector.FloorNormal
+	}
 	if column.Pick {
 		FloorPick(column)
 	} else {
 		Floor(column)
 	}
 
-	column.Segment.Normal.To3D(&column.Normal)
+	for i := range 4 {
+		le[i].Type = state.LightElementWall
+		le[i].Lightmap = column.Segment.Lightmap
+		le[i].LightmapAge = column.Segment.LightmapAge
+		column.Segment.Normal.To3D(&le[i].Normal)
+	}
 
 	hasPortal := !column.SectorSegment.AdjacentSector.Nil()
 	if column.Pick {
@@ -202,6 +217,9 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.X = x
 	column.Y = y
 	column.Angle = r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x]
+	column.MaterialSampler.X = x
+	column.MaterialSampler.Y = y
+	column.MaterialSampler.Angle = column.Angle
 	column.Sector = r.PlayerBody.Sector()
 	column.AngleSin, column.AngleCos = math.Sincos(column.Angle)
 	column.Ray.End = concepts.Vector2{
@@ -221,16 +239,12 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 	bob := math.Sin(r.Player.Bob)
 	// Initialize a column...
 	column := &state.Column{
-		Config:  r.Config,
-		YStart:  0,
-		YEnd:    r.ScreenHeight,
-		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
+		Config:          r.Config,
+		YStart:          0,
+		YEnd:            r.ScreenHeight,
+		CameraZ:         r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
+		MaterialSampler: state.MaterialSampler{Config: r.Config},
 	}
-	column.LightElements[0].Column = column
-	column.LightElements[1].Column = column
-	column.LightElements[2].Column = column
-	column.LightElements[3].Column = column
-
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 
 	for x := xStart; x < xEnd; x++ {
@@ -299,7 +313,7 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.RenderHud(buffer)
 }
 
-func (r *Renderer) Blit(dst []uint8, src *image.NRGBA, dstx, dsty int) {
+func (r *Renderer) ImgBlt(dst []uint8, src *image.NRGBA, dstx, dsty int) {
 	w := src.Rect.Dx()
 	h := src.Rect.Dy()
 	idst := (dstx + dsty*r.ScreenWidth) * 4
@@ -327,7 +341,7 @@ func (r *Renderer) RenderHud(buffer []uint8) {
 			return
 		}
 		rimg := imaging.Resize(img.Image, 32, 0, imaging.CatmullRom)
-		r.Blit(buffer, rimg, 10, r.ScreenHeight-42)
+		r.ImgBlt(buffer, rimg, 10, r.ScreenHeight-42)
 	}
 }
 
@@ -343,10 +357,10 @@ func (r *Renderer) Pick(x, y int) []state.PickedElement {
 		YEnd:    r.ScreenHeight,
 		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
 	}
-	column.LightElements[0].Column = column
-	column.LightElements[1].Column = column
-	column.LightElements[2].Column = column
-	column.LightElements[3].Column = column
+	column.LightElements[0].Config = r.Config
+	column.LightElements[1].Config = r.Config
+	column.LightElements[2].Config = r.Config
+	column.LightElements[3].Config = r.Config
 
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	return r.RenderColumn(column, x, y, true)

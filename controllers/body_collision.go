@@ -144,6 +144,7 @@ func (bc *BodyController) bodyExitsSector() {
 				e.Pos[2] = floorZ
 				log.Println("Entity entering adjacent sector is lower than floorZ")
 			}*/
+			bc.Body.LastEnteredPortal = segment
 			bc.Enter(segment.AdjacentSector)
 			break
 		}

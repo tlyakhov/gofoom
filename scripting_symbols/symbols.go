@@ -1,11 +1,11 @@
 package scripting_symbols
 
+//go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/archetypes
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/concepts
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/constants
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/behaviors
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/core
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/materials
-//go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/sectors
 
 import (
 	"reflect"

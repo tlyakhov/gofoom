@@ -58,7 +58,8 @@ func (db *EntityComponentDB) NewEntity() uint64 {
 
 // Reserves an entity ID in the database and returns a reference to it
 func (db *EntityComponentDB) RefForNewEntity() *EntityRef {
-	return &EntityRef{Entity: db.NewEntity(), DB: db}
+	entity := db.NewEntity()
+	return &EntityRef{Entity: entity, DB: db}
 }
 
 func (db *EntityComponentDB) EntityRef(entity uint64) *EntityRef {

@@ -40,10 +40,10 @@ func WallHi(s *state.ColumnPortal) {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialColor, surf.Material, &s.Intersection, s.U, lightV, s.Distance)
+			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.Intersection, s.U, lightV, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialColor)
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }
@@ -83,10 +83,10 @@ func WallLow(s *state.ColumnPortal) {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialColor, surf.Material, &s.Intersection, s.U, lightV, s.Distance)
+			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.Intersection, s.U, lightV, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialColor)
+		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
 		s.ZBuffer[screenIndex] = s.Distance
 	}
 }
