@@ -2,7 +2,6 @@ package render
 
 import (
 	"fmt"
-	"math"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
@@ -28,8 +27,7 @@ func Ceiling(s *state.Column) {
 	for s.Y = s.YStart; s.Y < s.ClippedStart; s.Y++ {
 		rayDir[2] = float64(s.ScreenHeight/2 - 1 - s.Y)
 		denom := s.Sector.CeilNormal.Dot(&rayDir)
-
-		if math.Abs(denom) == 0 {
+		if denom == 0 {
 			continue
 		}
 
@@ -45,7 +43,8 @@ func Ceiling(s *state.Column) {
 		world[0] += s.Ray.Start[0]
 		world[1] += s.Ray.Start[1]
 		world[2] += s.CameraZ
-		scaler := 64.0 / distToCeil
+		//fmt.Printf("%v\n", world)
+		scaler := 1.0 //64.0 / distToCeil
 		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
 
 		if distToCeil >= s.ZBuffer[screenIndex] {

@@ -101,7 +101,10 @@ func renderGame() {
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", db.Simulation.FPS))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	if !renderer.PlayerBody.SectorEntityRef.Render.Nil() {
-		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v", renderer.PlayerBody.SectorEntityRef.Render.String()))
+		ref := renderer.PlayerBody.SectorEntityRef.Render
+		s := 0
+		//		core.SectorFromDb(ref).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
+		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v, LM:%v", ref.String(), s))
 	}
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {

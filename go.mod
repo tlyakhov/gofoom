@@ -56,4 +56,6 @@ require (
 require (
 	github.com/gopxl/glhf/v2 v2.0.0 // indirect
 	github.com/gopxl/mainthread/v2 v2.0.0 // indirect
+	github.com/puzpuzpuz/xsync v1.5.2 // indirect
+	github.com/puzpuzpuz/xsync/v3 v3.1.0 // indirect
 )

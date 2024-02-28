@@ -94,9 +94,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		le := &c.LightElements[0]
 		le.Q.From(&b.Pos.Render)
 		le.Q[2] += b.Size.Render[1] * 0.5
-		le.Lightmap = nil
-		le.LightmapAge = nil
-		le.MapIndex = 0
+		le.MapIndex = state.WorldToLightmapAddress(&le.Q, b.Sector(), 0)
 		le.Segment = nil
 		le.Type = state.LightElementBody
 		le.InputBody = ref

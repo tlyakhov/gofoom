@@ -15,7 +15,8 @@ type LightElementType int
 
 //go:generate go run github.com/dmarkham/enumer -type=LightElementType -json
 const (
-	LightElementPlane LightElementType = iota
+	LightElementFloor LightElementType = iota
+	LightElementCeil
 	LightElementWall
 	LightElementBody
 )
@@ -24,7 +25,7 @@ const (
 type LightElement struct {
 	*Config
 	Type         LightElementType
-	MapIndex     uint32
+	MapIndex     uint64
 	Delta        concepts.Vector3
 	Output       concepts.Vector3
 	Filter       concepts.Vector4
@@ -34,20 +35,39 @@ type LightElement struct {
 	InputBody    *concepts.EntityRef
 	xorSeed      uint64
 
-	Sector      *core.Sector
-	Segment     *core.Segment
-	Normal      concepts.Vector3
-	Lightmap    []concepts.Vector3
-	LightmapAge []int
+	Sector  *core.Sector
+	Segment *core.Segment
+	Normal  concepts.Vector3
+}
+
+const lightmapMask uint64 = (1 << 16) - 1
+
+func WorldToLightmapAddress(v *concepts.Vector3, s *core.Sector, flags uint16) uint64 {
+	x := int64(v[0]-s.Min[0])/constants.LightGrid + 1
+	y := int64(v[1]-s.Min[1])/constants.LightGrid + 1
+	z := int64(v[2]-s.Min[2])/constants.LightGrid + 1
+	return ((uint64(x) & lightmapMask) << 48) |
+		((uint64(y) & lightmapMask) << 32) |
+		((uint64(z) & lightmapMask) << 16) |
+		uint64(flags)
+}
+
+func LightmapAddressToWorld(result *concepts.Vector3, a uint64, s *core.Sector) *concepts.Vector3 {
+	//w := uint64(a & wMask)
+	a = a >> 16
+	z := int64((a & lightmapMask)) - 1
+	a = a >> 16
+	y := int64((a & lightmapMask)) - 1
+	a = a >> 16
+	x := int64((a & lightmapMask)) - 1
+	result[0] = float64(x)*constants.LightGrid + s.Min[0]
+	result[1] = float64(y)*constants.LightGrid + s.Min[1]
+	result[2] = float64(z)*constants.LightGrid + s.Min[2]
+	return result
 }
 
 func (le *LightElement) Debug() *concepts.Vector3 {
-	if le.Type != LightElementWall {
-		le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex, le.Normal[2] > 0)
-	} else {
-		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
-		le.Segment.LightmapAddressToWorld(&le.Q, le.MapIndex)
-	}
+	LightmapAddressToWorld(&le.Q, le.MapIndex, le.Sector)
 	dbg := le.Q.Mul(1.0 / 64.0)
 	le.Output[0] = dbg[0] - math.Floor(dbg[0])
 	le.Output[1] = dbg[1] - math.Floor(dbg[1])
@@ -60,40 +80,28 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		le.Calculate(&le.Q)
 		return &le.Output
 	}
-	//return le.Debug(wall)
-	if int(le.MapIndex) >= len(le.Lightmap) {
-		le.Output[0] = 1
-		le.Output[1] = 0
-		le.Output[2] = 0
-		return &le.Output
-	}
-	lmResult := &le.Lightmap[le.MapIndex]
-	ditherHeuristic := constants.LightmapRefreshDither
-	/*if le.Distance > 0 {
-		ditherHeuristic = ditherHeuristic * 200 / int(le.Slice.Distance)
-	}*/
-	r := concepts.RngXorShift64(le.xorSeed)
-	le.xorSeed = r
-	if le.LightmapAge[le.MapIndex]+constants.MaxLightmapAge >= le.Config.Frame ||
-		r%uint64(ditherHeuristic) > 0 {
-		le.Output[0] = lmResult[0]
-		le.Output[1] = lmResult[1]
-		le.Output[2] = lmResult[2]
-		return &le.Output
-	}
+	//return le.Debug()
 
-	if le.Type == LightElementPlane {
-		le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex, le.Normal[2] > 0)
-	} else if le.Type == LightElementWall {
-		//log.Printf("Lightmap element doesn't exist: %v, %v, %v\n", le.Sector.Name, le.MapIndex, le.Segment.Name)
-		le.Segment.LightmapAddressToWorld(&le.Q, le.MapIndex)
+	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
+		ditherHeuristic := constants.LightmapRefreshDither
+		r := concepts.RngXorShift64(le.xorSeed)
+		le.xorSeed = r
+		if lmResult[3]+float64(constants.MaxLightmapAge) >= float64(le.Config.Frame) ||
+			r%uint64(ditherHeuristic) > 0 {
+			le.Output[0] = lmResult[0]
+			le.Output[1] = lmResult[1]
+			le.Output[2] = lmResult[2]
+			return &le.Output
+		}
 	}
+	LightmapAddressToWorld(&le.Q, le.MapIndex, le.Sector)
+	// Ensure we're within Z bounds:
+	floorZ, ceilZ := le.Sector.SlopedZRender(le.Q.To2D())
+	le.Q[2] = math.Min(ceilZ, math.Max(floorZ, le.Q[2]))
 	le.Calculate(&le.Q)
-	le.LightmapAge[le.MapIndex] = le.Config.Frame
-	lmResult[0] = le.Output[0]
-	lmResult[1] = le.Output[1]
-	lmResult[2] = le.Output[2]
+	le.Sector.Lightmap.Store(le.MapIndex, concepts.Vector4{le.Output[0], le.Output[1], le.Output[2], float64(le.Config.Frame)})
 	return &le.Output
+
 }
 
 // lightVisible determines whether a given light is visible from a world location.

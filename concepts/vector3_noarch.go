@@ -140,8 +140,8 @@ func (v *Vector3) NormSelf() *Vector3 {
 }
 
 // Dot calculates the dot product of two vectors.
-func (v *Vector3) Dot(v2 *Vector3) float64 {
-	return v[0]*v2[0] + v[1]*v2[1] + v[2]*v2[2]
+func (a *Vector3) Dot(b *Vector3) float64 {
+	return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]
 }
 
 // Reflect reflects a vector around another vector.
