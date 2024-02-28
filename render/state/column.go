@@ -41,7 +41,8 @@ type Column struct {
 	Angle              float64
 	AngleCos           float64
 	AngleSin           float64
-	Intersection       concepts.Vector3
+	RaySegTest         concepts.Vector2
+	RaySegIntersect    concepts.Vector3
 	Distance           float64
 	LastPortalDistance float64
 	U                  float64
@@ -68,8 +69,7 @@ func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
 	}
 
 	// Ray intersects?
-	isect := c.Intersection.To2D()
-	if ok := segment.Intersect2D(&c.Ray.Start, &c.Ray.End, isect); !ok {
+	if ok := segment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest); !ok {
 		/*	if c.Sector.Entity == 82 {
 			dbg := fmt.Sprintf("No intersection %v <-> %v", segment.A.StringHuman(), segment.B.StringHuman())
 			c.DebugNotices.Push(dbg)
@@ -78,7 +78,7 @@ func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
 	}
 
 	var dist float64
-	delta := concepts.Vector2{math.Abs(c.Intersection[0] - c.Ray.Start[0]), math.Abs(c.Intersection[1] - c.Ray.Start[1])}
+	delta := concepts.Vector2{math.Abs(c.RaySegTest[0] - c.Ray.Start[0]), math.Abs(c.RaySegTest[1] - c.Ray.Start[1])}
 	if delta[1] > delta[0] {
 		dist = math.Abs(delta[1] / c.AngleSin)
 	} else {
@@ -91,7 +91,9 @@ func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
 
 	c.Segment = segment
 	c.Distance = dist
-	c.U = isect.Dist(segment.A) / segment.Length
+	c.RaySegIntersect[0] = c.RaySegTest[0]
+	c.RaySegIntersect[1] = c.RaySegTest[1]
+	c.U = c.RaySegTest.Dist(segment.A) / segment.Length
 	return true
 }
 
@@ -117,18 +119,24 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		return result
 	}
 
-	/*// testing...
+	// testing...
+	/*dbg := world.Mul(1.0 / 64.0)
+	result[0] = dbg[0] - math.Floor(dbg[0])
+	result[1] = dbg[1] - math.Floor(dbg[1])
+	result[2] = dbg[2] - math.Floor(dbg[2])
+	return result
 	result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
 	result[1] = result[0]
 	result[2] = result[0]
 	return result*/
 
 	// Don't filter far away lightmaps. Tolerate a ~5px snap-in
-	if dist > float64(c.ScreenWidth)*constants.LightGrid*0.2 {
+	if true || dist > float64(c.ScreenWidth)*constants.LightGrid*0.2 {
 		c.LightUnfiltered(&c.Light, world, u, v)
 		return lit.Apply(result, &c.Light)
 	}
-	var wu, wv float64
+	return nil
+	/*var wu, wv float64
 
 	le00 := &c.LightElements[0]
 	le10 := &c.LightElements[1]
@@ -136,7 +144,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	le01 := &c.LightElements[3]
 
 	if c.Segment != nil && le00.Type == LightElementWall {
-		le00.MapIndex = c.Segment.LightmapAddress(u, v)
+		le00.MapIndex = WorldToLightmapAddress(world, le00.Type)
 		le10.MapIndex = le00.MapIndex + 1
 		le11.MapIndex = le10.MapIndex + c.Segment.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
@@ -145,7 +153,8 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		wu = 1.0 - (wu - math.Floor(wu))
 		wv = 1.0 - (wv - math.Floor(wv))
 	} else {
-		le00.MapIndex = c.Sector.LightmapAddress(world.To2D())
+
+		le00.MapIndex = WorldToLightmapAddress(world, le00.Type)
 		le10.MapIndex = le00.MapIndex + 1
 		le11.MapIndex = le10.MapIndex + c.Sector.LightmapWidth
 		le01.MapIndex = le11.MapIndex - 1
@@ -164,17 +173,16 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	c.Light[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
 	c.Light[3] = 1
 
-	return lit.Apply(result, &c.Light)
+	return lit.Apply(result, &c.Light)*/
 }
 
 func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3, u, v float64) *concepts.Vector4 {
 	le := &c.LightElements[0]
-
-	if c.Segment != nil && le.Type == LightElementWall {
-		le.MapIndex = c.Segment.LightmapAddress(u, v)
-	} else {
-		le.MapIndex = c.Sector.LightmapAddress(world.To2D())
+	flags := uint16(le.Type)
+	if le.Type == LightElementWall {
+		flags += uint16(le.Segment.Index)
 	}
+	le.MapIndex = WorldToLightmapAddress(world, c.Sector, flags)
 
 	r00 := le.Get()
 	result[0] = r00[0]

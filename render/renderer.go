@@ -85,9 +85,7 @@ func (r *Renderer) RenderSegmentColumn(column *state.Column) {
 
 	for i := range 4 {
 		le[i].Config = r.Config
-		le[i].Type = state.LightElementPlane
-		le[i].Lightmap = column.Sector.CeilLightmap
-		le[i].LightmapAge = column.Sector.CeilLightmapAge
+		le[i].Type = state.LightElementCeil
 		le[i].Normal = column.Sector.CeilNormal
 		le[i].Sector = column.Sector
 		le[i].Segment = column.Segment
@@ -98,8 +96,7 @@ func (r *Renderer) RenderSegmentColumn(column *state.Column) {
 		Ceiling(column)
 	}
 	for i := range 4 {
-		le[i].Lightmap = column.Sector.FloorLightmap
-		le[i].LightmapAge = column.Sector.FloorLightmapAge
+		le[i].Type = state.LightElementFloor
 		le[i].Normal = column.Sector.FloorNormal
 	}
 	if column.Pick {
@@ -110,8 +107,6 @@ func (r *Renderer) RenderSegmentColumn(column *state.Column) {
 
 	for i := range 4 {
 		le[i].Type = state.LightElementWall
-		le[i].Lightmap = column.Segment.Lightmap
-		le[i].LightmapAge = column.Segment.LightmapAge
 		column.Segment.Normal.To3D(&le[i].Normal)
 	}
 
@@ -142,7 +137,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			continue
 		}
 		c.SectorSegment = sectorSeg
-		c.BottomZ, c.TopZ = c.Sector.SlopedZRender(c.Intersection.To2D())
+		c.BottomZ, c.TopZ = c.Sector.SlopedZRender(c.RaySegIntersect.To2D())
 	}
 
 	if c.Segment != nil {

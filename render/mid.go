@@ -28,14 +28,14 @@ func WallMid(s *state.Column, internalSegment bool) {
 			continue
 		}
 		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		s.Intersection[2] = s.TopZ + v*(s.BottomZ-s.TopZ)
+		s.RaySegIntersect[2] = s.TopZ + v*(s.BottomZ-s.TopZ)
 		lightV := v
 		if !internalSegment && (s.Sector.FloorSlope != 0 || s.Sector.CeilSlope != 0) {
-			lightV = (s.Sector.Max[2] - s.Intersection[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
+			lightV = (s.Sector.Max[2] - s.RaySegIntersect[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 		}
 
 		if surf.Stretch == materials.StretchNone {
-			v = -s.Intersection[2] / 64.0
+			v = -s.RaySegIntersect[2] / 64.0
 		} else if surf.Stretch == materials.StretchAspect {
 			v *= (s.Segment.Top - s.Segment.Bottom) / s.Segment.Length
 		}
@@ -44,7 +44,7 @@ func WallMid(s *state.Column, internalSegment bool) {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.Intersection, s.U, lightV, s.Distance)
+			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.U, lightV, s.Distance)
 		}
 		s.ApplySample(&s.MaterialSampler.Output, int(screenIndex), s.Distance)
 	}

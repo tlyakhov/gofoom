@@ -16,21 +16,14 @@ type Segment struct {
 	Surface        materials.Surface `editable:"Mid Surface"`
 	ContactScripts []*Script         `editable:"Contact Scripts"`
 
-	Length         float64
-	Normal         concepts.Vector2
-	Lightmap       []concepts.Vector3
-	LightmapAge    []int
-	LightmapWidth  uint32
-	LightmapHeight uint32
+	Length float64
+	Normal concepts.Vector2
+	Index  int
 }
 
 func (s *Segment) Recalculate() {
 	s.Length = s.B.Sub(s.A).Length()
 	s.Normal = concepts.Vector2{-(s.B[1] - s.A[1]) / s.Length, (s.B[0] - s.A[0]) / s.Length}
-	s.LightmapWidth = uint32(s.Length/constants.LightGrid) + constants.LightSafety*2
-	s.LightmapHeight = uint32((s.Top-s.Bottom)/constants.LightGrid) + constants.LightSafety*2
-	s.Lightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
-	s.LightmapAge = make([]int, s.LightmapWidth*s.LightmapHeight)
 }
 
 func (s *Segment) Matches(s2 *Segment) bool {
@@ -150,26 +143,12 @@ func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 	return s.Normal.Dot(p.Sub(s.A))
 }
 
-func (s *Segment) LightmapAddress(u, v float64) uint32 {
-	dx := int(u*float64(s.LightmapWidth-constants.LightSafety*2)) + constants.LightSafety
-	dy := int(v*float64(s.LightmapHeight-constants.LightSafety*2)) + constants.LightSafety
-	return uint32(dy)*s.LightmapWidth + uint32(dx)
-}
-
 func (s *Segment) UVToWorld(result *concepts.Vector3, u, v float64) *concepts.Vector3 {
 	result[0] = s.A[0] + (s.B[0]-s.A[0])*u
 	result[1] = s.A[1] + (s.B[1]-s.A[1])*u
 	// v goes from top (0) to bottom (1)
 	result[2] = v*s.Bottom + (1.0-v)*s.Top
 	return result
-}
-
-func (s *Segment) LightmapAddressToWorld(result *concepts.Vector3, mapIndex uint32) *concepts.Vector3 {
-	lu := (mapIndex % s.LightmapWidth) - constants.LightSafety
-	lv := (mapIndex / s.LightmapWidth) - constants.LightSafety
-	u := (float64(lu) + 0.5) / float64(s.LightmapWidth-(constants.LightSafety*2))
-	v := (float64(lv) + 0.5) / float64(s.LightmapHeight-(constants.LightSafety*2))
-	return s.UVToWorld(result, u, v)
 }
 
 func (s *Segment) Construct(db *concepts.EntityComponentDB, data map[string]any) {

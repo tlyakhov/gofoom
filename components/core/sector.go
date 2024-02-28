@@ -7,6 +7,8 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+
+	"github.com/puzpuzpuz/xsync/v3"
 )
 
 type Sector struct {
@@ -30,14 +32,12 @@ type Sector struct {
 	EnterScripts     []*Script                     `editable:"Enter Scripts"`
 	ExitScripts      []*Script                     `editable:"Exit Scripts"`
 
-	Winding                           int8
-	Min, Max, Center                  concepts.Vector3
-	FloorNormal, CeilNormal           concepts.Vector3
-	LightmapWidth, LightmapHeight     uint32
-	FloorLightmap, CeilLightmap       []concepts.Vector3
-	FloorLightmapAge, CeilLightmapAge []int
-	PVS                               map[uint64]*Sector
-	PVL                               map[uint64]*concepts.EntityRef
+	Winding                 int8
+	Min, Max, Center        concepts.Vector3
+	FloorNormal, CeilNormal concepts.Vector3
+	PVS                     map[uint64]*Sector
+	PVL                     map[uint64]*concepts.EntityRef
+	Lightmap                *xsync.MapOf[uint64, concepts.Vector4]
 }
 
 var SectorComponentIndex int
@@ -94,6 +94,7 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
+	s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
 	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[uint64]*concepts.EntityRef)
 	s.InternalSegments = make(map[uint64]*concepts.EntityRef)
@@ -245,6 +246,7 @@ func (s *Sector) Recalculate() {
 		// Can't use prev/next pointers because they haven't been initialized yet.
 		next := s.Segments[(i+1)%len(s.Segments)]
 		sum += (next.P[0] - segment.P[0]) * (segment.P[1] + next.P[1])
+		segment.Index = i
 	}
 
 	if sum < 0 {
@@ -320,13 +322,6 @@ func (s *Sector) Recalculate() {
 	}
 
 	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
-
-	s.LightmapWidth = uint32((s.Max[0]-s.Min[0])/constants.LightGrid) + constants.LightSafety*2
-	s.LightmapHeight = uint32((s.Max[1]-s.Min[1])/constants.LightGrid) + constants.LightSafety*2
-	s.FloorLightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
-	s.CeilLightmap = make([]concepts.Vector3, s.LightmapWidth*s.LightmapHeight)
-	s.FloorLightmapAge = make([]int, s.LightmapWidth*s.LightmapHeight)
-	s.CeilLightmapAge = make([]int, s.LightmapWidth*s.LightmapHeight)
 }
 
 func (s *Sector) CalcDistforZ(isect *concepts.Vector2) float64 {
@@ -376,42 +371,6 @@ func (s *Sector) SlopedZOriginal(isect *concepts.Vector2) (floorZ float64, ceilZ
 // SlopedZNow figures out the current slice Z values accounting for slope.
 func (s *Sector) SlopedZNow(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
 	return s.slopedZ(s.BottomZ.Now, s.TopZ.Now, isect)
-}
-
-func (s *Sector) LightmapAddress(p *concepts.Vector2) uint32 {
-	dx := int((p[0]-s.Min[0])/constants.LightGrid) + constants.LightSafety
-	dy := int((p[1]-s.Min[1])/constants.LightGrid) + constants.LightSafety
-	dx = concepts.IntClamp(dx, 0, int(s.LightmapWidth-constants.LightSafety))  // Leave column safety for bi-linear filtering
-	dy = concepts.IntClamp(dy, 0, int(s.LightmapHeight-constants.LightSafety)) // Leave row safety for bi-linear filtering
-	return uint32(dy)*s.LightmapWidth + uint32(dx)
-}
-
-func (s *Sector) ToLightmapWorld(p *concepts.Vector3, floor bool) *concepts.Vector3 {
-	lw := p
-	lw.SubSelf(&s.Min).MulSelf(1.0 / constants.LightGrid)
-	lw[0] = math.Floor(lw[0])*constants.LightGrid + s.Min[0]
-	lw[1] = math.Floor(lw[1])*constants.LightGrid + s.Min[1]
-	floorZ, ceilZ := s.SlopedZRender(lw.To2D())
-	if floor {
-		lw[2] = floorZ
-	} else {
-		lw[2] = ceilZ
-	}
-	return lw
-}
-
-func (s *Sector) LightmapAddressToWorld(r *concepts.Vector3, mapIndex uint32, floor bool) *concepts.Vector3 {
-	u := int(mapIndex%s.LightmapWidth) - constants.LightSafety
-	v := int(mapIndex/s.LightmapWidth) - constants.LightSafety
-	r[0] = s.Min[0] + (float64(u)+0.0)*constants.LightGrid
-	r[1] = s.Min[1] + (float64(v)+0.0)*constants.LightGrid
-	floorZ, ceilZ := s.SlopedZRender(r.To2D())
-	if floor {
-		r[2] = floorZ
-	} else {
-		r[2] = ceilZ
-	}
-	return r
 }
 
 func (s *Sector) InBounds(world *concepts.Vector3) bool {
