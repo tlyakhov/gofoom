@@ -86,6 +86,11 @@ func (v *Vector2) Length() float64 {
 	return math.Sqrt(v[0]*v[0] + v[1]*v[1])
 }
 
+// Length2 calculates the length*length of a vector.
+func (v *Vector2) Length2() float64 {
+	return v[0]*v[0] + v[1]*v[1]
+}
+
 // Dist2 calculates the squared distance between two vectors.
 func (v *Vector2) Dist2(v2 *Vector2) float64 {
 	return (v[0]-v2[0])*(v[0]-v2[0]) +

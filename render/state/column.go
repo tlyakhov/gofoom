@@ -1,6 +1,7 @@
 package state
 
 import (
+	"fmt"
 	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -56,8 +57,11 @@ type Column struct {
 	ScreenEnd          int
 	ClippedStart       int
 	ClippedEnd         int
-	LightElements      [4]LightElement
+	LightElement       LightElement
 	Light              concepts.Vector4
+	LightVoxelA        concepts.Vector3
+	LightVoxelB        concepts.Vector3
+	LightResult        [8]concepts.Vector3
 	Pick               bool
 	PickedElements     []PickedElement
 }
@@ -106,8 +110,8 @@ func (c *Column) CalcScreen() {
 	c.ProjHeightTop = c.ProjectZ(c.TopZ - c.CameraZ)
 	c.ProjHeightBottom = c.ProjectZ(c.BottomZ - c.CameraZ)
 
-	c.ScreenStart = c.ScreenHeight/2 - int(c.ProjHeightTop)
-	c.ScreenEnd = c.ScreenHeight/2 - int(c.ProjHeightBottom)
+	c.ScreenStart = c.ScreenHeight/2 - int(math.Floor(c.ProjHeightTop))
+	c.ScreenEnd = c.ScreenHeight/2 - int(math.Floor(c.ProjHeightBottom))
 	c.ClippedStart = concepts.IntClamp(c.ScreenStart, c.YStart, c.YEnd)
 	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
@@ -130,61 +134,83 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	result[2] = result[0]
 	return result*/
 
-	// Don't filter far away lightmaps. Tolerate a ~5px snap-in
-	if true || dist > float64(c.ScreenWidth)*constants.LightGrid*0.2 {
+	// Don't filter far away lightmaps. Tolerate a ~2px snap-in
+	if dist > float64(c.ScreenWidth)*constants.LightGrid*0.5 {
 		c.LightUnfiltered(&c.Light, world, u, v)
 		return lit.Apply(result, &c.Light)
 	}
-	return nil
-	/*var wu, wv float64
 
-	le00 := &c.LightElements[0]
-	le10 := &c.LightElements[1]
-	le11 := &c.LightElements[2]
-	le01 := &c.LightElements[3]
-
-	if c.Segment != nil && le00.Type == LightElementWall {
-		le00.MapIndex = WorldToLightmapAddress(world, le00.Type)
-		le10.MapIndex = le00.MapIndex + 1
-		le11.MapIndex = le10.MapIndex + c.Segment.LightmapWidth
-		le01.MapIndex = le11.MapIndex - 1
-		wu = u * float64(c.Segment.LightmapWidth-constants.LightSafety*2)
-		wv = v * float64(c.Segment.LightmapHeight-constants.LightSafety*2)
-		wu = 1.0 - (wu - math.Floor(wu))
-		wv = 1.0 - (wv - math.Floor(wv))
-	} else {
-
-		le00.MapIndex = WorldToLightmapAddress(world, le00.Type)
-		le10.MapIndex = le00.MapIndex + 1
-		le11.MapIndex = le10.MapIndex + c.Sector.LightmapWidth
-		le01.MapIndex = le11.MapIndex - 1
-		q := &concepts.Vector3{world[0], world[1], world[2]}
-		c.Sector.ToLightmapWorld(q, le00.Type == LightElementWall)
-		wu = 1.0 - (world[0]-q[0])/constants.LightGrid
-		wv = 1.0 - (world[1]-q[1])/constants.LightGrid
+	flags := uint16(c.LightElement.Type)
+	if c.LightElement.Type == LightElementWall {
+		flags += uint16(c.LightElement.Segment.Index)
 	}
 
-	r00 := le00.Get()
-	r10 := le10.Get()
-	r11 := le11.Get()
-	r01 := le01.Get()
-	c.Light[0] = r00[0]*(wu*wv) + r10[0]*((1.0-wu)*wv) + r11[0]*(1.0-wu)*(1.0-wv) + r01[0]*wu*(1.0-wv)
-	c.Light[1] = r00[1]*(wu*wv) + r10[1]*((1.0-wu)*wv) + r11[1]*(1.0-wu)*(1.0-wv) + r01[1]*wu*(1.0-wv)
-	c.Light[2] = r00[2]*(wu*wv) + r10[2]*((1.0-wu)*wv) + r11[2]*(1.0-wu)*(1.0-wv) + r01[2]*wu*(1.0-wv)
+	c.LightElement.MapIndex = c.Sector.WorldToLightmapAddress(world, flags)
+	c.Sector.LightmapAddressToWorld(&c.LightVoxelA, c.LightElement.MapIndex)
+	dx := (world[0] - c.LightVoxelA[0]) / constants.LightGrid
+	dy := (world[1] - c.LightVoxelA[1]) / constants.LightGrid
+	dz := (world[2] - c.LightVoxelA[2]) / constants.LightGrid
+
+	if dx < 0 || dy < 0 || dz < 0 {
+		fmt.Printf("%v,%v,%v\n", dx, dy, dz)
+	}
+
+	c.LightElement.Get()
+	c.LightResult[0][0] = c.LightElement.Output[0]
+	c.LightResult[0][1] = c.LightElement.Output[1]
+	c.LightResult[0][2] = c.LightElement.Output[2]
+	for i := 1; i < 8; i++ {
+		if (i & 4) == 0 {
+			c.LightVoxelB[0] = c.LightVoxelA[0]
+		} else {
+			c.LightVoxelB[0] = c.LightVoxelA[0] + constants.LightGrid
+		}
+		if (i & 2) == 0 {
+			c.LightVoxelB[1] = c.LightVoxelA[1]
+		} else {
+			c.LightVoxelB[1] = c.LightVoxelA[1] + constants.LightGrid
+		}
+		if (i & 1) == 0 {
+			c.LightVoxelB[2] = c.LightVoxelA[2]
+		} else {
+			c.LightVoxelB[2] = c.LightVoxelA[2] + constants.LightGrid
+		}
+		c.LightElement.MapIndex = c.Sector.WorldToLightmapAddress(&c.LightVoxelB, flags)
+		c.LightElement.Get()
+		c.LightResult[i][0] = c.LightElement.Output[0]
+		c.LightResult[i][1] = c.LightElement.Output[1]
+		c.LightResult[i][2] = c.LightElement.Output[2]
+	}
+
+	for i := range 3 {
+		c00 := c.LightResult[0][i]*(1.0-dx) + c.LightResult[4][i]*dx
+		c01 := c.LightResult[1][i]*(1.0-dx) + c.LightResult[5][i]*dx
+		c10 := c.LightResult[2][i]*(1.0-dx) + c.LightResult[6][i]*dx
+		c11 := c.LightResult[3][i]*(1.0-dx) + c.LightResult[7][i]*dx
+		c0 := c00*(1.0-dy) + c10*dy
+		c1 := c01*(1.0-dy) + c11*dy
+		c.Light[i] = c0*(1.0-dz) + c1*dz
+	}
 	c.Light[3] = 1
 
-	return lit.Apply(result, &c.Light)*/
+	return lit.Apply(result, &c.Light)
 }
 
 func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3, u, v float64) *concepts.Vector4 {
-	le := &c.LightElements[0]
-	flags := uint16(le.Type)
-	if le.Type == LightElementWall {
-		flags += uint16(le.Segment.Index)
+	flags := uint16(c.LightElement.Type)
+	if c.LightElement.Type == LightElementWall {
+		flags += uint16(c.LightElement.Segment.Index)
 	}
-	le.MapIndex = WorldToLightmapAddress(world, c.Sector, flags)
+	/*
+		Fun dithered look, maybe leverage as an effect later?
+		jitter := *world
+		jitter[0] += (rand.Float64() - 0.5) * constants.LightGrid
+		jitter[1] += (rand.Float64() - 0.5) * constants.LightGrid
+		jitter[2] += (rand.Float64() - 0.5) * constants.LightGrid
+	*/
+	c.LightElement.MapIndex = c.Sector.WorldToLightmapAddress(world, flags)
 
-	r00 := le.Get()
+	r00 := c.LightElement.Get()
 	result[0] = r00[0]
 	result[1] = r00[1]
 	result[2] = r00[2]
