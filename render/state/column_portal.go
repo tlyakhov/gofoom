@@ -1,6 +1,7 @@
 package state
 
 import (
+	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
@@ -25,8 +26,8 @@ func (cp *ColumnPortal) CalcScreen() {
 	cp.AdjFloorZ, cp.AdjCeilZ = cp.Adj.SlopedZRender(cp.RaySegIntersect.To2D())
 	cp.AdjProjHeightTop = cp.ProjectZ(cp.AdjCeilZ - cp.CameraZ)
 	cp.AdjProjHeightBottom = cp.ProjectZ(cp.AdjFloorZ - cp.CameraZ)
-	cp.AdjScreenTop = cp.ScreenHeight/2 - int(cp.AdjProjHeightTop)
-	cp.AdjScreenBottom = cp.ScreenHeight/2 - int(cp.AdjProjHeightBottom)
+	cp.AdjScreenTop = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjHeightTop))
+	cp.AdjScreenBottom = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjHeightBottom))
 	cp.AdjClippedTop = concepts.IntClamp(cp.AdjScreenTop, cp.ClippedStart, cp.ClippedEnd)
 	cp.AdjClippedBottom = concepts.IntClamp(cp.AdjScreenBottom, cp.ClippedStart, cp.ClippedEnd)
 }

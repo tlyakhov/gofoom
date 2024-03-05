@@ -40,34 +40,8 @@ type LightElement struct {
 	Normal  concepts.Vector3
 }
 
-const lightmapMask uint64 = (1 << 16) - 1
-
-func WorldToLightmapAddress(v *concepts.Vector3, s *core.Sector, flags uint16) uint64 {
-	x := int64(v[0]-s.Min[0])/constants.LightGrid + 1
-	y := int64(v[1]-s.Min[1])/constants.LightGrid + 1
-	z := int64(v[2]-s.Min[2])/constants.LightGrid + 1
-	return ((uint64(x) & lightmapMask) << 48) |
-		((uint64(y) & lightmapMask) << 32) |
-		((uint64(z) & lightmapMask) << 16) |
-		uint64(flags)
-}
-
-func LightmapAddressToWorld(result *concepts.Vector3, a uint64, s *core.Sector) *concepts.Vector3 {
-	//w := uint64(a & wMask)
-	a = a >> 16
-	z := int64((a & lightmapMask)) - 1
-	a = a >> 16
-	y := int64((a & lightmapMask)) - 1
-	a = a >> 16
-	x := int64((a & lightmapMask)) - 1
-	result[0] = float64(x)*constants.LightGrid + s.Min[0]
-	result[1] = float64(y)*constants.LightGrid + s.Min[1]
-	result[2] = float64(z)*constants.LightGrid + s.Min[2]
-	return result
-}
-
 func (le *LightElement) Debug() *concepts.Vector3 {
-	LightmapAddressToWorld(&le.Q, le.MapIndex, le.Sector)
+	le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex)
 	dbg := le.Q.Mul(1.0 / 64.0)
 	le.Output[0] = dbg[0] - math.Floor(dbg[0])
 	le.Output[1] = dbg[1] - math.Floor(dbg[1])
@@ -86,7 +60,7 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		ditherHeuristic := constants.LightmapRefreshDither
 		r := concepts.RngXorShift64(le.xorSeed)
 		le.xorSeed = r
-		if lmResult[3]+float64(constants.MaxLightmapAge) >= float64(le.Config.Frame) ||
+		if int(lmResult[3])+constants.MaxLightmapAge >= le.Config.Frame ||
 			r%uint64(ditherHeuristic) > 0 {
 			le.Output[0] = lmResult[0]
 			le.Output[1] = lmResult[1]
@@ -94,10 +68,10 @@ func (le *LightElement) Get() *concepts.Vector3 {
 			return &le.Output
 		}
 	}
-	LightmapAddressToWorld(&le.Q, le.MapIndex, le.Sector)
+	le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex)
 	// Ensure we're within Z bounds:
-	floorZ, ceilZ := le.Sector.SlopedZRender(le.Q.To2D())
-	le.Q[2] = math.Min(ceilZ, math.Max(floorZ, le.Q[2]))
+	//floorZ, ceilZ := le.Sector.SlopedZRender(le.Q.To2D())
+	//le.Q[2] = math.Min(ceilZ, math.Max(floorZ, le.Q[2]))
 	le.Calculate(&le.Q)
 	le.Sector.Lightmap.Store(le.MapIndex, concepts.Vector4{le.Output[0], le.Output[1], le.Output[2], float64(le.Config.Frame)})
 	return &le.Output

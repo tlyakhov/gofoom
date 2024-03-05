@@ -14,53 +14,53 @@ func CeilingPick(s *state.Column) {
 }
 
 // Ceiling renders the ceiling portion of a slice.
-func Ceiling(s *state.Column) {
-	mat := s.Sector.CeilSurface.Material
-	extras := s.Sector.CeilSurface.ExtraStages
-	transform := s.Sector.CeilSurface.Transform
+func Ceiling(c *state.Column) {
+	mat := c.Sector.CeilSurface.Material
+	extras := c.Sector.CeilSurface.ExtraStages
+	transform := c.Sector.CeilSurface.Transform
 
 	// Because of our sloped ceilings, we can't use simple linear interpolation to calculate the distance
 	// or world position of the ceiling sample, we have to do a ray-plane intersection.
 	// Thankfully, the only expensive operation is a square root to get the distance.
-	planeRayDelta := &concepts.Vector3{s.Sector.Segments[0].P[0] - s.Ray.Start[0], s.Sector.Segments[0].P[1] - s.Ray.Start[1], s.Sector.TopZ.Render - s.CameraZ}
-	rayDir := concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], 0}
-	for s.Y = s.YStart; s.Y < s.ClippedStart; s.Y++ {
-		rayDir[2] = float64(s.ScreenHeight/2 - 1 - s.Y)
-		denom := s.Sector.CeilNormal.Dot(&rayDir)
+	planeRayDelta := &concepts.Vector3{c.Sector.Segments[0].P[0] - c.Ray.Start[0], c.Sector.Segments[0].P[1] - c.Ray.Start[1], c.Sector.TopZ.Render - c.CameraZ}
+	rayDir := concepts.Vector3{c.AngleCos * c.ViewFix[c.X], c.AngleSin * c.ViewFix[c.X], 0}
+	for c.Y = c.YStart; c.Y < c.ClippedStart; c.Y++ {
+		rayDir[2] = float64(c.ScreenHeight/2 - c.Y)
+		denom := c.Sector.CeilNormal.Dot(&rayDir)
 		if denom == 0 {
 			continue
 		}
 
-		t := planeRayDelta.Dot(&s.Sector.CeilNormal) / denom
+		t := planeRayDelta.Dot(&c.Sector.CeilNormal) / denom
 		if t <= 0 {
 			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
-			dbg := fmt.Sprintf("%v ceiling t <= 0", s.Sector.Entity)
-			s.DebugNotices.Push(dbg)
+			dbg := fmt.Sprintf("%v ceiling t <= 0", c.Sector.Entity)
+			c.DebugNotices.Push(dbg)
 			continue
 		}
 		world := &concepts.Vector3{rayDir[0] * t, rayDir[1] * t, rayDir[2] * t}
 		distToCeil := world.Length()
-		world[0] += s.Ray.Start[0]
-		world[1] += s.Ray.Start[1]
-		world[2] += s.CameraZ
-		//fmt.Printf("%v\n", world)
-		scaler := 1.0 //64.0 / distToCeil
-		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
+		dist2 := world.To2D().Length2()
+		screenIndex := uint32(c.X + c.Y*c.ScreenWidth)
 
-		if distToCeil >= s.ZBuffer[screenIndex] {
+		if distToCeil > c.ZBuffer[screenIndex] || dist2 > c.Distance*c.Distance {
 			continue
 		}
 
+		world[0] += c.Ray.Start[0]
+		world[1] += c.Ray.Start[1]
+		world[2] += c.CameraZ
+		scaler := 64.0 / distToCeil
 		tx := world[0] / 64.0
 		ty := world[1] / 64.0
 
 		if !mat.Nil() {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
-			s.SampleShader(mat, extras, tx, ty, scaler)
-			s.SampleLight(&s.MaterialSampler.Output, mat, world, 0, 0, distToCeil)
+			c.SampleShader(mat, extras, tx, ty, scaler)
+			c.SampleLight(&c.MaterialSampler.Output, mat, world, 0, 0, distToCeil)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
-		s.ZBuffer[screenIndex] = distToCeil
+		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)
+		c.ZBuffer[screenIndex] = distToCeil
 	}
 }

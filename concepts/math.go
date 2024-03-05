@@ -195,6 +195,19 @@ func IntersectLineSphere(a, b, c *Vector3, r float64) bool {
 	}
 	return true
 }
+
+func IntersectPointAABB(a, min, max *Vector3) bool {
+	for i := range 3 {
+		if a[i] < min[i] {
+			return false
+		}
+		if a[i] > max[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func IntersectLineAABB(a, b, c, ext *Vector3) bool {
 	d := Vector3{b[0] - a[0], b[1] - a[1], b[2] - a[2]}
 	dl := d.Length()

@@ -91,10 +91,10 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	}
 
 	if lit := materials.LitFromDb(ref); lit != nil {
-		le := &c.LightElements[0]
+		le := &c.LightElement
 		le.Q.From(&b.Pos.Render)
 		le.Q[2] += b.Size.Render[1] * 0.5
-		le.MapIndex = state.WorldToLightmapAddress(&le.Q, b.Sector(), 0)
+		le.MapIndex = b.Sector().WorldToLightmapAddress(&le.Q, 0)
 		le.Segment = nil
 		le.Type = state.LightElementBody
 		le.InputBody = ref

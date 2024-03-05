@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"log"
 	"math"
 
@@ -38,6 +39,7 @@ type Sector struct {
 	PVS                     map[uint64]*Sector
 	PVL                     map[uint64]*concepts.EntityRef
 	Lightmap                *xsync.MapOf[uint64, concepts.Vector4]
+	LightmapBias            [3]int64 // Quantized Min
 }
 
 var SectorComponentIndex int
@@ -94,7 +96,8 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
-	s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
+	//s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
+	s.Lightmap = xsync.NewMapOfPresized[uint64, concepts.Vector4](32 * 1024 * 3)
 	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[uint64]*concepts.EntityRef)
 	s.InternalSegments = make(map[uint64]*concepts.EntityRef)
@@ -322,6 +325,40 @@ func (s *Sector) Recalculate() {
 	}
 
 	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
+	// Floor is important, needs to truncate towards -Infinity rather than 0
+	s.LightmapBias[0] = int64(math.Floor(s.Min[0] / constants.LightGrid))
+	s.LightmapBias[1] = int64(math.Floor(s.Min[1] / constants.LightGrid))
+	s.LightmapBias[2] = int64(math.Floor(s.Min[2] / constants.LightGrid))
+}
+
+const lightmapMask uint64 = (1 << 16) - 1
+
+func (s *Sector) WorldToLightmapAddress(v *concepts.Vector3, flags uint16) uint64 {
+	// Floor is important, needs to truncate towards -Infinity rather than 0
+	x := int64(math.Floor(v[0]/constants.LightGrid)) - s.LightmapBias[0] + 2
+	y := int64(math.Floor(v[1]/constants.LightGrid)) - s.LightmapBias[1] + 2
+	z := int64(math.Floor(v[2]/constants.LightGrid)) - s.LightmapBias[2] + 2
+	if x < 0 || y < 0 || z < 0 {
+		fmt.Printf("Error: lightmap address conversion resulted in negative value: %v,%v,%v\n", x, y, z)
+	}
+	return ((uint64(x) & lightmapMask) << 48) |
+		((uint64(y) & lightmapMask) << 32) |
+		((uint64(z) & lightmapMask) << 16) |
+		uint64(flags)
+}
+
+func (s *Sector) LightmapAddressToWorld(result *concepts.Vector3, a uint64) *concepts.Vector3 {
+	//w := uint64(a & wMask)
+	a = a >> 16
+	z := int64((a & lightmapMask)) + s.LightmapBias[2] - 2
+	a = a >> 16
+	y := int64((a & lightmapMask)) + s.LightmapBias[1] - 2
+	a = a >> 16
+	x := int64((a & lightmapMask)) + s.LightmapBias[0] - 2
+	result[0] = float64(x) * constants.LightGrid
+	result[1] = float64(y) * constants.LightGrid
+	result[2] = float64(z) * constants.LightGrid
+	return result
 }
 
 func (s *Sector) CalcDistforZ(isect *concepts.Vector2) float64 {

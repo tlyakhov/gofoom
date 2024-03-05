@@ -47,82 +47,80 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 	return &r
 }
 
-func (r *Renderer) RenderPortal(slice *state.Column) {
-	if slice.Depth > constants.MaxPortals {
-		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", slice.Sector.Entity)
-		slice.DebugNotices.Push(dbg)
+func (r *Renderer) RenderPortal(c *state.Column) {
+	if c.Depth > constants.MaxPortals {
+		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", c.Sector.Entity)
+		c.DebugNotices.Push(dbg)
 		return
 	}
-	sp := &state.ColumnPortal{Column: slice}
-	sp.CalcScreen()
-	if sp.AdjSegment != nil {
-		if slice.Pick {
-			WallHiPick(sp)
-			WallLowPick(sp)
+	portal := &state.ColumnPortal{Column: c}
+	portal.CalcScreen()
+	if portal.AdjSegment != nil {
+		if c.Pick {
+			WallHiPick(portal)
+			WallLowPick(portal)
 		} else {
-			WallHi(sp)
-			WallLow(sp)
+			WallHi(portal)
+			WallLow(portal)
 		}
 	}
 
-	portalSlice := *slice
-	portalSlice.Sector = sp.Adj
-	portalSlice.YStart = sp.AdjClippedTop
-	portalSlice.YEnd = sp.AdjClippedBottom
-	portalSlice.LastPortalDistance = slice.Distance
-	portalSlice.Depth++
-	r.RenderSector(&portalSlice)
-	if slice.Pick {
-		slice.PickedElements = portalSlice.PickedElements
-	}
+	prevSector := c.Sector
+	prevYStart := c.YStart
+	prevYEnd := c.YEnd
+	c.Sector = portal.Adj
+	c.YStart = portal.AdjClippedTop
+	c.YEnd = portal.AdjClippedBottom
+	c.LastPortalDistance = c.Distance
+	c.Depth++
+	r.RenderSector(c)
+	c.Depth--
+	c.Sector = prevSector
+	c.YStart = prevYStart
+	c.YEnd = prevYEnd
 }
 
 // RenderSegmentColumn draws or picks a single pixel vertical column given a particular
 // segment intersection.
-func (r *Renderer) RenderSegmentColumn(column *state.Column) {
-	column.CalcScreen()
-	le := &column.LightElements
+func (r *Renderer) RenderSegmentColumn(c *state.Column) {
+	c.CalcScreen()
 
-	for i := range 4 {
-		le[i].Config = r.Config
-		le[i].Type = state.LightElementCeil
-		le[i].Normal = column.Sector.CeilNormal
-		le[i].Sector = column.Sector
-		le[i].Segment = column.Segment
-	}
-	if column.Pick {
-		CeilingPick(column)
+	c.LightElement.Config = r.Config
+	c.LightElement.Type = state.LightElementCeil
+	c.LightElement.Normal = c.Sector.CeilNormal
+	c.LightElement.Sector = c.Sector
+	c.LightElement.Segment = c.Segment
+
+	if c.Pick {
+		CeilingPick(c)
 	} else {
-		Ceiling(column)
+		Ceiling(c)
 	}
-	for i := range 4 {
-		le[i].Type = state.LightElementFloor
-		le[i].Normal = column.Sector.FloorNormal
-	}
-	if column.Pick {
-		FloorPick(column)
+	c.LightElement.Type = state.LightElementFloor
+	c.LightElement.Normal = c.Sector.FloorNormal
+
+	if c.Pick {
+		FloorPick(c)
 	} else {
-		Floor(column)
+		Floor(c)
 	}
 
-	for i := range 4 {
-		le[i].Type = state.LightElementWall
-		column.Segment.Normal.To3D(&le[i].Normal)
-	}
+	c.LightElement.Type = state.LightElementWall
+	c.Segment.Normal.To3D(&c.LightElement.Normal)
 
-	hasPortal := !column.SectorSegment.AdjacentSector.Nil()
-	if column.Pick {
-		if !hasPortal || column.SectorSegment.PortalHasMaterial {
-			WallMidPick(column)
+	hasPortal := !c.SectorSegment.AdjacentSector.Nil()
+	if c.Pick {
+		if !hasPortal || c.SectorSegment.PortalHasMaterial {
+			WallMidPick(c)
 			return
 		}
-		r.RenderPortal(column)
+		r.RenderPortal(c)
 	} else {
 		if hasPortal {
-			r.RenderPortal(column)
+			r.RenderPortal(c)
 		}
-		if !hasPortal || column.SectorSegment.PortalHasMaterial {
-			WallMid(column, false)
+		if !hasPortal || c.SectorSegment.PortalHasMaterial {
+			WallMid(c, false)
 		}
 	}
 
@@ -131,7 +129,6 @@ func (r *Renderer) RenderSegmentColumn(column *state.Column) {
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
 func (r *Renderer) RenderSector(c *state.Column) {
 	c.Distance = constants.MaxViewDistance
-	c.Ray.Delta.From(&c.Ray.End).SubSelf(&c.Ray.Start)
 	for _, sectorSeg := range c.Sector.Segments {
 		if !c.IntersectSegment(&sectorSeg.Segment, true) {
 			continue
@@ -208,6 +205,9 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 
 	// Reset the column
 	column.LastPortalDistance = 0
+	column.Depth = 0
+	column.YStart = 0
+	column.YEnd = r.ScreenHeight
 	column.Pick = pick
 	column.X = x
 	column.Y = y
@@ -221,6 +221,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 		r.PlayerBody.Pos.Render[0] + r.MaxViewDist*column.AngleCos,
 		r.PlayerBody.Pos.Render[1] + r.MaxViewDist*column.AngleSin,
 	}
+	column.Ray.Delta.From(&column.Ray.End).SubSelf(&column.Ray.Start)
 
 	if column.Sector == nil {
 		return nil
@@ -235,8 +236,6 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 	// Initialize a column...
 	column := &state.Column{
 		Config:          r.Config,
-		YStart:          0,
-		YEnd:            r.ScreenHeight,
 		CameraZ:         r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
 		MaterialSampler: state.MaterialSampler{Config: r.Config},
 	}
@@ -274,6 +273,14 @@ func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
 func (r *Renderer) Render(buffer []uint8) {
 	r.RefreshPlayer()
 
+	// Clear buffer, mainly useful for debugging
+	/*for i := 0; i < len(r.FrameBuffer); i++ {
+		r.FrameBuffer[i][0] = 0
+		r.FrameBuffer[i][1] = 0
+		r.FrameBuffer[i][2] = 0
+		r.FrameBuffer[i][3] = 1
+	}*/
+
 	// Frame Tint precalculation
 	r.FrameTint = r.Player.FrameTint
 	r.FrameTint[0] *= r.FrameTint[3]
@@ -295,7 +302,7 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.Counter = 0
 
 	if constants.RenderMultiThreaded {
-		blocks := 24
+		blocks := 12
 		blockSize := r.ScreenWidth / blocks
 		r.columnGroup.Add(blocks)
 		for x := 0; x < blocks; x++ {
@@ -352,10 +359,7 @@ func (r *Renderer) Pick(x, y int) []state.PickedElement {
 		YEnd:    r.ScreenHeight,
 		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
 	}
-	column.LightElements[0].Config = r.Config
-	column.LightElements[1].Config = r.Config
-	column.LightElements[2].Config = r.Config
-	column.LightElements[3].Config = r.Config
+	column.LightElement.Config = r.Config
 
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	return r.RenderColumn(column, x, y, true)

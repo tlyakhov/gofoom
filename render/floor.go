@@ -2,7 +2,6 @@ package render
 
 import (
 	"fmt"
-	"math"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
@@ -15,53 +14,54 @@ func FloorPick(s *state.Column) {
 }
 
 // Floor renders the floor portion of a slice.
-func Floor(s *state.Column) {
-	mat := s.Sector.FloorSurface.Material
-	extras := s.Sector.FloorSurface.ExtraStages
-	transform := s.Sector.FloorSurface.Transform
+func Floor(c *state.Column) {
+	mat := c.Sector.FloorSurface.Material
+	extras := c.Sector.FloorSurface.ExtraStages
+	transform := c.Sector.FloorSurface.Transform
 
 	// Because of our sloped floors, we can't use simple linear interpolation to calculate the distance
 	// or world position of the floor sample, we have to do a ray-plane intersection.
 	// Thankfully, the only expensive operation is a square root to get the distance.
-	planeRayDelta := &concepts.Vector3{s.Sector.Segments[0].P[0] - s.Ray.Start[0], s.Sector.Segments[0].P[1] - s.Ray.Start[1], s.Sector.BottomZ.Render - s.CameraZ}
-	rayDir := &concepts.Vector3{s.AngleCos * s.ViewFix[s.X], s.AngleSin * s.ViewFix[s.X], 0}
-	for s.Y = s.ClippedEnd; s.Y < s.YEnd; s.Y++ {
-		rayDir[2] = float64(s.ScreenHeight/2 - s.Y)
-		denom := s.Sector.FloorNormal.Dot(rayDir)
+	planeRayDelta := &concepts.Vector3{c.Sector.Segments[0].P[0] - c.Ray.Start[0], c.Sector.Segments[0].P[1] - c.Ray.Start[1], c.Sector.BottomZ.Render - c.CameraZ}
+	rayDir := &concepts.Vector3{c.AngleCos * c.ViewFix[c.X], c.AngleSin * c.ViewFix[c.X], 0}
+	for c.Y = c.ClippedEnd; c.Y < c.YEnd; c.Y++ {
+		rayDir[2] = float64(c.ScreenHeight/2 - c.Y)
+		denom := c.Sector.FloorNormal.Dot(rayDir)
 
-		if math.Abs(denom) == 0 {
+		if denom == 0 {
 			continue
 		}
 
-		t := planeRayDelta.Dot(&s.Sector.FloorNormal) / denom
+		t := planeRayDelta.Dot(&c.Sector.FloorNormal) / denom
 		if t <= 0 {
 			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
-			dbg := fmt.Sprintf("%v floor t <= 0", s.Sector.Entity)
-			s.DebugNotices.Push(dbg)
+			dbg := fmt.Sprintf("%v floor t <= 0", c.Sector.Entity)
+			c.DebugNotices.Push(dbg)
 			continue
 		}
 		world := &concepts.Vector3{rayDir[0] * t, rayDir[1] * t, rayDir[2] * t}
 		distToFloor := world.Length()
-		world[0] += s.Ray.Start[0]
-		world[1] += s.Ray.Start[1]
-		world[2] += s.CameraZ
-		scaler := 64.0 / distToFloor
-		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
+		dist2 := world.To2D().Length2()
+		screenIndex := uint32(c.X + c.Y*c.ScreenWidth)
 
-		if distToFloor >= s.ZBuffer[screenIndex] {
+		if distToFloor > c.ZBuffer[screenIndex] || dist2 > c.Distance*c.Distance {
 			continue
 		}
 
+		world[0] += c.Ray.Start[0]
+		world[1] += c.Ray.Start[1]
+		world[2] += c.CameraZ
+		scaler := 64.0 / distToFloor
 		tx := world[0] / 64.0
 		ty := world[1] / 64.0
 
 		if !mat.Nil() {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
-			s.SampleShader(mat, extras, tx, ty, scaler)
-			s.SampleLight(&s.MaterialSampler.Output, mat, world, 0, 0, distToFloor)
+			c.SampleShader(mat, extras, tx, ty, scaler)
+			c.SampleLight(&c.MaterialSampler.Output, mat, world, 0, 0, distToFloor)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
-		s.ZBuffer[screenIndex] = distToFloor
+		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)
+		c.ZBuffer[screenIndex] = distToFloor
 	}
 }
