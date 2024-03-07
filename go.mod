@@ -13,6 +13,7 @@ require (
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/loov/hrtime v1.0.3
 	github.com/mmcloughlin/avo v0.6.0
+	github.com/puzpuzpuz/xsync/v3 v3.1.0
 	github.com/rs/xid v1.5.0
 	github.com/traefik/yaegi v0.15.1
 	golang.org/x/image v0.15.0
@@ -56,6 +57,4 @@ require (
 require (
 	github.com/gopxl/glhf/v2 v2.0.0 // indirect
 	github.com/gopxl/mainthread/v2 v2.0.0 // indirect
-	github.com/puzpuzpuz/xsync v1.5.2 // indirect
-	github.com/puzpuzpuz/xsync/v3 v3.1.0 // indirect
 )
