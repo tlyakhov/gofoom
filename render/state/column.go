@@ -62,6 +62,7 @@ type Column struct {
 	LightVoxelA        concepts.Vector3
 	LightVoxelB        concepts.Vector3
 	LightResult        [8]concepts.Vector3
+	LightLastIndexes   [8]uint64
 	Pick               bool
 	PickedElements     []PickedElement
 }
@@ -155,10 +156,13 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		fmt.Printf("%v,%v,%v\n", dx, dy, dz)
 	}
 
-	c.LightElement.Get()
-	c.LightResult[0][0] = c.LightElement.Output[0]
-	c.LightResult[0][1] = c.LightElement.Output[1]
-	c.LightResult[0][2] = c.LightElement.Output[2]
+	if c.LightElement.MapIndex != c.LightLastIndexes[0] {
+		c.LightElement.Get()
+		c.LightResult[0][0] = c.LightElement.Output[0]
+		c.LightResult[0][1] = c.LightElement.Output[1]
+		c.LightResult[0][2] = c.LightElement.Output[2]
+	}
+	c.LightElement.MapIndex = c.LightLastIndexes[0]
 	for i := 1; i < 8; i++ {
 		if (i & 4) == 0 {
 			c.LightVoxelB[0] = c.LightVoxelA[0]
@@ -176,10 +180,13 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 			c.LightVoxelB[2] = c.LightVoxelA[2] + constants.LightGrid
 		}
 		c.LightElement.MapIndex = c.Sector.WorldToLightmapAddress(&c.LightVoxelB, flags)
-		c.LightElement.Get()
-		c.LightResult[i][0] = c.LightElement.Output[0]
-		c.LightResult[i][1] = c.LightElement.Output[1]
-		c.LightResult[i][2] = c.LightElement.Output[2]
+		if c.LightElement.MapIndex != c.LightLastIndexes[i] {
+			c.LightElement.Get()
+			c.LightResult[i][0] = c.LightElement.Output[0]
+			c.LightResult[i][1] = c.LightElement.Output[1]
+			c.LightResult[i][2] = c.LightElement.Output[2]
+		}
+		c.LightLastIndexes[i] = c.LightElement.MapIndex
 	}
 
 	for i := range 3 {

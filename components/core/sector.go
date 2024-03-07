@@ -96,8 +96,7 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
-	//s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
-	s.Lightmap = xsync.NewMapOfPresized[uint64, concepts.Vector4](32 * 1024 * 3)
+	s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
 	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[uint64]*concepts.EntityRef)
 	s.InternalSegments = make(map[uint64]*concepts.EntityRef)

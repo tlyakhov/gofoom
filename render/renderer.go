@@ -302,7 +302,7 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.Counter = 0
 
 	if constants.RenderMultiThreaded {
-		blocks := 12
+		blocks := 64
 		blockSize := r.ScreenWidth / blocks
 		r.columnGroup.Add(blocks)
 		for x := 0; x < blocks; x++ {
