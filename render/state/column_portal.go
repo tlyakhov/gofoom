@@ -28,6 +28,6 @@ func (cp *ColumnPortal) CalcScreen() {
 	cp.AdjProjHeightBottom = cp.ProjectZ(cp.AdjFloorZ - cp.CameraZ)
 	cp.AdjScreenTop = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjHeightTop))
 	cp.AdjScreenBottom = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjHeightBottom))
-	cp.AdjClippedTop = concepts.IntClamp(cp.AdjScreenTop, cp.ClippedStart, cp.ClippedEnd)
-	cp.AdjClippedBottom = concepts.IntClamp(cp.AdjScreenBottom, cp.ClippedStart, cp.ClippedEnd)
+	cp.AdjClippedTop = concepts.Clamp(cp.AdjScreenTop, cp.ClippedStart, cp.ClippedEnd)
+	cp.AdjClippedBottom = concepts.Clamp(cp.AdjScreenBottom, cp.ClippedStart, cp.ClippedEnd)
 }

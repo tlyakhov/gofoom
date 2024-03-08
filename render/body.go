@@ -68,7 +68,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	c.Distance = c.Ray.Start.Dist(b.Pos.Render.To2D())
 	x := (angleRender + r.FOV*0.5) * float64(r.ScreenWidth) / r.FOV
 
-	vfixindex := concepts.IntClamp(int(x), 0, r.ScreenWidth-1)
+	vfixindex := concepts.Clamp(int(x), 0, r.ScreenWidth-1)
 	depthScale := r.ViewFix[vfixindex] / c.Distance
 	xScale := depthScale * b.Size.Render[0]
 	x1 := (x - xScale*0.5)
@@ -82,8 +82,8 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	c.ProjHeightBottom = (b.Pos.Render[2] - c.CameraZ) * depthScale
 	c.ScreenStart = c.ScreenHeight/2 - int(c.ProjHeightTop)
 	c.ScreenEnd = c.ScreenHeight/2 - int(c.ProjHeightBottom)
-	c.ClippedStart = concepts.IntClamp(c.ScreenStart, c.YStart, c.YEnd)
-	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
+	c.ClippedStart = concepts.Clamp(c.ScreenStart, c.YStart, c.YEnd)
+	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
 
 	if c.Pick && c.Y >= c.ClippedStart && c.Y <= c.ClippedEnd {
 		c.PickedElements = append(c.PickedElements, state.PickedElement{Type: state.PickBody, Element: ref})
