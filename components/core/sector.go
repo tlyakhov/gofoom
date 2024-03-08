@@ -334,9 +334,9 @@ const lightmapMask uint64 = (1 << 16) - 1
 
 func (s *Sector) WorldToLightmapAddress(v *concepts.Vector3, flags uint16) uint64 {
 	// Floor is important, needs to truncate towards -Infinity rather than 0
-	x := int64(math.Floor(v[0]/constants.LightGrid)) - s.LightmapBias[0] + 2
-	y := int64(math.Floor(v[1]/constants.LightGrid)) - s.LightmapBias[1] + 2
 	z := int64(math.Floor(v[2]/constants.LightGrid)) - s.LightmapBias[2] + 2
+	y := int64(math.Floor(v[1]/constants.LightGrid)) - s.LightmapBias[1] + 2
+	x := int64(math.Floor(v[0]/constants.LightGrid)) - s.LightmapBias[0] + 2
 	if x < 0 || y < 0 || z < 0 {
 		fmt.Printf("Error: lightmap address conversion resulted in negative value: %v,%v,%v\n", x, y, z)
 	}
@@ -350,13 +350,13 @@ func (s *Sector) LightmapAddressToWorld(result *concepts.Vector3, a uint64) *con
 	//w := uint64(a & wMask)
 	a = a >> 16
 	z := int64((a & lightmapMask)) + s.LightmapBias[2] - 2
+	result[2] = float64(z) * constants.LightGrid
 	a = a >> 16
 	y := int64((a & lightmapMask)) + s.LightmapBias[1] - 2
+	result[1] = float64(y) * constants.LightGrid
 	a = a >> 16
 	x := int64((a & lightmapMask)) + s.LightmapBias[0] - 2
 	result[0] = float64(x) * constants.LightGrid
-	result[1] = float64(y) * constants.LightGrid
-	result[2] = float64(z) * constants.LightGrid
 	return result
 }
 

@@ -113,8 +113,8 @@ func (c *Column) CalcScreen() {
 
 	c.ScreenStart = c.ScreenHeight/2 - int(math.Floor(c.ProjHeightTop))
 	c.ScreenEnd = c.ScreenHeight/2 - int(math.Floor(c.ProjHeightBottom))
-	c.ClippedStart = concepts.IntClamp(c.ScreenStart, c.YStart, c.YEnd)
-	c.ClippedEnd = concepts.IntClamp(c.ScreenEnd, c.YStart, c.YEnd)
+	c.ClippedStart = concepts.Clamp(c.ScreenStart, c.YStart, c.YEnd)
+	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
 func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {
