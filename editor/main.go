@@ -54,6 +54,7 @@ func main() {
 	}
 
 	editor.App = app.NewWithID("com.foom.editor")
+	editor.App.Lifecycle().SetOnStopped(func() { pprof.StopCPUProfile() })
 	editor.Window = editor.App.NewWindow("Foom Editor")
 	editor.Window.Resize(fyne.NewSize(1920, 1000))
 	editor.Window.CenterOnScreen()
@@ -113,9 +114,7 @@ func main() {
 			if editor.DB == nil {
 				return
 			}
-			editor.Lock.Lock()
 			editor.DB.Simulation.Step()
-			editor.Lock.Unlock()
 			editor.MapWidget.Raster.Refresh()
 		}
 	}()

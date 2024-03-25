@@ -77,7 +77,9 @@ func (g *GameWidget) Draw() {
 	playerAlive := behaviors.AliveFromDb(playerBody.Ref())
 
 	pixels := g.Context.Image().(*image.RGBA).Pix
+	editor.Lock.Lock()
 	editor.Renderer.Render(pixels)
+	editor.Lock.Unlock()
 
 	g.Context.SetRGB(1, 0, 1)
 	g.Context.SetFontFace(basicfont.Face7x13)

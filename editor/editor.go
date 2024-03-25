@@ -131,6 +131,8 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) Integrate() {
+	editor.Lock.Lock()
+	defer editor.Lock.Unlock()
 	player := e.Renderer.Player
 	if player == nil {
 		return
