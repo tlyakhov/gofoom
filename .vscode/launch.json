@@ -28,7 +28,7 @@
             "buildFlags": "-race",
             "program": "${workspaceFolder}/editor/",
             "cwd": "${workspaceFolder}",
-            "output": "${workspaceFolder}/bin/editor"
+            "output": "${workspaceFolder}/bin/editor-races"
         },
         {
             "name": "Launch Game",
@@ -47,7 +47,7 @@
             "buildFlags": "-gcflags=-B -race",
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}",
-            "output": "${workspaceFolder}/bin/game"
+            "output": "${workspaceFolder}/bin/game-races"
         },
         {
             "name": "Convert Worlds",
@@ -67,11 +67,11 @@
             "request": "launch",
             "mode": "auto",
             "args": [
-                "-cpuprofile=editor.prof"
+                "-cpuprofile=./bin/editor.prof"
             ],
             "program": "${workspaceFolder}/editor/",
             "cwd": "${workspaceFolder}",
-            "output": "${workspaceFolder}/bin/editor"
+            "output": "${workspaceFolder}/bin/editor-prof"
         },
         {
             "name": "Profile Game",
@@ -80,11 +80,11 @@
             "mode": "auto",
             "buildFlags": "-gcflags=-B",
             "args": [
-                "-cpuprofile=game.prof"
+                "-cpuprofile=./bin/game.prof"
             ],
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}",
-            "output": "${workspaceFolder}/bin/game"
+            "output": "${workspaceFolder}/bin/game-prof"
         }
     ]
 }
