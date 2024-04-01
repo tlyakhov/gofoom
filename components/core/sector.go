@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"log"
 	"math"
 
@@ -337,9 +336,9 @@ func (s *Sector) WorldToLightmapAddress(v *concepts.Vector3, flags uint16) uint6
 	z := int64(math.Floor(v[2]/constants.LightGrid)) - s.LightmapBias[2] + 2
 	y := int64(math.Floor(v[1]/constants.LightGrid)) - s.LightmapBias[1] + 2
 	x := int64(math.Floor(v[0]/constants.LightGrid)) - s.LightmapBias[0] + 2
-	if x < 0 || y < 0 || z < 0 {
+	/*if x < 0 || y < 0 || z < 0 {
 		fmt.Printf("Error: lightmap address conversion resulted in negative value: %v,%v,%v\n", x, y, z)
-	}
+	}*/
 	return ((uint64(x) & lightmapMask) << 48) |
 		((uint64(y) & lightmapMask) << 32) |
 		((uint64(z) & lightmapMask) << 16) |

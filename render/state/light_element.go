@@ -70,9 +70,6 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		}
 	}
 	le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex)
-	// Ensure we're within Z bounds:
-	//floorZ, ceilZ := le.Sector.SlopedZRender(le.Q.To2D())
-	//le.Q[2] = math.Min(ceilZ, math.Max(floorZ, le.Q[2]))
 	le.Calculate(&le.Q)
 	le.Sector.Lightmap.Store(le.MapIndex, concepts.Vector4{le.Output[0], le.Output[1], le.Output[2], float64(le.Config.Frame + int(r)%ditherHeuristic)})
 	return &le.Output
