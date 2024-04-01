@@ -144,7 +144,7 @@ func run() {
 	cfg := opengl.WindowConfig{
 		Title:     "Foom",
 		Bounds:    pixel.R(0, 0, 1920, 1080),
-		VSync:     true,
+		VSync:     false,
 		Resizable: true,
 		//Undecorated: true,
 		//Monitor:     opengl.PrimaryMonitor(),

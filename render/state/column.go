@@ -34,6 +34,7 @@ type PickedElement struct {
 type Column struct {
 	*Config
 	MaterialSampler
+	LightElement
 	X, Y, YStart, YEnd int
 	Sector             *core.Sector
 	Segment            *core.Segment
@@ -57,12 +58,11 @@ type Column struct {
 	ScreenEnd          int
 	ClippedStart       int
 	ClippedEnd         int
-	LightElement       LightElement
 	Light              concepts.Vector4
 	LightVoxelA        concepts.Vector3
 	LightVoxelB        concepts.Vector3
 	LightResult        [8]concepts.Vector3
-	LightLastIndexes   [8]uint64
+	LightLastIndex     uint64
 	Pick               bool
 	PickedElements     []PickedElement
 }
@@ -146,8 +146,9 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		flags += uint16(c.LightElement.Segment.Index)
 	}
 
-	c.LightElement.MapIndex = c.Sector.WorldToLightmapAddress(world, flags)
-	c.Sector.LightmapAddressToWorld(&c.LightVoxelA, c.LightElement.MapIndex)
+	m0 := c.Sector.WorldToLightmapAddress(world, flags)
+	c.LightElement.MapIndex = m0
+	c.Sector.LightmapAddressToWorld(&c.LightVoxelA, m0)
 	dx := (world[0] - c.LightVoxelA[0]) / constants.LightGrid
 	dy := (world[1] - c.LightVoxelA[1]) / constants.LightGrid
 	dz := (world[2] - c.LightVoxelA[2]) / constants.LightGrid
@@ -156,38 +157,33 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		fmt.Printf("%v,%v,%v\n", dx, dy, dz)
 	}
 
-	if c.LightElement.MapIndex != c.LightLastIndexes[0] {
+	if m0 != c.LightLastIndex {
 		c.LightElement.Get()
-		c.LightResult[0][0] = c.LightElement.Output[0]
-		c.LightResult[0][1] = c.LightElement.Output[1]
-		c.LightResult[0][2] = c.LightElement.Output[2]
+		c.LightResult[0] = c.LightElement.Output
 	}
-	c.LightElement.MapIndex = c.LightLastIndexes[0]
 	for i := 1; i < 8; i++ {
-		if (i & 4) == 0 {
-			c.LightVoxelB[0] = c.LightVoxelA[0]
-		} else {
-			c.LightVoxelB[0] = c.LightVoxelA[0] + constants.LightGrid
+		c.LightElement.MapIndex = m0
+		c.LightVoxelB = c.LightVoxelA
+		if (i & 1) != 0 {
+			c.LightVoxelB[2] += constants.LightGrid
+			c.LightElement.MapIndex += 1 << 16
 		}
-		if (i & 2) == 0 {
-			c.LightVoxelB[1] = c.LightVoxelA[1]
-		} else {
-			c.LightVoxelB[1] = c.LightVoxelA[1] + constants.LightGrid
+		if (i & 2) != 0 {
+			c.LightVoxelB[1] += constants.LightGrid
+			c.LightElement.MapIndex += 1 << 32
 		}
-		if (i & 1) == 0 {
-			c.LightVoxelB[2] = c.LightVoxelA[2]
-		} else {
-			c.LightVoxelB[2] = c.LightVoxelA[2] + constants.LightGrid
+		if (i & 4) != 0 {
+			c.LightVoxelB[0] += constants.LightGrid
+			c.LightElement.MapIndex += 1 << 48
 		}
-		c.LightElement.MapIndex = c.Sector.WorldToLightmapAddress(&c.LightVoxelB, flags)
-		if c.LightElement.MapIndex != c.LightLastIndexes[i] {
+
+		if m0 != c.LightLastIndex {
 			c.LightElement.Get()
-			c.LightResult[i][0] = c.LightElement.Output[0]
-			c.LightResult[i][1] = c.LightElement.Output[1]
-			c.LightResult[i][2] = c.LightElement.Output[2]
+			c.LightResult[i] = c.LightElement.Output
 		}
-		c.LightLastIndexes[i] = c.LightElement.MapIndex
 	}
+
+	c.LightLastIndex = m0
 
 	for i := range 3 {
 		c00 := c.LightResult[0][i]*(1.0-dx) + c.LightResult[4][i]*dx

@@ -19,6 +19,7 @@ import (
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*state.Config
+	Columns     []state.Column
 	columnGroup *sync.WaitGroup
 }
 
@@ -40,7 +41,12 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 			Counter:      0,
 			DB:           db,
 		},
+		Columns:     make([]state.Column, constants.RenderBlocks),
 		columnGroup: new(sync.WaitGroup),
+	}
+
+	for i := range r.Columns {
+		r.Columns[i].Config = r.Config
 	}
 
 	r.Initialize()
@@ -231,14 +237,12 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	return column.PickedElements
 }
 
-func (r *Renderer) RenderBlock(buffer []uint8, xStart, xEnd int) {
+func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
 	bob := math.Sin(r.Player.Bob)
 	// Initialize a column...
-	column := &state.Column{
-		Config:          r.Config,
-		CameraZ:         r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
-		MaterialSampler: state.MaterialSampler{Config: r.Config},
-	}
+	column := &r.Columns[columnIndex]
+	column.CameraZ = r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob
+	column.MaterialSampler = state.MaterialSampler{Config: r.Config}
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 
 	for x := xStart; x < xEnd; x++ {
@@ -302,15 +306,14 @@ func (r *Renderer) Render(buffer []uint8) {
 	r.Counter = 0
 
 	if constants.RenderMultiThreaded {
-		blocks := 64
-		blockSize := r.ScreenWidth / blocks
-		r.columnGroup.Add(blocks)
-		for x := 0; x < blocks; x++ {
-			go r.RenderBlock(buffer, x*blockSize, x*blockSize+blockSize)
+		blockSize := r.ScreenWidth / constants.RenderBlocks
+		r.columnGroup.Add(constants.RenderBlocks)
+		for x := 0; x < constants.RenderBlocks; x++ {
+			go r.RenderBlock(buffer, x, x*blockSize, x*blockSize+blockSize)
 		}
 		r.columnGroup.Wait()
 	} else {
-		r.RenderBlock(buffer, 0, r.ScreenWidth)
+		r.RenderBlock(buffer, 0, 0, r.ScreenWidth)
 	}
 	r.RenderHud(buffer)
 }
