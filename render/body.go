@@ -73,8 +73,8 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	xScale := depthScale * b.Size.Render[0]
 	x1 := (x - xScale*0.5)
 	x2 := x1 + xScale
-	c.U = 0.5 + (float64(c.X)-x)/xScale
-	if x1 > float64(c.X) || x2 < float64(c.X) {
+	c.U = 0.5 + (float64(c.ScreenX)-x)/xScale
+	if x1 > float64(c.ScreenX) || x2 < float64(c.ScreenX) {
 		return
 	}
 
@@ -85,7 +85,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	c.ClippedStart = concepts.Clamp(c.ScreenStart, c.YStart, c.YEnd)
 	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
 
-	if c.Pick && c.Y >= c.ClippedStart && c.Y <= c.ClippedEnd {
+	if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
 		c.PickedElements = append(c.PickedElements, state.PickedElement{Type: state.PickBody, Element: ref})
 		return
 	}
@@ -113,7 +113,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	}
 
 	for y := c.ClippedStart; y < c.ClippedEnd; y++ {
-		screenIndex := (y*r.ScreenWidth + c.X)
+		screenIndex := (y*r.ScreenWidth + c.ScreenX)
 		if c.Distance >= r.ZBuffer[screenIndex] {
 			continue
 		}

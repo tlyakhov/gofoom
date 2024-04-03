@@ -9,9 +9,9 @@ import (
 
 type MaterialSampler struct {
 	*Config
-	Output concepts.Vector4
-	X, Y   int
-	Angle  float64
+	Output           concepts.Vector4
+	ScreenX, ScreenY int
+	Angle            float64
 }
 
 func (ms *MaterialSampler) SampleShader(ref *concepts.EntityRef, extraStages []*materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {
@@ -41,10 +41,10 @@ func (c *MaterialSampler) sampleTexture(result *concepts.Vector4, material *conc
 	if stage != nil {
 		u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
 		if (stage.Flags & materials.ShaderSky) != 0 {
-			v = float64(c.Y) / (float64(c.ScreenHeight) - 1)
+			v = float64(c.ScreenY) / (float64(c.ScreenHeight) - 1)
 
 			if (stage.Flags & materials.ShaderStaticBackground) != 0 {
-				u = float64(c.X) / (float64(c.ScreenWidth) - 1)
+				u = float64(c.ScreenX) / (float64(c.ScreenWidth) - 1)
 			} else {
 				u = c.Angle / (2.0 * math.Pi)
 			}

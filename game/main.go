@@ -160,7 +160,7 @@ func run() {
 	db = concepts.NewEntityComponentDB()
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
-	//controllers.CreateTestWorld2(db)
+	//controllers.CreateTestWorld(db)
 	//db.Save("data/worlds/exported_test.json")
 	if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)

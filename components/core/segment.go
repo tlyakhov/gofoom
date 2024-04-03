@@ -157,6 +157,7 @@ func (s *Segment) Construct(db *concepts.EntityComponentDB, data map[string]any)
 	s.Normal = concepts.Vector2{}
 	s.Bottom = 0
 	s.Top = 64
+	s.Surface.Construct(db, nil)
 
 	if data == nil {
 		return

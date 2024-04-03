@@ -6,7 +6,7 @@ import (
 )
 
 func WallMidPick(s *state.Column) {
-	if s.Y >= s.ClippedStart && s.Y < s.ClippedEnd {
+	if s.ScreenY >= s.ClippedStart && s.ScreenY < s.ClippedEnd {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickMid, Element: s.Segment})
 	}
 }
@@ -21,13 +21,13 @@ func WallMid(s *state.Column, internalSegment bool) {
 		}
 		u = (s.Segment.A[0] + s.Segment.A[1] + u*s.Segment.Length) / 64.0
 	}
-	for s.Y = s.ClippedStart; s.Y < s.ClippedEnd; s.Y++ {
-		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
+	for s.ScreenY = s.ClippedStart; s.ScreenY < s.ClippedEnd; s.ScreenY++ {
+		screenIndex := uint32(s.ScreenX + s.ScreenY*s.ScreenWidth)
 
 		if s.Distance >= s.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(s.Y-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
+		v := float64(s.ScreenY-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
 		s.RaySegIntersect[2] = s.TopZ + v*(s.BottomZ-s.TopZ)
 		lightV := v
 		if !internalSegment && (s.Sector.FloorSlope != 0 || s.Sector.CeilSlope != 0) {

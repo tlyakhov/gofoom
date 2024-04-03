@@ -35,36 +35,37 @@ type Column struct {
 	*Config
 	MaterialSampler
 	LightElement
-	X, Y, YStart, YEnd int
-	Sector             *core.Sector
-	Segment            *core.Segment
-	SectorSegment      *core.SectorSegment
-	Ray                *Ray
-	Angle              float64
-	AngleCos           float64
-	AngleSin           float64
-	RaySegTest         concepts.Vector2
-	RaySegIntersect    concepts.Vector3
-	Distance           float64
-	LastPortalDistance float64
-	U                  float64
-	Depth              int
-	CameraZ            float64
-	BottomZ            float64
-	TopZ               float64
-	ProjHeightTop      float64
-	ProjHeightBottom   float64
-	ScreenStart        int
-	ScreenEnd          int
-	ClippedStart       int
-	ClippedEnd         int
-	Light              concepts.Vector4
-	LightVoxelA        concepts.Vector3
-	LightVoxelB        concepts.Vector3
-	LightResult        [8]concepts.Vector3
-	LightLastIndex     uint64
-	Pick               bool
-	PickedElements     []PickedElement
+	YStart, YEnd        int
+	Sector              *core.Sector
+	Segment             *core.Segment
+	SectorSegment       *core.SectorSegment
+	Ray                 *Ray
+	Angle               float64
+	AngleCos            float64
+	AngleSin            float64
+	RaySegTest          concepts.Vector2
+	RaySegIntersect     concepts.Vector3
+	Distance            float64
+	LastPortalDistance  float64
+	U                   float64
+	Depth               int
+	CameraZ             float64
+	BottomZ             float64
+	TopZ                float64
+	ProjHeightTop       float64
+	ProjHeightBottom    float64
+	ScreenStart         int
+	ScreenEnd           int
+	ClippedStart        int
+	ClippedEnd          int
+	Light               concepts.Vector4
+	LightVoxelA         concepts.Vector3
+	LightResult         [8]concepts.Vector3
+	LightLastIndex      uint64
+	LightLastColIndices []uint64
+	LightLastColResults []concepts.Vector3
+	Pick                bool
+	PickedElements      []PickedElement
 }
 
 func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
@@ -103,7 +104,7 @@ func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
 }
 
 func (c *Column) ProjectZ(z float64) float64 {
-	return z * c.ViewFix[c.X] / c.Distance
+	return z * c.ViewFix[c.ScreenX] / c.Distance
 }
 
 func (c *Column) CalcScreen() {
@@ -129,8 +130,9 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	result[0] = dbg[0] - math.Floor(dbg[0])
 	result[1] = dbg[1] - math.Floor(dbg[1])
 	result[2] = dbg[2] - math.Floor(dbg[2])
-	return result
-	result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
+	return result*/
+	// Test depth
+	/*result[0] = concepts.Clamp(dist/500.0, 0.0, 1.0)
 	result[1] = result[0]
 	result[2] = result[0]
 	return result*/
@@ -149,6 +151,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	m0 := c.Sector.WorldToLightmapAddress(world, flags)
 	c.LightElement.MapIndex = m0
 	c.Sector.LightmapAddressToWorld(&c.LightVoxelA, m0)
+	// These deltas represent 0.0 - 1.0 distances within the light voxel
 	dx := (world[0] - c.LightVoxelA[0]) / constants.LightGrid
 	dy := (world[1] - c.LightVoxelA[1]) / constants.LightGrid
 	dz := (world[2] - c.LightVoxelA[2]) / constants.LightGrid
@@ -158,32 +161,23 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	}
 
 	if m0 != c.LightLastIndex {
-		c.LightElement.Get()
-		c.LightResult[0] = c.LightElement.Output
-	}
-	for i := 1; i < 8; i++ {
-		c.LightElement.MapIndex = m0
-		c.LightVoxelB = c.LightVoxelA
-		if (i & 1) != 0 {
-			c.LightVoxelB[2] += constants.LightGrid
-			c.LightElement.MapIndex += 1 << 16
-		}
-		if (i & 2) != 0 {
-			c.LightVoxelB[1] += constants.LightGrid
-			c.LightElement.MapIndex += 1 << 32
-		}
-		if (i & 4) != 0 {
-			c.LightVoxelB[0] += constants.LightGrid
-			c.LightElement.MapIndex += 1 << 48
-		}
-
-		if m0 != c.LightLastIndex {
+		if m0 == c.LightLastColIndices[c.ScreenY] && c.LightLastColIndices[c.ScreenY] != 0 {
+			copy(c.LightResult[:], c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8])
+		} else {
 			c.LightElement.Get()
-			c.LightResult[i] = c.LightElement.Output
+			c.LightResult[0] = c.LightElement.Output
+			c.LightLastColIndices[c.ScreenY] = m0
+			for i := 1; i < 8; i++ {
+				// Some bit shifting to generate our light voxel
+				// addresses without ifs. See LightmapAddressToWorld for details
+				c.LightElement.MapIndex = m0 + uint64(i&1)<<16 + uint64(i&2)<<(32-1) + uint64(i&4)<<(48-2)
+				c.LightElement.Get()
+				c.LightResult[i] = c.LightElement.Output
+			}
+			copy(c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8], c.LightResult[:])
 		}
+		c.LightLastIndex = m0
 	}
-
-	c.LightLastIndex = m0
 
 	for i := range 3 {
 		c00 := c.LightResult[0][i]*(1.0-dx) + c.LightResult[4][i]*dx

@@ -6,7 +6,7 @@ import (
 )
 
 func WallHiPick(s *state.ColumnPortal) {
-	if s.Y >= s.ClippedStart && s.Y < s.AdjClippedTop {
+	if s.ScreenY >= s.ClippedStart && s.ScreenY < s.AdjClippedTop {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickHigh, Element: s.AdjSegment})
 	}
 }
@@ -21,12 +21,12 @@ func WallHi(s *state.ColumnPortal) {
 		}
 		u = (s.Segment.A[0] + s.Segment.A[1] + u*s.Segment.Length) / 64.0
 	}
-	for s.Y = s.ClippedStart; s.Y < s.AdjClippedTop; s.Y++ {
-		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
+	for s.ScreenY = s.ClippedStart; s.ScreenY < s.AdjClippedTop; s.ScreenY++ {
+		screenIndex := uint32(s.ScreenX + s.ScreenY*s.ScreenWidth)
 		if s.Distance >= s.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(s.Y-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
+		v := float64(s.ScreenY-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
 		s.RaySegIntersect[2] = (1.0-v)*s.TopZ + v*s.AdjCeilZ
 		lightV := (s.Sector.Max[2] - s.RaySegIntersect[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
@@ -49,7 +49,7 @@ func WallHi(s *state.ColumnPortal) {
 }
 
 func WallLowPick(s *state.ColumnPortal) {
-	if s.Y >= s.AdjClippedBottom && s.Y < s.ClippedEnd {
+	if s.ScreenY >= s.AdjClippedBottom && s.ScreenY < s.ClippedEnd {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickLow, Element: s.AdjSegment})
 	}
 }
@@ -64,12 +64,12 @@ func WallLow(s *state.ColumnPortal) {
 		}
 		u = (s.Segment.A[0] + s.Segment.A[1] + u*s.Segment.Length) / 64.0
 	}
-	for s.Y = s.AdjClippedBottom; s.Y < s.ClippedEnd; s.Y++ {
-		screenIndex := uint32(s.X + s.Y*s.ScreenWidth)
+	for s.ScreenY = s.AdjClippedBottom; s.ScreenY < s.ClippedEnd; s.ScreenY++ {
+		screenIndex := uint32(s.ScreenX + s.ScreenY*s.ScreenWidth)
 		if s.Distance >= s.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(s.Y-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
+		v := float64(s.ScreenY-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
 		s.RaySegIntersect[2] = (1.0-v)*s.AdjFloorZ + v*s.BottomZ
 		lightV := (s.Sector.Max[2] - s.RaySegIntersect[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
