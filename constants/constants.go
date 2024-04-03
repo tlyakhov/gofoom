@@ -7,7 +7,7 @@ const (
 	MinMillisPerFrame = 1000.0 / 10.0 // Ensure we don't do a spiral of death at framerates < 10
 
 	// Rendering constants
-	RenderBlocks     = 64  // When multi-threaded, each block will have its own goroutine
+	RenderBlocks     = 32  // When multi-threaded, each block will have its own goroutine
 	MaxPortals       = 100 // avoid infinite portal traversal
 	IntersectEpsilon = 1e-10
 	// Decrease this value for more detailed shadows. 2 looks nice, uses lots of

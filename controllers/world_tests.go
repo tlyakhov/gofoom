@@ -13,6 +13,7 @@ import (
 func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size float64) *core.Sector {
 	isector := archetypes.CreateSector(db)
 	sector := core.SectorFromDb(isector)
+	sector.Construct(nil)
 	named := db.NewAttachedComponent(isector.Entity, concepts.NamedComponentIndex).(*concepts.Named)
 	named.Name = name
 
@@ -50,20 +51,25 @@ func CreateTestGrass(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	tex.Filter = true
 	tex.GenerateMipMaps = true
 	tex.Load()
-	//tiled := materials.TiledFromDb(igrass)
-	//tiled.Scale = 5.0
 	return igrass
 }
 func CreateTestSky(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	isky := archetypes.CreateBasic(db, materials.SolidComponentIndex) //materials.SkyComponentIndex)
-	nmat := db.NewAttachedComponent(isky.Entity, concepts.NamedComponentIndex).(*concepts.Named)
-	nmat.Name = "Sky"
-	tex := db.NewAttachedComponent(isky.Entity, materials.ImageComponentIndex).(*materials.Image)
-	tex.Source = "data/Sky.png"
-	tex.Filter = false
-	tex.GenerateMipMaps = false
-	tex.Load()
-	return isky
+	img := db.NewAttachedComponent(db.NewEntity(), materials.ImageComponentIndex).(*materials.Image)
+	img.Source = "data/Sky.png"
+	img.Filter = false
+	img.GenerateMipMaps = false
+	img.Load()
+
+	ref := archetypes.CreateBasic(db, materials.ShaderComponentIndex)
+	sky := materials.ShaderFromDb(ref)
+	sky.Stages = append(sky.Stages, new(materials.ShaderStage))
+	sky.Stages[0].Construct(nil)
+	sky.Stages[0].Texture = img.Ref()
+	sky.Stages[0].Flags = materials.ShaderSky | materials.ShaderTiled
+	named := db.NewAttachedComponent(ref.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+	named.Name = "Sky"
+
+	return ref
 }
 
 func CreateTestDirt(db *concepts.EntityComponentDB) *concepts.EntityRef {
@@ -75,7 +81,6 @@ func CreateTestDirt(db *concepts.EntityComponentDB) *concepts.EntityRef {
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.Load()
-	//materials.TiledFromDb(idirt)
 	return idirt
 }
 

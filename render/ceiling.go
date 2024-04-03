@@ -8,7 +8,7 @@ import (
 )
 
 func CeilingPick(s *state.Column) {
-	if s.Y >= s.YStart && s.Y < s.ClippedStart {
+	if s.ScreenY >= s.YStart && s.ScreenY < s.ClippedStart {
 		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickCeiling, Element: s.Sector.Ref()})
 	}
 }
@@ -23,9 +23,9 @@ func Ceiling(c *state.Column) {
 	// or world position of the ceiling sample, we have to do a ray-plane intersection.
 	// Thankfully, the only expensive operation is a square root to get the distance.
 	planeRayDelta := &concepts.Vector3{c.Sector.Segments[0].P[0] - c.Ray.Start[0], c.Sector.Segments[0].P[1] - c.Ray.Start[1], c.Sector.TopZ.Render - c.CameraZ}
-	rayDir := concepts.Vector3{c.AngleCos * c.ViewFix[c.X], c.AngleSin * c.ViewFix[c.X], 0}
-	for c.Y = c.YStart; c.Y < c.ClippedStart; c.Y++ {
-		rayDir[2] = float64(c.ScreenHeight/2 - c.Y)
+	rayDir := concepts.Vector3{c.AngleCos * c.ViewFix[c.ScreenX], c.AngleSin * c.ViewFix[c.ScreenX], 0}
+	for c.ScreenY = c.YStart; c.ScreenY < c.ClippedStart; c.ScreenY++ {
+		rayDir[2] = float64(c.ScreenHeight/2 - c.ScreenY)
 		denom := c.Sector.CeilNormal.Dot(&rayDir)
 		if denom == 0 {
 			continue
@@ -41,7 +41,7 @@ func Ceiling(c *state.Column) {
 		world := &concepts.Vector3{rayDir[0] * t, rayDir[1] * t, rayDir[2] * t}
 		distToCeil := world.Length()
 		dist2 := world.To2D().Length2()
-		screenIndex := uint32(c.X + c.Y*c.ScreenWidth)
+		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
 
 		if distToCeil > c.ZBuffer[screenIndex] || dist2 > c.Distance*c.Distance {
 			continue

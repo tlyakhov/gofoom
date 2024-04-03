@@ -47,6 +47,8 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 
 	for i := range r.Columns {
 		r.Columns[i].Config = r.Config
+		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
+		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 	}
 
 	r.Initialize()
@@ -191,7 +193,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			c.BottomZ = s.Bottom
 			c.CalcScreen()
 
-			if c.Pick && c.Y >= c.ClippedStart && c.Y <= c.ClippedEnd {
+			if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
 				c.PickedElements = append(c.PickedElements, state.PickedElement{Type: state.PickInternalSegment, Element: erwd.EntityRef})
 				return
 			}
@@ -215,11 +217,11 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.YStart = 0
 	column.YEnd = r.ScreenHeight
 	column.Pick = pick
-	column.X = x
-	column.Y = y
+	column.ScreenX = x
+	column.ScreenY = y
 	column.Angle = r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x]
-	column.MaterialSampler.X = x
-	column.MaterialSampler.Y = y
+	column.MaterialSampler.ScreenX = x
+	column.MaterialSampler.ScreenY = y
 	column.MaterialSampler.Angle = column.Angle
 	column.Sector = r.PlayerBody.Sector()
 	column.AngleSin, column.AngleCos = math.Sincos(column.Angle)
@@ -244,6 +246,9 @@ func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
 	column.CameraZ = r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config}
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	for i := range column.LightLastColIndices {
+		column.LightLastColIndices[i] = 0
+	}
 
 	for x := xStart; x < xEnd; x++ {
 		if x >= xEnd {

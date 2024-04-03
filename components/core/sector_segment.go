@@ -91,6 +91,8 @@ func (s *SectorSegment) Construct(data map[string]any) {
 	s.Normal = concepts.Vector2{}
 	s.PortalHasMaterial = false
 	s.PortalIsPassable = true
+	s.HiSurface.Construct(s.DB, nil)
+	s.LoSurface.Construct(s.DB, nil)
 
 	if data == nil {
 		return
