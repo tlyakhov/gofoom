@@ -28,7 +28,6 @@ func WallHi(s *state.ColumnPortal) {
 		}
 		v := float64(s.ScreenY-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
 		s.RaySegIntersect[2] = (1.0-v)*s.TopZ + v*s.AdjCeilZ
-		lightV := (s.Sector.Max[2] - s.RaySegIntersect[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
 		if surf.Stretch == materials.StretchNone {
 			v = -s.RaySegIntersect[2] / 64.0
@@ -40,7 +39,7 @@ func WallHi(s *state.ColumnPortal) {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.U, lightV, s.Distance)
+			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
 		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
@@ -71,7 +70,6 @@ func WallLow(s *state.ColumnPortal) {
 		}
 		v := float64(s.ScreenY-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
 		s.RaySegIntersect[2] = (1.0-v)*s.AdjFloorZ + v*s.BottomZ
-		lightV := (s.Sector.Max[2] - s.RaySegIntersect[2]) / (s.Sector.Max[2] - s.Sector.Min[2])
 
 		if surf.Stretch == materials.StretchNone {
 			v = -s.RaySegIntersect[2] / 64.0
@@ -83,7 +81,7 @@ func WallLow(s *state.ColumnPortal) {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.U, lightV, s.Distance)
+			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
 		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)

@@ -11,6 +11,19 @@ import (
 
 type Ray struct {
 	Start, End, Delta concepts.Vector2
+	Angle             float64
+	AngleCos          float64
+	AngleSin          float64
+}
+
+func (r *Ray) Set(a float64) {
+	r.Angle = a
+	r.AngleSin, r.AngleCos = math.Sincos(a)
+	r.End = concepts.Vector2{
+		r.Start[0] + constants.MaxViewDistance*r.AngleCos,
+		r.Start[1] + constants.MaxViewDistance*r.AngleSin,
+	}
+	r.Delta.From(&r.End).SubSelf(&r.Start)
 }
 
 type PickedType int
@@ -40,11 +53,9 @@ type Column struct {
 	Segment             *core.Segment
 	SectorSegment       *core.SectorSegment
 	Ray                 *Ray
-	Angle               float64
-	AngleCos            float64
-	AngleSin            float64
 	RaySegTest          concepts.Vector2
 	RaySegIntersect     concepts.Vector3
+	RayFloorCeil        concepts.Vector3
 	Distance            float64
 	LastPortalDistance  float64
 	U                   float64
@@ -86,9 +97,9 @@ func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
 	var dist float64
 	delta := concepts.Vector2{math.Abs(c.RaySegTest[0] - c.Ray.Start[0]), math.Abs(c.RaySegTest[1] - c.Ray.Start[1])}
 	if delta[1] > delta[0] {
-		dist = math.Abs(delta[1] / c.AngleSin)
+		dist = math.Abs(delta[1] / c.Ray.AngleSin)
 	} else {
-		dist = math.Abs(delta[0] / c.AngleCos)
+		dist = math.Abs(delta[0] / c.Ray.AngleCos)
 	}
 
 	if checkDist && (dist > c.Distance || dist < c.LastPortalDistance) {
@@ -118,7 +129,7 @@ func (c *Column) CalcScreen() {
 	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
-func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, u, v, dist float64) *concepts.Vector4 {
+func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, dist float64) *concepts.Vector4 {
 	lit := materials.LitFromDb(material)
 
 	if lit == nil {
@@ -138,8 +149,8 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	return result*/
 
 	// Don't filter far away lightmaps. Tolerate a ~2px snap-in
-	if dist > float64(c.ScreenWidth)*constants.LightGrid*0.5 {
-		c.LightUnfiltered(&c.Light, world, u, v)
+	if true || dist > float64(c.ScreenWidth)*constants.LightGrid*0.25 {
+		c.LightUnfiltered(&c.Light, world)
 		return lit.Apply(result, &c.Light)
 	}
 
@@ -160,10 +171,12 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		fmt.Printf("%v,%v,%v\n", dx, dy, dz)
 	}
 
+	debugVoxel := false
 	if m0 != c.LightLastIndex {
 		if m0 == c.LightLastColIndices[c.ScreenY] && c.LightLastColIndices[c.ScreenY] != 0 {
 			copy(c.LightResult[:], c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8])
 		} else {
+			debugVoxel = true
 			c.LightElement.Get()
 			c.LightResult[0] = c.LightElement.Output
 			c.LightLastColIndices[c.ScreenY] = m0
@@ -190,10 +203,16 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	}
 	c.Light[3] = 1
 
+	if debugVoxel {
+		/*	c.Light[0] = 1
+			c.Light[1] = 0
+			c.Light[2] = 0*/
+	}
+
 	return lit.Apply(result, &c.Light)
 }
 
-func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3, u, v float64) *concepts.Vector4 {
+func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3) *concepts.Vector4 {
 	flags := uint16(c.LightElement.Type)
 	if c.LightElement.Type == LightElementWall {
 		flags += uint16(c.LightElement.Segment.Index)

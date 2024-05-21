@@ -9,9 +9,9 @@ import (
 
 type MaterialSampler struct {
 	*Config
+	*Ray
 	Output           concepts.Vector4
 	ScreenX, ScreenY int
-	Angle            float64
 }
 
 func (ms *MaterialSampler) SampleShader(ref *concepts.EntityRef, extraStages []*materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {

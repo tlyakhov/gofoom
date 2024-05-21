@@ -7,6 +7,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"tlyakhov/gofoom/constants"
 	"unsafe"
 )
 
@@ -28,6 +29,13 @@ func (v *Vector3) To2D() *Vector2 {
 // Zero returns true if all components are 0.
 func (v *Vector3) Zero() bool {
 	return v[0] == 0 && v[1] == 0 && v[2] == 0
+}
+
+// Zero returns true if all components are within an epsilon.
+func (v *Vector3) WithinEpsilon() bool {
+	return v[0] > -constants.IntersectEpsilon && v[0] < constants.IntersectEpsilon &&
+		v[1] > -constants.IntersectEpsilon && v[1] < constants.IntersectEpsilon &&
+		v[2] > -constants.IntersectEpsilon && v[2] < constants.IntersectEpsilon
 }
 
 func (v *Vector3) Clone() *Vector3 {
