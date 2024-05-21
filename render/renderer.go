@@ -219,17 +219,13 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.Pick = pick
 	column.ScreenX = x
 	column.ScreenY = y
-	column.Angle = r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x]
 	column.MaterialSampler.ScreenX = x
 	column.MaterialSampler.ScreenY = y
 	column.MaterialSampler.Angle = column.Angle
 	column.Sector = r.PlayerBody.Sector()
-	column.AngleSin, column.AngleCos = math.Sincos(column.Angle)
-	column.Ray.End = concepts.Vector2{
-		r.PlayerBody.Pos.Render[0] + r.MaxViewDist*column.AngleCos,
-		r.PlayerBody.Pos.Render[1] + r.MaxViewDist*column.AngleSin,
-	}
-	column.Ray.Delta.From(&column.Ray.End).SubSelf(&column.Ray.Start)
+	column.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
+	column.RayFloorCeil[0] = column.Ray.AngleCos * column.ViewFix[column.ScreenX]
+	column.RayFloorCeil[1] = column.Ray.AngleSin * column.ViewFix[column.ScreenX]
 
 	if column.Sector == nil {
 		return nil
@@ -244,8 +240,8 @@ func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
 	column.CameraZ = r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob
-	column.MaterialSampler = state.MaterialSampler{Config: r.Config}
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
 	}

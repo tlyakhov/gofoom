@@ -12,7 +12,7 @@ const (
 	IntersectEpsilon = 1e-10
 	// Decrease this value for more detailed shadows. 2 looks nice, uses lots of
 	// memory and is very slow.
-	LightGrid               = 6.0
+	LightGrid               = 4.0
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.001
 	MaxViewDistance         = 10000.0

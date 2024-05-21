@@ -70,8 +70,22 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		}
 	}
 	le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex)
+	// Ensure our quantized world location is within Z bounds to avoid
+	// weird shadowing.
+	fz, cz := le.Sector.SlopedZRender(le.Q.To2D())
+	if le.Q[2] < fz {
+		le.Q[2] = fz
+	}
+	if le.Q[2] > cz {
+		le.Q[2] = cz
+	}
 	le.Calculate(&le.Q)
-	le.Sector.Lightmap.Store(le.MapIndex, concepts.Vector4{le.Output[0], le.Output[1], le.Output[2], float64(le.Config.Frame + int(r)%ditherHeuristic)})
+	le.Sector.Lightmap.Store(le.MapIndex, concepts.Vector4{
+		le.Output[0],
+		le.Output[1],
+		le.Output[2],
+		float64(le.Config.Frame + int(r)%ditherHeuristic),
+	})
 	return &le.Output
 
 }
@@ -285,6 +299,14 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	le.Output[1] = 0
 	le.Output[2] = 0
 
+	/*refs := make([]*concepts.EntityRef, 0)
+	for _, er := range le.Sector.PVL {
+		refs = append(refs, er)
+	}
+	sort.SliceStable(refs, func(i, j int) bool {
+		return refs[i].Entity < refs[j].Entity
+	})*/
+
 	for _, er := range le.Sector.PVL {
 		light := core.LightFromDb(er)
 		if !light.IsActive() {
@@ -331,7 +353,15 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation
 		}
 
-		if diffuseLight > 0 {
+		if diffuseLight < 0 {
+			//le.Output[0] = 1
+			continue
+		}
+		if le.Filter[3] == 0 {
+			le.Output[0] += light.Diffuse[0] * diffuseLight
+			le.Output[1] += light.Diffuse[1] * diffuseLight
+			le.Output[2] += light.Diffuse[2] * diffuseLight
+		} else {
 			a := 1.0 - le.Filter[3]
 			le.Output[0] += light.Diffuse[0]*diffuseLight*a + le.Filter[0]
 			le.Output[1] += light.Diffuse[1]*diffuseLight*a + le.Filter[1]
