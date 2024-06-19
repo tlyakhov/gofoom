@@ -1,3 +1,6 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
 package scripting_symbols
 
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/archetypes
