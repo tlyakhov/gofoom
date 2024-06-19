@@ -1763,6 +1763,9 @@
         }
       ]
     },
+    "behaviors.VerticalDoor": {
+      "Entity": "25"
+    },
     "concepts.Named": {
       "Entity": "25",
       "Name": "be4pufvvn27o06iajuu0"
@@ -1982,16 +1985,13 @@
           "Duration": 1000,
           "End": 0,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0083333333333333,
+          "Percent": 1.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
-    },
-    "behaviors.VerticalDoor": {
-      "Entity": "25"
     }
   },
   {
@@ -2556,6 +2556,7 @@
       "Name": "Item Test"
     },
     "core.Body": {
+      "Active": false,
       "Angle": {
         "Original": 0
       },
@@ -2572,8 +2573,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.6999999999999991,
-          "Reverse": true,
+          "Percent": 0.78125,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2877,10 +2878,10 @@
     },
     "core.Sector": {
       "Bodies": [
+        "126",
         "140",
         "113",
-        "119",
-        "126"
+        "119"
       ],
       "BottomZ": {
         "Original": 0
@@ -3305,11 +3306,10 @@
     },
     "core.Sector": {
       "Bodies": [
-        "107",
-        "42",
         "21",
         "32",
-        "131"
+        "131",
+        "107"
       ],
       "BottomZ": {
         "Original": -64
@@ -3322,6 +3322,9 @@
       "FloorSurface": {
         "Material": "122"
       },
+      "InternalSegments": [
+        "141"
+      ],
       "Segments": [
         {
           "Hi": {
@@ -3549,11 +3552,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -149.44335826228777,
+          "End": -42.54021035000009,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.22222222222222227,
+          "Percent": 0.5468750000000001,
           "Reverse": false,
-          "Start": -151.75725766418634,
+          "Start": -30.037978567126775,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -6485,6 +6488,9 @@
         }
       ]
     },
+    "behaviors.VerticalDoor": {
+      "Entity": "79"
+    },
     "concepts.Named": {
       "Entity": "79",
       "Name": "be4c3pfvn27mi9gdb9mg"
@@ -6564,16 +6570,13 @@
           "Duration": 1000,
           "End": 0,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0083333333333333,
+          "Percent": 1.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
-    },
-    "behaviors.VerticalDoor": {
-      "Entity": "79"
     }
   },
   {
@@ -6587,6 +6590,9 @@
           "Style": "ScriptStyleStatement"
         }
       ]
+    },
+    "behaviors.VerticalDoor": {
+      "Entity": "80"
     },
     "concepts.Named": {
       "Entity": "80",
@@ -6667,16 +6673,13 @@
           "Duration": 1000,
           "End": 0,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0083333333333333,
+          "Percent": 1.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
-    },
-    "behaviors.VerticalDoor": {
-      "Entity": "80"
     }
   },
   {
@@ -6690,6 +6693,9 @@
           "Style": "ScriptStyleStatement"
         }
       ]
+    },
+    "behaviors.VerticalDoor": {
+      "Entity": "81"
     },
     "concepts.Named": {
       "Entity": "81",
@@ -6770,16 +6776,13 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": -0.008333333333333333,
-          "Reverse": true,
+          "Percent": 0.0078125,
+          "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
         "Original": 64
       }
-    },
-    "behaviors.VerticalDoor": {
-      "Entity": "81"
     }
   },
   {
@@ -8308,8 +8311,8 @@
     },
     "core.Sector": {
       "Bodies": [
-        "101",
-        "102"
+        "102",
+        "101"
       ],
       "BottomZ": {
         "Original": 0
@@ -9273,7 +9276,6 @@
       "Entity": "113"
     },
     "materials.SpriteSheet": {
-      "Billboard": false,
       "Entity": "113",
       "Sprites": [
         {
@@ -9673,7 +9675,6 @@
       "Entity": "119"
     },
     "materials.SpriteSheet": {
-      "Billboard": false,
       "Entity": "119",
       "Sprites": [
         {
@@ -9976,7 +9977,6 @@
       "Entity": "126"
     },
     "materials.SpriteSheet": {
-      "Billboard": false,
       "Entity": "126",
       "Sprites": [
         {
@@ -10287,7 +10287,6 @@
       "Entity": "140"
     },
     "materials.SpriteSheet": {
-      "Billboard": false,
       "Entity": "140",
       "Sprites": [
         {
@@ -10296,6 +10295,26 @@
           "Image": "129"
         }
       ]
+    }
+  },
+  {
+    "Entity": "141",
+    "core.InternalSegment": {
+      "A": {
+        "X": -330,
+        "Y": 210
+      },
+      "B": {
+        "X": -360,
+        "Y": 110
+      },
+      "Bottom": -64,
+      "Entity": "141",
+      "Surface": {
+        "Material": "57",
+        "Stretch": "StretchFill"
+      },
+      "Top": -20
     }
   }
 ]
