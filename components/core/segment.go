@@ -184,6 +184,7 @@ func (s *Segment) Construct(db *concepts.EntityComponentDB, data map[string]any)
 	if v, ok := data["ContactScripts"]; ok {
 		s.ContactScripts = concepts.ConstructSlice[*Script](db, v)
 	}
+	s.Recalculate()
 }
 
 func (s *Segment) Serialize(storePositions bool) map[string]any {

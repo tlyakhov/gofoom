@@ -197,6 +197,11 @@ func (r *Renderer) RenderSector(c *state.Column) {
 				c.PickedElements = append(c.PickedElements, state.PickedElement{Type: state.PickInternalSegment, Element: erwd.EntityRef})
 				return
 			}
+			c.LightElement.Config = r.Config
+			c.LightElement.Sector = c.Sector
+			c.LightElement.Segment = &s.Segment
+			c.LightElement.Type = state.LightElementWall
+			s.Segment.Normal.To3D(&c.LightElement.Normal)
 			WallMid(c, true)
 		} else {
 			r.RenderBody(erwd.EntityRef, c)
