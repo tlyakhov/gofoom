@@ -150,7 +150,8 @@ func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 		for _, p := range picked {
 			objects = append(objects, p.Element)
 		}
-		editor.SelectObjects(objects, true)
+		// TODO: fix
+		//editor.SelectObjects(objects, true)
 	}
 }
 func (g *GameWidget) MouseUp(evt *desktop.MouseEvent) {}

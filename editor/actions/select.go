@@ -24,8 +24,8 @@ type Select struct {
 
 	Mode     string
 	Modifier SelectModifier
-	Original []any
-	Selected []any
+	Original []*state.Selectable
+	Selected []*state.Selectable
 }
 
 func (a *Select) OnMouseDown(evt *desktop.MouseEvent) {
@@ -36,7 +36,7 @@ func (a *Select) OnMouseDown(evt *desktop.MouseEvent) {
 		a.Modifier = SelectSub
 	}
 
-	a.Original = make([]any, len(a.State().SelectedObjects))
+	a.Original = make([]*state.Selectable, len(a.State().SelectedObjects))
 	copy(a.Original, a.State().SelectedObjects)
 
 	a.Mode = "SelectionStart"
@@ -51,28 +51,28 @@ func (a *Select) OnMouseUp() {
 	hovering := a.State().HoveringObjects
 
 	if len(hovering) == 0 { // User is trying to select a sector?
-		hovering = []any{}
+		hovering = []*state.Selectable{}
 		for _, isector := range a.State().DB.All(core.SectorComponentIndex) {
 			sector := isector.(*core.Sector)
 			if sector.IsPointInside2D(&a.State().MouseWorld) {
-				hovering = append(hovering, sector.Ref())
+				hovering = append(hovering, state.SelectableFromSector(sector))
 			}
 		}
 	}
 
 	if a.Modifier == SelectAdd {
-		a.Selected = make([]any, len(a.Original))
+		a.Selected = make([]*state.Selectable, len(a.Original))
 		copy(a.Selected, a.Original)
 		a.Selected = append(a.Selected, hovering...)
 	} else if a.Modifier == SelectSub {
-		a.Selected = []any{}
+		a.Selected = []*state.Selectable{}
 		for _, obj := range a.Original {
-			if state.IndexOf(hovering, obj) == -1 {
+			if obj.IndexOf(hovering) == -1 {
 				a.Selected = append(a.Selected, obj)
 			}
 		}
 	} else {
-		a.Selected = make([]any, len(hovering))
+		a.Selected = make([]*state.Selectable, len(hovering))
 		copy(a.Selected, hovering)
 	}
 	a.SelectObjects(a.Selected, true)

@@ -40,27 +40,23 @@ func (a *RotateSegments) Act() {
 }
 
 func (a *RotateSegments) Undo() {
-	for _, obj := range a.State().SelectedObjects {
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			if sector := core.SectorFromDb(target); sector != nil {
-				a.Rotate(sector, true)
-			}
-		case *core.SectorSegment:
-			a.Rotate(target.Sector, true)
+	for _, s := range a.State().SelectedObjects {
+		switch s.Type {
+		case state.SelectableSectorSegment:
+			fallthrough
+		case state.SelectableSector:
+			a.Rotate(s.Sector, true)
 		}
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *RotateSegments) Redo() {
-	for _, obj := range a.State().SelectedObjects {
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			if sector := core.SectorFromDb(target); sector != nil {
-				a.Rotate(sector, false)
-			}
-		case *core.SectorSegment:
-			a.Rotate(target.Sector, false)
+	for _, s := range a.State().SelectedObjects {
+		switch s.Type {
+		case state.SelectableSectorSegment:
+			fallthrough
+		case state.SelectableSector:
+			a.Rotate(s.Sector, false)
 		}
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)

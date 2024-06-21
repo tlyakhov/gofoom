@@ -152,7 +152,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	return result*/
 
 	// Don't filter far away lightmaps. Tolerate a ~2px snap-in
-	if true || dist > float64(c.ScreenWidth)*constants.LightGrid*0.25 {
+	if dist > float64(c.ScreenWidth)*constants.LightGrid*0.25 {
 		c.LightUnfiltered(&c.Light, world)
 		return lit.Apply(result, &c.Light)
 	}

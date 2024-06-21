@@ -22,8 +22,8 @@ func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 
 func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Push()
-	segmentHovering := state.IndexOf(editor.HoveringObjects, segment.EntityRef) != -1
-	segmentSelected := state.IndexOf(editor.SelectedObjects, segment.EntityRef) != -1
+	segmentHovering := state.SelectableFromInternalSegment(segment).IndexOf(editor.HoveringObjects) != -1
+	segmentSelected := state.SelectableFromInternalSegment(segment).IndexOf(editor.SelectedObjects) != -1
 
 	mw.Context.SetRGB(1, 1, 1)
 
@@ -82,16 +82,16 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 
 	mw.Context.Push()
 
-	sectorHovering := state.IndexOf(editor.HoveringObjects, sector.EntityRef) != -1
-	sectorSelected := state.IndexOf(editor.SelectedObjects, sector.EntityRef) != -1
+	sectorHovering := state.SelectableFromSector(sector).IndexOf(editor.HoveringObjects) != -1
+	sectorSelected := state.SelectableFromSector(sector).IndexOf(editor.SelectedObjects) != -1
 
 	for _, segment := range sector.Segments {
 		if segment.Next == nil || segment.P == segment.Next.P {
 			continue
 		}
 
-		segmentHovering := state.IndexOf(editor.HoveringObjects, segment) != -1
-		segmentSelected := state.IndexOf(editor.SelectedObjects, segment) != -1
+		segmentHovering := state.SelectableFromSegment(segment).IndexOf(editor.HoveringObjects) != -1
+		segmentSelected := state.SelectableFromSegment(segment).IndexOf(editor.SelectedObjects) != -1
 
 		if segment.AdjacentSector.Nil() {
 			mw.Context.SetRGB(1, 1, 1)
@@ -113,14 +113,11 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 
 		// Highlight PVS sectors...
 		for _, obj := range editor.SelectedObjects {
-			switch selected := obj.(type) {
-			case *concepts.EntityRef:
-				if s2 := core.SectorFromDb(selected); s2 != nil && sector != s2 {
-					if s2.PVS[sector.Entity] != nil {
-						mw.Context.SetRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
-					}
-				}
-
+			if obj.Sector == nil || sector == obj.Sector {
+				continue
+			}
+			if obj.Sector.PVS[sector.Entity] != nil {
+				mw.Context.SetRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
 			}
 		}
 

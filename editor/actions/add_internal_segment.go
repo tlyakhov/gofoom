@@ -6,6 +6,7 @@ package actions
 import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -18,7 +19,7 @@ type AddInternalSegment struct {
 func (a *AddInternalSegment) Act() {
 	a.SetMapCursor(desktop.CrosshairCursor)
 	a.Mode = "AddInternalSegment"
-	a.SelectObjects([]any{a.EntityRef}, true)
+	a.SelectObject(state.SelectableFromInternalSegment(a.InternalSegment), true)
 	//set cursor
 }
 

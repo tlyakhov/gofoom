@@ -5,7 +5,6 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
@@ -16,33 +15,17 @@ import (
 type Delete struct {
 	state.IEditor
 
-	Selected []any
-	Saved    map[uint64]any
-}
-
-func (a *Delete) Save(er *concepts.EntityRef) {
-	if _, ok := a.Saved[er.Entity]; !ok {
-		a.Saved[er.Entity] = a.State().DB.SerializeEntity(er.Entity)
-	}
+	Selected []*state.Selectable
+	Saved    map[*state.Selectable]any
 }
 
 func (a *Delete) Act() {
-	a.Saved = make(map[uint64]any)
-	a.Selected = make([]any, len(a.State().SelectedObjects))
+	a.Saved = make(map[*state.Selectable]any)
+	a.Selected = make([]*state.Selectable, len(a.State().SelectedObjects))
 	copy(a.Selected, a.State().SelectedObjects)
 
 	for _, obj := range a.Selected {
-		switch target := obj.(type) {
-		case *core.SectorSegment:
-			a.Save(target.Sector.Ref())
-		case *concepts.EntityRef:
-			if sector := core.SectorFromDb(target); sector != nil {
-				a.Save(target)
-			}
-			if body := core.BodyFromDb(target); body != nil {
-				a.Save(body.SectorEntityRef.Now)
-			}
-		}
+		a.Saved[obj] = obj.Serialize()
 	}
 	a.Redo()
 	a.ActionFinished(false, true, true)
@@ -57,8 +40,22 @@ func (a *Delete) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
-	for entity, saved := range a.Saved {
-		a.State().DB.DetachAll(entity)
+	for s, saved := range a.Saved {
+		switch s.Type {
+		case state.SelectableSector:
+			fallthrough
+		case state.SelectableSectorSegment:
+			// Reattach the whole sector, in case the user deleted the last segment
+			a.State().DB.DetachAll(s.Sector.Entity)
+		case state.SelectableBody:
+			a.State().DB.DetachAll(s.Body.Entity)
+		case state.SelectableInternalSegment:
+			fallthrough
+		case state.SelectableInternalSegmentA:
+			fallthrough
+		case state.SelectableInternalSegmentB:
+			a.State().DB.DetachAll(s.InternalSegment.Entity)
+		}
 		a.State().DB.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
@@ -68,28 +65,42 @@ func (a *Delete) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
-	for _, obj := range a.Selected {
-		switch target := obj.(type) {
-		case *core.SectorSegment:
-			for i, seg := range target.Sector.Segments {
-				if seg != target {
+	for s := range a.Saved {
+		switch s.Type {
+		case state.SelectableSector:
+			s.Sector.Bodies = make(map[uint64]*concepts.EntityRef)
+			s.Sector.InternalSegments = make(map[uint64]*concepts.EntityRef)
+			a.State().DB.DetachAll(s.Sector.Entity)
+		case state.SelectableSectorSegment:
+			for i, seg := range s.Sector.Segments {
+				if seg != s.SectorSegment {
 					continue
 				}
-				target.Sector.Segments = append(target.Sector.Segments[:i], target.Sector.Segments[i+1:]...)
-				if len(target.Sector.Segments) == 0 {
-					target.Sector.Bodies = make(map[uint64]*concepts.EntityRef)
-					a.State().DB.DetachAll(target.Sector.Entity)
+				s.Sector.Segments = append(s.Sector.Segments[:i], s.Sector.Segments[i+1:]...)
+				if len(s.Sector.Segments) == 0 {
+					s.Sector.Bodies = make(map[uint64]*concepts.EntityRef)
+					s.Sector.InternalSegments = make(map[uint64]*concepts.EntityRef)
+					a.State().DB.DetachAll(s.Sector.Entity)
 				}
 				break
 			}
-		case *concepts.EntityRef:
-			if behaviors.PlayerFromDb(target) != nil {
+		case state.SelectableBody:
+			if behaviors.PlayerFromDb(s.Body.EntityRef) != nil {
 				// Otherwise weird things happen...
 				continue
 			}
-			a.State().DB.DetachAll(target.Entity)
-			if body := core.BodyFromDb(target); body != nil {
-				delete(body.Sector().Bodies, target.Entity)
+			a.State().DB.DetachAll(s.Body.Entity)
+			if s.Body.Sector() != nil {
+				delete(s.Body.Sector().Bodies, s.Body.Entity)
+			}
+		case state.SelectableInternalSegment:
+			fallthrough
+		case state.SelectableInternalSegmentA:
+			fallthrough
+		case state.SelectableInternalSegmentB:
+			a.State().DB.DetachAll(s.InternalSegment.Entity)
+			if s.InternalSegment.Sector() != nil {
+				delete(s.InternalSegment.Sector().Bodies, s.InternalSegment.Entity)
 			}
 		}
 	}

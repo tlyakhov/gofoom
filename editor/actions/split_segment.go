@@ -49,32 +49,34 @@ func (a *SplitSegment) OnMouseUp() {
 	a.NewSegments = []*segmentSplitter{}
 
 	// Split only selected if any, otherwise all sectors/segments.
-	all := a.State().SelectedObjects
-	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().DB) {
+	// TODO: also split internal segments
+	var segments []*core.SectorSegment
+	if len(a.State().SelectedObjects) == 0 {
 		allSectors := a.State().DB.Components[core.SectorComponentIndex]
-		all = make([]any, len(allSectors))
-		i := 0
-		for _, s := range allSectors {
-			all[i] = s.Ref()
-			i++
+		segments = make([]*core.SectorSegment, 0)
+		for _, attachable := range allSectors {
+			sector := attachable.(*core.Sector)
+			segments = append(segments, sector.Segments...)
+		}
+	} else {
+		segments = make([]*core.SectorSegment, 0)
+		visited := make(map[*core.SectorSegment]bool)
+		for _, s := range a.State().SelectedObjects {
+			switch s.Type {
+			case state.SelectableSectorSegment:
+				segments = append(segments, s.SectorSegment)
+				visited[s.SectorSegment] = true
+			case state.SelectableSector:
+				for _, seg := range s.Sector.Segments {
+					segments = append(segments, seg)
+					visited[seg] = true
+				}
+			}
 		}
 	}
 
-	for _, selected := range all {
-		switch target := selected.(type) {
-		case *concepts.EntityRef:
-			if sector := core.SectorFromDb(target); sector != nil {
-				for j := 0; j < len(sector.Segments); j++ {
-					if a.Split(&segmentSplitter{
-						original: sector.Segments[j]}) {
-						j++ // Avoid infinite splitting.
-					}
-				}
-			}
-		case *core.SectorSegment:
-			a.Split(&segmentSplitter{original: target})
-		}
-
+	for _, seg := range segments {
+		a.Split(&segmentSplitter{original: seg})
 	}
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
