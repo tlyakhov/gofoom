@@ -68,7 +68,7 @@ func SelectableFromEntityRef(ref *concepts.EntityRef) *Selectable {
 	return nil
 }
 
-func (target *Selectable) IndexOf(list []*Selectable) int {
+func (target *Selectable) IndexIn(list []*Selectable) int {
 	for i, test := range list {
 		if test.Type != target.Type {
 			continue
@@ -100,7 +100,7 @@ func (target *Selectable) IndexOf(list []*Selectable) int {
 	return -1
 }
 func (s *Selectable) AddToList(list *[]*Selectable) bool {
-	if s.IndexOf(*list) >= 0 {
+	if s.IndexIn(*list) >= 0 {
 		return false
 	}
 	*list = append(*list, s)

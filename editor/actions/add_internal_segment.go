@@ -54,24 +54,25 @@ func (a *AddInternalSegment) OnMouseMove() {
 	case "AddInternalSegment":
 		fallthrough
 	case "AddInternalSegmentA":
-		*a.A = *worldGrid
+		a.A.From(worldGrid)
 		fallthrough
 	case "AddInternalSegmentB":
-		*a.B = *worldGrid
+		a.B.From(worldGrid)
 	}
 	if a.ContainingSector != nil {
 		a.Bottom, a.Top = a.ContainingSector.SlopedZOriginal(worldGrid)
 	}
 	a.Recalculate()
+	//fmt.Printf("iseg: %v, %v\n", a.A.StringHuman(), a.B.StringHuman())
 }
 
 func (a *AddInternalSegment) OnMouseUp() {
 	switch a.Mode {
 	case "AddInternalSegmentA":
-		*a.A = *a.WorldGrid(&a.State().MouseWorld)
+		a.A.From(a.WorldGrid(&a.State().MouseWorld))
 		a.Mode = "AddInternalSegmentB"
 	case "AddInternalSegmentB":
-		*a.B = *a.WorldGrid(&a.State().MouseWorld)
+		a.B.From(a.WorldGrid(&a.State().MouseWorld))
 		a.Mode = "AddInternalSegment"
 		a.State().Lock.Lock()
 		a.State().Modified = true

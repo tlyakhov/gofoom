@@ -67,7 +67,7 @@ func (a *Select) OnMouseUp() {
 	} else if a.Modifier == SelectSub {
 		a.Selected = []*state.Selectable{}
 		for _, obj := range a.Original {
-			if obj.IndexOf(hovering) == -1 {
+			if obj.IndexIn(hovering) == -1 {
 				a.Selected = append(a.Selected, obj)
 			}
 		}

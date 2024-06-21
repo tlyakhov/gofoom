@@ -48,8 +48,8 @@ func (mw *MapWidget) DrawBody(ibody *concepts.EntityRef) {
 		mw.Context.SetRGB(light.Diffuse[0], light.Diffuse[1], light.Diffuse[2])
 	} // Sprite...
 
-	hovering := state.SelectableFromBody(body).IndexOf(editor.HoveringObjects) != -1
-	selected := state.SelectableFromBody(body).IndexOf(editor.SelectedObjects) != -1
+	hovering := state.SelectableFromBody(body).IndexIn(editor.HoveringObjects) != -1
+	selected := state.SelectableFromBody(body).IndexIn(editor.SelectedObjects) != -1
 	if selected {
 		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
 	} else if hovering {

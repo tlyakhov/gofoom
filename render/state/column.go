@@ -82,9 +82,9 @@ type Column struct {
 	PickedElements      []PickedElement
 }
 
-func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool) bool {
+func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool, twoSided bool) bool {
 	// Wall is facing away from us
-	if c.Ray.Delta.Dot(&segment.Normal) > 0 {
+	if !twoSided && c.Ray.Delta.Dot(&segment.Normal) > 0 {
 		return false
 	}
 

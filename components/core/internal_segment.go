@@ -15,6 +15,7 @@ type InternalSegment struct {
 	concepts.Attached `editable:"^"`
 	Segment           `editable:"^"`
 
+	TwoSided        bool `editable:"Two sided?"`
 	SectorEntityRef *concepts.EntityRef
 }
 
@@ -39,8 +40,14 @@ func (s *InternalSegment) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Segment.Construct(s.DB, data)
 
+	s.TwoSided = false
+
 	if data == nil {
 		return
+	}
+
+	if v, ok := data["TwoSided"]; ok {
+		s.TwoSided = v.(bool)
 	}
 }
 
@@ -49,6 +56,10 @@ func (s *InternalSegment) Serialize() map[string]any {
 	seg := s.Segment.Serialize(true)
 	for k, v := range seg {
 		result[k] = v
+	}
+
+	if s.TwoSided {
+		result["TwoSided"] = true
 	}
 	return result
 }

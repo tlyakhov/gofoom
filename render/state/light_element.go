@@ -180,6 +180,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				}
 			}
 		}
+		// TODO: Generate shadows for internal segments as well
 
 		var next *core.Sector
 		// Since our sectors can be concave, we can't just go through the first portal we find,

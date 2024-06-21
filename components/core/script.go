@@ -33,6 +33,7 @@ func (e *Script) codeCommonHeader() string {
 	import "tlyakhov/gofoom/concepts"
 	import "tlyakhov/gofoom/constants"
 	import "log"
+	import "fmt"
 	`
 }
 func (e *Script) codeBoolExpr() string {

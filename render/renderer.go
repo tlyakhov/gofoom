@@ -141,7 +141,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 func (r *Renderer) RenderSector(c *state.Column) {
 	c.Distance = constants.MaxViewDistance
 	for _, sectorSeg := range c.Sector.Segments {
-		if !c.IntersectSegment(&sectorSeg.Segment, true) {
+		if !c.IntersectSegment(&sectorSeg.Segment, true, false) {
 			continue
 		}
 		c.SectorSegment = sectorSeg
@@ -155,6 +155,8 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		r.DebugNotices.Push(dbg)
 	}
 
+	// TODO: We need to remove this allocation without creating a memory
+	// leak.
 	sorted := make([]entityRefWithDist2, len(c.Sector.Bodies)+len(c.Sector.InternalSegments))
 	i := 0
 	for _, ref := range c.Sector.Bodies {
@@ -167,7 +169,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	for _, ref := range c.Sector.InternalSegments {
 		s := core.InternalSegmentFromDb(ref)
 		// TODO: we do this again later. Should we optimize this?
-		if !c.IntersectSegment(&s.Segment, false) {
+		if !c.IntersectSegment(&s.Segment, false, s.TwoSided) {
 			continue
 		}
 		sorted[i].EntityRef = ref
@@ -179,6 +181,8 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	slices.SortFunc(sorted, func(a entityRefWithDist2, b entityRefWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
+	savedSectorSegment := c.SectorSegment
+	c.SectorSegment = nil
 	for _, erwd := range sorted {
 		if erwd.EntityRef == nil {
 			continue
@@ -188,10 +192,10 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			if s == nil || !s.IsActive() {
 				continue
 			}
-			if !c.IntersectSegment(&s.Segment, false) {
+			if !c.IntersectSegment(&s.Segment, false, s.TwoSided) {
 				continue
 			}
-			c.SectorSegment = nil
+
 			c.TopZ = s.Top
 			c.BottomZ = s.Bottom
 			c.CalcScreen()
@@ -210,6 +214,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			r.RenderBody(erwd.EntityRef, c)
 		}
 	}
+	c.SectorSegment = savedSectorSegment
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
