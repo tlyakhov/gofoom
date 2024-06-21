@@ -351,9 +351,9 @@
     },
     "core.Sector": {
       "Bodies": [
-        "8",
         "107",
-        "9"
+        "9",
+        "8"
       ],
       "BottomZ": {
         "Original": 0
@@ -2084,8 +2084,8 @@
     },
     "core.Sector": {
       "Bodies": [
-        "42",
-        "125"
+        "125",
+        "42"
       ],
       "BottomZ": {
         "Original": -100
@@ -2573,8 +2573,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.78125,
-          "Reverse": false,
+          "Percent": 0.1875,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2877,12 +2877,6 @@
       "Name": "be46jcvvn27lk1dec8k0"
     },
     "core.Sector": {
-      "Bodies": [
-        "126",
-        "140",
-        "113",
-        "119"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -2894,6 +2888,12 @@
       "FloorSurface": {
         "Material": "122"
       },
+      "InternalSegments": [
+        "142",
+        "143",
+        "144",
+        "145"
+      ],
       "Segments": [
         {
           "AdjacentSector": "77",
@@ -3308,8 +3308,7 @@
       "Bodies": [
         "21",
         "32",
-        "131",
-        "107"
+        "131"
       ],
       "BottomZ": {
         "Original": -64
@@ -3552,11 +3551,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -42.54021035000009,
+          "End": -20.109793774211038,
           "Lifetime": "AnimationLifetimeOnce",
           "Percent": 0.5468750000000001,
           "Reverse": false,
-          "Start": -30.037978567126775,
+          "Start": -6.904239871031645,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -9231,62 +9230,6 @@
     }
   },
   {
-    "Entity": "113",
-    "core.Body": {
-      "Angle": {
-        "Original": 0
-      },
-      "CollisionResponse": "Slide",
-      "Entity": "113",
-      "Mass": 0,
-      "MountHeight": 15,
-      "Pos": {
-        "Original": {
-          "X": 16,
-          "Y": -266,
-          "Z": 0
-        }
-      },
-      "Size": {
-        "Original": {
-          "X": 32,
-          "Y": 32
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
-      }
-    },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
-      "Entity": "113"
-    },
-    "materials.SpriteSheet": {
-      "Entity": "113",
-      "Sprites": [
-        {
-          "Angle": 0,
-          "Frame": 0,
-          "Image": "129"
-        }
-      ]
-    }
-  },
-  {
     "Entity": "114",
     "concepts.Named": {
       "Entity": "114",
@@ -9630,62 +9573,6 @@
     }
   },
   {
-    "Entity": "119",
-    "core.Body": {
-      "Angle": {
-        "Original": -90
-      },
-      "CollisionResponse": "Slide",
-      "Entity": "119",
-      "Mass": 0,
-      "MountHeight": 15,
-      "Pos": {
-        "Original": {
-          "X": 0,
-          "Y": -282,
-          "Z": 0
-        }
-      },
-      "Size": {
-        "Original": {
-          "X": 32,
-          "Y": 32
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
-      }
-    },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
-      "Entity": "119"
-    },
-    "materials.SpriteSheet": {
-      "Entity": "119",
-      "Sprites": [
-        {
-          "Angle": 0,
-          "Frame": 0,
-          "Image": "129"
-        }
-      ]
-    }
-  },
-  {
     "Entity": "120",
     "concepts.Named": {
       "Entity": "120",
@@ -9929,62 +9816,6 @@
       },
       "Entity": "125",
       "Strength": 10
-    }
-  },
-  {
-    "Entity": "126",
-    "core.Body": {
-      "Angle": {
-        "Original": 90
-      },
-      "CollisionResponse": "Slide",
-      "Entity": "126",
-      "Mass": 0,
-      "MountHeight": 15,
-      "Pos": {
-        "Original": {
-          "X": 0,
-          "Y": -250,
-          "Z": 0
-        }
-      },
-      "Size": {
-        "Original": {
-          "X": 32,
-          "Y": 32
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
-      }
-    },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
-      "Entity": "126"
-    },
-    "materials.SpriteSheet": {
-      "Entity": "126",
-      "Sprites": [
-        {
-          "Angle": 0,
-          "Frame": 0,
-          "Image": "129"
-        }
-      ]
     }
   },
   {
@@ -10242,62 +10073,6 @@
     }
   },
   {
-    "Entity": "140",
-    "core.Body": {
-      "Angle": {
-        "Original": 180
-      },
-      "CollisionResponse": "Slide",
-      "Entity": "140",
-      "Mass": 0,
-      "MountHeight": 15,
-      "Pos": {
-        "Original": {
-          "X": -16,
-          "Y": -266,
-          "Z": 0
-        }
-      },
-      "Size": {
-        "Original": {
-          "X": 32,
-          "Y": 32
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
-      }
-    },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
-      "Entity": "140"
-    },
-    "materials.SpriteSheet": {
-      "Entity": "140",
-      "Sprites": [
-        {
-          "Angle": 0,
-          "Frame": 0,
-          "Image": "129"
-        }
-      ]
-    }
-  },
-  {
     "Entity": "141",
     "core.InternalSegment": {
       "A": {
@@ -10315,6 +10090,90 @@
         "Stretch": "StretchFill"
       },
       "Top": -20
+    }
+  },
+  {
+    "Entity": "142",
+    "core.InternalSegment": {
+      "A": {
+        "X": -40,
+        "Y": -310
+      },
+      "B": {
+        "X": -40,
+        "Y": -260
+      },
+      "Bottom": 0,
+      "Entity": "142",
+      "Surface": {
+        "Material": "129",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
+    }
+  },
+  {
+    "Entity": "143",
+    "core.InternalSegment": {
+      "A": {
+        "X": -40,
+        "Y": -260
+      },
+      "B": {
+        "X": 10,
+        "Y": -260
+      },
+      "Bottom": 0,
+      "Entity": "143",
+      "Surface": {
+        "Material": "129",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
+    }
+  },
+  {
+    "Entity": "144",
+    "core.InternalSegment": {
+      "A": {
+        "X": 10,
+        "Y": -260
+      },
+      "B": {
+        "X": 10,
+        "Y": -310
+      },
+      "Bottom": 0,
+      "Entity": "144",
+      "Surface": {
+        "Material": "129",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
+    }
+  },
+  {
+    "Entity": "145",
+    "core.InternalSegment": {
+      "A": {
+        "X": 10,
+        "Y": -310
+      },
+      "B": {
+        "X": -40,
+        "Y": -310
+      },
+      "Bottom": 0,
+      "Entity": "145",
+      "Surface": {
+        "Material": "129",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
     }
   }
 ]

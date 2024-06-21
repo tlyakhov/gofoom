@@ -160,7 +160,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		}
 		entity := list.BackingStore[id.Row][0].(int)
 		s := state.SelectableFromEntityRef(list.State().DB.EntityRef(uint64(entity)))
-		if s.IndexOf(editor.SelectedObjects) == -1 {
+		if s.IndexIn(editor.SelectedObjects) == -1 {
 			editor.SelectObject(s, false)
 		}
 		log.Printf("select: %v", entity)
