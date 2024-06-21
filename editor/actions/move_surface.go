@@ -45,24 +45,16 @@ func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 func (a *MoveSurface) Act() {
 	a.State().Lock.Lock()
 
-	a.Original = make([]float64, len(a.State().SelectedObjects))
-	for i, obj := range a.State().SelectedObjects {
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			if sector := core.SectorFromDb(target); sector != nil {
-				a.Original[i] = *a.Get(sector)
-				*a.Get(sector) += a.Delta
-				sector.BottomZ.Reset()
-				sector.TopZ.Reset()
-			}
-		case *core.SectorSegment:
-			a.Original[i] = *a.Get(target.Sector)
-			*a.Get(target.Sector) += a.Delta
-			target.Sector.BottomZ.Reset()
-			target.Sector.TopZ.Reset()
-
+	a.Original = make([]float64, 0)
+	for _, s := range a.State().SelectedObjects {
+		if s.Sector == nil {
+			continue
 		}
 
+		a.Original = append(a.Original, *a.Get(s.Sector))
+		*a.Get(s.Sector) += a.Delta
+		s.Sector.BottomZ.Reset()
+		s.Sector.TopZ.Reset()
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 	a.State().Modified = true
@@ -73,40 +65,32 @@ func (a *MoveSurface) Act() {
 func (a *MoveSurface) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
-
-	for i, obj := range a.State().SelectedObjects {
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			if sector := core.SectorFromDb(target); sector != nil {
-				*a.Get(sector) = a.Original[i]
-				sector.BottomZ.Reset()
-				sector.TopZ.Reset()
-			}
-		case *core.SectorSegment:
-			*a.Get(target.Sector) = a.Original[i]
-			target.Sector.BottomZ.Reset()
-			target.Sector.TopZ.Reset()
+	i := 0
+	for _, s := range a.State().SelectedObjects {
+		if s.Sector == nil {
+			continue
 		}
+
+		*a.Get(s.Sector) = a.Original[i]
+		s.Sector.BottomZ.Reset()
+		s.Sector.TopZ.Reset()
+		i++
 	}
+
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *MoveSurface) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
-	for _, obj := range a.State().SelectedObjects {
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			if sector := core.SectorFromDb(target); sector != nil {
-				*a.Get(sector) += a.Delta
-				sector.BottomZ.Reset()
-				sector.TopZ.Reset()
-			}
-		case *core.SectorSegment:
-			*a.Get(target.Sector) += a.Delta
-			target.Sector.BottomZ.Reset()
-			target.Sector.TopZ.Reset()
+	for _, s := range a.State().SelectedObjects {
+		if s.Sector == nil {
+			continue
 		}
+
+		*a.Get(s.Sector) += a.Delta
+		s.Sector.BottomZ.Reset()
+		s.Sector.TopZ.Reset()
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

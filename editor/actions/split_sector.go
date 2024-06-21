@@ -37,7 +37,9 @@ func (a *SplitSector) Split(sector *core.Sector) {
 		return
 	}
 	// Copy original sector's components to preserve them
-	copy(a.Original[sector.Entity], sector.DB.EntityComponents[sector.Entity])
+	o := sector.DB.EntityComponents[sector.Entity]
+	a.Original[sector.Entity] = make([]concepts.Attachable, len(o))
+	copy(a.Original[sector.Entity], o)
 	// Detach the original from the DB
 	sector.DB.DetachAll(sector.Entity)
 	// Attach the cloned entities/components
@@ -54,33 +56,36 @@ func (a *SplitSector) Split(sector *core.Sector) {
 func (a *SplitSector) OnMouseUp() {
 	a.Splitters = []*controllers.SectorSplitter{}
 
-	// Split only selected if any, otherwise all sectors/segments.
-	all := a.State().SelectedObjects
-	if len(all) == 0 || (len(all) == 1 && all[0] == a.State().DB) {
+	var sectors []*core.Sector
+	// Split only selected if any, otherwise all sectors.
+	if len(a.State().SelectedObjects) == 0 {
 		allSectors := a.State().DB.Components[core.SectorComponentIndex]
-		all = make([]any, len(allSectors))
+		sectors = make([]*core.Sector, len(allSectors))
 		i := 0
 		for _, s := range allSectors {
-			all[i] = s.Ref()
+			sectors[i] = s.(*core.Sector)
 			i++
+		}
+	} else {
+		sectors = make([]*core.Sector, 0)
+		visited := make(map[uint64]bool)
+		for _, s := range a.State().SelectedObjects {
+			// We could just check for the .Sector field being valid, but then
+			// the user may be surprised to have a sector split when they've
+			// selected a body or something else.
+			if s.Type != state.SelectableSector && s.Type != state.SelectableSectorSegment {
+				continue
+			}
+			if _, ok := visited[s.Sector.Entity]; ok {
+				continue
+			}
+			sectors = append(sectors, s.Sector)
+			visited[s.Sector.Entity] = true
 		}
 	}
 
-	visited := make(map[uint64]bool)
-	for _, obj := range all {
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			if _, ok := visited[target.Entity]; ok {
-				continue
-			}
-			if sector := core.SectorFromDb(target); sector != nil {
-				a.Split(sector)
-			}
-			visited[target.Entity] = true
-		case *core.SectorSegment:
-			a.Split(target.Sector)
-			visited[target.Sector.Entity] = true
-		}
+	for _, s := range sectors {
+		a.Split(s)
 	}
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)

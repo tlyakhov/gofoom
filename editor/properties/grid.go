@@ -130,29 +130,44 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 	}
 }
 
-func (g *Grid) fieldsFromSelection(selection []any) *PropertyGridState {
-	state := PropertyGridState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
-	for _, obj := range selection {
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			for _, c := range target.All() {
-				if c == nil {
-					continue
-				}
-				state.Parent = c
-				n := strings.Split(reflect.TypeOf(c).String(), ".")
-				state.ParentName = n[len(n)-1]
-				state.Ref = target
-				g.fieldsFromObject(c, state)
+func (g *Grid) fieldsFromSelection(selection []*state.Selectable) *PropertyGridState {
+	pgs := PropertyGridState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
+	for _, s := range selection {
+		var target *concepts.EntityRef
+		switch s.Type {
+		case state.SelectableSectorSegment:
+			pgs.Parent = nil
+			pgs.ParentName = "Segment"
+			pgs.Ref = s.Sector.Ref()
+			g.fieldsFromObject(target, pgs)
+			continue
+		case state.SelectableSector:
+			target = s.Sector.EntityRef
+		case state.SelectableBody:
+			target = s.Body.EntityRef
+		case state.SelectableInternalSegment:
+			fallthrough
+		case state.SelectableInternalSegmentA:
+			fallthrough
+		case state.SelectableInternalSegmentB:
+			target = s.InternalSegment.EntityRef
+		}
+
+		if target == nil {
+			continue
+		}
+		for _, c := range target.All() {
+			if c == nil {
+				continue
 			}
-		case *core.SectorSegment:
-			state.Parent = nil
-			state.ParentName = "Segment"
-			state.Ref = target.Sector.Ref()
-			g.fieldsFromObject(target, state)
+			pgs.Parent = c
+			n := strings.Split(reflect.TypeOf(c).String(), ".")
+			pgs.ParentName = n[len(n)-1]
+			pgs.Ref = target
+			g.fieldsFromObject(c, pgs)
 		}
 	}
-	return &state
+	return &pgs
 }
 
 // Confusing syntax. The constraint ensures that our underlying type has pointer
@@ -178,27 +193,37 @@ func gridAddOrUpdateWidgetAtIndex[PT interface {
 	return ptr
 }
 
-func (g *Grid) AddEntityControls(selection []any) {
+func (g *Grid) AddEntityControls(selection []*state.Selectable) {
 	entities := make([]uint64, 0)
 	entityList := ""
 	componentList := make([]bool, len(concepts.DbTypes().Indexes))
-	for _, obj := range selection {
+	for _, s := range selection {
 		if len(entityList) > 0 {
 			entityList += ", "
 		}
-		switch target := obj.(type) {
-		case *concepts.EntityRef:
-			entities = append(entities, target.Entity)
-			entityList += strconv.FormatUint(target.Entity, 10)
-			for index, c := range target.All() {
-				componentList[index] = (c != nil)
-			}
-		case *core.SectorSegment:
-			entities = append(entities, target.Sector.Entity)
-			entityList += strconv.FormatUint(target.Sector.Entity, 10)
-			for index, c := range target.Sector.All() {
-				componentList[index] = (c != nil)
-			}
+
+		var target *concepts.EntityRef
+		switch s.Type {
+		case state.SelectableSectorSegment:
+			fallthrough
+		case state.SelectableSector:
+			target = s.Sector.EntityRef
+		case state.SelectableBody:
+			target = s.Body.EntityRef
+		case state.SelectableInternalSegment:
+			fallthrough
+		case state.SelectableInternalSegmentA:
+			fallthrough
+		case state.SelectableInternalSegmentB:
+			target = s.InternalSegment.EntityRef
+		}
+		if target == nil {
+			continue
+		}
+		entities = append(entities, target.Entity)
+		entityList += strconv.FormatUint(target.Entity, 10)
+		for index, c := range target.All() {
+			componentList[index] = (c != nil)
 		}
 	}
 
@@ -248,7 +273,7 @@ func (g *Grid) sortedFields(state *PropertyGridState) []string {
 	return sorted
 }
 
-func (g *Grid) Refresh(selection []any) {
+func (g *Grid) Refresh(selection []*state.Selectable) {
 	g.refreshIndex = 0
 
 	if len(selection) > 0 {

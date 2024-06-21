@@ -4,7 +4,6 @@
 package state
 
 import (
-	"reflect"
 	"sync"
 	"tlyakhov/gofoom/concepts"
 
@@ -36,8 +35,8 @@ type Edit struct {
 	MouseDownWorld concepts.Vector2
 	MousePressed   bool
 
-	SelectedObjects        []any
-	HoveringObjects        []any
+	SelectedObjects        []*Selectable
+	HoveringObjects        []*Selectable
 	SearchTerms            string
 	SelectedTransformables []any
 
@@ -69,26 +68,10 @@ type IEditor interface {
 	SwitchTool(tool EditorTool)
 	UndoCurrent()
 	RedoCurrent()
-	SelectObjects(objects []any, updateTree bool)
+	SelectObject(s *Selectable, updateTree bool)
+	SelectObjects(objects []*Selectable, updateTree bool)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)
 	SetDialogLocation(dlg *dialog.FileDialog, target string)
-}
-
-func IndexOf(s []any, obj any) int {
-	if er, ok := obj.(*concepts.EntityRef); ok {
-		for i, e := range s {
-			if er2, ok2 := e.(*concepts.EntityRef); ok2 && er2.Entity == er.Entity {
-				return i
-			}
-		}
-		return -1
-	}
-	for i, e := range s {
-		if obj == e && reflect.TypeOf(obj) == reflect.TypeOf(e) {
-			return i
-		}
-	}
-	return -1
 }

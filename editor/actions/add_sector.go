@@ -19,7 +19,7 @@ type AddSector struct {
 func (a *AddSector) Act() {
 	a.SetMapCursor(desktop.CrosshairCursor)
 	a.Mode = "AddSector"
-	a.SelectObjects([]any{a.EntityRef}, true)
+	a.SelectObject(state.SelectableFromSector(a.Sector), true)
 	//set cursor
 }
 
