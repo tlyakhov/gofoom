@@ -136,8 +136,8 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 		g.NewAction(action)
 		action.Act()
 	}
-	c := container.New(&entityRefLayout{Child: layout.NewStackLayout()}, tree)
-	aitem := widget.NewAccordionItem(title, c)
+	c := container.New(&entityRefLayout{Child: layout.NewVBoxLayout()}, tree, widget.NewButton("Nest Material in new Shader", func() {}))
+	aiTree := widget.NewAccordionItem(title, c)
 	accordion := gridAddOrUpdateWidgetAtIndex[*widget.Accordion](g)
-	accordion.Items = []*widget.AccordionItem{aitem}
+	accordion.Items = []*widget.AccordionItem{aiTree}
 }

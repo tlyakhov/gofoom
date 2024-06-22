@@ -25,7 +25,7 @@ func (a *Move) OnMouseDown(evt *desktop.MouseEvent) {
 
 	a.Selected = make([]*core.Selectable, len(a.State().SelectedObjects))
 	copy(a.Selected, a.State().SelectedObjects)
-	a.Original = make([]concepts.Vector3, len(a.Selected))
+	a.Original = make([]concepts.Vector3, 0, len(a.Selected))
 
 	i := 0
 	for _, s := range a.Selected {
@@ -37,6 +37,12 @@ func (a *Move) OnMouseDown(evt *desktop.MouseEvent) {
 				seg.P.To3D(&a.Original[i])
 				i++
 			}
+		case core.SelectableLow:
+			fallthrough
+		case core.SelectableMid:
+			fallthrough
+		case core.SelectableHi:
+			fallthrough
 		case core.SelectableSectorSegment:
 			a.Original = append(a.Original, concepts.Vector3{})
 			s.SectorSegment.P.To3D(&a.Original[i])
@@ -85,6 +91,12 @@ func (a *Move) Act() {
 				i++
 			}
 			s.Sector.Recalculate()
+		case core.SelectableLow:
+			fallthrough
+		case core.SelectableMid:
+			fallthrough
+		case core.SelectableHi:
+			fallthrough
 		case core.SelectableSectorSegment:
 			s.SectorSegment.P = *a.WorldGrid(a.Original[i].To2D().Add(&a.Delta))
 			s.Sector.Recalculate()
@@ -125,6 +137,12 @@ func (a *Move) Undo() {
 				i++
 			}
 			s.Sector.Recalculate()
+		case core.SelectableLow:
+			fallthrough
+		case core.SelectableMid:
+			fallthrough
+		case core.SelectableHi:
+			fallthrough
 		case core.SelectableSectorSegment:
 			s.SectorSegment.P = *a.Original[i].To2D()
 			s.Sector.Recalculate()

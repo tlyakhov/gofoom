@@ -63,9 +63,21 @@ func (a *SplitSegment) OnMouseUp() {
 		visited := make(map[*core.SectorSegment]bool)
 		for _, s := range a.State().SelectedObjects {
 			switch s.Type {
+			// Segments:
+			case core.SelectableLow:
+				fallthrough
+			case core.SelectableMid:
+				fallthrough
+			case core.SelectableHi:
+				fallthrough
 			case core.SelectableSectorSegment:
 				segments = append(segments, s.SectorSegment)
 				visited[s.SectorSegment] = true
+			// Sectors:
+			case core.SelectableCeiling:
+				fallthrough
+			case core.SelectableFloor:
+				fallthrough
 			case core.SelectableSector:
 				for _, seg := range s.Sector.Segments {
 					segments = append(segments, seg)

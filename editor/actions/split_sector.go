@@ -73,7 +73,7 @@ func (a *SplitSector) OnMouseUp() {
 			// We could just check for the .Sector field being valid, but then
 			// the user may be surprised to have a sector split when they've
 			// selected a body or something else.
-			if s.Type != core.SelectableSector && s.Type != core.SelectableSectorSegment {
+			if s.Type == core.SelectableEntityRef || s.Type == core.SelectableBody {
 				continue
 			}
 			if _, ok := visited[s.Sector.Entity]; ok {

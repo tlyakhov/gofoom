@@ -2,7 +2,6 @@
   {
     "Entity": "1",
     "core.Spawn": {
-      "Active": true,
       "Entity": "1",
       "X": 0,
       "Y": 0
@@ -11,19 +10,16 @@
   {
     "Entity": "2",
     "concepts.Named": {
-      "Active": true,
       "Entity": "2",
       "Name": "Default"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/WDef.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -36,22 +32,15 @@
         "R": 1
       },
       "Entity": "2"
-    },
-    "materials.Tiled": {
-      "Active": true,
-      "Entity": "2",
-      "IsLiquid": false
     }
   },
   {
     "Entity": "3",
     "concepts.Named": {
-      "Active": true,
       "Entity": "3",
       "Name": "Starting"
     },
     "core.Sector": {
-      "Active": true,
       "Bodies": [
         "5",
         "4"
@@ -75,7 +64,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -88,7 +77,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -101,7 +90,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -114,7 +103,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -129,16 +118,13 @@
   {
     "Entity": "4",
     "concepts.Named": {
-      "Active": true,
       "Entity": "4",
       "Name": "ckpvt5dmdsrrj1r5a5pg"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "4",
       "Mass": 0,
@@ -153,8 +139,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
@@ -166,7 +151,6 @@
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -180,20 +164,16 @@
   {
     "Entity": "5",
     "behaviors.Alive": {
-      "Active": true,
       "Entity": "5",
       "Health": 100
     },
     "behaviors.Player": {
-      "Active": true,
       "Entity": "5"
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
       "CollisionResponse": "Slide",
       "Entity": "5",
       "Mass": 80,
@@ -208,8 +188,7 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
       },
       "Vel": {
