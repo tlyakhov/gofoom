@@ -134,8 +134,14 @@ func (g *Grid) fieldsFromSelection(selection []*core.Selectable) *PropertyGridSt
 	pgs := PropertyGridState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
 	for _, s := range selection {
 		switch s.Type {
+		case core.SelectableHi:
+			fallthrough
+		case core.SelectableLow:
+			fallthrough
+		case core.SelectableMid:
+			fallthrough
 		case core.SelectableSectorSegment:
-			pgs.Parent = nil
+			pgs.Parent = s.SectorSegment
 			pgs.ParentName = "Segment"
 			pgs.Ref = s.Ref
 			g.fieldsFromObject(s.SectorSegment, pgs)
@@ -192,6 +198,12 @@ func (g *Grid) AddEntityControls(selection []*core.Selectable) {
 		}
 
 		switch s.Type {
+		case core.SelectableHi:
+			fallthrough
+		case core.SelectableLow:
+			fallthrough
+		case core.SelectableMid:
+			fallthrough
 		case core.SelectableSectorSegment:
 			continue
 		}
@@ -200,6 +212,10 @@ func (g *Grid) AddEntityControls(selection []*core.Selectable) {
 		for index, c := range s.Ref.All() {
 			componentList[index] = (c != nil)
 		}
+	}
+
+	if len(entityList) == 0 {
+		return
 	}
 
 	label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
@@ -293,13 +309,19 @@ func (g *Grid) Refresh(selection []*core.Selectable) {
 		case *int:
 			g.fieldNumber(field)
 		case *concepts.Vector2:
-			fieldStringLikeType[*concepts.Vector2](g, field)
+			fieldStringLikeType[concepts.Vector2](g, field)
 		case *concepts.Vector3:
-			fieldStringLikeType[*concepts.Vector3](g, field)
+			fieldStringLikeType[concepts.Vector3](g, field)
 		case *concepts.Vector4:
+			fieldStringLikeType[concepts.Vector4](g, field)
+		case **concepts.Vector2:
+			fieldStringLikeType[*concepts.Vector2](g, field)
+		case **concepts.Vector3:
+			fieldStringLikeType[*concepts.Vector3](g, field)
+		case **concepts.Vector4:
 			fieldStringLikeType[*concepts.Vector4](g, field)
 		case *concepts.Matrix2:
-			fieldStringLikeType[*concepts.Matrix2](g, field)
+			fieldStringLikeType[concepts.Matrix2](g, field)
 		case *materials.SurfaceStretch:
 			g.fieldEnum(field, materials.SurfaceStretchValues())
 		case *core.CollisionResponse:

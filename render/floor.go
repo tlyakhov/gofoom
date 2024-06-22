@@ -6,13 +6,14 @@ package render
 import (
 	"fmt"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
 )
 
 func FloorPick(s *state.Column) {
 	if s.ScreenY >= s.ClippedEnd && s.ScreenY < s.YEnd {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickFloor, Element: s.Sector.Ref()})
+		s.PickedSelection = append(s.PickedSelection, core.SelectableFromFloor(s.Sector))
 	}
 }
 

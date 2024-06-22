@@ -18,19 +18,38 @@ import (
 )
 
 type StringLikeType interface {
-	*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4 | *concepts.Matrix2
-
-	String() string
+	concepts.Vector2 | concepts.Vector3 | concepts.Vector4 |
+		*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4 | concepts.Matrix2
 }
 
-func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridField) {
+func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
+	switch currentValue := any(v).(type) {
+	case *concepts.Vector2:
+		return currentValue.String()
+	case *concepts.Vector3:
+		return currentValue.String()
+	case *concepts.Vector4:
+		return currentValue.String()
+	case **concepts.Vector2:
+		return (*currentValue).String()
+	case **concepts.Vector3:
+		return (*currentValue).String()
+	case **concepts.Vector4:
+		return (*currentValue).String()
+	case *concepts.Matrix2:
+		return currentValue.String()
+	}
+	return ""
+}
+
+func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *state.PropertyGridField) {
 	origValue := ""
 	for i, v := range field.Values {
 		if i != 0 {
 			origValue += ", "
 		}
-		currentValue := v.Interface().(T)
-		origValue += currentValue.String()
+
+		origValue += stringLikeTypeString(v.Interface().(PT))
 	}
 
 	entry := widget.NewEntry()
@@ -38,25 +57,51 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 	entry.OnSubmitted = func(text string) {
 		var err error
 		var parsed any
-		// This is a hack to switch on type of T
-		var typedValue T
-		switch any(typedValue).(type) {
+		var currentValue PT
+		switch any(currentValue).(type) {
 		case *concepts.Vector2:
 			parsed, err = concepts.ParseVector2(text)
 		case *concepts.Vector3:
 			parsed, err = concepts.ParseVector3(text)
 		case *concepts.Vector4:
 			parsed, err = concepts.ParseVector4(text)
+		case **concepts.Vector2:
+			parsed, err = concepts.ParseVector2(text)
+		case **concepts.Vector3:
+			parsed, err = concepts.ParseVector3(text)
+		case **concepts.Vector4:
+			parsed, err = concepts.ParseVector4(text)
 		case *concepts.Matrix2:
 			parsed, err = concepts.ParseMatrix2(text)
 		}
 		if err != nil {
-			log.Printf("Couldn't parse %v from user entry. %v\n", reflect.TypeOf(typedValue).Name(), err)
+			log.Printf("Couldn't parse %v from user entry. %v\n", reflect.TypeOf(currentValue).Name(), err)
 			entry.SetText(origValue)
 			g.Focus(g.GridWidget)
 			return
 		}
-		currentValue := parsed.(T)
+		switch any(currentValue).(type) {
+		case *concepts.Vector2:
+			currentValue = parsed.(PT)
+		case *concepts.Vector3:
+			currentValue = parsed.(PT)
+		case *concepts.Vector4:
+			currentValue = parsed.(PT)
+		case **concepts.Vector2:
+			if v, ok := parsed.(T); ok {
+				currentValue = &v
+			}
+		case **concepts.Vector3:
+			if v, ok := parsed.(T); ok {
+				currentValue = &v
+			}
+		case **concepts.Vector4:
+			if v, ok := parsed.(T); ok {
+				currentValue = &v
+			}
+		case *concepts.Matrix2:
+			currentValue = parsed.(PT)
+		}
 		action := &actions.SetProperty{
 			IEditor:           g.IEditor,
 			PropertyGridField: field,
@@ -64,20 +109,20 @@ func fieldStringLikeType[T StringLikeType](g *Grid, field *state.PropertyGridFie
 		}
 		g.NewAction(action)
 		action.Act()
-		origValue = currentValue.String()
+		origValue = stringLikeTypeString(currentValue)
 		g.Focus(g.GridWidget)
 	}
 
 	cb := widget.NewCheck("Tweak", nil)
 	for _, v := range g.State().SelectedTransformables {
-		if typed, ok := v.(T); ok && typed == field.Values[0].Interface() {
+		if typed, ok := v.(PT); ok && typed == field.Values[0].Interface() {
 			cb.SetChecked(true)
 			break
 		}
 	}
 	cb.OnChanged = func(active bool) {
 		for i, v := range g.State().SelectedTransformables {
-			if typed, ok := v.(T); ok && typed == field.Values[0].Interface() {
+			if typed, ok := v.(PT); ok && typed == field.Values[0].Interface() {
 				if !active {
 					s := g.State().SelectedTransformables
 					g.State().SelectedTransformables = append(s[:i], s[i+1:]...)

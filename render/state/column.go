@@ -29,24 +29,6 @@ func (r *Ray) Set(a float64) {
 	r.Delta.From(&r.End).SubSelf(&r.Start)
 }
 
-type PickedType int
-
-//go:generate go run github.com/dmarkham/enumer -type=PickedType -json
-const (
-	PickCeiling PickedType = iota
-	PickHigh
-	PickMid
-	PickLow
-	PickFloor
-	PickBody
-	PickInternalSegment
-)
-
-type PickedElement struct {
-	Type    PickedType // ceil, floor, mid, hi, lo, body
-	Element any
-}
-
 type Column struct {
 	*Config
 	MaterialSampler
@@ -79,7 +61,7 @@ type Column struct {
 	LightLastColIndices []uint64
 	LightLastColResults []concepts.Vector3
 	Pick                bool
-	PickedElements      []PickedElement
+	PickedSelection     []*core.Selectable
 }
 
 func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool, twoSided bool) bool {

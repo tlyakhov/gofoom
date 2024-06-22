@@ -155,6 +155,8 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		r.DebugNotices.Push(dbg)
 	}
 
+	return
+
 	// TODO: We need to remove this allocation without creating a memory
 	// leak.
 	sorted := make([]entityRefWithDist2, len(c.Sector.Bodies)+len(c.Sector.InternalSegments))
@@ -182,6 +184,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		return int(b.Dist2 - a.Dist2)
 	})
 	savedSectorSegment := c.SectorSegment
+	savedSegment := c.Segment
 	c.SectorSegment = nil
 	for _, erwd := range sorted {
 		if erwd.EntityRef == nil {
@@ -201,7 +204,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			c.CalcScreen()
 
 			if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
-				c.PickedElements = append(c.PickedElements, state.PickedElement{Type: state.PickInternalSegment, Element: erwd.EntityRef})
+				c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(s))
 				return
 			}
 			c.LightElement.Config = r.Config
@@ -215,10 +218,11 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		}
 	}
 	c.SectorSegment = savedSectorSegment
+	c.Segment = savedSegment
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) []state.PickedElement {
+func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) []*core.Selectable {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
@@ -245,7 +249,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	}
 
 	r.RenderSector(column)
-	return column.PickedElements
+	return column.PickedSelection
 }
 
 func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
@@ -364,7 +368,7 @@ func (r *Renderer) RenderHud(buffer []uint8) {
 	}
 }
 
-func (r *Renderer) Pick(x, y int) []state.PickedElement {
+func (r *Renderer) Pick(x, y int) []*core.Selectable {
 	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
 		return nil
 	}
@@ -379,5 +383,6 @@ func (r *Renderer) Pick(x, y int) []state.PickedElement {
 	column.LightElement.Config = r.Config
 
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
 	return r.RenderColumn(column, x, y, true)
 }

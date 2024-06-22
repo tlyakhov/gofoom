@@ -6,13 +6,14 @@ package render
 import (
 	"fmt"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
 )
 
 func CeilingPick(s *state.Column) {
 	if s.ScreenY >= s.YStart && s.ScreenY < s.ClippedStart {
-		s.PickedElements = append(s.PickedElements, state.PickedElement{Type: state.PickCeiling, Element: s.Sector.Ref()})
+		s.PickedSelection = append(s.PickedSelection, core.SelectableFromCeil(s.Sector))
 	}
 }
 

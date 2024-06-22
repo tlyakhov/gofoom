@@ -44,6 +44,18 @@ func (a *SetProperty) FireHooks() {
 			target.Compile()
 		case *materials.Text:
 			target.RasterizeText()
+		case *core.SectorSegment:
+			// For SectorSegments, the A & B fields of the child Segment type
+			// are pointers to SectorSegment.P and SectorSegment.Next.P
+			// respectively. If the user edits the A or B field, we need to
+			// propagate that setting.
+			if a.Name == "Segment.A" {
+				target.P = *target.A
+				target.Recalculate()
+			} else if a.Name == "Segment.B" {
+				target.Next.P = *target.B
+				target.Recalculate()
+			}
 		}
 	}
 }

@@ -17,13 +17,32 @@ const (
 	SelectableCeiling
 	SelectableFloor
 	SelectableHi
-	SelectableLo
+	SelectableLow
 	SelectableMid
 	SelectableInternalSegment
 	SelectableInternalSegmentA
 	SelectableInternalSegmentB
 	SelectableBody
 )
+
+var typeGroups = map[SelectableType]SelectableType{
+	// Sectors
+	SelectableSector:  SelectableSector,
+	SelectableCeiling: SelectableSector,
+	SelectableFloor:   SelectableSector,
+	// Segments
+	SelectableSectorSegment: SelectableSectorSegment,
+	SelectableHi:            SelectableSectorSegment,
+	SelectableLow:           SelectableSectorSegment,
+	SelectableMid:           SelectableSectorSegment,
+	// Internal Segments
+	SelectableInternalSegment:  SelectableInternalSegment,
+	SelectableInternalSegmentA: SelectableInternalSegment,
+	SelectableInternalSegmentB: SelectableInternalSegment,
+	// Other
+	SelectableBody:      SelectableBody,
+	SelectableEntityRef: SelectableEntityRef,
+}
 
 // Selectable represents something an editor or player can pick. Initially this
 // was implemented via just passing `any` instances around, but that had the
@@ -42,9 +61,25 @@ func SelectableFromSector(s *Sector) *Selectable {
 	return &Selectable{Type: SelectableSector, Sector: s, Ref: s.EntityRef}
 }
 
+func SelectableFromFloor(s *Sector) *Selectable {
+	return &Selectable{Type: SelectableFloor, Sector: s, Ref: s.EntityRef}
+}
+
+func SelectableFromCeil(s *Sector) *Selectable {
+	return &Selectable{Type: SelectableCeiling, Sector: s, Ref: s.EntityRef}
+}
+
 func SelectableFromSegment(s *SectorSegment) *Selectable {
 	return &Selectable{
 		Type:          SelectableSectorSegment,
+		Sector:        s.Sector,
+		SectorSegment: s,
+		Ref:           s.Sector.EntityRef}
+}
+
+func SelectableFromWall(s *SectorSegment, t SelectableType) *Selectable {
+	return &Selectable{
+		Type:          t,
 		Sector:        s.Sector,
 		SectorSegment: s,
 		Ref:           s.Sector.EntityRef}
@@ -95,28 +130,42 @@ func SelectableFromEntityRef(ref *concepts.EntityRef) *Selectable {
 
 func (target *Selectable) IndexIn(list []*Selectable) int {
 	for i, test := range list {
-		if test.Type != target.Type {
+		if typeGroups[test.Type] != typeGroups[target.Type] {
 			continue
 		}
 		switch test.Type {
+		// Sector selectables
+		case SelectableFloor:
+			fallthrough
+		case SelectableCeiling:
+			fallthrough
 		case SelectableSector:
 			if target.Sector != test.Sector {
 				continue
 			}
+		// Segment selectables
+		case SelectableLow:
+			fallthrough
+		case SelectableMid:
+			fallthrough
+		case SelectableHi:
+			fallthrough
 		case SelectableSectorSegment:
 			if target.SectorSegment != test.SectorSegment {
 				continue
 			}
-		case SelectableBody:
-			if target.Body != test.Body {
-				continue
-			}
+		// InternalSegment selectables
 		case SelectableInternalSegment:
 			fallthrough
 		case SelectableInternalSegmentA:
 			fallthrough
 		case SelectableInternalSegmentB:
 			if target.InternalSegment != test.InternalSegment {
+				continue
+			}
+		// Other
+		case SelectableBody:
+			if target.Body != test.Body {
 				continue
 			}
 		case SelectableEntityRef:

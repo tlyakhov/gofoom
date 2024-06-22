@@ -89,7 +89,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
 
 	if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
-		c.PickedElements = append(c.PickedElements, state.PickedElement{Type: state.PickBody, Element: ref})
+		c.PickedSelection = append(c.PickedSelection, core.SelectableFromBody(b))
 		return
 	}
 
