@@ -139,19 +139,21 @@ func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 
 	// TODO: make this more granular, and also support bodies
 	if evt.Button == desktop.MouseButtonSecondary {
-		daw := g.Raster.Size().Width
-		dah := g.Raster.Size().Height
-		rw := editor.Renderer.ScreenWidth
-		rh := editor.Renderer.ScreenHeight
-		x := float64(evt.Position.X) * float64(rw) / float64(daw)
-		y := float64(evt.Position.Y) * float64(rh) / float64(dah)
-		picked := editor.Renderer.Pick(int(x), int(y))
-		objects := make([]any, 0)
-		for _, p := range picked {
-			objects = append(objects, p.Element)
-		}
-		// TODO: fix
-		//editor.SelectObjects(objects, true)
+		// TODO: fix up with new selectable stuff
+		/*
+			daw := g.Raster.Size().Width
+			dah := g.Raster.Size().Height
+			rw := editor.Renderer.ScreenWidth
+			rh := editor.Renderer.ScreenHeight
+			x := float64(evt.Position.X) * float64(rw) / float64(daw)
+			y := float64(evt.Position.Y) * float64(rh) / float64(dah)
+			picked := editor.Renderer.Pick(int(x), int(y))
+			objects := make([]any, 0)
+			for _, p := range picked {
+				objects = append(objects, p.Element)
+			}
+			editor.SelectObjects(objects, true)
+		*/
 	}
 }
 func (g *GameWidget) MouseUp(evt *desktop.MouseEvent) {}

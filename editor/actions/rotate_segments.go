@@ -42,9 +42,9 @@ func (a *RotateSegments) Act() {
 func (a *RotateSegments) Undo() {
 	for _, s := range a.State().SelectedObjects {
 		switch s.Type {
-		case state.SelectableSectorSegment:
+		case core.SelectableSectorSegment:
 			fallthrough
-		case state.SelectableSector:
+		case core.SelectableSector:
 			a.Rotate(s.Sector, true)
 		}
 	}
@@ -53,9 +53,9 @@ func (a *RotateSegments) Undo() {
 func (a *RotateSegments) Redo() {
 	for _, s := range a.State().SelectedObjects {
 		switch s.Type {
-		case state.SelectableSectorSegment:
+		case core.SelectableSectorSegment:
 			fallthrough
-		case state.SelectableSector:
+		case core.SelectableSector:
 			a.Rotate(s.Sector, false)
 		}
 	}

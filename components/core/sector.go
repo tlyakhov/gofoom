@@ -17,7 +17,10 @@ import (
 type Sector struct {
 	concepts.Attached `editable:"^"`
 
-	Segments         []*SectorSegment
+	Segments []*SectorSegment
+	// TODO: bodies and internal segments should be able to be contained in
+	// multiple sectors at the same time, to avoid weird boundary conditions.
+	// This will require ensuring things aren't double-counted.
 	Bodies           map[uint64]*concepts.EntityRef
 	InternalSegments map[uint64]*concepts.EntityRef
 	BottomZ          concepts.SimVariable[float64] `editable:"Floor Height"`
