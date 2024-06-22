@@ -22,12 +22,12 @@ func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 
 func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Push()
-	segmentHovering := state.SelectableFromInternalSegment(segment).IndexIn(editor.HoveringObjects) != -1
-	segmentSelected := state.SelectableFromInternalSegment(segment).IndexIn(editor.SelectedObjects) != -1
-	aHovering := segmentHovering || state.SelectableFromInternalSegmentA(segment).IndexIn(editor.HoveringObjects) != -1
-	aSelected := segmentSelected || state.SelectableFromInternalSegmentA(segment).IndexIn(editor.SelectedObjects) != -1
-	bHovering := segmentHovering || state.SelectableFromInternalSegmentB(segment).IndexIn(editor.HoveringObjects) != -1
-	bSelected := segmentSelected || state.SelectableFromInternalSegmentB(segment).IndexIn(editor.SelectedObjects) != -1
+	segmentHovering := core.SelectableFromInternalSegment(segment).IndexIn(editor.HoveringObjects) != -1
+	segmentSelected := core.SelectableFromInternalSegment(segment).IndexIn(editor.SelectedObjects) != -1
+	aHovering := segmentHovering || core.SelectableFromInternalSegmentA(segment).IndexIn(editor.HoveringObjects) != -1
+	aSelected := segmentSelected || core.SelectableFromInternalSegmentA(segment).IndexIn(editor.SelectedObjects) != -1
+	bHovering := segmentHovering || core.SelectableFromInternalSegmentB(segment).IndexIn(editor.HoveringObjects) != -1
+	bSelected := segmentSelected || core.SelectableFromInternalSegmentB(segment).IndexIn(editor.SelectedObjects) != -1
 
 	if segmentHovering {
 		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
@@ -38,26 +38,26 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	}
 
 	// Draw segment
-	mw.Context.SetLineWidth(1)
-	mw.Context.NewSubPath()
-	mw.Context.MoveTo(segment.A[0], segment.A[1])
-	mw.Context.LineTo(segment.B[0], segment.B[1])
-	//fmt.Printf("draw iseg: %v, %v\n", segment.A.StringHuman(), segment.B.StringHuman())
-	mw.Context.ClosePath()
-	mw.Context.Stroke()
-	// Draw normal
-	mw.Context.NewSubPath()
-	ns := segment.B.Add(segment.A).Mul(0.5)
-	ne := ns.Add(segment.Normal.Mul(4.0))
-	mw.Context.MoveTo(ns[0], ns[1])
-	mw.Context.LineTo(ne[0], ne[1])
-	mw.Context.ClosePath()
-	mw.Context.Stroke()
-
-	if segmentHovering || segmentSelected {
-		ne = ns.Add(segment.Normal.Mul(20.0))
-		txtLength := fmt.Sprintf("%.0f", segment.Length)
-		mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
+	if segment.A.Dist2(segment.B) > state.SegmentSelectionEpsilon {
+		mw.Context.SetLineWidth(1)
+		mw.Context.NewSubPath()
+		mw.Context.MoveTo(segment.A[0], segment.A[1])
+		mw.Context.LineTo(segment.B[0], segment.B[1])
+		mw.Context.ClosePath()
+		mw.Context.Stroke()
+		// Draw normal
+		mw.Context.NewSubPath()
+		ns := segment.B.Add(segment.A).Mul(0.5)
+		ne := ns.Add(segment.Normal.Mul(4.0))
+		mw.Context.MoveTo(ns[0], ns[1])
+		mw.Context.LineTo(ne[0], ne[1])
+		mw.Context.ClosePath()
+		mw.Context.Stroke()
+		if segmentHovering || segmentSelected {
+			ne = ns.Add(segment.Normal.Mul(20.0))
+			txtLength := fmt.Sprintf("%.0f", segment.Length)
+			mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
+		}
 	}
 
 	if aHovering {
@@ -99,16 +99,16 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 
 	mw.Context.Push()
 
-	sectorHovering := state.SelectableFromSector(sector).IndexIn(editor.HoveringObjects) != -1
-	sectorSelected := state.SelectableFromSector(sector).IndexIn(editor.SelectedObjects) != -1
+	sectorHovering := core.SelectableFromSector(sector).IndexIn(editor.HoveringObjects) != -1
+	sectorSelected := core.SelectableFromSector(sector).IndexIn(editor.SelectedObjects) != -1
 
 	for _, segment := range sector.Segments {
 		if segment.Next == nil || segment.P == segment.Next.P {
 			continue
 		}
 
-		segmentHovering := state.SelectableFromSegment(segment).IndexIn(editor.HoveringObjects) != -1
-		segmentSelected := state.SelectableFromSegment(segment).IndexIn(editor.SelectedObjects) != -1
+		segmentHovering := core.SelectableFromSegment(segment).IndexIn(editor.HoveringObjects) != -1
+		segmentSelected := core.SelectableFromSegment(segment).IndexIn(editor.SelectedObjects) != -1
 
 		if segment.AdjacentSector.Nil() {
 			mw.Context.SetRGB(1, 1, 1)

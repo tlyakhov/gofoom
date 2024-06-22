@@ -36,6 +36,10 @@ func (s *InternalSegment) Sector() *Sector {
 	return SectorFromDb(s.SectorEntityRef)
 }
 
+func (s *InternalSegment) String() string {
+	return "Segment: (" + s.Segment.A.StringHuman() + ")-(" + s.Segment.B.StringHuman() + ")"
+}
+
 func (s *InternalSegment) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Segment.Construct(s.DB, data)

@@ -5,6 +5,7 @@ package state
 
 import (
 	"sync"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 
 	"fyne.io/fyne/v2/dialog"
@@ -35,8 +36,8 @@ type Edit struct {
 	MouseDownWorld concepts.Vector2
 	MousePressed   bool
 
-	SelectedObjects        []*Selectable
-	HoveringObjects        []*Selectable
+	SelectedObjects        []*core.Selectable
+	HoveringObjects        []*core.Selectable
 	SearchTerms            string
 	SelectedTransformables []any
 
@@ -68,8 +69,8 @@ type IEditor interface {
 	SwitchTool(tool EditorTool)
 	UndoCurrent()
 	RedoCurrent()
-	SelectObject(s *Selectable, updateTree bool)
-	SelectObjects(objects []*Selectable, updateTree bool)
+	SelectObject(s *core.Selectable, updateTree bool)
+	SelectObjects(objects []*core.Selectable, updateTree bool)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)

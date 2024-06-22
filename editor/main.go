@@ -65,7 +65,7 @@ func main() {
 	CreateMainMenu()
 
 	editor.App.Lifecycle().SetOnStarted(func() {
-		editor.Load("data/worlds/hall.json")
+		editor.Load("data/worlds/empty.json")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 

@@ -12,6 +12,7 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 
@@ -77,7 +78,7 @@ func (g *Grid) updateTreeNodeEntityRef(tni widget.TreeNodeID, b bool, co fyne.Ca
 	label.SetText(name)
 	button := box.Objects[2].(*widget.Button)
 	button.OnTapped = func() {
-		g.IEditor.SelectObject(state.SelectableFromEntityRef(ref), true)
+		g.IEditor.SelectObject(core.SelectableFromEntityRef(ref), true)
 	}
 }
 

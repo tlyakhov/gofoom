@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
@@ -15,13 +16,13 @@ import (
 type Delete struct {
 	state.IEditor
 
-	Selected []*state.Selectable
-	Saved    map[*state.Selectable]any
+	Selected []*core.Selectable
+	Saved    map[*core.Selectable]any
 }
 
 func (a *Delete) Act() {
-	a.Saved = make(map[*state.Selectable]any)
-	a.Selected = make([]*state.Selectable, len(a.State().SelectedObjects))
+	a.Saved = make(map[*core.Selectable]any)
+	a.Selected = make([]*core.Selectable, len(a.State().SelectedObjects))
 	copy(a.Selected, a.State().SelectedObjects)
 
 	for _, obj := range a.Selected {
@@ -41,21 +42,7 @@ func (a *Delete) Undo() {
 	defer a.State().Lock.Unlock()
 
 	for s, saved := range a.Saved {
-		switch s.Type {
-		case state.SelectableSector:
-			fallthrough
-		case state.SelectableSectorSegment:
-			// Reattach the whole sector, in case the user deleted the last segment
-			a.State().DB.DetachAll(s.Sector.Entity)
-		case state.SelectableBody:
-			a.State().DB.DetachAll(s.Body.Entity)
-		case state.SelectableInternalSegment:
-			fallthrough
-		case state.SelectableInternalSegmentA:
-			fallthrough
-		case state.SelectableInternalSegmentB:
-			a.State().DB.DetachAll(s.InternalSegment.Entity)
-		}
+		a.State().DB.DetachAll(s.Ref.Entity)
 		a.State().DB.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
@@ -67,11 +54,11 @@ func (a *Delete) Redo() {
 
 	for s := range a.Saved {
 		switch s.Type {
-		case state.SelectableSector:
+		case core.SelectableSector:
 			s.Sector.Bodies = make(map[uint64]*concepts.EntityRef)
 			s.Sector.InternalSegments = make(map[uint64]*concepts.EntityRef)
 			a.State().DB.DetachAll(s.Sector.Entity)
-		case state.SelectableSectorSegment:
+		case core.SelectableSectorSegment:
 			for i, seg := range s.Sector.Segments {
 				if seg != s.SectorSegment {
 					continue
@@ -84,7 +71,7 @@ func (a *Delete) Redo() {
 				}
 				break
 			}
-		case state.SelectableBody:
+		case core.SelectableBody:
 			if behaviors.PlayerFromDb(s.Body.EntityRef) != nil {
 				// Otherwise weird things happen...
 				continue
@@ -93,15 +80,17 @@ func (a *Delete) Redo() {
 			if s.Body.Sector() != nil {
 				delete(s.Body.Sector().Bodies, s.Body.Entity)
 			}
-		case state.SelectableInternalSegment:
+		case core.SelectableInternalSegment:
 			fallthrough
-		case state.SelectableInternalSegmentA:
+		case core.SelectableInternalSegmentA:
 			fallthrough
-		case state.SelectableInternalSegmentB:
+		case core.SelectableInternalSegmentB:
 			a.State().DB.DetachAll(s.InternalSegment.Entity)
 			if s.InternalSegment.Sector() != nil {
 				delete(s.InternalSegment.Sector().Bodies, s.InternalSegment.Entity)
 			}
+		case core.SelectableEntityRef:
+			a.State().DB.DetachAll(s.Ref.Entity)
 		}
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)

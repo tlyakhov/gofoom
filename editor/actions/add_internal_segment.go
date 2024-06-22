@@ -6,7 +6,6 @@ package actions
 import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/controllers"
-	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -19,7 +18,7 @@ type AddInternalSegment struct {
 func (a *AddInternalSegment) Act() {
 	a.SetMapCursor(desktop.CrosshairCursor)
 	a.Mode = "AddInternalSegment"
-	a.SelectObject(state.SelectableFromInternalSegment(a.InternalSegment), true)
+	a.SelectObject(core.SelectableFromInternalSegment(a.InternalSegment), true)
 	//set cursor
 }
 
@@ -63,7 +62,6 @@ func (a *AddInternalSegment) OnMouseMove() {
 		a.Bottom, a.Top = a.ContainingSector.SlopedZOriginal(worldGrid)
 	}
 	a.Recalculate()
-	//fmt.Printf("iseg: %v, %v\n", a.A.StringHuman(), a.B.StringHuman())
 }
 
 func (a *AddInternalSegment) OnMouseUp() {

@@ -171,7 +171,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	dz := (world[2] - c.LightVoxelA[2]) / constants.LightGrid
 
 	if dx < 0 || dy < 0 || dz < 0 {
-		fmt.Printf("%v,%v,%v\n", dx, dy, dz)
+		fmt.Printf("Lightmap filter: dx/dy/dz < 0: %v,%v,%v\n", dx, dy, dz)
 	}
 
 	debugVoxel := false
