@@ -66,7 +66,7 @@ func (a *Select) OnMouseUp() {
 	} else if a.Modifier == SelectSub {
 		a.Selected = []*core.Selectable{}
 		for _, obj := range a.Original {
-			if obj.IndexIn(hovering) == -1 {
+			if obj.ExactIndexIn(hovering) == -1 {
 				a.Selected = append(a.Selected, obj)
 			}
 		}
@@ -74,7 +74,7 @@ func (a *Select) OnMouseUp() {
 		a.Selected = make([]*core.Selectable, len(hovering))
 		copy(a.Selected, hovering)
 	}
-	a.SelectObjects(a.Selected, true)
+	a.SelectObjects(true, a.Selected...)
 	a.ActionFinished(false, true, false)
 }
 func (a *Select) Act()    {}
@@ -82,9 +82,9 @@ func (a *Select) Cancel() {}
 func (a *Select) Frame()  {}
 
 func (a *Select) Undo() {
-	a.SelectObjects(a.Original, true)
+	a.SelectObjects(true, a.Original...)
 }
 func (a *Select) Redo() {
-	a.SelectObjects(a.Selected, true)
+	a.SelectObjects(true, a.Selected...)
 }
 func (a *Select) RequiresLock() bool { return false }

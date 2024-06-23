@@ -49,6 +49,9 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 	if v, ok := data["Material"]; ok {
 		s.Material = s.DB.DeserializeEntityRef(v)
 	}
+	if v, ok := data["Transform"]; ok {
+		s.Transform.Deserialize(v.([]any))
+	}
 	if v, ok := data["Stretch"]; ok {
 		ms, err := SurfaceStretchString(v.(string))
 		if err == nil {
@@ -72,6 +75,10 @@ func (s *Surface) Serialize() map[string]any {
 
 	if s.Stretch != StretchNone {
 		result["Stretch"] = s.Stretch.String()
+	}
+
+	if !s.Transform.IsIdentity() {
+		result["Transform"] = s.Transform.Serialize()
 	}
 
 	return result

@@ -22,12 +22,12 @@ func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 
 func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Push()
-	segmentHovering := core.SelectableFromInternalSegment(segment).IndexIn(editor.HoveringObjects) != -1
-	segmentSelected := core.SelectableFromInternalSegment(segment).IndexIn(editor.SelectedObjects) != -1
-	aHovering := segmentHovering || core.SelectableFromInternalSegmentA(segment).IndexIn(editor.HoveringObjects) != -1
-	aSelected := segmentSelected || core.SelectableFromInternalSegmentA(segment).IndexIn(editor.SelectedObjects) != -1
-	bHovering := segmentHovering || core.SelectableFromInternalSegmentB(segment).IndexIn(editor.HoveringObjects) != -1
-	bSelected := segmentSelected || core.SelectableFromInternalSegmentB(segment).IndexIn(editor.SelectedObjects) != -1
+	segmentHovering := core.SelectableFromInternalSegment(segment).ExactIndexIn(editor.HoveringObjects) != -1
+	segmentSelected := core.SelectableFromInternalSegment(segment).ExactIndexIn(editor.SelectedObjects) != -1
+	aHovering := segmentHovering || core.SelectableFromInternalSegmentA(segment).ExactIndexIn(editor.HoveringObjects) != -1
+	aSelected := segmentSelected || core.SelectableFromInternalSegmentA(segment).ExactIndexIn(editor.SelectedObjects) != -1
+	bHovering := segmentHovering || core.SelectableFromInternalSegmentB(segment).ExactIndexIn(editor.HoveringObjects) != -1
+	bSelected := segmentSelected || core.SelectableFromInternalSegmentB(segment).ExactIndexIn(editor.SelectedObjects) != -1
 
 	if segmentHovering {
 		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])

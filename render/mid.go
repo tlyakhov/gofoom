@@ -16,36 +16,36 @@ func WallMidPick(s *state.Column) {
 }
 
 // WallMid renders the wall portion (potentially over a portal).
-func WallMid(s *state.Column, internalSegment bool) {
-	surf := s.Segment.Surface
-	u := s.U
+func WallMid(c *state.Column, internalSegment bool) {
+	surf := c.Segment.Surface
+	u := c.U
 	if surf.Stretch == materials.StretchNone {
-		if !internalSegment && s.Sector.Winding < 0 {
+		if !internalSegment && c.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
-		u = (s.Segment.A[0] + s.Segment.A[1] + u*s.Segment.Length) / 64.0
+		u = (c.Segment.A[0] + c.Segment.A[1] + u*c.Segment.Length) / 64.0
 	}
-	for s.ScreenY = s.ClippedStart; s.ScreenY < s.ClippedEnd; s.ScreenY++ {
-		screenIndex := uint32(s.ScreenX + s.ScreenY*s.ScreenWidth)
+	for c.ScreenY = c.ClippedStart; c.ScreenY < c.ClippedEnd; c.ScreenY++ {
+		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
 
-		if s.Distance >= s.ZBuffer[screenIndex] {
+		if c.Distance >= c.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(s.ScreenY-s.ScreenStart) / float64(s.ScreenEnd-s.ScreenStart)
-		s.RaySegIntersect[2] = s.TopZ + v*(s.BottomZ-s.TopZ)
+		v := float64(c.ScreenY-c.ScreenStart) / float64(c.ScreenEnd-c.ScreenStart)
+		c.RaySegIntersect[2] = c.TopZ + v*(c.BottomZ-c.TopZ)
 
 		if surf.Stretch == materials.StretchNone {
-			v = -s.RaySegIntersect[2] / 64.0
+			v = -c.RaySegIntersect[2] / 64.0
 		} else if surf.Stretch == materials.StretchAspect {
-			v *= (s.Segment.Top - s.Segment.Bottom) / s.Segment.Length
+			v *= (c.Segment.Top - c.Segment.Bottom) / c.Segment.Length
 		}
 
 		if !surf.Material.Nil() {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
-			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.Distance)
+			c.SampleShader(surf.Material, surf.ExtraStages, tu, tv, c.ProjectZ(1.0))
+			c.SampleLight(&c.MaterialSampler.Output, surf.Material, &c.RaySegIntersect, c.Distance)
 		}
-		s.ApplySample(&s.MaterialSampler.Output, int(screenIndex), s.Distance)
+		c.ApplySample(&c.MaterialSampler.Output, int(screenIndex), c.Distance)
 	}
 }

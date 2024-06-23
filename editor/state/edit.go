@@ -69,8 +69,7 @@ type IEditor interface {
 	SwitchTool(tool EditorTool)
 	UndoCurrent()
 	RedoCurrent()
-	SelectObject(s *core.Selectable, updateTree bool)
-	SelectObjects(objects []*core.Selectable, updateTree bool)
+	SelectObjects(updateTree bool, s ...*core.Selectable)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)

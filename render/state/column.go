@@ -12,6 +12,12 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
+type EntityRefWithDist2 struct {
+	*concepts.EntityRef
+	Dist2     float64
+	IsSegment bool
+}
+
 type Ray struct {
 	Start, End, Delta concepts.Vector2
 	Angle             float64
@@ -30,38 +36,54 @@ func (r *Ray) Set(a float64) {
 }
 
 type Column struct {
+	// Global rendering configuration
 	*Config
+	// Samples shaders & images
 	MaterialSampler
+	// Stores light & shadow data
 	LightElement
-	YStart, YEnd        int
-	Sector              *core.Sector
-	Segment             *core.Segment
-	SectorSegment       *core.SectorSegment
-	Ray                 *Ray
-	RaySegTest          concepts.Vector2
-	RaySegIntersect     concepts.Vector3
-	RayFloorCeil        concepts.Vector3
-	Distance            float64
-	LastPortalDistance  float64
-	U                   float64
-	Depth               int
-	CameraZ             float64
-	BottomZ             float64
-	TopZ                float64
-	ProjHeightTop       float64
-	ProjHeightBottom    float64
-	ScreenStart         int
-	ScreenEnd           int
-	ClippedStart        int
-	ClippedEnd          int
+	// Pre-allocated stack of nested columns for portals
+	PortalColumns []Column
+	// Pre-allocated slice for sorting bodies and internal segments
+	SortedRefs []EntityRefWithDist2
+	// Following data is for casting rays and intersecting them
+	Sector             *core.Sector
+	Segment            *core.Segment
+	SectorSegment      *core.SectorSegment
+	Ray                *Ray
+	RaySegTest         concepts.Vector2
+	RaySegIntersect    concepts.Vector3
+	RayFloorCeil       concepts.Vector3
+	Distance           float64
+	LastPortalDistance float64
+	// Horizontal texture coordinate on segment
+	U float64
+	// How many portals have we traversed so far?
+	Depth int
+	// Height of camera above ground
+	CameraZ float64
+	// Height of floor/ceiling at current segment intersection
+	BottomZ float64
+	TopZ    float64
+	// Scaled screenspace boundaries of current column (unclipped)
+	YStart, YEnd int
+	// Projected height of floor/ceiling at current segment intersection
+	ProjHeightTop    float64
+	ProjHeightBottom float64
+	ScreenStart      int
+	ScreenEnd        int
+	ClippedStart     int
+	ClippedEnd       int
+	// Lightning cache
 	Light               concepts.Vector4
 	LightVoxelA         concepts.Vector3
 	LightResult         [8]concepts.Vector3
 	LightLastIndex      uint64
 	LightLastColIndices []uint64
 	LightLastColResults []concepts.Vector3
-	Pick                bool
-	PickedSelection     []*core.Selectable
+	// For picking things in editor
+	Pick            bool
+	PickedSelection []*core.Selectable
 }
 
 func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool, twoSided bool) bool {
@@ -156,12 +178,12 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 		fmt.Printf("Lightmap filter: dx/dy/dz < 0: %v,%v,%v\n", dx, dy, dz)
 	}
 
-	debugVoxel := false
+	//debugVoxel := false
 	if m0 != c.LightLastIndex {
 		if m0 == c.LightLastColIndices[c.ScreenY] && c.LightLastColIndices[c.ScreenY] != 0 {
 			copy(c.LightResult[:], c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8])
 		} else {
-			debugVoxel = true
+			//debugVoxel = true
 			c.LightElement.Get()
 			c.LightResult[0] = c.LightElement.Output
 			c.LightLastColIndices[c.ScreenY] = m0
@@ -188,11 +210,11 @@ func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.Entity
 	}
 	c.Light[3] = 1
 
-	if debugVoxel {
-		/*	c.Light[0] = 1
-			c.Light[1] = 0
-			c.Light[2] = 0*/
-	}
+	/*	if debugVoxel {
+		c.Light[0] = 1
+		c.Light[1] = 0
+		c.Light[2] = 0
+	}*/
 
 	return lit.Apply(result, &c.Light)
 }

@@ -22,6 +22,11 @@ func (m *Matrix2) SetIdentity() {
 	m[3] = 1
 }
 
+func (m *Matrix2) IsIdentity() bool {
+	return m[0] == 1 && m[2] == 0 && m[4] == 0 &&
+		m[1] == 0 && m[3] == 1 && m[5] == 0
+}
+
 func (m *Matrix2) String() string {
 	return fmt.Sprintf(
 		"%v, %v, %v, %v, %v, %v",

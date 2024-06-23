@@ -73,7 +73,9 @@ func (s *ShaderStage) Serialize() map[string]any {
 			result["Flags"] = flags
 		}
 	}
-	result["Transform"] = s.Transform.Serialize()
+	if !s.Transform.IsIdentity() {
+		result["Transform"] = s.Transform.Serialize()
+	}
 	return result
 }
 

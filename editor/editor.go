@@ -190,6 +190,7 @@ func (e *Editor) Integrate() {
 	e.GatherHoveringObjects()
 }
 
+// TODO: This should be an action
 func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 	for _, t := range e.State().SelectedTransformables {
 		switch target := t.(type) {
@@ -202,6 +203,8 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 			//			log.Printf("CST: %v", target.StringHuman())
 		}
 	}
+	e.Modified = true
+	e.UpdateTitle()
 }
 
 func (e *Editor) Load(filename string) {
@@ -219,7 +222,7 @@ func (e *Editor) Load(filename string) {
 	db.Simulation.Integrate = e.Integrate
 	db.Simulation.Render = e.GameWidget.Draw
 	e.DB = db
-	e.SelectObjects([]*core.Selectable{}, true)
+	e.SelectObjects(true)
 	editor.ResizeRenderer(640, 360)
 	e.refreshProperties()
 }
@@ -231,7 +234,7 @@ func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
 
-	e.SelectObjects([]*core.Selectable{}, true)
+	e.SelectObjects(true)
 
 	e.DB.Clear()
 	controllers.CreateTestWorld2(e.DB)
@@ -369,16 +372,12 @@ func (e *Editor) RedoCurrent() {
 	e.UndoHistory = append(e.UndoHistory, a)
 }
 
-func (e *Editor) SelectObject(s *core.Selectable, updateEntityList bool) {
-	e.SelectObjects([]*core.Selectable{s}, updateEntityList)
-}
-
-func (e *Editor) SelectObjects(s []*core.Selectable, updateEntityList bool) {
+func (e *Editor) SelectObjects(updateEntityList bool, s ...*core.Selectable) {
 	e.SelectedObjects = s
 	e.refreshProperties()
-	/*if updateEntityList {
-		e.EntityTree.SetSelection(objects)
-	}*/
+	if updateEntityList {
+		e.EntityList.Select(s...)
+	}
 }
 
 func (e *Editor) Selecting() bool {
@@ -517,10 +516,10 @@ func (e *Editor) ToolSelectSegment() {
 	for _, s := range editor.SelectedObjects {
 		switch s.Type {
 		case core.SelectableSector:
-			editor.SelectObject(core.SelectableFromSegment(s.Sector.Segments[0]), true)
+			editor.SelectObjects(true, core.SelectableFromSegment(s.Sector.Segments[0]))
 			return
 		case core.SelectableSectorSegment:
-			editor.SelectObject(core.SelectableFromSegment(s.SectorSegment.Next), true)
+			editor.SelectObjects(true, core.SelectableFromSegment(s.SectorSegment.Next))
 			return
 		}
 	}
