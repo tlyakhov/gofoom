@@ -26,12 +26,6 @@ type Renderer struct {
 	columnGroup *sync.WaitGroup
 }
 
-type entityRefWithDist2 struct {
-	*concepts.EntityRef
-	Dist2     float64
-	isSegment bool
-}
-
 // NewRenderer constructs a new Renderer.
 func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 	r := Renderer{
@@ -52,6 +46,9 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 		r.Columns[i].Config = r.Config
 		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
+		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
+		// Set up 16 slots initially
+		r.Columns[i].SortedRefs = make([]state.EntityRefWithDist2, 0, 16)
 	}
 
 	r.Initialize()
@@ -59,11 +56,12 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 }
 
 func (r *Renderer) RenderPortal(c *state.Column) {
-	if c.Depth > constants.MaxPortals {
+	if c.Depth >= constants.MaxPortals {
 		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", c.Sector.Entity)
 		c.DebugNotices.Push(dbg)
 		return
 	}
+	// This allocation is ok, does not escape
 	portal := &state.ColumnPortal{Column: c}
 	portal.CalcScreen()
 	if portal.AdjSegment != nil {
@@ -76,19 +74,16 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 		}
 	}
 
-	prevSector := c.Sector
-	prevYStart := c.YStart
-	prevYEnd := c.YEnd
-	c.Sector = portal.Adj
-	c.YStart = portal.AdjClippedTop
-	c.YEnd = portal.AdjClippedBottom
-	c.LastPortalDistance = c.Distance
-	c.Depth++
-	r.RenderSector(c)
-	c.Depth--
-	c.Sector = prevSector
-	c.YStart = prevYStart
-	c.YEnd = prevYEnd
+	childColumn := &c.PortalColumns[c.Depth]
+	// Copy current column into portal column
+	*childColumn = *c
+	childColumn.Sector = portal.Adj
+	childColumn.YStart = portal.AdjClippedTop
+	childColumn.YEnd = portal.AdjClippedBottom
+	childColumn.LastPortalDistance = c.Distance
+	childColumn.Depth++
+	r.RenderSector(childColumn)
+	c.PickedSelection = childColumn.PickedSelection
 }
 
 // RenderSegmentColumn draws or picks a single pixel vertical column given a particular
@@ -140,6 +135,8 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
 func (r *Renderer) RenderSector(c *state.Column) {
 	c.Distance = constants.MaxViewDistance
+	c.SectorSegment = nil
+	c.Segment = nil
 	for _, sectorSeg := range c.Sector.Segments {
 		if !c.IntersectSegment(&sectorSeg.Segment, true, false) {
 			continue
@@ -155,70 +152,59 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		r.DebugNotices.Push(dbg)
 	}
 
-	return
-
-	// TODO: We need to remove this allocation without creating a memory
-	// leak.
-	sorted := make([]entityRefWithDist2, len(c.Sector.Bodies)+len(c.Sector.InternalSegments))
-	i := 0
+	// Clear slice without reallocating memory
+	c.SortedRefs = c.SortedRefs[:0]
 	for _, ref := range c.Sector.Bodies {
 		b := core.BodyFromDb(ref)
-		sorted[i].EntityRef = ref
-		sorted[i].Dist2 = c.Ray.Start.Dist2(b.Pos.Render.To2D())
-		sorted[i].isSegment = false
-		i++
+		c.SortedRefs = append(c.SortedRefs, state.EntityRefWithDist2{
+			EntityRef: ref,
+			Dist2:     c.Ray.Start.Dist2(b.Pos.Render.To2D()),
+			IsSegment: false,
+		})
 	}
 	for _, ref := range c.Sector.InternalSegments {
 		s := core.InternalSegmentFromDb(ref)
 		// TODO: we do this again later. Should we optimize this?
-		if !c.IntersectSegment(&s.Segment, false, s.TwoSided) {
+		if s == nil || !s.IsActive() || !c.IntersectSegment(&s.Segment, false, s.TwoSided) {
 			continue
 		}
-		sorted[i].EntityRef = ref
-		sorted[i].Dist2 = c.Distance * c.Distance
-		sorted[i].isSegment = true
-		i++
+		c.SortedRefs = append(c.SortedRefs, state.EntityRefWithDist2{
+			EntityRef: ref,
+			Dist2:     c.Distance * c.Distance,
+			IsSegment: true,
+		})
 	}
 
-	slices.SortFunc(sorted, func(a entityRefWithDist2, b entityRefWithDist2) int {
+	slices.SortFunc(c.SortedRefs, func(a state.EntityRefWithDist2, b state.EntityRefWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
-	savedSectorSegment := c.SectorSegment
-	savedSegment := c.Segment
 	c.SectorSegment = nil
-	for _, erwd := range sorted {
-		if erwd.EntityRef == nil {
+	for _, sortedRef := range c.SortedRefs {
+		if sortedRef.EntityRef == nil {
 			continue
 		}
-		if erwd.isSegment {
-			s := core.InternalSegmentFromDb(erwd.EntityRef)
-			if s == nil || !s.IsActive() {
-				continue
-			}
-			if !c.IntersectSegment(&s.Segment, false, s.TwoSided) {
-				continue
-			}
-
-			c.TopZ = s.Top
-			c.BottomZ = s.Bottom
-			c.CalcScreen()
-
-			if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
-				c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(s))
-				return
-			}
-			c.LightElement.Config = r.Config
-			c.LightElement.Sector = c.Sector
-			c.LightElement.Segment = &s.Segment
-			c.LightElement.Type = state.LightElementWall
-			s.Segment.Normal.To3D(&c.LightElement.Normal)
-			WallMid(c, true)
-		} else {
-			r.RenderBody(erwd.EntityRef, c)
+		if !sortedRef.IsSegment {
+			r.RenderBody(sortedRef.EntityRef, c)
+			continue
 		}
+
+		s := core.InternalSegmentFromDb(sortedRef.EntityRef)
+		c.IntersectSegment(&s.Segment, false, s.TwoSided)
+		c.TopZ = s.Top
+		c.BottomZ = s.Bottom
+		c.CalcScreen()
+
+		if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
+			c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(s))
+			return
+		}
+		c.LightElement.Config = r.Config
+		c.LightElement.Sector = c.Sector
+		c.LightElement.Segment = &s.Segment
+		c.LightElement.Type = state.LightElementWall
+		s.Segment.Normal.To3D(&c.LightElement.Normal)
+		WallMid(c, true)
 	}
-	c.SectorSegment = savedSectorSegment
-	c.Segment = savedSegment
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
@@ -375,10 +361,12 @@ func (r *Renderer) Pick(x, y int) []*core.Selectable {
 	bob := math.Sin(r.Player.Bob) * 2
 	// Initialize a column...
 	column := &state.Column{
-		Config:  r.Config,
-		YStart:  0,
-		YEnd:    r.ScreenHeight,
-		CameraZ: r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
+		Config:        r.Config,
+		YStart:        0,
+		YEnd:          r.ScreenHeight,
+		CameraZ:       r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
+		PortalColumns: make([]state.Column, constants.MaxPortals),
+		SortedRefs:    make([]state.EntityRefWithDist2, 0, 16),
 	}
 	column.LightElement.Config = r.Config
 

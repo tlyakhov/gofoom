@@ -2573,8 +2573,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.1875,
-          "Reverse": true,
+          "Percent": 0.3125,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3306,9 +3306,9 @@
     },
     "core.Sector": {
       "Bodies": [
-        "21",
         "32",
-        "131"
+        "131",
+        "21"
       ],
       "BottomZ": {
         "Original": -64
@@ -3335,15 +3335,7 @@
           "Surface": {
             "ExtraStages": [
               {
-                "Texture": "57",
-                "Transform": [
-                  1,
-                  0,
-                  0,
-                  1,
-                  0,
-                  0
-                ]
+                "Texture": "57"
               }
             ],
             "Material": "2",
@@ -3551,11 +3543,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -20.109793774211038,
+          "End": -57.36996004452969,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.5468750000000001,
+          "Percent": 0.26041666666666663,
           "Reverse": false,
-          "Start": -6.904239871031645,
+          "Start": -41.53351723844956,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -3971,6 +3963,9 @@
       "Name": "be46jm7vn27lk1decco0"
     },
     "core.Sector": {
+      "Bodies": [
+        "107"
+      ],
       "BottomZ": {
         "Original": -20
       },
@@ -6640,7 +6635,15 @@
         {
           "AdjacentSector": "53",
           "Hi": {
-            "Material": "2"
+            "Material": "123",
+            "Transform": [
+              1,
+              0,
+              0,
+              1,
+              0.3200000000000002,
+              0
+            ]
           },
           "Lo": {
             "Material": "2"
@@ -6775,7 +6778,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0.0078125,
+          "Percent": 0,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -10076,12 +10079,12 @@
     "Entity": "141",
     "core.InternalSegment": {
       "A": {
-        "X": -330,
-        "Y": 210
+        "X": -280,
+        "Y": 220
       },
       "B": {
         "X": -360,
-        "Y": 110
+        "Y": 220
       },
       "Bottom": -64,
       "Entity": "141",
@@ -10089,7 +10092,8 @@
         "Material": "57",
         "Stretch": "StretchFill"
       },
-      "Top": -20
+      "Top": -20,
+      "TwoSided": true
     }
   },
   {

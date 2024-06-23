@@ -24,22 +24,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-type entityRefLayout struct {
-	Child fyne.Layout
-}
-
-func (erl *entityRefLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
-	s := erl.Child.MinSize(objects)
-	if s.Height < 200 {
-		s.Height = 200
-	}
-	return s
-}
-
-func (erl *entityRefLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
-	erl.Child.Layout(objects, containerSize)
-}
-
 func (g *Grid) imageForRef(ref *concepts.EntityRef) image.Image {
 	w, h := 64, 64
 	if img := materials.ImageFromDb(ref); img != nil {
@@ -78,7 +62,7 @@ func (g *Grid) updateTreeNodeEntityRef(tni widget.TreeNodeID, b bool, co fyne.Ca
 	label.SetText(name)
 	button := box.Objects[2].(*widget.Button)
 	button.OnTapped = func() {
-		g.IEditor.SelectObject(core.SelectableFromEntityRef(ref), true)
+		g.IEditor.SelectObjects(true, core.SelectableFromEntityRef(ref))
 	}
 }
 
@@ -119,6 +103,7 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 			canvas.NewImageFromImage(nil),
 			widget.NewLabel("Template"),
 			widget.NewButtonWithIcon("", theme.MoreHorizontalIcon(), nil),
+			widget.NewButtonWithIcon("", theme.LoginIcon(), nil),
 		)
 	}, g.updateTreeNodeEntityRef)
 	title := "Select " + editTypeTag
@@ -136,8 +121,25 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 		g.NewAction(action)
 		action.Act()
 	}
-	c := container.New(&entityRefLayout{Child: layout.NewVBoxLayout()}, tree, widget.NewButton("Nest Material in new Shader", func() {}))
+	c := container.New(&entityRefLayout{Child: layout.NewStackLayout()}, tree)
 	aiTree := widget.NewAccordionItem(title, c)
 	accordion := gridAddOrUpdateWidgetAtIndex[*widget.Accordion](g)
 	accordion.Items = []*widget.AccordionItem{aiTree}
+}
+
+// This layout is just to make the selection list have a static size
+type entityRefLayout struct {
+	Child fyne.Layout
+}
+
+func (erl *entityRefLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+	s := erl.Child.MinSize(objects)
+	if s.Height < 200 {
+		s.Height = 200
+	}
+	return s
+}
+
+func (erl *entityRefLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
+	erl.Child.Layout(objects, containerSize)
 }

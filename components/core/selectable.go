@@ -129,10 +129,21 @@ func SelectableFromEntityRef(ref *concepts.EntityRef) *Selectable {
 }
 
 func (target *Selectable) IndexIn(list []*Selectable) int {
+	return target.search(list, false)
+}
+
+func (target *Selectable) ExactIndexIn(list []*Selectable) int {
+	return target.search(list, true)
+}
+
+func (target *Selectable) search(list []*Selectable, exact bool) int {
 	for i, test := range list {
-		if typeGroups[test.Type] != typeGroups[target.Type] {
+		if exact && test.Type != target.Type {
+			continue
+		} else if !exact && typeGroups[test.Type] != typeGroups[target.Type] {
 			continue
 		}
+
 		switch test.Type {
 		// Sector selectables
 		case SelectableFloor:

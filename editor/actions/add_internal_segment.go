@@ -18,7 +18,7 @@ type AddInternalSegment struct {
 func (a *AddInternalSegment) Act() {
 	a.SetMapCursor(desktop.CrosshairCursor)
 	a.Mode = "AddInternalSegment"
-	a.SelectObject(core.SelectableFromInternalSegment(a.InternalSegment), true)
+	a.SelectObjects(true, core.SelectableFromInternalSegment(a.InternalSegment))
 	//set cursor
 }
 

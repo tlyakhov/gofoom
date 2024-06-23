@@ -145,7 +145,7 @@ func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 		rh := editor.Renderer.ScreenHeight
 		x := float64(evt.Position.X) * float64(rw) / float64(daw)
 		y := float64(evt.Position.Y) * float64(rh) / float64(dah)
-		editor.SelectObjects(editor.Renderer.Pick(int(x), int(y)), true)
+		editor.SelectObjects(true, editor.Renderer.Pick(int(x), int(y))...)
 	}
 }
 func (g *GameWidget) MouseUp(evt *desktop.MouseEvent) {}

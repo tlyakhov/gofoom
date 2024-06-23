@@ -9,86 +9,86 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func WallHiPick(s *state.ColumnPortal) {
-	if s.ScreenY >= s.ClippedStart && s.ScreenY < s.AdjClippedTop {
-		s.PickedSelection = append(s.PickedSelection, core.SelectableFromWall(s.AdjSegment, core.SelectableHi))
+func WallHiPick(cp *state.ColumnPortal) {
+	if cp.ScreenY >= cp.ClippedStart && cp.ScreenY < cp.AdjClippedTop {
+		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableHi))
 	}
 }
 
 // WallHi renders the top portion of a portal segment.
-func WallHi(s *state.ColumnPortal) {
-	surf := s.AdjSegment.HiSurface
-	u := s.U
+func WallHi(cp *state.ColumnPortal) {
+	surf := cp.AdjSegment.HiSurface
+	u := cp.U
 	if surf.Stretch == materials.StretchNone {
-		if s.Sector.Winding < 0 {
+		if cp.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
-		u = (s.Segment.A[0] + s.Segment.A[1] + u*s.Segment.Length) / 64.0
+		u = (cp.Segment.A[0] + cp.Segment.A[1] + u*cp.Segment.Length) / 64.0
 	}
-	for s.ScreenY = s.ClippedStart; s.ScreenY < s.AdjClippedTop; s.ScreenY++ {
-		screenIndex := uint32(s.ScreenX + s.ScreenY*s.ScreenWidth)
-		if s.Distance >= s.ZBuffer[screenIndex] {
+	for cp.ScreenY = cp.ClippedStart; cp.ScreenY < cp.AdjClippedTop; cp.ScreenY++ {
+		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
+		if cp.Distance >= cp.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(s.ScreenY-s.ScreenStart) / float64(s.AdjScreenTop-s.ScreenStart)
-		s.RaySegIntersect[2] = (1.0-v)*s.TopZ + v*s.AdjCeilZ
+		v := float64(cp.ScreenY-cp.ScreenStart) / float64(cp.AdjScreenTop-cp.ScreenStart)
+		cp.RaySegIntersect[2] = (1.0-v)*cp.TopZ + v*cp.AdjCeilZ
 
 		if surf.Stretch == materials.StretchNone {
-			v = -s.RaySegIntersect[2] / 64.0
+			v = -cp.RaySegIntersect[2] / 64.0
 		} else if surf.Stretch == materials.StretchAspect {
-			v *= (s.Sector.Max[2] - s.Sector.Min[2]) / s.Segment.Length
+			v *= (cp.Sector.Max[2] - cp.Sector.Min[2]) / cp.Segment.Length
 		}
 
 		if !surf.Material.Nil() {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
-			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.Distance)
+			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
+			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
-		s.ZBuffer[screenIndex] = s.Distance
+		cp.FrameBuffer[screenIndex].AddPreMulColorSelf(&cp.MaterialSampler.Output)
+		cp.ZBuffer[screenIndex] = cp.Distance
 	}
 }
 
-func WallLowPick(s *state.ColumnPortal) {
-	if s.ScreenY >= s.AdjClippedBottom && s.ScreenY < s.ClippedEnd {
-		s.PickedSelection = append(s.PickedSelection, core.SelectableFromWall(s.AdjSegment, core.SelectableLow))
+func WallLowPick(cp *state.ColumnPortal) {
+	if cp.ScreenY >= cp.AdjClippedBottom && cp.ScreenY < cp.ClippedEnd {
+		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableLow))
 	}
 }
 
 // WallLow renders the bottom portion of a portal segment.
-func WallLow(s *state.ColumnPortal) {
-	surf := s.AdjSegment.LoSurface
-	u := s.U
+func WallLow(cp *state.ColumnPortal) {
+	surf := cp.AdjSegment.LoSurface
+	u := cp.U
 	if surf.Stretch == materials.StretchNone {
-		if s.Sector.Winding < 0 {
+		if cp.Sector.Winding < 0 {
 			u = 1.0 - u
 		}
-		u = (s.Segment.A[0] + s.Segment.A[1] + u*s.Segment.Length) / 64.0
+		u = (cp.Segment.A[0] + cp.Segment.A[1] + u*cp.Segment.Length) / 64.0
 	}
-	for s.ScreenY = s.AdjClippedBottom; s.ScreenY < s.ClippedEnd; s.ScreenY++ {
-		screenIndex := uint32(s.ScreenX + s.ScreenY*s.ScreenWidth)
-		if s.Distance >= s.ZBuffer[screenIndex] {
+	for cp.ScreenY = cp.AdjClippedBottom; cp.ScreenY < cp.ClippedEnd; cp.ScreenY++ {
+		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
+		if cp.Distance >= cp.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(s.ScreenY-s.AdjScreenBottom) / float64(s.ScreenEnd-s.AdjScreenBottom)
-		s.RaySegIntersect[2] = (1.0-v)*s.AdjFloorZ + v*s.BottomZ
+		v := float64(cp.ScreenY-cp.AdjScreenBottom) / float64(cp.ScreenEnd-cp.AdjScreenBottom)
+		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjFloorZ + v*cp.BottomZ
 
 		if surf.Stretch == materials.StretchNone {
-			v = -s.RaySegIntersect[2] / 64.0
+			v = -cp.RaySegIntersect[2] / 64.0
 		} else if surf.Stretch == materials.StretchAspect {
-			v *= (s.Sector.Max[2] - s.Sector.Min[2]) / s.Segment.Length
+			v *= (cp.Sector.Max[2] - cp.Sector.Min[2]) / cp.Segment.Length
 		}
 
 		if !surf.Material.Nil() {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
-			s.SampleShader(surf.Material, surf.ExtraStages, tu, tv, s.ProjectZ(1.0))
-			s.SampleLight(&s.MaterialSampler.Output, surf.Material, &s.RaySegIntersect, s.Distance)
+			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
+			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
-		s.FrameBuffer[screenIndex].AddPreMulColorSelf(&s.MaterialSampler.Output)
-		s.ZBuffer[screenIndex] = s.Distance
+		cp.FrameBuffer[screenIndex].AddPreMulColorSelf(&cp.MaterialSampler.Output)
+		cp.ZBuffer[screenIndex] = cp.Distance
 	}
 }

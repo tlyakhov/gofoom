@@ -142,7 +142,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	button := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
 		list.State().Lock.Lock()
 		ref := editor.DB.RefForNewEntity()
-		editor.SelectObject(core.SelectableFromEntityRef(ref), true)
+		editor.SelectObjects(true, core.SelectableFromEntityRef(ref))
 		list.State().Lock.Unlock()
 	})
 	search := widget.NewEntry()
@@ -161,7 +161,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		entity := list.BackingStore[id.Row][0].(int)
 		s := core.SelectableFromEntityRef(list.State().DB.EntityRef(uint64(entity)))
 		if s.IndexIn(editor.SelectedObjects) == -1 {
-			editor.SelectObject(s, false)
+			editor.SelectObjects(false, s)
 		}
 		log.Printf("select: %v", entity)
 	}
@@ -230,6 +230,18 @@ func (list *EntityList) Update() {
 		list.BackingStore = append(list.BackingStore, backingRow)
 	}
 	list.applySort()
+}
+
+func (list *EntityList) Select(selected ...*core.Selectable) {
+	// TODO: Support multiple-selection when Fyne Table supports them
+	for i, row := range list.BackingStore {
+		for _, s := range selected {
+			if row[elcEntity].(int) == int(s.Ref.Entity) {
+				list.Table.Select(widget.TableCellID{Row: i, Col: 0})
+				return
+			}
+		}
+	}
 }
 
 func (list *EntityList) SetSort(col int, dir elSortDir) {
