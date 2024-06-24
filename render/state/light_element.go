@@ -180,7 +180,31 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				}
 			}
 		}
-		// TODO: Generate shadows for internal segments as well
+		for _, ref := range sector.InternalSegments {
+			seg := core.InternalSegmentFromDb(ref)
+			if seg == nil || &seg.Segment == le.Segment {
+				continue
+			}
+			// Find the intersection with this segment.
+			ok := seg.Intersect3D(p, lightPos, &le.Intersection)
+			if !ok {
+				if debugLighting {
+					log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
+				}
+				continue // No intersection, skip it!
+			}
+
+			sampler := &MaterialSampler{Config: le.Config}
+			u := le.Intersection.To2D().Dist(seg.A) / seg.Length
+			v := (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
+			sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1)
+			if lit := materials.LitFromDb(seg.Surface.Material); lit != nil {
+				lit.Apply(&sampler.Output, nil)
+			}
+			if sampler.Output[3] >= 0.99 {
+				return false
+			}
+		}
 
 		var next *core.Sector
 		// Since our sectors can be concave, we can't just go through the first portal we find,

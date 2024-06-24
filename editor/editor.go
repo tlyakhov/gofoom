@@ -80,6 +80,14 @@ func NewEditor() *Editor {
 	return e
 }
 
+func (e *Editor) Content() string {
+	return e.Window.Clipboard().Content()
+}
+
+func (e *Editor) SetContent(c string) {
+	e.Window.Clipboard().SetContent(c)
+}
+
 func (e *Editor) ScreenToWorld(p *concepts.Vector2) *concepts.Vector2 {
 	return p.Sub(e.Size.Mul(0.5)).MulSelf(1.0 / e.Scale).AddSelf(&e.Pos)
 }
