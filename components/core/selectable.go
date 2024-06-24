@@ -201,3 +201,35 @@ func (s *Selectable) AddToList(list *[]*Selectable) bool {
 func (s *Selectable) Serialize() any {
 	return s.Ref.DB.SerializeEntity(s.Ref.Entity)
 }
+
+func (s *Selectable) Transform(m *concepts.Matrix2) {
+	switch s.Type {
+	case SelectableSector:
+		for _, seg := range s.Sector.Segments {
+			m.ProjectSelf(&seg.P)
+		}
+		s.Sector.Recalculate()
+	case SelectableLow:
+		fallthrough
+	case SelectableMid:
+		fallthrough
+	case SelectableHi:
+		fallthrough
+	case SelectableSectorSegment:
+		m.ProjectSelf(&s.SectorSegment.P)
+		s.Sector.Recalculate()
+	case SelectableBody:
+		m.ProjectXYSelf(&s.Body.Pos.Original)
+		s.Body.Pos.Reset()
+	case SelectableInternalSegmentA:
+		m.ProjectSelf(s.InternalSegment.A)
+		s.InternalSegment.Recalculate()
+	case SelectableInternalSegmentB:
+		m.ProjectSelf(s.InternalSegment.B)
+		s.InternalSegment.Recalculate()
+	case SelectableInternalSegment:
+		m.ProjectSelf(s.InternalSegment.A)
+		m.ProjectSelf(s.InternalSegment.B)
+		s.InternalSegment.Recalculate()
+	}
+}

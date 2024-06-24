@@ -12,13 +12,13 @@ import (
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
+// TODO: Be more flexible with what we can delete/cut/copy/paste. Should be
+// possible to only grab a "hi" part of a segment, for example. For now,
+// just grab EntityRefs
 type Copy struct {
 	state.IEditor
 
-	Selected []*core.Selectable
-	// TODO: Be more flexible with what we can delete/cut/copy/paste. Should be
-	// possible to only grab a "hi" part of a segment, for example. For now,
-	// just grab EntityRefs
+	Selected      []*core.Selectable
 	Saved         map[uint64]any
 	ClipboardData string
 }
