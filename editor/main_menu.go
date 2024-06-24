@@ -156,6 +156,9 @@ func CreateMainMenu() {
 
 	editor.EditPaste.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyV, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.EditPaste.Menu = fyne.NewMenuItem("Paste", func() {
+		action := &actions.Paste{IEditor: editor}
+		editor.NewAction(action)
+		action.Act()
 	})
 
 	editor.EditSelectSegment.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyApostrophe, Modifier: fyne.KeyModifierShortcutDefault}
