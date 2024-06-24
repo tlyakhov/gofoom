@@ -100,11 +100,11 @@ func main() {
 	toolbarItems = append(toolbarItems, item)
 
 	toolbarItems = append(toolbarItems, widget.NewToolbarSeparator())
-	item = widget.NewToolbarAction(theme.ContentCutIcon(), func() {})
+	item = widget.NewToolbarAction(theme.ContentCutIcon(), editor.EditCut.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
-	item = widget.NewToolbarAction(theme.ContentCopyIcon(), func() {})
+	item = widget.NewToolbarAction(theme.ContentCopyIcon(), editor.EditCopy.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
-	item = widget.NewToolbarAction(theme.ContentPasteIcon(), func() {})
+	item = widget.NewToolbarAction(theme.ContentPasteIcon(), editor.EditPaste.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
 	toolbar := widget.NewToolbar(toolbarItems...)
 

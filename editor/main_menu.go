@@ -30,6 +30,9 @@ type EditorMenu struct {
 	EditUndo   MenuAction
 	EditRedo   MenuAction
 	EditDelete MenuAction
+	EditCut    MenuAction
+	EditCopy   MenuAction
+	EditPaste  MenuAction
 
 	EditSelectSegment   MenuAction
 	EditRaiseCeil       MenuAction
@@ -138,6 +141,21 @@ func CreateMainMenu() {
 		action := &actions.Delete{IEditor: editor}
 		editor.NewAction(action)
 		action.Act()
+	})
+
+	editor.EditCut.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyX, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditCut.Menu = fyne.NewMenuItem("Cut", func() {
+	})
+
+	editor.EditCopy.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyC, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditCopy.Menu = fyne.NewMenuItem("Copy", func() {
+		action := &actions.Copy{IEditor: editor}
+		editor.NewAction(action)
+		action.Act()
+	})
+
+	editor.EditPaste.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyV, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditPaste.Menu = fyne.NewMenuItem("Paste", func() {
 	})
 
 	editor.EditSelectSegment.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyApostrophe, Modifier: fyne.KeyModifierShortcutDefault}
@@ -261,7 +279,7 @@ func CreateMainMenu() {
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)
 	menuEdit := fyne.NewMenu("Edit", editor.EditUndo.Menu, editor.EditRedo.Menu, fyne.NewMenuItemSeparator(),
-		editor.EditDelete.Menu, fyne.NewMenuItemSeparator(),
+		editor.EditCut.Menu, editor.EditCopy.Menu, editor.EditPaste.Menu, editor.EditDelete.Menu, fyne.NewMenuItemSeparator(),
 		editor.EditSelectSegment.Menu,
 		editor.EditRaiseCeil.Menu, editor.EditLowerCeil.Menu, editor.EditRaiseFloor.Menu, editor.EditLowerFloor.Menu,
 		editor.EditRaiseCeilSlope.Menu, editor.EditLowerCeilSlope.Menu, editor.EditRaiseFloorSlope.Menu,

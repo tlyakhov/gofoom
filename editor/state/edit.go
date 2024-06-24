@@ -8,6 +8,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -55,6 +56,7 @@ type Edit struct {
 }
 
 type IEditor interface {
+	fyne.Clipboard
 	State() *Edit
 	ScreenToWorld(p *concepts.Vector2) *concepts.Vector2
 	WorldToScreen(p *concepts.Vector2) *concepts.Vector2
