@@ -4,7 +4,6 @@
 package core
 
 import (
-	"fmt"
 	"math"
 
 	"tlyakhov/gofoom/constants"
@@ -18,7 +17,7 @@ type Body struct {
 	Vel               concepts.SimVariable[concepts.Vector3]
 	Force             concepts.Vector3
 	Size              concepts.SimVariable[concepts.Vector2] `editable:"Size"`
-	SectorEntityRef   concepts.SimVariable[*concepts.EntityRef]
+	SectorEntityRef   *concepts.EntityRef
 	Angle             concepts.SimVariable[float64] `editable:"Angle"`
 	Mass              float64                       `editable:"Mass"`
 	CollisionResponse CollisionResponse             `editable:"Collision Response"`
@@ -48,44 +47,22 @@ func (b *Body) String() string {
 	return "Body: " + b.Pos.Now.StringHuman()
 }
 
-func (b *Body) sectorRenderBlend(blend float64) {
-	if b.SectorEntityRef.Now == nil || b.SectorEntityRef.Now == b.SectorEntityRef.Prev {
-		b.SectorEntityRef.Render = b.SectorEntityRef.Prev
-		return
-	}
-	if b.SectorEntityRef.Prev == nil || b.LastEnteredPortal == nil {
-		b.SectorEntityRef.Render = b.SectorEntityRef.Now
-		return
-	}
-
-	b.Pos.RenderBlend(blend)
-	fmt.Printf("WhichSide: %v, Winding: %v\n", b.LastEnteredPortal.WhichSide(b.Pos.Render.To2D()), b.LastEnteredPortal.Sector.Winding)
-	if b.LastEnteredPortal.WhichSide(b.Pos.Render.To2D())*float64(b.LastEnteredPortal.Sector.Winding) <= 0 {
-		b.SectorEntityRef.Render = b.SectorEntityRef.Prev
-		return
-	}
-	b.SectorEntityRef.Render = b.SectorEntityRef.Now
-}
-
 func (b *Body) SetDB(db *concepts.EntityComponentDB) {
 	if b.DB != nil {
 		b.Pos.Detach(b.DB.Simulation)
 		b.Vel.Detach(b.DB.Simulation)
 		b.Size.Detach(b.DB.Simulation)
 		b.Angle.Detach(b.DB.Simulation)
-		b.SectorEntityRef.Detach(b.DB.Simulation)
 	}
 	b.Attached.SetDB(db)
 	b.Pos.Attach(db.Simulation)
 	b.Vel.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
 	b.Angle.Attach(b.DB.Simulation)
-	b.SectorEntityRef.Attach(b.DB.Simulation)
-	b.SectorEntityRef.RenderCallback = b.sectorRenderBlend
 }
 
 func (b *Body) Sector() *Sector {
-	return SectorFromDb(b.SectorEntityRef.Now)
+	return SectorFromDb(b.SectorEntityRef)
 }
 
 func (b *Body) Normal() *concepts.Vector2 {
@@ -99,6 +76,27 @@ func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
+func (b *Body) RenderSector() *Sector {
+	// Figure out the sector to use for rendering this body based on the current
+	// render position. This may be different from Body.Sector(), since
+	// the Render position is interpolated (see Simulation)
+	// First, fast path - check if the body is inside its .Sector()
+	p := b.Pos.Render.To2D()
+	sector := b.Sector()
+	if sector != nil && sector.IsPointInside2D(p) {
+		return sector
+	}
+	// Go through all sectors to find the containing one. Optimize this later if
+	// necessary.
+	for _, a := range b.DB.Components[SectorComponentIndex] {
+		sector = a.(*Sector)
+		if sector == nil || !sector.IsPointInside2D(p) {
+			continue
+		}
+		return sector
+	}
+	return nil
+}
 func (b *Body) Construct(data map[string]any) {
 	b.Attached.Construct(data)
 

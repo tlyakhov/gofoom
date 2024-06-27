@@ -45,7 +45,7 @@ func (a *AddSector) OnMouseDown(evt *desktop.MouseEvent) {
 	}
 
 	a.Sector.Segments = append(segs, &seg)
-	a.AttachToSector()
+	a.Sector.Recalculate()
 }
 func (a *AddSector) OnMouseMove() {
 	if a.Mode != "AddSectorSegment" {

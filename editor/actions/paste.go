@@ -5,12 +5,10 @@ package actions
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -19,17 +17,14 @@ import (
 // possible to only grab a "hi" part of a segment, for example. For now,
 // just grab EntityRefs
 type Paste struct {
-	state.IEditor
+	Move
 
-	Selected       []*core.Selectable
 	CopiedToPasted map[uint64]uint64
 	ClipboardData  string
 }
 
 func (a *Paste) Act() {
 	a.ClipboardData = a.IEditor.Content()
-
-	fmt.Printf("%v\n", a.ClipboardData)
 
 	var parsed any
 	err := json.Unmarshal([]byte(a.ClipboardData), &parsed)
@@ -60,6 +55,7 @@ func (a *Paste) Act() {
 			continue
 		}
 
+		var pastedRef *concepts.EntityRef
 		for name, index := range concepts.DbTypes().Indexes {
 			jsonData := jsonEntity[name]
 			if jsonData == nil {
@@ -74,8 +70,11 @@ func (a *Paste) Act() {
 				pastedEntity := db.NewEntity()
 				db.Attach(index, pastedEntity, c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
+				pastedRef = c.Ref()
 			}
-			selectable := core.SelectableFromEntityRef(c.Ref())
+		}
+		if pastedRef != nil {
+			selectable := core.SelectableFromEntityRef(pastedRef)
 			selectable.AddToList(&a.Selected)
 		}
 	}
@@ -84,31 +83,39 @@ func (a *Paste) Act() {
 	// pasted materials to surfaces
 	// pasted bodies to sectors
 	// pasted internal segments to sectors
-	for copiedEntity, pastedEntity := range a.CopiedToPasted {
+	for _, pastedEntity := range a.CopiedToPasted {
 		ref := db.EntityRef(pastedEntity)
-		if seg := core.InternalSegmentFromDb(ref); seg != nil && seg.SectorEntityRef != nil {
-			// If the parent was copied as well, switch to the pasted parent.
-			if pastedParent, ok := a.CopiedToPasted[seg.SectorEntityRef.Entity]; ok {
-				seg.SectorEntityRef = db.EntityRef(pastedParent)
-				seg.Sector().InternalSegments[pastedEntity] = seg.Ref()
-				delete(seg.Sector().InternalSegments, copiedEntity)
-			}
+		if seg := core.InternalSegmentFromDb(ref); seg != nil {
+			seg.AttachToSectors()
 		}
+		if body := core.BodyFromDb(ref); body != nil {
+			body.SectorEntityRef = nil
+		}
+		// TODO: materials
 	}
 
-	// Test
-	m := concepts.IdentityMatrix2.Translate(&concepts.Vector2{100, 100})
+	// Save original positions
+	a.Original = make([]concepts.Vector3, 0, len(a.Selected))
 	for _, s := range a.Selected {
-		s.Transform(m)
+		a.Original = append(a.Original, s.SavePositions()...)
 	}
+
+	// Change selection
+	a.SelectObjects(true, a.Selected...)
 	a.State().Lock.Unlock()
+}
+func (a *Paste) Cancel() {}
+func (a *Paste) Frame()  {}
+func (a *Paste) OnMouseDown(evt *desktop.MouseEvent) {
+	a.State().Modified = true
 	a.ActionFinished(false, true, true)
 }
-func (a *Paste) Cancel()                             {}
-func (a *Paste) Frame()                              {}
-func (a *Paste) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *Paste) OnMouseMove()                        {}
-func (a *Paste) OnMouseUp()                          {}
+func (a *Paste) OnMouseMove() {
+	a.Move.OnMouseMove()
+}
+func (a *Paste) OnMouseUp() {
+
+}
 
 func (a *Paste) Undo() {
 }

@@ -22,8 +22,9 @@ import (
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*state.Config
-	Columns     []state.Column
-	columnGroup *sync.WaitGroup
+	Columns        []state.Column
+	columnGroup    *sync.WaitGroup
+	startingSector *core.Sector
 }
 
 // NewRenderer constructs a new Renderer.
@@ -225,11 +226,13 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.MaterialSampler.ScreenX = x
 	column.MaterialSampler.ScreenY = y
 	column.MaterialSampler.Angle = column.Angle
-	column.Sector = r.PlayerBody.Sector()
 	column.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
 	column.RayFloorCeil[0] = column.Ray.AngleCos * column.ViewFix[column.ScreenX]
 	column.RayFloorCeil[1] = column.Ray.AngleSin * column.ViewFix[column.ScreenX]
 
+	if r.startingSector != nil {
+		column.Sector = r.startingSector
+	}
 	if column.Sector == nil {
 		return nil
 	}
@@ -299,13 +302,10 @@ func (r *Renderer) Render(buffer []uint8) {
 	for r.DebugNotices.Length() > 30 {
 		r.DebugNotices.Pop()
 	}
-	if r.PlayerBody.SectorEntityRef.Render.Nil() {
-		r.DebugNotices.Push("Player is not in a sector")
-		return
-	}
 	r.RenderLock.Lock()
 	defer r.RenderLock.Unlock()
 
+	r.startingSector = r.PlayerBody.RenderSector()
 	r.Frame++
 	r.Counter = 0
 

@@ -17,10 +17,7 @@ import (
 type Sector struct {
 	concepts.Attached `editable:"^"`
 
-	Segments []*SectorSegment
-	// TODO: bodies and internal segments should be able to be contained in
-	// multiple sectors at the same time, to avoid weird boundary conditions.
-	// This will require ensuring things aren't double-counted.
+	Segments         []*SectorSegment
 	Bodies           map[uint64]*concepts.EntityRef
 	InternalSegments map[uint64]*concepts.EntityRef
 	BottomZ          concepts.SimVariable[float64] `editable:"Floor Height"`
@@ -64,11 +61,11 @@ func (s *Sector) String() string {
 	return "Sector: " + s.Center.StringHuman()
 }
 
-func (ms *Sector) IsPointInside2D(p *concepts.Vector2) bool {
+func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	inside := false
-	flag1 := (p[1] >= ms.Segments[0].P[1])
+	flag1 := (p[1] >= s.Segments[0].P[1])
 
-	for _, segment := range ms.Segments {
+	for _, segment := range s.Segments {
 		flag2 := (p[1] >= segment.Next.P[1])
 		if flag1 != flag2 {
 			if ((segment.Next.P[1]-p[1])*(segment.P[0]-segment.Next.P[0]) >= (segment.Next.P[0]-p[0])*(segment.P[1]-segment.Next.P[1])) == flag2 {
@@ -154,16 +151,6 @@ func (s *Sector) Construct(data map[string]any) {
 			s.Segments[i] = segment
 		}
 	}
-	if v, ok := data["Bodies"]; ok {
-		if refs, ok := v.([]any); ok {
-			s.Bodies = s.DB.DeserializeEntityRefs(refs)
-		}
-	}
-	if v, ok := data["InternalSegments"]; ok {
-		if refs, ok := v.([]any); ok {
-			s.InternalSegments = s.DB.DeserializeEntityRefs(refs)
-		}
-	}
 	if v, ok := data["FloorTarget"]; ok {
 		s.FloorTarget = s.DB.DeserializeEntityRef(v)
 	}
@@ -227,14 +214,6 @@ func (s *Sector) Serialize() map[string]any {
 	}
 	if len(s.ExitScripts) > 0 {
 		result["ExitScripts"] = concepts.SerializeSlice(s.ExitScripts)
-	}
-
-	if len(s.Bodies) > 0 {
-		result["Bodies"] = concepts.SerializeEntityRefMap(s.Bodies)
-	}
-
-	if len(s.InternalSegments) > 0 {
-		result["InternalSegments"] = concepts.SerializeEntityRefMap(s.InternalSegments)
 	}
 
 	segments := []any{}
@@ -440,6 +419,20 @@ func (s *Sector) AABBIntersect(min, max *concepts.Vector3, includeEdges bool) bo
 			s.Max[1] > min[1] &&
 			s.Min[2] < max[2] &&
 			s.Max[2] > min[2])
+	}
+}
+
+func (s *Sector) AABBIntersect2D(min, max *concepts.Vector2, includeEdges bool) bool {
+	if includeEdges {
+		return (s.Min[0] <= max[0] &&
+			s.Max[0] >= min[0] &&
+			s.Min[1] <= max[1] &&
+			s.Max[1] >= min[1])
+	} else {
+		return (s.Min[0] < max[0] &&
+			s.Max[0] > min[0] &&
+			s.Min[1] < max[1] &&
+			s.Max[1] > min[1])
 	}
 }
 

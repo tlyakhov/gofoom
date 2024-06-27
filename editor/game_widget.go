@@ -88,8 +88,8 @@ func (g *GameWidget) Draw() {
 	g.Context.SetFontFace(basicfont.Face7x13)
 	g.Context.DrawString(fmt.Sprintf("FPS: %.1f", editor.DB.Simulation.FPS), 10, 10)
 	g.Context.DrawString(fmt.Sprintf("Health: %.1f", playerAlive.Health), 10, 20)
-	if !playerBody.SectorEntityRef.Render.Nil() {
-		g.Context.DrawString(fmt.Sprintf("Sector: %v", playerBody.SectorEntityRef.Render.String()), 10, 30)
+	if !playerBody.SectorEntityRef.Nil() {
+		g.Context.DrawString(fmt.Sprintf("Sector: %v", playerBody.SectorEntityRef.String()), 10, 30)
 	}
 	g.Context.DrawString(fmt.Sprintf("f: %v, v: %v, p: %v\n", playerBody.Force.StringHuman(), playerBody.Vel.Render.StringHuman(), playerBody.Pos.Render.StringHuman()), 10, 40)
 

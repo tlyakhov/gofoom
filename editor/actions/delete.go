@@ -86,9 +86,7 @@ func (a *Delete) Redo() {
 			fallthrough
 		case core.SelectableInternalSegmentB:
 			a.State().DB.DetachAll(s.InternalSegment.Entity)
-			if s.InternalSegment.Sector() != nil {
-				delete(s.InternalSegment.Sector().Bodies, s.InternalSegment.Entity)
-			}
+			s.InternalSegment.DetachFromSectors()
 		case core.SelectableEntityRef:
 			a.State().DB.DetachAll(s.Ref.Entity)
 		}

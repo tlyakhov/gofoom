@@ -68,7 +68,7 @@ func processInput() {
 	}
 	if win.Pressed(pixel.KeySpace) {
 
-		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
+		if renderer.PlayerBody.SectorEntityRef.Component(behaviors.UnderwaterComponentIndex) != nil {
 			renderer.PlayerBody.Force[2] += constants.PlayerSwimStrength
 		} else if renderer.PlayerBody.OnGround {
 			renderer.PlayerBody.Force[2] += constants.PlayerJumpForce
@@ -76,7 +76,7 @@ func processInput() {
 		}
 	}
 	if win.Pressed(pixel.KeyC) {
-		if renderer.PlayerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
+		if renderer.PlayerBody.SectorEntityRef.Component(behaviors.UnderwaterComponentIndex) != nil {
 			renderer.PlayerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			renderer.Player.Crouching = true
@@ -103,8 +103,8 @@ func renderGame() {
 	canvas.Draw(win, mat)
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", db.Simulation.FPS))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
-	if !renderer.PlayerBody.SectorEntityRef.Render.Nil() {
-		ref := renderer.PlayerBody.SectorEntityRef.Render
+	if !renderer.PlayerBody.SectorEntityRef.Nil() {
+		ref := renderer.PlayerBody.SectorEntityRef
 		s := 0
 		//		core.SectorFromDb(ref).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
 		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v, LM:%v", ref.String(), s))
