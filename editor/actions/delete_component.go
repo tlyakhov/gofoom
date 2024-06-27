@@ -52,7 +52,7 @@ func (a *DeleteComponent) Redo() {
 		switch target := component.(type) {
 		case *core.Body:
 			entity := component.Ref().Entity
-			if target.SectorEntityRef.Now != nil {
+			if target.SectorEntityRef != nil {
 				a.SectorForEntity[entity] = target.Sector()
 				delete(a.SectorForEntity[entity].Bodies, entity)
 			}

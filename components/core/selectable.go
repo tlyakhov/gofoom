@@ -96,21 +96,18 @@ func SelectableFromBody(b *Body) *Selectable {
 func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
 	return &Selectable{
 		Type:            SelectableInternalSegment,
-		Sector:          s.Sector(),
 		InternalSegment: s,
 		Ref:             s.EntityRef}
 }
 
 func SelectableFromInternalSegmentA(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentA,
-		Sector:          s.Sector(),
 		InternalSegment: s,
 		Ref:             s.EntityRef}
 }
 
 func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentB,
-		Sector:          s.Sector(),
 		InternalSegment: s,
 		Ref:             s.EntityRef}
 }
@@ -189,7 +186,7 @@ func (target *Selectable) search(list []*Selectable, exact bool) int {
 	return -1
 }
 func (s *Selectable) AddToList(list *[]*Selectable) bool {
-	if s.IndexIn(*list) >= 0 {
+	if s.search(*list, true) >= 0 {
 		return false
 	}
 	*list = append(*list, s)
@@ -200,6 +197,73 @@ func (s *Selectable) AddToList(list *[]*Selectable) bool {
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {
 	return s.Ref.DB.SerializeEntity(s.Ref.Entity)
+}
+
+func (s *Selectable) SavePositions() []concepts.Vector3 {
+	positions := make([]concepts.Vector3, 0, 1)
+
+	switch s.Type {
+	case SelectableSector:
+		i := 0
+		for _, seg := range s.Sector.Segments {
+			positions = append(positions, concepts.Vector3{})
+			seg.P.To3D(&positions[i])
+			i++
+		}
+	case SelectableLow:
+		fallthrough
+	case SelectableMid:
+		fallthrough
+	case SelectableHi:
+		fallthrough
+	case SelectableSectorSegment:
+		positions = append(positions, concepts.Vector3{})
+		s.SectorSegment.P.To3D(&positions[0])
+	case SelectableBody:
+		positions = append(positions, s.Body.Pos.Original)
+	case SelectableInternalSegmentA:
+		positions = append(positions, concepts.Vector3{})
+		s.InternalSegment.A.To3D(&positions[0])
+	case SelectableInternalSegmentB:
+		positions = append(positions, concepts.Vector3{})
+		s.InternalSegment.B.To3D(&positions[0])
+	case SelectableInternalSegment:
+		positions = append(positions, concepts.Vector3{}, concepts.Vector3{})
+		s.InternalSegment.A.To3D(&positions[0])
+		s.InternalSegment.B.To3D(&positions[1])
+	}
+	return positions
+}
+
+func (s *Selectable) LoadPositions(positions []concepts.Vector3) int {
+	switch s.Type {
+	case SelectableSector:
+		i := 0
+		for _, seg := range s.Sector.Segments {
+			seg.P.From(positions[i].To2D())
+			i++
+		}
+		return i
+	case SelectableLow:
+		fallthrough
+	case SelectableMid:
+		fallthrough
+	case SelectableHi:
+		fallthrough
+	case SelectableSectorSegment:
+		s.SectorSegment.P.From(positions[0].To2D())
+	case SelectableBody:
+		s.Body.Pos.Original = positions[0]
+	case SelectableInternalSegmentA:
+		s.InternalSegment.A.From(positions[0].To2D())
+	case SelectableInternalSegmentB:
+		s.InternalSegment.B.From(positions[0].To2D())
+	case SelectableInternalSegment:
+		s.InternalSegment.A.From(positions[0].To2D())
+		s.InternalSegment.B.From(positions[1].To2D())
+		return 2
+	}
+	return 1
 }
 
 func (s *Selectable) Transform(m *concepts.Matrix2) {
@@ -230,6 +294,29 @@ func (s *Selectable) Transform(m *concepts.Matrix2) {
 	case SelectableInternalSegment:
 		m.ProjectSelf(s.InternalSegment.A)
 		m.ProjectSelf(s.InternalSegment.B)
+		s.InternalSegment.Recalculate()
+	}
+}
+
+func (s *Selectable) Recalculate() {
+	switch s.Type {
+	case SelectableSector:
+		fallthrough
+	case SelectableLow:
+		fallthrough
+	case SelectableMid:
+		fallthrough
+	case SelectableHi:
+		fallthrough
+	case SelectableSectorSegment:
+		s.Sector.Recalculate()
+	case SelectableBody:
+		s.Body.Pos.Reset()
+	case SelectableInternalSegmentA:
+		fallthrough
+	case SelectableInternalSegmentB:
+		fallthrough
+	case SelectableInternalSegment:
 		s.InternalSegment.Recalculate()
 	}
 }

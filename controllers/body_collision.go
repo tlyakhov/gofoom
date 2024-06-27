@@ -31,7 +31,7 @@ func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
 	}
 	bc.Sector = sector
 	bc.Sector.Bodies[bc.Body.Entity] = bc.Body.Ref()
-	bc.Body.SectorEntityRef.Now = sectorRef
+	bc.Body.SectorEntityRef = sectorRef
 
 	if bc.Body.OnGround {
 		floorZ, _ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
@@ -51,7 +51,7 @@ func (bc *BodyController) Exit() {
 	}
 	BodySectorScript(bc.Sector.ExitScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
 	delete(bc.Sector.Bodies, bc.Body.Entity)
-	bc.Body.SectorEntityRef.Now = nil
+	bc.Body.SectorEntityRef = nil
 }
 
 func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
@@ -79,24 +79,33 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 
 func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
-	closestDistance2 := math.MaxFloat64
 
-	for _, isector := range bc.EntityComponentDB.All(core.SectorComponentIndex) {
-		sector := isector.(*core.Sector)
-		d2 := bc.pos.Dist2(&sector.Center)
-
-		if closestSector == nil || d2 < closestDistance2 {
-			closestDistance2 = d2
-			closestSector = sector
-		}
+	for _, attachable := range bc.EntityComponentDB.All(core.SectorComponentIndex) {
+		sector := attachable.(*core.Sector)
 		if sector.IsPointInside2D(bc.pos2d) {
-			closestDistance2 = 0
+			closestSector = sector
 			break
 		}
 	}
 
-	if closestDistance2 > 0 {
-		bc.Body.Pos.Now = closestSector.Center
+	if closestSector == nil {
+		p := bc.Body.Pos.Now.To2D()
+		var closestSeg *core.SectorSegment
+		closestDistance2 := math.MaxFloat64
+		for _, attachable := range bc.EntityComponentDB.All(core.SectorComponentIndex) {
+			sector := attachable.(*core.Sector)
+			for _, seg := range sector.Segments {
+				dist2 := seg.DistanceToPoint2(p)
+				if closestSector == nil || dist2 < closestDistance2 {
+					closestDistance2 = dist2
+					closestSector = sector
+					closestSeg = seg
+				}
+			}
+		}
+		p = closestSeg.ClosestToPoint(p)
+		bc.Body.Pos.Now[0] = p[0]
+		bc.Body.Pos.Now[1] = p[1]
 	}
 
 	floorZ, ceilZ := closestSector.SlopedZNow(bc.pos2d)
@@ -230,8 +239,8 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 
 func (bc *BodyController) Collide() {
 	// We've got several possibilities we need to handle:
-	// 1.   The body is outside of all sectors. Put it into the nearest sector.
-	// 2.   The body has an un-initialized sector, but it's within a sector and doesn't need to be moved.
+	// 1.   The body has an un-initialized sector, but it's within a sector and doesn't need to be moved.
+	// 2.   The body is outside of all sectors. Put it into the nearest sector.
 	// 3.   The body is still in its current sector, but it's gotten too close to a wall and needs to be pushed back.
 	// 4.   The body is outside of the current sector because it's gone past a wall and needs to be pushed back.
 	// 5.   The body is outside of the current sector because it's gone through a portal and needs to change sectors.

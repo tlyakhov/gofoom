@@ -177,7 +177,7 @@ func (e *Editor) Integrate() {
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap["Space"] {
-		if playerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
+		if playerBody.SectorEntityRef.Component(behaviors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
 			playerBody.Force[2] += constants.PlayerJumpForce
@@ -185,7 +185,7 @@ func (e *Editor) Integrate() {
 		}
 	}
 	if e.GameWidget.KeyMap["C"] {
-		if playerBody.SectorEntityRef.Now.Component(behaviors.UnderwaterComponentIndex) != nil {
+		if playerBody.SectorEntityRef.Component(behaviors.UnderwaterComponentIndex) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true

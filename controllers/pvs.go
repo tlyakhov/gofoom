@@ -36,6 +36,10 @@ func (pvs *PvsController) Target(target concepts.Attachable) bool {
 }
 
 func (pvs *PvsController) Recalculate() {
+	for _, attachable := range pvs.DB.All(core.InternalSegmentComponentIndex) {
+		seg := attachable.(*core.InternalSegment)
+		seg.AttachToSectors()
+	}
 	pvs.updatePVS(make([]*concepts.Vector2, 0), nil, nil, nil)
 }
 

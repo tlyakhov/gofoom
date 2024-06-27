@@ -307,7 +307,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			le.DebugNotices.Push(dbg)
 			return false
 		}
-		if next == nil && !lightBody.SectorEntityRef.Render.Nil() && sector.Entity != lightBody.SectorEntityRef.Render.Entity {
+		if next == nil && !lightBody.SectorEntityRef.Nil() && sector.Entity != lightBody.SectorEntityRef.Entity {
 			if debugLighting {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}

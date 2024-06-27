@@ -32,7 +32,7 @@ func PlayerFromDb(entity *concepts.EntityRef) *Player {
 
 func (p *Player) Underwater() bool {
 	if b := core.BodyFromDb(p.EntityRef); b != nil {
-		if u := UnderwaterFromDb(b.SectorEntityRef.Now); u != nil {
+		if u := UnderwaterFromDb(b.SectorEntityRef); u != nil {
 			return true
 		}
 	}

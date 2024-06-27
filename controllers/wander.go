@@ -44,7 +44,7 @@ func (wc *WanderController) Always() {
 	wc.Body.Force.AddSelf(&f)
 
 	if wc.NextSector.Nil() {
-		wc.NextSector = wc.Body.SectorEntityRef.Now
+		wc.NextSector = wc.Body.SectorEntityRef
 	}
 
 	if wc.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
@@ -66,6 +66,9 @@ func (wc *WanderController) Always() {
 	}
 	if wc.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {
 		sector := wc.Body.Sector()
+		if sector == nil {
+			return
+		}
 		var closestSegment *core.SectorSegment
 		closestDist := constants.MaxViewDistance
 		for _, seg := range sector.Segments {
