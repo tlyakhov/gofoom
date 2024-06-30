@@ -46,7 +46,7 @@ func (a *MoveSurface) Act() {
 	a.State().Lock.Lock()
 
 	a.Original = make([]float64, 0)
-	for _, s := range a.State().SelectedObjects {
+	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Sector == nil {
 			continue
 		}
@@ -66,7 +66,7 @@ func (a *MoveSurface) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	i := 0
-	for _, s := range a.State().SelectedObjects {
+	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Sector == nil {
 			continue
 		}
@@ -83,7 +83,7 @@ func (a *MoveSurface) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
-	for _, s := range a.State().SelectedObjects {
+	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Sector == nil {
 			continue
 		}

@@ -160,7 +160,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		}
 		entity := list.BackingStore[id.Row][0].(int)
 		s := core.SelectableFromEntityRef(list.State().DB.EntityRef(uint64(entity)))
-		if s.IndexIn(editor.SelectedObjects) == -1 {
+		if !editor.SelectedObjects.Contains(s) {
 			editor.SelectObjects(false, s)
 		}
 		log.Printf("select: %v", entity)
@@ -232,12 +232,19 @@ func (list *EntityList) Update() {
 	list.applySort()
 }
 
-func (list *EntityList) Select(selected ...*core.Selectable) {
+func (list *EntityList) Select(selection *core.Selection) {
 	// TODO: Support multiple-selection when Fyne Table supports them
 	for i, row := range list.BackingStore {
-		for _, s := range selected {
+		for _, s := range selection.Exact {
 			if row[elcEntity].(int) == int(s.Ref.Entity) {
+				// Save and restore the handlers to avoid recursive selection
+				fs1 := list.Table.OnSelected
+				fs2 := list.Table.OnUnselected
+				list.Table.OnSelected = nil
+				list.Table.OnUnselected = nil
 				list.Table.Select(widget.TableCellID{Row: i, Col: 0})
+				list.Table.OnSelected = fs1
+				list.Table.OnUnselected = fs2
 				return
 			}
 		}

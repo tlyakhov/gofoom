@@ -5,6 +5,7 @@ package main
 
 import (
 	"flag"
+	"image/color"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -15,21 +16,20 @@ import (
 	"tlyakhov/gofoom/editor/resources"
 	_ "tlyakhov/gofoom/scripting_symbols"
 
-	"tlyakhov/gofoom/concepts"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/fogleman/gg"
 )
 
 var (
-	ColorSelectionPrimary   = concepts.Vector3{0, 1, 0}
-	ColorSelectionSecondary = concepts.Vector3{0, 1, 1}
-	ColorPVS                = concepts.Vector3{0.6, 1, 0.6}
-	editor                  *Editor
+	PatternSelectionPrimary   = gg.NewSolidPattern(color.NRGBA{0, 255, 0, 255})
+	PatternSelectionSecondary = gg.NewSolidPattern(color.NRGBA{0, 255, 255, 255})
+	PatternPVS                = gg.NewSolidPattern(color.NRGBA{160, 255, 160, 255})
+	editor                    *Editor
 )
 
 func init() {

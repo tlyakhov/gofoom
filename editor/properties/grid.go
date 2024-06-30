@@ -130,9 +130,9 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 	}
 }
 
-func (g *Grid) fieldsFromSelection(selection []*core.Selectable) *PropertyGridState {
+func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState {
 	pgs := PropertyGridState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
-	for _, s := range selection {
+	for _, s := range selection.Exact {
 		switch s.Type {
 		case core.SelectableHi:
 			fallthrough
@@ -188,11 +188,11 @@ func gridAddOrUpdateWidgetAtIndex[PT interface {
 	return ptr
 }
 
-func (g *Grid) AddEntityControls(selection []*core.Selectable) {
+func (g *Grid) AddEntityControls(selection *core.Selection) {
 	entities := make([]uint64, 0)
 	entityList := ""
 	componentList := make([]bool, len(concepts.DbTypes().Indexes))
-	for _, s := range selection {
+	for _, s := range selection.Exact {
 		if len(entityList) > 0 {
 			entityList += ", "
 		}
@@ -264,10 +264,20 @@ func (g *Grid) sortedFields(state *PropertyGridState) []string {
 	return sorted
 }
 
-func (g *Grid) Refresh(selection []*core.Selectable) {
+func (g *Grid) Refresh(selection *core.Selection) {
 	g.refreshIndex = 0
 
-	if len(selection) > 0 {
+	distinctTypes := make(map[core.SelectableType]bool)
+	for _, s := range selection.Exact {
+		distinctTypes[s.Type] = true
+	}
+
+	if len(distinctTypes) > 2 {
+		g.GridWidget.Objects = make([]fyne.CanvasObject, 0)
+		return
+	}
+
+	if len(selection.Exact) > 0 {
 		g.AddEntityControls(selection)
 	}
 

@@ -68,8 +68,27 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	TransformContext(mw.Context)
 	mw.Context.FontHeight()
 
+	// Highlight PVS sectors
+	pvsSector := make(map[uint64]*core.Sector)
+	for _, s := range editor.SelectedObjects.Exact {
+		if s.Sector == nil {
+			continue
+		}
+		for entity, sector := range s.Sector.PVS {
+			pvsSector[entity] = sector
+		}
+	}
+
 	for _, isector := range editor.DB.All(core.SectorComponentIndex) {
-		mw.DrawSector(isector.(*core.Sector))
+		mw.DrawSector(isector.(*core.Sector), pvsSector[isector.Ref().Entity] != nil)
+	}
+	for _, iseg := range editor.DB.All(core.InternalSegmentComponentIndex) {
+		mw.DrawInternalSegment(iseg.(*core.InternalSegment))
+	}
+	if editor.BodiesVisible {
+		for _, ibody := range editor.DB.All(core.BodyComponentIndex) {
+			mw.DrawBody(ibody.(*core.Body))
+		}
 	}
 
 	switch editor.CurrentAction.(type) {
@@ -84,12 +103,12 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 		}
 	case *actions.AddSector:
 		gridMouse := editor.WorldGrid(&editor.MouseWorld)
-		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		mw.DrawHandle(gridMouse)
 	case *actions.SplitSector, *actions.SplitSegment, *actions.AlignGrid:
 		gridMouse := editor.WorldGrid(&editor.MouseWorld)
 		gridMouseDown := editor.WorldGrid(&editor.MouseDownWorld)
-		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		mw.DrawHandle(gridMouse)
 		if editor.MousePressed {
 			mw.Context.NewSubPath()
@@ -145,7 +164,7 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 		editor.NewAction(&actions.Select{IEditor: editor})
 	} else if evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil {
 		editor.NewAction(&actions.Pan{IEditor: editor})
-	} else if evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && len(editor.SelectedObjects) > 0 {
+	} else if evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.SelectedObjects.Empty() {
 		editor.NewAction(&actions.Move{IEditor: editor})
 	}
 

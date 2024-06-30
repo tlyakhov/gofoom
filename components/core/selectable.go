@@ -57,6 +57,24 @@ type Selectable struct {
 	Ref             *concepts.EntityRef
 }
 
+func (s *Selectable) Hash() uint64 {
+	if s.SectorSegment != nil {
+		// 4 bits for type, 16 bits for segment index, 44 bits for entity
+		return (uint64(s.Type) << 60) | uint64(s.SectorSegment.Index<<44) | s.Ref.Entity
+	}
+	// 4 bits for type, 60 bits for entity
+	return (uint64(s.Type) << 60) | s.Ref.Entity
+}
+
+func (s *Selectable) GroupHash() uint64 {
+	if s.SectorSegment != nil {
+		// 4 bits for type, 16 bits for segment index, 44 bits for entity
+		return (uint64(SelectableSectorSegment) << 60) | uint64(s.SectorSegment.Index<<44) | s.Ref.Entity
+	}
+	// 4 bits for type, 60 bits for entity
+	return (uint64(typeGroups[s.Type]) << 60) | s.Ref.Entity
+}
+
 func SelectableFromSector(s *Sector) *Selectable {
 	return &Selectable{Type: SelectableSector, Sector: s, Ref: s.EntityRef}
 }
@@ -125,145 +143,10 @@ func SelectableFromEntityRef(ref *concepts.EntityRef) *Selectable {
 	return &Selectable{Type: SelectableEntityRef, Ref: ref}
 }
 
-func (target *Selectable) IndexIn(list []*Selectable) int {
-	return target.search(list, false)
-}
-
-func (target *Selectable) ExactIndexIn(list []*Selectable) int {
-	return target.search(list, true)
-}
-
-func (target *Selectable) search(list []*Selectable, exact bool) int {
-	for i, test := range list {
-		if exact && test.Type != target.Type {
-			continue
-		} else if !exact && typeGroups[test.Type] != typeGroups[target.Type] {
-			continue
-		}
-
-		switch test.Type {
-		// Sector selectables
-		case SelectableFloor:
-			fallthrough
-		case SelectableCeiling:
-			fallthrough
-		case SelectableSector:
-			if target.Sector != test.Sector {
-				continue
-			}
-		// Segment selectables
-		case SelectableLow:
-			fallthrough
-		case SelectableMid:
-			fallthrough
-		case SelectableHi:
-			fallthrough
-		case SelectableSectorSegment:
-			if target.SectorSegment != test.SectorSegment {
-				continue
-			}
-		// InternalSegment selectables
-		case SelectableInternalSegment:
-			fallthrough
-		case SelectableInternalSegmentA:
-			fallthrough
-		case SelectableInternalSegmentB:
-			if target.InternalSegment != test.InternalSegment {
-				continue
-			}
-		// Other
-		case SelectableBody:
-			if target.Body != test.Body {
-				continue
-			}
-		case SelectableEntityRef:
-			if target.Ref.Entity != test.Ref.Entity {
-				continue
-			}
-		}
-		return i
-	}
-	return -1
-}
-func (s *Selectable) AddToList(list *[]*Selectable) bool {
-	if s.search(*list, true) >= 0 {
-		return false
-	}
-	*list = append(*list, s)
-	return false
-}
-
 // Serialize saves the data for whatever the selectable is holding, which may or
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {
 	return s.Ref.DB.SerializeEntity(s.Ref.Entity)
-}
-
-func (s *Selectable) SavePositions() []concepts.Vector3 {
-	positions := make([]concepts.Vector3, 0, 1)
-
-	switch s.Type {
-	case SelectableSector:
-		i := 0
-		for _, seg := range s.Sector.Segments {
-			positions = append(positions, concepts.Vector3{})
-			seg.P.To3D(&positions[i])
-			i++
-		}
-	case SelectableLow:
-		fallthrough
-	case SelectableMid:
-		fallthrough
-	case SelectableHi:
-		fallthrough
-	case SelectableSectorSegment:
-		positions = append(positions, concepts.Vector3{})
-		s.SectorSegment.P.To3D(&positions[0])
-	case SelectableBody:
-		positions = append(positions, s.Body.Pos.Original)
-	case SelectableInternalSegmentA:
-		positions = append(positions, concepts.Vector3{})
-		s.InternalSegment.A.To3D(&positions[0])
-	case SelectableInternalSegmentB:
-		positions = append(positions, concepts.Vector3{})
-		s.InternalSegment.B.To3D(&positions[0])
-	case SelectableInternalSegment:
-		positions = append(positions, concepts.Vector3{}, concepts.Vector3{})
-		s.InternalSegment.A.To3D(&positions[0])
-		s.InternalSegment.B.To3D(&positions[1])
-	}
-	return positions
-}
-
-func (s *Selectable) LoadPositions(positions []concepts.Vector3) int {
-	switch s.Type {
-	case SelectableSector:
-		i := 0
-		for _, seg := range s.Sector.Segments {
-			seg.P.From(positions[i].To2D())
-			i++
-		}
-		return i
-	case SelectableLow:
-		fallthrough
-	case SelectableMid:
-		fallthrough
-	case SelectableHi:
-		fallthrough
-	case SelectableSectorSegment:
-		s.SectorSegment.P.From(positions[0].To2D())
-	case SelectableBody:
-		s.Body.Pos.Original = positions[0]
-	case SelectableInternalSegmentA:
-		s.InternalSegment.A.From(positions[0].To2D())
-	case SelectableInternalSegmentB:
-		s.InternalSegment.B.From(positions[0].To2D())
-	case SelectableInternalSegment:
-		s.InternalSegment.A.From(positions[0].To2D())
-		s.InternalSegment.B.From(positions[1].To2D())
-		return 2
-	}
-	return 1
 }
 
 func (s *Selectable) Transform(m *concepts.Matrix2) {
