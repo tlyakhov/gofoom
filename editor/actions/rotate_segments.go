@@ -40,7 +40,9 @@ func (a *RotateSegments) Act() {
 }
 
 func (a *RotateSegments) Undo() {
-	for _, s := range a.State().SelectedObjects {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Type == core.SelectableBody || s.Type == core.SelectableEntityRef {
 			continue
 		}
@@ -49,7 +51,9 @@ func (a *RotateSegments) Undo() {
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 func (a *RotateSegments) Redo() {
-	for _, s := range a.State().SelectedObjects {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Type == core.SelectableBody || s.Type == core.SelectableEntityRef {
 			continue
 		}

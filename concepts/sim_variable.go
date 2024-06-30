@@ -46,11 +46,11 @@ func (s *SimVariable[T]) Set(v T) {
 }
 
 func (s *SimVariable[T]) Attach(sim *Simulation) {
-	sim.All[s] = true
+	sim.All.Store(s, true)
 }
 
 func (s *SimVariable[T]) Detach(sim *Simulation) {
-	delete(sim.All, s)
+	sim.All.Delete(s)
 }
 
 func (s *SimVariable[T]) NewAnimation() *Animation[T] {

@@ -27,15 +27,20 @@ func (mw *MapWidget) DrawBodyAngle(e *core.Body) {
 	mw.Context.Stroke()
 }
 
-func (mw *MapWidget) DrawBody(ibody *concepts.EntityRef) {
-	body := core.BodyFromDb(ibody)
-
+func (mw *MapWidget) DrawBody(body *core.Body) {
 	if body == nil {
 		return
 	}
 
+	start := editor.ScreenToWorld(new(concepts.Vector2))
+	end := editor.ScreenToWorld(&editor.Size)
+	if body.Pos.Now[0] < start[0] || body.Pos.Now[0] > end[0] ||
+		body.Pos.Now[1] < start[1] || body.Pos.Now[1] > end[1] {
+		return
+	}
+
 	mw.Context.SetRGB(0.6, 0.6, 0.6)
-	if player := behaviors.PlayerFromDb(ibody); player != nil {
+	if player := behaviors.PlayerFromDb(body.EntityRef); player != nil {
 		// Let's get fancy:
 		mw.Context.SetRGB(0.6, 0.6, 0.6)
 		mw.Context.SetLineWidth(1)
@@ -43,16 +48,16 @@ func (mw *MapWidget) DrawBody(ibody *concepts.EntityRef) {
 		mw.Context.DrawArc(body.Pos.Now[0], body.Pos.Now[1], body.Size.Now[0]*0.25, 0, math.Pi*2)
 		mw.Context.ClosePath()
 		mw.Context.Stroke()
-	} else if light := core.LightFromDb(ibody); light != nil {
+	} else if light := core.LightFromDb(body.EntityRef); light != nil {
 		mw.Context.SetRGB(light.Diffuse[0], light.Diffuse[1], light.Diffuse[2])
 	} // Sprite...
 
-	hovering := core.SelectableFromBody(body).IndexIn(editor.HoveringObjects) != -1
-	selected := core.SelectableFromBody(body).IndexIn(editor.SelectedObjects) != -1
+	hovering := editor.HoveringObjects.Contains(core.SelectableFromBody(body))
+	selected := editor.SelectedObjects.Contains(core.SelectableFromBody(body))
 	if selected {
-		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 	} else if hovering {
-		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
 	}
 
 	mw.Context.SetLineWidth(1)
@@ -64,7 +69,7 @@ func (mw *MapWidget) DrawBody(ibody *concepts.EntityRef) {
 	mw.DrawBodyAngle(body)
 
 	if editor.ComponentNamesVisible {
-		text := ibody.NameString()
+		text := body.EntityRef.NameString()
 		mw.Context.Push()
 		mw.Context.SetRGB(0.3, 0.3, 0.5)
 		mw.Context.DrawStringAnchored(text, body.Pos.Now[0], body.Pos.Now[1], 0.5, 0.5)

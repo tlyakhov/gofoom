@@ -21,6 +21,7 @@ type Paste struct {
 
 	CopiedToPasted map[uint64]uint64
 	ClipboardData  string
+	Center         concepts.Vector3
 }
 
 func (a *Paste) Act() {
@@ -40,12 +41,13 @@ func (a *Paste) Act() {
 		return
 	}
 
-	// Important note: the copied entity may have been modified or no longer
+	// Important note: the copied objects may have been modified or no longer
 	// exist, since the user could have deleted/updated between cut/copying and
 	// pasting.
-	a.State().Lock.Lock()
+
 	// Copied -> Pasted
 	a.CopiedToPasted = make(map[uint64]uint64)
+	a.Selected = core.NewSelection()
 	db := a.State().DB
 	for copiedEntityString, jsonData := range jsonEntities {
 		copiedEntity, _ := strconv.ParseUint(copiedEntityString, 10, 64)
@@ -62,6 +64,7 @@ func (a *Paste) Act() {
 				continue
 			}
 			jsonComponent := jsonData.(map[string]any)
+			a.State().Lock.Lock()
 			c := db.LoadComponentWithoutAttaching(index, jsonComponent)
 
 			if pastedEntity, ok := a.CopiedToPasted[copiedEntity]; ok {
@@ -72,13 +75,14 @@ func (a *Paste) Act() {
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 				pastedRef = c.Ref()
 			}
+			a.State().Lock.Unlock()
 		}
 		if pastedRef != nil {
-			selectable := core.SelectableFromEntityRef(pastedRef)
-			selectable.AddToList(&a.Selected)
+			a.Selected.Add(core.SelectableFromEntityRef(pastedRef))
 		}
 	}
 
+	a.State().Lock.Lock()
 	// We need to wire up:
 	// pasted materials to surfaces
 	// pasted bodies to sectors
@@ -94,15 +98,17 @@ func (a *Paste) Act() {
 		// TODO: materials
 	}
 
-	// Save original positions
-	a.Original = make([]concepts.Vector3, 0, len(a.Selected))
-	for _, s := range a.Selected {
-		a.Original = append(a.Original, s.SavePositions()...)
+	a.Selected.SavePositions()
+	// Calculate the center of the selection
+	for _, pos := range a.Selected.Positions {
+		a.Center.AddSelf(pos)
 	}
+	a.Center.MulSelf(1.0 / float64(len(a.Selected.Positions)))
+
+	a.State().Lock.Unlock()
 
 	// Change selection
-	a.SelectObjects(true, a.Selected...)
-	a.State().Lock.Unlock()
+	a.SetSelection(true, a.Selected)
 }
 func (a *Paste) Cancel() {}
 func (a *Paste) Frame()  {}
@@ -111,7 +117,8 @@ func (a *Paste) OnMouseDown(evt *desktop.MouseEvent) {
 	a.ActionFinished(false, true, true)
 }
 func (a *Paste) OnMouseMove() {
-	a.Move.OnMouseMove()
+	a.Delta = *a.State().MouseWorld.Sub(a.WorldGrid(a.Center.To2D()))
+	a.Move.Act()
 }
 func (a *Paste) OnMouseUp() {
 

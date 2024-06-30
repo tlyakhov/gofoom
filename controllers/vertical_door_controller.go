@@ -30,7 +30,7 @@ func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
 func (vd *VerticalDoorController) Target(target concepts.Attachable) bool {
 	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
 	vd.Sector = core.SectorFromDb(target.Ref())
-	return vd.VerticalDoor.IsActive() && vd.Sector.IsActive()
+	return vd.VerticalDoor.IsActive() && vd.Sector != nil && vd.Sector.IsActive()
 }
 
 func (vd *VerticalDoorController) setupAnimation() {

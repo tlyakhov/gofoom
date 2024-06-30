@@ -5,7 +5,8 @@ package actions
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/editor/state"
 
@@ -18,17 +19,20 @@ import (
 type Copy struct {
 	state.IEditor
 
-	Selected      []*core.Selectable
+	Selected      *core.Selection
 	Saved         map[uint64]any
 	ClipboardData string
 }
 
 func (a *Copy) Act() {
 	a.Saved = make(map[uint64]any)
-	a.Selected = make([]*core.Selectable, len(a.State().SelectedObjects))
-	copy(a.Selected, a.State().SelectedObjects)
+	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
 
-	for _, obj := range a.Selected {
+	for _, obj := range a.Selected.Exact {
+		// Don't copy/paste players
+		if behaviors.PlayerFromDb(obj.Ref) != nil {
+			continue
+		}
 		a.Saved[obj.Ref.Entity] = obj.Serialize()
 	}
 
@@ -55,6 +59,6 @@ func (a *Copy) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
-	fmt.Printf("%v\n", a.ClipboardData)
+	log.Printf("%v\n", a.ClipboardData)
 	a.IEditor.SetContent(a.ClipboardData)
 }

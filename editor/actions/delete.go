@@ -16,16 +16,15 @@ import (
 type Delete struct {
 	state.IEditor
 
-	Selected []*core.Selectable
+	Selected *core.Selection
 	Saved    map[*core.Selectable]any
 }
 
 func (a *Delete) Act() {
 	a.Saved = make(map[*core.Selectable]any)
-	a.Selected = make([]*core.Selectable, len(a.State().SelectedObjects))
-	copy(a.Selected, a.State().SelectedObjects)
+	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
 
-	for _, obj := range a.Selected {
+	for _, obj := range a.Selected.Exact {
 		a.Saved[obj] = obj.Serialize()
 	}
 	a.Redo()

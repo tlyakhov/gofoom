@@ -72,6 +72,8 @@ func NewEditor() *Editor {
 			BodiesVisible:         true,
 			SectorTypesVisible:    false,
 			ComponentNamesVisible: true,
+			HoveringObjects:       core.NewSelection(),
+			SelectedObjects:       core.NewSelection(),
 		},
 		MapViewGrid: MapViewGrid{Visible: true},
 	}
@@ -117,6 +119,9 @@ func (e *Editor) UpdateTitle() {
 }
 
 func (e *Editor) UpdateStatus() {
+	e.Lock.Lock()
+	defer e.Lock.Unlock()
+
 	text := e.WorldGrid(&e.MouseWorld).StringHuman()
 	if e.MousePressed {
 		text = e.WorldGrid(&e.MouseDownWorld).StringHuman() + " -> " + text
@@ -124,7 +129,7 @@ func (e *Editor) UpdateStatus() {
 		text += " Length: " + strconv.FormatFloat(dist, 'f', 2, 64)
 	}
 	list := ""
-	for _, s := range e.HoveringObjects {
+	for _, s := range e.HoveringObjects.Exact {
 		if len(list) > 0 {
 			list += ", "
 		}
@@ -141,6 +146,11 @@ func (e *Editor) UpdateStatus() {
 			list += s.Body.String()
 		case core.SelectableSectorSegment:
 			list += s.SectorSegment.P.String()
+		}
+
+		if len(list) > 300 {
+			list += "..."
+			break
 		}
 	}
 	text = list + " ( " + text + " )"
@@ -381,10 +391,16 @@ func (e *Editor) RedoCurrent() {
 }
 
 func (e *Editor) SelectObjects(updateEntityList bool, s ...*core.Selectable) {
+	e.SelectedObjects.Clear()
+	e.SelectedObjects.Add(s...)
+	e.SetSelection(updateEntityList, e.SelectedObjects)
+}
+
+func (e *Editor) SetSelection(updateEntityList bool, s *core.Selection) {
 	e.SelectedObjects = s
 	e.refreshProperties()
 	if updateEntityList {
-		e.EntityList.Select(s...)
+		e.EntityList.Select(e.SelectedObjects)
 	}
 }
 
@@ -413,7 +429,7 @@ func (e *Editor) GatherHoveringObjects() {
 	// Hovering
 	v1, v2 := e.SelectionBox()
 
-	e.HoveringObjects = []*core.Selectable{}
+	e.HoveringObjects.Clear()
 
 	for _, isector := range e.DB.All(core.SectorComponentIndex) {
 		sector := isector.(*core.Sector)
@@ -421,7 +437,7 @@ func (e *Editor) GatherHoveringObjects() {
 		for _, segment := range sector.Segments {
 			if editor.Selecting() {
 				if segment.P[0] >= v1[0] && segment.P[1] >= v1[1] && segment.P[0] <= v2[0] && segment.P[1] <= v2[1] {
-					core.SelectableFromSegment(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromSegment(segment))
 				}
 				/*if segment.AABBIntersect(v1[0], v1[1], v2[0], v2[1]) {
 					if state.IndexOf(e.HoveringObjects, segment) == -1 {
@@ -430,10 +446,10 @@ func (e *Editor) GatherHoveringObjects() {
 				}*/
 			} else {
 				if e.Mouse.Sub(e.WorldToScreen(&segment.P)).Length() < state.SegmentSelectionEpsilon {
-					core.SelectableFromSegment(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromSegment(segment))
 				}
 				if segment.DistanceToPoint(e.ScreenToWorld(&e.Mouse)) < state.SegmentSelectionEpsilon {
-					core.SelectableFromSegment(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromSegment(segment))
 				}
 			}
 		}
@@ -447,21 +463,21 @@ func (e *Editor) GatherHoveringObjects() {
 				a := (segment.A[0] >= v1[0] && segment.A[1] >= v1[1] && segment.A[0] <= v2[0] && segment.A[1] <= v2[1])
 				b := (segment.B[0] >= v1[0] && segment.B[1] >= v1[1] && segment.B[0] <= v2[0] && segment.B[1] <= v2[1])
 				if a && b {
-					core.SelectableFromInternalSegment(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromInternalSegment(segment))
 				} else if a {
-					core.SelectableFromInternalSegmentA(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromInternalSegmentA(segment))
 				} else if b {
-					core.SelectableFromInternalSegmentB(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(segment))
 				}
 			} else {
 				if e.Mouse.Sub(e.WorldToScreen(segment.A)).Length() < state.SegmentSelectionEpsilon {
-					core.SelectableFromInternalSegmentA(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromInternalSegmentA(segment))
 				}
 				if e.Mouse.Sub(e.WorldToScreen(segment.B)).Length() < state.SegmentSelectionEpsilon {
-					core.SelectableFromInternalSegmentB(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(segment))
 				}
 				if segment.DistanceToPoint(e.ScreenToWorld(&e.Mouse)) < state.SegmentSelectionEpsilon {
-					core.SelectableFromInternalSegment(segment).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromInternalSegment(segment))
 				}
 			}
 		}
@@ -475,7 +491,7 @@ func (e *Editor) GatherHoveringObjects() {
 				p := body.Pos.Now
 				if p[0]+body.Size.Render[0]*0.5 >= v1[0] && p[0]-body.Size.Render[0]*0.5 <= v2[0] &&
 					p[1]+body.Size.Render[0]*0.5 >= v1[1] && p[1]-body.Size.Render[0]*0.5 <= v2[1] {
-					core.SelectableFromBody(body).AddToList(&e.HoveringObjects)
+					e.HoveringObjects.Add(core.SelectableFromBody(body))
 				}
 			}
 		}
@@ -521,7 +537,7 @@ func (e *Editor) SetDialogLocation(dlg *dialog.FileDialog, target string) {
 }
 
 func (e *Editor) ToolSelectSegment() {
-	for _, s := range editor.SelectedObjects {
+	for _, s := range editor.SelectedObjects.Grouped {
 		switch s.Type {
 		case core.SelectableSector:
 			editor.SelectObjects(true, core.SelectableFromSegment(s.Sector.Segments[0]))

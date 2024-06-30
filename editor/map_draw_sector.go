@@ -22,17 +22,17 @@ func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 
 func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Push()
-	segmentHovering := core.SelectableFromInternalSegment(segment).ExactIndexIn(editor.HoveringObjects) != -1
-	segmentSelected := core.SelectableFromInternalSegment(segment).ExactIndexIn(editor.SelectedObjects) != -1
-	aHovering := segmentHovering || core.SelectableFromInternalSegmentA(segment).ExactIndexIn(editor.HoveringObjects) != -1
-	aSelected := segmentSelected || core.SelectableFromInternalSegmentA(segment).ExactIndexIn(editor.SelectedObjects) != -1
-	bHovering := segmentHovering || core.SelectableFromInternalSegmentB(segment).ExactIndexIn(editor.HoveringObjects) != -1
-	bSelected := segmentSelected || core.SelectableFromInternalSegmentB(segment).ExactIndexIn(editor.SelectedObjects) != -1
+	segmentHovering := editor.HoveringObjects.Contains(core.SelectableFromInternalSegment(segment))
+	segmentSelected := editor.SelectedObjects.Contains(core.SelectableFromInternalSegment(segment))
+	aHovering := segmentHovering || editor.HoveringObjects.Contains(core.SelectableFromInternalSegmentA(segment))
+	aSelected := segmentSelected || editor.SelectedObjects.Contains(core.SelectableFromInternalSegmentA(segment))
+	bHovering := segmentHovering || editor.HoveringObjects.Contains(core.SelectableFromInternalSegmentB(segment))
+	bSelected := segmentSelected || editor.SelectedObjects.Contains(core.SelectableFromInternalSegmentB(segment))
 
 	if segmentHovering {
-		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
 	} else if segmentSelected {
-		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 	} else {
 		mw.Context.SetRGB(1, 1, 1)
 	}
@@ -61,10 +61,10 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	}
 
 	if aHovering {
-		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		mw.DrawHandle(segment.A)
 	} else if aSelected {
-		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
 		mw.DrawHandle(segment.A)
 	} else {
 		mw.Context.SetRGB(1, 1, 1)
@@ -73,10 +73,10 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	}
 
 	if bHovering {
-		mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
 		mw.DrawHandle(segment.B)
 	} else if bSelected {
-		mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		mw.DrawHandle(segment.B)
 	} else {
 		mw.Context.SetRGB(1, 1, 1)
@@ -86,7 +86,7 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Pop()
 }
 
-func (mw *MapWidget) DrawSector(sector *core.Sector) {
+func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 	if len(sector.Segments) == 0 {
 		return
 	}
@@ -99,16 +99,16 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 
 	mw.Context.Push()
 
-	sectorHovering := core.SelectableFromSector(sector).IndexIn(editor.HoveringObjects) != -1
-	sectorSelected := core.SelectableFromSector(sector).IndexIn(editor.SelectedObjects) != -1
+	sectorHovering := editor.HoveringObjects.Contains(core.SelectableFromSector(sector))
+	sectorSelected := editor.SelectedObjects.Contains(core.SelectableFromSector(sector))
 
 	for _, segment := range sector.Segments {
 		if segment.Next == nil || segment.P == segment.Next.P {
 			continue
 		}
 
-		segmentHovering := core.SelectableFromSegment(segment).IndexIn(editor.HoveringObjects) != -1
-		segmentSelected := core.SelectableFromSegment(segment).IndexIn(editor.SelectedObjects) != -1
+		segmentHovering := editor.HoveringObjects.Contains(core.SelectableFromSegment(segment))
+		segmentSelected := editor.SelectedObjects.Contains(core.SelectableFromSegment(segment))
 
 		if segment.AdjacentSector.Nil() {
 			mw.Context.SetRGB(1, 1, 1)
@@ -118,24 +118,19 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 
 		if sectorHovering || sectorSelected {
 			if segment.AdjacentSector.Nil() {
-				mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+				mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 			} else {
-				mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+				mw.Context.SetStrokeStyle(PatternSelectionSecondary)
 			}
 		} else if segmentHovering {
-			mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
 		} else if segmentSelected {
-			mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		}
-
-		// Highlight PVS sectors...
-		for _, obj := range editor.SelectedObjects {
-			if obj.Sector == nil || sector == obj.Sector {
-				continue
-			}
-			if obj.Sector.PVS[sector.Entity] != nil {
-				mw.Context.SetRGB(ColorPVS[0], ColorPVS[1], ColorPVS[2])
-			}
+		if isPartOfPVS {
+			mw.Context.SetDash(4, 4)
+		} else {
+			mw.Context.SetDash()
 		}
 
 		// Draw segment
@@ -161,10 +156,10 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		}
 
 		if segmentSelected {
-			mw.Context.SetRGB(ColorSelectionPrimary[0], ColorSelectionPrimary[1], ColorSelectionPrimary[2])
+			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 			mw.DrawHandle(&segment.P)
 		} else if segmentHovering {
-			mw.Context.SetRGB(ColorSelectionSecondary[0], ColorSelectionSecondary[1], ColorSelectionSecondary[2])
+			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
 			mw.DrawHandle(&segment.P)
 		} else {
 			mw.Context.DrawRectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
@@ -178,16 +173,6 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		mw.Context.SetRGB(0.3, 0.3, 0.3)
 		mw.Context.DrawStringAnchored(text, sector.Center[0], sector.Center[1], 0.5, 0.5)
 		mw.Context.Pop()
-	}
-
-	if editor.BodiesVisible {
-		for _, ref := range sector.Bodies {
-			mw.DrawBody(ref)
-		}
-	}
-
-	for _, ref := range sector.InternalSegments {
-		mw.DrawInternalSegment(core.InternalSegmentFromDb(ref))
 	}
 
 	mw.Context.Pop()

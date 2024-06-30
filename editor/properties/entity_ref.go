@@ -62,7 +62,7 @@ func (g *Grid) updateTreeNodeEntityRef(tni widget.TreeNodeID, b bool, co fyne.Ca
 	label.SetText(name)
 	button := box.Objects[2].(*widget.Button)
 	button.OnTapped = func() {
-		g.IEditor.SelectObjects(true, core.SelectableFromEntityRef(ref))
+		g.SelectObjects(true, core.SelectableFromEntityRef(ref))
 	}
 }
 

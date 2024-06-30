@@ -37,8 +37,8 @@ type Edit struct {
 	MouseDownWorld concepts.Vector2
 	MousePressed   bool
 
-	SelectedObjects        []*core.Selectable
-	HoveringObjects        []*core.Selectable
+	SelectedObjects        *core.Selection
+	HoveringObjects        *core.Selection
 	SearchTerms            string
 	SelectedTransformables []any
 
@@ -71,7 +71,8 @@ type IEditor interface {
 	SwitchTool(tool EditorTool)
 	UndoCurrent()
 	RedoCurrent()
-	SelectObjects(updateTree bool, s ...*core.Selectable)
+	SelectObjects(updateEntityList bool, s ...*core.Selectable)
+	SetSelection(updateEntityList bool, s *core.Selection)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)

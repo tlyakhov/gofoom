@@ -58,7 +58,7 @@ func (a *SplitSector) OnMouseUp() {
 
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
-	if len(a.State().SelectedObjects) == 0 {
+	if a.State().SelectedObjects.Empty() {
 		allSectors := a.State().DB.Components[core.SectorComponentIndex]
 		sectors = make([]*core.Sector, len(allSectors))
 		i := 0
@@ -69,7 +69,7 @@ func (a *SplitSector) OnMouseUp() {
 	} else {
 		sectors = make([]*core.Sector, 0)
 		visited := make(map[uint64]bool)
-		for _, s := range a.State().SelectedObjects {
+		for _, s := range a.State().SelectedObjects.Exact {
 			// We could just check for the .Sector field being valid, but then
 			// the user may be surprised to have a sector split when they've
 			// selected a body or something else.

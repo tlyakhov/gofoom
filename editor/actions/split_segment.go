@@ -51,7 +51,7 @@ func (a *SplitSegment) OnMouseUp() {
 	// Split only selected if any, otherwise all sectors/segments.
 	// TODO: also split internal segments
 	var segments []*core.SectorSegment
-	if len(a.State().SelectedObjects) == 0 {
+	if a.State().SelectedObjects.Empty() {
 		allSectors := a.State().DB.Components[core.SectorComponentIndex]
 		segments = make([]*core.SectorSegment, 0)
 		for _, attachable := range allSectors {
@@ -61,7 +61,7 @@ func (a *SplitSegment) OnMouseUp() {
 	} else {
 		segments = make([]*core.SectorSegment, 0)
 		visited := make(map[*core.SectorSegment]bool)
-		for _, s := range a.State().SelectedObjects {
+		for _, s := range a.State().SelectedObjects.Exact {
 			switch s.Type {
 			// Segments:
 			case core.SelectableLow:
