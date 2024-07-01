@@ -1,0 +1,611 @@
+[
+  {
+    "Entity": "1",
+    "core.Spawn": {
+      "Entity": "1",
+      "X": 0,
+      "Y": 0
+    }
+  },
+  {
+    "Entity": "2",
+    "concepts.Named": {
+      "Entity": "2",
+      "Name": "Default"
+    },
+    "materials.Image": {
+      "Entity": "2",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/WDef.png"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "2"
+    }
+  },
+  {
+    "Entity": "3",
+    "concepts.Named": {
+      "Entity": "3",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "3",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "6",
+          "AdjacentSegment": "1",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "PortalHasMaterial": true,
+          "PortalTeleports": true,
+          "Surface": {
+            "Material": "7",
+            "Stretch": "StretchFill"
+          },
+          "X": 100,
+          "Y": -20
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 80
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "10",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -30,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "4",
+    "concepts.Named": {
+      "Entity": "4",
+      "Name": "ckpvt5dmdsrrj1r5a5pg"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "4",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -60,
+          "Y": -70,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "4",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "5",
+    "behaviors.Alive": {
+      "Entity": "5",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "5"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "5",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    }
+  },
+  {
+    "Entity": "6",
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "6",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 10,
+          "Y": 220
+        },
+        {
+          "AdjacentSector": "3",
+          "AdjacentSegment": "2",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "PortalHasMaterial": true,
+          "PortalTeleports": true,
+          "Surface": {
+            "Material": "7",
+            "Stretch": "StretchFill"
+          },
+          "X": 200,
+          "Y": 310
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 160,
+          "Y": 480
+        },
+        {
+          "AdjacentSector": "10",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -110,
+          "Y": 460
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -110,
+          "Y": 290
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "7",
+    "concepts.Named": {
+      "Entity": "7",
+      "Name": "Portal"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "7"
+    },
+    "materials.Shader": {
+      "Entity": "7",
+      "Stages": [
+        {
+          "Texture": "9"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "8",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "8",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -20,
+          "Y": 350,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 0,
+        "Z": 1
+      },
+      "Entity": "8",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "9",
+    "materials.Image": {
+      "Entity": "9",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/portal.png"
+    }
+  },
+  {
+    "Entity": "10",
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "10",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -110,
+          "Y": 460
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -250,
+          "Y": 460
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -250,
+          "Y": 140
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 150
+        },
+        {
+          "AdjacentSector": "3",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -30,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -40,
+          "Y": 200
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -150,
+          "Y": 210
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -130,
+          "Y": 290
+        },
+        {
+          "AdjacentSector": "6",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -110,
+          "Y": 290
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "12",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "12",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -200,
+          "Y": 310,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "12",
+      "Strength": 2
+    }
+  }
+]

@@ -62,8 +62,25 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 		c.DebugNotices.Push(dbg)
 		return
 	}
+
+	// Copy current column into portal column
+	next := &c.PortalColumns[c.Depth]
+	*next = *c
+
+	if c.SectorSegment.AdjacentSegment.PortalTeleports {
+		next.Ray = &state.Ray{Start: c.Start, End: c.End}
+		next.Ray.Start = *c.SectorSegment.PortalMatrix.Unproject(&next.Ray.Start)
+		next.Ray.End = *c.SectorSegment.PortalMatrix.Unproject(&next.Ray.End)
+		next.Ray.Start = *c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.Project(&next.Ray.Start)
+		next.Ray.End = *c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.Project(&next.Ray.End)
+		next.Ray.AnglesFromStartEnd()
+		next.RayFloorCeil[0] = next.Ray.AngleCos * c.ViewFix[c.ScreenX]
+		next.RayFloorCeil[1] = next.Ray.AngleSin * c.ViewFix[c.ScreenX]
+		next.MaterialSampler.Ray = next.Ray
+	}
+
 	// This allocation is ok, does not escape
-	portal := &state.ColumnPortal{Column: c}
+	portal := &state.ColumnPortal{Column: next}
 	portal.CalcScreen()
 	if portal.AdjSegment != nil {
 		if c.Pick {
@@ -75,16 +92,13 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 		}
 	}
 
-	childColumn := &c.PortalColumns[c.Depth]
-	// Copy current column into portal column
-	*childColumn = *c
-	childColumn.Sector = portal.Adj
-	childColumn.YStart = portal.AdjClippedTop
-	childColumn.YEnd = portal.AdjClippedBottom
-	childColumn.LastPortalDistance = c.Distance
-	childColumn.Depth++
-	r.RenderSector(childColumn)
-	c.PickedSelection = childColumn.PickedSelection
+	next.Sector = portal.Adj
+	next.YStart = portal.AdjClippedTop
+	next.YEnd = portal.AdjClippedBottom
+	next.LastPortalDistance = c.Distance
+	next.Depth++
+	r.RenderSector(next)
+	c.PickedSelection = next.PickedSelection
 }
 
 // RenderSegmentColumn draws or picks a single pixel vertical column given a particular

@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
-type AddBody struct {
+type AddEntity struct {
 	state.IEditor
 
 	Mode             string
@@ -20,26 +20,23 @@ type AddBody struct {
 	ContainingSector *core.Sector
 }
 
-func (a *AddBody) DetachFromSector() {
+func (a *AddEntity) DetachFromSector() {
 	if body := core.BodyFromDb(a.EntityRef); body != nil {
 		if body.SectorEntityRef.Nil() {
 			return
 		}
 		delete(body.Sector().Bodies, a.EntityRef.Entity)
 	}
-	if seg := core.InternalSegmentFromDb(a.EntityRef); seg != nil {
-
-	}
 	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
-func (a *AddBody) AttachAll() {
+func (a *AddEntity) AttachAll() {
 	for index, component := range a.Components {
 		a.EntityRef.DB.Attach(index, a.EntityRef.Entity, component)
 	}
 }
 
-func (a *AddBody) AttachToSector() {
+func (a *AddEntity) AttachToSector() {
 	if body := core.BodyFromDb(a.EntityRef); body != nil {
 		if a.ContainingSector != nil {
 			body.SectorEntityRef = a.ContainingSector.Ref()
@@ -52,9 +49,9 @@ func (a *AddBody) AttachToSector() {
 	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
-func (a *AddBody) OnMouseDown(evt *desktop.MouseEvent) {}
+func (a *AddEntity) OnMouseDown(evt *desktop.MouseEvent) {}
 
-func (a *AddBody) OnMouseMove() {
+func (a *AddEntity) OnMouseMove() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
@@ -83,15 +80,15 @@ func (a *AddBody) OnMouseMove() {
 	}
 }
 
-func (a *AddBody) OnMouseUp() {
+func (a *AddEntity) OnMouseUp() {
 	a.State().Modified = true
 	a.ActionFinished(false, true, false)
 }
-func (a *AddBody) Act() {
+func (a *AddEntity) Act() {
 	a.Mode = "AddBody"
 	a.SelectObjects(true, core.SelectableFromEntityRef(a.EntityRef))
 }
-func (a *AddBody) Cancel() {
+func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()
 	a.DetachFromSector()
 	if a.EntityRef != nil {
@@ -101,14 +98,14 @@ func (a *AddBody) Cancel() {
 	a.SelectObjects(true)
 	a.ActionFinished(true, true, false)
 }
-func (a *AddBody) Undo() {
+func (a *AddEntity) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
 	a.DetachFromSector()
 	a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
 }
-func (a *AddBody) Redo() {
+func (a *AddEntity) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
@@ -116,4 +113,4 @@ func (a *AddBody) Redo() {
 	a.AttachAll()
 }
 
-func (a *AddBody) Frame() {}
+func (a *AddEntity) Frame() {}

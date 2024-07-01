@@ -35,6 +35,12 @@ func (r *Ray) Set(a float64) {
 	r.Delta.From(&r.End).SubSelf(&r.Start)
 }
 
+func (r *Ray) AnglesFromStartEnd() {
+	r.Delta.From(&r.End).SubSelf(&r.Start)
+	r.Angle = math.Atan2(r.Delta[1], r.Delta[0])
+	r.AngleSin, r.AngleCos = math.Sincos(r.Angle)
+}
+
 type Column struct {
 	// Global rendering configuration
 	*Config

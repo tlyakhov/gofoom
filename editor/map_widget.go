@@ -90,6 +90,32 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 			mw.DrawBody(ibody.(*core.Body))
 		}
 	}
+	// Portal testing code
+	/*p := core.BodyFromDb(editor.Renderer.Player.Ref())
+	v := &concepts.Vector2{p.Pos.Now[0], p.Pos.Now[1]}
+	v2 := v.Add(&concepts.Vector2{math.Cos(p.Angle.Now*concepts.Deg2rad) * 10, math.Sin(p.Angle.Now*concepts.Deg2rad) * 10})
+	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
+	mw.Context.NewSubPath()
+	mw.Context.MoveTo(v[0], v[1])
+	mw.Context.LineTo(v2[0], v2[1])
+	mw.Context.ClosePath()
+	mw.Context.Stroke()
+
+	portalSector1 := core.SectorFromDb(editor.DB.EntityRef(3))
+	portalSegment1 := portalSector1.Segments[2]
+	portalSector2 := core.SectorFromDb(editor.DB.EntityRef(6))
+	portalSegment2 := portalSector2.Segments[1]
+	v3 := portalSegment1.PortalMatrix.Unproject(v)
+	v3 = portalSegment2.MirrorPortalMatrix.Project(v3)
+	a := p.Angle.Now - math.Atan2(portalSegment1.Normal[1], portalSegment1.Normal[0])*concepts.Rad2deg + math.Atan2(portalSegment2.Normal[1], portalSegment2.Normal[0])*concepts.Rad2deg + 180
+	v4 := v3.Add(&concepts.Vector2{math.Cos(a*concepts.Deg2rad) * 10, math.Sin(a*concepts.Deg2rad) * 10})
+
+	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
+	mw.Context.NewSubPath()
+	mw.Context.MoveTo(v3[0], v3[1])
+	mw.Context.LineTo(v4[0], v4[1])
+	mw.Context.ClosePath()
+	mw.Context.Stroke()*/
 
 	switch editor.CurrentAction.(type) {
 	case *actions.Select:

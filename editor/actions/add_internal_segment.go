@@ -11,7 +11,7 @@ import (
 )
 
 type AddInternalSegment struct {
-	AddBody
+	AddEntity
 	*core.InternalSegment
 }
 
