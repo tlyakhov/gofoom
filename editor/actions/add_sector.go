@@ -12,7 +12,7 @@ import (
 )
 
 type AddSector struct {
-	AddBody
+	AddEntity
 	Sector *core.Sector
 }
 

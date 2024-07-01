@@ -112,6 +112,8 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 
 		if segment.AdjacentSector.Nil() {
 			mw.Context.SetRGB(1, 1, 1)
+		} else if segment.PortalTeleports {
+			mw.Context.SetRGB(1, 0.5, 0)
 		} else {
 			mw.Context.SetRGB(1, 1, 0)
 		}
@@ -127,7 +129,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 		} else if segmentSelected {
 			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		}
-		if isPartOfPVS {
+		if isPartOfPVS && !segmentSelected && !sectorSelected {
 			mw.Context.SetDash(4, 4)
 		} else {
 			mw.Context.SetDash()

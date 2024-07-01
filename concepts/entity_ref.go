@@ -27,7 +27,11 @@ func (er *EntityRef) Component(index int) Attachable {
 	if er == nil || er.Entity == 0 || index == 0 || len(er.DB.EntityComponents) <= int(er.Entity) {
 		return nil
 	}
-	return er.DB.EntityComponents[er.Entity][index]
+	ec := er.DB.EntityComponents[er.Entity]
+	if ec == nil {
+		return nil
+	}
+	return ec[index]
 }
 
 func (er *EntityRef) String() string {

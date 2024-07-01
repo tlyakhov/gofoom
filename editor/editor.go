@@ -312,21 +312,21 @@ func (e *Editor) ActTool() {
 		s.FloorSurface.Material = controllers.DefaultMaterial(e.DB)
 		s.CeilSurface.Material = controllers.DefaultMaterial(e.DB)
 		a := &actions.AddSector{Sector: s}
-		a.AddBody.IEditor = e
-		a.AddBody.EntityRef = ref
-		a.AddBody.Components = ref.All()
+		a.AddEntity.IEditor = e
+		a.AddEntity.EntityRef = ref
+		a.AddEntity.Components = ref.All()
 		e.NewAction(a)
 	case state.ToolAddInternalSegment:
 		ref := archetypes.CreateBasic(e.DB, core.InternalSegmentComponentIndex)
 		seg := core.InternalSegmentFromDb(ref)
 		a := &actions.AddInternalSegment{InternalSegment: seg}
-		a.AddBody.IEditor = e
-		a.AddBody.EntityRef = ref
-		a.AddBody.Components = ref.All()
+		a.AddEntity.IEditor = e
+		a.AddEntity.EntityRef = ref
+		a.AddEntity.Components = ref.All()
 		e.NewAction(a)
 	case state.ToolAddBody:
 		body := archetypes.CreateBasic(e.DB, core.BodyComponentIndex)
-		e.NewAction(&actions.AddBody{IEditor: e, EntityRef: body, Components: body.All()})
+		e.NewAction(&actions.AddEntity{IEditor: e, EntityRef: body, Components: body.All()})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:

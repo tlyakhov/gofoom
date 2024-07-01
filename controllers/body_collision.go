@@ -137,9 +137,52 @@ func (bc *BodyController) checkBodySegmentCollisions() {
 	}
 }
 
+func (bc *BodyController) bodyTeleport() bool {
+	for _, segment := range bc.Sector.Segments {
+		if !segment.PortalTeleports || segment.AdjacentSegment == nil {
+			continue
+		}
+		d := segment.DistanceToPoint2(bc.pos2d)
+		if d > bc.Body.Size.Now[0]*bc.Body.Size.Now[0]*0.25 {
+			continue
+		}
+		side := segment.WhichSide(bc.pos2d)
+		if side < 0 {
+			// Teleport position
+			v := segment.PortalMatrix.Unproject(bc.pos2d)
+			v = segment.AdjacentSegment.MirrorPortalMatrix.Project(v)
+			bc.Body.Pos.Now[0] = v[0]
+			bc.Body.Pos.Now[1] = v[1]
+			// Teleport velocity
+			trans := *bc.Body.Vel.Now.To2D()
+			trans[0] += segment.A[0]
+			trans[1] += segment.A[1]
+			v = segment.PortalMatrix.Unproject(&trans)
+			v = segment.AdjacentSegment.MirrorPortalMatrix.Project(v)
+			bc.Body.Vel.Now[0] = v[0] - segment.AdjacentSegment.B[0]
+			bc.Body.Vel.Now[1] = v[1] - segment.AdjacentSegment.B[1]
+			// Calculate new facing angle
+			bc.Body.Angle.Now = bc.Body.Angle.Now -
+				math.Atan2(segment.Normal[1], segment.Normal[0])*concepts.Rad2deg +
+				math.Atan2(segment.AdjacentSegment.Normal[1], segment.AdjacentSegment.Normal[0])*concepts.Rad2deg + 180
+			for bc.Body.Angle.Now > 360 {
+				bc.Body.Angle.Now -= 360
+			}
+			bc.Body.LastEnteredPortal = segment
+			bc.Enter(segment.AdjacentSector)
+			return true
+		}
+	}
+	return false
+}
+
 func (bc *BodyController) bodyExitsSector() {
 	// Exit the current sector.
 	bc.Exit()
+
+	if bc.bodyTeleport() {
+		return
+	}
 
 	for _, segment := range bc.Sector.Segments {
 		if segment.AdjacentSector.Nil() {

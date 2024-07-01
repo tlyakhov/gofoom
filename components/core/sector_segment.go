@@ -4,6 +4,7 @@
 package core
 
 import (
+	"strconv"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 )
@@ -21,13 +22,19 @@ type SectorSegment struct {
 	HiSurface         materials.Surface `editable:"High Surface"`
 	PortalHasMaterial bool              `editable:"Portal has material"`
 	PortalIsPassable  bool              `editable:"Portal is passable"`
+	PortalTeleports   bool              `editable:"The adjacent segment/sector requires teleporting"`
 
-	AdjacentSector  *concepts.EntityRef
-	AdjacentSegment *SectorSegment
+	AdjacentSector       *concepts.EntityRef
+	AdjacentSegment      *SectorSegment
+	AdjacentSegmentIndex int // Only when loading
 
 	Sector *Sector
-	Next   *SectorSegment
-	Prev   *SectorSegment
+
+	// Pre-calculated attributes
+	Next               *SectorSegment
+	Prev               *SectorSegment
+	PortalMatrix       concepts.Matrix2
+	MirrorPortalMatrix concepts.Matrix2
 
 	Flags int
 }
@@ -45,6 +52,20 @@ func (s *SectorSegment) Recalculate() {
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()
 	}
+
+	// These are for transforming coordinate spaces through teleporting portals
+	s.PortalMatrix[0] = s.B[0] - s.A[0]
+	s.PortalMatrix[1] = s.B[1] - s.A[1]
+	s.PortalMatrix[2] = s.Normal[0]
+	s.PortalMatrix[3] = s.Normal[1]
+	s.PortalMatrix[4] = s.A[0]
+	s.PortalMatrix[5] = s.A[1]
+	s.MirrorPortalMatrix[0] = -(s.B[0] - s.A[0])
+	s.MirrorPortalMatrix[1] = -(s.B[1] - s.A[1])
+	s.MirrorPortalMatrix[2] = -s.Normal[0]
+	s.MirrorPortalMatrix[3] = -s.Normal[1]
+	s.MirrorPortalMatrix[4] = s.B[0]
+	s.MirrorPortalMatrix[5] = s.B[1]
 }
 
 func (s *SectorSegment) RealizeAdjacentSector() {
@@ -53,7 +74,11 @@ func (s *SectorSegment) RealizeAdjacentSector() {
 	}
 
 	if adj, ok := s.AdjacentSector.Component(SectorComponentIndex).(*Sector); ok {
-		// Get the actual segment
+		// Get the actual segment using the index
+		if s.AdjacentSegmentIndex != -1 {
+			s.AdjacentSegment = adj.Segments[s.AdjacentSegmentIndex]
+		}
+		// Get the actual segment by finding a matching one
 		for _, s2 := range adj.Segments {
 			if s2.Matches(&s.Segment) {
 				s.AdjacentSegment = s2
@@ -94,8 +119,10 @@ func (s *SectorSegment) Construct(data map[string]any) {
 	s.Normal = concepts.Vector2{}
 	s.PortalHasMaterial = false
 	s.PortalIsPassable = true
+	s.PortalTeleports = false
 	s.HiSurface.Construct(s.DB, nil)
 	s.LoSurface.Construct(s.DB, nil)
+	s.AdjacentSegmentIndex = -1
 
 	if data == nil {
 		return
@@ -113,8 +140,16 @@ func (s *SectorSegment) Construct(data map[string]any) {
 	if v, ok := data["PortalIsPassable"]; ok {
 		s.PortalIsPassable = v.(bool)
 	}
+	if v, ok := data["PortalTeleports"]; ok {
+		s.PortalTeleports = v.(bool)
+	}
 	if v, ok := data["AdjacentSector"]; ok {
 		s.AdjacentSector = s.DB.DeserializeEntityRef(v)
+	}
+	if v, ok := data["AdjacentSegment"]; ok {
+		if parsed, err := strconv.ParseInt(v.(string), 10, 64); err == nil {
+			s.AdjacentSegmentIndex = int(parsed)
+		}
 	}
 	if v, ok := data["Lo"]; ok {
 		s.LoSurface.Construct(s.DB, v.(map[string]any))
@@ -134,6 +169,10 @@ func (s *SectorSegment) Serialize() map[string]any {
 	}
 	if !s.PortalIsPassable {
 		result["PortalIsPassable"] = false
+	}
+	if s.PortalTeleports {
+		result["PortalTeleports"] = true
+		result["AdjacentSegment"] = strconv.FormatInt(int64(s.AdjacentSegment.Index), 10)
 	}
 
 	result["Lo"] = s.LoSurface.Serialize()

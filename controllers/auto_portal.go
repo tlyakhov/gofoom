@@ -141,6 +141,10 @@ func AutoPortal(db *concepts.EntityComponentDB) {
 	for _, c := range db.All(core.SectorComponentIndex) {
 		sector := c.(*core.Sector)
 		for _, segment := range sector.Segments {
+			// Don't touch these during auto-portalling
+			if segment.PortalTeleports {
+				continue
+			}
 			segment.AdjacentSector = nil
 			segment.AdjacentSegment = nil
 		}

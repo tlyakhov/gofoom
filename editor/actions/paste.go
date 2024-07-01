@@ -125,7 +125,8 @@ func (a *Paste) OnMouseUp() {
 }
 
 func (a *Paste) Undo() {
+	// TODO: Implement
 }
 func (a *Paste) Redo() {
-
+	// TODO: Implement
 }

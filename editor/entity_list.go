@@ -142,6 +142,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	button := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
 		list.State().Lock.Lock()
 		ref := editor.DB.RefForNewEntity()
+
 		editor.SelectObjects(true, core.SelectableFromEntityRef(ref))
 		list.State().Lock.Unlock()
 	})
