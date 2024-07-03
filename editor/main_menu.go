@@ -63,6 +63,7 @@ type EditorMenu struct {
 	ToolsSplitSegment       MenuAction
 	ToolsSplitSector        MenuAction
 	ToolsAlignGrid          MenuAction
+	ToolsNewShader          MenuAction
 
 	BehaviorsPause MenuAction
 	BehaviorsReset MenuAction
@@ -259,6 +260,8 @@ func CreateMainMenu() {
 	editor.ToolsAlignGrid.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyG, Modifier: fyne.KeyModifierAlt}
 	editor.ToolsAlignGrid.Menu = fyne.NewMenuItem("Align Grid", func() { editor.SwitchTool(state.ToolAlignGrid) })
 
+	editor.ToolsNewShader.Menu = fyne.NewMenuItem("New Shader...", editor.NewShader)
+
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
 		editor.DB.Simulation.All.Range(func(simVar concepts.Simulated, _ bool) bool {
@@ -292,7 +295,8 @@ func CreateMainMenu() {
 	)
 	menuTools := fyne.NewMenu("Tools", editor.ToolsSelect.Menu,
 		editor.ToolsAddBody.Menu, editor.ToolsAddSector.Menu, editor.ToolsAddInternalSegment.Menu, editor.ToolsSplitSegment.Menu,
-		editor.ToolsSplitSector.Menu, editor.ToolsAlignGrid.Menu)
+		editor.ToolsSplitSector.Menu, editor.ToolsAlignGrid.Menu, fyne.NewMenuItemSeparator(),
+		editor.ToolsNewShader.Menu)
 	menuBehaviors := fyne.NewMenu("Behaviors", editor.BehaviorsReset.Menu, editor.BehaviorsPause.Menu)
 	mainMenu := fyne.NewMainMenu(menuFile, menuEdit, menuTools, menuBehaviors)
 	editor.Window.SetMainMenu(mainMenu)

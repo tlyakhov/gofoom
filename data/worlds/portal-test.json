@@ -45,7 +45,7 @@
         "Original": 0
       },
       "CeilSurface": {
-        "Material": "2"
+        "Material": "13"
       },
       "Entity": "3",
       "FloorFriction": 0.85,
@@ -138,6 +138,7 @@
           "Y": 100
         },
         {
+          "AdjacentSector": "14",
           "Hi": {
             "Material": "2"
           },
@@ -145,7 +146,7 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "13"
           },
           "X": -100,
           "Y": 100
@@ -245,7 +246,7 @@
     "Entity": "6",
     "core.Sector": {
       "BottomZ": {
-        "Original": 0
+        "Original": -8
       },
       "CeilSurface": {
         "Material": "2"
@@ -284,8 +285,8 @@
             "Material": "7",
             "Stretch": "StretchFill"
           },
-          "X": 200,
-          "Y": 310
+          "X": 220,
+          "Y": 400
         },
         {
           "Hi": {
@@ -478,7 +479,7 @@
             "Material": "2"
           },
           "X": -100,
-          "Y": 150
+          "Y": 130
         },
         {
           "AdjacentSector": "3",
@@ -517,7 +518,7 @@
           "Surface": {
             "Material": "2"
           },
-          "X": -40,
+          "X": -30,
           "Y": 200
         },
         {
@@ -530,8 +531,8 @@
           "Surface": {
             "Material": "2"
           },
-          "X": -150,
-          "Y": 210
+          "X": -130,
+          "Y": 230
         },
         {
           "Hi": {
@@ -564,6 +565,15 @@
       "TopZ": {
         "Original": 64
       }
+    }
+  },
+  {
+    "Entity": "11",
+    "materials.Image": {
+      "Entity": "11",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "/Users/tim/Documents/gofoom/data/nightsky.jpg"
     }
   },
   {
@@ -606,6 +616,98 @@
       },
       "Entity": "12",
       "Strength": 2
+    }
+  },
+  {
+    "Entity": "13",
+    "concepts.Named": {
+      "Entity": "13",
+      "Name": "Shader nightsky.jpg"
+    },
+    "materials.Shader": {
+      "Entity": "13",
+      "Stages": [
+        {
+          "Flags": "ShaderTiled|ShaderSky",
+          "Texture": "11"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "14",
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSlope": 0.05000000000000002,
+      "CeilSurface": {
+        "Material": "13"
+      },
+      "Entity": "14",
+      "FloorFriction": 0.85,
+      "FloorSlope": -0.2,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "AdjacentSector": "3",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "13"
+          },
+          "X": -210,
+          "Y": -100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "13"
+          },
+          "X": -210,
+          "Y": 100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
     }
   }
 ]

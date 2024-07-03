@@ -8,6 +8,7 @@ import (
 	"image"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 
@@ -23,6 +24,7 @@ import (
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/editor/properties"
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
@@ -334,6 +336,45 @@ func (e *Editor) ActTool() {
 	}
 
 	e.CurrentAction.Act()
+}
+
+func (e *Editor) NewShader() {
+	dlg := dialog.NewFileOpen(func(uc fyne.URIReadCloser, err error) {
+		if err != nil {
+			e.Alert(fmt.Sprintf("Error loading file: %v", err))
+			return
+		}
+		if uc == nil {
+			return
+		}
+		// First, load the image
+		refImg := archetypes.CreateBasic(e.DB, materials.ImageComponentIndex)
+		img := materials.ImageFromDb(refImg)
+		img.Source = uc.URI().Path()
+		img.Load()
+		a := &actions.AddEntity{IEditor: e, EntityRef: refImg, Components: refImg.All()}
+		e.NewAction(a)
+		e.CurrentAction.Act()
+		// Next set up the shader
+		ref := archetypes.CreateBasic(e.DB, materials.ShaderComponentIndex)
+		shader := materials.ShaderFromDb(ref)
+		stage := &materials.ShaderStage{}
+		stage.SetDB(e.DB)
+		stage.Construct(nil)
+		stage.Texture = refImg
+		shader.Stages = append(shader.Stages, stage)
+		named := editor.DB.NewAttachedComponent(ref.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+		named.Name = "Shader " + path.Base(img.Source)
+		a = &actions.AddEntity{IEditor: e, EntityRef: ref, Components: ref.All()}
+		e.NewAction(a)
+		e.CurrentAction.Act()
+
+	}, e.Window)
+
+	dlg.Resize(fyne.NewSize(1000, 700))
+	dlg.SetConfirmText("Load image file to use for shader")
+	dlg.SetDismissText("Cancel")
+	dlg.Show()
 }
 
 func (e *Editor) SwitchTool(tool state.EditorTool) {
