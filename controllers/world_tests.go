@@ -14,10 +14,10 @@ import (
 )
 
 func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size float64) *core.Sector {
-	isector := archetypes.CreateSector(db)
-	sector := core.SectorFromDb(isector)
+	eSector := archetypes.CreateSector(db)
+	sector := core.SectorFromDb(db, eSector)
 	sector.Construct(nil)
-	named := db.NewAttachedComponent(isector.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+	named := db.NewAttachedComponent(eSector, concepts.NamedComponentIndex).(*concepts.Named)
 	named.Name = name
 
 	mat := DefaultMaterial(db)
@@ -44,63 +44,63 @@ func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size fl
 	return sector
 }
 
-func CreateTestGrass(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	igrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(igrass.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+func CreateTestGrass(db *concepts.EntityComponentDB) concepts.Entity {
+	eGrass := archetypes.CreateBasicMaterial(db, true)
+	nmat := db.NewAttachedComponent(eGrass, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
-	tex := materials.ImageFromDb(igrass)
+	tex := materials.ImageFromDb(db, eGrass)
 	tex.Source = "data/grass.jpg"
 	tex.Filter = true
 	tex.GenerateMipMaps = true
 	tex.Load()
-	return igrass
+	return eGrass
 }
-func CreateTestSky(db *concepts.EntityComponentDB) *concepts.EntityRef {
+func CreateTestSky(db *concepts.EntityComponentDB) concepts.Entity {
 	img := db.NewAttachedComponent(db.NewEntity(), materials.ImageComponentIndex).(*materials.Image)
 	img.Source = "data/Sky.png"
 	img.Filter = false
 	img.GenerateMipMaps = false
 	img.Load()
 
-	ref := archetypes.CreateBasic(db, materials.ShaderComponentIndex)
-	sky := materials.ShaderFromDb(ref)
+	entity := archetypes.CreateBasic(db, materials.ShaderComponentIndex)
+	sky := materials.ShaderFromDb(db, entity)
 	sky.Stages = append(sky.Stages, new(materials.ShaderStage))
 	sky.Stages[0].Construct(nil)
-	sky.Stages[0].Texture = img.Ref()
+	sky.Stages[0].Texture = img.Entity
 	sky.Stages[0].Flags = materials.ShaderSky | materials.ShaderTiled
-	named := db.NewAttachedComponent(ref.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+	named := db.NewAttachedComponent(entity, concepts.NamedComponentIndex).(*concepts.Named)
 	named.Name = "Sky"
 
-	return ref
+	return entity
 }
 
-func CreateTestDirt(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	idirt := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(idirt.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+func CreateTestDirt(db *concepts.EntityComponentDB) concepts.Entity {
+	eDirt := archetypes.CreateBasicMaterial(db, true)
+	nmat := db.NewAttachedComponent(eDirt, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Dirt"
-	tex := materials.ImageFromDb(idirt)
+	tex := materials.ImageFromDb(db, eDirt)
 	tex.Source = "data/FDef.png"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.Load()
-	return idirt
+	return eDirt
 }
 
 func CreateTestWorld(db *concepts.EntityComponentDB) {
 	testw := 30
 	testh := 30
-	ispawn := archetypes.CreateBasic(db, core.SpawnComponentIndex)
-	spawn := core.SpawnFromDb(ispawn)
+	eSpawn := archetypes.CreateBasic(db, core.SpawnComponentIndex)
+	spawn := core.SpawnFromDb(db, eSpawn)
 	spawn.Spawn[0] = 250
 	spawn.Spawn[1] = 250
 	spawn.Spawn[2] = 100
 
-	igrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(igrass.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+	eGrass := archetypes.CreateBasicMaterial(db, true)
+	nmat := db.NewAttachedComponent(eGrass, concepts.NamedComponentIndex).(*concepts.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
-	tex := materials.ImageFromDb(igrass)
+	tex := materials.ImageFromDb(db, eGrass)
 	tex.Source = "data/grass.jpg"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
@@ -126,8 +126,8 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 			}
 
 			if rand.Uint32()%45 == 0 {
-				ilight := archetypes.CreateLightBody(db)
-				lightBody := core.BodyFromDb(ilight)
+				eLight := archetypes.CreateLightBody(db)
+				lightBody := core.BodyFromDb(db, eLight)
 				lightBody.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				lightBody.Pos.Reset()
 				lightBody.Mass = 0
@@ -137,8 +137,8 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 	}
 	for x := 0; x < testw; x++ {
 		for y := 0; y < testh; y++ {
-			isector := db.GetEntityRefByName(fmt.Sprintf("land_%v_%v", x, y))
-			sector := core.SectorFromDb(isector)
+			eSector := db.GetEntityRefByName(fmt.Sprintf("land_%v_%v", x, y))
+			sector := core.SectorFromDb(db, eSector)
 			// Randomly rotate the segments
 			rot := int(rand.Uint32() % 3)
 			for r := 0; r < rot; r++ {
@@ -152,8 +152,8 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 	db.ActAllControllers(concepts.ControllerLoaded)
 }
 func CreateTestWorld2(db *concepts.EntityComponentDB) {
-	ispawn := archetypes.CreateBasic(db, core.SpawnComponentIndex)
-	spawn := core.SpawnFromDb(ispawn)
+	eSpawn := archetypes.CreateBasic(db, core.SpawnComponentIndex)
+	spawn := core.SpawnFromDb(db, eSpawn)
 	spawn.Spawn[0] = 50
 	spawn.Spawn[1] = 50
 	spawn.Spawn[2] = 50
@@ -175,8 +175,8 @@ func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	sector3.CeilSurface.Material = isky
 	sector3.Segments[1].Surface.Material = isky
 
-	ilight := archetypes.CreateLightBody(db)
-	lightBody := core.BodyFromDb(ilight)
+	eLight := archetypes.CreateLightBody(db)
+	lightBody := core.BodyFromDb(db, eLight)
 	lightBody.Pos.Original = concepts.Vector3{0, 0, 60}
 	lightBody.Pos.Reset()
 	lightBody.Mass = 0

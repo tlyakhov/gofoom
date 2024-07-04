@@ -27,7 +27,7 @@ const (
 
 type Surface struct {
 	DB       *concepts.EntityComponentDB
-	Material *concepts.EntityRef `editable:"Material" edit_type:"Material"`
+	Material concepts.Entity `editable:"Material" edit_type:"Material"`
 	// Do we need both this AND the transform? not sure
 	Stretch     SurfaceStretch   `editable:"Stretch"`
 	ExtraStages []*ShaderStage   `editable:"Extra Shader Stages"`
@@ -47,7 +47,7 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 		s.ExtraStages = concepts.ConstructSlice[*ShaderStage](db, v)
 	}
 	if v, ok := data["Material"]; ok {
-		s.Material = s.DB.DeserializeEntityRef(v)
+		s.Material, _ = concepts.DeserializeEntity(v.(string))
 	}
 	if v, ok := data["Transform"]; ok {
 		s.Transform.Deserialize(v.([]any))
@@ -69,7 +69,7 @@ func (s *Surface) Serialize() map[string]any {
 		result["ExtraStages"] = concepts.SerializeSlice(s.ExtraStages)
 	}
 
-	if !s.Material.Nil() {
+	if s.Material != 0 {
 		result["Material"] = s.Material.Serialize()
 	}
 

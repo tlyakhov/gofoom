@@ -237,3 +237,6 @@ func (a *Animation[T]) Serialize() map[string]any {
 
 func (a *Animation[T]) SetDB(db *EntityComponentDB) {
 }
+func (a *Animation[T]) GetDB() *EntityComponentDB {
+	return nil
+}

@@ -48,7 +48,7 @@ func (bc *BodyController) Target(target concepts.Attachable) bool {
 		return false
 	}
 	bc.Sector = bc.Body.Sector()
-	bc.Player = behaviors.PlayerFromDb(bc.Body.EntityRef)
+	bc.Player = behaviors.PlayerFromDb(bc.Body.DB, bc.Body.Entity)
 	bc.pos = &bc.Body.Pos.Now
 	bc.pos2d = bc.pos.To2D()
 	bc.halfHeight = bc.Body.Size.Now[1] * 0.5
@@ -60,7 +60,7 @@ func (bc *BodyController) RemoveBody() {
 	if bc.Sector != nil {
 		delete(bc.Sector.Bodies, bc.Body.Entity)
 		bc.Sector = nil
-		bc.Body.SectorEntityRef = nil
+		bc.Body.SectorEntity = 0
 		//return
 	}
 	panic("BodyController.RemoveBody is broken")
@@ -103,34 +103,34 @@ func (bc *BodyController) Physics() {
 	floorZ, ceilZ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 
 	bc.Body.OnGround = false
-	if !bc.Sector.FloorTarget.Nil() && bodyTop < floorZ {
+	if bc.Sector.FloorTarget != 0 && bodyTop < floorZ {
 		bc.Exit()
 		bc.Enter(bc.Sector.FloorTarget)
 		_, ceilZ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
-	} else if !bc.Sector.FloorTarget.Nil() && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
+	} else if bc.Sector.FloorTarget != 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
 		bc.Body.Vel.Now[2] = constants.PlayerJumpForce
-	} else if bc.Sector.FloorTarget.Nil() && bc.Body.Pos.Now[2]-halfHeight <= floorZ {
+	} else if bc.Sector.FloorTarget == 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ {
 		dist := bc.Sector.FloorNormal[2] * (floorZ - (bc.Body.Pos.Now[2] - halfHeight))
 		delta := bc.Sector.FloorNormal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
 		bc.Body.OnGround = true
-		BodySectorScript(bc.Sector.FloorScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
+		BodySectorScript(bc.Sector.FloorScripts, bc.Body.Entity, bc.Sector.Entity)
 	}
 
-	if !bc.Sector.CeilTarget.Nil() && bodyTop > ceilZ {
+	if bc.Sector.CeilTarget != 0 && bodyTop > ceilZ {
 		bc.Exit()
 		bc.Enter(bc.Sector.CeilTarget)
-		bc.Sector = core.SectorFromDb(bc.Sector.CeilTarget)
+		bc.Sector = core.SectorFromDb(bc.Body.DB, bc.Sector.CeilTarget)
 		floorZ, _ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
-	} else if bc.Sector.CeilTarget.Nil() && bodyTop >= ceilZ {
+	} else if bc.Sector.CeilTarget == 0 && bodyTop >= ceilZ {
 		dist := -bc.Sector.CeilNormal[2] * (bodyTop - ceilZ + 1.0)
 		delta := bc.Sector.CeilNormal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
-		BodySectorScript(bc.Sector.CeilScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
+		BodySectorScript(bc.Sector.CeilScripts, bc.Body.Entity, bc.Sector.Entity)
 	}
 }
 

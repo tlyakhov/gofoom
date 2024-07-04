@@ -12,18 +12,18 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
+func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 	// TODO: We should probably not do all of this for every column. Can we
 	// cache any of these things as we cast rays?
-	b := core.BodyFromDb(ref)
+	b := core.BodyFromDb(r.DB, entity)
 	if b == nil || !b.IsActive() {
 		return
 	}
 
-	refMaterial := ref
+	eMaterial := entity
 	angleFromPlayer := r.PlayerBody.Angle2DTo(&b.Pos.Render)
 
-	sheet := materials.SpriteSheetFromDb(ref)
+	sheet := materials.SpriteSheetFromDb(r.DB, entity)
 	if sheet != nil && sheet.IsActive() {
 		angleSprite := 360 - angleFromPlayer + b.Angle.Render
 		if len(sheet.Sprites) == 0 {
@@ -54,10 +54,10 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		if sprite == nil {
 			return
 		}
-		refMaterial = sprite.Image
+		eMaterial = sprite.Image
 	}
 
-	if !archetypes.EntityRefIsMaterial(refMaterial) {
+	if !archetypes.EntityIsMaterial(r.DB, eMaterial) {
 		return
 	}
 
@@ -93,14 +93,14 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 		return
 	}
 
-	if lit := materials.LitFromDb(ref); lit != nil {
+	if lit := materials.LitFromDb(r.DB, entity); lit != nil {
 		le := &c.LightElement
 		le.Q.From(&b.Pos.Render)
 		le.Q[2] += b.Size.Render[1] * 0.5
 		le.MapIndex = b.Sector().WorldToLightmapAddress(&le.Q, 0)
 		le.Segment = nil
 		le.Type = state.LightElementBody
-		le.InputBody = ref
+		le.InputBody = entity
 		le.Sector = b.Sector()
 		le.Get()
 		c.Light.To3D().From(&le.Output)
@@ -121,7 +121,7 @@ func (r *Renderer) RenderBody(ref *concepts.EntityRef, c *state.Column) {
 			continue
 		}
 		v := float64(y-c.ScreenStart) / float64(c.ScreenEnd-c.ScreenStart)
-		sample := c.SampleShader(refMaterial, nil, c.U, v, depthScale)
+		sample := c.SampleShader(eMaterial, nil, c.U, v, depthScale)
 		sample.Mul4Self(&c.Light)
 		c.ApplySample(sample, screenIndex, c.Distance)
 	}

@@ -39,7 +39,7 @@ func WallHi(cp *state.ColumnPortal) {
 			v *= (cp.Sector.Max[2] - cp.Sector.Min[2]) / cp.Segment.Length
 		}
 
-		if !surf.Material.Nil() {
+		if surf.Material != 0 {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
@@ -81,7 +81,7 @@ func WallLow(cp *state.ColumnPortal) {
 			v *= (cp.Sector.Max[2] - cp.Sector.Min[2]) / cp.Segment.Length
 		}
 
-		if !surf.Material.Nil() {
+		if surf.Material != 0 {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))

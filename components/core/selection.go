@@ -55,7 +55,7 @@ func (s *Selection) ContainsGrouped(item *Selectable) bool {
 func (sel *Selection) Normalize() {
 	// Stores # of segments selected for each sector, or -1 if the sector itself
 	// is part of the selection.
-	segmentsForSector := make(map[uint64]int)
+	segmentsForSector := make(map[concepts.Entity]int)
 
 	// Count segments for sectors
 	for _, s := range sel.Exact {
@@ -94,7 +94,7 @@ func (sel *Selection) SavePositions() {
 		case SelectableSector:
 			for _, seg := range s.Sector.Segments {
 				// 4 bits for type, 16 bits for segment index, 44 bits for entity
-				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | s.Ref.Entity
+				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | uint64(s.Entity)
 				sel.Positions[hash] = &concepts.Vector3{seg.P[0], seg.P[1], 0}
 			}
 		case SelectableLow:
@@ -113,9 +113,9 @@ func (sel *Selection) SavePositions() {
 			sel.Positions[s.Hash()] = &concepts.Vector3{s.InternalSegment.B[0], s.InternalSegment.B[1]}
 		case SelectableInternalSegment:
 			// 4 bits for type, 1 bit for A/B, 59 bits for entity
-			hash := (uint64(s.Type) << 60) | s.Ref.Entity
+			hash := (uint64(s.Type) << 60) | uint64(s.Entity)
 			sel.Positions[hash] = &concepts.Vector3{s.InternalSegment.A[0], s.InternalSegment.A[1]}
-			hash = (uint64(s.Type) << 60) | uint64(1<<59) | s.Ref.Entity
+			hash = (uint64(s.Type) << 60) | uint64(1<<59) | uint64(s.Entity)
 			sel.Positions[hash] = &concepts.Vector3{s.InternalSegment.B[0], s.InternalSegment.B[1]}
 		}
 	}
@@ -127,7 +127,7 @@ func (sel *Selection) LoadPositions() {
 		case SelectableSector:
 			for _, seg := range s.Sector.Segments {
 				// 4 bits for type, 16 bits for segment index, 44 bits for entity
-				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | s.Ref.Entity
+				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | uint64(s.Entity)
 				seg.P.From(sel.Positions[hash].To2D())
 			}
 		case SelectableLow:
@@ -146,9 +146,9 @@ func (sel *Selection) LoadPositions() {
 			s.InternalSegment.B.From(sel.Positions[s.Hash()].To2D())
 		case SelectableInternalSegment:
 			// 4 bits for type, 1 bit for A/B, 59 bits for entity
-			hash := (uint64(s.Type) << 60) | s.Ref.Entity
+			hash := (uint64(s.Type) << 60) | uint64(s.Entity)
 			s.InternalSegment.A.From(sel.Positions[hash].To2D())
-			hash = (uint64(s.Type) << 60) | uint64(1<<59) | s.Ref.Entity
+			hash = (uint64(s.Type) << 60) | uint64(1<<59) | uint64(s.Entity)
 			s.InternalSegment.B.From(sel.Positions[hash].To2D())
 		}
 	}

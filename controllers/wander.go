@@ -32,7 +32,7 @@ func (wc *WanderController) Methods() concepts.ControllerMethod {
 
 func (wc *WanderController) Target(target concepts.Attachable) bool {
 	wc.Wander = target.(*behaviors.Wander)
-	wc.Body = core.BodyFromDb(target.Ref())
+	wc.Body = core.BodyFromDb(wc.Wander.DB, wc.Wander.Entity)
 	return wc.Wander.IsActive() && wc.Body.IsActive()
 }
 
@@ -43,8 +43,8 @@ func (wc *WanderController) Always() {
 	f.MulSelf(wc.Force)
 	wc.Body.Force.AddSelf(&f)
 
-	if wc.NextSector.Nil() {
-		wc.NextSector = wc.Body.SectorEntityRef
+	if wc.NextSector == 0 {
+		wc.NextSector = wc.Body.SectorEntity
 	}
 
 	if wc.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
@@ -54,7 +54,7 @@ func (wc *WanderController) Always() {
 		// Bias towards the center of the sector
 		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
 		end := start
-		if sector := core.SectorFromDb(wc.NextSector); sector != nil {
+		if sector := core.SectorFromDb(wc.Body.DB, wc.NextSector); sector != nil {
 			end = wc.Body.Angle2DTo(&sector.Center)
 		}
 		a.End = concepts.TweenAngles(start, end, 0.2, concepts.Lerp)
@@ -72,7 +72,7 @@ func (wc *WanderController) Always() {
 		var closestSegment *core.SectorSegment
 		closestDist := constants.MaxViewDistance
 		for _, seg := range sector.Segments {
-			if seg.AdjacentSector.Nil() || !seg.PortalIsPassable {
+			if seg.AdjacentSector == 0 || !seg.PortalIsPassable {
 				continue
 			}
 			dist := seg.DistanceToPoint2(wc.Body.Pos.Now.To2D())

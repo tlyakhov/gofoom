@@ -18,8 +18,8 @@ func init() {
 	SolidComponentIndex = concepts.DbTypes().Register(Solid{}, SolidFromDb)
 }
 
-func SolidFromDb(entity *concepts.EntityRef) *Solid {
-	if asserted, ok := entity.Component(SolidComponentIndex).(*Solid); ok {
+func SolidFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Solid {
+	if asserted, ok := db.Component(e, SolidComponentIndex).(*Solid); ok {
 		return asserted
 	}
 	return nil

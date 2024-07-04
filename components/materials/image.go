@@ -40,8 +40,8 @@ func init() {
 	ImageComponentIndex = concepts.DbTypes().Register(Image{}, ImageFromDb)
 }
 
-func ImageFromDb(entity *concepts.EntityRef) *Image {
-	if asserted, ok := entity.Component(ImageComponentIndex).(*Image); ok {
+func ImageFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Image {
+	if asserted, ok := db.Component(e, ImageComponentIndex).(*Image); ok {
 		return asserted
 	}
 	return nil

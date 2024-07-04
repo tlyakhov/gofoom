@@ -17,7 +17,7 @@ type Body struct {
 	Vel               concepts.SimVariable[concepts.Vector3]
 	Force             concepts.Vector3
 	Size              concepts.SimVariable[concepts.Vector2] `editable:"Size"`
-	SectorEntityRef   *concepts.EntityRef
+	SectorEntity      concepts.Entity
 	Angle             concepts.SimVariable[float64] `editable:"Angle"`
 	Mass              float64                       `editable:"Mass"`
 	CollisionResponse CollisionResponse             `editable:"Collision Response"`
@@ -36,8 +36,8 @@ func init() {
 	BodyComponentIndex = concepts.DbTypes().Register(Body{}, BodyFromDb)
 }
 
-func BodyFromDb(entity *concepts.EntityRef) *Body {
-	if asserted, ok := entity.Component(BodyComponentIndex).(*Body); ok {
+func BodyFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Body {
+	if asserted, ok := db.Component(e, BodyComponentIndex).(*Body); ok {
 		return asserted
 	}
 	return nil
@@ -62,7 +62,7 @@ func (b *Body) SetDB(db *concepts.EntityComponentDB) {
 }
 
 func (b *Body) Sector() *Sector {
-	return SectorFromDb(b.SectorEntityRef)
+	return SectorFromDb(b.DB, b.SectorEntity)
 }
 
 func (b *Body) Normal() *concepts.Vector2 {

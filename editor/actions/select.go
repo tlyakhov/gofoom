@@ -50,7 +50,7 @@ func (a *Select) OnMouseUp() {
 	hovering := a.State().HoveringObjects
 	if hovering.Empty() { // User is trying to select a sector?
 		hovering = core.NewSelection()
-		for _, isector := range a.State().DB.All(core.SectorComponentIndex) {
+		for _, isector := range a.State().DB.AllOfType(core.SectorComponentIndex) {
 			sector := isector.(*core.Sector)
 			if sector.IsPointInside2D(&a.State().MouseWorld) {
 				hovering.Add(core.SelectableFromSector(sector))

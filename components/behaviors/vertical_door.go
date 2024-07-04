@@ -43,8 +43,8 @@ func init() {
 	}
 }
 
-func VerticalDoorFromDb(entity *concepts.EntityRef) *VerticalDoor {
-	if asserted, ok := entity.Component(VerticalDoorComponentIndex).(*VerticalDoor); ok {
+func VerticalDoorFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *VerticalDoor {
+	if asserted, ok := db.Component(e, VerticalDoorComponentIndex).(*VerticalDoor); ok {
 		return asserted
 	}
 	return nil

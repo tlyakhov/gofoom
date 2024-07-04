@@ -52,5 +52,5 @@ func (c *Config) RefreshPlayer() {
 	if c.Player, ok = a.(*behaviors.Player); !ok {
 		return
 	}
-	c.PlayerBody = core.BodyFromDb(c.Player.EntityRef)
+	c.PlayerBody = core.BodyFromDb(c.DB, c.Player.Entity)
 }

@@ -17,8 +17,8 @@ func init() {
 	ShaderComponentIndex = concepts.DbTypes().Register(Shader{}, ShaderFromDb)
 }
 
-func ShaderFromDb(entity *concepts.EntityRef) *Shader {
-	if asserted, ok := entity.Component(ShaderComponentIndex).(*Shader); ok {
+func ShaderFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Shader {
+	if asserted, ok := db.Component(e, ShaderComponentIndex).(*Shader); ok {
 		return asserted
 	}
 	return nil

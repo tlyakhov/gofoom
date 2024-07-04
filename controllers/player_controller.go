@@ -37,11 +37,11 @@ func (pc *PlayerController) Target(target concepts.Attachable) bool {
 	if !pc.Player.IsActive() {
 		return false
 	}
-	pc.Body = core.BodyFromDb(pc.Player.EntityRef)
+	pc.Body = core.BodyFromDb(pc.Player.DB, pc.Player.Entity)
 	if !pc.Body.IsActive() {
 		return false
 	}
-	pc.Alive = behaviors.AliveFromDb(pc.Player.EntityRef)
+	pc.Alive = behaviors.AliveFromDb(pc.Player.DB, pc.Player.Entity)
 	return pc.Alive.IsActive()
 }
 

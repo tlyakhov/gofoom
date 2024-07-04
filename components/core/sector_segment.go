@@ -24,7 +24,7 @@ type SectorSegment struct {
 	PortalIsPassable  bool              `editable:"Portal is passable"`
 	PortalTeleports   bool              `editable:"The adjacent segment/sector requires teleporting"`
 
-	AdjacentSector       *concepts.EntityRef
+	AdjacentSector       concepts.Entity
 	AdjacentSegment      *SectorSegment
 	AdjacentSegmentIndex int // Only when loading
 
@@ -69,11 +69,11 @@ func (s *SectorSegment) Recalculate() {
 }
 
 func (s *SectorSegment) RealizeAdjacentSector() {
-	if s.AdjacentSector.Nil() {
+	if s.AdjacentSector == 0 {
 		return
 	}
 
-	if adj, ok := s.AdjacentSector.Component(SectorComponentIndex).(*Sector); ok {
+	if adj := SectorFromDb(s.DB, s.AdjacentSector); adj != nil {
 		// Get the actual segment using the index
 		if s.AdjacentSegmentIndex != -1 {
 			s.AdjacentSegment = adj.Segments[s.AdjacentSegmentIndex]
@@ -144,7 +144,7 @@ func (s *SectorSegment) Construct(data map[string]any) {
 		s.PortalTeleports = v.(bool)
 	}
 	if v, ok := data["AdjacentSector"]; ok {
-		s.AdjacentSector = s.DB.DeserializeEntityRef(v)
+		s.AdjacentSector, _ = concepts.DeserializeEntity(v.(string))
 	}
 	if v, ok := data["AdjacentSegment"]; ok {
 		if parsed, err := strconv.ParseInt(v.(string), 10, 64); err == nil {
@@ -178,7 +178,7 @@ func (s *SectorSegment) Serialize() map[string]any {
 	result["Lo"] = s.LoSurface.Serialize()
 	result["Hi"] = s.HiSurface.Serialize()
 
-	if !s.AdjacentSector.Nil() {
+	if s.AdjacentSector != 0 {
 		result["AdjacentSector"] = s.AdjacentSector.Serialize()
 	}
 

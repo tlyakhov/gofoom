@@ -28,8 +28,8 @@ func init() {
 	TextComponentIndex = concepts.DbTypes().Register(Text{}, TextFromDb)
 }
 
-func TextFromDb(entity *concepts.EntityRef) *Text {
-	if asserted, ok := entity.Component(TextComponentIndex).(*Text); ok {
+func TextFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Text {
+	if asserted, ok := db.Component(e, TextComponentIndex).(*Text); ok {
 		return asserted
 	}
 	return nil

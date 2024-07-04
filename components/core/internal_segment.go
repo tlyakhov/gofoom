@@ -21,8 +21,8 @@ func init() {
 	InternalSegmentComponentIndex = concepts.DbTypes().Register(InternalSegment{}, SectorFromDb)
 }
 
-func InternalSegmentFromDb(entity *concepts.EntityRef) *InternalSegment {
-	if asserted, ok := entity.Component(InternalSegmentComponentIndex).(*InternalSegment); ok {
+func InternalSegmentFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *InternalSegment {
+	if asserted, ok := db.Component(e, InternalSegmentComponentIndex).(*InternalSegment); ok {
 		return asserted
 	}
 	return nil
@@ -33,7 +33,7 @@ func (s *InternalSegment) String() string {
 }
 
 func (s *InternalSegment) DetachFromSectors() {
-	for _, attachable := range s.DB.All(SectorComponentIndex) {
+	for _, attachable := range s.DB.AllOfType(SectorComponentIndex) {
 		if attachable == nil {
 			continue
 		}
@@ -51,7 +51,7 @@ func (s *InternalSegment) AttachToSectors() {
 	if min[1] > max[1] {
 		min[1], max[1] = max[1], min[1]
 	}
-	for _, attachable := range s.DB.All(SectorComponentIndex) {
+	for _, attachable := range s.DB.AllOfType(SectorComponentIndex) {
 		if attachable == nil {
 			continue
 		}
@@ -69,7 +69,7 @@ func (s *InternalSegment) AttachToSectors() {
 			continue
 		}
 
-		sector.InternalSegments[s.Entity] = s.EntityRef
+		sector.InternalSegments[s.Entity] = s
 	}
 }
 

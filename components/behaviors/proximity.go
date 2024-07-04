@@ -21,8 +21,8 @@ func init() {
 	ProximityComponentIndex = concepts.DbTypes().Register(Proximity{}, ProximityFromDb)
 }
 
-func ProximityFromDb(entity *concepts.EntityRef) *Proximity {
-	if asserted, ok := entity.Component(ProximityComponentIndex).(*Proximity); ok {
+func ProximityFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Proximity {
+	if asserted, ok := db.Component(e, ProximityComponentIndex).(*Proximity); ok {
 		return asserted
 	}
 	return nil

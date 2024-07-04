@@ -36,6 +36,7 @@ func init() {
 		"ControllerRecalculate":        reflect.ValueOf(concepts.ControllerRecalculate),
 		"DbTypes":                      reflect.ValueOf(concepts.DbTypes),
 		"Deg2rad":                      reflect.ValueOf(concepts.Deg2rad),
+		"DeserializeEntity":            reflect.ValueOf(concepts.DeserializeEntity),
 		"EaseIn":                       reflect.ValueOf(concepts.EaseIn),
 		"EaseIn3":                      reflect.ValueOf(concepts.EaseIn3),
 		"EaseIn4":                      reflect.ValueOf(concepts.EaseIn4),
@@ -81,7 +82,6 @@ func init() {
 		"RGBAToInt32":                  reflect.ValueOf(concepts.RGBAToInt32),
 		"Rad2deg":                      reflect.ValueOf(concepts.Rad2deg),
 		"RngXorShift64":                reflect.ValueOf(concepts.RngXorShift64),
-		"SerializeEntityRefMap":        reflect.ValueOf(concepts.SerializeEntityRefMap),
 		"Spike":                        reflect.ValueOf(concepts.Spike),
 		"Spike2":                       reflect.ValueOf(concepts.Spike2),
 		"Spike3":                       reflect.ValueOf(concepts.Spike3),
@@ -107,8 +107,8 @@ func init() {
 		"Controller":           reflect.ValueOf((*concepts.Controller)(nil)),
 		"ControllerMethod":     reflect.ValueOf((*concepts.ControllerMethod)(nil)),
 		"ControllerSet":        reflect.ValueOf((*concepts.ControllerSet)(nil)),
+		"Entity":               reflect.ValueOf((*concepts.Entity)(nil)),
 		"EntityComponentDB":    reflect.ValueOf((*concepts.EntityComponentDB)(nil)),
-		"EntityRef":            reflect.ValueOf((*concepts.EntityRef)(nil)),
 		"Matrix2":              reflect.ValueOf((*concepts.Matrix2)(nil)),
 		"Named":                reflect.ValueOf((*concepts.Named)(nil)),
 		"Serializable":         reflect.ValueOf((*concepts.Serializable)(nil)),
@@ -135,6 +135,7 @@ type _tlyakhov_gofoom_concepts_Animated struct {
 	IValue     interface{}
 	WAnimate   func()
 	WConstruct func(data map[string]any)
+	WGetDB     func() *concepts.EntityComponentDB
 	WReset     func()
 	WSerialize func() map[string]any
 	WSetDB     func(db *concepts.EntityComponentDB)
@@ -145,6 +146,9 @@ func (W _tlyakhov_gofoom_concepts_Animated) Animate() {
 }
 func (W _tlyakhov_gofoom_concepts_Animated) Construct(data map[string]any) {
 	W.WConstruct(data)
+}
+func (W _tlyakhov_gofoom_concepts_Animated) GetDB() *concepts.EntityComponentDB {
+	return W.WGetDB()
 }
 func (W _tlyakhov_gofoom_concepts_Animated) Reset() {
 	W.WReset()
@@ -160,11 +164,12 @@ func (W _tlyakhov_gofoom_concepts_Animated) SetDB(db *concepts.EntityComponentDB
 type _tlyakhov_gofoom_concepts_Attachable struct {
 	IValue        interface{}
 	WConstruct    func(data map[string]any)
+	WGetDB        func() *concepts.EntityComponentDB
+	WGetEntity    func() concepts.Entity
 	WIndexInDB    func() int
-	WRef          func() *concepts.EntityRef
-	WResetRef     func()
 	WSerialize    func() map[string]any
 	WSetDB        func(db *concepts.EntityComponentDB)
+	WSetEntity    func(entity concepts.Entity)
 	WSetIndexInDB func(a0 int)
 	WString       func() string
 }
@@ -172,20 +177,23 @@ type _tlyakhov_gofoom_concepts_Attachable struct {
 func (W _tlyakhov_gofoom_concepts_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
+func (W _tlyakhov_gofoom_concepts_Attachable) GetDB() *concepts.EntityComponentDB {
+	return W.WGetDB()
+}
+func (W _tlyakhov_gofoom_concepts_Attachable) GetEntity() concepts.Entity {
+	return W.WGetEntity()
+}
 func (W _tlyakhov_gofoom_concepts_Attachable) IndexInDB() int {
 	return W.WIndexInDB()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) Ref() *concepts.EntityRef {
-	return W.WRef()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) ResetRef() {
-	W.WResetRef()
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) Serialize() map[string]any {
 	return W.WSerialize()
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) SetDB(db *concepts.EntityComponentDB) {
 	W.WSetDB(db)
+}
+func (W _tlyakhov_gofoom_concepts_Attachable) SetEntity(entity concepts.Entity) {
+	W.WSetEntity(entity)
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) SetIndexInDB(a0 int) {
 	W.WSetIndexInDB(a0)
@@ -239,12 +247,16 @@ func (W _tlyakhov_gofoom_concepts_Controller) Target(a0 concepts.Attachable) boo
 type _tlyakhov_gofoom_concepts_Serializable struct {
 	IValue     interface{}
 	WConstruct func(data map[string]any)
+	WGetDB     func() *concepts.EntityComponentDB
 	WSerialize func() map[string]any
 	WSetDB     func(db *concepts.EntityComponentDB)
 }
 
 func (W _tlyakhov_gofoom_concepts_Serializable) Construct(data map[string]any) {
 	W.WConstruct(data)
+}
+func (W _tlyakhov_gofoom_concepts_Serializable) GetDB() *concepts.EntityComponentDB {
+	return W.WGetDB()
 }
 func (W _tlyakhov_gofoom_concepts_Serializable) Serialize() map[string]any {
 	return W.WSerialize()
@@ -260,6 +272,7 @@ type _tlyakhov_gofoom_concepts_Simulated struct {
 	WConstruct    func(data map[string]any)
 	WDetach       func(sim *concepts.Simulation)
 	WGetAnimation func() concepts.Animated
+	WGetDB        func() *concepts.EntityComponentDB
 	WNewFrame     func()
 	WRenderBlend  func(a0 float64)
 	WReset        func()
@@ -278,6 +291,9 @@ func (W _tlyakhov_gofoom_concepts_Simulated) Detach(sim *concepts.Simulation) {
 }
 func (W _tlyakhov_gofoom_concepts_Simulated) GetAnimation() concepts.Animated {
 	return W.WGetAnimation()
+}
+func (W _tlyakhov_gofoom_concepts_Simulated) GetDB() *concepts.EntityComponentDB {
+	return W.WGetDB()
 }
 func (W _tlyakhov_gofoom_concepts_Simulated) NewFrame() {
 	W.WNewFrame()

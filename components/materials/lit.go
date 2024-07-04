@@ -20,8 +20,8 @@ func init() {
 	LitComponentIndex = concepts.DbTypes().Register(Lit{}, LitFromDb)
 }
 
-func LitFromDb(entity *concepts.EntityRef) *Lit {
-	if asserted, ok := entity.Component(LitComponentIndex).(*Lit); ok {
+func LitFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Lit {
+	if asserted, ok := db.Component(e, LitComponentIndex).(*Lit); ok {
 		return asserted
 	}
 	return nil

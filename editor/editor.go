@@ -166,7 +166,7 @@ func (e *Editor) Integrate() {
 	if player == nil {
 		return
 	}
-	playerBody := core.BodyFromDb(player.Ref())
+	playerBody := core.BodyFromDb(player.DB, player.Entity)
 
 	if e.GameWidget.KeyMap["W"] {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now, e.DB.EditorPaused)
@@ -189,7 +189,7 @@ func (e *Editor) Integrate() {
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap["Space"] {
-		if playerBody.SectorEntityRef.Component(behaviors.UnderwaterComponentIndex) != nil {
+		if behaviors.UnderwaterFromDb(player.DB, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
 			playerBody.Force[2] += constants.PlayerJumpForce
@@ -197,7 +197,7 @@ func (e *Editor) Integrate() {
 		}
 	}
 	if e.GameWidget.KeyMap["C"] {
-		if playerBody.SectorEntityRef.Component(behaviors.UnderwaterComponentIndex) != nil {
+		if behaviors.UnderwaterFromDb(player.DB, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
@@ -309,26 +309,26 @@ func (e *Editor) ActTool() {
 	case state.ToolSplitSector:
 		e.NewAction(&actions.SplitSector{IEditor: e})
 	case state.ToolAddSector:
-		ref := archetypes.CreateSector(e.DB)
-		s := core.SectorFromDb(ref)
+		entity := archetypes.CreateSector(e.DB)
+		s := core.SectorFromDb(e.DB, entity)
 		s.FloorSurface.Material = controllers.DefaultMaterial(e.DB)
 		s.CeilSurface.Material = controllers.DefaultMaterial(e.DB)
 		a := &actions.AddSector{Sector: s}
 		a.AddEntity.IEditor = e
-		a.AddEntity.EntityRef = ref
-		a.AddEntity.Components = ref.All()
+		a.AddEntity.Entity = entity
+		a.AddEntity.Components = e.DB.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddInternalSegment:
-		ref := archetypes.CreateBasic(e.DB, core.InternalSegmentComponentIndex)
-		seg := core.InternalSegmentFromDb(ref)
+		entity := archetypes.CreateBasic(e.DB, core.InternalSegmentComponentIndex)
+		seg := core.InternalSegmentFromDb(e.DB, entity)
 		a := &actions.AddInternalSegment{InternalSegment: seg}
 		a.AddEntity.IEditor = e
-		a.AddEntity.EntityRef = ref
-		a.AddEntity.Components = ref.All()
+		a.AddEntity.Entity = entity
+		a.AddEntity.Components = e.DB.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddBody:
-		body := archetypes.CreateBasic(e.DB, core.BodyComponentIndex)
-		e.NewAction(&actions.AddEntity{IEditor: e, EntityRef: body, Components: body.All()})
+		entity := archetypes.CreateBasic(e.DB, core.BodyComponentIndex)
+		e.NewAction(&actions.AddEntity{IEditor: e, Entity: entity, Components: e.DB.AllComponents(entity)})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:
@@ -348,24 +348,24 @@ func (e *Editor) NewShader() {
 			return
 		}
 		// First, load the image
-		refImg := archetypes.CreateBasic(e.DB, materials.ImageComponentIndex)
-		img := materials.ImageFromDb(refImg)
+		eImg := archetypes.CreateBasic(e.DB, materials.ImageComponentIndex)
+		img := materials.ImageFromDb(e.DB, eImg)
 		img.Source = uc.URI().Path()
 		img.Load()
-		a := &actions.AddEntity{IEditor: e, EntityRef: refImg, Components: refImg.All()}
+		a := &actions.AddEntity{IEditor: e, Entity: eImg, Components: e.DB.AllComponents(eImg)}
 		e.NewAction(a)
 		e.CurrentAction.Act()
 		// Next set up the shader
-		ref := archetypes.CreateBasic(e.DB, materials.ShaderComponentIndex)
-		shader := materials.ShaderFromDb(ref)
+		eShader := archetypes.CreateBasic(e.DB, materials.ShaderComponentIndex)
+		shader := materials.ShaderFromDb(e.DB, eShader)
 		stage := &materials.ShaderStage{}
 		stage.SetDB(e.DB)
 		stage.Construct(nil)
-		stage.Texture = refImg
+		stage.Texture = eImg
 		shader.Stages = append(shader.Stages, stage)
-		named := editor.DB.NewAttachedComponent(ref.Entity, concepts.NamedComponentIndex).(*concepts.Named)
+		named := editor.DB.NewAttachedComponent(eShader, concepts.NamedComponentIndex).(*concepts.Named)
 		named.Name = "Shader " + path.Base(img.Source)
-		a = &actions.AddEntity{IEditor: e, EntityRef: ref, Components: ref.All()}
+		a = &actions.AddEntity{IEditor: e, Entity: eShader, Components: e.DB.AllComponents(eShader)}
 		e.NewAction(a)
 		e.CurrentAction.Act()
 
@@ -472,8 +472,8 @@ func (e *Editor) GatherHoveringObjects() {
 
 	e.HoveringObjects.Clear()
 
-	for _, isector := range e.DB.All(core.SectorComponentIndex) {
-		sector := isector.(*core.Sector)
+	for _, a := range e.DB.AllOfType(core.SectorComponentIndex) {
+		sector := a.(*core.Sector)
 
 		for _, segment := range sector.Segments {
 			if editor.Selecting() {
@@ -494,46 +494,38 @@ func (e *Editor) GatherHoveringObjects() {
 				}
 			}
 		}
-
-		for _, iseg := range sector.InternalSegments {
-			segment := core.InternalSegmentFromDb(iseg)
-			if segment == nil {
-				continue
+	}
+	for _, a := range e.DB.AllOfType(core.InternalSegmentComponentIndex) {
+		seg := a.(*core.InternalSegment)
+		if editor.Selecting() {
+			a := (seg.A[0] >= v1[0] && seg.A[1] >= v1[1] && seg.A[0] <= v2[0] && seg.A[1] <= v2[1])
+			b := (seg.B[0] >= v1[0] && seg.B[1] >= v1[1] && seg.B[0] <= v2[0] && seg.B[1] <= v2[1])
+			if a && b {
+				e.HoveringObjects.Add(core.SelectableFromInternalSegment(seg))
+			} else if a {
+				e.HoveringObjects.Add(core.SelectableFromInternalSegmentA(seg))
+			} else if b {
+				e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(seg))
 			}
-			if editor.Selecting() {
-				a := (segment.A[0] >= v1[0] && segment.A[1] >= v1[1] && segment.A[0] <= v2[0] && segment.A[1] <= v2[1])
-				b := (segment.B[0] >= v1[0] && segment.B[1] >= v1[1] && segment.B[0] <= v2[0] && segment.B[1] <= v2[1])
-				if a && b {
-					e.HoveringObjects.Add(core.SelectableFromInternalSegment(segment))
-				} else if a {
-					e.HoveringObjects.Add(core.SelectableFromInternalSegmentA(segment))
-				} else if b {
-					e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(segment))
-				}
-			} else {
-				if e.Mouse.Sub(e.WorldToScreen(segment.A)).Length() < state.SegmentSelectionEpsilon {
-					e.HoveringObjects.Add(core.SelectableFromInternalSegmentA(segment))
-				}
-				if e.Mouse.Sub(e.WorldToScreen(segment.B)).Length() < state.SegmentSelectionEpsilon {
-					e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(segment))
-				}
-				if segment.DistanceToPoint(e.ScreenToWorld(&e.Mouse)) < state.SegmentSelectionEpsilon {
-					e.HoveringObjects.Add(core.SelectableFromInternalSegment(segment))
-				}
+		} else {
+			if e.Mouse.Sub(e.WorldToScreen(seg.A)).Length() < state.SegmentSelectionEpsilon {
+				e.HoveringObjects.Add(core.SelectableFromInternalSegmentA(seg))
+			}
+			if e.Mouse.Sub(e.WorldToScreen(seg.B)).Length() < state.SegmentSelectionEpsilon {
+				e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(seg))
+			}
+			if seg.DistanceToPoint(e.ScreenToWorld(&e.Mouse)) < state.SegmentSelectionEpsilon {
+				e.HoveringObjects.Add(core.SelectableFromInternalSegment(seg))
 			}
 		}
-
+	}
+	for _, a := range e.DB.AllOfType(core.BodyComponentIndex) {
+		body := a.(*core.Body)
 		if e.Selecting() {
-			for _, ibody := range sector.Bodies {
-				body := core.BodyFromDb(ibody)
-				if body == nil {
-					continue
-				}
-				p := body.Pos.Now
-				if p[0]+body.Size.Render[0]*0.5 >= v1[0] && p[0]-body.Size.Render[0]*0.5 <= v2[0] &&
-					p[1]+body.Size.Render[0]*0.5 >= v1[1] && p[1]-body.Size.Render[0]*0.5 <= v2[1] {
-					e.HoveringObjects.Add(core.SelectableFromBody(body))
-				}
+			p := body.Pos.Now
+			if p[0]+body.Size.Render[0]*0.5 >= v1[0] && p[0]-body.Size.Render[0]*0.5 <= v2[0] &&
+				p[1]+body.Size.Render[0]*0.5 >= v1[1] && p[1]-body.Size.Render[0]*0.5 <= v2[1] {
+				e.HoveringObjects.Add(core.SelectableFromBody(body))
 			}
 		}
 	}

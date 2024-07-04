@@ -110,7 +110,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 		segmentHovering := editor.HoveringObjects.Contains(core.SelectableFromSegment(segment))
 		segmentSelected := editor.SelectedObjects.Contains(core.SelectableFromSegment(segment))
 
-		if segment.AdjacentSector.Nil() {
+		if segment.AdjacentSector == 0 {
 			mw.Context.SetRGB(1, 1, 1)
 		} else if segment.PortalTeleports {
 			mw.Context.SetRGB(1, 0.5, 0)
@@ -119,7 +119,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 		}
 
 		if sectorHovering || sectorSelected {
-			if segment.AdjacentSector.Nil() {
+			if segment.AdjacentSector == 0 {
 				mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 			} else {
 				mw.Context.SetStrokeStyle(PatternSelectionSecondary)

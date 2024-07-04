@@ -40,7 +40,7 @@ func WallMid(c *state.Column, internalSegment bool) {
 			v *= (c.Segment.Top - c.Segment.Bottom) / c.Segment.Length
 		}
 
-		if !surf.Material.Nil() {
+		if surf.Material != 0 {
 			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
 			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
 			c.SampleShader(surf.Material, surf.ExtraStages, tu, tv, c.ProjectZ(1.0))

@@ -10,9 +10,9 @@ import (
 type Sprite struct {
 	DB *concepts.EntityComponentDB
 
-	Image *concepts.EntityRef `editable:"Image" edit_type:"Material"`
-	Frame int                 `editable:"Frame"`
-	Angle int                 `editable:"Angle"`
+	Image concepts.Entity `editable:"Image" edit_type:"Material"`
+	Frame int             `editable:"Frame"`
+	Angle int             `editable:"Angle"`
 }
 
 type SpriteSheet struct {
@@ -27,8 +27,8 @@ func init() {
 	SpriteSheetComponentIndex = concepts.DbTypes().Register(SpriteSheet{}, SpriteSheetFromDb)
 }
 
-func SpriteSheetFromDb(entity *concepts.EntityRef) *SpriteSheet {
-	if asserted, ok := entity.Component(SpriteSheetComponentIndex).(*SpriteSheet); ok {
+func SpriteSheetFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *SpriteSheet {
+	if asserted, ok := db.Component(e, SpriteSheetComponentIndex).(*SpriteSheet); ok {
 		return asserted
 	}
 	return nil
@@ -63,7 +63,7 @@ func (s *Sprite) Construct(data map[string]any) {
 		return
 	}
 	if v, ok := data["Image"]; ok {
-		s.Image = s.DB.DeserializeEntityRef(v)
+		s.Image, _ = concepts.DeserializeEntity(v.(string))
 	}
 	if v, ok := data["Frame"]; ok {
 		s.Frame = int(v.(float64))
@@ -75,7 +75,7 @@ func (s *Sprite) Construct(data map[string]any) {
 
 func (s *Sprite) Serialize() map[string]any {
 	result := make(map[string]any)
-	if !s.Image.Nil() {
+	if s.Image != 0 {
 		result["Image"] = s.Image.Serialize()
 	}
 	result["Frame"] = s.Frame
@@ -85,4 +85,8 @@ func (s *Sprite) Serialize() map[string]any {
 
 func (s *Sprite) SetDB(db *concepts.EntityComponentDB) {
 	s.DB = db
+}
+
+func (s *Sprite) GetDB() *concepts.EntityComponentDB {
+	return s.DB
 }

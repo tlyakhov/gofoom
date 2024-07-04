@@ -85,6 +85,10 @@ func (s *Script) SetDB(db *concepts.EntityComponentDB) {
 	s.DB = db
 }
 
+func (s *Script) GetDB() *concepts.EntityComponentDB {
+	return s.DB
+}
+
 func (s *Script) Construct(data map[string]any) {
 	s.ErrorMessage = ""
 	s.Vars = maps.Clone(concepts.DbTypes().ExprEnv)
@@ -110,14 +114,14 @@ func (s *Script) Serialize() map[string]any {
 	return data
 }
 
-func (s *Script) Ref(name string) *concepts.EntityRef {
+func (s *Script) Entity(name string) concepts.Entity {
 	if s.Vars[name] == nil {
-		return nil
+		return 0
 	}
-	if ref, ok := s.Vars[name].(*concepts.EntityRef); ok {
-		return ref
+	if entity, ok := s.Vars[name].(concepts.Entity); ok {
+		return entity
 	}
-	return nil
+	return 0
 }
 
 func (s *Script) Act() bool {

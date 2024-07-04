@@ -18,8 +18,8 @@ func init() {
 	NamedComponentIndex = DbTypes().Register(Named{}, NamedFromDb)
 }
 
-func NamedFromDb(entity *EntityRef) *Named {
-	if asserted, ok := entity.Component(NamedComponentIndex).(*Named); ok {
+func NamedFromDb(db *EntityComponentDB, e Entity) *Named {
+	if asserted, ok := db.Component(e, NamedComponentIndex).(*Named); ok {
 		return asserted
 	}
 	return nil
