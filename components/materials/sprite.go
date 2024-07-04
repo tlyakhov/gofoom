@@ -63,7 +63,7 @@ func (s *Sprite) Construct(data map[string]any) {
 		return
 	}
 	if v, ok := data["Image"]; ok {
-		s.Image, _ = concepts.DeserializeEntity(v.(string))
+		s.Image, _ = concepts.ParseEntity(v.(string))
 	}
 	if v, ok := data["Frame"]; ok {
 		s.Frame = int(v.(float64))
@@ -76,7 +76,7 @@ func (s *Sprite) Construct(data map[string]any) {
 func (s *Sprite) Serialize() map[string]any {
 	result := make(map[string]any)
 	if s.Image != 0 {
-		result["Image"] = s.Image.Serialize()
+		result["Image"] = s.Image.Format()
 	}
 	result["Frame"] = s.Frame
 	result["Angle"] = s.Angle

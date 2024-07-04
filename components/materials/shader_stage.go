@@ -36,7 +36,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Texture"]; ok {
-		s.Texture, _ = concepts.DeserializeEntity(v.(string))
+		s.Texture, _ = concepts.ParseEntity(v.(string))
 	}
 
 	if v, ok := data["Transform"]; ok {
@@ -58,7 +58,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 	result := make(map[string]any)
 
 	if s.Texture != 0 {
-		result["Texture"] = s.Texture.Serialize()
+		result["Texture"] = s.Texture.Format()
 	}
 	if s.Flags != ShaderTiled {
 		flags := ""

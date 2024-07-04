@@ -100,8 +100,7 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	// Make a copy to preserve everything other than the point.
 	copied := new(SectorSegment)
 	copied.Sector = s.Sector
-	copied.DB = s.DB
-	copied.Construct(s.Serialize())
+	copied.Construct(s.DB, s.Serialize())
 	copied.P = p
 	// Insert into the sector
 	s.Sector.Segments = append(s.Sector.Segments[:index+1], s.Sector.Segments[index:]...)
@@ -113,8 +112,9 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	return copied
 }
 
-func (s *SectorSegment) Construct(data map[string]any) {
-	s.Segment.Construct(s.DB, data)
+func (s *SectorSegment) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+	s.DB = db
+	s.Segment.Construct(db, data)
 	s.P = concepts.Vector2{}
 	s.Normal = concepts.Vector2{}
 	s.PortalHasMaterial = false
@@ -144,7 +144,7 @@ func (s *SectorSegment) Construct(data map[string]any) {
 		s.PortalTeleports = v.(bool)
 	}
 	if v, ok := data["AdjacentSector"]; ok {
-		s.AdjacentSector, _ = concepts.DeserializeEntity(v.(string))
+		s.AdjacentSector, _ = concepts.ParseEntity(v.(string))
 	}
 	if v, ok := data["AdjacentSegment"]; ok {
 		if parsed, err := strconv.ParseInt(v.(string), 10, 64); err == nil {
@@ -179,7 +179,7 @@ func (s *SectorSegment) Serialize() map[string]any {
 	result["Hi"] = s.HiSurface.Serialize()
 
 	if s.AdjacentSector != 0 {
-		result["AdjacentSector"] = s.AdjacentSector.Serialize()
+		result["AdjacentSector"] = s.AdjacentSector.Format()
 	}
 
 	return result

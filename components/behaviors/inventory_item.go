@@ -48,7 +48,7 @@ func (item *InventoryItem) Construct(data map[string]any) {
 		item.Count = v.(int)
 	}
 	if v, ok := data["Image"]; ok {
-		item.Image, _ = concepts.DeserializeEntity(v.(string))
+		item.Image, _ = concepts.ParseEntity(v.(string))
 	}
 }
 
@@ -62,7 +62,7 @@ func (item *InventoryItem) Serialize() map[string]any {
 		result["Count"] = item.Count
 	}
 	if item.Image != 0 {
-		result["Image"] = item.Image.Serialize()
+		result["Image"] = item.Image.Format()
 	}
 
 	return result

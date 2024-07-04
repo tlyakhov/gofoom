@@ -137,7 +137,7 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 	}
 	for x := 0; x < testw; x++ {
 		for y := 0; y < testh; y++ {
-			eSector := db.GetEntityRefByName(fmt.Sprintf("land_%v_%v", x, y))
+			eSector := db.GetEntityByName(fmt.Sprintf("land_%v_%v", x, y))
 			sector := core.SectorFromDb(db, eSector)
 			// Randomly rotate the segments
 			rot := int(rand.Uint32() % 3)

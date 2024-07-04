@@ -11,7 +11,7 @@ import (
 type SelectableType int
 
 const (
-	SelectableEntityRef SelectableType = iota
+	SelectableEntity SelectableType = iota
 	SelectableSector
 	SelectableSectorSegment
 	SelectableCeiling
@@ -40,8 +40,8 @@ var typeGroups = map[SelectableType]SelectableType{
 	SelectableInternalSegmentA: SelectableInternalSegment,
 	SelectableInternalSegmentB: SelectableInternalSegment,
 	// Other
-	SelectableBody:      SelectableBody,
-	SelectableEntityRef: SelectableEntityRef,
+	SelectableBody:   SelectableBody,
+	SelectableEntity: SelectableEntity,
 }
 
 // Selectable represents something an editor or player can pick. Initially this
@@ -137,7 +137,7 @@ func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
 		DB:              s.DB}
 }
 
-func SelectableFromEntityRef(db *concepts.EntityComponentDB, e concepts.Entity) *Selectable {
+func SelectableFromEntity(db *concepts.EntityComponentDB, e concepts.Entity) *Selectable {
 	if sector := SectorFromDb(db, e); sector != nil {
 		return SelectableFromSector(sector)
 	}
@@ -147,7 +147,7 @@ func SelectableFromEntityRef(db *concepts.EntityComponentDB, e concepts.Entity) 
 	if seg := InternalSegmentFromDb(db, e); seg != nil {
 		return SelectableFromInternalSegment(seg)
 	}
-	return &Selectable{Type: SelectableEntityRef, Entity: e, DB: db}
+	return &Selectable{Type: SelectableEntity, Entity: e, DB: db}
 }
 
 // Serialize saves the data for whatever the selectable is holding, which may or

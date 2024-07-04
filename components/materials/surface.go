@@ -47,7 +47,7 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 		s.ExtraStages = concepts.ConstructSlice[*ShaderStage](db, v)
 	}
 	if v, ok := data["Material"]; ok {
-		s.Material, _ = concepts.DeserializeEntity(v.(string))
+		s.Material, _ = concepts.ParseEntity(v.(string))
 	}
 	if v, ok := data["Transform"]; ok {
 		s.Transform.Deserialize(v.([]any))
@@ -70,7 +70,7 @@ func (s *Surface) Serialize() map[string]any {
 	}
 
 	if s.Material != 0 {
-		result["Material"] = s.Material.Serialize()
+		result["Material"] = s.Material.Format()
 	}
 
 	if s.Stretch != StretchNone {

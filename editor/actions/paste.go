@@ -49,14 +49,15 @@ func (a *Paste) Act() {
 	a.Selected = core.NewSelection()
 	db := a.State().DB
 	for copiedEntityString, jsonData := range jsonEntities {
-		copiedEntity, _ := concepts.DeserializeEntity(copiedEntityString)
+		copiedEntity, _ := concepts.ParseEntity(copiedEntityString)
 		jsonEntity := jsonData.(map[string]any)
 		if jsonEntity == nil {
 			log.Printf("ECS JSON object element should be an object\n")
 			continue
 		}
 
-		var pastedRef concepts.Entity
+		var pastedEntity concepts.Entity
+		var ok bool
 		for name, index := range concepts.DbTypes().Indexes {
 			jsonData := jsonEntity[name]
 			if jsonData == nil {
@@ -66,18 +67,17 @@ func (a *Paste) Act() {
 			a.State().Lock.Lock()
 			c := db.LoadComponentWithoutAttaching(index, jsonComponent)
 
-			if pastedEntity, ok := a.CopiedToPasted[copiedEntity]; ok {
+			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
 				db.Attach(index, pastedEntity, c)
 			} else {
-				pastedEntity := db.NewEntity()
+				pastedEntity = db.NewEntity()
 				db.Attach(index, pastedEntity, c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
-				pastedRef = c.GetEntity()
 			}
 			a.State().Lock.Unlock()
 		}
-		if pastedRef != 0 {
-			a.Selected.Add(core.SelectableFromEntityRef(db, pastedRef))
+		if pastedEntity != 0 {
+			a.Selected.Add(core.SelectableFromEntity(db, pastedEntity))
 		}
 	}
 

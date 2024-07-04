@@ -89,7 +89,7 @@ func (s *Sector) SetDB(db *concepts.EntityComponentDB) {
 
 func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 	segment := new(SectorSegment)
-	segment.Construct(nil)
+	segment.Construct(s.DB, nil)
 	segment.Sector = s
 	segment.P = concepts.Vector2{x, y}
 	s.Segments = append(s.Segments, segment)
@@ -146,16 +146,15 @@ func (s *Sector) Construct(data map[string]any) {
 		for i, jsonSegment := range jsonSegments {
 			segment := new(SectorSegment)
 			segment.Sector = s
-			segment.DB = s.DB
-			segment.Construct(jsonSegment.(map[string]any))
+			segment.Construct(s.DB, jsonSegment.(map[string]any))
 			s.Segments[i] = segment
 		}
 	}
 	if v, ok := data["FloorTarget"]; ok {
-		s.FloorTarget, _ = concepts.DeserializeEntity(v.(string))
+		s.FloorTarget, _ = concepts.ParseEntity(v.(string))
 	}
 	if v, ok := data["CeilTarget"]; ok {
-		s.CeilTarget, _ = concepts.DeserializeEntity(v.(string))
+		s.CeilTarget, _ = concepts.ParseEntity(v.(string))
 	}
 	if v, ok := data["Gravity"]; ok {
 		s.Gravity.Deserialize(v.(map[string]any))
@@ -198,10 +197,10 @@ func (s *Sector) Serialize() map[string]any {
 	}
 
 	if s.FloorTarget != 0 {
-		result["FloorTarget"] = s.FloorTarget.Serialize()
+		result["FloorTarget"] = s.FloorTarget.Format()
 	}
 	if s.CeilTarget != 0 {
-		result["CeilTarget"] = s.CeilTarget.Serialize()
+		result["CeilTarget"] = s.CeilTarget.Format()
 	}
 	if len(s.FloorScripts) > 0 {
 		result["FloorScripts"] = concepts.SerializeSlice(s.FloorScripts)

@@ -24,32 +24,36 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+func (g *Grid) entityBorderColor(entity concepts.Entity) *concepts.Vector4 {
+	if materials.ShaderFromDb(g.State().DB, entity) != nil {
+		return &concepts.Vector4{1.0, 0.0, 1.0, 0.5}
+	}
+	return &concepts.Vector4{0.0, 0.0, 0.0, 0.0}
+}
+
 func (g *Grid) imageForEntity(entity concepts.Entity) image.Image {
 	w, h := 64, 64
-	if img := materials.ImageFromDb(g.State().DB, entity); img != nil {
-		return img.Image
-	} else if text := materials.TextFromDb(g.State().DB, entity); text != nil && text.Rendered != nil {
-		return text.Rendered.Image
-	} else if solid := materials.SolidFromDb(g.State().DB, entity); solid != nil {
-		img := image.NewNRGBA(image.Rect(0, 0, w, h))
-		for i := 0; i < w*h; i++ {
-			img.Pix[i*4+0] = uint8(solid.Diffuse.Now[0] * 255)
-			img.Pix[i*4+1] = uint8(solid.Diffuse.Now[1] * 255)
-			img.Pix[i*4+2] = uint8(solid.Diffuse.Now[2] * 255)
-			img.Pix[i*4+3] = uint8(solid.Diffuse.Now[3] * 255)
+	img := image.NewRGBA(image.Rect(0, 0, w, h))
+	buffer := img.Pix
+	border := g.entityBorderColor(entity)
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			c := g.MaterialSampler.SampleShader(entity, nil, float64(x)/float64(w), float64(y)/float64(h), 1.0)
+			if x == 0 || y == 0 || x == w-1 || y == h-1 {
+				c.AddPreMulColorSelf(border)
+			}
+			index := x*4 + y*img.Stride
+			buffer[index+0] = uint8(concepts.Clamp(c[0]*255, 0, 255))
+			buffer[index+1] = uint8(concepts.Clamp(c[1]*255, 0, 255))
+			buffer[index+2] = uint8(concepts.Clamp(c[2]*255, 0, 255))
+			buffer[index+3] = uint8(concepts.Clamp(c[3]*255, 0, 255))
 		}
-		return img
-	} else if shader := materials.ShaderFromDb(g.State().DB, entity); shader != nil {
-		if len(shader.Stages) == 0 {
-			return nil
-		}
-		return g.imageForEntity(shader.Stages[0].Texture)
 	}
-	return image.NewRGBA(image.Rect(0, 0, w, h))
+	return img
 }
 
 func (g *Grid) updateTreeNodeEntity(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
-	entity, _ := concepts.DeserializeEntity(tni)
+	entity, _ := concepts.ParseEntity(tni)
 	name := entity.NameString(g.State().DB)
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
@@ -61,7 +65,7 @@ func (g *Grid) updateTreeNodeEntity(tni widget.TreeNodeID, b bool, co fyne.Canva
 	label.SetText(name)
 	button := box.Objects[2].(*widget.Button)
 	button.OnTapped = func() {
-		g.SelectObjects(true, core.SelectableFromEntityRef(g.State().DB, entity))
+		g.SelectObjects(true, core.SelectableFromEntity(g.State().DB, entity))
 	}
 }
 
@@ -106,11 +110,11 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	}, g.updateTreeNodeEntity)
 	title := "Select " + editTypeTag
 	if origValue != 0 {
-		tree.Select(origValue.Serialize())
+		tree.Select(origValue.Format())
 		title = editTypeTag + ": " + origValue.NameString(g.State().DB)
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
-		entity, _ := concepts.DeserializeEntity(tni)
+		entity, _ := concepts.ParseEntity(tni)
 		action := &actions.SetProperty{IEditor: g.IEditor,
 			PropertyGridField: field,
 			ToSet:             reflect.ValueOf(entity).Convert(field.Type.Elem()),
@@ -118,18 +122,18 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		g.NewAction(action)
 		action.Act()
 	}
-	c := container.New(&entityRefLayout{Child: layout.NewStackLayout()}, tree)
+	c := container.New(&gridEntitySelectorLayout{Child: layout.NewStackLayout()}, tree)
 	aiTree := widget.NewAccordionItem(title, c)
 	accordion := gridAddOrUpdateWidgetAtIndex[*widget.Accordion](g)
 	accordion.Items = []*widget.AccordionItem{aiTree}
 }
 
 // This layout is just to make the selection list have a static size
-type entityRefLayout struct {
+type gridEntitySelectorLayout struct {
 	Child fyne.Layout
 }
 
-func (erl *entityRefLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
+func (erl *gridEntitySelectorLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	s := erl.Child.MinSize(objects)
 	if s.Height < 200 {
 		s.Height = 200
@@ -137,6 +141,6 @@ func (erl *entityRefLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	return s
 }
 
-func (erl *entityRefLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
+func (erl *gridEntitySelectorLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
 	erl.Child.Layout(objects, containerSize)
 }

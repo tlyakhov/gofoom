@@ -16,6 +16,7 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
+	rs "tlyakhov/gofoom/render/state"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/layout"
@@ -35,8 +36,9 @@ type PropertyGridState struct {
 
 type Grid struct {
 	state.IEditor
-	GridWidget *fyne.Container
-	GridWindow fyne.Window
+	GridWidget      *fyne.Container
+	GridWindow      fyne.Window
+	MaterialSampler rs.MaterialSampler
 
 	refreshIndex int
 }
@@ -207,7 +209,7 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 			continue
 		}
 		entities = append(entities, s.Entity)
-		entityList += s.Entity.Serialize()
+		entityList += s.Entity.Format()
 		for index, c := range s.DB.AllComponents(s.Entity) {
 			componentList[index] = (c != nil)
 		}

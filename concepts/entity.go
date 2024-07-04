@@ -10,11 +10,11 @@ import (
 
 type Entity int
 
-func (e Entity) Serialize() string {
+func (e Entity) Format() string {
 	return strconv.FormatInt(int64(e), 10)
 }
 
-func DeserializeEntity(e string) (Entity, error) {
+func ParseEntity(e string) (Entity, error) {
 	v, err := strconv.ParseInt(e, 10, 32)
 	return Entity(v), err
 }
@@ -23,7 +23,7 @@ func (e Entity) String(db *EntityComponentDB) string {
 	var sb strings.Builder
 
 	sb.WriteString("[")
-	sb.WriteString(e.Serialize())
+	sb.WriteString(e.Format())
 	sb.WriteString("] ")
 	first := true
 	for _, c := range db.AllComponents(e) {
@@ -43,7 +43,7 @@ func (e Entity) String(db *EntityComponentDB) string {
 }
 
 func (e Entity) NameString(db *EntityComponentDB) string {
-	id := e.Serialize()
+	id := e.Format()
 	if named := NamedFromDb(db, e); named != nil {
 		return id + " - " + named.Name
 	}

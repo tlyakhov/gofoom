@@ -145,7 +145,7 @@ func (db *EntityComponentDB) LoadAttachComponent(index int, data map[string]any,
 	var err error
 	if ignoreSerializedEntity || data["Entity"] == nil {
 		entity = db.NewEntity()
-	} else if entity, err = DeserializeEntity(data["Entity"].(string)); entity == 0 || err != nil {
+	} else if entity, err = ParseEntity(data["Entity"].(string)); entity == 0 || err != nil {
 		entity = db.NewEntity()
 	}
 
@@ -267,7 +267,7 @@ func (db *EntityComponentDB) DetachAll(entity Entity) {
 	db.EntityComponents[entity] = nil
 }
 
-func (db *EntityComponentDB) GetEntityRefByName(name string) Entity {
+func (db *EntityComponentDB) GetEntityByName(name string) Entity {
 	if allNamed := db.AllOfType(NamedComponentIndex); allNamed != nil {
 		for _, c := range allNamed {
 			named := c.(*Named)
@@ -374,7 +374,7 @@ func (db *EntityComponentDB) DeserializeEntities(data []any) []Entity {
 	result := make([]Entity, len(data))
 
 	for i, e := range data {
-		if entity, err := DeserializeEntity(e.(string)); err == nil {
+		if entity, err := ParseEntity(e.(string)); err == nil {
 			result[i] = entity
 		}
 	}
@@ -384,7 +384,7 @@ func (db *EntityComponentDB) DeserializeEntities(data []any) []Entity {
 func (db *EntityComponentDB) SerializeEntities(data []Entity) []string {
 	result := make([]string, len(data))
 	for i, e := range data {
-		result[i] = e.Serialize()
+		result[i] = e.Format()
 	}
 	return result
 }

@@ -30,10 +30,10 @@ func (flags *flagsSlice) Set(value string) error {
 
 var inputFiles flagsSlice
 
-func jsonRefToEntityRef(db *concepts.EntityComponentDB, jsonData map[string]any, key string, obj any) {
+func jsonNameToEntity(db *concepts.EntityComponentDB, jsonData map[string]any, key string, obj any) {
 	log.Printf("[%v] Linking field %v...", reflect.TypeOf(obj).String(), key)
 	if name, ok := jsonData[key]; ok {
-		entity := db.GetEntityRefByName(name.(string))
+		entity := db.GetEntityByName(name.(string))
 		if entity != 0 {
 			log.Printf("Found entity %v", entity.String(db))
 			reflect.ValueOf(obj).Elem().FieldByName(key).Set(reflect.ValueOf(entity))
@@ -147,8 +147,8 @@ func convert(filename, output string) {
 			c.Construct(jsonSector)
 			switch target := c.(type) {
 			case *core.Sector:
-				jsonRefToEntityRef(db, jsonSector, "CeilMaterial", target)
-				jsonRefToEntityRef(db, jsonSector, "FloorMaterial", target)
+				jsonNameToEntity(db, jsonSector, "CeilMaterial", target)
+				jsonNameToEntity(db, jsonSector, "FloorMaterial", target)
 				if jsonSector["Mobs"] != nil {
 					convertBodies(db, target, jsonSector["Mobs"].([]any))
 				}
@@ -166,14 +166,14 @@ func convert(filename, output string) {
 			}
 			switch target := c.(type) {
 			case *core.Sector:
-				jsonRefToEntityRef(db, jsonSector, "CeilTarget", target)
-				jsonRefToEntityRef(db, jsonSector, "FloorTarget", target)
+				jsonNameToEntity(db, jsonSector, "CeilTarget", target)
+				jsonNameToEntity(db, jsonSector, "FloorTarget", target)
 				jsonSegments := jsonSector["Segments"].([]any)
 				for i, seg := range target.Segments {
-					jsonRefToEntityRef(db, jsonSegments[i].(map[string]any), "AdjacentSector", seg)
-					jsonRefToEntityRef(db, jsonSegments[i].(map[string]any), "LoMaterial", seg)
-					jsonRefToEntityRef(db, jsonSegments[i].(map[string]any), "MidMaterial", seg)
-					jsonRefToEntityRef(db, jsonSegments[i].(map[string]any), "HiMaterial", seg)
+					jsonNameToEntity(db, jsonSegments[i].(map[string]any), "AdjacentSector", seg)
+					jsonNameToEntity(db, jsonSegments[i].(map[string]any), "LoMaterial", seg)
+					jsonNameToEntity(db, jsonSegments[i].(map[string]any), "MidMaterial", seg)
+					jsonNameToEntity(db, jsonSegments[i].(map[string]any), "HiMaterial", seg)
 				}
 			}
 		}

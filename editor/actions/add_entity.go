@@ -86,7 +86,7 @@ func (a *AddEntity) OnMouseUp() {
 }
 func (a *AddEntity) Act() {
 	a.Mode = "AddBody"
-	a.SelectObjects(true, core.SelectableFromEntityRef(a.State().DB, a.Entity))
+	a.SelectObjects(true, core.SelectableFromEntity(a.State().DB, a.Entity))
 }
 func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()
