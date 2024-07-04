@@ -20,9 +20,9 @@ const (
 
 type ShaderStage struct {
 	DB        *concepts.EntityComponentDB
-	Texture   *concepts.EntityRef `editable:"Texture" edit_type:"Material"`
-	Transform concepts.Matrix2    `editable:"Transform"`
-	Flags     ShaderFlags         `editable:"Flags" edit_type:"Flags"`
+	Texture   concepts.Entity  `editable:"Texture" edit_type:"Material"`
+	Transform concepts.Matrix2 `editable:"Transform"`
+	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
 	// TODO: implement
 	Blend any
 }
@@ -36,7 +36,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Texture"]; ok {
-		s.Texture = s.DB.DeserializeEntityRef(v)
+		s.Texture, _ = concepts.DeserializeEntity(v.(string))
 	}
 
 	if v, ok := data["Transform"]; ok {
@@ -57,7 +57,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 func (s *ShaderStage) Serialize() map[string]any {
 	result := make(map[string]any)
 
-	if !s.Texture.Nil() {
+	if s.Texture != 0 {
 		result["Texture"] = s.Texture.Serialize()
 	}
 	if s.Flags != ShaderTiled {
@@ -81,4 +81,8 @@ func (s *ShaderStage) Serialize() map[string]any {
 
 func (s *ShaderStage) SetDB(db *concepts.EntityComponentDB) {
 	s.DB = db
+}
+
+func (s *ShaderStage) GetDB() *concepts.EntityComponentDB {
+	return s.DB
 }

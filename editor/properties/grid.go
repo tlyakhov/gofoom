@@ -8,7 +8,6 @@ import (
 	"log"
 	"reflect"
 	"sort"
-	"strconv"
 	"strings"
 
 	"tlyakhov/gofoom/concepts"
@@ -31,7 +30,7 @@ type PropertyGridState struct {
 	ParentName       string
 	ParentCollection *reflect.Value
 	Parent           any
-	Ref              *concepts.EntityRef
+	Entity           concepts.Entity
 }
 
 type Grid struct {
@@ -101,7 +100,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 				ParentCollection: pgs.ParentCollection,
 				Unique:           make(map[string]reflect.Value),
 				Parent:           pgs.Parent,
-				Ref:              pgs.Ref,
+				Entity:           pgs.Entity,
 			}
 			pgs.Fields[display] = gf
 			if editTypeTag, ok := field.Tag.Lookup("edit_type"); ok {
@@ -143,22 +142,22 @@ func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState
 		case core.SelectableSectorSegment:
 			pgs.Parent = s.SectorSegment
 			pgs.ParentName = "Segment"
-			pgs.Ref = s.Ref
+			pgs.Entity = s.Entity
 			g.fieldsFromObject(s.SectorSegment, pgs)
 			continue
 		}
 
-		if s.Ref == nil {
+		if s.Entity == 0 {
 			continue
 		}
-		for _, c := range s.Ref.All() {
+		for _, c := range s.DB.AllComponents(s.Entity) {
 			if c == nil {
 				continue
 			}
 			pgs.Parent = c
 			n := strings.Split(reflect.TypeOf(c).String(), ".")
 			pgs.ParentName = n[len(n)-1]
-			pgs.Ref = s.Ref
+			pgs.Entity = s.Entity
 			g.fieldsFromObject(c, pgs)
 		}
 	}
@@ -189,7 +188,7 @@ func gridAddOrUpdateWidgetAtIndex[PT interface {
 }
 
 func (g *Grid) AddEntityControls(selection *core.Selection) {
-	entities := make([]uint64, 0)
+	entities := make([]concepts.Entity, 0)
 	entityList := ""
 	componentList := make([]bool, len(concepts.DbTypes().Indexes))
 	for _, s := range selection.Exact {
@@ -207,9 +206,9 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 		case core.SelectableSectorSegment:
 			continue
 		}
-		entities = append(entities, s.Ref.Entity)
-		entityList += strconv.FormatUint(s.Ref.Entity, 10)
-		for index, c := range s.Ref.All() {
+		entities = append(entities, s.Entity)
+		entityList += s.Entity.Serialize()
+		for index, c := range s.DB.AllComponents(s.Entity) {
 			componentList[index] = (c != nil)
 		}
 	}
@@ -346,8 +345,8 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldEnum(field, concepts.AnimationCoordinatesValues())
 		case *materials.ShaderFlags:
 			g.fieldEnum(field, materials.ShaderFlagsValues())
-		case **concepts.EntityRef:
-			g.fieldEntityRef(field)
+		case *concepts.Entity:
+			g.fieldEntity(field)
 		case *[]*core.Script:
 			g.fieldSlice(field)
 		case *[]*materials.Sprite:

@@ -35,7 +35,7 @@ type LightElement struct {
 	Intersection concepts.Vector3
 	Q            concepts.Vector3
 	LightWorld   concepts.Vector3
-	InputBody    *concepts.EntityRef
+	InputBody    concepts.Entity
 	xorSeed      uint64
 
 	Sector  *core.Sector
@@ -106,7 +106,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 	}
 
 	for _, seg := range le.Sector.Segments {
-		if seg.AdjacentSector.Nil() || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
+		if seg.AdjacentSector == 0 || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
@@ -135,7 +135,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 	debugLighting := false
 	if constants.DebugLighting {
-		dbgName := concepts.NamedFromDb(le.DB.EntityRef(sector.Entity)).Name
+		dbgName := concepts.NamedFromDb(le.DB, sector.Entity).Name
 		debugWallCheck := le.Type == LightElementWall
 		debugLighting = constants.DebugLighting && debugWallCheck && dbgName == debugSectorName
 	}
@@ -162,11 +162,11 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			log.Printf("Sector: %v\n", sector.Entity)
 		}
 		// Generate entity shadows
-		for _, bodyRef := range sector.Bodies {
-			if bodyRef.Entity == lightBody.Entity || (le.Type == LightElementBody && le.InputBody.Entity == bodyRef.Entity) {
+		for _, b := range sector.Bodies {
+			if b.Entity == lightBody.Entity || (le.Type == LightElementBody && le.InputBody == b.Entity) {
 				continue
 			}
-			if b := core.BodyFromDb(bodyRef); b != nil && b.Active && b.Shadow != core.BodyShadowNone {
+			if b.Active && b.Shadow != core.BodyShadowNone {
 				switch b.Shadow {
 				case core.BodyShadowSphere:
 					if concepts.IntersectLineSphere(p, lightPos, &b.Pos.Render, lightBody.Size.Render[0]*0.5) {
@@ -180,9 +180,8 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				}
 			}
 		}
-		for _, ref := range sector.InternalSegments {
-			seg := core.InternalSegmentFromDb(ref)
-			if seg == nil || &seg.Segment == le.Segment {
+		for _, seg := range sector.InternalSegments {
+			if &seg.Segment == le.Segment {
 				continue
 			}
 			// Find the intersection with this segment.
@@ -198,7 +197,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			u := le.Intersection.To2D().Dist(seg.A) / seg.Length
 			v := (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
 			sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1)
-			if lit := materials.LitFromDb(seg.Surface.Material); lit != nil {
+			if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 				lit.Apply(&sampler.Output, nil)
 			}
 			if sampler.Output[3] >= 0.99 {
@@ -233,7 +232,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				log.Printf("Intersection for seg %v|%v = %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman(), le.Intersection.StringHuman())
 			}
 
-			if seg.AdjacentSector.Nil() {
+			if seg.AdjacentSector == 0 {
 				if debugLighting {
 					log.Printf("Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
@@ -261,7 +260,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
 				sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1)
-				if lit := materials.LitFromDb(seg.Surface.Material); lit != nil {
+				if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 					lit.Apply(&sampler.Output, nil)
 				}
 				if sampler.Output[3] >= 0.99 {
@@ -307,7 +306,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			le.DebugNotices.Push(dbg)
 			return false
 		}
-		if next == nil && !lightBody.SectorEntityRef.Nil() && sector.Entity != lightBody.SectorEntityRef.Entity {
+		if next == nil && lightBody.SectorEntity != 0 && sector.Entity != lightBody.SectorEntity {
 			if debugLighting {
 				log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			}
@@ -327,7 +326,7 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	le.Output[1] = 0
 	le.Output[2] = 0
 
-	/*refs := make([]*concepts.EntityRef, 0)
+	/*refs := make([]concepts.Entity, 0)
 	for _, er := range le.Sector.PVL {
 		refs = append(refs, er)
 	}
@@ -335,13 +334,12 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		return refs[i].Entity < refs[j].Entity
 	})*/
 
-	for _, er := range le.Sector.PVL {
-		light := core.LightFromDb(er)
+	for entity, body := range le.Sector.PVL {
+		light := core.LightFromDb(body.DB, entity)
 		if !light.IsActive() {
 			continue
 		}
 
-		body := core.BodyFromDb(er)
 		if !body.IsActive() {
 			continue
 		}

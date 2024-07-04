@@ -8,6 +8,7 @@ import (
 	"log"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/driver/desktop"
@@ -20,20 +21,20 @@ type Copy struct {
 	state.IEditor
 
 	Selected      *core.Selection
-	Saved         map[uint64]any
+	Saved         map[concepts.Entity]any
 	ClipboardData string
 }
 
 func (a *Copy) Act() {
-	a.Saved = make(map[uint64]any)
+	a.Saved = make(map[concepts.Entity]any)
 	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
 
 	for _, obj := range a.Selected.Exact {
 		// Don't copy/paste players
-		if behaviors.PlayerFromDb(obj.Ref) != nil {
+		if behaviors.PlayerFromDb(obj.DB, obj.Entity) != nil {
 			continue
 		}
-		a.Saved[obj.Ref.Entity] = obj.Serialize()
+		a.Saved[obj.Entity] = obj.Serialize()
 	}
 
 	bytes, err := json.MarshalIndent(a.Saved, "", "  ")

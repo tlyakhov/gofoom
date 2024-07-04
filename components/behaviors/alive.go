@@ -25,8 +25,8 @@ func init() {
 	AliveComponentIndex = concepts.DbTypes().Register(Alive{}, AliveFromDb)
 }
 
-func AliveFromDb(entity *concepts.EntityRef) *Alive {
-	if asserted, ok := entity.Component(AliveComponentIndex).(*Alive); ok {
+func AliveFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Alive {
+	if asserted, ok := db.Component(e, AliveComponentIndex).(*Alive); ok {
 		return asserted
 	}
 	return nil

@@ -23,16 +23,16 @@ func init() {
 	PlayerComponentIndex = concepts.DbTypes().Register(Player{}, PlayerFromDb)
 }
 
-func PlayerFromDb(entity *concepts.EntityRef) *Player {
-	if asserted, ok := entity.Component(PlayerComponentIndex).(*Player); ok {
+func PlayerFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Player {
+	if asserted, ok := db.Component(e, PlayerComponentIndex).(*Player); ok {
 		return asserted
 	}
 	return nil
 }
 
 func (p *Player) Underwater() bool {
-	if b := core.BodyFromDb(p.EntityRef); b != nil {
-		if u := UnderwaterFromDb(b.SectorEntityRef); u != nil {
+	if b := core.BodyFromDb(p.DB, p.Entity); b != nil {
+		if u := UnderwaterFromDb(p.DB, b.SectorEntity); u != nil {
 			return true
 		}
 	}

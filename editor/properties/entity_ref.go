@@ -24,13 +24,13 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func (g *Grid) imageForRef(ref *concepts.EntityRef) image.Image {
+func (g *Grid) imageForEntity(entity concepts.Entity) image.Image {
 	w, h := 64, 64
-	if img := materials.ImageFromDb(ref); img != nil {
+	if img := materials.ImageFromDb(g.State().DB, entity); img != nil {
 		return img.Image
-	} else if text := materials.TextFromDb(ref); text != nil && text.Rendered != nil {
+	} else if text := materials.TextFromDb(g.State().DB, entity); text != nil && text.Rendered != nil {
 		return text.Rendered.Image
-	} else if solid := materials.SolidFromDb(ref); solid != nil {
+	} else if solid := materials.SolidFromDb(g.State().DB, entity); solid != nil {
 		img := image.NewNRGBA(image.Rect(0, 0, w, h))
 		for i := 0; i < w*h; i++ {
 			img.Pix[i*4+0] = uint8(solid.Diffuse.Now[0] * 255)
@@ -39,38 +39,37 @@ func (g *Grid) imageForRef(ref *concepts.EntityRef) image.Image {
 			img.Pix[i*4+3] = uint8(solid.Diffuse.Now[3] * 255)
 		}
 		return img
-	} else if shader := materials.ShaderFromDb(ref); shader != nil {
+	} else if shader := materials.ShaderFromDb(g.State().DB, entity); shader != nil {
 		if len(shader.Stages) == 0 {
 			return nil
 		}
-		return g.imageForRef(shader.Stages[0].Texture)
+		return g.imageForEntity(shader.Stages[0].Texture)
 	}
 	return image.NewRGBA(image.Rect(0, 0, w, h))
 }
 
-func (g *Grid) updateTreeNodeEntityRef(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
-	entity, _ := strconv.ParseUint(tni, 10, 64)
-	ref := g.State().DB.EntityRef(entity)
-	name := ref.NameString()
+func (g *Grid) updateTreeNodeEntity(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
+	entity, _ := concepts.DeserializeEntity(tni)
+	name := entity.NameString(g.State().DB)
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
 	img.ScaleMode = canvas.ImageScaleSmooth
 	img.FillMode = canvas.ImageFillContain
-	img.Image = g.imageForRef(ref)
+	img.Image = g.imageForEntity(entity)
 	img.SetMinSize(fyne.NewSquareSize(64))
 	label := box.Objects[1].(*widget.Label)
 	label.SetText(name)
 	button := box.Objects[2].(*widget.Button)
 	button.OnTapped = func() {
-		g.SelectObjects(true, core.SelectableFromEntityRef(ref))
+		g.SelectObjects(true, core.SelectableFromEntityRef(g.State().DB, entity))
 	}
 }
 
-func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
-	// The value of this property is an EntityRef or pointer to EntityRef
-	var origValue *concepts.EntityRef
-	if !field.Values[0].Elem().IsNil() {
-		origValue = field.Values[0].Elem().Interface().(*concepts.EntityRef)
+func (g *Grid) fieldEntity(field *state.PropertyGridField) {
+	// The value of this property is an Entity
+	var origValue concepts.Entity
+	if !field.Values[0].Elem().IsZero() {
+		origValue = field.Values[0].Elem().Interface().(concepts.Entity)
 	}
 
 	editTypeTag, ok := field.Source.Tag.Lookup("edit_type")
@@ -86,8 +85,7 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 		if c == nil {
 			continue
 		}
-		er := g.State().DB.EntityRef(uint64(entity))
-		if archetypes.EntityRefIsMaterial(er) {
+		if archetypes.EntityIsMaterial(g.State().DB, concepts.Entity(entity)) {
 			refs = append(refs, strconv.Itoa(entity))
 		}
 	}
@@ -105,18 +103,17 @@ func (g *Grid) fieldEntityRef(field *state.PropertyGridField) {
 			widget.NewButtonWithIcon("", theme.MoreHorizontalIcon(), nil),
 			widget.NewButtonWithIcon("", theme.LoginIcon(), nil),
 		)
-	}, g.updateTreeNodeEntityRef)
+	}, g.updateTreeNodeEntity)
 	title := "Select " + editTypeTag
-	if !origValue.Nil() {
-		tree.Select(strconv.FormatUint(origValue.Entity, 10))
-		title = editTypeTag + ": " + origValue.NameString()
+	if origValue != 0 {
+		tree.Select(origValue.Serialize())
+		title = editTypeTag + ": " + origValue.NameString(g.State().DB)
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
-		entity, _ := strconv.ParseUint(tni, 10, 64)
-		ref := g.State().DB.EntityRef(entity)
+		entity, _ := concepts.DeserializeEntity(tni)
 		action := &actions.SetProperty{IEditor: g.IEditor,
 			PropertyGridField: field,
-			ToSet:             reflect.ValueOf(ref).Convert(field.Type.Elem()),
+			ToSet:             reflect.ValueOf(entity).Convert(field.Type.Elem()),
 		}
 		g.NewAction(action)
 		action.Act()

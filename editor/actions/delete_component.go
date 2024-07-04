@@ -15,12 +15,12 @@ import (
 type DeleteComponent struct {
 	state.IEditor
 
-	Components      map[uint64]concepts.Attachable
-	SectorForEntity map[uint64]*core.Sector
+	Components      map[concepts.Entity]concepts.Attachable
+	SectorForEntity map[concepts.Entity]*core.Sector
 }
 
 func (a *DeleteComponent) Act() {
-	a.SectorForEntity = make(map[uint64]*core.Sector)
+	a.SectorForEntity = make(map[concepts.Entity]*core.Sector)
 	a.Redo()
 	a.ActionFinished(false, true, false)
 }
@@ -35,9 +35,9 @@ func (a *DeleteComponent) Undo() {
 		a.State().DB.AttachTyped(entity, component)
 		switch target := component.(type) {
 		case *core.Body:
-			entity := component.Ref().Entity
+			entity := component.GetEntity()
 			if a.SectorForEntity[entity] != nil {
-				a.SectorForEntity[entity].Bodies[entity] = target.EntityRef
+				a.SectorForEntity[entity].Bodies[entity] = target
 			}
 		}
 	}
@@ -51,8 +51,8 @@ func (a *DeleteComponent) Redo() {
 		// TODO: Save material references
 		switch target := component.(type) {
 		case *core.Body:
-			entity := component.Ref().Entity
-			if target.SectorEntityRef != nil {
+			entity := component.GetEntity()
+			if target.SectorEntity != 0 {
 				a.SectorForEntity[entity] = target.Sector()
 				delete(a.SectorForEntity[entity].Bodies, entity)
 			}

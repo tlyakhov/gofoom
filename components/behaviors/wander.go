@@ -16,7 +16,7 @@ type Wander struct {
 	// Internal state
 	LastTurn   int64
 	LastTarget int64
-	NextSector *concepts.EntityRef
+	NextSector concepts.Entity
 }
 
 var WanderComponentIndex int
@@ -25,8 +25,8 @@ func init() {
 	WanderComponentIndex = concepts.DbTypes().Register(Wander{}, WanderFromDb)
 }
 
-func WanderFromDb(entity *concepts.EntityRef) *Wander {
-	if asserted, ok := entity.Component(WanderComponentIndex).(*Wander); ok {
+func WanderFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Wander {
+	if asserted, ok := db.Component(e, WanderComponentIndex).(*Wander); ok {
 		return asserted
 	}
 	return nil

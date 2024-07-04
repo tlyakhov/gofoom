@@ -266,9 +266,9 @@ func (a *SectorSplitter) collect() {
 		newSectorCount++
 		db := a.Sector.DB
 		newEntity := db.NewEntity()
-		clonedComponents := make([]concepts.Attachable, len(a.Sector.EntityRef.All()))
+		clonedComponents := make([]concepts.Attachable, len(db.AllComponents(a.Sector.Entity)))
 		a.Result = append(a.Result, clonedComponents)
-		for componentIndex, origComponent := range a.Sector.EntityRef.All() {
+		for componentIndex, origComponent := range db.AllComponents(a.Sector.Entity) {
 			if origComponent == nil {
 				continue
 			}
@@ -276,7 +276,7 @@ func (a *SectorSplitter) collect() {
 			// This will override the entity field with the original component's
 			// entity, so we'll fix it up afterwards.
 			addedComponent.Construct(origComponent.Serialize())
-			addedComponent.Ref().Entity = newEntity
+			addedComponent.SetEntity(newEntity)
 
 			clonedComponents[componentIndex] = addedComponent
 			switch target := addedComponent.(type) {
@@ -284,7 +284,7 @@ func (a *SectorSplitter) collect() {
 				target.Name = fmt.Sprintf("Split %v (%v)", target.Name, newSectorCount)
 			case *core.Sector:
 				// Don't clone the bodies.
-				target.Bodies = make(map[uint64]*concepts.EntityRef)
+				target.Bodies = make(map[concepts.Entity]*core.Body)
 				// Clear segments
 				target.Segments = []*core.SectorSegment{}
 
@@ -296,10 +296,10 @@ func (a *SectorSplitter) collect() {
 					addedSegment.Construct(visitor.Source.Serialize())
 					addedSegment.P = visitor.Start
 					addedSegment.AdjacentSegment = nil
-					addedSegment.AdjacentSector = nil
+					addedSegment.AdjacentSector = 0
 					target.Segments = append(target.Segments, addedSegment)
 					if visitor.Source.AdjacentSegment != nil {
-						visitor.Source.AdjacentSegment.AdjacentSector = nil
+						visitor.Source.AdjacentSegment.AdjacentSector = 0
 						visitor.Source.AdjacentSegment.AdjacentSegment = nil
 					}
 					visitor = visitor.Next
@@ -322,7 +322,7 @@ func (a *SectorSplitter) collect() {
 
 	for _, ibody := range a.Sector.DB.Components[core.BodyComponentIndex] {
 		body := ibody.(*core.Body)
-		if body.SectorEntityRef.Entity != a.Sector.Entity {
+		if body.SectorEntity != a.Sector.Entity {
 			continue
 		}
 		for _, components := range a.Result {
@@ -331,8 +331,8 @@ func (a *SectorSplitter) collect() {
 			}
 			if added, ok := components[core.SectorComponentIndex].(*core.Sector); ok &&
 				added.IsPointInside2D(body.Pos.Original.To2D()) {
-				body.SectorEntityRef = added.Ref()
-				added.Bodies[body.Ref().Entity] = body.Ref()
+				body.SectorEntity = added.Entity
+				added.Bodies[body.Entity] = body
 			}
 		}
 	}

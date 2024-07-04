@@ -4,7 +4,6 @@
 package archetypes
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 )
@@ -17,23 +16,23 @@ func EntityMapIsMaterial(components []concepts.Attachable) bool {
 		components[materials.SolidComponentIndex] != nil
 }
 
-func EntityRefIsMaterial(er *concepts.EntityRef) bool {
-	return EntityMapIsMaterial(er.All())
+func EntityIsMaterial(db *concepts.EntityComponentDB, e concepts.Entity) bool {
+	return EntityMapIsMaterial(db.AllComponents(e))
 }
 
 func AttachableIsMaterial(a concepts.Attachable) bool {
-	return EntityMapIsMaterial(a.Ref().All())
+	return EntityIsMaterial(a.GetDB(), a.GetEntity())
 }
 
-func CreateBasicMaterial(db *concepts.EntityComponentDB, textured bool) *concepts.EntityRef {
-	er := db.RefForNewEntity()
-	named := db.NewAttachedComponent(er.Entity, concepts.NamedComponentIndex).(*concepts.Named)
-	named.Name = "Material " + strconv.FormatUint(er.Entity, 10)
-	db.NewAttachedComponent(er.Entity, materials.LitComponentIndex)
+func CreateBasicMaterial(db *concepts.EntityComponentDB, textured bool) concepts.Entity {
+	e := db.NewEntity()
+	named := db.NewAttachedComponent(e, concepts.NamedComponentIndex).(*concepts.Named)
+	named.Name = "Material " + e.String(db)
+	db.NewAttachedComponent(e, materials.LitComponentIndex)
 	if textured {
-		db.NewAttachedComponent(er.Entity, materials.ImageComponentIndex)
+		db.NewAttachedComponent(e, materials.ImageComponentIndex)
 	} else {
-		db.NewAttachedComponent(er.Entity, materials.SolidComponentIndex)
+		db.NewAttachedComponent(e, materials.SolidComponentIndex)
 	}
-	return er
+	return e
 }

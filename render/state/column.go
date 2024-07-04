@@ -12,8 +12,8 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-type EntityRefWithDist2 struct {
-	*concepts.EntityRef
+type EntityWithDist2 struct {
+	concepts.Entity
 	Dist2     float64
 	IsSegment bool
 }
@@ -51,7 +51,7 @@ type Column struct {
 	// Pre-allocated stack of nested columns for portals
 	PortalColumns []Column
 	// Pre-allocated slice for sorting bodies and internal segments
-	SortedRefs []EntityRefWithDist2
+	EntitiesByDistance []EntityWithDist2
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
 	Segment            *core.Segment
@@ -142,8 +142,8 @@ func (c *Column) CalcScreen() {
 	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
 }
 
-func (c *Column) SampleLight(result *concepts.Vector4, material *concepts.EntityRef, world *concepts.Vector3, dist float64) *concepts.Vector4 {
-	lit := materials.LitFromDb(material)
+func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {
+	lit := materials.LitFromDb(c.DB, material)
 
 	if lit == nil {
 		return result

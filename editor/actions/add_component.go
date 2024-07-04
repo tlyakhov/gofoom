@@ -15,7 +15,7 @@ import (
 type AddComponent struct {
 	state.IEditor
 
-	Entities []uint64
+	Entities []concepts.Entity
 	Index    int
 }
 

@@ -49,42 +49,43 @@ var typeGroups = map[SelectableType]SelectableType{
 // limitation of not being able to select parts of objects that weren't explicit
 // types. (for example, only one point of an internal segment)
 type Selectable struct {
+	concepts.Entity
+	DB              *concepts.EntityComponentDB
 	Type            SelectableType
 	Sector          *Sector
 	Body            *Body
 	SectorSegment   *SectorSegment
 	InternalSegment *InternalSegment
-	Ref             *concepts.EntityRef
 }
 
 func (s *Selectable) Hash() uint64 {
 	if s.SectorSegment != nil {
 		// 4 bits for type, 16 bits for segment index, 44 bits for entity
-		return (uint64(s.Type) << 60) | uint64(s.SectorSegment.Index<<44) | s.Ref.Entity
+		return (uint64(s.Type) << 60) | uint64(s.SectorSegment.Index<<44) | uint64(s.Entity)
 	}
 	// 4 bits for type, 60 bits for entity
-	return (uint64(s.Type) << 60) | s.Ref.Entity
+	return (uint64(s.Type) << 60) | uint64(s.Entity)
 }
 
 func (s *Selectable) GroupHash() uint64 {
 	if s.SectorSegment != nil {
 		// 4 bits for type, 16 bits for segment index, 44 bits for entity
-		return (uint64(SelectableSectorSegment) << 60) | uint64(s.SectorSegment.Index<<44) | s.Ref.Entity
+		return (uint64(SelectableSectorSegment) << 60) | uint64(s.SectorSegment.Index<<44) | uint64(s.Entity)
 	}
 	// 4 bits for type, 60 bits for entity
-	return (uint64(typeGroups[s.Type]) << 60) | s.Ref.Entity
+	return (uint64(typeGroups[s.Type]) << 60) | uint64(s.Entity)
 }
 
 func SelectableFromSector(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableSector, Sector: s, Ref: s.EntityRef}
+	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, DB: s.DB}
 }
 
 func SelectableFromFloor(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableFloor, Sector: s, Ref: s.EntityRef}
+	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, DB: s.DB}
 }
 
 func SelectableFromCeil(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableCeiling, Sector: s, Ref: s.EntityRef}
+	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, DB: s.DB}
 }
 
 func SelectableFromSegment(s *SectorSegment) *Selectable {
@@ -92,7 +93,8 @@ func SelectableFromSegment(s *SectorSegment) *Selectable {
 		Type:          SelectableSectorSegment,
 		Sector:        s.Sector,
 		SectorSegment: s,
-		Ref:           s.Sector.EntityRef}
+		Entity:        s.Sector.Entity,
+		DB:            s.DB}
 }
 
 func SelectableFromWall(s *SectorSegment, t SelectableType) *Selectable {
@@ -100,7 +102,8 @@ func SelectableFromWall(s *SectorSegment, t SelectableType) *Selectable {
 		Type:          t,
 		Sector:        s.Sector,
 		SectorSegment: s,
-		Ref:           s.Sector.EntityRef}
+		Entity:        s.Sector.Entity,
+		DB:            s.DB}
 }
 
 func SelectableFromBody(b *Body) *Selectable {
@@ -108,45 +111,49 @@ func SelectableFromBody(b *Body) *Selectable {
 		Type:   SelectableBody,
 		Sector: b.Sector(),
 		Body:   b,
-		Ref:    b.EntityRef}
+		Entity: b.Entity,
+		DB:     b.DB}
 }
 
 func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
 	return &Selectable{
 		Type:            SelectableInternalSegment,
 		InternalSegment: s,
-		Ref:             s.EntityRef}
+		Entity:          s.Entity,
+		DB:              s.DB}
 }
 
 func SelectableFromInternalSegmentA(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentA,
 		InternalSegment: s,
-		Ref:             s.EntityRef}
+		Entity:          s.Entity,
+		DB:              s.DB}
 }
 
 func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentB,
 		InternalSegment: s,
-		Ref:             s.EntityRef}
+		Entity:          s.Entity,
+		DB:              s.DB}
 }
 
-func SelectableFromEntityRef(ref *concepts.EntityRef) *Selectable {
-	if sector := SectorFromDb(ref); sector != nil {
+func SelectableFromEntityRef(db *concepts.EntityComponentDB, e concepts.Entity) *Selectable {
+	if sector := SectorFromDb(db, e); sector != nil {
 		return SelectableFromSector(sector)
 	}
-	if body := BodyFromDb(ref); body != nil {
+	if body := BodyFromDb(db, e); body != nil {
 		return SelectableFromBody(body)
 	}
-	if seg := InternalSegmentFromDb(ref); seg != nil {
+	if seg := InternalSegmentFromDb(db, e); seg != nil {
 		return SelectableFromInternalSegment(seg)
 	}
-	return &Selectable{Type: SelectableEntityRef, Ref: ref}
+	return &Selectable{Type: SelectableEntityRef, Entity: e, DB: db}
 }
 
 // Serialize saves the data for whatever the selectable is holding, which may or
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {
-	return s.Ref.DB.SerializeEntity(s.Ref.Entity)
+	return s.DB.SerializeEntity(uint64(s.Entity))
 }
 
 func (s *Selectable) Transform(m *concepts.Matrix2) {

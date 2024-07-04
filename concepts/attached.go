@@ -4,12 +4,12 @@
 package concepts
 
 import (
-	"strconv"
 	"strings"
 )
 
 type Attached struct {
-	*EntityRef              `editable:"Component" edit_type:"Component"`
+	Entity
+	DB                      *EntityComponentDB
 	Active                  bool `editable:"Active?"`
 	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`
 	indexInDB               int
@@ -17,17 +17,19 @@ type Attached struct {
 
 type Attachable interface {
 	Serializable
-	Ref() *EntityRef
-	ResetRef()
 	String() string
 	IndexInDB() int
 	SetIndexInDB(int)
+	SetEntity(entity Entity)
+	GetEntity() Entity
 }
 
 type Serializable interface {
 	Construct(data map[string]any)
 	Serialize() map[string]any
+	// TODO: Rename to Attach
 	SetDB(db *EntityComponentDB)
+	GetDB() *EntityComponentDB
 }
 
 var AttachedComponentIndex int
@@ -44,10 +46,6 @@ func (a *Attached) String() string {
 	return "Attached"
 }
 
-func (a *Attached) Ref() *EntityRef {
-	return a.EntityRef
-}
-
 func (a *Attached) IndexInDB() int {
 	return a.indexInDB
 }
@@ -56,16 +54,20 @@ func (a *Attached) SetIndexInDB(i int) {
 	a.indexInDB = i
 }
 
-func (a *Attached) ResetRef() {
-	var db *EntityComponentDB
-	if a.EntityRef != nil {
-		db = a.EntityRef.DB
-	}
-	a.EntityRef = &EntityRef{DB: db}
+func (a *Attached) SetDB(db *EntityComponentDB) {
+	a.DB = db
 }
 
-func (a *Attached) SetDB(db *EntityComponentDB) {
-	a.EntityRef.DB = db
+func (a *Attached) GetDB() *EntityComponentDB {
+	return a.DB
+}
+
+func (a *Attached) SetEntity(entity Entity) {
+	a.Entity = entity
+}
+
+func (a *Attached) GetEntity() Entity {
+	return a.Entity
 }
 
 func (a *Attached) Construct(data map[string]any) {
@@ -76,7 +78,7 @@ func (a *Attached) Construct(data map[string]any) {
 		return
 	}
 	if v, ok := data["Entity"]; ok {
-		a.Entity, _ = strconv.ParseUint(v.(string), 10, 64)
+		a.Entity, _ = DeserializeEntity(v.(string))
 	}
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
@@ -87,7 +89,7 @@ func (a *Attached) Construct(data map[string]any) {
 }
 
 func (a *Attached) Serialize() map[string]any {
-	result := map[string]any{"Entity": strconv.FormatUint(a.Entity, 10)}
+	result := map[string]any{"Entity": a.Entity.Serialize()}
 	if !a.Active {
 		result["Active"] = a.Active
 	}

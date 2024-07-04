@@ -48,32 +48,40 @@ func (db *EntityComponentDB) Clear() {
 }
 
 // Reserves an entity ID in the database (no components attached)
-func (db *EntityComponentDB) NewEntity() uint64 {
+func (db *EntityComponentDB) NewEntity() Entity {
 	if free, found := db.usedEntities.MinZero(); found {
 		db.usedEntities.Set(free)
-		return uint64(free)
+		return Entity(free)
 	}
 	nextFree := len(db.EntityComponents)
 	db.EntityComponents = append(db.EntityComponents, nil)
 	db.usedEntities.Set(uint32(nextFree))
-	return uint64(nextFree)
+	return Entity(nextFree)
 }
 
-// Reserves an entity ID in the database and returns a reference to it
-func (db *EntityComponentDB) RefForNewEntity() *EntityRef {
-	entity := db.NewEntity()
-	return &EntityRef{Entity: entity, DB: db}
-}
-
-func (db *EntityComponentDB) EntityRef(entity uint64) *EntityRef {
-	return &EntityRef{DB: db, Entity: entity}
-}
-
-func (db *EntityComponentDB) All(index int) []Attachable {
+func (db *EntityComponentDB) AllOfType(index int) []Attachable {
 	return db.Components[index]
 }
 
-func (db *EntityComponentDB) AllForType(cType string) []Attachable {
+func (db *EntityComponentDB) AllComponents(entity Entity) []Attachable {
+	if entity == 0 || len(db.EntityComponents) <= int(entity) {
+		return nil
+	}
+	return db.EntityComponents[entity]
+}
+
+func (db *EntityComponentDB) Component(entity Entity, index int) Attachable {
+	if entity == 0 || index == 0 || len(db.EntityComponents) <= int(entity) {
+		return nil
+	}
+	ec := db.EntityComponents[entity]
+	if ec == nil {
+		return nil
+	}
+	return ec[index]
+}
+
+func (db *EntityComponentDB) AllOfNamedType(cType string) []Attachable {
 	if index, ok := DbTypes().Indexes[cType]; ok {
 		return db.Components[index]
 	}
@@ -89,13 +97,12 @@ func (db *EntityComponentDB) First(index int) Attachable {
 
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
-func (db *EntityComponentDB) attach(entity uint64, component Attachable, index int) {
+func (db *EntityComponentDB) attach(entity Entity, component Attachable, index int) {
 	if entity == 0 {
 		log.Printf("Tried to attach 0 entity!")
 		return
 	}
-	component.ResetRef()
-	component.Ref().Entity = entity
+	component.SetEntity(entity)
 	component.SetDB(db)
 
 	for len(db.EntityComponents) <= int(entity) {
@@ -124,7 +131,7 @@ func (db *EntityComponentDB) attach(entity uint64, component Attachable, index i
 }
 
 // Create a new component with the given index and attach it.
-func (db *EntityComponentDB) NewAttachedComponent(entity uint64, index int) Attachable {
+func (db *EntityComponentDB) NewAttachedComponent(entity Entity, index int) Attachable {
 	t := DbTypes().Types[index]
 	newc := reflect.New(t).Interface()
 	attached := newc.(Attachable)
@@ -134,11 +141,11 @@ func (db *EntityComponentDB) NewAttachedComponent(entity uint64, index int) Atta
 }
 
 func (db *EntityComponentDB) LoadAttachComponent(index int, data map[string]any, ignoreSerializedEntity bool) Attachable {
-	var entity uint64
+	var entity Entity
 	var err error
 	if ignoreSerializedEntity || data["Entity"] == nil {
 		entity = db.NewEntity()
-	} else if entity, err = strconv.ParseUint(data["Entity"].(string), 10, 64); entity == 0 || err != nil {
+	} else if entity, err = DeserializeEntity(data["Entity"].(string)); entity == 0 || err != nil {
 		entity = db.NewEntity()
 	}
 
@@ -159,14 +166,13 @@ func (db *EntityComponentDB) LoadComponentWithoutAttaching(index int, data map[s
 	t := DbTypes().Types[index]
 	newc := reflect.New(t).Interface()
 	component := newc.(Attachable)
-	component.ResetRef()
-	component.Ref().Entity = 0
+	component.SetEntity(0)
 	component.SetDB(db)
 	component.Construct(data)
 	return component
 }
 
-func (db *EntityComponentDB) NewAttachedComponentTyped(entity uint64, cType string) Attachable {
+func (db *EntityComponentDB) NewAttachedComponentTyped(entity Entity, cType string) Attachable {
 	if index, ok := DbTypes().Indexes[cType]; ok {
 		return db.NewAttachedComponent(entity, index)
 	}
@@ -175,12 +181,12 @@ func (db *EntityComponentDB) NewAttachedComponentTyped(entity uint64, cType stri
 	return nil
 }
 
-func (db *EntityComponentDB) Attach(componentIndex int, entity uint64, component Attachable) {
+func (db *EntityComponentDB) Attach(componentIndex int, entity Entity, component Attachable) {
 	db.attach(entity, component, componentIndex)
 }
 
 // This seems expensive. Need to profile
-func (db *EntityComponentDB) AttachTyped(entity uint64, component Attachable) {
+func (db *EntityComponentDB) AttachTyped(entity Entity, component Attachable) {
 	t := reflect.ValueOf(component).Type()
 
 	if t.Kind() == reflect.Ptr {
@@ -191,7 +197,7 @@ func (db *EntityComponentDB) AttachTyped(entity uint64, component Attachable) {
 	}
 }
 
-func (db *EntityComponentDB) Detach(index int, entity uint64) {
+func (db *EntityComponentDB) Detach(index int, entity Entity) {
 	if entity == 0 || index == 0 {
 		log.Printf("EntityComponentDB.Detach: tried to detach 0 entity/index.")
 		return
@@ -228,7 +234,7 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 	if component == nil {
 		return
 	}
-	entity := component.Ref().Entity
+	entity := component.GetEntity()
 
 	if entity == 0 {
 		return
@@ -246,11 +252,10 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 	}
 
 	db.Detach(index, entity)
-
-	component.ResetRef()
+	component.SetEntity(0)
 }
 
-func (db *EntityComponentDB) DetachAll(entity uint64) {
+func (db *EntityComponentDB) DetachAll(entity Entity) {
 	if entity == 0 {
 		return
 	}
@@ -262,16 +267,16 @@ func (db *EntityComponentDB) DetachAll(entity uint64) {
 	db.EntityComponents[entity] = nil
 }
 
-func (db *EntityComponentDB) GetEntityRefByName(name string) *EntityRef {
-	if allNamed := db.All(NamedComponentIndex); allNamed != nil {
+func (db *EntityComponentDB) GetEntityRefByName(name string) Entity {
+	if allNamed := db.AllOfType(NamedComponentIndex); allNamed != nil {
 		for _, c := range allNamed {
 			named := c.(*Named)
 			if named.Name == name {
-				return named.EntityRef
+				return named.Entity
 			}
 		}
 	}
-	return nil
+	return 0
 }
 
 func (db *EntityComponentDB) DeserializeAndAttachEntity(jsonEntity map[string]any) {
@@ -362,24 +367,24 @@ func (db *EntityComponentDB) Save(filename string) {
 	os.WriteFile(filename, bytes, os.ModePerm)
 }
 
-func (db *EntityComponentDB) DeserializeEntityRefs(data []any) map[uint64]*EntityRef {
-	result := make(map[uint64]*EntityRef)
+func (db *EntityComponentDB) DeserializeEntities(data []any) []Entity {
+	if data == nil {
+		return nil
+	}
+	result := make([]Entity, len(data))
 
-	for _, v := range data {
-		if entity, err := strconv.ParseUint(v.(string), 10, 64); err == nil {
-			result[entity] = db.EntityRef(entity)
+	for i, e := range data {
+		if entity, err := DeserializeEntity(e.(string)); err == nil {
+			result[i] = entity
 		}
 	}
 	return result
 }
 
-func (db *EntityComponentDB) DeserializeEntityRef(data any) *EntityRef {
-	if data == nil {
-		return nil
+func (db *EntityComponentDB) SerializeEntities(data []Entity) []string {
+	result := make([]string, len(data))
+	for i, e := range data {
+		result[i] = e.Serialize()
 	}
-
-	if entity, err := strconv.ParseUint(data.(string), 10, 64); err == nil {
-		return db.EntityRef(entity)
-	}
-	return nil
+	return result
 }

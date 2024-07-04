@@ -13,37 +13,37 @@ import (
 
 type AddEntity struct {
 	state.IEditor
+	concepts.Entity
 
 	Mode             string
-	EntityRef        *concepts.EntityRef
 	Components       []concepts.Attachable
 	ContainingSector *core.Sector
 }
 
 func (a *AddEntity) DetachFromSector() {
-	if body := core.BodyFromDb(a.EntityRef); body != nil {
-		if body.SectorEntityRef.Nil() {
+	if body := core.BodyFromDb(a.State().DB, a.Entity); body != nil {
+		if body.SectorEntity == 0 {
 			return
 		}
-		delete(body.Sector().Bodies, a.EntityRef.Entity)
+		delete(body.Sector().Bodies, a.Entity)
 	}
 	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
 func (a *AddEntity) AttachAll() {
 	for index, component := range a.Components {
-		a.EntityRef.DB.Attach(index, a.EntityRef.Entity, component)
+		a.State().DB.Attach(index, a.Entity, component)
 	}
 }
 
 func (a *AddEntity) AttachToSector() {
-	if body := core.BodyFromDb(a.EntityRef); body != nil {
+	if body := core.BodyFromDb(a.State().DB, a.Entity); body != nil {
 		if a.ContainingSector != nil {
-			body.SectorEntityRef = a.ContainingSector.Ref()
-			a.ContainingSector.Bodies[a.EntityRef.Entity] = a.EntityRef
+			body.SectorEntity = a.ContainingSector.Entity
+			a.ContainingSector.Bodies[a.Entity] = body
 		}
 	}
-	if seg := core.InternalSegmentFromDb(a.EntityRef); seg != nil {
+	if seg := core.InternalSegmentFromDb(a.State().DB, a.Entity); seg != nil {
 		seg.AttachToSectors()
 	}
 	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
@@ -57,7 +57,7 @@ func (a *AddEntity) OnMouseMove() {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	for _, isector := range a.State().DB.All(core.SectorComponentIndex) {
+	for _, isector := range a.State().DB.AllOfType(core.SectorComponentIndex) {
 		sector := isector.(*core.Sector)
 		if sector.IsPointInside2D(worldGrid) {
 			a.ContainingSector = sector
@@ -86,13 +86,13 @@ func (a *AddEntity) OnMouseUp() {
 }
 func (a *AddEntity) Act() {
 	a.Mode = "AddBody"
-	a.SelectObjects(true, core.SelectableFromEntityRef(a.EntityRef))
+	a.SelectObjects(true, core.SelectableFromEntityRef(a.State().DB, a.Entity))
 }
 func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()
 	a.DetachFromSector()
-	if a.EntityRef != nil {
-		a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
+	if a.Entity != 0 {
+		a.State().DB.DetachAll(a.Entity)
 	}
 	a.State().Lock.Unlock()
 	a.SelectObjects(true)
@@ -103,7 +103,7 @@ func (a *AddEntity) Undo() {
 	defer a.State().Lock.Unlock()
 
 	a.DetachFromSector()
-	a.EntityRef.DB.DetachAll(a.EntityRef.Entity)
+	a.State().DB.DetachAll(a.Entity)
 }
 func (a *AddEntity) Redo() {
 	a.State().Lock.Lock()

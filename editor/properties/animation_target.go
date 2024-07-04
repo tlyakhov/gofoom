@@ -22,7 +22,7 @@ func (g *Grid) fieldAnimationTarget(field *state.PropertyGridField) {
 
 	// **concepts.SimVariable[float64] -> concepts.SimVariable[float64]
 	searchType := field.Type.Elem().Elem()
-	for _, component := range field.Ref.All() {
+	for _, component := range g.State().DB.AllComponents(field.Entity) {
 		if component == nil {
 			continue
 		}

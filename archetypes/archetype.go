@@ -10,50 +10,49 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-func CreateBasic(db *concepts.EntityComponentDB, componentIndex int) *concepts.EntityRef {
-	er := db.RefForNewEntity()
-	db.NewAttachedComponent(er.Entity, componentIndex)
+func CreateBasic(db *concepts.EntityComponentDB, componentIndex int) concepts.Entity {
+	e := db.NewEntity()
+	db.NewAttachedComponent(e, componentIndex)
+	return e
+}
+
+func CreateSector(db *concepts.EntityComponentDB) concepts.Entity {
+	er := db.NewEntity()
+	db.NewAttachedComponent(er, core.SectorComponentIndex)
 
 	return er
 }
 
-func CreateSector(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	er := db.RefForNewEntity()
-	db.NewAttachedComponent(er.Entity, core.SectorComponentIndex)
-
-	return er
+func IsLightBody(db *concepts.EntityComponentDB, e concepts.Entity) bool {
+	return db.Component(e, core.BodyComponentIndex) != nil &&
+		db.Component(e, core.LightComponentIndex) != nil
 }
 
-func IsLightBody(er concepts.EntityRef) bool {
-	return er.Component(core.BodyComponentIndex) != nil &&
-		er.Component(core.LightComponentIndex) != nil
-}
-
-func CreateLightBody(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	er := db.RefForNewEntity()
-	body := db.NewAttachedComponent(er.Entity, core.BodyComponentIndex).(*core.Body)
-	db.NewAttachedComponent(er.Entity, core.LightComponentIndex)
+func CreateLightBody(db *concepts.EntityComponentDB) concepts.Entity {
+	e := db.NewEntity()
+	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
+	db.NewAttachedComponent(e, core.LightComponentIndex)
 	body.Size.Original[0] = 2
 	body.Size.Original[1] = 2
 	body.Size.Reset()
 
-	return er
+	return e
 }
 
-func IsPlayerBody(er concepts.EntityRef) bool {
-	return er.Component(core.BodyComponentIndex) != nil &&
-		er.Component(behaviors.PlayerComponentIndex) != nil &&
-		er.Component(behaviors.AliveComponentIndex) != nil
+func IsPlayerBody(db *concepts.EntityComponentDB, e concepts.Entity) bool {
+	return db.Component(e, core.BodyComponentIndex) != nil &&
+		db.Component(e, behaviors.PlayerComponentIndex) != nil &&
+		db.Component(e, behaviors.AliveComponentIndex) != nil
 }
 
-func CreatePlayerBody(db *concepts.EntityComponentDB) *concepts.EntityRef {
-	er := db.RefForNewEntity()
-	body := db.NewAttachedComponent(er.Entity, core.BodyComponentIndex).(*core.Body)
-	_ = db.NewAttachedComponent(er.Entity, behaviors.PlayerComponentIndex).(*behaviors.Player)
-	_ = db.NewAttachedComponent(er.Entity, behaviors.AliveComponentIndex).(*behaviors.Alive)
+func CreatePlayerBody(db *concepts.EntityComponentDB) concepts.Entity {
+	e := db.NewEntity()
+	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
+	_ = db.NewAttachedComponent(e, behaviors.PlayerComponentIndex).(*behaviors.Player)
+	_ = db.NewAttachedComponent(e, behaviors.AliveComponentIndex).(*behaviors.Alive)
 
 	body.Size.Set(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
 	body.Mass = constants.PlayerMass // kg
 
-	return er
+	return e
 }

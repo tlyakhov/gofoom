@@ -10,9 +10,9 @@ import (
 type InventoryItem struct {
 	concepts.Attached `editable:"^"`
 
-	Class string              `editable:"Class"`
-	Count int                 `editable:"Count"`
-	Image *concepts.EntityRef `editable:"Image" edit_type:"Material"`
+	Class string          `editable:"Class"`
+	Count int             `editable:"Count"`
+	Image concepts.Entity `editable:"Image" edit_type:"Material"`
 }
 
 var InventoryItemComponentIndex int
@@ -21,8 +21,8 @@ func init() {
 	InventoryItemComponentIndex = concepts.DbTypes().Register(InventoryItem{}, InventoryItemFromDb)
 }
 
-func InventoryItemFromDb(entity *concepts.EntityRef) *InventoryItem {
-	if asserted, ok := entity.Component(InventoryItemComponentIndex).(*InventoryItem); ok {
+func InventoryItemFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *InventoryItem {
+	if asserted, ok := db.Component(e, InventoryItemComponentIndex).(*InventoryItem); ok {
 		return asserted
 	}
 	return nil
@@ -48,7 +48,7 @@ func (item *InventoryItem) Construct(data map[string]any) {
 		item.Count = v.(int)
 	}
 	if v, ok := data["Image"]; ok {
-		item.Image = item.DB.DeserializeEntityRef(v)
+		item.Image, _ = concepts.DeserializeEntity(v.(string))
 	}
 }
 
@@ -61,7 +61,7 @@ func (item *InventoryItem) Serialize() map[string]any {
 	if item.Count > 1 {
 		result["Count"] = item.Count
 	}
-	if !item.Image.Nil() {
+	if item.Image != 0 {
 		result["Image"] = item.Image.Serialize()
 	}
 

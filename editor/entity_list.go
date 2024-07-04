@@ -141,9 +141,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 
 	button := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
 		list.State().Lock.Lock()
-		ref := editor.DB.RefForNewEntity()
-
-		editor.SelectObjects(true, core.SelectableFromEntityRef(ref))
+		editor.SelectObjects(true, core.SelectableFromEntityRef(editor.DB, editor.DB.NewEntity()))
 		list.State().Lock.Unlock()
 	})
 	search := widget.NewEntry()
@@ -160,7 +158,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 			return
 		}
 		entity := list.BackingStore[id.Row][0].(int)
-		s := core.SelectableFromEntityRef(list.State().DB.EntityRef(uint64(entity)))
+		s := core.SelectableFromEntityRef(list.State().DB, concepts.Entity(entity))
 		if !editor.SelectedObjects.Contains(s) {
 			editor.SelectObjects(false, s)
 		}
@@ -237,7 +235,7 @@ func (list *EntityList) Select(selection *core.Selection) {
 	// TODO: Support multiple-selection when Fyne Table supports them
 	for i, row := range list.BackingStore {
 		for _, s := range selection.Exact {
-			if row[elcEntity].(int) == int(s.Ref.Entity) {
+			if row[elcEntity].(int) == int(s.Entity) {
 				// Save and restore the handlers to avoid recursive selection
 				fs1 := list.Table.OnSelected
 				fs2 := list.Table.OnUnselected

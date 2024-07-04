@@ -68,7 +68,7 @@ func Floor(c *state.Column) {
 		tx := world[0] / 64.0
 		ty := world[1] / 64.0
 
-		if !mat.Nil() {
+		if mat != 0 {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
 			c.SampleShader(mat, extras, tx, ty, scaler)
 			c.SampleLight(&c.MaterialSampler.Output, mat, world, distToFloor)

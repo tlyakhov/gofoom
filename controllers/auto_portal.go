@@ -6,7 +6,6 @@ package controllers
 import (
 	"log"
 	"math"
-	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -24,9 +23,9 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 
 	// Case 1:
 	if a.Matches(&b.Segment) {
-		b.AdjacentSector = a.Sector.Ref()
+		b.AdjacentSector = a.Sector.Entity
 		b.AdjacentSegment = a
-		a.AdjacentSector = b.Sector.Ref()
+		a.AdjacentSector = b.Sector.Entity
 		a.AdjacentSegment = b
 		return false
 	}
@@ -138,31 +137,31 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // doing it manually every once in a while.
 func AutoPortal(db *concepts.EntityComponentDB) {
 	seen := map[string]bool{}
-	for _, c := range db.All(core.SectorComponentIndex) {
+	for _, c := range db.AllOfType(core.SectorComponentIndex) {
 		sector := c.(*core.Sector)
 		for _, segment := range sector.Segments {
 			// Don't touch these during auto-portalling
 			if segment.PortalTeleports {
 				continue
 			}
-			segment.AdjacentSector = nil
+			segment.AdjacentSector = 0
 			segment.AdjacentSegment = nil
 		}
 	}
-	for _, c := range db.All(core.SectorComponentIndex) {
-		for _, c2 := range db.All(core.SectorComponentIndex) {
+	for _, c := range db.AllOfType(core.SectorComponentIndex) {
+		for _, c2 := range db.AllOfType(core.SectorComponentIndex) {
 			if c == c2 {
 				continue
 			}
-			name := strconv.FormatUint(c.Ref().Entity, 10) + "|" + strconv.FormatUint(c2.Ref().Entity, 10)
-			id2 := strconv.FormatUint(c2.Ref().Entity, 10) + "|" + strconv.FormatUint(c.Ref().Entity, 10)
+			sector := c.(*core.Sector)
+			sector2 := c2.(*core.Sector)
+			name := sector.Entity.Serialize() + "|" + sector2.Entity.Serialize()
+			id2 := sector2.Entity.Serialize() + "|" + sector.Entity.Serialize()
 			if seen[id2] || seen[name] {
 				continue
 			}
 			seen[name] = true
 
-			sector := c.(*core.Sector)
-			sector2 := c2.(*core.Sector)
 			if !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
 				continue
 			}

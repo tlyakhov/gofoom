@@ -72,12 +72,12 @@ func (g *GameWidget) Draw() {
 		return
 	}
 
-	iplayer := editor.Renderer.Player
-	if iplayer == nil {
+	player := editor.Renderer.Player
+	if player == nil {
 		return
 	}
-	playerBody := core.BodyFromDb(iplayer.Ref())
-	playerAlive := behaviors.AliveFromDb(playerBody.Ref())
+	playerBody := core.BodyFromDb(player.DB, player.Entity)
+	playerAlive := behaviors.AliveFromDb(player.DB, player.Entity)
 
 	pixels := g.Context.Image().(*image.RGBA).Pix
 	editor.Lock.Lock()
@@ -88,8 +88,8 @@ func (g *GameWidget) Draw() {
 	g.Context.SetFontFace(basicfont.Face7x13)
 	g.Context.DrawString(fmt.Sprintf("FPS: %.1f", editor.DB.Simulation.FPS), 10, 10)
 	g.Context.DrawString(fmt.Sprintf("Health: %.1f", playerAlive.Health), 10, 20)
-	if !playerBody.SectorEntityRef.Nil() {
-		g.Context.DrawString(fmt.Sprintf("Sector: %v", playerBody.SectorEntityRef.String()), 10, 30)
+	if playerBody.SectorEntity != 0 {
+		g.Context.DrawString(fmt.Sprintf("Sector: %v", playerBody.SectorEntity.String(editor.DB)), 10, 30)
 	}
 	g.Context.DrawString(fmt.Sprintf("f: %v, v: %v, p: %v\n", playerBody.Force.StringHuman(), playerBody.Vel.Render.StringHuman(), playerBody.Pos.Render.StringHuman()), 10, 40)
 

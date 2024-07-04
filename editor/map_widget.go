@@ -69,7 +69,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	mw.Context.FontHeight()
 
 	// Highlight PVS sectors
-	pvsSector := make(map[uint64]*core.Sector)
+	pvsSector := make(map[concepts.Entity]*core.Sector)
 	for _, s := range editor.SelectedObjects.Exact {
 		if s.Sector == nil {
 			continue
@@ -79,15 +79,15 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 		}
 	}
 
-	for _, isector := range editor.DB.All(core.SectorComponentIndex) {
-		mw.DrawSector(isector.(*core.Sector), pvsSector[isector.Ref().Entity] != nil)
+	for _, a := range editor.DB.AllOfType(core.SectorComponentIndex) {
+		mw.DrawSector(a.(*core.Sector), pvsSector[a.GetEntity()] != nil)
 	}
-	for _, iseg := range editor.DB.All(core.InternalSegmentComponentIndex) {
-		mw.DrawInternalSegment(iseg.(*core.InternalSegment))
+	for _, a := range editor.DB.AllOfType(core.InternalSegmentComponentIndex) {
+		mw.DrawInternalSegment(a.(*core.InternalSegment))
 	}
 	if editor.BodiesVisible {
-		for _, ibody := range editor.DB.All(core.BodyComponentIndex) {
-			mw.DrawBody(ibody.(*core.Body))
+		for _, a := range editor.DB.AllOfType(core.BodyComponentIndex) {
+			mw.DrawBody(a.(*core.Body))
 		}
 	}
 	// Portal testing code

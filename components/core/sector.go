@@ -18,14 +18,14 @@ type Sector struct {
 	concepts.Attached `editable:"^"`
 
 	Segments         []*SectorSegment
-	Bodies           map[uint64]*concepts.EntityRef
-	InternalSegments map[uint64]*concepts.EntityRef
+	Bodies           map[concepts.Entity]*Body
+	InternalSegments map[concepts.Entity]*InternalSegment
 	BottomZ          concepts.SimVariable[float64] `editable:"Floor Height"`
 	TopZ             concepts.SimVariable[float64] `editable:"Ceiling Height"`
 	FloorSlope       float64                       `editable:"Floor Slope"`
 	CeilSlope        float64                       `editable:"Ceiling Slope"`
-	FloorTarget      *concepts.EntityRef           `editable:"Floor Target" edit_type:"Sector"`
-	CeilTarget       *concepts.EntityRef           `editable:"Ceiling Target" edit_type:"Sector"`
+	FloorTarget      concepts.Entity               `editable:"Floor Target" edit_type:"Sector"`
+	CeilTarget       concepts.Entity               `editable:"Ceiling Target" edit_type:"Sector"`
 	FloorSurface     materials.Surface             `editable:"Floor Surface"`
 	CeilSurface      materials.Surface             `editable:"Ceiling Surface"`
 	Gravity          concepts.Vector3              `editable:"Gravity"`
@@ -38,8 +38,8 @@ type Sector struct {
 	Winding                 int8
 	Min, Max, Center        concepts.Vector3
 	FloorNormal, CeilNormal concepts.Vector3
-	PVS                     map[uint64]*Sector
-	PVL                     map[uint64]*concepts.EntityRef
+	PVS                     map[concepts.Entity]*Sector
+	PVL                     map[concepts.Entity]*Body
 	Lightmap                *xsync.MapOf[uint64, concepts.Vector4]
 	LightmapBias            [3]int64 // Quantized Min
 }
@@ -50,8 +50,8 @@ func init() {
 	SectorComponentIndex = concepts.DbTypes().Register(Sector{}, SectorFromDb)
 }
 
-func SectorFromDb(entity *concepts.EntityRef) *Sector {
-	if asserted, ok := entity.Component(SectorComponentIndex).(*Sector); ok {
+func SectorFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Sector {
+	if asserted, ok := db.Component(e, SectorComponentIndex).(*Sector); ok {
 		return asserted
 	}
 	return nil
@@ -100,8 +100,8 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
 	s.Segments = make([]*SectorSegment, 0)
-	s.Bodies = make(map[uint64]*concepts.EntityRef)
-	s.InternalSegments = make(map[uint64]*concepts.EntityRef)
+	s.Bodies = make(map[concepts.Entity]*Body)
+	s.InternalSegments = make(map[concepts.Entity]*InternalSegment)
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0
 	s.Gravity[2] = -constants.Gravity
@@ -152,10 +152,10 @@ func (s *Sector) Construct(data map[string]any) {
 		}
 	}
 	if v, ok := data["FloorTarget"]; ok {
-		s.FloorTarget = s.DB.DeserializeEntityRef(v)
+		s.FloorTarget, _ = concepts.DeserializeEntity(v.(string))
 	}
 	if v, ok := data["CeilTarget"]; ok {
-		s.CeilTarget = s.DB.DeserializeEntityRef(v)
+		s.CeilTarget, _ = concepts.DeserializeEntity(v.(string))
 	}
 	if v, ok := data["Gravity"]; ok {
 		s.Gravity.Deserialize(v.(map[string]any))
@@ -197,10 +197,10 @@ func (s *Sector) Serialize() map[string]any {
 		result["CeilSlope"] = s.CeilSlope
 	}
 
-	if !s.FloorTarget.Nil() {
+	if s.FloorTarget != 0 {
 		result["FloorTarget"] = s.FloorTarget.Serialize()
 	}
-	if !s.CeilTarget.Nil() {
+	if s.CeilTarget != 0 {
 		result["CeilTarget"] = s.CeilTarget.Serialize()
 	}
 	if len(s.FloorScripts) > 0 {

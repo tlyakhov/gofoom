@@ -41,8 +41,8 @@ func (a *Delete) Undo() {
 	defer a.State().Lock.Unlock()
 
 	for s, saved := range a.Saved {
-		a.State().DB.DetachAll(s.Ref.Entity)
-		a.State().DB.DeserializeAndAttachEntity(saved.(map[string]any))
+		s.DB.DetachAll(s.Entity)
+		s.DB.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
@@ -54,9 +54,9 @@ func (a *Delete) Redo() {
 	for s := range a.Saved {
 		switch s.Type {
 		case core.SelectableSector:
-			s.Sector.Bodies = make(map[uint64]*concepts.EntityRef)
-			s.Sector.InternalSegments = make(map[uint64]*concepts.EntityRef)
-			a.State().DB.DetachAll(s.Sector.Entity)
+			s.Sector.Bodies = make(map[concepts.Entity]*core.Body)
+			s.Sector.InternalSegments = make(map[concepts.Entity]*core.InternalSegment)
+			s.DB.DetachAll(s.Sector.Entity)
 		case core.SelectableSectorSegment:
 			for i, seg := range s.Sector.Segments {
 				if seg != s.SectorSegment {
@@ -64,30 +64,30 @@ func (a *Delete) Redo() {
 				}
 				s.Sector.Segments = append(s.Sector.Segments[:i], s.Sector.Segments[i+1:]...)
 				if len(s.Sector.Segments) == 0 {
-					s.Sector.Bodies = make(map[uint64]*concepts.EntityRef)
-					s.Sector.InternalSegments = make(map[uint64]*concepts.EntityRef)
-					a.State().DB.DetachAll(s.Sector.Entity)
+					s.Sector.Bodies = make(map[concepts.Entity]*core.Body)
+					s.Sector.InternalSegments = make(map[concepts.Entity]*core.InternalSegment)
+					s.DB.DetachAll(s.Sector.Entity)
 				}
 				break
 			}
 		case core.SelectableBody:
-			if behaviors.PlayerFromDb(s.Body.EntityRef) != nil {
+			if behaviors.PlayerFromDb(s.DB, s.Entity) != nil {
 				// Otherwise weird things happen...
 				continue
 			}
-			a.State().DB.DetachAll(s.Body.Entity)
+			a.State().DB.DetachAll(s.Entity)
 			if s.Body.Sector() != nil {
-				delete(s.Body.Sector().Bodies, s.Body.Entity)
+				delete(s.Body.Sector().Bodies, s.Entity)
 			}
 		case core.SelectableInternalSegment:
 			fallthrough
 		case core.SelectableInternalSegmentA:
 			fallthrough
 		case core.SelectableInternalSegmentB:
-			a.State().DB.DetachAll(s.InternalSegment.Entity)
+			s.DB.DetachAll(s.InternalSegment.Entity)
 			s.InternalSegment.DetachFromSectors()
 		case core.SelectableEntityRef:
-			a.State().DB.DetachAll(s.Ref.Entity)
+			s.DB.DetachAll(s.Entity)
 		}
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)

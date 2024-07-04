@@ -19,8 +19,8 @@ func init() {
 		"CreateLightBody":      reflect.ValueOf(archetypes.CreateLightBody),
 		"CreatePlayerBody":     reflect.ValueOf(archetypes.CreatePlayerBody),
 		"CreateSector":         reflect.ValueOf(archetypes.CreateSector),
+		"EntityIsMaterial":     reflect.ValueOf(archetypes.EntityIsMaterial),
 		"EntityMapIsMaterial":  reflect.ValueOf(archetypes.EntityMapIsMaterial),
-		"EntityRefIsMaterial":  reflect.ValueOf(archetypes.EntityRefIsMaterial),
 		"IsLightBody":          reflect.ValueOf(archetypes.IsLightBody),
 		"IsPlayerBody":         reflect.ValueOf(archetypes.IsPlayerBody),
 	}

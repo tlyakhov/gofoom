@@ -49,7 +49,7 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
 		// Set up 16 slots initially
-		r.Columns[i].SortedRefs = make([]state.EntityRefWithDist2, 0, 16)
+		r.Columns[i].EntitiesByDistance = make([]state.EntityWithDist2, 0, 16)
 	}
 
 	r.Initialize()
@@ -129,7 +129,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	c.LightElement.Type = state.LightElementWall
 	c.Segment.Normal.To3D(&c.LightElement.Normal)
 
-	hasPortal := !c.SectorSegment.AdjacentSector.Nil()
+	hasPortal := c.SectorSegment.AdjacentSector != 0
 	if c.Pick {
 		if !hasPortal || c.SectorSegment.PortalHasMaterial {
 			WallMidPick(c)
@@ -168,42 +168,40 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	}
 
 	// Clear slice without reallocating memory
-	c.SortedRefs = c.SortedRefs[:0]
-	for _, ref := range c.Sector.Bodies {
-		b := core.BodyFromDb(ref)
-		c.SortedRefs = append(c.SortedRefs, state.EntityRefWithDist2{
-			EntityRef: ref,
+	c.EntitiesByDistance = c.EntitiesByDistance[:0]
+	for entity, b := range c.Sector.Bodies {
+		c.EntitiesByDistance = append(c.EntitiesByDistance, state.EntityWithDist2{
+			Entity:    entity,
 			Dist2:     c.Ray.Start.Dist2(b.Pos.Render.To2D()),
 			IsSegment: false,
 		})
 	}
-	for _, ref := range c.Sector.InternalSegments {
-		s := core.InternalSegmentFromDb(ref)
+	for entity, s := range c.Sector.InternalSegments {
 		// TODO: we do this again later. Should we optimize this?
 		if s == nil || !s.IsActive() || !c.IntersectSegment(&s.Segment, false, s.TwoSided) {
 			continue
 		}
-		c.SortedRefs = append(c.SortedRefs, state.EntityRefWithDist2{
-			EntityRef: ref,
+		c.EntitiesByDistance = append(c.EntitiesByDistance, state.EntityWithDist2{
+			Entity:    entity,
 			Dist2:     c.Distance * c.Distance,
 			IsSegment: true,
 		})
 	}
 
-	slices.SortFunc(c.SortedRefs, func(a state.EntityRefWithDist2, b state.EntityRefWithDist2) int {
+	slices.SortFunc(c.EntitiesByDistance, func(a state.EntityWithDist2, b state.EntityWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
 	c.SectorSegment = nil
-	for _, sortedRef := range c.SortedRefs {
-		if sortedRef.EntityRef == nil {
+	for _, sorted := range c.EntitiesByDistance {
+		if sorted.Entity == 0 {
 			continue
 		}
-		if !sortedRef.IsSegment {
-			r.RenderBody(sortedRef.EntityRef, c)
+		if !sorted.IsSegment {
+			r.RenderBody(sorted.Entity, c)
 			continue
 		}
 
-		s := core.InternalSegmentFromDb(sortedRef.EntityRef)
+		s := core.InternalSegmentFromDb(r.DB, sorted.Entity)
 		c.IntersectSegment(&s.Segment, false, s.TwoSided)
 		c.TopZ = s.Top
 		c.BottomZ = s.Bottom
@@ -359,7 +357,7 @@ func (r *Renderer) RenderHud(buffer []uint8) {
 		return
 	}
 	for _, item := range r.Player.Inventory {
-		img := materials.ImageFromDb(item.Image)
+		img := materials.ImageFromDb(r.DB, item.Image)
 		if img == nil {
 			return
 		}
@@ -375,12 +373,12 @@ func (r *Renderer) Pick(x, y int) []*core.Selectable {
 	bob := math.Sin(r.Player.Bob) * 2
 	// Initialize a column...
 	column := &state.Column{
-		Config:        r.Config,
-		YStart:        0,
-		YEnd:          r.ScreenHeight,
-		CameraZ:       r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
-		PortalColumns: make([]state.Column, constants.MaxPortals),
-		SortedRefs:    make([]state.EntityRefWithDist2, 0, 16),
+		Config:             r.Config,
+		YStart:             0,
+		YEnd:               r.ScreenHeight,
+		CameraZ:            r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
+		PortalColumns:      make([]state.Column, constants.MaxPortals),
+		EntitiesByDistance: make([]state.EntityWithDist2, 0, 16),
 	}
 	column.LightElement.Config = r.Config
 

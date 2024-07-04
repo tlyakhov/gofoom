@@ -24,7 +24,7 @@ type ColumnPortal struct {
 }
 
 func (cp *ColumnPortal) CalcScreen() {
-	cp.Adj = core.SectorFromDb(cp.SectorSegment.AdjacentSector)
+	cp.Adj = core.SectorFromDb(cp.DB, cp.SectorSegment.AdjacentSector)
 	cp.AdjSegment = cp.SectorSegment.AdjacentSegment
 	cp.AdjFloorZ, cp.AdjCeilZ = cp.Adj.SlopedZRender(cp.RaySegIntersect.To2D())
 	cp.AdjProjHeightTop = cp.ProjectZ(cp.AdjCeilZ - cp.CameraZ)

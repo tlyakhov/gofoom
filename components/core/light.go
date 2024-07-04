@@ -21,8 +21,8 @@ func init() {
 	LightComponentIndex = concepts.DbTypes().Register(Light{}, LightFromDb)
 }
 
-func LightFromDb(entity *concepts.EntityRef) *Light {
-	if asserted, ok := entity.Component(LightComponentIndex).(*Light); ok {
+func LightFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Light {
+	if asserted, ok := db.Component(e, LightComponentIndex).(*Light); ok {
 		return asserted
 	}
 	return nil

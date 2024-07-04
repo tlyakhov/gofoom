@@ -17,8 +17,8 @@ func init() {
 	UnderwaterComponentIndex = concepts.DbTypes().Register(Underwater{}, UnderwaterFromDb)
 }
 
-func UnderwaterFromDb(entity *concepts.EntityRef) *Underwater {
-	if asserted, ok := entity.Component(UnderwaterComponentIndex).(*Underwater); ok {
+func UnderwaterFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Underwater {
+	if asserted, ok := db.Component(e, UnderwaterComponentIndex).(*Underwater); ok {
 		return asserted
 	}
 	return nil

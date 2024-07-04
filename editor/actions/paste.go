@@ -6,7 +6,6 @@ package actions
 import (
 	"encoding/json"
 	"log"
-	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 
@@ -19,7 +18,7 @@ import (
 type Paste struct {
 	Move
 
-	CopiedToPasted map[uint64]uint64
+	CopiedToPasted map[concepts.Entity]concepts.Entity
 	ClipboardData  string
 	Center         concepts.Vector3
 }
@@ -46,18 +45,18 @@ func (a *Paste) Act() {
 	// pasting.
 
 	// Copied -> Pasted
-	a.CopiedToPasted = make(map[uint64]uint64)
+	a.CopiedToPasted = make(map[concepts.Entity]concepts.Entity)
 	a.Selected = core.NewSelection()
 	db := a.State().DB
 	for copiedEntityString, jsonData := range jsonEntities {
-		copiedEntity, _ := strconv.ParseUint(copiedEntityString, 10, 64)
+		copiedEntity, _ := concepts.DeserializeEntity(copiedEntityString)
 		jsonEntity := jsonData.(map[string]any)
 		if jsonEntity == nil {
 			log.Printf("ECS JSON object element should be an object\n")
 			continue
 		}
 
-		var pastedRef *concepts.EntityRef
+		var pastedRef concepts.Entity
 		for name, index := range concepts.DbTypes().Indexes {
 			jsonData := jsonEntity[name]
 			if jsonData == nil {
@@ -73,12 +72,12 @@ func (a *Paste) Act() {
 				pastedEntity := db.NewEntity()
 				db.Attach(index, pastedEntity, c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
-				pastedRef = c.Ref()
+				pastedRef = c.GetEntity()
 			}
 			a.State().Lock.Unlock()
 		}
-		if pastedRef != nil {
-			a.Selected.Add(core.SelectableFromEntityRef(pastedRef))
+		if pastedRef != 0 {
+			a.Selected.Add(core.SelectableFromEntityRef(db, pastedRef))
 		}
 	}
 
@@ -88,12 +87,11 @@ func (a *Paste) Act() {
 	// pasted bodies to sectors
 	// pasted internal segments to sectors
 	for _, pastedEntity := range a.CopiedToPasted {
-		ref := db.EntityRef(pastedEntity)
-		if seg := core.InternalSegmentFromDb(ref); seg != nil {
+		if seg := core.InternalSegmentFromDb(db, pastedEntity); seg != nil {
 			seg.AttachToSectors()
 		}
-		if body := core.BodyFromDb(ref); body != nil {
-			body.SectorEntityRef = nil
+		if body := core.BodyFromDb(db, pastedEntity); body != nil {
+			body.SectorEntity = 0
 		}
 		// TODO: materials
 	}

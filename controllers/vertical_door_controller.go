@@ -29,7 +29,7 @@ func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
 
 func (vd *VerticalDoorController) Target(target concepts.Attachable) bool {
 	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
-	vd.Sector = core.SectorFromDb(target.Ref())
+	vd.Sector = core.SectorFromDb(vd.VerticalDoor.DB, vd.VerticalDoor.Entity)
 	return vd.VerticalDoor.IsActive() && vd.Sector != nil && vd.Sector.IsActive()
 }
 

@@ -11,7 +11,7 @@ import (
 )
 
 type Simulatable interface {
-	~int | ~float64 | Vector2 | Vector3 | Vector4 | *EntityRef
+	~int | ~float64 | Vector2 | Vector3 | Vector4
 }
 
 type Simulated interface {
@@ -89,7 +89,7 @@ func (s *SimVariable[T]) RenderBlend(blend float64) {
 		sc.Render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
 		sc.Render[2] = Lerp(sc.Prev[2], sc.Now[2], blend)
 		sc.Render[3] = Lerp(sc.Prev[3], sc.Now[3], blend)
-	case *SimVariable[*EntityRef]:
+	case *SimVariable[Entity]:
 		sc.Render = sc.Prev
 		if blend > 0.5 {
 			sc.Render = sc.Now
@@ -115,7 +115,7 @@ func (s *SimVariable[T]) Serialize() map[string]any {
 		result["Original"] = sc.Original.Serialize()
 	case *SimVariable[Vector4]:
 		result["Original"] = sc.Original.Serialize(false)
-	case *SimVariable[*EntityRef]:
+	case *SimVariable[Entity]:
 		result["Original"] = sc.Original.Serialize()
 	default:
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", s)

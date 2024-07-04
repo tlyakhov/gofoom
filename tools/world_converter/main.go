@@ -33,10 +33,10 @@ var inputFiles flagsSlice
 func jsonRefToEntityRef(db *concepts.EntityComponentDB, jsonData map[string]any, key string, obj any) {
 	log.Printf("[%v] Linking field %v...", reflect.TypeOf(obj).String(), key)
 	if name, ok := jsonData[key]; ok {
-		er := db.GetEntityRefByName(name.(string))
-		if !er.Nil() {
-			log.Printf("Found entity %v", er.String())
-			reflect.ValueOf(obj).Elem().FieldByName(key).Set(reflect.ValueOf(er))
+		entity := db.GetEntityRefByName(name.(string))
+		if entity != 0 {
+			log.Printf("Found entity %v", entity.String(db))
+			reflect.ValueOf(obj).Elem().FieldByName(key).Set(reflect.ValueOf(entity))
 		}
 	}
 }
@@ -46,15 +46,14 @@ func convertBodies(db *concepts.EntityComponentDB, sector *core.Sector, jsonBodi
 		jsonBody := jsonData.(map[string]any)
 		bodyType := jsonBody["Type"].(string)
 		log.Printf("Converting body %v", jsonBody["Name"])
-		ibody := db.RefForNewEntity()
-		sector.Bodies[ibody.Entity] = ibody
-		db.NewAttachedComponent(ibody.Entity, concepts.NamedComponentIndex)
-		db.NewAttachedComponent(ibody.Entity, core.BodyComponentIndex)
+		eBody := db.NewEntity()
+		db.NewAttachedComponent(eBody, concepts.NamedComponentIndex)
+		sector.Bodies[eBody] = db.NewAttachedComponent(eBody, core.BodyComponentIndex).(*core.Body)
 		switch bodyType {
 		case "mobs.Light":
-			db.NewAttachedComponent(ibody.Entity, core.LightComponentIndex)
+			db.NewAttachedComponent(eBody, core.LightComponentIndex)
 		}
-		for index, c := range ibody.All() {
+		for index, c := range db.AllComponents(eBody) {
 			if c == nil {
 				continue
 			}
@@ -89,8 +88,8 @@ func convert(filename, output string) {
 	json := parsed.(map[string]any)
 
 	// Spawn
-	ispawn := db.RefForNewEntity()
-	spawn := db.NewAttachedComponent(ispawn.Entity, core.SpawnComponentIndex).(*core.Spawn)
+	eSpawn := db.NewEntity()
+	spawn := db.NewAttachedComponent(eSpawn, core.SpawnComponentIndex).(*core.Spawn)
 	spawn.Spawn[0] = json["SpawnX"].(float64)
 	spawn.Spawn[1] = json["SpawnY"].(float64)
 
@@ -99,20 +98,20 @@ func convert(filename, output string) {
 	for _, jsonData := range jsonMaterials {
 		jsonMaterial := jsonData.(map[string]any)
 		log.Printf("Converting material %v", jsonMaterial["Name"])
-		imat := db.RefForNewEntity()
+		eMaterial := db.NewEntity()
 		matType := jsonMaterial["Type"].(string)
-		db.NewAttachedComponent(imat.Entity, concepts.NamedComponentIndex)
-		db.NewAttachedComponent(imat.Entity, materials.ImageComponentIndex)
+		db.NewAttachedComponent(eMaterial, concepts.NamedComponentIndex)
+		db.NewAttachedComponent(eMaterial, materials.ImageComponentIndex)
 		switch matType {
 		case "materials.LitSampled":
-			db.NewAttachedComponent(imat.Entity, materials.LitComponentIndex)
+			db.NewAttachedComponent(eMaterial, materials.LitComponentIndex)
 		case "materials.PainfulLitSampled":
-			db.NewAttachedComponent(imat.Entity, materials.LitComponentIndex)
+			db.NewAttachedComponent(eMaterial, materials.LitComponentIndex)
 			//db.NewComponent(imat.Entity, behaviors.ToxicComponentIndex)
 		case "materials.Sky":
 			//			db.NewComponent(imat.Entity, materials.SkyComponentIndex)
 		}
-		for index, c := range imat.All() {
+		for index, c := range db.AllComponents(eMaterial) {
 			if c == nil {
 				continue
 			}
@@ -125,23 +124,23 @@ func convert(filename, output string) {
 	}
 
 	// Sectors & bodies
-	sectorIndexes := make(map[int]uint64)
+	sectorIndexes := make(map[int]concepts.Entity)
 	jsonSectors := json["Sectors"].([]any)
 	for index, jsonData := range jsonSectors {
 		jsonSector := jsonData.(map[string]any)
 		log.Printf("Converting sector %v", jsonSector["Name"])
-		isector := db.RefForNewEntity()
-		sectorIndexes[index] = isector.Entity
+		eSector := db.NewEntity()
+		sectorIndexes[index] = eSector
 		sectorType := jsonSector["Type"].(string)
-		db.NewAttachedComponent(isector.Entity, concepts.NamedComponentIndex)
-		db.NewAttachedComponent(isector.Entity, core.SectorComponentIndex)
+		db.NewAttachedComponent(eSector, concepts.NamedComponentIndex)
+		db.NewAttachedComponent(eSector, core.SectorComponentIndex)
 		switch sectorType {
 		case "sectors.VerticalDoor":
-			db.NewAttachedComponent(isector.Entity, behaviors.VerticalDoorComponentIndex)
+			db.NewAttachedComponent(eSector, behaviors.VerticalDoorComponentIndex)
 		case "sectors.ToxicSector":
 			//db.NewComponent(isector.Entity, behaviors.ToxicComponentIndex)
 		}
-		for _, c := range isector.All() {
+		for _, c := range db.AllComponents(eSector) {
 			if c == nil {
 				continue
 			}
@@ -159,9 +158,9 @@ func convert(filename, output string) {
 	for index, jsonData := range jsonSectors {
 		jsonSector := jsonData.(map[string]any)
 		log.Printf("Wiring up adjacent sectors %v", jsonSector["Name"])
-		isector := &concepts.EntityRef{DB: db, Entity: sectorIndexes[index]}
+		eSector := sectorIndexes[index]
 
-		for _, c := range isector.All() {
+		for _, c := range db.AllComponents(eSector) {
 			if c == nil {
 				continue
 			}

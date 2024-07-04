@@ -18,8 +18,8 @@ func init() {
 	SpawnComponentIndex = concepts.DbTypes().Register(Spawn{}, SpawnFromDb)
 }
 
-func SpawnFromDb(entity *concepts.EntityRef) *Spawn {
-	if asserted, ok := entity.Component(SpawnComponentIndex).(*Spawn); ok {
+func SpawnFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Spawn {
+	if asserted, ok := db.Component(e, SpawnComponentIndex).(*Spawn); ok {
 		return asserted
 	}
 	return nil

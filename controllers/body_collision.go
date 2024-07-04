@@ -11,37 +11,37 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-func BodySectorScript(scripts []*core.Script, ibody, isector *concepts.EntityRef) {
+func BodySectorScript(scripts []*core.Script, eBody, eSector concepts.Entity) {
 	for _, script := range scripts {
-		script.Vars["body"] = ibody
-		script.Vars["sector"] = isector
+		script.Vars["body"] = eBody
+		script.Vars["sector"] = eSector
 		script.Act()
 	}
 }
 
-func (bc *BodyController) Enter(sectorRef *concepts.EntityRef) {
-	if sectorRef.Nil() {
+func (bc *BodyController) Enter(eSector concepts.Entity) {
+	if eSector == 0 {
 		log.Printf("%v tried to enter nil sector", bc.Body.Entity)
 		return
 	}
-	sector := core.SectorFromDb(sectorRef)
+	sector := core.SectorFromDb(bc.Body.DB, eSector)
 	if sector == nil {
-		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, sectorRef.String())
+		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, eSector.String(bc.Body.DB))
 		return
 	}
 	bc.Sector = sector
-	bc.Sector.Bodies[bc.Body.Entity] = bc.Body.Ref()
-	bc.Body.SectorEntityRef = sectorRef
+	bc.Sector.Bodies[bc.Body.Entity] = bc.Body
+	bc.Body.SectorEntity = eSector
 
 	if bc.Body.OnGround {
 		floorZ, _ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		p := &bc.Body.Pos.Now
 		h := bc.Body.Size.Now[1] * 0.5
-		if bc.Sector.FloorTarget.Nil() && p[2]-h < floorZ {
+		if bc.Sector.FloorTarget == 0 && p[2]-h < floorZ {
 			p[2] = floorZ + h
 		}
 	}
-	BodySectorScript(bc.Sector.EnterScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
+	BodySectorScript(bc.Sector.EnterScripts, bc.Body.Entity, bc.Sector.Entity)
 }
 
 func (bc *BodyController) Exit() {
@@ -49,9 +49,9 @@ func (bc *BodyController) Exit() {
 		log.Printf("%v tried to exit nil sector", bc.Body.Entity)
 		return
 	}
-	BodySectorScript(bc.Sector.ExitScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
+	BodySectorScript(bc.Sector.ExitScripts, bc.Body.Entity, bc.Sector.Entity)
 	delete(bc.Sector.Bodies, bc.Body.Entity)
-	bc.Body.SectorEntityRef = nil
+	bc.Body.SectorEntity = 0
 }
 
 func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
@@ -80,7 +80,7 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
-	for _, attachable := range bc.EntityComponentDB.All(core.SectorComponentIndex) {
+	for _, attachable := range bc.EntityComponentDB.AllOfType(core.SectorComponentIndex) {
 		sector := attachable.(*core.Sector)
 		if sector.IsPointInside2D(bc.pos2d) {
 			closestSector = sector
@@ -92,7 +92,7 @@ func (bc *BodyController) findBodySector() {
 		p := bc.Body.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
 		closestDistance2 := math.MaxFloat64
-		for _, attachable := range bc.EntityComponentDB.All(core.SectorComponentIndex) {
+		for _, attachable := range bc.EntityComponentDB.AllOfType(core.SectorComponentIndex) {
 			sector := attachable.(*core.Sector)
 			for _, seg := range sector.Segments {
 				dist2 := seg.DistanceToPoint2(p)
@@ -114,15 +114,15 @@ func (bc *BodyController) findBodySector() {
 		//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
 		bc.pos[2] = floorZ + bc.halfHeight
 	}
-	bc.Enter(closestSector.Ref())
+	bc.Enter(closestSector.Entity)
 	// Don't mark as collided because this is probably an initialization.
 }
 
 func (bc *BodyController) checkBodySegmentCollisions() {
 	// See if we need to push back into the current sector.
 	for _, segment := range bc.Sector.Segments {
-		if !segment.AdjacentSector.Nil() && segment.PortalIsPassable {
-			adj := core.SectorFromDb(segment.AdjacentSector)
+		if segment.AdjacentSector != 0 && segment.PortalIsPassable {
+			adj := core.SectorFromDb(bc.Sector.DB, segment.AdjacentSector)
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
 			floorZ, ceilZ := adj.SlopedZNow(bc.pos2d)
@@ -185,10 +185,10 @@ func (bc *BodyController) bodyExitsSector() {
 	}
 
 	for _, segment := range bc.Sector.Segments {
-		if segment.AdjacentSector.Nil() {
+		if segment.AdjacentSector == 0 {
 			continue
 		}
-		adj := core.SectorFromDb(segment.AdjacentSector)
+		adj := core.SectorFromDb(bc.Sector.DB, segment.AdjacentSector)
 		floorZ, ceilZ := adj.SlopedZNow(bc.pos2d)
 		if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 			bc.pos[2]+bc.halfHeight < ceilZ &&
@@ -207,7 +207,7 @@ func (bc *BodyController) bodyExitsSector() {
 
 	if bc.Sector == nil {
 		// Case 6! This is the worst.
-		for _, component := range bc.Body.DB.All(core.SectorComponentIndex) {
+		for _, component := range bc.Body.DB.AllOfType(core.SectorComponentIndex) {
 			sector := component.(*core.Sector)
 			floorZ, ceilZ := sector.SlopedZNow(bc.pos2d)
 			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
@@ -258,8 +258,7 @@ func (bc *BodyController) bodyBounce(body *core.Body) {
 }
 
 func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
-	for _, ref := range sector.Bodies {
-		body := core.BodyFromDb(ref)
+	for _, body := range sector.Bodies {
 		if body == nil || body == bc.Body || !body.IsActive() {
 			continue
 		}
@@ -268,7 +267,7 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		r_a := bc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			item := behaviors.InventoryItemFromDb(body.EntityRef)
+			item := behaviors.InventoryItemFromDb(body.DB, body.Entity)
 			if item != nil && bc.Player != nil {
 				itemClone := item.DB.LoadComponentWithoutAttaching(behaviors.InventoryItemComponentIndex, item.Serialize())
 				bc.Player.Inventory = append(bc.Player.Inventory, itemClone.(*behaviors.InventoryItem))
@@ -328,7 +327,7 @@ func (bc *BodyController) Collide() {
 		}
 
 		for _, seg := range bc.collidedSegments {
-			BodySectorScript(seg.ContactScripts, bc.Body.EntityRef, bc.Sector.EntityRef)
+			BodySectorScript(seg.ContactScripts, bc.Body.Entity, bc.Sector.Entity)
 		}
 
 		switch bc.Body.CollisionResponse {

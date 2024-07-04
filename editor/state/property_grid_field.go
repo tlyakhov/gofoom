@@ -39,7 +39,7 @@ type PropertyGridField struct {
 	Source           *reflect.StructField
 	ParentCollection *reflect.Value
 	Parent           any
-	Ref              *concepts.EntityRef
+	Entity           concepts.Entity
 }
 
 func (f *PropertyGridField) Short() string {

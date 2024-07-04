@@ -17,7 +17,7 @@ type SplitSector struct {
 	state.IEditor
 
 	Splitters []*controllers.SectorSplitter
-	Original  map[uint64][]concepts.Attachable
+	Original  map[concepts.Entity][]concepts.Attachable
 }
 
 func (a *SplitSector) OnMouseDown(evt *desktop.MouseEvent) {}
@@ -48,7 +48,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 			if component == nil {
 				continue
 			}
-			a.State().DB.Attach(index, component.Ref().Entity, component)
+			component.GetDB().Attach(index, component.GetEntity(), component)
 		}
 	}
 }
@@ -68,7 +68,7 @@ func (a *SplitSector) OnMouseUp() {
 		}
 	} else {
 		sectors = make([]*core.Sector, 0)
-		visited := make(map[uint64]bool)
+		visited := make(map[concepts.Entity]bool)
 		for _, s := range a.State().SelectedObjects.Exact {
 			// We could just check for the .Sector field being valid, but then
 			// the user may be surprised to have a sector split when they've
@@ -96,7 +96,7 @@ func (a *SplitSector) Cancel() {
 }
 
 func (a *SplitSector) Undo() {
-	bodies := make([]*concepts.EntityRef, 0)
+	bodies := make([]concepts.Entity, 0)
 
 	for _, splitter := range a.Splitters {
 		if splitter.Result == nil {
@@ -104,13 +104,11 @@ func (a *SplitSector) Undo() {
 		}
 		for _, addedComponents := range splitter.Result {
 			sector := addedComponents[core.SectorComponentIndex].(*core.Sector)
-			for _, ibody := range sector.Bodies {
-				bodies = append(bodies, ibody)
-				if body := core.BodyFromDb(ibody); body != nil {
-					body.SectorEntityRef = nil
-				}
+			for entity, body := range sector.Bodies {
+				bodies = append(bodies, entity)
+				body.SectorEntity = 0
 			}
-			sector.Bodies = make(map[uint64]*concepts.EntityRef)
+			sector.Bodies = make(map[concepts.Entity]*core.Body)
 			a.State().DB.DetachAll(sector.Entity)
 		}
 	}
@@ -121,13 +119,12 @@ func (a *SplitSector) Undo() {
 			}
 			a.State().DB.Attach(index, entity, component)
 			if sector, ok := component.(*core.Sector); ok {
-				for _, ibody := range bodies {
-					if body := core.BodyFromDb(ibody); body != nil {
+				for _, entity := range bodies {
+					if body := core.BodyFromDb(a.State().DB, entity); body != nil {
 						if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-							body.SectorEntityRef = sector.EntityRef
-							sector.Bodies[ibody.Entity] = body.EntityRef
+							body.SectorEntity = sector.Entity
+							sector.Bodies[entity] = body
 						}
-
 					}
 				}
 			}
@@ -135,17 +132,15 @@ func (a *SplitSector) Undo() {
 	}
 }
 func (a *SplitSector) Redo() {
-	bodies := make([]*concepts.EntityRef, 0)
+	bodies := make([]concepts.Entity, 0)
 
 	for entity, originalComponents := range a.Original {
 		sector := originalComponents[core.SectorComponentIndex].(*core.Sector)
-		for _, ibody := range sector.Bodies {
-			bodies = append(bodies, ibody)
-			if body := core.BodyFromDb(ibody); body != nil {
-				body.SectorEntityRef = nil
-			}
+		for entity, body := range sector.Bodies {
+			bodies = append(bodies, entity)
+			body.SectorEntity = 0
 		}
-		sector.Bodies = make(map[uint64]*concepts.EntityRef)
+		sector.Bodies = make(map[concepts.Entity]*core.Body)
 		a.State().DB.DetachAll(entity)
 	}
 
@@ -158,15 +153,14 @@ func (a *SplitSector) Redo() {
 				if component == nil {
 					continue
 				}
-				a.State().DB.Attach(index, component.Ref().Entity, component)
+				a.State().DB.Attach(index, component.GetEntity(), component)
 				if sector, ok := component.(*core.Sector); ok {
-					for _, ibody := range bodies {
-						if body := core.BodyFromDb(ibody); body != nil {
+					for _, entity := range bodies {
+						if body := core.BodyFromDb(a.State().DB, entity); body != nil {
 							if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-								body.SectorEntityRef = sector.EntityRef
-								sector.Bodies[ibody.Entity] = body.EntityRef
+								body.SectorEntity = sector.Entity
+								sector.Bodies[entity] = body
 							}
-
 						}
 					}
 				}

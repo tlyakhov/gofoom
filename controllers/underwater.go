@@ -30,16 +30,12 @@ func (uc *UnderwaterController) Methods() concepts.ControllerMethod {
 
 func (uc *UnderwaterController) Target(target concepts.Attachable) bool {
 	uc.Underwater = target.(*behaviors.Underwater)
-	uc.Sector = core.SectorFromDb(target.Ref())
+	uc.Sector = core.SectorFromDb(target.GetDB(), target.GetEntity())
 	return uc.Underwater.IsActive() && uc.Sector.IsActive()
 }
 
 func (uc *UnderwaterController) Always() {
-	for _, ref := range uc.Sector.Bodies {
-		body := core.BodyFromDb(ref)
-		if body == nil {
-			continue
-		}
+	for _, body := range uc.Sector.Bodies {
 		body.Vel.Now.MulSelf(1.0 / constants.SwimDamping)
 	}
 }
