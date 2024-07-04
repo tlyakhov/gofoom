@@ -29,7 +29,7 @@ func (a *AddSector) OnMouseDown(evt *desktop.MouseEvent) {
 	a.Mode = "AddSectorSegment"
 
 	seg := core.SectorSegment{}
-	seg.Construct(nil)
+	seg.Construct(a.State().DB, nil)
 	seg.Sector = a.Sector
 	seg.HiSurface.Material = controllers.DefaultMaterial(a.State().DB)
 	seg.LoSurface.Material = controllers.DefaultMaterial(a.State().DB)

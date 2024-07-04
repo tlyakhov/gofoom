@@ -63,8 +63,6 @@ func (dbt *dbTypes) Register(local any, fromDbFunc any) int {
 	dbt.Indexes[tLocal.String()] = index
 	dbt.IndexesNoPackage[noPackage] = index
 	dbt.ExprEnv[noPackage] = fromDbFunc
-	//camelCase := strings.ToLower(noPackage[0:1]) + noPackage[1:]
-	//dbt.ExprEnv["i"+camelCase] = (*EntityRef)(nil)
 	return index
 }
 

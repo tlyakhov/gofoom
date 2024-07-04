@@ -17,10 +17,10 @@ func CreateBasic(db *concepts.EntityComponentDB, componentIndex int) concepts.En
 }
 
 func CreateSector(db *concepts.EntityComponentDB) concepts.Entity {
-	er := db.NewEntity()
-	db.NewAttachedComponent(er, core.SectorComponentIndex)
+	entity := db.NewEntity()
+	db.NewAttachedComponent(entity, core.SectorComponentIndex)
 
-	return er
+	return entity
 }
 
 func IsLightBody(db *concepts.EntityComponentDB, e concepts.Entity) bool {

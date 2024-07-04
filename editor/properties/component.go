@@ -20,12 +20,11 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	parentType := reflect.TypeOf(field.Parent)
 	entityList := ""
 	for _, v := range field.Values {
-		er := v.Elem().Interface().(concepts.Entity)
-		entity := er
+		entity := v.Elem().Interface().(concepts.Entity)
 		if len(entityList) > 0 {
 			entityList += ", "
 		}
-		entityList += entity.Serialize()
+		entityList += entity.Format()
 	}
 
 	button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)

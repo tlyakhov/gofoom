@@ -78,7 +78,7 @@ func (a *Attached) Construct(data map[string]any) {
 		return
 	}
 	if v, ok := data["Entity"]; ok {
-		a.Entity, _ = DeserializeEntity(v.(string))
+		a.Entity, _ = ParseEntity(v.(string))
 	}
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
@@ -89,7 +89,7 @@ func (a *Attached) Construct(data map[string]any) {
 }
 
 func (a *Attached) Serialize() map[string]any {
-	result := map[string]any{"Entity": a.Entity.Serialize()}
+	result := map[string]any{"Entity": a.Entity.Format()}
 	if !a.Active {
 		result["Active"] = a.Active
 	}

@@ -86,7 +86,7 @@ func (a *Delete) Redo() {
 		case core.SelectableInternalSegmentB:
 			s.DB.DetachAll(s.InternalSegment.Entity)
 			s.InternalSegment.DetachFromSectors()
-		case core.SelectableEntityRef:
+		case core.SelectableEntity:
 			s.DB.DetachAll(s.Entity)
 		}
 	}

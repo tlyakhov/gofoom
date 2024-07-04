@@ -29,6 +29,8 @@ import (
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
 
+	rs "tlyakhov/gofoom/render/state"
+
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
 )
@@ -80,6 +82,7 @@ func NewEditor() *Editor {
 		MapViewGrid: MapViewGrid{Visible: true},
 	}
 	e.Grid.IEditor = e
+	e.Grid.MaterialSampler.Ray = &rs.Ray{}
 	e.MapViewGrid.Current = &e.Edit.MapView
 	return e
 }
@@ -536,6 +539,7 @@ func (e *Editor) ResizeRenderer(w, h int) {
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h
 	e.Renderer.Initialize()
+	e.Grid.MaterialSampler.Config = e.Renderer.Config
 }
 
 func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {

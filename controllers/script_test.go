@@ -25,7 +25,7 @@ func BenchmarkScriptedCode(b *testing.B) {
 		"Code":  "core.SectorFromDb(sectorEntity).BottomZ.Original=5",
 		"Style": "ScriptStyleStatement",
 	})
-	s.Vars["sector"] = db.GetEntityRefByName("sector1")
+	s.Vars["sector"] = db.GetEntityByName("sector1")
 	b.Run("Script", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			s.Act()

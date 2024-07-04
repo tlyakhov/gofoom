@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _SelectableTypeName = "SelectableEntityRefSelectableSectorSelectableSectorSegmentSelectableCeilingSelectableFloorSelectableHiSelectableLowSelectableMidSelectableInternalSegmentSelectableInternalSegmentASelectableInternalSegmentBSelectableBody"
+const _SelectableTypeName = "SelectableEntitySelectableSectorSelectableSectorSegmentSelectableCeilingSelectableFloorSelectableHiSelectableLowSelectableMidSelectableInternalSegmentSelectableInternalSegmentASelectableInternalSegmentBSelectableBody"
 
-var _SelectableTypeIndex = [...]uint8{0, 19, 35, 58, 75, 90, 102, 115, 128, 153, 179, 205, 219}
+var _SelectableTypeIndex = [...]uint8{0, 16, 32, 55, 72, 87, 99, 112, 125, 150, 176, 202, 216}
 
-const _SelectableTypeLowerName = "selectableentityrefselectablesectorselectablesectorsegmentselectableceilingselectablefloorselectablehiselectablelowselectablemidselectableinternalsegmentselectableinternalsegmentaselectableinternalsegmentbselectablebody"
+const _SelectableTypeLowerName = "selectableentityselectablesectorselectablesectorsegmentselectableceilingselectablefloorselectablehiselectablelowselectablemidselectableinternalsegmentselectableinternalsegmentaselectableinternalsegmentbselectablebody"
 
 func (i SelectableType) String() string {
 	if i < 0 || i >= SelectableType(len(_SelectableTypeIndex)-1) {
@@ -25,7 +25,7 @@ func (i SelectableType) String() string {
 // Re-run the stringer command to generate them again.
 func _SelectableTypeNoOp() {
 	var x [1]struct{}
-	_ = x[SelectableEntityRef-(0)]
+	_ = x[SelectableEntity-(0)]
 	_ = x[SelectableSector-(1)]
 	_ = x[SelectableSectorSegment-(2)]
 	_ = x[SelectableCeiling-(3)]
@@ -39,48 +39,48 @@ func _SelectableTypeNoOp() {
 	_ = x[SelectableBody-(11)]
 }
 
-var _SelectableTypeValues = []SelectableType{SelectableEntityRef, SelectableSector, SelectableSectorSegment, SelectableCeiling, SelectableFloor, SelectableHi, SelectableLow, SelectableMid, SelectableInternalSegment, SelectableInternalSegmentA, SelectableInternalSegmentB, SelectableBody}
+var _SelectableTypeValues = []SelectableType{SelectableEntity, SelectableSector, SelectableSectorSegment, SelectableCeiling, SelectableFloor, SelectableHi, SelectableLow, SelectableMid, SelectableInternalSegment, SelectableInternalSegmentA, SelectableInternalSegmentB, SelectableBody}
 
 var _SelectableTypeNameToValueMap = map[string]SelectableType{
-	_SelectableTypeName[0:19]:         SelectableEntityRef,
-	_SelectableTypeLowerName[0:19]:    SelectableEntityRef,
-	_SelectableTypeName[19:35]:        SelectableSector,
-	_SelectableTypeLowerName[19:35]:   SelectableSector,
-	_SelectableTypeName[35:58]:        SelectableSectorSegment,
-	_SelectableTypeLowerName[35:58]:   SelectableSectorSegment,
-	_SelectableTypeName[58:75]:        SelectableCeiling,
-	_SelectableTypeLowerName[58:75]:   SelectableCeiling,
-	_SelectableTypeName[75:90]:        SelectableFloor,
-	_SelectableTypeLowerName[75:90]:   SelectableFloor,
-	_SelectableTypeName[90:102]:       SelectableHi,
-	_SelectableTypeLowerName[90:102]:  SelectableHi,
-	_SelectableTypeName[102:115]:      SelectableLow,
-	_SelectableTypeLowerName[102:115]: SelectableLow,
-	_SelectableTypeName[115:128]:      SelectableMid,
-	_SelectableTypeLowerName[115:128]: SelectableMid,
-	_SelectableTypeName[128:153]:      SelectableInternalSegment,
-	_SelectableTypeLowerName[128:153]: SelectableInternalSegment,
-	_SelectableTypeName[153:179]:      SelectableInternalSegmentA,
-	_SelectableTypeLowerName[153:179]: SelectableInternalSegmentA,
-	_SelectableTypeName[179:205]:      SelectableInternalSegmentB,
-	_SelectableTypeLowerName[179:205]: SelectableInternalSegmentB,
-	_SelectableTypeName[205:219]:      SelectableBody,
-	_SelectableTypeLowerName[205:219]: SelectableBody,
+	_SelectableTypeName[0:16]:         SelectableEntity,
+	_SelectableTypeLowerName[0:16]:    SelectableEntity,
+	_SelectableTypeName[16:32]:        SelectableSector,
+	_SelectableTypeLowerName[16:32]:   SelectableSector,
+	_SelectableTypeName[32:55]:        SelectableSectorSegment,
+	_SelectableTypeLowerName[32:55]:   SelectableSectorSegment,
+	_SelectableTypeName[55:72]:        SelectableCeiling,
+	_SelectableTypeLowerName[55:72]:   SelectableCeiling,
+	_SelectableTypeName[72:87]:        SelectableFloor,
+	_SelectableTypeLowerName[72:87]:   SelectableFloor,
+	_SelectableTypeName[87:99]:        SelectableHi,
+	_SelectableTypeLowerName[87:99]:   SelectableHi,
+	_SelectableTypeName[99:112]:       SelectableLow,
+	_SelectableTypeLowerName[99:112]:  SelectableLow,
+	_SelectableTypeName[112:125]:      SelectableMid,
+	_SelectableTypeLowerName[112:125]: SelectableMid,
+	_SelectableTypeName[125:150]:      SelectableInternalSegment,
+	_SelectableTypeLowerName[125:150]: SelectableInternalSegment,
+	_SelectableTypeName[150:176]:      SelectableInternalSegmentA,
+	_SelectableTypeLowerName[150:176]: SelectableInternalSegmentA,
+	_SelectableTypeName[176:202]:      SelectableInternalSegmentB,
+	_SelectableTypeLowerName[176:202]: SelectableInternalSegmentB,
+	_SelectableTypeName[202:216]:      SelectableBody,
+	_SelectableTypeLowerName[202:216]: SelectableBody,
 }
 
 var _SelectableTypeNames = []string{
-	_SelectableTypeName[0:19],
-	_SelectableTypeName[19:35],
-	_SelectableTypeName[35:58],
-	_SelectableTypeName[58:75],
-	_SelectableTypeName[75:90],
-	_SelectableTypeName[90:102],
-	_SelectableTypeName[102:115],
-	_SelectableTypeName[115:128],
-	_SelectableTypeName[128:153],
-	_SelectableTypeName[153:179],
-	_SelectableTypeName[179:205],
-	_SelectableTypeName[205:219],
+	_SelectableTypeName[0:16],
+	_SelectableTypeName[16:32],
+	_SelectableTypeName[32:55],
+	_SelectableTypeName[55:72],
+	_SelectableTypeName[72:87],
+	_SelectableTypeName[87:99],
+	_SelectableTypeName[99:112],
+	_SelectableTypeName[112:125],
+	_SelectableTypeName[125:150],
+	_SelectableTypeName[150:176],
+	_SelectableTypeName[176:202],
+	_SelectableTypeName[202:216],
 }
 
 // SelectableTypeString retrieves an enum value from the enum constants string name.

@@ -43,7 +43,7 @@ func (a *RotateSegments) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, s := range a.State().SelectedObjects.Exact {
-		if s.Type == core.SelectableBody || s.Type == core.SelectableEntityRef {
+		if s.Type == core.SelectableBody || s.Type == core.SelectableEntity {
 			continue
 		}
 		a.Rotate(s.Sector, true)
@@ -54,7 +54,7 @@ func (a *RotateSegments) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, s := range a.State().SelectedObjects.Exact {
-		if s.Type == core.SelectableBody || s.Type == core.SelectableEntityRef {
+		if s.Type == core.SelectableBody || s.Type == core.SelectableEntity {
 			continue
 		}
 		a.Rotate(s.Sector, false)

@@ -78,9 +78,9 @@ func (wc *WorldController) Always() {
 }
 
 func DefaultMaterial(db *concepts.EntityComponentDB) concepts.Entity {
-	er := db.GetEntityRefByName("Default Material")
-	if er != 0 {
-		return er
+	entity := db.GetEntityByName("Default Material")
+	if entity != 0 {
+		return entity
 	}
 
 	// Otherwise try a random one?

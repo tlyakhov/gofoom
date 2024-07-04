@@ -155,8 +155,8 @@ func AutoPortal(db *concepts.EntityComponentDB) {
 			}
 			sector := c.(*core.Sector)
 			sector2 := c2.(*core.Sector)
-			name := sector.Entity.Serialize() + "|" + sector2.Entity.Serialize()
-			id2 := sector2.Entity.Serialize() + "|" + sector.Entity.Serialize()
+			name := sector.Entity.Format() + "|" + sector2.Entity.Format()
+			id2 := sector2.Entity.Format() + "|" + sector.Entity.Format()
 			if seen[id2] || seen[name] {
 				continue
 			}

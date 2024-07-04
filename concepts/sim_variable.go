@@ -116,7 +116,7 @@ func (s *SimVariable[T]) Serialize() map[string]any {
 	case *SimVariable[Vector4]:
 		result["Original"] = sc.Original.Serialize(false)
 	case *SimVariable[Entity]:
-		result["Original"] = sc.Original.Serialize()
+		result["Original"] = sc.Original.Format()
 	default:
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", s)
 	}

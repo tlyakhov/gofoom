@@ -327,8 +327,8 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	le.Output[2] = 0
 
 	/*refs := make([]concepts.Entity, 0)
-	for _, er := range le.Sector.PVL {
-		refs = append(refs, er)
+	for _, entity := range le.Sector.PVL {
+		refs = append(refs, entity)
 	}
 	sort.SliceStable(refs, func(i, j int) bool {
 		return refs[i].Entity < refs[j].Entity
