@@ -5,6 +5,7 @@ package properties
 
 import (
 	"image"
+	"math"
 	"reflect"
 	"strconv"
 
@@ -31,6 +32,7 @@ func (g *Grid) entityBorderColor(entity concepts.Entity) *concepts.Vector4 {
 	return &concepts.Vector4{0.0, 0.0, 0.0, 0.0}
 }
 
+// TODO: We should cache these
 func (g *Grid) imageForEntity(entity concepts.Entity) image.Image {
 	w, h := 64, 64
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
@@ -38,8 +40,11 @@ func (g *Grid) imageForEntity(entity concepts.Entity) image.Image {
 	border := g.entityBorderColor(entity)
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
+			g.MaterialSampler.ScreenX = x * g.MaterialSampler.ScreenWidth / w
+			g.MaterialSampler.ScreenY = y * g.MaterialSampler.ScreenHeight / h
+			g.MaterialSampler.Angle = float64(x) * math.Pi * 2.0 / float64(w)
 			c := g.MaterialSampler.SampleShader(entity, nil, float64(x)/float64(w), float64(y)/float64(h), 1.0)
-			if x == 0 || y == 0 || x == w-1 || y == h-1 {
+			if x <= 1 || y <= 1 || x >= w-2 || y >= h-2 {
 				c.AddPreMulColorSelf(border)
 			}
 			index := x*4 + y*img.Stride
