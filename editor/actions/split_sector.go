@@ -54,6 +54,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 }
 
 func (a *SplitSector) OnMouseUp() {
+	a.Original = make(map[concepts.Entity][]concepts.Attachable)
 	a.Splitters = []*controllers.SectorSplitter{}
 
 	var sectors []*core.Sector

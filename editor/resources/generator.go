@@ -13,3 +13,6 @@ var ResourceIconAddSector = theme.NewThemedResource(resourceIconAddSectorSvg)
 
 //go:generate fyne bundle -o bundled.go -append ../../data/resources/icon-split-sector.svg
 var ResourceIconSplitSector = theme.NewThemedResource(resourceIconSplitSectorSvg)
+
+//go:generate fyne bundle -o bundled.go -append ../../data/resources/icon-split-segment.svg
+var ResourceIconSplitSegment = theme.NewThemedResource(resourceIconSplitSegmentSvg)

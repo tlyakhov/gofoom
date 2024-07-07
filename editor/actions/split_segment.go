@@ -4,6 +4,7 @@
 package actions
 
 import (
+	"slices"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
@@ -112,9 +113,15 @@ func (a *SplitSegment) Undo() {
 	}
 }
 func (a *SplitSegment) Redo() {
-	panic("unimplemented redo:splitsegment")
 	for _, ss := range a.NewSegments {
-		// TODO
+		index := 0
+		for i, seg := range ss.original.Sector.Segments {
+			if seg == ss.original {
+				index = i
+				break
+			}
+		}
+		ss.original.Sector.Segments = slices.Insert(ss.original.Sector.Segments, index+1, ss.added)
 		ss.added.Sector.Recalculate()
 	}
 }
