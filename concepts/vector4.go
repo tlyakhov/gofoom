@@ -1,8 +1,6 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-//go:build ignore
-
 package concepts
 
 import (
@@ -12,8 +10,6 @@ import (
 	"strings"
 	"unsafe"
 )
-
-//go:generate go run vector4_amd64_asm.go -out vector4_amd64_asm.s -stubs vector4_amd64_stub.go
 
 // Vector4 is a simple 4d vector type.
 type Vector4 [4]float64
@@ -59,13 +55,31 @@ func (a *Vector4) Add(b *Vector4) *Vector4 {
 
 // Add a vector to a vector.
 func (a *Vector4) AddSelf(b *Vector4) *Vector4 {
-	AsmVector4AddSelf((*[4]float64)(a), (*[4]float64)(b))
+	a[0] += b[0]
+	a[1] += b[1]
+	a[2] += b[2]
+	a[3] += b[3]
 	return a
 }
 
 // Add a premul alpha color to self
 func (a *Vector4) AddPreMulColorSelf(b *Vector4) *Vector4 {
-	AsmVector4AddPreMulColorSelf((*[4]float64)(a), (*[4]float64)(b))
+	if b[3] == 0 {
+		return a
+	}
+	if b[3] == 1 {
+		a[0] = b[0]
+		a[1] = b[1]
+		a[2] = b[2]
+		a[3] = b[3]
+		return a
+	}
+	inva := 1.0 - b[3]
+	a[0] = a[0]*inva + b[0]
+	a[1] = a[1]*inva + b[1]
+	a[2] = a[2]*inva + b[2]
+	a[3] = a[3]*inva + b[3]
+	a.ClampSelf(0, 1)
 	return a
 }
 
@@ -90,7 +104,10 @@ func (a *Vector4) Mul4(b *Vector4) *Vector4 {
 
 // Mul3 multiplies a vector by a vector.
 func (a *Vector4) Mul4Self(b *Vector4) *Vector4 {
-	AsmVector4Mul4Self((*[4]float64)(a), (*[4]float64)(b))
+	a[0] *= b[0]
+	a[1] *= b[1]
+	a[2] *= b[2]
+	a[3] *= b[3]
 	return a
 }
 
@@ -264,16 +281,15 @@ func ParseVector4(s string) (*Vector4, error) {
 }
 
 func Int32ToVector4(c uint32) Vector4 {
-	r := Vector4{}
-	AsmInt32ToVector4(c, (*[4]float64)(&r))
-	return r
+	return Vector4{
+		float64((c>>24)&0xFF) / 255.0, float64((c>>16)&0xFF) / 255.0,
+		float64((c>>8)&0xFF) / 255.0, float64(c&0xFF) / 255.0}
 }
 
 func Int32ToVector4PreMul(c uint32) Vector4 {
-	r := Vector4{}
-	AsmInt32ToVector4(c, (*[4]float64)(&r))
-	r[0] *= r[3]
-	r[1] *= r[3]
-	r[2] *= r[3]
-	return r
+	r := float64((c>>24)&0xFF) / 255.0
+	g := float64((c>>16)&0xFF) / 255.0
+	b := float64((c>>8)&0xFF) / 255.0
+	a := float64(c&0xFF) / 255.0
+	return Vector4{r * a, g * a, b * a, a}
 }
