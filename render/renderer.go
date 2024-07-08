@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/disintegration/imaging"
+	"github.com/puzpuzpuz/xsync/v3"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -22,9 +23,10 @@ import (
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*state.Config
-	Columns        []state.Column
-	columnGroup    *sync.WaitGroup
-	startingSector *core.Sector
+	Columns            []state.Column
+	columnGroup        *sync.WaitGroup
+	startingSector     *core.Sector
+	SectorLastRendered *xsync.MapOf[concepts.Entity, uint64]
 }
 
 // NewRenderer constructs a new Renderer.
@@ -39,14 +41,13 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 			Counter:      0,
 			DB:           db,
 		},
-		Columns:     make([]state.Column, constants.RenderBlocks),
-		columnGroup: new(sync.WaitGroup),
+		Columns:            make([]state.Column, constants.RenderBlocks),
+		columnGroup:        new(sync.WaitGroup),
+		SectorLastRendered: xsync.NewMapOf[concepts.Entity, uint64](),
 	}
 
 	for i := range r.Columns {
 		r.Columns[i].Config = r.Config
-		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
-		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
 		// Set up 16 slots initially
 		r.Columns[i].EntitiesByDistance = make([]state.EntityWithDist2, 0, 16)
@@ -54,6 +55,14 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 
 	r.Initialize()
 	return &r
+}
+
+func (r *Renderer) Initialize() {
+	r.Config.Initialize()
+	for i := range r.Columns {
+		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
+		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
+	}
 }
 
 func (r *Renderer) RenderPortal(c *state.Column) {
@@ -149,6 +158,8 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
 func (r *Renderer) RenderSector(c *state.Column) {
+	// This is for invalidating lighting caches (Sector.Lightmap)
+	r.SectorLastRendered.Store(c.Sector.Entity, uint64(r.Frame))
 	c.Distance = constants.MaxViewDistance
 	c.SectorSegment = nil
 	c.Segment = nil
@@ -332,6 +343,18 @@ func (r *Renderer) Render(buffer []uint8) {
 		r.RenderBlock(buffer, 0, 0, r.ScreenWidth)
 	}
 	r.RenderHud(buffer)
+	// Invalidate lighting caches
+	r.SectorLastRendered.Range(func(eSector concepts.Entity, lastSeen uint64) bool {
+		// Cache for a maximum number of frames
+		if r.Frame-lastSeen < 120 {
+			return true
+		}
+		if sector := r.DB.Component(eSector, core.SectorComponentIndex).(*core.Sector); sector != nil {
+			sector.Lightmap.Clear()
+		}
+		r.SectorLastRendered.Delete(eSector)
+		return true
+	})
 }
 
 func (r *Renderer) ImgBlt(dst []uint8, src *image.NRGBA, dstx, dsty int) {

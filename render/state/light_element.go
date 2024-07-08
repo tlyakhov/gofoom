@@ -58,14 +58,12 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		return &le.Output
 	}
 	//return le.Debug()
-
-	ditherHeuristic := constants.LightmapRefreshDither
 	r := concepts.RngXorShift64(le.xorSeed)
 	le.xorSeed = r
 
 	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
-		if int(lmResult[3])+constants.MaxLightmapAge >= le.Config.Frame ||
-			r%uint64(ditherHeuristic) > 0 {
+		if uint64(lmResult[3])+constants.MaxLightmapAge >= le.Config.Frame ||
+			r%constants.LightmapRefreshDither > 0 {
 			le.Output[0] = lmResult[0]
 			le.Output[1] = lmResult[1]
 			le.Output[2] = lmResult[2]
@@ -87,7 +85,7 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		le.Output[0],
 		le.Output[1],
 		le.Output[2],
-		float64(le.Config.Frame + int(r)%ditherHeuristic),
+		float64(le.Config.Frame + uint64(r)%constants.LightmapRefreshDither),
 	})
 	return &le.Output
 

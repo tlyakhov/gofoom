@@ -46,11 +46,15 @@ func NewGameWidget() *GameWidget {
 }
 
 func (g *GameWidget) generateRaster(requestedWidth, requestedHeight int) image.Image {
-	if g.Surface != nil && g.Context != nil {
+	editor.Lock.Lock()
+	defer editor.Lock.Unlock()
+
+	w := 640
+	h := w * requestedHeight / requestedWidth
+	if g.Surface != nil && g.Context != nil &&
+		editor.Renderer.ScreenWidth == w && editor.Renderer.ScreenHeight == h {
 		return g.Surface
 	}
-	w := 640
-	h := 360
 	editor.ResizeRenderer(w, h)
 	g.Surface = image.NewRGBA(image.Rect(0, 0, w, h))
 	g.Context = gg.NewContext(w, h)
@@ -86,7 +90,7 @@ func (g *GameWidget) Draw() {
 
 	g.Context.SetRGB(1, 0, 1)
 	g.Context.SetFontFace(basicfont.Face7x13)
-	g.Context.DrawString(fmt.Sprintf("FPS: %.1f", editor.DB.Simulation.FPS), 10, 10)
+	g.Context.DrawString(fmt.Sprintf("FPS: %.1f, Light cache: %v", editor.DB.Simulation.FPS, editor.Renderer.SectorLastRendered.Size()), 10, 10)
 	g.Context.DrawString(fmt.Sprintf("Health: %.1f", playerAlive.Health), 10, 20)
 	if playerBody.SectorEntity != 0 {
 		g.Context.DrawString(fmt.Sprintf("Sector: %v", playerBody.SectorEntity.String(editor.DB)), 10, 30)
