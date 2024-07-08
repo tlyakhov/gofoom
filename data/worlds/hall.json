@@ -1758,7 +1758,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.Ref(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.Ref(\"sector\")).Intent = behaviors.DoorIntentOpen }",
+          "Code": "if core.BodyFromDb(s.DB,s.Entity(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,s.Entity(\"sector\")).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
