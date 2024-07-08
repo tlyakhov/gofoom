@@ -159,10 +159,6 @@
   },
   {
     "Entity": "4",
-    "concepts.Named": {
-      "Entity": "4",
-      "Name": "ckpvt5dmdsrrj1r5a5pg"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -622,7 +618,7 @@
     "Entity": "13",
     "concepts.Named": {
       "Entity": "13",
-      "Name": "Shader nightsky.jpg"
+      "Name": "Shader Night Sky"
     },
     "materials.Shader": {
       "Entity": "13",
@@ -815,19 +811,40 @@
     }
   },
   {
+    "Entity": "18",
+    "core.InternalSegment": {
+      "A": {
+        "X": -10,
+        "Y": -60
+      },
+      "B": {
+        "X": -10,
+        "Y": -30
+      },
+      "Bottom": 0,
+      "Entity": "18",
+      "Surface": {
+        "Material": "24",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
+    }
+  },
+  {
     "Entity": "20",
     "materials.Image": {
       "Entity": "20",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/grass.jpg"
+      "Source": "data/grass.jpg"
     }
   },
   {
     "Entity": "21",
     "concepts.Named": {
       "Entity": "21",
-      "Name": "Shader grass.jpg"
+      "Name": "Shader Grass"
     },
     "materials.Lit": {
       "Ambient": {
@@ -1015,6 +1032,93 @@
       "TopZ": {
         "Original": 64
       }
+    }
+  },
+  {
+    "Entity": "23",
+    "materials.Image": {
+      "Entity": "23",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "/Users/tim/Documents/gofoom/data/space_tiles_hyptosis/ladder.png"
+    }
+  },
+  {
+    "Entity": "24",
+    "concepts.Named": {
+      "Entity": "24",
+      "Name": "Shader Ladder"
+    },
+    "materials.Shader": {
+      "Entity": "24",
+      "Stages": [
+        {
+          "Texture": "23"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "25",
+    "core.InternalSegment": {
+      "A": {
+        "X": -10,
+        "Y": -30
+      },
+      "B": {
+        "X": 20,
+        "Y": -30
+      },
+      "Bottom": 0,
+      "Entity": "25",
+      "Surface": {
+        "Material": "24",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
+    }
+  },
+  {
+    "Entity": "26",
+    "core.InternalSegment": {
+      "A": {
+        "X": 20,
+        "Y": -30
+      },
+      "B": {
+        "X": 20,
+        "Y": -60
+      },
+      "Bottom": 0,
+      "Entity": "26",
+      "Surface": {
+        "Material": "24",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
+    }
+  },
+  {
+    "Entity": "27",
+    "core.InternalSegment": {
+      "A": {
+        "X": 20,
+        "Y": -60
+      },
+      "B": {
+        "X": -10,
+        "Y": -60
+      },
+      "Bottom": 0,
+      "Entity": "27",
+      "Surface": {
+        "Material": "24",
+        "Stretch": "StretchFill"
+      },
+      "Top": 32,
+      "TwoSided": true
     }
   }
 ]

@@ -14,7 +14,8 @@ import (
 type Config struct {
 	DB                        *concepts.EntityComponentDB
 	ScreenWidth, ScreenHeight int
-	Frame, Counter            int
+	Frame                     uint64
+	Counter                   int
 	MaxViewDist, FOV          float64
 	CameraToProjectionPlane   float64
 	ViewRadians               []float64

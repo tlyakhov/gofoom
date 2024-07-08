@@ -82,8 +82,8 @@ func main() {
 
 	// Create the splitters
 
-	splitMapGame := container.NewVSplit(editor.MapWidget, editor.GameWidget)
-	splitMapGame.SetOffset(0.6425)
+	splitMapGame := container.NewVSplit(editor.GameWidget, editor.MapWidget)
+	splitMapGame.SetOffset(0.34)
 	splitMapGame.Refresh()
 
 	splitEntitiesMap := container.NewHSplit(editor.EntityList.Container, splitMapGame)

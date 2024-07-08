@@ -101,7 +101,7 @@ func renderGame() {
 	winh := win.Bounds().H()
 	mat := pixel.IM.ScaledXY(pixel.Vec{X: 0, Y: 0}, pixel.Vec{X: winw / float64(renderer.ScreenWidth), Y: -winh / float64(renderer.ScreenHeight)}).Moved(win.Bounds().Center())
 	canvas.Draw(win, mat)
-	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f", db.Simulation.FPS))
+	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f, Light cache: %v", renderer.DB.Simulation.FPS, renderer.SectorLastRendered.Size()))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	if renderer.PlayerBody.SectorEntity != 0 {
 		entity := renderer.PlayerBody.SectorEntity
