@@ -8,6 +8,7 @@ import (
 	"log"
 	"reflect"
 	"sort"
+	"strconv"
 	"strings"
 
 	"tlyakhov/gofoom/concepts"
@@ -97,6 +98,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 				Name:             display,
 				Depth:            pgs.Depth,
 				Type:             fieldValue.Addr().Type(),
+				Sort:             100,
 				Source:           &field,
 				ParentName:       pgs.ParentName,
 				ParentCollection: pgs.ParentCollection,
@@ -107,6 +109,9 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			pgs.Fields[display] = gf
 			if editTypeTag, ok := field.Tag.Lookup("edit_type"); ok {
 				gf.EditType = editTypeTag
+			}
+			if editSortTag, ok := field.Tag.Lookup("edit_sort"); ok {
+				gf.Sort, _ = strconv.Atoi(editSortTag)
 			}
 		}
 
@@ -302,6 +307,7 @@ func (g *Grid) Refresh(selection *core.Selection) {
 		}
 		label.Importance = widget.MediumImportance
 		label.TextStyle.Bold = false
+		//label.Wrapping = fyne.TextWrapWord
 
 		switch field.Values[0].Interface().(type) {
 		case *bool:

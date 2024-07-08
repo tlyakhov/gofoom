@@ -63,3 +63,7 @@ func (a *Copy) Redo() {
 	log.Printf("%v\n", a.ClipboardData)
 	a.IEditor.SetContent(a.ClipboardData)
 }
+
+func (a *Copy) Status() string {
+	return ""
+}

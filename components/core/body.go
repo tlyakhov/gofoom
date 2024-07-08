@@ -88,7 +88,7 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	for _, a := range b.DB.Components[SectorComponentIndex] {
+	for _, a := range b.DB.AllOfType(SectorComponentIndex) {
 		sector = a.(*Sector)
 		if sector == nil || !sector.IsPointInside2D(p) {
 			continue

@@ -48,6 +48,7 @@ type Edit struct {
 	CurrentAction IAction
 	UndoHistory   []IAction
 	RedoHistory   []IAction
+	KeysDown      map[fyne.KeyName]bool
 
 	// Map view filters
 	BodiesVisible         bool

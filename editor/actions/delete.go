@@ -92,3 +92,7 @@ func (a *Delete) Redo() {
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
+
+func (a *Delete) Status() string {
+	return ""
+}

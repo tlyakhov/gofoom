@@ -74,7 +74,7 @@ func (db *EntityComponentDB) ActAllControllers(method ControllerMethod) {
 			continue
 		}
 
-		for _, c := range db.Components[controller.ComponentIndex()] {
+		for _, c := range db.components[controller.ComponentIndex()] {
 			if !controller.Target(c) {
 				continue
 			}

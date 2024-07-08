@@ -53,7 +53,7 @@ func (a *SplitSegment) OnMouseUp() {
 	// TODO: also split internal segments
 	var segments []*core.SectorSegment
 	if a.State().SelectedObjects.Empty() {
-		allSectors := a.State().DB.Components[core.SectorComponentIndex]
+		allSectors := a.State().DB.AllOfType(core.SectorComponentIndex)
 		segments = make([]*core.SectorSegment, 0)
 		for _, attachable := range allSectors {
 			sector := attachable.(*core.Sector)
@@ -127,3 +127,7 @@ func (a *SplitSegment) Redo() {
 }
 
 func (a *SplitSegment) RequiresLock() bool { return true }
+
+func (a *SplitSegment) Status() string {
+	return ""
+}

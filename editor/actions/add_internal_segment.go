@@ -79,3 +79,7 @@ func (a *AddInternalSegment) OnMouseUp() {
 		a.ActionFinished(false, true, true)
 	}
 }
+
+func (a *AddInternalSegment) Status() string {
+	return ""
+}

@@ -61,3 +61,7 @@ func (a *DeleteComponent) Redo() {
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
+
+func (a *DeleteComponent) Status() string {
+	return ""
+}

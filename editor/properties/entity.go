@@ -25,7 +25,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func (g *Grid) entityBorderColor(entity concepts.Entity) *concepts.Vector4 {
+func (g *Grid) materialSelectionBorderColor(entity concepts.Entity) *concepts.Vector4 {
 	if materials.ShaderFromDb(g.State().DB, entity) != nil {
 		return &concepts.Vector4{1.0, 0.0, 1.0, 0.5}
 	}
@@ -37,7 +37,7 @@ func (g *Grid) imageForEntity(entity concepts.Entity) image.Image {
 	w, h := 64, 64
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
 	buffer := img.Pix
-	border := g.entityBorderColor(entity)
+	border := g.materialSelectionBorderColor(entity)
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
 			g.MaterialSampler.ScreenX = x * g.MaterialSampler.ScreenWidth / w

@@ -75,3 +75,7 @@ func (a *AddSector) OnMouseUp() {
 	}
 	// TODO: right-mouse button end
 }
+
+func (a *AddSector) Status() string {
+	return ""
+}

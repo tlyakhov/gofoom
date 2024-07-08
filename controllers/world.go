@@ -66,7 +66,7 @@ func (wc *WorldController) proximity(sector *core.Sector, body *core.Body) {
 }
 
 func (wc *WorldController) Always() {
-	for _, c := range wc.DB.Components[core.BodyComponentIndex] {
+	for _, c := range wc.DB.AllOfType(core.BodyComponentIndex) {
 		body := c.(*core.Body)
 		if !body.Active || body.Sector() == nil {
 			continue

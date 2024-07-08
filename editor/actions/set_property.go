@@ -91,3 +91,7 @@ func (a *SetProperty) Redo() {
 	}
 	a.FireHooks()
 }
+
+func (a *SetProperty) Status() string {
+	return ""
+}
