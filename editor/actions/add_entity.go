@@ -114,3 +114,7 @@ func (a *AddEntity) Redo() {
 }
 
 func (a *AddEntity) Frame() {}
+
+func (a *AddEntity) Status() string {
+	return ""
+}

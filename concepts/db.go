@@ -10,7 +10,6 @@ import (
 	"os"
 	"reflect"
 	"slices"
-	"strconv"
 	"sync"
 
 	"github.com/kelindar/bitmap"
@@ -23,10 +22,11 @@ import (
 // * A system is code that queries and operates on components and entities
 type EntityComponentDB struct {
 	*Simulation
-	Components       [][]Attachable
 	EntityComponents [][]Attachable
-	usedEntities     bitmap.Bitmap
-	Lock             sync.RWMutex
+
+	components   [][]Attachable
+	usedEntities bitmap.Bitmap
+	Lock         sync.RWMutex
 }
 
 func NewEntityComponentDB() *EntityComponentDB {
@@ -40,10 +40,10 @@ func (db *EntityComponentDB) Clear() {
 	db.usedEntities = bitmap.Bitmap{}
 	db.usedEntities.Set(0) // 0 is reserved
 	db.EntityComponents = make([][]Attachable, 1)
-	db.Components = make([][]Attachable, len(DbTypes().Types))
+	db.components = make([][]Attachable, len(DbTypes().Types))
 	db.Simulation = NewSimulation()
 	for i := 0; i < len(DbTypes().Types); i++ {
-		db.Components[i] = make([]Attachable, 0)
+		db.components[i] = make([]Attachable, 0)
 	}
 }
 
@@ -60,7 +60,7 @@ func (db *EntityComponentDB) NewEntity() Entity {
 }
 
 func (db *EntityComponentDB) AllOfType(index int) []Attachable {
-	return db.Components[index]
+	return db.components[index]
 }
 
 func (db *EntityComponentDB) AllComponents(entity Entity) []Attachable {
@@ -83,13 +83,13 @@ func (db *EntityComponentDB) Component(entity Entity, index int) Attachable {
 
 func (db *EntityComponentDB) AllOfNamedType(cType string) []Attachable {
 	if index, ok := DbTypes().Indexes[cType]; ok {
-		return db.Components[index]
+		return db.components[index]
 	}
 	return nil
 }
 
 func (db *EntityComponentDB) First(index int) Attachable {
-	for _, c := range db.Components[index] {
+	for _, c := range db.components[index] {
 		return c
 	}
 	return nil
@@ -115,7 +115,7 @@ func (db *EntityComponentDB) attach(entity Entity, component Attachable, index i
 			// A component with this index is already attached to this entity, overwrite it.
 			componentsIndex := ec[index].IndexInDB()
 			component.SetIndexInDB(componentsIndex)
-			db.Components[index][componentsIndex] = component
+			db.components[index][componentsIndex] = component
 			ec[index] = component
 			return
 		}
@@ -126,8 +126,8 @@ func (db *EntityComponentDB) attach(entity Entity, component Attachable, index i
 	// This entity doesn't have a component with this index attached. Extend the
 	// slice.
 	ec[index] = component
-	db.Components[index] = append(db.Components[index], component)
-	component.SetIndexInDB(len(db.Components[index]) - 1)
+	db.components[index] = append(db.components[index], component)
+	component.SetIndexInDB(len(db.components[index]) - 1)
 }
 
 // Create a new component with the given index and attach it.
@@ -218,12 +218,12 @@ func (db *EntityComponentDB) Detach(index int, entity Entity) {
 		return
 	}
 	i := ec[index].IndexInDB()
-	components := db.Components[index]
+	components := db.components[index]
 	size := len(components)
 	if size > i {
 		components[i] = components[size-1]
 		components[i].SetIndexInDB(i)
-		db.Components[index] = components[:size-1]
+		db.components[index] = components[:size-1]
 	} else {
 		log.Printf("EntityComponentDB.Detach: found entity %v component index %v, but component list is too short.", entity, index)
 	}
@@ -260,7 +260,7 @@ func (db *EntityComponentDB) DetachAll(entity Entity) {
 		return
 	}
 
-	for index := range db.Components {
+	for index := range db.components {
 		db.Detach(index, entity)
 	}
 
@@ -327,10 +327,10 @@ func (db *EntityComponentDB) Load(filename string) error {
 	return nil
 }
 
-func (db *EntityComponentDB) SerializeEntity(entity uint64) map[string]any {
+func (db *EntityComponentDB) SerializeEntity(entity Entity) map[string]any {
 	components := db.EntityComponents[entity]
 	jsonEntity := make(map[string]any)
-	jsonEntity["Entity"] = strconv.FormatUint(entity, 10)
+	jsonEntity["Entity"] = entity.Format()
 	for index, component := range components {
 		if component == nil {
 			continue
@@ -345,12 +345,12 @@ func (db *EntityComponentDB) Save(filename string) {
 	defer db.Lock.Unlock()
 	jsonDB := make([]any, 0)
 
-	sortedEntities := make([]uint64, 0)
+	sortedEntities := make([]Entity, 0)
 	for entity, c := range db.EntityComponents {
 		if entity == 0 || c == nil {
 			continue
 		}
-		sortedEntities = append(sortedEntities, uint64(entity))
+		sortedEntities = append(sortedEntities, Entity(entity))
 	}
 	slices.Sort(sortedEntities)
 

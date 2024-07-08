@@ -63,3 +63,7 @@ func (a *RotateSegments) Redo() {
 }
 
 func (a *RotateSegments) RequiresLock() bool { return true }
+
+func (a *RotateSegments) Status() string {
+	return ""
+}

@@ -37,7 +37,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 		return
 	}
 	// Copy original sector's components to preserve them
-	o := sector.DB.EntityComponents[sector.Entity]
+	o := sector.DB.AllComponents(sector.Entity)
 	a.Original[sector.Entity] = make([]concepts.Attachable, len(o))
 	copy(a.Original[sector.Entity], o)
 	// Detach the original from the DB
@@ -60,7 +60,7 @@ func (a *SplitSector) OnMouseUp() {
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
 	if a.State().SelectedObjects.Empty() {
-		allSectors := a.State().DB.Components[core.SectorComponentIndex]
+		allSectors := a.State().DB.AllOfType(core.SectorComponentIndex)
 		sectors = make([]*core.Sector, len(allSectors))
 		i := 0
 		for _, s := range allSectors {
@@ -169,4 +169,8 @@ func (a *SplitSector) Redo() {
 		}
 	}
 
+}
+
+func (a *SplitSector) Status() string {
+	return ""
 }

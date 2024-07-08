@@ -45,3 +45,7 @@ func (a *Pan) Redo() {
 }
 
 func (a *Pan) RequiresLock() bool { return true }
+
+func (a *Pan) Status() string {
+	return ""
+}

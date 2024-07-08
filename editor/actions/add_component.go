@@ -45,3 +45,7 @@ func (a *AddComponent) Redo() {
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
+
+func (a *AddComponent) Status() string {
+	return ""
+}

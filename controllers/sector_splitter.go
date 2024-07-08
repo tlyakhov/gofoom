@@ -320,7 +320,7 @@ func (a *SectorSplitter) collect() {
 		}
 	}
 
-	for _, ibody := range a.Sector.DB.Components[core.BodyComponentIndex] {
+	for _, ibody := range a.Sector.DB.AllOfType(core.BodyComponentIndex) {
 		body := ibody.(*core.Body)
 		if body.SectorEntity != a.Sector.Entity {
 			continue

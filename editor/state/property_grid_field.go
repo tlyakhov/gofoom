@@ -33,6 +33,7 @@ type PropertyGridField struct {
 	Values           []reflect.Value
 	Unique           map[string]reflect.Value
 	Type             reflect.Type
+	Sort             int
 	EditType         string
 	ParentName       string
 	Depth            int
@@ -45,7 +46,7 @@ type PropertyGridField struct {
 func (f *PropertyGridField) Short() string {
 	result := f.Name
 	reduced := false
-	for len(result) > 40 {
+	for len(result) > 32 {
 		reduced = true
 		split := strings.Split(result, ".")
 		if len(split) == 1 {

@@ -8,7 +8,7 @@ import (
 )
 
 type Attached struct {
-	Entity
+	Entity                  `editable:"Component" edit_type:"Component" edit_sort:"0"`
 	DB                      *EntityComponentDB
 	Active                  bool `editable:"Active?"`
 	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`

@@ -4,6 +4,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"math"
 	"tlyakhov/gofoom/components/core"
@@ -127,6 +128,26 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 			mw.Context.SetRGBA(0.67, 0.67, 1.0, 0.3)
 			mw.Context.Stroke()
 		}
+	case *actions.Transform:
+		gridMouse := editor.WorldGrid(&editor.MouseWorld)
+		gridMouseDown := editor.WorldGrid(&editor.MouseDownWorld)
+		mw.Context.SetRGBA(0.2, 0.6, 0.7, 0.8)
+		mw.Context.DrawRectangle(gridMouseDown[0]-2, gridMouseDown[1]-2, 4, 4)
+		mw.Context.Fill()
+		mw.Context.DrawRectangle(gridMouse[0]-2, gridMouse[1]-2, 4, 4)
+		mw.Context.Fill()
+		t := editor.CurrentAction.(*actions.Transform)
+		var label string
+		switch t.Mode {
+		case "rotate":
+			label = fmt.Sprintf("Rotating: %.1f", t.Angle*180/math.Pi)
+		case "rotate-constrained":
+			factor := math.Pi * 0.25
+			label = fmt.Sprintf("Rotating: %.1f", math.Round(t.Angle/factor)*factor*180/math.Pi)
+		default:
+			label = fmt.Sprintf("Translating: %.1f, %.1f", t.Delta[0], t.Delta[1])
+		}
+		mw.Context.DrawStringAnchored(label, gridMouseDown[0], gridMouseDown[1], 0.5, 1.0)
 	case *actions.AddSector:
 		gridMouse := editor.WorldGrid(&editor.MouseWorld)
 		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
@@ -165,8 +186,10 @@ func (mw *MapWidget) CreateRenderer() fyne.WidgetRenderer {
 }
 
 func (mw *MapWidget) KeyDown(evt *fyne.KeyEvent) {
+	editor.KeysDown[evt.Name] = true
 }
 func (mw *MapWidget) KeyUp(evt *fyne.KeyEvent) {
+	delete(editor.KeysDown, evt.Name)
 }
 
 func (mw *MapWidget) FocusLost()       {}
@@ -191,7 +214,7 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 	} else if evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil {
 		editor.NewAction(&actions.Pan{IEditor: editor})
 	} else if evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.SelectedObjects.Empty() {
-		editor.NewAction(&actions.Move{IEditor: editor})
+		editor.NewAction(&actions.Transform{IEditor: editor})
 	}
 
 	if editor.CurrentAction != nil {

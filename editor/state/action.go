@@ -15,4 +15,5 @@ type IAction interface {
 	Frame()
 	Undo()
 	Redo()
+	Status() string
 }

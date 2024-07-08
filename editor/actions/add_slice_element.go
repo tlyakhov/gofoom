@@ -74,3 +74,7 @@ func (a *AddSliceElement) Redo() {
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
+
+func (a *AddSliceElement) Status() string {
+	return ""
+}

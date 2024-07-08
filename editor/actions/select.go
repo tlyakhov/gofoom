@@ -88,3 +88,7 @@ func (a *Select) Redo() {
 	a.SetSelection(true, a.Selected)
 }
 func (a *Select) RequiresLock() bool { return false }
+
+func (a *Select) Status() string {
+	return ""
+}

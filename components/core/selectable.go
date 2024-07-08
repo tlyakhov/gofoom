@@ -153,7 +153,7 @@ func SelectableFromEntity(db *concepts.EntityComponentDB, e concepts.Entity) *Se
 // Serialize saves the data for whatever the selectable is holding, which may or
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {
-	return s.DB.SerializeEntity(uint64(s.Entity))
+	return s.DB.SerializeEntity(s.Entity)
 }
 
 func (s *Selectable) Transform(m *concepts.Matrix2) {

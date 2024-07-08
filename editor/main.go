@@ -79,12 +79,19 @@ func main() {
 	scrollProperties := container.NewScroll(editor.PropertyGrid)
 	editor.GameWidget = NewGameWidget()
 	editor.MapWidget = NewMapWidget()
-	splitGameProperties := container.NewVSplit(editor.GameWidget, scrollProperties)
 
-	splitMapGame := container.NewHSplit(editor.MapWidget, splitGameProperties)
+	// Create the splitters
+
+	splitMapGame := container.NewVSplit(editor.MapWidget, editor.GameWidget)
+	splitMapGame.SetOffset(0.6425)
 	splitMapGame.Refresh()
+
 	splitEntitiesMap := container.NewHSplit(editor.EntityList.Container, splitMapGame)
-	splitEntitiesMap.SetOffset(0.25)
+	splitEntitiesMap.SetOffset(0.3515)
+
+	splitMapProperties := container.NewHSplit(splitEntitiesMap, scrollProperties)
+	splitMapProperties.SetOffset(0.7)
+
 	editor.LabelStatus = widget.NewLabel("")
 	editor.LabelStatus.Truncation = fyne.TextTruncateEllipsis
 
@@ -112,7 +119,7 @@ func main() {
 	toolbarItems = append(toolbarItems, item)
 	toolbar := widget.NewToolbar(toolbarItems...)
 
-	mainBorder := container.NewBorder(toolbar, editor.LabelStatus, nil, nil, splitEntitiesMap)
+	mainBorder := container.NewBorder(toolbar, editor.LabelStatus, nil, nil, splitMapProperties)
 	editor.Window.SetContent(mainBorder)
 
 	go func() {

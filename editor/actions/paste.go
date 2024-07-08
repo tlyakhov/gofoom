@@ -16,7 +16,7 @@ import (
 // possible to only grab a "hi" part of a segment, for example. For now,
 // just grab EntityRefs
 type Paste struct {
-	Move
+	Transform
 
 	CopiedToPasted map[concepts.Entity]concepts.Entity
 	ClipboardData  string
@@ -116,7 +116,7 @@ func (a *Paste) OnMouseDown(evt *desktop.MouseEvent) {
 }
 func (a *Paste) OnMouseMove() {
 	a.Delta = *a.State().MouseWorld.Sub(a.WorldGrid(a.Center.To2D()))
-	a.Move.Act()
+	a.Transform.Act()
 }
 func (a *Paste) OnMouseUp() {
 
@@ -127,4 +127,8 @@ func (a *Paste) Undo() {
 }
 func (a *Paste) Redo() {
 	// TODO: Implement
+}
+
+func (a *Paste) Status() string {
+	return ""
 }

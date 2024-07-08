@@ -78,6 +78,7 @@ func NewEditor() *Editor {
 			ComponentNamesVisible: true,
 			HoveringObjects:       core.NewSelection(),
 			SelectedObjects:       core.NewSelection(),
+			KeysDown:              make(map[fyne.KeyName]bool),
 		},
 		MapViewGrid: MapViewGrid{Visible: true},
 	}
@@ -127,13 +128,22 @@ func (e *Editor) UpdateStatus() {
 	e.Lock.Lock()
 	defer e.Lock.Unlock()
 
-	text := e.WorldGrid(&e.MouseWorld).StringHuman()
+	var text string
+
+	if e.CurrentAction == nil {
+		text = "Left mouse down to transform selection. Right click/drag to select. Middle-drag to pan. Mouse-wheel to zoom."
+	} else {
+		text = e.CurrentAction.Status()
+	}
+
 	if e.MousePressed {
-		text = e.WorldGrid(&e.MouseDownWorld).StringHuman() + " -> " + text
+		text += e.WorldGrid(&e.MouseDownWorld).StringHuman() + " -> " + e.WorldGrid(&e.MouseWorld).StringHuman()
 		dist := e.WorldGrid(&e.MouseDownWorld).Sub(e.WorldGrid(&e.MouseWorld)).Length()
 		text += " Length: " + strconv.FormatFloat(dist, 'f', 2, 64)
+	} else {
+		text += e.WorldGrid(&e.MouseWorld).StringHuman()
 	}
-	list := ""
+	/*list := ""
 	for _, s := range e.HoveringObjects.Exact {
 		if len(list) > 0 {
 			list += ", "
@@ -158,7 +168,7 @@ func (e *Editor) UpdateStatus() {
 			break
 		}
 	}
-	text = list + " ( " + text + " )"
+	text = list + " ( " + text + " )"*/
 	e.LabelStatus.SetText(text)
 }
 

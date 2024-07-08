@@ -94,3 +94,7 @@ func (a *MoveSurface) Redo() {
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
+
+func (a *MoveSurface) Status() string {
+	return ""
+}

@@ -22,7 +22,7 @@ type SectorSegment struct {
 	HiSurface         materials.Surface `editable:"High Surface"`
 	PortalHasMaterial bool              `editable:"Portal has material"`
 	PortalIsPassable  bool              `editable:"Portal is passable"`
-	PortalTeleports   bool              `editable:"The adjacent segment/sector requires teleporting"`
+	PortalTeleports   bool              `editable:"Portal sector not adjacent"`
 
 	AdjacentSector       concepts.Entity
 	AdjacentSegment      *SectorSegment
