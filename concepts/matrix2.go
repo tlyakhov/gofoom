@@ -115,13 +115,13 @@ func (m *Matrix2) MulSelf(next *Matrix2) *Matrix2 {
 	return m
 }
 
-func (m Matrix2) Project(u *Vector2) *Vector2 {
+func (m *Matrix2) Project(u *Vector2) *Vector2 {
 	return &Vector2{
 		m[0]*u[0] + m[2]*u[1] + m[4],
 		m[1]*u[0] + m[3]*u[1] + m[5]}
 }
 
-func (m Matrix2) ProjectXY(u *Vector3) *Vector3 {
+func (m *Matrix2) ProjectXY(u *Vector3) *Vector3 {
 	return &Vector3{
 		m[0]*u[0] + m[2]*u[1] + m[4],
 		m[1]*u[0] + m[3]*u[1] + m[5],
@@ -129,14 +129,14 @@ func (m Matrix2) ProjectXY(u *Vector3) *Vector3 {
 	}
 }
 
-func (m Matrix2) ProjectXZ(u *Vector3) *Vector3 {
+func (m *Matrix2) ProjectXZ(u *Vector3) *Vector3 {
 	return &Vector3{
 		m[0]*u[0] + m[2]*u[2] + m[4],
 		u[1],
 		m[1]*u[0] + m[3]*u[2] + m[5]}
 }
 
-func (m Matrix2) ProjectSelf(u *Vector2) *Vector2 {
+func (m *Matrix2) ProjectSelf(u *Vector2) *Vector2 {
 	u[0], u[1] = m[0]*u[0]+m[2]*u[1]+m[4], m[1]*u[0]+m[3]*u[1]+m[5]
 	return u
 }
@@ -146,17 +146,28 @@ func (m Matrix2) ProjectXYSelf(u *Vector3) *Vector3 {
 	return u
 }
 
-func (m Matrix2) ProjectXZSelf(u *Vector3) *Vector3 {
+func (m *Matrix2) ProjectXZSelf(u *Vector3) *Vector3 {
 	u[0], u[2] = m[0]*u[0]+m[2]*u[2]+m[4], m[1]*u[0]+m[3]*u[2]+m[5]
 	return u
 }
 
-func (m Matrix2) Unproject(u *Vector2) *Vector2 {
+func (m *Matrix2) Unproject(u *Vector2) *Vector2 {
 	det := m[0]*m[3] - m[2]*m[1]
 	return &Vector2{
 		(m[3]*(u[0]-m[4]) - m[2]*(u[1]-m[5])) / det,
 		(-m[1]*(u[0]-m[4]) + m[0]*(u[1]-m[5])) / det,
 	}
+}
+
+func (m Matrix2) GetTransform() (angle float64, translation Vector2, scale Vector2) {
+	basis1 := &Vector2{m[0], m[1]}
+	basis2 := &Vector2{m[2], m[3]}
+	scale[0] = basis1.Length()
+	scale[1] = basis2.Length()
+	translation[0] = m[4]
+	translation[1] = m[5]
+	angle = math.Atan2(basis1[1], basis1[0]) + math.Atan2(basis2[1], basis2[0]) - math.Pi*0.5
+	return
 }
 
 func (m *Matrix2) Deserialize(data []any) {

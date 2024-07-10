@@ -116,7 +116,7 @@ func (bc *BodyController) Physics() {
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
 		bc.Body.OnGround = true
-		BodySectorScript(bc.Sector.FloorScripts, bc.Body.Entity, bc.Sector.Entity)
+		BodySectorScript(bc.Sector.FloorScripts, bc.Body, bc.Sector)
 	}
 
 	if bc.Sector.CeilTarget != 0 && bodyTop > ceilZ {
@@ -130,7 +130,7 @@ func (bc *BodyController) Physics() {
 		delta := bc.Sector.CeilNormal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
-		BodySectorScript(bc.Sector.CeilScripts, bc.Body.Entity, bc.Sector.Entity)
+		BodySectorScript(bc.Sector.CeilScripts, bc.Body, bc.Sector)
 	}
 }
 

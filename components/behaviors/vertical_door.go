@@ -29,7 +29,8 @@ const (
 type VerticalDoor struct {
 	concepts.Attached `editable:"^"`
 	State             DoorState
-	Intent            DoorIntent
+	Intent            DoorIntent `editable:"Intent"`
+	AutoClose         bool       `editable:"Auto-close"`
 }
 
 var VerticalDoorComponentIndex int
@@ -56,6 +57,7 @@ func (vd *VerticalDoor) String() string {
 
 func (vd *VerticalDoor) Construct(data map[string]any) {
 	vd.Attached.Construct(data)
+	vd.AutoClose = true
 
 	if data == nil {
 		return
@@ -68,4 +70,17 @@ func (vd *VerticalDoor) Construct(data map[string]any) {
 			panic(err)
 		}
 	}
+
+	if v, ok := data["AutoClose"]; ok {
+		vd.AutoClose = v.(bool)
+	}
+}
+
+func (vd *VerticalDoor) Serialize() map[string]any {
+	result := vd.Attached.Serialize()
+
+	if !vd.AutoClose {
+		result["AutoClose"] = false
+	}
+	return result
 }

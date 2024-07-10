@@ -52,7 +52,7 @@ func (wc *WorldController) proximity(sector *core.Sector, body *core.Body) {
 	// component that includes the body as a valid scripting source
 	if p := behaviors.ProximityFromDb(wc.DB, sector.Entity); p != nil && p.IsActive() {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
-			BodySectorScript(p.Scripts, body.Entity, sector.Entity)
+			BodySectorScript(p.Scripts, body, sector)
 		}
 	}
 
@@ -60,7 +60,7 @@ func (wc *WorldController) proximity(sector *core.Sector, body *core.Body) {
 	// component that includes the sector as a valid scripting source
 	if p := behaviors.ProximityFromDb(wc.DB, body.Entity); p != nil && p.IsActive() {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
-			BodySectorScript(p.Scripts, body.Entity, sector.Entity)
+			BodySectorScript(p.Scripts, body, sector)
 		}
 	}
 }

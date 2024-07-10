@@ -24,7 +24,7 @@ type Script struct {
 	runFunc      any
 }
 
-func (e *Script) codeCommonHeader() string {
+func (s *Script) codeCommonHeader() string {
 	return `package main
 	import "tlyakhov/gofoom/archetypes"
 	import "tlyakhov/gofoom/components/behaviors"
@@ -36,49 +36,49 @@ func (e *Script) codeCommonHeader() string {
 	import "fmt"
 	`
 }
-func (e *Script) codeBoolExpr() string {
-	return e.codeCommonHeader() + `
+func (s *Script) codeBoolExpr() string {
+	return s.codeCommonHeader() + `
 func Do(s *core.Script) bool {
-	return (` + e.Code + `)
+	return (` + s.Code + `)
 }`
 }
 
-func (e *Script) codeStatement() string {
-	return e.codeCommonHeader() + `
+func (s *Script) codeStatement() string {
+	return s.codeCommonHeader() + `
 func Do(s *core.Script) {
-	` + e.Code + `
+	` + s.Code + `
 }`
 }
 
-func (e *Script) Compile() {
-	e.ErrorMessage = ""
-	e.interp = interp.New(interp.Options{})
-	e.interp.Use(stdlib.Symbols)
-	e.interp.Use(concepts.DbTypes().InterpSymbols)
+func (s *Script) Compile() {
+	s.ErrorMessage = ""
+	s.interp = interp.New(interp.Options{})
+	s.interp.Use(stdlib.Symbols)
+	s.interp.Use(concepts.DbTypes().InterpSymbols)
 	var codeTemplate string
-	switch e.Style {
+	switch s.Style {
 	case ScriptStyleRaw:
-		codeTemplate = e.Code
+		codeTemplate = s.Code
 	case ScriptStyleBoolExpr:
-		codeTemplate = e.codeBoolExpr()
+		codeTemplate = s.codeBoolExpr()
 	case ScriptStyleStatement:
-		codeTemplate = e.codeStatement()
+		codeTemplate = s.codeStatement()
 	}
 
-	_, err := e.interp.Eval(codeTemplate)
+	_, err := s.interp.Eval(codeTemplate)
 	if err != nil {
-		e.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", e.Code, err)
-		log.Printf("%v", e.ErrorMessage)
+		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)
+		log.Printf("%v", s.ErrorMessage)
 		return
 	}
-	f, err := e.interp.Eval("main.Do")
+	f, err := s.interp.Eval("main.Do")
 	if err != nil {
-		e.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", e.Code, err)
-		log.Printf("%v", e.ErrorMessage)
+		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)
+		log.Printf("%v", s.ErrorMessage)
 		return
 	}
 
-	e.runFunc = f.Interface()
+	s.runFunc = f.Interface()
 }
 
 func (s *Script) SetDB(db *concepts.EntityComponentDB) {

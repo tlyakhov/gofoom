@@ -350,11 +350,6 @@
       "Name": "be3eq5fvn27i2m3sajcg"
     },
     "core.Sector": {
-      "Bodies": [
-        "107",
-        "9",
-        "8"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -1307,9 +1302,6 @@
       "Name": "be4pp3vvn27o06iajr40"
     },
     "core.Sector": {
-      "Bodies": [
-        "20"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -1758,7 +1750,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.DB,s.Entity(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,s.Entity(\"sector\")).Intent = behaviors.DoorIntentOpen }",
+          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,sector.Entity).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -2083,10 +2075,6 @@
       "Name": "be4bqb7vn27mek306bc0"
     },
     "core.Sector": {
-      "Bodies": [
-        "125",
-        "42"
-      ],
       "BottomZ": {
         "Original": -100
       },
@@ -2097,7 +2085,7 @@
       "FloorFriction": 0.85,
       "FloorScripts": [
         {
-          "Code": "if core.BodyFromDb(s.DB,s.Entity(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,81).Intent = behaviors.DoorIntentOpen }",
+          "Code": "body := s.Vars[\"body\"].(*core.Body)\nif body.Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,81).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ],
@@ -2306,9 +2294,6 @@
       "Name": "ckqk9glmdsria0nrngq0"
     },
     "core.Sector": {
-      "Bodies": [
-        "30"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -2443,9 +2428,6 @@
   {
     "Entity": "31",
     "core.Sector": {
-      "Bodies": [
-        "107"
-      ],
       "BottomZ": {
         "Original": -32
       },
@@ -2573,7 +2555,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.3125,
+          "Percent": 0.015625,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -2888,12 +2870,6 @@
       "FloorSurface": {
         "Material": "122"
       },
-      "InternalSegments": [
-        "142",
-        "143",
-        "144",
-        "145"
-      ],
       "Segments": [
         {
           "AdjacentSector": "77",
@@ -3305,11 +3281,6 @@
       "Name": "be46m1fvn27lk1deckug"
     },
     "core.Sector": {
-      "Bodies": [
-        "32",
-        "131",
-        "21"
-      ],
       "BottomZ": {
         "Original": -64
       },
@@ -3321,9 +3292,6 @@
       "FloorSurface": {
         "Material": "122"
       },
-      "InternalSegments": [
-        "141"
-      ],
       "Segments": [
         {
           "Hi": {
@@ -3543,11 +3511,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -57.36996004452969,
+          "End": -2.366638819378316,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.26041666666666663,
+          "Percent": 0.4947916666666668,
           "Reverse": false,
-          "Start": -41.53351723844956,
+          "Start": -18.336938999542195,
           "TweeningFunc": "EaseInOut"
         },
         "Original": 155.9558816022554
@@ -3558,8 +3526,8 @@
       "MountHeight": 30,
       "Pos": {
         "Original": {
-          "X": -400,
-          "Y": 150,
+          "X": -310,
+          "Y": 190,
           "Z": 0
         }
       },
@@ -3963,9 +3931,6 @@
       "Name": "be46jm7vn27lk1decco0"
     },
     "core.Sector": {
-      "Bodies": [
-        "107"
-      ],
       "BottomZ": {
         "Original": -20
       },
@@ -4285,9 +4250,6 @@
       "Name": "be4pp37vn27o06iajnog"
     },
     "core.Sector": {
-      "Bodies": [
-        "52"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -4584,9 +4546,6 @@
   {
     "Entity": "55",
     "core.Sector": {
-      "Bodies": [
-        "78"
-      ],
       "BottomZ": {
         "Original": -46
       },
@@ -4805,9 +4764,6 @@
       "Name": "be4epdnvn27mnbvee43g"
     },
     "core.Sector": {
-      "Bodies": [
-        "59"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -5050,9 +5006,6 @@
       "Name": "be4c3ufvn27mi9gdb9q0"
     },
     "core.Sector": {
-      "Bodies": [
-        "62"
-      ],
       "BottomZ": {
         "Original": -34
       },
@@ -5524,9 +5477,6 @@
       "Name": "be4c3m7vn27mi9gdb9g0"
     },
     "core.Sector": {
-      "Bodies": [
-        "68"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -6691,7 +6641,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.DB,s.Entity(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,s.Entity(\"sector\")).Intent = behaviors.DoorIntentOpen }",
+          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.VerticalDoorFromDb(sector.DB,sector.Entity).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6778,7 +6728,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0,
+          "Percent": 1.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -6952,9 +6902,6 @@
       "Name": "be46kk7vn27lk1decfbg"
     },
     "core.Sector": {
-      "Bodies": [
-        "85"
-      ],
       "BottomZ": {
         "Original": -32
       },
@@ -8020,9 +7967,6 @@
       "Name": "be4pp3vvn27o06iajqeg"
     },
     "core.Sector": {
-      "Bodies": [
-        "96"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -8312,10 +8256,6 @@
       "Name": "be4pvnfvn27o06iak8cg"
     },
     "core.Sector": {
-      "Bodies": [
-        "102",
-        "101"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -8503,10 +8443,6 @@
       "Name": "be3dsc7vn27ho9jt5740"
     },
     "core.Sector": {
-      "Bodies": [
-        "105",
-        "104"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -8826,9 +8762,6 @@
       "Name": "Sector 108"
     },
     "core.Sector": {
-      "Bodies": [
-        "107"
-      ],
       "BottomZ": {
         "Original": 0
       },
@@ -9582,9 +9515,6 @@
       "Name": "Sector 120"
     },
     "core.Sector": {
-      "Bodies": [
-        "121"
-      ],
       "BottomZ": {
         "Original": 35
       },
