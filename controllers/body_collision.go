@@ -11,10 +11,10 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-func BodySectorScript(scripts []*core.Script, eBody, eSector concepts.Entity) {
+func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sector) {
 	for _, script := range scripts {
-		script.Vars["body"] = eBody
-		script.Vars["sector"] = eSector
+		script.Vars["body"] = body
+		script.Vars["sector"] = sector
 		script.Act()
 	}
 }
@@ -41,7 +41,7 @@ func (bc *BodyController) Enter(eSector concepts.Entity) {
 			p[2] = floorZ + h
 		}
 	}
-	BodySectorScript(bc.Sector.EnterScripts, bc.Body.Entity, bc.Sector.Entity)
+	BodySectorScript(bc.Sector.EnterScripts, bc.Body, bc.Sector)
 }
 
 func (bc *BodyController) Exit() {
@@ -49,7 +49,7 @@ func (bc *BodyController) Exit() {
 		log.Printf("%v tried to exit nil sector", bc.Body.Entity)
 		return
 	}
-	BodySectorScript(bc.Sector.ExitScripts, bc.Body.Entity, bc.Sector.Entity)
+	BodySectorScript(bc.Sector.ExitScripts, bc.Body, bc.Sector)
 	delete(bc.Sector.Bodies, bc.Body.Entity)
 	bc.Body.SectorEntity = 0
 }
@@ -327,7 +327,7 @@ func (bc *BodyController) Collide() {
 		}
 
 		for _, seg := range bc.collidedSegments {
-			BodySectorScript(seg.ContactScripts, bc.Body.Entity, bc.Sector.Entity)
+			BodySectorScript(seg.ContactScripts, bc.Body, bc.Sector)
 		}
 
 		switch bc.Body.CollisionResponse {

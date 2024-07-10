@@ -54,7 +54,7 @@ func (vd *VerticalDoorController) Always() {
 	a := vd.Sector.TopZ.Animation
 	if a.Percent <= 0 {
 		vd.State = behaviors.DoorStateOpen
-		if vd.Intent == behaviors.DoorIntentOpen {
+		if vd.Intent == behaviors.DoorIntentOpen && vd.AutoClose {
 			vd.Intent = behaviors.DoorIntentClosed
 		}
 	}

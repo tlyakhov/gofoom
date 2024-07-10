@@ -70,8 +70,8 @@ func (s *ShaderStage) Serialize() map[string]any {
 				flags += "|"
 			}
 			flags += f.String()
-			result["Flags"] = flags
 		}
+		result["Flags"] = flags
 	}
 	if !s.Transform.IsIdentity() {
 		result["Transform"] = s.Transform.Serialize()
