@@ -76,7 +76,7 @@ func main() {
 	editor.EntityList.IEditor = editor
 	editor.EntityList.Build()
 
-	scrollProperties := container.NewScroll(editor.PropertyGrid)
+	scrollProperties := container.NewVScroll(editor.PropertyGrid)
 	editor.GameWidget = NewGameWidget()
 	editor.MapWidget = NewMapWidget()
 

@@ -22,6 +22,8 @@ func Floor(c *state.Column) {
 	mat := c.Sector.FloorSurface.Material
 	extras := c.Sector.FloorSurface.ExtraStages
 	transform := c.Sector.FloorSurface.Transform
+	sectorMin := &c.Sector.Min
+	sectorMax := &c.Sector.Max
 
 	// Because of our sloped floors, we can't use simple linear interpolation
 	// to calculate the distance or world position of the ceiling sample, we
@@ -65,15 +67,14 @@ func Floor(c *state.Column) {
 			world[2] += c.CameraZ
 		}
 		scaler := 64.0 / distToFloor
-		tx := world[0] / 64.0
-		ty := world[1] / 64.0
+		tx := (world[0] - sectorMin[0]) / (sectorMax[0] - sectorMin[0])
+		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])
 
 		if mat != 0 {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
 			c.SampleShader(mat, extras, tx, ty, scaler)
 			c.SampleLight(&c.MaterialSampler.Output, mat, world, distToFloor)
 		}
-		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))
 		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)
 		c.ZBuffer[screenIndex] = distToFloor
 	}

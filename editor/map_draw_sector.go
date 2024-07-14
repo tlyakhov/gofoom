@@ -107,8 +107,8 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 			continue
 		}
 
-		segmentHovering := editor.HoveringObjects.Contains(core.SelectableFromSegment(segment))
-		segmentSelected := editor.SelectedObjects.Contains(core.SelectableFromSegment(segment))
+		segmentHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromSegment(segment))
+		segmentSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromSegment(segment))
 
 		if segment.AdjacentSector == 0 {
 			mw.Context.SetRGB(1, 1, 1)

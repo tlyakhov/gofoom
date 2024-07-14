@@ -15,13 +15,13 @@ import (
 )
 
 func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
-	origValue := field.Values[0].Elem()
+	origValue := field.Values[0].Deref()
 	if origValue.IsNil() {
 		button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
 		button.Text = "Add Animation"
 		button.Icon = theme.ContentAddIcon()
 		button.OnTapped = func() {
-			parentValue := reflect.ValueOf(field.Parent)
+			parentValue := reflect.ValueOf(field.Values[0].Parent)
 			m := parentValue.MethodByName("NewAnimation")
 			newAnimation := m.Call(nil)[0]
 			action := &actions.SetProperty{
@@ -49,7 +49,7 @@ func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 }
 
 func (g *Grid) fieldTweeningFunc(field *state.PropertyGridField) {
-	origValue := field.Values[0].Elem().Pointer()
+	origValue := field.Values[0].Deref().Pointer()
 
 	opts := make([]string, 0)
 	for name := range concepts.TweeningFuncs {

@@ -22,6 +22,8 @@ func Ceiling(c *state.Column) {
 	mat := c.Sector.CeilSurface.Material
 	extras := c.Sector.CeilSurface.ExtraStages
 	transform := c.Sector.CeilSurface.Transform
+	sectorMin := &c.Sector.Min
+	sectorMax := &c.Sector.Max
 
 	// Because of our sloped ceilings, we can't use simple linear interpolation
 	// to calculate the distance or world position of the ceiling sample, we
@@ -74,8 +76,8 @@ func Ceiling(c *state.Column) {
 		}
 
 		scaler := 64.0 / distToCeil
-		tx := world[0] / 64.0
-		ty := world[1] / 64.0
+		tx := (world[0] - sectorMin[0]) / (sectorMax[0] - sectorMin[0])
+		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])
 
 		if mat != 0 {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]

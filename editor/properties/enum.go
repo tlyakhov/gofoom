@@ -14,7 +14,7 @@ import (
 
 func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 	// This is the actual value of this property converted to an int.
-	origValue := field.Values[0].Elem().Int()
+	origValue := field.Values[0].Deref().Int()
 	isFlags := field.EditType == "Flags"
 
 	selectedIndex := 0

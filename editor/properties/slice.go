@@ -16,7 +16,11 @@ import (
 )
 
 func (g *Grid) fieldSliceAdd(field *state.PropertyGridField, concreteType reflect.Type) {
-	action := &actions.AddSliceElement{IEditor: g.IEditor, SlicePtr: field.Values[0], Parent: field.Parent, Concrete: concreteType}
+	action := &actions.AddSliceElement{
+		IEditor:  g.IEditor,
+		SlicePtr: field.Values[0].Value,
+		Parent:   field.Values[0].Parent,
+		Concrete: concreteType}
 	g.NewAction(action)
 	action.Act()
 	g.Focus(g.GridWidget)

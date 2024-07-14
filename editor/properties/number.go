@@ -22,9 +22,9 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 			origValue += ", "
 		}
 		if field.Type.String() == "*float64" {
-			origValue += strconv.FormatFloat(v.Elem().Float(), 'f', -1, 64)
+			origValue += strconv.FormatFloat(v.Deref().Float(), 'f', -1, 64)
 		} else if field.Type.String() == "*int" {
-			origValue += strconv.Itoa(int(v.Elem().Int()))
+			origValue += strconv.Itoa(int(v.Deref().Int()))
 		}
 	}
 

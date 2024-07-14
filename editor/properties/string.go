@@ -33,7 +33,7 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 
 	var entry *widget.Entry
 
-	if exp, ok := field.Parent.(*core.Script); ok {
+	if exp, ok := field.Values[0].Parent().(*core.Script); ok {
 		label := widget.NewLabel("Compiled successfully")
 		if exp.ErrorMessage != "" {
 			label.Text = exp.ErrorMessage
