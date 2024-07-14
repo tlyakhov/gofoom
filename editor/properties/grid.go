@@ -31,7 +31,8 @@ type PropertyGridState struct {
 	Depth            int
 	ParentName       string
 	ParentCollection *reflect.Value
-	Parent           any
+	Ancestors        []any
+	ParentField      *state.PropertyGridField
 	Entity           concepts.Entity
 }
 
@@ -56,7 +57,10 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state Pr
 	if !state.Visited[child] {
 		state.ParentName = parentName
 		if updateParent {
-			state.Parent = child
+			ancestors := make([]any, len(state.Ancestors)+1)
+			copy(ancestors, state.Ancestors)
+			ancestors[len(ancestors)-1] = child
+			state.Ancestors = ancestors
 		}
 		g.fieldsFromObject(child, state)
 	}
@@ -95,16 +99,14 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		gf, ok := pgs.Fields[display]
 		if !ok {
 			gf = &state.PropertyGridField{
-				Name:             display,
-				Depth:            pgs.Depth,
-				Type:             fieldValue.Addr().Type(),
-				Sort:             100,
-				Source:           &field,
-				ParentName:       pgs.ParentName,
-				ParentCollection: pgs.ParentCollection,
-				Unique:           make(map[string]reflect.Value),
-				Parent:           pgs.Parent,
-				Entity:           pgs.Entity,
+				Name:       display,
+				Depth:      pgs.Depth,
+				Type:       fieldValue.Addr().Type(),
+				Sort:       100,
+				Source:     &field,
+				ParentName: pgs.ParentName,
+				Parent:     pgs.ParentField,
+				Unique:     make(map[string]reflect.Value),
 			}
 			pgs.Fields[display] = gf
 			if editTypeTag, ok := field.Tag.Lookup("edit_type"); ok {
@@ -115,7 +117,12 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			}
 		}
 
-		gf.Values = append(gf.Values, fieldValue.Addr())
+		gf.Values = append(gf.Values, &state.PropertyGridFieldValue{
+			Entity:           pgs.Entity,
+			Value:            fieldValue.Addr(),
+			ParentCollection: pgs.ParentCollection,
+			Ancestors:        pgs.Ancestors,
+		})
 		gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
 		if gf.IsEmbeddedType() {
@@ -129,6 +136,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			for i := 0; i < fieldValue.Len(); i++ {
 				name := fmt.Sprintf("%v[%v]", display, i)
 				pgsChild := pgs
+				pgsChild.ParentField = gf
 				pgsChild.ParentCollection = &fieldValue
 				g.childFields(name, fieldValue.Index(i), pgsChild, true)
 			}
@@ -147,7 +155,7 @@ func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState
 		case core.SelectableMid:
 			fallthrough
 		case core.SelectableSectorSegment:
-			pgs.Parent = s.SectorSegment
+			pgs.Ancestors = []any{s.SectorSegment}
 			pgs.ParentName = "Segment"
 			pgs.Entity = s.Entity
 			g.fieldsFromObject(s.SectorSegment, pgs)
@@ -161,7 +169,7 @@ func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState
 			if c == nil {
 				continue
 			}
-			pgs.Parent = c
+			pgs.Ancestors = []any{c}
 			n := strings.Split(reflect.TypeOf(c).String(), ".")
 			pgs.ParentName = n[len(n)-1]
 			pgs.Entity = s.Entity
@@ -177,21 +185,29 @@ func gridAddOrUpdateWidgetAtIndex[PT interface {
 	*T
 	fyne.CanvasObject
 }, T any](g *Grid) PT {
+	var ptr PT = new(T)
+	return gridAddOrUpdateAtIndex(g, ptr)
+}
+
+// Confusing syntax. The constraint ensures that our underlying type has pointer
+// receiver methods that implement fyne.CanvasObject
+func gridAddOrUpdateAtIndex[PT interface {
+	*T
+	fyne.CanvasObject
+}, T any](g *Grid, newInstance PT) PT {
 	if g.refreshIndex < len(g.GridWidget.Objects) {
 		if element, ok := g.GridWidget.Objects[g.refreshIndex].(PT); ok {
 			g.refreshIndex++
 			return element
 		}
-		var ptr PT = new(T)
-		g.GridWidget.Objects[g.refreshIndex] = ptr
+		g.GridWidget.Objects[g.refreshIndex] = newInstance
 		g.refreshIndex++
-		return ptr
+		return newInstance
 	}
 
-	var ptr PT = new(T)
-	g.GridWidget.Objects = append(g.GridWidget.Objects, ptr)
+	g.GridWidget.Objects = append(g.GridWidget.Objects, newInstance)
 	g.refreshIndex++
-	return ptr
+	return newInstance
 }
 
 func (g *Grid) AddEntityControls(selection *core.Selection) {
@@ -291,7 +307,7 @@ func (g *Grid) Refresh(selection *core.Selection) {
 	for _, display := range g.sortedFields(state) {
 		field := state.Fields[display]
 
-		if !field.Values[0].CanInterface() {
+		if !field.Values[0].Value.CanInterface() {
 			continue
 		}
 		label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
@@ -309,7 +325,7 @@ func (g *Grid) Refresh(selection *core.Selection) {
 		label.TextStyle.Bold = false
 		//label.Wrapping = fyne.TextWrapWord
 
-		switch field.Values[0].Interface().(type) {
+		switch field.Values[0].Value.Interface().(type) {
 		case *bool:
 			g.fieldBool(field)
 		case *string:
@@ -338,9 +354,7 @@ func (g *Grid) Refresh(selection *core.Selection) {
 		case **concepts.Vector4:
 			fieldStringLikeType[*concepts.Vector4](g, field)
 		case *concepts.Matrix2:
-			fieldStringLikeType[concepts.Matrix2](g, field)
-		case *materials.SurfaceStretch:
-			g.fieldEnum(field, materials.SurfaceStretchValues())
+			g.fieldMatrix2(field)
 		case *core.CollisionResponse:
 			g.fieldEnum(field, core.CollisionResponseValues())
 		case *core.BodyShadow:

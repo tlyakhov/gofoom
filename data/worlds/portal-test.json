@@ -91,8 +91,7 @@
           "PortalHasMaterial": true,
           "PortalTeleports": true,
           "Surface": {
-            "Material": "7",
-            "Stretch": "StretchFill"
+            "Material": "7"
           },
           "X": 100,
           "Y": -20
@@ -278,8 +277,7 @@
           "PortalHasMaterial": true,
           "PortalTeleports": true,
           "Surface": {
-            "Material": "7",
-            "Stretch": "StretchFill"
+            "Material": "7"
           },
           "X": 220,
           "Y": 400
@@ -864,8 +862,7 @@
         {
           "AdjacentSector": "10",
           "Hi": {
-            "Material": "32",
-            "Stretch": "StretchAspect"
+            "Material": "32"
           },
           "Lo": {
             "Material": "2"
@@ -949,8 +946,7 @@
       "Bottom": 0,
       "Entity": "18",
       "Surface": {
-        "Material": "24",
-        "Stretch": "StretchFill"
+        "Material": "24"
       },
       "Top": 32,
       "TwoSided": true
@@ -1188,6 +1184,7 @@
           "Y": -210
         },
         {
+          "AdjacentSector": "28",
           "Hi": {
             "Material": "2"
           },
@@ -1336,8 +1333,7 @@
       "Bottom": 0,
       "Entity": "25",
       "Surface": {
-        "Material": "24",
-        "Stretch": "StretchFill"
+        "Material": "24"
       },
       "Top": 32,
       "TwoSided": true
@@ -1357,8 +1353,7 @@
       "Bottom": 0,
       "Entity": "26",
       "Surface": {
-        "Material": "24",
-        "Stretch": "StretchFill"
+        "Material": "24"
       },
       "Top": 32,
       "TwoSided": true
@@ -1378,11 +1373,84 @@
       "Bottom": 0,
       "Entity": "27",
       "Surface": {
-        "Material": "24",
-        "Stretch": "StretchFill"
+        "Material": "24"
       },
       "Top": 32,
       "TwoSided": true
+    }
+  },
+  {
+    "Entity": "28",
+    "core.Sector": {
+      "BottomZ": {
+        "Original": -26
+      },
+      "CeilSurface": {
+        "Material": "13"
+      },
+      "Entity": "28",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "37"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -430,
+          "Y": -130
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -570,
+          "Y": -130
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -570,
+          "Y": 0
+        },
+        {
+          "AdjacentSector": "22",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -430,
+          "Y": 0
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
@@ -1458,6 +1526,87 @@
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "/Users/tim/Documents/gofoom/data/red-button.png"
+    }
+  },
+  {
+    "Entity": "34",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "34",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -500,
+          "Y": -70,
+          "Z": 19
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 1
+      },
+      "Entity": "34",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "36",
+    "materials.Image": {
+      "Entity": "36",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "/Users/tim/Documents/gofoom/data/Water.png"
+    }
+  },
+  {
+    "Entity": "37",
+    "concepts.Named": {
+      "Entity": "37",
+      "Name": "Shader Water"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "37"
+    },
+    "materials.Shader": {
+      "Entity": "37",
+      "Stages": [
+        {
+          "Flags": "ShaderTiled|ShaderLiquid",
+          "Texture": "36"
+        }
+      ]
     }
   }
 ]

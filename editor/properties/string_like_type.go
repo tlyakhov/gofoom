@@ -19,7 +19,7 @@ import (
 
 type StringLikeType interface {
 	concepts.Vector2 | concepts.Vector3 | concepts.Vector4 |
-		*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4 | concepts.Matrix2
+		*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4
 }
 
 func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
@@ -36,8 +36,6 @@ func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
 		return (*currentValue).String()
 	case **concepts.Vector4:
 		return (*currentValue).String()
-	case *concepts.Matrix2:
-		return currentValue.String()
 	}
 	return ""
 }
@@ -49,7 +47,7 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			origValue += ", "
 		}
 
-		origValue += stringLikeTypeString(v.Interface().(PT))
+		origValue += stringLikeTypeString(v.Value.Interface().(PT))
 	}
 
 	entry := widget.NewEntry()
@@ -71,8 +69,6 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			parsed, err = concepts.ParseVector3(text)
 		case **concepts.Vector4:
 			parsed, err = concepts.ParseVector4(text)
-		case *concepts.Matrix2:
-			parsed, err = concepts.ParseMatrix2(text)
 		}
 		if err != nil {
 			log.Printf("Couldn't parse %v from user entry. %v\n", reflect.TypeOf(currentValue).Name(), err)
@@ -99,8 +95,6 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			if v, ok := parsed.(T); ok {
 				currentValue = &v
 			}
-		case *concepts.Matrix2:
-			currentValue = parsed.(PT)
 		}
 		action := &actions.SetProperty{
 			IEditor:           g.IEditor,

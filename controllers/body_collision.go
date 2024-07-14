@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
 )
 
 func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sector) {
@@ -63,7 +64,15 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 	closest := segment.ClosestToPoint(bc.pos2d)
 	delta := bc.pos2d.Sub(closest)
 	d = delta.Length()
-	delta.NormSelf()
+	if d > constants.IntersectEpsilon {
+		delta[0] /= d
+		delta[1] /= d
+	} else {
+		delta.From(&segment.Normal)
+		delta[0] = -delta[0]
+		delta[1] = -delta[1]
+		d = 0
+	}
 	if side > 0 {
 		delta.MulSelf(bc.Body.Size.Now[0]*0.5 - d)
 	} else {
@@ -72,7 +81,9 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 	}
 	// Apply the impulse at the same time
 	bc.pos.To2D().AddSelf(delta)
-	bc.Body.Vel.Now.To2D().AddSelf(delta)
+	if d > 0 {
+		bc.Body.Vel.Now.To2D().AddSelf(delta)
+	}
 
 	return true
 }

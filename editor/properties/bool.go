@@ -15,7 +15,7 @@ import (
 func (g *Grid) fieldBool(field *state.PropertyGridField) {
 	origValue := false
 	for _, v := range field.Values {
-		origValue = origValue || v.Elem().Bool()
+		origValue = origValue || v.Deref().Bool()
 	}
 
 	cb := gridAddOrUpdateWidgetAtIndex[*widget.Check](g)

@@ -29,18 +29,17 @@ var EmbeddedTypes = [...]string{
 }
 
 type PropertyGridField struct {
-	Name             string
-	Values           []reflect.Value
-	Unique           map[string]reflect.Value
-	Type             reflect.Type
-	Sort             int
-	EditType         string
-	ParentName       string
-	Depth            int
-	Source           *reflect.StructField
-	ParentCollection *reflect.Value
-	Parent           any
-	Entity           concepts.Entity
+	Name       string
+	ParentName string
+	Type       reflect.Type
+	EditType   string
+	Source     *reflect.StructField
+	Sort       int
+	Depth      int
+	Parent     *PropertyGridField
+
+	Values []*PropertyGridFieldValue
+	Unique map[string]reflect.Value
 }
 
 func (f *PropertyGridField) Short() string {

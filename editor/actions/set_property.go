@@ -29,10 +29,10 @@ func (a *SetProperty) Cancel()                             {}
 func (a *SetProperty) Frame()                              {}
 
 func (a *SetProperty) FireHooks() {
-	// TODO: this has a bug - all these fire for the same parent. We need to
-	// be able to handle multiple chains of properties
-	for range a.Values {
-		switch target := a.Parent.(type) {
+	// TODO: Optimize this by remembering visited parents to avoid firing these
+	// multiple times for the same selection.
+	for _, v := range a.Values {
+		switch target := v.Parent().(type) {
 		case concepts.Simulated:
 			target.Reset()
 		case *materials.Image:
@@ -65,10 +65,11 @@ func (a *SetProperty) Act() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, v := range a.Values {
-		origValue := reflect.ValueOf(v.Elem().Interface())
+		origValue := reflect.ValueOf(v.Interface())
 		a.Original = append(a.Original, origValue)
-		v.Elem().Set(a.ToSet)
+		v.Deref().Set(a.ToSet)
 	}
+
 	a.FireHooks()
 	a.State().Modified = true
 }
@@ -78,7 +79,7 @@ func (a *SetProperty) Undo() {
 	defer a.State().Lock.Unlock()
 	for i, v := range a.Values {
 		fmt.Printf("Undo: %v\n", a.Original[i].String())
-		v.Elem().Set(a.Original[i])
+		v.Deref().Set(a.Original[i])
 	}
 	a.FireHooks()
 }
@@ -87,7 +88,7 @@ func (a *SetProperty) Redo() {
 	defer a.State().Lock.Unlock()
 	for _, v := range a.Values {
 		fmt.Printf("Redo: %v\n", a.ToSet.String())
-		v.Elem().Set(a.ToSet)
+		v.Deref().Set(a.ToSet)
 	}
 	a.FireHooks()
 }

@@ -77,8 +77,8 @@ func (g *Grid) updateTreeNodeEntity(tni widget.TreeNodeID, b bool, co fyne.Canva
 func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	// The value of this property is an Entity
 	var origValue concepts.Entity
-	if !field.Values[0].Elem().IsZero() {
-		origValue = field.Values[0].Elem().Interface().(concepts.Entity)
+	if !field.Values[0].Deref().IsZero() {
+		origValue = field.Values[0].Interface().(concepts.Entity)
 	}
 
 	editTypeTag, ok := field.Source.Tag.Lookup("edit_type")
