@@ -46,7 +46,14 @@ func (pc *PlayerController) Target(target concepts.Attachable) bool {
 }
 
 func (pc *PlayerController) Always() {
-	pc.Bob += pc.Body.Vel.Now.To2D().Length() / 64.0
+	uw := pc.Underwater()
+
+	if uw {
+		pc.Bob += 0.015
+	} else {
+		pc.Bob += pc.Body.Vel.Now.To2D().Length() / 64.0
+	}
+
 	for pc.Bob > math.Pi*2 {
 		pc.Bob -= math.Pi * 2
 	}
@@ -57,7 +64,7 @@ func (pc *PlayerController) Always() {
 		pc.Body.Size.Now[1] = constants.PlayerHeight
 	}
 
-	bob := math.Sin(pc.Bob)
+	bob := math.Sin(pc.Bob) * 1.5
 	pc.CameraZ = pc.Body.Pos.Render[2] + pc.Body.Size.Render[1]*0.5 + bob
 
 	if sector := pc.Body.Sector(); sector != nil {
@@ -79,8 +86,8 @@ func (pc *PlayerController) Always() {
 		maxCooldown += d.Cooldown.Original
 	}
 
-	if pc.Underwater() {
-		pc.FrameTint = concepts.Vector4{75.0 / 255.0, 147.0 / 255.0, 1, 90.0 / 255.0}
+	if uw {
+		pc.FrameTint = concepts.Vector4{0.29, 0.58, 1, 0.35}
 	} else {
 		pc.FrameTint = concepts.Vector4{}
 	}

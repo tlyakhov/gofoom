@@ -41,17 +41,14 @@ type SectorSegment struct {
 }
 
 func (s *SectorSegment) Recalculate() {
-	if s.Sector != nil {
-		s.Segment.Top = s.Sector.Max[2]
-		s.Segment.Bottom = s.Sector.Min[2]
-	}
 	s.Segment.A = &s.P
 	if s.Next != nil {
 		s.Segment.B = &s.Next.P
 	}
 	s.Segment.Recalculate()
-	if s.Sector != nil {
-		s.RealizeAdjacentSector()
+
+	if s.Sector != nil && s.Sector.Winding < 0 {
+		s.Segment.Normal.MulSelf(-1)
 	}
 
 	// These are for transforming coordinate spaces through teleporting portals
@@ -69,6 +66,10 @@ func (s *SectorSegment) Recalculate() {
 	s.MirrorPortalMatrix[3] = -s.Normal[1]
 	s.MirrorPortalMatrix[4] = s.B[0]
 	s.MirrorPortalMatrix[5] = s.B[1]
+
+	if s.Sector != nil {
+		s.RealizeAdjacentSector()
+	}
 }
 
 func (s *SectorSegment) RealizeAdjacentSector() {

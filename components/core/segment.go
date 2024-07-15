@@ -14,8 +14,6 @@ type Segment struct {
 	// TODO: These should probably be SimVariables
 	A              *concepts.Vector2 `editable:"A"`
 	B              *concepts.Vector2 `editable:"B"`
-	Bottom         float64           `editable:"Bottom"`
-	Top            float64           `editable:"Top"`
 	Surface        materials.Surface `editable:"Mid Surface"`
 	ContactScripts []*Script         `editable:"Contact Scripts"`
 
@@ -148,20 +146,10 @@ func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 	return s.Normal.Dot(p.Sub(s.A))
 }
 
-func (s *Segment) UVToWorld(result *concepts.Vector3, u, v float64) *concepts.Vector3 {
-	result[0] = s.A[0] + (s.B[0]-s.A[0])*u
-	result[1] = s.A[1] + (s.B[1]-s.A[1])*u
-	// v goes from top (0) to bottom (1)
-	result[2] = v*s.Bottom + (1.0-v)*s.Top
-	return result
-}
-
 func (s *Segment) Construct(db *concepts.EntityComponentDB, data map[string]any) {
 	s.A = new(concepts.Vector2)
 	s.B = new(concepts.Vector2)
 	s.Normal = concepts.Vector2{}
-	s.Bottom = 0
-	s.Top = 64
 	s.Surface.Construct(db, nil)
 
 	if data == nil {
@@ -173,12 +161,6 @@ func (s *Segment) Construct(db *concepts.EntityComponentDB, data map[string]any)
 	}
 	if v, ok := data["B"]; ok {
 		s.B.Deserialize(v.(map[string]any))
-	}
-	if v, ok := data["Top"]; ok {
-		s.Top = v.(float64)
-	}
-	if v, ok := data["Bottom"]; ok {
-		s.Bottom = v.(float64)
 	}
 	if v, ok := data["Mid"]; ok {
 		s.Surface.Construct(db, v.(map[string]any))
@@ -197,8 +179,6 @@ func (s *Segment) Serialize(storePositions bool) map[string]any {
 	if storePositions {
 		result["A"] = s.A.Serialize()
 		result["B"] = s.B.Serialize()
-		result["Top"] = s.Top
-		result["Bottom"] = s.Bottom
 	}
 	result["Surface"] = s.Surface.Serialize()
 

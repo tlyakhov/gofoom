@@ -982,7 +982,7 @@
         },
         {
           "AdjacentSector": "44",
-          "AdjacentSegment": "0",
+          "AdjacentSegment": "4",
           "Hi": {
             "Material": "2"
           },
@@ -1007,8 +1007,8 @@
           "Surface": {
             "Material": "2"
           },
-          "X": -420,
-          "Y": 290
+          "X": -430,
+          "Y": 280
         },
         {
           "Hi": {
@@ -1971,8 +1971,8 @@
       "MountHeight": 15,
       "Pos": {
         "Original": {
-          "X": -1130,
-          "Y": -10,
+          "X": -1140,
+          "Y": -20,
           "Z": -50
         }
       },
@@ -1989,6 +1989,16 @@
           "Z": 0
         }
       }
+    },
+    "core.Light": {
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 0.5,
+        "Z": 1
+      },
+      "Entity": "41",
+      "Strength": 2
     }
   },
   {
@@ -2280,7 +2290,15 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": [
+              0.7905694150420948,
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
           },
           "X": -1280,
           "Y": 430
@@ -2293,7 +2311,15 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": [
+              0.375,
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
           },
           "X": -1260,
           "Y": 370

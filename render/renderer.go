@@ -83,6 +83,10 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 		next.Ray.Start = *c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.Project(&next.Ray.Start)
 		next.Ray.End = *c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.Project(&next.Ray.End)
 		next.Ray.AnglesFromStartEnd()
+		// TODO: this has a bug if the adjacent sector has a sloped floor.
+		// Getting the right floor height is a bit expensive because we have to
+		// project the intersection point. For now just use the sector minimum.
+		next.CameraZ = c.CameraZ - c.BottomZ + c.SectorSegment.AdjacentSegment.Sector.Min[2]
 		next.RayFloorCeil[0] = next.Ray.AngleCos * c.ViewFix[c.ScreenX]
 		next.RayFloorCeil[1] = next.Ray.AngleSin * c.ViewFix[c.ScreenX]
 		next.MaterialSampler.Ray = next.Ray
