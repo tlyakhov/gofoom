@@ -12,7 +12,9 @@ type InternalSegment struct {
 	concepts.Attached `editable:"^"`
 	Segment           `editable:"^"`
 
-	TwoSided bool `editable:"Two sided?"`
+	Bottom   float64 `editable:"Bottom"`
+	Top      float64 `editable:"Top"`
+	TwoSided bool    `editable:"Two sided?"`
 }
 
 var InternalSegmentComponentIndex int
@@ -76,13 +78,20 @@ func (s *InternalSegment) AttachToSectors() {
 func (s *InternalSegment) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Segment.Construct(s.DB, data)
-
+	s.Bottom = 0
+	s.Top = 64
 	s.TwoSided = false
 
 	if data == nil {
 		return
 	}
 
+	if v, ok := data["Top"]; ok {
+		s.Top = v.(float64)
+	}
+	if v, ok := data["Bottom"]; ok {
+		s.Bottom = v.(float64)
+	}
 	if v, ok := data["TwoSided"]; ok {
 		s.TwoSided = v.(bool)
 	}
@@ -94,6 +103,9 @@ func (s *InternalSegment) Serialize() map[string]any {
 	for k, v := range seg {
 		result[k] = v
 	}
+
+	result["Top"] = s.Top
+	result["Bottom"] = s.Bottom
 
 	if s.TwoSided {
 		result["TwoSided"] = true

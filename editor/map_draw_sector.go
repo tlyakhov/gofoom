@@ -177,5 +177,10 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 		mw.Context.Pop()
 	}
 
+	mw.Context.Push()
+	mw.Context.SetRGB(0.3, 0.3, 0.3)
+	mw.Context.DrawStringAnchored(fmt.Sprintf("Winding: %v", sector.Winding), sector.Center[0], sector.Center[1], 0.5, 0.5)
+	mw.Context.Pop()
+
 	mw.Context.Pop()
 }
