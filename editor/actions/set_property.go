@@ -5,6 +5,7 @@ package actions
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 
 	"tlyakhov/gofoom/components/core"
@@ -18,8 +19,8 @@ import (
 type SetProperty struct {
 	state.IEditor
 	*state.PropertyGridField
-	Original []reflect.Value
-	ToSet    reflect.Value
+	Original       []reflect.Value
+	ValuesToAssign []reflect.Value
 }
 
 func (a *SetProperty) OnMouseDown(evt *desktop.MouseEvent) {}
@@ -27,6 +28,13 @@ func (a *SetProperty) OnMouseMove()                        {}
 func (a *SetProperty) OnMouseUp()                          {}
 func (a *SetProperty) Cancel()                             {}
 func (a *SetProperty) Frame()                              {}
+
+func (a *SetProperty) AssignAll(v reflect.Value) {
+	a.ValuesToAssign = make([]reflect.Value, len(a.Values))
+	for i := range a.ValuesToAssign {
+		a.ValuesToAssign[i] = v
+	}
+}
 
 func (a *SetProperty) FireHooks() {
 	// TODO: Optimize this by remembering visited parents to avoid firing these
@@ -55,7 +63,11 @@ func (a *SetProperty) FireHooks() {
 			} else if a.Name == "Segment.B" {
 				target.Next.P = *target.B
 				target.Recalculate()
+			} else if a.Name == "Segment.Portal sector" {
+				target.Recalculate()
 			}
+
+			log.Printf("%v", a.Name)
 		}
 	}
 }
@@ -64,10 +76,10 @@ func (a *SetProperty) Act() {
 	defer a.ActionFinished(false, true, false)
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
-	for _, v := range a.Values {
+	for i, v := range a.Values {
 		origValue := reflect.ValueOf(v.Interface())
 		a.Original = append(a.Original, origValue)
-		v.Deref().Set(a.ToSet)
+		v.Deref().Set(a.ValuesToAssign[i])
 	}
 
 	a.FireHooks()
@@ -86,9 +98,9 @@ func (a *SetProperty) Undo() {
 func (a *SetProperty) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
-	for _, v := range a.Values {
-		fmt.Printf("Redo: %v\n", a.ToSet.String())
-		v.Deref().Set(a.ToSet)
+	for i, v := range a.Values {
+		fmt.Printf("Redo: %v\n", a.ValuesToAssign[i].String())
+		v.Deref().Set(a.ValuesToAssign[i])
 	}
 	a.FireHooks()
 }

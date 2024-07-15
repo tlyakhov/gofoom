@@ -417,3 +417,13 @@ func (g *Grid) Focus(o fyne.CanvasObject) {
 		}
 	*/
 }
+
+func (g *Grid) ApplySetPropertyAction(field *state.PropertyGridField, v reflect.Value) {
+	action := &actions.SetProperty{
+		IEditor:           g.IEditor,
+		PropertyGridField: field,
+	}
+	action.AssignAll(v)
+	g.NewAction(action)
+	action.Act()
+}

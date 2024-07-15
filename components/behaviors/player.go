@@ -15,6 +15,7 @@ type Player struct {
 	Crouching bool
 	Inventory []*InventoryItem
 	Bob       float64
+	CameraZ   float64
 }
 
 var PlayerComponentIndex int

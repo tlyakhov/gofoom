@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"slices"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/theme"
@@ -24,26 +23,14 @@ func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 			parentValue := reflect.ValueOf(field.Values[0].Parent)
 			m := parentValue.MethodByName("NewAnimation")
 			newAnimation := m.Call(nil)[0]
-			action := &actions.SetProperty{
-				IEditor:           g.IEditor,
-				PropertyGridField: field,
-				ToSet:             newAnimation,
-			}
-			g.NewAction(action)
-			action.Act()
+			g.ApplySetPropertyAction(field, newAnimation)
 		}
 	} else {
 		button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
 		button.Text = "Remove Animation"
 		button.Icon = theme.ContentClearIcon()
 		button.OnTapped = func() {
-			action := &actions.SetProperty{
-				IEditor:           g.IEditor,
-				PropertyGridField: field,
-				ToSet:             reflect.Zero(origValue.Type()),
-			}
-			g.NewAction(action)
-			action.Act()
+			g.ApplySetPropertyAction(field, reflect.Zero(origValue.Type()))
 		}
 	}
 }
@@ -72,12 +59,6 @@ func (g *Grid) fieldTweeningFunc(field *state.PropertyGridField) {
 	s.SetSelectedIndex(selectedIndex)
 	s.PlaceHolder = "Select tweening function"
 	s.OnChanged = func(opt string) {
-		action := &actions.SetProperty{
-			IEditor:           g.IEditor,
-			PropertyGridField: field,
-			ToSet:             optValues[s.SelectedIndex()],
-		}
-		g.NewAction(action)
-		action.Act()
+		g.ApplySetPropertyAction(field, optValues[s.SelectedIndex()])
 	}
 }

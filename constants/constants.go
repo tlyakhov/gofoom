@@ -38,7 +38,7 @@ const (
 	GravitySwim           = 0.1
 	AirDensity            = 1.293
 	SphereDragCoefficient = 0.47
-	SwimDamping           = 2.0
+	SwimDamping           = 1.5
 	CollisionCheck        = 2.0
 	LiquidChurnSpeed      = 2.0
 	LiquidChurnSize       = 0.03
@@ -53,7 +53,7 @@ const (
 	PlayerWalkForce      = 10.0 * PlayerMass * TimeStep // Newtons (we work backwards and aim for X meters/time step)
 	PlayerTurnSpeed      = 180.0                        // Degrees per second
 	PlayerJumpForce      = 30.0 * PlayerMass * TimeStep // Newtons
-	PlayerSwimStrength   = 0.005
+	PlayerSwimStrength   = 20.0 * PlayerMass * TimeStep
 	PlayerHurtTime       = 30
 	PlayerMountHeight    = 15.0
 	PlayerMaxHealth      = 100

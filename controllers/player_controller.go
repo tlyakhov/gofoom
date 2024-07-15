@@ -57,6 +57,21 @@ func (pc *PlayerController) Always() {
 		pc.Body.Size.Now[1] = constants.PlayerHeight
 	}
 
+	bob := math.Sin(pc.Bob)
+	pc.CameraZ = pc.Body.Pos.Render[2] + pc.Body.Size.Render[1]*0.5 + bob
+
+	if sector := pc.Body.Sector(); sector != nil {
+		fz, cz := sector.SlopedZRender(pc.Body.Pos.Render.To2D())
+		fz += constants.IntersectEpsilon
+		cz -= constants.IntersectEpsilon
+		if pc.CameraZ < fz {
+			pc.CameraZ = fz
+		}
+		if pc.CameraZ > cz {
+			pc.CameraZ = cz
+		}
+	}
+
 	allCooldowns := 0.0
 	maxCooldown := 0.0
 	for _, d := range pc.Alive.Damages {
@@ -78,15 +93,15 @@ func (pc *PlayerController) Always() {
 }
 
 func MovePlayer(p *core.Body, angle float64, direct bool) {
+	uw := behaviors.UnderwaterFromDb(p.DB, p.SectorEntity) != nil
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce
-
 	if direct {
 		p.Pos.Now[0] += dx * 0.1 / p.Mass
 		p.Pos.Now[1] += dy * 0.1 / p.Mass
 	} else {
-		if p.OnGround {
+		if uw || p.OnGround {
 			p.Force[0] += dx
 			p.Force[1] += dy
 		}

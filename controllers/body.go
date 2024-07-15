@@ -104,8 +104,11 @@ func (bc *BodyController) Physics() {
 
 	bc.Body.OnGround = false
 	if bc.Sector.FloorTarget != 0 && bodyTop < floorZ {
+		delta := bc.Body.Pos.Now.Sub(&bc.Sector.Center)
 		bc.Exit()
 		bc.Enter(bc.Sector.FloorTarget)
+		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
+		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
 		_, ceilZ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
 	} else if bc.Sector.FloorTarget != 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
@@ -120,9 +123,11 @@ func (bc *BodyController) Physics() {
 	}
 
 	if bc.Sector.CeilTarget != 0 && bodyTop > ceilZ {
+		delta := bc.Body.Pos.Now.Sub(&bc.Sector.Center)
 		bc.Exit()
 		bc.Enter(bc.Sector.CeilTarget)
-		bc.Sector = core.SectorFromDb(bc.Body.DB, bc.Sector.CeilTarget)
+		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
+		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
 		floorZ, _ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
 	} else if bc.Sector.CeilTarget == 0 && bodyTop >= ceilZ {

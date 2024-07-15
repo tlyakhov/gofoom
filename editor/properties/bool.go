@@ -6,7 +6,6 @@ package properties
 import (
 	"reflect"
 
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/widget"
@@ -22,9 +21,7 @@ func (g *Grid) fieldBool(field *state.PropertyGridField) {
 	cb.OnChanged = nil
 	cb.SetChecked(origValue)
 	cb.OnChanged = func(active bool) {
-		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(active)}
-		g.NewAction(action)
-		action.Act()
+		g.ApplySetPropertyAction(field, reflect.ValueOf(active))
 		origValue = active
 		g.Focus(g.GridWidget)
 	}

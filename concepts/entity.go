@@ -20,6 +20,9 @@ func ParseEntity(e string) (Entity, error) {
 }
 
 func (e Entity) String(db *EntityComponentDB) string {
+	if e == 0 {
+		return "[0] Nothing"
+	}
 	var sb strings.Builder
 
 	sb.WriteString("[")
@@ -43,6 +46,9 @@ func (e Entity) String(db *EntityComponentDB) string {
 }
 
 func (e Entity) NameString(db *EntityComponentDB) string {
+	if e == 0 {
+		return "0 - Nothing"
+	}
 	id := e.Format()
 	if named := NamedFromDb(db, e); named != nil {
 		return id + " - " + named.Name

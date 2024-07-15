@@ -7,7 +7,6 @@ import (
 	"log"
 	"reflect"
 
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
@@ -96,13 +95,7 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 				currentValue = &v
 			}
 		}
-		action := &actions.SetProperty{
-			IEditor:           g.IEditor,
-			PropertyGridField: field,
-			ToSet:             reflect.ValueOf(currentValue).Elem(),
-		}
-		g.NewAction(action)
-		action.Act()
+		g.ApplySetPropertyAction(field, reflect.ValueOf(currentValue).Elem())
 		origValue = stringLikeTypeString(currentValue)
 		g.Focus(g.GridWidget)
 	}

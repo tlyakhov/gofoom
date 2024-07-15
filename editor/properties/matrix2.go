@@ -18,10 +18,15 @@ import (
 )
 
 func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bool) {
+	action := &actions.SetProperty{
+		IEditor:           g.IEditor,
+		PropertyGridField: field,
+		ValuesToAssign:    make([]reflect.Value, len(field.Values)),
+	}
 	// For Identity matrix transforms, the texture will fill the dimensions of
 	// the surface it's on. This method calculates the aspect ratio of the
 	// surface in the world, and adjusts the transform accordingly.
-	for _, v := range field.Values {
+	for i, v := range field.Values {
 		var worldWidth, worldHeight float64
 		grandparent := v.Ancestors[len(v.Ancestors)-2]
 		switch typed := grandparent.(type) {
@@ -46,14 +51,10 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 		} else {
 			newTransform[0] = worldWidth / worldHeight
 		}
-		action := &actions.SetProperty{
-			IEditor:           g.IEditor,
-			PropertyGridField: field,
-			ToSet:             reflect.ValueOf(newTransform).Elem(),
-		}
-		g.NewAction(action)
-		action.Act()
+		action.ValuesToAssign[i] = reflect.ValueOf(newTransform).Elem()
 	}
+	g.NewAction(action)
+	action.Act()
 }
 
 func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
@@ -82,9 +83,7 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 	entry.SetText(origMatrix)
 	entry.OnSubmitted = func(text string) {
 		if toSet, err := concepts.ParseMatrix2(text); err == nil {
-			action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(toSet).Elem()}
-			g.NewAction(action)
-			action.Act()
+			g.ApplySetPropertyAction(field, reflect.ValueOf(toSet).Elem())
 			origMatrix = text
 		} else {
 			entry.SetText(origMatrix)
@@ -93,15 +92,20 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 	f.Append("Matrix", entry)
 	eDelta := widget.NewEntry()
 	eDelta.OnSubmitted = func(text string) {
-		/*	if delta, err := concepts.ParseVector2(text); err == nil {
-			for _, v := range field.Values {
-				m := v.Interface().(*concepts.Matrix2)
-				m = m.Translate(delta)
-			}
-			action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(toSet).Elem()}
-			g.NewAction(action)
-			action.Act()
-		}*/
+		var delta *concepts.Vector2
+		var err error
+		if delta, err = concepts.ParseVector2(text); err != nil {
+			eDelta.SetText(origDelta)
+			return
+		}
+		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ValuesToAssign: make([]reflect.Value, len(field.Values))}
+		for i, v := range field.Values {
+			m := v.Value.Interface().(*concepts.Matrix2)
+			m = m.Translate(delta)
+			action.ValuesToAssign[i] = reflect.ValueOf(m).Elem()
+		}
+		g.NewAction(action)
+		action.Act()
 	}
 	eDelta.SetText(origDelta)
 	f.Append("DX/DY", eDelta)
@@ -111,15 +115,29 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 	eScale := widget.NewEntry()
 	eScale.SetText(origScale)
 	f.Append("SX/SY", eScale)
+	eScale.OnSubmitted = func(text string) {
+		var scale *concepts.Vector2
+		var err error
+		if scale, err = concepts.ParseVector2(text); err != nil {
+			eScale.SetText(origScale)
+			return
+		}
+		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ValuesToAssign: make([]reflect.Value, len(field.Values))}
+		for i, v := range field.Values {
+			m := v.Value.Interface().(*concepts.Matrix2)
+			m = m.AxisScale(scale)
+			action.ValuesToAssign[i] = reflect.ValueOf(m).Elem()
+		}
+		g.NewAction(action)
+		action.Act()
+	}
 
 	switch field.Values[0].Parent().(type) {
 	case *materials.Surface:
 		f.Append("", widget.NewButtonWithIcon("Reset/Fill", theme.ContentClearIcon(), func() {
 			toSet := &concepts.Matrix2{}
 			toSet.SetIdentity()
-			action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(toSet).Elem()}
-			g.NewAction(action)
-			action.Act()
+			g.ApplySetPropertyAction(field, reflect.ValueOf(toSet).Elem())
 		}))
 		f.Append("Aspect", container.NewHBox(
 			widget.NewButtonWithIcon("Scale W", theme.ViewFullScreenIcon(), func() { g.fieldMatrix2Aspect(field, false) }),

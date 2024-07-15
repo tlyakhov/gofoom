@@ -24,9 +24,10 @@ type SectorSegment struct {
 	PortalIsPassable  bool              `editable:"Portal is passable"`
 	PortalTeleports   bool              `editable:"Portal sector not adjacent"`
 
-	AdjacentSector       concepts.Entity
-	AdjacentSegment      *SectorSegment
-	AdjacentSegmentIndex int // Only when loading
+	AdjacentSector  concepts.Entity `editable:"Portal sector" edit_type:"Sector"`
+	AdjacentSegment *SectorSegment
+	// Only when loading or linking
+	AdjacentSegmentIndex int `editable:"Portal segment index"`
 
 	Sector *Sector
 
@@ -54,6 +55,8 @@ func (s *SectorSegment) Recalculate() {
 	}
 
 	// These are for transforming coordinate spaces through teleporting portals
+	// TODO: Something is broken with winding here
+	// TODO: A waste to store these for non-portal segments
 	s.PortalMatrix[0] = s.B[0] - s.A[0]
 	s.PortalMatrix[1] = s.B[1] - s.A[1]
 	s.PortalMatrix[2] = s.Normal[0]
@@ -75,8 +78,9 @@ func (s *SectorSegment) RealizeAdjacentSector() {
 
 	if adj := SectorFromDb(s.DB, s.AdjacentSector); adj != nil {
 		// Get the actual segment using the index
-		if s.AdjacentSegmentIndex != -1 {
+		if s.PortalTeleports && s.AdjacentSegmentIndex != -1 {
 			s.AdjacentSegment = adj.Segments[s.AdjacentSegmentIndex]
+			return
 		}
 		// Get the actual segment by finding a matching one
 		for _, s2 := range adj.Segments {
@@ -84,6 +88,10 @@ func (s *SectorSegment) RealizeAdjacentSector() {
 				s.AdjacentSegment = s2
 				break
 			}
+		}
+		// Pick one, to avoid nil reference errors
+		if s.AdjacentSegment == nil {
+			s.AdjacentSegment = adj.Segments[0]
 		}
 	}
 }
@@ -172,7 +180,9 @@ func (s *SectorSegment) Serialize() map[string]any {
 	}
 	if s.PortalTeleports {
 		result["PortalTeleports"] = true
-		result["AdjacentSegment"] = strconv.FormatInt(int64(s.AdjacentSegment.Index), 10)
+		if s.AdjacentSegment != nil {
+			result["AdjacentSegment"] = strconv.FormatInt(int64(s.AdjacentSegment.Index), 10)
+		}
 	}
 
 	result["Lo"] = s.LoSurface.Serialize()

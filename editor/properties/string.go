@@ -7,7 +7,6 @@ import (
 	"reflect"
 
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -53,9 +52,7 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 	entry.OnSubmitted = nil
 	entry.SetText(origValue)
 	entry.OnSubmitted = func(text string) {
-		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(text)}
-		g.NewAction(action)
-		action.Act()
+		g.ApplySetPropertyAction(field, reflect.ValueOf(text))
 		origValue = text
 	}
 }

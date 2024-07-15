@@ -5,12 +5,12 @@ package properties
 
 import (
 	"image"
+	"image/color"
 	"math"
 	"reflect"
 	"strconv"
 
 	"tlyakhov/gofoom/archetypes"
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
@@ -23,6 +23,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/fogleman/gg"
 )
 
 func (g *Grid) materialSelectionBorderColor(entity concepts.Entity) *concepts.Vector4 {
@@ -33,7 +34,7 @@ func (g *Grid) materialSelectionBorderColor(entity concepts.Entity) *concepts.Ve
 }
 
 // TODO: We should cache these
-func (g *Grid) imageForEntity(entity concepts.Entity) image.Image {
+func (g *Grid) imageForMaterial(entity concepts.Entity) image.Image {
 	w, h := 64, 64
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
 	buffer := img.Pix
@@ -57,20 +58,59 @@ func (g *Grid) imageForEntity(entity concepts.Entity) image.Image {
 	return img
 }
 
-func (g *Grid) updateTreeNodeEntity(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
+var patternPrimary = gg.NewSolidPattern(color.NRGBA{255, 255, 255, 255})
+var patternSecondary = gg.NewSolidPattern(color.NRGBA{255, 255, 0, 255})
+
+func (g *Grid) imageForSector(entity concepts.Entity) image.Image {
+	w, h := 64, 64
+	context := gg.NewContext(w, h)
+
+	sector := core.SectorFromDb(g.State().DB, entity)
+	context.SetLineWidth(1)
+	for _, segment := range sector.Segments {
+		if segment.AdjacentSegment != nil {
+			context.SetStrokeStyle(patternSecondary)
+		} else {
+			context.SetStrokeStyle(patternPrimary)
+		}
+		context.NewSubPath()
+		x := (segment.P[0] - sector.Min[0]) * float64(w) / (sector.Max[0] - sector.Min[0])
+		y := (segment.P[1] - sector.Min[1]) * float64(h) / (sector.Max[1] - sector.Min[1])
+		context.MoveTo(x, y)
+		x = (segment.Next.P[0] - sector.Min[0]) * float64(w) / (sector.Max[0] - sector.Min[0])
+		y = (segment.Next.P[1] - sector.Min[1]) * float64(h) / (sector.Max[1] - sector.Min[1])
+		context.LineTo(x, y)
+		context.ClosePath()
+		context.Stroke()
+	}
+
+	return context.Image()
+}
+
+func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
 	entity, _ := concepts.ParseEntity(tni)
 	name := entity.NameString(g.State().DB)
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
-	img.ScaleMode = canvas.ImageScaleSmooth
-	img.FillMode = canvas.ImageFillContain
-	img.Image = g.imageForEntity(entity)
-	img.SetMinSize(fyne.NewSquareSize(64))
+	img.Hidden = entity == 0
 	label := box.Objects[1].(*widget.Label)
-	label.SetText(name)
 	button := box.Objects[2].(*widget.Button)
-	button.OnTapped = func() {
-		g.SelectObjects(true, core.SelectableFromEntity(g.State().DB, entity))
+	button.Hidden = entity == 0
+
+	label.SetText(name)
+
+	if entity != 0 {
+		img.ScaleMode = canvas.ImageScaleSmooth
+		img.FillMode = canvas.ImageFillContain
+		if editTypeTag == "Material" {
+			img.Image = g.imageForMaterial(entity)
+		} else if editTypeTag == "Sector" {
+			img.Image = g.imageForSector(entity)
+		}
+		img.SetMinSize(fyne.NewSquareSize(64))
+		button.OnTapped = func() {
+			g.SelectObjects(true, core.SelectableFromEntity(g.State().DB, entity))
+		}
 	}
 }
 
@@ -88,13 +128,16 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	}
 
 	// Create our combo box with pixbuf/string enum entries.
-	refs := make([]widget.TreeNodeID, 0)
+	refs := make([]widget.TreeNodeID, 1)
+	refs[0] = "0"
 
 	for entity, c := range g.State().DB.EntityComponents {
 		if c == nil {
 			continue
 		}
-		if archetypes.EntityIsMaterial(g.State().DB, concepts.Entity(entity)) {
+		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().DB, concepts.Entity(entity)) {
+			refs = append(refs, strconv.Itoa(entity))
+		} else if editTypeTag == "Sector" && core.SectorFromDb(g.State().DB, concepts.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(entity))
 		}
 	}
@@ -112,7 +155,9 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 			widget.NewButtonWithIcon("", theme.MoreHorizontalIcon(), nil),
 			widget.NewButtonWithIcon("", theme.LoginIcon(), nil),
 		)
-	}, g.updateTreeNodeEntity)
+	}, func(tni widget.TreeNodeID, b bool, co fyne.CanvasObject) {
+		g.updateTreeNodeEntity(editTypeTag, tni, b, co)
+	})
 	title := "Select " + editTypeTag
 	if origValue != 0 {
 		tree.Select(origValue.Format())
@@ -120,12 +165,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
 		entity, _ := concepts.ParseEntity(tni)
-		action := &actions.SetProperty{IEditor: g.IEditor,
-			PropertyGridField: field,
-			ToSet:             reflect.ValueOf(entity).Convert(field.Type.Elem()),
-		}
-		g.NewAction(action)
-		action.Act()
+		g.ApplySetPropertyAction(field, reflect.ValueOf(entity).Convert(field.Type.Elem()))
 	}
 	c := container.New(&gridEntitySelectorLayout{Child: layout.NewStackLayout()}, tree)
 	aiTree := widget.NewAccordionItem(title, c)
