@@ -288,6 +288,10 @@ func (s *Sector) Recalculate() {
 
 		if s.Winding < 0 {
 			segment.Normal.MulSelf(-1)
+			segment.PortalMatrix[2] *= -1
+			segment.PortalMatrix[3] *= -1
+			segment.MirrorPortalMatrix[2] *= -1
+			segment.MirrorPortalMatrix[3] *= -1
 		}
 	}
 	s.Segments = filtered

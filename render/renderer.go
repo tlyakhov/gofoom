@@ -138,7 +138,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	c.LightElement.Type = state.LightElementWall
 	c.Segment.Normal.To3D(&c.LightElement.Normal)
 
-	hasPortal := c.SectorSegment.AdjacentSector != 0
+	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
 	if c.Pick {
 		if !hasPortal || c.SectorSegment.PortalHasMaterial {
 			WallMidPick(c)
@@ -265,10 +265,9 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 }
 
 func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
-	bob := math.Sin(r.Player.Bob)
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
-	column.CameraZ = r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob
+	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
 	for i := range column.LightLastColIndices {
@@ -349,7 +348,7 @@ func (r *Renderer) Render(buffer []uint8) {
 		if r.Frame-lastSeen < 120 {
 			return true
 		}
-		if sector := r.DB.Component(eSector, core.SectorComponentIndex).(*core.Sector); sector != nil {
+		if sector := core.SectorFromDb(r.DB, eSector); sector != nil {
 			sector.Lightmap.Clear()
 		}
 		r.SectorLastRendered.Delete(eSector)

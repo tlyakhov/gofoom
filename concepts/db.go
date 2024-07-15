@@ -70,6 +70,8 @@ func (db *EntityComponentDB) AllComponents(entity Entity) []Attachable {
 	return db.EntityComponents[entity]
 }
 
+// Callers need to be careful, this function can return nil that's not castable
+// to an actual component type. The *FromDb methods are better.
 func (db *EntityComponentDB) Component(entity Entity, index int) Attachable {
 	if entity == 0 || index == 0 || len(db.EntityComponents) <= int(entity) {
 		return nil

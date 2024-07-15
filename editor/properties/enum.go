@@ -6,7 +6,6 @@ package properties
 import (
 	"reflect"
 
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/widget"
@@ -49,13 +48,7 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 			for _, v := range s {
 				flags = flags | optsMap[v]
 			}
-			action := &actions.SetProperty{
-				IEditor:           g.IEditor,
-				PropertyGridField: field,
-				ToSet:             reflect.ValueOf(flags).Convert(field.Type.Elem()),
-			}
-			g.NewAction(action)
-			action.Act()
+			g.ApplySetPropertyAction(field, reflect.ValueOf(flags).Convert(field.Type.Elem()))
 		}
 	} else {
 		selectEntry := gridAddOrUpdateWidgetAtIndex[*widget.Select](g)
@@ -63,13 +56,7 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		selectEntry.OnChanged = nil
 		selectEntry.SetSelectedIndex(selectedIndex)
 		selectEntry.OnChanged = func(opt string) {
-			action := &actions.SetProperty{
-				IEditor:           g.IEditor,
-				PropertyGridField: field,
-				ToSet:             optsValues[selectEntry.SelectedIndex()],
-			}
-			g.NewAction(action)
-			action.Act()
+			g.ApplySetPropertyAction(field, optsValues[selectEntry.SelectedIndex()])
 		}
 	}
 }

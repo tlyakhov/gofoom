@@ -6,7 +6,6 @@ package properties
 import (
 	"log"
 	"reflect"
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/widget"
@@ -47,13 +46,7 @@ func (g *Grid) fieldAnimationTarget(field *state.PropertyGridField) {
 		selectEntry.SetSelectedIndex(selectedIndex)
 	}
 	selectEntry.OnChanged = func(opt string) {
-		action := &actions.SetProperty{
-			IEditor:           g.IEditor,
-			PropertyGridField: field,
-			ToSet:             optsValues[selectEntry.SelectedIndex()],
-		}
-		g.NewAction(action)
-		action.Act()
+		g.ApplySetPropertyAction(field, optsValues[selectEntry.SelectedIndex()])
 	}
 
 	g.GridWidget.Objects = append(g.GridWidget.Objects, selectEntry)

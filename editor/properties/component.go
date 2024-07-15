@@ -17,26 +17,25 @@ import (
 
 func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	// This will be a pointer
-	parentTypes := ""
+	parentType := ""
 	entities := ""
 	for _, v := range field.Values {
 		entity := v.Interface().(concepts.Entity)
 		if len(entities) > 0 {
 			entities += ", "
-			parentTypes += ", "
 		}
 		entities += entity.Format()
-		parentTypes += reflect.TypeOf(v.Parent()).Elem().String()
+		parentType = reflect.TypeOf(v.Parent()).Elem().String()
 	}
 
 	button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
-	button.Text = fmt.Sprintf("Remove %v from [%v]", parentTypes, entities)
+	button.Text = fmt.Sprintf("Remove %v from [%v]", parentType, entities)
 	button.Icon = theme.ContentRemoveIcon()
 	button.OnTapped = func() {
 		action := &actions.DeleteComponent{IEditor: g.IEditor, Components: make(map[concepts.Entity]concepts.Attachable)}
 		for _, v := range field.Values {
 			entity := v.Interface().(concepts.Entity)
-			log.Printf("Detaching %v from %v", parentTypes, entity)
+			log.Printf("Detaching %v from %v", parentType, entity)
 			action.Components[entity] = v.Parent().(concepts.Attachable)
 		}
 		g.NewAction(action)

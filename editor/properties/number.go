@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/widget"
@@ -50,10 +49,7 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 			}
 			toSet = reflect.ValueOf(i)
 		}
-
-		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: toSet}
-		g.NewAction(action)
-		action.Act()
+		g.ApplySetPropertyAction(field, toSet)
 		origValue = text
 	}
 }

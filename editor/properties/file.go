@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"reflect"
 
-	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -21,19 +20,13 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func (g *Grid) setFieldFile(entry *widget.Entry, field *state.PropertyGridField) {
-	action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ToSet: reflect.ValueOf(entry.Text)}
-	g.NewAction(action)
-	action.Act()
-}
-
 func (g *Grid) fieldFile(field *state.PropertyGridField) {
 	origValue := g.originalStrings(field)
 
 	entry := widget.NewEntry()
 	entry.SetText(origValue)
 	entry.OnSubmitted = func(s string) {
-		g.setFieldFile(entry, field)
+		g.ApplySetPropertyAction(field, reflect.ValueOf(entry.Text))
 	}
 
 	button := widget.NewButtonWithIcon("...", theme.FolderOpenIcon(), func() {
@@ -46,7 +39,7 @@ func (g *Grid) fieldFile(field *state.PropertyGridField) {
 				return
 			}
 			entry.SetText(uc.URI().Path())
-			g.setFieldFile(entry, field)
+			g.ApplySetPropertyAction(field, reflect.ValueOf(entry.Text))
 		}, g.GridWindow)
 		g.SetDialogLocation(dlg, entry.Text)
 
