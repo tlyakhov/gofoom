@@ -4,6 +4,7 @@
 package properties
 
 import (
+	"math"
 	"reflect"
 	"strconv"
 	"tlyakhov/gofoom/components/core"
@@ -38,11 +39,26 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 			fz, cz := typed.Sector.SlopedZNow(typed.A)
 			worldWidth = typed.Length
 			worldHeight = cz - fz
+			switch field.Name {
+			case "Segment.Low Surface.Transform":
+				if typed.AdjacentSegment != nil {
+					adj := core.SectorFromDb(g.State().DB, typed.AdjacentSector)
+					afz, _ := adj.SlopedZNow(typed.A)
+					worldHeight = math.Abs(fz - afz)
+				}
+			case "Segment.Hi Surface.Transform":
+				if typed.AdjacentSegment != nil {
+					adj := core.SectorFromDb(g.State().DB, typed.AdjacentSector)
+					_, acz := adj.SlopedZNow(typed.A)
+					worldHeight = math.Abs(cz - acz)
+				}
+			}
 		case *core.InternalSegment:
 			worldWidth = typed.Length
 			worldHeight = typed.Top - typed.Bottom
 		}
 		if worldHeight == 0 || worldWidth == 0 {
+			action.ValuesToAssign[i] = v.Deref()
 			continue
 		}
 		newTransform := &concepts.Matrix2{1, 0, 0, 1, 0, 0}

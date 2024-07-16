@@ -91,7 +91,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 			mw.DrawBody(a.(*core.Body))
 		}
 	}
-	// Portal testing code
+	/*// Portal testing code
 	p := core.BodyFromDb(editor.DB, editor.Renderer.Player.Entity)
 	v := &concepts.Vector2{p.Pos.Now[0], p.Pos.Now[1]}
 	v2 := v.Add(&concepts.Vector2{math.Cos(p.Angle.Now*concepts.Deg2rad) * 10, math.Sin(p.Angle.Now*concepts.Deg2rad) * 10})
@@ -116,7 +116,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	mw.Context.MoveTo(v3[0], v3[1])
 	mw.Context.LineTo(v4[0], v4[1])
 	mw.Context.ClosePath()
-	mw.Context.Stroke()
+	mw.Context.Stroke()*/
 
 	switch editor.CurrentAction.(type) {
 	case *actions.Select:

@@ -2538,7 +2538,6 @@
       "Name": "Item Test"
     },
     "core.Body": {
-      "Active": false,
       "Angle": {
         "Original": 0
       },
@@ -2555,17 +2554,17 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.015625,
-          "Reverse": false,
+          "Percent": 0.96875,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
             "Z": 0
           },
-          "TweeningFunc": "EaseInOut3"
+          "TweeningFunc": "EaseInOut2"
         },
         "Original": {
-          "X": -290,
+          "X": -280,
           "Y": 70,
           "Z": -64
         }
@@ -3306,8 +3305,7 @@
                 "Texture": "57"
               }
             ],
-            "Material": "2",
-            "Stretch": "StretchFill"
+            "Material": "2"
           },
           "X": -280,
           "Y": 30
@@ -3347,7 +3345,15 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "16"
+            "Material": "16",
+            "Transform": [
+              1,
+              0,
+              0,
+              1.0666666666666667,
+              0.5500000000000002,
+              0
+            ]
           },
           "X": -200,
           "Y": 110
@@ -3384,10 +3390,26 @@
             "Material": "2"
           },
           "Lo": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": [
+              3.75,
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
           },
           "Surface": {
-            "Material": "124"
+            "Material": "124",
+            "Transform": [
+              3.75,
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
           },
           "X": -200,
           "Y": 250
@@ -3511,12 +3533,12 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -2.366638819378316,
+          "End": -104.42248278777447,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.4947916666666668,
+          "Percent": 0.3125,
           "Reverse": false,
-          "Start": -18.336938999542195,
-          "TweeningFunc": "EaseInOut"
+          "Start": -85.07498482834693,
+          "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
       },
@@ -6530,7 +6552,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.DB,s.Entity(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,s.Entity(\"sector\")).Intent = behaviors.DoorIntentOpen }",
+          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6668,7 +6690,15 @@
       "Segments": [
         {
           "Hi": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": [
+              1,
+              0,
+              0,
+              0.003375000000000017,
+              0,
+              0.996625
+            ]
           },
           "Lo": {
             "Material": "2"
@@ -6682,7 +6712,15 @@
         {
           "AdjacentSector": "41",
           "Hi": {
-            "Material": "123"
+            "Material": "123",
+            "Transform": [
+              1,
+              0,
+              0,
+              0.003375000000000017,
+              0,
+              0.996625
+            ]
           },
           "Lo": {
             "Material": "2"
@@ -6695,7 +6733,15 @@
         },
         {
           "Hi": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": [
+              1,
+              0,
+              0,
+              0.003375000000000017,
+              0,
+              0.996625
+            ]
           },
           "Lo": {
             "Material": "2"
@@ -6709,7 +6755,15 @@
         {
           "AdjacentSector": "45",
           "Hi": {
-            "Material": "123"
+            "Material": "123",
+            "Transform": [
+              1,
+              0,
+              0,
+              0.003375000000000017,
+              0,
+              0.996625
+            ]
           },
           "Lo": {
             "Material": "2"
@@ -6728,7 +6782,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
+          "Percent": 0,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -10019,8 +10073,7 @@
       "Bottom": -64,
       "Entity": "141",
       "Surface": {
-        "Material": "57",
-        "Stretch": "StretchFill"
+        "Material": "57"
       },
       "Top": -20,
       "TwoSided": true
@@ -10040,8 +10093,7 @@
       "Bottom": 0,
       "Entity": "142",
       "Surface": {
-        "Material": "129",
-        "Stretch": "StretchFill"
+        "Material": "129"
       },
       "Top": 32,
       "TwoSided": true
@@ -10061,8 +10113,7 @@
       "Bottom": 0,
       "Entity": "143",
       "Surface": {
-        "Material": "129",
-        "Stretch": "StretchFill"
+        "Material": "129"
       },
       "Top": 32,
       "TwoSided": true
@@ -10082,8 +10133,7 @@
       "Bottom": 0,
       "Entity": "144",
       "Surface": {
-        "Material": "129",
-        "Stretch": "StretchFill"
+        "Material": "129"
       },
       "Top": 32,
       "TwoSided": true
@@ -10103,8 +10153,7 @@
       "Bottom": 0,
       "Entity": "145",
       "Surface": {
-        "Material": "129",
-        "Stretch": "StretchFill"
+        "Material": "129"
       },
       "Top": 32,
       "TwoSided": true

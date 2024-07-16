@@ -60,7 +60,7 @@ func (wc *WanderController) Always() {
 		a.End = concepts.TweenAngles(start, end, 0.2, concepts.Lerp)
 
 		a.Duration = 300
-		a.TweeningFunc = concepts.EaseInOut
+		a.TweeningFunc = concepts.EaseInOut2
 		a.Lifetime = concepts.AnimationLifetimeOnce
 		wc.LastTurn = wc.Timestamp
 	}
