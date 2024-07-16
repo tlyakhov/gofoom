@@ -5,7 +5,6 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -155,6 +154,15 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 			ne = ns.Add(segment.Normal.Mul(20.0))
 			txtLength := fmt.Sprintf("%.0f", segment.Length)
 			mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
+
+			if segment.AdjacentSegment == nil || segment.PortalHasMaterial {
+				img := editor.EntityImage(segment.Surface.Material, false)
+				mw.Context.Push()
+				ne = ns.Add(segment.Normal.Mul(-20.0))
+				mw.Context.ScaleAbout(0.3, 0.3, ne[0], ne[1])
+				mw.Context.DrawImageAnchored(img, (int)(ne[0]), (int)(ne[1]), 0.5, 0.5)
+				mw.Context.Pop()
+			}
 		}
 
 		if segmentSelected {
@@ -170,17 +178,12 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 	}
 
 	if editor.SectorTypesVisible {
-		text := reflect.TypeOf(sector).String()
+		text := sector.Entity.NameString(editor.DB)
 		mw.Context.Push()
 		mw.Context.SetRGB(0.3, 0.3, 0.3)
 		mw.Context.DrawStringAnchored(text, sector.Center[0], sector.Center[1], 0.5, 0.5)
 		mw.Context.Pop()
 	}
-
-	mw.Context.Push()
-	mw.Context.SetRGB(0.3, 0.3, 0.3)
-	mw.Context.DrawStringAnchored(fmt.Sprintf("Winding: %v", sector.Winding), sector.Center[0], sector.Center[1], 0.5, 0.5)
-	mw.Context.Pop()
 
 	mw.Context.Pop()
 }

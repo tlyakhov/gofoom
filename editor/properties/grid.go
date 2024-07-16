@@ -227,7 +227,18 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 		case core.SelectableMid:
 			fallthrough
 		case core.SelectableSectorSegment:
-			continue
+			label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
+			label.Text = fmt.Sprintf("Sector [%v]", s.Sector.Entity)
+			label.TextStyle.Bold = true
+			//label.SetTooltipText(entityList)
+			label.Alignment = fyne.TextAlignLeading
+
+			button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
+			button.SetText("Select parent sector")
+			button.SetIcon(theme.LoginIcon())
+			button.OnTapped = func() {
+				g.SelectObjects(true, core.SelectableFromEntity(g.State().DB, s.Sector.Entity))
+			}
 		}
 		entities = append(entities, s.Entity)
 		entityList += s.Entity.Format()
@@ -289,15 +300,15 @@ func (g *Grid) sortedFields(state *PropertyGridState) []string {
 func (g *Grid) Refresh(selection *core.Selection) {
 	g.refreshIndex = 0
 
-	distinctTypes := make(map[core.SelectableType]bool)
-	for _, s := range selection.Exact {
-		distinctTypes[s.Type] = true
-	}
+	/*	distinctTypes := make(map[core.SelectableType]bool)
+		for _, s := range selection.Exact {
+			distinctTypes[s.Type] = true
+		}
 
-	if len(distinctTypes) > 2 {
-		g.GridWidget.Objects = make([]fyne.CanvasObject, 0)
-		return
-	}
+		if len(distinctTypes) > 2 {
+			g.GridWidget.Objects = make([]fyne.CanvasObject, 0)
+			return
+		}*/
 
 	if len(selection.Exact) > 0 {
 		g.AddEntityControls(selection)

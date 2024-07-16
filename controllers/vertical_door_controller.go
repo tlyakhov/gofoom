@@ -44,14 +44,32 @@ func (vd *VerticalDoorController) setupAnimation() {
 	a.End = vd.Sector.BottomZ.Original
 	a.Coordinates = concepts.AnimationCoordinatesAbsolute
 	a.Duration = 1000
-	a.TweeningFunc = concepts.EaseInOut
+	a.TweeningFunc = concepts.EaseInOut4
 	a.Lifetime = concepts.AnimationLifetimeHold
 }
 
 func (vd *VerticalDoorController) Always() {
 	vd.setupAnimation()
+	// TODO: This breaks any surface transform customization the user has done.
+	// We need to store the original transform and manipulate it.
+	// TODO: it's slow to assign the callback every frame, we should do it
+	// only once.
 
+	// Need these local variables for the capture
 	a := vd.Sector.TopZ.Animation
+	sector := vd.Sector
+	a.RenderCallback = func(blend float64) {
+		if a.Percent == 0 {
+			return
+		}
+		v := (a.Render - a.Start) / (a.End - a.Start)
+		for _, seg := range sector.Segments {
+			//seg.HiSurface.Transform[1] = 0
+			seg.HiSurface.Transform[3] = v
+			seg.HiSurface.Transform[5] = 1.0 - v
+		}
+	}
+
 	if a.Percent <= 0 {
 		vd.State = behaviors.DoorStateOpen
 		if vd.Intent == behaviors.DoorIntentOpen && vd.AutoClose {

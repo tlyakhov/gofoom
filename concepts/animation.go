@@ -133,6 +133,9 @@ func (a *Animation[T]) Construct(data map[string]any) {
 	if v, ok := data["TweeningFunc"]; ok {
 		name := v.(string)
 		a.TweeningFunc = TweeningFuncs[name]
+		if a.TweeningFunc == nil {
+			a.TweeningFunc = Lerp
+		}
 	}
 	if v, ok := data["Duration"]; ok {
 		a.Duration = v.(float64)

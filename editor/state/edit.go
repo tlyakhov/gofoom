@@ -4,6 +4,7 @@
 package state
 
 import (
+	"image"
 	"sync"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -78,4 +79,5 @@ type IEditor interface {
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)
 	SetDialogLocation(dlg *dialog.FileDialog, target string)
+	EntityImage(entity concepts.Entity, sector bool) image.Image
 }
