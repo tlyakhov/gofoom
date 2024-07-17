@@ -15,6 +15,7 @@ type MaterialSampler struct {
 	*Ray
 	Output           concepts.Vector4
 	ScreenX, ScreenY int
+	NoTexture        bool
 }
 
 func (ms *MaterialSampler) SampleShader(eShader concepts.Entity, extraStages []*materials.ShaderStage, u, v float64, scale float64) *concepts.Vector4 {
@@ -67,6 +68,7 @@ func (ms *MaterialSampler) sampleTexture(result *concepts.Vector4, material conc
 		v -= math.Floor(v)
 	}
 
+	ms.NoTexture = false
 	var sample concepts.Vector4
 	if image := materials.ImageFromDb(ms.DB, material); image != nil {
 		sample = image.Sample(u, v, scale)
@@ -79,6 +81,7 @@ func (ms *MaterialSampler) sampleTexture(result *concepts.Vector4, material conc
 		sample[1] = 0
 		sample[2] = 0.5
 		sample[3] = 1.0
+		ms.NoTexture = true
 	}
 	result.AddPreMulColorSelf(&sample)
 

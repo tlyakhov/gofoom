@@ -4,11 +4,9 @@
 package main
 
 import (
-	"image"
 	"math"
 
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 
 	"tlyakhov/gofoom/components/behaviors"
@@ -58,16 +56,11 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	selected := editor.SelectedObjects.Contains(core.SelectableFromBody(body))
 
 	if selected || hovering {
-		var img image.Image
-		sheet := materials.SpriteSheetFromDb(editor.DB, body.Entity)
-		if sheet != nil && len(sheet.Sprites) > 0 {
-			img = editor.EntityImage(sheet.Sprites[0].Image, false)
-		} else {
-			img = editor.EntityImage(body.Entity, false)
-		}
+		img := editor.EntityImage(body.Entity, false)
 		mw.Context.Push()
-		mw.Context.ScaleAbout(2*body.Size.Now[0]/64, 2*body.Size.Now[0]/64, body.Pos.Now[0], body.Pos.Now[1])
-		mw.Context.DrawImageAnchored(img, (int)(body.Pos.Now[0]), (int)(body.Pos.Now[1]), 0.5, 0.5)
+		mw.Context.Translate(body.Pos.Now[0]+2*body.Size.Now[0], body.Pos.Now[1])
+		mw.Context.Scale(2*body.Size.Now[0]/64, 2*body.Size.Now[0]/64)
+		mw.Context.DrawImageAnchored(img, 0, 0, 0.5, 0.5)
 		mw.Context.Pop()
 	}
 
