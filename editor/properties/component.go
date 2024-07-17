@@ -30,6 +30,9 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 
 	button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
 	button.Text = fmt.Sprintf("Remove %v from [%v]", parentType, entities)
+	if len(button.Text) > 32 {
+		button.Text = button.Text[:32] + "..."
+	}
 	button.Icon = theme.ContentRemoveIcon()
 	button.OnTapped = func() {
 		action := &actions.DeleteComponent{IEditor: g.IEditor, Components: make(map[concepts.Entity]concepts.Attachable)}

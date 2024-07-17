@@ -6,14 +6,11 @@ package main
 import (
 	"fmt"
 	"image"
-	"image/color"
 	"log"
-	"math"
 	"os"
 	"path"
 	"path/filepath"
 	"strconv"
-	"time"
 
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
@@ -24,7 +21,6 @@ import (
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
-	"github.com/fogleman/gg"
 	"github.com/puzpuzpuz/xsync/v3"
 
 	"tlyakhov/gofoom/components/behaviors"
@@ -64,6 +60,7 @@ type Editor struct {
 	MapViewSurface *image.RGBA
 
 	entityIconCache *xsync.MapOf[concepts.Entity, entityIconCacheItem]
+	noTextureImage  image.Image
 }
 
 type entityIconCacheItem struct {
@@ -98,6 +95,7 @@ func NewEditor() *Editor {
 	e.Grid.IEditor = e
 	e.Grid.MaterialSampler.Ray = &rs.Ray{}
 	e.MapViewGrid.Current = &e.Edit.MapView
+
 	return e
 }
 
@@ -512,10 +510,10 @@ func (e *Editor) GatherHoveringObjects() {
 					}
 				}*/
 			} else {
-				if e.Mouse.Sub(e.WorldToScreen(&segment.P)).Length() < state.SegmentSelectionEpsilon {
+				if e.MouseWorld.Sub(&segment.P).Length() < state.SegmentSelectionEpsilon {
 					e.HoveringObjects.Add(core.SelectableFromSegment(segment))
 				}
-				if segment.DistanceToPoint(e.ScreenToWorld(&e.Mouse)) < state.SegmentSelectionEpsilon {
+				if segment.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
 					e.HoveringObjects.Add(core.SelectableFromSegment(segment))
 				}
 			}
@@ -534,23 +532,29 @@ func (e *Editor) GatherHoveringObjects() {
 				e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(seg))
 			}
 		} else {
-			if e.Mouse.Sub(e.WorldToScreen(seg.A)).Length() < state.SegmentSelectionEpsilon {
+			if e.MouseWorld.Sub(seg.A).Length() < state.SegmentSelectionEpsilon {
 				e.HoveringObjects.Add(core.SelectableFromInternalSegmentA(seg))
 			}
-			if e.Mouse.Sub(e.WorldToScreen(seg.B)).Length() < state.SegmentSelectionEpsilon {
+			if e.MouseWorld.Sub(seg.B).Length() < state.SegmentSelectionEpsilon {
 				e.HoveringObjects.Add(core.SelectableFromInternalSegmentB(seg))
 			}
-			if seg.DistanceToPoint(e.ScreenToWorld(&e.Mouse)) < state.SegmentSelectionEpsilon {
+			if seg.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
 				e.HoveringObjects.Add(core.SelectableFromInternalSegment(seg))
 			}
 		}
 	}
 	for _, a := range e.DB.AllOfType(core.BodyComponentIndex) {
 		body := a.(*core.Body)
+		p := body.Pos.Now
+		size := body.Size.Render[0]*0.5 + state.SegmentSelectionEpsilon
 		if e.Selecting() {
-			p := body.Pos.Now
-			if p[0]+body.Size.Render[0]*0.5 >= v1[0] && p[0]-body.Size.Render[0]*0.5 <= v2[0] &&
-				p[1]+body.Size.Render[0]*0.5 >= v1[1] && p[1]-body.Size.Render[0]*0.5 <= v2[1] {
+			if p[0]+size >= v1[0] && p[0]-size <= v2[0] &&
+				p[1]+size >= v1[1] && p[1]-size <= v2[1] {
+				e.HoveringObjects.Add(core.SelectableFromBody(body))
+			}
+		} else {
+			if p[0]+size > e.MouseWorld[0] && p[0]-size < e.MouseWorld[0] &&
+				p[1]+size > e.MouseWorld[1] && p[1]-size < e.MouseWorld[1] {
 				e.HoveringObjects.Add(core.SelectableFromBody(body))
 			}
 		}
@@ -607,82 +611,4 @@ func (e *Editor) ToolSelectSegment() {
 			return
 		}
 	}
-}
-
-func (e *Editor) materialSelectionBorderColor(entity concepts.Entity) *concepts.Vector4 {
-	if materials.ShaderFromDb(e.DB, entity) != nil {
-		return &concepts.Vector4{1.0, 0.0, 1.0, 0.5}
-	}
-	return &concepts.Vector4{0.0, 0.0, 0.0, 0.0}
-}
-
-// TODO: We should cache these
-func (e *Editor) imageForMaterial(entity concepts.Entity) image.Image {
-	w, h := 64, 64
-	img := image.NewRGBA(image.Rect(0, 0, w, h))
-	buffer := img.Pix
-	border := e.materialSelectionBorderColor(entity)
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
-			e.MaterialSampler.ScreenX = x * e.MaterialSampler.ScreenWidth / w
-			e.MaterialSampler.ScreenY = y * e.MaterialSampler.ScreenHeight / h
-			e.MaterialSampler.Angle = float64(x) * math.Pi * 2.0 / float64(w)
-			c := e.MaterialSampler.SampleShader(entity, nil, float64(x)/float64(w), float64(y)/float64(h), 1.0)
-			if x <= 1 || y <= 1 || x >= w-2 || y >= h-2 {
-				c.AddPreMulColorSelf(border)
-			}
-			index := x*4 + y*img.Stride
-			buffer[index+0] = uint8(concepts.Clamp(c[0]*255, 0, 255))
-			buffer[index+1] = uint8(concepts.Clamp(c[1]*255, 0, 255))
-			buffer[index+2] = uint8(concepts.Clamp(c[2]*255, 0, 255))
-			buffer[index+3] = uint8(concepts.Clamp(c[3]*255, 0, 255))
-		}
-	}
-	return img
-}
-
-var patternPrimary = gg.NewSolidPattern(color.NRGBA{255, 255, 255, 255})
-var patternSecondary = gg.NewSolidPattern(color.NRGBA{255, 255, 0, 255})
-
-func (e *Editor) imageForSector(entity concepts.Entity) image.Image {
-	w, h := 64, 64
-	context := gg.NewContext(w, h)
-
-	sector := core.SectorFromDb(e.DB, entity)
-	context.SetLineWidth(1)
-	for _, segment := range sector.Segments {
-		if segment.AdjacentSegment != nil {
-			context.SetStrokeStyle(patternSecondary)
-		} else {
-			context.SetStrokeStyle(patternPrimary)
-		}
-		context.NewSubPath()
-		x := (segment.P[0] - sector.Min[0]) * float64(w) / (sector.Max[0] - sector.Min[0])
-		y := (segment.P[1] - sector.Min[1]) * float64(h) / (sector.Max[1] - sector.Min[1])
-		context.MoveTo(x, y)
-		x = (segment.Next.P[0] - sector.Min[0]) * float64(w) / (sector.Max[0] - sector.Min[0])
-		y = (segment.Next.P[1] - sector.Min[1]) * float64(h) / (sector.Max[1] - sector.Min[1])
-		context.LineTo(x, y)
-		context.ClosePath()
-		context.Stroke()
-	}
-
-	return context.Image()
-}
-
-func (e *Editor) EntityImage(entity concepts.Entity, sector bool) image.Image {
-	item, exists := e.entityIconCache.Load(entity)
-	now := time.Now().UnixMilli()
-	if exists && now-item.LastUpdated < 1000*60 {
-		return item.Image
-	}
-	if sector {
-		item.Image = e.imageForSector(entity)
-	} else {
-		item.Image = e.imageForMaterial(entity)
-	}
-	item.LastUpdated = now
-	// TODO: Clean this cache periodically
-	e.entityIconCache.Store(entity, item)
-	return item.Image
 }

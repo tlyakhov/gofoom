@@ -31,7 +31,8 @@ func Floor(c *state.Column) {
 	// operation is a square root to get the distance.
 	// We could have a fast path for non-sloped cases, but it only saves a few
 	// math ops and adds branches, so seems unnecessary.
-	planeRayDelta := &concepts.Vector3{
+	world := concepts.Vector3{}
+	planeRayDelta := concepts.Vector3{
 		c.Sector.Segments[0].P[0] - c.Ray.Start[0],
 		c.Sector.Segments[0].P[1] - c.Ray.Start[1],
 		c.Sector.BottomZ.Render - c.CameraZ}
@@ -50,7 +51,9 @@ func Floor(c *state.Column) {
 			c.DebugNotices.Push(dbg)
 			continue
 		}
-		world := &concepts.Vector3{c.RayFloorCeil[0] * t, c.RayFloorCeil[1] * t, c.RayFloorCeil[2] * t}
+		world[2] = c.RayFloorCeil[2] * t
+		world[1] = c.RayFloorCeil[1] * t
+		world[0] = c.RayFloorCeil[0] * t
 		distToFloor := world.Length()
 		dist2 := world.To2D().Length2()
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
@@ -73,7 +76,7 @@ func Floor(c *state.Column) {
 		if mat != 0 {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
 			c.SampleShader(mat, extras, tx, ty, scaler)
-			c.SampleLight(&c.MaterialSampler.Output, mat, world, distToFloor)
+			c.SampleLight(&c.MaterialSampler.Output, mat, &world, distToFloor)
 		}
 		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)
 		c.ZBuffer[screenIndex] = distToFloor

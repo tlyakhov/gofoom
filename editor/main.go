@@ -18,6 +18,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
@@ -65,6 +66,11 @@ func main() {
 	CreateMainMenu()
 
 	editor.App.Lifecycle().SetOnStarted(func() {
+		// This is used whenever we don't have a texture for something
+		img := canvas.NewImageFromResource(theme.QuestionIcon())
+		img.Resize(fyne.NewSquareSize(64))
+		img.Refresh()
+		editor.noTextureImage = img.Image
 		editor.Load("data/worlds/portal-test.json")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})

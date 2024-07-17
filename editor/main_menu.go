@@ -65,6 +65,8 @@ type EditorMenu struct {
 	ToolsAlignGrid          MenuAction
 	ToolsNewShader          MenuAction
 
+	ViewSectorEntities MenuAction
+
 	BehaviorsPause MenuAction
 	BehaviorsReset MenuAction
 
@@ -262,6 +264,8 @@ func CreateMainMenu() {
 
 	editor.ToolsNewShader.Menu = fyne.NewMenuItem("New Shader...", editor.NewShader)
 
+	editor.ViewSectorEntities.Menu = fyne.NewMenuItem("Toggle Sector Labels", func() { editor.SectorTypesVisible = !editor.SectorTypesVisible })
+
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
 		editor.DB.Simulation.All.Range(func(simVar concepts.Simulated, _ bool) bool {
@@ -297,8 +301,12 @@ func CreateMainMenu() {
 		editor.ToolsAddBody.Menu, editor.ToolsAddSector.Menu, editor.ToolsAddInternalSegment.Menu, editor.ToolsSplitSegment.Menu,
 		editor.ToolsSplitSector.Menu, editor.ToolsAlignGrid.Menu, fyne.NewMenuItemSeparator(),
 		editor.ToolsNewShader.Menu)
+
+	menuView := fyne.NewMenu("View", editor.ViewSectorEntities.Menu)
+
 	menuBehaviors := fyne.NewMenu("Behaviors", editor.BehaviorsReset.Menu, editor.BehaviorsPause.Menu)
-	mainMenu := fyne.NewMainMenu(menuFile, menuEdit, menuTools, menuBehaviors)
+
+	mainMenu := fyne.NewMainMenu(menuFile, menuEdit, menuTools, menuView, menuBehaviors)
 	editor.Window.SetMainMenu(mainMenu)
 
 	editor.MenuActions = make(map[string]*MenuAction)
