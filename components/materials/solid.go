@@ -35,6 +35,7 @@ func (s *Solid) SetDB(db *concepts.EntityComponentDB) {
 
 func (s *Solid) Construct(data map[string]any) {
 	s.Attached.Construct(data)
+	s.Diffuse.Construct(nil)
 
 	if data == nil {
 		return

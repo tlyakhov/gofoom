@@ -17,6 +17,7 @@ func WallMidPick(s *state.Column) {
 // WallMid renders the wall portion (potentially over a portal).
 func WallMid(c *state.Column, internalSegment bool) {
 	surf := c.Segment.Surface
+	transform := surf.Transform.Render
 	for c.ScreenY = c.ClippedStart; c.ScreenY < c.ClippedEnd; c.ScreenY++ {
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
 
@@ -27,8 +28,8 @@ func WallMid(c *state.Column, internalSegment bool) {
 		c.RaySegIntersect[2] = c.TopZ + v*(c.BottomZ-c.TopZ)
 
 		if surf.Material != 0 {
-			tu := surf.Transform[0]*c.U + surf.Transform[2]*v + surf.Transform[4]
-			tv := surf.Transform[1]*c.U + surf.Transform[3]*v + surf.Transform[5]
+			tu := transform[0]*c.U + transform[2]*v + transform[4]
+			tv := transform[1]*c.U + transform[3]*v + transform[5]
 			c.SampleShader(surf.Material, surf.ExtraStages, tu, tv, c.ProjectZ(1.0))
 			c.SampleLight(&c.MaterialSampler.Output, surf.Material, &c.RaySegIntersect, c.Distance)
 		}

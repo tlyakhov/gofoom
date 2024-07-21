@@ -16,10 +16,19 @@ type Matrix2 [6]float64
 var IdentityMatrix2 = Matrix2{1, 0, 0, 1, 0, 0}
 
 func (m *Matrix2) SetIdentity() {
-	m[0] = 1
-	m[1] = 0
-	m[2] = 0
 	m[3] = 1
+	m[2] = 0
+	m[1] = 0
+	m[0] = 1
+}
+
+func (m *Matrix2) From(m2 *Matrix2) {
+	m[5] = m2[5]
+	m[4] = m2[4]
+	m[3] = m2[3]
+	m[2] = m2[2]
+	m[1] = m2[1]
+	m[0] = m2[0]
 }
 
 func (m *Matrix2) IsIdentity() bool {

@@ -116,8 +116,8 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 	for x := 0; x < testw; x++ {
 		for y := 0; y < testh; y++ {
 			sector := CreateTestSector(db, fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
-			sector.TopZ.Set(300)
-			sector.BottomZ.Set(rand.Float64() * 30)
+			sector.TopZ.SetAll(300)
+			sector.BottomZ.SetAll(rand.Float64() * 30)
 			sector.FloorSlope = rand.Float64() * 0.2
 			sector.CeilSurface.Material = isky
 			for i := 0; i < len(sector.Segments); i++ {
@@ -129,7 +129,7 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 				eLight := archetypes.CreateLightBody(db)
 				lightBody := core.BodyFromDb(db, eLight)
 				lightBody.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
-				lightBody.Pos.Reset()
+				lightBody.Pos.ResetToOriginal()
 				lightBody.Mass = 0
 				log.Println("Generated light")
 			}
@@ -163,14 +163,14 @@ func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	idirt := CreateTestDirt(db)
 
 	sector := CreateTestSector(db, "sector1", -100, -100, 200)
-	sector.TopZ.Set(100)
-	sector.BottomZ.Set(0)
+	sector.TopZ.SetAll(100)
+	sector.BottomZ.SetAll(0)
 	sector2 := CreateTestSector(db, "sector2", 100, -100, 200)
-	sector2.TopZ.Set(100)
-	sector2.BottomZ.Set(-10)
+	sector2.TopZ.SetAll(100)
+	sector2.BottomZ.SetAll(-10)
 	sector3 := CreateTestSector(db, "sector3", 300, -100, 200)
-	sector3.TopZ.Set(100)
-	sector3.BottomZ.Set(0)
+	sector3.TopZ.SetAll(100)
+	sector3.BottomZ.SetAll(0)
 	sector3.FloorSurface.Material = idirt
 	sector3.CeilSurface.Material = isky
 	sector3.Segments[1].Surface.Material = isky
@@ -178,7 +178,7 @@ func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	eLight := archetypes.CreateLightBody(db)
 	lightBody := core.BodyFromDb(db, eLight)
 	lightBody.Pos.Original = concepts.Vector3{0, 0, 60}
-	lightBody.Pos.Reset()
+	lightBody.Pos.ResetToOriginal()
 	lightBody.Mass = 0
 	log.Println("Generated light")
 

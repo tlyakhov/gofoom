@@ -17,6 +17,7 @@ var EmbeddedTypes = [...]string{
 	concepts.ReflectType[*concepts.SimVariable[concepts.Vector2]]().String(),
 	concepts.ReflectType[*concepts.SimVariable[concepts.Vector3]]().String(),
 	concepts.ReflectType[*concepts.SimVariable[concepts.Vector4]]().String(),
+	concepts.ReflectType[*concepts.SimVariable[concepts.Matrix2]]().String(),
 	concepts.ReflectType[*core.Script]().String(),
 	concepts.ReflectType[*materials.Surface]().String(),
 	concepts.ReflectType[*materials.ShaderStage]().String(),
@@ -26,6 +27,7 @@ var EmbeddedTypes = [...]string{
 	concepts.ReflectType[**concepts.Animation[concepts.Vector2]]().String(),
 	concepts.ReflectType[**concepts.Animation[concepts.Vector3]]().String(),
 	concepts.ReflectType[**concepts.Animation[concepts.Vector4]]().String(),
+	concepts.ReflectType[**concepts.Animation[concepts.Matrix2]]().String(),
 }
 
 type PropertyGridField struct {

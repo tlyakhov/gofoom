@@ -95,9 +95,11 @@ func (t *Text) Sample(x, y float64, scale float64) concepts.Vector4 {
 	return c
 }
 
+var defaultTextColor = map[string]any{"Original": map[string]any{"X": 1.0, "Y": 1.0, "Z": 1.0, "W": 1.0}}
+
 func (t *Text) Construct(data map[string]any) {
 	t.Attached.Construct(data)
-	t.Color.Set(concepts.Vector4{1, 1, 1, 1})
+	t.Color.Construct(defaultTextColor)
 	t.LineSpacing = 1.05
 
 	if data == nil {

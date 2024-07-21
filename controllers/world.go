@@ -43,7 +43,7 @@ func (wc *WorldController) Loaded() {
 		player := archetypes.CreatePlayerBody(wc.DB)
 		playerBody := core.BodyFromDb(wc.DB, player)
 		playerBody.Pos.Original = wc.Spawn.Spawn
-		playerBody.Pos.Reset()
+		playerBody.Pos.ResetToOriginal()
 	}
 }
 

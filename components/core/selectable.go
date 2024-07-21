@@ -174,7 +174,7 @@ func (s *Selectable) Transform(m *concepts.Matrix2) {
 		s.Sector.Recalculate()
 	case SelectableBody:
 		m.ProjectXYSelf(&s.Body.Pos.Original)
-		s.Body.Pos.Reset()
+		s.Body.Pos.ResetToOriginal()
 	case SelectableInternalSegmentA:
 		m.ProjectSelf(s.InternalSegment.A)
 		s.InternalSegment.Recalculate()
@@ -201,7 +201,7 @@ func (s *Selectable) Recalculate() {
 	case SelectableSectorSegment:
 		s.Sector.Recalculate()
 	case SelectableBody:
-		s.Body.Pos.Reset()
+		s.Body.Pos.ResetToOriginal()
 	case SelectableInternalSegmentA:
 		fallthrough
 	case SelectableInternalSegmentB:

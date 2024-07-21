@@ -129,7 +129,7 @@ var debugSectorName string = "Starting" // "be4bqmfvn27mek306btg"
 // TODO: Make more general
 // lightVisibleFromSector determines whether a given light is visible from a world location.
 func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
-	lightPos := &lightBody.Pos.Render
+	lightPos := lightBody.Pos.Render
 
 	debugLighting := false
 	if constants.DebugLighting {
@@ -167,12 +167,12 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if b.Active && b.Shadow != core.BodyShadowNone {
 				switch b.Shadow {
 				case core.BodyShadowSphere:
-					if concepts.IntersectLineSphere(p, lightPos, &b.Pos.Render, lightBody.Size.Render[0]*0.5) {
+					if concepts.IntersectLineSphere(p, lightPos, b.Pos.Render, lightBody.Size.Render[0]*0.5) {
 						return false
 					}
 				case core.BodyShadowAABB:
 					ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
-					if concepts.IntersectLineAABB(p, lightPos, &b.Pos.Render, ext) {
+					if concepts.IntersectLineAABB(p, lightPos, b.Pos.Render, ext) {
 						return false
 					}
 				}

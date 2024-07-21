@@ -11,7 +11,7 @@ import (
 )
 
 type Simulatable interface {
-	~int | ~float64 | Vector2 | Vector3 | Vector4
+	~int | ~float64 | Vector2 | Vector3 | Vector4 | Matrix2
 }
 
 type Simulated interface {
@@ -30,27 +30,34 @@ type SimVariable[T Simulatable] struct {
 	Now            T
 	Prev           T
 	Original       T `editable:"Initial Value"`
-	Render         T
+	Render         *T
+	Attached       bool
 	NoRenderBlend  bool // For things like angles
 	RenderCallback func(blend float64)
+
+	render T
 }
 
-func (s *SimVariable[T]) Reset() {
+func (s *SimVariable[T]) ResetToOriginal() {
 	s.Prev = s.Original
 	s.Now = s.Original
 }
 
-func (s *SimVariable[T]) Set(v T) {
+func (s *SimVariable[T]) SetAll(v T) {
 	s.Original = v
-	s.Reset()
+	s.ResetToOriginal()
 }
 
 func (s *SimVariable[T]) Attach(sim *Simulation) {
 	sim.All.Store(s, true)
+	s.Render = &s.render
+	s.Attached = true
 }
 
 func (s *SimVariable[T]) Detach(sim *Simulation) {
 	sim.All.Delete(s)
+	s.Render = &s.Now
+	s.Attached = false
 }
 
 func (s *SimVariable[T]) NewAnimation() *Animation[T] {
@@ -66,7 +73,7 @@ func (s *SimVariable[T]) NewFrame() {
 
 func (s *SimVariable[T]) RenderBlend(blend float64) {
 	if s.NoRenderBlend {
-		s.Render = s.Now
+		s.Render = &s.Now
 		if s.RenderCallback != nil {
 			s.RenderCallback(blend)
 		}
@@ -74,26 +81,28 @@ func (s *SimVariable[T]) RenderBlend(blend float64) {
 	}
 	switch sc := any(s).(type) {
 	case *SimVariable[int]:
-		sc.Render = int(Lerp(float64(sc.Prev), float64(sc.Now), blend))
+		sc.render = int(Lerp(float64(sc.Prev), float64(sc.Now), blend))
 	case *SimVariable[float64]:
-		sc.Render = Lerp(sc.Prev, sc.Now, blend)
+		sc.render = Lerp(sc.Prev, sc.Now, blend)
 	case *SimVariable[Vector2]:
-		sc.Render[0] = Lerp(sc.Prev[0], sc.Now[0], blend)
-		sc.Render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
+		sc.render[0] = Lerp(sc.Prev[0], sc.Now[0], blend)
+		sc.render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
 	case *SimVariable[Vector3]:
-		sc.Render[0] = Lerp(sc.Prev[0], sc.Now[0], blend)
-		sc.Render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
-		sc.Render[2] = Lerp(sc.Prev[2], sc.Now[2], blend)
+		sc.render[0] = Lerp(sc.Prev[0], sc.Now[0], blend)
+		sc.render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
+		sc.render[2] = Lerp(sc.Prev[2], sc.Now[2], blend)
 	case *SimVariable[Vector4]:
-		sc.Render[0] = Lerp(sc.Prev[0], sc.Now[0], blend)
-		sc.Render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
-		sc.Render[2] = Lerp(sc.Prev[2], sc.Now[2], blend)
-		sc.Render[3] = Lerp(sc.Prev[3], sc.Now[3], blend)
+		sc.render[0] = Lerp(sc.Prev[0], sc.Now[0], blend)
+		sc.render[1] = Lerp(sc.Prev[1], sc.Now[1], blend)
+		sc.render[2] = Lerp(sc.Prev[2], sc.Now[2], blend)
+		sc.render[3] = Lerp(sc.Prev[3], sc.Now[3], blend)
 	case *SimVariable[Entity]:
-		sc.Render = sc.Prev
+		sc.render = sc.Prev
 		if blend > 0.5 {
-			sc.Render = sc.Now
+			sc.render = sc.Now
 		}
+	case *SimVariable[Matrix2]:
+		s.Render = &s.Now
 	}
 
 	if s.RenderCallback != nil {
@@ -115,6 +124,8 @@ func (s *SimVariable[T]) Serialize() map[string]any {
 		result["Original"] = sc.Original.Serialize()
 	case *SimVariable[Vector4]:
 		result["Original"] = sc.Original.Serialize(false)
+	case *SimVariable[Matrix2]:
+		result["Original"] = sc.Original.Serialize()
 	case *SimVariable[Entity]:
 		result["Original"] = sc.Original.Format()
 	default:
@@ -128,7 +139,17 @@ func (s *SimVariable[T]) Serialize() map[string]any {
 }
 
 func (s *SimVariable[T]) Construct(data map[string]any) {
+	if !s.Attached {
+		s.Render = &s.Now
+	}
+
+	switch sc := any(s).(type) {
+	case *SimVariable[Matrix2]:
+		sc.Original.SetIdentity()
+	}
+
 	if data == nil {
+		s.ResetToOriginal()
 		return
 	}
 
@@ -144,11 +165,14 @@ func (s *SimVariable[T]) Construct(data map[string]any) {
 			sc.Original.Deserialize(v.(map[string]any))
 		case *SimVariable[Vector4]:
 			sc.Original.Deserialize(v.(map[string]any), false)
+		case *SimVariable[Matrix2]:
+			sc.Original.Deserialize(v.([]any))
 		default:
 			log.Panicf("Tried to deserialize SimVar[T] %v where T has no serializer", s)
 		}
-		s.Reset()
 	}
+
+	s.ResetToOriginal()
 
 	if v, ok := data["Animation"]; ok {
 		s.Animation = new(Animation[T])

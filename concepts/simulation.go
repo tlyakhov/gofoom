@@ -4,10 +4,10 @@
 package concepts
 
 import (
+	"sync"
 	"tlyakhov/gofoom/constants"
 
 	"github.com/loov/hrtime"
-	"github.com/puzpuzpuz/xsync/v3"
 )
 
 // This is based on the "Fix your timestep" blog post here:
@@ -24,13 +24,12 @@ type Simulation struct {
 	Counter          uint64
 	Integrate        func()
 	Render           func()
-	All              *xsync.MapOf[Simulated, bool]
+	All              sync.Map
 }
 
 func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
-		All:           xsync.NewMapOf[Simulated, bool](),
 		EditorPaused:  false,
 	}
 }
@@ -50,7 +49,8 @@ func (s *Simulation) Step() {
 	s.RenderTime += s.FrameMillis
 
 	for s.RenderTime >= constants.TimeStep {
-		s.All.Range(func(v Simulated, _ bool) bool {
+		s.All.Range(func(key any, _ any) bool {
+			v := key.(Simulated)
 			v.NewFrame()
 			if a := v.GetAnimation(); a != nil {
 				a.Animate()
@@ -70,7 +70,8 @@ func (s *Simulation) Step() {
 	// Update the blended values
 	s.RenderStateBlend = s.RenderTime / constants.TimeStep
 
-	s.All.Range(func(v Simulated, _ bool) bool {
+	s.All.Range(func(key any, _ any) bool {
+		v := key.(Simulated)
 		v.RenderBlend(s.RenderStateBlend)
 		return true
 	})

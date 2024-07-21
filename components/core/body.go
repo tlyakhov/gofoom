@@ -66,7 +66,7 @@ func (b *Body) Sector() *Sector {
 }
 
 func (b *Body) Normal() *concepts.Vector2 {
-	dy, dx := math.Sincos(b.Angle.Render * concepts.Deg2rad)
+	dy, dx := math.Sincos(*b.Angle.Render * concepts.Deg2rad)
 	return &concepts.Vector2{dx, dy}
 }
 
@@ -97,12 +97,17 @@ func (b *Body) RenderSector() *Sector {
 	}
 	return nil
 }
+
+var defaultBodySize = map[string]any{"Original": map[string]any{"X": 10.0, "Y": 10.0}}
+
 func (b *Body) Construct(data map[string]any) {
 	b.Attached.Construct(data)
 
-	b.Pos.Set(concepts.Vector3{0, 0, 0})
-	b.Vel.Set(concepts.Vector3{0, 0, 0})
-	b.Size.Set(concepts.Vector2{10, 10})
+	b.Pos.Construct(nil)
+	b.Vel.Construct(nil)
+	b.Size.Construct(defaultBodySize)
+	b.Angle.Construct(nil)
+
 	b.CollisionResponse = Slide
 	b.MountHeight = constants.PlayerMountHeight
 	b.Shadow = BodyShadowNone

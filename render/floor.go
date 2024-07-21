@@ -21,7 +21,7 @@ func FloorPick(s *state.Column) {
 func Floor(c *state.Column) {
 	mat := c.Sector.FloorSurface.Material
 	extras := c.Sector.FloorSurface.ExtraStages
-	transform := c.Sector.FloorSurface.Transform
+	transform := c.Sector.FloorSurface.Transform.Render
 	sectorMin := &c.Sector.Min
 	sectorMax := &c.Sector.Max
 
@@ -35,7 +35,7 @@ func Floor(c *state.Column) {
 	planeRayDelta := concepts.Vector3{
 		c.Sector.Segments[0].P[0] - c.Ray.Start[0],
 		c.Sector.Segments[0].P[1] - c.Ray.Start[1],
-		c.Sector.BottomZ.Render - c.CameraZ}
+		*c.Sector.BottomZ.Render - c.CameraZ}
 	for c.ScreenY = c.ClippedEnd; c.ScreenY < c.YEnd; c.ScreenY++ {
 		c.RayFloorCeil[2] = float64(c.ScreenHeight/2 - c.ScreenY)
 		denom := c.Sector.FloorNormal.Dot(&c.RayFloorCeil)
@@ -65,7 +65,7 @@ func Floor(c *state.Column) {
 		world[0] += c.Ray.Start[0]
 		world[1] += c.Ray.Start[1]
 		if c.Sector.FloorSlope == 0 {
-			world[2] = c.Sector.BottomZ.Render
+			world[2] = *c.Sector.BottomZ.Render
 		} else {
 			world[2] += c.CameraZ
 		}

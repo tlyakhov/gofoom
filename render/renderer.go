@@ -253,7 +253,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.MaterialSampler.ScreenX = x
 	column.MaterialSampler.ScreenY = y
 	column.MaterialSampler.Angle = column.Angle
-	column.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
+	column.Ray.Set(*r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
 	column.RayFloorCeil[0] = column.Ray.AngleCos * column.ViewFix[column.ScreenX]
 	column.RayFloorCeil[1] = column.Ray.AngleSin * column.ViewFix[column.ScreenX]
 

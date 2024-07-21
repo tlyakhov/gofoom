@@ -19,15 +19,15 @@ import (
 
 type Surface struct {
 	DB          *concepts.EntityComponentDB
-	Material    concepts.Entity  `editable:"Material" edit_type:"Material"`
-	ExtraStages []*ShaderStage   `editable:"Extra Shader Stages"`
-	Transform   concepts.Matrix2 `editable:"Transform"`
+	Material    concepts.Entity                        `editable:"Material" edit_type:"Material"`
+	ExtraStages []*ShaderStage                         `editable:"Extra Shader Stages"`
+	Transform   concepts.SimVariable[concepts.Matrix2] `editable:"Transform"`
 }
 
 func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any) {
 	s.DB = db
 	s.ExtraStages = make([]*ShaderStage, 0)
-	s.Transform = concepts.IdentityMatrix2
+	s.Transform.Construct(nil)
 
 	if data == nil {
 		return
@@ -40,7 +40,10 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 		s.Material, _ = concepts.ParseEntity(v.(string))
 	}
 	if v, ok := data["Transform"]; ok {
-		s.Transform.Deserialize(v.([]any))
+		if v2, ok2 := v.([]any); ok2 {
+			v = map[string]any{"Original": v2}
+		}
+		s.Transform.Construct(v.(map[string]any))
 	}
 }
 
@@ -55,7 +58,7 @@ func (s *Surface) Serialize() map[string]any {
 		result["Material"] = s.Material.Format()
 	}
 
-	if !s.Transform.IsIdentity() {
+	if !s.Transform.Original.IsIdentity() {
 		result["Transform"] = s.Transform.Serialize()
 	}
 
