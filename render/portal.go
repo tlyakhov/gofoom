@@ -17,6 +17,7 @@ func WallHiPick(cp *state.ColumnPortal) {
 // WallHi renders the top portion of a portal segment.
 func WallHi(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.HiSurface
+	transform := surf.Transform.Render
 	u := cp.U
 	for cp.ScreenY = cp.ClippedStart; cp.ScreenY < cp.AdjClippedTop; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
@@ -27,8 +28,8 @@ func WallHi(cp *state.ColumnPortal) {
 		cp.RaySegIntersect[2] = (1.0-v)*cp.TopZ + v*cp.AdjCeilZ
 
 		if surf.Material != 0 {
-			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
-			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
+			tu := transform[0]*u + transform[2]*v + transform[4]
+			tv := transform[1]*u + transform[3]*v + transform[5]
 			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
 			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		} else {
@@ -51,6 +52,7 @@ func WallLowPick(cp *state.ColumnPortal) {
 // WallLow renders the bottom portion of a portal segment.
 func WallLow(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.LoSurface
+	transform := surf.Transform.Render
 	u := cp.U
 	for cp.ScreenY = cp.AdjClippedBottom; cp.ScreenY < cp.ClippedEnd; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
@@ -61,8 +63,8 @@ func WallLow(cp *state.ColumnPortal) {
 		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjFloorZ + v*cp.BottomZ
 
 		if surf.Material != 0 {
-			tu := surf.Transform[0]*u + surf.Transform[2]*v + surf.Transform[4]
-			tv := surf.Transform[1]*u + surf.Transform[3]*v + surf.Transform[5]
+			tu := transform[0]*u + transform[2]*v + transform[4]
+			tv := transform[1]*u + transform[3]*v + transform[5]
 			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
 			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		} else {

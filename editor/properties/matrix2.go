@@ -29,7 +29,7 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 	// surface in the world, and adjusts the transform accordingly.
 	for i, v := range field.Values {
 		var worldWidth, worldHeight float64
-		grandparent := v.Ancestors[len(v.Ancestors)-2]
+		grandparent := v.Ancestors[len(v.Ancestors)-3]
 		switch typed := grandparent.(type) {
 		case *core.Sector:
 			// This is a floor or ceiling
@@ -40,13 +40,13 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 			worldWidth = typed.Length
 			worldHeight = cz - fz
 			switch field.Name {
-			case "Segment.Low Surface.Transform":
+			case "Segment.Low Surface.Transform.Initial Value":
 				if typed.AdjacentSegment != nil {
 					adj := core.SectorFromDb(g.State().DB, typed.AdjacentSector)
 					afz, _ := adj.SlopedZNow(typed.A)
 					worldHeight = math.Abs(fz - afz)
 				}
-			case "Segment.Hi Surface.Transform":
+			case "Segment.High Surface.Transform.Initial Value":
 				if typed.AdjacentSegment != nil {
 					adj := core.SectorFromDb(g.State().DB, typed.AdjacentSector)
 					_, acz := adj.SlopedZNow(typed.A)
@@ -148,7 +148,11 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		action.Act()
 	}
 
-	switch field.Values[0].Parent().(type) {
+	ancestors := field.Values[0].Ancestors
+	if len(ancestors) < 2 {
+		return
+	}
+	switch ancestors[len(ancestors)-2].(type) {
 	case *materials.Surface:
 		f.Append("", widget.NewButtonWithIcon("Reset/Fill", theme.ContentClearIcon(), func() {
 			toSet := &concepts.Matrix2{}

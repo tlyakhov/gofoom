@@ -53,8 +53,8 @@ func (a *MoveSurface) Act() {
 
 		a.Original = append(a.Original, *a.Get(s.Sector))
 		*a.Get(s.Sector) += a.Delta
-		s.Sector.BottomZ.Reset()
-		s.Sector.TopZ.Reset()
+		s.Sector.BottomZ.ResetToOriginal()
+		s.Sector.TopZ.ResetToOriginal()
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 	a.State().Modified = true
@@ -72,8 +72,8 @@ func (a *MoveSurface) Undo() {
 		}
 
 		*a.Get(s.Sector) = a.Original[i]
-		s.Sector.BottomZ.Reset()
-		s.Sector.TopZ.Reset()
+		s.Sector.BottomZ.ResetToOriginal()
+		s.Sector.TopZ.ResetToOriginal()
 		i++
 	}
 
@@ -89,8 +89,8 @@ func (a *MoveSurface) Redo() {
 		}
 
 		*a.Get(s.Sector) += a.Delta
-		s.Sector.BottomZ.Reset()
-		s.Sector.TopZ.Reset()
+		s.Sector.BottomZ.ResetToOriginal()
+		s.Sector.TopZ.ResetToOriginal()
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

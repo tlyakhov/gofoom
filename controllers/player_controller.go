@@ -82,7 +82,7 @@ func (pc *PlayerController) Always() {
 	allCooldowns := 0.0
 	maxCooldown := 0.0
 	for _, d := range pc.Alive.Damages {
-		allCooldowns += d.Cooldown.Render
+		allCooldowns += *d.Cooldown.Render
 		maxCooldown += d.Cooldown.Original
 	}
 

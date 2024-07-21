@@ -268,7 +268,8 @@ func CreateMainMenu() {
 
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
-		editor.DB.Simulation.All.Range(func(simVar concepts.Simulated, _ bool) bool {
+		editor.DB.Simulation.All.Range(func(key any, _ any) bool {
+			simVar := key.(concepts.Simulated)
 			simVar.Reset()
 			if a := simVar.GetAnimation(); a != nil {
 				a.Reset()

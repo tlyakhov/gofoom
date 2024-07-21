@@ -34,7 +34,7 @@ func CreateLightBody(db *concepts.EntityComponentDB) concepts.Entity {
 	db.NewAttachedComponent(e, core.LightComponentIndex)
 	body.Size.Original[0] = 2
 	body.Size.Original[1] = 2
-	body.Size.Reset()
+	body.Size.ResetToOriginal()
 
 	return e
 }
@@ -51,7 +51,7 @@ func CreatePlayerBody(db *concepts.EntityComponentDB) concepts.Entity {
 	_ = db.NewAttachedComponent(e, behaviors.PlayerComponentIndex).(*behaviors.Player)
 	_ = db.NewAttachedComponent(e, behaviors.AliveComponentIndex).(*behaviors.Alive)
 
-	body.Size.Set(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
+	body.Size.SetAll(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
 	body.Mass = constants.PlayerMass // kg
 
 	return e

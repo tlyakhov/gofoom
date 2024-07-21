@@ -75,7 +75,7 @@ func (ms *MaterialSampler) sampleTexture(result *concepts.Vector4, material conc
 	} else if text := materials.TextFromDb(ms.DB, material); text != nil {
 		sample = text.Sample(u, v, scale)
 	} else if solid := materials.SolidFromDb(ms.DB, material); solid != nil {
-		sample = solid.Diffuse.Render
+		sample.From(solid.Diffuse.Render)
 	} else {
 		sample[0] = 0.5
 		sample[1] = 0

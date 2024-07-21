@@ -75,7 +75,7 @@ func (a *AddEntity) OnMouseMove() {
 			floorZ, ceilZ := a.ContainingSector.SlopedZOriginal(worldGrid)
 			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
-		body.Pos.Reset()
+		body.Pos.ResetToOriginal()
 		a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 	}
 }

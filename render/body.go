@@ -21,11 +21,11 @@ func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 	}
 
 	eMaterial := entity
-	angleFromPlayer := r.PlayerBody.Angle2DTo(&b.Pos.Render)
+	angleFromPlayer := r.PlayerBody.Angle2DTo(b.Pos.Render)
 
 	sheet := materials.SpriteSheetFromDb(r.DB, entity)
 	if sheet != nil && sheet.IsActive() {
-		angleSprite := 360 - angleFromPlayer + b.Angle.Render
+		angleSprite := 360 - angleFromPlayer + *b.Angle.Render
 		if len(sheet.Sprites) == 0 {
 			return
 		}
@@ -61,7 +61,7 @@ func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 		return
 	}
 
-	angleRender := angleFromPlayer - r.PlayerBody.Angle.Render
+	angleRender := angleFromPlayer - *r.PlayerBody.Angle.Render
 	for angleRender < -180.0 {
 		angleRender += 360.0
 	}
@@ -95,7 +95,7 @@ func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 
 	if lit := materials.LitFromDb(r.DB, entity); lit != nil {
 		le := &c.LightElement
-		le.Q.From(&b.Pos.Render)
+		le.Q.From(b.Pos.Render)
 		le.Q[2] += b.Size.Render[1] * 0.5
 		le.MapIndex = b.Sector().WorldToLightmapAddress(&le.Q, 0)
 		le.Segment = nil

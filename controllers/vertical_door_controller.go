@@ -48,27 +48,55 @@ func (vd *VerticalDoorController) setupAnimation() {
 	a.Lifetime = concepts.AnimationLifetimeHold
 }
 
+func (vd *VerticalDoorController) adjustTransforms() {
+	a := vd.Sector.TopZ.Animation
+
+	if a.Now == a.Prev {
+		return
+	}
+
+	t := concepts.Matrix2{}
+	t.SetIdentity()
+	var v float64
+	for _, seg := range vd.Sector.Segments {
+		if seg.AdjacentSegment == nil {
+			denom := (a.End - a.Start)
+			if denom != 0 {
+				v = (a.Now - a.Start) / denom
+			} else {
+				v = 1
+			}
+		} else {
+			adj := seg.AdjacentSegment.Sector
+			denom := (a.End - adj.TopZ.Now)
+			if denom != 0 {
+				v = (a.Now - adj.TopZ.Now) / denom
+			} else {
+				v = 1
+			}
+		}
+		t[3] = 1.0 - v
+		t[5] = v
+		if !seg.Surface.Transform.Attached {
+			seg.Surface.Transform.Attach(vd.Simulation)
+		}
+		seg.Surface.Transform.Now.From(&seg.Surface.Transform.Original)
+		seg.Surface.Transform.Now.MulSelf(&t)
+
+		t[3] = v
+		t[5] = 1.0 - v
+		if !seg.HiSurface.Transform.Attached {
+			seg.HiSurface.Transform.Attach(vd.Simulation)
+		}
+		seg.HiSurface.Transform.Now.From(&seg.HiSurface.Transform.Original)
+		seg.HiSurface.Transform.Now.MulSelf(&t)
+	}
+}
+
 func (vd *VerticalDoorController) Always() {
 	vd.setupAnimation()
-	// TODO: This breaks any surface transform customization the user has done.
-	// We need to store the original transform and manipulate it.
-	// TODO: it's slow to assign the callback every frame, we should do it
-	// only once.
 
-	// Need these local variables for the capture
 	a := vd.Sector.TopZ.Animation
-	sector := vd.Sector
-	a.RenderCallback = func(blend float64) {
-		if a.Percent == 0 {
-			return
-		}
-		v := (a.Render - a.Start) / (a.End - a.Start)
-		for _, seg := range sector.Segments {
-			//seg.HiSurface.Transform[1] = 0
-			seg.HiSurface.Transform[3] = v
-			seg.HiSurface.Transform[5] = 1.0 - v
-		}
-	}
 
 	if a.Percent <= 0 {
 		vd.State = behaviors.DoorStateOpen
@@ -90,4 +118,6 @@ func (vd *VerticalDoorController) Always() {
 		vd.State = behaviors.DoorStateClosing
 		a.Reverse = false
 	}
+
+	vd.adjustTransforms()
 }

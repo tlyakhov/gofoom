@@ -96,6 +96,8 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 	return segment
 }
 
+var defaultSectorTopZ = map[string]any{"Original": 64.0}
+
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
@@ -105,8 +107,8 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0
 	s.Gravity[2] = -constants.Gravity
-	s.BottomZ.Set(0.0)
-	s.TopZ.Set(64.0)
+	s.BottomZ.Construct(nil)
+	s.TopZ.Construct(defaultSectorTopZ)
 	s.FloorFriction = 0.85
 	s.FloorSurface.Construct(s.DB, nil)
 	s.CeilSurface.Construct(s.DB, nil)
@@ -380,7 +382,7 @@ func (s *Sector) slopedZ(fz, cz float64, isect *concepts.Vector2) (floorZ float6
 
 // SlopedZRender figures out the current slice Z values accounting for slope.
 func (s *Sector) SlopedZRender(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
-	return s.slopedZ(s.BottomZ.Render, s.TopZ.Render, isect)
+	return s.slopedZ(*s.BottomZ.Render, *s.TopZ.Render, isect)
 }
 
 // SlopedZOriginal figures out the current slice Z values accounting for slope.

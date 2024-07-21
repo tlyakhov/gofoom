@@ -21,7 +21,7 @@ func CeilingPick(s *state.Column) {
 func Ceiling(c *state.Column) {
 	mat := c.Sector.CeilSurface.Material
 	extras := c.Sector.CeilSurface.ExtraStages
-	transform := c.Sector.CeilSurface.Transform
+	transform := c.Sector.CeilSurface.Transform.Render
 	sectorMin := &c.Sector.Min
 	sectorMax := &c.Sector.Max
 
@@ -35,7 +35,7 @@ func Ceiling(c *state.Column) {
 	planeRayDelta := concepts.Vector3{
 		c.Sector.Segments[0].P[0] - c.Ray.Start[0],
 		c.Sector.Segments[0].P[1] - c.Ray.Start[1],
-		c.Sector.TopZ.Render - c.CameraZ}
+		*c.Sector.TopZ.Render - c.CameraZ}
 	for c.ScreenY = c.YStart; c.ScreenY < c.ClippedStart; c.ScreenY++ {
 		c.RayFloorCeil[2] = float64(c.ScreenHeight/2 - c.ScreenY)
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
@@ -72,7 +72,7 @@ func Ceiling(c *state.Column) {
 		world[0] += c.Ray.Start[0]
 		world[1] += c.Ray.Start[1]
 		if c.Sector.CeilSlope == 0 {
-			world[2] = c.Sector.TopZ.Render
+			world[2] = *c.Sector.TopZ.Render
 		} else {
 			world[2] += c.CameraZ
 		}
