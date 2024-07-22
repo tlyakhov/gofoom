@@ -46,9 +46,9 @@ type Edit struct {
 	Tool          EditorTool
 	OpenFile      string
 	Modified      bool
-	CurrentAction IAction
-	UndoHistory   []IAction
-	RedoHistory   []IAction
+	CurrentAction Actionable
+	UndoHistory   []Actionable
+	RedoHistory   []Actionable
 	KeysDown      map[fyne.KeyName]bool
 
 	// Map view filters
@@ -68,7 +68,7 @@ type IEditor interface {
 	UpdateTitle()
 	Load(filename string)
 	ActionFinished(canceled, refreshProperties, autoPortal bool)
-	NewAction(a IAction)
+	NewAction(a Actionable)
 	ActTool()
 	SwitchTool(tool EditorTool)
 	UndoCurrent()

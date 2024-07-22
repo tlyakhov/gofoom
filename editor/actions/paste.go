@@ -109,7 +109,7 @@ func (a *Paste) Act() {
 	a.SetSelection(true, a.Selected)
 }
 func (a *Paste) Cancel() {}
-func (a *Paste) Frame()  {}
+
 func (a *Paste) OnMouseDown(evt *desktop.MouseEvent) {
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
@@ -130,5 +130,5 @@ func (a *Paste) Redo() {
 }
 
 func (a *Paste) Status() string {
-	return ""
+	return "Click to place pasted entity/entities"
 }

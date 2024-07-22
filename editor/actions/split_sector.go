@@ -22,7 +22,6 @@ type SplitSector struct {
 
 func (a *SplitSector) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *SplitSector) OnMouseMove()                        {}
-func (a *SplitSector) Frame()                              {}
 func (a *SplitSector) Act()                                {}
 
 func (a *SplitSector) Split(sector *core.Sector) {

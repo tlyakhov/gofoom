@@ -141,10 +141,10 @@ func (e *Editor) UpdateStatus() {
 
 	var text string
 
-	if e.CurrentAction == nil {
-		text = "Left mouse down to transform selection. Right click/drag to select. Middle-drag to pan. Mouse-wheel to zoom."
+	if m, ok := e.CurrentAction.(state.MouseActionable); ok {
+		text = m.Status()
 	} else {
-		text = e.CurrentAction.Status()
+		text = "Left mouse down to transform selection. Right click/drag to select. Middle-drag to pan. Mouse-wheel to zoom."
 	}
 
 	if e.MousePressed {
@@ -267,8 +267,6 @@ func (e *Editor) Load(filename string) {
 	db.Simulation.Render = e.GameWidget.Draw
 	e.DB = db
 	e.SelectObjects(true)
-	editor.ResizeRenderer(640, 360)
-	e.refreshProperties()
 }
 
 func (e *Editor) Test() {
@@ -278,15 +276,11 @@ func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
 
-	e.SelectObjects(true)
-
 	e.DB.Clear()
 	controllers.CreateTestWorld2(e.DB)
 	e.DB.Simulation.Integrate = e.Integrate
 	e.DB.Simulation.Render = e.GameWidget.Draw
-
-	e.ResizeRenderer(640, 360)
-	e.refreshProperties()
+	e.SelectObjects(true)
 }
 
 func (e *Editor) autoPortal() {
@@ -312,7 +306,7 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 		if len(e.UndoHistory) > 100 {
 			e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
 		}
-		e.RedoHistory = []state.IAction{}
+		e.RedoHistory = []state.Actionable{}
 	}
 	if refreshProperties {
 		e.refreshProperties()
@@ -322,7 +316,7 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	go e.ActTool()
 }
 
-func (e *Editor) NewAction(a state.IAction) {
+func (e *Editor) NewAction(a state.Actionable) {
 	e.CurrentAction = a
 }
 
@@ -403,8 +397,8 @@ func (e *Editor) NewShader() {
 
 func (e *Editor) SwitchTool(tool state.EditorTool) {
 	e.Tool = tool
-	if e.CurrentAction != nil {
-		e.CurrentAction.Cancel()
+	if m, ok := e.CurrentAction.(state.MouseActionable); ok {
+		m.Cancel()
 	} else {
 		e.ActTool()
 	}

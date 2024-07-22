@@ -7,19 +7,11 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type RotateSegments struct {
 	state.IEditor
 }
-
-func (a *RotateSegments) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *RotateSegments) OnMouseMove()                        {}
-func (a *RotateSegments) OnMouseUp()                          {}
-func (a *RotateSegments) Cancel()                             {}
-func (a *RotateSegments) Frame()                              {}
 
 func (a *RotateSegments) Rotate(sector *core.Sector, backward bool) {
 	length := len(sector.Segments)

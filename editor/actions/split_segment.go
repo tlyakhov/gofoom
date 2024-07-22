@@ -26,8 +26,8 @@ type SplitSegment struct {
 
 func (a *SplitSegment) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *SplitSegment) OnMouseMove()                        {}
-func (a *SplitSegment) Frame()                              {}
-func (a *SplitSegment) Act()                                {}
+
+func (a *SplitSegment) Act() {}
 
 func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	md := a.WorldGrid(&a.State().MouseDownWorld)

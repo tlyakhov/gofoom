@@ -12,8 +12,6 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type SetProperty struct {
@@ -22,12 +20,6 @@ type SetProperty struct {
 	Original       []reflect.Value
 	ValuesToAssign []reflect.Value
 }
-
-func (a *SetProperty) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *SetProperty) OnMouseMove()                        {}
-func (a *SetProperty) OnMouseUp()                          {}
-func (a *SetProperty) Cancel()                             {}
-func (a *SetProperty) Frame()                              {}
 
 func (a *SetProperty) AssignAll(v reflect.Value) {
 	a.ValuesToAssign = make([]reflect.Value, len(a.Values))
@@ -103,8 +95,4 @@ func (a *SetProperty) Redo() {
 		v.Deref().Set(a.ValuesToAssign[i])
 	}
 	a.FireHooks()
-}
-
-func (a *SetProperty) Status() string {
-	return ""
 }

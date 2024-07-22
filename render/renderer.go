@@ -346,6 +346,10 @@ func (r *Renderer) Render(buffer []uint8) {
 		r.RenderBlock(buffer, 0, 0, r.ScreenWidth)
 	}
 	r.RenderHud(buffer)
+
+	if r.Frame%4 <= 1 {
+		return
+	}
 	// Invalidate lighting caches
 	r.SectorLastRendered.Range(func(eSector concepts.Entity, lastSeen uint64) bool {
 		// Cache for a maximum number of frames

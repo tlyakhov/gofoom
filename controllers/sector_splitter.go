@@ -295,12 +295,10 @@ func (a *SectorSplitter) collect() {
 					addedSegment.Sector = target
 					addedSegment.Construct(target.DB, visitor.Source.Serialize())
 					addedSegment.P = visitor.Start
-					addedSegment.AdjacentSegment = nil
-					addedSegment.AdjacentSector = 0
 					target.Segments = append(target.Segments, addedSegment)
 					if visitor.Source.AdjacentSegment != nil {
-						visitor.Source.AdjacentSegment.AdjacentSector = 0
-						visitor.Source.AdjacentSegment.AdjacentSegment = nil
+						visitor.Source.AdjacentSegment.AdjacentSector = target.Entity
+						visitor.Source.AdjacentSegment.AdjacentSegment = addedSegment
 					}
 					visitor = visitor.Next
 					if visitor == edge {

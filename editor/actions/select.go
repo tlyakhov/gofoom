@@ -90,5 +90,5 @@ func (a *Select) Redo() {
 func (a *Select) RequiresLock() bool { return false }
 
 func (a *Select) Status() string {
-	return ""
+	return "Selecting " + a.Mode
 }

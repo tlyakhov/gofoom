@@ -47,6 +47,7 @@ func (pvs *PvsController) Loaded() {
 	pvs.Recalculate()
 }
 
+// TODO: There's a bug with dynamic lights: how/when do we update the PVL?
 func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
 	if visitor == nil {
 		pvs.Sector.PVS = make(map[concepts.Entity]*core.Sector)
