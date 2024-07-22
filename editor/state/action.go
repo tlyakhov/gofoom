@@ -5,15 +5,17 @@ package state
 
 import "fyne.io/fyne/v2/driver/desktop"
 
-// IAction represents a generic editor action.
-type IAction interface {
+// Actionable represents a generic editor action.
+type Actionable interface {
+	Act()
+	Undo()
+	Redo()
+}
+
+type MouseActionable interface {
 	OnMouseDown(evt *desktop.MouseEvent)
 	OnMouseUp()
 	OnMouseMove()
-	Act()
 	Cancel()
-	Frame()
-	Undo()
-	Redo()
 	Status() string
 }

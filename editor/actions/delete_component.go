@@ -8,8 +8,6 @@ import (
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type DeleteComponent struct {
@@ -24,11 +22,6 @@ func (a *DeleteComponent) Act() {
 	a.Redo()
 	a.ActionFinished(false, true, false)
 }
-func (a *DeleteComponent) Cancel()                             {}
-func (a *DeleteComponent) Frame()                              {}
-func (a *DeleteComponent) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *DeleteComponent) OnMouseMove()                        {}
-func (a *DeleteComponent) OnMouseUp()                          {}
 
 func (a *DeleteComponent) Undo() {
 	for entity, component := range a.Components {
@@ -60,8 +53,4 @@ func (a *DeleteComponent) Redo() {
 		a.State().DB.DetachByType(component)
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
-}
-
-func (a *DeleteComponent) Status() string {
-	return ""
 }

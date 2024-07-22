@@ -25,7 +25,7 @@ func WallMid(c *state.Column, internalSegment bool) {
 			continue
 		}
 		v := float64(c.ScreenY-c.ScreenStart) / float64(c.ScreenEnd-c.ScreenStart)
-		c.RaySegIntersect[2] = c.TopZ + v*(c.BottomZ-c.TopZ)
+		c.RaySegIntersect[2] = c.TopZ*(1.0-v) + v*c.BottomZ
 
 		if surf.Material != 0 {
 			tu := transform[0]*c.U + transform[2]*v + transform[4]

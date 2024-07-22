@@ -7,8 +7,6 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type MoveSurface struct {
@@ -19,12 +17,6 @@ type MoveSurface struct {
 	Slope    bool
 	Delta    float64
 }
-
-func (a *MoveSurface) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *MoveSurface) OnMouseMove()                        {}
-func (a *MoveSurface) OnMouseUp()                          {}
-func (a *MoveSurface) Cancel()                             {}
-func (a *MoveSurface) Frame()                              {}
 
 func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 	if a.Slope {
@@ -93,8 +85,4 @@ func (a *MoveSurface) Redo() {
 		s.Sector.TopZ.ResetToOriginal()
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
-}
-
-func (a *MoveSurface) Status() string {
-	return ""
 }

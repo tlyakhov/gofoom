@@ -17,7 +17,6 @@ type AlignGrid struct {
 
 func (a *AlignGrid) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *AlignGrid) OnMouseMove()                        {}
-func (a *AlignGrid) Frame()                              {}
 func (a *AlignGrid) Act()                                {}
 
 func (a *AlignGrid) OnMouseUp() {
@@ -44,5 +43,5 @@ func (a *AlignGrid) Redo() {
 }
 
 func (a *AlignGrid) Status() string {
-	return ""
+	return "Click to align grid"
 }

@@ -10,8 +10,6 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 // TODO: Be more flexible with what we can delete/cut/copy/paste. Should be
@@ -48,22 +46,13 @@ func (a *Copy) Act() {
 	a.Redo()
 	a.ActionFinished(false, false, false)
 }
-func (a *Copy) Cancel()                             {}
-func (a *Copy) Frame()                              {}
-func (a *Copy) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *Copy) OnMouseMove()                        {}
-func (a *Copy) OnMouseUp()                          {}
 
-func (a *Copy) Undo() {
-}
+func (a *Copy) Undo() {}
+
 func (a *Copy) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
 	log.Printf("%v\n", a.ClipboardData)
 	a.IEditor.SetContent(a.ClipboardData)
-}
-
-func (a *Copy) Status() string {
-	return ""
 }

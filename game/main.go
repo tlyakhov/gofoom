@@ -119,8 +119,6 @@ func renderGame() {
 }
 
 func run() {
-	//debug.SetGCPercent(-1)
-	//debug.SetMemoryLimit(1024 * 1024 * 1024)
 	if *cpuProfile != "" {
 		f, err := os.Create(*cpuProfile)
 		if err != nil {
@@ -128,18 +126,6 @@ func run() {
 		}
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
-
-		/*	// Start tracing
-			traceFile, err := os.Create("trace.out")
-			if err != nil {
-				panic(err)
-			}
-			defer traceFile.Close()
-
-			if err := trace.Start(traceFile); err != nil {
-				panic(err)
-			}
-			defer trace.Stop()*/
 	}
 
 	w := 640
@@ -180,7 +166,6 @@ func run() {
 
 	for !win.Closed() {
 		db.Simulation.Step()
-		//runtime.GC()
 	}
 }
 

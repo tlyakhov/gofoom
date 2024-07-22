@@ -35,7 +35,6 @@ func (a *Pan) OnMouseUp() {
 }
 func (a *Pan) Act()    {}
 func (a *Pan) Cancel() {}
-func (a *Pan) Frame()  {}
 
 func (a *Pan) Undo() {
 	a.State().Pos = a.OriginalPos
@@ -47,5 +46,5 @@ func (a *Pan) Redo() {
 func (a *Pan) RequiresLock() bool { return true }
 
 func (a *Pan) Status() string {
-	return ""
+	return "Panning"
 }

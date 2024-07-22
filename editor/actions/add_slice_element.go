@@ -10,8 +10,6 @@ import (
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type AddSliceElement struct {
@@ -25,11 +23,6 @@ func (a *AddSliceElement) Act() {
 	a.Redo()
 	a.ActionFinished(false, true, false)
 }
-func (a *AddSliceElement) Cancel()                             {}
-func (a *AddSliceElement) Frame()                              {}
-func (a *AddSliceElement) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *AddSliceElement) OnMouseMove()                        {}
-func (a *AddSliceElement) OnMouseUp()                          {}
 
 func (a *AddSliceElement) Undo() {
 	a.State().Lock.Lock()
@@ -73,8 +66,4 @@ func (a *AddSliceElement) Redo() {
 		a.State().DB.Simulation.AttachAnimation(anim.GetName(), anim)*/
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
-}
-
-func (a *AddSliceElement) Status() string {
-	return ""
 }

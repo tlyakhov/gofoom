@@ -217,15 +217,15 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 		editor.NewAction(&actions.Transform{IEditor: editor})
 	}
 
-	if editor.CurrentAction != nil {
-		editor.CurrentAction.OnMouseDown(evt)
+	if m, ok := editor.CurrentAction.(state.MouseActionable); ok {
+		m.OnMouseDown(evt)
 	}
 }
 func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	editor.MousePressed = false
 
-	if editor.CurrentAction != nil {
-		editor.CurrentAction.OnMouseUp()
+	if m, ok := editor.CurrentAction.(state.MouseActionable); ok {
+		m.OnMouseUp()
 	}
 }
 
@@ -278,8 +278,8 @@ func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
 	//log.Printf("scale:%v, x,y: %v, %v - world: %v, %v", scale, x, y, editor.MouseWorld[0], editor.MouseWorld[1])
 	editor.UpdateStatus()
 
-	if editor.CurrentAction != nil {
-		editor.CurrentAction.OnMouseMove()
+	if m, ok := editor.CurrentAction.(state.MouseActionable); ok {
+		m.OnMouseMove()
 	}
 }
 

@@ -113,8 +113,6 @@ func (a *AddEntity) Redo() {
 	a.AttachAll()
 }
 
-func (a *AddEntity) Frame() {}
-
 func (a *AddEntity) Status() string {
-	return ""
+	return "Click to place entity"
 }

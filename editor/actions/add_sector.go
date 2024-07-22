@@ -77,5 +77,5 @@ func (a *AddSector) OnMouseUp() {
 }
 
 func (a *AddSector) Status() string {
-	return ""
+	return "Click to place " + a.Mode
 }

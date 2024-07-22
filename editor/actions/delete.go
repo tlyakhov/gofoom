@@ -9,8 +9,6 @@ import (
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type Delete struct {
@@ -30,11 +28,6 @@ func (a *Delete) Act() {
 	a.Redo()
 	a.ActionFinished(false, true, true)
 }
-func (a *Delete) Cancel()                             {}
-func (a *Delete) Frame()                              {}
-func (a *Delete) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *Delete) OnMouseMove()                        {}
-func (a *Delete) OnMouseUp()                          {}
 
 func (a *Delete) Undo() {
 	a.State().Lock.Lock()
@@ -91,8 +84,4 @@ func (a *Delete) Redo() {
 		}
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
-}
-
-func (a *Delete) Status() string {
-	return ""
 }

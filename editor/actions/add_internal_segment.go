@@ -81,5 +81,5 @@ func (a *AddInternalSegment) OnMouseUp() {
 }
 
 func (a *AddInternalSegment) Status() string {
-	return ""
+	return "Click to place " + a.Mode
 }
