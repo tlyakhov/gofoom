@@ -71,7 +71,7 @@ func main() {
 		img.Resize(fyne.NewSquareSize(64))
 		img.Refresh()
 		editor.noTextureImage = img.Image
-		editor.Load("data/worlds/portal-test.json")
+		editor.Load("data/worlds/hall.json")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 

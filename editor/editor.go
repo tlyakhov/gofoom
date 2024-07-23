@@ -266,6 +266,9 @@ func (e *Editor) Load(filename string) {
 	db.Simulation.Integrate = e.Integrate
 	db.Simulation.Render = e.GameWidget.Draw
 	e.DB = db
+	if e.Renderer != nil {
+		e.Renderer.DB = db
+	}
 	e.SelectObjects(true)
 }
 
