@@ -18,18 +18,20 @@ func WallHiPick(cp *state.ColumnPortal) {
 func WallHi(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.HiSurface
 	transform := surf.Transform.Render
-	u := cp.U
+	// To calculate the vertical texture coordinate, we can't use the integer
+	// screen coordinates, we need to use the precise floats
+	vStart := float64(cp.ScreenHeight/2) - cp.ProjHeightTop
 	for cp.ScreenY = cp.ClippedStart; cp.ScreenY < cp.AdjClippedTop; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
 		if cp.Distance >= cp.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(cp.ScreenY-cp.ScreenStart) / float64(cp.AdjScreenTop-cp.ScreenStart)
+		v := (float64(cp.ScreenY) - vStart) / (cp.ProjHeightTop - cp.AdjProjHeightTop)
 		cp.RaySegIntersect[2] = (1.0-v)*cp.TopZ + v*cp.AdjCeilZ
 
 		if surf.Material != 0 {
-			tu := transform[0]*u + transform[2]*v + transform[4]
-			tv := transform[1]*u + transform[3]*v + transform[5]
+			tu := transform[0]*cp.U + transform[2]*v + transform[4]
+			tv := transform[1]*cp.U + transform[3]*v + transform[5]
 			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
 			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		} else {
@@ -53,18 +55,20 @@ func WallLowPick(cp *state.ColumnPortal) {
 func WallLow(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.LoSurface
 	transform := surf.Transform.Render
-	u := cp.U
+	// To calculate the vertical texture coordinate, we can't use the integer
+	// screen coordinates, we need to use the precise floats
+	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjHeightBottom
 	for cp.ScreenY = cp.AdjClippedBottom; cp.ScreenY < cp.ClippedEnd; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
 		if cp.Distance >= cp.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(cp.ScreenY-cp.AdjScreenBottom) / float64(cp.ScreenEnd-cp.AdjScreenBottom)
+		v := (float64(cp.ScreenY) - vStart) / (cp.AdjProjHeightBottom - cp.ProjHeightBottom)
 		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjFloorZ + v*cp.BottomZ
 
 		if surf.Material != 0 {
-			tu := transform[0]*u + transform[2]*v + transform[4]
-			tv := transform[1]*u + transform[3]*v + transform[5]
+			tu := transform[0]*cp.U + transform[2]*v + transform[4]
+			tv := transform[1]*cp.U + transform[3]*v + transform[5]
 			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
 			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		} else {

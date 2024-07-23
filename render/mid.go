@@ -18,13 +18,16 @@ func WallMidPick(s *state.Column) {
 func WallMid(c *state.Column, internalSegment bool) {
 	surf := c.Segment.Surface
 	transform := surf.Transform.Render
+	// To calculate the vertical texture coordinate, we can't use the integer
+	// screen coordinates, we need to use the precise floats
+	vStart := float64(c.ScreenHeight/2) - c.ProjHeightTop
 	for c.ScreenY = c.ClippedStart; c.ScreenY < c.ClippedEnd; c.ScreenY++ {
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
 
 		if c.Distance >= c.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(c.ScreenY-c.ScreenStart) / float64(c.ScreenEnd-c.ScreenStart)
+		v := (float64(c.ScreenY) - vStart) / (c.ProjHeightTop - c.ProjHeightBottom)
 		c.RaySegIntersect[2] = c.TopZ*(1.0-v) + v*c.BottomZ
 
 		if surf.Material != 0 {

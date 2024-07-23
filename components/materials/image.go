@@ -169,11 +169,8 @@ func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
 	fy := uint32(y * float64(h))
 
 	if !img.Filter {
-		index := fy*w + fx
-		//r := concepts.Vector4{}
-		//concepts.AsmInt32ToVector4PreMul(data[index], (*[4]float64)(&r))
-		//return r
-		return concepts.Int32ToVector4(data[index]) //concepts.Int32ToVector4PreMul(data[index])
+		// TODO: avoid allocating a vector here.
+		return concepts.Int32ToVector4(data[fy*w+fx])
 	}
 
 	fx = concepts.UMin(fx, w-1)

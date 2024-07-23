@@ -2538,6 +2538,7 @@
       "Name": "Item Test"
     },
     "core.Body": {
+      "Active": false,
       "Angle": {
         "Original": 0
       },
@@ -2554,7 +2555,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.96875,
+          "Percent": 0.78125,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -3346,14 +3347,16 @@
           },
           "Surface": {
             "Material": "16",
-            "Transform": [
-              1,
-              0,
-              0,
-              1.0666666666666667,
-              0.5500000000000002,
-              0
-            ]
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                1.0666666666666667,
+                0.5500000000000002,
+                0
+              ]
+            }
           },
           "X": -200,
           "Y": 110
@@ -3391,25 +3394,29 @@
           },
           "Lo": {
             "Material": "2",
-            "Transform": [
-              3.75,
-              0,
-              0,
-              1,
-              0,
-              0
-            ]
+            "Transform": {
+              "Original": [
+                3.75,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "Surface": {
             "Material": "124",
-            "Transform": [
-              3.75,
-              0,
-              0,
-              1,
-              0,
-              0
-            ]
+            "Transform": {
+              "Original": [
+                3.75,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": -200,
           "Y": 250
@@ -3533,11 +3540,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -104.42248278777447,
+          "End": 38.653185983022254,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.3125,
+          "Percent": 1.0156249999999996,
           "Reverse": false,
-          "Start": -85.07498482834693,
+          "Start": 34.83866167306801,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -6608,14 +6615,16 @@
           "AdjacentSector": "53",
           "Hi": {
             "Material": "123",
-            "Transform": [
-              1,
-              0,
-              0,
-              1,
-              0.3200000000000002,
-              0
-            ]
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                1,
+                0.3200000000000002,
+                0
+              ]
+            }
           },
           "Lo": {
             "Material": "2"
@@ -6691,14 +6700,16 @@
         {
           "Hi": {
             "Material": "2",
-            "Transform": [
-              1,
-              0,
-              0,
-              0.003375000000000017,
-              0,
-              0.996625
-            ]
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                0.003375000000000017,
+                0,
+                0.996625
+              ]
+            }
           },
           "Lo": {
             "Material": "2"
@@ -6712,15 +6723,7 @@
         {
           "AdjacentSector": "41",
           "Hi": {
-            "Material": "123",
-            "Transform": [
-              1,
-              0,
-              0,
-              0.003375000000000017,
-              0,
-              0.996625
-            ]
+            "Material": "123"
           },
           "Lo": {
             "Material": "2"
@@ -6734,14 +6737,16 @@
         {
           "Hi": {
             "Material": "2",
-            "Transform": [
-              1,
-              0,
-              0,
-              0.003375000000000017,
-              0,
-              0.996625
-            ]
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                0.003375000000000017,
+                0,
+                0.996625
+              ]
+            }
           },
           "Lo": {
             "Material": "2"
@@ -6756,14 +6761,16 @@
           "AdjacentSector": "45",
           "Hi": {
             "Material": "123",
-            "Transform": [
-              1,
-              0,
-              0,
-              0.003375000000000017,
-              0,
-              0.996625
-            ]
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                0.003375000000000017,
+                0,
+                0.996625
+              ]
+            }
           },
           "Lo": {
             "Material": "2"
@@ -6782,7 +6789,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0,
+          "Percent": 1.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
