@@ -12,7 +12,7 @@ import (
 )
 
 func CeilingPick(s *state.Column) {
-	if s.ScreenY >= s.YStart && s.ScreenY < s.ClippedStart {
+	if s.ScreenY >= s.EdgeTop && s.ScreenY < s.ClippedTop {
 		s.PickedSelection = append(s.PickedSelection, core.SelectableFromCeil(s.Sector))
 	}
 }
@@ -36,7 +36,7 @@ func Ceiling(c *state.Column) {
 		c.Sector.Segments[0].P[0] - c.Ray.Start[0],
 		c.Sector.Segments[0].P[1] - c.Ray.Start[1],
 		*c.Sector.TopZ.Render - c.CameraZ}
-	for c.ScreenY = c.YStart; c.ScreenY < c.ClippedStart; c.ScreenY++ {
+	for c.ScreenY = c.EdgeTop; c.ScreenY < c.ClippedTop; c.ScreenY++ {
 		c.RayFloorCeil[2] = float64(c.ScreenHeight/2 - c.ScreenY)
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
 		denom := c.Sector.CeilNormal.Dot(&c.RayFloorCeil)

@@ -19,7 +19,7 @@ type Text struct {
 	Label       string  `editable:"Label" edit_type:"multi-line-string"`
 	LineSpacing float64 `editable:"Line Spacing"`
 
-	Color concepts.SimVariable[concepts.Vector4] `editable:"Color"`
+	Color concepts.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
 var TextComponentIndex int

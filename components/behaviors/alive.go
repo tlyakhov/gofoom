@@ -10,7 +10,7 @@ import (
 
 type Damage struct {
 	Amount   float64
-	Cooldown concepts.SimVariable[float64]
+	Cooldown concepts.DynamicValue[float64]
 }
 
 type Alive struct {

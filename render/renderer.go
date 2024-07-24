@@ -86,7 +86,7 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 		// TODO: this has a bug if the adjacent sector has a sloped floor.
 		// Getting the right floor height is a bit expensive because we have to
 		// project the intersection point. For now just use the sector minimum.
-		next.CameraZ = c.CameraZ - c.BottomZ + c.SectorSegment.AdjacentSegment.Sector.Min[2]
+		next.CameraZ = c.CameraZ - c.IntersectionBottom + c.SectorSegment.AdjacentSegment.Sector.Min[2]
 		next.RayFloorCeil[0] = next.Ray.AngleCos * c.ViewFix[c.ScreenX]
 		next.RayFloorCeil[1] = next.Ray.AngleSin * c.ViewFix[c.ScreenX]
 		next.MaterialSampler.Ray = next.Ray
@@ -106,8 +106,8 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 	}
 
 	next.Sector = portal.Adj
-	next.YStart = portal.AdjClippedTop
-	next.YEnd = portal.AdjClippedBottom
+	next.EdgeTop = portal.AdjClippedTop
+	next.EdgeBottom = portal.AdjClippedBottom
 	next.LastPortalDistance = c.Distance
 	next.Depth++
 	r.RenderSector(next)
@@ -172,7 +172,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			continue
 		}
 		c.SectorSegment = sectorSeg
-		c.BottomZ, c.TopZ = c.Sector.SlopedZRender(c.RaySegIntersect.To2D())
+		c.IntersectionBottom, c.IntersectionTop = c.Sector.SlopedZRender(c.RaySegIntersect.To2D())
 	}
 
 	if c.Segment != nil {
@@ -218,11 +218,11 @@ func (r *Renderer) RenderSector(c *state.Column) {
 
 		s := core.InternalSegmentFromDb(r.DB, sorted.Entity)
 		c.IntersectSegment(&s.Segment, false, s.TwoSided)
-		c.TopZ = s.Top
-		c.BottomZ = s.Bottom
+		c.IntersectionTop = s.Top
+		c.IntersectionBottom = s.Bottom
 		c.CalcScreen()
 
-		if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
+		if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
 			c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(s))
 			return
 		}
@@ -245,8 +245,8 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	// Reset the column
 	column.LastPortalDistance = 0
 	column.Depth = 0
-	column.YStart = 0
-	column.YEnd = r.ScreenHeight
+	column.EdgeTop = 0
+	column.EdgeBottom = r.ScreenHeight
 	column.Pick = pick
 	column.ScreenX = x
 	column.ScreenY = y
@@ -404,8 +404,8 @@ func (r *Renderer) Pick(x, y int) []*core.Selectable {
 	// Initialize a column...
 	column := &state.Column{
 		Config:             r.Config,
-		YStart:             0,
-		YEnd:               r.ScreenHeight,
+		EdgeTop:            0,
+		EdgeBottom:         r.ScreenHeight,
 		CameraZ:            r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
 		PortalColumns:      make([]state.Column, constants.MaxPortals),
 		EntitiesByDistance: make([]state.EntityWithDist2, 0, 16),

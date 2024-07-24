@@ -31,8 +31,8 @@ type Animated interface {
 	Reset()
 }
 
-type Animation[T Simulatable] struct {
-	*SimVariable[T]
+type Animation[T DynamicType] struct {
+	*DynamicValue[T]
 	TweeningFunc `editable:"Tweening Function"`
 
 	Start       T                    `editable:"Start"`
@@ -65,7 +65,7 @@ func (a *Animation[T]) Reset() {
 }
 
 func (a *Animation[T]) Animate() {
-	if a == nil || !a.Active || a.SimVariable == nil {
+	if a == nil || !a.Active || a.DynamicValue == nil {
 		return
 	}
 	a.Percent = Clamp(a.Percent, 0, 1)

@@ -9,7 +9,7 @@ import (
 )
 
 func WallHiPick(cp *state.ColumnPortal) {
-	if cp.ScreenY >= cp.ClippedStart && cp.ScreenY < cp.AdjClippedTop {
+	if cp.ScreenY >= cp.ClippedTop && cp.ScreenY < cp.AdjClippedTop {
 		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableHi))
 	}
 }
@@ -20,14 +20,14 @@ func WallHi(cp *state.ColumnPortal) {
 	transform := surf.Transform.Render
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
-	vStart := float64(cp.ScreenHeight/2) - cp.ProjHeightTop
-	for cp.ScreenY = cp.ClippedStart; cp.ScreenY < cp.AdjClippedTop; cp.ScreenY++ {
+	vStart := float64(cp.ScreenHeight/2) - cp.ProjectedTop
+	for cp.ScreenY = cp.ClippedTop; cp.ScreenY < cp.AdjClippedTop; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
 		if cp.Distance >= cp.ZBuffer[screenIndex] {
 			continue
 		}
-		v := (float64(cp.ScreenY) - vStart) / (cp.ProjHeightTop - cp.AdjProjHeightTop)
-		cp.RaySegIntersect[2] = (1.0-v)*cp.TopZ + v*cp.AdjCeilZ
+		v := (float64(cp.ScreenY) - vStart) / (cp.ProjectedTop - cp.AdjProjectedTop)
+		cp.RaySegIntersect[2] = (1.0-v)*cp.IntersectionTop + v*cp.AdjTop
 
 		if surf.Material != 0 {
 			tu := transform[0]*cp.U + transform[2]*v + transform[4]
@@ -46,7 +46,7 @@ func WallHi(cp *state.ColumnPortal) {
 }
 
 func WallLowPick(cp *state.ColumnPortal) {
-	if cp.ScreenY >= cp.AdjClippedBottom && cp.ScreenY < cp.ClippedEnd {
+	if cp.ScreenY >= cp.AdjClippedBottom && cp.ScreenY < cp.ClippedBottom {
 		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableLow))
 	}
 }
@@ -57,14 +57,14 @@ func WallLow(cp *state.ColumnPortal) {
 	transform := surf.Transform.Render
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
-	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjHeightBottom
-	for cp.ScreenY = cp.AdjClippedBottom; cp.ScreenY < cp.ClippedEnd; cp.ScreenY++ {
+	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjectedBottom
+	for cp.ScreenY = cp.AdjClippedBottom; cp.ScreenY < cp.ClippedBottom; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
 		if cp.Distance >= cp.ZBuffer[screenIndex] {
 			continue
 		}
-		v := (float64(cp.ScreenY) - vStart) / (cp.AdjProjHeightBottom - cp.ProjHeightBottom)
-		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjFloorZ + v*cp.BottomZ
+		v := (float64(cp.ScreenY) - vStart) / (cp.AdjProjectedBottom - cp.ProjectedBottom)
+		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjBottom + v*cp.IntersectionBottom
 
 		if surf.Material != 0 {
 			tu := transform[0]*cp.U + transform[2]*v + transform[4]

@@ -20,20 +20,20 @@ type Sector struct {
 	Segments         []*SectorSegment
 	Bodies           map[concepts.Entity]*Body
 	InternalSegments map[concepts.Entity]*InternalSegment
-	BottomZ          concepts.SimVariable[float64] `editable:"Floor Height"`
-	TopZ             concepts.SimVariable[float64] `editable:"Ceiling Height"`
-	FloorSlope       float64                       `editable:"Floor Slope"`
-	CeilSlope        float64                       `editable:"Ceiling Slope"`
-	FloorTarget      concepts.Entity               `editable:"Floor Target" edit_type:"Sector"`
-	CeilTarget       concepts.Entity               `editable:"Ceiling Target" edit_type:"Sector"`
-	FloorSurface     materials.Surface             `editable:"Floor Surface"`
-	CeilSurface      materials.Surface             `editable:"Ceiling Surface"`
-	Gravity          concepts.Vector3              `editable:"Gravity"`
-	FloorFriction    float64                       `editable:"Floor Friction"`
-	FloorScripts     []*Script                     `editable:"Floor Scripts"`
-	CeilScripts      []*Script                     `editable:"Ceil Scripts"`
-	EnterScripts     []*Script                     `editable:"Enter Scripts"`
-	ExitScripts      []*Script                     `editable:"Exit Scripts"`
+	BottomZ          concepts.DynamicValue[float64] `editable:"Floor Height"`
+	TopZ             concepts.DynamicValue[float64] `editable:"Ceiling Height"`
+	FloorSlope       float64                        `editable:"Floor Slope"`
+	CeilSlope        float64                        `editable:"Ceiling Slope"`
+	FloorTarget      concepts.Entity                `editable:"Floor Target" edit_type:"Sector"`
+	CeilTarget       concepts.Entity                `editable:"Ceiling Target" edit_type:"Sector"`
+	FloorSurface     materials.Surface              `editable:"Floor Surface"`
+	CeilSurface      materials.Surface              `editable:"Ceiling Surface"`
+	Gravity          concepts.Vector3               `editable:"Gravity"`
+	FloorFriction    float64                        `editable:"Floor Friction"`
+	FloorScripts     []*Script                      `editable:"Floor Scripts"`
+	CeilScripts      []*Script                      `editable:"Ceil Scripts"`
+	EnterScripts     []*Script                      `editable:"Enter Scripts"`
+	ExitScripts      []*Script                      `editable:"Exit Scripts"`
 
 	Winding                 int8
 	Min, Max, Center        concepts.Vector3

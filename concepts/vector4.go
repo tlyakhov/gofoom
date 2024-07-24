@@ -280,12 +280,6 @@ func ParseVector4(s string) (*Vector4, error) {
 	return result, nil
 }
 
-func Int32ToVector4(c uint32) Vector4 {
-	return Vector4{
-		float64((c>>24)&0xFF) / 255.0, float64((c>>16)&0xFF) / 255.0,
-		float64((c>>8)&0xFF) / 255.0, float64(c&0xFF) / 255.0}
-}
-
 func Int32ToVector4PreMul(c uint32) Vector4 {
 	r := float64((c>>24)&0xFF) / 255.0
 	g := float64((c>>16)&0xFF) / 255.0

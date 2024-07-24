@@ -81,14 +81,14 @@ func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 		return
 	}
 
-	c.ProjHeightTop = (b.Pos.Render[2] + b.Size.Render[1] - c.CameraZ) * depthScale
-	c.ProjHeightBottom = (b.Pos.Render[2] - c.CameraZ) * depthScale
-	c.ScreenStart = c.ScreenHeight/2 - int(c.ProjHeightTop)
-	c.ScreenEnd = c.ScreenHeight/2 - int(c.ProjHeightBottom)
-	c.ClippedStart = concepts.Clamp(c.ScreenStart, c.YStart, c.YEnd)
-	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
+	c.ProjectedTop = (b.Pos.Render[2] + b.Size.Render[1] - c.CameraZ) * depthScale
+	c.ProjectedBottom = (b.Pos.Render[2] - c.CameraZ) * depthScale
+	c.ScreenTop = c.ScreenHeight/2 - int(c.ProjectedTop)
+	c.ScreenBottom = c.ScreenHeight/2 - int(c.ProjectedBottom)
+	c.ClippedTop = concepts.Clamp(c.ScreenTop, c.EdgeTop, c.EdgeBottom)
+	c.ClippedBottom = concepts.Clamp(c.ScreenBottom, c.EdgeTop, c.EdgeBottom)
 
-	if c.Pick && c.ScreenY >= c.ClippedStart && c.ScreenY <= c.ClippedEnd {
+	if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
 		c.PickedSelection = append(c.PickedSelection, core.SelectableFromBody(b))
 		return
 	}
@@ -115,12 +115,12 @@ func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 		c.Light[3] = 1
 	}
 
-	for y := c.ClippedStart; y < c.ClippedEnd; y++ {
+	for y := c.ClippedTop; y < c.ClippedBottom; y++ {
 		screenIndex := (y*r.ScreenWidth + c.ScreenX)
 		if c.Distance >= r.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(y-c.ScreenStart) / float64(c.ScreenEnd-c.ScreenStart)
+		v := float64(y-c.ScreenTop) / float64(c.ScreenBottom-c.ScreenTop)
 		sample := c.SampleShader(eMaterial, nil, c.U, v, depthScale)
 		sample.Mul4Self(&c.Light)
 		c.ApplySample(sample, screenIndex, c.Distance)

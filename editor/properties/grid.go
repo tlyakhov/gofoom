@@ -400,15 +400,15 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldAnimation(field)
 		case **concepts.Animation[concepts.Vector4]:
 			g.fieldAnimation(field)
-		case **concepts.SimVariable[int]:
+		case **concepts.DynamicValue[int]:
 			g.fieldAnimationTarget(field)
-		case **concepts.SimVariable[float64]:
+		case **concepts.DynamicValue[float64]:
 			g.fieldAnimationTarget(field)
-		case **concepts.SimVariable[concepts.Vector2]:
+		case **concepts.DynamicValue[concepts.Vector2]:
 			g.fieldAnimationTarget(field)
-		case **concepts.SimVariable[concepts.Vector3]:
+		case **concepts.DynamicValue[concepts.Vector3]:
 			g.fieldAnimationTarget(field)
-		case **concepts.SimVariable[concepts.Vector4]:
+		case **concepts.DynamicValue[concepts.Vector4]:
 			g.fieldAnimationTarget(field)
 		default:
 			g.refreshIndex++

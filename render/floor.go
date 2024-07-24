@@ -12,7 +12,7 @@ import (
 )
 
 func FloorPick(s *state.Column) {
-	if s.ScreenY >= s.ClippedEnd && s.ScreenY < s.YEnd {
+	if s.ScreenY >= s.ClippedBottom && s.ScreenY < s.EdgeBottom {
 		s.PickedSelection = append(s.PickedSelection, core.SelectableFromFloor(s.Sector))
 	}
 }
@@ -36,7 +36,7 @@ func Floor(c *state.Column) {
 		c.Sector.Segments[0].P[0] - c.Ray.Start[0],
 		c.Sector.Segments[0].P[1] - c.Ray.Start[1],
 		*c.Sector.BottomZ.Render - c.CameraZ}
-	for c.ScreenY = c.ClippedEnd; c.ScreenY < c.YEnd; c.ScreenY++ {
+	for c.ScreenY = c.ClippedBottom; c.ScreenY < c.EdgeBottom; c.ScreenY++ {
 		c.RayFloorCeil[2] = float64(c.ScreenHeight/2 - c.ScreenY)
 		denom := c.Sector.FloorNormal.Dot(&c.RayFloorCeil)
 

@@ -9,7 +9,7 @@ import (
 
 type Solid struct {
 	concepts.Attached `editable:"^"`
-	Diffuse           concepts.SimVariable[concepts.Vector4] `editable:"Color"`
+	Diffuse           concepts.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
 var SolidComponentIndex int

@@ -345,10 +345,6 @@
   },
   {
     "Entity": "7",
-    "concepts.Named": {
-      "Entity": "7",
-      "Name": "be3eq5fvn27i2m3sajcg"
-    },
     "core.Sector": {
       "BottomZ": {
         "Original": 0
@@ -426,10 +422,6 @@
   },
   {
     "Entity": "8",
-    "concepts.Named": {
-      "Entity": "8",
-      "Name": "be49mvvvn27m6mdvjqq0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -472,10 +464,6 @@
   },
   {
     "Entity": "9",
-    "concepts.Named": {
-      "Entity": "9",
-      "Name": "be26tkvvn27vmb5f7710"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -2555,8 +2543,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.78125,
-          "Reverse": true,
+          "Percent": 0.078125,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3540,11 +3528,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 38.653185983022254,
+          "End": -177.01936857905054,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1.0156249999999996,
+          "Percent": 0.7291666666666665,
           "Reverse": false,
-          "Start": 34.83866167306801,
+          "Start": -175.51296605146788,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -4610,8 +4598,8 @@
           "Surface": {
             "Material": "2"
           },
-          "X": -100,
-          "Y": -580
+          "X": -140,
+          "Y": -510
         },
         {
           "Hi": {
@@ -4905,10 +4893,6 @@
   },
   {
     "Entity": "59",
-    "concepts.Named": {
-      "Entity": "59",
-      "Name": "be4epmnvn27mnbvee48g"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -5134,10 +5118,6 @@
   },
   {
     "Entity": "62",
-    "concepts.Named": {
-      "Entity": "62",
-      "Name": "be4enjnvn27mnbvee10g"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -5511,13 +5491,33 @@
       },
       "CeilSlope": -0.2,
       "CeilSurface": {
-        "Material": "122"
+        "Material": "122",
+        "Transform": {
+          "Original": [
+            1,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        }
       },
       "Entity": "67",
       "FloorFriction": 0.85,
       "FloorSlope": -0.2,
       "FloorSurface": {
-        "Material": "122"
+        "Material": "122",
+        "Transform": {
+          "Original": [
+            1,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        }
       },
       "Segments": [
         {
@@ -5582,10 +5582,6 @@
   },
   {
     "Entity": "68",
-    "concepts.Named": {
-      "Entity": "68",
-      "Name": "be3et4nvn27i2m3savb0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -6456,7 +6452,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if core.BodyFromDb(s.DB,s.Entity(\"body\")).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,s.Entity(\"sector\")).Intent = behaviors.DoorIntentOpen }",
+          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.VerticalDoorFromDb(s.DB,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6524,7 +6520,7 @@
         {
           "AdjacentSector": "67",
           "Hi": {
-            "Material": "2"
+            "Material": "123"
           },
           "Lo": {
             "Material": "2"
@@ -6559,7 +6555,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen }",
+          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.VerticalDoorFromDb(s.DB,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6620,9 +6616,9 @@
                 1,
                 0,
                 0,
-                1,
-                0.3200000000000002,
-                0
+                1.28,
+                0,
+                -0.30000000000000004
               ]
             }
           },
@@ -6766,9 +6762,9 @@
                 1,
                 0,
                 0,
-                0.003375000000000017,
+                1.6,
                 0,
-                0.996625
+                -0.6
               ]
             }
           },
@@ -6789,7 +6785,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
+          "Percent": 0,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -7038,10 +7034,6 @@
   },
   {
     "Entity": "85",
-    "concepts.Named": {
-      "Entity": "85",
-      "Name": "be46k8vvn27lk1dece6g"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -8407,10 +8399,6 @@
   },
   {
     "Entity": "101",
-    "concepts.Named": {
-      "Entity": "101",
-      "Name": "be4bv4vvn27mek306eq0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -8453,10 +8441,6 @@
   },
   {
     "Entity": "102",
-    "concepts.Named": {
-      "Entity": "102",
-      "Name": "be4bv6nvn27mek306er0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -8608,10 +8592,6 @@
   },
   {
     "Entity": "104",
-    "concepts.Named": {
-      "Entity": "104",
-      "Name": "be26s47vn27vmb5f72m0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -8654,10 +8634,6 @@
   },
   {
     "Entity": "105",
-    "concepts.Named": {
-      "Entity": "105",
-      "Name": "be26t9fvn27vmb5f74g0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0

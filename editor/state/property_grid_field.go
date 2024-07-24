@@ -12,12 +12,12 @@ import (
 )
 
 var EmbeddedTypes = [...]string{
-	concepts.ReflectType[*concepts.SimVariable[float64]]().String(),
-	concepts.ReflectType[*concepts.SimVariable[int]]().String(),
-	concepts.ReflectType[*concepts.SimVariable[concepts.Vector2]]().String(),
-	concepts.ReflectType[*concepts.SimVariable[concepts.Vector3]]().String(),
-	concepts.ReflectType[*concepts.SimVariable[concepts.Vector4]]().String(),
-	concepts.ReflectType[*concepts.SimVariable[concepts.Matrix2]]().String(),
+	concepts.ReflectType[*concepts.DynamicValue[float64]]().String(),
+	concepts.ReflectType[*concepts.DynamicValue[int]]().String(),
+	concepts.ReflectType[*concepts.DynamicValue[concepts.Vector2]]().String(),
+	concepts.ReflectType[*concepts.DynamicValue[concepts.Vector3]]().String(),
+	concepts.ReflectType[*concepts.DynamicValue[concepts.Vector4]]().String(),
+	concepts.ReflectType[*concepts.DynamicValue[concepts.Matrix2]]().String(),
 	concepts.ReflectType[*core.Script]().String(),
 	concepts.ReflectType[*materials.Surface]().String(),
 	concepts.ReflectType[*materials.ShaderStage]().String(),

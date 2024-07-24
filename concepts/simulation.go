@@ -50,9 +50,9 @@ func (s *Simulation) Step() {
 
 	for s.RenderTime >= constants.TimeStep {
 		s.All.Range(func(key any, _ any) bool {
-			v := key.(Simulated)
-			v.NewFrame()
-			if a := v.GetAnimation(); a != nil {
+			d := key.(Dynamic)
+			d.NewFrame()
+			if a := d.GetAnimation(); a != nil {
 				a.Animate()
 			}
 			return true
@@ -71,8 +71,8 @@ func (s *Simulation) Step() {
 	s.RenderStateBlend = s.RenderTime / constants.TimeStep
 
 	s.All.Range(func(key any, _ any) bool {
-		v := key.(Simulated)
-		v.RenderBlend(s.RenderStateBlend)
+		d := key.(Dynamic)
+		d.RenderBlend(s.RenderStateBlend)
 		return true
 	})
 

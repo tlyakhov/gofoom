@@ -69,17 +69,13 @@ type Column struct {
 	// Height of camera above ground
 	CameraZ float64
 	// Height of floor/ceiling at current segment intersection
-	BottomZ float64
-	TopZ    float64
+	IntersectionTop, IntersectionBottom float64
 	// Scaled screenspace boundaries of current column (unclipped)
-	YStart, YEnd int
+	EdgeTop, EdgeBottom int
 	// Projected height of floor/ceiling at current segment intersection
-	ProjHeightTop    float64
-	ProjHeightBottom float64
-	ScreenStart      int
-	ScreenEnd        int
-	ClippedStart     int
-	ClippedEnd       int
+	ProjectedTop, ProjectedBottom float64
+	ScreenTop, ScreenBottom       int
+	ClippedTop, ClippedBottom     int
 	// Lightning cache
 	Light               concepts.Vector4
 	LightVoxelA         concepts.Vector3
@@ -92,6 +88,8 @@ type Column struct {
 	PickedSelection []*core.Selectable
 }
 
+// This function has side effects: it fills in various fields on the Column if
+// there was an intersection, and affects Column.RaySegTest even if not.
 func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool, twoSided bool) bool {
 	// Wall is facing away from us
 	if !twoSided && c.Ray.Delta.Dot(&segment.Normal) > 0 {
@@ -108,11 +106,12 @@ func (c *Column) IntersectSegment(segment *core.Segment, checkDist bool, twoSide
 	}
 
 	var dist float64
-	delta := concepts.Vector2{math.Abs(c.RaySegTest[0] - c.Ray.Start[0]), math.Abs(c.RaySegTest[1] - c.Ray.Start[1])}
-	if delta[1] > delta[0] {
-		dist = math.Abs(delta[1] / c.Ray.AngleSin)
+	dx := math.Abs(c.RaySegTest[0] - c.Ray.Start[0])
+	dy := math.Abs(c.RaySegTest[1] - c.Ray.Start[1])
+	if dy > dx {
+		dist = math.Abs(dy / c.Ray.AngleSin)
 	} else {
-		dist = math.Abs(delta[0] / c.Ray.AngleCos)
+		dist = math.Abs(dx / c.Ray.AngleCos)
 	}
 
 	if checkDist && (dist > c.Distance || dist < c.LastPortalDistance) {
@@ -133,13 +132,13 @@ func (c *Column) ProjectZ(z float64) float64 {
 
 func (c *Column) CalcScreen() {
 	// Screen slice precalculation
-	c.ProjHeightTop = c.ProjectZ(c.TopZ - c.CameraZ)
-	c.ProjHeightBottom = c.ProjectZ(c.BottomZ - c.CameraZ)
+	c.ProjectedTop = c.ProjectZ(c.IntersectionTop - c.CameraZ)
+	c.ProjectedBottom = c.ProjectZ(c.IntersectionBottom - c.CameraZ)
 
-	c.ScreenStart = c.ScreenHeight/2 - int(math.Floor(c.ProjHeightTop))
-	c.ScreenEnd = c.ScreenHeight/2 - int(math.Floor(c.ProjHeightBottom))
-	c.ClippedStart = concepts.Clamp(c.ScreenStart, c.YStart, c.YEnd)
-	c.ClippedEnd = concepts.Clamp(c.ScreenEnd, c.YStart, c.YEnd)
+	c.ScreenTop = c.ScreenHeight/2 - int(math.Floor(c.ProjectedTop))
+	c.ScreenBottom = c.ScreenHeight/2 - int(math.Floor(c.ProjectedBottom))
+	c.ClippedTop = concepts.Clamp(c.ScreenTop, c.EdgeTop, c.EdgeBottom)
+	c.ClippedBottom = concepts.Clamp(c.ScreenBottom, c.EdgeTop, c.EdgeBottom)
 }
 
 func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {

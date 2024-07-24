@@ -19,9 +19,9 @@ import (
 
 type Surface struct {
 	DB          *concepts.EntityComponentDB
-	Material    concepts.Entity                        `editable:"Material" edit_type:"Material"`
-	ExtraStages []*ShaderStage                         `editable:"Extra Shader Stages"`
-	Transform   concepts.SimVariable[concepts.Matrix2] `editable:"Transform"`
+	Material    concepts.Entity                         `editable:"Material" edit_type:"Material"`
+	ExtraStages []*ShaderStage                          `editable:"Extra Shader Stages"`
+	Transform   concepts.DynamicValue[concepts.Matrix2] `editable:"Transform"`
 }
 
 func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any) {

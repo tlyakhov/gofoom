@@ -13,16 +13,16 @@ import (
 
 type Body struct {
 	concepts.Attached `editable:"^"`
-	Pos               concepts.SimVariable[concepts.Vector3] `editable:"Position"`
-	Vel               concepts.SimVariable[concepts.Vector3]
+	Pos               concepts.DynamicValue[concepts.Vector3] `editable:"Position"`
+	Vel               concepts.DynamicValue[concepts.Vector3]
 	Force             concepts.Vector3
-	Size              concepts.SimVariable[concepts.Vector2] `editable:"Size"`
+	Size              concepts.DynamicValue[concepts.Vector2] `editable:"Size"`
 	SectorEntity      concepts.Entity
-	Angle             concepts.SimVariable[float64] `editable:"Angle"`
-	Mass              float64                       `editable:"Mass"`
-	CollisionResponse CollisionResponse             `editable:"Collision Response"`
-	Shadow            BodyShadow                    `editable:"Shadow Type"`
-	MountHeight       float64                       `editable:"Mount Height"`
+	Angle             concepts.DynamicValue[float64] `editable:"Angle"`
+	Mass              float64                        `editable:"Mass"`
+	CollisionResponse CollisionResponse              `editable:"Collision Response"`
+	Shadow            BodyShadow                     `editable:"Shadow Type"`
+	MountHeight       float64                        `editable:"Mount Height"`
 	OnGround          bool
 
 	// For rendering - we can figure out which side of this our render
