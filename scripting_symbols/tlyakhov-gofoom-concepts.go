@@ -49,7 +49,6 @@ func init() {
 		"Int32ToNRGBA":                 reflect.ValueOf(concepts.Int32ToNRGBA),
 		"Int32ToRGBA":                  reflect.ValueOf(concepts.Int32ToRGBA),
 		"Int32ToVector3":               reflect.ValueOf(concepts.Int32ToVector3),
-		"Int32ToVector4":               reflect.ValueOf(concepts.Int32ToVector4),
 		"Int32ToVector4PreMul":         reflect.ValueOf(concepts.Int32ToVector4PreMul),
 		"Intersect":                    reflect.ValueOf(concepts.Intersect),
 		"IntersectLineAABB":            reflect.ValueOf(concepts.IntersectLineAABB),
@@ -102,12 +101,12 @@ func init() {
 		"Controller":           reflect.ValueOf((*concepts.Controller)(nil)),
 		"ControllerMethod":     reflect.ValueOf((*concepts.ControllerMethod)(nil)),
 		"ControllerSet":        reflect.ValueOf((*concepts.ControllerSet)(nil)),
+		"Dynamic":              reflect.ValueOf((*concepts.Dynamic)(nil)),
 		"Entity":               reflect.ValueOf((*concepts.Entity)(nil)),
 		"EntityComponentDB":    reflect.ValueOf((*concepts.EntityComponentDB)(nil)),
 		"Matrix2":              reflect.ValueOf((*concepts.Matrix2)(nil)),
 		"Named":                reflect.ValueOf((*concepts.Named)(nil)),
 		"Serializable":         reflect.ValueOf((*concepts.Serializable)(nil)),
-		"Simulated":            reflect.ValueOf((*concepts.Simulated)(nil)),
 		"Simulation":           reflect.ValueOf((*concepts.Simulation)(nil)),
 		"SyncQueue":            reflect.ValueOf((*concepts.SyncQueue)(nil)),
 		"SyncUniqueQueue":      reflect.ValueOf((*concepts.SyncUniqueQueue)(nil)),
@@ -120,8 +119,8 @@ func init() {
 		"_Animated":     reflect.ValueOf((*_tlyakhov_gofoom_concepts_Animated)(nil)),
 		"_Attachable":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_Attachable)(nil)),
 		"_Controller":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_Controller)(nil)),
+		"_Dynamic":      reflect.ValueOf((*_tlyakhov_gofoom_concepts_Dynamic)(nil)),
 		"_Serializable": reflect.ValueOf((*_tlyakhov_gofoom_concepts_Serializable)(nil)),
-		"_Simulated":    reflect.ValueOf((*_tlyakhov_gofoom_concepts_Simulated)(nil)),
 	}
 }
 
@@ -238,6 +237,52 @@ func (W _tlyakhov_gofoom_concepts_Controller) Target(a0 concepts.Attachable) boo
 	return W.WTarget(a0)
 }
 
+// _tlyakhov_gofoom_concepts_Dynamic is an interface wrapper for Dynamic type
+type _tlyakhov_gofoom_concepts_Dynamic struct {
+	IValue           interface{}
+	WAttach          func(sim *concepts.Simulation)
+	WConstruct       func(data map[string]any)
+	WDetach          func(sim *concepts.Simulation)
+	WGetAnimation    func() concepts.Animated
+	WGetDB           func() *concepts.EntityComponentDB
+	WNewFrame        func()
+	WRenderBlend     func(a0 float64)
+	WResetToOriginal func()
+	WSerialize       func() map[string]any
+	WSetDB           func(db *concepts.EntityComponentDB)
+}
+
+func (W _tlyakhov_gofoom_concepts_Dynamic) Attach(sim *concepts.Simulation) {
+	W.WAttach(sim)
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) Construct(data map[string]any) {
+	W.WConstruct(data)
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) Detach(sim *concepts.Simulation) {
+	W.WDetach(sim)
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) GetAnimation() concepts.Animated {
+	return W.WGetAnimation()
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) GetDB() *concepts.EntityComponentDB {
+	return W.WGetDB()
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) NewFrame() {
+	W.WNewFrame()
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) RenderBlend(a0 float64) {
+	W.WRenderBlend(a0)
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) ResetToOriginal() {
+	W.WResetToOriginal()
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) Serialize() map[string]any {
+	return W.WSerialize()
+}
+func (W _tlyakhov_gofoom_concepts_Dynamic) SetDB(db *concepts.EntityComponentDB) {
+	W.WSetDB(db)
+}
+
 // _tlyakhov_gofoom_concepts_Serializable is an interface wrapper for Serializable type
 type _tlyakhov_gofoom_concepts_Serializable struct {
 	IValue     interface{}
@@ -257,51 +302,5 @@ func (W _tlyakhov_gofoom_concepts_Serializable) Serialize() map[string]any {
 	return W.WSerialize()
 }
 func (W _tlyakhov_gofoom_concepts_Serializable) SetDB(db *concepts.EntityComponentDB) {
-	W.WSetDB(db)
-}
-
-// _tlyakhov_gofoom_concepts_Simulated is an interface wrapper for Simulated type
-type _tlyakhov_gofoom_concepts_Simulated struct {
-	IValue        interface{}
-	WAttach       func(sim *concepts.Simulation)
-	WConstruct    func(data map[string]any)
-	WDetach       func(sim *concepts.Simulation)
-	WGetAnimation func() concepts.Animated
-	WGetDB        func() *concepts.EntityComponentDB
-	WNewFrame     func()
-	WRenderBlend  func(a0 float64)
-	WReset        func()
-	WSerialize    func() map[string]any
-	WSetDB        func(db *concepts.EntityComponentDB)
-}
-
-func (W _tlyakhov_gofoom_concepts_Simulated) Attach(sim *concepts.Simulation) {
-	W.WAttach(sim)
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) Detach(sim *concepts.Simulation) {
-	W.WDetach(sim)
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) GetAnimation() concepts.Animated {
-	return W.WGetAnimation()
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) GetDB() *concepts.EntityComponentDB {
-	return W.WGetDB()
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) NewFrame() {
-	W.WNewFrame()
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) RenderBlend(a0 float64) {
-	W.WRenderBlend(a0)
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) Reset() {
-	W.WReset()
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) Serialize() map[string]any {
-	return W.WSerialize()
-}
-func (W _tlyakhov_gofoom_concepts_Simulated) SetDB(db *concepts.EntityComponentDB) {
 	W.WSetDB(db)
 }

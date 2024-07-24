@@ -170,7 +170,10 @@ func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
 
 	if !img.Filter {
 		// TODO: avoid allocating a vector here.
-		return concepts.Int32ToVector4(data[fy*w+fx])
+		c := data[fy*w+fx]
+		return concepts.Vector4{
+			float64((c>>24)&0xFF) / 255.0, float64((c>>16)&0xFF) / 255.0,
+			float64((c>>8)&0xFF) / 255.0, float64(c&0xFF) / 255.0}
 	}
 
 	fx = concepts.UMin(fx, w-1)

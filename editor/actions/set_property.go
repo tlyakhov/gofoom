@@ -33,8 +33,8 @@ func (a *SetProperty) FireHooks() {
 	// multiple times for the same selection.
 	for _, v := range a.Values {
 		switch target := v.Parent().(type) {
-		case concepts.Simulated:
-			target.Reset()
+		case concepts.Dynamic:
+			target.ResetToOriginal()
 		case *materials.Image:
 			if a.Source.Name == "Source" {
 				target.Load()

@@ -11,26 +11,22 @@ import (
 
 type ColumnPortal struct {
 	*Column
-	Adj                 *core.Sector
-	AdjSegment          *core.SectorSegment
-	AdjProjHeightTop    float64
-	AdjProjHeightBottom float64
-	AdjFloorZ           float64
-	AdjCeilZ            float64
-	AdjScreenTop        int
-	AdjScreenBottom     int
-	AdjClippedTop       int
-	AdjClippedBottom    int
+	Adj                                 *core.Sector
+	AdjSegment                          *core.SectorSegment
+	AdjTop, AdjBottom                   float64
+	AdjProjectedTop, AdjProjectedBottom float64
+	AdjScreenTop, AdjScreenBottom       int
+	AdjClippedTop, AdjClippedBottom     int
 }
 
 func (cp *ColumnPortal) CalcScreen() {
 	cp.Adj = core.SectorFromDb(cp.DB, cp.SectorSegment.AdjacentSector)
 	cp.AdjSegment = cp.SectorSegment.AdjacentSegment
-	cp.AdjFloorZ, cp.AdjCeilZ = cp.Adj.SlopedZRender(cp.RaySegIntersect.To2D())
-	cp.AdjProjHeightTop = cp.ProjectZ(cp.AdjCeilZ - cp.CameraZ)
-	cp.AdjProjHeightBottom = cp.ProjectZ(cp.AdjFloorZ - cp.CameraZ)
-	cp.AdjScreenTop = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjHeightTop))
-	cp.AdjScreenBottom = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjHeightBottom))
-	cp.AdjClippedTop = concepts.Clamp(cp.AdjScreenTop, cp.ClippedStart, cp.ClippedEnd)
-	cp.AdjClippedBottom = concepts.Clamp(cp.AdjScreenBottom, cp.ClippedStart, cp.ClippedEnd)
+	cp.AdjBottom, cp.AdjTop = cp.Adj.SlopedZRender(cp.RaySegIntersect.To2D())
+	cp.AdjProjectedTop = cp.ProjectZ(cp.AdjTop - cp.CameraZ)
+	cp.AdjProjectedBottom = cp.ProjectZ(cp.AdjBottom - cp.CameraZ)
+	cp.AdjScreenTop = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjectedTop))
+	cp.AdjScreenBottom = cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjectedBottom))
+	cp.AdjClippedTop = concepts.Clamp(cp.AdjScreenTop, cp.ClippedTop, cp.ClippedBottom)
+	cp.AdjClippedBottom = concepts.Clamp(cp.AdjScreenBottom, cp.ClippedTop, cp.ClippedBottom)
 }
