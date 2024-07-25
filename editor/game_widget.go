@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"image"
+	"log"
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -149,7 +150,15 @@ func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 		rh := editor.Renderer.ScreenHeight
 		x := float64(evt.Position.X) * float64(rw) / float64(daw)
 		y := float64(evt.Position.Y) * float64(rh) / float64(dah)
-		editor.SelectObjects(true, editor.Renderer.Pick(int(x), int(y))...)
+		picked := editor.Renderer.Pick(int(x), int(y))
+		if evt.Modifier&fyne.KeyModifierShift != 0 {
+			editor.SelectedObjects.Add(picked...)
+			editor.SetSelection(true, editor.SelectedObjects)
+		} else if evt.Modifier&fyne.KeyModifierSuper != 0 {
+			log.Printf("Subtracting game picking unimplemented")
+		} else {
+			editor.SelectObjects(true, picked...)
+		}
 	}
 }
 func (g *GameWidget) MouseUp(evt *desktop.MouseEvent) {}

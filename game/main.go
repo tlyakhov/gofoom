@@ -103,16 +103,19 @@ func renderGame() {
 	canvas.Draw(win, mat)
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f, Light cache: %v", renderer.DB.Simulation.FPS, renderer.SectorLastRendered.Size()))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
+	hits := renderer.ICacheHits.Load()
+	misses := renderer.ICacheMisses.Load()
+	mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
 	if renderer.PlayerBody.SectorEntity != 0 {
 		entity := renderer.PlayerBody.SectorEntity
 		s := 0
 		//		core.SectorFromDb(ref).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
-		mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v, LM:%v", entity.String(renderer.DB), s))
+		mainFont.Draw(win, 10, 40, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v, LM:%v", entity.String(renderer.DB), s))
 	}
 	y := 0
 	for y < 20 && renderer.DebugNotices.Length() > 0 {
 		msg := renderer.DebugNotices.Pop().(string)
-		mainFont.Draw(win, 10, 40+float64(y)*10, color.NRGBA{0xff, 0, 0, 0xff}, msg)
+		mainFont.Draw(win, 10, 50+float64(y)*10, color.NRGBA{0xff, 0, 0, 0xff}, msg)
 		y++
 	}
 	win.Update()

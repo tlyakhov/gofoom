@@ -12,18 +12,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
+func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 	// TODO: We should probably not do all of this for every column. Can we
 	// cache any of these things as we cast rays?
-	b := core.BodyFromDb(r.DB, entity)
-	if b == nil || !b.IsActive() {
-		return
-	}
 
-	eMaterial := entity
+	eMaterial := b.Entity
 	angleFromPlayer := r.PlayerBody.Angle2DTo(b.Pos.Render)
 
-	sheet := materials.SpriteSheetFromDb(r.DB, entity)
+	sheet := materials.SpriteSheetFromDb(r.DB, b.Entity)
 	if sheet != nil && sheet.IsActive() {
 		angleSprite := 360 - angleFromPlayer + *b.Angle.Render
 		if len(sheet.Sprites) == 0 {
@@ -83,24 +79,24 @@ func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 
 	c.ProjectedTop = (b.Pos.Render[2] + b.Size.Render[1] - c.CameraZ) * depthScale
 	c.ProjectedBottom = (b.Pos.Render[2] - c.CameraZ) * depthScale
-	c.ScreenTop = c.ScreenHeight/2 - int(c.ProjectedTop)
-	c.ScreenBottom = c.ScreenHeight/2 - int(c.ProjectedBottom)
-	c.ClippedTop = concepts.Clamp(c.ScreenTop, c.EdgeTop, c.EdgeBottom)
-	c.ClippedBottom = concepts.Clamp(c.ScreenBottom, c.EdgeTop, c.EdgeBottom)
+	screenTop := c.ScreenHeight/2 - int(c.ProjectedTop)
+	screenBottom := c.ScreenHeight/2 - int(c.ProjectedBottom)
+	c.ClippedTop = concepts.Clamp(screenTop, c.EdgeTop, c.EdgeBottom)
+	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 
 	if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
 		c.PickedSelection = append(c.PickedSelection, core.SelectableFromBody(b))
 		return
 	}
 
-	if lit := materials.LitFromDb(r.DB, entity); lit != nil {
+	if lit := materials.LitFromDb(r.DB, b.Entity); lit != nil {
 		le := &c.LightElement
 		le.Q.From(b.Pos.Render)
 		le.Q[2] += b.Size.Render[1] * 0.5
 		le.MapIndex = b.Sector().WorldToLightmapAddress(&le.Q, 0)
 		le.Segment = nil
 		le.Type = state.LightElementBody
-		le.InputBody = entity
+		le.InputBody = b.Entity
 		le.Sector = b.Sector()
 		le.Get()
 		c.Light.To3D().From(&le.Output)
@@ -114,13 +110,13 @@ func (r *Renderer) RenderBody(entity concepts.Entity, c *state.Column) {
 		c.Light[2] = 1
 		c.Light[3] = 1
 	}
-
+	vStart := float64(c.ScreenHeight/2) - c.ProjectedTop
 	for y := c.ClippedTop; y < c.ClippedBottom; y++ {
 		screenIndex := (y*r.ScreenWidth + c.ScreenX)
 		if c.Distance >= r.ZBuffer[screenIndex] {
 			continue
 		}
-		v := float64(y-c.ScreenTop) / float64(c.ScreenBottom-c.ScreenTop)
+		v := (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
 		sample := c.SampleShader(eMaterial, nil, c.U, v, depthScale)
 		sample.Mul4Self(&c.Light)
 		c.ApplySample(sample, screenIndex, c.Distance)

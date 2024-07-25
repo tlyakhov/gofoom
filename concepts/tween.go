@@ -88,7 +88,7 @@ func EaseInOut2(start, end, t float64) float64 {
 
 func EaseInOut3(start, end, t float64) float64 {
 	if t < 0.5 {
-		t = 4 * t * t
+		t = 4 * t * t * t
 	} else {
 		t = (-2*t + 2)
 		t = t * t * t
