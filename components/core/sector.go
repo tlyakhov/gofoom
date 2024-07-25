@@ -35,6 +35,7 @@ type Sector struct {
 	EnterScripts     []*Script                      `editable:"Enter Scripts"`
 	ExitScripts      []*Script                      `editable:"Exit Scripts"`
 
+	Concave                 bool
 	Winding                 int8
 	Min, Max, Center        concepts.Vector3
 	FloorNormal, CeilNormal concepts.Vector3
@@ -303,6 +304,24 @@ func (s *Sector) Recalculate() {
 		s.CeilNormal.CrossSelf(sloped, delta).NormSelf()
 		if s.CeilNormal[2] > 0 {
 			s.CeilNormal.MulSelf(-1)
+		}
+
+		// Figure out if this sector is concave.
+		// The algorithm tests if any angles are > 180 degrees
+		prev := 0.0
+		for _, s1 := range s.Segments {
+			s2 := s1.Next
+			s3 := s2.Next
+			d1 := s2.P.Sub(&s1.P)
+			d2 := s3.P.Sub(&s2.P)
+			c := d1.Cross(d2)
+			if c != 0 {
+				if c*prev < 0 {
+					s.Concave = true
+					break
+				}
+				prev = c
+			}
 		}
 	}
 

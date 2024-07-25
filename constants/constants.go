@@ -22,8 +22,8 @@ const (
 	FieldOfView             = 90
 	DebugLevel              = 1
 	CollisionSteps          = 10
-	MaxLightmapAge          = 4 // in frames
-	LightmapRefreshDither   = 8 // in frames
+	MaxLightmapAge          = 3 // in frames
+	LightmapRefreshDither   = 6 // in frames
 	RenderMultiThreaded     = true
 	DebugLighting           = false
 

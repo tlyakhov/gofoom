@@ -166,21 +166,43 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
 func (r *Renderer) RenderSector(c *state.Column) {
-	// This is for invalidating lighting caches (Sector.Lightmap)
+	// Remember the frame # we rendered this sector. This is used when trying to
+	// invalidate lighting caches (Sector.Lightmap)
 	// TODO: We can probably do something simpler and cheaper here.
 	r.SectorLastRendered.Store(c.Sector.Entity, uint64(r.Frame))
 
-	// Try the previous one first
+	/*  The structure of this function is a bit complicated because we try to
+		remember successful ray/segment intersections for convex sectors. This
+		is most beneficial for sectors with a lot of segments.
+
+		Summary of Renderer.RenderSector overall:
+
+		1. If the sector is not concave, and the contents of the cache at the
+		    current portal depth match the current sector, and the cached segment
+	        is intersected by the ray, use the cached data, avoiding visiting the
+		    rest of the segments for the sector.
+
+		2. Otherwise, iterate through all the segments looking for
+		   intersections.
+
+		3. Render a column, potentially visiting portal sectors.
+		4. Find intersections with internal segments, collect distances.
+		5. Find intersections with Bodies, collect distances.
+		6. Sort bodies/internal segments by distance.
+		7. Render bodies and internal segments in order.
+
+	*/
+
 	c.SegmentIntersection = &c.Visited[c.Depth]
-	if c.SectorSegment != nil && c.SectorSegment.Sector == c.Sector &&
-		c.SectorSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
+	cacheValid := !c.Sector.Concave && c.SectorSegment != nil && c.SectorSegment.Sector == c.Sector
+	if cacheValid && c.SectorSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
 		r.ICacheHits.Add(1)
 		c.Distance = c.Ray.DistTo(&c.RaySegTest)
 		c.RaySegIntersect[0] = c.RaySegTest[0]
 		c.RaySegIntersect[1] = c.RaySegTest[1]
 	} else {
 		r.ICacheMisses.Add(1)
-		c.SegmentIntersection = nil
+		found := false
 		for _, sectorSeg := range c.Sector.Segments {
 			// Wall is facing away from us
 			if c.Ray.Delta.Dot(&sectorSeg.Normal) > 0 {
@@ -192,16 +214,22 @@ func (r *Renderer) RenderSector(c *state.Column) {
 				continue
 			}
 
+			// Check if we've already found a closer segment
 			dist := c.Ray.DistTo(&c.RaySegTest)
-			if (c.SegmentIntersection != nil && dist > c.Distance) || dist < c.LastPortalDistance {
+			if (found && dist > c.Distance) ||
+				dist < c.LastPortalDistance {
 				continue
 			}
-			c.SegmentIntersection = &c.Visited[c.Depth]
+
+			found = true
 			c.SegmentIntersection.Segment = &sectorSeg.Segment
 			c.SectorSegment = sectorSeg
 			c.Distance = dist
 			c.RaySegIntersect[0] = c.RaySegTest[0]
 			c.RaySegIntersect[1] = c.RaySegTest[1]
+		}
+		if !found {
+			c.SegmentIntersection = nil
 		}
 	}
 
@@ -316,6 +344,7 @@ func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
+	column.LightElement.XorSeed = r.Frame + uint64(xStart)
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
 	}
@@ -351,6 +380,8 @@ func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
 // Render a frame.
 func (r *Renderer) Render(buffer []uint8) {
 	r.RefreshPlayer()
+	r.ICacheHits.Store(0)
+	r.ICacheMisses.Store(0)
 
 	// Clear buffer, mainly useful for debugging
 	/*for i := 0; i < len(r.FrameBuffer); i++ {
