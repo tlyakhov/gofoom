@@ -36,7 +36,7 @@ type LightElement struct {
 	Q            concepts.Vector3
 	LightWorld   concepts.Vector3
 	InputBody    concepts.Entity
-	xorSeed      uint64
+	XorSeed      uint64
 
 	Sector  *core.Sector
 	Segment *core.Segment
@@ -58,8 +58,8 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		return &le.Output
 	}
 	//return le.Debug()
-	r := concepts.RngXorShift64(le.xorSeed)
-	le.xorSeed = r
+	r := concepts.RngXorShift64(le.XorSeed)
+	le.XorSeed = r
 
 	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
 		if uint64(lmResult[3])+constants.MaxLightmapAge >= le.Config.Frame ||
