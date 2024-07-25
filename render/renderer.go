@@ -9,6 +9,7 @@ import (
 	"math"
 	"slices"
 	"sync"
+	"sync/atomic"
 
 	"github.com/disintegration/imaging"
 	"github.com/puzpuzpuz/xsync/v3"
@@ -27,6 +28,8 @@ type Renderer struct {
 	columnGroup        *sync.WaitGroup
 	startingSector     *core.Sector
 	SectorLastRendered *xsync.MapOf[concepts.Entity, uint64]
+
+	ICacheHits, ICacheMisses atomic.Int64
 }
 
 // NewRenderer constructs a new Renderer.
@@ -49,6 +52,7 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 	for i := range r.Columns {
 		r.Columns[i].Config = r.Config
 		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
+		r.Columns[i].Visited = make([]state.SegmentIntersection, constants.MaxPortals)
 		// Set up 16 slots initially
 		r.Columns[i].EntitiesByDistance = make([]state.EntityWithDist2, 0, 16)
 	}
@@ -123,7 +127,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	c.LightElement.Type = state.LightElementCeil
 	c.LightElement.Normal = c.Sector.CeilNormal
 	c.LightElement.Sector = c.Sector
-	c.LightElement.Segment = c.Segment
+	c.LightElement.Segment = c.SegmentIntersection.Segment
 
 	if c.Pick {
 		CeilingPick(c)
@@ -140,7 +144,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	}
 
 	c.LightElement.Type = state.LightElementWall
-	c.Segment.Normal.To3D(&c.LightElement.Normal)
+	c.SegmentIntersection.Segment.Normal.To3D(&c.LightElement.Normal)
 
 	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
 	if c.Pick {
@@ -163,19 +167,47 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
 func (r *Renderer) RenderSector(c *state.Column) {
 	// This is for invalidating lighting caches (Sector.Lightmap)
+	// TODO: We can probably do something simpler and cheaper here.
 	r.SectorLastRendered.Store(c.Sector.Entity, uint64(r.Frame))
-	c.Distance = constants.MaxViewDistance
-	c.SectorSegment = nil
-	c.Segment = nil
-	for _, sectorSeg := range c.Sector.Segments {
-		if !c.IntersectSegment(&sectorSeg.Segment, true, false) {
-			continue
+
+	// Try the previous one first
+	c.SegmentIntersection = &c.Visited[c.Depth]
+	if c.SectorSegment != nil && c.SectorSegment.Sector == c.Sector &&
+		c.SectorSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
+		r.ICacheHits.Add(1)
+		c.Distance = c.Ray.DistTo(&c.RaySegTest)
+		c.RaySegIntersect[0] = c.RaySegTest[0]
+		c.RaySegIntersect[1] = c.RaySegTest[1]
+	} else {
+		r.ICacheMisses.Add(1)
+		c.SegmentIntersection = nil
+		for _, sectorSeg := range c.Sector.Segments {
+			// Wall is facing away from us
+			if c.Ray.Delta.Dot(&sectorSeg.Normal) > 0 {
+				continue
+			}
+
+			// Ray intersects?
+			if !sectorSeg.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
+				continue
+			}
+
+			dist := c.Ray.DistTo(&c.RaySegTest)
+			if (c.SegmentIntersection != nil && dist > c.Distance) || dist < c.LastPortalDistance {
+				continue
+			}
+			c.SegmentIntersection = &c.Visited[c.Depth]
+			c.SegmentIntersection.Segment = &sectorSeg.Segment
+			c.SectorSegment = sectorSeg
+			c.Distance = dist
+			c.RaySegIntersect[0] = c.RaySegTest[0]
+			c.RaySegIntersect[1] = c.RaySegTest[1]
 		}
-		c.SectorSegment = sectorSeg
-		c.IntersectionBottom, c.IntersectionTop = c.Sector.SlopedZRender(c.RaySegIntersect.To2D())
 	}
 
-	if c.Segment != nil {
+	if c.SegmentIntersection != nil {
+		c.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
+		c.IntersectionBottom, c.IntersectionTop = c.Sector.SlopedZRender(c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
@@ -184,53 +216,63 @@ func (r *Renderer) RenderSector(c *state.Column) {
 
 	// Clear slice without reallocating memory
 	c.EntitiesByDistance = c.EntitiesByDistance[:0]
-	for entity, b := range c.Sector.Bodies {
+	for _, b := range c.Sector.Bodies {
 		c.EntitiesByDistance = append(c.EntitiesByDistance, state.EntityWithDist2{
-			Entity:    entity,
-			Dist2:     c.Ray.Start.Dist2(b.Pos.Render.To2D()),
-			IsSegment: false,
+			Body:  b,
+			Dist2: c.Ray.Start.Dist2(b.Pos.Render.To2D()),
 		})
 	}
-	for entity, s := range c.Sector.InternalSegments {
+	for _, s := range c.Sector.InternalSegments {
 		// TODO: we do this again later. Should we optimize this?
-		if s == nil || !s.IsActive() || !c.IntersectSegment(&s.Segment, false, s.TwoSided) {
+		if s == nil || !s.IsActive() {
 			continue
 		}
+		// Is the segment facing away?
+		if !s.TwoSided && c.Ray.Delta.Dot(&s.Normal) > 0 {
+			continue
+		}
+		// Ray intersects?
+		if !s.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
+			continue
+		}
+
+		dist := c.Ray.DistTo(&c.RaySegTest)
 		c.EntitiesByDistance = append(c.EntitiesByDistance, state.EntityWithDist2{
-			Entity:    entity,
-			Dist2:     c.Distance * c.Distance,
-			IsSegment: true,
+			InternalSegment: s,
+			Dist2:           dist * dist,
 		})
 	}
 
 	slices.SortFunc(c.EntitiesByDistance, func(a state.EntityWithDist2, b state.EntityWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
-	c.SectorSegment = nil
+	c.SegmentIntersection = &state.SegmentIntersection{}
 	for _, sorted := range c.EntitiesByDistance {
-		if sorted.Entity == 0 {
-			continue
-		}
-		if !sorted.IsSegment {
-			r.RenderBody(sorted.Entity, c)
+		if sorted.Body != nil {
+			r.RenderBody(sorted.Body, c)
 			continue
 		}
 
-		s := core.InternalSegmentFromDb(r.DB, sorted.Entity)
-		c.IntersectSegment(&s.Segment, false, s.TwoSided)
-		c.IntersectionTop = s.Top
-		c.IntersectionBottom = s.Bottom
+		// Ray intersection
+		sorted.InternalSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
+		c.SegmentIntersection.Segment = &sorted.InternalSegment.Segment
+		c.Distance = c.Ray.DistTo(&c.RaySegTest)
+		c.RaySegIntersect[0] = c.RaySegTest[0]
+		c.RaySegIntersect[1] = c.RaySegTest[1]
+		c.U = c.RaySegTest.Dist(sorted.InternalSegment.A) / sorted.InternalSegment.Length
+		c.IntersectionTop = sorted.InternalSegment.Top
+		c.IntersectionBottom = sorted.InternalSegment.Bottom
 		c.CalcScreen()
 
 		if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
-			c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(s))
+			c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(sorted.InternalSegment))
 			return
 		}
 		c.LightElement.Config = r.Config
 		c.LightElement.Sector = c.Sector
-		c.LightElement.Segment = &s.Segment
+		c.LightElement.Segment = &sorted.InternalSegment.Segment
 		c.LightElement.Type = state.LightElementWall
-		s.Segment.Normal.To3D(&c.LightElement.Normal)
+		sorted.InternalSegment.Normal.To3D(&c.LightElement.Normal)
 		WallMid(c, true)
 	}
 }

@@ -17,12 +17,14 @@ type SectorSegment struct {
 	DB      *concepts.EntityComponentDB
 	Segment `editable:"^"`
 
-	P                 concepts.Vector2  `editable:"X/Y"`
-	LoSurface         materials.Surface `editable:"Low Surface"`
-	HiSurface         materials.Surface `editable:"High Surface"`
-	PortalHasMaterial bool              `editable:"Portal has material"`
-	PortalIsPassable  bool              `editable:"Portal is passable"`
-	PortalTeleports   bool              `editable:"Portal sector not adjacent"`
+	P         concepts.Vector2  `editable:"X/Y"`
+	LoSurface materials.Surface `editable:"Low Surface"`
+	HiSurface materials.Surface `editable:"High Surface"`
+	// TODO: This should also be implemented for hi/lo surfaces
+	WallUVIgnoreSlope bool `editable:"Wall U/V ignore slope"`
+	PortalHasMaterial bool `editable:"Portal has material"`
+	PortalIsPassable  bool `editable:"Portal is passable"`
+	PortalTeleports   bool `editable:"Portal sector not adjacent"`
 
 	AdjacentSector  concepts.Entity `editable:"Portal sector" edit_type:"Sector"`
 	AdjacentSegment *SectorSegment
@@ -126,6 +128,7 @@ func (s *SectorSegment) Construct(db *concepts.EntityComponentDB, data map[strin
 	s.Segment.Construct(db, data)
 	s.P = concepts.Vector2{}
 	s.Normal = concepts.Vector2{}
+	s.WallUVIgnoreSlope = false
 	s.PortalHasMaterial = false
 	s.PortalIsPassable = true
 	s.PortalTeleports = false
@@ -142,6 +145,9 @@ func (s *SectorSegment) Construct(db *concepts.EntityComponentDB, data map[strin
 	}
 	if v, ok := data["Y"]; ok {
 		s.P[1] = v.(float64)
+	}
+	if v, ok := data["WallUVIgnoreSlope"]; ok {
+		s.WallUVIgnoreSlope = v.(bool)
 	}
 	if v, ok := data["PortalHasMaterial"]; ok {
 		s.PortalHasMaterial = v.(bool)
@@ -173,6 +179,9 @@ func (s *SectorSegment) Serialize() map[string]any {
 	result["X"] = s.P[0]
 	result["Y"] = s.P[1]
 
+	if s.WallUVIgnoreSlope {
+		result["WallUVIgnoreSlope"] = true
+	}
 	if s.PortalHasMaterial {
 		result["PortalHasMaterial"] = true
 	}

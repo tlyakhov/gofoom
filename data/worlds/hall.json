@@ -1856,6 +1856,7 @@
           "Surface": {
             "Material": "2"
           },
+          "WallUVIgnoreSlope": true,
           "X": 840,
           "Y": -860
         },
@@ -1954,6 +1955,7 @@
           "Surface": {
             "Material": "2"
           },
+          "WallUVIgnoreSlope": true,
           "X": 660,
           "Y": -860
         }
@@ -1968,7 +1970,7 @@
           "Percent": 1.0078125,
           "Reverse": false,
           "Start": 64,
-          "TweeningFunc": "Lerp"
+          "TweeningFunc": "EaseInOut3"
         },
         "Original": 64
       }
@@ -2031,7 +2033,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                5.833333333333333,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 840,
           "Y": -310
@@ -2250,7 +2262,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                5.833333333333333,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 100,
           "Y": -160
@@ -2526,7 +2548,6 @@
       "Name": "Item Test"
     },
     "core.Body": {
-      "Active": false,
       "Angle": {
         "Original": 0
       },
@@ -2543,7 +2564,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.078125,
+          "Percent": 0.015625,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -2815,7 +2836,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                3.9393939393939394,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 200,
           "Y": -510
@@ -3237,7 +3268,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                9.090909090909092,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": -100,
           "Y": -210
@@ -3525,14 +3566,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -177.01936857905054,
+          "End": -91.86047827642957,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.7291666666666665,
+          "Percent": 1.0260416666666667,
           "Reverse": false,
-          "Start": -175.51296605146788,
+          "Start": -98.28780444820957,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -4156,7 +4197,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                9.090909090909092,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": -100,
           "Y": -510
@@ -5307,8 +5358,19 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                0.5555555555555556,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
+          "WallUVIgnoreSlope": true,
           "X": 100,
           "Y": 100
         }
@@ -5375,7 +5437,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                9.166666666666666,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 530,
           "Y": -310
@@ -5825,7 +5897,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                2.5,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 80,
           "Y": 100
@@ -5949,7 +6031,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                12.5,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 840,
           "Y": -760
@@ -6189,7 +6281,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                6.96969696969697,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 410,
           "Y": -510
@@ -6378,7 +6480,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                4.166666666666667,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 100,
           "Y": -310
@@ -7117,8 +7229,19 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                0.3125,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
+          "WallUVIgnoreSlope": true,
           "X": -80,
           "Y": 100
         },
@@ -7430,7 +7553,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                2.7777777777777777,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 200,
           "Y": -310
@@ -7593,7 +7726,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                5.151515151515151,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": -100,
           "Y": 10
@@ -8183,7 +8326,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                7.575757575757576,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
           },
           "X": 640,
           "Y": -510
