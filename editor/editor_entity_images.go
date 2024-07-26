@@ -32,7 +32,7 @@ func (e *Editor) imageForMaterial(entity concepts.Entity) image.Image {
 			e.MaterialSampler.ScreenX = x * e.MaterialSampler.ScreenWidth / w
 			e.MaterialSampler.ScreenY = y * e.MaterialSampler.ScreenHeight / h
 			e.MaterialSampler.Angle = float64(x) * math.Pi * 2.0 / float64(w)
-			c := e.MaterialSampler.SampleShader(entity, nil, float64(x)/float64(w), float64(y)/float64(h), 1.0)
+			c := e.MaterialSampler.SampleShader(entity, nil, float64(x)/float64(w), float64(y)/float64(h), uint32(w), uint32(h))
 			if e.MaterialSampler.NoTexture {
 				return e.noTextureImage
 			}

@@ -194,7 +194,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			sampler := &MaterialSampler{Config: le.Config}
 			u := le.Intersection.To2D().Dist(seg.A) / seg.Length
 			v := (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
-			sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1)
+			sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1024, 1024)
 			if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 				lit.Apply(&sampler.Output, nil)
 			}
@@ -257,7 +257,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				sampler := &MaterialSampler{Config: le.Config}
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1)
+				sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1024, 1024)
 				if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 					lit.Apply(&sampler.Output, nil)
 				}

@@ -117,7 +117,7 @@ func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 			continue
 		}
 		v := (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
-		sample := c.SampleShader(eMaterial, nil, c.U, v, depthScale)
+		sample := c.SampleShader(eMaterial, nil, c.U, v, uint32(xScale), uint32(screenBottom-screenTop))
 		sample.Mul4Self(&c.Light)
 		c.ApplySample(sample, screenIndex, c.Distance)
 	}
