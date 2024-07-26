@@ -21,9 +21,11 @@ type MoveSurface struct {
 func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 	if a.Slope {
 		if a.Floor {
-			return &sector.FloorSlope
+			//return &sector.FloorSlope
+			return &sector.FloorNormal[2]
 		} else {
-			return &sector.CeilSlope
+			//return &sector.CeilSlope
+			return &sector.CeilNormal[2]
 		}
 	} else {
 		if a.Floor {

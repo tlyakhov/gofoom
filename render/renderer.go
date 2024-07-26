@@ -70,7 +70,7 @@ func (r *Renderer) Initialize() {
 }
 
 func (r *Renderer) RenderPortal(c *state.Column) {
-	if c.Depth >= constants.MaxPortals {
+	if c.Depth >= constants.MaxPortals-1 {
 		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", c.Sector.Entity)
 		c.DebugNotices.Push(dbg)
 		return
@@ -235,7 +235,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 
 	if c.SegmentIntersection != nil {
 		c.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
-		c.IntersectionBottom, c.IntersectionTop = c.Sector.SlopedZRender(c.RaySegIntersect.To2D())
+		c.IntersectionBottom, c.IntersectionTop = c.Sector.PointZ(concepts.DynamicRender, c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
@@ -482,6 +482,7 @@ func (r *Renderer) Pick(x, y int) []*core.Selectable {
 		CameraZ:            r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
 		PortalColumns:      make([]state.Column, constants.MaxPortals),
 		EntitiesByDistance: make([]state.EntityWithDist2, 0, 16),
+		Visited:            make([]state.SegmentIntersection, constants.MaxPortals),
 	}
 	column.LightElement.Config = r.Config
 

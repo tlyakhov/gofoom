@@ -73,7 +73,7 @@ func (le *LightElement) Get() *concepts.Vector3 {
 	le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
-	fz, cz := le.Sector.SlopedZRender(le.Q.To2D())
+	fz, cz := le.Sector.PointZ(concepts.DynamicRender, le.Q.To2D())
 	if le.Q[2] < fz {
 		le.Q[2] = fz
 	}
@@ -112,7 +112,7 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSegment.Sector.SlopedZRender(p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicRender, p.To2D())
 		if p[2]-ceilZ > constants.LightGrid || floorZ-p[2] > constants.LightGrid {
 			continue
 		}
@@ -239,8 +239,8 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.SlopedZRender(le.Intersection.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.SlopedZRender(le.Intersection.To2D())
+			floorZ, ceilZ := sector.PointZ(concepts.DynamicRender, le.Intersection.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicRender, le.Intersection.To2D())
 			if debugLighting {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}

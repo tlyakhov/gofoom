@@ -118,7 +118,7 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 			sector := CreateTestSector(db, fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
 			sector.TopZ.SetAll(300)
 			sector.BottomZ.SetAll(rand.Float64() * 30)
-			sector.FloorSlope = rand.Float64() * 0.2
+			//sector.FloorSlope = rand.Float64() * 0.2
 			sector.CeilSurface.Material = isky
 			for i := 0; i < len(sector.Segments); i++ {
 				sector.Segments[i].Surface.Material = isky
