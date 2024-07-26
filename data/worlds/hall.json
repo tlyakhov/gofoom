@@ -125,13 +125,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": -0.5734623443633284,
+        "Y": -0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "4",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7000000000000001,
+      "FloorNormal": {
+        "X": -0.5734623443633284,
+        "Y": -0,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -291,7 +299,11 @@
       },
       "Entity": "6",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.425,
+      "FloorNormal": {
+        "X": -0.27657819918549315,
+        "Y": -0.27657819918549315,
+        "Z": 0.9203309184584746
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -595,13 +607,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7,
+      "CeilNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "11",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7,
+      "FloorNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -677,13 +697,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0.5734623443633284,
+        "Y": 0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "12",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0.6476484200955406,
+        "Y": -0,
+        "Z": 0.7619393177594593
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -764,7 +792,11 @@
       },
       "Entity": "13",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.3,
+      "FloorNormal": {
+        "X": -0,
+        "Y": -0.2873478855663454,
+        "Z": 0.9578262852211513
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -1217,7 +1249,11 @@
       },
       "Entity": "18",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.3,
+      "FloorNormal": {
+        "X": 0.2873478855663454,
+        "Y": 0,
+        "Z": 0.9578262852211513
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -1298,7 +1334,11 @@
       },
       "Entity": "19",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.425,
+      "FloorNormal": {
+        "X": -0.27657819918549315,
+        "Y": 0.27657819918549315,
+        "Z": 0.9203309184584746
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -1986,13 +2026,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0,
+        "Y": -0.5734623443633284,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "26",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7000000000000001,
+      "FloorNormal": {
+        "X": -0,
+        "Y": -0.5734623443633284,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -2215,13 +2263,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "28",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7000000000000001,
+      "FloorNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -2564,8 +2620,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.015625,
-          "Reverse": false,
+          "Percent": 0.609375,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2574,8 +2630,8 @@
           "TweeningFunc": "EaseInOut2"
         },
         "Original": {
-          "X": -280,
-          "Y": 70,
+          "X": -400,
+          "Y": 60,
           "Z": -64
         }
       },
@@ -2708,7 +2764,11 @@
       "BottomZ": {
         "Original": 20
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0.5734623443633284,
+        "Y": 0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
@@ -2789,13 +2849,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0,
+        "Y": 0.5734623443633284,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "35",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0,
+        "Y": 0.6476484200955406,
+        "Z": 0.7619393177594592
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -2976,13 +3044,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0.5734623443633284,
+        "Y": 0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "37",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0.6476484200955406,
+        "Y": -0,
+        "Z": 0.7619393177594593
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -3144,7 +3220,11 @@
       },
       "Entity": "39",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.3,
+      "FloorNormal": {
+        "X": -0.2873478855663454,
+        "Y": -0,
+        "Z": 0.9578262852211513
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -3221,13 +3301,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0.5734623443633283,
+        "Y": 0,
+        "Z": -0.8192319205190404
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "40",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0.6476484200955405,
+        "Y": -0,
+        "Z": 0.7619393177594592
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -3566,14 +3654,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Active": false,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -91.86047827642957,
+          "End": -96.67579494121493,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1.0260416666666667,
+          "Percent": 0.8072916666666664,
           "Reverse": false,
-          "Start": -98.28780444820957,
+          "Start": -83.54034054272385,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -4150,13 +4238,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0,
+        "Y": 0.5734623443633283,
+        "Z": -0.8192319205190404
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "49",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0,
+        "Y": 0.6476484200955405,
+        "Z": 0.7619393177594592
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -4326,7 +4422,11 @@
       },
       "Entity": "51",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.425,
+      "FloorNormal": {
+        "X": 0.27657819918549315,
+        "Y": -0.27657819918549315,
+        "Z": 0.9203309184584746
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -4539,13 +4639,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7,
+      "CeilNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "54",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7,
+      "FloorNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -5298,13 +5406,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": -0.5734623443633284,
+        "Y": -0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "64",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7000000000000001,
+      "FloorNormal": {
+        "X": -0.5734623443633284,
+        "Y": -0,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -5390,13 +5506,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0,
+        "Y": -0.5734623443633284,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "65",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7000000000000001,
+      "FloorNormal": {
+        "X": -0,
+        "Y": -0.5734623443633284,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -5561,7 +5685,11 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.2,
+      "CeilNormal": {
+        "X": 0,
+        "Y": 0.19611613513818404,
+        "Z": -0.9805806756909202
+      },
       "CeilSurface": {
         "Material": "122",
         "Transform": {
@@ -5577,7 +5705,11 @@
       },
       "Entity": "67",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.2,
+      "FloorNormal": {
+        "X": -0,
+        "Y": -0.19611613513818404,
+        "Z": 0.9805806756909202
+      },
       "FloorSurface": {
         "Material": "122",
         "Transform": {
@@ -5704,13 +5836,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7,
+      "CeilNormal": {
+        "X": -0,
+        "Y": -0.5734623443633282,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "69",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7,
+      "FloorNormal": {
+        "X": 0,
+        "Y": -0.5734623443633282,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -5984,13 +6124,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7,
+      "CeilNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "72",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7,
+      "FloorNormal": {
+        "X": -0.5734623443633283,
+        "Y": -0,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -6234,13 +6382,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0,
+        "Y": 0.5734623443633284,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "75",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0,
+        "Y": 0.6476484200955406,
+        "Z": 0.7619393177594592
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -6433,13 +6589,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": -0.5734623443633284,
+        "Y": -0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "77",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7000000000000001,
+      "FloorNormal": {
+        "X": -0.5734623443633284,
+        "Y": -0,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -6897,7 +7061,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0,
+          "Percent": 1.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -7196,13 +7360,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0.5734623443633283,
+        "Y": 0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "86",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0.6476484200955405,
+        "Y": -0,
+        "Z": 0.7619393177594592
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -7506,13 +7678,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0,
+        "Y": -0.5734623443633284,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "89",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7000000000000001,
+      "FloorNormal": {
+        "X": -0,
+        "Y": -0.5734623443633284,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -7603,7 +7783,11 @@
       },
       "Entity": "90",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.3,
+      "FloorNormal": {
+        "X": -0,
+        "Y": 0.28734788556634544,
+        "Z": 0.9578262852211514
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -7679,13 +7863,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0.5734623443633284,
+        "Y": 0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "91",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0.6476484200955405,
+        "Y": -0,
+        "Z": 0.7619393177594592
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -7929,13 +8121,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.25,
+      "CeilNormal": {
+        "X": -0.1455213750217998,
+        "Y": -0.19402850002906638,
+        "Z": -0.9701425001453319
+      },
       "CeilSurface": {
         "Material": "123"
       },
       "Entity": "94",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.10000000000000002,
+      "FloorNormal": {
+        "X": -0.05970223141259936,
+        "Y": -0.07960297521679915,
+        "Z": 0.9950371902099892
+      },
       "FloorSurface": {
         "Material": "123"
       },
@@ -8171,7 +8371,11 @@
       },
       "Entity": "95",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.425,
+      "FloorNormal": {
+        "X": 0.27657819918549315,
+        "Y": 0.27657819918549315,
+        "Z": 0.9203309184584746
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -8279,13 +8483,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7000000000000001,
+      "CeilNormal": {
+        "X": 0.5734623443633284,
+        "Y": 0,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "97",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.8500000000000002,
+      "FloorNormal": {
+        "X": 0.6476484200955406,
+        "Y": -0,
+        "Z": 0.7619393177594593
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -9055,13 +9267,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7,
+      "CeilNormal": {
+        "X": 0,
+        "Y": 0.5734623443633283,
+        "Z": -0.8192319205190404
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "109",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7,
+      "FloorNormal": {
+        "X": 0,
+        "Y": 0.5734623443633283,
+        "Z": 0.8192319205190404
+      },
       "FloorSurface": {
         "Material": "122"
       },
@@ -9218,13 +9438,21 @@
       "BottomZ": {
         "Original": 0
       },
-      "CeilSlope": -0.7,
+      "CeilNormal": {
+        "X": 0,
+        "Y": 0.5734623443633283,
+        "Z": -0.8192319205190405
+      },
       "CeilSurface": {
         "Material": "122"
       },
       "Entity": "111",
       "FloorFriction": 0.85,
-      "FloorSlope": 0.7,
+      "FloorNormal": {
+        "X": 0,
+        "Y": 0.5734623443633283,
+        "Z": 0.8192319205190405
+      },
       "FloorSurface": {
         "Material": "122"
       },

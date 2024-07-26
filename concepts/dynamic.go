@@ -23,6 +23,16 @@ type Dynamic interface {
 	GetAnimation() Animated
 }
 
+//go:generate go run github.com/dmarkham/enumer -type=DynamicStage -json
+type DynamicStage int
+
+const (
+	DynamicOriginal DynamicStage = iota
+	DynamicPrev
+	DynamicRender
+	DynamicNow
+)
+
 // A DynamicType is a type constraint for anything the engine can simulate
 type DynamicType interface {
 	~int | ~float64 | Vector2 | Vector3 | Vector4 | Matrix2

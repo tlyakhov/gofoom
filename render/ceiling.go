@@ -71,11 +71,7 @@ func Ceiling(c *state.Column) {
 
 		world[0] += c.Ray.Start[0]
 		world[1] += c.Ray.Start[1]
-		if c.Sector.CeilSlope == 0 {
-			world[2] = *c.Sector.TopZ.Render
-		} else {
-			world[2] += c.CameraZ
-		}
+		world[2] += c.CameraZ
 
 		scaler := 64.0 / distToCeil
 		tx := (world[0] - sectorMin[0]) / (sectorMax[0] - sectorMin[0])

@@ -2,7 +2,6 @@
   {
     "Entity": "1",
     "core.Spawn": {
-      "Active": true,
       "Entity": "1",
       "X": 0,
       "Y": 0
@@ -11,59 +10,48 @@
   {
     "Entity": "2",
     "concepts.Named": {
-      "Active": true,
       "Entity": "2",
       "Name": "Default"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/WDef.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
         "Z": 0.1
       },
       "Diffuse": {
-        "X": 1,
-        "Y": 1,
-        "Z": 1
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
       },
       "Entity": "2"
-    },
-    "materials.Tiled": {
-      "Active": true,
-      "Entity": "2",
-      "IsLiquid": false,
-      "Scale": 1
     }
   },
   {
     "Entity": "3",
     "concepts.Named": {
-      "Active": true,
       "Entity": "3",
       "Name": "ckmr71tmdsri8tolfq30"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -72,7 +60,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -40,
@@ -86,7 +74,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -30,
@@ -99,7 +87,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 30,
@@ -113,39 +101,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 60,
           "Y": -100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "4",
     "concepts.Named": {
-      "Active": true,
       "Entity": "4",
       "Name": "ckmr7gdmdsri8tolfqg0"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "5"
-      ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "4",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -154,7 +139,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -220,
@@ -167,7 +152,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -150,
@@ -181,7 +166,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -130,
@@ -194,7 +179,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -290,
@@ -207,7 +192,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -380,
@@ -221,44 +206,54 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -290,
           "Y": -190
         }
       ],
-      "TopZ": 94
+      "TopZ": {
+        "Original": 94
+      }
     }
   },
   {
     "Entity": "5",
     "concepts.Named": {
-      "Active": true,
       "Entity": "5",
       "Name": "ckmr7odmdsri8tolfqu0"
     },
     "core.Body": {
-      "Active": true,
-      "Angle": 0,
-      "BoundingRadius": 10,
+      "Angle": {
+        "Original": 0
+      },
       "CollisionResponse": "Slide",
       "Entity": "5",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -210,
-        "Y": -80,
-        "Z": 32
+        "Original": {
+          "X": -220,
+          "Y": -80,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -272,26 +267,21 @@
   {
     "Entity": "6",
     "concepts.Named": {
-      "Active": true,
       "Entity": "6",
       "Name": "cknes4tmdsru23m3nip0"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "7"
-      ],
-      "BottomZ": 2,
+      "BottomZ": {
+        "Original": 2
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "6",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -300,7 +290,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 70,
@@ -313,7 +303,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 80,
@@ -326,7 +316,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 260,
@@ -340,44 +330,54 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 460,
           "Y": 260
         }
       ],
-      "TopZ": 80
+      "TopZ": {
+        "Original": 80
+      }
     }
   },
   {
     "Entity": "7",
     "concepts.Named": {
-      "Active": true,
       "Entity": "7",
       "Name": "cknes7dmdsru23m3nitg"
     },
     "core.Body": {
-      "Active": true,
-      "Angle": 0,
-      "BoundingRadius": 10,
+      "Angle": {
+        "Original": 0
+      },
       "CollisionResponse": "Slide",
       "Entity": "7",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 170,
-        "Y": 370,
-        "Z": 32
+        "Original": {
+          "X": 170,
+          "Y": 370,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -391,24 +391,21 @@
   {
     "Entity": "8",
     "concepts.Named": {
-      "Active": true,
       "Entity": "8",
       "Name": "ckmr7dtmdsri8tolfq8g"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "8",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -417,7 +414,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -30,
@@ -431,7 +428,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -90,
@@ -444,7 +441,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -60,
@@ -457,7 +454,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 10,
@@ -471,37 +468,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 30,
           "Y": -210
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "9",
     "concepts.Named": {
-      "Active": true,
       "Entity": "9",
       "Name": "ckmr7f5mdsri8tolfqc0"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "9",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -510,7 +506,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -90,
@@ -524,7 +520,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -220,
@@ -537,7 +533,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -290,
@@ -550,7 +546,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -230,
@@ -563,7 +559,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -180,
@@ -577,37 +573,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -60,
           "Y": -280
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "10",
     "concepts.Named": {
-      "Active": true,
       "Entity": "10",
       "Name": "ckmr6tlmdsri8tolfoq0"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "10",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -616,7 +611,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -630,7 +625,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -40,
@@ -643,7 +638,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -13.25,
@@ -656,39 +651,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "11",
     "concepts.Named": {
-      "Active": true,
       "Entity": "11",
       "Name": "ckmr6vtmdsri8tolfph0"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "12"
-      ],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "11",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -698,7 +690,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -40,
@@ -712,7 +704,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 60,
@@ -725,7 +717,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 71.66666666666667,
@@ -739,44 +731,54 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -13.25,
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "12",
     "concepts.Named": {
-      "Active": true,
       "Entity": "12",
       "Name": "ckmr7b5mdsri8tolfq6g"
     },
     "core.Body": {
-      "Active": true,
-      "Angle": 0,
-      "BoundingRadius": 10,
+      "Angle": {
+        "Original": 0
+      },
       "CollisionResponse": "Slide",
       "Entity": "12",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 40,
-        "Y": -20,
-        "Z": 32
+        "Original": {
+          "X": 40,
+          "Y": -20,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -790,26 +792,21 @@
   {
     "Entity": "13",
     "concepts.Named": {
-      "Active": true,
       "Entity": "13",
       "Name": "cknes35mdsru23m3nilg"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "14"
-      ],
-      "BottomZ": -22,
+      "BottomZ": {
+        "Original": -22
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "13",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -818,7 +815,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 60,
@@ -831,7 +828,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 320,
@@ -845,7 +842,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 460,
@@ -858,7 +855,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 70,
@@ -872,44 +869,54 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 60,
           "Y": 260
         }
       ],
-      "TopZ": 80
+      "TopZ": {
+        "Original": 80
+      }
     }
   },
   {
     "Entity": "14",
     "concepts.Named": {
-      "Active": true,
       "Entity": "14",
       "Name": "cknes75mdsru23m3nisg"
     },
     "core.Body": {
-      "Active": true,
-      "Angle": 0,
-      "BoundingRadius": 10,
+      "Angle": {
+        "Original": 0
+      },
       "CollisionResponse": "Slide",
       "Entity": "14",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": 130,
-        "Y": 210,
-        "Z": 32
+        "Original": {
+          "X": 130,
+          "Y": 210,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -923,25 +930,26 @@
   {
     "Entity": "15",
     "concepts.Named": {
-      "Active": true,
       "Entity": "15",
       "Name": "ckmr7kdmdsri8tolfqng"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [],
-      "BottomZ": -22,
+      "BottomZ": {
+        "Original": -22
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "15",
       "FloorFriction": 0.85,
+      "FloorNormal": {
+        "X": 0.19611613513818404,
+        "Y": -0,
+        "Z": 0.9805806756909202
+      },
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
-      "FloorSlope": 0.2,
       "Segments": [
         {
           "AdjacentSector": "13",
@@ -951,7 +959,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 60,
@@ -964,7 +972,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 60,
@@ -978,7 +986,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
@@ -991,37 +999,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
           "Y": 90
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "16",
     "concepts.Named": {
-      "Active": true,
       "Entity": "16",
       "Name": "ckmr6vtmdsri8tolfpsg"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [],
-      "BottomZ": 0,
+      "BottomZ": {
+        "Original": 0
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "16",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1030,7 +1037,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 60,
@@ -1043,7 +1050,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -1056,7 +1063,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -1070,37 +1077,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 71.66666666666667,
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "TopZ": {
+        "Original": 64
+      }
     }
   },
   {
     "Entity": "17",
     "concepts.Named": {
-      "Active": true,
       "Entity": "17",
       "Name": "ckmr7ilmdsri8tolfqk0"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [],
-      "BottomZ": 22,
+      "BottomZ": {
+        "Original": 22
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "17",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "AdjacentSector": "4",
@@ -1110,7 +1116,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -130,
@@ -1123,7 +1129,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -290,
@@ -1137,7 +1143,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -240,
@@ -1151,7 +1157,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
@@ -1164,39 +1170,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
           "Y": 90
         }
       ],
-      "TopZ": 116
+      "TopZ": {
+        "Original": 116
+      }
     }
   },
   {
     "Entity": "18",
     "concepts.Named": {
-      "Active": true,
       "Entity": "18",
       "Name": "ckmr7ltmdsri8tolfqqg"
     },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "19"
-      ],
-      "BottomZ": 22,
+      "BottomZ": {
+        "Original": 22
+      },
       "CeilSurface": {
         "Material": "2"
       },
-      "CeilScale": 64,
       "Entity": "18",
       "FloorFriction": 0.85,
       "FloorSurface": {
         "Material": "2"
       },
-      "FloorScale": 64,
       "Segments": [
         {
           "Hi": {
@@ -1205,7 +1208,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -160,
@@ -1218,7 +1221,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -300,
@@ -1231,7 +1234,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -330,
@@ -1245,44 +1248,54 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -240,
           "Y": 60
         }
       ],
-      "TopZ": 116
+      "TopZ": {
+        "Original": 116
+      }
     }
   },
   {
     "Entity": "19",
     "concepts.Named": {
-      "Active": true,
       "Entity": "19",
       "Name": "cknes7lmdsru23m3niug"
     },
     "core.Body": {
-      "Active": true,
-      "Angle": 0,
-      "BoundingRadius": 10,
+      "Angle": {
+        "Original": 0
+      },
       "CollisionResponse": "Slide",
       "Entity": "19",
-      "Height": 0,
+      "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "X": -260,
-        "Y": 150,
-        "Z": 32
+        "Original": {
+          "X": -260,
+          "Y": 150,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
       },
       "Vel": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -1291,6 +1304,45 @@
       },
       "Entity": "19",
       "Strength": 2
+    }
+  },
+  {
+    "Entity": "20",
+    "behaviors.Alive": {
+      "Entity": "20",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "20"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "20",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 20,
+          "Y": 40
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
     }
   }
 ]

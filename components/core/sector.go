@@ -22,8 +22,8 @@ type Sector struct {
 	InternalSegments map[concepts.Entity]*InternalSegment
 	BottomZ          concepts.DynamicValue[float64] `editable:"Floor Height"`
 	TopZ             concepts.DynamicValue[float64] `editable:"Ceiling Height"`
-	FloorSlope       float64                        `editable:"Floor Slope"`
-	CeilSlope        float64                        `editable:"Ceiling Slope"`
+	FloorNormal      concepts.Vector3               `editable:"Floor Normal"`
+	CeilNormal       concepts.Vector3               `editable:"Ceiling Normal"`
 	FloorTarget      concepts.Entity                `editable:"Floor Target" edit_type:"Sector"`
 	CeilTarget       concepts.Entity                `editable:"Ceiling Target" edit_type:"Sector"`
 	FloorSurface     materials.Surface              `editable:"Floor Surface"`
@@ -35,14 +35,13 @@ type Sector struct {
 	EnterScripts     []*Script                      `editable:"Enter Scripts"`
 	ExitScripts      []*Script                      `editable:"Exit Scripts"`
 
-	Concave                 bool
-	Winding                 int8
-	Min, Max, Center        concepts.Vector3
-	FloorNormal, CeilNormal concepts.Vector3
-	PVS                     map[concepts.Entity]*Sector
-	PVL                     map[concepts.Entity]*Body
-	Lightmap                *xsync.MapOf[uint64, concepts.Vector4]
-	LightmapBias            [3]int64 // Quantized Min
+	Concave          bool
+	Winding          int8
+	Min, Max, Center concepts.Vector3
+	PVS              map[concepts.Entity]*Sector
+	PVL              map[concepts.Entity]*Body
+	Lightmap         *xsync.MapOf[uint64, concepts.Vector4]
+	LightmapBias     [3]int64 // Quantized Min
 }
 
 var SectorComponentIndex int
@@ -108,6 +107,12 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0
 	s.Gravity[2] = -constants.Gravity
+	s.FloorNormal[0] = 0
+	s.FloorNormal[1] = 0
+	s.FloorNormal[2] = 1
+	s.CeilNormal[0] = 0
+	s.CeilNormal[1] = 0
+	s.CeilNormal[2] = -1
 	s.BottomZ.Construct(nil)
 	s.TopZ.Construct(defaultSectorTopZ)
 	s.FloorFriction = 0.85
@@ -130,11 +135,12 @@ func (s *Sector) Construct(data map[string]any) {
 		}
 		s.BottomZ.Construct(v.(map[string]any))
 	}
-	if v, ok := data["FloorSlope"]; ok {
-		s.FloorSlope = v.(float64)
+
+	if v, ok := data["FloorNormal"]; ok {
+		s.FloorNormal.Deserialize(v.(map[string]any))
 	}
-	if v, ok := data["CeilSlope"]; ok {
-		s.CeilSlope = v.(float64)
+	if v, ok := data["CeilNormal"]; ok {
+		s.CeilNormal.Deserialize(v.(map[string]any))
 	}
 
 	if v, ok := data["FloorSurface"]; ok {
@@ -192,11 +198,12 @@ func (s *Sector) Serialize() map[string]any {
 		result["Gravity"] = s.Gravity.Serialize()
 	}
 	result["FloorFriction"] = s.FloorFriction
-	if s.FloorSlope != 0 {
-		result["FloorSlope"] = s.FloorSlope
+
+	if s.FloorNormal[0] != 0 || s.FloorNormal[1] != 0 || s.FloorNormal[2] != 1 {
+		result["FloorNormal"] = s.FloorNormal.Serialize()
 	}
-	if s.CeilSlope != 0 {
-		result["CeilSlope"] = s.CeilSlope
+	if s.CeilNormal[0] != 0 || s.CeilNormal[1] != 0 || s.CeilNormal[2] != -1 {
+		result["CeilNormal"] = s.CeilNormal.Serialize()
 	}
 
 	if s.FloorTarget != 0 {
@@ -273,7 +280,7 @@ func (s *Sector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		floorZ, ceilZ := s.SlopedZOriginal(&segment.P)
+		floorZ, ceilZ := s.PointZ(concepts.DynamicOriginal, &segment.P)
 		if floorZ < s.Min[2] {
 			s.Min[2] = floorZ
 		}
@@ -292,20 +299,6 @@ func (s *Sector) Recalculate() {
 	s.Segments = filtered
 
 	if len(s.Segments) > 1 {
-		sloped := s.Segments[0].Normal.To3D(new(concepts.Vector3))
-		delta := (&concepts.Vector2{s.Segments[1].P[0], s.Segments[1].P[1]}).Sub(&s.Segments[0].P).To3D(new(concepts.Vector3))
-		sloped[2] = s.FloorSlope
-		s.FloorNormal.CrossSelf(sloped, delta).NormSelf()
-		if s.FloorNormal[2] < 0 {
-			s.FloorNormal.MulSelf(-1)
-		}
-		s.Segments[0].Normal.To3D(sloped)
-		sloped[2] = s.CeilSlope
-		s.CeilNormal.CrossSelf(sloped, delta).NormSelf()
-		if s.CeilNormal[2] > 0 {
-			s.CeilNormal.MulSelf(-1)
-		}
-
 		// Figure out if this sector is concave.
 		// The algorithm tests if any angles are > 180 degrees
 		prev := 0.0
@@ -365,53 +358,29 @@ func (s *Sector) LightmapAddressToWorld(result *concepts.Vector3, a uint64) *con
 	return result
 }
 
-func (s *Sector) CalcDistforZ(isect *concepts.Vector2) float64 {
-	a := &s.Segments[0].P
-	b := &s.Segments[1].P
-	length2 := a.Dist2(b)
-	if length2 == 0 {
-		return isect.Dist(a)
-	} else {
-		delta := concepts.Vector2{b[0] - a[0], b[1] - a[1]}
-		t := ((isect[0]-a[0])*delta[0] + (isect[1]-a[1])*delta[1]) / length2
-		delta[0] = a[0] + delta[0]*t
-		delta[1] = a[1] + delta[1]*t
-		return isect.Dist(&delta)
+// PointZ finds the Z value at a point in the sector
+func (s *Sector) PointZ(stage concepts.DynamicStage, isect *concepts.Vector2) (bottom float64, top float64) {
+	var fz, cz float64
+	switch stage {
+	case concepts.DynamicOriginal:
+		fz, cz = s.BottomZ.Original, s.TopZ.Original
+	case concepts.DynamicPrev:
+		fz, cz = s.BottomZ.Prev, s.TopZ.Prev
+	case concepts.DynamicNow:
+		fz, cz = s.BottomZ.Now, s.TopZ.Now
+	case concepts.DynamicRender:
+		fz, cz = *s.BottomZ.Render, *s.TopZ.Render
 	}
-}
+	df := s.FloorNormal[2]*fz + s.FloorNormal[1]*s.Segments[0].P[1] +
+		s.FloorNormal[0]*s.Segments[0].P[0]
 
-func (s *Sector) slopedZ(fz, cz float64, isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
-	floorZ = fz
-	ceilZ = cz
-	// Fast path
-	if (s.FloorSlope == 0 && s.CeilSlope == 0) || len(s.Segments) < 2 {
-		return
-	}
+	bottom = (df - s.FloorNormal[0]*isect[0] - s.FloorNormal[1]*isect[1]) / s.FloorNormal[2]
 
-	dist := s.CalcDistforZ(isect)
+	dc := s.CeilNormal[2]*cz + s.CeilNormal[1]*s.Segments[0].P[1] +
+		s.CeilNormal[0]*s.Segments[0].P[0]
 
-	if s.FloorSlope != 0 {
-		floorZ += s.FloorSlope * dist
-	}
-	if s.CeilSlope != 0 {
-		ceilZ += s.CeilSlope * dist
-	}
+	top = (dc - s.CeilNormal[0]*isect[0] - s.CeilNormal[1]*isect[1]) / s.CeilNormal[2]
 	return
-}
-
-// SlopedZRender figures out the current slice Z values accounting for slope.
-func (s *Sector) SlopedZRender(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
-	return s.slopedZ(*s.BottomZ.Render, *s.TopZ.Render, isect)
-}
-
-// SlopedZOriginal figures out the current slice Z values accounting for slope.
-func (s *Sector) SlopedZOriginal(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
-	return s.slopedZ(s.BottomZ.Original, s.TopZ.Original, isect)
-}
-
-// SlopedZNow figures out the current slice Z values accounting for slope.
-func (s *Sector) SlopedZNow(isect *concepts.Vector2) (floorZ float64, ceilZ float64) {
-	return s.slopedZ(s.BottomZ.Now, s.TopZ.Now, isect)
 }
 
 func (s *Sector) InBounds(world *concepts.Vector3) bool {

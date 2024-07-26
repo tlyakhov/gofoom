@@ -64,11 +64,8 @@ func Floor(c *state.Column) {
 
 		world[0] += c.Ray.Start[0]
 		world[1] += c.Ray.Start[1]
-		if c.Sector.FloorSlope == 0 {
-			world[2] = *c.Sector.BottomZ.Render
-		} else {
-			world[2] += c.CameraZ
-		}
+		world[2] += c.CameraZ
+
 		scaler := 64.0 / distToFloor
 		tx := (world[0] - sectorMin[0]) / (sectorMax[0] - sectorMin[0])
 		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])

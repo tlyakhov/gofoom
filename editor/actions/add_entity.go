@@ -72,7 +72,7 @@ func (a *AddEntity) OnMouseMove() {
 		body.Pos.Original[0] = worldGrid[0]
 		body.Pos.Original[1] = worldGrid[1]
 		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.SlopedZOriginal(worldGrid)
+			floorZ, ceilZ := a.ContainingSector.PointZ(concepts.DynamicOriginal, worldGrid)
 			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
 		body.Pos.ResetToOriginal()

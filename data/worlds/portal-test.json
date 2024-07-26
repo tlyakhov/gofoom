@@ -673,7 +673,11 @@
       },
       "Entity": "14",
       "FloorFriction": 0.85,
-      "FloorSlope": -0.2,
+      "FloorNormal": {
+        "X": -0.19611613513818404,
+        "Y": 0,
+        "Z": 0.9805806756909201
+      },
       "FloorSurface": {
         "Material": "21"
       },

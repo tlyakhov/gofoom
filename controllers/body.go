@@ -100,7 +100,7 @@ func (bc *BodyController) Physics() {
 
 	halfHeight := bc.Body.Size.Now[1] * 0.5
 	bodyTop := bc.Body.Pos.Now[2] + halfHeight
-	floorZ, ceilZ := bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
+	floorZ, ceilZ := bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
 
 	bc.Body.OnGround = false
 	if bc.Sector.FloorTarget != 0 && bodyTop < floorZ {
@@ -109,7 +109,7 @@ func (bc *BodyController) Physics() {
 		bc.Enter(bc.Sector.FloorTarget)
 		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
 		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
-		_, ceilZ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
+		_, ceilZ = bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
 	} else if bc.Sector.FloorTarget != 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
 		bc.Body.Vel.Now[2] = constants.PlayerJumpForce
@@ -128,7 +128,7 @@ func (bc *BodyController) Physics() {
 		bc.Enter(bc.Sector.CeilTarget)
 		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
 		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
-		floorZ, _ = bc.Sector.SlopedZNow(bc.Body.Pos.Now.To2D())
+		floorZ, _ = bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
 	} else if bc.Sector.CeilTarget == 0 && bodyTop >= ceilZ {
 		dist := -bc.Sector.CeilNormal[2] * (bodyTop - ceilZ + 1.0)
