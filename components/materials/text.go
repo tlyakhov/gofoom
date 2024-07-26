@@ -83,11 +83,11 @@ func (t *Text) RasterizeText() {
 	t.Rendered.Image = rgba
 }
 
-func (t *Text) Sample(x, y float64, scale float64) concepts.Vector4 {
+func (t *Text) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 	if t.Rendered == nil {
 		t.RasterizeText()
 	}
-	c := t.Rendered.Sample(x, y, scale)
+	c := t.Rendered.Sample(x, y, sw, sh)
 	c[0] = t.Color.Render[0] * c[3]
 	c[1] = t.Color.Render[1] * c[3]
 	c[2] = t.Color.Render[2] * c[3]

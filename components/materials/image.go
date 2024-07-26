@@ -4,6 +4,7 @@
 package materials
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"os"
@@ -13,6 +14,10 @@ import (
 	_ "image/png"
 
 	"tlyakhov/gofoom/concepts"
+
+	"github.com/disintegration/imaging"
+	"github.com/fogleman/gg"
+	"golang.org/x/image/font/inconsolata"
 )
 
 type mipMap struct {
@@ -29,8 +34,7 @@ type Image struct {
 	GenerateMipMaps bool   `editable:"Generate Mip Maps?" edit_type:"bool"`
 	Filter          bool   `editable:"Filter?" edit_type:"bool"`
 	Data            []uint32
-	MipMaps         map[uint32]*mipMap
-	SmallestMipMap  *mipMap
+	MipMaps         []*mipMap
 	Image           image.Image
 }
 
@@ -81,24 +85,58 @@ func (img *Image) Load() error {
 		}
 	}
 	img.generateMipMaps()
+	//img.generateTestMipMaps()
 	return nil
 }
 
-// TODO: Use https://github.com/disintegration/imaging for this, one of the
-// nicer filters.
-func (img *Image) generateMipMaps() {
-	img.MipMaps = make(map[uint32]*mipMap)
+func (img *Image) generateTestMipMaps() {
+	img.MipMaps = make([]*mipMap, 0)
+	w := img.Width
+	h := img.Height
+	for w > 4 && h > 4 {
+		index := len(img.MipMaps)
+		bg := (index + 1) * 255 / 6
+		mm := mipMap{Width: w, Height: h, Data: make([]uint32, w*h)}
+		face := inconsolata.Regular8x16
+		c := gg.NewContext(int(w), int(h))
+		c.SetFontFace(face)
+		c.SetRGBA255(bg, bg, bg, 255)
+		c.DrawRectangle(0, 0, float64(w), float64(h))
+		c.Fill()
+		c.SetRGBA255(255, 0, 0, 255)
+		c.Translate(float64(w)*0.5, float64(h)*0.5)
+		c.Scale(8.0/float64(index+1), 8.0/float64(index+1))
+		c.DrawStringAnchored(fmt.Sprintf("Index: %v, w:%v,h:%v", index, w, h), 0, 0, 0.5, 0.5)
+		rgba := c.Image().(*image.RGBA)
+		for i := 0; i < len(rgba.Pix)/4; i++ {
+			a := uint32(rgba.Pix[i*4+3])
+			b := uint32(rgba.Pix[i*4+2])
+			g := uint32(rgba.Pix[i*4+1])
+			r := uint32(rgba.Pix[i*4+0])
+			mm.Data[i] = ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | (a & 0xFF)
+		}
 
-	index := concepts.NearestPow2(uint32(img.Height))
-	img.MipMaps[index] = &mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
-	prev := img.MipMaps[index]
+		img.MipMaps = append(img.MipMaps, &mm)
+		if w > 4 {
+			w = concepts.UMax(4, w/2)
+		}
+		if h > 4 {
+			h = concepts.UMax(4, h/2)
+		}
+	}
+}
+
+func (img *Image) generateSimpleMipMaps() {
+	img.MipMaps = make([]*mipMap, 1)
+	img.MipMaps[0] = &mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
+	prev := img.MipMaps[0]
 
 	w := img.Width / 2
 	h := img.Height / 2
 
 	var x, y, px, py, pcx, pcy uint32
 
-	for w > 1 && h > 1 {
+	for w > 2 && h > 2 {
 		mm := mipMap{Width: w, Height: h, Data: make([]uint32, w*h)}
 
 		for y = 0; y < h; y++ {
@@ -122,37 +160,67 @@ func (img *Image) generateMipMaps() {
 				mm.Data[y*mm.Width+x] = concepts.RGBAToInt32(avg)
 			}
 		}
-		index := concepts.NearestPow2(uint32(mm.Height))
-		img.MipMaps[index] = &mm
+		img.MipMaps = append(img.MipMaps, &mm)
 		prev = &mm
-		if w > 1 {
-			w = concepts.UMax(1, w/2)
+		if w > 2 {
+			w = concepts.UMax(2, w/2)
 		}
-		if h > 1 {
-			h = concepts.UMax(1, h/2)
+		if h > 2 {
+			h = concepts.UMax(2, h/2)
 		}
 	}
-	img.SmallestMipMap = prev
 }
 
-func (img *Image) Sample(x, y float64, scale float64) concepts.Vector4 {
+func (img *Image) generateMipMaps() {
+	img.MipMaps = make([]*mipMap, 1)
+	img.MipMaps[0] = &mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
+
+	w := img.Width / 2
+	h := img.Height / 2
+
+	for w > 2 && h > 2 {
+		mm := mipMap{Width: w, Height: h, Data: make([]uint32, w*h)}
+		rimg := imaging.Resize(img.Image, int(w), int(h), imaging.Lanczos)
+		for y := 0; y < int(h); y++ {
+			for x := 0; x < int(w); x++ {
+				index := x*4 + y*rimg.Stride
+				mm.Data[y*int(mm.Width)+x] = concepts.NRGBAToInt32(
+					color.NRGBA{rimg.Pix[index],
+						rimg.Pix[index+1],
+						rimg.Pix[index+2],
+						rimg.Pix[index+3]})
+			}
+		}
+		img.MipMaps = append(img.MipMaps, &mm)
+		if w > 2 {
+			w = concepts.UMax(2, w/2)
+		}
+		if h > 2 {
+			h = concepts.UMax(2, h/2)
+		}
+	}
+}
+
+func (img *Image) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 	// Testing:
 	// return (0xAF << 24) | 0xFF
 	data := img.Data
 	w := img.Width
 	h := img.Height
-	scaledHeight := uint32(float64(h) * scale)
+	scaledArea := sw * sh
 
-	if scaledHeight > 0 && img.GenerateMipMaps && img.SmallestMipMap != nil {
-		if scaledHeight < img.SmallestMipMap.Height {
-			data = img.SmallestMipMap.Data
-			w = img.SmallestMipMap.Width
-			h = img.SmallestMipMap.Height
-		} else if scaledHeight < img.Height {
-			mm := img.MipMaps[concepts.NearestPow2(scaledHeight)]
+	if scaledArea > 0 && img.GenerateMipMaps && len(img.MipMaps) > 1 {
+		mm := img.MipMaps[0]
+		for i := 1; i < len(img.MipMaps); i++ {
+			next := img.MipMaps[i]
+			if scaledArea <= next.Width*next.Height {
+				mm = next
+				continue
+			}
 			data = mm.Data
 			w = mm.Width
 			h = mm.Height
+			break
 		}
 	}
 

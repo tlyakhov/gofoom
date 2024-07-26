@@ -25,6 +25,11 @@ func Ceiling(c *state.Column) {
 	sectorMin := &c.Sector.Min
 	sectorMax := &c.Sector.Max
 
+	sw := (sectorMax[0] - sectorMin[0])
+	sh := (sectorMax[1] - sectorMin[1])
+	sw, sh = (transform[0]*sw+transform[2]*sh+transform[4])*c.ViewFix[c.ScreenX],
+		(transform[1]*sw+transform[3]*sh+transform[5])*c.ViewFix[c.ScreenX]
+
 	// Because of our sloped ceilings, we can't use simple linear interpolation
 	// to calculate the distance or world position of the ceiling sample, we
 	// have to do a ray-plane intersection.	Thankfully, the only expensive
@@ -73,13 +78,12 @@ func Ceiling(c *state.Column) {
 		world[1] += c.Ray.Start[1]
 		world[2] += c.CameraZ
 
-		scaler := 64.0 / distToCeil
 		tx := (world[0] - sectorMin[0]) / (sectorMax[0] - sectorMin[0])
 		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])
 
 		if mat != 0 {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
-			c.SampleShader(mat, extras, tx, ty, scaler)
+			c.SampleShader(mat, extras, tx, ty, uint32(sw/distToCeil), uint32(sh/distToCeil))
 			c.SampleLight(&c.MaterialSampler.Output, mat, &world, distToCeil)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))

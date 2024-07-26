@@ -18,6 +18,8 @@ func WallHiPick(cp *state.ColumnPortal) {
 func WallHi(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.HiSurface
 	transform := surf.Transform.Render
+	sw := uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
+	sh := uint32(cp.ProjectedTop - cp.AdjProjectedTop)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
 	vStart := float64(cp.ScreenHeight/2) - cp.ProjectedTop
@@ -32,7 +34,7 @@ func WallHi(cp *state.ColumnPortal) {
 		if surf.Material != 0 {
 			tu := transform[0]*cp.U + transform[2]*v + transform[4]
 			tv := transform[1]*cp.U + transform[3]*v + transform[5]
-			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
+			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, sw, sh)
 			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5
@@ -55,6 +57,8 @@ func WallLowPick(cp *state.ColumnPortal) {
 func WallLow(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.LoSurface
 	transform := surf.Transform.Render
+	sw := uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
+	sh := uint32(cp.AdjProjectedBottom - cp.ProjectedBottom)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
 	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjectedBottom
@@ -69,7 +73,7 @@ func WallLow(cp *state.ColumnPortal) {
 		if surf.Material != 0 {
 			tu := transform[0]*cp.U + transform[2]*v + transform[4]
 			tv := transform[1]*cp.U + transform[3]*v + transform[5]
-			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, cp.ProjectZ(1.0))
+			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, sw, sh)
 			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5

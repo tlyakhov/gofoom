@@ -1,0 +1,1007 @@
+[
+  {
+    "Entity": "1",
+    "core.Spawn": {
+      "Entity": "1",
+      "X": 0,
+      "Y": 0
+    }
+  },
+  {
+    "Entity": "2",
+    "concepts.Named": {
+      "Entity": "2",
+      "Name": "Default"
+    },
+    "materials.Image": {
+      "Entity": "2",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "/Users/tim/Documents/gofoom/data/stained-glass.jpeg"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "2"
+    }
+  },
+  {
+    "Entity": "3",
+    "concepts.Named": {
+      "Entity": "3",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "3",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "AdjacentSector": "8",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "6",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "12",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "10",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "4",
+    "concepts.Named": {
+      "Entity": "4",
+      "Name": "ckpvt5dmdsrrj1r5a5pg"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "4",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -60,
+          "Y": -70,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.4,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "4",
+      "Strength": 2
+    }
+  },
+  {
+    "Entity": "5",
+    "behaviors.Alive": {
+      "Entity": "5",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "5"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "5",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    }
+  },
+  {
+    "Entity": "6",
+    "concepts.Named": {
+      "Entity": "6",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "6",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "AdjacentSector": "7",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": -100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 500,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "13",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 500,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "3",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "7",
+    "concepts.Named": {
+      "Entity": "7",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "7",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": -500
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 500,
+          "Y": -500
+        },
+        {
+          "AdjacentSector": "6",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 500,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "8",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": -100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "8",
+    "concepts.Named": {
+      "Entity": "8",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "8",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -500
+        },
+        {
+          "AdjacentSector": "7",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": -500
+        },
+        {
+          "AdjacentSector": "3",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "9",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "9",
+    "concepts.Named": {
+      "Entity": "9",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "9",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -500,
+          "Y": -500
+        },
+        {
+          "AdjacentSector": "8",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -500
+        },
+        {
+          "AdjacentSector": "10",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -500,
+          "Y": -100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "10",
+    "concepts.Named": {
+      "Entity": "10",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "10",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "AdjacentSector": "9",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -500,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "3",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": -100
+        },
+        {
+          "AdjacentSector": "11",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -500,
+          "Y": 100
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "11",
+    "concepts.Named": {
+      "Entity": "11",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "11",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "AdjacentSector": "10",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -500,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "12",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 500
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -500,
+          "Y": 500
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "12",
+    "concepts.Named": {
+      "Entity": "12",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "12",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "AdjacentSector": "3",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 100
+        },
+        {
+          "AdjacentSector": "13",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 500
+        },
+        {
+          "AdjacentSector": "11",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": -100,
+          "Y": 500
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "13",
+    "concepts.Named": {
+      "Entity": "13",
+      "Name": "Starting"
+    },
+    "core.Sector": {
+      "BottomZ": {
+        "Original": 0
+      },
+      "CeilSurface": {
+        "Material": "2"
+      },
+      "Entity": "13",
+      "FloorFriction": 0.85,
+      "FloorSurface": {
+        "Material": "2"
+      },
+      "Segments": [
+        {
+          "AdjacentSector": "6",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 500,
+          "Y": 100
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 500,
+          "Y": 500
+        },
+        {
+          "AdjacentSector": "12",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 100,
+          "Y": 500
+        }
+      ],
+      "TopZ": {
+        "Original": 64
+      }
+    }
+  },
+  {
+    "Entity": "14",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "14",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 420,
+          "Y": -410,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.01,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "14",
+      "Strength": 1
+    }
+  },
+  {
+    "Entity": "16",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "16",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": 420,
+          "Y": 430,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.01,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "16",
+      "Strength": 1
+    }
+  },
+  {
+    "Entity": "17",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "17",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -440,
+          "Y": 450,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.01,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "17",
+      "Strength": 1
+    }
+  },
+  {
+    "Entity": "18",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "18",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -440,
+          "Y": -440,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 0.01,
+      "Diffuse": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      },
+      "Entity": "18",
+      "Strength": 1
+    }
+  }
+]

@@ -30,9 +30,12 @@ func WallMid(c *state.Column, internalSegment bool) {
 		vTop -= c.ProjectedTop
 		dv = (c.ProjectedTop - c.ProjectedBottom)
 	}
+	sw := uint32(c.ProjectZ(c.SegmentIntersection.Segment.Length))
+	sh := uint32(dv)
 	if dv != 0 {
 		dv = 1.0 / dv
 	}
+
 	for c.ScreenY = c.ClippedTop; c.ScreenY < c.ClippedBottom; c.ScreenY++ {
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
 
@@ -46,7 +49,8 @@ func WallMid(c *state.Column, internalSegment bool) {
 		if surf.Material != 0 {
 			tu := transform[0]*c.U + transform[2]*v + transform[4]
 			tv := transform[1]*c.U + transform[3]*v + transform[5]
-			c.SampleShader(surf.Material, surf.ExtraStages, tu, tv, c.ProjectZ(1.0))
+			//log.Printf("%v,%v", sw, sh)
+			c.SampleShader(surf.Material, surf.ExtraStages, tu, tv, sw, sh)
 			c.SampleLight(&c.MaterialSampler.Output, surf.Material, &c.RaySegIntersect, c.Distance)
 		}
 		c.ApplySample(&c.MaterialSampler.Output, int(screenIndex), c.Distance)
