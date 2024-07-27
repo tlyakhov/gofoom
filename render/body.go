@@ -65,10 +65,9 @@ func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 		angleRender -= 360.0
 	}
 	c.Distance = c.Ray.Start.Dist(b.Pos.Render.To2D())
-	x := (angleRender + r.FOV*0.5) * float64(r.ScreenWidth) / r.FOV
-
-	vfixindex := concepts.Clamp(int(x), 0, r.ScreenWidth-1)
-	depthScale := r.ViewFix[vfixindex] / c.Distance
+	x := math.Tan(angleRender*concepts.Deg2rad)*r.CameraToProjectionPlane + float64(r.ScreenWidth)*0.5
+	depthScale := r.CameraToProjectionPlane / math.Cos(angleRender*concepts.Deg2rad)
+	depthScale /= c.Distance
 	xScale := depthScale * b.Size.Render[0]
 	x1 := (x - xScale*0.5)
 	x2 := x1 + xScale
@@ -77,8 +76,8 @@ func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 		return
 	}
 
-	c.ProjectedTop = (b.Pos.Render[2] + b.Size.Render[1] - c.CameraZ) * depthScale
-	c.ProjectedBottom = (b.Pos.Render[2] - c.CameraZ) * depthScale
+	c.ProjectedTop = (b.Pos.Render[2] + b.Size.Render[1]*0.5 - c.CameraZ) * depthScale
+	c.ProjectedBottom = c.ProjectedTop - b.Size.Render[1]*depthScale
 	screenTop := c.ScreenHeight/2 - int(c.ProjectedTop)
 	screenBottom := c.ScreenHeight/2 - int(c.ProjectedBottom)
 	c.ClippedTop = concepts.Clamp(screenTop, c.EdgeTop, c.EdgeBottom)
@@ -92,7 +91,6 @@ func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 	if lit := materials.LitFromDb(r.DB, b.Entity); lit != nil {
 		le := &c.LightElement
 		le.Q.From(b.Pos.Render)
-		le.Q[2] += b.Size.Render[1] * 0.5
 		le.MapIndex = b.Sector().WorldToLightmapAddress(&le.Q, 0)
 		le.Segment = nil
 		le.Type = state.LightElementBody

@@ -2620,8 +2620,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.609375,
-          "Reverse": true,
+          "Percent": 0.109375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2632,7 +2632,7 @@
         "Original": {
           "X": -400,
           "Y": 60,
-          "Z": -64
+          "Z": -56
         }
       },
       "Shadow": "BodyShadowSphere",
@@ -3657,11 +3657,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -96.67579494121493,
+          "End": 115.8120564876195,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.8072916666666664,
+          "Percent": 0.7552083333333331,
           "Reverse": false,
-          "Start": -83.54034054272385,
+          "Start": 128.94201110840868,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554

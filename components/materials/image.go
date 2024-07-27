@@ -23,6 +23,7 @@ import (
 type mipMap struct {
 	Width, Height uint32
 	Data          []uint32
+	Image         image.Image
 }
 
 // Image represents an image that will be rendered in-game.
@@ -34,7 +35,7 @@ type Image struct {
 	GenerateMipMaps bool   `editable:"Generate Mip Maps?" edit_type:"bool"`
 	Filter          bool   `editable:"Filter?" edit_type:"bool"`
 	Data            []uint32
-	MipMaps         []*mipMap
+	MipMaps         []mipMap
 	Image           image.Image
 }
 
@@ -90,7 +91,7 @@ func (img *Image) Load() error {
 }
 
 func (img *Image) generateTestMipMaps() {
-	img.MipMaps = make([]*mipMap, 0)
+	img.MipMaps = make([]mipMap, 0)
 	w := img.Width
 	h := img.Height
 	for w > 4 && h > 4 {
@@ -116,7 +117,7 @@ func (img *Image) generateTestMipMaps() {
 			mm.Data[i] = ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | (a & 0xFF)
 		}
 
-		img.MipMaps = append(img.MipMaps, &mm)
+		img.MipMaps = append(img.MipMaps, mm)
 		if w > 4 {
 			w = concepts.UMax(4, w/2)
 		}
@@ -127,8 +128,8 @@ func (img *Image) generateTestMipMaps() {
 }
 
 func (img *Image) generateSimpleMipMaps() {
-	img.MipMaps = make([]*mipMap, 1)
-	img.MipMaps[0] = &mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
+	img.MipMaps = make([]mipMap, 1)
+	img.MipMaps[0] = mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
 	prev := img.MipMaps[0]
 
 	w := img.Width / 2
@@ -160,8 +161,8 @@ func (img *Image) generateSimpleMipMaps() {
 				mm.Data[y*mm.Width+x] = concepts.RGBAToInt32(avg)
 			}
 		}
-		img.MipMaps = append(img.MipMaps, &mm)
-		prev = &mm
+		img.MipMaps = append(img.MipMaps, mm)
+		prev = mm
 		if w > 2 {
 			w = concepts.UMax(2, w/2)
 		}
@@ -172,13 +173,13 @@ func (img *Image) generateSimpleMipMaps() {
 }
 
 func (img *Image) generateMipMaps() {
-	img.MipMaps = make([]*mipMap, 1)
-	img.MipMaps[0] = &mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
+	img.MipMaps = make([]mipMap, 1)
+	img.MipMaps[0] = mipMap{Width: img.Width, Height: img.Height, Data: img.Data}
 
 	w := img.Width / 2
 	h := img.Height / 2
 
-	for w > 2 && h > 2 {
+	for w >= 2 && h >= 2 {
 		mm := mipMap{Width: w, Height: h, Data: make([]uint32, w*h)}
 		rimg := imaging.Resize(img.Image, int(w), int(h), imaging.Lanczos)
 		for y := 0; y < int(h); y++ {
@@ -191,13 +192,10 @@ func (img *Image) generateMipMaps() {
 						rimg.Pix[index+3]})
 			}
 		}
-		img.MipMaps = append(img.MipMaps, &mm)
-		if w > 2 {
-			w = concepts.UMax(2, w/2)
-		}
-		if h > 2 {
-			h = concepts.UMax(2, h/2)
-		}
+		img.MipMaps = append(img.MipMaps, mm)
+
+		w /= 2
+		h /= 2
 	}
 }
 

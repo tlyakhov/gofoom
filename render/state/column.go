@@ -34,10 +34,10 @@ type Column struct {
 	*Config
 	// Samples shaders & images
 	MaterialSampler
-	// Stores light & shadow data
-	LightElement
 	// Stores current segment intersection
 	*SegmentIntersection
+	// Stores light & shadow data
+	LightElement LightElement
 	// Pre-allocated stack of past intersections, for speed
 	Visited []SegmentIntersection
 	// Pre-allocated stack of nested columns for portals

@@ -99,8 +99,18 @@ func renderGame() {
 	canvas.SetPixels(buffer.Pix)
 	winw := win.Bounds().W()
 	winh := win.Bounds().H()
-	mat := pixel.IM.ScaledXY(pixel.Vec{X: 0, Y: 0}, pixel.Vec{X: winw / float64(renderer.ScreenWidth), Y: -winh / float64(renderer.ScreenHeight)}).Moved(win.Bounds().Center())
+	mat := pixel.IM
+	mat = mat.ScaledXY(pixel.ZV, pixel.Vec{X: winw / float64(renderer.ScreenWidth), Y: winh / float64(renderer.ScreenHeight)})
+	win.SetMatrix(mat)
+	mat = pixel.IM
+	mat = mat.ScaledXY(pixel.ZV, pixel.Vec{X: 1, Y: -1})
+	mat = mat.Moved(pixel.Vec{X: float64(renderer.ScreenWidth / 2), Y: float64(renderer.ScreenHeight / 2)})
 	canvas.Draw(win, mat)
+
+	screen := renderer.WorldToScreen(&concepts.Vector3{-320, 30, -32})
+	if screen != nil {
+		mainFont.Draw(win, screen[0], float64(renderer.ScreenHeight)-screen[1], color.NRGBA{0xff, 0, 0, 0xff}, "test")
+	}
 	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f, Light cache: %v", renderer.DB.Simulation.FPS, renderer.SectorLastRendered.Size()))
 	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	hits := renderer.ICacheHits.Load()
@@ -154,7 +164,7 @@ func run() {
 	db.Simulation.Render = renderGame
 	//controllers.CreateTestWorld(db)
 	//db.Save("data/worlds/exported_test.json")
-	if err = db.Load("data/worlds/portal-test.json"); err != nil {
+	if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}

@@ -52,7 +52,7 @@ func (m *Matrix2) StringHuman() string {
 	)
 }
 
-func (m *Matrix2) Translate(delta *Vector2) *Matrix2 {
+func (m *Matrix2) TranslateSelf(delta *Vector2) *Matrix2 {
 	m[4] += delta[0]
 	m[5] += delta[1]
 	return m
