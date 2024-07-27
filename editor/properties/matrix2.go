@@ -117,7 +117,7 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ValuesToAssign: make([]reflect.Value, len(field.Values))}
 		for i, v := range field.Values {
 			m := v.Value.Interface().(*concepts.Matrix2)
-			m = m.Translate(delta)
+			m = m.TranslateSelf(delta)
 			action.ValuesToAssign[i] = reflect.ValueOf(m).Elem()
 		}
 		g.NewAction(action)

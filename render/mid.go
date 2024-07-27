@@ -16,7 +16,7 @@ func WallMidPick(s *state.Column) {
 
 // WallMid renders the wall portion (potentially over a portal).
 func WallMid(c *state.Column, internalSegment bool) {
-	surf := c.SegmentIntersection.Segment.Surface
+	surf := c.Segment.Surface
 	transform := surf.Transform.Render
 	noSlope := c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope
 	// To calculate the vertical texture coordinate, we can't use the integer
@@ -30,7 +30,7 @@ func WallMid(c *state.Column, internalSegment bool) {
 		vTop -= c.ProjectedTop
 		dv = (c.ProjectedTop - c.ProjectedBottom)
 	}
-	sw := uint32(c.ProjectZ(c.SegmentIntersection.Segment.Length))
+	sw := uint32(c.ProjectZ(c.Segment.Length))
 	sh := uint32(dv)
 	if dv != 0 {
 		dv = 1.0 / dv

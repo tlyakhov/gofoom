@@ -57,18 +57,18 @@ func NewFont(path string, size float64) (*Font, error) {
 
 func (f *Font) Draw(win *opengl.Window, x, y float64, c color.Color, s string) {
 	// log.Printf("Font draw: %v\n", f.atlas.Glyph(text.ASCII[65]))
-	txt := text.New(pixel.V(x, y), f.atlas)
+	txt := text.New(pixel.ZV, f.atlas)
 	txt.Color = c
 
 	txt.WriteString(s)
-	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 2))
+	txt.Draw(win, pixel.IM.Moved(pixel.V(x, y)))
 }
 
 func (f *Font) DrawCanvas(canvas *opengl.Canvas, x, y float64, c color.Color, s string) {
 	// log.Printf("Font draw: %v\n", f.atlas.Glyph(text.ASCII[65]))
-	txt := text.New(pixel.V(x, y), f.atlas)
+	txt := text.New(pixel.ZV, f.atlas)
 	txt.Color = c
 
 	txt.WriteString(s)
-	txt.Draw(canvas, pixel.IM.Moved(pixel.V(x, y)).Scaled(pixel.Vec{}, 2))
+	txt.Draw(canvas, pixel.IM.Moved(pixel.V(x, y)))
 }

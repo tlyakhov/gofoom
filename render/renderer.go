@@ -69,6 +69,25 @@ func (r *Renderer) Initialize() {
 	}
 }
 
+func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
+	relative := concepts.Vector2{world[0], world[1]}
+	relative[0] -= r.PlayerBody.Pos.Render[0]
+	relative[1] -= r.PlayerBody.Pos.Render[1]
+	radians := math.Atan2(relative[1], relative[0]) - *r.PlayerBody.Angle.Render*concepts.Deg2rad
+	for radians < -math.Pi {
+		radians += 2 * math.Pi
+	}
+	if radians < -math.Pi*0.5 || radians > math.Pi*0.5 {
+		return nil
+	}
+	x := math.Tan(radians)*r.CameraToProjectionPlane + float64(r.ScreenWidth)*0.5
+	dist := relative.Length()
+	y := (world[2] - r.Player.CameraZ) / dist
+	y *= r.CameraToProjectionPlane / math.Cos(radians)
+	y = float64(r.ScreenHeight/2) - math.Floor(y)
+	return &concepts.Vector2{x, y}
+}
+
 func (r *Renderer) RenderPortal(c *state.Column) {
 	if c.Depth >= constants.MaxPortals-1 {
 		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", c.Sector.Entity)
@@ -127,7 +146,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	c.LightElement.Type = state.LightElementCeil
 	c.LightElement.Normal = c.Sector.CeilNormal
 	c.LightElement.Sector = c.Sector
-	c.LightElement.Segment = c.SegmentIntersection.Segment
+	c.LightElement.Segment = c.Segment
 
 	if c.Pick {
 		CeilingPick(c)
@@ -144,7 +163,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	}
 
 	c.LightElement.Type = state.LightElementWall
-	c.SegmentIntersection.Segment.Normal.To3D(&c.LightElement.Normal)
+	c.Segment.Normal.To3D(&c.LightElement.Normal)
 
 	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
 	if c.Pick {
@@ -222,7 +241,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			}
 
 			found = true
-			c.SegmentIntersection.Segment = &sectorSeg.Segment
+			c.Segment = &sectorSeg.Segment
 			c.SectorSegment = sectorSeg
 			c.Distance = dist
 			c.RaySegIntersect[0] = c.RaySegTest[0]
@@ -283,7 +302,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 
 		// Ray intersection
 		sorted.InternalSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
-		c.SegmentIntersection.Segment = &sorted.InternalSegment.Segment
+		c.Segment = &sorted.InternalSegment.Segment
 		c.Distance = c.Ray.DistTo(&c.RaySegTest)
 		c.RaySegIntersect[0] = c.RaySegTest[0]
 		c.RaySegIntersect[1] = c.RaySegTest[1]
@@ -473,13 +492,12 @@ func (r *Renderer) Pick(x, y int) []*core.Selectable {
 	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
 		return nil
 	}
-	bob := math.Sin(r.Player.Bob) * 2
 	// Initialize a column...
 	column := &state.Column{
 		Config:             r.Config,
 		EdgeTop:            0,
 		EdgeBottom:         r.ScreenHeight,
-		CameraZ:            r.PlayerBody.Pos.Render[2] + r.PlayerBody.Size.Render[1]*0.5 + bob,
+		CameraZ:            r.Player.CameraZ,
 		PortalColumns:      make([]state.Column, constants.MaxPortals),
 		EntitiesByDistance: make([]state.EntityWithDist2, 0, 16),
 		Visited:            make([]state.SegmentIntersection, constants.MaxPortals),

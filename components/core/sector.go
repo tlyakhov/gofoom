@@ -20,14 +20,14 @@ type Sector struct {
 	Segments         []*SectorSegment
 	Bodies           map[concepts.Entity]*Body
 	InternalSegments map[concepts.Entity]*InternalSegment
-	BottomZ          concepts.DynamicValue[float64] `editable:"Floor Height"`
-	TopZ             concepts.DynamicValue[float64] `editable:"Ceiling Height"`
+	BottomZ          concepts.DynamicValue[float64] `editable:"Floor"`
+	TopZ             concepts.DynamicValue[float64] `editable:"Ceiling"`
 	FloorNormal      concepts.Vector3               `editable:"Floor Normal"`
-	CeilNormal       concepts.Vector3               `editable:"Ceiling Normal"`
+	CeilNormal       concepts.Vector3               `editable:"Ceil Normal"`
 	FloorTarget      concepts.Entity                `editable:"Floor Target" edit_type:"Sector"`
-	CeilTarget       concepts.Entity                `editable:"Ceiling Target" edit_type:"Sector"`
-	FloorSurface     materials.Surface              `editable:"Floor Surface"`
-	CeilSurface      materials.Surface              `editable:"Ceiling Surface"`
+	CeilTarget       concepts.Entity                `editable:"Ceil Target" edit_type:"Sector"`
+	FloorSurface     materials.Surface              `editable:"Floor Surf"`
+	CeilSurface      materials.Surface              `editable:"Ceil Surf"`
 	Gravity          concepts.Vector3               `editable:"Gravity"`
 	FloorFriction    float64                        `editable:"Floor Friction"`
 	FloorScripts     []*Script                      `editable:"Floor Scripts"`

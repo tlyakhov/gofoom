@@ -68,7 +68,7 @@ func (a *Transform) Act() {
 		factor := math.Pi * 0.25
 		m = m.RotateBasis(&a.MouseDown, math.Round(a.Angle/factor)*factor)
 	default:
-		m.Translate(a.WorldGrid(&a.Delta))
+		m.TranslateSelf(a.WorldGrid(&a.Delta))
 	}
 	for _, s := range a.Selected.Exact {
 		s.Transform(m)
