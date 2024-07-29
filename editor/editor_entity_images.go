@@ -88,9 +88,9 @@ func (e *Editor) EntityImage(entity concepts.Entity, sector bool) image.Image {
 	if sector {
 		item.Image = e.imageForSector(entity)
 	} else {
-		sheet := materials.SpriteSheetFromDb(editor.DB, entity)
-		if sheet != nil && len(sheet.Sprites) > 0 {
-			item.Image = e.imageForMaterial(sheet.Sprites[0].Image)
+		sprite := materials.SpriteFromDb(editor.DB, entity)
+		if sprite != nil && sprite.Image != 0 {
+			item.Image = e.imageForMaterial(sprite.Image)
 		} else {
 			item.Image = e.imageForMaterial(entity)
 		}

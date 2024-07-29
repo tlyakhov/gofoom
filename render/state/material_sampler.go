@@ -16,6 +16,7 @@ type MaterialSampler struct {
 	Output           concepts.Vector4
 	ScreenX, ScreenY int
 	NoTexture        bool
+	SpriteAngle      float64
 }
 
 func (ms *MaterialSampler) SampleShader(eShader concepts.Entity, extraStages []*materials.ShaderStage, u, v float64, sw, sh uint32) *concepts.Vector4 {
@@ -68,6 +69,11 @@ func (ms *MaterialSampler) sampleTexture(result *concepts.Vector4, material conc
 	var sample concepts.Vector4
 	if image := materials.ImageFromDb(ms.DB, material); image != nil {
 		sample = image.Sample(u, v, sw, sh)
+	} else if sprite := materials.SpriteFromDb(ms.DB, material); sprite != nil {
+		aindex := uint32(ms.SpriteAngle) * sprite.Angles / 360
+		c := aindex % sprite.Cols
+		r := aindex / sprite.Cols
+		sample = sprite.Sample(u, v, sw, sh, c, r)
 	} else if text := materials.TextFromDb(ms.DB, material); text != nil {
 		sample = text.Sample(u, v, sw, sh)
 	} else if solid := materials.SolidFromDb(ms.DB, material); solid != nil {

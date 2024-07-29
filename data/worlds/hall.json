@@ -2620,8 +2620,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.109375,
-          "Reverse": false,
+          "Percent": 0.78125,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2632,7 +2632,7 @@
         "Original": {
           "X": -400,
           "Y": 60,
-          "Z": -56
+          "Z": -52
         }
       },
       "Shadow": "BodyShadowSphere",
@@ -2664,15 +2664,10 @@
       },
       "Entity": "32"
     },
-    "materials.SpriteSheet": {
+    "materials.Sprite": {
+      "Angles": "0",
       "Entity": "32",
-      "Sprites": [
-        {
-          "Angle": 0,
-          "Frame": 0,
-          "Image": "98"
-        }
-      ]
+      "Image": "98"
     }
   },
   {
@@ -3657,11 +3652,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 115.8120564876195,
+          "End": -68.81186653991045,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.7552083333333331,
+          "Percent": 0.10416666666666667,
           "Reverse": false,
-          "Start": 128.94201110840868,
+          "Start": -76.0695951299912,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -3706,50 +3701,12 @@
       },
       "Entity": "42"
     },
-    "materials.SpriteSheet": {
+    "materials.Sprite": {
+      "Angles": "8",
+      "Cols": "4",
       "Entity": "42",
-      "Sprites": [
-        {
-          "Angle": 0,
-          "Frame": 0,
-          "Image": "134"
-        },
-        {
-          "Angle": 315,
-          "Frame": 0,
-          "Image": "132"
-        },
-        {
-          "Angle": 45,
-          "Frame": 0,
-          "Image": "133"
-        },
-        {
-          "Angle": 90,
-          "Frame": 0,
-          "Image": "135"
-        },
-        {
-          "Angle": 270,
-          "Frame": 0,
-          "Image": "136"
-        },
-        {
-          "Angle": 135,
-          "Frame": 0,
-          "Image": "138"
-        },
-        {
-          "Angle": 225,
-          "Frame": 0,
-          "Image": "137"
-        },
-        {
-          "Angle": 180,
-          "Frame": 0,
-          "Image": "139"
-        }
-      ]
+      "Image": "113",
+      "Rows": "2"
     }
   },
   {
@@ -7061,8 +7018,8 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
-          "Reverse": false,
+          "Percent": 0.0078125,
+          "Reverse": true,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
@@ -9584,6 +9541,29 @@
     }
   },
   {
+    "Entity": "113",
+    "materials.Image": {
+      "Entity": "113",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub.png"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "113"
+    }
+  },
+  {
     "Entity": "114",
     "concepts.Named": {
       "Entity": "114",
@@ -10317,110 +10297,6 @@
       },
       "Entity": "131",
       "Strength": 1.5
-    }
-  },
-  {
-    "Entity": "132",
-    "concepts.Named": {
-      "Entity": "132",
-      "Name": "flub-back-left"
-    },
-    "materials.Image": {
-      "Entity": "132",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-back-left.png"
-    }
-  },
-  {
-    "Entity": "133",
-    "concepts.Named": {
-      "Entity": "133",
-      "Name": "flub-back-right"
-    },
-    "materials.Image": {
-      "Entity": "133",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-back-right.png"
-    }
-  },
-  {
-    "Entity": "134",
-    "concepts.Named": {
-      "Entity": "134",
-      "Name": "flub-back"
-    },
-    "materials.Image": {
-      "Entity": "134",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-back.png"
-    }
-  },
-  {
-    "Entity": "135",
-    "concepts.Named": {
-      "Entity": "135",
-      "Name": "flub-right"
-    },
-    "materials.Image": {
-      "Entity": "135",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-right.png"
-    }
-  },
-  {
-    "Entity": "136",
-    "concepts.Named": {
-      "Entity": "136",
-      "Name": "flub-left"
-    },
-    "materials.Image": {
-      "Entity": "136",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-left.png"
-    }
-  },
-  {
-    "Entity": "137",
-    "concepts.Named": {
-      "Entity": "137",
-      "Name": "flub-front-left"
-    },
-    "materials.Image": {
-      "Entity": "137",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-front-left.png"
-    }
-  },
-  {
-    "Entity": "138",
-    "concepts.Named": {
-      "Entity": "138",
-      "Name": "flub-front-right"
-    },
-    "materials.Image": {
-      "Entity": "138",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-front-right.png"
-    }
-  },
-  {
-    "Entity": "139",
-    "concepts.Named": {
-      "Entity": "139",
-      "Name": "flub-front"
-    },
-    "materials.Image": {
-      "Entity": "139",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub-front.png"
     }
   },
   {

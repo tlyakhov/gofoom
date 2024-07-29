@@ -10,6 +10,7 @@ import (
 
 func EntityMapIsMaterial(components []concepts.Attachable) bool {
 	return components[materials.ShaderComponentIndex] != nil ||
+		components[materials.SpriteComponentIndex] != nil ||
 		components[materials.LitComponentIndex] != nil ||
 		components[materials.ImageComponentIndex] != nil ||
 		components[materials.TextComponentIndex] != nil ||

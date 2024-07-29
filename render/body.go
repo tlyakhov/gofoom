@@ -13,50 +13,18 @@ import (
 )
 
 func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
+	if !archetypes.EntityIsMaterial(r.DB, b.Entity) {
+		return
+	}
 	// TODO: We should probably not do all of this for every column. Can we
 	// cache any of these things as we cast rays?
 
-	eMaterial := b.Entity
+	// Calculate angles for picking the right sprite, and also relative to camera
 	angleFromPlayer := r.PlayerBody.Angle2DTo(b.Pos.Render)
-
-	sheet := materials.SpriteSheetFromDb(r.DB, b.Entity)
-	if sheet != nil && sheet.IsActive() {
-		angleSprite := 360 - angleFromPlayer + *b.Angle.Render
-		if len(sheet.Sprites) == 0 {
-			return
-		}
-		// Pick the sprite to use
-		// Too slow?
-		bestDelta := 1000.0
-		var sprite *materials.Sprite
-		for i, s := range sheet.Sprites {
-			if s == nil {
-				continue
-			}
-			angleDelta := float64(s.Angle) - angleSprite
-			for angleDelta < -180 {
-				angleDelta += 360
-			}
-			for angleDelta > 180 {
-				angleDelta -= 360
-			}
-			angleDelta = math.Abs(angleDelta)
-			if sprite == nil || angleDelta < bestDelta {
-				bestDelta = angleDelta
-				sprite = sheet.Sprites[i]
-			}
-		}
-
-		if sprite == nil {
-			return
-		}
-		eMaterial = sprite.Image
+	c.SpriteAngle = 270 - angleFromPlayer + *b.Angle.Render + 360
+	for c.SpriteAngle > 360 {
+		c.SpriteAngle -= 360
 	}
-
-	if !archetypes.EntityIsMaterial(r.DB, eMaterial) {
-		return
-	}
-
 	angleRender := angleFromPlayer - *r.PlayerBody.Angle.Render
 	for angleRender < -180.0 {
 		angleRender += 360.0
@@ -64,6 +32,7 @@ func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 	for angleRender > 180.0 {
 		angleRender -= 360.0
 	}
+	// Calculate screenspace coordinates
 	c.Distance = c.Ray.Start.Dist(b.Pos.Render.To2D())
 	x := math.Tan(angleRender*concepts.Deg2rad)*r.CameraToProjectionPlane + float64(r.ScreenWidth)*0.5
 	depthScale := r.CameraToProjectionPlane / math.Cos(angleRender*concepts.Deg2rad)
@@ -115,7 +84,7 @@ func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 			continue
 		}
 		v := (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
-		sample := c.SampleShader(eMaterial, nil, c.U, v, uint32(xScale), uint32(screenBottom-screenTop))
+		sample := c.SampleShader(b.Entity, nil, c.U, v, uint32(xScale), uint32(screenBottom-screenTop))
 		sample.Mul4Self(&c.Light)
 		c.ApplySample(sample, screenIndex, c.Distance)
 	}
