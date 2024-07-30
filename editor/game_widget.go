@@ -4,20 +4,14 @@
 package main
 
 import (
-	"fmt"
 	"image"
 	"log"
-	"time"
-	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/render"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
 	"github.com/fogleman/gg"
-	"golang.org/x/image/font/basicfont"
 )
 
 // Declare conformity with interfaces
@@ -32,7 +26,6 @@ type GameWidget struct {
 	Raster  *canvas.Raster
 	Context *gg.Context
 	Surface *image.RGBA
-	Font    *render.Font
 	KeyMap  map[fyne.KeyName]bool
 }
 
@@ -41,7 +34,6 @@ func NewGameWidget() *GameWidget {
 		KeyMap: make(map[fyne.KeyName]bool),
 	}
 	g.ExtendBaseWidget(g)
-	g.Font, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 	g.Raster = canvas.NewRaster(g.generateRaster)
 	return g
 }
@@ -81,38 +73,14 @@ func (g *GameWidget) Draw() {
 	if player == nil {
 		return
 	}
-	playerBody := core.BodyFromDb(player.DB, player.Entity)
-	playerAlive := behaviors.AliveFromDb(player.DB, player.Entity)
 
 	pixels := g.Context.Image().(*image.RGBA).Pix
 	editor.Lock.Lock()
-	editor.Renderer.Render(pixels)
+	editor.Renderer.Render()
+	editor.Renderer.DebugInfo()
+	editor.Renderer.ApplyBuffer(pixels)
 	editor.Lock.Unlock()
 
-	g.Context.SetRGB(1, 0, 1)
-	g.Context.SetFontFace(basicfont.Face7x13)
-	g.Context.DrawString(fmt.Sprintf("FPS: %.1f, Light cache: %v", editor.DB.Simulation.FPS, editor.Renderer.SectorLastRendered.Size()), 10, 10)
-	g.Context.DrawString(fmt.Sprintf("Health: %.1f", playerAlive.Health), 10, 20)
-	if playerBody.SectorEntity != 0 {
-		g.Context.DrawString(fmt.Sprintf("Sector: %v", playerBody.SectorEntity.String(editor.DB)), 10, 30)
-	}
-	g.Context.DrawString(fmt.Sprintf("f: %v, v: %v, p: %v\n", playerBody.Force.StringHuman(), playerBody.Vel.Render.StringHuman(), playerBody.Pos.Render.StringHuman()), 10, 40)
-
-	g.Context.SetRGB(1, 0, 0)
-
-	for i := 0; i < 20; i++ {
-		if i >= editor.Renderer.DebugNotices.Length() {
-			break
-		}
-		msg := editor.Renderer.DebugNotices.Items[i].(string)
-		if t, ok := editor.Renderer.DebugNotices.SetWithTimes.Load(msg); ok {
-			g.Context.DrawString(msg, 10, 50+float64(i)*10)
-			age := time.Now().UnixMilli() - t.(int64)
-			if age > 10000 {
-				editor.Renderer.DebugNotices.PopAtIndex(i)
-			}
-		}
-	}
 	copy(g.Surface.Pix, pixels)
 	g.Raster.Refresh()
 }

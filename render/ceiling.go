@@ -11,14 +11,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func CeilingPick(s *state.Column) {
+func ceilingPick(s *state.Column) {
 	if s.ScreenY >= s.EdgeTop && s.ScreenY < s.ClippedTop {
 		s.PickedSelection = append(s.PickedSelection, core.SelectableFromCeil(s.Sector))
 	}
 }
 
-// Ceiling renders the ceiling portion of a slice.
-func Ceiling(c *state.Column) {
+// ceiling renders the ceiling portion of a slice.
+func ceiling(c *state.Column) {
 	mat := c.Sector.CeilSurface.Material
 	extras := c.Sector.CeilSurface.ExtraStages
 	transform := c.Sector.CeilSurface.Transform.Render

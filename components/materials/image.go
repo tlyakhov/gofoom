@@ -15,7 +15,7 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
-	"github.com/disintegration/imaging"
+	"github.com/disintegration/gift"
 	"github.com/fogleman/gg"
 	"golang.org/x/image/font/inconsolata"
 )
@@ -23,7 +23,7 @@ import (
 type mipMap struct {
 	Width, Height uint32
 	Data          []uint32
-	Image         image.Image
+	Image         *image.RGBA
 }
 
 // Image represents an image that will be rendered in-game.
@@ -181,15 +181,19 @@ func (img *Image) generateMipMaps() {
 
 	for w >= 2 && h >= 2 {
 		mm := mipMap{Width: w, Height: h, Data: make([]uint32, w*h)}
-		rimg := imaging.Resize(img.Image, int(w), int(h), imaging.Lanczos)
+		mm.Image = image.NewRGBA(image.Rect(0, 0, int(w), int(h)))
+		g := gift.New(
+			gift.Resize(int(w), int(h), gift.LanczosResampling),
+		)
+		g.Draw(mm.Image, img.Image)
 		for y := 0; y < int(h); y++ {
 			for x := 0; x < int(w); x++ {
-				index := x*4 + y*rimg.Stride
-				mm.Data[y*int(mm.Width)+x] = concepts.NRGBAToInt32(
-					color.NRGBA{rimg.Pix[index],
-						rimg.Pix[index+1],
-						rimg.Pix[index+2],
-						rimg.Pix[index+3]})
+				index := x*4 + y*mm.Image.Stride
+				mm.Data[y*int(mm.Width)+x] = concepts.RGBAToInt32(
+					color.RGBA{mm.Image.Pix[index],
+						mm.Image.Pix[index+1],
+						mm.Image.Pix[index+2],
+						mm.Image.Pix[index+3]})
 			}
 		}
 		img.MipMaps = append(img.MipMaps, mm)

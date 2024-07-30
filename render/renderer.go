@@ -5,13 +5,11 @@ package render
 
 import (
 	"fmt"
-	"image"
 	"math"
 	"slices"
 	"sync"
 	"sync/atomic"
 
-	"github.com/disintegration/imaging"
 	"github.com/puzpuzpuz/xsync/v3"
 
 	"tlyakhov/gofoom/components/core"
@@ -120,11 +118,11 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 	portal.CalcScreen()
 	if portal.AdjSegment != nil {
 		if c.Pick {
-			WallHiPick(portal)
-			WallLowPick(portal)
+			wallHiPick(portal)
+			wallLowPick(portal)
 		} else {
-			WallHi(portal)
-			WallLow(portal)
+			wallHi(portal)
+			wallLow(portal)
 		}
 	}
 
@@ -149,17 +147,17 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	c.LightElement.Segment = c.Segment
 
 	if c.Pick {
-		CeilingPick(c)
+		ceilingPick(c)
 	} else {
-		Ceiling(c)
+		ceiling(c)
 	}
 	c.LightElement.Type = state.LightElementFloor
 	c.LightElement.Normal = c.Sector.FloorNormal
 
 	if c.Pick {
-		FloorPick(c)
+		floorPick(c)
 	} else {
-		Floor(c)
+		floor(c)
 	}
 
 	c.LightElement.Type = state.LightElementWall
@@ -168,7 +166,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
 	if c.Pick {
 		if !hasPortal || c.SectorSegment.PortalHasMaterial {
-			WallMidPick(c)
+			wallPick(c)
 			return
 		}
 		r.RenderPortal(c)
@@ -177,7 +175,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 			r.RenderPortal(c)
 		}
 		if !hasPortal || c.SectorSegment.PortalHasMaterial {
-			WallMid(c, false)
+			r.wall(c, false)
 		}
 	}
 
@@ -296,7 +294,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	c.SegmentIntersection = &state.SegmentIntersection{}
 	for _, sorted := range c.EntitiesByDistance {
 		if sorted.Body != nil {
-			r.RenderBody(sorted.Body, c)
+			r.renderBody(sorted.Body, c)
 			continue
 		}
 
@@ -320,7 +318,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		c.LightElement.Segment = &sorted.InternalSegment.Segment
 		c.LightElement.Type = state.LightElementWall
 		sorted.InternalSegment.Normal.To3D(&c.LightElement.Normal)
-		WallMid(c, true)
+		r.wall(c, true)
 	}
 }
 
@@ -357,7 +355,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	return column.PickedSelection
 }
 
-func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
+func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
 	column.CameraZ = r.Player.CameraZ
@@ -369,26 +367,10 @@ func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
 	}
 
 	for x := xStart; x < xEnd; x++ {
-		if x >= xEnd {
+		if x >= r.ScreenWidth {
 			break
 		}
 		r.RenderColumn(column, x, 0, false)
-		for y := 0; y < r.ScreenHeight; y++ {
-			screenIndex := (x + y*r.ScreenWidth)
-			fb := &r.FrameBuffer[screenIndex]
-			screenIndex *= 4
-			if r.FrameTint[3] != 0 {
-				a := 1.0 - r.FrameTint[3]
-				buffer[screenIndex+0] = uint8(concepts.Clamp((fb[0]*a+r.FrameTint[0])*255, 0, 255))
-				buffer[screenIndex+1] = uint8(concepts.Clamp((fb[1]*a+r.FrameTint[1])*255, 0, 255))
-				buffer[screenIndex+2] = uint8(concepts.Clamp((fb[2]*a+r.FrameTint[2])*255, 0, 255))
-			} else {
-				buffer[screenIndex+0] = uint8(concepts.Clamp(fb[0]*255, 0, 255))
-				buffer[screenIndex+1] = uint8(concepts.Clamp(fb[1]*255, 0, 255))
-				buffer[screenIndex+2] = uint8(concepts.Clamp(fb[2]*255, 0, 255))
-			}
-			buffer[screenIndex+3] = 0xFF
-		}
 	}
 
 	if constants.RenderMultiThreaded {
@@ -397,7 +379,7 @@ func (r *Renderer) RenderBlock(buffer []uint8, columnIndex, xStart, xEnd int) {
 }
 
 // Render a frame.
-func (r *Renderer) Render(buffer []uint8) {
+func (r *Renderer) Render() {
 	r.RefreshPlayer()
 	r.ICacheHits.Store(0)
 	r.ICacheMisses.Store(0)
@@ -431,13 +413,13 @@ func (r *Renderer) Render(buffer []uint8) {
 		blockSize := r.ScreenWidth / constants.RenderBlocks
 		r.columnGroup.Add(constants.RenderBlocks)
 		for x := 0; x < constants.RenderBlocks; x++ {
-			go r.RenderBlock(buffer, x, x*blockSize, x*blockSize+blockSize)
+			go r.RenderBlock(x, x*blockSize, x*blockSize+blockSize)
 		}
 		r.columnGroup.Wait()
 	} else {
-		r.RenderBlock(buffer, 0, 0, r.ScreenWidth)
+		r.RenderBlock(0, 0, r.ScreenWidth)
 	}
-	r.RenderHud(buffer)
+	r.RenderHud()
 
 	if r.Frame%4 <= 1 {
 		return
@@ -456,35 +438,52 @@ func (r *Renderer) Render(buffer []uint8) {
 	})
 }
 
-func (r *Renderer) ImgBlt(dst []uint8, src *image.NRGBA, dstx, dsty int) {
-	w := src.Rect.Dx()
-	h := src.Rect.Dy()
-	idst := (dstx + dsty*r.ScreenWidth) * 4
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
-			isrc := x*4 + y*src.Stride
-			a := int(src.Pix[isrc+3])
-			da := 255 - a
-			dst[idst+0] = uint8((int(dst[idst+0]) * da / 255) + int(src.Pix[isrc+0])*a/255)
-			dst[idst+1] = uint8((int(dst[idst+1]) * da / 255) + int(src.Pix[isrc+1])*a/255)
-			dst[idst+2] = uint8((int(dst[idst+2]) * da / 255) + int(src.Pix[isrc+2])*a/255)
-			idst += 4
+func (r *Renderer) ApplyBuffer(buffer []uint8) {
+	// TODO: How much faster would a 16-bit integer framebuffer be?
+	for y := 0; y < r.ScreenHeight; y++ {
+		for x := 0; x < r.ScreenWidth; x++ {
+			fbIndex := (x + y*r.ScreenWidth)
+			screenIndex := fbIndex * 4
+			buffer[screenIndex+3] = 0xFF
+			if r.FrameTint[3] != 0 {
+				a := 1.0 - r.FrameTint[3]
+				buffer[screenIndex+2] = uint8(concepts.Clamp((r.FrameBuffer[fbIndex][2]*a+r.FrameTint[2])*255, 0, 255))
+				buffer[screenIndex+1] = uint8(concepts.Clamp((r.FrameBuffer[fbIndex][1]*a+r.FrameTint[1])*255, 0, 255))
+				buffer[screenIndex+0] = uint8(concepts.Clamp((r.FrameBuffer[fbIndex][0]*a+r.FrameTint[0])*255, 0, 255))
+			} else {
+				buffer[screenIndex+1] = uint8(r.FrameBuffer[fbIndex][1] * 255)
+				buffer[screenIndex+2] = uint8(r.FrameBuffer[fbIndex][2] * 255)
+				buffer[screenIndex+0] = uint8(r.FrameBuffer[fbIndex][0] * 255)
+			}
 		}
-		idst = (dstx + (dsty+y)*r.ScreenWidth) * 4
 	}
 }
 
-func (r *Renderer) RenderHud(buffer []uint8) {
-	if r.Player == nil {
+func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z float64) {
+	sample.ClampSelf(0, 1)
+	if sample[3] == 0 {
 		return
 	}
-	for _, item := range r.Player.Inventory {
-		img := materials.ImageFromDb(r.DB, item.Image)
-		if img == nil {
-			return
+	if sample[3] == 1 {
+		r.FrameBuffer[screenIndex] = *sample
+		r.ZBuffer[screenIndex] = z
+		return
+	}
+	dst := &r.FrameBuffer[screenIndex]
+	dst[0] = dst[0]*(1.0-sample[3]) + sample[0]
+	dst[1] = dst[1]*(1.0-sample[3]) + sample[1]
+	dst[2] = dst[2]*(1.0-sample[3]) + sample[2]
+	if sample[3] > 0.8 {
+		r.ZBuffer[screenIndex] = z
+	}
+}
+
+func (r *Renderer) BitBlt(src *materials.Image, dstx, dsty, w, h int) {
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			c := src.Sample(float64(x)/float64(w), float64(y)/float64(h), uint32(w), uint32(h))
+			r.ApplySample(&c, x+dstx+(y+dsty)*r.ScreenWidth, -1)
 		}
-		rimg := imaging.Resize(img.Image, 32, 0, imaging.CatmullRom)
-		r.ImgBlt(buffer, rimg, 10, r.ScreenHeight-42)
 	}
 }
 
