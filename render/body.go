@@ -12,7 +12,7 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
+func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	if !archetypes.EntityIsMaterial(r.DB, b.Entity) {
 		return
 	}
@@ -86,6 +86,6 @@ func (r *Renderer) RenderBody(b *core.Body, c *state.Column) {
 		v := (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
 		sample := c.SampleShader(b.Entity, nil, c.U, v, uint32(xScale), uint32(screenBottom-screenTop))
 		sample.Mul4Self(&c.Light)
-		c.ApplySample(sample, screenIndex, c.Distance)
+		r.ApplySample(sample, screenIndex, c.Distance)
 	}
 }

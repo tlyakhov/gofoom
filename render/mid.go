@@ -8,14 +8,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func WallMidPick(s *state.Column) {
+func wallPick(s *state.Column) {
 	if s.ScreenY >= s.ClippedTop && s.ScreenY < s.ClippedBottom {
 		s.PickedSelection = append(s.PickedSelection, core.SelectableFromWall(s.SectorSegment, core.SelectableMid))
 	}
 }
 
-// WallMid renders the wall portion (potentially over a portal).
-func WallMid(c *state.Column, internalSegment bool) {
+// wall renders the wall portion (potentially over a portal).
+func (r *Renderer) wall(c *state.Column, internalSegment bool) {
 	surf := c.Segment.Surface
 	transform := surf.Transform.Render
 	noSlope := c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope
@@ -53,6 +53,6 @@ func WallMid(c *state.Column, internalSegment bool) {
 			c.SampleShader(surf.Material, surf.ExtraStages, tu, tv, sw, sh)
 			c.SampleLight(&c.MaterialSampler.Output, surf.Material, &c.RaySegIntersect, c.Distance)
 		}
-		c.ApplySample(&c.MaterialSampler.Output, int(screenIndex), c.Distance)
+		r.ApplySample(&c.MaterialSampler.Output, int(screenIndex), c.Distance)
 	}
 }

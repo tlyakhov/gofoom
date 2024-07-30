@@ -8,14 +8,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func WallHiPick(cp *state.ColumnPortal) {
+func wallHiPick(cp *state.ColumnPortal) {
 	if cp.ScreenY >= cp.ClippedTop && cp.ScreenY < cp.AdjClippedTop {
 		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableHi))
 	}
 }
 
-// WallHi renders the top portion of a portal segment.
-func WallHi(cp *state.ColumnPortal) {
+// wallHi renders the top portion of a portal segment.
+func wallHi(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.HiSurface
 	transform := surf.Transform.Render
 	sw := uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
@@ -47,14 +47,14 @@ func WallHi(cp *state.ColumnPortal) {
 	}
 }
 
-func WallLowPick(cp *state.ColumnPortal) {
+func wallLowPick(cp *state.ColumnPortal) {
 	if cp.ScreenY >= cp.AdjClippedBottom && cp.ScreenY < cp.ClippedBottom {
 		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableLow))
 	}
 }
 
-// WallLow renders the bottom portion of a portal segment.
-func WallLow(cp *state.ColumnPortal) {
+// wallLow renders the bottom portion of a portal segment.
+func wallLow(cp *state.ColumnPortal) {
 	surf := cp.AdjSegment.LoSurface
 	transform := surf.Transform.Render
 	sw := uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))

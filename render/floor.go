@@ -11,14 +11,14 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
-func FloorPick(s *state.Column) {
+func floorPick(s *state.Column) {
 	if s.ScreenY >= s.ClippedBottom && s.ScreenY < s.EdgeBottom {
 		s.PickedSelection = append(s.PickedSelection, core.SelectableFromFloor(s.Sector))
 	}
 }
 
-// Floor renders the floor portion of a slice.
-func Floor(c *state.Column) {
+// floor renders the floor portion of a slice.
+func floor(c *state.Column) {
 	mat := c.Sector.FloorSurface.Material
 	extras := c.Sector.FloorSurface.ExtraStages
 	transform := c.Sector.FloorSurface.Transform.Render

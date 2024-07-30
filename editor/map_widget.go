@@ -11,7 +11,6 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/render"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -32,14 +31,12 @@ type MapWidget struct {
 	Raster    *canvas.Raster
 	Context   *gg.Context
 	Surface   *image.RGBA
-	Font      *render.Font
 	MapCursor desktop.Cursor
 }
 
 func NewMapWidget() *MapWidget {
 	mw := &MapWidget{MapCursor: desktop.DefaultCursor}
 	mw.ExtendBaseWidget(mw)
-	mw.Font, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 	mw.Raster = canvas.NewRaster(mw.Draw)
 	return mw
 }

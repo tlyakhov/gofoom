@@ -5,7 +5,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"image"
 	"log"
 	"os"
@@ -23,7 +22,6 @@ import (
 	// "math/rand"
 	// "os"
 
-	"image/color"
 	_ "image/png"
 
 	"github.com/gopxl/pixel/v2"
@@ -36,7 +34,6 @@ var db *concepts.EntityComponentDB
 var renderer *render.Renderer
 var canvas *opengl.Canvas
 var buffer *image.RGBA
-var mainFont *render.Font
 
 func processInput() {
 	if renderer.Player == nil {
@@ -92,10 +89,10 @@ func integrateGame() {
 }
 
 func renderGame() {
-	playerAlive := behaviors.AliveFromDb(renderer.DB, renderer.PlayerBody.Entity)
-	// player := bodies.PlayerFromDb(&gameMap.Player)
+	renderer.Render()
+	renderer.DebugInfo()
 
-	renderer.Render(buffer.Pix)
+	renderer.ApplyBuffer(buffer.Pix)
 	canvas.SetPixels(buffer.Pix)
 	winw := win.Bounds().W()
 	winh := win.Bounds().H()
@@ -106,28 +103,6 @@ func renderGame() {
 	mat = mat.ScaledXY(pixel.ZV, pixel.Vec{X: 1, Y: -1})
 	mat = mat.Moved(pixel.Vec{X: float64(renderer.ScreenWidth / 2), Y: float64(renderer.ScreenHeight / 2)})
 	canvas.Draw(win, mat)
-
-	screen := renderer.WorldToScreen(&concepts.Vector3{-320, 30, -32})
-	if screen != nil {
-		mainFont.Draw(win, screen[0], float64(renderer.ScreenHeight)-screen[1], color.NRGBA{0xff, 0, 0, 0xff}, "test")
-	}
-	mainFont.Draw(win, 10, 10, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("FPS: %.1f, Light cache: %v", renderer.DB.Simulation.FPS, renderer.SectorLastRendered.Size()))
-	mainFont.Draw(win, 10, 20, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Health: %.1f", playerAlive.Health))
-	hits := renderer.ICacheHits.Load()
-	misses := renderer.ICacheMisses.Load()
-	mainFont.Draw(win, 10, 30, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
-	if renderer.PlayerBody.SectorEntity != 0 {
-		entity := renderer.PlayerBody.SectorEntity
-		s := 0
-		//		core.SectorFromDb(ref).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
-		mainFont.Draw(win, 10, 40, color.NRGBA{0xff, 0, 0, 0xff}, fmt.Sprintf("Sector: %v, LM:%v", entity.String(renderer.DB), s))
-	}
-	y := 0
-	for y < 20 && renderer.DebugNotices.Length() > 0 {
-		msg := renderer.DebugNotices.Pop().(string)
-		mainFont.Draw(win, 10, 50+float64(y)*10, color.NRGBA{0xff, 0, 0, 0xff}, msg)
-		y++
-	}
 	win.Update()
 }
 
@@ -174,8 +149,6 @@ func run() {
 	renderer.ScreenWidth = w
 	renderer.ScreenHeight = h
 	renderer.Initialize()
-
-	mainFont, _ = render.NewFont("/Library/Fonts/Courier New.ttf", 24)
 
 	for !win.Closed() {
 		db.Simulation.Step()

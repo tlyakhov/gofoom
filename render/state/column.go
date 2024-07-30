@@ -198,22 +198,3 @@ func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vecto
 	result[3] = 1
 	return result
 }
-
-func (c *Column) ApplySample(sample *concepts.Vector4, screenIndex int, z float64) {
-	sample.ClampSelf(0, 1)
-	if sample[3] == 0 {
-		return
-	}
-	if sample[3] == 1 {
-		c.FrameBuffer[screenIndex] = *sample
-		c.ZBuffer[screenIndex] = z
-		return
-	}
-	dst := &c.FrameBuffer[screenIndex]
-	dst[0] = dst[0]*(1.0-sample[3]) + sample[0]
-	dst[1] = dst[1]*(1.0-sample[3]) + sample[1]
-	dst[2] = dst[2]*(1.0-sample[3]) + sample[2]
-	if sample[3] > 0.8 {
-		c.ZBuffer[screenIndex] = z
-	}
-}

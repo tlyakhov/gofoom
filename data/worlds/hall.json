@@ -2620,7 +2620,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.78125,
+          "Percent": 0.828125,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -3652,11 +3652,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -68.81186653991045,
+          "End": 87.16715861353654,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.10416666666666667,
+          "Percent": 0.5468750000000001,
           "Reverse": false,
-          "Start": -76.0695951299912,
+          "Start": 67.37041361704706,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -7018,8 +7018,8 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0.0078125,
-          "Reverse": true,
+          "Percent": 0,
+          "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
@@ -9907,6 +9907,15 @@
     }
   },
   {
+    "Entity": "119",
+    "materials.Image": {
+      "Entity": "119",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "/Users/tim/Documents/gofoom/data/RDE_8x8.png"
+    }
+  },
+  {
     "Entity": "120",
     "concepts.Named": {
       "Entity": "120",
@@ -10147,6 +10156,20 @@
       },
       "Entity": "125",
       "Strength": 10
+    }
+  },
+  {
+    "Entity": "126",
+    "concepts.Named": {
+      "Entity": "126",
+      "Name": "HUD Font"
+    },
+    "materials.Sprite": {
+      "Angles": "0",
+      "Cols": "16",
+      "Rows": "16",
+      "Entity": "126",
+      "Image": "119"
     }
   },
   {
