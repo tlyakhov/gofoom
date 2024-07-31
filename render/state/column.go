@@ -44,6 +44,8 @@ type Column struct {
 	PortalColumns []Column
 	// Pre-allocated slice for sorting bodies and internal segments
 	EntitiesByDistance []EntityWithDist2
+	// All visited bodies
+	BodiesSeen map[concepts.Entity]*core.Body
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
 	Ray                *Ray

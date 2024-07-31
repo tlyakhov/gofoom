@@ -25,6 +25,7 @@ type Renderer struct {
 	Columns            []state.Column
 	columnGroup        *sync.WaitGroup
 	startingSector     *core.Sector
+	textStyle          *TextStyle
 	SectorLastRendered *xsync.MapOf[concepts.Entity, uint64]
 
 	ICacheHits, ICacheMisses atomic.Int64
@@ -65,6 +66,7 @@ func (r *Renderer) Initialize() {
 		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 	}
+	r.textStyle = r.NewTextStyle()
 }
 
 func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
@@ -175,7 +177,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 			r.RenderPortal(c)
 		}
 		if !hasPortal || c.SectorSegment.PortalHasMaterial {
-			r.wall(c, false)
+			r.wall(c)
 		}
 	}
 
@@ -318,7 +320,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		c.LightElement.Segment = &sorted.InternalSegment.Segment
 		c.LightElement.Type = state.LightElementWall
 		sorted.InternalSegment.Normal.To3D(&c.LightElement.Normal)
-		r.wall(c, true)
+		r.wall(c)
 	}
 }
 
@@ -358,6 +360,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
+	column.BodiesSeen = make(map[concepts.Entity]*core.Body)
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
@@ -440,39 +443,82 @@ func (r *Renderer) Render() {
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
 	// TODO: How much faster would a 16-bit integer framebuffer be?
-	for y := 0; y < r.ScreenHeight; y++ {
-		for x := 0; x < r.ScreenWidth; x++ {
-			fbIndex := (x + y*r.ScreenWidth)
-			screenIndex := fbIndex * 4
-			buffer[screenIndex+3] = 0xFF
-			if r.FrameTint[3] != 0 {
-				a := 1.0 - r.FrameTint[3]
-				buffer[screenIndex+2] = uint8(concepts.Clamp((r.FrameBuffer[fbIndex][2]*a+r.FrameTint[2])*255, 0, 255))
-				buffer[screenIndex+1] = uint8(concepts.Clamp((r.FrameBuffer[fbIndex][1]*a+r.FrameTint[1])*255, 0, 255))
-				buffer[screenIndex+0] = uint8(concepts.Clamp((r.FrameBuffer[fbIndex][0]*a+r.FrameTint[0])*255, 0, 255))
+	for fbIndex := 0; fbIndex < r.ScreenWidth*r.ScreenHeight; fbIndex++ {
+		screenIndex := fbIndex * 4
+		buffer[screenIndex+3] = 0xFF
+		if r.FrameTint[3] != 0 {
+			a := 1.0 - r.FrameTint[3]
+			for i := 2; i >= 0; i-- {
+				v := r.FrameBuffer[fbIndex][i]*a + r.FrameTint[i]
+				if v < 0 {
+					buffer[screenIndex+i] = 0
+				} else if v > 1 {
+					buffer[screenIndex+i] = 0xFF
+				} else {
+					buffer[screenIndex+i] = uint8(v * 0xFF)
+				}
+			}
+		} else {
+			v := r.FrameBuffer[fbIndex][2]
+			if v < 0 {
+				buffer[screenIndex+2] = 0
+			} else if v >= 1 {
+				buffer[screenIndex+2] = 0xFF
 			} else {
-				buffer[screenIndex+1] = uint8(r.FrameBuffer[fbIndex][1] * 255)
-				buffer[screenIndex+2] = uint8(r.FrameBuffer[fbIndex][2] * 255)
-				buffer[screenIndex+0] = uint8(r.FrameBuffer[fbIndex][0] * 255)
+				buffer[screenIndex+2] = uint8(v * 0xFF)
+			}
+			v = r.FrameBuffer[fbIndex][1]
+			if v < 0 {
+				buffer[screenIndex+1] = 0
+			} else if v >= 1 {
+				buffer[screenIndex+1] = 0xFF
+			} else {
+				buffer[screenIndex+1] = uint8(v * 0xFF)
+			}
+			v = r.FrameBuffer[fbIndex][0]
+			if v < 0 {
+				buffer[screenIndex] = 0
+			} else if v >= 1 {
+				buffer[screenIndex] = 0xFF
+			} else {
+				buffer[screenIndex] = uint8(v * 0xFF)
 			}
 		}
 	}
 }
 
 func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z float64) {
-	sample.ClampSelf(0, 1)
-	if sample[3] == 0 {
+	if sample[3] <= 0 {
 		return
 	}
-	if sample[3] == 1 {
+	if sample[3] >= 1 {
 		r.FrameBuffer[screenIndex] = *sample
 		r.ZBuffer[screenIndex] = z
 		return
 	}
 	dst := &r.FrameBuffer[screenIndex]
-	dst[0] = dst[0]*(1.0-sample[3]) + sample[0]
-	dst[1] = dst[1]*(1.0-sample[3]) + sample[1]
-	dst[2] = dst[2]*(1.0-sample[3]) + sample[2]
+	dst[3] = dst[3]*(1.0-sample[3]) + sample[3]
+	if sample[2] < 0 {
+		dst[2] *= (1.0 - sample[3])
+	} else if sample[2] >= 1 {
+		dst[2] = 1
+	} else {
+		dst[2] = dst[2]*(1.0-sample[3]) + sample[2]
+	}
+	if sample[1] < 0 {
+		dst[1] *= (1.0 - sample[3])
+	} else if sample[1] >= 1 {
+		dst[1] = 1
+	} else {
+		dst[1] = dst[1]*(1.0-sample[3]) + sample[1]
+	}
+	if sample[0] < 0 {
+		dst[0] *= (1.0 - sample[3])
+	} else if sample[0] >= 1 {
+		dst[0] = 1
+	} else {
+		dst[0] = dst[0]*(1.0-sample[3]) + sample[0]
+	}
 	if sample[3] > 0.8 {
 		r.ZBuffer[screenIndex] = z
 	}
@@ -481,8 +527,16 @@ func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z floa
 func (r *Renderer) BitBlt(src *materials.Image, dstx, dsty, w, h int) {
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
+			dx := x + dstx
+			if dx < 0 || dx >= r.ScreenWidth {
+				continue
+			}
+			dy := y + dsty
+			if dy < 0 || dy >= r.ScreenHeight {
+				continue
+			}
 			c := src.Sample(float64(x)/float64(w), float64(y)/float64(h), uint32(w), uint32(h))
-			r.ApplySample(&c, x+dstx+(y+dsty)*r.ScreenWidth, -1)
+			r.ApplySample(&c, dx+dy*r.ScreenWidth, -1)
 		}
 	}
 }

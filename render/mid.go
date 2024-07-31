@@ -15,7 +15,7 @@ func wallPick(s *state.Column) {
 }
 
 // wall renders the wall portion (potentially over a portal).
-func (r *Renderer) wall(c *state.Column, internalSegment bool) {
+func (r *Renderer) wall(c *state.Column) {
 	surf := c.Segment.Surface
 	transform := surf.Transform.Render
 	noSlope := c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope

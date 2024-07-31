@@ -348,9 +348,15 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			default:
 				g.fieldString(field, false)
 			}
+		case *float32:
+			g.fieldNumber(field)
 		case *float64:
 			g.fieldNumber(field)
 		case *int:
+			g.fieldNumber(field)
+		case *uint32:
+			g.fieldNumber(field)
+		case *uint64:
 			g.fieldNumber(field)
 		case *concepts.Vector2:
 			fieldStringLikeType[concepts.Vector2](g, field)
