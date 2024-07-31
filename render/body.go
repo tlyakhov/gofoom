@@ -78,6 +78,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		c.Light[3] = 1
 	}
 	vStart := float64(c.ScreenHeight/2) - c.ProjectedTop
+	seen := false
 	for y := c.ClippedTop; y < c.ClippedBottom; y++ {
 		screenIndex := (y*r.ScreenWidth + c.ScreenX)
 		if c.Distance >= r.ZBuffer[screenIndex] {
@@ -87,5 +88,9 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		sample := c.SampleShader(b.Entity, nil, c.U, v, uint32(xScale), uint32(screenBottom-screenTop))
 		sample.Mul4Self(&c.Light)
 		r.ApplySample(sample, screenIndex, c.Distance)
+		seen = true
+	}
+	if seen {
+		c.BodiesSeen[b.Entity] = b
 	}
 }

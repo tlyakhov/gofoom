@@ -301,6 +301,63 @@ func (img *Image) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 	return concepts.Vector4{r, g, b, a}
 }
 
+func (img *Image) SampleAlpha(x, y float64, sw, sh uint32) float64 {
+	// Testing:
+	// return (0xAF << 24) | 0xFF
+	data := img.Data
+	w := img.Width
+	h := img.Height
+	scaledArea := sw * sh
+
+	if scaledArea > 0 && img.GenerateMipMaps && len(img.MipMaps) > 1 {
+		mm := img.MipMaps[0]
+		for i := 1; i < len(img.MipMaps); i++ {
+			next := img.MipMaps[i]
+			if scaledArea <= next.Width*next.Height {
+				mm = next
+				continue
+			}
+			data = mm.Data
+			w = mm.Width
+			h = mm.Height
+			break
+		}
+	}
+
+	if data == nil || w == 0 || h == 0 {
+		// Debug values
+		return 1 // full alpha
+	}
+
+	if x < 0 || y < 0 || x >= 1 || y >= 1 {
+		return 0
+	}
+
+	fx := uint32(x * float64(w))
+	fy := uint32(y * float64(h))
+
+	if !img.Filter {
+		return float64(data[fy*w+fx]&0xFF) / 255.0
+	}
+
+	fx = concepts.UMin(fx, w-1)
+	fy = concepts.UMin(fy, h-1)
+	cx := (fx + 1) % w
+	cy := (fy + 1) % h
+	wx := x*float64(w) - float64(fx)
+	wy := y*float64(h) - float64(fy)
+
+	c00 := data[fy*w+fx] & 0xFF
+	c10 := data[fy*w+cx] & 0xFF
+	c11 := data[cy*w+cx] & 0xFF
+	c01 := data[cy*w+fx] & 0xFF
+	if c00 == c10 && c10 == c11 && c11 == c01 {
+		return float64(c00) / 255.0
+	} else {
+		return (float64(c00)*(1.0-wx)*(1.0-wy) + float64(c10)*wx*(1.0-wy) + float64(c11)*wx*wy + float64(c01)*(1.0-wx)*wy) / 255.0
+	}
+}
+
 func (img *Image) Construct(data map[string]any) {
 	img.Attached.Construct(data)
 	img.Filter = false

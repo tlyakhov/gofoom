@@ -3,7 +3,34 @@
 
 package render
 
-import "tlyakhov/gofoom/components/materials"
+import (
+	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/concepts"
+)
+
+type TextStyle struct {
+	Sprite             *materials.Sprite
+	Width, Height      int
+	HSpacing, VSpacing int
+	Color              concepts.Vector4
+	Shadow             bool
+	ClipX, ClipY       int
+	ClipW, ClipH       int
+}
+
+func (r *Renderer) NewTextStyle() *TextStyle {
+	return &TextStyle{
+		Sprite:   r.DefaultFont(),
+		Width:    8,
+		Height:   8,
+		HSpacing: 0,
+		VSpacing: 0,
+		Color:    concepts.Vector4{1, 1, 1, 1},
+		Shadow:   false,
+		ClipW:    r.ScreenWidth,
+		ClipH:    r.ScreenHeight,
+	}
+}
 
 // TODO: This should be more configurable
 func (r *Renderer) DefaultFont() *materials.Sprite {
@@ -11,31 +38,51 @@ func (r *Renderer) DefaultFont() *materials.Sprite {
 	return materials.SpriteFromDb(r.DB, r.DB.GetEntityByName("HUD Font"))
 }
 
-// TODO: Wrap all parameters in a struct
 // TODO: Add ability to anchor string left/mid/right, top/mid/bot
-func (r *Renderer) DrawString(sprite *materials.Sprite, s string, x, y, w, h int) {
-	if sprite == nil {
+func (r *Renderer) DrawString(s *TextStyle, x, y int, text string) {
+	if s.Sprite == nil || s.Width == 0 || s.Height == 0 {
 		return
 	}
-	for _, c := range s {
+	dx := x
+	dy := y
+	fw := 1.0 / float64(s.Width)
+	fh := 1.0 / float64(s.Height)
+	for _, c := range text {
+		if c == '\n' {
+			dx = x
+			dy += s.Height + s.VSpacing
+			continue
+		}
 		index := uint32(c)
-		col := index % sprite.Cols
-		row := index / sprite.Cols
-		for v := 0; v < h; v++ {
-			for u := 0; u < w; u++ {
-				if x < 0 || x >= r.ScreenWidth || y < 0 || y >= r.ScreenHeight {
-					x++
+		col := index % s.Sprite.Cols
+		row := index / s.Sprite.Cols
+		for v := 0; v < s.Height; v++ {
+			for u := 0; u < s.Width; u++ {
+				// Clip to screen
+				if dx < s.ClipX || dx >= s.ClipX+s.ClipW ||
+					dy < s.ClipY || dy >= s.ClipY+s.ClipH {
+					dx++
 					continue
 				}
-				screenIndex := x + y*r.ScreenWidth
-				c := sprite.Sample(float64(u)/float64(w), float64(v)/float64(h), uint32(w), uint32(h), col, row)
-				r.ApplySample(&c, screenIndex, -1)
-				x++
+				screenIndex := dx + dy*r.ScreenWidth
+				//c := concepts.Vector4{float64(col + row), fw, fh}
+				a := s.Sprite.SampleAlpha(
+					float64(u)*fw,
+					float64(v)*fh,
+					uint32(s.Width),
+					uint32(s.Height),
+					col, row)
+				a *= s.Color[3]
+				if s.Shadow && dx < s.ClipX+s.ClipW-1 && dy < s.ClipY+s.ClipH-1 {
+					r.ApplySample(&concepts.Vector4{0, 0, 0, a}, screenIndex+1+r.ScreenWidth, -1)
+				}
+				r.ApplySample(&concepts.Vector4{s.Color[0] * a, s.Color[1] * a, s.Color[2] * a, a}, screenIndex, -2)
+				dx++
 			}
-			x -= w
-			y++
+			dx -= s.Width
+			dy++
 		}
-		x += w
-		y -= h
+		dx += s.Width + s.HSpacing
+		dy -= s.Height
 	}
 }

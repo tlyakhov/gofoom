@@ -187,10 +187,26 @@ func (v *Vector4) Clamp(min, max float64) *Vector4 {
 
 // ClampSelf clamps a vector's values between a minimum and maximum range in place.
 func (v *Vector4) ClampSelf(min, max float64) *Vector4 {
-	v[0] = Clamp(v[0], min, max)
-	v[1] = Clamp(v[1], min, max)
-	v[2] = Clamp(v[2], min, max)
-	v[3] = Clamp(v[3], min, max)
+	if v[3] < min {
+		v[3] = min
+	} else if v[3] > max {
+		v[3] = max
+	}
+	if v[2] < min {
+		v[2] = min
+	} else if v[2] > max {
+		v[2] = max
+	}
+	if v[1] < min {
+		v[1] = min
+	} else if v[1] > max {
+		v[1] = max
+	}
+	if v[0] < min {
+		v[0] = min
+	} else if v[0] > max {
+		v[0] = max
+	}
 	return v
 }
 

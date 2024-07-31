@@ -10,6 +10,14 @@ import (
 
 type Entity int
 
+type EntityRef[T interface {
+	comparable
+	Attachable
+}] struct {
+	Entity Entity
+	Value  T
+}
+
 func (e Entity) Format() string {
 	return strconv.FormatInt(int64(e), 10)
 }
@@ -54,4 +62,16 @@ func (e Entity) NameString(db *EntityComponentDB) string {
 		return id + " - " + named.Name
 	}
 	return id
+}
+
+func (ref *EntityRef[T]) Refresh(db *EntityComponentDB, index int) {
+	var zero T
+	if ref.Entity == 0 {
+		ref.Value = zero
+		return
+	}
+	if ref.Value != zero && ref.Value.GetEntity() == ref.Entity {
+		return
+	}
+	ref.Value = db.Component(ref.Entity, index).(T)
 }

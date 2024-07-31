@@ -67,13 +67,13 @@ func (ms *MaterialSampler) sampleTexture(result *concepts.Vector4, material conc
 
 	ms.NoTexture = false
 	var sample concepts.Vector4
-	if image := materials.ImageFromDb(ms.DB, material); image != nil {
-		sample = image.Sample(u, v, sw, sh)
-	} else if sprite := materials.SpriteFromDb(ms.DB, material); sprite != nil {
+	if sprite := materials.SpriteFromDb(ms.DB, material); sprite != nil {
 		aindex := uint32(ms.SpriteAngle) * sprite.Angles / 360
 		c := aindex % sprite.Cols
 		r := aindex / sprite.Cols
 		sample = sprite.Sample(u, v, sw, sh, c, r)
+	} else if image := materials.ImageFromDb(ms.DB, material); image != nil {
+		sample = image.Sample(u, v, sw, sh)
 	} else if text := materials.TextFromDb(ms.DB, material); text != nil {
 		sample = text.Sample(u, v, sw, sh)
 	} else if solid := materials.SolidFromDb(ms.DB, material); solid != nil {

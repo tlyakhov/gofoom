@@ -3687,6 +3687,12 @@
         }
       }
     },
+    "materials.Image": {
+      "Entity": "42",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/flub/flub.png"
+    },
     "materials.Lit": {
       "Ambient": {
         "X": 0.1,
@@ -3705,7 +3711,7 @@
       "Angles": "8",
       "Cols": "4",
       "Entity": "42",
-      "Image": "113",
+      "Image": "42",
       "Rows": "2"
     }
   },
@@ -9541,29 +9547,6 @@
     }
   },
   {
-    "Entity": "113",
-    "materials.Image": {
-      "Entity": "113",
-      "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "data/game/flub/flub.png"
-    },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
-      "Entity": "113"
-    }
-  },
-  {
     "Entity": "114",
     "concepts.Named": {
       "Entity": "114",
@@ -9908,11 +9891,22 @@
   },
   {
     "Entity": "119",
+    "concepts.Named": {
+      "Entity": "119",
+      "Name": "HUD Font 2"
+    },
+    "materials.Sprite": {
+      "Angles": "0",
+      "Cols": "16",
+      "Rows": "16",
+      "Entity": "119",
+      "Image": "119"
+    },
     "materials.Image": {
       "Entity": "119",
       "Filter": false,
-      "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/RDE_8x8.png"
+      "GenerateMipMaps": false,
+      "Source": "data/Lord_Nightmare_6x6font02.png"
     }
   },
   {
@@ -10169,7 +10163,13 @@
       "Cols": "16",
       "Rows": "16",
       "Entity": "126",
-      "Image": "119"
+      "Image": "126"
+    },
+    "materials.Image": {
+      "Entity": "126",
+      "Filter": false,
+      "GenerateMipMaps": false,
+      "Source": "data/RDE_8x8.png"
     }
   },
   {
