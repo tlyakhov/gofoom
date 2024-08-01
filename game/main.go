@@ -32,6 +32,7 @@ var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var win *opengl.Window
 var db *concepts.EntityComponentDB
 var renderer *render.Renderer
+var ui *render.UI
 var canvas *opengl.Canvas
 var buffer *image.RGBA
 
@@ -89,10 +90,18 @@ func integrateGame() {
 }
 
 func renderGame() {
+	ui.NewFrame()
+	sw := ui.ScreenWidth / ui.TextStyle.CharWidth
+	sh := ui.ScreenHeight / ui.TextStyle.CharHeight
+	ui.Button("Reset", sw/2, sh/2, true)
+	ui.Button("Load World", sw/2, sh/2+3, false)
+	ui.Button("Quit", sw/2, sh/2+6, false)
+
 	renderer.Render()
 	renderer.DebugInfo()
-
+	ui.RenderTextBuffer()
 	renderer.ApplyBuffer(buffer.Pix)
+
 	canvas.SetPixels(buffer.Pix)
 	winw := win.Bounds().W()
 	winh := win.Bounds().H()
@@ -149,6 +158,8 @@ func run() {
 	renderer.ScreenWidth = w
 	renderer.ScreenHeight = h
 	renderer.Initialize()
+	ui = &render.UI{Renderer: renderer}
+	ui.Initialize()
 
 	for !win.Closed() {
 		db.Simulation.Step()
