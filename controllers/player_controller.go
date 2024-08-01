@@ -58,6 +58,9 @@ func (pc *PlayerController) Always() {
 		pc.Bob -= math.Pi * 2
 	}
 
+	// TODO: There's a bug here: this can cause a player<->floor collision that
+	// has to be resolved by shoving the player upwards, making an uncrouch into
+	// an unintentional jump.
 	if pc.Crouching {
 		pc.Body.Size.Now[1] = constants.PlayerCrouchHeight
 	} else {

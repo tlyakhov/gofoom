@@ -4,81 +4,121 @@
 package render
 
 import (
-	"fmt"
-	"time"
-	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
 )
 
-func (r *Renderer) RenderHud() {
-	if r.Player == nil {
-		return
-	}
-	for _, item := range r.Player.Inventory {
-		img := materials.ImageFromDb(r.DB, item.Image)
-		if img == nil {
-			return
-		}
-		r.BitBlt(img, 10, r.ScreenHeight-42, 32, 32)
+type textElement struct {
+	Rune    rune
+	Color   *concepts.Vector4
+	BGColor *concepts.Vector4
+}
+type UIConfig struct {
+	LabelColor    concepts.Vector4
+	SelectedColor concepts.Vector4
+	BGColor       concepts.Vector4
+	ShadowColor   concepts.Vector4
+	TextStyle     *TextStyle
+}
+type UI struct {
+	UIConfig
+	*Renderer
+
+	textBuffer []textElement
+}
+
+func (ui *UI) Initialize() {
+	ui.LabelColor = concepts.Vector4{1, 1, 1, 1}
+	ui.BGColor = concepts.Vector4{0.2, 0.2, 0.2, 1}
+	ui.ShadowColor = concepts.Vector4{0, 0, 0, 1}
+	ui.SelectedColor = concepts.Vector4{0.5, 0.5, 1, 1}
+	ui.TextStyle = ui.NewTextStyle()
+	sw := ui.ScreenWidth / ui.TextStyle.CharWidth
+	sh := ui.ScreenHeight / ui.TextStyle.CharHeight
+
+	if len(ui.textBuffer) != sw*sh {
+		ui.textBuffer = make([]textElement, sw*sh)
 	}
 }
 
-func (r *Renderer) DebugInfo() {
-	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("DebugInfo"))
+func (ui *UI) Button(label string, x, y int, selected bool) {
+	var index int
+	color := &ui.LabelColor
+	if selected {
+		color = &ui.SelectedColor
+	}
+	sw := ui.ScreenWidth / ui.TextStyle.CharWidth
+	sh := ui.ScreenHeight / ui.textStyle.CharHeight
+	padding := 2
+	extent := concepts.Max(10, len(label)+padding*2)
+	x -= extent / 2
+	for i := 0; i < extent; i++ {
+		if x+i < 0 || x+i >= sw || y < 0 || y >= sh {
+			continue
+		}
+		index = x + i + y*sw
+		ui.textBuffer[index].Color = color
+		ui.textBuffer[index].BGColor = &ui.UIConfig.BGColor
+		if i < padding || i >= len(label)+padding {
+			ui.textBuffer[index].Rune = ' '
+		} else {
+			ui.textBuffer[index].Rune = []rune(label)[i-padding]
+		}
+		if y+1 >= sh {
+			continue
+		}
+		shadow := index + sw + 1
+		ui.textBuffer[shadow].Color = &ui.ShadowColor
+		ui.textBuffer[shadow].BGColor = nil
+		ui.textBuffer[shadow].Rune = 223 // CP437 UPPER HALF BLOCK
+	}
+	index = x + extent + y*sw
+	ui.textBuffer[index].Color = &ui.ShadowColor
+	ui.textBuffer[index].BGColor = nil
+	ui.textBuffer[index].Rune = 220 // CP437 LOWER HALF BLOCK
+}
 
-	playerAlive := behaviors.AliveFromDb(r.DB, r.PlayerBody.Entity)
-	// player := bodies.PlayerFromDb(&gameMap.Player)
+func (ui *UI) NewFrame() {
+	for i := 0; i < len(ui.textBuffer); i++ {
+		ui.textBuffer[i].Rune = 0
+		ui.textBuffer[i].BGColor = nil
+		ui.textBuffer[i].Color = nil
+	}
+}
 
-	ts := r.NewTextStyle()
-	ts.Color[3] = 0.5
-	ts.Shadow = true
-	ts.HAnchor = 0
-	ts.VAnchor = 0
-	for x := 0; x < constants.RenderBlocks; x++ {
-		c := r.Columns[x]
-		for _, b := range c.BodiesSeen {
-			top := &concepts.Vector3{}
-			top[0] = b.Pos.Render[0]
-			top[1] = b.Pos.Render[1]
-			top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
-			scr := r.WorldToScreen(top)
-			if scr == nil {
+func (ui *UI) RenderTextBuffer() {
+	s := ui.TextStyle
+	s.Shadow = true
+	s.HAnchor = -1
+	s.VAnchor = -1
+	if s.Sprite == nil || s.CharWidth == 0 || s.CharHeight == 0 {
+		return
+	}
+	img := materials.ImageFromDb(s.Sprite.DB, s.Sprite.Image)
+	if img == nil {
+		return
+	}
+
+	c := s.Color
+	sw := ui.ScreenWidth / s.CharWidth
+	sh := ui.ScreenHeight / s.CharHeight
+	for y := 0; y < sh; y++ {
+		for x := 0; x < sw; x++ {
+			t := ui.textBuffer[x+y*sw]
+			if t.Rune == 0 {
 				continue
 			}
-			text := fmt.Sprintf("%v", b.String())
-			r.DrawString(ts, int(scr[0]), int(scr[1])-16, text)
-		}
-	}
-	ts.HAnchor = -1
-	ts.VAnchor = -1
-
-	r.DrawString(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Light cache: %v", r.DB.Simulation.FPS, r.SectorLastRendered.Size()))
-	r.DrawString(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
-	hits := r.ICacheHits.Load()
-	misses := r.ICacheMisses.Load()
-	r.DrawString(ts, 4, 24, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
-	if r.PlayerBody.SectorEntity != 0 {
-		entity := r.PlayerBody.SectorEntity
-		s := 0
-		//		core.SectorFromDb(ref).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
-		r.DrawString(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.String(r.DB), s))
-		r.DrawString(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", r.PlayerBody.Force.StringHuman(), r.PlayerBody.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
-	}
-
-	for i := 0; i < 20; i++ {
-		if i >= r.DebugNotices.Length() {
-			break
-		}
-		msg := r.DebugNotices.Items[i].(string)
-		if t, ok := r.DebugNotices.SetWithTimes.Load(msg); ok {
-			r.DrawString(ts, 4, 54+i*10, msg)
-			age := time.Now().UnixMilli() - t.(int64)
-			if age > 10000 {
-				r.DebugNotices.PopAtIndex(i)
+			if t.Color != nil {
+				s.Color = *t.Color
+			} else {
+				s.Color = c
 			}
+			if t.BGColor != nil && t.BGColor[3] > 0 {
+				s.BGColor = *t.BGColor
+			} else {
+				s.BGColor[3] = 0
+			}
+			ui.drawChar(s, img, t.Rune, x*s.CharWidth, y*s.CharHeight)
 		}
 	}
-
 }

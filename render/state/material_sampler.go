@@ -85,7 +85,10 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage, extraStages
 	}
 
 	ms.NoTexture = false
-	a := ms.Materials[ms.pipelineIndex]
+	var a concepts.Attachable
+	if ms.pipelineIndex < len(ms.Materials) {
+		a = ms.Materials[ms.pipelineIndex]
+	}
 	switch m := a.(type) {
 	case *materials.Shader:
 		ms.pipelineIndex++

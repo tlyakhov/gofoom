@@ -9,27 +9,31 @@ import (
 )
 
 type TextStyle struct {
-	Sprite             *materials.Sprite
-	Width, Height      int
-	HSpacing, VSpacing int
-	VAnchor, HAnchor   int
-	Color              concepts.Vector4
-	Shadow             bool
-	ClipX, ClipY       int
-	ClipW, ClipH       int
+	Sprite                *materials.Sprite
+	CharWidth, CharHeight int
+	HSpacing, VSpacing    int
+	VAnchor, HAnchor      int
+	Color                 concepts.Vector4
+	BGColor               concepts.Vector4
+	Shadow                bool
+	ClipX, ClipY          int
+	ClipW, ClipH          int
+
+	sample concepts.Vector4
+	shadow concepts.Vector4
 }
 
 func (r *Renderer) NewTextStyle() *TextStyle {
 	return &TextStyle{
-		Sprite:   r.DefaultFont(),
-		Width:    8,
-		Height:   8,
-		HSpacing: 0,
-		VSpacing: 0,
-		Color:    concepts.Vector4{1, 1, 1, 1},
-		Shadow:   false,
-		ClipW:    r.ScreenWidth,
-		ClipH:    r.ScreenHeight,
+		Sprite:     r.DefaultFont(),
+		CharWidth:  8,
+		CharHeight: 8,
+		HSpacing:   0,
+		VSpacing:   0,
+		Color:      concepts.Vector4{1, 1, 1, 1},
+		Shadow:     false,
+		ClipW:      r.ScreenWidth,
+		ClipH:      r.ScreenHeight,
 	}
 }
 
@@ -39,8 +43,64 @@ func (r *Renderer) DefaultFont() *materials.Sprite {
 	return materials.SpriteFromDb(r.DB, r.DB.GetEntityByName("HUD Font"))
 }
 
-func (r *Renderer) DrawString(s *TextStyle, x, y int, text string) {
-	if s.Sprite == nil || s.Width == 0 || s.Height == 0 {
+func (r *Renderer) drawChar(s *TextStyle, img *materials.Image, c rune, dx, dy int) {
+	fw := 1.0 / float64(s.CharWidth)
+	fh := 1.0 / float64(s.CharHeight)
+	index := uint32(c)
+	col := index % s.Sprite.Cols
+	row := index / s.Sprite.Cols
+	// Background first
+	if s.BGColor[3] > 0 {
+		bgx := dx
+		bgy := dy
+		for v := 0; v < s.CharHeight; v++ {
+			for u := 0; u < s.CharWidth; u++ {
+				// Clip to screen
+				if bgx < s.ClipX || bgx >= s.ClipX+s.ClipW ||
+					bgy < s.ClipY || bgy >= s.ClipY+s.ClipH {
+					bgx++
+					continue
+				}
+				r.ApplySample(&s.BGColor, bgx+bgy*r.ScreenWidth, -1)
+				bgx++
+			}
+			bgx -= s.CharWidth
+			bgy++
+		}
+	}
+	// Foreground
+	for v := 0; v < s.CharHeight; v++ {
+		for u := 0; u < s.CharWidth; u++ {
+			// Clip to screen
+			if dx < s.ClipX || dx >= s.ClipX+s.ClipW ||
+				dy < s.ClipY || dy >= s.ClipY+s.ClipH {
+				dx++
+				continue
+			}
+			screenIndex := dx + dy*r.ScreenWidth
+			ur, vr := s.Sprite.TransformUV(float64(u)*fw, float64(v)*fh, col, row)
+			a := img.SampleAlpha(ur, vr,
+				uint32(s.CharWidth)*s.Sprite.Cols,
+				uint32(s.CharHeight)*s.Sprite.Rows)
+			a *= s.Color[3]
+			if s.Shadow && dx < s.ClipX+s.ClipW-1 && dy < s.ClipY+s.ClipH-1 {
+				s.shadow[3] = a
+				r.ApplySample(&s.shadow, screenIndex+1+r.ScreenWidth, -2)
+			}
+			s.sample[3] = a
+			s.sample[2] = s.Color[2] * a
+			s.sample[1] = s.Color[1] * a
+			s.sample[0] = s.Color[0] * a
+			r.ApplySample(&s.sample, screenIndex, -3)
+			dx++
+		}
+		dx -= s.CharWidth
+		dy++
+	}
+}
+
+func (r *Renderer) Print(s *TextStyle, x, y int, text string) {
+	if s.Sprite == nil || s.CharWidth == 0 || s.CharHeight == 0 {
 		return
 	}
 	img := materials.ImageFromDb(s.Sprite.DB, s.Sprite.Image)
@@ -64,47 +124,20 @@ func (r *Renderer) DrawString(s *TextStyle, x, y int, text string) {
 	}
 	dx := x
 	dy := y
-	fw := 1.0 / float64(s.Width)
-	fh := 1.0 / float64(s.Height)
 	for _, c := range text {
 		if c == '\n' {
 			dx = x
-			dy += s.Height + s.VSpacing
+			dy += s.CharHeight + s.VSpacing
 			continue
 		}
-		index := uint32(c)
-		col := index % s.Sprite.Cols
-		row := index / s.Sprite.Cols
-		for v := 0; v < s.Height; v++ {
-			for u := 0; u < s.Width; u++ {
-				// Clip to screen
-				if dx < s.ClipX || dx >= s.ClipX+s.ClipW ||
-					dy < s.ClipY || dy >= s.ClipY+s.ClipH {
-					dx++
-					continue
-				}
-				screenIndex := dx + dy*r.ScreenWidth
-				ur, vr := s.Sprite.TransformUV(float64(u)*fw, float64(v)*fh, col, row)
-				a := img.SampleAlpha(ur, vr,
-					uint32(s.Width)*s.Sprite.Cols,
-					uint32(s.Height)*s.Sprite.Rows)
-				a *= s.Color[3]
-				if s.Shadow && dx < s.ClipX+s.ClipW-1 && dy < s.ClipY+s.ClipH-1 {
-					r.ApplySample(&concepts.Vector4{0, 0, 0, a}, screenIndex+1+r.ScreenWidth, -1)
-				}
-				r.ApplySample(&concepts.Vector4{s.Color[0] * a, s.Color[1] * a, s.Color[2] * a, a}, screenIndex, -2)
-				dx++
-			}
-			dx -= s.Width
-			dy++
-		}
-		dx += s.Width + s.HSpacing
-		dy -= s.Height
+
+		r.drawChar(s, img, c, dx, dy)
+		dx += s.CharWidth + s.HSpacing
 	}
 }
 
 func (r *Renderer) MeasureString(s *TextStyle, text string) (w int, h int) {
-	if s.Width == 0 || s.Height == 0 || len(text) == 0 {
+	if s.CharWidth == 0 || s.CharHeight == 0 || len(text) == 0 {
 		return
 	}
 	w = 0
@@ -122,12 +155,12 @@ func (r *Renderer) MeasureString(s *TextStyle, text string) (w int, h int) {
 		}
 		if dx == 0 {
 			// For the first character in a line, include the line height
-			dy += s.Height
+			dy += s.CharHeight
 		} else {
 			// For the 2nd character+ in a line, add a space between letters
 			dx += s.HSpacing
 		}
-		dx += s.Width
+		dx += s.CharWidth
 	}
 	if dx > w {
 		w = dx
