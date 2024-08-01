@@ -119,10 +119,10 @@ func (img *Image) generateTestMipMaps() {
 
 		img.MipMaps = append(img.MipMaps, mm)
 		if w > 4 {
-			w = concepts.UMax(4, w/2)
+			w = concepts.Max(4, w/2)
 		}
 		if h > 4 {
-			h = concepts.UMax(4, h/2)
+			h = concepts.Max(4, h/2)
 		}
 	}
 }
@@ -144,8 +144,8 @@ func (img *Image) generateSimpleMipMaps() {
 			for x = 0; x < w; x++ {
 				px = x * (prev.Width - 1) / (w - 1)
 				py = y * (prev.Height - 1) / (h - 1)
-				pcx = concepts.UMin(px+1, prev.Width-1)
-				pcy = concepts.UMin(py+1, prev.Height-1)
+				pcx = concepts.Min(px+1, prev.Width-1)
+				pcy = concepts.Min(py+1, prev.Height-1)
 				c := [16]color.RGBA{
 					concepts.Int32ToRGBA(prev.Data[py*prev.Width+px]),
 					concepts.Int32ToRGBA(prev.Data[py*prev.Width+pcx]),
@@ -164,10 +164,10 @@ func (img *Image) generateSimpleMipMaps() {
 		img.MipMaps = append(img.MipMaps, mm)
 		prev = mm
 		if w > 2 {
-			w = concepts.UMax(2, w/2)
+			w = concepts.Max(2, w/2)
 		}
 		if h > 2 {
-			h = concepts.UMax(2, h/2)
+			h = concepts.Max(2, h/2)
 		}
 	}
 }
@@ -246,8 +246,8 @@ func (img *Image) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 			float64((c>>8)&0xFF) / 255.0, float64(c&0xFF) / 255.0}
 	}
 
-	fx = concepts.UMin(fx, w-1)
-	fy = concepts.UMin(fy, h-1)
+	fx = concepts.Min(fx, w-1)
+	fy = concepts.Min(fy, h-1)
 	cx := (fx + 1) % w
 	cy := (fy + 1) % h
 	t00 := data[fy*w+fx]
@@ -340,8 +340,8 @@ func (img *Image) SampleAlpha(x, y float64, sw, sh uint32) float64 {
 		return float64(data[fy*w+fx]&0xFF) / 255.0
 	}
 
-	fx = concepts.UMin(fx, w-1)
-	fy = concepts.UMin(fy, h-1)
+	fx = concepts.Min(fx, w-1)
+	fy = concepts.Min(fy, h-1)
 	cx := (fx + 1) % w
 	cy := (fy + 1) % h
 	wx := x*float64(w) - float64(fx)

@@ -24,6 +24,9 @@ func (e *Editor) materialSelectionBorderColor(entity concepts.Entity) *concepts.
 
 func (e *Editor) imageForMaterial(entity concepts.Entity) image.Image {
 	w, h := 64, 64
+	e.MaterialSampler.Initialize(entity, nil)
+	e.MaterialSampler.ScaleW = 64
+	e.MaterialSampler.ScaleH = 64
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
 	buffer := img.Pix
 	border := e.materialSelectionBorderColor(entity)
@@ -32,18 +35,19 @@ func (e *Editor) imageForMaterial(entity concepts.Entity) image.Image {
 			e.MaterialSampler.ScreenX = x * e.MaterialSampler.ScreenWidth / w
 			e.MaterialSampler.ScreenY = y * e.MaterialSampler.ScreenHeight / h
 			e.MaterialSampler.Angle = float64(x) * math.Pi * 2.0 / float64(w)
-			c := e.MaterialSampler.SampleShader(entity, nil, float64(x)/float64(w), float64(y)/float64(h), uint32(w), uint32(h))
+			e.MaterialSampler.SampleMaterial(nil, float64(x)/float64(w), float64(y)/float64(h))
 			if e.MaterialSampler.NoTexture {
 				return e.noTextureImage
 			}
 			if x <= 1 || y <= 1 || x >= w-2 || y >= h-2 {
-				c.AddPreMulColorSelf(border)
+				e.MaterialSampler.Output.AddPreMulColorSelf(border)
 			}
 			index := x*4 + y*img.Stride
-			buffer[index+0] = uint8(concepts.Clamp(c[0]*255, 0, 255))
-			buffer[index+1] = uint8(concepts.Clamp(c[1]*255, 0, 255))
-			buffer[index+2] = uint8(concepts.Clamp(c[2]*255, 0, 255))
-			buffer[index+3] = uint8(concepts.Clamp(c[3]*255, 0, 255))
+
+			buffer[index+3] = concepts.ByteClamp(e.MaterialSampler.Output[3] * 0xFF)
+			buffer[index+2] = concepts.ByteClamp(e.MaterialSampler.Output[2] * 0xFF)
+			buffer[index+1] = concepts.ByteClamp(e.MaterialSampler.Output[1] * 0xFF)
+			buffer[index+0] = concepts.ByteClamp(e.MaterialSampler.Output[0] * 0xFF)
 		}
 	}
 	return img
@@ -88,12 +92,7 @@ func (e *Editor) EntityImage(entity concepts.Entity, sector bool) image.Image {
 	if sector {
 		item.Image = e.imageForSector(entity)
 	} else {
-		sprite := materials.SpriteFromDb(editor.DB, entity)
-		if sprite != nil && sprite.Image.Entity != 0 {
-			item.Image = e.imageForMaterial(sprite.Image.Entity)
-		} else {
-			item.Image = e.imageForMaterial(entity)
-		}
+		item.Image = e.imageForMaterial(entity)
 	}
 	item.LastUpdated = now
 	// TODO: Clean this cache periodically

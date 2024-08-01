@@ -443,46 +443,22 @@ func (r *Renderer) Render() {
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
 	// TODO: How much faster would a 16-bit integer framebuffer be?
-	for fbIndex := 0; fbIndex < r.ScreenWidth*r.ScreenHeight; fbIndex++ {
-		screenIndex := fbIndex * 4
-		buffer[screenIndex+3] = 0xFF
-		if r.FrameTint[3] != 0 {
-			a := 1.0 - r.FrameTint[3]
-			for i := 2; i >= 0; i-- {
-				v := r.FrameBuffer[fbIndex][i]*a + r.FrameTint[i]
-				if v < 0 {
-					buffer[screenIndex+i] = 0
-				} else if v > 1 {
-					buffer[screenIndex+i] = 0xFF
-				} else {
-					buffer[screenIndex+i] = uint8(v * 0xFF)
-				}
-			}
-		} else {
-			v := r.FrameBuffer[fbIndex][2]
-			if v < 0 {
-				buffer[screenIndex+2] = 0
-			} else if v >= 1 {
-				buffer[screenIndex+2] = 0xFF
-			} else {
-				buffer[screenIndex+2] = uint8(v * 0xFF)
-			}
-			v = r.FrameBuffer[fbIndex][1]
-			if v < 0 {
-				buffer[screenIndex+1] = 0
-			} else if v >= 1 {
-				buffer[screenIndex+1] = 0xFF
-			} else {
-				buffer[screenIndex+1] = uint8(v * 0xFF)
-			}
-			v = r.FrameBuffer[fbIndex][0]
-			if v < 0 {
-				buffer[screenIndex] = 0
-			} else if v >= 1 {
-				buffer[screenIndex] = 0xFF
-			} else {
-				buffer[screenIndex] = uint8(v * 0xFF)
-			}
+	if r.FrameTint[3] != 0 {
+		for fbIndex := 0; fbIndex < r.ScreenWidth*r.ScreenHeight; fbIndex++ {
+			screenIndex := fbIndex * 4
+			inva := 1.0 - r.FrameTint[3]
+			buffer[screenIndex+3] = 0xFF
+			buffer[screenIndex+2] = concepts.ByteClamp((r.FrameBuffer[fbIndex][2]*inva + r.FrameTint[2]) * 0xFF)
+			buffer[screenIndex+1] = concepts.ByteClamp((r.FrameBuffer[fbIndex][1]*inva + r.FrameTint[1]) * 0xFF)
+			buffer[screenIndex+0] = concepts.ByteClamp((r.FrameBuffer[fbIndex][0]*inva + r.FrameTint[0]) * 0xFF)
+		}
+	} else {
+		for fbIndex := 0; fbIndex < r.ScreenWidth*r.ScreenHeight; fbIndex++ {
+			screenIndex := fbIndex * 4
+			buffer[screenIndex+3] = 0xFF
+			buffer[screenIndex+2] = concepts.ByteClamp(r.FrameBuffer[fbIndex][2] * 0xFF)
+			buffer[screenIndex+1] = concepts.ByteClamp(r.FrameBuffer[fbIndex][1] * 0xFF)
+			buffer[screenIndex+0] = concepts.ByteClamp(r.FrameBuffer[fbIndex][0] * 0xFF)
 		}
 	}
 }
@@ -496,28 +472,29 @@ func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z floa
 		r.ZBuffer[screenIndex] = z
 		return
 	}
+	inva := 1.0 - sample[3]
 	dst := &r.FrameBuffer[screenIndex]
-	dst[3] = dst[3]*(1.0-sample[3]) + sample[3]
+	dst[3] = dst[3]*inva + sample[3]
 	if sample[2] < 0 {
-		dst[2] *= (1.0 - sample[3])
+		dst[2] *= inva
 	} else if sample[2] >= 1 {
 		dst[2] = 1
 	} else {
-		dst[2] = dst[2]*(1.0-sample[3]) + sample[2]
+		dst[2] = dst[2]*inva + sample[2]
 	}
 	if sample[1] < 0 {
-		dst[1] *= (1.0 - sample[3])
+		dst[1] *= inva
 	} else if sample[1] >= 1 {
 		dst[1] = 1
 	} else {
-		dst[1] = dst[1]*(1.0-sample[3]) + sample[1]
+		dst[1] = dst[1]*inva + sample[1]
 	}
 	if sample[0] < 0 {
-		dst[0] *= (1.0 - sample[3])
+		dst[0] *= inva
 	} else if sample[0] >= 1 {
 		dst[0] = 1
 	} else {
-		dst[0] = dst[0]*(1.0-sample[3]) + sample[0]
+		dst[0] = dst[0]*inva + sample[0]
 	}
 	if sample[3] > 0.8 {
 		r.ZBuffer[screenIndex] = z

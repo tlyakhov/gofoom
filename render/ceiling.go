@@ -21,6 +21,7 @@ func ceilingPick(s *state.Column) {
 func ceiling(c *state.Column) {
 	mat := c.Sector.CeilSurface.Material
 	extras := c.Sector.CeilSurface.ExtraStages
+	c.MaterialSampler.Initialize(mat, extras)
 	transform := c.Sector.CeilSurface.Transform.Render
 	sectorMin := &c.Sector.Min
 	sectorMax := &c.Sector.Max
@@ -83,7 +84,9 @@ func ceiling(c *state.Column) {
 
 		if mat != 0 {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
-			c.SampleShader(mat, extras, tx, ty, uint32(sw/distToCeil), uint32(sh/distToCeil))
+			c.ScaleW = uint32(sw / distToCeil)
+			c.ScaleH = uint32(sh / distToCeil)
+			c.SampleMaterial(extras, tx, ty)
 			c.SampleLight(&c.MaterialSampler.Output, mat, &world, distToCeil)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))

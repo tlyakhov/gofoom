@@ -191,10 +191,14 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				continue // No intersection, skip it!
 			}
 
-			sampler := &MaterialSampler{Config: le.Config}
+			sampler := &MaterialSampler{
+				Config: le.Config,
+				ScaleW: 1024,
+				ScaleH: 1024}
+			sampler.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
 			u := le.Intersection.To2D().Dist(seg.A) / seg.Length
 			v := (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
-			sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1024, 1024)
+			sampler.SampleMaterial(seg.Surface.ExtraStages, u, v)
 			if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 				lit.Apply(&sampler.Output, nil)
 			}
@@ -210,7 +214,8 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, seg := range sector.Segments {
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
-			if (le.Type == LightElementWall && &seg.Segment == le.Segment) || le.Delta.To2D().Dot(&seg.Normal) > 0 {
+			if (le.Type == LightElementWall && &seg.Segment == le.Segment) ||
+				le.Delta[0]*seg.Normal[0]+le.Delta[1]*seg.Normal[1] > 0 {
 				if debugLighting {
 					log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				}
@@ -254,10 +259,14 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// If the portal has a transparent material, we need to filter the light
 			if seg.PortalHasMaterial {
-				sampler := &MaterialSampler{Config: le.Config}
+				sampler := &MaterialSampler{
+					Config: le.Config,
+					ScaleW: 1024,
+					ScaleH: 1024}
+				sampler.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
 				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
 				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				sampler.SampleShader(seg.Surface.Material, seg.Surface.ExtraStages, u, v, 1024, 1024)
+				sampler.SampleMaterial(seg.Surface.ExtraStages, u, v)
 				if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 					lit.Apply(&sampler.Output, nil)
 				}

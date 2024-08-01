@@ -38,6 +38,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	depthScale := r.CameraToProjectionPlane / math.Cos(angleRender*concepts.Deg2rad)
 	depthScale /= c.Distance
 	xScale := depthScale * b.Size.Render[0]
+	c.ScaleW = uint32(xScale)
 	x1 := (x - xScale*0.5)
 	x2 := x1 + xScale
 	c.U = 0.5 + (float64(c.ScreenX)-x)/xScale
@@ -49,6 +50,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	c.ProjectedBottom = c.ProjectedTop - b.Size.Render[1]*depthScale
 	screenTop := c.ScreenHeight/2 - int(c.ProjectedTop)
 	screenBottom := c.ScreenHeight/2 - int(c.ProjectedBottom)
+	c.ScaleH = uint32(screenBottom - screenTop)
 	c.ClippedTop = concepts.Clamp(screenTop, c.EdgeTop, c.EdgeBottom)
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 
@@ -79,15 +81,16 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	}
 	vStart := float64(c.ScreenHeight/2) - c.ProjectedTop
 	seen := false
+	c.MaterialSampler.Initialize(b.Entity, nil)
 	for y := c.ClippedTop; y < c.ClippedBottom; y++ {
 		screenIndex := (y*r.ScreenWidth + c.ScreenX)
 		if c.Distance >= r.ZBuffer[screenIndex] {
 			continue
 		}
 		v := (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
-		sample := c.SampleShader(b.Entity, nil, c.U, v, uint32(xScale), uint32(screenBottom-screenTop))
-		sample.Mul4Self(&c.Light)
-		r.ApplySample(sample, screenIndex, c.Distance)
+		c.SampleMaterial( nil, c.U, v)
+		c.MaterialSampler.Output.Mul4Self(&c.Light)
+		r.ApplySample(&c.MaterialSampler.Output, screenIndex, c.Distance)
 		seen = true
 	}
 	if seen {
