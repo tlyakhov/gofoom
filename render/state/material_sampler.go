@@ -15,31 +15,50 @@ type MaterialSampler struct {
 	*Ray
 	Output           concepts.Vector4
 	ScreenX, ScreenY int
+	ScaleW, ScaleH   uint32
 	NoTexture        bool
 	SpriteAngle      float64
+	Materials        []concepts.Attachable
+	pipelineIndex    int
 }
 
-func (ms *MaterialSampler) SampleShader(eShader concepts.Entity, extraStages []*materials.ShaderStage, u, v float64, sw, sh uint32) *concepts.Vector4 {
+func (ms *MaterialSampler) Initialize(material concepts.Entity, extraStages []*materials.ShaderStage) {
+	ms.Materials = ms.Materials[:0]
+	ms.derefMaterials(material, extraStages, nil)
+}
+
+func (ms *MaterialSampler) derefMaterials(material concepts.Entity, extraStages []*materials.ShaderStage, parent concepts.Attachable) {
+	if shader := materials.ShaderFromDb(ms.DB, material); shader != nil && shader != parent {
+		ms.Materials = append(ms.Materials, shader)
+		for _, stage := range shader.Stages {
+			ms.derefMaterials(stage.Texture, nil, shader)
+		}
+	} else if sprite := materials.SpriteFromDb(ms.DB, material); sprite != nil && sprite != parent {
+		ms.Materials = append(ms.Materials, sprite)
+		ms.derefMaterials(sprite.Image, nil, sprite)
+	} else if image := materials.ImageFromDb(ms.DB, material); image != nil {
+		ms.Materials = append(ms.Materials, image)
+	} else if text := materials.TextFromDb(ms.DB, material); text != nil {
+		ms.Materials = append(ms.Materials, text)
+	} else if solid := materials.SolidFromDb(ms.DB, material); solid != nil {
+		ms.Materials = append(ms.Materials, solid)
+	}
+
+	for _, stage := range extraStages {
+		ms.derefMaterials(stage.Texture, nil, nil)
+	}
+}
+
+func (ms *MaterialSampler) SampleMaterial(extraStages []*materials.ShaderStage, u, v float64) {
 	ms.Output[0] = 0
 	ms.Output[1] = 0
 	ms.Output[2] = 0
 	ms.Output[3] = 0
-	shader := materials.ShaderFromDb(ms.DB, eShader)
-	if shader == nil {
-		ms.sampleTexture(&ms.Output, eShader, nil, u, v, sw, sh)
-	} else {
-		for _, stage := range shader.Stages {
-			ms.sampleTexture(&ms.Output, stage.Texture, stage, u, v, sw, sh)
-		}
-	}
-
-	for _, stage := range extraStages {
-		ms.sampleTexture(&ms.Output, stage.Texture, stage, u, v, sw, sh)
-	}
-	return &ms.Output
+	ms.pipelineIndex = 0
+	ms.sampleStage(nil, extraStages, u, v)
 }
 
-func (ms *MaterialSampler) sampleTexture(result *concepts.Vector4, material concepts.Entity, stage *materials.ShaderStage, u, v float64, sw, sh uint32) *concepts.Vector4 {
+func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage, extraStages []*materials.ShaderStage, u, v float64) {
 	if stage != nil {
 		u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
 		if (stage.Flags & materials.ShaderSky) != 0 {
@@ -66,28 +85,45 @@ func (ms *MaterialSampler) sampleTexture(result *concepts.Vector4, material conc
 	}
 
 	ms.NoTexture = false
-	var sample concepts.Vector4
-	if sprite := materials.SpriteFromDb(ms.DB, material); sprite != nil {
-		aindex := uint32(ms.SpriteAngle) * sprite.Angles / 360
-		c := aindex % sprite.Cols
-		r := aindex / sprite.Cols
-		sample = sprite.Sample(u, v, sw, sh, c, r)
-	} else if image := materials.ImageFromDb(ms.DB, material); image != nil {
-		sample = image.Sample(u, v, sw, sh)
-	} else if text := materials.TextFromDb(ms.DB, material); text != nil {
-		sample = text.Sample(u, v, sw, sh)
-	} else if solid := materials.SolidFromDb(ms.DB, material); solid != nil {
-		sample.From(solid.Diffuse.Render)
-	} else {
-		sample[0] = 0.5
-		sample[1] = 0
-		sample[2] = 0.5
-		sample[3] = 1.0
+	a := ms.Materials[ms.pipelineIndex]
+	switch m := a.(type) {
+	case *materials.Shader:
+		ms.pipelineIndex++
+		for _, stage := range m.Stages {
+			ms.sampleStage(stage, nil, u, v)
+		}
+	case *materials.Sprite:
+		ms.pipelineIndex++
+		aindex := uint32(ms.SpriteAngle) * m.Angles / 360
+		c := aindex % m.Cols
+		r := aindex / m.Cols
+		u, v := m.TransformUV(u, v, c, r)
+		ms.ScaleW *= m.Cols
+		ms.ScaleH *= m.Rows
+		ms.sampleStage(nil, nil, u, v)
+		ms.ScaleW /= m.Cols
+		ms.ScaleH /= m.Rows
+	case *materials.Image:
+		ms.pipelineIndex++
+		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
+		ms.Output.AddPreMulColorSelf(&sample)
+	case *materials.Text:
+		ms.pipelineIndex++
+		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
+		ms.Output.AddPreMulColorSelf(&sample)
+	case *materials.Solid:
+		ms.pipelineIndex++
+		ms.Output.AddPreMulColorSelf(m.Diffuse.Render)
+	default:
+		ms.pipelineIndex++
+		sample := concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true
+		ms.Output.AddPreMulColorSelf(&sample)
 	}
-	result.AddPreMulColorSelf(&sample)
 
-	return result
+	for _, stage := range extraStages {
+		ms.sampleStage(stage, nil, u, v)
+	}
 }
 
 func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {

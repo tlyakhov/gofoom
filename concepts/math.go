@@ -30,6 +30,20 @@ func Clamp[T cmp.Ordered](x, min, max T) T {
 	return x
 }
 
+func Min[T cmp.Ordered](x, y T) T {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func Max[T cmp.Ordered](x, y T) T {
+	if x > y {
+		return x
+	}
+	return y
+}
+
 func NearestPow2(n uint32) uint32 {
 	if n == 0 {
 		return 0
@@ -42,32 +56,15 @@ func NearestPow2(n uint32) uint32 {
 	return n - (n >> 1)
 }
 
-func Min(x, y int) int {
-	if x < y {
-		return x
+func ByteClamp(x float64) uint8 {
+	if x <= 0 {
+		return 0
 	}
-	return y
-}
+	if x >= 0xFF {
+		return 0xFF
+	}
 
-func Max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
-}
-
-func UMin(x, y uint32) uint32 {
-	if x < y {
-		return x
-	}
-	return y
-}
-
-func UMax(x, y uint32) uint32 {
-	if x > y {
-		return x
-	}
-	return y
+	return uint8(x)
 }
 
 func NormalizeAngle(a float64) float64 {
@@ -165,12 +162,19 @@ func TruncateString(str string, max int) string {
 
 // https://gamedev.stackexchange.com/questions/96459/fast-ray-sphere-collision-code
 func IntersectLineSphere(a, b, c *Vector3, r float64) bool {
-	delta := b.Sub(a)
-	t := delta.Length2()
-	delta.NormSelf()
-	m := a.Sub(c)
-	bb := m.Dot(delta)
-	cc := m.Length2() - r*r
+	dz := b[2] - a[2]
+	dy := b[1] - a[1]
+	dx := b[0] - a[0]
+	t := dx*dx + dy*dy + dz*dz
+	dl := math.Sqrt(t)
+	dx /= dl
+	dy /= dl
+	dz /= dl
+	mz := a[2] - c[2]
+	my := a[1] - c[1]
+	mx := a[0] - c[0]
+	bb := mx*dx + my*dy + mz*dz
+	cc := mx*mx + my*my + mz*mz - r*r
 	if cc > 0 && bb > 0 {
 		return false
 	}

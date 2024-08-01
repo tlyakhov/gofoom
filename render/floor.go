@@ -21,6 +21,7 @@ func floorPick(s *state.Column) {
 func floor(c *state.Column) {
 	mat := c.Sector.FloorSurface.Material
 	extras := c.Sector.FloorSurface.ExtraStages
+	c.MaterialSampler.Initialize(mat, extras)
 	transform := c.Sector.FloorSurface.Transform.Render
 	sectorMin := &c.Sector.Min
 	sectorMax := &c.Sector.Max
@@ -76,7 +77,9 @@ func floor(c *state.Column) {
 
 		if mat != 0 {
 			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
-			c.SampleShader(mat, extras, tx, ty, uint32(sw/distToFloor), uint32(sh/distToFloor))
+			c.ScaleW = uint32(sw / distToFloor)
+			c.ScaleH = uint32(sh / distToFloor)
+			c.SampleMaterial(extras, tx, ty)
 			c.SampleLight(&c.MaterialSampler.Output, mat, &world, distToFloor)
 		}
 		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)

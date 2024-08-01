@@ -16,8 +16,10 @@ func wallPick(s *state.Column) {
 
 // wall renders the wall portion (potentially over a portal).
 func (r *Renderer) wall(c *state.Column) {
-	surf := c.Segment.Surface
-	transform := surf.Transform.Render
+	mat := c.Segment.Surface.Material
+	extras := c.Segment.Surface.ExtraStages
+	c.MaterialSampler.Initialize(mat, extras)
+	transform := c.Segment.Surface.Transform.Render
 	noSlope := c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
@@ -30,8 +32,8 @@ func (r *Renderer) wall(c *state.Column) {
 		vTop -= c.ProjectedTop
 		dv = (c.ProjectedTop - c.ProjectedBottom)
 	}
-	sw := uint32(c.ProjectZ(c.Segment.Length))
-	sh := uint32(dv)
+	c.ScaleW = uint32(c.ProjectZ(c.Segment.Length))
+	c.ScaleH = uint32(dv)
 	if dv != 0 {
 		dv = 1.0 / dv
 	}
@@ -46,12 +48,11 @@ func (r *Renderer) wall(c *state.Column) {
 		v := (float64(c.ScreenY) - vTop) * dv
 		c.RaySegIntersect[2] = c.IntersectionTop*(1.0-v) + v*c.IntersectionBottom
 
-		if surf.Material != 0 {
+		if mat != 0 {
 			tu := transform[0]*c.U + transform[2]*v + transform[4]
 			tv := transform[1]*c.U + transform[3]*v + transform[5]
-			//log.Printf("%v,%v", sw, sh)
-			c.SampleShader(surf.Material, surf.ExtraStages, tu, tv, sw, sh)
-			c.SampleLight(&c.MaterialSampler.Output, surf.Material, &c.RaySegIntersect, c.Distance)
+			c.SampleMaterial(extras, tu, tv)
+			c.SampleLight(&c.MaterialSampler.Output, mat, &c.RaySegIntersect, c.Distance)
 		}
 		r.ApplySample(&c.MaterialSampler.Output, int(screenIndex), c.Distance)
 	}

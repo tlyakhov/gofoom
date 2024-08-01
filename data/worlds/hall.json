@@ -2620,8 +2620,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.828125,
-          "Reverse": true,
+          "Percent": 0.546875,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3640,7 +3640,7 @@
     "Entity": "42",
     "behaviors.Wander": {
       "Entity": "42",
-      "Force": 10
+      "Force": 50
     },
     "concepts.Named": {
       "Entity": "42",
@@ -3652,11 +3652,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 87.16715861353654,
+          "End": 166.4418871852753,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.5468750000000001,
+          "Percent": 0.6510416666666666,
           "Reverse": false,
-          "Start": 67.37041361704706,
+          "Start": 129.08020814394305,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -7024,7 +7024,7 @@
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeHold",
-          "Percent": 0,
+          "Percent": 0.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -9895,18 +9895,18 @@
       "Entity": "119",
       "Name": "HUD Font 2"
     },
-    "materials.Sprite": {
-      "Angles": "0",
-      "Cols": "16",
-      "Rows": "16",
-      "Entity": "119",
-      "Image": "119"
-    },
     "materials.Image": {
       "Entity": "119",
       "Filter": false,
       "GenerateMipMaps": false,
       "Source": "data/Lord_Nightmare_6x6font02.png"
+    },
+    "materials.Sprite": {
+      "Angles": "0",
+      "Cols": "16",
+      "Entity": "119",
+      "Image": "119",
+      "Rows": "16"
     }
   },
   {
@@ -10158,18 +10158,18 @@
       "Entity": "126",
       "Name": "HUD Font"
     },
-    "materials.Sprite": {
-      "Angles": "0",
-      "Cols": "16",
-      "Rows": "16",
-      "Entity": "126",
-      "Image": "126"
-    },
     "materials.Image": {
       "Entity": "126",
       "Filter": false,
       "GenerateMipMaps": false,
       "Source": "data/RDE_8x8.png"
+    },
+    "materials.Sprite": {
+      "Angles": "0",
+      "Cols": "16",
+      "Entity": "126",
+      "Image": "126",
+      "Rows": "16"
     }
   },
   {

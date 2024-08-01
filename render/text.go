@@ -12,6 +12,7 @@ type TextStyle struct {
 	Sprite             *materials.Sprite
 	Width, Height      int
 	HSpacing, VSpacing int
+	VAnchor, HAnchor   int
 	Color              concepts.Vector4
 	Shadow             bool
 	ClipX, ClipY       int
@@ -38,10 +39,28 @@ func (r *Renderer) DefaultFont() *materials.Sprite {
 	return materials.SpriteFromDb(r.DB, r.DB.GetEntityByName("HUD Font"))
 }
 
-// TODO: Add ability to anchor string left/mid/right, top/mid/bot
 func (r *Renderer) DrawString(s *TextStyle, x, y int, text string) {
 	if s.Sprite == nil || s.Width == 0 || s.Height == 0 {
 		return
+	}
+	img := materials.ImageFromDb(s.Sprite.DB, s.Sprite.Image)
+	if img == nil {
+		return
+	}
+	var mx, my int
+
+	if s.HAnchor >= 0 || s.VAnchor >= 0 {
+		mx, my = r.MeasureString(s, text)
+		if s.HAnchor == 0 {
+			x += -mx / 2
+		} else {
+			x += -mx
+		}
+		if s.VAnchor == 0 {
+			y += -my / 2
+		} else {
+			y += -my
+		}
 	}
 	dx := x
 	dy := y
@@ -65,13 +84,10 @@ func (r *Renderer) DrawString(s *TextStyle, x, y int, text string) {
 					continue
 				}
 				screenIndex := dx + dy*r.ScreenWidth
-				//c := concepts.Vector4{float64(col + row), fw, fh}
-				a := s.Sprite.SampleAlpha(
-					float64(u)*fw,
-					float64(v)*fh,
-					uint32(s.Width),
-					uint32(s.Height),
-					col, row)
+				ur, vr := s.Sprite.TransformUV(float64(u)*fw, float64(v)*fh, col, row)
+				a := img.SampleAlpha(ur, vr,
+					uint32(s.Width)*s.Sprite.Cols,
+					uint32(s.Height)*s.Sprite.Rows)
 				a *= s.Color[3]
 				if s.Shadow && dx < s.ClipX+s.ClipW-1 && dy < s.ClipY+s.ClipH-1 {
 					r.ApplySample(&concepts.Vector4{0, 0, 0, a}, screenIndex+1+r.ScreenWidth, -1)
@@ -85,4 +101,37 @@ func (r *Renderer) DrawString(s *TextStyle, x, y int, text string) {
 		dx += s.Width + s.HSpacing
 		dy -= s.Height
 	}
+}
+
+func (r *Renderer) MeasureString(s *TextStyle, text string) (w int, h int) {
+	if s.Width == 0 || s.Height == 0 || len(text) == 0 {
+		return
+	}
+	w = 0
+	h = 0
+	dx := 0
+	dy := 0
+	for _, c := range text {
+		if c == '\n' {
+			if dx > w {
+				w = dx
+			}
+			dx = 0
+			dy += s.VSpacing
+			continue
+		}
+		if dx == 0 {
+			// For the first character in a line, include the line height
+			dy += s.Height
+		} else {
+			// For the 2nd character+ in a line, add a space between letters
+			dx += s.HSpacing
+		}
+		dx += s.Width
+	}
+	if dx > w {
+		w = dx
+	}
+	h = dy
+	return
 }

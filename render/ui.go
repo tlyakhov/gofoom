@@ -34,7 +34,8 @@ func (r *Renderer) DebugInfo() {
 	ts := r.NewTextStyle()
 	ts.Color[3] = 0.5
 	ts.Shadow = true
-
+	ts.HAnchor = 0
+	ts.VAnchor = 0
 	for x := 0; x < constants.RenderBlocks; x++ {
 		c := r.Columns[x]
 		for _, b := range c.BodiesSeen {
@@ -50,6 +51,8 @@ func (r *Renderer) DebugInfo() {
 			r.DrawString(ts, int(scr[0]), int(scr[1])-16, text)
 		}
 	}
+	ts.HAnchor = -1
+	ts.VAnchor = -1
 
 	r.DrawString(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Light cache: %v", r.DB.Simulation.FPS, r.SectorLastRendered.Size()))
 	r.DrawString(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))

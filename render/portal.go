@@ -16,10 +16,12 @@ func wallHiPick(cp *state.ColumnPortal) {
 
 // wallHi renders the top portion of a portal segment.
 func wallHi(cp *state.ColumnPortal) {
-	surf := cp.AdjSegment.HiSurface
-	transform := surf.Transform.Render
-	sw := uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
-	sh := uint32(cp.ProjectedTop - cp.AdjProjectedTop)
+	mat := cp.AdjSegment.HiSurface.Material
+	extras := cp.AdjSegment.HiSurface.ExtraStages
+	cp.MaterialSampler.Initialize(mat, extras)
+	transform := cp.AdjSegment.HiSurface.Transform.Render
+	cp.ScaleW = uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
+	cp.ScaleH = uint32(cp.ProjectedTop - cp.AdjProjectedTop)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
 	vStart := float64(cp.ScreenHeight/2) - cp.ProjectedTop
@@ -31,11 +33,11 @@ func wallHi(cp *state.ColumnPortal) {
 		v := (float64(cp.ScreenY) - vStart) / (cp.ProjectedTop - cp.AdjProjectedTop)
 		cp.RaySegIntersect[2] = (1.0-v)*cp.IntersectionTop + v*cp.AdjTop
 
-		if surf.Material != 0 {
+		if mat != 0 {
 			tu := transform[0]*cp.U + transform[2]*v + transform[4]
 			tv := transform[1]*cp.U + transform[3]*v + transform[5]
-			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, sw, sh)
-			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
+			cp.SampleMaterial(extras, tu, tv)
+			cp.SampleLight(&cp.MaterialSampler.Output, mat, &cp.RaySegIntersect, cp.Distance)
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5
 			cp.MaterialSampler.Output[1] = 1
@@ -55,10 +57,12 @@ func wallLowPick(cp *state.ColumnPortal) {
 
 // wallLow renders the bottom portion of a portal segment.
 func wallLow(cp *state.ColumnPortal) {
-	surf := cp.AdjSegment.LoSurface
-	transform := surf.Transform.Render
-	sw := uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
-	sh := uint32(cp.AdjProjectedBottom - cp.ProjectedBottom)
+	mat := cp.AdjSegment.LoSurface.Material
+	extras := cp.AdjSegment.LoSurface.ExtraStages
+	cp.MaterialSampler.Initialize(mat, extras)
+	transform := cp.AdjSegment.LoSurface.Transform.Render
+	cp.ScaleW = uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
+	cp.ScaleH = uint32(cp.AdjProjectedBottom - cp.ProjectedBottom)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
 	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjectedBottom
@@ -70,11 +74,11 @@ func wallLow(cp *state.ColumnPortal) {
 		v := (float64(cp.ScreenY) - vStart) / (cp.AdjProjectedBottom - cp.ProjectedBottom)
 		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjBottom + v*cp.IntersectionBottom
 
-		if surf.Material != 0 {
+		if mat != 0 {
 			tu := transform[0]*cp.U + transform[2]*v + transform[4]
 			tv := transform[1]*cp.U + transform[3]*v + transform[5]
-			cp.SampleShader(surf.Material, surf.ExtraStages, tu, tv, sw, sh)
-			cp.SampleLight(&cp.MaterialSampler.Output, surf.Material, &cp.RaySegIntersect, cp.Distance)
+			cp.SampleMaterial(extras, tu, tv)
+			cp.SampleLight(&cp.MaterialSampler.Output, mat, &cp.RaySegIntersect, cp.Distance)
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5
 			cp.MaterialSampler.Output[1] = 1
