@@ -32,18 +32,15 @@ var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var win *opengl.Window
 var db *concepts.EntityComponentDB
 var renderer *render.Renderer
-var ui *render.UI
 var canvas *opengl.Canvas
 var buffer *image.RGBA
+var inMenu = true
 
-func processInput() {
+func gameInput() {
 	if renderer.Player == nil {
 		return
 	}
-	win.SetClosed(win.JustPressed(pixel.KeyEscape))
 
-	if win.JustPressed(pixel.MouseButtonLeft) {
-	}
 	if win.Pressed(pixel.KeyW) {
 		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now, false)
 	}
@@ -85,21 +82,24 @@ func processInput() {
 }
 
 func integrateGame() {
-	processInput()
-	db.ActAllControllers(concepts.ControllerAlways)
+	if win.JustReleased(pixel.KeyEscape) {
+		inMenu = !inMenu
+	}
+	if inMenu {
+		menuInput()
+	} else {
+		gameInput()
+		db.ActAllControllers(concepts.ControllerAlways)
+	}
+	win.UpdateInput()
 }
 
 func renderGame() {
-	ui.NewFrame()
-	sw := ui.ScreenWidth / ui.TextStyle.CharWidth
-	sh := ui.ScreenHeight / ui.TextStyle.CharHeight
-	ui.Button("Reset", sw/2, sh/2, true)
-	ui.Button("Load World", sw/2, sh/2+3, false)
-	ui.Button("Quit", sw/2, sh/2+6, false)
-
 	renderer.Render()
 	renderer.DebugInfo()
-	ui.RenderTextBuffer()
+	if inMenu {
+		ui.Render()
+	}
 	renderer.ApplyBuffer(buffer.Pix)
 
 	canvas.SetPixels(buffer.Pix)
@@ -112,7 +112,7 @@ func renderGame() {
 	mat = mat.ScaledXY(pixel.ZV, pixel.Vec{X: 1, Y: -1})
 	mat = mat.Moved(pixel.Vec{X: float64(renderer.ScreenWidth / 2), Y: float64(renderer.ScreenHeight / 2)})
 	canvas.Draw(win, mat)
-	win.Update()
+	win.SwapBuffers()
 }
 
 func run() {
@@ -148,7 +148,7 @@ func run() {
 	db.Simulation.Render = renderGame
 	//controllers.CreateTestWorld(db)
 	//db.Save("data/worlds/exported_test.json")
-	if err = db.Load("data/worlds/hall.json"); err != nil {
+	if err = db.Load("data/worlds/portal-test.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
@@ -160,6 +160,8 @@ func run() {
 	renderer.Initialize()
 	ui = &render.UI{Renderer: renderer}
 	ui.Initialize()
+
+	InitializeMenus()
 
 	for !win.Closed() {
 		db.Simulation.Step()

@@ -15,7 +15,7 @@ type textElement struct {
 }
 type UIConfig struct {
 	LabelColor    concepts.Vector4
-	SelectedColor concepts.Vector4
+	SelectedColor concepts.DynamicValue[concepts.Vector4]
 	BGColor       concepts.Vector4
 	ShadowColor   concepts.Vector4
 	TextStyle     *TextStyle
@@ -24,14 +24,34 @@ type UI struct {
 	UIConfig
 	*Renderer
 
+	Page *UIPage
+
 	textBuffer []textElement
+}
+
+type UIElement struct {
+	Label  string
+	Action func()
+}
+
+type UIPage struct {
+	Items        []UIElement
+	SelectedItem int
 }
 
 func (ui *UI) Initialize() {
 	ui.LabelColor = concepts.Vector4{1, 1, 1, 1}
-	ui.BGColor = concepts.Vector4{0.2, 0.2, 0.2, 1}
-	ui.ShadowColor = concepts.Vector4{0, 0, 0, 1}
-	ui.SelectedColor = concepts.Vector4{0.5, 0.5, 1, 1}
+	ui.BGColor = concepts.Vector4{0.3, 0.3, 0.3, 1}
+	ui.ShadowColor = concepts.Vector4{0.1, 0.1, 0.1, 1}
+
+	ui.SelectedColor.Attach(ui.DB.Simulation)
+	a := ui.SelectedColor.NewAnimation()
+	ui.SelectedColor.Animation = a
+	a.Duration = 400
+	a.Start = ui.BGColor
+	a.End = concepts.Vector4{0, 0.431, 1, 1}
+	a.TweeningFunc = concepts.EaseOut2
+
 	ui.TextStyle = ui.NewTextStyle()
 	sw := ui.ScreenWidth / ui.TextStyle.CharWidth
 	sh := ui.ScreenHeight / ui.TextStyle.CharHeight
@@ -43,9 +63,9 @@ func (ui *UI) Initialize() {
 
 func (ui *UI) Button(label string, x, y int, selected bool) {
 	var index int
-	color := &ui.LabelColor
+	bgcolor := &ui.UIConfig.BGColor
 	if selected {
-		color = &ui.SelectedColor
+		bgcolor = ui.SelectedColor.Render
 	}
 	sw := ui.ScreenWidth / ui.TextStyle.CharWidth
 	sh := ui.ScreenHeight / ui.textStyle.CharHeight
@@ -57,8 +77,8 @@ func (ui *UI) Button(label string, x, y int, selected bool) {
 			continue
 		}
 		index = x + i + y*sw
-		ui.textBuffer[index].Color = color
-		ui.textBuffer[index].BGColor = &ui.UIConfig.BGColor
+		ui.textBuffer[index].Color = &ui.LabelColor
+		ui.textBuffer[index].BGColor = bgcolor
 		if i < padding || i >= len(label)+padding {
 			ui.textBuffer[index].Rune = ' '
 		} else {
@@ -78,15 +98,30 @@ func (ui *UI) Button(label string, x, y int, selected bool) {
 	ui.textBuffer[index].Rune = 220 // CP437 LOWER HALF BLOCK
 }
 
-func (ui *UI) NewFrame() {
+func (ui *UI) renderPage(page *UIPage) {
+	sw := ui.ScreenWidth / ui.TextStyle.CharWidth
+	sh := ui.ScreenHeight / ui.TextStyle.CharHeight
+	x := sw / 2
+	y := sh/2 - len(page.Items)*3/2
+	for i, item := range page.Items {
+		ui.Button(item.Label, x, y+i*3, i == page.SelectedItem)
+	}
+}
+
+func (ui *UI) Render() {
+	if ui.Page == nil {
+		return
+	}
 	for i := 0; i < len(ui.textBuffer); i++ {
 		ui.textBuffer[i].Rune = 0
 		ui.textBuffer[i].BGColor = nil
 		ui.textBuffer[i].Color = nil
 	}
+	ui.renderPage(ui.Page)
+	ui.renderTextBuffer()
 }
 
-func (ui *UI) RenderTextBuffer() {
+func (ui *UI) renderTextBuffer() {
 	s := ui.TextStyle
 	s.Shadow = true
 	s.HAnchor = -1
