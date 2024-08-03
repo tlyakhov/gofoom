@@ -68,6 +68,9 @@ func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy i
 			bgy++
 		}
 	}
+	if c == 0 {
+		return
+	}
 	// Foreground
 	for v := 0; v < s.CharHeight; v++ {
 		for u := 0; u < s.CharWidth; u++ {
