@@ -2002,12 +2002,12 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
-          "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
+          "Lifetime": "AnimationLifetimeOnce",
+          "Percent": 1,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "EaseInOut3"
@@ -2620,8 +2620,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.546875,
-          "Reverse": false,
+          "Percent": 0.65625,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3652,11 +3652,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 166.4418871852753,
+          "End": -154.96055166655003,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.6510416666666666,
+          "Percent": 0.23437499999999997,
           "Reverse": false,
-          "Start": 129.08020814394305,
+          "Start": -169.462230607311,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -6773,12 +6773,12 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
-          "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
+          "Lifetime": "AnimationLifetimeOnce",
+          "Percent": 1,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -6886,12 +6886,12 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
-          "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
+          "Lifetime": "AnimationLifetimeOnce",
+          "Percent": 1,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "Lerp"
@@ -7023,9 +7023,9 @@
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": -64,
-          "Lifetime": "AnimationLifetimeHold",
+          "Lifetime": "AnimationLifetimeOnce",
           "Percent": 0.0078125,
-          "Reverse": false,
+          "Reverse": true,
           "Start": 64,
           "TweeningFunc": "Lerp"
         },
@@ -10347,11 +10347,11 @@
     "core.InternalSegment": {
       "A": {
         "X": -40,
-        "Y": -310
+        "Y": -300
       },
       "B": {
         "X": -40,
-        "Y": -260
+        "Y": -250
       },
       "Bottom": 0,
       "Entity": "142",
@@ -10367,11 +10367,11 @@
     "core.InternalSegment": {
       "A": {
         "X": -40,
-        "Y": -260
+        "Y": -250
       },
       "B": {
         "X": 10,
-        "Y": -260
+        "Y": -250
       },
       "Bottom": 0,
       "Entity": "143",
@@ -10387,11 +10387,11 @@
     "core.InternalSegment": {
       "A": {
         "X": 10,
-        "Y": -260
+        "Y": -250
       },
       "B": {
         "X": 10,
-        "Y": -310
+        "Y": -300
       },
       "Bottom": 0,
       "Entity": "144",
@@ -10407,11 +10407,11 @@
     "core.InternalSegment": {
       "A": {
         "X": 10,
-        "Y": -310
+        "Y": -300
       },
       "B": {
         "X": -40,
-        "Y": -310
+        "Y": -300
       },
       "Bottom": 0,
       "Entity": "145",

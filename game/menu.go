@@ -4,49 +4,49 @@
 package main
 
 import (
-	"tlyakhov/gofoom/render"
-
 	"github.com/gopxl/pixel/v2"
+
+	"tlyakhov/gofoom/ui"
 )
 
-var ui *render.UI
-var menuMain *render.UIPage
+var gameUI *ui.UI
+var uiPageMain *ui.Page
 
 func InitializeMenus() {
-	menuMain = &render.UIPage{
-		Items: []render.UIElement{
-			{Label: "Reset"},
-			{Label: "Load World"},
-			{Label: "Options"},
-			{Label: "Quit", Action: func() {
+	uiPageMain = &ui.Page{
+		Items: []ui.IWidget{
+			&ui.Button{Widget: ui.Widget{Label: "Reset"}},
+			&ui.Button{Widget: ui.Widget{Label: "Load World"}},
+			&ui.Button{Widget: ui.Widget{Label: "Options"}},
+			&ui.Button{Widget: ui.Widget{Label: "Quit", Action: func() {
 				win.SetClosed(true)
-			}},
+			}}},
 		},
 	}
-	ui.Page = menuMain
+	gameUI.SetPage(uiPageMain)
 }
 
 func menuInput() {
-	if ui.Page == nil {
-		ui.Page = menuMain
+	if gameUI.Page == nil {
+		gameUI.SetPage(uiPageMain)
 	}
 
-	if win.JustReleased(pixel.KeyW) || win.JustReleased(pixel.KeyUp) {
-		ui.Page.SelectedItem--
-		if ui.Page.SelectedItem < 0 {
-			ui.Page.SelectedItem = 0
+	if win.JustPressed(pixel.KeyW) || win.JustPressed(pixel.KeyUp) {
+		gameUI.Page.SelectedItem--
+		if gameUI.Page.SelectedItem < 0 {
+			gameUI.Page.SelectedItem = 0
 		}
 	}
-	if win.JustReleased(pixel.KeyS) || win.JustReleased(pixel.KeyDown) {
-		ui.Page.SelectedItem++
-		if ui.Page.SelectedItem >= len(ui.Page.Items) {
-			ui.Page.SelectedItem = len(ui.Page.Items) - 1
+	if win.JustPressed(pixel.KeyS) || win.JustPressed(pixel.KeyDown) {
+		gameUI.Page.SelectedItem++
+		if gameUI.Page.SelectedItem >= len(gameUI.Page.Items) {
+			gameUI.Page.SelectedItem = len(gameUI.Page.Items) - 1
 		}
 	}
 	if win.JustReleased(pixel.KeyEnter) || win.JustReleased(pixel.KeySpace) {
-		item := ui.Page.Items[ui.Page.SelectedItem]
-		if item.Action != nil {
-			item.Action()
+		item := gameUI.Page.Items[gameUI.Page.SelectedItem]
+		if item.GetWidget().Action != nil {
+			item.GetWidget().Action()
 		}
 	}
 }

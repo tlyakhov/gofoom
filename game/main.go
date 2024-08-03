@@ -12,6 +12,7 @@ import (
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/ui"
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -98,7 +99,7 @@ func renderGame() {
 	renderer.Render()
 	renderer.DebugInfo()
 	if inMenu {
-		ui.Render()
+		gameUI.Render()
 	}
 	renderer.ApplyBuffer(buffer.Pix)
 
@@ -148,7 +149,7 @@ func run() {
 	db.Simulation.Render = renderGame
 	//controllers.CreateTestWorld(db)
 	//db.Save("data/worlds/exported_test.json")
-	if err = db.Load("data/worlds/portal-test.json"); err != nil {
+	if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
@@ -158,8 +159,8 @@ func run() {
 	renderer.ScreenWidth = w
 	renderer.ScreenHeight = h
 	renderer.Initialize()
-	ui = &render.UI{Renderer: renderer}
-	ui.Initialize()
+	gameUI = &ui.UI{Renderer: renderer}
+	gameUI.Initialize()
 
 	InitializeMenus()
 
