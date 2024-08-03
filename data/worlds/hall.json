@@ -2010,7 +2010,7 @@
           "Percent": 1,
           "Reverse": false,
           "Start": 64,
-          "TweeningFunc": "EaseInOut3"
+          "TweeningFunc": "EaseInOut4"
         },
         "Original": 64
       }
@@ -2614,13 +2614,13 @@
       "Pos": {
         "Animation": {
           "Active": true,
-          "Duration": 500,
+          "Duration": 1000,
           "End": {
             "X": 0,
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.65625,
+          "Percent": 0.5234375,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -3652,11 +3652,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -154.96055166655003,
+          "End": 131.73458382202028,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.23437499999999997,
+          "Percent": 0.9895833333333328,
           "Reverse": false,
-          "Start": -169.462230607311,
+          "Start": 131.53379162274788,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -6724,7 +6724,17 @@
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                6.399999809265137,
+                0,
+                0
+              ]
+            }
           },
           "X": 330,
           "Y": -520
@@ -6745,13 +6755,33 @@
         },
         {
           "Hi": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                6.4,
+                0,
+                0
+              ]
+            }
           },
           "Lo": {
             "Material": "2"
           },
           "Surface": {
-            "Material": "2"
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                6.399999809265137,
+                0,
+                0
+              ]
+            }
           },
           "X": 410,
           "Y": -510
@@ -6778,10 +6808,10 @@
           "Duration": 1000,
           "End": 0,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
-          "Reverse": false,
+          "Percent": 0,
+          "Reverse": true,
           "Start": 64,
-          "TweeningFunc": "Lerp"
+          "TweeningFunc": "EaseInOut4"
         },
         "Original": 64
       }
@@ -6894,7 +6924,7 @@
           "Percent": 1,
           "Reverse": false,
           "Start": 64,
-          "TweeningFunc": "Lerp"
+          "TweeningFunc": "EaseInOut4"
         },
         "Original": 64
       }
@@ -7019,15 +7049,15 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.0078125,
-          "Reverse": true,
+          "Percent": 1,
+          "Reverse": false,
           "Start": 64,
-          "TweeningFunc": "Lerp"
+          "TweeningFunc": "EaseInOut4"
         },
         "Original": 64
       }
