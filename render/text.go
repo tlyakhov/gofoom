@@ -43,7 +43,7 @@ func (r *Renderer) DefaultFont() *materials.Sprite {
 	return materials.SpriteFromDb(r.DB, r.DB.GetEntityByName("HUD Font"))
 }
 
-func (r *Renderer) drawChar(s *TextStyle, img *materials.Image, c rune, dx, dy int) {
+func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy int) {
 	fw := 1.0 / float64(s.CharWidth)
 	fh := 1.0 / float64(s.CharHeight)
 	index := uint32(c)
@@ -131,7 +131,7 @@ func (r *Renderer) Print(s *TextStyle, x, y int, text string) {
 			continue
 		}
 
-		r.drawChar(s, img, c, dx, dy)
+		r.DrawChar(s, img, c, dx, dy)
 		dx += s.CharWidth + s.HSpacing
 	}
 }

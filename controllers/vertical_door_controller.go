@@ -24,7 +24,7 @@ func (vd *VerticalDoorController) ComponentIndex() int {
 }
 
 func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways
+	return concepts.ControllerAlways | concepts.ControllerRecalculate
 }
 
 func (vd *VerticalDoorController) Target(target concepts.Attachable) bool {
@@ -34,9 +34,6 @@ func (vd *VerticalDoorController) Target(target concepts.Attachable) bool {
 }
 
 func (vd *VerticalDoorController) setupAnimation() {
-	if vd.Sector.TopZ.Animation != nil {
-		return
-	}
 	a := vd.Sector.TopZ.NewAnimation()
 	a.SetDB(vd.DB)
 	a.Construct(nil)
@@ -45,7 +42,7 @@ func (vd *VerticalDoorController) setupAnimation() {
 	a.Coordinates = concepts.AnimationCoordinatesAbsolute
 	a.Duration = 1000
 	a.TweeningFunc = concepts.EaseInOut4
-	a.Lifetime = concepts.AnimationLifetimeHold
+	a.Lifetime = concepts.AnimationLifetimeOnce
 }
 
 func (vd *VerticalDoorController) adjustTransforms() {
@@ -94,7 +91,9 @@ func (vd *VerticalDoorController) adjustTransforms() {
 }
 
 func (vd *VerticalDoorController) Always() {
-	vd.setupAnimation()
+	if vd.Sector.TopZ.Animation == nil {
+		vd.setupAnimation()
+	}
 
 	a := vd.Sector.TopZ.Animation
 
@@ -114,10 +113,18 @@ func (vd *VerticalDoorController) Always() {
 	if vd.Intent == behaviors.DoorIntentOpen && vd.State != behaviors.DoorStateOpen {
 		vd.State = behaviors.DoorStateOpening
 		a.Reverse = true
+		a.Active = true
 	} else if vd.Intent == behaviors.DoorIntentClosed && vd.State != behaviors.DoorStateClosed {
 		vd.State = behaviors.DoorStateClosing
 		a.Reverse = false
+		a.Active = true
 	}
 
 	vd.adjustTransforms()
+}
+
+func (vd *VerticalDoorController) Recalculate() {
+	if vd.Sector != nil {
+		vd.setupAnimation()
+	}
 }

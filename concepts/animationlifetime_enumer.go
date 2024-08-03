@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _AnimationLifetimeName = "AnimationLifetimeOnceAnimationLifetimeHoldAnimationLifetimeLoop"
+const _AnimationLifetimeName = "AnimationLifetimeOnceAnimationLifetimeLoopAnimationLifetimeBounceOnceAnimationLifetimeBounce"
 
-var _AnimationLifetimeIndex = [...]uint8{0, 21, 42, 63}
+var _AnimationLifetimeIndex = [...]uint8{0, 21, 42, 69, 92}
 
-const _AnimationLifetimeLowerName = "animationlifetimeonceanimationlifetimeholdanimationlifetimeloop"
+const _AnimationLifetimeLowerName = "animationlifetimeonceanimationlifetimeloopanimationlifetimebounceonceanimationlifetimebounce"
 
 func (i AnimationLifetime) String() string {
 	if i < 0 || i >= AnimationLifetime(len(_AnimationLifetimeIndex)-1) {
@@ -26,25 +26,29 @@ func (i AnimationLifetime) String() string {
 func _AnimationLifetimeNoOp() {
 	var x [1]struct{}
 	_ = x[AnimationLifetimeOnce-(0)]
-	_ = x[AnimationLifetimeHold-(1)]
-	_ = x[AnimationLifetimeLoop-(2)]
+	_ = x[AnimationLifetimeLoop-(1)]
+	_ = x[AnimationLifetimeBounceOnce-(2)]
+	_ = x[AnimationLifetimeBounce-(3)]
 }
 
-var _AnimationLifetimeValues = []AnimationLifetime{AnimationLifetimeOnce, AnimationLifetimeHold, AnimationLifetimeLoop}
+var _AnimationLifetimeValues = []AnimationLifetime{AnimationLifetimeOnce, AnimationLifetimeLoop, AnimationLifetimeBounceOnce, AnimationLifetimeBounce}
 
 var _AnimationLifetimeNameToValueMap = map[string]AnimationLifetime{
 	_AnimationLifetimeName[0:21]:       AnimationLifetimeOnce,
 	_AnimationLifetimeLowerName[0:21]:  AnimationLifetimeOnce,
-	_AnimationLifetimeName[21:42]:      AnimationLifetimeHold,
-	_AnimationLifetimeLowerName[21:42]: AnimationLifetimeHold,
-	_AnimationLifetimeName[42:63]:      AnimationLifetimeLoop,
-	_AnimationLifetimeLowerName[42:63]: AnimationLifetimeLoop,
+	_AnimationLifetimeName[21:42]:      AnimationLifetimeLoop,
+	_AnimationLifetimeLowerName[21:42]: AnimationLifetimeLoop,
+	_AnimationLifetimeName[42:69]:      AnimationLifetimeBounceOnce,
+	_AnimationLifetimeLowerName[42:69]: AnimationLifetimeBounceOnce,
+	_AnimationLifetimeName[69:92]:      AnimationLifetimeBounce,
+	_AnimationLifetimeLowerName[69:92]: AnimationLifetimeBounce,
 }
 
 var _AnimationLifetimeNames = []string{
 	_AnimationLifetimeName[0:21],
 	_AnimationLifetimeName[21:42],
-	_AnimationLifetimeName[42:63],
+	_AnimationLifetimeName[42:69],
+	_AnimationLifetimeName[69:92],
 }
 
 // AnimationLifetimeString retrieves an enum value from the enum constants string name.

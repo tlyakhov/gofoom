@@ -253,7 +253,7 @@ func (bc *BodyController) bodyBounce(body *core.Body) {
 	// Solid spheres
 	i_a := bc.Body.Mass * r_a * r_a * 2.0 / 5.0
 	i_b := body.Mass * r_b * r_b * 2.0 / 5.0
-	e := 0.3
+	e := 0.8
 	if i_a > 0 && i_b > 0 {
 		j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + 1.0/body.Mass + c_a.Dot(c_a)/i_a + c_b.Dot(c_b)/i_b)
 		bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))

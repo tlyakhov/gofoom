@@ -4,6 +4,7 @@
 package concepts
 
 import (
+	"log"
 	"reflect"
 	"tlyakhov/gofoom/constants"
 )
@@ -13,8 +14,9 @@ type AnimationLifetime int
 
 const (
 	AnimationLifetimeOnce AnimationLifetime = iota
-	AnimationLifetimeHold
 	AnimationLifetimeLoop
+	AnimationLifetimeBounceOnce
+	AnimationLifetimeBounce
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=AnimationCoordinates -json
@@ -68,36 +70,48 @@ func (a *Animation[T]) Animate() {
 	if a == nil || !a.Active || a.DynamicValue == nil {
 		return
 	}
+	if a.Reverse {
+		a.Percent -= constants.TimeStep / a.Duration
+	} else {
+		a.Percent += constants.TimeStep / a.Duration
+	}
 	a.Percent = Clamp(a.Percent, 0, 1)
+	percent := a.Percent
+	if a.Lifetime == AnimationLifetimeBounce || a.Lifetime == AnimationLifetimeBounceOnce {
+		percent *= 2
+		if percent > 1 {
+			percent = 2.0 - percent
+		}
+	}
 	switch c := any(a).(type) {
 	case *Animation[int]:
-		c.Now = int(c.TweeningFunc(float64(c.Start), float64(c.End), c.Percent))
+		c.Now = int(c.TweeningFunc(float64(c.Start), float64(c.End), percent))
 		if a.Coordinates == AnimationCoordinatesRelative {
 			c.Now += c.Original
 		}
 	case *Animation[float64]:
-		c.Now = c.TweeningFunc(c.Start, c.End, c.Percent)
+		c.Now = c.TweeningFunc(c.Start, c.End, percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
 			c.Now += c.Original
 		}
 	case *Animation[Vector2]:
-		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], c.Percent)
-		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], c.Percent)
+		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], percent)
+		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
 			c.Now.AddSelf(&c.Original)
 		}
 	case *Animation[Vector3]:
-		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], c.Percent)
-		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], c.Percent)
-		c.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], c.Percent)
+		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], percent)
+		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], percent)
+		c.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
 			c.Now.AddSelf(&c.Original)
 		}
 	case *Animation[Vector4]:
-		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], c.Percent)
-		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], c.Percent)
-		c.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], c.Percent)
-		c.Now[3] = c.TweeningFunc(c.Start[3], c.End[3], c.Percent)
+		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], percent)
+		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], percent)
+		c.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], percent)
+		c.Now[3] = c.TweeningFunc(c.Start[3], c.End[3], percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
 			c.Now.AddSelf(&c.Original)
 		}
@@ -106,15 +120,14 @@ func (a *Animation[T]) Animate() {
 	if (a.Percent >= 1 && !a.Reverse) || (a.Percent <= 0 && a.Reverse) {
 		switch a.Lifetime {
 		case AnimationLifetimeOnce:
+			fallthrough
+		case AnimationLifetimeBounceOnce:
 			a.Active = false
-		case AnimationLifetimeLoop:
+		case AnimationLifetimeBounce:
 			a.Reverse = !a.Reverse
+		case AnimationLifetimeLoop:
+			a.Reset()
 		}
-	}
-	if a.Reverse {
-		a.Percent -= constants.TimeStep / a.Duration
-	} else {
-		a.Percent += constants.TimeStep / a.Duration
 	}
 }
 
@@ -123,7 +136,7 @@ func (a *Animation[T]) Construct(data map[string]any) {
 	a.Duration = 1000
 	a.Reverse = false
 	a.TweeningFunc = Lerp
-	a.Lifetime = AnimationLifetimeLoop
+	a.Lifetime = AnimationLifetimeBounce
 	a.Coordinates = AnimationCoordinatesRelative
 
 	if data == nil {
@@ -154,7 +167,7 @@ func (a *Animation[T]) Construct(data map[string]any) {
 		if err == nil {
 			a.Lifetime = als
 		} else {
-			panic(err)
+			log.Printf("Animation.Construct: %v", err)
 		}
 	}
 	if v, ok := data["Coordinates"]; ok {
@@ -162,7 +175,7 @@ func (a *Animation[T]) Construct(data map[string]any) {
 		if err == nil {
 			a.Coordinates = acs
 		} else {
-			panic(err)
+			log.Printf("Animation.Construct: %v", err)
 		}
 	}
 
@@ -211,7 +224,7 @@ func (a *Animation[T]) Serialize() map[string]any {
 	result["Reverse"] = a.Reverse
 	result["Percent"] = a.Percent
 	result["TweeningFunc"] = TweeningFuncNames[reflect.ValueOf(a.TweeningFunc).Pointer()]
-	if a.Lifetime != AnimationLifetimeLoop {
+	if a.Lifetime != AnimationLifetimeBounce {
 		result["Lifetime"] = a.Lifetime.String()
 	}
 	if a.Coordinates != AnimationCoordinatesRelative {
