@@ -9,7 +9,6 @@ import (
 	"log"
 	"os"
 	"reflect"
-	"slices"
 	"sync"
 
 	"github.com/kelindar/bitmap"
@@ -347,17 +346,8 @@ func (db *EntityComponentDB) Save(filename string) {
 	defer db.Lock.Unlock()
 	jsonDB := make([]any, 0)
 
-	sortedEntities := make([]Entity, 0)
-	for entity, c := range db.EntityComponents {
-		if entity == 0 || c == nil {
-			continue
-		}
-		sortedEntities = append(sortedEntities, Entity(entity))
-	}
-	slices.Sort(sortedEntities)
-
-	for _, entity := range sortedEntities {
-		jsonDB = append(jsonDB, db.SerializeEntity(entity))
+	for entity := range db.EntityComponents {
+		jsonDB = append(jsonDB, db.SerializeEntity(Entity(entity)))
 	}
 
 	bytes, err := json.MarshalIndent(jsonDB, "", "  ")

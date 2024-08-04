@@ -40,8 +40,8 @@ func (vd *VerticalDoorController) setupAnimation() {
 	a.Start = vd.Sector.TopZ.Original
 	a.End = vd.Sector.BottomZ.Original
 	a.Coordinates = concepts.AnimationCoordinatesAbsolute
-	a.Duration = 1000
-	a.TweeningFunc = concepts.EaseInOut4
+	a.Duration = vd.Duration
+	a.TweeningFunc = vd.TweeningFunc
 	a.Lifetime = concepts.AnimationLifetimeOnce
 }
 

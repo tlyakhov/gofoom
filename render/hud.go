@@ -9,7 +9,6 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
 )
 
 func (r *Renderer) RenderHud() {
@@ -39,7 +38,7 @@ func (r *Renderer) DebugInfo() {
 	ts.Shadow = true
 	ts.HAnchor = 0
 	ts.VAnchor = 0
-	for x := 0; x < constants.RenderBlocks; x++ {
+	for x := 0; x < r.Blocks; x++ {
 		c := r.Columns[x]
 		for _, b := range c.BodiesSeen {
 			top := &concepts.Vector3{}

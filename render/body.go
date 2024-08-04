@@ -62,7 +62,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	if lit := materials.LitFromDb(r.DB, b.Entity); lit != nil {
 		le := &c.LightElement
 		le.Q.From(b.Pos.Render)
-		le.MapIndex = b.Sector().WorldToLightmapAddress(&le.Q, 0)
+		le.MapIndex = c.WorldToLightmapAddress(b.Sector(), &le.Q, 0)
 		le.Segment = nil
 		le.Type = state.LightElementBody
 		le.InputBody = b.Entity
@@ -88,7 +88,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 			continue
 		}
 		v := (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
-		c.SampleMaterial( nil, c.U, v)
+		c.SampleMaterial(nil, c.U, v)
 		c.MaterialSampler.Output.Mul4Self(&c.Light)
 		r.ApplySample(&c.MaterialSampler.Output, screenIndex, c.Distance)
 		seen = true

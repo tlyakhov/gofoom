@@ -10,22 +10,24 @@ const (
 	MinMillisPerFrame = 1000.0 / 10.0 // Ensure we don't do a spiral of death at framerates < 10
 
 	// Rendering constants
-	RenderBlocks     = 32  // When multi-threaded, each block will have its own goroutine
-	MaxPortals       = 100 // avoid infinite portal traversal
-	IntersectEpsilon = 1e-10
-	// Decrease this value for more detailed shadows. 2 looks nice, uses lots of
-	// memory and is very slow.
-	LightGrid               = 4.0
+	MaxPortals              = 100 // avoid infinite portal traversal
+	IntersectEpsilon        = 1e-10
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.001
 	MaxViewDistance         = 10000.0
-	FieldOfView             = 90
 	DebugLevel              = 1
 	CollisionSteps          = 10
 	MaxLightmapAge          = 3 // in frames
 	LightmapRefreshDither   = 6 // in frames
-	RenderMultiThreaded     = true
 	DebugLighting           = false
+
+	// Rendering defaults
+	FieldOfView         = 90
+	RenderMultiThreaded = true
+	RenderBlocks        = 32 // When multi-threaded, each block will have its own goroutine
+	// Decrease this value for more detailed shadows. 2 looks nice, uses lots of
+	// memory and is very slow.
+	LightGrid = 4.0
 
 	// Audio constants
 	SourcesPerSound  = 8
@@ -58,6 +60,7 @@ const (
 	PlayerMaxHealth      = 100
 
 	// Game constants
+	UserSettings             = "bin/settings.json"
 	MaxGameTextTime          = 15 * 1000
 	MaxGameText              = 25
 	GameTextFadeTime         = 1000

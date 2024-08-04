@@ -22,7 +22,6 @@ func init() {
 		"CollisionSteps":           reflect.ValueOf(constant.MakeFromLiteral("10", token.INT, 0)),
 		"DebugLevel":               reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
 		"DebugLighting":            reflect.ValueOf(constants.DebugLighting),
-		"DoorSpeed":                reflect.ValueOf(constant.MakeFromLiteral("0.03999999999999999999918684837063587167449441039934754371643066406", token.FLOAT, 0)),
 		"FieldOfView":              reflect.ValueOf(constant.MakeFromLiteral("90", token.INT, 0)),
 		"FirstMap":                 reflect.ValueOf(constant.MakeFromLiteral("\"testMap\"", token.STRING, 0)),
 		"GameTextFadeTime":         reflect.ValueOf(constant.MakeFromLiteral("1000", token.INT, 0)),
@@ -64,6 +63,7 @@ func init() {
 		"TimeStep":                 reflect.ValueOf(constant.MakeFromLiteral("7.8125", token.FLOAT, 0)),
 		"TimeStepS":                reflect.ValueOf(constant.MakeFromLiteral("0.0078125", token.FLOAT, 0)),
 		"UnitsPerMeter":            reflect.ValueOf(constant.MakeFromLiteral("32", token.FLOAT, 0)),
+		"UserSettings":             reflect.ValueOf(constant.MakeFromLiteral("\"bin/settings.json\"", token.STRING, 0)),
 		"VelocityEpsilon":          reflect.ValueOf(constant.MakeFromLiteral("9.99999999999999999994126620636112567498475617893197842480160209e-16", token.FLOAT, 0)),
 		"WanderSectorProbability":  reflect.ValueOf(constant.MakeFromLiteral("0.25", token.FLOAT, 0)),
 	}

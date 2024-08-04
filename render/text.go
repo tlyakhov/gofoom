@@ -87,7 +87,7 @@ func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy i
 				uint32(s.CharHeight)*s.Sprite.Rows)
 			a *= s.Color[3]
 			if s.Shadow && dx < s.ClipX+s.ClipW-1 && dy < s.ClipY+s.ClipH-1 {
-				s.shadow[3] = a
+				s.shadow[3] = a * 0.5
 				r.ApplySample(&s.shadow, screenIndex+1+r.ScreenWidth, -2)
 			}
 			s.sample[3] = a

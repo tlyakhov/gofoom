@@ -9,7 +9,6 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
 )
 
 type EntityWithDist2 struct {
@@ -116,7 +115,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 	return result*/
 
 	// Don't filter far away lightmaps. Tolerate a ~2px snap-in
-	if dist > float64(c.ScreenWidth)*constants.LightGrid*0.25 {
+	if dist > float64(c.ScreenWidth)*c.LightGrid*0.25 {
 		c.LightUnfiltered(&c.Light, world)
 		return lit.Apply(result, &c.Light)
 	}
@@ -126,13 +125,13 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 		flags += uint16(c.LightElement.Segment.Index)
 	}
 
-	m0 := c.Sector.WorldToLightmapAddress(world, flags)
+	m0 := c.WorldToLightmapAddress(c.Sector, world, flags)
 	c.LightElement.MapIndex = m0
-	c.Sector.LightmapAddressToWorld(&c.LightVoxelA, m0)
+	c.LightmapAddressToWorld(c.Sector, &c.LightVoxelA, m0)
 	// These deltas represent 0.0 - 1.0 distances within the light voxel
-	dx := (world[0] - c.LightVoxelA[0]) / constants.LightGrid
-	dy := (world[1] - c.LightVoxelA[1]) / constants.LightGrid
-	dz := (world[2] - c.LightVoxelA[2]) / constants.LightGrid
+	dx := (world[0] - c.LightVoxelA[0]) / c.LightGrid
+	dy := (world[1] - c.LightVoxelA[1]) / c.LightGrid
+	dz := (world[2] - c.LightVoxelA[2]) / c.LightGrid
 
 	if dx < 0 || dy < 0 || dz < 0 {
 		fmt.Printf("Lightmap filter: dx/dy/dz < 0: %v,%v,%v\n", dx, dy, dz)
@@ -191,7 +190,7 @@ func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vecto
 		jitter[1] += (rand.Float64() - 0.5) * constants.LightGrid
 		jitter[2] += (rand.Float64() - 0.5) * constants.LightGrid
 	*/
-	c.LightElement.MapIndex = c.Sector.WorldToLightmapAddress(world, flags)
+	c.LightElement.MapIndex = c.WorldToLightmapAddress(c.Sector, world, flags)
 
 	r00 := c.LightElement.Get()
 	result[0] = r00[0]
