@@ -17,7 +17,7 @@
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/stained-glass.jpeg"
+      "Source": "data/stained-glass.jpeg"
     },
     "materials.Lit": {
       "Ambient": {

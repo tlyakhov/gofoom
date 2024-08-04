@@ -84,8 +84,16 @@ func gameInput() {
 
 func integrateGame() {
 	if win.JustReleased(pixel.KeyEscape) {
-		inMenu = !inMenu
+		if inMenu && gameUI.Page != nil && gameUI.Page.Parent != nil {
+			gameUI.SetPage(gameUI.Page.Parent)
+		} else {
+			inMenu = !inMenu
+			if !inMenu {
+				gameUI.SetPage(nil)
+			}
+		}
 	}
+
 	if inMenu {
 		menuInput()
 	} else {
@@ -149,7 +157,7 @@ func run() {
 	db.Simulation.Render = renderGame
 	//controllers.CreateTestWorld(db)
 	//db.Save("data/worlds/exported_test.json")
-	if err = db.Load("data/worlds/hall.json"); err != nil {
+	if err = db.Load("data/worlds/portal-test.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
@@ -160,9 +168,10 @@ func run() {
 	renderer.ScreenHeight = h
 	renderer.Initialize()
 	gameUI = &ui.UI{Renderer: renderer}
+	gameUI.OnChanged = saveSettings
 	gameUI.Initialize()
 
-	InitializeMenus()
+	initializeMenus()
 
 	for !win.Closed() {
 		db.Simulation.Step()

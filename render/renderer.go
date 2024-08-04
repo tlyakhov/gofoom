@@ -35,25 +35,19 @@ type Renderer struct {
 func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 	r := Renderer{
 		Config: &state.Config{
-			ScreenWidth:  640,
-			ScreenHeight: 360,
-			FOV:          constants.FieldOfView,
-			MaxViewDist:  constants.MaxViewDistance,
-			Frame:        0,
-			Counter:      0,
-			DB:           db,
+			ScreenWidth:   640,
+			ScreenHeight:  360,
+			FOV:           constants.FieldOfView,
+			Multithreaded: constants.RenderMultiThreaded,
+			Blocks:        constants.RenderBlocks,
+			LightGrid:     constants.LightGrid,
+			MaxViewDist:   constants.MaxViewDistance,
+			Frame:         0,
+			Counter:       0,
+			DB:            db,
 		},
-		Columns:            make([]state.Column, constants.RenderBlocks),
 		columnGroup:        new(sync.WaitGroup),
 		SectorLastRendered: xsync.NewMapOf[concepts.Entity, uint64](),
-	}
-
-	for i := range r.Columns {
-		r.Columns[i].Config = r.Config
-		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
-		r.Columns[i].Visited = make([]state.SegmentIntersection, constants.MaxPortals)
-		// Set up 16 slots initially
-		r.Columns[i].EntitiesByDistance = make([]state.EntityWithDist2, 0, 16)
 	}
 
 	r.Initialize()
@@ -62,7 +56,15 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 
 func (r *Renderer) Initialize() {
 	r.Config.Initialize()
+
+	r.Columns = make([]state.Column, r.Blocks)
+
 	for i := range r.Columns {
+		r.Columns[i].Config = r.Config
+		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
+		r.Columns[i].Visited = make([]state.SegmentIntersection, constants.MaxPortals)
+		// Set up 16 slots initially
+		r.Columns[i].EntitiesByDistance = make([]state.EntityWithDist2, 0, 16)
 		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 	}
@@ -188,7 +190,15 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
 	// TODO: We can probably do something simpler and cheaper here.
-	r.SectorLastRendered.Store(c.Sector.Entity, uint64(r.Frame))
+	_, loaded := r.SectorLastRendered.LoadAndStore(c.Sector.Entity, uint64(r.Frame))
+	if !loaded {
+		// TODO: Move this elsewhere, we should only be doing this when the
+		// sector changes.
+		// Floor is important, needs to truncate towards -Infinity rather than 0
+		c.Sector.LightmapBias[0] = int64(math.Floor(c.Sector.Min[0]/r.LightGrid)) - 2
+		c.Sector.LightmapBias[1] = int64(math.Floor(c.Sector.Min[1]/r.LightGrid)) - 2
+		c.Sector.LightmapBias[2] = int64(math.Floor(c.Sector.Min[2]/r.LightGrid)) - 2
+	}
 
 	/*  The structure of this function is a bit complicated because we try to
 		remember successful ray/segment intersections for convex sectors. This
@@ -376,7 +386,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 		r.RenderColumn(column, x, 0, false)
 	}
 
-	if constants.RenderMultiThreaded {
+	if r.Multithreaded {
 		r.columnGroup.Done()
 	}
 }
@@ -412,10 +422,10 @@ func (r *Renderer) Render() {
 	r.Frame++
 	r.Counter = 0
 
-	if constants.RenderMultiThreaded {
-		blockSize := r.ScreenWidth / constants.RenderBlocks
-		r.columnGroup.Add(constants.RenderBlocks)
-		for x := 0; x < constants.RenderBlocks; x++ {
+	if r.Multithreaded {
+		blockSize := r.ScreenWidth / r.Blocks
+		r.columnGroup.Add(r.Blocks)
+		for x := 0; x < r.Blocks; x++ {
 			go r.RenderBlock(x, x*blockSize, x*blockSize+blockSize)
 		}
 		r.columnGroup.Wait()

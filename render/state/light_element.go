@@ -44,7 +44,7 @@ type LightElement struct {
 }
 
 func (le *LightElement) Debug() *concepts.Vector3 {
-	le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex)
+	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
 	dbg := le.Q.Mul(1.0 / 64.0)
 	le.Output[0] = dbg[0] - math.Floor(dbg[0])
 	le.Output[1] = dbg[1] - math.Floor(dbg[1])
@@ -70,7 +70,7 @@ func (le *LightElement) Get() *concepts.Vector3 {
 			return &le.Output
 		}
 	}
-	le.Sector.LightmapAddressToWorld(&le.Q, le.MapIndex)
+	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
 	fz, cz := le.Sector.PointZ(concepts.DynamicRender, le.Q.To2D())
@@ -108,12 +108,12 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
-		if d2 >= constants.LightGrid*constants.LightGrid {
+		if d2 >= le.LightGrid*le.LightGrid {
 			continue
 		}
 
 		floorZ, ceilZ := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicRender, p.To2D())
-		if p[2]-ceilZ > constants.LightGrid || floorZ-p[2] > constants.LightGrid {
+		if p[2]-ceilZ > le.LightGrid || floorZ-p[2] > le.LightGrid {
 			continue
 		}
 		if le.lightVisibleFromSector(p, body, seg.AdjacentSegment.Sector) {

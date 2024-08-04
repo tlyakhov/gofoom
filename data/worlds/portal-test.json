@@ -17,7 +17,7 @@
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/space_tiles_hyptosis/wool_colored_white.png"
+      "Source": "data/space_tiles_hyptosis/wool_colored_white.png"
     },
     "materials.Lit": {
       "Ambient": {
@@ -1386,7 +1386,7 @@
       "Entity": "23",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/space_tiles_hyptosis/ladder.png"
+      "Source": "data/space_tiles_hyptosis/ladder.png"
     }
   },
   {
@@ -1712,7 +1712,7 @@
       "Entity": "31",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/DGarage.png"
+      "Source": "data/DGarage.png"
     }
   },
   {
@@ -1750,7 +1750,7 @@
       "Entity": "33",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/red-button.png"
+      "Source": "data/red-button.png"
     }
   },
   {
@@ -1843,7 +1843,7 @@
       "Entity": "36",
       "Filter": false,
       "GenerateMipMaps": true,
-      "Source": "/Users/tim/Documents/gofoom/data/Water.png"
+      "Source": "data/Water.png"
     }
   },
   {

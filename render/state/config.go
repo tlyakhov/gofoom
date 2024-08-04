@@ -13,10 +13,13 @@ import (
 
 type Config struct {
 	DB                        *concepts.EntityComponentDB
+	Multithreaded             bool
+	Blocks                    int
 	ScreenWidth, ScreenHeight int
 	Frame                     uint64
 	Counter                   int
 	MaxViewDist, FOV          float64
+	LightGrid                 float64
 	CameraToProjectionPlane   float64
 	ViewRadians               []float64
 	ViewFix                   []float64
@@ -54,4 +57,37 @@ func (c *Config) RefreshPlayer() {
 		return
 	}
 	c.PlayerBody = core.BodyFromDb(c.DB, c.Player.Entity)
+}
+
+const lightmapMask uint64 = (1 << 16) - 1
+
+func (c *Config) WorldToLightmapAddress(s *core.Sector, v *concepts.Vector3, flags uint16) uint64 {
+	// Floor is important, needs to truncate towards -Infinity rather than 0
+	z := int64(math.Floor(v[2]/c.LightGrid)) - s.LightmapBias[2]
+	y := int64(math.Floor(v[1]/c.LightGrid)) - s.LightmapBias[1]
+	x := int64(math.Floor(v[0]/c.LightGrid)) - s.LightmapBias[0]
+	/*if x < 0 || y < 0 || z < 0 {
+		fmt.Printf("Error: lightmap address conversion resulted in negative value: %v,%v,%v\n", x, y, z)
+	}*/
+	// Bit shift and mask the components, and add the sector entity at the end
+	// to ensure that overlapping addresses are distinct for each sector
+	return (((uint64(x) & lightmapMask) << 48) |
+		((uint64(y) & lightmapMask) << 32) |
+		((uint64(z) & lightmapMask) << 16) |
+		uint64(flags)) + (uint64(s.Entity) * 1009)
+}
+
+func (c *Config) LightmapAddressToWorld(s *core.Sector, result *concepts.Vector3, a uint64) *concepts.Vector3 {
+	//w := uint64(a & wMask)
+	a -= uint64(s.Entity) * 1009
+	a = a >> 16
+	z := int64((a & lightmapMask)) + s.LightmapBias[2]
+	result[2] = float64(z) * c.LightGrid
+	a = a >> 16
+	y := int64((a & lightmapMask)) + s.LightmapBias[1]
+	result[1] = float64(y) * c.LightGrid
+	a = a >> 16
+	x := int64((a & lightmapMask)) + s.LightmapBias[0]
+	result[0] = float64(x) * c.LightGrid
+	return result
 }

@@ -319,43 +319,6 @@ func (s *Sector) Recalculate() {
 	}
 
 	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
-	// Floor is important, needs to truncate towards -Infinity rather than 0
-	s.LightmapBias[0] = int64(math.Floor(s.Min[0]/constants.LightGrid)) - 2
-	s.LightmapBias[1] = int64(math.Floor(s.Min[1]/constants.LightGrid)) - 2
-	s.LightmapBias[2] = int64(math.Floor(s.Min[2]/constants.LightGrid)) - 2
-}
-
-const lightmapMask uint64 = (1 << 16) - 1
-
-func (s *Sector) WorldToLightmapAddress(v *concepts.Vector3, flags uint16) uint64 {
-	// Floor is important, needs to truncate towards -Infinity rather than 0
-	z := int64(math.Floor(v[2]/constants.LightGrid)) - s.LightmapBias[2]
-	y := int64(math.Floor(v[1]/constants.LightGrid)) - s.LightmapBias[1]
-	x := int64(math.Floor(v[0]/constants.LightGrid)) - s.LightmapBias[0]
-	/*if x < 0 || y < 0 || z < 0 {
-		fmt.Printf("Error: lightmap address conversion resulted in negative value: %v,%v,%v\n", x, y, z)
-	}*/
-	// Bit shift and mask the components, and add the sector entity at the end
-	// to ensure that overlapping addresses are distinct for each sector
-	return (((uint64(x) & lightmapMask) << 48) |
-		((uint64(y) & lightmapMask) << 32) |
-		((uint64(z) & lightmapMask) << 16) |
-		uint64(flags)) + (uint64(s.Entity) * 1009)
-}
-
-func (s *Sector) LightmapAddressToWorld(result *concepts.Vector3, a uint64) *concepts.Vector3 {
-	//w := uint64(a & wMask)
-	a -= uint64(s.Entity) * 1009
-	a = a >> 16
-	z := int64((a & lightmapMask)) + s.LightmapBias[2]
-	result[2] = float64(z) * constants.LightGrid
-	a = a >> 16
-	y := int64((a & lightmapMask)) + s.LightmapBias[1]
-	result[1] = float64(y) * constants.LightGrid
-	a = a >> 16
-	x := int64((a & lightmapMask)) + s.LightmapBias[0]
-	result[0] = float64(x) * constants.LightGrid
-	return result
 }
 
 // PointZ finds the Z value at a point in the sector
