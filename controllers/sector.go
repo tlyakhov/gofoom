@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
@@ -22,19 +23,20 @@ func (sc *SectorController) ComponentIndex() int {
 }
 
 // Should run before everything
-func (a *SectorController) Priority() int {
+func (sc *SectorController) Priority() int {
 	return 50
 }
 
-func (a *SectorController) Methods() concepts.ControllerMethod {
+func (sc *SectorController) Methods() concepts.ControllerMethod {
 	return concepts.ControllerRecalculate
 }
 
-func (a *SectorController) Target(target concepts.Attachable) bool {
-	a.Sector = target.(*core.Sector)
-	return a.Sector.IsActive()
+func (sc *SectorController) Target(target concepts.Attachable) bool {
+	sc.Sector = target.(*core.Sector)
+	return sc.Sector.IsActive()
 }
 
-func (a *SectorController) Recalculate() {
-	a.Sector.Recalculate()
+func (sc *SectorController) Recalculate() {
+	sc.Sector.Recalculate()
+	sc.Sector.LightmapBias[0] = math.MaxInt64
 }

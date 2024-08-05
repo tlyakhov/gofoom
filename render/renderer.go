@@ -190,10 +190,9 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
 	// TODO: We can probably do something simpler and cheaper here.
-	_, loaded := r.SectorLastRendered.LoadAndStore(c.Sector.Entity, uint64(r.Frame))
-	if !loaded {
-		// TODO: Move this elsewhere, we should only be doing this when the
-		// sector changes.
+	r.SectorLastRendered.Store(c.Sector.Entity, uint64(r.Frame))
+
+	if c.Sector.LightmapBias[0] == math.MaxInt64 {
 		// Floor is important, needs to truncate towards -Infinity rather than 0
 		c.Sector.LightmapBias[0] = int64(math.Floor(c.Sector.Min[0]/r.LightGrid)) - 2
 		c.Sector.LightmapBias[1] = int64(math.Floor(c.Sector.Min[1]/r.LightGrid)) - 2

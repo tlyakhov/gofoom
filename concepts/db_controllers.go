@@ -8,10 +8,9 @@ import (
 	"sort"
 )
 
-type ControllerSet struct {
-	*EntityComponentDB
-	All []Controller
-}
+// TODO: A lot of unnecessary complexity here because we originally had way more
+// different types of controllers. Now there are only really 2 methods: "Loaded"
+// and "Recalculate". Should simplify.
 
 func (dbt *dbTypes) RegisterController(local Controller) {
 	dbt.lock.Lock()
@@ -31,20 +30,6 @@ func (dbt *dbTypes) RegisterController(local Controller) {
 	})
 }
 
-func (db *EntityComponentDB) NewControllerSet() *ControllerSet {
-	result := &ControllerSet{
-		EntityComponentDB: db,
-		All:               make([]Controller, len(DbTypes().Controllers)),
-	}
-
-	for i, t := range DbTypes().Controllers {
-		c := reflect.New(t.Elem()).Interface().(Controller)
-		c.Parent(result)
-		result.All[i] = c
-	}
-	return result
-}
-
 func act(controller Controller, method ControllerMethod) {
 	switch method {
 	case ControllerAlways:
@@ -56,8 +41,12 @@ func act(controller Controller, method ControllerMethod) {
 	}
 }
 
-func (set *ControllerSet) Act(component Attachable, index int, method ControllerMethod) {
-	for _, controller := range set.All {
+func (db *EntityComponentDB) Act(component Attachable, index int, method ControllerMethod) {
+	for _, t := range DbTypes().Controllers {
+		controller := reflect.New(t.Elem()).Interface().(Controller)
+		if controller == nil || controller.Methods()&method == 0 {
+			continue
+		}
 		if controller.Methods()&method == 0 ||
 			controller.ComponentIndex() != index ||
 			!controller.Target(component) {
@@ -68,8 +57,8 @@ func (set *ControllerSet) Act(component Attachable, index int, method Controller
 }
 
 func (db *EntityComponentDB) ActAllControllers(method ControllerMethod) {
-	set := db.NewControllerSet()
-	for _, controller := range set.All {
+	for _, t := range DbTypes().Controllers {
+		controller := reflect.New(t.Elem()).Interface().(Controller)
 		if controller == nil || controller.Methods()&method == 0 {
 			continue
 		}

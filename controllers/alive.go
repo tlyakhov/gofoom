@@ -33,7 +33,7 @@ func (a *AliveController) Target(target concepts.Attachable) bool {
 func (a *AliveController) Always() {
 	for source, d := range a.Damages {
 		if d.Cooldown.Now <= 0 {
-			d.Cooldown.Detach(a.Simulation)
+			d.Cooldown.Detach(a.DB.Simulation)
 			delete(a.Damages, source)
 			continue
 		}

@@ -47,7 +47,7 @@ func (wc *WanderController) Always() {
 		wc.NextSector = wc.Body.SectorEntity
 	}
 
-	if wc.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
+	if wc.DB.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
 		a := wc.Body.Angle.NewAnimation()
 		a.Coordinates = concepts.AnimationCoordinatesAbsolute
 		a.Start = wc.Body.Angle.Now
@@ -62,9 +62,9 @@ func (wc *WanderController) Always() {
 		a.Duration = 300
 		a.TweeningFunc = concepts.EaseInOut2
 		a.Lifetime = concepts.AnimationLifetimeOnce
-		wc.LastTurn = wc.Timestamp
+		wc.LastTurn = wc.DB.Timestamp
 	}
-	if wc.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {
+	if wc.DB.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {
 		sector := wc.Body.Sector()
 		if sector == nil {
 			return
@@ -85,6 +85,6 @@ func (wc *WanderController) Always() {
 		if closestSegment != nil {
 			wc.NextSector = closestSegment.AdjacentSector
 		}
-		wc.LastTarget = wc.Timestamp
+		wc.LastTarget = wc.DB.Timestamp
 	}
 }

@@ -64,8 +64,10 @@ func (ui *UI) Initialize() {
 	ui.Padding = 2
 	ui.LabelColor = concepts.Vector4{1, 1, 1, 1}
 	ui.BGColor = concepts.Vector4{0.3, 0.3, 0.3, 1}
+	ui.BGColor.MulSelf(0.3)
 	ui.WidgetColor = concepts.Vector4{0.5, 0.5, 0.5, 1}
 	ui.ShadowColor = concepts.Vector4{0.1, 0.1, 0.1, 1}
+	ui.ShadowColor.MulSelf(0.3)
 	ui.SelectedColor = concepts.Vector4{0, 0.431, 1, 1}
 	ui.ShadowText = true
 
