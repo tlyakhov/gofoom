@@ -63,9 +63,11 @@ func initializeMenus() {
 		if !strings.HasSuffix(path, ".json") {
 			return nil
 		}
+		name := filepath.Base(path)
+		name = name[0 : len(name)-len(filepath.Ext(path))]
 		b := &ui.Button{
 			Widget: ui.Widget{
-				Label:   "Load " + filepath.Base(path),
+				Label:   name,
 				Tooltip: path,
 			},
 			Clicked: func(b *ui.Button) {

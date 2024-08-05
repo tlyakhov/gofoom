@@ -13,30 +13,37 @@ func (ui *UI) inRange(x, y int) bool {
 	return x >= 0 && y >= 0 && x < ui.cols && y < ui.rows
 }
 
-func (ui *UI) renderDialog(title string, x, y, w, h int) {
+func (ui *UI) renderDialog(title string, x, y, w, h int, scrollPos float64, a float64) {
+	c := &ui.LabelColor
+	bg := &ui.BGColor
+	if a != 1 {
+		c = c.Mul(a)
+		bg = bg.Mul(a)
+	}
+
 	// Corners first
 	if ui.inRange(x, y) {
 		t := &ui.textBuffer[x+y*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = c
+		t.BGColor = bg
 		t.Rune = 201 // CP437 BOX DRAWINGS DOUBLE DOWN AND RIGHT
 	}
 	if ui.inRange(x+w, y) {
 		t := &ui.textBuffer[(x+w)+y*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = c
+		t.BGColor = bg
 		t.Rune = 187 // CP437 BOX DRAWINGS DOUBLE DOWN AND LEFT
 	}
 	if ui.inRange(x, y+h-1) {
 		t := &ui.textBuffer[x+(y+h-1)*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = c
+		t.BGColor = bg
 		t.Rune = 200 // CP437 BOX DRAWINGS DOUBLE UP AND RIGHT
 	}
 	if ui.inRange(x+w, y+h-1) {
 		t := &ui.textBuffer[(x+w)+(y+h-1)*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = c
+		t.BGColor = bg
 		t.Rune = 188 // CP437 BOX DRAWINGS DOUBLE UP AND LEFT
 	}
 
@@ -49,8 +56,8 @@ func (ui *UI) renderDialog(title string, x, y, w, h int) {
 			continue
 		}
 		t := &ui.textBuffer[i+y*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = c
+		t.BGColor = bg
 
 		switch {
 		case i == x+1:
@@ -76,8 +83,8 @@ func (ui *UI) renderDialog(title string, x, y, w, h int) {
 			continue
 		}
 		t = &ui.textBuffer[i+(y+h-1)*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = c
+		t.BGColor = bg
 		t.Rune = 205 // CP437 BOX DRAWINGS DOUBLE HORIZONTAL
 
 		// Fill
@@ -86,20 +93,22 @@ func (ui *UI) renderDialog(title string, x, y, w, h int) {
 				continue
 			}
 			t := &ui.textBuffer[i+j*ui.cols]
-			t.Color = &ui.LabelColor
-			t.BGColor = &ui.BGColor
+			t.Color = c
+			t.BGColor = bg
 			t.Rune = 0
 		}
 	}
 
+	yScroll := int(scrollPos * float64(h-5))
+	hasScroll := scrollPos >= 0
 	for i := y + 1; i < y+h-1; i++ {
 		// Left bar
 		if !ui.inRange(x, i) {
 			continue
 		}
 		t := &ui.textBuffer[x+i*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = c
+		t.BGColor = bg
 		t.Rune = 186 // CP437 BOX DRAWINGS DOUBLE VERTICAL
 
 		// Right bar
@@ -107,9 +116,28 @@ func (ui *UI) renderDialog(title string, x, y, w, h int) {
 			continue
 		}
 		t = &ui.textBuffer[x+w+i*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
-		t.Rune = 186 // CP437 BOX DRAWINGS DOUBLE VERTICAL
+		switch {
+		case hasScroll && i == y+1:
+			t.Color = bg
+			t.BGColor = c
+			t.Rune = 30 // CP437 BLACK UP-POINTING TRIANGLE
+		case hasScroll && i == y+h-2:
+			t.Color = bg
+			t.BGColor = c
+			t.Rune = 31 // CP437 BLACK UP-POINTING TRIANGLE
+		case hasScroll && i == y+2+yScroll:
+			t.Color = bg
+			t.BGColor = c
+			t.Rune = 254 // CP437 BLACK SQUARE
+		case hasScroll:
+			t.Color = bg
+			t.BGColor = c
+			t.Rune = 177 // CP437 LIGHT SHADE
+		default:
+			t.Color = c
+			t.BGColor = bg
+			t.Rune = 186 // CP437 BOX DRAWINGS DOUBLE VERTICAL
+		}
 	}
 }
 
@@ -193,16 +221,17 @@ func (ui *UI) renderSlider(s *Slider, x, y int) {
 	ui.renderBox(&s.Widget, label, x, y, ui.Padding+len(s.Label)+1, ui.Padding+len(label))
 }
 
-func (ui *UI) renderTooltip(widget *Widget) {
+func (ui *UI) renderTooltip(p *Page, widget *Widget) {
 	w, h := ui.MeasureString(ui.TextStyle, widget.Tooltip)
 	w /= ui.TextStyle.CharWidth
 	h /= ui.TextStyle.CharHeight
 
 	x := ui.cols / 2
 	y := ui.rows - h - ui.Padding*2 - 1
+
 	ui.renderDialog("?",
 		x-w/2-ui.Padding, y,
-		w+ui.Padding*2, h+ui.Padding*2)
+		w+ui.Padding*2, h+ui.Padding*2, -1, *p.tooltipAlpha.Render)
 	xx := x - w/2
 	for i := 0; i < len(widget.Tooltip); i++ {
 		r := []rune(widget.Tooltip)[i]
@@ -215,16 +244,22 @@ func (ui *UI) renderTooltip(widget *Widget) {
 			continue
 		}
 		t := &ui.textBuffer[xx+(y+2)*ui.cols]
-		t.Color = &ui.LabelColor
-		t.BGColor = &ui.BGColor
+		t.Color = ui.LabelColor.Mul(*p.tooltipAlpha.Render)
+		t.BGColor = ui.BGColor.Mul(*p.tooltipAlpha.Render)
 		t.Rune = r
 		t.Shadow = ui.ShadowText
 		xx++
 	}
 }
 
-func (ui *UI) measurePage(page *Page) (mx, my int) {
-	mx, my = 0, 0
+func (ui *UI) measurePage(page *Page) (mx, my, visibleWidgets int) {
+	tooltipHeight := 6
+	maxHeight := ui.rows - ui.Padding*2 - tooltipHeight
+	if page.IsDialog {
+		maxHeight -= 3
+	}
+
+	mx, my, visibleWidgets = 0, 0, 0
 	for _, v := range page.Widgets {
 		var dx, dy int
 		switch w := v.(type) {
@@ -239,41 +274,64 @@ func (ui *UI) measurePage(page *Page) (mx, my int) {
 			mx = dx
 		}
 		my += dy + 1
+		visibleWidgets++
+		if my >= maxHeight {
+			break
+		}
 	}
 	return
 }
 
 func (ui *UI) renderPage(page *Page) {
+	mx, my, visibleWidgets := ui.measurePage(page)
+	page.VisibleWidgets = visibleWidgets
 	x := ui.cols / 2
-	y := ui.rows/2 - len(page.Widgets)*3/2
+	y := ui.rows/2 - my/2
 	if page.IsDialog {
-		mx, my := ui.measurePage(page)
-		mx += ui.Padding * 2
+		scrollPos := -1.0
+		if page.VisibleWidgets != len(page.Widgets) {
+			scrollPos = float64(page.ScrollPos) / float64(len(page.Widgets)-page.VisibleWidgets)
+		}
+		mx += ui.Padding*2 + 2
 		ui.renderDialog(page.Title,
 			x-mx/2, y-ui.Padding,
-			mx, my+ui.Padding)
+			mx, my+ui.Padding, scrollPos, 1)
 	}
-	for i, v := range page.Widgets {
+
+	limit := concepts.Min(len(page.Widgets), page.ScrollPos+visibleWidgets)
+	for i := page.ScrollPos; i < limit; i++ {
 		selected := i == page.SelectedItem
-		switch w := v.(type) {
+		switch w := page.Widgets[i].(type) {
 		case *Button:
-			ui.renderButton(w, x, y+i*3)
+			ui.renderButton(w, x, y)
 		case *Checkbox:
-			ui.renderCheckbox(w, x, y+i*3)
+			ui.renderCheckbox(w, x, y)
 		case *Slider:
-			ui.renderSlider(w, x, y+i*3)
+			ui.renderSlider(w, x, y)
 		}
-		w := v.GetWidget()
+		y += 3
+		w := page.Widgets[i].GetWidget()
 		if selected {
 			w.highlight.Animation.Lifetime = concepts.AnimationLifetimeBounce
 			w.highlight.Animation.Active = true
-			if len(w.Tooltip) > 0 {
-				ui.renderTooltip(w)
-			}
 		} else {
 			w.highlight.Animation.Lifetime = concepts.AnimationLifetimeBounceOnce
 		}
 	}
+	if page.tooltipCurrent != nil {
+		ui.renderTooltip(page, page.tooltipCurrent.GetWidget())
+	}
+	if page.tooltipQueue.Len() > 0 {
+		if page.tooltipAlpha.Percent > 0 {
+			page.tooltipAlpha.Reverse = true
+			page.tooltipAlpha.Active = true
+		} else {
+			page.tooltipCurrent = page.tooltipQueue.PopBack()
+			page.tooltipAlpha.Reverse = false
+			page.tooltipAlpha.Active = true
+		}
+	}
+
 }
 
 func (ui *UI) Render() {
