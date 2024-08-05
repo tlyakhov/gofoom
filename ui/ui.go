@@ -35,6 +35,7 @@ func (ui *UI) SetPage(page *Page) {
 			w := item.GetWidget()
 			w.highlight.Detach(ui.DB.Simulation)
 		}
+		ui.Page.tooltipAlpha.Detach(ui.DB.Simulation)
 	}
 
 	ui.Page = page
@@ -42,6 +43,18 @@ func (ui *UI) SetPage(page *Page) {
 	if page == nil {
 		return
 	}
+
+	page.tooltipAlpha.Attach(ui.DB.Simulation)
+	a := page.tooltipAlpha.NewAnimation()
+	page.tooltipAlpha.Animation = a
+	a.Duration = 200
+	a.Start = 0
+	a.End = 1.0
+	a.TweeningFunc = concepts.EaseInOut2
+	a.Lifetime = concepts.AnimationLifetimeOnce
+	a.Reverse = false
+	a.Active = false
+	a.Coordinates = concepts.AnimationCoordinatesAbsolute
 
 	for _, item := range page.Widgets {
 		w := item.GetWidget()
@@ -64,10 +77,10 @@ func (ui *UI) Initialize() {
 	ui.Padding = 2
 	ui.LabelColor = concepts.Vector4{1, 1, 1, 1}
 	ui.BGColor = concepts.Vector4{0.3, 0.3, 0.3, 1}
-	ui.BGColor.MulSelf(0.3)
+	ui.BGColor.MulSelf(0.5)
 	ui.WidgetColor = concepts.Vector4{0.5, 0.5, 0.5, 1}
 	ui.ShadowColor = concepts.Vector4{0.1, 0.1, 0.1, 1}
-	ui.ShadowColor.MulSelf(0.3)
+	ui.ShadowColor.MulSelf(0.5)
 	ui.SelectedColor = concepts.Vector4{0, 0.431, 1, 1}
 	ui.ShadowText = true
 
@@ -88,6 +101,13 @@ func (ui *UI) MoveUp() {
 	if ui.Page.SelectedItem < 0 {
 		ui.Page.SelectedItem = 0
 	}
+	if w := ui.Page.SelectedWidget(); w.GetWidget().Tooltip != "" {
+		ui.Page.tooltipQueue.PushBack(w)
+	}
+
+	for ui.Page.SelectedItem < ui.Page.ScrollPos {
+		ui.Page.ScrollPos--
+	}
 }
 func (ui *UI) MoveDown() {
 	if ui.Page == nil {
@@ -97,6 +117,15 @@ func (ui *UI) MoveDown() {
 	if ui.Page.SelectedItem >= len(ui.Page.Widgets) {
 		ui.Page.SelectedItem = len(ui.Page.Widgets) - 1
 	}
+
+	if w := ui.Page.SelectedWidget(); w.GetWidget().Tooltip != "" {
+		ui.Page.tooltipQueue.PushBack(w)
+	}
+
+	for ui.Page.SelectedItem >= ui.Page.ScrollPos+ui.Page.VisibleWidgets {
+		ui.Page.ScrollPos++
+	}
+
 }
 func (ui *UI) Action() {
 	if ui.Page == nil {

@@ -55,6 +55,7 @@ require (
 
 require (
 	github.com/disintegration/gift v1.2.1 // indirect
+	github.com/gammazero/deque v0.2.1 // indirect
 	github.com/gopxl/glhf/v2 v2.1.0 // indirect
 	github.com/gopxl/mainthread/v2 v2.1.1 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
