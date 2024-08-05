@@ -12,7 +12,6 @@ const (
 )
 
 type Controller interface {
-	Parent(*ControllerSet)
 	Priority() int
 	ComponentIndex() int
 	Methods() ControllerMethod
@@ -24,7 +23,6 @@ type Controller interface {
 }
 
 type BaseController struct {
-	*ControllerSet
 }
 
 func (c *BaseController) Priority() int {
@@ -37,10 +35,6 @@ func (c *BaseController) ComponentIndex() int {
 
 func (c *BaseController) Methods() ControllerMethod {
 	return 0
-}
-
-func (c *BaseController) Parent(s *ControllerSet) {
-	c.ControllerSet = s
 }
 
 func (c *BaseController) Target(a Attachable) bool {

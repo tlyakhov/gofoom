@@ -170,8 +170,8 @@ func run() {
 	gameUI = &ui.UI{Renderer: renderer}
 	gameUI.OnChanged = saveSettings
 	gameUI.Initialize()
-
 	initializeMenus()
+	ui.LoadSettings(constants.UserSettings, uiPageMain, uiPageOptions, uiPageKeyBindings)
 
 	for !win.Closed() {
 		db.Simulation.Step()

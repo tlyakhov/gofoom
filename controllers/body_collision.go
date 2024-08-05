@@ -91,7 +91,7 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
-	for _, attachable := range bc.EntityComponentDB.AllOfType(core.SectorComponentIndex) {
+	for _, attachable := range bc.Body.DB.AllOfType(core.SectorComponentIndex) {
 		sector := attachable.(*core.Sector)
 		if sector.IsPointInside2D(bc.pos2d) {
 			closestSector = sector
@@ -103,7 +103,7 @@ func (bc *BodyController) findBodySector() {
 		p := bc.Body.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
 		closestDistance2 := math.MaxFloat64
-		for _, attachable := range bc.EntityComponentDB.AllOfType(core.SectorComponentIndex) {
+		for _, attachable := range bc.Body.DB.AllOfType(core.SectorComponentIndex) {
 			sector := attachable.(*core.Sector)
 			for _, seg := range sector.Segments {
 				dist2 := seg.DistanceToPoint2(p)

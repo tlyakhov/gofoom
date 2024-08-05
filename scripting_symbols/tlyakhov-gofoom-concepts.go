@@ -105,7 +105,6 @@ func init() {
 		"BaseController":       reflect.ValueOf((*concepts.BaseController)(nil)),
 		"Controller":           reflect.ValueOf((*concepts.Controller)(nil)),
 		"ControllerMethod":     reflect.ValueOf((*concepts.ControllerMethod)(nil)),
-		"ControllerSet":        reflect.ValueOf((*concepts.ControllerSet)(nil)),
 		"Dynamic":              reflect.ValueOf((*concepts.Dynamic)(nil)),
 		"DynamicStage":         reflect.ValueOf((*concepts.DynamicStage)(nil)),
 		"Entity":               reflect.ValueOf((*concepts.Entity)(nil)),
@@ -212,7 +211,6 @@ type _tlyakhov_gofoom_concepts_Controller struct {
 	WComponentIndex func() int
 	WLoaded         func()
 	WMethods        func() concepts.ControllerMethod
-	WParent         func(a0 *concepts.ControllerSet)
 	WPriority       func() int
 	WRecalculate    func()
 	WTarget         func(a0 concepts.Attachable) bool
@@ -229,9 +227,6 @@ func (W _tlyakhov_gofoom_concepts_Controller) Loaded() {
 }
 func (W _tlyakhov_gofoom_concepts_Controller) Methods() concepts.ControllerMethod {
 	return W.WMethods()
-}
-func (W _tlyakhov_gofoom_concepts_Controller) Parent(a0 *concepts.ControllerSet) {
-	W.WParent(a0)
 }
 func (W _tlyakhov_gofoom_concepts_Controller) Priority() int {
 	return W.WPriority()

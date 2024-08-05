@@ -3,6 +3,11 @@
 
 package ui
 
+import (
+	"strconv"
+	"tlyakhov/gofoom/concepts"
+)
+
 type Slider struct {
 	Widget
 
@@ -14,6 +19,14 @@ type Slider struct {
 
 func (s *Slider) Serialize() map[string]any {
 	result := s.Widget.Serialize()
-	result["Value"] = s.Value
+	result["Value"] = strconv.FormatInt(int64(s.Value), 10)
 	return result
+}
+
+func (s *Slider) Construct(data map[string]any) {
+	if v, ok := data["Value"]; ok {
+		if v2, err := strconv.ParseInt(v.(string), 10, 64); err == nil {
+			s.Value = concepts.Max(concepts.Min(int(v2), s.Max), s.Min)
+		}
+	}
 }

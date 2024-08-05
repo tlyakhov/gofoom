@@ -16,3 +16,9 @@ func (cb *Checkbox) Serialize() map[string]any {
 	result["Value"] = cb.Value
 	return result
 }
+
+func (cb *Checkbox) Construct(data map[string]any) {
+	if v, ok := data["Value"]; ok {
+		cb.Value = v.(bool)
+	}
+}
