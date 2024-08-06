@@ -47,7 +47,7 @@ func (ui *UI) SetPage(page *Page) {
 	page.tooltipAlpha.Attach(ui.DB.Simulation)
 	a := page.tooltipAlpha.NewAnimation()
 	page.tooltipAlpha.Animation = a
-	a.Duration = 200
+	a.Duration = 100
 	a.Start = 0
 	a.End = 1.0
 	a.TweeningFunc = concepts.EaseInOut2

@@ -141,7 +141,7 @@ func (e *Editor) UpdateStatus() {
 
 	var text string
 
-	if m, ok := e.CurrentAction.(state.MouseActionable); ok {
+	if m, ok := e.CurrentAction.(state.Cancelable); ok {
 		text = m.Status()
 	} else {
 		text = "Left mouse down to transform selection. Right click/drag to select. Middle-drag to pan. Mouse-wheel to zoom."
@@ -400,7 +400,7 @@ func (e *Editor) NewShader() {
 
 func (e *Editor) SwitchTool(tool state.EditorTool) {
 	e.Tool = tool
-	if m, ok := e.CurrentAction.(state.MouseActionable); ok {
+	if m, ok := e.CurrentAction.(state.Cancelable); ok {
 		m.Cancel()
 	} else {
 		e.ActTool()
@@ -581,7 +581,7 @@ func (e *Editor) SetDialogLocation(dlg *dialog.FileDialog, target string) {
 	if target == "" {
 		target, _ = os.Getwd()
 	}
-	dlg.SetFileName(target)
+	dlg.SetFileName(filepath.Base(target))
 	absPath, err := filepath.Abs(target)
 	if err != nil {
 		log.Printf("SetDialogLocation: error making absolute path from %v", target)

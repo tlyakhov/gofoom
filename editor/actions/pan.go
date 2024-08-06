@@ -7,8 +7,14 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 )
+
+// Declare conformity with interfaces
+var _ fyne.Draggable = (*Pan)(nil)
+var _ desktop.Hoverable = (*Pan)(nil)
+var _ desktop.Mouseable = (*Pan)(nil)
 
 type Pan struct {
 	state.IEditor
@@ -18,20 +24,48 @@ type Pan struct {
 	Delta       concepts.Vector2
 }
 
-func (a *Pan) OnMouseDown(evt *desktop.MouseEvent) {
-	a.Mode = "PanStart"
+func (a *Pan) begin() {
+	if a.Mode != "" {
+		return
+	}
+	a.Mode = "Panning"
 	a.OriginalPos = a.State().Pos
 	a.SetMapCursor(desktop.VResizeCursor)
 }
 
-func (a *Pan) OnMouseMove() {
-	a.Mode = "Panning"
+func (a *Pan) end() {
+	if a.Mode != "Panning" {
+		return
+	}
+	a.Mode = ""
+	a.ActionFinished(false, false, false)
+}
+
+func (a *Pan) MouseDown(evt *desktop.MouseEvent) {
+	a.begin()
+}
+
+func (a *Pan) MouseIn(evt *desktop.MouseEvent) {}
+func (a *Pan) MouseOut()                       {}
+
+func (a *Pan) MouseMoved(evt *desktop.MouseEvent) {
+	a.begin()
 	a.Delta = *a.State().Mouse.Sub(&a.State().MouseDown)
 	a.State().Pos = *a.OriginalPos.Sub(a.Delta.Mul(1.0 / a.State().Scale))
 }
 
-func (a *Pan) OnMouseUp() {
-	a.ActionFinished(false, false, false)
+func (a *Pan) Dragged(evt *fyne.DragEvent) {
+	a.begin()
+	a.Delta = *a.State().Mouse.Sub(&a.State().MouseDown)
+	a.State().Pos = *a.OriginalPos.Sub(a.Delta.Mul(1.0 / a.State().Scale))
+}
+
+func (a *Pan) DragEnd() {
+	a.end()
+}
+
+func (a *Pan) MouseUp(evt *desktop.MouseEvent) {
+	a.end()
 }
 func (a *Pan) Act()    {}
 func (a *Pan) Cancel() {}

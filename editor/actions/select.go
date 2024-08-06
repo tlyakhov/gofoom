@@ -19,6 +19,11 @@ const (
 	SelectSub
 )
 
+// Declare conformity with interfaces
+var _ fyne.Draggable = (*Select)(nil)
+var _ fyne.SecondaryTappable = (*Select)(nil)
+var _ desktop.Mouseable = (*Select)(nil)
+
 type Select struct {
 	state.IEditor
 
@@ -28,25 +33,28 @@ type Select struct {
 	Selected *core.Selection
 }
 
-func (a *Select) OnMouseDown(evt *desktop.MouseEvent) {
+func (a *Select) begin(m fyne.KeyModifier) {
+	if a.Mode != "" {
+		return
+	}
 
-	if evt.Modifier&fyne.KeyModifierShift != 0 {
+	if m&fyne.KeyModifierShift != 0 {
 		a.Modifier = SelectAdd
-	} else if evt.Modifier&fyne.KeyModifierSuper != 0 {
+	} else if m&fyne.KeyModifierSuper != 0 {
 		a.Modifier = SelectSub
 	}
 
 	a.Original = core.NewSelectionClone(a.State().SelectedObjects)
 
-	a.Mode = "SelectionStart"
+	a.Mode = "Selecting"
 	a.SetMapCursor(desktop.TextCursor)
 }
 
-func (a *Select) OnMouseMove() {
-	a.Mode = "Selecting"
-}
+func (a *Select) end() {
+	if a.Mode != "Selecting" {
+		return
+	}
 
-func (a *Select) OnMouseUp() {
 	hovering := a.State().HoveringObjects
 	if hovering.Empty() { // User is trying to select a sector?
 		hovering = core.NewSelection()
@@ -74,9 +82,34 @@ func (a *Select) OnMouseUp() {
 		a.Selected = core.NewSelectionClone(hovering)
 	}
 	a.Selected.Normalize()
+	a.Mode = ""
 	a.SetSelection(true, a.Selected)
 	a.ActionFinished(false, true, false)
 }
+
+func (a *Select) MouseDown(evt *desktop.MouseEvent) {
+	a.begin(evt.Modifier)
+}
+
+func (a *Select) TappedSecondary(evt *fyne.PointEvent) {
+	if a.Mode == "" {
+		a.begin(fyne.KeyModifier(0))
+		a.end()
+	}
+}
+
+func (a *Select) Dragged(evt *fyne.DragEvent) {
+	a.begin(fyne.KeyModifier(0))
+}
+
+func (a *Select) DragEnd() {
+	a.end()
+}
+
+func (a *Select) MouseUp(evt *desktop.MouseEvent) {
+	a.end()
+}
+
 func (a *Select) Act()    {}
 func (a *Select) Cancel() {}
 func (a *Select) Frame()  {}
@@ -90,5 +123,5 @@ func (a *Select) Redo() {
 func (a *Select) RequiresLock() bool { return false }
 
 func (a *Select) Status() string {
-	return "Selecting " + a.Mode
+	return "Selecting"
 }

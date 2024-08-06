@@ -37,6 +37,7 @@ type Edit struct {
 	MouseWorld     concepts.Vector2
 	MouseDownWorld concepts.Vector2
 	MousePressed   bool
+	Dragging       bool
 
 	SelectedObjects        *core.Selection
 	HoveringObjects        *core.Selection
