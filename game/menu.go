@@ -94,16 +94,16 @@ func menuInput() {
 		gameUI.SetPage(uiPageMain)
 	}
 
-	if win.JustPressed(pixel.KeyW) || win.JustPressed(pixel.KeyUp) {
+	if win.JustPressed(pixel.KeyW) || win.Repeated(pixel.KeyW) {
 		gameUI.MoveUp()
 	}
-	if win.JustPressed(pixel.KeyS) || win.JustPressed(pixel.KeyDown) {
+	if win.JustPressed(pixel.KeyS) || win.Repeated(pixel.KeyS) {
 		gameUI.MoveDown()
 	}
-	if win.JustPressed(pixel.KeyA) || win.JustPressed(pixel.KeyLeft) {
+	if win.JustPressed(pixel.KeyA) || win.Repeated(pixel.KeyA) {
 		gameUI.EditLeft()
 	}
-	if win.JustPressed(pixel.KeyD) || win.JustPressed(pixel.KeyRight) {
+	if win.JustPressed(pixel.KeyD) || win.Repeated(pixel.KeyD) {
 		gameUI.EditRight()
 	}
 	if win.JustReleased(pixel.KeyEnter) || win.JustReleased(pixel.KeySpace) {

@@ -9,11 +9,38 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
+const (
+	CharCornerTopLeft int = iota
+	CharCornerTopRight
+	CharCornerBottomLeft
+	CharCornerBottomRight
+	CharHorizontal
+	CharVertical
+)
+
+var heavyDialog = [...]rune{
+	201, // CP437 BOX DRAWINGS DOUBLE DOWN AND RIGHT
+	187, // CP437 BOX DRAWINGS DOUBLE DOWN AND LEFT
+	200, // CP437 BOX DRAWINGS DOUBLE UP AND RIGHT
+	188, // CP437 BOX DRAWINGS DOUBLE UP AND LEFT
+	205, // CP437 BOX DRAWINGS DOUBLE HORIZONTAL
+	186, // CP437 BOX DRAWINGS DOUBLE VERTICAL
+}
+
+var lightDialog = [...]rune{
+	218, // CP437 BOX DRAWINGS LIGHT DOWN AND RIGHT
+	191, // CP437 BOX DRAWINGS LIGHT DOWN AND LEFT
+	192, // CP437 BOX DRAWINGS LIGHT UP AND RIGHT
+	217, // CP437 BOX DRAWINGS LIGHT UP AND LEFT
+	196, // CP437 BOX DRAWINGS LIGHT HORIZONTAL
+	179, // CP437 BOX DRAWINGS LIGHT VERTICAL
+}
+
 func (ui *UI) inRange(x, y int) bool {
 	return x >= 0 && y >= 0 && x < ui.cols && y < ui.rows
 }
 
-func (ui *UI) renderDialog(title string, x, y, w, h int, scrollPos float64, a float64) {
+func (ui *UI) renderDialog(weight [6]rune, title string, x, y, w, h int, scrollPos float64, a float64) {
 	c := &ui.LabelColor
 	bg := &ui.BGColor
 	if a != 1 {
@@ -26,25 +53,25 @@ func (ui *UI) renderDialog(title string, x, y, w, h int, scrollPos float64, a fl
 		t := &ui.textBuffer[x+y*ui.cols]
 		t.Color = c
 		t.BGColor = bg
-		t.Rune = 201 // CP437 BOX DRAWINGS DOUBLE DOWN AND RIGHT
+		t.Rune = weight[CharCornerTopLeft]
 	}
 	if ui.inRange(x+w, y) {
 		t := &ui.textBuffer[(x+w)+y*ui.cols]
 		t.Color = c
 		t.BGColor = bg
-		t.Rune = 187 // CP437 BOX DRAWINGS DOUBLE DOWN AND LEFT
+		t.Rune = weight[CharCornerTopRight]
 	}
 	if ui.inRange(x, y+h-1) {
 		t := &ui.textBuffer[x+(y+h-1)*ui.cols]
 		t.Color = c
 		t.BGColor = bg
-		t.Rune = 200 // CP437 BOX DRAWINGS DOUBLE UP AND RIGHT
+		t.Rune = weight[CharCornerBottomLeft]
 	}
 	if ui.inRange(x+w, y+h-1) {
 		t := &ui.textBuffer[(x+w)+(y+h-1)*ui.cols]
 		t.Color = c
 		t.BGColor = bg
-		t.Rune = 188 // CP437 BOX DRAWINGS DOUBLE UP AND LEFT
+		t.Rune = weight[CharCornerBottomRight]
 	}
 
 	titleStart := x + w/2 - len(title)/2
@@ -75,7 +102,7 @@ func (ui *UI) renderDialog(title string, x, y, w, h int, scrollPos float64, a fl
 			t.Rune = []rune(title)[i-titleStart]
 			t.Shadow = ui.ShadowText
 		default:
-			t.Rune = 205 // CP437 BOX DRAWINGS DOUBLE HORIZONTAL
+			t.Rune = weight[CharHorizontal]
 		}
 
 		// Bottom bar
@@ -85,7 +112,7 @@ func (ui *UI) renderDialog(title string, x, y, w, h int, scrollPos float64, a fl
 		t = &ui.textBuffer[i+(y+h-1)*ui.cols]
 		t.Color = c
 		t.BGColor = bg
-		t.Rune = 205 // CP437 BOX DRAWINGS DOUBLE HORIZONTAL
+		t.Rune = weight[CharHorizontal]
 
 		// Fill
 		for j := y + 1; j < y+h-1; j++ {
@@ -109,7 +136,7 @@ func (ui *UI) renderDialog(title string, x, y, w, h int, scrollPos float64, a fl
 		t := &ui.textBuffer[x+i*ui.cols]
 		t.Color = c
 		t.BGColor = bg
-		t.Rune = 186 // CP437 BOX DRAWINGS DOUBLE VERTICAL
+		t.Rune = weight[CharVertical]
 
 		// Right bar
 		if !ui.inRange(x+w, i) {
@@ -136,7 +163,7 @@ func (ui *UI) renderDialog(title string, x, y, w, h int, scrollPos float64, a fl
 		default:
 			t.Color = c
 			t.BGColor = bg
-			t.Rune = 186 // CP437 BOX DRAWINGS DOUBLE VERTICAL
+			t.Rune = weight[CharVertical]
 		}
 	}
 }
@@ -229,7 +256,7 @@ func (ui *UI) renderTooltip(p *Page, widget *Widget) {
 	x := ui.cols / 2
 	y := ui.rows - h - ui.Padding*2 - 1
 
-	ui.renderDialog("?",
+	ui.renderDialog(lightDialog, "?",
 		x-w/2-ui.Padding, y,
 		w+ui.Padding*2, h+ui.Padding*2, -1, *p.tooltipAlpha.Render)
 	xx := x - w/2
@@ -293,7 +320,7 @@ func (ui *UI) renderPage(page *Page) {
 			scrollPos = float64(page.ScrollPos) / float64(len(page.Widgets)-page.VisibleWidgets)
 		}
 		mx += ui.Padding*2 + 2
-		ui.renderDialog(page.Title,
+		ui.renderDialog(heavyDialog, page.Title,
 			x-mx/2, y-ui.Padding,
 			mx, my+ui.Padding, scrollPos, 1)
 	}
@@ -322,10 +349,10 @@ func (ui *UI) renderPage(page *Page) {
 		ui.renderTooltip(page, page.tooltipCurrent.GetWidget())
 	}
 	if page.tooltipQueue.Len() > 0 {
-		if page.tooltipAlpha.Percent > 0 {
+		if page.tooltipAlpha.Percent >= 1 {
 			page.tooltipAlpha.Reverse = true
 			page.tooltipAlpha.Active = true
-		} else {
+		} else if page.tooltipAlpha.Percent <= 0 {
 			page.tooltipCurrent = page.tooltipQueue.PopBack()
 			page.tooltipAlpha.Reverse = false
 			page.tooltipAlpha.Active = true

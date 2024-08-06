@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"image"
+	"log"
 	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -20,7 +21,10 @@ import (
 )
 
 // Declare conformity with interfaces
+var _ fyne.Draggable = (*MapWidget)(nil)
 var _ fyne.Focusable = (*MapWidget)(nil)
+var _ fyne.Tappable = (*MapWidget)(nil)
+var _ fyne.SecondaryTappable = (*MapWidget)(nil)
 var _ fyne.Widget = (*MapWidget)(nil)
 var _ desktop.Mouseable = (*MapWidget)(nil)
 var _ desktop.Keyable = (*MapWidget)(nil)
@@ -200,6 +204,10 @@ func (mw *MapWidget) TypedKey(evt *fyne.KeyEvent) {
 	}
 }
 func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
+	if mw.Context == nil {
+		return
+	}
+	log.Printf("Mouse down")
 	mw.requestFocus()
 	editor.MousePressed = true
 	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
@@ -214,15 +222,47 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 		editor.NewAction(&actions.Transform{IEditor: editor})
 	}
 
-	if m, ok := editor.CurrentAction.(state.MouseActionable); ok {
-		m.OnMouseDown(evt)
+	if m, ok := editor.CurrentAction.(desktop.Mouseable); ok {
+		m.MouseDown(evt)
 	}
 }
 func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	editor.MousePressed = false
 
-	if m, ok := editor.CurrentAction.(state.MouseActionable); ok {
-		m.OnMouseUp()
+	if m, ok := editor.CurrentAction.(desktop.Mouseable); ok {
+		m.MouseUp(evt)
+	}
+}
+
+func (mw *MapWidget) Tapped(evt *fyne.PointEvent) {
+	if mw.Context == nil {
+		return
+	}
+	mw.requestFocus()
+
+	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
+	editor.MouseDown[0], editor.MouseDown[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
+	editor.MouseDownWorld = *editor.ScreenToWorld(&editor.MouseDown)
+	log.Printf("Tapped")
+
+	if m, ok := editor.CurrentAction.(fyne.Tappable); ok {
+		m.Tapped(evt)
+	}
+}
+
+func (mw *MapWidget) TappedSecondary(evt *fyne.PointEvent) {
+	if mw.Context == nil {
+		return
+	}
+	mw.requestFocus()
+
+	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
+	editor.MouseDown[0], editor.MouseDown[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
+	editor.MouseDownWorld = *editor.ScreenToWorld(&editor.MouseDown)
+	log.Printf("SecondaryTapped")
+
+	if m, ok := editor.CurrentAction.(fyne.SecondaryTappable); ok {
+		m.TappedSecondary(evt)
 	}
 }
 
@@ -254,9 +294,39 @@ func (mw *MapWidget) Scrolled(ev *fyne.ScrollEvent) {
 	}
 }
 
+func (mw *MapWidget) DragEnd() {
+	editor.Dragging = false
+	log.Printf("DragEnd")
+
+	if m, ok := editor.CurrentAction.(fyne.Draggable); ok {
+		m.DragEnd()
+	}
+}
+
+func (mw *MapWidget) Dragged(evt *fyne.DragEvent) {
+	if mw.Context == nil {
+		return
+	}
+
+	editor.Dragging = true
+	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
+	editor.Mouse[0], editor.Mouse[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
+	editor.MouseWorld = *editor.ScreenToWorld(&editor.MouseWorld)
+
+	if m, ok := editor.CurrentAction.(fyne.Draggable); ok {
+		m.Dragged(evt)
+	}
+}
+
 func (mw *MapWidget) MouseIn(ev *desktop.MouseEvent) {
+	if m, ok := editor.CurrentAction.(desktop.Hoverable); ok {
+		m.MouseIn(ev)
+	}
 }
 func (mw *MapWidget) MouseOut() {
+	if m, ok := editor.CurrentAction.(desktop.Hoverable); ok {
+		m.MouseOut()
+	}
 }
 
 func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
@@ -275,8 +345,8 @@ func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
 	//log.Printf("scale:%v, x,y: %v, %v - world: %v, %v", scale, x, y, editor.MouseWorld[0], editor.MouseWorld[1])
 	editor.UpdateStatus()
 
-	if m, ok := editor.CurrentAction.(state.MouseActionable); ok {
-		m.OnMouseMove()
+	if m, ok := editor.CurrentAction.(desktop.Hoverable); ok {
+		m.MouseMoved(ev)
 	}
 }
 
