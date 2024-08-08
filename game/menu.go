@@ -59,7 +59,7 @@ func initializeMenus() {
 			}},
 		}}
 
-	filepath.Walk("data/", func(path string, info fs.FileInfo, err error) error {
+	filepath.Walk("data/worlds/", func(path string, info fs.FileInfo, err error) error {
 		if !strings.HasSuffix(path, ".json") {
 			return nil
 		}
@@ -73,7 +73,7 @@ func initializeMenus() {
 			Clicked: func(b *ui.Button) {
 				db.Clear()
 				if err := db.Load(path); err != nil {
-					log.Printf("Error loading world %v", err)
+					log.Printf("Error loading world %v: %v", path, err)
 					return
 				}
 				db.Simulation.Integrate = integrateGame

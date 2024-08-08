@@ -53,10 +53,6 @@ func (le *LightElement) Debug() *concepts.Vector3 {
 }
 
 func (le *LightElement) Get() *concepts.Vector3 {
-	if le.Type == LightElementBody {
-		le.Calculate(&le.Q)
-		return &le.Output
-	}
 	//return le.Debug()
 	r := concepts.RngXorShift64(le.XorSeed)
 	le.XorSeed = r
@@ -98,11 +94,8 @@ func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 		return true
 	}
 
-	// For bodies, don't need to check adjacent sectors
-	if le.Type == LightElementBody {
-		return false
-	}
-
+	// Check adjacent sectors - this is valuable for edge cases where our voxel
+	// is near a boundary
 	for _, seg := range le.Sector.Segments {
 		if seg.AdjacentSector == 0 || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
 			continue
@@ -161,20 +154,20 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		}
 		// Generate entity shadows
 		for _, b := range sector.Bodies {
-			if b.Entity == lightBody.Entity || (le.Type == LightElementBody && le.InputBody == b.Entity) {
+			if !b.Active || b.Shadow == core.BodyShadowNone ||
+				b.Entity == lightBody.Entity ||
+				(le.Type == LightElementBody && le.InputBody == b.Entity) {
 				continue
 			}
-			if b.Active && b.Shadow != core.BodyShadowNone {
-				switch b.Shadow {
-				case core.BodyShadowSphere:
-					if concepts.IntersectLineSphere(p, lightPos, b.Pos.Render, lightBody.Size.Render[0]*0.5) {
-						return false
-					}
-				case core.BodyShadowAABB:
-					ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
-					if concepts.IntersectLineAABB(p, lightPos, b.Pos.Render, ext) {
-						return false
-					}
+			switch b.Shadow {
+			case core.BodyShadowSphere:
+				if concepts.IntersectLineSphere(p, lightPos, b.Pos.Render, b.Size.Render[0]*0.5) {
+					return false
+				}
+			case core.BodyShadowAABB:
+				ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
+				if concepts.IntersectLineAABB(p, lightPos, b.Pos.Render, ext) {
+					return false
 				}
 			}
 		}
@@ -184,7 +177,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			}
 			// Find the intersection with this segment.
 			ok := seg.Intersect3D(p, lightPos, &le.Intersection)
-			if !ok {
+			if !ok || le.Intersection[2] < seg.Bottom || le.Intersection[2] > seg.Top {
 				if debugLighting {
 					log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
 				}
@@ -206,6 +199,24 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				return false
 			}
 		}
+
+		// Does intersecting the ceiling/floor help us?
+		/*denom := sector.CeilNormal.Dot(&le.Delta)
+		if denom != 0 {
+			planeRayDelta := concepts.Vector3{
+				sector.Segments[0].P[0] - p[0],
+				sector.Segments[0].P[1] - p[1],
+				*sector.TopZ.Render - p[2]}
+			t := planeRayDelta.Dot(&sector.CeilNormal) / denom
+			if t > 0 {
+				//				le.Intersection[2] = le.Delta[2] * t
+				le.Intersection[1] = le.Delta[1] * t
+				le.Intersection[0] = le.Delta[0] * t
+				if sector.IsPointInside2D(le.Intersection.To2D()) {
+					return false
+				}
+			}
+		}*/
 
 		var next *core.Sector
 		// Since our sectors can be concave, we can't just go through the first portal we find,

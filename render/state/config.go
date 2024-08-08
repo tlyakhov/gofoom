@@ -61,7 +61,7 @@ func (c *Config) RefreshPlayer() {
 
 const lightmapMask uint64 = (1 << 16) - 1
 
-func (c *Config) WorldToLightmapAddress(s *core.Sector, v *concepts.Vector3, flags uint16) uint64 {
+func (c *Config) WorldToLightmapAddress(s *core.Sector, v *concepts.Vector3, extraHash uint16) uint64 {
 	// Floor is important, needs to truncate towards -Infinity rather than 0
 	z := int64(math.Floor(v[2]/c.LightGrid)) - s.LightmapBias[2]
 	y := int64(math.Floor(v[1]/c.LightGrid)) - s.LightmapBias[1]
@@ -74,7 +74,7 @@ func (c *Config) WorldToLightmapAddress(s *core.Sector, v *concepts.Vector3, fla
 	return (((uint64(x) & lightmapMask) << 48) |
 		((uint64(y) & lightmapMask) << 32) |
 		((uint64(z) & lightmapMask) << 16) |
-		uint64(flags)) + (uint64(s.Entity) * 1009)
+		uint64(extraHash)) + (uint64(s.Entity) * 1009)
 }
 
 func (c *Config) LightmapAddressToWorld(s *core.Sector, result *concepts.Vector3, a uint64) *concepts.Vector3 {

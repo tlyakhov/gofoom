@@ -72,7 +72,7 @@ func (m *Matrix2) AxisScaleBasis(basis *Vector2, scale *Vector2) *Matrix2 {
 	return m
 }
 
-func (m *Matrix2) Scale(scale float64) *Matrix2 {
+func (m *Matrix2) ScaleSelf(scale float64) *Matrix2 {
 	m[0], m[2], m[4] = m[0]*scale, m[2]*scale, m[4]*scale
 	m[1], m[3], m[5] = m[1]*scale, m[3]*scale, m[5]*scale
 	return m
@@ -100,9 +100,9 @@ func (m *Matrix2) RotateSelf(angle float64) *Matrix2 {
 
 func (m *Matrix2) RotateBasis(basis *Vector2, angle float64) *Matrix2 {
 	sint, cost := math.Sincos(angle)
-	m[4], m[5] = m[4]-basis[0], m[5]-basis[0]
+	m[4], m[5] = m[4]-basis[0], m[5]-basis[1]
 	m = m.Mul(&Matrix2{cost, sint, -sint, cost, 0, 0})
-	m[4], m[5] = m[4]+basis[0], m[5]+basis[0]
+	m[4], m[5] = m[4]+basis[0], m[5]+basis[1]
 	return m
 }
 

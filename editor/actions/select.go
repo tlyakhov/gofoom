@@ -33,6 +33,8 @@ type Select struct {
 	Selected *core.Selection
 }
 
+// TODO: This begin/end pattern for action could be generalized to avoid
+// so much similar code across the editor actions.
 func (a *Select) begin(m fyne.KeyModifier) {
 	if a.Mode != "" {
 		return

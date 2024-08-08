@@ -1,0 +1,58 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
+package behaviors
+
+import (
+	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/concepts"
+)
+
+type WeaponInstant struct {
+	concepts.Attached `editable:"^"`
+
+	MarkMaterial concepts.Entity `editable:"Mark Material" edit_type:"Material"`
+
+	// Internal state
+	FireNextFrame bool `editable:"Fire Next Frame"`
+	ShaderStages  []*materials.ShaderStage
+}
+
+var WeaponInstantComponentIndex int
+
+func init() {
+	WeaponInstantComponentIndex = concepts.DbTypes().Register(WeaponInstant{}, WeaponInstantFromDb)
+}
+
+func WeaponInstantFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *WeaponInstant {
+	if asserted, ok := db.Component(e, WeaponInstantComponentIndex).(*WeaponInstant); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (w *WeaponInstant) String() string {
+	return "WeaponInstant"
+}
+
+func (w *WeaponInstant) Construct(data map[string]any) {
+	w.Attached.Construct(data)
+
+	if data == nil {
+		return
+	}
+
+	if v, ok := data["MarkMaterial"]; ok {
+		w.MarkMaterial, _ = concepts.ParseEntity(v.(string))
+	}
+}
+
+func (w *WeaponInstant) Serialize() map[string]any {
+	result := w.Attached.Serialize()
+
+	if w.MarkMaterial != 0 {
+		result["MarkMaterial"] = w.MarkMaterial.Format()
+	}
+
+	return result
+}
