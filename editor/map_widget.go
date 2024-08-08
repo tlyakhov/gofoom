@@ -296,7 +296,7 @@ func (mw *MapWidget) Scrolled(ev *fyne.ScrollEvent) {
 
 func (mw *MapWidget) DragEnd() {
 	editor.Dragging = false
-	log.Printf("DragEnd")
+	//log.Printf("DragEnd")
 
 	if m, ok := editor.CurrentAction.(fyne.Draggable); ok {
 		m.DragEnd()
@@ -311,7 +311,8 @@ func (mw *MapWidget) Dragged(evt *fyne.DragEvent) {
 	editor.Dragging = true
 	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
 	editor.Mouse[0], editor.Mouse[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
-	editor.MouseWorld = *editor.ScreenToWorld(&editor.MouseWorld)
+	editor.MouseWorld = *editor.ScreenToWorld(&editor.Mouse)
+	//log.Printf("Dragged: %v", evt.Position)
 
 	if m, ok := editor.CurrentAction.(fyne.Draggable); ok {
 		m.Dragged(evt)
@@ -339,11 +340,11 @@ func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
 	if x == editor.Mouse[0] && y == editor.Mouse[1] {
 		return
 	}
-	editor.Mouse[0] = x
-	editor.Mouse[1] = y
+	editor.Mouse[0], editor.Mouse[1] = x, y
 	editor.MouseWorld = *editor.ScreenToWorld(&editor.Mouse)
 	//log.Printf("scale:%v, x,y: %v, %v - world: %v, %v", scale, x, y, editor.MouseWorld[0], editor.MouseWorld[1])
 	editor.UpdateStatus()
+	//log.Printf("Moved")
 
 	if m, ok := editor.CurrentAction.(desktop.Hoverable); ok {
 		m.MouseMoved(ev)

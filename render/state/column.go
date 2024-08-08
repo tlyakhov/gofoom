@@ -120,12 +120,12 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 		return lit.Apply(result, &c.Light)
 	}
 
-	flags := uint16(c.LightElement.Type)
+	extraHash := uint16(c.LightElement.Type)
 	if c.LightElement.Type == LightElementWall {
-		flags += uint16(c.LightElement.Segment.Index)
+		extraHash += c.Segment.LightExtraHash
 	}
 
-	m0 := c.WorldToLightmapAddress(c.Sector, world, flags)
+	m0 := c.WorldToLightmapAddress(c.Sector, world, extraHash)
 	c.LightElement.MapIndex = m0
 	c.LightmapAddressToWorld(c.Sector, &c.LightVoxelA, m0)
 	// These deltas represent 0.0 - 1.0 distances within the light voxel
@@ -179,9 +179,9 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 }
 
 func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3) *concepts.Vector4 {
-	flags := uint16(c.LightElement.Type)
+	extraHash := uint16(c.LightElement.Type)
 	if c.LightElement.Type == LightElementWall {
-		flags += uint16(c.LightElement.Segment.Index)
+		extraHash += c.Segment.LightExtraHash
 	}
 	/*
 		Fun dithered look, maybe leverage as an effect later?
@@ -190,7 +190,7 @@ func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vecto
 		jitter[1] += (rand.Float64() - 0.5) * constants.LightGrid
 		jitter[2] += (rand.Float64() - 0.5) * constants.LightGrid
 	*/
-	c.LightElement.MapIndex = c.WorldToLightmapAddress(c.Sector, world, flags)
+	c.LightElement.MapIndex = c.WorldToLightmapAddress(c.Sector, world, extraHash)
 
 	r00 := c.LightElement.Get()
 	result[0] = r00[0]

@@ -1,5 +1,8 @@
 [
   {
+    "Entity": "0"
+  },
+  {
     "Entity": "1",
     "core.Spawn": {
       "Entity": "1",
@@ -1784,7 +1787,9 @@
       ]
     },
     "behaviors.VerticalDoor": {
-      "Entity": "25"
+      "Duration": 1000,
+      "Entity": "25",
+      "TweeningFunc": "EaseInOut2"
     },
     "concepts.Named": {
       "Entity": "25",
@@ -2010,7 +2015,7 @@
           "Percent": 1,
           "Reverse": false,
           "Start": 64,
-          "TweeningFunc": "EaseInOut4"
+          "TweeningFunc": "EaseInOut2"
         },
         "Original": 64
       }
@@ -2620,8 +2625,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.5234375,
-          "Reverse": true,
+          "Percent": 0.2734375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3652,11 +3657,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 131.73458382202028,
+          "End": 25.541256824049523,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.9895833333333328,
+          "Percent": 0.4427083333333334,
           "Reverse": false,
-          "Start": 131.53379162274788,
+          "Start": 35.055777390548045,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -6697,7 +6702,9 @@
       ]
     },
     "behaviors.VerticalDoor": {
-      "Entity": "79"
+      "Duration": 1000,
+      "Entity": "79",
+      "TweeningFunc": "EaseInOut2"
     },
     "concepts.Named": {
       "Entity": "79",
@@ -6808,10 +6815,10 @@
           "Duration": 1000,
           "End": 0,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0,
-          "Reverse": true,
+          "Percent": 1,
+          "Reverse": false,
           "Start": 64,
-          "TweeningFunc": "EaseInOut4"
+          "TweeningFunc": "EaseInOut2"
         },
         "Original": 64
       }
@@ -6830,7 +6837,9 @@
       ]
     },
     "behaviors.VerticalDoor": {
-      "Entity": "80"
+      "Duration": 1000,
+      "Entity": "80",
+      "TweeningFunc": "EaseInOut2"
     },
     "concepts.Named": {
       "Entity": "80",
@@ -6924,7 +6933,7 @@
           "Percent": 1,
           "Reverse": false,
           "Start": 64,
-          "TweeningFunc": "EaseInOut4"
+          "TweeningFunc": "EaseInOut2"
         },
         "Original": 64
       }
@@ -6943,7 +6952,9 @@
       ]
     },
     "behaviors.VerticalDoor": {
-      "Entity": "81"
+      "Duration": 1000,
+      "Entity": "81",
+      "TweeningFunc": "EaseInOut2"
     },
     "concepts.Named": {
       "Entity": "81",
@@ -7049,15 +7060,15 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": false,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
-          "Reverse": false,
+          "Percent": 0.0078125,
+          "Reverse": true,
           "Start": 64,
-          "TweeningFunc": "EaseInOut4"
+          "TweeningFunc": "EaseInOut2"
         },
         "Original": 64
       }
@@ -9120,6 +9131,10 @@
     "behaviors.Player": {
       "Entity": "107"
     },
+    "behaviors.WeaponInstant": {
+      "Entity": "107",
+      "MarkMaterial": "113"
+    },
     "core.Body": {
       "Angle": {
         "Original": 262.5
@@ -9574,6 +9589,33 @@
       "TopZ": {
         "Original": 80
       }
+    }
+  },
+  {
+    "Entity": "113",
+    "concepts.Named": {
+      "Entity": "113",
+      "Name": "Weapon Mark"
+    },
+    "materials.Image": {
+      "Entity": "113",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/weapon-mark.png"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "113"
     }
   },
   {
@@ -10351,6 +10393,33 @@
       "Entity": "131",
       "Strength": 1.5
     }
+  },
+  {
+    "Entity": "132"
+  },
+  {
+    "Entity": "133"
+  },
+  {
+    "Entity": "134"
+  },
+  {
+    "Entity": "135"
+  },
+  {
+    "Entity": "136"
+  },
+  {
+    "Entity": "137"
+  },
+  {
+    "Entity": "138"
+  },
+  {
+    "Entity": "139"
+  },
+  {
+    "Entity": "140"
   },
   {
     "Entity": "141",

@@ -62,6 +62,11 @@ func gameInput() {
 		renderer.PlayerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
 		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
+	if win.JustPressed(pixel.KeyF) || win.Repeated(pixel.KeyF) {
+		if w := behaviors.WeaponInstantFromDb(renderer.DB, renderer.Player.Entity); w != nil {
+			w.FireNextFrame = true
+		}
+	}
 	if win.Pressed(pixel.KeySpace) {
 
 		if behaviors.UnderwaterFromDb(renderer.DB, renderer.PlayerBody.SectorEntity) != nil {
@@ -157,7 +162,7 @@ func run() {
 	db.Simulation.Render = renderGame
 	//controllers.CreateTestWorld(db)
 	//db.Save("data/worlds/exported_test.json")
-	if err = db.Load("data/worlds/portal-test.json"); err != nil {
+	if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
