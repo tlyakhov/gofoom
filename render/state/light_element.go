@@ -189,9 +189,11 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				ScaleW: 1024,
 				ScaleH: 1024}
 			sampler.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-			u := le.Intersection.To2D().Dist(seg.A) / seg.Length
-			v := (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
-			sampler.SampleMaterial(seg.Surface.ExtraStages, u, v)
+			sampler.NU = le.Intersection.To2D().Dist(seg.A) / seg.Length
+			sampler.NV = (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
+			sampler.U = sampler.NU
+			sampler.V = sampler.NV
+			sampler.SampleMaterial(seg.Surface.ExtraStages)
 			if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 				lit.Apply(&sampler.Output, nil)
 			}
@@ -275,9 +277,11 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 					ScaleW: 1024,
 					ScaleH: 1024}
 				sampler.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-				u := le.Intersection.To2D().Dist(&seg.P) / seg.Length
-				v := (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				sampler.SampleMaterial(seg.Surface.ExtraStages, u, v)
+				sampler.NU = le.Intersection.To2D().Dist(&seg.P) / seg.Length
+				sampler.NV = (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
+				sampler.U = sampler.NU
+				sampler.V = sampler.NV
+				sampler.SampleMaterial(seg.Surface.ExtraStages)
 				if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
 					lit.Apply(&sampler.Output, nil)
 				}

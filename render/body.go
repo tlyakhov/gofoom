@@ -41,7 +41,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	c.ScaleW = uint32(xScale)
 	x1 := (x - xScale*0.5)
 	x2 := x1 + xScale
-	c.U = 0.5 + (float64(c.ScreenX)-x)/xScale
+	c.MaterialSampler.NU = 0.5 + (float64(c.ScreenX)-x)/xScale
 	if x1 > float64(c.ScreenX) || x2 < float64(c.ScreenX) {
 		return
 	}
@@ -87,8 +87,10 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		if c.Distance >= r.ZBuffer[screenIndex] {
 			continue
 		}
-		v := (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
-		c.SampleMaterial(nil, c.U, v)
+		c.NV = (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
+		c.MaterialSampler.U = c.NU
+		c.MaterialSampler.V = c.NV
+		c.SampleMaterial(nil)
 		c.MaterialSampler.Output.Mul4Self(&c.Light)
 		r.ApplySample(&c.MaterialSampler.Output, screenIndex, c.Distance)
 		seen = true

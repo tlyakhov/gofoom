@@ -15,6 +15,15 @@ type Matrix2 [6]float64
 
 var IdentityMatrix2 = Matrix2{1, 0, 0, 1, 0, 0}
 
+const (
+	MatBasis1X int = iota
+	MatBasis1Y
+	MatBasis2X
+	MatBasis2Y
+	MatTransX
+	MatTransY
+)
+
 func (m *Matrix2) SetIdentity() {
 	m[3] = 1
 	m[2] = 0
@@ -166,6 +175,32 @@ func (m *Matrix2) Unproject(u *Vector2) *Vector2 {
 		(m[3]*(u[0]-m[4]) - m[2]*(u[1]-m[5])) / det,
 		(-m[1]*(u[0]-m[4]) + m[0]*(u[1]-m[5])) / det,
 	}
+}
+
+func (m *Matrix2) AffineInverseSelf() *Matrix2 {
+	// Affine matrixes are of the form [ X b ]
+	//                                 [ 0 1 ]
+	// So pretend our 3x2 matrix, is actually 3x3 of this form.
+	// In this case:
+	// inv(m) = [ inv(X)   -inv(X) * b ]
+	//          [   0            1     ]
+	// where X is 2x2.
+
+	// First, find inverse of X:
+	det := m[0]*m[3] - m[2]*m[1]
+	if det == 0 {
+		// What to do if no inverse?
+		m.SetIdentity()
+		return nil // Likely crash, but ok for now
+	}
+	m[0], m[3] = m[3]/det, m[0]/det
+	m[1], m[2] = -m[2]/det, -m[1]/det
+
+	// Next, calculate translation:
+	m[4], m[5] = -(m[0]*m[4] + m[2]*m[5]),
+		-(m[1]*m[4] + m[3]*m[5])
+
+	return m
 }
 
 func (m Matrix2) GetTransform() (angle float64, translation Vector2, scale Vector2) {

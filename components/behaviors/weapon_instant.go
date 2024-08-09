@@ -8,10 +8,13 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
+// TODO: Implement attributes like cooldowns, spread, DPS, scripting
 type WeaponInstant struct {
 	concepts.Attached `editable:"^"`
 
+	// Bullets make marks on walls/internal segments
 	MarkMaterial concepts.Entity `editable:"Mark Material" edit_type:"Material"`
+	MarkSize     float64         `editable:"Mark Size"`
 
 	// Internal state
 	FireNextFrame bool `editable:"Fire Next Frame"`
@@ -37,6 +40,7 @@ func (w *WeaponInstant) String() string {
 
 func (w *WeaponInstant) Construct(data map[string]any) {
 	w.Attached.Construct(data)
+	w.MarkSize = 10
 
 	if data == nil {
 		return
@@ -45,6 +49,10 @@ func (w *WeaponInstant) Construct(data map[string]any) {
 	if v, ok := data["MarkMaterial"]; ok {
 		w.MarkMaterial, _ = concepts.ParseEntity(v.(string))
 	}
+
+	if v, ok := data["MarkSize"]; ok {
+		w.MarkSize = v.(float64)
+	}
 }
 
 func (w *WeaponInstant) Serialize() map[string]any {
@@ -52,6 +60,10 @@ func (w *WeaponInstant) Serialize() map[string]any {
 
 	if w.MarkMaterial != 0 {
 		result["MarkMaterial"] = w.MarkMaterial.Format()
+	}
+
+	if w.MarkSize != 10 {
+		result["MarkSize"] = w.MarkSize
 	}
 
 	return result

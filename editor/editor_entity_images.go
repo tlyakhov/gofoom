@@ -32,10 +32,14 @@ func (e *Editor) imageForMaterial(entity concepts.Entity) image.Image {
 	border := e.materialSelectionBorderColor(entity)
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
+			e.MaterialSampler.NU = float64(x) / float64(w)
+			e.MaterialSampler.NV = float64(y) / float64(h)
+			e.MaterialSampler.U = e.MaterialSampler.NU
+			e.MaterialSampler.V = e.MaterialSampler.NV
 			e.MaterialSampler.ScreenX = x * e.MaterialSampler.ScreenWidth / w
 			e.MaterialSampler.ScreenY = y * e.MaterialSampler.ScreenHeight / h
 			e.MaterialSampler.Angle = float64(x) * math.Pi * 2.0 / float64(w)
-			e.MaterialSampler.SampleMaterial(nil, float64(x)/float64(w), float64(y)/float64(h))
+			e.MaterialSampler.SampleMaterial(nil)
 			if e.MaterialSampler.NoTexture {
 				return e.noTextureImage
 			}
