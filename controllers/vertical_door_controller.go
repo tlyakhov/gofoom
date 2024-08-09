@@ -72,16 +72,16 @@ func (vd *VerticalDoorController) adjustTransforms() {
 				v = 1
 			}
 		}
-		t[3] = 1.0 - v
-		t[5] = v
+		t[concepts.MatBasis2Y] = 1.0 - v
+		t[concepts.MatTransY] = v
 		if !seg.Surface.Transform.Attached {
 			seg.Surface.Transform.Attach(vd.DB.Simulation)
 		}
 		seg.Surface.Transform.Now.From(&seg.Surface.Transform.Original)
 		seg.Surface.Transform.Now.MulSelf(&t)
 
-		t[3] = v
-		t[5] = 1.0 - v
+		t[concepts.MatBasis2Y] = v
+		t[concepts.MatTransY] = 1.0 - v
 		if !seg.HiSurface.Transform.Attached {
 			seg.HiSurface.Transform.Attach(vd.DB.Simulation)
 		}

@@ -76,10 +76,13 @@ func floor(c *state.Column) {
 		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])
 
 		if mat != 0 {
-			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
+			c.MaterialSampler.NU = tx
+			c.MaterialSampler.NV = ty
+			c.MaterialSampler.U = transform[0]*c.MaterialSampler.NU + transform[2]*c.MaterialSampler.NV + transform[4]
+			c.MaterialSampler.V = transform[1]*c.MaterialSampler.NU + transform[3]*c.MaterialSampler.NV + transform[5]
 			c.ScaleW = uint32(sw / distToFloor)
 			c.ScaleH = uint32(sh / distToFloor)
-			c.SampleMaterial(extras, tx, ty)
+			c.SampleMaterial(extras)
 			c.SampleLight(&c.MaterialSampler.Output, mat, &world, distToFloor)
 		}
 		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)

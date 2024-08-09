@@ -20,22 +20,27 @@ type MaterialSampler struct {
 	SpriteAngle      float64
 	Materials        []concepts.Attachable
 	pipelineIndex    int
+	U, V             float64
+	NU, NV           float64
 }
 
 func (ms *MaterialSampler) Initialize(material concepts.Entity, extraStages []*materials.ShaderStage) {
 	ms.Materials = ms.Materials[:0]
-	ms.derefMaterials(material, extraStages, nil)
+	ms.derefMaterials(material, nil)
+	for _, stage := range extraStages {
+		ms.derefMaterials(stage.Texture, nil)
+	}
 }
 
-func (ms *MaterialSampler) derefMaterials(material concepts.Entity, extraStages []*materials.ShaderStage, parent concepts.Attachable) {
+func (ms *MaterialSampler) derefMaterials(material concepts.Entity, parent concepts.Attachable) {
 	if shader := materials.ShaderFromDb(ms.DB, material); shader != nil && shader != parent {
 		ms.Materials = append(ms.Materials, shader)
 		for _, stage := range shader.Stages {
-			ms.derefMaterials(stage.Texture, nil, shader)
+			ms.derefMaterials(stage.Texture, shader)
 		}
 	} else if sprite := materials.SpriteFromDb(ms.DB, material); sprite != nil && sprite != parent {
 		ms.Materials = append(ms.Materials, sprite)
-		ms.derefMaterials(sprite.Image, nil, sprite)
+		ms.derefMaterials(sprite.Image, sprite)
 	} else if image := materials.ImageFromDb(ms.DB, material); image != nil {
 		ms.Materials = append(ms.Materials, image)
 	} else if text := materials.TextFromDb(ms.DB, material); text != nil {
@@ -44,23 +49,29 @@ func (ms *MaterialSampler) derefMaterials(material concepts.Entity, extraStages 
 		ms.Materials = append(ms.Materials, solid)
 	}
 
-	for _, stage := range extraStages {
-		ms.derefMaterials(stage.Texture, nil, nil)
-	}
 }
 
-func (ms *MaterialSampler) SampleMaterial(extraStages []*materials.ShaderStage, u, v float64) {
+func (ms *MaterialSampler) SampleMaterial(extraStages []*materials.ShaderStage) {
 	ms.Output[0] = 0
 	ms.Output[1] = 0
 	ms.Output[2] = 0
 	ms.Output[3] = 0
 	ms.pipelineIndex = 0
-	ms.sampleStage(nil, extraStages, u, v)
+	ms.sampleStage(nil)
+	for _, stage := range extraStages {
+		ms.sampleStage(stage)
+	}
 }
 
-func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage, extraStages []*materials.ShaderStage, u, v float64) {
+func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
+	u := ms.U
+	v := ms.V
 	if stage != nil {
-		u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
+		if stage.IgnoreSurfaceTransform {
+			u, v = stage.Transform[0]*ms.NU+stage.Transform[2]*ms.NV+stage.Transform[4], stage.Transform[1]*ms.NU+stage.Transform[3]*ms.NV+stage.Transform[5]
+		} else {
+			u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
+		}
 		if (stage.Flags & materials.ShaderSky) != 0 {
 			v = float64(ms.ScreenY) / (float64(ms.ScreenHeight) - 1)
 
@@ -93,17 +104,17 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage, extraStages
 	case *materials.Shader:
 		ms.pipelineIndex++
 		for _, stage := range m.Stages {
-			ms.sampleStage(stage, nil, u, v)
+			ms.sampleStage(stage)
 		}
 	case *materials.Sprite:
 		ms.pipelineIndex++
 		aindex := uint32(ms.SpriteAngle) * m.Angles / 360
 		c := aindex % m.Cols
 		r := aindex / m.Cols
-		u, v := m.TransformUV(u, v, c, r)
+		ms.U, ms.V = m.TransformUV(u, v, c, r)
 		ms.ScaleW *= m.Cols
 		ms.ScaleH *= m.Rows
-		ms.sampleStage(nil, nil, u, v)
+		ms.sampleStage(nil)
 		ms.ScaleW /= m.Cols
 		ms.ScaleH /= m.Rows
 	case *materials.Image:
@@ -122,10 +133,6 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage, extraStages
 		sample := concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true
 		ms.Output.AddPreMulColorSelf(&sample)
-	}
-
-	for _, stage := range extraStages {
-		ms.sampleStage(stage, nil, u, v)
 	}
 }
 

@@ -18,7 +18,8 @@ type WeaponInstantController struct {
 	*behaviors.WeaponInstant
 	Body *core.Body
 
-	delta, isect concepts.Vector3
+	delta, isect, hit concepts.Vector3
+	transform         concepts.Matrix2
 }
 
 func init() {
@@ -41,10 +42,7 @@ func (wc *WeaponInstantController) Target(target concepts.Attachable) bool {
 
 // This is similar to the code for lighting
 func (wc *WeaponInstantController) Hit() *core.Selectable {
-	// Since our sectors can be concave, we can't just go through the first portal we find,
-	// we have to go through the NEAREST one. Use hitDist2 to keep track...
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
-	dist2 := constants.MaxViewDistance * constants.MaxViewDistance
 	idist2 := 0.0
 	var s *core.Selectable
 	p := &wc.Body.Pos.Now
@@ -65,19 +63,20 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 			}
 			switch b.Shadow {
 			case core.BodyShadowSphere:
-				if concepts.IntersectLineSphere(p, rayEnd, b.Pos.Render, b.Size.Render[0]*0.5) {
+				if concepts.IntersectLineSphere(p, rayEnd, &b.Pos.Now, b.Size.Now[0]*0.5) {
 					continue
 				}
 			case core.BodyShadowAABB:
-				ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
-				if !concepts.IntersectLineAABB(p, rayEnd, b.Pos.Render, ext) {
+				ext := &concepts.Vector3{b.Size.Now[0], b.Size.Now[0], b.Size.Now[1]}
+				if !concepts.IntersectLineAABB(p, rayEnd, &b.Pos.Now, ext) {
 					continue
 				}
 			}
-			idist2 = b.Pos.Render.Dist2(p)
+			idist2 = b.Pos.Now.Dist2(p)
 			if idist2 < hitDist2 {
 				s = core.SelectableFromBody(b)
 				hitDist2 = idist2
+				wc.hit = b.Pos.Now
 			}
 		}
 		for _, seg := range sector.InternalSegments {
@@ -87,10 +86,14 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 				if idist2 < hitDist2 {
 					s = core.SelectableFromInternalSegment(seg)
 					hitDist2 = idist2
+					wc.hit = wc.isect
 				}
 			}
 		}
 
+		// Since our sectors can be concave, we can't just go through the first portal we find,
+		// we have to go through the NEAREST one. Use dist2 to keep track...
+		dist2 := constants.MaxViewDistance * constants.MaxViewDistance
 		var next *core.Sector
 		for _, seg := range sector.Segments {
 			// Segment facing backwards from our ray? skip it.
@@ -109,19 +112,21 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 				if idist2 < hitDist2 {
 					s = core.SelectableFromWall(seg, core.SelectableMid)
 					hitDist2 = idist2
+					wc.hit = wc.isect
 				}
 				continue
 			}
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.PointZ(concepts.DynamicRender, wc.isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicRender, wc.isect.To2D())
+			floorZ, ceilZ := sector.PointZ(concepts.DynamicNow, wc.isect.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicNow, wc.isect.To2D())
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
 					s = core.SelectableFromWall(seg, core.SelectableLow)
 					hitDist2 = idist2
+					wc.hit = wc.isect
 				}
 				continue
 			}
@@ -131,6 +136,7 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 				if idist2 < hitDist2 {
 					s = core.SelectableFromWall(seg, core.SelectableHi)
 					hitDist2 = idist2
+					wc.hit = wc.isect
 				}
 				continue
 			}
@@ -158,6 +164,76 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 	return s
 }
 
+func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
+	switch s.Type {
+	case core.SelectableHi:
+		_, top = s.Sector.PointZ(concepts.DynamicNow, p)
+		adj := s.SectorSegment.AdjacentSegment.Sector
+		_, adjTop := adj.PointZ(concepts.DynamicNow, p)
+		if adjTop <= top {
+			bottom = adjTop
+			surf = &s.SectorSegment.AdjacentSegment.HiSurface
+		} else {
+			bottom, top = top, adjTop
+			surf = &s.SectorSegment.HiSurface
+		}
+	case core.SelectableLow:
+		bottom, _ = s.Sector.PointZ(concepts.DynamicNow, p)
+		adj := s.SectorSegment.AdjacentSegment.Sector
+		adjBottom, _ := adj.PointZ(concepts.DynamicNow, p)
+		if bottom <= adjBottom {
+			top = adjBottom
+			surf = &s.SectorSegment.AdjacentSegment.LoSurface
+		} else {
+			bottom, top = adjBottom, bottom
+			surf = &s.SectorSegment.LoSurface
+		}
+	case core.SelectableMid:
+		bottom, top = s.Sector.PointZ(concepts.DynamicNow, p)
+		surf = &s.SectorSegment.Surface
+	case core.SelectableInternalSegment:
+		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
+		surf = &s.InternalSegment.Surface
+	}
+	return
+}
+
+func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *core.Selectable, transform *concepts.Matrix2) *materials.Surface {
+	// Inverse of the size of bullet mark we want
+	scale := 1.0 / wc.MarkSize
+	// 3x2 transformation matrixes are composed of
+	// the horizontal basis vector in slots [0] & [1], which we set to the
+	// width of the segment, scaled
+	// the vertical basis vector in slots [2] & [3], which we set to the
+	// height of the segment
+	// and finally the translation in slots [4] & [5], which we set to the
+	// world position of the mark, relative to the segment
+	switch s.Type {
+	case core.SelectableHi:
+		fallthrough
+	case core.SelectableLow:
+		fallthrough
+	case core.SelectableMid:
+		transform[concepts.MatBasis1X] = s.SectorSegment.Length
+		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(&s.SectorSegment.P)
+	case core.SelectableInternalSegment:
+		transform[concepts.MatBasis1X] = s.InternalSegment.Length
+		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(s.InternalSegment.A)
+	}
+
+	surf, bottom, top := wc.MarkSurface(s, wc.hit.To2D())
+	// This is reversed because our UV coordinates go top->bottom
+	transform[concepts.MatBasis2Y] = (bottom - top)
+	transform[concepts.MatTransY] = -(wc.Body.Pos.Now[2] - top)
+
+	transform[concepts.MatBasis1X] *= scale
+	transform[concepts.MatBasis2Y] *= scale
+	transform[concepts.MatTransX] *= scale
+	transform[concepts.MatTransY] *= scale
+
+	return surf
+}
+
 func (wc *WeaponInstantController) Always() {
 	if !wc.FireNextFrame {
 		return
@@ -169,20 +245,27 @@ func (wc *WeaponInstantController) Always() {
 		return
 	}
 
-	log.Printf("Weapon hit! %v, %v", s, wc.isect)
-	// TODO: Cover all surface types
-	// TODO: Keep track of a finite set of extra stages in a ring buffer.
-	switch s.Type {
-	case core.SelectableMid:
-		u := wc.isect.To2D().Dist(&s.SectorSegment.P) / s.SectorSegment.Length
-		v := 0.5
-		es := &materials.ShaderStage{Texture: wc.MarkMaterial}
+	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman())
+	if s.Type == core.SelectableBody {
+		// Push bodies away
+		s.Body.Vel.Now.AddSelf(wc.delta.Mul(3))
+	} else if s.Type == core.SelectableSectorSegment ||
+		s.Type == core.SelectableHi ||
+		s.Type == core.SelectableLow ||
+		s.Type == core.SelectableMid ||
+		s.Type == core.SelectableInternalSegment {
+		// Make a mark on walls
+
+		// TODO: Include floors and ceilings
+		// TODO: Keep track of a finite set of extra stages in a ring buffer.
+		es := &materials.ShaderStage{
+			Texture:                wc.MarkMaterial,
+			IgnoreSurfaceTransform: false}
 		es.SetDB(s.DB)
-		es.Transform.SetIdentity()
-		es.Transform.ScaleSelf(10)
-		es.Transform[4] = -u * 10
-		es.Transform[5] = -v * 10
+		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
+		surf.ExtraStages = append(surf.ExtraStages, es)
+		es.Transform.From(&surf.Transform.Now)
+		es.Transform.AffineInverseSelf().MulSelf(&wc.transform)
 		wc.ShaderStages = append(wc.ShaderStages, es)
-		s.SectorSegment.Surface.ExtraStages = append(s.SectorSegment.Surface.ExtraStages, es)
 	}
 }

@@ -49,9 +49,11 @@ func (r *Renderer) wall(c *state.Column) {
 		c.RaySegIntersect[2] = c.IntersectionTop*(1.0-v) + v*c.IntersectionBottom
 
 		if mat != 0 {
-			tu := transform[0]*c.U + transform[2]*v + transform[4]
-			tv := transform[1]*c.U + transform[3]*v + transform[5]
-			c.SampleMaterial(extras, tu, tv)
+			c.MaterialSampler.NU = c.SegmentIntersection.U
+			c.MaterialSampler.NV = v
+			c.MaterialSampler.U = transform[0]*c.MaterialSampler.NU + transform[2]*c.MaterialSampler.NV + transform[4]
+			c.MaterialSampler.V = transform[1]*c.MaterialSampler.NU + transform[3]*c.MaterialSampler.NV + transform[5]
+			c.SampleMaterial(extras)
 			c.SampleLight(&c.MaterialSampler.Output, mat, &c.RaySegIntersect, c.Distance)
 		}
 		r.ApplySample(&c.MaterialSampler.Output, int(screenIndex), c.Distance)

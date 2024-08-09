@@ -54,20 +54,19 @@ func (s *SectorSegment) Recalculate() {
 	}
 
 	// These are for transforming coordinate spaces through teleporting portals
-	// TODO: Something is broken with winding here
 	// TODO: A waste to store these for non-portal segments
-	s.PortalMatrix[0] = s.B[0] - s.A[0]
-	s.PortalMatrix[1] = s.B[1] - s.A[1]
-	s.PortalMatrix[2] = s.Normal[0]
-	s.PortalMatrix[3] = s.Normal[1]
-	s.PortalMatrix[4] = s.A[0]
-	s.PortalMatrix[5] = s.A[1]
-	s.MirrorPortalMatrix[0] = -(s.B[0] - s.A[0])
-	s.MirrorPortalMatrix[1] = -(s.B[1] - s.A[1])
-	s.MirrorPortalMatrix[2] = -s.Normal[0]
-	s.MirrorPortalMatrix[3] = -s.Normal[1]
-	s.MirrorPortalMatrix[4] = s.B[0]
-	s.MirrorPortalMatrix[5] = s.B[1]
+	s.PortalMatrix[concepts.MatBasis1X] = s.B[0] - s.A[0]
+	s.PortalMatrix[concepts.MatBasis1Y] = s.B[1] - s.A[1]
+	s.PortalMatrix[concepts.MatBasis2X] = s.Normal[0]
+	s.PortalMatrix[concepts.MatBasis2Y] = s.Normal[1]
+	s.PortalMatrix[concepts.MatTransX] = s.A[0]
+	s.PortalMatrix[concepts.MatTransY] = s.A[1]
+	s.MirrorPortalMatrix[concepts.MatBasis1X] = -(s.B[0] - s.A[0])
+	s.MirrorPortalMatrix[concepts.MatBasis1Y] = -(s.B[1] - s.A[1])
+	s.MirrorPortalMatrix[concepts.MatBasis2X] = -s.Normal[0]
+	s.MirrorPortalMatrix[concepts.MatBasis2Y] = -s.Normal[1]
+	s.MirrorPortalMatrix[concepts.MatTransX] = s.B[0]
+	s.MirrorPortalMatrix[concepts.MatTransY] = s.B[1]
 
 	if s.Sector != nil {
 		s.RealizeAdjacentSector()

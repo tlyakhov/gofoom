@@ -4,6 +4,7 @@
 package core
 
 import (
+	"math"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -209,4 +210,24 @@ func (s *Selectable) Recalculate() {
 	case SelectableInternalSegment:
 		s.InternalSegment.Recalculate()
 	}
+}
+
+func (s *Selectable) PointZ(p *concepts.Vector2) (bottom float64, top float64) {
+	switch s.Type {
+	case SelectableHi:
+		_, top = s.Sector.PointZ(concepts.DynamicNow, p)
+		adj := s.SectorSegment.AdjacentSegment.Sector
+		_, adjTop := adj.PointZ(concepts.DynamicNow, p)
+		bottom, top = math.Min(adjTop, top), math.Max(adjTop, top)
+	case SelectableLow:
+		bottom, _ = s.Sector.PointZ(concepts.DynamicNow, p)
+		adj := s.SectorSegment.AdjacentSegment.Sector
+		adjBottom, _ := adj.PointZ(concepts.DynamicNow, p)
+		bottom, top = math.Min(adjBottom, bottom), math.Max(adjBottom, bottom)
+	case SelectableMid:
+		bottom, top = s.Sector.PointZ(concepts.DynamicNow, p)
+	case SelectableInternalSegment:
+		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
+	}
+	return
 }

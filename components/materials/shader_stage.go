@@ -23,6 +23,9 @@ type ShaderStage struct {
 	Texture   concepts.Entity  `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2 `editable:"Transform"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
+
+	IgnoreSurfaceTransform bool `editable:"Ignore Surface Transform"`
+
 	// TODO: implement
 	Blend any
 }
@@ -41,6 +44,10 @@ func (s *ShaderStage) Construct(data map[string]any) {
 
 	if v, ok := data["Transform"]; ok {
 		s.Transform.Deserialize(v.([]any))
+	}
+
+	if v, ok := data["IgnoreSurfaceTransform"]; ok {
+		s.IgnoreSurfaceTransform = v.(bool)
 	}
 
 	if v, ok := data["Flags"]; ok {
@@ -75,6 +82,9 @@ func (s *ShaderStage) Serialize() map[string]any {
 	}
 	if !s.Transform.IsIdentity() {
 		result["Transform"] = s.Transform.Serialize()
+	}
+	if s.IgnoreSurfaceTransform {
+		result["IgnoreSurfaceTransform"] = s.IgnoreSurfaceTransform
 	}
 	return result
 }

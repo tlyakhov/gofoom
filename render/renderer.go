@@ -262,7 +262,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	}
 
 	if c.SegmentIntersection != nil {
-		c.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
+		c.SegmentIntersection.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
 		c.IntersectionBottom, c.IntersectionTop = c.Sector.PointZ(concepts.DynamicRender, c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
@@ -315,7 +315,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		c.Distance = c.Ray.DistTo(&c.RaySegTest)
 		c.RaySegIntersect[0] = c.RaySegTest[0]
 		c.RaySegIntersect[1] = c.RaySegTest[1]
-		c.U = c.RaySegTest.Dist(sorted.InternalSegment.A) / sorted.InternalSegment.Length
+		c.SegmentIntersection.U = c.RaySegTest.Dist(sorted.InternalSegment.A) / sorted.InternalSegment.Length
 		c.IntersectionTop = sorted.InternalSegment.Top
 		c.IntersectionBottom = sorted.InternalSegment.Bottom
 		c.CalcScreen()

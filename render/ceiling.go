@@ -83,10 +83,13 @@ func ceiling(c *state.Column) {
 		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])
 
 		if mat != 0 {
-			tx, ty = transform[0]*tx+transform[2]*ty+transform[4], transform[1]*tx+transform[3]*ty+transform[5]
+			c.MaterialSampler.NU = tx
+			c.MaterialSampler.NV = ty
+			c.MaterialSampler.U = transform[0]*c.MaterialSampler.NU + transform[2]*c.MaterialSampler.NV + transform[4]
+			c.MaterialSampler.V = transform[1]*c.MaterialSampler.NU + transform[3]*c.MaterialSampler.NV + transform[5]
 			c.ScaleW = uint32(sw / distToCeil)
 			c.ScaleH = uint32(sh / distToCeil)
-			c.SampleMaterial(extras, tx, ty)
+			c.SampleMaterial(extras)
 			c.SampleLight(&c.MaterialSampler.Output, mat, &world, distToCeil)
 		}
 		//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&s.FrameBuffer[screenIndex]), (*[4]float64)(&s.Material))

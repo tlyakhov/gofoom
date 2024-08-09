@@ -34,9 +34,11 @@ func wallHi(cp *state.ColumnPortal) {
 		cp.RaySegIntersect[2] = (1.0-v)*cp.IntersectionTop + v*cp.AdjTop
 
 		if mat != 0 {
-			tu := transform[0]*cp.U + transform[2]*v + transform[4]
-			tv := transform[1]*cp.U + transform[3]*v + transform[5]
-			cp.SampleMaterial(extras, tu, tv)
+			cp.MaterialSampler.NU = cp.SegmentIntersection.U
+			cp.MaterialSampler.NV = v
+			cp.MaterialSampler.U = transform[0]*cp.MaterialSampler.NU + transform[2]*cp.MaterialSampler.NV + transform[4]
+			cp.MaterialSampler.V = transform[1]*cp.MaterialSampler.NU + transform[3]*cp.MaterialSampler.NV + transform[5]
+			cp.SampleMaterial(extras)
 			cp.SampleLight(&cp.MaterialSampler.Output, mat, &cp.RaySegIntersect, cp.Distance)
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5
@@ -75,9 +77,11 @@ func wallLow(cp *state.ColumnPortal) {
 		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjBottom + v*cp.IntersectionBottom
 
 		if mat != 0 {
-			tu := transform[0]*cp.U + transform[2]*v + transform[4]
-			tv := transform[1]*cp.U + transform[3]*v + transform[5]
-			cp.SampleMaterial(extras, tu, tv)
+			cp.MaterialSampler.NU = cp.SegmentIntersection.U
+			cp.MaterialSampler.NV = v
+			cp.MaterialSampler.U = transform[0]*cp.MaterialSampler.NU + transform[2]*cp.MaterialSampler.NV + transform[4]
+			cp.MaterialSampler.V = transform[1]*cp.MaterialSampler.NU + transform[3]*cp.MaterialSampler.NV + transform[5]
+			cp.SampleMaterial(extras)
 			cp.SampleLight(&cp.MaterialSampler.Output, mat, &cp.RaySegIntersect, cp.Distance)
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5
