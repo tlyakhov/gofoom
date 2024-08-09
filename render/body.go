@@ -6,6 +6,7 @@ package render
 import (
 	"math"
 	"tlyakhov/gofoom/archetypes"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
@@ -68,7 +69,9 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		le.InputBody = b.Entity
 		le.Sector = b.Sector()
 		le.Get()
-		c.Light.To3D().From(&le.Output)
+		c.Light[0] = le.Output[0]
+		c.Light[1] = le.Output[1]
+		c.Light[2] = le.Output[2]
 		c.Light[3] = 1
 		// result = Surface * Diffuse * (Ambient + Lightmap)
 		c.Light.To3D().AddSelf(&lit.Ambient)
@@ -79,6 +82,10 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		c.Light[2] = 1
 		c.Light[3] = 1
 	}
+	if alive := behaviors.AliveFromDb(r.DB, b.Entity); alive != nil {
+		alive.Tint(&c.Light)
+	}
+
 	vStart := float64(c.ScreenHeight/2) - c.ProjectedTop
 	seen := false
 	c.MaterialSampler.Initialize(b.Entity, nil)

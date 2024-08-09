@@ -62,7 +62,7 @@ func gameInput() {
 		renderer.PlayerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
 		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
-	if win.JustPressed(pixel.KeyF) || win.Repeated(pixel.KeyF) {
+	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
 		if w := behaviors.WeaponInstantFromDb(renderer.DB, renderer.Player.Entity); w != nil {
 			w.FireNextFrame = true
 		}

@@ -58,7 +58,7 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	for sector != nil {
 		for _, b := range sector.Bodies {
-			if !b.Active || b.Shadow == core.BodyShadowNone {
+			if !b.Active || b.Shadow == core.BodyShadowNone || b.Entity == wc.Entity {
 				continue
 			}
 			switch b.Shadow {
@@ -245,10 +245,20 @@ func (wc *WeaponInstantController) Always() {
 		return
 	}
 
+	// TODO: Account for bullet velocity travel time. Do this by calculating
+	// time it would take to hit the thing and delaying the outcome? could be
+	// buggy though if the object in question moves
 	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman())
 	if s.Type == core.SelectableBody {
 		// Push bodies away
+		// TODO: Parameterize in WeaponInstant
 		s.Body.Vel.Now.AddSelf(wc.delta.Mul(3))
+		// Hurt anything alive
+		if alive := behaviors.AliveFromDb(wc.DB, s.Body.Entity); alive != nil {
+			// TODO: Parameterize in WeaponInstant
+			alive.Hurt("Weapon "+s.Entity.Format(), 5, 20)
+		}
+		// TODO: Death animations/entity deactivation
 	} else if s.Type == core.SelectableSectorSegment ||
 		s.Type == core.SelectableHi ||
 		s.Type == core.SelectableLow ||
