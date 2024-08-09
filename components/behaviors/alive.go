@@ -9,7 +9,8 @@ import (
 )
 
 type Damage struct {
-	Amount   float64
+	Amount float64
+	// This is in frames currently, should be in seconds or ms
 	Cooldown concepts.DynamicValue[float64]
 }
 
@@ -63,6 +64,20 @@ func (a *Alive) Hurt(source string, amount, cooldown float64) bool {
 	a.Damages[source] = &d
 
 	return true
+}
+
+func (alive *Alive) Tint(color *concepts.Vector4) {
+	allCooldowns := 0.0
+	maxCooldown := 0.0
+	for _, d := range alive.Damages {
+		allCooldowns += *d.Cooldown.Render
+		maxCooldown += d.Cooldown.Original
+	}
+
+	if allCooldowns > 0 && maxCooldown > 0 {
+		a := allCooldowns * 0.6 / maxCooldown
+		color.AddPreMulColorSelf(&concepts.Vector4{1, 0, 0, a})
+	}
 }
 
 func (a *Alive) Serialize() map[string]any {

@@ -2609,6 +2609,7 @@
       "Name": "Item Test"
     },
     "core.Body": {
+      "Active": false,
       "Angle": {
         "Original": 0
       },
@@ -2625,7 +2626,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.2734375,
+          "Percent": 0,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -3643,6 +3644,10 @@
   },
   {
     "Entity": "42",
+    "behaviors.Alive": {
+      "Entity": "42",
+      "Health": 100
+    },
     "behaviors.Wander": {
       "Entity": "42",
       "Force": 50
@@ -3657,11 +3662,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 25.541256824049523,
+          "End": 166.90889798711763,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.4427083333333334,
+          "Percent": 0.5729166666666667,
           "Reverse": false,
-          "Start": 35.055777390548045,
+          "Start": 160.2238574203388,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -3672,8 +3677,8 @@
       "MountHeight": 30,
       "Pos": {
         "Original": {
-          "X": -310,
-          "Y": 190,
+          "X": 0,
+          "Y": 70,
           "Z": 0
         }
       },
@@ -6925,12 +6930,12 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": false,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
+          "Percent": 0.0078125,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "EaseInOut2"
@@ -7060,13 +7065,13 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": -64,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.0078125,
-          "Reverse": true,
+          "Percent": 1,
+          "Reverse": false,
           "Start": 64,
           "TweeningFunc": "EaseInOut2"
         },
@@ -9145,8 +9150,8 @@
       "MountHeight": 15,
       "Pos": {
         "Original": {
-          "X": -280,
-          "Y": 140,
+          "X": -400,
+          "Y": 60,
           "Z": 0
         }
       },

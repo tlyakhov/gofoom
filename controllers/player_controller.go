@@ -82,24 +82,13 @@ func (pc *PlayerController) Always() {
 		}
 	}
 
-	allCooldowns := 0.0
-	maxCooldown := 0.0
-	for _, d := range pc.Alive.Damages {
-		allCooldowns += *d.Cooldown.Render
-		maxCooldown += d.Cooldown.Original
-	}
-
 	if uw {
 		pc.FrameTint = concepts.Vector4{0.29, 0.58, 1, 0.35}
 	} else {
 		pc.FrameTint = concepts.Vector4{}
 	}
 
-	if allCooldowns > 0 && maxCooldown > 0 {
-		a := allCooldowns * 0.6 / maxCooldown
-		pc.FrameTint.MulSelf(1.0 - a)
-		pc.FrameTint.AddSelf(&concepts.Vector4{1, 0, 0, a})
-	}
+	pc.Alive.Tint(&pc.FrameTint)
 }
 
 func MovePlayer(p *core.Body, angle float64, direct bool) {

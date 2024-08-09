@@ -50,6 +50,9 @@ func (r *Renderer) DebugInfo() {
 				continue
 			}
 			text := fmt.Sprintf("%v", b.String())
+			if alive := behaviors.AliveFromDb(r.DB, b.Entity); alive != nil {
+				text = fmt.Sprintf("%v", alive.Health)
+			}
 			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
 		}
 	}
