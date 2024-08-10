@@ -22,6 +22,7 @@ type Simulation struct {
 	PrevTimestamp    int64
 	Timestamp        int64
 	Counter          uint64
+	Frame            uint64
 	Integrate        func()
 	Render           func()
 	All              sync.Map
@@ -78,5 +79,6 @@ func (s *Simulation) Step() {
 
 	if s.Render != nil {
 		s.Render()
+		s.Frame++
 	}
 }

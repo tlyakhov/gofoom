@@ -2609,7 +2609,6 @@
       "Name": "Item Test"
     },
     "core.Body": {
-      "Active": false,
       "Angle": {
         "Original": 0
       },
@@ -2626,8 +2625,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0,
-          "Reverse": false,
+          "Percent": 0.5234375,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3662,11 +3661,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 166.90889798711763,
+          "End": 154.5367209040304,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.5729166666666667,
+          "Percent": 0.078125,
           "Reverse": false,
-          "Start": 160.2238574203388,
+          "Start": 137.59281571827475,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -6930,12 +6929,12 @@
       ],
       "TopZ": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 1000,
           "End": 0,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.0078125,
+          "Percent": 1,
           "Reverse": false,
           "Start": 64,
           "TweeningFunc": "EaseInOut2"
@@ -9150,9 +9149,9 @@
       "MountHeight": 15,
       "Pos": {
         "Original": {
-          "X": -400,
-          "Y": 60,
-          "Z": 0
+          "X": -320,
+          "Y": 185,
+          "Z": -44
         }
       },
       "Size": {
@@ -10400,10 +10399,86 @@
     }
   },
   {
-    "Entity": "132"
+    "Entity": "132",
+    "behaviors.InventoryItem": {
+      "Class": "WeirdGun",
+      "Entity": "132"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CollisionResponse": "Slide",
+      "Entity": "132",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Animation": {
+          "Active": true,
+          "Duration": 1000,
+          "End": {
+            "X": 0,
+            "Y": 0,
+            "Z": 5
+          },
+          "Percent": 0.1953125,
+          "Reverse": true,
+          "Start": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TweeningFunc": "EaseInOut2"
+        },
+        "Original": {
+          "X": -260,
+          "Y": 60,
+          "Z": -52
+        }
+      },
+      "Shadow": "BodyShadowSphere",
+      "Size": {
+        "Original": {
+          "X": 20,
+          "Y": 20
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Sprite": {
+      "Angles": "0",
+      "Entity": "132",
+      "Image": "133"
+    }
   },
   {
-    "Entity": "133"
+    "Entity": "133",
+    "materials.Image": {
+      "Entity": "133",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/weird-gun.png"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "133"
+    }
   },
   {
     "Entity": "134"

@@ -49,8 +49,8 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 
 	c.ProjectedTop = (b.Pos.Render[2] + b.Size.Render[1]*0.5 - c.CameraZ) * depthScale
 	c.ProjectedBottom = c.ProjectedTop - b.Size.Render[1]*depthScale
-	screenTop := c.ScreenHeight/2 - int(c.ProjectedTop)
-	screenBottom := c.ScreenHeight/2 - int(c.ProjectedBottom)
+	screenTop := c.ScreenHeight/2 - int(math.Floor(c.ProjectedTop))
+	screenBottom := c.ScreenHeight/2 - int(math.Floor(c.ProjectedBottom))
 	c.ScaleH = uint32(screenBottom - screenTop)
 	c.ClippedTop = concepts.Clamp(screenTop, c.EdgeTop, c.EdgeBottom)
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)

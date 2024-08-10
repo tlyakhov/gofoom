@@ -16,8 +16,6 @@ type Config struct {
 	Multithreaded             bool
 	Blocks                    int
 	ScreenWidth, ScreenHeight int
-	Frame                     uint64
-	Counter                   int
 	MaxViewDist, FOV          float64
 	LightGrid                 float64
 	CameraToProjectionPlane   float64

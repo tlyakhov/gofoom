@@ -20,7 +20,7 @@ func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 		button.Text = "Add Animation"
 		button.Icon = theme.ContentAddIcon()
 		button.OnTapped = func() {
-			parentValue := reflect.ValueOf(field.Values[0].Parent)
+			parentValue := reflect.ValueOf(field.Values[0].Parent())
 			m := parentValue.MethodByName("NewAnimation")
 			newAnimation := m.Call(nil)[0]
 			g.ApplySetPropertyAction(field, newAnimation)
