@@ -333,10 +333,13 @@ func (db *EntityComponentDB) SerializeEntity(entity Entity) map[string]any {
 	jsonEntity := make(map[string]any)
 	jsonEntity["Entity"] = entity.Format()
 	for index, component := range components {
-		if component == nil {
+		if component == nil || component.IsSystem() {
 			continue
 		}
 		jsonEntity[DbTypes().Types[index].String()] = component.Serialize()
+	}
+	if len(jsonEntity) == 1 {
+		return nil
 	}
 	return jsonEntity
 }
@@ -347,7 +350,11 @@ func (db *EntityComponentDB) Save(filename string) {
 	jsonDB := make([]any, 0)
 
 	for entity := range db.EntityComponents {
-		jsonDB = append(jsonDB, db.SerializeEntity(Entity(entity)))
+		jsonEntity := db.SerializeEntity(Entity(entity))
+		if len(jsonEntity) == 0 {
+			continue
+		}
+		jsonDB = append(jsonDB, jsonEntity)
 	}
 
 	bytes, err := json.MarshalIndent(jsonDB, "", "  ")

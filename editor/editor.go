@@ -263,6 +263,7 @@ func (e *Editor) Load(filename string) {
 		e.Alert(fmt.Sprintf("Error loading world: %v", err))
 		return
 	}
+	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 	db.Simulation.Integrate = e.Integrate
 	db.Simulation.Render = e.GameWidget.Draw
 	e.DB = db

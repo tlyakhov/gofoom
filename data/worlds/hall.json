@@ -1,8 +1,5 @@
 [
   {
-    "Entity": "0"
-  },
-  {
     "Entity": "1",
     "core.Spawn": {
       "Entity": "1",
@@ -2625,8 +2622,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.5234375,
-          "Reverse": true,
+          "Percent": 0.265625,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3661,11 +3658,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 154.5367209040304,
+          "End": 133.7993362202148,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.078125,
+          "Percent": 0.7031249999999999,
           "Reverse": false,
-          "Start": 137.59281571827475,
+          "Start": 100.87383225952445,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -3677,7 +3674,7 @@
       "Pos": {
         "Original": {
           "X": 0,
-          "Y": 70,
+          "Y": -130,
           "Z": 0
         }
       },
@@ -10229,26 +10226,6 @@
     }
   },
   {
-    "Entity": "126",
-    "concepts.Named": {
-      "Entity": "126",
-      "Name": "HUD Font"
-    },
-    "materials.Image": {
-      "Entity": "126",
-      "Filter": false,
-      "GenerateMipMaps": false,
-      "Source": "data/RDE_8x8.png"
-    },
-    "materials.Sprite": {
-      "Angles": "0",
-      "Cols": "16",
-      "Entity": "126",
-      "Image": "126",
-      "Rows": "16"
-    }
-  },
-  {
     "Entity": "127",
     "concepts.Named": {
       "Entity": "127",
@@ -10421,8 +10398,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.1953125,
-          "Reverse": true,
+          "Percent": 0.59375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10479,27 +10456,6 @@
       },
       "Entity": "133"
     }
-  },
-  {
-    "Entity": "134"
-  },
-  {
-    "Entity": "135"
-  },
-  {
-    "Entity": "136"
-  },
-  {
-    "Entity": "137"
-  },
-  {
-    "Entity": "138"
-  },
-  {
-    "Entity": "139"
-  },
-  {
-    "Entity": "140"
   },
   {
     "Entity": "141",

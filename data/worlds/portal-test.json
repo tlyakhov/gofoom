@@ -3183,25 +3183,5 @@
         "Original": 64
       }
     }
-  },
-  {
-    "Entity": "56",
-    "concepts.Named": {
-      "Entity": "56",
-      "Name": "HUD Font"
-    },
-    "materials.Image": {
-      "Entity": "56",
-      "Filter": false,
-      "GenerateMipMaps": false,
-      "Source": "data/RDE_8x8.png"
-    },
-    "materials.Sprite": {
-      "Angles": "0",
-      "Cols": "16",
-      "Entity": "56",
-      "Image": "56",
-      "Rows": "16"
-    }
   }
 ]
