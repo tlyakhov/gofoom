@@ -11,6 +11,7 @@ import (
 
 	"github.com/gopxl/pixel/v2"
 
+	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ui"
 )
@@ -76,6 +77,7 @@ func initializeMenus() {
 					log.Printf("Error loading world %v: %v", path, err)
 					return
 				}
+				archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 				db.Simulation.Integrate = integrateGame
 				db.Simulation.Render = renderGame
 				gameUI.Config.TextStyle = renderer.NewTextStyle()

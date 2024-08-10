@@ -10,6 +10,7 @@ import (
 type Attached struct {
 	Entity                  `editable:"Component" edit_type:"Component" edit_sort:"0"`
 	DB                      *EntityComponentDB
+	System                  bool // Don't serialize this entity, disallow editing
 	Active                  bool `editable:"Active?"`
 	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`
 	indexInDB               int
@@ -17,6 +18,7 @@ type Attached struct {
 
 type Attachable interface {
 	Serializable
+	IsSystem() bool
 	String() string
 	IndexInDB() int
 	SetIndexInDB(int)
@@ -48,6 +50,10 @@ func (a *Attached) String() string {
 
 func (a *Attached) IndexInDB() int {
 	return a.indexInDB
+}
+
+func (a *Attached) IsSystem() bool {
+	return a.System
 }
 
 func (a *Attached) SetIndexInDB(i int) {

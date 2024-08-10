@@ -10,6 +10,7 @@ import (
 	"os"
 	"runtime/pprof"
 
+	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ui"
@@ -166,6 +167,8 @@ func run() {
 		log.Printf("Error loading world %v", err)
 		return
 	}
+	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
+
 	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
 	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
 	renderer = render.NewRenderer(db)

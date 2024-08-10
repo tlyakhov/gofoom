@@ -6,6 +6,7 @@ package archetypes
 import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
@@ -48,11 +49,33 @@ func IsPlayerBody(db *concepts.EntityComponentDB, e concepts.Entity) bool {
 func CreatePlayerBody(db *concepts.EntityComponentDB) concepts.Entity {
 	e := db.NewEntity()
 	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
-	_ = db.NewAttachedComponent(e, behaviors.PlayerComponentIndex).(*behaviors.Player)
-	_ = db.NewAttachedComponent(e, behaviors.AliveComponentIndex).(*behaviors.Alive)
-
+	body.System = true
 	body.Size.SetAll(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
 	body.Mass = constants.PlayerMass // kg
+	player := db.NewAttachedComponent(e, behaviors.PlayerComponentIndex).(*behaviors.Player)
+	player.System = true
+	alive := db.NewAttachedComponent(e, behaviors.AliveComponentIndex).(*behaviors.Alive)
+	alive.System = true
 
+	return e
+}
+
+func CreateFont(db *concepts.EntityComponentDB, filename string, name string) concepts.Entity {
+	e := db.NewEntity()
+	named := db.NewAttachedComponent(e, concepts.NamedComponentIndex).(*concepts.Named)
+	named.System = true
+	named.Name = name
+	img := db.NewAttachedComponent(e, materials.ImageComponentIndex).(*materials.Image)
+	img.System = true
+	img.Source = filename
+	img.GenerateMipMaps = false
+	img.Filter = false
+	img.Load()
+	sprite := db.NewAttachedComponent(e, materials.SpriteComponentIndex).(*materials.Sprite)
+	sprite.System = true
+	sprite.Rows = 16
+	sprite.Cols = 16
+	sprite.Image = e
+	sprite.Angles = 0
 	return e
 }
