@@ -58,7 +58,7 @@ func (le *LightElement) Get() *concepts.Vector3 {
 	le.XorSeed = r
 
 	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
-		if uint64(lmResult[3])+constants.MaxLightmapAge >= le.Config.Frame ||
+		if uint64(lmResult[3])+constants.MaxLightmapAge >= le.DB.Frame ||
 			r%constants.LightmapRefreshDither > 0 {
 			le.Output[0] = lmResult[0]
 			le.Output[1] = lmResult[1]
@@ -81,7 +81,7 @@ func (le *LightElement) Get() *concepts.Vector3 {
 		le.Output[0],
 		le.Output[1],
 		le.Output[2],
-		float64(le.Config.Frame + uint64(r)%constants.LightmapRefreshDither),
+		float64(le.DB.Frame + uint64(r)%constants.LightmapRefreshDither),
 	})
 	return &le.Output
 

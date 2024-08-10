@@ -11,11 +11,13 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/render/state"
 )
 
 type WeaponInstantController struct {
 	concepts.BaseController
 	*behaviors.WeaponInstant
+	state.MaterialSampler
 	Body *core.Body
 
 	delta, isect, hit concepts.Vector3
@@ -41,10 +43,14 @@ func (wc *WeaponInstantController) Target(target concepts.Attachable) bool {
 }
 
 // This is similar to the code for lighting
-func (wc *WeaponInstantController) Hit() *core.Selectable {
+func (wc *WeaponInstantController) Cast() *core.Selectable {
+	var v1, v2 concepts.Vector2
+	var s *core.Selectable
+	wc.MaterialSampler.Config = &state.Config{DB: wc.Body.DB}
+	wc.MaterialSampler.Ray = &state.Ray{Angle: wc.Body.Angle.Now}
+
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
 	idist2 := 0.0
-	var s *core.Selectable
 	p := &wc.Body.Pos.Now
 	wc.delta[0] = math.Cos(wc.Body.Angle.Now * concepts.Deg2rad)
 	wc.delta[1] = math.Sin(wc.Body.Angle.Now * concepts.Deg2rad)
@@ -58,20 +64,31 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	for sector != nil {
 		for _, b := range sector.Bodies {
-			if !b.Active || b.Shadow == core.BodyShadowNone || b.Entity == wc.Entity {
+			if !b.Active || b.Entity == wc.Entity {
 				continue
 			}
-			switch b.Shadow {
-			case core.BodyShadowSphere:
-				if concepts.IntersectLineSphere(p, rayEnd, &b.Pos.Now, b.Size.Now[0]*0.5) {
-					continue
-				}
-			case core.BodyShadowAABB:
-				ext := &concepts.Vector3{b.Size.Now[0], b.Size.Now[0], b.Size.Now[1]}
-				if !concepts.IntersectLineAABB(p, rayEnd, &b.Pos.Now, ext) {
-					continue
-				}
+			// We need to intersect and occlude a billboard. First do AABB
+			ext := &concepts.Vector3{b.Size.Now[0], b.Size.Now[0], b.Size.Now[1]}
+			if !concepts.IntersectLineAABB(p, rayEnd, &b.Pos.Now, ext) {
+				continue
 			}
+			v1[0] = b.Pos.Now[0] + wc.delta[1]*b.Size.Now[0]*0.5
+			v1[1] = b.Pos.Now[1] - wc.delta[0]*b.Size.Now[0]*0.5
+			v2[0] = b.Pos.Now[0] - wc.delta[1]*b.Size.Now[0]*0.5
+			v2[1] = b.Pos.Now[1] + wc.delta[0]*b.Size.Now[0]*0.5
+			if !concepts.IntersectSegments(p.To2D(), rayEnd.To2D(), &v1, &v2, wc.isect.To2D()) {
+				continue
+			}
+			wc.MaterialSampler.Initialize(b.Entity, nil)
+			wc.NU = wc.isect.To2D().Dist(&v1) / b.Size.Now[0]
+			wc.NV = 0.5
+			wc.U = wc.NU
+			wc.V = wc.NV
+			wc.SampleMaterial(nil)
+			if wc.Output[3] < 0.5 {
+				continue
+			}
+
 			idist2 = b.Pos.Now.Dist2(p)
 			if idist2 < hitDist2 {
 				s = core.SelectableFromBody(b)
@@ -82,7 +99,7 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 		for _, seg := range sector.InternalSegments {
 			// Find the intersection with this segment.
 			if ok := seg.Intersect3D(p, rayEnd, &wc.isect); ok {
-				idist2 := wc.isect.Dist2(p)
+				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
 					s = core.SelectableFromInternalSegment(seg)
 					hitDist2 = idist2
@@ -141,7 +158,7 @@ func (wc *WeaponInstantController) Hit() *core.Selectable {
 				continue
 			}
 
-			// Get the square of the distance to the intersection (from the target point)
+			// Get the square of the distance to the intersection
 			idist2 := wc.isect.Dist2(p)
 			if idist2-dist2 > constants.IntersectEpsilon {
 				// If the current intersection point is farther than one we
@@ -239,7 +256,7 @@ func (wc *WeaponInstantController) Always() {
 		return
 	}
 	wc.FireNextFrame = false
-	s := wc.Hit()
+	s := wc.Cast()
 
 	if s == nil {
 		return
@@ -254,7 +271,7 @@ func (wc *WeaponInstantController) Always() {
 		// TODO: Parameterize in WeaponInstant
 		s.Body.Vel.Now.AddSelf(wc.delta.Mul(3))
 		// Hurt anything alive
-		if alive := behaviors.AliveFromDb(wc.DB, s.Body.Entity); alive != nil {
+		if alive := behaviors.AliveFromDb(wc.Body.DB, s.Body.Entity); alive != nil {
 			// TODO: Parameterize in WeaponInstant
 			alive.Hurt("Weapon "+s.Entity.Format(), 5, 20)
 		}

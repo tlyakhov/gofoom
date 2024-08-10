@@ -83,7 +83,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 
 		if (stage.Flags & materials.ShaderLiquid) != 0 {
-			lv, lu := math.Sincos(float64(ms.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
+			lv, lu := math.Sincos(float64(stage.DB.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
 			u += lu * constants.LiquidChurnSize
 			v += lv * constants.LiquidChurnSize
 		}

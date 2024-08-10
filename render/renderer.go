@@ -42,8 +42,6 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 			Blocks:        constants.RenderBlocks,
 			LightGrid:     constants.LightGrid,
 			MaxViewDist:   constants.MaxViewDistance,
-			Frame:         0,
-			Counter:       0,
 			DB:            db,
 		},
 		columnGroup:        new(sync.WaitGroup),
@@ -190,7 +188,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
 	// TODO: We can probably do something simpler and cheaper here.
-	r.SectorLastRendered.Store(c.Sector.Entity, uint64(r.Frame))
+	r.SectorLastRendered.Store(c.Sector.Entity, c.DB.Frame)
 
 	if c.Sector.LightmapBias[0] == math.MaxInt64 {
 		// Floor is important, needs to truncate towards -Infinity rather than 0
@@ -373,7 +371,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
-	column.LightElement.XorSeed = r.Frame + uint64(xStart)
+	column.LightElement.XorSeed = r.DB.Frame + uint64(xStart)
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
 	}
@@ -418,8 +416,6 @@ func (r *Renderer) Render() {
 	defer r.RenderLock.Unlock()
 
 	r.startingSector = r.PlayerBody.RenderSector()
-	r.Frame++
-	r.Counter = 0
 
 	if r.Multithreaded {
 		blockSize := r.ScreenWidth / r.Blocks
@@ -433,13 +429,13 @@ func (r *Renderer) Render() {
 	}
 	r.RenderHud()
 
-	if r.Frame%4 <= 1 {
+	if r.DB.Frame%4 <= 1 {
 		return
 	}
 	// Invalidate lighting caches
 	r.SectorLastRendered.Range(func(eSector concepts.Entity, lastSeen uint64) bool {
 		// Cache for a maximum number of frames
-		if r.Frame-lastSeen < 120 {
+		if r.DB.Frame-lastSeen < 120 {
 			return true
 		}
 		if sector := core.SectorFromDb(r.DB, eSector); sector != nil {
