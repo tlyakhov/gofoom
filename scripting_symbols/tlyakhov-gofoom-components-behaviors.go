@@ -40,6 +40,8 @@ func init() {
 		"VerticalDoorFromDb":          reflect.ValueOf(behaviors.VerticalDoorFromDb),
 		"WanderComponentIndex":        reflect.ValueOf(&behaviors.WanderComponentIndex).Elem(),
 		"WanderFromDb":                reflect.ValueOf(behaviors.WanderFromDb),
+		"WeaponInstantComponentIndex": reflect.ValueOf(&behaviors.WeaponInstantComponentIndex).Elem(),
+		"WeaponInstantFromDb":         reflect.ValueOf(behaviors.WeaponInstantFromDb),
 
 		// type definitions
 		"Alive":         reflect.ValueOf((*behaviors.Alive)(nil)),
@@ -52,5 +54,6 @@ func init() {
 		"Underwater":    reflect.ValueOf((*behaviors.Underwater)(nil)),
 		"VerticalDoor":  reflect.ValueOf((*behaviors.VerticalDoor)(nil)),
 		"Wander":        reflect.ValueOf((*behaviors.Wander)(nil)),
+		"WeaponInstant": reflect.ValueOf((*behaviors.WeaponInstant)(nil)),
 	}
 }

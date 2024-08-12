@@ -16,6 +16,7 @@ func init() {
 		"AttachableIsMaterial": reflect.ValueOf(archetypes.AttachableIsMaterial),
 		"CreateBasic":          reflect.ValueOf(archetypes.CreateBasic),
 		"CreateBasicMaterial":  reflect.ValueOf(archetypes.CreateBasicMaterial),
+		"CreateFont":           reflect.ValueOf(archetypes.CreateFont),
 		"CreateLightBody":      reflect.ValueOf(archetypes.CreateLightBody),
 		"CreatePlayerBody":     reflect.ValueOf(archetypes.CreatePlayerBody),
 		"CreateSector":         reflect.ValueOf(archetypes.CreateSector),

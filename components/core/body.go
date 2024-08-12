@@ -20,7 +20,9 @@ type Body struct {
 	SectorEntity      concepts.Entity
 	Angle             concepts.DynamicValue[float64] `editable:"Angle"`
 	Mass              float64                        `editable:"Mass"`
-	CollisionResponse CollisionResponse              `editable:"Collision Response"`
+	CrBody            CollisionResponse              `editable:"Collision (Body)"`
+	CrPlayer          CollisionResponse              `editable:"Collision (Player)"`
+	CrWall            CollisionResponse              `editable:"Collision (Wall)"`
 	Shadow            BodyShadow                     `editable:"Shadow Type"`
 	MountHeight       float64                        `editable:"Mount Height"`
 	OnGround          bool
@@ -108,7 +110,9 @@ func (b *Body) Construct(data map[string]any) {
 	b.Size.Construct(defaultBodySize)
 	b.Angle.Construct(nil)
 
-	b.CollisionResponse = Slide
+	b.CrBody = CollideNone
+	b.CrPlayer = CollideNone
+	b.CrWall = CollideSeparate
 	b.MountHeight = constants.PlayerMountHeight
 	b.Shadow = BodyShadowNone
 	b.Angle.NoRenderBlend = true
@@ -150,12 +154,22 @@ func (b *Body) Construct(data map[string]any) {
 	if v, ok := data["Mass"]; ok {
 		b.Mass = v.(float64)
 	}
-	if v, ok := data["CollisionResponse"]; ok {
+	if v, ok := data["CrBody"]; ok {
 		c, err := CollisionResponseString(v.(string))
 		if err == nil {
-			b.CollisionResponse = c
-		} else {
-			panic(err)
+			b.CrBody = c
+		}
+	}
+	if v, ok := data["CrPlayer"]; ok {
+		c, err := CollisionResponseString(v.(string))
+		if err == nil {
+			b.CrPlayer = c
+		}
+	}
+	if v, ok := data["CrWall"]; ok {
+		c, err := CollisionResponseString(v.(string))
+		if err == nil {
+			b.CrWall = c
 		}
 	}
 	if v, ok := data["Shadow"]; ok {
@@ -176,7 +190,9 @@ func (b *Body) Serialize() map[string]any {
 	result["Angle"] = b.Angle.Serialize()
 	result["Mass"] = b.Mass
 	result["MountHeight"] = b.MountHeight
-	result["CollisionResponse"] = b.CollisionResponse.String()
+	result["CrBody"] = b.CrBody.String()
+	result["CrPlayer"] = b.CrPlayer.String()
+	result["CrWall"] = b.CrWall.String()
 	if b.Shadow != BodyShadowNone {
 		result["Shadow"] = b.Shadow.String()
 	}

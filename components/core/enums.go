@@ -7,11 +7,11 @@ type CollisionResponse int
 
 //go:generate go run github.com/dmarkham/enumer -type=CollisionResponse -json
 const (
-	Slide CollisionResponse = iota
-	Bounce
-	Stop
-	Remove
-	Callback
+	CollideNone CollisionResponse = iota
+	CollideSeparate
+	CollideBounce
+	CollideStop
+	CollideRemove
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=BodyShadow -json

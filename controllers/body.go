@@ -55,17 +55,6 @@ func (bc *BodyController) Target(target concepts.Attachable) bool {
 	return true
 }
 
-func (bc *BodyController) RemoveBody() {
-	// TODO: poorly implemented
-	if bc.Sector != nil {
-		delete(bc.Sector.Bodies, bc.Body.Entity)
-		bc.Sector = nil
-		bc.Body.SectorEntity = 0
-		//return
-	}
-	panic("BodyController.RemoveBody is broken")
-}
-
 func (bc *BodyController) ResetForce() {
 	bc.Body.Force[2] = 0.0
 	bc.Body.Force[1] = 0.0
