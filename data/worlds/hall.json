@@ -438,7 +438,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "8",
       "Mass": 0,
       "MountHeight": 30,
@@ -480,7 +482,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "9",
       "Mass": 0,
       "MountHeight": 30,
@@ -1400,7 +1404,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "20",
       "Mass": 0,
       "MountHeight": 20,
@@ -1442,7 +1448,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "21",
       "Mass": 0,
       "MountHeight": 15,
@@ -2457,7 +2465,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "30",
       "Mass": 0,
       "MountHeight": 15,
@@ -2606,10 +2616,13 @@
       "Name": "Item Test"
     },
     "core.Body": {
+      "Active": false,
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "32",
       "Mass": 0,
       "MountHeight": 15,
@@ -2622,7 +2635,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.265625,
+          "Percent": 0.671875,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -3658,16 +3671,18 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 133.7993362202148,
+          "End": -47.94980508558237,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.7031249999999999,
+          "Percent": 0.5468750000000001,
           "Reverse": false,
-          "Start": 100.87383225952445,
+          "Start": -69.77507534372036,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideBounce",
+      "CrPlayer": "CollideBounce",
+      "CrWall": "CollideSeparate",
       "Entity": "42",
       "Mass": 15,
       "MountHeight": 30,
@@ -4457,7 +4472,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "52",
       "Mass": 0,
       "MountHeight": 20,
@@ -5025,7 +5042,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "59",
       "Mass": 0,
       "MountHeight": 20,
@@ -5250,7 +5269,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "62",
       "Mass": 0,
       "MountHeight": 20,
@@ -5759,7 +5780,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "68",
       "Mass": 0,
       "MountHeight": 30,
@@ -6654,7 +6677,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "78",
       "Mass": 0,
       "MountHeight": 15,
@@ -7319,7 +7344,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "85",
       "Mass": 0,
       "MountHeight": 30,
@@ -8442,7 +8469,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "96",
       "Mass": 0,
       "MountHeight": 20,
@@ -8773,7 +8802,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "101",
       "Mass": 0,
       "MountHeight": 20,
@@ -8815,7 +8846,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "102",
       "Mass": 0,
       "MountHeight": 20,
@@ -8966,7 +8999,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "104",
       "Mass": 0,
       "MountHeight": 30,
@@ -9008,7 +9043,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "105",
       "Mass": 0,
       "MountHeight": 30,
@@ -9140,7 +9177,9 @@
       "Angle": {
         "Original": 262.5
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "107",
       "Mass": 80,
       "MountHeight": 15,
@@ -10066,7 +10105,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "121",
       "Mass": 0,
       "MountHeight": 15,
@@ -10189,7 +10230,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "125",
       "Mass": 0,
       "MountHeight": 15,
@@ -10339,7 +10382,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "131",
       "Mass": 0,
       "MountHeight": 15,
@@ -10385,7 +10430,9 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
       "Entity": "132",
       "Mass": 0,
       "MountHeight": 15,
@@ -10398,8 +10445,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.59375,
-          "Reverse": false,
+          "Percent": 1,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,

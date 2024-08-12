@@ -8,8 +8,14 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 )
+
+// Declare conformity with interfaces
+var _ fyne.Draggable = (*AddEntity)(nil)
+var _ desktop.Hoverable = (*AddEntity)(nil)
+var _ desktop.Mouseable = (*AddEntity)(nil)
 
 type AddEntity struct {
 	state.IEditor
@@ -49,9 +55,20 @@ func (a *AddEntity) AttachToSector() {
 	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }
 
-func (a *AddEntity) OnMouseDown(evt *desktop.MouseEvent) {}
+func (a *AddEntity) Dragged(d *fyne.DragEvent) {
+	a.MouseMoved(&desktop.MouseEvent{PointEvent: d.PointEvent})
+}
 
-func (a *AddEntity) OnMouseMove() {
+func (a *AddEntity) DragEnd() {
+	a.MouseUp(&desktop.MouseEvent{})
+}
+
+func (a *AddEntity) MouseDown(evt *desktop.MouseEvent) {}
+
+func (a *AddEntity) MouseIn(evt *desktop.MouseEvent) {}
+func (a *AddEntity) MouseOut()                       {}
+
+func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
@@ -80,10 +97,11 @@ func (a *AddEntity) OnMouseMove() {
 	}
 }
 
-func (a *AddEntity) OnMouseUp() {
+func (a *AddEntity) MouseUp(evt *desktop.MouseEvent) {
 	a.State().Modified = true
 	a.ActionFinished(false, true, false)
 }
+
 func (a *AddEntity) Act() {
 	a.Mode = "AddBody"
 	a.SelectObjects(true, core.SelectableFromEntity(a.State().DB, a.Entity))

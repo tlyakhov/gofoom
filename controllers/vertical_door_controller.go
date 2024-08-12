@@ -108,13 +108,19 @@ func (vd *VerticalDoorController) Always() {
 		if vd.Intent == behaviors.DoorIntentClosed {
 			vd.Intent = behaviors.DoorIntentReset
 		}
+		/*for _, seg := range vd.Sector.Segments {
+			if seg.AdjacentSegment == nil {
+				continue
+			}
+			vd.DB.Act(seg.AdjacentSegment.Sector, core.SectorComponentIndex, concepts.ControllerRecalculate)
+		}*/
 	}
 
-	if vd.Intent == behaviors.DoorIntentOpen && vd.State != behaviors.DoorStateOpen {
+	if vd.Intent == behaviors.DoorIntentOpen && vd.State != behaviors.DoorStateOpen && vd.State != behaviors.DoorStateOpening {
 		vd.State = behaviors.DoorStateOpening
 		a.Reverse = true
 		a.Active = true
-	} else if vd.Intent == behaviors.DoorIntentClosed && vd.State != behaviors.DoorStateClosed {
+	} else if vd.Intent == behaviors.DoorIntentClosed && vd.State != behaviors.DoorStateClosed && vd.State != behaviors.DoorStateClosing {
 		vd.State = behaviors.DoorStateClosing
 		a.Reverse = false
 		a.Active = true

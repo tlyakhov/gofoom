@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _CollisionResponseName = "SlideBounceStopRemoveCallback"
+const _CollisionResponseName = "CollideNoneCollideSeparateCollideBounceCollideStopCollideRemove"
 
-var _CollisionResponseIndex = [...]uint8{0, 5, 11, 15, 21, 29}
+var _CollisionResponseIndex = [...]uint8{0, 11, 26, 39, 50, 63}
 
-const _CollisionResponseLowerName = "slidebouncestopremovecallback"
+const _CollisionResponseLowerName = "collidenonecollideseparatecollidebouncecollidestopcollideremove"
 
 func (i CollisionResponse) String() string {
 	if i < 0 || i >= CollisionResponse(len(_CollisionResponseIndex)-1) {
@@ -25,34 +25,34 @@ func (i CollisionResponse) String() string {
 // Re-run the stringer command to generate them again.
 func _CollisionResponseNoOp() {
 	var x [1]struct{}
-	_ = x[Slide-(0)]
-	_ = x[Bounce-(1)]
-	_ = x[Stop-(2)]
-	_ = x[Remove-(3)]
-	_ = x[Callback-(4)]
+	_ = x[CollideNone-(0)]
+	_ = x[CollideSeparate-(1)]
+	_ = x[CollideBounce-(2)]
+	_ = x[CollideStop-(3)]
+	_ = x[CollideRemove-(4)]
 }
 
-var _CollisionResponseValues = []CollisionResponse{Slide, Bounce, Stop, Remove, Callback}
+var _CollisionResponseValues = []CollisionResponse{CollideNone, CollideSeparate, CollideBounce, CollideStop, CollideRemove}
 
 var _CollisionResponseNameToValueMap = map[string]CollisionResponse{
-	_CollisionResponseName[0:5]:        Slide,
-	_CollisionResponseLowerName[0:5]:   Slide,
-	_CollisionResponseName[5:11]:       Bounce,
-	_CollisionResponseLowerName[5:11]:  Bounce,
-	_CollisionResponseName[11:15]:      Stop,
-	_CollisionResponseLowerName[11:15]: Stop,
-	_CollisionResponseName[15:21]:      Remove,
-	_CollisionResponseLowerName[15:21]: Remove,
-	_CollisionResponseName[21:29]:      Callback,
-	_CollisionResponseLowerName[21:29]: Callback,
+	_CollisionResponseName[0:11]:       CollideNone,
+	_CollisionResponseLowerName[0:11]:  CollideNone,
+	_CollisionResponseName[11:26]:      CollideSeparate,
+	_CollisionResponseLowerName[11:26]: CollideSeparate,
+	_CollisionResponseName[26:39]:      CollideBounce,
+	_CollisionResponseLowerName[26:39]: CollideBounce,
+	_CollisionResponseName[39:50]:      CollideStop,
+	_CollisionResponseLowerName[39:50]: CollideStop,
+	_CollisionResponseName[50:63]:      CollideRemove,
+	_CollisionResponseLowerName[50:63]: CollideRemove,
 }
 
 var _CollisionResponseNames = []string{
-	_CollisionResponseName[0:5],
-	_CollisionResponseName[5:11],
-	_CollisionResponseName[11:15],
-	_CollisionResponseName[15:21],
-	_CollisionResponseName[21:29],
+	_CollisionResponseName[0:11],
+	_CollisionResponseName[11:26],
+	_CollisionResponseName[26:39],
+	_CollisionResponseName[39:50],
+	_CollisionResponseName[50:63],
 }
 
 // CollisionResponseString retrieves an enum value from the enum constants string name.

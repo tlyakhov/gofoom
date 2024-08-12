@@ -54,6 +54,7 @@ func init() {
 		"ElasticOut":                   reflect.ValueOf(concepts.ElasticOut),
 		"ExecutionDuration":            reflect.ValueOf(concepts.ExecutionDuration),
 		"ExecutionTrack":               reflect.ValueOf(concepts.ExecutionTrack),
+		"Hash64to32":                   reflect.ValueOf(concepts.Hash64to32),
 		"IdentityMatrix2":              reflect.ValueOf(&concepts.IdentityMatrix2).Elem(),
 		"Int32ToNRGBA":                 reflect.ValueOf(concepts.Int32ToNRGBA),
 		"Int32ToRGBA":                  reflect.ValueOf(concepts.Int32ToRGBA),
@@ -67,6 +68,12 @@ func init() {
 		"IntersectSegmentsRaw":         reflect.ValueOf(concepts.IntersectSegmentsRaw),
 		"Lerp":                         reflect.ValueOf(concepts.Lerp),
 		"MapArray":                     reflect.ValueOf(concepts.MapArray),
+		"MatBasis1X":                   reflect.ValueOf(concepts.MatBasis1X),
+		"MatBasis1Y":                   reflect.ValueOf(concepts.MatBasis1Y),
+		"MatBasis2X":                   reflect.ValueOf(concepts.MatBasis2X),
+		"MatBasis2Y":                   reflect.ValueOf(concepts.MatBasis2Y),
+		"MatTransX":                    reflect.ValueOf(concepts.MatTransX),
+		"MatTransY":                    reflect.ValueOf(concepts.MatTransY),
 		"NRGBAToInt32":                 reflect.ValueOf(concepts.NRGBAToInt32),
 		"NamedComponentIndex":          reflect.ValueOf(&concepts.NamedComponentIndex).Elem(),
 		"NamedFromDb":                  reflect.ValueOf(concepts.NamedFromDb),
@@ -166,6 +173,7 @@ type _tlyakhov_gofoom_concepts_Attachable struct {
 	WGetDB        func() *concepts.EntityComponentDB
 	WGetEntity    func() concepts.Entity
 	WIndexInDB    func() int
+	WIsSystem     func() bool
 	WSerialize    func() map[string]any
 	WSetDB        func(db *concepts.EntityComponentDB)
 	WSetEntity    func(entity concepts.Entity)
@@ -184,6 +192,9 @@ func (W _tlyakhov_gofoom_concepts_Attachable) GetEntity() concepts.Entity {
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) IndexInDB() int {
 	return W.WIndexInDB()
+}
+func (W _tlyakhov_gofoom_concepts_Attachable) IsSystem() bool {
+	return W.WIsSystem()
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) Serialize() map[string]any {
 	return W.WSerialize()

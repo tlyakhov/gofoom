@@ -57,7 +57,7 @@ func (a *Transform) end() {
 	a.ActionFinished(false, true, true)
 }
 
-func (a *Transform) moved(m fyne.KeyModifier) {
+func (a *Transform) moved(_ fyne.KeyModifier) {
 	if a.Mode == "" {
 		return
 	}
