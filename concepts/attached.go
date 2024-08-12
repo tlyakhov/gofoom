@@ -18,7 +18,6 @@ type Attached struct {
 
 type Attachable interface {
 	Serializable
-	IsSystem() bool
 	String() string
 	IndexInDB() int
 	SetIndexInDB(int)
@@ -28,6 +27,7 @@ type Attachable interface {
 
 type Serializable interface {
 	Construct(data map[string]any)
+	IsSystem() bool
 	Serialize() map[string]any
 	// TODO: Rename to Attach
 	SetDB(db *EntityComponentDB)
@@ -157,9 +157,12 @@ func ConstructSlice[PT interface {
 }
 
 func SerializeSlice[T Serializable](elements []T) []map[string]any {
-	result := make([]map[string]any, len(elements))
-	for i, element := range elements {
-		result[i] = element.Serialize()
+	result := make([]map[string]any, 0, len(elements))
+	for _, element := range elements {
+		if element.IsSystem() {
+			continue
+		}
+		result = append(result, element.Serialize())
 	}
 	return result
 }

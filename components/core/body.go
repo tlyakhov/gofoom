@@ -20,12 +20,15 @@ type Body struct {
 	SectorEntity      concepts.Entity
 	Angle             concepts.DynamicValue[float64] `editable:"Angle"`
 	Mass              float64                        `editable:"Mass"`
-	CrBody            CollisionResponse              `editable:"Collision (Body)"`
-	CrPlayer          CollisionResponse              `editable:"Collision (Player)"`
-	CrWall            CollisionResponse              `editable:"Collision (Wall)"`
-	Shadow            BodyShadow                     `editable:"Shadow Type"`
-	MountHeight       float64                        `editable:"Mount Height"`
-	OnGround          bool
+
+	// "Bounciness" (0 = inelastic, 1 = perfectly elastic)
+	Elasticity  float64           `editable:"Elasticity"`
+	CrBody      CollisionResponse `editable:"Collision (Body)"`
+	CrPlayer    CollisionResponse `editable:"Collision (Player)"`
+	CrWall      CollisionResponse `editable:"Collision (Wall)"`
+	Shadow      BodyShadow        `editable:"Shadow Type"`
+	MountHeight float64           `editable:"Mount Height"`
+	OnGround    bool
 
 	// For rendering - we can figure out which side of this our render
 	// position is on so we end up in the right sector when render blending
@@ -110,6 +113,7 @@ func (b *Body) Construct(data map[string]any) {
 	b.Size.Construct(defaultBodySize)
 	b.Angle.Construct(nil)
 
+	b.Elasticity = 0.5
 	b.CrBody = CollideNone
 	b.CrPlayer = CollideNone
 	b.CrWall = CollideSeparate
@@ -154,6 +158,9 @@ func (b *Body) Construct(data map[string]any) {
 	if v, ok := data["Mass"]; ok {
 		b.Mass = v.(float64)
 	}
+	if v, ok := data["Elasticity"]; ok {
+		b.Elasticity = v.(float64)
+	}
 	if v, ok := data["CrBody"]; ok {
 		c, err := CollisionResponseString(v.(string))
 		if err == nil {
@@ -189,6 +196,7 @@ func (b *Body) Serialize() map[string]any {
 	result["Size"] = b.Size.Serialize()
 	result["Angle"] = b.Angle.Serialize()
 	result["Mass"] = b.Mass
+	result["Elasticity"] = b.Elasticity
 	result["MountHeight"] = b.MountHeight
 	result["CrBody"] = b.CrBody.String()
 	result["CrPlayer"] = b.CrPlayer.String()

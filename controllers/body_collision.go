@@ -284,19 +284,26 @@ func (bc *BodyController) bounceBody(body *core.Body, separateOnly bool) {
 
 	c_a := r_ap.Cross(n)
 	c_b := r_bp.Cross(n)
-	// Solid spheres
-	i_a := bc.Body.Mass * r_a * r_a * 2.0 / 5.0
-	i_b := otherMass * r_b * r_b * 2.0 / 5.0
-	e := 0.8
-	if i_a > 0 && i_b > 0 {
-		j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + 1.0/otherMass + c_a.Dot(c_a)/i_a + c_b.Dot(c_b)/i_b)
-		bc.Body.Vel.Now.AddSelf(n.Mul(j / otherMass))
-		body.Vel.Now.AddSelf(n.Mul(-j / otherMass))
-	} else if i_a > 0 {
-		j := -(1.0 + e) * v_p1.Dot(n) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/i_a)
+	// Solid sphere moment of inertia = (2/5)MR^2
+	momentA := bc.Body.Mass * r_a * r_a * 2.0 / 5.0
+	momentB := otherMass * r_b * r_b * 2.0 / 5.0
+	eA := 0.0
+	eB := 0.0
+	if bc.Body.Elasticity > 0 || body.Elasticity > 0 {
+		eA = bc.Body.Elasticity * bc.Body.Elasticity / (bc.Body.Elasticity + body.Elasticity)
+		eB = body.Elasticity * body.Elasticity / (bc.Body.Elasticity + body.Elasticity)
+	}
+	if momentA > 0 && momentB > 0 {
+		jA := v_p1.Dot(n) / (1.0/bc.Body.Mass + 1.0/otherMass + c_a.Dot(c_a)/momentA + c_b.Dot(c_b)/momentB)
+		jB := -(1.0 + eB) * jA
+		jA = -(1.0 + eA) * jA
+		bc.Body.Vel.Now.AddSelf(n.Mul(jA / otherMass))
+		body.Vel.Now.AddSelf(n.Mul(-jB / otherMass))
+	} else if momentA > 0 {
+		j := -(1.0 + eA) * v_p1.Dot(n) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/momentA)
 		bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))
-	} else if i_b > 0 {
-		j := -(1.0 + e) * v_p1.Dot(n) / (1.0/otherMass + c_b.Dot(c_b)/i_b)
+	} else if momentB > 0 {
+		j := -(1.0 + eB) * v_p1.Dot(n) / (1.0/otherMass + c_b.Dot(c_b)/momentB)
 		body.Vel.Now.AddSelf(n.Mul(-j / otherMass))
 	}
 	//fmt.Printf("%v <-> %v = %v\n", bc.Body.String(), body.String(), diff)
@@ -339,6 +346,53 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 	}
 }
 
+func (bc *BodyController) CollideZ() {
+	halfHeight := bc.Body.Size.Now[1] * 0.5
+	bodyTop := bc.Body.Pos.Now[2] + halfHeight
+	floorZ, ceilZ := bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
+
+	bc.Body.OnGround = false
+	if bc.Sector.FloorTarget != 0 && bodyTop < floorZ {
+		delta := bc.Body.Pos.Now.Sub(&bc.Sector.Center)
+		bc.Exit()
+		bc.Enter(bc.Sector.FloorTarget)
+		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
+		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
+		_, ceilZ = bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
+		bc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
+	} else if bc.Sector.FloorTarget != 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
+		bc.Body.Vel.Now[2] = constants.PlayerJumpForce
+	} else if bc.Sector.FloorTarget == 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ {
+		dist := bc.Sector.FloorNormal[2] * (floorZ - (bc.Body.Pos.Now[2] - halfHeight))
+		delta := bc.Sector.FloorNormal.Mul(dist)
+		// TODO: do this for ceiling too
+		c_a := delta.Cross(&bc.Sector.FloorNormal)
+		// Solid sphere moment of inertia
+		moment := bc.Body.Mass * halfHeight * halfHeight * 2.0 / 5.0
+		j := -(1.0 + bc.Body.Elasticity) * bc.Body.Vel.Now.Dot(&bc.Sector.FloorNormal) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/moment)
+		bc.Body.Vel.Now.AddSelf(bc.Sector.FloorNormal.Mul(j / bc.Body.Mass))
+		bc.Body.Pos.Now.AddSelf(delta)
+		bc.Body.OnGround = true
+		BodySectorScript(bc.Sector.FloorScripts, bc.Body, bc.Sector)
+	}
+
+	if bc.Sector.CeilTarget != 0 && bodyTop > ceilZ {
+		delta := bc.Body.Pos.Now.Sub(&bc.Sector.Center)
+		bc.Exit()
+		bc.Enter(bc.Sector.CeilTarget)
+		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
+		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
+		floorZ, _ = bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
+		bc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
+	} else if bc.Sector.CeilTarget == 0 && bodyTop >= ceilZ {
+		dist := -bc.Sector.CeilNormal[2] * (bodyTop - ceilZ + 1.0)
+		delta := bc.Sector.CeilNormal.Mul(dist)
+		bc.Body.Vel.Now.AddSelf(delta)
+		bc.Body.Pos.Now.AddSelf(delta)
+		BodySectorScript(bc.Sector.CeilScripts, bc.Body, bc.Sector)
+	}
+}
+
 func (bc *BodyController) Collide() {
 	// We've got several possibilities we need to handle:
 	// 1.   The body has an un-initialized sector, but it's within a sector and doesn't need to be moved.
@@ -372,6 +426,7 @@ func (bc *BodyController) Collide() {
 		}
 
 		if bc.Sector != nil {
+			bc.CollideZ()
 			//		bc.bodyBodyCollide(bc.Sector)
 			for _, sector := range bc.Sector.PVS {
 				bc.bodyBodyCollide(sector)

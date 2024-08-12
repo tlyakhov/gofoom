@@ -39,9 +39,12 @@ func (wc *WorldController) Target(target concepts.Attachable) bool {
 
 func (wc *WorldController) Loaded() {
 	// Create a player if we don't have one
-	if wc.DB.First(behaviors.PlayerComponentIndex) == nil {
-		player := archetypes.CreatePlayerBody(wc.DB)
-		playerBody := core.BodyFromDb(wc.DB, player)
+	if player := wc.DB.First(behaviors.PlayerComponentIndex).(*behaviors.Player); player != nil {
+		playerBody := core.BodyFromDb(wc.DB, player.Entity)
+		playerBody.Elasticity = 0.1
+	} else {
+		entity := archetypes.CreatePlayerBody(wc.DB)
+		playerBody := core.BodyFromDb(wc.DB, entity)
 		playerBody.Pos.Original = wc.Spawn.Spawn
 		playerBody.Pos.ResetToOriginal()
 	}

@@ -20,6 +20,7 @@ const (
 	MaxLightmapAge          = 3 // in frames
 	LightmapRefreshDither   = 6 // in frames
 	DebugLighting           = false
+	MaxWeaponMarks          = 30
 
 	// Rendering defaults
 	FieldOfView         = 90
@@ -53,7 +54,7 @@ const (
 	PlayerCrouchHeight   = 16.0
 	PlayerWalkForce      = 10.0 * PlayerMass * TimeStep // Newtons (we work backwards and aim for X meters/time step)
 	PlayerTurnSpeed      = 180.0                        // Degrees per second
-	PlayerJumpForce      = 30.0 * PlayerMass * TimeStep // Newtons
+	PlayerJumpForce      = 60.0 * PlayerMass * TimeStep // Newtons
 	PlayerSwimStrength   = 20.0 * PlayerMass * TimeStep
 	PlayerHurtTime       = 30
 	PlayerMountHeight    = 15.0

@@ -256,3 +256,7 @@ func (a *Animation[T]) SetDB(db *EntityComponentDB) {
 func (a *Animation[T]) GetDB() *EntityComponentDB {
 	return nil
 }
+
+func (a *Animation[T]) IsSystem() bool {
+	return false
+}
