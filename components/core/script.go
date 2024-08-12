@@ -21,6 +21,7 @@ type Script struct {
 	interp       *interp.Interpreter
 	Vars         map[string]any
 	DB           *concepts.EntityComponentDB
+	System       bool
 	runFunc      any
 }
 
@@ -87,6 +88,10 @@ func (s *Script) SetDB(db *concepts.EntityComponentDB) {
 
 func (s *Script) GetDB() *concepts.EntityComponentDB {
 	return s.DB
+}
+
+func (s *Script) IsSystem() bool {
+	return s.System
 }
 
 func (s *Script) Construct(data map[string]any) {

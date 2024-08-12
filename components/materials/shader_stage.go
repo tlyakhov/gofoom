@@ -20,6 +20,7 @@ const (
 
 type ShaderStage struct {
 	DB        *concepts.EntityComponentDB
+	System    bool
 	Texture   concepts.Entity  `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2 `editable:"Transform"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
@@ -95,4 +96,8 @@ func (s *ShaderStage) SetDB(db *concepts.EntityComponentDB) {
 
 func (s *ShaderStage) GetDB() *concepts.EntityComponentDB {
 	return s.DB
+}
+
+func (s *ShaderStage) IsSystem() bool {
+	return s.System
 }

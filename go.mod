@@ -4,9 +4,10 @@ go 1.22
 
 require (
 	fyne.io/fyne/v2 v2.5.0
-	github.com/disintegration/imaging v1.6.2
+	github.com/disintegration/gift v1.2.1
 	github.com/dmarkham/enumer v1.5.10
 	github.com/fogleman/gg v1.3.0
+	github.com/gammazero/deque v0.2.1
 	github.com/gopxl/pixel/v2 v2.2.0
 	github.com/kelindar/bitmap v1.5.2
 	github.com/klauspost/cpuid/v2 v2.2.8
@@ -54,19 +55,11 @@ require (
 )
 
 require (
-	github.com/disintegration/gift v1.2.1 // indirect
-	github.com/gammazero/deque v0.2.1 // indirect
+	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/gopxl/glhf/v2 v2.1.0 // indirect
 	github.com/gopxl/mainthread/v2 v2.1.1 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/neelance/astrewrite v0.0.0-20160511093645-99348263ae86 // indirect
-	github.com/neelance/sourcemap v0.0.0-20200213170602-2833bce08e4c // indirect
-	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
-	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/spf13/cobra v1.2.1 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/crypto v0.25.0 // indirect
+	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49 // indirect
+	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
+	github.com/rymdport/portal v0.2.2 // indirect
 	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/term v0.22.0 // indirect
-	honnef.co/go/js/dom v0.0.0-20231112215516-51f43a291193 // indirect
 )

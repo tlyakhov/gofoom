@@ -72,6 +72,8 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 			if !concepts.IntersectLineAABB(p, rayEnd, &b.Pos.Now, ext) {
 				continue
 			}
+			// Calculate line segment vertices for a billboard perpendicular to
+			// our weapon source.
 			v1[0] = b.Pos.Now[0] + wc.delta[1]*b.Size.Now[0]*0.5
 			v1[1] = b.Pos.Now[1] - wc.delta[0]*b.Size.Now[0]*0.5
 			v2[0] = b.Pos.Now[0] - wc.delta[1]*b.Size.Now[0]*0.5
@@ -251,6 +253,20 @@ func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *core.Selectable, t
 	return surf
 }
 
+func (wc *WeaponInstantController) updateMarks(mark behaviors.WeaponMark) {
+	wc.Marks.PushBack(mark)
+	for wc.Marks.Len() > constants.MaxWeaponMarks {
+		wm := wc.Marks.PopFront()
+		for i, stage := range wm.Surface.ExtraStages {
+			if stage != wm.ShaderStage {
+				continue
+			}
+			wm.Surface.ExtraStages = append(wm.Surface.ExtraStages[:i], wm.Surface.ExtraStages[i+1:]...)
+			break
+		}
+	}
+}
+
 func (wc *WeaponInstantController) Always() {
 	if !wc.FireNextFrame {
 		return
@@ -284,15 +300,18 @@ func (wc *WeaponInstantController) Always() {
 		// Make a mark on walls
 
 		// TODO: Include floors and ceilings
-		// TODO: Keep track of a finite set of extra stages in a ring buffer.
 		es := &materials.ShaderStage{
 			Texture:                wc.MarkMaterial,
-			IgnoreSurfaceTransform: false}
+			IgnoreSurfaceTransform: false,
+			System:                 true}
 		es.SetDB(s.DB)
 		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
 		surf.ExtraStages = append(surf.ExtraStages, es)
 		es.Transform.From(&surf.Transform.Now)
 		es.Transform.AffineInverseSelf().MulSelf(&wc.transform)
-		wc.ShaderStages = append(wc.ShaderStages, es)
+		wc.updateMarks(behaviors.WeaponMark{
+			ShaderStage: es,
+			Surface:     surf,
+		})
 	}
 }

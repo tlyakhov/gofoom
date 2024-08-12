@@ -6,6 +6,8 @@ package behaviors
 import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+
+	"github.com/gammazero/deque"
 )
 
 // TODO: Implement attributes like cooldowns, spread, DPS, scripting
@@ -18,7 +20,13 @@ type WeaponInstant struct {
 
 	// Internal state
 	FireNextFrame bool `editable:"Fire Next Frame"`
-	ShaderStages  []*materials.ShaderStage
+	// TODO: We should serialize these
+	Marks deque.Deque[WeaponMark]
+}
+
+type WeaponMark struct {
+	*materials.ShaderStage
+	*materials.Surface
 }
 
 var WeaponInstantComponentIndex int
@@ -40,7 +48,8 @@ func (w *WeaponInstant) String() string {
 
 func (w *WeaponInstant) Construct(data map[string]any) {
 	w.Attached.Construct(data)
-	w.MarkSize = 10
+	w.MarkSize = 5
+	w.Marks = deque.Deque[WeaponMark]{}
 
 	if data == nil {
 		return
@@ -62,7 +71,7 @@ func (w *WeaponInstant) Serialize() map[string]any {
 		result["MarkMaterial"] = w.MarkMaterial.Format()
 	}
 
-	if w.MarkSize != 10 {
+	if w.MarkSize != 5 {
 		result["MarkSize"] = w.MarkSize
 	}
 
