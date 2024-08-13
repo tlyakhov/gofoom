@@ -142,6 +142,7 @@ type _tlyakhov_gofoom_concepts_Animated struct {
 	WAnimate   func()
 	WConstruct func(data map[string]any)
 	WGetDB     func() *concepts.EntityComponentDB
+	WIsSystem  func() bool
 	WReset     func()
 	WSerialize func() map[string]any
 	WSetDB     func(db *concepts.EntityComponentDB)
@@ -155,6 +156,9 @@ func (W _tlyakhov_gofoom_concepts_Animated) Construct(data map[string]any) {
 }
 func (W _tlyakhov_gofoom_concepts_Animated) GetDB() *concepts.EntityComponentDB {
 	return W.WGetDB()
+}
+func (W _tlyakhov_gofoom_concepts_Animated) IsSystem() bool {
+	return W.WIsSystem()
 }
 func (W _tlyakhov_gofoom_concepts_Animated) Reset() {
 	W.WReset()
@@ -257,6 +261,7 @@ type _tlyakhov_gofoom_concepts_Dynamic struct {
 	WDetach          func(sim *concepts.Simulation)
 	WGetAnimation    func() concepts.Animated
 	WGetDB           func() *concepts.EntityComponentDB
+	WIsSystem        func() bool
 	WNewFrame        func()
 	WRenderBlend     func(a0 float64)
 	WResetToOriginal func()
@@ -279,6 +284,9 @@ func (W _tlyakhov_gofoom_concepts_Dynamic) GetAnimation() concepts.Animated {
 func (W _tlyakhov_gofoom_concepts_Dynamic) GetDB() *concepts.EntityComponentDB {
 	return W.WGetDB()
 }
+func (W _tlyakhov_gofoom_concepts_Dynamic) IsSystem() bool {
+	return W.WIsSystem()
+}
 func (W _tlyakhov_gofoom_concepts_Dynamic) NewFrame() {
 	W.WNewFrame()
 }
@@ -300,6 +308,7 @@ type _tlyakhov_gofoom_concepts_Serializable struct {
 	IValue     interface{}
 	WConstruct func(data map[string]any)
 	WGetDB     func() *concepts.EntityComponentDB
+	WIsSystem  func() bool
 	WSerialize func() map[string]any
 	WSetDB     func(db *concepts.EntityComponentDB)
 }
@@ -309,6 +318,9 @@ func (W _tlyakhov_gofoom_concepts_Serializable) Construct(data map[string]any) {
 }
 func (W _tlyakhov_gofoom_concepts_Serializable) GetDB() *concepts.EntityComponentDB {
 	return W.WGetDB()
+}
+func (W _tlyakhov_gofoom_concepts_Serializable) IsSystem() bool {
+	return W.WIsSystem()
 }
 func (W _tlyakhov_gofoom_concepts_Serializable) Serialize() map[string]any {
 	return W.WSerialize()

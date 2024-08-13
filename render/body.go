@@ -61,11 +61,11 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	}
 
 	if lit := materials.LitFromDb(r.DB, b.Entity); lit != nil {
-		le := &c.LightElement
+		le := &c.LightSampler
 		le.Q.From(b.Pos.Render)
 		le.MapIndex = c.WorldToLightmapAddress(b.Sector(), &le.Q, 0)
 		le.Segment = nil
-		le.Type = state.LightElementBody
+		le.Type = state.LightSamplerBody
 		le.InputBody = b.Entity
 		le.Sector = b.Sector()
 		le.Get()

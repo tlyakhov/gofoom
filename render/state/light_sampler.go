@@ -14,20 +14,20 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-type LightElementType int
+type LightSamplerType int
 
-//go:generate go run github.com/dmarkham/enumer -type=LightElementType -json
+//go:generate go run github.com/dmarkham/enumer -type=LightSamplerType -json
 const (
-	LightElementFloor LightElementType = iota
-	LightElementCeil
-	LightElementWall
-	LightElementBody
+	LightSamplerFloor LightSamplerType = iota
+	LightSamplerCeil
+	LightSamplerWall
+	LightSamplerBody
 )
 
 // All the data and state required to retrieve/calculate a lightmap texel
-type LightElement struct {
-	*Config
-	Type         LightElementType
+type LightSampler struct {
+	MaterialSampler
+	Type         LightSamplerType
 	MapIndex     uint64
 	Delta        concepts.Vector3
 	Output       concepts.Vector3
@@ -43,7 +43,7 @@ type LightElement struct {
 	Normal  concepts.Vector3
 }
 
-func (le *LightElement) Debug() *concepts.Vector3 {
+func (le *LightSampler) Debug() *concepts.Vector3 {
 	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
 	dbg := le.Q.Mul(1.0 / 64.0)
 	le.Output[0] = dbg[0] - math.Floor(dbg[0])
@@ -52,7 +52,7 @@ func (le *LightElement) Debug() *concepts.Vector3 {
 	return &le.Output
 }
 
-func (le *LightElement) Get() *concepts.Vector3 {
+func (le *LightSampler) Get() *concepts.Vector3 {
 	//return le.Debug()
 	r := concepts.RngXorShift64(le.XorSeed)
 	le.XorSeed = r
@@ -76,6 +76,8 @@ func (le *LightElement) Get() *concepts.Vector3 {
 	if le.Q[2] > cz {
 		le.Q[2] = cz
 	}
+	le.ScaleW = 1024
+	le.ScaleH = 1024
 	le.Calculate(&le.Q)
 	le.Sector.Lightmap.Store(le.MapIndex, concepts.Vector4{
 		le.Output[0],
@@ -88,7 +90,7 @@ func (le *LightElement) Get() *concepts.Vector3 {
 }
 
 // lightVisible determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisible(p *concepts.Vector3, body *core.Body) bool {
+func (le *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool {
 	// Always check the starting sector
 	if le.lightVisibleFromSector(p, body, le.Sector) {
 		return true
@@ -121,13 +123,13 @@ var debugSectorName string = "Starting" // "be4bqmfvn27mek306btg"
 
 // TODO: Make more general
 // lightVisibleFromSector determines whether a given light is visible from a world location.
-func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
+func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
 	lightPos := lightBody.Pos.Render
 
 	debugLighting := false
 	if constants.DebugLighting {
 		dbgName := concepts.NamedFromDb(le.DB, sector.Entity).Name
-		debugWallCheck := le.Type == LightElementWall
+		debugWallCheck := le.Type == LightSamplerWall
 		debugLighting = constants.DebugLighting && debugWallCheck && dbgName == debugSectorName
 	}
 
@@ -156,7 +158,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, b := range sector.Bodies {
 			if !b.Active || b.Shadow == core.BodyShadowNone ||
 				b.Entity == lightBody.Entity ||
-				(le.Type == LightElementBody && le.InputBody == b.Entity) {
+				(le.Type == LightSamplerBody && le.InputBody == b.Entity) {
 				continue
 			}
 			switch b.Shadow {
@@ -168,6 +170,34 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
 				if concepts.IntersectLineAABB(p, lightPos, b.Pos.Render, ext) {
 					return false
+				}
+			case core.BodyShadowImage:
+				// We need to intersect and occlude a billboard.
+				// Calculate line segment vertices for a billboard perpendicular to
+				// our weapon source.
+				d := le.Delta.Length()
+				seg := core.Segment{
+					A: &concepts.Vector2{
+						b.Pos.Render[0] + le.Delta[1]*b.Size.Render[0]*0.5/d,
+						b.Pos.Render[1] - le.Delta[0]*b.Size.Render[0]*0.5/d,
+					},
+					B: &concepts.Vector2{
+						b.Pos.Render[0] - le.Delta[1]*b.Size.Render[0]*0.5/d,
+						b.Pos.Render[1] + le.Delta[0]*b.Size.Render[0]*0.5/d,
+					}}
+				if ok := seg.Intersect3D(p, lightPos, &le.Intersection); ok {
+					le.Initialize(b.Entity, nil)
+					le.NU = le.Intersection.To2D().Dist(seg.A) / b.Size.Render[0]
+					le.NV = (b.Pos.Render[2] + b.Size.Render[0]*0.5 - le.Intersection[2]) / (b.Size.Render[1])
+					if le.NV < 0 || le.NV > 1 {
+						continue
+					}
+					le.U = le.NU
+					le.V = le.NV
+					le.SampleMaterial(nil)
+					if le.MaterialSampler.Output[3] > 0.5 {
+						return false
+					}
 				}
 			}
 		}
@@ -184,20 +214,16 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				continue // No intersection, skip it!
 			}
 
-			sampler := &MaterialSampler{
-				Config: le.Config,
-				ScaleW: 1024,
-				ScaleH: 1024}
-			sampler.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-			sampler.NU = le.Intersection.To2D().Dist(seg.A) / seg.Length
-			sampler.NV = (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
-			sampler.U = sampler.NU
-			sampler.V = sampler.NV
-			sampler.SampleMaterial(seg.Surface.ExtraStages)
+			le.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
+			le.NU = le.Intersection.To2D().Dist(seg.A) / seg.Length
+			le.NV = (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
+			le.U = le.NU
+			le.V = le.NV
+			le.SampleMaterial(seg.Surface.ExtraStages)
 			if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
-				lit.Apply(&sampler.Output, nil)
+				lit.Apply(&le.MaterialSampler.Output, nil)
 			}
-			if sampler.Output[3] >= 0.99 {
+			if le.MaterialSampler.Output[3] >= 0.99 {
 				return false
 			}
 		}
@@ -227,7 +253,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, seg := range sector.Segments {
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
-			if (le.Type == LightElementWall && &seg.Segment == le.Segment) ||
+			if (le.Type == LightSamplerWall && &seg.Segment == le.Segment) ||
 				le.Delta[0]*seg.Normal[0]+le.Delta[1]*seg.Normal[1] > 0 {
 				if debugLighting {
 					log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
@@ -272,24 +298,20 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// If the portal has a transparent material, we need to filter the light
 			if seg.PortalHasMaterial {
-				sampler := &MaterialSampler{
-					Config: le.Config,
-					ScaleW: 1024,
-					ScaleH: 1024}
-				sampler.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-				sampler.NU = le.Intersection.To2D().Dist(&seg.P) / seg.Length
-				sampler.NV = (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				sampler.U = sampler.NU
-				sampler.V = sampler.NV
-				sampler.SampleMaterial(seg.Surface.ExtraStages)
+				le.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
+				le.NU = le.Intersection.To2D().Dist(&seg.P) / seg.Length
+				le.NV = (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
+				le.U = le.NU
+				le.V = le.NV
+				le.SampleMaterial(seg.Surface.ExtraStages)
 				if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
-					lit.Apply(&sampler.Output, nil)
+					lit.Apply(&le.MaterialSampler.Output, nil)
 				}
-				if sampler.Output[3] >= 0.99 {
+				if le.MaterialSampler.Output[3] >= 0.99 {
 					return false
 				}
 				//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&le.Filter), (*[4]float64)(&le.Material))
-				le.Filter.AddPreMulColorSelf(&sampler.Output)
+				le.Filter.AddPreMulColorSelf(&le.MaterialSampler.Output)
 			}
 
 			// Get the square of the distance to the intersection (from the target point)
@@ -343,7 +365,7 @@ func (le *LightElement) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	return true
 }
 
-func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
+func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	le.Output[0] = 0
 	le.Output[1] = 0
 	le.Output[2] = 0
@@ -395,7 +417,7 @@ func (le *LightElement) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 				continue
 			}
 		}
-		if le.Type == LightElementBody {
+		if le.Type == LightSamplerBody {
 			diffuseLight = attenuation
 		} else {
 			diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation

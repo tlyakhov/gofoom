@@ -417,19 +417,23 @@ func (bc *BodyController) Collide() {
 			bc.findBodySector()
 		}
 
-		// Case 3 & 4
-		bc.checkBodySegmentCollisions()
-
-		if !bc.Sector.IsPointInside2D(bc.pos2d) {
-			// Cases 5 & 6
-			bc.bodyExitsSector()
+		if bc.Body.CrWall != core.CollideNone {
+			// Case 3 & 4
+			bc.checkBodySegmentCollisions()
 		}
 
 		if bc.Sector != nil {
+			if !bc.Sector.IsPointInside2D(bc.pos2d) {
+				// Cases 5 & 6
+				bc.bodyExitsSector()
+			}
+
 			bc.CollideZ()
-			//		bc.bodyBodyCollide(bc.Sector)
-			for _, sector := range bc.Sector.PVS {
-				bc.bodyBodyCollide(sector)
+			if bc.Body.CrBody != core.CollideNone {
+				//		bc.bodyBodyCollide(bc.Sector)
+				for _, sector := range bc.Sector.PVS {
+					bc.bodyBodyCollide(sector)
+				}
 			}
 		}
 

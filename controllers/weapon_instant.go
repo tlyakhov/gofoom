@@ -67,11 +67,7 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 			if !b.Active || b.Entity == wc.Entity {
 				continue
 			}
-			// We need to intersect and occlude a billboard. First do AABB
-			ext := &concepts.Vector3{b.Size.Now[0], b.Size.Now[0], b.Size.Now[1]}
-			if !concepts.IntersectLineAABB(p, rayEnd, &b.Pos.Now, ext) {
-				continue
-			}
+			// We need to intersect and occlude a billboard.
 			// Calculate line segment vertices for a billboard perpendicular to
 			// our weapon source.
 			v1[0] = b.Pos.Now[0] + wc.delta[1]*b.Size.Now[0]*0.5

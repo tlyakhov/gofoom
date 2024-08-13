@@ -441,6 +441,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "8",
       "Mass": 0,
       "MountHeight": 30,
@@ -485,6 +486,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "9",
       "Mass": 0,
       "MountHeight": 30,
@@ -1407,6 +1409,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "20",
       "Mass": 0,
       "MountHeight": 20,
@@ -1451,6 +1454,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "21",
       "Mass": 0,
       "MountHeight": 15,
@@ -2468,6 +2472,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "30",
       "Mass": 0,
       "MountHeight": 15,
@@ -2616,13 +2621,13 @@
       "Name": "Item Test"
     },
     "core.Body": {
-      "Active": false,
       "Angle": {
         "Original": 0
       },
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "32",
       "Mass": 0,
       "MountHeight": 15,
@@ -2635,7 +2640,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.671875,
+          "Percent": 0.640625,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -2650,7 +2655,7 @@
           "Z": -52
         }
       },
-      "Shadow": "BodyShadowSphere",
+      "Shadow": "BodyShadowImage",
       "Size": {
         "Original": {
           "X": 20,
@@ -3671,11 +3676,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -47.94980508558237,
+          "End": -5.6621016199963075,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.5468750000000001,
+          "Percent": 0.078125,
           "Reverse": false,
-          "Start": -69.77507534372036,
+          "Start": -24.956301049725514,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -3683,6 +3688,7 @@
       "CrBody": "CollideBounce",
       "CrPlayer": "CollideBounce",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "42",
       "Mass": 15,
       "MountHeight": 30,
@@ -3693,7 +3699,7 @@
           "Z": 0
         }
       },
-      "Shadow": "BodyShadowAABB",
+      "Shadow": "BodyShadowImage",
       "Size": {
         "Original": {
           "X": 32,
@@ -4475,6 +4481,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "52",
       "Mass": 0,
       "MountHeight": 20,
@@ -5045,6 +5052,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "59",
       "Mass": 0,
       "MountHeight": 20,
@@ -5272,6 +5280,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "62",
       "Mass": 0,
       "MountHeight": 20,
@@ -5783,6 +5792,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "68",
       "Mass": 0,
       "MountHeight": 30,
@@ -6680,6 +6690,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "78",
       "Mass": 0,
       "MountHeight": 15,
@@ -7347,6 +7358,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "85",
       "Mass": 0,
       "MountHeight": 30,
@@ -8472,6 +8484,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "96",
       "Mass": 0,
       "MountHeight": 20,
@@ -8805,6 +8818,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "101",
       "Mass": 0,
       "MountHeight": 20,
@@ -8849,6 +8863,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "102",
       "Mass": 0,
       "MountHeight": 20,
@@ -9002,6 +9017,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "104",
       "Mass": 0,
       "MountHeight": 30,
@@ -9046,6 +9062,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "105",
       "Mass": 0,
       "MountHeight": 30,
@@ -9180,6 +9197,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
       "Entity": "107",
       "Mass": 80,
       "MountHeight": 15,
@@ -10108,6 +10126,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "121",
       "Mass": 0,
       "MountHeight": 15,
@@ -10233,6 +10252,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "125",
       "Mass": 0,
       "MountHeight": 15,
@@ -10385,6 +10405,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "131",
       "Mass": 0,
       "MountHeight": 15,
@@ -10433,6 +10454,7 @@
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "132",
       "Mass": 0,
       "MountHeight": 15,
@@ -10445,8 +10467,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 1,
-          "Reverse": true,
+          "Percent": 0.984375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10460,7 +10482,7 @@
           "Z": -52
         }
       },
-      "Shadow": "BodyShadowSphere",
+      "Shadow": "BodyShadowImage",
       "Size": {
         "Original": {
           "X": 20,

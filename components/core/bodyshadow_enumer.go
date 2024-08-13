@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _BodyShadowName = "BodyShadowNoneBodyShadowSphereBodyShadowAABB"
+const _BodyShadowName = "BodyShadowNoneBodyShadowImageBodyShadowSphereBodyShadowAABB"
 
-var _BodyShadowIndex = [...]uint8{0, 14, 30, 44}
+var _BodyShadowIndex = [...]uint8{0, 14, 29, 45, 59}
 
-const _BodyShadowLowerName = "bodyshadownonebodyshadowspherebodyshadowaabb"
+const _BodyShadowLowerName = "bodyshadownonebodyshadowimagebodyshadowspherebodyshadowaabb"
 
 func (i BodyShadow) String() string {
 	if i < 0 || i >= BodyShadow(len(_BodyShadowIndex)-1) {
@@ -26,25 +26,29 @@ func (i BodyShadow) String() string {
 func _BodyShadowNoOp() {
 	var x [1]struct{}
 	_ = x[BodyShadowNone-(0)]
-	_ = x[BodyShadowSphere-(1)]
-	_ = x[BodyShadowAABB-(2)]
+	_ = x[BodyShadowImage-(1)]
+	_ = x[BodyShadowSphere-(2)]
+	_ = x[BodyShadowAABB-(3)]
 }
 
-var _BodyShadowValues = []BodyShadow{BodyShadowNone, BodyShadowSphere, BodyShadowAABB}
+var _BodyShadowValues = []BodyShadow{BodyShadowNone, BodyShadowImage, BodyShadowSphere, BodyShadowAABB}
 
 var _BodyShadowNameToValueMap = map[string]BodyShadow{
 	_BodyShadowName[0:14]:       BodyShadowNone,
 	_BodyShadowLowerName[0:14]:  BodyShadowNone,
-	_BodyShadowName[14:30]:      BodyShadowSphere,
-	_BodyShadowLowerName[14:30]: BodyShadowSphere,
-	_BodyShadowName[30:44]:      BodyShadowAABB,
-	_BodyShadowLowerName[30:44]: BodyShadowAABB,
+	_BodyShadowName[14:29]:      BodyShadowImage,
+	_BodyShadowLowerName[14:29]: BodyShadowImage,
+	_BodyShadowName[29:45]:      BodyShadowSphere,
+	_BodyShadowLowerName[29:45]: BodyShadowSphere,
+	_BodyShadowName[45:59]:      BodyShadowAABB,
+	_BodyShadowLowerName[45:59]: BodyShadowAABB,
 }
 
 var _BodyShadowNames = []string{
 	_BodyShadowName[0:14],
-	_BodyShadowName[14:30],
-	_BodyShadowName[30:44],
+	_BodyShadowName[14:29],
+	_BodyShadowName[29:45],
+	_BodyShadowName[45:59],
 }
 
 // BodyShadowString retrieves an enum value from the enum constants string name.
