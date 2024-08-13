@@ -36,7 +36,7 @@ type Column struct {
 	// Stores current segment intersection
 	*SegmentIntersection
 	// Stores light & shadow data
-	LightElement LightElement
+	LightSampler LightSampler
 	// Pre-allocated stack of past intersections, for speed
 	Visited []SegmentIntersection
 	// Pre-allocated stack of nested columns for portals
@@ -63,7 +63,7 @@ type Column struct {
 	ProjectedSectorTop, ProjectedSectorBottom float64
 	// Screen-space coordinates clipped to edges
 	ClippedTop, ClippedBottom int
-	// Lightning cache
+	// Lighting cache
 	Light               concepts.Vector4
 	LightVoxelA         concepts.Vector3
 	LightResult         [8]concepts.Vector3
@@ -120,13 +120,13 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 		return lit.Apply(result, &c.Light)
 	}
 
-	extraHash := uint16(c.LightElement.Type)
-	if c.LightElement.Type == LightElementWall {
+	extraHash := uint16(c.LightSampler.Type)
+	if c.LightSampler.Type == LightSamplerWall {
 		extraHash += c.Segment.LightExtraHash
 	}
 
 	m0 := c.WorldToLightmapAddress(c.Sector, world, extraHash)
-	c.LightElement.MapIndex = m0
+	c.LightSampler.MapIndex = m0
 	c.LightmapAddressToWorld(c.Sector, &c.LightVoxelA, m0)
 	// These deltas represent 0.0 - 1.0 distances within the light voxel
 	dx := (world[0] - c.LightVoxelA[0]) / c.LightGrid
@@ -143,15 +143,15 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 			copy(c.LightResult[:], c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8])
 		} else {
 			//debugVoxel = true
-			c.LightElement.Get()
-			c.LightResult[0] = c.LightElement.Output
+			c.LightSampler.Get()
+			c.LightResult[0] = c.LightSampler.Output
 			c.LightLastColIndices[c.ScreenY] = m0
 			for i := 1; i < 8; i++ {
 				// Some bit shifting to generate our light voxel
 				// addresses without ifs. See LightmapAddressToWorld for details
-				c.LightElement.MapIndex = m0 + uint64(i&1)<<16 + uint64(i&2)<<(32-1) + uint64(i&4)<<(48-2)
-				c.LightElement.Get()
-				c.LightResult[i] = c.LightElement.Output
+				c.LightSampler.MapIndex = m0 + uint64(i&1)<<16 + uint64(i&2)<<(32-1) + uint64(i&4)<<(48-2)
+				c.LightSampler.Get()
+				c.LightResult[i] = c.LightSampler.Output
 			}
 			copy(c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8], c.LightResult[:])
 		}
@@ -179,8 +179,8 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 }
 
 func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3) *concepts.Vector4 {
-	extraHash := uint16(c.LightElement.Type)
-	if c.LightElement.Type == LightElementWall {
+	extraHash := uint16(c.LightSampler.Type)
+	if c.LightSampler.Type == LightSamplerWall {
 		extraHash += c.Segment.LightExtraHash
 	}
 	/*
@@ -190,9 +190,9 @@ func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vecto
 		jitter[1] += (rand.Float64() - 0.5) * constants.LightGrid
 		jitter[2] += (rand.Float64() - 0.5) * constants.LightGrid
 	*/
-	c.LightElement.MapIndex = c.WorldToLightmapAddress(c.Sector, world, extraHash)
+	c.LightSampler.MapIndex = c.WorldToLightmapAddress(c.Sector, world, extraHash)
 
-	r00 := c.LightElement.Get()
+	r00 := c.LightSampler.Get()
 	result[0] = r00[0]
 	result[1] = r00[1]
 	result[2] = r00[2]

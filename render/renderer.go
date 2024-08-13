@@ -142,19 +142,19 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	c.CalcScreen()
 
-	c.LightElement.Config = r.Config
-	c.LightElement.Type = state.LightElementCeil
-	c.LightElement.Normal = c.Sector.CeilNormal
-	c.LightElement.Sector = c.Sector
-	c.LightElement.Segment = c.Segment
+	c.LightSampler.MaterialSampler.Config = r.Config
+	c.LightSampler.Type = state.LightSamplerCeil
+	c.LightSampler.Normal = c.Sector.CeilNormal
+	c.LightSampler.Sector = c.Sector
+	c.LightSampler.Segment = c.Segment
 
 	if c.Pick {
 		ceilingPick(c)
 	} else {
 		ceiling(c)
 	}
-	c.LightElement.Type = state.LightElementFloor
-	c.LightElement.Normal = c.Sector.FloorNormal
+	c.LightSampler.Type = state.LightSamplerFloor
+	c.LightSampler.Normal = c.Sector.FloorNormal
 
 	if c.Pick {
 		floorPick(c)
@@ -162,8 +162,8 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 		floor(c)
 	}
 
-	c.LightElement.Type = state.LightElementWall
-	c.Segment.Normal.To3D(&c.LightElement.Normal)
+	c.LightSampler.Type = state.LightSamplerWall
+	c.Segment.Normal.To3D(&c.LightSampler.Normal)
 
 	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
 	if c.Pick {
@@ -322,11 +322,11 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(sorted.InternalSegment))
 			return
 		}
-		c.LightElement.Config = r.Config
-		c.LightElement.Sector = c.Sector
-		c.LightElement.Segment = &sorted.InternalSegment.Segment
-		c.LightElement.Type = state.LightElementWall
-		sorted.InternalSegment.Normal.To3D(&c.LightElement.Normal)
+		c.LightSampler.MaterialSampler.Config = r.Config
+		c.LightSampler.Sector = c.Sector
+		c.LightSampler.Segment = &sorted.InternalSegment.Segment
+		c.LightSampler.Type = state.LightSamplerWall
+		sorted.InternalSegment.Normal.To3D(&c.LightSampler.Normal)
 		r.wall(c)
 	}
 }
@@ -371,7 +371,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
-	column.LightElement.XorSeed = r.DB.Frame + uint64(xStart)
+	column.LightSampler.XorSeed = r.DB.Frame + uint64(xStart)
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
 	}
@@ -537,7 +537,7 @@ func (r *Renderer) Pick(x, y int) []*core.Selectable {
 		EntitiesByDistance: make([]state.EntityWithDist2, 0, 16),
 		Visited:            make([]state.SegmentIntersection, constants.MaxPortals),
 	}
-	column.LightElement.Config = r.Config
+	column.LightSampler.MaterialSampler.Config = r.Config
 
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}

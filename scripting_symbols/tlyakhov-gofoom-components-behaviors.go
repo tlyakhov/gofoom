@@ -55,5 +55,6 @@ func init() {
 		"VerticalDoor":  reflect.ValueOf((*behaviors.VerticalDoor)(nil)),
 		"Wander":        reflect.ValueOf((*behaviors.Wander)(nil)),
 		"WeaponInstant": reflect.ValueOf((*behaviors.WeaponInstant)(nil)),
+		"WeaponMark":    reflect.ValueOf((*behaviors.WeaponMark)(nil)),
 	}
 }
