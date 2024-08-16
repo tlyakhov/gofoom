@@ -5,6 +5,7 @@ package state
 
 import (
 	"math"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -30,6 +31,26 @@ func (ms *MaterialSampler) Initialize(material concepts.Entity, extraStages []*m
 	for _, stage := range extraStages {
 		ms.derefMaterials(stage.Texture, nil)
 	}
+}
+
+func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core.Body) bool {
+	delta := &concepts.Vector3{dst[0] - src[0], dst[1] - src[1], dst[2] - src[2]}
+	delta.NormSelf()
+	isect := concepts.Vector3{}
+	seg := b.BillboardSegment(delta, concepts.DynamicRender)
+	ok := seg.Intersect3D(src, dst, &isect)
+	if !ok {
+		return false
+	}
+	ms.Initialize(b.Entity, nil)
+	ms.NU = isect.To2D().Dist(seg.A) / b.Size.Render[0]
+	ms.NV = (b.Pos.Render[2] + b.Size.Render[0]*0.5 - isect[2]) / (b.Size.Render[1])
+	if ms.NV < 0 || ms.NV > 1 {
+		return false
+	}
+	ms.U = ms.NU
+	ms.V = ms.NV
+	return true
 }
 
 func (ms *MaterialSampler) derefMaterials(material concepts.Entity, parent concepts.Attachable) {

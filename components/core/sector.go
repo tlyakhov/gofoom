@@ -323,17 +323,8 @@ func (s *Sector) Recalculate() {
 
 // PointZ finds the Z value at a point in the sector
 func (s *Sector) PointZ(stage concepts.DynamicStage, isect *concepts.Vector2) (bottom float64, top float64) {
-	var fz, cz float64
-	switch stage {
-	case concepts.DynamicOriginal:
-		fz, cz = s.BottomZ.Original, s.TopZ.Original
-	case concepts.DynamicPrev:
-		fz, cz = s.BottomZ.Prev, s.TopZ.Prev
-	case concepts.DynamicNow:
-		fz, cz = s.BottomZ.Now, s.TopZ.Now
-	case concepts.DynamicRender:
-		fz, cz = *s.BottomZ.Render, *s.TopZ.Render
-	}
+	fz := s.BottomZ.Value(stage)
+	cz := s.TopZ.Value(stage)
 	df := s.FloorNormal[2]*fz + s.FloorNormal[1]*s.Segments[0].P[1] +
 		s.FloorNormal[0]*s.Segments[0].P[0]
 

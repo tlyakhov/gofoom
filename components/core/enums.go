@@ -8,6 +8,7 @@ type CollisionResponse int
 //go:generate go run github.com/dmarkham/enumer -type=CollisionResponse -json
 const (
 	CollideNone CollisionResponse = iota
+	CollideDeactivate
 	CollideSeparate
 	CollideBounce
 	CollideStop

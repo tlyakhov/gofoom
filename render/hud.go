@@ -5,6 +5,7 @@ package render
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/materials"
@@ -15,12 +16,24 @@ func (r *Renderer) RenderHud() {
 	if r.Player == nil {
 		return
 	}
-	for _, item := range r.Player.Inventory {
-		img := materials.ImageFromDb(r.DB, item.Image)
+	ts := r.textStyle
+	ts.Color[0] = 1
+	ts.Color[1] = 1
+	ts.Color[2] = 1
+	ts.Color[3] = 0.5
+	ts.Shadow = true
+	ts.HAnchor = 0
+	ts.VAnchor = 0
+	for i, slot := range r.Player.Inventory {
+		img := materials.ImageFromDb(r.DB, slot.Image)
 		if img == nil {
 			return
 		}
-		r.BitBlt(img, 10, r.ScreenHeight-42, 32, 32)
+		r.BitBlt(img, i*40+10, r.ScreenHeight-42, 32, 32)
+		r.Print(ts, i*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count))
+		/*if slot.Entity == r.Player.CurrentWeapon {
+			r.BitBlt(img, r.ScreenWidth/2-32, r.ScreenHeight-64, 64, 64)
+		}*/
 	}
 }
 
@@ -73,15 +86,15 @@ func (r *Renderer) DebugInfo() {
 	}
 
 	for i := 0; i < 20; i++ {
-		if i >= r.DebugNotices.Length() {
+		if i >= r.Player.Notices.Length() {
 			break
 		}
-		msg := r.DebugNotices.Items[i].(string)
-		if t, ok := r.DebugNotices.SetWithTimes.Load(msg); ok {
+		msg := r.Player.Notices.Items[i].(string)
+		if t, ok := r.Player.Notices.SetWithTimes.Load(msg); ok {
 			r.Print(ts, 4, 54+i*10, msg)
 			age := time.Now().UnixMilli() - t.(int64)
 			if age > 10000 {
-				r.DebugNotices.PopAtIndex(i)
+				r.Player.Notices.PopAtIndex(i)
 			}
 		}
 	}

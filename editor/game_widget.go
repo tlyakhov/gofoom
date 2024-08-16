@@ -6,6 +6,7 @@ package main
 import (
 	"image"
 	"log"
+	"tlyakhov/gofoom/concepts"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -26,12 +27,12 @@ type GameWidget struct {
 	Raster  *canvas.Raster
 	Context *gg.Context
 	Surface *image.RGBA
-	KeyMap  map[fyne.KeyName]bool
+	KeyMap  concepts.Set[fyne.KeyName]
 }
 
 func NewGameWidget() *GameWidget {
 	g := &GameWidget{
-		KeyMap: make(map[fyne.KeyName]bool),
+		KeyMap: make(concepts.Set[fyne.KeyName]),
 	}
 	g.ExtendBaseWidget(g)
 	g.Raster = canvas.NewRaster(g.generateRaster)
@@ -88,12 +89,12 @@ func (g *GameWidget) Draw() {
 func (g *GameWidget) KeyDown(evt *fyne.KeyEvent) {
 	editor.Lock.Lock()
 	defer editor.Lock.Unlock()
-	g.KeyMap[evt.Name] = true
+	g.KeyMap[evt.Name] = struct{}{}
 }
 func (g *GameWidget) KeyUp(evt *fyne.KeyEvent) {
 	editor.Lock.Lock()
 	defer editor.Lock.Unlock()
-	g.KeyMap[evt.Name] = false
+	delete(g.KeyMap, evt.Name)
 }
 
 func (g *GameWidget) FocusLost()       {}

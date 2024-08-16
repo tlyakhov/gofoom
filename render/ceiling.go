@@ -55,7 +55,7 @@ func ceiling(c *state.Column) {
 		if t <= 0 {
 			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 1, 0, 1})
 			dbg := fmt.Sprintf("%v ceiling t <= 0", c.Sector.Entity)
-			c.DebugNotices.Push(dbg)
+			c.Player.Notices.Push(dbg)
 			continue
 		}
 

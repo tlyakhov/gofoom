@@ -51,17 +51,16 @@ func (a *SplitSegment) OnMouseUp() {
 
 	// Split only selected if any, otherwise all sectors/segments.
 	// TODO: also split internal segments
-	var segments []*core.SectorSegment
+	var segments concepts.Set[*core.SectorSegment]
 	if a.State().SelectedObjects.Empty() {
 		allSectors := a.State().DB.AllOfType(core.SectorComponentIndex)
-		segments = make([]*core.SectorSegment, 0)
+		segments = make(concepts.Set[*core.SectorSegment])
 		for _, attachable := range allSectors {
 			sector := attachable.(*core.Sector)
-			segments = append(segments, sector.Segments...)
+			segments.AddAll(sector.Segments...)
 		}
 	} else {
-		segments = make([]*core.SectorSegment, 0)
-		visited := make(map[*core.SectorSegment]bool)
+		segments = make(concepts.Set[*core.SectorSegment])
 		for _, s := range a.State().SelectedObjects.Exact {
 			switch s.Type {
 			// Segments:
@@ -72,8 +71,7 @@ func (a *SplitSegment) OnMouseUp() {
 			case core.SelectableHi:
 				fallthrough
 			case core.SelectableSectorSegment:
-				segments = append(segments, s.SectorSegment)
-				visited[s.SectorSegment] = true
+				segments.Add(s.SectorSegment)
 			// Sectors:
 			case core.SelectableCeiling:
 				fallthrough
@@ -81,14 +79,13 @@ func (a *SplitSegment) OnMouseUp() {
 				fallthrough
 			case core.SelectableSector:
 				for _, seg := range s.Sector.Segments {
-					segments = append(segments, seg)
-					visited[seg] = true
+					segments.Add(seg)
 				}
 			}
 		}
 	}
 
-	for _, seg := range segments {
+	for seg := range segments {
 		a.Split(&segmentSplitter{original: seg})
 	}
 	a.State().Modified = true

@@ -27,8 +27,7 @@ type Config struct {
 	Player                    *behaviors.Player
 	PlayerBody                *core.Body
 
-	DebugNotices concepts.SyncUniqueQueue
-	RenderLock   sync.Mutex
+	RenderLock sync.Mutex
 }
 
 func (c *Config) Initialize() {

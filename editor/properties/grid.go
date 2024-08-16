@@ -27,7 +27,7 @@ import (
 
 type PropertyGridState struct {
 	Fields           map[string]*state.PropertyGridField
-	Visited          map[any]bool
+	Visited          concepts.Set[any]
 	Depth            int
 	ParentName       string
 	ParentCollection *reflect.Value
@@ -54,7 +54,7 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state Pr
 	} else {
 		log.Printf("%v, %v", childValue.String(), childValue.Type())
 	}
-	if !state.Visited[child] {
+	if !state.Visited.Contains(child) {
 		state.ParentName = parentName
 		if updateParent {
 			ancestors := make([]any, len(state.Ancestors)+1)
@@ -74,7 +74,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 	}
 
 	pgs.Depth++
-	pgs.Visited[obj] = true
+	pgs.Visited.Add(obj)
 
 	for i := 0; i < objType.NumField(); i++ {
 		field := objType.FieldByIndex([]int{i})
@@ -145,7 +145,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 }
 
 func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState {
-	pgs := PropertyGridState{Visited: make(map[any]bool), Fields: make(map[string]*state.PropertyGridField)}
+	pgs := PropertyGridState{Visited: make(concepts.Set[any]), Fields: make(map[string]*state.PropertyGridField)}
 	for _, s := range selection.Exact {
 		switch s.Type {
 		case core.SelectableHi:

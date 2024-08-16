@@ -3,10 +3,6 @@
 
 package concepts
 
-import (
-	"strings"
-)
-
 type Attached struct {
 	Entity                  `editable:"Component" edit_type:"Component" edit_sort:"0"`
 	DB                      *EntityComponentDB
@@ -104,37 +100,6 @@ func (a *Attached) Serialize() map[string]any {
 	}
 
 	return result
-}
-
-func (a *Attached) DeserializeComponentList(list *map[int]bool, name string, data map[string]any) {
-	v, ok := data[name]
-	if !ok {
-		return
-	}
-	listString, ok := v.(string)
-	if !ok {
-		return
-	}
-	split := strings.Split(listString, ",")
-	*list = make(map[int]bool)
-	for _, typeName := range split {
-		componentIndex := DbTypes().Indexes[typeName]
-		if componentIndex != 0 {
-			(*list)[componentIndex] = true
-		}
-	}
-}
-
-func (a *Attached) SerializeComponentList(list map[int]bool, name string, result map[string]any) {
-	if len(list) == 0 {
-		return
-	}
-
-	types := make([]string, 0)
-	for index := range list {
-		types = append(types, DbTypes().Types[index].String())
-	}
-	result[name] = strings.Join(types, ",")
 }
 
 // Confusing syntax. The constraint ensures that our underlying type has pointer

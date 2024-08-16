@@ -87,7 +87,7 @@ func NewEditor() *Editor {
 			ComponentNamesVisible: true,
 			HoveringObjects:       core.NewSelection(),
 			SelectedObjects:       core.NewSelection(),
-			KeysDown:              make(map[fyne.KeyName]bool),
+			KeysDown:              make(concepts.Set[fyne.KeyName]),
 		},
 		MapViewGrid:     MapViewGrid{Visible: true},
 		entityIconCache: xsync.NewMapOf[concepts.Entity, entityIconCacheItem](),
@@ -192,27 +192,27 @@ func (e *Editor) Integrate() {
 	}
 	playerBody := core.BodyFromDb(player.DB, player.Entity)
 
-	if e.GameWidget.KeyMap["W"] {
+	if e.GameWidget.KeyMap.Contains("W") {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now, e.DB.EditorPaused)
 	}
-	if e.GameWidget.KeyMap["S"] {
+	if e.GameWidget.KeyMap.Contains("S") {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0, e.DB.EditorPaused)
 	}
-	if e.GameWidget.KeyMap["E"] {
+	if e.GameWidget.KeyMap.Contains("E") {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0, e.DB.EditorPaused)
 	}
-	if e.GameWidget.KeyMap["Q"] {
+	if e.GameWidget.KeyMap.Contains("Q") {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0, e.DB.EditorPaused)
 	}
-	if e.GameWidget.KeyMap["A"] {
+	if e.GameWidget.KeyMap.Contains("A") {
 		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
-	if e.GameWidget.KeyMap["D"] {
+	if e.GameWidget.KeyMap.Contains("D") {
 		playerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
-	if e.GameWidget.KeyMap["Space"] {
+	if e.GameWidget.KeyMap.Contains("Space") {
 		if behaviors.UnderwaterFromDb(player.DB, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
@@ -220,7 +220,7 @@ func (e *Editor) Integrate() {
 			playerBody.OnGround = false
 		}
 	}
-	if e.GameWidget.KeyMap["C"] {
+	if e.GameWidget.KeyMap.Contains("C") {
 		if behaviors.UnderwaterFromDb(player.DB, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {

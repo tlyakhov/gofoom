@@ -52,6 +52,19 @@ type DynamicValue[T DynamicType] struct {
 	render T
 }
 
+func (d *DynamicValue[T]) Value(s DynamicStage) T {
+	switch s {
+	case DynamicOriginal:
+		return d.Original
+	case DynamicPrev:
+		return d.Prev
+	case DynamicNow:
+		return d.Now
+	default:
+		return *d.Render
+	}
+}
+
 func (d *DynamicValue[T]) ResetToOriginal() {
 	d.Prev = d.Original
 	d.Now = d.Original
@@ -202,6 +215,7 @@ func (d *DynamicValue[T]) GetAnimation() Animated {
 // entity.component.field (e.g. "53.Body.Pos")
 var reDynamicSource = regexp.MustCompile(`(\d+).(\w+).(\w+)`)
 
+// This is currently unused, probably should delete but seems potentially valuable?
 func DynamicFromString[T DynamicType](db *EntityComponentDB, source string) *DynamicValue[T] {
 	matches := reDynamicSource.FindStringSubmatch(source)
 	if len(matches) != 3 {

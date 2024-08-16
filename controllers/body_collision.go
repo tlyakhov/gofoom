@@ -309,6 +309,20 @@ func (bc *BodyController) bounceBody(body *core.Body, separateOnly bool) {
 	//fmt.Printf("%v <-> %v = %v\n", bc.Body.String(), body.String(), diff)
 }
 
+func (bc *BodyController) getInventoryItem(item *behaviors.InventoryItem) {
+	for _, slot := range bc.Player.Inventory {
+		if !slot.ValidClasses.Contains(item.Class) {
+			continue
+		}
+		if slot.Count >= slot.Limit {
+			bc.Player.Notices.Push("Can't pick up more " + item.Class)
+			return
+		}
+		slot.Count++
+		bc.Player.Notices.Push("Picked up a " + item.Class)
+	}
+}
+
 func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 	for _, body := range sector.Bodies {
 		if body == nil || body == bc.Body || !body.IsActive() {
@@ -319,18 +333,19 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		r_a := bc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			item := behaviors.InventoryItemFromDb(body.DB, body.Entity)
-			if item != nil && bc.Player != nil {
-				itemClone := item.DB.LoadComponentWithoutAttaching(behaviors.InventoryItemComponentIndex, item.Serialize())
-				bc.Player.Inventory = append(bc.Player.Inventory, itemClone.(*behaviors.InventoryItem))
-				body.Active = false
-				continue
-			}
+			// TODO: Handle cases regardless of which entity is the controller
+			// target
 			cr := bc.Body.CrBody
 			if behaviors.PlayerFromDb(body.DB, body.Entity) != nil {
 				cr = bc.Body.CrPlayer
 			}
+			item := behaviors.InventoryItemFromDb(body.DB, body.Entity)
+			if item != nil && bc.Player != nil {
+				bc.getInventoryItem(item)
+			}
 			switch cr {
+			case core.CollideDeactivate:
+				bc.Body.Active = false
 			case core.CollideSeparate:
 				bc.bounceBody(body, true)
 			case core.CollideStop:

@@ -91,7 +91,7 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 func (r *Renderer) RenderPortal(c *state.Column) {
 	if c.Depth >= constants.MaxPortals-1 {
 		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", c.Sector.Entity)
-		c.DebugNotices.Push(dbg)
+		r.Player.Notices.Push(dbg)
 		return
 	}
 
@@ -265,7 +265,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		r.RenderSegmentColumn(c)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
-		r.DebugNotices.Push(dbg)
+		r.Player.Notices.Push(dbg)
 	}
 
 	// Clear slice without reallocating memory
@@ -409,8 +409,8 @@ func (r *Renderer) Render() {
 	r.FrameTint[2] *= r.FrameTint[3]
 
 	// Make sure we don't have too many debug notices
-	for r.DebugNotices.Length() > 30 {
-		r.DebugNotices.Pop()
+	for r.Player.Notices.Length() > 30 {
+		r.Player.Notices.Pop()
 	}
 	r.RenderLock.Lock()
 	defer r.RenderLock.Unlock()
