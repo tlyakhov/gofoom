@@ -68,7 +68,7 @@ func (a *SplitSector) OnMouseUp() {
 		}
 	} else {
 		sectors = make([]*core.Sector, 0)
-		visited := make(map[concepts.Entity]bool)
+		visited := make(concepts.Set[concepts.Entity])
 		for _, s := range a.State().SelectedObjects.Exact {
 			// We could just check for the .Sector field being valid, but then
 			// the user may be surprised to have a sector split when they've
@@ -76,11 +76,11 @@ func (a *SplitSector) OnMouseUp() {
 			if s.Type == core.SelectableEntity || s.Type == core.SelectableBody {
 				continue
 			}
-			if _, ok := visited[s.Sector.Entity]; ok {
+			if visited.Contains(s.Sector.Entity) {
 				continue
 			}
 			sectors = append(sectors, s.Sector)
-			visited[s.Sector.Entity] = true
+			visited.Add(s.Sector.Entity)
 		}
 	}
 

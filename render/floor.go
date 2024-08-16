@@ -54,7 +54,7 @@ func floor(c *state.Column) {
 		if t <= 0 {
 			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
 			dbg := fmt.Sprintf("%v floor t <= 0", c.Sector.Entity)
-			c.DebugNotices.Push(dbg)
+			c.Player.Notices.Push(dbg)
 			continue
 		}
 		world[2] = c.RayFloorCeil[2] * t

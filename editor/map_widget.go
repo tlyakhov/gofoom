@@ -187,10 +187,10 @@ func (mw *MapWidget) CreateRenderer() fyne.WidgetRenderer {
 }
 
 func (mw *MapWidget) KeyDown(evt *fyne.KeyEvent) {
-	editor.KeysDown[evt.Name] = true
+	editor.KeysDown.Add(evt.Name)
 }
 func (mw *MapWidget) KeyUp(evt *fyne.KeyEvent) {
-	delete(editor.KeysDown, evt.Name)
+	editor.KeysDown.Delete(evt.Name)
 }
 
 func (mw *MapWidget) FocusLost()       {}

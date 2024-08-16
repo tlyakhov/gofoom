@@ -44,7 +44,6 @@ func (wc *WeaponInstantController) Target(target concepts.Attachable) bool {
 
 // This is similar to the code for lighting
 func (wc *WeaponInstantController) Cast() *core.Selectable {
-	var v1, v2 concepts.Vector2
 	var s *core.Selectable
 	wc.MaterialSampler.Config = &state.Config{DB: wc.Body.DB}
 	wc.MaterialSampler.Ray = &state.Ray{Angle: wc.Body.Angle.Now}
@@ -67,31 +66,17 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 			if !b.Active || b.Entity == wc.Entity {
 				continue
 			}
-			// We need to intersect and occlude a billboard.
-			// Calculate line segment vertices for a billboard perpendicular to
-			// our weapon source.
-			v1[0] = b.Pos.Now[0] + wc.delta[1]*b.Size.Now[0]*0.5
-			v1[1] = b.Pos.Now[1] - wc.delta[0]*b.Size.Now[0]*0.5
-			v2[0] = b.Pos.Now[0] - wc.delta[1]*b.Size.Now[0]*0.5
-			v2[1] = b.Pos.Now[1] + wc.delta[0]*b.Size.Now[0]*0.5
-			if !concepts.IntersectSegments(p.To2D(), rayEnd.To2D(), &v1, &v2, wc.isect.To2D()) {
-				continue
-			}
-			wc.MaterialSampler.Initialize(b.Entity, nil)
-			wc.NU = wc.isect.To2D().Dist(&v1) / b.Size.Now[0]
-			wc.NV = 0.5
-			wc.U = wc.NU
-			wc.V = wc.NV
-			wc.SampleMaterial(nil)
-			if wc.Output[3] < 0.5 {
-				continue
-			}
-
-			idist2 = b.Pos.Now.Dist2(p)
-			if idist2 < hitDist2 {
-				s = core.SelectableFromBody(b)
-				hitDist2 = idist2
-				wc.hit = b.Pos.Now
+			if ok := wc.InitializeRayBody(p, rayEnd, b); ok {
+				wc.SampleMaterial(nil)
+				if wc.MaterialSampler.Output[3] < 0.9 {
+					continue
+				}
+				idist2 = b.Pos.Now.Dist2(p)
+				if idist2 < hitDist2 {
+					s = core.SelectableFromBody(b)
+					hitDist2 = idist2
+					wc.hit = b.Pos.Now
+				}
 			}
 		}
 		for _, seg := range sector.InternalSegments {

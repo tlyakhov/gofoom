@@ -50,7 +50,7 @@ type Edit struct {
 	CurrentAction Actionable
 	UndoHistory   []Actionable
 	RedoHistory   []Actionable
-	KeysDown      map[fyne.KeyName]bool
+	KeysDown      concepts.Set[fyne.KeyName]
 
 	// Map view filters
 	BodiesVisible         bool

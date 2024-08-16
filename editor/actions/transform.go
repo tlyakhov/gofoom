@@ -65,9 +65,9 @@ func (a *Transform) moved(_ fyne.KeyModifier) {
 	a.Delta = *a.State().MouseWorld.Sub(&a.mouseDown)
 	log.Printf("Delta: %v, %v -> %v", a.Delta, a.mouseDown.StringHuman(), a.State().MouseWorld.StringHuman())
 	a.Angle = a.Delta[0] / 60.0
-	if a.State().KeysDown[desktop.KeyShiftLeft] && a.State().KeysDown[desktop.KeyAltLeft] {
+	if a.State().KeysDown.Contains(desktop.KeyShiftLeft) && a.State().KeysDown.Contains(desktop.KeyAltLeft) {
 		a.Mode = "rotate"
-	} else if a.State().KeysDown[desktop.KeyShiftLeft] {
+	} else if a.State().KeysDown.Contains(desktop.KeyShiftLeft) {
 		a.Mode = "rotate-constrained"
 	} else {
 		a.Mode = "translate"

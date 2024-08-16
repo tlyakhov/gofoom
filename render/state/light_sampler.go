@@ -76,8 +76,8 @@ func (le *LightSampler) Get() *concepts.Vector3 {
 	if le.Q[2] > cz {
 		le.Q[2] = cz
 	}
-	le.ScaleW = 1024
-	le.ScaleH = 1024
+	le.ScaleW = 64
+	le.ScaleH = 64
 	le.Calculate(&le.Q)
 	le.Sector.Lightmap.Store(le.MapIndex, concepts.Vector4{
 		le.Output[0],
@@ -145,7 +145,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	if maxDist2 <= lightBody.Size.Render[0]*lightBody.Size.Render[0]*0.25 {
 		return true
 	}
-
+	le.Delta.NormSelf()
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
@@ -172,28 +172,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 					return false
 				}
 			case core.BodyShadowImage:
-				// We need to intersect and occlude a billboard.
-				// Calculate line segment vertices for a billboard perpendicular to
-				// our weapon source.
-				d := le.Delta.Length()
-				seg := core.Segment{
-					A: &concepts.Vector2{
-						b.Pos.Render[0] + le.Delta[1]*b.Size.Render[0]*0.5/d,
-						b.Pos.Render[1] - le.Delta[0]*b.Size.Render[0]*0.5/d,
-					},
-					B: &concepts.Vector2{
-						b.Pos.Render[0] - le.Delta[1]*b.Size.Render[0]*0.5/d,
-						b.Pos.Render[1] + le.Delta[0]*b.Size.Render[0]*0.5/d,
-					}}
-				if ok := seg.Intersect3D(p, lightPos, &le.Intersection); ok {
-					le.Initialize(b.Entity, nil)
-					le.NU = le.Intersection.To2D().Dist(seg.A) / b.Size.Render[0]
-					le.NV = (b.Pos.Render[2] + b.Size.Render[0]*0.5 - le.Intersection[2]) / (b.Size.Render[1])
-					if le.NV < 0 || le.NV > 1 {
-						continue
-					}
-					le.U = le.NU
-					le.V = le.NV
+				if ok := le.InitializeRayBody(p, lightPos, b); ok {
 					le.SampleMaterial(nil)
 					if le.MaterialSampler.Output[3] > 0.5 {
 						return false
@@ -347,7 +326,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		depth++
 		if depth > constants.MaxPortals { // Avoid infinite looping.
 			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
-			le.DebugNotices.Push(dbg)
+			le.Player.Notices.Push(dbg)
 			return false
 		}
 		if next == nil && lightBody.SectorEntity != 0 && sector.Entity != lightBody.SectorEntity {

@@ -2640,8 +2640,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.640625,
-          "Reverse": false,
+          "Percent": 0.078125,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3673,14 +3673,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -5.6621016199963075,
+          "End": 136.26966703657683,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.078125,
+          "Percent": 1,
           "Reverse": false,
-          "Start": -24.956301049725514,
+          "Start": 152.505469425854,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -10445,7 +10445,12 @@
     "Entity": "132",
     "behaviors.InventoryItem": {
       "Class": "WeirdGun",
-      "Entity": "132"
+      "Entity": "132",
+      "Image": "133"
+    },
+    "behaviors.WeaponInstant": {
+      "Entity": "132",
+      "MarkMaterial": "113"
     },
     "core.Body": {
       "Angle": {
@@ -10467,7 +10472,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.984375,
+          "Percent": 0.265625,
           "Reverse": false,
           "Start": {
             "X": 0,

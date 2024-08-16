@@ -89,6 +89,12 @@ func (pc *PlayerController) Always() {
 	}
 
 	pc.Alive.Tint(&pc.FrameTint)
+
+	/*for _, item := range pc.Inventory {
+		if w := behaviors.WeaponInstantFromDb(pc.DB, item.Entity); w != nil {
+			pc.CurrentWeapon = item.Entity
+		}
+	}*/
 }
 
 func MovePlayer(p *core.Body, angle float64, direct bool) {
