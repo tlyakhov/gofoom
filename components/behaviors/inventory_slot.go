@@ -12,8 +12,8 @@ import (
 type InventorySlot struct {
 	DB           *concepts.EntityComponentDB
 	ValidClasses concepts.Set[string]
-	Limit        int
-	Count        int
+	Limit        int             `editable:"Limit"`
+	Count        int             `editable:"Count"`
 	Image        concepts.Entity `editable:"Image" edit_type:"Material"`
 }
 

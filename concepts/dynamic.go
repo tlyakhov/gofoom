@@ -10,19 +10,6 @@ import (
 	"strconv"
 )
 
-// Dynamic is an interface for any value that is affected by time in the engine:
-// 1. They have a lifecycle with a starting value that changes over time
-// 2. They may have a "render" value interpolated between a past/future values.
-type Dynamic interface {
-	Serializable
-	Attach(sim *Simulation)
-	Detach(sim *Simulation)
-	ResetToOriginal()
-	RenderBlend(float64)
-	NewFrame()
-	GetAnimation() Animated
-}
-
 //go:generate go run github.com/dmarkham/enumer -type=DynamicStage -json
 type DynamicStage int
 

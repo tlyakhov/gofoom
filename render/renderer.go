@@ -13,7 +13,6 @@ import (
 	"github.com/puzpuzpuz/xsync/v3"
 
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/render/state"
@@ -271,6 +270,9 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	// Clear slice without reallocating memory
 	c.EntitiesByDistance = c.EntitiesByDistance[:0]
 	for _, b := range c.Sector.Bodies {
+		if b == nil || !b.Active {
+			continue
+		}
 		c.EntitiesByDistance = append(c.EntitiesByDistance, state.EntityWithDist2{
 			Body:  b,
 			Dist2: c.Ray.Start.Dist2(b.Pos.Render.To2D()),
@@ -506,19 +508,29 @@ func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z floa
 	}
 }
 
-func (r *Renderer) BitBlt(src *materials.Image, dstx, dsty, w, h int) {
+func (r *Renderer) BitBlt(src concepts.Entity, dstx, dsty, w, h int) {
+	ms := state.MaterialSampler{
+		Config: r.Config,
+		ScaleW: uint32(w),
+		ScaleH: uint32(h),
+	}
+	ms.Initialize(src, nil)
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
-			dx := x + dstx
-			if dx < 0 || dx >= r.ScreenWidth {
+			ms.ScreenX = x + dstx
+			if ms.ScreenX < 0 || ms.ScreenX >= r.ScreenWidth {
 				continue
 			}
-			dy := y + dsty
-			if dy < 0 || dy >= r.ScreenHeight {
+			ms.ScreenY = y + dsty
+			if ms.ScreenY < 0 || ms.ScreenY >= r.ScreenHeight {
 				continue
 			}
-			c := src.Sample(float64(x)/float64(w), float64(y)/float64(h), uint32(w), uint32(h))
-			r.ApplySample(&c, dx+dy*r.ScreenWidth, -1)
+			ms.NU = float64(x) / float64(w)
+			ms.NV = float64(y) / float64(h)
+			ms.U = ms.NU
+			ms.V = ms.NV
+			ms.SampleMaterial(nil)
+			r.ApplySample(&ms.Output, ms.ScreenX+ms.ScreenY*r.ScreenWidth, -1)
 		}
 	}
 }

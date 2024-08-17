@@ -15,6 +15,7 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	rs "tlyakhov/gofoom/render/state"
@@ -391,6 +392,8 @@ func (g *Grid) Refresh(selection *core.Selection) {
 		case *[]*materials.Sprite:
 			g.fieldSlice(field)
 		case *[]*materials.ShaderStage:
+			g.fieldSlice(field)
+		case *[]*behaviors.InventorySlot:
 			g.fieldSlice(field)
 		case *[]concepts.Animated:
 			g.fieldSlice(field)

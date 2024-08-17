@@ -13,7 +13,7 @@ type Player struct {
 
 	FrameTint     concepts.Vector4
 	Crouching     bool
-	Inventory     []*InventorySlot
+	Inventory     []*InventorySlot `editable:"Inventory"`
 	Bob           float64
 	CameraZ       float64
 	CurrentWeapon *InventorySlot

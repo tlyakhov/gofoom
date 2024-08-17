@@ -169,7 +169,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity,
 	}
 	c.Light[3] = 1
 
-	/*	if debugVoxel {
+	/*if debugVoxel {
 		c.Light[0] = 1
 		c.Light[1] = 0
 		c.Light[2] = 0

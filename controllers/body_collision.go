@@ -6,6 +6,7 @@ package controllers
 import (
 	"log"
 	"math"
+	"math/rand/v2"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -233,78 +234,136 @@ func (bc *BodyController) bodyExitsSector() {
 	}
 }
 
-func (bc *BodyController) removeBody() {
+func (bc *BodyController) removeBody(body *core.Body) {
 	// TODO: poorly implemented
-	if bc.Sector != nil {
-		delete(bc.Sector.Bodies, bc.Body.Entity)
-		bc.Sector = nil
-		bc.Body.SectorEntity = 0
-		//return
-	}
-	panic("BodyController.RemoveBody is broken")
-}
-
-func (bc *BodyController) bounceBody(body *core.Body, separateOnly bool) {
-	// From https://www.myphysicslab.com/engine2D/collision-en.html
-	otherMass := 0.0
-	if body.CrBody == core.CollideBounce || body.CrBody == core.CollideSeparate {
-		otherMass = body.Mass
-	}
-
-	r_a := bc.Body.Size.Now[0] * 0.5
-	r_b := body.Size.Now[0] * 0.5
-	n := bc.pos.Sub(&body.Pos.Now)
-	d := n.Length()
-	if d > 0 {
-		n.MulSelf(1.0 / d)
-		d = r_a + r_b - d
-		if bc.Body.Mass > 0 || otherMass > 0 {
-			a_factor := bc.Body.Mass / (bc.Body.Mass + otherMass)
-			b_factor := otherMass / (bc.Body.Mass + otherMass)
-			bc.pos[0] += n[0] * d * a_factor
-			bc.pos[1] += n[1] * d * a_factor
-			body.Pos.Now[0] -= n[0] * d * b_factor
-			body.Pos.Now[1] -= n[1] * d * b_factor
+	sector := body.Sector()
+	if sector != nil {
+		delete(sector.Bodies, body.Entity)
+		body.SectorEntity = 0
+		if body == bc.Body {
+			bc.Sector = nil
 		}
 	}
-	if separateOnly {
+	body.DB.DetachAll(body.Entity)
+}
+
+func (bc *BodyController) resolveCollision(body *core.Body) {
+	// Use the right collision response settings
+	aResponse := bc.Body.CrBody
+	bResponse := body.CrBody
+	if behaviors.PlayerFromDb(body.DB, body.Entity) != nil {
+		aResponse = bc.Body.CrPlayer
+	}
+	if bc.Player != nil {
+		bResponse = body.CrPlayer
+	}
+
+	// We scale the push-back by the mass of the body.
+	aMass := 0.0
+	bMass := 0.0
+	if aResponse&core.CollideBounce != 0 || aResponse&core.CollideSeparate != 0 {
+		aMass = bc.Body.Mass
+	}
+	if bResponse&core.CollideBounce != 0 || bResponse&core.CollideSeparate != 0 {
+		bMass = body.Mass
+	}
+
+	// The code below to bounce rigid bodies is adapted from
+	// https://www.myphysicslab.com/engine2D/collision-en.html
+
+	aRadius := bc.Body.Size.Now[0] * 0.5
+	bRadius := body.Size.Now[0] * 0.5
+	UnitAtoB := bc.pos.Sub(&body.Pos.Now)
+	distance := UnitAtoB.Length()
+	if distance > constants.IntersectEpsilon {
+		UnitAtoB.MulSelf(1.0 / distance)
+	} else {
+		// The bodies are right on top of each other.
+		// Resolve the collision with a random direction vector.
+		UnitAtoB[0], UnitAtoB[1] = math.Sincos(rand.Float64() * math.Pi * 2)
+	}
+
+	// This code separates inter-penetrating bodies
+	distance = aRadius + bRadius - distance
+	if aMass > 0 || bMass > 0 {
+		aWeight := aMass / (aMass + bMass)
+		bWeight := bMass / (aMass + bMass)
+		bc.pos[0] += UnitAtoB[0] * distance * aWeight
+		bc.pos[1] += UnitAtoB[1] * distance * aWeight
+		body.Pos.Now[0] -= UnitAtoB[0] * distance * bWeight
+		body.Pos.Now[1] -= UnitAtoB[1] * distance * bWeight
+	}
+
+	// Next handle the other cases and check if we need to do a bounce
+	if aResponse&core.CollideDeactivate != 0 {
+		bc.Body.Active = false
+	}
+	if aResponse&core.CollideStop != 0 {
+		bc.Body.Vel.Now[0] = 0
+		bc.Body.Vel.Now[1] = 0
+		bc.Body.Vel.Now[2] = 0
+	}
+	if aResponse&core.CollideRemove != 0 {
+		bc.removeBody(bc.Body)
+	}
+	if bResponse&core.CollideDeactivate != 0 {
+		body.Active = false
+	}
+	if bResponse&core.CollideStop != 0 {
+		body.Vel.Now[0] = 0
+		body.Vel.Now[1] = 0
+		body.Vel.Now[2] = 0
+	}
+	if bResponse&core.CollideRemove != 0 {
+		bc.removeBody(body)
+	}
+
+	if aResponse&core.CollideBounce == 0 && bResponse&core.CollideBounce == 0 {
 		return
 	}
 
-	r_ap := n.Mul(-r_a)
-	r_bp := n.Mul(r_b)
+	// These two handle the case when one body is set to only separate, and
+	// the other needs to "bounce"
+	if aResponse&core.CollideSeparate != 0 {
+		aMass = 0.0
+	}
+	if bResponse&core.CollideSeparate != 0 {
+		bMass = 0.0
+	}
+
+	r_ap := UnitAtoB.Mul(-aRadius)
+	r_bp := UnitAtoB.Mul(bRadius)
 	// For now, assume no angular velocity. In the future, this may
 	// change.
 	//vang_a1, vang_b1 := new(concepts.Vector3), new(concepts.Vector3)
 	v_a1, v_b1 := &bc.Body.Vel.Now, &body.Vel.Now
-
 	v_ap1 := v_a1 //.Add(vang_a1.Cross(r_ap))
 	v_bp1 := v_b1 //.Add(vang_b1.Cross(r_bp))
 	v_p1 := v_ap1.Sub(v_bp1)
 
-	c_a := r_ap.Cross(n)
-	c_b := r_bp.Cross(n)
+	aC := r_ap.Cross(UnitAtoB)
+	bC := r_bp.Cross(UnitAtoB)
 	// Solid sphere moment of inertia = (2/5)MR^2
-	momentA := bc.Body.Mass * r_a * r_a * 2.0 / 5.0
-	momentB := otherMass * r_b * r_b * 2.0 / 5.0
-	eA := 0.0
-	eB := 0.0
+	momentA := aMass * aRadius * aRadius * 2.0 / 5.0
+	momentB := bMass * bRadius * bRadius * 2.0 / 5.0
+	aElasticity := 0.0
+	bElasticity := 0.0
 	if bc.Body.Elasticity > 0 || body.Elasticity > 0 {
-		eA = bc.Body.Elasticity * bc.Body.Elasticity / (bc.Body.Elasticity + body.Elasticity)
-		eB = body.Elasticity * body.Elasticity / (bc.Body.Elasticity + body.Elasticity)
+		aElasticity = bc.Body.Elasticity * bc.Body.Elasticity / (bc.Body.Elasticity + body.Elasticity)
+		bElasticity = body.Elasticity * body.Elasticity / (bc.Body.Elasticity + body.Elasticity)
 	}
 	if momentA > 0 && momentB > 0 {
-		jA := v_p1.Dot(n) / (1.0/bc.Body.Mass + 1.0/otherMass + c_a.Dot(c_a)/momentA + c_b.Dot(c_b)/momentB)
-		jB := -(1.0 + eB) * jA
-		jA = -(1.0 + eA) * jA
-		bc.Body.Vel.Now.AddSelf(n.Mul(jA / otherMass))
-		body.Vel.Now.AddSelf(n.Mul(-jB / otherMass))
+		jA := v_p1.Dot(UnitAtoB) / (1.0/bc.Body.Mass + 1.0/bMass + aC.Dot(aC)/momentA + bC.Dot(bC)/momentB)
+		jB := -(1.0 + bElasticity) * jA
+		jA = -(1.0 + aElasticity) * jA
+		bc.Body.Vel.Now.AddSelf(UnitAtoB.Mul(jA / bMass))
+		body.Vel.Now.AddSelf(UnitAtoB.Mul(-jB / bMass))
 	} else if momentA > 0 {
-		j := -(1.0 + eA) * v_p1.Dot(n) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/momentA)
-		bc.Body.Vel.Now.AddSelf(n.Mul(j / bc.Body.Mass))
+		j := -(1.0 + aElasticity) * v_p1.Dot(UnitAtoB) / (1.0/bc.Body.Mass + aC.Dot(aC)/momentA)
+		bc.Body.Vel.Now.AddSelf(UnitAtoB.Mul(j / bc.Body.Mass))
 	} else if momentB > 0 {
-		j := -(1.0 + eB) * v_p1.Dot(n) / (1.0/otherMass + c_b.Dot(c_b)/momentB)
-		body.Vel.Now.AddSelf(n.Mul(-j / otherMass))
+		j := -(1.0 + bElasticity) * v_p1.Dot(UnitAtoB) / (1.0/bMass + bC.Dot(bC)/momentB)
+		body.Vel.Now.AddSelf(UnitAtoB.Mul(-j / bMass))
 	}
 	//fmt.Printf("%v <-> %v = %v\n", bc.Body.String(), body.String(), diff)
 }
@@ -333,30 +392,11 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		r_a := bc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			// TODO: Handle cases regardless of which entity is the controller
-			// target
-			cr := bc.Body.CrBody
-			if behaviors.PlayerFromDb(body.DB, body.Entity) != nil {
-				cr = bc.Body.CrPlayer
-			}
 			item := behaviors.InventoryItemFromDb(body.DB, body.Entity)
-			if item != nil && bc.Player != nil {
+			if item != nil && item.Active && bc.Player != nil {
 				bc.getInventoryItem(item)
 			}
-			switch cr {
-			case core.CollideDeactivate:
-				bc.Body.Active = false
-			case core.CollideSeparate:
-				bc.bounceBody(body, true)
-			case core.CollideStop:
-				bc.bounceBody(body, true)
-				bc.Body.Vel.Now[0] = 0
-				bc.Body.Vel.Now[1] = 0
-			case core.CollideBounce:
-				bc.bounceBody(body, false)
-			case core.CollideRemove:
-				bc.removeBody()
-			}
+			bc.resolveCollision(body)
 		}
 	}
 }
@@ -444,11 +484,9 @@ func (bc *BodyController) Collide() {
 			}
 
 			bc.CollideZ()
-			if bc.Body.CrBody != core.CollideNone {
-				//		bc.bodyBodyCollide(bc.Sector)
-				for _, sector := range bc.Sector.PVS {
-					bc.bodyBodyCollide(sector)
-				}
+			//		bc.bodyBodyCollide(bc.Sector)
+			for _, sector := range bc.Sector.PVS {
+				bc.bodyBodyCollide(sector)
 			}
 		}
 
@@ -464,17 +502,18 @@ func (bc *BodyController) Collide() {
 			BodySectorScript(seg.ContactScripts, bc.Body, bc.Sector)
 		}
 
-		switch bc.Body.CrWall {
-		case core.CollideStop:
+		if bc.Body.CrWall&core.CollideStop != 0 {
 			bc.Body.Vel.Now[0] = 0
 			bc.Body.Vel.Now[1] = 0
-		case core.CollideBounce:
+		}
+		if bc.Body.CrWall&core.CollideBounce != 0 {
 			for _, segment := range bc.collidedSegments {
 				n := segment.Normal.To3D(new(concepts.Vector3))
 				bc.Body.Vel.Now.SubSelf(n.Mul(2 * bc.Body.Vel.Now.Dot(n)))
 			}
-		case core.CollideRemove:
-			bc.removeBody()
+		}
+		if bc.Body.CrWall&core.CollideRemove != 0 {
+			bc.removeBody(bc.Body)
 		}
 	}
 }

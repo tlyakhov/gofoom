@@ -35,9 +35,15 @@ func TextFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Text {
 	return nil
 }
 
-func (t *Text) SetDB(db *concepts.EntityComponentDB) {
+func (t *Text) OnDetach() {
 	if t.DB != nil {
 		t.Color.Detach(t.DB.Simulation)
+	}
+	t.Attached.OnDetach()
+}
+func (t *Text) SetDB(db *concepts.EntityComponentDB) {
+	if t.DB != db {
+		t.OnDetach()
 	}
 	t.Attached.SetDB(db)
 	t.Color.Attach(db.Simulation)

@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
 
@@ -25,15 +25,11 @@ func (r *Renderer) RenderHud() {
 	ts.HAnchor = 0
 	ts.VAnchor = 0
 	for i, slot := range r.Player.Inventory {
-		img := materials.ImageFromDb(r.DB, slot.Image)
-		if img == nil {
-			return
-		}
-		r.BitBlt(img, i*40+10, r.ScreenHeight-42, 32, 32)
+		r.BitBlt(slot.Image, i*40+10, r.ScreenHeight-42, 32, 32)
 		r.Print(ts, i*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count))
-		/*if slot.Entity == r.Player.CurrentWeapon {
-			r.BitBlt(img, r.ScreenWidth/2-32, r.ScreenHeight-64, 64, 64)
-		}*/
+		if slot == r.Player.CurrentWeapon {
+			r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128)
+		}
 	}
 }
 
@@ -80,7 +76,7 @@ func (r *Renderer) DebugInfo() {
 	if r.PlayerBody.SectorEntity != 0 {
 		entity := r.PlayerBody.SectorEntity
 		s := 0
-		//		core.SectorFromDb(ref).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
+		core.SectorFromDb(r.DB, entity).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
 		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.String(r.DB), s))
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", r.PlayerBody.Force.StringHuman(), r.PlayerBody.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
 	}

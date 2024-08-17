@@ -25,9 +25,15 @@ func SolidFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Solid {
 	return nil
 }
 
-func (s *Solid) SetDB(db *concepts.EntityComponentDB) {
+func (s *Solid) OnDetach() {
 	if s.DB != nil {
 		s.Diffuse.Detach(s.DB.Simulation)
+	}
+	s.Attached.OnDetach()
+}
+func (s *Solid) SetDB(db *concepts.EntityComponentDB) {
+	if s.DB != db {
+		s.OnDetach()
 	}
 	s.Attached.SetDB(db)
 	s.Diffuse.Attach(s.DB.Simulation)
