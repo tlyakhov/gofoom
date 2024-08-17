@@ -77,10 +77,22 @@ func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	return inside
 }
 
-func (s *Sector) SetDB(db *concepts.EntityComponentDB) {
+func (s *Sector) OnDetach() {
 	if s.DB != nil {
 		s.TopZ.Detach(s.DB.Simulation)
 		s.BottomZ.Detach(s.DB.Simulation)
+	}
+	for _, b := range s.Bodies {
+		b.SectorEntity = 0
+	}
+	s.Bodies = make(map[concepts.Entity]*Body)
+	s.InternalSegments = make(map[concepts.Entity]*InternalSegment)
+	s.Attached.OnDetach()
+}
+
+func (s *Sector) SetDB(db *concepts.EntityComponentDB) {
+	if s.DB != db {
+		s.OnDetach()
 	}
 	s.Attached.SetDB(db)
 	s.TopZ.Attach(db.Simulation)

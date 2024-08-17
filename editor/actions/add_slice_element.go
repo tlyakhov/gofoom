@@ -5,6 +5,7 @@ package actions
 
 import (
 	"reflect"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/editor/state"
@@ -45,25 +46,16 @@ func (a *AddSliceElement) Redo() {
 	switch target := newValue.Interface().(type) {
 	case **core.Script:
 		*target = new(core.Script)
-		script := *target
-		script.SetDB(a.State().DB)
-		script.Construct(nil)
 	case **materials.ShaderStage:
 		*target = new(materials.ShaderStage)
-		stage := *target
-		stage.SetDB(a.State().DB)
-		stage.Construct(nil)
 	case **materials.Sprite:
 		*target = new(materials.Sprite)
-		sprite := *target
-		sprite.SetDB(a.State().DB)
-		sprite.Construct(nil)
-		/*case *concepts.IAnimation:
-		reflect.ValueOf(target).Elem().Set(reflect.New(a.Concrete))
-		anim := *target
-		anim.SetDB(a.State().DB)
-		anim.Construct(nil)
-		a.State().DB.Simulation.AttachAnimation(anim.GetName(), anim)*/
+	case **behaviors.InventorySlot:
+		*target = new(behaviors.InventorySlot)
+	}
+	if serializable, ok := newValue.Elem().Interface().(concepts.Serializable); ok {
+		serializable.SetDB(a.State().DB)
+		serializable.Construct(nil)
 	}
 	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
 }

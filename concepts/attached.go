@@ -12,24 +12,6 @@ type Attached struct {
 	indexInDB               int
 }
 
-type Attachable interface {
-	Serializable
-	String() string
-	IndexInDB() int
-	SetIndexInDB(int)
-	SetEntity(entity Entity)
-	GetEntity() Entity
-}
-
-type Serializable interface {
-	Construct(data map[string]any)
-	IsSystem() bool
-	Serialize() map[string]any
-	// TODO: Rename to Attach
-	SetDB(db *EntityComponentDB)
-	GetDB() *EntityComponentDB
-}
-
 var AttachedComponentIndex int
 
 func init() {
@@ -46,6 +28,9 @@ func (a *Attached) String() string {
 
 func (a *Attached) IndexInDB() int {
 	return a.indexInDB
+}
+
+func (a *Attached) OnDetach() {
 }
 
 func (a *Attached) IsSystem() bool {

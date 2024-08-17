@@ -39,10 +39,6 @@ var buffer *image.RGBA
 var inMenu = true
 
 func gameInput() {
-	if renderer.Player == nil {
-		return
-	}
-
 	if win.Pressed(pixel.KeyW) {
 		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now, false)
 	}
@@ -102,7 +98,10 @@ func integrateGame() {
 
 	if inMenu {
 		menuInput()
-	} else {
+	} else if renderer.Player != nil {
+		if renderer.Player.Inventory[InventoryWeirdGun].Count > 0 {
+			renderer.Player.CurrentWeapon = renderer.Player.Inventory[InventoryWeirdGun]
+		}
 		gameInput()
 		db.ActAllControllers(concepts.ControllerAlways)
 	}
@@ -167,6 +166,7 @@ func run() {
 		log.Printf("Error loading world %v", err)
 		return
 	}
+	setupPlayer()
 	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 
 	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))

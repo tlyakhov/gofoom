@@ -4,7 +4,6 @@
 package controllers
 
 import (
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -38,31 +37,6 @@ func (wc *WorldController) Target(target concepts.Attachable) bool {
 }
 
 func (wc *WorldController) Loaded() {
-	var player *behaviors.Player
-	// Create a player if we don't have one
-	if player = wc.DB.First(behaviors.PlayerComponentIndex).(*behaviors.Player); player != nil {
-		playerBody := core.BodyFromDb(wc.DB, player.Entity)
-		playerBody.Elasticity = 0.1
-	} else {
-		entity := archetypes.CreatePlayerBody(wc.DB)
-		playerBody := core.BodyFromDb(wc.DB, entity)
-		playerBody.Pos.Original = wc.Spawn.Spawn
-		playerBody.Pos.ResetToOriginal()
-		player = wc.DB.First(behaviors.PlayerComponentIndex).(*behaviors.Player)
-	}
-	player.Inventory = make([]*behaviors.InventorySlot, 2)
-	player.Inventory[0] = &behaviors.InventorySlot{
-		Image:        player.DB.GetEntityByName("Pluk"),
-		Limit:        5,
-		ValidClasses: make(concepts.Set[string]),
-	}
-	player.Inventory[0].ValidClasses.Add("Flower")
-	player.Inventory[1] = &behaviors.InventorySlot{
-		Image:        133,
-		Limit:        1,
-		ValidClasses: make(concepts.Set[string]),
-	}
-	player.Inventory[1].ValidClasses.Add("WeirdGun")
 }
 
 func (wc *WorldController) proximity(sector *core.Sector, body *core.Body) {

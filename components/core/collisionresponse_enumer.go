@@ -8,55 +8,81 @@ import (
 	"strings"
 )
 
-const _CollisionResponseName = "CollideNoneCollideDeactivateCollideSeparateCollideBounceCollideStopCollideRemove"
+const (
+	_CollisionResponseName_0      = "CollideNoneCollideDeactivate"
+	_CollisionResponseLowerName_0 = "collidenonecollidedeactivate"
+	_CollisionResponseName_1      = "CollideSeparate"
+	_CollisionResponseLowerName_1 = "collideseparate"
+	_CollisionResponseName_2      = "CollideBounce"
+	_CollisionResponseLowerName_2 = "collidebounce"
+	_CollisionResponseName_3      = "CollideStop"
+	_CollisionResponseLowerName_3 = "collidestop"
+	_CollisionResponseName_4      = "CollideRemove"
+	_CollisionResponseLowerName_4 = "collideremove"
+)
 
-var _CollisionResponseIndex = [...]uint8{0, 11, 28, 43, 56, 67, 80}
-
-const _CollisionResponseLowerName = "collidenonecollidedeactivatecollideseparatecollidebouncecollidestopcollideremove"
+var (
+	_CollisionResponseIndex_0 = [...]uint8{0, 11, 28}
+	_CollisionResponseIndex_1 = [...]uint8{0, 15}
+	_CollisionResponseIndex_2 = [...]uint8{0, 13}
+	_CollisionResponseIndex_3 = [...]uint8{0, 11}
+	_CollisionResponseIndex_4 = [...]uint8{0, 13}
+)
 
 func (i CollisionResponse) String() string {
-	if i < 0 || i >= CollisionResponse(len(_CollisionResponseIndex)-1) {
+	switch {
+	case 1 <= i && i <= 2:
+		i -= 1
+		return _CollisionResponseName_0[_CollisionResponseIndex_0[i]:_CollisionResponseIndex_0[i+1]]
+	case i == 4:
+		return _CollisionResponseName_1
+	case i == 8:
+		return _CollisionResponseName_2
+	case i == 16:
+		return _CollisionResponseName_3
+	case i == 32:
+		return _CollisionResponseName_4
+	default:
 		return fmt.Sprintf("CollisionResponse(%d)", i)
 	}
-	return _CollisionResponseName[_CollisionResponseIndex[i]:_CollisionResponseIndex[i+1]]
 }
 
 // An "invalid array index" compiler error signifies that the constant values have changed.
 // Re-run the stringer command to generate them again.
 func _CollisionResponseNoOp() {
 	var x [1]struct{}
-	_ = x[CollideNone-(0)]
-	_ = x[CollideDeactivate-(1)]
-	_ = x[CollideSeparate-(2)]
-	_ = x[CollideBounce-(3)]
-	_ = x[CollideStop-(4)]
-	_ = x[CollideRemove-(5)]
+	_ = x[CollideNone-(1)]
+	_ = x[CollideDeactivate-(2)]
+	_ = x[CollideSeparate-(4)]
+	_ = x[CollideBounce-(8)]
+	_ = x[CollideStop-(16)]
+	_ = x[CollideRemove-(32)]
 }
 
 var _CollisionResponseValues = []CollisionResponse{CollideNone, CollideDeactivate, CollideSeparate, CollideBounce, CollideStop, CollideRemove}
 
 var _CollisionResponseNameToValueMap = map[string]CollisionResponse{
-	_CollisionResponseName[0:11]:       CollideNone,
-	_CollisionResponseLowerName[0:11]:  CollideNone,
-	_CollisionResponseName[11:28]:      CollideDeactivate,
-	_CollisionResponseLowerName[11:28]: CollideDeactivate,
-	_CollisionResponseName[28:43]:      CollideSeparate,
-	_CollisionResponseLowerName[28:43]: CollideSeparate,
-	_CollisionResponseName[43:56]:      CollideBounce,
-	_CollisionResponseLowerName[43:56]: CollideBounce,
-	_CollisionResponseName[56:67]:      CollideStop,
-	_CollisionResponseLowerName[56:67]: CollideStop,
-	_CollisionResponseName[67:80]:      CollideRemove,
-	_CollisionResponseLowerName[67:80]: CollideRemove,
+	_CollisionResponseName_0[0:11]:       CollideNone,
+	_CollisionResponseLowerName_0[0:11]:  CollideNone,
+	_CollisionResponseName_0[11:28]:      CollideDeactivate,
+	_CollisionResponseLowerName_0[11:28]: CollideDeactivate,
+	_CollisionResponseName_1[0:15]:       CollideSeparate,
+	_CollisionResponseLowerName_1[0:15]:  CollideSeparate,
+	_CollisionResponseName_2[0:13]:       CollideBounce,
+	_CollisionResponseLowerName_2[0:13]:  CollideBounce,
+	_CollisionResponseName_3[0:11]:       CollideStop,
+	_CollisionResponseLowerName_3[0:11]:  CollideStop,
+	_CollisionResponseName_4[0:13]:       CollideRemove,
+	_CollisionResponseLowerName_4[0:13]:  CollideRemove,
 }
 
 var _CollisionResponseNames = []string{
-	_CollisionResponseName[0:11],
-	_CollisionResponseName[11:28],
-	_CollisionResponseName[28:43],
-	_CollisionResponseName[43:56],
-	_CollisionResponseName[56:67],
-	_CollisionResponseName[67:80],
+	_CollisionResponseName_0[0:11],
+	_CollisionResponseName_0[11:28],
+	_CollisionResponseName_1[0:15],
+	_CollisionResponseName_2[0:13],
+	_CollisionResponseName_3[0:11],
+	_CollisionResponseName_4[0:13],
 }
 
 // CollisionResponseString retrieves an enum value from the enum constants string name.

@@ -52,12 +52,22 @@ func (b *Body) String() string {
 	return "Body: " + b.Pos.Now.StringHuman()
 }
 
-func (b *Body) SetDB(db *concepts.EntityComponentDB) {
+func (b *Body) OnDetach() {
 	if b.DB != nil {
 		b.Pos.Detach(b.DB.Simulation)
 		b.Vel.Detach(b.DB.Simulation)
 		b.Size.Detach(b.DB.Simulation)
 		b.Angle.Detach(b.DB.Simulation)
+	}
+	if sector := b.Sector(); sector != nil {
+		delete(sector.Bodies, b.Entity)
+	}
+	b.Attached.OnDetach()
+}
+
+func (b *Body) SetDB(db *concepts.EntityComponentDB) {
+	if b.DB != db {
+		b.OnDetach()
 	}
 	b.Attached.SetDB(db)
 	b.Pos.Attach(db.Simulation)

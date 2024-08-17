@@ -2625,7 +2625,7 @@
         "Original": 0
       },
       "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
+      "CrPlayer": "CollideDeactivate",
       "CrWall": "CollideSeparate",
       "Elasticity": 0.5,
       "Entity": "32",
@@ -2640,8 +2640,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.078125,
-          "Reverse": true,
+          "Percent": 0.59375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3673,14 +3673,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Active": false,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 136.26966703657683,
+          "End": -129.50936356323263,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
+          "Percent": 0.625,
           "Reverse": false,
-          "Start": 152.505469425854,
+          "Start": -122.70438575570087,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -10457,7 +10457,7 @@
         "Original": 0
       },
       "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
+      "CrPlayer": "CollideDeactivate",
       "CrWall": "CollideSeparate",
       "Elasticity": 0.5,
       "Entity": "132",
@@ -10472,7 +10472,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.265625,
+          "Percent": 0.9375,
           "Reverse": false,
           "Start": {
             "X": 0,

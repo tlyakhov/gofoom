@@ -198,7 +198,7 @@ func (db *EntityComponentDB) AttachTyped(entity Entity, component Attachable) {
 	}
 }
 
-func (db *EntityComponentDB) Detach(index int, entity Entity) {
+func (db *EntityComponentDB) detach(index int, entity Entity, checkForEmpty bool) {
 	if entity == 0 || index == 0 {
 		log.Printf("EntityComponentDB.Detach: tried to detach 0 entity/index.")
 		return
@@ -218,6 +218,7 @@ func (db *EntityComponentDB) Detach(index int, entity Entity) {
 		// log.Printf("EntityComponentDB.Detach: entity %v component %v is nil.", entity, index)
 		return
 	}
+	ec[index].OnDetach()
 	i := ec[index].IndexInDB()
 	components := db.components[index]
 	size := len(components)
@@ -229,6 +230,23 @@ func (db *EntityComponentDB) Detach(index int, entity Entity) {
 		log.Printf("EntityComponentDB.Detach: found entity %v component index %v, but component list is too short.", entity, index)
 	}
 	ec[index] = nil
+
+	if checkForEmpty {
+		allNil := true
+		for _, c := range ec {
+			if c != nil {
+				allNil = false
+			}
+		}
+		if allNil {
+			db.EntityComponents[entity] = nil
+			db.usedEntities.Remove(uint32(entity))
+		}
+	}
+}
+
+func (db *EntityComponentDB) Detach(index int, entity Entity) {
+	db.detach(index, entity, true)
 }
 
 func (db *EntityComponentDB) DetachByType(component Attachable) {
@@ -252,8 +270,7 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 		return
 	}
 
-	db.Detach(index, entity)
-	component.SetEntity(0)
+	db.detach(index, entity, true)
 }
 
 func (db *EntityComponentDB) DetachAll(entity Entity) {
@@ -262,10 +279,11 @@ func (db *EntityComponentDB) DetachAll(entity Entity) {
 	}
 
 	for index := range db.components {
-		db.Detach(index, entity)
+		db.detach(index, entity, false)
 	}
 
 	db.EntityComponents[entity] = nil
+	db.usedEntities.Remove(uint32(entity))
 }
 
 func (db *EntityComponentDB) GetEntityByName(name string) Entity {
