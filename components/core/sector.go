@@ -10,36 +10,37 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 
 	"github.com/puzpuzpuz/xsync/v3"
 )
 
 type Sector struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	Segments         []*SectorSegment
-	Bodies           map[concepts.Entity]*Body
-	InternalSegments map[concepts.Entity]*InternalSegment
-	BottomZ          concepts.DynamicValue[float64] `editable:"Floor"`
-	TopZ             concepts.DynamicValue[float64] `editable:"Ceiling"`
-	FloorNormal      concepts.Vector3               `editable:"Floor Normal"`
-	CeilNormal       concepts.Vector3               `editable:"Ceil Normal"`
-	FloorTarget      concepts.Entity                `editable:"Floor Target" edit_type:"Sector"`
-	CeilTarget       concepts.Entity                `editable:"Ceil Target" edit_type:"Sector"`
-	FloorSurface     materials.Surface              `editable:"Floor Surf"`
-	CeilSurface      materials.Surface              `editable:"Ceil Surf"`
-	Gravity          concepts.Vector3               `editable:"Gravity"`
-	FloorFriction    float64                        `editable:"Floor Friction"`
-	FloorScripts     []*Script                      `editable:"Floor Scripts"`
-	CeilScripts      []*Script                      `editable:"Ceil Scripts"`
-	EnterScripts     []*Script                      `editable:"Enter Scripts"`
-	ExitScripts      []*Script                      `editable:"Exit Scripts"`
+	Bodies           map[ecs.Entity]*Body
+	InternalSegments map[ecs.Entity]*InternalSegment
+	BottomZ          ecs.DynamicValue[float64] `editable:"Floor"`
+	TopZ             ecs.DynamicValue[float64] `editable:"Ceiling"`
+	FloorNormal      concepts.Vector3          `editable:"Floor Normal"`
+	CeilNormal       concepts.Vector3          `editable:"Ceil Normal"`
+	FloorTarget      ecs.Entity                `editable:"Floor Target" edit_type:"Sector"`
+	CeilTarget       ecs.Entity                `editable:"Ceil Target" edit_type:"Sector"`
+	FloorSurface     materials.Surface         `editable:"Floor Surf"`
+	CeilSurface      materials.Surface         `editable:"Ceil Surf"`
+	Gravity          concepts.Vector3          `editable:"Gravity"`
+	FloorFriction    float64                   `editable:"Floor Friction"`
+	FloorScripts     []*Script                 `editable:"Floor Scripts"`
+	CeilScripts      []*Script                 `editable:"Ceil Scripts"`
+	EnterScripts     []*Script                 `editable:"Enter Scripts"`
+	ExitScripts      []*Script                 `editable:"Exit Scripts"`
 
 	Concave          bool
 	Winding          int8
 	Min, Max, Center concepts.Vector3
-	PVS              map[concepts.Entity]*Sector
-	PVL              map[concepts.Entity]*Body
+	PVS              map[ecs.Entity]*Sector
+	PVL              map[ecs.Entity]*Body
 	Lightmap         *xsync.MapOf[uint64, concepts.Vector4]
 	LightmapBias     [3]int64 // Quantized Min
 }
@@ -47,10 +48,10 @@ type Sector struct {
 var SectorComponentIndex int
 
 func init() {
-	SectorComponentIndex = concepts.DbTypes().Register(Sector{}, SectorFromDb)
+	SectorComponentIndex = ecs.Types().Register(Sector{}, SectorFromDb)
 }
 
-func SectorFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Sector {
+func SectorFromDb(db *ecs.ECS, e ecs.Entity) *Sector {
 	if asserted, ok := db.Component(e, SectorComponentIndex).(*Sector); ok {
 		return asserted
 	}
@@ -85,12 +86,12 @@ func (s *Sector) OnDetach() {
 	for _, b := range s.Bodies {
 		b.SectorEntity = 0
 	}
-	s.Bodies = make(map[concepts.Entity]*Body)
-	s.InternalSegments = make(map[concepts.Entity]*InternalSegment)
+	s.Bodies = make(map[ecs.Entity]*Body)
+	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 	s.Attached.OnDetach()
 }
 
-func (s *Sector) SetDB(db *concepts.EntityComponentDB) {
+func (s *Sector) SetDB(db *ecs.ECS) {
 	if s.DB != db {
 		s.OnDetach()
 	}
@@ -114,8 +115,8 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4]()
 	s.Segments = make([]*SectorSegment, 0)
-	s.Bodies = make(map[concepts.Entity]*Body)
-	s.InternalSegments = make(map[concepts.Entity]*InternalSegment)
+	s.Bodies = make(map[ecs.Entity]*Body)
+	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0
 	s.Gravity[2] = -constants.Gravity
@@ -172,10 +173,10 @@ func (s *Sector) Construct(data map[string]any) {
 		}
 	}
 	if v, ok := data["FloorTarget"]; ok {
-		s.FloorTarget, _ = concepts.ParseEntity(v.(string))
+		s.FloorTarget, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["CeilTarget"]; ok {
-		s.CeilTarget, _ = concepts.ParseEntity(v.(string))
+		s.CeilTarget, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["Gravity"]; ok {
 		s.Gravity.Deserialize(v.(map[string]any))
@@ -184,16 +185,16 @@ func (s *Sector) Construct(data map[string]any) {
 		s.FloorFriction = v.(float64)
 	}
 	if v, ok := data["FloorScripts"]; ok {
-		s.FloorScripts = concepts.ConstructSlice[*Script](s.DB, v)
+		s.FloorScripts = ecs.ConstructSlice[*Script](s.DB, v)
 	}
 	if v, ok := data["CeilScripts"]; ok {
-		s.CeilScripts = concepts.ConstructSlice[*Script](s.DB, v)
+		s.CeilScripts = ecs.ConstructSlice[*Script](s.DB, v)
 	}
 	if v, ok := data["EnterScripts"]; ok {
-		s.EnterScripts = concepts.ConstructSlice[*Script](s.DB, v)
+		s.EnterScripts = ecs.ConstructSlice[*Script](s.DB, v)
 	}
 	if v, ok := data["ExitScripts"]; ok {
-		s.ExitScripts = concepts.ConstructSlice[*Script](s.DB, v)
+		s.ExitScripts = ecs.ConstructSlice[*Script](s.DB, v)
 	}
 
 	s.Recalculate()
@@ -225,16 +226,16 @@ func (s *Sector) Serialize() map[string]any {
 		result["CeilTarget"] = s.CeilTarget.Format()
 	}
 	if len(s.FloorScripts) > 0 {
-		result["FloorScripts"] = concepts.SerializeSlice(s.FloorScripts)
+		result["FloorScripts"] = ecs.SerializeSlice(s.FloorScripts)
 	}
 	if len(s.CeilScripts) > 0 {
-		result["CeilScripts"] = concepts.SerializeSlice(s.CeilScripts)
+		result["CeilScripts"] = ecs.SerializeSlice(s.CeilScripts)
 	}
 	if len(s.EnterScripts) > 0 {
-		result["EnterScripts"] = concepts.SerializeSlice(s.EnterScripts)
+		result["EnterScripts"] = ecs.SerializeSlice(s.EnterScripts)
 	}
 	if len(s.ExitScripts) > 0 {
-		result["ExitScripts"] = concepts.SerializeSlice(s.ExitScripts)
+		result["ExitScripts"] = ecs.SerializeSlice(s.ExitScripts)
 	}
 
 	segments := []any{}
@@ -292,7 +293,7 @@ func (s *Sector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		floorZ, ceilZ := s.PointZ(concepts.DynamicOriginal, &segment.P)
+		floorZ, ceilZ := s.PointZ(ecs.DynamicOriginal, &segment.P)
 		if floorZ < s.Min[2] {
 			s.Min[2] = floorZ
 		}
@@ -334,7 +335,7 @@ func (s *Sector) Recalculate() {
 }
 
 // PointZ finds the Z value at a point in the sector
-func (s *Sector) PointZ(stage concepts.DynamicStage, isect *concepts.Vector2) (bottom float64, top float64) {
+func (s *Sector) PointZ(stage ecs.DynamicStage, isect *concepts.Vector2) (bottom float64, top float64) {
 	fz := s.BottomZ.Value(stage)
 	cz := s.TopZ.Value(stage)
 	df := s.FloorNormal[2]*fz + s.FloorNormal[1]*s.Segments[0].P[1] +

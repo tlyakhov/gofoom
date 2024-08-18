@@ -10,6 +10,7 @@ import (
 	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -71,7 +72,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	mw.Context.FontHeight()
 
 	// Highlight PVS sectors
-	pvsSector := make(map[concepts.Entity]*core.Sector)
+	pvsSector := make(map[ecs.Entity]*core.Sector)
 	for _, s := range editor.SelectedObjects.Exact {
 		if s.Sector == nil {
 			continue

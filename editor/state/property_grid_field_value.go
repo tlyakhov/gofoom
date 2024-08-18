@@ -5,11 +5,11 @@ package state
 
 import (
 	"reflect"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type PropertyGridFieldValue struct {
-	Entity           concepts.Entity
+	Entity           ecs.Entity
 	Value            reflect.Value
 	ParentCollection *reflect.Value
 	Ancestors        []any

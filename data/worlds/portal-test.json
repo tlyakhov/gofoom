@@ -9,7 +9,7 @@
   },
   {
     "Entity": "2",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "2",
       "Name": "Default"
     },
@@ -36,7 +36,7 @@
   },
   {
     "Entity": "3",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "3",
       "Name": "Starting"
     },
@@ -330,7 +330,7 @@
   },
   {
     "Entity": "7",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "7",
       "Name": "Portal"
     },
@@ -648,7 +648,7 @@
   },
   {
     "Entity": "13",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "13",
       "Name": "Shader Night Sky"
     },
@@ -1150,7 +1150,7 @@
   },
   {
     "Entity": "21",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "21",
       "Name": "Shader Grass"
     },
@@ -1391,7 +1391,7 @@
   },
   {
     "Entity": "24",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "24",
       "Name": "Shader Ladder"
     },
@@ -1717,7 +1717,7 @@
   },
   {
     "Entity": "32",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "32",
       "Name": "Shader DGarage.png"
     },
@@ -1848,7 +1848,7 @@
   },
   {
     "Entity": "37",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "37",
       "Name": "Shader Water"
     },

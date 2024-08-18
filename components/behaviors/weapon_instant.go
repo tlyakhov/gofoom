@@ -5,18 +5,18 @@ package behaviors
 
 import (
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"github.com/gammazero/deque"
 )
 
 // TODO: Implement attributes like cooldowns, spread, DPS, scripting
 type WeaponInstant struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	// Bullets make marks on walls/internal segments
-	MarkMaterial concepts.Entity `editable:"Mark Material" edit_type:"Material"`
-	MarkSize     float64         `editable:"Mark Size"`
+	MarkMaterial ecs.Entity `editable:"Mark Material" edit_type:"Material"`
+	MarkSize     float64    `editable:"Mark Size"`
 
 	// Internal state
 	FireNextFrame bool `editable:"Fire Next Frame"`
@@ -32,10 +32,10 @@ type WeaponMark struct {
 var WeaponInstantComponentIndex int
 
 func init() {
-	WeaponInstantComponentIndex = concepts.DbTypes().Register(WeaponInstant{}, WeaponInstantFromDb)
+	WeaponInstantComponentIndex = ecs.Types().Register(WeaponInstant{}, WeaponInstantFromDb)
 }
 
-func WeaponInstantFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *WeaponInstant {
+func WeaponInstantFromDb(db *ecs.ECS, e ecs.Entity) *WeaponInstant {
 	if asserted, ok := db.Component(e, WeaponInstantComponentIndex).(*WeaponInstant); ok {
 		return asserted
 	}
@@ -56,7 +56,7 @@ func (w *WeaponInstant) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["MarkMaterial"]; ok {
-		w.MarkMaterial, _ = concepts.ParseEntity(v.(string))
+		w.MarkMaterial, _ = ecs.ParseEntity(v.(string))
 	}
 
 	if v, ok := data["MarkSize"]; ok {

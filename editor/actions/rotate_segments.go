@@ -5,7 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
 
@@ -40,7 +40,7 @@ func (a *RotateSegments) Undo() {
 		}
 		a.Rotate(s.Sector, true)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *RotateSegments) Redo() {
 	a.State().Lock.Lock()
@@ -51,7 +51,7 @@ func (a *RotateSegments) Redo() {
 		}
 		a.Rotate(s.Sector, false)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *RotateSegments) RequiresLock() bool { return true }

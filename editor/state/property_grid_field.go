@@ -9,25 +9,26 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 var EmbeddedTypes = [...]string{
-	concepts.ReflectType[*concepts.DynamicValue[float64]]().String(),
-	concepts.ReflectType[*concepts.DynamicValue[int]]().String(),
-	concepts.ReflectType[*concepts.DynamicValue[concepts.Vector2]]().String(),
-	concepts.ReflectType[*concepts.DynamicValue[concepts.Vector3]]().String(),
-	concepts.ReflectType[*concepts.DynamicValue[concepts.Vector4]]().String(),
-	concepts.ReflectType[*concepts.DynamicValue[concepts.Matrix2]]().String(),
-	concepts.ReflectType[*core.Script]().String(),
-	concepts.ReflectType[*materials.Surface]().String(),
-	concepts.ReflectType[*materials.ShaderStage]().String(),
-	concepts.ReflectType[*materials.Sprite]().String(),
-	concepts.ReflectType[**concepts.Animation[float64]]().String(),
-	concepts.ReflectType[**concepts.Animation[int]]().String(),
-	concepts.ReflectType[**concepts.Animation[concepts.Vector2]]().String(),
-	concepts.ReflectType[**concepts.Animation[concepts.Vector3]]().String(),
-	concepts.ReflectType[**concepts.Animation[concepts.Vector4]]().String(),
-	concepts.ReflectType[**concepts.Animation[concepts.Matrix2]]().String(),
+	reflect.TypeFor[*ecs.DynamicValue[float64]]().String(),
+	reflect.TypeFor[*ecs.DynamicValue[int]]().String(),
+	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector2]]().String(),
+	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector3]]().String(),
+	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector4]]().String(),
+	reflect.TypeFor[*ecs.DynamicValue[concepts.Matrix2]]().String(),
+	reflect.TypeFor[*core.Script]().String(),
+	reflect.TypeFor[*materials.Surface]().String(),
+	reflect.TypeFor[*materials.ShaderStage]().String(),
+	reflect.TypeFor[*materials.Sprite]().String(),
+	reflect.TypeFor[**ecs.Animation[float64]]().String(),
+	reflect.TypeFor[**ecs.Animation[int]]().String(),
+	reflect.TypeFor[**ecs.Animation[concepts.Vector2]]().String(),
+	reflect.TypeFor[**ecs.Animation[concepts.Vector3]]().String(),
+	reflect.TypeFor[**ecs.Animation[concepts.Vector4]]().String(),
+	reflect.TypeFor[**ecs.Animation[concepts.Matrix2]]().String(),
 }
 
 type PropertyGridField struct {

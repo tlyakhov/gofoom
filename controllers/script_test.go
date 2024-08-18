@@ -8,12 +8,12 @@ import (
 
 	"testing"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	_ "tlyakhov/gofoom/scripting_symbols"
 )
 
-func setup() *concepts.EntityComponentDB {
-	db := concepts.NewEntityComponentDB()
+func setup() *ecs.ECS {
+	db := ecs.NewECS()
 	CreateTestWorld2(db)
 	return db
 }
@@ -33,7 +33,7 @@ func BenchmarkScriptedCode(b *testing.B) {
 	})
 	b.Run("Native", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			core.SectorFromDb(db, s.Vars["sector"].(concepts.Entity)).BottomZ.Original = rand.Float64()
+			core.SectorFromDb(db, s.Vars["sector"].(ecs.Entity)).BottomZ.Original = rand.Float64()
 		}
 	})
 }

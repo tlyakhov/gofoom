@@ -5,6 +5,7 @@ package materials
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 /*
@@ -18,13 +19,13 @@ import (
 */
 
 type Surface struct {
-	DB          *concepts.EntityComponentDB
-	Material    concepts.Entity                         `editable:"Material" edit_type:"Material"`
-	ExtraStages []*ShaderStage                          `editable:"Extra Shader Stages"`
-	Transform   concepts.DynamicValue[concepts.Matrix2] `editable:"Transform"`
+	DB          *ecs.ECS
+	Material    ecs.Entity                         `editable:"Material" edit_type:"Material"`
+	ExtraStages []*ShaderStage                     `editable:"Extra Shader Stages"`
+	Transform   ecs.DynamicValue[concepts.Matrix2] `editable:"Transform"`
 }
 
-func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+func (s *Surface) Construct(db *ecs.ECS, data map[string]any) {
 	s.DB = db
 	s.ExtraStages = make([]*ShaderStage, 0)
 	s.Transform.Construct(nil)
@@ -34,10 +35,10 @@ func (s *Surface) Construct(db *concepts.EntityComponentDB, data map[string]any)
 	}
 
 	if v, ok := data["ExtraStages"]; ok {
-		s.ExtraStages = concepts.ConstructSlice[*ShaderStage](db, v)
+		s.ExtraStages = ecs.ConstructSlice[*ShaderStage](db, v)
 	}
 	if v, ok := data["Material"]; ok {
-		s.Material, _ = concepts.ParseEntity(v.(string))
+		s.Material, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["Transform"]; ok {
 		if v2, ok2 := v.([]any); ok2 {
@@ -51,7 +52,7 @@ func (s *Surface) Serialize() map[string]any {
 	result := make(map[string]any)
 
 	if len(s.ExtraStages) > 0 {
-		result["ExtraStages"] = concepts.SerializeSlice(s.ExtraStages)
+		result["ExtraStages"] = ecs.SerializeSlice(s.ExtraStages)
 	}
 
 	if s.Material != 0 {

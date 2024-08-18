@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 // TODO: Fix situations where sectors are on top of each other and shouldn't be
@@ -135,7 +136,7 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // most cases each comparison is pretty cheap. For really large worlds, we could
 // give the user the option of disabling auto-portalling in the editor and only
 // doing it manually every once in a while.
-func AutoPortal(db *concepts.EntityComponentDB) {
+func AutoPortal(db *ecs.ECS) {
 	seen := make(concepts.Set[string])
 	for _, c := range db.AllOfType(core.SectorComponentIndex) {
 		sector := c.(*core.Sector)

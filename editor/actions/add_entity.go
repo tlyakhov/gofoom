@@ -5,7 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -19,10 +19,10 @@ var _ desktop.Mouseable = (*AddEntity)(nil)
 
 type AddEntity struct {
 	state.IEditor
-	concepts.Entity
+	ecs.Entity
 
 	Mode             string
-	Components       []concepts.Attachable
+	Components       []ecs.Attachable
 	ContainingSector *core.Sector
 }
 
@@ -33,7 +33,7 @@ func (a *AddEntity) DetachFromSector() {
 		}
 		delete(body.Sector().Bodies, a.Entity)
 	}
-	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	//a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *AddEntity) AttachAll() {
@@ -52,7 +52,7 @@ func (a *AddEntity) AttachToSector() {
 	if seg := core.InternalSegmentFromDb(a.State().DB, a.Entity); seg != nil {
 		seg.AttachToSectors()
 	}
-	//a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	//a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *AddEntity) Dragged(d *fyne.DragEvent) {
@@ -89,11 +89,11 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 		body.Pos.Original[0] = worldGrid[0]
 		body.Pos.Original[1] = worldGrid[1]
 		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.PointZ(concepts.DynamicOriginal, worldGrid)
+			floorZ, ceilZ := a.ContainingSector.PointZ(ecs.DynamicOriginal, worldGrid)
 			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
 		body.Pos.ResetToOriginal()
-		a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+		a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 	}
 }
 

@@ -1,13 +1,14 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 import (
 	"log"
 	"reflect"
 	"regexp"
 	"strconv"
+	"tlyakhov/gofoom/concepts"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=DynamicStage -json
@@ -22,7 +23,7 @@ const (
 
 // A DynamicType is a type constraint for anything the engine can simulate
 type DynamicType interface {
-	~int | ~float64 | Vector2 | Vector3 | Vector4 | Matrix2
+	~int | ~float64 | concepts.Vector2 | concepts.Vector3 | concepts.Vector4 | concepts.Matrix2
 }
 
 type DynamicValue[T DynamicType] struct {
@@ -95,27 +96,27 @@ func (d *DynamicValue[T]) RenderBlend(blend float64) {
 	}
 	switch dc := any(d).(type) {
 	case *DynamicValue[int]:
-		dc.render = int(Lerp(float64(dc.Prev), float64(dc.Now), blend))
+		dc.render = int(concepts.Lerp(float64(dc.Prev), float64(dc.Now), blend))
 	case *DynamicValue[float64]:
-		dc.render = Lerp(dc.Prev, dc.Now, blend)
-	case *DynamicValue[Vector2]:
-		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
-	case *DynamicValue[Vector3]:
-		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
-	case *DynamicValue[Vector4]:
-		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
-		dc.render[3] = Lerp(dc.Prev[3], dc.Now[3], blend)
+		dc.render = concepts.Lerp(dc.Prev, dc.Now, blend)
+	case *DynamicValue[concepts.Vector2]:
+		dc.render[0] = concepts.Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.render[1] = concepts.Lerp(dc.Prev[1], dc.Now[1], blend)
+	case *DynamicValue[concepts.Vector3]:
+		dc.render[0] = concepts.Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.render[1] = concepts.Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.render[2] = concepts.Lerp(dc.Prev[2], dc.Now[2], blend)
+	case *DynamicValue[concepts.Vector4]:
+		dc.render[0] = concepts.Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.render[1] = concepts.Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.render[2] = concepts.Lerp(dc.Prev[2], dc.Now[2], blend)
+		dc.render[3] = concepts.Lerp(dc.Prev[3], dc.Now[3], blend)
 	case *DynamicValue[Entity]:
 		dc.render = dc.Prev
 		if blend > 0.5 {
 			dc.render = dc.Now
 		}
-	case *DynamicValue[Matrix2]:
+	case *DynamicValue[concepts.Matrix2]:
 		d.Render = &d.Now
 	}
 
@@ -132,13 +133,13 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 		result["Original"] = dc.Original
 	case *DynamicValue[float64]:
 		result["Original"] = dc.Original
-	case *DynamicValue[Vector2]:
+	case *DynamicValue[concepts.Vector2]:
 		result["Original"] = dc.Original.Serialize()
-	case *DynamicValue[Vector3]:
+	case *DynamicValue[concepts.Vector3]:
 		result["Original"] = dc.Original.Serialize()
-	case *DynamicValue[Vector4]:
+	case *DynamicValue[concepts.Vector4]:
 		result["Original"] = dc.Original.Serialize(false)
-	case *DynamicValue[Matrix2]:
+	case *DynamicValue[concepts.Matrix2]:
 		result["Original"] = dc.Original.Serialize()
 	case *DynamicValue[Entity]:
 		result["Original"] = dc.Original.Format()
@@ -158,7 +159,7 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	}
 
 	switch sc := any(d).(type) {
-	case *DynamicValue[Matrix2]:
+	case *DynamicValue[concepts.Matrix2]:
 		sc.Original.SetIdentity()
 	}
 
@@ -173,13 +174,13 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 			dc.Original = v.(int)
 		case *DynamicValue[float64]:
 			dc.Original = v.(float64)
-		case *DynamicValue[Vector2]:
+		case *DynamicValue[concepts.Vector2]:
 			dc.Original.Deserialize(v.(map[string]any))
-		case *DynamicValue[Vector3]:
+		case *DynamicValue[concepts.Vector3]:
 			dc.Original.Deserialize(v.(map[string]any))
-		case *DynamicValue[Vector4]:
+		case *DynamicValue[concepts.Vector4]:
 			dc.Original.Deserialize(v.(map[string]any), false)
-		case *DynamicValue[Matrix2]:
+		case *DynamicValue[concepts.Matrix2]:
 			dc.Original.Deserialize(v.([]any))
 		default:
 			log.Panicf("Tried to deserialize SimVar[T] %v where T has no serializer", d)
@@ -203,14 +204,14 @@ func (d *DynamicValue[T]) GetAnimation() Animated {
 var reDynamicSource = regexp.MustCompile(`(\d+).(\w+).(\w+)`)
 
 // This is currently unused, probably should delete but seems potentially valuable?
-func DynamicFromString[T DynamicType](db *EntityComponentDB, source string) *DynamicValue[T] {
+func DynamicFromString[T DynamicType](db *ECS, source string) *DynamicValue[T] {
 	matches := reDynamicSource.FindStringSubmatch(source)
 	if len(matches) != 3 {
 		log.Printf("DynamicFromString - target %v isn't entity.component.field", source)
 		return nil
 	}
 	entity, _ := strconv.ParseUint(matches[0], 10, 64)
-	index := DbTypes().Indexes[matches[1]]
+	index := Types().Indexes[matches[1]]
 	field := matches[2]
 	component := db.EntityComponents[entity][index]
 	if component == nil {

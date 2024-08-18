@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 import (
 	"reflect"
@@ -12,7 +12,7 @@ import (
 // different types of controllers. Now there are only really 2 methods: "Loaded"
 // and "Recalculate". Should simplify.
 
-func (types *dbTypes) RegisterController(instance Controller, priority int) {
+func (types *typeMetadata) RegisterController(instance Controller, priority int) {
 	types.lock.Lock()
 	defer types.lock.Unlock()
 	instanceType := reflect.ValueOf(instance).Type()
@@ -40,8 +40,8 @@ func act(controller Controller, method ControllerMethod) {
 	}
 }
 
-func (db *EntityComponentDB) Act(component Attachable, index int, method ControllerMethod) {
-	for _, meta := range DbTypes().Controllers {
+func (db *ECS) Act(component Attachable, index int, method ControllerMethod) {
+	for _, meta := range Types().Controllers {
 		controller := reflect.New(meta.Type.Elem()).Interface().(Controller)
 		if controller == nil || controller.Methods()&method == 0 {
 			continue
@@ -55,8 +55,8 @@ func (db *EntityComponentDB) Act(component Attachable, index int, method Control
 	}
 }
 
-func (db *EntityComponentDB) ActAllControllers(method ControllerMethod) {
-	for _, meta := range DbTypes().Controllers {
+func (db *ECS) ActAllControllers(method ControllerMethod) {
+	for _, meta := range Types().Controllers {
 		controller := reflect.New(meta.Type.Elem()).Interface().(Controller)
 		if controller == nil || controller.Methods()&method == 0 {
 			continue

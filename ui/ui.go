@@ -5,6 +5,7 @@ package ui
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render"
 )
 
@@ -51,10 +52,10 @@ func (ui *UI) SetPage(page *Page) {
 	a.Start = 0
 	a.End = 1.0
 	a.TweeningFunc = concepts.EaseInOut2
-	a.Lifetime = concepts.AnimationLifetimeOnce
+	a.Lifetime = ecs.AnimationLifetimeOnce
 	a.Reverse = false
 	a.Active = false
-	a.Coordinates = concepts.AnimationCoordinatesAbsolute
+	a.Coordinates = ecs.AnimationCoordinatesAbsolute
 
 	for _, item := range page.Widgets {
 		w := item.GetWidget()
@@ -66,10 +67,10 @@ func (ui *UI) SetPage(page *Page) {
 		a.Start = w.highlight.Original
 		a.End = ui.SelectedColor
 		a.TweeningFunc = concepts.EaseInOut2
-		a.Lifetime = concepts.AnimationLifetimeBounce
+		a.Lifetime = ecs.AnimationLifetimeBounce
 		a.Reverse = false
 		a.Active = false
-		a.Coordinates = concepts.AnimationCoordinatesAbsolute
+		a.Coordinates = ecs.AnimationCoordinatesAbsolute
 	}
 }
 

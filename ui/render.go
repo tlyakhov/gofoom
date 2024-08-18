@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 const (
@@ -339,10 +340,10 @@ func (ui *UI) renderPage(page *Page) {
 		y += 3
 		w := page.Widgets[i].GetWidget()
 		if selected {
-			w.highlight.Animation.Lifetime = concepts.AnimationLifetimeBounce
+			w.highlight.Animation.Lifetime = ecs.AnimationLifetimeBounce
 			w.highlight.Animation.Active = true
 		} else {
-			w.highlight.Animation.Lifetime = concepts.AnimationLifetimeBounceOnce
+			w.highlight.Animation.Lifetime = ecs.AnimationLifetimeBounceOnce
 		}
 	}
 	if page.tooltipCurrent != nil {

@@ -10,27 +10,28 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 type WanderController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*behaviors.Wander
 	Body *core.Body
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&WanderController{}, 100)
+	ecs.Types().RegisterController(&WanderController{}, 100)
 }
 
 func (wc *WanderController) ComponentIndex() int {
 	return behaviors.WanderComponentIndex
 }
 
-func (wc *WanderController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways
+func (wc *WanderController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways
 }
 
-func (wc *WanderController) Target(target concepts.Attachable) bool {
+func (wc *WanderController) Target(target ecs.Attachable) bool {
 	wc.Wander = target.(*behaviors.Wander)
 	wc.Body = core.BodyFromDb(wc.Wander.DB, wc.Wander.Entity)
 	return wc.Wander.IsActive() && wc.Body.IsActive()
@@ -49,7 +50,7 @@ func (wc *WanderController) Always() {
 
 	if wc.DB.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
 		a := wc.Body.Angle.NewAnimation()
-		a.Coordinates = concepts.AnimationCoordinatesAbsolute
+		a.Coordinates = ecs.AnimationCoordinatesAbsolute
 		a.Start = wc.Body.Angle.Now
 		// Bias towards the center of the sector
 		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
@@ -61,7 +62,7 @@ func (wc *WanderController) Always() {
 
 		a.Duration = 300
 		a.TweeningFunc = concepts.EaseInOut2
-		a.Lifetime = concepts.AnimationLifetimeOnce
+		a.Lifetime = ecs.AnimationLifetimeOnce
 		wc.LastTurn = wc.DB.Timestamp
 	}
 	if wc.DB.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {

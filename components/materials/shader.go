@@ -3,10 +3,12 @@
 
 package materials
 
-import "tlyakhov/gofoom/concepts"
+import (
+	"tlyakhov/gofoom/ecs"
+)
 
 type Shader struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	Stages []*ShaderStage `editable:"Stages"`
 }
@@ -14,10 +16,10 @@ type Shader struct {
 var ShaderComponentIndex int
 
 func init() {
-	ShaderComponentIndex = concepts.DbTypes().Register(Shader{}, ShaderFromDb)
+	ShaderComponentIndex = ecs.Types().Register(Shader{}, ShaderFromDb)
 }
 
-func ShaderFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Shader {
+func ShaderFromDb(db *ecs.ECS, e ecs.Entity) *Shader {
 	if asserted, ok := db.Component(e, ShaderComponentIndex).(*Shader); ok {
 		return asserted
 	}
@@ -34,13 +36,13 @@ func (s *Shader) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Stages"]; ok {
-		s.Stages = concepts.ConstructSlice[*ShaderStage](s.DB, v)
+		s.Stages = ecs.ConstructSlice[*ShaderStage](s.DB, v)
 	}
 }
 
 func (s *Shader) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 
-	result["Stages"] = concepts.SerializeSlice(s.Stages)
+	result["Stages"] = ecs.SerializeSlice(s.Stages)
 	return result
 }

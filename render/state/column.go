@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type EntityWithDist2 struct {
@@ -44,7 +45,7 @@ type Column struct {
 	// Pre-allocated slice for sorting bodies and internal segments
 	EntitiesByDistance []EntityWithDist2
 	// All visited bodies
-	BodiesSeen map[concepts.Entity]*core.Body
+	BodiesSeen map[ecs.Entity]*core.Body
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
 	Ray                *Ray
@@ -95,7 +96,7 @@ func (c *Column) CalcScreen() {
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 }
 
-func (c *Column) SampleLight(result *concepts.Vector4, material concepts.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {
+func (c *Column) SampleLight(result *concepts.Vector4, material ecs.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {
 	lit := materials.LitFromDb(c.DB, material)
 
 	if lit == nil {

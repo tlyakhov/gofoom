@@ -9,7 +9,7 @@
   },
   {
     "Entity": "2",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "2",
       "Name": "Default"
     },
@@ -36,7 +36,7 @@
   },
   {
     "Entity": "3",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "3",
       "Name": "Starting"
     },
@@ -115,7 +115,7 @@
   },
   {
     "Entity": "4",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "4",
       "Name": "ckg769lmdsrlum5bli80"
     },
@@ -161,7 +161,7 @@
   },
   {
     "Entity": "5",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "5",
       "Name": "upper"
     },
@@ -245,7 +245,7 @@
   },
   {
     "Entity": "6",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "6",
       "Name": "ckg76htmdsrlum5blid0"
     },
@@ -324,7 +324,7 @@
   },
   {
     "Entity": "7",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "7",
       "Name": "lower"
     },

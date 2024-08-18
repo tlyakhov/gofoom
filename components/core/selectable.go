@@ -6,6 +6,7 @@ package core
 import (
 	"math"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=SelectableType -json
@@ -50,8 +51,8 @@ var typeGroups = map[SelectableType]SelectableType{
 // limitation of not being able to select parts of objects that weren't explicit
 // types. (for example, only one point of an internal segment)
 type Selectable struct {
-	concepts.Entity
-	DB              *concepts.EntityComponentDB
+	ecs.Entity
+	DB              *ecs.ECS
 	Type            SelectableType
 	Sector          *Sector
 	Body            *Body
@@ -138,7 +139,7 @@ func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
 		DB:              s.DB}
 }
 
-func SelectableFromEntity(db *concepts.EntityComponentDB, e concepts.Entity) *Selectable {
+func SelectableFromEntity(db *ecs.ECS, e ecs.Entity) *Selectable {
 	if sector := SectorFromDb(db, e); sector != nil {
 		return SelectableFromSector(sector)
 	}
@@ -215,17 +216,17 @@ func (s *Selectable) Recalculate() {
 func (s *Selectable) PointZ(p *concepts.Vector2) (bottom float64, top float64) {
 	switch s.Type {
 	case SelectableHi:
-		_, top = s.Sector.PointZ(concepts.DynamicNow, p)
+		_, top = s.Sector.PointZ(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.PointZ(concepts.DynamicNow, p)
+		_, adjTop := adj.PointZ(ecs.DynamicNow, p)
 		bottom, top = math.Min(adjTop, top), math.Max(adjTop, top)
 	case SelectableLow:
-		bottom, _ = s.Sector.PointZ(concepts.DynamicNow, p)
+		bottom, _ = s.Sector.PointZ(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.PointZ(concepts.DynamicNow, p)
+		adjBottom, _ := adj.PointZ(ecs.DynamicNow, p)
 		bottom, top = math.Min(adjBottom, bottom), math.Max(adjBottom, bottom)
 	case SelectableMid:
-		bottom, top = s.Sector.PointZ(concepts.DynamicNow, p)
+		bottom, top = s.Sector.PointZ(ecs.DynamicNow, p)
 	case SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
 	}

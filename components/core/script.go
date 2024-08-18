@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 	"maps"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
@@ -20,7 +20,7 @@ type Script struct {
 	ErrorMessage string
 	interp       *interp.Interpreter
 	Vars         map[string]any
-	DB           *concepts.EntityComponentDB
+	DB           *ecs.ECS
 	System       bool
 	runFunc      any
 }
@@ -55,7 +55,7 @@ func (s *Script) Compile() {
 	s.ErrorMessage = ""
 	s.interp = interp.New(interp.Options{})
 	s.interp.Use(stdlib.Symbols)
-	s.interp.Use(concepts.DbTypes().InterpSymbols)
+	s.interp.Use(ecs.Types().InterpSymbols)
 	var codeTemplate string
 	switch s.Style {
 	case ScriptStyleRaw:
@@ -82,11 +82,11 @@ func (s *Script) Compile() {
 	s.runFunc = f.Interface()
 }
 
-func (s *Script) SetDB(db *concepts.EntityComponentDB) {
+func (s *Script) SetDB(db *ecs.ECS) {
 	s.DB = db
 }
 
-func (s *Script) GetDB() *concepts.EntityComponentDB {
+func (s *Script) GetDB() *ecs.ECS {
 	return s.DB
 }
 
@@ -96,7 +96,7 @@ func (s *Script) IsSystem() bool {
 
 func (s *Script) Construct(data map[string]any) {
 	s.ErrorMessage = ""
-	s.Vars = maps.Clone(concepts.DbTypes().ExprEnv)
+	s.Vars = maps.Clone(ecs.Types().ExprEnv)
 
 	if data == nil {
 		return
@@ -119,11 +119,11 @@ func (s *Script) Serialize() map[string]any {
 	return data
 }
 
-func (s *Script) Entity(name string) concepts.Entity {
+func (s *Script) Entity(name string) ecs.Entity {
 	if s.Vars[name] == nil {
 		return 0
 	}
-	if entity, ok := s.Vars[name].(concepts.Entity); ok {
+	if entity, ok := s.Vars[name].(ecs.Entity); ok {
 		return entity
 	}
 	return 0

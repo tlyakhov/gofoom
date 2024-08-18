@@ -6,9 +6,8 @@ package actions
 import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
-
-	"tlyakhov/gofoom/concepts"
 )
 
 type Delete struct {
@@ -38,7 +37,7 @@ func (a *Delete) Undo() {
 		s.DB.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *Delete) Redo() {
 	a.State().Lock.Lock()
@@ -47,8 +46,8 @@ func (a *Delete) Redo() {
 	for s := range a.Saved {
 		switch s.Type {
 		case core.SelectableSector:
-			s.Sector.Bodies = make(map[concepts.Entity]*core.Body)
-			s.Sector.InternalSegments = make(map[concepts.Entity]*core.InternalSegment)
+			s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
+			s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
 			s.DB.DetachAll(s.Sector.Entity)
 		case core.SelectableSectorSegment:
 			for i, seg := range s.Sector.Segments {
@@ -57,8 +56,8 @@ func (a *Delete) Redo() {
 				}
 				s.Sector.Segments = append(s.Sector.Segments[:i], s.Sector.Segments[i+1:]...)
 				if len(s.Sector.Segments) == 0 {
-					s.Sector.Bodies = make(map[concepts.Entity]*core.Body)
-					s.Sector.InternalSegments = make(map[concepts.Entity]*core.InternalSegment)
+					s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
+					s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
 					s.DB.DetachAll(s.Sector.Entity)
 				}
 				break
@@ -83,5 +82,5 @@ func (a *Delete) Redo() {
 			s.DB.DetachAll(s.Entity)
 		}
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }

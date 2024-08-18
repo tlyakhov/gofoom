@@ -9,6 +9,7 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 // The algorithm here is from:
@@ -27,7 +28,7 @@ type SectorSplitter struct {
 	EdgesOnLine          []*splitEdge
 	Splitter1, Splitter2 concepts.Vector2
 	Sector               *core.Sector
-	Result               [][]concepts.Attachable
+	Result               [][]ecs.Attachable
 }
 
 type splitEdge struct {
@@ -255,7 +256,7 @@ func (a *SectorSplitter) verifyCycles() {
 }
 
 func (a *SectorSplitter) collect() {
-	a.Result = make([][]concepts.Attachable, 0)
+	a.Result = make([][]ecs.Attachable, 0)
 	newSectorCount := 0
 	for _, edge := range a.SplitSector {
 		if edge.Visited {
@@ -266,7 +267,7 @@ func (a *SectorSplitter) collect() {
 		newSectorCount++
 		db := a.Sector.DB
 		newEntity := db.NewEntity()
-		clonedComponents := make([]concepts.Attachable, len(db.AllComponents(a.Sector.Entity)))
+		clonedComponents := make([]ecs.Attachable, len(db.AllComponents(a.Sector.Entity)))
 		a.Result = append(a.Result, clonedComponents)
 		for componentIndex, origComponent := range db.AllComponents(a.Sector.Entity) {
 			if origComponent == nil {
@@ -280,11 +281,11 @@ func (a *SectorSplitter) collect() {
 
 			clonedComponents[componentIndex] = addedComponent
 			switch target := addedComponent.(type) {
-			case *concepts.Named:
+			case *ecs.Named:
 				target.Name = fmt.Sprintf("Split %v (%v)", target.Name, newSectorCount)
 			case *core.Sector:
 				// Don't clone the bodies.
-				target.Bodies = make(map[concepts.Entity]*core.Body)
+				target.Bodies = make(map[ecs.Entity]*core.Body)
 				// Clear segments
 				target.Segments = []*core.SectorSegment{}
 

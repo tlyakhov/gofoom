@@ -5,15 +5,14 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
-
-	"tlyakhov/gofoom/concepts"
 )
 
 type AddComponent struct {
 	state.IEditor
 
-	Entities []concepts.Entity
+	Entities []ecs.Entity
 	Index    int
 }
 
@@ -28,7 +27,7 @@ func (a *AddComponent) Undo() {
 	for _, entity := range a.Entities {
 		a.State().DB.Detach(a.Index, entity)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *AddComponent) Redo() {
 	a.State().Lock.Lock()
@@ -36,5 +35,5 @@ func (a *AddComponent) Redo() {
 	for _, entity := range a.Entities {
 		a.State().DB.NewAttachedComponent(entity, a.Index)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }

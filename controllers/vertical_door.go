@@ -7,27 +7,28 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type VerticalDoorController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*behaviors.VerticalDoor
 	Sector *core.Sector
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&VerticalDoorController{}, 100)
+	ecs.Types().RegisterController(&VerticalDoorController{}, 100)
 }
 
 func (vd *VerticalDoorController) ComponentIndex() int {
 	return behaviors.VerticalDoorComponentIndex
 }
 
-func (vd *VerticalDoorController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways | concepts.ControllerRecalculate
+func (vd *VerticalDoorController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (vd *VerticalDoorController) Target(target concepts.Attachable) bool {
+func (vd *VerticalDoorController) Target(target ecs.Attachable) bool {
 	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
 	vd.Sector = core.SectorFromDb(vd.VerticalDoor.DB, vd.VerticalDoor.Entity)
 	return vd.VerticalDoor.IsActive() && vd.Sector != nil && vd.Sector.IsActive()
@@ -39,10 +40,10 @@ func (vd *VerticalDoorController) setupAnimation() {
 	a.Construct(nil)
 	a.Start = vd.Sector.TopZ.Original
 	a.End = vd.Sector.BottomZ.Original
-	a.Coordinates = concepts.AnimationCoordinatesAbsolute
+	a.Coordinates = ecs.AnimationCoordinatesAbsolute
 	a.Duration = vd.Duration
 	a.TweeningFunc = vd.TweeningFunc
-	a.Lifetime = concepts.AnimationLifetimeOnce
+	a.Lifetime = ecs.AnimationLifetimeOnce
 }
 
 func (vd *VerticalDoorController) adjustTransforms() {
@@ -112,7 +113,7 @@ func (vd *VerticalDoorController) Always() {
 			if seg.AdjacentSegment == nil {
 				continue
 			}
-			vd.DB.Act(seg.AdjacentSegment.Sector, core.SectorComponentIndex, concepts.ControllerRecalculate)
+			vd.DB.Act(seg.AdjacentSegment.Sector, core.SectorComponentIndex, ecs.ControllerRecalculate)
 		}*/
 	}
 

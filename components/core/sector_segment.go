@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 const (
@@ -14,7 +15,7 @@ const (
 )
 
 type SectorSegment struct {
-	DB      *concepts.EntityComponentDB
+	DB      *ecs.ECS
 	Segment `editable:"^"`
 
 	P         concepts.Vector2  `editable:"X/Y"`
@@ -26,7 +27,7 @@ type SectorSegment struct {
 	PortalIsPassable  bool `editable:"Portal is passable"`
 	PortalTeleports   bool `editable:"Portal sector not adjacent"`
 
-	AdjacentSector  concepts.Entity `editable:"Portal sector" edit_type:"Sector"`
+	AdjacentSector  ecs.Entity `editable:"Portal sector" edit_type:"Sector"`
 	AdjacentSegment *SectorSegment
 	// Only when loading or linking
 	AdjacentSegmentIndex int `editable:"Portal segment index"`
@@ -122,7 +123,7 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	return copied
 }
 
-func (s *SectorSegment) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
 	s.DB = db
 	s.Segment.Construct(db, data)
 	s.P = concepts.Vector2{}
@@ -158,7 +159,7 @@ func (s *SectorSegment) Construct(db *concepts.EntityComponentDB, data map[strin
 		s.PortalTeleports = v.(bool)
 	}
 	if v, ok := data["AdjacentSector"]; ok {
-		s.AdjacentSector, _ = concepts.ParseEntity(v.(string))
+		s.AdjacentSector, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["AdjacentSegment"]; ok {
 		if parsed, err := strconv.ParseInt(v.(string), 10, 64); err == nil {

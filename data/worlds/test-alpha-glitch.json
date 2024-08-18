@@ -9,7 +9,7 @@
   },
   {
     "Entity": "2",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "2",
       "Name": "Default"
     },
@@ -98,7 +98,7 @@
   },
   {
     "Entity": "4",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "4",
       "Name": "ckpvt5dmdsrrj1r5a5pg"
     },
@@ -238,7 +238,7 @@
   },
   {
     "Entity": "8",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "8",
       "Name": "SolidBlue"
     },
@@ -256,7 +256,7 @@
   },
   {
     "Entity": "13",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "13",
       "Name": "Split Starting (1)"
     },
@@ -320,7 +320,7 @@
   },
   {
     "Entity": "14",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "14",
       "Name": "Split Starting (2)"
     },

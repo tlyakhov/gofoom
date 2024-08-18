@@ -5,25 +5,25 @@ package materials
 
 import (
 	"strconv"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Sprite struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
-	Image  concepts.Entity `editable:"Image" edit_type:"Material"`
-	Cols   uint32          `editable:"Columns"`
-	Rows   uint32          `editable:"Rows"`
-	Angles uint32          `editable:"# of Angles"`
+	Image  ecs.Entity `editable:"Image" edit_type:"Material"`
+	Cols   uint32     `editable:"Columns"`
+	Rows   uint32     `editable:"Rows"`
+	Angles uint32     `editable:"# of Angles"`
 }
 
 var SpriteComponentIndex int
 
 func init() {
-	SpriteComponentIndex = concepts.DbTypes().Register(Sprite{}, SpriteFromDb)
+	SpriteComponentIndex = ecs.Types().Register(Sprite{}, SpriteFromDb)
 }
 
-func SpriteFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Sprite {
+func SpriteFromDb(db *ecs.ECS, e ecs.Entity) *Sprite {
 	if asserted, ok := db.Component(e, SpriteComponentIndex).(*Sprite); ok {
 		return asserted
 	}
@@ -54,7 +54,7 @@ func (s *Sprite) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Image"]; ok {
-		s.Image, _ = concepts.ParseEntity(v.(string))
+		s.Image, _ = ecs.ParseEntity(v.(string))
 	}
 
 	if v, ok := data["Rows"]; ok {

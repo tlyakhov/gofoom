@@ -4,20 +4,20 @@
 package behaviors
 
 import (
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Underwater struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 }
 
 var UnderwaterComponentIndex int
 
 func init() {
-	UnderwaterComponentIndex = concepts.DbTypes().Register(Underwater{}, UnderwaterFromDb)
+	UnderwaterComponentIndex = ecs.Types().Register(Underwater{}, UnderwaterFromDb)
 }
 
-func UnderwaterFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Underwater {
+func UnderwaterFromDb(db *ecs.ECS, e ecs.Entity) *Underwater {
 	if asserted, ok := db.Component(e, UnderwaterComponentIndex).(*Underwater); ok {
 		return asserted
 	}

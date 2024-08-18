@@ -15,6 +15,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render/state"
 )
 
@@ -25,13 +26,13 @@ type Renderer struct {
 	columnGroup        *sync.WaitGroup
 	startingSector     *core.Sector
 	textStyle          *TextStyle
-	SectorLastRendered *xsync.MapOf[concepts.Entity, uint64]
+	SectorLastRendered *xsync.MapOf[ecs.Entity, uint64]
 
 	ICacheHits, ICacheMisses atomic.Int64
 }
 
 // NewRenderer constructs a new Renderer.
-func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
+func NewRenderer(db *ecs.ECS) *Renderer {
 	r := Renderer{
 		Config: &state.Config{
 			ScreenWidth:   640,
@@ -44,7 +45,7 @@ func NewRenderer(db *concepts.EntityComponentDB) *Renderer {
 			DB:            db,
 		},
 		columnGroup:        new(sync.WaitGroup),
-		SectorLastRendered: xsync.NewMapOf[concepts.Entity, uint64](),
+		SectorLastRendered: xsync.NewMapOf[ecs.Entity, uint64](),
 	}
 
 	r.Initialize()
@@ -260,7 +261,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 
 	if c.SegmentIntersection != nil {
 		c.SegmentIntersection.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
-		c.IntersectionBottom, c.IntersectionTop = c.Sector.PointZ(concepts.DynamicRender, c.RaySegIntersect.To2D())
+		c.IntersectionBottom, c.IntersectionTop = c.Sector.PointZ(ecs.DynamicRender, c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
@@ -369,7 +370,7 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
-	column.BodiesSeen = make(map[concepts.Entity]*core.Body)
+	column.BodiesSeen = make(map[ecs.Entity]*core.Body)
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
@@ -435,7 +436,7 @@ func (r *Renderer) Render() {
 		return
 	}
 	// Invalidate lighting caches
-	r.SectorLastRendered.Range(func(eSector concepts.Entity, lastSeen uint64) bool {
+	r.SectorLastRendered.Range(func(eSector ecs.Entity, lastSeen uint64) bool {
 		// Cache for a maximum number of frames
 		if r.DB.Frame-lastSeen < 120 {
 			return true
@@ -508,7 +509,7 @@ func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z floa
 	}
 }
 
-func (r *Renderer) BitBlt(src concepts.Entity, dstx, dsty, w, h int) {
+func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int) {
 	ms := state.MaterialSampler{
 		Config: r.Config,
 		ScaleW: uint32(w),

@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -34,7 +35,7 @@ type PropertyGridState struct {
 	ParentCollection *reflect.Value
 	Ancestors        []any
 	ParentField      *state.PropertyGridField
-	Entity           concepts.Entity
+	Entity           ecs.Entity
 }
 
 type Grid struct {
@@ -128,7 +129,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 
 		if gf.IsEmbeddedType() {
 			// Animations are a special case
-			if !gf.Type.Elem().AssignableTo(concepts.ReflectType[concepts.Animated]()) {
+			if !gf.Type.Elem().AssignableTo(reflect.TypeFor[ecs.Animated]()) {
 				delete(pgs.Fields, display)
 			}
 			name := display
@@ -212,9 +213,9 @@ func gridAddOrUpdateAtIndex[PT interface {
 }
 
 func (g *Grid) AddEntityControls(selection *core.Selection) {
-	entities := make([]concepts.Entity, 0)
+	entities := make([]ecs.Entity, 0)
 	entityList := ""
-	componentList := make([]bool, len(concepts.DbTypes().Indexes))
+	componentList := make([]bool, len(ecs.Types().Indexes))
 	for _, s := range selection.Exact {
 		if len(entityList) > 0 {
 			entityList += ", "
@@ -260,8 +261,8 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 
 	opts := make([]string, 0)
 	optsIndices := make([]int, 0)
-	for index, t := range concepts.DbTypes().Types {
-		if t == nil || componentList[index] || index == concepts.AttachedComponentIndex {
+	for index, t := range ecs.Types().Types {
+		if t == nil || componentList[index] || index == ecs.AttachedComponentIndex {
 			continue
 		}
 		opts = append(opts, t.String())
@@ -379,13 +380,13 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldEnum(field, core.BodyShadowValues())
 		case *core.ScriptStyle:
 			g.fieldEnum(field, core.ScriptStyleValues())
-		case *concepts.AnimationLifetime:
-			g.fieldEnum(field, concepts.AnimationLifetimeValues())
-		case *concepts.AnimationCoordinates:
-			g.fieldEnum(field, concepts.AnimationCoordinatesValues())
+		case *ecs.AnimationLifetime:
+			g.fieldEnum(field, ecs.AnimationLifetimeValues())
+		case *ecs.AnimationCoordinates:
+			g.fieldEnum(field, ecs.AnimationCoordinatesValues())
 		case *materials.ShaderFlags:
 			g.fieldEnum(field, materials.ShaderFlagsValues())
-		case *concepts.Entity:
+		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]*core.Script:
 			g.fieldSlice(field)
@@ -395,29 +396,29 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldSlice(field)
 		case *[]*behaviors.InventorySlot:
 			g.fieldSlice(field)
-		case *[]concepts.Animated:
+		case *[]ecs.Animated:
 			g.fieldSlice(field)
 		case *concepts.TweeningFunc:
 			g.fieldTweeningFunc(field)
-		case **concepts.Animation[int]:
+		case **ecs.Animation[int]:
 			g.fieldAnimation(field)
-		case **concepts.Animation[float64]:
+		case **ecs.Animation[float64]:
 			g.fieldAnimation(field)
-		case **concepts.Animation[concepts.Vector2]:
+		case **ecs.Animation[concepts.Vector2]:
 			g.fieldAnimation(field)
-		case **concepts.Animation[concepts.Vector3]:
+		case **ecs.Animation[concepts.Vector3]:
 			g.fieldAnimation(field)
-		case **concepts.Animation[concepts.Vector4]:
+		case **ecs.Animation[concepts.Vector4]:
 			g.fieldAnimation(field)
-		case **concepts.DynamicValue[int]:
+		case **ecs.DynamicValue[int]:
 			g.fieldAnimationTarget(field)
-		case **concepts.DynamicValue[float64]:
+		case **ecs.DynamicValue[float64]:
 			g.fieldAnimationTarget(field)
-		case **concepts.DynamicValue[concepts.Vector2]:
+		case **ecs.DynamicValue[concepts.Vector2]:
 			g.fieldAnimationTarget(field)
-		case **concepts.DynamicValue[concepts.Vector3]:
+		case **ecs.DynamicValue[concepts.Vector3]:
 			g.fieldAnimationTarget(field)
-		case **concepts.DynamicValue[concepts.Vector4]:
+		case **ecs.DynamicValue[concepts.Vector4]:
 			g.fieldAnimationTarget(field)
 		default:
 			g.refreshIndex++

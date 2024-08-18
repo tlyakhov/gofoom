@@ -4,32 +4,30 @@
 package archetypes
 
 import (
-	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
-func CreateBasic(db *concepts.EntityComponentDB, componentIndex int) concepts.Entity {
+func CreateBasic(db *ecs.ECS, componentIndex int) ecs.Entity {
 	e := db.NewEntity()
 	db.NewAttachedComponent(e, componentIndex)
 	return e
 }
 
-func CreateSector(db *concepts.EntityComponentDB) concepts.Entity {
+func CreateSector(db *ecs.ECS) ecs.Entity {
 	entity := db.NewEntity()
 	db.NewAttachedComponent(entity, core.SectorComponentIndex)
 
 	return entity
 }
 
-func IsLightBody(db *concepts.EntityComponentDB, e concepts.Entity) bool {
+func IsLightBody(db *ecs.ECS, e ecs.Entity) bool {
 	return db.Component(e, core.BodyComponentIndex) != nil &&
 		db.Component(e, core.LightComponentIndex) != nil
 }
 
-func CreateLightBody(db *concepts.EntityComponentDB) concepts.Entity {
+func CreateLightBody(db *ecs.ECS) ecs.Entity {
 	e := db.NewEntity()
 	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
 	db.NewAttachedComponent(e, core.LightComponentIndex)
@@ -40,13 +38,13 @@ func CreateLightBody(db *concepts.EntityComponentDB) concepts.Entity {
 	return e
 }
 
-func IsPlayerBody(db *concepts.EntityComponentDB, e concepts.Entity) bool {
+/*func IsPlayerBody(db *ecs.EntityComponentDB, e ecs.Entity) bool {
 	return db.Component(e, core.BodyComponentIndex) != nil &&
 		db.Component(e, behaviors.PlayerComponentIndex) != nil &&
 		db.Component(e, behaviors.AliveComponentIndex) != nil
 }
 
-func CreatePlayerBody(db *concepts.EntityComponentDB) concepts.Entity {
+func CreatePlayerBody(db *ecs.EntityComponentDB) ecs.Entity {
 	e := db.NewEntity()
 	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
 	body.System = true
@@ -58,11 +56,11 @@ func CreatePlayerBody(db *concepts.EntityComponentDB) concepts.Entity {
 	alive.System = true
 
 	return e
-}
+}*/
 
-func CreateFont(db *concepts.EntityComponentDB, filename string, name string) concepts.Entity {
+func CreateFont(db *ecs.ECS, filename string, name string) ecs.Entity {
 	e := db.NewEntity()
-	named := db.NewAttachedComponent(e, concepts.NamedComponentIndex).(*concepts.Named)
+	named := db.NewAttachedComponent(e, ecs.NamedComponentIndex).(*ecs.Named)
 	named.System = true
 	named.Name = name
 	img := db.NewAttachedComponent(e, materials.ImageComponentIndex).(*materials.Image)

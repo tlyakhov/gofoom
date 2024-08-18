@@ -9,7 +9,7 @@
   },
   {
     "Entity": "2",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "2",
       "Name": "Default"
     },
@@ -36,7 +36,7 @@
   },
   {
     "Entity": "3",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "3",
       "Name": "Starting"
     },
@@ -118,7 +118,7 @@
   },
   {
     "Entity": "4",
-    "concepts.Named": {
+    "ecs.Named": {
       "Entity": "4",
       "Name": "ckpvt5dmdsrrj1r5a5pg"
     },

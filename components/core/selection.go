@@ -6,6 +6,7 @@ package core
 import (
 	"maps"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Selection struct {
@@ -55,7 +56,7 @@ func (s *Selection) ContainsGrouped(item *Selectable) bool {
 func (sel *Selection) Normalize() {
 	// Stores # of segments selected for each sector, or -1 if the sector itself
 	// is part of the selection.
-	segmentsForSector := make(map[concepts.Entity]int)
+	segmentsForSector := make(map[ecs.Entity]int)
 
 	// Count segments for sectors
 	for _, s := range sel.Exact {

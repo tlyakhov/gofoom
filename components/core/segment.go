@@ -8,6 +8,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Segment struct {
@@ -148,7 +149,7 @@ func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 	return s.Normal.Dot(p.Sub(s.A))
 }
 
-func (s *Segment) Construct(db *concepts.EntityComponentDB, data map[string]any) {
+func (s *Segment) Construct(db *ecs.ECS, data map[string]any) {
 	s.A = new(concepts.Vector2)
 	s.B = new(concepts.Vector2)
 	s.Normal = concepts.Vector2{}
@@ -171,7 +172,7 @@ func (s *Segment) Construct(db *concepts.EntityComponentDB, data map[string]any)
 		s.Surface.Construct(db, v.(map[string]any))
 	}
 	if v, ok := data["ContactScripts"]; ok {
-		s.ContactScripts = concepts.ConstructSlice[*Script](db, v)
+		s.ContactScripts = ecs.ConstructSlice[*Script](db, v)
 	}
 	s.Recalculate()
 }
@@ -185,7 +186,7 @@ func (s *Segment) Serialize(storePositions bool) map[string]any {
 	result["Surface"] = s.Surface.Serialize()
 
 	if len(s.ContactScripts) > 0 {
-		result["ContactScripts"] = concepts.SerializeSlice(s.ContactScripts)
+		result["ContactScripts"] = ecs.SerializeSlice(s.ContactScripts)
 	}
 
 	return result

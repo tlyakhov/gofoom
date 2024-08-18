@@ -6,6 +6,7 @@ package actions
 import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
@@ -17,7 +18,7 @@ type SplitSector struct {
 	state.IEditor
 
 	Splitters []*controllers.SectorSplitter
-	Original  map[concepts.Entity][]concepts.Attachable
+	Original  map[ecs.Entity][]ecs.Attachable
 }
 
 func (a *SplitSector) OnMouseDown(evt *desktop.MouseEvent) {}
@@ -37,7 +38,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	}
 	// Copy original sector's components to preserve them
 	o := sector.DB.AllComponents(sector.Entity)
-	a.Original[sector.Entity] = make([]concepts.Attachable, len(o))
+	a.Original[sector.Entity] = make([]ecs.Attachable, len(o))
 	copy(a.Original[sector.Entity], o)
 	// Detach the original from the DB
 	sector.DB.DetachAll(sector.Entity)
@@ -53,7 +54,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 }
 
 func (a *SplitSector) OnMouseUp() {
-	a.Original = make(map[concepts.Entity][]concepts.Attachable)
+	a.Original = make(map[ecs.Entity][]ecs.Attachable)
 	a.Splitters = []*controllers.SectorSplitter{}
 
 	var sectors []*core.Sector
@@ -68,7 +69,7 @@ func (a *SplitSector) OnMouseUp() {
 		}
 	} else {
 		sectors = make([]*core.Sector, 0)
-		visited := make(concepts.Set[concepts.Entity])
+		visited := make(concepts.Set[ecs.Entity])
 		for _, s := range a.State().SelectedObjects.Exact {
 			// We could just check for the .Sector field being valid, but then
 			// the user may be surprised to have a sector split when they've
@@ -96,7 +97,7 @@ func (a *SplitSector) Cancel() {
 }
 
 func (a *SplitSector) Undo() {
-	bodies := make([]concepts.Entity, 0)
+	bodies := make([]ecs.Entity, 0)
 
 	for _, splitter := range a.Splitters {
 		if splitter.Result == nil {
@@ -108,7 +109,7 @@ func (a *SplitSector) Undo() {
 				bodies = append(bodies, entity)
 				body.SectorEntity = 0
 			}
-			sector.Bodies = make(map[concepts.Entity]*core.Body)
+			sector.Bodies = make(map[ecs.Entity]*core.Body)
 			a.State().DB.DetachAll(sector.Entity)
 		}
 	}
@@ -132,7 +133,7 @@ func (a *SplitSector) Undo() {
 	}
 }
 func (a *SplitSector) Redo() {
-	bodies := make([]concepts.Entity, 0)
+	bodies := make([]ecs.Entity, 0)
 
 	for entity, originalComponents := range a.Original {
 		sector := originalComponents[core.SectorComponentIndex].(*core.Sector)
@@ -140,7 +141,7 @@ func (a *SplitSector) Redo() {
 			bodies = append(bodies, entity)
 			body.SectorEntity = 0
 		}
-		sector.Bodies = make(map[concepts.Entity]*core.Body)
+		sector.Bodies = make(map[ecs.Entity]*core.Body)
 		a.State().DB.DetachAll(entity)
 	}
 

@@ -6,22 +6,22 @@ package behaviors
 import (
 	"fmt"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Proximity struct {
-	concepts.Attached `editable:"^"`
-	Range             float64        `editable:"Range"`
-	Scripts           []*core.Script `editable:"Scripts"`
+	ecs.Attached `editable:"^"`
+	Range        float64        `editable:"Range"`
+	Scripts      []*core.Script `editable:"Scripts"`
 }
 
 var ProximityComponentIndex int
 
 func init() {
-	ProximityComponentIndex = concepts.DbTypes().Register(Proximity{}, ProximityFromDb)
+	ProximityComponentIndex = ecs.Types().Register(Proximity{}, ProximityFromDb)
 }
 
-func ProximityFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Proximity {
+func ProximityFromDb(db *ecs.ECS, e ecs.Entity) *Proximity {
 	if asserted, ok := db.Component(e, ProximityComponentIndex).(*Proximity); ok {
 		return asserted
 	}
@@ -46,7 +46,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Scripts"]; ok {
-		p.Scripts = concepts.ConstructSlice[*core.Script](p.DB, v)
+		p.Scripts = ecs.ConstructSlice[*core.Script](p.DB, v)
 	}
 
 }
@@ -56,7 +56,7 @@ func (p *Proximity) Serialize() map[string]any {
 	result["Range"] = p.Range
 
 	if len(p.Scripts) > 0 {
-		result["Scripts"] = concepts.SerializeSlice(p.Scripts)
+		result["Scripts"] = ecs.SerializeSlice(p.Scripts)
 	}
 
 	return result

@@ -10,10 +10,11 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 type BodyController struct {
-	concepts.BaseController
+	ecs.BaseController
 	Body   *core.Body
 	Sector *core.Sector
 	Player *behaviors.Player
@@ -25,20 +26,20 @@ type BodyController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&BodyController{}, 80)
+	ecs.Types().RegisterController(&BodyController{}, 80)
 }
 
 func (bc *BodyController) ComponentIndex() int {
 	return core.BodyComponentIndex
 }
 
-func (bc *BodyController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways |
-		concepts.ControllerRecalculate |
-		concepts.ControllerLoaded
+func (bc *BodyController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways |
+		ecs.ControllerRecalculate |
+		ecs.ControllerLoaded
 }
 
-func (bc *BodyController) Target(target concepts.Attachable) bool {
+func (bc *BodyController) Target(target ecs.Attachable) bool {
 	bc.Body = target.(*core.Body)
 	if !bc.Body.IsActive() {
 		return false

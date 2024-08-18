@@ -10,7 +10,7 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
 
@@ -33,7 +33,7 @@ func (a *SetProperty) FireHooks() {
 	// multiple times for the same selection.
 	for _, v := range a.Values {
 		switch target := v.Parent().(type) {
-		case concepts.Dynamic:
+		case ecs.Dynamic:
 			target.ResetToOriginal()
 		case *materials.Image:
 			if a.Source.Name == "Source" {

@@ -5,20 +5,19 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
-
-	"tlyakhov/gofoom/concepts"
 )
 
 type DeleteComponent struct {
 	state.IEditor
 
-	Components      map[concepts.Entity]concepts.Attachable
-	SectorForEntity map[concepts.Entity]*core.Sector
+	Components      map[ecs.Entity]ecs.Attachable
+	SectorForEntity map[ecs.Entity]*core.Sector
 }
 
 func (a *DeleteComponent) Act() {
-	a.SectorForEntity = make(map[concepts.Entity]*core.Sector)
+	a.SectorForEntity = make(map[ecs.Entity]*core.Sector)
 	a.Redo()
 	a.ActionFinished(false, true, false)
 }
@@ -34,7 +33,7 @@ func (a *DeleteComponent) Undo() {
 			}
 		}
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *DeleteComponent) Redo() {
 	a.State().Lock.Lock()
@@ -52,5 +51,5 @@ func (a *DeleteComponent) Redo() {
 		}
 		a.State().DB.DetachByType(component)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }

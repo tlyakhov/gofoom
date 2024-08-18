@@ -6,6 +6,7 @@ package behaviors
 import (
 	"reflect"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type DoorState int
@@ -28,10 +29,10 @@ const (
 )
 
 type VerticalDoor struct {
-	concepts.Attached `editable:"^"`
-	State             DoorState
-	Intent            DoorIntent `editable:"Intent"`
-	AutoClose         bool       `editable:"Auto-close"`
+	ecs.Attached `editable:"^"`
+	State        DoorState
+	Intent       DoorIntent `editable:"Intent"`
+	AutoClose    bool       `editable:"Auto-close"`
 
 	// Passthroughs to Animation
 	TweeningFunc concepts.TweeningFunc `editable:"Tweening Function"`
@@ -41,15 +42,15 @@ type VerticalDoor struct {
 var VerticalDoorComponentIndex int
 
 func init() {
-	VerticalDoorComponentIndex = concepts.DbTypes().Register(VerticalDoor{}, VerticalDoorFromDb)
+	VerticalDoorComponentIndex = ecs.Types().Register(VerticalDoor{}, VerticalDoorFromDb)
 	dis := DoorIntentStrings()
 	div := DoorIntentValues()
 	for i, s := range dis {
-		concepts.DbTypes().ExprEnv[s] = div[i]
+		ecs.Types().ExprEnv[s] = div[i]
 	}
 }
 
-func VerticalDoorFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *VerticalDoor {
+func VerticalDoorFromDb(db *ecs.ECS, e ecs.Entity) *VerticalDoor {
 	if asserted, ok := db.Component(e, VerticalDoorComponentIndex).(*VerticalDoor); ok {
 		return asserted
 	}

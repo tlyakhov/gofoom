@@ -5,8 +5,8 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -60,7 +60,7 @@ func (a *AddInternalSegment) OnMouseMove() {
 		a.B.From(worldGrid)
 	}
 	if a.ContainingSector != nil {
-		a.Bottom, a.Top = a.ContainingSector.PointZ(concepts.DynamicOriginal, worldGrid)
+		a.Bottom, a.Top = a.ContainingSector.PointZ(ecs.DynamicOriginal, worldGrid)
 	}
 	a.Recalculate()
 }

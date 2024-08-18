@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 import (
 	"github.com/rs/xid"
@@ -15,10 +15,10 @@ type Named struct {
 var NamedComponentIndex int
 
 func init() {
-	NamedComponentIndex = DbTypes().Register(Named{}, NamedFromDb)
+	NamedComponentIndex = Types().Register(Named{}, NamedFromDb)
 }
 
-func NamedFromDb(db *EntityComponentDB, e Entity) *Named {
+func NamedFromDb(db *ECS, e Entity) *Named {
 	if asserted, ok := db.Component(e, NamedComponentIndex).(*Named); ok {
 		return asserted
 	}

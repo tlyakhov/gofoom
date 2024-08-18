@@ -10,7 +10,7 @@
   },
   {
     "Entity": "2",
-    "concepts.Named": {
+    "ecs.Named": {
       "Active": true,
       "Entity": "2",
       "Name": "Default"
@@ -25,7 +25,7 @@
   },
   {
     "Entity": "3",
-    "concepts.Named": {
+    "ecs.Named": {
       "Active": true,
       "Entity": "3",
       "Name": "Blue"
@@ -40,7 +40,7 @@
   },
   {
     "Entity": "4",
-    "concepts.Named": {
+    "ecs.Named": {
       "Active": true,
       "Entity": "4",
       "Name": "cl5anh5mdsrmm6mqu5d0"

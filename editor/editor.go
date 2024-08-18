@@ -14,6 +14,7 @@ import (
 
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 
 	"fyne.io/fyne/v2"
@@ -59,7 +60,7 @@ type Editor struct {
 	Renderer       *render.Renderer
 	MapViewSurface *image.RGBA
 
-	entityIconCache *xsync.MapOf[concepts.Entity, entityIconCacheItem]
+	entityIconCache *xsync.MapOf[ecs.Entity, entityIconCacheItem]
 	noTextureImage  image.Image
 }
 
@@ -75,7 +76,7 @@ func (e *Editor) State() *state.Edit {
 func NewEditor() *Editor {
 	e := &Editor{
 		Edit: state.Edit{
-			DB: concepts.NewEntityComponentDB(),
+			DB: ecs.NewECS(),
 			MapView: state.MapView{
 				Scale: 1.0,
 				Step:  10,
@@ -90,7 +91,7 @@ func NewEditor() *Editor {
 			KeysDown:              make(concepts.Set[fyne.KeyName]),
 		},
 		MapViewGrid:     MapViewGrid{Visible: true},
-		entityIconCache: xsync.NewMapOf[concepts.Entity, entityIconCacheItem](),
+		entityIconCache: xsync.NewMapOf[ecs.Entity, entityIconCacheItem](),
 	}
 	e.Grid.IEditor = e
 	e.Grid.MaterialSampler.Ray = &rs.Ray{}
@@ -230,7 +231,7 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	e.DB.ActAllControllers(concepts.ControllerAlways)
+	e.DB.ActAllControllers(ecs.ControllerAlways)
 	e.GatherHoveringObjects()
 }
 
@@ -257,7 +258,7 @@ func (e *Editor) Load(filename string) {
 	e.OpenFile = filename
 	e.Modified = false
 	e.UpdateTitle()
-	db := concepts.NewEntityComponentDB()
+	db := ecs.NewECS()
 	err := db.Load(e.OpenFile)
 	if err != nil {
 		e.Alert(fmt.Sprintf("Error loading world: %v", err))
@@ -385,7 +386,7 @@ func (e *Editor) NewShader() {
 		stage.Construct(nil)
 		stage.Texture = eImg
 		shader.Stages = append(shader.Stages, stage)
-		named := editor.DB.NewAttachedComponent(eShader, concepts.NamedComponentIndex).(*concepts.Named)
+		named := editor.DB.NewAttachedComponent(eShader, ecs.NamedComponentIndex).(*ecs.Named)
 		named.Name = "Shader " + path.Base(img.Source)
 		a = &actions.AddEntity{IEditor: e, Entity: eShader, Components: e.DB.AllComponents(eShader)}
 		e.NewAction(a)
