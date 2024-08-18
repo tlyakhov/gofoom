@@ -79,9 +79,9 @@ func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 }
 
 func (s *Sector) OnDetach() {
-	if s.DB != nil {
-		s.TopZ.Detach(s.DB.Simulation)
-		s.BottomZ.Detach(s.DB.Simulation)
+	if s.ECS != nil {
+		s.TopZ.Detach(s.ECS.Simulation)
+		s.BottomZ.Detach(s.ECS.Simulation)
 	}
 	for _, b := range s.Bodies {
 		b.SectorEntity = 0
@@ -91,18 +91,18 @@ func (s *Sector) OnDetach() {
 	s.Attached.OnDetach()
 }
 
-func (s *Sector) SetDB(db *ecs.ECS) {
-	if s.DB != db {
+func (s *Sector) SetECS(db *ecs.ECS) {
+	if s.ECS != db {
 		s.OnDetach()
 	}
-	s.Attached.SetDB(db)
+	s.Attached.SetECS(db)
 	s.TopZ.Attach(db.Simulation)
 	s.BottomZ.Attach(db.Simulation)
 }
 
 func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 	segment := new(SectorSegment)
-	segment.Construct(s.DB, nil)
+	segment.Construct(s.ECS, nil)
 	segment.Sector = s
 	segment.P = concepts.Vector2{x, y}
 	s.Segments = append(s.Segments, segment)
@@ -129,8 +129,8 @@ func (s *Sector) Construct(data map[string]any) {
 	s.BottomZ.Construct(nil)
 	s.TopZ.Construct(defaultSectorTopZ)
 	s.FloorFriction = 0.85
-	s.FloorSurface.Construct(s.DB, nil)
-	s.CeilSurface.Construct(s.DB, nil)
+	s.FloorSurface.Construct(s.ECS, nil)
+	s.CeilSurface.Construct(s.ECS, nil)
 
 	if data == nil {
 		return
@@ -157,10 +157,10 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["FloorSurface"]; ok {
-		s.FloorSurface.Construct(s.DB, v.(map[string]any))
+		s.FloorSurface.Construct(s.ECS, v.(map[string]any))
 	}
 	if v, ok := data["CeilSurface"]; ok {
-		s.CeilSurface.Construct(s.DB, v.(map[string]any))
+		s.CeilSurface.Construct(s.ECS, v.(map[string]any))
 	}
 	if v, ok := data["Segments"]; ok {
 		jsonSegments := v.([]any)
@@ -168,7 +168,7 @@ func (s *Sector) Construct(data map[string]any) {
 		for i, jsonSegment := range jsonSegments {
 			segment := new(SectorSegment)
 			segment.Sector = s
-			segment.Construct(s.DB, jsonSegment.(map[string]any))
+			segment.Construct(s.ECS, jsonSegment.(map[string]any))
 			s.Segments[i] = segment
 		}
 	}
@@ -185,16 +185,16 @@ func (s *Sector) Construct(data map[string]any) {
 		s.FloorFriction = v.(float64)
 	}
 	if v, ok := data["FloorScripts"]; ok {
-		s.FloorScripts = ecs.ConstructSlice[*Script](s.DB, v)
+		s.FloorScripts = ecs.ConstructSlice[*Script](s.ECS, v)
 	}
 	if v, ok := data["CeilScripts"]; ok {
-		s.CeilScripts = ecs.ConstructSlice[*Script](s.DB, v)
+		s.CeilScripts = ecs.ConstructSlice[*Script](s.ECS, v)
 	}
 	if v, ok := data["EnterScripts"]; ok {
-		s.EnterScripts = ecs.ConstructSlice[*Script](s.DB, v)
+		s.EnterScripts = ecs.ConstructSlice[*Script](s.ECS, v)
 	}
 	if v, ok := data["ExitScripts"]; ok {
-		s.ExitScripts = ecs.ConstructSlice[*Script](s.DB, v)
+		s.ExitScripts = ecs.ConstructSlice[*Script](s.ECS, v)
 	}
 
 	s.Recalculate()

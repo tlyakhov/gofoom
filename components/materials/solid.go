@@ -27,17 +27,17 @@ func SolidFromDb(db *ecs.ECS, e ecs.Entity) *Solid {
 }
 
 func (s *Solid) OnDetach() {
-	if s.DB != nil {
-		s.Diffuse.Detach(s.DB.Simulation)
+	if s.ECS != nil {
+		s.Diffuse.Detach(s.ECS.Simulation)
 	}
 	s.Attached.OnDetach()
 }
-func (s *Solid) SetDB(db *ecs.ECS) {
-	if s.DB != db {
+func (s *Solid) SetECS(db *ecs.ECS) {
+	if s.ECS != db {
 		s.OnDetach()
 	}
-	s.Attached.SetDB(db)
-	s.Diffuse.Attach(s.DB.Simulation)
+	s.Attached.SetECS(db)
+	s.Diffuse.Attach(s.ECS.Simulation)
 }
 
 func (s *Solid) Construct(data map[string]any) {

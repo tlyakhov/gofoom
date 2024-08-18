@@ -18,8 +18,8 @@ type Serializable interface {
 	IsSystem() bool
 	Serialize() map[string]any
 	// TODO: Rename to Attach
-	SetDB(db *ECS)
-	GetDB() *ECS
+	SetECS(db *ECS)
+	GetECS() *ECS
 }
 
 // Dynamic is an interface for any value that is affected by time in the engine:

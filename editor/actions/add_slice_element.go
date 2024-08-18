@@ -53,7 +53,7 @@ func (a *AddSliceElement) Redo() {
 		*target = new(behaviors.InventorySlot)
 	}
 	if serializable, ok := newValue.Elem().Interface().(ecs.Serializable); ok {
-		serializable.SetDB(a.State().DB)
+		serializable.SetECS(a.State().DB)
 		serializable.Construct(nil)
 	}
 	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)

@@ -30,13 +30,13 @@ func (vd *VerticalDoorController) Methods() ecs.ControllerMethod {
 
 func (vd *VerticalDoorController) Target(target ecs.Attachable) bool {
 	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
-	vd.Sector = core.SectorFromDb(vd.VerticalDoor.DB, vd.VerticalDoor.Entity)
+	vd.Sector = core.SectorFromDb(vd.VerticalDoor.ECS, vd.VerticalDoor.Entity)
 	return vd.VerticalDoor.IsActive() && vd.Sector != nil && vd.Sector.IsActive()
 }
 
 func (vd *VerticalDoorController) setupAnimation() {
 	a := vd.Sector.TopZ.NewAnimation()
-	a.SetDB(vd.DB)
+	a.SetECS(vd.ECS)
 	a.Construct(nil)
 	a.Start = vd.Sector.TopZ.Original
 	a.End = vd.Sector.BottomZ.Original
@@ -76,7 +76,7 @@ func (vd *VerticalDoorController) adjustTransforms() {
 		t[concepts.MatBasis2Y] = 1.0 - v
 		t[concepts.MatTransY] = v
 		if !seg.Surface.Transform.Attached {
-			seg.Surface.Transform.Attach(vd.DB.Simulation)
+			seg.Surface.Transform.Attach(vd.ECS.Simulation)
 		}
 		seg.Surface.Transform.Now.From(&seg.Surface.Transform.Original)
 		seg.Surface.Transform.Now.MulSelf(&t)
@@ -84,7 +84,7 @@ func (vd *VerticalDoorController) adjustTransforms() {
 		t[concepts.MatBasis2Y] = v
 		t[concepts.MatTransY] = 1.0 - v
 		if !seg.HiSurface.Transform.Attached {
-			seg.HiSurface.Transform.Attach(vd.DB.Simulation)
+			seg.HiSurface.Transform.Attach(vd.ECS.Simulation)
 		}
 		seg.HiSurface.Transform.Now.From(&seg.HiSurface.Transform.Original)
 		seg.HiSurface.Transform.Now.MulSelf(&t)

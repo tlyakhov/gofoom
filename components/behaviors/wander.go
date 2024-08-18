@@ -40,7 +40,7 @@ func (w *Wander) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 
 	w.Force = 10
-	w.LastTurn = w.DB.Timestamp
+	w.LastTurn = w.ECS.Timestamp
 
 	if data == nil {
 		return

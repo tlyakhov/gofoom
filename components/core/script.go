@@ -82,11 +82,11 @@ func (s *Script) Compile() {
 	s.runFunc = f.Interface()
 }
 
-func (s *Script) SetDB(db *ecs.ECS) {
+func (s *Script) SetECS(db *ecs.ECS) {
 	s.DB = db
 }
 
-func (s *Script) GetDB() *ecs.ECS {
+func (s *Script) GetECS() *ecs.ECS {
 	return s.DB
 }
 

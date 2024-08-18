@@ -265,7 +265,7 @@ func (a *SectorSplitter) collect() {
 
 		// Clone all the original components using serialization.
 		newSectorCount++
-		db := a.Sector.DB
+		db := a.Sector.ECS
 		newEntity := db.NewEntity()
 		clonedComponents := make([]ecs.Attachable, len(db.AllComponents(a.Sector.Entity)))
 		a.Result = append(a.Result, clonedComponents)
@@ -294,7 +294,7 @@ func (a *SectorSplitter) collect() {
 					visitor.Visited = true
 					addedSegment := &core.SectorSegment{}
 					addedSegment.Sector = target
-					addedSegment.Construct(target.DB, visitor.Source.Serialize())
+					addedSegment.Construct(target.ECS, visitor.Source.Serialize())
 					addedSegment.P = visitor.Start
 					target.Segments = append(target.Segments, addedSegment)
 					if visitor.Source.AdjacentSegment != nil {
@@ -319,7 +319,7 @@ func (a *SectorSplitter) collect() {
 		}
 	}
 
-	for _, ibody := range a.Sector.DB.AllOfType(core.BodyComponentIndex) {
+	for _, ibody := range a.Sector.ECS.AllOfType(core.BodyComponentIndex) {
 		body := ibody.(*core.Body)
 		if body.SectorEntity != a.Sector.Entity {
 			continue

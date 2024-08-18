@@ -31,7 +31,7 @@ func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
 
 func (uc *UnderwaterController) Target(target ecs.Attachable) bool {
 	uc.Underwater = target.(*behaviors.Underwater)
-	uc.Sector = core.SectorFromDb(target.GetDB(), target.GetEntity())
+	uc.Sector = core.SectorFromDb(target.GetECS(), target.GetEntity())
 	return uc.Underwater.IsActive() && uc.Sector.IsActive()
 }
 

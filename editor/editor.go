@@ -191,7 +191,7 @@ func (e *Editor) Integrate() {
 	if player == nil {
 		return
 	}
-	playerBody := core.BodyFromDb(player.DB, player.Entity)
+	playerBody := core.BodyFromDb(player.ECS, player.Entity)
 
 	if e.GameWidget.KeyMap.Contains("W") {
 		controllers.MovePlayer(playerBody, playerBody.Angle.Now, e.DB.EditorPaused)
@@ -214,7 +214,7 @@ func (e *Editor) Integrate() {
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap.Contains("Space") {
-		if behaviors.UnderwaterFromDb(player.DB, playerBody.SectorEntity) != nil {
+		if behaviors.UnderwaterFromDb(player.ECS, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
 			playerBody.Force[2] += constants.PlayerJumpForce
@@ -222,7 +222,7 @@ func (e *Editor) Integrate() {
 		}
 	}
 	if e.GameWidget.KeyMap.Contains("C") {
-		if behaviors.UnderwaterFromDb(player.DB, playerBody.SectorEntity) != nil {
+		if behaviors.UnderwaterFromDb(player.ECS, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
@@ -382,7 +382,7 @@ func (e *Editor) NewShader() {
 		eShader := archetypes.CreateBasic(e.DB, materials.ShaderComponentIndex)
 		shader := materials.ShaderFromDb(e.DB, eShader)
 		stage := &materials.ShaderStage{}
-		stage.SetDB(e.DB)
+		stage.SetECS(e.DB)
 		stage.Construct(nil)
 		stage.Texture = eImg
 		shader.Stages = append(shader.Stages, stage)

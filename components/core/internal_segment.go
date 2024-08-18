@@ -36,7 +36,7 @@ func (s *InternalSegment) String() string {
 }
 
 func (s *InternalSegment) DetachFromSectors() {
-	for _, attachable := range s.DB.AllOfType(SectorComponentIndex) {
+	for _, attachable := range s.ECS.AllOfType(SectorComponentIndex) {
 		if attachable == nil {
 			continue
 		}
@@ -54,7 +54,7 @@ func (s *InternalSegment) AttachToSectors() {
 	if min[1] > max[1] {
 		min[1], max[1] = max[1], min[1]
 	}
-	for _, attachable := range s.DB.AllOfType(SectorComponentIndex) {
+	for _, attachable := range s.ECS.AllOfType(SectorComponentIndex) {
 		if attachable == nil {
 			continue
 		}
@@ -78,7 +78,7 @@ func (s *InternalSegment) AttachToSectors() {
 
 func (s *InternalSegment) Construct(data map[string]any) {
 	s.Attached.Construct(data)
-	s.Segment.Construct(s.DB, data)
+	s.Segment.Construct(s.ECS, data)
 	s.Bottom = 0
 	s.Top = 64
 	s.TwoSided = false

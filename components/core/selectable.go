@@ -79,15 +79,15 @@ func (s *Selectable) GroupHash() uint64 {
 }
 
 func SelectableFromSector(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, DB: s.DB}
+	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, DB: s.ECS}
 }
 
 func SelectableFromFloor(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, DB: s.DB}
+	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, DB: s.ECS}
 }
 
 func SelectableFromCeil(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, DB: s.DB}
+	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, DB: s.ECS}
 }
 
 func SelectableFromSegment(s *SectorSegment) *Selectable {
@@ -114,7 +114,7 @@ func SelectableFromBody(b *Body) *Selectable {
 		Sector: b.Sector(),
 		Body:   b,
 		Entity: b.Entity,
-		DB:     b.DB}
+		DB:     b.ECS}
 }
 
 func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
@@ -122,21 +122,21 @@ func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
 		Type:            SelectableInternalSegment,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		DB:              s.DB}
+		DB:              s.ECS}
 }
 
 func SelectableFromInternalSegmentA(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentA,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		DB:              s.DB}
+		DB:              s.ECS}
 }
 
 func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentB,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		DB:              s.DB}
+		DB:              s.ECS}
 }
 
 func SelectableFromEntity(db *ecs.ECS, e ecs.Entity) *Selectable {

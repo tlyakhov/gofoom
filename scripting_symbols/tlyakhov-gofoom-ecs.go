@@ -75,11 +75,11 @@ type _tlyakhov_gofoom_ecs_Animated struct {
 	IValue     interface{}
 	WAnimate   func()
 	WConstruct func(data map[string]any)
-	WGetDB     func() *ecs.ECS
+	WGetECS     func() *ecs.ECS
 	WIsSystem  func() bool
 	WReset     func()
 	WSerialize func() map[string]any
-	WSetDB     func(db *ecs.ECS)
+	WSetECS     func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Animated) Animate() {
@@ -88,8 +88,8 @@ func (W _tlyakhov_gofoom_ecs_Animated) Animate() {
 func (W _tlyakhov_gofoom_ecs_Animated) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
-func (W _tlyakhov_gofoom_ecs_Animated) GetDB() *ecs.ECS {
-	return W.WGetDB()
+func (W _tlyakhov_gofoom_ecs_Animated) GetECS() *ecs.ECS {
+	return W.WGetECS()
 }
 func (W _tlyakhov_gofoom_ecs_Animated) IsSystem() bool {
 	return W.WIsSystem()
@@ -100,21 +100,21 @@ func (W _tlyakhov_gofoom_ecs_Animated) Reset() {
 func (W _tlyakhov_gofoom_ecs_Animated) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Animated) SetDB(db *ecs.ECS) {
-	W.WSetDB(db)
+func (W _tlyakhov_gofoom_ecs_Animated) SetECS(db *ecs.ECS) {
+	W.WSetECS(db)
 }
 
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_ecs_Attachable struct {
 	IValue        interface{}
 	WConstruct    func(data map[string]any)
-	WGetDB        func() *ecs.ECS
+	WGetECS        func() *ecs.ECS
 	WGetEntity    func() ecs.Entity
 	WIndexInDB    func() int
 	WIsSystem     func() bool
 	WOnDetach     func()
 	WSerialize    func() map[string]any
-	WSetDB        func(db *ecs.ECS)
+	WSetECS        func(db *ecs.ECS)
 	WSetEntity    func(entity ecs.Entity)
 	WSetIndexInDB func(a0 int)
 	WString       func() string
@@ -123,8 +123,8 @@ type _tlyakhov_gofoom_ecs_Attachable struct {
 func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) GetDB() *ecs.ECS {
-	return W.WGetDB()
+func (W _tlyakhov_gofoom_ecs_Attachable) GetECS() *ecs.ECS {
+	return W.WGetECS()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) GetEntity() ecs.Entity {
 	return W.WGetEntity()
@@ -141,8 +141,8 @@ func (W _tlyakhov_gofoom_ecs_Attachable) OnDetach() {
 func (W _tlyakhov_gofoom_ecs_Attachable) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) SetDB(db *ecs.ECS) {
-	W.WSetDB(db)
+func (W _tlyakhov_gofoom_ecs_Attachable) SetECS(db *ecs.ECS) {
+	W.WSetECS(db)
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) SetEntity(entity ecs.Entity) {
 	W.WSetEntity(entity)
@@ -194,13 +194,13 @@ type _tlyakhov_gofoom_ecs_Dynamic struct {
 	WConstruct       func(data map[string]any)
 	WDetach          func(sim *ecs.Simulation)
 	WGetAnimation    func() ecs.Animated
-	WGetDB           func() *ecs.ECS
+	WGetECS           func() *ecs.ECS
 	WIsSystem        func() bool
 	WNewFrame        func()
 	WRenderBlend     func(a0 float64)
 	WResetToOriginal func()
 	WSerialize       func() map[string]any
-	WSetDB           func(db *ecs.ECS)
+	WSetECS           func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Dynamic) Attach(sim *ecs.Simulation) {
@@ -215,8 +215,8 @@ func (W _tlyakhov_gofoom_ecs_Dynamic) Detach(sim *ecs.Simulation) {
 func (W _tlyakhov_gofoom_ecs_Dynamic) GetAnimation() ecs.Animated {
 	return W.WGetAnimation()
 }
-func (W _tlyakhov_gofoom_ecs_Dynamic) GetDB() *ecs.ECS {
-	return W.WGetDB()
+func (W _tlyakhov_gofoom_ecs_Dynamic) GetECS() *ecs.ECS {
+	return W.WGetECS()
 }
 func (W _tlyakhov_gofoom_ecs_Dynamic) IsSystem() bool {
 	return W.WIsSystem()
@@ -233,25 +233,25 @@ func (W _tlyakhov_gofoom_ecs_Dynamic) ResetToOriginal() {
 func (W _tlyakhov_gofoom_ecs_Dynamic) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Dynamic) SetDB(db *ecs.ECS) {
-	W.WSetDB(db)
+func (W _tlyakhov_gofoom_ecs_Dynamic) SetECS(db *ecs.ECS) {
+	W.WSetECS(db)
 }
 
 // _tlyakhov_gofoom_ecs_Serializable is an interface wrapper for Serializable type
 type _tlyakhov_gofoom_ecs_Serializable struct {
 	IValue     interface{}
 	WConstruct func(data map[string]any)
-	WGetDB     func() *ecs.ECS
+	WGetECS     func() *ecs.ECS
 	WIsSystem  func() bool
 	WSerialize func() map[string]any
-	WSetDB     func(db *ecs.ECS)
+	WSetECS     func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
-func (W _tlyakhov_gofoom_ecs_Serializable) GetDB() *ecs.ECS {
-	return W.WGetDB()
+func (W _tlyakhov_gofoom_ecs_Serializable) GetECS() *ecs.ECS {
+	return W.WGetECS()
 }
 func (W _tlyakhov_gofoom_ecs_Serializable) IsSystem() bool {
 	return W.WIsSystem()
@@ -259,6 +259,6 @@ func (W _tlyakhov_gofoom_ecs_Serializable) IsSystem() bool {
 func (W _tlyakhov_gofoom_ecs_Serializable) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Serializable) SetDB(db *ecs.ECS) {
-	W.WSetDB(db)
+func (W _tlyakhov_gofoom_ecs_Serializable) SetECS(db *ecs.ECS) {
+	W.WSetECS(db)
 }

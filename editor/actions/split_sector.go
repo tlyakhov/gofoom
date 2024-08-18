@@ -37,18 +37,18 @@ func (a *SplitSector) Split(sector *core.Sector) {
 		return
 	}
 	// Copy original sector's components to preserve them
-	o := sector.DB.AllComponents(sector.Entity)
+	o := sector.ECS.AllComponents(sector.Entity)
 	a.Original[sector.Entity] = make([]ecs.Attachable, len(o))
 	copy(a.Original[sector.Entity], o)
 	// Detach the original from the DB
-	sector.DB.DetachAll(sector.Entity)
+	sector.ECS.DetachAll(sector.Entity)
 	// Attach the cloned entities/components
 	for _, added := range s.Result {
 		for index, component := range added {
 			if component == nil {
 				continue
 			}
-			component.GetDB().Attach(index, component.GetEntity(), component)
+			component.GetECS().Attach(index, component.GetEntity(), component)
 		}
 	}
 }

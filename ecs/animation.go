@@ -252,9 +252,9 @@ func (a *Animation[T]) Serialize() map[string]any {
 	return result
 }
 
-func (a *Animation[T]) SetDB(db *ECS) {
+func (a *Animation[T]) SetECS(db *ECS) {
 }
-func (a *Animation[T]) GetDB() *ECS {
+func (a *Animation[T]) GetECS() *ECS {
 	return nil
 }
 

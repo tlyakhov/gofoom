@@ -104,7 +104,7 @@ func (db *ECS) attach(entity Entity, component Attachable, index int) {
 		return
 	}
 	component.SetEntity(entity)
-	component.SetDB(db)
+	component.SetECS(db)
 
 	for len(db.EntityComponents) <= int(entity) {
 		db.EntityComponents = append(db.EntityComponents, nil)
@@ -168,7 +168,7 @@ func (db *ECS) LoadComponentWithoutAttaching(index int, data map[string]any) Att
 	newc := reflect.New(t).Interface()
 	component := newc.(Attachable)
 	component.SetEntity(0)
-	component.SetDB(db)
+	component.SetECS(db)
 	component.Construct(data)
 	return component
 }

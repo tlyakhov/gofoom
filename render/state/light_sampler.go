@@ -200,7 +200,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			le.U = le.NU
 			le.V = le.NV
 			le.SampleMaterial(seg.Surface.ExtraStages)
-			if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
+			if lit := materials.LitFromDb(seg.ECS, seg.Surface.Material); lit != nil {
 				lit.Apply(&le.MaterialSampler.Output, nil)
 			}
 			if le.MaterialSampler.Output[3] >= 0.99 {
@@ -359,7 +359,7 @@ func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	})*/
 
 	for entity, body := range le.Sector.PVL {
-		light := core.LightFromDb(body.DB, entity)
+		light := core.LightFromDb(body.ECS, entity)
 		if !light.IsActive() {
 			continue
 		}
