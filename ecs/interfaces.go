@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 type Attachable interface {
 	Serializable
@@ -18,8 +18,8 @@ type Serializable interface {
 	IsSystem() bool
 	Serialize() map[string]any
 	// TODO: Rename to Attach
-	SetDB(db *EntityComponentDB)
-	GetDB() *EntityComponentDB
+	SetDB(db *ECS)
+	GetDB() *ECS
 }
 
 // Dynamic is an interface for any value that is affected by time in the engine:

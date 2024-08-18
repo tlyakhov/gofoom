@@ -8,6 +8,7 @@ import (
 	"log"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -18,7 +19,7 @@ import (
 type Paste struct {
 	Transform
 
-	CopiedToPasted map[concepts.Entity]concepts.Entity
+	CopiedToPasted map[ecs.Entity]ecs.Entity
 	ClipboardData  string
 	Center         concepts.Vector3
 }
@@ -45,20 +46,20 @@ func (a *Paste) Act() {
 	// pasting.
 
 	// Copied -> Pasted
-	a.CopiedToPasted = make(map[concepts.Entity]concepts.Entity)
+	a.CopiedToPasted = make(map[ecs.Entity]ecs.Entity)
 	a.Selected = core.NewSelection()
 	db := a.State().DB
 	for copiedEntityString, jsonData := range jsonEntities {
-		copiedEntity, _ := concepts.ParseEntity(copiedEntityString)
+		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
 		jsonEntity := jsonData.(map[string]any)
 		if jsonEntity == nil {
 			log.Printf("ECS JSON object element should be an object\n")
 			continue
 		}
 
-		var pastedEntity concepts.Entity
+		var pastedEntity ecs.Entity
 		var ok bool
-		for name, index := range concepts.DbTypes().Indexes {
+		for name, index := range ecs.Types().Indexes {
 			jsonData := jsonEntity[name]
 			if jsonData == nil {
 				continue

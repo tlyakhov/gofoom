@@ -7,19 +7,20 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/concepts"
 )
 
 type Body struct {
-	concepts.Attached `editable:"^"`
-	Pos               concepts.DynamicValue[concepts.Vector3] `editable:"Position"`
-	Vel               concepts.DynamicValue[concepts.Vector3]
-	Force             concepts.Vector3
-	Size              concepts.DynamicValue[concepts.Vector2] `editable:"Size"`
-	SectorEntity      concepts.Entity
-	Angle             concepts.DynamicValue[float64] `editable:"Angle"`
-	Mass              float64                        `editable:"Mass"`
+	ecs.Attached `editable:"^"`
+	Pos          ecs.DynamicValue[concepts.Vector3] `editable:"Position"`
+	Vel          ecs.DynamicValue[concepts.Vector3]
+	Force        concepts.Vector3
+	Size         ecs.DynamicValue[concepts.Vector2] `editable:"Size"`
+	SectorEntity ecs.Entity
+	Angle        ecs.DynamicValue[float64] `editable:"Angle"`
+	Mass         float64                   `editable:"Mass"`
 
 	// "Bounciness" (0 = inelastic, 1 = perfectly elastic)
 	Elasticity  float64           `editable:"Elasticity"`
@@ -38,10 +39,10 @@ type Body struct {
 var BodyComponentIndex int
 
 func init() {
-	BodyComponentIndex = concepts.DbTypes().Register(Body{}, BodyFromDb)
+	BodyComponentIndex = ecs.Types().Register(Body{}, BodyFromDb)
 }
 
-func BodyFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Body {
+func BodyFromDb(db *ecs.ECS, e ecs.Entity) *Body {
 	if asserted, ok := db.Component(e, BodyComponentIndex).(*Body); ok {
 		return asserted
 	}
@@ -65,7 +66,7 @@ func (b *Body) OnDetach() {
 	b.Attached.OnDetach()
 }
 
-func (b *Body) SetDB(db *concepts.EntityComponentDB) {
+func (b *Body) SetDB(db *ecs.ECS) {
 	if b.DB != db {
 		b.OnDetach()
 	}
@@ -91,7 +92,7 @@ func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
-func (b *Body) BillboardSegment(unitView *concepts.Vector3, ds concepts.DynamicStage) *Segment {
+func (b *Body) BillboardSegment(unitView *concepts.Vector3, ds ecs.DynamicStage) *Segment {
 	p := b.Pos.Value(ds)
 	s := b.Size.Value(ds)
 	return &Segment{

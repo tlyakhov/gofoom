@@ -6,13 +6,14 @@ package scripting_symbols
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/archetypes
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/concepts
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/constants
+//go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/ecs
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/behaviors
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/core
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/materials
 
 import (
 	"reflect"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 // Symbols variable stores the map of script symbols per package.
@@ -31,5 +32,5 @@ func init() {
 		"MapTypes": reflect.ValueOf(MapTypes),
 	}
 	// We have to set this here to avoid a circular reference.
-	concepts.DbTypes().InterpSymbols = Symbols
+	ecs.Types().InterpSymbols = Symbols
 }

@@ -6,27 +6,28 @@ package behaviors
 import (
 	"fmt"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Damage struct {
 	Amount float64
 	// This is in frames currently, should be in seconds or ms
-	Cooldown concepts.DynamicValue[float64]
+	Cooldown ecs.DynamicValue[float64]
 }
 
 type Alive struct {
-	concepts.Attached `editable:"^"`
-	Health            float64 `editable:"Health"`
-	Damages           map[string]*Damage
+	ecs.Attached `editable:"^"`
+	Health       float64 `editable:"Health"`
+	Damages      map[string]*Damage
 }
 
 var AliveComponentIndex int
 
 func init() {
-	AliveComponentIndex = concepts.DbTypes().Register(Alive{}, AliveFromDb)
+	AliveComponentIndex = ecs.Types().Register(Alive{}, AliveFromDb)
 }
 
-func AliveFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Alive {
+func AliveFromDb(db *ecs.ECS, e ecs.Entity) *Alive {
 	if asserted, ok := db.Component(e, AliveComponentIndex).(*Alive); ok {
 		return asserted
 	}

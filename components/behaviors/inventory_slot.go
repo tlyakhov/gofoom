@@ -7,14 +7,15 @@ import (
 	"strconv"
 	"strings"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type InventorySlot struct {
-	DB           *concepts.EntityComponentDB
+	DB           *ecs.ECS
 	ValidClasses concepts.Set[string]
-	Limit        int             `editable:"Limit"`
-	Count        int             `editable:"Count"`
-	Image        concepts.Entity `editable:"Image" edit_type:"Material"`
+	Limit        int        `editable:"Limit"`
+	Count        int        `editable:"Count"`
+	Image        ecs.Entity `editable:"Image" edit_type:"Material"`
 }
 
 func (s *InventorySlot) Construct(data map[string]any) {
@@ -34,7 +35,7 @@ func (s *InventorySlot) Construct(data map[string]any) {
 		s.Count, _ = strconv.Atoi(v.(string))
 	}
 	if v, ok := data["Image"]; ok {
-		s.Image, _ = concepts.ParseEntity(v.(string))
+		s.Image, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["ValidClasses"]; ok {
 		classes := strings.Split(v.(string), ",")
@@ -64,9 +65,9 @@ func (s *InventorySlot) Serialize() map[string]any {
 	return data
 }
 
-func (s *InventorySlot) SetDB(db *concepts.EntityComponentDB) {
+func (s *InventorySlot) SetDB(db *ecs.ECS) {
 	s.DB = db
 }
-func (s *InventorySlot) GetDB() *concepts.EntityComponentDB {
+func (s *InventorySlot) GetDB() *ecs.ECS {
 	return s.DB
 }

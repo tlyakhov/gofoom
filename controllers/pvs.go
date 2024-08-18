@@ -6,27 +6,28 @@ package controllers
 import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type PvsController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*core.Sector
 }
 
 func init() {
 	// Should run after the SectorController, which recalculates normals etc
-	concepts.DbTypes().RegisterController(&PvsController{}, 60)
+	ecs.Types().RegisterController(&PvsController{}, 60)
 }
 
 func (pvs *PvsController) ComponentIndex() int {
 	return core.SectorComponentIndex
 }
 
-func (pvs *PvsController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerRecalculate | concepts.ControllerLoaded
+func (pvs *PvsController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerRecalculate | ecs.ControllerLoaded
 }
 
-func (pvs *PvsController) Target(target concepts.Attachable) bool {
+func (pvs *PvsController) Target(target ecs.Attachable) bool {
 	pvs.Sector = target.(*core.Sector)
 	return pvs.Sector.IsActive()
 }
@@ -46,8 +47,8 @@ func (pvs *PvsController) Loaded() {
 // TODO: There's a bug with dynamic lights: how/when do we update the PVL?
 func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
 	if visitor == nil {
-		pvs.Sector.PVS = make(map[concepts.Entity]*core.Sector)
-		pvs.Sector.PVL = make(map[concepts.Entity]*core.Body)
+		pvs.Sector.PVS = make(map[ecs.Entity]*core.Sector)
+		pvs.Sector.PVL = make(map[ecs.Entity]*core.Body)
 		pvs.Sector.PVS[pvs.Entity] = pvs.Sector
 		visitor = pvs.Sector
 	}

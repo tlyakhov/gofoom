@@ -7,10 +7,11 @@ import (
 	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Player struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	Spawn         bool
 	FrameTint     concepts.Vector4
@@ -26,10 +27,10 @@ type Player struct {
 var PlayerComponentIndex int
 
 func init() {
-	PlayerComponentIndex = concepts.DbTypes().Register(Player{}, PlayerFromDb)
+	PlayerComponentIndex = ecs.Types().Register(Player{}, PlayerFromDb)
 }
 
-func PlayerFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Player {
+func PlayerFromDb(db *ecs.ECS, e ecs.Entity) *Player {
 	if asserted, ok := db.Component(e, PlayerComponentIndex).(*Player); ok {
 		return asserted
 	}
@@ -60,7 +61,7 @@ func (p *Player) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Inventory"]; ok {
-		concepts.ConstructSlice[*InventoryItem](p.DB, v)
+		ecs.ConstructSlice[*InventoryItem](p.DB, v)
 	}
 
 	if v, ok := data["CurrentWeapon"]; ok {
@@ -77,7 +78,7 @@ func (p *Player) Serialize() map[string]any {
 	result["Spawn"] = p.Spawn
 
 	if len(p.Inventory) > 0 {
-		result["Inventory"] = concepts.SerializeSlice(p.Inventory)
+		result["Inventory"] = ecs.SerializeSlice(p.Inventory)
 	}
 	if p.CurrentWeapon != nil {
 		for i, slot := range p.Inventory {

@@ -4,11 +4,11 @@
 package behaviors
 
 import (
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Wander struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	Force     float64 `editable:"Force"`
 	AsImpulse bool    `editable:"Apply as impulse"`
@@ -16,16 +16,16 @@ type Wander struct {
 	// Internal state
 	LastTurn   int64
 	LastTarget int64
-	NextSector concepts.Entity
+	NextSector ecs.Entity
 }
 
 var WanderComponentIndex int
 
 func init() {
-	WanderComponentIndex = concepts.DbTypes().Register(Wander{}, WanderFromDb)
+	WanderComponentIndex = ecs.Types().Register(Wander{}, WanderFromDb)
 }
 
-func WanderFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Wander {
+func WanderFromDb(db *ecs.ECS, e ecs.Entity) *Wander {
 	if asserted, ok := db.Component(e, WanderComponentIndex).(*Wander); ok {
 		return asserted
 	}

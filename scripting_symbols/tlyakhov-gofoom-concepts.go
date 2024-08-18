@@ -13,322 +13,73 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/concepts/concepts"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"AnimationCoordinatesAbsolute": reflect.ValueOf(concepts.AnimationCoordinatesAbsolute),
-		"AnimationCoordinatesRelative": reflect.ValueOf(concepts.AnimationCoordinatesRelative),
-		"AnimationCoordinatesString":   reflect.ValueOf(concepts.AnimationCoordinatesString),
-		"AnimationCoordinatesStrings":  reflect.ValueOf(concepts.AnimationCoordinatesStrings),
-		"AnimationCoordinatesValues":   reflect.ValueOf(concepts.AnimationCoordinatesValues),
-		"AnimationLifetimeBounce":      reflect.ValueOf(concepts.AnimationLifetimeBounce),
-		"AnimationLifetimeBounceOnce":  reflect.ValueOf(concepts.AnimationLifetimeBounceOnce),
-		"AnimationLifetimeLoop":        reflect.ValueOf(concepts.AnimationLifetimeLoop),
-		"AnimationLifetimeOnce":        reflect.ValueOf(concepts.AnimationLifetimeOnce),
-		"AnimationLifetimeString":      reflect.ValueOf(concepts.AnimationLifetimeString),
-		"AnimationLifetimeStrings":     reflect.ValueOf(concepts.AnimationLifetimeStrings),
-		"AnimationLifetimeValues":      reflect.ValueOf(concepts.AnimationLifetimeValues),
-		"AttachedComponentIndex":       reflect.ValueOf(&concepts.AttachedComponentIndex).Elem(),
-		"ByteClamp":                    reflect.ValueOf(concepts.ByteClamp),
-		"ColorToInt32PreMul":           reflect.ValueOf(concepts.ColorToInt32PreMul),
-		"ControllerAlways":             reflect.ValueOf(concepts.ControllerAlways),
-		"ControllerLoaded":             reflect.ValueOf(concepts.ControllerLoaded),
-		"ControllerRecalculate":        reflect.ValueOf(concepts.ControllerRecalculate),
-		"DbTypes":                      reflect.ValueOf(concepts.DbTypes),
-		"Deg2rad":                      reflect.ValueOf(concepts.Deg2rad),
-		"DynamicNow":                   reflect.ValueOf(concepts.DynamicNow),
-		"DynamicOriginal":              reflect.ValueOf(concepts.DynamicOriginal),
-		"DynamicPrev":                  reflect.ValueOf(concepts.DynamicPrev),
-		"DynamicRender":                reflect.ValueOf(concepts.DynamicRender),
-		"DynamicStageString":           reflect.ValueOf(concepts.DynamicStageString),
-		"DynamicStageStrings":          reflect.ValueOf(concepts.DynamicStageStrings),
-		"DynamicStageValues":           reflect.ValueOf(concepts.DynamicStageValues),
-		"EaseIn2":                      reflect.ValueOf(concepts.EaseIn2),
-		"EaseIn3":                      reflect.ValueOf(concepts.EaseIn3),
-		"EaseIn4":                      reflect.ValueOf(concepts.EaseIn4),
-		"EaseInOut2":                   reflect.ValueOf(concepts.EaseInOut2),
-		"EaseInOut3":                   reflect.ValueOf(concepts.EaseInOut3),
-		"EaseInOut4":                   reflect.ValueOf(concepts.EaseInOut4),
-		"EaseOut2":                     reflect.ValueOf(concepts.EaseOut2),
-		"EaseOut3":                     reflect.ValueOf(concepts.EaseOut3),
-		"EaseOut4":                     reflect.ValueOf(concepts.EaseOut4),
-		"ElasticIn":                    reflect.ValueOf(concepts.ElasticIn),
-		"ElasticInOut":                 reflect.ValueOf(concepts.ElasticInOut),
-		"ElasticOut":                   reflect.ValueOf(concepts.ElasticOut),
-		"ExecutionDuration":            reflect.ValueOf(concepts.ExecutionDuration),
-		"ExecutionTrack":               reflect.ValueOf(concepts.ExecutionTrack),
-		"Hash64to32":                   reflect.ValueOf(concepts.Hash64to32),
-		"IdentityMatrix2":              reflect.ValueOf(&concepts.IdentityMatrix2).Elem(),
-		"Int32ToNRGBA":                 reflect.ValueOf(concepts.Int32ToNRGBA),
-		"Int32ToRGBA":                  reflect.ValueOf(concepts.Int32ToRGBA),
-		"Int32ToVector3":               reflect.ValueOf(concepts.Int32ToVector3),
-		"Int32ToVector4PreMul":         reflect.ValueOf(concepts.Int32ToVector4PreMul),
-		"Intersect":                    reflect.ValueOf(concepts.Intersect),
-		"IntersectLineAABB":            reflect.ValueOf(concepts.IntersectLineAABB),
-		"IntersectLineSphere":          reflect.ValueOf(concepts.IntersectLineSphere),
-		"IntersectPointAABB":           reflect.ValueOf(concepts.IntersectPointAABB),
-		"IntersectSegments":            reflect.ValueOf(concepts.IntersectSegments),
-		"IntersectSegmentsRaw":         reflect.ValueOf(concepts.IntersectSegmentsRaw),
-		"Lerp":                         reflect.ValueOf(concepts.Lerp),
-		"MapArray":                     reflect.ValueOf(concepts.MapArray),
-		"MatBasis1X":                   reflect.ValueOf(concepts.MatBasis1X),
-		"MatBasis1Y":                   reflect.ValueOf(concepts.MatBasis1Y),
-		"MatBasis2X":                   reflect.ValueOf(concepts.MatBasis2X),
-		"MatBasis2Y":                   reflect.ValueOf(concepts.MatBasis2Y),
-		"MatTransX":                    reflect.ValueOf(concepts.MatTransX),
-		"MatTransY":                    reflect.ValueOf(concepts.MatTransY),
-		"NRGBAToInt32":                 reflect.ValueOf(concepts.NRGBAToInt32),
-		"NamedComponentIndex":          reflect.ValueOf(&concepts.NamedComponentIndex).Elem(),
-		"NamedFromDb":                  reflect.ValueOf(concepts.NamedFromDb),
-		"NearestPow2":                  reflect.ValueOf(concepts.NearestPow2),
-		"NewEntityComponentDB":         reflect.ValueOf(concepts.NewEntityComponentDB),
-		"NewSimulation":                reflect.ValueOf(concepts.NewSimulation),
-		"NormalizeAngle":               reflect.ValueOf(concepts.NormalizeAngle),
-		"ParseEntity":                  reflect.ValueOf(concepts.ParseEntity),
-		"ParseHexColor":                reflect.ValueOf(concepts.ParseHexColor),
-		"ParseMatrix2":                 reflect.ValueOf(concepts.ParseMatrix2),
-		"ParseVector2":                 reflect.ValueOf(concepts.ParseVector2),
-		"ParseVector3":                 reflect.ValueOf(concepts.ParseVector3),
-		"ParseVector4":                 reflect.ValueOf(concepts.ParseVector4),
-		"RGBAToInt32":                  reflect.ValueOf(concepts.RGBAToInt32),
-		"Rad2deg":                      reflect.ValueOf(concepts.Rad2deg),
-		"RngXorShift64":                reflect.ValueOf(concepts.RngXorShift64),
-		"Spike":                        reflect.ValueOf(concepts.Spike),
-		"Spike2":                       reflect.ValueOf(concepts.Spike2),
-		"Spike3":                       reflect.ValueOf(concepts.Spike3),
-		"Spike4":                       reflect.ValueOf(concepts.Spike4),
-		"TruncateString":               reflect.ValueOf(concepts.TruncateString),
-		"TweenAngles":                  reflect.ValueOf(concepts.TweenAngles),
-		"TweeningFuncNames":            reflect.ValueOf(&concepts.TweeningFuncNames).Elem(),
-		"TweeningFuncs":                reflect.ValueOf(&concepts.TweeningFuncs).Elem(),
-		"V2":                           reflect.ValueOf(concepts.V2),
-		"V3":                           reflect.ValueOf(concepts.V3),
-		"V4":                           reflect.ValueOf(concepts.V4),
-		"Vector2AABBIntersect":         reflect.ValueOf(concepts.Vector2AABBIntersect),
+		"ByteClamp":            reflect.ValueOf(concepts.ByteClamp),
+		"ColorToInt32PreMul":   reflect.ValueOf(concepts.ColorToInt32PreMul),
+		"Deg2rad":              reflect.ValueOf(concepts.Deg2rad),
+		"EaseIn2":              reflect.ValueOf(concepts.EaseIn2),
+		"EaseIn3":              reflect.ValueOf(concepts.EaseIn3),
+		"EaseIn4":              reflect.ValueOf(concepts.EaseIn4),
+		"EaseInOut2":           reflect.ValueOf(concepts.EaseInOut2),
+		"EaseInOut3":           reflect.ValueOf(concepts.EaseInOut3),
+		"EaseInOut4":           reflect.ValueOf(concepts.EaseInOut4),
+		"EaseOut2":             reflect.ValueOf(concepts.EaseOut2),
+		"EaseOut3":             reflect.ValueOf(concepts.EaseOut3),
+		"EaseOut4":             reflect.ValueOf(concepts.EaseOut4),
+		"ElasticIn":            reflect.ValueOf(concepts.ElasticIn),
+		"ElasticInOut":         reflect.ValueOf(concepts.ElasticInOut),
+		"ElasticOut":           reflect.ValueOf(concepts.ElasticOut),
+		"ExecutionDuration":    reflect.ValueOf(concepts.ExecutionDuration),
+		"ExecutionTrack":       reflect.ValueOf(concepts.ExecutionTrack),
+		"Hash64to32":           reflect.ValueOf(concepts.Hash64to32),
+		"IdentityMatrix2":      reflect.ValueOf(&concepts.IdentityMatrix2).Elem(),
+		"Int32ToNRGBA":         reflect.ValueOf(concepts.Int32ToNRGBA),
+		"Int32ToRGBA":          reflect.ValueOf(concepts.Int32ToRGBA),
+		"Int32ToVector3":       reflect.ValueOf(concepts.Int32ToVector3),
+		"Int32ToVector4PreMul": reflect.ValueOf(concepts.Int32ToVector4PreMul),
+		"Intersect":            reflect.ValueOf(concepts.Intersect),
+		"IntersectLineAABB":    reflect.ValueOf(concepts.IntersectLineAABB),
+		"IntersectLineSphere":  reflect.ValueOf(concepts.IntersectLineSphere),
+		"IntersectPointAABB":   reflect.ValueOf(concepts.IntersectPointAABB),
+		"IntersectSegments":    reflect.ValueOf(concepts.IntersectSegments),
+		"IntersectSegmentsRaw": reflect.ValueOf(concepts.IntersectSegmentsRaw),
+		"Lerp":                 reflect.ValueOf(concepts.Lerp),
+		"MatBasis1X":           reflect.ValueOf(concepts.MatBasis1X),
+		"MatBasis1Y":           reflect.ValueOf(concepts.MatBasis1Y),
+		"MatBasis2X":           reflect.ValueOf(concepts.MatBasis2X),
+		"MatBasis2Y":           reflect.ValueOf(concepts.MatBasis2Y),
+		"MatTransX":            reflect.ValueOf(concepts.MatTransX),
+		"MatTransY":            reflect.ValueOf(concepts.MatTransY),
+		"NRGBAToInt32":         reflect.ValueOf(concepts.NRGBAToInt32),
+		"NearestPow2":          reflect.ValueOf(concepts.NearestPow2),
+		"NormalizeAngle":       reflect.ValueOf(concepts.NormalizeAngle),
+		"ParseHexColor":        reflect.ValueOf(concepts.ParseHexColor),
+		"ParseMatrix2":         reflect.ValueOf(concepts.ParseMatrix2),
+		"ParseVector2":         reflect.ValueOf(concepts.ParseVector2),
+		"ParseVector3":         reflect.ValueOf(concepts.ParseVector3),
+		"ParseVector4":         reflect.ValueOf(concepts.ParseVector4),
+		"RGBAToInt32":          reflect.ValueOf(concepts.RGBAToInt32),
+		"Rad2deg":              reflect.ValueOf(concepts.Rad2deg),
+		"RngXorShift64":        reflect.ValueOf(concepts.RngXorShift64),
+		"Spike":                reflect.ValueOf(concepts.Spike),
+		"Spike2":               reflect.ValueOf(concepts.Spike2),
+		"Spike3":               reflect.ValueOf(concepts.Spike3),
+		"Spike4":               reflect.ValueOf(concepts.Spike4),
+		"TruncateString":       reflect.ValueOf(concepts.TruncateString),
+		"TweenAngles":          reflect.ValueOf(concepts.TweenAngles),
+		"TweeningFuncNames":    reflect.ValueOf(&concepts.TweeningFuncNames).Elem(),
+		"TweeningFuncs":        reflect.ValueOf(&concepts.TweeningFuncs).Elem(),
+		"V2":                   reflect.ValueOf(concepts.V2),
+		"V3":                   reflect.ValueOf(concepts.V3),
+		"V4":                   reflect.ValueOf(concepts.V4),
+		"Vector2AABBIntersect": reflect.ValueOf(concepts.Vector2AABBIntersect),
 
 		// type definitions
-		"Animated":             reflect.ValueOf((*concepts.Animated)(nil)),
-		"AnimationCoordinates": reflect.ValueOf((*concepts.AnimationCoordinates)(nil)),
-		"AnimationLifetime":    reflect.ValueOf((*concepts.AnimationLifetime)(nil)),
-		"Attachable":           reflect.ValueOf((*concepts.Attachable)(nil)),
-		"Attached":             reflect.ValueOf((*concepts.Attached)(nil)),
-		"BaseController":       reflect.ValueOf((*concepts.BaseController)(nil)),
-		"Controller":           reflect.ValueOf((*concepts.Controller)(nil)),
-		"ControllerMethod":     reflect.ValueOf((*concepts.ControllerMethod)(nil)),
-		"Dynamic":              reflect.ValueOf((*concepts.Dynamic)(nil)),
-		"DynamicStage":         reflect.ValueOf((*concepts.DynamicStage)(nil)),
-		"Entity":               reflect.ValueOf((*concepts.Entity)(nil)),
-		"EntityComponentDB":    reflect.ValueOf((*concepts.EntityComponentDB)(nil)),
-		"Matrix2":              reflect.ValueOf((*concepts.Matrix2)(nil)),
-		"Named":                reflect.ValueOf((*concepts.Named)(nil)),
-		"Serializable":         reflect.ValueOf((*concepts.Serializable)(nil)),
-		"Simulation":           reflect.ValueOf((*concepts.Simulation)(nil)),
-		"SyncQueue":            reflect.ValueOf((*concepts.SyncQueue)(nil)),
-		"SyncUniqueQueue":      reflect.ValueOf((*concepts.SyncUniqueQueue)(nil)),
-		"TweeningFunc":         reflect.ValueOf((*concepts.TweeningFunc)(nil)),
-		"Vector2":              reflect.ValueOf((*concepts.Vector2)(nil)),
-		"Vector3":              reflect.ValueOf((*concepts.Vector3)(nil)),
-		"Vector4":              reflect.ValueOf((*concepts.Vector4)(nil)),
-
-		// interface wrapper definitions
-		"_Animated":     reflect.ValueOf((*_tlyakhov_gofoom_concepts_Animated)(nil)),
-		"_Attachable":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_Attachable)(nil)),
-		"_Controller":   reflect.ValueOf((*_tlyakhov_gofoom_concepts_Controller)(nil)),
-		"_Dynamic":      reflect.ValueOf((*_tlyakhov_gofoom_concepts_Dynamic)(nil)),
-		"_Serializable": reflect.ValueOf((*_tlyakhov_gofoom_concepts_Serializable)(nil)),
+		"Matrix2":         reflect.ValueOf((*concepts.Matrix2)(nil)),
+		"SyncQueue":       reflect.ValueOf((*concepts.SyncQueue)(nil)),
+		"SyncUniqueQueue": reflect.ValueOf((*concepts.SyncUniqueQueue)(nil)),
+		"TweeningFunc":    reflect.ValueOf((*concepts.TweeningFunc)(nil)),
+		"Vector2":         reflect.ValueOf((*concepts.Vector2)(nil)),
+		"Vector3":         reflect.ValueOf((*concepts.Vector3)(nil)),
+		"Vector4":         reflect.ValueOf((*concepts.Vector4)(nil)),
 	}
-}
-
-// _tlyakhov_gofoom_concepts_Animated is an interface wrapper for Animated type
-type _tlyakhov_gofoom_concepts_Animated struct {
-	IValue     interface{}
-	WAnimate   func()
-	WConstruct func(data map[string]any)
-	WGetDB     func() *concepts.EntityComponentDB
-	WIsSystem  func() bool
-	WReset     func()
-	WSerialize func() map[string]any
-	WSetDB     func(db *concepts.EntityComponentDB)
-}
-
-func (W _tlyakhov_gofoom_concepts_Animated) Animate() {
-	W.WAnimate()
-}
-func (W _tlyakhov_gofoom_concepts_Animated) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_concepts_Animated) GetDB() *concepts.EntityComponentDB {
-	return W.WGetDB()
-}
-func (W _tlyakhov_gofoom_concepts_Animated) IsSystem() bool {
-	return W.WIsSystem()
-}
-func (W _tlyakhov_gofoom_concepts_Animated) Reset() {
-	W.WReset()
-}
-func (W _tlyakhov_gofoom_concepts_Animated) Serialize() map[string]any {
-	return W.WSerialize()
-}
-func (W _tlyakhov_gofoom_concepts_Animated) SetDB(db *concepts.EntityComponentDB) {
-	W.WSetDB(db)
-}
-
-// _tlyakhov_gofoom_concepts_Attachable is an interface wrapper for Attachable type
-type _tlyakhov_gofoom_concepts_Attachable struct {
-	IValue        interface{}
-	WConstruct    func(data map[string]any)
-	WGetDB        func() *concepts.EntityComponentDB
-	WGetEntity    func() concepts.Entity
-	WIndexInDB    func() int
-	WIsSystem     func() bool
-	WOnDetach     func()
-	WSerialize    func() map[string]any
-	WSetDB        func(db *concepts.EntityComponentDB)
-	WSetEntity    func(entity concepts.Entity)
-	WSetIndexInDB func(a0 int)
-	WString       func() string
-}
-
-func (W _tlyakhov_gofoom_concepts_Attachable) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) GetDB() *concepts.EntityComponentDB {
-	return W.WGetDB()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) GetEntity() concepts.Entity {
-	return W.WGetEntity()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) IndexInDB() int {
-	return W.WIndexInDB()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) IsSystem() bool {
-	return W.WIsSystem()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) OnDetach() {
-	W.WOnDetach()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) Serialize() map[string]any {
-	return W.WSerialize()
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) SetDB(db *concepts.EntityComponentDB) {
-	W.WSetDB(db)
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) SetEntity(entity concepts.Entity) {
-	W.WSetEntity(entity)
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) SetIndexInDB(a0 int) {
-	W.WSetIndexInDB(a0)
-}
-func (W _tlyakhov_gofoom_concepts_Attachable) String() string {
-	if W.WString == nil {
-		return ""
-	}
-	return W.WString()
-}
-
-// _tlyakhov_gofoom_concepts_Controller is an interface wrapper for Controller type
-type _tlyakhov_gofoom_concepts_Controller struct {
-	IValue          interface{}
-	WAlways         func()
-	WComponentIndex func() int
-	WLoaded         func()
-	WMethods        func() concepts.ControllerMethod
-	WPriority       func() int
-	WRecalculate    func()
-	WTarget         func(a0 concepts.Attachable) bool
-}
-
-func (W _tlyakhov_gofoom_concepts_Controller) Always() {
-	W.WAlways()
-}
-func (W _tlyakhov_gofoom_concepts_Controller) ComponentIndex() int {
-	return W.WComponentIndex()
-}
-func (W _tlyakhov_gofoom_concepts_Controller) Loaded() {
-	W.WLoaded()
-}
-func (W _tlyakhov_gofoom_concepts_Controller) Methods() concepts.ControllerMethod {
-	return W.WMethods()
-}
-func (W _tlyakhov_gofoom_concepts_Controller) Priority() int {
-	return W.WPriority()
-}
-func (W _tlyakhov_gofoom_concepts_Controller) Recalculate() {
-	W.WRecalculate()
-}
-func (W _tlyakhov_gofoom_concepts_Controller) Target(a0 concepts.Attachable) bool {
-	return W.WTarget(a0)
-}
-
-// _tlyakhov_gofoom_concepts_Dynamic is an interface wrapper for Dynamic type
-type _tlyakhov_gofoom_concepts_Dynamic struct {
-	IValue           interface{}
-	WAttach          func(sim *concepts.Simulation)
-	WConstruct       func(data map[string]any)
-	WDetach          func(sim *concepts.Simulation)
-	WGetAnimation    func() concepts.Animated
-	WGetDB           func() *concepts.EntityComponentDB
-	WIsSystem        func() bool
-	WNewFrame        func()
-	WRenderBlend     func(a0 float64)
-	WResetToOriginal func()
-	WSerialize       func() map[string]any
-	WSetDB           func(db *concepts.EntityComponentDB)
-}
-
-func (W _tlyakhov_gofoom_concepts_Dynamic) Attach(sim *concepts.Simulation) {
-	W.WAttach(sim)
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) Detach(sim *concepts.Simulation) {
-	W.WDetach(sim)
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) GetAnimation() concepts.Animated {
-	return W.WGetAnimation()
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) GetDB() *concepts.EntityComponentDB {
-	return W.WGetDB()
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) IsSystem() bool {
-	return W.WIsSystem()
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) NewFrame() {
-	W.WNewFrame()
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) RenderBlend(a0 float64) {
-	W.WRenderBlend(a0)
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) ResetToOriginal() {
-	W.WResetToOriginal()
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) Serialize() map[string]any {
-	return W.WSerialize()
-}
-func (W _tlyakhov_gofoom_concepts_Dynamic) SetDB(db *concepts.EntityComponentDB) {
-	W.WSetDB(db)
-}
-
-// _tlyakhov_gofoom_concepts_Serializable is an interface wrapper for Serializable type
-type _tlyakhov_gofoom_concepts_Serializable struct {
-	IValue     interface{}
-	WConstruct func(data map[string]any)
-	WGetDB     func() *concepts.EntityComponentDB
-	WIsSystem  func() bool
-	WSerialize func() map[string]any
-	WSetDB     func(db *concepts.EntityComponentDB)
-}
-
-func (W _tlyakhov_gofoom_concepts_Serializable) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_concepts_Serializable) GetDB() *concepts.EntityComponentDB {
-	return W.WGetDB()
-}
-func (W _tlyakhov_gofoom_concepts_Serializable) IsSystem() bool {
-	return W.WIsSystem()
-}
-func (W _tlyakhov_gofoom_concepts_Serializable) Serialize() map[string]any {
-	return W.WSerialize()
-}
-func (W _tlyakhov_gofoom_concepts_Serializable) SetDB(db *concepts.EntityComponentDB) {
-	W.WSetDB(db)
 }

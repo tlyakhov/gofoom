@@ -5,12 +5,13 @@ package core
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 // InternalSegments must be sorted back-to-front alongside entities
 type InternalSegment struct {
-	concepts.Attached `editable:"^"`
-	Segment           `editable:"^"`
+	ecs.Attached `editable:"^"`
+	Segment      `editable:"^"`
 
 	Bottom   float64 `editable:"Bottom"`
 	Top      float64 `editable:"Top"`
@@ -20,10 +21,10 @@ type InternalSegment struct {
 var InternalSegmentComponentIndex int
 
 func init() {
-	InternalSegmentComponentIndex = concepts.DbTypes().Register(InternalSegment{}, SectorFromDb)
+	InternalSegmentComponentIndex = ecs.Types().Register(InternalSegment{}, SectorFromDb)
 }
 
-func InternalSegmentFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *InternalSegment {
+func InternalSegmentFromDb(db *ecs.ECS, e ecs.Entity) *InternalSegment {
 	if asserted, ok := db.Component(e, InternalSegmentComponentIndex).(*InternalSegment); ok {
 		return asserted
 	}

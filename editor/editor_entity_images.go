@@ -11,18 +11,19 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"github.com/fogleman/gg"
 )
 
-func (e *Editor) materialSelectionBorderColor(entity concepts.Entity) *concepts.Vector4 {
+func (e *Editor) materialSelectionBorderColor(entity ecs.Entity) *concepts.Vector4 {
 	if materials.ShaderFromDb(e.DB, entity) != nil {
 		return &concepts.Vector4{1.0, 0.0, 1.0, 0.5}
 	}
 	return &concepts.Vector4{0.0, 0.0, 0.0, 0.0}
 }
 
-func (e *Editor) imageForMaterial(entity concepts.Entity) image.Image {
+func (e *Editor) imageForMaterial(entity ecs.Entity) image.Image {
 	w, h := 64, 64
 	e.MaterialSampler.Initialize(entity, nil)
 	e.MaterialSampler.ScaleW = 64
@@ -60,7 +61,7 @@ func (e *Editor) imageForMaterial(entity concepts.Entity) image.Image {
 var patternPrimary = gg.NewSolidPattern(color.NRGBA{255, 255, 255, 255})
 var patternSecondary = gg.NewSolidPattern(color.NRGBA{255, 255, 0, 255})
 
-func (e *Editor) imageForSector(entity concepts.Entity) image.Image {
+func (e *Editor) imageForSector(entity ecs.Entity) image.Image {
 	w, h := 64, 64
 	context := gg.NewContext(w, h)
 
@@ -86,7 +87,7 @@ func (e *Editor) imageForSector(entity concepts.Entity) image.Image {
 	return context.Image()
 }
 
-func (e *Editor) EntityImage(entity concepts.Entity, sector bool) image.Image {
+func (e *Editor) EntityImage(entity ecs.Entity, sector bool) image.Image {
 	item, exists := e.entityIconCache.Load(entity)
 	now := time.Now().UnixMilli()
 	if exists && now-item.LastUpdated < 1000*60 {

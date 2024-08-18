@@ -6,27 +6,27 @@ package controllers
 import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type ProximityController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*core.Body
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&ProximityController{}, 100)
+	ecs.Types().RegisterController(&ProximityController{}, 100)
 }
 
 func (pc *ProximityController) ComponentIndex() int {
 	return core.BodyComponentIndex
 }
 
-func (pc *ProximityController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways
+func (pc *ProximityController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways
 }
 
-func (pc *ProximityController) Target(target concepts.Attachable) bool {
+func (pc *ProximityController) Target(target ecs.Attachable) bool {
 	pc.Body = target.(*core.Body)
 	return pc.IsActive() && pc.SectorEntity != 0
 }

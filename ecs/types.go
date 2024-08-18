@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 import (
 	"reflect"
@@ -17,7 +17,7 @@ type controllerMetadata struct {
 	Type     reflect.Type
 	Priority int
 }
-type dbTypes struct {
+type typeMetadata struct {
 	Indexes           map[string]int
 	IndexesNoPackage  map[string]int
 	Types             []reflect.Type
@@ -29,51 +29,51 @@ type dbTypes struct {
 	lock              sync.RWMutex
 }
 
-var globalDbTypes *dbTypes
+var globalTypeMetadata *typeMetadata
 var once sync.Once
 
-func DbTypes() *dbTypes {
+func Types() *typeMetadata {
 	once.Do(func() {
-		globalDbTypes = &dbTypes{
+		globalTypeMetadata = &typeMetadata{
 			Controllers:      make([]controllerMetadata, 0),
 			Indexes:          make(map[string]int),
 			IndexesNoPackage: make(map[string]int),
 			ExprEnv:          make(map[string]any),
 		}
 	})
-	return globalDbTypes
+	return globalTypeMetadata
 }
 
-func (dbt *dbTypes) Register(local any, fromDbFunc any) int {
-	dbt.lock.Lock()
-	defer dbt.lock.Unlock()
+func (ecsTypes *typeMetadata) Register(local any, fromDbFunc any) int {
+	ecsTypes.lock.Lock()
+	defer ecsTypes.lock.Unlock()
 	tLocal := reflect.ValueOf(local).Type()
 
 	if tLocal.Kind() == reflect.Ptr {
 		tLocal = tLocal.Elem()
 	}
-	index := (int)(atomic.AddUint32(&dbt.nextFreeComponent, 1))
-	for len(dbt.Types) < index+1 {
-		dbt.Types = append(dbt.Types, nil)
-		dbt.Funcs = append(dbt.Funcs, nil)
+	index := (int)(atomic.AddUint32(&ecsTypes.nextFreeComponent, 1))
+	for len(ecsTypes.Types) < index+1 {
+		ecsTypes.Types = append(ecsTypes.Types, nil)
+		ecsTypes.Funcs = append(ecsTypes.Funcs, nil)
 	}
 	// Remove the package prefix (e.g. "core.Body" -> "Body")
 	// see core.Expression
 	tSplit := strings.Split(tLocal.String(), ".")
 	noPackage := tSplit[len(tSplit)-1]
 
-	dbt.Types[index] = tLocal
-	dbt.Funcs[index] = fromDbFunc
-	dbt.Indexes[reflect.PointerTo(tLocal).String()] = index
-	dbt.Indexes[tLocal.String()] = index
-	dbt.IndexesNoPackage[noPackage] = index
-	dbt.ExprEnv[noPackage] = fromDbFunc
+	ecsTypes.Types[index] = tLocal
+	ecsTypes.Funcs[index] = fromDbFunc
+	ecsTypes.Indexes[reflect.PointerTo(tLocal).String()] = index
+	ecsTypes.Indexes[tLocal.String()] = index
+	ecsTypes.IndexesNoPackage[noPackage] = index
+	ecsTypes.ExprEnv[noPackage] = fromDbFunc
 	return index
 }
 
-func (dbt *dbTypes) Type(name string) reflect.Type {
-	if index, ok := dbt.Indexes[name]; ok {
-		return dbt.Types[index]
+func (ecsTypes *typeMetadata) Type(name string) reflect.Type {
+	if index, ok := ecsTypes.Indexes[name]; ok {
+		return ecsTypes.Types[index]
 	}
 	return nil
 }

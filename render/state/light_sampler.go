@@ -12,6 +12,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 type LightSamplerType int
@@ -35,7 +36,7 @@ type LightSampler struct {
 	Intersection concepts.Vector3
 	Q            concepts.Vector3
 	LightWorld   concepts.Vector3
-	InputBody    concepts.Entity
+	InputBody    ecs.Entity
 	XorSeed      uint64
 
 	Sector  *core.Sector
@@ -69,7 +70,7 @@ func (le *LightSampler) Get() *concepts.Vector3 {
 	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
-	fz, cz := le.Sector.PointZ(concepts.DynamicRender, le.Q.To2D())
+	fz, cz := le.Sector.PointZ(ecs.DynamicRender, le.Q.To2D())
 	if le.Q[2] < fz {
 		le.Q[2] = fz
 	}
@@ -107,7 +108,7 @@ func (le *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicRender, p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.PointZ(ecs.DynamicRender, p.To2D())
 		if p[2]-ceilZ > le.LightGrid || floorZ-p[2] > le.LightGrid {
 			continue
 		}
@@ -128,7 +129,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 	debugLighting := false
 	if constants.DebugLighting {
-		dbgName := concepts.NamedFromDb(le.DB, sector.Entity).Name
+		dbgName := ecs.NamedFromDb(le.DB, sector.Entity).Name
 		debugWallCheck := le.Type == LightSamplerWall
 		debugLighting = constants.DebugLighting && debugWallCheck && dbgName == debugSectorName
 	}
@@ -262,8 +263,8 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.PointZ(concepts.DynamicRender, le.Intersection.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicRender, le.Intersection.To2D())
+			floorZ, ceilZ := sector.PointZ(ecs.DynamicRender, le.Intersection.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(ecs.DynamicRender, le.Intersection.To2D())
 			if debugLighting {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}
@@ -349,7 +350,7 @@ func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	le.Output[1] = 0
 	le.Output[2] = 0
 
-	/*refs := make([]concepts.Entity, 0)
+	/*refs := make([]ecs.Entity, 0)
 	for _, entity := range le.Sector.PVL {
 		refs = append(refs, entity)
 	}

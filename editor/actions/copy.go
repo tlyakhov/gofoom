@@ -8,7 +8,7 @@ import (
 	"log"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
 
@@ -19,12 +19,12 @@ type Copy struct {
 	state.IEditor
 
 	Selected      *core.Selection
-	Saved         map[concepts.Entity]any
+	Saved         map[ecs.Entity]any
 	ClipboardData string
 }
 
 func (a *Copy) Act() {
-	a.Saved = make(map[concepts.Entity]any)
+	a.Saved = make(map[ecs.Entity]any)
 	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
 
 	for _, obj := range a.Selected.Exact {

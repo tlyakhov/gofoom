@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 import (
 	"strconv"
@@ -27,7 +27,7 @@ func ParseEntity(e string) (Entity, error) {
 	return Entity(v), err
 }
 
-func (e Entity) String(db *EntityComponentDB) string {
+func (e Entity) String(db *ECS) string {
 	if e == 0 {
 		return "[0] Nothing"
 	}
@@ -53,7 +53,7 @@ func (e Entity) String(db *EntityComponentDB) string {
 	return sb.String()
 }
 
-func (e Entity) NameString(db *EntityComponentDB) string {
+func (e Entity) NameString(db *ECS) string {
 	if e == 0 {
 		return "0 - Nothing"
 	}
@@ -64,7 +64,7 @@ func (e Entity) NameString(db *EntityComponentDB) string {
 	return id
 }
 
-func (ref *EntityRef[T]) Refresh(db *EntityComponentDB, index int) {
+func (ref *EntityRef[T]) Refresh(db *ECS, index int) {
 	var zero T
 	if ref.Entity == 0 {
 		ref.Value = zero

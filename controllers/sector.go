@@ -6,28 +6,28 @@ package controllers
 import (
 	"math"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type SectorController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*core.Sector
 }
 
 func init() {
 	// Should run before everything
-	concepts.DbTypes().RegisterController(&SectorController{}, 50)
+	ecs.Types().RegisterController(&SectorController{}, 50)
 }
 
 func (sc *SectorController) ComponentIndex() int {
 	return core.SectorComponentIndex
 }
 
-func (sc *SectorController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerRecalculate
+func (sc *SectorController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerRecalculate
 }
 
-func (sc *SectorController) Target(target concepts.Attachable) bool {
+func (sc *SectorController) Target(target ecs.Attachable) bool {
 	sc.Sector = target.(*core.Sector)
 	return sc.Sector.IsActive()
 }

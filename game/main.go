@@ -14,6 +14,7 @@ import (
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
 
 	"tlyakhov/gofoom/concepts"
@@ -33,7 +34,7 @@ import (
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var win *opengl.Window
-var db *concepts.EntityComponentDB
+var db *ecs.ECS
 var renderer *render.Renderer
 var canvas *opengl.Canvas
 var buffer *image.RGBA
@@ -104,7 +105,7 @@ func integrateGame() {
 			renderer.Player.CurrentWeapon = renderer.Player.Inventory[InventoryWeirdGun]
 		}
 		gameInput()
-		db.ActAllControllers(concepts.ControllerAlways)
+		db.ActAllControllers(ecs.ControllerAlways)
 	}
 	win.UpdateInput()
 }
@@ -158,10 +159,10 @@ func run() {
 
 	win.SetSmooth(false)
 
-	for _, meta := range concepts.DbTypes().Controllers {
+	for _, meta := range ecs.Types().Controllers {
 		fmt.Printf("%v, priority %v\n", meta.Type.String(), meta.Priority)
 	}
-	db = concepts.NewEntityComponentDB()
+	db = ecs.NewECS()
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
 	//controllers.CreateTestWorld(db)

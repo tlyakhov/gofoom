@@ -4,7 +4,7 @@
 package ui
 
 import (
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"github.com/gammazero/deque"
 )
@@ -20,7 +20,7 @@ type Page struct {
 	VisibleWidgets int
 
 	tooltipCurrent IWidget
-	tooltipAlpha   concepts.DynamicValue[float64]
+	tooltipAlpha   ecs.DynamicValue[float64]
 	tooltipQueue   deque.Deque[IWidget]
 }
 

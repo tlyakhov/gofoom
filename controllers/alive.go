@@ -5,27 +5,27 @@ package controllers
 
 import (
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type AliveController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*behaviors.Alive
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&AliveController{}, 100)
+	ecs.Types().RegisterController(&AliveController{}, 100)
 }
 
 func (a *AliveController) ComponentIndex() int {
 	return behaviors.AliveComponentIndex
 }
 
-func (a *AliveController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways
+func (a *AliveController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways
 }
 
-func (a *AliveController) Target(target concepts.Attachable) bool {
+func (a *AliveController) Target(target ecs.Attachable) bool {
 	a.Alive = target.(*behaviors.Alive)
 	return a.IsActive()
 }

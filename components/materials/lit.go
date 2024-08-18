@@ -5,10 +5,11 @@ package materials
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Lit struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	Ambient concepts.Vector3 `editable:"Ambient Color" edit_type:"color"`
 	Diffuse concepts.Vector4 `editable:"Diffuse Color" edit_type:"color"`
@@ -17,10 +18,10 @@ type Lit struct {
 var LitComponentIndex int
 
 func init() {
-	LitComponentIndex = concepts.DbTypes().Register(Lit{}, LitFromDb)
+	LitComponentIndex = ecs.Types().Register(Lit{}, LitFromDb)
 }
 
-func LitFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Lit {
+func LitFromDb(db *ecs.ECS, e ecs.Entity) *Lit {
 	if asserted, ok := db.Component(e, LitComponentIndex).(*Lit); ok {
 		return asserted
 	}

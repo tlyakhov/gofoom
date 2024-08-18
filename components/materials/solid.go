@@ -5,20 +5,21 @@ package materials
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Solid struct {
-	concepts.Attached `editable:"^"`
-	Diffuse           concepts.DynamicValue[concepts.Vector4] `editable:"Color"`
+	ecs.Attached `editable:"^"`
+	Diffuse      ecs.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
 var SolidComponentIndex int
 
 func init() {
-	SolidComponentIndex = concepts.DbTypes().Register(Solid{}, SolidFromDb)
+	SolidComponentIndex = ecs.Types().Register(Solid{}, SolidFromDb)
 }
 
-func SolidFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Solid {
+func SolidFromDb(db *ecs.ECS, e ecs.Entity) *Solid {
 	if asserted, ok := db.Component(e, SolidComponentIndex).(*Solid); ok {
 		return asserted
 	}
@@ -31,7 +32,7 @@ func (s *Solid) OnDetach() {
 	}
 	s.Attached.OnDetach()
 }
-func (s *Solid) SetDB(db *concepts.EntityComponentDB) {
+func (s *Solid) SetDB(db *ecs.ECS) {
 	if s.DB != db {
 		s.OnDetach()
 	}

@@ -14,6 +14,7 @@ import (
 	_ "image/png"
 
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"github.com/disintegration/gift"
 	"github.com/fogleman/gg"
@@ -28,7 +29,7 @@ type mipMap struct {
 
 // Image represents an image that will be rendered in-game.
 type Image struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	Width, Height   uint32
 	Source          string `editable:"Texture Source" edit_type:"file"`
@@ -42,10 +43,10 @@ type Image struct {
 var ImageComponentIndex int
 
 func init() {
-	ImageComponentIndex = concepts.DbTypes().Register(Image{}, ImageFromDb)
+	ImageComponentIndex = ecs.Types().Register(Image{}, ImageFromDb)
 }
 
-func ImageFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Image {
+func ImageFromDb(db *ecs.ECS, e ecs.Entity) *Image {
 	if asserted, ok := db.Component(e, ImageComponentIndex).(*Image); ok {
 		return asserted
 	}

@@ -1,11 +1,11 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 type Attached struct {
 	Entity                  `editable:"Component" edit_type:"Component" edit_sort:"0"`
-	DB                      *EntityComponentDB
+	DB                      *ECS
 	System                  bool // Don't serialize this entity, disallow editing
 	Active                  bool `editable:"Active?"`
 	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`
@@ -15,7 +15,7 @@ type Attached struct {
 var AttachedComponentIndex int
 
 func init() {
-	AttachedComponentIndex = DbTypes().Register(Attached{}, nil)
+	AttachedComponentIndex = Types().Register(Attached{}, nil)
 }
 
 func (a *Attached) IsActive() bool {
@@ -41,11 +41,11 @@ func (a *Attached) SetIndexInDB(i int) {
 	a.indexInDB = i
 }
 
-func (a *Attached) SetDB(db *EntityComponentDB) {
+func (a *Attached) SetDB(db *ECS) {
 	a.DB = db
 }
 
-func (a *Attached) GetDB() *EntityComponentDB {
+func (a *Attached) GetDB() *ECS {
 	return a.DB
 }
 
@@ -92,7 +92,7 @@ func (a *Attached) Serialize() map[string]any {
 func ConstructSlice[PT interface {
 	*T
 	Serializable
-}, T any](db *EntityComponentDB, data any) []PT {
+}, T any](db *ECS, data any) []PT {
 	var result []PT
 
 	if dataSlice, ok := data.([]any); ok {

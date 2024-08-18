@@ -8,10 +8,10 @@ import (
 	"strconv"
 
 	"tlyakhov/gofoom/archetypes"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -22,7 +22,7 @@ import (
 )
 
 func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _ bool, co fyne.CanvasObject) {
-	entity, _ := concepts.ParseEntity(tni)
+	entity, _ := ecs.ParseEntity(tni)
 	name := entity.NameString(g.State().DB)
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
@@ -46,9 +46,9 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 
 func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	// The value of this property is an Entity
-	var origValue concepts.Entity
+	var origValue ecs.Entity
 	if !field.Values[0].Deref().IsZero() {
-		origValue = field.Values[0].Interface().(concepts.Entity)
+		origValue = field.Values[0].Interface().(ecs.Entity)
 	}
 
 	editTypeTag, ok := field.Source.Tag.Lookup("edit_type")
@@ -65,9 +65,9 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		if c == nil {
 			continue
 		}
-		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().DB, concepts.Entity(entity)) {
+		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().DB, ecs.Entity(entity)) {
 			refs = append(refs, strconv.Itoa(entity))
-		} else if editTypeTag == "Sector" && core.SectorFromDb(g.State().DB, concepts.Entity(entity)) != nil {
+		} else if editTypeTag == "Sector" && core.SectorFromDb(g.State().DB, ecs.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(entity))
 		}
 	}
@@ -93,7 +93,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		title = editTypeTag + ": " + origValue.NameString(g.State().DB)
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
-		entity, _ := concepts.ParseEntity(tni)
+		entity, _ := ecs.ParseEntity(tni)
 		g.ApplySetPropertyAction(field, reflect.ValueOf(entity).Convert(field.Type.Elem()))
 	}
 	c := container.New(&gridEntitySelectorLayout{Child: layout.NewStackLayout()}, tree)

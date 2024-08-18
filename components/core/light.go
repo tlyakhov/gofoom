@@ -5,10 +5,11 @@ package core
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Light struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
 	Diffuse     concepts.Vector3 `editable:"Diffuse"`
 	Strength    float64          `editable:"Strength"`
@@ -18,10 +19,10 @@ type Light struct {
 var LightComponentIndex int
 
 func init() {
-	LightComponentIndex = concepts.DbTypes().Register(Light{}, LightFromDb)
+	LightComponentIndex = ecs.Types().Register(Light{}, LightFromDb)
 }
 
-func LightFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Light {
+func LightFromDb(db *ecs.ECS, e ecs.Entity) *Light {
 	if asserted, ok := db.Component(e, LightComponentIndex).(*Light); ok {
 		return asserted
 	}

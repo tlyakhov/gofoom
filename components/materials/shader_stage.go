@@ -6,6 +6,7 @@ package materials
 import (
 	"strings"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=ShaderFlags -json
@@ -19,9 +20,9 @@ const (
 )
 
 type ShaderStage struct {
-	DB        *concepts.EntityComponentDB
+	DB        *ecs.ECS
 	System    bool
-	Texture   concepts.Entity  `editable:"Texture" edit_type:"Material"`
+	Texture   ecs.Entity       `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2 `editable:"Transform"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
 
@@ -40,7 +41,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Texture"]; ok {
-		s.Texture, _ = concepts.ParseEntity(v.(string))
+		s.Texture, _ = ecs.ParseEntity(v.(string))
 	}
 
 	if v, ok := data["Transform"]; ok {
@@ -90,11 +91,11 @@ func (s *ShaderStage) Serialize() map[string]any {
 	return result
 }
 
-func (s *ShaderStage) SetDB(db *concepts.EntityComponentDB) {
+func (s *ShaderStage) SetDB(db *ecs.ECS) {
 	s.DB = db
 }
 
-func (s *ShaderStage) GetDB() *concepts.EntityComponentDB {
+func (s *ShaderStage) GetDB() *ecs.ECS {
 	return s.DB
 }
 

@@ -4,7 +4,7 @@
 package main
 
 import (
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
 )
 
@@ -72,7 +72,7 @@ func initMenuOptions() {
 					renderer.LightGrid = float64(s.Value) / 10.0
 					renderer.Initialize()
 					// After everything's loaded, trigger the controllers
-					db.ActAllControllers(concepts.ControllerRecalculate)
+					db.ActAllControllers(ecs.ControllerRecalculate)
 				},
 			},
 		},

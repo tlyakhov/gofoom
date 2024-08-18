@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sector) {
@@ -21,7 +22,7 @@ func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sect
 	}
 }
 
-func (bc *BodyController) Enter(eSector concepts.Entity) {
+func (bc *BodyController) Enter(eSector ecs.Entity) {
 	if eSector == 0 {
 		log.Printf("%v tried to enter nil sector", bc.Body.Entity)
 		return
@@ -36,7 +37,7 @@ func (bc *BodyController) Enter(eSector concepts.Entity) {
 	bc.Body.SectorEntity = eSector
 
 	if bc.Body.OnGround {
-		floorZ, _ := bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
+		floorZ, _ := bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 		p := &bc.Body.Pos.Now
 		h := bc.Body.Size.Now[1] * 0.5
 		if bc.Sector.FloorTarget == 0 && p[2]-h < floorZ {
@@ -120,7 +121,7 @@ func (bc *BodyController) findBodySector() {
 		bc.Body.Pos.Now[1] = p[1]
 	}
 
-	floorZ, ceilZ := closestSector.PointZ(concepts.DynamicNow, bc.pos2d)
+	floorZ, ceilZ := closestSector.PointZ(ecs.DynamicNow, bc.pos2d)
 	//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
 	if bc.pos[2]-bc.halfHeight < floorZ || bc.pos[2]+bc.halfHeight > ceilZ {
 		//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
@@ -137,7 +138,7 @@ func (bc *BodyController) checkBodySegmentCollisions() {
 			adj := core.SectorFromDb(bc.Sector.DB, segment.AdjacentSector)
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
-			floorZ, ceilZ := adj.PointZ(concepts.DynamicNow, bc.pos2d)
+			floorZ, ceilZ := adj.PointZ(ecs.DynamicNow, bc.pos2d)
 			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 				bc.pos[2]+bc.halfHeight < ceilZ {
 				continue
@@ -201,7 +202,7 @@ func (bc *BodyController) bodyExitsSector() {
 			continue
 		}
 		adj := core.SectorFromDb(bc.Sector.DB, segment.AdjacentSector)
-		floorZ, ceilZ := adj.PointZ(concepts.DynamicNow, bc.pos2d)
+		floorZ, ceilZ := adj.PointZ(ecs.DynamicNow, bc.pos2d)
 		if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 			bc.pos[2]+bc.halfHeight < ceilZ &&
 			adj.IsPointInside2D(bc.pos2d) {
@@ -221,7 +222,7 @@ func (bc *BodyController) bodyExitsSector() {
 		// Case 6! This is the worst.
 		for _, component := range bc.Body.DB.AllOfType(core.SectorComponentIndex) {
 			sector := component.(*core.Sector)
-			floorZ, ceilZ := sector.PointZ(concepts.DynamicNow, bc.pos2d)
+			floorZ, ceilZ := sector.PointZ(ecs.DynamicNow, bc.pos2d)
 			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 				bc.pos[2]+bc.halfHeight < ceilZ {
 				for _, segment := range sector.Segments {
@@ -408,7 +409,7 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 func (bc *BodyController) CollideZ() {
 	halfHeight := bc.Body.Size.Now[1] * 0.5
 	bodyTop := bc.Body.Pos.Now[2] + halfHeight
-	floorZ, ceilZ := bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
+	floorZ, ceilZ := bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 
 	bc.Body.OnGround = false
 	if bc.Sector.FloorTarget != 0 && bodyTop < floorZ {
@@ -417,7 +418,7 @@ func (bc *BodyController) CollideZ() {
 		bc.Enter(bc.Sector.FloorTarget)
 		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
 		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
-		_, ceilZ = bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
+		_, ceilZ = bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
 	} else if bc.Sector.FloorTarget != 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
 		bc.Body.Vel.Now[2] = constants.PlayerJumpForce
@@ -441,7 +442,7 @@ func (bc *BodyController) CollideZ() {
 		bc.Enter(bc.Sector.CeilTarget)
 		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
 		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
-		floorZ, _ = bc.Sector.PointZ(concepts.DynamicNow, bc.Body.Pos.Now.To2D())
+		floorZ, _ = bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
 	} else if bc.Sector.CeilTarget == 0 && bodyTop >= ceilZ {
 		dist := -bc.Sector.CeilNormal[2] * (bodyTop - ceilZ + 1.0)

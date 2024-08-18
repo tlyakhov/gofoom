@@ -5,7 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
 
@@ -50,7 +50,7 @@ func (a *MoveSurface) Act() {
 		s.Sector.BottomZ.ResetToOriginal()
 		s.Sector.TopZ.ResetToOriginal()
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
 	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, false)
@@ -71,7 +71,7 @@ func (a *MoveSurface) Undo() {
 		i++
 	}
 
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *MoveSurface) Redo() {
 	a.State().Lock.Lock()
@@ -86,5 +86,5 @@ func (a *MoveSurface) Redo() {
 		s.Sector.BottomZ.ResetToOriginal()
 		s.Sector.TopZ.ResetToOriginal()
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }

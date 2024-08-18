@@ -4,24 +4,24 @@
 package behaviors
 
 import (
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type InventoryItem struct {
-	concepts.Attached `editable:"^"`
+	ecs.Attached `editable:"^"`
 
-	Class string          `editable:"Class"`
-	Count int             `editable:"Count"`
-	Image concepts.Entity `editable:"Image" edit_type:"Material"`
+	Class string     `editable:"Class"`
+	Count int        `editable:"Count"`
+	Image ecs.Entity `editable:"Image" edit_type:"Material"`
 }
 
 var InventoryItemComponentIndex int
 
 func init() {
-	InventoryItemComponentIndex = concepts.DbTypes().Register(InventoryItem{}, InventoryItemFromDb)
+	InventoryItemComponentIndex = ecs.Types().Register(InventoryItem{}, InventoryItemFromDb)
 }
 
-func InventoryItemFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *InventoryItem {
+func InventoryItemFromDb(db *ecs.ECS, e ecs.Entity) *InventoryItem {
 	if asserted, ok := db.Component(e, InventoryItemComponentIndex).(*InventoryItem); ok {
 		return asserted
 	}
@@ -48,7 +48,7 @@ func (item *InventoryItem) Construct(data map[string]any) {
 		item.Count = v.(int)
 	}
 	if v, ok := data["Image"]; ok {
-		item.Image, _ = concepts.ParseEntity(v.(string))
+		item.Image, _ = ecs.ParseEntity(v.(string))
 	}
 }
 

@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package ecs
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ import (
 // * A component is a named (string) table with columns of fields, rows of
 // entities
 // * A system is code that queries and operates on components and entities
-type EntityComponentDB struct {
+type ECS struct {
 	*Simulation
 	EntityComponents [][]Attachable
 
@@ -28,26 +28,26 @@ type EntityComponentDB struct {
 	Lock         sync.RWMutex
 }
 
-func NewEntityComponentDB() *EntityComponentDB {
-	db := &EntityComponentDB{}
+func NewECS() *ECS {
+	db := &ECS{}
 	db.Clear()
 
 	return db
 }
 
-func (db *EntityComponentDB) Clear() {
+func (db *ECS) Clear() {
 	db.usedEntities = bitmap.Bitmap{}
 	db.usedEntities.Set(0) // 0 is reserved
 	db.EntityComponents = make([][]Attachable, 1)
-	db.components = make([][]Attachable, len(DbTypes().Types))
+	db.components = make([][]Attachable, len(Types().Types))
 	db.Simulation = NewSimulation()
-	for i := 0; i < len(DbTypes().Types); i++ {
+	for i := 0; i < len(Types().Types); i++ {
 		db.components[i] = make([]Attachable, 0)
 	}
 }
 
 // Reserves an entity ID in the database (no components attached)
-func (db *EntityComponentDB) NewEntity() Entity {
+func (db *ECS) NewEntity() Entity {
 	if free, found := db.usedEntities.MinZero(); found {
 		db.usedEntities.Set(free)
 		return Entity(free)
@@ -58,11 +58,11 @@ func (db *EntityComponentDB) NewEntity() Entity {
 	return Entity(nextFree)
 }
 
-func (db *EntityComponentDB) AllOfType(index int) []Attachable {
+func (db *ECS) AllOfType(index int) []Attachable {
 	return db.components[index]
 }
 
-func (db *EntityComponentDB) AllComponents(entity Entity) []Attachable {
+func (db *ECS) AllComponents(entity Entity) []Attachable {
 	if entity == 0 || len(db.EntityComponents) <= int(entity) {
 		return nil
 	}
@@ -71,7 +71,7 @@ func (db *EntityComponentDB) AllComponents(entity Entity) []Attachable {
 
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The *FromDb methods are better.
-func (db *EntityComponentDB) Component(entity Entity, index int) Attachable {
+func (db *ECS) Component(entity Entity, index int) Attachable {
 	if entity == 0 || index == 0 || len(db.EntityComponents) <= int(entity) {
 		return nil
 	}
@@ -82,14 +82,14 @@ func (db *EntityComponentDB) Component(entity Entity, index int) Attachable {
 	return ec[index]
 }
 
-func (db *EntityComponentDB) AllOfNamedType(cType string) []Attachable {
-	if index, ok := DbTypes().Indexes[cType]; ok {
+func (db *ECS) AllOfNamedType(cType string) []Attachable {
+	if index, ok := Types().Indexes[cType]; ok {
 		return db.components[index]
 	}
 	return nil
 }
 
-func (db *EntityComponentDB) First(index int) Attachable {
+func (db *ECS) First(index int) Attachable {
 	for _, c := range db.components[index] {
 		return c
 	}
@@ -98,7 +98,7 @@ func (db *EntityComponentDB) First(index int) Attachable {
 
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
-func (db *EntityComponentDB) attach(entity Entity, component Attachable, index int) {
+func (db *ECS) attach(entity Entity, component Attachable, index int) {
 	if entity == 0 {
 		log.Printf("Tried to attach 0 entity!")
 		return
@@ -121,7 +121,7 @@ func (db *EntityComponentDB) attach(entity Entity, component Attachable, index i
 			return
 		}
 	} else {
-		ec = make([]Attachable, len(DbTypes().Types))
+		ec = make([]Attachable, len(Types().Types))
 		db.EntityComponents[entity] = ec
 	}
 	// This entity doesn't have a component with this index attached. Extend the
@@ -132,8 +132,8 @@ func (db *EntityComponentDB) attach(entity Entity, component Attachable, index i
 }
 
 // Create a new component with the given index and attach it.
-func (db *EntityComponentDB) NewAttachedComponent(entity Entity, index int) Attachable {
-	t := DbTypes().Types[index]
+func (db *ECS) NewAttachedComponent(entity Entity, index int) Attachable {
+	t := Types().Types[index]
 	newc := reflect.New(t).Interface()
 	attached := newc.(Attachable)
 	db.attach(entity, attached, index)
@@ -141,7 +141,7 @@ func (db *EntityComponentDB) NewAttachedComponent(entity Entity, index int) Atta
 	return attached
 }
 
-func (db *EntityComponentDB) LoadAttachComponent(index int, data map[string]any, ignoreSerializedEntity bool) Attachable {
+func (db *ECS) LoadAttachComponent(index int, data map[string]any, ignoreSerializedEntity bool) Attachable {
 	var entity Entity
 	var err error
 	if ignoreSerializedEntity || data["Entity"] == nil {
@@ -152,7 +152,7 @@ func (db *EntityComponentDB) LoadAttachComponent(index int, data map[string]any,
 
 	db.usedEntities.Set(uint32(entity))
 
-	t := DbTypes().Types[index]
+	t := Types().Types[index]
 	newc := reflect.New(t).Interface()
 	attached := newc.(Attachable)
 	db.attach(entity, attached, index)
@@ -160,11 +160,11 @@ func (db *EntityComponentDB) LoadAttachComponent(index int, data map[string]any,
 	return attached
 }
 
-func (db *EntityComponentDB) LoadComponentWithoutAttaching(index int, data map[string]any) Attachable {
+func (db *ECS) LoadComponentWithoutAttaching(index int, data map[string]any) Attachable {
 	if data == nil {
 		return nil
 	}
-	t := DbTypes().Types[index]
+	t := Types().Types[index]
 	newc := reflect.New(t).Interface()
 	component := newc.(Attachable)
 	component.SetEntity(0)
@@ -173,8 +173,8 @@ func (db *EntityComponentDB) LoadComponentWithoutAttaching(index int, data map[s
 	return component
 }
 
-func (db *EntityComponentDB) NewAttachedComponentTyped(entity Entity, cType string) Attachable {
-	if index, ok := DbTypes().Indexes[cType]; ok {
+func (db *ECS) NewAttachedComponentTyped(entity Entity, cType string) Attachable {
+	if index, ok := Types().Indexes[cType]; ok {
 		return db.NewAttachedComponent(entity, index)
 	}
 
@@ -182,23 +182,23 @@ func (db *EntityComponentDB) NewAttachedComponentTyped(entity Entity, cType stri
 	return nil
 }
 
-func (db *EntityComponentDB) Attach(componentIndex int, entity Entity, component Attachable) {
+func (db *ECS) Attach(componentIndex int, entity Entity, component Attachable) {
 	db.attach(entity, component, componentIndex)
 }
 
 // This seems expensive. Need to profile
-func (db *EntityComponentDB) AttachTyped(entity Entity, component Attachable) {
+func (db *ECS) AttachTyped(entity Entity, component Attachable) {
 	t := reflect.ValueOf(component).Type()
 
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
-	if index, ok := DbTypes().Indexes[t.String()]; ok {
+	if index, ok := Types().Indexes[t.String()]; ok {
 		db.attach(entity, component, index)
 	}
 }
 
-func (db *EntityComponentDB) detach(index int, entity Entity, checkForEmpty bool) {
+func (db *ECS) detach(index int, entity Entity, checkForEmpty bool) {
 	if entity == 0 || index == 0 {
 		log.Printf("EntityComponentDB.Detach: tried to detach 0 entity/index.")
 		return
@@ -245,11 +245,11 @@ func (db *EntityComponentDB) detach(index int, entity Entity, checkForEmpty bool
 	}
 }
 
-func (db *EntityComponentDB) Detach(index int, entity Entity) {
+func (db *ECS) Detach(index int, entity Entity) {
 	db.detach(index, entity, true)
 }
 
-func (db *EntityComponentDB) DetachByType(component Attachable) {
+func (db *ECS) DetachByType(component Attachable) {
 	if component == nil {
 		return
 	}
@@ -265,7 +265,7 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 		tLocal = tLocal.Elem()
 	}
 
-	index := DbTypes().Indexes[tLocal.String()]
+	index := Types().Indexes[tLocal.String()]
 	if index < 0 {
 		return
 	}
@@ -273,7 +273,7 @@ func (db *EntityComponentDB) DetachByType(component Attachable) {
 	db.detach(index, entity, true)
 }
 
-func (db *EntityComponentDB) DetachAll(entity Entity) {
+func (db *ECS) DetachAll(entity Entity) {
 	if entity == 0 {
 		return
 	}
@@ -286,7 +286,7 @@ func (db *EntityComponentDB) DetachAll(entity Entity) {
 	db.usedEntities.Remove(uint32(entity))
 }
 
-func (db *EntityComponentDB) GetEntityByName(name string) Entity {
+func (db *ECS) GetEntityByName(name string) Entity {
 	if allNamed := db.AllOfType(NamedComponentIndex); allNamed != nil {
 		for _, c := range allNamed {
 			named := c.(*Named)
@@ -298,8 +298,8 @@ func (db *EntityComponentDB) GetEntityByName(name string) Entity {
 	return 0
 }
 
-func (db *EntityComponentDB) DeserializeAndAttachEntity(jsonEntity map[string]any) {
-	for name, index := range DbTypes().Indexes {
+func (db *ECS) DeserializeAndAttachEntity(jsonEntity map[string]any) {
+	for name, index := range Types().Indexes {
 		jsonData := jsonEntity[name]
 		if jsonData == nil {
 			continue
@@ -308,7 +308,7 @@ func (db *EntityComponentDB) DeserializeAndAttachEntity(jsonEntity map[string]an
 		db.LoadAttachComponent(index, jsonComponent, false)
 	}
 }
-func (db *EntityComponentDB) Load(filename string) error {
+func (db *ECS) Load(filename string) error {
 	db.Lock.Lock()
 	defer db.Lock.Unlock()
 
@@ -346,7 +346,7 @@ func (db *EntityComponentDB) Load(filename string) error {
 	return nil
 }
 
-func (db *EntityComponentDB) SerializeEntity(entity Entity) map[string]any {
+func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 	components := db.EntityComponents[entity]
 	jsonEntity := make(map[string]any)
 	jsonEntity["Entity"] = entity.Format()
@@ -354,7 +354,7 @@ func (db *EntityComponentDB) SerializeEntity(entity Entity) map[string]any {
 		if component == nil || component.IsSystem() {
 			continue
 		}
-		jsonEntity[DbTypes().Types[index].String()] = component.Serialize()
+		jsonEntity[Types().Types[index].String()] = component.Serialize()
 	}
 	if len(jsonEntity) == 1 {
 		return nil
@@ -362,7 +362,7 @@ func (db *EntityComponentDB) SerializeEntity(entity Entity) map[string]any {
 	return jsonEntity
 }
 
-func (db *EntityComponentDB) Save(filename string) {
+func (db *ECS) Save(filename string) {
 	db.Lock.Lock()
 	defer db.Lock.Unlock()
 	jsonDB := make([]any, 0)
@@ -384,7 +384,7 @@ func (db *EntityComponentDB) Save(filename string) {
 	os.WriteFile(filename, bytes, os.ModePerm)
 }
 
-func (db *EntityComponentDB) DeserializeEntities(data []any) []Entity {
+func (db *ECS) DeserializeEntities(data []any) []Entity {
 	if data == nil {
 		return nil
 	}
@@ -398,10 +398,24 @@ func (db *EntityComponentDB) DeserializeEntities(data []any) []Entity {
 	return result
 }
 
-func (db *EntityComponentDB) SerializeEntities(data []Entity) []string {
+func (db *ECS) SerializeEntities(data []Entity) []string {
 	result := make([]string, len(data))
 	for i, e := range data {
 		result[i] = e.Format()
 	}
 	return result
+}
+
+func ConstructArray(parent any, arrayPtr any, data any) {
+	valuePtr := reflect.ValueOf(arrayPtr)
+	arrayValue := valuePtr.Elem()
+
+	itemType := reflect.TypeOf(arrayPtr).Elem().Elem()
+	arrayValue.Set(reflect.Zero(arrayValue.Type()))
+	for _, child := range data.([]any) {
+		item := reflect.New(itemType.Elem()).Interface().(Attachable)
+		//item.SetParent(parent)
+		item.Construct(child.(map[string]any))
+		arrayValue.Set(reflect.Append(arrayValue, reflect.ValueOf(item)))
+	}
 }

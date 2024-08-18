@@ -11,13 +11,14 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
-func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size float64) *core.Sector {
+func CreateTestSector(db *ecs.ECS, name string, x, y, size float64) *core.Sector {
 	eSector := archetypes.CreateSector(db)
 	sector := core.SectorFromDb(db, eSector)
 	sector.Construct(nil)
-	named := db.NewAttachedComponent(eSector, concepts.NamedComponentIndex).(*concepts.Named)
+	named := db.NewAttachedComponent(eSector, ecs.NamedComponentIndex).(*ecs.Named)
 	named.Name = name
 
 	mat := DefaultMaterial(db)
@@ -44,9 +45,9 @@ func CreateTestSector(db *concepts.EntityComponentDB, name string, x, y, size fl
 	return sector
 }
 
-func CreateTestGrass(db *concepts.EntityComponentDB) concepts.Entity {
+func CreateTestGrass(db *ecs.ECS) ecs.Entity {
 	eGrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eGrass, concepts.NamedComponentIndex).(*concepts.Named)
+	nmat := db.NewAttachedComponent(eGrass, ecs.NamedComponentIndex).(*ecs.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	tex := materials.ImageFromDb(db, eGrass)
@@ -56,7 +57,7 @@ func CreateTestGrass(db *concepts.EntityComponentDB) concepts.Entity {
 	tex.Load()
 	return eGrass
 }
-func CreateTestSky(db *concepts.EntityComponentDB) concepts.Entity {
+func CreateTestSky(db *ecs.ECS) ecs.Entity {
 	img := db.NewAttachedComponent(db.NewEntity(), materials.ImageComponentIndex).(*materials.Image)
 	img.Source = "data/Sky.png"
 	img.Filter = false
@@ -69,15 +70,15 @@ func CreateTestSky(db *concepts.EntityComponentDB) concepts.Entity {
 	sky.Stages[0].Construct(nil)
 	sky.Stages[0].Texture = img.Entity
 	sky.Stages[0].Flags = materials.ShaderSky | materials.ShaderTiled
-	named := db.NewAttachedComponent(entity, concepts.NamedComponentIndex).(*concepts.Named)
+	named := db.NewAttachedComponent(entity, ecs.NamedComponentIndex).(*ecs.Named)
 	named.Name = "Sky"
 
 	return entity
 }
 
-func CreateTestDirt(db *concepts.EntityComponentDB) concepts.Entity {
+func CreateTestDirt(db *ecs.ECS) ecs.Entity {
 	eDirt := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eDirt, concepts.NamedComponentIndex).(*concepts.Named)
+	nmat := db.NewAttachedComponent(eDirt, ecs.NamedComponentIndex).(*ecs.Named)
 	nmat.Name = "Dirt"
 	tex := materials.ImageFromDb(db, eDirt)
 	tex.Source = "data/FDef.png"
@@ -87,12 +88,12 @@ func CreateTestDirt(db *concepts.EntityComponentDB) concepts.Entity {
 	return eDirt
 }
 
-func CreateTestWorld(db *concepts.EntityComponentDB) {
+func CreateTestWorld(db *ecs.ECS) {
 	testw := 30
 	testh := 30
 
 	eGrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eGrass, concepts.NamedComponentIndex).(*concepts.Named)
+	nmat := db.NewAttachedComponent(eGrass, ecs.NamedComponentIndex).(*ecs.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	tex := materials.ImageFromDb(db, eGrass)
@@ -142,11 +143,11 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 		}
 	}
 	// After everything's loaded, trigger the controllers
-	db.ActAllControllers(concepts.ControllerRecalculate)
+	db.ActAllControllers(ecs.ControllerRecalculate)
 	AutoPortal(db)
-	db.ActAllControllers(concepts.ControllerLoaded)
+	db.ActAllControllers(ecs.ControllerLoaded)
 }
-func CreateTestWorld2(db *concepts.EntityComponentDB) {
+func CreateTestWorld2(db *ecs.ECS) {
 	CreateTestGrass(db)
 	isky := CreateTestSky(db)
 	idirt := CreateTestDirt(db)
@@ -172,7 +173,7 @@ func CreateTestWorld2(db *concepts.EntityComponentDB) {
 	log.Println("Generated light")
 
 	// After everything's loaded, trigger the controllers
-	db.ActAllControllers(concepts.ControllerRecalculate)
+	db.ActAllControllers(ecs.ControllerRecalculate)
 	AutoPortal(db)
-	db.ActAllControllers(concepts.ControllerLoaded)
+	db.ActAllControllers(ecs.ControllerLoaded)
 }

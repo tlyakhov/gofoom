@@ -8,9 +8,8 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
-
-	"tlyakhov/gofoom/concepts"
 )
 
 type AddSliceElement struct {
@@ -31,7 +30,7 @@ func (a *AddSliceElement) Undo() {
 	if a.SlicePtr.Elem().Len() > 0 {
 		a.SlicePtr.Elem().Slice(0, a.SlicePtr.Len()-1)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *AddSliceElement) Redo() {
 	a.State().Lock.Lock()
@@ -53,9 +52,9 @@ func (a *AddSliceElement) Redo() {
 	case **behaviors.InventorySlot:
 		*target = new(behaviors.InventorySlot)
 	}
-	if serializable, ok := newValue.Elem().Interface().(concepts.Serializable); ok {
+	if serializable, ok := newValue.Elem().Interface().(ecs.Serializable); ok {
 		serializable.SetDB(a.State().DB)
 		serializable.Construct(nil)
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }

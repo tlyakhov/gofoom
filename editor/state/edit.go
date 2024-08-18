@@ -8,6 +8,7 @@ import (
 	"sync"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
@@ -28,7 +29,7 @@ const (
 
 type Edit struct {
 	MapView
-	DB   *concepts.EntityComponentDB
+	DB   *ecs.ECS
 	Lock sync.Mutex
 
 	// Map view positions in world/screen space.
@@ -80,5 +81,5 @@ type IEditor interface {
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)
 	SetDialogLocation(dlg *dialog.FileDialog, target string)
-	EntityImage(entity concepts.Entity, sector bool) image.Image
+	EntityImage(entity ecs.Entity, sector bool) image.Image
 }

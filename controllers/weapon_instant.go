@@ -11,11 +11,12 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render/state"
 )
 
 type WeaponInstantController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*behaviors.WeaponInstant
 	state.MaterialSampler
 	Body *core.Body
@@ -25,18 +26,18 @@ type WeaponInstantController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&WeaponInstantController{}, 100)
+	ecs.Types().RegisterController(&WeaponInstantController{}, 100)
 }
 
 func (wc *WeaponInstantController) ComponentIndex() int {
 	return behaviors.WeaponInstantComponentIndex
 }
 
-func (wc *WeaponInstantController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways
+func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways
 }
 
-func (wc *WeaponInstantController) Target(target concepts.Attachable) bool {
+func (wc *WeaponInstantController) Target(target ecs.Attachable) bool {
 	wc.WeaponInstant = target.(*behaviors.WeaponInstant)
 	wc.Body = core.BodyFromDb(wc.WeaponInstant.DB, wc.WeaponInstant.Entity)
 	return wc.WeaponInstant.IsActive() && wc.Body.IsActive()
@@ -119,8 +120,8 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.PointZ(concepts.DynamicNow, wc.isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(concepts.DynamicNow, wc.isect.To2D())
+			floorZ, ceilZ := sector.PointZ(ecs.DynamicNow, wc.isect.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(ecs.DynamicNow, wc.isect.To2D())
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
@@ -167,9 +168,9 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
 	switch s.Type {
 	case core.SelectableHi:
-		_, top = s.Sector.PointZ(concepts.DynamicNow, p)
+		_, top = s.Sector.PointZ(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.PointZ(concepts.DynamicNow, p)
+		_, adjTop := adj.PointZ(ecs.DynamicNow, p)
 		if adjTop <= top {
 			bottom = adjTop
 			surf = &s.SectorSegment.AdjacentSegment.HiSurface
@@ -178,9 +179,9 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			surf = &s.SectorSegment.HiSurface
 		}
 	case core.SelectableLow:
-		bottom, _ = s.Sector.PointZ(concepts.DynamicNow, p)
+		bottom, _ = s.Sector.PointZ(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.PointZ(concepts.DynamicNow, p)
+		adjBottom, _ := adj.PointZ(ecs.DynamicNow, p)
 		if bottom <= adjBottom {
 			top = adjBottom
 			surf = &s.SectorSegment.AdjacentSegment.LoSurface
@@ -189,7 +190,7 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			surf = &s.SectorSegment.LoSurface
 		}
 	case core.SelectableMid:
-		bottom, top = s.Sector.PointZ(concepts.DynamicNow, p)
+		bottom, top = s.Sector.PointZ(ecs.DynamicNow, p)
 		surf = &s.SectorSegment.Surface
 	case core.SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top

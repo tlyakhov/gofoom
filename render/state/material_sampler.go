@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 type MaterialSampler struct {
@@ -19,13 +20,13 @@ type MaterialSampler struct {
 	ScaleW, ScaleH   uint32
 	NoTexture        bool
 	SpriteAngle      float64
-	Materials        []concepts.Attachable
+	Materials        []ecs.Attachable
 	pipelineIndex    int
 	U, V             float64
 	NU, NV           float64
 }
 
-func (ms *MaterialSampler) Initialize(material concepts.Entity, extraStages []*materials.ShaderStage) {
+func (ms *MaterialSampler) Initialize(material ecs.Entity, extraStages []*materials.ShaderStage) {
 	ms.Materials = ms.Materials[:0]
 	ms.derefMaterials(material, nil)
 	for _, stage := range extraStages {
@@ -37,7 +38,7 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 	delta := &concepts.Vector3{dst[0] - src[0], dst[1] - src[1], dst[2] - src[2]}
 	delta.NormSelf()
 	isect := concepts.Vector3{}
-	seg := b.BillboardSegment(delta, concepts.DynamicRender)
+	seg := b.BillboardSegment(delta, ecs.DynamicRender)
 	ok := seg.Intersect3D(src, dst, &isect)
 	if !ok {
 		return false
@@ -53,7 +54,7 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 	return true
 }
 
-func (ms *MaterialSampler) derefMaterials(material concepts.Entity, parent concepts.Attachable) {
+func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Attachable) {
 	if shader := materials.ShaderFromDb(ms.DB, material); shader != nil && shader != parent {
 		ms.Materials = append(ms.Materials, shader)
 		for _, stage := range shader.Stages {
@@ -117,7 +118,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	}
 
 	ms.NoTexture = false
-	var a concepts.Attachable
+	var a ecs.Attachable
 	if ms.pipelineIndex < len(ms.Materials) {
 		a = ms.Materials[ms.pipelineIndex]
 	}

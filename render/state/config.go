@@ -9,10 +9,11 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type Config struct {
-	DB                        *concepts.EntityComponentDB
+	DB                        *ecs.ECS
 	Multithreaded             bool
 	Blocks                    int
 	ScreenWidth, ScreenHeight int

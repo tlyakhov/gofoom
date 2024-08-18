@@ -7,6 +7,7 @@ import (
 	"log"
 	"math"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
@@ -51,7 +52,7 @@ func (a *Transform) end() {
 	}
 
 	a.State().Lock.Lock()
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Lock.Unlock()
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
@@ -131,7 +132,7 @@ func (a *Transform) Undo() {
 	for _, s := range a.Selected.Exact {
 		s.Recalculate()
 	}
-	a.State().DB.ActAllControllers(concepts.ControllerRecalculate)
+	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *Transform) Redo() {
 	a.Act()

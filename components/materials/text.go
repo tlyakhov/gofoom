@@ -7,28 +7,29 @@ import (
 	"image"
 	"strings"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"github.com/fogleman/gg"
 	"golang.org/x/image/font/inconsolata"
 )
 
 type Text struct {
-	concepts.Attached `editable:"^"`
-	Rendered          *Image
+	ecs.Attached `editable:"^"`
+	Rendered     *Image
 
 	Label       string  `editable:"Label" edit_type:"multi-line-string"`
 	LineSpacing float64 `editable:"Line Spacing"`
 
-	Color concepts.DynamicValue[concepts.Vector4] `editable:"Color"`
+	Color ecs.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
 var TextComponentIndex int
 
 func init() {
-	TextComponentIndex = concepts.DbTypes().Register(Text{}, TextFromDb)
+	TextComponentIndex = ecs.Types().Register(Text{}, TextFromDb)
 }
 
-func TextFromDb(db *concepts.EntityComponentDB, e concepts.Entity) *Text {
+func TextFromDb(db *ecs.ECS, e ecs.Entity) *Text {
 	if asserted, ok := db.Component(e, TextComponentIndex).(*Text); ok {
 		return asserted
 	}
@@ -41,7 +42,7 @@ func (t *Text) OnDetach() {
 	}
 	t.Attached.OnDetach()
 }
-func (t *Text) SetDB(db *concepts.EntityComponentDB) {
+func (t *Text) SetDB(db *ecs.ECS) {
 	if t.DB != db {
 		t.OnDetach()
 	}

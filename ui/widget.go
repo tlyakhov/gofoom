@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 type textElement struct {
@@ -25,7 +26,7 @@ type Widget struct {
 	ID        string
 	Label     string
 	Tooltip   string
-	highlight concepts.DynamicValue[concepts.Vector4]
+	highlight ecs.DynamicValue[concepts.Vector4]
 }
 
 type Button struct {

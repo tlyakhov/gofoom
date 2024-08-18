@@ -10,30 +10,31 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/constants"
 )
 
 type PlayerController struct {
-	concepts.BaseController
+	ecs.BaseController
 	*behaviors.Player
 	Alive *behaviors.Alive
 	Body  *core.Body
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&PlayerController{}, 100)
+	ecs.Types().RegisterController(&PlayerController{}, 100)
 }
 
 func (pc *PlayerController) ComponentIndex() int {
 	return behaviors.PlayerComponentIndex
 }
 
-func (pc *PlayerController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways
+func (pc *PlayerController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways
 }
 
-func (pc *PlayerController) Target(target concepts.Attachable) bool {
+func (pc *PlayerController) Target(target ecs.Attachable) bool {
 	pc.Player = target.(*behaviors.Player)
 	if !pc.Player.IsActive() || pc.Player.Spawn {
 		return false
@@ -72,7 +73,7 @@ func (pc *PlayerController) Always() {
 	pc.CameraZ = pc.Body.Pos.Render[2] + pc.Body.Size.Render[1]*0.5 + bob - 5
 
 	if sector := pc.Body.Sector(); sector != nil {
-		fz, cz := sector.PointZ(concepts.DynamicRender, pc.Body.Pos.Render.To2D())
+		fz, cz := sector.PointZ(ecs.DynamicRender, pc.Body.Pos.Render.To2D())
 		fz += constants.IntersectEpsilon
 		cz -= constants.IntersectEpsilon
 		if pc.CameraZ < fz {
@@ -114,7 +115,7 @@ func MovePlayer(p *core.Body, angle float64, direct bool) {
 	}
 }
 
-func Respawn(db *concepts.EntityComponentDB) {
+func Respawn(db *ecs.ECS) {
 	var player *behaviors.Player
 
 	spawns := make([]*behaviors.Player, 0)
@@ -137,8 +138,8 @@ func Respawn(db *concepts.EntityComponentDB) {
 
 	spawn := spawns[rand.Int()%len(spawns)]
 	copiedSpawn := db.SerializeEntity(spawn.Entity)
-	var pastedEntity concepts.Entity
-	for name, index := range concepts.DbTypes().Indexes {
+	var pastedEntity ecs.Entity
+	for name, index := range ecs.Types().Indexes {
 		jsonData := copiedSpawn[name]
 		if jsonData == nil {
 			continue

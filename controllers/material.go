@@ -5,10 +5,10 @@ package controllers
 
 import (
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
-func DefaultMaterial(db *concepts.EntityComponentDB) concepts.Entity {
+func DefaultMaterial(db *ecs.ECS) ecs.Entity {
 	entity := db.GetEntityByName("Default Material")
 	if entity != 0 {
 		return entity

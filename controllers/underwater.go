@@ -8,27 +8,28 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/ecs"
 )
 
 type UnderwaterController struct {
-	concepts.BaseController
+	ecs.BaseController
 	Underwater *behaviors.Underwater
 	Sector     *core.Sector
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&UnderwaterController{}, 100)
+	ecs.Types().RegisterController(&UnderwaterController{}, 100)
 }
 
 func (uc *UnderwaterController) ComponentIndex() int {
 	return behaviors.UnderwaterComponentIndex
 }
 
-func (uc *UnderwaterController) Methods() concepts.ControllerMethod {
-	return concepts.ControllerAlways | concepts.ControllerLoaded
+func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways | ecs.ControllerLoaded
 }
 
-func (uc *UnderwaterController) Target(target concepts.Attachable) bool {
+func (uc *UnderwaterController) Target(target ecs.Attachable) bool {
 	uc.Underwater = target.(*behaviors.Underwater)
 	uc.Sector = core.SectorFromDb(target.GetDB(), target.GetEntity())
 	return uc.Underwater.IsActive() && uc.Sector.IsActive()

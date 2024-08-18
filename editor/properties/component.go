@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -20,7 +20,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	parentType := ""
 	entities := ""
 	for _, v := range field.Values {
-		entity := v.Interface().(concepts.Entity)
+		entity := v.Interface().(ecs.Entity)
 		if len(entities) > 0 {
 			entities += ", "
 		}
@@ -35,11 +35,11 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	}
 	button.Icon = theme.ContentRemoveIcon()
 	button.OnTapped = func() {
-		action := &actions.DeleteComponent{IEditor: g.IEditor, Components: make(map[concepts.Entity]concepts.Attachable)}
+		action := &actions.DeleteComponent{IEditor: g.IEditor, Components: make(map[ecs.Entity]ecs.Attachable)}
 		for _, v := range field.Values {
-			entity := v.Interface().(concepts.Entity)
+			entity := v.Interface().(ecs.Entity)
 			log.Printf("Detaching %v from %v", parentType, entity)
-			action.Components[entity] = v.Parent().(concepts.Attachable)
+			action.Components[entity] = v.Parent().(ecs.Attachable)
 		}
 		g.NewAction(action)
 		action.Act()

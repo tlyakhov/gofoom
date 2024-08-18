@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"reflect"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -269,7 +270,7 @@ func CreateMainMenu() {
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
 		editor.DB.Simulation.All.Range(func(key any, _ any) bool {
-			d := key.(concepts.Dynamic)
+			d := key.(ecs.Dynamic)
 			d.ResetToOriginal()
 			if a := d.GetAnimation(); a != nil {
 				a.Reset()
