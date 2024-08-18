@@ -16,7 +16,7 @@ type VerticalDoorController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&VerticalDoorController{})
+	concepts.DbTypes().RegisterController(&VerticalDoorController{}, 100)
 }
 
 func (vd *VerticalDoorController) ComponentIndex() int {

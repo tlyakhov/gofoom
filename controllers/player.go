@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"math"
+	"math/rand/v2"
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -21,7 +22,7 @@ type PlayerController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&PlayerController{})
+	concepts.DbTypes().RegisterController(&PlayerController{}, 100)
 }
 
 func (pc *PlayerController) ComponentIndex() int {
@@ -34,7 +35,7 @@ func (pc *PlayerController) Methods() concepts.ControllerMethod {
 
 func (pc *PlayerController) Target(target concepts.Attachable) bool {
 	pc.Player = target.(*behaviors.Player)
-	if !pc.Player.IsActive() {
+	if !pc.Player.IsActive() || pc.Player.Spawn {
 		return false
 	}
 	pc.Body = core.BodyFromDb(pc.Player.DB, pc.Player.Entity)
@@ -68,7 +69,7 @@ func (pc *PlayerController) Always() {
 	}
 
 	bob := math.Sin(pc.Bob) * 1.5
-	pc.CameraZ = pc.Body.Pos.Render[2] + pc.Body.Size.Render[1]*0.5 + bob
+	pc.CameraZ = pc.Body.Pos.Render[2] + pc.Body.Size.Render[1]*0.5 + bob - 5
 
 	if sector := pc.Body.Sector(); sector != nil {
 		fz, cz := sector.PointZ(concepts.DynamicRender, pc.Body.Pos.Render.To2D())
@@ -109,6 +110,48 @@ func MovePlayer(p *core.Body, angle float64, direct bool) {
 		if uw || p.OnGround {
 			p.Force[0] += dx
 			p.Force[1] += dy
+		}
+	}
+}
+
+func Respawn(db *concepts.EntityComponentDB) {
+	var player *behaviors.Player
+
+	spawns := make([]*behaviors.Player, 0)
+	for _, attachable := range db.AllOfType(behaviors.PlayerComponentIndex) {
+		p := attachable.(*behaviors.Player)
+		if !p.Active {
+			continue
+		}
+		if p.Spawn {
+			spawns = append(spawns, p)
+			continue
+		}
+		player = p
+	}
+
+	// Create a player if we don't have one
+	if player != nil || len(spawns) == 0 {
+		return
+	}
+
+	spawn := spawns[rand.Int()%len(spawns)]
+	copiedSpawn := db.SerializeEntity(spawn.Entity)
+	var pastedEntity concepts.Entity
+	for name, index := range concepts.DbTypes().Indexes {
+		jsonData := copiedSpawn[name]
+		if jsonData == nil {
+			continue
+		}
+		if pastedEntity == 0 {
+			pastedEntity = db.NewEntity()
+		}
+		jsonComponent := jsonData.(map[string]any)
+		c := db.LoadComponentWithoutAttaching(index, jsonComponent)
+		db.Attach(index, pastedEntity, c)
+		if index == behaviors.PlayerComponentIndex {
+			player := c.(*behaviors.Player)
+			player.Spawn = false
 		}
 	}
 }

@@ -19,7 +19,7 @@ type WanderController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&WanderController{})
+	concepts.DbTypes().RegisterController(&WanderController{}, 100)
 }
 
 func (wc *WanderController) ComponentIndex() int {

@@ -15,7 +15,7 @@ import (
 )
 
 // The architecture is like this:
-// * An entity is a globally unique uint64, e.g. primary key
+// * An entity is a globally unique integer (uint32), e.g. primary key
 // * A component is a named (string) table with columns of fields, rows of
 // entities
 // * A system is code that queries and operates on components and entities

@@ -14,7 +14,7 @@ type AliveController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&AliveController{})
+	concepts.DbTypes().RegisterController(&AliveController{}, 100)
 }
 
 func (a *AliveController) ComponentIndex() int {

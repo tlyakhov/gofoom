@@ -48,12 +48,15 @@ func (c *Config) Initialize() {
 }
 
 func (c *Config) RefreshPlayer() {
-	var ok bool
-	a := c.DB.First(behaviors.PlayerComponentIndex)
-	if c.Player, ok = a.(*behaviors.Player); !ok {
+	for _, attachable := range c.DB.AllOfType(behaviors.PlayerComponentIndex) {
+		player := attachable.(*behaviors.Player)
+		if !player.Active || player.Spawn {
+			continue
+		}
+		c.Player = player
+		c.PlayerBody = core.BodyFromDb(c.DB, c.Player.Entity)
 		return
 	}
-	c.PlayerBody = core.BodyFromDb(c.DB, c.Player.Entity)
 }
 
 const lightmapMask uint64 = (1 << 16) - 1

@@ -12,13 +12,18 @@ import (
 	"github.com/traefik/yaegi/interp"
 )
 
+type controllerMetadata struct {
+	Controller
+	Type     reflect.Type
+	Priority int
+}
 type dbTypes struct {
 	Indexes           map[string]int
 	IndexesNoPackage  map[string]int
 	Types             []reflect.Type
 	Funcs             []any
 	nextFreeComponent uint32
-	Controllers       []reflect.Type
+	Controllers       []controllerMetadata
 	ExprEnv           map[string]any
 	InterpSymbols     interp.Exports
 	lock              sync.RWMutex
@@ -30,7 +35,7 @@ var once sync.Once
 func DbTypes() *dbTypes {
 	once.Do(func() {
 		globalDbTypes = &dbTypes{
-			Controllers:      make([]reflect.Type, 0),
+			Controllers:      make([]controllerMetadata, 0),
 			Indexes:          make(map[string]int),
 			IndexesNoPackage: make(map[string]int),
 			ExprEnv:          make(map[string]any),

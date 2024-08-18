@@ -5,6 +5,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"image"
 	"log"
 	"os"
@@ -157,6 +158,9 @@ func run() {
 
 	win.SetSmooth(false)
 
+	for _, meta := range concepts.DbTypes().Controllers {
+		fmt.Printf("%v, priority %v\n", meta.Type.String(), meta.Priority)
+	}
 	db = concepts.NewEntityComponentDB()
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
@@ -166,7 +170,7 @@ func run() {
 		log.Printf("Error loading world %v", err)
 		return
 	}
-	setupPlayer()
+	controllers.Respawn(db)
 	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 
 	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))

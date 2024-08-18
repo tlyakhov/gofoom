@@ -49,6 +49,7 @@ func init() {
 		"DoorIntent":    reflect.ValueOf((*behaviors.DoorIntent)(nil)),
 		"DoorState":     reflect.ValueOf((*behaviors.DoorState)(nil)),
 		"InventoryItem": reflect.ValueOf((*behaviors.InventoryItem)(nil)),
+		"InventorySlot": reflect.ValueOf((*behaviors.InventorySlot)(nil)),
 		"Player":        reflect.ValueOf((*behaviors.Player)(nil)),
 		"Proximity":     reflect.ValueOf((*behaviors.Proximity)(nil)),
 		"Underwater":    reflect.ValueOf((*behaviors.Underwater)(nil)),

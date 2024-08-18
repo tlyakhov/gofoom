@@ -177,6 +177,14 @@ func (m *Matrix2) Unproject(u *Vector2) *Vector2 {
 	}
 }
 
+func (m *Matrix2) UnprojectSelf(u *Vector2) *Vector2 {
+	det := m[0]*m[3] - m[2]*m[1]
+	u[0], u[1] =
+		(m[3]*(u[0]-m[4])-m[2]*(u[1]-m[5]))/det,
+		(-m[1]*(u[0]-m[4])+m[0]*(u[1]-m[5]))/det
+	return u
+}
+
 func (m *Matrix2) AffineInverseSelf() *Matrix2 {
 	// Affine matrixes are of the form [ X b ]
 	//                                 [ 0 1 ]

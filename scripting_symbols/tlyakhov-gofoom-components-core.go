@@ -23,6 +23,7 @@ func init() {
 		"BodyShadowStrings":              reflect.ValueOf(core.BodyShadowStrings),
 		"BodyShadowValues":               reflect.ValueOf(core.BodyShadowValues),
 		"CollideBounce":                  reflect.ValueOf(core.CollideBounce),
+		"CollideDeactivate":              reflect.ValueOf(core.CollideDeactivate),
 		"CollideNone":                    reflect.ValueOf(core.CollideNone),
 		"CollideRemove":                  reflect.ValueOf(core.CollideRemove),
 		"CollideSeparate":                reflect.ValueOf(core.CollideSeparate),
@@ -69,8 +70,6 @@ func init() {
 		"SelectableTypeString":           reflect.ValueOf(core.SelectableTypeString),
 		"SelectableTypeStrings":          reflect.ValueOf(core.SelectableTypeStrings),
 		"SelectableTypeValues":           reflect.ValueOf(core.SelectableTypeValues),
-		"SpawnComponentIndex":            reflect.ValueOf(&core.SpawnComponentIndex).Elem(),
-		"SpawnFromDb":                    reflect.ValueOf(core.SpawnFromDb),
 
 		// type definitions
 		"Body":              reflect.ValueOf((*core.Body)(nil)),
@@ -86,6 +85,5 @@ func init() {
 		"Selectable":        reflect.ValueOf((*core.Selectable)(nil)),
 		"SelectableType":    reflect.ValueOf((*core.SelectableType)(nil)),
 		"Selection":         reflect.ValueOf((*core.Selection)(nil)),
-		"Spawn":             reflect.ValueOf((*core.Spawn)(nil)),
 	}
 }

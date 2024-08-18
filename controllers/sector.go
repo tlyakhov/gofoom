@@ -15,16 +15,12 @@ type SectorController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&SectorController{})
+	// Should run before everything
+	concepts.DbTypes().RegisterController(&SectorController{}, 50)
 }
 
 func (sc *SectorController) ComponentIndex() int {
 	return core.SectorComponentIndex
-}
-
-// Should run before everything
-func (sc *SectorController) Priority() int {
-	return 50
 }
 
 func (sc *SectorController) Methods() concepts.ControllerMethod {

@@ -4,6 +4,7 @@
 package behaviors
 
 import (
+	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 )
@@ -11,6 +12,7 @@ import (
 type Player struct {
 	concepts.Attached `editable:"^"`
 
+	Spawn         bool
 	FrameTint     concepts.Vector4
 	Crouching     bool
 	Inventory     []*InventorySlot `editable:"Inventory"`
@@ -45,28 +47,46 @@ func (p *Player) Underwater() bool {
 
 func (p *Player) Construct(data map[string]any) {
 	p.Attached.Construct(data)
+	// By convention, we construct spawn points rather than active players to
+	// avoid weird behaviors.
+	p.Spawn = true
 
 	if data == nil {
 		return
+	}
+
+	if v, ok := data["Spawn"]; ok {
+		p.Spawn = v.(bool)
 	}
 
 	if v, ok := data["Inventory"]; ok {
 		concepts.ConstructSlice[*InventoryItem](p.DB, v)
 	}
 
-	/*if v, ok := data["CurrentWeapon"]; ok {
-		p.CurrentWeapon, _ = concepts.ParseEntity(v.(string))
-	}*/
+	if v, ok := data["CurrentWeapon"]; ok {
+		index, _ := strconv.Atoi(v.(string))
+		if index >= 0 && index < len(p.Inventory) {
+			p.CurrentWeapon = p.Inventory[index]
+		}
+	}
 }
 
 func (p *Player) Serialize() map[string]any {
 	result := p.Attached.Serialize()
 
+	result["Spawn"] = p.Spawn
+
 	if len(p.Inventory) > 0 {
 		result["Inventory"] = concepts.SerializeSlice(p.Inventory)
 	}
-	/*if p.CurrentWeapon != 0 {
-		result["CurrentWeapon"] = p.CurrentWeapon.Format()
-	}*/
+	if p.CurrentWeapon != nil {
+		for i, slot := range p.Inventory {
+			if slot != p.CurrentWeapon {
+				continue
+			}
+			result["CurrentWeapon"] = strconv.Itoa(i)
+			break
+		}
+	}
 	return result
 }

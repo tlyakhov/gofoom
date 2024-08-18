@@ -25,7 +25,7 @@ type WeaponInstantController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&WeaponInstantController{})
+	concepts.DbTypes().RegisterController(&WeaponInstantController{}, 100)
 }
 
 func (wc *WeaponInstantController) ComponentIndex() int {

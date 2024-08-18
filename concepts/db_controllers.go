@@ -12,21 +12,20 @@ import (
 // different types of controllers. Now there are only really 2 methods: "Loaded"
 // and "Recalculate". Should simplify.
 
-func (dbt *dbTypes) RegisterController(local Controller) {
-	dbt.lock.Lock()
-	defer dbt.lock.Unlock()
-	tLocal := reflect.ValueOf(local).Type()
+func (types *dbTypes) RegisterController(instance Controller, priority int) {
+	types.lock.Lock()
+	defer types.lock.Unlock()
+	instanceType := reflect.ValueOf(instance).Type()
 
-	if tLocal.Kind() != reflect.Ptr {
+	if instanceType.Kind() != reflect.Ptr {
 		panic("Attempt to register controller with a value type (should be a pointer)")
 	}
-	dbt.Controllers = append(dbt.Controllers, tLocal)
-	// This is incredibly inefficient, but our N count is so low it doesn't
-	// matter. Can refactor later if necessary
-	sort.Slice(dbt.Controllers, func(i, j int) bool {
-		ic := reflect.New(dbt.Controllers[i].Elem()).Interface().(Controller)
-		jc := reflect.New(dbt.Controllers[j].Elem()).Interface().(Controller)
-		return ic.Priority() < jc.Priority()
+	types.Controllers = append(types.Controllers, controllerMetadata{
+		Controller: instance,
+		Type:       instanceType,
+		Priority:   priority})
+	sort.Slice(types.Controllers, func(i, j int) bool {
+		return types.Controllers[i].Priority < types.Controllers[j].Priority
 	})
 }
 
@@ -42,8 +41,8 @@ func act(controller Controller, method ControllerMethod) {
 }
 
 func (db *EntityComponentDB) Act(component Attachable, index int, method ControllerMethod) {
-	for _, t := range DbTypes().Controllers {
-		controller := reflect.New(t.Elem()).Interface().(Controller)
+	for _, meta := range DbTypes().Controllers {
+		controller := reflect.New(meta.Type.Elem()).Interface().(Controller)
 		if controller == nil || controller.Methods()&method == 0 {
 			continue
 		}
@@ -57,8 +56,8 @@ func (db *EntityComponentDB) Act(component Attachable, index int, method Control
 }
 
 func (db *EntityComponentDB) ActAllControllers(method ControllerMethod) {
-	for _, t := range DbTypes().Controllers {
-		controller := reflect.New(t.Elem()).Interface().(Controller)
+	for _, meta := range DbTypes().Controllers {
+		controller := reflect.New(meta.Type.Elem()).Interface().(Controller)
 		if controller == nil || controller.Methods()&method == 0 {
 			continue
 		}

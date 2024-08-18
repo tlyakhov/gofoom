@@ -100,10 +100,10 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 
 	if c.SectorSegment.AdjacentSegment.PortalTeleports {
 		next.Ray = &state.Ray{Start: c.Start, End: c.End}
-		next.Ray.Start = *c.SectorSegment.PortalMatrix.Unproject(&next.Ray.Start)
-		next.Ray.End = *c.SectorSegment.PortalMatrix.Unproject(&next.Ray.End)
-		next.Ray.Start = *c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.Project(&next.Ray.Start)
-		next.Ray.End = *c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.Project(&next.Ray.End)
+		c.SectorSegment.PortalMatrix.UnprojectSelf(&next.Ray.Start)
+		c.SectorSegment.PortalMatrix.UnprojectSelf(&next.Ray.End)
+		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&next.Ray.Start)
+		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&next.Ray.End)
 		next.Ray.AnglesFromStartEnd()
 		// TODO: this has a bug if the adjacent sector has a sloped floor.
 		// Getting the right floor height is a bit expensive because we have to
