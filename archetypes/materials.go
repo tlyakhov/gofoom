@@ -22,7 +22,7 @@ func EntityIsMaterial(db *ecs.ECS, e ecs.Entity) bool {
 }
 
 func AttachableIsMaterial(a ecs.Attachable) bool {
-	return EntityIsMaterial(a.GetDB(), a.GetEntity())
+	return EntityIsMaterial(a.GetECS(), a.GetEntity())
 }
 
 func CreateBasicMaterial(db *ecs.ECS, textured bool) ecs.Entity {

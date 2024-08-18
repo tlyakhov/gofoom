@@ -27,9 +27,9 @@ func (bc *BodyController) Enter(eSector ecs.Entity) {
 		log.Printf("%v tried to enter nil sector", bc.Body.Entity)
 		return
 	}
-	sector := core.SectorFromDb(bc.Body.DB, eSector)
+	sector := core.SectorFromDb(bc.Body.ECS, eSector)
 	if sector == nil {
-		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, eSector.String(bc.Body.DB))
+		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, eSector.String(bc.Body.ECS))
 		return
 	}
 	bc.Sector = sector
@@ -93,7 +93,7 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
-	for _, attachable := range bc.Body.DB.AllOfType(core.SectorComponentIndex) {
+	for _, attachable := range bc.Body.ECS.AllOfType(core.SectorComponentIndex) {
 		sector := attachable.(*core.Sector)
 		if sector.IsPointInside2D(bc.pos2d) {
 			closestSector = sector
@@ -105,7 +105,7 @@ func (bc *BodyController) findBodySector() {
 		p := bc.Body.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
 		closestDistance2 := math.MaxFloat64
-		for _, attachable := range bc.Body.DB.AllOfType(core.SectorComponentIndex) {
+		for _, attachable := range bc.Body.ECS.AllOfType(core.SectorComponentIndex) {
 			sector := attachable.(*core.Sector)
 			for _, seg := range sector.Segments {
 				dist2 := seg.DistanceToPoint2(p)
@@ -135,7 +135,7 @@ func (bc *BodyController) checkBodySegmentCollisions() {
 	// See if we need to push back into the current sector.
 	for _, segment := range bc.Sector.Segments {
 		if segment.AdjacentSector != 0 && segment.PortalIsPassable {
-			adj := core.SectorFromDb(bc.Sector.DB, segment.AdjacentSector)
+			adj := core.SectorFromDb(bc.Sector.ECS, segment.AdjacentSector)
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
 			floorZ, ceilZ := adj.PointZ(ecs.DynamicNow, bc.pos2d)
@@ -201,7 +201,7 @@ func (bc *BodyController) bodyExitsSector() {
 		if segment.AdjacentSector == 0 {
 			continue
 		}
-		adj := core.SectorFromDb(bc.Sector.DB, segment.AdjacentSector)
+		adj := core.SectorFromDb(bc.Sector.ECS, segment.AdjacentSector)
 		floorZ, ceilZ := adj.PointZ(ecs.DynamicNow, bc.pos2d)
 		if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 			bc.pos[2]+bc.halfHeight < ceilZ &&
@@ -220,7 +220,7 @@ func (bc *BodyController) bodyExitsSector() {
 
 	if bc.Sector == nil {
 		// Case 6! This is the worst.
-		for _, component := range bc.Body.DB.AllOfType(core.SectorComponentIndex) {
+		for _, component := range bc.Body.ECS.AllOfType(core.SectorComponentIndex) {
 			sector := component.(*core.Sector)
 			floorZ, ceilZ := sector.PointZ(ecs.DynamicNow, bc.pos2d)
 			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
@@ -245,14 +245,14 @@ func (bc *BodyController) removeBody(body *core.Body) {
 			bc.Sector = nil
 		}
 	}
-	body.DB.DetachAll(body.Entity)
+	body.ECS.DetachAll(body.Entity)
 }
 
 func (bc *BodyController) resolveCollision(body *core.Body) {
 	// Use the right collision response settings
 	aResponse := bc.Body.CrBody
 	bResponse := body.CrBody
-	if behaviors.PlayerFromDb(body.DB, body.Entity) != nil {
+	if behaviors.PlayerFromDb(body.ECS, body.Entity) != nil {
 		aResponse = bc.Body.CrPlayer
 	}
 	if bc.Player != nil {
@@ -388,7 +388,7 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		if body == nil || body == bc.Body || !body.IsActive() {
 			continue
 		}
-		if p := behaviors.PlayerFromDb(body.DB, body.Entity); p != nil && p.Spawn {
+		if p := behaviors.PlayerFromDb(body.ECS, body.Entity); p != nil && p.Spawn {
 			// Ignore spawn points
 			continue
 		}
@@ -397,7 +397,7 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		r_a := bc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			item := behaviors.InventoryItemFromDb(body.DB, body.Entity)
+			item := behaviors.InventoryItemFromDb(body.ECS, body.Entity)
 			if item != nil && item.Active && bc.Player != nil {
 				bc.getInventoryItem(item)
 			}

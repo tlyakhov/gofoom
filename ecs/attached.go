@@ -5,7 +5,7 @@ package ecs
 
 type Attached struct {
 	Entity                  `editable:"Component" edit_type:"Component" edit_sort:"0"`
-	DB                      *ECS
+	ECS                     *ECS
 	System                  bool // Don't serialize this entity, disallow editing
 	Active                  bool `editable:"Active?"`
 	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`
@@ -19,7 +19,7 @@ func init() {
 }
 
 func (a *Attached) IsActive() bool {
-	return a != nil && a.Entity != 0 && a.Active && (a.ActiveWhileEditorPaused || !a.DB.Simulation.EditorPaused)
+	return a != nil && a.Entity != 0 && a.Active && (a.ActiveWhileEditorPaused || !a.ECS.Simulation.EditorPaused)
 }
 
 func (a *Attached) String() string {
@@ -41,12 +41,12 @@ func (a *Attached) SetIndexInDB(i int) {
 	a.indexInDB = i
 }
 
-func (a *Attached) SetDB(db *ECS) {
-	a.DB = db
+func (a *Attached) SetECS(db *ECS) {
+	a.ECS = db
 }
 
-func (a *Attached) GetDB() *ECS {
-	return a.DB
+func (a *Attached) GetECS() *ECS {
+	return a.ECS
 }
 
 func (a *Attached) SetEntity(entity Entity) {
@@ -99,7 +99,7 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].SetDB(db)
+			result[i].SetECS(db)
 			result[i].Construct(dataElement.(map[string]any))
 		}
 	}

@@ -46,7 +46,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Scripts"]; ok {
-		p.Scripts = ecs.ConstructSlice[*core.Script](p.DB, v)
+		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v)
 	}
 
 }

@@ -34,7 +34,7 @@ func (pc *ProximityController) Target(target ecs.Attachable) bool {
 func (pc *ProximityController) proximity(sector *core.Sector, body *core.Body) {
 	// Consider the case where the sector entity has a proximity
 	// component that includes the body as a valid scripting source
-	if p := behaviors.ProximityFromDb(pc.DB, sector.Entity); p != nil && p.IsActive() {
+	if p := behaviors.ProximityFromDb(pc.ECS, sector.Entity); p != nil && p.IsActive() {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
 			BodySectorScript(p.Scripts, body, sector)
 		}
@@ -42,7 +42,7 @@ func (pc *ProximityController) proximity(sector *core.Sector, body *core.Body) {
 
 	// Consider the case where the body entity has a proximity
 	// component that includes the sector as a valid scripting source
-	if p := behaviors.ProximityFromDb(pc.DB, body.Entity); p != nil && p.IsActive() {
+	if p := behaviors.ProximityFromDb(pc.ECS, body.Entity); p != nil && p.IsActive() {
 		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
 			BodySectorScript(p.Scripts, body, sector)
 		}

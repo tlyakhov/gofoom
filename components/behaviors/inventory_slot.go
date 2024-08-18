@@ -12,10 +12,10 @@ import (
 
 type InventorySlot struct {
 	DB           *ecs.ECS
-	ValidClasses concepts.Set[string]
-	Limit        int        `editable:"Limit"`
-	Count        int        `editable:"Count"`
-	Image        ecs.Entity `editable:"Image" edit_type:"Material"`
+	ValidClasses concepts.Set[string] `editable:"Classes"`
+	Limit        int                  `editable:"Limit"`
+	Count        int                  `editable:"Count"`
+	Image        ecs.Entity           `editable:"Image" edit_type:"Material"`
 }
 
 func (s *InventorySlot) Construct(data map[string]any) {
@@ -65,9 +65,9 @@ func (s *InventorySlot) Serialize() map[string]any {
 	return data
 }
 
-func (s *InventorySlot) SetDB(db *ecs.ECS) {
+func (s *InventorySlot) SetECS(db *ecs.ECS) {
 	s.DB = db
 }
-func (s *InventorySlot) GetDB() *ecs.ECS {
+func (s *InventorySlot) GetECS() *ecs.ECS {
 	return s.DB
 }

@@ -91,11 +91,11 @@ func (s *ShaderStage) Serialize() map[string]any {
 	return result
 }
 
-func (s *ShaderStage) SetDB(db *ecs.ECS) {
+func (s *ShaderStage) SetECS(db *ecs.ECS) {
 	s.DB = db
 }
 
-func (s *ShaderStage) GetDB() *ecs.ECS {
+func (s *ShaderStage) GetECS() *ecs.ECS {
 	return s.DB
 }
 

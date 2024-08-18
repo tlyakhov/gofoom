@@ -59,7 +59,7 @@ func (a *Alive) Hurt(source string, amount, cooldown float64) bool {
 	}
 	d := Damage{Amount: amount}
 	if !d.Cooldown.Attached {
-		d.Cooldown.Attach(a.DB.Simulation)
+		d.Cooldown.Attach(a.ECS.Simulation)
 	}
 	d.Cooldown.SetAll(cooldown)
 	a.Damages[source] = &d

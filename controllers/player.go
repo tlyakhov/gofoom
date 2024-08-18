@@ -39,11 +39,11 @@ func (pc *PlayerController) Target(target ecs.Attachable) bool {
 	if !pc.Player.IsActive() || pc.Player.Spawn {
 		return false
 	}
-	pc.Body = core.BodyFromDb(pc.Player.DB, pc.Player.Entity)
+	pc.Body = core.BodyFromDb(pc.Player.ECS, pc.Player.Entity)
 	if !pc.Body.IsActive() {
 		return false
 	}
-	pc.Alive = behaviors.AliveFromDb(pc.Player.DB, pc.Player.Entity)
+	pc.Alive = behaviors.AliveFromDb(pc.Player.ECS, pc.Player.Entity)
 	return pc.Alive.IsActive()
 }
 
@@ -100,7 +100,7 @@ func (pc *PlayerController) Always() {
 }
 
 func MovePlayer(p *core.Body, angle float64, direct bool) {
-	uw := behaviors.UnderwaterFromDb(p.DB, p.SectorEntity) != nil
+	uw := behaviors.UnderwaterFromDb(p.ECS, p.SectorEntity) != nil
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce

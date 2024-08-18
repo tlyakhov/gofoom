@@ -37,16 +37,16 @@ func TextFromDb(db *ecs.ECS, e ecs.Entity) *Text {
 }
 
 func (t *Text) OnDetach() {
-	if t.DB != nil {
-		t.Color.Detach(t.DB.Simulation)
+	if t.ECS != nil {
+		t.Color.Detach(t.ECS.Simulation)
 	}
 	t.Attached.OnDetach()
 }
-func (t *Text) SetDB(db *ecs.ECS) {
-	if t.DB != db {
+func (t *Text) SetECS(db *ecs.ECS) {
+	if t.ECS != db {
 		t.OnDetach()
 	}
-	t.Attached.SetDB(db)
+	t.Attached.SetECS(db)
 	t.Color.Attach(db.Simulation)
 }
 

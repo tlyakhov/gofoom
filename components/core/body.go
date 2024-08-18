@@ -54,11 +54,11 @@ func (b *Body) String() string {
 }
 
 func (b *Body) OnDetach() {
-	if b.DB != nil {
-		b.Pos.Detach(b.DB.Simulation)
-		b.Vel.Detach(b.DB.Simulation)
-		b.Size.Detach(b.DB.Simulation)
-		b.Angle.Detach(b.DB.Simulation)
+	if b.ECS != nil {
+		b.Pos.Detach(b.ECS.Simulation)
+		b.Vel.Detach(b.ECS.Simulation)
+		b.Size.Detach(b.ECS.Simulation)
+		b.Angle.Detach(b.ECS.Simulation)
 	}
 	if sector := b.Sector(); sector != nil {
 		delete(sector.Bodies, b.Entity)
@@ -66,19 +66,19 @@ func (b *Body) OnDetach() {
 	b.Attached.OnDetach()
 }
 
-func (b *Body) SetDB(db *ecs.ECS) {
-	if b.DB != db {
+func (b *Body) SetECS(db *ecs.ECS) {
+	if b.ECS != db {
 		b.OnDetach()
 	}
-	b.Attached.SetDB(db)
+	b.Attached.SetECS(db)
 	b.Pos.Attach(db.Simulation)
 	b.Vel.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
-	b.Angle.Attach(b.DB.Simulation)
+	b.Angle.Attach(b.ECS.Simulation)
 }
 
 func (b *Body) Sector() *Sector {
-	return SectorFromDb(b.DB, b.SectorEntity)
+	return SectorFromDb(b.ECS, b.SectorEntity)
 }
 
 func (b *Body) Normal() *concepts.Vector2 {
@@ -118,7 +118,7 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	for _, a := range b.DB.AllOfType(SectorComponentIndex) {
+	for _, a := range b.ECS.AllOfType(SectorComponentIndex) {
 		sector = a.(*Sector)
 		if sector == nil || !sector.IsPointInside2D(p) {
 			continue

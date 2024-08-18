@@ -38,8 +38,8 @@ func PlayerFromDb(db *ecs.ECS, e ecs.Entity) *Player {
 }
 
 func (p *Player) Underwater() bool {
-	if b := core.BodyFromDb(p.DB, p.Entity); b != nil {
-		if u := UnderwaterFromDb(p.DB, b.SectorEntity); u != nil {
+	if b := core.BodyFromDb(p.ECS, p.Entity); b != nil {
+		if u := UnderwaterFromDb(p.ECS, b.SectorEntity); u != nil {
 			return true
 		}
 	}
@@ -61,7 +61,7 @@ func (p *Player) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Inventory"]; ok {
-		ecs.ConstructSlice[*InventoryItem](p.DB, v)
+		ecs.ConstructSlice[*InventoryItem](p.ECS, v)
 	}
 
 	if v, ok := data["CurrentWeapon"]; ok {

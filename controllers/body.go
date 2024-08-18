@@ -44,7 +44,7 @@ func (bc *BodyController) Target(target ecs.Attachable) bool {
 	if !bc.Body.IsActive() {
 		return false
 	}
-	bc.Player = behaviors.PlayerFromDb(bc.Body.DB, bc.Body.Entity)
+	bc.Player = behaviors.PlayerFromDb(bc.Body.ECS, bc.Body.Entity)
 	if bc.Player != nil && bc.Player.Spawn {
 		// If this is a spawn point, skip it
 		return false

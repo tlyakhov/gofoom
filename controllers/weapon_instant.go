@@ -39,14 +39,14 @@ func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {
 
 func (wc *WeaponInstantController) Target(target ecs.Attachable) bool {
 	wc.WeaponInstant = target.(*behaviors.WeaponInstant)
-	wc.Body = core.BodyFromDb(wc.WeaponInstant.DB, wc.WeaponInstant.Entity)
+	wc.Body = core.BodyFromDb(wc.WeaponInstant.ECS, wc.WeaponInstant.Entity)
 	return wc.WeaponInstant.IsActive() && wc.Body.IsActive()
 }
 
 // This is similar to the code for lighting
 func (wc *WeaponInstantController) Cast() *core.Selectable {
 	var s *core.Selectable
-	wc.MaterialSampler.Config = &state.Config{DB: wc.Body.DB}
+	wc.MaterialSampler.Config = &state.Config{DB: wc.Body.ECS}
 	wc.MaterialSampler.Ray = &state.Ray{Angle: wc.Body.Angle.Now}
 
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
@@ -269,7 +269,7 @@ func (wc *WeaponInstantController) Always() {
 		// TODO: Parameterize in WeaponInstant
 		s.Body.Vel.Now.AddSelf(wc.delta.Mul(3))
 		// Hurt anything alive
-		if alive := behaviors.AliveFromDb(wc.Body.DB, s.Body.Entity); alive != nil {
+		if alive := behaviors.AliveFromDb(wc.Body.ECS, s.Body.Entity); alive != nil {
 			// TODO: Parameterize in WeaponInstant
 			alive.Hurt("Weapon "+s.Entity.Format(), 5, 20)
 		}
@@ -286,7 +286,7 @@ func (wc *WeaponInstantController) Always() {
 			Texture:                wc.MarkMaterial,
 			IgnoreSurfaceTransform: false,
 			System:                 true}
-		es.SetDB(s.DB)
+		es.SetECS(s.DB)
 		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
 		surf.ExtraStages = append(surf.ExtraStages, es)
 		es.Transform.From(&surf.Transform.Now)

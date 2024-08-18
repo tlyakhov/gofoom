@@ -106,7 +106,7 @@ func (r *Renderer) Print(s *TextStyle, x, y int, text string) {
 	if s.Sprite == nil || s.CharWidth == 0 || s.CharHeight == 0 {
 		return
 	}
-	img := materials.ImageFromDb(s.Sprite.DB, s.Sprite.Image)
+	img := materials.ImageFromDb(s.Sprite.ECS, s.Sprite.Image)
 	if img == nil {
 		return
 	}

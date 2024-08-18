@@ -33,7 +33,7 @@ func (pvs *PvsController) Target(target ecs.Attachable) bool {
 }
 
 func (pvs *PvsController) Recalculate() {
-	for _, attachable := range pvs.DB.AllOfType(core.InternalSegmentComponentIndex) {
+	for _, attachable := range pvs.ECS.AllOfType(core.InternalSegmentComponentIndex) {
 		seg := attachable.(*core.InternalSegment)
 		seg.AttachToSectors()
 	}
@@ -54,7 +54,7 @@ func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.S
 	}
 
 	for entity, body := range visitor.Bodies {
-		if core.LightFromDb(body.DB, entity) != nil {
+		if core.LightFromDb(body.ECS, entity) != nil {
 			pvs.Sector.PVL[entity] = body
 		}
 	}
@@ -89,7 +89,7 @@ func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.S
 			adjmin = &adj.Sector.Min
 		}
 
-		adjsec := core.SectorFromDb(pvs.Sector.DB, seg.AdjacentSector)
+		adjsec := core.SectorFromDb(pvs.Sector.ECS, seg.AdjacentSector)
 		pvs.Sector.PVS[seg.AdjacentSector] = adjsec
 
 		normals[nNormals] = &seg.Normal

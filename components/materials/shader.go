@@ -36,7 +36,7 @@ func (s *Shader) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Stages"]; ok {
-		s.Stages = ecs.ConstructSlice[*ShaderStage](s.DB, v)
+		s.Stages = ecs.ConstructSlice[*ShaderStage](s.ECS, v)
 	}
 }
 
