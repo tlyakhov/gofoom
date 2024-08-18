@@ -387,6 +387,10 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		if body == nil || body == bc.Body || !body.IsActive() {
 			continue
 		}
+		if p := behaviors.PlayerFromDb(body.DB, body.Entity); p != nil && p.Spawn {
+			// Ignore spawn points
+			continue
+		}
 		// From https://www.myphysicslab.com/engine2D/collision-en.html
 		d2 := bc.pos.Dist2(&body.Pos.Now)
 		r_a := bc.Body.Size.Now[0] * 0.5

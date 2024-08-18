@@ -178,6 +178,7 @@ type _tlyakhov_gofoom_concepts_Attachable struct {
 	WGetEntity    func() concepts.Entity
 	WIndexInDB    func() int
 	WIsSystem     func() bool
+	WOnDetach     func()
 	WSerialize    func() map[string]any
 	WSetDB        func(db *concepts.EntityComponentDB)
 	WSetEntity    func(entity concepts.Entity)
@@ -199,6 +200,9 @@ func (W _tlyakhov_gofoom_concepts_Attachable) IndexInDB() int {
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) IsSystem() bool {
 	return W.WIsSystem()
+}
+func (W _tlyakhov_gofoom_concepts_Attachable) OnDetach() {
+	W.WOnDetach()
 }
 func (W _tlyakhov_gofoom_concepts_Attachable) Serialize() map[string]any {
 	return W.WSerialize()

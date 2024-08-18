@@ -13,6 +13,7 @@ import (
 
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ui"
 )
 
@@ -79,9 +80,9 @@ func initializeMenus() {
 				}
 				archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 				renderer.Initialize()
+				controllers.Respawn(db)
 				db.Simulation.Integrate = integrateGame
 				db.Simulation.Render = renderGame
-				setupPlayer()
 				gameUI.Config.TextStyle = renderer.NewTextStyle()
 				inMenu = false
 				gameUI.SetPage(nil)

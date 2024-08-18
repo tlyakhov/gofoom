@@ -25,15 +25,11 @@ type BodyController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&BodyController{})
+	concepts.DbTypes().RegisterController(&BodyController{}, 80)
 }
 
 func (bc *BodyController) ComponentIndex() int {
 	return core.BodyComponentIndex
-}
-
-func (bc *BodyController) Priority() int {
-	return 80
 }
 
 func (bc *BodyController) Methods() concepts.ControllerMethod {
@@ -47,8 +43,12 @@ func (bc *BodyController) Target(target concepts.Attachable) bool {
 	if !bc.Body.IsActive() {
 		return false
 	}
-	bc.Sector = bc.Body.Sector()
 	bc.Player = behaviors.PlayerFromDb(bc.Body.DB, bc.Body.Entity)
+	if bc.Player != nil && bc.Player.Spawn {
+		// If this is a spawn point, skip it
+		return false
+	}
+	bc.Sector = bc.Body.Sector()
 	bc.pos = &bc.Body.Pos.Now
 	bc.pos2d = bc.pos.To2D()
 	bc.halfHeight = bc.Body.Size.Now[1] * 0.5

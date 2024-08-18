@@ -14,16 +14,12 @@ type PvsController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&PvsController{})
+	// Should run after the SectorController, which recalculates normals etc
+	concepts.DbTypes().RegisterController(&PvsController{}, 60)
 }
 
 func (pvs *PvsController) ComponentIndex() int {
 	return core.SectorComponentIndex
-}
-
-// Should run after the SectorController, which recalculates normals etc
-func (pvs *PvsController) Priority() int {
-	return 60
 }
 
 func (pvs *PvsController) Methods() concepts.ControllerMethod {

@@ -12,7 +12,6 @@ const (
 )
 
 type Controller interface {
-	Priority() int
 	ComponentIndex() int
 	Methods() ControllerMethod
 	// Return false if controller shouldn't run for this entity
@@ -23,10 +22,6 @@ type Controller interface {
 }
 
 type BaseController struct {
-}
-
-func (c *BaseController) Priority() int {
-	return 100
 }
 
 func (c *BaseController) ComponentIndex() int {

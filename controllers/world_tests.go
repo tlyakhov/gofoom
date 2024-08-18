@@ -90,11 +90,6 @@ func CreateTestDirt(db *concepts.EntityComponentDB) concepts.Entity {
 func CreateTestWorld(db *concepts.EntityComponentDB) {
 	testw := 30
 	testh := 30
-	eSpawn := archetypes.CreateBasic(db, core.SpawnComponentIndex)
-	spawn := core.SpawnFromDb(db, eSpawn)
-	spawn.Spawn[0] = 250
-	spawn.Spawn[1] = 250
-	spawn.Spawn[2] = 100
 
 	eGrass := archetypes.CreateBasicMaterial(db, true)
 	nmat := db.NewAttachedComponent(eGrass, concepts.NamedComponentIndex).(*concepts.Named)
@@ -152,12 +147,6 @@ func CreateTestWorld(db *concepts.EntityComponentDB) {
 	db.ActAllControllers(concepts.ControllerLoaded)
 }
 func CreateTestWorld2(db *concepts.EntityComponentDB) {
-	eSpawn := archetypes.CreateBasic(db, core.SpawnComponentIndex)
-	spawn := core.SpawnFromDb(db, eSpawn)
-	spawn.Spawn[0] = 50
-	spawn.Spawn[1] = 50
-	spawn.Spawn[2] = 50
-
 	CreateTestGrass(db)
 	isky := CreateTestSky(db)
 	idirt := CreateTestDirt(db)

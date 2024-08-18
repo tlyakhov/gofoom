@@ -28,8 +28,8 @@ func (a *Copy) Act() {
 	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
 
 	for _, obj := range a.Selected.Exact {
-		// Don't copy/paste players
-		if behaviors.PlayerFromDb(obj.DB, obj.Entity) != nil {
+		// Don't copy/paste active players
+		if p := behaviors.PlayerFromDb(obj.DB, obj.Entity); p != nil && !p.Spawn {
 			continue
 		}
 		a.Saved[obj.Entity] = obj.Serialize()

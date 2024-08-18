@@ -9184,7 +9184,8 @@
       "Health": 50
     },
     "behaviors.Player": {
-      "Entity": "107"
+      "Entity": "107",
+      "Spawn": false
     },
     "behaviors.WeaponInstant": {
       "Entity": "107",

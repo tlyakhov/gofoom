@@ -17,7 +17,7 @@ type UnderwaterController struct {
 }
 
 func init() {
-	concepts.DbTypes().RegisterController(&UnderwaterController{})
+	concepts.DbTypes().RegisterController(&UnderwaterController{}, 100)
 }
 
 func (uc *UnderwaterController) ComponentIndex() int {
