@@ -39,14 +39,14 @@ func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {
 
 func (wc *WeaponInstantController) Target(target ecs.Attachable) bool {
 	wc.WeaponInstant = target.(*behaviors.WeaponInstant)
-	wc.Body = core.BodyFromDb(wc.WeaponInstant.ECS, wc.WeaponInstant.Entity)
+	wc.Body = core.GetBody(wc.WeaponInstant.ECS, wc.WeaponInstant.Entity)
 	return wc.WeaponInstant.IsActive() && wc.Body.IsActive()
 }
 
 // This is similar to the code for lighting
 func (wc *WeaponInstantController) Cast() *core.Selectable {
 	var s *core.Selectable
-	wc.MaterialSampler.Config = &state.Config{DB: wc.Body.ECS}
+	wc.MaterialSampler.Config = &state.Config{ECS: wc.Body.ECS}
 	wc.MaterialSampler.Ray = &state.Ray{Angle: wc.Body.Angle.Now}
 
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
@@ -120,8 +120,8 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.PointZ(ecs.DynamicNow, wc.isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(ecs.DynamicNow, wc.isect.To2D())
+			floorZ, ceilZ := sector.ZAt(ecs.DynamicNow, wc.isect.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(ecs.DynamicNow, wc.isect.To2D())
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
@@ -168,9 +168,9 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
 	switch s.Type {
 	case core.SelectableHi:
-		_, top = s.Sector.PointZ(ecs.DynamicNow, p)
+		_, top = s.Sector.ZAt(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.PointZ(ecs.DynamicNow, p)
+		_, adjTop := adj.ZAt(ecs.DynamicNow, p)
 		if adjTop <= top {
 			bottom = adjTop
 			surf = &s.SectorSegment.AdjacentSegment.HiSurface
@@ -179,9 +179,9 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			surf = &s.SectorSegment.HiSurface
 		}
 	case core.SelectableLow:
-		bottom, _ = s.Sector.PointZ(ecs.DynamicNow, p)
+		bottom, _ = s.Sector.ZAt(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.PointZ(ecs.DynamicNow, p)
+		adjBottom, _ := adj.ZAt(ecs.DynamicNow, p)
 		if bottom <= adjBottom {
 			top = adjBottom
 			surf = &s.SectorSegment.AdjacentSegment.LoSurface
@@ -190,7 +190,7 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			surf = &s.SectorSegment.LoSurface
 		}
 	case core.SelectableMid:
-		bottom, top = s.Sector.PointZ(ecs.DynamicNow, p)
+		bottom, top = s.Sector.ZAt(ecs.DynamicNow, p)
 		surf = &s.SectorSegment.Surface
 	case core.SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
@@ -269,7 +269,7 @@ func (wc *WeaponInstantController) Always() {
 		// TODO: Parameterize in WeaponInstant
 		s.Body.Vel.Now.AddSelf(wc.delta.Mul(3))
 		// Hurt anything alive
-		if alive := behaviors.AliveFromDb(wc.Body.ECS, s.Body.Entity); alive != nil {
+		if alive := behaviors.GetAlive(wc.Body.ECS, s.Body.Entity); alive != nil {
 			// TODO: Parameterize in WeaponInstant
 			alive.Hurt("Weapon "+s.Entity.Format(), 5, 20)
 		}
@@ -286,7 +286,7 @@ func (wc *WeaponInstantController) Always() {
 			Texture:                wc.MarkMaterial,
 			IgnoreSurfaceTransform: false,
 			System:                 true}
-		es.SetECS(s.DB)
+		es.SetECS(s.ECS)
 		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
 		surf.ExtraStages = append(surf.ExtraStages, es)
 		es.Transform.From(&surf.Transform.Now)

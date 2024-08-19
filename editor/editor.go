@@ -76,7 +76,7 @@ func (e *Editor) State() *state.Edit {
 func NewEditor() *Editor {
 	e := &Editor{
 		Edit: state.Edit{
-			DB: ecs.NewECS(),
+			ECS: ecs.NewECS(),
 			MapView: state.MapView{
 				Scale: 1.0,
 				Step:  10,
@@ -191,19 +191,19 @@ func (e *Editor) Integrate() {
 	if player == nil {
 		return
 	}
-	playerBody := core.BodyFromDb(player.ECS, player.Entity)
+	playerBody := core.GetBody(player.ECS, player.Entity)
 
 	if e.GameWidget.KeyMap.Contains("W") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now, e.DB.EditorPaused)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("S") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0, e.DB.EditorPaused)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("E") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0, e.DB.EditorPaused)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("Q") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0, e.DB.EditorPaused)
+		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("A") {
 		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
@@ -214,7 +214,7 @@ func (e *Editor) Integrate() {
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap.Contains("Space") {
-		if behaviors.UnderwaterFromDb(player.ECS, playerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(player.ECS, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
 			playerBody.Force[2] += constants.PlayerJumpForce
@@ -222,7 +222,7 @@ func (e *Editor) Integrate() {
 		}
 	}
 	if e.GameWidget.KeyMap.Contains("C") {
-		if behaviors.UnderwaterFromDb(player.ECS, playerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(player.ECS, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
@@ -231,7 +231,7 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	e.DB.ActAllControllers(ecs.ControllerAlways)
+	e.ECS.ActAllControllers(ecs.ControllerAlways)
 	e.GatherHoveringObjects()
 }
 
@@ -267,9 +267,9 @@ func (e *Editor) Load(filename string) {
 	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 	db.Simulation.Integrate = e.Integrate
 	db.Simulation.Render = e.GameWidget.Draw
-	e.DB = db
+	e.ECS = db
 	if e.Renderer != nil {
-		e.Renderer.DB = db
+		e.Renderer.ECS = db
 	}
 	e.SelectObjects(true)
 }
@@ -281,17 +281,17 @@ func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
 
-	e.DB.Clear()
-	controllers.CreateTestWorld2(e.DB)
-	e.DB.Simulation.Integrate = e.Integrate
-	e.DB.Simulation.Render = e.GameWidget.Draw
+	e.ECS.Clear()
+	controllers.CreateTestWorld2(e.ECS)
+	e.ECS.Simulation.Integrate = e.Integrate
+	e.ECS.Simulation.Render = e.GameWidget.Draw
 	e.SelectObjects(true)
 }
 
 func (e *Editor) autoPortal() {
 	defer concepts.ExecutionDuration(concepts.ExecutionTrack("AutoPortal"))
 	e.Lock.Lock()
-	controllers.AutoPortal(e.DB)
+	controllers.AutoPortal(e.ECS)
 	e.Lock.Unlock()
 }
 
@@ -332,26 +332,26 @@ func (e *Editor) ActTool() {
 	case state.ToolSplitSector:
 		e.NewAction(&actions.SplitSector{IEditor: e})
 	case state.ToolAddSector:
-		entity := archetypes.CreateSector(e.DB)
-		s := core.SectorFromDb(e.DB, entity)
-		s.FloorSurface.Material = controllers.DefaultMaterial(e.DB)
-		s.CeilSurface.Material = controllers.DefaultMaterial(e.DB)
+		entity := archetypes.CreateSector(e.ECS)
+		s := core.GetSector(e.ECS, entity)
+		s.Bottom.Surface.Material = controllers.DefaultMaterial(e.ECS)
+		s.Top.Surface.Material = controllers.DefaultMaterial(e.ECS)
 		a := &actions.AddSector{Sector: s}
 		a.AddEntity.IEditor = e
 		a.AddEntity.Entity = entity
-		a.AddEntity.Components = e.DB.AllComponents(entity)
+		a.AddEntity.Components = e.ECS.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddInternalSegment:
-		entity := archetypes.CreateBasic(e.DB, core.InternalSegmentComponentIndex)
-		seg := core.InternalSegmentFromDb(e.DB, entity)
+		entity := archetypes.CreateBasic(e.ECS, core.InternalSegmentComponentIndex)
+		seg := core.GetInternalSegment(e.ECS, entity)
 		a := &actions.AddInternalSegment{InternalSegment: seg}
 		a.AddEntity.IEditor = e
 		a.AddEntity.Entity = entity
-		a.AddEntity.Components = e.DB.AllComponents(entity)
+		a.AddEntity.Components = e.ECS.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddBody:
-		entity := archetypes.CreateBasic(e.DB, core.BodyComponentIndex)
-		e.NewAction(&actions.AddEntity{IEditor: e, Entity: entity, Components: e.DB.AllComponents(entity)})
+		entity := archetypes.CreateBasic(e.ECS, core.BodyComponentIndex)
+		e.NewAction(&actions.AddEntity{IEditor: e, Entity: entity, Components: e.ECS.AllComponents(entity)})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:
@@ -371,24 +371,24 @@ func (e *Editor) NewShader() {
 			return
 		}
 		// First, load the image
-		eImg := archetypes.CreateBasic(e.DB, materials.ImageComponentIndex)
-		img := materials.ImageFromDb(e.DB, eImg)
+		eImg := archetypes.CreateBasic(e.ECS, materials.ImageComponentIndex)
+		img := materials.GetImage(e.ECS, eImg)
 		img.Source = uc.URI().Path()
 		img.Load()
-		a := &actions.AddEntity{IEditor: e, Entity: eImg, Components: e.DB.AllComponents(eImg)}
+		a := &actions.AddEntity{IEditor: e, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
 		e.NewAction(a)
 		e.CurrentAction.Act()
 		// Next set up the shader
-		eShader := archetypes.CreateBasic(e.DB, materials.ShaderComponentIndex)
-		shader := materials.ShaderFromDb(e.DB, eShader)
+		eShader := archetypes.CreateBasic(e.ECS, materials.ShaderComponentIndex)
+		shader := materials.GetShader(e.ECS, eShader)
 		stage := &materials.ShaderStage{}
-		stage.SetECS(e.DB)
+		stage.SetECS(e.ECS)
 		stage.Construct(nil)
 		stage.Texture = eImg
 		shader.Stages = append(shader.Stages, stage)
-		named := editor.DB.NewAttachedComponent(eShader, ecs.NamedComponentIndex).(*ecs.Named)
+		named := editor.ECS.NewAttachedComponent(eShader, ecs.NamedComponentIndex).(*ecs.Named)
 		named.Name = "Shader " + path.Base(img.Source)
-		a = &actions.AddEntity{IEditor: e, Entity: eShader, Components: e.DB.AllComponents(eShader)}
+		a = &actions.AddEntity{IEditor: e, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
 		e.NewAction(a)
 		e.CurrentAction.Act()
 
@@ -426,7 +426,7 @@ func (e *Editor) UndoCurrent() {
 		return
 	}
 	a.Undo()
-	controllers.AutoPortal(e.DB)
+	controllers.AutoPortal(e.ECS)
 	e.refreshProperties()
 	e.RedoHistory = append(e.RedoHistory, a)
 }
@@ -449,7 +449,7 @@ func (e *Editor) RedoCurrent() {
 		return
 	}
 	a.Redo()
-	controllers.AutoPortal(e.DB)
+	controllers.AutoPortal(e.ECS)
 	e.refreshProperties()
 	e.UndoHistory = append(e.UndoHistory, a)
 }
@@ -495,7 +495,7 @@ func (e *Editor) GatherHoveringObjects() {
 
 	e.HoveringObjects.Clear()
 
-	for _, a := range e.DB.AllOfType(core.SectorComponentIndex) {
+	for _, a := range e.ECS.AllOfType(core.SectorComponentIndex) {
 		sector := a.(*core.Sector)
 
 		for _, segment := range sector.Segments {
@@ -518,7 +518,7 @@ func (e *Editor) GatherHoveringObjects() {
 			}
 		}
 	}
-	for _, a := range e.DB.AllOfType(core.InternalSegmentComponentIndex) {
+	for _, a := range e.ECS.AllOfType(core.InternalSegmentComponentIndex) {
 		seg := a.(*core.InternalSegment)
 		if editor.Selecting() {
 			a := (seg.A[0] >= v1[0] && seg.A[1] >= v1[1] && seg.A[0] <= v2[0] && seg.A[1] <= v2[1])
@@ -542,7 +542,7 @@ func (e *Editor) GatherHoveringObjects() {
 			}
 		}
 	}
-	for _, a := range e.DB.AllOfType(core.BodyComponentIndex) {
+	for _, a := range e.ECS.AllOfType(core.BodyComponentIndex) {
 		body := a.(*core.Body)
 		p := body.Pos.Now
 		size := body.Size.Render[0]*0.5 + state.SegmentSelectionEpsilon
@@ -561,7 +561,7 @@ func (e *Editor) GatherHoveringObjects() {
 }
 
 func (e *Editor) ResizeRenderer(w, h int) {
-	e.Renderer = render.NewRenderer(e.DB)
+	e.Renderer = render.NewRenderer(e.ECS)
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h
 	e.Renderer.Initialize()

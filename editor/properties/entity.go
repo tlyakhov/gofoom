@@ -23,7 +23,7 @@ import (
 
 func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _ bool, co fyne.CanvasObject) {
 	entity, _ := ecs.ParseEntity(tni)
-	name := entity.NameString(g.State().DB)
+	name := entity.NameString(g.State().ECS)
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
 	img.Hidden = entity == 0
@@ -39,7 +39,7 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 		img.Image = g.IEditor.EntityImage(entity, editTypeTag != "Material")
 		img.SetMinSize(fyne.NewSquareSize(64))
 		button.OnTapped = func() {
-			g.SelectObjects(true, core.SelectableFromEntity(g.State().DB, entity))
+			g.SelectObjects(true, core.SelectableFromEntity(g.State().ECS, entity))
 		}
 	}
 }
@@ -61,13 +61,13 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	refs := make([]widget.TreeNodeID, 1)
 	refs[0] = "0"
 
-	for entity, c := range g.State().DB.EntityComponents {
+	for entity, c := range g.State().ECS.EntityComponents {
 		if c == nil {
 			continue
 		}
-		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().DB, ecs.Entity(entity)) {
+		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().ECS, ecs.Entity(entity)) {
 			refs = append(refs, strconv.Itoa(entity))
-		} else if editTypeTag == "Sector" && core.SectorFromDb(g.State().DB, ecs.Entity(entity)) != nil {
+		} else if editTypeTag == "Sector" && core.GetSector(g.State().ECS, ecs.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(entity))
 		}
 	}
@@ -90,7 +90,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	title := "Select " + editTypeTag
 	if origValue != 0 {
 		tree.Select(origValue.Format())
-		title = editTypeTag + ": " + origValue.NameString(g.State().DB)
+		title = editTypeTag + ": " + origValue.NameString(g.State().ECS)
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
 		entity, _ := ecs.ParseEntity(tni)

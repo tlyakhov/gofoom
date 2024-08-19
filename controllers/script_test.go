@@ -20,9 +20,9 @@ func setup() *ecs.ECS {
 
 func BenchmarkScriptedCode(b *testing.B) {
 	db := setup()
-	s := core.Script{DB: db}
+	s := core.Script{ECS: db}
 	s.Construct(map[string]any{
-		"Code":  "core.SectorFromDb(sectorEntity).BottomZ.Original=5",
+		"Code":  "core.GetSector(sectorEntity).Bottom.Z.Original=5",
 		"Style": "ScriptStyleStatement",
 	})
 	s.Vars["sector"] = db.GetEntityByName("sector1")
@@ -33,7 +33,7 @@ func BenchmarkScriptedCode(b *testing.B) {
 	})
 	b.Run("Native", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			core.SectorFromDb(db, s.Vars["sector"].(ecs.Entity)).BottomZ.Original = rand.Float64()
+			core.GetSector(db, s.Vars["sector"].(ecs.Entity)).Bottom.Z.Original = rand.Float64()
 		}
 	})
 }

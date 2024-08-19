@@ -82,19 +82,19 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 		}
 	}
 
-	for _, a := range editor.DB.AllOfType(core.SectorComponentIndex) {
+	for _, a := range editor.ECS.AllOfType(core.SectorComponentIndex) {
 		mw.DrawSector(a.(*core.Sector), pvsSector[a.GetEntity()] != nil)
 	}
-	for _, a := range editor.DB.AllOfType(core.InternalSegmentComponentIndex) {
+	for _, a := range editor.ECS.AllOfType(core.InternalSegmentComponentIndex) {
 		mw.DrawInternalSegment(a.(*core.InternalSegment))
 	}
 	if editor.BodiesVisible {
-		for _, a := range editor.DB.AllOfType(core.BodyComponentIndex) {
+		for _, a := range editor.ECS.AllOfType(core.BodyComponentIndex) {
 			mw.DrawBody(a.(*core.Body))
 		}
 	}
 	/*// Portal testing code
-	p := core.BodyFromDb(editor.DB, editor.Renderer.Player.Entity)
+	p := core.GetBody(editor.ECS, editor.Renderer.Player.Entity)
 	v := &concepts.Vector2{p.Pos.Now[0], p.Pos.Now[1]}
 	v2 := v.Add(&concepts.Vector2{math.Cos(p.Angle.Now*concepts.Deg2rad) * 10, math.Sin(p.Angle.Now*concepts.Deg2rad) * 10})
 	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
@@ -104,9 +104,9 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	mw.Context.ClosePath()
 	mw.Context.Stroke()
 
-	portalSector1 := core.SectorFromDb(editor.DB, 44)
+	portalSector1 := core.GetSector(editor.ECS, 44)
 	portalSegment1 := portalSector1.Segments[4]
-	portalSector2 := core.SectorFromDb(editor.DB, 19)
+	portalSector2 := core.GetSector(editor.ECS, 19)
 	portalSegment2 := portalSector2.Segments[1]
 	v3 := portalSegment1.PortalMatrix.Unproject(v)
 	v3 = portalSegment2.MirrorPortalMatrix.Project(v3)

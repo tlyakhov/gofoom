@@ -19,10 +19,10 @@ func ceilingPick(s *state.Column) {
 
 // ceiling renders the ceiling portion of a slice.
 func ceiling(c *state.Column) {
-	mat := c.Sector.CeilSurface.Material
-	extras := c.Sector.CeilSurface.ExtraStages
+	mat := c.Sector.Top.Surface.Material
+	extras := c.Sector.Top.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)
-	transform := c.Sector.CeilSurface.Transform.Render
+	transform := c.Sector.Top.Surface.Transform.Render
 	sectorMin := &c.Sector.Min
 	sectorMax := &c.Sector.Max
 
@@ -41,17 +41,17 @@ func ceiling(c *state.Column) {
 	planeRayDelta := concepts.Vector3{
 		c.Sector.Segments[0].P[0] - c.Ray.Start[0],
 		c.Sector.Segments[0].P[1] - c.Ray.Start[1],
-		*c.Sector.TopZ.Render - c.CameraZ}
+		*c.Sector.Top.Z.Render - c.CameraZ}
 	for c.ScreenY = c.EdgeTop; c.ScreenY < c.ClippedTop; c.ScreenY++ {
 		c.RayFloorCeil[2] = float64(c.ScreenHeight/2 - c.ScreenY)
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
-		denom := c.Sector.CeilNormal.Dot(&c.RayFloorCeil)
+		denom := c.Sector.Top.Normal.Dot(&c.RayFloorCeil)
 		if denom == 0 {
 			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 0, 0, 1})
 			continue
 		}
 
-		t := planeRayDelta.Dot(&c.Sector.CeilNormal) / denom
+		t := planeRayDelta.Dot(&c.Sector.Top.Normal) / denom
 		if t <= 0 {
 			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 1, 0, 1})
 			dbg := fmt.Sprintf("%v ceiling t <= 0", c.Sector.Entity)

@@ -38,13 +38,13 @@ func CreateLightBody(db *ecs.ECS) ecs.Entity {
 	return e
 }
 
-/*func IsPlayerBody(db *ecs.EntityComponentDB, e ecs.Entity) bool {
+/*func IsPlayerBody(db *ecs.ECS, e ecs.Entity) bool {
 	return db.Component(e, core.BodyComponentIndex) != nil &&
 		db.Component(e, behaviors.PlayerComponentIndex) != nil &&
 		db.Component(e, behaviors.AliveComponentIndex) != nil
 }
 
-func CreatePlayerBody(db *ecs.EntityComponentDB) ecs.Entity {
+func CreatePlayerBody(db *ecs.ECS) ecs.Entity {
 	e := db.NewEntity()
 	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
 	body.System = true

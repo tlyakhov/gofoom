@@ -16,10 +16,10 @@ type Shader struct {
 var ShaderComponentIndex int
 
 func init() {
-	ShaderComponentIndex = ecs.Types().Register(Shader{}, ShaderFromDb)
+	ShaderComponentIndex = ecs.Types().Register(Shader{}, GetShader)
 }
 
-func ShaderFromDb(db *ecs.ECS, e ecs.Entity) *Shader {
+func GetShader(db *ecs.ECS, e ecs.Entity) *Shader {
 	if asserted, ok := db.Component(e, ShaderComponentIndex).(*Shader); ok {
 		return asserted
 	}

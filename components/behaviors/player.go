@@ -27,10 +27,10 @@ type Player struct {
 var PlayerComponentIndex int
 
 func init() {
-	PlayerComponentIndex = ecs.Types().Register(Player{}, PlayerFromDb)
+	PlayerComponentIndex = ecs.Types().Register(Player{}, GetPlayer)
 }
 
-func PlayerFromDb(db *ecs.ECS, e ecs.Entity) *Player {
+func GetPlayer(db *ecs.ECS, e ecs.Entity) *Player {
 	if asserted, ok := db.Component(e, PlayerComponentIndex).(*Player); ok {
 		return asserted
 	}
@@ -38,8 +38,8 @@ func PlayerFromDb(db *ecs.ECS, e ecs.Entity) *Player {
 }
 
 func (p *Player) Underwater() bool {
-	if b := core.BodyFromDb(p.ECS, p.Entity); b != nil {
-		if u := UnderwaterFromDb(p.ECS, b.SectorEntity); u != nil {
+	if b := core.GetBody(p.ECS, p.Entity); b != nil {
+		if u := GetUnderwater(p.ECS, b.SectorEntity); u != nil {
 			return true
 		}
 	}

@@ -34,9 +34,9 @@ func (ui *UI) SetPage(page *Page) {
 	if ui.Page != nil {
 		for _, item := range ui.Page.Widgets {
 			w := item.GetWidget()
-			w.highlight.Detach(ui.DB.Simulation)
+			w.highlight.Detach(ui.ECS.Simulation)
 		}
-		ui.Page.tooltipAlpha.Detach(ui.DB.Simulation)
+		ui.Page.tooltipAlpha.Detach(ui.ECS.Simulation)
 	}
 
 	ui.Page = page
@@ -45,7 +45,7 @@ func (ui *UI) SetPage(page *Page) {
 		return
 	}
 
-	page.tooltipAlpha.Attach(ui.DB.Simulation)
+	page.tooltipAlpha.Attach(ui.ECS.Simulation)
 	a := page.tooltipAlpha.NewAnimation()
 	page.tooltipAlpha.Animation = a
 	a.Duration = 100
@@ -59,7 +59,7 @@ func (ui *UI) SetPage(page *Page) {
 
 	for _, item := range page.Widgets {
 		w := item.GetWidget()
-		w.highlight.Attach(ui.DB.Simulation)
+		w.highlight.Attach(ui.ECS.Simulation)
 		w.highlight.SetAll(ui.WidgetColor)
 		a := w.highlight.NewAnimation()
 		w.highlight.Animation = a

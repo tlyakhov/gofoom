@@ -14,7 +14,7 @@ import (
 )
 
 func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
-	if !archetypes.EntityIsMaterial(r.DB, b.Entity) {
+	if !archetypes.EntityIsMaterial(r.ECS, b.Entity) {
 		return
 	}
 	// TODO: We should probably not do all of this for every column. Can we
@@ -60,7 +60,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		return
 	}
 
-	if lit := materials.LitFromDb(r.DB, b.Entity); lit != nil {
+	if lit := materials.GetLit(r.ECS, b.Entity); lit != nil {
 		le := &c.LightSampler
 		le.Q.From(b.Pos.Render)
 		le.MapIndex = c.WorldToLightmapAddress(b.Sector(), &le.Q, 0)
@@ -82,7 +82,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		c.Light[2] = 1
 		c.Light[3] = 1
 	}
-	if alive := behaviors.AliveFromDb(r.DB, b.Entity); alive != nil {
+	if alive := behaviors.GetAlive(r.ECS, b.Entity); alive != nil {
 		alive.Tint(&c.Light)
 	}
 

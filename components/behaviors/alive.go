@@ -24,10 +24,10 @@ type Alive struct {
 var AliveComponentIndex int
 
 func init() {
-	AliveComponentIndex = ecs.Types().Register(Alive{}, AliveFromDb)
+	AliveComponentIndex = ecs.Types().Register(Alive{}, GetAlive)
 }
 
-func AliveFromDb(db *ecs.ECS, e ecs.Entity) *Alive {
+func GetAlive(db *ecs.ECS, e ecs.Entity) *Alive {
 	if asserted, ok := db.Component(e, AliveComponentIndex).(*Alive); ok {
 		return asserted
 	}

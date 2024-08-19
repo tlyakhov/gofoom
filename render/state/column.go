@@ -86,8 +86,8 @@ func (c *Column) CalcScreen() {
 	c.ProjectedBottom = c.ProjectZ(c.IntersectionBottom - c.CameraZ)
 
 	if c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope {
-		c.ProjectedSectorTop = c.ProjectZ(*c.Sector.TopZ.Render - c.CameraZ)
-		c.ProjectedSectorBottom = c.ProjectZ(*c.Sector.BottomZ.Render - c.CameraZ)
+		c.ProjectedSectorTop = c.ProjectZ(*c.Sector.Top.Z.Render - c.CameraZ)
+		c.ProjectedSectorBottom = c.ProjectZ(*c.Sector.Bottom.Z.Render - c.CameraZ)
 	}
 
 	screenTop := c.ScreenHeight/2 - int(math.Floor(c.ProjectedTop))
@@ -97,7 +97,7 @@ func (c *Column) CalcScreen() {
 }
 
 func (c *Column) SampleLight(result *concepts.Vector4, material ecs.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {
-	lit := materials.LitFromDb(c.DB, material)
+	lit := materials.GetLit(c.ECS, material)
 
 	if lit == nil {
 		return result

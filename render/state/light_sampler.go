@@ -59,7 +59,7 @@ func (le *LightSampler) Get() *concepts.Vector3 {
 	le.XorSeed = r
 
 	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
-		if uint64(lmResult[3])+constants.MaxLightmapAge >= le.DB.Frame ||
+		if uint64(lmResult[3])+constants.MaxLightmapAge >= le.ECS.Frame ||
 			r%constants.LightmapRefreshDither > 0 {
 			le.Output[0] = lmResult[0]
 			le.Output[1] = lmResult[1]
@@ -70,7 +70,7 @@ func (le *LightSampler) Get() *concepts.Vector3 {
 	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
-	fz, cz := le.Sector.PointZ(ecs.DynamicRender, le.Q.To2D())
+	fz, cz := le.Sector.ZAt(ecs.DynamicRender, le.Q.To2D())
 	if le.Q[2] < fz {
 		le.Q[2] = fz
 	}
@@ -84,7 +84,7 @@ func (le *LightSampler) Get() *concepts.Vector3 {
 		le.Output[0],
 		le.Output[1],
 		le.Output[2],
-		float64(le.DB.Frame + uint64(r)%constants.LightmapRefreshDither),
+		float64(le.ECS.Frame + uint64(r)%constants.LightmapRefreshDither),
 	})
 	return &le.Output
 
@@ -108,7 +108,7 @@ func (le *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSegment.Sector.PointZ(ecs.DynamicRender, p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(ecs.DynamicRender, p.To2D())
 		if p[2]-ceilZ > le.LightGrid || floorZ-p[2] > le.LightGrid {
 			continue
 		}
@@ -129,7 +129,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 	debugLighting := false
 	if constants.DebugLighting {
-		dbgName := ecs.NamedFromDb(le.DB, sector.Entity).Name
+		dbgName := ecs.GetNamed(le.ECS, sector.Entity).Name
 		debugWallCheck := le.Type == LightSamplerWall
 		debugLighting = constants.DebugLighting && debugWallCheck && dbgName == debugSectorName
 	}
@@ -200,7 +200,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			le.U = le.NU
 			le.V = le.NV
 			le.SampleMaterial(seg.Surface.ExtraStages)
-			if lit := materials.LitFromDb(seg.ECS, seg.Surface.Material); lit != nil {
+			if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
 				lit.Apply(&le.MaterialSampler.Output, nil)
 			}
 			if le.MaterialSampler.Output[3] >= 0.99 {
@@ -209,13 +209,13 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		}
 
 		// Does intersecting the ceiling/floor help us?
-		/*denom := sector.CeilNormal.Dot(&le.Delta)
+		/*denom := sector.Top.Normal.Dot(&le.Delta)
 		if denom != 0 {
 			planeRayDelta := concepts.Vector3{
 				sector.Segments[0].P[0] - p[0],
 				sector.Segments[0].P[1] - p[1],
-				*sector.TopZ.Render - p[2]}
-			t := planeRayDelta.Dot(&sector.CeilNormal) / denom
+				*sector.Top.Z.Render - p[2]}
+			t := planeRayDelta.Dot(&sector.Top.Normal) / denom
 			if t > 0 {
 				//				le.Intersection[2] = le.Delta[2] * t
 				le.Intersection[1] = le.Delta[1] * t
@@ -263,8 +263,9 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.PointZ(ecs.DynamicRender, le.Intersection.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.PointZ(ecs.DynamicRender, le.Intersection.To2D())
+			i2d := le.Intersection.To2D()
+			floorZ, ceilZ := sector.ZAt(ecs.DynamicRender, i2d)
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(ecs.DynamicRender, i2d)
 			if debugLighting {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}
@@ -284,7 +285,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				le.U = le.NU
 				le.V = le.NV
 				le.SampleMaterial(seg.Surface.ExtraStages)
-				if lit := materials.LitFromDb(seg.DB, seg.Surface.Material); lit != nil {
+				if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
 					lit.Apply(&le.MaterialSampler.Output, nil)
 				}
 				if le.MaterialSampler.Output[3] >= 0.99 {
@@ -359,7 +360,7 @@ func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	})*/
 
 	for entity, body := range le.Sector.PVL {
-		light := core.LightFromDb(body.ECS, entity)
+		light := core.GetLight(body.ECS, entity)
 		if !light.IsActive() {
 			continue
 		}

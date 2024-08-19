@@ -30,7 +30,7 @@ func (a *AddSliceElement) Undo() {
 	if a.SlicePtr.Elem().Len() > 0 {
 		a.SlicePtr.Elem().Slice(0, a.SlicePtr.Len()-1)
 	}
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *AddSliceElement) Redo() {
 	a.State().Lock.Lock()
@@ -53,8 +53,8 @@ func (a *AddSliceElement) Redo() {
 		*target = new(behaviors.InventorySlot)
 	}
 	if serializable, ok := newValue.Elem().Interface().(ecs.Serializable); ok {
-		serializable.SetECS(a.State().DB)
+		serializable.SetECS(a.State().ECS)
 		serializable.Construct(nil)
 	}
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }

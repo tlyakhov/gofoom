@@ -33,11 +33,11 @@ func (a *Delete) Undo() {
 	defer a.State().Lock.Unlock()
 
 	for s, saved := range a.Saved {
-		s.DB.DetachAll(s.Entity)
-		s.DB.DeserializeAndAttachEntity(saved.(map[string]any))
+		s.ECS.DetachAll(s.Entity)
+		s.ECS.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *Delete) Redo() {
 	a.State().Lock.Lock()
@@ -48,7 +48,7 @@ func (a *Delete) Redo() {
 		case core.SelectableSector:
 			s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 			s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
-			s.DB.DetachAll(s.Sector.Entity)
+			s.ECS.DetachAll(s.Sector.Entity)
 		case core.SelectableSectorSegment:
 			for i, seg := range s.Sector.Segments {
 				if seg != s.SectorSegment {
@@ -58,16 +58,16 @@ func (a *Delete) Redo() {
 				if len(s.Sector.Segments) == 0 {
 					s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 					s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
-					s.DB.DetachAll(s.Sector.Entity)
+					s.ECS.DetachAll(s.Sector.Entity)
 				}
 				break
 			}
 		case core.SelectableBody:
-			if behaviors.PlayerFromDb(s.DB, s.Entity) != nil {
+			if behaviors.GetPlayer(s.ECS, s.Entity) != nil {
 				// Otherwise weird things happen...
 				continue
 			}
-			a.State().DB.DetachAll(s.Entity)
+			a.State().ECS.DetachAll(s.Entity)
 			if s.Body.Sector() != nil {
 				delete(s.Body.Sector().Bodies, s.Entity)
 			}
@@ -76,11 +76,11 @@ func (a *Delete) Redo() {
 		case core.SelectableInternalSegmentA:
 			fallthrough
 		case core.SelectableInternalSegmentB:
-			s.DB.DetachAll(s.InternalSegment.Entity)
+			s.ECS.DetachAll(s.InternalSegment.Entity)
 			s.InternalSegment.DetachFromSectors()
 		case core.SelectableEntity:
-			s.DB.DetachAll(s.Entity)
+			s.ECS.DetachAll(s.Entity)
 		}
 	}
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }

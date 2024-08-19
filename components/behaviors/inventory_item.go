@@ -4,6 +4,7 @@
 package behaviors
 
 import (
+	"strconv"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -18,10 +19,10 @@ type InventoryItem struct {
 var InventoryItemComponentIndex int
 
 func init() {
-	InventoryItemComponentIndex = ecs.Types().Register(InventoryItem{}, InventoryItemFromDb)
+	InventoryItemComponentIndex = ecs.Types().Register(InventoryItem{}, GetInventoryItem)
 }
 
-func InventoryItemFromDb(db *ecs.ECS, e ecs.Entity) *InventoryItem {
+func GetInventoryItem(db *ecs.ECS, e ecs.Entity) *InventoryItem {
 	if asserted, ok := db.Component(e, InventoryItemComponentIndex).(*InventoryItem); ok {
 		return asserted
 	}
@@ -45,7 +46,7 @@ func (item *InventoryItem) Construct(data map[string]any) {
 		item.Class = v.(string)
 	}
 	if v, ok := data["Count"]; ok {
-		item.Count = v.(int)
+		item.Count, _ = strconv.Atoi(v.(string))
 	}
 	if v, ok := data["Image"]; ok {
 		item.Image, _ = ecs.ParseEntity(v.(string))
@@ -59,7 +60,7 @@ func (item *InventoryItem) Serialize() map[string]any {
 		result["Class"] = item.Class
 	}
 	if item.Count > 1 {
-		result["Count"] = item.Count
+		result["Count"] = strconv.Itoa(item.Count)
 	}
 	if item.Image != 0 {
 		result["Image"] = item.Image.Format()

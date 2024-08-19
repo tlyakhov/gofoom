@@ -55,19 +55,19 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 }
 
 func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Attachable) {
-	if shader := materials.ShaderFromDb(ms.DB, material); shader != nil && shader != parent {
+	if shader := materials.GetShader(ms.ECS, material); shader != nil && shader != parent {
 		ms.Materials = append(ms.Materials, shader)
 		for _, stage := range shader.Stages {
 			ms.derefMaterials(stage.Texture, shader)
 		}
-	} else if sprite := materials.SpriteFromDb(ms.DB, material); sprite != nil && sprite != parent {
+	} else if sprite := materials.GetSprite(ms.ECS, material); sprite != nil && sprite != parent {
 		ms.Materials = append(ms.Materials, sprite)
 		ms.derefMaterials(sprite.Image, sprite)
-	} else if image := materials.ImageFromDb(ms.DB, material); image != nil {
+	} else if image := materials.GetImage(ms.ECS, material); image != nil {
 		ms.Materials = append(ms.Materials, image)
-	} else if text := materials.TextFromDb(ms.DB, material); text != nil {
+	} else if text := materials.GetText(ms.ECS, material); text != nil {
 		ms.Materials = append(ms.Materials, text)
-	} else if solid := materials.SolidFromDb(ms.DB, material); solid != nil {
+	} else if solid := materials.GetSolid(ms.ECS, material); solid != nil {
 		ms.Materials = append(ms.Materials, solid)
 	}
 
@@ -105,7 +105,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 
 		if (stage.Flags & materials.ShaderLiquid) != 0 {
-			lv, lu := math.Sincos(float64(stage.DB.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
+			lv, lu := math.Sincos(float64(stage.ECS.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
 			u += lu * constants.LiquidChurnSize
 			v += lv * constants.LiquidChurnSize
 		}

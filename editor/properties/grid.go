@@ -167,7 +167,7 @@ func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState
 		if s.Entity == 0 {
 			continue
 		}
-		for _, c := range s.DB.AllComponents(s.Entity) {
+		for _, c := range s.ECS.AllComponents(s.Entity) {
 			if c == nil {
 				continue
 			}
@@ -239,12 +239,12 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 			button.SetText("Select parent sector")
 			button.SetIcon(theme.LoginIcon())
 			button.OnTapped = func() {
-				g.SelectObjects(true, core.SelectableFromEntity(g.State().DB, s.Sector.Entity))
+				g.SelectObjects(true, core.SelectableFromEntity(g.State().ECS, s.Sector.Entity))
 			}
 		}
 		entities = append(entities, s.Entity)
 		entityList += s.Entity.Format()
-		for index, c := range s.DB.AllComponents(s.Entity) {
+		for index, c := range s.ECS.AllComponents(s.Entity) {
 			componentList[index] = (c != nil)
 		}
 	}
@@ -350,6 +350,8 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			default:
 				g.fieldString(field, false)
 			}
+		case *concepts.Set[string]:
+			g.fieldString(field, false)
 		case *float32:
 			g.fieldNumber(field)
 		case *float64:

@@ -19,10 +19,10 @@ func floorPick(s *state.Column) {
 
 // floor renders the floor portion of a slice.
 func floor(c *state.Column) {
-	mat := c.Sector.FloorSurface.Material
-	extras := c.Sector.FloorSurface.ExtraStages
+	mat := c.Sector.Bottom.Surface.Material
+	extras := c.Sector.Bottom.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)
-	transform := c.Sector.FloorSurface.Transform.Render
+	transform := c.Sector.Bottom.Surface.Transform.Render
 	sectorMin := &c.Sector.Min
 	sectorMax := &c.Sector.Max
 
@@ -41,16 +41,16 @@ func floor(c *state.Column) {
 	planeRayDelta := concepts.Vector3{
 		c.Sector.Segments[0].P[0] - c.Ray.Start[0],
 		c.Sector.Segments[0].P[1] - c.Ray.Start[1],
-		*c.Sector.BottomZ.Render - c.CameraZ}
+		*c.Sector.Bottom.Z.Render - c.CameraZ}
 	for c.ScreenY = c.ClippedBottom; c.ScreenY < c.EdgeBottom; c.ScreenY++ {
 		c.RayFloorCeil[2] = float64(c.ScreenHeight/2 - c.ScreenY)
-		denom := c.Sector.FloorNormal.Dot(&c.RayFloorCeil)
+		denom := c.Sector.Bottom.Normal.Dot(&c.RayFloorCeil)
 
 		if denom == 0 {
 			continue
 		}
 
-		t := planeRayDelta.Dot(&c.Sector.FloorNormal) / denom
+		t := planeRayDelta.Dot(&c.Sector.Bottom.Normal) / denom
 		if t <= 0 {
 			//s.Write(uint32(s.X+s.Y*s.ScreenWidth), 255)
 			dbg := fmt.Sprintf("%v floor t <= 0", c.Sector.Entity)

@@ -39,10 +39,10 @@ type Body struct {
 var BodyComponentIndex int
 
 func init() {
-	BodyComponentIndex = ecs.Types().Register(Body{}, BodyFromDb)
+	BodyComponentIndex = ecs.Types().Register(Body{}, GetBody)
 }
 
-func BodyFromDb(db *ecs.ECS, e ecs.Entity) *Body {
+func GetBody(db *ecs.ECS, e ecs.Entity) *Body {
 	if asserted, ok := db.Component(e, BodyComponentIndex).(*Body); ok {
 		return asserted
 	}
@@ -78,7 +78,7 @@ func (b *Body) SetECS(db *ecs.ECS) {
 }
 
 func (b *Body) Sector() *Sector {
-	return SectorFromDb(b.ECS, b.SectorEntity)
+	return GetSector(b.ECS, b.SectorEntity)
 }
 
 func (b *Body) Normal() *concepts.Vector2 {

@@ -39,11 +39,11 @@ func (pc *PlayerController) Target(target ecs.Attachable) bool {
 	if !pc.Player.IsActive() || pc.Player.Spawn {
 		return false
 	}
-	pc.Body = core.BodyFromDb(pc.Player.ECS, pc.Player.Entity)
+	pc.Body = core.GetBody(pc.Player.ECS, pc.Player.Entity)
 	if !pc.Body.IsActive() {
 		return false
 	}
-	pc.Alive = behaviors.AliveFromDb(pc.Player.ECS, pc.Player.Entity)
+	pc.Alive = behaviors.GetAlive(pc.Player.ECS, pc.Player.Entity)
 	return pc.Alive.IsActive()
 }
 
@@ -73,7 +73,7 @@ func (pc *PlayerController) Always() {
 	pc.CameraZ = pc.Body.Pos.Render[2] + pc.Body.Size.Render[1]*0.5 + bob - 5
 
 	if sector := pc.Body.Sector(); sector != nil {
-		fz, cz := sector.PointZ(ecs.DynamicRender, pc.Body.Pos.Render.To2D())
+		fz, cz := sector.ZAt(ecs.DynamicRender, pc.Body.Pos.Render.To2D())
 		fz += constants.IntersectEpsilon
 		cz -= constants.IntersectEpsilon
 		if pc.CameraZ < fz {
@@ -93,14 +93,14 @@ func (pc *PlayerController) Always() {
 	pc.Alive.Tint(&pc.FrameTint)
 
 	/*for _, item := range pc.Inventory {
-		if w := behaviors.WeaponInstantFromDb(pc.DB, item.Entity); w != nil {
+		if w := behaviors.GetWeaponInstant(pc.ECS, item.Entity); w != nil {
 			pc.CurrentWeapon = item.Entity
 		}
 	}*/
 }
 
 func MovePlayer(p *core.Body, angle float64, direct bool) {
-	uw := behaviors.UnderwaterFromDb(p.ECS, p.SectorEntity) != nil
+	uw := behaviors.GetUnderwater(p.ECS, p.SectorEntity) != nil
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce

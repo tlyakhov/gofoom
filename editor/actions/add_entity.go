@@ -27,32 +27,32 @@ type AddEntity struct {
 }
 
 func (a *AddEntity) DetachFromSector() {
-	if body := core.BodyFromDb(a.State().DB, a.Entity); body != nil {
+	if body := core.GetBody(a.State().ECS, a.Entity); body != nil {
 		if body.SectorEntity == 0 {
 			return
 		}
 		delete(body.Sector().Bodies, a.Entity)
 	}
-	//a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	//a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *AddEntity) AttachAll() {
 	for index, component := range a.Components {
-		a.State().DB.Attach(index, a.Entity, component)
+		a.State().ECS.Attach(index, a.Entity, component)
 	}
 }
 
 func (a *AddEntity) AttachToSector() {
-	if body := core.BodyFromDb(a.State().DB, a.Entity); body != nil {
+	if body := core.GetBody(a.State().ECS, a.Entity); body != nil {
 		if a.ContainingSector != nil {
 			body.SectorEntity = a.ContainingSector.Entity
 			a.ContainingSector.Bodies[a.Entity] = body
 		}
 	}
-	if seg := core.InternalSegmentFromDb(a.State().DB, a.Entity); seg != nil {
+	if seg := core.GetInternalSegment(a.State().ECS, a.Entity); seg != nil {
 		seg.AttachToSectors()
 	}
-	//a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	//a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *AddEntity) Dragged(d *fyne.DragEvent) {
@@ -74,7 +74,7 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	for _, isector := range a.State().DB.AllOfType(core.SectorComponentIndex) {
+	for _, isector := range a.State().ECS.AllOfType(core.SectorComponentIndex) {
 		sector := isector.(*core.Sector)
 		if sector.IsPointInside2D(worldGrid) {
 			a.ContainingSector = sector
@@ -89,11 +89,11 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 		body.Pos.Original[0] = worldGrid[0]
 		body.Pos.Original[1] = worldGrid[1]
 		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.PointZ(ecs.DynamicOriginal, worldGrid)
+			floorZ, ceilZ := a.ContainingSector.ZAt(ecs.DynamicOriginal, worldGrid)
 			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
 		body.Pos.ResetToOriginal()
-		a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+		a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 	}
 }
 
@@ -104,13 +104,13 @@ func (a *AddEntity) MouseUp(evt *desktop.MouseEvent) {
 
 func (a *AddEntity) Act() {
 	a.Mode = "AddBody"
-	a.SelectObjects(true, core.SelectableFromEntity(a.State().DB, a.Entity))
+	a.SelectObjects(true, core.SelectableFromEntity(a.State().ECS, a.Entity))
 }
 func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()
 	a.DetachFromSector()
 	if a.Entity != 0 {
-		a.State().DB.DetachAll(a.Entity)
+		a.State().ECS.DetachAll(a.Entity)
 	}
 	a.State().Lock.Unlock()
 	a.SelectObjects(true)
@@ -121,7 +121,7 @@ func (a *AddEntity) Undo() {
 	defer a.State().Lock.Unlock()
 
 	a.DetachFromSector()
-	a.State().DB.DetachAll(a.Entity)
+	a.State().ECS.DetachAll(a.Entity)
 }
 func (a *AddEntity) Redo() {
 	a.State().Lock.Lock()

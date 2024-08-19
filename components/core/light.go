@@ -19,10 +19,10 @@ type Light struct {
 var LightComponentIndex int
 
 func init() {
-	LightComponentIndex = ecs.Types().Register(Light{}, LightFromDb)
+	LightComponentIndex = ecs.Types().Register(Light{}, GetLight)
 }
 
-func LightFromDb(db *ecs.ECS, e ecs.Entity) *Light {
+func GetLight(db *ecs.ECS, e ecs.Entity) *Light {
 	if asserted, ok := db.Component(e, LightComponentIndex).(*Light); ok {
 		return asserted
 	}

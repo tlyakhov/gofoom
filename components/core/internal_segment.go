@@ -21,10 +21,10 @@ type InternalSegment struct {
 var InternalSegmentComponentIndex int
 
 func init() {
-	InternalSegmentComponentIndex = ecs.Types().Register(InternalSegment{}, SectorFromDb)
+	InternalSegmentComponentIndex = ecs.Types().Register(InternalSegment{}, GetSector)
 }
 
-func InternalSegmentFromDb(db *ecs.ECS, e ecs.Entity) *InternalSegment {
+func GetInternalSegment(db *ecs.ECS, e ecs.Entity) *InternalSegment {
 	if asserted, ok := db.Component(e, InternalSegmentComponentIndex).(*InternalSegment); ok {
 		return asserted
 	}

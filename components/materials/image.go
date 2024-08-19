@@ -43,10 +43,10 @@ type Image struct {
 var ImageComponentIndex int
 
 func init() {
-	ImageComponentIndex = ecs.Types().Register(Image{}, ImageFromDb)
+	ImageComponentIndex = ecs.Types().Register(Image{}, GetImage)
 }
 
-func ImageFromDb(db *ecs.ECS, e ecs.Entity) *Image {
+func GetImage(db *ecs.ECS, e ecs.Entity) *Image {
 	if asserted, ok := db.Component(e, ImageComponentIndex).(*Image); ok {
 		return asserted
 	}

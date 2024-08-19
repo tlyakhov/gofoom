@@ -19,14 +19,14 @@ import (
 */
 
 type Surface struct {
-	DB          *ecs.ECS
+	ECS         *ecs.ECS
 	Material    ecs.Entity                         `editable:"Material" edit_type:"Material"`
 	ExtraStages []*ShaderStage                     `editable:"Extra Shader Stages"`
 	Transform   ecs.DynamicValue[concepts.Matrix2] `editable:"Transform"`
 }
 
 func (s *Surface) Construct(db *ecs.ECS, data map[string]any) {
-	s.DB = db
+	s.ECS = db
 	s.ExtraStages = make([]*ShaderStage, 0)
 	s.Transform.Construct(nil)
 

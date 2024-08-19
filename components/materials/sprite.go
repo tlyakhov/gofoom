@@ -20,10 +20,10 @@ type Sprite struct {
 var SpriteComponentIndex int
 
 func init() {
-	SpriteComponentIndex = ecs.Types().Register(Sprite{}, SpriteFromDb)
+	SpriteComponentIndex = ecs.Types().Register(Sprite{}, GetSprite)
 }
 
-func SpriteFromDb(db *ecs.ECS, e ecs.Entity) *Sprite {
+func GetSprite(db *ecs.ECS, e ecs.Entity) *Sprite {
 	if asserted, ok := db.Component(e, SpriteComponentIndex).(*Sprite); ok {
 		return asserted
 	}

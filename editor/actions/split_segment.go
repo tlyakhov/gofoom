@@ -53,7 +53,7 @@ func (a *SplitSegment) OnMouseUp() {
 	// TODO: also split internal segments
 	var segments concepts.Set[*core.SectorSegment]
 	if a.State().SelectedObjects.Empty() {
-		allSectors := a.State().DB.AllOfType(core.SectorComponentIndex)
+		allSectors := a.State().ECS.AllOfType(core.SectorComponentIndex)
 		segments = make(concepts.Set[*core.SectorSegment])
 		for _, attachable := range allSectors {
 			sector := attachable.(*core.Sector)

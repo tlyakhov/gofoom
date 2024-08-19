@@ -58,7 +58,7 @@ func (e Entity) NameString(db *ECS) string {
 		return "0 - Nothing"
 	}
 	id := e.Format()
-	if named := NamedFromDb(db, e); named != nil {
+	if named := GetNamed(db, e); named != nil {
 		return id + " - " + named.Name
 	}
 	return id

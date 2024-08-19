@@ -29,7 +29,7 @@ func (a *Copy) Act() {
 
 	for _, obj := range a.Selected.Exact {
 		// Don't copy/paste active players
-		if p := behaviors.PlayerFromDb(obj.DB, obj.Entity); p != nil && !p.Spawn {
+		if p := behaviors.GetPlayer(obj.ECS, obj.Entity); p != nil && !p.Spawn {
 			continue
 		}
 		a.Saved[obj.Entity] = obj.Serialize()

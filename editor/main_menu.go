@@ -105,7 +105,7 @@ func CreateMainMenu() {
 			if uc == nil {
 				return
 			}
-			editor.DB.Save(uc.URI().Path())
+			editor.ECS.Save(uc.URI().Path())
 			editor.OpenFile = uc.URI().Path()
 			editor.Modified = false
 			editor.UpdateTitle()
@@ -128,7 +128,7 @@ func CreateMainMenu() {
 			editor.FileSaveAs.Menu.Action()
 			return
 		}
-		editor.DB.Save(editor.OpenFile)
+		editor.ECS.Save(editor.OpenFile)
 		editor.Modified = false
 		editor.UpdateTitle()
 	})
@@ -269,7 +269,7 @@ func CreateMainMenu() {
 
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
-		editor.DB.Simulation.All.Range(func(key any, _ any) bool {
+		editor.ECS.Simulation.All.Range(func(key any, _ any) bool {
 			d := key.(ecs.Dynamic)
 			d.ResetToOriginal()
 			if a := d.GetAnimation(); a != nil {
@@ -281,8 +281,8 @@ func CreateMainMenu() {
 	editor.BehaviorsPause.NoModifier = true
 	editor.BehaviorsPause.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5}
 	editor.BehaviorsPause.Menu = fyne.NewMenuItem("Pause simulation", func() {
-		editor.DB.EditorPaused = !editor.DB.EditorPaused
-		if editor.DB.EditorPaused {
+		editor.ECS.EditorPaused = !editor.ECS.EditorPaused
+		if editor.ECS.EditorPaused {
 			editor.BehaviorsPause.Menu.Label = "Resume simulation"
 		} else {
 			editor.BehaviorsPause.Menu.Label = "Pause simulation"

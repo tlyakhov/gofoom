@@ -15,7 +15,7 @@ const (
 )
 
 type SectorSegment struct {
-	DB      *ecs.ECS
+	ECS     *ecs.ECS
 	Segment `editable:"^"`
 
 	P         concepts.Vector2  `editable:"X/Y"`
@@ -79,7 +79,7 @@ func (s *SectorSegment) RealizeAdjacentSector() {
 		return
 	}
 
-	if adj := SectorFromDb(s.DB, s.AdjacentSector); adj != nil {
+	if adj := GetSector(s.ECS, s.AdjacentSector); adj != nil {
 		// Get the actual segment using the index
 		if s.PortalTeleports && s.AdjacentSegmentIndex != -1 {
 			s.AdjacentSegment = adj.Segments[s.AdjacentSegmentIndex]
@@ -111,7 +111,7 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	// Make a copy to preserve everything other than the point.
 	copied := new(SectorSegment)
 	copied.Sector = s.Sector
-	copied.Construct(s.DB, s.Serialize())
+	copied.Construct(s.ECS, s.Serialize())
 	copied.P = p
 	// Insert into the sector
 	s.Sector.Segments = append(s.Sector.Segments[:index+1], s.Sector.Segments[index:]...)
@@ -124,7 +124,7 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 }
 
 func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
-	s.DB = db
+	s.ECS = db
 	s.Segment.Construct(db, data)
 	s.P = concepts.Vector2{}
 	s.Normal = concepts.Vector2{}
@@ -132,8 +132,8 @@ func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
 	s.PortalHasMaterial = false
 	s.PortalIsPassable = true
 	s.PortalTeleports = false
-	s.HiSurface.Construct(s.DB, nil)
-	s.LoSurface.Construct(s.DB, nil)
+	s.HiSurface.Construct(s.ECS, nil)
+	s.LoSurface.Construct(s.ECS, nil)
 	s.AdjacentSegmentIndex = -1
 
 	if data == nil {
@@ -167,10 +167,10 @@ func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
 		}
 	}
 	if v, ok := data["Lo"]; ok {
-		s.LoSurface.Construct(s.DB, v.(map[string]any))
+		s.LoSurface.Construct(s.ECS, v.(map[string]any))
 	}
 	if v, ok := data["Hi"]; ok {
-		s.HiSurface.Construct(s.DB, v.(map[string]any))
+		s.HiSurface.Construct(s.ECS, v.(map[string]any))
 	}
 }
 

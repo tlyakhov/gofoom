@@ -9,7 +9,7 @@ type Attached struct {
 	System                  bool // Don't serialize this entity, disallow editing
 	Active                  bool `editable:"Active?"`
 	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`
-	indexInDB               int
+	indexInECS              int
 }
 
 var AttachedComponentIndex int
@@ -26,8 +26,8 @@ func (a *Attached) String() string {
 	return "Attached"
 }
 
-func (a *Attached) IndexInDB() int {
-	return a.indexInDB
+func (a *Attached) IndexInECS() int {
+	return a.indexInECS
 }
 
 func (a *Attached) OnDetach() {
@@ -37,8 +37,8 @@ func (a *Attached) IsSystem() bool {
 	return a.System
 }
 
-func (a *Attached) SetIndexInDB(i int) {
-	a.indexInDB = i
+func (a *Attached) SetIndexInECS(i int) {
+	a.indexInECS = i
 }
 
 func (a *Attached) SetECS(db *ECS) {

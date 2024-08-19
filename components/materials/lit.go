@@ -18,10 +18,10 @@ type Lit struct {
 var LitComponentIndex int
 
 func init() {
-	LitComponentIndex = ecs.Types().Register(Lit{}, LitFromDb)
+	LitComponentIndex = ecs.Types().Register(Lit{}, GetLit)
 }
 
-func LitFromDb(db *ecs.ECS, e ecs.Entity) *Lit {
+func GetLit(db *ecs.ECS, e ecs.Entity) *Lit {
 	if asserted, ok := db.Component(e, LitComponentIndex).(*Lit); ok {
 		return asserted
 	}
