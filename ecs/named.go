@@ -15,10 +15,10 @@ type Named struct {
 var NamedComponentIndex int
 
 func init() {
-	NamedComponentIndex = Types().Register(Named{}, NamedFromDb)
+	NamedComponentIndex = Types().Register(Named{}, GetNamed)
 }
 
-func NamedFromDb(db *ECS, e Entity) *Named {
+func GetNamed(db *ECS, e Entity) *Named {
 	if asserted, ok := db.Component(e, NamedComponentIndex).(*Named); ok {
 		return asserted
 	}

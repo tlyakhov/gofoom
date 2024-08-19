@@ -6,8 +6,8 @@ package ecs
 type Attachable interface {
 	Serializable
 	String() string
-	IndexInDB() int
-	SetIndexInDB(int)
+	IndexInECS() int
+	SetIndexInECS(int)
 	SetEntity(entity Entity)
 	GetEntity() Entity
 	OnDetach()

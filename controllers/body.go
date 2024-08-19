@@ -44,7 +44,7 @@ func (bc *BodyController) Target(target ecs.Attachable) bool {
 	if !bc.Body.IsActive() {
 		return false
 	}
-	bc.Player = behaviors.PlayerFromDb(bc.Body.ECS, bc.Body.Entity)
+	bc.Player = behaviors.GetPlayer(bc.Body.ECS, bc.Body.Entity)
 	if bc.Player != nil && bc.Player.Spawn {
 		// If this is a spawn point, skip it
 		return false
@@ -81,7 +81,7 @@ func (bc *BodyController) Forces() {
 			if bc.Body.OnGround {
 				// Kinetic friction
 				drag.From(v)
-				drag.MulSelf(-bc.Sector.FloorFriction * bc.Sector.FloorNormal.Dot(g.MulSelf(-1)))
+				drag.MulSelf(-bc.Sector.FloorFriction * bc.Sector.Bottom.Normal.Dot(g.MulSelf(-1)))
 				f.AddSelf(&drag)
 			}
 			//log.Printf("%v\n", drag)

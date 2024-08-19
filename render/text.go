@@ -40,7 +40,7 @@ func (r *Renderer) NewTextStyle() *TextStyle {
 // TODO: This should be more configurable
 func (r *Renderer) DefaultFont() *materials.Sprite {
 	// TODO: Avoid searching every time
-	return materials.SpriteFromDb(r.DB, r.DB.GetEntityByName("Default Font"))
+	return materials.GetSprite(r.ECS, r.ECS.GetEntityByName("Default Font"))
 }
 
 func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy int) {
@@ -106,7 +106,7 @@ func (r *Renderer) Print(s *TextStyle, x, y int, text string) {
 	if s.Sprite == nil || s.CharWidth == 0 || s.CharHeight == 0 {
 		return
 	}
-	img := materials.ImageFromDb(s.Sprite.ECS, s.Sprite.Image)
+	img := materials.GetImage(s.Sprite.ECS, s.Sprite.Image)
 	if img == nil {
 		return
 	}

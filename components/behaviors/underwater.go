@@ -14,10 +14,10 @@ type Underwater struct {
 var UnderwaterComponentIndex int
 
 func init() {
-	UnderwaterComponentIndex = ecs.Types().Register(Underwater{}, UnderwaterFromDb)
+	UnderwaterComponentIndex = ecs.Types().Register(Underwater{}, GetUnderwater)
 }
 
-func UnderwaterFromDb(db *ecs.ECS, e ecs.Entity) *Underwater {
+func GetUnderwater(db *ecs.ECS, e ecs.Entity) *Underwater {
 	if asserted, ok := db.Component(e, UnderwaterComponentIndex).(*Underwater); ok {
 		return asserted
 	}

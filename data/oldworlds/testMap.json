@@ -26,8 +26,8 @@
     "Sectors": [
         {
             "Type": "mapping.PhysicalSector",
-            "BottomZ": 0,
-            "TopZ": 64,
+            "Bottom.Z": 0,
+            "Top.Z": 64,
             "FloorMaterial": "Blue",
             "CeilMaterial": "Blue",
             "Segments": [

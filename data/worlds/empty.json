@@ -45,15 +45,15 @@
         "5",
         "4"
       ],
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -110,7 +110,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }

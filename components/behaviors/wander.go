@@ -22,10 +22,10 @@ type Wander struct {
 var WanderComponentIndex int
 
 func init() {
-	WanderComponentIndex = ecs.Types().Register(Wander{}, WanderFromDb)
+	WanderComponentIndex = ecs.Types().Register(Wander{}, GetWander)
 }
 
-func WanderFromDb(db *ecs.ECS, e ecs.Entity) *Wander {
+func GetWander(db *ecs.ECS, e ecs.Entity) *Wander {
 	if asserted, ok := db.Component(e, WanderComponentIndex).(*Wander); ok {
 		return asserted
 	}

@@ -16,14 +16,14 @@ import (
 
 func CreateTestSector(db *ecs.ECS, name string, x, y, size float64) *core.Sector {
 	eSector := archetypes.CreateSector(db)
-	sector := core.SectorFromDb(db, eSector)
+	sector := core.GetSector(db, eSector)
 	sector.Construct(nil)
 	named := db.NewAttachedComponent(eSector, ecs.NamedComponentIndex).(*ecs.Named)
 	named.Name = name
 
 	mat := DefaultMaterial(db)
-	sector.FloorSurface.Material = mat
-	sector.CeilSurface.Material = mat
+	sector.Bottom.Surface.Material = mat
+	sector.Top.Surface.Material = mat
 	seg := sector.AddSegment(x, y)
 	seg.Surface.Material = mat
 	seg.HiSurface.Material = mat
@@ -50,7 +50,7 @@ func CreateTestGrass(db *ecs.ECS) ecs.Entity {
 	nmat := db.NewAttachedComponent(eGrass, ecs.NamedComponentIndex).(*ecs.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
-	tex := materials.ImageFromDb(db, eGrass)
+	tex := materials.GetImage(db, eGrass)
 	tex.Source = "data/grass.jpg"
 	tex.Filter = true
 	tex.GenerateMipMaps = true
@@ -65,7 +65,7 @@ func CreateTestSky(db *ecs.ECS) ecs.Entity {
 	img.Load()
 
 	entity := archetypes.CreateBasic(db, materials.ShaderComponentIndex)
-	sky := materials.ShaderFromDb(db, entity)
+	sky := materials.GetShader(db, entity)
 	sky.Stages = append(sky.Stages, new(materials.ShaderStage))
 	sky.Stages[0].Construct(nil)
 	sky.Stages[0].Texture = img.Entity
@@ -80,7 +80,7 @@ func CreateTestDirt(db *ecs.ECS) ecs.Entity {
 	eDirt := archetypes.CreateBasicMaterial(db, true)
 	nmat := db.NewAttachedComponent(eDirt, ecs.NamedComponentIndex).(*ecs.Named)
 	nmat.Name = "Dirt"
-	tex := materials.ImageFromDb(db, eDirt)
+	tex := materials.GetImage(db, eDirt)
 	tex.Source = "data/FDef.png"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
@@ -96,12 +96,12 @@ func CreateTestWorld(db *ecs.ECS) {
 	nmat := db.NewAttachedComponent(eGrass, ecs.NamedComponentIndex).(*ecs.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
-	tex := materials.ImageFromDb(db, eGrass)
+	tex := materials.GetImage(db, eGrass)
 	tex.Source = "data/grass.jpg"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.Load()
-	//tiled := materials.TiledFromDb(igrass)
+	//tiled := materials.GetTiled(igrass)
 	//tiled.Scale = 5.0
 
 	CreateTestGrass(db)
@@ -112,10 +112,10 @@ func CreateTestWorld(db *ecs.ECS) {
 	for x := 0; x < testw; x++ {
 		for y := 0; y < testh; y++ {
 			sector := CreateTestSector(db, fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
-			sector.TopZ.SetAll(300)
-			sector.BottomZ.SetAll(rand.Float64() * 30)
+			sector.Top.Z.SetAll(300)
+			sector.Bottom.Z.SetAll(rand.Float64() * 30)
 			//sector.FloorSlope = rand.Float64() * 0.2
-			sector.CeilSurface.Material = isky
+			sector.Top.Surface.Material = isky
 			for i := 0; i < len(sector.Segments); i++ {
 				sector.Segments[i].Surface.Material = isky
 				sector.Segments[i].LoSurface.Material = idirt
@@ -123,7 +123,7 @@ func CreateTestWorld(db *ecs.ECS) {
 
 			if rand.Uint32()%45 == 0 {
 				eLight := archetypes.CreateLightBody(db)
-				lightBody := core.BodyFromDb(db, eLight)
+				lightBody := core.GetBody(db, eLight)
 				lightBody.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				lightBody.Pos.ResetToOriginal()
 				lightBody.Mass = 0
@@ -134,7 +134,7 @@ func CreateTestWorld(db *ecs.ECS) {
 	for x := 0; x < testw; x++ {
 		for y := 0; y < testh; y++ {
 			eSector := db.GetEntityByName(fmt.Sprintf("land_%v_%v", x, y))
-			sector := core.SectorFromDb(db, eSector)
+			sector := core.GetSector(db, eSector)
 			// Randomly rotate the segments
 			rot := int(rand.Uint32() % 3)
 			for r := 0; r < rot; r++ {
@@ -153,20 +153,20 @@ func CreateTestWorld2(db *ecs.ECS) {
 	idirt := CreateTestDirt(db)
 
 	sector := CreateTestSector(db, "sector1", -100, -100, 200)
-	sector.TopZ.SetAll(100)
-	sector.BottomZ.SetAll(0)
+	sector.Top.Z.SetAll(100)
+	sector.Bottom.Z.SetAll(0)
 	sector2 := CreateTestSector(db, "sector2", 100, -100, 200)
-	sector2.TopZ.SetAll(100)
-	sector2.BottomZ.SetAll(-10)
+	sector2.Top.Z.SetAll(100)
+	sector2.Bottom.Z.SetAll(-10)
 	sector3 := CreateTestSector(db, "sector3", 300, -100, 200)
-	sector3.TopZ.SetAll(100)
-	sector3.BottomZ.SetAll(0)
-	sector3.FloorSurface.Material = idirt
-	sector3.CeilSurface.Material = isky
+	sector3.Top.Z.SetAll(100)
+	sector3.Bottom.Z.SetAll(0)
+	sector3.Bottom.Surface.Material = idirt
+	sector3.Top.Surface.Material = isky
 	sector3.Segments[1].Surface.Material = isky
 
 	eLight := archetypes.CreateLightBody(db)
-	lightBody := core.BodyFromDb(db, eLight)
+	lightBody := core.GetBody(db, eLight)
 	lightBody.Pos.Original = concepts.Vector3{0, 0, 60}
 	lightBody.Pos.ResetToOriginal()
 	lightBody.Mass = 0

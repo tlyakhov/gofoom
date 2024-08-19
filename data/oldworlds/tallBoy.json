@@ -27,7 +27,7 @@
   ],
   "Sectors": [
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -104,11 +104,11 @@
           "Y": 100
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -60,
+      "Bottom.Z": -60,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -166,7 +166,7 @@
           "Y": 100
         }
       ],
-      "TopZ": 112,
+      "Top.Z": 112,
       "Type": "core.PhysicalSector"
     }
   ],

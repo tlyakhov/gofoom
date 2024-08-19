@@ -40,7 +40,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	o := sector.ECS.AllComponents(sector.Entity)
 	a.Original[sector.Entity] = make([]ecs.Attachable, len(o))
 	copy(a.Original[sector.Entity], o)
-	// Detach the original from the DB
+	// Detach the original from the ECS
 	sector.ECS.DetachAll(sector.Entity)
 	// Attach the cloned entities/components
 	for _, added := range s.Result {
@@ -60,7 +60,7 @@ func (a *SplitSector) OnMouseUp() {
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
 	if a.State().SelectedObjects.Empty() {
-		allSectors := a.State().DB.AllOfType(core.SectorComponentIndex)
+		allSectors := a.State().ECS.AllOfType(core.SectorComponentIndex)
 		sectors = make([]*core.Sector, len(allSectors))
 		i := 0
 		for _, s := range allSectors {
@@ -110,7 +110,7 @@ func (a *SplitSector) Undo() {
 				body.SectorEntity = 0
 			}
 			sector.Bodies = make(map[ecs.Entity]*core.Body)
-			a.State().DB.DetachAll(sector.Entity)
+			a.State().ECS.DetachAll(sector.Entity)
 		}
 	}
 	for entity, originalComponents := range a.Original {
@@ -118,10 +118,10 @@ func (a *SplitSector) Undo() {
 			if component == nil {
 				continue
 			}
-			a.State().DB.Attach(index, entity, component)
+			a.State().ECS.Attach(index, entity, component)
 			if sector, ok := component.(*core.Sector); ok {
 				for _, entity := range bodies {
-					if body := core.BodyFromDb(a.State().DB, entity); body != nil {
+					if body := core.GetBody(a.State().ECS, entity); body != nil {
 						if sector.IsPointInside2D(body.Pos.Original.To2D()) {
 							body.SectorEntity = sector.Entity
 							sector.Bodies[entity] = body
@@ -142,7 +142,7 @@ func (a *SplitSector) Redo() {
 			body.SectorEntity = 0
 		}
 		sector.Bodies = make(map[ecs.Entity]*core.Body)
-		a.State().DB.DetachAll(entity)
+		a.State().ECS.DetachAll(entity)
 	}
 
 	for _, splitter := range a.Splitters {
@@ -154,10 +154,10 @@ func (a *SplitSector) Redo() {
 				if component == nil {
 					continue
 				}
-				a.State().DB.Attach(index, component.GetEntity(), component)
+				a.State().ECS.Attach(index, component.GetEntity(), component)
 				if sector, ok := component.(*core.Sector); ok {
 					for _, entity := range bodies {
-						if body := core.BodyFromDb(a.State().DB, entity); body != nil {
+						if body := core.GetBody(a.State().ECS, entity); body != nil {
 							if sector.IsPointInside2D(body.Pos.Original.To2D()) {
 								body.SectorEntity = sector.Entity
 								sector.Bodies[entity] = body

@@ -41,15 +41,15 @@
       "Name": "ckmr71tmdsri8tolfq30"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -108,7 +108,7 @@
           "Y": -100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -120,15 +120,15 @@
       "Name": "ckmr7gdmdsri8tolfqg0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "4",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -213,7 +213,7 @@
           "Y": -190
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 94
       }
     }
@@ -271,15 +271,15 @@
       "Name": "cknes4tmdsru23m3nip0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 2
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "6",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -337,7 +337,7 @@
           "Y": 260
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 80
       }
     }
@@ -395,15 +395,15 @@
       "Name": "ckmr7dtmdsri8tolfq8g"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "8",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -475,7 +475,7 @@
           "Y": -210
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -487,15 +487,15 @@
       "Name": "ckmr7f5mdsri8tolfqc0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "9",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -580,7 +580,7 @@
           "Y": -280
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -592,15 +592,15 @@
       "Name": "ckmr6tlmdsri8tolfoq0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "10",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -658,7 +658,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -670,15 +670,15 @@
       "Name": "ckmr6vtmdsri8tolfph0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "11",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -738,7 +738,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -796,15 +796,15 @@
       "Name": "cknes35mdsru23m3nilg"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -22
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "13",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -876,7 +876,7 @@
           "Y": 260
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 80
       }
     }
@@ -934,20 +934,20 @@
       "Name": "ckmr7kdmdsri8tolfqng"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -22
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "15",
       "FloorFriction": 0.85,
-      "FloorNormal": {
+      "Bottom.Normal": {
         "X": 0.19611613513818404,
         "Y": -0,
         "Z": 0.9805806756909202
       },
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -1006,7 +1006,7 @@
           "Y": 90
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -1018,15 +1018,15 @@
       "Name": "ckmr6vtmdsri8tolfpsg"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "16",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -1084,7 +1084,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -1096,15 +1096,15 @@
       "Name": "ckmr7ilmdsri8tolfqk0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 22
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "17",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -1177,7 +1177,7 @@
           "Y": 90
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 116
       }
     }
@@ -1189,15 +1189,15 @@
       "Name": "ckmr7ltmdsri8tolfqqg"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 22
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "18",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -1255,7 +1255,7 @@
           "Y": 60
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 116
       }
     }

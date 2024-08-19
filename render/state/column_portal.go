@@ -20,9 +20,9 @@ type ColumnPortal struct {
 }
 
 func (cp *ColumnPortal) CalcScreen() {
-	cp.Adj = core.SectorFromDb(cp.DB, cp.SectorSegment.AdjacentSector)
+	cp.Adj = core.GetSector(cp.ECS, cp.SectorSegment.AdjacentSector)
 	cp.AdjSegment = cp.SectorSegment.AdjacentSegment
-	cp.AdjBottom, cp.AdjTop = cp.Adj.PointZ(ecs.DynamicRender, cp.RaySegIntersect.To2D())
+	cp.AdjBottom, cp.AdjTop = cp.Adj.ZAt(ecs.DynamicRender, cp.RaySegIntersect.To2D())
 	cp.AdjProjectedTop = cp.ProjectZ(cp.AdjTop - cp.CameraZ)
 	cp.AdjProjectedBottom = cp.ProjectZ(cp.AdjBottom - cp.CameraZ)
 

@@ -62,13 +62,13 @@ func gameInput() {
 		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
 	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
-		if w := behaviors.WeaponInstantFromDb(renderer.DB, renderer.Player.Entity); w != nil {
+		if w := behaviors.GetWeaponInstant(renderer.ECS, renderer.Player.Entity); w != nil {
 			w.FireNextFrame = true
 		}
 	}
 	if win.Pressed(pixel.KeySpace) {
 
-		if behaviors.UnderwaterFromDb(renderer.DB, renderer.PlayerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(renderer.ECS, renderer.PlayerBody.SectorEntity) != nil {
 			renderer.PlayerBody.Force[2] += constants.PlayerSwimStrength
 		} else if renderer.PlayerBody.OnGround {
 			renderer.PlayerBody.Force[2] += constants.PlayerJumpForce
@@ -76,7 +76,7 @@ func gameInput() {
 		}
 	}
 	if win.Pressed(pixel.KeyC) {
-		if behaviors.UnderwaterFromDb(renderer.DB, renderer.PlayerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(renderer.ECS, renderer.PlayerBody.SectorEntity) != nil {
 			renderer.PlayerBody.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			renderer.Player.Crouching = true

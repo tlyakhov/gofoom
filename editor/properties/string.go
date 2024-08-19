@@ -5,8 +5,10 @@ package properties
 
 import (
 	"reflect"
+	"strings"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -21,7 +23,13 @@ func (g *Grid) originalStrings(field *state.PropertyGridField) string {
 		if i != 0 {
 			origValue += ", "
 		}
-		origValue += v.Elem().String()
+		e := v.Elem()
+		if e.Kind() == reflect.String {
+			origValue += e.String()
+		} else {
+			s := v.MethodByName("String").Call(nil)[0].String()
+			origValue += s
+		}
 		i++
 	}
 	return origValue
@@ -51,6 +59,15 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 	entry.MultiLine = multiline
 	entry.OnSubmitted = nil
 	entry.SetText(origValue)
+	if _, ok := field.Values[0].Interface().(concepts.Set[string]); ok {
+		entry.OnSubmitted = func(text string) {
+			set := make(concepts.Set[string])
+			split := strings.Split(text, ",")
+			set.AddAll(split...)
+			g.ApplySetPropertyAction(field, reflect.ValueOf(set))
+		}
+		return
+	}
 	entry.OnSubmitted = func(text string) {
 		g.ApplySetPropertyAction(field, reflect.ValueOf(text))
 		origValue = text

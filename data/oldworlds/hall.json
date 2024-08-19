@@ -28,7 +28,7 @@
   ],
   "Sectors": [
     {
-      "BottomZ": 20,
+      "Bottom.Z": 20,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -74,11 +74,11 @@
           "Y": -770
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -125,11 +125,11 @@
           "Y": 90
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -44,
+      "Bottom.Z": -44,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -173,11 +173,11 @@
           "Y": -110
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -214,11 +214,11 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -333,11 +333,11 @@
           "Y": -490
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -383,11 +383,11 @@
           "Y": 42.928932188134524
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7,
@@ -434,11 +434,11 @@
           "Y": -760
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -485,11 +485,11 @@
           "Y": -860
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -563,11 +563,11 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -649,11 +649,11 @@
           "Y": -860
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -4,
+      "Bottom.Z": -4,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -697,11 +697,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -765,11 +765,11 @@
           "Y": -1060
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -60,
+      "Bottom.Z": -60,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -813,11 +813,11 @@
           "Y": 110
         }
       ],
-      "TopZ": -4,
+      "Top.Z": -4,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -863,11 +863,11 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -939,11 +939,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -985,11 +985,11 @@
           "Y": 33.70425713316365
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1035,11 +1035,11 @@
           "Y": -310
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -100,
+      "Bottom.Z": -100,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1115,11 +1115,11 @@
           "Y": 30
         }
       ],
-      "TopZ": 100,
+      "Top.Z": 100,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1165,11 +1165,11 @@
           "Y": -770
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1303,11 +1303,11 @@
           "Y": -860
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -1354,11 +1354,11 @@
           "Y": -310
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -100,
+      "Bottom.Z": -100,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1434,11 +1434,11 @@
           "Y": 110
         }
       ],
-      "TopZ": 100,
+      "Top.Z": 100,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -1485,11 +1485,11 @@
           "Y": 50
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -1567,11 +1567,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1635,11 +1635,11 @@
           "Y": -1060
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1694,11 +1694,11 @@
           "Y": -1060
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -60,
+      "Bottom.Z": -60,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1742,11 +1742,11 @@
           "Y": 240
         }
       ],
-      "TopZ": -4,
+      "Top.Z": -4,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 20,
+      "Bottom.Z": 20,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -1792,11 +1792,11 @@
           "Y": -770
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -1843,11 +1843,11 @@
           "Y": -510
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -1902,11 +1902,11 @@
           "Y": -490
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -1953,11 +1953,11 @@
           "Y": 10
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -48,
+      "Bottom.Z": -48,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2003,11 +2003,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2054,11 +2054,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -2105,11 +2105,11 @@
           "Y": -510
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -64,
+      "Bottom.Z": -64,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -2271,11 +2271,11 @@
           "Y": 30
         }
       ],
-      "TopZ": 0,
+      "Top.Z": 0,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -8,
+      "Bottom.Z": -8,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2319,11 +2319,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 30,
+      "Bottom.Z": 30,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2369,11 +2369,11 @@
           "Y": 42.928932188134524
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -64,
+      "Bottom.Z": -64,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2417,11 +2417,11 @@
           "Y": -10
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -24,
+      "Bottom.Z": -24,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2465,11 +2465,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -20,
+      "Bottom.Z": -20,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2513,11 +2513,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -60,
+      "Bottom.Z": -60,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2561,11 +2561,11 @@
           "Y": 240
         }
       ],
-      "TopZ": -4,
+      "Top.Z": -4,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -2612,11 +2612,11 @@
           "Y": -510
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -12,
+      "Bottom.Z": -12,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2660,11 +2660,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -2736,11 +2736,11 @@
           "Y": -1040
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2800,11 +2800,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7,
@@ -2851,11 +2851,11 @@
           "Y": -770
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2918,11 +2918,11 @@
           "Y": -1060
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -2968,11 +2968,11 @@
           "Y": -860
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3027,11 +3027,11 @@
           "Y": -1060
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -3133,11 +3133,11 @@
           "Y": -180
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -52,
+      "Bottom.Z": -52,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3181,11 +3181,11 @@
           "Y": -70
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -34,
+      "Bottom.Z": -34,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -3279,11 +3279,11 @@
           "Y": -690
         }
       ],
-      "TopZ": 46,
+      "Top.Z": 46,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -56,
+      "Bottom.Z": -56,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3327,11 +3327,11 @@
           "Y": -50
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -3377,11 +3377,11 @@
           "Y": 100
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -3428,11 +3428,11 @@
           "Y": -310
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3476,11 +3476,11 @@
           "Y": -180
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.2,
@@ -3561,11 +3561,11 @@
           "Y": -690
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7,
@@ -3645,11 +3645,11 @@
           "Y": -1040
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3695,11 +3695,11 @@
           "Y": -510
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3762,11 +3762,11 @@
           "Y": 85.35533905932738
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7,
@@ -3813,11 +3813,11 @@
           "Y": -310
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -40,
+      "Bottom.Z": -40,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3861,11 +3861,11 @@
           "Y": -130
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -36,
+      "Bottom.Z": -36,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -3909,11 +3909,11 @@
           "Y": -150
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -3960,11 +3960,11 @@
           "Y": -510
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4026,11 +4026,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -4077,11 +4077,11 @@
           "Y": -160
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4135,11 +4135,11 @@
           "Y": -1060
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4183,11 +4183,11 @@
           "Y": -520
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4231,11 +4231,11 @@
           "Y": -160
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -64,
+      "Bottom.Z": -64,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4279,11 +4279,11 @@
           "Y": 20
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -48,
+      "Bottom.Z": -48,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4327,11 +4327,11 @@
           "Y": -90
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -28,
+      "Bottom.Z": -28,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4375,11 +4375,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -32,
+      "Bottom.Z": -32,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -4458,11 +4458,11 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -4508,11 +4508,11 @@
           "Y": 50
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4594,11 +4594,11 @@
           "Y": -490
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4644,11 +4644,11 @@
           "Y": -210
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -4695,11 +4695,11 @@
           "Y": -310
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4745,11 +4745,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -4796,11 +4796,11 @@
           "Y": -160
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -60,
+      "Bottom.Z": -60,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4844,11 +4844,11 @@
           "Y": -30
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -60,
+      "Bottom.Z": -60,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -4892,11 +4892,11 @@
           "Y": 110
         }
       ],
-      "TopZ": -4,
+      "Top.Z": -4,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.25,
@@ -5038,11 +5038,11 @@
           "Y": -310
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -5114,11 +5114,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 150,
+      "Top.Z": 150,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7000000000000001,
@@ -5165,11 +5165,11 @@
           "Y": -760
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "CeilSlope": -0.7,
@@ -5249,11 +5249,11 @@
           "Y": -1220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -5299,11 +5299,11 @@
           "Y": 7.573593128807154
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -5427,11 +5427,11 @@
           "Y": -760
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": 0,
+      "Bottom.Z": 0,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [
@@ -5564,11 +5564,11 @@
           "Y": -160
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     },
     {
-      "BottomZ": -16,
+      "Bottom.Z": -16,
       "CeilMaterial": "Default",
       "CeilScale": 64,
       "Mobs": [],
@@ -5612,7 +5612,7 @@
           "Y": -220
         }
       ],
-      "TopZ": 64,
+      "Top.Z": 64,
       "Type": "core.PhysicalSector"
     }
   ],

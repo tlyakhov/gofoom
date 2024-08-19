@@ -33,7 +33,7 @@ func (wc *WanderController) Methods() ecs.ControllerMethod {
 
 func (wc *WanderController) Target(target ecs.Attachable) bool {
 	wc.Wander = target.(*behaviors.Wander)
-	wc.Body = core.BodyFromDb(wc.Wander.ECS, wc.Wander.Entity)
+	wc.Body = core.GetBody(wc.Wander.ECS, wc.Wander.Entity)
 	return wc.Wander.IsActive() && wc.Body.IsActive()
 }
 
@@ -55,7 +55,7 @@ func (wc *WanderController) Always() {
 		// Bias towards the center of the sector
 		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
 		end := start
-		if sector := core.SectorFromDb(wc.Body.ECS, wc.NextSector); sector != nil {
+		if sector := core.GetSector(wc.Body.ECS, wc.NextSector); sector != nil {
 			end = wc.Body.Angle2DTo(&sector.Center)
 		}
 		a.End = concepts.TweenAngles(start, end, 0.2, concepts.Lerp)

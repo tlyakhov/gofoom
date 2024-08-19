@@ -30,16 +30,16 @@ func (vd *VerticalDoorController) Methods() ecs.ControllerMethod {
 
 func (vd *VerticalDoorController) Target(target ecs.Attachable) bool {
 	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
-	vd.Sector = core.SectorFromDb(vd.VerticalDoor.ECS, vd.VerticalDoor.Entity)
+	vd.Sector = core.GetSector(vd.VerticalDoor.ECS, vd.VerticalDoor.Entity)
 	return vd.VerticalDoor.IsActive() && vd.Sector != nil && vd.Sector.IsActive()
 }
 
 func (vd *VerticalDoorController) setupAnimation() {
-	a := vd.Sector.TopZ.NewAnimation()
+	a := vd.Sector.Top.Z.NewAnimation()
 	a.SetECS(vd.ECS)
 	a.Construct(nil)
-	a.Start = vd.Sector.TopZ.Original
-	a.End = vd.Sector.BottomZ.Original
+	a.Start = vd.Sector.Top.Z.Original
+	a.End = vd.Sector.Bottom.Z.Original
 	a.Coordinates = ecs.AnimationCoordinatesAbsolute
 	a.Duration = vd.Duration
 	a.TweeningFunc = vd.TweeningFunc
@@ -47,7 +47,7 @@ func (vd *VerticalDoorController) setupAnimation() {
 }
 
 func (vd *VerticalDoorController) adjustTransforms() {
-	a := vd.Sector.TopZ.Animation
+	a := vd.Sector.Top.Z.Animation
 
 	if a.Now == a.Prev {
 		return
@@ -66,9 +66,9 @@ func (vd *VerticalDoorController) adjustTransforms() {
 			}
 		} else {
 			adj := seg.AdjacentSegment.Sector
-			denom := (a.End - adj.TopZ.Now)
+			denom := (a.End - adj.Top.Z.Now)
 			if denom != 0 {
-				v = (a.Now - adj.TopZ.Now) / denom
+				v = (a.Now - adj.Top.Z.Now) / denom
 			} else {
 				v = 1
 			}
@@ -92,11 +92,11 @@ func (vd *VerticalDoorController) adjustTransforms() {
 }
 
 func (vd *VerticalDoorController) Always() {
-	if vd.Sector.TopZ.Animation == nil {
+	if vd.Sector.Top.Z.Animation == nil {
 		vd.setupAnimation()
 	}
 
-	a := vd.Sector.TopZ.Animation
+	a := vd.Sector.Top.Z.Animation
 
 	if a.Percent <= 0 {
 		vd.State = behaviors.DoorStateOpen
@@ -113,7 +113,7 @@ func (vd *VerticalDoorController) Always() {
 			if seg.AdjacentSegment == nil {
 				continue
 			}
-			vd.DB.Act(seg.AdjacentSegment.Sector, core.SectorComponentIndex, ecs.ControllerRecalculate)
+			vd.ECS.Act(seg.AdjacentSegment.Sector, core.SectorComponentIndex, ecs.ControllerRecalculate)
 		}*/
 	}
 

@@ -42,7 +42,7 @@ type VerticalDoor struct {
 var VerticalDoorComponentIndex int
 
 func init() {
-	VerticalDoorComponentIndex = ecs.Types().Register(VerticalDoor{}, VerticalDoorFromDb)
+	VerticalDoorComponentIndex = ecs.Types().Register(VerticalDoor{}, GetVerticalDoor)
 	dis := DoorIntentStrings()
 	div := DoorIntentValues()
 	for i, s := range dis {
@@ -50,7 +50,7 @@ func init() {
 	}
 }
 
-func VerticalDoorFromDb(db *ecs.ECS, e ecs.Entity) *VerticalDoor {
+func GetVerticalDoor(db *ecs.ECS, e ecs.Entity) *VerticalDoor {
 	if asserted, ok := db.Component(e, VerticalDoorComponentIndex).(*VerticalDoor); ok {
 		return asserted
 	}

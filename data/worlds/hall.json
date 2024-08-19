@@ -1,13 +1,5 @@
 [
   {
-    "Entity": "1",
-    "core.Spawn": {
-      "Entity": "1",
-      "X": -320,
-      "Y": 205
-    }
-  },
-  {
     "Entity": "2",
     "ecs.Named": {
       "Entity": "2",
@@ -36,22 +28,17 @@
   },
   {
     "Entity": "3",
-    "ecs.Named": {
-      "Entity": "3",
-      "Name": "be4pvnfvn27o06iak950"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 20
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 20
+        }
       },
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "100",
@@ -110,39 +97,38 @@
           "Y": -770
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "3",
+      "Name": "be4pvnfvn27o06iak950"
     }
   },
   {
     "Entity": "4",
-    "ecs.Named": {
-      "Entity": "4",
-      "Name": "be26u9vvn27vmb5f7cp0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.5734623443633284,
-        "Y": -0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.5734623443633284,
+          "Y": -0,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "4",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.5734623443633284,
-        "Y": -0,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "10",
@@ -200,29 +186,38 @@
           "Y": 90
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.5734623443633284,
+          "Y": -0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "4",
+      "Name": "be26u9vvn27vmb5f7cp0"
     }
   },
   {
     "Entity": "5",
-    "ecs.Named": {
-      "Entity": "5",
-      "Name": "be46lsnvn27lk1dech50"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -44
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -44
+        }
       },
       "Entity": "5",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -279,34 +274,38 @@
           "Y": -110
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "5",
+      "Name": "be46lsnvn27lk1dech50"
     }
   },
   {
     "Entity": "6",
-    "ecs.Named": {
-      "Entity": "6",
-      "Name": "be4pp37vn27o06iajn30"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.27657819918549315,
+          "Y": -0.27657819918549315,
+          "Z": 0.9203309184584746
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "6",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.27657819918549315,
-        "Y": -0.27657819918549315,
-        "Z": 0.9203309184584746
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -350,25 +349,33 @@
           "Y": -1040
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "6",
+      "Name": "be4pp37vn27o06iajn30"
     }
   },
   {
     "Entity": "7",
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "7",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "89",
@@ -427,8 +434,13 @@
           "Y": -490
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -524,22 +536,17 @@
   },
   {
     "Entity": "10",
-    "ecs.Named": {
-      "Entity": "10",
-      "Name": "be3dsc7vn27ho9jt57ig"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "10",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "4",
@@ -598,39 +605,38 @@
           "Y": 42.928932188134524
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "10",
+      "Name": "be3dsc7vn27ho9jt57ig"
     }
   },
   {
     "Entity": "11",
-    "ecs.Named": {
-      "Entity": "11",
-      "Name": "be4pvl7vn27o06iak35g"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "11",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "24",
@@ -688,39 +694,43 @@
           "Y": -760
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "11",
+      "Name": "be4pvl7vn27o06iak35g"
     }
   },
   {
     "Entity": "12",
-    "ecs.Named": {
-      "Entity": "12",
-      "Name": "be4pvjvvn27o06iak230"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0.5734623443633284,
-        "Y": 0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.6476484200955406,
+          "Y": -0,
+          "Z": 0.7619393177594593
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "12",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.6476484200955406,
-        "Y": -0,
-        "Z": 0.7619393177594593
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "56",
@@ -778,34 +788,43 @@
           "Y": -860
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0.5734623443633284,
+          "Y": 0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "12",
+      "Name": "be4pvjvvn27o06iak230"
     }
   },
   {
     "Entity": "13",
-    "ecs.Named": {
-      "Entity": "13",
-      "Name": "be4pp37vn27o06iajotg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0,
+          "Y": -0.2873478855663454,
+          "Z": 0.9578262852211513
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "13",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0,
-        "Y": -0.2873478855663454,
-        "Z": 0.9578262852211513
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "25",
@@ -906,29 +925,33 @@
           "Y": -1040
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "13",
+      "Name": "be4pp37vn27o06iajotg"
     }
   },
   {
     "Entity": "14",
-    "ecs.Named": {
-      "Entity": "14",
-      "Name": "be4pvnfvn27o06iak75g"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "14",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "54",
@@ -1043,29 +1066,33 @@
           "Y": -860
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "14",
+      "Name": "be4pvnfvn27o06iak75g"
     }
   },
   {
     "Entity": "15",
-    "ecs.Named": {
-      "Entity": "15",
-      "Name": "be46jk7vn27lk1dec9s0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -4
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -4
+        }
       },
       "Entity": "15",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1122,9 +1149,18 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "15",
+      "Name": "be46jk7vn27lk1dec9s0"
     }
   },
   {
@@ -1163,22 +1199,17 @@
   },
   {
     "Entity": "17",
-    "ecs.Named": {
-      "Entity": "17",
-      "Name": "be4bqjnvn27mek306bng"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -60
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "17",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1235,34 +1266,38 @@
           "Y": 110
         }
       ],
-      "TopZ": {
-        "Original": -4
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -4
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "17",
+      "Name": "be4bqjnvn27mek306bng"
     }
   },
   {
     "Entity": "18",
-    "ecs.Named": {
-      "Entity": "18",
-      "Name": "be4pp3vvn27o06iajq30"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.2873478855663454,
+          "Y": 0,
+          "Z": 0.9578262852211513
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "18",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.2873478855663454,
-        "Y": 0,
-        "Z": 0.9578262852211513
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1320,34 +1355,38 @@
           "Y": -1040
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "18",
+      "Name": "be4pp3vvn27o06iajq30"
     }
   },
   {
     "Entity": "19",
-    "ecs.Named": {
-      "Entity": "19",
-      "Name": "be4pp3vvn27o06iajr40"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.27657819918549315,
+          "Y": 0.27657819918549315,
+          "Z": 0.9203309184584746
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "19",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.27657819918549315,
-        "Y": 0.27657819918549315,
-        "Z": 0.9203309184584746
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1391,17 +1430,22 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "19",
+      "Name": "be4pp3vvn27o06iajr40"
     }
   },
   {
     "Entity": "20",
-    "ecs.Named": {
-      "Entity": "20",
-      "Name": "be4pr0vvn27o06iajrd0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -1443,6 +1487,10 @@
       },
       "Entity": "20",
       "Strength": 1
+    },
+    "ecs.Named": {
+      "Entity": "20",
+      "Name": "be4pr0vvn27o06iajrd0"
     }
   },
   {
@@ -1492,22 +1540,17 @@
   },
   {
     "Entity": "22",
-    "ecs.Named": {
-      "Entity": "22",
-      "Name": "be4eoifvn27mnbvee2gg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "22",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -1566,29 +1609,33 @@
           "Y": -310
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "22",
+      "Name": "be4eoifvn27mnbvee2gg"
     }
   },
   {
     "Entity": "23",
-    "ecs.Named": {
-      "Entity": "23",
-      "Name": "be4bqmfvn27mek306btg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -100
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -100
+        }
       },
       "Entity": "23",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1697,29 +1744,33 @@
           "Y": 30
         }
       ],
-      "TopZ": {
-        "Original": 100
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 100
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "23",
+      "Name": "be4bqmfvn27mek306btg"
     }
   },
   {
     "Entity": "24",
-    "ecs.Named": {
-      "Entity": "24",
-      "Name": "be4pvnfvn27o06iak8pg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "24",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "11",
@@ -1778,9 +1829,18 @@
           "Y": -770
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "24",
+      "Name": "be4pvnfvn27o06iak8pg"
     }
   },
   {
@@ -1790,7 +1850,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,sector.Entity).Intent = behaviors.DoorIntentOpen }",
+          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.GetVerticalDoor(s.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -1800,22 +1860,17 @@
       "Entity": "25",
       "TweeningFunc": "EaseInOut2"
     },
-    "ecs.Named": {
-      "Entity": "25",
-      "Name": "be4pufvvn27o06iajuu0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "25",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2014,50 +2069,49 @@
           "Y": -860
         }
       ],
-      "TopZ": {
-        "Animation": {
-          "Active": false,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 1000,
-          "End": 0,
-          "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
-          "Reverse": false,
-          "Start": 64,
-          "TweeningFunc": "EaseInOut2"
+      "Top": {
+        "Surface": {
+          "Material": "122"
         },
-        "Original": 64
+        "Z": {
+          "Animation": {
+            "Active": false,
+            "Coordinates": "AnimationCoordinatesAbsolute",
+            "Duration": 1000,
+            "End": 0,
+            "Lifetime": "AnimationLifetimeOnce",
+            "Percent": 1,
+            "Reverse": false,
+            "Start": 64,
+            "TweeningFunc": "EaseInOut2"
+          },
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "25",
+      "Name": "be4pufvvn27o06iajuu0"
     }
   },
   {
     "Entity": "26",
-    "ecs.Named": {
-      "Entity": "26",
-      "Name": "be4eoifvn27mnbvee2s0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": -0.5734623443633284,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0,
+          "Y": -0.5734623443633284,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "26",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0,
-        "Y": -0.5734623443633284,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -2125,35 +2179,38 @@
           "Y": -310
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": -0.5734623443633284,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "26",
+      "Name": "be4eoifvn27mnbvee2s0"
     }
   },
   {
     "Entity": "27",
-    "ecs.Named": {
-      "Entity": "27",
-      "Name": "be4bqb7vn27mek306bc0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -100
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "127"
+        },
+        "Z": {
+          "Original": -100
+        }
       },
       "Entity": "27",
       "FloorFriction": 0.85,
-      "FloorScripts": [
-        {
-          "Code": "body := s.Vars[\"body\"].(*core.Body)\nif body.Mass \u003e 10 { behaviors.VerticalDoorFromDb(s.DB,81).Intent = behaviors.DoorIntentOpen }",
-          "Style": "ScriptStyleStatement"
-        }
-      ],
-      "FloorSurface": {
-        "Material": "127"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2262,39 +2319,38 @@
           "Y": 110
         }
       ],
-      "TopZ": {
-        "Original": 100
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 100
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "27",
+      "Name": "be4bqb7vn27mek306bc0"
     }
   },
   {
     "Entity": "28",
-    "ecs.Named": {
-      "Entity": "28",
-      "Name": "be26u9vvn27vmb5f7d4g"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "28",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "103",
@@ -2362,29 +2418,38 @@
           "Y": 50
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "28",
+      "Name": "be26u9vvn27vmb5f7d4g"
     }
   },
   {
     "Entity": "29",
-    "ecs.Named": {
-      "Entity": "29",
-      "Name": "ckqk9glmdsria0nrngq0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "29",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2454,17 +2519,22 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "29",
+      "Name": "ckqk9glmdsria0nrngq0"
     }
   },
   {
     "Entity": "30",
-    "ecs.Named": {
-      "Entity": "30",
-      "Name": "ckqka4lmdsria0nrnisg"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -2506,22 +2576,25 @@
       },
       "Entity": "30",
       "Strength": 2
+    },
+    "ecs.Named": {
+      "Entity": "30",
+      "Name": "ckqka4lmdsria0nrnisg"
     }
   },
   {
     "Entity": "31",
     "core.Sector": {
-      "BottomZ": {
-        "Original": -32
-      },
-      "CeilSurface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -32
+        }
       },
       "Entity": "31",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2604,8 +2677,13 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -2615,10 +2693,6 @@
       "Class": "Flower",
       "Entity": "32",
       "Image": "98"
-    },
-    "ecs.Named": {
-      "Entity": "32",
-      "Name": "Item Test"
     },
     "core.Body": {
       "Angle": {
@@ -2640,8 +2714,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.59375,
-          "Reverse": false,
+          "Percent": 0.1796875,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2670,6 +2744,10 @@
         }
       }
     },
+    "ecs.Named": {
+      "Entity": "32",
+      "Name": "Item Test"
+    },
     "materials.Lit": {
       "Ambient": {
         "X": 0.1,
@@ -2692,22 +2770,17 @@
   },
   {
     "Entity": "33",
-    "ecs.Named": {
-      "Entity": "33",
-      "Name": "be4bql7vn27mek306bqg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -60
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "33",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2764,34 +2837,33 @@
           "Y": 240
         }
       ],
-      "TopZ": {
-        "Original": -4
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -4
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "33",
+      "Name": "be4bql7vn27mek306bqg"
     }
   },
   {
     "Entity": "34",
-    "ecs.Named": {
-      "Entity": "34",
-      "Name": "be4pvl7vn27o06iak550"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 20
-      },
-      "CeilNormal": {
-        "X": 0.5734623443633284,
-        "Y": 0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 20
+        }
       },
       "Entity": "34",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -2849,39 +2921,43 @@
           "Y": -770
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0.5734623443633284,
+          "Y": 0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "34",
+      "Name": "be4pvl7vn27o06iak550"
     }
   },
   {
     "Entity": "35",
-    "ecs.Named": {
-      "Entity": "35",
-      "Name": "be3estnvn27i2m3satqg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": 0.5734623443633284,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.6476484200955406,
+          "Z": 0.7619393177594592
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "35",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0,
-        "Y": 0.6476484200955406,
-        "Z": 0.7619393177594592
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -2949,29 +3025,38 @@
           "Y": -510
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.5734623443633284,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "35",
+      "Name": "be3estnvn27i2m3satqg"
     }
   },
   {
     "Entity": "36",
-    "ecs.Named": {
-      "Entity": "36",
-      "Name": "be46jcvvn27lk1dec8k0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "36",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "77",
@@ -3044,39 +3129,38 @@
           "Y": -490
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "36",
+      "Name": "be46jcvvn27lk1dec8k0"
     }
   },
   {
     "Entity": "37",
-    "ecs.Named": {
-      "Entity": "37",
-      "Name": "be26u9vvn27vmb5f7bcg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0.5734623443633284,
-        "Y": 0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.6476484200955406,
+          "Y": -0,
+          "Z": 0.7619393177594593
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "37",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.6476484200955406,
-        "Y": -0,
-        "Z": 0.7619393177594593
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "99",
@@ -3134,29 +3218,38 @@
           "Y": 10
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0.5734623443633284,
+          "Y": 0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "37",
+      "Name": "be26u9vvn27vmb5f7bcg"
     }
   },
   {
     "Entity": "38",
-    "ecs.Named": {
-      "Entity": "38",
-      "Name": "be4pp3vvn27o06iajpng"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -48
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -48
+        }
       },
       "Entity": "38",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "39",
@@ -3215,34 +3308,38 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "38",
+      "Name": "be4pp3vvn27o06iajpng"
     }
   },
   {
     "Entity": "39",
-    "ecs.Named": {
-      "Entity": "39",
-      "Name": "be4pp3vvn27o06iajqog"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.2873478855663454,
+          "Y": -0,
+          "Z": 0.9578262852211513
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "39",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.2873478855663454,
-        "Y": -0,
-        "Z": 0.9578262852211513
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "76",
@@ -3301,39 +3398,38 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "39",
+      "Name": "be4pp3vvn27o06iajqog"
     }
   },
   {
     "Entity": "40",
-    "ecs.Named": {
-      "Entity": "40",
-      "Name": "be46jcvvn27lk1dec910"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0.5734623443633283,
-        "Y": 0,
-        "Z": -0.8192319205190404
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.6476484200955405,
+          "Y": -0,
+          "Z": 0.7619393177594592
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "40",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.6476484200955405,
-        "Y": -0,
-        "Z": 0.7619393177594592
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "36",
@@ -3401,29 +3497,38 @@
           "Y": -510
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0.5734623443633283,
+          "Y": 0,
+          "Z": -0.8192319205190404
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "40",
+      "Name": "be46jcvvn27lk1dec910"
     }
   },
   {
     "Entity": "41",
-    "ecs.Named": {
-      "Entity": "41",
-      "Name": "be46m1fvn27lk1deckug"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -64
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -64
+        }
       },
       "Entity": "41",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -3651,9 +3756,18 @@
           "Y": 30
         }
       ],
-      "TopZ": {
-        "Original": 0
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "41",
+      "Name": "be46m1fvn27lk1deckug"
     }
   },
   {
@@ -3666,21 +3780,17 @@
       "Entity": "42",
       "Force": 50
     },
-    "ecs.Named": {
-      "Entity": "42",
-      "Name": "FlubTest"
-    },
     "core.Body": {
       "Angle": {
         "Animation": {
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -129.50936356323263,
+          "End": 29.633357037382027,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.625,
+          "Percent": 0.41666666666666674,
           "Reverse": false,
-          "Start": -122.70438575570087,
+          "Start": 33.536964549951236,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -3714,6 +3824,10 @@
         }
       }
     },
+    "ecs.Named": {
+      "Entity": "42",
+      "Name": "FlubTest"
+    },
     "materials.Image": {
       "Entity": "42",
       "Filter": false,
@@ -3744,22 +3858,17 @@
   },
   {
     "Entity": "43",
-    "ecs.Named": {
-      "Entity": "43",
-      "Name": "be46jknvn27lk1decaj0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -8
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -8
+        }
       },
       "Entity": "43",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -3816,29 +3925,33 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "43",
+      "Name": "be46jknvn27lk1decaj0"
     }
   },
   {
     "Entity": "44",
-    "ecs.Named": {
-      "Entity": "44",
-      "Name": "be3dsc7vn27ho9jt57u0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 30
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 30
+        }
       },
       "Entity": "44",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -3897,29 +4010,33 @@
           "Y": 42.928932188134524
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "44",
+      "Name": "be3dsc7vn27ho9jt57u0"
     }
   },
   {
     "Entity": "45",
-    "ecs.Named": {
-      "Entity": "45",
-      "Name": "be4c2lnvn27mi9gdb850"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -64
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -64
+        }
       },
       "Entity": "45",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -3976,29 +4093,33 @@
           "Y": -10
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "45",
+      "Name": "be4c2lnvn27mi9gdb850"
     }
   },
   {
     "Entity": "46",
-    "ecs.Named": {
-      "Entity": "46",
-      "Name": "be46jmfvn27lk1decdf0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -24
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -24
+        }
       },
       "Entity": "46",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -4055,29 +4176,33 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "46",
+      "Name": "be46jmfvn27lk1decdf0"
     }
   },
   {
     "Entity": "47",
-    "ecs.Named": {
-      "Entity": "47",
-      "Name": "be46jm7vn27lk1decco0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -20
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -20
+        }
       },
       "Entity": "47",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -4134,29 +4259,33 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "47",
+      "Name": "be46jm7vn27lk1decco0"
     }
   },
   {
     "Entity": "48",
-    "ecs.Named": {
-      "Entity": "48",
-      "Name": "be4bq7vvn27mek306b60"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -60
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "48",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -4213,39 +4342,38 @@
           "Y": 240
         }
       ],
-      "TopZ": {
-        "Original": -4
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -4
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "48",
+      "Name": "be4bq7vvn27mek306b60"
     }
   },
   {
     "Entity": "49",
-    "ecs.Named": {
-      "Entity": "49",
-      "Name": "be3eq5fvn27i2m3sahpg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": 0.5734623443633283,
-        "Z": -0.8192319205190404
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.6476484200955405,
+          "Z": 0.7619393177594592
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "49",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0,
-        "Y": 0.6476484200955405,
-        "Z": 0.7619393177594592
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "7",
@@ -4313,29 +4441,38 @@
           "Y": -510
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.5734623443633283,
+          "Z": -0.8192319205190404
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "49",
+      "Name": "be3eq5fvn27i2m3sahpg"
     }
   },
   {
     "Entity": "50",
-    "ecs.Named": {
-      "Entity": "50",
-      "Name": "be46jl7vn27lk1decba0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -12
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -12
+        }
       },
       "Entity": "50",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -4392,34 +4529,38 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "50",
+      "Name": "be46jl7vn27lk1decba0"
     }
   },
   {
     "Entity": "51",
-    "ecs.Named": {
-      "Entity": "51",
-      "Name": "be4pp37vn27o06iajnog"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.27657819918549315,
+          "Y": -0.27657819918549315,
+          "Z": 0.9203309184584746
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "51",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.27657819918549315,
-        "Y": -0.27657819918549315,
-        "Z": 0.9203309184584746
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -4463,17 +4604,22 @@
           "Y": -1040
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "51",
+      "Name": "be4pp37vn27o06iajnog"
     }
   },
   {
     "Entity": "52",
-    "ecs.Named": {
-      "Entity": "52",
-      "Name": "be4pr07vn27o06iajrb0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -4515,26 +4661,25 @@
       },
       "Entity": "52",
       "Strength": 1
+    },
+    "ecs.Named": {
+      "Entity": "52",
+      "Name": "be4pr07vn27o06iajrb0"
     }
   },
   {
     "Entity": "53",
-    "ecs.Named": {
-      "Entity": "53",
-      "Name": "be49j2vvn27m4cr0h39g"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "53",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -4617,39 +4762,38 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "53",
+      "Name": "be49j2vvn27m4cr0h39g"
     }
   },
   {
     "Entity": "54",
-    "ecs.Named": {
-      "Entity": "54",
-      "Name": "be4pvjvvn27o06iak1ng"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "54",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "14",
@@ -4707,25 +4851,38 @@
           "Y": -770
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "54",
+      "Name": "be4pvjvvn27o06iak1ng"
     }
   },
   {
     "Entity": "55",
     "core.Sector": {
-      "BottomZ": {
-        "Original": -46
-      },
-      "CeilSurface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -46
+        }
       },
       "Entity": "55",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -4820,29 +4977,29 @@
           "Y": -430
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
   {
     "Entity": "56",
-    "ecs.Named": {
-      "Entity": "56",
-      "Name": "be4pvnfvn27o06iak7s0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "56",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -4901,9 +5058,18 @@
           "Y": -860
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "56",
+      "Name": "be4pvnfvn27o06iak7s0"
     }
   },
   {
@@ -4928,22 +5094,17 @@
   },
   {
     "Entity": "58",
-    "ecs.Named": {
-      "Entity": "58",
-      "Name": "be4epdnvn27mnbvee43g"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "58",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -5038,9 +5199,18 @@
           "Y": -180
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "58",
+      "Name": "be4epdnvn27mnbvee43g"
     }
   },
   {
@@ -5090,22 +5260,17 @@
   },
   {
     "Entity": "60",
-    "ecs.Named": {
-      "Entity": "60",
-      "Name": "be46ltvvn27lk1decij0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -52
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -52
+        }
       },
       "Entity": "60",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -5162,29 +5327,33 @@
           "Y": -70
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "60",
+      "Name": "be46ltvvn27lk1decij0"
     }
   },
   {
     "Entity": "61",
-    "ecs.Named": {
-      "Entity": "61",
-      "Name": "be4c3ufvn27mi9gdb9q0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -34
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -34
+        }
       },
       "Entity": "61",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -5266,9 +5435,18 @@
           "Y": -690
         }
       ],
-      "TopZ": {
-        "Original": 46
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 46
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "61",
+      "Name": "be4c3ufvn27mi9gdb9q0"
     }
   },
   {
@@ -5318,22 +5496,17 @@
   },
   {
     "Entity": "63",
-    "ecs.Named": {
-      "Entity": "63",
-      "Name": "be46lufvn27lk1decjlg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -56
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -56
+        }
       },
       "Entity": "63",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -5390,39 +5563,38 @@
           "Y": -50
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "63",
+      "Name": "be46lufvn27lk1decjlg"
     }
   },
   {
     "Entity": "64",
-    "ecs.Named": {
-      "Entity": "64",
-      "Name": "be26u7fvn27vmb5f7790"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.5734623443633284,
-        "Y": -0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.5734623443633284,
+          "Y": -0,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "64",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.5734623443633284,
-        "Y": -0,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -5490,39 +5662,43 @@
           "Y": 100
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.5734623443633284,
+          "Y": -0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "64",
+      "Name": "be26u7fvn27vmb5f7790"
     }
   },
   {
     "Entity": "65",
-    "ecs.Named": {
-      "Entity": "65",
-      "Name": "be4eohnvn27mnbvee1pg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": -0.5734623443633284,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0,
+          "Y": -0.5734623443633284,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "65",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0,
-        "Y": -0.5734623443633284,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -5590,29 +5766,38 @@
           "Y": -310
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": -0.5734623443633284,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "65",
+      "Name": "be4eohnvn27mnbvee1pg"
     }
   },
   {
     "Entity": "66",
-    "ecs.Named": {
-      "Entity": "66",
-      "Name": "be4epb7vn27mnbvee40g"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "66",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "94",
@@ -5669,59 +5854,48 @@
           "Y": -180
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "66",
+      "Name": "be4epb7vn27mnbvee40g"
     }
   },
   {
     "Entity": "67",
-    "ecs.Named": {
-      "Entity": "67",
-      "Name": "be4c3m7vn27mi9gdb9g0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": 0.19611613513818404,
-        "Z": -0.9805806756909202
-      },
-      "CeilSurface": {
-        "Material": "122",
-        "Transform": {
-          "Original": [
-            1,
-            0,
-            0,
-            2,
-            0,
-            0
-          ]
+      "Bottom": {
+        "Normal": {
+          "X": -0,
+          "Y": -0.19611613513818404,
+          "Z": 0.9805806756909202
+        },
+        "Surface": {
+          "Material": "122",
+          "Transform": {
+            "Original": [
+              1,
+              0,
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        },
+        "Z": {
+          "Original": 0
         }
       },
       "Entity": "67",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0,
-        "Y": -0.19611613513818404,
-        "Z": 0.9805806756909202
-      },
-      "FloorSurface": {
-        "Material": "122",
-        "Transform": {
-          "Original": [
-            1,
-            0,
-            0,
-            2,
-            0,
-            0
-          ]
-        }
-      },
       "Segments": [
         {
           "AdjacentSector": "79",
@@ -5778,9 +5952,33 @@
           "Y": -690
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.19611613513818404,
+          "Z": -0.9805806756909202
+        },
+        "Surface": {
+          "Material": "122",
+          "Transform": {
+            "Original": [
+              1,
+              0,
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "67",
+      "Name": "be4c3m7vn27mi9gdb9g0"
     }
   },
   {
@@ -5830,32 +6028,22 @@
   },
   {
     "Entity": "69",
-    "ecs.Named": {
-      "Entity": "69",
-      "Name": "ckqbdsdmdsrmu07rpqsg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0,
-        "Y": -0.5734623443633282,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0,
+          "Y": -0.5734623443633282,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "69",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0,
-        "Y": -0.5734623443633282,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "108",
@@ -5912,29 +6100,38 @@
           "Y": -1040
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0,
+          "Y": -0.5734623443633282,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "69",
+      "Name": "ckqbdsdmdsrmu07rpqsg"
     }
   },
   {
     "Entity": "70",
-    "ecs.Named": {
-      "Entity": "70",
-      "Name": "be3esufvn27i2m3sav10"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "70",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -5993,29 +6190,33 @@
           "Y": -510
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "70",
+      "Name": "be3esufvn27i2m3sav10"
     }
   },
   {
     "Entity": "71",
-    "ecs.Named": {
-      "Entity": "71",
-      "Name": "be3dsc7vn27ho9jt56fg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "71",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "64",
@@ -6111,39 +6312,38 @@
           "Y": 85.35533905932738
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "71",
+      "Name": "be3dsc7vn27ho9jt56fg"
     }
   },
   {
     "Entity": "72",
-    "ecs.Named": {
-      "Entity": "72",
-      "Name": "be4pvl7vn27o06iak2q0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "72",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.5734623443633283,
-        "Y": -0,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "100",
@@ -6211,29 +6411,38 @@
           "Y": -310
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.5734623443633283,
+          "Y": -0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "72",
+      "Name": "be4pvl7vn27o06iak2q0"
     }
   },
   {
     "Entity": "73",
-    "ecs.Named": {
-      "Entity": "73",
-      "Name": "be46lr7vn27lk1decge0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -40
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -40
+        }
       },
       "Entity": "73",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -6290,29 +6499,33 @@
           "Y": -130
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "73",
+      "Name": "be46lr7vn27lk1decge0"
     }
   },
   {
     "Entity": "74",
-    "ecs.Named": {
-      "Entity": "74",
-      "Name": "be46lqnvn27lk1decfn0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -36
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -36
+        }
       },
       "Entity": "74",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -6369,39 +6582,38 @@
           "Y": -150
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "74",
+      "Name": "be46lqnvn27lk1decfn0"
     }
   },
   {
     "Entity": "75",
-    "ecs.Named": {
-      "Entity": "75",
-      "Name": "be4bsjnvn27mek306eg0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": 0.5734623443633284,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.6476484200955406,
+          "Z": 0.7619393177594592
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "75",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0,
-        "Y": 0.6476484200955406,
-        "Z": 0.7619393177594592
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "87",
@@ -6469,29 +6681,38 @@
           "Y": -510
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.5734623443633284,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "75",
+      "Name": "be4bsjnvn27mek306eg0"
     }
   },
   {
     "Entity": "76",
-    "ecs.Named": {
-      "Entity": "76",
-      "Name": "ckqbdl5mdsrmu07rpql0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "76",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "39",
@@ -6576,39 +6797,38 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "76",
+      "Name": "ckqbdl5mdsrmu07rpql0"
     }
   },
   {
     "Entity": "77",
-    "ecs.Named": {
-      "Entity": "77",
-      "Name": "be3eq5fvn27i2m3saigg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.5734623443633284,
-        "Y": -0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0.5734623443633284,
+          "Y": -0,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "77",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.5734623443633284,
-        "Y": -0,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "36",
@@ -6676,9 +6896,23 @@
           "Y": -160
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.5734623443633284,
+          "Y": -0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "77",
+      "Name": "be3eq5fvn27i2m3saigg"
     }
   },
   {
@@ -6733,7 +6967,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.VerticalDoorFromDb(s.DB,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
+          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6743,22 +6977,17 @@
       "Entity": "79",
       "TweeningFunc": "EaseInOut2"
     },
-    "ecs.Named": {
-      "Entity": "79",
-      "Name": "be4c3pfvn27mi9gdb9mg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "79",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -6845,20 +7074,29 @@
           "Y": -520
         }
       ],
-      "TopZ": {
-        "Animation": {
-          "Active": false,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 1000,
-          "End": 0,
-          "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
-          "Reverse": false,
-          "Start": 64,
-          "TweeningFunc": "EaseInOut2"
+      "Top": {
+        "Surface": {
+          "Material": "122"
         },
-        "Original": 64
+        "Z": {
+          "Animation": {
+            "Active": false,
+            "Coordinates": "AnimationCoordinatesAbsolute",
+            "Duration": 1000,
+            "End": 0,
+            "Lifetime": "AnimationLifetimeOnce",
+            "Percent": 1,
+            "Reverse": false,
+            "Start": 64,
+            "TweeningFunc": "EaseInOut2"
+          },
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "79",
+      "Name": "be4c3pfvn27mi9gdb9mg"
     }
   },
   {
@@ -6868,7 +7106,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.VerticalDoorFromDb(s.DB,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
+          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6878,22 +7116,17 @@
       "Entity": "80",
       "TweeningFunc": "EaseInOut2"
     },
-    "ecs.Named": {
-      "Entity": "80",
-      "Name": "be49hlvvn27m4cr0h360"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "80",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "88",
@@ -6960,20 +7193,29 @@
           "Y": -160
         }
       ],
-      "TopZ": {
-        "Animation": {
-          "Active": false,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 1000,
-          "End": 0,
-          "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
-          "Reverse": false,
-          "Start": 64,
-          "TweeningFunc": "EaseInOut2"
+      "Top": {
+        "Surface": {
+          "Material": "122"
         },
-        "Original": 64
+        "Z": {
+          "Animation": {
+            "Active": false,
+            "Coordinates": "AnimationCoordinatesAbsolute",
+            "Duration": 1000,
+            "End": 0,
+            "Lifetime": "AnimationLifetimeOnce",
+            "Percent": 1,
+            "Reverse": false,
+            "Start": 64,
+            "TweeningFunc": "EaseInOut2"
+          },
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "80",
+      "Name": "be49hlvvn27m4cr0h360"
     }
   },
   {
@@ -6983,7 +7225,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.VerticalDoorFromDb(sector.DB,sector.Entity).Intent = behaviors.DoorIntentOpen }",
+          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -6993,22 +7235,17 @@
       "Entity": "81",
       "TweeningFunc": "EaseInOut2"
     },
-    "ecs.Named": {
-      "Entity": "81",
-      "Name": "be4c2p7vn27mi9gdb8n0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -64
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -64
+        }
       },
       "Entity": "81",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -7095,40 +7332,44 @@
           "Y": 20
         }
       ],
-      "TopZ": {
-        "Animation": {
-          "Active": false,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 1000,
-          "End": -64,
-          "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
-          "Reverse": false,
-          "Start": 64,
-          "TweeningFunc": "EaseInOut2"
+      "Top": {
+        "Surface": {
+          "Material": "122"
         },
-        "Original": 64
+        "Z": {
+          "Animation": {
+            "Active": false,
+            "Coordinates": "AnimationCoordinatesAbsolute",
+            "Duration": 1000,
+            "End": -64,
+            "Lifetime": "AnimationLifetimeOnce",
+            "Percent": 1,
+            "Reverse": false,
+            "Start": 64,
+            "TweeningFunc": "EaseInOut2"
+          },
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "81",
+      "Name": "be4c2p7vn27mi9gdb8n0"
     }
   },
   {
     "Entity": "82",
-    "ecs.Named": {
-      "Entity": "82",
-      "Name": "be46lt7vn27lk1dechs0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -48
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -48
+        }
       },
       "Entity": "82",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -7185,29 +7426,33 @@
           "Y": -90
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "82",
+      "Name": "be46lt7vn27lk1dechs0"
     }
   },
   {
     "Entity": "83",
-    "ecs.Named": {
-      "Entity": "83",
-      "Name": "be46kk7vn27lk1decesg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -28
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -28
+        }
       },
       "Entity": "83",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -7264,29 +7509,33 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "83",
+      "Name": "be46kk7vn27lk1decesg"
     }
   },
   {
     "Entity": "84",
-    "ecs.Named": {
-      "Entity": "84",
-      "Name": "be46kk7vn27lk1decfbg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -32
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -32
+        }
       },
       "Entity": "84",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "74",
@@ -7344,9 +7593,18 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "84",
+      "Name": "be46kk7vn27lk1decfbg"
     }
   },
   {
@@ -7396,32 +7654,22 @@
   },
   {
     "Entity": "86",
-    "ecs.Named": {
-      "Entity": "86",
-      "Name": "be26u7fvn27vmb5f78bg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0.5734623443633283,
-        "Y": 0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.6476484200955405,
+          "Y": -0,
+          "Z": 0.7619393177594592
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "86",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.6476484200955405,
-        "Y": -0,
-        "Z": 0.7619393177594592
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -7489,29 +7737,38 @@
           "Y": 50
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0.5734623443633283,
+          "Y": 0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "86",
+      "Name": "be26u7fvn27vmb5f78bg"
     }
   },
   {
     "Entity": "87",
-    "ecs.Named": {
-      "Entity": "87",
-      "Name": "be4eoifvn27mnbvee3ag"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "87",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "26",
@@ -7626,29 +7883,33 @@
           "Y": -490
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "87",
+      "Name": "be4eoifvn27mnbvee3ag"
     }
   },
   {
     "Entity": "88",
-    "ecs.Named": {
-      "Entity": "88",
-      "Name": "be46jcvvn27lk1dec9cg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "88",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "36",
@@ -7707,39 +7968,38 @@
           "Y": -210
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "88",
+      "Name": "be46jcvvn27lk1dec9cg"
     }
   },
   {
     "Entity": "89",
-    "ecs.Named": {
-      "Entity": "89",
-      "Name": "be3eq5fvn27i2m3sais0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": -0.5734623443633284,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0,
+          "Y": -0.5734623443633284,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "89",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0,
-        "Y": -0.5734623443633284,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "7",
@@ -7807,34 +8067,43 @@
           "Y": -310
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": -0.5734623443633284,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "89",
+      "Name": "be3eq5fvn27i2m3sais0"
     }
   },
   {
     "Entity": "90",
-    "ecs.Named": {
-      "Entity": "90",
-      "Name": "be4pp3vvn27o06iajpc0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": -0,
+          "Y": 0.28734788556634544,
+          "Z": 0.9578262852211514
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "90",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0,
-        "Y": 0.28734788556634544,
-        "Z": 0.9578262852211514
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -7892,39 +8161,38 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "90",
+      "Name": "be4pp3vvn27o06iajpc0"
     }
   },
   {
     "Entity": "91",
-    "ecs.Named": {
-      "Entity": "91",
-      "Name": "be26u9vvn27vmb5f7b10"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0.5734623443633284,
-        "Y": 0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.6476484200955405,
+          "Y": -0,
+          "Z": 0.7619393177594592
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "91",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.6476484200955405,
-        "Y": -0,
-        "Z": 0.7619393177594592
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "103",
@@ -7992,29 +8260,38 @@
           "Y": -160
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0.5734623443633284,
+          "Y": 0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "91",
+      "Name": "be26u9vvn27vmb5f7b10"
     }
   },
   {
     "Entity": "92",
-    "ecs.Named": {
-      "Entity": "92",
-      "Name": "be46luvvn27lk1deckcg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -60
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "92",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -8071,29 +8348,33 @@
           "Y": -30
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "92",
+      "Name": "be46luvvn27lk1deckcg"
     }
   },
   {
     "Entity": "93",
-    "ecs.Named": {
-      "Entity": "93",
-      "Name": "be4bq9vvn27mek306b90"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -60
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "93",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "41",
@@ -8150,39 +8431,38 @@
           "Y": 110
         }
       ],
-      "TopZ": {
-        "Original": -4
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -4
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "93",
+      "Name": "be4bq9vvn27mek306b90"
     }
   },
   {
     "Entity": "94",
-    "ecs.Named": {
-      "Entity": "94",
-      "Name": "be4eojfvn27mnbvee3n0"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": -0.1455213750217998,
-        "Y": -0.19402850002906638,
-        "Z": -0.9701425001453319
-      },
-      "CeilSurface": {
-        "Material": "123"
+      "Bottom": {
+        "Normal": {
+          "X": -0.05970223141259936,
+          "Y": -0.07960297521679915,
+          "Z": 0.9950371902099892
+        },
+        "Surface": {
+          "Material": "123"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "94",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": -0.05970223141259936,
-        "Y": -0.07960297521679915,
-        "Z": 0.9950371902099892
-      },
-      "FloorSurface": {
-        "Material": "123"
-      },
       "Segments": [
         {
           "Hi": {
@@ -8395,34 +8675,43 @@
           "Y": -310
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": -0.1455213750217998,
+          "Y": -0.19402850002906638,
+          "Z": -0.9701425001453319
+        },
+        "Surface": {
+          "Material": "123"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "94",
+      "Name": "be4eojfvn27mnbvee3n0"
     }
   },
   {
     "Entity": "95",
-    "ecs.Named": {
-      "Entity": "95",
-      "Name": "be4pp3vvn27o06iajqeg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.27657819918549315,
+          "Y": 0.27657819918549315,
+          "Z": 0.9203309184584746
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "95",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.27657819918549315,
-        "Y": 0.27657819918549315,
-        "Z": 0.9203309184584746
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -8466,17 +8755,22 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 150
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 150
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "95",
+      "Name": "be4pp3vvn27o06iajqeg"
     }
   },
   {
     "Entity": "96",
-    "ecs.Named": {
-      "Entity": "96",
-      "Name": "be4pr0nvn27o06iajrc0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -8518,36 +8812,30 @@
       },
       "Entity": "96",
       "Strength": 1
+    },
+    "ecs.Named": {
+      "Entity": "96",
+      "Name": "be4pr0nvn27o06iajrc0"
     }
   },
   {
     "Entity": "97",
-    "ecs.Named": {
-      "Entity": "97",
-      "Name": "be4pvl7vn27o06iak5gg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0.5734623443633284,
-        "Y": 0,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0.6476484200955406,
+          "Y": -0,
+          "Z": 0.7619393177594593
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "97",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0.6476484200955406,
-        "Y": -0,
-        "Z": 0.7619393177594593
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "100",
@@ -8615,9 +8903,23 @@
           "Y": -760
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0.5734623443633284,
+          "Y": 0,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "97",
+      "Name": "be4pvl7vn27o06iak5gg"
     }
   },
   {
@@ -8635,22 +8937,17 @@
   },
   {
     "Entity": "99",
-    "ecs.Named": {
-      "Entity": "99",
-      "Name": "be26uavvn27vmb5f7edg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "99",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "71",
@@ -8709,29 +9006,33 @@
           "Y": 7.573593128807154
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "99",
+      "Name": "be26uavvn27vmb5f7edg"
     }
   },
   {
     "Entity": "100",
-    "ecs.Named": {
-      "Entity": "100",
-      "Name": "be4pvnfvn27o06iak8cg"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "100",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "72",
@@ -8804,9 +9105,18 @@
           "Y": -760
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "100",
+      "Name": "be4pvnfvn27o06iak8cg"
     }
   },
   {
@@ -8901,22 +9211,17 @@
   },
   {
     "Entity": "103",
-    "ecs.Named": {
-      "Entity": "103",
-      "Name": "be3dsc7vn27ho9jt5740"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "103",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "28",
@@ -9003,9 +9308,18 @@
           "Y": -160
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "103",
+      "Name": "be3dsc7vn27ho9jt5740"
     }
   },
   {
@@ -9100,22 +9414,17 @@
   },
   {
     "Entity": "106",
-    "ecs.Named": {
-      "Entity": "106",
-      "Name": "be46jlnvn27lk1decc10"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": -16
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": -16
+        }
       },
       "Entity": "106",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -9172,9 +9481,18 @@
           "Y": -220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "106",
+      "Name": "be46jlnvn27lk1decc10"
     }
   },
   {
@@ -9226,22 +9544,17 @@
   },
   {
     "Entity": "108",
-    "ecs.Named": {
-      "Entity": "108",
-      "Name": "Sector 108"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "108",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "109",
@@ -9319,39 +9632,38 @@
           "Y": -1060
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "108",
+      "Name": "Sector 108"
     }
   },
   {
     "Entity": "109",
-    "ecs.Named": {
-      "Entity": "109",
-      "Name": "Sector 109"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": 0.5734623443633283,
-        "Z": -0.8192319205190404
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.5734623443633283,
+          "Z": 0.8192319205190404
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "109",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0,
-        "Y": 0.5734623443633283,
-        "Z": 0.8192319205190404
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "108",
@@ -9409,29 +9721,38 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.5734623443633283,
+          "Z": -0.8192319205190404
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "109",
+      "Name": "Sector 109"
     }
   },
   {
     "Entity": "110",
-    "ecs.Named": {
-      "Entity": "110",
-      "Name": "Sector 110"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "110",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "111",
@@ -9490,39 +9811,38 @@
           "Y": -1200
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "110",
+      "Name": "Sector 110"
     }
   },
   {
     "Entity": "111",
-    "ecs.Named": {
-      "Entity": "111",
-      "Name": "Sector 111"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 0
-      },
-      "CeilNormal": {
-        "X": 0,
-        "Y": 0.5734623443633283,
-        "Z": -0.8192319205190405
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.5734623443633283,
+          "Z": 0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "111",
       "FloorFriction": 0.85,
-      "FloorNormal": {
-        "X": 0,
-        "Y": 0.5734623443633283,
-        "Z": 0.8192319205190405
-      },
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "108",
@@ -9579,29 +9899,38 @@
           "Y": -1220
         }
       ],
-      "TopZ": {
-        "Original": 64
+      "Top": {
+        "Normal": {
+          "X": 0,
+          "Y": 0.5734623443633283,
+          "Z": -0.8192319205190405
+        },
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "111",
+      "Name": "Sector 111"
     }
   },
   {
     "Entity": "112",
-    "ecs.Named": {
-      "Entity": "112",
-      "Name": "Sector 112"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 5
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 5
+        }
       },
       "Entity": "112",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "AdjacentSector": "114",
@@ -9645,9 +9974,18 @@
           "Y": -1350
         }
       ],
-      "TopZ": {
-        "Original": 80
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 80
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "112",
+      "Name": "Sector 112"
     }
   },
   {
@@ -9679,22 +10017,17 @@
   },
   {
     "Entity": "114",
-    "ecs.Named": {
-      "Entity": "114",
-      "Name": "Sector 114"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 10
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 10
+        }
       },
       "Entity": "114",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -9738,29 +10071,33 @@
           "Y": -1400
         }
       ],
-      "TopZ": {
-        "Original": 85
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 85
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "114",
+      "Name": "Sector 114"
     }
   },
   {
     "Entity": "115",
-    "ecs.Named": {
-      "Entity": "115",
-      "Name": "Sector 115"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 15
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 15
+        }
       },
       "Entity": "115",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -9804,29 +10141,33 @@
           "Y": -1400
         }
       ],
-      "TopZ": {
-        "Original": 90
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 90
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "115",
+      "Name": "Sector 115"
     }
   },
   {
     "Entity": "116",
-    "ecs.Named": {
-      "Entity": "116",
-      "Name": "Sector 116"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 20
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 20
+        }
       },
       "Entity": "116",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -9870,29 +10211,33 @@
           "Y": -1400
         }
       ],
-      "TopZ": {
-        "Original": 95
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 95
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "116",
+      "Name": "Sector 116"
     }
   },
   {
     "Entity": "117",
-    "ecs.Named": {
-      "Entity": "117",
-      "Name": "Sector 117"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 25
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 25
+        }
       },
       "Entity": "117",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -9936,29 +10281,33 @@
           "Y": -1400
         }
       ],
-      "TopZ": {
-        "Original": 95
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 95
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "117",
+      "Name": "Sector 117"
     }
   },
   {
     "Entity": "118",
-    "ecs.Named": {
-      "Entity": "118",
-      "Name": "Sector 118"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 30
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 30
+        }
       },
       "Entity": "118",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -10015,9 +10364,18 @@
           "Y": -1430
         }
       ],
-      "TopZ": {
-        "Original": 100
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 100
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "118",
+      "Name": "Sector 118"
     }
   },
   {
@@ -10042,22 +10400,17 @@
   },
   {
     "Entity": "120",
-    "ecs.Named": {
-      "Entity": "120",
-      "Name": "Sector 120"
-    },
     "core.Sector": {
-      "BottomZ": {
-        "Original": 35
-      },
-      "CeilSurface": {
-        "Material": "122"
+      "Bottom": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 35
+        }
       },
       "Entity": "120",
       "FloorFriction": 0.85,
-      "FloorSurface": {
-        "Material": "122"
-      },
       "Segments": [
         {
           "Hi": {
@@ -10113,9 +10466,18 @@
           "Y": -1610
         }
       ],
-      "TopZ": {
-        "Original": 110
+      "Top": {
+        "Surface": {
+          "Material": "122"
+        },
+        "Z": {
+          "Original": 110
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "120",
+      "Name": "Sector 120"
     }
   },
   {
@@ -10287,6 +10649,53 @@
       },
       "Entity": "125",
       "Strength": 10
+    }
+  },
+  {
+    "Entity": "126",
+    "behaviors.Alive": {
+      "Entity": "126",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "126",
+      "Spawn": true
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "126",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -390,
+          "Y": 180,
+          "Z": -32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 15,
+          "Y": 15
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "ecs.Named": {
+      "Entity": "126",
+      "Name": "Spawn"
     }
   },
   {
@@ -10473,7 +10882,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.9375,
+          "Percent": 0.171875,
           "Reverse": false,
           "Start": {
             "X": 0,

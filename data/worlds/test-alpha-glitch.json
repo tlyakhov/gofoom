@@ -267,15 +267,15 @@
         "5",
         "6"
       ],
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "13",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -313,7 +313,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -328,15 +328,15 @@
       "Bodies": [
         "3"
       ],
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "14",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -376,7 +376,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }

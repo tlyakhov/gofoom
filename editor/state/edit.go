@@ -29,7 +29,7 @@ const (
 
 type Edit struct {
 	MapView
-	DB   *ecs.ECS
+	ECS  *ecs.ECS
 	Lock sync.Mutex
 
 	// Map view positions in world/screen space.

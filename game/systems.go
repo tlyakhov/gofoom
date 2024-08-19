@@ -13,19 +13,19 @@ const (
 )
 
 //entity := archetypes.CreatePlayerBody(db)
-//playerBody := core.BodyFromDb(db, entity)
+//playerBody := core.GetBody(db, entity)
 /*if spawn != nil {
 	playerBody.Pos.Original = spawn.Spawn
 	playerBody.Pos.ResetToOriginal()
 }*/
-//player = behaviors.PlayerFromDb(db, entity)
+//player = behaviors.GetPlayer(db, entity)
 
-/*playerBody := core.BodyFromDb(db, player.Entity)
+/*playerBody := core.GetBody(db, player.Entity)
 playerBody.Elasticity = 0.1
 
 player.Inventory = make([]*behaviors.InventorySlot, InventoryCount)
 slot := &behaviors.InventorySlot{
-	Image:        player.DB.GetEntityByName("Pluk"),
+	Image:        player.ECS.GetEntityByName("Pluk"),
 	Limit:        5,
 	ValidClasses: make(concepts.Set[string]),
 }

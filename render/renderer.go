@@ -42,7 +42,7 @@ func NewRenderer(db *ecs.ECS) *Renderer {
 			Blocks:        constants.RenderBlocks,
 			LightGrid:     constants.LightGrid,
 			MaxViewDist:   constants.MaxViewDistance,
-			DB:            db,
+			ECS:           db,
 		},
 		columnGroup:        new(sync.WaitGroup),
 		SectorLastRendered: xsync.NewMapOf[ecs.Entity, uint64](),
@@ -144,7 +144,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 
 	c.LightSampler.MaterialSampler.Config = r.Config
 	c.LightSampler.Type = state.LightSamplerCeil
-	c.LightSampler.Normal = c.Sector.CeilNormal
+	c.LightSampler.Normal = c.Sector.Top.Normal
 	c.LightSampler.Sector = c.Sector
 	c.LightSampler.Segment = c.Segment
 
@@ -154,7 +154,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 		ceiling(c)
 	}
 	c.LightSampler.Type = state.LightSamplerFloor
-	c.LightSampler.Normal = c.Sector.FloorNormal
+	c.LightSampler.Normal = c.Sector.Bottom.Normal
 
 	if c.Pick {
 		floorPick(c)
@@ -188,7 +188,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
 	// TODO: We can probably do something simpler and cheaper here.
-	r.SectorLastRendered.Store(c.Sector.Entity, c.DB.Frame)
+	r.SectorLastRendered.Store(c.Sector.Entity, c.ECS.Frame)
 
 	if c.Sector.LightmapBias[0] == math.MaxInt64 {
 		// Floor is important, needs to truncate towards -Infinity rather than 0
@@ -261,7 +261,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 
 	if c.SegmentIntersection != nil {
 		c.SegmentIntersection.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
-		c.IntersectionBottom, c.IntersectionTop = c.Sector.PointZ(ecs.DynamicRender, c.RaySegIntersect.To2D())
+		c.IntersectionBottom, c.IntersectionTop = c.Sector.ZAt(ecs.DynamicRender, c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
@@ -374,7 +374,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
-	column.LightSampler.XorSeed = r.DB.Frame + uint64(xStart)
+	column.LightSampler.XorSeed = r.ECS.Frame + uint64(xStart)
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
 	}
@@ -432,16 +432,16 @@ func (r *Renderer) Render() {
 	}
 	r.RenderHud()
 
-	if r.DB.Frame%4 <= 1 {
+	if r.ECS.Frame%4 <= 1 {
 		return
 	}
 	// Invalidate lighting caches
 	r.SectorLastRendered.Range(func(eSector ecs.Entity, lastSeen uint64) bool {
 		// Cache for a maximum number of frames
-		if r.DB.Frame-lastSeen < 120 {
+		if r.ECS.Frame-lastSeen < 120 {
 			return true
 		}
-		if sector := core.SectorFromDb(r.DB, eSector); sector != nil {
+		if sector := core.GetSector(r.ECS, eSector); sector != nil {
 			sector.Lightmap.Clear()
 		}
 		r.SectorLastRendered.Delete(eSector)

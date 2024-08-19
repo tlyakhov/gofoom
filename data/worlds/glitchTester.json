@@ -41,15 +41,15 @@
       "Name": "Starting"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -108,7 +108,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -166,20 +166,20 @@
       "Name": "upper"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "5",
       "FloorFriction": 0.85,
-      "FloorNormal": {
+      "Bottom.Normal": {
         "X": 0.14834045293024467,
         "Y": 0,
         "Z": 0.9889363528682976
       },
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -238,7 +238,7 @@
           "Y": -100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -250,15 +250,15 @@
       "Name": "ckg76htmdsrlum5blid0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "6",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -317,7 +317,7 @@
           "Y": -160
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -329,15 +329,15 @@
       "Name": "lower"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "7",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -396,7 +396,7 @@
           "Y": -100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }

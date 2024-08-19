@@ -114,8 +114,8 @@ func (db *ECS) attach(entity Entity, component Attachable, index int) {
 	if ec = db.EntityComponents[entity]; ec != nil {
 		if ec[index] != nil {
 			// A component with this index is already attached to this entity, overwrite it.
-			componentsIndex := ec[index].IndexInDB()
-			component.SetIndexInDB(componentsIndex)
+			componentsIndex := ec[index].IndexInECS()
+			component.SetIndexInECS(componentsIndex)
 			db.components[index][componentsIndex] = component
 			ec[index] = component
 			return
@@ -128,7 +128,7 @@ func (db *ECS) attach(entity Entity, component Attachable, index int) {
 	// slice.
 	ec[index] = component
 	db.components[index] = append(db.components[index], component)
-	component.SetIndexInDB(len(db.components[index]) - 1)
+	component.SetIndexInECS(len(db.components[index]) - 1)
 }
 
 // Create a new component with the given index and attach it.
@@ -200,34 +200,34 @@ func (db *ECS) AttachTyped(entity Entity, component Attachable) {
 
 func (db *ECS) detach(index int, entity Entity, checkForEmpty bool) {
 	if entity == 0 || index == 0 {
-		log.Printf("EntityComponentDB.Detach: tried to detach 0 entity/index.")
+		log.Printf("ECS.Detach: tried to detach 0 entity/index.")
 		return
 	}
 
 	if len(db.EntityComponents) <= int(entity) {
-		log.Printf("EntityComponentDB.Detach: entity %v is >= length of list %v.", entity, len(db.EntityComponents))
+		log.Printf("ECS.Detach: entity %v is >= length of list %v.", entity, len(db.EntityComponents))
 		return
 	}
 	ec := db.EntityComponents[entity]
 	if ec == nil {
-		log.Printf("EntityComponentDB.Detach: entity %v has no components.", entity)
+		log.Printf("ECS.Detach: entity %v has no components.", entity)
 		return
 	}
 
 	if ec[index] == nil {
-		// log.Printf("EntityComponentDB.Detach: entity %v component %v is nil.", entity, index)
+		// log.Printf("ECS.Detach: entity %v component %v is nil.", entity, index)
 		return
 	}
 	ec[index].OnDetach()
-	i := ec[index].IndexInDB()
+	i := ec[index].IndexInECS()
 	components := db.components[index]
 	size := len(components)
 	if size > i {
 		components[i] = components[size-1]
-		components[i].SetIndexInDB(i)
+		components[i].SetIndexInECS(i)
 		db.components[index] = components[:size-1]
 	} else {
-		log.Printf("EntityComponentDB.Detach: found entity %v component index %v, but component list is too short.", entity, index)
+		log.Printf("ECS.Detach: found entity %v component index %v, but component list is too short.", entity, index)
 	}
 	ec[index] = nil
 
@@ -365,17 +365,17 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 func (db *ECS) Save(filename string) {
 	db.Lock.Lock()
 	defer db.Lock.Unlock()
-	jsonDB := make([]any, 0)
+	jsonECS := make([]any, 0)
 
 	for entity := range db.EntityComponents {
 		jsonEntity := db.SerializeEntity(Entity(entity))
 		if len(jsonEntity) == 0 {
 			continue
 		}
-		jsonDB = append(jsonDB, jsonEntity)
+		jsonECS = append(jsonECS, jsonEntity)
 	}
 
-	bytes, err := json.MarshalIndent(jsonDB, "", "  ")
+	bytes, err := json.MarshalIndent(jsonECS, "", "  ")
 
 	if err != nil {
 		panic(err)

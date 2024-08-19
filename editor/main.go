@@ -71,7 +71,7 @@ func main() {
 		img.Resize(fyne.NewSquareSize(64))
 		img.Refresh()
 		editor.noTextureImage = img.Image
-		editor.Load("data/worlds/hall.json")
+		editor.Load("data/worlds/portal-test.json")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 
@@ -131,10 +131,10 @@ func main() {
 	go func() {
 		t := time.NewTicker(time.Second / 60)
 		for range t.C {
-			if editor.DB == nil {
+			if editor.ECS == nil {
 				return
 			}
-			editor.DB.Simulation.Step()
+			editor.ECS.Simulation.Step()
 			editor.MapWidget.Raster.Refresh()
 		}
 	}()

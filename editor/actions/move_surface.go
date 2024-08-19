@@ -22,16 +22,16 @@ func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 	if a.Slope {
 		if a.Floor {
 			//return &sector.FloorSlope
-			return &sector.FloorNormal[2]
+			return &sector.Bottom.Normal[2]
 		} else {
 			//return &sector.CeilSlope
-			return &sector.CeilNormal[2]
+			return &sector.Top.Normal[2]
 		}
 	} else {
 		if a.Floor {
-			return &sector.BottomZ.Original
+			return &sector.Bottom.Z.Original
 		} else {
-			return &sector.TopZ.Original
+			return &sector.Top.Z.Original
 		}
 	}
 }
@@ -47,10 +47,10 @@ func (a *MoveSurface) Act() {
 
 		a.Original = append(a.Original, *a.Get(s.Sector))
 		*a.Get(s.Sector) += a.Delta
-		s.Sector.BottomZ.ResetToOriginal()
-		s.Sector.TopZ.ResetToOriginal()
+		s.Sector.Bottom.Z.ResetToOriginal()
+		s.Sector.Top.Z.ResetToOriginal()
 	}
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
 	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, false)
@@ -66,12 +66,12 @@ func (a *MoveSurface) Undo() {
 		}
 
 		*a.Get(s.Sector) = a.Original[i]
-		s.Sector.BottomZ.ResetToOriginal()
-		s.Sector.TopZ.ResetToOriginal()
+		s.Sector.Bottom.Z.ResetToOriginal()
+		s.Sector.Top.Z.ResetToOriginal()
 		i++
 	}
 
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *MoveSurface) Redo() {
 	a.State().Lock.Lock()
@@ -83,8 +83,8 @@ func (a *MoveSurface) Redo() {
 		}
 
 		*a.Get(s.Sector) += a.Delta
-		s.Sector.BottomZ.ResetToOriginal()
-		s.Sector.TopZ.ResetToOriginal()
+		s.Sector.Bottom.Z.ResetToOriginal()
+		s.Sector.Top.Z.ResetToOriginal()
 	}
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }

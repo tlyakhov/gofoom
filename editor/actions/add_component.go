@@ -25,15 +25,15 @@ func (a *AddComponent) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
-		a.State().DB.Detach(a.Index, entity)
+		a.State().ECS.Detach(a.Index, entity)
 	}
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *AddComponent) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
-		a.State().DB.NewAttachedComponent(entity, a.Index)
+		a.State().ECS.NewAttachedComponent(entity, a.Index)
 	}
-	a.State().DB.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }

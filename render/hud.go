@@ -36,8 +36,8 @@ func (r *Renderer) RenderHud() {
 func (r *Renderer) DebugInfo() {
 	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("DebugInfo"))
 
-	playerAlive := behaviors.AliveFromDb(r.DB, r.PlayerBody.Entity)
-	// player := bodies.PlayerFromDb(&gameMap.Player)
+	playerAlive := behaviors.GetAlive(r.ECS, r.PlayerBody.Entity)
+	// player := bodies.GetPlayer(&gameMap.Player)
 
 	ts := r.textStyle
 	ts.Color[0] = 1
@@ -59,7 +59,7 @@ func (r *Renderer) DebugInfo() {
 				continue
 			}
 			text := fmt.Sprintf("%v", b.String())
-			if alive := behaviors.AliveFromDb(r.DB, b.Entity); alive != nil {
+			if alive := behaviors.GetAlive(r.ECS, b.Entity); alive != nil {
 				text = fmt.Sprintf("%v", alive.Health)
 			}
 			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
@@ -68,7 +68,7 @@ func (r *Renderer) DebugInfo() {
 	ts.HAnchor = -1
 	ts.VAnchor = -1
 
-	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Light cache: %v", r.DB.Simulation.FPS, r.SectorLastRendered.Size()))
+	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Light cache: %v", r.ECS.Simulation.FPS, r.SectorLastRendered.Size()))
 	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	hits := r.ICacheHits.Load()
 	misses := r.ICacheMisses.Load()
@@ -76,8 +76,8 @@ func (r *Renderer) DebugInfo() {
 	if r.PlayerBody.SectorEntity != 0 {
 		entity := r.PlayerBody.SectorEntity
 		s := 0
-		core.SectorFromDb(r.DB, entity).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
-		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.String(r.DB), s))
+		core.GetSector(r.ECS, entity).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
+		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.String(r.ECS), s))
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", r.PlayerBody.Force.StringHuman(), r.PlayerBody.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
 	}
 

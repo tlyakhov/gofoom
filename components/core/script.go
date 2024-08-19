@@ -20,7 +20,7 @@ type Script struct {
 	ErrorMessage string
 	interp       *interp.Interpreter
 	Vars         map[string]any
-	DB           *ecs.ECS
+	ECS          *ecs.ECS
 	System       bool
 	runFunc      any
 }
@@ -83,11 +83,11 @@ func (s *Script) Compile() {
 }
 
 func (s *Script) SetECS(db *ecs.ECS) {
-	s.DB = db
+	s.ECS = db
 }
 
 func (s *Script) GetECS() *ecs.ECS {
-	return s.DB
+	return s.ECS
 }
 
 func (s *Script) IsSystem() bool {

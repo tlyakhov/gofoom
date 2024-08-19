@@ -29,7 +29,7 @@ func (a *AddInternalSegment) OnMouseDown(evt *desktop.MouseEvent) {
 	switch a.Mode {
 	case "AddInternalSegment":
 		a.Mode = "AddInternalSegmentA"
-		a.Surface.Material = controllers.DefaultMaterial(a.State().DB)
+		a.Surface.Material = controllers.DefaultMaterial(a.State().ECS)
 		a.AttachToSector()
 	case "AddInternalSegmentA":
 	}
@@ -40,7 +40,7 @@ func (a *AddInternalSegment) OnMouseMove() {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	for _, attachable := range a.State().DB.AllOfType(core.SectorComponentIndex) {
+	for _, attachable := range a.State().ECS.AllOfType(core.SectorComponentIndex) {
 		sector := attachable.(*core.Sector)
 		if sector.IsPointInside2D(worldGrid) {
 			a.ContainingSector = sector
@@ -60,7 +60,7 @@ func (a *AddInternalSegment) OnMouseMove() {
 		a.B.From(worldGrid)
 	}
 	if a.ContainingSector != nil {
-		a.Bottom, a.Top = a.ContainingSector.PointZ(ecs.DynamicOriginal, worldGrid)
+		a.Bottom, a.Top = a.ContainingSector.ZAt(ecs.DynamicOriginal, worldGrid)
 	}
 	a.Recalculate()
 }

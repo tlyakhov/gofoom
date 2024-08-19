@@ -20,7 +20,7 @@ const (
 )
 
 type ShaderStage struct {
-	DB        *ecs.ECS
+	ECS       *ecs.ECS
 	System    bool
 	Texture   ecs.Entity       `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2 `editable:"Transform"`
@@ -92,11 +92,11 @@ func (s *ShaderStage) Serialize() map[string]any {
 }
 
 func (s *ShaderStage) SetECS(db *ecs.ECS) {
-	s.DB = db
+	s.ECS = db
 }
 
 func (s *ShaderStage) GetECS() *ecs.ECS {
-	return s.DB
+	return s.ECS
 }
 
 func (s *ShaderStage) IsSystem() bool {

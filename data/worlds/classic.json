@@ -351,15 +351,15 @@
       "Name": "sector0"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "15",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -439,7 +439,7 @@
           "Y": -30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -451,15 +451,15 @@
       "Name": "sector1"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "16",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -512,7 +512,7 @@
           "Y": -30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -524,15 +524,15 @@
       "Name": "sector2"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -10
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "17",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -585,7 +585,7 @@
           "Y": -30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -597,15 +597,15 @@
       "Name": "sector3"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "18",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -684,7 +684,7 @@
           "Y": 30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -834,15 +834,15 @@
       "Name": "sector4"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -3
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "11"
       },
       "Entity": "23",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "9"
       },
       "Segments": [
@@ -895,7 +895,7 @@
           "Y": 30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 50
       }
     }
@@ -907,15 +907,15 @@
       "Name": "sector5"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -20
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "24",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "9"
       },
       "Segments": [
@@ -970,7 +970,7 @@
           "Y": 30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -982,15 +982,15 @@
       "Name": "sector6"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -30
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "25",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "9"
       },
       "Segments": [
@@ -1045,7 +1045,7 @@
           "Y": 30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -1057,15 +1057,15 @@
       "Name": "sector7"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -40
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "26",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "9"
       },
       "Segments": [
@@ -1120,7 +1120,7 @@
           "Y": 30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -1132,15 +1132,15 @@
       "Name": "sector8"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -50
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "27",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "9"
       },
       "Segments": [
@@ -1195,7 +1195,7 @@
           "Y": 30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -1207,15 +1207,15 @@
       "Name": "sector9"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -60
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "8"
       },
       "Entity": "28",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "10"
       },
       "Segments": [
@@ -1295,7 +1295,7 @@
           "Y": 30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -6
       }
     }
@@ -1349,15 +1349,15 @@
       "Name": "sector10"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -60
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "8"
       },
       "Entity": "30",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "10"
       },
       "Segments": [
@@ -1413,7 +1413,7 @@
           "Y": -140
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -6
       }
     }
@@ -1467,15 +1467,15 @@
       "Name": "sector11"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -60
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "8"
       },
       "Entity": "32",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "10"
       },
       "Segments": [
@@ -1531,7 +1531,7 @@
           "Y": 140
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -6
       }
     }
@@ -1585,15 +1585,15 @@
       "Name": "sector12"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "12"
       },
       "Entity": "34",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -1661,7 +1661,7 @@
           "Y": -30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 60
       }
     }
@@ -1673,15 +1673,15 @@
       "Name": "sector13"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "12"
       },
       "Entity": "35",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -1749,7 +1749,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 60
       }
     }
@@ -1761,15 +1761,15 @@
       "Name": "sector14"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "9"
       },
       "Entity": "36",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -1824,7 +1824,7 @@
           "Y": 100
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 60
       }
     }
@@ -1836,18 +1836,18 @@
       "Name": "sector15"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -20
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "37",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "13"
       },
-      "FloorTarget": "40",
+      "Bottom.Target": "40",
       "Segments": [
         {
           "Hi": {
@@ -1939,7 +1939,7 @@
           "Y": 20
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 100
       }
     }
@@ -1997,15 +1997,15 @@
       "Name": "sector16"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 10
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "9"
       },
       "Entity": "39",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -2060,7 +2060,7 @@
           "Y": 400
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 60
       }
     }
@@ -2072,16 +2072,16 @@
       "Name": "sector17"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -170
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "13"
       },
-      "CeilTarget": "37",
+      "Top.Target": "37",
       "Entity": "40",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -2175,7 +2175,7 @@
           "Y": 230
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -20
       }
     }
@@ -2187,15 +2187,15 @@
       "Name": "sector18"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -230
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "8"
       },
       "Entity": "41",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Gravity": {
@@ -2313,7 +2313,7 @@
           "Y": 410
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -20
       }
     }
@@ -2371,15 +2371,15 @@
       "Name": "sector19"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -50
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "8"
       },
       "Entity": "43",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -2433,7 +2433,7 @@
           "Y": 410
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -20
       }
     }
@@ -2445,18 +2445,18 @@
       "Name": "sector20"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -20
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "9"
       },
       "Entity": "44",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "13"
       },
-      "FloorTarget": "45",
+      "Bottom.Target": "45",
       "Segments": [
         {
           "AdjacentSector": "45",
@@ -2541,7 +2541,7 @@
           "Y": 400
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 60
       }
     }
@@ -2553,16 +2553,16 @@
       "Name": "sector21"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -200
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "13"
       },
-      "CeilTarget": "44",
+      "Top.Target": "44",
       "Entity": "45",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -2645,7 +2645,7 @@
           "Y": 400
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -20
       }
     }
@@ -2657,16 +2657,16 @@
       "Name": "sector22"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -70
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "13"
       },
-      "CeilTarget": "48",
+      "Top.Target": "48",
       "Entity": "46",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -2725,7 +2725,7 @@
           "Y": 200
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": -20
       }
     }
@@ -2783,18 +2783,18 @@
       "Name": "sector23"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -20
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "8"
       },
       "Entity": "48",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "13"
       },
-      "FloorTarget": "46",
+      "Bottom.Target": "46",
       "Segments": [
         {
           "AdjacentSector": "46",
@@ -2851,7 +2851,7 @@
           "Y": 200
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 50
       }
     }
@@ -2863,15 +2863,15 @@
       "Name": "sector24"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": -10
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "2"
       },
       "Entity": "49",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "3"
       },
       "Segments": [
@@ -2927,7 +2927,7 @@
           "Y": 200
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 70
       }
     }
@@ -2985,7 +2985,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 {\n  behaviors.VerticalDoorFromDb(sector.DB,sector.Entity).Intent = behaviors.DoorIntentOpen\n}",
+          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 {\n  behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen\n}",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -2998,15 +2998,15 @@
       "Name": "sector25"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "6"
       },
       "Entity": "51",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "Segments": [
@@ -3061,7 +3061,7 @@
           "Y": -30
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Animation": {
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
@@ -3084,15 +3084,15 @@
       "Name": "sector26"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 15
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "52",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -3147,7 +3147,7 @@
           "Y": 120
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }
@@ -3159,15 +3159,15 @@
       "Name": "sector27"
     },
     "core.Sector": {
-      "BottomZ": {
+      "Bottom.Z": {
         "Original": 0
       },
-      "CeilSurface": {
+      "Top.Surface": {
         "Material": "14"
       },
       "Entity": "53",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "8"
       },
       "Segments": [
@@ -3223,7 +3223,7 @@
           "Y": 3000
         }
       ],
-      "TopZ": {
+      "Top.Z": {
         "Original": 64
       }
     }

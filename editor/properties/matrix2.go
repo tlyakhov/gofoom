@@ -37,20 +37,20 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 			worldWidth = typed.Max[0] - typed.Min[0]
 			worldHeight = typed.Max[1] - typed.Min[1]
 		case *core.SectorSegment:
-			fz, cz := typed.Sector.PointZ(ecs.DynamicNow, typed.A)
+			fz, cz := typed.Sector.ZAt(ecs.DynamicNow, typed.A)
 			worldWidth = typed.Length
 			worldHeight = cz - fz
 			switch field.Name {
 			case "Segment.Low Surface.Transform.Initial Value":
 				if typed.AdjacentSegment != nil {
-					adj := core.SectorFromDb(g.State().DB, typed.AdjacentSector)
-					afz, _ := adj.PointZ(ecs.DynamicNow, typed.A)
+					adj := core.GetSector(g.State().ECS, typed.AdjacentSector)
+					afz := adj.Bottom.ZAt(ecs.DynamicNow, typed.A)
 					worldHeight = math.Abs(fz - afz)
 				}
 			case "Segment.High Surface.Transform.Initial Value":
 				if typed.AdjacentSegment != nil {
-					adj := core.SectorFromDb(g.State().DB, typed.AdjacentSector)
-					_, acz := adj.PointZ(ecs.DynamicNow, typed.A)
+					adj := core.GetSector(g.State().ECS, typed.AdjacentSector)
+					acz := adj.Top.ZAt(ecs.DynamicNow, typed.A)
 					worldHeight = math.Abs(cz - acz)
 				}
 			}

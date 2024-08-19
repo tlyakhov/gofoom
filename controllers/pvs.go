@@ -54,7 +54,7 @@ func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.S
 	}
 
 	for entity, body := range visitor.Bodies {
-		if core.LightFromDb(body.ECS, entity) != nil {
+		if core.GetLight(body.ECS, entity) != nil {
 			pvs.Sector.PVL[entity] = body
 		}
 	}
@@ -89,7 +89,7 @@ func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.S
 			adjmin = &adj.Sector.Min
 		}
 
-		adjsec := core.SectorFromDb(pvs.Sector.ECS, seg.AdjacentSector)
+		adjsec := core.GetSector(pvs.Sector.ECS, seg.AdjacentSector)
 		pvs.Sector.PVS[seg.AdjacentSector] = adjsec
 
 		normals[nNormals] = &seg.Normal

@@ -48,7 +48,7 @@ func (a *Paste) Act() {
 	// Copied -> Pasted
 	a.CopiedToPasted = make(map[ecs.Entity]ecs.Entity)
 	a.Selected = core.NewSelection()
-	db := a.State().DB
+	db := a.State().ECS
 	for copiedEntityString, jsonData := range jsonEntities {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
 		jsonEntity := jsonData.(map[string]any)
@@ -88,10 +88,10 @@ func (a *Paste) Act() {
 	// pasted bodies to sectors
 	// pasted internal segments to sectors
 	for _, pastedEntity := range a.CopiedToPasted {
-		if seg := core.InternalSegmentFromDb(db, pastedEntity); seg != nil {
+		if seg := core.GetInternalSegment(db, pastedEntity); seg != nil {
 			seg.AttachToSectors()
 		}
-		if body := core.BodyFromDb(db, pastedEntity); body != nil {
+		if body := core.GetBody(db, pastedEntity); body != nil {
 			body.SectorEntity = 0
 		}
 		// TODO: materials

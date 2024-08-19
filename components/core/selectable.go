@@ -52,7 +52,7 @@ var typeGroups = map[SelectableType]SelectableType{
 // types. (for example, only one point of an internal segment)
 type Selectable struct {
 	ecs.Entity
-	DB              *ecs.ECS
+	ECS             *ecs.ECS
 	Type            SelectableType
 	Sector          *Sector
 	Body            *Body
@@ -79,15 +79,15 @@ func (s *Selectable) GroupHash() uint64 {
 }
 
 func SelectableFromSector(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, DB: s.ECS}
+	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, ECS: s.ECS}
 }
 
 func SelectableFromFloor(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, DB: s.ECS}
+	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, ECS: s.ECS}
 }
 
 func SelectableFromCeil(s *Sector) *Selectable {
-	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, DB: s.ECS}
+	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, ECS: s.ECS}
 }
 
 func SelectableFromSegment(s *SectorSegment) *Selectable {
@@ -96,7 +96,7 @@ func SelectableFromSegment(s *SectorSegment) *Selectable {
 		Sector:        s.Sector,
 		SectorSegment: s,
 		Entity:        s.Sector.Entity,
-		DB:            s.DB}
+		ECS:           s.ECS}
 }
 
 func SelectableFromWall(s *SectorSegment, t SelectableType) *Selectable {
@@ -105,7 +105,7 @@ func SelectableFromWall(s *SectorSegment, t SelectableType) *Selectable {
 		Sector:        s.Sector,
 		SectorSegment: s,
 		Entity:        s.Sector.Entity,
-		DB:            s.DB}
+		ECS:           s.ECS}
 }
 
 func SelectableFromBody(b *Body) *Selectable {
@@ -114,7 +114,7 @@ func SelectableFromBody(b *Body) *Selectable {
 		Sector: b.Sector(),
 		Body:   b,
 		Entity: b.Entity,
-		DB:     b.ECS}
+		ECS:    b.ECS}
 }
 
 func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
@@ -122,40 +122,40 @@ func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
 		Type:            SelectableInternalSegment,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		DB:              s.ECS}
+		ECS:             s.ECS}
 }
 
 func SelectableFromInternalSegmentA(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentA,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		DB:              s.ECS}
+		ECS:             s.ECS}
 }
 
 func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentB,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		DB:              s.ECS}
+		ECS:             s.ECS}
 }
 
 func SelectableFromEntity(db *ecs.ECS, e ecs.Entity) *Selectable {
-	if sector := SectorFromDb(db, e); sector != nil {
+	if sector := GetSector(db, e); sector != nil {
 		return SelectableFromSector(sector)
 	}
-	if body := BodyFromDb(db, e); body != nil {
+	if body := GetBody(db, e); body != nil {
 		return SelectableFromBody(body)
 	}
-	if seg := InternalSegmentFromDb(db, e); seg != nil {
+	if seg := GetInternalSegment(db, e); seg != nil {
 		return SelectableFromInternalSegment(seg)
 	}
-	return &Selectable{Type: SelectableEntity, Entity: e, DB: db}
+	return &Selectable{Type: SelectableEntity, Entity: e, ECS: db}
 }
 
 // Serialize saves the data for whatever the selectable is holding, which may or
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {
-	return s.DB.SerializeEntity(s.Entity)
+	return s.ECS.SerializeEntity(s.Entity)
 }
 
 func (s *Selectable) Transform(m *concepts.Matrix2) {
@@ -216,17 +216,17 @@ func (s *Selectable) Recalculate() {
 func (s *Selectable) PointZ(p *concepts.Vector2) (bottom float64, top float64) {
 	switch s.Type {
 	case SelectableHi:
-		_, top = s.Sector.PointZ(ecs.DynamicNow, p)
+		_, top = s.Sector.ZAt(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.PointZ(ecs.DynamicNow, p)
+		_, adjTop := adj.ZAt(ecs.DynamicNow, p)
 		bottom, top = math.Min(adjTop, top), math.Max(adjTop, top)
 	case SelectableLow:
-		bottom, _ = s.Sector.PointZ(ecs.DynamicNow, p)
+		bottom, _ = s.Sector.ZAt(ecs.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.PointZ(ecs.DynamicNow, p)
+		adjBottom, _ := adj.ZAt(ecs.DynamicNow, p)
 		bottom, top = math.Min(adjBottom, bottom), math.Max(adjBottom, bottom)
 	case SelectableMid:
-		bottom, top = s.Sector.PointZ(ecs.DynamicNow, p)
+		bottom, top = s.Sector.ZAt(ecs.DynamicNow, p)
 	case SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
 	}

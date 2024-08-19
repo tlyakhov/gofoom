@@ -16,10 +16,10 @@ type Solid struct {
 var SolidComponentIndex int
 
 func init() {
-	SolidComponentIndex = ecs.Types().Register(Solid{}, SolidFromDb)
+	SolidComponentIndex = ecs.Types().Register(Solid{}, GetSolid)
 }
 
-func SolidFromDb(db *ecs.ECS, e ecs.Entity) *Solid {
+func GetSolid(db *ecs.ECS, e ecs.Entity) *Solid {
 	if asserted, ok := db.Component(e, SolidComponentIndex).(*Solid); ok {
 		return asserted
 	}

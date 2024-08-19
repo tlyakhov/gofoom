@@ -30,7 +30,6 @@ func init() {
 		"ControllerAlways":             reflect.ValueOf(ecs.ControllerAlways),
 		"ControllerLoaded":             reflect.ValueOf(ecs.ControllerLoaded),
 		"ControllerRecalculate":        reflect.ValueOf(ecs.ControllerRecalculate),
-		"DbTypes":                      reflect.ValueOf(ecs.Types),
 		"DynamicNow":                   reflect.ValueOf(ecs.DynamicNow),
 		"DynamicOriginal":              reflect.ValueOf(ecs.DynamicOriginal),
 		"DynamicPrev":                  reflect.ValueOf(ecs.DynamicPrev),
@@ -38,11 +37,12 @@ func init() {
 		"DynamicStageString":           reflect.ValueOf(ecs.DynamicStageString),
 		"DynamicStageStrings":          reflect.ValueOf(ecs.DynamicStageStrings),
 		"DynamicStageValues":           reflect.ValueOf(ecs.DynamicStageValues),
+		"GetNamed":                     reflect.ValueOf(ecs.GetNamed),
 		"NamedComponentIndex":          reflect.ValueOf(&ecs.NamedComponentIndex).Elem(),
-		"NamedFromDb":                  reflect.ValueOf(ecs.NamedFromDb),
-		"NewEntityComponentDB":         reflect.ValueOf(ecs.NewECS),
+		"NewECS":                       reflect.ValueOf(ecs.NewECS),
 		"NewSimulation":                reflect.ValueOf(ecs.NewSimulation),
 		"ParseEntity":                  reflect.ValueOf(ecs.ParseEntity),
+		"Types":                        reflect.ValueOf(ecs.Types),
 
 		// type definitions
 		"Animated":             reflect.ValueOf((*ecs.Animated)(nil)),
@@ -55,8 +55,8 @@ func init() {
 		"ControllerMethod":     reflect.ValueOf((*ecs.ControllerMethod)(nil)),
 		"Dynamic":              reflect.ValueOf((*ecs.Dynamic)(nil)),
 		"DynamicStage":         reflect.ValueOf((*ecs.DynamicStage)(nil)),
+		"ECS":                  reflect.ValueOf((*ecs.ECS)(nil)),
 		"Entity":               reflect.ValueOf((*ecs.Entity)(nil)),
-		"EntityComponentDB":    reflect.ValueOf((*ecs.ECS)(nil)),
 		"Named":                reflect.ValueOf((*ecs.Named)(nil)),
 		"Serializable":         reflect.ValueOf((*ecs.Serializable)(nil)),
 		"Simulation":           reflect.ValueOf((*ecs.Simulation)(nil)),
@@ -75,11 +75,11 @@ type _tlyakhov_gofoom_ecs_Animated struct {
 	IValue     interface{}
 	WAnimate   func()
 	WConstruct func(data map[string]any)
-	WGetECS     func() *ecs.ECS
+	WGetECS    func() *ecs.ECS
 	WIsSystem  func() bool
 	WReset     func()
 	WSerialize func() map[string]any
-	WSetECS     func(db *ecs.ECS)
+	WSetECS    func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Animated) Animate() {
@@ -106,18 +106,18 @@ func (W _tlyakhov_gofoom_ecs_Animated) SetECS(db *ecs.ECS) {
 
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_ecs_Attachable struct {
-	IValue        interface{}
-	WConstruct    func(data map[string]any)
+	IValue         interface{}
+	WConstruct     func(data map[string]any)
 	WGetECS        func() *ecs.ECS
-	WGetEntity    func() ecs.Entity
-	WIndexInDB    func() int
-	WIsSystem     func() bool
-	WOnDetach     func()
-	WSerialize    func() map[string]any
+	WGetEntity     func() ecs.Entity
+	WIndexInECS    func() int
+	WIsSystem      func() bool
+	WOnDetach      func()
+	WSerialize     func() map[string]any
 	WSetECS        func(db *ecs.ECS)
-	WSetEntity    func(entity ecs.Entity)
-	WSetIndexInDB func(a0 int)
-	WString       func() string
+	WSetEntity     func(entity ecs.Entity)
+	WSetIndexInECS func(a0 int)
+	WString        func() string
 }
 
 func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
@@ -129,8 +129,8 @@ func (W _tlyakhov_gofoom_ecs_Attachable) GetECS() *ecs.ECS {
 func (W _tlyakhov_gofoom_ecs_Attachable) GetEntity() ecs.Entity {
 	return W.WGetEntity()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) IndexInDB() int {
-	return W.WIndexInDB()
+func (W _tlyakhov_gofoom_ecs_Attachable) IndexInECS() int {
+	return W.WIndexInECS()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) IsSystem() bool {
 	return W.WIsSystem()
@@ -147,8 +147,8 @@ func (W _tlyakhov_gofoom_ecs_Attachable) SetECS(db *ecs.ECS) {
 func (W _tlyakhov_gofoom_ecs_Attachable) SetEntity(entity ecs.Entity) {
 	W.WSetEntity(entity)
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) SetIndexInDB(a0 int) {
-	W.WSetIndexInDB(a0)
+func (W _tlyakhov_gofoom_ecs_Attachable) SetIndexInECS(a0 int) {
+	W.WSetIndexInECS(a0)
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) String() string {
 	if W.WString == nil {
@@ -194,13 +194,13 @@ type _tlyakhov_gofoom_ecs_Dynamic struct {
 	WConstruct       func(data map[string]any)
 	WDetach          func(sim *ecs.Simulation)
 	WGetAnimation    func() ecs.Animated
-	WGetECS           func() *ecs.ECS
+	WGetECS          func() *ecs.ECS
 	WIsSystem        func() bool
 	WNewFrame        func()
 	WRenderBlend     func(a0 float64)
 	WResetToOriginal func()
 	WSerialize       func() map[string]any
-	WSetECS           func(db *ecs.ECS)
+	WSetECS          func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Dynamic) Attach(sim *ecs.Simulation) {
@@ -241,10 +241,10 @@ func (W _tlyakhov_gofoom_ecs_Dynamic) SetECS(db *ecs.ECS) {
 type _tlyakhov_gofoom_ecs_Serializable struct {
 	IValue     interface{}
 	WConstruct func(data map[string]any)
-	WGetECS     func() *ecs.ECS
+	WGetECS    func() *ecs.ECS
 	WIsSystem  func() bool
 	WSerialize func() map[string]any
-	WSetECS     func(db *ecs.ECS)
+	WSetECS    func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {

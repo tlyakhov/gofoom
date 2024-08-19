@@ -114,8 +114,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector0",
-            "BottomZ": 0,
-            "TopZ": 64,
+            "Bottom.Z": 0,
+            "Top.Z": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
             "Segments": [
@@ -172,8 +172,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector1",
-            "BottomZ": 0,
-            "TopZ": 64,
+            "Bottom.Z": 0,
+            "Top.Z": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
             "Segments": [
@@ -214,8 +214,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector2",
-            "BottomZ": -10,
-            "TopZ": 64,
+            "Bottom.Z": -10,
+            "Top.Z": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
             "Segments": [
@@ -256,8 +256,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector3",
-            "BottomZ": 0,
-            "TopZ": 64,
+            "Bottom.Z": 0,
+            "Top.Z": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
             "Mobs": [
@@ -354,8 +354,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector4",
-            "BottomZ": -3,
-            "TopZ": 50,
+            "Bottom.Z": -3,
+            "Top.Z": 50,
             "FloorMaterial": "f1",
             "CeilMaterial": "f5",
             "Segments": [
@@ -396,8 +396,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector5",
-            "BottomZ": -20,
-            "TopZ": 64,
+            "Bottom.Z": -20,
+            "Top.Z": 64,
             "FloorMaterial": "f1",
             "CeilMaterial": "Sky",
             "Segments": [
@@ -438,8 +438,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector6",
-            "BottomZ": -30,
-            "TopZ": 64,
+            "Bottom.Z": -30,
+            "Top.Z": 64,
             "FloorMaterial": "f1",
             "CeilMaterial": "Sky",
             "Segments": [
@@ -480,8 +480,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector7",
-            "BottomZ": -40,
-            "TopZ": 64,
+            "Bottom.Z": -40,
+            "Top.Z": 64,
             "FloorMaterial": "f1",
             "CeilMaterial": "Sky",
             "Segments": [
@@ -522,8 +522,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector8",
-            "BottomZ": -50,
-            "TopZ": 64,
+            "Bottom.Z": -50,
+            "Top.Z": 64,
             "FloorMaterial": "f1",
             "CeilMaterial": "Sky",
             "Segments": [
@@ -564,8 +564,8 @@
         {
             "Type": "sectors.ToxicSector",
             "Name": "sector9",
-            "BottomZ": -60,
-            "TopZ": -6,
+            "Bottom.Z": -60,
+            "Top.Z": -6,
             "FloorMaterial": "Painful Slime",
             "CeilMaterial": "Default Floor",
             "Mobs": [
@@ -642,8 +642,8 @@
         {
             "Type": "sectors.ToxicSector",
             "Name": "sector10",
-            "BottomZ": -60,
-            "TopZ": -6,
+            "Bottom.Z": -60,
+            "Top.Z": -6,
             "FloorMaterial": "Painful Slime",
             "CeilMaterial": "Default Floor",
             "Mobs": [
@@ -704,8 +704,8 @@
         {
             "Type": "sectors.ToxicSector",
             "Name": "sector11",
-            "BottomZ": -60,
-            "TopZ": -6,
+            "Bottom.Z": -60,
+            "Top.Z": -6,
             "FloorMaterial": "Painful Slime",
             "CeilMaterial": "Default Floor",
             "Mobs": [
@@ -766,8 +766,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector12",
-            "BottomZ": 0,
-            "TopZ": 60,
+            "Bottom.Z": 0,
+            "Top.Z": 60,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "f6",
             "Segments": [
@@ -816,8 +816,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector13",
-            "BottomZ": 0,
-            "TopZ": 60,
+            "Bottom.Z": 0,
+            "Top.Z": 60,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "f6",
             "Segments": [
@@ -866,8 +866,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector14",
-            "BottomZ": 0,
-            "TopZ": 60,
+            "Bottom.Z": 0,
+            "Top.Z": 60,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "f1",
             "Segments": [
@@ -908,11 +908,11 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector15",
-            "BottomZ": -20,
-            "TopZ": 100,
+            "Bottom.Z": -20,
+            "Top.Z": 100,
             "FloorMaterial": "Water",
             "CeilMaterial": "Sky",
-            "FloorTarget": "sector17",
+            "Bottom.Target": "sector17",
             "Mobs": [
                 {
                     "Type": "mobs.Light",
@@ -996,8 +996,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector16",
-            "BottomZ": 10,
-            "TopZ": 60,
+            "Bottom.Z": 10,
+            "Top.Z": 60,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "f1",
             "Segments": [
@@ -1038,11 +1038,11 @@
         {
             "Type": "sectors.Underwater",
             "Name": "sector17",
-            "BottomZ": -170,
-            "TopZ": -20,
+            "Bottom.Z": -170,
+            "Top.Z": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Water",
-            "CeilTarget": "sector15",
+            "Top.Target": "sector15",
             "tags": [
                 "underwater"
             ],
@@ -1084,8 +1084,8 @@
         {
             "Type": "sectors.Underwater",
             "Name": "sector18",
-            "BottomZ": -230,
-            "TopZ": -20,
+            "Bottom.Z": -230,
+            "Top.Z": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Default Floor",
             "tags": [
@@ -1166,8 +1166,8 @@
         {
             "Type": "sectors.Underwater",
             "Name": "sector19",
-            "BottomZ": -50,
-            "TopZ": -20,
+            "Bottom.Z": -50,
+            "Top.Z": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Default Floor",
             "tags": [
@@ -1211,11 +1211,11 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector20",
-            "BottomZ": -20,
-            "TopZ": 60,
+            "Bottom.Z": -20,
+            "Top.Z": 60,
             "FloorMaterial": "Water",
             "CeilMaterial": "f1",
-            "FloorTarget": "sector21",
+            "Bottom.Target": "sector21",
             "Segments": [
                 {
                     "X": 400,
@@ -1270,11 +1270,11 @@
         {
             "Type": "sectors.Underwater",
             "Name": "sector21",
-            "BottomZ": -200,
-            "TopZ": -20,
+            "Bottom.Z": -200,
+            "Top.Z": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Water",
-            "CeilTarget": "sector20",
+            "Top.Target": "sector20",
             "tags": [
                 "underwater"
             ],
@@ -1316,11 +1316,11 @@
         {
             "Type": "sectors.Underwater",
             "Name": "sector22",
-            "BottomZ": -70,
-            "TopZ": -20,
+            "Bottom.Z": -70,
+            "Top.Z": -20,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Water",
-            "CeilTarget": "sector23",
+            "Top.Target": "sector23",
             "tags": [
                 "underwater"
             ],
@@ -1383,11 +1383,11 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector23",
-            "BottomZ": -20,
-            "TopZ": 50,
+            "Bottom.Z": -20,
+            "Top.Z": 50,
             "FloorMaterial": "Water",
             "CeilMaterial": "Default Floor",
-            "FloorTarget": "sector22",
+            "Bottom.Target": "sector22",
             "Segments": [
                 {
                     "X": 620,
@@ -1426,8 +1426,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector24",
-            "BottomZ": -10,
-            "TopZ": 70,
+            "Bottom.Z": -10,
+            "Top.Z": 70,
             "FloorMaterial": "mat1",
             "CeilMaterial": "Default",
             "Mobs": [
@@ -1483,8 +1483,8 @@
         {
             "Type": "sectors.VerticalDoor",
             "Name": "sector25",
-            "BottomZ": 0,
-            "TopZ": 64,
+            "Bottom.Z": 0,
+            "Top.Z": 64,
             "FloorMaterial": "Default",
             "CeilMaterial": "mat6",
             "Segments": [
@@ -1525,8 +1525,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector26",
-            "BottomZ": 15,
-            "TopZ": 64,
+            "Bottom.Z": 15,
+            "Top.Z": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
             "Mobs": [],
@@ -1568,8 +1568,8 @@
         {
             "Type": "core.PhysicalSector",
             "Name": "sector27",
-            "BottomZ": 0,
-            "TopZ": 64,
+            "Bottom.Z": 0,
+            "Top.Z": 64,
             "FloorMaterial": "Default Floor",
             "CeilMaterial": "Sky",
             "Mobs": [],

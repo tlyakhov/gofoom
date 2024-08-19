@@ -13,7 +13,7 @@ import (
 )
 
 type Config struct {
-	DB                        *ecs.ECS
+	ECS                       *ecs.ECS
 	Multithreaded             bool
 	Blocks                    int
 	ScreenWidth, ScreenHeight int
@@ -49,13 +49,13 @@ func (c *Config) Initialize() {
 }
 
 func (c *Config) RefreshPlayer() {
-	for _, attachable := range c.DB.AllOfType(behaviors.PlayerComponentIndex) {
+	for _, attachable := range c.ECS.AllOfType(behaviors.PlayerComponentIndex) {
 		player := attachable.(*behaviors.Player)
 		if !player.Active || player.Spawn {
 			continue
 		}
 		c.Player = player
-		c.PlayerBody = core.BodyFromDb(c.DB, c.Player.Entity)
+		c.PlayerBody = core.GetBody(c.ECS, c.Player.Entity)
 		return
 	}
 }

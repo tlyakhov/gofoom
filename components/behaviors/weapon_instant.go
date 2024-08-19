@@ -32,10 +32,10 @@ type WeaponMark struct {
 var WeaponInstantComponentIndex int
 
 func init() {
-	WeaponInstantComponentIndex = ecs.Types().Register(WeaponInstant{}, WeaponInstantFromDb)
+	WeaponInstantComponentIndex = ecs.Types().Register(WeaponInstant{}, GetWeaponInstant)
 }
 
-func WeaponInstantFromDb(db *ecs.ECS, e ecs.Entity) *WeaponInstant {
+func GetWeaponInstant(db *ecs.ECS, e ecs.Entity) *WeaponInstant {
 	if asserted, ok := db.Component(e, WeaponInstantComponentIndex).(*WeaponInstant); ok {
 		return asserted
 	}

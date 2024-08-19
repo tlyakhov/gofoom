@@ -55,14 +55,14 @@
       "Bodies": [
         "4"
       ],
-      "BottomZ": 0,
-      "CeilSurface": {
+      "Bottom.Z": 0,
+      "Top.Surface": {
         "Material": "2"
       },
       "CeilScale": 64,
       "Entity": "3",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "FloorScale": 64,
@@ -121,7 +121,7 @@
           "Y": 100
         }
       ],
-      "TopZ": 64
+      "Top.Z": 64
     }
   },
   {
@@ -172,14 +172,14 @@
     "core.Sector": {
       "Active": true,
       "Bodies": [],
-      "BottomZ": -60,
-      "CeilSurface": {
+      "Bottom.Z": -60,
+      "Top.Surface": {
         "Material": "2"
       },
       "CeilScale": 64,
       "Entity": "5",
       "FloorFriction": 0.85,
-      "FloorSurface": {
+      "Bottom.Surface": {
         "Material": "2"
       },
       "FloorScale": 64,
@@ -264,7 +264,7 @@
           "Y": 100
         }
       ],
-      "TopZ": 112
+      "Top.Z": 112
     }
   }
 ]

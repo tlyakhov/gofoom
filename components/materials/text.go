@@ -26,10 +26,10 @@ type Text struct {
 var TextComponentIndex int
 
 func init() {
-	TextComponentIndex = ecs.Types().Register(Text{}, TextFromDb)
+	TextComponentIndex = ecs.Types().Register(Text{}, GetText)
 }
 
-func TextFromDb(db *ecs.ECS, e ecs.Entity) *Text {
+func GetText(db *ecs.ECS, e ecs.Entity) *Text {
 	if asserted, ok := db.Component(e, TextComponentIndex).(*Text); ok {
 		return asserted
 	}

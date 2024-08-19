@@ -18,10 +18,10 @@ type Proximity struct {
 var ProximityComponentIndex int
 
 func init() {
-	ProximityComponentIndex = ecs.Types().Register(Proximity{}, ProximityFromDb)
+	ProximityComponentIndex = ecs.Types().Register(Proximity{}, GetProximity)
 }
 
-func ProximityFromDb(db *ecs.ECS, e ecs.Entity) *Proximity {
+func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {
 	if asserted, ok := db.Component(e, ProximityComponentIndex).(*Proximity); ok {
 		return asserted
 	}

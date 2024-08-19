@@ -27,7 +27,7 @@ func (bc *BodyController) Enter(eSector ecs.Entity) {
 		log.Printf("%v tried to enter nil sector", bc.Body.Entity)
 		return
 	}
-	sector := core.SectorFromDb(bc.Body.ECS, eSector)
+	sector := core.GetSector(bc.Body.ECS, eSector)
 	if sector == nil {
 		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, eSector.String(bc.Body.ECS))
 		return
@@ -37,10 +37,10 @@ func (bc *BodyController) Enter(eSector ecs.Entity) {
 	bc.Body.SectorEntity = eSector
 
 	if bc.Body.OnGround {
-		floorZ, _ := bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
+		floorZ := bc.Sector.Bottom.ZAt(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 		p := &bc.Body.Pos.Now
 		h := bc.Body.Size.Now[1] * 0.5
-		if bc.Sector.FloorTarget == 0 && p[2]-h < floorZ {
+		if bc.Sector.Bottom.Target == 0 && p[2]-h < floorZ {
 			p[2] = floorZ + h
 		}
 	}
@@ -121,7 +121,7 @@ func (bc *BodyController) findBodySector() {
 		bc.Body.Pos.Now[1] = p[1]
 	}
 
-	floorZ, ceilZ := closestSector.PointZ(ecs.DynamicNow, bc.pos2d)
+	floorZ, ceilZ := closestSector.ZAt(ecs.DynamicNow, bc.pos2d)
 	//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
 	if bc.pos[2]-bc.halfHeight < floorZ || bc.pos[2]+bc.halfHeight > ceilZ {
 		//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", bc.Body.Entity, p[2], floorZ)
@@ -135,10 +135,10 @@ func (bc *BodyController) checkBodySegmentCollisions() {
 	// See if we need to push back into the current sector.
 	for _, segment := range bc.Sector.Segments {
 		if segment.AdjacentSector != 0 && segment.PortalIsPassable {
-			adj := core.SectorFromDb(bc.Sector.ECS, segment.AdjacentSector)
+			adj := core.GetSector(bc.Sector.ECS, segment.AdjacentSector)
 			// We can still collide with a portal if the heights don't match.
 			// If we're within limits, ignore the portal.
-			floorZ, ceilZ := adj.PointZ(ecs.DynamicNow, bc.pos2d)
+			floorZ, ceilZ := adj.ZAt(ecs.DynamicNow, bc.pos2d)
 			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 				bc.pos[2]+bc.halfHeight < ceilZ {
 				continue
@@ -201,8 +201,8 @@ func (bc *BodyController) bodyExitsSector() {
 		if segment.AdjacentSector == 0 {
 			continue
 		}
-		adj := core.SectorFromDb(bc.Sector.ECS, segment.AdjacentSector)
-		floorZ, ceilZ := adj.PointZ(ecs.DynamicNow, bc.pos2d)
+		adj := core.GetSector(bc.Sector.ECS, segment.AdjacentSector)
+		floorZ, ceilZ := adj.ZAt(ecs.DynamicNow, bc.pos2d)
 		if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 			bc.pos[2]+bc.halfHeight < ceilZ &&
 			adj.IsPointInside2D(bc.pos2d) {
@@ -222,7 +222,7 @@ func (bc *BodyController) bodyExitsSector() {
 		// Case 6! This is the worst.
 		for _, component := range bc.Body.ECS.AllOfType(core.SectorComponentIndex) {
 			sector := component.(*core.Sector)
-			floorZ, ceilZ := sector.PointZ(ecs.DynamicNow, bc.pos2d)
+			floorZ, ceilZ := sector.ZAt(ecs.DynamicNow, bc.pos2d)
 			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 				bc.pos[2]+bc.halfHeight < ceilZ {
 				for _, segment := range sector.Segments {
@@ -252,7 +252,7 @@ func (bc *BodyController) resolveCollision(body *core.Body) {
 	// Use the right collision response settings
 	aResponse := bc.Body.CrBody
 	bResponse := body.CrBody
-	if behaviors.PlayerFromDb(body.ECS, body.Entity) != nil {
+	if behaviors.GetPlayer(body.ECS, body.Entity) != nil {
 		aResponse = bc.Body.CrPlayer
 	}
 	if bc.Player != nil {
@@ -388,7 +388,7 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		if body == nil || body == bc.Body || !body.IsActive() {
 			continue
 		}
-		if p := behaviors.PlayerFromDb(body.ECS, body.Entity); p != nil && p.Spawn {
+		if p := behaviors.GetPlayer(body.ECS, body.Entity); p != nil && p.Spawn {
 			// Ignore spawn points
 			continue
 		}
@@ -397,7 +397,7 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 		r_a := bc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			item := behaviors.InventoryItemFromDb(body.ECS, body.Entity)
+			item := behaviors.GetInventoryItem(body.ECS, body.Entity)
 			if item != nil && item.Active && bc.Player != nil {
 				bc.getInventoryItem(item)
 			}
@@ -409,47 +409,47 @@ func (bc *BodyController) bodyBodyCollide(sector *core.Sector) {
 func (bc *BodyController) CollideZ() {
 	halfHeight := bc.Body.Size.Now[1] * 0.5
 	bodyTop := bc.Body.Pos.Now[2] + halfHeight
-	floorZ, ceilZ := bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
+	floorZ, ceilZ := bc.Sector.ZAt(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 
 	bc.Body.OnGround = false
-	if bc.Sector.FloorTarget != 0 && bodyTop < floorZ {
+	if bc.Sector.Bottom.Target != 0 && bodyTop < floorZ {
 		delta := bc.Body.Pos.Now.Sub(&bc.Sector.Center)
 		bc.Exit()
-		bc.Enter(bc.Sector.FloorTarget)
+		bc.Enter(bc.Sector.Bottom.Target)
 		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
 		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
-		_, ceilZ = bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
+		ceilZ = bc.Sector.Top.ZAt(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
-	} else if bc.Sector.FloorTarget != 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
+	} else if bc.Sector.Bottom.Target != 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ && bc.Body.Vel.Now[2] > 0 {
 		bc.Body.Vel.Now[2] = constants.PlayerJumpForce
-	} else if bc.Sector.FloorTarget == 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ {
-		dist := bc.Sector.FloorNormal[2] * (floorZ - (bc.Body.Pos.Now[2] - halfHeight))
-		delta := bc.Sector.FloorNormal.Mul(dist)
+	} else if bc.Sector.Bottom.Target == 0 && bc.Body.Pos.Now[2]-halfHeight <= floorZ {
+		dist := bc.Sector.Bottom.Normal[2] * (floorZ - (bc.Body.Pos.Now[2] - halfHeight))
+		delta := bc.Sector.Bottom.Normal.Mul(dist)
 		// TODO: do this for ceiling too
-		c_a := delta.Cross(&bc.Sector.FloorNormal)
+		c_a := delta.Cross(&bc.Sector.Bottom.Normal)
 		// Solid sphere moment of inertia
 		moment := bc.Body.Mass * halfHeight * halfHeight * 2.0 / 5.0
-		j := -(1.0 + bc.Body.Elasticity) * bc.Body.Vel.Now.Dot(&bc.Sector.FloorNormal) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/moment)
-		bc.Body.Vel.Now.AddSelf(bc.Sector.FloorNormal.Mul(j / bc.Body.Mass))
+		j := -(1.0 + bc.Body.Elasticity) * bc.Body.Vel.Now.Dot(&bc.Sector.Bottom.Normal) / (1.0/bc.Body.Mass + c_a.Dot(c_a)/moment)
+		bc.Body.Vel.Now.AddSelf(bc.Sector.Bottom.Normal.Mul(j / bc.Body.Mass))
 		bc.Body.Pos.Now.AddSelf(delta)
 		bc.Body.OnGround = true
-		BodySectorScript(bc.Sector.FloorScripts, bc.Body, bc.Sector)
+		BodySectorScript(bc.Sector.Bottom.Scripts, bc.Body, bc.Sector)
 	}
 
-	if bc.Sector.CeilTarget != 0 && bodyTop > ceilZ {
+	if bc.Sector.Top.Target != 0 && bodyTop > ceilZ {
 		delta := bc.Body.Pos.Now.Sub(&bc.Sector.Center)
 		bc.Exit()
-		bc.Enter(bc.Sector.CeilTarget)
+		bc.Enter(bc.Sector.Top.Target)
 		bc.Body.Pos.Now[0] = bc.Sector.Center[0] + delta[0]
 		bc.Body.Pos.Now[1] = bc.Sector.Center[1] + delta[1]
-		floorZ, _ = bc.Sector.PointZ(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
+		floorZ = bc.Sector.Bottom.ZAt(ecs.DynamicNow, bc.Body.Pos.Now.To2D())
 		bc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
-	} else if bc.Sector.CeilTarget == 0 && bodyTop >= ceilZ {
-		dist := -bc.Sector.CeilNormal[2] * (bodyTop - ceilZ + 1.0)
-		delta := bc.Sector.CeilNormal.Mul(dist)
+	} else if bc.Sector.Top.Target == 0 && bodyTop >= ceilZ {
+		dist := -bc.Sector.Top.Normal[2] * (bodyTop - ceilZ + 1.0)
+		delta := bc.Sector.Top.Normal.Mul(dist)
 		bc.Body.Vel.Now.AddSelf(delta)
 		bc.Body.Pos.Now.AddSelf(delta)
-		BodySectorScript(bc.Sector.CeilScripts, bc.Body, bc.Sector)
+		BodySectorScript(bc.Sector.Top.Scripts, bc.Body, bc.Sector)
 	}
 }
 

@@ -11,7 +11,7 @@ import (
 )
 
 type InventorySlot struct {
-	DB           *ecs.ECS
+	ECS          *ecs.ECS
 	ValidClasses concepts.Set[string] `editable:"Classes"`
 	Limit        int                  `editable:"Limit"`
 	Count        int                  `editable:"Count"`
@@ -66,8 +66,8 @@ func (s *InventorySlot) Serialize() map[string]any {
 }
 
 func (s *InventorySlot) SetECS(db *ecs.ECS) {
-	s.DB = db
+	s.ECS = db
 }
 func (s *InventorySlot) GetECS() *ecs.ECS {
-	return s.DB
+	return s.ECS
 }

@@ -142,7 +142,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 
 	button := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
 		list.State().Lock.Lock()
-		editor.SelectObjects(true, core.SelectableFromEntity(editor.DB, editor.DB.NewEntity()))
+		editor.SelectObjects(true, core.SelectableFromEntity(editor.ECS, editor.ECS.NewEntity()))
 		list.State().Lock.Unlock()
 	})
 	search := widget.NewEntry()
@@ -159,7 +159,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 			return
 		}
 		entity := list.BackingStore[id.Row][0].(int)
-		s := core.SelectableFromEntity(list.State().DB, ecs.Entity(entity))
+		s := core.SelectableFromEntity(list.State().ECS, ecs.Entity(entity))
 		if !editor.SelectedObjects.Contains(s) {
 			editor.SelectObjects(false, s)
 		}
@@ -178,7 +178,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 }
 func (list *EntityList) Update() {
 	list.BackingStore = make([][elcNumColumns]any, 0)
-	ec := list.State().DB.EntityComponents
+	ec := list.State().ECS.EntityComponents
 	if ec == nil {
 		return
 	}

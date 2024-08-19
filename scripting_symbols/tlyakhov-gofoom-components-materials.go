@@ -13,25 +13,25 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/components/materials/materials"] = map[string]reflect.Value{
 		// function, constant and variable definitions
+		"GetImage":               reflect.ValueOf(materials.GetImage),
+		"GetLit":                 reflect.ValueOf(materials.GetLit),
+		"GetShader":              reflect.ValueOf(materials.GetShader),
+		"GetSolid":               reflect.ValueOf(materials.GetSolid),
+		"GetSprite":              reflect.ValueOf(materials.GetSprite),
+		"GetText":                reflect.ValueOf(materials.GetText),
 		"ImageComponentIndex":    reflect.ValueOf(&materials.ImageComponentIndex).Elem(),
-		"ImageFromDb":            reflect.ValueOf(materials.ImageFromDb),
 		"LitComponentIndex":      reflect.ValueOf(&materials.LitComponentIndex).Elem(),
-		"LitFromDb":              reflect.ValueOf(materials.LitFromDb),
 		"ShaderComponentIndex":   reflect.ValueOf(&materials.ShaderComponentIndex).Elem(),
 		"ShaderFlagsString":      reflect.ValueOf(materials.ShaderFlagsString),
 		"ShaderFlagsStrings":     reflect.ValueOf(materials.ShaderFlagsStrings),
 		"ShaderFlagsValues":      reflect.ValueOf(materials.ShaderFlagsValues),
-		"ShaderFromDb":           reflect.ValueOf(materials.ShaderFromDb),
 		"ShaderLiquid":           reflect.ValueOf(materials.ShaderLiquid),
 		"ShaderSky":              reflect.ValueOf(materials.ShaderSky),
 		"ShaderStaticBackground": reflect.ValueOf(materials.ShaderStaticBackground),
 		"ShaderTiled":            reflect.ValueOf(materials.ShaderTiled),
 		"SolidComponentIndex":    reflect.ValueOf(&materials.SolidComponentIndex).Elem(),
-		"SolidFromDb":            reflect.ValueOf(materials.SolidFromDb),
 		"SpriteComponentIndex":   reflect.ValueOf(&materials.SpriteComponentIndex).Elem(),
-		"SpriteFromDb":           reflect.ValueOf(materials.SpriteFromDb),
 		"TextComponentIndex":     reflect.ValueOf(&materials.TextComponentIndex).Elem(),
-		"TextFromDb":             reflect.ValueOf(materials.TextFromDb),
 
 		// type definitions
 		"Image":       reflect.ValueOf((*materials.Image)(nil)),
