@@ -142,7 +142,7 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 	case *DynamicValue[concepts.Matrix2]:
 		result["Original"] = dc.Original.Serialize()
 	case *DynamicValue[Entity]:
-		result["Original"] = dc.Original.Format()
+		result["Original"] = dc.Original.String()
 	default:
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", d)
 	}

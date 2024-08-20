@@ -13,13 +13,14 @@ import (
 )
 
 var EmbeddedTypes = [...]string{
+	reflect.TypeFor[*core.Script]().String(),
+	reflect.TypeFor[*core.SectorPlane]().String(),
 	reflect.TypeFor[*ecs.DynamicValue[float64]]().String(),
 	reflect.TypeFor[*ecs.DynamicValue[int]]().String(),
 	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector2]]().String(),
 	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector3]]().String(),
 	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector4]]().String(),
 	reflect.TypeFor[*ecs.DynamicValue[concepts.Matrix2]]().String(),
-	reflect.TypeFor[*core.Script]().String(),
 	reflect.TypeFor[*materials.Surface]().String(),
 	reflect.TypeFor[*materials.ShaderStage]().String(),
 	reflect.TypeFor[*materials.Sprite]().String(),

@@ -116,14 +116,20 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Gravity[2] = -constants.Gravity
 	s.FloorFriction = 0.85
 	s.Bottom.Construct(s, nil)
+	s.Bottom.Normal[2] = 1
+	s.Bottom.Normal[1] = 0
+	s.Bottom.Normal[0] = 0
 	s.Top.Construct(s, nil)
 	s.Top.Normal[2] = -1
+	s.Top.Normal[1] = 0
+	s.Top.Normal[0] = 0
 	s.Top.Z.SetAll(64.0)
 
 	if data == nil {
 		return
 	}
 
+	// TODO: Remove the following after all the world files are migrated
 	if _, ok := data["Bottom"]; !ok {
 		data["Bottom"] = make(map[string]any)
 	}
@@ -160,6 +166,7 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["Top.Scripts"]; ok {
 		data["Top"].(map[string]any)["Scripts"] = v
 	}
+	// END TODO
 
 	if v, ok := data["Bottom"]; ok {
 		s.Bottom.Construct(s, v.(map[string]any))

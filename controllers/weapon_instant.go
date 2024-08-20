@@ -271,7 +271,7 @@ func (wc *WeaponInstantController) Always() {
 		// Hurt anything alive
 		if alive := behaviors.GetAlive(wc.Body.ECS, s.Body.Entity); alive != nil {
 			// TODO: Parameterize in WeaponInstant
-			alive.Hurt("Weapon "+s.Entity.Format(), 5, 20)
+			alive.Hurt("Weapon "+s.Entity.String(), 5, 20)
 		}
 		// TODO: Death animations/entity deactivation
 	} else if s.Type == core.SelectableSectorSegment ||

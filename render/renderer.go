@@ -110,8 +110,8 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 		// Getting the right floor height is a bit expensive because we have to
 		// project the intersection point. For now just use the sector minimum.
 		next.CameraZ = c.CameraZ - c.IntersectionBottom + c.SectorSegment.AdjacentSegment.Sector.Min[2]
-		next.RayFloorCeil[0] = next.Ray.AngleCos * c.ViewFix[c.ScreenX]
-		next.RayFloorCeil[1] = next.Ray.AngleSin * c.ViewFix[c.ScreenX]
+		next.RayPlane[0] = next.Ray.AngleCos * c.ViewFix[c.ScreenX]
+		next.RayPlane[1] = next.Ray.AngleSin * c.ViewFix[c.ScreenX]
 		next.MaterialSampler.Ray = next.Ray
 	}
 
@@ -151,7 +151,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	if c.Pick {
 		ceilingPick(c)
 	} else {
-		ceiling(c)
+		planes(c, &c.Sector.Top)
 	}
 	c.LightSampler.Type = state.LightSamplerFloor
 	c.LightSampler.Normal = c.Sector.Bottom.Normal
@@ -159,7 +159,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	if c.Pick {
 		floorPick(c)
 	} else {
-		floor(c)
+		planes(c, &c.Sector.Bottom)
 	}
 
 	c.LightSampler.Type = state.LightSamplerWall
@@ -353,8 +353,8 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 	column.MaterialSampler.ScreenY = y
 	column.MaterialSampler.Angle = column.Angle
 	column.Ray.Set(*r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
-	column.RayFloorCeil[0] = column.Ray.AngleCos * column.ViewFix[column.ScreenX]
-	column.RayFloorCeil[1] = column.Ray.AngleSin * column.ViewFix[column.ScreenX]
+	column.RayPlane[0] = column.Ray.AngleCos * column.ViewFix[column.ScreenX]
+	column.RayPlane[1] = column.Ray.AngleSin * column.ViewFix[column.ScreenX]
 
 	if r.startingSector != nil {
 		column.Sector = r.startingSector

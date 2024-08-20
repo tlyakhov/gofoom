@@ -9,6 +9,7 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -65,6 +66,12 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 			split := strings.Split(text, ",")
 			set.AddAll(split...)
 			g.ApplySetPropertyAction(field, reflect.ValueOf(set))
+		}
+		return
+	} else if _, ok := field.Values[0].Interface().(concepts.Set[ecs.Entity]); ok {
+		entry.OnSubmitted = func(text string) {
+			split := strings.Split(text, ",")
+			g.ApplySetPropertyAction(field, reflect.ValueOf(ecs.DeserializeEntities(split)))
 		}
 		return
 	}

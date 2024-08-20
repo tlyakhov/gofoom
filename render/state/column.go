@@ -50,7 +50,7 @@ type Column struct {
 	Sector             *core.Sector
 	Ray                *Ray
 	RaySegTest         concepts.Vector2
-	RayFloorCeil       concepts.Vector3
+	RayPlane           concepts.Vector3
 	LastPortalDistance float64
 	// How many portals have we traversed so far?
 	Depth int

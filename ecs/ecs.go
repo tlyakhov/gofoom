@@ -349,7 +349,7 @@ func (db *ECS) Load(filename string) error {
 func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 	components := db.EntityComponents[entity]
 	jsonEntity := make(map[string]any)
-	jsonEntity["Entity"] = entity.Format()
+	jsonEntity["Entity"] = entity.String()
 	for index, component := range components {
 		if component == nil || component.IsSystem() {
 			continue
@@ -382,28 +382,6 @@ func (db *ECS) Save(filename string) {
 	}
 
 	os.WriteFile(filename, bytes, os.ModePerm)
-}
-
-func (db *ECS) DeserializeEntities(data []any) []Entity {
-	if data == nil {
-		return nil
-	}
-	result := make([]Entity, len(data))
-
-	for i, e := range data {
-		if entity, err := ParseEntity(e.(string)); err == nil {
-			result[i] = entity
-		}
-	}
-	return result
-}
-
-func (db *ECS) SerializeEntities(data []Entity) []string {
-	result := make([]string, len(data))
-	for i, e := range data {
-		result[i] = e.Format()
-	}
-	return result
 }
 
 func ConstructArray(parent any, arrayPtr any, data any) {

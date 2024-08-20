@@ -67,7 +67,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 	result := make(map[string]any)
 
 	if s.Texture != 0 {
-		result["Texture"] = s.Texture.Format()
+		result["Texture"] = s.Texture.String()
 	}
 	if s.Flags != ShaderTiled {
 		flags := ""
