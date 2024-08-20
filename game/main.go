@@ -101,7 +101,7 @@ func integrateGame() {
 	if inMenu {
 		menuInput()
 	} else if renderer.Player != nil {
-		if renderer.Player.Inventory[InventoryWeirdGun].Count > 0 {
+		if len(renderer.Player.Inventory) == 2 && renderer.Player.Inventory[InventoryWeirdGun].Count > 0 {
 			renderer.Player.CurrentWeapon = renderer.Player.Inventory[InventoryWeirdGun]
 		}
 		gameInput()
@@ -171,7 +171,7 @@ func run() {
 		log.Printf("Error loading world %v", err)
 		return
 	}
-	controllers.Respawn(db)
+	controllers.Respawn(db, true)
 	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 
 	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))

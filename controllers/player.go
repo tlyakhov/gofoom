@@ -115,10 +115,9 @@ func MovePlayer(p *core.Body, angle float64, direct bool) {
 	}
 }
 
-func Respawn(db *ecs.ECS) {
-	var player *behaviors.Player
-
+func Respawn(db *ecs.ECS, force bool) {
 	spawns := make([]*behaviors.Player, 0)
+	players := make([]*behaviors.Player, 0)
 	for _, attachable := range db.AllOfType(behaviors.PlayerComponentIndex) {
 		p := attachable.(*behaviors.Player)
 		if !p.Active {
@@ -126,13 +125,24 @@ func Respawn(db *ecs.ECS) {
 		}
 		if p.Spawn {
 			spawns = append(spawns, p)
-			continue
+		} else {
+			players = append(players, p)
 		}
-		player = p
 	}
 
-	// Create a player if we don't have one
-	if player != nil || len(spawns) == 0 {
+	// Remove extra players
+	// By default, avoid spawning a player if one exists
+	maxPlayers := 1
+	if force {
+		maxPlayers = 0
+	}
+
+	for len(players) > maxPlayers {
+		db.DetachAll(players[len(players)-1].Entity)
+		players = players[:len(players)-1]
+	}
+
+	if len(players) > 0 || len(spawns) == 0 {
 		return
 	}
 
@@ -153,6 +163,9 @@ func Respawn(db *ecs.ECS) {
 		if index == behaviors.PlayerComponentIndex {
 			player := c.(*behaviors.Player)
 			player.Spawn = false
+		} else if index == ecs.NamedComponentIndex {
+			named := c.(*ecs.Named)
+			named.Name = "Player"
 		}
 	}
 }
