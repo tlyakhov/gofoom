@@ -28,7 +28,7 @@ func AttachableIsMaterial(a ecs.Attachable) bool {
 func CreateBasicMaterial(db *ecs.ECS, textured bool) ecs.Entity {
 	e := db.NewEntity()
 	named := db.NewAttachedComponent(e, ecs.NamedComponentIndex).(*ecs.Named)
-	named.Name = "Material " + e.String(db)
+	named.Name = "Material " + e.Format(db)
 	db.NewAttachedComponent(e, materials.LitComponentIndex)
 	if textured {
 		db.NewAttachedComponent(e, materials.ImageComponentIndex)

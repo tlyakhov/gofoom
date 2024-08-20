@@ -156,8 +156,8 @@ func AutoPortal(db *ecs.ECS) {
 			}
 			sector := c.(*core.Sector)
 			sector2 := c2.(*core.Sector)
-			name := sector.Entity.Format() + "|" + sector2.Entity.Format()
-			id2 := sector2.Entity.Format() + "|" + sector.Entity.Format()
+			name := sector.Entity.String() + "|" + sector2.Entity.String()
+			id2 := sector2.Entity.String() + "|" + sector.Entity.String()
 			if seen.Contains(id2) || seen.Contains(name) {
 				continue
 			}

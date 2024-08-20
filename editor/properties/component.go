@@ -24,7 +24,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		if len(entities) > 0 {
 			entities += ", "
 		}
-		entities += entity.Format()
+		entities += entity.String()
 		parentType = reflect.TypeOf(v.Parent()).Elem().String()
 	}
 

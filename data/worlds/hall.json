@@ -1845,16 +1845,6 @@
   },
   {
     "Entity": "25",
-    "behaviors.Proximity": {
-      "Entity": "25",
-      "Range": 100,
-      "Scripts": [
-        {
-          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.GetVerticalDoor(s.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
-          "Style": "ScriptStyleStatement"
-        }
-      ]
-    },
     "behaviors.VerticalDoor": {
       "Duration": 1000,
       "Entity": "25",
@@ -2714,8 +2704,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.1796875,
-          "Reverse": true,
+          "Percent": 0.6640625,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3786,11 +3776,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 29.633357037382027,
+          "End": 20.462246408216334,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.41666666666666674,
+          "Percent": 0.5468750000000001,
           "Reverse": false,
-          "Start": 33.536964549951236,
+          "Start": 44.25566088386451,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -6962,16 +6952,6 @@
   },
   {
     "Entity": "79",
-    "behaviors.Proximity": {
-      "Entity": "79",
-      "Range": 100,
-      "Scripts": [
-        {
-          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
-          "Style": "ScriptStyleStatement"
-        }
-      ]
-    },
     "behaviors.VerticalDoor": {
       "Duration": 1000,
       "Entity": "79",
@@ -7101,16 +7081,6 @@
   },
   {
     "Entity": "80",
-    "behaviors.Proximity": {
-      "Entity": "80",
-      "Range": 100,
-      "Scripts": [
-        {
-          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
-          "Style": "ScriptStyleStatement"
-        }
-      ]
-    },
     "behaviors.VerticalDoor": {
       "Duration": 1000,
       "Entity": "80",
@@ -7220,16 +7190,6 @@
   },
   {
     "Entity": "81",
-    "behaviors.Proximity": {
-      "Entity": "81",
-      "Range": 100,
-      "Scripts": [
-        {
-          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
-          "Style": "ScriptStyleStatement"
-        }
-      ]
-    },
     "behaviors.VerticalDoor": {
       "Duration": 1000,
       "Entity": "81",
@@ -10882,8 +10842,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.171875,
-          "Reverse": false,
+          "Percent": 0.984375,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10939,6 +10899,29 @@
         "R": 1
       },
       "Entity": "133"
+    }
+  },
+  {
+    "Entity": "134",
+    "behaviors.Proximity": {
+      "Entities": [
+        "79",
+        "25",
+        "81",
+        "80"
+      ],
+      "Entity": "134",
+      "Range": 100,
+      "Scripts": [
+        {
+          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
+          "Style": "ScriptStyleStatement"
+        }
+      ]
+    },
+    "ecs.Named": {
+      "Entity": "134",
+      "Name": "Proximity (Vertical Doors)"
     }
   },
   {

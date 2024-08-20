@@ -11,7 +11,7 @@ import (
 
 type ProximityController struct {
 	ecs.BaseController
-	*core.Body
+	*behaviors.Proximity
 }
 
 func init() {
@@ -19,7 +19,7 @@ func init() {
 }
 
 func (pc *ProximityController) ComponentIndex() int {
-	return core.BodyComponentIndex
+	return behaviors.ProximityComponentIndex
 }
 
 func (pc *ProximityController) Methods() ecs.ControllerMethod {
@@ -27,34 +27,36 @@ func (pc *ProximityController) Methods() ecs.ControllerMethod {
 }
 
 func (pc *ProximityController) Target(target ecs.Attachable) bool {
-	pc.Body = target.(*core.Body)
-	return pc.IsActive() && pc.SectorEntity != 0
+	pc.Proximity = target.(*behaviors.Proximity)
+	return pc.IsActive()
 }
 
-func (pc *ProximityController) proximity(sector *core.Sector, body *core.Body) {
-	// Consider the case where the sector entity has a proximity
-	// component that includes the body as a valid scripting source
-	if p := behaviors.GetProximity(pc.ECS, sector.Entity); p != nil && p.IsActive() {
-		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
-			BodySectorScript(p.Scripts, body, sector)
+func (pc *ProximityController) proximity(entity ecs.Entity) {
+	if sector := core.GetSector(pc.ECS, entity); sector != nil {
+		for _, pvs := range sector.PVS {
+			for _, body := range pvs.Bodies {
+				if sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
+					BodySectorScript(pc.Scripts, body, sector)
+				}
+			}
 		}
+		return
 	}
-
-	// Consider the case where the body entity has a proximity
-	// component that includes the sector as a valid scripting source
-	if p := behaviors.GetProximity(pc.ECS, body.Entity); p != nil && p.IsActive() {
-		if sector.Center.Dist2(&body.Pos.Now) < p.Range*p.Range {
-			BodySectorScript(p.Scripts, body, sector)
+	if body := core.GetBody(pc.ECS, entity); body != nil && body.SectorEntity != 0 {
+		container := body.Sector()
+		for _, sector := range container.PVS {
+			if sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
+				BodySectorScript(pc.Scripts, body, sector)
+			}
 		}
 	}
 }
 
 func (pc *ProximityController) Always() {
-	sector := pc.Sector()
-	if sector == nil {
-		return
-	}
-	for _, pvs := range sector.PVS {
-		pc.proximity(pvs, pc.Body)
+	// Is the target itself a body or sector?
+	pc.proximity(pc.Entity)
+
+	for entity := range pc.Entities {
+		pc.proximity(entity)
 	}
 }

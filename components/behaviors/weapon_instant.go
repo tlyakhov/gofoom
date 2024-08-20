@@ -68,7 +68,7 @@ func (w *WeaponInstant) Serialize() map[string]any {
 	result := w.Attached.Serialize()
 
 	if w.MarkMaterial != 0 {
-		result["MarkMaterial"] = w.MarkMaterial.Format()
+		result["MarkMaterial"] = w.MarkMaterial.String()
 	}
 
 	if w.MarkSize != 5 {

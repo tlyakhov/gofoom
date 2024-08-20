@@ -76,7 +76,7 @@ func (a *Attached) Construct(data map[string]any) {
 }
 
 func (a *Attached) Serialize() map[string]any {
-	result := map[string]any{"Entity": a.Entity.Format()}
+	result := map[string]any{"Entity": a.Entity.String()}
 	if !a.Active {
 		result["Active"] = a.Active
 	}

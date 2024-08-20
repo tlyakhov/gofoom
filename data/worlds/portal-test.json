@@ -205,7 +205,8 @@
       "Health": 100
     },
     "behaviors.Player": {
-      "Entity": "5"
+      "Entity": "5",
+      "Spawn": false
     },
     "core.Body": {
       "Angle": {

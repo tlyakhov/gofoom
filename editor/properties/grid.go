@@ -243,7 +243,7 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 			}
 		}
 		entities = append(entities, s.Entity)
-		entityList += s.Entity.Format()
+		entityList += s.Entity.String()
 		for index, c := range s.ECS.AllComponents(s.Entity) {
 			componentList[index] = (c != nil)
 		}
@@ -338,7 +338,11 @@ func (g *Grid) Refresh(selection *core.Selection) {
 		label.TextStyle.Bold = false
 		//label.Wrapping = fyne.TextWrapWord
 
-		switch field.Values[0].Value.Interface().(type) {
+		x := field.Values[0].Value.Interface()
+		/*		if x == nil {
+				x = reflect.New(field.Type).Interface()
+			}*/
+		switch x.(type) {
 		case *bool:
 			g.fieldBool(field)
 		case *string:
@@ -351,6 +355,8 @@ func (g *Grid) Refresh(selection *core.Selection) {
 				g.fieldString(field, false)
 			}
 		case *concepts.Set[string]:
+			g.fieldString(field, false)
+		case *concepts.Set[ecs.Entity]:
 			g.fieldString(field, false)
 		case *float32:
 			g.fieldNumber(field)
@@ -412,16 +418,8 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldAnimation(field)
 		case **ecs.Animation[concepts.Vector4]:
 			g.fieldAnimation(field)
-		case **ecs.DynamicValue[int]:
-			g.fieldAnimationTarget(field)
-		case **ecs.DynamicValue[float64]:
-			g.fieldAnimationTarget(field)
-		case **ecs.DynamicValue[concepts.Vector2]:
-			g.fieldAnimationTarget(field)
-		case **ecs.DynamicValue[concepts.Vector3]:
-			g.fieldAnimationTarget(field)
-		case **ecs.DynamicValue[concepts.Vector4]:
-			g.fieldAnimationTarget(field)
+		case **ecs.Animation[concepts.Matrix2]:
+			g.fieldAnimation(field)
 		default:
 			g.refreshIndex++
 			g.GridWidget.Add(widget.NewLabel("Unavailable"))

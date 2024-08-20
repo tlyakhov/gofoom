@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"reflect"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
@@ -68,8 +69,9 @@ type EditorMenu struct {
 
 	ViewSectorEntities MenuAction
 
-	BehaviorsPause MenuAction
-	BehaviorsReset MenuAction
+	BehaviorsPause   MenuAction
+	BehaviorsReset   MenuAction
+	BehaviorsRespawn MenuAction
 
 	MenuActions map[string]*MenuAction
 }
@@ -289,6 +291,10 @@ func CreateMainMenu() {
 		}
 		editor.Window.MainMenu().Items[3].Refresh()
 	})
+	editor.BehaviorsRespawn.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierAlt}
+	editor.BehaviorsRespawn.Menu = fyne.NewMenuItem("Respawn", func() {
+		controllers.Respawn(editor.ECS)
+	})
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)
 	menuEdit := fyne.NewMenu("Edit", editor.EditUndo.Menu, editor.EditRedo.Menu, fyne.NewMenuItemSeparator(),
@@ -306,7 +312,7 @@ func CreateMainMenu() {
 
 	menuView := fyne.NewMenu("View", editor.ViewSectorEntities.Menu)
 
-	menuBehaviors := fyne.NewMenu("Behaviors", editor.BehaviorsReset.Menu, editor.BehaviorsPause.Menu)
+	menuBehaviors := fyne.NewMenu("Behaviors", editor.BehaviorsReset.Menu, editor.BehaviorsPause.Menu, editor.BehaviorsRespawn.Menu)
 
 	mainMenu := fyne.NewMainMenu(menuFile, menuEdit, menuTools, menuView, menuBehaviors)
 	editor.Window.SetMainMenu(mainMenu)

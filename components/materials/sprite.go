@@ -77,7 +77,7 @@ func (s *Sprite) Construct(data map[string]any) {
 func (s *Sprite) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	if s.Image != 0 {
-		result["Image"] = s.Image.Format()
+		result["Image"] = s.Image.String()
 	}
 	if s.Rows != 1 {
 		result["Rows"] = strconv.FormatUint(uint64(s.Rows), 10)

@@ -29,7 +29,7 @@ func (bc *BodyController) Enter(eSector ecs.Entity) {
 	}
 	sector := core.GetSector(bc.Body.ECS, eSector)
 	if sector == nil {
-		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, eSector.String(bc.Body.ECS))
+		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, eSector.Format(bc.Body.ECS))
 		return
 	}
 	bc.Sector = sector

@@ -63,7 +63,7 @@ func (item *InventoryItem) Serialize() map[string]any {
 		result["Count"] = strconv.Itoa(item.Count)
 	}
 	if item.Image != 0 {
-		result["Image"] = item.Image.Format()
+		result["Image"] = item.Image.String()
 	}
 
 	return result

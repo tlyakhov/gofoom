@@ -53,7 +53,7 @@ func (s *InventorySlot) Serialize() map[string]any {
 	data := make(map[string]any)
 	data["Limit"] = strconv.Itoa(s.Limit)
 	data["Count"] = strconv.Itoa(s.Count)
-	data["Image"] = s.Image.Format()
+	data["Image"] = s.Image.String()
 	classes := ""
 	for c := range s.ValidClasses {
 		if len(classes) > 0 {

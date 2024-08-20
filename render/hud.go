@@ -77,7 +77,7 @@ func (r *Renderer) DebugInfo() {
 		entity := r.PlayerBody.SectorEntity
 		s := 0
 		core.GetSector(r.ECS, entity).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
-		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.String(r.ECS), s))
+		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.Format(r.ECS), s))
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", r.PlayerBody.Force.StringHuman(), r.PlayerBody.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
 	}
 

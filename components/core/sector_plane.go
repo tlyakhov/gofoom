@@ -25,9 +25,6 @@ func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
 	s.Sector = sector
 	s.Surface.Construct(sector.ECS, data)
 	s.ECS = sector.ECS
-	s.Normal[0] = 0
-	s.Normal[1] = 0
-	s.Normal[2] = 1
 
 	if data == nil {
 		return
@@ -62,7 +59,7 @@ func (s *SectorPlane) Serialize() map[string]any {
 		result["Normal"] = s.Normal.Serialize()
 	}
 	if s.Target != 0 {
-		result["Target"] = s.Target.Format()
+		result["Target"] = s.Target.String()
 	}
 	if len(s.Scripts) > 0 {
 		result["Scripts"] = ecs.SerializeSlice(s.Scripts)

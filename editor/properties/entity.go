@@ -89,7 +89,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	})
 	title := "Select " + editTypeTag
 	if origValue != 0 {
-		tree.Select(origValue.Format())
+		tree.Select(origValue.String())
 		title = editTypeTag + ": " + origValue.NameString(g.State().ECS)
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
