@@ -41,44 +41,55 @@ benefits as far as dynamic sectors, lighting, etc...
 - Architecture
   - Separation of game/engine code.
   - Entity/Component/System architecture
-  - Behavioral system for entities.
-  - Multi-threaded rendering using goroutines.
-  - No limits to sector/entity counts
+  - Multi-threaded rendering using goroutines
+  - No artificial limits on scale
 - Rendering
   - Sectors with non-orthogonal walls of variable height.
   - Texture mapped floors, ceilings, and walls.
   - Layered texture shaders
-  - Transparent walls and "stained glass"
+    - Arbitrary transforms on every stage
+    - Transparent walls and "stained glass"
+    - Bilinear filtering & mipmapping for images and shadow maps.
+    - Per-pixel alpha blending
   - Sloped floors and ceilings.
   - Objects represented as sprites with multiple angles.
   - Bitmap fonts
-  - Fully dynamic per-pixel lighting with dynamic shadow maps.
-  - Bilinear filtering & mipmapping for images and shadow maps.
-  - Per-pixel alpha blending
+  - Fully dynamic lighting with shadow maps.
 - Interactivity
   - Various effect sectors (doors, underwater sectors)
   - Physics and collision detection for player and objects.
+  - Instant hit ("hitscan") weapons
+  - Inventory
   - Custom scripting (in Golang!) for interactive in-game effects
+  - Animations capable of arbitrary easing functions
+  - In-game UI, retro DOS style
 - World editor:
   - Realtime 3D view, allowing live manipulation of the world by clicking.
   - Edit any sector/segment/entity property.
   - Slice sectors/split segments.
   - Automatic portal generation.
   - Undo/redo history.
+  - Copy/paste
 
 ### Soon:
 
-- More interactivity: inventory, weapons/projectiles, NPC movement
-- Internal sectors
-- "Pre-fabs" and instancing to enable more complex construction
+- More interactivity:
+  - Inventory, weapons/projectiles, NPC movement
+  - Keys, quest items
+  - Dialogues with NPCs
+  - Game success/failure conditions
+  - Sprite animations, "video"
+  - Save/Restore games
+- More UX for design
+  - Internal sectors
+  - "Pre-fabs" and instancing to enable more complex construction
 
 ## Repository Structure
 
 - [/archetypes](/archetypes/) - these are preset or template combinations of
   components to build up more complex entities.
 - [/concepts](/concepts/) - general types, interfaces, and functions.
-  Math, serialization, etc... Includes the ECS database and associated storage
-  methods for holding components.
+  Math, containers, etc...
 - [/constants](/constants/) - self-explanatory. Currently a mix of game and
   engine constants.
 - [/controllers](/controllers/) - the "systems" in the ECS architecture.
@@ -95,6 +106,7 @@ benefits as far as dynamic sectors, lighting, etc...
   - [/sectors](/components/sectors/) - these modify the behavior of basic
     sectors (e.g. underwater, doors, etc...)
 - [/data](/data/) - a bunch of test data.
+- [/ecs](/ecs/) - The ECS "database", query methods, serialization.
 - [/editor](/editor/) - all the code for the world editor.
 - [/game](/game/) - the game executable.
 - [/render](/render/) - the renderer and its state.

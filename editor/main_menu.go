@@ -293,7 +293,9 @@ func CreateMainMenu() {
 	})
 	editor.BehaviorsRespawn.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierAlt}
 	editor.BehaviorsRespawn.Menu = fyne.NewMenuItem("Respawn", func() {
-		controllers.Respawn(editor.ECS)
+		editor.Lock.Lock()
+		defer editor.Lock.Unlock()
+		controllers.Respawn(editor.ECS, true)
 	})
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)

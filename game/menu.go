@@ -80,7 +80,7 @@ func initializeMenus() {
 				}
 				archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 				renderer.Initialize()
-				controllers.Respawn(db)
+				controllers.Respawn(db, true)
 				db.Simulation.Integrate = integrateGame
 				db.Simulation.Render = renderGame
 				gameUI.Config.TextStyle = renderer.NewTextStyle()

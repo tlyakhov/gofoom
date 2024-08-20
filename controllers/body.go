@@ -97,6 +97,9 @@ func (bc *BodyController) Always() {
 	}
 	if bc.Sector != nil {
 		bc.Forces()
+	} else {
+		// Try to put this body into a sector
+		bc.Collide()
 	}
 	// Our physics are impulse-based. We do semi-implicit Euler calculations
 	// at each time step, and apply constraints (e.g. collision) directly to the velocities

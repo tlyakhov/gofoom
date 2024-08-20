@@ -16,9 +16,8 @@ import (
 
 // The architecture is like this:
 // * An entity is a globally unique integer (uint32), e.g. primary key
-// * A component is a named (string) table with columns of fields, rows of
-// entities
-// * A system is code that queries and operates on components and entities
+// * An entity can be associated with multiple components (one of each kind)
+// * A system (controller) is code that queries and operates on components and entities
 type ECS struct {
 	*Simulation
 	EntityComponents [][]Attachable
