@@ -177,6 +177,8 @@ func AutoPortal(db *ecs.ECS) {
 						}
 					}
 					if split {
+						sector.Recalculate()
+						sector2.Recalculate()
 						break
 					}
 				}

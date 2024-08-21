@@ -231,8 +231,12 @@ func (m *Matrix2) Deserialize(data []any) {
 	}
 }
 
-func (m *Matrix2) Serialize() [6]float64 {
-	return ([6]float64)(*m)
+func (m *Matrix2) Serialize() []any {
+	result := make([]any, 6)
+	for i, e := range m {
+		result[i] = e
+	}
+	return result
 }
 
 // ParseMatrix2 parses strings in the form "x,y,z,a,b,c" into matrices.

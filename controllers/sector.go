@@ -4,7 +4,6 @@
 package controllers
 
 import (
-	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/ecs"
 )
@@ -34,5 +33,4 @@ func (sc *SectorController) Target(target ecs.Attachable) bool {
 
 func (sc *SectorController) Recalculate() {
 	sc.Sector.Recalculate()
-	sc.Sector.LightmapBias[0] = math.MaxInt64
 }

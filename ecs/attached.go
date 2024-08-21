@@ -102,6 +102,13 @@ func ConstructSlice[PT interface {
 			result[i].SetECS(db)
 			result[i].Construct(dataElement.(map[string]any))
 		}
+	} else if dataSlice, ok := data.([]map[string]any); ok {
+		result = make([]PT, len(dataSlice))
+		for i, dataElement := range dataSlice {
+			result[i] = new(T)
+			result[i].SetECS(db)
+			result[i].Construct(dataElement)
+		}
 	}
 	return result
 }

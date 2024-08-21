@@ -8,8 +8,14 @@ import (
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 )
+
+// Declare conformity with interfaces
+var _ fyne.Draggable = (*AddSector)(nil)
+var _ desktop.Hoverable = (*AddSector)(nil)
+var _ desktop.Mouseable = (*AddSector)(nil)
 
 type AddSector struct {
 	AddEntity
@@ -23,7 +29,15 @@ func (a *AddSector) Act() {
 	//set cursor
 }
 
-func (a *AddSector) OnMouseDown(evt *desktop.MouseEvent) {
+func (a *AddSector) Dragged(d *fyne.DragEvent) {
+	a.MouseMoved(&desktop.MouseEvent{PointEvent: d.PointEvent})
+}
+
+func (a *AddSector) DragEnd() {
+	a.MouseUp(&desktop.MouseEvent{})
+}
+
+func (a *AddSector) MouseDown(evt *desktop.MouseEvent) {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	a.Mode = "AddSectorSegment"
@@ -47,7 +61,11 @@ func (a *AddSector) OnMouseDown(evt *desktop.MouseEvent) {
 	a.Sector.Segments = append(segs, &seg)
 	a.Sector.Recalculate()
 }
-func (a *AddSector) OnMouseMove() {
+
+func (a *AddSector) MouseIn(evt *desktop.MouseEvent) {}
+func (a *AddSector) MouseOut()                       {}
+
+func (a *AddSector) MouseMoved(evt *desktop.MouseEvent) {
 	if a.Mode != "AddSectorSegment" {
 		return
 	}
@@ -57,7 +75,10 @@ func (a *AddSector) OnMouseMove() {
 	seg.P = *a.WorldGrid(&a.State().MouseWorld)
 }
 
-func (a *AddSector) OnMouseUp() {
+func (a *AddSector) MouseUp(evt *desktop.MouseEvent) {
+	if a.Mode != "AddSectorSegment" {
+		return
+	}
 	a.Mode = "AddSector"
 
 	segs := a.Sector.Segments

@@ -140,12 +140,8 @@ func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
 		return
 	}
 
-	if v, ok := data["X"]; ok {
-		s.P[0] = v.(float64)
-	}
-	if v, ok := data["Y"]; ok {
-		s.P[1] = v.(float64)
-	}
+	s.P.Deserialize(data)
+
 	if v, ok := data["WallUVIgnoreSlope"]; ok {
 		s.WallUVIgnoreSlope = v.(bool)
 	}
