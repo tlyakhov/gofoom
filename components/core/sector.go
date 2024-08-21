@@ -228,6 +228,7 @@ func (s *Sector) Serialize() map[string]any {
 }
 
 func (s *Sector) Recalculate() {
+	// TODO: Make this method more efficient
 	concepts.V3(&s.Center, 0, 0, (s.Top.Z.Original+s.Bottom.Z.Original)/2)
 	concepts.V3(&s.Min, math.Inf(1), math.Inf(1), math.Inf(1))
 	concepts.V3(&s.Max, math.Inf(-1), math.Inf(-1), math.Inf(-1))
@@ -313,6 +314,7 @@ func (s *Sector) Recalculate() {
 	}
 
 	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
+	s.LightmapBias[0] = math.MaxInt64
 }
 
 func (s *Sector) InBounds(world *concepts.Vector3) bool {

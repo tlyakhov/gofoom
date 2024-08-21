@@ -61,7 +61,7 @@ func (p *Player) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Inventory"]; ok {
-		ecs.ConstructSlice[*InventoryItem](p.ECS, v)
+		p.Inventory = ecs.ConstructSlice[*InventorySlot](p.ECS, v)
 	}
 
 	if v, ok := data["CurrentWeapon"]; ok {

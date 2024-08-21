@@ -2704,8 +2704,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.6640625,
-          "Reverse": false,
+          "Percent": 0.6875,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3776,11 +3776,11 @@
           "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": 20.462246408216334,
+          "End": -157.26043741712905,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.5468750000000001,
+          "Percent": 0.8072916666666664,
           "Reverse": false,
-          "Start": 44.25566088386451,
+          "Start": -138.2472558156859,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -9459,19 +9459,15 @@
     "Entity": "107",
     "behaviors.Alive": {
       "Entity": "107",
-      "Health": 50
+      "Health": 100
     },
     "behaviors.Player": {
       "Entity": "107",
       "Spawn": false
     },
-    "behaviors.WeaponInstant": {
-      "Entity": "107",
-      "MarkMaterial": "113"
-    },
     "core.Body": {
       "Angle": {
-        "Original": 262.5
+        "Original": 0
       },
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
@@ -9482,9 +9478,9 @@
       "MountHeight": 15,
       "Pos": {
         "Original": {
-          "X": -320,
-          "Y": 185,
-          "Z": -44
+          "X": -390,
+          "Y": 180,
+          "Z": -32
         }
       },
       "Size": {
@@ -9500,6 +9496,10 @@
           "Z": 0
         }
       }
+    },
+    "ecs.Named": {
+      "Entity": "107",
+      "Name": "Player"
     }
   },
   {
@@ -10619,6 +10619,20 @@
     },
     "behaviors.Player": {
       "Entity": "126",
+      "Inventory": [
+        {
+          "Count": "0",
+          "Image": "133",
+          "Limit": "1",
+          "ValidClasses": "WeirdGun"
+        },
+        {
+          "Count": "0",
+          "Image": "98",
+          "Limit": "100",
+          "ValidClasses": "Pluk,Flower"
+        }
+      ],
       "Spawn": true
     },
     "core.Body": {
@@ -10842,7 +10856,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.984375,
+          "Percent": 0.3359375,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -10905,10 +10919,10 @@
     "Entity": "134",
     "behaviors.Proximity": {
       "Entities": [
-        "79",
-        "25",
         "81",
-        "80"
+        "80",
+        "79",
+        "25"
       ],
       "Entity": "134",
       "Range": 100,
