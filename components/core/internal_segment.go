@@ -21,7 +21,7 @@ type InternalSegment struct {
 var InternalSegmentComponentIndex int
 
 func init() {
-	InternalSegmentComponentIndex = ecs.Types().Register(InternalSegment{}, GetSector)
+	InternalSegmentComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[InternalSegment, *InternalSegment]{Getter: GetInternalSegment})
 }
 
 func GetInternalSegment(db *ecs.ECS, e ecs.Entity) *InternalSegment {
@@ -36,12 +36,9 @@ func (s *InternalSegment) String() string {
 }
 
 func (s *InternalSegment) DetachFromSectors() {
-	for _, attachable := range s.ECS.AllOfType(SectorComponentIndex) {
-		if attachable == nil {
-			continue
-		}
-		sector := attachable.(*Sector)
-		delete(sector.InternalSegments, s.Entity)
+	col := ecs.Column[Sector](s.ECS, SectorComponentIndex)
+	for i := range col.Length {
+		delete(col.Value(i).InternalSegments, s.Entity)
 	}
 }
 
@@ -54,11 +51,9 @@ func (s *InternalSegment) AttachToSectors() {
 	if min[1] > max[1] {
 		min[1], max[1] = max[1], min[1]
 	}
-	for _, attachable := range s.ECS.AllOfType(SectorComponentIndex) {
-		if attachable == nil {
-			continue
-		}
-		sector := attachable.(*Sector)
+	col := ecs.Column[Sector](s.ECS, SectorComponentIndex)
+	for i := range col.Length {
+		sector := col.Value(i)
 		// This is missing the spanning case, where an internal segment is
 		// passing through a sector, but neither endpoint is inside of it.
 		// Seems like an edge case we don't really need to handle.

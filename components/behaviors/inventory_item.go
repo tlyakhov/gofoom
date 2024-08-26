@@ -19,7 +19,7 @@ type InventoryItem struct {
 var InventoryItemComponentIndex int
 
 func init() {
-	InventoryItemComponentIndex = ecs.Types().Register(InventoryItem{}, GetInventoryItem)
+	InventoryItemComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[InventoryItem, *InventoryItem]{Getter: GetInventoryItem})
 }
 
 func GetInventoryItem(db *ecs.ECS, e ecs.Entity) *InventoryItem {

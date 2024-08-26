@@ -20,7 +20,7 @@ type Proximity struct {
 var ProximityComponentIndex int
 
 func init() {
-	ProximityComponentIndex = ecs.Types().Register(Proximity{}, GetProximity)
+	ProximityComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Proximity, *Proximity]{Getter: GetProximity})
 }
 
 func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {

@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -60,8 +61,9 @@ func (a *Select) end() {
 	hovering := a.State().HoveringObjects
 	if hovering.Empty() { // User is trying to select a sector?
 		hovering = core.NewSelection()
-		for _, isector := range a.State().ECS.AllOfType(core.SectorComponentIndex) {
-			sector := isector.(*core.Sector)
+		col := ecs.Column[core.Sector](a.State().ECS, core.SectorComponentIndex)
+		for i := range col.Length {
+			sector := col.Value(i)
 			if sector.IsPointInside2D(&a.State().MouseWorld) {
 				hovering.Add(core.SelectableFromSector(sector))
 			}

@@ -18,7 +18,7 @@ type Lit struct {
 var LitComponentIndex int
 
 func init() {
-	LitComponentIndex = ecs.Types().Register(Lit{}, GetLit)
+	LitComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Lit, *Lit]{Getter: GetLit})
 }
 
 func GetLit(db *ecs.ECS, e ecs.Entity) *Lit {

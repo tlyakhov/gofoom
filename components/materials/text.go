@@ -26,7 +26,7 @@ type Text struct {
 var TextComponentIndex int
 
 func init() {
-	TextComponentIndex = ecs.Types().Register(Text{}, GetText)
+	TextComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Text, *Text]{Getter: GetText})
 }
 
 func GetText(db *ecs.ECS, e ecs.Entity) *Text {

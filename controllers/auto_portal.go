@@ -137,10 +137,9 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // give the user the option of disabling auto-portalling in the editor and only
 // doing it manually every once in a while.
 func AutoPortal(db *ecs.ECS) {
-	seen := make(concepts.Set[string])
-	for _, c := range db.AllOfType(core.SectorComponentIndex) {
-		sector := c.(*core.Sector)
-		for _, segment := range sector.Segments {
+	col := ecs.Column[core.Sector](db, core.SectorComponentIndex)
+	for i := range col.Length {
+		for _, segment := range col.Value(i).Segments {
 			// Don't touch these during auto-portalling
 			if segment.PortalTeleports {
 				continue
@@ -149,19 +148,10 @@ func AutoPortal(db *ecs.ECS) {
 			segment.AdjacentSegment = nil
 		}
 	}
-	for _, c := range db.AllOfType(core.SectorComponentIndex) {
-		for _, c2 := range db.AllOfType(core.SectorComponentIndex) {
-			if c == c2 {
-				continue
-			}
-			sector := c.(*core.Sector)
-			sector2 := c2.(*core.Sector)
-			name := sector.Entity.String() + "|" + sector2.Entity.String()
-			id2 := sector2.Entity.String() + "|" + sector.Entity.String()
-			if seen.Contains(id2) || seen.Contains(name) {
-				continue
-			}
-			seen.Add(name)
+	for i := range col.Length {
+		for j := i + 1; j < col.Length; j++ {
+			sector := col.Value(i)
+			sector2 := col.Value(j)
 
 			if !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
 				continue

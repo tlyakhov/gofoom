@@ -39,7 +39,7 @@ type Sector struct {
 var SectorComponentIndex int
 
 func init() {
-	SectorComponentIndex = ecs.Types().Register(Sector{}, GetSector)
+	SectorComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Sector, *Sector]{Getter: GetSector})
 }
 
 func GetSector(db *ecs.ECS, e ecs.Entity) *Sector {

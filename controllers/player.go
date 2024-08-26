@@ -118,8 +118,9 @@ func MovePlayer(p *core.Body, angle float64, direct bool) {
 func Respawn(db *ecs.ECS, force bool) {
 	spawns := make([]*behaviors.Player, 0)
 	players := make([]*behaviors.Player, 0)
-	for _, attachable := range db.AllOfType(behaviors.PlayerComponentIndex) {
-		p := attachable.(*behaviors.Player)
+	col := ecs.Column[behaviors.Player](db, behaviors.PlayerComponentIndex)
+	for i := range col.Length {
+		p := col.Value(i)
 		if !p.Active {
 			continue
 		}
@@ -159,7 +160,7 @@ func Respawn(db *ecs.ECS, force bool) {
 		}
 		jsonComponent := jsonData.(map[string]any)
 		c := db.LoadComponentWithoutAttaching(index, jsonComponent)
-		db.Attach(index, pastedEntity, c)
+		c = db.Attach(index, pastedEntity, c)
 		if index == behaviors.PlayerComponentIndex {
 			player := c.(*behaviors.Player)
 			player.Spawn = false

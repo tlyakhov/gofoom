@@ -74,8 +74,9 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	for _, isector := range a.State().ECS.AllOfType(core.SectorComponentIndex) {
-		sector := isector.(*core.Sector)
+	col := ecs.Column[core.Sector](a.State().ECS, core.SectorComponentIndex)
+	for i := range col.Length {
+		sector := col.Value(i)
 		if sector.IsPointInside2D(worldGrid) {
 			a.ContainingSector = sector
 			break
