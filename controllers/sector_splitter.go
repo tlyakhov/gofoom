@@ -319,8 +319,9 @@ func (a *SectorSplitter) collect() {
 		}
 	}
 
-	for _, ibody := range a.Sector.ECS.AllOfType(core.BodyComponentIndex) {
-		body := ibody.(*core.Body)
+	col := ecs.Column[core.Body](a.Sector.ECS, core.BodyComponentIndex)
+	for i := range col.Length {
+		body := col.Value(i)
 		if body.SectorEntity != a.Sector.Entity {
 			continue
 		}

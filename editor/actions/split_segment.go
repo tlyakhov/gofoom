@@ -6,6 +6,7 @@ package actions
 import (
 	"slices"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
@@ -53,11 +54,10 @@ func (a *SplitSegment) OnMouseUp() {
 	// TODO: also split internal segments
 	var segments concepts.Set[*core.SectorSegment]
 	if a.State().SelectedObjects.Empty() {
-		allSectors := a.State().ECS.AllOfType(core.SectorComponentIndex)
+		col := ecs.Column[core.Sector](a.State().ECS, core.SectorComponentIndex)
 		segments = make(concepts.Set[*core.SectorSegment])
-		for _, attachable := range allSectors {
-			sector := attachable.(*core.Sector)
-			segments.AddAll(sector.Segments...)
+		for i := range col.Length {
+			segments.AddAll(col.Value(i).Segments...)
 		}
 	} else {
 		segments = make(concepts.Set[*core.SectorSegment])

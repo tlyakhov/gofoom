@@ -261,7 +261,7 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 
 	opts := make([]string, 0)
 	optsIndices := make([]int, 0)
-	for index, t := range ecs.Types().Types {
+	for index, t := range ecs.Types().ComponentColumns {
 		if t == nil || componentList[index] || index == ecs.AttachedComponentIndex {
 			continue
 		}

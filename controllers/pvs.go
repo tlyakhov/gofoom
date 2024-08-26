@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"log"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
@@ -33,9 +34,9 @@ func (pvs *PvsController) Target(target ecs.Attachable) bool {
 }
 
 func (pvs *PvsController) Recalculate() {
-	for _, attachable := range pvs.ECS.AllOfType(core.InternalSegmentComponentIndex) {
-		seg := attachable.(*core.InternalSegment)
-		seg.AttachToSectors()
+	col := ecs.Column[core.InternalSegment](pvs.ECS, core.InternalSegmentComponentIndex)
+	for i := range col.Length {
+		col.Value(i).AttachToSectors()
 	}
 	pvs.updatePVS(make([]*concepts.Vector2, 0), nil, nil, nil)
 }
@@ -50,6 +51,10 @@ func (pvs *PvsController) updatePVS(normals []*concepts.Vector2, visitor *core.S
 		pvs.Sector.PVS = make(map[ecs.Entity]*core.Sector)
 		pvs.Sector.PVL = make(map[ecs.Entity]*core.Body)
 		pvs.Sector.PVS[pvs.Entity] = pvs.Sector
+		x := ecs.Column[core.Sector](pvs.ECS, core.SectorComponentIndex).Value(pvs.Sector.IndexInECS())
+		y := core.GetSector(pvs.ECS, pvs.Entity)
+		log.Printf("PVS for %v - %p ?= %p ?= %p", pvs.Sector.Entity, pvs.Sector, x, y)
+		//pvs.Sector.Bottom.Z.SetAll(-200)
 		visitor = pvs.Sector
 	}
 

@@ -62,8 +62,9 @@ func (db *ECS) ActAllControllers(method ControllerMethod) {
 			continue
 		}
 
-		for _, c := range db.components[controller.ComponentIndex()] {
-			if !controller.Target(c) {
+		col := db.columns[controller.ComponentIndex()]
+		for i := range col.Len() {
+			if !controller.Target(col.Attachable(i)) {
 				continue
 			}
 			act(controller, method)

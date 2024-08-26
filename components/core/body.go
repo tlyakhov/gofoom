@@ -39,7 +39,7 @@ type Body struct {
 var BodyComponentIndex int
 
 func init() {
-	BodyComponentIndex = ecs.Types().Register(Body{}, GetBody)
+	BodyComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Body, *Body]{Getter: GetBody})
 }
 
 func GetBody(db *ecs.ECS, e ecs.Entity) *Body {
@@ -118,9 +118,10 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	for _, a := range b.ECS.AllOfType(SectorComponentIndex) {
-		sector = a.(*Sector)
-		if sector == nil || !sector.IsPointInside2D(p) {
+	col := ecs.Column[Sector](b.ECS, SectorComponentIndex)
+	for i := range col.Length {
+		sector := col.Value(i)
+		if sector.Entity == 0 || !sector.IsPointInside2D(p) {
 			continue
 		}
 		return sector

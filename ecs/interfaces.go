@@ -3,6 +3,16 @@
 
 package ecs
 
+import "reflect"
+
+type Serializable interface {
+	Construct(data map[string]any)
+	IsSystem() bool
+	Serialize() map[string]any
+	// TODO: Rename to Attach
+	SetECS(db *ECS)
+	GetECS() *ECS
+}
 type Attachable interface {
 	Serializable
 	String() string
@@ -13,13 +23,20 @@ type Attachable interface {
 	OnDetach()
 }
 
-type Serializable interface {
-	Construct(data map[string]any)
-	IsSystem() bool
-	Serialize() map[string]any
-	// TODO: Rename to Attach
-	SetECS(db *ECS)
-	GetECS() *ECS
+type AttachableColumn interface {
+	New() Attachable
+	Add(c Attachable) Attachable
+	Replace(c Attachable, index int) Attachable
+	Attachable(index int) Attachable
+	Detach(index int)
+	Type() reflect.Type
+	Len() int
+	String() string
+}
+
+type GenericAttachable[T any] interface {
+	*T
+	Attachable
 }
 
 // Dynamic is an interface for any value that is affected by time in the engine:

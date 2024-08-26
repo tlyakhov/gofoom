@@ -82,15 +82,18 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 		}
 	}
 
-	for _, a := range editor.ECS.AllOfType(core.SectorComponentIndex) {
-		mw.DrawSector(a.(*core.Sector), pvsSector[a.GetEntity()] != nil)
+	colSector := ecs.Column[core.Sector](editor.ECS, core.SectorComponentIndex)
+	for i := range colSector.Length {
+		mw.DrawSector(colSector.Value(i), pvsSector[colSector.Value(i).Entity] != nil)
 	}
-	for _, a := range editor.ECS.AllOfType(core.InternalSegmentComponentIndex) {
-		mw.DrawInternalSegment(a.(*core.InternalSegment))
+	colSeg := ecs.Column[core.InternalSegment](editor.ECS, core.InternalSegmentComponentIndex)
+	for i := range colSeg.Length {
+		mw.DrawInternalSegment(colSeg.Value(i))
 	}
 	if editor.BodiesVisible {
-		for _, a := range editor.ECS.AllOfType(core.BodyComponentIndex) {
-			mw.DrawBody(a.(*core.Body))
+		col3 := ecs.Column[core.Body](editor.ECS, core.BodyComponentIndex)
+		for i := range col3.Length {
+			mw.DrawBody(col3.Value(i))
 		}
 	}
 	/*// Portal testing code

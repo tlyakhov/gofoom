@@ -16,7 +16,7 @@ type Solid struct {
 var SolidComponentIndex int
 
 func init() {
-	SolidComponentIndex = ecs.Types().Register(Solid{}, GetSolid)
+	SolidComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Solid, *Solid]{Getter: GetSolid})
 }
 
 func GetSolid(db *ecs.ECS, e ecs.Entity) *Solid {

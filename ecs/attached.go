@@ -15,7 +15,7 @@ type Attached struct {
 var AttachedComponentIndex int
 
 func init() {
-	AttachedComponentIndex = Types().Register(Attached{}, nil)
+	AttachedComponentIndex = RegisterComponent(&ComponentColumn[Attached, *Attached]{})
 }
 
 func (a *Attached) IsActive() bool {

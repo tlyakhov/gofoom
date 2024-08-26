@@ -49,8 +49,9 @@ func (c *Config) Initialize() {
 }
 
 func (c *Config) RefreshPlayer() {
-	for _, attachable := range c.ECS.AllOfType(behaviors.PlayerComponentIndex) {
-		player := attachable.(*behaviors.Player)
+	col := ecs.Column[behaviors.Player](c.ECS, behaviors.PlayerComponentIndex)
+	for i := range col.Length {
+		player := col.Value(i)
 		if !player.Active || player.Spawn {
 			continue
 		}

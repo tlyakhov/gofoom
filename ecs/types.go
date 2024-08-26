@@ -20,8 +20,7 @@ type controllerMetadata struct {
 type typeMetadata struct {
 	Indexes           map[string]int
 	IndexesNoPackage  map[string]int
-	Types             []reflect.Type
-	Funcs             []any
+	ComponentColumns  []AttachableColumn
 	nextFreeComponent uint32
 	Controllers       []controllerMetadata
 	ExprEnv           map[string]any
@@ -44,36 +43,31 @@ func Types() *typeMetadata {
 	return globalTypeMetadata
 }
 
-func (ecsTypes *typeMetadata) Register(local any, fromDbFunc any) int {
+func RegisterComponent[T any, PT GenericAttachable[T]](column *ComponentColumn[T, PT]) int {
+	ecsTypes := Types()
 	ecsTypes.lock.Lock()
 	defer ecsTypes.lock.Unlock()
-	tLocal := reflect.ValueOf(local).Type()
-
-	if tLocal.Kind() == reflect.Ptr {
-		tLocal = tLocal.Elem()
-	}
 	index := (int)(atomic.AddUint32(&ecsTypes.nextFreeComponent, 1))
-	for len(ecsTypes.Types) < index+1 {
-		ecsTypes.Types = append(ecsTypes.Types, nil)
-		ecsTypes.Funcs = append(ecsTypes.Funcs, nil)
+	for len(ecsTypes.ComponentColumns) < index+1 {
+		ecsTypes.ComponentColumns = append(ecsTypes.ComponentColumns, nil)
 	}
 	// Remove the package prefix (e.g. "core.Body" -> "Body")
 	// see core.Expression
-	tSplit := strings.Split(tLocal.String(), ".")
+	column.typeOfT = reflect.TypeFor[T]()
+	tSplit := strings.Split(column.Type().String(), ".")
 	noPackage := tSplit[len(tSplit)-1]
 
-	ecsTypes.Types[index] = tLocal
-	ecsTypes.Funcs[index] = fromDbFunc
-	ecsTypes.Indexes[reflect.PointerTo(tLocal).String()] = index
-	ecsTypes.Indexes[tLocal.String()] = index
+	ecsTypes.ComponentColumns[index] = column
+	ecsTypes.Indexes[reflect.PointerTo(column.Type()).String()] = index
+	ecsTypes.Indexes[column.String()] = index
 	ecsTypes.IndexesNoPackage[noPackage] = index
-	ecsTypes.ExprEnv[noPackage] = fromDbFunc
+	ecsTypes.ExprEnv[noPackage] = column.Getter
 	return index
 }
 
-func (ecsTypes *typeMetadata) Type(name string) reflect.Type {
+func (ecsTypes *typeMetadata) Type(name string) AttachableColumn {
 	if index, ok := ecsTypes.Indexes[name]; ok {
-		return ecsTypes.Types[index]
+		return ecsTypes.ComponentColumns[index]
 	}
 	return nil
 }

@@ -495,8 +495,9 @@ func (e *Editor) GatherHoveringObjects() {
 
 	e.HoveringObjects.Clear()
 
-	for _, a := range e.ECS.AllOfType(core.SectorComponentIndex) {
-		sector := a.(*core.Sector)
+	col := ecs.Column[core.Sector](e.ECS, core.SectorComponentIndex)
+	for i := range col.Length {
+		sector := col.Value(i)
 
 		for _, segment := range sector.Segments {
 			if editor.Selecting() {
@@ -518,8 +519,10 @@ func (e *Editor) GatherHoveringObjects() {
 			}
 		}
 	}
-	for _, a := range e.ECS.AllOfType(core.InternalSegmentComponentIndex) {
-		seg := a.(*core.InternalSegment)
+
+	col2 := ecs.Column[core.InternalSegment](e.ECS, core.InternalSegmentComponentIndex)
+	for i := range col2.Length {
+		seg := col2.Value(i)
 		if editor.Selecting() {
 			a := (seg.A[0] >= v1[0] && seg.A[1] >= v1[1] && seg.A[0] <= v2[0] && seg.A[1] <= v2[1])
 			b := (seg.B[0] >= v1[0] && seg.B[1] >= v1[1] && seg.B[0] <= v2[0] && seg.B[1] <= v2[1])
@@ -542,8 +545,10 @@ func (e *Editor) GatherHoveringObjects() {
 			}
 		}
 	}
-	for _, a := range e.ECS.AllOfType(core.BodyComponentIndex) {
-		body := a.(*core.Body)
+
+	col3 := ecs.Column[core.Body](e.ECS, core.BodyComponentIndex)
+	for i := range col3.Length {
+		body := col3.Value(i)
 		p := body.Pos.Now
 		size := body.Size.Render[0]*0.5 + state.SegmentSelectionEpsilon
 		if e.Selecting() {

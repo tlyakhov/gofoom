@@ -93,8 +93,9 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
-	for _, attachable := range bc.Body.ECS.AllOfType(core.SectorComponentIndex) {
-		sector := attachable.(*core.Sector)
+	col := ecs.Column[core.Sector](bc.Body.ECS, core.SectorComponentIndex)
+	for i := range col.Length {
+		sector := col.Value(i)
 		if sector.IsPointInside2D(bc.pos2d) {
 			closestSector = sector
 			break
@@ -105,8 +106,8 @@ func (bc *BodyController) findBodySector() {
 		p := bc.Body.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
 		closestDistance2 := math.MaxFloat64
-		for _, attachable := range bc.Body.ECS.AllOfType(core.SectorComponentIndex) {
-			sector := attachable.(*core.Sector)
+		for i := range col.Length {
+			sector := col.Value(i)
 			for _, seg := range sector.Segments {
 				dist2 := seg.DistanceToPoint2(p)
 				if closestSector == nil || dist2 < closestDistance2 {
@@ -220,8 +221,9 @@ func (bc *BodyController) bodyExitsSector() {
 
 	if bc.Sector == nil {
 		// Case 6! This is the worst.
-		for _, component := range bc.Body.ECS.AllOfType(core.SectorComponentIndex) {
-			sector := component.(*core.Sector)
+		col := ecs.Column[core.Sector](bc.Body.ECS, core.SectorComponentIndex)
+		for i := range col.Length {
+			sector := col.Value(i)
 			floorZ, ceilZ := sector.ZAt(ecs.DynamicNow, bc.pos2d)
 			if bc.pos[2]-bc.halfHeight+bc.Body.MountHeight >= floorZ &&
 				bc.pos[2]+bc.halfHeight < ceilZ {

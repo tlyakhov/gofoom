@@ -21,7 +21,7 @@ type Path struct {
 var PathComponentIndex int
 
 func init() {
-	PathComponentIndex = ecs.Types().Register(Path{}, GetPath)
+	PathComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Path, *Path]{Getter: GetPath})
 }
 
 func GetPath(db *ecs.ECS, e ecs.Entity) *Path {

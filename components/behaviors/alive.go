@@ -24,7 +24,7 @@ type Alive struct {
 var AliveComponentIndex int
 
 func init() {
-	AliveComponentIndex = ecs.Types().Register(Alive{}, GetAlive)
+	AliveComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Alive, *Alive]{Getter: GetAlive})
 }
 
 func GetAlive(db *ecs.ECS, e ecs.Entity) *Alive {
