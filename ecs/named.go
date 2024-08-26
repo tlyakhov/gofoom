@@ -15,7 +15,7 @@ type Named struct {
 var NamedComponentIndex int
 
 func init() {
-	NamedComponentIndex = RegisterComponent(&ComponentColumn[Named, *Named]{Getter: GetNamed})
+	NamedComponentIndex = RegisterComponent(&Column[Named, *Named]{Getter: GetNamed})
 }
 
 func GetNamed(db *ECS, e Entity) *Named {

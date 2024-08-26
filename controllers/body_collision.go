@@ -93,7 +93,7 @@ func (bc *BodyController) PushBack(segment *core.SectorSegment) bool {
 func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
-	col := ecs.Column[core.Sector](bc.Body.ECS, core.SectorComponentIndex)
+	col := ecs.ColumnFor[core.Sector](bc.Body.ECS, core.SectorComponentIndex)
 	for i := range col.Length {
 		sector := col.Value(i)
 		if sector.IsPointInside2D(bc.pos2d) {
@@ -221,7 +221,7 @@ func (bc *BodyController) bodyExitsSector() {
 
 	if bc.Sector == nil {
 		// Case 6! This is the worst.
-		col := ecs.Column[core.Sector](bc.Body.ECS, core.SectorComponentIndex)
+		col := ecs.ColumnFor[core.Sector](bc.Body.ECS, core.SectorComponentIndex)
 		for i := range col.Length {
 			sector := col.Value(i)
 			floorZ, ceilZ := sector.ZAt(ecs.DynamicNow, bc.pos2d)

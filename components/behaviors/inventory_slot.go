@@ -65,7 +65,7 @@ func (s *InventorySlot) Serialize() map[string]any {
 	return data
 }
 
-func (s *InventorySlot) SetECS(db *ecs.ECS) {
+func (s *InventorySlot) AttachECS(db *ecs.ECS) {
 	s.ECS = db
 }
 func (s *InventorySlot) GetECS() *ecs.ECS {

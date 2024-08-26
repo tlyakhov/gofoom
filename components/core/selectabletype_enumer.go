@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _SelectableTypeName = "SelectableEntitySelectableSectorSelectableSectorSegmentSelectableCeilingSelectableFloorSelectableHiSelectableLowSelectableMidSelectableInternalSegmentSelectableInternalSegmentASelectableInternalSegmentBSelectableBody"
+const _SelectableTypeName = "SelectableEntitySelectableSectorSelectableSectorSegmentSelectableCeilingSelectableFloorSelectableHiSelectableLowSelectableMidSelectableInternalSegmentSelectableInternalSegmentASelectableInternalSegmentBSelectableBodySelectablePathSelectablePathSegment"
 
-var _SelectableTypeIndex = [...]uint8{0, 16, 32, 55, 72, 87, 99, 112, 125, 150, 176, 202, 216}
+var _SelectableTypeIndex = [...]uint8{0, 16, 32, 55, 72, 87, 99, 112, 125, 150, 176, 202, 216, 230, 251}
 
-const _SelectableTypeLowerName = "selectableentityselectablesectorselectablesectorsegmentselectableceilingselectablefloorselectablehiselectablelowselectablemidselectableinternalsegmentselectableinternalsegmentaselectableinternalsegmentbselectablebody"
+const _SelectableTypeLowerName = "selectableentityselectablesectorselectablesectorsegmentselectableceilingselectablefloorselectablehiselectablelowselectablemidselectableinternalsegmentselectableinternalsegmentaselectableinternalsegmentbselectablebodyselectablepathselectablepathsegment"
 
 func (i SelectableType) String() string {
 	if i < 0 || i >= SelectableType(len(_SelectableTypeIndex)-1) {
@@ -37,9 +37,11 @@ func _SelectableTypeNoOp() {
 	_ = x[SelectableInternalSegmentA-(9)]
 	_ = x[SelectableInternalSegmentB-(10)]
 	_ = x[SelectableBody-(11)]
+	_ = x[SelectablePath-(12)]
+	_ = x[SelectablePathSegment-(13)]
 }
 
-var _SelectableTypeValues = []SelectableType{SelectableEntity, SelectableSector, SelectableSectorSegment, SelectableCeiling, SelectableFloor, SelectableHi, SelectableLow, SelectableMid, SelectableInternalSegment, SelectableInternalSegmentA, SelectableInternalSegmentB, SelectableBody}
+var _SelectableTypeValues = []SelectableType{SelectableEntity, SelectableSector, SelectableSectorSegment, SelectableCeiling, SelectableFloor, SelectableHi, SelectableLow, SelectableMid, SelectableInternalSegment, SelectableInternalSegmentA, SelectableInternalSegmentB, SelectableBody, SelectablePath, SelectablePathSegment}
 
 var _SelectableTypeNameToValueMap = map[string]SelectableType{
 	_SelectableTypeName[0:16]:         SelectableEntity,
@@ -66,6 +68,10 @@ var _SelectableTypeNameToValueMap = map[string]SelectableType{
 	_SelectableTypeLowerName[176:202]: SelectableInternalSegmentB,
 	_SelectableTypeName[202:216]:      SelectableBody,
 	_SelectableTypeLowerName[202:216]: SelectableBody,
+	_SelectableTypeName[216:230]:      SelectablePath,
+	_SelectableTypeLowerName[216:230]: SelectablePath,
+	_SelectableTypeName[230:251]:      SelectablePathSegment,
+	_SelectableTypeLowerName[230:251]: SelectablePathSegment,
 }
 
 var _SelectableTypeNames = []string{
@@ -81,6 +87,8 @@ var _SelectableTypeNames = []string{
 	_SelectableTypeName[150:176],
 	_SelectableTypeName[176:202],
 	_SelectableTypeName[202:216],
+	_SelectableTypeName[216:230],
+	_SelectableTypeName[230:251],
 }
 
 // SelectableTypeString retrieves an enum value from the enum constants string name.

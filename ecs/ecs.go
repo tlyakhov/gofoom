@@ -64,8 +64,8 @@ func (db *ECS) NewEntity() Entity {
 	return Entity(nextFree)
 }
 
-func Column[T any, PT GenericAttachable[T]](db *ECS, index int) *ComponentColumn[T, PT] {
-	return db.columns[index].(*ComponentColumn[T, PT])
+func ColumnFor[T any, PT GenericAttachable[T]](db *ECS, index int) *Column[T, PT] {
+	return db.columns[index].(*Column[T, PT])
 }
 
 func (db *ECS) AllComponents(entity Entity) []Attachable {
@@ -114,7 +114,7 @@ func (db *ECS) attach(entity Entity, component Attachable, index int) Attachable
 	if ec = db.EntityComponents[entity]; ec != nil {
 		if ec[index] != nil {
 			// A component with this index is already attached to this entity, overwrite it.
-			componentsIndex := ec[index].IndexInECS()
+			componentsIndex := ec[index].IndexInColumn()
 			component = slice.Replace(component, componentsIndex)
 			component.SetEntity(entity)
 			ec[index] = component
@@ -161,7 +161,7 @@ func (db *ECS) LoadComponentWithoutAttaching(index int, data map[string]any) Att
 	}
 	component := Types().ComponentColumns[index].New()
 	component.SetEntity(0)
-	component.SetECS(db)
+	component.AttachECS(db)
 	component.Construct(data)
 	return component
 }
@@ -216,7 +216,7 @@ func (db *ECS) detach(index int, entity Entity, checkForEmpty bool) {
 		return
 	}
 	ec[index].OnDetach()
-	db.columns[index].Detach(ec[index].IndexInECS())
+	db.columns[index].Detach(ec[index].IndexInColumn())
 	ec[index] = nil
 
 	if checkForEmpty {
@@ -278,7 +278,7 @@ func (db *ECS) DetachAll(entity Entity) {
 }
 
 func (db *ECS) GetEntityByName(name string) Entity {
-	col := Column[Named](db, NamedComponentIndex)
+	col := ColumnFor[Named](db, NamedComponentIndex)
 	for i := range col.Length {
 		named := col.Value(i)
 		if named.Name == name {

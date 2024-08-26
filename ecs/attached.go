@@ -15,7 +15,7 @@ type Attached struct {
 var AttachedComponentIndex int
 
 func init() {
-	AttachedComponentIndex = RegisterComponent(&ComponentColumn[Attached, *Attached]{})
+	AttachedComponentIndex = RegisterComponent(&Column[Attached, *Attached]{})
 }
 
 func (a *Attached) IsActive() bool {
@@ -26,7 +26,7 @@ func (a *Attached) String() string {
 	return "Attached"
 }
 
-func (a *Attached) IndexInECS() int {
+func (a *Attached) IndexInColumn() int {
 	return a.indexInECS
 }
 
@@ -37,11 +37,11 @@ func (a *Attached) IsSystem() bool {
 	return a.System
 }
 
-func (a *Attached) SetIndexInECS(i int) {
+func (a *Attached) SetColumnIndex(i int) {
 	a.indexInECS = i
 }
 
-func (a *Attached) SetECS(db *ECS) {
+func (a *Attached) AttachECS(db *ECS) {
 	a.ECS = db
 }
 
@@ -99,14 +99,14 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].SetECS(db)
+			result[i].AttachECS(db)
 			result[i].Construct(dataElement.(map[string]any))
 		}
 	} else if dataSlice, ok := data.([]map[string]any); ok {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].SetECS(db)
+			result[i].AttachECS(db)
 			result[i].Construct(dataElement)
 		}
 	}

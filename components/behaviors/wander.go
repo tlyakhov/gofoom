@@ -22,7 +22,7 @@ type Wander struct {
 var WanderComponentIndex int
 
 func init() {
-	WanderComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Wander, *Wander]{Getter: GetWander})
+	WanderComponentIndex = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander})
 }
 
 func GetWander(db *ecs.ECS, e ecs.Entity) *Wander {

@@ -15,7 +15,7 @@ const chunkSize = 64
 // See https://utcc.utoronto.ca/~cks/space/blog/programming/GoSlicesVsPointers
 type componentChunk[T any, PT GenericAttachable[T]] [chunkSize]T
 
-type ComponentColumn[T any, PT GenericAttachable[T]] struct {
+type Column[T any, PT GenericAttachable[T]] struct {
 	*ECS
 	data  []*componentChunk[T, PT]
 	Index int
@@ -27,20 +27,20 @@ type ComponentColumn[T any, PT GenericAttachable[T]] struct {
 }
 
 // No bounds checking for performance. This should be inlined
-func (col *ComponentColumn[T, PT]) Value(index int) PT {
+func (col *Column[T, PT]) Value(index int) PT {
 	return &col.data[index/chunkSize][index%chunkSize]
 }
 
-func (c *ComponentColumn[T, PT]) Attachable(index int) Attachable {
+func (c *Column[T, PT]) Attachable(index int) Attachable {
 	return c.Value(index)
 }
 
-func (col *ComponentColumn[T, PT]) Detach(index int) {
+func (col *Column[T, PT]) Detach(index int) {
 	if index < col.Length {
 		if index != col.Length-1 {
 			// swap with last element
 			*col.Value(index) = *col.Value(col.Length - 1)
-			col.Value(index).SetIndexInECS(index)
+			col.Value(index).SetColumnIndex(index)
 		}
 		col.Length--
 		// If we've detached the last in a chunk, remove it
@@ -52,7 +52,7 @@ func (col *ComponentColumn[T, PT]) Detach(index int) {
 	}
 }
 
-func (col *ComponentColumn[T, PT]) Add(component Attachable) Attachable {
+func (col *Column[T, PT]) Add(component Attachable) Attachable {
 	chunk := col.Length / chunkSize
 	if chunk >= len(col.data) {
 		col.data = append(col.data, new(componentChunk[T, PT]))
@@ -64,37 +64,37 @@ func (col *ComponentColumn[T, PT]) Add(component Attachable) Attachable {
 	}
 
 	component = PT(&col.data[chunk][index])
-	component.SetIndexInECS(index)
-	component.SetECS(col.ECS)
+	component.SetColumnIndex(index)
+	component.AttachECS(col.ECS)
 	col.Length++
 	return component
 }
 
-func (col *ComponentColumn[T, PT]) Replace(component Attachable, index int) Attachable {
+func (col *Column[T, PT]) Replace(component Attachable, index int) Attachable {
 	if component == nil {
 		return col.Value(index)
 	}
 	ptr := col.Value(index)
 	*ptr = *(component.(PT))
 	component = ptr
-	component.SetIndexInECS(index)
-	component.SetECS(col.ECS)
+	component.SetColumnIndex(index)
+	component.AttachECS(col.ECS)
 	return component
 }
 
-func (c *ComponentColumn[T, PT]) New() Attachable {
+func (c *Column[T, PT]) New() Attachable {
 	var x T
 	return PT(&x)
 }
 
-func (c *ComponentColumn[T, PT]) Type() reflect.Type {
+func (c *Column[T, PT]) Type() reflect.Type {
 	return c.typeOfT
 }
 
-func (c *ComponentColumn[T, PT]) Len() int {
+func (c *Column[T, PT]) Len() int {
 	return c.Length
 }
 
-func (c *ComponentColumn[T, PT]) String() string {
+func (c *Column[T, PT]) String() string {
 	return c.typeOfT.String()
 }

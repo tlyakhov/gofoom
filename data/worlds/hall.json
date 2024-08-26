@@ -2704,8 +2704,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.6875,
-          "Reverse": true,
+          "Percent": 0.375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3773,14 +3773,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Active": true,
+          "Active": false,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -157.26043741712905,
+          "End": -110.39799229536456,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.8072916666666664,
+          "Percent": 1,
           "Reverse": false,
-          "Start": -138.2472558156859,
+          "Start": -114.20256201360384,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -10856,8 +10856,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.3359375,
-          "Reverse": true,
+          "Percent": 0.7265625,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10936,6 +10936,29 @@
     "ecs.Named": {
       "Entity": "134",
       "Name": "Proximity (Vertical Doors)"
+    }
+  },
+  {
+    "Entity": "135",
+    "core.Path": {
+      "Entity": "135",
+      "Segments": [
+        {
+          "X": -310,
+          "Y": 170,
+          "Z": 0
+        },
+        {
+          "X": -320,
+          "Y": -180,
+          "Z": 0
+        },
+        {
+          "X": 10,
+          "Y": 0,
+          "Z": 0
+        }
+      ]
     }
   },
   {

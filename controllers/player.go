@@ -118,7 +118,7 @@ func MovePlayer(p *core.Body, angle float64, direct bool) {
 func Respawn(db *ecs.ECS, force bool) {
 	spawns := make([]*behaviors.Player, 0)
 	players := make([]*behaviors.Player, 0)
-	col := ecs.Column[behaviors.Player](db, behaviors.PlayerComponentIndex)
+	col := ecs.ColumnFor[behaviors.Player](db, behaviors.PlayerComponentIndex)
 	for i := range col.Length {
 		p := col.Value(i)
 		if !p.Active {

@@ -42,6 +42,7 @@ func init() {
 		"NewECS":                       reflect.ValueOf(ecs.NewECS),
 		"NewSimulation":                reflect.ValueOf(ecs.NewSimulation),
 		"ParseEntity":                  reflect.ValueOf(ecs.ParseEntity),
+		"SerializeEntities":            reflect.ValueOf(ecs.SerializeEntities),
 		"Types":                        reflect.ValueOf(ecs.Types),
 
 		// type definitions
@@ -49,6 +50,7 @@ func init() {
 		"AnimationCoordinates": reflect.ValueOf((*ecs.AnimationCoordinates)(nil)),
 		"AnimationLifetime":    reflect.ValueOf((*ecs.AnimationLifetime)(nil)),
 		"Attachable":           reflect.ValueOf((*ecs.Attachable)(nil)),
+		"AttachableColumn":     reflect.ValueOf((*ecs.AttachableColumn)(nil)),
 		"Attached":             reflect.ValueOf((*ecs.Attached)(nil)),
 		"BaseController":       reflect.ValueOf((*ecs.BaseController)(nil)),
 		"Controller":           reflect.ValueOf((*ecs.Controller)(nil)),
@@ -60,13 +62,16 @@ func init() {
 		"Named":                reflect.ValueOf((*ecs.Named)(nil)),
 		"Serializable":         reflect.ValueOf((*ecs.Serializable)(nil)),
 		"Simulation":           reflect.ValueOf((*ecs.Simulation)(nil)),
+		"SubSerializable":      reflect.ValueOf((*ecs.SubSerializable)(nil)),
 
 		// interface wrapper definitions
-		"_Animated":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Animated)(nil)),
-		"_Attachable":   reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
-		"_Controller":   reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
-		"_Dynamic":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Dynamic)(nil)),
-		"_Serializable": reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
+		"_Animated":         reflect.ValueOf((*_tlyakhov_gofoom_ecs_Animated)(nil)),
+		"_Attachable":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
+		"_AttachableColumn": reflect.ValueOf((*_tlyakhov_gofoom_ecs_AttachableColumn)(nil)),
+		"_Controller":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
+		"_Dynamic":          reflect.ValueOf((*_tlyakhov_gofoom_ecs_Dynamic)(nil)),
+		"_Serializable":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
+		"_SubSerializable":  reflect.ValueOf((*_tlyakhov_gofoom_ecs_SubSerializable)(nil)),
 	}
 }
 
@@ -74,16 +79,19 @@ func init() {
 type _tlyakhov_gofoom_ecs_Animated struct {
 	IValue     interface{}
 	WAnimate   func()
+	WAttachECS func(db *ecs.ECS)
 	WConstruct func(data map[string]any)
 	WGetECS    func() *ecs.ECS
 	WIsSystem  func() bool
 	WReset     func()
 	WSerialize func() map[string]any
-	WSetECS    func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Animated) Animate() {
 	W.WAnimate()
+}
+func (W _tlyakhov_gofoom_ecs_Animated) AttachECS(db *ecs.ECS) {
+	W.WAttachECS(db)
 }
 func (W _tlyakhov_gofoom_ecs_Animated) Construct(data map[string]any) {
 	W.WConstruct(data)
@@ -100,26 +108,26 @@ func (W _tlyakhov_gofoom_ecs_Animated) Reset() {
 func (W _tlyakhov_gofoom_ecs_Animated) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Animated) SetECS(db *ecs.ECS) {
-	W.WSetECS(db)
-}
 
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_ecs_Attachable struct {
-	IValue         interface{}
-	WConstruct     func(data map[string]any)
-	WGetECS        func() *ecs.ECS
-	WGetEntity     func() ecs.Entity
-	WIndexInECS    func() int
-	WIsSystem      func() bool
-	WOnDetach      func()
-	WSerialize     func() map[string]any
-	WSetECS        func(db *ecs.ECS)
-	WSetEntity     func(entity ecs.Entity)
-	WSetIndexInECS func(a0 int)
-	WString        func() string
+	IValue          interface{}
+	WAttachECS      func(db *ecs.ECS)
+	WConstruct      func(data map[string]any)
+	WGetECS         func() *ecs.ECS
+	WGetEntity      func() ecs.Entity
+	WIndexInColumn  func() int
+	WIsSystem       func() bool
+	WOnDetach       func()
+	WSerialize      func() map[string]any
+	WSetColumnIndex func(a0 int)
+	WSetEntity      func(entity ecs.Entity)
+	WString         func() string
 }
 
+func (W _tlyakhov_gofoom_ecs_Attachable) AttachECS(db *ecs.ECS) {
+	W.WAttachECS(db)
+}
 func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
@@ -129,8 +137,8 @@ func (W _tlyakhov_gofoom_ecs_Attachable) GetECS() *ecs.ECS {
 func (W _tlyakhov_gofoom_ecs_Attachable) GetEntity() ecs.Entity {
 	return W.WGetEntity()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) IndexInECS() int {
-	return W.WIndexInECS()
+func (W _tlyakhov_gofoom_ecs_Attachable) IndexInColumn() int {
+	return W.WIndexInColumn()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) IsSystem() bool {
 	return W.WIsSystem()
@@ -141,20 +149,58 @@ func (W _tlyakhov_gofoom_ecs_Attachable) OnDetach() {
 func (W _tlyakhov_gofoom_ecs_Attachable) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) SetECS(db *ecs.ECS) {
-	W.WSetECS(db)
+func (W _tlyakhov_gofoom_ecs_Attachable) SetColumnIndex(a0 int) {
+	W.WSetColumnIndex(a0)
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) SetEntity(entity ecs.Entity) {
 	W.WSetEntity(entity)
-}
-func (W _tlyakhov_gofoom_ecs_Attachable) SetIndexInECS(a0 int) {
-	W.WSetIndexInECS(a0)
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) String() string {
 	if W.WString == nil {
 		return ""
 	}
 	return W.WString()
+}
+
+// _tlyakhov_gofoom_ecs_AttachableColumn is an interface wrapper for AttachableColumn type
+type _tlyakhov_gofoom_ecs_AttachableColumn struct {
+	IValue      interface{}
+	WAdd        func(c ecs.Attachable) ecs.Attachable
+	WAttachable func(index int) ecs.Attachable
+	WDetach     func(index int)
+	WLen        func() int
+	WNew        func() ecs.Attachable
+	WReplace    func(c ecs.Attachable, index int) ecs.Attachable
+	WString     func() string
+	WType       func() reflect.Type
+}
+
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Add(c ecs.Attachable) ecs.Attachable {
+	return W.WAdd(c)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Attachable(index int) ecs.Attachable {
+	return W.WAttachable(index)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Detach(index int) {
+	W.WDetach(index)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Len() int {
+	return W.WLen()
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) New() ecs.Attachable {
+	return W.WNew()
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Replace(c ecs.Attachable, index int) ecs.Attachable {
+	return W.WReplace(c, index)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) String() string {
+	if W.WString == nil {
+		return ""
+	}
+	return W.WString()
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Type() reflect.Type {
+	return W.WType()
 }
 
 // _tlyakhov_gofoom_ecs_Controller is an interface wrapper for Controller type
@@ -191,6 +237,7 @@ func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable) bool {
 type _tlyakhov_gofoom_ecs_Dynamic struct {
 	IValue           interface{}
 	WAttach          func(sim *ecs.Simulation)
+	WAttachECS       func(db *ecs.ECS)
 	WConstruct       func(data map[string]any)
 	WDetach          func(sim *ecs.Simulation)
 	WGetAnimation    func() ecs.Animated
@@ -200,11 +247,13 @@ type _tlyakhov_gofoom_ecs_Dynamic struct {
 	WRenderBlend     func(a0 float64)
 	WResetToOriginal func()
 	WSerialize       func() map[string]any
-	WSetECS          func(db *ecs.ECS)
 }
 
 func (W _tlyakhov_gofoom_ecs_Dynamic) Attach(sim *ecs.Simulation) {
 	W.WAttach(sim)
+}
+func (W _tlyakhov_gofoom_ecs_Dynamic) AttachECS(db *ecs.ECS) {
+	W.WAttachECS(db)
 }
 func (W _tlyakhov_gofoom_ecs_Dynamic) Construct(data map[string]any) {
 	W.WConstruct(data)
@@ -233,20 +282,20 @@ func (W _tlyakhov_gofoom_ecs_Dynamic) ResetToOriginal() {
 func (W _tlyakhov_gofoom_ecs_Dynamic) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Dynamic) SetECS(db *ecs.ECS) {
-	W.WSetECS(db)
-}
 
 // _tlyakhov_gofoom_ecs_Serializable is an interface wrapper for Serializable type
 type _tlyakhov_gofoom_ecs_Serializable struct {
 	IValue     interface{}
+	WAttachECS func(db *ecs.ECS)
 	WConstruct func(data map[string]any)
 	WGetECS    func() *ecs.ECS
 	WIsSystem  func() bool
 	WSerialize func() map[string]any
-	WSetECS    func(db *ecs.ECS)
 }
 
+func (W _tlyakhov_gofoom_ecs_Serializable) AttachECS(db *ecs.ECS) {
+	W.WAttachECS(db)
+}
 func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
@@ -259,6 +308,17 @@ func (W _tlyakhov_gofoom_ecs_Serializable) IsSystem() bool {
 func (W _tlyakhov_gofoom_ecs_Serializable) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Serializable) SetECS(db *ecs.ECS) {
-	W.WSetECS(db)
+
+// _tlyakhov_gofoom_ecs_SubSerializable is an interface wrapper for SubSerializable type
+type _tlyakhov_gofoom_ecs_SubSerializable struct {
+	IValue     interface{}
+	WConstruct func(ecs *ecs.ECS, data map[string]any)
+	WSerialize func() map[string]any
+}
+
+func (W _tlyakhov_gofoom_ecs_SubSerializable) Construct(ecs *ecs.ECS, data map[string]any) {
+	W.WConstruct(ecs, data)
+}
+func (W _tlyakhov_gofoom_ecs_SubSerializable) Serialize() map[string]any {
+	return W.WSerialize()
 }

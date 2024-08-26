@@ -82,7 +82,7 @@ func (s *Script) Compile() {
 	s.runFunc = f.Interface()
 }
 
-func (s *Script) SetECS(db *ecs.ECS) {
+func (s *Script) AttachECS(db *ecs.ECS) {
 	s.ECS = db
 }
 

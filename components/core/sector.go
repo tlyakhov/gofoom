@@ -39,7 +39,7 @@ type Sector struct {
 var SectorComponentIndex int
 
 func init() {
-	SectorComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Sector, *Sector]{Getter: GetSector})
+	SectorComponentIndex = ecs.RegisterComponent(&ecs.Column[Sector, *Sector]{Getter: GetSector})
 }
 
 func GetSector(db *ecs.ECS, e ecs.Entity) *Sector {
@@ -86,11 +86,11 @@ func (s *Sector) OnDetach() {
 	s.Attached.OnDetach()
 }
 
-func (s *Sector) SetECS(db *ecs.ECS) {
+func (s *Sector) AttachECS(db *ecs.ECS) {
 	if s.ECS != db {
 		s.OnDetach()
 	}
-	s.Attached.SetECS(db)
+	s.Attached.AttachECS(db)
 	s.Top.Z.Attach(db.Simulation)
 	s.Bottom.Z.Attach(db.Simulation)
 }
@@ -238,7 +238,6 @@ func (s *Sector) Recalculate() {
 		// Can't use prev/next pointers because they haven't been initialized yet.
 		next := s.Segments[(i+1)%len(s.Segments)]
 		sum += (next.P[0] - segment.P[0]) * (segment.P[1] + next.P[1])
-		segment.Index = i
 	}
 
 	if sum < 0 {
@@ -257,6 +256,7 @@ func (s *Sector) Recalculate() {
 			next.Prev = prev
 			continue
 		}
+		segment.Index = len(filtered)
 		filtered = append(filtered, segment)
 		segment.Next = next
 		next.Prev = segment

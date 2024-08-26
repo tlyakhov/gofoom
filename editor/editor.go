@@ -382,7 +382,7 @@ func (e *Editor) NewShader() {
 		eShader := archetypes.CreateBasic(e.ECS, materials.ShaderComponentIndex)
 		shader := materials.GetShader(e.ECS, eShader)
 		stage := &materials.ShaderStage{}
-		stage.SetECS(e.ECS)
+		stage.AttachECS(e.ECS)
 		stage.Construct(nil)
 		stage.Texture = eImg
 		shader.Stages = append(shader.Stages, stage)
@@ -495,9 +495,9 @@ func (e *Editor) GatherHoveringObjects() {
 
 	e.HoveringObjects.Clear()
 
-	col := ecs.Column[core.Sector](e.ECS, core.SectorComponentIndex)
-	for i := range col.Length {
-		sector := col.Value(i)
+	colSector := ecs.ColumnFor[core.Sector](e.ECS, core.SectorComponentIndex)
+	for i := range colSector.Length {
+		sector := colSector.Value(i)
 
 		for _, segment := range sector.Segments {
 			if editor.Selecting() {
@@ -520,9 +520,9 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	col2 := ecs.Column[core.InternalSegment](e.ECS, core.InternalSegmentComponentIndex)
-	for i := range col2.Length {
-		seg := col2.Value(i)
+	colSeg := ecs.ColumnFor[core.InternalSegment](e.ECS, core.InternalSegmentComponentIndex)
+	for i := range colSeg.Length {
+		seg := colSeg.Value(i)
 		if editor.Selecting() {
 			a := (seg.A[0] >= v1[0] && seg.A[1] >= v1[1] && seg.A[0] <= v2[0] && seg.A[1] <= v2[1])
 			b := (seg.B[0] >= v1[0] && seg.B[1] >= v1[1] && seg.B[0] <= v2[0] && seg.B[1] <= v2[1])
@@ -546,9 +546,29 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	col3 := ecs.Column[core.Body](e.ECS, core.BodyComponentIndex)
-	for i := range col3.Length {
-		body := col3.Value(i)
+	colPath := ecs.ColumnFor[core.Path](e.ECS, core.PathComponentIndex)
+	for i := range colPath.Length {
+		path := colPath.Value(i)
+
+		for _, segment := range path.Segments {
+			if editor.Selecting() {
+				if segment.P[0] >= v1[0] && segment.P[1] >= v1[1] && segment.P[0] <= v2[0] && segment.P[1] <= v2[1] {
+					e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
+				}
+			} else {
+				if e.MouseWorld.Sub(segment.P.To2D()).Length() < state.SegmentSelectionEpsilon {
+					e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
+				}
+				/*if segment.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
+					e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
+				}*/
+			}
+		}
+	}
+
+	colBody := ecs.ColumnFor[core.Body](e.ECS, core.BodyComponentIndex)
+	for i := range colBody.Length {
+		body := colBody.Value(i)
 		p := body.Pos.Now
 		size := body.Size.Render[0]*0.5 + state.SegmentSelectionEpsilon
 		if e.Selecting() {

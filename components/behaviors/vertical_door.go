@@ -42,7 +42,7 @@ type VerticalDoor struct {
 var VerticalDoorComponentIndex int
 
 func init() {
-	VerticalDoorComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[VerticalDoor, *VerticalDoor]{Getter: GetVerticalDoor})
+	VerticalDoorComponentIndex = ecs.RegisterComponent(&ecs.Column[VerticalDoor, *VerticalDoor]{Getter: GetVerticalDoor})
 	dis := DoorIntentStrings()
 	div := DoorIntentValues()
 	for i, s := range dis {

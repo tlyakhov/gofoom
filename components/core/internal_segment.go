@@ -21,7 +21,7 @@ type InternalSegment struct {
 var InternalSegmentComponentIndex int
 
 func init() {
-	InternalSegmentComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[InternalSegment, *InternalSegment]{Getter: GetInternalSegment})
+	InternalSegmentComponentIndex = ecs.RegisterComponent(&ecs.Column[InternalSegment, *InternalSegment]{Getter: GetInternalSegment})
 }
 
 func GetInternalSegment(db *ecs.ECS, e ecs.Entity) *InternalSegment {
@@ -36,7 +36,7 @@ func (s *InternalSegment) String() string {
 }
 
 func (s *InternalSegment) DetachFromSectors() {
-	col := ecs.Column[Sector](s.ECS, SectorComponentIndex)
+	col := ecs.ColumnFor[Sector](s.ECS, SectorComponentIndex)
 	for i := range col.Length {
 		delete(col.Value(i).InternalSegments, s.Entity)
 	}
@@ -51,7 +51,7 @@ func (s *InternalSegment) AttachToSectors() {
 	if min[1] > max[1] {
 		min[1], max[1] = max[1], min[1]
 	}
-	col := ecs.Column[Sector](s.ECS, SectorComponentIndex)
+	col := ecs.ColumnFor[Sector](s.ECS, SectorComponentIndex)
 	for i := range col.Length {
 		sector := col.Value(i)
 		// This is missing the spanning case, where an internal segment is

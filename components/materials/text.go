@@ -26,7 +26,7 @@ type Text struct {
 var TextComponentIndex int
 
 func init() {
-	TextComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Text, *Text]{Getter: GetText})
+	TextComponentIndex = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText})
 }
 
 func GetText(db *ecs.ECS, e ecs.Entity) *Text {
@@ -42,11 +42,11 @@ func (t *Text) OnDetach() {
 	}
 	t.Attached.OnDetach()
 }
-func (t *Text) SetECS(db *ecs.ECS) {
+func (t *Text) AttachECS(db *ecs.ECS) {
 	if t.ECS != db {
 		t.OnDetach()
 	}
-	t.Attached.SetECS(db)
+	t.Attached.AttachECS(db)
 	t.Color.Attach(db.Simulation)
 }
 

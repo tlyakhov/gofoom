@@ -25,6 +25,8 @@ const (
 	SelectableInternalSegmentA
 	SelectableInternalSegmentB
 	SelectableBody
+	SelectablePath
+	SelectablePathSegment
 )
 
 var typeGroups = map[SelectableType]SelectableType{
@@ -41,6 +43,9 @@ var typeGroups = map[SelectableType]SelectableType{
 	SelectableInternalSegment:  SelectableInternalSegment,
 	SelectableInternalSegmentA: SelectableInternalSegment,
 	SelectableInternalSegmentB: SelectableInternalSegment,
+	// Paths
+	SelectablePath:        SelectablePath,
+	SelectablePathSegment: SelectablePathSegment,
 	// Other
 	SelectableBody:   SelectableBody,
 	SelectableEntity: SelectableEntity,
@@ -58,21 +63,25 @@ type Selectable struct {
 	Body            *Body
 	SectorSegment   *SectorSegment
 	InternalSegment *InternalSegment
+	Path            *Path
+	PathSegment     *PathSegment
 }
 
 func (s *Selectable) Hash() uint64 {
 	if s.SectorSegment != nil {
 		// 4 bits for type, 16 bits for segment index, 44 bits for entity
 		return (uint64(s.Type) << 60) | uint64(s.SectorSegment.Index<<44) | uint64(s.Entity)
+	} else if s.PathSegment != nil {
+		// 4 bits for type, 16 bits for segment index, 44 bits for entity
+		return (uint64(s.Type) << 60) | uint64(s.PathSegment.Index<<44) | uint64(s.Entity)
 	}
 	// 4 bits for type, 60 bits for entity
 	return (uint64(s.Type) << 60) | uint64(s.Entity)
 }
 
 func (s *Selectable) GroupHash() uint64 {
-	if s.SectorSegment != nil {
-		// 4 bits for type, 16 bits for segment index, 44 bits for entity
-		return (uint64(SelectableSectorSegment) << 60) | uint64(s.SectorSegment.Index<<44) | uint64(s.Entity)
+	if s.SectorSegment != nil || s.PathSegment != nil {
+		return s.Hash()
 	}
 	// 4 bits for type, 60 bits for entity
 	return (uint64(typeGroups[s.Type]) << 60) | uint64(s.Entity)
@@ -139,6 +148,19 @@ func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
 		ECS:             s.ECS}
 }
 
+func SelectableFromPath(p *Path) *Selectable {
+	return &Selectable{Type: SelectablePath, Path: p, Entity: p.Entity, ECS: p.ECS}
+}
+
+func SelectableFromPathSegment(s *PathSegment) *Selectable {
+	return &Selectable{
+		Type:        SelectablePathSegment,
+		Path:        s.Path,
+		PathSegment: s,
+		Entity:      s.Path.Entity,
+		ECS:         s.ECS}
+}
+
 func SelectableFromEntity(db *ecs.ECS, e ecs.Entity) *Selectable {
 	if sector := GetSector(db, e); sector != nil {
 		return SelectableFromSector(sector)
@@ -148,6 +170,9 @@ func SelectableFromEntity(db *ecs.ECS, e ecs.Entity) *Selectable {
 	}
 	if seg := GetInternalSegment(db, e); seg != nil {
 		return SelectableFromInternalSegment(seg)
+	}
+	if path := GetPath(db, e); path != nil {
+		return SelectableFromPath(path)
 	}
 	return &Selectable{Type: SelectableEntity, Entity: e, ECS: db}
 }
@@ -174,6 +199,14 @@ func (s *Selectable) Transform(m *concepts.Matrix2) {
 	case SelectableSectorSegment:
 		m.ProjectSelf(&s.SectorSegment.P)
 		s.Sector.Recalculate()
+	case SelectablePath:
+		for _, seg := range s.Path.Segments {
+			m.ProjectSelf(seg.P.To2D())
+		}
+		s.Path.Recalculate()
+	case SelectablePathSegment:
+		m.ProjectSelf(s.PathSegment.P.To2D())
+		s.Path.Recalculate()
 	case SelectableBody:
 		m.ProjectXYSelf(&s.Body.Pos.Original)
 		s.Body.Pos.ResetToOriginal()
@@ -202,6 +235,10 @@ func (s *Selectable) Recalculate() {
 		fallthrough
 	case SelectableSectorSegment:
 		s.Sector.Recalculate()
+	case SelectablePath:
+		fallthrough
+	case SelectablePathSegment:
+		s.Path.Recalculate()
 	case SelectableBody:
 		s.Body.Pos.ResetToOriginal()
 	case SelectableInternalSegmentA:

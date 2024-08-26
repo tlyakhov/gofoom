@@ -19,7 +19,7 @@ type Light struct {
 var LightComponentIndex int
 
 func init() {
-	LightComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Light, *Light]{Getter: GetLight})
+	LightComponentIndex = ecs.RegisterComponent(&ecs.Column[Light, *Light]{Getter: GetLight})
 }
 
 func GetLight(db *ecs.ECS, e ecs.Entity) *Light {

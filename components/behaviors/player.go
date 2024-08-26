@@ -27,7 +27,7 @@ type Player struct {
 var PlayerComponentIndex int
 
 func init() {
-	PlayerComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Player, *Player]{Getter: GetPlayer})
+	PlayerComponentIndex = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer})
 }
 
 func GetPlayer(db *ecs.ECS, e ecs.Entity) *Player {

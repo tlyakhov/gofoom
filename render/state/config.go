@@ -49,7 +49,7 @@ func (c *Config) Initialize() {
 }
 
 func (c *Config) RefreshPlayer() {
-	col := ecs.Column[behaviors.Player](c.ECS, behaviors.PlayerComponentIndex)
+	col := ecs.ColumnFor[behaviors.Player](c.ECS, behaviors.PlayerComponentIndex)
 	for i := range col.Length {
 		player := col.Value(i)
 		if !player.Active || player.Spawn {

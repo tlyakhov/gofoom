@@ -36,7 +36,7 @@ func (vd *VerticalDoorController) Target(target ecs.Attachable) bool {
 
 func (vd *VerticalDoorController) setupAnimation() {
 	a := vd.Sector.Top.Z.NewAnimation()
-	a.SetECS(vd.ECS)
+	a.AttachECS(vd.ECS)
 	a.Construct(nil)
 	a.Start = vd.Sector.Top.Z.Original
 	a.End = vd.Sector.Bottom.Z.Original

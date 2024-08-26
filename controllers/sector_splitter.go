@@ -319,7 +319,7 @@ func (a *SectorSplitter) collect() {
 		}
 	}
 
-	col := ecs.Column[core.Body](a.Sector.ECS, core.BodyComponentIndex)
+	col := ecs.ColumnFor[core.Body](a.Sector.ECS, core.BodyComponentIndex)
 	for i := range col.Length {
 		body := col.Value(i)
 		if body.SectorEntity != a.Sector.Entity {

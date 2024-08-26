@@ -9,15 +9,19 @@ type Serializable interface {
 	Construct(data map[string]any)
 	IsSystem() bool
 	Serialize() map[string]any
-	// TODO: Rename to Attach
-	SetECS(db *ECS)
+	AttachECS(db *ECS)
 	GetECS() *ECS
 }
+type SubSerializable interface {
+	Construct(ecs *ECS, data map[string]any)
+	Serialize() map[string]any
+}
+
 type Attachable interface {
 	Serializable
 	String() string
-	IndexInECS() int
-	SetIndexInECS(int)
+	IndexInColumn() int
+	SetColumnIndex(int)
 	SetEntity(entity Entity)
 	GetEntity() Entity
 	OnDetach()
