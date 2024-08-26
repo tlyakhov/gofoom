@@ -9,22 +9,21 @@ import (
 )
 
 type PathSegment struct {
-	ECS     *ecs.ECS
-	Segment `editable:"^"`
+	ECS *ecs.ECS
 
 	P concepts.Vector3 `editable:"Position"`
 
 	// Pre-calculated attributes
-	Path *Path
-	Next *PathSegment
-	Prev *PathSegment
+	Index  int
+	Length float64
+	Path   *Path
+	Next   *PathSegment
+	Prev   *PathSegment
 }
 
 func (s *PathSegment) Construct(db *ecs.ECS, data map[string]any) {
 	s.ECS = db
-	s.Segment.Construct(db, data)
 	s.P = concepts.Vector3{}
-	s.Normal = concepts.Vector2{}
 
 	if data == nil {
 		return
@@ -34,7 +33,7 @@ func (s *PathSegment) Construct(db *ecs.ECS, data map[string]any) {
 }
 
 func (s *PathSegment) Serialize() map[string]any {
-	result := s.Segment.Serialize(false)
+	result := make(map[string]any)
 	result["X"] = s.P[0]
 	result["Y"] = s.P[1]
 	result["Z"] = s.P[2]

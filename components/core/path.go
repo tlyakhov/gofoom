@@ -15,13 +15,14 @@ import (
 type Path struct {
 	ecs.Attached `editable:"^"`
 
-	Segments []*PathSegment
+	Loop     bool           `editable:"Loop"`
+	Segments []*PathSegment `editable:"Segments"`
 }
 
 var PathComponentIndex int
 
 func init() {
-	PathComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Path, *Path]{Getter: GetPath})
+	PathComponentIndex = ecs.RegisterComponent(&ecs.Column[Path, *Path]{Getter: GetPath})
 }
 
 func GetPath(db *ecs.ECS, e ecs.Entity) *Path {
@@ -78,23 +79,33 @@ func (p *Path) Serialize() map[string]any {
 	return result
 }
 
-func (s *Path) Recalculate() {
+func (p *Path) Recalculate() {
 	filtered := make([]*PathSegment, 0)
 	var prev *PathSegment
-	for i, segment := range s.Segments {
-		next := s.Segments[(i+1)%len(s.Segments)]
+	for i, segment := range p.Segments {
+		segment.Index = len(filtered)
+		filtered = append(filtered, segment)
+		segment.Path = p
+
+		nextIndex := (i + 1) % len(p.Segments)
+		next := p.Segments[nextIndex]
+		if nextIndex == 0 && !p.Loop {
+			segment.Length = 0
+			segment.Next = nil
+			next.Prev = nil
+			continue
+		}
+
 		// Filter out degenerate segments.
 		if prev != nil && prev.P == segment.P {
 			prev.Next = next
 			next.Prev = prev
 			continue
 		}
-		filtered = append(filtered, segment)
 		segment.Next = next
 		next.Prev = segment
 		prev = segment
-		segment.Path = s
-		segment.Recalculate()
+		segment.Length = next.P.Dist(&segment.P)
 	}
-	s.Segments = filtered
+	p.Segments = filtered
 }

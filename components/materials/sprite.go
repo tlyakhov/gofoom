@@ -20,7 +20,7 @@ type Sprite struct {
 var SpriteComponentIndex int
 
 func init() {
-	SpriteComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Sprite, *Sprite]{Getter: GetSprite})
+	SpriteComponentIndex = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite})
 }
 
 func GetSprite(db *ecs.ECS, e ecs.Entity) *Sprite {

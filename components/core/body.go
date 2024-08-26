@@ -39,7 +39,7 @@ type Body struct {
 var BodyComponentIndex int
 
 func init() {
-	BodyComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Body, *Body]{Getter: GetBody})
+	BodyComponentIndex = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody})
 }
 
 func GetBody(db *ecs.ECS, e ecs.Entity) *Body {
@@ -66,11 +66,11 @@ func (b *Body) OnDetach() {
 	b.Attached.OnDetach()
 }
 
-func (b *Body) SetECS(db *ecs.ECS) {
+func (b *Body) AttachECS(db *ecs.ECS) {
 	if b.ECS != db {
 		b.OnDetach()
 	}
-	b.Attached.SetECS(db)
+	b.Attached.AttachECS(db)
 	b.Pos.Attach(db.Simulation)
 	b.Vel.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
@@ -118,7 +118,7 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	col := ecs.Column[Sector](b.ECS, SectorComponentIndex)
+	col := ecs.ColumnFor[Sector](b.ECS, SectorComponentIndex)
 	for i := range col.Length {
 		sector := col.Value(i)
 		if sector.Entity == 0 || !sector.IsPointInside2D(p) {

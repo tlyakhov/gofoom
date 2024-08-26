@@ -43,7 +43,7 @@ func Types() *typeMetadata {
 	return globalTypeMetadata
 }
 
-func RegisterComponent[T any, PT GenericAttachable[T]](column *ComponentColumn[T, PT]) int {
+func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT]) int {
 	ecsTypes := Types()
 	ecsTypes.lock.Lock()
 	defer ecsTypes.lock.Unlock()

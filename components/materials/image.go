@@ -43,7 +43,7 @@ type Image struct {
 var ImageComponentIndex int
 
 func init() {
-	ImageComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Image, *Image]{Getter: GetImage})
+	ImageComponentIndex = ecs.RegisterComponent(&ecs.Column[Image, *Image]{Getter: GetImage})
 }
 
 func GetImage(db *ecs.ECS, e ecs.Entity) *Image {

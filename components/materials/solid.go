@@ -16,7 +16,7 @@ type Solid struct {
 var SolidComponentIndex int
 
 func init() {
-	SolidComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[Solid, *Solid]{Getter: GetSolid})
+	SolidComponentIndex = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid})
 }
 
 func GetSolid(db *ecs.ECS, e ecs.Entity) *Solid {
@@ -32,11 +32,11 @@ func (s *Solid) OnDetach() {
 	}
 	s.Attached.OnDetach()
 }
-func (s *Solid) SetECS(db *ecs.ECS) {
+func (s *Solid) AttachECS(db *ecs.ECS) {
 	if s.ECS != db {
 		s.OnDetach()
 	}
-	s.Attached.SetECS(db)
+	s.Attached.AttachECS(db)
 	s.Diffuse.Attach(s.ECS.Simulation)
 }
 

@@ -286,7 +286,7 @@ func (wc *WeaponInstantController) Always() {
 			Texture:                wc.MarkMaterial,
 			IgnoreSurfaceTransform: false,
 			System:                 true}
-		es.SetECS(s.ECS)
+		es.AttachECS(s.ECS)
 		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
 		surf.ExtraStages = append(surf.ExtraStages, es)
 		es.Transform.From(&surf.Transform.Now)

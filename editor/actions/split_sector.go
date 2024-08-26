@@ -60,7 +60,7 @@ func (a *SplitSector) OnMouseUp() {
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
 	if a.State().SelectedObjects.Empty() {
-		col := ecs.Column[core.Sector](a.State().ECS, core.SectorComponentIndex)
+		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorComponentIndex)
 		sectors = make([]*core.Sector, col.Length)
 		for i := range col.Length {
 			sectors[i] = col.Value(i)

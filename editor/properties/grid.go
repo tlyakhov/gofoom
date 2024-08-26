@@ -406,6 +406,8 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldSlice(field)
 		case *[]ecs.Animated:
 			g.fieldSlice(field)
+		case *[]*core.PathSegment:
+			g.fieldSlice(field)
 		case *concepts.TweeningFunc:
 			g.fieldTweeningFunc(field)
 		case **ecs.Animation[int]:

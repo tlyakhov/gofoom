@@ -32,7 +32,7 @@ type WeaponMark struct {
 var WeaponInstantComponentIndex int
 
 func init() {
-	WeaponInstantComponentIndex = ecs.RegisterComponent(&ecs.ComponentColumn[WeaponInstant, *WeaponInstant]{Getter: GetWeaponInstant})
+	WeaponInstantComponentIndex = ecs.RegisterComponent(&ecs.Column[WeaponInstant, *WeaponInstant]{Getter: GetWeaponInstant})
 }
 
 func GetWeaponInstant(db *ecs.ECS, e ecs.Entity) *WeaponInstant {

@@ -35,6 +35,7 @@ type SectorSegment struct {
 	Sector *Sector
 
 	// Pre-calculated attributes
+	Index              int
 	Next               *SectorSegment
 	Prev               *SectorSegment
 	PortalMatrix       concepts.Matrix2

@@ -187,3 +187,77 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 
 	mw.Context.Pop()
 }
+
+func (mw *MapWidget) DrawPath(path *core.Path) {
+	if len(path.Segments) == 0 {
+		return
+	}
+
+	/*start := editor.ScreenToWorld(new(concepts.Vector2))
+	end := editor.ScreenToWorld(&editor.Size)
+	if !concepts.Vector2AABBIntersect(path.Min.To2D(), path.Max.To2D(), start, end, true) {
+		return
+	}*/
+
+	mw.Context.Push()
+
+	pathHovering := editor.HoveringObjects.Contains(core.SelectableFromPath(path))
+	pathSelected := editor.SelectedObjects.Contains(core.SelectableFromPath(path))
+
+	for _, segment := range path.Segments {
+		if segment.Next == nil || segment.P == segment.Next.P {
+			continue
+		}
+
+		segmentHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
+		segmentSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
+
+		mw.Context.SetRGB(0.4, 1, 0.6)
+
+		if pathHovering || pathSelected {
+			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		} else if segmentHovering {
+			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+		} else if segmentSelected {
+			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		}
+
+		// Draw segment
+		mw.Context.SetLineWidth(1)
+		mw.Context.NewSubPath()
+		mw.Context.MoveTo(segment.P[0], segment.P[1])
+		mw.Context.LineTo(segment.Next.P[0], segment.Next.P[1])
+		mw.Context.ClosePath()
+		mw.Context.Stroke()
+
+		if pathHovering || pathSelected || segmentHovering || segmentSelected {
+			normal := &concepts.Vector3{segment.Next.P[1] - segment.P[1], segment.P[0] - segment.Next.P[0], 0}
+			normal.NormSelf()
+			ns := segment.Next.P.Add(&segment.P).Mul(0.5)
+			ne := ns.Add(normal.Mul(20.0))
+			txtLength := fmt.Sprintf("%.0f", segment.Length)
+			mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
+		}
+
+		if segmentSelected {
+			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			mw.DrawHandle(segment.P.To2D())
+		} else if segmentHovering {
+			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+			mw.DrawHandle(segment.P.To2D())
+		} else {
+			mw.Context.DrawRectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
+			mw.Context.Stroke()
+		}
+	}
+
+	/*if editor.SectorTypesVisible {
+		text := path.Entity.NameString(editor.ECS)
+		mw.Context.Push()
+		mw.Context.SetRGB(0.3, 0.3, 0.3)
+		mw.Context.DrawStringAnchored(text, path.Center[0], path.Center[1], 0.5, 0.5)
+		mw.Context.Pop()
+	}*/
+
+	mw.Context.Pop()
+}

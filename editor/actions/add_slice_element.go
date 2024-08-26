@@ -5,13 +5,11 @@ package actions
 
 import (
 	"reflect"
-	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
 
+// TODO: Expand this to also delete elements and move them
 type AddSliceElement struct {
 	state.IEditor
 	Parent   any
@@ -40,21 +38,16 @@ func (a *AddSliceElement) Redo() {
 	sliceElem := a.SlicePtr.Elem()
 	s := reflect.Append(sliceElem, reflect.Zero(sliceElem.Type().Elem()))
 	sliceElem.Set(s)
-	newValue := sliceElem.Index(sliceElem.Len() - 1).Addr()
-	// Add more types?
-	switch target := newValue.Interface().(type) {
-	case **core.Script:
-		*target = new(core.Script)
-	case **materials.ShaderStage:
-		*target = new(materials.ShaderStage)
-	case **materials.Sprite:
-		*target = new(materials.Sprite)
-	case **behaviors.InventorySlot:
-		*target = new(behaviors.InventorySlot)
+	newValue := sliceElem.Index(sliceElem.Len() - 1)
+	if newValue.Kind() == reflect.Pointer {
+		newValue.Set(reflect.New(newValue.Type().Elem()))
 	}
-	if serializable, ok := newValue.Elem().Interface().(ecs.Serializable); ok {
-		serializable.SetECS(a.State().ECS)
+
+	if serializable, ok := newValue.Interface().(ecs.Serializable); ok {
+		serializable.AttachECS(a.State().ECS)
 		serializable.Construct(nil)
+	} else if subSerializable, ok := newValue.Interface().(ecs.SubSerializable); ok {
+		subSerializable.Construct(a.State().ECS, nil)
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
