@@ -38,9 +38,9 @@ func (db *ECS) Clear() {
 	db.usedEntities = bitmap.Bitmap{}
 	db.usedEntities.Set(0) // 0 is reserved
 	db.EntityComponents = make([][]Attachable, 1)
-	db.columns = make([]AttachableColumn, len(Types().ComponentColumns))
+	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = NewSimulation()
-	for i, columnPlaceholder := range Types().ComponentColumns {
+	for i, columnPlaceholder := range Types().ColumnPlaceholders {
 		if columnPlaceholder == nil {
 			continue
 		}
@@ -76,7 +76,7 @@ func (db *ECS) AllComponents(entity Entity) []Attachable {
 }
 
 // Callers need to be careful, this function can return nil that's not castable
-// to an actual component type. The *FromDb methods are better.
+// to an actual component type. The Get* methods are better.
 func (db *ECS) Component(entity Entity, index int) Attachable {
 	if entity == 0 || index == 0 || len(db.EntityComponents) <= int(entity) {
 		return nil
@@ -121,7 +121,7 @@ func (db *ECS) attach(entity Entity, component Attachable, index int) Attachable
 			return component
 		}
 	} else {
-		ec = make([]Attachable, len(Types().ComponentColumns))
+		ec = make([]Attachable, len(Types().ColumnPlaceholders))
 		db.EntityComponents[entity] = ec
 	}
 	// This entity doesn't have a component with this index attached. Extend the
@@ -159,7 +159,7 @@ func (db *ECS) LoadComponentWithoutAttaching(index int, data map[string]any) Att
 	if data == nil {
 		return nil
 	}
-	component := Types().ComponentColumns[index].New()
+	component := Types().ColumnPlaceholders[index].New()
 	component.SetEntity(0)
 	component.AttachECS(db)
 	component.Construct(data)
@@ -345,7 +345,7 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 		if component == nil || component.IsSystem() {
 			continue
 		}
-		jsonEntity[Types().ComponentColumns[index].String()] = component.Serialize()
+		jsonEntity[Types().ColumnPlaceholders[index].String()] = component.Serialize()
 	}
 	if len(jsonEntity) == 1 {
 		return nil

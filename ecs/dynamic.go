@@ -5,10 +5,12 @@ package ecs
 
 import (
 	"log"
+	"math"
 	"reflect"
 	"regexp"
 	"strconv"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=DynamicStage -json
@@ -36,6 +38,16 @@ type DynamicValue[T DynamicType] struct {
 	Attached       bool
 	NoRenderBlend  bool // For things like angles
 	RenderCallback func(blend float64)
+
+	// Procedural dynamics
+	Procedural bool    `editable:"Procedural?"`
+	Input      *T      `editable:"Input"`
+	Freq       float64 `editable:"Frequency"` // in Hz
+	Damping    float64 `editable:"Damping"`   // aka Zeta
+	Response   float64 `editable:"Response"`
+
+	outputV, prevInput T
+	k1, k2, k3         float64
 
 	render T
 }
@@ -86,7 +98,45 @@ func (d *DynamicValue[T]) NewFrame() {
 	d.Prev = d.Now
 }
 
-func (d *DynamicValue[T]) RenderBlend(blend float64) {
+func (d *DynamicValue[T]) UpdateProcedural() {
+	// Based on "Giving Personality to Procedural Animations using Math"
+	// https://www.youtube.com/watch?v=KPoeNZZ6H4s
+	dt := constants.TimeStepS
+	k2Stable := math.Max(math.Max(d.k2, dt*dt*0.5+dt*d.k1*0.5), dt*d.k1)
+
+	switch dc := any(d).(type) {
+	case *DynamicValue[float64]:
+		inputV := *dc.Input - dc.prevInput
+		dc.Now += dc.outputV * dt
+		dc.outputV += dt * (*dc.Input + d.k3*inputV - dc.Now - d.k1*dc.outputV) / k2Stable
+	case *DynamicValue[concepts.Vector2]:
+		inputV := concepts.Vector2{
+			dc.Input[0] - dc.prevInput[0],
+			dc.Input[1] - dc.prevInput[1]}
+		dc.Now[0] += dc.outputV[0] * dt
+		dc.Now[1] += dc.outputV[1] * dt
+		dc.outputV[1] += dt * (dc.Input[1] + d.k3*inputV[1] - dc.Now[1] - d.k1*dc.outputV[1]) / k2Stable
+		dc.outputV[0] += dt * (dc.Input[0] + d.k3*inputV[0] - dc.Now[0] - d.k1*dc.outputV[0]) / k2Stable
+	case *DynamicValue[concepts.Vector3]:
+		inputV := concepts.Vector3{
+			dc.Input[0] - dc.prevInput[0],
+			dc.Input[1] - dc.prevInput[1],
+			dc.Input[2] - dc.prevInput[2]}
+		dc.Now[0] += dc.outputV[0] * dt
+		dc.Now[1] += dc.outputV[1] * dt
+		dc.Now[2] += dc.outputV[2] * dt
+		dc.outputV[2] += dt * (dc.Input[2] + d.k3*inputV[2] - dc.Now[2] - d.k1*dc.outputV[2]) / k2Stable
+		dc.outputV[1] += dt * (dc.Input[1] + d.k3*inputV[1] - dc.Now[1] - d.k1*dc.outputV[1]) / k2Stable
+		dc.outputV[0] += dt * (dc.Input[0] + d.k3*inputV[0] - dc.Now[0] - d.k1*dc.outputV[0]) / k2Stable
+	default:
+		panic("DynamicValue[T] procedural animations only implemented for float64, vector2, vector3")
+	}
+	d.prevInput = *d.Input
+}
+func (d *DynamicValue[T]) Update(blend float64) {
+	if d.Procedural {
+		d.UpdateProcedural()
+	}
 	if d.NoRenderBlend {
 		d.Render = &d.Now
 		if d.RenderCallback != nil {
@@ -147,6 +197,11 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", d)
 	}
 
+	result["Procedural"] = d.Procedural
+	result["Freq"] = d.Freq
+	result["Damping"] = d.Damping
+	result["Response"] = d.Response
+
 	if d.Animation != nil {
 		result["Animation"] = d.Animation.Serialize()
 	}
@@ -187,7 +242,22 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 		}
 	}
 
+	if v, ok := data["Procedural"]; ok {
+		d.Procedural = v.(bool)
+	}
+	if v, ok := data["Freq"]; ok {
+		d.Freq = v.(float64)
+	}
+	if v, ok := data["Damping"]; ok {
+		d.Damping = v.(float64)
+	}
+	if v, ok := data["Response"]; ok {
+		d.Response = v.(float64)
+	}
+	//	Input      *T      `editable:"Input"`
+
 	d.ResetToOriginal()
+	d.Recalculate()
 
 	if v, ok := data["Animation"]; ok {
 		d.Animation = new(Animation[T])
@@ -198,6 +268,29 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 
 func (d *DynamicValue[T]) GetAnimation() Animated {
 	return d.Animation
+}
+
+func (d *DynamicValue[T]) Recalculate() {
+	if !d.Procedural {
+		return
+	}
+
+	// Based on "Giving Personality to Procedural Animations using Math"
+	// https://www.youtube.com/watch?v=KPoeNZZ6H4s
+	if d.Freq == 0 {
+		d.Freq = 0.000001
+	}
+	radians := (2.0 * math.Pi * d.Freq)
+	d.k1 = d.Damping / (math.Pi * d.Freq)
+	d.k2 = 1.0 / (radians * radians)
+	d.k2 = d.Response * d.Damping / radians
+	// 80% of actual limit, to be safe
+	// d.tCrit = 0.8 * (math.Sqrt(4*d.k2+d.k1*d.k1) - d.k1)
+	if d.Input != nil {
+		d.Now = *d.Input
+	}
+	var zero T
+	d.outputV = zero
 }
 
 // entity.component.field (e.g. "53.Body.Pos")

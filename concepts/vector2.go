@@ -229,6 +229,9 @@ func (v *Vector2) Deserialize(data map[string]any) {
 
 // String formats the vector as a string
 func (v *Vector2) String() string {
+	if v == nil {
+		return ""
+	}
 	return strconv.FormatFloat(v[0], 'f', -1, 64) + ", " +
 		strconv.FormatFloat(v[1], 'f', -1, 64)
 }
