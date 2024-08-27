@@ -48,7 +48,7 @@ func (col *Column[T, PT]) Detach(index int) {
 			col.data = col.data[:len(col.data)-1]
 		}
 	} else {
-		log.Printf("ComponentColumn.Detach: found component index %v, but component list is too short.", index)
+		log.Printf("ecs.Column.Detach: found component index %v, but component list is too short.", index)
 	}
 }
 

@@ -2704,7 +2704,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.375,
+          "Percent": 0.609375,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -3773,14 +3773,14 @@
     "core.Body": {
       "Angle": {
         "Animation": {
-          "Active": false,
+          "Active": true,
           "Coordinates": "AnimationCoordinatesAbsolute",
           "Duration": 300,
-          "End": -110.39799229536456,
+          "End": 71.43724188408517,
           "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 1,
+          "Percent": 0.13020833333333334,
           "Reverse": false,
-          "Start": -114.20256201360384,
+          "Start": 61.94645667534809,
           "TweeningFunc": "EaseInOut2"
         },
         "Original": 155.9558816022554
@@ -10856,7 +10856,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.7265625,
+          "Percent": 0.9609375,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -10919,10 +10919,10 @@
     "Entity": "134",
     "behaviors.Proximity": {
       "Entities": [
-        "81",
         "80",
         "79",
-        "25"
+        "25",
+        "81"
       ],
       "Entity": "134",
       "Range": 100,
@@ -10954,8 +10954,8 @@
           "Z": 0
         },
         {
-          "X": 10,
-          "Y": 0,
+          "X": 0,
+          "Y": -180,
           "Z": 0
         }
       ]

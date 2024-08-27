@@ -15,6 +15,7 @@ type Attached struct {
 var AttachedComponentIndex int
 
 func init() {
+	// TODO: Do we actually need this to be registered?
 	AttachedComponentIndex = RegisterComponent(&Column[Attached, *Attached]{})
 }
 

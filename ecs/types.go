@@ -18,14 +18,14 @@ type controllerMetadata struct {
 	Priority int
 }
 type typeMetadata struct {
-	Indexes           map[string]int
-	IndexesNoPackage  map[string]int
-	ComponentColumns  []AttachableColumn
-	nextFreeComponent uint32
-	Controllers       []controllerMetadata
-	ExprEnv           map[string]any
-	InterpSymbols     interp.Exports
-	lock              sync.RWMutex
+	Indexes            map[string]int
+	IndexesNoPackage   map[string]int
+	ColumnPlaceholders []AttachableColumn
+	nextFreeComponent  uint32
+	Controllers        []controllerMetadata
+	ExprEnv            map[string]any
+	InterpSymbols      interp.Exports
+	lock               sync.RWMutex
 }
 
 var globalTypeMetadata *typeMetadata
@@ -48,8 +48,8 @@ func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT]) in
 	ecsTypes.lock.Lock()
 	defer ecsTypes.lock.Unlock()
 	index := (int)(atomic.AddUint32(&ecsTypes.nextFreeComponent, 1))
-	for len(ecsTypes.ComponentColumns) < index+1 {
-		ecsTypes.ComponentColumns = append(ecsTypes.ComponentColumns, nil)
+	for len(ecsTypes.ColumnPlaceholders) < index+1 {
+		ecsTypes.ColumnPlaceholders = append(ecsTypes.ColumnPlaceholders, nil)
 	}
 	// Remove the package prefix (e.g. "core.Body" -> "Body")
 	// see core.Expression
@@ -57,7 +57,7 @@ func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT]) in
 	tSplit := strings.Split(column.Type().String(), ".")
 	noPackage := tSplit[len(tSplit)-1]
 
-	ecsTypes.ComponentColumns[index] = column
+	ecsTypes.ColumnPlaceholders[index] = column
 	ecsTypes.Indexes[reflect.PointerTo(column.Type()).String()] = index
 	ecsTypes.Indexes[column.String()] = index
 	ecsTypes.IndexesNoPackage[noPackage] = index
@@ -67,7 +67,7 @@ func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT]) in
 
 func (ecsTypes *typeMetadata) Type(name string) AttachableColumn {
 	if index, ok := ecsTypes.Indexes[name]; ok {
-		return ecsTypes.ComponentColumns[index]
+		return ecsTypes.ColumnPlaceholders[index]
 	}
 	return nil
 }

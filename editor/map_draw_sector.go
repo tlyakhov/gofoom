@@ -205,14 +205,26 @@ func (mw *MapWidget) DrawPath(path *core.Path) {
 	pathSelected := editor.SelectedObjects.Contains(core.SelectableFromPath(path))
 
 	for _, segment := range path.Segments {
+		segmentHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
+		segmentSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
+
+		if segmentSelected {
+			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			mw.DrawHandle(segment.P.To2D())
+		} else if segmentHovering {
+			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+			mw.DrawHandle(segment.P.To2D())
+		} else {
+			mw.Context.DrawRectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
+			mw.Context.Stroke()
+		}
+
 		if segment.Next == nil || segment.P == segment.Next.P {
 			continue
 		}
 
-		segmentHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
-		segmentSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
-
 		mw.Context.SetRGB(0.4, 1, 0.6)
+		mw.Context.SetDash(2, 4)
 
 		if pathHovering || pathSelected {
 			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
@@ -237,17 +249,6 @@ func (mw *MapWidget) DrawPath(path *core.Path) {
 			ne := ns.Add(normal.Mul(20.0))
 			txtLength := fmt.Sprintf("%.0f", segment.Length)
 			mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
-		}
-
-		if segmentSelected {
-			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-			mw.DrawHandle(segment.P.To2D())
-		} else if segmentHovering {
-			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
-			mw.DrawHandle(segment.P.To2D())
-		} else {
-			mw.Context.DrawRectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
-			mw.Context.Stroke()
 		}
 	}
 

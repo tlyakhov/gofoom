@@ -212,6 +212,9 @@ func (v *Vector3) CrossSelf(vec1, vec2 *Vector3) *Vector3 {
 
 // String formats the vector as a string
 func (v *Vector3) String() string {
+	if v == nil {
+		return ""
+	}
 	return strconv.FormatFloat(v[0], 'f', -1, 64) + ", " +
 		strconv.FormatFloat(v[1], 'f', -1, 64) + ", " +
 		strconv.FormatFloat(v[2], 'f', -1, 64)

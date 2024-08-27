@@ -35,6 +35,7 @@ func (a *SetProperty) FireHooks() {
 		switch target := v.Parent().(type) {
 		case ecs.Dynamic:
 			target.ResetToOriginal()
+			target.Recalculate()
 		case *materials.Image:
 			if a.Source.Name == "Source" {
 				target.Load()

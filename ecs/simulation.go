@@ -14,6 +14,7 @@ import (
 // https://gafferongames.com/post/fix_your_timestep/
 type Simulation struct {
 	EditorPaused     bool
+	Recalculate      bool
 	SimTime          float64
 	RenderTime       float64
 	FrameMillis      float64
@@ -73,7 +74,10 @@ func (s *Simulation) Step() {
 
 	s.All.Range(func(key any, _ any) bool {
 		d := key.(Dynamic)
-		d.RenderBlend(s.RenderStateBlend)
+		if s.Recalculate {
+			d.Recalculate()
+		}
+		d.Update(s.RenderStateBlend)
 		return true
 	})
 

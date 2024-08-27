@@ -51,7 +51,8 @@ type Dynamic interface {
 	Attach(sim *Simulation)
 	Detach(sim *Simulation)
 	ResetToOriginal()
-	RenderBlend(float64)
+	Update(float64)
+	Recalculate()
 	NewFrame()
 	GetAnimation() Animated
 }
