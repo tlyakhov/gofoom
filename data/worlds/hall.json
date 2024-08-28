@@ -2704,7 +2704,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.609375,
+          "Percent": 0.546875,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -3766,24 +3766,16 @@
       "Entity": "42",
       "Health": 100
     },
-    "behaviors.Wander": {
+    "behaviors.Follower": {
       "Entity": "42",
-      "Force": 50
+      "Index": "5",
+      "NoZ": true,
+      "Path": "135"
     },
     "core.Body": {
       "Angle": {
-        "Animation": {
-          "Active": true,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 300,
-          "End": 71.43724188408517,
-          "Lifetime": "AnimationLifetimeOnce",
-          "Percent": 0.13020833333333334,
-          "Reverse": false,
-          "Start": 61.94645667534809,
-          "TweeningFunc": "EaseInOut2"
-        },
-        "Original": 155.9558816022554
+        "Original": 155.9558816022554,
+        "Procedural": true
       },
       "CrBody": "CollideBounce",
       "CrPlayer": "CollideBounce",
@@ -3797,7 +3789,8 @@
           "X": 0,
           "Y": -130,
           "Z": 0
-        }
+        },
+        "Procedural": true
       },
       "Shadow": "BodyShadowImage",
       "Size": {
@@ -7169,12 +7162,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": false,
+            "Active": true,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
+            "Percent": 0,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -10630,7 +10623,7 @@
           "Count": "0",
           "Image": "98",
           "Limit": "100",
-          "ValidClasses": "Pluk,Flower"
+          "ValidClasses": "Flower,Pluk"
         }
       ],
       "Spawn": true
@@ -10856,7 +10849,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.9609375,
+          "Percent": 0.921875,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -10949,13 +10942,38 @@
           "Z": 0
         },
         {
-          "X": -320,
+          "X": -330,
           "Y": -180,
           "Z": 0
         },
         {
-          "X": 0,
-          "Y": -180,
+          "X": 60,
+          "Y": -210,
+          "Z": 0
+        },
+        {
+          "X": 60,
+          "Y": -10,
+          "Z": 0
+        },
+        {
+          "X": -40,
+          "Y": -10,
+          "Z": 0
+        },
+        {
+          "X": -10,
+          "Y": -170,
+          "Z": 0
+        },
+        {
+          "X": -320,
+          "Y": -190,
+          "Z": 0
+        },
+        {
+          "X": -350,
+          "Y": 170,
           "Z": 0
         }
       ]
