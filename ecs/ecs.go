@@ -10,6 +10,7 @@ import (
 	"os"
 	"reflect"
 	"sync"
+	"tlyakhov/gofoom/dynamic"
 
 	"github.com/kelindar/bitmap"
 )
@@ -19,7 +20,7 @@ import (
 // * An entity can be associated with multiple components (one of each kind)
 // * A system (controller) is code that queries and operates on components and entities
 type ECS struct {
-	*Simulation
+	*dynamic.Simulation
 	EntityComponents [][]Attachable
 
 	columns      []AttachableColumn
@@ -39,7 +40,7 @@ func (db *ECS) Clear() {
 	db.usedEntities.Set(0) // 0 is reserved
 	db.EntityComponents = make([][]Attachable, 1)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
-	db.Simulation = NewSimulation()
+	db.Simulation = dynamic.NewSimulation()
 	for i, columnPlaceholder := range Types().ColumnPlaceholders {
 		if columnPlaceholder == nil {
 			continue

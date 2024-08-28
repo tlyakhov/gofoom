@@ -7,6 +7,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -36,14 +37,14 @@ func (vd *VerticalDoorController) Target(target ecs.Attachable) bool {
 
 func (vd *VerticalDoorController) setupAnimation() {
 	a := vd.Sector.Top.Z.NewAnimation()
-	a.AttachECS(vd.ECS)
+	//a.AttachECS(vd.ECS)
 	a.Construct(nil)
 	a.Start = vd.Sector.Top.Z.Original
 	a.End = vd.Sector.Bottom.Z.Original
-	a.Coordinates = ecs.AnimationCoordinatesAbsolute
+	a.Coordinates = dynamic.AnimationCoordinatesAbsolute
 	a.Duration = vd.Duration
 	a.TweeningFunc = vd.TweeningFunc
-	a.Lifetime = ecs.AnimationLifetimeOnce
+	a.Lifetime = dynamic.AnimationLifetimeOnce
 }
 
 func (vd *VerticalDoorController) adjustTransforms() {

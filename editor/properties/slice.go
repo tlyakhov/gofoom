@@ -6,7 +6,7 @@ package properties
 import (
 	"reflect"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/ecs"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -28,17 +28,17 @@ func (g *Grid) fieldSliceAdd(field *state.PropertyGridField, concreteType reflec
 }
 
 var animationTypes = map[string]reflect.Type{
-	"Animation[int]":     reflect.TypeFor[ecs.Animation[int]](),
-	"Animation[float64]": reflect.TypeFor[ecs.Animation[float64]](),
-	"Animation[Vector2]": reflect.TypeFor[ecs.Animation[concepts.Vector2]](),
-	"Animation[Vector3]": reflect.TypeFor[ecs.Animation[concepts.Vector3]](),
-	"Animation[Vector4]": reflect.TypeFor[ecs.Animation[concepts.Vector4]](),
+	"Animation[int]":     reflect.TypeFor[dynamic.Animation[int]](),
+	"Animation[float64]": reflect.TypeFor[dynamic.Animation[float64]](),
+	"Animation[Vector2]": reflect.TypeFor[dynamic.Animation[concepts.Vector2]](),
+	"Animation[Vector3]": reflect.TypeFor[dynamic.Animation[concepts.Vector3]](),
+	"Animation[Vector4]": reflect.TypeFor[dynamic.Animation[concepts.Vector4]](),
 }
 
 func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 	// field.Type is *[]<something>
 	elemType := field.Type.Elem().Elem()
-	if elemType == reflect.TypeFor[ecs.Animated]() {
+	if elemType == reflect.TypeFor[dynamic.Animated]() {
 		buttons := make([]fyne.CanvasObject, len(animationTypes))
 		i := 0
 		for name, t := range animationTypes {

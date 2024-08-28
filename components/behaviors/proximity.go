@@ -6,15 +6,15 @@ package behaviors
 import (
 	"fmt"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type Proximity struct {
 	ecs.Attached `editable:"^"`
-	Range        float64                  `editable:"Range"`
-	Scripts      []*core.Script           `editable:"Scripts"`
-	Entities     concepts.Set[ecs.Entity] `editable:"Entities"`
+	Range        float64                    `editable:"Range"`
+	Scripts      []*core.Script             `editable:"Scripts"`
+	Entities     containers.Set[ecs.Entity] `editable:"Entities"`
 }
 
 var ProximityComponentIndex int
@@ -36,7 +36,7 @@ func (p *Proximity) String() string {
 
 func (p *Proximity) Construct(data map[string]any) {
 	p.Attached.Construct(data)
-	p.Entities = make(concepts.Set[ecs.Entity])
+	p.Entities = make(containers.Set[ecs.Entity])
 	p.Range = 100
 
 	if data == nil {

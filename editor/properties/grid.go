@@ -12,6 +12,8 @@ import (
 	"strings"
 
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
@@ -29,7 +31,7 @@ import (
 
 type PropertyGridState struct {
 	Fields           map[string]*state.PropertyGridField
-	Visited          concepts.Set[any]
+	Visited          containers.Set[any]
 	Depth            int
 	ParentName       string
 	ParentCollection *reflect.Value
@@ -129,7 +131,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 
 		if gf.IsEmbeddedType() {
 			// Animations are a special case
-			if !gf.Type.Elem().AssignableTo(reflect.TypeFor[ecs.Animated]()) {
+			if !gf.Type.Elem().AssignableTo(reflect.TypeFor[dynamic.Animated]()) {
 				delete(pgs.Fields, display)
 			}
 			name := display
@@ -147,7 +149,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 }
 
 func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState {
-	pgs := PropertyGridState{Visited: make(concepts.Set[any]), Fields: make(map[string]*state.PropertyGridField)}
+	pgs := PropertyGridState{Visited: make(containers.Set[any]), Fields: make(map[string]*state.PropertyGridField)}
 	for _, s := range selection.Exact {
 		switch s.Type {
 		case core.SelectableHi:
@@ -354,9 +356,9 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			default:
 				g.fieldString(field, false)
 			}
-		case *concepts.Set[string]:
+		case *containers.Set[string]:
 			g.fieldString(field, false)
-		case *concepts.Set[ecs.Entity]:
+		case *containers.Set[ecs.Entity]:
 			g.fieldString(field, false)
 		case *float32:
 			g.fieldNumber(field)
@@ -388,10 +390,10 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldEnum(field, core.BodyShadowValues())
 		case *core.ScriptStyle:
 			g.fieldEnum(field, core.ScriptStyleValues())
-		case *ecs.AnimationLifetime:
-			g.fieldEnum(field, ecs.AnimationLifetimeValues())
-		case *ecs.AnimationCoordinates:
-			g.fieldEnum(field, ecs.AnimationCoordinatesValues())
+		case *dynamic.AnimationLifetime:
+			g.fieldEnum(field, dynamic.AnimationLifetimeValues())
+		case *dynamic.AnimationCoordinates:
+			g.fieldEnum(field, dynamic.AnimationCoordinatesValues())
 		case *materials.ShaderFlags:
 			g.fieldEnum(field, materials.ShaderFlagsValues())
 		case *ecs.Entity:
@@ -404,23 +406,23 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldSlice(field)
 		case *[]*behaviors.InventorySlot:
 			g.fieldSlice(field)
-		case *[]ecs.Animated:
+		case *[]dynamic.Animated:
 			g.fieldSlice(field)
 		case *[]*core.PathSegment:
 			g.fieldSlice(field)
 		case *concepts.TweeningFunc:
 			g.fieldTweeningFunc(field)
-		case **ecs.Animation[int]:
+		case **dynamic.Animation[int]:
 			g.fieldAnimation(field)
-		case **ecs.Animation[float64]:
+		case **dynamic.Animation[float64]:
 			g.fieldAnimation(field)
-		case **ecs.Animation[concepts.Vector2]:
+		case **dynamic.Animation[concepts.Vector2]:
 			g.fieldAnimation(field)
-		case **ecs.Animation[concepts.Vector3]:
+		case **dynamic.Animation[concepts.Vector3]:
 			g.fieldAnimation(field)
-		case **ecs.Animation[concepts.Vector4]:
+		case **dynamic.Animation[concepts.Vector4]:
 			g.fieldAnimation(field)
-		case **ecs.Animation[concepts.Matrix2]:
+		case **dynamic.Animation[concepts.Matrix2]:
 			g.fieldAnimation(field)
 		default:
 			g.refreshIndex++

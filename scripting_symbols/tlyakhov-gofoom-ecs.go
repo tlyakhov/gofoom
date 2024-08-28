@@ -13,100 +13,38 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/ecs/ecs"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"AnimationCoordinatesAbsolute": reflect.ValueOf(ecs.AnimationCoordinatesAbsolute),
-		"AnimationCoordinatesRelative": reflect.ValueOf(ecs.AnimationCoordinatesRelative),
-		"AnimationCoordinatesString":   reflect.ValueOf(ecs.AnimationCoordinatesString),
-		"AnimationCoordinatesStrings":  reflect.ValueOf(ecs.AnimationCoordinatesStrings),
-		"AnimationCoordinatesValues":   reflect.ValueOf(ecs.AnimationCoordinatesValues),
-		"AnimationLifetimeBounce":      reflect.ValueOf(ecs.AnimationLifetimeBounce),
-		"AnimationLifetimeBounceOnce":  reflect.ValueOf(ecs.AnimationLifetimeBounceOnce),
-		"AnimationLifetimeLoop":        reflect.ValueOf(ecs.AnimationLifetimeLoop),
-		"AnimationLifetimeOnce":        reflect.ValueOf(ecs.AnimationLifetimeOnce),
-		"AnimationLifetimeString":      reflect.ValueOf(ecs.AnimationLifetimeString),
-		"AnimationLifetimeStrings":     reflect.ValueOf(ecs.AnimationLifetimeStrings),
-		"AnimationLifetimeValues":      reflect.ValueOf(ecs.AnimationLifetimeValues),
-		"AttachedComponentIndex":       reflect.ValueOf(&ecs.AttachedComponentIndex).Elem(),
-		"ConstructArray":               reflect.ValueOf(ecs.ConstructArray),
-		"ControllerAlways":             reflect.ValueOf(ecs.ControllerAlways),
-		"ControllerLoaded":             reflect.ValueOf(ecs.ControllerLoaded),
-		"ControllerRecalculate":        reflect.ValueOf(ecs.ControllerRecalculate),
-		"DynamicNow":                   reflect.ValueOf(ecs.DynamicNow),
-		"DynamicOriginal":              reflect.ValueOf(ecs.DynamicOriginal),
-		"DynamicPrev":                  reflect.ValueOf(ecs.DynamicPrev),
-		"DynamicRender":                reflect.ValueOf(ecs.DynamicRender),
-		"DynamicStageString":           reflect.ValueOf(ecs.DynamicStageString),
-		"DynamicStageStrings":          reflect.ValueOf(ecs.DynamicStageStrings),
-		"DynamicStageValues":           reflect.ValueOf(ecs.DynamicStageValues),
-		"GetNamed":                     reflect.ValueOf(ecs.GetNamed),
-		"NamedComponentIndex":          reflect.ValueOf(&ecs.NamedComponentIndex).Elem(),
-		"NewECS":                       reflect.ValueOf(ecs.NewECS),
-		"NewSimulation":                reflect.ValueOf(ecs.NewSimulation),
-		"ParseEntity":                  reflect.ValueOf(ecs.ParseEntity),
-		"SerializeEntities":            reflect.ValueOf(ecs.SerializeEntities),
-		"Types":                        reflect.ValueOf(ecs.Types),
+		"AttachedComponentIndex": reflect.ValueOf(&ecs.AttachedComponentIndex).Elem(),
+		"ConstructArray":         reflect.ValueOf(ecs.ConstructArray),
+		"ControllerAlways":       reflect.ValueOf(ecs.ControllerAlways),
+		"ControllerLoaded":       reflect.ValueOf(ecs.ControllerLoaded),
+		"ControllerRecalculate":  reflect.ValueOf(ecs.ControllerRecalculate),
+		"GetNamed":               reflect.ValueOf(ecs.GetNamed),
+		"NamedComponentIndex":    reflect.ValueOf(&ecs.NamedComponentIndex).Elem(),
+		"NewECS":                 reflect.ValueOf(ecs.NewECS),
+		"ParseEntity":            reflect.ValueOf(ecs.ParseEntity),
+		"SerializeEntities":      reflect.ValueOf(ecs.SerializeEntities),
+		"Types":                  reflect.ValueOf(ecs.Types),
 
 		// type definitions
-		"Animated":             reflect.ValueOf((*ecs.Animated)(nil)),
-		"AnimationCoordinates": reflect.ValueOf((*ecs.AnimationCoordinates)(nil)),
-		"AnimationLifetime":    reflect.ValueOf((*ecs.AnimationLifetime)(nil)),
-		"Attachable":           reflect.ValueOf((*ecs.Attachable)(nil)),
-		"AttachableColumn":     reflect.ValueOf((*ecs.AttachableColumn)(nil)),
-		"Attached":             reflect.ValueOf((*ecs.Attached)(nil)),
-		"BaseController":       reflect.ValueOf((*ecs.BaseController)(nil)),
-		"Controller":           reflect.ValueOf((*ecs.Controller)(nil)),
-		"ControllerMethod":     reflect.ValueOf((*ecs.ControllerMethod)(nil)),
-		"Dynamic":              reflect.ValueOf((*ecs.Dynamic)(nil)),
-		"DynamicStage":         reflect.ValueOf((*ecs.DynamicStage)(nil)),
-		"ECS":                  reflect.ValueOf((*ecs.ECS)(nil)),
-		"Entity":               reflect.ValueOf((*ecs.Entity)(nil)),
-		"Named":                reflect.ValueOf((*ecs.Named)(nil)),
-		"Serializable":         reflect.ValueOf((*ecs.Serializable)(nil)),
-		"Simulation":           reflect.ValueOf((*ecs.Simulation)(nil)),
-		"SubSerializable":      reflect.ValueOf((*ecs.SubSerializable)(nil)),
+		"Attachable":       reflect.ValueOf((*ecs.Attachable)(nil)),
+		"AttachableColumn": reflect.ValueOf((*ecs.AttachableColumn)(nil)),
+		"Attached":         reflect.ValueOf((*ecs.Attached)(nil)),
+		"BaseController":   reflect.ValueOf((*ecs.BaseController)(nil)),
+		"Controller":       reflect.ValueOf((*ecs.Controller)(nil)),
+		"ControllerMethod": reflect.ValueOf((*ecs.ControllerMethod)(nil)),
+		"ECS":              reflect.ValueOf((*ecs.ECS)(nil)),
+		"Entity":           reflect.ValueOf((*ecs.Entity)(nil)),
+		"Named":            reflect.ValueOf((*ecs.Named)(nil)),
+		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
+		"SubSerializable":  reflect.ValueOf((*ecs.SubSerializable)(nil)),
 
 		// interface wrapper definitions
-		"_Animated":         reflect.ValueOf((*_tlyakhov_gofoom_ecs_Animated)(nil)),
 		"_Attachable":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
 		"_AttachableColumn": reflect.ValueOf((*_tlyakhov_gofoom_ecs_AttachableColumn)(nil)),
 		"_Controller":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
-		"_Dynamic":          reflect.ValueOf((*_tlyakhov_gofoom_ecs_Dynamic)(nil)),
 		"_Serializable":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
 		"_SubSerializable":  reflect.ValueOf((*_tlyakhov_gofoom_ecs_SubSerializable)(nil)),
 	}
-}
-
-// _tlyakhov_gofoom_ecs_Animated is an interface wrapper for Animated type
-type _tlyakhov_gofoom_ecs_Animated struct {
-	IValue     interface{}
-	WAnimate   func()
-	WAttachECS func(db *ecs.ECS)
-	WConstruct func(data map[string]any)
-	WGetECS    func() *ecs.ECS
-	WIsSystem  func() bool
-	WReset     func()
-	WSerialize func() map[string]any
-}
-
-func (W _tlyakhov_gofoom_ecs_Animated) Animate() {
-	W.WAnimate()
-}
-func (W _tlyakhov_gofoom_ecs_Animated) AttachECS(db *ecs.ECS) {
-	W.WAttachECS(db)
-}
-func (W _tlyakhov_gofoom_ecs_Animated) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_ecs_Animated) GetECS() *ecs.ECS {
-	return W.WGetECS()
-}
-func (W _tlyakhov_gofoom_ecs_Animated) IsSystem() bool {
-	return W.WIsSystem()
-}
-func (W _tlyakhov_gofoom_ecs_Animated) Reset() {
-	W.WReset()
-}
-func (W _tlyakhov_gofoom_ecs_Animated) Serialize() map[string]any {
-	return W.WSerialize()
 }
 
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
@@ -231,56 +169,6 @@ func (W _tlyakhov_gofoom_ecs_Controller) Recalculate() {
 }
 func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable) bool {
 	return W.WTarget(a0)
-}
-
-// _tlyakhov_gofoom_ecs_Dynamic is an interface wrapper for Dynamic type
-type _tlyakhov_gofoom_ecs_Dynamic struct {
-	IValue           interface{}
-	WAttach          func(sim *ecs.Simulation)
-	WAttachECS       func(db *ecs.ECS)
-	WConstruct       func(data map[string]any)
-	WDetach          func(sim *ecs.Simulation)
-	WGetAnimation    func() ecs.Animated
-	WGetECS          func() *ecs.ECS
-	WIsSystem        func() bool
-	WNewFrame        func()
-	WRenderBlend     func(a0 float64)
-	WResetToOriginal func()
-	WSerialize       func() map[string]any
-}
-
-func (W _tlyakhov_gofoom_ecs_Dynamic) Attach(sim *ecs.Simulation) {
-	W.WAttach(sim)
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) AttachECS(db *ecs.ECS) {
-	W.WAttachECS(db)
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) Detach(sim *ecs.Simulation) {
-	W.WDetach(sim)
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) GetAnimation() ecs.Animated {
-	return W.WGetAnimation()
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) GetECS() *ecs.ECS {
-	return W.WGetECS()
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) IsSystem() bool {
-	return W.WIsSystem()
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) NewFrame() {
-	W.WNewFrame()
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) RenderBlend(a0 float64) {
-	W.WRenderBlend(a0)
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) ResetToOriginal() {
-	W.WResetToOriginal()
-}
-func (W _tlyakhov_gofoom_ecs_Dynamic) Serialize() map[string]any {
-	return W.WSerialize()
 }
 
 // _tlyakhov_gofoom_ecs_Serializable is an interface wrapper for Serializable type

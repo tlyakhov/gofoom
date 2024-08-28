@@ -6,23 +6,23 @@ package behaviors
 import (
 	"strconv"
 	"strings"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type InventorySlot struct {
 	ECS          *ecs.ECS
-	ValidClasses concepts.Set[string] `editable:"Classes"`
-	Limit        int                  `editable:"Limit"`
-	Count        int                  `editable:"Count"`
-	Image        ecs.Entity           `editable:"Image" edit_type:"Material"`
+	ValidClasses containers.Set[string] `editable:"Classes"`
+	Limit        int                    `editable:"Limit"`
+	Count        int                    `editable:"Count"`
+	Image        ecs.Entity             `editable:"Image" edit_type:"Material"`
 }
 
 func (s *InventorySlot) Construct(data map[string]any) {
 	s.Limit = 100
 	s.Count = 0
 	s.Image = 0
-	s.ValidClasses = make(concepts.Set[string])
+	s.ValidClasses = make(containers.Set[string])
 
 	if data == nil {
 		return

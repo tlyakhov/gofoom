@@ -8,6 +8,7 @@ import (
 	"sync"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2"
@@ -51,7 +52,7 @@ type Edit struct {
 	CurrentAction Actionable
 	UndoHistory   []Actionable
 	RedoHistory   []Actionable
-	KeysDown      concepts.Set[fyne.KeyName]
+	KeysDown      containers.Set[fyne.KeyName]
 
 	// Map view filters
 	BodiesVisible         bool

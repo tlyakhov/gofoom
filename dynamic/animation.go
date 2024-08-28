@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package ecs
+package dynamic
 
 import (
 	"log"
@@ -29,7 +29,7 @@ const (
 )
 
 type Animated interface {
-	Serializable
+	//ecs.Serializable
 	Animate()
 	Reset()
 }
@@ -250,14 +250,4 @@ func (a *Animation[T]) Serialize() map[string]any {
 		result["End"] = c.End.Serialize(false)
 	}
 	return result
-}
-
-func (a *Animation[T]) AttachECS(db *ECS) {
-}
-func (a *Animation[T]) GetECS() *ECS {
-	return nil
-}
-
-func (a *Animation[T]) IsSystem() bool {
-	return false
 }

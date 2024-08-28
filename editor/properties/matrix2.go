@@ -10,7 +10,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/ecs"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -37,20 +37,20 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 			worldWidth = typed.Max[0] - typed.Min[0]
 			worldHeight = typed.Max[1] - typed.Min[1]
 		case *core.SectorSegment:
-			fz, cz := typed.Sector.ZAt(ecs.DynamicNow, typed.A)
+			fz, cz := typed.Sector.ZAt(dynamic.DynamicNow, typed.A)
 			worldWidth = typed.Length
 			worldHeight = cz - fz
 			switch field.Name {
 			case "Segment.Low Surface.Transform.Initial Value":
 				if typed.AdjacentSegment != nil {
 					adj := core.GetSector(g.State().ECS, typed.AdjacentSector)
-					afz := adj.Bottom.ZAt(ecs.DynamicNow, typed.A)
+					afz := adj.Bottom.ZAt(dynamic.DynamicNow, typed.A)
 					worldHeight = math.Abs(fz - afz)
 				}
 			case "Segment.High Surface.Transform.Initial Value":
 				if typed.AdjacentSegment != nil {
 					adj := core.GetSector(g.State().ECS, typed.AdjacentSector)
-					acz := adj.Top.ZAt(ecs.DynamicNow, typed.A)
+					acz := adj.Top.ZAt(dynamic.DynamicNow, typed.A)
 					worldHeight = math.Abs(cz - acz)
 				}
 			}

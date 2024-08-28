@@ -1,14 +1,11 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package ecs
+package dynamic
 
 import (
 	"log"
 	"math"
-	"reflect"
-	"regexp"
-	"strconv"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
@@ -167,11 +164,6 @@ func (d *DynamicValue[T]) Update(blend float64) {
 		dc.render[1] = concepts.Lerp(dc.Prev[1], dc.Now[1], blend)
 		dc.render[2] = concepts.Lerp(dc.Prev[2], dc.Now[2], blend)
 		dc.render[3] = concepts.Lerp(dc.Prev[3], dc.Now[3], blend)
-	case *DynamicValue[Entity]:
-		dc.render = dc.Prev
-		if blend > 0.5 {
-			dc.render = dc.Now
-		}
 	case *DynamicValue[concepts.Matrix2]:
 		d.Render = &d.Now
 	}
@@ -197,8 +189,6 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 		result["Original"] = dc.Original.Serialize(false)
 	case *DynamicValue[concepts.Matrix2]:
 		result["Original"] = dc.Original.Serialize()
-	case *DynamicValue[Entity]:
-		result["Original"] = dc.Original.String()
 	default:
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", d)
 	}
@@ -302,35 +292,4 @@ func (d *DynamicValue[T]) Recalculate() {
 	// d.tCrit = 0.8 * (math.Sqrt(4*d.k2+d.k1*d.k1) - d.k1)
 	var zero T
 	d.outputV = zero
-}
-
-// entity.component.field (e.g. "53.Body.Pos")
-var reDynamicSource = regexp.MustCompile(`(\d+).(\w+).(\w+)`)
-
-// This is currently unused, probably should delete but seems potentially valuable?
-func DynamicFromString[T DynamicType](db *ECS, source string) *DynamicValue[T] {
-	matches := reDynamicSource.FindStringSubmatch(source)
-	if len(matches) != 3 {
-		log.Printf("DynamicFromString - target %v isn't entity.component.field", source)
-		return nil
-	}
-	entity, _ := strconv.ParseUint(matches[0], 10, 64)
-	index := Types().Indexes[matches[1]]
-	field := matches[2]
-	component := db.EntityComponents[entity][index]
-	if component == nil {
-		log.Printf("DynamicFromString - component %v on entity %v is nil", matches[1], entity)
-		return nil
-	}
-	fieldValue := reflect.ValueOf(component).Elem().FieldByName(field)
-	if fieldValue.IsZero() {
-		log.Printf("DynamicFromString - no field %v on component %v", field, component.String())
-		return nil
-	}
-	if result, ok := fieldValue.Addr().Interface().(*DynamicValue[T]); ok {
-		return result
-	} else {
-		log.Printf("DynamicFromString - %v is not *DynamicValue[T]", source)
-		return nil
-	}
 }

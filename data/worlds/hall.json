@@ -2704,7 +2704,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.546875,
+          "Percent": 0.734375,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -3768,9 +3768,10 @@
     },
     "behaviors.Follower": {
       "Entity": "42",
-      "Index": "5",
+      "Index": "6",
       "NoZ": true,
-      "Path": "135"
+      "Path": "135",
+      "Speed": 20
     },
     "core.Body": {
       "Angle": {
@@ -7162,12 +7163,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": true,
+            "Active": false,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0,
+            "Percent": 1,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -7291,13 +7292,13 @@
         },
         "Z": {
           "Animation": {
-            "Active": false,
+            "Active": true,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
-            "Reverse": false,
+            "Percent": 0.0078125,
+            "Reverse": true,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -10849,8 +10850,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.921875,
-          "Reverse": false,
+          "Percent": 0.890625,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,

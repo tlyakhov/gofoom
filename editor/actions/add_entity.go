@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
@@ -90,7 +91,7 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 		body.Pos.Original[0] = worldGrid[0]
 		body.Pos.Original[1] = worldGrid[1]
 		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.ZAt(ecs.DynamicOriginal, worldGrid)
+			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
 			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
 		body.Pos.ResetToOriginal()

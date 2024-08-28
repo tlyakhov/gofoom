@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -38,7 +39,7 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 	delta := &concepts.Vector3{dst[0] - src[0], dst[1] - src[1], dst[2] - src[2]}
 	delta.NormSelf()
 	isect := concepts.Vector3{}
-	seg := b.BillboardSegment(delta, ecs.DynamicRender)
+	seg := b.BillboardSegment(delta, dynamic.DynamicRender)
 	ok := seg.Intersect3D(src, dst, &isect)
 	if !ok {
 		return false

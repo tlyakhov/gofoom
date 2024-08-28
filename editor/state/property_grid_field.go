@@ -9,27 +9,27 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/ecs"
+	"tlyakhov/gofoom/dynamic"
 )
 
 var EmbeddedTypes = [...]string{
 	reflect.TypeFor[*core.Script]().String(),
 	reflect.TypeFor[*core.SectorPlane]().String(),
-	reflect.TypeFor[*ecs.DynamicValue[float64]]().String(),
-	reflect.TypeFor[*ecs.DynamicValue[int]]().String(),
-	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector2]]().String(),
-	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector3]]().String(),
-	reflect.TypeFor[*ecs.DynamicValue[concepts.Vector4]]().String(),
-	reflect.TypeFor[*ecs.DynamicValue[concepts.Matrix2]]().String(),
+	reflect.TypeFor[*dynamic.DynamicValue[float64]]().String(),
+	reflect.TypeFor[*dynamic.DynamicValue[int]]().String(),
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector2]]().String(),
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector3]]().String(),
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector4]]().String(),
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Matrix2]]().String(),
 	reflect.TypeFor[*materials.Surface]().String(),
 	reflect.TypeFor[*materials.ShaderStage]().String(),
 	reflect.TypeFor[*materials.Sprite]().String(),
-	reflect.TypeFor[**ecs.Animation[float64]]().String(),
-	reflect.TypeFor[**ecs.Animation[int]]().String(),
-	reflect.TypeFor[**ecs.Animation[concepts.Vector2]]().String(),
-	reflect.TypeFor[**ecs.Animation[concepts.Vector3]]().String(),
-	reflect.TypeFor[**ecs.Animation[concepts.Vector4]]().String(),
-	reflect.TypeFor[**ecs.Animation[concepts.Matrix2]]().String(),
+	reflect.TypeFor[**dynamic.Animation[float64]]().String(),
+	reflect.TypeFor[**dynamic.Animation[int]]().String(),
+	reflect.TypeFor[**dynamic.Animation[concepts.Vector2]]().String(),
+	reflect.TypeFor[**dynamic.Animation[concepts.Vector3]]().String(),
+	reflect.TypeFor[**dynamic.Animation[concepts.Vector4]]().String(),
+	reflect.TypeFor[**dynamic.Animation[concepts.Matrix2]]().String(),
 }
 
 type PropertyGridField struct {
