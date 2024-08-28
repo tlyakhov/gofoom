@@ -23,11 +23,16 @@ const (
 	DynamicNow
 )
 
-// A DynamicType is a type constraint for anything the engine can simulate
-type DynamicType interface {
-	~int | ~float64 | concepts.Vector2 | concepts.Vector3 | concepts.Vector4 | concepts.Matrix2
-}
-
+// A DynamicValue is anything in the engine that evolves over time.
+//
+// * They store several states:
+//   - Original (what to use when loading a world or respawning)
+//   - Prev/Now (previous frame, next frame)
+//   - Render (a value blended between Prev & Now based on last frame time)
+//   - Input (if this is a procedurally animated value, this is the input)
+//
+// * Procedurally animated values use second-order dynamics for organic movement
+// * Values can also have Animations that use easing (e.g. inventory item bobbing)
 type DynamicValue[T DynamicType] struct {
 	*Animation[T] `editable:"Animation"`
 
@@ -41,7 +46,7 @@ type DynamicValue[T DynamicType] struct {
 
 	// Procedural dynamics
 	Procedural bool    `editable:"Procedural?"`
-	Input      *T      `editable:"Input"`
+	Input      T       `editable:"Input"`
 	Freq       float64 `editable:"Frequency"` // in Hz
 	Damping    float64 `editable:"Damping"`   // aka Zeta
 	Response   float64 `editable:"Response"`
@@ -68,6 +73,8 @@ func (d *DynamicValue[T]) Value(s DynamicStage) T {
 func (d *DynamicValue[T]) ResetToOriginal() {
 	d.Prev = d.Original
 	d.Now = d.Original
+	d.Input = d.Original
+	d.prevInput = d.Original
 }
 
 func (d *DynamicValue[T]) SetAll(v T) {
@@ -103,12 +110,11 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 	// https://www.youtube.com/watch?v=KPoeNZZ6H4s
 	dt := constants.TimeStepS
 	k2Stable := math.Max(math.Max(d.k2, dt*dt*0.5+dt*d.k1*0.5), dt*d.k1)
-
 	switch dc := any(d).(type) {
 	case *DynamicValue[float64]:
-		inputV := *dc.Input - dc.prevInput
+		inputV := dc.Input - dc.prevInput
 		dc.Now += dc.outputV * dt
-		dc.outputV += dt * (*dc.Input + d.k3*inputV - dc.Now - d.k1*dc.outputV) / k2Stable
+		dc.outputV += dt * (dc.Input + d.k3*inputV - dc.Now - d.k1*dc.outputV) / k2Stable
 	case *DynamicValue[concepts.Vector2]:
 		inputV := concepts.Vector2{
 			dc.Input[0] - dc.prevInput[0],
@@ -131,7 +137,7 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 	default:
 		panic("DynamicValue[T] procedural animations only implemented for float64, vector2, vector3")
 	}
-	d.prevInput = *d.Input
+	d.prevInput = d.Input
 }
 func (d *DynamicValue[T]) Update(blend float64) {
 	if d.Procedural {
@@ -197,10 +203,18 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", d)
 	}
 
-	result["Procedural"] = d.Procedural
-	result["Freq"] = d.Freq
-	result["Damping"] = d.Damping
-	result["Response"] = d.Response
+	if d.Procedural {
+		result["Procedural"] = d.Procedural
+	}
+	if d.Freq != 4.58 {
+		result["Freq"] = d.Freq
+	}
+	if d.Damping != 0.35 {
+		result["Damping"] = d.Damping
+	}
+	if d.Response != -3.54 {
+		result["Response"] = d.Response
+	}
 
 	if d.Animation != nil {
 		result["Animation"] = d.Animation.Serialize()
@@ -209,6 +223,12 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 }
 
 func (d *DynamicValue[T]) Construct(data map[string]any) {
+	defer d.ResetToOriginal()
+
+	d.Freq = 4.58
+	d.Damping = 0.35
+	d.Response = -3.54
+
 	if !d.Attached {
 		d.Render = &d.Now
 	}
@@ -219,7 +239,6 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	}
 
 	if data == nil {
-		d.ResetToOriginal()
 		return
 	}
 
@@ -256,7 +275,6 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	}
 	//	Input      *T      `editable:"Input"`
 
-	d.ResetToOriginal()
 	d.Recalculate()
 
 	if v, ok := data["Animation"]; ok {
@@ -271,10 +289,6 @@ func (d *DynamicValue[T]) GetAnimation() Animated {
 }
 
 func (d *DynamicValue[T]) Recalculate() {
-	if !d.Procedural {
-		return
-	}
-
 	// Based on "Giving Personality to Procedural Animations using Math"
 	// https://www.youtube.com/watch?v=KPoeNZZ6H4s
 	if d.Freq == 0 {
@@ -283,12 +297,9 @@ func (d *DynamicValue[T]) Recalculate() {
 	radians := (2.0 * math.Pi * d.Freq)
 	d.k1 = d.Damping / (math.Pi * d.Freq)
 	d.k2 = 1.0 / (radians * radians)
-	d.k2 = d.Response * d.Damping / radians
+	d.k3 = d.Response * d.Damping / radians
 	// 80% of actual limit, to be safe
 	// d.tCrit = 0.8 * (math.Sqrt(4*d.k2+d.k1*d.k1) - d.k1)
-	if d.Input != nil {
-		d.Now = *d.Input
-	}
 	var zero T
 	d.outputV = zero
 }

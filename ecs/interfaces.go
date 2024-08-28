@@ -3,7 +3,10 @@
 
 package ecs
 
-import "reflect"
+import (
+	"reflect"
+	"tlyakhov/gofoom/concepts"
+)
 
 type Serializable interface {
 	Construct(data map[string]any)
@@ -41,6 +44,11 @@ type AttachableColumn interface {
 type GenericAttachable[T any] interface {
 	*T
 	Attachable
+}
+
+// A DynamicType is a type constraint for anything the engine can simulate
+type DynamicType interface {
+	~int | ~float64 | concepts.Vector2 | concepts.Vector3 | concepts.Vector4 | concepts.Matrix2
 }
 
 // Dynamic is an interface for any value that is affected by time in the engine:

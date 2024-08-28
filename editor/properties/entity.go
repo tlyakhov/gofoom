@@ -36,7 +36,9 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 	if entity != 0 {
 		img.ScaleMode = canvas.ImageScaleSmooth
 		img.FillMode = canvas.ImageFillContain
-		img.Image = g.IEditor.EntityImage(entity, editTypeTag != "Material")
+		if editTypeTag != "Path" {
+			img.Image = g.IEditor.EntityImage(entity, editTypeTag != "Material")
+		}
 		img.SetMinSize(fyne.NewSquareSize(64))
 		button.OnTapped = func() {
 			g.SelectObjects(true, core.SelectableFromEntity(g.State().ECS, entity))
@@ -68,6 +70,8 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().ECS, ecs.Entity(entity)) {
 			refs = append(refs, strconv.Itoa(entity))
 		} else if editTypeTag == "Sector" && core.GetSector(g.State().ECS, ecs.Entity(entity)) != nil {
+			refs = append(refs, strconv.Itoa(entity))
+		} else if editTypeTag == "Path" && core.GetPath(g.State().ECS, ecs.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(entity))
 		}
 	}
