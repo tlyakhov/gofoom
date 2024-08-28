@@ -146,7 +146,7 @@ func (b *Body) Construct(data map[string]any) {
 	b.CrWall = CollideSeparate
 	b.MountHeight = constants.PlayerMountHeight
 	b.Shadow = BodyShadowNone
-	b.Angle.NoRenderBlend = true
+	b.Angle.IsAngle = true
 
 	if data == nil {
 		return

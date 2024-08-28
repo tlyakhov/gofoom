@@ -410,7 +410,7 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldSlice(field)
 		case *[]*core.PathSegment:
 			g.fieldSlice(field)
-		case *concepts.TweeningFunc:
+		case *dynamic.TweeningFunc:
 			g.fieldTweeningFunc(field)
 		case **dynamic.Animation[int]:
 			g.fieldAnimation(field)

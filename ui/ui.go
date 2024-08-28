@@ -51,7 +51,7 @@ func (ui *UI) SetPage(page *Page) {
 	a.Duration = 100
 	a.Start = 0
 	a.End = 1.0
-	a.TweeningFunc = concepts.EaseInOut2
+	a.TweeningFunc = dynamic.EaseInOut2
 	a.Lifetime = dynamic.AnimationLifetimeOnce
 	a.Reverse = false
 	a.Active = false
@@ -66,7 +66,7 @@ func (ui *UI) SetPage(page *Page) {
 		a.Duration = 500
 		a.Start = w.highlight.Original
 		a.End = ui.SelectedColor
-		a.TweeningFunc = concepts.EaseInOut2
+		a.TweeningFunc = dynamic.EaseInOut2
 		a.Lifetime = dynamic.AnimationLifetimeBounce
 		a.Reverse = false
 		a.Active = false

@@ -33,13 +33,14 @@ const (
 type DynamicValue[T DynamicType] struct {
 	*Animation[T] `editable:"Animation"`
 
-	Now            T
-	Prev           T
-	Original       T `editable:"Initial Value"`
-	Render         *T
-	Attached       bool
-	NoRenderBlend  bool // For things like angles
-	RenderCallback func(blend float64)
+	Now           T
+	Prev          T
+	Original      T `editable:"Initial Value"`
+	Render        *T
+	Attached      bool
+	NoRenderBlend bool // Always use next frame value
+	IsAngle       bool // Only relevant for T=float64
+	OnRender      func(blend float64)
 
 	// Procedural dynamics
 	Procedural bool    `editable:"Procedural?"`
@@ -102,6 +103,15 @@ func (d *DynamicValue[T]) NewFrame() {
 	d.Prev = d.Now
 }
 
+func fixAngle(src float64, dst *float64) {
+	for *dst-src > 180 {
+		*dst -= 360
+	}
+	for *dst-src < -180 {
+		*dst += 360
+	}
+}
+
 func (d *DynamicValue[T]) UpdateProcedural() {
 	// Based on "Giving Personality to Procedural Animations using Math"
 	// https://www.youtube.com/watch?v=KPoeNZZ6H4s
@@ -109,6 +119,12 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 	k2Stable := math.Max(math.Max(d.k2, dt*dt*0.5+dt*d.k1*0.5), dt*d.k1)
 	switch dc := any(d).(type) {
 	case *DynamicValue[float64]:
+		if dc.IsAngle {
+			// |Input-prevInput| should be < 180
+			// |Input-Now| should be < 180
+			fixAngle(dc.Now, &dc.Input)
+			fixAngle(dc.Input, &dc.prevInput)
+		}
 		inputV := dc.Input - dc.prevInput
 		dc.Now += dc.outputV * dt
 		dc.outputV += dt * (dc.Input + d.k3*inputV - dc.Now - d.k1*dc.outputV) / k2Stable
@@ -142,34 +158,38 @@ func (d *DynamicValue[T]) Update(blend float64) {
 	}
 	if d.NoRenderBlend {
 		d.Render = &d.Now
-		if d.RenderCallback != nil {
-			d.RenderCallback(blend)
+		if d.OnRender != nil {
+			d.OnRender(blend)
 		}
 		return
 	}
 	switch dc := any(d).(type) {
 	case *DynamicValue[int]:
-		dc.render = int(concepts.Lerp(float64(dc.Prev), float64(dc.Now), blend))
+		dc.render = int(Lerp(float64(dc.Prev), float64(dc.Now), blend))
 	case *DynamicValue[float64]:
-		dc.render = concepts.Lerp(dc.Prev, dc.Now, blend)
+		if dc.IsAngle {
+			dc.render = TweenAngles(dc.Prev, dc.Now, blend, Lerp)
+		} else {
+			dc.render = Lerp(dc.Prev, dc.Now, blend)
+		}
 	case *DynamicValue[concepts.Vector2]:
-		dc.render[0] = concepts.Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = concepts.Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
 	case *DynamicValue[concepts.Vector3]:
-		dc.render[0] = concepts.Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = concepts.Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.render[2] = concepts.Lerp(dc.Prev[2], dc.Now[2], blend)
+		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
 	case *DynamicValue[concepts.Vector4]:
-		dc.render[0] = concepts.Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = concepts.Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.render[2] = concepts.Lerp(dc.Prev[2], dc.Now[2], blend)
-		dc.render[3] = concepts.Lerp(dc.Prev[3], dc.Now[3], blend)
+		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
+		dc.render[3] = Lerp(dc.Prev[3], dc.Now[3], blend)
 	case *DynamicValue[concepts.Matrix2]:
 		d.Render = &d.Now
 	}
 
-	if d.RenderCallback != nil {
-		d.RenderCallback(blend)
+	if d.OnRender != nil {
+		d.OnRender(blend)
 	}
 }
 

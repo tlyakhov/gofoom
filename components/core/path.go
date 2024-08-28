@@ -11,11 +11,13 @@ import (
 // This component represents a path. Examples:
 // - Animated entities and NPCs can follow this
 // - Special FX can be shaped by paths
-// TODO: Use https://www.youtube.com/watch?v=KPoeNZZ6H4s
+
+// TODO: Paths should probably be refactored to be scriptable Actions instead.
+// An action could be to move to a point sure, but it could also be to change
+// angle, fire a weapon, etc...
 type Path struct {
 	ecs.Attached `editable:"^"`
 
-	Loop     bool           `editable:"Loop"`
 	Segments []*PathSegment `editable:"Segments"`
 }
 
@@ -89,12 +91,12 @@ func (p *Path) Recalculate() {
 
 		nextIndex := (i + 1) % len(p.Segments)
 		next := p.Segments[nextIndex]
-		if nextIndex == 0 && !p.Loop {
+		/*if nextIndex == 0 && !p.Loop {
 			segment.Length = 0
 			segment.Next = nil
 			next.Prev = nil
 			continue
-		}
+		}*/
 
 		// Filter out degenerate segments.
 		if prev != nil && prev.P == segment.P {

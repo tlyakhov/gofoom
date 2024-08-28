@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package dynamic
 
 import (
 	"math"
@@ -178,11 +178,15 @@ func ElasticInOut(start, end, t float64) float64 {
 }
 
 func TweenAngles(start, end, t float64, f TweeningFunc) float64 {
-	// Simple way to do this is
+	// Nice trick from https://iogames.forum/t/how-to-smoothly-interpolate-between-two-angles-in-javascript/14839
+	da := math.Mod(end-start, 360)
+	return f(start, start+math.Mod(2*da, 360)-da, t)
+
+	/*// Simple way to do this is
 	// to convert to cartesian space, blend, convert back
-	y1, x1 := math.Sincos(start * Deg2rad)
-	y2, x2 := math.Sincos(end * Deg2rad)
+	y1, x1 := math.Sincos(start * concepts.Deg2rad)
+	y2, x2 := math.Sincos(end * concepts.Deg2rad)
 	x := f(x1, x2, t)
 	y := f(y1, y2, t)
-	return math.Atan2(y, x) * Rad2deg
+	return math.Atan2(y, x) * concepts.Rad2deg*/
 }
