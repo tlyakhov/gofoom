@@ -5,7 +5,7 @@ package behaviors
 
 import (
 	"reflect"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -35,8 +35,8 @@ type VerticalDoor struct {
 	AutoClose    bool       `editable:"Auto-close"`
 
 	// Passthroughs to Animation
-	TweeningFunc concepts.TweeningFunc `editable:"Tweening Function"`
-	Duration     float64               `editable:"Duration"`
+	TweeningFunc dynamic.TweeningFunc `editable:"Tweening Function"`
+	Duration     float64              `editable:"Duration"`
 }
 
 var VerticalDoorComponentIndex int
@@ -64,7 +64,7 @@ func (vd *VerticalDoor) String() string {
 func (vd *VerticalDoor) Construct(data map[string]any) {
 	vd.Attached.Construct(data)
 	vd.AutoClose = true
-	vd.TweeningFunc = concepts.EaseInOut2
+	vd.TweeningFunc = dynamic.EaseInOut2
 	vd.Duration = 1000
 
 	if data == nil {
@@ -84,9 +84,9 @@ func (vd *VerticalDoor) Construct(data map[string]any) {
 	}
 	if v, ok := data["TweeningFunc"]; ok {
 		name := v.(string)
-		vd.TweeningFunc = concepts.TweeningFuncs[name]
+		vd.TweeningFunc = dynamic.TweeningFuncs[name]
 		if vd.TweeningFunc == nil {
-			vd.TweeningFunc = concepts.EaseInOut2
+			vd.TweeningFunc = dynamic.EaseInOut2
 		}
 	}
 	if v, ok := data["Duration"]; ok {
@@ -101,6 +101,6 @@ func (vd *VerticalDoor) Serialize() map[string]any {
 		result["AutoClose"] = false
 	}
 	result["Duration"] = vd.Duration
-	result["TweeningFunc"] = concepts.TweeningFuncNames[reflect.ValueOf(vd.TweeningFunc).Pointer()]
+	result["TweeningFunc"] = dynamic.TweeningFuncNames[reflect.ValueOf(vd.TweeningFunc).Pointer()]
 	return result
 }

@@ -62,6 +62,8 @@ benefits as far as dynamic sectors, lighting, etc...
   - Inventory
   - Custom scripting (in Golang!) for interactive in-game effects
   - Animations capable of arbitrary easing functions
+  - Procedural animations capable of elastic/second-order dynamics
+  - Path following for objects and enemies
   - In-game UI, retro DOS style
 - World editor:
   - Realtime 3D view, allowing live manipulation of the world by clicking.
@@ -105,7 +107,9 @@ benefits as far as dynamic sectors, lighting, etc...
     geometry and bodies.
   - [/sectors](/components/sectors/) - these modify the behavior of basic
     sectors (e.g. underwater, doors, etc...)
+- [/containers](/containers) - data structures like set and queue
 - [/data](/data/) - a bunch of test data.
+- [/dynamic](/dynamic/) - Animations, dynamic values, procedural animation
 - [/ecs](/ecs/) - The ECS "database", query methods, serialization.
 - [/editor](/editor/) - all the code for the world editor.
 - [/game](/game/) - the game executable.

@@ -6,7 +6,7 @@ package properties
 import (
 	"reflect"
 	"slices"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/theme"
@@ -39,14 +39,14 @@ func (g *Grid) fieldTweeningFunc(field *state.PropertyGridField) {
 	origValue := field.Values[0].Deref().Pointer()
 
 	opts := make([]string, 0)
-	for name := range concepts.TweeningFuncs {
+	for name := range dynamic.TweeningFuncs {
 		opts = append(opts, name)
 	}
 	slices.Sort(opts)
 	optValues := make([]reflect.Value, 0)
 	selectedIndex := 0
 	for i, name := range opts {
-		f := reflect.ValueOf(concepts.TweeningFuncs[name])
+		f := reflect.ValueOf(dynamic.TweeningFuncs[name])
 		optValues = append(optValues, f)
 		if f.Pointer() == origValue {
 			selectedIndex = i

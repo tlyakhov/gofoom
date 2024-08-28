@@ -36,7 +36,7 @@ type Animated interface {
 
 type Animation[T DynamicType] struct {
 	*DynamicValue[T]
-	concepts.TweeningFunc `editable:"Tweening Function"`
+	TweeningFunc `editable:"Tweening Function"`
 
 	Start       T                    `editable:"Start"`
 	End         T                    `editable:"End"`
@@ -48,10 +48,10 @@ type Animation[T DynamicType] struct {
 	Percent     float64
 }
 
-func (a *Animation[T]) SetEasingFunc(name string) concepts.TweeningFunc {
-	a.TweeningFunc = concepts.TweeningFuncs[name]
+func (a *Animation[T]) SetEasingFunc(name string) TweeningFunc {
+	a.TweeningFunc = TweeningFuncs[name]
 	if a.TweeningFunc == nil {
-		a.TweeningFunc = concepts.Lerp
+		a.TweeningFunc = Lerp
 	}
 	return a.TweeningFunc
 }
@@ -136,7 +136,7 @@ func (a *Animation[T]) Construct(data map[string]any) {
 	a.Active = true
 	a.Duration = 1000
 	a.Reverse = false
-	a.TweeningFunc = concepts.Lerp
+	a.TweeningFunc = Lerp
 	a.Lifetime = AnimationLifetimeBounce
 	a.Coordinates = AnimationCoordinatesRelative
 
@@ -146,9 +146,9 @@ func (a *Animation[T]) Construct(data map[string]any) {
 
 	if v, ok := data["TweeningFunc"]; ok {
 		name := v.(string)
-		a.TweeningFunc = concepts.TweeningFuncs[name]
+		a.TweeningFunc = TweeningFuncs[name]
 		if a.TweeningFunc == nil {
-			a.TweeningFunc = concepts.Lerp
+			a.TweeningFunc = Lerp
 		}
 	}
 	if v, ok := data["Duration"]; ok {
@@ -224,7 +224,7 @@ func (a *Animation[T]) Serialize() map[string]any {
 	result["Active"] = a.Active
 	result["Reverse"] = a.Reverse
 	result["Percent"] = a.Percent
-	result["TweeningFunc"] = concepts.TweeningFuncNames[reflect.ValueOf(a.TweeningFunc).Pointer()]
+	result["TweeningFunc"] = TweeningFuncNames[reflect.ValueOf(a.TweeningFunc).Pointer()]
 	if a.Lifetime != AnimationLifetimeBounce {
 		result["Lifetime"] = a.Lifetime.String()
 	}

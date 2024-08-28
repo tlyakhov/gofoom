@@ -204,7 +204,7 @@ func (mw *MapWidget) DrawPath(path *core.Path) {
 	pathHovering := editor.HoveringObjects.Contains(core.SelectableFromPath(path))
 	pathSelected := editor.SelectedObjects.Contains(core.SelectableFromPath(path))
 
-	for _, segment := range path.Segments {
+	for i, segment := range path.Segments {
 		segmentHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
 		segmentSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
 
@@ -219,12 +219,11 @@ func (mw *MapWidget) DrawPath(path *core.Path) {
 			mw.Context.Stroke()
 		}
 
-		if segment.Next == nil || segment.P == segment.Next.P {
+		if i == len(path.Segments)-1 || segment.P == segment.Next.P {
 			continue
 		}
 
 		mw.Context.SetRGB(0.4, 1, 0.6)
-		mw.Context.SetDash(2, 4)
 
 		if pathHovering || pathSelected {
 			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
@@ -235,12 +234,14 @@ func (mw *MapWidget) DrawPath(path *core.Path) {
 		}
 
 		// Draw segment
+		mw.Context.SetDash(3, 8)
 		mw.Context.SetLineWidth(1)
 		mw.Context.NewSubPath()
 		mw.Context.MoveTo(segment.P[0], segment.P[1])
 		mw.Context.LineTo(segment.Next.P[0], segment.Next.P[1])
 		mw.Context.ClosePath()
 		mw.Context.Stroke()
+		mw.Context.SetDash()
 
 		if pathHovering || pathSelected || segmentHovering || segmentSelected {
 			normal := &concepts.Vector3{segment.Next.P[1] - segment.P[1], segment.P[0] - segment.Next.P[0], 0}

@@ -59,10 +59,10 @@ func (wc *WanderController) Always() {
 		if sector := core.GetSector(wc.Body.ECS, wc.NextSector); sector != nil {
 			end = wc.Body.Angle2DTo(&sector.Center)
 		}
-		a.End = concepts.TweenAngles(start, end, 0.2, concepts.Lerp)
+		a.End = dynamic.TweenAngles(start, end, 0.2, dynamic.Lerp)
 
 		a.Duration = 300
-		a.TweeningFunc = concepts.EaseInOut2
+		a.TweeningFunc = dynamic.EaseInOut2
 		a.Lifetime = dynamic.AnimationLifetimeOnce
 		wc.LastTurn = wc.ECS.Timestamp
 	}
