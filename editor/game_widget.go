@@ -6,7 +6,7 @@ package main
 import (
 	"image"
 	"log"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -27,12 +27,12 @@ type GameWidget struct {
 	Raster  *canvas.Raster
 	Context *gg.Context
 	Surface *image.RGBA
-	KeyMap  concepts.Set[fyne.KeyName]
+	KeyMap  containers.Set[fyne.KeyName]
 }
 
 func NewGameWidget() *GameWidget {
 	g := &GameWidget{
-		KeyMap: make(concepts.Set[fyne.KeyName]),
+		KeyMap: make(containers.Set[fyne.KeyName]),
 	}
 	g.ExtendBaseWidget(g)
 	g.Raster = canvas.NewRaster(g.generateRaster)

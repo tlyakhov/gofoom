@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/ecs"
+	"tlyakhov/gofoom/dynamic"
 )
 
 const (
@@ -340,10 +340,10 @@ func (ui *UI) renderPage(page *Page) {
 		y += 3
 		w := page.Widgets[i].GetWidget()
 		if selected {
-			w.highlight.Animation.Lifetime = ecs.AnimationLifetimeBounce
+			w.highlight.Animation.Lifetime = dynamic.AnimationLifetimeBounce
 			w.highlight.Animation.Active = true
 		} else {
-			w.highlight.Animation.Lifetime = ecs.AnimationLifetimeBounceOnce
+			w.highlight.Animation.Lifetime = dynamic.AnimationLifetimeBounceOnce
 		}
 	}
 	if page.tooltipCurrent != nil {

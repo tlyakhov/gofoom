@@ -12,6 +12,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -70,7 +71,7 @@ func (le *LightSampler) Get() *concepts.Vector3 {
 	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
-	fz, cz := le.Sector.ZAt(ecs.DynamicRender, le.Q.To2D())
+	fz, cz := le.Sector.ZAt(dynamic.DynamicRender, le.Q.To2D())
 	if le.Q[2] < fz {
 		le.Q[2] = fz
 	}
@@ -108,7 +109,7 @@ func (le *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(ecs.DynamicRender, p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, p.To2D())
 		if p[2]-ceilZ > le.LightGrid || floorZ-p[2] > le.LightGrid {
 			continue
 		}
@@ -264,8 +265,8 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
 			i2d := le.Intersection.To2D()
-			floorZ, ceilZ := sector.ZAt(ecs.DynamicRender, i2d)
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(ecs.DynamicRender, i2d)
+			floorZ, ceilZ := sector.ZAt(dynamic.DynamicRender, i2d)
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, i2d)
 			if debugLighting {
 				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			}

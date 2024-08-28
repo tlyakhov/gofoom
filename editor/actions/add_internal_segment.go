@@ -6,6 +6,7 @@ package actions
 import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2/driver/desktop"
@@ -61,7 +62,7 @@ func (a *AddInternalSegment) OnMouseMove() {
 		a.B.From(worldGrid)
 	}
 	if a.ContainingSector != nil {
-		a.Bottom, a.Top = a.ContainingSector.ZAt(ecs.DynamicOriginal, worldGrid)
+		a.Bottom, a.Top = a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
 	}
 	a.Recalculate()
 }

@@ -7,6 +7,7 @@ import (
 	"math"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -14,11 +15,11 @@ type SectorPlane struct {
 	ECS *ecs.ECS
 	*Sector
 
-	Z       ecs.DynamicValue[float64] `editable:"Z"`
-	Normal  concepts.Vector3          `editable:"Normal"`
-	Target  ecs.Entity                `editable:"Target" edit_type:"Sector"`
-	Surface materials.Surface         `editable:"Surf"`
-	Scripts []*Script                 `editable:"Scripts"`
+	Z       dynamic.DynamicValue[float64] `editable:"Z"`
+	Normal  concepts.Vector3              `editable:"Normal"`
+	Target  ecs.Entity                    `editable:"Target" edit_type:"Sector"`
+	Surface materials.Surface             `editable:"Surf"`
+	Scripts []*Script                     `editable:"Scripts"`
 }
 
 func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
@@ -68,7 +69,7 @@ func (s *SectorPlane) Serialize() map[string]any {
 	return result
 }
 
-func (s *SectorPlane) ZAt(stage ecs.DynamicStage, isect *concepts.Vector2) float64 {
+func (s *SectorPlane) ZAt(stage dynamic.DynamicStage, isect *concepts.Vector2) float64 {
 	z := s.Z.Value(stage)
 	if s.Sector == nil || len(s.Sector.Segments) == 0 {
 		return z

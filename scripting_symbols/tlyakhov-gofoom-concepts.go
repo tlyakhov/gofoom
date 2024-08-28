@@ -74,12 +74,10 @@ func init() {
 		"Vector2AABBIntersect": reflect.ValueOf(concepts.Vector2AABBIntersect),
 
 		// type definitions
-		"Matrix2":         reflect.ValueOf((*concepts.Matrix2)(nil)),
-		"SyncQueue":       reflect.ValueOf((*concepts.SyncQueue)(nil)),
-		"SyncUniqueQueue": reflect.ValueOf((*concepts.SyncUniqueQueue)(nil)),
-		"TweeningFunc":    reflect.ValueOf((*concepts.TweeningFunc)(nil)),
-		"Vector2":         reflect.ValueOf((*concepts.Vector2)(nil)),
-		"Vector3":         reflect.ValueOf((*concepts.Vector3)(nil)),
-		"Vector4":         reflect.ValueOf((*concepts.Vector4)(nil)),
+		"Matrix2":      reflect.ValueOf((*concepts.Matrix2)(nil)),
+		"TweeningFunc": reflect.ValueOf((*concepts.TweeningFunc)(nil)),
+		"Vector2":      reflect.ValueOf((*concepts.Vector2)(nil)),
+		"Vector3":      reflect.ValueOf((*concepts.Vector3)(nil)),
+		"Vector4":      reflect.ValueOf((*concepts.Vector4)(nil)),
 	}
 }

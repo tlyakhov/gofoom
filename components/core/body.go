@@ -7,6 +7,7 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/concepts"
@@ -14,13 +15,13 @@ import (
 
 type Body struct {
 	ecs.Attached `editable:"^"`
-	Pos          ecs.DynamicValue[concepts.Vector3] `editable:"Position"`
-	Vel          ecs.DynamicValue[concepts.Vector3]
+	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`
+	Vel          dynamic.DynamicValue[concepts.Vector3]
 	Force        concepts.Vector3
-	Size         ecs.DynamicValue[concepts.Vector2] `editable:"Size"`
+	Size         dynamic.DynamicValue[concepts.Vector2] `editable:"Size"`
 	SectorEntity ecs.Entity
-	Angle        ecs.DynamicValue[float64] `editable:"Angle"`
-	Mass         float64                   `editable:"Mass"`
+	Angle        dynamic.DynamicValue[float64] `editable:"Angle"`
+	Mass         float64                       `editable:"Mass"`
 
 	// "Bounciness" (0 = inelastic, 1 = perfectly elastic)
 	Elasticity  float64           `editable:"Elasticity"`
@@ -92,7 +93,7 @@ func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
-func (b *Body) BillboardSegment(unitView *concepts.Vector3, ds ecs.DynamicStage) *Segment {
+func (b *Body) BillboardSegment(unitView *concepts.Vector3, ds dynamic.DynamicStage) *Segment {
 	p := b.Pos.Value(ds)
 	s := b.Size.Value(ds)
 	return &Segment{

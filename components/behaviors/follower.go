@@ -5,15 +5,16 @@ package behaviors
 
 import (
 	"strconv"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
 type Follower struct {
 	ecs.Attached `editable:"^"`
-	Path         ecs.Entity            `editable:"Path" edit_type:"Path"`
-	NoZ          bool                  `editable:"2D only"`
-	Lifetime     ecs.AnimationLifetime `editable:"Lifetime"`
-	Speed        float64               `editable:"Speed"`
+	Path         ecs.Entity                `editable:"Path" edit_type:"Path"`
+	NoZ          bool                      `editable:"2D only"`
+	Lifetime     dynamic.AnimationLifetime `editable:"Lifetime"`
+	Speed        float64                   `editable:"Speed"`
 
 	// Internal state
 	Index int
@@ -41,7 +42,7 @@ func (f *Follower) Construct(data map[string]any) {
 	f.NoZ = false
 	f.Index = 0
 	f.Speed = 10
-	f.Lifetime = ecs.AnimationLifetimeLoop
+	f.Lifetime = dynamic.AnimationLifetimeLoop
 
 	if data == nil {
 		return
@@ -59,7 +60,7 @@ func (f *Follower) Construct(data map[string]any) {
 		f.NoZ = v.(bool)
 	}
 	if v, ok := data["Lifetime"]; ok {
-		if l, err := ecs.AnimationLifetimeString(v.(string)); err == nil {
+		if l, err := dynamic.AnimationLifetimeString(v.(string)); err == nil {
 			f.Lifetime = l
 		}
 	}
@@ -80,7 +81,7 @@ func (f *Follower) Serialize() map[string]any {
 	if f.NoZ {
 		result["NoZ"] = f.NoZ
 	}
-	if f.Lifetime != ecs.AnimationLifetimeLoop {
+	if f.Lifetime != dynamic.AnimationLifetimeLoop {
 		result["Lifetime"] = f.Lifetime
 	}
 	return result

@@ -15,6 +15,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render/state"
 )
@@ -261,7 +262,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 
 	if c.SegmentIntersection != nil {
 		c.SegmentIntersection.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
-		c.IntersectionBottom, c.IntersectionTop = c.Sector.ZAt(ecs.DynamicRender, c.RaySegIntersect.To2D())
+		c.IntersectionBottom, c.IntersectionTop = c.Sector.ZAt(dynamic.DynamicRender, c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)

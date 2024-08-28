@@ -7,7 +7,5 @@ package concepts
 
 import (
 	_ "github.com/dmarkham/enumer"
-	_ "github.com/klauspost/cpuid/v2"
-	_ "github.com/mmcloughlin/avo"
 	_ "golang.org/x/tools/cmd/stringer"
 )

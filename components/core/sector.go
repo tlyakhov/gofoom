@@ -9,6 +9,7 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/puzpuzpuz/xsync/v3"
@@ -69,7 +70,7 @@ func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	return inside
 }
 
-func (s *Sector) ZAt(stage ecs.DynamicStage, p *concepts.Vector2) (fz, cz float64) {
+func (s *Sector) ZAt(stage dynamic.DynamicStage, p *concepts.Vector2) (fz, cz float64) {
 	return s.Bottom.ZAt(stage, p), s.Top.ZAt(stage, p)
 }
 
@@ -275,7 +276,7 @@ func (s *Sector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		bz, tz := s.ZAt(ecs.DynamicOriginal, &segment.P)
+		bz, tz := s.ZAt(dynamic.DynamicOriginal, &segment.P)
 		if bz < s.Min[2] {
 			s.Min[2] = bz
 		}

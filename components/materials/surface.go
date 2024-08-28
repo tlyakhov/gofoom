@@ -5,6 +5,7 @@ package materials
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -20,9 +21,9 @@ import (
 
 type Surface struct {
 	ECS         *ecs.ECS
-	Material    ecs.Entity                         `editable:"Material" edit_type:"Material"`
-	ExtraStages []*ShaderStage                     `editable:"Extra Shader Stages"`
-	Transform   ecs.DynamicValue[concepts.Matrix2] `editable:"Transform"`
+	Material    ecs.Entity                             `editable:"Material" edit_type:"Material"`
+	ExtraStages []*ShaderStage                         `editable:"Extra Shader Stages"`
+	Transform   dynamic.DynamicValue[concepts.Matrix2] `editable:"Transform"`
 }
 
 func (s *Surface) Construct(db *ecs.ECS, data map[string]any) {

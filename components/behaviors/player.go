@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -21,7 +22,7 @@ type Player struct {
 	CameraZ       float64
 	CurrentWeapon *InventorySlot
 
-	Notices concepts.SyncUniqueQueue
+	Notices containers.SyncUniqueQueue
 }
 
 var PlayerComponentIndex int

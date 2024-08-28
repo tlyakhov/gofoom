@@ -7,6 +7,7 @@ import (
 	"image"
 	"strings"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/fogleman/gg"
@@ -20,7 +21,7 @@ type Text struct {
 	Label       string  `editable:"Label" edit_type:"multi-line-string"`
 	LineSpacing float64 `editable:"Line Spacing"`
 
-	Color ecs.DynamicValue[concepts.Vector4] `editable:"Color"`
+	Color dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
 var TextComponentIndex int

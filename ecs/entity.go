@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 )
 
 type Entity int
@@ -78,8 +78,8 @@ func (ref *EntityRef[T]) Refresh(db *ECS, index int) {
 	ref.Value = db.Component(ref.Entity, index).(T)
 }
 
-func DeserializeEntities[T ~string | any](data []T) concepts.Set[Entity] {
-	result := make(concepts.Set[Entity])
+func DeserializeEntities[T ~string | any](data []T) containers.Set[Entity] {
+	result := make(containers.Set[Entity])
 	if data == nil {
 		return result
 	}
@@ -99,7 +99,7 @@ func DeserializeEntities[T ~string | any](data []T) concepts.Set[Entity] {
 	return result
 }
 
-func SerializeEntities(data concepts.Set[Entity]) []string {
+func SerializeEntities(data containers.Set[Entity]) []string {
 	result := make([]string, len(data))
 	i := 0
 	for e := range data {

@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render/state"
 )
@@ -120,8 +121,8 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.ZAt(ecs.DynamicNow, wc.isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(ecs.DynamicNow, wc.isect.To2D())
+			floorZ, ceilZ := sector.ZAt(dynamic.DynamicNow, wc.isect.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicNow, wc.isect.To2D())
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
@@ -168,9 +169,9 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
 	switch s.Type {
 	case core.SelectableHi:
-		_, top = s.Sector.ZAt(ecs.DynamicNow, p)
+		_, top = s.Sector.ZAt(dynamic.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.ZAt(ecs.DynamicNow, p)
+		_, adjTop := adj.ZAt(dynamic.DynamicNow, p)
 		if adjTop <= top {
 			bottom = adjTop
 			surf = &s.SectorSegment.AdjacentSegment.HiSurface
@@ -179,9 +180,9 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			surf = &s.SectorSegment.HiSurface
 		}
 	case core.SelectableLow:
-		bottom, _ = s.Sector.ZAt(ecs.DynamicNow, p)
+		bottom, _ = s.Sector.ZAt(dynamic.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.ZAt(ecs.DynamicNow, p)
+		adjBottom, _ := adj.ZAt(dynamic.DynamicNow, p)
 		if bottom <= adjBottom {
 			top = adjBottom
 			surf = &s.SectorSegment.AdjacentSegment.LoSurface
@@ -190,7 +191,7 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			surf = &s.SectorSegment.LoSurface
 		}
 	case core.SelectableMid:
-		bottom, top = s.Sector.ZAt(ecs.DynamicNow, p)
+		bottom, top = s.Sector.ZAt(dynamic.DynamicNow, p)
 		surf = &s.SectorSegment.Surface
 	case core.SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top

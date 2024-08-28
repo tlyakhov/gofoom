@@ -6,13 +6,14 @@ package behaviors
 import (
 	"fmt"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
 type Damage struct {
 	Amount float64
 	// This is in frames currently, should be in seconds or ms
-	Cooldown ecs.DynamicValue[float64]
+	Cooldown dynamic.DynamicValue[float64]
 }
 
 type Alive struct {

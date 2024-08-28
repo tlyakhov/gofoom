@@ -14,6 +14,7 @@ import (
 
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 
@@ -88,7 +89,7 @@ func NewEditor() *Editor {
 			ComponentNamesVisible: true,
 			HoveringObjects:       core.NewSelection(),
 			SelectedObjects:       core.NewSelection(),
-			KeysDown:              make(concepts.Set[fyne.KeyName]),
+			KeysDown:              make(containers.Set[fyne.KeyName]),
 		},
 		MapViewGrid:     MapViewGrid{Visible: true},
 		entityIconCache: xsync.NewMapOf[ecs.Entity, entityIconCacheItem](),

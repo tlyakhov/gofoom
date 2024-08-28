@@ -5,12 +5,13 @@ package materials
 
 import (
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
 type Solid struct {
 	ecs.Attached `editable:"^"`
-	Diffuse      ecs.DynamicValue[concepts.Vector4] `editable:"Color"`
+	Diffuse      dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
 var SolidComponentIndex int

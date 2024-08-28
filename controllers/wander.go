@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -50,7 +51,7 @@ func (wc *WanderController) Always() {
 
 	if wc.ECS.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
 		a := wc.Body.Angle.NewAnimation()
-		a.Coordinates = ecs.AnimationCoordinatesAbsolute
+		a.Coordinates = dynamic.AnimationCoordinatesAbsolute
 		a.Start = wc.Body.Angle.Now
 		// Bias towards the center of the sector
 		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
@@ -62,7 +63,7 @@ func (wc *WanderController) Always() {
 
 		a.Duration = 300
 		a.TweeningFunc = concepts.EaseInOut2
-		a.Lifetime = ecs.AnimationLifetimeOnce
+		a.Lifetime = dynamic.AnimationLifetimeOnce
 		wc.LastTurn = wc.ECS.Timestamp
 	}
 	if wc.ECS.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {

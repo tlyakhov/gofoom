@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
@@ -60,15 +60,15 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 	entry.MultiLine = multiline
 	entry.OnSubmitted = nil
 	entry.SetText(origValue)
-	if _, ok := field.Values[0].Interface().(concepts.Set[string]); ok {
+	if _, ok := field.Values[0].Interface().(containers.Set[string]); ok {
 		entry.OnSubmitted = func(text string) {
-			set := make(concepts.Set[string])
+			set := make(containers.Set[string])
 			split := strings.Split(text, ",")
 			set.AddAll(split...)
 			g.ApplySetPropertyAction(field, reflect.ValueOf(set))
 		}
 		return
-	} else if _, ok := field.Values[0].Interface().(concepts.Set[ecs.Entity]); ok {
+	} else if _, ok := field.Values[0].Interface().(containers.Set[ecs.Entity]); ok {
 		entry.OnSubmitted = func(text string) {
 			split := strings.Split(text, ",")
 			g.ApplySetPropertyAction(field, reflect.ValueOf(ecs.DeserializeEntities(split)))

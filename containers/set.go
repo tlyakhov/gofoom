@@ -1,11 +1,10 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package concepts
+package containers
 
-type stringable interface {
-	String() string
-}
+import "fmt"
+
 type Set[T comparable] map[T]struct{}
 
 func (s Set[T]) Add(element T) {
@@ -36,7 +35,7 @@ func (s Set[T]) String() string {
 		switch value := any(element).(type) {
 		case string:
 			r += value
-		case stringable:
+		case fmt.Stringer:
 			r += value.String()
 		}
 	}

@@ -4,7 +4,7 @@
 package actions
 
 import (
-	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
@@ -67,7 +67,7 @@ func (a *SplitSector) OnMouseUp() {
 		}
 	} else {
 		sectors = make([]*core.Sector, 0)
-		visited := make(concepts.Set[ecs.Entity])
+		visited := make(containers.Set[ecs.Entity])
 		for _, s := range a.State().SelectedObjects.Exact {
 			// We could just check for the .Sector field being valid, but then
 			// the user may be surprised to have a sector split when they've
