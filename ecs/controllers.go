@@ -40,14 +40,14 @@ func act(controller Controller, method ControllerMethod) {
 	}
 }
 
-func (db *ECS) Act(component Attachable, index int, method ControllerMethod) {
+func (db *ECS) Act(component Attachable, id ComponentID, method ControllerMethod) {
 	for _, meta := range Types().Controllers {
 		controller := reflect.New(meta.Type.Elem()).Interface().(Controller)
 		if controller == nil || controller.Methods()&method == 0 {
 			continue
 		}
 		if controller.Methods()&method == 0 ||
-			controller.ComponentIndex() != index ||
+			controller.ComponentID() != id ||
 			!controller.Target(component) {
 			continue
 		}
@@ -62,7 +62,7 @@ func (db *ECS) ActAllControllers(method ControllerMethod) {
 			continue
 		}
 
-		col := db.columns[controller.ComponentIndex()]
+		col := db.columns[controller.ComponentID()&0xFFFF]
 		for i := range col.Len() {
 			if !controller.Target(col.Attachable(i)) {
 				continue

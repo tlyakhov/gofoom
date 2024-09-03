@@ -30,6 +30,7 @@ type Attachable interface {
 }
 
 type AttachableColumn interface {
+	From(source AttachableColumn)
 	New() Attachable
 	Add(c Attachable) Attachable
 	Replace(c Attachable, index int) Attachable
@@ -37,6 +38,7 @@ type AttachableColumn interface {
 	Detach(index int)
 	Type() reflect.Type
 	Len() int
+	ID() ComponentID
 	String() string
 }
 

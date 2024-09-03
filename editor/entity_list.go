@@ -178,7 +178,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 }
 func (list *EntityList) Update() {
 	list.BackingStore = make([][elcNumColumns]any, 0)
-	numEcsColumns := len(ecs.Types().ColumnPlaceholders)
+	numEcsColumns := ecs.Types().LenGroupedComponents
 	ec := list.State().ECS.EntityComponents
 	searchValid := len(list.State().SearchTerms) > 0
 
@@ -205,13 +205,16 @@ func (list *EntityList) Update() {
 			}
 			parentDesc += desc
 
-			if index == core.BodyComponentIndex {
+			switch c.(type) {
+			case *core.Body:
 				rowColor = colornames.Lightblue
-			} else if index == core.SectorComponentIndex {
+			case *core.Sector:
 				rowColor = colornames.Lightgreen
-			} else if index == materials.ImageComponentIndex ||
-				index == materials.SolidComponentIndex ||
-				index == materials.ShaderComponentIndex {
+			case *materials.Image:
+				rowColor = colornames.Lightpink
+			case *materials.Sprite:
+				rowColor = colornames.Lightpink
+			case *materials.Shader:
 				rowColor = colornames.Lightpink
 			}
 		}
@@ -220,7 +223,7 @@ func (list *EntityList) Update() {
 			dispRank = concepts.Max(concepts.Min(rank+50, 100), 0)
 		}
 		backingRow := [4]any{
-			entity,
+			int(entity),
 			parentDesc,
 			dispRank,
 			rowColor,

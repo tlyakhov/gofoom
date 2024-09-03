@@ -30,8 +30,8 @@ func init() {
 	ecs.Types().RegisterController(&WeaponInstantController{}, 100)
 }
 
-func (wc *WeaponInstantController) ComponentIndex() int {
-	return behaviors.WeaponInstantComponentIndex
+func (wc *WeaponInstantController) ComponentID() ecs.ComponentID {
+	return behaviors.WeaponInstantCID
 }
 
 func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {

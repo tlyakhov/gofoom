@@ -29,8 +29,8 @@ func init() {
 	ecs.Types().RegisterController(&BodyController{}, 80)
 }
 
-func (bc *BodyController) ComponentIndex() int {
-	return core.BodyComponentIndex
+func (bc *BodyController) ComponentID() ecs.ComponentID {
+	return core.BodyCID
 }
 
 func (bc *BodyController) Methods() ecs.ControllerMethod {

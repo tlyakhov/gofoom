@@ -24,9 +24,9 @@ type ECS struct {
 	Entities         bitmap.Bitmap
 	EntityComponents []Attachable
 
-	columns    []AttachableColumn
-	numColumns int
-	Lock       sync.RWMutex
+	lenGroupedComponents int
+	columns              []AttachableColumn
+	Lock                 sync.RWMutex
 }
 
 func NewECS() *ECS {
@@ -37,12 +37,12 @@ func NewECS() *ECS {
 }
 
 func (db *ECS) Clear() {
-	db.numColumns = len(Types().ColumnPlaceholders)
+	db.lenGroupedComponents = Types().LenGroupedComponents
 	db.Entities = bitmap.Bitmap{}
 	db.Entities.Set(0) // 0 is reserved
 	// 0 is reserved
-	db.EntityComponents = make([]Attachable, db.numColumns)
-	db.columns = make([]AttachableColumn, db.numColumns)
+	db.EntityComponents = make([]Attachable, db.lenGroupedComponents)
+	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = dynamic.NewSimulation()
 	for i, columnPlaceholder := range Types().ColumnPlaceholders {
 		if columnPlaceholder == nil {
@@ -54,6 +54,7 @@ func (db *ECS) Clear() {
 		newComponentMetadata := reflect.New(t.Elem())
 		newComponentMetadata.Elem().FieldByName("ECS").Set(reflect.ValueOf(db))
 		db.columns[i] = newComponentMetadata.Interface().(AttachableColumn)
+		db.columns[i].From(columnPlaceholder)
 	}
 }
 
@@ -64,64 +65,66 @@ func (db *ECS) NewEntity() Entity {
 		return Entity(free)
 	}
 	nextFree := len(db.EntityComponents)
-	db.EntityComponents = append(db.EntityComponents, nil)
+	for range db.lenGroupedComponents {
+		db.EntityComponents = append(db.EntityComponents, nil)
+	}
 	db.Entities.Set(uint32(nextFree))
 	return Entity(nextFree)
 }
 
-func ColumnFor[T any, PT GenericAttachable[T]](db *ECS, index int) *Column[T, PT] {
-	return db.columns[index].(*Column[T, PT])
+func ColumnFor[T any, PT GenericAttachable[T]](db *ECS, id ComponentID) *Column[T, PT] {
+	return db.columns[id&0xFFFF].(*Column[T, PT])
 }
 
 func (db *ECS) AllComponents(entity Entity) []Attachable {
-	start := int(entity) * db.numColumns
+	start := int(entity) * db.lenGroupedComponents
 	if entity == 0 || len(db.EntityComponents) <= start {
 		return nil
 	}
-	end := start + db.numColumns
+	end := start + db.lenGroupedComponents
 	return db.EntityComponents[start:end]
 }
 
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The Get* methods are better.
-func (db *ECS) Component(entity Entity, cindex int) Attachable {
-	if entity == 0 || cindex == 0 {
+func (db *ECS) Component(entity Entity, id ComponentID) Attachable {
+	if entity == 0 || id == 0 {
 		return nil
 	}
-	index := int(entity)*db.numColumns + cindex
+	index := int(entity)*db.lenGroupedComponents + int(id>>16)
 	if len(db.EntityComponents) <= index {
 		return nil
 	}
 	return db.EntityComponents[index]
 }
 
-func (db *ECS) First(index int) Attachable {
-	c := db.columns[index]
+func (db *ECS) First(id ComponentID) Attachable {
+	c := db.columns[id&0xFFFF]
 	if c.Len() > 0 {
-		return db.columns[index].Attachable(0)
+		return db.columns[id&0xFFFF].Attachable(0)
 	}
 	return nil
 }
 
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
-func (db *ECS) attach(entity Entity, component Attachable, cindex int) Attachable {
+func (db *ECS) attach(entity Entity, component Attachable, componentID ComponentID) Attachable {
 	if entity == 0 {
 		log.Printf("Tried to attach 0 entity!")
 		return nil
 	}
 
-	index := int(entity)*db.numColumns + cindex
-	for len(db.EntityComponents) <= int(entity+1)*db.numColumns {
+	index := int(entity)*db.lenGroupedComponents + int(componentID>>16)
+	for len(db.EntityComponents) <= int(entity+1)*db.lenGroupedComponents {
 		db.EntityComponents = append(db.EntityComponents, nil)
 	}
 
-	column := db.columns[cindex]
+	column := db.columns[componentID&0xFFFF]
 	ec := db.EntityComponents[index]
 	if ec != nil {
 		// A component with this index is already attached to this entity, overwrite it.
-		componentsIndex := ec.IndexInColumn()
-		component = column.Replace(component, componentsIndex)
+		indexInColumn := ec.IndexInColumn()
+		component = column.Replace(component, indexInColumn)
 	} else {
 		// This entity doesn't have a component with this index attached. Extend the
 		// slice.
@@ -133,13 +136,13 @@ func (db *ECS) attach(entity Entity, component Attachable, cindex int) Attachabl
 }
 
 // Create a new component with the given index and attach it.
-func (db *ECS) NewAttachedComponent(entity Entity, index int) Attachable {
-	attached := db.attach(entity, nil, index)
+func (db *ECS) NewAttachedComponent(entity Entity, id ComponentID) Attachable {
+	attached := db.attach(entity, nil, id)
 	attached.Construct(nil)
 	return attached
 }
 
-func (db *ECS) LoadAttachComponent(index int, data map[string]any, ignoreSerializedEntity bool) Attachable {
+func (db *ECS) LoadAttachComponent(id ComponentID, data map[string]any, ignoreSerializedEntity bool) Attachable {
 	var entity Entity
 	var err error
 	if ignoreSerializedEntity || data["Entity"] == nil {
@@ -150,16 +153,16 @@ func (db *ECS) LoadAttachComponent(index int, data map[string]any, ignoreSeriali
 
 	db.Entities.Set(uint32(entity))
 
-	attached := db.attach(entity, nil, index)
+	attached := db.attach(entity, nil, id)
 	attached.Construct(data)
 	return attached
 }
 
-func (db *ECS) LoadComponentWithoutAttaching(index int, data map[string]any) Attachable {
+func (db *ECS) LoadComponentWithoutAttaching(id ComponentID, data map[string]any) Attachable {
 	if data == nil {
 		return nil
 	}
-	component := Types().ColumnPlaceholders[index].New()
+	component := Types().ColumnPlaceholders[id&0xFFFF].New()
 	component.SetEntity(0)
 	component.AttachECS(db)
 	component.Construct(data)
@@ -167,7 +170,7 @@ func (db *ECS) LoadComponentWithoutAttaching(index int, data map[string]any) Att
 }
 
 func (db *ECS) NewAttachedComponentTyped(entity Entity, cType string) Attachable {
-	if index, ok := Types().Indexes[cType]; ok {
+	if index, ok := Types().IDs[cType]; ok {
 		return db.NewAttachedComponent(entity, index)
 	}
 
@@ -175,8 +178,8 @@ func (db *ECS) NewAttachedComponentTyped(entity Entity, cType string) Attachable
 	return nil
 }
 
-func (db *ECS) Attach(componentIndex int, entity Entity, component Attachable) Attachable {
-	return db.attach(entity, component, componentIndex)
+func (db *ECS) Attach(id ComponentID, entity Entity, component Attachable) Attachable {
+	return db.attach(entity, component, id)
 }
 
 // This seems expensive. Need to profile
@@ -186,25 +189,25 @@ func (db *ECS) AttachTyped(entity Entity, component Attachable) {
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
-	if index, ok := Types().Indexes[t.String()]; ok {
+	if index, ok := Types().IDs[t.String()]; ok {
 		db.attach(entity, component, index)
 	}
 }
 
-func (db *ECS) detach(cindex int, entity Entity, checkForEmpty bool) {
+func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 	if entity == 0 {
 		log.Printf("ECS.Detach: tried to detach 0 entity.")
 		return
 	}
-	if cindex == 0 {
+	if id == 0 {
 		log.Printf("ECS.Detach: tried to detach 0 component index.")
 		return
 	}
 
-	index := int(entity)*db.numColumns + cindex
+	index := int(entity)*db.lenGroupedComponents + int(id>>16)
 
 	if len(db.EntityComponents) <= index {
-		log.Printf("ECS.Detach: entity %v is >= length of list %v.", entity, len(db.EntityComponents)/db.numColumns)
+		log.Printf("ECS.Detach: entity %v is >= length of list %v.", entity, len(db.EntityComponents)/db.lenGroupedComponents)
 		return
 	}
 	ec := db.EntityComponents[index]
@@ -213,13 +216,21 @@ func (db *ECS) detach(cindex int, entity Entity, checkForEmpty bool) {
 		return
 	}
 
+	// Ensure that the component is of the type the caller expects:
+	column := db.columns[id&0xFFFF]
+	iic := ec.IndexInColumn()
+	if column.Len() <= iic || column.Attachable(iic) != ec {
+		log.Printf("ECS.Detach: tried to detach %v from entity %v - %v", column.String(), entity, ec.String())
+		return
+	}
+
 	ec.OnDetach()
-	db.columns[cindex].Detach(ec.IndexInColumn())
+	column.Detach(ec.IndexInColumn())
 	db.EntityComponents[index] = nil
 
 	if checkForEmpty {
 		allNil := true
-		for i := int(entity) * db.numColumns; i < int(entity+1)*db.numColumns; i++ {
+		for i := int(entity) * db.lenGroupedComponents; i < int(entity+1)*db.lenGroupedComponents; i++ {
 			if db.EntityComponents[i] != nil {
 				allNil = false
 			}
@@ -230,8 +241,8 @@ func (db *ECS) detach(cindex int, entity Entity, checkForEmpty bool) {
 	}
 }
 
-func (db *ECS) Detach(index int, entity Entity) {
-	db.detach(index, entity, true)
+func (db *ECS) Detach(id ComponentID, entity Entity) {
+	db.detach(id, entity, true)
 }
 
 func (db *ECS) DetachByType(component Attachable) {
@@ -250,12 +261,8 @@ func (db *ECS) DetachByType(component Attachable) {
 		tLocal = tLocal.Elem()
 	}
 
-	index := Types().Indexes[tLocal.String()]
-	if index < 0 {
-		return
-	}
-
-	db.detach(index, entity, true)
+	id := Types().IDs[tLocal.String()]
+	db.detach(id, entity, true)
 }
 
 func (db *ECS) DetachAll(entity Entity) {
@@ -263,19 +270,17 @@ func (db *ECS) DetachAll(entity Entity) {
 		return
 	}
 
-	for index := range db.columns {
+	for _, index := range Types().IDs {
 		if index == 0 {
 			continue
 		}
 		db.detach(index, entity, false)
 	}
-
-	db.EntityComponents[entity] = nil
 	db.Entities.Remove(uint32(entity))
 }
 
 func (db *ECS) GetEntityByName(name string) Entity {
-	col := ColumnFor[Named](db, NamedComponentIndex)
+	col := ColumnFor[Named](db, NamedCID)
 	for i := range col.Length {
 		named := col.Value(i)
 		if named.Name == name {
@@ -287,7 +292,7 @@ func (db *ECS) GetEntityByName(name string) Entity {
 }
 
 func (db *ECS) DeserializeAndAttachEntity(jsonEntity map[string]any) {
-	for name, index := range Types().Indexes {
+	for name, index := range Types().IDs {
 		jsonData := jsonEntity[name]
 		if jsonData == nil {
 			continue
@@ -337,17 +342,14 @@ func (db *ECS) Load(filename string) error {
 func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 	jsonEntity := make(map[string]any)
 	jsonEntity["Entity"] = entity.String()
-	start := int(entity) * db.numColumns
-	end := start + db.numColumns
-	column := 0
+	start := int(entity) * db.lenGroupedComponents
+	end := start + db.lenGroupedComponents
 	for i := start; i < end; i++ {
 		component := db.EntityComponents[i]
 		if component == nil || component.IsSystem() {
-			column++
 			continue
 		}
-		jsonEntity[Types().ColumnPlaceholders[column].String()] = component.Serialize()
-		column++
+		jsonEntity[reflect.TypeOf(component).Elem().String()] = component.Serialize()
 	}
 	if len(jsonEntity) == 1 {
 		return nil
@@ -356,6 +358,7 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 }
 
 func (db *ECS) Save(filename string) {
+	panic("this hasn't been converted yet!")
 	db.Lock.Lock()
 	defer db.Lock.Unlock()
 	jsonECS := make([]any, 0)

@@ -14,14 +14,14 @@ type Solid struct {
 	Diffuse      dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
-var SolidComponentIndex int
+var SolidCID ecs.ComponentID
 
 func init() {
-	SolidComponentIndex = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid})
+	SolidCID = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid}, "Material")
 }
 
 func GetSolid(db *ecs.ECS, e ecs.Entity) *Solid {
-	if asserted, ok := db.Component(e, SolidComponentIndex).(*Solid); ok {
+	if asserted, ok := db.Component(e, SolidCID).(*Solid); ok {
 		return asserted
 	}
 	return nil

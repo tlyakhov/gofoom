@@ -21,8 +21,8 @@ func init() {
 	ecs.Types().RegisterController(&UnderwaterController{}, 100)
 }
 
-func (uc *UnderwaterController) ComponentIndex() int {
-	return behaviors.UnderwaterComponentIndex
+func (uc *UnderwaterController) ComponentID() ecs.ComponentID {
+	return behaviors.UnderwaterCID
 }
 
 func (uc *UnderwaterController) Methods() ecs.ControllerMethod {

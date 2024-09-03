@@ -12,14 +12,14 @@ type Named struct {
 	Name     string `editable:"Name"`
 }
 
-var NamedComponentIndex int
+var NamedCID ComponentID
 
 func init() {
-	NamedComponentIndex = RegisterComponent(&Column[Named, *Named]{Getter: GetNamed})
+	NamedCID = RegisterComponent(&Column[Named, *Named]{Getter: GetNamed}, "")
 }
 
 func GetNamed(db *ECS, e Entity) *Named {
-	if asserted, ok := db.Component(e, NamedComponentIndex).(*Named); ok {
+	if asserted, ok := db.Component(e, NamedCID).(*Named); ok {
 		return asserted
 	}
 	return nil

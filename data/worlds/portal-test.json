@@ -206,7 +206,7 @@
     },
     "behaviors.Player": {
       "Entity": "5",
-      "Spawn": false
+      "Spawn": true
     },
     "core.Body": {
       "Angle": {

@@ -13,14 +13,14 @@ type Shader struct {
 	Stages []*ShaderStage `editable:"Stages"`
 }
 
-var ShaderComponentIndex int
+var ShaderCID ecs.ComponentID
 
 func init() {
-	ShaderComponentIndex = ecs.RegisterComponent(&ecs.Column[Shader, *Shader]{Getter: GetShader})
+	ShaderCID = ecs.RegisterComponent(&ecs.Column[Shader, *Shader]{Getter: GetShader}, "BodySectorSegmentPathShader")
 }
 
 func GetShader(db *ecs.ECS, e ecs.Entity) *Shader {
-	if asserted, ok := db.Component(e, ShaderComponentIndex).(*Shader); ok {
+	if asserted, ok := db.Component(e, ShaderCID).(*Shader); ok {
 		return asserted
 	}
 	return nil

@@ -9,28 +9,28 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func CreateBasic(db *ecs.ECS, componentIndex int) ecs.Entity {
+func CreateBasic(db *ecs.ECS, componentID ecs.ComponentID) ecs.Entity {
 	e := db.NewEntity()
-	db.NewAttachedComponent(e, componentIndex)
+	db.NewAttachedComponent(e, componentID)
 	return e
 }
 
 func CreateSector(db *ecs.ECS) ecs.Entity {
 	entity := db.NewEntity()
-	db.NewAttachedComponent(entity, core.SectorComponentIndex)
+	db.NewAttachedComponent(entity, core.SectorCID)
 
 	return entity
 }
 
 func IsLightBody(db *ecs.ECS, e ecs.Entity) bool {
-	return db.Component(e, core.BodyComponentIndex) != nil &&
-		db.Component(e, core.LightComponentIndex) != nil
+	return db.Component(e, core.BodyCID) != nil &&
+		db.Component(e, core.LightCID) != nil
 }
 
 func CreateLightBody(db *ecs.ECS) ecs.Entity {
 	e := db.NewEntity()
-	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
-	db.NewAttachedComponent(e, core.LightComponentIndex)
+	body := db.NewAttachedComponent(e, core.BodyCID).(*core.Body)
+	db.NewAttachedComponent(e, core.LightCID)
 	body.Size.Original[0] = 2
 	body.Size.Original[1] = 2
 	body.Size.ResetToOriginal()
@@ -39,20 +39,20 @@ func CreateLightBody(db *ecs.ECS) ecs.Entity {
 }
 
 /*func IsPlayerBody(db *ecs.ECS, e ecs.Entity) bool {
-	return db.Component(e, core.BodyComponentIndex) != nil &&
-		db.Component(e, behaviors.PlayerComponentIndex) != nil &&
-		db.Component(e, behaviors.AliveComponentIndex) != nil
+	return db.Component(e, core.BodyCID) != nil &&
+		db.Component(e, behaviors.PlayerCID) != nil &&
+		db.Component(e, behaviors.AliveCID) != nil
 }
 
 func CreatePlayerBody(db *ecs.ECS) ecs.Entity {
 	e := db.NewEntity()
-	body := db.NewAttachedComponent(e, core.BodyComponentIndex).(*core.Body)
+	body := db.NewAttachedComponent(e, core.BodyCID).(*core.Body)
 	body.System = true
 	body.Size.SetAll(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
 	body.Mass = constants.PlayerMass // kg
-	player := db.NewAttachedComponent(e, behaviors.PlayerComponentIndex).(*behaviors.Player)
+	player := db.NewAttachedComponent(e, behaviors.PlayerCID).(*behaviors.Player)
 	player.System = true
-	alive := db.NewAttachedComponent(e, behaviors.AliveComponentIndex).(*behaviors.Alive)
+	alive := db.NewAttachedComponent(e, behaviors.AliveCID).(*behaviors.Alive)
 	alive.System = true
 
 	return e
@@ -60,16 +60,16 @@ func CreatePlayerBody(db *ecs.ECS) ecs.Entity {
 
 func CreateFont(db *ecs.ECS, filename string, name string) ecs.Entity {
 	e := db.NewEntity()
-	named := db.NewAttachedComponent(e, ecs.NamedComponentIndex).(*ecs.Named)
+	named := db.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)
 	named.System = true
 	named.Name = name
-	img := db.NewAttachedComponent(e, materials.ImageComponentIndex).(*materials.Image)
+	img := db.NewAttachedComponent(e, materials.ImageCID).(*materials.Image)
 	img.System = true
 	img.Source = filename
 	img.GenerateMipMaps = false
 	img.Filter = false
 	img.Load()
-	sprite := db.NewAttachedComponent(e, materials.SpriteComponentIndex).(*materials.Sprite)
+	sprite := db.NewAttachedComponent(e, materials.SpriteCID).(*materials.Sprite)
 	sprite.System = true
 	sprite.Rows = 16
 	sprite.Cols = 16

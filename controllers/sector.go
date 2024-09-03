@@ -18,8 +18,8 @@ func init() {
 	ecs.Types().RegisterController(&SectorController{}, 50)
 }
 
-func (sc *SectorController) ComponentIndex() int {
-	return core.SectorComponentIndex
+func (sc *SectorController) ComponentID() ecs.ComponentID {
+	return core.SectorCID
 }
 
 func (sc *SectorController) Methods() ecs.ControllerMethod {

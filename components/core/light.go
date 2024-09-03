@@ -16,14 +16,14 @@ type Light struct {
 	Attenuation float64          `editable:"Attenuation"`
 }
 
-var LightComponentIndex int
+var LightCID ecs.ComponentID
 
 func init() {
-	LightComponentIndex = ecs.RegisterComponent(&ecs.Column[Light, *Light]{Getter: GetLight})
+	LightCID = ecs.RegisterComponent(&ecs.Column[Light, *Light]{Getter: GetLight}, "LightLit")
 }
 
 func GetLight(db *ecs.ECS, e ecs.Entity) *Light {
-	if asserted, ok := db.Component(e, LightComponentIndex).(*Light); ok {
+	if asserted, ok := db.Component(e, LightCID).(*Light); ok {
 		return asserted
 	}
 	return nil

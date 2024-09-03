@@ -15,5 +15,5 @@ func DefaultMaterial(db *ecs.ECS) ecs.Entity {
 	}
 
 	// Otherwise try a random one?
-	return db.First(materials.LitComponentIndex).GetEntity()
+	return db.First(materials.LitCID).GetEntity()
 }

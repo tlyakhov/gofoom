@@ -15,14 +15,14 @@ type Lit struct {
 	Diffuse concepts.Vector4 `editable:"Diffuse Color" edit_type:"color"`
 }
 
-var LitComponentIndex int
+var LitCID ecs.ComponentID
 
 func init() {
-	LitComponentIndex = ecs.RegisterComponent(&ecs.Column[Lit, *Lit]{Getter: GetLit})
+	LitCID = ecs.RegisterComponent(&ecs.Column[Lit, *Lit]{Getter: GetLit}, "LightLit")
 }
 
 func GetLit(db *ecs.ECS, e ecs.Entity) *Lit {
-	if asserted, ok := db.Component(e, LitComponentIndex).(*Lit); ok {
+	if asserted, ok := db.Component(e, LitCID).(*Lit); ok {
 		return asserted
 	}
 	return nil

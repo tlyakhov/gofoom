@@ -18,14 +18,14 @@ type InternalSegment struct {
 	TwoSided bool    `editable:"Two sided?"`
 }
 
-var InternalSegmentComponentIndex int
+var InternalSegmentCID ecs.ComponentID
 
 func init() {
-	InternalSegmentComponentIndex = ecs.RegisterComponent(&ecs.Column[InternalSegment, *InternalSegment]{Getter: GetInternalSegment})
+	InternalSegmentCID = ecs.RegisterComponent(&ecs.Column[InternalSegment, *InternalSegment]{Getter: GetInternalSegment}, "BodySectorSegmentPathShader")
 }
 
 func GetInternalSegment(db *ecs.ECS, e ecs.Entity) *InternalSegment {
-	if asserted, ok := db.Component(e, InternalSegmentComponentIndex).(*InternalSegment); ok {
+	if asserted, ok := db.Component(e, InternalSegmentCID).(*InternalSegment); ok {
 		return asserted
 	}
 	return nil
@@ -36,7 +36,7 @@ func (s *InternalSegment) String() string {
 }
 
 func (s *InternalSegment) DetachFromSectors() {
-	col := ecs.ColumnFor[Sector](s.ECS, SectorComponentIndex)
+	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
 	for i := range col.Length {
 		delete(col.Value(i).InternalSegments, s.Entity)
 	}
@@ -51,7 +51,7 @@ func (s *InternalSegment) AttachToSectors() {
 	if min[1] > max[1] {
 		min[1], max[1] = max[1], min[1]
 	}
-	col := ecs.ColumnFor[Sector](s.ECS, SectorComponentIndex)
+	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
 	for i := range col.Length {
 		sector := col.Value(i)
 		// This is missing the spanning case, where an internal segment is

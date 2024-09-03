@@ -55,7 +55,7 @@ func (a *SplitSegment) OnMouseUp() {
 	// TODO: also split internal segments
 	var segments containers.Set[*core.SectorSegment]
 	if a.State().SelectedObjects.Empty() {
-		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorComponentIndex)
+		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
 		segments = make(containers.Set[*core.SectorSegment])
 		for i := range col.Length {
 			segments.AddAll(col.Value(i).Segments...)

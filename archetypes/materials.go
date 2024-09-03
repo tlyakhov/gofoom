@@ -9,12 +9,12 @@ import (
 )
 
 func EntityMapIsMaterial(components []ecs.Attachable) bool {
-	return len(components) > 0 && (components[materials.ShaderComponentIndex] != nil ||
-		components[materials.SpriteComponentIndex] != nil ||
-		components[materials.LitComponentIndex] != nil ||
-		components[materials.ImageComponentIndex] != nil ||
-		components[materials.TextComponentIndex] != nil ||
-		components[materials.SolidComponentIndex] != nil)
+	return len(components) > 0 && (components[materials.ShaderCID>>16] != nil ||
+		components[materials.SpriteCID>>16] != nil ||
+		components[materials.LitCID>>16] != nil ||
+		components[materials.ImageCID>>16] != nil ||
+		components[materials.TextCID>>16] != nil ||
+		components[materials.SolidCID>>16] != nil)
 }
 
 func EntityIsMaterial(db *ecs.ECS, e ecs.Entity) bool {
@@ -27,13 +27,13 @@ func AttachableIsMaterial(a ecs.Attachable) bool {
 
 func CreateBasicMaterial(db *ecs.ECS, textured bool) ecs.Entity {
 	e := db.NewEntity()
-	named := db.NewAttachedComponent(e, ecs.NamedComponentIndex).(*ecs.Named)
+	named := db.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)
 	named.Name = "Material " + e.Format(db)
-	db.NewAttachedComponent(e, materials.LitComponentIndex)
+	db.NewAttachedComponent(e, materials.LitCID)
 	if textured {
-		db.NewAttachedComponent(e, materials.ImageComponentIndex)
+		db.NewAttachedComponent(e, materials.ImageCID)
 	} else {
-		db.NewAttachedComponent(e, materials.SolidComponentIndex)
+		db.NewAttachedComponent(e, materials.SolidCID)
 	}
 	return e
 }

@@ -41,7 +41,7 @@ func (a *AddInternalSegment) OnMouseMove() {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorComponentIndex)
+	col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
 	for i := range col.Length {
 		sector := col.Value(i)
 		if sector.IsPointInside2D(worldGrid) {

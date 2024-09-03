@@ -13,19 +13,19 @@ type AddComponent struct {
 	state.IEditor
 
 	Entities []ecs.Entity
-	Index    int
+	ID       ecs.ComponentID
 }
 
 func (a *AddComponent) Act() {
 	a.Redo()
-	a.ActionFinished(false, true, a.Index == core.SectorComponentIndex)
+	a.ActionFinished(false, true, a.ID == core.SectorCID)
 }
 
 func (a *AddComponent) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
-		a.State().ECS.Detach(a.Index, entity)
+		a.State().ECS.Detach(a.ID, entity)
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
@@ -33,7 +33,7 @@ func (a *AddComponent) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
-		a.State().ECS.NewAttachedComponent(entity, a.Index)
+		a.State().ECS.NewAttachedComponent(entity, a.ID)
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }

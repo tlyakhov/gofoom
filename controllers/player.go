@@ -27,8 +27,8 @@ func init() {
 	ecs.Types().RegisterController(&PlayerController{}, 100)
 }
 
-func (pc *PlayerController) ComponentIndex() int {
-	return behaviors.PlayerComponentIndex
+func (pc *PlayerController) ComponentID() ecs.ComponentID {
+	return behaviors.PlayerCID
 }
 
 func (pc *PlayerController) Methods() ecs.ControllerMethod {
@@ -119,7 +119,7 @@ func MovePlayer(p *core.Body, angle float64, direct bool) {
 func Respawn(db *ecs.ECS, force bool) {
 	spawns := make([]*behaviors.Player, 0)
 	players := make([]*behaviors.Player, 0)
-	col := ecs.ColumnFor[behaviors.Player](db, behaviors.PlayerComponentIndex)
+	col := ecs.ColumnFor[behaviors.Player](db, behaviors.PlayerCID)
 	for i := range col.Length {
 		p := col.Value(i)
 		if !p.Active {
@@ -151,7 +151,7 @@ func Respawn(db *ecs.ECS, force bool) {
 	spawn := spawns[rand.Int()%len(spawns)]
 	copiedSpawn := db.SerializeEntity(spawn.Entity)
 	var pastedEntity ecs.Entity
-	for name, index := range ecs.Types().Indexes {
+	for name, id := range ecs.Types().IDs {
 		jsonData := copiedSpawn[name]
 		if jsonData == nil {
 			continue
@@ -160,12 +160,12 @@ func Respawn(db *ecs.ECS, force bool) {
 			pastedEntity = db.NewEntity()
 		}
 		jsonComponent := jsonData.(map[string]any)
-		c := db.LoadComponentWithoutAttaching(index, jsonComponent)
-		c = db.Attach(index, pastedEntity, c)
-		if index == behaviors.PlayerComponentIndex {
+		c := db.LoadComponentWithoutAttaching(id, jsonComponent)
+		c = db.Attach(id, pastedEntity, c)
+		if id == behaviors.PlayerCID {
 			player := c.(*behaviors.Player)
 			player.Spawn = false
-		} else if index == ecs.NamedComponentIndex {
+		} else if id == ecs.NamedCID {
 			named := c.(*ecs.Named)
 			named.Name = "Player"
 		}

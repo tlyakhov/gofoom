@@ -39,10 +39,10 @@ type VerticalDoor struct {
 	Duration     float64              `editable:"Duration"`
 }
 
-var VerticalDoorComponentIndex int
+var VerticalDoorCID ecs.ComponentID
 
 func init() {
-	VerticalDoorComponentIndex = ecs.RegisterComponent(&ecs.Column[VerticalDoor, *VerticalDoor]{Getter: GetVerticalDoor})
+	VerticalDoorCID = ecs.RegisterComponent(&ecs.Column[VerticalDoor, *VerticalDoor]{Getter: GetVerticalDoor}, "")
 	dis := DoorIntentStrings()
 	div := DoorIntentValues()
 	for i, s := range dis {
@@ -51,7 +51,7 @@ func init() {
 }
 
 func GetVerticalDoor(db *ecs.ECS, e ecs.Entity) *VerticalDoor {
-	if asserted, ok := db.Component(e, VerticalDoorComponentIndex).(*VerticalDoor); ok {
+	if asserted, ok := db.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
 		return asserted
 	}
 	return nil

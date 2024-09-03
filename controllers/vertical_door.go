@@ -21,8 +21,8 @@ func init() {
 	ecs.Types().RegisterController(&VerticalDoorController{}, 100)
 }
 
-func (vd *VerticalDoorController) ComponentIndex() int {
-	return behaviors.VerticalDoorComponentIndex
+func (vd *VerticalDoorController) ComponentID() ecs.ComponentID {
+	return behaviors.VerticalDoorCID
 }
 
 func (vd *VerticalDoorController) Methods() ecs.ControllerMethod {
@@ -114,7 +114,7 @@ func (vd *VerticalDoorController) Always() {
 			if seg.AdjacentSegment == nil {
 				continue
 			}
-			vd.ECS.Act(seg.AdjacentSegment.Sector, core.SectorComponentIndex, ecs.ControllerRecalculate)
+			vd.ECS.Act(seg.AdjacentSegment.Sector, core.SectorCID, ecs.ControllerRecalculate)
 		}*/
 	}
 

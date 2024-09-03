@@ -37,14 +37,14 @@ type Body struct {
 	LastEnteredPortal *SectorSegment
 }
 
-var BodyComponentIndex int
+var BodyCID ecs.ComponentID
 
 func init() {
-	BodyComponentIndex = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody})
+	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody}, "BodySectorSegmentPathShader")
 }
 
 func GetBody(db *ecs.ECS, e ecs.Entity) *Body {
-	if asserted, ok := db.Component(e, BodyComponentIndex).(*Body); ok {
+	if asserted, ok := db.Component(e, BodyCID).(*Body); ok {
 		return asserted
 	}
 	return nil
@@ -119,7 +119,7 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	col := ecs.ColumnFor[Sector](b.ECS, SectorComponentIndex)
+	col := ecs.ColumnFor[Sector](b.ECS, SectorCID)
 	for i := range col.Length {
 		sector := col.Value(i)
 		if sector.Entity == 0 || !sector.IsPointInside2D(p) {

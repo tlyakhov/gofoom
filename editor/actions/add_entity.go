@@ -38,8 +38,8 @@ func (a *AddEntity) DetachFromSector() {
 }
 
 func (a *AddEntity) AttachAll() {
-	for index, component := range a.Components {
-		a.State().ECS.Attach(index, a.Entity, component)
+	for _, component := range a.Components {
+		a.State().ECS.Attach(ecs.Types().ID(component), a.Entity, component)
 	}
 }
 
@@ -75,7 +75,7 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorComponentIndex)
+	col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
 	for i := range col.Length {
 		sector := col.Value(i)
 		if sector.IsPointInside2D(worldGrid) {
@@ -86,16 +86,17 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 
 	a.DetachFromSector()
 	a.AttachToSector()
-	if c := a.Components[core.BodyComponentIndex]; c != nil {
-		body := c.(*core.Body)
-		body.Pos.Original[0] = worldGrid[0]
-		body.Pos.Original[1] = worldGrid[1]
-		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
-			body.Pos.Original[2] = (floorZ + ceilZ) / 2
+	if c := a.Components[core.BodyCID>>16]; c != nil {
+		if body, ok := c.(*core.Body); ok {
+			body.Pos.Original[0] = worldGrid[0]
+			body.Pos.Original[1] = worldGrid[1]
+			if a.ContainingSector != nil {
+				floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
+				body.Pos.Original[2] = (floorZ + ceilZ) / 2
+			}
+			body.Pos.ResetToOriginal()
+			a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 		}
-		body.Pos.ResetToOriginal()
-		a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 	}
 }
 

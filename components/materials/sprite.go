@@ -17,14 +17,14 @@ type Sprite struct {
 	Angles uint32     `editable:"# of Angles"`
 }
 
-var SpriteComponentIndex int
+var SpriteCID ecs.ComponentID
 
 func init() {
-	SpriteComponentIndex = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite})
+	SpriteCID = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite}, "")
 }
 
 func GetSprite(db *ecs.ECS, e ecs.Entity) *Sprite {
-	if asserted, ok := db.Component(e, SpriteComponentIndex).(*Sprite); ok {
+	if asserted, ok := db.Component(e, SpriteCID).(*Sprite); ok {
 		return asserted
 	}
 	return nil

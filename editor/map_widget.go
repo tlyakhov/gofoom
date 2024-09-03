@@ -82,20 +82,20 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 		}
 	}
 
-	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorComponentIndex)
+	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorCID)
 	for i := range colSector.Length {
 		mw.DrawSector(colSector.Value(i), pvsSector[colSector.Value(i).Entity] != nil)
 	}
-	colSeg := ecs.ColumnFor[core.InternalSegment](editor.ECS, core.InternalSegmentComponentIndex)
+	colSeg := ecs.ColumnFor[core.InternalSegment](editor.ECS, core.InternalSegmentCID)
 	for i := range colSeg.Length {
 		mw.DrawInternalSegment(colSeg.Value(i))
 	}
-	colPath := ecs.ColumnFor[core.Path](editor.ECS, core.PathComponentIndex)
+	colPath := ecs.ColumnFor[core.Path](editor.ECS, core.PathCID)
 	for i := range colPath.Length {
 		mw.DrawPath(colPath.Value(i))
 	}
 	if editor.BodiesVisible {
-		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyComponentIndex)
+		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyCID)
 		for i := range col3.Length {
 			mw.DrawBody(col3.Value(i))
 		}
