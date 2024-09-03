@@ -29,14 +29,14 @@ type WeaponMark struct {
 	*materials.Surface
 }
 
-var WeaponInstantComponentIndex int
+var WeaponInstantCID ecs.ComponentID
 
 func init() {
-	WeaponInstantComponentIndex = ecs.RegisterComponent(&ecs.Column[WeaponInstant, *WeaponInstant]{Getter: GetWeaponInstant})
+	WeaponInstantCID = ecs.RegisterComponent(&ecs.Column[WeaponInstant, *WeaponInstant]{Getter: GetWeaponInstant}, "")
 }
 
 func GetWeaponInstant(db *ecs.ECS, e ecs.Entity) *WeaponInstant {
-	if asserted, ok := db.Component(e, WeaponInstantComponentIndex).(*WeaponInstant); ok {
+	if asserted, ok := db.Component(e, WeaponInstantCID).(*WeaponInstant); ok {
 		return asserted
 	}
 	return nil

@@ -19,14 +19,14 @@ type Wander struct {
 	NextSector ecs.Entity
 }
 
-var WanderComponentIndex int
+var WanderCID ecs.ComponentID
 
 func init() {
-	WanderComponentIndex = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander})
+	WanderCID = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander}, "FollowerWander")
 }
 
 func GetWander(db *ecs.ECS, e ecs.Entity) *Wander {
-	if asserted, ok := db.Component(e, WanderComponentIndex).(*Wander); ok {
+	if asserted, ok := db.Component(e, WanderCID).(*Wander); ok {
 		return asserted
 	}
 	return nil

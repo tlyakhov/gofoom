@@ -217,7 +217,7 @@ func gridAddOrUpdateAtIndex[PT interface {
 func (g *Grid) AddEntityControls(selection *core.Selection) {
 	entities := make([]ecs.Entity, 0)
 	entityList := ""
-	componentList := make([]bool, len(ecs.Types().Indexes))
+	componentList := make([]bool, len(ecs.Types().ColumnIndexes))
 	for _, s := range selection.Exact {
 		if len(entityList) > 0 {
 			entityList += ", "
@@ -262,13 +262,13 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 	label.Alignment = fyne.TextAlignLeading
 
 	opts := make([]string, 0)
-	optsIndices := make([]int, 0)
+	optsComponentIDs := make([]ecs.ComponentID, 0)
 	for index, t := range ecs.Types().ColumnPlaceholders {
-		if t == nil || componentList[index] || index == ecs.AttachedComponentIndex {
+		if t == nil || componentList[index] || t.ID() == ecs.AttachedCID {
 			continue
 		}
 		opts = append(opts, t.String())
-		optsIndices = append(optsIndices, index)
+		optsComponentIDs = append(optsComponentIDs, t.ID())
 	}
 	selectComponent := widget.NewSelect(opts, func(s string) {})
 
@@ -277,7 +277,7 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 		if optsIndex < 0 {
 			return
 		}
-		action := &actions.AddComponent{IEditor: g.IEditor, Index: optsIndices[optsIndex], Entities: entities}
+		action := &actions.AddComponent{IEditor: g.IEditor, ID: optsComponentIDs[optsIndex], Entities: entities}
 		g.NewAction(action)
 		action.Act()
 

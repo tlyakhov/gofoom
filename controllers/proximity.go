@@ -18,8 +18,8 @@ func init() {
 	ecs.Types().RegisterController(&ProximityController{}, 100)
 }
 
-func (pc *ProximityController) ComponentIndex() int {
-	return behaviors.ProximityComponentIndex
+func (pc *ProximityController) ComponentID() ecs.ComponentID {
+	return behaviors.ProximityCID
 }
 
 func (pc *ProximityController) Methods() ecs.ControllerMethod {

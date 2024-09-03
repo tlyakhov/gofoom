@@ -269,17 +269,17 @@ func (a *SectorSplitter) collect() {
 		newEntity := db.NewEntity()
 		clonedComponents := make([]ecs.Attachable, len(db.AllComponents(a.Sector.Entity)))
 		a.Result = append(a.Result, clonedComponents)
-		for componentIndex, origComponent := range db.AllComponents(a.Sector.Entity) {
+		for i, origComponent := range db.AllComponents(a.Sector.Entity) {
 			if origComponent == nil {
 				continue
 			}
-			addedComponent := db.NewAttachedComponent(newEntity, componentIndex)
+			addedComponent := db.NewAttachedComponent(newEntity, ecs.Types().ID(origComponent))
 			// This will override the entity field with the original component's
 			// entity, so we'll fix it up afterwards.
 			addedComponent.Construct(origComponent.Serialize())
 			addedComponent.SetEntity(newEntity)
 
-			clonedComponents[componentIndex] = addedComponent
+			clonedComponents[i] = addedComponent
 			switch target := addedComponent.(type) {
 			case *ecs.Named:
 				target.Name = fmt.Sprintf("Split %v (%v)", target.Name, newSectorCount)
@@ -312,24 +312,24 @@ func (a *SectorSplitter) collect() {
 	}
 	// Only one a.Sector means we didn't split anything
 	if len(a.Result) == 1 {
-		added := a.Result[0][core.SectorComponentIndex].(*core.Sector)
+		added := a.Result[0][core.SectorCID>>16].(*core.Sector)
 		if len(added.Segments) == len(a.Sector.Segments) {
 			a.Result = nil
 			return
 		}
 	}
 
-	col := ecs.ColumnFor[core.Body](a.Sector.ECS, core.BodyComponentIndex)
+	col := ecs.ColumnFor[core.Body](a.Sector.ECS, core.BodyCID)
 	for i := range col.Length {
 		body := col.Value(i)
 		if body.SectorEntity != a.Sector.Entity {
 			continue
 		}
 		for _, components := range a.Result {
-			if components[core.SectorComponentIndex] == nil {
+			if components[core.SectorCID>>16] == nil {
 				continue
 			}
-			if added, ok := components[core.SectorComponentIndex].(*core.Sector); ok &&
+			if added, ok := components[core.SectorCID>>16].(*core.Sector); ok &&
 				added.IsPointInside2D(body.Pos.Original.To2D()) {
 				body.SectorEntity = added.Entity
 				added.Bodies[body.Entity] = body

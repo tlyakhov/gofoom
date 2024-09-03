@@ -20,14 +20,14 @@ type Follower struct {
 	Index int
 }
 
-var FollowerComponentIndex int
+var FollowerCID ecs.ComponentID
 
 func init() {
-	FollowerComponentIndex = ecs.RegisterComponent(&ecs.Column[Follower, *Follower]{Getter: GetFollower})
+	FollowerCID = ecs.RegisterComponent(&ecs.Column[Follower, *Follower]{Getter: GetFollower}, "FollowerWander")
 }
 
 func GetFollower(db *ecs.ECS, e ecs.Entity) *Follower {
-	if asserted, ok := db.Component(e, FollowerComponentIndex).(*Follower); ok {
+	if asserted, ok := db.Component(e, FollowerCID).(*Follower); ok {
 		return asserted
 	}
 	return nil

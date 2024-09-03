@@ -19,8 +19,8 @@ func init() {
 	ecs.Types().RegisterController(&PvsController{}, 60)
 }
 
-func (pvs *PvsController) ComponentIndex() int {
-	return core.SectorComponentIndex
+func (pvs *PvsController) ComponentID() ecs.ComponentID {
+	return core.SectorCID
 }
 
 func (pvs *PvsController) Methods() ecs.ControllerMethod {
@@ -33,7 +33,7 @@ func (pvs *PvsController) Target(target ecs.Attachable) bool {
 }
 
 func (pvs *PvsController) Recalculate() {
-	col := ecs.ColumnFor[core.InternalSegment](pvs.ECS, core.InternalSegmentComponentIndex)
+	col := ecs.ColumnFor[core.InternalSegment](pvs.ECS, core.InternalSegmentCID)
 	for i := range col.Length {
 		col.Value(i).AttachToSectors()
 	}

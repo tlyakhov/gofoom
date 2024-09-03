@@ -44,11 +44,11 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	sector.ECS.DetachAll(sector.Entity)
 	// Attach the cloned entities/components
 	for _, added := range s.Result {
-		for index, component := range added {
+		for _, component := range added {
 			if component == nil {
 				continue
 			}
-			component.GetECS().Attach(index, component.GetEntity(), component)
+			component.GetECS().Attach(ecs.Types().ID(component), component.GetEntity(), component)
 		}
 	}
 }
@@ -60,7 +60,7 @@ func (a *SplitSector) OnMouseUp() {
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
 	if a.State().SelectedObjects.Empty() {
-		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorComponentIndex)
+		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
 		sectors = make([]*core.Sector, col.Length)
 		for i := range col.Length {
 			sectors[i] = col.Value(i)
@@ -102,7 +102,7 @@ func (a *SplitSector) Undo() {
 			continue
 		}
 		for _, addedComponents := range splitter.Result {
-			sector := addedComponents[core.SectorComponentIndex].(*core.Sector)
+			sector := addedComponents[core.SectorCID].(*core.Sector)
 			for entity, body := range sector.Bodies {
 				bodies = append(bodies, entity)
 				body.SectorEntity = 0
@@ -112,11 +112,11 @@ func (a *SplitSector) Undo() {
 		}
 	}
 	for entity, originalComponents := range a.Original {
-		for index, component := range originalComponents {
+		for _, component := range originalComponents {
 			if component == nil {
 				continue
 			}
-			a.State().ECS.Attach(index, entity, component)
+			a.State().ECS.Attach(ecs.Types().ID(component), entity, component)
 			if sector, ok := component.(*core.Sector); ok {
 				for _, entity := range bodies {
 					if body := core.GetBody(a.State().ECS, entity); body != nil {
@@ -134,7 +134,7 @@ func (a *SplitSector) Redo() {
 	bodies := make([]ecs.Entity, 0)
 
 	for entity, originalComponents := range a.Original {
-		sector := originalComponents[core.SectorComponentIndex].(*core.Sector)
+		sector := originalComponents[core.SectorCID].(*core.Sector)
 		for entity, body := range sector.Bodies {
 			bodies = append(bodies, entity)
 			body.SectorEntity = 0
@@ -148,11 +148,11 @@ func (a *SplitSector) Redo() {
 			continue
 		}
 		for _, addedComponents := range splitter.Result {
-			for index, component := range addedComponents {
+			for _, component := range addedComponents {
 				if component == nil {
 					continue
 				}
-				a.State().ECS.Attach(index, component.GetEntity(), component)
+				a.State().ECS.Attach(ecs.Types().ID(component), component.GetEntity(), component)
 				if sector, ok := component.(*core.Sector); ok {
 					for _, entity := range bodies {
 						if body := core.GetBody(a.State().ECS, entity); body != nil {

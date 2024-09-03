@@ -18,8 +18,8 @@ func init() {
 	ecs.Types().RegisterController(&PathController{}, 50)
 }
 
-func (sc *PathController) ComponentIndex() int {
-	return core.PathComponentIndex
+func (sc *PathController) ComponentID() ecs.ComponentID {
+	return core.PathCID
 }
 
 func (sc *PathController) Methods() ecs.ControllerMethod {

@@ -17,8 +17,8 @@ func init() {
 	ecs.Types().RegisterController(&AliveController{}, 100)
 }
 
-func (a *AliveController) ComponentIndex() int {
-	return behaviors.AliveComponentIndex
+func (a *AliveController) ComponentID() ecs.ComponentID {
+	return behaviors.AliveCID
 }
 
 func (a *AliveController) Methods() ecs.ControllerMethod {

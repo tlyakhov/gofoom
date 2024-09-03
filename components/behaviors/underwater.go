@@ -11,14 +11,14 @@ type Underwater struct {
 	ecs.Attached `editable:"^"`
 }
 
-var UnderwaterComponentIndex int
+var UnderwaterCID ecs.ComponentID
 
 func init() {
-	UnderwaterComponentIndex = ecs.RegisterComponent(&ecs.Column[Underwater, *Underwater]{Getter: GetUnderwater})
+	UnderwaterCID = ecs.RegisterComponent(&ecs.Column[Underwater, *Underwater]{Getter: GetUnderwater}, "")
 }
 
 func GetUnderwater(db *ecs.ECS, e ecs.Entity) *Underwater {
-	if asserted, ok := db.Component(e, UnderwaterComponentIndex).(*Underwater); ok {
+	if asserted, ok := db.Component(e, UnderwaterCID).(*Underwater); ok {
 		return asserted
 	}
 	return nil

@@ -24,14 +24,14 @@ type Text struct {
 	Color dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
-var TextComponentIndex int
+var TextCID ecs.ComponentID
 
 func init() {
-	TextComponentIndex = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText})
+	TextCID = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText}, "Material")
 }
 
 func GetText(db *ecs.ECS, e ecs.Entity) *Text {
-	if asserted, ok := db.Component(e, TextComponentIndex).(*Text); ok {
+	if asserted, ok := db.Component(e, TextCID).(*Text); ok {
 		return asserted
 	}
 	return nil

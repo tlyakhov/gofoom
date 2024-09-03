@@ -12,11 +12,11 @@ type Attached struct {
 	indexInECS              int
 }
 
-var AttachedComponentIndex int
+var AttachedCID ComponentID
 
 func init() {
 	// TODO: Do we actually need this to be registered?
-	AttachedComponentIndex = RegisterComponent(&Column[Attached, *Attached]{})
+	// AttachedCID = RegisterComponent(&Column[Attached, *Attached]{}, "")
 }
 
 func (a *Attached) IsActive() bool {

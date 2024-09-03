@@ -25,14 +25,14 @@ type Player struct {
 	Notices containers.SyncUniqueQueue
 }
 
-var PlayerComponentIndex int
+var PlayerCID ecs.ComponentID
 
 func init() {
-	PlayerComponentIndex = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer})
+	PlayerCID = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer}, "")
 }
 
 func GetPlayer(db *ecs.ECS, e ecs.Entity) *Player {
-	if asserted, ok := db.Component(e, PlayerComponentIndex).(*Player); ok {
+	if asserted, ok := db.Component(e, PlayerCID).(*Player); ok {
 		return asserted
 	}
 	return nil

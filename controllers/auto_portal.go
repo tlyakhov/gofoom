@@ -137,7 +137,7 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // give the user the option of disabling auto-portalling in the editor and only
 // doing it manually every once in a while.
 func AutoPortal(db *ecs.ECS) {
-	col := ecs.ColumnFor[core.Sector](db, core.SectorComponentIndex)
+	col := ecs.ColumnFor[core.Sector](db, core.SectorCID)
 	for i := range col.Length {
 		for _, segment := range col.Value(i).Segments {
 			// Don't touch these during auto-portalling

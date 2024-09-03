@@ -343,7 +343,7 @@ func (e *Editor) ActTool() {
 		a.AddEntity.Components = e.ECS.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddInternalSegment:
-		entity := archetypes.CreateBasic(e.ECS, core.InternalSegmentComponentIndex)
+		entity := archetypes.CreateBasic(e.ECS, core.InternalSegmentCID)
 		seg := core.GetInternalSegment(e.ECS, entity)
 		a := &actions.AddInternalSegment{InternalSegment: seg}
 		a.AddEntity.IEditor = e
@@ -351,7 +351,7 @@ func (e *Editor) ActTool() {
 		a.AddEntity.Components = e.ECS.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddBody:
-		entity := archetypes.CreateBasic(e.ECS, core.BodyComponentIndex)
+		entity := archetypes.CreateBasic(e.ECS, core.BodyCID)
 		e.NewAction(&actions.AddEntity{IEditor: e, Entity: entity, Components: e.ECS.AllComponents(entity)})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
@@ -372,7 +372,7 @@ func (e *Editor) NewShader() {
 			return
 		}
 		// First, load the image
-		eImg := archetypes.CreateBasic(e.ECS, materials.ImageComponentIndex)
+		eImg := archetypes.CreateBasic(e.ECS, materials.ImageCID)
 		img := materials.GetImage(e.ECS, eImg)
 		img.Source = uc.URI().Path()
 		img.Load()
@@ -380,14 +380,14 @@ func (e *Editor) NewShader() {
 		e.NewAction(a)
 		e.CurrentAction.Act()
 		// Next set up the shader
-		eShader := archetypes.CreateBasic(e.ECS, materials.ShaderComponentIndex)
+		eShader := archetypes.CreateBasic(e.ECS, materials.ShaderCID)
 		shader := materials.GetShader(e.ECS, eShader)
 		stage := &materials.ShaderStage{}
 		stage.AttachECS(e.ECS)
 		stage.Construct(nil)
 		stage.Texture = eImg
 		shader.Stages = append(shader.Stages, stage)
-		named := editor.ECS.NewAttachedComponent(eShader, ecs.NamedComponentIndex).(*ecs.Named)
+		named := editor.ECS.NewAttachedComponent(eShader, ecs.NamedCID).(*ecs.Named)
 		named.Name = "Shader " + path.Base(img.Source)
 		a = &actions.AddEntity{IEditor: e, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
 		e.NewAction(a)
@@ -496,7 +496,7 @@ func (e *Editor) GatherHoveringObjects() {
 
 	e.HoveringObjects.Clear()
 
-	colSector := ecs.ColumnFor[core.Sector](e.ECS, core.SectorComponentIndex)
+	colSector := ecs.ColumnFor[core.Sector](e.ECS, core.SectorCID)
 	for i := range colSector.Length {
 		sector := colSector.Value(i)
 
@@ -521,7 +521,7 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	colSeg := ecs.ColumnFor[core.InternalSegment](e.ECS, core.InternalSegmentComponentIndex)
+	colSeg := ecs.ColumnFor[core.InternalSegment](e.ECS, core.InternalSegmentCID)
 	for i := range colSeg.Length {
 		seg := colSeg.Value(i)
 		if editor.Selecting() {
@@ -547,7 +547,7 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	colPath := ecs.ColumnFor[core.Path](e.ECS, core.PathComponentIndex)
+	colPath := ecs.ColumnFor[core.Path](e.ECS, core.PathCID)
 	for i := range colPath.Length {
 		path := colPath.Value(i)
 
@@ -567,7 +567,7 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	colBody := ecs.ColumnFor[core.Body](e.ECS, core.BodyComponentIndex)
+	colBody := ecs.ColumnFor[core.Body](e.ECS, core.BodyCID)
 	for i := range colBody.Length {
 		body := colBody.Value(i)
 		p := body.Pos.Now

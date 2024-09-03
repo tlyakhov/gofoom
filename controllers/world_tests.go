@@ -18,7 +18,7 @@ func CreateTestSector(db *ecs.ECS, name string, x, y, size float64) *core.Sector
 	eSector := archetypes.CreateSector(db)
 	sector := core.GetSector(db, eSector)
 	sector.Construct(nil)
-	named := db.NewAttachedComponent(eSector, ecs.NamedComponentIndex).(*ecs.Named)
+	named := db.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name
 
 	mat := DefaultMaterial(db)
@@ -47,7 +47,7 @@ func CreateTestSector(db *ecs.ECS, name string, x, y, size float64) *core.Sector
 
 func CreateTestGrass(db *ecs.ECS) ecs.Entity {
 	eGrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eGrass, ecs.NamedComponentIndex).(*ecs.Named)
+	nmat := db.NewAttachedComponent(eGrass, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	tex := materials.GetImage(db, eGrass)
@@ -58,19 +58,19 @@ func CreateTestGrass(db *ecs.ECS) ecs.Entity {
 	return eGrass
 }
 func CreateTestSky(db *ecs.ECS) ecs.Entity {
-	img := db.NewAttachedComponent(db.NewEntity(), materials.ImageComponentIndex).(*materials.Image)
+	img := db.NewAttachedComponent(db.NewEntity(), materials.ImageCID).(*materials.Image)
 	img.Source = "data/Sky.png"
 	img.Filter = false
 	img.GenerateMipMaps = false
 	img.Load()
 
-	entity := archetypes.CreateBasic(db, materials.ShaderComponentIndex)
+	entity := archetypes.CreateBasic(db, materials.ShaderCID)
 	sky := materials.GetShader(db, entity)
 	sky.Stages = append(sky.Stages, new(materials.ShaderStage))
 	sky.Stages[0].Construct(nil)
 	sky.Stages[0].Texture = img.Entity
 	sky.Stages[0].Flags = materials.ShaderSky | materials.ShaderTiled
-	named := db.NewAttachedComponent(entity, ecs.NamedComponentIndex).(*ecs.Named)
+	named := db.NewAttachedComponent(entity, ecs.NamedCID).(*ecs.Named)
 	named.Name = "Sky"
 
 	return entity
@@ -78,7 +78,7 @@ func CreateTestSky(db *ecs.ECS) ecs.Entity {
 
 func CreateTestDirt(db *ecs.ECS) ecs.Entity {
 	eDirt := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eDirt, ecs.NamedComponentIndex).(*ecs.Named)
+	nmat := db.NewAttachedComponent(eDirt, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Dirt"
 	tex := materials.GetImage(db, eDirt)
 	tex.Source = "data/FDef.png"
@@ -93,7 +93,7 @@ func CreateTestWorld(db *ecs.ECS) {
 	testh := 30
 
 	eGrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eGrass, ecs.NamedComponentIndex).(*ecs.Named)
+	nmat := db.NewAttachedComponent(eGrass, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Default Material"
 	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	tex := materials.GetImage(db, eGrass)

@@ -37,14 +37,14 @@ type Sector struct {
 	LightmapBias     [3]int64 // Quantized Min
 }
 
-var SectorComponentIndex int
+var SectorCID ecs.ComponentID
 
 func init() {
-	SectorComponentIndex = ecs.RegisterComponent(&ecs.Column[Sector, *Sector]{Getter: GetSector})
+	SectorCID = ecs.RegisterComponent(&ecs.Column[Sector, *Sector]{Getter: GetSector}, "BodySectorSegmentPathShader")
 }
 
 func GetSector(db *ecs.ECS, e ecs.Entity) *Sector {
-	if asserted, ok := db.Component(e, SectorComponentIndex).(*Sector); ok {
+	if asserted, ok := db.Component(e, SectorCID).(*Sector); ok {
 		return asserted
 	}
 	return nil

@@ -22,14 +22,14 @@ type Alive struct {
 	Damages      map[string]*Damage
 }
 
-var AliveComponentIndex int
+var AliveCID ecs.ComponentID
 
 func init() {
-	AliveComponentIndex = ecs.RegisterComponent(&ecs.Column[Alive, *Alive]{Getter: GetAlive})
+	AliveCID = ecs.RegisterComponent(&ecs.Column[Alive, *Alive]{Getter: GetAlive}, "")
 }
 
 func GetAlive(db *ecs.ECS, e ecs.Entity) *Alive {
-	if asserted, ok := db.Component(e, AliveComponentIndex).(*Alive); ok {
+	if asserted, ok := db.Component(e, AliveCID).(*Alive); ok {
 		return asserted
 	}
 	return nil

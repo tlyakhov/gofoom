@@ -16,14 +16,14 @@ type InventoryItem struct {
 	Image ecs.Entity `editable:"Image" edit_type:"Material"`
 }
 
-var InventoryItemComponentIndex int
+var InventoryItemCID ecs.ComponentID
 
 func init() {
-	InventoryItemComponentIndex = ecs.RegisterComponent(&ecs.Column[InventoryItem, *InventoryItem]{Getter: GetInventoryItem})
+	InventoryItemCID = ecs.RegisterComponent(&ecs.Column[InventoryItem, *InventoryItem]{Getter: GetInventoryItem}, "")
 }
 
 func GetInventoryItem(db *ecs.ECS, e ecs.Entity) *InventoryItem {
-	if asserted, ok := db.Component(e, InventoryItemComponentIndex).(*InventoryItem); ok {
+	if asserted, ok := db.Component(e, InventoryItemCID).(*InventoryItem); ok {
 		return asserted
 	}
 	return nil

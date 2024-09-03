@@ -21,14 +21,14 @@ type Path struct {
 	Segments []*PathSegment `editable:"Segments"`
 }
 
-var PathComponentIndex int
+var PathCID ecs.ComponentID
 
 func init() {
-	PathComponentIndex = ecs.RegisterComponent(&ecs.Column[Path, *Path]{Getter: GetPath})
+	PathCID = ecs.RegisterComponent(&ecs.Column[Path, *Path]{Getter: GetPath}, "BodySectorSegmentPathShader")
 }
 
 func GetPath(db *ecs.ECS, e ecs.Entity) *Path {
-	if asserted, ok := db.Component(e, PathComponentIndex).(*Path); ok {
+	if asserted, ok := db.Component(e, PathCID).(*Path); ok {
 		return asserted
 	}
 	return nil

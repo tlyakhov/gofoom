@@ -24,8 +24,8 @@ func init() {
 	ecs.Types().RegisterController(&WanderController{}, 100)
 }
 
-func (wc *WanderController) ComponentIndex() int {
-	return behaviors.WanderComponentIndex
+func (wc *WanderController) ComponentID() ecs.ComponentID {
+	return behaviors.WanderCID
 }
 
 func (wc *WanderController) Methods() ecs.ControllerMethod {

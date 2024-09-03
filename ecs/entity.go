@@ -66,7 +66,7 @@ func (e Entity) NameString(db *ECS) string {
 	return id
 }
 
-func (ref *EntityRef[T]) Refresh(db *ECS, index int) {
+func (ref *EntityRef[T]) Refresh(db *ECS, id ComponentID) {
 	var zero T
 	if ref.Entity == 0 {
 		ref.Value = zero
@@ -75,7 +75,7 @@ func (ref *EntityRef[T]) Refresh(db *ECS, index int) {
 	if ref.Value != zero && ref.Value.GetEntity() == ref.Entity {
 		return
 	}
-	ref.Value = db.Component(ref.Entity, index).(T)
+	ref.Value = db.Component(ref.Entity, id).(T)
 }
 
 func DeserializeEntities[T ~string | any](data []T) containers.Set[Entity] {

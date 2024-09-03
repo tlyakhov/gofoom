@@ -17,14 +17,14 @@ type Proximity struct {
 	Entities     containers.Set[ecs.Entity] `editable:"Entities"`
 }
 
-var ProximityComponentIndex int
+var ProximityCID ecs.ComponentID
 
 func init() {
-	ProximityComponentIndex = ecs.RegisterComponent(&ecs.Column[Proximity, *Proximity]{Getter: GetProximity})
+	ProximityCID = ecs.RegisterComponent(&ecs.Column[Proximity, *Proximity]{Getter: GetProximity}, "")
 }
 
 func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {
-	if asserted, ok := db.Component(e, ProximityComponentIndex).(*Proximity); ok {
+	if asserted, ok := db.Component(e, ProximityCID).(*Proximity); ok {
 		return asserted
 	}
 	return nil

@@ -40,14 +40,14 @@ type Image struct {
 	Image           image.Image
 }
 
-var ImageComponentIndex int
+var ImageCID ecs.ComponentID
 
 func init() {
-	ImageComponentIndex = ecs.RegisterComponent(&ecs.Column[Image, *Image]{Getter: GetImage})
+	ImageCID = ecs.RegisterComponent(&ecs.Column[Image, *Image]{Getter: GetImage}, "Material")
 }
 
 func GetImage(db *ecs.ECS, e ecs.Entity) *Image {
-	if asserted, ok := db.Component(e, ImageComponentIndex).(*Image); ok {
+	if asserted, ok := db.Component(e, ImageCID).(*Image); ok {
 		return asserted
 	}
 	return nil

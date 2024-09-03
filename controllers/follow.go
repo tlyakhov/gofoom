@@ -24,8 +24,8 @@ func init() {
 	ecs.Types().RegisterController(&FollowController{}, 100)
 }
 
-func (fc *FollowController) ComponentIndex() int {
-	return behaviors.FollowerComponentIndex
+func (fc *FollowController) ComponentID() ecs.ComponentID {
+	return behaviors.FollowerCID
 }
 
 func (fc *FollowController) Methods() ecs.ControllerMethod {

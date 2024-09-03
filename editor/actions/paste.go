@@ -59,20 +59,20 @@ func (a *Paste) Act() {
 
 		var pastedEntity ecs.Entity
 		var ok bool
-		for name, index := range ecs.Types().Indexes {
+		for name, id := range ecs.Types().IDs {
 			jsonData := jsonEntity[name]
 			if jsonData == nil {
 				continue
 			}
 			jsonComponent := jsonData.(map[string]any)
 			a.State().Lock.Lock()
-			c := db.LoadComponentWithoutAttaching(index, jsonComponent)
+			c := db.LoadComponentWithoutAttaching(id, jsonComponent)
 
 			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
-				db.Attach(index, pastedEntity, c)
+				db.Attach(id, pastedEntity, c)
 			} else {
 				pastedEntity = db.NewEntity()
-				db.Attach(index, pastedEntity, c)
+				db.Attach(id, pastedEntity, c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 			}
 			a.State().Lock.Unlock()

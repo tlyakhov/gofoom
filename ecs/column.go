@@ -23,9 +23,17 @@ type Column[T any, PT GenericAttachable[T]] struct {
 	Length int
 	Getter func(ecs *ECS, e Entity) PT
 
-	data    []*componentChunk[T, PT]
-	fill    bitmap.Bitmap
-	typeOfT reflect.Type
+	data        []*componentChunk[T, PT]
+	fill        bitmap.Bitmap
+	typeOfT     reflect.Type
+	componentID ComponentID
+}
+
+func (col *Column[T, PT]) From(source AttachableColumn) {
+	placeholder := source.(*Column[T, PT])
+	col.typeOfT = placeholder.typeOfT
+	col.componentID = placeholder.componentID
+	col.Getter = placeholder.Getter
 }
 
 // No bounds checking for performance. This should be inlined
@@ -103,6 +111,10 @@ func (c *Column[T, PT]) Type() reflect.Type {
 
 func (c *Column[T, PT]) Len() int {
 	return c.Length
+}
+
+func (c *Column[T, PT]) ID() ComponentID {
+	return c.componentID
 }
 
 func (c *Column[T, PT]) String() string {

@@ -12,7 +12,7 @@ const (
 )
 
 type Controller interface {
-	ComponentIndex() int
+	ComponentID() ComponentID
 	Methods() ControllerMethod
 	// Return false if controller shouldn't run for this entity
 	Target(Attachable) bool
@@ -24,8 +24,8 @@ type Controller interface {
 type BaseController struct {
 }
 
-func (c *BaseController) ComponentIndex() int {
-	return AttachedComponentIndex
+func (c *BaseController) ComponentID() ComponentID {
+	return AttachedCID
 }
 
 func (c *BaseController) Methods() ControllerMethod {
