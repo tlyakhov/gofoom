@@ -29,8 +29,9 @@ type Column[T any, PT GenericAttachable[T]] struct {
 	componentID ComponentID
 }
 
-func (col *Column[T, PT]) From(source AttachableColumn) {
+func (col *Column[T, PT]) From(source AttachableColumn, ecs *ECS) {
 	placeholder := source.(*Column[T, PT])
+	col.ECS = ecs
 	col.typeOfT = placeholder.typeOfT
 	col.componentID = placeholder.componentID
 	col.Getter = placeholder.Getter

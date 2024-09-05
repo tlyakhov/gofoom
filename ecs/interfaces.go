@@ -30,7 +30,7 @@ type Attachable interface {
 }
 
 type AttachableColumn interface {
-	From(source AttachableColumn)
+	From(source AttachableColumn, ecs *ECS)
 	New() Attachable
 	Add(c Attachable) Attachable
 	Replace(c Attachable, index int) Attachable

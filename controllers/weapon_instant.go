@@ -169,9 +169,9 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
 	switch s.Type {
 	case core.SelectableHi:
-		_, top = s.Sector.ZAt(dynamic.DynamicNow, p)
+		top = s.Sector.Top.ZAt(dynamic.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.ZAt(dynamic.DynamicNow, p)
+		adjTop := adj.Top.ZAt(dynamic.DynamicNow, p)
 		if adjTop <= top {
 			bottom = adjTop
 			surf = &s.SectorSegment.AdjacentSegment.HiSurface
@@ -180,9 +180,9 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			surf = &s.SectorSegment.HiSurface
 		}
 	case core.SelectableLow:
-		bottom, _ = s.Sector.ZAt(dynamic.DynamicNow, p)
+		bottom = s.Sector.Bottom.ZAt(dynamic.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.ZAt(dynamic.DynamicNow, p)
+		adjBottom := adj.Bottom.ZAt(dynamic.DynamicNow, p)
 		if bottom <= adjBottom {
 			top = adjBottom
 			surf = &s.SectorSegment.AdjacentSegment.LoSurface
