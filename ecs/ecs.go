@@ -51,10 +51,8 @@ func (db *ECS) Clear() {
 		log.Printf("Component %v, index: %v", columnPlaceholder.Type().String(), i)
 		// t = *ComponentColumn[T]
 		t := reflect.TypeOf(columnPlaceholder)
-		newComponentMetadata := reflect.New(t.Elem())
-		newComponentMetadata.Elem().FieldByName("ECS").Set(reflect.ValueOf(db))
-		db.columns[i] = newComponentMetadata.Interface().(AttachableColumn)
-		db.columns[i].From(columnPlaceholder)
+		db.columns[i] = reflect.New(t.Elem()).Interface().(AttachableColumn)
+		db.columns[i].From(columnPlaceholder, db)
 	}
 }
 
@@ -349,7 +347,8 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 		if component == nil || component.IsSystem() {
 			continue
 		}
-		jsonEntity[reflect.TypeOf(component).Elem().String()] = component.Serialize()
+		col := Types().ColumnPlaceholders[Types().ID(component)&0xFFFF]
+		jsonEntity[col.Type().String()] = component.Serialize()
 	}
 	if len(jsonEntity) == 1 {
 		return nil
@@ -358,18 +357,17 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 }
 
 func (db *ECS) Save(filename string) {
-	panic("this hasn't been converted yet!")
 	db.Lock.Lock()
 	defer db.Lock.Unlock()
 	jsonECS := make([]any, 0)
 
-	for entity := range db.EntityComponents {
+	db.Entities.Range(func(entity uint32) {
 		jsonEntity := db.SerializeEntity(Entity(entity))
 		if len(jsonEntity) == 0 {
-			continue
+			return
 		}
 		jsonECS = append(jsonECS, jsonEntity)
-	}
+	})
 
 	bytes, err := json.MarshalIndent(jsonECS, "", "  ")
 
