@@ -6,7 +6,7 @@ package actions
 import (
 	"log"
 	"math"
-	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
@@ -24,7 +24,7 @@ var _ desktop.Mouseable = (*Transform)(nil)
 type Transform struct {
 	state.IEditor
 
-	Selected  *core.Selection
+	Selected  *selection.Selection
 	mouseDown concepts.Vector2
 	Delta     concepts.Vector2
 	Angle     float64
@@ -38,7 +38,7 @@ func (a *Transform) begin() {
 
 	a.SetMapCursor(desktop.PointerCursor)
 
-	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
+	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
 	a.Mode = "translate"
 
 	a.State().Lock.Lock()

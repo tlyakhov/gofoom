@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
@@ -45,8 +46,8 @@ func (wc *WeaponInstantController) Target(target ecs.Attachable) bool {
 }
 
 // This is similar to the code for lighting
-func (wc *WeaponInstantController) Cast() *core.Selectable {
-	var s *core.Selectable
+func (wc *WeaponInstantController) Cast() *selection.Selectable {
+	var s *selection.Selectable
 	wc.MaterialSampler.Config = &state.Config{ECS: wc.Body.ECS}
 	wc.MaterialSampler.Ray = &state.Ray{Angle: wc.Body.Angle.Now}
 
@@ -75,7 +76,7 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 				}
 				idist2 = b.Pos.Now.Dist2(p)
 				if idist2 < hitDist2 {
-					s = core.SelectableFromBody(b)
+					s = selection.SelectableFromBody(b)
 					hitDist2 = idist2
 					wc.hit = b.Pos.Now
 				}
@@ -86,7 +87,7 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 			if ok := seg.Intersect3D(p, rayEnd, &wc.isect); ok {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
-					s = core.SelectableFromInternalSegment(seg)
+					s = selection.SelectableFromInternalSegment(seg)
 					hitDist2 = idist2
 					wc.hit = wc.isect
 				}
@@ -112,7 +113,7 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 			if seg.AdjacentSector == 0 {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
-					s = core.SelectableFromWall(seg, core.SelectableMid)
+					s = selection.SelectableFromWall(seg, selection.SelectableMid)
 					hitDist2 = idist2
 					wc.hit = wc.isect
 				}
@@ -126,7 +127,7 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
-					s = core.SelectableFromWall(seg, core.SelectableLow)
+					s = selection.SelectableFromWall(seg, selection.SelectableLow)
 					hitDist2 = idist2
 					wc.hit = wc.isect
 				}
@@ -136,7 +137,7 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 				wc.isect[2] < floorZ || wc.isect[2] > ceilZ {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {
-					s = core.SelectableFromWall(seg, core.SelectableHi)
+					s = selection.SelectableFromWall(seg, selection.SelectableHi)
 					hitDist2 = idist2
 					wc.hit = wc.isect
 				}
@@ -166,9 +167,9 @@ func (wc *WeaponInstantController) Cast() *core.Selectable {
 	return s
 }
 
-func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
+func (wc *WeaponInstantController) MarkSurface(s *selection.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
 	switch s.Type {
-	case core.SelectableHi:
+	case selection.SelectableHi:
 		top = s.Sector.Top.ZAt(dynamic.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
 		adjTop := adj.Top.ZAt(dynamic.DynamicNow, p)
@@ -179,7 +180,7 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			bottom, top = top, adjTop
 			surf = &s.SectorSegment.HiSurface
 		}
-	case core.SelectableLow:
+	case selection.SelectableLow:
 		bottom = s.Sector.Bottom.ZAt(dynamic.DynamicNow, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
 		adjBottom := adj.Bottom.ZAt(dynamic.DynamicNow, p)
@@ -190,17 +191,17 @@ func (wc *WeaponInstantController) MarkSurface(s *core.Selectable, p *concepts.V
 			bottom, top = adjBottom, bottom
 			surf = &s.SectorSegment.LoSurface
 		}
-	case core.SelectableMid:
+	case selection.SelectableMid:
 		bottom, top = s.Sector.ZAt(dynamic.DynamicNow, p)
 		surf = &s.SectorSegment.Surface
-	case core.SelectableInternalSegment:
+	case selection.SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
 		surf = &s.InternalSegment.Surface
 	}
 	return
 }
 
-func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *core.Selectable, transform *concepts.Matrix2) *materials.Surface {
+func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *selection.Selectable, transform *concepts.Matrix2) *materials.Surface {
 	// Inverse of the size of bullet mark we want
 	scale := 1.0 / wc.MarkSize
 	// 3x2 transformation matrixes are composed of
@@ -211,14 +212,14 @@ func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *core.Selectable, t
 	// and finally the translation in slots [4] & [5], which we set to the
 	// world position of the mark, relative to the segment
 	switch s.Type {
-	case core.SelectableHi:
+	case selection.SelectableHi:
 		fallthrough
-	case core.SelectableLow:
+	case selection.SelectableLow:
 		fallthrough
-	case core.SelectableMid:
+	case selection.SelectableMid:
 		transform[concepts.MatBasis1X] = s.SectorSegment.Length
 		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(&s.SectorSegment.P)
-	case core.SelectableInternalSegment:
+	case selection.SelectableInternalSegment:
 		transform[concepts.MatBasis1X] = s.InternalSegment.Length
 		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(s.InternalSegment.A)
 	}
@@ -265,7 +266,7 @@ func (wc *WeaponInstantController) Always() {
 	// time it would take to hit the thing and delaying the outcome? could be
 	// buggy though if the object in question moves
 	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman())
-	if s.Type == core.SelectableBody {
+	if s.Type == selection.SelectableBody {
 		// Push bodies away
 		// TODO: Parameterize in WeaponInstant
 		s.Body.Vel.Now.AddSelf(wc.delta.Mul(3))
@@ -275,11 +276,11 @@ func (wc *WeaponInstantController) Always() {
 			alive.Hurt("Weapon "+s.Entity.String(), 5, 20)
 		}
 		// TODO: Death animations/entity deactivation
-	} else if s.Type == core.SelectableSectorSegment ||
-		s.Type == core.SelectableHi ||
-		s.Type == core.SelectableLow ||
-		s.Type == core.SelectableMid ||
-		s.Type == core.SelectableInternalSegment {
+	} else if s.Type == selection.SelectableSectorSegment ||
+		s.Type == selection.SelectableHi ||
+		s.Type == selection.SelectableLow ||
+		s.Type == selection.SelectableMid ||
+		s.Type == selection.SelectableInternalSegment {
 		// Make a mark on walls
 
 		// TODO: Include floors and ceilings

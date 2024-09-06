@@ -21,6 +21,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/components/selection"
 	rs "tlyakhov/gofoom/render/state"
 
 	"fyne.io/fyne/v2"
@@ -148,17 +149,17 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 	}
 }
 
-func (g *Grid) fieldsFromSelection(selection *core.Selection) *PropertyGridState {
+func (g *Grid) fieldsFromSelection(sel *selection.Selection) *PropertyGridState {
 	pgs := PropertyGridState{Visited: make(containers.Set[any]), Fields: make(map[string]*state.PropertyGridField)}
-	for _, s := range selection.Exact {
+	for _, s := range sel.Exact {
 		switch s.Type {
-		case core.SelectableHi:
+		case selection.SelectableHi:
 			fallthrough
-		case core.SelectableLow:
+		case selection.SelectableLow:
 			fallthrough
-		case core.SelectableMid:
+		case selection.SelectableMid:
 			fallthrough
-		case core.SelectableSectorSegment:
+		case selection.SelectableSectorSegment:
 			pgs.Ancestors = []any{s.SectorSegment}
 			pgs.ParentName = "Segment"
 			pgs.Entity = s.Entity
@@ -214,23 +215,23 @@ func gridAddOrUpdateAtIndex[PT interface {
 	return newInstance
 }
 
-func (g *Grid) AddEntityControls(selection *core.Selection) {
+func (g *Grid) AddEntityControls(sel *selection.Selection) {
 	entities := make([]ecs.Entity, 0)
 	entityList := ""
 	componentList := make([]bool, len(ecs.Types().ColumnIndexes))
-	for _, s := range selection.Exact {
+	for _, s := range sel.Exact {
 		if len(entityList) > 0 {
 			entityList += ", "
 		}
 
 		switch s.Type {
-		case core.SelectableHi:
+		case selection.SelectableHi:
 			fallthrough
-		case core.SelectableLow:
+		case selection.SelectableLow:
 			fallthrough
-		case core.SelectableMid:
+		case selection.SelectableMid:
 			fallthrough
-		case core.SelectableSectorSegment:
+		case selection.SelectableSectorSegment:
 			label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
 			label.Text = fmt.Sprintf("Sector [%v]", s.Sector.Entity)
 			label.TextStyle.Bold = true
@@ -241,7 +242,7 @@ func (g *Grid) AddEntityControls(selection *core.Selection) {
 			button.SetText("Select parent sector")
 			button.SetIcon(theme.LoginIcon())
 			button.OnTapped = func() {
-				g.SelectObjects(true, core.SelectableFromEntity(g.State().ECS, s.Sector.Entity))
+				g.SelectObjects(true, selection.SelectableFromEntity(g.State().ECS, s.Sector.Entity))
 			}
 		}
 		entities = append(entities, s.Entity)
@@ -301,7 +302,7 @@ func (g *Grid) sortedFields(state *PropertyGridState) []string {
 	return sorted
 }
 
-func (g *Grid) Refresh(selection *core.Selection) {
+func (g *Grid) Refresh(selection *selection.Selection) {
 	g.refreshIndex = 0
 
 	/*	distinctTypes := make(map[core.SelectableType]bool)
@@ -408,7 +409,7 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldSlice(field)
 		case *[]dynamic.Animated:
 			g.fieldSlice(field)
-		case *[]*core.ActionWaypoint:
+		case *[]*behaviors.ActionWaypoint:
 			g.fieldSlice(field)
 		case *dynamic.TweeningFunc:
 			g.fieldTweeningFunc(field)

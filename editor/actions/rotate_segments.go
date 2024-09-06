@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
@@ -35,7 +36,7 @@ func (a *RotateSegments) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, s := range a.State().SelectedObjects.Exact {
-		if s.Type == core.SelectableBody || s.Type == core.SelectableEntity {
+		if s.Type == selection.SelectableBody || s.Type == selection.SelectableEntity {
 			continue
 		}
 		a.Rotate(s.Sector, true)
@@ -46,7 +47,7 @@ func (a *RotateSegments) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, s := range a.State().SelectedObjects.Exact {
-		if s.Type == core.SelectableBody || s.Type == core.SelectableEntity {
+		if s.Type == selection.SelectableBody || s.Type == selection.SelectableEntity {
 			continue
 		}
 		a.Rotate(s.Sector, false)

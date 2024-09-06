@@ -1,10 +1,12 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package core
+package selection
 
 import (
 	"math"
+	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
@@ -59,11 +61,11 @@ type Selectable struct {
 	ecs.Entity
 	ECS             *ecs.ECS
 	Type            SelectableType
-	Sector          *Sector
-	Body            *Body
-	SectorSegment   *SectorSegment
-	InternalSegment *InternalSegment
-	ActionWaypoint  *ActionWaypoint
+	Sector          *core.Sector
+	Body            *core.Body
+	SectorSegment   *core.SectorSegment
+	InternalSegment *core.InternalSegment
+	ActionWaypoint  *behaviors.ActionWaypoint
 }
 
 func (s *Selectable) Hash() uint64 {
@@ -83,19 +85,19 @@ func (s *Selectable) GroupHash() uint64 {
 	return (uint64(typeGroups[s.Type]) << 60) | uint64(s.Entity)
 }
 
-func SelectableFromSector(s *Sector) *Selectable {
+func SelectableFromSector(s *core.Sector) *Selectable {
 	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, ECS: s.ECS}
 }
 
-func SelectableFromFloor(s *Sector) *Selectable {
+func SelectableFromFloor(s *core.Sector) *Selectable {
 	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, ECS: s.ECS}
 }
 
-func SelectableFromCeil(s *Sector) *Selectable {
+func SelectableFromCeil(s *core.Sector) *Selectable {
 	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, ECS: s.ECS}
 }
 
-func SelectableFromSegment(s *SectorSegment) *Selectable {
+func SelectableFromSegment(s *core.SectorSegment) *Selectable {
 	return &Selectable{
 		Type:          SelectableSectorSegment,
 		Sector:        s.Sector,
@@ -104,7 +106,7 @@ func SelectableFromSegment(s *SectorSegment) *Selectable {
 		ECS:           s.ECS}
 }
 
-func SelectableFromWall(s *SectorSegment, t SelectableType) *Selectable {
+func SelectableFromWall(s *core.SectorSegment, t SelectableType) *Selectable {
 	return &Selectable{
 		Type:          t,
 		Sector:        s.Sector,
@@ -113,7 +115,7 @@ func SelectableFromWall(s *SectorSegment, t SelectableType) *Selectable {
 		ECS:           s.ECS}
 }
 
-func SelectableFromBody(b *Body) *Selectable {
+func SelectableFromBody(b *core.Body) *Selectable {
 	return &Selectable{
 		Type:   SelectableBody,
 		Sector: b.Sector(),
@@ -122,7 +124,7 @@ func SelectableFromBody(b *Body) *Selectable {
 		ECS:    b.ECS}
 }
 
-func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
+func SelectableFromInternalSegment(s *core.InternalSegment) *Selectable {
 	return &Selectable{
 		Type:            SelectableInternalSegment,
 		InternalSegment: s,
@@ -130,21 +132,21 @@ func SelectableFromInternalSegment(s *InternalSegment) *Selectable {
 		ECS:             s.ECS}
 }
 
-func SelectableFromInternalSegmentA(s *InternalSegment) *Selectable {
+func SelectableFromInternalSegmentA(s *core.InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentA,
 		InternalSegment: s,
 		Entity:          s.Entity,
 		ECS:             s.ECS}
 }
 
-func SelectableFromInternalSegmentB(s *InternalSegment) *Selectable {
+func SelectableFromInternalSegmentB(s *core.InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentB,
 		InternalSegment: s,
 		Entity:          s.Entity,
 		ECS:             s.ECS}
 }
 
-func SelectableFromActionWaypoint(s *ActionWaypoint) *Selectable {
+func SelectableFromActionWaypoint(s *behaviors.ActionWaypoint) *Selectable {
 	return &Selectable{
 		Type:           SelectableActionWaypoint,
 		ActionWaypoint: s,
@@ -153,16 +155,16 @@ func SelectableFromActionWaypoint(s *ActionWaypoint) *Selectable {
 }
 
 func SelectableFromEntity(db *ecs.ECS, e ecs.Entity) *Selectable {
-	if sector := GetSector(db, e); sector != nil {
+	if sector := core.GetSector(db, e); sector != nil {
 		return SelectableFromSector(sector)
 	}
-	if body := GetBody(db, e); body != nil {
+	if body := core.GetBody(db, e); body != nil {
 		return SelectableFromBody(body)
 	}
-	if seg := GetInternalSegment(db, e); seg != nil {
+	if seg := core.GetInternalSegment(db, e); seg != nil {
 		return SelectableFromInternalSegment(seg)
 	}
-	if aw := GetActionWaypoint(db, e); aw != nil {
+	if aw := behaviors.GetActionWaypoint(db, e); aw != nil {
 		return SelectableFromActionWaypoint(aw)
 	}
 	return &Selectable{Type: SelectableEntity, Entity: e, ECS: db}

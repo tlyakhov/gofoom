@@ -1,24 +1,20 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package core
+package behaviors
 
 import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
-// This component represents a path. Examples:
+// This component represents a target position an entity should go to. Examples:
 // - Animated entities and NPCs can follow this
 // - Special FX can be shaped by paths
-// An action could be to move to a point sure, but it could also be to change
-// angle, fire a weapon, etc...
 type ActionWaypoint struct {
 	ecs.Attached `editable:"^"`
 
 	P concepts.Vector3 `editable:"Position"`
-
-	Next ecs.Entity `editable:"Next" edit_type:"Action"`
 }
 
 var ActionWaypointCID ecs.ComponentID
@@ -35,7 +31,7 @@ func GetActionWaypoint(db *ecs.ECS, e ecs.Entity) *ActionWaypoint {
 }
 
 func (waypoint *ActionWaypoint) String() string {
-	return "Action Waypoint: " + waypoint.P.StringHuman()
+	return "Waypoint: " + waypoint.P.StringHuman()
 }
 
 func (waypoint *ActionWaypoint) Construct(data map[string]any) {
@@ -46,10 +42,6 @@ func (waypoint *ActionWaypoint) Construct(data map[string]any) {
 		return
 	}
 
-	if v, ok := data["Next"]; ok {
-		waypoint.Next, _ = ecs.ParseEntity(v.(string))
-	}
-
 	waypoint.P.Deserialize(data)
 }
 
@@ -58,10 +50,6 @@ func (waypoint *ActionWaypoint) Serialize() map[string]any {
 	result["X"] = waypoint.P[0]
 	result["Y"] = waypoint.P[1]
 	result["Z"] = waypoint.P[2]
-
-	if waypoint.Next != 0 {
-		result["Next"] = waypoint.Next.String()
-	}
 
 	return result
 }

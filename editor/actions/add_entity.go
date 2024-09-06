@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
@@ -107,7 +108,7 @@ func (a *AddEntity) MouseUp(evt *desktop.MouseEvent) {
 
 func (a *AddEntity) Act() {
 	a.Mode = "AddBody"
-	a.SelectObjects(true, core.SelectableFromEntity(a.State().ECS, a.Entity))
+	a.SelectObjects(true, selection.SelectableFromEntity(a.State().ECS, a.Entity))
 }
 func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()

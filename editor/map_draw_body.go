@@ -7,6 +7,7 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 
 	"tlyakhov/gofoom/components/behaviors"
@@ -52,8 +53,8 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 		mw.Context.SetRGB(light.Diffuse[0], light.Diffuse[1], light.Diffuse[2])
 	} // Sprite...
 
-	hovering := editor.HoveringObjects.Contains(core.SelectableFromBody(body))
-	selected := editor.SelectedObjects.Contains(core.SelectableFromBody(body))
+	hovering := editor.HoveringObjects.Contains(selection.SelectableFromBody(body))
+	selected := editor.SelectedObjects.Contains(selection.SelectableFromBody(body))
 
 	if selected || hovering {
 		img := editor.EntityImage(body.Entity, false)

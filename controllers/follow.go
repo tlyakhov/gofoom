@@ -17,9 +17,7 @@ import (
 type FollowController struct {
 	ecs.BaseController
 	*behaviors.Follower
-	Body   *core.Body
-	Start  *core.ActionWaypoint
-	Action *core.ActionWaypoint
+	Body *core.Body
 }
 
 func init() {
@@ -37,68 +35,68 @@ func (fc *FollowController) Methods() ecs.ControllerMethod {
 func (fc *FollowController) Target(target ecs.Attachable) bool {
 	fc.Follower = target.(*behaviors.Follower)
 	fc.Body = core.GetBody(fc.Follower.ECS, fc.Follower.Entity)
-	fc.Start = core.GetActionWaypoint(fc.Follower.ECS, fc.Follower.Start)
-	fc.Action = core.GetActionWaypoint(fc.Follower.ECS, fc.Follower.Action)
 	return fc.Follower.IsActive() && fc.Body.IsActive()
 }
 
 func (fc *FollowController) Recalculate() {
 	var d2 float64
-	var closest *core.ActionWaypoint
+	var closest *behaviors.ActionWaypoint
 
 	visited := make(containers.Set[ecs.Entity])
 
 	closestDist2 := math.MaxFloat64
 	action := fc.Start
-	for action != nil {
-		if visited.Contains(action.Entity) {
+	for action != 0 {
+		if visited.Contains(action) {
 			break
 		}
-		visited.Add(action.Entity)
-		if fc.NoZ {
-			d2 = action.P.To2D().Dist2(fc.Body.Pos.Now.To2D())
+		visited.Add(action)
+
+		if waypoint := behaviors.GetActionWaypoint(fc.ECS, action); waypoint != nil {
+			if fc.NoZ {
+				d2 = waypoint.P.To2D().Dist2(fc.Body.Pos.Now.To2D())
+			} else {
+				d2 = waypoint.P.Dist2(&fc.Body.Pos.Now)
+			}
+			if d2 < closestDist2 {
+				closestDist2 = d2
+				closest = waypoint
+			}
+		}
+
+		if t := behaviors.GetActionTransition(fc.ECS, action); t != nil {
+			action = t.Next
 		} else {
-			d2 = action.P.Dist2(&fc.Body.Pos.Now)
+			action = 0
 		}
-		if d2 < closestDist2 {
-			closestDist2 = d2
-			closest = action
-		}
-		action = core.GetActionWaypoint(action.ECS, action.Next)
 	}
-	fc.Action = closest
+	fc.Action = closest.Entity
 	fc.Follower.Action = closest.Entity
 }
 
-func (fc *FollowController) Always() {
-	if fc.Follower.Action == 0 {
-		fc.Follower.Action = fc.Follower.Start
-		fc.Action = fc.Start
+func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
+	if jump.Fired.Contains(fc.Body.Entity) {
+		return true
 	}
+	jump.Fired.Add(fc.Body.Entity)
 
+	fc.Body.Force[2] += constants.PlayerJumpForce
+
+	return true
+}
+
+func (fc *FollowController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	pos := &fc.Body.Pos.Now
 	if fc.Body.Pos.Procedural {
 		pos = &fc.Body.Pos.Input
 	}
 
 	// Have we reached the target?
-	if pos.To2D().Dist2(fc.Action.P.To2D()) < 1 {
-		if fc.Action.Next != 0 {
-			fc.Follower.Action = fc.Action.Next
-		} else {
-			switch fc.Lifetime {
-			case dynamic.AnimationLifetimeLoop:
-				fc.Follower.Action = fc.Follower.Start
-			case dynamic.AnimationLifetimeOnce:
-				fc.Follower.Active = false
-			case dynamic.AnimationLifetimeBounce:
-			case dynamic.AnimationLifetimeBounceOnce:
-			}
-		}
-		return
+	if pos.To2D().Dist2(waypoint.P.To2D()) < 1 {
+		return true
 	}
 
-	v := fc.Action.P.Sub(pos)
+	v := waypoint.P.Sub(pos)
 	if fc.NoZ {
 		v[2] = 0
 		if fc.Body.Pos.Procedural {
@@ -117,5 +115,42 @@ func (fc *FollowController) Always() {
 		fc.Body.Pos.Input.AddSelf(v)
 	} else {
 		fc.Body.Vel.Now = *v
+	}
+
+	return false
+}
+
+func (fc *FollowController) Always() {
+	if fc.Action == 0 {
+		fc.Action = fc.Start
+	}
+
+	doTransition := true
+
+	if waypoint := behaviors.GetActionWaypoint(fc.ECS, fc.Action); waypoint != nil {
+		doTransition = doTransition && fc.Waypoint(waypoint)
+	}
+
+	if jump := behaviors.GetActionJump(fc.ECS, fc.Action); jump != nil {
+		doTransition = doTransition && fc.Jump(jump)
+	}
+
+	if !doTransition {
+		return
+	}
+
+	if t := behaviors.GetActionTransition(fc.ECS, fc.Action); t != nil {
+		if t.Next != 0 {
+			fc.Action = t.Next
+		} else {
+			switch fc.Lifetime {
+			case dynamic.AnimationLifetimeLoop:
+				fc.Action = fc.Start
+			case dynamic.AnimationLifetimeOnce:
+				fc.Active = false
+			case dynamic.AnimationLifetimeBounce:
+			case dynamic.AnimationLifetimeBounceOnce:
+			}
+		}
 	}
 }

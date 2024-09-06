@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
@@ -30,8 +31,8 @@ type Select struct {
 
 	Mode     string
 	Modifier SelectModifier
-	Original *core.Selection
-	Selected *core.Selection
+	Original *selection.Selection
+	Selected *selection.Selection
 }
 
 // TODO: This begin/end pattern for action could be generalized to avoid
@@ -47,7 +48,7 @@ func (a *Select) begin(m fyne.KeyModifier) {
 		a.Modifier = SelectSub
 	}
 
-	a.Original = core.NewSelectionClone(a.State().SelectedObjects)
+	a.Original = selection.NewSelectionClone(a.State().SelectedObjects)
 
 	a.Mode = "Selecting"
 	a.SetMapCursor(desktop.TextCursor)
@@ -60,30 +61,30 @@ func (a *Select) end() {
 
 	hovering := a.State().HoveringObjects
 	if hovering.Empty() { // User is trying to select a sector?
-		hovering = core.NewSelection()
+		hovering = selection.NewSelection()
 		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
 		for i := range col.Length {
 			sector := col.Value(i)
 			if sector.IsPointInside2D(&a.State().MouseWorld) {
-				hovering.Add(core.SelectableFromSector(sector))
+				hovering.Add(selection.SelectableFromSector(sector))
 			}
 		}
 	}
 
 	if a.Modifier == SelectAdd {
-		a.Selected = core.NewSelectionClone(a.Original)
+		a.Selected = selection.NewSelectionClone(a.Original)
 		for _, s := range hovering.Exact {
 			a.Selected.Add(s)
 		}
 	} else if a.Modifier == SelectSub {
-		a.Selected = core.NewSelection()
+		a.Selected = selection.NewSelection()
 		for _, obj := range a.Original.Exact {
 			if !hovering.Contains(obj) {
 				a.Selected.Add(obj)
 			}
 		}
 	} else {
-		a.Selected = core.NewSelectionClone(hovering)
+		a.Selected = selection.NewSelectionClone(hovering)
 	}
 	a.Selected.Normalize()
 	a.Mode = ""

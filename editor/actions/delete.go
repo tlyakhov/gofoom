@@ -6,6 +6,7 @@ package actions
 import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
@@ -13,13 +14,13 @@ import (
 type Delete struct {
 	state.IEditor
 
-	Selected *core.Selection
-	Saved    map[*core.Selectable]any
+	Selected *selection.Selection
+	Saved    map[*selection.Selectable]any
 }
 
 func (a *Delete) Act() {
-	a.Saved = make(map[*core.Selectable]any)
-	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
+	a.Saved = make(map[*selection.Selectable]any)
+	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
 
 	for _, obj := range a.Selected.Exact {
 		a.Saved[obj] = obj.Serialize()
@@ -45,11 +46,11 @@ func (a *Delete) Redo() {
 
 	for s := range a.Saved {
 		switch s.Type {
-		case core.SelectableSector:
+		case selection.SelectableSector:
 			s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 			s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
 			s.ECS.DetachAll(s.Sector.Entity)
-		case core.SelectableSectorSegment:
+		case selection.SelectableSectorSegment:
 			for i, seg := range s.Sector.Segments {
 				if seg != s.SectorSegment {
 					continue
@@ -62,7 +63,7 @@ func (a *Delete) Redo() {
 				}
 				break
 			}
-		case core.SelectableBody:
+		case selection.SelectableBody:
 			if behaviors.GetPlayer(s.ECS, s.Entity) != nil {
 				// Otherwise weird things happen...
 				continue
@@ -71,14 +72,14 @@ func (a *Delete) Redo() {
 			if s.Body.Sector() != nil {
 				delete(s.Body.Sector().Bodies, s.Entity)
 			}
-		case core.SelectableInternalSegment:
+		case selection.SelectableInternalSegment:
 			fallthrough
-		case core.SelectableInternalSegmentA:
+		case selection.SelectableInternalSegmentA:
 			fallthrough
-		case core.SelectableInternalSegmentB:
+		case selection.SelectableInternalSegmentB:
 			s.ECS.DetachAll(s.InternalSegment.Entity)
 			s.InternalSegment.DetachFromSectors()
-		case core.SelectableEntity:
+		case selection.SelectableEntity:
 			s.ECS.DetachAll(s.Entity)
 		}
 	}

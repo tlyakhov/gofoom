@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/editor/state"
 
@@ -25,7 +26,7 @@ type AddSector struct {
 func (a *AddSector) Act() {
 	a.SetMapCursor(desktop.CrosshairCursor)
 	a.Mode = "AddSector"
-	a.SelectObjects(true, core.SelectableFromSector(a.Sector))
+	a.SelectObjects(true, selection.SelectableFromSector(a.Sector))
 	//set cursor
 }
 

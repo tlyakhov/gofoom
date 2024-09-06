@@ -13,6 +13,7 @@ import (
 	"github.com/puzpuzpuz/xsync/v3"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
@@ -323,7 +324,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		c.CalcScreen()
 
 		if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
-			c.PickedSelection = append(c.PickedSelection, core.SelectableFromInternalSegment(sorted.InternalSegment))
+			c.PickedSelection = append(c.PickedSelection, selection.SelectableFromInternalSegment(sorted.InternalSegment))
 			return
 		}
 		c.LightSampler.MaterialSampler.Config = r.Config
@@ -336,7 +337,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) []*core.Selectable {
+func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) []*selection.Selectable {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
@@ -537,7 +538,7 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int) {
 	}
 }
 
-func (r *Renderer) Pick(x, y int) []*core.Selectable {
+func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
 		return nil
 	}

@@ -6,7 +6,9 @@ package main
 import (
 	"fmt"
 
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 )
@@ -21,12 +23,12 @@ func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 
 func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Push()
-	segmentHovering := editor.HoveringObjects.Contains(core.SelectableFromInternalSegment(segment))
-	segmentSelected := editor.SelectedObjects.Contains(core.SelectableFromInternalSegment(segment))
-	aHovering := segmentHovering || editor.HoveringObjects.Contains(core.SelectableFromInternalSegmentA(segment))
-	aSelected := segmentSelected || editor.SelectedObjects.Contains(core.SelectableFromInternalSegmentA(segment))
-	bHovering := segmentHovering || editor.HoveringObjects.Contains(core.SelectableFromInternalSegmentB(segment))
-	bSelected := segmentSelected || editor.SelectedObjects.Contains(core.SelectableFromInternalSegmentB(segment))
+	segmentHovering := editor.HoveringObjects.Contains(selection.SelectableFromInternalSegment(segment))
+	segmentSelected := editor.SelectedObjects.Contains(selection.SelectableFromInternalSegment(segment))
+	aHovering := segmentHovering || editor.HoveringObjects.Contains(selection.SelectableFromInternalSegmentA(segment))
+	aSelected := segmentSelected || editor.SelectedObjects.Contains(selection.SelectableFromInternalSegmentA(segment))
+	bHovering := segmentHovering || editor.HoveringObjects.Contains(selection.SelectableFromInternalSegmentB(segment))
+	bSelected := segmentSelected || editor.SelectedObjects.Contains(selection.SelectableFromInternalSegmentB(segment))
 
 	if segmentHovering {
 		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
@@ -98,16 +100,16 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 
 	mw.Context.Push()
 
-	sectorHovering := editor.HoveringObjects.Contains(core.SelectableFromSector(sector))
-	sectorSelected := editor.SelectedObjects.Contains(core.SelectableFromSector(sector))
+	sectorHovering := editor.HoveringObjects.Contains(selection.SelectableFromSector(sector))
+	sectorSelected := editor.SelectedObjects.Contains(selection.SelectableFromSector(sector))
 
 	for _, segment := range sector.Segments {
 		if segment.Next == nil || segment.P == segment.Next.P {
 			continue
 		}
 
-		segmentHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromSegment(segment))
-		segmentSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromSegment(segment))
+		segmentHovering := editor.HoveringObjects.ContainsGrouped(selection.SelectableFromSegment(segment))
+		segmentSelected := editor.SelectedObjects.ContainsGrouped(selection.SelectableFromSegment(segment))
 
 		if segment.AdjacentSector == 0 {
 			mw.Context.SetRGB(1, 1, 1)
@@ -188,7 +190,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 	mw.Context.Pop()
 }
 
-func (mw *MapWidget) DrawPath(waypoint *core.ActionWaypoint) {
+func (mw *MapWidget) DrawPath(waypoint *behaviors.ActionWaypoint) {
 	/*start := editor.ScreenToWorld(new(concepts.Vector2))
 	end := editor.ScreenToWorld(&editor.Size)
 	if !concepts.Vector2AABBIntersect(path.Min.To2D(), path.Max.To2D(), start, end, true) {
@@ -197,8 +199,8 @@ func (mw *MapWidget) DrawPath(waypoint *core.ActionWaypoint) {
 
 	mw.Context.Push()
 
-	waypointHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromActionWaypoint(waypoint))
-	waypointSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromActionWaypoint(waypoint))
+	waypointHovering := editor.HoveringObjects.ContainsGrouped(selection.SelectableFromActionWaypoint(waypoint))
+	waypointSelected := editor.SelectedObjects.ContainsGrouped(selection.SelectableFromActionWaypoint(waypoint))
 
 	if waypointSelected {
 		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
@@ -211,11 +213,12 @@ func (mw *MapWidget) DrawPath(waypoint *core.ActionWaypoint) {
 		mw.Context.Stroke()
 	}
 
-	if waypoint.Next == 0 {
+	transition := behaviors.GetActionTransition(waypoint.ECS, waypoint.Entity)
+	if transition == nil || transition.Next == 0 {
 		return
 	}
 
-	next := core.GetActionWaypoint(waypoint.ECS, waypoint.Next)
+	next := behaviors.GetActionWaypoint(waypoint.ECS, transition.Next)
 
 	if next == nil {
 		return
