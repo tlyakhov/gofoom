@@ -36,7 +36,7 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 	if entity != 0 {
 		img.ScaleMode = canvas.ImageScaleSmooth
 		img.FillMode = canvas.ImageFillContain
-		if editTypeTag != "Path" {
+		if editTypeTag != "Action" {
 			img.Image = g.IEditor.EntityImage(entity, editTypeTag != "Material")
 		}
 		img.SetMinSize(fyne.NewSquareSize(64))
@@ -63,18 +63,15 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	refs := make([]widget.TreeNodeID, 1)
 	refs[0] = "0"
 
-	for entity, c := range g.State().ECS.EntityComponents {
-		if c == nil {
-			continue
-		}
+	g.State().ECS.Entities.Range(func(entity uint32) {
 		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().ECS, ecs.Entity(entity)) {
-			refs = append(refs, strconv.Itoa(entity))
+			refs = append(refs, strconv.Itoa(int(entity)))
 		} else if editTypeTag == "Sector" && core.GetSector(g.State().ECS, ecs.Entity(entity)) != nil {
-			refs = append(refs, strconv.Itoa(entity))
-		} else if editTypeTag == "Path" && core.GetPath(g.State().ECS, ecs.Entity(entity)) != nil {
-			refs = append(refs, strconv.Itoa(entity))
+			refs = append(refs, strconv.Itoa(int(entity)))
+		} else if editTypeTag == "Action" && core.GetActionWaypoint(g.State().ECS, ecs.Entity(entity)) != nil {
+			refs = append(refs, strconv.Itoa(int(entity)))
 		}
-	}
+	})
 	tree := widget.NewTree(func(tni widget.TreeNodeID) []widget.TreeNodeID {
 		if tni != "" {
 			return []string{}

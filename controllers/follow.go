@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
@@ -16,8 +17,9 @@ import (
 type FollowController struct {
 	ecs.BaseController
 	*behaviors.Follower
-	Body *core.Body
-	Path *core.Path
+	Body   *core.Body
+	Start  *core.ActionWaypoint
+	Action *core.ActionWaypoint
 }
 
 func init() {
@@ -35,30 +37,44 @@ func (fc *FollowController) Methods() ecs.ControllerMethod {
 func (fc *FollowController) Target(target ecs.Attachable) bool {
 	fc.Follower = target.(*behaviors.Follower)
 	fc.Body = core.GetBody(fc.Follower.ECS, fc.Follower.Entity)
-	fc.Path = core.GetPath(fc.Follower.ECS, fc.Follower.Path)
-	return fc.Follower.IsActive() && fc.Body.IsActive() && fc.Path != nil && fc.Path.IsActive()
+	fc.Start = core.GetActionWaypoint(fc.Follower.ECS, fc.Follower.Start)
+	fc.Action = core.GetActionWaypoint(fc.Follower.ECS, fc.Follower.Action)
+	return fc.Follower.IsActive() && fc.Body.IsActive()
 }
 
 func (fc *FollowController) Recalculate() {
 	var d2 float64
-	closest := 0
+	var closest *core.ActionWaypoint
+
+	visited := make(containers.Set[ecs.Entity])
+
 	closestDist2 := math.MaxFloat64
-	for i, seg := range fc.Path.Segments {
+	action := fc.Start
+	for action != nil {
+		if visited.Contains(action.Entity) {
+			break
+		}
+		visited.Add(action.Entity)
 		if fc.NoZ {
-			d2 = seg.P.To2D().Dist2(fc.Body.Pos.Now.To2D())
+			d2 = action.P.To2D().Dist2(fc.Body.Pos.Now.To2D())
 		} else {
-			d2 = seg.P.Dist2(&fc.Body.Pos.Now)
+			d2 = action.P.Dist2(&fc.Body.Pos.Now)
 		}
 		if d2 < closestDist2 {
 			closestDist2 = d2
-			closest = i
+			closest = action
 		}
+		action = core.GetActionWaypoint(action.ECS, action.Next)
 	}
-	fc.Index = closest
+	fc.Action = closest
+	fc.Follower.Action = closest.Entity
 }
 
 func (fc *FollowController) Always() {
-	target := fc.Path.Segments[fc.Index]
+	if fc.Follower.Action == 0 {
+		fc.Follower.Action = fc.Follower.Start
+		fc.Action = fc.Start
+	}
 
 	pos := &fc.Body.Pos.Now
 	if fc.Body.Pos.Procedural {
@@ -66,26 +82,23 @@ func (fc *FollowController) Always() {
 	}
 
 	// Have we reached the target?
-	if pos.To2D().Dist2(target.P.To2D()) < 1 {
-		end := len(fc.Path.Segments)
-		fc.Follower.Index = fc.Follower.Index + 1
-		if fc.Follower.Index >= end {
+	if pos.To2D().Dist2(fc.Action.P.To2D()) < 1 {
+		if fc.Action.Next != 0 {
+			fc.Follower.Action = fc.Action.Next
+		} else {
 			switch fc.Lifetime {
 			case dynamic.AnimationLifetimeLoop:
-				fc.Follower.Index = 0
+				fc.Follower.Action = fc.Follower.Start
 			case dynamic.AnimationLifetimeOnce:
-				fc.Follower.Index = end - 1
 				fc.Follower.Active = false
 			case dynamic.AnimationLifetimeBounce:
-				fc.Follower.Index = concepts.Max(end-2, 0)
 			case dynamic.AnimationLifetimeBounceOnce:
-				fc.Follower.Index = concepts.Max(end-2, 0)
 			}
 		}
 		return
 	}
 
-	v := target.P.Sub(pos)
+	v := fc.Action.P.Sub(pos)
 	if fc.NoZ {
 		v[2] = 0
 		if fc.Body.Pos.Procedural {

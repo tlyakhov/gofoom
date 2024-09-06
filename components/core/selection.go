@@ -106,14 +106,8 @@ func (sel *Selection) SavePositions() {
 			fallthrough
 		case SelectableSectorSegment:
 			sel.Positions[s.Hash()] = &concepts.Vector3{s.SectorSegment.P[0], s.SectorSegment.P[1]}
-		case SelectablePath:
-			for _, seg := range s.Path.Segments {
-				// 4 bits for type, 16 bits for segment index, 44 bits for entity
-				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | uint64(s.Entity)
-				sel.Positions[hash] = seg.P.Clone()
-			}
-		case SelectablePathSegment:
-			sel.Positions[s.Hash()] = s.PathSegment.P.Clone()
+		case SelectableActionWaypoint:
+			sel.Positions[s.Hash()] = s.ActionWaypoint.P.Clone()
 		case SelectableBody:
 			sel.Positions[s.Hash()] = s.Body.Pos.Original.Clone()
 		case SelectableInternalSegmentA:
@@ -147,14 +141,8 @@ func (sel *Selection) LoadPositions() {
 			fallthrough
 		case SelectableSectorSegment:
 			s.SectorSegment.P.From(sel.Positions[s.Hash()].To2D())
-		case SelectablePath:
-			for _, seg := range s.Path.Segments {
-				// 4 bits for type, 16 bits for segment index, 44 bits for entity
-				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | uint64(s.Entity)
-				seg.P.From(sel.Positions[hash])
-			}
-		case SelectablePathSegment:
-			s.PathSegment.P.From(sel.Positions[s.Hash()])
+		case SelectableActionWaypoint:
+			s.ActionWaypoint.P.From(sel.Positions[s.Hash()])
 		case SelectableBody:
 			s.Body.Pos.Original.From(sel.Positions[s.Hash()])
 		case SelectableInternalSegmentA:

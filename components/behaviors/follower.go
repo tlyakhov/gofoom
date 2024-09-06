@@ -4,20 +4,19 @@
 package behaviors
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
 type Follower struct {
 	ecs.Attached `editable:"^"`
-	Path         ecs.Entity                `editable:"Path" edit_type:"Path"`
+	Start        ecs.Entity                `editable:"Starting Action" edit_type:"Action"`
 	NoZ          bool                      `editable:"2D only"`
 	Lifetime     dynamic.AnimationLifetime `editable:"Lifetime"`
 	Speed        float64                   `editable:"Speed"`
 
 	// Internal state
-	Index int
+	Action ecs.Entity
 }
 
 var FollowerCID ecs.ComponentID
@@ -40,7 +39,7 @@ func (f *Follower) String() string {
 func (f *Follower) Construct(data map[string]any) {
 	f.Attached.Construct(data)
 	f.NoZ = false
-	f.Index = 0
+	f.Action = f.Start
 	f.Speed = 10
 	f.Lifetime = dynamic.AnimationLifetimeLoop
 
@@ -48,13 +47,11 @@ func (f *Follower) Construct(data map[string]any) {
 		return
 	}
 
-	if v, ok := data["Path"]; ok {
-		f.Path, _ = ecs.ParseEntity(v.(string))
+	if v, ok := data["Action"]; ok {
+		f.Action, _ = ecs.ParseEntity(v.(string))
 	}
-	if v, ok := data["Index"]; ok {
-		if i, err := strconv.Atoi(v.(string)); err == nil {
-			f.Index = int(i)
-		}
+	if v, ok := data["Start"]; ok {
+		f.Start, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["NoZ"]; ok {
 		f.NoZ = v.(bool)
@@ -72,12 +69,10 @@ func (f *Follower) Construct(data map[string]any) {
 func (f *Follower) Serialize() map[string]any {
 	result := f.Attached.Serialize()
 
-	result["Path"] = f.Path.String()
+	result["Action"] = f.Action.String()
+	result["Start"] = f.Start.String()
 	result["Speed"] = f.Speed
 
-	if f.Index != 0 {
-		result["Index"] = strconv.Itoa(f.Index)
-	}
 	if f.NoZ {
 		result["NoZ"] = f.NoZ
 	}

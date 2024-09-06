@@ -38,10 +38,10 @@ func _SelectableTypeNoOp() {
 	_ = x[SelectableInternalSegmentB-(10)]
 	_ = x[SelectableBody-(11)]
 	_ = x[SelectablePath-(12)]
-	_ = x[SelectablePathSegment-(13)]
+	_ = x[SelectableActionWaypoint-(13)]
 }
 
-var _SelectableTypeValues = []SelectableType{SelectableEntity, SelectableSector, SelectableSectorSegment, SelectableCeiling, SelectableFloor, SelectableHi, SelectableLow, SelectableMid, SelectableInternalSegment, SelectableInternalSegmentA, SelectableInternalSegmentB, SelectableBody, SelectablePath, SelectablePathSegment}
+var _SelectableTypeValues = []SelectableType{SelectableEntity, SelectableSector, SelectableSectorSegment, SelectableCeiling, SelectableFloor, SelectableHi, SelectableLow, SelectableMid, SelectableInternalSegment, SelectableInternalSegmentA, SelectableInternalSegmentB, SelectableBody, SelectablePath, SelectableActionWaypoint}
 
 var _SelectableTypeNameToValueMap = map[string]SelectableType{
 	_SelectableTypeName[0:16]:         SelectableEntity,
@@ -70,8 +70,8 @@ var _SelectableTypeNameToValueMap = map[string]SelectableType{
 	_SelectableTypeLowerName[202:216]: SelectableBody,
 	_SelectableTypeName[216:230]:      SelectablePath,
 	_SelectableTypeLowerName[216:230]: SelectablePath,
-	_SelectableTypeName[230:251]:      SelectablePathSegment,
-	_SelectableTypeLowerName[230:251]: SelectablePathSegment,
+	_SelectableTypeName[230:251]:      SelectableActionWaypoint,
+	_SelectableTypeLowerName[230:251]: SelectableActionWaypoint,
 }
 
 var _SelectableTypeNames = []string{

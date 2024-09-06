@@ -56,5 +56,6 @@ golang.org/x/tools v0.13.0/go.mod h1:HvlwmtVNQAhOuCjW7xxvovg8wbNq7LwfXh/k7wXUl58
 golang.org/x/tools/go/vcs v0.1.0-deprecated/go.mod h1:zUrvATBAvEI9535oC0yWYsLsHIV4Z7g63sNPVMtuBy8=
 hawx.me/code/hadfield v0.0.0-20180420190601-72744ca377c0/go.mod h1:wzKgiz2WXn3UMieb1JDce006zbkZFKBu4qWO/w1u29Y=
 hawx.me/code/img v0.0.0-20150501151119-6cd0f2a93fda/go.mod h1:O+YrtCKu596QHeIJkMxnddl1Ho3s8mO0IJEAOiLuLJo=
+honnef.co/go/js/dom v0.0.0-20210725211120-f030747120f2/go.mod h1:sUMDUKNB2ZcVjt92UnLy3cdGs+wDAcrPdV3JP6sVgA4=
 honnef.co/go/js/dom v0.0.0-20231112215516-51f43a291193/go.mod h1:sUMDUKNB2ZcVjt92UnLy3cdGs+wDAcrPdV3JP6sVgA4=
 pgregory.net/rapid v0.4.8/go.mod h1:Z5PbWqjvWR1I3UGjvboUuan4fe4ZYEYNLNQLExzCoUs=

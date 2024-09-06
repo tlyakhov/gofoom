@@ -178,8 +178,6 @@ func (list *EntityList) Build() fyne.CanvasObject {
 }
 func (list *EntityList) Update() {
 	list.BackingStore = make([][elcNumColumns]any, 0)
-	numEcsColumns := ecs.Types().LenGroupedComponents
-	ec := list.State().ECS.EntityComponents
 	searchValid := len(list.State().SearchTerms) > 0
 
 	list.State().ECS.Entities.Range(func(entity uint32) {
@@ -189,8 +187,7 @@ func (list *EntityList) Update() {
 		rowColor := theme.Color(theme.ColorNameForeground)
 		parentDesc := ""
 		rank := 0
-		for index := range numEcsColumns {
-			c := ec[int(entity)*numEcsColumns+index]
+		for _, c := range list.State().ECS.AllComponents(ecs.Entity(entity)) {
 			if c == nil {
 				continue
 			}
