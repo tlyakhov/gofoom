@@ -4,13 +4,13 @@
 package render
 
 import (
-	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/render/state"
 )
 
 func wallHiPick(cp *state.ColumnPortal) {
 	if cp.ScreenY >= cp.ClippedTop && cp.ScreenY < cp.AdjClippedTop {
-		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableHi))
+		cp.PickedSelection = append(cp.PickedSelection, selection.SelectableFromWall(cp.AdjSegment, selection.SelectableHi))
 	}
 }
 
@@ -53,7 +53,7 @@ func wallHi(cp *state.ColumnPortal) {
 
 func wallLowPick(cp *state.ColumnPortal) {
 	if cp.ScreenY >= cp.AdjClippedBottom && cp.ScreenY < cp.ClippedBottom {
-		cp.PickedSelection = append(cp.PickedSelection, core.SelectableFromWall(cp.AdjSegment, core.SelectableLow))
+		cp.PickedSelection = append(cp.PickedSelection, selection.SelectableFromWall(cp.AdjSegment, selection.SelectableLow))
 	}
 }
 

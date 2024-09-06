@@ -8,6 +8,7 @@ import (
 	"image"
 	"log"
 	"math"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
@@ -90,7 +91,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	for i := range colSeg.Length {
 		mw.DrawInternalSegment(colSeg.Value(i))
 	}
-	colWaypoint := ecs.ColumnFor[core.ActionWaypoint](editor.ECS, core.ActionWaypointCID)
+	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](editor.ECS, behaviors.ActionWaypointCID)
 	for i := range colWaypoint.Length {
 		mw.DrawPath(colWaypoint.Value(i))
 	}

@@ -5,6 +5,7 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
@@ -20,7 +21,7 @@ type AddInternalSegment struct {
 func (a *AddInternalSegment) Act() {
 	a.SetMapCursor(desktop.CrosshairCursor)
 	a.Mode = "AddInternalSegment"
-	a.SelectObjects(true, core.SelectableFromInternalSegment(a.InternalSegment))
+	a.SelectObjects(true, selection.SelectableFromInternalSegment(a.InternalSegment))
 	//set cursor
 }
 

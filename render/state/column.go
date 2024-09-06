@@ -8,6 +8,7 @@ import (
 	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
@@ -73,7 +74,7 @@ type Column struct {
 	LightLastColResults []concepts.Vector3
 	// For picking things in editor
 	Pick            bool
-	PickedSelection []*core.Selectable
+	PickedSelection []*selection.Selectable
 }
 
 func (c *Column) ProjectZ(z float64) float64 {

@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"log"
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
@@ -18,14 +18,14 @@ import (
 type Copy struct {
 	state.IEditor
 
-	Selected      *core.Selection
+	Selected      *selection.Selection
 	Saved         map[ecs.Entity]any
 	ClipboardData string
 }
 
 func (a *Copy) Act() {
 	a.Saved = make(map[ecs.Entity]any)
-	a.Selected = core.NewSelectionClone(a.State().SelectedObjects)
+	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
 
 	for _, obj := range a.Selected.Exact {
 		// Don't copy/paste active players

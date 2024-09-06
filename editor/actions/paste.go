@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"log"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
@@ -47,7 +48,7 @@ func (a *Paste) Act() {
 
 	// Copied -> Pasted
 	a.CopiedToPasted = make(map[ecs.Entity]ecs.Entity)
-	a.Selected = core.NewSelection()
+	a.Selected = selection.NewSelection()
 	db := a.State().ECS
 	for copiedEntityString, jsonData := range jsonEntities {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
@@ -78,7 +79,7 @@ func (a *Paste) Act() {
 			a.State().Lock.Unlock()
 		}
 		if pastedEntity != 0 {
-			a.Selected.Add(core.SelectableFromEntity(db, pastedEntity))
+			a.Selected.Add(selection.SelectableFromEntity(db, pastedEntity))
 		}
 	}
 

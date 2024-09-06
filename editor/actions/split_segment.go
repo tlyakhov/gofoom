@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -65,20 +66,20 @@ func (a *SplitSegment) OnMouseUp() {
 		for _, s := range a.State().SelectedObjects.Exact {
 			switch s.Type {
 			// Segments:
-			case core.SelectableLow:
+			case selection.SelectableLow:
 				fallthrough
-			case core.SelectableMid:
+			case selection.SelectableMid:
 				fallthrough
-			case core.SelectableHi:
+			case selection.SelectableHi:
 				fallthrough
-			case core.SelectableSectorSegment:
+			case selection.SelectableSectorSegment:
 				segments.Add(s.SectorSegment)
 			// Sectors:
-			case core.SelectableCeiling:
+			case selection.SelectableCeiling:
 				fallthrough
-			case core.SelectableFloor:
+			case selection.SelectableFloor:
 				fallthrough
-			case core.SelectableSector:
+			case selection.SelectableSector:
 				for _, seg := range s.Sector.Segments {
 					segments.Add(seg)
 				}

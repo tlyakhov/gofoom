@@ -6,7 +6,7 @@ package state
 import (
 	"image"
 	"sync"
-	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
@@ -41,8 +41,8 @@ type Edit struct {
 	MousePressed   bool
 	Dragging       bool
 
-	SelectedObjects        *core.Selection
-	HoveringObjects        *core.Selection
+	SelectedObjects        *selection.Selection
+	HoveringObjects        *selection.Selection
 	SearchTerms            string
 	SelectedTransformables []any
 
@@ -76,8 +76,8 @@ type IEditor interface {
 	SwitchTool(tool EditorTool)
 	UndoCurrent()
 	RedoCurrent()
-	SelectObjects(updateEntityList bool, s ...*core.Selectable)
-	SetSelection(updateEntityList bool, s *core.Selection)
+	SelectObjects(updateEntityList bool, s ...*selection.Selectable)
+	SetSelection(updateEntityList bool, s *selection.Selection)
 	Selecting() bool
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)

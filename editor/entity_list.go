@@ -11,6 +11,7 @@ import (
 	"strings"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
@@ -142,7 +143,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 
 	button := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
 		list.State().Lock.Lock()
-		editor.SelectObjects(true, core.SelectableFromEntity(editor.ECS, editor.ECS.NewEntity()))
+		editor.SelectObjects(true, selection.SelectableFromEntity(editor.ECS, editor.ECS.NewEntity()))
 		list.State().Lock.Unlock()
 	})
 	search := widget.NewEntry()
@@ -159,7 +160,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 			return
 		}
 		entity := list.BackingStore[id.Row][0].(int)
-		s := core.SelectableFromEntity(list.State().ECS, ecs.Entity(entity))
+		s := selection.SelectableFromEntity(list.State().ECS, ecs.Entity(entity))
 		if !editor.SelectedObjects.Contains(s) {
 			editor.SelectObjects(false, s)
 		}
@@ -231,7 +232,7 @@ func (list *EntityList) Update() {
 	list.applySort()
 }
 
-func (list *EntityList) Select(selection *core.Selection) {
+func (list *EntityList) Select(selection *selection.Selection) {
 	// TODO: Support multiple-selection when Fyne Table supports them
 	for i, row := range list.BackingStore {
 		for _, s := range selection.Exact {

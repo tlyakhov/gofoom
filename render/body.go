@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
 )
@@ -56,7 +57,7 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 
 	if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
-		c.PickedSelection = append(c.PickedSelection, core.SelectableFromBody(b))
+		c.PickedSelection = append(c.PickedSelection, selection.SelectableFromBody(b))
 		return
 	}
 

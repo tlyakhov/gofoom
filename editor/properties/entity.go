@@ -11,7 +11,9 @@ import (
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -41,7 +43,7 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 		}
 		img.SetMinSize(fyne.NewSquareSize(64))
 		button.OnTapped = func() {
-			g.SelectObjects(true, core.SelectableFromEntity(g.State().ECS, entity))
+			g.SelectObjects(true, selection.SelectableFromEntity(g.State().ECS, entity))
 		}
 	}
 }
@@ -68,7 +70,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 			refs = append(refs, strconv.Itoa(int(entity)))
 		} else if editTypeTag == "Sector" && core.GetSector(g.State().ECS, ecs.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(int(entity)))
-		} else if editTypeTag == "Action" && core.GetActionWaypoint(g.State().ECS, ecs.Entity(entity)) != nil {
+		} else if editTypeTag == "Action" && behaviors.GetActionWaypoint(g.State().ECS, ecs.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(int(entity)))
 		}
 	})
