@@ -21,8 +21,12 @@ import (
 // * A system (controller) is code that queries and operates on components and entities
 type ECS struct {
 	*dynamic.Simulation
-	Entities         bitmap.Bitmap
-	EntityComponents []Attachable
+	Entities bitmap.Bitmap
+	// This slice will hold # entities * # component types * 8 bytes.
+	// Let's say we have 1,000,000 entities * 64 grouped components,
+	// that would use up 512MB of space. If the average entity only has ~4
+	// components, if packed, that would be 32MB, or 6%.
+	entityComponents []Attachable
 
 	lenGroupedComponents int
 	columns              []AttachableColumn
@@ -41,7 +45,7 @@ func (db *ECS) Clear() {
 	db.Entities = bitmap.Bitmap{}
 	db.Entities.Set(0) // 0 is reserved
 	// 0 is reserved
-	db.EntityComponents = make([]Attachable, db.lenGroupedComponents)
+	db.entityComponents = make([]Attachable, db.lenGroupedComponents)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = dynamic.NewSimulation()
 	for i, columnPlaceholder := range Types().ColumnPlaceholders {
@@ -62,9 +66,9 @@ func (db *ECS) NewEntity() Entity {
 		db.Entities.Set(free)
 		return Entity(free)
 	}
-	nextFree := len(db.EntityComponents)
-	for range db.lenGroupedComponents {
-		db.EntityComponents = append(db.EntityComponents, nil)
+	nextFree := len(db.entityComponents) / db.lenGroupedComponents
+	for len(db.entityComponents) < (nextFree+1)*db.lenGroupedComponents {
+		db.entityComponents = append(db.entityComponents, nil)
 	}
 	db.Entities.Set(uint32(nextFree))
 	return Entity(nextFree)
@@ -76,11 +80,11 @@ func ColumnFor[T any, PT GenericAttachable[T]](db *ECS, id ComponentID) *Column[
 
 func (db *ECS) AllComponents(entity Entity) []Attachable {
 	start := int(entity) * db.lenGroupedComponents
-	if entity == 0 || len(db.EntityComponents) <= start {
+	if entity == 0 || len(db.entityComponents) <= start {
 		return nil
 	}
 	end := start + db.lenGroupedComponents
-	return db.EntityComponents[start:end]
+	return db.entityComponents[start:end]
 }
 
 // Callers need to be careful, this function can return nil that's not castable
@@ -90,10 +94,10 @@ func (db *ECS) Component(entity Entity, id ComponentID) Attachable {
 		return nil
 	}
 	index := int(entity)*db.lenGroupedComponents + int(id>>16)
-	if len(db.EntityComponents) <= index {
+	if len(db.entityComponents) <= index {
 		return nil
 	}
-	return db.EntityComponents[index]
+	return db.entityComponents[index]
 }
 
 func (db *ECS) First(id ComponentID) Attachable {
@@ -113,12 +117,12 @@ func (db *ECS) attach(entity Entity, component Attachable, componentID Component
 	}
 
 	index := int(entity)*db.lenGroupedComponents + int(componentID>>16)
-	for len(db.EntityComponents) <= int(entity+1)*db.lenGroupedComponents {
-		db.EntityComponents = append(db.EntityComponents, nil)
+	for len(db.entityComponents) <= int(entity+1)*db.lenGroupedComponents {
+		db.entityComponents = append(db.entityComponents, nil)
 	}
 
 	column := db.columns[componentID&0xFFFF]
-	ec := db.EntityComponents[index]
+	ec := db.entityComponents[index]
 	if ec != nil {
 		// A component with this index is already attached to this entity, overwrite it.
 		indexInColumn := ec.IndexInColumn()
@@ -129,7 +133,7 @@ func (db *ECS) attach(entity Entity, component Attachable, componentID Component
 		component = column.Add(component)
 	}
 	component.SetEntity(entity)
-	db.EntityComponents[index] = component
+	db.entityComponents[index] = component
 	return component
 }
 
@@ -204,11 +208,11 @@ func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 
 	index := int(entity)*db.lenGroupedComponents + int(id>>16)
 
-	if len(db.EntityComponents) <= index {
-		log.Printf("ECS.Detach: entity %v is >= length of list %v.", entity, len(db.EntityComponents)/db.lenGroupedComponents)
+	if len(db.entityComponents) <= index {
+		log.Printf("ECS.Detach: entity %v is >= length of list %v.", entity, len(db.entityComponents)/db.lenGroupedComponents)
 		return
 	}
-	ec := db.EntityComponents[index]
+	ec := db.entityComponents[index]
 	if ec == nil {
 		// This component is not attached
 		return
@@ -224,12 +228,12 @@ func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 
 	ec.OnDetach()
 	column.Detach(ec.IndexInColumn())
-	db.EntityComponents[index] = nil
+	db.entityComponents[index] = nil
 
 	if checkForEmpty {
 		allNil := true
 		for i := int(entity) * db.lenGroupedComponents; i < int(entity+1)*db.lenGroupedComponents; i++ {
-			if db.EntityComponents[i] != nil {
+			if db.entityComponents[i] != nil {
 				allNil = false
 			}
 		}
@@ -343,7 +347,7 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 	start := int(entity) * db.lenGroupedComponents
 	end := start + db.lenGroupedComponents
 	for i := start; i < end; i++ {
-		component := db.EntityComponents[i]
+		component := db.entityComponents[i]
 		if component == nil || component.IsSystem() {
 			continue
 		}

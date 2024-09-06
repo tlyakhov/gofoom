@@ -547,23 +547,21 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	colPath := ecs.ColumnFor[core.Path](e.ECS, core.PathCID)
-	for i := range colPath.Length {
-		path := colPath.Value(i)
+	colWaypoint := ecs.ColumnFor[core.ActionWaypoint](e.ECS, core.ActionWaypointCID)
+	for i := range colWaypoint.Length {
+		aw := colWaypoint.Value(i)
 
-		for _, segment := range path.Segments {
-			if editor.Selecting() {
-				if segment.P[0] >= v1[0] && segment.P[1] >= v1[1] && segment.P[0] <= v2[0] && segment.P[1] <= v2[1] {
-					e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
-				}
-			} else {
-				if e.MouseWorld.Sub(segment.P.To2D()).Length() < state.SegmentSelectionEpsilon {
-					e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
-				}
-				/*if segment.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
-					e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
-				}*/
+		if editor.Selecting() {
+			if aw.P[0] >= v1[0] && aw.P[1] >= v1[1] && aw.P[0] <= v2[0] && aw.P[1] <= v2[1] {
+				e.HoveringObjects.Add(core.SelectableFromActionWaypoint(aw))
 			}
+		} else {
+			if e.MouseWorld.Sub(aw.P.To2D()).Length() < state.SegmentSelectionEpsilon {
+				e.HoveringObjects.Add(core.SelectableFromActionWaypoint(aw))
+			}
+			/*if segment.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
+				e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
+			}*/
 		}
 	}
 

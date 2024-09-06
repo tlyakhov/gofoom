@@ -107,6 +107,8 @@ type _tlyakhov_gofoom_ecs_AttachableColumn struct {
 	WAdd        func(c ecs.Attachable) ecs.Attachable
 	WAttachable func(index int) ecs.Attachable
 	WDetach     func(index int)
+	WFrom       func(source ecs.AttachableColumn, ecs *ecs.ECS)
+	WID         func() ecs.ComponentID
 	WLen        func() int
 	WNew        func() ecs.Attachable
 	WReplace    func(c ecs.Attachable, index int) ecs.Attachable
@@ -122,6 +124,12 @@ func (W _tlyakhov_gofoom_ecs_AttachableColumn) Attachable(index int) ecs.Attacha
 }
 func (W _tlyakhov_gofoom_ecs_AttachableColumn) Detach(index int) {
 	W.WDetach(index)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) From(source ecs.AttachableColumn, ecs *ecs.ECS) {
+	W.WFrom(source, ecs)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) ID() ecs.ComponentID {
+	return W.WID()
 }
 func (W _tlyakhov_gofoom_ecs_AttachableColumn) Len() int {
 	return W.WLen()
@@ -144,20 +152,20 @@ func (W _tlyakhov_gofoom_ecs_AttachableColumn) Type() reflect.Type {
 
 // _tlyakhov_gofoom_ecs_Controller is an interface wrapper for Controller type
 type _tlyakhov_gofoom_ecs_Controller struct {
-	IValue          interface{}
-	WAlways         func()
-	WComponentIndex func() ecs.ComponentID
-	WLoaded         func()
-	WMethods        func() ecs.ControllerMethod
-	WRecalculate    func()
-	WTarget         func(a0 ecs.Attachable) bool
+	IValue       interface{}
+	WAlways      func()
+	WComponentID func() ecs.ComponentID
+	WLoaded      func()
+	WMethods     func() ecs.ControllerMethod
+	WRecalculate func()
+	WTarget      func(a0 ecs.Attachable) bool
 }
 
 func (W _tlyakhov_gofoom_ecs_Controller) Always() {
 	W.WAlways()
 }
-func (W _tlyakhov_gofoom_ecs_Controller) ComponentIndex() ecs.ComponentID {
-	return W.WComponentIndex()
+func (W _tlyakhov_gofoom_ecs_Controller) ComponentID() ecs.ComponentID {
+	return W.WComponentID()
 }
 func (W _tlyakhov_gofoom_ecs_Controller) Loaded() {
 	W.WLoaded()

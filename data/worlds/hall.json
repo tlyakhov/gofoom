@@ -2704,7 +2704,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.59375,
+          "Percent": 0.796875,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -3767,11 +3767,11 @@
       "Health": 100
     },
     "behaviors.Follower": {
+      "Action": "147",
       "Entity": "42",
-      "Index": "7",
       "NoZ": true,
-      "Path": "135",
-      "Speed": 20
+      "Speed": 35,
+      "Start": "135"
     },
     "core.Body": {
       "Angle": {
@@ -3787,8 +3787,8 @@
       "MountHeight": 30,
       "Pos": {
         "Original": {
-          "X": 0,
-          "Y": -130,
+          "X": 20,
+          "Y": -180,
           "Z": 0
         },
         "Procedural": true
@@ -7292,12 +7292,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": false,
+            "Active": true,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
+            "Percent": 0,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -10846,8 +10846,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.96875,
-          "Reverse": false,
+          "Percent": 0.8203125,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10913,10 +10913,10 @@
     "Entity": "134",
     "behaviors.Proximity": {
       "Entities": [
-        "80",
-        "79",
         "25",
-        "81"
+        "81",
+        "80",
+        "79"
       ],
       "Entity": "134",
       "Range": 100,
@@ -10934,50 +10934,62 @@
   },
   {
     "Entity": "135",
-    "core.Path": {
+    "core.ActionWaypoint": {
       "Entity": "135",
-      "Segments": [
-        {
-          "X": -310,
-          "Y": 170,
-          "Z": 0
-        },
-        {
-          "X": -330,
-          "Y": -180,
-          "Z": 0
-        },
-        {
-          "X": 60,
-          "Y": -210,
-          "Z": 0
-        },
-        {
-          "X": 60,
-          "Y": -10,
-          "Z": 0
-        },
-        {
-          "X": -40,
-          "Y": -10,
-          "Z": 0
-        },
-        {
-          "X": 20,
-          "Y": -180,
-          "Z": 0
-        },
-        {
-          "X": -320,
-          "Y": -190,
-          "Z": 0
-        },
-        {
-          "X": -350,
-          "Y": 170,
-          "Z": 0
-        }
-      ]
+      "Next": "136",
+      "X": -350,
+      "Y": 120,
+      "Z": 0
+    }
+  },
+  {
+    "Entity": "136",
+    "core.ActionWaypoint": {
+      "Entity": "136",
+      "Next": "137",
+      "X": -330,
+      "Y": -180,
+      "Z": 0
+    }
+  },
+  {
+    "Entity": "137",
+    "core.ActionWaypoint": {
+      "Entity": "137",
+      "Next": "138",
+      "X": 40,
+      "Y": -220,
+      "Z": 0
+    }
+  },
+  {
+    "Entity": "138",
+    "core.ActionWaypoint": {
+      "Entity": "138",
+      "Next": "139",
+      "X": 70,
+      "Y": -10,
+      "Z": 0
+    }
+  },
+  {
+    "Entity": "139",
+    "core.ActionWaypoint": {
+      "Entity": "139",
+      "Next": "140",
+      "X": 10,
+      "Y": -20,
+      "Z": 0
+    }
+  },
+  {
+    "Entity": "140",
+    "core.ActionWaypoint": {
+      "Entity": "140",
+      "Next": "146",
+      "X": 10,
+      "Y": -190,
+      "Z": 0
     }
   },
   {
@@ -11078,6 +11090,26 @@
       },
       "Top": 32,
       "TwoSided": true
+    }
+  },
+  {
+    "Entity": "146",
+    "core.ActionWaypoint": {
+      "Entity": "146",
+      "Next": "147",
+      "X": -320,
+      "Y": -190,
+      "Z": 0
+    }
+  },
+  {
+    "Entity": "147",
+    "core.ActionWaypoint": {
+      "Entity": "147",
+      "Next": "135",
+      "X": -300,
+      "Y": 120,
+      "Z": 0
     }
   }
 ]

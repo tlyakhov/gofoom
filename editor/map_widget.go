@@ -90,9 +90,9 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	for i := range colSeg.Length {
 		mw.DrawInternalSegment(colSeg.Value(i))
 	}
-	colPath := ecs.ColumnFor[core.Path](editor.ECS, core.PathCID)
-	for i := range colPath.Length {
-		mw.DrawPath(colPath.Value(i))
+	colWaypoint := ecs.ColumnFor[core.ActionWaypoint](editor.ECS, core.ActionWaypointCID)
+	for i := range colWaypoint.Length {
+		mw.DrawPath(colWaypoint.Value(i))
 	}
 	if editor.BodiesVisible {
 		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyCID)

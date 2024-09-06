@@ -408,7 +408,7 @@ func (g *Grid) Refresh(selection *core.Selection) {
 			g.fieldSlice(field)
 		case *[]dynamic.Animated:
 			g.fieldSlice(field)
-		case *[]*core.PathSegment:
+		case *[]*core.ActionWaypoint:
 			g.fieldSlice(field)
 		case *dynamic.TweeningFunc:
 			g.fieldTweeningFunc(field)

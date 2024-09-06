@@ -188,11 +188,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 	mw.Context.Pop()
 }
 
-func (mw *MapWidget) DrawPath(path *core.Path) {
-	if len(path.Segments) == 0 {
-		return
-	}
-
+func (mw *MapWidget) DrawPath(waypoint *core.ActionWaypoint) {
 	/*start := editor.ScreenToWorld(new(concepts.Vector2))
 	end := editor.ScreenToWorld(&editor.Size)
 	if !concepts.Vector2AABBIntersect(path.Min.To2D(), path.Max.To2D(), start, end, true) {
@@ -201,56 +197,57 @@ func (mw *MapWidget) DrawPath(path *core.Path) {
 
 	mw.Context.Push()
 
-	pathHovering := editor.HoveringObjects.Contains(core.SelectableFromPath(path))
-	pathSelected := editor.SelectedObjects.Contains(core.SelectableFromPath(path))
+	waypointHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromActionWaypoint(waypoint))
+	waypointSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromActionWaypoint(waypoint))
 
-	for i, segment := range path.Segments {
-		segmentHovering := editor.HoveringObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
-		segmentSelected := editor.SelectedObjects.ContainsGrouped(core.SelectableFromPathSegment(segment))
-
-		if segmentSelected {
-			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-			mw.DrawHandle(segment.P.To2D())
-		} else if segmentHovering {
-			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
-			mw.DrawHandle(segment.P.To2D())
-		} else {
-			mw.Context.DrawRectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
-			mw.Context.Stroke()
-		}
-
-		if i == len(path.Segments)-1 || segment.P == segment.Next.P {
-			continue
-		}
-
-		mw.Context.SetRGB(0.4, 1, 0.6)
-
-		if pathHovering || pathSelected {
-			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-		} else if segmentHovering {
-			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
-		} else if segmentSelected {
-			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-		}
-
-		// Draw segment
-		mw.Context.SetDash(3, 8)
-		mw.Context.SetLineWidth(1)
-		mw.Context.NewSubPath()
-		mw.Context.MoveTo(segment.P[0], segment.P[1])
-		mw.Context.LineTo(segment.Next.P[0], segment.Next.P[1])
-		mw.Context.ClosePath()
+	if waypointSelected {
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		mw.DrawHandle(waypoint.P.To2D())
+	} else if waypointHovering {
+		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+		mw.DrawHandle(waypoint.P.To2D())
+	} else {
+		mw.Context.DrawRectangle(waypoint.P[0]-1, waypoint.P[1]-1, 2, 2)
 		mw.Context.Stroke()
-		mw.Context.SetDash()
+	}
 
-		if pathHovering || pathSelected || segmentHovering || segmentSelected {
-			normal := &concepts.Vector3{segment.Next.P[1] - segment.P[1], segment.P[0] - segment.Next.P[0], 0}
-			normal.NormSelf()
-			ns := segment.Next.P.Add(&segment.P).Mul(0.5)
-			ne := ns.Add(normal.Mul(20.0))
-			txtLength := fmt.Sprintf("%.0f", segment.Length)
-			mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
-		}
+	if waypoint.Next == 0 {
+		return
+	}
+
+	next := core.GetActionWaypoint(waypoint.ECS, waypoint.Next)
+
+	if next == nil {
+		return
+	}
+
+	mw.Context.SetRGB(0.4, 1, 0.6)
+
+	if waypointHovering || waypointSelected {
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+	} else if waypointHovering {
+		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+	} else if waypointSelected {
+		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+	}
+
+	// Draw segment
+	mw.Context.SetDash(3, 8)
+	mw.Context.SetLineWidth(1)
+	mw.Context.NewSubPath()
+	mw.Context.MoveTo(waypoint.P[0], waypoint.P[1])
+	mw.Context.LineTo(next.P[0], next.P[1])
+	mw.Context.ClosePath()
+	mw.Context.Stroke()
+	mw.Context.SetDash()
+
+	if waypointHovering || waypointSelected {
+		normal := &concepts.Vector3{next.P[1] - waypoint.P[1], waypoint.P[0] - next.P[0], 0}
+		normal.NormSelf()
+		ns := next.P.Add(&waypoint.P).Mul(0.5)
+		ne := ns.Add(normal.Mul(20.0))
+		txtLength := fmt.Sprintf("%.0f", next.P.Sub(&waypoint.P).Length())
+		mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
 	}
 
 	/*if editor.SectorTypesVisible {
