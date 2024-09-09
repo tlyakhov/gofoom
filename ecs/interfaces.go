@@ -26,6 +26,8 @@ type Attachable interface {
 	SetColumnIndex(int)
 	SetEntity(entity Entity)
 	GetEntity() Entity
+	SetComponentID(ComponentID)
+	GetComponentID() ComponentID
 	OnDetach()
 }
 

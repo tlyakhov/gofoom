@@ -4,6 +4,7 @@
 package ecs
 
 type Attached struct {
+	ComponentID
 	Entity                  `editable:"Component" edit_type:"Component" edit_sort:"0"`
 	ECS                     *ECS
 	System                  bool // Don't serialize this entity, disallow editing
@@ -56,6 +57,14 @@ func (a *Attached) SetEntity(entity Entity) {
 
 func (a *Attached) GetEntity() Entity {
 	return a.Entity
+}
+
+func (a *Attached) SetComponentID(cid ComponentID) {
+	a.ComponentID = cid
+}
+
+func (a *Attached) GetComponentID() ComponentID {
+	return a.ComponentID
 }
 
 func (a *Attached) Construct(data map[string]any) {

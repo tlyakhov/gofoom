@@ -71,7 +71,6 @@ func (fc *FollowController) Recalculate() {
 		}
 	}
 	fc.Action = closest.Entity
-	fc.Follower.Action = closest.Entity
 }
 
 func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
@@ -137,6 +136,10 @@ func (fc *FollowController) Always() {
 
 	if !doTransition {
 		return
+	}
+
+	if jump := behaviors.GetActionJump(fc.ECS, fc.Action); jump != nil {
+		jump.Fired.Delete(fc.Body.Entity)
 	}
 
 	if t := behaviors.GetActionTransition(fc.ECS, fc.Action); t != nil {

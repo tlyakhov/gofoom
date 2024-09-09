@@ -2704,7 +2704,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.828125,
+          "Percent": 0.4765625,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -3767,7 +3767,7 @@
       "Health": 100
     },
     "behaviors.Follower": {
-      "Action": "147",
+      "Action": "136",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
@@ -7297,8 +7297,8 @@
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0.1796875,
-            "Reverse": true,
+            "Percent": 0,
+            "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -10826,6 +10826,10 @@
       "Entity": "132",
       "Image": "133"
     },
+    "behaviors.WeaponInstant": {
+      "Entity": "132",
+      "MarkMaterial": "113"
+    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -10846,8 +10850,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.7890625,
-          "Reverse": true,
+          "Percent": 0.859375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10884,10 +10888,6 @@
   },
   {
     "Entity": "133",
-    "behaviors.WeaponInstant": {
-      "Entity": "132",
-      "MarkMaterial": "113"
-    },
     "materials.Image": {
       "Entity": "133",
       "Filter": false,
@@ -10969,8 +10969,8 @@
     },
     "behaviors.ActionWaypoint": {
       "Entity": "137",
-      "X": 40,
-      "Y": -220,
+      "X": 70,
+      "Y": -200,
       "Z": 0
     }
   },

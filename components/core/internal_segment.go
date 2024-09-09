@@ -21,7 +21,7 @@ type InternalSegment struct {
 var InternalSegmentCID ecs.ComponentID
 
 func init() {
-	InternalSegmentCID = ecs.RegisterComponent(&ecs.Column[InternalSegment, *InternalSegment]{Getter: GetInternalSegment}, "BodySectorSegmentPathShader")
+	InternalSegmentCID = ecs.RegisterComponent(&ecs.Column[InternalSegment, *InternalSegment]{Getter: GetInternalSegment}, "BodySectorSegment")
 }
 
 func GetInternalSegment(db *ecs.ECS, e ecs.Entity) *InternalSegment {
