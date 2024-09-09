@@ -40,7 +40,7 @@ type Body struct {
 var BodyCID ecs.ComponentID
 
 func init() {
-	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody}, "BodySectorSegmentPathShader")
+	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody}, "BodySectorSegment")
 }
 
 func GetBody(db *ecs.ECS, e ecs.Entity) *Body {

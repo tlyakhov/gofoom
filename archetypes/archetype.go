@@ -38,26 +38,6 @@ func CreateLightBody(db *ecs.ECS) ecs.Entity {
 	return e
 }
 
-/*func IsPlayerBody(db *ecs.ECS, e ecs.Entity) bool {
-	return db.Component(e, core.BodyCID) != nil &&
-		db.Component(e, behaviors.PlayerCID) != nil &&
-		db.Component(e, behaviors.AliveCID) != nil
-}
-
-func CreatePlayerBody(db *ecs.ECS) ecs.Entity {
-	e := db.NewEntity()
-	body := db.NewAttachedComponent(e, core.BodyCID).(*core.Body)
-	body.System = true
-	body.Size.SetAll(concepts.Vector2{constants.PlayerBoundingRadius * 2, constants.PlayerHeight})
-	body.Mass = constants.PlayerMass // kg
-	player := db.NewAttachedComponent(e, behaviors.PlayerCID).(*behaviors.Player)
-	player.System = true
-	alive := db.NewAttachedComponent(e, behaviors.AliveCID).(*behaviors.Alive)
-	alive.System = true
-
-	return e
-}*/
-
 func CreateFont(db *ecs.ECS, filename string, name string) ecs.Entity {
 	e := db.NewEntity()
 	named := db.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)

@@ -9,12 +9,23 @@ import (
 )
 
 func EntityMapIsMaterial(components []ecs.Attachable) bool {
-	return len(components) > 0 && (components[materials.ShaderCID>>16] != nil ||
-		components[materials.SpriteCID>>16] != nil ||
-		components[materials.LitCID>>16] != nil ||
-		components[materials.ImageCID>>16] != nil ||
-		components[materials.TextCID>>16] != nil ||
-		components[materials.SolidCID>>16] != nil)
+	for _, c := range components {
+		switch c.(type) {
+		case *materials.Shader:
+			return true
+		case *materials.Sprite:
+			return true
+		case *materials.Lit:
+			return true
+		case *materials.Image:
+			return true
+		case *materials.Text:
+			return true
+		case *materials.Solid:
+			return true
+		}
+	}
+	return false
 }
 
 func EntityIsMaterial(db *ecs.ECS, e ecs.Entity) bool {
