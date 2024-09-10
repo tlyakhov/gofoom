@@ -21,12 +21,11 @@ import (
 // * A system (controller) is code that queries and operates on components and entities
 type ECS struct {
 	*dynamic.Simulation
-	Entities         bitmap.Bitmap
-	entityComponents []ComponentTable
+	Entities bitmap.Bitmap
+	Lock     sync.RWMutex
 
-	lenGroupedComponents int
-	columns              []AttachableColumn
-	Lock                 sync.RWMutex
+	rows    []ComponentTable
+	columns []AttachableColumn
 }
 
 func NewECS() *ECS {
@@ -37,11 +36,10 @@ func NewECS() *ECS {
 }
 
 func (db *ECS) Clear() {
-	db.lenGroupedComponents = Types().LenGroupedComponents
 	db.Entities = bitmap.Bitmap{}
 	db.Entities.Set(0) // 0 is reserved
 	// 0 is reserved
-	db.entityComponents = make([]ComponentTable, 1)
+	db.rows = make([]ComponentTable, 1)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = dynamic.NewSimulation()
 	for i, columnPlaceholder := range Types().ColumnPlaceholders {
@@ -62,9 +60,9 @@ func (db *ECS) NewEntity() Entity {
 		db.Entities.Set(free)
 		return Entity(free)
 	}
-	nextFree := len(db.entityComponents)
-	for len(db.entityComponents) < (nextFree + 1) {
-		db.entityComponents = append(db.entityComponents, nil)
+	nextFree := len(db.rows)
+	for len(db.rows) < (nextFree + 1) {
+		db.rows = append(db.rows, nil)
 	}
 	db.Entities.Set(uint32(nextFree))
 	return Entity(nextFree)
@@ -75,19 +73,19 @@ func ColumnFor[T any, PT GenericAttachable[T]](db *ECS, id ComponentID) *Column[
 }
 
 func (db *ECS) AllComponents(entity Entity) ComponentTable {
-	if entity == 0 || len(db.entityComponents) <= int(entity) {
+	if entity == 0 || len(db.rows) <= int(entity) {
 		return nil
 	}
-	return db.entityComponents[int(entity)]
+	return db.rows[int(entity)]
 }
 
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The Get* methods are better.
 func (db *ECS) Component(entity Entity, id ComponentID) Attachable {
-	if entity == 0 || id == 0 || len(db.entityComponents) <= int(entity) {
+	if entity == 0 || id == 0 || len(db.rows) <= int(entity) {
 		return nil
 	}
-	return db.entityComponents[int(entity)].Get(id)
+	return db.rows[int(entity)].Get(id)
 }
 
 func (db *ECS) First(id ComponentID) Attachable {
@@ -106,12 +104,12 @@ func (db *ECS) attach(entity Entity, component Attachable, componentID Component
 		return nil
 	}
 
-	for int(entity) >= len(db.entityComponents) {
-		db.entityComponents = append(db.entityComponents, nil)
+	for int(entity) >= len(db.rows) {
+		db.rows = append(db.rows, nil)
 	}
 
 	column := db.columns[componentID&0xFFFF]
-	ec := db.entityComponents[int(entity)].Get(componentID)
+	ec := db.rows[int(entity)].Get(componentID)
 	if ec != nil {
 		// A component with this index is already attached to this entity, overwrite it.
 		indexInColumn := ec.IndexInColumn()
@@ -123,7 +121,7 @@ func (db *ECS) attach(entity Entity, component Attachable, componentID Component
 	}
 	component.SetEntity(entity)
 	component.SetComponentID(componentID)
-	db.entityComponents[int(entity)].Set(component)
+	db.rows[int(entity)].Set(component)
 	return component
 }
 
@@ -196,11 +194,11 @@ func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 		return
 	}
 
-	if len(db.entityComponents) <= int(entity) {
-		log.Printf("ECS.Detach: entity %v is >= length of list %v.", entity, len(db.entityComponents))
+	if len(db.rows) <= int(entity) {
+		log.Printf("ECS.Detach: entity %v is >= length of list %v.", entity, len(db.rows))
 		return
 	}
-	ec := db.entityComponents[int(entity)].Get(id)
+	ec := db.rows[int(entity)].Get(id)
 	column := db.columns[id&0xFFFF]
 	if ec == nil {
 		// This component is not attached
@@ -217,11 +215,11 @@ func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 
 	ec.OnDetach()
 	column.Detach(ec.IndexInColumn())
-	db.entityComponents[int(entity)].Delete(id)
+	db.rows[int(entity)].Delete(id)
 
 	if checkForEmpty {
 		allNil := true
-		for _, a := range db.entityComponents[int(entity)] {
+		for _, a := range db.rows[int(entity)] {
 			if a != nil {
 				allNil = false
 				break
@@ -229,7 +227,7 @@ func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 		}
 		if allNil {
 			db.Entities.Remove(uint32(entity))
-			db.entityComponents[int(entity)] = nil
+			db.rows[int(entity)] = nil
 		}
 	}
 }
@@ -263,11 +261,11 @@ func (db *ECS) DetachAll(entity Entity) {
 		return
 	}
 
-	if len(db.entityComponents) <= int(entity) {
+	if len(db.rows) <= int(entity) {
 		return
 	}
 
-	for _, c := range db.entityComponents[int(entity)] {
+	for _, c := range db.rows[int(entity)] {
 		if c == nil {
 			continue
 		}
@@ -275,7 +273,7 @@ func (db *ECS) DetachAll(entity Entity) {
 		c.OnDetach()
 		db.columns[id&0xFFFF].Detach(c.IndexInColumn())
 	}
-	db.entityComponents[int(entity)] = nil
+	db.rows[int(entity)] = nil
 	db.Entities.Remove(uint32(entity))
 }
 
@@ -342,7 +340,7 @@ func (db *ECS) Load(filename string) error {
 func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 	jsonEntity := make(map[string]any)
 	jsonEntity["Entity"] = entity.String()
-	for _, component := range db.entityComponents[int(entity)] {
+	for _, component := range db.rows[int(entity)] {
 		if component == nil || component.IsSystem() {
 			continue
 		}
