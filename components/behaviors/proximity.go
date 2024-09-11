@@ -12,9 +12,16 @@ import (
 
 type Proximity struct {
 	ecs.Attached `editable:"^"`
-	Range        float64                    `editable:"Range"`
-	Scripts      []*core.Script             `editable:"Scripts"`
-	Entities     containers.Set[ecs.Entity] `editable:"Entities"`
+
+	RequiresPlayerAction bool                       `editable:"Requires Player Action?"`
+	ActsOnSectors        bool                       `editable:"Acts on Sectors?"`
+	Range                float64                    `editable:"Range"`
+	Hysteresis           float64                    `editable:"Hysteresis (ms)"`
+	Scripts              []*core.Script             `editable:"Scripts"`
+	Entities             containers.Set[ecs.Entity] `editable:"Entities"`
+
+	// Internal state
+	LastFired int64
 }
 
 var ProximityCID ecs.ComponentID
@@ -38,6 +45,9 @@ func (p *Proximity) Construct(data map[string]any) {
 	p.Attached.Construct(data)
 	p.Entities = make(containers.Set[ecs.Entity])
 	p.Range = 100
+	p.Hysteresis = 200
+	p.RequiresPlayerAction = false
+	p.ActsOnSectors = false
 
 	if data == nil {
 		return
@@ -45,6 +55,17 @@ func (p *Proximity) Construct(data map[string]any) {
 
 	if v, ok := data["Range"]; ok {
 		p.Range = v.(float64)
+	}
+
+	if v, ok := data["Hysteresis"]; ok {
+		p.Range = v.(float64)
+	}
+
+	if v, ok := data["RequiresPlayerAction"]; ok {
+		p.RequiresPlayerAction = v.(bool)
+	}
+	if v, ok := data["ActsOnSectors"]; ok {
+		p.ActsOnSectors = v.(bool)
 	}
 
 	if v, ok := data["Scripts"]; ok {
@@ -58,7 +79,21 @@ func (p *Proximity) Construct(data map[string]any) {
 
 func (p *Proximity) Serialize() map[string]any {
 	result := p.Attached.Serialize()
-	result["Range"] = p.Range
+
+	if p.Range != 100 {
+		result["Range"] = p.Range
+	}
+	if p.Hysteresis != 200 {
+		result["Hysteresis"] = p.Hysteresis
+	}
+
+	if p.RequiresPlayerAction {
+		result["RequiresPlayerAction"] = true
+	}
+
+	if p.ActsOnSectors {
+		result["ActsOnSectors"] = true
+	}
 
 	if len(p.Scripts) > 0 {
 		result["Scripts"] = ecs.SerializeSlice(p.Scripts)

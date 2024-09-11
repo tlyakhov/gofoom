@@ -215,6 +215,9 @@ func (e *Editor) Integrate() {
 		playerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
 		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
 	}
+
+	player.ActionPressed = e.GameWidget.KeyMap.Contains("F")
+
 	if e.GameWidget.KeyMap.Contains("Space") {
 		if behaviors.GetUnderwater(player.ECS, playerBody.SectorEntity) != nil {
 			playerBody.Force[2] += constants.PlayerSwimStrength
@@ -266,6 +269,7 @@ func (e *Editor) Load(filename string) {
 		e.Alert(fmt.Sprintf("Error loading world: %v", err))
 		return
 	}
+	controllers.Respawn(db, true)
 	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 	db.Simulation.Integrate = e.Integrate
 	db.Simulation.Render = e.GameWidget.Draw

@@ -6,6 +6,7 @@ package controllers
 import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -28,26 +29,57 @@ func (pc *ProximityController) Methods() ecs.ControllerMethod {
 
 func (pc *ProximityController) Target(target ecs.Attachable) bool {
 	pc.Proximity = target.(*behaviors.Proximity)
-	return pc.IsActive()
+	return pc.IsActive() && pc.ECS.Timestamp > pc.LastFired+int64(pc.Hysteresis)
 }
 
-func (pc *ProximityController) proximity(entity ecs.Entity) {
-	if sector := core.GetSector(pc.ECS, entity); sector != nil {
-		for _, pvs := range sector.PVS {
-			for _, body := range pvs.Bodies {
-				if sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
-					BodySectorScript(pc.Scripts, body, sector)
-				}
+func (pc *ProximityController) checkPlayer(entity ecs.Entity) bool {
+	if !pc.RequiresPlayerAction {
+		return true
+	}
+	if player := behaviors.GetPlayer(pc.ECS, entity); player != nil && player.ActionPressed {
+		return true
+	}
+	return false
+}
+
+func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
+	pc.LastFired = pc.ECS.Timestamp
+	for _, script := range pc.Scripts {
+		script.Vars["proximityEntity"] = pc.Entity
+		script.Vars["body"] = body
+		script.Vars["sector"] = sector
+		script.Act()
+	}
+}
+
+func (pc *ProximityController) sectorBodies(proximityEntity ecs.Entity, sector *core.Sector, pos *concepts.Vector3) {
+	for _, body := range sector.Bodies {
+		if !pc.checkPlayer(body.Entity) {
+			continue
+		}
+		if pos.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
+			if ps := core.GetSector(pc.ECS, proximityEntity); ps != nil {
+				pc.fire(body, ps)
+			} else {
+				pc.fire(body, sector)
 			}
+		}
+	}
+}
+func (pc *ProximityController) proximity(proximityEntity ecs.Entity) {
+	if sector := core.GetSector(pc.ECS, proximityEntity); sector != nil {
+		for _, pvs := range sector.PVS {
+			pc.sectorBodies(proximityEntity, pvs, &sector.Center)
 		}
 		return
 	}
-	if body := core.GetBody(pc.ECS, entity); body != nil && body.SectorEntity != 0 {
+	if body := core.GetBody(pc.ECS, proximityEntity); body != nil && body.SectorEntity != 0 {
 		container := body.Sector()
 		for _, sector := range container.PVS {
-			if sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
-				BodySectorScript(pc.Scripts, body, sector)
+			if pc.ActsOnSectors && sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
+				pc.fire(body, sector)
 			}
+			pc.sectorBodies(proximityEntity, sector, &body.Pos.Now)
 		}
 	}
 }

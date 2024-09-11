@@ -66,6 +66,9 @@ func gameInput() {
 			w.FireNextFrame = true
 		}
 	}
+
+	renderer.Player.ActionPressed = (win.JustPressed(pixel.MouseButton2) || win.Repeated(pixel.MouseButton2))
+
 	if win.Pressed(pixel.KeySpace) {
 
 		if behaviors.GetUnderwater(renderer.ECS, renderer.PlayerBody.SectorEntity) != nil {

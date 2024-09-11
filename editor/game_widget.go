@@ -70,11 +70,6 @@ func (g *GameWidget) Draw() {
 		return
 	}
 
-	player := editor.Renderer.Player
-	if player == nil {
-		return
-	}
-
 	pixels := g.Context.Image().(*image.RGBA).Pix
 	editor.Lock.Lock()
 	editor.Renderer.Render()
