@@ -13,6 +13,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
+// TODO: Separate out "Position", "Moving", and perhaps "Collidable" components
 type Body struct {
 	ecs.Attached `editable:"^"`
 	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`
@@ -31,10 +32,6 @@ type Body struct {
 	Shadow      BodyShadow        `editable:"Shadow Type"`
 	MountHeight float64           `editable:"Mount Height"`
 	OnGround    bool
-
-	// For rendering - we can figure out which side of this our render
-	// position is on so we end up in the right sector when render blending
-	LastEnteredPortal *SectorSegment
 }
 
 var BodyCID ecs.ComponentID

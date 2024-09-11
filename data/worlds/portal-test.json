@@ -1,10 +1,45 @@
 [
   {
     "Entity": "1",
-    "core.Spawn": {
+    "behaviors.Alive": {
       "Entity": "1",
-      "X": 0,
-      "Y": 0
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "1",
+      "Spawn": false
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "1",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -90,
+          "Y": 60,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
     }
   },
   {
@@ -36,22 +71,17 @@
   },
   {
     "Entity": "3",
-    "ecs.Named": {
-      "Entity": "3",
-      "Name": "Starting"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "13"
+      "Bottom": {
+        "Surface": {
+          "Material": "21"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "3",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "21"
-      },
       "Segments": [
         {
           "Hi": {
@@ -151,9 +181,18 @@
           "Y": 100
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "3",
+      "Name": "Starting"
     }
   },
   {
@@ -162,7 +201,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "4",
       "Mass": 0,
       "MountHeight": 15,
@@ -212,7 +254,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "5",
       "Mass": 80,
       "MountHeight": 15,
@@ -241,17 +286,16 @@
   {
     "Entity": "6",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -8
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -8
+        }
       },
       "Entity": "6",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -324,8 +368,13 @@
           "Y": 290
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -364,7 +413,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "8",
       "Mass": 0,
       "MountHeight": 15,
@@ -412,17 +464,16 @@
   {
     "Entity": "10",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "10",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -452,12 +503,6 @@
           "Y": 460
         },
         {
-          "ContactScripts": [
-            {
-              "Code": "door := behaviors.GetVerticalDoor(s.ECS,16)\nif door.State != behaviors.DoorStateOpen {\n  door.Intent = behaviors.DoorIntentOpen\n} else if door.State != behaviors.DoorStateClosed {\n  door.Intent = behaviors.DoorIntentClosed\n}",
-              "Style": "ScriptStyleStatement"
-            }
-          ],
           "Hi": {
             "Material": "2"
           },
@@ -591,8 +636,13 @@
           "Y": 290
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -611,7 +661,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "12",
       "Mass": 0,
       "MountHeight": 15,
@@ -666,22 +719,21 @@
   {
     "Entity": "14",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "13"
+      "Bottom": {
+        "Normal": {
+          "X": -0.19611613513818404,
+          "Y": 0,
+          "Z": 0.9805806756909201
+        },
+        "Surface": {
+          "Material": "21"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "14",
       "FloorFriction": 0.85,
-      "Bottom.Normal": {
-        "X": -0.19611613513818404,
-        "Y": 0,
-        "Z": 0.9805806756909201
-      },
-      "Bottom.Surface": {
-        "Material": "21"
-      },
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -739,25 +791,29 @@
           "Y": 100
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
   {
     "Entity": "15",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "13"
+      "Bottom": {
+        "Surface": {
+          "Material": "21"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "15",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "21"
-      },
       "Segments": [
         {
           "Hi": {
@@ -800,8 +856,13 @@
           "Y": -100
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -809,20 +870,21 @@
     "Entity": "16",
     "behaviors.VerticalDoor": {
       "AutoClose": false,
-      "Entity": "16"
+      "Duration": 1000,
+      "Entity": "16",
+      "TweeningFunc": "EaseInOut2"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "16",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -919,19 +981,24 @@
           "Y": 460
         }
       ],
-      "Top.Z": {
-        "Animation": {
-          "Active": true,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 1000,
-          "End": 0,
-          "Lifetime": "AnimationLifetimeHold",
-          "Percent": -0.0078125,
-          "Reverse": true,
-          "Start": 64,
-          "TweeningFunc": "Lerp"
+      "Top": {
+        "Surface": {
+          "Material": "2"
         },
-        "Original": 64
+        "Z": {
+          "Animation": {
+            "Active": false,
+            "Coordinates": "AnimationCoordinatesAbsolute",
+            "Duration": 1000,
+            "End": 0,
+            "Lifetime": "AnimationLifetimeOnce",
+            "Percent": 1,
+            "Reverse": false,
+            "Start": 64,
+            "TweeningFunc": "EaseInOut2"
+          },
+          "Original": 64
+        }
       }
     }
   },
@@ -941,7 +1008,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "17",
       "Mass": 0,
       "MountHeight": 15,
@@ -1000,17 +1070,16 @@
   {
     "Entity": "19",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "19",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1135,8 +1204,13 @@
           "Y": 460
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -1181,17 +1255,16 @@
   {
     "Entity": "22",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -22
-      },
-      "Top.Surface": {
-        "Material": "13"
+      "Bottom": {
+        "Surface": {
+          "Material": "21"
+        },
+        "Z": {
+          "Original": -22
+        }
       },
       "Entity": "22",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "21"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1376,8 +1449,13 @@
           "Y": 100
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -1468,18 +1546,17 @@
   {
     "Entity": "28",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -26
-      },
-      "Top.Surface": {
-        "Material": "13"
+      "Bottom": {
+        "Surface": {
+          "Material": "37"
+        },
+        "Target": "30",
+        "Z": {
+          "Original": -26
+        }
       },
       "Entity": "28",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "37"
-      },
-      "Bottom.Target": "30",
       "Segments": [
         {
           "Hi": {
@@ -1535,8 +1612,13 @@
           "Y": 0
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -1546,7 +1628,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "29",
       "Mass": 0,
       "MountHeight": 15,
@@ -1588,18 +1673,16 @@
       "Entity": "30"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -200
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -200
+        }
       },
-      "Top.Surface": {
-        "Material": "37"
-      },
-      "Top.Target": "28",
       "Entity": "30",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Gravity": {
         "X": 0,
         "Y": 0,
@@ -1702,8 +1785,14 @@
           "Y": 0
         }
       ],
-      "Top.Z": {
-        "Original": -26
+      "Top": {
+        "Surface": {
+          "Material": "37"
+        },
+        "Target": "28",
+        "Z": {
+          "Original": -26
+        }
       }
     }
   },
@@ -1760,7 +1849,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "34",
       "Mass": 0,
       "MountHeight": 15,
@@ -1802,7 +1894,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "35",
       "Mass": 0,
       "MountHeight": 15,
@@ -1883,17 +1978,16 @@
       "Entity": "38"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -82
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -82
+        }
       },
       "Entity": "38",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Gravity": {
         "X": 0,
         "Y": 0,
@@ -1955,8 +2049,13 @@
           "Y": -190
         }
       ],
-      "Top.Z": {
-        "Original": -38
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -38
+        }
       }
     }
   },
@@ -1986,18 +2085,16 @@
       "Entity": "40"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -100
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -100
+        }
       },
-      "Top.Surface": {
-        "Material": "37"
-      },
-      "Top.Target": "43",
       "Entity": "40",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Gravity": {
         "X": 0,
         "Y": 0,
@@ -2058,8 +2155,14 @@
           "Y": -90
         }
       ],
-      "Top.Z": {
-        "Original": 20
+      "Top": {
+        "Surface": {
+          "Material": "37"
+        },
+        "Target": "43",
+        "Z": {
+          "Original": 20
+        }
       }
     }
   },
@@ -2069,7 +2172,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "41",
       "Mass": 0,
       "MountHeight": 15,
@@ -2111,17 +2217,16 @@
       "Entity": "42"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -100
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -100
+        }
       },
       "Entity": "42",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Gravity": {
         "X": 0,
         "Y": 0,
@@ -2209,26 +2314,30 @@
           "Y": -90
         }
       ],
-      "Top.Z": {
-        "Original": 20
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 20
+        }
       }
     }
   },
   {
     "Entity": "43",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 20
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "37"
+        },
+        "Target": "40",
+        "Z": {
+          "Original": 20
+        }
       },
       "Entity": "43",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "37"
-      },
-      "Bottom.Target": "40",
       "Segments": [
         {
           "Hi": {
@@ -2284,25 +2393,29 @@
           "Y": 260
         }
       ],
-      "Top.Z": {
-        "Original": 100
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 100
+        }
       }
     }
   },
   {
     "Entity": "44",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 20
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 20
+        }
       },
       "Entity": "44",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2447,8 +2560,13 @@
           "Y": 340
         }
       ],
-      "Top.Z": {
-        "Original": 100
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 100
+        }
       }
     }
   },
@@ -2478,7 +2596,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "46",
       "Mass": 0,
       "MountHeight": 15,
@@ -2567,20 +2688,21 @@
       ]
     },
     "behaviors.VerticalDoor": {
-      "Entity": "49"
+      "Duration": 1000,
+      "Entity": "49",
+      "TweeningFunc": "EaseInOut2"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -14
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -14
+        }
       },
       "Entity": "49",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2677,36 +2799,40 @@
           "Y": -100
         }
       ],
-      "Top.Z": {
-        "Animation": {
-          "Active": true,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 1000,
-          "End": -14,
-          "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
-          "Reverse": false,
-          "Start": 64,
-          "TweeningFunc": "EaseInOut4"
+      "Top": {
+        "Surface": {
+          "Material": "2"
         },
-        "Original": 64
+        "Z": {
+          "Animation": {
+            "Active": false,
+            "Coordinates": "AnimationCoordinatesAbsolute",
+            "Duration": 1000,
+            "End": -14,
+            "Lifetime": "AnimationLifetimeOnce",
+            "Percent": 1,
+            "Reverse": false,
+            "Start": 64,
+            "TweeningFunc": "EaseInOut2"
+          },
+          "Original": 64
+        }
       }
     }
   },
   {
     "Entity": "50",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -8
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": -8
+        }
       },
       "Entity": "50",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2776,35 +2902,39 @@
           "Y": -110
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
   {
     "Entity": "51",
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "21",
+          "Transform": {
+            "Original": [
+              3.357142857142857,
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
+          }
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "51",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "21",
-        "Transform": {
-          "Original": [
-            3.357142857142857,
-            0,
-            0,
-            1,
-            0,
-            0
-          ]
-        }
-      },
       "Segments": [
         {
           "AdjacentSector": "50",
@@ -2883,8 +3013,13 @@
           "Y": -210
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
@@ -2894,7 +3029,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "52",
       "Mass": 0,
       "MountHeight": 15,
@@ -2936,7 +3074,10 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
       "Entity": "54",
       "Mass": 0,
       "MountHeight": 15,
@@ -2978,27 +3119,26 @@
       "Entity": "55"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -240
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2",
+          "Transform": {
+            "Original": [
+              4,
+              0,
+              0,
+              4,
+              0,
+              0
+            ]
+          }
+        },
+        "Z": {
+          "Original": -240
+        }
       },
       "Entity": "55",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2",
-        "Transform": {
-          "Original": [
-            4,
-            0,
-            0,
-            4,
-            0,
-            0
-          ]
-        }
-      },
       "Gravity": {
         "X": 0,
         "Y": 0,
@@ -3180,8 +3320,59 @@
           "Y": -130
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
+      }
+    }
+  },
+  {
+    "Entity": "56",
+    "behaviors.Proximity": {
+      "Entity": "56",
+      "Range": 100,
+      "RequiresPlayerAction": true,
+      "Scripts": [
+        {
+          "Code": "door := behaviors.GetVerticalDoor(s.ECS,16)\nif door.State != behaviors.DoorStateOpen {\n  door.Intent = behaviors.DoorIntentOpen\n} else if door.State != behaviors.DoorStateClosed {\n  door.Intent = behaviors.DoorIntentClosed\n}",
+          "Style": "ScriptStyleStatement"
+        }
+      ]
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "56",
+      "Mass": 0,
+      "MountHeight": 15,
+      "Pos": {
+        "Original": {
+          "X": -240,
+          "Y": 360,
+          "Z": 32
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      },
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
       }
     }
   }

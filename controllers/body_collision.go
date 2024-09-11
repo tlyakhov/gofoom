@@ -183,7 +183,6 @@ func (bc *BodyController) bodyTeleport() bool {
 			for bc.Body.Angle.Now > 360 {
 				bc.Body.Angle.Now -= 360
 			}
-			bc.Body.LastEnteredPortal = segment
 			bc.Enter(segment.AdjacentSector)
 			return true
 		}
@@ -214,7 +213,6 @@ func (bc *BodyController) bodyExitsSector() {
 				e.Pos[2] = floorZ
 				log.Println("Entity entering adjacent sector is lower than floorZ")
 			}*/
-			bc.Body.LastEnteredPortal = segment
 			bc.Enter(segment.AdjacentSector)
 			break
 		}

@@ -21,6 +21,7 @@ type Player struct {
 	Bob           float64
 	CameraZ       float64
 	CurrentWeapon *InventorySlot
+	ActionPressed bool
 
 	Notices containers.SyncUniqueQueue
 }
