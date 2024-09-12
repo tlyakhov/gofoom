@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
 
@@ -190,76 +191,61 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 	mw.Context.Pop()
 }
 
-func (mw *MapWidget) DrawPath(waypoint *behaviors.ActionWaypoint) {
-	/*start := editor.ScreenToWorld(new(concepts.Vector2))
-	end := editor.ScreenToWorld(&editor.Size)
-	if !concepts.Vector2AABBIntersect(path.Min.To2D(), path.Max.To2D(), start, end, true) {
-		return
-	}*/
+func (mw *MapWidget) DrawActions(start ecs.Entity) {
+	behaviors.IterateActions(editor.ECS, start, func(action ecs.Entity, parentP *concepts.Vector3) {
+		sel := selection.SelectableFromEntity(editor.ECS, action)
 
-	mw.Context.Push()
-
-	waypointHovering := editor.HoveringObjects.ContainsGrouped(selection.SelectableFromActionWaypoint(waypoint))
-	waypointSelected := editor.SelectedObjects.ContainsGrouped(selection.SelectableFromActionWaypoint(waypoint))
-
-	if waypointSelected {
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-		mw.DrawHandle(waypoint.P.To2D())
-	} else if waypointHovering {
-		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
-		mw.DrawHandle(waypoint.P.To2D())
-	} else {
-		mw.Context.DrawRectangle(waypoint.P[0]-1, waypoint.P[1]-1, 2, 2)
-		mw.Context.Stroke()
-	}
-
-	transition := behaviors.GetActionTransition(waypoint.ECS, waypoint.Entity)
-	if transition == nil || transition.Next == 0 {
-		return
-	}
-
-	next := behaviors.GetActionWaypoint(waypoint.ECS, transition.Next)
-
-	if next == nil {
-		return
-	}
-
-	mw.Context.SetRGB(0.4, 1, 0.6)
-
-	if waypointHovering || waypointSelected {
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-	} else if waypointHovering {
-		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
-	} else if waypointSelected {
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-	}
-
-	// Draw segment
-	mw.Context.SetDash(3, 8)
-	mw.Context.SetLineWidth(1)
-	mw.Context.NewSubPath()
-	mw.Context.MoveTo(waypoint.P[0], waypoint.P[1])
-	mw.Context.LineTo(next.P[0], next.P[1])
-	mw.Context.ClosePath()
-	mw.Context.Stroke()
-	mw.Context.SetDash()
-
-	if waypointHovering || waypointSelected {
-		normal := &concepts.Vector3{next.P[1] - waypoint.P[1], waypoint.P[0] - next.P[0], 0}
-		normal.NormSelf()
-		ns := next.P.Add(&waypoint.P).Mul(0.5)
-		ne := ns.Add(normal.Mul(20.0))
-		txtLength := fmt.Sprintf("%.0f", next.P.Sub(&waypoint.P).Length())
-		mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
-	}
-
-	/*if editor.SectorTypesVisible {
-		text := path.Entity.NameString(editor.ECS)
 		mw.Context.Push()
-		mw.Context.SetRGB(0.3, 0.3, 0.3)
-		mw.Context.DrawStringAnchored(text, path.Center[0], path.Center[1], 0.5, 0.5)
-		mw.Context.Pop()
-	}*/
+		waypoint := behaviors.GetActionWaypoint(editor.ECS, action)
+		if waypoint == nil {
+			return
+		}
+		waypointHovering := editor.HoveringObjects.ContainsGrouped(sel)
+		waypointSelected := editor.SelectedObjects.ContainsGrouped(sel)
 
-	mw.Context.Pop()
+		if parentP != nil {
+			mw.Context.SetRGB(0.4, 1, 0.6)
+
+			if waypointHovering || waypointSelected {
+				mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			} else if waypointHovering {
+				mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+			} else if waypointSelected {
+				mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			}
+
+			// Draw segment
+			mw.Context.SetDash(3, 8)
+			mw.Context.SetLineWidth(1)
+			mw.Context.NewSubPath()
+			mw.Context.MoveTo(parentP[0], parentP[1])
+			mw.Context.LineTo(waypoint.P[0], waypoint.P[1])
+			// TODO: Arrowhead
+			mw.Context.ClosePath()
+			mw.Context.Stroke()
+			mw.Context.SetDash()
+
+			if waypointHovering || waypointSelected {
+				normal := &concepts.Vector3{waypoint.P[1] - parentP[1], parentP[0] - waypoint.P[0], 0}
+				normal.NormSelf()
+				ns := waypoint.P.Add(&waypoint.P).Mul(0.5)
+				ne := ns.Add(normal.Mul(20.0))
+				txtLength := fmt.Sprintf("%.0f", waypoint.P.Sub(parentP).Length())
+				mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
+			}
+		}
+
+		if waypointSelected {
+			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			mw.DrawHandle(waypoint.P.To2D())
+		} else if waypointHovering {
+			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+			mw.DrawHandle(waypoint.P.To2D())
+		} else {
+			mw.Context.DrawRectangle(waypoint.P[0]-1, waypoint.P[1]-1, 2, 2)
+			mw.Context.Stroke()
+		}
+
+		mw.Context.Pop()
+	})
 }

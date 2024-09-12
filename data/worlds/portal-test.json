@@ -657,9 +657,16 @@
   },
   {
     "Entity": "12",
+    "behaviors.Follower": {
+      "Action": "61",
+      "Entity": "12",
+      "Speed": 50,
+      "Start": "57"
+    },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Original": 0,
+        "Procedural": true
       },
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
@@ -673,7 +680,8 @@
           "X": -200,
           "Y": 310,
           "Z": 32
-        }
+        },
+        "Procedural": true
       },
       "Size": {
         "Original": {
@@ -2679,7 +2687,7 @@
     "Entity": "49",
     "behaviors.Proximity": {
       "Entity": "49",
-      "Range": 100,
+      "Range": 0,
       "Scripts": [
         {
           "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
@@ -3334,7 +3342,6 @@
     "Entity": "56",
     "behaviors.Proximity": {
       "Entity": "56",
-      "Range": 100,
       "RequiresPlayerAction": true,
       "Scripts": [
         {
@@ -3374,6 +3381,82 @@
           "Z": 0
         }
       }
+    }
+  },
+  {
+    "Entity": "57",
+    "behaviors.ActionTransition": {
+      "Entity": "57",
+      "Next": [
+        "58",
+        "61"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "57",
+      "X": -210,
+      "Y": 190,
+      "Z": 25
+    }
+  },
+  {
+    "Entity": "58",
+    "behaviors.ActionTransition": {
+      "Entity": "58",
+      "Next": [
+        "59"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "58",
+      "X": -220,
+      "Y": 350,
+      "Z": 25
+    }
+  },
+  {
+    "Entity": "59",
+    "behaviors.ActionTransition": {
+      "Entity": "59",
+      "Next": [
+        "60"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "59",
+      "X": -160,
+      "Y": 350,
+      "Z": 25
+    }
+  },
+  {
+    "Entity": "60",
+    "behaviors.ActionTransition": {
+      "Entity": "60",
+      "Next": [
+        "57"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "60",
+      "X": -150,
+      "Y": 160,
+      "Z": 25
+    }
+  },
+  {
+    "Entity": "61",
+    "behaviors.ActionTransition": {
+      "Entity": "61",
+      "Next": [
+        "60"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "61",
+      "X": -60,
+      "Y": 170,
+      "Z": 25
     }
   }
 ]

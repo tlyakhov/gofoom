@@ -5,11 +5,11 @@ package controllers
 
 import (
 	"math"
+	"math/rand"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
@@ -42,35 +42,27 @@ func (fc *FollowController) Recalculate() {
 	var d2 float64
 	var closest *behaviors.ActionWaypoint
 
-	visited := make(containers.Set[ecs.Entity])
-
 	closestDist2 := math.MaxFloat64
-	action := fc.Start
-	for action != 0 {
-		if visited.Contains(action) {
-			break
-		}
-		visited.Add(action)
 
-		if waypoint := behaviors.GetActionWaypoint(fc.ECS, action); waypoint != nil {
-			if fc.NoZ {
-				d2 = waypoint.P.To2D().Dist2(fc.Body.Pos.Now.To2D())
-			} else {
-				d2 = waypoint.P.Dist2(&fc.Body.Pos.Now)
-			}
-			if d2 < closestDist2 {
-				closestDist2 = d2
-				closest = waypoint
-			}
+	behaviors.IterateActions(fc.ECS, fc.Start, func(action ecs.Entity, _ *concepts.Vector3) {
+		waypoint := behaviors.GetActionWaypoint(fc.ECS, action)
+		if waypoint == nil {
+			return
 		}
-
-		if t := behaviors.GetActionTransition(fc.ECS, action); t != nil {
-			action = t.Next
+		if fc.NoZ {
+			d2 = waypoint.P.To2D().Dist2(fc.Body.Pos.Now.To2D())
 		} else {
-			action = 0
+			d2 = waypoint.P.Dist2(&fc.Body.Pos.Now)
 		}
+		if d2 < closestDist2 {
+			closestDist2 = d2
+			closest = waypoint
+		}
+	})
+
+	if closest != nil {
+		fc.Action = closest.Entity
 	}
-	fc.Action = closest.Entity
 }
 
 func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
@@ -79,7 +71,8 @@ func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
 	}
 	jump.Fired.Add(fc.Body.Entity)
 
-	fc.Body.Force[2] += constants.PlayerJumpForce
+	// TODO: Parameterize this
+	fc.Body.Force[2] += constants.PlayerJumpForce * 0.5
 
 	return true
 }
@@ -143,8 +136,15 @@ func (fc *FollowController) Always() {
 	}
 
 	if t := behaviors.GetActionTransition(fc.ECS, fc.Action); t != nil {
-		if t.Next != 0 {
-			fc.Action = t.Next
+		if len(t.Next) > 0 {
+			i := rand.Intn(len(t.Next))
+			for next := range t.Next {
+				fc.Action = next
+				if i <= 0 {
+					break
+				}
+				i--
+			}
 		} else {
 			switch fc.Lifetime {
 			case dynamic.AnimationLifetimeLoop:

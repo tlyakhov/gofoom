@@ -22,6 +22,7 @@ type Proximity struct {
 
 	// Internal state
 	LastFired int64
+	Firing    bool
 }
 
 var ProximityCID ecs.ComponentID

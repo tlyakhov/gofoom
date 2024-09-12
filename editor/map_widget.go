@@ -93,7 +93,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	}
 	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](editor.ECS, behaviors.ActionWaypointCID)
 	for i := range colWaypoint.Length {
-		mw.DrawPath(colWaypoint.Value(i))
+		mw.DrawActions(colWaypoint.Value(i).Entity)
 	}
 	if editor.BodiesVisible {
 		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyCID)
