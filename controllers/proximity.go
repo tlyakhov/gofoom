@@ -29,7 +29,7 @@ func (pc *ProximityController) Methods() ecs.ControllerMethod {
 
 func (pc *ProximityController) Target(target ecs.Attachable) bool {
 	pc.Proximity = target.(*behaviors.Proximity)
-	return pc.IsActive() && pc.ECS.Timestamp > pc.LastFired+int64(pc.Hysteresis)
+	return pc.IsActive()
 }
 
 func (pc *ProximityController) checkPlayer(entity ecs.Entity) bool {
@@ -43,6 +43,10 @@ func (pc *ProximityController) checkPlayer(entity ecs.Entity) bool {
 }
 
 func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
+	pc.Firing = true
+	if pc.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
+		return
+	}
 	pc.LastFired = pc.ECS.Timestamp
 	for _, script := range pc.Scripts {
 		script.Vars["proximityEntity"] = pc.Entity
@@ -85,6 +89,8 @@ func (pc *ProximityController) proximity(proximityEntity ecs.Entity) {
 }
 
 func (pc *ProximityController) Always() {
+	pc.Firing = false
+
 	// Is the target itself a body or sector?
 	pc.proximity(pc.Entity)
 

@@ -4,13 +4,15 @@
 package behaviors
 
 import (
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type ActionTransition struct {
 	ecs.Attached `editable:"^"`
 
-	Next ecs.Entity `editable:"Next" edit_type:"Action"`
+	Next containers.Set[ecs.Entity] `editable:"Next" edit_type:"Action"`
 }
 
 var ActionTransitionCID ecs.ComponentID
@@ -27,27 +29,82 @@ func GetActionTransition(db *ecs.ECS, e ecs.Entity) *ActionTransition {
 }
 
 func (transition *ActionTransition) String() string {
-	return "Transition to " + transition.Next.NameString(transition.ECS)
+	var s string
+
+	for e := range transition.Next {
+		if len(s) > 0 {
+			s += ", "
+		}
+		s += e.NameString(transition.ECS)
+	}
+	return "Transition to " + s
 }
 
 func (transition *ActionTransition) Construct(data map[string]any) {
 	transition.Attached.Construct(data)
+	transition.Next = make(containers.Set[ecs.Entity])
 
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Next"]; ok {
-		transition.Next, _ = ecs.ParseEntity(v.(string))
+		transition.Next = ecs.DeserializeEntities(v.([]any))
 	}
 }
 
 func (transition *ActionTransition) Serialize() map[string]any {
 	result := transition.Attached.Serialize()
 
-	if transition.Next != 0 {
-		result["Next"] = transition.Next.String()
+	if len(transition.Next) > 0 {
+		result["Next"] = ecs.SerializeEntities(transition.Next)
 	}
 
 	return result
+}
+
+func IterateActions(db *ecs.ECS, start ecs.Entity, f func(action ecs.Entity, parentPosition *concepts.Vector3)) {
+	var parentP *concepts.Vector3
+	visited := make(map[ecs.Entity]*concepts.Vector3, 1)
+	actions := make(map[ecs.Entity]ecs.Entity)
+	actions[start] = 0
+
+	for len(actions) > 0 {
+		var action ecs.Entity
+		for action = range actions {
+			break
+		}
+		// Avoid infinite loops
+		if _, ok := visited[action]; ok {
+			delete(actions, action)
+			continue
+		}
+
+		visited[action] = nil
+
+		if waypoint := GetActionWaypoint(db, action); waypoint != nil {
+			visited[action] = &waypoint.P
+
+			if actions[action] != 0 {
+				parentP = visited[actions[action]]
+			}
+		}
+
+		delete(actions, action)
+
+		f(action, parentP)
+
+		transition := GetActionTransition(db, action)
+		if transition == nil {
+			continue
+		}
+
+		for next := range transition.Next {
+			if next == 0 {
+				continue
+			}
+
+			actions[next] = action
+		}
+	}
 }
