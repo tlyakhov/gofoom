@@ -36,8 +36,13 @@ func (r *Renderer) RenderHud() {
 func (r *Renderer) DebugInfo() {
 	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("DebugInfo"))
 
-	playerAlive := behaviors.GetAlive(r.ECS, r.PlayerBody.Entity)
 	// player := bodies.GetPlayer(&gameMap.Player)
+	playerAlive := behaviors.GetAlive(r.ECS, r.Player.Entity)
+	playerMobile := core.GetMobile(r.ECS, r.Player.Entity)
+
+	if playerAlive == nil || playerMobile == nil {
+		return
+	}
 
 	ts := r.textStyle
 	ts.Color[0] = 1
@@ -78,7 +83,7 @@ func (r *Renderer) DebugInfo() {
 		s := 0
 		core.GetSector(r.ECS, entity).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
 		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.Format(r.ECS), s))
-		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", r.PlayerBody.Force.StringHuman(), r.PlayerBody.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
+		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(), playerMobile.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
 	}
 
 	for i := 0; i < 20; i++ {

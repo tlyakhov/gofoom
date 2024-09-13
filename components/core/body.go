@@ -6,32 +6,20 @@ package core
 import (
 	"math"
 
-	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/concepts"
 )
 
-// TODO: Separate out "Position", "Moving", and perhaps "Collidable" components
 type Body struct {
 	ecs.Attached `editable:"^"`
 	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`
-	Vel          dynamic.DynamicValue[concepts.Vector3]
-	Force        concepts.Vector3
 	Size         dynamic.DynamicValue[concepts.Vector2] `editable:"Size"`
 	SectorEntity ecs.Entity
 	Angle        dynamic.DynamicValue[float64] `editable:"Angle"`
-	Mass         float64                       `editable:"Mass"`
-
-	// "Bounciness" (0 = inelastic, 1 = perfectly elastic)
-	Elasticity  float64           `editable:"Elasticity"`
-	CrBody      CollisionResponse `editable:"Collision (Body)"`
-	CrPlayer    CollisionResponse `editable:"Collision (Player)"`
-	CrWall      CollisionResponse `editable:"Collision (Wall)"`
-	Shadow      BodyShadow        `editable:"Shadow Type"`
-	MountHeight float64           `editable:"Mount Height"`
-	OnGround    bool
+	Shadow       BodyShadow                    `editable:"Shadow Type"`
+	OnGround     bool
 }
 
 var BodyCID ecs.ComponentID
@@ -54,7 +42,6 @@ func (b *Body) String() string {
 func (b *Body) OnDetach() {
 	if b.ECS != nil {
 		b.Pos.Detach(b.ECS.Simulation)
-		b.Vel.Detach(b.ECS.Simulation)
 		b.Size.Detach(b.ECS.Simulation)
 		b.Angle.Detach(b.ECS.Simulation)
 	}
@@ -70,7 +57,6 @@ func (b *Body) AttachECS(db *ecs.ECS) {
 	}
 	b.Attached.AttachECS(db)
 	b.Pos.Attach(db.Simulation)
-	b.Vel.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
 	b.Angle.Attach(b.ECS.Simulation)
 }
@@ -133,16 +119,9 @@ func (b *Body) Construct(data map[string]any) {
 	b.Attached.Construct(data)
 
 	b.Pos.Construct(nil)
-	b.Vel.Construct(nil)
 	b.Size.Construct(defaultBodySize)
 	b.Angle.Construct(nil)
 
-	b.Elasticity = 0.5
-	b.CrBody = CollideNone
-	b.CrPlayer = CollideNone
-	b.CrWall = CollideSeparate
-	b.MountHeight = constants.PlayerMountHeight
-	b.Shadow = BodyShadowNone
 	b.Angle.IsAngle = true
 
 	if data == nil {
@@ -156,13 +135,7 @@ func (b *Body) Construct(data map[string]any) {
 		}
 		b.Pos.Construct(v3)
 	}
-	if v, ok := data["Vel"]; ok {
-		v3 := v.(map[string]any)
-		if _, ok2 := v3["X"]; ok2 {
-			v3 = map[string]any{"Original": v3}
-		}
-		b.Vel.Construct(v3)
-	}
+
 	if v, ok := data["Size"]; ok {
 		v2 := v.(map[string]any)
 		if _, ok2 := v2["X"]; ok2 {
@@ -175,33 +148,6 @@ func (b *Body) Construct(data map[string]any) {
 			v = map[string]any{"Original": v2}
 		}
 		b.Angle.Construct(v.(map[string]any))
-	}
-	if v, ok := data["MountHeight"]; ok {
-		b.MountHeight = v.(float64)
-	}
-	if v, ok := data["Mass"]; ok {
-		b.Mass = v.(float64)
-	}
-	if v, ok := data["Elasticity"]; ok {
-		b.Elasticity = v.(float64)
-	}
-	if v, ok := data["CrBody"]; ok {
-		c, err := CollisionResponseString(v.(string))
-		if err == nil {
-			b.CrBody = c
-		}
-	}
-	if v, ok := data["CrPlayer"]; ok {
-		c, err := CollisionResponseString(v.(string))
-		if err == nil {
-			b.CrPlayer = c
-		}
-	}
-	if v, ok := data["CrWall"]; ok {
-		c, err := CollisionResponseString(v.(string))
-		if err == nil {
-			b.CrWall = c
-		}
 	}
 	if v, ok := data["Shadow"]; ok {
 		c, err := BodyShadowString(v.(string))
@@ -216,15 +162,8 @@ func (b *Body) Construct(data map[string]any) {
 func (b *Body) Serialize() map[string]any {
 	result := b.Attached.Serialize()
 	result["Pos"] = b.Pos.Serialize()
-	result["Vel"] = b.Vel.Serialize()
 	result["Size"] = b.Size.Serialize()
 	result["Angle"] = b.Angle.Serialize()
-	result["Mass"] = b.Mass
-	result["Elasticity"] = b.Elasticity
-	result["MountHeight"] = b.MountHeight
-	result["CrBody"] = b.CrBody.String()
-	result["CrPlayer"] = b.CrPlayer.String()
-	result["CrWall"] = b.CrWall.String()
 	if b.Shadow != BodyShadowNone {
 		result["Shadow"] = b.Shadow.String()
 	}

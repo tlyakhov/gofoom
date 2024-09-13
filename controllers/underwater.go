@@ -13,8 +13,8 @@ import (
 
 type UnderwaterController struct {
 	ecs.BaseController
-	Underwater *behaviors.Underwater
-	Sector     *core.Sector
+	*behaviors.Underwater
+	Sector *core.Sector
 }
 
 func init() {
@@ -32,12 +32,14 @@ func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
 func (uc *UnderwaterController) Target(target ecs.Attachable) bool {
 	uc.Underwater = target.(*behaviors.Underwater)
 	uc.Sector = core.GetSector(target.GetECS(), target.GetEntity())
-	return uc.Underwater.IsActive() && uc.Sector.IsActive()
+	return uc.IsActive() && uc.Sector.IsActive()
 }
 
 func (uc *UnderwaterController) Always() {
-	for _, body := range uc.Sector.Bodies {
-		body.Vel.Now.MulSelf(1.0 / constants.SwimDamping)
+	for e := range uc.Sector.Bodies {
+		if mobile := core.GetMobile(uc.ECS, e); mobile != nil {
+			mobile.Vel.Now.MulSelf(1.0 / constants.SwimDamping)
+		}
 	}
 }
 

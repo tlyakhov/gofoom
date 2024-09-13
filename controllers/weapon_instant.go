@@ -267,9 +267,11 @@ func (wc *WeaponInstantController) Always() {
 	// buggy though if the object in question moves
 	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman())
 	if s.Type == selection.SelectableBody {
-		// Push bodies away
-		// TODO: Parameterize in WeaponInstant
-		s.Body.Vel.Now.AddSelf(wc.delta.Mul(3))
+		if mobile := core.GetMobile(s.Body.ECS, s.Body.Entity); mobile != nil {
+			// Push bodies away
+			// TODO: Parameterize in WeaponInstant
+			mobile.Vel.Now.AddSelf(wc.delta.Mul(3))
+		}
 		// Hurt anything alive
 		if alive := behaviors.GetAlive(wc.Body.ECS, s.Body.Entity); alive != nil {
 			// TODO: Parameterize in WeaponInstant

@@ -19,8 +19,9 @@ import (
 type PlayerController struct {
 	ecs.BaseController
 	*behaviors.Player
-	Alive *behaviors.Alive
-	Body  *core.Body
+	Alive  *behaviors.Alive
+	Body   *core.Body
+	Mobile *core.Mobile
 }
 
 func init() {
@@ -40,12 +41,16 @@ func (pc *PlayerController) Target(target ecs.Attachable) bool {
 	if !pc.Player.IsActive() || pc.Player.Spawn {
 		return false
 	}
-	pc.Body = core.GetBody(pc.Player.ECS, pc.Player.Entity)
-	if !pc.Body.IsActive() {
+	pc.Body = core.GetBody(pc.ECS, pc.Entity)
+	if pc.Body == nil || !pc.Body.IsActive() {
 		return false
 	}
-	pc.Alive = behaviors.GetAlive(pc.Player.ECS, pc.Player.Entity)
-	return pc.Alive.IsActive()
+	pc.Alive = behaviors.GetAlive(pc.ECS, pc.Entity)
+	if pc.Alive == nil || !pc.Alive.IsActive() {
+		return false
+	}
+	pc.Mobile = core.GetMobile(pc.ECS, pc.Entity)
+	return pc.Mobile != nil && pc.Mobile.IsActive()
 }
 
 func (pc *PlayerController) Always() {
@@ -54,7 +59,7 @@ func (pc *PlayerController) Always() {
 	if uw {
 		pc.Bob += 0.015
 	} else {
-		pc.Bob += pc.Body.Vel.Now.To2D().Length() / 64.0
+		pc.Bob += pc.Mobile.Vel.Now.To2D().Length() / 64.0
 	}
 
 	for pc.Bob > math.Pi*2 {
@@ -100,18 +105,23 @@ func (pc *PlayerController) Always() {
 	}*/
 }
 
-func MovePlayer(p *core.Body, angle float64, direct bool) {
-	uw := behaviors.GetUnderwater(p.ECS, p.SectorEntity) != nil
+func MovePlayer(db *ecs.ECS, e ecs.Entity, angle float64, direct bool) {
+	p := core.GetBody(db, e)
+	m := core.GetMobile(db, e)
+	if p == nil || m == nil {
+		return
+	}
+	uw := behaviors.GetUnderwater(db, p.SectorEntity) != nil
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce
 	if direct {
-		p.Pos.Now[0] += dx * 0.1 / p.Mass
-		p.Pos.Now[1] += dy * 0.1 / p.Mass
+		p.Pos.Now[0] += dx * 0.1 / m.Mass
+		p.Pos.Now[1] += dy * 0.1 / m.Mass
 	} else {
 		if uw || p.OnGround {
-			p.Force[0] += dx
-			p.Force[1] += dy
+			m.Force[0] += dx
+			m.Force[1] += dy
 		}
 	}
 }
@@ -170,4 +180,6 @@ func Respawn(db *ecs.ECS, force bool) {
 			named.Name = "Player"
 		}
 	}
+	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerRecalculate)
+	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerAlways)
 }

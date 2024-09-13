@@ -71,3 +71,25 @@ func (db *ECS) ActAllControllers(method ControllerMethod) {
 		}
 	}
 }
+
+func (db *ECS) ActAllControllersOneEntity(entity Entity, method ControllerMethod) {
+	if entity == 0 || len(db.rows) <= int(entity) {
+		return
+	}
+
+	for _, meta := range Types().Controllers {
+		controller := reflect.New(meta.Type.Elem()).Interface().(Controller)
+		if controller == nil || controller.Methods()&method == 0 {
+			continue
+		}
+
+		for _, component := range db.rows[entity] {
+			if component == nil ||
+				component.GetComponentID() != controller.ComponentID() ||
+				!controller.Target(component) {
+				continue
+			}
+			act(controller, method)
+		}
+	}
+}

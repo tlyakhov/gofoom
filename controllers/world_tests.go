@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"tlyakhov/gofoom/archetypes"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
@@ -88,6 +89,26 @@ func CreateTestDirt(db *ecs.ECS) ecs.Entity {
 	return eDirt
 }
 
+func CreateSpawn(db *ecs.ECS) {
+	e := db.NewEntity()
+	player := &behaviors.Player{}
+	player.Construct(nil)
+	player.Spawn = true
+	db.Attach(behaviors.PlayerCID, e, player)
+	body := &core.Body{}
+	body.Construct(nil)
+	body.Pos.SetAll(concepts.Vector3{50, 50, 40})
+	db.Attach(core.BodyCID, e, body)
+	mobile := &core.Mobile{}
+	mobile.Construct(nil)
+	mobile.Mass = 80
+	db.Attach(core.MobileCID, e, mobile)
+	alive := &behaviors.Alive{}
+	alive.Construct(nil)
+	db.Attach(behaviors.AliveCID, e, alive)
+	Respawn(db, true)
+}
+
 func CreateTestWorld(db *ecs.ECS) {
 	testw := 30
 	testh := 30
@@ -126,7 +147,6 @@ func CreateTestWorld(db *ecs.ECS) {
 				lightBody := core.GetBody(db, eLight)
 				lightBody.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				lightBody.Pos.ResetToOriginal()
-				lightBody.Mass = 0
 				log.Println("Generated light")
 			}
 		}
@@ -142,6 +162,7 @@ func CreateTestWorld(db *ecs.ECS) {
 			}
 		}
 	}
+	CreateSpawn(db)
 	// After everything's loaded, trigger the controllers
 	db.ActAllControllers(ecs.ControllerRecalculate)
 	AutoPortal(db)
@@ -169,8 +190,9 @@ func CreateTestWorld2(db *ecs.ECS) {
 	lightBody := core.GetBody(db, eLight)
 	lightBody.Pos.Original = concepts.Vector3{0, 0, 60}
 	lightBody.Pos.ResetToOriginal()
-	lightBody.Mass = 0
 	log.Println("Generated light")
+
+	CreateSpawn(db)
 
 	// After everything's loaded, trigger the controllers
 	db.ActAllControllers(ecs.ControllerRecalculate)
