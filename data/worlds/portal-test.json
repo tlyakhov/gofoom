@@ -250,6 +250,22 @@
       "Entity": "5",
       "Spawn": true
     },
+    "core.Mobile": {
+      "CrBody": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "5",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -2690,7 +2706,7 @@
       "Range": 0,
       "Scripts": [
         {
-          "Code": "if (s.Vars[\"body\"].(*core.Body)).Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
+          "Code": "if (s.Vars[\"mobile\"].(*core.Mobile)).Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,s.Vars[\"sector\"].(*core.Sector).Entity).Intent = behaviors.DoorIntentOpen\n}",
           "Style": "ScriptStyleStatement"
         }
       ]

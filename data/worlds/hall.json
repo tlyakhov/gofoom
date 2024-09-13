@@ -9459,10 +9459,7 @@
       "Entity": "107",
       "Spawn": false
     },
-    "core.Body": {
-      "Angle": {
-        "Original": 0
-      },
+    "core.Mobile": {
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
@@ -9470,24 +9467,30 @@
       "Entity": "107",
       "Mass": 80,
       "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "107",
       "Pos": {
         "Original": {
           "X": -390,
           "Y": 180,
-          "Z": -32
+          "Z": -44
         }
       },
       "Size": {
         "Original": {
           "X": 15,
           "Y": 15
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -10629,10 +10632,7 @@
       ],
       "Spawn": true
     },
-    "core.Body": {
-      "Angle": {
-        "Original": 0
-      },
+    "core.Mobile": {
       "CrBody": "CollideNone",
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
@@ -10640,24 +10640,30 @@
       "Entity": "126",
       "Mass": 80,
       "MountHeight": 15,
-      "Pos": {
-        "Original": {
-          "X": -390,
-          "Y": 180,
-          "Z": -32
-        }
-      },
-      "Size": {
-        "Original": {
-          "X": 15,
-          "Y": 15
-        }
-      },
       "Vel": {
         "Original": {
           "X": 0,
           "Y": 0,
           "Z": 0
+        }
+      }
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "126",
+      "Pos": {
+        "Original": {
+          "X": -390,
+          "Y": 180,
+          "Z": -44
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 15,
+          "Y": 40
         }
       }
     },
@@ -10922,7 +10928,7 @@
       "Range": 100,
       "Scripts": [
         {
-          "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
+          "Code": "m := s.Vars[\"mobile\"].(*core.Mobile)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif m.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]

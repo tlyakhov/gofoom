@@ -13,6 +13,7 @@ import (
 
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
@@ -41,17 +42,19 @@ var buffer *image.RGBA
 var inMenu = true
 
 func gameInput() {
+	playerMobile := core.GetMobile(renderer.ECS, renderer.Player.Entity)
+
 	if win.Pressed(pixel.KeyW) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now, false)
 	}
 	if win.Pressed(pixel.KeyS) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+180.0, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+180.0, false)
 	}
 	if win.Pressed(pixel.KeyE) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+90.0, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+90.0, false)
 	}
 	if win.Pressed(pixel.KeyQ) {
-		controllers.MovePlayer(renderer.PlayerBody, renderer.PlayerBody.Angle.Now+270.0, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+270.0, false)
 	}
 	if win.Pressed(pixel.KeyA) {
 		renderer.PlayerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
@@ -72,15 +75,15 @@ func gameInput() {
 	if win.Pressed(pixel.KeySpace) {
 
 		if behaviors.GetUnderwater(renderer.ECS, renderer.PlayerBody.SectorEntity) != nil {
-			renderer.PlayerBody.Force[2] += constants.PlayerSwimStrength
+			playerMobile.Force[2] += constants.PlayerSwimStrength
 		} else if renderer.PlayerBody.OnGround {
-			renderer.PlayerBody.Force[2] += constants.PlayerJumpForce
+			playerMobile.Force[2] += constants.PlayerJumpForce
 			renderer.PlayerBody.OnGround = false
 		}
 	}
 	if win.Pressed(pixel.KeyC) {
 		if behaviors.GetUnderwater(renderer.ECS, renderer.PlayerBody.SectorEntity) != nil {
-			renderer.PlayerBody.Force[2] -= constants.PlayerSwimStrength
+			playerMobile.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			renderer.Player.Crouching = true
 		}
@@ -168,12 +171,12 @@ func run() {
 	db = ecs.NewECS()
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
-	//controllers.CreateTestWorld(db)
-	//db.Save("data/worlds/exported_test.json")
-	if err = db.Load("data/worlds/hall.json"); err != nil {
+	controllers.CreateTestWorld(db)
+	//db.Save("bin/exported_test.json")
+	/*if err = db.Load("data/worlds/hall.json"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
-	}
+	}*/
 	controllers.Respawn(db, true)
 	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
 

@@ -194,18 +194,19 @@ func (e *Editor) Integrate() {
 		return
 	}
 	playerBody := core.GetBody(player.ECS, player.Entity)
+	playerMobile := core.GetMobile(player.ECS, player.Entity)
 
 	if e.GameWidget.KeyMap.Contains("W") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("S") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+180.0, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+180.0, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("E") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+90.0, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+90.0, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("Q") {
-		controllers.MovePlayer(playerBody, playerBody.Angle.Now+270.0, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+270.0, e.ECS.EditorPaused)
 	}
 	if e.GameWidget.KeyMap.Contains("A") {
 		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
@@ -220,15 +221,15 @@ func (e *Editor) Integrate() {
 
 	if e.GameWidget.KeyMap.Contains("Space") {
 		if behaviors.GetUnderwater(player.ECS, playerBody.SectorEntity) != nil {
-			playerBody.Force[2] += constants.PlayerSwimStrength
+			playerMobile.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
-			playerBody.Force[2] += constants.PlayerJumpForce
+			playerMobile.Force[2] += constants.PlayerJumpForce
 			playerBody.OnGround = false
 		}
 	}
 	if e.GameWidget.KeyMap.Contains("C") {
 		if behaviors.GetUnderwater(player.ECS, playerBody.SectorEntity) != nil {
-			playerBody.Force[2] -= constants.PlayerSwimStrength
+			playerMobile.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
 		}

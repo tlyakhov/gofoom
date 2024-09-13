@@ -17,7 +17,8 @@ import (
 type WanderController struct {
 	ecs.BaseController
 	*behaviors.Wander
-	Body *core.Body
+	Body   *core.Body
+	Mobile *core.Mobile
 }
 
 func init() {
@@ -34,8 +35,9 @@ func (wc *WanderController) Methods() ecs.ControllerMethod {
 
 func (wc *WanderController) Target(target ecs.Attachable) bool {
 	wc.Wander = target.(*behaviors.Wander)
-	wc.Body = core.GetBody(wc.Wander.ECS, wc.Wander.Entity)
-	return wc.Wander.IsActive() && wc.Body.IsActive()
+	wc.Body = core.GetBody(wc.ECS, wc.Entity)
+	wc.Mobile = core.GetMobile(wc.ECS, wc.Entity)
+	return wc.Wander.IsActive() && wc.Body.IsActive() && wc.Mobile.IsActive()
 }
 
 func (wc *WanderController) Always() {
@@ -43,7 +45,7 @@ func (wc *WanderController) Always() {
 	f := concepts.Vector3{}
 	f[1], f[0] = math.Sincos(wc.Body.Angle.Now * concepts.Deg2rad)
 	f.MulSelf(wc.Force)
-	wc.Body.Force.AddSelf(&f)
+	wc.Mobile.Force.AddSelf(&f)
 
 	if wc.NextSector == 0 {
 		wc.NextSector = wc.Body.SectorEntity

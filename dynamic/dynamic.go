@@ -71,6 +71,7 @@ func (d *DynamicValue[T]) Value(s DynamicStage) T {
 func (d *DynamicValue[T]) ResetToOriginal() {
 	d.Prev = d.Original
 	d.Now = d.Original
+	*d.Render = d.Original
 	d.Input = d.Original
 	d.prevInput = d.Original
 }

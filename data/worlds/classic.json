@@ -1,10 +1,48 @@
 [
   {
     "Entity": "1",
-    "core.Spawn": {
+    "behaviors.Alive": {
       "Entity": "1",
-      "X": 0,
-      "Y": -70
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "1",
+      "Spawn": false
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "1",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": -70,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 15,
+          "Y": 15
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "1",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
     }
   },
   {
@@ -346,22 +384,17 @@
   },
   {
     "Entity": "15",
-    "ecs.Named": {
-      "Entity": "15",
-      "Name": "sector0"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "15",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "Hi": {
@@ -439,29 +472,33 @@
           "Y": -30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "15",
+      "Name": "sector0"
     }
   },
   {
     "Entity": "16",
-    "ecs.Named": {
-      "Entity": "16",
-      "Name": "sector1"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "16",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "51",
@@ -512,29 +549,33 @@
           "Y": -30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "16",
+      "Name": "sector1"
     }
   },
   {
     "Entity": "17",
-    "ecs.Named": {
-      "Entity": "17",
-      "Name": "sector2"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -10
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -10
+        }
       },
       "Entity": "17",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "24",
@@ -585,29 +626,33 @@
           "Y": -30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "17",
+      "Name": "sector2"
     }
   },
   {
     "Entity": "18",
-    "ecs.Named": {
-      "Entity": "18",
-      "Name": "sector3"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "18",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "52",
@@ -684,9 +729,18 @@
           "Y": 30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "18",
+      "Name": "sector3"
     }
   },
   {
@@ -695,10 +749,7 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "19",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -17,
@@ -711,13 +762,6 @@
           "X": 10,
           "Y": 10
         }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
       }
     }
   },
@@ -727,10 +771,7 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "20",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 45,
@@ -743,13 +784,6 @@
           "X": 10,
           "Y": 10
         }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
       }
     }
   },
@@ -759,10 +793,7 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "21",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 85,
@@ -775,13 +806,6 @@
           "X": 10,
           "Y": 10
         }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
       }
     }
   },
@@ -791,10 +815,7 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "22",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 0,
@@ -806,13 +827,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -829,22 +843,17 @@
   },
   {
     "Entity": "23",
-    "ecs.Named": {
-      "Entity": "23",
-      "Name": "sector4"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -3
-      },
-      "Top.Surface": {
-        "Material": "11"
+      "Bottom": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": -3
+        }
       },
       "Entity": "23",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "9"
-      },
       "Segments": [
         {
           "AdjacentSector": "15",
@@ -895,29 +904,33 @@
           "Y": 30
         }
       ],
-      "Top.Z": {
-        "Original": 50
+      "Top": {
+        "Surface": {
+          "Material": "11"
+        },
+        "Z": {
+          "Original": 50
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "23",
+      "Name": "sector4"
     }
   },
   {
     "Entity": "24",
-    "ecs.Named": {
-      "Entity": "24",
-      "Name": "sector5"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -20
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": -20
+        }
       },
       "Entity": "24",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "9"
-      },
       "Segments": [
         {
           "Hi": {
@@ -970,29 +983,33 @@
           "Y": 30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "24",
+      "Name": "sector5"
     }
   },
   {
     "Entity": "25",
-    "ecs.Named": {
-      "Entity": "25",
-      "Name": "sector6"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -30
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": -30
+        }
       },
       "Entity": "25",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "9"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1045,29 +1062,33 @@
           "Y": 30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "25",
+      "Name": "sector6"
     }
   },
   {
     "Entity": "26",
-    "ecs.Named": {
-      "Entity": "26",
-      "Name": "sector7"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -40
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": -40
+        }
       },
       "Entity": "26",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "9"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1120,29 +1141,33 @@
           "Y": 30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "26",
+      "Name": "sector7"
     }
   },
   {
     "Entity": "27",
-    "ecs.Named": {
-      "Entity": "27",
-      "Name": "sector8"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -50
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": -50
+        }
       },
       "Entity": "27",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "9"
-      },
       "Segments": [
         {
           "Hi": {
@@ -1195,29 +1220,33 @@
           "Y": 30
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "27",
+      "Name": "sector8"
     }
   },
   {
     "Entity": "28",
-    "ecs.Named": {
-      "Entity": "28",
-      "Name": "sector9"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -60
-      },
-      "Top.Surface": {
-        "Material": "8"
+      "Bottom": {
+        "Surface": {
+          "Material": "10"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "28",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "10"
-      },
       "Segments": [
         {
           "AdjacentSector": "30",
@@ -1295,9 +1324,18 @@
           "Y": 30
         }
       ],
-      "Top.Z": {
-        "Original": -6
+      "Top": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -6
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "28",
+      "Name": "sector9"
     }
   },
   {
@@ -1306,10 +1344,7 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "29",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -240,
@@ -1321,13 +1356,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -1344,22 +1372,17 @@
   },
   {
     "Entity": "30",
-    "ecs.Named": {
-      "Entity": "30",
-      "Name": "sector10"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -60
-      },
-      "Top.Surface": {
-        "Material": "8"
+      "Bottom": {
+        "Surface": {
+          "Material": "10"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "30",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "10"
-      },
       "Segments": [
         {
           "AdjacentSector": "28",
@@ -1413,9 +1436,18 @@
           "Y": -140
         }
       ],
-      "Top.Z": {
-        "Original": -6
+      "Top": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -6
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "30",
+      "Name": "sector10"
     }
   },
   {
@@ -1424,10 +1456,7 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "31",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -240,
@@ -1439,13 +1468,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -1462,22 +1484,17 @@
   },
   {
     "Entity": "32",
-    "ecs.Named": {
-      "Entity": "32",
-      "Name": "sector11"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -60
-      },
-      "Top.Surface": {
-        "Material": "8"
+      "Bottom": {
+        "Surface": {
+          "Material": "10"
+        },
+        "Z": {
+          "Original": -60
+        }
       },
       "Entity": "32",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "10"
-      },
       "Segments": [
         {
           "AdjacentSector": "28",
@@ -1531,9 +1548,18 @@
           "Y": 140
         }
       ],
-      "Top.Z": {
-        "Original": -6
+      "Top": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -6
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "32",
+      "Name": "sector11"
     }
   },
   {
@@ -1542,10 +1568,7 @@
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "33",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -240,
@@ -1557,13 +1580,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -1580,22 +1596,17 @@
   },
   {
     "Entity": "34",
-    "ecs.Named": {
-      "Entity": "34",
-      "Name": "sector12"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "12"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "34",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "51",
@@ -1661,29 +1672,33 @@
           "Y": -30
         }
       ],
-      "Top.Z": {
-        "Original": 60
+      "Top": {
+        "Surface": {
+          "Material": "12"
+        },
+        "Z": {
+          "Original": 60
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "34",
+      "Name": "sector12"
     }
   },
   {
     "Entity": "35",
-    "ecs.Named": {
-      "Entity": "35",
-      "Name": "sector13"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "12"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "35",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "34",
@@ -1749,29 +1764,33 @@
           "Y": 100
         }
       ],
-      "Top.Z": {
-        "Original": 60
+      "Top": {
+        "Surface": {
+          "Material": "12"
+        },
+        "Z": {
+          "Original": 60
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "35",
+      "Name": "sector13"
     }
   },
   {
     "Entity": "36",
-    "ecs.Named": {
-      "Entity": "36",
-      "Name": "sector14"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "9"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "36",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "35",
@@ -1824,30 +1843,34 @@
           "Y": 100
         }
       ],
-      "Top.Z": {
-        "Original": 60
+      "Top": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": 60
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "36",
+      "Name": "sector14"
     }
   },
   {
     "Entity": "37",
-    "ecs.Named": {
-      "Entity": "37",
-      "Name": "sector15"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -20
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Target": "40",
+        "Z": {
+          "Original": -20
+        }
       },
       "Entity": "37",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "13"
-      },
-      "Bottom.Target": "40",
       "Segments": [
         {
           "Hi": {
@@ -1939,25 +1962,27 @@
           "Y": 20
         }
       ],
-      "Top.Z": {
-        "Original": 100
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 100
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "37",
+      "Name": "sector15"
     }
   },
   {
     "Entity": "38",
-    "ecs.Named": {
-      "Entity": "38",
-      "Name": "cl5anh5mdsrmm6mqtu70"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "38",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 350,
@@ -1970,13 +1995,6 @@
           "X": 10,
           "Y": 10
         }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
       }
     },
     "core.Light": {
@@ -1988,26 +2006,25 @@
       },
       "Entity": "38",
       "Strength": 2
+    },
+    "ecs.Named": {
+      "Entity": "38",
+      "Name": "cl5anh5mdsrmm6mqtu70"
     }
   },
   {
     "Entity": "39",
-    "ecs.Named": {
-      "Entity": "39",
-      "Name": "sector16"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 10
-      },
-      "Top.Surface": {
-        "Material": "9"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 10
+        }
       },
       "Entity": "39",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "37",
@@ -2060,30 +2077,33 @@
           "Y": 400
         }
       ],
-      "Top.Z": {
-        "Original": 60
+      "Top": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": 60
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "39",
+      "Name": "sector16"
     }
   },
   {
     "Entity": "40",
-    "ecs.Named": {
-      "Entity": "40",
-      "Name": "sector17"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -170
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -170
+        }
       },
-      "Top.Surface": {
-        "Material": "13"
-      },
-      "Top.Target": "37",
       "Entity": "40",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2175,29 +2195,34 @@
           "Y": 230
         }
       ],
-      "Top.Z": {
-        "Original": -20
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Target": "37",
+        "Z": {
+          "Original": -20
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "40",
+      "Name": "sector17"
     }
   },
   {
     "Entity": "41",
-    "ecs.Named": {
-      "Entity": "41",
-      "Name": "sector18"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -230
-      },
-      "Top.Surface": {
-        "Material": "8"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -230
+        }
       },
       "Entity": "41",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Gravity": {
         "X": 0,
         "Y": 0,
@@ -2313,25 +2338,27 @@
           "Y": 410
         }
       ],
-      "Top.Z": {
-        "Original": -20
+      "Top": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -20
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "41",
+      "Name": "sector18"
     }
   },
   {
     "Entity": "42",
-    "ecs.Named": {
-      "Entity": "42",
-      "Name": "cl5anh5mdsrmm6mqtub0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "42",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 640,
@@ -2344,13 +2371,6 @@
           "X": 10,
           "Y": 10
         }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
       }
     },
     "core.Light": {
@@ -2362,26 +2382,25 @@
       },
       "Entity": "42",
       "Strength": 2
+    },
+    "ecs.Named": {
+      "Entity": "42",
+      "Name": "cl5anh5mdsrmm6mqtub0"
     }
   },
   {
     "Entity": "43",
-    "ecs.Named": {
-      "Entity": "43",
-      "Name": "sector19"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -50
-      },
-      "Top.Surface": {
-        "Material": "8"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -50
+        }
       },
       "Entity": "43",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2433,30 +2452,34 @@
           "Y": 410
         }
       ],
-      "Top.Z": {
-        "Original": -20
+      "Top": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -20
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "43",
+      "Name": "sector19"
     }
   },
   {
     "Entity": "44",
-    "ecs.Named": {
-      "Entity": "44",
-      "Name": "sector20"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -20
-      },
-      "Top.Surface": {
-        "Material": "9"
+      "Bottom": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Target": "45",
+        "Z": {
+          "Original": -20
+        }
       },
       "Entity": "44",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "13"
-      },
-      "Bottom.Target": "45",
       "Segments": [
         {
           "AdjacentSector": "45",
@@ -2541,30 +2564,33 @@
           "Y": 400
         }
       ],
-      "Top.Z": {
-        "Original": 60
+      "Top": {
+        "Surface": {
+          "Material": "9"
+        },
+        "Z": {
+          "Original": 60
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "44",
+      "Name": "sector20"
     }
   },
   {
     "Entity": "45",
-    "ecs.Named": {
-      "Entity": "45",
-      "Name": "sector21"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -200
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -200
+        }
       },
-      "Top.Surface": {
-        "Material": "13"
-      },
-      "Top.Target": "44",
       "Entity": "45",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "44",
@@ -2645,30 +2671,34 @@
           "Y": 400
         }
       ],
-      "Top.Z": {
-        "Original": -20
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Target": "44",
+        "Z": {
+          "Original": -20
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "45",
+      "Name": "sector21"
     }
   },
   {
     "Entity": "46",
-    "ecs.Named": {
-      "Entity": "46",
-      "Name": "sector22"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -70
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": -70
+        }
       },
-      "Top.Surface": {
-        "Material": "13"
-      },
-      "Top.Target": "48",
       "Entity": "46",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "48",
@@ -2725,25 +2755,28 @@
           "Y": 200
         }
       ],
-      "Top.Z": {
-        "Original": -20
+      "Top": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Target": "48",
+        "Z": {
+          "Original": -20
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "46",
+      "Name": "sector22"
     }
   },
   {
     "Entity": "47",
-    "ecs.Named": {
-      "Entity": "47",
-      "Name": "cl5anh5mdsrmm6mqtug0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "47",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 610,
@@ -2756,13 +2789,6 @@
           "X": 10,
           "Y": 10
         }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
       }
     },
     "core.Light": {
@@ -2774,27 +2800,26 @@
       },
       "Entity": "47",
       "Strength": 2
+    },
+    "ecs.Named": {
+      "Entity": "47",
+      "Name": "cl5anh5mdsrmm6mqtug0"
     }
   },
   {
     "Entity": "48",
-    "ecs.Named": {
-      "Entity": "48",
-      "Name": "sector23"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -20
-      },
-      "Top.Surface": {
-        "Material": "8"
+      "Bottom": {
+        "Surface": {
+          "Material": "13"
+        },
+        "Target": "46",
+        "Z": {
+          "Original": -20
+        }
       },
       "Entity": "48",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "13"
-      },
-      "Bottom.Target": "46",
       "Segments": [
         {
           "AdjacentSector": "46",
@@ -2851,29 +2876,33 @@
           "Y": 200
         }
       ],
-      "Top.Z": {
-        "Original": 50
+      "Top": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 50
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "48",
+      "Name": "sector23"
     }
   },
   {
     "Entity": "49",
-    "ecs.Named": {
-      "Entity": "49",
-      "Name": "sector24"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": -10
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "3"
+        },
+        "Z": {
+          "Original": -10
+        }
       },
       "Entity": "49",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "3"
-      },
       "Segments": [
         {
           "Hi": {
@@ -2927,25 +2956,27 @@
           "Y": 200
         }
       ],
-      "Top.Z": {
-        "Original": 70
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 70
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "49",
+      "Name": "sector24"
     }
   },
   {
     "Entity": "50",
-    "ecs.Named": {
-      "Entity": "50",
-      "Name": "cl5anh5mdsrmm6mqtuj0"
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "50",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 700,
@@ -2958,13 +2989,6 @@
           "X": 10,
           "Y": 10
         }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
       }
     },
     "core.Light": {
@@ -2976,13 +3000,16 @@
       },
       "Entity": "50",
       "Strength": 2
+    },
+    "ecs.Named": {
+      "Entity": "50",
+      "Name": "cl5anh5mdsrmm6mqtuj0"
     }
   },
   {
     "Entity": "51",
     "behaviors.Proximity": {
       "Entity": "51",
-      "Range": 100,
       "Scripts": [
         {
           "Code": "body := s.Vars[\"body\"].(*core.Body)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif body.Mass \u003e 10 {\n  behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen\n}",
@@ -2991,24 +3018,21 @@
       ]
     },
     "behaviors.VerticalDoor": {
-      "Entity": "51"
-    },
-    "ecs.Named": {
+      "Duration": 1000,
       "Entity": "51",
-      "Name": "sector25"
+      "TweeningFunc": "EaseInOut2"
     },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "6"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "51",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "AdjacentSector": "34",
@@ -3061,40 +3085,44 @@
           "Y": -30
         }
       ],
-      "Top.Z": {
-        "Animation": {
-          "Active": true,
-          "Coordinates": "AnimationCoordinatesAbsolute",
-          "Duration": 1000,
-          "End": 0,
-          "Lifetime": "AnimationLifetimeHold",
-          "Percent": 1.0078125,
-          "Reverse": false,
-          "Start": 64,
-          "TweeningFunc": "Lerp"
+      "Top": {
+        "Surface": {
+          "Material": "6"
         },
-        "Original": 64
+        "Z": {
+          "Animation": {
+            "Active": false,
+            "Coordinates": "AnimationCoordinatesAbsolute",
+            "Duration": 1000,
+            "End": 0,
+            "Lifetime": "AnimationLifetimeOnce",
+            "Percent": 1,
+            "Reverse": false,
+            "Start": 64,
+            "TweeningFunc": "EaseInOut2"
+          },
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "51",
+      "Name": "sector25"
     }
   },
   {
     "Entity": "52",
-    "ecs.Named": {
-      "Entity": "52",
-      "Name": "sector26"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 15
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 15
+        }
       },
       "Entity": "52",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "18",
@@ -3147,29 +3175,33 @@
           "Y": 120
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "52",
+      "Name": "sector26"
     }
   },
   {
     "Entity": "53",
-    "ecs.Named": {
-      "Entity": "53",
-      "Name": "sector27"
-    },
     "core.Sector": {
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "14"
+      "Bottom": {
+        "Surface": {
+          "Material": "8"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "53",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "8"
-      },
       "Segments": [
         {
           "AdjacentSector": "52",
@@ -3223,9 +3255,18 @@
           "Y": 3000
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "14"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "53",
+      "Name": "sector27"
     }
   },
   {
@@ -3235,16 +3276,14 @@
       "Health": 100
     },
     "behaviors.Player": {
-      "Entity": "54"
+      "Entity": "54",
+      "Spawn": true
     },
     "core.Body": {
       "Angle": {
         "Original": 0
       },
-      "CollisionResponse": "Slide",
       "Entity": "54",
-      "Mass": 80,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 0,
@@ -3257,7 +3296,16 @@
           "X": 15,
           "Y": 15
         }
-      },
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "54",
+      "Mass": 80,
+      "MountHeight": 15,
       "Vel": {
         "Original": {
           "X": 0,
@@ -3272,7 +3320,7 @@
     "materials.Image": {
       "Entity": "55",
       "Filter": false,
-      "GenerateMipMaps": true,
+      "GenerateMipMaps": false,
       "Source": "data/game/sky.png"
     },
     "materials.Lit": {

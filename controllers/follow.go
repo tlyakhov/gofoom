@@ -17,7 +17,8 @@ import (
 type FollowController struct {
 	ecs.BaseController
 	*behaviors.Follower
-	Body *core.Body
+	Body   *core.Body
+	Mobile *core.Mobile
 }
 
 func init() {
@@ -34,7 +35,8 @@ func (fc *FollowController) Methods() ecs.ControllerMethod {
 
 func (fc *FollowController) Target(target ecs.Attachable) bool {
 	fc.Follower = target.(*behaviors.Follower)
-	fc.Body = core.GetBody(fc.Follower.ECS, fc.Follower.Entity)
+	fc.Body = core.GetBody(fc.ECS, fc.Entity)
+	fc.Mobile = core.GetMobile(fc.ECS, fc.Entity)
 	return fc.Follower.IsActive() && fc.Body.IsActive()
 }
 
@@ -66,13 +68,13 @@ func (fc *FollowController) Recalculate() {
 }
 
 func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
-	if jump.Fired.Contains(fc.Body.Entity) {
+	if fc.Mobile == nil || jump.Fired.Contains(fc.Body.Entity) {
 		return true
 	}
 	jump.Fired.Add(fc.Body.Entity)
 
 	// TODO: Parameterize this
-	fc.Body.Force[2] += constants.PlayerJumpForce * 0.5
+	fc.Mobile.Force[2] += constants.PlayerJumpForce * 0.5
 
 	return true
 }
@@ -105,8 +107,8 @@ func (fc *FollowController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	}
 	if fc.Body.Pos.Procedural {
 		fc.Body.Pos.Input.AddSelf(v)
-	} else {
-		fc.Body.Vel.Now = *v
+	} else if fc.Mobile != nil {
+		fc.Mobile.Vel.Now = *v
 	}
 
 	return false

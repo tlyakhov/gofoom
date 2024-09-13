@@ -88,6 +88,59 @@ func (db *ECS) Component(entity Entity, id ComponentID) Attachable {
 	return db.rows[int(entity)].Get(id)
 }
 
+// Shortcut methods for retrieving multiple components at a time
+func Archetype2[T1 any, T2 any,
+	PT1 GenericAttachable[T1], PT2 GenericAttachable[T2]](db *ECS, entity Entity) (pt1 PT1, pt2 PT2) {
+	pt1 = nil
+	pt2 = nil
+	if entity == 0 || len(db.rows) <= int(entity) {
+		return
+	}
+	for _, attachable := range db.rows[int(entity)] {
+		if attachable == nil {
+			continue
+		}
+		if ct, ok := attachable.(PT1); ok {
+			pt1 = ct
+		} else if ct, ok := attachable.(PT2); ok {
+			pt2 = ct
+		}
+		if pt1 != nil && pt2 != nil {
+			return
+		}
+	}
+	return
+}
+
+func Archetype3[T1 any, T2 any, T3 any,
+	PT1 GenericAttachable[T1],
+	PT2 GenericAttachable[T2],
+	PT3 GenericAttachable[T3]](db *ECS, entity Entity) (pt1 PT1, pt2 PT2, pt3 PT3) {
+	pt1 = nil
+	pt2 = nil
+	pt3 = nil
+	if entity == 0 || len(db.rows) <= int(entity) {
+		return
+	}
+	for _, attachable := range db.rows[int(entity)] {
+		if attachable == nil {
+			continue
+		}
+		if ct, ok := attachable.(PT1); ok {
+			pt1 = ct
+		} else if ct, ok := attachable.(PT2); ok {
+			pt2 = ct
+		} else if ct, ok := attachable.(PT3); ok {
+			pt3 = ct
+		}
+
+		if pt1 != nil && pt2 != nil && pt3 != nil {
+			return
+		}
+	}
+	return
+}
+
 func (db *ECS) First(id ComponentID) Attachable {
 	c := db.columns[id&0xFFFF]
 	if c.Len() > 0 {

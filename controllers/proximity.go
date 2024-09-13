@@ -51,6 +51,7 @@ func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
 	for _, script := range pc.Scripts {
 		script.Vars["proximityEntity"] = pc.Entity
 		script.Vars["body"] = body
+		script.Vars["mobile"] = core.GetMobile(pc.ECS, body.Entity)
 		script.Vars["sector"] = sector
 		script.Act()
 	}

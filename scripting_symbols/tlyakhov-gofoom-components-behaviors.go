@@ -44,6 +44,7 @@ func init() {
 		"GetWander":           reflect.ValueOf(behaviors.GetWander),
 		"GetWeaponInstant":    reflect.ValueOf(behaviors.GetWeaponInstant),
 		"InventoryItemCID":    reflect.ValueOf(&behaviors.InventoryItemCID).Elem(),
+		"IterateActions":      reflect.ValueOf(behaviors.IterateActions),
 		"PlayerCID":           reflect.ValueOf(&behaviors.PlayerCID).Elem(),
 		"ProximityCID":        reflect.ValueOf(&behaviors.ProximityCID).Elem(),
 		"UnderwaterCID":       reflect.ValueOf(&behaviors.UnderwaterCID).Elem(),
