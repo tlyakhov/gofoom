@@ -38,7 +38,8 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 	if entity != 0 {
 		img.ScaleMode = canvas.ImageScaleSmooth
 		img.FillMode = canvas.ImageFillContain
-		if editTypeTag != "Action" {
+		if editTypeTag == "Sector" || editTypeTag == "Material" {
+			// TODO: Make images for other entity types like actions
 			img.Image = g.IEditor.EntityImage(entity, editTypeTag != "Material")
 		}
 		img.SetMinSize(fyne.NewSquareSize(64))
@@ -65,12 +66,15 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	refs := make([]widget.TreeNodeID, 1)
 	refs[0] = "0"
 
+	// TODO: Optimize this by using columns directly. This is unwieldy
 	g.State().ECS.Entities.Range(func(entity uint32) {
 		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().ECS, ecs.Entity(entity)) {
 			refs = append(refs, strconv.Itoa(int(entity)))
 		} else if editTypeTag == "Sector" && core.GetSector(g.State().ECS, ecs.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(int(entity)))
 		} else if editTypeTag == "Action" && behaviors.GetActionWaypoint(g.State().ECS, ecs.Entity(entity)) != nil {
+			refs = append(refs, strconv.Itoa(int(entity)))
+		} else if editTypeTag == "Weapon" && behaviors.GetWeaponClass(g.State().ECS, ecs.Entity(entity)) != nil {
 			refs = append(refs, strconv.Itoa(int(entity)))
 		}
 	})

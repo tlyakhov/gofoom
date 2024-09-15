@@ -102,7 +102,7 @@ func (a *Attached) Serialize() map[string]any {
 func ConstructSlice[PT interface {
 	*T
 	Serializable
-}, T any](db *ECS, data any) []PT {
+}, T any](db *ECS, data any, hook func(item PT)) []PT {
 	var result []PT
 
 	if dataSlice, ok := data.([]any); ok {
@@ -110,6 +110,9 @@ func ConstructSlice[PT interface {
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
 			result[i].AttachECS(db)
+			if hook != nil {
+				hook(result[i])
+			}
 			result[i].Construct(dataElement.(map[string]any))
 		}
 	} else if dataSlice, ok := data.([]map[string]any); ok {
@@ -117,6 +120,9 @@ func ConstructSlice[PT interface {
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
 			result[i].AttachECS(db)
+			if hook != nil {
+				hook(result[i])
+			}
 			result[i].Construct(dataElement)
 		}
 	}

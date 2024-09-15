@@ -21,7 +21,8 @@ type WeaponInstantController struct {
 	ecs.BaseController
 	*behaviors.WeaponInstant
 	state.MaterialSampler
-	Body *core.Body
+	Body  *core.Body
+	Class *behaviors.WeaponClass
 
 	delta, isect, hit concepts.Vector3
 	transform         concepts.Matrix2
@@ -41,6 +42,7 @@ func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {
 
 func (wc *WeaponInstantController) Target(target ecs.Attachable) bool {
 	wc.WeaponInstant = target.(*behaviors.WeaponInstant)
+	wc.Class = behaviors.GetWeaponClass(wc.WeaponInstant.ECS, wc.WeaponInstant.Class)
 	wc.Body = core.GetBody(wc.WeaponInstant.ECS, wc.WeaponInstant.Entity)
 	return wc.WeaponInstant.IsActive() && wc.Body.IsActive()
 }
@@ -203,7 +205,7 @@ func (wc *WeaponInstantController) MarkSurface(s *selection.Selectable, p *conce
 
 func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *selection.Selectable, transform *concepts.Matrix2) *materials.Surface {
 	// Inverse of the size of bullet mark we want
-	scale := 1.0 / wc.MarkSize
+	scale := 1.0 / wc.Class.MarkSize
 	// 3x2 transformation matrixes are composed of
 	// the horizontal basis vector in slots [0] & [1], which we set to the
 	// width of the segment, scaled
@@ -275,7 +277,7 @@ func (wc *WeaponInstantController) Always() {
 		// Hurt anything alive
 		if alive := behaviors.GetAlive(wc.Body.ECS, s.Body.Entity); alive != nil {
 			// TODO: Parameterize in WeaponInstant
-			alive.Hurt("Weapon "+s.Entity.String(), 5, 20)
+			alive.Hurt("Weapon "+s.Entity.String(), wc.Class.Damage, 20)
 		}
 		// TODO: Death animations/entity deactivation
 	} else if s.Type == selection.SelectableSectorSegment ||
@@ -287,7 +289,7 @@ func (wc *WeaponInstantController) Always() {
 
 		// TODO: Include floors and ceilings
 		es := &materials.ShaderStage{
-			Texture:                wc.MarkMaterial,
+			Texture:                wc.Class.MarkMaterial,
 			IgnoreSurfaceTransform: false,
 			System:                 true}
 		es.AttachECS(s.ECS)

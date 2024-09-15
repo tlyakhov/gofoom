@@ -1,5 +1,69 @@
 [
   {
+    "Entity": "1",
+    "behaviors.Alive": {
+      "Entity": "1",
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "1",
+      "Inventory": [
+        {
+          "Count": "0",
+          "Image": "133",
+          "Limit": "1",
+          "ValidClasses": "WeirdGun"
+        },
+        {
+          "Count": "0",
+          "Image": "98",
+          "Limit": "100",
+          "ValidClasses": "Flower,Pluk"
+        }
+      ],
+      "Spawn": false
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "1",
+      "Pos": {
+        "Original": {
+          "X": -30,
+          "Y": 60,
+          "Z": -44
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 15,
+          "Y": 40
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "1",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "ecs.Named": {
+      "Entity": "1",
+      "Name": "Player"
+    }
+  },
+  {
     "Entity": "2",
     "ecs.Named": {
       "Entity": "2",
@@ -450,13 +514,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "8",
-      "Mass": 0,
-      "MountHeight": 30,
       "Pos": {
         "Original": {
           "X": 140,
@@ -468,13 +526,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -495,13 +546,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "9",
-      "Mass": 0,
-      "MountHeight": 30,
       "Pos": {
         "Original": {
           "X": 140,
@@ -513,13 +558,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -1450,13 +1488,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "20",
-      "Mass": 0,
-      "MountHeight": 20,
       "Pos": {
         "Original": {
           "X": 900,
@@ -1468,13 +1500,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -1499,13 +1524,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "21",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -220,
@@ -1517,13 +1536,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -2529,13 +2541,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "30",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 1370,
@@ -2547,13 +2553,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -2688,13 +2687,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideDeactivate",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "32",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Animation": {
           "Active": true,
@@ -2704,8 +2697,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.4765625,
-          "Reverse": false,
+          "Percent": 0.7734375,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2724,13 +2717,6 @@
         "Original": {
           "X": 20,
           "Y": 20
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -3767,24 +3753,22 @@
       "Health": 100
     },
     "behaviors.Follower": {
-      "Action": "136",
+      "Action": "137",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
       "Start": "135"
+    },
+    "behaviors.WeaponInstant": {
+      "Class": "148",
+      "Entity": "42"
     },
     "core.Body": {
       "Angle": {
         "Original": 155.9558816022554,
         "Procedural": true
       },
-      "CrBody": "CollideBounce",
-      "CrPlayer": "CollideBounce",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "42",
-      "Mass": 15,
-      "MountHeight": 30,
       "Pos": {
         "Original": {
           "X": 20,
@@ -3798,13 +3782,6 @@
         "Original": {
           "X": 32,
           "Y": 32
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -4395,6 +4372,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -4608,13 +4586,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "52",
-      "Mass": 0,
-      "MountHeight": 20,
       "Pos": {
         "Original": {
           "X": 580,
@@ -4626,13 +4598,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -5203,13 +5168,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "59",
-      "Mass": 0,
-      "MountHeight": 20,
       "Pos": {
         "Original": {
           "X": 730,
@@ -5221,13 +5180,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -5439,13 +5391,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "62",
-      "Mass": 0,
-      "MountHeight": 20,
       "Pos": {
         "Original": {
           "X": 380,
@@ -5457,13 +5403,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -5971,13 +5910,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "68",
-      "Mass": 0,
-      "MountHeight": 30,
       "Pos": {
         "Original": {
           "X": 370,
@@ -5989,13 +5922,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -6905,13 +6831,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "78",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -470,
@@ -6923,13 +6843,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -7292,12 +7205,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": true,
+            "Active": false,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0,
+            "Percent": 1,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -7567,13 +7480,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "85",
-      "Mass": 0,
-      "MountHeight": 30,
       "Pos": {
         "Original": {
           "X": -340,
@@ -7585,13 +7492,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -8729,13 +8629,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "96",
-      "Mass": 0,
-      "MountHeight": 20,
       "Pos": {
         "Original": {
           "X": 580,
@@ -8747,13 +8641,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -9079,13 +8966,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "101",
-      "Mass": 0,
-      "MountHeight": 20,
       "Pos": {
         "Original": {
           "X": 810,
@@ -9097,13 +8978,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -9124,13 +8998,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "102",
-      "Mass": 0,
-      "MountHeight": 20,
       "Pos": {
         "Original": {
           "X": 670,
@@ -9142,13 +9010,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -9282,13 +9143,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "104",
-      "Mass": 0,
-      "MountHeight": 30,
       "Pos": {
         "Original": {
           "X": -70,
@@ -9300,13 +9155,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -9327,13 +9175,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "105",
-      "Mass": 0,
-      "MountHeight": 30,
       "Pos": {
         "Original": {
           "X": 70,
@@ -9345,13 +9187,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -9447,56 +9282,6 @@
     "ecs.Named": {
       "Entity": "106",
       "Name": "be46jlnvn27lk1decc10"
-    }
-  },
-  {
-    "Entity": "107",
-    "behaviors.Alive": {
-      "Entity": "107",
-      "Health": 100
-    },
-    "behaviors.Player": {
-      "Entity": "107",
-      "Spawn": false
-    },
-    "core.Mobile": {
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.1,
-      "Entity": "107",
-      "Mass": 80,
-      "MountHeight": 15,
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
-      }
-    },
-    "core.Body": {
-      "Angle": {
-        "Original": 0
-      },
-      "Entity": "107",
-      "Pos": {
-        "Original": {
-          "X": -390,
-          "Y": 180,
-          "Z": -44
-        }
-      },
-      "Size": {
-        "Original": {
-          "X": 15,
-          "Y": 15
-        }
-      }
-    },
-    "ecs.Named": {
-      "Entity": "107",
-      "Name": "Player"
     }
   },
   {
@@ -10443,13 +10228,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "121",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 1430,
@@ -10461,13 +10240,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -10569,13 +10341,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "125",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -520,
@@ -10587,13 +10353,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -10632,22 +10391,6 @@
       ],
       "Spawn": true
     },
-    "core.Mobile": {
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.1,
-      "Entity": "126",
-      "Mass": 80,
-      "MountHeight": 15,
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        }
-      }
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -10664,6 +10407,22 @@
         "Original": {
           "X": 15,
           "Y": 40
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "126",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
         }
       }
     },
@@ -10786,13 +10545,7 @@
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideNone",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "131",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -230,
@@ -10804,13 +10557,6 @@
         "Original": {
           "X": 10,
           "Y": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -10833,20 +10579,13 @@
       "Image": "133"
     },
     "behaviors.WeaponInstant": {
-      "Entity": "132",
-      "MarkMaterial": "113"
+      "Entity": "132"
     },
     "core.Body": {
       "Angle": {
         "Original": 0
       },
-      "CrBody": "CollideNone",
-      "CrPlayer": "CollideDeactivate",
-      "CrWall": "CollideSeparate",
-      "Elasticity": 0.5,
       "Entity": "132",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Animation": {
           "Active": true,
@@ -10856,8 +10595,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.859375,
-          "Reverse": false,
+          "Percent": 0.390625,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10876,13 +10615,6 @@
         "Original": {
           "X": 20,
           "Y": 20
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
         }
       }
     },
@@ -10925,10 +10657,9 @@
         "25"
       ],
       "Entity": "134",
-      "Range": 100,
       "Scripts": [
         {
-          "Code": "m := s.Vars[\"mobile\"].(*core.Mobile)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif m.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
+          "Code": "if s.Vars[\"mobile\"] == nil { return }\n m := s.Vars[\"mobile\"].(*core.Mobile)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif m.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -10942,7 +10673,9 @@
     "Entity": "135",
     "behaviors.ActionTransition": {
       "Entity": "135",
-      "Next": [ "136" ]
+      "Next": [
+        "136"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "135",
@@ -10955,7 +10688,9 @@
     "Entity": "136",
     "behaviors.ActionTransition": {
       "Entity": "136",
-      "Next": [ "137" ]
+      "Next": [
+        "137"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "136",
@@ -10971,7 +10706,9 @@
     },
     "behaviors.ActionTransition": {
       "Entity": "137",
-      "Next": [ "138" ]
+      "Next": [
+        "138"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "137",
@@ -10982,9 +10719,14 @@
   },
   {
     "Entity": "138",
+    "behaviors.ActionFire": {
+      "Entity": "138"
+    },
     "behaviors.ActionTransition": {
       "Entity": "138",
-      "Next": [ "139" ]
+      "Next": [
+        "139"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "138",
@@ -10997,7 +10739,9 @@
     "Entity": "139",
     "behaviors.ActionTransition": {
       "Entity": "139",
-      "Next": [ "140" ]
+      "Next": [
+        "140"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "139",
@@ -11010,7 +10754,9 @@
     "Entity": "140",
     "behaviors.ActionTransition": {
       "Entity": "140",
-      "Next": [ "146" ]
+      "Next": [
+        "146"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "140",
@@ -11073,6 +10819,7 @@
       "Bottom": 0,
       "Entity": "143",
       "Surface": {
+        "ExtraStages": [],
         "Material": "129"
       },
       "Top": 32,
@@ -11123,7 +10870,9 @@
     "Entity": "146",
     "behaviors.ActionTransition": {
       "Entity": "146",
-      "Next": [ "147" ]
+      "Next": [
+        "147"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "146",
@@ -11136,13 +10885,25 @@
     "Entity": "147",
     "behaviors.ActionTransition": {
       "Entity": "147",
-      "Next": [ "135" ]
+      "Next": [
+        "135"
+      ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "147",
       "X": -300,
       "Y": 120,
       "Z": 0
+    }
+  },
+  {
+    "Entity": "148",
+    "behaviors.WeaponClass": {
+      "Cooldown": 100,
+      "Damage": 10,
+      "Entity": "148",
+      "MarkMaterial": "113",
+      "Spread": 0
     }
   }
 ]

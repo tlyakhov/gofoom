@@ -7,11 +7,17 @@ import (
 	"fmt"
 	"log"
 	"maps"
+	"strings"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 )
+
+type ScriptParam struct {
+	Name     string
+	TypeName string
+}
 
 type Script struct {
 	Code  string      `editable:"Code" edit_type:"multi-line-string"`
@@ -20,35 +26,66 @@ type Script struct {
 	ErrorMessage string
 	interp       *interp.Interpreter
 	Vars         map[string]any
+	Params       []ScriptParam
 	ECS          *ecs.ECS
 	System       bool
 	runFunc      any
 }
 
-func (s *Script) codeCommonHeader() string {
-	return `package main
+// TODO: Refactor this to use text/Template
+func (s *Script) codeParams(sb *strings.Builder) {
+	for _, p := range s.Params {
+		sb.WriteString("var ")
+		sb.WriteString(p.Name)
+		sb.WriteString(" ")
+		sb.WriteString(p.TypeName)
+		sb.WriteString("\n")
+		sb.WriteString(`if s.Vars["`)
+		sb.WriteString(p.Name)
+		sb.WriteString("\"] != nil {\n")
+		sb.WriteString(p.Name)
+		sb.WriteString(` = s.Vars["`)
+		sb.WriteString(p.Name)
+		sb.WriteString(`"].(`)
+		sb.WriteString(p.TypeName)
+		sb.WriteString(")\n}\n")
+	}
+}
+
+func (s *Script) codeCommonHeader(sb *strings.Builder) {
+	sb.WriteString(`package main
 	import "tlyakhov/gofoom/archetypes"
 	import "tlyakhov/gofoom/components/behaviors"
 	import "tlyakhov/gofoom/components/core"
 	import "tlyakhov/gofoom/components/materials"
 	import "tlyakhov/gofoom/concepts"
+	import "tlyakhov/gofoom/containers"
 	import "tlyakhov/gofoom/constants"
+	import "tlyakhov/gofoom/ecs"
 	import "log"
 	import "fmt"
-	`
+	`)
 }
-func (s *Script) codeBoolExpr() string {
-	return s.codeCommonHeader() + `
+func (s *Script) codeBoolExpr(sb *strings.Builder) {
+	s.codeCommonHeader(sb)
+	sb.WriteString(`
 func Do(s *core.Script) bool {
-	return (` + s.Code + `)
-}`
+	`)
+	s.codeParams(sb)
+	sb.WriteString(`
+return (` + s.Code + `)
+	}`)
 }
 
-func (s *Script) codeStatement() string {
-	return s.codeCommonHeader() + `
+func (s *Script) codeStatement(sb *strings.Builder) {
+	s.codeCommonHeader(sb)
+	sb.WriteString(`
 func Do(s *core.Script) {
+	`)
+	s.codeParams(sb)
+	sb.WriteString(`
 	` + s.Code + `
-}`
+	}`)
 }
 
 func (s *Script) Compile() {
@@ -61,9 +98,13 @@ func (s *Script) Compile() {
 	case ScriptStyleRaw:
 		codeTemplate = s.Code
 	case ScriptStyleBoolExpr:
-		codeTemplate = s.codeBoolExpr()
+		sb := new(strings.Builder)
+		s.codeBoolExpr(sb)
+		codeTemplate = sb.String()
 	case ScriptStyleStatement:
-		codeTemplate = s.codeStatement()
+		sb := new(strings.Builder)
+		s.codeStatement(sb)
+		codeTemplate = sb.String()
 	}
 
 	_, err := s.interp.Eval(codeTemplate)
@@ -72,6 +113,7 @@ func (s *Script) Compile() {
 		log.Printf("%v", s.ErrorMessage)
 		return
 	}
+	log.Printf("%v", codeTemplate)
 	f, err := s.interp.Eval("main.Do")
 	if err != nil {
 		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)
@@ -104,6 +146,11 @@ func (s *Script) Construct(data map[string]any) {
 
 	if v, ok := data["Style"]; ok {
 		s.Style, _ = ScriptStyleString(v.(string))
+	}
+
+	// !!! Should happen prior to .Compile()
+	if v, ok := data["Params"]; ok {
+		s.Params = v.([]ScriptParam)
 	}
 
 	if v, ok := data["Code"]; ok {

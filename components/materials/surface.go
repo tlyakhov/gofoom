@@ -36,7 +36,7 @@ func (s *Surface) Construct(db *ecs.ECS, data map[string]any) {
 	}
 
 	if v, ok := data["ExtraStages"]; ok {
-		s.ExtraStages = ecs.ConstructSlice[*ShaderStage](db, v)
+		s.ExtraStages = ecs.ConstructSlice[*ShaderStage](db, v, nil)
 	}
 	if v, ok := data["Material"]; ok {
 		s.Material, _ = ecs.ParseEntity(v.(string))

@@ -195,10 +195,10 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["EnterScripts"]; ok {
-		s.EnterScripts = ecs.ConstructSlice[*Script](s.ECS, v)
+		s.EnterScripts = ecs.ConstructSlice[*Script](s.ECS, v, nil)
 	}
 	if v, ok := data["ExitScripts"]; ok {
-		s.ExitScripts = ecs.ConstructSlice[*Script](s.ECS, v)
+		s.ExitScripts = ecs.ConstructSlice[*Script](s.ECS, v, nil)
 	}
 
 	s.Recalculate()

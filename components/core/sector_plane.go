@@ -47,7 +47,7 @@ func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
 		s.Target, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["Scripts"]; ok {
-		s.Scripts = ecs.ConstructSlice[*Script](s.ECS, v)
+		s.Scripts = ecs.ConstructSlice[*Script](s.ECS, v, nil)
 	}
 }
 
