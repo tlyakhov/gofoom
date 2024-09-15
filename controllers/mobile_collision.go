@@ -174,12 +174,14 @@ func (mc *MobileController) removeBody(body *core.Body) {
 
 func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core.Body) {
 	// Use the right collision response settings
+	otherVel := &concepts.Vector3{}
 	aResponse := mc.CrBody
 	bResponse := core.CollideNone
 	otherElasticity := 0.0
 	if other != nil {
 		bResponse = other.CrBody
 		otherElasticity = other.Elasticity
+		otherVel = &other.Vel.Now
 		if behaviors.GetPlayer(other.ECS, other.Entity) != nil {
 			aResponse = mc.CrPlayer
 		}
@@ -267,7 +269,7 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 	// For now, assume no angular velocity. In the future, this may
 	// change.
 	//vang_a1, vang_b1 := new(concepts.Vector3), new(concepts.Vector3)
-	v_a1, v_b1 := &mc.Vel.Now, &other.Vel.Now
+	v_a1, v_b1 := &mc.Vel.Now, otherVel
 	v_ap1 := v_a1 //.Add(vang_a1.Cross(r_ap))
 	v_bp1 := v_b1 //.Add(vang_b1.Cross(r_bp))
 	v_p1 := v_ap1.Sub(v_bp1)

@@ -10,6 +10,18 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
+//go:generate go run github.com/dmarkham/enumer -type=ProximityFlags -json
+type ProximityFlags int
+
+const (
+	ProximitySelf ProximityFlags = 1 << iota
+	ProximityRefers
+	ProximityOnBody
+	ProximityOnSector
+	ProximityTargetsBody
+	ProximityTargetsSector
+)
+
 type Proximity struct {
 	ecs.Attached `editable:"^"`
 
@@ -72,10 +84,11 @@ func (p *Proximity) Construct(data map[string]any) {
 	if v, ok := data["Scripts"]; ok {
 		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v, func(s *core.Script) {
 			s.Params = []core.ScriptParam{
-				{Name: "proximityEntity", TypeName: "ecs.Entity"},
+				{Name: "proximity", TypeName: "*behaviors.Proximity"},
+				{Name: "onEntity", TypeName: "ecs.Entity"},
 				{Name: "body", TypeName: "*core.Body"},
-				{Name: "body2", TypeName: "*core.Body"},
 				{Name: "sector", TypeName: "*core.Sector"},
+				{Name: "flags", TypeName: "behaviors.ProximityFlags"},
 			}
 		})
 	}
