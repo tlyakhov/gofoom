@@ -30,8 +30,8 @@
       "Entity": "1",
       "Pos": {
         "Original": {
-          "X": -30,
-          "Y": 60,
+          "X": -390,
+          "Y": 180,
           "Z": -44
         }
       },
@@ -2697,8 +2697,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.7734375,
-          "Reverse": true,
+          "Percent": 0.3984375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3753,7 +3753,7 @@
       "Health": 100
     },
     "behaviors.Follower": {
-      "Action": "137",
+      "Action": "146",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
@@ -3782,6 +3782,22 @@
         "Original": {
           "X": 32,
           "Y": 32
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideBounce",
+      "CrPlayer": "CollideBounce",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "42",
+      "Mass": 40,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
         }
       }
     },
@@ -4372,7 +4388,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -6150,6 +6165,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -10595,8 +10611,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.390625,
-          "Reverse": true,
+          "Percent": 0.78125,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10651,15 +10667,15 @@
     "Entity": "134",
     "behaviors.Proximity": {
       "Entities": [
-        "81",
         "80",
         "79",
-        "25"
+        "25",
+        "81"
       ],
       "Entity": "134",
       "Scripts": [
         {
-          "Code": "if s.Vars[\"mobile\"] == nil { return }\n m := s.Vars[\"mobile\"].(*core.Mobile)\nsector := s.Vars[\"sector\"].(*core.Sector)\nif m.Mass \u003e 10 { behaviors.GetVerticalDoor(sector.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen }",
+          "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]
@@ -10819,7 +10835,6 @@
       "Bottom": 0,
       "Entity": "143",
       "Surface": {
-        "ExtraStages": [],
         "Material": "129"
       },
       "Top": 32,

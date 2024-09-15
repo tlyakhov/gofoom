@@ -40,7 +40,7 @@ func init() {
 		"MaxGameText":              reflect.ValueOf(constant.MakeFromLiteral("25", token.INT, 0)),
 		"MaxGameTextTime":          reflect.ValueOf(constant.MakeFromLiteral("15000", token.INT, 0)),
 		"MaxLightmapAge":           reflect.ValueOf(constant.MakeFromLiteral("3", token.INT, 0)),
-		"MaxPortals":               reflect.ValueOf(constant.MakeFromLiteral("100", token.INT, 0)),
+		"MaxPortals":               reflect.ValueOf(constant.MakeFromLiteral("300", token.INT, 0)),
 		"MaxViewDistance":          reflect.ValueOf(constant.MakeFromLiteral("10000", token.FLOAT, 0)),
 		"MaxWeaponMarks":           reflect.ValueOf(constant.MakeFromLiteral("30", token.INT, 0)),
 		"MetersPerUnit":            reflect.ValueOf(constant.MakeFromLiteral("0.03125", token.FLOAT, 0)),

@@ -2703,9 +2703,10 @@
     "Entity": "49",
     "behaviors.Proximity": {
       "Entity": "49",
+      "Hysteresis": 0,
       "Scripts": [
         {
-          "Code": "if body == nil { return }\nif mobile := core.GetMobile(s.ECS, body.Entity); mobile != nil && sector != nil && mobile.Mass \u003e 10 {\n  behaviors.GetVerticalDoor(s.ECS,sector.Entity).Intent = behaviors.DoorIntentOpen\n}",
+          "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
       ]

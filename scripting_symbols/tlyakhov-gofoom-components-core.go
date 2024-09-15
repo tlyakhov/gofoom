@@ -54,6 +54,7 @@ func init() {
 		"Light":             reflect.ValueOf((*core.Light)(nil)),
 		"Mobile":            reflect.ValueOf((*core.Mobile)(nil)),
 		"Script":            reflect.ValueOf((*core.Script)(nil)),
+		"ScriptParam":       reflect.ValueOf((*core.ScriptParam)(nil)),
 		"ScriptStyle":       reflect.ValueOf((*core.ScriptStyle)(nil)),
 		"Sector":            reflect.ValueOf((*core.Sector)(nil)),
 		"SectorPlane":       reflect.ValueOf((*core.SectorPlane)(nil)),
