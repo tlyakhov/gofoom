@@ -59,7 +59,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Hysteresis"]; ok {
-		p.Range = v.(float64)
+		p.Hysteresis = v.(float64)
 	}
 
 	if v, ok := data["RequiresPlayerAction"]; ok {
@@ -70,7 +70,14 @@ func (p *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Scripts"]; ok {
-		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v)
+		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v, func(s *core.Script) {
+			s.Params = []core.ScriptParam{
+				{Name: "proximityEntity", TypeName: "ecs.Entity"},
+				{Name: "body", TypeName: "*core.Body"},
+				{Name: "body2", TypeName: "*core.Body"},
+				{Name: "sector", TypeName: "*core.Sector"},
+			}
+		})
 	}
 
 	if v, ok := data["Entities"]; ok {

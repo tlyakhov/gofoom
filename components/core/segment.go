@@ -171,7 +171,7 @@ func (s *Segment) Construct(db *ecs.ECS, data map[string]any) {
 		s.Surface.Construct(db, v.(map[string]any))
 	}
 	if v, ok := data["ContactScripts"]; ok {
-		s.ContactScripts = ecs.ConstructSlice[*Script](db, v)
+		s.ContactScripts = ecs.ConstructSlice[*Script](db, v, nil)
 	}
 	s.Recalculate()
 }

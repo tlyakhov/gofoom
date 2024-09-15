@@ -10,7 +10,7 @@ const (
 	MinMillisPerFrame = 1000.0 / 10.0 // Ensure we don't do a spiral of death at framerates < 10
 
 	// Rendering constants
-	MaxPortals              = 100 // avoid infinite portal traversal
+	MaxPortals              = 300 // avoid infinite portal traversal
 	IntersectEpsilon        = 1e-10
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.001

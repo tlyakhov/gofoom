@@ -79,6 +79,19 @@ func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
 	return true
 }
 
+func (fc *FollowController) Fire(fire *behaviors.ActionFire) bool {
+	weapon := behaviors.GetWeaponInstant(fc.ECS, fc.Body.Entity)
+
+	if weapon == nil || fire.Fired.Contains(fc.Body.Entity) {
+		return true
+	}
+	fire.Fired.Add(fc.Body.Entity)
+
+	weapon.FireNextFrame = true
+
+	return true
+}
+
 func (fc *FollowController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	pos := &fc.Body.Pos.Now
 	if fc.Body.Pos.Procedural {
@@ -127,6 +140,10 @@ func (fc *FollowController) Always() {
 
 	if jump := behaviors.GetActionJump(fc.ECS, fc.Action); jump != nil {
 		doTransition = doTransition && fc.Jump(jump)
+	}
+
+	if fire := behaviors.GetActionFire(fc.ECS, fc.Action); fire != nil {
+		doTransition = doTransition && fc.Fire(fire)
 	}
 
 	if !doTransition {

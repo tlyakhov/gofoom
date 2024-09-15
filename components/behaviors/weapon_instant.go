@@ -4,29 +4,20 @@
 package behaviors
 
 import (
-	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/gammazero/deque"
 )
 
-// TODO: Implement attributes like cooldowns, spread, DPS, scripting
 type WeaponInstant struct {
 	ecs.Attached `editable:"^"`
 
-	// Bullets make marks on walls/internal segments
-	MarkMaterial ecs.Entity `editable:"Mark Material" edit_type:"Material"`
-	MarkSize     float64    `editable:"Mark Size"`
+	Class ecs.Entity `editable:"Class" edit_type:"Weapon"`
 
 	// Internal state
 	FireNextFrame bool `editable:"Fire Next Frame"`
 	// TODO: We should serialize these
 	Marks deque.Deque[WeaponMark]
-}
-
-type WeaponMark struct {
-	*materials.ShaderStage
-	*materials.Surface
 }
 
 var WeaponInstantCID ecs.ComponentID
@@ -48,31 +39,22 @@ func (w *WeaponInstant) String() string {
 
 func (w *WeaponInstant) Construct(data map[string]any) {
 	w.Attached.Construct(data)
-	w.MarkSize = 5
 	w.Marks = deque.Deque[WeaponMark]{}
 
 	if data == nil {
 		return
 	}
 
-	if v, ok := data["MarkMaterial"]; ok {
-		w.MarkMaterial, _ = ecs.ParseEntity(v.(string))
-	}
-
-	if v, ok := data["MarkSize"]; ok {
-		w.MarkSize = v.(float64)
+	if v, ok := data["Class"]; ok {
+		w.Class, _ = ecs.ParseEntity(v.(string))
 	}
 }
 
 func (w *WeaponInstant) Serialize() map[string]any {
 	result := w.Attached.Serialize()
 
-	if w.MarkMaterial != 0 {
-		result["MarkMaterial"] = w.MarkMaterial.String()
-	}
-
-	if w.MarkSize != 5 {
-		result["MarkSize"] = w.MarkSize
+	if w.Class != 0 {
+		result["Class"] = w.Class.String()
 	}
 
 	return result
