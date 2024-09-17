@@ -101,8 +101,8 @@ func (bc *BodyController) findBodySector() {
 			}
 		}
 		p = closestSeg.ClosestToPoint(p)
-		bc.Body.Pos.Now[0] = p[0]
-		bc.Body.Pos.Now[1] = p[1]
+		bc.Body.Pos.Input[0] = p[0]
+		bc.Body.Pos.Input[1] = p[1]
 	}
 
 	floorZ, ceilZ := closestSector.ZAt(dynamic.DynamicNow, bc.pos2d)

@@ -9,6 +9,8 @@ import (
 	"image/color"
 	"log"
 	"math"
+	"runtime"
+	"strings"
 	"time"
 	"tlyakhov/gofoom/constants"
 	"unicode"
@@ -285,4 +287,19 @@ func Hash64to32(key uint64) uint32 {
 	key = key + (key << 6)
 	key = key ^ (key >> 22)
 	return uint32(key)
+}
+
+func StackTrace() string {
+	var sb strings.Builder
+	pc := make([]uintptr, 15)
+	n := runtime.Callers(2, pc)
+	frames := runtime.CallersFrames(pc[:n])
+	for {
+		frame, more := frames.Next()
+		sb.WriteString(fmt.Sprintf("%s:%d %s\n", frame.File, frame.Line, frame.Function))
+		if !more {
+			break
+		}
+	}
+	return sb.String()
 }

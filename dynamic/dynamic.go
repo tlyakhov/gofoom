@@ -72,6 +72,11 @@ func (d *DynamicValue[T]) Value(s DynamicStage) T {
 }
 
 func (d *DynamicValue[T]) ResetToOriginal() {
+	if d.Render == nil {
+		log.Println("DynamicValue[T].ResetToOriginal: value is unattached to Simulation. Stack trace:")
+		log.Println(concepts.StackTrace())
+		return
+	}
 	d.Prev = d.Original
 	d.Now = d.Original
 	*d.Render = d.Original
@@ -237,6 +242,7 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 }
 
 func (d *DynamicValue[T]) Construct(data map[string]any) {
+	// Highlighting this with a comment, it's important!
 	defer d.ResetToOriginal()
 
 	d.Freq = 4.58

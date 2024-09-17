@@ -4,14 +4,11 @@
 package behaviors
 
 import (
-	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type ActionFire struct {
-	ecs.Attached `editable:"^"`
-
-	Fired containers.Set[ecs.Entity]
+	ActionTimed `editable:"^"`
 }
 
 var ActionFireCID ecs.ComponentID
@@ -32,9 +29,7 @@ func (fire *ActionFire) String() string {
 }
 
 func (fire *ActionFire) Construct(data map[string]any) {
-	fire.Attached.Construct(data)
-
-	fire.Fired = make(containers.Set[ecs.Entity])
+	fire.ActionTimed.Construct(data)
 
 	if data == nil {
 		return
@@ -42,7 +37,7 @@ func (fire *ActionFire) Construct(data map[string]any) {
 }
 
 func (fire *ActionFire) Serialize() map[string]any {
-	result := fire.Attached.Serialize()
+	result := fire.ActionTimed.Serialize()
 
 	return result
 }
