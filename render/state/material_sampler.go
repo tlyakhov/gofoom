@@ -131,9 +131,15 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 	case *materials.Sprite:
 		ms.pipelineIndex++
-		aindex := uint32(ms.SpriteAngle) * m.Angles / 360
-		c := aindex % m.Cols
-		r := aindex / m.Cols
+		frame := uint32(*m.Frame.Render)
+		if stage != nil {
+			frame += uint32(stage.Frame)
+		}
+		cell := uint32(ms.SpriteAngle) * m.Angles / 360
+		cell += m.Angles * (frame % m.Frames)
+
+		c := cell % m.Cols
+		r := cell / m.Cols
 		ms.U, ms.V = m.TransformUV(u, v, c, r)
 		ms.ScaleW *= m.Cols
 		ms.ScaleH *= m.Rows

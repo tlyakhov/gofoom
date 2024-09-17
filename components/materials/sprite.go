@@ -5,6 +5,7 @@ package materials
 
 import (
 	"strconv"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -15,6 +16,9 @@ type Sprite struct {
 	Cols   uint32     `editable:"Columns"`
 	Rows   uint32     `editable:"Rows"`
 	Angles uint32     `editable:"# of Angles"`
+
+	Frames uint32                    `editable:"# of Frames"`
+	Frame  dynamic.DynamicValue[int] `editable:"Frame"`
 }
 
 var SpriteCID ecs.ComponentID
@@ -28,6 +32,22 @@ func GetSprite(db *ecs.ECS, e ecs.Entity) *Sprite {
 		return asserted
 	}
 	return nil
+}
+
+func (s *Sprite) OnDetach() {
+	if s.ECS != nil {
+		s.Frame.Detach(s.ECS.Simulation)
+	}
+	s.Attached.OnDetach()
+}
+
+func (s *Sprite) AttachECS(db *ecs.ECS) {
+	if s.ECS != db {
+		s.OnDetach()
+	}
+	s.Attached.AttachECS(db)
+	s.Frame.Attach(db.Simulation)
+
 }
 
 func (s *Sprite) TransformUV(u, v float64, c, r uint32) (ur, vr float64) {
@@ -47,7 +67,9 @@ func (s *Sprite) Construct(data map[string]any) {
 
 	s.Rows = 1
 	s.Cols = 1
-	s.Angles = 0
+	s.Angles = 1
+	s.Frames = 1
+	s.Frame.SetAll(0)
 
 	if data == nil {
 		return
@@ -72,6 +94,14 @@ func (s *Sprite) Construct(data map[string]any) {
 			s.Angles = uint32(v2)
 		}
 	}
+	if v, ok := data["Frames"]; ok {
+		if v2, err := strconv.ParseInt(v.(string), 10, 32); err == nil {
+			s.Frames = uint32(v2)
+		}
+	}
+	if v, ok := data["Frame"]; ok {
+		s.Frame.Construct(v.(map[string]any))
+	}
 }
 
 func (s *Sprite) Serialize() map[string]any {
@@ -88,6 +118,10 @@ func (s *Sprite) Serialize() map[string]any {
 	if s.Angles != 1 {
 		result["Angles"] = strconv.FormatUint(uint64(s.Angles), 10)
 	}
+	if s.Frames != 1 {
+		result["Frames"] = strconv.FormatUint(uint64(s.Frames), 10)
+	}
+	result["Frame"] = s.Frame.Serialize()
 
 	return result
 }
