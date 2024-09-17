@@ -4,6 +4,7 @@
 package materials
 
 import (
+	"strconv"
 	"strings"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
@@ -25,6 +26,7 @@ type ShaderStage struct {
 	Texture   ecs.Entity       `editable:"Texture" edit_type:"Material"`
 	Transform concepts.Matrix2 `editable:"Transform"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
+	Frame     int              `editable:"Frame"`
 
 	IgnoreSurfaceTransform bool `editable:"Ignore Surface Transform"`
 
@@ -52,6 +54,12 @@ func (s *ShaderStage) Construct(data map[string]any) {
 		s.IgnoreSurfaceTransform = v.(bool)
 	}
 
+	if v, ok := data["Frame"]; ok {
+		if v2, err := strconv.Atoi(v.(string)); err != nil {
+			s.Frame = v2
+		}
+	}
+
 	if v, ok := data["Flags"]; ok {
 		parsedFlags := strings.Split(v.(string), "|")
 		s.Flags = 0
@@ -69,6 +77,11 @@ func (s *ShaderStage) Serialize() map[string]any {
 	if s.Texture != 0 {
 		result["Texture"] = s.Texture.String()
 	}
+
+	if s.Frame != 0 {
+		result["Frame"] = strconv.Itoa(s.Frame)
+	}
+
 	if s.Flags != ShaderTiled {
 		flags := ""
 		for _, f := range ShaderFlagsValues() {

@@ -88,9 +88,10 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 }
 
 func (pc *ProximityController) proximityOnBody(body *core.Body) {
-	if !pc.isEntityPlayerAndActing(body.Entity) {
-		return
-	}
+	// TODO: We should consider the case when the "on" entity is the player.
+	//if !pc.isEntityPlayerAndActing(body.Entity) {
+	//	return
+	//}
 	pc.flags &= ^behaviors.ProximityOnSector
 	pc.flags |= behaviors.ProximityOnBody
 	container := body.Sector()

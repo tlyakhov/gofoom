@@ -6,6 +6,7 @@ package dynamic
 import (
 	"log"
 	"math"
+	"strconv"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
@@ -33,9 +34,11 @@ const (
 type DynamicValue[T DynamicType] struct {
 	*Animation[T] `editable:"Animation"`
 
-	Now           T
-	Prev          T
-	Original      T `editable:"Initial Value"`
+	Now      T
+	Prev     T
+	Original T `editable:"Initial Value"`
+	// If there are runtime errors about this field being nil, it's probably
+	// because the .Attach() method was never called
 	Render        *T
 	Attached      bool
 	NoRenderBlend bool // Always use next frame value
@@ -199,7 +202,7 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 
 	switch dc := any(d).(type) {
 	case *DynamicValue[int]:
-		result["Original"] = dc.Original
+		result["Original"] = strconv.Itoa(dc.Original)
 	case *DynamicValue[float64]:
 		result["Original"] = dc.Original
 	case *DynamicValue[concepts.Vector2]:
@@ -256,7 +259,7 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	if v, ok := data["Original"]; ok {
 		switch dc := any(d).(type) {
 		case *DynamicValue[int]:
-			dc.Original = v.(int)
+			dc.Original, _ = strconv.Atoi(v.(string))
 		case *DynamicValue[float64]:
 			dc.Original = v.(float64)
 		case *DynamicValue[concepts.Vector2]:
