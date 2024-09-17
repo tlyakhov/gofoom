@@ -17,11 +17,11 @@ type Simulation struct {
 	Recalculate      bool
 	SimTime          float64
 	RenderTime       float64
-	FrameMillis      float64
+	FrameMillis      float64 // Milliseconds
 	RenderStateBlend float64
 	FPS              float64
-	PrevTimestamp    int64
-	Timestamp        int64
+	PrevTimestamp    int64 // Milliseconds
+	Timestamp        int64 // Milliseconds
 	Counter          uint64
 	Frame            uint64
 	Integrate        func()

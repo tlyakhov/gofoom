@@ -2390,6 +2390,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -2697,8 +2698,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.3984375,
-          "Reverse": false,
+          "Percent": 0.859375,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2741,6 +2742,12 @@
     "materials.Sprite": {
       "Angles": "0",
       "Entity": "32",
+      "Frame": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Original": "0",
+        "Response": 0
+      },
       "Image": "98"
     }
   },
@@ -3753,7 +3760,7 @@
       "Health": 100
     },
     "behaviors.Follower": {
-      "Action": "146",
+      "Action": "136",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
@@ -3829,6 +3836,12 @@
       "Angles": "8",
       "Cols": "4",
       "Entity": "42",
+      "Frame": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Original": "0",
+        "Response": 0
+      },
       "Image": "42",
       "Rows": "2"
     }
@@ -3964,6 +3977,7 @@
             "Material": "2"
           },
           "Lo": {
+            "ExtraStages": [],
             "Material": "123"
           },
           "Surface": {
@@ -5583,6 +5597,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -6165,7 +6180,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -7221,12 +7235,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": false,
+            "Active": true,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
+            "Percent": 0.0078125,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -10152,6 +10166,12 @@
       "Angles": "0",
       "Cols": "16",
       "Entity": "119",
+      "Frame": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Original": "0",
+        "Response": 0
+      },
       "Image": "119",
       "Rows": "16"
     }
@@ -10611,8 +10631,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.78125,
-          "Reverse": false,
+          "Percent": 0.4765625,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10637,6 +10657,12 @@
     "materials.Sprite": {
       "Angles": "0",
       "Entity": "132",
+      "Frame": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Original": "0",
+        "Response": 0
+      },
       "Image": "133"
     }
   },
@@ -10673,6 +10699,7 @@
         "81"
       ],
       "Entity": "134",
+      "Hysteresis": 0,
       "Scripts": [
         {
           "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
@@ -10736,6 +10763,12 @@
   {
     "Entity": "138",
     "behaviors.ActionFire": {
+      "Delay": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Original": 500,
+        "Response": 0
+      },
       "Entity": "138"
     },
     "behaviors.ActionTransition": {
@@ -10746,8 +10779,8 @@
     },
     "behaviors.ActionWaypoint": {
       "Entity": "138",
-      "X": 70,
-      "Y": -10,
+      "X": 20,
+      "Y": -40,
       "Z": 0
     }
   },
@@ -10761,8 +10794,8 @@
     },
     "behaviors.ActionWaypoint": {
       "Entity": "139",
-      "X": 10,
-      "Y": -20,
+      "X": -50,
+      "Y": -90,
       "Z": 0
     }
   },

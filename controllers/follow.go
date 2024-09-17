@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"log"
 	"math"
 	"math/rand"
 	"tlyakhov/gofoom/components/behaviors"
@@ -41,6 +42,10 @@ func (fc *FollowController) Target(target ecs.Attachable) bool {
 }
 
 func (fc *FollowController) Recalculate() {
+	if fc.Action != 0 {
+		return
+	}
+
 	var d2 float64
 	var closest *behaviors.ActionWaypoint
 
@@ -64,6 +69,7 @@ func (fc *FollowController) Recalculate() {
 
 	if closest != nil {
 		fc.Action = closest.Entity
+		fc.LastTransition = fc.ECS.Timestamp
 	}
 }
 
@@ -71,6 +77,10 @@ func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
 	if fc.Mobile == nil || jump.Fired.Contains(fc.Body.Entity) {
 		return true
 	}
+	if fc.ECS.Timestamp-fc.LastTransition < int64(jump.Delay.Now) {
+		return false
+	}
+
 	jump.Fired.Add(fc.Body.Entity)
 
 	// TODO: Parameterize this
@@ -85,6 +95,11 @@ func (fc *FollowController) Fire(fire *behaviors.ActionFire) bool {
 	if weapon == nil || fire.Fired.Contains(fc.Body.Entity) {
 		return true
 	}
+	log.Printf("%v < %v?", fc.ECS.Timestamp-fc.LastTransition, int64(fire.Delay.Now))
+	if fc.ECS.Timestamp-fc.LastTransition < int64(fire.Delay.Now) {
+		return false
+	}
+
 	fire.Fired.Add(fc.Body.Entity)
 
 	weapon.FireNextFrame = true
@@ -134,27 +149,35 @@ func (fc *FollowController) Always() {
 
 	doTransition := true
 
+	var timed *behaviors.ActionTimed
+
 	if waypoint := behaviors.GetActionWaypoint(fc.ECS, fc.Action); waypoint != nil {
-		doTransition = doTransition && fc.Waypoint(waypoint)
+		doTransition = fc.Waypoint(waypoint) && doTransition
 	}
 
 	if jump := behaviors.GetActionJump(fc.ECS, fc.Action); jump != nil {
-		doTransition = doTransition && fc.Jump(jump)
+		// Order of ops matters - the && short circuits on false
+		doTransition = fc.Jump(jump) && doTransition
+		timed = &jump.ActionTimed
 	}
 
 	if fire := behaviors.GetActionFire(fc.ECS, fc.Action); fire != nil {
-		doTransition = doTransition && fc.Fire(fire)
+		// Order of ops matters - the && short circuits on false
+		doTransition = fc.Fire(fire) && doTransition
+		timed = &fire.ActionTimed
 	}
 
 	if !doTransition {
 		return
 	}
 
-	if jump := behaviors.GetActionJump(fc.ECS, fc.Action); jump != nil {
-		jump.Fired.Delete(fc.Body.Entity)
+	if timed != nil {
+		timed.Fired.Delete(fc.Body.Entity)
 	}
 
 	if t := behaviors.GetActionTransition(fc.ECS, fc.Action); t != nil {
+		log.Printf("Transition %v, time from last: %v", fc.Action.Format(fc.ECS), fc.ECS.Timestamp-fc.LastTransition)
+		fc.LastTransition = fc.ECS.Timestamp
 		if len(t.Next) > 0 {
 			i := rand.Intn(len(t.Next))
 			for next := range t.Next {

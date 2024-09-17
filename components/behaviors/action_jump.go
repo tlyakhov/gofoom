@@ -4,14 +4,11 @@
 package behaviors
 
 import (
-	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type ActionJump struct {
-	ecs.Attached `editable:"^"`
-
-	Fired containers.Set[ecs.Entity]
+	ActionTimed `editable:"^"`
 }
 
 var ActionJumpCID ecs.ComponentID
@@ -32,9 +29,7 @@ func (jump *ActionJump) String() string {
 }
 
 func (jump *ActionJump) Construct(data map[string]any) {
-	jump.Attached.Construct(data)
-
-	jump.Fired = make(containers.Set[ecs.Entity])
+	jump.ActionTimed.Construct(data)
 
 	if data == nil {
 		return
@@ -42,7 +37,7 @@ func (jump *ActionJump) Construct(data map[string]any) {
 }
 
 func (jump *ActionJump) Serialize() map[string]any {
-	result := jump.Attached.Serialize()
+	result := jump.ActionTimed.Serialize()
 
 	return result
 }

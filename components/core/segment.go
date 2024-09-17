@@ -12,7 +12,7 @@ import (
 )
 
 type Segment struct {
-	// TODO: These should probably be SimVariables
+	// TODO: These should probably be DynamicValues
 	A              *concepts.Vector2 `editable:"A"`
 	B              *concepts.Vector2 `editable:"B"`
 	Surface        materials.Surface `editable:"Mid Surface"`

@@ -17,13 +17,13 @@ type Mobile struct {
 	Vel          dynamic.DynamicValue[concepts.Vector3]
 	Force        concepts.Vector3
 	Mass         float64 `editable:"Mass"`
+	MountHeight  float64 `editable:"Mount Height"`
 
 	// "Bounciness" (0 = inelastic, 1 = perfectly elastic)
-	Elasticity  float64           `editable:"Elasticity"`
-	CrBody      CollisionResponse `editable:"Collision (Body)"`
-	CrPlayer    CollisionResponse `editable:"Collision (Player)"`
-	CrWall      CollisionResponse `editable:"Collision (Wall)"`
-	MountHeight float64           `editable:"Mount Height"`
+	Elasticity float64           `editable:"Elasticity"`
+	CrBody     CollisionResponse `editable:"Collision (Body)"`
+	CrPlayer   CollisionResponse `editable:"Collision (Player)"`
+	CrWall     CollisionResponse `editable:"Collision (Wall)"`
 }
 
 var MobileCID ecs.ComponentID

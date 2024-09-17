@@ -16,7 +16,8 @@ type Follower struct {
 	Speed        float64                   `editable:"Speed"`
 
 	// Internal state
-	Action ecs.Entity
+	Action         ecs.Entity
+	LastTransition int64
 }
 
 var FollowerCID ecs.ComponentID
@@ -42,6 +43,7 @@ func (f *Follower) Construct(data map[string]any) {
 	f.Action = f.Start
 	f.Speed = 10
 	f.Lifetime = dynamic.AnimationLifetimeLoop
+	f.LastTransition = 0
 
 	if data == nil {
 		return

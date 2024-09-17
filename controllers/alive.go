@@ -32,7 +32,7 @@ func (a *AliveController) Target(target ecs.Attachable) bool {
 
 func (a *AliveController) Always() {
 	for source, d := range a.Damages {
-		if d.Cooldown.Now <= 0 {
+		if d.Cooldown.Input <= 0 {
 			d.Cooldown.Detach(a.ECS.Simulation)
 			delete(a.Damages, source)
 			continue
@@ -43,6 +43,6 @@ func (a *AliveController) Always() {
 			}
 			d.Amount = 0
 		}
-		d.Cooldown.Now--
+		d.Cooldown.Input--
 	}
 }
