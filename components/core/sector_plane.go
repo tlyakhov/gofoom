@@ -25,6 +25,7 @@ type SectorPlane struct {
 func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
 	s.Sector = sector
 	s.Surface.Construct(sector.ECS, data)
+	s.Z.Construct(nil)
 	s.ECS = sector.ECS
 
 	if data == nil {
