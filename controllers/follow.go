@@ -4,7 +4,6 @@
 package controllers
 
 import (
-	"log"
 	"math"
 	"math/rand"
 	"tlyakhov/gofoom/components/behaviors"
@@ -13,6 +12,14 @@ import (
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+)
+
+type timedState int
+
+const (
+	timedFired timedState = iota
+	timedDelayed
+	timedReady
 )
 
 type FollowController struct {
@@ -38,7 +45,7 @@ func (fc *FollowController) Target(target ecs.Attachable) bool {
 	fc.Follower = target.(*behaviors.Follower)
 	fc.Body = core.GetBody(fc.ECS, fc.Entity)
 	fc.Mobile = core.GetMobile(fc.ECS, fc.Entity)
-	return fc.Follower.IsActive() && fc.Body.IsActive()
+	return fc.Follower.IsActive() && fc.Body != nil && fc.Body.IsActive()
 }
 
 func (fc *FollowController) Recalculate() {
@@ -73,38 +80,54 @@ func (fc *FollowController) Recalculate() {
 	}
 }
 
+func (fc *FollowController) timedAction(timed *behaviors.ActionTimed) timedState {
+	if timed.Fired.Contains(fc.Body.Entity) {
+		return timedFired
+	}
+	if fc.ECS.Timestamp-fc.LastTransition < int64(timed.Delay.Now) {
+		return timedDelayed
+	}
+
+	timed.Fired.Add(fc.Body.Entity)
+	return timedReady
+}
+
 func (fc *FollowController) Jump(jump *behaviors.ActionJump) bool {
-	if fc.Mobile == nil || jump.Fired.Contains(fc.Body.Entity) {
+	if fc.Mobile == nil {
 		return true
 	}
-	if fc.ECS.Timestamp-fc.LastTransition < int64(jump.Delay.Now) {
+	state := fc.timedAction(&jump.ActionTimed)
+
+	switch state {
+	case timedFired:
+		return true
+	case timedDelayed:
 		return false
+	default:
+		// TODO: Parameterize this
+		fc.Mobile.Force[2] += constants.PlayerJumpForce * 0.5
+		return true
 	}
-
-	jump.Fired.Add(fc.Body.Entity)
-
-	// TODO: Parameterize this
-	fc.Mobile.Force[2] += constants.PlayerJumpForce * 0.5
-
-	return true
 }
 
 func (fc *FollowController) Fire(fire *behaviors.ActionFire) bool {
 	weapon := behaviors.GetWeaponInstant(fc.ECS, fc.Body.Entity)
 
-	if weapon == nil || fire.Fired.Contains(fc.Body.Entity) {
+	if weapon == nil {
 		return true
 	}
-	log.Printf("%v < %v?", fc.ECS.Timestamp-fc.LastTransition, int64(fire.Delay.Now))
-	if fc.ECS.Timestamp-fc.LastTransition < int64(fire.Delay.Now) {
+
+	state := fc.timedAction(&fire.ActionTimed)
+
+	switch state {
+	case timedFired:
+		return true
+	case timedDelayed:
 		return false
+	default:
+		weapon.FireNextFrame = true
+		return true
 	}
-
-	fire.Fired.Add(fc.Body.Entity)
-
-	weapon.FireNextFrame = true
-
-	return true
 }
 
 func (fc *FollowController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
@@ -128,13 +151,11 @@ func (fc *FollowController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	dist := v.Length()
 	if dist > 0 {
 		fc.Body.Angle.Input = math.Atan2(v[1], v[0]) * concepts.Rad2deg
-		speed := fc.Speed * constants.TimeStepS / dist
-		if speed < 1 {
-			v.MulSelf(speed)
-		}
+		speed := fc.Speed / dist
+		v.MulSelf(speed)
 	}
 	if fc.Body.Pos.Procedural {
-		fc.Body.Pos.Input.AddSelf(v)
+		fc.Body.Pos.Input.AddSelf(v.MulSelf(constants.TimeStepS))
 	} else if fc.Mobile != nil {
 		fc.Mobile.Vel.Now = *v
 	}
@@ -176,7 +197,6 @@ func (fc *FollowController) Always() {
 	}
 
 	if t := behaviors.GetActionTransition(fc.ECS, fc.Action); t != nil {
-		log.Printf("Transition %v, time from last: %v", fc.Action.Format(fc.ECS), fc.ECS.Timestamp-fc.LastTransition)
 		fc.LastTransition = fc.ECS.Timestamp
 		if len(t.Next) > 0 {
 			i := rand.Intn(len(t.Next))

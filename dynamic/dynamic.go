@@ -47,15 +47,19 @@ type DynamicValue[T DynamicType] struct {
 
 	// Procedural dynamics
 	Procedural bool    `editable:"Procedural?"`
-	Input      T       `editable:"Input"`
-	Freq       float64 `editable:"Frequency"` // in Hz
-	Damping    float64 `editable:"Damping"`   // aka Zeta
-	Response   float64 `editable:"Response"`
+	Input      T       `editable:"Input" edit_condition:"IsProcedural"`
+	Freq       float64 `editable:"Frequency" edit_condition:"IsProcedural"` // in Hz
+	Damping    float64 `editable:"Damping" edit_condition:"IsProcedural"`   // aka Zeta
+	Response   float64 `editable:"Response" edit_condition:"IsProcedural"`
 
 	outputV, prevInput T
 	k1, k2, k3         float64
 
 	render T
+}
+
+func (d *DynamicValue[T]) IsProcedural() bool {
+	return d.Procedural
 }
 
 func (d *DynamicValue[T]) Value(s DynamicStage) T {

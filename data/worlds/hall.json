@@ -2390,7 +2390,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -2698,7 +2697,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.859375,
+          "Percent": 0.421875,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -3977,7 +3976,6 @@
             "Material": "2"
           },
           "Lo": {
-            "ExtraStages": [],
             "Material": "123"
           },
           "Surface": {
@@ -5597,7 +5595,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -6276,7 +6273,17 @@
           "Z": 0.8192319205190405
         },
         "Surface": {
-          "Material": "122"
+          "Material": "122",
+          "Transform": {
+            "Original": [
+              1,
+              0,
+              0,
+              10,
+              0,
+              0
+            ]
+          }
         },
         "Z": {
           "Original": 0
@@ -6324,7 +6331,7 @@
             "Material": "2",
             "Transform": {
               "Original": [
-                12.5,
+                0.8333333333333344,
                 0,
                 0,
                 1,
@@ -6335,6 +6342,53 @@
           },
           "X": 840,
           "Y": -760
+        },
+        {
+          "AdjacentSector": "149",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                12.5,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
+          },
+          "X": 840,
+          "Y": -730
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                2.222222222222225,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
+          },
+          "X": 840,
+          "Y": -330
         },
         {
           "AdjacentSector": "26",
@@ -6358,7 +6412,17 @@
           "Z": -0.8192319205190405
         },
         "Surface": {
-          "Material": "122"
+          "Material": "122",
+          "Transform": {
+            "Original": [
+              1,
+              0,
+              0,
+              10,
+              0,
+              0
+            ]
+          }
         },
         "Z": {
           "Original": 64
@@ -7240,7 +7304,7 @@
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0.0078125,
+            "Percent": 0.2578125,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -8114,6 +8178,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -10631,7 +10696,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.4765625,
+          "Percent": 0.0390625,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -10952,6 +11017,243 @@
       "Entity": "148",
       "MarkMaterial": "113",
       "Spread": 0
+    }
+  },
+  {
+    "Entity": "149",
+    "core.Sector": {
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Damping": 0,
+          "Freq": 0.000001,
+          "Original": 16,
+          "Response": 0
+        }
+      },
+      "Entity": "149",
+      "FloorFriction": 0.85,
+      "Segments": [
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "154"
+          },
+          "X": 840,
+          "Y": -330
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2",
+            "Transform": {
+              "Original": [
+                1,
+                0,
+                0,
+                0.09411764705882353,
+                0,
+                0
+              ]
+            }
+          },
+          "Surface": {
+            "Material": "154",
+            "Transform": {
+              "Original": [
+                10.625,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            }
+          },
+          "X": 880,
+          "Y": -330
+        },
+        {
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "154"
+          },
+          "X": 880,
+          "Y": -730
+        },
+        {
+          "AdjacentSector": "72",
+          "Hi": {
+            "Material": "2"
+          },
+          "Lo": {
+            "Material": "2"
+          },
+          "Surface": {
+            "Material": "2"
+          },
+          "X": 840,
+          "Y": -730
+        }
+      ],
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Damping": 0,
+          "Freq": 0.000001,
+          "Original": 48,
+          "Response": 0
+        }
+      }
+    }
+  },
+  {
+    "Entity": "150",
+    "behaviors.ActionTransition": {
+      "Entity": "150",
+      "Next": [
+        "151"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "150",
+      "X": 860,
+      "Y": -710,
+      "Z": 32
+    }
+  },
+  {
+    "Entity": "151",
+    "behaviors.ActionTransition": {
+      "Entity": "151",
+      "Next": [
+        "150"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "151",
+      "X": 860,
+      "Y": -350,
+      "Z": 32
+    }
+  },
+  {
+    "Entity": "152",
+    "behaviors.Follower": {
+      "Action": "151",
+      "Entity": "152",
+      "Speed": 100,
+      "Start": "150"
+    },
+    "behaviors.WeaponInstant": {
+      "Class": "148",
+      "Entity": "152"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 180
+      },
+      "Entity": "152",
+      "Pos": {
+        "Original": {
+          "X": 860,
+          "Y": -710,
+          "Z": 32
+        },
+        "Procedural": true
+      },
+      "Size": {
+        "Original": {
+          "X": 20,
+          "Y": 20
+        }
+      }
+    },
+    "core.Light": {
+      "Attenuation": 1,
+      "Diffuse": {
+        "X": 1,
+        "Y": 0,
+        "Z": 0
+      },
+      "Entity": "152",
+      "Strength": 5
+    },
+    "ecs.Named": {
+      "Entity": "152",
+      "Name": "Trap Turret"
+    },
+    "materials.Sprite": {
+      "Entity": "152",
+      "Frame": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Original": "0",
+        "Response": 0
+      },
+      "Image": "153"
+    }
+  },
+  {
+    "Entity": "153",
+    "materials.Image": {
+      "Entity": "153",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/transparent-bubble.png"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "153"
+    }
+  },
+  {
+    "Entity": "154",
+    "materials.Image": {
+      "Entity": "154",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/space_tiles_hyptosis/sand.png"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "154"
     }
   }
 ]

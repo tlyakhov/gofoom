@@ -14,6 +14,8 @@ type ActionTimed struct {
 
 	Delay dynamic.DynamicValue[float64] `editable:"Delay"`
 
+	// TODO: Add ability to repeat multiple times in a single action
+	// TODO: Add ability to fire at random intervals
 	Fired containers.Set[ecs.Entity]
 }
 

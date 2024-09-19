@@ -5,6 +5,7 @@ package dynamic
 
 import (
 	"math"
+	"math/rand/v2"
 	"reflect"
 )
 
@@ -28,6 +29,7 @@ var TweeningFuncs = map[string]TweeningFunc{
 	"ElasticIn":    ElasticIn,
 	"ElasticOut":   ElasticOut,
 	"ElasticInOut": ElasticInOut,
+	"Random":       Random,
 }
 var TweeningFuncNames map[uintptr]string
 
@@ -189,4 +191,8 @@ func TweenAngles(start, end, t float64, f TweeningFunc) float64 {
 	x := f(x1, x2, t)
 	y := f(y1, y2, t)
 	return math.Atan2(y, x) * concepts.Rad2deg*/
+}
+
+func Random(start, end, t float64) float64 {
+	return Lerp(start, end, rand.Float64())
 }

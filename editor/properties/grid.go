@@ -88,6 +88,13 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		if !ok {
 			continue
 		}
+		if editConditionTag, ok := field.Tag.Lookup("edit_condition"); ok {
+			b := objValue.MethodByName(editConditionTag).Call(nil)
+			if !b[0].Bool() {
+				continue
+			}
+		}
+
 		display := tag
 		if pgs.ParentName != "" {
 			display = pgs.ParentName + "." + display
@@ -131,9 +138,11 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 		gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
 		if gf.IsEmbeddedType() {
-			// Animations are a special case
-			if !gf.Type.Elem().AssignableTo(reflect.TypeFor[dynamic.Animated]()) {
+			// Animations are a special case. This is a bit ugly, could be more
+			// efficient.
+			if !strings.Contains(gf.Type.String(), "dynamic.Animation") {
 				delete(pgs.Fields, display)
+				//	log.Printf("%v", display)
 			}
 			name := display
 			g.childFields(name, fieldValue, pgs, true)
@@ -218,7 +227,7 @@ func gridAddOrUpdateAtIndex[PT interface {
 func (g *Grid) AddEntityControls(sel *selection.Selection) {
 	entities := make([]ecs.Entity, 0)
 	entityList := ""
-	componentList := make([]bool, len(ecs.Types().ColumnIndexes))
+	componentList := make(containers.Set[ecs.ComponentID])
 	for _, s := range sel.Exact {
 		if len(entityList) > 0 {
 			entityList += ", "
@@ -247,8 +256,11 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 		}
 		entities = append(entities, s.Entity)
 		entityList += s.Entity.String()
-		for index, c := range s.ECS.AllComponents(s.Entity) {
-			componentList[index] = (c != nil)
+		for _, c := range s.ECS.AllComponents(s.Entity) {
+			if c == nil {
+				continue
+			}
+			componentList.Add(ecs.Types().ID(c))
 		}
 	}
 
@@ -264,8 +276,8 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 
 	opts := make([]string, 0)
 	optsComponentIDs := make([]ecs.ComponentID, 0)
-	for index, t := range ecs.Types().ColumnPlaceholders {
-		if t == nil || componentList[index] || t.ID() == ecs.AttachedCID {
+	for _, t := range ecs.Types().ColumnPlaceholders {
+		if t == nil || componentList.Contains(t.ID()) {
 			continue
 		}
 		opts = append(opts, t.String())

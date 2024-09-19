@@ -113,7 +113,7 @@ func (s *Script) Compile() {
 		log.Printf("%v", s.ErrorMessage)
 		return
 	}
-	log.Printf("%v", codeTemplate)
+	//log.Printf("%v", codeTemplate)
 	f, err := s.interp.Eval("main.Do")
 	if err != nil {
 		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)

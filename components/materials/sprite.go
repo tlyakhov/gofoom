@@ -69,7 +69,7 @@ func (s *Sprite) Construct(data map[string]any) {
 	s.Cols = 1
 	s.Angles = 1
 	s.Frames = 1
-	s.Frame.SetAll(0)
+	s.Frame.Construct(nil)
 
 	if data == nil {
 		return
