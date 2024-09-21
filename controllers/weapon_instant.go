@@ -289,7 +289,7 @@ func (wc *WeaponInstantController) Always() {
 
 		// TODO: Include floors and ceilings
 		es := &materials.ShaderStage{
-			Texture:                wc.Class.MarkMaterial,
+			Material:               wc.Class.MarkMaterial,
 			IgnoreSurfaceTransform: false,
 			System:                 true}
 		es.AttachECS(s.ECS)

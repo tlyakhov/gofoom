@@ -15,8 +15,6 @@ func EntityMapIsMaterial(components []ecs.Attachable) bool {
 			return true
 		case *materials.Sprite:
 			return true
-		case *materials.Lit:
-			return true
 		case *materials.Image:
 			return true
 		case *materials.Text:
