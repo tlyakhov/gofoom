@@ -4,12 +4,18 @@
 package behaviors
 
 import (
+	"strconv"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type ParticleEmitter struct {
 	ecs.Attached `editable:"^"`
+
+	Lifetime float64    `editable:"Lifetime"`  // ms
+	FadeTime float64    `editable:"Fade Time"` // ms
+	Limit    int        `editable:"Particle Count Limit"`
+	Material ecs.Entity `editable:"Material" edit_type:"Material"`
 
 	Particles containers.Set[ecs.Entity]
 	Spawned   map[ecs.Entity]int64
@@ -35,6 +41,11 @@ func (pe *ParticleEmitter) String() string {
 func (pe *ParticleEmitter) Construct(data map[string]any) {
 	pe.Attached.Construct(data)
 
+	pe.Lifetime = 5000
+	pe.FadeTime = 1000
+	pe.Limit = 100
+	pe.Material = 0
+
 	pe.Particles = make(containers.Set[ecs.Entity])
 	pe.Spawned = make(map[ecs.Entity]int64)
 
@@ -48,6 +59,19 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 			pe.Spawned[e] = pe.ECS.Timestamp
 		}
 	}
+
+	if v, ok := data["Lifetime"]; ok {
+		pe.Lifetime = v.(float64)
+	}
+	if v, ok := data["FadeTime"]; ok {
+		pe.FadeTime = v.(float64)
+	}
+	if v, ok := data["Limit"]; ok {
+		pe.Limit, _ = strconv.Atoi(v.(string))
+	}
+	if v, ok := data["Material"]; ok {
+		pe.Material, _ = ecs.ParseEntity(v.(string))
+	}
 }
 
 func (pe *ParticleEmitter) Serialize() map[string]any {
@@ -55,6 +79,19 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 
 	if len(pe.Particles) > 0 {
 		result["Particles"] = ecs.SerializeEntities(pe.Particles)
+	}
+
+	if pe.Lifetime != 5000 {
+		result["Lifetime"] = pe.Lifetime
+	}
+	if pe.FadeTime != 1000 {
+		result["FadeTime"] = pe.FadeTime
+	}
+	if pe.Limit != 100 {
+		result["Limit"] = pe.Limit
+	}
+	if pe.Material != 0 {
+		result["Material"] = pe.Material.String()
 	}
 
 	return result

@@ -23,7 +23,7 @@ const (
 type ShaderStage struct {
 	ECS       *ecs.ECS
 	System    bool
-	Texture   ecs.Entity       `editable:"Texture" edit_type:"Material"`
+	Material  ecs.Entity       `editable:"Material" edit_type:"Material"`
 	Transform concepts.Matrix2 `editable:"Transform"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
 	Frame     int              `editable:"Frame"`
@@ -45,7 +45,11 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Texture"]; ok {
-		s.Texture, _ = ecs.ParseEntity(v.(string))
+		s.Material, _ = ecs.ParseEntity(v.(string))
+	}
+
+	if v, ok := data["Material"]; ok {
+		s.Material, _ = ecs.ParseEntity(v.(string))
 	}
 
 	if v, ok := data["Transform"]; ok {
@@ -80,8 +84,8 @@ func (s *ShaderStage) Construct(data map[string]any) {
 func (s *ShaderStage) Serialize() map[string]any {
 	result := make(map[string]any)
 
-	if s.Texture != 0 {
-		result["Texture"] = s.Texture.String()
+	if s.Material != 0 {
+		result["Material"] = s.Material.String()
 	}
 
 	if s.Frame != 0 {

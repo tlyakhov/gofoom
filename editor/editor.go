@@ -391,7 +391,7 @@ func (e *Editor) NewShader() {
 		stage := &materials.ShaderStage{}
 		stage.AttachECS(e.ECS)
 		stage.Construct(nil)
-		stage.Texture = eImg
+		stage.Material = eImg
 		shader.Stages = append(shader.Stages, stage)
 		named := editor.ECS.NewAttachedComponent(eShader, ecs.NamedCID).(*ecs.Named)
 		named.Name = "Shader " + path.Base(img.Source)

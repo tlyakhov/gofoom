@@ -14,8 +14,41 @@ import (
 	"tlyakhov/gofoom/render/state"
 )
 
+func (r *Renderer) renderBodyPixel(b *core.Body, lit *materials.Lit, c *state.Column) {
+	scr := r.WorldToScreen(b.Pos.Render)
+	if scr == nil {
+		return
+	}
+	x := int(scr[0])
+	y := int(scr[1])
+	if x != c.ScreenX || y < 0 || y >= r.ScreenHeight {
+		return
+	}
+
+	le := &c.LightSampler
+	le.Q.From(b.Pos.Render)
+	le.MapIndex = c.WorldToLightmapAddress(b.Sector(), &le.Q, 0)
+	le.Segment = nil
+	le.Type = state.LightSamplerBody
+	le.InputBody = b.Entity
+	le.Sector = b.Sector()
+	le.Get()
+	c.Light[0] = le.Output[0]
+	c.Light[1] = le.Output[1]
+	c.Light[2] = le.Output[2]
+	c.Light[3] = 1
+	// result = Surface * Diffuse * (Ambient + Lightmap)
+	c.Light.To3D().AddSelf(&lit.Ambient)
+	c.Light.Mul4Self(&lit.Diffuse)
+	r.ApplySample(&c.Light, x+y*r.ScreenWidth, b.Pos.Render.Dist(r.PlayerBody.Pos.Render))
+}
+
 func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	if !archetypes.EntityIsMaterial(r.ECS, b.Entity) {
+		// If it's lit, render a pixel
+		if lit := materials.GetLit(r.ECS, b.Entity); lit != nil {
+			r.renderBodyPixel(b, lit, c)
+		}
 		return
 	}
 	// TODO: We should probably not do all of this for every column. Can we

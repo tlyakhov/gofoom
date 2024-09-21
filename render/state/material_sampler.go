@@ -31,7 +31,7 @@ func (ms *MaterialSampler) Initialize(material ecs.Entity, extraStages []*materi
 	ms.Materials = ms.Materials[:0]
 	ms.derefMaterials(material, nil)
 	for _, stage := range extraStages {
-		ms.derefMaterials(stage.Texture, nil)
+		ms.derefMaterials(stage.Material, nil)
 	}
 }
 
@@ -59,7 +59,7 @@ func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Attach
 	if shader := materials.GetShader(ms.ECS, material); shader != nil && shader != parent {
 		ms.Materials = append(ms.Materials, shader)
 		for _, stage := range shader.Stages {
-			ms.derefMaterials(stage.Texture, shader)
+			ms.derefMaterials(stage.Material, shader)
 		}
 	} else if sprite := materials.GetSprite(ms.ECS, material); sprite != nil && sprite != parent {
 		ms.Materials = append(ms.Materials, sprite)

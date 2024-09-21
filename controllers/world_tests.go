@@ -116,7 +116,7 @@ func CreateTestSky(db *ecs.ECS) ecs.Entity {
 	sky := materials.GetShader(db, entity)
 	sky.Stages = append(sky.Stages, new(materials.ShaderStage))
 	sky.Stages[0].Construct(nil)
-	sky.Stages[0].Texture = img.Entity
+	sky.Stages[0].Material = img.Entity
 	sky.Stages[0].Flags = materials.ShaderSky | materials.ShaderTiled
 	named := db.NewAttachedComponent(entity, ecs.NamedCID).(*ecs.Named)
 	named.Name = "Sky"
