@@ -1,29 +1,67 @@
 [
   {
     "Entity": "1",
-    "core.Spawn": {
-      "Active": true,
+    "behaviors.Alive": {
       "Entity": "1",
-      "X": 0,
-      "Y": 0
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "1",
+      "Spawn": false
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "1",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 15,
+          "Y": 15
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "1",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "ecs.Named": {
+      "Entity": "1",
+      "Name": "Player"
     }
   },
   {
     "Entity": "2",
     "ecs.Named": {
-      "Active": true,
       "Entity": "2",
       "Name": "Default"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/WDef.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -36,37 +74,21 @@
         "R": 1
       },
       "Entity": "2"
-    },
-    "materials.Tiled": {
-      "Active": true,
-      "Entity": "2",
-      "IsLiquid": false
     }
   },
   {
     "Entity": "3",
-    "ecs.Named": {
-      "Active": true,
-      "Entity": "3",
-      "Name": "Starting"
-    },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "6",
-        "4"
-      ],
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "3",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "AdjacentSector": "5",
@@ -76,7 +98,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -89,7 +111,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -102,7 +124,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -115,35 +137,34 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
           "Y": 100
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "3",
+      "Name": "Starting"
     }
   },
   {
     "Entity": "4",
-    "ecs.Named": {
-      "Active": true,
-      "Entity": "4",
-      "Name": "ckpvt5dmdsrrj1r5a5pg"
-    },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
-      "CollisionResponse": "Slide",
       "Entity": "4",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -60,
@@ -154,20 +175,11 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
+          "Y": 10
         }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -176,28 +188,25 @@
       },
       "Entity": "4",
       "Strength": 2
+    },
+    "ecs.Named": {
+      "Entity": "4",
+      "Name": "ckpvt5dmdsrrj1r5a5pg"
     }
   },
   {
     "Entity": "5",
-    "ecs.Named": {
-      "Active": true,
-      "Entity": "5",
-      "Name": "ckqk2b5mdsri1gn3kn60"
-    },
     "core.Sector": {
-      "Active": true,
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "5",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "AdjacentSector": "3",
@@ -207,7 +216,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -220,7 +229,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -233,7 +242,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -246,39 +255,42 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
           "Y": -210
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "5",
+      "Name": "ckqk2b5mdsri1gn3kn60"
     }
   },
   {
     "Entity": "6",
     "behaviors.Alive": {
-      "Active": true,
       "Entity": "6",
       "Health": 100
     },
     "behaviors.Player": {
-      "Active": true,
-      "Entity": "6"
+      "Entity": "6",
+      "Spawn": true
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
-      "CollisionResponse": "Slide",
       "Entity": "6",
-      "Mass": 80,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 0,
@@ -289,10 +301,18 @@
       "Size": {
         "Original": {
           "X": 15,
-          "Y": 15,
-          "Z": 40
+          "Y": 15
         }
-      },
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "6",
+      "Mass": 80,
+      "MountHeight": 15,
       "Vel": {
         "Original": {
           "X": 0,
@@ -300,6 +320,10 @@
           "Z": 0
         }
       }
+    },
+    "ecs.Named": {
+      "Entity": "6",
+      "Name": "Spawn"
     }
   }
 ]

@@ -37,7 +37,7 @@ func (col *Column[T, PT]) From(source AttachableColumn, ecs *ECS) {
 	col.Getter = placeholder.Getter
 }
 
-// No bounds checking for performance. This should be inlined
+// No bounds checking for performance. This should always be inlined
 func (col *Column[T, PT]) Value(index int) PT {
 	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
 	if ptr.GetECS() == nil {
@@ -46,6 +46,8 @@ func (col *Column[T, PT]) Value(index int) PT {
 	return ptr
 }
 
+// No bounds checking for performance. This should always be inlined
+// Duplicates code in .Value() because the return type is different here
 func (col *Column[T, PT]) Attachable(index int) Attachable {
 	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
 	if ptr.GetECS() == nil {

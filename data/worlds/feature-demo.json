@@ -1,29 +1,67 @@
 [
   {
     "Entity": "1",
-    "core.Spawn": {
-      "Active": true,
+    "behaviors.Alive": {
       "Entity": "1",
-      "X": 0,
-      "Y": 0
+      "Health": 100
+    },
+    "behaviors.Player": {
+      "Entity": "1",
+      "Spawn": false
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "1",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "1",
+      "Mass": 80,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "ecs.Named": {
+      "Entity": "1",
+      "Name": "Player"
     }
   },
   {
     "Entity": "2",
     "ecs.Named": {
-      "Active": true,
       "Entity": "2",
       "Name": "Default"
     },
     "materials.Image": {
-      "Active": true,
       "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/WDef.png"
     },
     "materials.Lit": {
-      "Active": true,
       "Ambient": {
         "X": 0.1,
         "Y": 0.1,
@@ -36,37 +74,21 @@
         "R": 1
       },
       "Entity": "2"
-    },
-    "materials.Tiled": {
-      "Active": true,
-      "Entity": "2",
-      "IsLiquid": false
     }
   },
   {
     "Entity": "3",
-    "ecs.Named": {
-      "Active": true,
-      "Entity": "3",
-      "Name": "Starting"
-    },
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "4",
-        "5"
-      ],
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "3",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -75,7 +97,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
@@ -89,7 +111,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -102,7 +124,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -115,35 +137,34 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": -100,
           "Y": 100
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
+    },
+    "ecs.Named": {
+      "Entity": "3",
+      "Name": "Starting"
     }
   },
   {
     "Entity": "4",
-    "ecs.Named": {
-      "Active": true,
-      "Entity": "4",
-      "Name": "ckpvt5dmdsrrj1r5a5pg"
-    },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
-      "CollisionResponse": "Slide",
       "Entity": "4",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": -60,
@@ -154,20 +175,11 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
+          "Y": 10
         }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -176,29 +188,27 @@
       },
       "Entity": "4",
       "Strength": 2
+    },
+    "ecs.Named": {
+      "Entity": "4",
+      "Name": "ckpvt5dmdsrrj1r5a5pg"
     }
   },
   {
     "Entity": "5",
     "behaviors.Alive": {
-      "Active": true,
       "Entity": "5",
       "Health": 100
     },
     "behaviors.Player": {
-      "Active": true,
-      "Entity": "5"
+      "Entity": "5",
+      "Spawn": true
     },
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
-      "CollisionResponse": "Slide",
       "Entity": "5",
-      "Mass": 80,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 0,
@@ -209,10 +219,18 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
+          "Y": 10
         }
-      },
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.1,
+      "Entity": "5",
+      "Mass": 80,
+      "MountHeight": 15,
       "Vel": {
         "Original": {
           "X": 0,
@@ -220,33 +238,31 @@
           "Z": 0
         }
       }
+    },
+    "ecs.Named": {
+      "Entity": "5",
+      "Name": "Spawn"
     }
   },
   {
     "Entity": "6",
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "5",
-        "10"
-      ],
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "6",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "AdjacentSector": "3",
           "Hi": {},
           "Lo": {},
-          "Mid": {},
+          "Surface": {},
           "X": 100,
           "Y": 100
         },
@@ -257,7 +273,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -270,7 +286,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
@@ -283,7 +299,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 280,
@@ -293,7 +309,7 @@
           "AdjacentSector": "7",
           "Hi": {},
           "Lo": {},
-          "Mid": {},
+          "Surface": {},
           "X": 280,
           "Y": -400
         },
@@ -302,7 +318,7 @@
             "Material": "2"
           },
           "Lo": {},
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 280,
@@ -315,7 +331,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 280,
@@ -328,36 +344,36 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 100,
           "Y": 420
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
   {
     "Entity": "7",
     "core.Sector": {
-      "Active": true,
-      "Bodies": [
-        "9"
-      ],
-      "Bottom.Z": {
-        "Original": 0
-      },
-      "Top.Surface": {
-        "Material": "2"
+      "Bottom": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 0
+        }
       },
       "Entity": "7",
       "FloorFriction": 0.85,
-      "Bottom.Surface": {
-        "Material": "2"
-      },
       "Segments": [
         {
           "Hi": {
@@ -366,7 +382,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 280,
@@ -379,7 +395,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 380,
@@ -392,7 +408,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 380,
@@ -405,7 +421,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 620,
@@ -418,7 +434,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 620,
@@ -431,7 +447,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 380,
@@ -444,7 +460,7 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 380,
@@ -458,30 +474,30 @@
           "Lo": {
             "Material": "2"
           },
-          "Mid": {
+          "Surface": {
             "Material": "2"
           },
           "X": 280,
           "Y": -310
         }
       ],
-      "Top.Z": {
-        "Original": 64
+      "Top": {
+        "Surface": {
+          "Material": "2"
+        },
+        "Z": {
+          "Original": 64
+        }
       }
     }
   },
   {
     "Entity": "9",
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
-      "CollisionResponse": "Slide",
       "Entity": "9",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 530,
@@ -492,20 +508,11 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
+          "Y": 10
         }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,
@@ -519,15 +526,10 @@
   {
     "Entity": "10",
     "core.Body": {
-      "Active": true,
       "Angle": {
         "Original": 0
       },
-      "BoundingRadius": 10,
-      "CollisionResponse": "Slide",
       "Entity": "10",
-      "Mass": 0,
-      "MountHeight": 15,
       "Pos": {
         "Original": {
           "X": 170,
@@ -538,20 +540,11 @@
       "Size": {
         "Original": {
           "X": 10,
-          "Y": 10,
-          "Z": 10
-        }
-      },
-      "Vel": {
-        "Original": {
-          "X": 0,
-          "Y": 0,
-          "Z": 0
+          "Y": 10
         }
       }
     },
     "core.Light": {
-      "Active": true,
       "Attenuation": 0.4,
       "Diffuse": {
         "X": 1,

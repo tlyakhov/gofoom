@@ -118,6 +118,7 @@ type _tlyakhov_gofoom_ecs_AttachableColumn struct {
 	IValue      interface{}
 	WAdd        func(c ecs.Attachable) ecs.Attachable
 	WAttachable func(index int) ecs.Attachable
+	WCap        func() int
 	WDetach     func(index int)
 	WFrom       func(source ecs.AttachableColumn, ecs *ecs.ECS)
 	WID         func() ecs.ComponentID
@@ -133,6 +134,9 @@ func (W _tlyakhov_gofoom_ecs_AttachableColumn) Add(c ecs.Attachable) ecs.Attacha
 }
 func (W _tlyakhov_gofoom_ecs_AttachableColumn) Attachable(index int) ecs.Attachable {
 	return W.WAttachable(index)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Cap() int {
+	return W.WCap()
 }
 func (W _tlyakhov_gofoom_ecs_AttachableColumn) Detach(index int) {
 	W.WDetach(index)

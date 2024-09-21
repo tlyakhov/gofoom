@@ -637,7 +637,7 @@
   },
   {
     "Entity": "12",
-    "behaviors.Follower": {
+    "behaviors.Actor": {
       "Action": "57",
       "Entity": "12",
       "Speed": 50,

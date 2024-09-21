@@ -47,6 +47,7 @@ func init() {
 		"RGBAToInt32":          reflect.ValueOf(concepts.RGBAToInt32),
 		"Rad2deg":              reflect.ValueOf(concepts.Rad2deg),
 		"RngXorShift64":        reflect.ValueOf(concepts.RngXorShift64),
+		"StackTrace":           reflect.ValueOf(concepts.StackTrace),
 		"TruncateString":       reflect.ValueOf(concepts.TruncateString),
 		"V2":                   reflect.ValueOf(concepts.V2),
 		"V3":                   reflect.ValueOf(concepts.V3),

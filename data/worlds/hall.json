@@ -3758,7 +3758,7 @@
       "Entity": "42",
       "Health": 100
     },
-    "behaviors.Follower": {
+    "behaviors.Actor": {
       "Action": "146",
       "Entity": "42",
       "NoZ": true,
@@ -11155,7 +11155,7 @@
   },
   {
     "Entity": "152",
-    "behaviors.Follower": {
+    "behaviors.Actor": {
       "Action": "151",
       "Entity": "152",
       "Speed": 100,
