@@ -46,6 +46,7 @@ func init() {
 		"ElasticOut":                   reflect.ValueOf(dynamic.ElasticOut),
 		"Lerp":                         reflect.ValueOf(dynamic.Lerp),
 		"NewSimulation":                reflect.ValueOf(dynamic.NewSimulation),
+		"Random":                       reflect.ValueOf(dynamic.Random),
 		"Spike":                        reflect.ValueOf(dynamic.Spike),
 		"Spike2":                       reflect.ValueOf(dynamic.Spike2),
 		"Spike3":                       reflect.ValueOf(dynamic.Spike3),
