@@ -34,8 +34,10 @@ func (pvs *PvsController) Target(target ecs.Attachable) bool {
 
 func (pvs *PvsController) Recalculate() {
 	col := ecs.ColumnFor[core.InternalSegment](pvs.ECS, core.InternalSegmentCID)
-	for i := range col.Length {
-		col.Value(i).AttachToSectors()
+	for i := range col.Cap() {
+		if seg := col.Value(i); seg != nil {
+			seg.AttachToSectors()
+		}
 	}
 	pvs.updatePVS(make([]*concepts.Vector2, 0), nil, nil, nil)
 }

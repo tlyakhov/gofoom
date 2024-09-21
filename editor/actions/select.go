@@ -63,8 +63,11 @@ func (a *Select) end() {
 	if hovering.Empty() { // User is trying to select a sector?
 		hovering = selection.NewSelection()
 		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
-		for i := range col.Length {
+		for i := range col.Cap() {
 			sector := col.Value(i)
+			if sector == nil {
+				continue
+			}
 			if sector.IsPointInside2D(&a.State().MouseWorld) {
 				hovering.Add(selection.SelectableFromSector(sector))
 			}

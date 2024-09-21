@@ -84,21 +84,29 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	}
 
 	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorCID)
-	for i := range colSector.Length {
-		mw.DrawSector(colSector.Value(i), pvsSector[colSector.Value(i).Entity] != nil)
+	for i := range colSector.Cap() {
+		if sector := colSector.Value(i); sector != nil {
+			mw.DrawSector(sector, pvsSector[colSector.Value(i).Entity] != nil)
+		}
 	}
 	colSeg := ecs.ColumnFor[core.InternalSegment](editor.ECS, core.InternalSegmentCID)
-	for i := range colSeg.Length {
-		mw.DrawInternalSegment(colSeg.Value(i))
+	for i := range colSeg.Cap() {
+		if seg := colSeg.Value(i); seg != nil {
+			mw.DrawInternalSegment(seg)
+		}
 	}
 	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](editor.ECS, behaviors.ActionWaypointCID)
-	for i := range colWaypoint.Length {
-		mw.DrawActions(colWaypoint.Value(i).Entity)
+	for i := range colWaypoint.Cap() {
+		if waypoint := colWaypoint.Value(i); waypoint != nil {
+			mw.DrawActions(waypoint.Entity)
+		}
 	}
 	if editor.BodiesVisible {
 		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyCID)
-		for i := range col3.Length {
-			mw.DrawBody(col3.Value(i))
+		for i := range col3.Cap() {
+			if body := col3.Value(i); body != nil {
+				mw.DrawBody(body)
+			}
 		}
 	}
 	/*// Portal testing code

@@ -1,0 +1,96 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
+package controllers
+
+import (
+	"math"
+	"math/rand"
+	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
+)
+
+type ParticleController struct {
+	ecs.BaseController
+	*behaviors.ParticleEmitter
+	Body   *core.Body
+	Mobile *core.Mobile
+}
+
+func init() {
+	ecs.Types().RegisterController(&ParticleController{}, 100)
+}
+
+func (pc *ParticleController) ComponentID() ecs.ComponentID {
+	return behaviors.ParticleEmitterCID
+}
+
+func (pc *ParticleController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways
+}
+
+func (pc *ParticleController) Target(target ecs.Attachable) bool {
+	pc.ParticleEmitter = target.(*behaviors.ParticleEmitter)
+	if !pc.ParticleEmitter.IsActive() {
+		return false
+	}
+	pc.Body = core.GetBody(pc.ECS, pc.Entity)
+	if pc.Body == nil || !pc.Body.IsActive() {
+		return false
+	}
+	pc.Mobile = core.GetMobile(pc.ECS, pc.Entity)
+	return true
+}
+
+func (pc *ParticleController) Always() {
+	toRemove := make([]ecs.Entity, 0, 10)
+	for e, timestamp := range pc.Spawned {
+		age := pc.ECS.Timestamp - timestamp
+
+		if shader := materials.GetShader(pc.ECS, e); shader != nil {
+			shader.Stages[0].Opacity = 1.0 - math.Min(float64(age-4000)/1000, 1.0)
+		}
+
+		if age < 5000 {
+			continue
+		}
+		toRemove = append(toRemove, e)
+		pc.ECS.DetachAll(e)
+		pc.Particles.Delete(e)
+	}
+
+	for _, e := range toRemove {
+		delete(pc.Spawned, e)
+	}
+
+	maxParticles := 30
+	if len(pc.Particles) > maxParticles {
+		return
+	}
+	if rand.Intn(10) != 0 {
+		return
+	}
+	e := pc.ECS.NewEntity()
+	pc.Particles.Add(e)
+	pc.Spawned[e] = pc.ECS.Timestamp
+	body := pc.ECS.NewAttachedComponent(e, core.BodyCID).(*core.Body)
+	body.System = true
+	mobile := pc.ECS.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
+	mobile.System = true
+	shader := pc.ECS.NewAttachedComponent(e, materials.ShaderCID).(*materials.Shader)
+	shader.System = true
+	body.Pos.Now.From(&pc.Body.Pos.Now)
+	//body.Shadow = core.BodyShadowImage
+	rang := (rand.Float64() - 0.5) * 10
+	mobile.Vel.Now[0] = math.Cos((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
+	mobile.Vel.Now[1] = math.Sin((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
+	mobile.Vel.Now[2] = (rand.Float64() - 0.5) * 10
+	mobile.Mass = 1
+	stage := materials.ShaderStage{}
+	stage.Construct(nil)
+	stage.Texture = 153
+	shader.Stages = append(shader.Stages, &stage)
+}

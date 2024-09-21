@@ -77,8 +77,11 @@ func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
 	col := ecs.ColumnFor[core.Sector](bc.Body.ECS, core.SectorCID)
-	for i := range col.Length {
+	for i := range col.Cap() {
 		sector := col.Value(i)
+		if sector == nil {
+			continue
+		}
 		if sector.IsPointInside2D(bc.pos2d) {
 			closestSector = sector
 			break
@@ -89,8 +92,11 @@ func (bc *BodyController) findBodySector() {
 		p := bc.Body.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
 		closestDistance2 := math.MaxFloat64
-		for i := range col.Length {
+		for i := range col.Cap() {
 			sector := col.Value(i)
+			if sector == nil {
+				continue
+			}
 			for _, seg := range sector.Segments {
 				dist2 := seg.DistanceToPoint2(p)
 				if closestSector == nil || dist2 < closestDistance2 {

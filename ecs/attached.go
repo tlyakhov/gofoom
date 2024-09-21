@@ -33,6 +33,7 @@ func (a *Attached) IndexInColumn() int {
 }
 
 func (a *Attached) OnDetach() {
+	a.ECS = nil
 }
 
 func (a *Attached) IsSystem() bool {

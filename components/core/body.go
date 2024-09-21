@@ -44,9 +44,9 @@ func (b *Body) OnDetach() {
 		b.Pos.Detach(b.ECS.Simulation)
 		b.Size.Detach(b.ECS.Simulation)
 		b.Angle.Detach(b.ECS.Simulation)
-	}
-	if sector := b.Sector(); sector != nil {
-		delete(sector.Bodies, b.Entity)
+		if sector := b.Sector(); sector != nil {
+			delete(sector.Bodies, b.Entity)
+		}
 	}
 	b.Attached.OnDetach()
 }
@@ -103,12 +103,10 @@ func (b *Body) RenderSector() *Sector {
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
 	col := ecs.ColumnFor[Sector](b.ECS, SectorCID)
-	for i := range col.Length {
-		sector := col.Value(i)
-		if sector.Entity == 0 || !sector.IsPointInside2D(p) {
-			continue
+	for i := range col.Cap() {
+		if sector := col.Value(i); sector != nil && sector.IsPointInside2D(p) {
+			return sector
 		}
-		return sector
 	}
 	return nil
 }

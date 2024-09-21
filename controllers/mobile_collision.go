@@ -144,8 +144,11 @@ func (mc *MobileController) bodyExitsSector() {
 	if mc.Sector == nil {
 		// Case 6! This is the worst.
 		col := ecs.ColumnFor[core.Sector](mc.Body.ECS, core.SectorCID)
-		for i := range col.Length {
+		for i := range col.Cap() {
 			sector := col.Value(i)
+			if sector == nil {
+				continue
+			}
 			floorZ, ceilZ := sector.ZAt(dynamic.DynamicNow, mc.pos2d)
 			if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
 				mc.pos[2]+mc.halfHeight < ceilZ {

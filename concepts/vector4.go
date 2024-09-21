@@ -83,6 +83,27 @@ func (a *Vector4) AddPreMulColorSelf(b *Vector4) *Vector4 {
 	return a
 }
 
+// Add a premul alpha color to self
+func (a *Vector4) AddPreMulColorSelfOpacity(b *Vector4, o float64) *Vector4 {
+	if b[3] == 0 {
+		return a
+	}
+	if b[3] == 1 {
+		a[0] = b[0] * o
+		a[1] = b[1] * o
+		a[2] = b[2] * o
+		a[3] = b[3] * o
+		return a
+	}
+	inva := 1.0 - b[3]*o
+	a[0] = a[0]*inva + b[0]*o
+	a[1] = a[1]*inva + b[1]*o
+	a[2] = a[2]*inva + b[2]*o
+	a[3] = a[3]*inva + b[3]*o
+	a.ClampSelf(0, 1)
+	return a
+}
+
 // Sub subtracts a vector from a vector.
 func (a *Vector4) Sub(b *Vector4) *Vector4 {
 	return &Vector4{a[0] - b[0], a[1] - b[1], a[2] - b[2], a[3] - b[3]}

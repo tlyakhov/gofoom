@@ -503,8 +503,12 @@ func (e *Editor) GatherHoveringObjects() {
 	e.HoveringObjects.Clear()
 
 	colSector := ecs.ColumnFor[core.Sector](e.ECS, core.SectorCID)
-	for i := range colSector.Length {
+	for i := range colSector.Cap() {
 		sector := colSector.Value(i)
+
+		if sector == nil {
+			continue
+		}
 
 		for _, segment := range sector.Segments {
 			if editor.Selecting() {
@@ -528,8 +532,11 @@ func (e *Editor) GatherHoveringObjects() {
 	}
 
 	colSeg := ecs.ColumnFor[core.InternalSegment](e.ECS, core.InternalSegmentCID)
-	for i := range colSeg.Length {
+	for i := range colSeg.Cap() {
 		seg := colSeg.Value(i)
+		if seg == nil {
+			continue
+		}
 		if editor.Selecting() {
 			a := (seg.A[0] >= v1[0] && seg.A[1] >= v1[1] && seg.A[0] <= v2[0] && seg.A[1] <= v2[1])
 			b := (seg.B[0] >= v1[0] && seg.B[1] >= v1[1] && seg.B[0] <= v2[0] && seg.B[1] <= v2[1])
@@ -554,8 +561,12 @@ func (e *Editor) GatherHoveringObjects() {
 	}
 
 	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](e.ECS, behaviors.ActionWaypointCID)
-	for i := range colWaypoint.Length {
+	for i := range colWaypoint.Cap() {
 		aw := colWaypoint.Value(i)
+
+		if aw == nil {
+			continue
+		}
 
 		if editor.Selecting() {
 			if aw.P[0] >= v1[0] && aw.P[1] >= v1[1] && aw.P[0] <= v2[0] && aw.P[1] <= v2[1] {
@@ -572,8 +583,11 @@ func (e *Editor) GatherHoveringObjects() {
 	}
 
 	colBody := ecs.ColumnFor[core.Body](e.ECS, core.BodyCID)
-	for i := range colBody.Length {
+	for i := range colBody.Cap() {
 		body := colBody.Value(i)
+		if body == nil {
+			continue
+		}
 		p := body.Pos.Now
 		size := body.Size.Render[0]*0.5 + state.SegmentSelectionEpsilon
 		if e.Selecting() {

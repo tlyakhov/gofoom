@@ -143,8 +143,11 @@ func Archetype3[T1 any, T2 any, T3 any,
 
 func (db *ECS) First(id ComponentID) Attachable {
 	c := db.columns[id&0xFFFF]
-	if c.Len() > 0 {
-		return db.columns[id&0xFFFF].Attachable(0)
+	for i := 0; i < c.Cap(); i++ {
+		a := db.columns[id&0xFFFF].Attachable(i)
+		if a != nil {
+			return a
+		}
 	}
 	return nil
 }
@@ -332,9 +335,8 @@ func (db *ECS) DetachAll(entity Entity) {
 
 func (db *ECS) GetEntityByName(name string) Entity {
 	col := ColumnFor[Named](db, NamedCID)
-	for i := range col.Length {
-		named := col.Value(i)
-		if named.Name == name {
+	for i := range col.Cap() {
+		if named := col.Value(i); named != nil && named.Name == name {
 			return named.Entity
 		}
 	}

@@ -39,15 +39,23 @@ func (col *Column[T, PT]) From(source AttachableColumn, ecs *ECS) {
 
 // No bounds checking for performance. This should be inlined
 func (col *Column[T, PT]) Value(index int) PT {
-	return &(col.data[index/chunkSize][index%chunkSize])
+	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
+	if ptr.GetECS() == nil {
+		return nil
+	}
+	return ptr
 }
 
-func (c *Column[T, PT]) Attachable(index int) Attachable {
-	return c.Value(index)
+func (col *Column[T, PT]) Attachable(index int) Attachable {
+	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
+	if ptr.GetECS() == nil {
+		return nil
+	}
+	return ptr
 }
 
 func (col *Column[T, PT]) Detach(index int) {
-	if index >= col.Length {
+	if index >= col.Cap() {
 		log.Printf("ecs.Column.Detach: found component index %v, but component list is too short.", index)
 		return
 	}
@@ -66,7 +74,7 @@ func (col *Column[T, PT]) Add(component Attachable) Attachable {
 	// First try an empty slot in the fill list
 	if nextFree, found = col.fill.MinZero(); !found {
 		// No empty slots, put it at the end
-		nextFree = uint32(col.Length)
+		nextFree = uint32(col.Cap())
 	}
 
 	chunk := nextFree / chunkSize
@@ -81,9 +89,9 @@ func (col *Column[T, PT]) Add(component Attachable) Attachable {
 		col.data[chunk][indexInChunk] = *(component.(PT))
 	}
 
-	col.fill.Set(uint32(nextFree))
+	col.fill.Set(nextFree)
 	component = PT(&col.data[chunk][indexInChunk])
-	component.SetColumnIndex(col.Length)
+	component.SetColumnIndex(int(nextFree))
 	component.AttachECS(col.ECS)
 	col.Length++
 	return component
@@ -112,6 +120,10 @@ func (c *Column[T, PT]) Type() reflect.Type {
 
 func (c *Column[T, PT]) Len() int {
 	return c.Length
+}
+
+func (c *Column[T, PT]) Cap() int {
+	return len(c.data) * chunkSize
 }
 
 func (c *Column[T, PT]) ID() ComponentID {

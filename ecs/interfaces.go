@@ -40,6 +40,7 @@ type AttachableColumn interface {
 	Detach(index int)
 	Type() reflect.Type
 	Len() int
+	Cap() int
 	ID() ComponentID
 	String() string
 }
