@@ -27,6 +27,7 @@ type ShaderStage struct {
 	Transform concepts.Matrix2 `editable:"Transform"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
 	Frame     int              `editable:"Frame"`
+	Opacity   float64          `editable:"Opacity"`
 
 	IgnoreSurfaceTransform bool `editable:"Ignore Surface Transform"`
 
@@ -37,6 +38,7 @@ type ShaderStage struct {
 func (s *ShaderStage) Construct(data map[string]any) {
 	s.Transform = concepts.IdentityMatrix2
 	s.Flags = ShaderTiled
+	s.Opacity = 1
 
 	if data == nil {
 		return
@@ -60,6 +62,10 @@ func (s *ShaderStage) Construct(data map[string]any) {
 		}
 	}
 
+	if v, ok := data["Opacity"]; ok {
+		s.Opacity = v.(float64)
+	}
+
 	if v, ok := data["Flags"]; ok {
 		parsedFlags := strings.Split(v.(string), "|")
 		s.Flags = 0
@@ -80,6 +86,10 @@ func (s *ShaderStage) Serialize() map[string]any {
 
 	if s.Frame != 0 {
 		result["Frame"] = strconv.Itoa(s.Frame)
+	}
+
+	if s.Opacity != 1 {
+		result["Opacity"] = s.Opacity
 	}
 
 	if s.Flags != ShaderTiled {

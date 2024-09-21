@@ -2697,8 +2697,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.421875,
-          "Reverse": true,
+          "Percent": 0.6015625,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -3759,7 +3759,7 @@
       "Health": 100
     },
     "behaviors.Follower": {
-      "Action": "136",
+      "Action": "146",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
@@ -3976,6 +3976,7 @@
             "Material": "2"
           },
           "Lo": {
+            "ExtraStages": [],
             "Material": "123"
           },
           "Surface": {
@@ -7170,13 +7171,13 @@
         },
         "Z": {
           "Animation": {
-            "Active": false,
+            "Active": true,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
-            "Reverse": false,
+            "Percent": 0.0078125,
+            "Reverse": true,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -7299,12 +7300,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": true,
+            "Active": false,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0.2578125,
+            "Percent": 1,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -8178,7 +8179,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -10696,8 +10696,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.0390625,
-          "Reverse": true,
+          "Percent": 0.984375,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10758,10 +10758,10 @@
     "Entity": "134",
     "behaviors.Proximity": {
       "Entities": [
-        "80",
-        "79",
         "25",
-        "81"
+        "81",
+        "80",
+        "79"
       ],
       "Entity": "134",
       "Hysteresis": 0,
@@ -11161,6 +11161,40 @@
       "Speed": 100,
       "Start": "150"
     },
+    "behaviors.ParticleEmitter": {
+      "Entity": "152",
+      "Particles": [
+        "158",
+        "172",
+        "155",
+        "161",
+        "163",
+        "167",
+        "168",
+        "180",
+        "159",
+        "169",
+        "178",
+        "156",
+        "160",
+        "166",
+        "173",
+        "185",
+        "162",
+        "175",
+        "177",
+        "164",
+        "170",
+        "174",
+        "165",
+        "176",
+        "157",
+        "171",
+        "179",
+        "183",
+        "184"
+      ]
+    },
     "behaviors.WeaponInstant": {
       "Class": "148",
       "Entity": "152"
@@ -11254,6 +11288,1340 @@
         "R": 1
       },
       "Entity": "154"
+    }
+  },
+  {
+    "Entity": "155",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "155",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "155",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "155",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "156",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "156",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "156",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "156",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "157",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "157",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "157",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "157",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "158",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "158",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "158",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "158",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "159",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "159",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "159",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "159",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "160",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "160",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "160",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "160",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "161",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "161",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "161",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "161",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "162",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "162",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "162",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "162",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "163",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "163",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "163",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "163",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "164",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "164",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "164",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "164",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "165",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "165",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "165",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "165",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "166",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "166",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "166",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "166",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "167",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "167",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "167",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "167",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "168",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "168",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "168",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "168",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "169",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "169",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "169",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "169",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "170",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "170",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "170",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "170",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "171",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "171",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "171",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "171",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "172",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "172",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "172",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "172",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "173",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "173",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "173",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "173",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "174",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "174",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "174",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "174",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "175",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "175",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "175",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "175",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "176",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "176",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "176",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "176",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "177",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "177",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "177",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "177",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "178",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "178",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "178",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "178",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "179",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "179",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "179",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "179",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "180",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "180",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "180",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "180",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "183",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "183",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "183",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "183",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "184",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "184",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "184",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "184",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
+    }
+  },
+  {
+    "Entity": "185",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "185",
+      "Pos": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "core.Mobile": {
+      "CrMoving": "CollideNone",
+      "CrPlayer": "CollideNone",
+      "CrWall": "CollideSeparate",
+      "Elasticity": 0.5,
+      "Entity": "185",
+      "Mass": 1,
+      "MountHeight": 15,
+      "Vel": {
+        "Original": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        }
+      }
+    },
+    "materials.Shader": {
+      "Entity": "185",
+      "Stages": [
+        {
+          "Texture": "153"
+        }
+      ]
     }
   }
 ]

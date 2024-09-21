@@ -131,6 +131,13 @@ func (fc *FollowController) Fire(fire *behaviors.ActionFire) bool {
 }
 
 func (fc *FollowController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
+	state := fc.timedAction(&waypoint.ActionTimed)
+
+	switch state {
+	case timedDelayed:
+		return false
+	}
+
 	pos := &fc.Body.Pos.Now
 	if fc.Body.Pos.Procedural {
 		pos = &fc.Body.Pos.Input
@@ -174,6 +181,7 @@ func (fc *FollowController) Always() {
 
 	if waypoint := behaviors.GetActionWaypoint(fc.ECS, fc.Action); waypoint != nil {
 		doTransition = fc.Waypoint(waypoint) && doTransition
+		timed = &waypoint.ActionTimed
 	}
 
 	if jump := behaviors.GetActionJump(fc.ECS, fc.Action); jump != nil {

@@ -12,7 +12,7 @@ import (
 // - Animated entities and NPCs can follow this
 // - Special FX can be shaped by paths
 type ActionWaypoint struct {
-	ecs.Attached `editable:"^"`
+	ActionTimed `editable:"^"`
 
 	P concepts.Vector3 `editable:"Position"`
 }
@@ -35,7 +35,7 @@ func (waypoint *ActionWaypoint) String() string {
 }
 
 func (waypoint *ActionWaypoint) Construct(data map[string]any) {
-	waypoint.Attached.Construct(data)
+	waypoint.ActionTimed.Construct(data)
 	waypoint.P = concepts.Vector3{}
 
 	if data == nil {
@@ -46,7 +46,7 @@ func (waypoint *ActionWaypoint) Construct(data map[string]any) {
 }
 
 func (waypoint *ActionWaypoint) Serialize() map[string]any {
-	result := waypoint.Attached.Serialize()
+	result := waypoint.ActionTimed.Serialize()
 	result["X"] = waypoint.P[0]
 	result["Y"] = waypoint.P[1]
 	result["Z"] = waypoint.P[2]

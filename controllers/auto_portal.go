@@ -138,8 +138,12 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // doing it manually every once in a while.
 func AutoPortal(db *ecs.ECS) {
 	col := ecs.ColumnFor[core.Sector](db, core.SectorCID)
-	for i := range col.Length {
-		for _, segment := range col.Value(i).Segments {
+	for i := range col.Cap() {
+		sector := col.Value(i)
+		if sector == nil {
+			continue
+		}
+		for _, segment := range sector.Segments {
 			// Don't touch these during auto-portalling
 			if segment.PortalTeleports {
 				continue
@@ -148,12 +152,17 @@ func AutoPortal(db *ecs.ECS) {
 			segment.AdjacentSegment = nil
 		}
 	}
-	for i := range col.Length {
-		for j := i + 1; j < col.Length; j++ {
-			sector := col.Value(i)
+	for i := range col.Cap() {
+		sector := col.Value(i)
+
+		if sector == nil {
+			continue
+		}
+
+		for j := i + 1; j < col.Cap(); j++ {
 			sector2 := col.Value(j)
 
-			if !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
+			if sector2 == nil || !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
 				continue
 			}
 

@@ -89,7 +89,10 @@ func (ms *MaterialSampler) SampleMaterial(extraStages []*materials.ShaderStage) 
 func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	u := ms.U
 	v := ms.V
+	opacity := 1.0
 	if stage != nil {
+		opacity = stage.Opacity
+
 		if stage.IgnoreSurfaceTransform {
 			u, v = stage.Transform[0]*ms.NU+stage.Transform[2]*ms.NV+stage.Transform[4], stage.Transform[1]*ms.NU+stage.Transform[3]*ms.NV+stage.Transform[5]
 		} else {
@@ -149,19 +152,19 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	case *materials.Image:
 		ms.pipelineIndex++
 		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
-		ms.Output.AddPreMulColorSelf(&sample)
+		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
 	case *materials.Text:
 		ms.pipelineIndex++
 		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
-		ms.Output.AddPreMulColorSelf(&sample)
+		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
 	case *materials.Solid:
 		ms.pipelineIndex++
-		ms.Output.AddPreMulColorSelf(m.Diffuse.Render)
+		ms.Output.AddPreMulColorSelfOpacity(m.Diffuse.Render, opacity)
 	default:
 		ms.pipelineIndex++
 		sample := concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true
-		ms.Output.AddPreMulColorSelf(&sample)
+		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
 	}
 }
 

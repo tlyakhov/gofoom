@@ -37,8 +37,10 @@ func (s *InternalSegment) String() string {
 
 func (s *InternalSegment) DetachFromSectors() {
 	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
-	for i := range col.Length {
-		delete(col.Value(i).InternalSegments, s.Entity)
+	for i := range col.Cap() {
+		if sector := col.Value(i); sector != nil {
+			delete(sector.InternalSegments, s.Entity)
+		}
 	}
 }
 
@@ -52,8 +54,11 @@ func (s *InternalSegment) AttachToSectors() {
 		min[1], max[1] = max[1], min[1]
 	}
 	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
-	for i := range col.Length {
+	for i := range col.Cap() {
 		sector := col.Value(i)
+		if sector == nil {
+			continue
+		}
 		// This is missing the spanning case, where an internal segment is
 		// passing through a sector, but neither endpoint is inside of it.
 		// Seems like an edge case we don't really need to handle.

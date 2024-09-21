@@ -130,9 +130,9 @@ func Respawn(db *ecs.ECS, force bool) {
 	spawns := make([]*behaviors.Player, 0)
 	players := make([]*behaviors.Player, 0)
 	col := ecs.ColumnFor[behaviors.Player](db, behaviors.PlayerCID)
-	for i := range col.Length {
+	for i := range col.Cap() {
 		p := col.Value(i)
-		if !p.Active {
+		if p == nil || !p.Active {
 			continue
 		}
 		if p.Spawn {

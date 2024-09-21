@@ -52,7 +52,7 @@ func (r *Renderer) DebugInfo() {
 	ts.Shadow = true
 	ts.HAnchor = 0
 	ts.VAnchor = 0
-	for x := 0; x < r.Blocks; x++ {
+	/*for x := 0; x < r.Blocks; x++ {
 		c := r.Columns[x]
 		for _, b := range c.BodiesSeen {
 			top := &concepts.Vector3{}
@@ -69,7 +69,7 @@ func (r *Renderer) DebugInfo() {
 			}
 			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
 		}
-	}
+	}*/
 	ts.HAnchor = -1
 	ts.VAnchor = -1
 
