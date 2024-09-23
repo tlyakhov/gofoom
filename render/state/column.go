@@ -10,12 +10,14 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type EntityWithDist2 struct {
 	Body            *core.Body
 	InternalSegment *core.InternalSegment
+	Sector          *core.Sector
 	Dist2           float64
 }
 
@@ -44,9 +46,8 @@ type Column struct {
 	// Pre-allocated stack of nested columns for portals
 	PortalColumns []Column
 	// Pre-allocated slice for sorting bodies and internal segments
-	EntitiesByDistance []EntityWithDist2
-	// All visited bodies
-	BodiesSeen map[ecs.Entity]*core.Body
+	Sectors            containers.Set[*core.Sector]
+	EntitiesByDistance []*EntityWithDist2
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
 	Ray                *Ray

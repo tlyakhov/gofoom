@@ -56,11 +56,10 @@ func (le *LightSampler) Debug() *concepts.Vector3 {
 
 func (le *LightSampler) Get() *concepts.Vector3 {
 	//return le.Debug()
-	r := concepts.RngXorShift64(le.XorSeed)
-	le.XorSeed = r
+	r := concepts.RngXorShift64(uint64(le.ECS.Timestamp) + le.MapIndex)
 
 	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
-		if uint64(lmResult[3])+constants.MaxLightmapAge >= le.ECS.Frame ||
+		if math.Float64bits(lmResult[3])+constants.MaxLightmapAge >= le.ECS.Frame ||
 			r%constants.LightmapRefreshDither > 0 {
 			le.Output[0] = lmResult[0]
 			le.Output[1] = lmResult[1]
@@ -85,7 +84,7 @@ func (le *LightSampler) Get() *concepts.Vector3 {
 		le.Output[0],
 		le.Output[1],
 		le.Output[2],
-		float64(le.ECS.Frame + uint64(r)%constants.LightmapRefreshDither),
+		math.Float64frombits(le.ECS.Frame + uint64(r)%constants.LightmapRefreshDither),
 	})
 	return &le.Output
 
