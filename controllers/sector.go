@@ -23,7 +23,7 @@ func (sc *SectorController) ComponentID() ecs.ComponentID {
 }
 
 func (sc *SectorController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerRecalculate | ecs.ControllerAlways
 }
 
 func (sc *SectorController) Target(target ecs.Attachable) bool {
@@ -33,4 +33,14 @@ func (sc *SectorController) Target(target ecs.Attachable) bool {
 
 func (sc *SectorController) Recalculate() {
 	sc.Sector.Recalculate()
+}
+
+func (sc *SectorController) Always() {
+	frame := sc.LastSeenFrame.Load()
+	// Cache for a maximum number of frames
+	if frame <= 0 || sc.ECS.Frame-uint64(frame) < 120 {
+		return
+	}
+	sc.Lightmap.Clear()
+	sc.LastSeenFrame.Store(-1)
 }

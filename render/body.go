@@ -7,55 +7,26 @@ import (
 	"math"
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/render/state"
 )
 
-func (r *Renderer) renderBodyPixel(b *core.Body, lit *materials.Lit, c *state.Column) {
-	scr := r.WorldToScreen(b.Pos.Render)
-	if scr == nil {
-		return
-	}
-	x := int(scr[0])
-	y := int(scr[1])
-	if x != c.ScreenX || y < 0 || y >= r.ScreenHeight {
-		return
-	}
+func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStart, xEnd int) {
+	b := ebd.Body
 
-	le := &c.LightSampler
-	le.Q.From(b.Pos.Render)
-	le.MapIndex = c.WorldToLightmapAddress(b.Sector(), &le.Q, 0)
-	le.Segment = nil
-	le.Type = state.LightSamplerBody
-	le.InputBody = b.Entity
-	le.Sector = b.Sector()
-	le.Get()
-	c.Light[0] = le.Output[0]
-	c.Light[1] = le.Output[1]
-	c.Light[2] = le.Output[2]
-	c.Light[3] = 1
-	// result = Surface * Diffuse * (Ambient + Lightmap)
-	c.Light.To3D().AddSelf(&lit.Ambient)
-	c.Light.Mul4Self(&lit.Diffuse)
-	r.ApplySample(&c.Light, x+y*r.ScreenWidth, b.Pos.Render.Dist(r.PlayerBody.Pos.Render))
-}
-
-func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	if !archetypes.EntityIsMaterial(r.ECS, b.Entity) {
 		// If it's lit, render a pixel
 		if lit := materials.GetLit(r.ECS, b.Entity); lit != nil {
-			r.renderBodyPixel(b, lit, c)
+			r.renderBodyPixel(ebd, lit, c, xStart, xEnd)
 		}
 		return
 	}
-	// TODO: We should probably not do all of this for every column. Can we
-	// cache any of these things as we cast rays?
 
 	// Calculate angles for picking the right sprite, and also relative to camera
 	angleFromPlayer := r.PlayerBody.Angle2DTo(b.Pos.Render)
+	// This formula seems magic, what's happening here?
 	c.SpriteAngle = 270 - angleFromPlayer + *b.Angle.Render + 360
 	for c.SpriteAngle > 360 {
 		c.SpriteAngle -= 360
@@ -68,16 +39,15 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 		angleRender -= 360.0
 	}
 	// Calculate screenspace coordinates
-	c.Distance = c.Ray.Start.Dist(b.Pos.Render.To2D())
-	x := math.Tan(angleRender*concepts.Deg2rad)*r.CameraToProjectionPlane + float64(r.ScreenWidth)*0.5
+	c.Distance = math.Sqrt(ebd.Dist2)
+	xMid := math.Tan(angleRender*concepts.Deg2rad)*r.CameraToProjectionPlane + float64(r.ScreenWidth)*0.5
 	depthScale := r.CameraToProjectionPlane / math.Cos(angleRender*concepts.Deg2rad)
 	depthScale /= c.Distance
 	xScale := depthScale * b.Size.Render[0]
 	c.ScaleW = uint32(xScale)
-	x1 := (x - xScale*0.5)
-	x2 := x1 + xScale
-	c.MaterialSampler.NU = 0.5 + (float64(c.ScreenX)-x)/xScale
-	if x1 > float64(c.ScreenX) || x2 < float64(c.ScreenX) {
+	x1 := concepts.Max(int(xMid-xScale*0.5), xStart)
+	x2 := concepts.Min(int(xMid+xScale*0.5), xEnd)
+	if x1 == x2 {
 		return
 	}
 
@@ -121,22 +91,56 @@ func (r *Renderer) renderBody(b *core.Body, c *state.Column) {
 	}
 
 	vStart := float64(c.ScreenHeight/2) - c.ProjectedTop
-	seen := false
 	c.MaterialSampler.Initialize(b.Entity, nil)
-	for y := c.ClippedTop; y < c.ClippedBottom; y++ {
-		screenIndex := (y*r.ScreenWidth + c.ScreenX)
-		if c.Distance >= r.ZBuffer[screenIndex] {
+
+	for c.ScreenX = x1; c.ScreenX < x2; c.ScreenX++ {
+		if c.ScreenX < xStart || c.ScreenX >= xEnd {
 			continue
 		}
-		c.NV = (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
-		c.MaterialSampler.U = c.NU
-		c.MaterialSampler.V = c.NV
-		c.SampleMaterial(nil)
-		c.MaterialSampler.Output.Mul4Self(&c.Light)
-		r.ApplySample(&c.MaterialSampler.Output, screenIndex, c.Distance)
-		seen = true
+		c.MaterialSampler.NU = 0.5 + (float64(c.ScreenX)-xMid)/xScale
+
+		for y := c.ClippedTop; y < c.ClippedBottom; y++ {
+			screenIndex := (y*r.ScreenWidth + c.ScreenX)
+			if c.Distance >= r.ZBuffer[screenIndex] {
+				continue
+			}
+			c.NV = (float64(y) - vStart) / (c.ProjectedTop - c.ProjectedBottom)
+			c.MaterialSampler.U = c.NU
+			c.MaterialSampler.V = c.NV
+			c.SampleMaterial(nil)
+			c.MaterialSampler.Output.Mul4Self(&c.Light)
+			r.ApplySample(&c.MaterialSampler.Output, screenIndex, c.Distance)
+		}
 	}
-	if seen {
-		c.BodiesSeen[b.Entity] = b
+}
+
+func (r *Renderer) renderBodyPixel(ebd *state.EntityWithDist2, lit *materials.Lit, c *state.Column, sx, ex int) {
+	b := ebd.Body
+
+	scr := r.WorldToScreen(b.Pos.Render)
+	if scr == nil {
+		return
 	}
+	x := int(scr[0])
+	y := int(scr[1])
+	if x < sx || x >= ex || y < 0 || y >= r.ScreenHeight {
+		return
+	}
+	dist := math.Sqrt(ebd.Dist2)
+	screenIndex := x + y*r.ScreenWidth
+	if dist >= r.ZBuffer[screenIndex] {
+		return
+	}
+
+	/*le := &c.LightSampler
+	le.Q.From(b.Pos.Render)
+	le.MapIndex = c.WorldToLightmapAddress(b.Sector(), &le.Q, 0)
+	le.Segment = nil
+	le.Type = state.LightSamplerBody
+	le.InputBody = b.Entity
+	le.Sector = b.Sector()
+	le.Get()*/
+	c.Light.From(&lit.Diffuse)
+	c.Light.To3D().AddSelf(&lit.Ambient)
+	r.ApplySample(&c.Light, screenIndex, dist)
 }

@@ -29,10 +29,6 @@ func (mw *MapWidget) DrawBodyAngle(e *core.Body) {
 }
 
 func (mw *MapWidget) DrawBody(body *core.Body) {
-	if body == nil {
-		return
-	}
-
 	start := editor.ScreenToWorld(new(concepts.Vector2))
 	end := editor.ScreenToWorld(&editor.Size)
 	if body.Pos.Now[0] < start[0] || body.Pos.Now[0] > end[0] ||

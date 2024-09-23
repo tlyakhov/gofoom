@@ -18,7 +18,7 @@ const (
 	DebugLevel              = 1
 	CollisionSteps          = 10
 	MaxLightmapAge          = 3 // in frames
-	LightmapRefreshDither   = 6 // in frames
+	LightmapRefreshDither   = 4 // in frames
 	DebugLighting           = false
 	MaxWeaponMarks          = 30
 

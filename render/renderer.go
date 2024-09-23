@@ -10,12 +10,12 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/puzpuzpuz/xsync/v3"
-
+	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render/state"
@@ -24,11 +24,10 @@ import (
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*state.Config
-	Columns            []state.Column
-	columnGroup        *sync.WaitGroup
-	startingSector     *core.Sector
-	textStyle          *TextStyle
-	SectorLastRendered *xsync.MapOf[ecs.Entity, uint64]
+	Columns        []state.Column
+	columnGroup    *sync.WaitGroup
+	startingSector *core.Sector
+	textStyle      *TextStyle
 
 	ICacheHits, ICacheMisses atomic.Int64
 }
@@ -46,8 +45,7 @@ func NewRenderer(db *ecs.ECS) *Renderer {
 			MaxViewDist:   constants.MaxViewDistance,
 			ECS:           db,
 		},
-		columnGroup:        new(sync.WaitGroup),
-		SectorLastRendered: xsync.NewMapOf[ecs.Entity, uint64](),
+		columnGroup: new(sync.WaitGroup),
 	}
 
 	r.Initialize()
@@ -64,7 +62,7 @@ func (r *Renderer) Initialize() {
 		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
 		r.Columns[i].Visited = make([]state.SegmentIntersection, constants.MaxPortals)
 		// Set up 16 slots initially
-		r.Columns[i].EntitiesByDistance = make([]state.EntityWithDist2, 0, 16)
+		r.Columns[i].EntitiesByDistance = make([]*state.EntityWithDist2, 0, 16)
 		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 	}
@@ -136,6 +134,7 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 	next.LastPortalDistance = c.Distance
 	next.Depth++
 	r.RenderSector(next)
+	c.EntitiesByDistance = next.EntitiesByDistance
 	c.PickedSelection = next.PickedSelection
 }
 
@@ -189,8 +188,8 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 func (r *Renderer) RenderSector(c *state.Column) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
-	// TODO: We can probably do something simpler and cheaper here.
-	r.SectorLastRendered.Store(c.Sector.Entity, c.ECS.Frame)
+	c.Sector.LastSeenFrame.Store(int64(c.ECS.Frame))
+	c.Sectors.Add(c.Sector)
 
 	if c.Sector.LightmapBias[0] == math.MaxInt64 {
 		// Floor is important, needs to truncate towards -Infinity rather than 0
@@ -214,11 +213,6 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		   intersections.
 
 		3. Render a column, potentially visiting portal sectors.
-		4. Find intersections with internal segments, collect distances.
-		5. Find intersections with Bodies, collect distances.
-		6. Sort bodies/internal segments by distance.
-		7. Render bodies and internal segments in order.
-
 	*/
 
 	c.SegmentIntersection = &c.Visited[c.Depth]
@@ -269,71 +263,6 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
 		r.Player.Notices.Push(dbg)
 	}
-
-	// Clear slice without reallocating memory
-	c.EntitiesByDistance = c.EntitiesByDistance[:0]
-	for _, b := range c.Sector.Bodies {
-		if b == nil || !b.Active {
-			continue
-		}
-		c.EntitiesByDistance = append(c.EntitiesByDistance, state.EntityWithDist2{
-			Body:  b,
-			Dist2: c.Ray.Start.Dist2(b.Pos.Render.To2D()),
-		})
-	}
-	for _, s := range c.Sector.InternalSegments {
-		// TODO: we do this again later. Should we optimize this?
-		if s == nil || !s.IsActive() {
-			continue
-		}
-		// Is the segment facing away?
-		if !s.TwoSided && c.Ray.Delta.Dot(&s.Normal) > 0 {
-			continue
-		}
-		// Ray intersects?
-		if !s.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
-			continue
-		}
-
-		dist := c.Ray.DistTo(&c.RaySegTest)
-		c.EntitiesByDistance = append(c.EntitiesByDistance, state.EntityWithDist2{
-			InternalSegment: s,
-			Dist2:           dist * dist,
-		})
-	}
-
-	slices.SortFunc(c.EntitiesByDistance, func(a state.EntityWithDist2, b state.EntityWithDist2) int {
-		return int(b.Dist2 - a.Dist2)
-	})
-	c.SegmentIntersection = &state.SegmentIntersection{}
-	for _, sorted := range c.EntitiesByDistance {
-		if sorted.Body != nil {
-			r.renderBody(sorted.Body, c)
-			continue
-		}
-
-		// Ray intersection
-		sorted.InternalSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
-		c.Segment = &sorted.InternalSegment.Segment
-		c.Distance = c.Ray.DistTo(&c.RaySegTest)
-		c.RaySegIntersect[0] = c.RaySegTest[0]
-		c.RaySegIntersect[1] = c.RaySegTest[1]
-		c.SegmentIntersection.U = c.RaySegTest.Dist(sorted.InternalSegment.A) / sorted.InternalSegment.Length
-		c.IntersectionTop = sorted.InternalSegment.Top
-		c.IntersectionBottom = sorted.InternalSegment.Bottom
-		c.CalcScreen()
-
-		if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
-			c.PickedSelection = append(c.PickedSelection, selection.SelectableFromInternalSegment(sorted.InternalSegment))
-			return
-		}
-		c.LightSampler.MaterialSampler.Config = r.Config
-		c.LightSampler.Sector = c.Sector
-		c.LightSampler.Segment = &sorted.InternalSegment.Segment
-		c.LightSampler.Type = state.LightSamplerWall
-		sorted.InternalSegment.Normal.To3D(&c.LightSampler.Normal)
-		r.wall(c)
-	}
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
@@ -372,20 +301,69 @@ func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) [
 func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
-	column.BodiesSeen = make(map[ecs.Entity]*core.Body)
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
 	column.LightSampler.XorSeed = r.ECS.Frame + uint64(xStart)
+	// Clear slice without reallocating memory
+	column.EntitiesByDistance = column.EntitiesByDistance[:0]
+	column.Sectors = make(containers.Set[*core.Sector])
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
 	}
+
+	/*
+		1. Cast rays, render sector walls, ceilings, and floors.
+			1.a. Remember which sectors we've seen.
+		2. For each sector we've seen:
+			2.a. Gather renderable Bodies, collect distances.
+			2.b. Gather internal segments, collect distances.
+		3. Sort bodies/internal segments by distance.
+		4. Render bodies and internal segments in order.
+	*/
 
 	for x := xStart; x < xEnd; x++ {
 		if x >= r.ScreenWidth {
 			break
 		}
 		r.RenderColumn(column, x, 0, false)
+	}
+
+	for sector := range column.Sectors {
+		for _, b := range sector.Bodies {
+			if b == nil || !b.Active || !archetypes.EntityIsMaterial(b.ECS, b.Entity) {
+				continue
+			}
+			column.EntitiesByDistance = append(column.EntitiesByDistance, &state.EntityWithDist2{
+				Body:  b,
+				Dist2: column.Ray.Start.Dist2(b.Pos.Render.To2D()),
+			})
+		}
+		for _, s := range sector.InternalSegments {
+			if s == nil || !s.IsActive() {
+				continue
+			}
+			dist := column.Ray.DistTo(&column.RaySegTest)
+			column.EntitiesByDistance = append(column.EntitiesByDistance, &state.EntityWithDist2{
+				InternalSegment: s,
+				Dist2:           dist * dist,
+				Sector:          sector,
+			})
+		}
+	}
+
+	slices.SortFunc(column.EntitiesByDistance, func(a *state.EntityWithDist2, b *state.EntityWithDist2) int {
+		return int(b.Dist2 - a.Dist2)
+	})
+	column.SegmentIntersection = &state.SegmentIntersection{}
+	column.LightSampler.MaterialSampler.Config = r.Config
+	column.LightSampler.Type = state.LightSamplerWall
+	for _, sorted := range column.EntitiesByDistance {
+		if sorted.Body != nil {
+			r.renderBody(sorted, column, xStart, xEnd)
+		} else {
+			r.renderInternalSegment(sorted, column, xStart, xEnd)
+		}
 	}
 
 	if r.Multithreaded {
@@ -433,22 +411,6 @@ func (r *Renderer) Render() {
 		r.RenderBlock(0, 0, r.ScreenWidth)
 	}
 	r.RenderHud()
-
-	if r.ECS.Frame%4 <= 1 {
-		return
-	}
-	// Invalidate lighting caches
-	r.SectorLastRendered.Range(func(eSector ecs.Entity, lastSeen uint64) bool {
-		// Cache for a maximum number of frames
-		if r.ECS.Frame-lastSeen < 120 {
-			return true
-		}
-		if sector := core.GetSector(r.ECS, eSector); sector != nil {
-			sector.Lightmap.Clear()
-		}
-		r.SectorLastRendered.Delete(eSector)
-		return true
-	})
 }
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
@@ -549,7 +511,7 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 		EdgeBottom:         r.ScreenHeight,
 		CameraZ:            r.Player.CameraZ,
 		PortalColumns:      make([]state.Column, constants.MaxPortals),
-		EntitiesByDistance: make([]state.EntityWithDist2, 0, 16),
+		EntitiesByDistance: make([]*state.EntityWithDist2, 0, 16),
 		Visited:            make([]state.SegmentIntersection, constants.MaxPortals),
 	}
 	column.LightSampler.MaterialSampler.Config = r.Config

@@ -51,7 +51,7 @@ func (pc *ParticleController) Always() {
 		age := float64(pc.ECS.Timestamp - timestamp)
 
 		if shader := materials.GetShader(pc.ECS, e); shader != nil {
-			shader.Stages[0].Opacity = 1.0 - math.Min((age-pc.Lifetime+pc.FadeTime)/pc.FadeTime, 1.0)
+			shader.Stages[0].Opacity = 1.0 - concepts.Clamp((age-(pc.Lifetime-pc.FadeTime))/pc.FadeTime, 0.0, 1.0)
 		}
 
 		if age < pc.Lifetime {
@@ -80,22 +80,22 @@ func (pc *ParticleController) Always() {
 	mobile := pc.ECS.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
 	mobile.System = true
 	body.Pos.Now.From(&pc.Body.Pos.Now)
-	//body.Shadow = core.BodyShadowImage
+	body.Shadow = core.BodyShadowNone
 	rang := (rand.Float64() - 0.5) * 10
 	mobile.Vel.Now[0] = math.Cos((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
 	mobile.Vel.Now[1] = math.Sin((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
 	mobile.Vel.Now[2] = (rand.Float64() - 0.5) * 10
 	mobile.Mass = 0.25
-	lit := pc.ECS.NewAttachedComponent(e, materials.LitCID).(*materials.Lit)
-	lit.System = true
-	lit.Diffuse[0] = 1.0
+	//lit := pc.ECS.NewAttachedComponent(e, materials.LitCID).(*materials.Lit)
+	//lit.System = true
+	/*lit.Diffuse[0] = 1.0
 	lit.Diffuse[1] = 0.0
 	lit.Diffuse[2] = 0.0
-	lit.Diffuse[3] = 1.0
-	/*shader := pc.ECS.NewAttachedComponent(e, materials.ShaderCID).(*materials.Shader)
+	lit.Diffuse[3] = 1.0*/
+	shader := pc.ECS.NewAttachedComponent(e, materials.ShaderCID).(*materials.Shader)
 	shader.System = true
 	stage := materials.ShaderStage{}
 	stage.Construct(nil)
 	stage.Material = pc.Material
-	shader.Stages = append(shader.Stages, &stage)*/
+	shader.Stages = append(shader.Stages, &stage)
 }

@@ -73,7 +73,7 @@ func (r *Renderer) DebugInfo() {
 	ts.HAnchor = -1
 	ts.VAnchor = -1
 
-	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Light cache: %v", r.ECS.Simulation.FPS, r.SectorLastRendered.Size()))
+	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v", r.ECS.Simulation.FPS, r.ECS.Entities.Count()))
 	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	hits := r.ICacheHits.Load()
 	misses := r.ICacheMisses.Load()
