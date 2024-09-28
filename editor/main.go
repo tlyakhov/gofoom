@@ -109,6 +109,8 @@ func main() {
 	toolbarItems = append(toolbarItems, item)
 	item = widget.NewToolbarAction(resources.ResourceIconAddSector, editor.ToolsAddSector.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
+	item = widget.NewToolbarAction(theme.ContentAddIcon(), editor.ToolsAddInternalSegment.Menu.Action)
+	toolbarItems = append(toolbarItems, item)
 	item = widget.NewToolbarAction(resources.ResourceIconSplitSector, editor.ToolsSplitSector.Menu.Action)
 	toolbarItems = append(toolbarItems, item)
 	item = widget.NewToolbarAction(resources.ResourceIconSplitSegment, editor.ToolsSplitSegment.Menu.Action)

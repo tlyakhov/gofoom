@@ -7,7 +7,6 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
-	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
@@ -21,25 +20,17 @@ const (
 	SelectSub
 )
 
-// Declare conformity with interfaces
-var _ fyne.Draggable = (*Select)(nil)
-var _ fyne.SecondaryTappable = (*Select)(nil)
-var _ desktop.Mouseable = (*Select)(nil)
-
 type Select struct {
-	state.IEditor
+	Place
 
-	Mode     string
 	Modifier SelectModifier
 	Original *selection.Selection
 	Selected *selection.Selection
 }
 
-// TODO: This begin/end pattern for action could be generalized to avoid
-// so much similar code across the editor actions.
-func (a *Select) begin(m fyne.KeyModifier) {
-	if a.Mode != "" {
-		return
+func (a *Select) BeginPoint(m fyne.KeyModifier, b desktop.MouseButton) bool {
+	if !a.Place.BeginPoint(m, b) {
+		return false
 	}
 
 	if m&fyne.KeyModifierShift != 0 {
@@ -49,14 +40,12 @@ func (a *Select) begin(m fyne.KeyModifier) {
 	}
 
 	a.Original = selection.NewSelectionClone(a.State().SelectedObjects)
-
-	a.Mode = "Selecting"
-	a.SetMapCursor(desktop.TextCursor)
+	return true
 }
 
-func (a *Select) end() {
-	if a.Mode != "Selecting" {
-		return
+func (a *Select) EndPoint() bool {
+	if !a.Place.EndPoint() {
+		return false
 	}
 
 	hovering := a.State().HoveringObjects
@@ -90,32 +79,9 @@ func (a *Select) end() {
 		a.Selected = selection.NewSelectionClone(hovering)
 	}
 	a.Selected.Normalize()
-	a.Mode = ""
 	a.SetSelection(true, a.Selected)
 	a.ActionFinished(false, true, false)
-}
-
-func (a *Select) MouseDown(evt *desktop.MouseEvent) {
-	a.begin(evt.Modifier)
-}
-
-func (a *Select) TappedSecondary(evt *fyne.PointEvent) {
-	if a.Mode == "" {
-		a.begin(fyne.KeyModifier(0))
-		a.end()
-	}
-}
-
-func (a *Select) Dragged(evt *fyne.DragEvent) {
-	a.begin(fyne.KeyModifier(0))
-}
-
-func (a *Select) DragEnd() {
-	a.end()
-}
-
-func (a *Select) MouseUp(evt *desktop.MouseEvent) {
-	a.end()
+	return true
 }
 
 func (a *Select) Act()    {}

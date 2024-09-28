@@ -15,13 +15,27 @@ type Page struct {
 	Widgets      []IWidget
 	SelectedItem int
 	Parent       *Page
+	Apply        func(p *Page)
 
 	ScrollPos      int
 	VisibleWidgets int
 
+	mapped         map[string]IWidget
 	tooltipCurrent IWidget
 	tooltipAlpha   dynamic.DynamicValue[float64]
 	tooltipQueue   deque.Deque[IWidget]
+}
+
+func (p *Page) Initialize() {
+	p.mapped = make(map[string]IWidget)
+
+	for _, w := range p.Widgets {
+		p.mapped[w.GetWidget().ID] = w
+	}
+}
+
+func (p *Page) Widget(id string) IWidget {
+	return p.mapped[id]
 }
 
 func (p *Page) SelectedWidget() IWidget {
@@ -60,11 +74,20 @@ func (p *Page) Construct(data map[string]any) {
 					switch ww := w.(type) {
 					case *Slider:
 						ww.Construct(jsonWidget)
+						if ww.Moved != nil {
+							ww.Moved(ww)
+						}
 					case *Checkbox:
 						ww.Construct(jsonWidget)
+						if ww.Checked != nil {
+							ww.Checked(ww)
+						}
 					}
 				}
 			}
 		}
+	}
+	if p.Apply != nil {
+		p.Apply(p)
 	}
 }

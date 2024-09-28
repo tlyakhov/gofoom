@@ -61,8 +61,6 @@ func (r *Renderer) Initialize() {
 		r.Columns[i].Config = r.Config
 		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
 		r.Columns[i].Visited = make([]state.SegmentIntersection, constants.MaxPortals)
-		// Set up 16 slots initially
-		r.Columns[i].EntitiesByDistance = make([]*state.EntityWithDist2, 0, 16)
 		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 	}
@@ -134,7 +132,6 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 	next.LastPortalDistance = c.Distance
 	next.Depth++
 	r.RenderSector(next)
-	c.EntitiesByDistance = next.EntitiesByDistance
 	c.PickedSelection = next.PickedSelection
 }
 
@@ -304,9 +301,8 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
-	column.LightSampler.XorSeed = r.ECS.Frame + uint64(xStart)
-	// Clear slice without reallocating memory
-	column.EntitiesByDistance = column.EntitiesByDistance[:0]
+	column.LightSampler.XorSeed = uint64(r.ECS.Timestamp)
+	ewd2s := make([]*state.EntityWithDist2, 0, 16)
 	column.Sectors = make(containers.Set[*core.Sector])
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
@@ -334,7 +330,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 			if b == nil || !b.Active || !archetypes.EntityIsMaterial(b.ECS, b.Entity) {
 				continue
 			}
-			column.EntitiesByDistance = append(column.EntitiesByDistance, &state.EntityWithDist2{
+			ewd2s = append(ewd2s, &state.EntityWithDist2{
 				Body:  b,
 				Dist2: column.Ray.Start.Dist2(b.Pos.Render.To2D()),
 			})
@@ -344,7 +340,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 				continue
 			}
 			dist := column.Ray.DistTo(&column.RaySegTest)
-			column.EntitiesByDistance = append(column.EntitiesByDistance, &state.EntityWithDist2{
+			ewd2s = append(ewd2s, &state.EntityWithDist2{
 				InternalSegment: s,
 				Dist2:           dist * dist,
 				Sector:          sector,
@@ -352,13 +348,13 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 		}
 	}
 
-	slices.SortFunc(column.EntitiesByDistance, func(a *state.EntityWithDist2, b *state.EntityWithDist2) int {
+	slices.SortFunc(ewd2s, func(a *state.EntityWithDist2, b *state.EntityWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
 	column.SegmentIntersection = &state.SegmentIntersection{}
 	column.LightSampler.MaterialSampler.Config = r.Config
 	column.LightSampler.Type = state.LightSamplerWall
-	for _, sorted := range column.EntitiesByDistance {
+	for _, sorted := range ewd2s {
 		if sorted.Body != nil {
 			r.renderBody(sorted, column, xStart, xEnd)
 		} else {
@@ -506,13 +502,12 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 	}
 	// Initialize a column...
 	column := &state.Column{
-		Config:             r.Config,
-		EdgeTop:            0,
-		EdgeBottom:         r.ScreenHeight,
-		CameraZ:            r.Player.CameraZ,
-		PortalColumns:      make([]state.Column, constants.MaxPortals),
-		EntitiesByDistance: make([]*state.EntityWithDist2, 0, 16),
-		Visited:            make([]state.SegmentIntersection, constants.MaxPortals),
+		Config:        r.Config,
+		EdgeTop:       0,
+		EdgeBottom:    r.ScreenHeight,
+		CameraZ:       r.Player.CameraZ,
+		PortalColumns: make([]state.Column, constants.MaxPortals),
+		Visited:       make([]state.SegmentIntersection, constants.MaxPortals),
 	}
 	column.LightSampler.MaterialSampler.Config = r.Config
 

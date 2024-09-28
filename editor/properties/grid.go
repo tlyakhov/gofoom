@@ -124,6 +124,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			if editTypeTag, ok := field.Tag.Lookup("edit_type"); ok {
 				gf.EditType = editTypeTag
 			}
+			// TODO: Implement sorting, this was never done
 			if editSortTag, ok := field.Tag.Lookup("edit_sort"); ok {
 				gf.Sort, _ = strconv.Atoi(editSortTag)
 			}

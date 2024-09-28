@@ -5,11 +5,10 @@ package actions
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/dynamic"
-	"tlyakhov/gofoom/ecs"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
@@ -19,44 +18,35 @@ type AddInternalSegment struct {
 }
 
 func (a *AddInternalSegment) Act() {
+	a.AddEntity.Act()
 	a.SetMapCursor(desktop.CrosshairCursor)
-	a.Mode = "AddInternalSegment"
-	a.SelectObjects(true, selection.SelectableFromInternalSegment(a.InternalSegment))
-	//set cursor
 }
 
-func (a *AddInternalSegment) OnMouseDown(evt *desktop.MouseEvent) {
+func (a *AddInternalSegment) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool {
+	if !a.AddEntity.BeginPoint(m, button) {
+		return false
+	}
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	switch a.Mode {
-	case "AddInternalSegment":
+	case "Begin":
 		a.Mode = "AddInternalSegmentA"
 		a.Surface.Material = controllers.DefaultMaterial(a.State().ECS)
 		a.AttachToSector()
 	case "AddInternalSegmentA":
 	}
+	return true
 }
-func (a *AddInternalSegment) OnMouseMove() {
+
+func (a *AddInternalSegment) Point() bool {
+	a.AddEntity.Point()
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
-	for i := range col.Length {
-		sector := col.Value(i)
-		if sector.IsPointInside2D(worldGrid) {
-			a.ContainingSector = sector
-			break
-		}
-	}
-
-	a.DetachFromSector()
-	a.AttachToSector()
 	switch a.Mode {
-	case "AddInternalSegment":
-		fallthrough
-	case "AddInternalSegmentA":
+	case "Begin", "AddInternalSegmentA":
 		a.A.From(worldGrid)
 		fallthrough
 	case "AddInternalSegmentB":
@@ -66,12 +56,19 @@ func (a *AddInternalSegment) OnMouseMove() {
 		a.Bottom, a.Top = a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
 	}
 	a.Recalculate()
+	return true
 }
 
-func (a *AddInternalSegment) OnMouseUp() {
+func (a *AddInternalSegment) EndPoint() bool {
+	if !a.AddEntity.EndPoint() {
+		return false
+	}
+
 	switch a.Mode {
 	case "AddInternalSegmentA":
+		a.State().Lock.Lock()
 		a.A.From(a.WorldGrid(&a.State().MouseWorld))
+		a.State().Lock.Unlock()
 		a.Mode = "AddInternalSegmentB"
 	case "AddInternalSegmentB":
 		a.B.From(a.WorldGrid(&a.State().MouseWorld))
@@ -82,6 +79,7 @@ func (a *AddInternalSegment) OnMouseUp() {
 		a.State().Lock.Unlock()
 		a.ActionFinished(false, true, true)
 	}
+	return true
 }
 
 func (a *AddInternalSegment) Status() string {

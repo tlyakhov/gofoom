@@ -255,84 +255,66 @@ func (a *SectorSplitter) verifyCycles() {
 	}
 }
 
+func (a *SectorSplitter) collectEdge(edge *splitEdge) {
+	db := a.Sector.ECS
+	i := len(a.Result)
+	a.Result = append(a.Result, make([]ecs.Attachable, 0))
+	for _, origComponent := range db.AllComponents(a.Sector.Entity) {
+		if origComponent == nil {
+			continue
+		}
+		id := ecs.Types().ID(origComponent)
+		clonedComponent := db.LoadComponentWithoutAttaching(id, origComponent.Serialize())
+		a.Result[i] = append(a.Result[i], clonedComponent)
+		switch target := clonedComponent.(type) {
+		case *ecs.Named:
+			target.Name = fmt.Sprintf("Split %v (%v)", target.Name, len(a.Result))
+		case *core.Sector:
+			// Don't clone the bodies.
+			target.Bodies = make(map[ecs.Entity]*core.Body)
+			// Clear segments
+			target.Segments = []*core.SectorSegment{}
+
+			visitor := edge
+			for {
+				visitor.Visited = true
+				addedSegment := &core.SectorSegment{}
+				addedSegment.Sector = target
+				addedSegment.Construct(target.ECS, visitor.Source.Serialize())
+				addedSegment.P = visitor.Start
+				target.Segments = append(target.Segments, addedSegment)
+				if visitor.Source.AdjacentSegment != nil {
+					visitor.Source.AdjacentSegment.AdjacentSector = target.Entity
+					visitor.Source.AdjacentSegment.AdjacentSegment = addedSegment
+				}
+				visitor = visitor.Next
+				if visitor == edge {
+					break
+				}
+			}
+			target.Recalculate()
+		}
+	}
+}
+
 func (a *SectorSplitter) collect() {
 	a.Result = make([][]ecs.Attachable, 0)
-	newSectorCount := 0
 	for _, edge := range a.SplitSector {
 		if edge.Visited {
 			continue
 		}
-
-		// Clone all the original components using serialization.
-		newSectorCount++
-		db := a.Sector.ECS
-		newEntity := db.NewEntity()
-		clonedComponents := make([]ecs.Attachable, len(db.AllComponents(a.Sector.Entity)))
-		a.Result = append(a.Result, clonedComponents)
-		for i, origComponent := range db.AllComponents(a.Sector.Entity) {
-			if origComponent == nil {
-				continue
-			}
-			addedComponent := db.NewAttachedComponent(newEntity, ecs.Types().ID(origComponent))
-			// This will override the entity field with the original component's
-			// entity, so we'll fix it up afterwards.
-			addedComponent.Construct(origComponent.Serialize())
-			addedComponent.SetEntity(newEntity)
-
-			clonedComponents[i] = addedComponent
-			switch target := addedComponent.(type) {
-			case *ecs.Named:
-				target.Name = fmt.Sprintf("Split %v (%v)", target.Name, newSectorCount)
-			case *core.Sector:
-				// Don't clone the bodies.
-				target.Bodies = make(map[ecs.Entity]*core.Body)
-				// Clear segments
-				target.Segments = []*core.SectorSegment{}
-
-				visitor := edge
-				for {
-					visitor.Visited = true
-					addedSegment := &core.SectorSegment{}
-					addedSegment.Sector = target
-					addedSegment.Construct(target.ECS, visitor.Source.Serialize())
-					addedSegment.P = visitor.Start
-					target.Segments = append(target.Segments, addedSegment)
-					if visitor.Source.AdjacentSegment != nil {
-						visitor.Source.AdjacentSegment.AdjacentSector = target.Entity
-						visitor.Source.AdjacentSegment.AdjacentSegment = addedSegment
-					}
-					visitor = visitor.Next
-					if visitor == edge {
-						break
-					}
-				}
-				target.Recalculate()
-			}
-		}
+		a.collectEdge(edge)
 	}
 	// Only one a.Sector means we didn't split anything
 	if len(a.Result) == 1 {
-		added := a.Result[0][core.SectorCID>>16].(*core.Sector)
-		if len(added.Segments) == len(a.Sector.Segments) {
-			a.Result = nil
-			return
-		}
-	}
-
-	col := ecs.ColumnFor[core.Body](a.Sector.ECS, core.BodyCID)
-	for i := range col.Cap() {
-		body := col.Value(i)
-		if body == nil || body.SectorEntity != a.Sector.Entity {
-			continue
-		}
-		for _, components := range a.Result {
-			if components[core.SectorCID>>16] == nil {
+		for _, newComponent := range a.Result[0] {
+			if newComponent == nil {
 				continue
 			}
-			if added, ok := components[core.SectorCID>>16].(*core.Sector); ok &&
-				added.IsPointInside2D(body.Pos.Original.To2D()) {
-				body.SectorEntity = added.Entity
-				added.Bodies[body.Entity] = body
+			if sector, ok := newComponent.(*core.Sector); ok && sector != nil &&
+				len(sector.Segments) == len(a.Sector.Segments) {
+				a.Result = nil
+				return
 			}
 		}
 	}

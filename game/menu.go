@@ -20,17 +20,14 @@ import (
 var gameUI *ui.UI
 var uiPageMain *ui.Page
 var uiPageLoadWorld *ui.Page
+var settingsNeedSave bool = false
 
-/*
-	MaxPortals       = 100 // avoid infinite portal traversal
-	MaxViewDistance         = 10000.0
-	CollisionSteps          = 10
-	MaxLightmapAge          = 3 // in frames
-	LightmapRefreshDither   = 6 // in frames
-*/
+func saveSettings() {
+	ui.SaveSettings(constants.UserSettings, uiPageMain, uiPageSettings, uiPageKeyBindings)
+}
 
-func saveSettings(w ui.IWidget) {
-	ui.SaveSettings(constants.UserSettings, uiPageMain, uiPageOptions, uiPageKeyBindings)
+func onWidgetChanged(w ui.IWidget) {
+	settingsNeedSave = true
 }
 
 func initializeMenus() {
@@ -42,8 +39,8 @@ func initializeMenus() {
 			&ui.Button{Widget: ui.Widget{Label: "Load World " + string(rune(16))}, Clicked: func(b *ui.Button) {
 				gameUI.SetPage(uiPageLoadWorld)
 			}},
-			&ui.Button{Widget: ui.Widget{Label: "Options " + string(rune(16))}, Clicked: func(b *ui.Button) {
-				gameUI.SetPage(uiPageOptions)
+			&ui.Button{Widget: ui.Widget{Label: "Settings " + string(rune(16))}, Clicked: func(b *ui.Button) {
+				gameUI.SetPage(uiPageSettings)
 			}},
 			&ui.Button{Widget: ui.Widget{Label: "Quit"},
 				Clicked: func(b *ui.Button) {
@@ -51,6 +48,8 @@ func initializeMenus() {
 				}},
 		},
 	}
+	uiPageMain.Initialize()
+
 	uiPageLoadWorld = &ui.Page{
 		Parent:   uiPageMain,
 		IsDialog: true,
@@ -90,6 +89,7 @@ func initializeMenus() {
 		uiPageLoadWorld.Widgets = append(uiPageLoadWorld.Widgets, b)
 		return nil
 	})
+	uiPageLoadWorld.Initialize()
 
 	initMenuOptions()
 }

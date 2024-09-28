@@ -189,7 +189,7 @@ func (list *EntityList) Update() {
 		parentDesc := ""
 		rank := 0
 		for _, c := range list.State().ECS.AllComponents(ecs.Entity(entity)) {
-			if c == nil {
+			if c == nil || c.IsSystem() {
 				continue
 			}
 			desc := c.String()
@@ -215,6 +215,9 @@ func (list *EntityList) Update() {
 			case *materials.Shader:
 				rowColor = colornames.Lightpink
 			}
+		}
+		if len(parentDesc) == 0 {
+			return
 		}
 		dispRank := 100
 		if searchValid {

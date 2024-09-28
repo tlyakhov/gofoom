@@ -8,15 +8,37 @@ import (
 	"tlyakhov/gofoom/ui"
 )
 
-var uiPageOptions, uiPageKeyBindings *ui.Page
+/*
+TODO: Also add these:
+
+MaxPortals       = 100 // avoid infinite portal traversal
+MaxViewDistance         = 10000.0
+CollisionSteps          = 10
+MaxLightmapAge          = 3 // in frames
+LightmapRefreshDither   = 6 // in frames
+*/
+var uiPageSettings, uiPageKeyBindings *ui.Page
 
 func initMenuOptions() {
-	uiPageOptions = &ui.Page{
+	uiPageSettings = &ui.Page{
 		Parent:   uiPageMain,
 		IsDialog: true,
 		Title:    "Options",
+		Apply: func(p *ui.Page) {
+			renderer.Multithreaded = p.Widget("multiRender").(*ui.Checkbox).Value
+			renderer.Blocks = p.Widget("multiBlocks").(*ui.Slider).Value
+			renderer.FOV = float64(p.Widget("fov").(*ui.Slider).Value)
+			renderer.LightGrid = float64(p.Widget("lightGrid").(*ui.Slider).Value) / 10.0
+			// After everything's loaded, trigger the controllers
+			db.ActAllControllers(ecs.ControllerRecalculate)
+			renderer.Initialize()
+			saveSettings()
+		},
 		Widgets: []ui.IWidget{
 			&ui.Button{Widget: ui.Widget{Label: string(rune(17)) + " Main Menu"}, Clicked: func(b *ui.Button) {
+				if settingsNeedSave {
+					// TODO: Ask user to save or discard
+				}
 				gameUI.SetPage(uiPageMain)
 			}},
 			&ui.Button{
@@ -27,6 +49,14 @@ func initMenuOptions() {
 				Clicked: func(b *ui.Button) {
 					gameUI.SetPage(uiPageKeyBindings)
 				}},
+			&ui.Button{
+				Widget: ui.Widget{
+					Label:   "Apply & Save",
+					Tooltip: "Apply and save settings",
+				},
+				Clicked: func(b *ui.Button) {
+					uiPageSettings.Apply(uiPageSettings)
+				}},
 			&ui.Checkbox{
 				Widget: ui.Widget{
 					ID:      "multiRender",
@@ -34,9 +64,7 @@ func initMenuOptions() {
 					Tooltip: "Whether to parallelize rendering across multiple cores.\nHeavy impact on performance.",
 				},
 				Value: renderer.Multithreaded,
-				Checked: func(cb *ui.Checkbox) {
-					renderer.Multithreaded = cb.Value
-				}},
+			},
 			&ui.Slider{
 				Widget: ui.Widget{
 					ID:      "multiBlocks",
@@ -44,10 +72,6 @@ func initMenuOptions() {
 					Tooltip: "Subdivide the screen into this many horizontal columns when rendering.\nIdeal seems to be ~2x physical cores. Heavy impact on performance.",
 				},
 				Min: 2, Max: 64, Value: int(renderer.Blocks), Step: 2,
-				Moved: func(s *ui.Slider) {
-					renderer.Blocks = s.Value
-					renderer.Initialize()
-				},
 			},
 			&ui.Slider{
 				Widget: ui.Widget{
@@ -56,10 +80,6 @@ func initMenuOptions() {
 					Tooltip: "Angular extent of the player camera, in degrees.",
 				},
 				Min: 45, Max: 160, Value: int(renderer.FOV), Step: 5,
-				Moved: func(s *ui.Slider) {
-					renderer.FOV = float64(s.Value)
-					renderer.Initialize()
-				},
 			},
 			&ui.Slider{
 				Widget: ui.Widget{
@@ -68,23 +88,20 @@ func initMenuOptions() {
 					Tooltip: "Size of lightmap texels, in 1/10 of a world unit.\nLower is better, but impacts performance.",
 				},
 				Min: 5, Max: 100, Value: int(renderer.LightGrid * 10), Step: 1,
-				Moved: func(s *ui.Slider) {
-					renderer.LightGrid = float64(s.Value) / 10.0
-					renderer.Initialize()
-					// After everything's loaded, trigger the controllers
-					db.ActAllControllers(ecs.ControllerRecalculate)
-				},
 			},
 		},
 	}
+	uiPageSettings.Initialize()
+
 	uiPageKeyBindings = &ui.Page{
-		Parent:   uiPageOptions,
+		Parent:   uiPageSettings,
 		IsDialog: true,
 		Title:    "Key Bindings",
 		Widgets: []ui.IWidget{
 			&ui.Button{Widget: ui.Widget{Label: string(rune(17)) + " Options"}, Clicked: func(b *ui.Button) {
-				gameUI.SetPage(uiPageOptions)
+				gameUI.SetPage(uiPageSettings)
 			}},
 		},
 	}
+	uiPageKeyBindings.Initialize()
 }
