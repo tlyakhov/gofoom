@@ -78,10 +78,31 @@ func (s *Sector) ZAt(stage dynamic.DynamicStage, p *concepts.Vector2) (fz, cz fl
 	return s.Bottom.ZAt(stage, p), s.Top.ZAt(stage, p)
 }
 
+func (s *Sector) removeAdjacentReferences() {
+	if s.Entity == 0 || s.ECS == nil {
+		return
+	}
+
+	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
+	for i := range col.Cap() {
+		sector := col.Value(i)
+		if sector == nil {
+			continue
+		}
+		for _, seg := range sector.Segments {
+			if seg.AdjacentSector == s.Entity {
+				seg.AdjacentSector = 0
+				seg.AdjacentSegment = nil
+				seg.AdjacentSegmentIndex = 0
+			}
+		}
+	}
+}
 func (s *Sector) OnDetach() {
 	if s.ECS != nil {
 		s.Top.Z.Detach(s.ECS.Simulation)
 		s.Bottom.Z.Detach(s.ECS.Simulation)
+		s.removeAdjacentReferences()
 	}
 	for _, b := range s.Bodies {
 		b.SectorEntity = 0
@@ -251,21 +272,12 @@ func (s *Sector) Recalculate() {
 		s.Winding = -1
 	}
 
-	filtered := make([]*SectorSegment, 0)
-	var prev *SectorSegment
 	for i, segment := range s.Segments {
 		next := s.Segments[(i+1)%len(s.Segments)]
-		// Filter out degenerate segments.
-		if prev != nil && prev.P == segment.P {
-			prev.Next = next
-			next.Prev = prev
-			continue
-		}
-		segment.Index = len(filtered)
-		filtered = append(filtered, segment)
+		segment.Index = i
 		segment.Next = next
 		next.Prev = segment
-		prev = segment
+		//prev = segment
 		s.Center[0] += segment.P[0]
 		s.Center[1] += segment.P[1]
 		if segment.P[0] < s.Min[0] {
@@ -296,7 +308,6 @@ func (s *Sector) Recalculate() {
 		segment.Sector = s
 		segment.Recalculate()
 	}
-	s.Segments = filtered
 
 	if len(s.Segments) > 1 {
 		// Figure out if this sector is concave.

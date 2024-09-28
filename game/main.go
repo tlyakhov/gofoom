@@ -187,10 +187,10 @@ func run() {
 	renderer.ScreenHeight = h
 	renderer.Initialize()
 	gameUI = &ui.UI{Renderer: renderer}
-	gameUI.OnChanged = saveSettings
+	gameUI.OnChanged = onWidgetChanged
 	gameUI.Initialize()
 	initializeMenus()
-	ui.LoadSettings(constants.UserSettings, uiPageMain, uiPageOptions, uiPageKeyBindings)
+	ui.LoadSettings(constants.UserSettings, uiPageMain, uiPageSettings, uiPageKeyBindings)
 
 	for !win.Closed() {
 		db.Simulation.Step()

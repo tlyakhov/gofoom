@@ -8,22 +8,15 @@ import (
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
-	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
-// Declare conformity with interfaces
-var _ fyne.Draggable = (*AddEntity)(nil)
-var _ desktop.Hoverable = (*AddEntity)(nil)
-var _ desktop.Mouseable = (*AddEntity)(nil)
-
 type AddEntity struct {
-	state.IEditor
+	Place
 	ecs.Entity
 
-	Mode             string
 	Components       []ecs.Attachable
 	ContainingSector *core.Sector
 }
@@ -57,28 +50,32 @@ func (a *AddEntity) AttachToSector() {
 	//a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 
-func (a *AddEntity) Dragged(d *fyne.DragEvent) {
-	a.MouseMoved(&desktop.MouseEvent{PointEvent: d.PointEvent})
+func (a *AddEntity) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool {
+	if !a.Place.BeginPoint(m, button) {
+		return false
+	}
+
+	return a.Point()
 }
+func (a *AddEntity) Point() bool {
+	a.Place.Point()
+	body := core.GetBody(a.State().ECS, a.Entity)
+	seg := core.GetInternalSegment(a.State().ECS, a.Entity)
+	if body == nil && seg == nil {
+		return true
+	}
 
-func (a *AddEntity) DragEnd() {
-	a.MouseUp(&desktop.MouseEvent{})
-}
-
-func (a *AddEntity) MouseDown(evt *desktop.MouseEvent) {}
-
-func (a *AddEntity) MouseIn(evt *desktop.MouseEvent) {}
-func (a *AddEntity) MouseOut()                       {}
-
-func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
 	col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
-	for i := range col.Length {
+	for i := range col.Cap() {
 		sector := col.Value(i)
+		if sector == nil {
+			continue
+		}
 		if sector.IsPointInside2D(worldGrid) {
 			a.ContainingSector = sector
 			break
@@ -87,27 +84,31 @@ func (a *AddEntity) MouseMoved(evt *desktop.MouseEvent) {
 
 	a.DetachFromSector()
 	a.AttachToSector()
-	if c := a.Components[core.BodyCID>>16]; c != nil {
-		if body, ok := c.(*core.Body); ok {
-			body.Pos.Original[0] = worldGrid[0]
-			body.Pos.Original[1] = worldGrid[1]
-			if a.ContainingSector != nil {
-				floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
-				body.Pos.Original[2] = (floorZ + ceilZ) / 2
-			}
-			body.Pos.ResetToOriginal()
-			a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	if body != nil {
+		body.Pos.Original[0] = worldGrid[0]
+		body.Pos.Original[1] = worldGrid[1]
+		if a.ContainingSector != nil {
+			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
+			body.Pos.Original[2] = (floorZ + ceilZ) / 2
 		}
+		body.Pos.ResetToOriginal()
 	}
+	return true
 }
 
-func (a *AddEntity) MouseUp(evt *desktop.MouseEvent) {
+func (a *AddEntity) EndPoint() bool {
+	if !a.Place.EndPoint() {
+		return false
+	}
+	a.State().Lock.Lock()
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
+	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, false)
+	return true
 }
 
 func (a *AddEntity) Act() {
-	a.Mode = "AddBody"
 	a.SelectObjects(true, selection.SelectableFromEntity(a.State().ECS, a.Entity))
 }
 func (a *AddEntity) Cancel() {
@@ -131,8 +132,8 @@ func (a *AddEntity) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 
-	a.AttachToSector()
 	a.AttachAll()
+	a.AttachToSector()
 }
 
 func (a *AddEntity) Status() string {

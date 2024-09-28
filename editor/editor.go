@@ -335,9 +335,9 @@ func (e *Editor) NewAction(a state.Actionable) {
 func (e *Editor) ActTool() {
 	switch e.Tool {
 	case state.ToolSplitSegment:
-		e.NewAction(&actions.SplitSegment{IEditor: e})
+		e.NewAction(&actions.SplitSegment{Place: actions.Place{IEditor: e}})
 	case state.ToolSplitSector:
-		e.NewAction(&actions.SplitSector{IEditor: e})
+		e.NewAction(&actions.SplitSector{Place: actions.Place{IEditor: e}})
 	case state.ToolAddSector:
 		entity := archetypes.CreateSector(e.ECS)
 		s := core.GetSector(e.ECS, entity)
@@ -358,7 +358,7 @@ func (e *Editor) ActTool() {
 		e.NewAction(a)
 	case state.ToolAddBody:
 		entity := archetypes.CreateBasic(e.ECS, core.BodyCID)
-		e.NewAction(&actions.AddEntity{IEditor: e, Entity: entity, Components: e.ECS.AllComponents(entity)})
+		e.NewAction(&actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: entity, Components: e.ECS.AllComponents(entity)})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
 	default:
@@ -382,7 +382,7 @@ func (e *Editor) NewShader() {
 		img := materials.GetImage(e.ECS, eImg)
 		img.Source = uc.URI().Path()
 		img.Load()
-		a := &actions.AddEntity{IEditor: e, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
+		a := &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
 		e.NewAction(a)
 		e.CurrentAction.Act()
 		// Next set up the shader
@@ -395,7 +395,7 @@ func (e *Editor) NewShader() {
 		shader.Stages = append(shader.Stages, stage)
 		named := editor.ECS.NewAttachedComponent(eShader, ecs.NamedCID).(*ecs.Named)
 		named.Name = "Shader " + path.Base(img.Source)
-		a = &actions.AddEntity{IEditor: e, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
+		a = &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
 		e.NewAction(a)
 		e.CurrentAction.Act()
 

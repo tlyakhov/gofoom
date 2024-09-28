@@ -8,12 +8,9 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
-	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type segmentSplitter struct {
@@ -22,13 +19,10 @@ type segmentSplitter struct {
 }
 
 type SplitSegment struct {
-	state.IEditor
+	Place
 
 	NewSegments []*segmentSplitter
 }
-
-func (a *SplitSegment) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *SplitSegment) OnMouseMove()                        {}
 
 func (a *SplitSegment) Act() {}
 
@@ -49,7 +43,10 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	return true
 }
 
-func (a *SplitSegment) OnMouseUp() {
+func (a *SplitSegment) EndPoint() bool {
+	if !a.Place.EndPoint() {
+		return false
+	}
 	a.NewSegments = []*segmentSplitter{}
 
 	// Split only selected if any, otherwise all sectors/segments.
@@ -58,28 +55,22 @@ func (a *SplitSegment) OnMouseUp() {
 	if a.State().SelectedObjects.Empty() {
 		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
 		segments = make(containers.Set[*core.SectorSegment])
-		for i := range col.Length {
-			segments.AddAll(col.Value(i).Segments...)
+		for i := range col.Cap() {
+			if sector := col.Value(i); sector != nil {
+				segments.AddAll(sector.Segments...)
+			}
 		}
 	} else {
 		segments = make(containers.Set[*core.SectorSegment])
 		for _, s := range a.State().SelectedObjects.Exact {
 			switch s.Type {
 			// Segments:
-			case selection.SelectableLow:
-				fallthrough
-			case selection.SelectableMid:
-				fallthrough
-			case selection.SelectableHi:
-				fallthrough
-			case selection.SelectableSectorSegment:
+			case selection.SelectableLow, selection.SelectableMid,
+				selection.SelectableHi, selection.SelectableSectorSegment:
 				segments.Add(s.SectorSegment)
 			// Sectors:
-			case selection.SelectableCeiling:
-				fallthrough
-			case selection.SelectableFloor:
-				fallthrough
-			case selection.SelectableSector:
+			case selection.SelectableCeiling, selection.SelectableFloor,
+				selection.SelectableSector:
 				for _, seg := range s.Sector.Segments {
 					segments.Add(seg)
 				}
@@ -92,6 +83,7 @@ func (a *SplitSegment) OnMouseUp() {
 	}
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
+	return true
 }
 
 func (a *SplitSegment) Cancel() {

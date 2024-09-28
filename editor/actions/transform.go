@@ -120,7 +120,10 @@ func (a *Transform) Act() {
 		m.TranslateSelf(a.WorldGrid(&a.Delta))
 	}
 	for _, s := range a.Selected.Exact {
-		s.Transform(m)
+		s.PositionRange(func(p *concepts.Vector2) {
+			m.ProjectSelf(p)
+			*p = *a.WorldGrid(p)
+		})
 		s.Recalculate()
 	}
 }

@@ -220,25 +220,51 @@ func (mw *MapWidget) TypedKey(evt *fyne.KeyEvent) {
 		}
 	}
 }
-func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
+
+func (mw *MapWidget) setMouseDown(evt *fyne.PointEvent) bool {
 	if mw.Context == nil {
-		return
+		return false
 	}
-	log.Printf("Mouse down")
 	mw.requestFocus()
 	editor.MousePressed = true
 	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
 	editor.MouseDown[0], editor.MouseDown[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
 	editor.MouseDownWorld = *editor.ScreenToWorld(&editor.MouseDown)
+	return true
+}
 
-	if evt.Button == desktop.MouseButtonSecondary && editor.CurrentAction == nil {
-		editor.NewAction(&actions.Select{IEditor: editor})
-	} else if evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil {
+func (mw *MapWidget) setMouse(evt *fyne.PointEvent) bool {
+	if mw.Context == nil {
+		return false
+	}
+	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
+	x, y := float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
+	if x == editor.Mouse[0] && y == editor.Mouse[1] {
+		return false
+	}
+	editor.Mouse[0], editor.Mouse[1] = x, y
+	editor.MouseWorld = *editor.ScreenToWorld(&editor.Mouse)
+	return true
+}
+
+func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
+	log.Printf("Mouse down")
+	if !mw.setMouseDown(&evt.PointEvent) {
+		return
+	}
+
+	switch {
+	case evt.Button == desktop.MouseButtonSecondary && editor.CurrentAction == nil:
+		editor.NewAction(&actions.Select{Place: actions.Place{IEditor: editor}})
+	case evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil:
 		editor.NewAction(&actions.Pan{IEditor: editor})
-	} else if evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.SelectedObjects.Empty() {
+	case evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.SelectedObjects.Empty():
 		editor.NewAction(&actions.Transform{IEditor: editor})
 	}
 
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+		bp.BeginPoint(evt.Modifier, evt.Button)
+	}
 	if m, ok := editor.CurrentAction.(desktop.Mouseable); ok {
 		m.MouseDown(evt)
 	}
@@ -246,40 +272,45 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	editor.MousePressed = false
 
+	log.Printf("MouseUp")
+
 	if m, ok := editor.CurrentAction.(desktop.Mouseable); ok {
 		m.MouseUp(evt)
+	}
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+		bp.EndPoint()
 	}
 }
 
 func (mw *MapWidget) Tapped(evt *fyne.PointEvent) {
-	if mw.Context == nil {
+	if !mw.setMouseDown(evt) {
 		return
 	}
-	mw.requestFocus()
 
-	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
-	editor.MouseDown[0], editor.MouseDown[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
-	editor.MouseDownWorld = *editor.ScreenToWorld(&editor.MouseDown)
 	log.Printf("Tapped")
 
 	if m, ok := editor.CurrentAction.(fyne.Tappable); ok {
 		m.Tapped(evt)
 	}
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+		bp.BeginPoint(0, desktop.MouseButtonPrimary)
+		bp.EndPoint()
+	}
 }
 
 func (mw *MapWidget) TappedSecondary(evt *fyne.PointEvent) {
-	if mw.Context == nil {
+	if !mw.setMouseDown(evt) {
 		return
 	}
-	mw.requestFocus()
 
-	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
-	editor.MouseDown[0], editor.MouseDown[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
-	editor.MouseDownWorld = *editor.ScreenToWorld(&editor.MouseDown)
 	log.Printf("SecondaryTapped")
 
 	if m, ok := editor.CurrentAction.(fyne.SecondaryTappable); ok {
 		m.TappedSecondary(evt)
+	}
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+		bp.BeginPoint(0, desktop.MouseButtonSecondary)
+		bp.EndPoint()
 	}
 }
 
@@ -313,24 +344,32 @@ func (mw *MapWidget) Scrolled(ev *fyne.ScrollEvent) {
 
 func (mw *MapWidget) DragEnd() {
 	editor.Dragging = false
+	editor.MousePressed = false
 	//log.Printf("DragEnd")
 
 	if m, ok := editor.CurrentAction.(fyne.Draggable); ok {
 		m.DragEnd()
 	}
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+		bp.EndPoint()
+	}
 }
 
 func (mw *MapWidget) Dragged(evt *fyne.DragEvent) {
-	if mw.Context == nil {
+	if !mw.setMouse(&evt.PointEvent) {
 		return
 	}
 
 	editor.Dragging = true
-	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
-	editor.Mouse[0], editor.Mouse[1] = float64(evt.Position.X)*scale, float64(evt.Position.Y)*scale
-	editor.MouseWorld = *editor.ScreenToWorld(&editor.Mouse)
+
 	//log.Printf("Dragged: %v", evt.Position)
 
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+		if !bp.Point() {
+			bp.BeginPoint(0, desktop.MouseButtonPrimary)
+			bp.Point()
+		}
+	}
 	if m, ok := editor.CurrentAction.(fyne.Draggable); ok {
 		m.Dragged(evt)
 	}
@@ -348,21 +387,16 @@ func (mw *MapWidget) MouseOut() {
 }
 
 func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
-	if mw.Context == nil {
+	if !mw.setMouse(&ev.PointEvent) {
 		return
 	}
-
-	scale := float64(mw.Context.Width()) / float64(mw.Size().Width)
-	x, y := float64(ev.Position.X)*scale, float64(ev.Position.Y)*scale
-	if x == editor.Mouse[0] && y == editor.Mouse[1] {
-		return
-	}
-	editor.Mouse[0], editor.Mouse[1] = x, y
-	editor.MouseWorld = *editor.ScreenToWorld(&editor.Mouse)
 	//log.Printf("scale:%v, x,y: %v, %v - world: %v, %v", scale, x, y, editor.MouseWorld[0], editor.MouseWorld[1])
 	editor.UpdateStatus()
-	//log.Printf("Moved")
+	log.Printf("Moved")
 
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+		bp.Point()
+	}
 	if m, ok := editor.CurrentAction.(desktop.Hoverable); ok {
 		m.MouseMoved(ev)
 	}

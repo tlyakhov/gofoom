@@ -46,8 +46,7 @@ type Column struct {
 	// Pre-allocated stack of nested columns for portals
 	PortalColumns []Column
 	// Pre-allocated slice for sorting bodies and internal segments
-	Sectors            containers.Set[*core.Sector]
-	EntitiesByDistance []*EntityWithDist2
+	Sectors containers.Set[*core.Sector]
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
 	Ray                *Ray

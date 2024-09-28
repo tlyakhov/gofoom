@@ -56,7 +56,12 @@ func (le *LightSampler) Debug() *concepts.Vector3 {
 
 func (le *LightSampler) Get() *concepts.Vector3 {
 	//return le.Debug()
-	r := concepts.RngXorShift64(uint64(le.ECS.Timestamp) + le.MapIndex)
+	//r := concepts.RngXorShift64(le.XorSeed + uint64(le.ECS.Timestamp) +
+	//le.MapIndex)
+	// TODO: Figure out how to make this not tear across block boundaries while
+	// keeping the randomness
+	r := concepts.RngXorShift64(le.XorSeed)
+	le.XorSeed = r
 
 	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
 		if math.Float64bits(lmResult[3])+constants.MaxLightmapAge >= le.ECS.Frame ||
@@ -206,6 +211,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if le.MaterialSampler.Output[3] >= 0.99 {
 				return false
 			}
+			le.Filter[3] += le.MaterialSampler.Output[3]
 		}
 
 		// Does intersecting the ceiling/floor help us?
@@ -291,7 +297,6 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				if le.MaterialSampler.Output[3] >= 0.99 {
 					return false
 				}
-				//concepts.AsmVector4AddPreMulColorSelf((*[4]float64)(&le.Filter), (*[4]float64)(&le.Material))
 				le.Filter.AddPreMulColorSelf(&le.MaterialSampler.Output)
 			}
 

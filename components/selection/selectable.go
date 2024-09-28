@@ -176,49 +176,39 @@ func (s *Selectable) Serialize() any {
 	return s.ECS.SerializeEntity(s.Entity)
 }
 
-func (s *Selectable) Transform(m *concepts.Matrix2) {
+func (s *Selectable) PositionRange(f func(p *concepts.Vector2)) {
 	switch s.Type {
 	case SelectableSector:
 		for _, seg := range s.Sector.Segments {
-			m.ProjectSelf(&seg.P)
+			f(&seg.P)
 		}
 		s.Sector.Recalculate()
-	case SelectableLow:
-		fallthrough
-	case SelectableMid:
-		fallthrough
-	case SelectableHi:
+	case SelectableLow, SelectableMid, SelectableHi:
 		fallthrough
 	case SelectableSectorSegment:
-		m.ProjectSelf(&s.SectorSegment.P)
+		f(&s.SectorSegment.P)
 		s.Sector.Recalculate()
 	case SelectableActionWaypoint:
-		m.ProjectSelf(s.ActionWaypoint.P.To2D())
+		f(s.ActionWaypoint.P.To2D())
 	case SelectableBody:
-		m.ProjectXYSelf(&s.Body.Pos.Original)
+		f(s.Body.Pos.Original.To2D())
 		s.Body.Pos.ResetToOriginal()
 	case SelectableInternalSegmentA:
-		m.ProjectSelf(s.InternalSegment.A)
+		f(s.InternalSegment.A)
 		s.InternalSegment.Recalculate()
 	case SelectableInternalSegmentB:
-		m.ProjectSelf(s.InternalSegment.B)
+		f(s.InternalSegment.B)
 		s.InternalSegment.Recalculate()
 	case SelectableInternalSegment:
-		m.ProjectSelf(s.InternalSegment.A)
-		m.ProjectSelf(s.InternalSegment.B)
+		f(s.InternalSegment.A)
+		f(s.InternalSegment.B)
 		s.InternalSegment.Recalculate()
 	}
 }
 
 func (s *Selectable) Recalculate() {
 	switch s.Type {
-	case SelectableSector:
-		fallthrough
-	case SelectableLow:
-		fallthrough
-	case SelectableMid:
-		fallthrough
-	case SelectableHi:
+	case SelectableSector, SelectableLow, SelectableMid, SelectableHi:
 		fallthrough
 	case SelectableSectorSegment:
 		s.Sector.Recalculate()
@@ -226,9 +216,7 @@ func (s *Selectable) Recalculate() {
 		fallthrough
 	case SelectableBody:
 		s.Body.Pos.ResetToOriginal()
-	case SelectableInternalSegmentA:
-		fallthrough
-	case SelectableInternalSegmentB:
+	case SelectableInternalSegmentA, SelectableInternalSegmentB:
 		fallthrough
 	case SelectableInternalSegment:
 		s.InternalSegment.Recalculate()
