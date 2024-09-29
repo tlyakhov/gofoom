@@ -25,7 +25,7 @@ func (a *AddComponent) Undo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
-		a.State().ECS.Detach(a.ID, entity)
+		a.State().ECS.DeleteComponent(a.ID, entity)
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }

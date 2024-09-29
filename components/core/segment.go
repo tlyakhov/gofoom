@@ -46,8 +46,28 @@ func (s1 *Segment) Intersect2D(s2A, s2B, result *concepts.Vector2) bool {
 }
 
 func (s1 *Segment) Intersect3D(s2A, s2B, result *concepts.Vector3) bool {
-	r, s, s1dx, s1dy := concepts.IntersectSegmentsRaw(s1.A, s1.B, s2A.To2D(), s2B.To2D())
-	if r < 0 {
+	s1dx := s1.B[0] - s1.A[0]
+	s1dy := s1.B[1] - s1.A[1]
+	s2dx := s2B[0] - s2A[0]
+	s2dy := s2B[1] - s2A[1]
+
+	denom := s1dx*s2dy - s2dx*s1dy
+	if denom == 0 {
+		return false
+	}
+	r := (s1.A[1]-s2A[1])*s2dx - (s1.A[0]-s2A[0])*s2dy
+	if (denom < 0 && r >= constants.IntersectEpsilon) ||
+		(denom > 0 && r < -constants.IntersectEpsilon) {
+		return false
+	}
+	s := (s1.A[1]-s2A[1])*s1dx - (s1.A[0]-s2A[0])*s1dy
+	if (denom < 0 && s >= constants.IntersectEpsilon) ||
+		(denom > 0 && s < -constants.IntersectEpsilon) {
+		return false
+	}
+	r /= denom
+	s /= denom
+	if r < 0 || s < 0 || r > 1 || s > 1 {
 		return false
 	}
 	result[0] = s1.A[0] + r*s1dx

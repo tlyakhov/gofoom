@@ -36,12 +36,12 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	// Copy original sector's components to preserve them
 	a.Original[sector.Entity] = db.SerializeEntity(sector.Entity)
 	// Detach the original from the ECS
-	db.DetachAll(sector.Entity)
+	db.Delete(sector.Entity)
 	// Attach the cloned entities/components
 	for _, added := range s.Result {
 		entity := db.NewEntity()
 		for _, component := range added {
-			db.Attach(ecs.Types().ID(component), entity, component)
+			db.Upsert(ecs.Types().ID(component), entity, component)
 		}
 	}
 }

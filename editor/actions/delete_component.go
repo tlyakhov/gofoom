@@ -24,7 +24,7 @@ func (a *DeleteComponent) Act() {
 
 func (a *DeleteComponent) Undo() {
 	for entity, component := range a.Components {
-		a.State().ECS.AttachTyped(entity, component)
+		a.State().ECS.UpsertTyped(entity, component)
 		switch target := component.(type) {
 		case *core.Body:
 			entity := component.GetEntity()
@@ -49,7 +49,7 @@ func (a *DeleteComponent) Redo() {
 				delete(a.SectorForEntity[entity].Bodies, entity)
 			}
 		}
-		a.State().ECS.DetachByType(component)
+		a.State().ECS.DeleteByType(component)
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
