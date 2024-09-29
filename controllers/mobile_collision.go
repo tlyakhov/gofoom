@@ -172,7 +172,7 @@ func (mc *MobileController) removeBody(body *core.Body) {
 			mc.Sector = nil
 		}
 	}
-	body.ECS.DetachAll(body.Entity)
+	body.ECS.Delete(body.Entity)
 }
 
 func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core.Body) {

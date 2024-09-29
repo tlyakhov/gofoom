@@ -154,7 +154,7 @@ func (db *ECS) First(id ComponentID) Attachable {
 
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
-func (db *ECS) attach(entity Entity, component Attachable, componentID ComponentID) Attachable {
+func (db *ECS) upsert(entity Entity, component Attachable, componentID ComponentID) Attachable {
 	if entity == 0 {
 		log.Printf("Tried to attach 0 entity!")
 		return nil
@@ -183,7 +183,7 @@ func (db *ECS) attach(entity Entity, component Attachable, componentID Component
 
 // Create a new component with the given index and attach it.
 func (db *ECS) NewAttachedComponent(entity Entity, id ComponentID) Attachable {
-	attached := db.attach(entity, nil, id)
+	attached := db.upsert(entity, nil, id)
 	attached.Construct(nil)
 	return attached
 }
@@ -199,7 +199,7 @@ func (db *ECS) LoadAttachComponent(id ComponentID, data map[string]any, ignoreSe
 
 	db.Entities.Set(uint32(entity))
 
-	attached := db.attach(entity, nil, id)
+	attached := db.upsert(entity, nil, id)
 	attached.Construct(data)
 	return attached
 }
@@ -224,23 +224,23 @@ func (db *ECS) NewAttachedComponentTyped(entity Entity, cType string) Attachable
 	return nil
 }
 
-func (db *ECS) Attach(id ComponentID, entity Entity, component Attachable) Attachable {
-	return db.attach(entity, component, id)
+func (db *ECS) Upsert(id ComponentID, entity Entity, component Attachable) Attachable {
+	return db.upsert(entity, component, id)
 }
 
 // This seems expensive. Need to profile
-func (db *ECS) AttachTyped(entity Entity, component Attachable) {
+func (db *ECS) UpsertTyped(entity Entity, component Attachable) {
 	t := reflect.ValueOf(component).Type()
 
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
 	if index, ok := Types().IDs[t.String()]; ok {
-		db.attach(entity, component, index)
+		db.upsert(entity, component, index)
 	}
 }
 
-func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
+func (db *ECS) delete(id ComponentID, entity Entity, checkForEmpty bool) {
 	if entity == 0 {
 		log.Printf("ECS.Detach: tried to detach 0 entity.")
 		return
@@ -288,11 +288,11 @@ func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 	}
 }
 
-func (db *ECS) Detach(id ComponentID, entity Entity) {
-	db.detach(id, entity, true)
+func (db *ECS) DeleteComponent(id ComponentID, entity Entity) {
+	db.delete(id, entity, true)
 }
 
-func (db *ECS) DetachByType(component Attachable) {
+func (db *ECS) DeleteByType(component Attachable) {
 	if component == nil {
 		return
 	}
@@ -309,10 +309,10 @@ func (db *ECS) DetachByType(component Attachable) {
 	}
 
 	id := Types().IDs[tLocal.String()]
-	db.detach(id, entity, true)
+	db.delete(id, entity, true)
 }
 
-func (db *ECS) DetachAll(entity Entity) {
+func (db *ECS) Delete(entity Entity) {
 	if entity == 0 {
 		return
 	}

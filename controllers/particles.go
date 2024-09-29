@@ -58,7 +58,7 @@ func (pc *ParticleController) Always() {
 			continue
 		}
 		toRemove = append(toRemove, e)
-		pc.ECS.DetachAll(e)
+		pc.ECS.Delete(e)
 		pc.Particles.Delete(e)
 	}
 

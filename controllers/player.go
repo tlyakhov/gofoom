@@ -150,7 +150,7 @@ func Respawn(db *ecs.ECS, force bool) {
 	}
 
 	for len(players) > maxPlayers {
-		db.DetachAll(players[len(players)-1].Entity)
+		db.Delete(players[len(players)-1].Entity)
 		players = players[:len(players)-1]
 	}
 
@@ -171,7 +171,7 @@ func Respawn(db *ecs.ECS, force bool) {
 		}
 		jsonComponent := jsonData.(map[string]any)
 		c := db.LoadComponentWithoutAttaching(id, jsonComponent)
-		c = db.Attach(id, pastedEntity, c)
+		c = db.Upsert(id, pastedEntity, c)
 		if id == behaviors.PlayerCID {
 			player := c.(*behaviors.Player)
 			player.Spawn = false

@@ -33,7 +33,7 @@ func (a *AddEntity) DetachFromSector() {
 
 func (a *AddEntity) AttachAll() {
 	for _, component := range a.Components {
-		a.State().ECS.Attach(ecs.Types().ID(component), a.Entity, component)
+		a.State().ECS.Upsert(ecs.Types().ID(component), a.Entity, component)
 	}
 }
 
@@ -115,7 +115,7 @@ func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()
 	a.DetachFromSector()
 	if a.Entity != 0 {
-		a.State().ECS.DetachAll(a.Entity)
+		a.State().ECS.Delete(a.Entity)
 	}
 	a.State().Lock.Unlock()
 	a.SelectObjects(true)
@@ -126,7 +126,7 @@ func (a *AddEntity) Undo() {
 	defer a.State().Lock.Unlock()
 
 	a.DetachFromSector()
-	a.State().ECS.DetachAll(a.Entity)
+	a.State().ECS.Delete(a.Entity)
 }
 func (a *AddEntity) Redo() {
 	a.State().Lock.Lock()

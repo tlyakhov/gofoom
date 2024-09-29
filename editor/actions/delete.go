@@ -34,7 +34,7 @@ func (a *Delete) Undo() {
 	defer a.State().Lock.Unlock()
 
 	for s, saved := range a.Saved {
-		s.ECS.DetachAll(s.Entity)
+		s.ECS.Delete(s.Entity)
 		s.ECS.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
@@ -49,7 +49,7 @@ func (a *Delete) Redo() {
 		case selection.SelectableSector:
 			s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 			s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
-			s.ECS.DetachAll(s.Sector.Entity)
+			s.ECS.Delete(s.Sector.Entity)
 		case selection.SelectableSectorSegment:
 			for i, seg := range s.Sector.Segments {
 				if seg != s.SectorSegment {
@@ -59,7 +59,7 @@ func (a *Delete) Redo() {
 				if len(s.Sector.Segments) == 0 {
 					s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 					s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
-					s.ECS.DetachAll(s.Sector.Entity)
+					s.ECS.Delete(s.Sector.Entity)
 				}
 				break
 			}
@@ -68,7 +68,7 @@ func (a *Delete) Redo() {
 				// Otherwise weird things happen...
 				continue
 			}
-			a.State().ECS.DetachAll(s.Entity)
+			a.State().ECS.Delete(s.Entity)
 			if s.Body.Sector() != nil {
 				delete(s.Body.Sector().Bodies, s.Entity)
 			}
@@ -77,10 +77,10 @@ func (a *Delete) Redo() {
 		case selection.SelectableInternalSegmentA:
 			fallthrough
 		case selection.SelectableInternalSegmentB:
-			s.ECS.DetachAll(s.InternalSegment.Entity)
+			s.ECS.Delete(s.InternalSegment.Entity)
 			s.InternalSegment.DetachFromSectors()
 		case selection.SelectableEntity:
-			s.ECS.DetachAll(s.Entity)
+			s.ECS.Delete(s.Entity)
 		}
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
