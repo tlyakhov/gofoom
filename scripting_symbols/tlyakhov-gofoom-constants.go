@@ -34,7 +34,7 @@ func init() {
 		"InventoryGatherTextStyle": reflect.ValueOf(constant.MakeFromLiteral("\"#666\"", token.STRING, 0)),
 		"LightAttenuationEpsilon":  reflect.ValueOf(constant.MakeFromLiteral("0.0009999999999999999999584953855845392833856521974666975438594818115", token.FLOAT, 0)),
 		"LightGrid":                reflect.ValueOf(constant.MakeFromLiteral("4", token.FLOAT, 0)),
-		"LightmapRefreshDither":    reflect.ValueOf(constant.MakeFromLiteral("6", token.INT, 0)),
+		"LightmapRefreshDither":    reflect.ValueOf(constant.MakeFromLiteral("4", token.INT, 0)),
 		"LiquidChurnSize":          reflect.ValueOf(constant.MakeFromLiteral("0.02999999999999999999939013627797690375587080779951065778732299805", token.FLOAT, 0)),
 		"LiquidChurnSpeed":         reflect.ValueOf(constant.MakeFromLiteral("2", token.FLOAT, 0)),
 		"MaxGameText":              reflect.ValueOf(constant.MakeFromLiteral("25", token.INT, 0)),
