@@ -63,6 +63,7 @@ func (r *Renderer) Initialize() {
 		r.Columns[i].Visited = make([]state.SegmentIntersection, constants.MaxPortals)
 		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
+		r.Columns[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
 	r.textStyle = r.NewTextStyle()
 }
@@ -302,7 +303,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
 	column.LightSampler.XorSeed = uint64(r.ECS.Timestamp)
-	ewd2s := make([]*state.EntityWithDist2, 0, 16)
+	ewd2s := make([]*state.EntityWithDist2, 0, 64)
 	column.Sectors = make(containers.Set[*core.Sector])
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0

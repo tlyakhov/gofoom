@@ -5,7 +5,6 @@ package state
 
 import (
 	"fmt"
-	"log"
 	"math"
 
 	"tlyakhov/gofoom/components/core"
@@ -39,6 +38,7 @@ type LightSampler struct {
 	LightWorld   concepts.Vector3
 	InputBody    ecs.Entity
 	XorSeed      uint64
+	Visited      []*core.Sector
 
 	Sector  *core.Sector
 	Segment *core.Segment
@@ -125,23 +125,11 @@ func (le *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 	return false
 }
 
-var debugSectorName string = "Starting" // "be4bqmfvn27mek306btg"
-
-// TODO: Make more general
 // lightVisibleFromSector determines whether a given light is visible from a world location.
 func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
 	lightPos := lightBody.Pos.Render
 
-	debugLighting := false
-	if constants.DebugLighting {
-		dbgName := ecs.GetNamed(le.ECS, sector.Entity).Name
-		debugWallCheck := le.Type == LightSamplerWall
-		debugLighting = constants.DebugLighting && debugWallCheck && dbgName == debugSectorName
-	}
-
-	if debugLighting {
-		log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), lightPos)
-	}
+	// log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), lightPos)
 	le.Delta[0] = lightPos[0]
 	le.Delta[1] = lightPos[1]
 	le.Delta[2] = lightPos[2]
@@ -151,16 +139,136 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	if maxDist2 <= lightBody.Size.Render[0]*lightBody.Size.Render[0]*0.25 {
 		return true
 	}
-	le.Delta.NormSelf()
+
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
+	le.Delta.NormSelf()
+	le.Visited = le.Visited[:0]
 	for sector != nil {
-		if debugLighting {
-			log.Printf("Sector: %v\n", sector.Entity)
+		// log.Printf("Sector: %v\n", sector.Entity)
+		/*denom := sector.Top.Normal.Dot(&le.Delta)
+		if denom != 0 {
+			t := (sector.Segments[0].P[0]-p[0])*sector.Top.Normal[0] +
+				(sector.Segments[0].P[1]-p[1])*sector.Top.Normal[1] +
+				(*sector.Top.Z.Render-p[2])*sector.Top.Normal[2]
+			t /= denom
+			if t > 0.1 && t*t < maxDist2 {
+				return false
+			}
 		}
-		// Generate entity shadows
+		denom = sector.Bottom.Normal.Dot(&le.Delta)
+		if denom != 0 {
+			t := (sector.Segments[0].P[0]-p[0])*sector.Bottom.Normal[0] +
+				(sector.Segments[0].P[1]-p[1])*sector.Bottom.Normal[1] +
+				(*sector.Bottom.Z.Render-p[2])*sector.Bottom.Normal[2]
+			t /= denom
+			if t > 0.1 && t*t < maxDist2 {
+				return false
+			}
+		}*/
+
+		var next *core.Sector
+		// Since our sectors can be concave, we can't just go through the first portal we find,
+		// we have to go through the NEAREST one. Use dist2 to keep track...
+		dist2 := maxDist2
+		for _, seg := range sector.Segments {
+			// Don't occlude the world location with the segment it's located on
+			// Segment facing backwards from our ray? skip it.
+			if (le.Type == LightSamplerWall && &seg.Segment == le.Segment) ||
+				le.Delta[0]*seg.Normal[0]+le.Delta[1]*seg.Normal[1] > 0 {
+				// log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				continue
+			}
+
+			// Find the intersection with this segment.
+			ok := seg.Intersect3D(p, lightPos, &le.Intersection)
+			if !ok {
+				// log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				continue // No intersection, skip it!
+			}
+
+			// log.Printf("Intersection for seg %v|%v = %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman(), le.Intersection.StringHuman())
+
+			if seg.AdjacentSector == 0 {
+				// log.Printf("Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				return false // This is a wall, that means the light is occluded for sure.
+			}
+
+			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
+			// bottom/top portions could be in the way.
+			i2d := le.Intersection.To2D()
+			floorZ, ceilZ := sector.ZAt(dynamic.DynamicRender, i2d)
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, i2d)
+			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
+			if le.Intersection[2] < floorZ2 || le.Intersection[2] > ceilZ2 ||
+				le.Intersection[2] < floorZ || le.Intersection[2] > ceilZ {
+				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				return false // Same as wall, we're occluded.
+			}
+
+			// If the portal has a transparent material, we need to filter the light
+			if seg.PortalHasMaterial {
+				le.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
+				le.NU = le.Intersection.To2D().Dist(&seg.P) / seg.Length
+				le.NV = (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
+				le.U = le.NU
+				le.V = le.NV
+				le.SampleMaterial(seg.Surface.ExtraStages)
+				if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
+					lit.Apply(&le.MaterialSampler.Output, nil)
+				}
+				if le.MaterialSampler.Output[3] >= 0.99 {
+					return false
+				}
+				le.Filter.AddPreMulColorSelf(&le.MaterialSampler.Output)
+			}
+
+			// Get the square of the distance to the intersection (from the target point)
+			idist2 := le.Intersection.Dist2(p)
+
+			// If the difference between the intersected distance and the light distance is
+			// within the bounding radius of our light, our light is right on a portal boundary and visible.
+			if math.Abs(idist2-maxDist2) < lightBody.Size.Render[0]*0.5 {
+				return true
+			}
+
+			if idist2-dist2 > constants.IntersectEpsilon {
+				// log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
+				// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
+				continue
+			}
+
+			if prevDist-idist2 > constants.IntersectEpsilon {
+				// log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
+				// If the current intersection point is BEHIND the last one, we went backwards?
+				continue
+			}
+
+			// We're in the clear! Move to the next adjacent sector.
+			dist2 = idist2
+			next = seg.AdjacentSegment.Sector
+		}
+		prevDist = dist2
+		depth++
+		if depth > constants.MaxPortals { // Avoid infinite looping.
+			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
+			le.Player.Notices.Push(dbg)
+			return false
+		}
+		if next == nil && lightBody.SectorEntity != 0 && sector.Entity != lightBody.SectorEntity {
+			// log.Printf("No intersections, but ended up in a different sector than the light!\n")
+			return false
+		}
+		le.Visited = append(le.Visited, sector)
+		sector = next
+	}
+
+	// Generate entity shadows last. That way if the light is blocked by sector
+	// walls, we don't waste time checking/blending lots of bodies or internal
+	// segments.
+	for _, sector := range le.Visited {
 		for _, b := range sector.Bodies {
 			if !b.Active || b.Shadow == core.BodyShadowNone ||
 				b.Entity == lightBody.Entity ||
@@ -193,9 +301,7 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			// Find the intersection with this segment.
 			ok := seg.Intersect3D(p, lightPos, &le.Intersection)
 			if !ok || le.Intersection[2] < seg.Bottom || le.Intersection[2] > seg.Top {
-				if debugLighting {
-					log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
-				}
+				// log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
 				continue // No intersection, skip it!
 			}
 
@@ -213,141 +319,9 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			}
 			le.Filter[3] += le.MaterialSampler.Output[3]
 		}
-
-		// Does intersecting the ceiling/floor help us?
-		/*denom := sector.Top.Normal.Dot(&le.Delta)
-		if denom != 0 {
-			planeRayDelta := concepts.Vector3{
-				sector.Segments[0].P[0] - p[0],
-				sector.Segments[0].P[1] - p[1],
-				*sector.Top.Z.Render - p[2]}
-			t := planeRayDelta.Dot(&sector.Top.Normal) / denom
-			if t > 0 {
-				//				le.Intersection[2] = le.Delta[2] * t
-				le.Intersection[1] = le.Delta[1] * t
-				le.Intersection[0] = le.Delta[0] * t
-				if sector.IsPointInside2D(le.Intersection.To2D()) {
-					return false
-				}
-			}
-		}*/
-
-		var next *core.Sector
-		// Since our sectors can be concave, we can't just go through the first portal we find,
-		// we have to go through the NEAREST one. Use dist2 to keep track...
-		dist2 := maxDist2
-		for _, seg := range sector.Segments {
-			// Don't occlude the world location with the segment it's located on
-			// Segment facing backwards from our ray? skip it.
-			if (le.Type == LightSamplerWall && &seg.Segment == le.Segment) ||
-				le.Delta[0]*seg.Normal[0]+le.Delta[1]*seg.Normal[1] > 0 {
-				if debugLighting {
-					log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
-				}
-				continue
-			}
-
-			// Find the intersection with this segment.
-			ok := seg.Intersect3D(p, lightPos, &le.Intersection)
-			if !ok {
-				if debugLighting {
-					log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
-				}
-				continue // No intersection, skip it!
-			}
-
-			if debugLighting {
-				log.Printf("Intersection for seg %v|%v = %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman(), le.Intersection.StringHuman())
-			}
-
-			if seg.AdjacentSector == 0 {
-				if debugLighting {
-					log.Printf("Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
-				}
-				return false // This is a wall, that means the light is occluded for sure.
-			}
-
-			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
-			// bottom/top portions could be in the way.
-			i2d := le.Intersection.To2D()
-			floorZ, ceilZ := sector.ZAt(dynamic.DynamicRender, i2d)
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, i2d)
-			if debugLighting {
-				log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
-			}
-			if le.Intersection[2] < floorZ2 || le.Intersection[2] > ceilZ2 ||
-				le.Intersection[2] < floorZ || le.Intersection[2] > ceilZ {
-				if debugLighting {
-					log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
-				}
-				return false // Same as wall, we're occluded.
-			}
-
-			// If the portal has a transparent material, we need to filter the light
-			if seg.PortalHasMaterial {
-				le.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-				le.NU = le.Intersection.To2D().Dist(&seg.P) / seg.Length
-				le.NV = (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				le.U = le.NU
-				le.V = le.NV
-				le.SampleMaterial(seg.Surface.ExtraStages)
-				if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
-					lit.Apply(&le.MaterialSampler.Output, nil)
-				}
-				if le.MaterialSampler.Output[3] >= 0.99 {
-					return false
-				}
-				le.Filter.AddPreMulColorSelf(&le.MaterialSampler.Output)
-			}
-
-			// Get the square of the distance to the intersection (from the target point)
-			idist2 := le.Intersection.Dist2(p)
-
-			// If the difference between the intersected distance and the light distance is
-			// within the bounding radius of our light, our light is right on a portal boundary and visible.
-			if math.Abs(idist2-maxDist2) < lightBody.Size.Render[0]*0.5 {
-				return true
-			}
-
-			if idist2-dist2 > constants.IntersectEpsilon {
-				if debugLighting {
-					log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
-				}
-				// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
-				continue
-			}
-
-			if prevDist-idist2 > constants.IntersectEpsilon {
-				if debugLighting {
-					log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
-				}
-				// If the current intersection point is BEHIND the last one, we went backwards?
-				continue
-			}
-
-			// We're in the clear! Move to the next adjacent sector.
-			dist2 = idist2
-			next = seg.AdjacentSegment.Sector
-		}
-		prevDist = dist2
-		depth++
-		if depth > constants.MaxPortals { // Avoid infinite looping.
-			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
-			le.Player.Notices.Push(dbg)
-			return false
-		}
-		if next == nil && lightBody.SectorEntity != 0 && sector.Entity != lightBody.SectorEntity {
-			if debugLighting {
-				log.Printf("No intersections, but ended up in a different sector than the light!\n")
-			}
-			return false
-		}
-		sector = next
 	}
 
-	if debugLighting {
-		log.Printf("Lit!\n")
-	}
+	// log.Printf("Lit!\n")
 	return true
 }
 

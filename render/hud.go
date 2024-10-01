@@ -9,7 +9,6 @@ import (
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 )
 
 func (r *Renderer) RenderHud() {
@@ -80,8 +79,7 @@ func (r *Renderer) DebugInfo() {
 	r.Print(ts, 4, 24, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
 	if r.PlayerBody.SectorEntity != 0 {
 		entity := r.PlayerBody.SectorEntity
-		s := 0
-		core.GetSector(r.ECS, entity).Lightmap.Range(func(k uint64, v concepts.Vector4) bool { s++; return true })
+		s := core.GetSector(r.ECS, entity).Lightmap.Size()
 		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.Format(r.ECS), s))
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(), playerMobile.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
 	}
