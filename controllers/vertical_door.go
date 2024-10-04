@@ -18,7 +18,7 @@ type VerticalDoorController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&VerticalDoorController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &VerticalDoorController{} }, 100)
 }
 
 func (vd *VerticalDoorController) ComponentID() ecs.ComponentID {

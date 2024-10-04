@@ -14,6 +14,7 @@ const (
 type Controller interface {
 	ComponentID() ComponentID
 	Methods() ControllerMethod
+	EditorPausedMethods() ControllerMethod
 	// Return false if controller shouldn't run for this entity
 	Target(Attachable) bool
 	Always()
@@ -29,6 +30,10 @@ func (c *BaseController) ComponentID() ComponentID {
 }
 
 func (c *BaseController) Methods() ControllerMethod {
+	return 0
+}
+
+func (c *BaseController) EditorPausedMethods() ControllerMethod {
 	return 0
 }
 

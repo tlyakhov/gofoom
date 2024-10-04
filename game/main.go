@@ -45,16 +45,16 @@ func gameInput() {
 	playerMobile := core.GetMobile(renderer.ECS, renderer.Player.Entity)
 
 	if win.Pressed(pixel.KeyW) {
-		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now)
 	}
 	if win.Pressed(pixel.KeyS) {
-		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+180.0, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+180.0)
 	}
 	if win.Pressed(pixel.KeyE) {
-		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+90.0, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+90.0)
 	}
 	if win.Pressed(pixel.KeyQ) {
-		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+270.0, false)
+		controllers.MovePlayer(renderer.ECS, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+270.0)
 	}
 	if win.Pressed(pixel.KeyA) {
 		renderer.PlayerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS

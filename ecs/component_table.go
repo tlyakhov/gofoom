@@ -26,7 +26,8 @@ func (table *ComponentTable) Set(a Attachable) {
 		i = (i + 1) % size
 	}
 
-	// Rehash every few attached components
+	// If we're here, that means we didn't find an empty slot.
+	// We need to expand the table and rehash.
 	newTable := make(ComponentTable, size+ComponentTableGrowthRate)
 	for _, c := range *table {
 		if c == nil {

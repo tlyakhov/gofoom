@@ -25,7 +25,7 @@ type BodyController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&BodyController{}, 75)
+	ecs.Types().RegisterController(func() ecs.Controller { return &BodyController{} }, 75)
 }
 
 func (bc *BodyController) ComponentID() ecs.ComponentID {
@@ -35,6 +35,11 @@ func (bc *BodyController) ComponentID() ecs.ComponentID {
 func (bc *BodyController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways |
 		ecs.ControllerRecalculate |
+		ecs.ControllerLoaded
+}
+
+func (bc *BodyController) EditorPausedMethods() ecs.ControllerMethod {
+	return ecs.ControllerRecalculate |
 		ecs.ControllerLoaded
 }
 

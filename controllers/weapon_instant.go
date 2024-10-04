@@ -29,7 +29,7 @@ type WeaponInstantController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&WeaponInstantController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &WeaponInstantController{} }, 100)
 }
 
 func (wc *WeaponInstantController) ComponentID() ecs.ComponentID {

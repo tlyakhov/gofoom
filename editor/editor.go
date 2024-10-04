@@ -197,16 +197,16 @@ func (e *Editor) Integrate() {
 	playerMobile := core.GetMobile(player.ECS, player.Entity)
 
 	if e.GameWidget.KeyMap.Contains("W") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap.Contains("S") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+180.0, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+180.0)
 	}
 	if e.GameWidget.KeyMap.Contains("E") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+90.0, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+90.0)
 	}
 	if e.GameWidget.KeyMap.Contains("Q") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+270.0, e.ECS.EditorPaused)
+		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+270.0)
 	}
 	if e.GameWidget.KeyMap.Contains("A") {
 		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS

@@ -29,7 +29,6 @@ const (
 )
 
 type Animated interface {
-	//ecs.Serializable
 	Animate()
 	Reset()
 }

@@ -30,7 +30,7 @@ type ActionController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&ActionController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &ActionController{} }, 100)
 }
 
 func (ac *ActionController) ComponentID() ecs.ComponentID {
@@ -42,6 +42,9 @@ func (ac *ActionController) Methods() ecs.ControllerMethod {
 }
 
 func (ac *ActionController) Target(target ecs.Attachable) bool {
+	if target.GetECS().Simulation.EditorPaused {
+		return false
+	}
 	ac.Actor = target.(*behaviors.Actor)
 	ac.Body = core.GetBody(ac.ECS, ac.Entity)
 	ac.Mobile = core.GetMobile(ac.ECS, ac.Entity)

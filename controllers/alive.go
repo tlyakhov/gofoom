@@ -14,7 +14,7 @@ type AliveController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&AliveController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &AliveController{} }, 100)
 }
 
 func (a *AliveController) ComponentID() ecs.ComponentID {
@@ -33,7 +33,7 @@ func (a *AliveController) Target(target ecs.Attachable) bool {
 func (a *AliveController) Always() {
 	for source, d := range a.Damages {
 		if d.Cooldown.Input <= 0 {
-			d.Cooldown.Detach(a.ECS.Simulation)
+			d.Cooldown.Detach(a.Alive.ECS.Simulation)
 			delete(a.Damages, source)
 			continue
 		}

@@ -16,7 +16,7 @@ type PvsController struct {
 
 func init() {
 	// Should run after the SectorController, which recalculates normals etc
-	ecs.Types().RegisterController(&PvsController{}, 60)
+	ecs.Types().RegisterController(func() ecs.Controller { return &PvsController{} }, 60)
 }
 
 func (pvs *PvsController) ComponentID() ecs.ComponentID {

@@ -54,7 +54,7 @@ func (s *Simulation) Step() {
 		s.All.Range(func(key any, _ any) bool {
 			d := key.(Dynamic)
 			d.NewFrame()
-			if a := d.GetAnimation(); a != nil {
+			if a := d.GetAnimation(); a != nil && !s.EditorPaused {
 				a.Animate()
 			}
 			return true
