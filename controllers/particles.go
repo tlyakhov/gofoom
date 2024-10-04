@@ -21,7 +21,7 @@ type ParticleController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&ParticleController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &ParticleController{} }, 100)
 }
 
 func (pc *ParticleController) ComponentID() ecs.ComponentID {

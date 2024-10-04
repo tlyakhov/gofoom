@@ -5,12 +5,11 @@ package ecs
 
 type Attached struct {
 	ComponentID
-	Entity                  `editable:"Component" edit_type:"Component" edit_sort:"0"`
-	ECS                     *ECS
-	System                  bool // Don't serialize this entity, disallow editing
-	Active                  bool `editable:"Active?"`
-	ActiveWhileEditorPaused bool `editable:"Active when editor paused?"`
-	indexInECS              int
+	Entity     `editable:"Component" edit_type:"Component" edit_sort:"0"`
+	ECS        *ECS
+	System     bool // Don't serialize this entity, disallow editing
+	Active     bool `editable:"Active?"`
+	indexInECS int
 }
 
 var AttachedCID ComponentID
@@ -21,7 +20,7 @@ func init() {
 }
 
 func (a *Attached) IsActive() bool {
-	return a != nil && a.Entity != 0 && a.Active && (a.ActiveWhileEditorPaused || !a.ECS.Simulation.EditorPaused)
+	return a != nil && a.Entity != 0 && a.Active
 }
 
 func (a *Attached) String() string {
@@ -70,7 +69,6 @@ func (a *Attached) GetComponentID() ComponentID {
 
 func (a *Attached) Construct(data map[string]any) {
 	a.Active = true
-	a.ActiveWhileEditorPaused = true
 
 	if data == nil {
 		return
@@ -81,18 +79,12 @@ func (a *Attached) Construct(data map[string]any) {
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
 	}
-	if v, ok := data["ActiveWhileEditorPaused"]; ok {
-		a.ActiveWhileEditorPaused = v.(bool)
-	}
 }
 
 func (a *Attached) Serialize() map[string]any {
 	result := map[string]any{"Entity": a.Entity.String()}
 	if !a.Active {
 		result["Active"] = a.Active
-	}
-	if !a.ActiveWhileEditorPaused {
-		result["ActiveWhileEditorPaused"] = a.ActiveWhileEditorPaused
 	}
 
 	return result

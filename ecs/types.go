@@ -14,9 +14,9 @@ import (
 
 type ComponentID uint32
 type controllerMetadata struct {
-	Controller
-	Type     reflect.Type
-	Priority int
+	Constructor func() Controller
+	Type        reflect.Type
+	Priority    int
 }
 type typeMetadata struct {
 	ColumnIndexes        map[string]int

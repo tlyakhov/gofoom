@@ -19,7 +19,7 @@ type ProximityController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&ProximityController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &ProximityController{} }, 100)
 }
 
 func (pc *ProximityController) ComponentID() ecs.ComponentID {

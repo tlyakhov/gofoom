@@ -18,7 +18,7 @@ type UnderwaterController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&UnderwaterController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &UnderwaterController{} }, 100)
 }
 
 func (uc *UnderwaterController) ComponentID() ecs.ComponentID {

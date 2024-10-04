@@ -255,7 +255,7 @@ func (s *Sector) Serialize() map[string]any {
 
 func (s *Sector) Recalculate() {
 	// TODO: Make this method more efficient
-	concepts.V3(&s.Center, 0, 0, (s.Top.Z.Original+s.Bottom.Z.Original)/2)
+	concepts.V3(&s.Center, 0, 0, 0)
 	concepts.V3(&s.Min, math.Inf(1), math.Inf(1), math.Inf(1))
 	concepts.V3(&s.Max, math.Inf(-1), math.Inf(-1), math.Inf(-1))
 
@@ -293,6 +293,7 @@ func (s *Sector) Recalculate() {
 			s.Max[1] = segment.P[1]
 		}
 		bz, tz := s.ZAt(dynamic.DynamicOriginal, &segment.P)
+		s.Center[2] += (bz + tz) * 0.5
 		if bz < s.Min[2] {
 			s.Min[2] = bz
 		}

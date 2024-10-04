@@ -15,7 +15,7 @@ type SectorController struct {
 
 func init() {
 	// Should run before everything
-	ecs.Types().RegisterController(&SectorController{}, 50)
+	ecs.Types().RegisterController(func() ecs.Controller { return &SectorController{} }, 50)
 }
 
 func (sc *SectorController) ComponentID() ecs.ComponentID {

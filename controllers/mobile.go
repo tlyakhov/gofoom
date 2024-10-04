@@ -20,7 +20,7 @@ type MobileController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&MobileController{}, 80)
+	ecs.Types().RegisterController(func() ecs.Controller { return &MobileController{} }, 80)
 }
 
 func (mc *MobileController) ComponentID() ecs.ComponentID {
@@ -30,6 +30,11 @@ func (mc *MobileController) ComponentID() ecs.ComponentID {
 func (mc *MobileController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways |
 		ecs.ControllerRecalculate |
+		ecs.ControllerLoaded
+}
+
+func (mc *MobileController) EditorPausedMethods() ecs.ControllerMethod {
+	return ecs.ControllerRecalculate |
 		ecs.ControllerLoaded
 }
 

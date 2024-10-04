@@ -22,7 +22,7 @@ type WanderController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&WanderController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &WanderController{} }, 100)
 }
 
 func (wc *WanderController) ComponentID() ecs.ComponentID {

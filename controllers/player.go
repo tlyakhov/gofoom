@@ -25,7 +25,7 @@ type PlayerController struct {
 }
 
 func init() {
-	ecs.Types().RegisterController(&PlayerController{}, 100)
+	ecs.Types().RegisterController(func() ecs.Controller { return &PlayerController{} }, 100)
 }
 
 func (pc *PlayerController) ComponentID() ecs.ComponentID {
@@ -105,7 +105,15 @@ func (pc *PlayerController) Always() {
 	}*/
 }
 
-func MovePlayer(db *ecs.ECS, e ecs.Entity, angle float64, direct bool) {
+func MovePlayer(db *ecs.ECS, e ecs.Entity, angle float64) {
+	if db.EditorPaused {
+		MovePlayerNoClip(db, e, angle)
+	} else {
+		MovePlayerForce(db, e, angle)
+	}
+}
+
+func MovePlayerForce(db *ecs.ECS, e ecs.Entity, angle float64) {
 	p := core.GetBody(db, e)
 	m := core.GetMobile(db, e)
 	if p == nil || m == nil {
@@ -115,14 +123,30 @@ func MovePlayer(db *ecs.ECS, e ecs.Entity, angle float64, direct bool) {
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce
-	if direct {
-		p.Pos.Now[0] += dx * 0.1 / m.Mass
-		p.Pos.Now[1] += dy * 0.1 / m.Mass
-	} else {
-		if uw || p.OnGround {
-			m.Force[0] += dx
-			m.Force[1] += dy
-		}
+
+	if uw || p.OnGround {
+		m.Force[0] += dx
+		m.Force[1] += dy
+	}
+}
+
+func MovePlayerNoClip(db *ecs.ECS, e ecs.Entity, angle float64) {
+	p := core.GetBody(db, e)
+	m := core.GetMobile(db, e)
+	if p == nil || m == nil {
+		return
+	}
+	dy, dx := math.Sincos(angle * concepts.Deg2rad)
+	dy *= constants.PlayerWalkForce
+	dx *= constants.PlayerWalkForce
+	player := behaviors.GetPlayer(db, e)
+	p.Pos.Now[0] += dx * 0.02 / m.Mass
+	p.Pos.Now[1] += dy * 0.02 / m.Mass
+	sector := p.RenderSector()
+	if sector != nil {
+		p.SectorEntity = sector.Entity
+		p.Pos.Now[2] = sector.Center[2]
+		player.CameraZ = p.Pos.Now[2]
 	}
 }
 
