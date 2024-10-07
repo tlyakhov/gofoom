@@ -55,6 +55,10 @@ func (a *Attached) SetEntity(entity Entity) {
 	a.Entity = entity
 }
 
+func (a *Attached) SetActive(active bool) {
+	a.Active = active
+}
+
 func (a *Attached) GetEntity() Entity {
 	return a.Entity
 }

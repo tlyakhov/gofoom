@@ -352,6 +352,8 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	slices.SortFunc(ewd2s, func(a *state.EntityWithDist2, b *state.EntityWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
+	// This has a bug when rendering portals: these need to be transformed and
+	// clipped through portals appropriately.
 	column.SegmentIntersection = &state.SegmentIntersection{}
 	column.LightSampler.MaterialSampler.Config = r.Config
 	column.LightSampler.Type = state.LightSamplerWall

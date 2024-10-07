@@ -53,7 +53,7 @@ func CreateFont(db *ecs.ECS, filename string, name string) ecs.Entity {
 	sprite.System = true
 	sprite.Rows = 16
 	sprite.Cols = 16
-	sprite.Image = e
+	sprite.Material = e
 	sprite.Angles = 0
 	return e
 }

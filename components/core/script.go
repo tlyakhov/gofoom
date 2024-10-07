@@ -59,8 +59,9 @@ func (s *Script) codeCommonHeader(sb *strings.Builder) {
 	import "tlyakhov/gofoom/components/core"
 	import "tlyakhov/gofoom/components/materials"
 	import "tlyakhov/gofoom/concepts"
-	import "tlyakhov/gofoom/containers"
 	import "tlyakhov/gofoom/constants"
+	import "tlyakhov/gofoom/containers"
+	import "tlyakhov/gofoom/controllers"
 	import "tlyakhov/gofoom/ecs"
 	import "log"
 	import "fmt"
@@ -124,6 +125,10 @@ func (s *Script) Compile() {
 	s.runFunc = f.Interface()
 }
 
+func (s *Script) IsCompiled() bool {
+	return s.interp != nil && s.runFunc != nil
+}
+
 func (s *Script) AttachECS(db *ecs.ECS) {
 	s.ECS = db
 }
@@ -177,7 +182,7 @@ func (s *Script) Entity(name string) ecs.Entity {
 }
 
 func (s *Script) Act() bool {
-	if s.interp == nil || s.runFunc == nil {
+	if !s.IsCompiled() {
 		return false
 	}
 	// This handles panics inside the interpreter. It's a bit aggressive, but

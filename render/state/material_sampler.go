@@ -63,7 +63,7 @@ func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Attach
 		}
 	} else if sprite := materials.GetSprite(ms.ECS, material); sprite != nil && sprite != parent {
 		ms.Materials = append(ms.Materials, sprite)
-		ms.derefMaterials(sprite.Image, sprite)
+		ms.derefMaterials(sprite.Material, sprite)
 	} else if image := materials.GetImage(ms.ECS, material); image != nil {
 		ms.Materials = append(ms.Materials, image)
 	} else if text := materials.GetText(ms.ECS, material); text != nil {

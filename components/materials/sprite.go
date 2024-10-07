@@ -12,10 +12,10 @@ import (
 type Sprite struct {
 	ecs.Attached `editable:"^"`
 
-	Image  ecs.Entity `editable:"Image" edit_type:"Material"`
-	Cols   uint32     `editable:"Columns"`
-	Rows   uint32     `editable:"Rows"`
-	Angles uint32     `editable:"# of Angles"`
+	Material ecs.Entity `editable:"Material" edit_type:"Material"`
+	Cols     uint32     `editable:"Columns"`
+	Rows     uint32     `editable:"Rows"`
+	Angles   uint32     `editable:"# of Angles"`
 
 	Frames uint32                    `editable:"# of Frames"`
 	Frame  dynamic.DynamicValue[int] `editable:"Frame"`
@@ -51,7 +51,7 @@ func (s *Sprite) AttachECS(db *ecs.ECS) {
 }
 
 func (s *Sprite) TransformUV(u, v float64, c, r uint32) (ur, vr float64) {
-	if s.Image == 0 || s.Rows == 0 || s.Cols == 0 {
+	if s.Material == 0 || s.Rows == 0 || s.Cols == 0 {
 		return u, v
 	}
 
@@ -75,8 +75,8 @@ func (s *Sprite) Construct(data map[string]any) {
 		return
 	}
 
-	if v, ok := data["Image"]; ok {
-		s.Image, _ = ecs.ParseEntity(v.(string))
+	if v, ok := data["Material"]; ok {
+		s.Material, _ = ecs.ParseEntity(v.(string))
 	}
 
 	if v, ok := data["Rows"]; ok {
@@ -106,8 +106,8 @@ func (s *Sprite) Construct(data map[string]any) {
 
 func (s *Sprite) Serialize() map[string]any {
 	result := s.Attached.Serialize()
-	if s.Image != 0 {
-		result["Image"] = s.Image.String()
+	if s.Material != 0 {
+		result["Material"] = s.Material.String()
 	}
 	if s.Rows != 1 {
 		result["Rows"] = strconv.FormatUint(uint64(s.Rows), 10)

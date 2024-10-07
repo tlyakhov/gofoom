@@ -32,7 +32,7 @@ type Image struct {
 	ecs.Attached `editable:"^"`
 
 	Width, Height   uint32
-	Source          string `editable:"Texture Source" edit_type:"file"`
+	Source          string `editable:"File" edit_type:"file"`
 	GenerateMipMaps bool   `editable:"Generate Mip Maps?" edit_type:"bool"`
 	Filter          bool   `editable:"Filter?" edit_type:"bool"`
 	Data            []uint32

@@ -29,6 +29,7 @@ type Attachable interface {
 	SetComponentID(ComponentID)
 	GetComponentID() ComponentID
 	OnDetach()
+	SetActive(active bool)
 }
 
 type AttachableColumn interface {

@@ -2077,13 +2077,13 @@
         },
         "Z": {
           "Animation": {
-            "Active": true,
+            "Active": false,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0.0078125,
-            "Reverse": true,
+            "Percent": 1,
+            "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -2390,7 +2390,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -2684,6 +2683,16 @@
       "Entity": "32",
       "Image": "98"
     },
+    "behaviors.Proximity": {
+      "Entity": "32",
+      "Range": 20,
+      "Scripts": [
+        {
+          "Code": "if body == nil { return }\np := behaviors.GetPlayer(s.ECS, body.Entity)\nitem := behaviors.GetInventoryItem(s.ECS,onEntity)\nif p == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(p, item)",
+          "Style": "ScriptStyleStatement"
+        }
+      ]
+    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -2698,7 +2707,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.3671875,
+          "Percent": 0.890625,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -2748,7 +2757,7 @@
         "Original": "0",
         "Response": 0
       },
-      "Image": "98"
+      "Material": "98"
     }
   },
   {
@@ -3756,7 +3765,7 @@
   {
     "Entity": "42",
     "behaviors.Actor": {
-      "Action": "146",
+      "Action": "135",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
@@ -3842,7 +3851,7 @@
         "Original": "0",
         "Response": 0
       },
-      "Image": "42",
+      "Material": "42",
       "Rows": "2"
     }
   },
@@ -6178,7 +6187,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -6872,7 +6880,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -7173,13 +7180,13 @@
         },
         "Z": {
           "Animation": {
-            "Active": true,
+            "Active": false,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0.0078125,
-            "Reverse": true,
+            "Percent": 1,
+            "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -7668,6 +7675,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2"
           },
           "X": -100,
@@ -10241,7 +10249,7 @@
         "Original": "0",
         "Response": 0
       },
-      "Image": "119",
+      "Material": "119",
       "Rows": "16"
     }
   },
@@ -10700,8 +10708,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.015625,
-          "Reverse": false,
+          "Percent": 0.5078125,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10732,7 +10740,7 @@
         "Original": "0",
         "Response": 0
       },
-      "Image": "133"
+      "Material": "133"
     }
   },
   {
@@ -11160,7 +11168,7 @@
   {
     "Entity": "152",
     "behaviors.Actor": {
-      "Action": "151",
+      "Action": "150",
       "Entity": "152",
       "Speed": 100,
       "Start": "150"
@@ -11169,75 +11177,68 @@
       "Entity": "152",
       "Material": "153",
       "Particles": [
-        "164",
-        "208",
-        "167",
-        "160",
-        "165",
-        "178",
-        "200",
-        "194",
-        "175",
-        "218",
-        "231",
-        "155",
-        "168",
-        "179",
-        "181",
-        "190",
-        "211",
-        "199",
-        "214",
-        "157",
-        "171",
-        "183",
-        "185",
-        "201",
-        "223",
-        "158",
         "163",
+        "166",
+        "186",
+        "198",
+        "157",
+        "161",
+        "170",
+        "162",
+        "184",
+        "190",
+        "199",
+        "226",
+        "227",
+        "160",
+        "173",
+        "183",
+        "168",
+        "197",
+        "209",
+        "228",
+        "156",
+        "194",
+        "196",
+        "200",
+        "203",
+        "212",
+        "224",
+        "179",
+        "204",
+        "214",
+        "171",
+        "189",
+        "213",
+        "229",
+        "230",
+        "172",
         "177",
         "188",
-        "228",
-        "162",
-        "166",
-        "204",
-        "176",
-        "187",
-        "198",
-        "225",
-        "174",
-        "195",
-        "173",
-        "205",
-        "197",
-        "210",
-        "215",
-        "229",
-        "161",
-        "212",
-        "156",
-        "169",
-        "203",
-        "217",
-        "224",
-        "207",
-        "209",
-        "159",
-        "172",
-        "182",
-        "186",
-        "189",
-        "196",
-        "216",
-        "230",
-        "227",
-        "170",
-        "180",
-        "184",
+        "211",
+        "185",
+        "201",
         "202",
-        "213",
-        "226"
+        "218",
+        "225",
+        "164",
+        "195",
+        "217",
+        "215",
+        "155",
+        "165",
+        "167",
+        "169",
+        "174",
+        "176",
+        "181",
+        "182",
+        "210",
+        "158",
+        "223",
+        "175",
+        "178",
+        "216"
       ]
     },
     "behaviors.WeaponInstant": {
@@ -11286,7 +11287,7 @@
         "Original": "0",
         "Response": 0
       },
-      "Image": "153"
+      "Material": "153"
     }
   },
   {

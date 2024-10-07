@@ -82,15 +82,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Scripts"]; ok {
-		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v, func(s *core.Script) {
-			s.Params = []core.ScriptParam{
-				{Name: "proximity", TypeName: "*behaviors.Proximity"},
-				{Name: "onEntity", TypeName: "ecs.Entity"},
-				{Name: "body", TypeName: "*core.Body"},
-				{Name: "sector", TypeName: "*core.Sector"},
-				{Name: "flags", TypeName: "behaviors.ProximityFlags"},
-			}
-		})
+		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v, nil)
 	}
 
 	if v, ok := data["Entities"]; ok {
