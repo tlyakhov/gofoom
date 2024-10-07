@@ -45,6 +45,14 @@ func (pc *ProximityController) isEntityPlayerAndActing(entity ecs.Entity) bool {
 	return false
 }
 
+var proximityScriptParams = []core.ScriptParam{
+	{Name: "proximity", TypeName: "*behaviors.Proximity"},
+	{Name: "onEntity", TypeName: "ecs.Entity"},
+	{Name: "body", TypeName: "*core.Body"},
+	{Name: "sector", TypeName: "*core.Sector"},
+	{Name: "flags", TypeName: "behaviors.ProximityFlags"},
+}
+
 func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
 	pc.Firing = true
 	if pc.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
@@ -52,6 +60,10 @@ func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
 	}
 	pc.LastFired = pc.ECS.Timestamp
 	for _, script := range pc.Scripts {
+		if len(script.Params) == 0 {
+			script.Params = proximityScriptParams
+			script.Compile()
+		}
 		script.Vars["proximity"] = pc.Proximity
 		script.Vars["onEntity"] = pc.onEntity
 		script.Vars["body"] = body

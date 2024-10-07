@@ -207,3 +207,23 @@ func Respawn(db *ecs.ECS, force bool) {
 	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerRecalculate)
 	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerAlways)
 }
+
+func PickUpInventoryItem(p *behaviors.Player, item *behaviors.InventoryItem) {
+	for _, slot := range p.Inventory {
+		if !slot.ValidClasses.Contains(item.Class) {
+			continue
+		}
+		if slot.Count >= slot.Limit {
+			p.Notices.Push("Can't pick up more " + item.Class)
+			return
+		}
+		slot.Count++
+		p.Notices.Push("Picked up a " + item.Class)
+		// Disable all the entity components
+		for _, c := range item.ECS.AllComponents(item.Entity) {
+			if c != nil {
+				c.SetActive(false)
+			}
+		}
+	}
+}

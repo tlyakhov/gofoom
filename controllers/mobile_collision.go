@@ -162,19 +162,6 @@ func (mc *MobileController) bodyExitsSector() {
 	}
 }
 
-func (mc *MobileController) removeBody(body *core.Body) {
-	// TODO: poorly implemented
-	sector := body.Sector()
-	if sector != nil {
-		delete(sector.Bodies, body.Entity)
-		body.SectorEntity = 0
-		if body == mc.Body {
-			mc.Sector = nil
-		}
-	}
-	body.ECS.Delete(body.Entity)
-}
-
 func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core.Body) {
 	// Use the right collision response settings
 	otherVel := &concepts.Vector3{}
@@ -239,7 +226,8 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 		mc.Vel.Now[2] = 0
 	}
 	if aResponse&core.CollideRemove != 0 {
-		mc.removeBody(mc.Body)
+		mc.Sector = nil
+		mc.Body.ECS.Delete(mc.Body.Entity)
 	}
 
 	if bResponse&core.CollideDeactivate != 0 {
@@ -251,7 +239,7 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 		other.Vel.Now[2] = 0
 	}
 	if bResponse&core.CollideRemove != 0 {
-		mc.removeBody(otherBody)
+		otherBody.ECS.Delete(otherBody.Entity)
 	}
 
 	if aResponse&core.CollideBounce == 0 && bResponse&core.CollideBounce == 0 {
@@ -304,20 +292,6 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 	//fmt.Printf("%v <-> %v = %v\n", mc.Body.String(), body.String(), diff)
 }
 
-func (mc *MobileController) getInventoryItem(item *behaviors.InventoryItem) {
-	for _, slot := range mc.Player.Inventory {
-		if !slot.ValidClasses.Contains(item.Class) {
-			continue
-		}
-		if slot.Count >= slot.Limit {
-			mc.Player.Notices.Push("Can't pick up more " + item.Class)
-			return
-		}
-		slot.Count++
-		mc.Player.Notices.Push("Picked up a " + item.Class)
-	}
-}
-
 func (mc *MobileController) bodyBodyCollide(sector *core.Sector) {
 	for _, body := range sector.Bodies {
 		if body == nil || body == mc.Body || !body.IsActive() {
@@ -332,10 +306,6 @@ func (mc *MobileController) bodyBodyCollide(sector *core.Sector) {
 		r_a := mc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			item := behaviors.GetInventoryItem(body.ECS, body.Entity)
-			if item != nil && item.Active && mc.Player != nil {
-				mc.getInventoryItem(item)
-			}
 			mc.resolveCollision(core.GetMobile(body.ECS, body.Entity), body)
 		}
 	}
@@ -453,7 +423,8 @@ func (mc *MobileController) Collide() {
 			}
 		}
 		if mc.CrWall&core.CollideRemove != 0 {
-			mc.removeBody(mc.Body)
+			mc.Sector = nil
+			mc.Body.ECS.Delete(mc.Body.Entity)
 		}
 	}
 }

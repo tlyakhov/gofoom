@@ -168,13 +168,14 @@ func (W _tlyakhov_gofoom_ecs_AttachableColumn) Type() reflect.Type {
 
 // _tlyakhov_gofoom_ecs_Controller is an interface wrapper for Controller type
 type _tlyakhov_gofoom_ecs_Controller struct {
-	IValue       interface{}
-	WAlways      func()
-	WComponentID func() ecs.ComponentID
-	WLoaded      func()
-	WMethods     func() ecs.ControllerMethod
-	WRecalculate func()
-	WTarget      func(a0 ecs.Attachable) bool
+	IValue               interface{}
+	WAlways              func()
+	WComponentID         func() ecs.ComponentID
+	WEditorPausedMethods func() ecs.ControllerMethod
+	WLoaded              func()
+	WMethods             func() ecs.ControllerMethod
+	WRecalculate         func()
+	WTarget              func(a0 ecs.Attachable) bool
 }
 
 func (W _tlyakhov_gofoom_ecs_Controller) Always() {
@@ -182,6 +183,9 @@ func (W _tlyakhov_gofoom_ecs_Controller) Always() {
 }
 func (W _tlyakhov_gofoom_ecs_Controller) ComponentID() ecs.ComponentID {
 	return W.WComponentID()
+}
+func (W _tlyakhov_gofoom_ecs_Controller) EditorPausedMethods() ecs.ControllerMethod {
+	return W.WEditorPausedMethods()
 }
 func (W _tlyakhov_gofoom_ecs_Controller) Loaded() {
 	W.WLoaded()

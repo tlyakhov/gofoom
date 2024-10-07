@@ -1,20 +1,20 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package controllers
+package scripting_symbols
 
 import (
 	"math/rand"
 
 	"testing"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
-	_ "tlyakhov/gofoom/scripting_symbols"
 )
 
 func setup() *ecs.ECS {
 	db := ecs.NewECS()
-	CreateTestWorld2(db)
+	controllers.CreateTestWorld2(db)
 	return db
 }
 
