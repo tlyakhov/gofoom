@@ -97,6 +97,7 @@ func NewEditor() *Editor {
 	}
 	e.Grid.IEditor = e
 	e.Grid.MaterialSampler.Ray = &rs.Ray{}
+	e.ResizeRenderer(320, 240)
 	e.MapViewGrid.Current = &e.Edit.MapView
 
 	return e

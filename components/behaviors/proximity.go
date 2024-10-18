@@ -6,7 +6,6 @@ package behaviors
 import (
 	"fmt"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -14,9 +13,7 @@ import (
 type ProximityFlags int
 
 const (
-	ProximitySelf ProximityFlags = 1 << iota
-	ProximityRefers
-	ProximityOnBody
+	ProximityOnBody ProximityFlags = 1 << iota
 	ProximityOnSector
 	ProximityTargetsBody
 	ProximityTargetsSector
@@ -25,12 +22,11 @@ const (
 type Proximity struct {
 	ecs.Attached `editable:"^"`
 
-	RequiresPlayerAction bool                       `editable:"Requires Player Action?"`
-	ActsOnSectors        bool                       `editable:"Acts on Sectors?"`
-	Range                float64                    `editable:"Range"`
-	Hysteresis           float64                    `editable:"Hysteresis (ms)"`
-	Scripts              []*core.Script             `editable:"Scripts"`
-	Entities             containers.Set[ecs.Entity] `editable:"Entities"`
+	RequiresPlayerAction bool           `editable:"Requires Player Action?"`
+	ActsOnSectors        bool           `editable:"Acts on Sectors?"`
+	Range                float64        `editable:"Range"`
+	Hysteresis           float64        `editable:"Hysteresis (ms)"`
+	Scripts              []*core.Script `editable:"Scripts"`
 
 	// Internal state
 	LastFired int64
@@ -56,7 +52,6 @@ func (p *Proximity) String() string {
 
 func (p *Proximity) Construct(data map[string]any) {
 	p.Attached.Construct(data)
-	p.Entities = make(containers.Set[ecs.Entity])
 	p.Range = 100
 	p.Hysteresis = 200
 	p.RequiresPlayerAction = false
@@ -84,10 +79,6 @@ func (p *Proximity) Construct(data map[string]any) {
 	if v, ok := data["Scripts"]; ok {
 		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v, nil)
 	}
-
-	if v, ok := data["Entities"]; ok {
-		p.Entities = ecs.DeserializeEntities(v.([]any))
-	}
 }
 
 func (p *Proximity) Serialize() map[string]any {
@@ -110,10 +101,6 @@ func (p *Proximity) Serialize() map[string]any {
 
 	if len(p.Scripts) > 0 {
 		result["Scripts"] = ecs.SerializeSlice(p.Scripts)
-	}
-
-	if len(p.Entities) > 0 {
-		result["Entities"] = ecs.SerializeEntities(p.Entities)
 	}
 
 	return result

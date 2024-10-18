@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/dynamic"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
 
@@ -45,6 +46,8 @@ func (a *SetProperty) FireHooks() {
 			target.Compile()
 		case *materials.Text:
 			target.RasterizeText()
+		case *ecs.Instanced:
+			target.Recalculate()
 		case *core.SectorSegment:
 			// For SectorSegments, the A & B fields of the child Segment type
 			// are pointers to SectorSegment.P and SectorSegment.Next.P

@@ -2091,6 +2091,12 @@
         }
       }
     },
+    "ecs.Instanced": {
+      "Entities": [
+        "134"
+      ],
+      "Entity": "25"
+    },
     "ecs.Named": {
       "Entity": "25",
       "Name": "be4pufvvn27o06iajuu0"
@@ -2707,7 +2713,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.890625,
+          "Percent": 0.6875,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -3765,7 +3771,7 @@
   {
     "Entity": "42",
     "behaviors.Actor": {
-      "Action": "135",
+      "Action": "136",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
@@ -6187,6 +6193,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -7085,6 +7092,12 @@
         }
       }
     },
+    "ecs.Instanced": {
+      "Entities": [
+        "134"
+      ],
+      "Entity": "79"
+    },
     "ecs.Named": {
       "Entity": "79",
       "Name": "be4c3pfvn27mi9gdb9mg"
@@ -7193,6 +7206,12 @@
           "Original": 64
         }
       }
+    },
+    "ecs.Instanced": {
+      "Entities": [
+        "134"
+      ],
+      "Entity": "80"
     },
     "ecs.Named": {
       "Entity": "80",
@@ -7309,12 +7328,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": false,
+            "Active": true,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": -64,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
+            "Percent": 0,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -7322,6 +7341,12 @@
           "Original": 64
         }
       }
+    },
+    "ecs.Instanced": {
+      "Entities": [
+        "134"
+      ],
+      "Entity": "81"
     },
     "ecs.Named": {
       "Entity": "81",
@@ -7675,7 +7700,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2"
           },
           "X": -100,
@@ -10499,7 +10523,7 @@
           "Count": "0",
           "Image": "98",
           "Limit": "100",
-          "ValidClasses": "Flower,Pluk"
+          "ValidClasses": "Pluk,Flower"
         }
       ],
       "Spawn": true
@@ -10708,7 +10732,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.5078125,
+          "Percent": 0.296875,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -10769,12 +10793,6 @@
   {
     "Entity": "134",
     "behaviors.Proximity": {
-      "Entities": [
-        "80",
-        "79",
-        "25",
-        "81"
-      ],
       "Entity": "134",
       "Hysteresis": 0,
       "Scripts": [
@@ -11177,68 +11195,64 @@
       "Entity": "152",
       "Material": "153",
       "Particles": [
-        "163",
-        "166",
-        "186",
-        "198",
-        "157",
-        "161",
         "170",
-        "162",
-        "184",
-        "190",
-        "199",
-        "226",
+        "175",
+        "171",
+        "182",
+        "188",
+        "204",
+        "159",
+        "164",
+        "180",
         "227",
+        "202",
+        "203",
+        "210",
+        "165",
+        "169",
+        "172",
+        "224",
+        "207",
+        "215",
+        "216",
+        "168",
+        "174",
+        "190",
+        "198",
+        "214",
+        "226",
+        "161",
+        "183",
+        "201",
+        "208",
+        "158",
+        "177",
+        "189",
+        "167",
+        "199",
+        "155",
+        "178",
+        "179",
+        "166",
+        "187",
+        "212",
+        "200",
+        "205",
         "160",
         "173",
-        "183",
-        "168",
-        "197",
+        "218",
+        "223",
+        "213",
+        "217",
+        "156",
+        "181",
+        "186",
+        "211",
+        "194",
         "209",
         "228",
-        "156",
-        "194",
-        "196",
-        "200",
-        "203",
-        "212",
-        "224",
-        "179",
-        "204",
-        "214",
-        "171",
-        "189",
-        "213",
-        "229",
-        "230",
-        "172",
-        "177",
-        "188",
-        "211",
-        "185",
-        "201",
-        "202",
-        "218",
-        "225",
-        "164",
-        "195",
-        "217",
-        "215",
-        "155",
-        "165",
-        "167",
-        "169",
-        "174",
-        "176",
-        "181",
-        "182",
-        "210",
-        "158",
-        "223",
-        "175",
-        "178",
-        "216"
+        "157",
+        "225"
       ]
     },
     "behaviors.WeaponInstant": {
@@ -11334,6 +11348,34 @@
         "R": 1
       },
       "Entity": "154"
+    }
+  },
+  {
+    "Entity": "176",
+    "core.Body": {
+      "Angle": {
+        "Original": 0
+      },
+      "Entity": "176",
+      "Pos": {
+        "Original": {
+          "X": -260,
+          "Y": 170,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "ecs.Instanced": {
+      "Entities": [
+        "32"
+      ],
+      "Entity": "176"
     }
   },
   {

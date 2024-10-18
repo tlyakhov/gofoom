@@ -10,7 +10,7 @@ import (
 
 func EntityMapIsMaterial(components []ecs.Attachable) bool {
 	for _, c := range components {
-		switch c.(type) {
+		switch cc := c.(type) {
 		case *materials.Shader:
 			return true
 		case *materials.Sprite:
@@ -21,6 +21,10 @@ func EntityMapIsMaterial(components []ecs.Attachable) bool {
 			return true
 		case *materials.Solid:
 			return true
+		case *ecs.Instanced:
+			if EntityMapIsMaterial(cc.SourceComponents) {
+				return true
+			}
 		}
 	}
 	return false
@@ -31,7 +35,7 @@ func EntityIsMaterial(db *ecs.ECS, e ecs.Entity) bool {
 }
 
 func AttachableIsMaterial(a ecs.Attachable) bool {
-	return EntityIsMaterial(a.GetECS(), a.GetEntity())
+	return EntityIsMaterial(a.GetECS(), a.Base().Entity)
 }
 
 func CreateBasicMaterial(db *ecs.ECS, textured bool) ecs.Entity {

@@ -222,7 +222,7 @@ func PickUpInventoryItem(p *behaviors.Player, item *behaviors.InventoryItem) {
 		// Disable all the entity components
 		for _, c := range item.ECS.AllComponents(item.Entity) {
 			if c != nil {
-				c.SetActive(false)
+				c.Base().Active = false
 			}
 		}
 	}

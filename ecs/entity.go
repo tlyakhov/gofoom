@@ -72,7 +72,7 @@ func (ref *EntityRef[T]) Refresh(db *ECS, id ComponentID) {
 		ref.Value = zero
 		return
 	}
-	if ref.Value != zero && ref.Value.GetEntity() == ref.Entity {
+	if ref.Value != zero && ref.Value.Base().Entity == ref.Entity {
 		return
 	}
 	ref.Value = db.Component(ref.Entity, id).(T)

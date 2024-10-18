@@ -57,8 +57,6 @@ func init() {
 		"ProximityFlagsValues":   reflect.ValueOf(behaviors.ProximityFlagsValues),
 		"ProximityOnBody":        reflect.ValueOf(behaviors.ProximityOnBody),
 		"ProximityOnSector":      reflect.ValueOf(behaviors.ProximityOnSector),
-		"ProximityRefers":        reflect.ValueOf(behaviors.ProximityRefers),
-		"ProximitySelf":          reflect.ValueOf(behaviors.ProximitySelf),
 		"ProximityTargetsBody":   reflect.ValueOf(behaviors.ProximityTargetsBody),
 		"ProximityTargetsSector": reflect.ValueOf(behaviors.ProximityTargetsSector),
 		"UnderwaterCID":          reflect.ValueOf(&behaviors.UnderwaterCID).Elem(),

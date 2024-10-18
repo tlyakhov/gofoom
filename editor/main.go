@@ -65,16 +65,6 @@ func main() {
 
 	CreateMainMenu()
 
-	editor.App.Lifecycle().SetOnStarted(func() {
-		// This is used whenever we don't have a texture for something
-		img := canvas.NewImageFromResource(theme.QuestionIcon())
-		img.Resize(fyne.NewSquareSize(64))
-		img.Refresh()
-		editor.noTextureImage = img.Image
-		editor.Load("data/worlds/hall.json")
-	})
-	editor.App.Lifecycle().SetOnStopped(func() {})
-
 	editor.PropertyGrid = container.New(layout.NewFormLayout())
 	editor.GridWidget = editor.PropertyGrid
 	editor.GridWindow = editor.Window
@@ -129,6 +119,16 @@ func main() {
 
 	mainBorder := container.NewBorder(toolbar, editor.LabelStatus, nil, nil, splitMapProperties)
 	editor.Window.SetContent(mainBorder)
+
+	editor.App.Lifecycle().SetOnStarted(func() {
+		// This is used whenever we don't have a texture for something
+		img := canvas.NewImageFromResource(theme.QuestionIcon())
+		img.Resize(fyne.NewSquareSize(64))
+		img.Refresh()
+		editor.noTextureImage = img.Image
+		editor.Load("data/worlds/hall.json")
+	})
+	editor.App.Lifecycle().SetOnStopped(func() {})
 
 	go func() {
 		t := time.NewTicker(time.Second / 60)
