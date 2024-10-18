@@ -15,13 +15,14 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/ecs/ecs"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"AttachedCID":              reflect.ValueOf(&ecs.AttachedCID).Elem(),
 		"ComponentTableGrowthRate": reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
 		"ConstructArray":           reflect.ValueOf(ecs.ConstructArray),
 		"ControllerAlways":         reflect.ValueOf(ecs.ControllerAlways),
 		"ControllerLoaded":         reflect.ValueOf(ecs.ControllerLoaded),
 		"ControllerRecalculate":    reflect.ValueOf(ecs.ControllerRecalculate),
+		"GetInstanced":             reflect.ValueOf(ecs.GetInstanced),
 		"GetNamed":                 reflect.ValueOf(ecs.GetNamed),
+		"InstancedCID":             reflect.ValueOf(&ecs.InstancedCID).Elem(),
 		"NamedCID":                 reflect.ValueOf(&ecs.NamedCID).Elem(),
 		"NewECS":                   reflect.ValueOf(ecs.NewECS),
 		"ParseEntity":              reflect.ValueOf(ecs.ParseEntity),
@@ -29,19 +30,21 @@ func init() {
 		"Types":                    reflect.ValueOf(ecs.Types),
 
 		// type definitions
-		"Attachable":       reflect.ValueOf((*ecs.Attachable)(nil)),
-		"AttachableColumn": reflect.ValueOf((*ecs.AttachableColumn)(nil)),
-		"Attached":         reflect.ValueOf((*ecs.Attached)(nil)),
-		"BaseController":   reflect.ValueOf((*ecs.BaseController)(nil)),
-		"ComponentID":      reflect.ValueOf((*ecs.ComponentID)(nil)),
-		"ComponentTable":   reflect.ValueOf((*ecs.ComponentTable)(nil)),
-		"Controller":       reflect.ValueOf((*ecs.Controller)(nil)),
-		"ControllerMethod": reflect.ValueOf((*ecs.ControllerMethod)(nil)),
-		"ECS":              reflect.ValueOf((*ecs.ECS)(nil)),
-		"Entity":           reflect.ValueOf((*ecs.Entity)(nil)),
-		"Named":            reflect.ValueOf((*ecs.Named)(nil)),
-		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
-		"SubSerializable":  reflect.ValueOf((*ecs.SubSerializable)(nil)),
+		"Attachable":          reflect.ValueOf((*ecs.Attachable)(nil)),
+		"AttachableColumn":    reflect.ValueOf((*ecs.AttachableColumn)(nil)),
+		"Attached":            reflect.ValueOf((*ecs.Attached)(nil)),
+		"BaseController":      reflect.ValueOf((*ecs.BaseController)(nil)),
+		"ComponentID":         reflect.ValueOf((*ecs.ComponentID)(nil)),
+		"ComponentTable":      reflect.ValueOf((*ecs.ComponentTable)(nil)),
+		"Controller":          reflect.ValueOf((*ecs.Controller)(nil)),
+		"ControllerMethod":    reflect.ValueOf((*ecs.ControllerMethod)(nil)),
+		"ECS":                 reflect.ValueOf((*ecs.ECS)(nil)),
+		"Entity":              reflect.ValueOf((*ecs.Entity)(nil)),
+		"Instanced":           reflect.ValueOf((*ecs.Instanced)(nil)),
+		"InstancedController": reflect.ValueOf((*ecs.InstancedController)(nil)),
+		"Named":               reflect.ValueOf((*ecs.Named)(nil)),
+		"Serializable":        reflect.ValueOf((*ecs.Serializable)(nil)),
+		"SubSerializable":     reflect.ValueOf((*ecs.SubSerializable)(nil)),
 
 		// interface wrapper definitions
 		"_Attachable":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
@@ -54,39 +57,32 @@ func init() {
 
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_ecs_Attachable struct {
-	IValue          interface{}
-	WAttachECS      func(db *ecs.ECS)
-	WConstruct      func(data map[string]any)
-	WGetComponentID func() ecs.ComponentID
-	WGetECS         func() *ecs.ECS
-	WGetEntity      func() ecs.Entity
-	WIndexInColumn  func() int
-	WIsSystem       func() bool
-	WOnDetach       func()
-	WSerialize      func() map[string]any
-	WSetColumnIndex func(a0 int)
-	WSetComponentID func(a0 ecs.ComponentID)
-	WSetEntity      func(entity ecs.Entity)
-	WString         func() string
+	IValue     interface{}
+	WAttachECS func(db *ecs.ECS)
+	WBase      func() *ecs.Attached
+	WConstruct func(data map[string]any)
+	WGetECS    func() *ecs.ECS
+	WIsActive  func() bool
+	WIsSystem  func() bool
+	WOnDetach  func()
+	WSerialize func() map[string]any
+	WString    func() string
 }
 
 func (W _tlyakhov_gofoom_ecs_Attachable) AttachECS(db *ecs.ECS) {
 	W.WAttachECS(db)
 }
+func (W _tlyakhov_gofoom_ecs_Attachable) Base() *ecs.Attached {
+	return W.WBase()
+}
 func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_ecs_Attachable) GetComponentID() ecs.ComponentID {
-	return W.WGetComponentID()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) GetECS() *ecs.ECS {
 	return W.WGetECS()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) GetEntity() ecs.Entity {
-	return W.WGetEntity()
-}
-func (W _tlyakhov_gofoom_ecs_Attachable) IndexInColumn() int {
-	return W.WIndexInColumn()
+func (W _tlyakhov_gofoom_ecs_Attachable) IsActive() bool {
+	return W.WIsActive()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) IsSystem() bool {
 	return W.WIsSystem()
@@ -96,15 +92,6 @@ func (W _tlyakhov_gofoom_ecs_Attachable) OnDetach() {
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) Serialize() map[string]any {
 	return W.WSerialize()
-}
-func (W _tlyakhov_gofoom_ecs_Attachable) SetColumnIndex(a0 int) {
-	W.WSetColumnIndex(a0)
-}
-func (W _tlyakhov_gofoom_ecs_Attachable) SetComponentID(a0 ecs.ComponentID) {
-	W.WSetComponentID(a0)
-}
-func (W _tlyakhov_gofoom_ecs_Attachable) SetEntity(entity ecs.Entity) {
-	W.WSetEntity(entity)
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) String() string {
 	if W.WString == nil {

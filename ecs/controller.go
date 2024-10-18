@@ -26,7 +26,7 @@ type BaseController struct {
 }
 
 func (c *BaseController) ComponentID() ComponentID {
-	return AttachedCID
+	return 0
 }
 
 func (c *BaseController) Methods() ControllerMethod {

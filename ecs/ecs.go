@@ -168,15 +168,15 @@ func (db *ECS) upsert(entity Entity, component Attachable, componentID Component
 	ec := db.rows[int(entity)].Get(componentID)
 	if ec != nil {
 		// A component with this index is already attached to this entity, overwrite it.
-		indexInColumn := ec.IndexInColumn()
+		indexInColumn := ec.Base().indexInColumn
 		component = column.Replace(component, indexInColumn)
 	} else {
 		// This entity doesn't have a component with this index attached. Extend the
 		// slice.
 		component = column.Add(component)
 	}
-	component.SetEntity(entity)
-	component.SetComponentID(componentID)
+	component.Base().Entity = entity
+	component.Base().ComponentID = componentID
 	db.rows[int(entity)].Set(component)
 	return component
 }
@@ -209,7 +209,7 @@ func (db *ECS) LoadComponentWithoutAttaching(id ComponentID, data map[string]any
 		return nil
 	}
 	component := Types().ColumnPlaceholders[id&0xFFFF].New()
-	component.SetEntity(0)
+	component.Base().Entity = 0
 	component.AttachECS(db)
 	component.Construct(data)
 	return component
@@ -263,14 +263,14 @@ func (db *ECS) delete(id ComponentID, entity Entity, checkForEmpty bool) {
 	}
 
 	// Ensure that the component is of the type the caller expects:
-	iic := ec.IndexInColumn()
+	iic := ec.Base().indexInColumn
 	if column.Len() <= iic || column.Attachable(iic) != ec {
 		log.Printf("ECS.Detach: tried to detach %v from entity %v - %v", column.String(), entity, ec.String())
 		return
 	}
 
 	ec.OnDetach()
-	column.Detach(ec.IndexInColumn())
+	column.Detach(ec.Base().indexInColumn)
 	db.rows[int(entity)].Delete(id)
 
 	if checkForEmpty {
@@ -296,7 +296,7 @@ func (db *ECS) DeleteByType(component Attachable) {
 	if component == nil {
 		return
 	}
-	entity := component.GetEntity()
+	entity := component.Base().Entity
 
 	if entity == 0 {
 		return
@@ -325,9 +325,9 @@ func (db *ECS) Delete(entity Entity) {
 		if c == nil {
 			continue
 		}
-		id := c.GetComponentID()
+		id := c.Base().ComponentID
 		c.OnDetach()
-		db.columns[id&0xFFFF].Detach(c.IndexInColumn())
+		db.columns[id&0xFFFF].Detach(c.Base().indexInColumn)
 	}
 	db.rows[int(entity)] = nil
 	db.Entities.Remove(uint32(entity))
@@ -399,7 +399,7 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 		if component == nil || component.IsSystem() {
 			continue
 		}
-		col := Types().ColumnPlaceholders[component.GetComponentID()&0xFFFF]
+		col := Types().ColumnPlaceholders[component.Base().ComponentID&0xFFFF]
 		jsonEntity[col.Type().String()] = component.Serialize()
 	}
 	if len(jsonEntity) == 1 {

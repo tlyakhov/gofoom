@@ -39,8 +39,9 @@ benefits as far as dynamic sectors, lighting, etc...
 ## Features
 
 - Architecture
-  - Separation of game/engine code.
+  - Separation of game/engine code
   - Entity/Component/System architecture
+  - Instancing for entities
   - Multi-threaded rendering using goroutines
   - No artificial limits on scale
 - Rendering
@@ -63,7 +64,8 @@ benefits as far as dynamic sectors, lighting, etc...
   - Custom scripting (in Golang!) for interactive in-game effects
   - Animations capable of arbitrary easing functions
   - Procedural animations capable of elastic/second-order dynamics
-  - Path following for objects and enemies
+  - Scripted actions for objects and enemies
+  - Particle systems
   - In-game UI, retro DOS style
 - World editor:
   - Realtime 3D view, allowing live manipulation of the world by clicking.
@@ -84,7 +86,7 @@ benefits as far as dynamic sectors, lighting, etc...
   - Save/Restore games
 - More UX for design
   - Internal sectors
-  - "Pre-fabs" and instancing to enable more complex construction
+  - More pre-fabs for interactive elements
 
 ## Repository Structure
 

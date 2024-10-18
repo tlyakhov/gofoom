@@ -93,7 +93,7 @@ func (col *Column[T, PT]) Add(component Attachable) Attachable {
 
 	col.fill.Set(nextFree)
 	component = PT(&col.data[chunk][indexInChunk])
-	component.SetColumnIndex(int(nextFree))
+	component.Base().indexInColumn = (int(nextFree))
 	component.AttachECS(col.ECS)
 	col.Length++
 	return component
@@ -106,7 +106,7 @@ func (col *Column[T, PT]) Replace(component Attachable, index int) Attachable {
 	ptr := col.Value(index)
 	*ptr = *(component.(PT))
 	component = ptr
-	component.SetColumnIndex(index)
+	component.Base().indexInColumn = index
 	component.AttachECS(col.ECS)
 	return component
 }

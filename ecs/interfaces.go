@@ -22,14 +22,9 @@ type SubSerializable interface {
 type Attachable interface {
 	Serializable
 	String() string
-	IndexInColumn() int
-	SetColumnIndex(int)
-	SetEntity(entity Entity)
-	GetEntity() Entity
-	SetComponentID(ComponentID)
-	GetComponentID() ComponentID
 	OnDetach()
-	SetActive(active bool)
+	IsActive() bool
+	Base() *Attached
 }
 
 type AttachableColumn interface {

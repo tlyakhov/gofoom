@@ -27,7 +27,7 @@ func (a *DeleteComponent) Undo() {
 		a.State().ECS.UpsertTyped(entity, component)
 		switch target := component.(type) {
 		case *core.Body:
-			entity := component.GetEntity()
+			entity := component.Base().Entity
 			if a.SectorForEntity[entity] != nil {
 				a.SectorForEntity[entity].Bodies[entity] = target
 			}
@@ -43,7 +43,7 @@ func (a *DeleteComponent) Redo() {
 		// TODO: Save material references
 		switch target := component.(type) {
 		case *core.Body:
-			entity := component.GetEntity()
+			entity := component.Base().Entity
 			if target.SectorEntity != 0 {
 				a.SectorForEntity[entity] = target.Sector()
 				delete(a.SectorForEntity[entity].Bodies, entity)

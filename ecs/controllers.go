@@ -25,15 +25,35 @@ func (types *typeMetadata) RegisterController(constructor func() Controller, pri
 	})
 }
 
-func act(controller Controller, method ControllerMethod) {
-	switch method {
-	case ControllerAlways:
-		controller.Always()
-	case ControllerLoaded:
-		controller.Loaded()
-	case ControllerRecalculate:
-		controller.Recalculate()
+func act(controller Controller, component Attachable, method ControllerMethod) {
+	if controller.Target(component) {
+		switch method {
+		case ControllerAlways:
+			controller.Always()
+		case ControllerLoaded:
+			controller.Loaded()
+		case ControllerRecalculate:
+			controller.Recalculate()
+		}
 	}
+	attached := component.Base()
+	// Apply to instanced copies as well
+	for e := range attached.instancedCopies {
+		instanced := GetInstanced(attached.ECS, e)
+		instanced.PushEntityFields()
+		if controller.Target(component) {
+			switch method {
+			case ControllerAlways:
+				controller.Always()
+			case ControllerLoaded:
+				controller.Loaded()
+			case ControllerRecalculate:
+				controller.Recalculate()
+			}
+		}
+		instanced.PopEntityFields()
+	}
+
 }
 
 func (db *ECS) Act(component Attachable, id ComponentID, method ControllerMethod) {
@@ -46,11 +66,10 @@ func (db *ECS) Act(component Attachable, id ComponentID, method ControllerMethod
 			(!db.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
-		if controller.ComponentID() != id ||
-			!controller.Target(component) {
+		if controller.ComponentID() != id {
 			continue
 		}
-		act(controller, method)
+		act(controller, component, method)
 	}
 }
 
@@ -63,11 +82,9 @@ func (db *ECS) ActAllControllers(method ControllerMethod) {
 		}
 		col := db.columns[controller.ComponentID()&0xFFFF]
 		for i := range col.Cap() {
-			a := col.Attachable(i)
-			if a == nil || !controller.Target(a) {
-				continue
+			if component := col.Attachable(i); component != nil {
+				act(controller, component, method)
 			}
-			act(controller, method)
 		}
 	}
 }
@@ -85,11 +102,10 @@ func (db *ECS) ActAllControllersOneEntity(entity Entity, method ControllerMethod
 		}
 		for _, component := range db.rows[entity] {
 			if component == nil ||
-				component.GetComponentID() != controller.ComponentID() ||
-				!controller.Target(component) {
+				component.Base().ComponentID != controller.ComponentID() {
 				continue
 			}
-			act(controller, method)
+			act(controller, component, method)
 		}
 	}
 }

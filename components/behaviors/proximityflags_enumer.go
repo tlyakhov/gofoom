@@ -9,24 +9,18 @@ import (
 )
 
 const (
-	_ProximityFlagsName_0      = "ProximitySelfProximityRefers"
-	_ProximityFlagsLowerName_0 = "proximityselfproximityrefers"
-	_ProximityFlagsName_1      = "ProximityOnBody"
-	_ProximityFlagsLowerName_1 = "proximityonbody"
-	_ProximityFlagsName_2      = "ProximityOnSector"
-	_ProximityFlagsLowerName_2 = "proximityonsector"
-	_ProximityFlagsName_3      = "ProximityTargetsBody"
-	_ProximityFlagsLowerName_3 = "proximitytargetsbody"
-	_ProximityFlagsName_4      = "ProximityTargetsSector"
-	_ProximityFlagsLowerName_4 = "proximitytargetssector"
+	_ProximityFlagsName_0      = "ProximityOnBodyProximityOnSector"
+	_ProximityFlagsLowerName_0 = "proximityonbodyproximityonsector"
+	_ProximityFlagsName_1      = "ProximityTargetsBody"
+	_ProximityFlagsLowerName_1 = "proximitytargetsbody"
+	_ProximityFlagsName_2      = "ProximityTargetsSector"
+	_ProximityFlagsLowerName_2 = "proximitytargetssector"
 )
 
 var (
-	_ProximityFlagsIndex_0 = [...]uint8{0, 13, 28}
-	_ProximityFlagsIndex_1 = [...]uint8{0, 15}
-	_ProximityFlagsIndex_2 = [...]uint8{0, 17}
-	_ProximityFlagsIndex_3 = [...]uint8{0, 20}
-	_ProximityFlagsIndex_4 = [...]uint8{0, 22}
+	_ProximityFlagsIndex_0 = [...]uint8{0, 15, 32}
+	_ProximityFlagsIndex_1 = [...]uint8{0, 20}
+	_ProximityFlagsIndex_2 = [...]uint8{0, 22}
 )
 
 func (i ProximityFlags) String() string {
@@ -38,10 +32,6 @@ func (i ProximityFlags) String() string {
 		return _ProximityFlagsName_1
 	case i == 8:
 		return _ProximityFlagsName_2
-	case i == 16:
-		return _ProximityFlagsName_3
-	case i == 32:
-		return _ProximityFlagsName_4
 	default:
 		return fmt.Sprintf("ProximityFlags(%d)", i)
 	}
@@ -51,38 +41,30 @@ func (i ProximityFlags) String() string {
 // Re-run the stringer command to generate them again.
 func _ProximityFlagsNoOp() {
 	var x [1]struct{}
-	_ = x[ProximitySelf-(1)]
-	_ = x[ProximityRefers-(2)]
-	_ = x[ProximityOnBody-(4)]
-	_ = x[ProximityOnSector-(8)]
-	_ = x[ProximityTargetsBody-(16)]
-	_ = x[ProximityTargetsSector-(32)]
+	_ = x[ProximityOnBody-(1)]
+	_ = x[ProximityOnSector-(2)]
+	_ = x[ProximityTargetsBody-(4)]
+	_ = x[ProximityTargetsSector-(8)]
 }
 
-var _ProximityFlagsValues = []ProximityFlags{ProximitySelf, ProximityRefers, ProximityOnBody, ProximityOnSector, ProximityTargetsBody, ProximityTargetsSector}
+var _ProximityFlagsValues = []ProximityFlags{ProximityOnBody, ProximityOnSector, ProximityTargetsBody, ProximityTargetsSector}
 
 var _ProximityFlagsNameToValueMap = map[string]ProximityFlags{
-	_ProximityFlagsName_0[0:13]:       ProximitySelf,
-	_ProximityFlagsLowerName_0[0:13]:  ProximitySelf,
-	_ProximityFlagsName_0[13:28]:      ProximityRefers,
-	_ProximityFlagsLowerName_0[13:28]: ProximityRefers,
-	_ProximityFlagsName_1[0:15]:       ProximityOnBody,
-	_ProximityFlagsLowerName_1[0:15]:  ProximityOnBody,
-	_ProximityFlagsName_2[0:17]:       ProximityOnSector,
-	_ProximityFlagsLowerName_2[0:17]:  ProximityOnSector,
-	_ProximityFlagsName_3[0:20]:       ProximityTargetsBody,
-	_ProximityFlagsLowerName_3[0:20]:  ProximityTargetsBody,
-	_ProximityFlagsName_4[0:22]:       ProximityTargetsSector,
-	_ProximityFlagsLowerName_4[0:22]:  ProximityTargetsSector,
+	_ProximityFlagsName_0[0:15]:       ProximityOnBody,
+	_ProximityFlagsLowerName_0[0:15]:  ProximityOnBody,
+	_ProximityFlagsName_0[15:32]:      ProximityOnSector,
+	_ProximityFlagsLowerName_0[15:32]: ProximityOnSector,
+	_ProximityFlagsName_1[0:20]:       ProximityTargetsBody,
+	_ProximityFlagsLowerName_1[0:20]:  ProximityTargetsBody,
+	_ProximityFlagsName_2[0:22]:       ProximityTargetsSector,
+	_ProximityFlagsLowerName_2[0:22]:  ProximityTargetsSector,
 }
 
 var _ProximityFlagsNames = []string{
-	_ProximityFlagsName_0[0:13],
-	_ProximityFlagsName_0[13:28],
-	_ProximityFlagsName_1[0:15],
-	_ProximityFlagsName_2[0:17],
-	_ProximityFlagsName_3[0:20],
-	_ProximityFlagsName_4[0:22],
+	_ProximityFlagsName_0[0:15],
+	_ProximityFlagsName_0[15:32],
+	_ProximityFlagsName_1[0:20],
+	_ProximityFlagsName_2[0:22],
 }
 
 // ProximityFlagsString retrieves an enum value from the enum constants string name.

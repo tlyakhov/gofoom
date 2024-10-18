@@ -140,13 +140,7 @@ func (pc *ProximityController) Always() {
 	*/
 
 	// Is the target itself a body or sector?
-	pc.flags = behaviors.ProximitySelf
+	pc.flags = 0
 	pc.onEntity = pc.Entity
 	pc.proximity(pc.Entity)
-
-	for entity := range pc.Entities {
-		pc.flags = behaviors.ProximityRefers
-		pc.onEntity = entity
-		pc.proximity(entity)
-	}
 }

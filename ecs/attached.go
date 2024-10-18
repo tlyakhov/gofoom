@@ -3,35 +3,51 @@
 
 package ecs
 
+import (
+	"tlyakhov/gofoom/containers"
+)
+
 type Attached struct {
 	ComponentID
-	Entity     `editable:"Component" edit_type:"Component" edit_sort:"0"`
-	ECS        *ECS
-	System     bool // Don't serialize this entity, disallow editing
-	Active     bool `editable:"Active?"`
-	indexInECS int
-}
+	Entity        `editable:"Component" edit_type:"Component" edit_sort:"0"`
+	ECS           *ECS
+	System        bool // Don't serialize this entity, disallow editing
+	Active        bool `editable:"Active?"`
+	indexInColumn int
 
-var AttachedCID ComponentID
-
-func init() {
-	// TODO: Do we actually need this to be registered?
-	// AttachedCID = RegisterComponent(&Column[Attached, *Attached]{}, "")
+	// Other entities that use this component. See Instanced.Entities
+	instancedCopies containers.Set[Entity]
+	entityStack     []Entity
 }
 
 func (a *Attached) IsActive() bool {
 	return a != nil && a.Entity != 0 && a.Active
 }
 
+func (a *Attached) GetECS() *ECS {
+	return a.ECS
+}
+
 func (a *Attached) String() string {
 	return "Attached"
 }
 
-func (a *Attached) IndexInColumn() int {
-	return a.indexInECS
+func (a *Attached) Base() *Attached {
+	return a
 }
 
 func (a *Attached) OnDetach() {
+	if a.ECS == nil {
+		return
+	}
+	// Remove this entity from the sources of any instanced copies
+	for e := range a.instancedCopies {
+		if instanced := GetInstanced(a.ECS, e); instanced != nil {
+			instanced.Sources.Delete(e)
+			instanced.SourceComponents.Delete(a.ComponentID)
+		}
+	}
+	a.instancedCopies = make(containers.Set[Entity])
 	a.ECS = nil
 }
 
@@ -40,39 +56,17 @@ func (a *Attached) IsSystem() bool {
 }
 
 func (a *Attached) SetColumnIndex(i int) {
-	a.indexInECS = i
+	a.indexInColumn = i
 }
 
 func (a *Attached) AttachECS(db *ECS) {
 	a.ECS = db
 }
 
-func (a *Attached) GetECS() *ECS {
-	return a.ECS
-}
-
-func (a *Attached) SetEntity(entity Entity) {
-	a.Entity = entity
-}
-
-func (a *Attached) SetActive(active bool) {
-	a.Active = active
-}
-
-func (a *Attached) GetEntity() Entity {
-	return a.Entity
-}
-
-func (a *Attached) SetComponentID(cid ComponentID) {
-	a.ComponentID = cid
-}
-
-func (a *Attached) GetComponentID() ComponentID {
-	return a.ComponentID
-}
-
 func (a *Attached) Construct(data map[string]any) {
 	a.Active = true
+	a.System = false
+	a.instancedCopies = make(containers.Set[Entity])
 
 	if data == nil {
 		return
