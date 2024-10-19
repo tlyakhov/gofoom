@@ -40,6 +40,20 @@ func (n *Instanced) String() string {
 	return strconv.FormatInt(int64(n.Entity), 10)
 }
 
+func (n *Instanced) OnDetach() {
+	defer n.Attached.OnDetach()
+	if n.ECS == nil {
+		return
+	}
+	// Remove this entity from any instanced copies
+	for _, sourceComponent := range n.SourceComponents {
+		if sourceComponent != nil {
+			sourceComponent.Base().instancedCopies.Delete(n.Entity)
+		}
+	}
+	n.SourceComponents = make(ComponentTable, 0)
+}
+
 func (n *Instanced) Recalculate() {
 	for _, sourceComponent := range n.SourceComponents {
 		if sourceComponent != nil {
@@ -87,6 +101,8 @@ func (n *Instanced) PopEntityFields() {
 
 func (n *Instanced) Construct(data map[string]any) {
 	n.Attached.Construct(data)
+
+	n.Sources = make(containers.Set[Entity])
 
 	if data == nil {
 		return

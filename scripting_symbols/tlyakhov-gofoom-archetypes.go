@@ -14,13 +14,10 @@ func init() {
 	Symbols["tlyakhov/gofoom/archetypes/archetypes"] = map[string]reflect.Value{
 		// function, constant and variable definitions
 		"AttachableIsMaterial": reflect.ValueOf(archetypes.AttachableIsMaterial),
-		"CreateBasic":          reflect.ValueOf(archetypes.CreateBasic),
 		"CreateBasicMaterial":  reflect.ValueOf(archetypes.CreateBasicMaterial),
 		"CreateFont":           reflect.ValueOf(archetypes.CreateFont),
 		"CreateLightBody":      reflect.ValueOf(archetypes.CreateLightBody),
-		"CreateSector":         reflect.ValueOf(archetypes.CreateSector),
 		"EntityIsMaterial":     reflect.ValueOf(archetypes.EntityIsMaterial),
 		"EntityMapIsMaterial":  reflect.ValueOf(archetypes.EntityMapIsMaterial),
-		"IsLightBody":          reflect.ValueOf(archetypes.IsLightBody),
 	}
 }

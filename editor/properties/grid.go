@@ -400,8 +400,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldMatrix2(field)
 		case *core.CollisionResponse:
 			g.fieldEnum(field, core.CollisionResponseValues())
-		case *core.BodyShadow:
-			g.fieldEnum(field, core.BodyShadowValues())
+		case *materials.MaterialShadow:
+			g.fieldEnum(field, materials.MaterialShadowValues())
 		case *core.ScriptStyle:
 			g.fieldEnum(field, core.ScriptStyleValues())
 		case *dynamic.AnimationLifetime:

@@ -16,9 +16,9 @@ type Body struct {
 	ecs.Attached `editable:"^"`
 	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`
 	Size         dynamic.DynamicValue[concepts.Vector2] `editable:"Size"`
+	Angle        dynamic.DynamicValue[float64]          `editable:"Angle"`
+
 	SectorEntity ecs.Entity
-	Angle        dynamic.DynamicValue[float64] `editable:"Angle"`
-	Shadow       BodyShadow                    `editable:"Shadow Type"`
 	OnGround     bool
 }
 
@@ -147,14 +147,6 @@ func (b *Body) Construct(data map[string]any) {
 		}
 		b.Angle.Construct(v.(map[string]any))
 	}
-	if v, ok := data["Shadow"]; ok {
-		c, err := BodyShadowString(v.(string))
-		if err == nil {
-			b.Shadow = c
-		} else {
-			panic(err)
-		}
-	}
 }
 
 func (b *Body) Serialize() map[string]any {
@@ -162,8 +154,5 @@ func (b *Body) Serialize() map[string]any {
 	result["Pos"] = b.Pos.Serialize()
 	result["Size"] = b.Size.Serialize()
 	result["Angle"] = b.Angle.Serialize()
-	if b.Shadow != BodyShadowNone {
-		result["Shadow"] = b.Shadow.String()
-	}
 	return result
 }

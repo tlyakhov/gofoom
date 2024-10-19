@@ -16,9 +16,8 @@ import (
 )
 
 func CreateTestSector(db *ecs.ECS, name string, x, y, size float64) *core.Sector {
-	eSector := archetypes.CreateSector(db)
-	sector := core.GetSector(db, eSector)
-	sector.Construct(nil)
+	eSector := db.NewEntity()
+	sector := db.NewAttachedComponent(eSector, core.SectorCID).(*core.Sector)
 	named := db.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name
 
@@ -47,9 +46,8 @@ func CreateTestSector(db *ecs.ECS, name string, x, y, size float64) *core.Sector
 }
 
 func CreateTestHeightmapSector(db *ecs.ECS, name string, x, y, size float64) (*core.Sector, *core.Sector) {
-	eSector := archetypes.CreateSector(db)
-	sector1 := core.GetSector(db, eSector)
-	sector1.Construct(nil)
+	eSector := db.NewEntity()
+	sector1 := db.NewAttachedComponent(eSector, core.SectorCID).(*core.Sector)
 	named := db.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_1"
 
@@ -69,9 +67,8 @@ func CreateTestHeightmapSector(db *ecs.ECS, name string, x, y, size float64) (*c
 	seg.HiSurface.Material = mat
 	seg.LoSurface.Material = mat
 
-	eSector = archetypes.CreateSector(db)
-	sector2 := core.GetSector(db, eSector)
-	sector2.Construct(nil)
+	eSector = db.NewEntity()
+	sector2 := db.NewAttachedComponent(eSector, core.SectorCID).(*core.Sector)
 	named = db.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_2"
 
@@ -112,8 +109,8 @@ func CreateTestSky(db *ecs.ECS) ecs.Entity {
 	img.GenerateMipMaps = false
 	img.Load()
 
-	entity := archetypes.CreateBasic(db, materials.ShaderCID)
-	sky := materials.GetShader(db, entity)
+	entity := db.NewEntity()
+	sky := db.NewAttachedComponent(entity, materials.ShaderCID).(*materials.Shader)
 	sky.Stages = append(sky.Stages, new(materials.ShaderStage))
 	sky.Stages[0].Construct(nil)
 	sky.Stages[0].Material = img.Entity
