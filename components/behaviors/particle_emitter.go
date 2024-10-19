@@ -15,7 +15,7 @@ type ParticleEmitter struct {
 	Lifetime float64    `editable:"Lifetime"`  // ms
 	FadeTime float64    `editable:"Fade Time"` // ms
 	Limit    int        `editable:"Particle Count Limit"`
-	Material ecs.Entity `editable:"Material" edit_type:"Material"`
+	Source   ecs.Entity `editable:"Source" edit_type:"Material"`
 
 	Particles containers.Set[ecs.Entity]
 	Spawned   map[ecs.Entity]int64
@@ -44,7 +44,7 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	pe.Lifetime = 5000
 	pe.FadeTime = 1000
 	pe.Limit = 100
-	pe.Material = 0
+	pe.Source = 0
 
 	pe.Particles = make(containers.Set[ecs.Entity])
 	pe.Spawned = make(map[ecs.Entity]int64)
@@ -69,8 +69,8 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	if v, ok := data["Limit"]; ok {
 		pe.Limit, _ = strconv.Atoi(v.(string))
 	}
-	if v, ok := data["Material"]; ok {
-		pe.Material, _ = ecs.ParseEntity(v.(string))
+	if v, ok := data["Source"]; ok {
+		pe.Source, _ = ecs.ParseEntity(v.(string))
 	}
 }
 
@@ -90,8 +90,8 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 	if pe.Limit != 100 {
 		result["Limit"] = pe.Limit
 	}
-	if pe.Material != 0 {
-		result["Material"] = pe.Material.String()
+	if pe.Source != 0 {
+		result["Source"] = pe.Source.String()
 	}
 
 	return result

@@ -270,27 +270,31 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	// segments.
 	for _, sector := range le.Visited {
 		for _, b := range sector.Bodies {
-			if !b.Active || b.Shadow == core.BodyShadowNone ||
+			if !b.Active ||
 				b.Entity == lightBody.Entity ||
 				(le.Type == LightSamplerBody && le.InputBody == b.Entity) {
 				continue
 			}
-			switch b.Shadow {
-			case core.BodyShadowSphere:
-				if concepts.IntersectLineSphere(p, lightPos, b.Pos.Render, b.Size.Render[0]*0.5) {
-					return false
-				}
-			case core.BodyShadowAABB:
-				ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
-				if concepts.IntersectLineAABB(p, lightPos, b.Pos.Render, ext) {
-					return false
-				}
-			case core.BodyShadowImage:
+			lit := materials.GetLit(le.ECS, b.Entity)
+			if lit == nil || lit.Shadow == materials.ShadowNone {
+				continue
+			}
+			switch lit.Shadow {
+			case materials.ShadowImage:
 				if ok := le.InitializeRayBody(p, lightPos, b); ok {
 					le.SampleMaterial(nil)
 					if le.MaterialSampler.Output[3] > 0.5 {
 						return false
 					}
+				}
+			case materials.ShadowSphere:
+				if concepts.IntersectLineSphere(p, lightPos, b.Pos.Render, b.Size.Render[0]*0.5) {
+					return false
+				}
+			case materials.ShadowAABB:
+				ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
+				if concepts.IntersectLineAABB(p, lightPos, b.Pos.Render, ext) {
+					return false
 				}
 			}
 		}

@@ -14,13 +14,6 @@ func init() {
 	Symbols["tlyakhov/gofoom/components/core/core"] = map[string]reflect.Value{
 		// function, constant and variable definitions
 		"BodyCID":                  reflect.ValueOf(&core.BodyCID).Elem(),
-		"BodyShadowAABB":           reflect.ValueOf(core.BodyShadowAABB),
-		"BodyShadowImage":          reflect.ValueOf(core.BodyShadowImage),
-		"BodyShadowNone":           reflect.ValueOf(core.BodyShadowNone),
-		"BodyShadowSphere":         reflect.ValueOf(core.BodyShadowSphere),
-		"BodyShadowString":         reflect.ValueOf(core.BodyShadowString),
-		"BodyShadowStrings":        reflect.ValueOf(core.BodyShadowStrings),
-		"BodyShadowValues":         reflect.ValueOf(core.BodyShadowValues),
 		"CollideBounce":            reflect.ValueOf(core.CollideBounce),
 		"CollideDeactivate":        reflect.ValueOf(core.CollideDeactivate),
 		"CollideNone":              reflect.ValueOf(core.CollideNone),
@@ -48,7 +41,6 @@ func init() {
 
 		// type definitions
 		"Body":              reflect.ValueOf((*core.Body)(nil)),
-		"BodyShadow":        reflect.ValueOf((*core.BodyShadow)(nil)),
 		"CollisionResponse": reflect.ValueOf((*core.CollisionResponse)(nil)),
 		"InternalSegment":   reflect.ValueOf((*core.InternalSegment)(nil)),
 		"Light":             reflect.ValueOf((*core.Light)(nil)),

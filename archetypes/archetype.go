@@ -9,24 +9,6 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func CreateBasic(db *ecs.ECS, componentID ecs.ComponentID) ecs.Entity {
-	e := db.NewEntity()
-	db.NewAttachedComponent(e, componentID)
-	return e
-}
-
-func CreateSector(db *ecs.ECS) ecs.Entity {
-	entity := db.NewEntity()
-	db.NewAttachedComponent(entity, core.SectorCID)
-
-	return entity
-}
-
-func IsLightBody(db *ecs.ECS, e ecs.Entity) bool {
-	return db.Component(e, core.BodyCID) != nil &&
-		db.Component(e, core.LightCID) != nil
-}
-
 func CreateLightBody(db *ecs.ECS) ecs.Entity {
 	e := db.NewEntity()
 	body := db.NewAttachedComponent(e, core.BodyCID).(*core.Body)

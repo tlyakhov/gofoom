@@ -340,8 +340,8 @@ func (e *Editor) ActTool() {
 	case state.ToolSplitSector:
 		e.NewAction(&actions.SplitSector{Place: actions.Place{IEditor: e}})
 	case state.ToolAddSector:
-		entity := archetypes.CreateSector(e.ECS)
-		s := core.GetSector(e.ECS, entity)
+		entity := e.ECS.NewEntity()
+		s := e.ECS.NewAttachedComponent(entity, core.SectorCID).(*core.Sector)
 		s.Bottom.Surface.Material = controllers.DefaultMaterial(e.ECS)
 		s.Top.Surface.Material = controllers.DefaultMaterial(e.ECS)
 		a := &actions.AddSector{Sector: s}
@@ -350,15 +350,16 @@ func (e *Editor) ActTool() {
 		a.AddEntity.Components = e.ECS.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddInternalSegment:
-		entity := archetypes.CreateBasic(e.ECS, core.InternalSegmentCID)
-		seg := core.GetInternalSegment(e.ECS, entity)
+		entity := e.ECS.NewEntity()
+		seg := e.ECS.NewAttachedComponent(entity, core.InternalSegmentCID).(*core.InternalSegment)
 		a := &actions.AddInternalSegment{InternalSegment: seg}
 		a.AddEntity.IEditor = e
 		a.AddEntity.Entity = entity
 		a.AddEntity.Components = e.ECS.AllComponents(entity)
 		e.NewAction(a)
 	case state.ToolAddBody:
-		entity := archetypes.CreateBasic(e.ECS, core.BodyCID)
+		entity := e.ECS.NewEntity()
+		e.ECS.NewAttachedComponent(entity, core.BodyCID)
 		e.NewAction(&actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: entity, Components: e.ECS.AllComponents(entity)})
 	case state.ToolAlignGrid:
 		e.NewAction(&actions.AlignGrid{IEditor: e})
@@ -379,16 +380,16 @@ func (e *Editor) NewShader() {
 			return
 		}
 		// First, load the image
-		eImg := archetypes.CreateBasic(e.ECS, materials.ImageCID)
-		img := materials.GetImage(e.ECS, eImg)
+		eImg := e.ECS.NewEntity()
+		img := e.ECS.NewAttachedComponent(eImg, materials.ImageCID).(*materials.Image)
 		img.Source = uc.URI().Path()
 		img.Load()
 		a := &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
 		e.NewAction(a)
 		e.CurrentAction.Act()
 		// Next set up the shader
-		eShader := archetypes.CreateBasic(e.ECS, materials.ShaderCID)
-		shader := materials.GetShader(e.ECS, eShader)
+		eShader := e.ECS.NewEntity()
+		shader := e.ECS.NewAttachedComponent(eImg, materials.ShaderCID).(*materials.Shader)
 		stage := &materials.ShaderStage{}
 		stage.AttachECS(e.ECS)
 		stage.Construct(nil)

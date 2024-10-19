@@ -66,12 +66,13 @@ func (pc *ParticleController) Always() {
 		delete(pc.Spawned, e)
 	}
 
-	if len(pc.Particles) > pc.Limit {
+	if pc.Source == 0 || len(pc.Particles) > pc.Limit {
 		return
 	}
 	if rand.Intn(10) != 0 {
 		return
 	}
+
 	e := pc.ECS.NewEntity()
 	pc.Particles.Add(e)
 	pc.Spawned[e] = pc.ECS.Timestamp
@@ -80,7 +81,6 @@ func (pc *ParticleController) Always() {
 	mobile := pc.ECS.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
 	mobile.System = true
 	body.Pos.Now.From(&pc.Body.Pos.Now)
-	body.Shadow = core.BodyShadowNone
 	rang := (rand.Float64() - 0.5) * 10
 	mobile.Vel.Now[0] = math.Cos((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
 	mobile.Vel.Now[1] = math.Sin((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
@@ -92,10 +92,8 @@ func (pc *ParticleController) Always() {
 	lit.Diffuse[1] = 0.0
 	lit.Diffuse[2] = 0.0
 	lit.Diffuse[3] = 1.0*/
-	shader := pc.ECS.NewAttachedComponent(e, materials.ShaderCID).(*materials.Shader)
-	shader.System = true
-	stage := materials.ShaderStage{}
-	stage.Construct(nil)
-	stage.Material = pc.Material
-	shader.Stages = append(shader.Stages, &stage)
+	instanced := pc.ECS.NewAttachedComponent(e, ecs.InstancedCID).(*ecs.Instanced)
+	instanced.System = true
+	instanced.Sources.Add(pc.Source)
+	instanced.Recalculate()
 }
