@@ -25,7 +25,7 @@ type Body struct {
 var BodyCID ecs.ComponentID
 
 func init() {
-	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody}, "BodySectorSegment")
+	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody})
 }
 
 func GetBody(db *ecs.ECS, e ecs.Entity) *Body {

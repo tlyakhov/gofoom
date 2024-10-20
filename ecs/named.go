@@ -15,7 +15,7 @@ type Named struct {
 var NamedCID ComponentID
 
 func init() {
-	NamedCID = RegisterComponent(&Column[Named, *Named]{Getter: GetNamed}, "")
+	NamedCID = RegisterComponent(&Column[Named, *Named]{Getter: GetNamed})
 }
 
 func GetNamed(db *ECS, e Entity) *Named {

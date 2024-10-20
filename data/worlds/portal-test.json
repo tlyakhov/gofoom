@@ -395,7 +395,7 @@
       "Entity": "7",
       "Stages": [
         {
-          "Texture": "9"
+          "Material": "9"
         }
       ]
     }
@@ -493,7 +493,7 @@
             "ExtraStages": [
               {
                 "Flags": "",
-                "Texture": "33",
+                "Material": "33",
                 "Transform": [
                   14,
                   0,
@@ -638,10 +638,65 @@
   {
     "Entity": "12",
     "behaviors.Actor": {
-      "Action": "57",
+      "Action": "62",
       "Entity": "12",
       "Speed": 50,
       "Start": "57"
+    },
+    "behaviors.ParticleEmitter": {
+      "Entity": "12",
+      "Particles": [
+        "104",
+        "126",
+        "74",
+        "81",
+        "92",
+        "110",
+        "72",
+        "101",
+        "109",
+        "105",
+        "106",
+        "127",
+        "69",
+        "70",
+        "108",
+        "95",
+        "97",
+        "99",
+        "87",
+        "125",
+        "89",
+        "102",
+        "107",
+        "128",
+        "90",
+        "98",
+        "82",
+        "129",
+        "96",
+        "100",
+        "103",
+        "78",
+        "85",
+        "91",
+        "73",
+        "84",
+        "71",
+        "80",
+        "94",
+        "65",
+        "67",
+        "93",
+        "83",
+        "88",
+        "68",
+        "79",
+        "111",
+        "64",
+        "66"
+      ],
+      "Source": "86"
     },
     "core.Body": {
       "Angle": {
@@ -686,7 +741,7 @@
       "Stages": [
         {
           "Flags": "ShaderTiled|ShaderSky",
-          "Texture": "11"
+          "Material": "11"
         }
       ]
     }
@@ -967,8 +1022,8 @@
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0,
-            "Reverse": true,
+            "Percent": 1,
+            "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -1209,7 +1264,7 @@
       "Entity": "21",
       "Stages": [
         {
-          "Texture": "20"
+          "Material": "20"
         }
       ]
     }
@@ -1440,7 +1495,7 @@
       "Entity": "24",
       "Stages": [
         {
-          "Texture": "23"
+          "Material": "23"
         }
       ]
     }
@@ -1778,7 +1833,7 @@
       "Entity": "32",
       "Stages": [
         {
-          "Texture": "31"
+          "Material": "31"
         }
       ]
     }
@@ -1902,7 +1957,7 @@
       "Stages": [
         {
           "Flags": "ShaderTiled|ShaderLiquid",
-          "Texture": "36"
+          "Material": "36"
         }
       ]
     }
@@ -3349,6 +3404,15 @@
       "X": -90,
       "Y": 150,
       "Z": 25
+    }
+  },
+  {
+    "Entity": "86",
+    "materials.Image": {
+      "Entity": "86",
+      "Filter": false,
+      "GenerateMipMaps": true,
+      "Source": "data/game/acid-bubble.png"
     }
   }
 ]

@@ -36,7 +36,7 @@ type Proximity struct {
 var ProximityCID ecs.ComponentID
 
 func init() {
-	ProximityCID = ecs.RegisterComponent(&ecs.Column[Proximity, *Proximity]{Getter: GetProximity}, "")
+	ProximityCID = ecs.RegisterComponent(&ecs.Column[Proximity, *Proximity]{Getter: GetProximity})
 }
 
 func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {

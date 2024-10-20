@@ -16,7 +16,7 @@ type Shader struct {
 var ShaderCID ecs.ComponentID
 
 func init() {
-	ShaderCID = ecs.RegisterComponent(&ecs.Column[Shader, *Shader]{Getter: GetShader}, "")
+	ShaderCID = ecs.RegisterComponent(&ecs.Column[Shader, *Shader]{Getter: GetShader})
 }
 
 func GetShader(db *ecs.ECS, e ecs.Entity) *Shader {

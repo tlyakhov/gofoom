@@ -14,7 +14,7 @@ type ActionFire struct {
 var ActionFireCID ecs.ComponentID
 
 func init() {
-	ActionFireCID = ecs.RegisterComponent(&ecs.Column[ActionFire, *ActionFire]{Getter: GetActionFire}, "")
+	ActionFireCID = ecs.RegisterComponent(&ecs.Column[ActionFire, *ActionFire]{Getter: GetActionFire})
 }
 
 func GetActionFire(db *ecs.ECS, e ecs.Entity) *ActionFire {

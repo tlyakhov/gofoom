@@ -24,7 +24,7 @@ type Sprite struct {
 var SpriteCID ecs.ComponentID
 
 func init() {
-	SpriteCID = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite}, "")
+	SpriteCID = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite})
 }
 
 func GetSprite(db *ecs.ECS, e ecs.Entity) *Sprite {

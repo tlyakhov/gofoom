@@ -7,12 +7,12 @@ import (
 	"reflect"
 	"strconv"
 
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 
 	"fyne.io/fyne/v2"
@@ -62,27 +62,37 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		return
 	}
 
-	// Create our combo box with pixbuf/string enum entries.
-	refs := make([]widget.TreeNodeID, 1)
-	refs[0] = "0"
+	entities := make([]widget.TreeNodeID, 1)
+	entities[0] = "0"
 
-	// TODO: Optimize this by using columns directly. This is unwieldy
-	g.State().ECS.Entities.Range(func(entity uint32) {
-		if editTypeTag == "Material" && archetypes.EntityIsMaterial(g.State().ECS, ecs.Entity(entity)) {
-			refs = append(refs, strconv.Itoa(int(entity)))
-		} else if editTypeTag == "Sector" && core.GetSector(g.State().ECS, ecs.Entity(entity)) != nil {
-			refs = append(refs, strconv.Itoa(int(entity)))
-		} else if editTypeTag == "Action" && behaviors.GetActionWaypoint(g.State().ECS, ecs.Entity(entity)) != nil {
-			refs = append(refs, strconv.Itoa(int(entity)))
-		} else if editTypeTag == "Weapon" && behaviors.GetWeaponClass(g.State().ECS, ecs.Entity(entity)) != nil {
-			refs = append(refs, strconv.Itoa(int(entity)))
+	cids := make([]ecs.ComponentID, 0)
+
+	switch editTypeTag {
+	case "Sector":
+		cids = append(cids, core.SectorCID)
+	case "Material":
+		cids = append(cids, materials.ShaderCID, materials.SpriteCID,
+			materials.ImageCID, materials.TextCID, materials.SolidCID)
+	case "Action":
+		cids = append(cids, behaviors.ActionWaypointCID, behaviors.ActionJumpCID,
+			behaviors.ActionFireCID, behaviors.ActionTransitionCID)
+	case "Weapon":
+		cids = append(cids, behaviors.WeaponClassCID)
+	}
+	for _, cid := range cids {
+		col := g.State().ECS.Column(cid)
+		for i := range col.Cap() {
+			if a := col.Attachable(i); a != nil {
+				entities = append(entities, strconv.Itoa(int(a.Base().Entity)))
+			}
 		}
-	})
+	}
+
 	tree := widget.NewTree(func(tni widget.TreeNodeID) []widget.TreeNodeID {
 		if tni != "" {
 			return []string{}
 		}
-		return refs
+		return entities
 	}, func(tni widget.TreeNodeID) bool {
 		return tni == ""
 	}, func(b bool) fyne.CanvasObject {

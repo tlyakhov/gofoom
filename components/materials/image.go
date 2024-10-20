@@ -43,7 +43,7 @@ type Image struct {
 var ImageCID ecs.ComponentID
 
 func init() {
-	ImageCID = ecs.RegisterComponent(&ecs.Column[Image, *Image]{Getter: GetImage}, "Material")
+	ImageCID = ecs.RegisterComponent(&ecs.Column[Image, *Image]{Getter: GetImage})
 }
 
 func GetImage(db *ecs.ECS, e ecs.Entity) *Image {

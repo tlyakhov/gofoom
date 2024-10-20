@@ -24,7 +24,7 @@ type ShaderStage struct {
 	ECS       *ecs.ECS
 	System    bool
 	Material  ecs.Entity       `editable:"Material" edit_type:"Material"`
-	Transform concepts.Matrix2 `editable:"Transform"`
+	Transform concepts.Matrix2 `editable:"ℝ2→ℝ2"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
 	Frame     int              `editable:"Frame"`
 	Opacity   float64          `editable:"Opacity"`

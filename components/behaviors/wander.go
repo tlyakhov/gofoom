@@ -22,7 +22,7 @@ type Wander struct {
 var WanderCID ecs.ComponentID
 
 func init() {
-	WanderCID = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander}, "ActorWander")
+	WanderCID = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander})
 }
 
 func GetWander(db *ecs.ECS, e ecs.Entity) *Wander {

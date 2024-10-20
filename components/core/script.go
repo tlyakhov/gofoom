@@ -4,10 +4,11 @@
 package core
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"maps"
-	"strings"
+	"text/template"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/traefik/yaegi/interp"
@@ -32,28 +33,15 @@ type Script struct {
 	runFunc      any
 }
 
-// TODO: Refactor this to use text/Template
-func (s *Script) codeParams(sb *strings.Builder) {
-	for _, p := range s.Params {
-		sb.WriteString("var ")
-		sb.WriteString(p.Name)
-		sb.WriteString(" ")
-		sb.WriteString(p.TypeName)
-		sb.WriteString("\n")
-		sb.WriteString(`if s.Vars["`)
-		sb.WriteString(p.Name)
-		sb.WriteString("\"] != nil {\n")
-		sb.WriteString(p.Name)
-		sb.WriteString(` = s.Vars["`)
-		sb.WriteString(p.Name)
-		sb.WriteString(`"].(`)
-		sb.WriteString(p.TypeName)
-		sb.WriteString(")\n}\n")
-	}
-}
+var scriptTemplate *template.Template
 
-func (s *Script) codeCommonHeader(sb *strings.Builder) {
-	sb.WriteString(`package main
+func init() {
+	var err error
+	scriptTemplate, err = template.New("script").Funcs(template.FuncMap{
+		"BoolExpr": func() ScriptStyle { return ScriptStyleBoolExpr },
+	}).Parse(`
+	package main
+
 	import "tlyakhov/gofoom/archetypes"
 	import "tlyakhov/gofoom/components/behaviors"
 	import "tlyakhov/gofoom/components/core"
@@ -65,28 +53,22 @@ func (s *Script) codeCommonHeader(sb *strings.Builder) {
 	import "tlyakhov/gofoom/ecs"
 	import "log"
 	import "fmt"
-	`)
-}
-func (s *Script) codeBoolExpr(sb *strings.Builder) {
-	s.codeCommonHeader(sb)
-	sb.WriteString(`
-func Do(s *core.Script) bool {
-	`)
-	s.codeParams(sb)
-	sb.WriteString(`
-return (` + s.Code + `)
-	}`)
-}
 
-func (s *Script) codeStatement(sb *strings.Builder) {
-	s.codeCommonHeader(sb)
-	sb.WriteString(`
-func Do(s *core.Script) {
+	func Do(s *core.Script) {{if eq .Style BoolExpr}}bool{{end}} {
+		{{range .Params}}
+			var {{.Name}} {{.TypeName}}
+			if s.Vars["{{.Name}}"] != nil {
+				{{.Name}} = s.Vars["{{.Name}}"].({{.TypeName}})
+			}
+		{{end}}
+
+		{{if eq .Style BoolExpr}}return {{end}}{{.Code}}
+	}
+
 	`)
-	s.codeParams(sb)
-	sb.WriteString(`
-	` + s.Code + `
-	}`)
+	if err != nil {
+		log.Printf("core.Script: error building script template: %v", err)
+	}
 }
 
 func (s *Script) Compile() {
@@ -98,14 +80,15 @@ func (s *Script) Compile() {
 	switch s.Style {
 	case ScriptStyleRaw:
 		codeTemplate = s.Code
-	case ScriptStyleBoolExpr:
-		sb := new(strings.Builder)
-		s.codeBoolExpr(sb)
-		codeTemplate = sb.String()
-	case ScriptStyleStatement:
-		sb := new(strings.Builder)
-		s.codeStatement(sb)
-		codeTemplate = sb.String()
+	default:
+		var buf bytes.Buffer
+		err := scriptTemplate.Execute(&buf, s)
+		if err != nil {
+			s.ErrorMessage += fmt.Sprintf("Error building script template %v: %v", s.Code, err)
+			log.Printf("%v", s.ErrorMessage)
+			return
+		}
+		codeTemplate = buf.String()
 	}
 
 	_, err := s.interp.Eval(codeTemplate)
@@ -114,7 +97,7 @@ func (s *Script) Compile() {
 		log.Printf("%v", s.ErrorMessage)
 		return
 	}
-	//log.Printf("%v", codeTemplate)
+	log.Printf("%v", codeTemplate)
 	f, err := s.interp.Eval("main.Do")
 	if err != nil {
 		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)

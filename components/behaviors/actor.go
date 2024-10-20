@@ -23,7 +23,7 @@ type Actor struct {
 var ActorCID ecs.ComponentID
 
 func init() {
-	ActorCID = ecs.RegisterComponent(&ecs.Column[Actor, *Actor]{Getter: GetActor}, "ActorWander")
+	ActorCID = ecs.RegisterComponent(&ecs.Column[Actor, *Actor]{Getter: GetActor})
 }
 
 func GetActor(db *ecs.ECS, e ecs.Entity) *Actor {

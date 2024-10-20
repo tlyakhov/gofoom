@@ -23,7 +23,7 @@ type WeaponInstant struct {
 var WeaponInstantCID ecs.ComponentID
 
 func init() {
-	WeaponInstantCID = ecs.RegisterComponent(&ecs.Column[WeaponInstant, *WeaponInstant]{Getter: GetWeaponInstant}, "")
+	WeaponInstantCID = ecs.RegisterComponent(&ecs.Column[WeaponInstant, *WeaponInstant]{Getter: GetWeaponInstant})
 }
 
 func GetWeaponInstant(db *ecs.ECS, e ecs.Entity) *WeaponInstant {

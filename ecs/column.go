@@ -17,6 +17,8 @@ const chunkSize = 64
 // See https://utcc.utoronto.ca/~cks/space/blog/programming/GoSlicesVsPointers
 type componentChunk[T any, PT GenericAttachable[T]] [chunkSize]T
 
+// Sparse columnar storage of typed Attachable structs. Very efficient to access
+// because it's ultimately just a slice of arrays.
 type Column[T any, PT GenericAttachable[T]] struct {
 	*ECS
 	Index  int

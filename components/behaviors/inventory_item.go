@@ -19,7 +19,7 @@ type InventoryItem struct {
 var InventoryItemCID ecs.ComponentID
 
 func init() {
-	InventoryItemCID = ecs.RegisterComponent(&ecs.Column[InventoryItem, *InventoryItem]{Getter: GetInventoryItem}, "")
+	InventoryItemCID = ecs.RegisterComponent(&ecs.Column[InventoryItem, *InventoryItem]{Getter: GetInventoryItem})
 }
 
 func GetInventoryItem(db *ecs.ECS, e ecs.Entity) *InventoryItem {

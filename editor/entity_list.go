@@ -98,7 +98,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	list.Update()
 
 	list.Table = widget.NewTableWithHeaders(list.tableLength, func() fyne.CanvasObject {
-		text := canvas.NewText("Template", theme.ForegroundColor())
+		text := canvas.NewText("Template", theme.Color(theme.ColorNameForeground))
 		progress := widget.NewProgressBar()
 		return container.NewStack(text, progress)
 	}, list.tableUpdate)
@@ -246,6 +246,7 @@ func (list *EntityList) Select(selection *selection.Selection) {
 				list.Table.OnSelected = nil
 				list.Table.OnUnselected = nil
 				list.Table.Select(widget.TableCellID{Row: i, Col: 0})
+				list.Table.ScrollTo(widget.TableCellID{Row: i, Col: 0})
 				list.Table.OnSelected = fs1
 				list.Table.OnUnselected = fs2
 				return

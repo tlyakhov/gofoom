@@ -80,7 +80,7 @@ func (db *ECS) ActAllControllers(method ControllerMethod) {
 			(!db.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
-		col := db.columns[controller.ComponentID()&0xFFFF]
+		col := db.columns[controller.ComponentID()]
 		for i := range col.Cap() {
 			if component := col.Attachable(i); component != nil {
 				act(controller, component, method)

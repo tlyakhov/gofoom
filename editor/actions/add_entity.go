@@ -13,6 +13,9 @@ import (
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
+// Declare conformity with interfaces
+var _ Placeable = (*AddEntity)(nil)
+
 type AddEntity struct {
 	Place
 	ecs.Entity
