@@ -29,7 +29,7 @@ type Mobile struct {
 var MobileCID ecs.ComponentID
 
 func init() {
-	MobileCID = ecs.RegisterComponent(&ecs.Column[Mobile, *Mobile]{Getter: GetMobile}, "")
+	MobileCID = ecs.RegisterComponent(&ecs.Column[Mobile, *Mobile]{Getter: GetMobile})
 }
 
 func GetMobile(db *ecs.ECS, e ecs.Entity) *Mobile {

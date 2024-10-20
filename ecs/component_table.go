@@ -9,7 +9,7 @@ Closed hash table, indexed directly by component indices
 	This is designed to be extremely fast due to the direct hashing, small
 	number of elements, etc...
 
-	It handles "instances" as a special case, recursively querying parent tables
+	It handles links as a special case, recursively querying parent tables
 	if the entity in question has an Linked component attached.
 */
 type ComponentTable []Attachable
@@ -18,7 +18,7 @@ const ComponentTableGrowthRate = 8
 
 func (table *ComponentTable) Set(a Attachable) {
 	cid := a.Base().ComponentID
-	size := len(*table)
+	size := ComponentID(len(*table))
 	if size == 0 {
 		*table = make(ComponentTable, ComponentTableGrowthRate)
 		size = ComponentTableGrowthRate
@@ -28,7 +28,8 @@ func (table *ComponentTable) Set(a Attachable) {
 		(*table)[0] = a
 		return
 	}
-	i := 1 + int(cid>>16)%(size-1)
+	// Skip the first element
+	i := 1 + cid%(size-1)
 	for range size - 1 {
 		if i == 0 {
 			i = 1
@@ -55,7 +56,7 @@ func (table *ComponentTable) Set(a Attachable) {
 
 // This method should be as efficient as possible, it gets called a lot!
 func (table ComponentTable) Get(cid ComponentID) Attachable {
-	size := uint16(len(table))
+	size := ComponentID(len(table))
 	if size == 0 {
 		return nil
 	}
@@ -63,7 +64,8 @@ func (table ComponentTable) Get(cid ComponentID) Attachable {
 	if cid == LinkedCID {
 		return table[0]
 	}
-	i := 1 + uint16(cid>>16)%(size-1)
+	// Skip the first element
+	i := 1 + cid%(size-1)
 	for range size - 1 {
 		if i == 0 {
 			i = 1
@@ -83,7 +85,7 @@ func (table ComponentTable) Get(cid ComponentID) Attachable {
 }
 
 func (table *ComponentTable) Delete(cid ComponentID) {
-	size := uint16(len(*table))
+	size := ComponentID(len(*table))
 	if size == 0 {
 		return
 	}
@@ -93,7 +95,7 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 		return
 	}
 	// First, find our slot by linear probing
-	i := 1 + (uint16(cid>>16))%(size-1)
+	i := 1 + cid%(size-1)
 	found := false
 	for range size - 1 {
 		if i == 0 {
@@ -127,7 +129,7 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 			return
 		}
 		cid := (*table)[i].Base().ComponentID
-		hash := 1 + uint16(cid>>16)%(size-1)
+		hash := 1 + cid%(size-1)
 		if hash != i {
 			(*table)[prev], (*table)[i] = (*table)[i], nil
 		} else {

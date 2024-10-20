@@ -27,7 +27,7 @@ type Text struct {
 var TextCID ecs.ComponentID
 
 func init() {
-	TextCID = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText}, "Material")
+	TextCID = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText})
 }
 
 func GetText(db *ecs.ECS, e ecs.Entity) *Text {

@@ -17,7 +17,7 @@ type Solid struct {
 var SolidCID ecs.ComponentID
 
 func init() {
-	SolidCID = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid}, "Material")
+	SolidCID = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid})
 }
 
 func GetSolid(db *ecs.ECS, e ecs.Entity) *Solid {

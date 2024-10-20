@@ -29,7 +29,7 @@ type Player struct {
 var PlayerCID ecs.ComponentID
 
 func init() {
-	PlayerCID = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer}, "")
+	PlayerCID = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer})
 }
 
 func GetPlayer(db *ecs.ECS, e ecs.Entity) *Player {

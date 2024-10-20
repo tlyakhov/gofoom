@@ -41,17 +41,17 @@ type mockC8 struct {
 }
 
 func BenchmarkGet(b *testing.B) {
-	RegisterComponent(&Column[mockC1, *mockC1]{}, "")
-	RegisterComponent(&Column[mockC2, *mockC2]{}, "")
-	RegisterComponent(&Column[mockC3, *mockC3]{}, "")
-	RegisterComponent(&Column[mockC4, *mockC4]{}, "")
-	RegisterComponent(&Column[mockC5, *mockC5]{}, "")
-	RegisterComponent(&Column[mockC6, *mockC6]{}, "")
-	RegisterComponent(&Column[mockC7, *mockC7]{}, "")
-	RegisterComponent(&Column[mockC8, *mockC8]{}, "")
+	RegisterComponent(&Column[mockC1, *mockC1]{})
+	RegisterComponent(&Column[mockC2, *mockC2]{})
+	RegisterComponent(&Column[mockC3, *mockC3]{})
+	RegisterComponent(&Column[mockC4, *mockC4]{})
+	RegisterComponent(&Column[mockC5, *mockC5]{})
+	RegisterComponent(&Column[mockC6, *mockC6]{})
+	RegisterComponent(&Column[mockC7, *mockC7]{})
+	RegisterComponent(&Column[mockC8, *mockC8]{})
 	db := NewECS()
 	cp := Types().ColumnPlaceholders
-	numEntities := 10000
+	numEntities := 1000
 	for range numEntities {
 		entity := db.NewEntity()
 		for range 5 {

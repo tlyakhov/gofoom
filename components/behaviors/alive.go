@@ -25,7 +25,7 @@ type Alive struct {
 var AliveCID ecs.ComponentID
 
 func init() {
-	AliveCID = ecs.RegisterComponent(&ecs.Column[Alive, *Alive]{Getter: GetAlive}, "")
+	AliveCID = ecs.RegisterComponent(&ecs.Column[Alive, *Alive]{Getter: GetAlive})
 }
 
 func GetAlive(db *ecs.ECS, e ecs.Entity) *Alive {

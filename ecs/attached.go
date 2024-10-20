@@ -7,6 +7,8 @@ import (
 	"tlyakhov/gofoom/containers"
 )
 
+// Attached represents a set of fields common to every component and implements
+// the Attachable interface.
 type Attached struct {
 	ComponentID
 	Entity        `editable:"Component" edit_type:"Component" edit_sort:"0"`

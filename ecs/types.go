@@ -20,12 +20,10 @@ type controllerMetadata struct {
 }
 type typeMetadata struct {
 	ColumnIndexes        map[string]int
-	GroupIndexes         map[string]int
 	IDs                  map[string]ComponentID
 	LenGroupedComponents int
 	ColumnPlaceholders   []AttachableColumn
 	nextFreeComponent    uint32
-	nextFreeGroup        uint32
 	Controllers          []controllerMetadata
 	ExprEnv              map[string]any
 	InterpSymbols        interp.Exports
@@ -41,14 +39,13 @@ func Types() *typeMetadata {
 			Controllers:   make([]controllerMetadata, 0),
 			IDs:           make(map[string]ComponentID),
 			ColumnIndexes: make(map[string]int),
-			GroupIndexes:  make(map[string]int),
 			ExprEnv:       make(map[string]any),
 		}
 	})
 	return globalTypeMetadata
 }
 
-func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT], group string) ComponentID {
+func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT]) ComponentID {
 	ecsTypes := Types()
 	ecsTypes.lock.Lock()
 	defer ecsTypes.lock.Unlock()
@@ -61,21 +58,7 @@ func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT], gr
 	column.typeOfT = reflect.TypeFor[T]()
 	tSplit := strings.Split(column.Type().String(), ".")
 	noPackage := tSplit[len(tSplit)-1]
-
-	var groupIndex int
-	switch {
-	case group == "":
-		groupIndex = (int)(atomic.AddUint32(&ecsTypes.nextFreeGroup, 1))
-		ecsTypes.LenGroupedComponents++
-	case ecsTypes.GroupIndexes[group] != 0:
-		groupIndex = ecsTypes.GroupIndexes[group]
-	default:
-		groupIndex = (int)(atomic.AddUint32(&ecsTypes.nextFreeGroup, 1))
-		ecsTypes.GroupIndexes[group] = groupIndex
-		ecsTypes.LenGroupedComponents++
-	}
-
-	column.componentID = ComponentID(groupIndex<<16 | columnIndex)
+	column.componentID = ComponentID(columnIndex)
 	ecsTypes.ColumnPlaceholders[columnIndex] = column
 	ecsTypes.ColumnIndexes[reflect.PointerTo(column.Type()).String()] = columnIndex
 	ecsTypes.ColumnIndexes[column.String()] = columnIndex

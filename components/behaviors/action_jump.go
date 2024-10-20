@@ -14,7 +14,7 @@ type ActionJump struct {
 var ActionJumpCID ecs.ComponentID
 
 func init() {
-	ActionJumpCID = ecs.RegisterComponent(&ecs.Column[ActionJump, *ActionJump]{Getter: GetActionJump}, "")
+	ActionJumpCID = ecs.RegisterComponent(&ecs.Column[ActionJump, *ActionJump]{Getter: GetActionJump})
 }
 
 func GetActionJump(db *ecs.ECS, e ecs.Entity) *ActionJump {

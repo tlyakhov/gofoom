@@ -47,7 +47,7 @@ type Sector struct {
 var SectorCID ecs.ComponentID
 
 func init() {
-	SectorCID = ecs.RegisterComponent(&ecs.Column[Sector, *Sector]{Getter: GetSector}, "BodySectorSegment")
+	SectorCID = ecs.RegisterComponent(&ecs.Column[Sector, *Sector]{Getter: GetSector})
 }
 
 func GetSector(db *ecs.ECS, e ecs.Entity) *Sector {

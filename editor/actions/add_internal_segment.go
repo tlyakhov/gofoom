@@ -12,6 +12,9 @@ import (
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
+// Declare conformity with interfaces
+var _ Placeable = (*AddInternalSegment)(nil)
+
 type AddInternalSegment struct {
 	AddEntity
 	*core.InternalSegment
@@ -60,10 +63,6 @@ func (a *AddInternalSegment) Point() bool {
 }
 
 func (a *AddInternalSegment) EndPoint() bool {
-	if !a.AddEntity.EndPoint() {
-		return false
-	}
-
 	switch a.Mode {
 	case "AddInternalSegmentA":
 		a.State().Lock.Lock()
@@ -72,12 +71,7 @@ func (a *AddInternalSegment) EndPoint() bool {
 		a.Mode = "AddInternalSegmentB"
 	case "AddInternalSegmentB":
 		a.B.From(a.WorldGrid(&a.State().MouseWorld))
-		a.Mode = "AddInternalSegment"
-		a.State().Lock.Lock()
-		a.State().Modified = true
-		a.Recalculate()
-		a.State().Lock.Unlock()
-		a.ActionFinished(false, true, true)
+		return a.AddEntity.EndPoint()
 	}
 	return true
 }

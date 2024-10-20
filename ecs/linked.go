@@ -26,7 +26,7 @@ type Linked struct {
 var LinkedCID ComponentID
 
 func init() {
-	LinkedCID = RegisterComponent(&Column[Linked, *Linked]{Getter: GetLinked}, "")
+	LinkedCID = RegisterComponent(&Column[Linked, *Linked]{Getter: GetLinked})
 }
 
 func GetLinked(db *ECS, e Entity) *Linked {

@@ -70,7 +70,11 @@ func (db *ECS) NewEntity() Entity {
 }
 
 func ColumnFor[T any, PT GenericAttachable[T]](db *ECS, id ComponentID) *Column[T, PT] {
-	return db.columns[id&0xFFFF].(*Column[T, PT])
+	return db.columns[id].(*Column[T, PT])
+}
+
+func (db *ECS) Column(id ComponentID) AttachableColumn {
+	return db.columns[id]
 }
 
 func (db *ECS) AllComponents(entity Entity) ComponentTable {
@@ -143,9 +147,9 @@ func Archetype3[T1 any, T2 any, T3 any,
 }
 
 func (db *ECS) First(id ComponentID) Attachable {
-	c := db.columns[id&0xFFFF]
+	c := db.columns[id]
 	for i := 0; i < c.Cap(); i++ {
-		a := db.columns[id&0xFFFF].Attachable(i)
+		a := db.columns[id].Attachable(i)
 		if a != nil {
 			return a
 		}
@@ -165,7 +169,7 @@ func (db *ECS) upsert(entity Entity, component Attachable, componentID Component
 		db.rows = append(db.rows, nil)
 	}
 
-	column := db.columns[componentID&0xFFFF]
+	column := db.columns[componentID]
 	ec := db.rows[int(entity)].Get(componentID)
 	if ec != nil {
 		// A component with this index is already attached to this entity, overwrite it.
@@ -209,7 +213,7 @@ func (db *ECS) LoadComponentWithoutAttaching(id ComponentID, data map[string]any
 	if data == nil {
 		return nil
 	}
-	component := Types().ColumnPlaceholders[id&0xFFFF].New()
+	component := Types().ColumnPlaceholders[id].New()
 	component.Base().Entity = 0
 	component.AttachECS(db)
 	component.Construct(data)
@@ -256,7 +260,7 @@ func (db *ECS) delete(id ComponentID, entity Entity, checkForEmpty bool) {
 		return
 	}
 	ec := db.rows[int(entity)].Get(id)
-	column := db.columns[id&0xFFFF]
+	column := db.columns[id]
 	if ec == nil {
 		// This component is not attached
 		log.Printf("ECS.Detach: tried to detach unattached component %v from entity %v", column.String(), entity)
@@ -328,7 +332,7 @@ func (db *ECS) Delete(entity Entity) {
 		}
 		id := c.Base().ComponentID
 		c.OnDetach()
-		db.columns[id&0xFFFF].Detach(c.Base().indexInColumn)
+		db.columns[id].Detach(c.Base().indexInColumn)
 	}
 	db.rows[int(entity)] = nil
 	db.Entities.Remove(uint32(entity))
@@ -400,7 +404,7 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 		if component == nil || component.IsSystem() {
 			continue
 		}
-		col := Types().ColumnPlaceholders[component.Base().ComponentID&0xFFFF]
+		col := Types().ColumnPlaceholders[component.Base().ComponentID]
 		jsonEntity[col.Type().String()] = component.Serialize()
 	}
 	if len(jsonEntity) == 1 {
