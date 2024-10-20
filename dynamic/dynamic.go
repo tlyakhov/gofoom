@@ -36,7 +36,7 @@ type DynamicValue[T DynamicType] struct {
 
 	Now      T
 	Prev     T
-	Original T `editable:"Initial Value"`
+	Original T `editable:"Value"`
 	// If there are runtime errors about this field being nil, it's probably
 	// because the .Attach() method was never called
 	Render        *T

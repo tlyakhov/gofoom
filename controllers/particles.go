@@ -92,8 +92,8 @@ func (pc *ParticleController) Always() {
 	lit.Diffuse[1] = 0.0
 	lit.Diffuse[2] = 0.0
 	lit.Diffuse[3] = 1.0*/
-	instanced := pc.ECS.NewAttachedComponent(e, ecs.InstancedCID).(*ecs.Instanced)
-	instanced.System = true
-	instanced.Sources.Add(pc.Source)
-	instanced.Recalculate()
+	linked := pc.ECS.NewAttachedComponent(e, ecs.LinkedCID).(*ecs.Linked)
+	linked.System = true
+	linked.Sources.Add(pc.Source)
+	linked.Recalculate()
 }

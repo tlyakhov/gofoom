@@ -46,7 +46,7 @@ func (a *SetProperty) FireHooks() {
 			target.Compile()
 		case *materials.Text:
 			target.RasterizeText()
-		case *ecs.Instanced:
+		case *ecs.Linked:
 			target.Recalculate()
 		case *core.SectorSegment:
 			// For SectorSegments, the A & B fields of the child Segment type

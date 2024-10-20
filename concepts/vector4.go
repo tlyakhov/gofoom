@@ -88,11 +88,8 @@ func (a *Vector4) AddPreMulColorSelfOpacity(b *Vector4, o float64) *Vector4 {
 	if b[3] == 0 {
 		return a
 	}
-	if b[3] == 1 {
-		a[0] = b[0] * o
-		a[1] = b[1] * o
-		a[2] = b[2] * o
-		a[3] = b[3] * o
+	if b[3] == 1 && o == 1 {
+		*a = *b
 		return a
 	}
 	inva := 1.0 - b[3]*o

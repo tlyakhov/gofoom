@@ -166,6 +166,9 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	}
 	if ac.Body.Pos.Procedural {
 		ac.Body.Pos.Input.AddSelf(v.MulSelf(constants.TimeStepS))
+		var bc BodyController
+		bc.Target(ac.Body)
+		bc.findBodySector()
 	} else if ac.Mobile != nil {
 		ac.Mobile.Vel.Now = *v
 	}

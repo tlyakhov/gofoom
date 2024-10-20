@@ -106,7 +106,7 @@ func (mc *MobileController) bodyTeleport() bool {
 			for mc.Body.Angle.Now > 360 {
 				mc.Body.Angle.Now -= 360
 			}
-			mc.Enter(segment.AdjacentSector)
+			mc.Enter(core.GetSector(mc.ECS, segment.AdjacentSector))
 			return true
 		}
 	}
@@ -136,7 +136,7 @@ func (mc *MobileController) bodyExitsSector() {
 				e.Pos[2] = floorZ
 				log.Println("Entity entering adjacent sector is lower than floorZ")
 			}*/
-			mc.Enter(segment.AdjacentSector)
+			mc.Enter(adj)
 			break
 		}
 	}
@@ -320,7 +320,7 @@ func (mc *MobileController) CollideZ() {
 	if mc.Sector.Bottom.Target != 0 && bodyTop < floorZ {
 		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center)
 		mc.Exit()
-		mc.Enter(mc.Sector.Bottom.Target)
+		mc.Enter(core.GetSector(mc.ECS, mc.Sector.Bottom.Target))
 		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
 		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
 		ceilZ = mc.Sector.Top.ZAt(dynamic.DynamicNow, mc.Body.Pos.Now.To2D())
@@ -344,7 +344,7 @@ func (mc *MobileController) CollideZ() {
 	if mc.Sector.Top.Target != 0 && bodyTop > ceilZ {
 		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center)
 		mc.Exit()
-		mc.Enter(mc.Sector.Top.Target)
+		mc.Enter(core.GetSector(mc.ECS, mc.Sector.Top.Target))
 		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
 		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
 		floorZ = mc.Sector.Bottom.ZAt(dynamic.DynamicNow, mc.Body.Pos.Now.To2D())

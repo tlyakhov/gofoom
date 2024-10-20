@@ -15,7 +15,7 @@ import (
 
 type BodyController struct {
 	ecs.BaseController
-	Body   *core.Body
+	*core.Body
 	Sector *core.Sector
 	Player *behaviors.Player
 
@@ -54,9 +54,9 @@ func (bc *BodyController) Target(target ecs.Attachable) bool {
 		return false
 	}
 	bc.Sector = bc.Body.Sector()
-	bc.pos = &bc.Body.Pos.Now
+	bc.pos = &bc.Pos.Now
 	bc.pos2d = bc.pos.To2D()
-	bc.halfHeight = bc.Body.Size.Now[1] * 0.5
+	bc.halfHeight = bc.Size.Now[1] * 0.5
 	return true
 }
 
@@ -81,7 +81,7 @@ func (bc *BodyController) Loaded() {
 func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
-	col := ecs.ColumnFor[core.Sector](bc.Body.ECS, core.SectorCID)
+	col := ecs.ColumnFor[core.Sector](bc.ECS, core.SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
 		if sector == nil {
@@ -94,7 +94,8 @@ func (bc *BodyController) findBodySector() {
 	}
 
 	if closestSector == nil {
-		p := bc.Body.Pos.Now.To2D()
+		// Find the closest segment and use its sector
+		p := bc.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
 		closestDistance2 := math.MaxFloat64
 		for i := range col.Cap() {
@@ -118,32 +119,37 @@ func (bc *BodyController) findBodySector() {
 
 	floorZ, ceilZ := closestSector.ZAt(dynamic.DynamicNow, bc.pos2d)
 	//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
-	if bc.pos[2]-bc.halfHeight < floorZ || bc.pos[2]+bc.halfHeight > ceilZ {
-		//log.Printf("Moved body %v to closest sector and adjusted Z from %v to %v", mc.Body.Entity, p[2], floorZ)
+	if bc.pos[2]-bc.halfHeight < floorZ {
 		bc.pos[2] = floorZ + bc.halfHeight
 	}
-	bc.Enter(closestSector.Entity)
-	// Don't mark as collided because this is probably an initialization.
+	if bc.pos[2]+bc.halfHeight > ceilZ {
+		bc.pos[2] = ceilZ - bc.halfHeight
+	}
+	if bc.Sector != closestSector {
+		if bc.Sector != nil {
+			bc.Exit()
+		}
+		bc.Enter(closestSector)
+	}
 }
 
-func (bc *BodyController) Enter(eSector ecs.Entity) {
-	if eSector == 0 {
-		log.Printf("%v tried to enter nil sector", bc.Body.Entity)
-		return
-	}
-	sector := core.GetSector(bc.Body.ECS, eSector)
+func (bc *BodyController) Enter(sector *core.Sector) {
 	if sector == nil {
-		log.Printf("%v tried to enter entity %v that's not a sector", bc.Body.Entity, eSector.Format(bc.Body.ECS))
+		log.Printf("%v tried to enter nil sector", bc.Entity)
 		return
 	}
 	bc.Sector = sector
-	bc.Sector.Bodies[bc.Body.Entity] = bc.Body
-	bc.Body.SectorEntity = eSector
+	bc.Sector.Bodies[bc.Entity] = bc.Body
+	bc.Body.SectorEntity = sector.Entity
+
+	if core.GetLight(bc.ECS, bc.Entity) != nil {
+		bc.Sector.PVL[bc.Entity] = bc.Body
+	}
 
 	if bc.Body.OnGround {
-		floorZ := bc.Sector.Bottom.ZAt(dynamic.DynamicNow, bc.Body.Pos.Now.To2D())
-		p := &bc.Body.Pos.Now
-		h := bc.Body.Size.Now[1] * 0.5
+		floorZ := bc.Sector.Bottom.ZAt(dynamic.DynamicNow, bc.Pos.Now.To2D())
+		p := &bc.Pos.Now
+		h := bc.Size.Now[1] * 0.5
 		if bc.Sector.Bottom.Target == 0 && p[2]-h < floorZ {
 			p[2] = floorZ + h
 		}
@@ -153,10 +159,11 @@ func (bc *BodyController) Enter(eSector ecs.Entity) {
 
 func (bc *BodyController) Exit() {
 	if bc.Sector == nil {
-		log.Printf("%v tried to exit nil sector", bc.Body.Entity)
+		log.Printf("%v tried to exit nil sector", bc.Entity)
 		return
 	}
 	BodySectorScript(bc.Sector.ExitScripts, bc.Body, bc.Sector)
-	delete(bc.Sector.Bodies, bc.Body.Entity)
-	bc.Body.SectorEntity = 0
+	delete(bc.Sector.Bodies, bc.Entity)
+	// Don't delete out of the PVL, avoid flickering
+	bc.SectorEntity = 0
 }

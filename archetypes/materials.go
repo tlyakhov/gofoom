@@ -8,7 +8,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func EntityMapIsMaterial(components []ecs.Attachable) bool {
+func ComponentTableIsMaterial(components ecs.ComponentTable) bool {
 	for _, c := range components {
 		switch cc := c.(type) {
 		case *materials.Shader:
@@ -21,8 +21,8 @@ func EntityMapIsMaterial(components []ecs.Attachable) bool {
 			return true
 		case *materials.Solid:
 			return true
-		case *ecs.Instanced:
-			if EntityMapIsMaterial(cc.SourceComponents) {
+		case *ecs.Linked:
+			if ComponentTableIsMaterial(cc.SourceComponents) {
 				return true
 			}
 		}
@@ -31,11 +31,7 @@ func EntityMapIsMaterial(components []ecs.Attachable) bool {
 }
 
 func EntityIsMaterial(db *ecs.ECS, e ecs.Entity) bool {
-	return EntityMapIsMaterial(db.AllComponents(e))
-}
-
-func AttachableIsMaterial(a ecs.Attachable) bool {
-	return EntityIsMaterial(a.GetECS(), a.Base().Entity)
+	return ComponentTableIsMaterial(db.AllComponents(e))
 }
 
 func CreateBasicMaterial(db *ecs.ECS, textured bool) ecs.Entity {

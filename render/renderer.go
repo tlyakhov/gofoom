@@ -302,7 +302,6 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.CameraZ = r.Player.CameraZ
 	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
-	column.LightSampler.XorSeed = uint64(r.ECS.Timestamp)
 	ewd2s := make([]*state.EntityWithDist2, 0, 64)
 	column.Sectors = make(containers.Set[*core.Sector])
 	for i := range column.LightLastColIndices {
@@ -511,6 +510,7 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 		CameraZ:       r.Player.CameraZ,
 		PortalColumns: make([]state.Column, constants.MaxPortals),
 		Visited:       make([]state.SegmentIntersection, constants.MaxPortals),
+		Sectors:       make(containers.Set[*core.Sector]),
 	}
 	column.LightSampler.MaterialSampler.Config = r.Config
 

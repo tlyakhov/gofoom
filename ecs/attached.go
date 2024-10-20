@@ -15,9 +15,9 @@ type Attached struct {
 	Active        bool `editable:"Active?"`
 	indexInColumn int
 
-	// Other entities that use this component. See Instanced.Entities
-	instancedCopies containers.Set[Entity]
-	entityStack     []Entity
+	// Other entities that use this component. See Linked.Entities
+	linkedCopies containers.Set[Entity]
+	entityStack  []Entity
 }
 
 func (a *Attached) IsActive() bool {
@@ -40,14 +40,14 @@ func (a *Attached) OnDetach() {
 	if a.ECS == nil {
 		return
 	}
-	// Remove this entity from the sources of any instanced copies
-	for e := range a.instancedCopies {
-		if instanced := GetInstanced(a.ECS, e); instanced != nil {
-			instanced.Sources.Delete(e)
-			instanced.SourceComponents.Delete(a.ComponentID)
+	// Remove this entity from the sources of any linked copies
+	for e := range a.linkedCopies {
+		if linked := GetLinked(a.ECS, e); linked != nil {
+			linked.Sources.Delete(e)
+			linked.SourceComponents.Delete(a.ComponentID)
 		}
 	}
-	a.instancedCopies = make(containers.Set[Entity])
+	a.linkedCopies = make(containers.Set[Entity])
 	a.ECS = nil
 }
 
@@ -66,7 +66,7 @@ func (a *Attached) AttachECS(db *ECS) {
 func (a *Attached) Construct(data map[string]any) {
 	a.Active = true
 	a.System = false
-	a.instancedCopies = make(containers.Set[Entity])
+	a.linkedCopies = make(containers.Set[Entity])
 
 	if data == nil {
 		return
