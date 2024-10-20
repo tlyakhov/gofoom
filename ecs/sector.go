@@ -3,29 +3,29 @@
 
 package ecs
 
-type InstancedController struct {
+type LinkedController struct {
 	BaseController
-	*Instanced
+	*Linked
 }
 
 func init() {
 	// Should run before everything
-	Types().RegisterController(func() Controller { return &InstancedController{} }, 0)
+	Types().RegisterController(func() Controller { return &LinkedController{} }, 0)
 }
 
-func (ic *InstancedController) ComponentID() ComponentID {
-	return InstancedCID
+func (ic *LinkedController) ComponentID() ComponentID {
+	return LinkedCID
 }
 
-func (ic *InstancedController) Methods() ControllerMethod {
+func (ic *LinkedController) Methods() ControllerMethod {
 	return ControllerRecalculate
 }
 
-func (ic *InstancedController) Target(target Attachable) bool {
-	ic.Instanced = target.(*Instanced)
-	return ic.Instanced.IsActive()
+func (ic *LinkedController) Target(target Attachable) bool {
+	ic.Linked = target.(*Linked)
+	return ic.Linked.IsActive()
 }
 
-func (ic *InstancedController) Recalculate() {
-	ic.Instanced.Recalculate()
+func (ic *LinkedController) Recalculate() {
+	ic.Linked.Recalculate()
 }

@@ -3,9 +3,15 @@
 
 package ecs
 
-// Closed hash table, indexed directly by component indices
-// This is designed to be extremely fast due to the direct hashing, small
-// number of elements, etc...
+/*
+Closed hash table, indexed directly by component indices
+
+	This is designed to be extremely fast due to the direct hashing, small
+	number of elements, etc...
+
+	It handles "instances" as a special case, recursively querying parent tables
+	if the entity in question has an Linked component attached.
+*/
 type ComponentTable []Attachable
 
 const ComponentTableGrowthRate = 8
@@ -17,8 +23,8 @@ func (table *ComponentTable) Set(a Attachable) {
 		*table = make(ComponentTable, ComponentTableGrowthRate)
 		size = ComponentTableGrowthRate
 	}
-	// 0 is reserved for Instanced components
-	if cid == InstancedCID {
+	// 0 is reserved for Linked components
+	if cid == LinkedCID {
 		(*table)[0] = a
 		return
 	}
@@ -53,8 +59,8 @@ func (table ComponentTable) Get(cid ComponentID) Attachable {
 	if size == 0 {
 		return nil
 	}
-	// 0 is reserved for Instanced components
-	if cid == InstancedCID {
+	// 0 is reserved for Linked components
+	if cid == LinkedCID {
 		return table[0]
 	}
 	i := 1 + uint16(cid>>16)%(size-1)
@@ -73,7 +79,7 @@ func (table ComponentTable) Get(cid ComponentID) Attachable {
 	if table[0] == nil {
 		return nil
 	}
-	return table[0].(*Instanced).SourceComponents.Get(cid)
+	return table[0].(*Linked).SourceComponents.Get(cid)
 }
 
 func (table *ComponentTable) Delete(cid ComponentID) {
@@ -81,8 +87,8 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 	if size == 0 {
 		return
 	}
-	// 0 is reserved for Instanced components
-	if cid == InstancedCID {
+	// 0 is reserved for Linked components
+	if cid == LinkedCID {
 		(*table)[0] = nil
 		return
 	}

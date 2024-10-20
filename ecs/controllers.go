@@ -37,10 +37,10 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 		}
 	}
 	attached := component.Base()
-	// Apply to instanced copies as well
-	for e := range attached.instancedCopies {
-		instanced := GetInstanced(attached.ECS, e)
-		instanced.PushEntityFields()
+	// Apply to linked copies as well
+	for e := range attached.linkedCopies {
+		linked := GetLinked(attached.ECS, e)
+		linked.PushEntityFields()
 		if controller.Target(component) {
 			switch method {
 			case ControllerAlways:
@@ -51,7 +51,7 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 				controller.Recalculate()
 			}
 		}
-		instanced.PopEntityFields()
+		linked.PopEntityFields()
 	}
 
 }

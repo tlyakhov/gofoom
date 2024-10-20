@@ -19,8 +19,8 @@ type SectorSegment struct {
 	Segment `editable:"^"`
 
 	P         concepts.Vector2  `editable:"X/Y"`
-	LoSurface materials.Surface `editable:"Low Surface"`
-	HiSurface materials.Surface `editable:"High Surface"`
+	LoSurface materials.Surface `editable:"Low"`
+	HiSurface materials.Surface `editable:"High"`
 	// TODO: This should also be implemented for hi/lo surfaces
 	WallUVIgnoreSlope bool `editable:"Wall U/V ignore slope"`
 	PortalHasMaterial bool `editable:"Portal has material"`

@@ -15,7 +15,7 @@ type Segment struct {
 	// TODO: These should probably be DynamicValues
 	A              *concepts.Vector2 `editable:"A"`
 	B              *concepts.Vector2 `editable:"B"`
-	Surface        materials.Surface `editable:"Mid Surface"`
+	Surface        materials.Surface `editable:"Mid"`
 	ContactScripts []*Script         `editable:"Contact Scripts"`
 
 	// Pre-calculated attributes

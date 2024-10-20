@@ -37,7 +37,8 @@ func NewECS() *ECS {
 
 func (db *ECS) Clear() {
 	db.Entities = bitmap.Bitmap{}
-	db.Entities.Set(0) // 0 is reserved
+	// 0 is reserved
+	db.Entities.Set(0)
 	// 0 is reserved
 	db.rows = make([]ComponentTable, 1)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))

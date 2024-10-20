@@ -8,13 +8,13 @@ import (
 	"tlyakhov/gofoom/containers"
 )
 
-// Adding an Instanced component to an entity makes it possible for that entity
+// Adding an Linked component to an entity makes it possible for that entity
 // to mix in components from other entities, reusing common data. This does
 // incur a cost when accessing, since the component table has to follow the
 // chain of references, and controllers have to substitute entity IDs for the
-// instanced components. It also adds complexity for any code that relies on
+// linked components. It also adds complexity for any code that relies on
 // <Component>.Entity to be consistent.
-type Instanced struct {
+type Linked struct {
 	Attached `editable:"^"`
 	// TODO: Should these be an ordered list for layering?
 	Sources containers.Set[Entity] `editable:"Source Entities"`
@@ -23,41 +23,41 @@ type Instanced struct {
 	SourceComponents ComponentTable
 }
 
-var InstancedCID ComponentID
+var LinkedCID ComponentID
 
 func init() {
-	InstancedCID = RegisterComponent(&Column[Instanced, *Instanced]{Getter: GetInstanced}, "")
+	LinkedCID = RegisterComponent(&Column[Linked, *Linked]{Getter: GetLinked}, "")
 }
 
-func GetInstanced(db *ECS, e Entity) *Instanced {
-	if asserted, ok := db.Component(e, InstancedCID).(*Instanced); ok {
+func GetLinked(db *ECS, e Entity) *Linked {
+	if asserted, ok := db.Component(e, LinkedCID).(*Linked); ok {
 		return asserted
 	}
 	return nil
 }
 
-func (n *Instanced) String() string {
+func (n *Linked) String() string {
 	return strconv.FormatInt(int64(n.Entity), 10)
 }
 
-func (n *Instanced) OnDetach() {
+func (n *Linked) OnDetach() {
 	defer n.Attached.OnDetach()
 	if n.ECS == nil {
 		return
 	}
-	// Remove this entity from any instanced copies
+	// Remove this entity from any linked copies
 	for _, sourceComponent := range n.SourceComponents {
 		if sourceComponent != nil {
-			sourceComponent.Base().instancedCopies.Delete(n.Entity)
+			sourceComponent.Base().linkedCopies.Delete(n.Entity)
 		}
 	}
 	n.SourceComponents = make(ComponentTable, 0)
 }
 
-func (n *Instanced) Recalculate() {
+func (n *Linked) Recalculate() {
 	for _, sourceComponent := range n.SourceComponents {
 		if sourceComponent != nil {
-			sourceComponent.Base().instancedCopies.Delete(n.Entity)
+			sourceComponent.Base().linkedCopies.Delete(n.Entity)
 		}
 	}
 	n.SourceComponents = make(ComponentTable, 0)
@@ -67,12 +67,12 @@ func (n *Instanced) Recalculate() {
 				continue
 			}
 			n.SourceComponents.Set(sourceComponent)
-			sourceComponent.Base().instancedCopies.Add(n.Entity)
+			sourceComponent.Base().linkedCopies.Add(n.Entity)
 		}
 	}
 }
 
-func (n *Instanced) PushEntityFields() {
+func (n *Linked) PushEntityFields() {
 	for sourceEntity := range n.Sources {
 		for _, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
 			if sourceComponent == nil {
@@ -85,7 +85,7 @@ func (n *Instanced) PushEntityFields() {
 	}
 }
 
-func (n *Instanced) PopEntityFields() {
+func (n *Linked) PopEntityFields() {
 	for sourceEntity := range n.Sources {
 		for _, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
 			if sourceComponent == nil {
@@ -99,7 +99,7 @@ func (n *Instanced) PopEntityFields() {
 	}
 }
 
-func (n *Instanced) Construct(data map[string]any) {
+func (n *Linked) Construct(data map[string]any) {
 	n.Attached.Construct(data)
 
 	n.Sources = make(containers.Set[Entity])
@@ -113,7 +113,7 @@ func (n *Instanced) Construct(data map[string]any) {
 	}
 }
 
-func (n *Instanced) Serialize() map[string]any {
+func (n *Linked) Serialize() map[string]any {
 	result := n.Attached.Serialize()
 	result["Entities"] = SerializeEntities(n.Sources)
 	return result

@@ -32,11 +32,14 @@ type Sector struct {
 	Concave          bool
 	Winding          int8
 	Min, Max, Center concepts.Vector3
-	PVS              map[ecs.Entity]*Sector
-	PVL              map[ecs.Entity]*Body
+
+	// Potentially visible sets
+	PVS            map[ecs.Entity]*Sector
+	PVL            map[ecs.Entity]*Body
+	LastPVSRefresh uint64
 
 	// Lightmap data
-	Lightmap      *xsync.MapOf[uint64, concepts.Vector4]
+	Lightmap      *xsync.MapOf[uint64, *LightmapCell]
 	LightmapBias  [3]int64 // Quantized Min
 	LastSeenFrame atomic.Int64
 }
@@ -133,7 +136,9 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
-	s.Lightmap = xsync.NewMapOf[uint64, concepts.Vector4](xsync.WithPresize(1024))
+	s.PVS = make(map[ecs.Entity]*Sector)
+	s.PVL = make(map[ecs.Entity]*Body)
+	s.Lightmap = xsync.NewMapOf[uint64, *LightmapCell](xsync.WithPresize(1024))
 	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[ecs.Entity]*Body)
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
