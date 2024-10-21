@@ -5,7 +5,6 @@ package ecs
 
 import (
 	"strconv"
-	"tlyakhov/gofoom/containers"
 )
 
 // Adding an Linked component to an entity makes it possible for that entity
@@ -16,8 +15,8 @@ import (
 // <Component>.Entity to be consistent.
 type Linked struct {
 	Attached `editable:"^"`
-	// TODO: Should these be an ordered list for layering?
-	Sources containers.Set[Entity] `editable:"Source Entities"`
+	// Ordered list, can be layered
+	Sources []Entity `editable:"Source Entities"`
 
 	// Internal state
 	SourceComponents ComponentTable
@@ -61,7 +60,7 @@ func (n *Linked) Recalculate() {
 		}
 	}
 	n.SourceComponents = make(ComponentTable, 0)
-	for sourceEntity := range n.Sources {
+	for _, sourceEntity := range n.Sources {
 		for _, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
 			if sourceComponent == nil {
 				continue
@@ -73,7 +72,7 @@ func (n *Linked) Recalculate() {
 }
 
 func (n *Linked) PushEntityFields() {
-	for sourceEntity := range n.Sources {
+	for _, sourceEntity := range n.Sources {
 		for _, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
 			if sourceComponent == nil {
 				continue
@@ -86,7 +85,7 @@ func (n *Linked) PushEntityFields() {
 }
 
 func (n *Linked) PopEntityFields() {
-	for sourceEntity := range n.Sources {
+	for _, sourceEntity := range n.Sources {
 		for _, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
 			if sourceComponent == nil {
 				continue
@@ -102,19 +101,27 @@ func (n *Linked) PopEntityFields() {
 func (n *Linked) Construct(data map[string]any) {
 	n.Attached.Construct(data)
 
-	n.Sources = make(containers.Set[Entity])
+	n.Sources = make([]Entity, 0)
 
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Entities"]; ok {
-		n.Sources = DeserializeEntities(v.([]any))
+		arr := v.([]any)
+		n.Sources = make([]Entity, len(arr))
+		for i, e := range arr {
+			n.Sources[i], _ = ParseEntity(e.(string))
+		}
 	}
 }
 
 func (n *Linked) Serialize() map[string]any {
 	result := n.Attached.Serialize()
-	result["Entities"] = SerializeEntities(n.Sources)
+	arr := make([]string, len(n.Sources))
+	for i, e := range n.Sources {
+		arr[i] = e.String()
+	}
+	result["Entities"] = arr
 	return result
 }

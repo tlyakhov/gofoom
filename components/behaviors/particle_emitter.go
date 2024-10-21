@@ -88,7 +88,7 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 		result["FadeTime"] = pe.FadeTime
 	}
 	if pe.Limit != 100 {
-		result["Limit"] = pe.Limit
+		result["Limit"] = strconv.Itoa(pe.Limit)
 	}
 	if pe.Source != 0 {
 		result["Source"] = pe.Source.String()

@@ -47,7 +47,7 @@ func (db *ECS) Clear() {
 		if columnPlaceholder == nil {
 			continue
 		}
-		log.Printf("Component %v, index: %v", columnPlaceholder.Type().String(), i)
+		// log.Printf("Component %v, index: %v", columnPlaceholder.Type().String(), i)
 		// t = *ComponentColumn[T]
 		t := reflect.TypeOf(columnPlaceholder)
 		db.columns[i] = reflect.New(t.Elem()).Interface().(AttachableColumn)

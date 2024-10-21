@@ -42,7 +42,6 @@ benefits as far as dynamic sectors, lighting, etc...
   - Separation of game/engine code
   - Entity/Component/System architecture
   - Instancing for entities
-  - Multi-threaded rendering using goroutines
   - No artificial limits on scale
 - Rendering
   - Sectors with non-orthogonal walls of variable height.
@@ -56,6 +55,7 @@ benefits as far as dynamic sectors, lighting, etc...
   - Objects represented as sprites with multiple angles.
   - Bitmap fonts
   - Fully dynamic lighting with shadow maps.
+  - Multi-threaded rendering using goroutines
 - Interactivity
   - Various effect sectors (doors, underwater sectors)
   - Physics and collision detection for player and objects.
@@ -92,8 +92,7 @@ benefits as far as dynamic sectors, lighting, etc...
 
 - [/archetypes](/archetypes/) - these are preset or template combinations of
   components to build up more complex entities.
-- [/concepts](/concepts/) - general types, interfaces, and functions.
-  Math, containers, etc...
+- [/concepts](/concepts/) - general types, interfaces, and functions. Math, etc...
 - [/constants](/constants/) - self-explanatory. Currently a mix of game and
   engine constants.
 - [/controllers](/controllers/) - the "systems" in the ECS architecture.
@@ -116,3 +115,5 @@ benefits as far as dynamic sectors, lighting, etc...
 - [/editor](/editor/) - all the code for the world editor.
 - [/game](/game/) - the game executable.
 - [/render](/render/) - the renderer and its state.
+- [/scripting_symbols](/scripting_symbols/) - bindings for the traefik/yaegi interpreter.
+- [/ui](/ui/) - the user interface framework.

@@ -29,6 +29,10 @@ func (s *Segment) Recalculate() {
 	s.Normal[0] = -(s.B[1] - s.A[1]) / s.Length
 	s.Normal[1] = (s.B[0] - s.A[0]) / s.Length
 	s.LightExtraHash = uint16(concepts.Hash64to32(math.Float64bits(s.Normal[0])))
+	for _, script := range s.ContactScripts {
+		script.Params = contactScriptParams
+		script.Compile()
+	}
 }
 
 func (s *Segment) Matches(s2 *Segment) bool {

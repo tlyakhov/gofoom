@@ -85,6 +85,7 @@ func (s *Script) Compile() {
 		err := scriptTemplate.Execute(&buf, s)
 		if err != nil {
 			s.ErrorMessage += fmt.Sprintf("Error building script template %v: %v", s.Code, err)
+			s.interp = nil
 			log.Printf("%v", s.ErrorMessage)
 			return
 		}
@@ -97,7 +98,7 @@ func (s *Script) Compile() {
 		log.Printf("%v", s.ErrorMessage)
 		return
 	}
-	log.Printf("%v", codeTemplate)
+	// log.Printf("%v", codeTemplate)
 	f, err := s.interp.Eval("main.Do")
 	if err != nil {
 		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)
@@ -136,14 +137,12 @@ func (s *Script) Construct(data map[string]any) {
 		s.Style, _ = ScriptStyleString(v.(string))
 	}
 
-	// !!! Should happen prior to .Compile()
 	if v, ok := data["Params"]; ok {
 		s.Params = v.([]ScriptParam)
 	}
 
 	if v, ok := data["Code"]; ok {
 		s.Code = v.(string)
-		s.Compile()
 	}
 }
 

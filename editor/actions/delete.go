@@ -69,16 +69,12 @@ func (a *Delete) Redo() {
 				continue
 			}
 			a.State().ECS.Delete(s.Entity)
-			if s.Body.Sector() != nil {
-				delete(s.Body.Sector().Bodies, s.Entity)
-			}
 		case selection.SelectableInternalSegment:
 			fallthrough
 		case selection.SelectableInternalSegmentA:
 			fallthrough
 		case selection.SelectableInternalSegmentB:
 			s.ECS.Delete(s.InternalSegment.Entity)
-			s.InternalSegment.DetachFromSectors()
 		case selection.SelectableEntity:
 			s.ECS.Delete(s.Entity)
 		}

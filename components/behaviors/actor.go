@@ -14,10 +14,6 @@ type Actor struct {
 	NoZ          bool                      `editable:"2D only"`
 	Lifetime     dynamic.AnimationLifetime `editable:"Lifetime"`
 	Speed        float64                   `editable:"Speed"`
-
-	// Internal state
-	Action         ecs.Entity
-	LastTransition int64
 }
 
 var ActorCID ecs.ComponentID
@@ -40,18 +36,13 @@ func (a *Actor) String() string {
 func (a *Actor) Construct(data map[string]any) {
 	a.Attached.Construct(data)
 	a.NoZ = false
-	a.Action = a.Start
 	a.Speed = 10
 	a.Lifetime = dynamic.AnimationLifetimeLoop
-	a.LastTransition = 0
 
 	if data == nil {
 		return
 	}
 
-	if v, ok := data["Action"]; ok {
-		a.Action, _ = ecs.ParseEntity(v.(string))
-	}
 	if v, ok := data["Start"]; ok {
 		a.Start, _ = ecs.ParseEntity(v.(string))
 	}
@@ -71,7 +62,6 @@ func (a *Actor) Construct(data map[string]any) {
 func (a *Actor) Serialize() map[string]any {
 	result := a.Attached.Serialize()
 
-	result["Action"] = a.Action.String()
 	result["Start"] = a.Start.String()
 	result["Speed"] = a.Speed
 

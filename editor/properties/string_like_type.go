@@ -6,7 +6,9 @@ package properties
 import (
 	"log"
 	"reflect"
+	"strings"
 
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"tlyakhov/gofoom/concepts"
@@ -18,7 +20,8 @@ import (
 
 type StringLikeType interface {
 	concepts.Vector2 | concepts.Vector3 | concepts.Vector4 |
-		*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4
+		*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4 |
+		[]ecs.Entity
 }
 
 func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
@@ -35,6 +38,12 @@ func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
 		return (*currentValue).String()
 	case **concepts.Vector4:
 		return (*currentValue).String()
+	case *[]ecs.Entity:
+		s := make([]string, len(*currentValue))
+		for i, e := range *currentValue {
+			s[i] = e.String()
+		}
+		return strings.Join(s, ", ")
 	}
 	return ""
 }
@@ -68,6 +77,18 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			parsed, err = concepts.ParseVector3(text)
 		case **concepts.Vector4:
 			parsed, err = concepts.ParseVector4(text)
+		case *[]ecs.Entity:
+			split := strings.Split(text, ",")
+			entities := make([]ecs.Entity, len(split))
+			for i, s := range split {
+				entity, err2 := ecs.ParseEntity(s)
+				if err2 != nil {
+					err = err2
+					break
+				}
+				entities[i] = entity
+			}
+			parsed = &entities
 		}
 		if err != nil {
 			log.Printf("Couldn't parse %v from user entry. %v\n", reflect.TypeOf(currentValue).Name(), err)
@@ -94,6 +115,8 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			if v, ok := parsed.(T); ok {
 				currentValue = &v
 			}
+		case *[]ecs.Entity:
+			currentValue = parsed.(PT)
 		}
 		g.ApplySetPropertyAction(field, reflect.ValueOf(currentValue).Elem())
 		origValue = stringLikeTypeString(currentValue)

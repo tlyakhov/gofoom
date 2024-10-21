@@ -22,11 +22,12 @@ const (
 type Proximity struct {
 	ecs.Attached `editable:"^"`
 
-	RequiresPlayerAction bool           `editable:"Requires Player Action?"`
-	ActsOnSectors        bool           `editable:"Acts on Sectors?"`
-	Range                float64        `editable:"Range"`
-	Hysteresis           float64        `editable:"Hysteresis (ms)"`
-	Scripts              []*core.Script `editable:"Scripts"`
+	RequiresPlayerAction bool    `editable:"Requires Player Action?"`
+	ActsOnSectors        bool    `editable:"Acts on Sectors?"`
+	Range                float64 `editable:"Range"`
+	Hysteresis           float64 `editable:"Hysteresis (ms)"`
+	// TODO: Do we actually need a slice here? Maybe one is fine.
+	Scripts []*core.Script `editable:"Scripts"`
 
 	// Internal state
 	LastFired int64

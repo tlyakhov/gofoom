@@ -25,6 +25,7 @@ const (
 type ActionController struct {
 	ecs.BaseController
 	*behaviors.Actor
+	State  *behaviors.ActorState
 	Body   *core.Body
 	Mobile *core.Mobile
 }
@@ -46,13 +47,20 @@ func (ac *ActionController) Target(target ecs.Attachable) bool {
 		return false
 	}
 	ac.Actor = target.(*behaviors.Actor)
+	ac.State = behaviors.GetActorState(ac.ECS, ac.Entity)
 	ac.Body = core.GetBody(ac.ECS, ac.Entity)
 	ac.Mobile = core.GetMobile(ac.ECS, ac.Entity)
-	return ac.Actor.IsActive() && ac.Body != nil && ac.Body.IsActive()
+	return ac.Actor.IsActive() &&
+		ac.Body != nil && ac.Body.IsActive() &&
+		(ac.State == nil || ac.State.IsActive())
 }
 
 func (ac *ActionController) Recalculate() {
-	if ac.Action != 0 {
+	if ac.State == nil {
+		ac.State = ac.ECS.NewAttachedComponent(ac.Entity, behaviors.ActorStateCID).(*behaviors.ActorState)
+	}
+
+	if ac.State.Action != 0 {
 		return
 	}
 
@@ -78,8 +86,8 @@ func (ac *ActionController) Recalculate() {
 	})
 
 	if closest != nil {
-		ac.Action = closest.Entity
-		ac.LastTransition = ac.ECS.Timestamp
+		ac.State.Action = closest.Entity
+		ac.State.LastTransition = ac.ECS.Timestamp
 	}
 }
 
@@ -87,7 +95,7 @@ func (ac *ActionController) timedAction(timed *behaviors.ActionTimed) timedState
 	if timed.Fired.Contains(ac.Body.Entity) {
 		return timedFired
 	}
-	if ac.ECS.Timestamp-ac.LastTransition < int64(timed.Delay.Now) {
+	if ac.ECS.Timestamp-ac.State.LastTransition < int64(timed.Delay.Now) {
 		return timedDelayed
 	}
 
@@ -160,43 +168,58 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	}
 	dist := v.Length()
 	if dist > 0 {
-		ac.Body.Angle.Input = math.Atan2(v[1], v[0]) * concepts.Rad2deg
+		angle := math.Atan2(v[1], v[0]) * concepts.Rad2deg
+		if ac.Body.Angle.Procedural {
+			ac.Body.Angle.Input = angle
+		} else {
+			ac.Body.Angle.Now = angle
+		}
 		speed := ac.Speed / dist
 		v.MulSelf(speed)
 	}
-	if ac.Body.Pos.Procedural {
+	switch {
+	case ac.Mobile != nil:
+		ac.Mobile.Vel.Now = *v
+	case ac.Body.Pos.Procedural:
 		ac.Body.Pos.Input.AddSelf(v.MulSelf(constants.TimeStepS))
 		var bc BodyController
 		bc.Target(ac.Body)
 		bc.findBodySector()
-	} else if ac.Mobile != nil {
-		ac.Mobile.Vel.Now = *v
+	default:
+		ac.Body.Pos.Now.AddSelf(v.MulSelf(constants.TimeStepS))
+		var bc BodyController
+		bc.Target(ac.Body)
+		bc.findBodySector()
 	}
 
 	return false
 }
 
 func (ac *ActionController) Always() {
-	if ac.Action == 0 {
-		ac.Action = ac.Start
+	if ac.State == nil {
+		ac.Recalculate()
+	}
+
+	if ac.State.Action == 0 {
+		ac.State.Action = ac.Start
 	}
 
 	doTransition := true
 
 	var timed *behaviors.ActionTimed
 
-	if waypoint := behaviors.GetActionWaypoint(ac.ECS, ac.Action); waypoint != nil {
+	if waypoint := behaviors.GetActionWaypoint(ac.ECS, ac.State.Action); waypoint != nil {
 		doTransition = ac.Waypoint(waypoint) && doTransition
 		timed = &waypoint.ActionTimed
 	}
 
-	if jump := behaviors.GetActionJump(ac.ECS, ac.Action); jump != nil {
+	if jump := behaviors.GetActionJump(ac.ECS, ac.State.Action); jump != nil {
 		// Order of ops matters - the && short circuits on false
 		doTransition = ac.Jump(jump) && doTransition
 		timed = &jump.ActionTimed
 	}
 
-	if fire := behaviors.GetActionFire(ac.ECS, ac.Action); fire != nil {
+	if fire := behaviors.GetActionFire(ac.ECS, ac.State.Action); fire != nil {
 		// Order of ops matters - the && short circuits on false
 		doTransition = ac.Fire(fire) && doTransition
 		timed = &fire.ActionTimed
@@ -210,12 +233,12 @@ func (ac *ActionController) Always() {
 		timed.Fired.Delete(ac.Body.Entity)
 	}
 
-	if t := behaviors.GetActionTransition(ac.ECS, ac.Action); t != nil {
-		ac.LastTransition = ac.ECS.Timestamp
+	if t := behaviors.GetActionTransition(ac.ECS, ac.State.Action); t != nil {
+		ac.State.LastTransition = ac.ECS.Timestamp
 		if len(t.Next) > 0 {
 			i := rand.Intn(len(t.Next))
 			for next := range t.Next {
-				ac.Action = next
+				ac.State.Action = next
 				if i <= 0 {
 					break
 				}
@@ -224,9 +247,9 @@ func (ac *ActionController) Always() {
 		} else {
 			switch ac.Lifetime {
 			case dynamic.AnimationLifetimeLoop:
-				ac.Action = ac.Start
+				ac.State.Action = ac.Start
 			case dynamic.AnimationLifetimeOnce:
-				ac.Active = false
+				ac.State.Active = false
 			case dynamic.AnimationLifetimeBounce:
 			case dynamic.AnimationLifetimeBounceOnce:
 			}

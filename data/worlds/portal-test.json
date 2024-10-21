@@ -493,6 +493,7 @@
             "ExtraStages": [
               {
                 "Flags": "",
+                "Frame": "3",
                 "Material": "33",
                 "Transform": [
                   14,
@@ -638,62 +639,28 @@
   {
     "Entity": "12",
     "behaviors.Actor": {
-      "Action": "62",
       "Entity": "12",
       "Speed": 50,
       "Start": "57"
     },
+    "behaviors.ActorState": {
+      "Action": "75",
+      "Entity": "12"
+    },
     "behaviors.ParticleEmitter": {
       "Entity": "12",
+      "Limit": "10",
       "Particles": [
-        "104",
-        "126",
-        "74",
-        "81",
-        "92",
-        "110",
-        "72",
-        "101",
-        "109",
-        "105",
-        "106",
-        "127",
-        "69",
         "70",
-        "108",
-        "95",
-        "97",
-        "99",
-        "87",
-        "125",
-        "89",
-        "102",
-        "107",
-        "128",
-        "90",
-        "98",
-        "82",
-        "129",
-        "96",
-        "100",
-        "103",
-        "78",
-        "85",
-        "91",
+        "72",
         "73",
-        "84",
-        "71",
-        "80",
-        "94",
-        "65",
-        "67",
-        "93",
-        "83",
-        "88",
-        "68",
-        "79",
-        "111",
         "64",
+        "69",
+        "67",
+        "68",
+        "71",
+        "74",
+        "65",
         "66"
       ],
       "Source": "86"
@@ -706,8 +673,8 @@
       "Entity": "12",
       "Pos": {
         "Original": {
-          "X": -200,
-          "Y": 310,
+          "X": -280,
+          "Y": 30,
           "Z": 32
         },
         "Procedural": true
@@ -3270,16 +3237,6 @@
   },
   {
     "Entity": "56",
-    "behaviors.Proximity": {
-      "Entity": "56",
-      "RequiresPlayerAction": true,
-      "Scripts": [
-        {
-          "Code": "door := behaviors.GetVerticalDoor(s.ECS,16)\nbuttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nif door.State != behaviors.DoorStateOpen {\n  door.Intent = behaviors.DoorIntentOpen\nbuttonStage.Frame = 1\n} else if door.State != behaviors.DoorStateClosed {\n  door.Intent = behaviors.DoorIntentClosed\nbuttonStage.Frame=0\n}",
-          "Style": "ScriptStyleStatement"
-        }
-      ]
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -3298,6 +3255,13 @@
           "Y": 10
         }
       }
+    },
+    "ecs.Linked": {
+      "Entities": [
+        "77",
+        "78"
+      ],
+      "Entity": "56"
     }
   },
   {
@@ -3305,8 +3269,8 @@
     "behaviors.ActionTransition": {
       "Entity": "57",
       "Next": [
-        "61",
-        "58"
+        "58",
+        "61"
       ]
     },
     "behaviors.ActionWaypoint": {
@@ -3381,13 +3345,13 @@
     "behaviors.ActionTransition": {
       "Entity": "62",
       "Next": [
-        "63"
+        "76"
       ]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "62",
-      "X": -30,
-      "Y": 50,
+      "X": -40,
+      "Y": 10,
       "Z": 25
     }
   },
@@ -3407,12 +3371,109 @@
     }
   },
   {
+    "Entity": "75",
+    "behaviors.ActionTransition": {
+      "Entity": "75",
+      "Next": [
+        "63"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "75",
+      "X": -70,
+      "Y": 30,
+      "Z": 25
+    }
+  },
+  {
+    "Entity": "76",
+    "behaviors.ActionTransition": {
+      "Entity": "76",
+      "Next": [
+        "75"
+      ]
+    },
+    "behaviors.ActionWaypoint": {
+      "Entity": "76",
+      "X": -310,
+      "Y": -40,
+      "Z": 25
+    }
+  },
+  {
+    "Entity": "77",
+    "behaviors.Proximity": {
+      "Entity": "77",
+      "RequiresPlayerAction": true,
+      "Scripts": [
+        {
+          "Code": "door := behaviors.GetVerticalDoor(s.ECS,16)\nbuttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nif door.State != behaviors.DoorStateOpen {\n  door.Intent = behaviors.DoorIntentOpen\nbuttonStage.Frame = 1\n} else if door.State != behaviors.DoorStateClosed {\n  door.Intent = behaviors.DoorIntentClosed\nbuttonStage.Frame=0\n}",
+          "Style": "ScriptStyleStatement"
+        }
+      ]
+    },
+    "ecs.Named": {
+      "Entity": "77",
+      "Name": "Open Door 16"
+    }
+  },
+  {
+    "Entity": "78",
+    "behaviors.Proximity": {
+      "Entity": "78",
+      "Range": 50,
+      "Scripts": [
+        {
+          "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Frame = 3",
+          "Style": "ScriptStyleStatement"
+        }
+      ]
+    }
+  },
+  {
     "Entity": "86",
     "materials.Image": {
       "Entity": "86",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/game/acid-bubble.png"
+    }
+  },
+  {
+    "Entity": "125",
+    "behaviors.ActorState": {
+      "Action": "63",
+      "Entity": "125"
+    },
+    "core.Body": {
+      "Angle": {
+        "Original": 0,
+        "Procedural": true
+      },
+      "Entity": "125",
+      "Pos": {
+        "Original": {
+          "X": -180,
+          "Y": 420,
+          "Z": 0
+        }
+      },
+      "Size": {
+        "Original": {
+          "X": 10,
+          "Y": 10
+        }
+      }
+    },
+    "ecs.Linked": {
+      "Entities": [
+        "12"
+      ],
+      "Entity": "125"
+    },
+    "ecs.Named": {
+      "Entity": "125",
+      "Name": "Instanced LightActor test"
     }
   }
 ]
