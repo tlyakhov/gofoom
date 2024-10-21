@@ -45,7 +45,12 @@ func (a *Attached) OnDetach() {
 	// Remove this entity from the sources of any linked copies
 	for e := range a.linkedCopies {
 		if linked := GetLinked(a.ECS, e); linked != nil {
-			linked.Sources.Delete(e)
+			for i, source := range linked.Sources {
+				if source == e {
+					linked.Sources = append(linked.Sources[:i], linked.Sources[i+1:]...)
+					break
+				}
+			}
 			linked.SourceComponents.Delete(a.ComponentID)
 		}
 	}

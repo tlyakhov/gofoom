@@ -27,7 +27,7 @@ func (pc *ProximityController) ComponentID() ecs.ComponentID {
 }
 
 func (pc *ProximityController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
+	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
 func (pc *ProximityController) Target(target ecs.Attachable) bool {
@@ -53,6 +53,13 @@ var proximityScriptParams = []core.ScriptParam{
 	{Name: "flags", TypeName: "behaviors.ProximityFlags"},
 }
 
+func (pc *ProximityController) Recalculate() {
+	for _, script := range pc.Scripts {
+		script.Params = proximityScriptParams
+		script.Compile()
+	}
+}
+
 func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
 	pc.Firing = true
 	if pc.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
@@ -60,10 +67,6 @@ func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
 	}
 	pc.LastFired = pc.ECS.Timestamp
 	for _, script := range pc.Scripts {
-		if len(script.Params) == 0 {
-			script.Params = proximityScriptParams
-			script.Compile()
-		}
 		script.Vars["proximity"] = pc.Proximity
 		script.Vars["onEntity"] = pc.onEntity
 		script.Vars["body"] = body

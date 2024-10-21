@@ -258,6 +258,11 @@ func (s *Sector) Serialize() map[string]any {
 	return result
 }
 
+var contactScriptParams = []ScriptParam{
+	{Name: "body", TypeName: "*core.Body"},
+	{Name: "sector", TypeName: "*core.Sector"},
+}
+
 func (s *Sector) Recalculate() {
 	// TODO: Make this method more efficient
 	concepts.V3(&s.Center, 0, 0, 0)
@@ -337,6 +342,22 @@ func (s *Sector) Recalculate() {
 
 	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
 	s.LightmapBias[0] = math.MaxInt64
+	for _, script := range s.EnterScripts {
+		script.Params = contactScriptParams
+		script.Compile()
+	}
+	for _, script := range s.ExitScripts {
+		script.Params = contactScriptParams
+		script.Compile()
+	}
+	for _, script := range s.Top.Scripts {
+		script.Params = contactScriptParams
+		script.Compile()
+	}
+	for _, script := range s.Bottom.Scripts {
+		script.Params = contactScriptParams
+		script.Compile()
+	}
 }
 
 func (s *Sector) InBounds(world *concepts.Vector3) bool {

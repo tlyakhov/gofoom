@@ -147,7 +147,10 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			}
 			name := display
 			g.childFields(name, fieldValue, pgs, true)
-		} else if field.Type.Kind() == reflect.Slice {
+		} else if field.Type.Kind() == reflect.Slice &&
+			(field.Type.Elem().Kind() == reflect.Pointer ||
+				field.Type.Elem().Kind() == reflect.Struct ||
+				field.Type.Elem().Kind() == reflect.Interface) {
 			for i := 0; i < fieldValue.Len(); i++ {
 				name := fmt.Sprintf("%v[%v]", display, i)
 				pgsChild := pgs
@@ -396,6 +399,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			fieldStringLikeType[*concepts.Vector3](g, field)
 		case **concepts.Vector4:
 			fieldStringLikeType[*concepts.Vector4](g, field)
+		case *[]ecs.Entity:
+			fieldStringLikeType[[]ecs.Entity](g, field)
 		case *concepts.Matrix2:
 			g.fieldMatrix2(field)
 		case *core.CollisionResponse:
