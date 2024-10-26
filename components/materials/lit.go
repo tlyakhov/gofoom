@@ -8,22 +8,11 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-//go:generate go run github.com/dmarkham/enumer -type=MaterialShadow -json
-type MaterialShadow int
-
-const (
-	ShadowNone MaterialShadow = iota
-	ShadowImage
-	ShadowSphere
-	ShadowAABB
-)
-
 type Lit struct {
 	ecs.Attached `editable:"^"`
 
 	Ambient concepts.Vector3 `editable:"Ambient Color" edit_type:"color"`
 	Diffuse concepts.Vector4 `editable:"Diffuse Color" edit_type:"color"`
-	Shadow  MaterialShadow   `editable:"Shadow Type"`
 }
 
 var LitCID ecs.ComponentID
@@ -64,23 +53,12 @@ func (m *Lit) Construct(data map[string]any) {
 			m.Diffuse.To3D().Deserialize(vmap)
 		}
 	}
-	if v, ok := data["Shadow"]; ok {
-		c, err := MaterialShadowString(v.(string))
-		if err == nil {
-			m.Shadow = c
-		} else {
-			panic(err)
-		}
-	}
 }
 
 func (m *Lit) Serialize() map[string]any {
 	result := m.Attached.Serialize()
 	result["Ambient"] = m.Ambient.Serialize()
 	result["Diffuse"] = m.Diffuse.Serialize(true)
-	if m.Shadow != ShadowNone {
-		result["Shadow"] = m.Shadow.String()
-	}
 	return result
 }
 

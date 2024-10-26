@@ -61,7 +61,7 @@ const (
 	PlayerMaxHealth      = 100
 
 	// Game constants
-	UserSettings             = "bin/settings.json"
+	UserSettings             = "settings.json"
 	MaxGameTextTime          = 15 * 1000
 	MaxGameText              = 25
 	GameTextFadeTime         = 1000

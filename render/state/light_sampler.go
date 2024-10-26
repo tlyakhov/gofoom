@@ -19,10 +19,10 @@ type LightSamplerType int
 
 //go:generate go run github.com/dmarkham/enumer -type=LightSamplerType -json
 const (
-	LightSamplerFloor LightSamplerType = iota
+	LightSamplerBody LightSamplerType = iota
+	LightSamplerFloor
 	LightSamplerCeil
 	LightSamplerWall
-	LightSamplerBody
 )
 
 // All the data and state required to retrieve/calculate a lightmap texel
@@ -44,80 +44,80 @@ type LightSampler struct {
 	Normal  concepts.Vector3
 }
 
-func (le *LightSampler) Debug() *concepts.Vector3 {
-	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
-	dbg := le.Q.Mul(1.0 / 64.0)
-	le.Output[0] = dbg[0] - math.Floor(dbg[0])
-	le.Output[1] = dbg[1] - math.Floor(dbg[1])
-	le.Output[2] = dbg[2] - math.Floor(dbg[2])
-	return &le.Output
+func (ls *LightSampler) Debug() *concepts.Vector3 {
+	ls.LightmapAddressToWorld(ls.Sector, &ls.Q, ls.MapIndex)
+	dbg := ls.Q.Mul(1.0 / 64.0)
+	ls.Output[0] = dbg[0] - math.Floor(dbg[0])
+	ls.Output[1] = dbg[1] - math.Floor(dbg[1])
+	ls.Output[2] = dbg[2] - math.Floor(dbg[2])
+	return &ls.Output
 }
 
-func (le *LightSampler) Get() *concepts.Vector3 {
+func (ls *LightSampler) Get() *concepts.Vector3 {
 	//return le.Debug()
 	//r := concepts.RngXorShift64(le.XorSeed + uint64(le.ECS.Timestamp) +
 	//le.MapIndex)
 	// TODO: Figure out how to make this not tear across block boundaries while
 	// keeping the randomness
 
-	if lmResult, exists := le.Sector.Lightmap.Load(le.MapIndex); exists {
+	if lmResult, exists := ls.Sector.Lightmap.Load(ls.MapIndex); exists {
 		r := concepts.RngXorShift64(lmResult.RandomSeed)
 		lmResult.RandomSeed = r
-		if lmResult.Timestamp+constants.MaxLightmapAge >= le.ECS.Frame ||
+		if lmResult.Timestamp+constants.MaxLightmapAge >= ls.ECS.Frame ||
 			r%constants.LightmapRefreshDither > 0 {
-			le.Output = lmResult.Light
-			return &le.Output
+			ls.Output = lmResult.Light
+			return &ls.Output
 		}
 	}
-	le.LightmapAddressToWorld(le.Sector, &le.Q, le.MapIndex)
+	ls.LightmapAddressToWorld(ls.Sector, &ls.Q, ls.MapIndex)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
-	fz, cz := le.Sector.ZAt(dynamic.DynamicRender, le.Q.To2D())
-	if le.Q[2] < fz {
-		le.Q[2] = fz
+	fz, cz := ls.Sector.ZAt(dynamic.DynamicRender, ls.Q.To2D())
+	if ls.Q[2] < fz {
+		ls.Q[2] = fz
 	}
-	if le.Q[2] > cz {
-		le.Q[2] = cz
+	if ls.Q[2] > cz {
+		ls.Q[2] = cz
 	}
-	le.ScaleW = 64
-	le.ScaleH = 64
-	le.Calculate(&le.Q)
-	r := concepts.RngXorShift64(uint64(le.ECS.Timestamp))
-	le.Sector.Lightmap.Store(le.MapIndex, &core.LightmapCell{
+	ls.ScaleW = 64
+	ls.ScaleH = 64
+	ls.Calculate(&ls.Q)
+	r := concepts.RngXorShift64(uint64(ls.ECS.Timestamp))
+	ls.Sector.Lightmap.Store(ls.MapIndex, &core.LightmapCell{
 		Light: concepts.Vector3{
-			le.Output[0],
-			le.Output[1],
-			le.Output[2]},
-		Timestamp:  le.ECS.Frame + r%constants.LightmapRefreshDither,
+			ls.Output[0],
+			ls.Output[1],
+			ls.Output[2]},
+		Timestamp:  ls.ECS.Frame + r%constants.LightmapRefreshDither,
 		RandomSeed: r,
 	})
-	return &le.Output
+	return &ls.Output
 
 }
 
 // lightVisible determines whether a given light is visible from a world location.
-func (le *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool {
+func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool {
 	// Always check the starting sector
-	if le.lightVisibleFromSector(p, body, le.Sector) {
+	if ls.lightVisibleFromSector(p, body, ls.Sector) {
 		return true
 	}
 
 	// Check adjacent sectors - this is valuable for edge cases where our voxel
 	// is near a boundary
-	for _, seg := range le.Sector.Segments {
+	for _, seg := range ls.Sector.Segments {
 		if seg.AdjacentSector == 0 || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
-		if d2 >= le.LightGrid*le.LightGrid {
+		if d2 >= ls.LightGrid*ls.LightGrid {
 			continue
 		}
 
 		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, p.To2D())
-		if p[2]-ceilZ > le.LightGrid || floorZ-p[2] > le.LightGrid {
+		if p[2]-ceilZ > ls.LightGrid || floorZ-p[2] > ls.LightGrid {
 			continue
 		}
-		if le.lightVisibleFromSector(p, body, seg.AdjacentSegment.Sector) {
+		if ls.lightVisibleFromSector(p, body, seg.AdjacentSegment.Sector) {
 			return true
 		}
 	}
@@ -126,15 +126,15 @@ func (le *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 }
 
 // lightVisibleFromSector determines whether a given light is visible from a world location.
-func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
+func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
 	lightPos := lightBody.Pos.Render
 
 	// log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), lightPos)
-	le.Delta[0] = lightPos[0]
-	le.Delta[1] = lightPos[1]
-	le.Delta[2] = lightPos[2]
-	le.Delta.SubSelf(p)
-	maxDist2 := le.Delta.Length2()
+	ls.Delta[0] = lightPos[0]
+	ls.Delta[1] = lightPos[1]
+	ls.Delta[2] = lightPos[2]
+	ls.Delta.SubSelf(p)
+	maxDist2 := ls.Delta.Length2()
 	// Is the point right next to the light? Visible by definition.
 	if maxDist2 <= lightBody.Size.Render[0]*lightBody.Size.Render[0]*0.25 {
 		return true
@@ -144,8 +144,8 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
-	le.Delta.NormSelf()
-	le.Visited = le.Visited[:0]
+	ls.Delta.NormSelf()
+	ls.Visited = ls.Visited[:0]
 	for sector != nil {
 		// log.Printf("Sector: %v\n", sector.Entity)
 		/*denom := sector.Top.Normal.Dot(&le.Delta)
@@ -176,14 +176,14 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, seg := range sector.Segments {
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
-			if (le.Type == LightSamplerWall && &seg.Segment == le.Segment) ||
-				le.Delta[0]*seg.Normal[0]+le.Delta[1]*seg.Normal[1] > 0 {
+			if (ls.Type == LightSamplerWall && &seg.Segment == ls.Segment) ||
+				ls.Delta[0]*seg.Normal[0]+ls.Delta[1]*seg.Normal[1] > 0 {
 				// log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				continue
 			}
 
 			// Find the intersection with this segment.
-			ok := seg.Intersect3D(p, lightPos, &le.Intersection)
+			ok := seg.Intersect3D(p, lightPos, &ls.Intersection)
 			if !ok {
 				// log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				continue // No intersection, skip it!
@@ -198,35 +198,35 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			i2d := le.Intersection.To2D()
+			i2d := ls.Intersection.To2D()
 			floorZ, ceilZ := sector.ZAt(dynamic.DynamicRender, i2d)
 			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
-			if le.Intersection[2] < floorZ2 || le.Intersection[2] > ceilZ2 ||
-				le.Intersection[2] < floorZ || le.Intersection[2] > ceilZ {
+			if ls.Intersection[2] < floorZ2 || ls.Intersection[2] > ceilZ2 ||
+				ls.Intersection[2] < floorZ || ls.Intersection[2] > ceilZ {
 				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				return false // Same as wall, we're occluded.
 			}
 
 			// If the portal has a transparent material, we need to filter the light
 			if seg.PortalHasMaterial {
-				le.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-				le.NU = le.Intersection.To2D().Dist(&seg.P) / seg.Length
-				le.NV = (ceilZ - le.Intersection[2]) / (ceilZ - floorZ)
-				le.U = le.NU
-				le.V = le.NV
-				le.SampleMaterial(seg.Surface.ExtraStages)
+				ls.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
+				ls.NU = ls.Intersection.To2D().Dist(&seg.P) / seg.Length
+				ls.NV = (ceilZ - ls.Intersection[2]) / (ceilZ - floorZ)
+				ls.U = ls.NU
+				ls.V = ls.NV
+				ls.SampleMaterial(seg.Surface.ExtraStages)
 				if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
-					lit.Apply(&le.MaterialSampler.Output, nil)
+					lit.Apply(&ls.MaterialSampler.Output, nil)
 				}
-				if le.MaterialSampler.Output[3] >= 0.99 {
+				if ls.MaterialSampler.Output[3] >= 0.99 {
 					return false
 				}
-				le.Filter.AddPreMulColorSelf(&le.MaterialSampler.Output)
+				ls.Filter.AddPreMulColorSelf(&ls.MaterialSampler.Output)
 			}
 
 			// Get the square of the distance to the intersection (from the target point)
-			idist2 := le.Intersection.Dist2(p)
+			idist2 := ls.Intersection.Dist2(p)
 
 			// If the difference between the intersected distance and the light distance is
 			// within the bounding radius of our light, our light is right on a portal boundary and visible.
@@ -254,36 +254,61 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		depth++
 		if depth > constants.MaxPortals { // Avoid infinite looping.
 			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
-			le.Player.Notices.Push(dbg)
+			ls.Player.Notices.Push(dbg)
 			return false
 		}
 		if next == nil && lightBody.SectorEntity != 0 && sector.Entity != lightBody.SectorEntity {
 			// log.Printf("No intersections, but ended up in a different sector than the light!\n")
 			return false
 		}
-		le.Visited = append(le.Visited, sector)
+		ls.Visited = append(ls.Visited, sector)
 		sector = next
 	}
 
 	// Generate entity shadows last. That way if the light is blocked by sector
 	// walls, we don't waste time checking/blending lots of bodies or internal
 	// segments.
-	for _, sector := range le.Visited {
+	for _, sector := range ls.Visited {
+		for _, seg := range sector.InternalSegments {
+			if &seg.Segment == ls.Segment {
+				continue
+			}
+			// Find the intersection with this segment.
+			ok := seg.Intersect3D(p, lightPos, &ls.Intersection)
+			if !ok || ls.Intersection[2] < seg.Bottom || ls.Intersection[2] > seg.Top {
+				// log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
+				continue // No intersection, skip it!
+			}
+
+			ls.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
+			ls.NU = ls.Intersection.To2D().Dist(seg.A) / seg.Length
+			ls.NV = (seg.Top - ls.Intersection[2]) / (seg.Top - seg.Bottom)
+			ls.U = ls.NU
+			ls.V = ls.NV
+			ls.SampleMaterial(seg.Surface.ExtraStages)
+			if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
+				lit.Apply(&ls.MaterialSampler.Output, nil)
+			}
+			if ls.MaterialSampler.Output[3] >= 0.99 {
+				return false
+			}
+			ls.Filter[3] += ls.MaterialSampler.Output[3]
+		}
 		for _, b := range sector.Bodies {
 			if !b.Active ||
 				b.Entity == lightBody.Entity ||
-				(le.Type == LightSamplerBody && le.InputBody == b.Entity) {
+				(ls.Type == LightSamplerBody && ls.InputBody == b.Entity) {
 				continue
 			}
-			lit := materials.GetLit(le.ECS, b.Entity)
-			if lit == nil || lit.Shadow == materials.ShadowNone {
+			vis := materials.GetVisible(ls.ECS, b.Entity)
+			if vis == nil || !vis.Active || vis.Shadow == materials.ShadowNone {
 				continue
 			}
-			switch lit.Shadow {
+			switch vis.Shadow {
 			case materials.ShadowImage:
-				if ok := le.InitializeRayBody(p, lightPos, b); ok {
-					le.SampleMaterial(nil)
-					if le.MaterialSampler.Output[3] > 0.5 {
+				if ok := ls.InitializeRayBody(p, lightPos, b); ok {
+					ls.SampleMaterial(nil)
+					if ls.MaterialSampler.Output[3]*vis.Opacity > 0.5 {
 						return false
 					}
 				}
@@ -298,41 +323,16 @@ func (le *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				}
 			}
 		}
-		for _, seg := range sector.InternalSegments {
-			if &seg.Segment == le.Segment {
-				continue
-			}
-			// Find the intersection with this segment.
-			ok := seg.Intersect3D(p, lightPos, &le.Intersection)
-			if !ok || le.Intersection[2] < seg.Bottom || le.Intersection[2] > seg.Top {
-				// log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
-				continue // No intersection, skip it!
-			}
-
-			le.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-			le.NU = le.Intersection.To2D().Dist(seg.A) / seg.Length
-			le.NV = (seg.Top - le.Intersection[2]) / (seg.Top - seg.Bottom)
-			le.U = le.NU
-			le.V = le.NV
-			le.SampleMaterial(seg.Surface.ExtraStages)
-			if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
-				lit.Apply(&le.MaterialSampler.Output, nil)
-			}
-			if le.MaterialSampler.Output[3] >= 0.99 {
-				return false
-			}
-			le.Filter[3] += le.MaterialSampler.Output[3]
-		}
 	}
 
 	// log.Printf("Lit!\n")
 	return true
 }
 
-func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
-	le.Output[0] = 0
-	le.Output[1] = 0
-	le.Output[2] = 0
+func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
+	ls.Output[0] = 0
+	ls.Output[1] = 0
+	ls.Output[2] = 0
 
 	/*refs := make([]ecs.Entity, 0)
 	for _, entity := range le.Sector.PVL {
@@ -342,7 +342,7 @@ func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		return refs[i].Entity < refs[j].Entity
 	})*/
 
-	for entity, body := range le.Sector.PVL {
+	for entity, body := range ls.Sector.PVL {
 		light := core.GetLight(body.ECS, entity)
 		if !light.IsActive() {
 			continue
@@ -351,20 +351,20 @@ func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		if !body.IsActive() {
 			continue
 		}
-		le.Filter[0] = 0
-		le.Filter[1] = 0
-		le.Filter[2] = 0
-		le.Filter[3] = 0
-		le.LightWorld[0] = body.Pos.Render[0]
-		le.LightWorld[1] = body.Pos.Render[1]
-		le.LightWorld[2] = body.Pos.Render[2]
-		le.LightWorld.SubSelf(world)
-		dist := le.LightWorld.Length()
+		ls.Filter[0] = 0
+		ls.Filter[1] = 0
+		ls.Filter[2] = 0
+		ls.Filter[3] = 0
+		ls.LightWorld[0] = body.Pos.Render[0]
+		ls.LightWorld[1] = body.Pos.Render[1]
+		ls.LightWorld[2] = body.Pos.Render[2]
+		ls.LightWorld.SubSelf(world)
+		dist := ls.LightWorld.Length()
 		diffuseLight := 1.0
 		attenuation := 1.0
 		if dist != 0 {
 			// Normalize
-			le.LightWorld.MulSelf(1.0 / dist)
+			ls.LightWorld.MulSelf(1.0 / dist)
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
 				//log.Printf("%v\n", dist)
@@ -376,31 +376,31 @@ func (le *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 				//log.Printf("Too far: %v\n", world.StringHuman())
 				continue
 			}
-			if !le.lightVisible(world, body) {
+			if !ls.lightVisible(world, body) {
 				//log.Printf("Shadowed: %v\n", world.StringHuman())
 				continue
 			}
 		}
-		if le.Type == LightSamplerBody {
+		if ls.Type == LightSamplerBody {
 			diffuseLight = attenuation
 		} else {
-			diffuseLight = le.Normal.Dot(&le.LightWorld) * attenuation
+			diffuseLight = ls.Normal.Dot(&ls.LightWorld) * attenuation
 		}
 
 		if diffuseLight < 0 {
 			//le.Output[0] = 1
 			continue
 		}
-		if le.Filter[3] == 0 {
-			le.Output[0] += light.Diffuse[0] * diffuseLight
-			le.Output[1] += light.Diffuse[1] * diffuseLight
-			le.Output[2] += light.Diffuse[2] * diffuseLight
+		if ls.Filter[3] == 0 {
+			ls.Output[0] += light.Diffuse[0] * diffuseLight
+			ls.Output[1] += light.Diffuse[1] * diffuseLight
+			ls.Output[2] += light.Diffuse[2] * diffuseLight
 		} else {
-			a := 1.0 - le.Filter[3]
-			le.Output[0] += light.Diffuse[0]*diffuseLight*a + le.Filter[0]
-			le.Output[1] += light.Diffuse[1]*diffuseLight*a + le.Filter[1]
-			le.Output[2] += light.Diffuse[2]*diffuseLight*a + le.Filter[2]
+			a := 1.0 - ls.Filter[3]
+			ls.Output[0] += light.Diffuse[0]*diffuseLight*a + ls.Filter[0]
+			ls.Output[1] += light.Diffuse[1]*diffuseLight*a + ls.Filter[1]
+			ls.Output[2] += light.Diffuse[2]*diffuseLight*a + ls.Filter[2]
 		}
 	}
-	return &le.Output
+	return &ls.Output
 }

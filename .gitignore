@@ -18,6 +18,7 @@ debug
 # Profiler
 *.prof
 editor-glade.glade~
+ssa.html
 
 .DS_Store
 

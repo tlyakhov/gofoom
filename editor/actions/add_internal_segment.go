@@ -26,7 +26,7 @@ func (a *AddInternalSegment) Act() {
 }
 
 func (a *AddInternalSegment) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool {
-	if !a.AddEntity.BeginPoint(m, button) {
+	if !a.Place.BeginPoint(m, button) {
 		return false
 	}
 	a.State().Lock.Lock()

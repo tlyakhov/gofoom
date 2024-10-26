@@ -10,8 +10,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -327,12 +327,17 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 
 	for sector := range column.Sectors {
 		for _, b := range sector.Bodies {
-			if b == nil || !b.Active || !archetypes.EntityIsMaterial(b.ECS, b.Entity) {
+			if b == nil || !b.Active {
+				continue
+			}
+			vis := materials.GetVisible(b.ECS, b.Entity)
+			if vis == nil || !vis.Active {
 				continue
 			}
 			ewd2s = append(ewd2s, &state.EntityWithDist2{
-				Body:  b,
-				Dist2: column.Ray.Start.Dist2(b.Pos.Render.To2D()),
+				Body:    b,
+				Dist2:   column.Ray.Start.Dist2(b.Pos.Render.To2D()),
+				Visible: vis,
 			})
 		}
 		for _, s := range sector.InternalSegments {

@@ -5,7 +5,6 @@ package render
 
 import (
 	"math"
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
@@ -15,12 +14,13 @@ import (
 
 func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStart, xEnd int) {
 	b := ebd.Body
+	// If it's lit, render a pixel
+	if ebd.Visible.PixelOnly {
+		r.renderBodyPixel(ebd, c, xStart, xEnd)
+		return
+	}
 
-	if !archetypes.EntityIsMaterial(r.ECS, b.Entity) {
-		// If it's lit, render a pixel
-		if lit := materials.GetLit(r.ECS, b.Entity); lit != nil {
-			r.renderBodyPixel(ebd, lit, c, xStart, xEnd)
-		}
+	if ebd.Visible.Opacity <= 0 {
 		return
 	}
 
@@ -47,7 +47,7 @@ func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStar
 	c.ScaleW = uint32(xScale)
 	x1 := concepts.Max(int(xMid-xScale*0.5), xStart)
 	x2 := concepts.Min(int(xMid+xScale*0.5), xEnd)
-	if x1 == x2 {
+	if x1 == x2 || x2 < xStart || x1 >= xEnd {
 		return
 	}
 
@@ -59,23 +59,25 @@ func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStar
 	c.ClippedTop = concepts.Clamp(screenTop, c.EdgeTop, c.EdgeBottom)
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 
-	if c.Pick && c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
+	if c.Pick &&
+		c.ScreenX >= x1 && c.ScreenX < x2 &&
+		c.ScreenY >= c.ClippedTop && c.ScreenY <= c.ClippedBottom {
+
 		c.PickedSelection = append(c.PickedSelection, selection.SelectableFromBody(b))
 		return
 	}
 
 	if lit := materials.GetLit(r.ECS, b.Entity); lit != nil {
-		le := &c.LightSampler
-		le.Q.From(b.Pos.Render)
-		le.MapIndex = c.WorldToLightmapAddress(b.Sector(), &le.Q, 0)
-		le.Segment = nil
-		le.Type = state.LightSamplerBody
-		le.InputBody = b.Entity
-		le.Sector = b.Sector()
-		le.Get()
-		c.Light[0] = le.Output[0]
-		c.Light[1] = le.Output[1]
-		c.Light[2] = le.Output[2]
+		ls := &c.LightSampler
+		ls.Sector = b.Sector()
+		ls.Type = state.LightSamplerBody
+		ls.MapIndex = c.WorldToLightmapAddress(ls.Sector, b.Pos.Render, uint16(ls.Type))
+		ls.Segment = nil
+		ls.InputBody = b.Entity
+		ls.Get()
+		c.Light[0] = ls.Output[0]
+		c.Light[1] = ls.Output[1]
+		c.Light[2] = ls.Output[2]
 		c.Light[3] = 1
 		// result = Surface * Diffuse * (Ambient + Lightmap)
 		c.Light.To3D().AddSelf(&lit.Ambient)
@@ -91,8 +93,8 @@ func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStar
 	}
 
 	vStart := float64(c.ScreenHeight/2) - c.ProjectedTop
+	c.Light.MulSelf(ebd.Visible.Opacity)
 	c.MaterialSampler.Initialize(b.Entity, nil)
-
 	for c.ScreenX = x1; c.ScreenX < x2; c.ScreenX++ {
 		if c.ScreenX < xStart || c.ScreenX >= xEnd {
 			continue
@@ -114,11 +116,11 @@ func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStar
 	}
 }
 
-func (r *Renderer) renderBodyPixel(ebd *state.EntityWithDist2, lit *materials.Lit, c *state.Column, sx, ex int) {
+func (r *Renderer) renderBodyPixel(ebd *state.EntityWithDist2, c *state.Column, sx, ex int) {
 	b := ebd.Body
-
+	lit := materials.GetLit(r.ECS, b.Entity)
 	scr := r.WorldToScreen(b.Pos.Render)
-	if scr == nil {
+	if scr == nil || lit == nil {
 		return
 	}
 	x := int(scr[0])

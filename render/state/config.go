@@ -76,12 +76,12 @@ func (c *Config) WorldToLightmapAddress(s *core.Sector, v *concepts.Vector3, ext
 	return (((uint64(x) & lightmapMask) << 48) |
 		((uint64(y) & lightmapMask) << 32) |
 		((uint64(z) & lightmapMask) << 16) |
-		uint64(extraHash)) + (uint64(s.Entity) * 1009)
+		uint64(extraHash)) //+ (uint64(s.Entity) * 1009)
 }
 
 func (c *Config) LightmapAddressToWorld(s *core.Sector, result *concepts.Vector3, a uint64) *concepts.Vector3 {
 	//w := uint64(a & wMask)
-	a -= uint64(s.Entity) * 1009
+	//a -= uint64(s.Entity) * 1009
 	a = a >> 16
 	z := int64((a & lightmapMask)) + s.LightmapBias[2]
 	result[2] = float64(z) * c.LightGrid

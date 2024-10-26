@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _LightSamplerTypeName = "LightSamplerFloorLightSamplerCeilLightSamplerWallLightSamplerBody"
+const _LightSamplerTypeName = "LightSamplerBodyLightSamplerFloorLightSamplerCeilLightSamplerWall"
 
-var _LightSamplerTypeIndex = [...]uint8{0, 17, 33, 49, 65}
+var _LightSamplerTypeIndex = [...]uint8{0, 16, 33, 49, 65}
 
-const _LightSamplerTypeLowerName = "lightsamplerfloorlightsamplerceillightsamplerwalllightsamplerbody"
+const _LightSamplerTypeLowerName = "lightsamplerbodylightsamplerfloorlightsamplerceillightsamplerwall"
 
 func (i LightSamplerType) String() string {
 	if i < 0 || i >= LightSamplerType(len(_LightSamplerTypeIndex)-1) {
@@ -25,28 +25,28 @@ func (i LightSamplerType) String() string {
 // Re-run the stringer command to generate them again.
 func _LightSamplerTypeNoOp() {
 	var x [1]struct{}
-	_ = x[LightSamplerFloor-(0)]
-	_ = x[LightSamplerCeil-(1)]
-	_ = x[LightSamplerWall-(2)]
-	_ = x[LightSamplerBody-(3)]
+	_ = x[LightSamplerBody-(0)]
+	_ = x[LightSamplerFloor-(1)]
+	_ = x[LightSamplerCeil-(2)]
+	_ = x[LightSamplerWall-(3)]
 }
 
-var _LightSamplerTypeValues = []LightSamplerType{LightSamplerFloor, LightSamplerCeil, LightSamplerWall, LightSamplerBody}
+var _LightSamplerTypeValues = []LightSamplerType{LightSamplerBody, LightSamplerFloor, LightSamplerCeil, LightSamplerWall}
 
 var _LightSamplerTypeNameToValueMap = map[string]LightSamplerType{
-	_LightSamplerTypeName[0:17]:       LightSamplerFloor,
-	_LightSamplerTypeLowerName[0:17]:  LightSamplerFloor,
-	_LightSamplerTypeName[17:33]:      LightSamplerCeil,
-	_LightSamplerTypeLowerName[17:33]: LightSamplerCeil,
-	_LightSamplerTypeName[33:49]:      LightSamplerWall,
-	_LightSamplerTypeLowerName[33:49]: LightSamplerWall,
-	_LightSamplerTypeName[49:65]:      LightSamplerBody,
-	_LightSamplerTypeLowerName[49:65]: LightSamplerBody,
+	_LightSamplerTypeName[0:16]:       LightSamplerBody,
+	_LightSamplerTypeLowerName[0:16]:  LightSamplerBody,
+	_LightSamplerTypeName[16:33]:      LightSamplerFloor,
+	_LightSamplerTypeLowerName[16:33]: LightSamplerFloor,
+	_LightSamplerTypeName[33:49]:      LightSamplerCeil,
+	_LightSamplerTypeLowerName[33:49]: LightSamplerCeil,
+	_LightSamplerTypeName[49:65]:      LightSamplerWall,
+	_LightSamplerTypeLowerName[49:65]: LightSamplerWall,
 }
 
 var _LightSamplerTypeNames = []string{
-	_LightSamplerTypeName[0:17],
-	_LightSamplerTypeName[17:33],
+	_LightSamplerTypeName[0:16],
+	_LightSamplerTypeName[16:33],
 	_LightSamplerTypeName[33:49],
 	_LightSamplerTypeName[49:65],
 }
