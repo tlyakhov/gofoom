@@ -2713,7 +2713,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.6640625,
+          "Percent": 0.8203125,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -2763,6 +2763,11 @@
         "Response": 0
       },
       "Material": "98"
+    },
+    "materials.Visible": {
+      "Ambient": 1,
+      "Entity": "32",
+      "Shadow": "ShadowImage"
     }
   },
   {
@@ -3770,11 +3775,14 @@
   {
     "Entity": "42",
     "behaviors.Actor": {
-      "Action": "140",
       "Entity": "42",
       "NoZ": true,
       "Speed": 35,
       "Start": "135"
+    },
+    "behaviors.ActorState": {
+      "Action": "147",
+      "Entity": "42"
     },
     "behaviors.Alive": {
       "Entity": "42",
@@ -3795,14 +3803,14 @@
           "X": 20,
           "Y": -180,
           "Z": 0
-        },
-        "Procedural": true
+        }
       },
       "Size": {
         "Original": {
           "X": 32,
           "Y": 32
-        }
+        },
+        "Procedural": true
       }
     },
     "core.Mobile": {
@@ -3857,6 +3865,11 @@
       },
       "Material": "42",
       "Rows": "2"
+    },
+    "materials.Visible": {
+      "Ambient": 1,
+      "Entity": "42",
+      "Shadow": "ShadowImage"
     }
   },
   {
@@ -3990,7 +4003,6 @@
             "Material": "2"
           },
           "Lo": {
-            "ExtraStages": [],
             "Material": "123"
           },
           "Surface": {
@@ -6885,7 +6897,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Original": [
@@ -7192,12 +7203,12 @@
         },
         "Z": {
           "Animation": {
-            "Active": true,
+            "Active": false,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0.3984375,
+            "Percent": 1,
             "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
@@ -10730,7 +10741,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.9453125,
+          "Percent": 0.78125,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -10762,6 +10773,11 @@
         "Response": 0
       },
       "Material": "133"
+    },
+    "materials.Visible": {
+      "Ambient": 1,
+      "Entity": "132",
+      "Shadow": "ShadowImage"
     }
   },
   {
@@ -11183,73 +11199,112 @@
   {
     "Entity": "152",
     "behaviors.Actor": {
-      "Action": "151",
       "Entity": "152",
+      "FaceNextWaypoint": false,
       "Speed": 100,
       "Start": "150"
+    },
+    "behaviors.ActorState": {
+      "Action": "151",
+      "Entity": "152"
     },
     "behaviors.ParticleEmitter": {
       "Entity": "152",
       "Particles": [
-        "183",
         "184",
-        "187",
-        "188",
-        "201",
-        "203",
-        "212",
-        "160",
-        "163",
-        "169",
-        "205",
-        "195",
-        "199",
-        "209",
-        "159",
-        "182",
-        "196",
-        "214",
-        "166",
-        "171",
-        "173",
-        "216",
-        "170",
-        "177",
-        "186",
-        "211",
-        "180",
-        "185",
-        "197",
-        "207",
-        "162",
-        "164",
+        "231",
+        "255",
+        "223",
+        "236",
+        "244",
+        "249",
         "172",
-        "181",
+        "186",
+        "210",
+        "183",
+        "199",
+        "200",
+        "155",
+        "162",
+        "166",
+        "177",
+        "243",
+        "251",
+        "170",
+        "178",
         "208",
-        "157",
+        "213",
+        "202",
+        "216",
+        "239",
+        "230",
+        "237",
+        "240",
+        "163",
+        "168",
+        "187",
+        "197",
+        "227",
+        "247",
+        "158",
         "165",
+        "182",
+        "188",
+        "225",
+        "228",
+        "235",
+        "245",
+        "157",
+        "169",
         "174",
         "189",
-        "156",
-        "175",
-        "194",
-        "202",
+        "246",
         "167",
-        "178",
-        "213",
-        "161",
-        "179",
-        "198",
-        "210",
-        "155",
-        "158",
+        "175",
+        "159",
         "190",
-        "200",
-        "168",
+        "194",
+        "233",
+        "232",
+        "234",
+        "241",
+        "173",
+        "185",
+        "203",
+        "207",
+        "250",
+        "253",
+        "254",
+        "196",
+        "224",
+        "238",
+        "248",
+        "211",
+        "209",
+        "215",
+        "226",
+        "242",
+        "180",
+        "181",
+        "195",
+        "201",
+        "252",
+        "171",
+        "179",
         "204",
-        "215"
+        "156",
+        "160",
+        "161",
+        "164",
+        "205",
+        "212",
+        "214",
+        "229"
       ],
-      "Source": "153"
+      "Source": "153",
+      "Vel": 15,
+      "XYSpread": 10,
+      "ZSpread": 10
     },
     "behaviors.WeaponInstant": {
       "Class": "148",
@@ -11298,6 +11353,11 @@
         "Response": 0
       },
       "Material": "153"
+    },
+    "materials.Visible": {
+      "Ambient": 1,
+      "Entity": "152",
+      "Shadow": "ShadowImage"
     }
   },
   {
@@ -11361,13 +11421,13 @@
         "Original": {
           "X": -260,
           "Y": 170,
-          "Z": 0
+          "Z": -54
         }
       },
       "Size": {
         "Original": {
-          "X": 10,
-          "Y": 10
+          "X": 20,
+          "Y": 20
         }
       }
     },

@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -50,8 +51,9 @@ func (pc *ParticleController) Always() {
 	for e, timestamp := range pc.Spawned {
 		age := float64(pc.ECS.Timestamp - timestamp)
 
-		if shader := materials.GetShader(pc.ECS, e); shader != nil {
-			shader.Stages[0].Opacity = 1.0 - concepts.Clamp((age-(pc.Lifetime-pc.FadeTime))/pc.FadeTime, 0.0, 1.0)
+		if vis := materials.GetVisible(pc.ECS, e); vis != nil {
+			fade := (age - (pc.Lifetime - pc.FadeTime)) / pc.FadeTime
+			vis.Opacity = 1.0 - concepts.Clamp(fade, 0.0, 1.0)
 		}
 
 		if age < pc.Lifetime {
@@ -69,31 +71,41 @@ func (pc *ParticleController) Always() {
 	if pc.Source == 0 || len(pc.Particles) > pc.Limit {
 		return
 	}
-	if rand.Intn(10) != 0 {
-		return
-	}
+	// Our goal is to spawn ~pc.Limit particles across pc.Lifetime.
+	// Approximate the probability that we should spawn a particle this frame.
+	// For example, for 10 particles over 10,000ms, we would get:
+	// 10/(10000/7.8) = 0.0078
+	probability := float64(pc.Limit) / (pc.Lifetime / constants.TimeStep)
+	// if this probability is > 1, we need to spawn more than one particle per
+	// frame.
+	iterations := int(probability) + 1
+	probability /= float64(iterations)
 
-	e := pc.ECS.NewEntity()
-	pc.Particles.Add(e)
-	pc.Spawned[e] = pc.ECS.Timestamp
-	body := pc.ECS.NewAttachedComponent(e, core.BodyCID).(*core.Body)
-	body.System = true
-	mobile := pc.ECS.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
-	mobile.System = true
-	body.Pos.Now.From(&pc.Body.Pos.Now)
-	rang := (rand.Float64() - 0.5) * 10
-	mobile.Vel.Now[0] = math.Cos((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
-	mobile.Vel.Now[1] = math.Sin((pc.Body.Angle.Now+rang)*concepts.Deg2rad) * 15
-	mobile.Vel.Now[2] = (rand.Float64() - 0.5) * 10
-	mobile.Mass = 0.25
-	//lit := pc.ECS.NewAttachedComponent(e, materials.LitCID).(*materials.Lit)
-	//lit.System = true
-	/*lit.Diffuse[0] = 1.0
-	lit.Diffuse[1] = 0.0
-	lit.Diffuse[2] = 0.0
-	lit.Diffuse[3] = 1.0*/
-	linked := pc.ECS.NewAttachedComponent(e, ecs.LinkedCID).(*ecs.Linked)
-	linked.System = true
-	linked.Sources = append(linked.Sources, pc.Source)
-	linked.Recalculate()
+	for range iterations {
+		if rand.Float64() > probability {
+			return
+		}
+
+		e := pc.ECS.NewEntity()
+		pc.Particles.Add(e)
+		pc.Spawned[e] = pc.ECS.Timestamp
+		body := pc.ECS.NewAttachedComponent(e, core.BodyCID).(*core.Body)
+		body.System = true
+		vis := pc.ECS.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
+		vis.System = true
+		mobile := pc.ECS.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
+		mobile.System = true
+		linked := pc.ECS.NewAttachedComponent(e, ecs.LinkedCID).(*ecs.Linked)
+		linked.System = true
+
+		linked.Sources = append(linked.Sources, pc.Source)
+		linked.Recalculate()
+		body.Pos.Now.From(&pc.Body.Pos.Now)
+		hAngle := pc.Body.Angle.Now + (rand.Float64()-0.5)*pc.XYSpread
+		vAngle := (rand.Float64() - 0.5) * pc.ZSpread
+		mobile.Vel.Now[0] = math.Cos(hAngle*concepts.Deg2rad) * pc.Vel
+		mobile.Vel.Now[1] = math.Sin(hAngle*concepts.Deg2rad) * pc.Vel
+		mobile.Vel.Now[2] = math.Sin(vAngle*concepts.Deg2rad) * pc.Vel
+		mobile.Mass = 0.25
+	}
 }

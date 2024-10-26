@@ -16,6 +16,9 @@ type ParticleEmitter struct {
 	FadeTime float64    `editable:"Fade Time"` // ms
 	Limit    int        `editable:"Particle Count Limit"`
 	Source   ecs.Entity `editable:"Source" edit_type:"Material"`
+	XYSpread float64    `editable:"XY Spread"` // Degrees
+	ZSpread  float64    `editable:"Z Spread"`  // Degrees
+	Vel      float64    `editable:"Velocity"`
 
 	Particles containers.Set[ecs.Entity]
 	Spawned   map[ecs.Entity]int64
@@ -45,6 +48,9 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	pe.FadeTime = 1000
 	pe.Limit = 100
 	pe.Source = 0
+	pe.XYSpread = 10
+	pe.ZSpread = 10
+	pe.Vel = 15
 
 	pe.Particles = make(containers.Set[ecs.Entity])
 	pe.Spawned = make(map[ecs.Entity]int64)
@@ -65,6 +71,15 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	}
 	if v, ok := data["FadeTime"]; ok {
 		pe.FadeTime = v.(float64)
+	}
+	if v, ok := data["XYSpread"]; ok {
+		pe.XYSpread = v.(float64)
+	}
+	if v, ok := data["ZSpread"]; ok {
+		pe.ZSpread = v.(float64)
+	}
+	if v, ok := data["Vel"]; ok {
+		pe.Vel = v.(float64)
 	}
 	if v, ok := data["Limit"]; ok {
 		pe.Limit, _ = strconv.Atoi(v.(string))
@@ -93,6 +108,9 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 	if pe.Source != 0 {
 		result["Source"] = pe.Source.String()
 	}
+	result["XYSpread"] = pe.XYSpread
+	result["ZSpread"] = pe.ZSpread
+	result["Vel"] = pe.Vel
 
 	return result
 }

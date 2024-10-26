@@ -9,11 +9,12 @@ import (
 )
 
 type Actor struct {
-	ecs.Attached `editable:"^"`
-	Start        ecs.Entity                `editable:"Starting Action" edit_type:"Action"`
-	NoZ          bool                      `editable:"2D only"`
-	Lifetime     dynamic.AnimationLifetime `editable:"Lifetime"`
-	Speed        float64                   `editable:"Speed"`
+	ecs.Attached     `editable:"^"`
+	Start            ecs.Entity                `editable:"Starting Action" edit_type:"Action"`
+	NoZ              bool                      `editable:"2D only"`
+	Lifetime         dynamic.AnimationLifetime `editable:"Lifetime"`
+	Speed            float64                   `editable:"Speed"`
+	FaceNextWaypoint bool                      `editable:"Face Waypoint?"`
 }
 
 var ActorCID ecs.ComponentID
@@ -38,6 +39,7 @@ func (a *Actor) Construct(data map[string]any) {
 	a.NoZ = false
 	a.Speed = 10
 	a.Lifetime = dynamic.AnimationLifetimeLoop
+	a.FaceNextWaypoint = true
 
 	if data == nil {
 		return
@@ -57,6 +59,10 @@ func (a *Actor) Construct(data map[string]any) {
 	if v, ok := data["Speed"]; ok {
 		a.Speed = v.(float64)
 	}
+	if v, ok := data["FaceNextWaypoint"]; ok {
+		a.FaceNextWaypoint = v.(bool)
+	}
+
 }
 
 func (a *Actor) Serialize() map[string]any {
@@ -70,6 +76,9 @@ func (a *Actor) Serialize() map[string]any {
 	}
 	if a.Lifetime != dynamic.AnimationLifetimeLoop {
 		result["Lifetime"] = a.Lifetime
+	}
+	if !a.FaceNextWaypoint {
+		result["FaceNextWaypoint"] = a.FaceNextWaypoint
 	}
 	return result
 }

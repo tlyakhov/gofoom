@@ -293,6 +293,7 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 }
 
 func (mc *MobileController) bodyBodyCollide(sector *core.Sector) {
+	// TODO: This is really expensive if there are lots of bodies in one sector
 	for _, body := range sector.Bodies {
 		if body == nil || body == mc.Body || !body.IsActive() {
 			continue

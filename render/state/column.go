@@ -16,6 +16,7 @@ import (
 
 type EntityWithDist2 struct {
 	Body            *core.Body
+	Visible         *materials.Visible
 	InternalSegment *core.InternalSegment
 	Sector          *core.Sector
 	Dist2           float64

@@ -169,9 +169,9 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	dist := v.Length()
 	if dist > 0 {
 		angle := math.Atan2(v[1], v[0]) * concepts.Rad2deg
-		if ac.Body.Angle.Procedural {
+		if ac.FaceNextWaypoint && ac.Body.Angle.Procedural {
 			ac.Body.Angle.Input = angle
-		} else {
+		} else if ac.FaceNextWaypoint {
 			ac.Body.Angle.Now = angle
 		}
 		speed := ac.Speed / dist

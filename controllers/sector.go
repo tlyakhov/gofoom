@@ -37,9 +37,10 @@ func (sc *SectorController) Recalculate() {
 	sc.Sector.Recalculate()
 }
 
+// TODO: This should be done with an actual queue, to avoid big lag spikes
 func (sc *SectorController) pvs() {
 	// Only update a few sectors
-	if sc.pvsRecalculated > 2 {
+	if sc.pvsRecalculated > 4 {
 		return
 	}
 	// Tolerate 10 frame refresh?
@@ -54,9 +55,14 @@ func (sc *SectorController) pvs() {
 
 func (sc *SectorController) Always() {
 	frame := sc.LastSeenFrame.Load()
+	// This sector hasn't been observed recently
+	if frame <= 0 {
+		return
+	}
+	// This sector has been observed, queue up recalculating PVS
+	sc.pvs()
 	// Cache for a maximum number of frames
-	if frame <= 0 || sc.ECS.Frame-uint64(frame) < 120 {
-		sc.pvs()
+	if sc.ECS.Frame-uint64(frame) < 120 {
 		return
 	}
 	sc.Lightmap.Clear()
