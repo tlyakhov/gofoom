@@ -25,6 +25,7 @@ type Sector struct {
 	FloorFriction    float64          `editable:"Floor Friction"`
 	Segments         []*SectorSegment
 	Bodies           map[ecs.Entity]*Body
+	Colliders        map[ecs.Entity]*Mobile
 	InternalSegments map[ecs.Entity]*InternalSegment
 	EnterScripts     []*Script `editable:"Enter Scripts"`
 	ExitScripts      []*Script `editable:"Exit Scripts"`
@@ -33,10 +34,11 @@ type Sector struct {
 	Winding          int8
 	Min, Max, Center concepts.Vector3
 
-	// Potentially visible sets
-	PVS            map[ecs.Entity]*Sector
-	PVL            map[ecs.Entity]*Body
+	// Potentially visible set
 	LastPVSRefresh uint64
+	PVS            map[ecs.Entity]*Sector
+	// Potentially visible lights
+	PVL []*Body
 
 	// Lightmap data
 	Lightmap      *xsync.MapOf[uint64, *LightmapCell]
@@ -111,6 +113,7 @@ func (s *Sector) OnDetach() {
 		b.SectorEntity = 0
 	}
 	s.Bodies = make(map[ecs.Entity]*Body)
+	s.Colliders = make(map[ecs.Entity]*Mobile)
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 	s.Attached.OnDetach()
 }
@@ -137,10 +140,11 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
 	s.PVS = make(map[ecs.Entity]*Sector)
-	s.PVL = make(map[ecs.Entity]*Body)
+	s.PVL = make([]*Body, 0)
 	s.Lightmap = xsync.NewMapOf[uint64, *LightmapCell](xsync.WithPresize(1024))
 	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[ecs.Entity]*Body)
+	s.Colliders = make(map[ecs.Entity]*Mobile)
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0

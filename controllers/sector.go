@@ -56,6 +56,7 @@ func (sc *SectorController) pvs() {
 func (sc *SectorController) Always() {
 	frame := sc.LastSeenFrame.Load()
 	// This sector hasn't been observed recently
+	// TODO: In this case, we should queue up a PVS refresh at the tail of the queue.
 	if frame <= 0 {
 		return
 	}

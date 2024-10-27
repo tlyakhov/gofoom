@@ -107,5 +107,8 @@ func (pc *ParticleController) Always() {
 		mobile.Vel.Now[1] = math.Sin(hAngle*concepts.Deg2rad) * pc.Vel
 		mobile.Vel.Now[2] = math.Sin(vAngle*concepts.Deg2rad) * pc.Vel
 		mobile.Mass = 0.25
+		mobile.CrBody = core.CollideNone
+		mobile.CrPlayer = core.CollideNone
+		mobile.CrWall = core.CollideBounce
 	}
 }

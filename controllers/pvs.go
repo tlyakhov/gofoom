@@ -14,14 +14,19 @@ import (
 func updatePVS(pvsSector *core.Sector, normals []*concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
 	if visitor == nil {
 		pvsSector.PVS = make(map[ecs.Entity]*core.Sector)
-		pvsSector.PVL = make(map[ecs.Entity]*core.Body)
+		pvsSector.PVL = make([]*core.Body, 0)
+		pvsSector.Colliders = make(map[ecs.Entity]*core.Mobile)
 		pvsSector.PVS[pvsSector.Entity] = pvsSector
 		visitor = pvsSector
 	}
 
 	for entity, body := range visitor.Bodies {
 		if core.GetLight(body.ECS, entity) != nil {
-			pvsSector.PVL[entity] = body
+			pvsSector.PVL = append(pvsSector.PVL, body)
+		}
+		if m := core.GetMobile(body.ECS, entity); m != nil &&
+			(m.CrBody != core.CollideNone || m.CrPlayer != core.CollideNone) {
+			pvsSector.Colliders[entity] = m
 		}
 	}
 

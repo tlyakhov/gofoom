@@ -162,21 +162,21 @@ func (mc *MobileController) bodyExitsSector() {
 	}
 }
 
-func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core.Body) {
+func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.Body) {
 	// Use the right collision response settings
 	otherVel := &concepts.Vector3{}
 	aResponse := mc.CrBody
 	bResponse := core.CollideNone
 	otherElasticity := 0.0
-	if other != nil {
-		bResponse = other.CrBody
-		otherElasticity = other.Elasticity
-		otherVel = &other.Vel.Now
-		if behaviors.GetPlayer(other.ECS, other.Entity) != nil {
+	if bMobile != nil {
+		bResponse = bMobile.CrBody
+		otherElasticity = bMobile.Elasticity
+		otherVel = &bMobile.Vel.Now
+		if behaviors.GetPlayer(bMobile.ECS, bMobile.Entity) != nil {
 			aResponse = mc.CrPlayer
 		}
 		if mc.Player != nil {
-			bResponse = other.CrPlayer
+			bResponse = bMobile.CrPlayer
 		}
 	}
 
@@ -187,15 +187,15 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 		aMass = mc.Mass
 	}
 	if bResponse&core.CollideBounce != 0 || bResponse&core.CollideSeparate != 0 {
-		bMass = other.Mass
+		bMass = bMobile.Mass
 	}
 
 	// The code below to bounce rigid bodies is adapted from
 	// https://www.myphysicslab.com/engine2D/collision-en.html
 
 	aRadius := mc.Body.Size.Now[0] * 0.5
-	bRadius := otherBody.Size.Now[0] * 0.5
-	UnitAtoB := mc.pos.Sub(&otherBody.Pos.Now)
+	bRadius := bBody.Size.Now[0] * 0.5
+	UnitAtoB := mc.pos.Sub(&bBody.Pos.Now)
 	distance := UnitAtoB.Length()
 	if distance > constants.IntersectEpsilon {
 		UnitAtoB.MulSelf(1.0 / distance)
@@ -212,8 +212,8 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 		bWeight := bMass / (aMass + bMass)
 		mc.pos[0] += UnitAtoB[0] * distance * aWeight
 		mc.pos[1] += UnitAtoB[1] * distance * aWeight
-		otherBody.Pos.Now[0] -= UnitAtoB[0] * distance * bWeight
-		otherBody.Pos.Now[1] -= UnitAtoB[1] * distance * bWeight
+		bBody.Pos.Now[0] -= UnitAtoB[0] * distance * bWeight
+		bBody.Pos.Now[1] -= UnitAtoB[1] * distance * bWeight
 	}
 
 	// Next handle the other cases and check if we need to do a bounce
@@ -231,15 +231,15 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 	}
 
 	if bResponse&core.CollideDeactivate != 0 {
-		other.Active = false
+		bMobile.Active = false
 	}
 	if bResponse&core.CollideStop != 0 {
-		other.Vel.Now[0] = 0
-		other.Vel.Now[1] = 0
-		other.Vel.Now[2] = 0
+		bMobile.Vel.Now[0] = 0
+		bMobile.Vel.Now[1] = 0
+		bMobile.Vel.Now[2] = 0
 	}
 	if bResponse&core.CollideRemove != 0 {
-		otherBody.ECS.Delete(otherBody.Entity)
+		bBody.ECS.Delete(bBody.Entity)
 	}
 
 	if aResponse&core.CollideBounce == 0 && bResponse&core.CollideBounce == 0 {
@@ -281,20 +281,24 @@ func (mc *MobileController) resolveCollision(other *core.Mobile, otherBody *core
 		jB := -(1.0 + bElasticity) * jA
 		jA = -(1.0 + aElasticity) * jA
 		mc.Vel.Now.AddSelf(UnitAtoB.Mul(jA / bMass))
-		other.Vel.Now.AddSelf(UnitAtoB.Mul(-jB / bMass))
+		bMobile.Vel.Now.AddSelf(UnitAtoB.Mul(-jB / bMass))
 	} else if momentA > 0 {
 		j := -(1.0 + aElasticity) * v_p1.Dot(UnitAtoB) / (1.0/mc.Mass + aC.Dot(aC)/momentA)
 		mc.Vel.Now.AddSelf(UnitAtoB.Mul(j / mc.Mass))
 	} else if momentB > 0 {
 		j := -(1.0 + bElasticity) * v_p1.Dot(UnitAtoB) / (1.0/bMass + bC.Dot(bC)/momentB)
-		other.Vel.Now.AddSelf(UnitAtoB.Mul(-j / bMass))
+		bMobile.Vel.Now.AddSelf(UnitAtoB.Mul(-j / bMass))
 	}
 	//fmt.Printf("%v <-> %v = %v\n", mc.Body.String(), body.String(), diff)
 }
 
 func (mc *MobileController) bodyBodyCollide(sector *core.Sector) {
 	// TODO: This is really expensive if there are lots of bodies in one sector
-	for _, body := range sector.Bodies {
+	for _, mobile := range sector.Colliders {
+		if !mobile.Active {
+			continue
+		}
+		body := core.GetBody(mc.ECS, mobile.Entity)
 		if body == nil || body == mc.Body || !body.IsActive() {
 			continue
 		}
@@ -307,7 +311,7 @@ func (mc *MobileController) bodyBodyCollide(sector *core.Sector) {
 		r_a := mc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
-			mc.resolveCollision(core.GetMobile(body.ECS, body.Entity), body)
+			mc.resolveCollision(mobile, body)
 		}
 	}
 }
@@ -331,7 +335,6 @@ func (mc *MobileController) CollideZ() {
 	} else if mc.Sector.Bottom.Target == 0 && mc.Body.Pos.Now[2]-halfHeight <= floorZ {
 		dist := mc.Sector.Bottom.Normal[2] * (floorZ - (mc.Body.Pos.Now[2] - halfHeight))
 		delta := mc.Sector.Bottom.Normal.Mul(dist)
-		// TODO: do this for ceiling too
 		c_a := delta.Cross(&mc.Sector.Bottom.Normal)
 		// Solid sphere moment of inertia
 		moment := mc.Mass * halfHeight * halfHeight * 2.0 / 5.0
@@ -353,7 +356,11 @@ func (mc *MobileController) CollideZ() {
 	} else if mc.Sector.Top.Target == 0 && bodyTop >= ceilZ {
 		dist := -mc.Sector.Top.Normal[2] * (bodyTop - ceilZ + 1.0)
 		delta := mc.Sector.Top.Normal.Mul(dist)
-		mc.Vel.Now.AddSelf(delta)
+		c_a := delta.Cross(&mc.Sector.Top.Normal)
+		// Solid sphere moment of inertia
+		moment := mc.Mass * halfHeight * halfHeight * 2.0 / 5.0
+		j := -(1.0 + mc.Elasticity) * mc.Vel.Now.Dot(&mc.Sector.Top.Normal) / (1.0/mc.Mass + c_a.Dot(c_a)/moment)
+		mc.Vel.Now.AddSelf(mc.Sector.Top.Normal.Mul(j / mc.Mass))
 		mc.Body.Pos.Now.AddSelf(delta)
 		BodySectorScript(mc.Sector.Top.Scripts, mc.Body, mc.Sector)
 	}

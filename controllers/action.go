@@ -179,7 +179,11 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	}
 	switch {
 	case ac.Mobile != nil:
-		ac.Mobile.Vel.Now = *v
+		// TODO: Is this a hack?
+		if !ac.Body.OnGround {
+			v.MulSelf(0.1)
+		}
+		ac.Mobile.Force.AddSelf(v)
 	case ac.Body.Pos.Procedural:
 		ac.Body.Pos.Input.AddSelf(v.MulSelf(constants.TimeStepS))
 		var bc BodyController

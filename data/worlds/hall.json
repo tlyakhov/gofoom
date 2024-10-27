@@ -169,10 +169,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "3",
-      "Name": "be4pvnfvn27o06iak950"
     }
   },
   {
@@ -263,10 +259,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "4",
-      "Name": "be26u9vvn27vmb5f7cp0"
     }
   },
   {
@@ -346,10 +338,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "5",
-      "Name": "be46lsnvn27lk1dech50"
     }
   },
   {
@@ -421,10 +409,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "6",
-      "Name": "be4pp37vn27o06iajn30"
     }
   },
   {
@@ -651,10 +635,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "10",
-      "Name": "be3dsc7vn27ho9jt57ig"
     }
   },
   {
@@ -745,10 +725,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "11",
-      "Name": "be4pvl7vn27o06iak35g"
     }
   },
   {
@@ -839,10 +815,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "12",
-      "Name": "be4pvjvvn27o06iak230"
     }
   },
   {
@@ -971,10 +943,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "13",
-      "Name": "be4pp37vn27o06iajotg"
     }
   },
   {
@@ -1112,10 +1080,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "14",
-      "Name": "be4pvnfvn27o06iak75g"
     }
   },
   {
@@ -1195,10 +1159,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "15",
-      "Name": "be46jk7vn27lk1dec9s0"
     }
   },
   {
@@ -1312,10 +1272,6 @@
           "Original": -4
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "17",
-      "Name": "be4bqjnvn27mek306bng"
     }
   },
   {
@@ -1401,10 +1357,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "18",
-      "Name": "be4pp3vvn27o06iajq30"
     }
   },
   {
@@ -1476,10 +1428,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "19",
-      "Name": "be4pp3vvn27o06iajr40"
     }
   },
   {
@@ -1512,10 +1460,6 @@
       },
       "Entity": "20",
       "Strength": 1
-    },
-    "ecs.Named": {
-      "Entity": "20",
-      "Name": "be4pr0vvn27o06iajrd0"
     }
   },
   {
@@ -1629,10 +1573,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "22",
-      "Name": "be4eoifvn27mnbvee2gg"
     }
   },
   {
@@ -1764,10 +1704,6 @@
           "Original": 100
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "23",
-      "Name": "be4bqmfvn27mek306btg"
     }
   },
   {
@@ -1849,10 +1785,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "24",
-      "Name": "be4pvnfvn27o06iak8pg"
     }
   },
   {
@@ -2096,10 +2028,6 @@
         "134"
       ],
       "Entity": "25"
-    },
-    "ecs.Named": {
-      "Entity": "25",
-      "Name": "be4pufvvn27o06iajuu0"
     }
   },
   {
@@ -2200,10 +2128,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "26",
-      "Name": "be4eoifvn27mnbvee2s0"
     }
   },
   {
@@ -2335,10 +2259,6 @@
           "Original": 100
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "27",
-      "Name": "be4bqb7vn27mek306bc0"
     }
   },
   {
@@ -2439,10 +2359,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "28",
-      "Name": "be26u9vvn27vmb5f7d4g"
     }
   },
   {
@@ -2535,10 +2451,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "29",
-      "Name": "ckqk9glmdsria0nrngq0"
     }
   },
   {
@@ -2571,10 +2483,6 @@
       },
       "Entity": "30",
       "Strength": 2
-    },
-    "ecs.Named": {
-      "Entity": "30",
-      "Name": "ckqka4lmdsria0nrnisg"
     }
   },
   {
@@ -2713,7 +2621,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.8203125,
+          "Percent": 0.3515625,
           "Reverse": false,
           "Start": {
             "X": 0,
@@ -2847,10 +2755,6 @@
           "Original": -4
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "33",
-      "Name": "be4bql7vn27mek306bqg"
     }
   },
   {
@@ -2936,10 +2840,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "34",
-      "Name": "be4pvl7vn27o06iak550"
     }
   },
   {
@@ -3139,10 +3039,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "36",
-      "Name": "be46jcvvn27lk1dec8k0"
     }
   },
   {
@@ -3318,10 +3214,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "38",
-      "Name": "be4pp3vvn27o06iajpng"
     }
   },
   {
@@ -3408,10 +3300,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "39",
-      "Name": "be4pp3vvn27o06iajqog"
     }
   },
   {
@@ -3512,10 +3400,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "40",
-      "Name": "be46jcvvn27lk1dec910"
     }
   },
   {
@@ -3766,10 +3650,6 @@
           "Original": 0
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "41",
-      "Name": "be46m1fvn27lk1deckug"
     }
   },
   {
@@ -3777,11 +3657,11 @@
     "behaviors.Actor": {
       "Entity": "42",
       "NoZ": true,
-      "Speed": 35,
+      "Speed": 350,
       "Start": "135"
     },
     "behaviors.ActorState": {
-      "Action": "147",
+      "Action": "137",
       "Entity": "42"
     },
     "behaviors.Alive": {
@@ -3800,9 +3680,9 @@
       "Entity": "42",
       "Pos": {
         "Original": {
-          "X": 20,
-          "Y": -180,
-          "Z": 0
+          "X": -10,
+          "Y": -30,
+          "Z": -50
         }
       },
       "Size": {
@@ -3949,10 +3829,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "43",
-      "Name": "be46jknvn27lk1decaj0"
     }
   },
   {
@@ -4117,10 +3993,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "45",
-      "Name": "be4c2lnvn27mi9gdb850"
     }
   },
   {
@@ -4200,10 +4072,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "46",
-      "Name": "be46jmfvn27lk1decdf0"
     }
   },
   {
@@ -4283,10 +4151,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "47",
-      "Name": "be46jm7vn27lk1decco0"
     }
   },
   {
@@ -4366,10 +4230,6 @@
           "Original": -4
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "48",
-      "Name": "be4bq7vvn27mek306b60"
     }
   },
   {
@@ -4553,10 +4413,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "50",
-      "Name": "be46jl7vn27lk1decba0"
     }
   },
   {
@@ -4628,10 +4484,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "51",
-      "Name": "be4pp37vn27o06iajnog"
     }
   },
   {
@@ -4664,10 +4516,6 @@
       },
       "Entity": "52",
       "Strength": 1
-    },
-    "ecs.Named": {
-      "Entity": "52",
-      "Name": "be4pr07vn27o06iajrb0"
     }
   },
   {
@@ -4773,10 +4621,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "53",
-      "Name": "be49j2vvn27m4cr0h39g"
     }
   },
   {
@@ -4867,10 +4711,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "54",
-      "Name": "be4pvjvvn27o06iak1ng"
     }
   },
   {
@@ -5069,10 +4909,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "56",
-      "Name": "be4pvnfvn27o06iak7s0"
     }
   },
   {
@@ -5210,10 +5046,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "58",
-      "Name": "be4epdnvn27mnbvee43g"
     }
   },
   {
@@ -5325,10 +5157,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "60",
-      "Name": "be46ltvvn27lk1decij0"
     }
   },
   {
@@ -5433,10 +5261,6 @@
           "Original": 46
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "61",
-      "Name": "be4c3ufvn27mi9gdb9q0"
     }
   },
   {
@@ -5548,10 +5372,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "63",
-      "Name": "be46lufvn27lk1decjlg"
     }
   },
   {
@@ -5756,10 +5576,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "65",
-      "Name": "be4eohnvn27mnbvee1pg"
     }
   },
   {
@@ -5839,10 +5655,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "66",
-      "Name": "be4epb7vn27mnbvee40g"
     }
   },
   {
@@ -5952,10 +5764,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "67",
-      "Name": "be4c3m7vn27mi9gdb9g0"
     }
   },
   {
@@ -6455,10 +6263,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "72",
-      "Name": "be4pvl7vn27o06iak2q0"
     }
   },
   {
@@ -6538,10 +6342,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "73",
-      "Name": "be46lr7vn27lk1decge0"
     }
   },
   {
@@ -6621,10 +6421,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "74",
-      "Name": "be46lqnvn27lk1decfn0"
     }
   },
   {
@@ -6725,10 +6521,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "75",
-      "Name": "be4bsjnvn27mek306eg0"
     }
   },
   {
@@ -7107,10 +6899,6 @@
         "134"
       ],
       "Entity": "79"
-    },
-    "ecs.Named": {
-      "Entity": "79",
-      "Name": "be4c3pfvn27mi9gdb9mg"
     }
   },
   {
@@ -7203,13 +6991,13 @@
         },
         "Z": {
           "Animation": {
-            "Active": false,
+            "Active": true,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
-            "Reverse": false,
+            "Percent": 0.0859375,
+            "Reverse": true,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -7222,10 +7010,6 @@
         "134"
       ],
       "Entity": "80"
-    },
-    "ecs.Named": {
-      "Entity": "80",
-      "Name": "be49hlvvn27m4cr0h360"
     }
   },
   {
@@ -7357,10 +7141,6 @@
         "134"
       ],
       "Entity": "81"
-    },
-    "ecs.Named": {
-      "Entity": "81",
-      "Name": "be4c2p7vn27mi9gdb8n0"
     }
   },
   {
@@ -7440,10 +7220,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "82",
-      "Name": "be46lt7vn27lk1dechs0"
     }
   },
   {
@@ -7523,10 +7299,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "83",
-      "Name": "be46kk7vn27lk1decesg"
     }
   },
   {
@@ -7607,10 +7379,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "84",
-      "Name": "be46kk7vn27lk1decfbg"
     }
   },
   {
@@ -7884,10 +7652,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "87",
-      "Name": "be4eoifvn27mnbvee3ag"
     }
   },
   {
@@ -7969,10 +7733,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "88",
-      "Name": "be46jcvvn27lk1dec9cg"
     }
   },
   {
@@ -8163,10 +7923,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "90",
-      "Name": "be4pp3vvn27o06iajpc0"
     }
   },
   {
@@ -8350,10 +8106,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "92",
-      "Name": "be46luvvn27lk1deckcg"
     }
   },
   {
@@ -8433,10 +8185,6 @@
           "Original": -4
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "93",
-      "Name": "be4bq9vvn27mek306b90"
     }
   },
   {
@@ -8682,10 +8430,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "94",
-      "Name": "be4eojfvn27mnbvee3n0"
     }
   },
   {
@@ -8757,10 +8501,6 @@
           "Original": 150
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "95",
-      "Name": "be4pp3vvn27o06iajqeg"
     }
   },
   {
@@ -8793,10 +8533,6 @@
       },
       "Entity": "96",
       "Strength": 1
-    },
-    "ecs.Named": {
-      "Entity": "96",
-      "Name": "be4pr0nvn27o06iajrc0"
     }
   },
   {
@@ -8897,10 +8633,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "97",
-      "Name": "be4pvl7vn27o06iak5gg"
     }
   },
   {
@@ -9094,10 +8826,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "100",
-      "Name": "be4pvnfvn27o06iak8cg"
     }
   },
   {
@@ -9418,10 +9146,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "106",
-      "Name": "be46jlnvn27lk1decc10"
     }
   },
   {
@@ -10741,8 +10465,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.78125,
-          "Reverse": true,
+          "Percent": 0.75,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -11205,101 +10929,109 @@
       "Start": "150"
     },
     "behaviors.ActorState": {
-      "Action": "151",
+      "Action": "150",
       "Entity": "152"
     },
     "behaviors.ParticleEmitter": {
       "Entity": "152",
       "Particles": [
-        "184",
-        "231",
-        "255",
-        "223",
-        "236",
-        "244",
-        "249",
-        "172",
-        "186",
-        "210",
-        "183",
-        "199",
-        "200",
-        "155",
-        "162",
-        "166",
-        "177",
-        "243",
-        "251",
-        "170",
-        "178",
+        "165",
+        "190",
+        "198",
         "208",
         "213",
-        "202",
-        "216",
-        "239",
-        "230",
-        "237",
-        "240",
-        "163",
-        "168",
-        "187",
-        "197",
-        "227",
-        "247",
-        "158",
-        "165",
-        "182",
-        "188",
         "225",
-        "228",
-        "235",
         "245",
-        "157",
-        "169",
-        "174",
-        "189",
-        "246",
-        "167",
-        "175",
-        "159",
-        "190",
-        "194",
-        "233",
-        "232",
-        "234",
-        "241",
-        "173",
-        "185",
-        "203",
-        "207",
+        "158",
+        "168",
+        "229",
         "250",
         "253",
-        "254",
-        "196",
-        "224",
-        "238",
-        "248",
-        "211",
-        "209",
-        "215",
-        "226",
-        "242",
-        "180",
-        "181",
+        "261",
         "195",
-        "201",
-        "252",
-        "171",
+        "235",
+        "243",
+        "257",
         "179",
-        "204",
+        "209",
+        "238",
+        "251",
+        "255",
+        "169",
+        "183",
+        "217",
+        "230",
+        "262",
+        "177",
+        "223",
+        "224",
+        "228",
+        "263",
+        "194",
+        "201",
+        "215",
+        "218",
+        "241",
+        "216",
         "156",
-        "160",
-        "161",
-        "164",
+        "159",
+        "162",
+        "167",
+        "173",
         "205",
         "212",
+        "240",
+        "242",
+        "260",
+        "239",
+        "155",
+        "161",
+        "189",
+        "200",
+        "226",
+        "227",
+        "233",
+        "256",
+        "160",
+        "164",
+        "175",
+        "187",
+        "196",
+        "197",
+        "258",
+        "172",
+        "181",
+        "202",
+        "207",
         "214",
-        "229"
+        "231",
+        "252",
+        "244",
+        "163",
+        "178",
+        "180",
+        "185",
+        "188",
+        "203",
+        "237",
+        "259",
+        "170",
+        "184",
+        "199",
+        "210",
+        "264",
+        "157",
+        "171",
+        "174",
+        "182",
+        "232",
+        "236",
+        "166",
+        "186",
+        "204",
+        "211",
+        "234",
+        "246"
       ],
       "Source": "153",
       "Vel": 15,
@@ -11543,10 +11275,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "191",
-      "Name": "ckqbdl5mdsrmu07rpql0"
     }
   },
   {
@@ -11980,10 +11708,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "221",
-      "Name": "ckqk9glmdsria0nrngq0"
     }
   },
   {
@@ -12068,10 +11792,6 @@
           "Original": 64
         }
       }
-    },
-    "ecs.Named": {
-      "Entity": "222",
-      "Name": "ckqbdsdmdsrmu07rpqsg"
     }
   }
 ]
