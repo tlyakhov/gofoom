@@ -9,23 +9,22 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/render/state"
 )
 
-func ceilingPick(s *state.Column) {
+func ceilingPick(s *column) {
 	if s.ScreenY >= s.EdgeTop && s.ScreenY < s.ClippedTop {
 		s.PickedSelection = append(s.PickedSelection, selection.SelectableFromCeil(s.Sector))
 	}
 }
 
-func floorPick(s *state.Column) {
+func floorPick(s *column) {
 	if s.ScreenY >= s.ClippedBottom && s.ScreenY < s.EdgeBottom {
 		s.PickedSelection = append(s.PickedSelection, selection.SelectableFromFloor(s.Sector))
 	}
 }
 
 // planes renders the top/bottom (ceiling/floor) portion of a slice.
-func planes(c *state.Column, plane *core.SectorPlane) {
+func planes(c *column, plane *core.SectorPlane) {
 	mat := plane.Surface.Material
 	extras := plane.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)

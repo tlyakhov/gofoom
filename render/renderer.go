@@ -18,13 +18,12 @@ import (
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
-	"tlyakhov/gofoom/render/state"
 )
 
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
-	*state.Config
-	Columns        []state.Column
+	*Config
+	Columns        []column
 	columnGroup    *sync.WaitGroup
 	startingSector *core.Sector
 	textStyle      *TextStyle
@@ -35,7 +34,7 @@ type Renderer struct {
 // NewRenderer constructs a new Renderer.
 func NewRenderer(db *ecs.ECS) *Renderer {
 	r := Renderer{
-		Config: &state.Config{
+		Config: &Config{
 			ScreenWidth:   640,
 			ScreenHeight:  360,
 			FOV:           constants.FieldOfView,
@@ -55,12 +54,12 @@ func NewRenderer(db *ecs.ECS) *Renderer {
 func (r *Renderer) Initialize() {
 	r.Config.Initialize()
 
-	r.Columns = make([]state.Column, r.Blocks)
+	r.Columns = make([]column, r.Blocks)
 
 	for i := range r.Columns {
 		r.Columns[i].Config = r.Config
-		r.Columns[i].PortalColumns = make([]state.Column, constants.MaxPortals)
-		r.Columns[i].Visited = make([]state.SegmentIntersection, constants.MaxPortals)
+		r.Columns[i].PortalColumns = make([]column, constants.MaxPortals)
+		r.Columns[i].Visited = make([]segmentIntersection, constants.MaxPortals)
 		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 		r.Columns[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
@@ -87,7 +86,7 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 	return &concepts.Vector2{x, y}
 }
 
-func (r *Renderer) RenderPortal(c *state.Column) {
+func (r *Renderer) RenderPortal(c *column) {
 	if c.Depth >= constants.MaxPortals-1 {
 		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", c.Sector.Entity)
 		r.Player.Notices.Push(dbg)
@@ -99,7 +98,7 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 	*next = *c
 
 	if c.SectorSegment.AdjacentSegment.PortalTeleports {
-		next.Ray = &state.Ray{Start: c.Start, End: c.End}
+		next.Ray = &Ray{Start: c.Start, End: c.End}
 		c.SectorSegment.PortalMatrix.UnprojectSelf(&next.Ray.Start)
 		c.SectorSegment.PortalMatrix.UnprojectSelf(&next.Ray.End)
 		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&next.Ray.Start)
@@ -115,7 +114,7 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 	}
 
 	// This allocation is ok, does not escape
-	portal := &state.ColumnPortal{Column: next}
+	portal := &columnPortal{column: next}
 	portal.CalcScreen()
 	if portal.AdjSegment != nil {
 		if c.Pick {
@@ -138,11 +137,11 @@ func (r *Renderer) RenderPortal(c *state.Column) {
 
 // RenderSegmentColumn draws or picks a single pixel vertical column given a particular
 // segment intersection.
-func (r *Renderer) RenderSegmentColumn(c *state.Column) {
+func (r *Renderer) RenderSegmentColumn(c *column) {
 	c.CalcScreen()
 
 	c.LightSampler.MaterialSampler.Config = r.Config
-	c.LightSampler.Type = state.LightSamplerCeil
+	c.LightSampler.Type = LightSamplerCeil
 	c.LightSampler.Normal = c.Sector.Top.Normal
 	c.LightSampler.Sector = c.Sector
 	c.LightSampler.Segment = c.Segment
@@ -152,7 +151,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 	} else {
 		planes(c, &c.Sector.Top)
 	}
-	c.LightSampler.Type = state.LightSamplerFloor
+	c.LightSampler.Type = LightSamplerFloor
 	c.LightSampler.Normal = c.Sector.Bottom.Normal
 
 	if c.Pick {
@@ -161,7 +160,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 		planes(c, &c.Sector.Bottom)
 	}
 
-	c.LightSampler.Type = state.LightSamplerWall
+	c.LightSampler.Type = LightSamplerWall
 	c.Segment.Normal.To3D(&c.LightSampler.Normal)
 
 	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
@@ -183,7 +182,7 @@ func (r *Renderer) RenderSegmentColumn(c *state.Column) {
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
-func (r *Renderer) RenderSector(c *state.Column) {
+func (r *Renderer) RenderSector(c *column) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
 	c.Sector.LastSeenFrame.Store(int64(c.ECS.Frame))
@@ -213,7 +212,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 		3. Render a column, potentially visiting portal sectors.
 	*/
 
-	c.SegmentIntersection = &c.Visited[c.Depth]
+	c.segmentIntersection = &c.Visited[c.Depth]
 	cacheValid := !c.Sector.Concave && c.SectorSegment != nil && c.SectorSegment.Sector == c.Sector
 	if cacheValid && c.SectorSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
 		r.ICacheHits.Add(1)
@@ -249,12 +248,12 @@ func (r *Renderer) RenderSector(c *state.Column) {
 			c.RaySegIntersect[1] = c.RaySegTest[1]
 		}
 		if !found {
-			c.SegmentIntersection = nil
+			c.segmentIntersection = nil
 		}
 	}
 
-	if c.SegmentIntersection != nil {
-		c.SegmentIntersection.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
+	if c.segmentIntersection != nil {
+		c.segmentIntersection.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
 		c.IntersectionBottom, c.IntersectionTop = c.Sector.ZAt(dynamic.DynamicRender, c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
@@ -264,7 +263,7 @@ func (r *Renderer) RenderSector(c *state.Column) {
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(column *state.Column, x int, y int, pick bool) []*selection.Selectable {
+func (r *Renderer) RenderColumn(column *column, x int, y int, pick bool) []*selection.Selectable {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
@@ -300,9 +299,9 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
 	column.CameraZ = r.Player.CameraZ
-	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
-	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
-	ewd2s := make([]*state.EntityWithDist2, 0, 64)
+	column.Ray = &Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	column.MaterialSampler = MaterialSampler{Config: r.Config, Ray: column.Ray}
+	ewd2s := make([]*entityWithDist2, 0, 64)
 	column.Sectors = make(containers.Set[*core.Sector])
 	for i := range column.LightLastColIndices {
 		column.LightLastColIndices[i] = 0
@@ -334,7 +333,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 			if vis == nil || !vis.Active {
 				continue
 			}
-			ewd2s = append(ewd2s, &state.EntityWithDist2{
+			ewd2s = append(ewd2s, &entityWithDist2{
 				Body:    b,
 				Dist2:   column.Ray.Start.Dist2(b.Pos.Render.To2D()),
 				Visible: vis,
@@ -345,7 +344,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 				continue
 			}
 			dist := column.Ray.DistTo(&column.RaySegTest)
-			ewd2s = append(ewd2s, &state.EntityWithDist2{
+			ewd2s = append(ewd2s, &entityWithDist2{
 				InternalSegment: s,
 				Dist2:           dist * dist,
 				Sector:          sector,
@@ -353,14 +352,14 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 		}
 	}
 
-	slices.SortFunc(ewd2s, func(a *state.EntityWithDist2, b *state.EntityWithDist2) int {
+	slices.SortFunc(ewd2s, func(a *entityWithDist2, b *entityWithDist2) int {
 		return int(b.Dist2 - a.Dist2)
 	})
 	// This has a bug when rendering portals: these need to be transformed and
 	// clipped through portals appropriately.
-	column.SegmentIntersection = &state.SegmentIntersection{}
+	column.segmentIntersection = &segmentIntersection{}
 	column.LightSampler.MaterialSampler.Config = r.Config
-	column.LightSampler.Type = state.LightSamplerWall
+	column.LightSampler.Type = LightSamplerWall
 	for _, sorted := range ewd2s {
 		if sorted.Body != nil {
 			r.renderBody(sorted, column, xStart, xEnd)
@@ -477,7 +476,7 @@ func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z floa
 }
 
 func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int) {
-	ms := state.MaterialSampler{
+	ms := MaterialSampler{
 		Config: r.Config,
 		ScaleW: uint32(w),
 		ScaleH: uint32(h),
@@ -508,18 +507,18 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 		return nil
 	}
 	// Initialize a column...
-	column := &state.Column{
+	column := &column{
 		Config:        r.Config,
 		EdgeTop:       0,
 		EdgeBottom:    r.ScreenHeight,
 		CameraZ:       r.Player.CameraZ,
-		PortalColumns: make([]state.Column, constants.MaxPortals),
-		Visited:       make([]state.SegmentIntersection, constants.MaxPortals),
+		PortalColumns: make([]column, constants.MaxPortals),
+		Visited:       make([]segmentIntersection, constants.MaxPortals),
 		Sectors:       make(containers.Set[*core.Sector]),
 	}
 	column.LightSampler.MaterialSampler.Config = r.Config
 
-	column.Ray = &state.Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
-	column.MaterialSampler = state.MaterialSampler{Config: r.Config, Ray: column.Ray}
+	column.Ray = &Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	column.MaterialSampler = MaterialSampler{Config: r.Config, Ray: column.Ray}
 	return r.RenderColumn(column, x, y, true)
 }

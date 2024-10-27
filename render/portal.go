@@ -5,17 +5,16 @@ package render
 
 import (
 	"tlyakhov/gofoom/components/selection"
-	"tlyakhov/gofoom/render/state"
 )
 
-func wallHiPick(cp *state.ColumnPortal) {
+func wallHiPick(cp *columnPortal) {
 	if cp.ScreenY >= cp.ClippedTop && cp.ScreenY < cp.AdjClippedTop {
 		cp.PickedSelection = append(cp.PickedSelection, selection.SelectableFromWall(cp.AdjSegment, selection.SelectableHi))
 	}
 }
 
 // wallHi renders the top portion of a portal segment.
-func wallHi(cp *state.ColumnPortal) {
+func wallHi(cp *columnPortal) {
 	mat := cp.AdjSegment.HiSurface.Material
 	extras := cp.AdjSegment.HiSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
@@ -34,7 +33,7 @@ func wallHi(cp *state.ColumnPortal) {
 		cp.RaySegIntersect[2] = (1.0-v)*cp.IntersectionTop + v*cp.AdjTop
 
 		if mat != 0 {
-			cp.MaterialSampler.NU = cp.SegmentIntersection.U
+			cp.MaterialSampler.NU = cp.segmentIntersection.U
 			cp.MaterialSampler.NV = v
 			cp.MaterialSampler.U = transform[0]*cp.MaterialSampler.NU + transform[2]*cp.MaterialSampler.NV + transform[4]
 			cp.MaterialSampler.V = transform[1]*cp.MaterialSampler.NU + transform[3]*cp.MaterialSampler.NV + transform[5]
@@ -51,14 +50,14 @@ func wallHi(cp *state.ColumnPortal) {
 	}
 }
 
-func wallLowPick(cp *state.ColumnPortal) {
+func wallLowPick(cp *columnPortal) {
 	if cp.ScreenY >= cp.AdjClippedBottom && cp.ScreenY < cp.ClippedBottom {
 		cp.PickedSelection = append(cp.PickedSelection, selection.SelectableFromWall(cp.AdjSegment, selection.SelectableLow))
 	}
 }
 
 // wallLow renders the bottom portion of a portal segment.
-func wallLow(cp *state.ColumnPortal) {
+func wallLow(cp *columnPortal) {
 	mat := cp.AdjSegment.LoSurface.Material
 	extras := cp.AdjSegment.LoSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
@@ -77,7 +76,7 @@ func wallLow(cp *state.ColumnPortal) {
 		cp.RaySegIntersect[2] = (1.0-v)*cp.AdjBottom + v*cp.IntersectionBottom
 
 		if mat != 0 {
-			cp.MaterialSampler.NU = cp.SegmentIntersection.U
+			cp.MaterialSampler.NU = cp.segmentIntersection.U
 			cp.MaterialSampler.NV = v
 			cp.MaterialSampler.U = transform[0]*cp.MaterialSampler.NU + transform[2]*cp.MaterialSampler.NV + transform[4]
 			cp.MaterialSampler.V = transform[1]*cp.MaterialSampler.NU + transform[3]*cp.MaterialSampler.NV + transform[5]

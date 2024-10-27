@@ -11,7 +11,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/render/state"
+	"tlyakhov/gofoom/render"
 )
 
 const bounds = 30000
@@ -20,7 +20,7 @@ func BenchmarkLightmapConversion(b *testing.B) {
 	b.Run("Correctness", func(b *testing.B) {
 		s := new(core.Sector)
 		s.Construct(nil)
-		c := state.Config{}
+		c := render.Config{}
 		c.Initialize()
 		v := new(concepts.Vector3)
 		result := new(concepts.Vector3)

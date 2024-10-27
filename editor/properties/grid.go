@@ -17,12 +17,12 @@ import (
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/render"
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
-	rs "tlyakhov/gofoom/render/state"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/layout"
@@ -45,7 +45,7 @@ type Grid struct {
 	state.IEditor
 	GridWidget      *fyne.Container
 	GridWindow      fyne.Window
-	MaterialSampler rs.MaterialSampler
+	MaterialSampler render.MaterialSampler
 
 	refreshIndex int
 }
