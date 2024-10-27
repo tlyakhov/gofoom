@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package state
+package render
 
 import (
 	"math"
@@ -10,8 +10,8 @@ import (
 	"tlyakhov/gofoom/dynamic"
 )
 
-type ColumnPortal struct {
-	*Column
+type columnPortal struct {
+	*column
 	Adj                                 *core.Sector
 	AdjSegment                          *core.SectorSegment
 	AdjTop, AdjBottom                   float64
@@ -19,7 +19,7 @@ type ColumnPortal struct {
 	AdjClippedTop, AdjClippedBottom     int
 }
 
-func (cp *ColumnPortal) CalcScreen() {
+func (cp *columnPortal) CalcScreen() {
 	cp.Adj = core.GetSector(cp.ECS, cp.SectorSegment.AdjacentSector)
 	cp.AdjSegment = cp.SectorSegment.AdjacentSegment
 	cp.AdjBottom, cp.AdjTop = cp.Adj.ZAt(dynamic.DynamicRender, cp.RaySegIntersect.To2D())

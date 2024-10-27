@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package state
+package render
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-type EntityWithDist2 struct {
+type entityWithDist2 struct {
 	Body            *core.Body
 	Visible         *materials.Visible
 	InternalSegment *core.InternalSegment
@@ -22,7 +22,7 @@ type EntityWithDist2 struct {
 	Dist2           float64
 }
 
-type SegmentIntersection struct {
+type segmentIntersection struct {
 	Segment         *core.Segment
 	SectorSegment   *core.SectorSegment
 	RaySegIntersect concepts.Vector3
@@ -33,19 +33,19 @@ type SegmentIntersection struct {
 	IntersectionTop, IntersectionBottom float64
 }
 
-type Column struct {
+type column struct {
 	// Global rendering configuration
 	*Config
 	// Samples shaders & images
 	MaterialSampler
 	// Stores current segment intersection
-	*SegmentIntersection
+	*segmentIntersection
 	// Stores light & shadow data
 	LightSampler LightSampler
 	// Pre-allocated stack of past intersections, for speed
-	Visited []SegmentIntersection
+	Visited []segmentIntersection
 	// Pre-allocated stack of nested columns for portals
-	PortalColumns []Column
+	PortalColumns []column
 	// Pre-allocated slice for sorting bodies and internal segments
 	Sectors containers.Set[*core.Sector]
 	// Following data is for casting rays and intersecting them
@@ -78,11 +78,11 @@ type Column struct {
 	PickedSelection []*selection.Selectable
 }
 
-func (c *Column) ProjectZ(z float64) float64 {
+func (c *column) ProjectZ(z float64) float64 {
 	return z * c.ViewFix[c.ScreenX] / c.Distance
 }
 
-func (c *Column) CalcScreen() {
+func (c *column) CalcScreen() {
 	// Screen slice precalculation
 	c.ProjectedTop = c.ProjectZ(c.IntersectionTop - c.CameraZ)
 	c.ProjectedBottom = c.ProjectZ(c.IntersectionBottom - c.CameraZ)
@@ -98,7 +98,7 @@ func (c *Column) CalcScreen() {
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 }
 
-func (c *Column) SampleLight(result *concepts.Vector4, material ecs.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {
+func (c *column) SampleLight(result *concepts.Vector4, material ecs.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {
 	lit := materials.GetLit(c.ECS, material)
 
 	if lit == nil {
@@ -181,7 +181,7 @@ func (c *Column) SampleLight(result *concepts.Vector4, material ecs.Entity, worl
 	return lit.Apply(result, &c.Light)
 }
 
-func (c *Column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3) *concepts.Vector4 {
+func (c *column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3) *concepts.Vector4 {
 	extraHash := uint16(c.LightSampler.Type)
 	if c.LightSampler.Type == LightSamplerWall {
 		extraHash += c.Segment.LightExtraHash

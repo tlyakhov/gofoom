@@ -33,8 +33,6 @@ import (
 	"tlyakhov/gofoom/editor/state"
 	"tlyakhov/gofoom/render"
 
-	rs "tlyakhov/gofoom/render/state"
-
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
 )
@@ -96,7 +94,7 @@ func NewEditor() *Editor {
 		entityIconCache: xsync.NewMapOf[ecs.Entity, entityIconCacheItem](),
 	}
 	e.Grid.IEditor = e
-	e.Grid.MaterialSampler.Ray = &rs.Ray{}
+	e.Grid.MaterialSampler.Ray = &render.Ray{}
 	e.ResizeRenderer(320, 240)
 	e.MapViewGrid.Current = &e.Edit.MapView
 

@@ -6,10 +6,9 @@ package render
 import (
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/render/state"
 )
 
-func (r *Renderer) renderInternalSegment(ewd *state.EntityWithDist2, c *state.Column, xStart, xEnd int) {
+func (r *Renderer) renderInternalSegment(ewd *entityWithDist2, c *column, xStart, xEnd int) {
 	c.Sector = ewd.Sector
 	c.Segment = &ewd.InternalSegment.Segment
 	c.IntersectionTop = ewd.InternalSegment.Top
@@ -35,7 +34,7 @@ func (r *Renderer) renderInternalSegment(ewd *state.EntityWithDist2, c *state.Co
 		c.Distance = c.Ray.DistTo(&c.RaySegTest)
 		c.RaySegIntersect[0] = c.RaySegTest[0]
 		c.RaySegIntersect[1] = c.RaySegTest[1]
-		c.SegmentIntersection.U = c.RaySegTest.Dist(ewd.InternalSegment.A) / ewd.InternalSegment.Length
+		c.segmentIntersection.U = c.RaySegTest.Dist(ewd.InternalSegment.A) / ewd.InternalSegment.Length
 
 		c.CalcScreen()
 

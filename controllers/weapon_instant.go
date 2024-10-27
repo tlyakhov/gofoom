@@ -14,13 +14,13 @@ import (
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
-	"tlyakhov/gofoom/render/state"
+	"tlyakhov/gofoom/render"
 )
 
 type WeaponInstantController struct {
 	ecs.BaseController
 	*behaviors.WeaponInstant
-	state.MaterialSampler
+	render.MaterialSampler
 	Body  *core.Body
 	Class *behaviors.WeaponClass
 
@@ -50,8 +50,8 @@ func (wc *WeaponInstantController) Target(target ecs.Attachable) bool {
 // This is similar to the code for lighting
 func (wc *WeaponInstantController) Cast() *selection.Selectable {
 	var s *selection.Selectable
-	wc.MaterialSampler.Config = &state.Config{ECS: wc.Body.ECS}
-	wc.MaterialSampler.Ray = &state.Ray{Angle: wc.Body.Angle.Now}
+	wc.MaterialSampler.Config = &render.Config{ECS: wc.Body.ECS}
+	wc.MaterialSampler.Ray = &render.Ray{Angle: wc.Body.Angle.Now}
 
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
 	idist2 := 0.0

@@ -5,17 +5,16 @@ package render
 
 import (
 	"tlyakhov/gofoom/components/selection"
-	"tlyakhov/gofoom/render/state"
 )
 
-func wallPick(s *state.Column) {
+func wallPick(s *column) {
 	if s.ScreenY >= s.ClippedTop && s.ScreenY < s.ClippedBottom {
 		s.PickedSelection = append(s.PickedSelection, selection.SelectableFromWall(s.SectorSegment, selection.SelectableMid))
 	}
 }
 
 // wall renders the wall portion (potentially over a portal).
-func (r *Renderer) wall(c *state.Column) {
+func (r *Renderer) wall(c *column) {
 	mat := c.Segment.Surface.Material
 	extras := c.Segment.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)
@@ -49,7 +48,7 @@ func (r *Renderer) wall(c *state.Column) {
 		c.RaySegIntersect[2] = c.IntersectionTop*(1.0-v) + v*c.IntersectionBottom
 
 		if mat != 0 {
-			c.MaterialSampler.NU = c.SegmentIntersection.U
+			c.MaterialSampler.NU = c.segmentIntersection.U
 			c.MaterialSampler.NV = v
 			c.MaterialSampler.U = transform[0]*c.MaterialSampler.NU + transform[2]*c.MaterialSampler.NV + transform[4]
 			c.MaterialSampler.V = transform[1]*c.MaterialSampler.NU + transform[3]*c.MaterialSampler.NV + transform[5]

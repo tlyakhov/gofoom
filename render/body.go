@@ -9,10 +9,9 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/render/state"
 )
 
-func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStart, xEnd int) {
+func (r *Renderer) renderBody(ebd *entityWithDist2, c *column, xStart, xEnd int) {
 	b := ebd.Body
 	// If it's lit, render a pixel
 	if ebd.Visible.PixelOnly {
@@ -70,7 +69,7 @@ func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStar
 	if lit := materials.GetLit(r.ECS, b.Entity); lit != nil {
 		ls := &c.LightSampler
 		ls.Sector = b.Sector()
-		ls.Type = state.LightSamplerBody
+		ls.Type = LightSamplerBody
 		ls.MapIndex = c.WorldToLightmapAddress(ls.Sector, b.Pos.Render, uint16(ls.Type))
 		ls.Segment = nil
 		ls.InputBody = b.Entity
@@ -116,7 +115,7 @@ func (r *Renderer) renderBody(ebd *state.EntityWithDist2, c *state.Column, xStar
 	}
 }
 
-func (r *Renderer) renderBodyPixel(ebd *state.EntityWithDist2, c *state.Column, sx, ex int) {
+func (r *Renderer) renderBodyPixel(ebd *entityWithDist2, c *column, sx, ex int) {
 	b := ebd.Body
 	lit := materials.GetLit(r.ECS, b.Entity)
 	scr := r.WorldToScreen(b.Pos.Render)
