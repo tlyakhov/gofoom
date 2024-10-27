@@ -79,8 +79,9 @@ func (r *Renderer) DebugInfo() {
 	r.Print(ts, 4, 24, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
 	if r.PlayerBody.SectorEntity != 0 {
 		entity := r.PlayerBody.SectorEntity
-		s := core.GetSector(r.ECS, entity).Lightmap.Size()
-		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v", entity.Format(r.ECS), s))
+		sector := core.GetSector(r.ECS, entity)
+		s := sector.Lightmap.Size()
+		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v, Colliders: %v", entity.Format(r.ECS), s, len(sector.Colliders)))
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(), playerMobile.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
 	}
 

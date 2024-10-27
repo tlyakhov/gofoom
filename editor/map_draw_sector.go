@@ -132,7 +132,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		}
 		if isPartOfPVS && !segmentSelected && !sectorSelected {
-			mw.Context.SetDash(4, 4)
+			mw.Context.SetDash(4, 8)
 		} else {
 			mw.Context.SetDash()
 		}

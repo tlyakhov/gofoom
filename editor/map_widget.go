@@ -85,26 +85,26 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 
 	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorCID)
 	for i := range colSector.Cap() {
-		if sector := colSector.Value(i); sector != nil {
+		if sector := colSector.Value(i); sector != nil && !sector.System {
 			mw.DrawSector(sector, pvsSector[colSector.Value(i).Entity] != nil)
 		}
 	}
 	colSeg := ecs.ColumnFor[core.InternalSegment](editor.ECS, core.InternalSegmentCID)
 	for i := range colSeg.Cap() {
-		if seg := colSeg.Value(i); seg != nil {
+		if seg := colSeg.Value(i); seg != nil && !seg.System {
 			mw.DrawInternalSegment(seg)
 		}
 	}
 	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](editor.ECS, behaviors.ActionWaypointCID)
 	for i := range colWaypoint.Cap() {
-		if waypoint := colWaypoint.Value(i); waypoint != nil {
+		if waypoint := colWaypoint.Value(i); waypoint != nil && !waypoint.System {
 			mw.DrawActions(waypoint.Entity)
 		}
 	}
 	if editor.BodiesVisible {
 		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyCID)
 		for i := range col3.Cap() {
-			if body := col3.Value(i); body != nil {
+			if body := col3.Value(i); body != nil && !body.System {
 				mw.DrawBody(body)
 			}
 		}

@@ -272,6 +272,7 @@ func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 		case *core.Sector:
 			// Don't clone the bodies.
 			target.Bodies = make(map[ecs.Entity]*core.Body)
+			target.Colliders = make(map[ecs.Entity]*core.Mobile)
 			// Clear segments
 			target.Segments = []*core.SectorSegment{}
 

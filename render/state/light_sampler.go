@@ -342,13 +342,12 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		return refs[i].Entity < refs[j].Entity
 	})*/
 
-	for entity, body := range ls.Sector.PVL {
-		light := core.GetLight(body.ECS, entity)
-		if !light.IsActive() {
+	for _, body := range ls.Sector.PVL {
+		if !body.IsActive() {
 			continue
 		}
-
-		if !body.IsActive() {
+		light := core.GetLight(body.ECS, body.Entity)
+		if !light.IsActive() {
 			continue
 		}
 		ls.Filter[0] = 0

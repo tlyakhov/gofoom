@@ -143,7 +143,13 @@ func (bc *BodyController) Enter(sector *core.Sector) {
 	bc.Body.SectorEntity = sector.Entity
 
 	if core.GetLight(bc.ECS, bc.Entity) != nil {
-		bc.Sector.PVL[bc.Entity] = bc.Body
+		bc.Sector.PVL = append(bc.Sector.PVL, bc.Body)
+	}
+
+	if m := core.GetMobile(bc.ECS, bc.Entity); m != nil {
+		if m.CrBody != core.CollideNone || m.CrPlayer != core.CollideNone {
+			bc.Sector.Colliders[m.Entity] = m
+		}
 	}
 
 	if bc.Body.OnGround {
@@ -165,5 +171,10 @@ func (bc *BodyController) Exit() {
 	BodySectorScript(bc.Sector.ExitScripts, bc.Body, bc.Sector)
 	delete(bc.Sector.Bodies, bc.Entity)
 	// Don't delete out of the PVL, avoid flickering
+	if m := core.GetMobile(bc.ECS, bc.Entity); m != nil {
+		if m.CrBody != core.CollideNone || m.CrPlayer != core.CollideNone {
+			delete(bc.Sector.Colliders, m.Entity)
+		}
+	}
 	bc.SectorEntity = 0
 }
