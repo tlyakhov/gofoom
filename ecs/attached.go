@@ -38,6 +38,19 @@ func (a *Attached) Base() *Attached {
 	return a
 }
 
+func (a *Attached) IsEntitySubstituted() bool {
+	return len(a.entityStack) > 0
+}
+
+// Return whichever Entity this component is actually attached to (rather than
+// a linked substitution)
+func (a *Attached) UnlinkedEntity() Entity {
+	if a.IsEntitySubstituted() {
+		return a.entityStack[0]
+	}
+	return a.Entity
+}
+
 func (a *Attached) OnDetach() {
 	if a.ECS == nil {
 		return

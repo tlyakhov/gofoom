@@ -47,7 +47,7 @@ func (n *Linked) OnDetach() {
 	// Remove this entity from any linked copies
 	for _, sourceComponent := range n.SourceComponents {
 		if sourceComponent != nil {
-			sourceComponent.Base().linkedCopies.Delete(n.Entity)
+			sourceComponent.Base().linkedCopies.Delete(n.UnlinkedEntity())
 		}
 	}
 	n.SourceComponents = make(ComponentTable, 0)
@@ -56,7 +56,7 @@ func (n *Linked) OnDetach() {
 func (n *Linked) Recalculate() {
 	for _, sourceComponent := range n.SourceComponents {
 		if sourceComponent != nil {
-			sourceComponent.Base().linkedCopies.Delete(n.Entity)
+			sourceComponent.Base().linkedCopies.Delete(n.UnlinkedEntity())
 		}
 	}
 	n.SourceComponents = make(ComponentTable, 0)
@@ -66,34 +66,43 @@ func (n *Linked) Recalculate() {
 				continue
 			}
 			n.SourceComponents.Set(sourceComponent)
-			sourceComponent.Base().linkedCopies.Add(n.Entity)
+			sourceComponent.Base().linkedCopies.Add(n.UnlinkedEntity())
 		}
 	}
 }
 
+// These methods recurse towards roots. In other words, if you have:
+// A < B < C (where B & C are ecs.Linked components) and you do
+// C.pushEntityFields, it will recurse into A.
 func (n *Linked) PushEntityFields() {
 	for _, sourceEntity := range n.Sources {
-		for _, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
+		for i, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
 			if sourceComponent == nil {
 				continue
 			}
-			a := sourceComponent.Base()
-			a.entityStack = append(a.entityStack, a.Entity)
-			a.Entity = n.Entity
+			parent := sourceComponent.Base()
+			parent.entityStack = append(parent.entityStack, parent.Entity)
+			parent.Entity = n.Entity
+			if i == 0 { // Recurse into linked component
+				sourceComponent.(*Linked).PushEntityFields()
+			}
 		}
 	}
 }
 
 func (n *Linked) PopEntityFields() {
 	for _, sourceEntity := range n.Sources {
-		for _, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
+		for i, sourceComponent := range n.ECS.AllComponents(sourceEntity) {
 			if sourceComponent == nil {
 				continue
 			}
-			a := sourceComponent.Base()
-			last := len(a.entityStack) - 1
-			a.Entity = a.entityStack[last]
-			a.entityStack = a.entityStack[:last]
+			if i == 0 { // Recurse into linked component
+				sourceComponent.(*Linked).PopEntityFields()
+			}
+			parent := sourceComponent.Base()
+			last := len(parent.entityStack) - 1
+			parent.Entity = parent.entityStack[last]
+			parent.entityStack = parent.entityStack[:last]
 		}
 	}
 }

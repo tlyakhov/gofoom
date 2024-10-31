@@ -324,6 +324,10 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 		r.RenderColumn(column, x, 0, false)
 	}
 
+	// TODO: This has a bug: we could have a body in a different sector actually
+	// show up in a block that hasn't visited that sector. We could either
+	// render bodies single-threaded, or attempt to do something more clever
+	// by attempting to render bodies for adjacent sectors.
 	for sector := range column.Sectors {
 		for _, b := range sector.Bodies {
 			if b == nil || !b.Active {
@@ -449,21 +453,21 @@ func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z floa
 	inva := 1.0 - sample[3]
 	dst := &r.FrameBuffer[screenIndex]
 	dst[3] = dst[3]*inva + sample[3]
-	if sample[2] < 0 {
+	if sample[2] <= 0 {
 		dst[2] *= inva
 	} else if sample[2] >= 1 {
 		dst[2] = 1
 	} else {
 		dst[2] = dst[2]*inva + sample[2]
 	}
-	if sample[1] < 0 {
+	if sample[1] <= 0 {
 		dst[1] *= inva
 	} else if sample[1] >= 1 {
 		dst[1] = 1
 	} else {
 		dst[1] = dst[1]*inva + sample[1]
 	}
-	if sample[0] < 0 {
+	if sample[0] <= 0 {
 		dst[0] *= inva
 	} else if sample[0] >= 1 {
 		dst[0] = 1
@@ -508,7 +512,6 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 	}
 	// Initialize a column...
 	column := &column{
-		Config:        r.Config,
 		EdgeTop:       0,
 		EdgeBottom:    r.ScreenHeight,
 		CameraZ:       r.Player.CameraZ,

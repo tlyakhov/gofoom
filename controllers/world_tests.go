@@ -315,15 +315,15 @@ func CreateTestWorld3(db *ecs.ECS) {
 			}
 			sector1.Recalculate()
 			sector2.Recalculate()
-
-			if rand.Uint32()%45 == 0 {
-				eLight := archetypes.CreateLightBody(db)
-				lightBody := core.GetBody(db, eLight)
-				lightBody.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
-				lightBody.Pos.ResetToOriginal()
-				log.Println("Generated light")
-			}
 		}
+	}
+
+	for range 5 {
+		eLight := archetypes.CreateLightBody(db)
+		lightBody := core.GetBody(db, eLight)
+		lightBody.Pos.Original = concepts.Vector3{float64(testw*scale) * rand.Float64(), float64(testh*scale) * rand.Float64(), 200}
+		lightBody.Pos.ResetToOriginal()
+		log.Println("Generated light")
 	}
 
 	CreateSpawn(db)

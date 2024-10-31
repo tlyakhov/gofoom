@@ -32,7 +32,7 @@ func (pc *ProximityController) Methods() ecs.ControllerMethod {
 
 func (pc *ProximityController) Target(target ecs.Attachable) bool {
 	pc.Proximity = target.(*behaviors.Proximity)
-	return pc.IsActive()
+	return pc.Proximity.IsActive()
 }
 
 func (pc *ProximityController) isEntityPlayerAndActing(entity ecs.Entity) bool {
@@ -60,6 +60,15 @@ func (pc *ProximityController) Recalculate() {
 	}
 }
 
+func (pc *ProximityController) isValid(e ecs.Entity) bool {
+	for cid := range pc.ValidComponents {
+		if pc.ECS.Component(e, cid) == nil {
+			return false
+		}
+	}
+	return true
+}
+
 func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
 	pc.Firing = true
 	if pc.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
@@ -78,11 +87,14 @@ func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
 
 func (pc *ProximityController) sectorBodies(sector *core.Sector, pos *concepts.Vector3) {
 	for _, body := range sector.Bodies {
+		if !body.Active || body.Entity == pc.Entity {
+			continue
+		}
 		if (pc.flags&behaviors.ProximityTargetsBody) != 0 &&
 			!pc.isEntityPlayerAndActing(body.Entity) {
 			continue
 		}
-		if pos.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
+		if pos.Dist2(&body.Pos.Now) < pc.Range*pc.Range && pc.isValid(body.Entity) {
 			pc.fire(body, nil)
 		}
 	}
@@ -91,7 +103,11 @@ func (pc *ProximityController) sectorBodies(sector *core.Sector, pos *concepts.V
 func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 	pc.flags |= behaviors.ProximityOnSector
 	for _, pvs := range sector.PVS {
-		if pc.ActsOnSectors && sector.Center.Dist2(&pvs.Center) < pc.Range*pc.Range {
+		if !pvs.Active || pvs.Entity == pc.Entity {
+			continue
+		}
+		if pc.ActsOnSectors &&
+			sector.Center.Dist2(&pvs.Center) < pc.Range*pc.Range && pc.isValid(pvs.Entity) {
 			pc.flags |= behaviors.ProximityTargetsSector
 			pc.flags &= ^behaviors.ProximityTargetsBody
 			pc.fire(nil, sector)
@@ -111,7 +127,9 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	pc.flags |= behaviors.ProximityOnBody
 	container := body.Sector()
 	for _, sector := range container.PVS {
-		if pc.ActsOnSectors && sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range {
+		if sector.Active && pc.ActsOnSectors &&
+			sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range &&
+			pc.isValid(sector.Entity) {
 			pc.flags |= behaviors.ProximityTargetsSector
 			pc.flags &= ^behaviors.ProximityTargetsBody
 			pc.fire(nil, sector)
@@ -122,28 +140,22 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	}
 }
 
-func (pc *ProximityController) proximity(proximityEntity ecs.Entity) {
-	// TODO: Add InternalSegments
-	if sector := core.GetSector(pc.ECS, proximityEntity); sector != nil {
-		pc.proximityOnSector(sector)
-	} else if body := core.GetBody(pc.ECS, proximityEntity); body != nil && body.SectorEntity != 0 {
-		pc.proximityOnBody(body)
-	}
-}
-
 func (pc *ProximityController) Always() {
 	pc.Firing = false
 	/*
 		We have several factors to consider:
-		1. Is the component referring to an entity, attached to one, or both?
-		2. What kind of entity is the proximity on? (sector, body, etc...)
-		3. What kind of target does this component respond to (sector, body,
+		1. What kind of entity is the proximity on? (sector, body, etc...)
+		2. What kind of target does this component respond to (sector, body,
 		   etc...)
 
 	*/
 
-	// Is the target itself a body or sector?
 	pc.flags = 0
 	pc.onEntity = pc.Entity
-	pc.proximity(pc.Entity)
+	// TODO: Add InternalSegments
+	if sector := core.GetSector(pc.ECS, pc.Entity); sector != nil && sector.Active {
+		pc.proximityOnSector(sector)
+	} else if body := core.GetBody(pc.ECS, pc.Entity); body != nil && body.SectorEntity != 0 && body.Active {
+		pc.proximityOnBody(body)
+	}
 }

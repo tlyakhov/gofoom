@@ -5,7 +5,10 @@ package behaviors
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -26,6 +29,9 @@ type Proximity struct {
 	ActsOnSectors        bool    `editable:"Acts on Sectors?"`
 	Range                float64 `editable:"Range"`
 	Hysteresis           float64 `editable:"Hysteresis (ms)"`
+
+	ValidComponents containers.Set[ecs.ComponentID] `editable:"ValidComponents"`
+
 	// TODO: Do we actually need a slice here? Maybe one is fine.
 	Scripts []*core.Script `editable:"Scripts"`
 
@@ -57,6 +63,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	p.Hysteresis = 200
 	p.RequiresPlayerAction = false
 	p.ActsOnSectors = false
+	p.ValidComponents = make(containers.Set[ecs.ComponentID])
 
 	if data == nil {
 		return
@@ -80,6 +87,16 @@ func (p *Proximity) Construct(data map[string]any) {
 	if v, ok := data["Scripts"]; ok {
 		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v, nil)
 	}
+
+	if v, ok := data["ValidComponents"]; ok {
+		split := strings.Split(v.(string), ",")
+		for _, s := range split {
+			id := ecs.Types().IDs[s]
+			if id != 0 {
+				p.ValidComponents.Add(id)
+			}
+		}
+	}
 }
 
 func (p *Proximity) Serialize() map[string]any {
@@ -102,6 +119,17 @@ func (p *Proximity) Serialize() map[string]any {
 
 	if len(p.Scripts) > 0 {
 		result["Scripts"] = ecs.SerializeSlice(p.Scripts)
+	}
+
+	if len(p.ValidComponents) > 0 {
+		s := ""
+		for id := range p.ValidComponents {
+			if len(s) > 0 {
+				s += ","
+			}
+			s += strconv.Itoa(int(id))
+		}
+		result["ValidComponents"] = s
 	}
 
 	return result

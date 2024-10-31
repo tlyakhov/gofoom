@@ -48,7 +48,7 @@ func (ui *UI) SetPage(page *Page) {
 	page.tooltipAlpha.Attach(ui.ECS.Simulation)
 	a := page.tooltipAlpha.NewAnimation()
 	page.tooltipAlpha.Animation = a
-	a.Duration = 100
+	a.Duration = 50
 	a.Start = 0
 	a.End = 1.0
 	a.TweeningFunc = dynamic.EaseInOut2
@@ -63,7 +63,7 @@ func (ui *UI) SetPage(page *Page) {
 		w.highlight.SetAll(ui.WidgetColor)
 		a := w.highlight.NewAnimation()
 		w.highlight.Animation = a
-		a.Duration = 500
+		a.Duration = 250
 		a.Start = w.highlight.Original
 		a.End = ui.SelectedColor
 		a.TweeningFunc = dynamic.EaseInOut2
