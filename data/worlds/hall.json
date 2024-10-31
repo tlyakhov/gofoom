@@ -18,7 +18,7 @@
           "Count": "0",
           "Image": "98",
           "Limit": "100",
-          "ValidClasses": "Pluk,Flower"
+          "ValidClasses": "Flower,Pluk"
         }
       ],
       "Spawn": false
@@ -2592,21 +2592,6 @@
   },
   {
     "Entity": "32",
-    "behaviors.InventoryItem": {
-      "Class": "Flower",
-      "Entity": "32",
-      "Image": "98"
-    },
-    "behaviors.Proximity": {
-      "Entity": "32",
-      "Range": 20,
-      "Scripts": [
-        {
-          "Code": "if body == nil { return }\np := behaviors.GetPlayer(s.ECS, body.Entity)\nitem := behaviors.GetInventoryItem(s.ECS,onEntity)\nif p == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(p, item)",
-          "Style": "ScriptStyleStatement"
-        }
-      ]
-    },
     "core.Body": {
       "Angle": {
         "Original": 0
@@ -2621,8 +2606,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.3515625,
-          "Reverse": false,
+          "Percent": 0.9765625,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2643,39 +2628,15 @@
         }
       }
     },
-    "ecs.Named": {
-      "Entity": "32",
-      "Name": "Item Test"
-    },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
+    "ecs.Linked": {
+      "Entities": [
+        "249"
+      ],
       "Entity": "32"
     },
-    "materials.Sprite": {
-      "Angles": "0",
+    "ecs.Named": {
       "Entity": "32",
-      "Frame": {
-        "Damping": 0,
-        "Freq": 0.000001,
-        "Original": "0",
-        "Response": 0
-      },
-      "Material": "98"
-    },
-    "materials.Visible": {
-      "Ambient": 1,
-      "Entity": "32",
-      "Shadow": "ShadowImage"
+      "Name": "Flower (Starting Room)"
     }
   },
   {
@@ -3661,7 +3622,7 @@
       "Start": "135"
     },
     "behaviors.ActorState": {
-      "Action": "137",
+      "Action": "146",
       "Entity": "42"
     },
     "behaviors.Alive": {
@@ -6991,13 +6952,13 @@
         },
         "Z": {
           "Animation": {
-            "Active": true,
+            "Active": false,
             "Coordinates": "AnimationCoordinatesAbsolute",
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 0.0859375,
-            "Reverse": true,
+            "Percent": 1,
+            "Reverse": false,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
@@ -10465,8 +10426,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.75,
-          "Reverse": false,
+          "Percent": 0.578125,
+          "Reverse": true,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -10487,6 +10448,12 @@
         }
       }
     },
+    "ecs.Linked": {
+      "Entities": [
+        "246"
+      ],
+      "Entity": "132"
+    },
     "materials.Sprite": {
       "Angles": "0",
       "Entity": "132",
@@ -10497,11 +10464,6 @@
         "Response": 0
       },
       "Material": "133"
-    },
-    "materials.Visible": {
-      "Ambient": 1,
-      "Entity": "132",
-      "Shadow": "ShadowImage"
     }
   },
   {
@@ -10929,109 +10891,110 @@
       "Start": "150"
     },
     "behaviors.ActorState": {
-      "Action": "150",
+      "Action": "151",
       "Entity": "152"
     },
     "behaviors.ParticleEmitter": {
       "Entity": "152",
       "Particles": [
-        "165",
-        "190",
-        "198",
-        "208",
-        "213",
-        "225",
-        "245",
-        "158",
-        "168",
-        "229",
-        "250",
-        "253",
-        "261",
-        "195",
-        "235",
-        "243",
-        "257",
-        "179",
-        "209",
-        "238",
-        "251",
-        "255",
-        "169",
-        "183",
-        "217",
-        "230",
-        "262",
-        "177",
-        "223",
-        "224",
-        "228",
-        "263",
-        "194",
-        "201",
-        "215",
         "218",
-        "241",
-        "216",
-        "156",
-        "159",
-        "162",
-        "167",
-        "173",
-        "205",
-        "212",
-        "240",
-        "242",
-        "260",
-        "239",
-        "155",
-        "161",
-        "189",
-        "200",
-        "226",
-        "227",
-        "233",
-        "256",
-        "160",
-        "164",
-        "175",
-        "187",
-        "196",
-        "197",
-        "258",
-        "172",
-        "181",
-        "202",
-        "207",
-        "214",
-        "231",
-        "252",
-        "244",
-        "163",
-        "178",
-        "180",
-        "185",
-        "188",
-        "203",
-        "237",
-        "259",
         "170",
-        "184",
-        "199",
-        "210",
-        "264",
-        "157",
         "171",
+        "177",
+        "207",
+        "208",
+        "254",
+        "162",
+        "194",
+        "198",
+        "228",
+        "242",
+        "172",
+        "183",
+        "215",
+        "224",
+        "241",
+        "263",
+        "163",
+        "167",
+        "210",
+        "216",
+        "226",
         "174",
-        "182",
-        "232",
-        "236",
-        "166",
-        "186",
-        "204",
         "211",
+        "217",
+        "255",
+        "230",
+        "237",
+        "252",
+        "158",
+        "159",
+        "179",
+        "195",
+        "204",
+        "188",
+        "261",
+        "165",
+        "197",
+        "231",
+        "238",
+        "266",
+        "260",
+        "200",
+        "205",
+        "214",
+        "233",
+        "245",
+        "265",
+        "155",
+        "185",
+        "187",
+        "190",
+        "247",
+        "212",
+        "232",
         "234",
-        "246"
+        "157",
+        "175",
+        "178",
+        "201",
+        "203",
+        "253",
+        "258",
+        "184",
+        "229",
+        "248",
+        "259",
+        "235",
+        "240",
+        "250",
+        "156",
+        "168",
+        "186",
+        "213",
+        "257",
+        "166",
+        "169",
+        "209",
+        "225",
+        "262",
+        "243",
+        "256",
+        "264",
+        "164",
+        "196",
+        "223",
+        "227",
+        "202",
+        "236",
+        "239",
+        "160",
+        "161",
+        "173",
+        "189",
+        "199",
+        "244",
+        "251"
       ],
       "Source": "153",
       "Vel": 15,
@@ -11151,9 +11114,9 @@
       "Entity": "176",
       "Pos": {
         "Original": {
-          "X": -260,
-          "Y": 170,
-          "Z": -54
+          "X": 40,
+          "Y": -250,
+          "Z": 4
         }
       },
       "Size": {
@@ -11165,7 +11128,7 @@
     },
     "ecs.Linked": {
       "Entities": [
-        "32"
+        "249"
       ],
       "Entity": "176"
     }
@@ -11792,6 +11755,72 @@
           "Original": 64
         }
       }
+    }
+  },
+  {
+    "Entity": "246",
+    "behaviors.Proximity": {
+      "Entity": "246",
+      "Range": 50,
+      "Scripts": [
+        {
+          "Code": "if body == nil { return }\np := behaviors.GetPlayer(s.ECS, body.Entity)\nitem := behaviors.GetInventoryItem(s.ECS,onEntity)\nif p == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(p, item)",
+          "Style": "ScriptStyleStatement"
+        }
+      ],
+      "ValidComponents": "24"
+    },
+    "ecs.Named": {
+      "Entity": "246",
+      "Name": "Inventory Item Base"
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      },
+      "Entity": "246"
+    },
+    "materials.Visible": {
+      "Ambient": 1,
+      "Entity": "246",
+      "Shadow": "ShadowImage"
+    }
+  },
+  {
+    "Entity": "249",
+    "behaviors.InventoryItem": {
+      "Class": "Flower",
+      "Entity": "249",
+      "Image": "98"
+    },
+    "ecs.Linked": {
+      "Entities": [
+        "246"
+      ],
+      "Entity": "249"
+    },
+    "ecs.Named": {
+      "Entity": "249",
+      "Name": "Flower Inventory Item"
+    },
+    "materials.Sprite": {
+      "Angles": "0",
+      "Entity": "249",
+      "Frame": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Original": "0",
+        "Response": 0
+      },
+      "Material": "98"
     }
   }
 ]

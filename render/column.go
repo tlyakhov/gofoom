@@ -34,8 +34,6 @@ type segmentIntersection struct {
 }
 
 type column struct {
-	// Global rendering configuration
-	*Config
 	// Samples shaders & images
 	MaterialSampler
 	// Stores current segment intersection

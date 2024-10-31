@@ -217,8 +217,10 @@ func PickUpInventoryItem(p *behaviors.Player, item *behaviors.InventoryItem) {
 			p.Notices.Push("Can't pick up more " + item.Class)
 			return
 		}
+		// TODO: Make Dynamic
 		slot.Count++
 		p.Notices.Push("Picked up a " + item.Class)
+		item.Count--
 		// Disable all the entity components
 		for _, c := range item.ECS.AllComponents(item.Entity) {
 			if c != nil {

@@ -159,38 +159,38 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 		return true
 	}
 
-	v := waypoint.P.Sub(pos)
+	force := waypoint.P.Sub(pos)
 	if ac.NoZ {
-		v[2] = 0
+		force[2] = 0
 		if ac.Body.Pos.Procedural {
 			ac.Body.Pos.Input[2] = ac.Body.Pos.Now[2]
 		}
 	}
-	dist := v.Length()
+	dist := force.Length()
 	if dist > 0 {
-		angle := math.Atan2(v[1], v[0]) * concepts.Rad2deg
+		angle := math.Atan2(force[1], force[0]) * concepts.Rad2deg
 		if ac.FaceNextWaypoint && ac.Body.Angle.Procedural {
 			ac.Body.Angle.Input = angle
 		} else if ac.FaceNextWaypoint {
 			ac.Body.Angle.Now = angle
 		}
 		speed := ac.Speed / dist
-		v.MulSelf(speed)
+		force.MulSelf(speed)
 	}
 	switch {
 	case ac.Mobile != nil:
 		// TODO: Is this a hack?
 		if !ac.Body.OnGround {
-			v.MulSelf(0.1)
+			force.MulSelf(0.1)
 		}
-		ac.Mobile.Force.AddSelf(v)
+		ac.Mobile.Force.AddSelf(force)
 	case ac.Body.Pos.Procedural:
-		ac.Body.Pos.Input.AddSelf(v.MulSelf(constants.TimeStepS))
+		ac.Body.Pos.Input.AddSelf(force.MulSelf(constants.TimeStepS))
 		var bc BodyController
 		bc.Target(ac.Body)
 		bc.findBodySector()
 	default:
-		ac.Body.Pos.Now.AddSelf(v.MulSelf(constants.TimeStepS))
+		ac.Body.Pos.Now.AddSelf(force.MulSelf(constants.TimeStepS))
 		var bc BodyController
 		bc.Target(ac.Body)
 		bc.findBodySector()

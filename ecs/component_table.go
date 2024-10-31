@@ -55,7 +55,7 @@ func (table *ComponentTable) Set(a Attachable) {
 }
 
 // This method should be as efficient as possible, it gets called a lot!
-func (table ComponentTable) Get(cid ComponentID) Attachable {
+func (table ComponentTable) get(cid ComponentID, followLinks bool) Attachable {
 	size := ComponentID(len(table))
 	if size == 0 {
 		return nil
@@ -78,10 +78,18 @@ func (table ComponentTable) Get(cid ComponentID) Attachable {
 		i = (i + 1) % size
 	}
 	// If this table isn't an "instance", just return nil, otherwise try the instance.
-	if table[0] == nil {
+	if table[0] == nil || !followLinks {
 		return nil
 	}
-	return table[0].(*Linked).SourceComponents.Get(cid)
+	return table[0].(*Linked).SourceComponents.get(cid, true)
+}
+
+func (table ComponentTable) Get(cid ComponentID) Attachable {
+	return table.get(cid, true)
+}
+
+func (table ComponentTable) GetNoLinks(cid ComponentID) Attachable {
+	return table.get(cid, false)
 }
 
 func (table *ComponentTable) Delete(cid ComponentID) {
