@@ -15,7 +15,7 @@ import (
 type DynamicStage int
 
 const (
-	DynamicOriginal DynamicStage = iota
+	DynamicSpawn DynamicStage = iota
 	DynamicPrev
 	DynamicRender
 	DynamicNow
@@ -34,9 +34,9 @@ const (
 type DynamicValue[T DynamicType] struct {
 	*Animation[T] `editable:"Animation"`
 
-	Now      T
-	Prev     T
-	Original T `editable:"Value"`
+	Now   T
+	Prev  T
+	Spawn T `editable:"Value"`
 	// If there are runtime errors about this field being nil, it's probably
 	// because the .Attach() method was never called
 	Render        *T
@@ -64,8 +64,8 @@ func (d *DynamicValue[T]) IsProcedural() bool {
 
 func (d *DynamicValue[T]) Value(s DynamicStage) T {
 	switch s {
-	case DynamicOriginal:
-		return d.Original
+	case DynamicSpawn:
+		return d.Spawn
 	case DynamicPrev:
 		return d.Prev
 	case DynamicNow:
@@ -75,22 +75,22 @@ func (d *DynamicValue[T]) Value(s DynamicStage) T {
 	}
 }
 
-func (d *DynamicValue[T]) ResetToOriginal() {
+func (d *DynamicValue[T]) ResetToSpawn() {
 	if d.Render == nil {
-		log.Println("DynamicValue[T].ResetToOriginal: value is unattached to Simulation. Stack trace:")
+		log.Println("DynamicValue[T].ResetToSpawn: value is unattached to Simulation. Stack trace:")
 		log.Println(concepts.StackTrace())
 		return
 	}
-	d.Prev = d.Original
-	d.Now = d.Original
-	*d.Render = d.Original
-	d.Input = d.Original
-	d.prevInput = d.Original
+	d.Prev = d.Spawn
+	d.Now = d.Spawn
+	*d.Render = d.Spawn
+	d.Input = d.Spawn
+	d.prevInput = d.Spawn
 }
 
 func (d *DynamicValue[T]) SetAll(v T) {
-	d.Original = v
-	d.ResetToOriginal()
+	d.Spawn = v
+	d.ResetToSpawn()
 }
 
 func (d *DynamicValue[T]) Attach(sim *Simulation) {
@@ -211,17 +211,17 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 
 	switch dc := any(d).(type) {
 	case *DynamicValue[int]:
-		result["Original"] = strconv.Itoa(dc.Original)
+		result["Original"] = strconv.Itoa(dc.Spawn)
 	case *DynamicValue[float64]:
-		result["Original"] = dc.Original
+		result["Original"] = dc.Spawn
 	case *DynamicValue[concepts.Vector2]:
-		result["Original"] = dc.Original.Serialize()
+		result["Original"] = dc.Spawn.Serialize()
 	case *DynamicValue[concepts.Vector3]:
-		result["Original"] = dc.Original.Serialize()
+		result["Original"] = dc.Spawn.Serialize()
 	case *DynamicValue[concepts.Vector4]:
-		result["Original"] = dc.Original.Serialize(false)
+		result["Original"] = dc.Spawn.Serialize(false)
 	case *DynamicValue[concepts.Matrix2]:
-		result["Original"] = dc.Original.Serialize()
+		result["Original"] = dc.Spawn.Serialize()
 	default:
 		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", d)
 	}
@@ -247,7 +247,7 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 
 func (d *DynamicValue[T]) Construct(data map[string]any) {
 	// Highlighting this with a comment, it's important!
-	defer d.ResetToOriginal()
+	defer d.ResetToSpawn()
 
 	d.Freq = 4.58
 	d.Damping = 0.35
@@ -259,7 +259,7 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 
 	switch sc := any(d).(type) {
 	case *DynamicValue[concepts.Matrix2]:
-		sc.Original.SetIdentity()
+		sc.Spawn.SetIdentity()
 	}
 
 	if data == nil {
@@ -269,17 +269,17 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	if v, ok := data["Original"]; ok {
 		switch dc := any(d).(type) {
 		case *DynamicValue[int]:
-			dc.Original, _ = strconv.Atoi(v.(string))
+			dc.Spawn, _ = strconv.Atoi(v.(string))
 		case *DynamicValue[float64]:
-			dc.Original = v.(float64)
+			dc.Spawn = v.(float64)
 		case *DynamicValue[concepts.Vector2]:
-			dc.Original.Deserialize(v.(map[string]any))
+			dc.Spawn.Deserialize(v.(map[string]any))
 		case *DynamicValue[concepts.Vector3]:
-			dc.Original.Deserialize(v.(map[string]any))
+			dc.Spawn.Deserialize(v.(map[string]any))
 		case *DynamicValue[concepts.Vector4]:
-			dc.Original.Deserialize(v.(map[string]any), false)
+			dc.Spawn.Deserialize(v.(map[string]any), false)
 		case *DynamicValue[concepts.Matrix2]:
-			dc.Original.Deserialize(v.([]any))
+			dc.Spawn.Deserialize(v.([]any))
 		default:
 			log.Panicf("Tried to deserialize SimVar[T] %v where T has no serializer", d)
 		}

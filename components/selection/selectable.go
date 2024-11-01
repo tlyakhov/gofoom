@@ -191,8 +191,8 @@ func (s *Selectable) PositionRange(f func(p *concepts.Vector2)) {
 	case SelectableActionWaypoint:
 		f(s.ActionWaypoint.P.To2D())
 	case SelectableBody:
-		f(s.Body.Pos.Original.To2D())
-		s.Body.Pos.ResetToOriginal()
+		f(s.Body.Pos.Spawn.To2D())
+		s.Body.Pos.ResetToSpawn()
 	case SelectableInternalSegmentA:
 		f(s.InternalSegment.A)
 		s.InternalSegment.Recalculate()
@@ -215,7 +215,7 @@ func (s *Selectable) Recalculate() {
 	case SelectablePath:
 		fallthrough
 	case SelectableBody:
-		s.Body.Pos.ResetToOriginal()
+		s.Body.Pos.ResetToSpawn()
 	case SelectableInternalSegmentA, SelectableInternalSegmentB:
 		fallthrough
 	case SelectableInternalSegment:

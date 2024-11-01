@@ -1,5 +1,7 @@
 # gofoom
 
+<img src="data/resources/logo-flattened.svg" alt="gofoom logo" width="200">
+
 gofoom is a very WIP golang 2.5D sector/portal-based software raycasting game
 engine. It continues on from my older project
 https://github.com/tlyakhov/jsfoom.

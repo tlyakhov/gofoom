@@ -273,7 +273,7 @@ func CreateMainMenu() {
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
 		editor.ECS.Simulation.All.Range(func(key any, _ any) bool {
 			d := key.(dynamic.Dynamic)
-			d.ResetToOriginal()
+			d.ResetToSpawn()
 			if a := d.GetAnimation(); a != nil {
 				a.Reset()
 			}

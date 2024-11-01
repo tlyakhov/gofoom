@@ -44,6 +44,7 @@ func init() {
 		"CollisionResponse": reflect.ValueOf((*core.CollisionResponse)(nil)),
 		"InternalSegment":   reflect.ValueOf((*core.InternalSegment)(nil)),
 		"Light":             reflect.ValueOf((*core.Light)(nil)),
+		"LightmapCell":      reflect.ValueOf((*core.LightmapCell)(nil)),
 		"Mobile":            reflect.ValueOf((*core.Mobile)(nil)),
 		"Script":            reflect.ValueOf((*core.Script)(nil)),
 		"ScriptParam":       reflect.ValueOf((*core.ScriptParam)(nil)),

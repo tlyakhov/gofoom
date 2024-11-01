@@ -19,6 +19,7 @@ func init() {
 		"GetSolid":               reflect.ValueOf(materials.GetSolid),
 		"GetSprite":              reflect.ValueOf(materials.GetSprite),
 		"GetText":                reflect.ValueOf(materials.GetText),
+		"GetVisible":             reflect.ValueOf(materials.GetVisible),
 		"ImageCID":               reflect.ValueOf(&materials.ImageCID).Elem(),
 		"LitCID":                 reflect.ValueOf(&materials.LitCID).Elem(),
 		"MaterialShadowString":   reflect.ValueOf(materials.MaterialShadowString),
@@ -39,6 +40,7 @@ func init() {
 		"SolidCID":               reflect.ValueOf(&materials.SolidCID).Elem(),
 		"SpriteCID":              reflect.ValueOf(&materials.SpriteCID).Elem(),
 		"TextCID":                reflect.ValueOf(&materials.TextCID).Elem(),
+		"VisibleCID":             reflect.ValueOf(&materials.VisibleCID).Elem(),
 
 		// type definitions
 		"Image":          reflect.ValueOf((*materials.Image)(nil)),
@@ -51,5 +53,6 @@ func init() {
 		"Sprite":         reflect.ValueOf((*materials.Sprite)(nil)),
 		"Surface":        reflect.ValueOf((*materials.Surface)(nil)),
 		"Text":           reflect.ValueOf((*materials.Text)(nil)),
+		"Visible":        reflect.ValueOf((*materials.Visible)(nil)),
 	}
 }

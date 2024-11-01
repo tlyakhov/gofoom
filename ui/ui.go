@@ -64,7 +64,7 @@ func (ui *UI) SetPage(page *Page) {
 		a := w.highlight.NewAnimation()
 		w.highlight.Animation = a
 		a.Duration = 250
-		a.Start = w.highlight.Original
+		a.Start = w.highlight.Spawn
 		a.End = ui.SelectedColor
 		a.TweeningFunc = dynamic.EaseInOut2
 		a.Lifetime = dynamic.AnimationLifetimeBounce

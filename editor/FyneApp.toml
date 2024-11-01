@@ -1,8 +1,9 @@
 [Details]
-  Name = "Foom Editor"
+  Icon = "Icon.png"
+  Name = "gofoom Editor"
   ID = "com.foom.editor"
-  Version = "1.0.0"
-  Build = 1
+  Version = "0.5.0"
+  Build = 2
 
 [Development]
   HelperText = "This binary was built with debug symbols"
@@ -11,7 +12,7 @@
   HelperText = "This binary was built without debug symbols"
 
 [LinuxAndBSD]
-  GenericName = "Foom Editor"
+  GenericName = "gofoom Editor"
   Categories = ["Games"]
-  Comment = "The world editor for the Foom engine"
-  Keywords = ["editor", "foom"]
+  Comment = "The world editor for the gofoom engine"
+  Keywords = ["editor", "gofoom"]

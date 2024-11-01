@@ -60,7 +60,7 @@ func (s *Surface) Serialize() map[string]any {
 		result["Material"] = s.Material.String()
 	}
 
-	if !s.Transform.Original.IsIdentity() {
+	if !s.Transform.Spawn.IsIdentity() {
 		result["Transform"] = s.Transform.Serialize()
 	}
 

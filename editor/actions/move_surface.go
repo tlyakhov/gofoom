@@ -29,9 +29,9 @@ func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 		}
 	} else {
 		if a.Floor {
-			return &sector.Bottom.Z.Original
+			return &sector.Bottom.Z.Spawn
 		} else {
-			return &sector.Top.Z.Original
+			return &sector.Top.Z.Spawn
 		}
 	}
 }
@@ -47,8 +47,8 @@ func (a *MoveSurface) Act() {
 
 		a.Original = append(a.Original, *a.Get(s.Sector))
 		*a.Get(s.Sector) += a.Delta
-		s.Sector.Bottom.Z.ResetToOriginal()
-		s.Sector.Top.Z.ResetToOriginal()
+		s.Sector.Bottom.Z.ResetToSpawn()
+		s.Sector.Top.Z.ResetToSpawn()
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
@@ -66,8 +66,8 @@ func (a *MoveSurface) Undo() {
 		}
 
 		*a.Get(s.Sector) = a.Original[i]
-		s.Sector.Bottom.Z.ResetToOriginal()
-		s.Sector.Top.Z.ResetToOriginal()
+		s.Sector.Bottom.Z.ResetToSpawn()
+		s.Sector.Top.Z.ResetToSpawn()
 		i++
 	}
 
@@ -83,8 +83,8 @@ func (a *MoveSurface) Redo() {
 		}
 
 		*a.Get(s.Sector) += a.Delta
-		s.Sector.Bottom.Z.ResetToOriginal()
-		s.Sector.Top.Z.ResetToOriginal()
+		s.Sector.Bottom.Z.ResetToSpawn()
+		s.Sector.Top.Z.ResetToSpawn()
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }

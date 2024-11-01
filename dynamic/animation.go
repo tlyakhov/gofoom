@@ -87,25 +87,25 @@ func (a *Animation[T]) Animate() {
 	case *Animation[int]:
 		c.Now = int(c.TweeningFunc(float64(c.Start), float64(c.End), percent))
 		if a.Coordinates == AnimationCoordinatesRelative {
-			c.Now += c.Original
+			c.Now += c.Spawn
 		}
 	case *Animation[float64]:
 		c.Now = c.TweeningFunc(c.Start, c.End, percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
-			c.Now += c.Original
+			c.Now += c.Spawn
 		}
 	case *Animation[concepts.Vector2]:
 		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], percent)
 		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
-			c.Now.AddSelf(&c.Original)
+			c.Now.AddSelf(&c.Spawn)
 		}
 	case *Animation[concepts.Vector3]:
 		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], percent)
 		c.Now[1] = c.TweeningFunc(c.Start[1], c.End[1], percent)
 		c.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
-			c.Now.AddSelf(&c.Original)
+			c.Now.AddSelf(&c.Spawn)
 		}
 	case *Animation[concepts.Vector4]:
 		c.Now[0] = c.TweeningFunc(c.Start[0], c.End[0], percent)
@@ -113,7 +113,7 @@ func (a *Animation[T]) Animate() {
 		c.Now[2] = c.TweeningFunc(c.Start[2], c.End[2], percent)
 		c.Now[3] = c.TweeningFunc(c.Start[3], c.End[3], percent)
 		if a.Coordinates == AnimationCoordinatesRelative {
-			c.Now.AddSelf(&c.Original)
+			c.Now.AddSelf(&c.Spawn)
 		}
 	}
 

@@ -39,8 +39,8 @@ func (vd *VerticalDoorController) setupAnimation() {
 	a := vd.Sector.Top.Z.NewAnimation()
 	//a.AttachECS(vd.ECS)
 	a.Construct(nil)
-	a.Start = vd.Sector.Top.Z.Original
-	a.End = vd.Sector.Bottom.Z.Original
+	a.Start = vd.Sector.Top.Z.Spawn
+	a.End = vd.Sector.Bottom.Z.Spawn
 	a.Coordinates = dynamic.AnimationCoordinatesAbsolute
 	a.Duration = vd.Duration
 	a.TweeningFunc = vd.TweeningFunc
@@ -79,7 +79,7 @@ func (vd *VerticalDoorController) adjustTransforms() {
 		if !seg.Surface.Transform.Attached {
 			seg.Surface.Transform.Attach(vd.ECS.Simulation)
 		}
-		seg.Surface.Transform.Now.From(&seg.Surface.Transform.Original)
+		seg.Surface.Transform.Now.From(&seg.Surface.Transform.Spawn)
 		seg.Surface.Transform.Now.MulSelf(&t)
 
 		t[concepts.MatBasis2Y] = v
@@ -87,7 +87,7 @@ func (vd *VerticalDoorController) adjustTransforms() {
 		if !seg.HiSurface.Transform.Attached {
 			seg.HiSurface.Transform.Attach(vd.ECS.Simulation)
 		}
-		seg.HiSurface.Transform.Now.From(&seg.HiSurface.Transform.Original)
+		seg.HiSurface.Transform.Now.From(&seg.HiSurface.Transform.Spawn)
 		seg.HiSurface.Transform.Now.MulSelf(&t)
 	}
 }
