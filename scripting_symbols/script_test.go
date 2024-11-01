@@ -33,7 +33,7 @@ func BenchmarkScriptedCode(b *testing.B) {
 	})
 	b.Run("Native", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			core.GetSector(db, s.Vars["sector"].(ecs.Entity)).Bottom.Z.Original = rand.Float64()
+			core.GetSector(db, s.Vars["sector"].(ecs.Entity)).Bottom.Z.Spawn = rand.Float64()
 		}
 	})
 }

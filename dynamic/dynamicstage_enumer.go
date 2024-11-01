@@ -25,17 +25,17 @@ func (i DynamicStage) String() string {
 // Re-run the stringer command to generate them again.
 func _DynamicStageNoOp() {
 	var x [1]struct{}
-	_ = x[DynamicOriginal-(0)]
+	_ = x[DynamicSpawn-(0)]
 	_ = x[DynamicPrev-(1)]
 	_ = x[DynamicRender-(2)]
 	_ = x[DynamicNow-(3)]
 }
 
-var _DynamicStageValues = []DynamicStage{DynamicOriginal, DynamicPrev, DynamicRender, DynamicNow}
+var _DynamicStageValues = []DynamicStage{DynamicSpawn, DynamicPrev, DynamicRender, DynamicNow}
 
 var _DynamicStageNameToValueMap = map[string]DynamicStage{
-	_DynamicStageName[0:15]:       DynamicOriginal,
-	_DynamicStageLowerName[0:15]:  DynamicOriginal,
+	_DynamicStageName[0:15]:       DynamicSpawn,
+	_DynamicStageLowerName[0:15]:  DynamicSpawn,
 	_DynamicStageName[15:26]:      DynamicPrev,
 	_DynamicStageLowerName[15:26]: DynamicPrev,
 	_DynamicStageName[26:39]:      DynamicRender,

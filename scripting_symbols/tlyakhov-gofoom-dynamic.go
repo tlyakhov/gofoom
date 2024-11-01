@@ -26,9 +26,9 @@ func init() {
 		"AnimationLifetimeStrings":     reflect.ValueOf(dynamic.AnimationLifetimeStrings),
 		"AnimationLifetimeValues":      reflect.ValueOf(dynamic.AnimationLifetimeValues),
 		"DynamicNow":                   reflect.ValueOf(dynamic.DynamicNow),
-		"DynamicOriginal":              reflect.ValueOf(dynamic.DynamicOriginal),
 		"DynamicPrev":                  reflect.ValueOf(dynamic.DynamicPrev),
 		"DynamicRender":                reflect.ValueOf(dynamic.DynamicRender),
+		"DynamicSpawn":                 reflect.ValueOf(dynamic.DynamicSpawn),
 		"DynamicStageString":           reflect.ValueOf(dynamic.DynamicStageString),
 		"DynamicStageStrings":          reflect.ValueOf(dynamic.DynamicStageStrings),
 		"DynamicStageValues":           reflect.ValueOf(dynamic.DynamicStageValues),
@@ -86,14 +86,14 @@ func (W _tlyakhov_gofoom_dynamic_Animated) Reset() {
 
 // _tlyakhov_gofoom_dynamic_Dynamic is an interface wrapper for Dynamic type
 type _tlyakhov_gofoom_dynamic_Dynamic struct {
-	IValue           interface{}
-	WAttach          func(sim *dynamic.Simulation)
-	WDetach          func(sim *dynamic.Simulation)
-	WGetAnimation    func() dynamic.Animated
-	WNewFrame        func()
-	WRecalculate     func()
-	WResetToOriginal func()
-	WUpdate          func(a0 float64)
+	IValue        interface{}
+	WAttach       func(sim *dynamic.Simulation)
+	WDetach       func(sim *dynamic.Simulation)
+	WGetAnimation func() dynamic.Animated
+	WNewFrame     func()
+	WRecalculate  func()
+	WResetToSpawn func()
+	WUpdate       func(a0 float64)
 }
 
 func (W _tlyakhov_gofoom_dynamic_Dynamic) Attach(sim *dynamic.Simulation) {
@@ -111,8 +111,8 @@ func (W _tlyakhov_gofoom_dynamic_Dynamic) NewFrame() {
 func (W _tlyakhov_gofoom_dynamic_Dynamic) Recalculate() {
 	W.WRecalculate()
 }
-func (W _tlyakhov_gofoom_dynamic_Dynamic) ResetToOriginal() {
-	W.WResetToOriginal()
+func (W _tlyakhov_gofoom_dynamic_Dynamic) ResetToSpawn() {
+	W.WResetToSpawn()
 }
 func (W _tlyakhov_gofoom_dynamic_Dynamic) Update(a0 float64) {
 	W.WUpdate(a0)

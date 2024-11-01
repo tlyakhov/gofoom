@@ -17,7 +17,7 @@ type DynamicType interface {
 type Dynamic interface {
 	Attach(sim *Simulation)
 	Detach(sim *Simulation)
-	ResetToOriginal()
+	ResetToSpawn()
 	Update(float64)
 	Recalculate()
 	NewFrame()

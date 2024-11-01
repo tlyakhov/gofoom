@@ -56,7 +56,7 @@ func (a *AddInternalSegment) Point() bool {
 		a.B.From(worldGrid)
 	}
 	if a.ContainingSector != nil {
-		a.Bottom, a.Top = a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
+		a.Bottom, a.Top = a.ContainingSector.ZAt(dynamic.DynamicSpawn, worldGrid)
 	}
 	a.Recalculate()
 	return true

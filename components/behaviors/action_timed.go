@@ -56,7 +56,7 @@ func (timed *ActionTimed) Construct(data map[string]any) {
 func (timed *ActionTimed) Serialize() map[string]any {
 	result := timed.Attached.Serialize()
 
-	if timed.Delay.Original != 0 {
+	if timed.Delay.Spawn != 0 {
 		result["Delay"] = timed.Delay.Serialize()
 	}
 

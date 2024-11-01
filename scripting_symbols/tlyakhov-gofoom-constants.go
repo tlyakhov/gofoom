@@ -64,7 +64,7 @@ func init() {
 		"TimeStep":                 reflect.ValueOf(constant.MakeFromLiteral("7.8125", token.FLOAT, 0)),
 		"TimeStepS":                reflect.ValueOf(constant.MakeFromLiteral("0.0078125", token.FLOAT, 0)),
 		"UnitsPerMeter":            reflect.ValueOf(constant.MakeFromLiteral("32", token.FLOAT, 0)),
-		"UserSettings":             reflect.ValueOf(constant.MakeFromLiteral("\"bin/settings.json\"", token.STRING, 0)),
+		"UserSettings":             reflect.ValueOf(constant.MakeFromLiteral("\"settings.json\"", token.STRING, 0)),
 		"VelocityEpsilon":          reflect.ValueOf(constant.MakeFromLiteral("9.99999999999999999994126620636112567498475617893197842480160209e-16", token.FLOAT, 0)),
 		"WanderSectorProbability":  reflect.ValueOf(constant.MakeFromLiteral("0.25", token.FLOAT, 0)),
 	}

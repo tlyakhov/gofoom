@@ -109,7 +109,7 @@ func (sel *Selection) SavePositions() {
 		case SelectableActionWaypoint:
 			sel.Positions[s.Hash()] = s.ActionWaypoint.P.Clone()
 		case SelectableBody:
-			sel.Positions[s.Hash()] = s.Body.Pos.Original.Clone()
+			sel.Positions[s.Hash()] = s.Body.Pos.Spawn.Clone()
 		case SelectableInternalSegmentA:
 			sel.Positions[s.Hash()] = &concepts.Vector3{s.InternalSegment.A[0], s.InternalSegment.A[1]}
 		case SelectableInternalSegmentB:
@@ -144,7 +144,7 @@ func (sel *Selection) LoadPositions() {
 		case SelectableActionWaypoint:
 			s.ActionWaypoint.P.From(sel.Positions[s.Hash()])
 		case SelectableBody:
-			s.Body.Pos.Original.From(sel.Positions[s.Hash()])
+			s.Body.Pos.Spawn.From(sel.Positions[s.Hash()])
 		case SelectableInternalSegmentA:
 			s.InternalSegment.A.From(sel.Positions[s.Hash()].To2D())
 		case SelectableInternalSegmentB:

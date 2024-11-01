@@ -13,9 +13,9 @@ func CreateLightBody(db *ecs.ECS) ecs.Entity {
 	e := db.NewEntity()
 	body := db.NewAttachedComponent(e, core.BodyCID).(*core.Body)
 	db.NewAttachedComponent(e, core.LightCID)
-	body.Size.Original[0] = 2
-	body.Size.Original[1] = 2
-	body.Size.ResetToOriginal()
+	body.Size.Spawn[0] = 2
+	body.Size.Spawn[1] = 2
+	body.Size.ResetToSpawn()
 
 	return e
 }

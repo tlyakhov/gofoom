@@ -306,7 +306,7 @@ func (s *Sector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		bz, tz := s.ZAt(dynamic.DynamicOriginal, &segment.P)
+		bz, tz := s.ZAt(dynamic.DynamicSpawn, &segment.P)
 		s.Center[2] += (bz + tz) * 0.5
 		if bz < s.Min[2] {
 			s.Min[2] = bz

@@ -88,13 +88,13 @@ func (a *AddEntity) Point() bool {
 	a.DetachFromSector()
 	a.AttachToSector()
 	if body != nil {
-		body.Pos.Original[0] = worldGrid[0]
-		body.Pos.Original[1] = worldGrid[1]
+		body.Pos.Spawn[0] = worldGrid[0]
+		body.Pos.Spawn[1] = worldGrid[1]
 		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicOriginal, worldGrid)
-			body.Pos.Original[2] = (floorZ + ceilZ) / 2
+			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicSpawn, worldGrid)
+			body.Pos.Spawn[2] = (floorZ + ceilZ) / 2
 		}
-		body.Pos.ResetToOriginal()
+		body.Pos.ResetToSpawn()
 	}
 	return true
 }

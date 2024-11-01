@@ -35,7 +35,7 @@ func (a *SetProperty) FireHooks() {
 	for _, v := range a.Values {
 		switch target := v.Parent().(type) {
 		case dynamic.Dynamic:
-			target.ResetToOriginal()
+			target.ResetToSpawn()
 			target.Recalculate()
 		case *materials.Image:
 			if a.Source.Name == "Source" {

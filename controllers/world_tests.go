@@ -189,8 +189,8 @@ func CreateTestWorld(db *ecs.ECS) {
 			if rand.Uint32()%45 == 0 {
 				eLight := archetypes.CreateLightBody(db)
 				lightBody := core.GetBody(db, eLight)
-				lightBody.Pos.Original = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
-				lightBody.Pos.ResetToOriginal()
+				lightBody.Pos.Spawn = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
+				lightBody.Pos.ResetToSpawn()
 				log.Println("Generated light")
 			}
 		}
@@ -232,8 +232,8 @@ func CreateTestWorld2(db *ecs.ECS) {
 
 	eLight := archetypes.CreateLightBody(db)
 	lightBody := core.GetBody(db, eLight)
-	lightBody.Pos.Original = concepts.Vector3{0, 0, 60}
-	lightBody.Pos.ResetToOriginal()
+	lightBody.Pos.Spawn = concepts.Vector3{0, 0, 60}
+	lightBody.Pos.ResetToSpawn()
 	log.Println("Generated light")
 
 	CreateSpawn(db)
@@ -321,8 +321,8 @@ func CreateTestWorld3(db *ecs.ECS) {
 	for range 5 {
 		eLight := archetypes.CreateLightBody(db)
 		lightBody := core.GetBody(db, eLight)
-		lightBody.Pos.Original = concepts.Vector3{float64(testw*scale) * rand.Float64(), float64(testh*scale) * rand.Float64(), 200}
-		lightBody.Pos.ResetToOriginal()
+		lightBody.Pos.Spawn = concepts.Vector3{float64(testw*scale) * rand.Float64(), float64(testh*scale) * rand.Float64(), 200}
+		lightBody.Pos.ResetToSpawn()
 		log.Println("Generated light")
 	}
 
