@@ -11,18 +11,18 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "1",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -90,
           "Y": 60,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -37,7 +37,7 @@
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -80,7 +80,7 @@
           "Material": "21"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "3",
@@ -189,7 +189,7 @@
           "Material": "13"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     },
@@ -202,18 +202,18 @@
     "Entity": "4",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "4",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -60,
           "Y": -70,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -242,18 +242,18 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "5",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -90,
           "Y": 60,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -268,7 +268,7 @@
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -284,7 +284,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -8
+          "Spawn": -8
         }
       },
       "Entity": "6",
@@ -366,7 +366,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -404,18 +404,18 @@
     "Entity": "8",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "8",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -20,
           "Y": 350,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -449,7 +449,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "10",
@@ -495,14 +495,7 @@
                 "Flags": "",
                 "Frame": "3",
                 "Material": "33",
-                "Transform": [
-                  14,
-                  0,
-                  0,
-                  5,
-                  -0.5,
-                  -2
-                ]
+                "Transform": [14, 0, 0, 5, -0.5, -2]
               }
             ],
             "Material": "2"
@@ -622,7 +615,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -667,12 +660,12 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0,
+        "Spawn": 0,
         "Procedural": true
       },
       "Entity": "12",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -280,
           "Y": 30,
           "Z": 32
@@ -680,7 +673,7 @@
         "Procedural": true
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -726,7 +719,7 @@
           "Material": "21"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "14",
@@ -793,7 +786,7 @@
           "Material": "13"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -806,7 +799,7 @@
           "Material": "21"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "15",
@@ -858,7 +851,7 @@
           "Material": "13"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -877,7 +870,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "16",
@@ -887,14 +880,7 @@
           "Hi": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                -0,
-                0,
-                1
-              ]
+              "Spawn": [1, 0, 0, -0, 0, 1]
             }
           },
           "Lo": {
@@ -911,14 +897,7 @@
           "Hi": {
             "Material": "32",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                -0,
-                0,
-                1
-              ]
+              "Spawn": [1, 0, 0, -0, 0, 1]
             }
           },
           "Lo": {
@@ -934,14 +913,7 @@
           "Hi": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                -0,
-                0,
-                1
-              ]
+              "Spawn": [1, 0, 0, -0, 0, 1]
             }
           },
           "Lo": {
@@ -958,14 +930,7 @@
           "Hi": {
             "Material": "32",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                0.8,
-                0,
-                0
-              ]
+              "Spawn": [1, 0, 0, 0.8, 0, 0]
             }
           },
           "Lo": {
@@ -994,7 +959,7 @@
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -1003,18 +968,18 @@
     "Entity": "17",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "17",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -150,
           "Y": -120,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -1059,7 +1024,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "19",
@@ -1193,7 +1158,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -1244,7 +1209,7 @@
           "Material": "21"
         },
         "Z": {
-          "Original": -22
+          "Spawn": -22
         }
       },
       "Entity": "22",
@@ -1340,14 +1305,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                0.8432993810941913,
-                0.3,
-                0
-              ]
+              "Spawn": [1, 0, 0, 0.8432993810941913, 0.3, 0]
             }
           },
           "X": -430,
@@ -1438,7 +1396,7 @@
           "Material": "13"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -1536,7 +1494,7 @@
         },
         "Target": "30",
         "Z": {
-          "Original": -26
+          "Spawn": -26
         }
       },
       "Entity": "28",
@@ -1601,7 +1559,7 @@
           "Material": "13"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -1610,18 +1568,18 @@
     "Entity": "29",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "29",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -410,
           "Y": 470,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -1649,7 +1607,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -200
+          "Spawn": -200
         }
       },
       "Entity": "30",
@@ -1671,14 +1629,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                1.3384615384615384,
-                0,
-                0
-              ]
+              "Spawn": [1, 0, 0, 1.3384615384615384, 0, 0]
             }
           },
           "X": -730,
@@ -1695,14 +1646,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                1.2428571428571429,
-                0,
-                0
-              ]
+              "Spawn": [1, 0, 0, 1.2428571428571429, 0, 0]
             }
           },
           "X": -730,
@@ -1718,14 +1662,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                4,
-                0,
-                0,
-                4,
-                0,
-                0
-              ]
+              "Spawn": [4, 0, 0, 4, 0, 0]
             }
           },
           "X": -870,
@@ -1742,14 +1679,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                1.2428571428571429,
-                0,
-                0
-              ]
+              "Spawn": [1, 0, 0, 1.2428571428571429, 0, 0]
             }
           },
           "X": -870,
@@ -1762,7 +1692,7 @@
         },
         "Target": "28",
         "Z": {
-          "Original": -26
+          "Spawn": -26
         }
       }
     }
@@ -1819,7 +1749,7 @@
       "Frame": {
         "Damping": 0,
         "Freq": 0.000001,
-        "Original": "0",
+        "Spawn": "0",
         "Response": 0
       },
       "Frames": "2",
@@ -1830,18 +1760,18 @@
     "Entity": "34",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "34",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -500,
           "Y": -70,
           "Z": 19
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -1862,18 +1792,18 @@
     "Entity": "35",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "35",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -800,
           "Y": -70,
           "Z": -50
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -1940,7 +1870,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -82
+          "Spawn": -82
         }
       },
       "Entity": "38",
@@ -2011,7 +1941,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -38
+          "Spawn": -38
         }
       }
     }
@@ -2047,7 +1977,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -100
+          "Spawn": -100
         }
       },
       "Entity": "40",
@@ -2118,7 +2048,7 @@
         },
         "Target": "43",
         "Z": {
-          "Original": 20
+          "Spawn": 20
         }
       }
     }
@@ -2127,18 +2057,18 @@
     "Entity": "41",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "41",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -1140,
           "Y": -170,
           "Z": -50
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -2166,7 +2096,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -100
+          "Spawn": -100
         }
       },
       "Entity": "42",
@@ -2263,7 +2193,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 20
+          "Spawn": 20
         }
       }
     }
@@ -2277,7 +2207,7 @@
         },
         "Target": "40",
         "Z": {
-          "Original": 20
+          "Spawn": 20
         }
       },
       "Entity": "43",
@@ -2342,7 +2272,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 100
+          "Spawn": 100
         }
       }
     }
@@ -2355,7 +2285,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 20
+          "Spawn": 20
         }
       },
       "Entity": "44",
@@ -2453,14 +2383,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                0.7905694150420948,
-                0,
-                0,
-                1,
-                0,
-                0
-              ]
+              "Spawn": [0.7905694150420948, 0, 0, 1, 0, 0]
             }
           },
           "X": -1280,
@@ -2476,14 +2399,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                0.375,
-                0,
-                0,
-                1,
-                0,
-                0
-              ]
+              "Spawn": [0.375, 0, 0, 1, 0, 0]
             }
           },
           "X": -1260,
@@ -2509,7 +2425,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 100
+          "Spawn": 100
         }
       }
     }
@@ -2538,18 +2454,18 @@
     "Entity": "46",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "46",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -1190,
           "Y": 340,
           "Z": 60
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -2629,7 +2545,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -14
+          "Spawn": -14
         }
       },
       "Entity": "49",
@@ -2645,14 +2561,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                0.1282051282051282,
-                0,
-                0,
-                1,
-                0,
-                0
-              ]
+              "Spawn": [0.1282051282051282, 0, 0, 1, 0, 0]
             }
           },
           "X": -300,
@@ -2682,14 +2591,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                0.1282051320259389,
-                0,
-                0,
-                1,
-                0,
-                0
-              ]
+              "Spawn": [0.1282051320259389, 0, 0, 1, 0, 0]
             }
           },
           "X": -230,
@@ -2700,27 +2602,13 @@
           "Hi": {
             "Material": "32",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                1.1142857142857143,
-                0,
-                -0.1
-              ]
+              "Spawn": [1, 0, 0, 1.1142857142857143, 0, -0.1]
             }
           },
           "Lo": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                1,
-                0,
-                0,
-                0.11428571428571428,
-                0,
-                0
-              ]
+              "Spawn": [1, 0, 0, 0.11428571428571428, 0, 0]
             }
           },
           "Surface": {
@@ -2746,7 +2634,7 @@
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -2759,7 +2647,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": -8
+          "Spawn": -8
         }
       },
       "Entity": "50",
@@ -2838,7 +2726,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -2850,18 +2738,11 @@
         "Surface": {
           "Material": "21",
           "Transform": {
-            "Original": [
-              3.357142857142857,
-              0,
-              0,
-              1,
-              0,
-              0
-            ]
+            "Spawn": [3.357142857142857, 0, 0, 1, 0, 0]
           }
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "51",
@@ -2904,14 +2785,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                7.34375,
-                0,
-                0,
-                1,
-                0,
-                0
-              ]
+              "Spawn": [7.34375, 0, 0, 1, 0, 0]
             }
           },
           "X": -360,
@@ -2949,7 +2823,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -2958,18 +2832,18 @@
     "Entity": "52",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "52",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -260,
           "Y": -170,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -2990,18 +2864,18 @@
     "Entity": "54",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "54",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -330,
           "Y": 130,
           "Z": 21
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -3028,18 +2902,11 @@
         "Surface": {
           "Material": "2",
           "Transform": {
-            "Original": [
-              4,
-              0,
-              0,
-              4,
-              0,
-              0
-            ]
+            "Spawn": [4, 0, 0, 4, 0, 0]
           }
         },
         "Z": {
-          "Original": -240
+          "Spawn": -240
         }
       },
       "Entity": "55",
@@ -3100,14 +2967,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                4,
-                0,
-                0,
-                4,
-                0,
-                0
-              ]
+              "Spawn": [4, 0, 0, 4, 0, 0]
             }
           },
           "X": -870,
@@ -3123,14 +2983,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                5.7894736842105265,
-                0,
-                0,
-                4,
-                0,
-                0
-              ]
+              "Spawn": [5.7894736842105265, 0, 0, 4, 0, 0]
             }
           },
           "X": -610,
@@ -3146,14 +2999,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                4,
-                0,
-                0,
-                4,
-                0,
-                0
-              ]
+              "Spawn": [4, 0, 0, 4, 0, 0]
             }
           },
           "X": -610,
@@ -3169,14 +3015,7 @@
           "Surface": {
             "Material": "2",
             "Transform": {
-              "Original": [
-                4,
-                0,
-                0,
-                4,
-                0,
-                0
-              ]
+              "Spawn": [4, 0, 0, 4, 0, 0]
             }
           },
           "X": -870,
@@ -3230,7 +3069,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     }
@@ -3239,28 +3078,25 @@
     "Entity": "56",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "56",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -240,
           "Y": 360,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       }
     },
     "ecs.Linked": {
-      "Entities": [
-        "77",
-        "78"
-      ],
+      "Entities": ["77", "78"],
       "Entity": "56"
     }
   },
@@ -3268,10 +3104,7 @@
     "Entity": "57",
     "behaviors.ActionTransition": {
       "Entity": "57",
-      "Next": [
-        "58",
-        "61"
-      ]
+      "Next": ["58", "61"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "57",
@@ -3284,9 +3117,7 @@
     "Entity": "58",
     "behaviors.ActionTransition": {
       "Entity": "58",
-      "Next": [
-        "59"
-      ]
+      "Next": ["59"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "58",
@@ -3299,9 +3130,7 @@
     "Entity": "59",
     "behaviors.ActionTransition": {
       "Entity": "59",
-      "Next": [
-        "60"
-      ]
+      "Next": ["60"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "59",
@@ -3314,9 +3143,7 @@
     "Entity": "60",
     "behaviors.ActionTransition": {
       "Entity": "60",
-      "Next": [
-        "57"
-      ]
+      "Next": ["57"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "60",
@@ -3329,9 +3156,7 @@
     "Entity": "61",
     "behaviors.ActionTransition": {
       "Entity": "61",
-      "Next": [
-        "62"
-      ]
+      "Next": ["62"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "61",
@@ -3344,9 +3169,7 @@
     "Entity": "62",
     "behaviors.ActionTransition": {
       "Entity": "62",
-      "Next": [
-        "76"
-      ]
+      "Next": ["76"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "62",
@@ -3359,9 +3182,7 @@
     "Entity": "63",
     "behaviors.ActionTransition": {
       "Entity": "63",
-      "Next": [
-        "60"
-      ]
+      "Next": ["60"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "63",
@@ -3374,9 +3195,7 @@
     "Entity": "75",
     "behaviors.ActionTransition": {
       "Entity": "75",
-      "Next": [
-        "63"
-      ]
+      "Next": ["63"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "75",
@@ -3389,9 +3208,7 @@
     "Entity": "76",
     "behaviors.ActionTransition": {
       "Entity": "76",
-      "Next": [
-        "75"
-      ]
+      "Next": ["75"]
     },
     "behaviors.ActionWaypoint": {
       "Entity": "76",
@@ -3447,28 +3264,26 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0,
+        "Spawn": 0,
         "Procedural": true
       },
       "Entity": "125",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -180,
           "Y": 420,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       }
     },
     "ecs.Linked": {
-      "Entities": [
-        "12"
-      ],
+      "Entities": ["12"],
       "Entity": "125"
     },
     "ecs.Named": {

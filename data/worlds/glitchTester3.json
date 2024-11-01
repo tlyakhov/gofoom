@@ -11,18 +11,18 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "1",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 20,
           "Y": 40
         }
@@ -37,7 +37,7 @@
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -89,7 +89,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "3",
@@ -155,7 +155,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     },
@@ -168,18 +168,18 @@
     "Entity": "4",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "4",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -50,
           "Y": -120,
           "Z": 40
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
@@ -208,7 +208,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "5",
@@ -274,7 +274,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     },
@@ -291,7 +291,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "6",
@@ -357,7 +357,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     },
@@ -374,7 +374,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 0
+          "Spawn": 0
         }
       },
       "Entity": "7",
@@ -440,7 +440,7 @@
           "Material": "2"
         },
         "Z": {
-          "Original": 64
+          "Spawn": 64
         }
       }
     },
@@ -461,18 +461,18 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "Entity": "8",
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 20,
           "Y": 40
         }
@@ -487,7 +487,7 @@
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0

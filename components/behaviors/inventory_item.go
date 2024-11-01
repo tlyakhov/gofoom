@@ -4,16 +4,16 @@
 package behaviors
 
 import (
-	"strconv"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
 type InventoryItem struct {
 	ecs.Attached `editable:"^"`
 
-	Class string     `editable:"Class"`
-	Count int        `editable:"Count"`
-	Image ecs.Entity `editable:"Image" edit_type:"Material"`
+	Class string               `editable:"Class"`
+	Count dynamic.Spawned[int] `editable:"Count"`
+	Image ecs.Entity           `editable:"Image" edit_type:"Material"`
 }
 
 var InventoryItemCID ecs.ComponentID
@@ -36,7 +36,7 @@ func (item *InventoryItem) String() string {
 func (item *InventoryItem) Construct(data map[string]any) {
 	item.Attached.Construct(data)
 	item.Class = "GenericItem"
-	item.Count = 1
+	item.Count.SetAll(1)
 
 	if data == nil {
 		return
@@ -46,7 +46,7 @@ func (item *InventoryItem) Construct(data map[string]any) {
 		item.Class = v.(string)
 	}
 	if v, ok := data["Count"]; ok {
-		item.Count, _ = strconv.Atoi(v.(string))
+		item.Count.Construct(v.(map[string]any))
 	}
 	if v, ok := data["Image"]; ok {
 		item.Image, _ = ecs.ParseEntity(v.(string))
@@ -56,11 +56,10 @@ func (item *InventoryItem) Construct(data map[string]any) {
 func (item *InventoryItem) Serialize() map[string]any {
 	result := item.Attached.Serialize()
 
+	result["Count"] = item.Count.Serialize()
+
 	if item.Class != "GenericItem" {
 		result["Class"] = item.Class
-	}
-	if item.Count > 1 {
-		result["Count"] = strconv.Itoa(item.Count)
 	}
 	if item.Image != 0 {
 		result["Image"] = item.Image.String()

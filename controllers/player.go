@@ -5,7 +5,6 @@ package controllers
 
 import (
 	"math"
-	"math/rand/v2"
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -150,77 +149,19 @@ func MovePlayerNoClip(db *ecs.ECS, e ecs.Entity, angle float64) {
 	}
 }
 
-func Respawn(db *ecs.ECS, force bool) {
-	spawns := make([]*behaviors.Player, 0)
-	players := make([]*behaviors.Player, 0)
-	col := ecs.ColumnFor[behaviors.Player](db, behaviors.PlayerCID)
-	for i := range col.Cap() {
-		p := col.Value(i)
-		if p == nil || !p.Active {
-			continue
-		}
-		if p.Spawn {
-			spawns = append(spawns, p)
-		} else {
-			players = append(players, p)
-		}
-	}
-
-	// Remove extra players
-	// By default, avoid spawning a player if one exists
-	maxPlayers := 1
-	if force {
-		maxPlayers = 0
-	}
-
-	for len(players) > maxPlayers {
-		db.Delete(players[len(players)-1].Entity)
-		players = players[:len(players)-1]
-	}
-
-	if len(players) > 0 || len(spawns) == 0 {
-		return
-	}
-
-	spawn := spawns[rand.Int()%len(spawns)]
-	copiedSpawn := db.SerializeEntity(spawn.Entity)
-	var pastedEntity ecs.Entity
-	for name, id := range ecs.Types().IDs {
-		jsonData := copiedSpawn[name]
-		if jsonData == nil {
-			continue
-		}
-		if pastedEntity == 0 {
-			pastedEntity = db.NewEntity()
-		}
-		jsonComponent := jsonData.(map[string]any)
-		c := db.LoadComponentWithoutAttaching(id, jsonComponent)
-		c = db.Upsert(id, pastedEntity, c)
-		if id == behaviors.PlayerCID {
-			player := c.(*behaviors.Player)
-			player.Spawn = false
-		} else if id == ecs.NamedCID {
-			named := c.(*ecs.Named)
-			named.Name = "Player"
-		}
-	}
-	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerRecalculate)
-	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerAlways)
-}
-
 func PickUpInventoryItem(p *behaviors.Player, item *behaviors.InventoryItem) {
 	for _, slot := range p.Inventory {
 		if !slot.ValidClasses.Contains(item.Class) {
 			continue
 		}
-		if slot.Count >= slot.Limit {
+		if slot.Count.Now >= slot.Limit {
 			p.Notices.Push("Can't pick up more " + item.Class)
 			return
 		}
-		// TODO: Make Dynamic
-		slot.Count++
+		// TODO: Handle mismatches of slot limits and counts better
+		slot.Count.Now++
 		p.Notices.Push("Picked up a " + item.Class)
-		item.Count--
+		item.Count.Now--
 		// Disable all the entity components
 		for _, c := range item.ECS.AllComponents(item.Entity) {
 			if c != nil {

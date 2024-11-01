@@ -34,7 +34,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -101,7 +101,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -113,7 +113,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -206,7 +206,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 94
+        "Spawn": 94
       }
     }
   },
@@ -218,27 +218,27 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "CollisionResponse": "Slide",
       "Entity": "5",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -220,
           "Y": -80,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -264,7 +264,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 2
+        "Spawn": 2
       },
       "Top.Surface": {
         "Material": "2"
@@ -330,7 +330,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 80
+        "Spawn": 80
       }
     }
   },
@@ -342,27 +342,27 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "CollisionResponse": "Slide",
       "Entity": "7",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 170,
           "Y": 370,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -388,7 +388,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -468,7 +468,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -480,7 +480,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -573,7 +573,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -585,7 +585,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -651,7 +651,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -663,7 +663,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -731,7 +731,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -743,27 +743,27 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "CollisionResponse": "Slide",
       "Entity": "12",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 40,
           "Y": -20,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -789,7 +789,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": -22
+        "Spawn": -22
       },
       "Top.Surface": {
         "Material": "2"
@@ -869,7 +869,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 80
+        "Spawn": 80
       }
     }
   },
@@ -881,27 +881,27 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "CollisionResponse": "Slide",
       "Entity": "14",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 130,
           "Y": 210,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -927,7 +927,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": -22
+        "Spawn": -22
       },
       "Top.Surface": {
         "Material": "2"
@@ -999,7 +999,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -1011,7 +1011,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -1077,7 +1077,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -1089,7 +1089,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 22
+        "Spawn": 22
       },
       "Top.Surface": {
         "Material": "2"
@@ -1170,7 +1170,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 116
+        "Spawn": 116
       }
     }
   },
@@ -1182,7 +1182,7 @@
     },
     "core.Sector": {
       "Bottom.Z": {
-        "Original": 22
+        "Spawn": 22
       },
       "Top.Surface": {
         "Material": "2"
@@ -1248,7 +1248,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 116
+        "Spawn": 116
       }
     }
   },
@@ -1260,27 +1260,27 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "CollisionResponse": "Slide",
       "Entity": "19",
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": -260,
           "Y": 150,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -1316,7 +1316,7 @@
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -1329,27 +1329,27 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "CollisionResponse": "Slide",
       "Entity": "20",
       "Mass": 80,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 20,
           "Y": 40
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0

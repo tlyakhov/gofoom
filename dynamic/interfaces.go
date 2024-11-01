@@ -15,11 +15,17 @@ type DynamicType interface {
 // 1. They have a lifecycle with a starting value that changes over time
 // 2. They may have a "render" value interpolated between a past/future values.
 type Dynamic interface {
-	Attach(sim *Simulation)
-	Detach(sim *Simulation)
-	ResetToSpawn()
+	Spawnable
 	Update(float64)
 	Recalculate()
 	NewFrame()
 	GetAnimation() Animated
+}
+
+// Spawnable is an interface for any value that spawns at load and then
+// changes over time.
+type Spawnable interface {
+	ResetToSpawn()
+	Attach(sim *Simulation)
+	Detach(sim *Simulation)
 }

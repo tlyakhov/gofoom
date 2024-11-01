@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _DynamicStageName = "DynamicOriginalDynamicPrevDynamicRenderDynamicNow"
+const _DynamicStageName = "DynamicSpawnDynamicPrevDynamicRenderDynamicNow"
 
-var _DynamicStageIndex = [...]uint8{0, 15, 26, 39, 49}
+var _DynamicStageIndex = [...]uint8{0, 12, 23, 36, 46}
 
-const _DynamicStageLowerName = "dynamicoriginaldynamicprevdynamicrenderdynamicnow"
+const _DynamicStageLowerName = "dynamicspawndynamicprevdynamicrenderdynamicnow"
 
 func (i DynamicStage) String() string {
 	if i < 0 || i >= DynamicStage(len(_DynamicStageIndex)-1) {
@@ -34,21 +34,21 @@ func _DynamicStageNoOp() {
 var _DynamicStageValues = []DynamicStage{DynamicSpawn, DynamicPrev, DynamicRender, DynamicNow}
 
 var _DynamicStageNameToValueMap = map[string]DynamicStage{
-	_DynamicStageName[0:15]:       DynamicSpawn,
-	_DynamicStageLowerName[0:15]:  DynamicSpawn,
-	_DynamicStageName[15:26]:      DynamicPrev,
-	_DynamicStageLowerName[15:26]: DynamicPrev,
-	_DynamicStageName[26:39]:      DynamicRender,
-	_DynamicStageLowerName[26:39]: DynamicRender,
-	_DynamicStageName[39:49]:      DynamicNow,
-	_DynamicStageLowerName[39:49]: DynamicNow,
+	_DynamicStageName[0:12]:       DynamicSpawn,
+	_DynamicStageLowerName[0:12]:  DynamicSpawn,
+	_DynamicStageName[12:23]:      DynamicPrev,
+	_DynamicStageLowerName[12:23]: DynamicPrev,
+	_DynamicStageName[23:36]:      DynamicRender,
+	_DynamicStageLowerName[23:36]: DynamicRender,
+	_DynamicStageName[36:46]:      DynamicNow,
+	_DynamicStageLowerName[36:46]: DynamicNow,
 }
 
 var _DynamicStageNames = []string{
-	_DynamicStageName[0:15],
-	_DynamicStageName[15:26],
-	_DynamicStageName[26:39],
-	_DynamicStageName[39:49],
+	_DynamicStageName[0:12],
+	_DynamicStageName[12:23],
+	_DynamicStageName[23:36],
+	_DynamicStageName[36:46],
 }
 
 // DynamicStageString retrieves an enum value from the enum constants string name.

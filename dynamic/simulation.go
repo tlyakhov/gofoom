@@ -4,10 +4,10 @@
 package dynamic
 
 import (
-	"sync"
 	"tlyakhov/gofoom/constants"
 
 	"github.com/loov/hrtime"
+	"github.com/puzpuzpuz/xsync/v3"
 )
 
 // This is based on the "Fix your timestep" blog post here:
@@ -26,13 +26,16 @@ type Simulation struct {
 	Frame            uint64
 	Integrate        func()
 	Render           func()
-	All              sync.Map
+	Dynamics         *xsync.MapOf[Dynamic, struct{}]
+	Spawnables       *xsync.MapOf[Spawnable, struct{}]
 }
 
 func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
 		EditorPaused:  false,
+		Dynamics:      xsync.NewMapOf[Dynamic, struct{}](),
+		Spawnables:    xsync.NewMapOf[Spawnable, struct{}](),
 	}
 }
 
@@ -51,8 +54,7 @@ func (s *Simulation) Step() {
 	s.RenderTime += s.FrameMillis
 
 	for s.RenderTime >= constants.TimeStep {
-		s.All.Range(func(key any, _ any) bool {
-			d := key.(Dynamic)
+		s.Dynamics.Range(func(d Dynamic, _ struct{}) bool {
 			d.NewFrame()
 			if a := d.GetAnimation(); a != nil && !s.EditorPaused {
 				a.Animate()
@@ -72,8 +74,7 @@ func (s *Simulation) Step() {
 	// Update the blended values
 	s.RenderStateBlend = s.RenderTime / constants.TimeStep
 
-	s.All.Range(func(key any, _ any) bool {
-		d := key.(Dynamic)
+	s.Dynamics.Range(func(d Dynamic, _ struct{}) bool {
 		if s.Recalculate {
 			d.Recalculate()
 		}

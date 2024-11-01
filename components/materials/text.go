@@ -103,7 +103,7 @@ func (t *Text) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 	return c
 }
 
-var defaultTextColor = map[string]any{"Original": map[string]any{"X": 1.0, "Y": 1.0, "Z": 1.0, "W": 1.0}}
+var defaultTextColor = map[string]any{"Spawn": map[string]any{"X": 1.0, "Y": 1.0, "Z": 1.0, "W": 1.0}}
 
 func (t *Text) Construct(data map[string]any) {
 	t.Attached.Construct(data)

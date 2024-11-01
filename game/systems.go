@@ -15,8 +15,8 @@ const (
 //entity := archetypes.CreatePlayerBody(db)
 //playerBody := core.GetBody(db, entity)
 /*if spawn != nil {
-	playerBody.Pos.Original = spawn.Spawn
-	playerBody.Pos.ResetToOriginal()
+	playerBody.Pos.Spawn = spawn.Spawn
+	playerBody.Pos.ResetToSpawn()
 }*/
 //player = behaviors.GetPlayer(db, entity)
 

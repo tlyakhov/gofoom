@@ -34,7 +34,7 @@
     "Entity": "3",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
@@ -42,20 +42,20 @@
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 110,
           "Y": 0,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 64,
           "Y": 64
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -96,7 +96,7 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
@@ -104,20 +104,20 @@
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 40,
           "Y": -50,
           "Z": 32
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -153,7 +153,7 @@
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -166,7 +166,7 @@
     },
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
@@ -174,20 +174,20 @@
       "Mass": 80,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 10,
           "Y": 10
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -199,7 +199,7 @@
     "Entity": "6",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
@@ -207,20 +207,20 @@
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 50,
           "Y": 0,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 64,
           "Y": 64
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
@@ -256,7 +256,7 @@
     },
     "materials.Solid": {
       "Diffuse": {
-        "Original": {
+        "Spawn": {
           "W": 0.5,
           "X": 0,
           "Y": 0,
@@ -273,14 +273,9 @@
       "Name": "Split Starting (1)"
     },
     "core.Sector": {
-      "Bodies": [
-        "15",
-        "4",
-        "5",
-        "6"
-      ],
+      "Bodies": ["15", "4", "5", "6"],
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -326,7 +321,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -337,11 +332,9 @@
       "Name": "Split Starting (2)"
     },
     "core.Sector": {
-      "Bodies": [
-        "3"
-      ],
+      "Bodies": ["3"],
       "Bottom.Z": {
-        "Original": 0
+        "Spawn": 0
       },
       "Top.Surface": {
         "Material": "2"
@@ -389,7 +382,7 @@
         }
       ],
       "Top.Z": {
-        "Original": 64
+        "Spawn": 64
       }
     }
   },
@@ -397,7 +390,7 @@
     "Entity": "15",
     "core.Body": {
       "Angle": {
-        "Original": 0
+        "Spawn": 0
       },
       "BoundingRadius": 10,
       "CollisionResponse": "Slide",
@@ -405,20 +398,20 @@
       "Mass": 0,
       "MountHeight": 15,
       "Pos": {
-        "Original": {
+        "Spawn": {
           "X": 80,
           "Y": 0,
           "Z": 0
         }
       },
       "Size": {
-        "Original": {
+        "Spawn": {
           "X": 64,
           "Y": 64
         }
       },
       "Vel": {
-        "Original": {
+        "Spawn": {
           "X": 0,
           "Y": 0,
           "Z": 0
