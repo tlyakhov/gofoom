@@ -111,7 +111,7 @@ func (b *Body) RenderSector() *Sector {
 	return nil
 }
 
-var defaultBodySize = map[string]any{"Original": map[string]any{"X": 10.0, "Y": 10.0}}
+var defaultBodySize = map[string]any{"Spawn": map[string]any{"X": 10.0, "Y": 10.0}}
 
 func (b *Body) Construct(data map[string]any) {
 	b.Attached.Construct(data)
@@ -129,7 +129,7 @@ func (b *Body) Construct(data map[string]any) {
 	if v, ok := data["Pos"]; ok {
 		v3 := v.(map[string]any)
 		if _, ok2 := v3["X"]; ok2 {
-			v3 = map[string]any{"Original": v3}
+			v3 = map[string]any{"Spawn": v3}
 		}
 		b.Pos.Construct(v3)
 	}
@@ -137,13 +137,13 @@ func (b *Body) Construct(data map[string]any) {
 	if v, ok := data["Size"]; ok {
 		v2 := v.(map[string]any)
 		if _, ok2 := v2["X"]; ok2 {
-			v2 = map[string]any{"Original": v2}
+			v2 = map[string]any{"Spawn": v2}
 		}
 		b.Size.Construct(v2)
 	}
 	if v, ok := data["Angle"]; ok {
 		if v2, ok2 := v.(float64); ok2 {
-			v = map[string]any{"Original": v2}
+			v = map[string]any{"Spawn": v2}
 		}
 		b.Angle.Construct(v.(map[string]any))
 	}

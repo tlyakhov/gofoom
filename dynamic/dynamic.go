@@ -6,7 +6,6 @@ package dynamic
 import (
 	"log"
 	"math"
-	"strconv"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 )
@@ -24,7 +23,7 @@ const (
 // A DynamicValue is anything in the engine that evolves over time.
 //
 // * They store several states:
-//   - Original (what to use when loading a world or respawning)
+//   - Spawn (what to use when loading a world or respawning)
 //   - Prev/Now (previous frame, next frame)
 //   - Render (a value blended between Prev & Now based on last frame time)
 //   - Input (if this is a procedurally animated value, this is the input)
@@ -33,16 +32,16 @@ const (
 // * Values can also have Animations that use easing (e.g. inventory item bobbing)
 type DynamicValue[T DynamicType] struct {
 	*Animation[T] `editable:"Animation"`
+	Spawned[T]
 
-	Now   T
-	Prev  T
-	Spawn T `editable:"Value"`
+	Prev T
 	// If there are runtime errors about this field being nil, it's probably
 	// because the .Attach() method was never called
-	Render        *T
-	Attached      bool
+	Render  *T
+	IsAngle bool // Only relevant for T=float64
+
+	// Do we need these? not used anywhere currently
 	NoRenderBlend bool // Always use next frame value
-	IsAngle       bool // Only relevant for T=float64
 	OnRender      func(blend float64)
 
 	// Procedural dynamics
@@ -81,8 +80,8 @@ func (d *DynamicValue[T]) ResetToSpawn() {
 		log.Println(concepts.StackTrace())
 		return
 	}
+	d.Spawned.ResetToSpawn()
 	d.Prev = d.Spawn
-	d.Now = d.Spawn
 	*d.Render = d.Spawn
 	d.Input = d.Spawn
 	d.prevInput = d.Spawn
@@ -94,15 +93,17 @@ func (d *DynamicValue[T]) SetAll(v T) {
 }
 
 func (d *DynamicValue[T]) Attach(sim *Simulation) {
-	sim.All.Store(d, true)
-	d.Render = &d.render
+	sim.Dynamics.Store(d, struct{}{})
+	sim.Spawnables.Store(d, struct{}{})
 	d.Attached = true
+	d.Render = &d.render
 }
 
 func (d *DynamicValue[T]) Detach(sim *Simulation) {
-	sim.All.Delete(d)
 	d.Render = &d.Now
 	d.Attached = false
+	sim.Spawnables.Delete(d)
+	sim.Dynamics.Delete(d)
 }
 
 func (d *DynamicValue[T]) NewAnimation() *Animation[T] {
@@ -207,24 +208,7 @@ func (d *DynamicValue[T]) Update(blend float64) {
 }
 
 func (d *DynamicValue[T]) Serialize() map[string]any {
-	result := make(map[string]any)
-
-	switch dc := any(d).(type) {
-	case *DynamicValue[int]:
-		result["Original"] = strconv.Itoa(dc.Spawn)
-	case *DynamicValue[float64]:
-		result["Original"] = dc.Spawn
-	case *DynamicValue[concepts.Vector2]:
-		result["Original"] = dc.Spawn.Serialize()
-	case *DynamicValue[concepts.Vector3]:
-		result["Original"] = dc.Spawn.Serialize()
-	case *DynamicValue[concepts.Vector4]:
-		result["Original"] = dc.Spawn.Serialize(false)
-	case *DynamicValue[concepts.Matrix2]:
-		result["Original"] = dc.Spawn.Serialize()
-	default:
-		log.Panicf("Tried to serialize SimVar[T] %v where T has no serializer", d)
-	}
+	result := d.Spawned.Serialize()
 
 	if d.Procedural {
 		result["Procedural"] = d.Procedural
@@ -246,43 +230,19 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 }
 
 func (d *DynamicValue[T]) Construct(data map[string]any) {
-	// Highlighting this with a comment, it's important!
-	defer d.ResetToSpawn()
-
+	d.Spawned.Construct(data)
 	d.Freq = 4.58
 	d.Damping = 0.35
 	d.Response = -3.54
-
+	d.Prev = d.Now
+	d.Input = d.Now
+	d.prevInput = d.Now
 	if !d.Attached {
 		d.Render = &d.Now
 	}
 
-	switch sc := any(d).(type) {
-	case *DynamicValue[concepts.Matrix2]:
-		sc.Spawn.SetIdentity()
-	}
-
 	if data == nil {
 		return
-	}
-
-	if v, ok := data["Original"]; ok {
-		switch dc := any(d).(type) {
-		case *DynamicValue[int]:
-			dc.Spawn, _ = strconv.Atoi(v.(string))
-		case *DynamicValue[float64]:
-			dc.Spawn = v.(float64)
-		case *DynamicValue[concepts.Vector2]:
-			dc.Spawn.Deserialize(v.(map[string]any))
-		case *DynamicValue[concepts.Vector3]:
-			dc.Spawn.Deserialize(v.(map[string]any))
-		case *DynamicValue[concepts.Vector4]:
-			dc.Spawn.Deserialize(v.(map[string]any), false)
-		case *DynamicValue[concepts.Matrix2]:
-			dc.Spawn.Deserialize(v.([]any))
-		default:
-			log.Panicf("Tried to deserialize SimVar[T] %v where T has no serializer", d)
-		}
 	}
 
 	if v, ok := data["Procedural"]; ok {
@@ -297,7 +257,7 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	if v, ok := data["Response"]; ok {
 		d.Response = v.(float64)
 	}
-	//	Input      *T      `editable:"Input"`
+	//	TODO: Serialize Input as well?
 
 	d.Recalculate()
 

@@ -34,7 +34,7 @@ func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
 
 	if v, ok := data["Z"]; ok {
 		if v2, ok2 := v.(float64); ok2 {
-			v = map[string]any{"Original": v2}
+			v = map[string]any{"Spawn": v2}
 		}
 		s.Z.Construct(v.(map[string]any))
 	}

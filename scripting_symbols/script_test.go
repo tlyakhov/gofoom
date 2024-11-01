@@ -22,7 +22,7 @@ func BenchmarkScriptedCode(b *testing.B) {
 	db := setup()
 	s := core.Script{ECS: db}
 	s.Construct(map[string]any{
-		"Code":  "core.GetSector(sectorEntity).Bottom.Z.Original=5",
+		"Code":  "core.GetSector(sectorEntity).Bottom.Z.Spawn=5",
 		"Style": "ScriptStyleStatement",
 	})
 	s.Vars["sector"] = db.GetEntityByName("sector1")

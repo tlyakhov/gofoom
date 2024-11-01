@@ -84,7 +84,7 @@ func (m *Mobile) Construct(data map[string]any) {
 	if v, ok := data["Vel"]; ok {
 		v3 := v.(map[string]any)
 		if _, ok2 := v3["X"]; ok2 {
-			v3 = map[string]any{"Original": v3}
+			v3 = map[string]any{"Spawn": v3}
 		}
 		m.Vel.Construct(v3)
 	}

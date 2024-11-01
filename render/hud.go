@@ -25,7 +25,7 @@ func (r *Renderer) RenderHud() {
 	ts.VAnchor = 0
 	for i, slot := range r.Player.Inventory {
 		r.BitBlt(slot.Image, i*40+10, r.ScreenHeight-42, 32, 32)
-		r.Print(ts, i*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count))
+		r.Print(ts, i*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
 		if slot == r.Player.CurrentWeapon {
 			r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128)
 		}

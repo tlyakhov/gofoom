@@ -8,7 +8,6 @@ import (
 	"reflect"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
@@ -270,16 +269,7 @@ func CreateMainMenu() {
 	editor.ViewSectorEntities.Menu = fyne.NewMenuItem("Toggle Sector Labels", func() { editor.SectorTypesVisible = !editor.SectorTypesVisible })
 
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
-	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() {
-		editor.ECS.Simulation.All.Range(func(key any, _ any) bool {
-			d := key.(dynamic.Dynamic)
-			d.ResetToSpawn()
-			if a := d.GetAnimation(); a != nil {
-				a.Reset()
-			}
-			return true
-		})
-	})
+	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() { controllers.ResetAllSpawnables(editor.ECS) })
 	editor.BehaviorsPause.NoModifier = true
 	editor.BehaviorsPause.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5}
 	editor.BehaviorsPause.Menu = fyne.NewMenuItem("Pause simulation", func() {

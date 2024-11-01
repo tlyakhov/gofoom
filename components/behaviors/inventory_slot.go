@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"tlyakhov/gofoom/containers"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -14,13 +15,13 @@ type InventorySlot struct {
 	ECS          *ecs.ECS
 	ValidClasses containers.Set[string] `editable:"Classes"`
 	Limit        int                    `editable:"Limit"`
-	Count        int                    `editable:"Count"`
+	Count        dynamic.Spawned[int]   `editable:"Count"`
 	Image        ecs.Entity             `editable:"Image" edit_type:"Material"`
 }
 
 func (s *InventorySlot) Construct(data map[string]any) {
 	s.Limit = 100
-	s.Count = 0
+	s.Count.SetAll(0)
 	s.Image = 0
 	s.ValidClasses = make(containers.Set[string])
 
@@ -32,7 +33,7 @@ func (s *InventorySlot) Construct(data map[string]any) {
 		s.Limit, _ = strconv.Atoi(v.(string))
 	}
 	if v, ok := data["Count"]; ok {
-		s.Count, _ = strconv.Atoi(v.(string))
+		s.Count.Construct(v.(map[string]any))
 	}
 	if v, ok := data["Image"]; ok {
 		s.Image, _ = ecs.ParseEntity(v.(string))
@@ -52,7 +53,7 @@ func (s *InventorySlot) IsSystem() bool {
 func (s *InventorySlot) Serialize() map[string]any {
 	data := make(map[string]any)
 	data["Limit"] = strconv.Itoa(s.Limit)
-	data["Count"] = strconv.Itoa(s.Count)
+	data["Count"] = s.Count.Serialize()
 	data["Image"] = s.Image.String()
 	classes := ""
 	for c := range s.ValidClasses {

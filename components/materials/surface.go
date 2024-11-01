@@ -43,7 +43,7 @@ func (s *Surface) Construct(db *ecs.ECS, data map[string]any) {
 	}
 	if v, ok := data["Transform"]; ok {
 		if v2, ok2 := v.([]any); ok2 {
-			v = map[string]any{"Original": v2}
+			v = map[string]any{"Spawn": v2}
 		}
 		s.Transform.Construct(v.(map[string]any))
 	}

@@ -11,6 +11,7 @@ import (
 
 // TODO: This can be very expensive for large areas with lots of lights. How can
 // we optimize this?
+// TODO: Can we special-case doors to block invisible sectors when closed?
 func updatePVS(pvsSector *core.Sector, normals []*concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
 	if visitor == nil {
 		pvsSector.PVS = make(map[ecs.Entity]*core.Sector)
