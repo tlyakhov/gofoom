@@ -42,6 +42,8 @@ type LightSampler struct {
 	Sector  *core.Sector
 	Segment *core.Segment
 	Normal  concepts.Vector3
+
+	xorSeed uint64
 }
 
 func (ls *LightSampler) Debug() *concepts.Vector3 {
@@ -55,16 +57,10 @@ func (ls *LightSampler) Debug() *concepts.Vector3 {
 
 func (ls *LightSampler) Get() *concepts.Vector3 {
 	//return le.Debug()
-	//r := concepts.RngXorShift64(le.XorSeed + uint64(le.ECS.Timestamp) +
-	//le.MapIndex)
-	// TODO: Figure out how to make this not tear across block boundaries while
-	// keeping the randomness
-
 	if lmResult, exists := ls.Sector.Lightmap.Load(ls.MapIndex); exists {
-		r := concepts.RngXorShift64(lmResult.RandomSeed)
-		lmResult.RandomSeed = r
+		r := concepts.RngXorShift64(ls.xorSeed ^ ls.MapIndex ^ uint64(ls.ScreenY))
 		if lmResult.Timestamp+constants.MaxLightmapAge >= ls.ECS.Frame ||
-			r%constants.LightmapRefreshDither > 0 {
+			!concepts.RngDecide(r, constants.LightmapRefreshDither) {
 			ls.Output = lmResult.Light
 			return &ls.Output
 		}
@@ -82,14 +78,13 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 	ls.ScaleW = 64
 	ls.ScaleH = 64
 	ls.Calculate(&ls.Q)
-	r := concepts.RngXorShift64(uint64(ls.ECS.Timestamp))
+	r := concepts.RngXorShift64(ls.xorSeed ^ uint64(ls.ECS.Timestamp))
 	ls.Sector.Lightmap.Store(ls.MapIndex, &core.LightmapCell{
 		Light: concepts.Vector3{
 			ls.Output[0],
 			ls.Output[1],
 			ls.Output[2]},
-		Timestamp:  ls.ECS.Frame + r%constants.LightmapRefreshDither,
-		RandomSeed: r,
+		Timestamp: ls.ECS.Frame + r%constants.LightmapRefreshDither,
 	})
 	return &ls.Output
 

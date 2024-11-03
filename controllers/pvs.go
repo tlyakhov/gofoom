@@ -9,6 +9,41 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
+type PvsController struct {
+	ecs.BaseController
+	*core.PvsQueue
+}
+
+func init() {
+	ecs.Types().RegisterController(func() ecs.Controller { return &PvsController{} }, 100)
+}
+
+func (pvs *PvsController) ComponentID() ecs.ComponentID {
+	return core.PvsQueueCID
+}
+
+func (pvs *PvsController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerAlways
+}
+
+func (pvs *PvsController) Target(target ecs.Attachable) bool {
+	pvs.PvsQueue = target.(*core.PvsQueue)
+	return pvs.PvsQueue.IsActive()
+}
+
+func (pvs *PvsController) Always() {
+	// We should potentially limit this further, if we have areas with a ton of sectors
+	for range 2 {
+		sector := pvs.PopHead()
+		if sector == nil {
+			break
+		}
+		sector.LastPVSRefresh = pvs.ECS.Frame
+		updatePVS(sector, make([]*concepts.Vector2, 0), nil, nil, nil)
+		// log.Printf("Refreshed pvs for %v", sector.Entity)
+	}
+}
+
 // TODO: This can be very expensive for large areas with lots of lights. How can
 // we optimize this?
 // TODO: Can we special-case doors to block invisible sectors when closed?

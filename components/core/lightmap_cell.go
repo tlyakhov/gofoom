@@ -6,7 +6,6 @@ package core
 import "tlyakhov/gofoom/concepts"
 
 type LightmapCell struct {
-	Light      concepts.Vector3
-	Timestamp  uint64
-	RandomSeed uint64
+	Light     concepts.Vector3
+	Timestamp uint64
 }

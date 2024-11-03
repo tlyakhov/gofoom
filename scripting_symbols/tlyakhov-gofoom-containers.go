@@ -7,13 +7,8 @@ package scripting_symbols
 
 import (
 	"reflect"
-	"tlyakhov/gofoom/containers"
 )
 
 func init() {
-	Symbols["tlyakhov/gofoom/containers/containers"] = map[string]reflect.Value{
-		// type definitions
-		"SyncQueue":       reflect.ValueOf((*containers.SyncQueue)(nil)),
-		"SyncUniqueQueue": reflect.ValueOf((*containers.SyncUniqueQueue)(nil)),
-	}
+	Symbols["tlyakhov/gofoom/containers/containers"] = map[string]reflect.Value{}
 }

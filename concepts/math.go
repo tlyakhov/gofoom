@@ -142,6 +142,11 @@ func RngXorShift64(xorSeed uint64) uint64 {
 	return x
 }
 
+func RngDecide(r uint64, mod uint64) bool {
+	block := math.MaxUint64 / mod
+	return r < block
+}
+
 func TruncateString(str string, max int) string {
 	lastSpaceIx := -1
 	len := 0

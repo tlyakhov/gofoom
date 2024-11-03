@@ -5,14 +5,13 @@ package controllers
 
 import (
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
 type SectorController struct {
 	ecs.BaseController
 	*core.Sector
-	pvsRecalculated int
+	pvsQueue *core.PvsQueue
 }
 
 func init() {
@@ -37,31 +36,34 @@ func (sc *SectorController) Recalculate() {
 	sc.Sector.Recalculate()
 }
 
-// TODO: This should be done with an actual queue, to avoid big lag spikes
-func (sc *SectorController) pvs() {
-	// Only update a few sectors
-	if sc.pvsRecalculated > 4 {
+func (sc *SectorController) getOrCreateQ() {
+	if sc.pvsQueue != nil {
 		return
 	}
-	// Tolerate 10 frame refresh?
-	if sc.ECS.Frame-sc.LastPVSRefresh < 10 {
-		return
+	a := sc.ECS.First(core.PvsQueueCID)
+	if a != nil {
+		sc.pvsQueue = a.(*core.PvsQueue)
+	} else {
+		e := sc.ECS.NewEntity()
+		sc.pvsQueue = sc.ECS.NewAttachedComponent(e, core.PvsQueueCID).(*core.PvsQueue)
+		sc.pvsQueue.System = true
 	}
-
-	sc.pvsRecalculated++
-	sc.LastPVSRefresh = sc.ECS.Frame
-	updatePVS(sc.Sector, make([]*concepts.Vector2, 0), nil, nil, nil)
 }
 
 func (sc *SectorController) Always() {
+	sc.getOrCreateQ()
 	frame := sc.LastSeenFrame.Load()
 	// This sector hasn't been observed recently
-	// TODO: In this case, we should queue up a PVS refresh at the tail of the queue.
 	if frame <= 0 {
+		sc.pvsQueue.PushTail(sc.Sector)
 		return
 	}
 	// This sector has been observed, queue up recalculating PVS
-	sc.pvs()
+	// Tolerate 10 frame refresh?
+	if sc.ECS.Frame-sc.LastPVSRefresh > 10 {
+		sc.pvsQueue.PushHead(sc.Sector)
+	}
+
 	// Cache for a maximum number of frames
 	if sc.ECS.Frame-uint64(frame) < 120 {
 		return

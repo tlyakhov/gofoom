@@ -75,6 +75,14 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	mw.Context.SetRGB(0.33, 0.33, 0.33)
 	mw.DrawBodyAngle(body)
 
+	if prox := behaviors.GetProximity(body.ECS, body.Entity); prox != nil {
+		mw.Context.SetRGB(0, 0.33, 0.33)
+		mw.Context.NewSubPath()
+		mw.Context.DrawArc(body.Pos.Now[0], body.Pos.Now[1], prox.Range, 0, math.Pi*2)
+		mw.Context.ClosePath()
+		mw.Context.Stroke()
+	}
+
 	if editor.ComponentNamesVisible {
 		text := body.NameString(body.ECS)
 		mw.Context.Push()
