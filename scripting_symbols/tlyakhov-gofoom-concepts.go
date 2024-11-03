@@ -46,6 +46,7 @@ func init() {
 		"ParseVector4":         reflect.ValueOf(concepts.ParseVector4),
 		"RGBAToInt32":          reflect.ValueOf(concepts.RGBAToInt32),
 		"Rad2deg":              reflect.ValueOf(concepts.Rad2deg),
+		"RngDecide":            reflect.ValueOf(concepts.RngDecide),
 		"RngXorShift64":        reflect.ValueOf(concepts.RngXorShift64),
 		"StackTrace":           reflect.ValueOf(concepts.StackTrace),
 		"TruncateString":       reflect.ValueOf(concepts.TruncateString),

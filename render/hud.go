@@ -89,7 +89,7 @@ func (r *Renderer) DebugInfo() {
 		if i >= r.Player.Notices.Length() {
 			break
 		}
-		msg := r.Player.Notices.Items[i].(string)
+		msg := r.Player.Notices.Items[i]
 		if t, ok := r.Player.Notices.SetWithTimes.Load(msg); ok {
 			r.Print(ts, 4, 54+i*10, msg)
 			age := time.Now().UnixMilli() - t.(int64)

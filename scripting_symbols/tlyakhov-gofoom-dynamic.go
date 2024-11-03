@@ -62,11 +62,13 @@ func init() {
 		"Dynamic":              reflect.ValueOf((*dynamic.Dynamic)(nil)),
 		"DynamicStage":         reflect.ValueOf((*dynamic.DynamicStage)(nil)),
 		"Simulation":           reflect.ValueOf((*dynamic.Simulation)(nil)),
+		"Spawnable":            reflect.ValueOf((*dynamic.Spawnable)(nil)),
 		"TweeningFunc":         reflect.ValueOf((*dynamic.TweeningFunc)(nil)),
 
 		// interface wrapper definitions
-		"_Animated": reflect.ValueOf((*_tlyakhov_gofoom_dynamic_Animated)(nil)),
-		"_Dynamic":  reflect.ValueOf((*_tlyakhov_gofoom_dynamic_Dynamic)(nil)),
+		"_Animated":  reflect.ValueOf((*_tlyakhov_gofoom_dynamic_Animated)(nil)),
+		"_Dynamic":   reflect.ValueOf((*_tlyakhov_gofoom_dynamic_Dynamic)(nil)),
+		"_Spawnable": reflect.ValueOf((*_tlyakhov_gofoom_dynamic_Spawnable)(nil)),
 	}
 }
 
@@ -116,4 +118,22 @@ func (W _tlyakhov_gofoom_dynamic_Dynamic) ResetToSpawn() {
 }
 func (W _tlyakhov_gofoom_dynamic_Dynamic) Update(a0 float64) {
 	W.WUpdate(a0)
+}
+
+// _tlyakhov_gofoom_dynamic_Spawnable is an interface wrapper for Spawnable type
+type _tlyakhov_gofoom_dynamic_Spawnable struct {
+	IValue        interface{}
+	WAttach       func(sim *dynamic.Simulation)
+	WDetach       func(sim *dynamic.Simulation)
+	WResetToSpawn func()
+}
+
+func (W _tlyakhov_gofoom_dynamic_Spawnable) Attach(sim *dynamic.Simulation) {
+	W.WAttach(sim)
+}
+func (W _tlyakhov_gofoom_dynamic_Spawnable) Detach(sim *dynamic.Simulation) {
+	W.WDetach(sim)
+}
+func (W _tlyakhov_gofoom_dynamic_Spawnable) ResetToSpawn() {
+	W.WResetToSpawn()
 }

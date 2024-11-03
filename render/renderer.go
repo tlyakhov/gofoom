@@ -18,6 +18,8 @@ import (
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/loov/hrtime"
 )
 
 // Renderer holds all state related to a specific camera/map configuration.
@@ -27,6 +29,7 @@ type Renderer struct {
 	columnGroup    *sync.WaitGroup
 	startingSector *core.Sector
 	textStyle      *TextStyle
+	xorSeed        uint64
 
 	ICacheHits, ICacheMisses atomic.Int64
 }
@@ -65,6 +68,7 @@ func (r *Renderer) Initialize() {
 		r.Columns[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
 	r.textStyle = r.NewTextStyle()
+	r.xorSeed = concepts.RngXorShift64(uint64(hrtime.Now().Milliseconds()))
 }
 
 func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
@@ -299,6 +303,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// Initialize a column...
 	column := &r.Columns[columnIndex]
 	column.CameraZ = r.Player.CameraZ
+	column.LightSampler.xorSeed = r.xorSeed
 	column.Ray = &Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = MaterialSampler{Config: r.Config, Ray: column.Ray}
 	ewd2s := make([]*entityWithDist2, 0, 64)
@@ -382,6 +387,7 @@ func (r *Renderer) Render() {
 	r.RefreshPlayer()
 	r.ICacheHits.Store(0)
 	r.ICacheMisses.Store(0)
+	r.xorSeed = concepts.RngXorShift64(r.xorSeed)
 
 	// Clear buffer, mainly useful for debugging
 	/*for i := 0; i < len(r.FrameBuffer); i++ {

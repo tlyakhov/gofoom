@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"math"
+	"strconv"
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -158,10 +159,10 @@ func PickUpInventoryItem(p *behaviors.Player, item *behaviors.InventoryItem) {
 			p.Notices.Push("Can't pick up more " + item.Class)
 			return
 		}
-		// TODO: Handle mismatches of slot limits and counts better
-		slot.Count.Now++
-		p.Notices.Push("Picked up a " + item.Class)
-		item.Count.Now--
+		toAdd := concepts.Min(item.Count.Now, slot.Limit-slot.Count.Now)
+		slot.Count.Now += toAdd
+		p.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)
+		item.Count.Now -= toAdd
 		// Disable all the entity components
 		for _, c := range item.ECS.AllComponents(item.Entity) {
 			if c != nil {

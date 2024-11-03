@@ -23,7 +23,7 @@ type Player struct {
 	CurrentWeapon *InventorySlot
 	ActionPressed bool
 
-	Notices containers.SyncUniqueQueue
+	Notices containers.SyncUniqueQueue[string]
 }
 
 var PlayerCID ecs.ComponentID

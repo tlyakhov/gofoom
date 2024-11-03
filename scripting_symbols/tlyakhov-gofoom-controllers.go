@@ -29,6 +29,7 @@ func init() {
 		"MovePlayerForce":           reflect.ValueOf(controllers.MovePlayerForce),
 		"MovePlayerNoClip":          reflect.ValueOf(controllers.MovePlayerNoClip),
 		"PickUpInventoryItem":       reflect.ValueOf(controllers.PickUpInventoryItem),
+		"ResetAllSpawnables":        reflect.ValueOf(controllers.ResetAllSpawnables),
 		"Respawn":                   reflect.ValueOf(controllers.Respawn),
 
 		// type definitions
@@ -40,6 +41,7 @@ func init() {
 		"ParticleController":        reflect.ValueOf((*controllers.ParticleController)(nil)),
 		"PlayerController":          reflect.ValueOf((*controllers.PlayerController)(nil)),
 		"ProximityController":       reflect.ValueOf((*controllers.ProximityController)(nil)),
+		"PvsController":             reflect.ValueOf((*controllers.PvsController)(nil)),
 		"SectorController":          reflect.ValueOf((*controllers.SectorController)(nil)),
 		"SectorSplitter":            reflect.ValueOf((*controllers.SectorSplitter)(nil)),
 		"UnderwaterController":      reflect.ValueOf((*controllers.UnderwaterController)(nil)),
