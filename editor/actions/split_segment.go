@@ -30,9 +30,9 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	md := a.WorldGrid(&a.State().MouseDownWorld)
 	m := a.WorldGrid(&a.State().MouseWorld)
 	isect := new(concepts.Vector2)
-	exists := ss.original.Intersect2D(md, m, isect)
+	u := ss.original.Intersect2D(md, m, isect)
 
-	if !exists || *isect == ss.original.P || *isect == ss.original.Next.P {
+	if u < 0 || *isect == ss.original.P || *isect == ss.original.Next.P {
 		return false
 	}
 

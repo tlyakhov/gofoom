@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    xml:space="preserve"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
    sodipodi:docname="logo.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,14 +24,14 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="1.26"
-     inkscape:cx="300"
+     inkscape:cx="299.60317"
      inkscape:cy="267.06349"
      inkscape:window-width="2560"
      inkscape:window-height="1302"
      inkscape:window-x="0"
      inkscape:window-y="1145"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer5"
      showgrid="false"><inkscape:grid
        id="grid1"
        units="mm"
@@ -62,7 +62,7 @@
      id="layer2"
      inkscape:label="Circle"
      style="display:inline;opacity:1"><circle
-       style="fill:#29144b;fill-opacity:1;stroke:none;stroke-width:0.503854;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke markers fill"
+       style="fill:#3e1e71;fill-opacity:1;stroke:none;stroke-width:0.503854;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke markers fill"
        id="path1"
        cx="70"
        cy="70"
@@ -115,7 +115,7 @@
      id="layer5"
      inkscape:label="Triangle Mask"
      style="display:inline;opacity:1"><path
-       style="display:inline;opacity:1;fill:#29144b;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke markers fill"
+       style="display:inline;opacity:1;fill:#3e1e71;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke markers fill"
        d="M 10.251927,70 95.0001,132.26429 10.251927,129.74807 10.251805,70.0001"
        id="path5" /></g><g
      inkscape:groupmode="layer"

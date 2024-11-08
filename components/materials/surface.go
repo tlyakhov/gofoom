@@ -23,7 +23,7 @@ type Surface struct {
 	ECS         *ecs.ECS
 	Material    ecs.Entity                             `editable:"Material" edit_type:"Material"`
 	ExtraStages []*ShaderStage                         `editable:"Extra Shader Stages"`
-	Transform   dynamic.DynamicValue[concepts.Matrix2] `editable:"ℝ2→ℝ2"`
+	Transform   dynamic.DynamicValue[concepts.Matrix2] `editable:"ℝ²→ℝ²"`
 }
 
 func (s *Surface) Construct(db *ecs.ECS, data map[string]any) {

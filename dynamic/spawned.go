@@ -10,7 +10,7 @@ import (
 )
 
 type Spawned[T DynamicType] struct {
-	Spawn    T `editable:"Value"`
+	Spawn    T `editable:"Spawn"`
 	Now      T
 	Attached bool
 }

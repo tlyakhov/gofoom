@@ -69,9 +69,10 @@ func (f *PropertyGridField) Short() string {
 }
 
 func (f *PropertyGridField) IsEmbeddedType() bool {
+	s := f.Type.String()
 	for _, t := range EmbeddedTypes {
 		//log.Printf("%v - %v", f.Short(), f.Type.String())
-		if f.Type.String() == t {
+		if s == t {
 			return true
 		}
 	}

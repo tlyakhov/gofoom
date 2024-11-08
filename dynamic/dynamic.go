@@ -32,7 +32,7 @@ const (
 // * Values can also have Animations that use easing (e.g. inventory item bobbing)
 type DynamicValue[T DynamicType] struct {
 	*Animation[T] `editable:"Animation"`
-	Spawned[T]
+	Spawned[T]    `editable:"^"`
 
 	Prev T
 	// If there are runtime errors about this field being nil, it's probably

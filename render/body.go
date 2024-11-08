@@ -69,8 +69,10 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, c *column, xStart, xEnd int)
 	if lit := materials.GetLit(r.ECS, b.Entity); lit != nil {
 		ls := &c.LightSampler
 		ls.Sector = b.Sector()
-		ls.Type = LightSamplerBody
-		ls.MapIndex = c.WorldToLightmapAddress(ls.Sector, b.Pos.Render, uint16(ls.Type))
+		ls.Normal[0] = math.Cos(*b.Angle.Render * concepts.Deg2rad)
+		ls.Normal[1] = math.Sin(*b.Angle.Render * concepts.Deg2rad)
+		ls.Normal[2] = 0
+		ls.Hash = c.WorldToLightmapHash(ls.Sector, b.Pos.Render, &ls.Normal)
 		ls.Segment = nil
 		ls.InputBody = b.Entity
 		ls.Get()

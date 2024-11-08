@@ -70,8 +70,8 @@ func (g *GameWidget) Draw() {
 		return
 	}
 
-	pixels := g.Context.Image().(*image.RGBA).Pix
 	editor.Lock.Lock()
+	pixels := g.Context.Image().(*image.RGBA).Pix
 	editor.Renderer.Render()
 	editor.Renderer.DebugInfo()
 	editor.Renderer.ApplyBuffer(pixels)

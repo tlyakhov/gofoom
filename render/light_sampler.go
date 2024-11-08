@@ -15,21 +15,10 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-type LightSamplerType int
-
-//go:generate go run github.com/dmarkham/enumer -type=LightSamplerType -json
-const (
-	LightSamplerBody LightSamplerType = iota
-	LightSamplerFloor
-	LightSamplerCeil
-	LightSamplerWall
-)
-
-// All the data and state required to retrieve/calculate a lightmap texel
+// All the data and state required to retrieve/calculate a lightmap voxel
 type LightSampler struct {
 	MaterialSampler
-	Type         LightSamplerType
-	MapIndex     uint64
+	Hash         uint64
 	Delta        concepts.Vector3
 	Output       concepts.Vector3
 	Filter       concepts.Vector4
@@ -47,7 +36,7 @@ type LightSampler struct {
 }
 
 func (ls *LightSampler) Debug() *concepts.Vector3 {
-	ls.LightmapAddressToWorld(ls.Sector, &ls.Q, ls.MapIndex)
+	ls.LightmapHashToWorld(ls.Sector, &ls.Q, ls.Hash)
 	dbg := ls.Q.Mul(1.0 / 64.0)
 	ls.Output[0] = dbg[0] - math.Floor(dbg[0])
 	ls.Output[1] = dbg[1] - math.Floor(dbg[1])
@@ -56,16 +45,15 @@ func (ls *LightSampler) Debug() *concepts.Vector3 {
 }
 
 func (ls *LightSampler) Get() *concepts.Vector3 {
-	//return le.Debug()
-	if lmResult, exists := ls.Sector.Lightmap.Load(ls.MapIndex); exists {
-		r := concepts.RngXorShift64(ls.xorSeed ^ ls.MapIndex ^ uint64(ls.ScreenY))
+	if lmResult, exists := ls.Sector.Lightmap.Load(ls.Hash); exists {
+		r := concepts.RngXorShift64(ls.xorSeed ^ ls.Hash ^ uint64(ls.ScreenY))
 		if lmResult.Timestamp+constants.MaxLightmapAge >= ls.ECS.Frame ||
 			!concepts.RngDecide(r, constants.LightmapRefreshDither) {
 			ls.Output = lmResult.Light
 			return &ls.Output
 		}
 	}
-	ls.LightmapAddressToWorld(ls.Sector, &ls.Q, ls.MapIndex)
+	ls.LightmapHashToWorld(ls.Sector, &ls.Q, ls.Hash)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
 	fz, cz := ls.Sector.ZAt(dynamic.DynamicRender, ls.Q.To2D())
@@ -78,13 +66,12 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 	ls.ScaleW = 64
 	ls.ScaleH = 64
 	ls.Calculate(&ls.Q)
-	r := concepts.RngXorShift64(ls.xorSeed ^ uint64(ls.ECS.Timestamp))
-	ls.Sector.Lightmap.Store(ls.MapIndex, &core.LightmapCell{
+	ls.Sector.Lightmap.Store(ls.Hash, &core.LightmapCell{
 		Light: concepts.Vector3{
 			ls.Output[0],
 			ls.Output[1],
 			ls.Output[2]},
-		Timestamp: ls.ECS.Frame + r%constants.LightmapRefreshDither,
+		Timestamp: ls.ECS.Frame,
 	})
 	return &ls.Output
 
@@ -104,7 +91,7 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
-		if d2 >= ls.LightGrid*ls.LightGrid {
+		if d2 >= ls.LightGrid*ls.LightGrid*2 {
 			continue
 		}
 
@@ -171,7 +158,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, seg := range sector.Segments {
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
-			if (ls.Type == LightSamplerWall && &seg.Segment == ls.Segment) ||
+			if &seg.Segment == ls.Segment ||
 				ls.Delta[0]*seg.Normal[0]+ls.Delta[1]*seg.Normal[1] > 0 {
 				// log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				continue
@@ -292,7 +279,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, b := range sector.Bodies {
 			if !b.Active ||
 				b.Entity == lightBody.Entity ||
-				(ls.Type == LightSamplerBody && ls.InputBody == b.Entity) {
+				b.Entity == ls.InputBody {
 				continue
 			}
 			vis := materials.GetVisible(ls.ECS, b.Entity)
@@ -357,8 +344,6 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		diffuseLight := 1.0
 		attenuation := 1.0
 		if dist != 0 {
-			// Normalize
-			ls.LightWorld.MulSelf(1.0 / dist)
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
 				//log.Printf("%v\n", dist)
@@ -375,9 +360,11 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 				continue
 			}
 		}
-		if ls.Type == LightSamplerBody {
+		if ls.InputBody != 0 {
 			diffuseLight = attenuation
 		} else {
+			// Normalize
+			ls.LightWorld.MulSelf(1.0 / dist)
 			diffuseLight = ls.Normal.Dot(&ls.LightWorld) * attenuation
 		}
 

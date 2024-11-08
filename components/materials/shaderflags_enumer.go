@@ -15,12 +15,15 @@ const (
 	_ShaderFlagsLowerName_1 = "shaderstaticbackground"
 	_ShaderFlagsName_2      = "ShaderLiquid"
 	_ShaderFlagsLowerName_2 = "shaderliquid"
+	_ShaderFlagsName_3      = "ShaderFrob"
+	_ShaderFlagsLowerName_3 = "shaderfrob"
 )
 
 var (
 	_ShaderFlagsIndex_0 = [...]uint8{0, 11, 20}
 	_ShaderFlagsIndex_1 = [...]uint8{0, 22}
 	_ShaderFlagsIndex_2 = [...]uint8{0, 12}
+	_ShaderFlagsIndex_3 = [...]uint8{0, 10}
 )
 
 func (i ShaderFlags) String() string {
@@ -32,6 +35,8 @@ func (i ShaderFlags) String() string {
 		return _ShaderFlagsName_1
 	case i == 8:
 		return _ShaderFlagsName_2
+	case i == 16:
+		return _ShaderFlagsName_3
 	default:
 		return fmt.Sprintf("ShaderFlags(%d)", i)
 	}
@@ -45,9 +50,10 @@ func _ShaderFlagsNoOp() {
 	_ = x[ShaderSky-(2)]
 	_ = x[ShaderStaticBackground-(4)]
 	_ = x[ShaderLiquid-(8)]
+	_ = x[ShaderFrob-(16)]
 }
 
-var _ShaderFlagsValues = []ShaderFlags{ShaderTiled, ShaderSky, ShaderStaticBackground, ShaderLiquid}
+var _ShaderFlagsValues = []ShaderFlags{ShaderTiled, ShaderSky, ShaderStaticBackground, ShaderLiquid, ShaderFrob}
 
 var _ShaderFlagsNameToValueMap = map[string]ShaderFlags{
 	_ShaderFlagsName_0[0:11]:       ShaderTiled,
@@ -58,6 +64,8 @@ var _ShaderFlagsNameToValueMap = map[string]ShaderFlags{
 	_ShaderFlagsLowerName_1[0:22]:  ShaderStaticBackground,
 	_ShaderFlagsName_2[0:12]:       ShaderLiquid,
 	_ShaderFlagsLowerName_2[0:12]:  ShaderLiquid,
+	_ShaderFlagsName_3[0:10]:       ShaderFrob,
+	_ShaderFlagsLowerName_3[0:10]:  ShaderFrob,
 }
 
 var _ShaderFlagsNames = []string{
@@ -65,6 +73,7 @@ var _ShaderFlagsNames = []string{
 	_ShaderFlagsName_0[11:20],
 	_ShaderFlagsName_1[0:22],
 	_ShaderFlagsName_2[0:12],
+	_ShaderFlagsName_3[0:10],
 }
 
 // ShaderFlagsString retrieves an enum value from the enum constants string name.

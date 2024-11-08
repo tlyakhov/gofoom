@@ -3241,7 +3241,7 @@
       "Range": 50,
       "Scripts": [
         {
-          "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Frame = 3",
+          "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags |= materials.ShaderFrob",
           "Style": "ScriptStyleStatement"
         }
       ]
