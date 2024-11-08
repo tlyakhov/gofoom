@@ -61,35 +61,37 @@ func (c *Config) RefreshPlayer() {
 	}
 }
 
-const lightmapMask uint64 = (1 << 16) - 1
+const lightmapVMask uint64 = (1 << 16) - 1
+const lightmapNMask uint64 = (1 << 5) - 1
 
-func (c *Config) WorldToLightmapAddress(s *core.Sector, v *concepts.Vector3, extraHash uint16) uint64 {
+func (c *Config) WorldToLightmapHash(s *core.Sector, v *concepts.Vector3, n *concepts.Vector3) uint64 {
 	// Floor is important, needs to truncate towards -Infinity rather than 0
 	z := int64(math.Floor(v[2]/c.LightGrid)) - s.LightmapBias[2]
 	y := int64(math.Floor(v[1]/c.LightGrid)) - s.LightmapBias[1]
 	x := int64(math.Floor(v[0]/c.LightGrid)) - s.LightmapBias[0]
-	/*if x < 0 || y < 0 || z < 0 {
-		fmt.Printf("Error: lightmap address conversion resulted in negative value: %v,%v,%v\n", x, y, z)
-	}*/
-	// Bit shift and mask the components, and add the sector entity at the end
-	// to ensure that overlapping addresses are distinct for each sector
-	return (((uint64(x) & lightmapMask) << 48) |
-		((uint64(y) & lightmapMask) << 32) |
-		((uint64(z) & lightmapMask) << 16) |
-		uint64(extraHash)) //+ (uint64(s.Entity) * 1009)
+	// Quantize the normal to 5 bits per dimension
+	nz := int8(n[2] * 15)
+	ny := int8(n[1] * 15)
+	nx := int8(n[0] * 15)
+	// Bit shift and mask the components
+	return ((uint64(x) & lightmapVMask) << 48) |
+		((uint64(y) & lightmapVMask) << 32) |
+		((uint64(z) & lightmapVMask) << 16) |
+		((uint64(nx) & lightmapNMask) << 10) |
+		((uint64(ny) & lightmapNMask) << 5) |
+		((uint64(nz) & lightmapNMask) << 0)
 }
 
-func (c *Config) LightmapAddressToWorld(s *core.Sector, result *concepts.Vector3, a uint64) *concepts.Vector3 {
-	//w := uint64(a & wMask)
-	//a -= uint64(s.Entity) * 1009
+func (c *Config) LightmapHashToWorld(s *core.Sector, result *concepts.Vector3, a uint64) *concepts.Vector3 {
+	// Bypass the normal
 	a = a >> 16
-	z := int64((a & lightmapMask)) + s.LightmapBias[2]
-	result[2] = float64(z) * c.LightGrid
+	z := int64(int16(a&lightmapVMask)) + s.LightmapBias[2]
+	result[2] = float64(z * int64(c.LightGrid))
 	a = a >> 16
-	y := int64((a & lightmapMask)) + s.LightmapBias[1]
-	result[1] = float64(y) * c.LightGrid
+	y := int64(int16(a&lightmapVMask)) + s.LightmapBias[1]
+	result[1] = float64(y * int64(c.LightGrid))
 	a = a >> 16
-	x := int64((a & lightmapMask)) + s.LightmapBias[0]
-	result[0] = float64(x) * c.LightGrid
+	x := int64(int16(a&lightmapVMask)) + s.LightmapBias[0]
+	result[0] = float64(x * int64(c.LightGrid))
 	return result
 }

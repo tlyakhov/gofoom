@@ -13,6 +13,7 @@ func (r *Renderer) renderInternalSegment(ewd *entityWithDist2, c *column, xStart
 	c.Segment = &ewd.InternalSegment.Segment
 	c.IntersectionTop = ewd.InternalSegment.Top
 	c.IntersectionBottom = ewd.InternalSegment.Bottom
+	c.LightSampler.InputBody = 0
 	c.LightSampler.Sector = c.Sector
 	c.LightSampler.Segment = &ewd.InternalSegment.Segment
 	ewd.InternalSegment.Normal.To3D(&c.LightSampler.Normal)
@@ -25,7 +26,8 @@ func (r *Renderer) renderInternalSegment(ewd *entityWithDist2, c *column, xStart
 			continue
 		}
 		// Ray intersection
-		if !ewd.InternalSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
+		u := ewd.InternalSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
+		if u < 0 {
 			continue
 		}
 		c.ScreenX = x
@@ -34,7 +36,7 @@ func (r *Renderer) renderInternalSegment(ewd *entityWithDist2, c *column, xStart
 		c.Distance = c.Ray.DistTo(&c.RaySegTest)
 		c.RaySegIntersect[0] = c.RaySegTest[0]
 		c.RaySegIntersect[1] = c.RaySegTest[1]
-		c.segmentIntersection.U = c.RaySegTest.Dist(ewd.InternalSegment.A) / ewd.InternalSegment.Length
+		c.segmentIntersection.U = u
 
 		c.CalcScreen()
 

@@ -46,7 +46,7 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 
 	pe.Lifetime = 5000
 	pe.FadeTime = 1000
-	pe.Limit = 100
+	pe.Limit = 30
 	pe.Source = 0
 	pe.XYSpread = 10
 	pe.ZSpread = 10

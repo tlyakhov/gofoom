@@ -4,7 +4,6 @@
 package render
 
 import (
-	"fmt"
 	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -68,8 +67,8 @@ type column struct {
 	Light               concepts.Vector4
 	LightVoxelA         concepts.Vector3
 	LightResult         [8]concepts.Vector3
-	LightLastIndex      uint64
-	LightLastColIndices []uint64
+	LightLastHash       uint64
+	LightLastColHashes  []uint64
 	LightLastColResults []concepts.Vector3
 	// For picking things in editor
 	Pick            bool
@@ -121,44 +120,53 @@ func (c *column) SampleLight(result *concepts.Vector4, material ecs.Entity, worl
 		return lit.Apply(result, &c.Light)
 	}
 
-	extraHash := uint16(c.LightSampler.Type)
-	if c.LightSampler.Type == LightSamplerWall {
-		extraHash += c.Segment.LightExtraHash
-	}
-
-	m0 := c.WorldToLightmapAddress(c.Sector, world, extraHash)
-	c.LightSampler.MapIndex = m0
-	c.LightmapAddressToWorld(c.Sector, &c.LightVoxelA, m0)
+	m0 := c.WorldToLightmapHash(c.Sector, world, &c.LightSampler.Normal)
+	c.LightSampler.Hash = m0
+	c.LightmapHashToWorld(c.Sector, &c.LightVoxelA, m0)
 	// These deltas represent 0.0 - 1.0 distances within the light voxel
 	dx := (world[0] - c.LightVoxelA[0]) / c.LightGrid
 	dy := (world[1] - c.LightVoxelA[1]) / c.LightGrid
 	dz := (world[2] - c.LightVoxelA[2]) / c.LightGrid
 
-	if dx < 0 || dy < 0 || dz < 0 {
+	/*if dx < 0 || dy < 0 || dz < 0 || dx > 1 || dy > 1 || dz > 1 {
 		fmt.Printf("Lightmap filter: dx/dy/dz < 0: %v,%v,%v\n", dx, dy, dz)
-	}
+		// This duplicated code is for debugging
+		m0 := c.WorldToLightmapHash(c.Sector, world, &c.LightSampler.Normal)
+		c.LightSampler.Hash = m0
+		c.LightmapHashToWorld(c.Sector, &c.LightVoxelA, m0)
+	}*/
 
+	// We XOR with the sector entity to avoid problems across sector boundaries
+	cacheHash := m0 ^ concepts.RngXorShift64(uint64(c.Sector.Entity))
 	//debugVoxel := false
-	if m0 != c.LightLastIndex {
-		if m0 == c.LightLastColIndices[c.ScreenY] && c.LightLastColIndices[c.ScreenY] != 0 {
+	if cacheHash != c.LightLastHash {
+		if cacheHash == c.LightLastColHashes[c.ScreenY] && c.LightLastColHashes[c.ScreenY] != 0 {
 			copy(c.LightResult[:], c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8])
 		} else {
 			//debugVoxel = true
 			c.LightSampler.Get()
 			c.LightResult[0] = c.LightSampler.Output
-			c.LightLastColIndices[c.ScreenY] = m0
+			c.LightLastColHashes[c.ScreenY] = cacheHash
 			for i := 1; i < 8; i++ {
-				// Some bit shifting to generate our light voxel
-				// addresses without ifs. See LightmapAddressToWorld for details
-				c.LightSampler.MapIndex = m0 + uint64(i&1)<<16 + uint64(i&2)<<(32-1) + uint64(i&4)<<(48-2)
+				/*c.LightVoxelA[2] += float64((i & 1)) * c.LightGrid
+				c.LightVoxelA[1] += float64((i&2)>>1) * c.LightGrid
+				c.LightVoxelA[0] += float64((i&4)>>2) * c.LightGrid
+				c.LightSampler.MapIndex = c.WorldToLightmapAddress(c.Sector, &c.LightVoxelA, &c.LightSampler.Normal)
+				c.LightVoxelA[2] -= float64((i & 1)) * c.LightGrid
+				c.LightVoxelA[1] -= float64((i&2)>>1) * c.LightGrid
+				c.LightVoxelA[0] -= float64((i&4)>>2) * c.LightGrid*/
+				// Some bit shifting to generate our light voxel hash without
+				// branches. See LightmapHashToWorld for details
+				c.LightSampler.Hash = m0 + uint64(i&1)<<16 + uint64(i&2)<<(32-1) + uint64(i&4)<<(48-2)
 				c.LightSampler.Get()
 				c.LightResult[i] = c.LightSampler.Output
 			}
 			copy(c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8], c.LightResult[:])
 		}
-		c.LightLastIndex = m0
+		c.LightLastHash = cacheHash
 	}
 
+	// Bilinear interpolation of R,G,B components
 	for i := range 3 {
 		c00 := c.LightResult[0][i]*(1.0-dx) + c.LightResult[4][i]*dx
 		c01 := c.LightResult[1][i]*(1.0-dx) + c.LightResult[5][i]*dx
@@ -180,10 +188,6 @@ func (c *column) SampleLight(result *concepts.Vector4, material ecs.Entity, worl
 }
 
 func (c *column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3) *concepts.Vector4 {
-	extraHash := uint16(c.LightSampler.Type)
-	if c.LightSampler.Type == LightSamplerWall {
-		extraHash += c.Segment.LightExtraHash
-	}
 	/*
 		Fun dithered look, maybe leverage as an effect later?
 		jitter := *world
@@ -191,12 +195,11 @@ func (c *column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vecto
 		jitter[1] += (rand.Float64() - 0.5) * constants.LightGrid
 		jitter[2] += (rand.Float64() - 0.5) * constants.LightGrid
 	*/
-	c.LightSampler.MapIndex = c.WorldToLightmapAddress(c.Sector, world, extraHash)
-
-	r00 := c.LightSampler.Get()
-	result[0] = r00[0]
-	result[1] = r00[1]
-	result[2] = r00[2]
+	c.LightSampler.Hash = c.WorldToLightmapHash(c.Sector, world, &c.LightSampler.Normal)
+	c.LightSampler.Get()
+	result[0] = c.LightSampler.Output[0]
+	result[1] = c.LightSampler.Output[1]
+	result[2] = c.LightSampler.Output[2]
 	result[3] = 1
 	return result
 }

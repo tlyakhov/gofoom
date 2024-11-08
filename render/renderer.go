@@ -5,6 +5,7 @@ package render
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"slices"
 	"sync"
@@ -63,7 +64,7 @@ func (r *Renderer) Initialize() {
 		r.Columns[i].Config = r.Config
 		r.Columns[i].PortalColumns = make([]column, constants.MaxPortals)
 		r.Columns[i].Visited = make([]segmentIntersection, constants.MaxPortals)
-		r.Columns[i].LightLastColIndices = make([]uint64, r.ScreenHeight)
+		r.Columns[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 		r.Columns[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
@@ -145,17 +146,16 @@ func (r *Renderer) RenderSegmentColumn(c *column) {
 	c.CalcScreen()
 
 	c.LightSampler.MaterialSampler.Config = r.Config
-	c.LightSampler.Type = LightSamplerCeil
+	c.LightSampler.InputBody = 0
 	c.LightSampler.Normal = c.Sector.Top.Normal
 	c.LightSampler.Sector = c.Sector
-	c.LightSampler.Segment = c.Segment
+	c.LightSampler.Segment = nil
 
 	if c.Pick {
 		ceilingPick(c)
 	} else {
 		planes(c, &c.Sector.Top)
 	}
-	c.LightSampler.Type = LightSamplerFloor
 	c.LightSampler.Normal = c.Sector.Bottom.Normal
 
 	if c.Pick {
@@ -164,7 +164,7 @@ func (r *Renderer) RenderSegmentColumn(c *column) {
 		planes(c, &c.Sector.Bottom)
 	}
 
-	c.LightSampler.Type = LightSamplerWall
+	c.LightSampler.Segment = c.Segment
 	c.Segment.Normal.To3D(&c.LightSampler.Normal)
 
 	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
@@ -192,11 +192,13 @@ func (r *Renderer) RenderSector(c *column) {
 	c.Sector.LastSeenFrame.Store(int64(c.ECS.Frame))
 	c.Sectors.Add(c.Sector)
 
+	// TODO: Fix data race here, since LightmapBias can be read in another goroutine
 	if c.Sector.LightmapBias[0] == math.MaxInt64 {
 		// Floor is important, needs to truncate towards -Infinity rather than 0
-		c.Sector.LightmapBias[0] = int64(math.Floor(c.Sector.Min[0]/r.LightGrid)) - 2
-		c.Sector.LightmapBias[1] = int64(math.Floor(c.Sector.Min[1]/r.LightGrid)) - 2
-		c.Sector.LightmapBias[2] = int64(math.Floor(c.Sector.Min[2]/r.LightGrid)) - 2
+		c.Sector.LightmapBias[2] = int64(math.Floor(c.Sector.Min[2] / r.LightGrid))
+		c.Sector.LightmapBias[1] = int64(math.Floor(c.Sector.Min[1] / r.LightGrid))
+		c.Sector.LightmapBias[0] = int64(math.Floor(c.Sector.Min[0] / r.LightGrid))
+		log.Printf("%v", c.Sector.LightmapBias)
 	}
 
 	/*  The structure of this function is a bit complicated because we try to
@@ -218,12 +220,21 @@ func (r *Renderer) RenderSector(c *column) {
 
 	c.segmentIntersection = &c.Visited[c.Depth]
 	cacheValid := !c.Sector.Concave && c.SectorSegment != nil && c.SectorSegment.Sector == c.Sector
-	if cacheValid && c.SectorSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
-		r.ICacheHits.Add(1)
-		c.Distance = c.Ray.DistTo(&c.RaySegTest)
-		c.RaySegIntersect[0] = c.RaySegTest[0]
-		c.RaySegIntersect[1] = c.RaySegTest[1]
-	} else {
+	if cacheValid {
+		u := c.SectorSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
+		if u >= 0 {
+			r.ICacheHits.Add(1)
+			c.Distance = c.Ray.DistTo(&c.RaySegTest)
+			c.RaySegIntersect[0] = c.RaySegTest[0]
+			c.RaySegIntersect[1] = c.RaySegTest[1]
+			c.segmentIntersection.U = u
+		} else {
+			cacheValid = false
+		}
+	}
+
+	// Check again, we may have a valid cache, but no intersection
+	if !cacheValid {
 		r.ICacheMisses.Add(1)
 		found := false
 		for _, sectorSeg := range c.Sector.Segments {
@@ -233,7 +244,8 @@ func (r *Renderer) RenderSector(c *column) {
 			}
 
 			// Ray intersects?
-			if !sectorSeg.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest) {
+			u := sectorSeg.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
+			if u < 0 {
 				continue
 			}
 
@@ -250,6 +262,7 @@ func (r *Renderer) RenderSector(c *column) {
 			c.Distance = dist
 			c.RaySegIntersect[0] = c.RaySegTest[0]
 			c.RaySegIntersect[1] = c.RaySegTest[1]
+			c.segmentIntersection.U = u
 		}
 		if !found {
 			c.segmentIntersection = nil
@@ -257,7 +270,6 @@ func (r *Renderer) RenderSector(c *column) {
 	}
 
 	if c.segmentIntersection != nil {
-		c.segmentIntersection.U = c.RaySegIntersect.To2D().Dist(c.SectorSegment.A) / c.SectorSegment.Length
 		c.IntersectionBottom, c.IntersectionTop = c.Sector.ZAt(dynamic.DynamicRender, c.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(c)
 	} else {
@@ -308,8 +320,8 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.MaterialSampler = MaterialSampler{Config: r.Config, Ray: column.Ray}
 	ewd2s := make([]*entityWithDist2, 0, 64)
 	column.Sectors = make(containers.Set[*core.Sector])
-	for i := range column.LightLastColIndices {
-		column.LightLastColIndices[i] = 0
+	for i := range column.LightLastColHashes {
+		column.LightLastColHashes[i] = 0
 	}
 
 	/*
@@ -368,7 +380,6 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// clipped through portals appropriately.
 	column.segmentIntersection = &segmentIntersection{}
 	column.LightSampler.MaterialSampler.Config = r.Config
-	column.LightSampler.Type = LightSamplerWall
 	for _, sorted := range ewd2s {
 		if sorted.Body != nil {
 			r.renderBody(sorted, column, xStart, xEnd)

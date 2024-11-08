@@ -264,14 +264,14 @@ func IntersectSegmentsRaw(s1A, s1B, s2A, s2B *Vector2) (float64, float64, float6
 	return Clamp(r, 0.0, 1.0), Clamp(s, 0.0, 1.0), s1dx, s1dy
 }
 
-func IntersectSegments(s1A, s1B, s2A, s2B, result *Vector2) bool {
+func IntersectSegments(s1A, s1B, s2A, s2B, result *Vector2) float64 {
 	r, _, s1dx, s1dy := IntersectSegmentsRaw(s1A, s1B, s2A, s2B)
 	if r < 0 {
-		return false
+		return -1
 	}
 	result[0] = s1A[0] + r*s1dx
 	result[1] = s1A[1] + r*s1dy
-	return true
+	return r
 }
 
 // Use the below like: `defer ExecutionDuration(ExecutionTrack("blah"))`

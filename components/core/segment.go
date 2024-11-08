@@ -19,16 +19,14 @@ type Segment struct {
 	ContactScripts []*Script         `editable:"Contact Scripts"`
 
 	// Pre-calculated attributes
-	Length         float64
-	Normal         concepts.Vector2
-	LightExtraHash uint16
+	Length float64
+	Normal concepts.Vector2
 }
 
 func (s *Segment) Recalculate() {
 	s.Length = s.B.Dist(s.A)
 	s.Normal[0] = -(s.B[1] - s.A[1]) / s.Length
 	s.Normal[1] = (s.B[0] - s.A[0]) / s.Length
-	s.LightExtraHash = uint16(concepts.Hash64to32(math.Float64bits(s.Normal[0])))
 	for _, script := range s.ContactScripts {
 		script.Params = contactScriptParams
 		script.Compile()
@@ -45,7 +43,7 @@ func (s *Segment) Matches(s2 *Segment) bool {
 	return d1 || d2
 }
 
-func (s1 *Segment) Intersect2D(s2A, s2B, result *concepts.Vector2) bool {
+func (s1 *Segment) Intersect2D(s2A, s2B, result *concepts.Vector2) float64 {
 	return concepts.IntersectSegments(s1.A, s1.B, s2A, s2B, result)
 }
 

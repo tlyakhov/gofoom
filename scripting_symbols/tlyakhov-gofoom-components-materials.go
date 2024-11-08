@@ -29,6 +29,7 @@ func init() {
 		"ShaderFlagsString":      reflect.ValueOf(materials.ShaderFlagsString),
 		"ShaderFlagsStrings":     reflect.ValueOf(materials.ShaderFlagsStrings),
 		"ShaderFlagsValues":      reflect.ValueOf(materials.ShaderFlagsValues),
+		"ShaderFrob":             reflect.ValueOf(materials.ShaderFrob),
 		"ShaderLiquid":           reflect.ValueOf(materials.ShaderLiquid),
 		"ShaderSky":              reflect.ValueOf(materials.ShaderSky),
 		"ShaderStaticBackground": reflect.ValueOf(materials.ShaderStaticBackground),

@@ -79,6 +79,12 @@ func (ms *MaterialSampler) SampleMaterial(extraStages []*materials.ShaderStage) 
 	ms.Output[1] = 0
 	ms.Output[2] = 0
 	ms.Output[3] = 0
+	/* Debug:
+	ms.Output[0] = 0.5
+	ms.Output[1] = 0.5
+	ms.Output[2] = 0.5
+	ms.Output[3] = 1
+	return*/
 	ms.pipelineIndex = 0
 	ms.sampleStage(nil)
 	for _, stage := range extraStages {
@@ -165,6 +171,10 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		sample := concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true
 		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
+	}
+
+	if stage != nil && (stage.Flags&materials.ShaderFrob) != 0 {
+		ms.Output.MulSelf(3)
 	}
 }
 

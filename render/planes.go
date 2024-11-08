@@ -9,6 +9,8 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 )
 
 func ceilingPick(s *column) {
@@ -78,7 +80,7 @@ func planes(c *column, plane *core.SectorPlane) {
 		distToPlane := world.Length()
 		dist2 := world.To2D().Length2()
 
-		if distToPlane > c.ZBuffer[screenIndex] || dist2 > c.Distance*c.Distance {
+		if distToPlane > c.ZBuffer[screenIndex] || dist2 > c.Distance*c.Distance+constants.IntersectEpsilon {
 			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 0, 0, 1})
 			continue
 		}
@@ -90,7 +92,8 @@ func planes(c *column, plane *core.SectorPlane) {
 
 		world[0] += c.Ray.Start[0]
 		world[1] += c.Ray.Start[1]
-		world[2] += c.CameraZ
+		//		world[2] += c.CameraZ
+		world[2] = plane.ZAt(dynamic.DynamicRender, world.To2D())
 
 		tx := (world[0] - sectorMin[0]) / (sectorMax[0] - sectorMin[0])
 		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])

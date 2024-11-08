@@ -18,13 +18,14 @@ const (
 	ShaderSky
 	ShaderStaticBackground
 	ShaderLiquid
+	ShaderFrob
 )
 
 type ShaderStage struct {
 	ECS       *ecs.ECS
 	System    bool
 	Material  ecs.Entity       `editable:"Material" edit_type:"Material"`
-	Transform concepts.Matrix2 `editable:"ℝ2→ℝ2"`
+	Transform concepts.Matrix2 `editable:"ℝ²→ℝ²"`
 	Flags     ShaderFlags      `editable:"Flags" edit_type:"Flags"`
 	Frame     int              `editable:"Frame"`
 	Opacity   float64          `editable:"Opacity"`

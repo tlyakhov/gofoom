@@ -605,7 +605,9 @@ func (e *Editor) GatherHoveringObjects() {
 }
 
 func (e *Editor) ResizeRenderer(w, h int) {
-	e.Renderer = render.NewRenderer(e.ECS)
+	if e.Renderer == nil {
+		e.Renderer = render.NewRenderer(e.ECS)
+	}
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h
 	e.Renderer.Initialize()

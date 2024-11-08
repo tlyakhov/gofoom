@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -34,6 +35,9 @@ func (sc *SectorController) Target(target ecs.Attachable) bool {
 
 func (sc *SectorController) Recalculate() {
 	sc.Sector.Recalculate()
+	if len(sc.Sector.PVS) == 0 {
+		updatePVS(sc.Sector, make([]*concepts.Vector2, 0), nil, nil, nil)
+	}
 }
 
 func (sc *SectorController) getOrCreateQ() {
