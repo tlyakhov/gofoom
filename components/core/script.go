@@ -31,6 +31,7 @@ type Script struct {
 	ECS          *ecs.ECS
 	System       bool
 	runFunc      any
+	execCode     string
 }
 
 var scriptTemplate *template.Template
@@ -76,10 +77,9 @@ func (s *Script) Compile() {
 	s.interp = interp.New(interp.Options{})
 	s.interp.Use(stdlib.Symbols)
 	s.interp.Use(ecs.Types().InterpSymbols)
-	var codeTemplate string
 	switch s.Style {
 	case ScriptStyleRaw:
-		codeTemplate = s.Code
+		s.execCode = s.Code
 	default:
 		var buf bytes.Buffer
 		err := scriptTemplate.Execute(&buf, s)
@@ -89,19 +89,19 @@ func (s *Script) Compile() {
 			log.Printf("%v", s.ErrorMessage)
 			return
 		}
-		codeTemplate = buf.String()
+		s.execCode = buf.String()
 	}
 
-	_, err := s.interp.Eval(codeTemplate)
+	_, err := s.interp.Eval(s.execCode)
 	if err != nil {
-		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)
+		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.execCode, err)
 		log.Printf("%v", s.ErrorMessage)
 		return
 	}
 	// log.Printf("%v", codeTemplate)
 	f, err := s.interp.Eval("main.Do")
 	if err != nil {
-		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.Code, err)
+		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.execCode, err)
 		log.Printf("%v", s.ErrorMessage)
 		return
 	}
@@ -111,6 +111,10 @@ func (s *Script) Compile() {
 
 func (s *Script) IsCompiled() bool {
 	return s.interp != nil && s.runFunc != nil
+}
+
+func (s *Script) IsEmpty() bool {
+	return len(s.Code) == 0
 }
 
 func (s *Script) AttachECS(db *ecs.ECS) {
@@ -175,6 +179,8 @@ func (s *Script) Act() bool {
 			return
 		}
 
+		log.Printf("Script error: %v", recovered)
+		log.Printf("in code: %v", s.execCode)
 		s.ErrorMessage = fmt.Sprintf("Script error: %v", recovered)
 		s.interp = nil
 		s.runFunc = nil

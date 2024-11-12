@@ -5,7 +5,6 @@ package render
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"slices"
 	"sync"
@@ -198,7 +197,6 @@ func (r *Renderer) RenderSector(c *column) {
 		c.Sector.LightmapBias[2] = int64(math.Floor(c.Sector.Min[2] / r.LightGrid))
 		c.Sector.LightmapBias[1] = int64(math.Floor(c.Sector.Min[1] / r.LightGrid))
 		c.Sector.LightmapBias[0] = int64(math.Floor(c.Sector.Min[0] / r.LightGrid))
-		log.Printf("%v", c.Sector.LightmapBias)
 	}
 
 	/*  The structure of this function is a bit complicated because we try to
