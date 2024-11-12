@@ -1299,12 +1299,10 @@
       "Active": true,
       "Entity": "25",
       "Range": 100,
-      "Scripts": [
-        {
+      "InRange": {
           "Code": "sectors.GetVerticalDoor(s.Ref(\"sector\")).Intent = sectors.DoorIntentOpen",
           "Style": "ScriptStyleStatement"
         }
-      ]
     },
     "ecs.Named": {
       "Active": true,

@@ -92,6 +92,16 @@ func (ms *MaterialSampler) SampleMaterial(extraStages []*materials.ShaderStage) 
 	}
 }
 
+func (ms *MaterialSampler) frob(stage *materials.ShaderStage, sample *concepts.Vector4) {
+	if stage == nil || (stage.Flags&materials.ShaderFrob) == 0 {
+		return
+	}
+
+	sample[0] += 0.3 * sample[3]
+	sample[1] += 0.3 * sample[3]
+	sample[2] += 0.3 * sample[3]
+}
+
 func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	u := ms.U
 	v := ms.V
@@ -132,6 +142,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	if ms.pipelineIndex < len(ms.Materials) {
 		a = ms.Materials[ms.pipelineIndex]
 	}
+
 	switch m := a.(type) {
 	case *materials.Shader:
 		ms.pipelineIndex++
@@ -155,26 +166,27 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		ms.sampleStage(nil)
 		ms.ScaleW /= m.Cols
 		ms.ScaleH /= m.Rows
+		ms.frob(stage, &ms.Output)
 	case *materials.Image:
 		ms.pipelineIndex++
 		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
+		ms.frob(stage, &sample)
 		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
 	case *materials.Text:
 		ms.pipelineIndex++
 		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
+		ms.frob(stage, &sample)
 		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
 	case *materials.Solid:
 		ms.pipelineIndex++
 		ms.Output.AddPreMulColorSelfOpacity(m.Diffuse.Render, opacity)
+		ms.frob(stage, &ms.Output)
 	default:
 		ms.pipelineIndex++
 		sample := concepts.Vector4{0.5, 0, 0.5, 1}
+		ms.frob(stage, &ms.Output)
 		ms.NoTexture = true
 		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
-	}
-
-	if stage != nil && (stage.Flags&materials.ShaderFrob) != 0 {
-		ms.Output.MulSelf(3)
 	}
 }
 

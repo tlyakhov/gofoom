@@ -1,0 +1,79 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
+package behaviors
+
+import (
+	"fmt"
+	"strconv"
+	"tlyakhov/gofoom/ecs"
+)
+
+//go:generate go run github.com/dmarkham/enumer -type=ProximityStatus -json
+type ProximityStatus int
+
+const (
+	ProximityIdle ProximityStatus = iota
+	ProximityFiring
+	ProximityWaiting
+)
+
+type ProximityState struct {
+	ecs.Attached
+
+	LastFired  int64
+	Status     ProximityStatus
+	PrevStatus ProximityStatus
+	Source     ecs.Entity
+	Target     ecs.Entity
+}
+
+var ProximityStateCID ecs.ComponentID
+
+func init() {
+	ProximityStateCID = ecs.RegisterComponent(&ecs.Column[ProximityState, *ProximityState]{Getter: GetProximityState})
+}
+
+func GetProximityState(db *ecs.ECS, e ecs.Entity) *ProximityState {
+	if asserted, ok := db.Component(e, ProximityStateCID).(*ProximityState); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (p *ProximityState) String() string {
+	return fmt.Sprintf("ProximityState (%v is close to %v, status %v)", p.Target.String(), p.Source.String(), p.Status.String())
+}
+
+func (p *ProximityState) Construct(data map[string]any) {
+	p.Attached.Construct(data)
+	p.System = true
+
+	if data == nil {
+		return
+	}
+
+	if v, ok := data["Source"]; ok {
+		p.Source, _ = ecs.ParseEntity(v.(string))
+	}
+	if v, ok := data["Target"]; ok {
+		p.Target, _ = ecs.ParseEntity(v.(string))
+	}
+	if v, ok := data["LastFired"]; ok {
+		p.LastFired, _ = strconv.ParseInt(v.(string), 10, 64)
+	}
+	if v, ok := data["Status"]; ok {
+		p.Status, _ = ProximityStatusString(v.(string))
+	}
+
+}
+
+func (p *ProximityState) Serialize() map[string]any {
+	result := p.Attached.Serialize()
+	result["Source"] = p.Source.String()
+	result["Target"] = p.Target.String()
+	result["LastFired"] = strconv.FormatInt(p.LastFired, 10)
+	result["Status"] = p.Status.String()
+
+	return result
+}

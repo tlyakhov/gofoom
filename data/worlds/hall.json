@@ -11211,12 +11211,10 @@
     "behaviors.Proximity": {
       "Entity": "134",
       "Hysteresis": 0,
-      "Scripts": [
-        {
+      "InRange": {
           "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
-      ]
     },
     "ecs.Named": {
       "Entity": "134",
@@ -12542,12 +12540,10 @@
     "behaviors.Proximity": {
       "Entity": "246",
       "Range": 50,
-      "Scripts": [
-        {
+      "InRange": {
           "Code": "if body == nil { return }\np := behaviors.GetPlayer(s.ECS, body.Entity)\nitem := behaviors.GetInventoryItem(s.ECS,onEntity)\nif p == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(p, item)",
           "Style": "ScriptStyleStatement"
         }
-      ]
     },
     "ecs.Named": {
       "Entity": "246",

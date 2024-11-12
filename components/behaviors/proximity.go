@@ -10,6 +10,8 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/puzpuzpuz/xsync/v3"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=ProximityFlags -json
@@ -32,12 +34,11 @@ type Proximity struct {
 
 	ValidComponents containers.Set[ecs.ComponentID] `editable:"ValidComponents"`
 
-	// TODO: Do we actually need a slice here? Maybe one is fine.
-	Scripts []*core.Script `editable:"Scripts"`
+	InRange core.Script `editable:"InRange"`
+	Enter   core.Script `editable:"Enter"`
+	Exit    core.Script `editable:"Exit"`
 
-	// Internal state
-	LastFired int64
-	Firing    bool
+	State *xsync.MapOf[uint64, *ProximityState]
 }
 
 var ProximityCID ecs.ComponentID
@@ -53,6 +54,25 @@ func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {
 	return nil
 }
 
+func (p *Proximity) OnDetach() {
+	if p.ECS != nil {
+		p.InRange.ECS = nil
+		p.Enter.ECS = nil
+		p.Exit.ECS = nil
+	}
+	p.Attached.OnDetach()
+}
+
+func (p *Proximity) AttachECS(db *ecs.ECS) {
+	if p.ECS != db {
+		p.OnDetach()
+	}
+	p.Attached.AttachECS(db)
+	p.InRange.AttachECS(db)
+	p.Enter.AttachECS(db)
+	p.Exit.AttachECS(db)
+}
+
 func (p *Proximity) String() string {
 	return fmt.Sprintf("Proximity: %.2f", p.Range)
 }
@@ -64,6 +84,8 @@ func (p *Proximity) Construct(data map[string]any) {
 	p.RequiresPlayerAction = false
 	p.ActsOnSectors = false
 	p.ValidComponents = make(containers.Set[ecs.ComponentID])
+	// TODO: Serialize this
+	p.State = xsync.NewMapOf[uint64, *ProximityState]()
 
 	if data == nil {
 		return
@@ -84,8 +106,14 @@ func (p *Proximity) Construct(data map[string]any) {
 		p.ActsOnSectors = v.(bool)
 	}
 
-	if v, ok := data["Scripts"]; ok {
-		p.Scripts = ecs.ConstructSlice[*core.Script](p.ECS, v, nil)
+	if v, ok := data["InRange"]; ok {
+		p.InRange.Construct(v.(map[string]any))
+	}
+	if v, ok := data["Enter"]; ok {
+		p.Enter.Construct(v.(map[string]any))
+	}
+	if v, ok := data["Exit"]; ok {
+		p.Exit.Construct(v.(map[string]any))
 	}
 
 	if v, ok := data["ValidComponents"]; ok {
@@ -117,8 +145,14 @@ func (p *Proximity) Serialize() map[string]any {
 		result["ActsOnSectors"] = true
 	}
 
-	if len(p.Scripts) > 0 {
-		result["Scripts"] = ecs.SerializeSlice(p.Scripts)
+	if !p.InRange.IsEmpty() {
+		result["InRange"] = p.InRange.Serialize()
+	}
+	if !p.Enter.IsEmpty() {
+		result["Enter"] = p.Enter.Serialize()
+	}
+	if !p.Exit.IsEmpty() {
+		result["Exit"] = p.Exit.Serialize()
 	}
 
 	if len(p.ValidComponents) > 0 {

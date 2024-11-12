@@ -3017,12 +3017,10 @@
     "behaviors.Proximity": {
       "Entity": "51",
       "Hysteresis": 0,
-      "Scripts": [
-        {
+      "InRange": {
           "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e10 { vd.Intent = behaviors.DoorIntentOpen }",
           "Style": "ScriptStyleStatement"
         }
-      ]
     },
     "behaviors.VerticalDoor": {
       "Duration": 1000,

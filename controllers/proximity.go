@@ -13,9 +13,7 @@ import (
 type ProximityController struct {
 	ecs.BaseController
 	*behaviors.Proximity
-
-	flags    behaviors.ProximityFlags
-	onEntity ecs.Entity
+	flags behaviors.ProximityFlags
 }
 
 func init() {
@@ -54,9 +52,17 @@ var proximityScriptParams = []core.ScriptParam{
 }
 
 func (pc *ProximityController) Recalculate() {
-	for _, script := range pc.Scripts {
-		script.Params = proximityScriptParams
-		script.Compile()
+	if !pc.InRange.IsEmpty() {
+		pc.InRange.Params = proximityScriptParams
+		pc.InRange.Compile()
+	}
+	if !pc.Enter.IsEmpty() {
+		pc.Enter.Params = proximityScriptParams
+		pc.Enter.Compile()
+	}
+	if !pc.Exit.IsEmpty() {
+		pc.Exit.Params = proximityScriptParams
+		pc.Exit.Compile()
 	}
 }
 
@@ -69,20 +75,44 @@ func (pc *ProximityController) isValid(e ecs.Entity) bool {
 	return true
 }
 
-func (pc *ProximityController) fire(body *core.Body, sector *core.Sector) {
-	pc.Firing = true
-	if pc.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
+func (pc *ProximityController) actScript(body *core.Body, sector *core.Sector, script *core.Script) {
+	script.Vars["proximity"] = pc.Proximity
+	script.Vars["onEntity"] = pc.Entity
+	script.Vars["body"] = body
+	script.Vars["sector"] = sector
+	script.Vars["flags"] = pc.flags
+	script.Act()
+}
+
+func (pc *ProximityController) react(target ecs.Entity, body *core.Body, sector *core.Sector) {
+	var loaded bool
+	var state *behaviors.ProximityState
+
+	key := uint64(uint32(pc.Entity)) | uint64(uint32(target))
+	if state, loaded = pc.State.Load(key); !loaded {
+		state = pc.ECS.NewAttachedComponent(pc.ECS.NewEntity(), behaviors.ProximityStateCID).(*behaviors.ProximityState)
+		state.System = true
+		state.Source = pc.Entity
+		state.Target = target
+		state.PrevStatus = behaviors.ProximityIdle
+		state.Status = behaviors.ProximityIdle
+		pc.State.Store(key, state)
+	}
+
+	if state.PrevStatus != behaviors.ProximityIdle && state.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
+		state.Status = behaviors.ProximityWaiting
 		return
 	}
-	pc.LastFired = pc.ECS.Timestamp
-	for _, script := range pc.Scripts {
-		script.Vars["proximity"] = pc.Proximity
-		script.Vars["onEntity"] = pc.onEntity
-		script.Vars["body"] = body
-		script.Vars["sector"] = sector
-		script.Vars["flags"] = pc.flags
-		script.Act()
+	state.LastFired = pc.ECS.Timestamp
+	if state.PrevStatus == behaviors.ProximityIdle && pc.Enter.IsCompiled() {
+		pc.actScript(body, sector, &pc.Enter)
 	}
+	state.Status = behaviors.ProximityFiring
+
+	if pc.InRange.IsCompiled() {
+		pc.actScript(body, sector, &pc.InRange)
+	}
+
 }
 
 func (pc *ProximityController) sectorBodies(sector *core.Sector, pos *concepts.Vector3) {
@@ -95,7 +125,7 @@ func (pc *ProximityController) sectorBodies(sector *core.Sector, pos *concepts.V
 			continue
 		}
 		if pos.Dist2(&body.Pos.Now) < pc.Range*pc.Range && pc.isValid(body.Entity) {
-			pc.fire(body, nil)
+			pc.react(body.Entity, body, nil)
 		}
 	}
 }
@@ -110,7 +140,7 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 			sector.Center.Dist2(&pvs.Center) < pc.Range*pc.Range && pc.isValid(pvs.Entity) {
 			pc.flags |= behaviors.ProximityTargetsSector
 			pc.flags &= ^behaviors.ProximityTargetsBody
-			pc.fire(nil, sector)
+			pc.react(sector.Entity, nil, sector)
 		}
 		pc.flags |= behaviors.ProximityTargetsBody
 		pc.flags &= ^behaviors.ProximityTargetsSector
@@ -132,7 +162,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 			pc.isValid(sector.Entity) {
 			pc.flags |= behaviors.ProximityTargetsSector
 			pc.flags &= ^behaviors.ProximityTargetsBody
-			pc.fire(nil, sector)
+			pc.react(sector.Entity, nil, sector)
 		}
 		pc.flags |= behaviors.ProximityTargetsBody
 		pc.flags &= ^behaviors.ProximityTargetsSector
@@ -141,7 +171,15 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 }
 
 func (pc *ProximityController) Always() {
-	pc.Firing = false
+	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
+		if state.Source != pc.Entity {
+			return true
+		}
+		state.PrevStatus = state.Status
+		state.Status = behaviors.ProximityIdle
+		return true
+	})
+
 	/*
 		We have several factors to consider:
 		1. What kind of entity is the proximity on? (sector, body, etc...)
@@ -151,11 +189,25 @@ func (pc *ProximityController) Always() {
 	*/
 
 	pc.flags = 0
-	pc.onEntity = pc.Entity
 	// TODO: Add InternalSegments
 	if sector := core.GetSector(pc.ECS, pc.Entity); sector != nil && sector.Active {
 		pc.proximityOnSector(sector)
 	} else if body := core.GetBody(pc.ECS, pc.Entity); body != nil && body.SectorEntity != 0 && body.Active {
 		pc.proximityOnBody(body)
 	}
+
+	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
+		if state.Source != pc.Entity {
+			return true
+		}
+		if state.Status == behaviors.ProximityIdle {
+			if state.PrevStatus != behaviors.ProximityIdle && pc.Exit.IsCompiled() {
+				// TODO: We should save/fill these fields when firing
+				pc.actScript(nil, nil, &pc.Exit)
+			}
+			pc.State.Delete(key)
+			pc.ECS.Delete(state.Entity)
+		}
+		return true
+	})
 }
