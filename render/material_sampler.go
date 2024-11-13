@@ -17,6 +17,7 @@ type MaterialSampler struct {
 	*Config
 	*Ray
 	Output           concepts.Vector4
+	StageOutput      concepts.Vector4
 	ScreenX, ScreenY int
 	ScaleW, ScaleH   uint32
 	NoTexture        bool
@@ -97,9 +98,14 @@ func (ms *MaterialSampler) frob(stage *materials.ShaderStage, sample *concepts.V
 		return
 	}
 
-	sample[0] += 0.3 * sample[3]
-	sample[1] += 0.3 * sample[3]
-	sample[2] += 0.3 * sample[3]
+	pulse := math.Sin(float64(ms.ECS.Timestamp)*0.005)*0.5 + 1.0
+	hsp := concepts.RGBtoHSP(sample.To3D())
+	hsp[2] *= 2.0 * pulse
+	hsp[0] = 0.15
+	rgb := concepts.HSPtoRGB(&hsp)
+	sample[0] = rgb[0]
+	sample[1] = rgb[1]
+	sample[2] = rgb[2]
 }
 
 func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
@@ -148,7 +154,9 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		ms.pipelineIndex++
 		for _, stage := range m.Stages {
 			ms.sampleStage(stage)
+			ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
 		}
+		return
 	case *materials.Sprite:
 		ms.pipelineIndex++
 		frame := uint32(*m.Frame.Render)
@@ -166,28 +174,22 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		ms.sampleStage(nil)
 		ms.ScaleW /= m.Cols
 		ms.ScaleH /= m.Rows
-		ms.frob(stage, &ms.Output)
 	case *materials.Image:
 		ms.pipelineIndex++
-		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
-		ms.frob(stage, &sample)
-		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
+		ms.StageOutput = m.Sample(u, v, ms.ScaleW, ms.ScaleH)
 	case *materials.Text:
 		ms.pipelineIndex++
-		sample := m.Sample(u, v, ms.ScaleW, ms.ScaleH)
-		ms.frob(stage, &sample)
-		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
+		ms.StageOutput = m.Sample(u, v, ms.ScaleW, ms.ScaleH)
 	case *materials.Solid:
 		ms.pipelineIndex++
-		ms.Output.AddPreMulColorSelfOpacity(m.Diffuse.Render, opacity)
-		ms.frob(stage, &ms.Output)
+		ms.StageOutput = *m.Diffuse.Render
 	default:
 		ms.pipelineIndex++
-		sample := concepts.Vector4{0.5, 0, 0.5, 1}
-		ms.frob(stage, &ms.Output)
+		ms.StageOutput = concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true
-		ms.Output.AddPreMulColorSelfOpacity(&sample, opacity)
 	}
+	ms.frob(stage, &ms.StageOutput)
+	ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
 }
 
 func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {

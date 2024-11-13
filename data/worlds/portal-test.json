@@ -11,15 +11,15 @@
     },
     "core.Body": {
       "Angle": {
-        "Now": 184.52614764584402,
+        "Now": 205.61989764584402,
         "Spawn": 0
       },
       "Entity": "1",
       "Pos": {
         "Now": {
-          "X": -1.6475923597025115,
-          "Y": 380.01570629383576,
-          "Z": 12
+          "X": -166.7528111350287,
+          "Y": 391.8471041038308,
+          "Z": 20
         },
         "Spawn": {
           "X": -90,
@@ -48,8 +48,8 @@
       "MountHeight": 15,
       "Vel": {
         "Now": {
-          "X": 1.0699686394096709e-9,
-          "Y": 8.46996938965462e-11,
+          "X": -6.25296685187903e-92,
+          "Y": 4.107180495795128e-93,
           "Z": 0.007001650399223597
         },
         "Spawn": {
@@ -454,12 +454,12 @@
       "Entity": "8",
       "Pos": {
         "Now": {
-          "X": -20,
+          "X": -10,
           "Y": 350,
           "Z": 32
         },
         "Spawn": {
-          "X": -20,
+          "X": -10,
           "Y": 350,
           "Z": 32
         }
@@ -547,7 +547,7 @@
           "Surface": {
             "ExtraStages": [
               {
-                "Flags": "",
+                "Flags": "ShaderFrob",
                 "Material": "33",
                 "Transform": [
                   14,
@@ -699,18 +699,23 @@
       "Start": "57"
     },
     "behaviors.ActorState": {
-      "Action": "60",
+      "Action": "75",
       "Entity": "12"
     },
     "behaviors.ParticleEmitter": {
       "Entity": "12",
       "Limit": "10",
       "Particles": [
-        "66",
-        "67",
-        "68",
+        "69",
         "74",
-        "79"
+        "67",
+        "70",
+        "71",
+        "72",
+        "81",
+        "84",
+        "80",
+        "68"
       ],
       "Source": "86",
       "Vel": 15,
@@ -719,15 +724,15 @@
     },
     "core.Body": {
       "Angle": {
-        "Now": -2989.1557276068843,
+        "Now": -6103.721632399162,
         "Procedural": true,
         "Spawn": 0
       },
       "Entity": "12",
       "Pos": {
         "Now": {
-          "X": -159.6696808160327,
-          "Y": 334.18345095890635,
+          "X": -80.30373291824874,
+          "Y": 26.99119999733356,
           "Z": 25
         },
         "Procedural": true,
@@ -3778,15 +3783,15 @@
     "Entity": "78",
     "behaviors.Proximity": {
       "Enter": {
-        "Code": "log.Printf(\"Test Enter\")\nbuttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags |= materials.ShaderFrob ",
+        "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags |= materials.ShaderFrob ",
         "Style": "ScriptStyleStatement"
       },
       "Entity": "78",
       "Exit": {
-        "Code": "log.Printf(\"Test Exit\")\nbuttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags \u0026= ^materials.ShaderFrob",
+        "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags \u0026= ^materials.ShaderFrob",
         "Style": "ScriptStyleStatement"
       },
-      "Range": 50,
+      "Hysteresis": 0,
       "ValidComponents": "behaviors.Player"
     },
     "ecs.Named": {
@@ -3806,20 +3811,20 @@
   {
     "Entity": "125",
     "behaviors.ActorState": {
-      "Action": "57",
+      "Action": "75",
       "Entity": "125"
     },
     "core.Body": {
       "Angle": {
-        "Now": -3785.166296460485,
+        "Now": -7543.6587409354315,
         "Procedural": true,
         "Spawn": 0
       },
       "Entity": "125",
       "Pos": {
         "Now": {
-          "X": -158.83114795018716,
-          "Y": 165.11742608444098,
+          "X": -223.7101605293522,
+          "Y": -14.885018753022576,
           "Z": 24.999999999999996
         },
         "Spawn": {

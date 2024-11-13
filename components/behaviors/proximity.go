@@ -5,7 +5,6 @@ package behaviors
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/containers"
@@ -161,7 +160,7 @@ func (p *Proximity) Serialize() map[string]any {
 			if len(s) > 0 {
 				s += ","
 			}
-			s += strconv.Itoa(int(id))
+			s += ecs.Types().ColumnPlaceholders[id].String()
 		}
 		result["ValidComponents"] = s
 	}
