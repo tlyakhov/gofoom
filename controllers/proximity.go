@@ -99,7 +99,7 @@ func (pc *ProximityController) react(target ecs.Entity, body *core.Body, sector 
 		pc.State.Store(key, state)
 	}
 
-	if state.PrevStatus != behaviors.ProximityIdle && state.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
+	if state.PrevStatus != behaviors.ProximityIdle && pc.Hysteresis > 0 && state.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
 		state.Status = behaviors.ProximityWaiting
 		return
 	}
