@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
@@ -53,9 +54,7 @@ func (pc *PlayerController) Target(target ecs.Attachable) bool {
 	return pc.Mobile != nil && pc.Mobile.IsActive()
 }
 
-func (pc *PlayerController) Always() {
-	uw := pc.Underwater()
-
+func (pc *PlayerController) bob(uw bool) {
 	if uw {
 		pc.Bob += 0.015
 	} else {
@@ -89,20 +88,73 @@ func (pc *PlayerController) Always() {
 			pc.CameraZ = cz
 		}
 	}
+}
 
+func (pc *PlayerController) Always() {
+	uw := pc.Underwater()
 	if uw {
 		pc.FrameTint = concepts.Vector4{0.29, 0.58, 1, 0.35}
 	} else {
 		pc.FrameTint = concepts.Vector4{}
 	}
-
 	pc.Alive.Tint(&pc.FrameTint)
 
+	pc.bob(uw)
+
+	// If we have a weapon, select it
+	// TODO: This should be handled by an inventory UI of some kind,
+	// or at least a 1...N quick-select
 	/*for _, item := range pc.Inventory {
 		if w := behaviors.GetWeaponInstant(pc.ECS, item.Entity); w != nil {
 			pc.CurrentWeapon = item.Entity
 		}
 	}*/
+
+	// This section handles frobbing
+
+	// Figure out closest body out of the ones the player can select
+	prevTarget := pc.SelectedTarget
+	pc.SelectedTarget = 0
+	closestDist2 := math.MaxFloat64
+	for e := range pc.HoveringTargets {
+		body := core.GetBody(pc.ECS, e)
+		if body == nil {
+			continue
+		}
+		d2 := body.Pos.Now.Dist2(&pc.Body.Pos.Now)
+		if d2 > closestDist2 {
+			continue
+		}
+		closestDist2 = d2
+		pc.SelectedTarget = e
+	}
+	// If our selection has changed, run scripts
+	if pc.SelectedTarget != prevTarget {
+		if prevTarget != 0 {
+			if pt := behaviors.GetPlayerTargetable(pc.ECS, prevTarget); pt != nil && pt.UnSelected.IsCompiled() {
+				pt.UnSelected.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
+				pt.UnSelected.Vars["player"] = pc.Player
+				pt.UnSelected.Act()
+			}
+		}
+		if pc.SelectedTarget != 0 {
+			if pt := behaviors.GetPlayerTargetable(pc.ECS, pc.SelectedTarget); pt != nil && pt.Selected.IsCompiled() {
+				pt.Selected.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
+				pt.Selected.Vars["player"] = pc.Player
+				pt.Selected.Act()
+			}
+		}
+	}
+	// If we have a selected item and the player is pressing the key, frob!
+	if pc.SelectedTarget != 0 && pc.ActionPressed {
+		if pt := behaviors.GetPlayerTargetable(pc.ECS, pc.SelectedTarget); pt != nil && pt.Frob.IsCompiled() {
+			pt.Frob.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
+			pt.Frob.Vars["player"] = pc.Player
+			pt.Frob.Act()
+		}
+	}
+	// Reset our potential selection for next frame
+	pc.HoveringTargets = make(containers.Set[ecs.Entity])
 }
 
 func MovePlayer(db *ecs.ECS, e ecs.Entity, angle float64) {

@@ -37,7 +37,8 @@ func (pc *ProximityController) isEntityPlayerAndActing(entity ecs.Entity) bool {
 	if !pc.RequiresPlayerAction {
 		return true
 	}
-	if player := behaviors.GetPlayer(pc.ECS, entity); player != nil && player.ActionPressed {
+	if player := behaviors.GetPlayer(pc.ECS, entity); player != nil &&
+		player.ActionPressed && player.SelectedTarget == 0 {
 		return true
 	}
 	return false
