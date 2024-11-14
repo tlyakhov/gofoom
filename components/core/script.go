@@ -9,6 +9,7 @@ import (
 	"log"
 	"maps"
 	"text/template"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/traefik/yaegi/interp"
@@ -21,8 +22,7 @@ type ScriptParam struct {
 }
 
 type Script struct {
-	Code  string      `editable:"Code" edit_type:"multi-line-string"`
-	Style ScriptStyle `editable:"Style"`
+	Code string `editable:"Code" edit_type:"multi-line-string"`
 
 	ErrorMessage string
 	interp       *interp.Interpreter
@@ -38,9 +38,7 @@ var scriptTemplate *template.Template
 
 func init() {
 	var err error
-	scriptTemplate, err = template.New("script").Funcs(template.FuncMap{
-		"BoolExpr": func() ScriptStyle { return ScriptStyleBoolExpr },
-	}).Parse(`
+	scriptTemplate, err = template.New("script").Parse(`
 	package main
 
 	import "tlyakhov/gofoom/archetypes"
@@ -55,7 +53,7 @@ func init() {
 	import "log"
 	import "fmt"
 
-	func Do(s *core.Script) {{if eq .Style BoolExpr}}bool{{end}} {
+	func Do(s *core.Script) {
 		{{range .Params}}
 			var {{.Name}} {{.TypeName}}
 			if s.Vars["{{.Name}}"] != nil {
@@ -63,7 +61,7 @@ func init() {
 			}
 		{{end}}
 
-		{{if eq .Style BoolExpr}}return {{end}}{{.Code}}
+		{{.Code}}
 	}
 
 	`)
@@ -73,26 +71,27 @@ func init() {
 }
 
 func (s *Script) Compile() {
+	if s.ECS == nil {
+		log.Println("Script.Compile: ECS is nil. Stack trace:")
+		log.Println(concepts.StackTrace())
+		return
+	}
 	s.ErrorMessage = ""
 	s.interp = interp.New(interp.Options{})
 	s.interp.Use(stdlib.Symbols)
 	s.interp.Use(ecs.Types().InterpSymbols)
-	switch s.Style {
-	case ScriptStyleRaw:
-		s.execCode = s.Code
-	default:
-		var buf bytes.Buffer
-		err := scriptTemplate.Execute(&buf, s)
-		if err != nil {
-			s.ErrorMessage += fmt.Sprintf("Error building script template %v: %v", s.Code, err)
-			s.interp = nil
-			log.Printf("%v", s.ErrorMessage)
-			return
-		}
-		s.execCode = buf.String()
-	}
 
-	_, err := s.interp.Eval(s.execCode)
+	var buf bytes.Buffer
+	err := scriptTemplate.Execute(&buf, s)
+	if err != nil {
+		s.ErrorMessage += fmt.Sprintf("Error building script template %v: %v", s.Code, err)
+		s.interp = nil
+		log.Printf("%v", s.ErrorMessage)
+		return
+	}
+	s.execCode = buf.String()
+
+	_, err = s.interp.Eval(s.execCode)
 	if err != nil {
 		s.ErrorMessage += fmt.Sprintf("Error compiling script %v: %v", s.execCode, err)
 		log.Printf("%v", s.ErrorMessage)
@@ -137,10 +136,6 @@ func (s *Script) Construct(data map[string]any) {
 		return
 	}
 
-	if v, ok := data["Style"]; ok {
-		s.Style, _ = ScriptStyleString(v.(string))
-	}
-
 	if v, ok := data["Params"]; ok {
 		s.Params = v.([]ScriptParam)
 	}
@@ -153,7 +148,6 @@ func (s *Script) Construct(data map[string]any) {
 func (s *Script) Serialize() map[string]any {
 	data := make(map[string]any)
 	data["Code"] = s.Code
-	data["Style"] = s.Style
 	return data
 }
 

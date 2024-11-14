@@ -33,12 +33,6 @@ func init() {
 		"LightCID":                 reflect.ValueOf(&core.LightCID).Elem(),
 		"MobileCID":                reflect.ValueOf(&core.MobileCID).Elem(),
 		"PvsQueueCID":              reflect.ValueOf(&core.PvsQueueCID).Elem(),
-		"ScriptStyleBoolExpr":      reflect.ValueOf(core.ScriptStyleBoolExpr),
-		"ScriptStyleRaw":           reflect.ValueOf(core.ScriptStyleRaw),
-		"ScriptStyleStatement":     reflect.ValueOf(core.ScriptStyleStatement),
-		"ScriptStyleString":        reflect.ValueOf(core.ScriptStyleString),
-		"ScriptStyleStrings":       reflect.ValueOf(core.ScriptStyleStrings),
-		"ScriptStyleValues":        reflect.ValueOf(core.ScriptStyleValues),
 		"SectorCID":                reflect.ValueOf(&core.SectorCID).Elem(),
 
 		// type definitions
@@ -51,7 +45,6 @@ func init() {
 		"PvsQueue":          reflect.ValueOf((*core.PvsQueue)(nil)),
 		"Script":            reflect.ValueOf((*core.Script)(nil)),
 		"ScriptParam":       reflect.ValueOf((*core.ScriptParam)(nil)),
-		"ScriptStyle":       reflect.ValueOf((*core.ScriptStyle)(nil)),
 		"Sector":            reflect.ValueOf((*core.Sector)(nil)),
 		"SectorPlane":       reflect.ValueOf((*core.SectorPlane)(nil)),
 		"SectorSegment":     reflect.ValueOf((*core.SectorSegment)(nil)),

@@ -9,6 +9,7 @@ import (
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 )
 
 func (r *Renderer) RenderHud() {
@@ -35,7 +36,6 @@ func (r *Renderer) RenderHud() {
 func (r *Renderer) DebugInfo() {
 	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("DebugInfo"))
 
-	// player := bodies.GetPlayer(&gameMap.Player)
 	playerAlive := behaviors.GetAlive(r.ECS, r.Player.Entity)
 	playerMobile := core.GetMobile(r.ECS, r.Player.Entity)
 
@@ -69,6 +69,23 @@ func (r *Renderer) DebugInfo() {
 			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
 		}
 	}*/
+
+	if r.Player.SelectedTarget != 0 {
+		b := core.GetBody(r.ECS, r.Player.SelectedTarget)
+		top := &concepts.Vector3{}
+		top[0] = b.Pos.Render[0]
+		top[1] = b.Pos.Render[1]
+		top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
+		scr := r.WorldToScreen(top)
+		if scr != nil {
+			text := fmt.Sprintf("%v", b.Entity.Format(r.ECS))
+			if alive := behaviors.GetAlive(r.ECS, b.Entity); alive != nil {
+				text = fmt.Sprintf("%v", alive.Health)
+			}
+			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
+		}
+	}
+
 	ts.HAnchor = -1
 	ts.VAnchor = -1
 

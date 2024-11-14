@@ -31,15 +31,15 @@
     },
     "core.Body": {
       "Angle": {
-        "Now": 77.34375,
+        "Now": 258.75,
         "Spawn": 0
       },
       "Entity": "1",
       "Pos": {
         "Now": {
-          "X": -33.457871370659724,
-          "Y": 17.519025122375467,
-          "Z": 20
+          "X": -295.5698283553377,
+          "Y": 182.40949693924955,
+          "Z": -44
         },
         "Spawn": {
           "X": -390,
@@ -68,9 +68,9 @@
       "MountHeight": 15,
       "Vel": {
         "Now": {
-          "X": -1.0005665639540576e-11,
-          "Y": 2.0367000299211512e-10,
-          "Z": 0.007001650411977742
+          "X": -0.00000596481515515061,
+          "Y": -0.000029983063296590077,
+          "Z": 0.0070016504119779915
         },
         "Spawn": {
           "X": 0,
@@ -2740,7 +2740,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.7734375,
+          "Percent": 0.6484375,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -2752,7 +2752,7 @@
         "Now": {
           "X": -400,
           "Y": 60,
-          "Z": -49.94677734375
+          "Z": -47.88134765625
         },
         "Spawn": {
           "X": -400,
@@ -3836,16 +3836,16 @@
     },
     "core.Body": {
       "Angle": {
-        "Now": 2877.9173150114107,
+        "Now": 5042.609404374399,
         "Procedural": true,
         "Spawn": 155.9558816022554
       },
       "Entity": "42",
       "Pos": {
         "Now": {
-          "X": 66.79305870981686,
-          "Y": -199.88339786231407,
-          "Z": 16
+          "X": -273.79041673518384,
+          "Y": -203.73742084447468,
+          "Z": -12
         },
         "Spawn": {
           "X": -10,
@@ -3875,9 +3875,9 @@
       "MountHeight": 15,
       "Vel": {
         "Now": {
-          "X": 1.0489377200932606,
-          "Y": -0.03813864034140155,
-          "Z": 0.026087160049219682
+          "X": 1.0499399812128631,
+          "Y": 0.011396370059434942,
+          "Z": 0.02608716021001886
         },
         "Spawn": {
           "X": 0,
@@ -4046,6 +4046,7 @@
             "Material": "2"
           },
           "Lo": {
+            "ExtraStages": [],
             "Material": "123"
           },
           "Surface": {
@@ -8484,6 +8485,7 @@
             "Material": "2"
           },
           "Surface": {
+            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Now": [
@@ -11133,7 +11135,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.375,
+          "Percent": 0.25,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -11145,7 +11147,7 @@
         "Now": {
           "X": -260,
           "Y": 60,
-          "Z": -47.625
+          "Z": -49.5
         },
         "Spawn": {
           "X": -260,
@@ -11212,9 +11214,9 @@
       "Entity": "134",
       "Hysteresis": 0,
       "InRange": {
-          "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
-          "Style": "ScriptStyleStatement"
-        }
+        "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
+        "Style": "ScriptStyleStatement"
+      }
     },
     "ecs.Named": {
       "Entity": "134",
@@ -11630,86 +11632,39 @@
     },
     "behaviors.ParticleEmitter": {
       "Entity": "152",
+      "Limit": "30",
       "Particles": [
-        "200",
-        "210",
-        "212",
-        "214",
-        "183",
-        "198",
-        "199",
-        "242",
-        "224",
-        "168",
-        "169",
-        "208",
+        "178",
         "186",
-        "188",
-        "196",
-        "202",
-        "205",
-        "166",
-        "182",
-        "184",
-        "216",
-        "167",
-        "204",
-        "211",
-        "195",
-        "213",
-        "227",
-        "173",
-        "189",
-        "190",
-        "230",
-        "158",
-        "170",
-        "172",
-        "179",
-        "157",
-        "165",
-        "177",
-        "223",
-        "229",
-        "263",
-        "228",
-        "256",
-        "201",
-        "217",
-        "245",
-        "156",
-        "162",
-        "174",
-        "197",
-        "218",
-        "226",
-        "258",
-        "161",
-        "175",
-        "181",
-        "262",
-        "203",
-        "209",
-        "259",
-        "159",
-        "160",
-        "180",
-        "207",
-        "215",
-        "225",
-        "241",
-        "247",
         "163",
-        "187",
-        "257",
-        "244",
-        "261",
+        "169",
+        "190",
+        "165",
+        "171",
+        "181",
+        "184",
+        "174",
+        "167",
+        "166",
+        "179",
+        "189",
+        "170",
+        "173",
         "164",
+        "180",
+        "182",
+        "175",
+        "177",
+        "188",
+        "187",
+        "160",
+        "158",
+        "168",
+        "162",
+        "159",
+        "183",
         "185",
-        "194",
-        "248",
-        "260",
-        "171"
+        "172"
       ],
       "Source": "153",
       "Vel": 15,
@@ -11729,7 +11684,7 @@
       "Pos": {
         "Now": {
           "X": 860,
-          "Y": -383.7565956493709,
+          "Y": -394.5760222919728,
           "Z": 32
         },
         "Procedural": true,
@@ -12537,13 +12492,20 @@
   },
   {
     "Entity": "246",
+    "behaviors.PlayerTargetable": {
+      "Entity": "246",
+      "Frob": {
+        "Code": "if body == nil { return }\nitem := behaviors.GetInventoryItem(s.ECS, body.Entity)\nif player == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(player, item)\n",
+        "Style": "ScriptStyleStatement"
+      }
+    },
     "behaviors.Proximity": {
       "Entity": "246",
-      "Range": 50,
+      "Hysteresis": 0,
       "InRange": {
-          "Code": "if body == nil { return }\np := behaviors.GetPlayer(s.ECS, body.Entity)\nitem := behaviors.GetInventoryItem(s.ECS,onEntity)\nif p == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(p, item)",
-          "Style": "ScriptStyleStatement"
-        }
+        "Code": "if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {\n  p.HoveringTargets.Add(onEntity)\n}",
+        "Style": "ScriptStyleStatement"
+      }
     },
     "ecs.Named": {
       "Entity": "246",

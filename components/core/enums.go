@@ -14,12 +14,3 @@ const (
 	CollideStop
 	CollideRemove
 )
-
-//go:generate go run github.com/dmarkham/enumer -type=ScriptStyle -json
-type ScriptStyle int
-
-const (
-	ScriptStyleRaw ScriptStyle = iota
-	ScriptStyleBoolExpr
-	ScriptStyleStatement
-)

@@ -23,6 +23,9 @@ type Player struct {
 	CurrentWeapon *InventorySlot
 	ActionPressed bool
 
+	SelectedTarget  ecs.Entity
+	HoveringTargets containers.Set[ecs.Entity]
+
 	Notices containers.SyncUniqueQueue[string]
 }
 
@@ -53,6 +56,7 @@ func (p *Player) Construct(data map[string]any) {
 	// By convention, we construct spawn points rather than active players to
 	// avoid weird behaviors.
 	p.Spawn = true
+	p.HoveringTargets = make(containers.Set[ecs.Entity])
 
 	if data == nil {
 		return

@@ -6,6 +6,8 @@
 package scripting_symbols
 
 import (
+	"go/constant"
+	"go/token"
 	"reflect"
 	"tlyakhov/gofoom/concepts"
 )
@@ -18,6 +20,7 @@ func init() {
 		"Deg2rad":              reflect.ValueOf(concepts.Deg2rad),
 		"ExecutionDuration":    reflect.ValueOf(concepts.ExecutionDuration),
 		"ExecutionTrack":       reflect.ValueOf(concepts.ExecutionTrack),
+		"HSPtoRGB":             reflect.ValueOf(concepts.HSPtoRGB),
 		"Hash64to32":           reflect.ValueOf(concepts.Hash64to32),
 		"IdentityMatrix2":      reflect.ValueOf(&concepts.IdentityMatrix2).Elem(),
 		"Int32ToNRGBA":         reflect.ValueOf(concepts.Int32ToNRGBA),
@@ -44,7 +47,11 @@ func init() {
 		"ParseVector2":         reflect.ValueOf(concepts.ParseVector2),
 		"ParseVector3":         reflect.ValueOf(concepts.ParseVector3),
 		"ParseVector4":         reflect.ValueOf(concepts.ParseVector4),
+		"Pb":                   reflect.ValueOf(constant.MakeFromLiteral("0.1140000000000000000014094628242311557642096886411309242248535156", token.FLOAT, 0)),
+		"Pg":                   reflect.ValueOf(constant.MakeFromLiteral("0.5870000000000000000221177243187042904537520371377468109130859375", token.FLOAT, 0)),
+		"Pr":                   reflect.ValueOf(constant.MakeFromLiteral("0.2989999999999999999900253400131333592071314342319965362548828125", token.FLOAT, 0)),
 		"RGBAToInt32":          reflect.ValueOf(concepts.RGBAToInt32),
+		"RGBtoHSP":             reflect.ValueOf(concepts.RGBtoHSP),
 		"Rad2deg":              reflect.ValueOf(concepts.Rad2deg),
 		"RngDecide":            reflect.ValueOf(concepts.RngDecide),
 		"RngXorShift64":        reflect.ValueOf(concepts.RngXorShift64),
