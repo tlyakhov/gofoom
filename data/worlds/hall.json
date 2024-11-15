@@ -12494,6 +12494,7 @@
     "Entity": "246",
     "behaviors.PlayerTargetable": {
       "Entity": "246",
+      "Message": "Pick up item",
       "Frob": {
         "Code": "if body == nil { return }\nitem := behaviors.GetInventoryItem(s.ECS, body.Entity)\nif player == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(player, item)\n",
         "Style": "ScriptStyleStatement"

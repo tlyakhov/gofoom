@@ -11,15 +11,15 @@
     },
     "core.Body": {
       "Angle": {
-        "Now": 199.99489764584402,
+        "Now": 187.33864764584402,
         "Spawn": 0
       },
       "Entity": "1",
       "Pos": {
         "Now": {
-          "X": 6.445697133908878,
-          "Y": 441.8993584024565,
-          "Z": 12
+          "X": -176.28460713846005,
+          "Y": 371.58882877974264,
+          "Z": 20
         },
         "Spawn": {
           "X": -90,
@@ -48,9 +48,9 @@
       "MountHeight": 15,
       "Vel": {
         "Now": {
-          "X": 0.000009473370810650015,
-          "Y": 0.000003447449965500064,
-          "Z": 0.007001650399223611
+          "X": -7.842704666657609e-44,
+          "Y": -1.0100510462677092e-44,
+          "Z": 0.007001650399223597
         },
         "Spawn": {
           "X": 0,
@@ -699,24 +699,22 @@
       "Start": "57"
     },
     "behaviors.ActorState": {
-      "Action": "57",
+      "Action": "60",
       "Entity": "12"
     },
     "behaviors.ParticleEmitter": {
       "Entity": "12",
       "Limit": "10",
       "Particles": [
-        "72",
-        "73",
-        "74",
-        "77",
-        "66",
-        "69",
-        "71",
-        "79",
-        "68",
         "67",
-        "70"
+        "69",
+        "70",
+        "71",
+        "74",
+        "66",
+        "68",
+        "72",
+        "73"
       ],
       "Source": "86",
       "Vel": 15,
@@ -725,15 +723,15 @@
     },
     "core.Body": {
       "Angle": {
-        "Now": -13885.497637075903,
+        "Now": -14846.696791589042,
         "Procedural": true,
         "Spawn": 0
       },
       "Entity": "12",
       "Pos": {
         "Now": {
-          "X": -203.22960376695406,
-          "Y": 186.75685818198014,
+          "X": -151.97554253907117,
+          "Y": 194.23060736721854,
           "Z": 25
         },
         "Procedural": true,
@@ -2853,8 +2851,7 @@
       "Entity": "49",
       "Hysteresis": 0,
       "InRange": {
-        "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
-        "Style": "ScriptStyleStatement"
+        "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }"
       }
     },
     "behaviors.VerticalDoor": {
@@ -3595,16 +3592,14 @@
     "behaviors.PlayerTargetable": {
       "Entity": "56",
       "Frob": {
-        "Code": "door := behaviors.GetVerticalDoor(s.ECS,16)\nbuttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nif door.State != behaviors.DoorStateOpen {\n  door.Intent = behaviors.DoorIntentOpen\nbuttonStage.Frame = 1\n} else if door.State != behaviors.DoorStateClosed {\n  door.Intent = behaviors.DoorIntentClosed\nbuttonStage.Frame=0\n}",
-        "Style": "ScriptStyleStatement"
+        "Code": "door := behaviors.GetVerticalDoor(s.ECS,16)\nbuttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nif door.State != behaviors.DoorStateOpen {\n  door.Intent = behaviors.DoorIntentOpen\nbuttonStage.Frame = 1\n} else if door.State != behaviors.DoorStateClosed {\n  door.Intent = behaviors.DoorIntentClosed\nbuttonStage.Frame=0\n}"
       },
+      "Message": "Open",
       "Selected": {
-        "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags |= materials.ShaderFrob",
-        "Style": "ScriptStyleStatement"
+        "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags |= materials.ShaderFrob"
       },
       "UnSelected": {
-        "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags \u0026= ^materials.ShaderFrob",
-        "Style": "ScriptStyleStatement"
+        "Code": "buttonSector := core.GetSector(s.ECS,10)\nbuttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]\nbuttonStage.Flags \u0026= ^materials.ShaderFrob"
       }
     },
     "core.Body": {
@@ -3785,8 +3780,7 @@
       "Entity": "78",
       "Hysteresis": 0,
       "InRange": {
-        "Code": "if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {\n  p.HoveringTargets.Add(onEntity)\n}",
-        "Style": "ScriptStyleStatement"
+        "Code": "if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {\n  p.HoveringTargets.Add(onEntity)\n}"
       },
       "ValidComponents": "behaviors.Player"
     },
@@ -3807,20 +3801,20 @@
   {
     "Entity": "125",
     "behaviors.ActorState": {
-      "Action": "62",
+      "Action": "58",
       "Entity": "125"
     },
     "core.Body": {
       "Angle": {
-        "Now": -13402.667333995756,
+        "Now": -13947.66229908861,
         "Procedural": true,
         "Spawn": 0
       },
       "Entity": "125",
       "Pos": {
         "Now": {
-          "X": -45.05013154928961,
-          "Y": 49.205425622692864,
+          "X": -212.68554067316234,
+          "Y": 239.21816717685027,
           "Z": 24.999999999999996
         },
         "Spawn": {

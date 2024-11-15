@@ -13,6 +13,7 @@ type PlayerTargetable struct {
 	Frob         core.Script `editable:"Frob"`
 	Selected     core.Script `editable:"Selected"`
 	UnSelected   core.Script `editable:"UnSelected"`
+	Message      string      `editable:"Message"`
 }
 
 var PlayerTargetableCID ecs.ComponentID
@@ -67,6 +68,9 @@ func (pt *PlayerTargetable) Construct(data map[string]any) {
 	if v, ok := data["UnSelected"]; ok {
 		pt.UnSelected.Construct(v.(map[string]any))
 	}
+	if v, ok := data["Message"]; ok {
+		pt.Message = v.(string)
+	}
 }
 
 func (pt *PlayerTargetable) Serialize() map[string]any {
@@ -80,6 +84,9 @@ func (pt *PlayerTargetable) Serialize() map[string]any {
 	}
 	if !pt.UnSelected.IsEmpty() {
 		result["UnSelected"] = pt.UnSelected.Serialize()
+	}
+	if len(pt.Message) > 0 {
+		result["Message"] = pt.Message
 	}
 	return result
 }

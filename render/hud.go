@@ -24,6 +24,22 @@ func (r *Renderer) RenderHud() {
 	ts.Shadow = true
 	ts.HAnchor = 0
 	ts.VAnchor = 0
+
+	if r.Player.SelectedTarget != 0 {
+		b := core.GetBody(r.ECS, r.Player.SelectedTarget)
+		pt := behaviors.GetPlayerTargetable(r.ECS, r.Player.SelectedTarget)
+		if pt != nil && len(pt.Message) > 0 {
+			top := &concepts.Vector3{}
+			top[0] = b.Pos.Render[0]
+			top[1] = b.Pos.Render[1]
+			top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
+			scr := r.WorldToScreen(top)
+			if scr != nil {
+				r.Print(ts, int(scr[0]), int(scr[1])-16, pt.Message+" "+r.Player.SelectedTarget.String())
+			}
+		}
+	}
+
 	for i, slot := range r.Player.Inventory {
 		r.BitBlt(slot.Image, i*40+10, r.ScreenHeight-42, 32, 32)
 		r.Print(ts, i*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
@@ -69,22 +85,6 @@ func (r *Renderer) DebugInfo() {
 			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
 		}
 	}*/
-
-	if r.Player.SelectedTarget != 0 {
-		b := core.GetBody(r.ECS, r.Player.SelectedTarget)
-		top := &concepts.Vector3{}
-		top[0] = b.Pos.Render[0]
-		top[1] = b.Pos.Render[1]
-		top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
-		scr := r.WorldToScreen(top)
-		if scr != nil {
-			text := fmt.Sprintf("%v", b.Entity.Format(r.ECS))
-			if alive := behaviors.GetAlive(r.ECS, b.Entity); alive != nil {
-				text = fmt.Sprintf("%v", alive.Health)
-			}
-			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
-		}
-	}
 
 	ts.HAnchor = -1
 	ts.VAnchor = -1
