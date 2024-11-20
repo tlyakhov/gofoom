@@ -28,7 +28,8 @@ func (pc *ProximityController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (pc *ProximityController) Target(target ecs.Attachable) bool {
+func (pc *ProximityController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	pc.Entity = e
 	pc.Proximity = target.(*behaviors.Proximity)
 	return pc.Proximity.IsActive()
 }

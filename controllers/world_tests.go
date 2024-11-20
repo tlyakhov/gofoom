@@ -138,18 +138,18 @@ func CreateSpawn(db *ecs.ECS) {
 	player := &behaviors.Player{}
 	player.Construct(nil)
 	player.Spawn = true
-	db.Upsert(behaviors.PlayerCID, e, player)
+	db.Attach(behaviors.PlayerCID, e, player)
 	body := &core.Body{}
 	body.Construct(nil)
 	body.Pos.SetAll(concepts.Vector3{50, 50, 40})
-	db.Upsert(core.BodyCID, e, body)
+	db.Attach(core.BodyCID, e, body)
 	mobile := &core.Mobile{}
 	mobile.Construct(nil)
 	mobile.Mass = 80
-	db.Upsert(core.MobileCID, e, mobile)
+	db.Attach(core.MobileCID, e, mobile)
 	alive := &behaviors.Alive{}
 	alive.Construct(nil)
-	db.Upsert(behaviors.AliveCID, e, alive)
+	db.Attach(behaviors.AliveCID, e, alive)
 	Respawn(db, true)
 }
 

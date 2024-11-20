@@ -53,6 +53,8 @@ func GetImage(db *ecs.ECS, e ecs.Entity) *Image {
 	return nil
 }
 
+func (img *Image) MultiAttachable() bool { return true }
+
 func (img *Image) String() string {
 	return "Image: " + img.Source
 }

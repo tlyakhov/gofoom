@@ -41,7 +41,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	for _, added := range s.Result {
 		entity := db.NewEntity()
 		for _, component := range added {
-			db.Upsert(ecs.Types().ID(component), entity, component)
+			db.Attach(ecs.Types().ID(component), entity, component)
 		}
 	}
 }

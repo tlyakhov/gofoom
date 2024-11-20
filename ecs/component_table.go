@@ -8,9 +8,6 @@ Closed hash table, indexed directly by component indices
 
 	This is designed to be extremely fast due to the direct hashing, small
 	number of elements, etc...
-
-	It handles links as a special case, recursively querying parent tables
-	if the entity in question has an Linked component attached.
 */
 type ComponentTable []Attachable
 
@@ -23,17 +20,8 @@ func (table *ComponentTable) Set(a Attachable) {
 		*table = make(ComponentTable, ComponentTableGrowthRate)
 		size = ComponentTableGrowthRate
 	}
-	// 0 is reserved for Linked components
-	if cid == LinkedCID {
-		(*table)[0] = a
-		return
-	}
-	// Skip the first element
-	i := 1 + cid%(size-1)
-	for range size - 1 {
-		if i == 0 {
-			i = 1
-		}
+	i := cid % size
+	for range size {
 		if (*table)[i] == nil || (*table)[i].Base().ComponentID == cid {
 			(*table)[i] = a
 			return
@@ -55,21 +43,13 @@ func (table *ComponentTable) Set(a Attachable) {
 }
 
 // This method should be as efficient as possible, it gets called a lot!
-func (table ComponentTable) get(cid ComponentID, followLinks bool) Attachable {
+func (table ComponentTable) Get(cid ComponentID) Attachable {
 	size := ComponentID(len(table))
 	if size == 0 {
 		return nil
 	}
-	// 0 is reserved for Linked components
-	if cid == LinkedCID {
-		return table[0]
-	}
-	// Skip the first element
-	i := 1 + cid%(size-1)
-	for range size - 1 {
-		if i == 0 {
-			i = 1
-		}
+	i := cid % size
+	for range size {
 		if table[i] == nil {
 			break
 		} else if table[i].Base().ComponentID == cid {
@@ -77,19 +57,7 @@ func (table ComponentTable) get(cid ComponentID, followLinks bool) Attachable {
 		}
 		i = (i + 1) % size
 	}
-	// If this table isn't an "instance", just return nil, otherwise try the instance.
-	if table[0] == nil || !followLinks {
-		return nil
-	}
-	return table[0].(*Linked).SourceComponents.get(cid, true)
-}
-
-func (table ComponentTable) Get(cid ComponentID) Attachable {
-	return table.get(cid, true)
-}
-
-func (table ComponentTable) GetNoLinks(cid ComponentID) Attachable {
-	return table.get(cid, false)
+	return nil
 }
 
 func (table *ComponentTable) Delete(cid ComponentID) {
@@ -97,18 +65,10 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 	if size == 0 {
 		return
 	}
-	// 0 is reserved for Linked components
-	if cid == LinkedCID {
-		(*table)[0] = nil
-		return
-	}
 	// First, find our slot by linear probing
-	i := 1 + cid%(size-1)
+	i := cid % size
 	found := false
-	for range size - 1 {
-		if i == 0 {
-			i = 1
-		}
+	for range size {
 		if (*table)[i] == nil {
 			// Already nil, nothing to do
 			return
@@ -129,15 +89,12 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 	// hash value.
 	prev := i
 	i = (i + 1) % size
-	for range size - 1 {
-		if i == 0 {
-			i = 1
-		}
+	for range size {
 		if (*table)[i] == nil {
 			return
 		}
 		cid := (*table)[i].Base().ComponentID
-		hash := 1 + cid%(size-1)
+		hash := cid % size
 		if hash != i {
 			(*table)[prev], (*table)[i] = (*table)[i], nil
 		} else {

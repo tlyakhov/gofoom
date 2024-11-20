@@ -28,7 +28,8 @@ func (sc *SectorController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate | ecs.ControllerAlways
 }
 
-func (sc *SectorController) Target(target ecs.Attachable) bool {
+func (sc *SectorController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	sc.Entity = e
 	sc.Sector = target.(*core.Sector)
 	return sc.Sector.IsActive()
 }

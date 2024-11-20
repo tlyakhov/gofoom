@@ -5,14 +5,13 @@ package behaviors
 
 import (
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
 type ActionTransition struct {
 	ecs.Attached `editable:"^"`
 
-	Next containers.Set[ecs.Entity] `editable:"Next" edit_type:"Action"`
+	Next ecs.EntityTable `editable:"Next" edit_type:"Action"`
 }
 
 var ActionTransitionCID ecs.ComponentID
@@ -31,7 +30,10 @@ func GetActionTransition(db *ecs.ECS, e ecs.Entity) *ActionTransition {
 func (transition *ActionTransition) String() string {
 	var s string
 
-	for e := range transition.Next {
+	for _, e := range transition.Next {
+		if e == 0 {
+			continue
+		}
 		if len(s) > 0 {
 			s += ", "
 		}
@@ -42,14 +44,18 @@ func (transition *ActionTransition) String() string {
 
 func (transition *ActionTransition) Construct(data map[string]any) {
 	transition.Attached.Construct(data)
-	transition.Next = make(containers.Set[ecs.Entity])
+	transition.Next = make(ecs.EntityTable, 0)
 
 	if data == nil {
 		return
 	}
 
 	if v, ok := data["Next"]; ok {
-		transition.Next = ecs.DeserializeEntities(v.([]any))
+		if s, ok := v.(string); ok {
+			transition.Next = ecs.ParseEntityCSV(s)
+		} else {
+			transition.Next = ecs.DeserializeEntities(v.([]any))
+		}
 	}
 }
 
@@ -57,7 +63,7 @@ func (transition *ActionTransition) Serialize() map[string]any {
 	result := transition.Attached.Serialize()
 
 	if len(transition.Next) > 0 {
-		result["Next"] = ecs.SerializeEntities(transition.Next)
+		result["Next"] = transition.Next.Serialize()
 	}
 
 	return result
@@ -99,7 +105,7 @@ func IterateActions(db *ecs.ECS, start ecs.Entity, f func(action ecs.Entity, par
 			continue
 		}
 
-		for next := range transition.Next {
+		for _, next := range transition.Next {
 			if next == 0 {
 				continue
 			}

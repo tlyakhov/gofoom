@@ -27,16 +27,15 @@ func GetSolid(db *ecs.ECS, e ecs.Entity) *Solid {
 	return nil
 }
 
-func (s *Solid) OnDetach() {
+func (s *Solid) MultiAttachable() bool { return true }
+
+func (s *Solid) OnDelete() {
+	defer s.Attached.OnDelete()
 	if s.ECS != nil {
 		s.Diffuse.Detach(s.ECS.Simulation)
 	}
-	s.Attached.OnDetach()
 }
 func (s *Solid) AttachECS(db *ecs.ECS) {
-	if s.ECS != db {
-		s.OnDetach()
-	}
 	s.Attached.AttachECS(db)
 	s.Diffuse.Attach(s.ECS.Simulation)
 }

@@ -29,9 +29,10 @@ func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerLoaded
 }
 
-func (uc *UnderwaterController) Target(target ecs.Attachable) bool {
+func (uc *UnderwaterController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	uc.Entity = e
 	uc.Underwater = target.(*behaviors.Underwater)
-	uc.Sector = core.GetSector(target.GetECS(), target.Base().Entity)
+	uc.Sector = core.GetSector(uc.ECS, uc.Entity)
 	return uc.IsActive() && uc.Sector.IsActive()
 }
 

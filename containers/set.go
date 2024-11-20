@@ -21,6 +21,14 @@ func (s Set[T]) Delete(element T) {
 	delete(s, element)
 }
 
+func (s Set[T]) First() T {
+	for element := range s {
+		return element
+	}
+	var empty T
+	return empty
+}
+
 func (s Set[T]) Contains(element T) bool {
 	_, ok := s[element]
 	return ok

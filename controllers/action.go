@@ -42,10 +42,11 @@ func (ac *ActionController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (ac *ActionController) Target(target ecs.Attachable) bool {
+func (ac *ActionController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	if target.GetECS().Simulation.EditorPaused {
 		return false
 	}
+	ac.Entity = e
 	ac.Actor = target.(*behaviors.Actor)
 	ac.State = behaviors.GetActorState(ac.ECS, ac.Entity)
 	ac.Body = core.GetBody(ac.ECS, ac.Entity)
@@ -187,12 +188,12 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	case ac.Body.Pos.Procedural:
 		ac.Body.Pos.Input.AddSelf(force.MulSelf(constants.TimeStepS))
 		var bc BodyController
-		bc.Target(ac.Body)
+		bc.Target(ac.Body, ac.Entity)
 		bc.findBodySector()
 	default:
 		ac.Body.Pos.Now.AddSelf(force.MulSelf(constants.TimeStepS))
 		var bc BodyController
-		bc.Target(ac.Body)
+		bc.Target(ac.Body, ac.Entity)
 		bc.findBodySector()
 	}
 
@@ -241,7 +242,7 @@ func (ac *ActionController) Always() {
 		ac.State.LastTransition = ac.ECS.Timestamp
 		if len(t.Next) > 0 {
 			i := rand.Intn(len(t.Next))
-			for next := range t.Next {
+			for _, next := range t.Next {
 				ac.State.Action = next
 				if i <= 0 {
 					break

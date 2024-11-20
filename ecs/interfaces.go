@@ -22,8 +22,10 @@ type SubSerializable interface {
 type Attachable interface {
 	Serializable
 	String() string
-	OnDetach()
+	OnDetach(Entity)
+	OnDelete()
 	IsActive() bool
+	MultiAttachable() bool
 	Base() *Attached
 }
 
@@ -44,4 +46,23 @@ type AttachableColumn interface {
 type GenericAttachable[T any] interface {
 	*T
 	Attachable
+}
+
+type ControllerMethod uint32
+
+const (
+	ControllerAlways ControllerMethod = 1 << iota
+	ControllerLoaded
+	ControllerRecalculate
+)
+
+type Controller interface {
+	ComponentID() ComponentID
+	Methods() ControllerMethod
+	EditorPausedMethods() ControllerMethod
+	// Return false if controller shouldn't run for this entity
+	Target(Attachable, Entity) bool
+	Always()
+	Loaded()
+	Recalculate()
 }

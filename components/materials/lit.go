@@ -28,6 +28,8 @@ func GetLit(db *ecs.ECS, e ecs.Entity) *Lit {
 	return nil
 }
 
+func (m *Lit) MultiAttachable() bool { return true }
+
 func (m *Lit) String() string {
 	return "Lit: " + m.Diffuse.String()
 }

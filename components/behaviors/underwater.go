@@ -23,3 +23,5 @@ func GetUnderwater(db *ecs.ECS, e ecs.Entity) *Underwater {
 	}
 	return nil
 }
+
+func (u *Underwater) MultiAttachable() bool { return true }

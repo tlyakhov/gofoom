@@ -43,7 +43,7 @@ func GetPlayer(db *ecs.ECS, e ecs.Entity) *Player {
 }
 
 func (p *Player) Underwater() bool {
-	if b := core.GetBody(p.ECS, p.Entity); b != nil {
+	if b := core.GetBody(p.ECS, p.Entities.First()); b != nil {
 		if u := GetUnderwater(p.ECS, b.SectorEntity); u != nil {
 			return true
 		}

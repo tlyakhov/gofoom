@@ -399,6 +399,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			fieldStringLikeType[*concepts.Vector3](g, field)
 		case **concepts.Vector4:
 			fieldStringLikeType[*concepts.Vector4](g, field)
+		case *ecs.EntityTable:
+			fieldStringLikeType[ecs.EntityTable](g, field)
 		case *[]ecs.Entity:
 			fieldStringLikeType[[]ecs.Entity](g, field)
 		case *concepts.Matrix2:

@@ -25,32 +25,34 @@ func (types *typeMetadata) RegisterController(constructor func() Controller, pri
 	})
 }
 
-func act(controller Controller, component Attachable, method ControllerMethod, child Attachable) {
-	if controller.Target(component) {
-		switch method {
-		case ControllerAlways:
-			controller.Always()
-		case ControllerLoaded:
-			controller.Loaded()
-		case ControllerRecalculate:
-			controller.Recalculate()
+func act(controller Controller, component Attachable, method ControllerMethod) {
+	if component.Base().Attachments == 1 {
+		if controller.Target(component, component.Base().Entity) {
+			switch method {
+			case ControllerAlways:
+				controller.Always()
+			case ControllerLoaded:
+				controller.Loaded()
+			case ControllerRecalculate:
+				controller.Recalculate()
+			}
 		}
+		return
 	}
-	attached := component.Base()
-	ecs := attached.ECS
-	if child != nil {
-		attached = child.Base()
-	}
-	// Apply to linked copies as well...
-	for e := range attached.linkedCopies {
-		// unless they override this component!
-		if ecs.rows[int(e)].GetNoLinks(component.Base().ComponentID) != nil {
+	for _, e := range component.Base().Entities {
+		if e == 0 {
 			continue
 		}
-		linked := GetLinked(ecs, e)
-		linked.PushEntityFields()
-		act(controller, component, method, linked)
-		linked.PopEntityFields()
+		if controller.Target(component, e) {
+			switch method {
+			case ControllerAlways:
+				controller.Always()
+			case ControllerLoaded:
+				controller.Loaded()
+			case ControllerRecalculate:
+				controller.Recalculate()
+			}
+		}
 	}
 }
 
@@ -67,7 +69,7 @@ func (db *ECS) Act(component Attachable, id ComponentID, method ControllerMethod
 		if controller.ComponentID() != id {
 			continue
 		}
-		act(controller, component, method, nil)
+		act(controller, component, method)
 	}
 }
 
@@ -81,7 +83,7 @@ func (db *ECS) ActAllControllers(method ControllerMethod) {
 		col := db.columns[controller.ComponentID()]
 		for i := range col.Cap() {
 			if component := col.Attachable(i); component != nil {
-				act(controller, component, method, nil)
+				act(controller, component, method)
 			}
 		}
 	}
@@ -103,7 +105,7 @@ func (db *ECS) ActAllControllersOneEntity(entity Entity, method ControllerMethod
 				component.Base().ComponentID != controller.ComponentID() {
 				continue
 			}
-			act(controller, component, method, nil)
+			act(controller, component, method)
 		}
 	}
 }

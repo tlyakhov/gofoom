@@ -29,23 +29,13 @@ func GetPlayerTargetable(db *ecs.ECS, e ecs.Entity) *PlayerTargetable {
 	return nil
 }
 
+func (pt *PlayerTargetable) MultiAttachable() bool { return true }
+
 func (pt *PlayerTargetable) String() string {
 	return "PlayerTargetable"
 }
 
-func (pt *PlayerTargetable) OnDetach() {
-	if pt.ECS != nil {
-		pt.Frob.ECS = nil
-		pt.Selected.ECS = nil
-		pt.UnSelected.ECS = nil
-	}
-	pt.Attached.OnDetach()
-}
-
 func (pt *PlayerTargetable) AttachECS(db *ecs.ECS) {
-	if pt.ECS != db {
-		pt.OnDetach()
-	}
 	pt.Attached.AttachECS(db)
 	pt.Frob.AttachECS(db)
 	pt.Selected.AttachECS(db)

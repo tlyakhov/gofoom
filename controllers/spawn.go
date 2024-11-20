@@ -45,7 +45,7 @@ func Respawn(db *ecs.ECS, force bool) {
 	spawn := spawns[rand.Int()%len(spawns)]
 	copiedSpawn := db.SerializeEntity(spawn.Entity)
 	var pastedEntity ecs.Entity
-	for name, id := range ecs.Types().IDs {
+	for name, cid := range ecs.Types().IDs {
 		jsonData := copiedSpawn[name]
 		if jsonData == nil {
 			continue
@@ -54,12 +54,12 @@ func Respawn(db *ecs.ECS, force bool) {
 			pastedEntity = db.NewEntity()
 		}
 		jsonComponent := jsonData.(map[string]any)
-		c := db.LoadComponentWithoutAttaching(id, jsonComponent)
-		c = db.Upsert(id, pastedEntity, c)
-		if id == behaviors.PlayerCID {
+		c := db.LoadComponentWithoutAttaching(cid, jsonComponent)
+		c = db.Attach(cid, pastedEntity, c)
+		if cid == behaviors.PlayerCID {
 			player := c.(*behaviors.Player)
 			player.Spawn = false
-		} else if id == ecs.NamedCID {
+		} else if cid == ecs.NamedCID {
 			named := c.(*ecs.Named)
 			named.Name = "Player"
 		}

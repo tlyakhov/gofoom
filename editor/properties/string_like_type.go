@@ -21,7 +21,7 @@ import (
 type StringLikeType interface {
 	concepts.Vector2 | concepts.Vector3 | concepts.Vector4 |
 		*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4 |
-		[]ecs.Entity
+		ecs.EntityTable | []ecs.Entity
 }
 
 func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
@@ -38,12 +38,10 @@ func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
 		return (*currentValue).String()
 	case **concepts.Vector4:
 		return (*currentValue).String()
+	case *ecs.EntityTable:
+		return currentValue.String()
 	case *[]ecs.Entity:
-		s := make([]string, len(*currentValue))
-		for i, e := range *currentValue {
-			s[i] = e.String()
-		}
-		return strings.Join(s, ", ")
+		return (ecs.EntityTable)(*currentValue).String()
 	}
 	return ""
 }
@@ -77,13 +75,16 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			parsed, err = concepts.ParseVector3(text)
 		case **concepts.Vector4:
 			parsed, err = concepts.ParseVector4(text)
+		case *ecs.EntityTable:
+			entities := ecs.ParseEntityCSV(text)
+			parsed = &entities
 		case *[]ecs.Entity:
 			split := strings.Split(text, ",")
 			entities := make([]ecs.Entity, len(split))
 			for i, s := range split {
-				entity, err2 := ecs.ParseEntity(s)
-				if err2 != nil {
-					err = err2
+				entity, subError := ecs.ParseEntity(s)
+				if subError != nil {
+					err = subError
 					break
 				}
 				entities[i] = entity
@@ -115,6 +116,8 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			if v, ok := parsed.(T); ok {
 				currentValue = &v
 			}
+		case *ecs.EntityTable:
+			currentValue = parsed.(PT)
 		case *[]ecs.Entity:
 			currentValue = parsed.(PT)
 		}

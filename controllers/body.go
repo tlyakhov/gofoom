@@ -43,12 +43,13 @@ func (bc *BodyController) EditorPausedMethods() ecs.ControllerMethod {
 		ecs.ControllerLoaded
 }
 
-func (bc *BodyController) Target(target ecs.Attachable) bool {
+func (bc *BodyController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	bc.Entity = e
 	bc.Body = target.(*core.Body)
-	if !bc.Body.IsActive() {
+	if bc.Body == nil || !bc.Body.IsActive() {
 		return false
 	}
-	bc.Player = behaviors.GetPlayer(bc.Body.ECS, bc.Body.Entity)
+	bc.Player = behaviors.GetPlayer(bc.Body.ECS, bc.Entity)
 	if bc.Player != nil && bc.Player.Spawn {
 		// If this is a spawn point, skip it
 		return false
