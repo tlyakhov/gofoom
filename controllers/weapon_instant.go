@@ -40,11 +40,12 @@ func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (wc *WeaponInstantController) Target(target ecs.Attachable) bool {
+func (wc *WeaponInstantController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	wc.Entity = e
 	wc.WeaponInstant = target.(*behaviors.WeaponInstant)
 	wc.Class = behaviors.GetWeaponClass(wc.WeaponInstant.ECS, wc.WeaponInstant.Class)
-	wc.Body = core.GetBody(wc.WeaponInstant.ECS, wc.WeaponInstant.Entity)
-	return wc.WeaponInstant.IsActive() && wc.Body.IsActive()
+	wc.Body = core.GetBody(wc.WeaponInstant.ECS, wc.Entity)
+	return wc.WeaponInstant.IsActive() && wc.Body != nil && wc.Body.IsActive()
 }
 
 // This is similar to the code for lighting

@@ -38,12 +38,13 @@ func (mc *MobileController) EditorPausedMethods() ecs.ControllerMethod {
 		ecs.ControllerLoaded
 }
 
-func (mc *MobileController) Target(target ecs.Attachable) bool {
+func (mc *MobileController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	mc.BaseController.Entity = e
 	mc.Mobile = target.(*core.Mobile)
 	if !mc.Mobile.IsActive() {
 		return false
 	}
-	return mc.BodyController.Target(core.GetBody(mc.ECS, mc.Entity))
+	return mc.BodyController.Target(core.GetBody(mc.ECS, mc.BaseController.Entity), e)
 }
 
 func (mc *MobileController) ResetForce() {

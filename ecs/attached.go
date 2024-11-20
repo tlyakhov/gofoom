@@ -3,27 +3,21 @@
 
 package ecs
 
-import (
-	"tlyakhov/gofoom/containers"
-)
-
 // Attached represents a set of fields common to every component and implements
 // the Attachable interface.
 type Attached struct {
 	ComponentID
-	Entity        `editable:"Component" edit_type:"Component" edit_sort:"0"`
+	Entity
+	Entities      EntityTable `editable:"Component" edit_type:"Component" edit_sort:"0"`
+	Attachments   int
 	ECS           *ECS
 	System        bool // Don't serialize this entity, disallow editing
 	Active        bool `editable:"Active?"`
 	indexInColumn int
-
-	// Other entities that use this component. See Linked.Entities
-	linkedCopies containers.Set[Entity]
-	entityStack  []Entity
 }
 
 func (a *Attached) IsActive() bool {
-	return a != nil && a.Entity != 0 && a.Active
+	return a != nil && a.Attachments > 0 && a.Active
 }
 
 func (a *Attached) GetECS() *ECS {
@@ -38,36 +32,21 @@ func (a *Attached) Base() *Attached {
 	return a
 }
 
-func (a *Attached) IsEntitySubstituted() bool {
-	return len(a.entityStack) > 0
+func (a *Attached) MultiAttachable() bool {
+	// By default, components cannot be shared
+	return false
 }
 
-// Return whichever Entity this component is actually attached to (rather than
-// a linked substitution)
-func (a *Attached) UnlinkedEntity() Entity {
-	if a.IsEntitySubstituted() {
-		return a.entityStack[0]
+func (a *Attached) OnDetach(entity Entity) {
+	if a.Entities.Delete(entity) {
+		a.Attachments--
 	}
-	return a.Entity
+	if a.Attachments == 1 {
+		a.Entity = a.Entities.First()
+	}
 }
 
-func (a *Attached) OnDetach() {
-	if a.ECS == nil {
-		return
-	}
-	// Remove this entity from the sources of any linked copies
-	for e := range a.linkedCopies {
-		if linked := GetLinked(a.ECS, e); linked != nil {
-			for i, source := range linked.Sources {
-				if source == e {
-					linked.Sources = append(linked.Sources[:i], linked.Sources[i+1:]...)
-					break
-				}
-			}
-			linked.SourceComponents.Delete(a.ComponentID)
-		}
-	}
-	a.linkedCopies = make(containers.Set[Entity])
+func (a *Attached) OnDelete() {
 	a.ECS = nil
 }
 
@@ -86,21 +65,19 @@ func (a *Attached) AttachECS(db *ECS) {
 func (a *Attached) Construct(data map[string]any) {
 	a.Active = true
 	a.System = false
-	a.linkedCopies = make(containers.Set[Entity])
 
 	if data == nil {
 		return
 	}
-	if v, ok := data["Entity"]; ok {
-		a.Entity, _ = ParseEntity(v.(string))
-	}
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
 	}
+	// TODO: Is this construction used anywhere? This should be happening in ECS
+	//a.Entities, a.Attachments = LoadEntitiesFromJson(data)
 }
 
 func (a *Attached) Serialize() map[string]any {
-	result := map[string]any{"Entity": a.Entity.String()}
+	result := map[string]any{"Entities": a.Entities.Serialize()}
 	if !a.Active {
 		result["Active"] = a.Active
 	}

@@ -32,7 +32,8 @@ func (ptc *PlayerTargetableController) EditorPausedMethods() ecs.ControllerMetho
 		ecs.ControllerLoaded
 }
 
-func (ptc *PlayerTargetableController) Target(target ecs.Attachable) bool {
+func (ptc *PlayerTargetableController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	ptc.Entity = e
 	ptc.PlayerTargetable = target.(*behaviors.PlayerTargetable)
 	return ptc.PlayerTargetable.IsActive()
 }

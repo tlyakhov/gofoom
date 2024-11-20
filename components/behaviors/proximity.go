@@ -53,19 +53,9 @@ func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {
 	return nil
 }
 
-func (p *Proximity) OnDetach() {
-	if p.ECS != nil {
-		p.InRange.ECS = nil
-		p.Enter.ECS = nil
-		p.Exit.ECS = nil
-	}
-	p.Attached.OnDetach()
-}
+func (p *Proximity) MultiAttachable() bool { return true }
 
 func (p *Proximity) AttachECS(db *ecs.ECS) {
-	if p.ECS != db {
-		p.OnDetach()
-	}
 	p.Attached.AttachECS(db)
 	p.InRange.AttachECS(db)
 	p.Enter.AttachECS(db)

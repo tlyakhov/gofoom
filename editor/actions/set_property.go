@@ -34,6 +34,8 @@ func (a *SetProperty) FireHooks() {
 	// multiple times for the same selection.
 	for _, v := range a.Values {
 		switch target := v.Parent().(type) {
+		case *ecs.Linked:
+			target.Recalculate()
 		case dynamic.Dynamic:
 			target.ResetToSpawn()
 			target.Recalculate()
@@ -46,8 +48,6 @@ func (a *SetProperty) FireHooks() {
 			target.Compile()
 		case *materials.Text:
 			target.RasterizeText()
-		case *ecs.Linked:
-			target.Recalculate()
 		case *core.SectorSegment:
 			// For SectorSegments, the A & B fields of the child Segment type
 			// are pointers to SectorSegment.P and SectorSegment.Next.P

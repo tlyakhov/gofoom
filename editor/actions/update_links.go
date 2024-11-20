@@ -1,0 +1,71 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
+package actions
+
+import (
+	"tlyakhov/gofoom/containers"
+	"tlyakhov/gofoom/ecs"
+	"tlyakhov/gofoom/editor/state"
+)
+
+type UpdateLinks struct {
+	state.IEditor
+
+	Entities         ecs.EntityTable
+	OldComponents    map[ecs.Entity]ecs.ComponentTable
+	AddComponents    ecs.ComponentTable
+	RemoveComponents containers.Set[ecs.ComponentID]
+}
+
+func (a *UpdateLinks) Act() {
+	a.Redo()
+	a.ActionFinished(false, true, false)
+}
+
+func (a *UpdateLinks) Undo() {
+	panic("Unimplemented")
+}
+
+func (a *UpdateLinks) attach(entity ecs.Entity) {
+	db := a.State().ECS
+
+	all := db.AllComponents(entity)
+	oldComponents := make(ecs.ComponentTable, len(all))
+	copy(oldComponents, all)
+	a.OldComponents[entity] = oldComponents
+
+	for _, oldComponent := range oldComponents {
+		if oldComponent == nil {
+			continue
+		}
+		cid := oldComponent.Base().ComponentID
+		addComponent := a.AddComponents.Get(cid)
+		if a.RemoveComponents.Contains(cid) || (addComponent != nil && addComponent != oldComponent) {
+			db.DetachComponent(cid, entity)
+		}
+	}
+
+	for _, addComponent := range a.AddComponents {
+		if addComponent == nil {
+			continue
+		}
+		cid := addComponent.Base().ComponentID
+		oldComponent := oldComponents.Get(cid)
+		if oldComponent == nil || addComponent != oldComponent {
+			db.Attach(cid, entity, addComponent)
+		}
+	}
+}
+func (a *UpdateLinks) Redo() {
+	a.State().Lock.Lock()
+	defer a.State().Lock.Unlock()
+
+	a.OldComponents = make(map[ecs.Entity]ecs.ComponentTable)
+	for _, e := range a.Entities {
+		if e != 0 {
+			a.attach(e)
+		}
+	}
+	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+}

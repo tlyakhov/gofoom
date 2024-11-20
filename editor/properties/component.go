@@ -6,11 +6,15 @@ package properties
 import (
 	"fmt"
 	"log"
-	"reflect"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
@@ -18,31 +22,76 @@ import (
 func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	// This will be a pointer
 	parentType := ""
-	entities := ""
+	var parent ecs.Attachable
+	var parentCID ecs.ComponentID
+	allEntities := make(ecs.EntityTable, 0)
+	selEntities := make(ecs.EntityTable, 0)
 	for _, v := range field.Values {
-		entity := v.Interface().(ecs.Entity)
-		if len(entities) > 0 {
-			entities += ", "
+		subTable := v.Interface().(ecs.EntityTable)
+		for _, e := range subTable {
+			if e != 0 {
+				allEntities.Set(e)
+			}
 		}
-		entities += entity.String()
-		parentType = reflect.TypeOf(v.Parent()).Elem().String()
+		selEntities.Set(v.Entity)
+		parent = v.Parent().(ecs.Attachable)
+		parentCID = parent.Base().ComponentID
+		parentType = ecs.Types().ColumnPlaceholders[parentCID].Type().Name()
 	}
 
-	button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
-	button.Text = fmt.Sprintf("Remove %v from [%v]", parentType, entities)
-	if len(button.Text) > 32 {
-		button.Text = button.Text[:32] + "..."
+	label := widget.NewLabel("Entities: " + concepts.TruncateString(allEntities.String(), 20))
+
+	removeButton := widget.NewButton("", nil)
+	removeButton.Text = fmt.Sprintf("%v from [%v]", parentType, concepts.TruncateString(selEntities.String(), 10))
+	if len(removeButton.Text) > 32 {
+		removeButton.Text = removeButton.Text[:32] + "..."
 	}
-	button.Icon = theme.ContentRemoveIcon()
-	button.OnTapped = func() {
-		action := &actions.DeleteComponent{IEditor: g.IEditor, Components: make(map[ecs.Entity]ecs.Attachable)}
-		for _, v := range field.Values {
-			entity := v.Interface().(ecs.Entity)
-			log.Printf("Detaching %v from %v", parentType, entity)
-			action.Components[entity] = v.Parent().(ecs.Attachable)
+	removeButton.Icon = theme.ContentRemoveIcon()
+	removeButton.OnTapped = func() {
+		action := &actions.UpdateLinks{
+			IEditor:          g.IEditor,
+			Entities:         selEntities,
+			RemoveComponents: make(containers.Set[ecs.ComponentID]),
+		}
+		action.RemoveComponents.Add(parentCID)
+		for _, e := range selEntities {
+			log.Printf("Detaching %v from %v", parentType, e)
 		}
 		g.NewAction(action)
 		action.Act()
 		g.Focus(g.GridWidget)
 	}
+
+	entitiesEntry := widget.NewEntry()
+	entitiesEntry.Text = ""
+	addButton := widget.NewButton("", nil)
+	addButton.Text = concepts.TruncateString(fmt.Sprintf("Link %v...", parentType), 32)
+	addButton.Icon = theme.ContentAddIcon()
+	addButton.OnTapped = func() {
+		dialog.ShowForm(addButton.Text, "Add", "Cancel", []*widget.FormItem{
+			{Text: "Entities", Widget: entitiesEntry},
+		}, func(b bool) {
+			if !b {
+				return
+			}
+			action := &actions.UpdateLinks{
+				IEditor:       g.IEditor,
+				Entities:      ecs.ParseEntityCSV(entitiesEntry.Text),
+				AddComponents: make(ecs.ComponentTable, 0),
+			}
+			action.AddComponents.Set(parent)
+			for _, e := range action.Entities {
+				if e != 0 {
+					log.Printf("Attaching %v to %v", parentType, e)
+				}
+			}
+			g.NewAction(action)
+			action.Act()
+			g.Focus(g.GridWidget)
+		}, g.GridWindow)
+	}
+
+	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
+	c.Layout = layout.NewVBoxLayout()
+	c.Objects = []fyne.CanvasObject{label, addButton, removeButton}
 }

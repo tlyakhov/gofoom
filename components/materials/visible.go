@@ -39,6 +39,8 @@ func GetVisible(db *ecs.ECS, e ecs.Entity) *Visible {
 	return nil
 }
 
+func (v *Visible) MultiAttachable() bool { return true }
+
 func (v *Visible) String() string {
 	return "Visible (Opacity: " + strconv.FormatFloat(v.Opacity, 'f', 2, 64) + ")"
 }

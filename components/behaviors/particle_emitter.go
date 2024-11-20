@@ -5,7 +5,6 @@ package behaviors
 
 import (
 	"strconv"
-	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -20,8 +19,7 @@ type ParticleEmitter struct {
 	ZSpread  float64    `editable:"Z Spread"`  // Degrees
 	Vel      float64    `editable:"Velocity"`
 
-	Particles containers.Set[ecs.Entity]
-	Spawned   map[ecs.Entity]int64
+	Spawned map[ecs.Entity]int64
 }
 
 var ParticleEmitterCID ecs.ComponentID
@@ -52,7 +50,6 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	pe.ZSpread = 10
 	pe.Vel = 15
 
-	pe.Particles = make(containers.Set[ecs.Entity])
 	pe.Spawned = make(map[ecs.Entity]int64)
 
 	if data == nil {
@@ -60,9 +57,16 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Particles"]; ok {
-		pe.Particles = ecs.DeserializeEntities(v.([]any))
-		for e := range pe.Particles {
-			pe.Spawned[e] = pe.ECS.Timestamp
+		var particles ecs.EntityTable
+		if s, ok := v.(string); ok {
+			particles = ecs.ParseEntityCSV(s)
+		} else {
+			particles = ecs.DeserializeEntities(v.([]any))
+		}
+		for _, e := range particles {
+			if e != 0 {
+				pe.Spawned[e] = pe.ECS.Timestamp
+			}
 		}
 	}
 
@@ -92,8 +96,12 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 func (pe *ParticleEmitter) Serialize() map[string]any {
 	result := pe.Attached.Serialize()
 
-	if len(pe.Particles) > 0 {
-		result["Particles"] = ecs.SerializeEntities(pe.Particles)
+	if len(pe.Spawned) > 0 {
+		particles := make(ecs.EntityTable, 0)
+		for e := range pe.Spawned {
+			particles.Set(e)
+		}
+		result["Particles"] = particles.Serialize()
 	}
 
 	if pe.Lifetime != 5000 {

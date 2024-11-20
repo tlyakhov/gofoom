@@ -26,7 +26,8 @@ func (pvs *PvsController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (pvs *PvsController) Target(target ecs.Attachable) bool {
+func (pvs *PvsController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	pvs.Entity = e
 	pvs.PvsQueue = target.(*core.PvsQueue)
 	return pvs.PvsQueue.IsActive()
 }

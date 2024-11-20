@@ -20,13 +20,13 @@ func init() {
 		"ControllerAlways":         reflect.ValueOf(ecs.ControllerAlways),
 		"ControllerLoaded":         reflect.ValueOf(ecs.ControllerLoaded),
 		"ControllerRecalculate":    reflect.ValueOf(ecs.ControllerRecalculate),
-		"GetLinked":                reflect.ValueOf(ecs.GetLinked),
+		"EntityTableGrowthRate":    reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
 		"GetNamed":                 reflect.ValueOf(ecs.GetNamed),
-		"LinkedCID":                reflect.ValueOf(&ecs.LinkedCID).Elem(),
+		"LoadEntitiesFromJson":     reflect.ValueOf(ecs.LoadEntitiesFromJson),
 		"NamedCID":                 reflect.ValueOf(&ecs.NamedCID).Elem(),
 		"NewECS":                   reflect.ValueOf(ecs.NewECS),
 		"ParseEntity":              reflect.ValueOf(ecs.ParseEntity),
-		"SerializeEntities":        reflect.ValueOf(ecs.SerializeEntities),
+		"ParseEntityCSV":           reflect.ValueOf(ecs.ParseEntityCSV),
 		"Types":                    reflect.ValueOf(ecs.Types),
 
 		// type definitions
@@ -40,8 +40,7 @@ func init() {
 		"ControllerMethod": reflect.ValueOf((*ecs.ControllerMethod)(nil)),
 		"ECS":              reflect.ValueOf((*ecs.ECS)(nil)),
 		"Entity":           reflect.ValueOf((*ecs.Entity)(nil)),
-		"Linked":           reflect.ValueOf((*ecs.Linked)(nil)),
-		"LinkedController": reflect.ValueOf((*ecs.LinkedController)(nil)),
+		"EntityTable":      reflect.ValueOf((*ecs.EntityTable)(nil)),
 		"Named":            reflect.ValueOf((*ecs.Named)(nil)),
 		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
 		"SubSerializable":  reflect.ValueOf((*ecs.SubSerializable)(nil)),
@@ -57,16 +56,18 @@ func init() {
 
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_ecs_Attachable struct {
-	IValue     interface{}
-	WAttachECS func(db *ecs.ECS)
-	WBase      func() *ecs.Attached
-	WConstruct func(data map[string]any)
-	WGetECS    func() *ecs.ECS
-	WIsActive  func() bool
-	WIsSystem  func() bool
-	WOnDetach  func()
-	WSerialize func() map[string]any
-	WString    func() string
+	IValue           interface{}
+	WAttachECS       func(db *ecs.ECS)
+	WBase            func() *ecs.Attached
+	WConstruct       func(data map[string]any)
+	WGetECS          func() *ecs.ECS
+	WIsActive        func() bool
+	WIsSystem        func() bool
+	WMultiAttachable func() bool
+	WOnDelete        func()
+	WOnDetach        func(a0 ecs.Entity)
+	WSerialize       func() map[string]any
+	WString          func() string
 }
 
 func (W _tlyakhov_gofoom_ecs_Attachable) AttachECS(db *ecs.ECS) {
@@ -87,8 +88,14 @@ func (W _tlyakhov_gofoom_ecs_Attachable) IsActive() bool {
 func (W _tlyakhov_gofoom_ecs_Attachable) IsSystem() bool {
 	return W.WIsSystem()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) OnDetach() {
-	W.WOnDetach()
+func (W _tlyakhov_gofoom_ecs_Attachable) MultiAttachable() bool {
+	return W.WMultiAttachable()
+}
+func (W _tlyakhov_gofoom_ecs_Attachable) OnDelete() {
+	W.WOnDelete()
+}
+func (W _tlyakhov_gofoom_ecs_Attachable) OnDetach(a0 ecs.Entity) {
+	W.WOnDetach(a0)
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) Serialize() map[string]any {
 	return W.WSerialize()

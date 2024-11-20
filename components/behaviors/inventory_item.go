@@ -29,6 +29,8 @@ func GetInventoryItem(db *ecs.ECS, e ecs.Entity) *InventoryItem {
 	return nil
 }
 
+func (item *InventoryItem) MultiAttachable() bool { return true }
+
 func (item *InventoryItem) String() string {
 	return "InventoryItem"
 }

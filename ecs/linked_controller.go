@@ -21,7 +21,8 @@ func (ic *LinkedController) Methods() ControllerMethod {
 	return ControllerRecalculate
 }
 
-func (ic *LinkedController) Target(target Attachable) bool {
+func (ic *LinkedController) Target(target Attachable, e Entity) bool {
+	ic.Entity = e
 	ic.Linked = target.(*Linked)
 	return ic.Linked.IsActive()
 }

@@ -37,16 +37,15 @@ func GetText(db *ecs.ECS, e ecs.Entity) *Text {
 	return nil
 }
 
-func (t *Text) OnDetach() {
+func (t *Text) MultiAttachable() bool { return true }
+
+func (t *Text) OnDelete() {
+	defer t.Attached.OnDelete()
 	if t.ECS != nil {
 		t.Color.Detach(t.ECS.Simulation)
 	}
-	t.Attached.OnDetach()
 }
 func (t *Text) AttachECS(db *ecs.ECS) {
-	if t.ECS != db {
-		t.OnDetach()
-	}
 	t.Attached.AttachECS(db)
 	t.Color.Attach(db.Simulation)
 }

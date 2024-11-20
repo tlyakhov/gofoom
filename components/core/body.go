@@ -39,22 +39,26 @@ func (b *Body) String() string {
 	return "Body: " + b.Pos.Now.StringHuman()
 }
 
-func (b *Body) OnDetach() {
+func (b *Body) OnDetach(e ecs.Entity) {
+	defer b.Attached.OnDetach(e)
+	if b.ECS == nil {
+		return
+	}
+	if sector := b.Sector(); sector != nil {
+		delete(sector.Bodies, e)
+	}
+}
+
+func (b *Body) OnDelete() {
+	defer b.Attached.OnDelete()
 	if b.ECS != nil {
 		b.Pos.Detach(b.ECS.Simulation)
 		b.Size.Detach(b.ECS.Simulation)
 		b.Angle.Detach(b.ECS.Simulation)
-		if sector := b.Sector(); sector != nil {
-			delete(sector.Bodies, b.Entity)
-		}
 	}
-	b.Attached.OnDetach()
 }
 
 func (b *Body) AttachECS(db *ecs.ECS) {
-	if b.ECS != db {
-		b.OnDetach()
-	}
 	b.Attached.AttachECS(db)
 	b.Pos.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)

@@ -84,7 +84,7 @@ func (s *Sector) ZAt(stage dynamic.DynamicStage, p *concepts.Vector2) (fz, cz fl
 }
 
 func (s *Sector) removeAdjacentReferences() {
-	if s.Entity == 0 || s.ECS == nil {
+	if s.Attachments == 0 || s.ECS == nil {
 		return
 	}
 
@@ -95,7 +95,7 @@ func (s *Sector) removeAdjacentReferences() {
 			continue
 		}
 		for _, seg := range sector.Segments {
-			if seg.AdjacentSector == s.Entity {
+			if s.Entities.Contains(seg.AdjacentSector) {
 				seg.AdjacentSector = 0
 				seg.AdjacentSegment = nil
 				seg.AdjacentSegmentIndex = 0
@@ -103,7 +103,8 @@ func (s *Sector) removeAdjacentReferences() {
 		}
 	}
 }
-func (s *Sector) OnDetach() {
+func (s *Sector) OnDelete() {
+	defer s.Attached.OnDelete()
 	if s.ECS != nil {
 		s.Top.Z.Detach(s.ECS.Simulation)
 		s.Bottom.Z.Detach(s.ECS.Simulation)
@@ -115,13 +116,9 @@ func (s *Sector) OnDetach() {
 	s.Bodies = make(map[ecs.Entity]*Body)
 	s.Colliders = make(map[ecs.Entity]*Mobile)
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
-	s.Attached.OnDetach()
 }
 
 func (s *Sector) AttachECS(db *ecs.ECS) {
-	if s.ECS != db {
-		s.OnDetach()
-	}
 	s.Attached.AttachECS(db)
 	s.Top.Z.Attach(db.Simulation)
 	s.Bottom.Z.Attach(db.Simulation)

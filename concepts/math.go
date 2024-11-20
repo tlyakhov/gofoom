@@ -101,24 +101,21 @@ func RngDecide(r uint64, mod uint64) bool {
 	return r < block
 }
 
-func TruncateString(str string, max int) string {
-	lastSpaceIx := -1
+// Adapted from https://stackoverflow.com/questions/59955085/how-can-i-elliptically-truncate-text-in-golang
+func TruncateString(text string, limit int) string {
+	lastWordBoundaryIndex := limit
 	len := 0
-	for i, r := range str {
-		if unicode.IsSpace(r) {
-			lastSpaceIx = i
+	for i, r := range text {
+		if unicode.IsSpace(r) || unicode.IsPunct(r) {
+			lastWordBoundaryIndex = i
 		}
 		len++
-		if len >= max {
-			if lastSpaceIx != -1 {
-				return str[:lastSpaceIx] + "..."
-			}
-			// If here, string is longer than max, but has no spaces
-			return str[:max] + "..."
+		if len > limit {
+			return text[:lastWordBoundaryIndex] + "..."
 		}
 	}
-	// If here, string is shorter than max
-	return str
+	// If here, string is shorter or equal to limit
+	return text
 }
 
 // https://gamedev.stackexchange.com/questions/96459/fast-ray-sphere-collision-code

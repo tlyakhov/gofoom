@@ -2,11 +2,9 @@
   {
     "Entity": "1",
     "behaviors.Alive": {
-      "Entity": "1",
       "Health": 100
     },
     "behaviors.Player": {
-      "Entity": "1",
       "Inventory": [
         {
           "Count": {
@@ -24,22 +22,21 @@
           },
           "Image": "98",
           "Limit": "100",
-          "ValidClasses": "Pluk,Flower"
+          "ValidClasses": "Flower,Pluk"
         }
       ],
       "Spawn": false
     },
     "core.Body": {
       "Angle": {
-        "Now": 258.75,
+        "Now": 257.34375,
         "Spawn": 0
       },
-      "Entity": "1",
       "Pos": {
         "Now": {
-          "X": -295.5698283553377,
-          "Y": 182.40949693924955,
-          "Z": -44
+          "X": 53.70605949163325,
+          "Y": -116.50775297605942,
+          "Z": 20
         },
         "Spawn": {
           "X": -390,
@@ -63,14 +60,13 @@
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
       "Elasticity": 0.1,
-      "Entity": "1",
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
         "Now": {
-          "X": -0.00000596481515515061,
-          "Y": -0.000029983063296590077,
-          "Z": 0.0070016504119779915
+          "X": -4.600120415255853e-61,
+          "Y": -2.0485454785310526e-60,
+          "Z": 0.007001650411977742
         },
         "Spawn": {
           "X": 0,
@@ -80,18 +76,15 @@
       }
     },
     "ecs.Named": {
-      "Entity": "1",
       "Name": "Player"
     }
   },
   {
     "Entity": "2",
     "ecs.Named": {
-      "Entity": "2",
       "Name": "Default"
     },
     "materials.Image": {
-      "Entity": "2",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/wool_colored_white.png"
@@ -107,8 +100,7 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "2"
+      }
     }
   },
   {
@@ -123,7 +115,6 @@
           "Spawn": 20
         }
       },
-      "Entity": "3",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -211,7 +202,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "4",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -298,7 +288,6 @@
           "Spawn": -44
         }
       },
-      "Entity": "5",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -384,7 +373,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "6",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -452,7 +440,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "7",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -530,7 +517,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "8",
       "Pos": {
         "Now": {
           "X": 140,
@@ -561,7 +547,6 @@
         "Y": 0.6,
         "Z": 1
       },
-      "Entity": "8",
       "Strength": 2
     }
   },
@@ -572,7 +557,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "9",
       "Pos": {
         "Now": {
           "X": 140,
@@ -603,7 +587,6 @@
         "Y": 0.6,
         "Z": 1
       },
-      "Entity": "9",
       "Strength": 2
     }
   },
@@ -619,7 +602,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "10",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -707,7 +689,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "11",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -799,7 +780,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "12",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -891,7 +871,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "13",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1016,7 +995,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "14",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1155,7 +1133,6 @@
           "Spawn": -4
         }
       },
-      "Entity": "15",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1227,11 +1204,9 @@
   {
     "Entity": "16",
     "ecs.Named": {
-      "Entity": "16",
       "Name": "Test Shader"
     },
     "materials.Shader": {
-      "Entity": "16",
       "Stages": [
         {
           "Material": "123",
@@ -1270,7 +1245,6 @@
           "Spawn": -60
         }
       },
-      "Entity": "17",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1356,7 +1330,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "18",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1443,7 +1416,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "19",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1506,7 +1478,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "20",
       "Pos": {
         "Now": {
           "X": 900,
@@ -1537,7 +1508,6 @@
         "Y": 1,
         "Z": 0.9
       },
-      "Entity": "20",
       "Strength": 1
     }
   },
@@ -1548,7 +1518,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "21",
       "Pos": {
         "Now": {
           "X": -220,
@@ -1579,7 +1548,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "21",
       "Strength": 0.2
     }
   },
@@ -1595,7 +1563,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "22",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1678,7 +1645,6 @@
           "Spawn": -100
         }
       },
-      "Entity": "23",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1811,7 +1777,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "24",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -1884,9 +1849,14 @@
   },
   {
     "Entity": "25",
+    "behaviors.Proximity": {
+      "Hysteresis": 0,
+      "InRange": {
+        "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }"
+      }
+    },
     "behaviors.VerticalDoor": {
       "Duration": 1000,
-      "Entity": "25",
       "TweeningFunc": "EaseInOut2"
     },
     "core.Sector": {
@@ -1899,7 +1869,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "25",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2119,12 +2088,6 @@
           "Spawn": 64
         }
       }
-    },
-    "ecs.Linked": {
-      "Entities": [
-        "134"
-      ],
-      "Entity": "25"
     }
   },
   {
@@ -2144,7 +2107,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "26",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2249,7 +2211,6 @@
           "Spawn": -100
         }
       },
-      "Entity": "27",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2387,7 +2348,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "28",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2492,7 +2452,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "29",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2581,7 +2540,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "30",
       "Pos": {
         "Now": {
           "X": 1370,
@@ -2612,7 +2570,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "30",
       "Strength": 2
     }
   },
@@ -2628,7 +2585,6 @@
           "Spawn": -32
         }
       },
-      "Entity": "31",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2725,12 +2681,31 @@
   },
   {
     "Entity": "32",
+    "behaviors.InventoryItem": {
+      "Class": "Flower",
+      "Count": {
+        "Now": "1",
+        "Spawn": "1"
+      },
+      "Image": "98"
+    },
+    "behaviors.PlayerTargetable": {
+      "Frob": {
+        "Code": "if body == nil { return }\nitem := behaviors.GetInventoryItem(s.ECS, body.Entity)\nif player == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(player, item)\n"
+      },
+      "Message": "Pick up item"
+    },
+    "behaviors.Proximity": {
+      "Hysteresis": 0,
+      "InRange": {
+        "Code": "if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {\n  p.HoveringTargets.Add(onEntity)\n}"
+      }
+    },
     "core.Body": {
       "Angle": {
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "32",
       "Pos": {
         "Animation": {
           "Active": true,
@@ -2740,8 +2715,8 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.6484375,
-          "Reverse": true,
+          "Percent": 0.953125,
+          "Reverse": false,
           "Start": {
             "X": 0,
             "Y": 0,
@@ -2752,7 +2727,7 @@
         "Now": {
           "X": -400,
           "Y": 60,
-          "Z": -47.88134765625
+          "Z": -51.912109375
         },
         "Spawn": {
           "X": -400,
@@ -2772,14 +2747,27 @@
       }
     },
     "ecs.Linked": {
-      "Entities": [
+      "Sources": [
         "249"
-      ],
-      "Entity": "32"
+      ]
     },
     "ecs.Named": {
-      "Entity": "32",
       "Name": "Flower (Starting Room)"
+    },
+    "materials.Sprite": {
+      "Angles": "0",
+      "Frame": {
+        "Damping": 0,
+        "Freq": 0.000001,
+        "Now": "0",
+        "Response": 0,
+        "Spawn": "0"
+      },
+      "Material": "98"
+    },
+    "materials.Visible": {
+      "Ambient": 1,
+      "Shadow": "ShadowImage"
     }
   },
   {
@@ -2794,7 +2782,6 @@
           "Spawn": -60
         }
       },
-      "Entity": "33",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2875,7 +2862,6 @@
           "Spawn": 20
         }
       },
-      "Entity": "34",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -2967,7 +2953,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "35",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -3060,7 +3045,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "35",
       "Name": "be3estnvn27i2m3satqg"
     }
   },
@@ -3076,7 +3060,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "36",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -3178,7 +3161,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "37",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -3253,7 +3235,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "37",
       "Name": "be26u9vvn27vmb5f7bcg"
     }
   },
@@ -3269,7 +3250,6 @@
           "Spawn": -48
         }
       },
-      "Entity": "38",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -3357,7 +3337,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "39",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -3445,7 +3424,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "40",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -3550,7 +3528,6 @@
           "Spawn": -64
         }
       },
-      "Entity": "41",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -3817,35 +3794,30 @@
   {
     "Entity": "42",
     "behaviors.Actor": {
-      "Entity": "42",
       "NoZ": true,
       "Speed": 350,
       "Start": "135"
     },
     "behaviors.ActorState": {
-      "Action": "137",
-      "Entity": "42"
+      "Action": "146"
     },
     "behaviors.Alive": {
-      "Entity": "42",
       "Health": 100
     },
     "behaviors.WeaponInstant": {
-      "Class": "148",
-      "Entity": "42"
+      "Class": "148"
     },
     "core.Body": {
       "Angle": {
-        "Now": 5042.609404374399,
+        "Now": 4859.675135926649,
         "Procedural": true,
         "Spawn": 155.9558816022554
       },
-      "Entity": "42",
       "Pos": {
         "Now": {
-          "X": -273.79041673518384,
-          "Y": -203.73742084447468,
-          "Z": -12
+          "X": -136.13982251080697,
+          "Y": -191.32979657979203,
+          "Z": 16
         },
         "Spawn": {
           "X": -10,
@@ -3870,14 +3842,13 @@
       "CrPlayer": "CollideBounce",
       "CrWall": "CollideSeparate",
       "Elasticity": 0.5,
-      "Entity": "42",
       "Mass": 40,
       "MountHeight": 15,
       "Vel": {
         "Now": {
-          "X": 1.0499399812128631,
-          "Y": 0.011396370059434942,
-          "Z": 0.02608716021001886
+          "X": -1.049603385538073,
+          "Y": 0.007591415451063641,
+          "Z": 0.02608716004921969
         },
         "Spawn": {
           "X": 0,
@@ -3887,11 +3858,9 @@
       }
     },
     "ecs.Named": {
-      "Entity": "42",
       "Name": "FlubTest"
     },
     "materials.Image": {
-      "Entity": "42",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/game/flub/flub.png"
@@ -3907,13 +3876,11 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "42"
+      }
     },
     "materials.Sprite": {
       "Angles": "8",
       "Cols": "4",
-      "Entity": "42",
       "Frame": {
         "Damping": 0,
         "Freq": 0.000001,
@@ -3926,7 +3893,6 @@
     },
     "materials.Visible": {
       "Ambient": 1,
-      "Entity": "42",
       "Shadow": "ShadowImage"
     }
   },
@@ -3942,7 +3908,6 @@
           "Spawn": -8
         }
       },
-      "Entity": "43",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4023,7 +3988,6 @@
           "Spawn": 30
         }
       },
-      "Entity": "44",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4095,7 +4059,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "44",
       "Name": "be3dsc7vn27ho9jt57u0"
     }
   },
@@ -4111,7 +4074,6 @@
           "Spawn": -64
         }
       },
-      "Entity": "45",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4192,7 +4154,6 @@
           "Spawn": -24
         }
       },
-      "Entity": "46",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4273,7 +4234,6 @@
           "Spawn": -20
         }
       },
-      "Entity": "47",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4354,7 +4314,6 @@
           "Spawn": -60
         }
       },
-      "Entity": "48",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4440,7 +4399,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "49",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4533,7 +4491,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "49",
       "Name": "be3eq5fvn27i2m3sahpg"
     }
   },
@@ -4549,7 +4506,6 @@
           "Spawn": -12
         }
       },
-      "Entity": "50",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4635,7 +4591,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "51",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4698,7 +4653,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "52",
       "Pos": {
         "Now": {
           "X": 580,
@@ -4729,7 +4683,6 @@
         "Y": 1,
         "Z": 0.9
       },
-      "Entity": "52",
       "Strength": 1
     }
   },
@@ -4745,7 +4698,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "53",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4857,7 +4809,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "54",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -4944,7 +4895,6 @@
           "Spawn": -46
         }
       },
-      "Entity": "55",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5063,7 +5013,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "56",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5137,7 +5086,6 @@
   {
     "Entity": "57",
     "ecs.Named": {
-      "Entity": "57",
       "Name": "Text Test"
     },
     "materials.Text": {
@@ -5155,7 +5103,6 @@
           "Z": 1
         }
       },
-      "Entity": "57",
       "Label": "Testing an extra shader stage\nThat has a multi-line generated\nText material on top of a regular\nTexture",
       "LineSpacing": 1.05
     }
@@ -5172,7 +5119,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "58",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5286,7 +5232,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "59",
       "Pos": {
         "Now": {
           "X": 730,
@@ -5317,7 +5262,6 @@
         "Y": 0.8,
         "Z": 1
       },
-      "Entity": "59",
       "Strength": 2
     }
   },
@@ -5333,7 +5277,6 @@
           "Spawn": -52
         }
       },
-      "Entity": "60",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5414,7 +5357,6 @@
           "Spawn": -34
         }
       },
-      "Entity": "61",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5515,7 +5457,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "62",
       "Pos": {
         "Now": {
           "X": 380,
@@ -5546,7 +5487,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "62",
       "Strength": 2
     }
   },
@@ -5562,7 +5502,6 @@
           "Spawn": -56
         }
       },
-      "Entity": "63",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5648,7 +5587,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "64",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5741,7 +5679,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "64",
       "Name": "be26u7fvn27vmb5f7790"
     }
   },
@@ -5762,7 +5699,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "65",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5867,7 +5803,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "66",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -5971,7 +5906,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "67",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6070,7 +6004,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "68",
       "Pos": {
         "Now": {
           "X": 370,
@@ -6101,7 +6034,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "68",
       "Strength": 2
     }
   },
@@ -6122,7 +6054,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "69",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6196,7 +6127,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "69",
       "Name": "ckqbdsdmdsrmu07rpqsg"
     }
   },
@@ -6212,7 +6142,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "70",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6283,7 +6212,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "70",
       "Name": "be3esufvn27i2m3sav10"
     }
   },
@@ -6299,7 +6227,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "71",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6324,7 +6251,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "243",
             "Transform": {
               "Now": [
@@ -6416,7 +6342,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "71",
       "Name": "be3dsc7vn27ho9jt56fg"
     }
   },
@@ -6455,7 +6380,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "72",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6641,7 +6565,6 @@
           "Spawn": -40
         }
       },
-      "Entity": "73",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6722,7 +6645,6 @@
           "Spawn": -36
         }
       },
-      "Entity": "74",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6808,7 +6730,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "75",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -6913,7 +6834,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "76",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7010,7 +6930,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "76",
       "Name": "ckqbdl5mdsrmu07rpql0"
     }
   },
@@ -7031,7 +6950,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "77",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7124,7 +7042,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "77",
       "Name": "be3eq5fvn27i2m3saigg"
     }
   },
@@ -7135,7 +7052,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "78",
       "Pos": {
         "Now": {
           "X": -470,
@@ -7166,15 +7082,14 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "78",
       "Strength": 2
     }
   },
   {
     "Entity": "79",
+    "behaviors.Proximity": "25",
     "behaviors.VerticalDoor": {
       "Duration": 1000,
-      "Entity": "79",
       "TweeningFunc": "EaseInOut2"
     },
     "core.Sector": {
@@ -7187,7 +7102,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "79",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7321,17 +7235,16 @@
       }
     },
     "ecs.Linked": {
-      "Entities": [
+      "Sources": [
         "134"
-      ],
-      "Entity": "79"
+      ]
     }
   },
   {
     "Entity": "80",
+    "behaviors.Proximity": "25",
     "behaviors.VerticalDoor": {
       "Duration": 1000,
-      "Entity": "80",
       "TweeningFunc": "EaseInOut2"
     },
     "core.Sector": {
@@ -7344,7 +7257,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "80",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7383,9 +7295,9 @@
                 1,
                 0,
                 0,
-                1.28,
+                0.00015625,
                 0,
-                -0.30000000000000004
+                0.99984130859375
               ],
               "Spawn": [
                 1,
@@ -7431,28 +7343,27 @@
             "Duration": 1000,
             "End": 0,
             "Lifetime": "AnimationLifetimeOnce",
-            "Percent": 1,
-            "Reverse": false,
+            "Percent": 0,
+            "Reverse": true,
             "Start": 64,
             "TweeningFunc": "EaseInOut2"
           },
-          "Now": 0,
+          "Now": 64,
           "Spawn": 64
         }
       }
     },
     "ecs.Linked": {
-      "Entities": [
+      "Sources": [
         "134"
-      ],
-      "Entity": "80"
+      ]
     }
   },
   {
     "Entity": "81",
+    "behaviors.Proximity": "25",
     "behaviors.VerticalDoor": {
       "Duration": 1000,
-      "Entity": "81",
       "TweeningFunc": "EaseInOut2"
     },
     "core.Sector": {
@@ -7465,7 +7376,6 @@
           "Spawn": -64
         }
       },
-      "Entity": "81",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7599,10 +7509,9 @@
       }
     },
     "ecs.Linked": {
-      "Entities": [
+      "Sources": [
         "134"
-      ],
-      "Entity": "81"
+      ]
     }
   },
   {
@@ -7617,7 +7526,6 @@
           "Spawn": -48
         }
       },
-      "Entity": "82",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7698,7 +7606,6 @@
           "Spawn": -28
         }
       },
-      "Entity": "83",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7779,7 +7686,6 @@
           "Spawn": -32
         }
       },
-      "Entity": "84",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -7856,7 +7762,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "85",
       "Pos": {
         "Now": {
           "X": -340,
@@ -7887,7 +7792,6 @@
         "Y": 0.7,
         "Z": 0.5
       },
-      "Entity": "85",
       "Strength": 3
     }
   },
@@ -7908,7 +7812,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "86",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8001,7 +7904,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "86",
       "Name": "be26u7fvn27vmb5f78bg"
     }
   },
@@ -8017,7 +7919,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "87",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8156,7 +8057,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "88",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8244,7 +8144,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "89",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8337,7 +8236,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "89",
       "Name": "be3eq5fvn27i2m3sais0"
     }
   },
@@ -8358,7 +8256,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "90",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8446,7 +8343,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "91",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8485,7 +8381,6 @@
             "Material": "2"
           },
           "Surface": {
-            "ExtraStages": [],
             "Material": "2",
             "Transform": {
               "Now": [
@@ -8540,7 +8435,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "91",
       "Name": "be26u9vvn27vmb5f7b10"
     }
   },
@@ -8556,7 +8450,6 @@
           "Spawn": -60
         }
       },
-      "Entity": "92",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8637,7 +8530,6 @@
           "Spawn": -60
         }
       },
-      "Entity": "93",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8723,7 +8615,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "94",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -8970,7 +8861,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "95",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9033,7 +8923,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "96",
       "Pos": {
         "Now": {
           "X": 580,
@@ -9064,7 +8953,6 @@
         "Y": 1,
         "Z": 0.9
       },
-      "Entity": "96",
       "Strength": 1
     }
   },
@@ -9085,7 +8973,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "97",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9181,11 +9068,9 @@
   {
     "Entity": "98",
     "ecs.Named": {
-      "Entity": "98",
       "Name": "Pluk"
     },
     "materials.Image": {
-      "Entity": "98",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/game/pluk.png"
@@ -9203,7 +9088,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "99",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9274,7 +9158,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "99",
       "Name": "be26uavvn27vmb5f7edg"
     }
   },
@@ -9290,7 +9173,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "100",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9382,7 +9264,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "101",
       "Pos": {
         "Now": {
           "X": 810,
@@ -9413,7 +9294,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "101",
       "Strength": 2
     }
   },
@@ -9424,7 +9304,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "102",
       "Pos": {
         "Now": {
           "X": 670,
@@ -9455,7 +9334,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "102",
       "Strength": 2
     }
   },
@@ -9471,7 +9349,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "103",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9570,7 +9447,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "103",
       "Name": "be3dsc7vn27ho9jt5740"
     }
   },
@@ -9581,7 +9457,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "104",
       "Pos": {
         "Now": {
           "X": -70,
@@ -9612,7 +9487,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "104",
       "Strength": 2
     }
   },
@@ -9623,7 +9497,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "105",
       "Pos": {
         "Now": {
           "X": 70,
@@ -9654,7 +9527,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "105",
       "Strength": 2
     }
   },
@@ -9670,7 +9542,6 @@
           "Spawn": -16
         }
       },
-      "Entity": "106",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9751,7 +9622,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "108",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9841,7 +9711,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "108",
       "Name": "Sector 108"
     }
   },
@@ -9862,7 +9731,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "109",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -9937,7 +9805,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "109",
       "Name": "Sector 109"
     }
   },
@@ -9953,7 +9820,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "110",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10024,7 +9890,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "110",
       "Name": "Sector 110"
     }
   },
@@ -10045,7 +9910,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "111",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10119,7 +9983,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "111",
       "Name": "Sector 111"
     }
   },
@@ -10135,7 +9998,6 @@
           "Spawn": 5
         }
       },
-      "Entity": "112",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10191,18 +10053,15 @@
       }
     },
     "ecs.Named": {
-      "Entity": "112",
       "Name": "Sector 112"
     }
   },
   {
     "Entity": "113",
     "ecs.Named": {
-      "Entity": "113",
       "Name": "Weapon Mark"
     },
     "materials.Image": {
-      "Entity": "113",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/weapon-mark.png"
@@ -10218,8 +10077,7 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "113"
+      }
     }
   },
   {
@@ -10234,7 +10092,6 @@
           "Spawn": 10
         }
       },
-      "Entity": "114",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10290,7 +10147,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "114",
       "Name": "Sector 114"
     }
   },
@@ -10306,7 +10162,6 @@
           "Spawn": 15
         }
       },
-      "Entity": "115",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10362,7 +10217,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "115",
       "Name": "Sector 115"
     }
   },
@@ -10378,7 +10232,6 @@
           "Spawn": 20
         }
       },
-      "Entity": "116",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10434,7 +10287,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "116",
       "Name": "Sector 116"
     }
   },
@@ -10450,7 +10302,6 @@
           "Spawn": 25
         }
       },
-      "Entity": "117",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10506,7 +10357,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "117",
       "Name": "Sector 117"
     }
   },
@@ -10522,7 +10372,6 @@
           "Spawn": 30
         }
       },
-      "Entity": "118",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10591,18 +10440,15 @@
       }
     },
     "ecs.Named": {
-      "Entity": "118",
       "Name": "Sector 118"
     }
   },
   {
     "Entity": "119",
     "ecs.Named": {
-      "Entity": "119",
       "Name": "HUD Font 2"
     },
     "materials.Image": {
-      "Entity": "119",
       "Filter": false,
       "GenerateMipMaps": false,
       "Source": "data/Lord_Nightmare_6x6font02.png"
@@ -10610,7 +10456,6 @@
     "materials.Sprite": {
       "Angles": "0",
       "Cols": "16",
-      "Entity": "119",
       "Frame": {
         "Damping": 0,
         "Freq": 0.000001,
@@ -10634,7 +10479,6 @@
           "Spawn": 35
         }
       },
-      "Entity": "120",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -10702,7 +10546,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "120",
       "Name": "Sector 120"
     }
   },
@@ -10713,7 +10556,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "121",
       "Pos": {
         "Now": {
           "X": 1430,
@@ -10744,18 +10586,15 @@
         "Y": 0.8,
         "Z": 0.1
       },
-      "Entity": "121",
       "Strength": 2
     }
   },
   {
     "Entity": "122",
     "ecs.Named": {
-      "Entity": "122",
       "Name": "Floor"
     },
     "materials.Image": {
-      "Entity": "122",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/ggrass_top.png"
@@ -10771,18 +10610,15 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "122"
+      }
     }
   },
   {
     "Entity": "123",
     "ecs.Named": {
-      "Entity": "123",
       "Name": "Door Metal"
     },
     "materials.Image": {
-      "Entity": "123",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/wool_colored_gray.png"
@@ -10798,18 +10634,15 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "123"
+      }
     }
   },
   {
     "Entity": "124",
     "ecs.Named": {
-      "Entity": "124",
       "Name": "Wall Variation"
     },
     "materials.Image": {
-      "Entity": "124",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/wool_colored_red.png"
@@ -10825,8 +10658,7 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "124"
+      }
     }
   },
   {
@@ -10836,7 +10668,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "125",
       "Pos": {
         "Now": {
           "X": -520,
@@ -10867,18 +10698,15 @@
         "Y": 0.5,
         "Z": 0
       },
-      "Entity": "125",
       "Strength": 10
     }
   },
   {
     "Entity": "126",
     "behaviors.Alive": {
-      "Entity": "126",
       "Health": 100
     },
     "behaviors.Player": {
-      "Entity": "126",
       "Inventory": [
         {
           "Count": {
@@ -10906,7 +10734,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "126",
       "Pos": {
         "Now": {
           "X": -390,
@@ -10935,7 +10762,6 @@
       "CrPlayer": "CollideNone",
       "CrWall": "CollideSeparate",
       "Elasticity": 0.1,
-      "Entity": "126",
       "Mass": 80,
       "MountHeight": 15,
       "Vel": {
@@ -10952,18 +10778,15 @@
       }
     },
     "ecs.Named": {
-      "Entity": "126",
       "Name": "Spawn"
     }
   },
   {
     "Entity": "127",
     "ecs.Named": {
-      "Entity": "127",
       "Name": "Toxic"
     },
     "materials.Image": {
-      "Entity": "127",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/FSlime.png"
@@ -10979,18 +10802,15 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "127"
+      }
     }
   },
   {
     "Entity": "128",
     "ecs.Named": {
-      "Entity": "128",
       "Name": "Glass"
     },
     "materials.Image": {
-      "Entity": "128",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/glass-test.png"
@@ -11006,18 +10826,15 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "128"
+      }
     }
   },
   {
     "Entity": "129",
     "ecs.Named": {
-      "Entity": "129",
       "Name": "Ladder"
     },
     "materials.Image": {
-      "Entity": "129",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/ladder.png"
@@ -11033,18 +10850,15 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "129"
+      }
     }
   },
   {
     "Entity": "130",
     "ecs.Named": {
-      "Entity": "130",
       "Name": "Stained Glass"
     },
     "materials.Image": {
-      "Entity": "130",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/stained-glass.jpeg"
@@ -11060,8 +10874,7 @@
         "B": 0.5,
         "G": 0.5,
         "R": 0.5
-      },
-      "Entity": "130"
+      }
     }
   },
   {
@@ -11071,7 +10884,6 @@
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "131",
       "Pos": {
         "Now": {
           "X": -230,
@@ -11102,7 +10914,6 @@
         "Y": 1,
         "Z": 1
       },
-      "Entity": "131",
       "Strength": 1.5
     }
   },
@@ -11114,18 +10925,16 @@
         "Now": "1",
         "Spawn": "1"
       },
-      "Entity": "132",
       "Image": "133"
     },
-    "behaviors.WeaponInstant": {
-      "Entity": "132"
-    },
+    "behaviors.PlayerTargetable": "32",
+    "behaviors.Proximity": "32",
+    "behaviors.WeaponInstant": {},
     "core.Body": {
       "Angle": {
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "132",
       "Pos": {
         "Animation": {
           "Active": true,
@@ -11135,7 +10944,7 @@
             "Y": 0,
             "Z": 5
           },
-          "Percent": 0.25,
+          "Percent": 0.6484375,
           "Reverse": true,
           "Start": {
             "X": 0,
@@ -11147,7 +10956,7 @@
         "Now": {
           "X": -260,
           "Y": 60,
-          "Z": -49.5
+          "Z": -47.88134765625
         },
         "Spawn": {
           "X": -260,
@@ -11167,14 +10976,25 @@
       }
     },
     "ecs.Linked": {
-      "Entities": [
+      "Sources": [
         "246"
-      ],
-      "Entity": "132"
+      ]
+    },
+    "materials.Lit": {
+      "Ambient": {
+        "X": 0.1,
+        "Y": 0.1,
+        "Z": 0.1
+      },
+      "Diffuse": {
+        "A": 1,
+        "B": 1,
+        "G": 1,
+        "R": 1
+      }
     },
     "materials.Sprite": {
       "Angles": "0",
-      "Entity": "132",
       "Frame": {
         "Damping": 0,
         "Freq": 0.000001,
@@ -11183,12 +11003,12 @@
         "Spawn": "0"
       },
       "Material": "133"
-    }
+    },
+    "materials.Visible": "32"
   },
   {
     "Entity": "133",
     "materials.Image": {
-      "Entity": "133",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/weird-gun.png"
@@ -11204,35 +11024,24 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "133"
+      }
     }
   },
   {
     "Entity": "134",
-    "behaviors.Proximity": {
-      "Entity": "134",
-      "Hysteresis": 0,
-      "InRange": {
-        "Code": "if body == nil { return }\nm := core.GetMobile(s.ECS, body.Entity)\nvd := behaviors.GetVerticalDoor(s.ECS,onEntity)\nif m == nil || vd == nil { return }\nif m.Mass \u003e 10 { vd.Intent = behaviors.DoorIntentOpen }",
-        "Style": "ScriptStyleStatement"
-      }
-    },
+    "behaviors.Proximity": "25",
     "ecs.Named": {
-      "Entity": "134",
       "Name": "Proximity (Vertical Doors)"
     }
   },
   {
     "Entity": "135",
     "behaviors.ActionTransition": {
-      "Entity": "135",
       "Next": [
         "136"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "135",
       "X": -350,
       "Y": 120,
       "Z": 0
@@ -11241,13 +11050,11 @@
   {
     "Entity": "136",
     "behaviors.ActionTransition": {
-      "Entity": "136",
       "Next": [
         "137"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "136",
       "X": -330,
       "Y": -180,
       "Z": 0
@@ -11255,17 +11062,13 @@
   },
   {
     "Entity": "137",
-    "behaviors.ActionJump": {
-      "Entity": "137"
-    },
+    "behaviors.ActionJump": {},
     "behaviors.ActionTransition": {
-      "Entity": "137",
       "Next": [
         "138"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "137",
       "X": 70,
       "Y": -200,
       "Z": 0
@@ -11280,17 +11083,14 @@
         "Now": 500,
         "Response": 0,
         "Spawn": 500
-      },
-      "Entity": "138"
+      }
     },
     "behaviors.ActionTransition": {
-      "Entity": "138",
       "Next": [
         "139"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "138",
       "X": 20,
       "Y": -40,
       "Z": 0
@@ -11299,13 +11099,11 @@
   {
     "Entity": "139",
     "behaviors.ActionTransition": {
-      "Entity": "139",
       "Next": [
         "140"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "139",
       "X": -50,
       "Y": -90,
       "Z": 0
@@ -11314,13 +11112,11 @@
   {
     "Entity": "140",
     "behaviors.ActionTransition": {
-      "Entity": "140",
       "Next": [
         "146"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "140",
       "X": 10,
       "Y": -190,
       "Z": 0
@@ -11338,7 +11134,6 @@
         "Y": 220
       },
       "Bottom": -64,
-      "Entity": "141",
       "Surface": {
         "Material": "57"
       },
@@ -11358,7 +11153,6 @@
         "Y": -250
       },
       "Bottom": 0,
-      "Entity": "142",
       "Surface": {
         "Material": "129"
       },
@@ -11378,7 +11172,6 @@
         "Y": -250
       },
       "Bottom": 0,
-      "Entity": "143",
       "Surface": {
         "Material": "129"
       },
@@ -11398,7 +11191,6 @@
         "Y": -300
       },
       "Bottom": 0,
-      "Entity": "144",
       "Surface": {
         "Material": "129"
       },
@@ -11418,7 +11210,6 @@
         "Y": -300
       },
       "Bottom": 0,
-      "Entity": "145",
       "Surface": {
         "Material": "129"
       },
@@ -11429,13 +11220,11 @@
   {
     "Entity": "146",
     "behaviors.ActionTransition": {
-      "Entity": "146",
       "Next": [
         "147"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "146",
       "X": -320,
       "Y": -190,
       "Z": 0
@@ -11444,13 +11233,11 @@
   {
     "Entity": "147",
     "behaviors.ActionTransition": {
-      "Entity": "147",
       "Next": [
         "135"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "147",
       "X": -300,
       "Y": 120,
       "Z": 0
@@ -11461,7 +11248,6 @@
     "behaviors.WeaponClass": {
       "Cooldown": 100,
       "Damage": 10,
-      "Entity": "148",
       "MarkMaterial": "113",
       "Spread": 0
     }
@@ -11481,7 +11267,6 @@
           "Spawn": 16
         }
       },
-      "Entity": "149",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -11591,13 +11376,11 @@
   {
     "Entity": "150",
     "behaviors.ActionTransition": {
-      "Entity": "150",
       "Next": [
         "151"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "150",
       "X": 860,
       "Y": -710,
       "Z": 32
@@ -11606,13 +11389,11 @@
   {
     "Entity": "151",
     "behaviors.ActionTransition": {
-      "Entity": "151",
       "Next": [
         "150"
       ]
     },
     "behaviors.ActionWaypoint": {
-      "Entity": "151",
       "X": 860,
       "Y": -350,
       "Z": 32
@@ -11621,50 +11402,49 @@
   {
     "Entity": "152",
     "behaviors.Actor": {
-      "Entity": "152",
       "FaceNextWaypoint": false,
       "Speed": 100,
       "Start": "150"
     },
     "behaviors.ActorState": {
-      "Action": "150",
-      "Entity": "152"
+      "Action": "150"
     },
     "behaviors.ParticleEmitter": {
-      "Entity": "152",
       "Limit": "30",
       "Particles": [
-        "178",
-        "186",
-        "163",
-        "169",
-        "190",
         "165",
-        "171",
-        "181",
-        "184",
-        "174",
-        "167",
         "166",
-        "179",
-        "189",
+        "167",
+        "168",
+        "169",
         "170",
+        "171",
+        "172",
         "173",
-        "164",
-        "180",
-        "182",
+        "174",
         "175",
         "177",
-        "188",
-        "187",
-        "160",
-        "158",
-        "168",
-        "162",
-        "159",
+        "178",
+        "179",
+        "180",
+        "181",
+        "182",
         "183",
+        "184",
         "185",
-        "172"
+        "186",
+        "187",
+        "188",
+        "189",
+        "157",
+        "159",
+        "160",
+        "161",
+        "162",
+        "163",
+        "164",
+        "",
+        ""
       ],
       "Source": "153",
       "Vel": 15,
@@ -11672,19 +11452,17 @@
       "ZSpread": 10
     },
     "behaviors.WeaponInstant": {
-      "Class": "148",
-      "Entity": "152"
+      "Class": "148"
     },
     "core.Body": {
       "Angle": {
         "Now": 180,
         "Spawn": 180
       },
-      "Entity": "152",
       "Pos": {
         "Now": {
           "X": 860,
-          "Y": -394.5760222919728,
+          "Y": -574.4801074230327,
           "Z": 32
         },
         "Procedural": true,
@@ -11712,15 +11490,12 @@
         "Y": 0,
         "Z": 0
       },
-      "Entity": "152",
       "Strength": 5
     },
     "ecs.Named": {
-      "Entity": "152",
       "Name": "Trap Turret"
     },
     "materials.Sprite": {
-      "Entity": "152",
       "Frame": {
         "Damping": 0,
         "Freq": 0.000001,
@@ -11732,18 +11507,15 @@
     },
     "materials.Visible": {
       "Ambient": 1,
-      "Entity": "152",
       "Shadow": "ShadowImage"
     }
   },
   {
     "Entity": "153",
     "ecs.Named": {
-      "Entity": "153",
       "Name": "Bubble"
     },
     "materials.Image": {
-      "Entity": "153",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/game/transparent-bubble.png"
@@ -11759,14 +11531,12 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "153"
+      }
     }
   },
   {
     "Entity": "154",
     "materials.Image": {
-      "Entity": "154",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/sand.png"
@@ -11782,18 +11552,109 @@
         "B": 1,
         "G": 1,
         "R": 1
-      },
-      "Entity": "154"
+      }
     }
   },
   {
+    "Entity": "157",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "159",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "160",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "161",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "162",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "163",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "164",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "165",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "166",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "167",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "168",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "169",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "170",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "171",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "172",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "173",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "174",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "175",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
     "Entity": "176",
+    "behaviors.InventoryItem": "32",
+    "behaviors.PlayerTargetable": "32",
+    "behaviors.Proximity": "32",
     "core.Body": {
       "Angle": {
         "Now": 0,
         "Spawn": 0
       },
-      "Entity": "176",
       "Pos": {
         "Now": {
           "X": 40,
@@ -11818,11 +11679,77 @@
       }
     },
     "ecs.Linked": {
-      "Entities": [
+      "Sources": [
         "249"
-      ],
-      "Entity": "176"
-    }
+      ]
+    },
+    "materials.Sprite": "32",
+    "materials.Visible": "32"
+  },
+  {
+    "Entity": "177",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "178",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "179",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "180",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "181",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "182",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "183",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "184",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "185",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "186",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "187",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "188",
+    "materials.Image": "153",
+    "materials.Lit": "153"
+  },
+  {
+    "Entity": "189",
+    "materials.Image": "153",
+    "materials.Lit": "153"
   },
   {
     "Entity": "191",
@@ -11836,7 +11763,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "191",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -11945,7 +11871,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "192",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -12034,7 +11959,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "192",
       "Name": "Sector 108"
     }
   },
@@ -12055,7 +11979,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "193",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -12129,7 +12052,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "193",
       "Name": "Sector 109"
     }
   },
@@ -12142,7 +12064,6 @@
         "Y": 1,
         "Z": 0.6
       },
-      "Entity": "206",
       "Strength": 2
     }
   },
@@ -12158,7 +12079,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "219",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -12225,7 +12145,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "219",
       "Name": "Sector 110"
     }
   },
@@ -12246,7 +12165,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "220",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -12319,7 +12237,6 @@
       }
     },
     "ecs.Named": {
-      "Entity": "220",
       "Name": "Sector 111"
     }
   },
@@ -12335,7 +12252,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "221",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -12388,7 +12304,6 @@
           "Spawn": 0
         }
       },
-      "Entity": "222",
       "FloorFriction": 0.85,
       "Segments": [
         {
@@ -12465,7 +12380,6 @@
   {
     "Entity": "239",
     "materials.Image": {
-      "Entity": "239",
       "Filter": false,
       "GenerateMipMaps": true,
       "Source": "data/space_tiles_hyptosis/glass.png"
@@ -12474,11 +12388,9 @@
   {
     "Entity": "243",
     "ecs.Named": {
-      "Entity": "243",
       "Name": "Space Window"
     },
     "materials.Shader": {
-      "Entity": "243",
       "Stages": [
         {
           "Flags": "ShaderTiled|ShaderSky",
@@ -12492,84 +12404,28 @@
   },
   {
     "Entity": "246",
-    "behaviors.PlayerTargetable": {
-      "Entity": "246",
-      "Message": "Pick up item",
-      "Frob": {
-        "Code": "if body == nil { return }\nitem := behaviors.GetInventoryItem(s.ECS, body.Entity)\nif player == nil || item == nil { return }\ncontrollers.PickUpInventoryItem(player, item)\n",
-        "Style": "ScriptStyleStatement"
-      }
-    },
-    "behaviors.Proximity": {
-      "Entity": "246",
-      "Hysteresis": 0,
-      "InRange": {
-        "Code": "if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {\n  p.HoveringTargets.Add(onEntity)\n}",
-        "Style": "ScriptStyleStatement"
-      }
-    },
+    "behaviors.PlayerTargetable": "32",
+    "behaviors.Proximity": "32",
     "ecs.Named": {
-      "Entity": "246",
       "Name": "Inventory Item Base"
     },
-    "materials.Lit": {
-      "Ambient": {
-        "X": 0.1,
-        "Y": 0.1,
-        "Z": 0.1
-      },
-      "Diffuse": {
-        "A": 1,
-        "B": 1,
-        "G": 1,
-        "R": 1
-      },
-      "Entity": "246"
-    },
-    "materials.Visible": {
-      "Ambient": 1,
-      "Entity": "246",
-      "Shadow": "ShadowImage"
-    }
+    "materials.Lit": "132",
+    "materials.Visible": "32"
   },
   {
     "Entity": "249",
-    "behaviors.InventoryItem": {
-      "Class": "Flower",
-      "Count": {
-        "Now": "1",
-        "Spawn": "1"
-      },
-      "Entity": "249",
-      "Image": "98"
-    },
-    "ecs.Linked": {
-      "Entities": [
-        "246"
-      ],
-      "Entity": "249"
-    },
+    "behaviors.InventoryItem": "32",
+    "behaviors.PlayerTargetable": "32",
+    "behaviors.Proximity": "32",
     "ecs.Named": {
-      "Entity": "249",
       "Name": "Flower Inventory Item"
     },
-    "materials.Sprite": {
-      "Angles": "0",
-      "Entity": "249",
-      "Frame": {
-        "Damping": 0,
-        "Freq": 0.000001,
-        "Now": "0",
-        "Response": 0,
-        "Spawn": "0"
-      },
-      "Material": "98"
-    }
+    "materials.Sprite": "32",
+    "materials.Visible": "32"
   },
   {
     "Entity": "254",
     "materials.Image": {
-      "Entity": "254",
       "Filter": false,
       "GenerateMipMaps": false,
       "Source": "data/space.png"

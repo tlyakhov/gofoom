@@ -36,7 +36,7 @@ func (a *AddEntity) DetachFromSector() {
 
 func (a *AddEntity) AttachAll() {
 	for _, component := range a.Components {
-		a.State().ECS.Upsert(ecs.Types().ID(component), a.Entity, component)
+		a.State().ECS.Attach(ecs.Types().ID(component), a.Entity, component)
 	}
 }
 

@@ -29,6 +29,8 @@ func GetLight(db *ecs.ECS, e ecs.Entity) *Light {
 	return nil
 }
 
+func (l *Light) MultiAttachable() bool { return true }
+
 func (l *Light) String() string {
 	return "Light: " + l.Diffuse.StringHuman()
 }

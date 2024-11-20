@@ -34,17 +34,16 @@ func GetSprite(db *ecs.ECS, e ecs.Entity) *Sprite {
 	return nil
 }
 
-func (s *Sprite) OnDetach() {
+func (s *Sprite) MultiAttachable() bool { return true }
+
+func (s *Sprite) OnDelete() {
+	defer s.Attached.OnDelete()
 	if s.ECS != nil {
 		s.Frame.Detach(s.ECS.Simulation)
 	}
-	s.Attached.OnDetach()
 }
 
 func (s *Sprite) AttachECS(db *ecs.ECS) {
-	if s.ECS != db {
-		s.OnDetach()
-	}
 	s.Attached.AttachECS(db)
 	s.Frame.Attach(db.Simulation)
 

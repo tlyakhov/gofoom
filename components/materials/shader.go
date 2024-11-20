@@ -26,6 +26,8 @@ func GetShader(db *ecs.ECS, e ecs.Entity) *Shader {
 	return nil
 }
 
+func (s *Shader) MultiAttachable() bool { return true }
+
 func (s *Shader) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 

@@ -10,7 +10,7 @@ import (
 
 func ComponentTableIsMaterial(components ecs.ComponentTable) bool {
 	for _, c := range components {
-		switch cc := c.(type) {
+		switch c.(type) {
 		case *materials.Shader:
 			return true
 		case *materials.Sprite:
@@ -21,10 +21,6 @@ func ComponentTableIsMaterial(components ecs.ComponentTable) bool {
 			return true
 		case *materials.Solid:
 			return true
-		case *ecs.Linked:
-			if ComponentTableIsMaterial(cc.SourceComponents) {
-				return true
-			}
 		}
 	}
 	return false

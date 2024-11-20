@@ -33,7 +33,8 @@ func (pc *ParticleController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (pc *ParticleController) Target(target ecs.Attachable) bool {
+func (pc *ParticleController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	pc.Entity = e
 	pc.ParticleEmitter = target.(*behaviors.ParticleEmitter)
 	if !pc.ParticleEmitter.IsActive() {
 		return false
@@ -61,14 +62,13 @@ func (pc *ParticleController) Always() {
 		}
 		toRemove = append(toRemove, e)
 		pc.ECS.Delete(e)
-		pc.Particles.Delete(e)
 	}
 
 	for _, e := range toRemove {
 		delete(pc.Spawned, e)
 	}
 
-	if pc.Source == 0 || len(pc.Particles) > pc.Limit {
+	if pc.Source == 0 || len(pc.Spawned) > pc.Limit {
 		return
 	}
 	// Our goal is to spawn ~pc.Limit particles across pc.Lifetime.
@@ -87,7 +87,6 @@ func (pc *ParticleController) Always() {
 		}
 
 		e := pc.ECS.NewEntity()
-		pc.Particles.Add(e)
 		pc.Spawned[e] = pc.ECS.Timestamp
 		body := pc.ECS.NewAttachedComponent(e, core.BodyCID).(*core.Body)
 		body.System = true
@@ -95,11 +94,8 @@ func (pc *ParticleController) Always() {
 		vis.System = true
 		mobile := pc.ECS.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
 		mobile.System = true
-		linked := pc.ECS.NewAttachedComponent(e, ecs.LinkedCID).(*ecs.Linked)
-		linked.System = true
 
-		linked.Sources = append(linked.Sources, pc.Source)
-		linked.Recalculate()
+		pc.ECS.Link(e, pc.Source)
 		body.Pos.Now.From(&pc.Body.Pos.Now)
 		hAngle := pc.Body.Angle.Now + (rand.Float64()-0.5)*pc.XYSpread
 		vAngle := (rand.Float64() - 0.5) * pc.ZSpread

@@ -7,18 +7,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"tlyakhov/gofoom/containers"
 )
 
 type Entity int
-
-type EntityRef[T interface {
-	comparable
-	Attachable
-}] struct {
-	Entity Entity
-	Value  T
-}
 
 func (e Entity) String() string {
 	return strconv.FormatInt(int64(e), 10)
@@ -66,45 +57,59 @@ func (e Entity) NameString(db *ECS) string {
 	return id
 }
 
-func (ref *EntityRef[T]) Refresh(db *ECS, id ComponentID) {
-	var zero T
-	if ref.Entity == 0 {
-		ref.Value = zero
-		return
-	}
-	if ref.Value != zero && ref.Value.Base().Entity == ref.Entity {
-		return
-	}
-	ref.Value = db.Component(ref.Entity, id).(T)
-}
-
-func DeserializeEntities[T ~string | any](data []T) containers.Set[Entity] {
-	result := make(containers.Set[Entity])
+func DeserializeEntities[T ~string | any](data []T) EntityTable {
 	if data == nil {
-		return result
+		return nil
 	}
 
+	result := make(EntityTable, 0)
 	for _, e := range data {
 		switch c := any(e).(type) {
 		case string:
 			if entity, err := ParseEntity(c); err == nil {
-				result.Add(entity)
+				result.Set(entity)
 			}
 		case fmt.Stringer:
 			if entity, err := ParseEntity(c.String()); err == nil {
-				result.Add(entity)
+				result.Set(entity)
 			}
 		}
 	}
 	return result
 }
 
-func SerializeEntities(data containers.Set[Entity]) []string {
-	result := make([]string, len(data))
-	i := 0
-	for e := range data {
-		result[i] = e.String()
-		i++
+func ParseEntityCSV(csv string) EntityTable {
+	entities := make(EntityTable, 0)
+	split := strings.Split(csv, ",")
+	for _, s := range split {
+		if e, err := ParseEntity(s); err == nil {
+			entities.Set(e)
+		}
 	}
-	return result
+	return entities
+}
+
+func LoadEntitiesFromJson(data map[string]any) (EntityTable, int) {
+	jsonEntities := data["Entities"]
+	if v, ok := data["Entity"]; ok && jsonEntities == nil {
+		jsonEntities = v
+	}
+	if jsonEntities == nil {
+		return nil, 0
+	}
+	var entities EntityTable
+	if s, ok := jsonEntities.(string); ok {
+		entities = ParseEntityCSV(s)
+	} else if arr, ok := jsonEntities.([]string); ok {
+		entities = DeserializeEntities(arr)
+	} else if arr, ok := jsonEntities.([]any); ok {
+		entities = DeserializeEntities(arr)
+	}
+	attachments := 0
+	for _, e := range entities {
+		if e != 0 {
+			attachments++
+		}
+	}
+	return entities, attachments
 }

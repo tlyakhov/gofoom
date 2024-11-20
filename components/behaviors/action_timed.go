@@ -23,17 +23,14 @@ func (timed *ActionTimed) String() string {
 	return "Timed"
 }
 
-func (timed *ActionTimed) OnDetach() {
+func (timed *ActionTimed) OnDelete() {
 	if timed.ECS != nil {
 		timed.Delay.Detach(timed.ECS.Simulation)
 	}
-	timed.Attached.OnDetach()
+	timed.Attached.OnDelete()
 }
 
 func (timed *ActionTimed) AttachECS(db *ecs.ECS) {
-	if timed.ECS != db {
-		timed.OnDetach()
-	}
 	timed.Attached.AttachECS(db)
 	timed.Delay.Attach(db.Simulation)
 }
