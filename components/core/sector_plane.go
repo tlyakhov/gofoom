@@ -9,6 +9,8 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type SectorPlane struct {
@@ -33,13 +35,13 @@ func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
 	}
 
 	if v, ok := data["Z"]; ok {
-		if v2, ok2 := v.(float64); ok2 {
+		if v2, err := cast.ToFloat64E(v); err == nil {
 			v = map[string]any{"Spawn": v2}
 		}
 		s.Z.Construct(v.(map[string]any))
 	}
 	if v, ok := data["Normal"]; ok {
-		s.Normal.Deserialize(v.(map[string]any))
+		s.Normal.Deserialize(v.(string))
 	}
 	if v, ok := data["Surface"]; ok {
 		s.Surface.Construct(s.ECS, v.(map[string]any))

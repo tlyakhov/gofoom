@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type DoorState int
@@ -90,7 +92,7 @@ func (vd *VerticalDoor) Construct(data map[string]any) {
 		}
 	}
 	if v, ok := data["Duration"]; ok {
-		vd.Duration = v.(float64)
+		vd.Duration = cast.ToFloat64(v)
 	}
 }
 

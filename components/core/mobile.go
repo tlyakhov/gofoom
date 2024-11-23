@@ -9,6 +9,8 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/concepts"
+
+	"github.com/spf13/cast"
 )
 
 // TODO: Separate out "Collidable" component?
@@ -90,13 +92,13 @@ func (m *Mobile) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["MountHeight"]; ok {
-		m.MountHeight = v.(float64)
+		m.MountHeight = cast.ToFloat64(v)
 	}
 	if v, ok := data["Mass"]; ok {
-		m.Mass = v.(float64)
+		m.Mass = cast.ToFloat64(v)
 	}
 	if v, ok := data["Elasticity"]; ok {
-		m.Elasticity = v.(float64)
+		m.Elasticity = cast.ToFloat64(v)
 	}
 	if v, ok := data["CrMoving"]; ok {
 		c, err := CollisionResponseString(v.(string))

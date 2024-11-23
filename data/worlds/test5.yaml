@@ -1,0 +1,746 @@
+- Entity: "2"
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/WDef.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "3"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -40, -100
+          Surface:
+            Material: "2"
+        - AdjacentSector: "8"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, -200
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, -210
+          Surface:
+            Material: "2"
+        - AdjacentSector: "11"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 60, -100
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: ckmr71tmdsri8tolfq30
+- Entity: "4"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -220, -150
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -150, -90
+          Surface:
+            Material: "2"
+        - AdjacentSector: "17"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -130, -10
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -290, -30
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -380, -60
+          Surface:
+            Material: "2"
+        - AdjacentSector: "9"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -290, -190
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 94
+            Spawn: 94
+  ecs.Named:
+    Name: ckmr7gdmdsri8tolfqg0
+- Entity: "5"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -220, -80, 32
+        Spawn: -220, -80, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckmr7odmdsri8tolfqu0
+- Entity: "6"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 2
+            Spawn: 2
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 70, 280
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 80, 450
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 260, 430
+          Surface:
+            Material: "2"
+        - AdjacentSector: "13"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 460, 260
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 80
+            Spawn: 80
+  ecs.Named:
+    Name: cknes4tmdsru23m3nip0
+- Entity: "7"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 170, 370, 32
+        Spawn: 170, 370, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: cknes7dmdsru23m3nitg
+- Entity: "8"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, -200
+          Surface:
+            Material: "2"
+        - AdjacentSector: "9"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -90, -230
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -60, -280
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 10, -260
+          Surface:
+            Material: "2"
+        - AdjacentSector: "3"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, -210
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: ckmr7dtmdsri8tolfq8g
+- Entity: "9"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -90, -230
+          Surface:
+            Material: "2"
+        - AdjacentSector: "4"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -220, -150
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -290, -190
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -230, -230
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, -280
+          Surface:
+            Material: "2"
+        - AdjacentSector: "8"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -60, -280
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: ckmr7f5mdsri8tolfqc0
+- Entity: "10"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, -100
+          Surface:
+            Material: "2"
+        - AdjacentSector: "11"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -40, -100
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -13.25, 100
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 100
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: ckmr6tlmdsri8tolfoq0
+- Entity: "11"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "3"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -40, -100
+          Surface:
+            Material: "2"
+        - AdjacentSector: "16"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 60, -100
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 71.66666666666667, 100
+          Surface:
+            Material: "2"
+        - AdjacentSector: "10"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -13.25, 100
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: ckmr6vtmdsri8tolfph0
+- Entity: "12"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 40, -20, 32
+        Spawn: 40, -20, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckmr7b5mdsri8tolfq6g
+- Entity: "13"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: -22
+            Spawn: -22
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 60, 180
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 320, 130
+          Surface:
+            Material: "2"
+        - AdjacentSector: "6"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 460, 260
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 70, 280
+          Surface:
+            Material: "2"
+        - AdjacentSector: "15"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 60, 260
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 80
+            Spawn: 80
+  ecs.Named:
+    Name: cknes35mdsru23m3nilg
+- Entity: "14"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 130, 210, 32
+        Spawn: 130, 210, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: cknes75mdsru23m3nisg
+- Entity: "15"
+  core.Sector:
+    Bottom:
+        Normal: 0.19611613513818404, -0, 0.9805806756909202
+        Surface:
+            Material: "2"
+        Z:
+            Now: -22
+            Spawn: -22
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "13"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 60, 180
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 60, 260
+          Surface:
+            Material: "2"
+        - AdjacentSector: "17"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, 160
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, 90
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: ckmr7kdmdsri8tolfqng
+- Entity: "16"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 60, -100
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, -100
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 100
+          Surface:
+            Material: "2"
+        - AdjacentSector: "11"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 71.66666666666667, 100
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: ckmr6vtmdsri8tolfpsg
+- Entity: "17"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 22
+            Spawn: 22
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "4"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -130, -10
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -290, -30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "18"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -240, 60
+          Surface:
+            Material: "2"
+        - AdjacentSector: "15"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, 160
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, 90
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 116
+            Spawn: 116
+  ecs.Named:
+    Name: ckmr7ilmdsri8tolfqk0
+- Entity: "18"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 22
+            Spawn: 22
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, 160
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, 240
+          Surface:
+            Material: "2"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -330, 160
+          Surface:
+            Material: "2"
+        - AdjacentSector: "17"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -240, 60
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 116
+            Spawn: 116
+  ecs.Named:
+    Name: ckmr7ltmdsri8tolfqqg
+- Entity: "19"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -260, 150, 32
+        Spawn: -260, 150, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: cknes7lmdsru23m3niug
+- Entity: "20"
+  behaviors.Alive:
+    Health: 100
+  behaviors.Player:
+    Spawn: true
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 0, 0, 0
+        Spawn: 0, 0, 0
+    Size:
+        Now: 20, 40
+        Spawn: 20, 40
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+        Now: 0, 0, 0
+        Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Spawn

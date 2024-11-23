@@ -181,10 +181,10 @@ func (s *Segment) Construct(db *ecs.ECS, data map[string]any) {
 	}
 
 	if v, ok := data["A"]; ok {
-		s.A.Deserialize(v.(map[string]any))
+		s.A.Deserialize(v.(string))
 	}
 	if v, ok := data["B"]; ok {
-		s.B.Deserialize(v.(map[string]any))
+		s.B.Deserialize(v.(string))
 	}
 	if v, ok := data["Mid"]; ok {
 		s.Surface.Construct(db, v.(map[string]any))

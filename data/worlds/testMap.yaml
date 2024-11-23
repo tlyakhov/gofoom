@@ -1,0 +1,52 @@
+- Entity: "2"
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: true
+    GenerateMipMaps: true
+    Source: data/WDef.png
+- Entity: "3"
+  ecs.Named:
+    Name: Blue
+  materials.Image:
+    Filter: true
+    GenerateMipMaps: true
+    Source: data/grass.jpg
+- Entity: "4"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "3"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi: {}
+          Lo: {}
+          P: -300, -300
+          Surface:
+            Material: "2"
+        - Hi: {}
+          Lo: {}
+          P: 300, -300
+          Surface:
+            Material: "2"
+        - Hi: {}
+          Lo: {}
+          P: 300, 300
+          Surface:
+            Material: "2"
+        - Hi: {}
+          Lo: {}
+          P: -300, 300
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "3"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: cl5anh5mdsrmm6mqu5d0

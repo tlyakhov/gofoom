@@ -6,6 +6,8 @@ package materials
 import (
 	"strconv"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=MaterialShadow -json
@@ -57,7 +59,7 @@ func (m *Visible) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Opacity"]; ok {
-		m.Opacity = v.(float64)
+		m.Opacity = cast.ToFloat64(v)
 	}
 	if v, ok := data["PixelOnly"]; ok {
 		m.PixelOnly = v.(bool)

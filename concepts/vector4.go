@@ -229,34 +229,9 @@ func (v *Vector4) ClampSelf(min, max float64) *Vector4 {
 }
 
 // Deserialize assigns this vector's fields from a parsed JSON map.
-func (v *Vector4) Deserialize(data map[string]any, color bool) {
-	if color {
-		if val, ok := data["R"]; ok {
-			v[0] = val.(float64)
-		}
-		if val, ok := data["G"]; ok {
-			v[1] = val.(float64)
-		}
-		if val, ok := data["B"]; ok {
-			v[2] = val.(float64)
-		}
-		if val, ok := data["A"]; ok {
-			v[3] = val.(float64)
-		}
-	} else {
-		if val, ok := data["X"]; ok {
-			v[0] = val.(float64)
-		}
-		if val, ok := data["Y"]; ok {
-			v[1] = val.(float64)
-		}
-		if val, ok := data["Z"]; ok {
-			v[2] = val.(float64)
-		}
-		if val, ok := data["W"]; ok {
-			v[3] = val.(float64)
-		}
-	}
+func (v *Vector4) Deserialize(data string) {
+	vx, _ := ParseVector4(data)
+	*v = *vx
 }
 
 func (v *Vector4) ToInt32Color() uint32 {
@@ -280,11 +255,8 @@ func (v *Vector4) StringHuman() string {
 }
 
 // Serialize formats the vector as a JSON key-value map.
-func (v *Vector4) Serialize(color bool) map[string]any {
-	if color {
-		return map[string]any{"R": v[0], "G": v[1], "B": v[2], "A": v[3]}
-	}
-	return map[string]any{"X": v[0], "Y": v[1], "Z": v[2], "W": v[3]}
+func (v *Vector4) Serialize(color bool) string {
+	return v.String()
 }
 
 // ParseVector4 parses strings in the form "X, Y, Z, W" into vectors.

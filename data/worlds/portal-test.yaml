@@ -1,0 +1,1829 @@
+- Entity: "1"
+  behaviors.Alive:
+    Health: 100
+  behaviors.Player:
+    Spawn: false
+  core.Body:
+    Angle:
+      Now: 187.33864764584402
+      Spawn: 0
+    Pos:
+      Now: -176.28460713846005, 371.58882877974264, 20
+      Spawn: -90, 60, 0
+    Size:
+      Now: 10, 40
+      Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: -0.00000000000000000000000000000000000000000007842704666657609, -0.000000000000000000000000000000000000000000010100510462677092, 0.007001650399223597
+      Spawn: 0, 0, 0
+- Entity: "2"
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/space_tiles_hyptosis/wool_colored_white.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "3"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "21"
+      Z:
+        Now: 0
+        Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -100, -100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 100, -100
+        Surface:
+          Material: "2"
+      - AdjacentSector: "6"
+        AdjacentSegment: 1
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 100, -20
+        PortalHasMaterial: true
+        PortalTeleports: true
+        Surface:
+          Material: "7"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 100, 80
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 100, 100
+        Surface:
+          Material: "2"
+      - AdjacentSector: "10"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -30, 100
+        Surface:
+          Material: "2"
+      - AdjacentSector: "14"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -100, 100
+        Surface:
+          Material: "13"
+    Top:
+      Surface:
+        Material: "13"
+      Z:
+        Now: 64
+        Spawn: 64
+  ecs.Named:
+    Name: Starting
+- Entity: "4"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -60, -70, 32
+      Spawn: -60, -70, 32
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "5"
+  behaviors.Alive:
+    Health: 100
+  behaviors.Player:
+    Spawn: true
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -90, 60, 0
+      Spawn: -90, 60, 0
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: 0, 0, 0
+      Spawn: 0, 0, 0
+- Entity: "6"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -8
+        Spawn: -8
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 10, 220
+        Surface:
+          Material: "2"
+      - AdjacentSector: "3"
+        AdjacentSegment: 2
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 220, 400
+        PortalHasMaterial: true
+        PortalTeleports: true
+        Surface:
+          Material: "7"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 160, 480
+        Surface:
+          Material: "2"
+      - AdjacentSector: "10"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -110, 460
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -110, 290
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "7"
+  ecs.Named:
+    Name: Portal
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+  materials.Shader:
+    Stages:
+      - Material: "9"
+- Entity: "8"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -10, 350, 32
+      Spawn: -10, 350, 32
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 0, 1
+    Strength: 2
+- Entity: "9"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/portal.png
+- Entity: "10"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 0
+        Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -110, 460
+        Surface:
+          Material: "2"
+      - AdjacentSector: "16"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -250, 460
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -250, 380
+        Surface:
+          ExtraStages:
+            - Flags: ShaderFrob
+              Material: "33"
+              Transform: 14, 0, -0.5, 0, 5, -2
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -250, 140
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -100, 130
+        Surface:
+          Material: "2"
+      - AdjacentSector: "3"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -100, 100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -30, 100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -30, 200
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -130, 230
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -130, 290
+        Surface:
+          Material: "2"
+      - AdjacentSector: "6"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -110, 290
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "11"
+  materials.Image:
+    Filter: true
+    GenerateMipMaps: true
+    Source: data/nightsky.jpg
+- Entity: "12"
+  behaviors.Actor:
+    Speed: 50
+    Start: "57"
+  behaviors.ActorState:
+    Action: "60"
+  behaviors.ParticleEmitter:
+    Limit: "10"
+    Particles:
+      - "72"
+      - "73"
+      - "74"
+      - "66"
+      - "67"
+      - "68"
+      - "69"
+      - "70"
+      - "71"
+    Source: "86"
+    Vel: 15
+    XYSpread: 10
+    ZSpread: 10
+  core.Body:
+    Angle:
+      Now: -14846.696791589042
+      Procedural: true
+      Spawn: 0
+    Pos:
+      Now: -151.97554253907117, 194.23060736721854, 25
+      Procedural: true
+      Spawn: -280, 30, 32
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "13"
+  ecs.Named:
+    Name: Shader Night Sky
+  materials.Shader:
+    Stages:
+      - Flags: ShaderTiled|ShaderSky
+        Material: "11"
+- Entity: "14"
+  core.Sector:
+    Bottom:
+      Normal: -0.19611613513818404, 0, 0.9805806756909201
+      Surface:
+        Material: "21"
+      Z:
+        Now: 0
+        Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+      - AdjacentSector: "3"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -100, 100
+        Surface:
+          Material: "2"
+      - AdjacentSector: "15"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -100, -100
+        Surface:
+          Material: "2"
+      - AdjacentSector: "22"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -210, -100
+        Surface:
+          Material: "13"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -210, 100
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "13"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "15"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "21"
+      Z:
+        Now: 0
+        Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -100, -100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -150, -150
+        Surface:
+          Material: "2"
+      - AdjacentSector: "14"
+        Hi:
+          Material: "13"
+        Lo:
+          Material: "2"
+        P: -210, -100
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "13"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "16"
+  behaviors.VerticalDoor:
+    AutoClose: false
+    Duration: 1000
+    TweeningFunc: EaseInOut2
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 0
+        Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+          Transform:
+            Now: 1, 0, 0, 0, 0, 1
+            Spawn: 1, 0, 0, 0, -0, 1
+        Lo:
+          Material: "2"
+        P: -250, 380
+        Surface:
+          Material: "2"
+      - AdjacentSector: "19"
+        Hi:
+          Material: "32"
+          Transform:
+            Now: 1, 0, 0, 0, 0, 1
+            Spawn: 1, 0, 0, 0, -0, 1
+        Lo:
+          Material: "2"
+        P: -260, 380
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+          Transform:
+            Now: 1, 0, 0, 0, 0, 1
+            Spawn: 1, 0, 0, 0, -0, 1
+        Lo:
+          Material: "2"
+        P: -260, 460
+        Surface:
+          Material: "2"
+      - AdjacentSector: "10"
+        Hi:
+          Material: "32"
+          Transform:
+            Now: 1, 0, 0, 0, 0.8, 0
+            Spawn: 1, 0, 0, 0, 0.8, 0
+        Lo:
+          Material: "2"
+        P: -250, 460
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Animation:
+          Active: false
+          Coordinates: AnimationCoordinatesAbsolute
+          Duration: 1000
+          End: 0
+          Lifetime: AnimationLifetimeOnce
+          Percent: 1
+          Reverse: false
+          Start: 64
+          TweeningFunc: EaseInOut2
+        Now: 0
+        Spawn: 64
+- Entity: "17"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -150, -120, 32
+      Spawn: -150, -120, 32
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 0.8, 0.8, 1
+    Strength: 2
+- Entity: "18"
+  core.InternalSegment:
+    A: -10, -60
+    B: -10, -30
+    Bottom: 0
+    Surface:
+      Material: "24"
+    Top: 32
+    TwoSided: true
+- Entity: "19"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 0
+        Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -260, 380
+        Surface:
+          Material: "2"
+      - AdjacentSector: "44"
+        AdjacentSegment: 4
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -370, 380
+        PortalHasMaterial: true
+        PortalTeleports: true
+        Surface:
+          Material: "7"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -430, 280
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -520, 310
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -490, 600
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -270, 610
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -300, 530
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -280, 490
+        Surface:
+          Material: "2"
+      - AdjacentSector: "16"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -260, 460
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "20"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/grass.jpg
+- Entity: "21"
+  ecs.Named:
+    Name: Shader Grass
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+  materials.Shader:
+    Stages:
+      - Material: "20"
+- Entity: "22"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "21"
+      Z:
+        Now: -22
+        Spawn: -22
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -210, -100
+        Surface:
+          Material: "2"
+      - AdjacentSector: "49"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -230, -100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -300, -100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -320, -100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -380, -210
+        Surface:
+          Material: "2"
+      - AdjacentSector: "28"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -430, -130
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -430, 0
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 1, 0, 0.3, 0, 0.8432993810941913, 0
+            Spawn: 1, 0, 0.3, 0, 0.8432993810941913, 0
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -410, 100
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -380, 180
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -310, 210
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -280, 170
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -270, 120
+        Surface:
+          Material: "2"
+      - AdjacentSector: "14"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -210, 100
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "13"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "23"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/space_tiles_hyptosis/ladder.png
+- Entity: "24"
+  ecs.Named:
+    Name: Shader Ladder
+  materials.Shader:
+    Stages:
+      - Material: "23"
+- Entity: "25"
+  core.InternalSegment:
+    A: -10, -30
+    B: 20, -30
+    Bottom: 0
+    Surface:
+      Material: "24"
+    Top: 32
+    TwoSided: true
+- Entity: "26"
+  core.InternalSegment:
+    A: 20, -30
+    B: 20, -60
+    Bottom: 0
+    Surface:
+      Material: "24"
+    Top: 32
+    TwoSided: true
+- Entity: "27"
+  core.InternalSegment:
+    A: 20, -60
+    B: -10, -60
+    Bottom: 0
+    Surface:
+      Material: "24"
+    Top: 32
+    TwoSided: true
+- Entity: "28"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "37"
+      Target: "30"
+      Z:
+        Now: -26
+        Spawn: -26
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -430, -130
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -570, -130
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -570, 0
+        Surface:
+          Material: "2"
+      - AdjacentSector: "22"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -430, 0
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "13"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "29"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -410, 470, 32
+      Spawn: -410, 470, 32
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "30"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -200
+        Spawn: -200
+    FloorFriction: 0.85
+    Gravity: 0, 0, -0.1
+    Segments:
+      - AdjacentSector: "55"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -730, 0
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 1, 0, 0, 0, 1.3384615384615384, 0
+            Spawn: 1, 0, 0, 0, 1.3384615384615384, 0
+      - AdjacentSector: "55"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -730, -130
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 1, 0, 0, 0, 1.2428571428571429, 0
+            Spawn: 1, 0, 0, 0, 1.2428571428571429, 0
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, -130
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 4, 0, 0, 0, 4, 0
+            Spawn: 4, 0, 0, 0, 4, 0
+      - AdjacentSector: "55"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, 0
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 1, 0, 0, 0, 1.2428571428571429, 0
+            Spawn: 1, 0, 0, 0, 1.2428571428571429, 0
+    Top:
+      Surface:
+        Material: "37"
+      Target: "28"
+      Z:
+        Now: -26
+        Spawn: -26
+- Entity: "31"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/DGarage.png
+- Entity: "32"
+  ecs.Named:
+    Name: Shader DGarage.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+  materials.Shader:
+    Stages:
+      - Material: "31"
+- Entity: "33"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/red-button.png
+  materials.Sprite:
+    Cols: "2"
+    Frame:
+      Damping: 0
+      Freq: 1e-06
+      Now: "0"
+      Response: 0
+      Spawn: "0"
+    Frames: "2"
+    Material: "33"
+- Entity: "34"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -500, -70, 19
+      Spawn: -500, -70, 19
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 0.6, 0.6, 1
+    Strength: 2
+- Entity: "35"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -800, -70, -50
+      Spawn: -800, -70, -50
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "36"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/Water.png
+- Entity: "37"
+  ecs.Named:
+    Name: Shader Water
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+  materials.Shader:
+    Stages:
+      - Flags: ShaderTiled|ShaderLiquid
+        Material: "36"
+- Entity: "38"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -82
+        Spawn: -82
+    FloorFriction: 0.85
+    Gravity: 0, 0, -0.1
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, -250
+        Surface:
+          Material: "2"
+      - AdjacentSector: "42"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -250
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -190
+        Surface:
+          Material: "2"
+      - AdjacentSector: "55"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, -190
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -38
+        Spawn: -38
+- Entity: "39"
+  core.InternalSegment:
+    A: -1140, 370
+    B: -1140, 400
+    Bottom: 20
+    Surface:
+      Material: "24"
+    Top: 52
+    TwoSided: true
+- Entity: "40"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -100
+        Spawn: -100
+    FloorFriction: 0.85
+    Gravity: 0, 0, -0.1
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -10
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1170, -20
+        Surface:
+          Material: "2"
+      - AdjacentSector: "42"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1170, -90
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -90
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "37"
+      Target: "43"
+      Z:
+        Now: 20
+        Spawn: 20
+- Entity: "41"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -1140, -170, -50
+      Spawn: -1140, -170, -50
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 0.5, 1
+    Strength: 2
+- Entity: "42"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -100
+        Spawn: -100
+    FloorFriction: 0.85
+    Gravity: 0, 0, -0.1
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1170, -90
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1170, -320
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -320
+        Surface:
+          Material: "2"
+      - AdjacentSector: "38"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -250
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -190
+        Surface:
+          Material: "2"
+      - AdjacentSector: "40"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1090, -90
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 20
+        Spawn: 20
+- Entity: "43"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "37"
+      Target: "40"
+      Z:
+        Now: 20
+        Spawn: 20
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1260, 340
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1340, 330
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1340, 260
+        Surface:
+          Material: "2"
+      - AdjacentSector: "44"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1260, 260
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 100
+        Spawn: 100
+- Entity: "44"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 20
+        Spawn: 20
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1260, 260
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1110, 260
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1100, 340
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1030, 390
+        Surface:
+          Material: "2"
+      - AdjacentSector: "19"
+        AdjacentSegment: 1
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1050, 510
+        PortalHasMaterial: true
+        PortalTeleports: true
+        Surface:
+          Material: "7"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1160, 510
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1280, 430
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 0.7905694150420948, 0, 0, 0, 1, 0
+            Spawn: 0.7905694150420948, 0, 0, 0, 1, 0
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1260, 370
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 0.375, 0, 0, 0, 1, 0
+            Spawn: 0.375, 0, 0, 0, 1, 0
+      - AdjacentSector: "43"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -1260, 340
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 100
+        Spawn: 100
+- Entity: "45"
+  core.InternalSegment:
+    A: -1140, 400
+    B: -1110, 400
+    Bottom: 20
+    Surface:
+      Material: "24"
+    Top: 52
+    TwoSided: true
+- Entity: "46"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -1190, 340, 60
+      Spawn: -1190, 340, 60
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "47"
+  core.InternalSegment:
+    A: -1110, 400
+    B: -1110, 370
+    Bottom: 20
+    Surface:
+      Material: "24"
+    Top: 52
+    TwoSided: true
+- Entity: "48"
+  core.InternalSegment:
+    A: -1110, 370
+    B: -1140, 370
+    Bottom: 20
+    Surface:
+      Material: "24"
+    Top: 52
+    TwoSided: true
+- Entity: "49"
+  behaviors.Proximity:
+    Hysteresis: 0
+    InRange:
+      Code: |-
+        if body == nil { return }
+        m := core.GetMobile(s.ECS, body.Entity)
+        vd := behaviors.GetVerticalDoor(s.ECS,onEntity)
+        if m == nil || vd == nil { return }
+        if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
+  behaviors.VerticalDoor:
+    Duration: 1000
+    TweeningFunc: EaseInOut2
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -14
+        Spawn: -14
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -300, -100
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 0.1282051282051282, 0, 0, 0, 0, 1
+            Spawn: 0.1282051282051282, 0, 0, 0, 1, 0
+      - AdjacentSector: "50"
+        Hi:
+          Material: "32"
+        Lo:
+          Material: "2"
+        P: -300, -110
+        Surface:
+          Material: "32"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -230, -110
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 0.1282051320259389, 0, 0, 0, 0, 1
+            Spawn: 0.1282051320259389, 0, 0, 0, 1, 0
+      - AdjacentSector: "22"
+        Hi:
+          Material: "32"
+          Transform:
+            Now: 1, 0, 0, 0, 1.1142857142857143, -0.1
+            Spawn: 1, 0, 0, 0, 1.1142857142857143, -0.1
+        Lo:
+          Material: "2"
+          Transform:
+            Now: 1, 0, 0, 0, 0.11428571428571428, 0
+            Spawn: 1, 0, 0, 0, 0.11428571428571428, 0
+        P: -230, -100
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Animation:
+          Active: false
+          Coordinates: AnimationCoordinatesAbsolute
+          Duration: 1000
+          End: -14
+          Lifetime: AnimationLifetimeOnce
+          Percent: 1
+          Reverse: false
+          Start: 64
+          TweeningFunc: EaseInOut2
+        Now: -14
+        Spawn: 64
+- Entity: "50"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+      Z:
+        Now: -8
+        Spawn: -8
+    FloorFriction: 0.85
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -300, -110
+        Surface:
+          Material: "2"
+      - AdjacentSector: "51"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -360, -210
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -160, -210
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -160, -160
+        Surface:
+          Material: "2"
+      - AdjacentSector: "49"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -230, -110
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "51"
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "21"
+        Transform:
+          Now: 3.357142857142857, 0, 0, 0, 1, 0
+          Spawn: 3.357142857142857, 0, 0, 0, 1, 0
+      Z:
+        Now: 0
+        Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+      - AdjacentSector: "50"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -160, -210
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -360, -210
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -360, -350
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 7.34375, 0, 0, 0, 1, 0
+            Spawn: 7.34375, 0, 0, 0, 1, 0
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 110, -350
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: 110, -210
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "52"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -260, -170, 32
+      Spawn: -260, -170, 32
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "54"
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -330, 130, 21
+      Spawn: -330, 130, 21
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "55"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: "2"
+        Transform:
+          Now: 4, 0, 0, 0, 4, 0
+          Spawn: 4, 0, 0, 0, 4, 0
+      Z:
+        Now: -240
+        Spawn: -240
+    FloorFriction: 0.85
+    Gravity: 0, 0, -0.1
+    Segments:
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, -130
+        Surface:
+          Material: "2"
+      - AdjacentSector: "38"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, -190
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, -250
+        Surface:
+          Material: "2"
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, -280
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 4, 0, 0, 0, 4, 0
+            Spawn: 4, 0, 0, 0, 4, 0
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -610, -280
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 5.7894736842105265, 0, 0, 0, 4, 0
+            Spawn: 5.7894736842105265, 0, 0, 0, 4, 0
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -610, 160
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 4, 0, 0, 0, 4, 0
+            Spawn: 4, 0, 0, 0, 4, 0
+      - Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, 160
+        Surface:
+          Material: "2"
+          Transform:
+            Now: 4, 0, 0, 0, 4, 0
+            Spawn: 4, 0, 0, 0, 4, 0
+      - AdjacentSector: "30"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -870, 0
+        Surface:
+          Material: "2"
+      - AdjacentSector: "30"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -730, 0
+        Surface:
+          Material: "2"
+      - AdjacentSector: "30"
+        Hi:
+          Material: "2"
+        Lo:
+          Material: "2"
+        P: -730, -130
+        Surface:
+          Material: "2"
+    Top:
+      Surface:
+        Material: "2"
+      Z:
+        Now: 64
+        Spawn: 64
+- Entity: "56"
+  behaviors.PlayerTargetable:
+    Frob:
+      Code: |-
+        door := behaviors.GetVerticalDoor(s.ECS,16)
+        buttonSector := core.GetSector(s.ECS,10)
+        buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
+        if door.State != behaviors.DoorStateOpen {
+          door.Intent = behaviors.DoorIntentOpen
+        buttonStage.Frame = 1
+        } else if door.State != behaviors.DoorStateClosed {
+          door.Intent = behaviors.DoorIntentClosed
+        buttonStage.Frame=0
+        }
+    Message: Open
+    Selected:
+      Code: |-
+        buttonSector := core.GetSector(s.ECS,10)
+        buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
+        buttonStage.Flags |= materials.ShaderFrob
+    UnSelected:
+      Code: |-
+        buttonSector := core.GetSector(s.ECS,10)
+        buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
+        buttonStage.Flags &= ^materials.ShaderFrob
+  behaviors.Proximity:
+    Hysteresis: 0
+    InRange:
+      Code: |-
+        if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {
+          p.HoveringTargets.Add(onEntity)
+        }
+    ValidComponents: behaviors.Player
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -240, 360, 32
+      Spawn: -240, 360, 32
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  ecs.Linked:
+    Sources:
+      - "78"
+- Entity: "57"
+  behaviors.ActionTransition:
+    Next:
+      - "58"
+      - "61"
+  behaviors.ActionWaypoint:
+    P: -210, 190, 25
+- Entity: "58"
+  behaviors.ActionTransition:
+    Next:
+      - "59"
+  behaviors.ActionWaypoint:
+    P: -220, 350, 25
+- Entity: "59"
+  behaviors.ActionTransition:
+    Next:
+      - "60"
+  behaviors.ActionWaypoint:
+    P: -160, 350, 25
+- Entity: "60"
+  behaviors.ActionTransition:
+    Next:
+      - "57"
+  behaviors.ActionWaypoint:
+    P: -150, 160, 25
+- Entity: "61"
+  behaviors.ActionTransition:
+    Next:
+      - "62"
+  behaviors.ActionWaypoint:
+    P: -60, 170, 25
+- Entity: "62"
+  behaviors.ActionTransition:
+    Next:
+      - "76"
+  behaviors.ActionWaypoint:
+    P: -40, 10, 25
+- Entity: "63"
+  behaviors.ActionTransition:
+    Next:
+      - "60"
+  behaviors.ActionWaypoint:
+    P: -90, 150, 25
+- Entity: "75"
+  behaviors.ActionTransition:
+    Next:
+      - "63"
+  behaviors.ActionWaypoint:
+    P: -70, 30, 25
+- Entity: "76"
+  behaviors.ActionTransition:
+    Next:
+      - "75"
+  behaviors.ActionWaypoint:
+    P: -310, -40, 25
+- Entity: "78"
+  behaviors.Proximity: "56"
+  ecs.Named:
+    Name: Add Body to Player's targeting
+- Entity: "86"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/game/acid-bubble.png
+- Entity: "125"
+  behaviors.ActorState:
+    Action: "58"
+  core.Body:
+    Angle:
+      Now: -13947.66229908861
+      Procedural: true
+      Spawn: 0
+    Pos:
+      Now: -212.68554067316234, 239.21816717685027, 24.999999999999996
+      Spawn: -180, 420, 0
+    Size:
+      Now: 10, 10
+      Spawn: 10, 10
+  core.Light: "12"
+  ecs.Linked:
+    Sources:
+      - "12"
+  ecs.Named:
+    Name: Instanced LightActor test

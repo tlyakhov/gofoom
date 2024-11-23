@@ -6,6 +6,8 @@ package behaviors
 import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 // TODO: Implement scripting
@@ -55,15 +57,15 @@ func (w *WeaponClass) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Damage"]; ok {
-		w.Damage = v.(float64)
+		w.Damage = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["Spread"]; ok {
-		w.Spread = v.(float64)
+		w.Spread = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["Cooldown"]; ok {
-		w.Cooldown = v.(float64)
+		w.Cooldown = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["MarkMaterial"]; ok {
@@ -71,7 +73,7 @@ func (w *WeaponClass) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["MarkSize"]; ok {
-		w.MarkSize = v.(float64)
+		w.MarkSize = cast.ToFloat64(v)
 	}
 }
 

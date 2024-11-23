@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+
+	"github.com/spf13/cast"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=AnimationLifetime -json
@@ -151,10 +153,10 @@ func (a *Animation[T]) Construct(data map[string]any) {
 		}
 	}
 	if v, ok := data["Duration"]; ok {
-		a.Duration = v.(float64)
+		a.Duration = cast.ToFloat64(v)
 	}
 	if v, ok := data["Percent"]; ok {
-		a.Percent = v.(float64)
+		a.Percent = cast.ToFloat64(v)
 	}
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
@@ -182,38 +184,38 @@ func (a *Animation[T]) Construct(data map[string]any) {
 	switch c := any(a).(type) {
 	case *Animation[int]:
 		if v, ok := data["Start"]; ok {
-			c.Start = v.(int)
+			c.Start = cast.ToInt(v)
 		}
 		if v, ok := data["End"]; ok {
-			c.End = v.(int)
+			c.End = cast.ToInt(v)
 		}
 	case *Animation[float64]:
 		if v, ok := data["Start"]; ok {
-			c.Start = v.(float64)
+			c.Start = cast.ToFloat64(v)
 		}
 		if v, ok := data["End"]; ok {
-			c.End = v.(float64)
+			c.End = cast.ToFloat64(v)
 		}
 	case *Animation[concepts.Vector2]:
 		if v, ok := data["Start"]; ok {
-			c.Start.Deserialize(v.(map[string]any))
+			c.Start.Deserialize(v.(string))
 		}
 		if v, ok := data["End"]; ok {
-			c.End.Deserialize(v.(map[string]any))
+			c.End.Deserialize(v.(string))
 		}
 	case *Animation[concepts.Vector3]:
 		if v, ok := data["Start"]; ok {
-			c.Start.Deserialize(v.(map[string]any))
+			c.Start.Deserialize(v.(string))
 		}
 		if v, ok := data["End"]; ok {
-			c.End.Deserialize(v.(map[string]any))
+			c.End.Deserialize(v.(string))
 		}
 	case *Animation[concepts.Vector4]:
 		if v, ok := data["Start"]; ok {
-			c.Start.Deserialize(v.(map[string]any), false)
+			c.Start.Deserialize(v.(string))
 		}
 		if v, ok := data["End"]; ok {
-			c.End.Deserialize(v.(map[string]any), false)
+			c.End.Deserialize(v.(string))
 		}
 	}
 }

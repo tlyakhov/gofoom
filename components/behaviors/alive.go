@@ -8,6 +8,8 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type Damage struct {
@@ -50,7 +52,7 @@ func (a *Alive) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Health"]; ok {
-		a.Health = v.(float64)
+		a.Health = cast.ToFloat64(v)
 	}
 }
 

@@ -6,6 +6,8 @@ package behaviors
 import (
 	"strconv"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type ParticleEmitter struct {
@@ -71,19 +73,19 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Lifetime"]; ok {
-		pe.Lifetime = v.(float64)
+		pe.Lifetime = cast.ToFloat64(v)
 	}
 	if v, ok := data["FadeTime"]; ok {
-		pe.FadeTime = v.(float64)
+		pe.FadeTime = cast.ToFloat64(v)
 	}
 	if v, ok := data["XYSpread"]; ok {
-		pe.XYSpread = v.(float64)
+		pe.XYSpread = cast.ToFloat64(v)
 	}
 	if v, ok := data["ZSpread"]; ok {
-		pe.ZSpread = v.(float64)
+		pe.ZSpread = cast.ToFloat64(v)
 	}
 	if v, ok := data["Vel"]; ok {
-		pe.Vel = v.(float64)
+		pe.Vel = cast.ToFloat64(v)
 	}
 	if v, ok := data["Limit"]; ok {
 		pe.Limit, _ = strconv.Atoi(v.(string))

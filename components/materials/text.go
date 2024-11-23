@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/fogleman/gg"
+	"github.com/spf13/cast"
 	"golang.org/x/image/font/inconsolata"
 )
 
@@ -102,7 +103,7 @@ func (t *Text) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 	return c
 }
 
-var defaultTextColor = map[string]any{"Spawn": map[string]any{"X": 1.0, "Y": 1.0, "Z": 1.0, "W": 1.0}}
+var defaultTextColor = map[string]any{"Spawn": "1,1,1,1"}
 
 func (t *Text) Construct(data map[string]any) {
 	t.Attached.Construct(data)
@@ -114,7 +115,7 @@ func (t *Text) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["LineSpacing"]; ok {
-		t.LineSpacing = v.(float64)
+		t.LineSpacing = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["Label"]; ok {

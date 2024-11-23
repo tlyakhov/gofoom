@@ -1,0 +1,1871 @@
+- Entity: "1"
+  behaviors.Alive:
+    Health: 100
+  behaviors.Player:
+    Spawn: false
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 0, -70, 0
+        Spawn: 0, -70, 0
+    Size:
+        Now: 15, 15
+        Spawn: 15, 15
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+        Now: 0, 0, 0
+        Spawn: 0, 0, 0
+- Entity: "2"
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/WDef.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "3"
+  ecs.Named:
+    Name: mat1
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/WSlimy.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "4"
+  ecs.Named:
+    Name: mat2
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/WMetal.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "5"
+  ecs.Named:
+    Name: mat3
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/WSlimeGrate.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "6"
+  ecs.Named:
+    Name: mat6
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/WDirty.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "7"
+  ecs.Named:
+    Name: Doom Garage Door
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/DGarage.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "8"
+  ecs.Named:
+    Name: Default Floor
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/FDef.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "9"
+  ecs.Named:
+    Name: f1
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/FGrayTile.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "10"
+  ecs.Named:
+    Name: Painful Slime Shader
+  materials.Shader:
+    Stages:
+        - Flags: ShaderTiled|ShaderLiquid
+          Material: "57"
+          Transform: 2, 0, 0, 0, 2, 0
+- Entity: "11"
+  ecs.Named:
+    Name: f5
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/FRedLight.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "12"
+  ecs.Named:
+    Name: f6
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/FHexMetal.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "13"
+  ecs.Named:
+    Name: Water
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/Water.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "14"
+  ecs.Named:
+    Name: Sky
+  materials.Shader:
+    Stages:
+        - Flags: ShaderTiled|ShaderSky
+          Material: "55"
+- Entity: "15"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, -100
+          Surface:
+            Material: "14"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, -100
+          Surface:
+            Material: "4"
+        - AdjacentSector: "16"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, -30
+          Surface: {}
+        - AdjacentSector: "23"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, -30
+          Surface: {}
+        - AdjacentSector: "17"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, -30
+          Surface:
+            Material: "4"
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector0
+- Entity: "16"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "51"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, -30
+          Surface: {}
+        - AdjacentSector: "18"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 30
+          Surface: {}
+        - AdjacentSector: "23"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, 30
+          Surface: {}
+        - AdjacentSector: "15"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, -30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector1
+- Entity: "17"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -10
+            Spawn: -10
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "24"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, -30
+          Surface: {}
+        - AdjacentSector: "18"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 30
+          Surface: {}
+        - AdjacentSector: "23"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, 30
+          Surface: {}
+        - AdjacentSector: "15"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, -30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector2
+- Entity: "18"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "52"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 100
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 100
+          Surface:
+            Material: "4"
+        - AdjacentSector: "16"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 30
+          Surface: {}
+        - AdjacentSector: "23"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, 30
+          Surface: {}
+        - AdjacentSector: "17"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, 30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 30
+          Surface:
+            Material: "4"
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector3
+- Entity: "19"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -17, 68, 0
+        Spawn: -17, 68, 0
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+- Entity: "20"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 45, 68, 0
+        Spawn: 45, 68, 0
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+- Entity: "21"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 85, 68, 0
+        Spawn: 85, 68, 0
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+- Entity: "22"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 0, 68, 32
+        Spawn: 0, 68, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "23"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "9"
+        Z:
+            Now: -3
+            Spawn: -3
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "15"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, -30
+          Surface: {}
+        - AdjacentSector: "16"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, -30
+          Surface: {}
+        - AdjacentSector: "18"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 30, 30
+          Surface: {}
+        - AdjacentSector: "17"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -30, 30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "11"
+        Z:
+            Now: 50
+            Spawn: 50
+  ecs.Named:
+    Name: sector4
+- Entity: "24"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "9"
+        Z:
+            Now: -20
+            Spawn: -20
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, -30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "25"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -120, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -120, 30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "17"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector5
+- Entity: "25"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "9"
+        Z:
+            Now: -30
+            Spawn: -30
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -120, -30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "26"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -140, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -140, 30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "24"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -120, 30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector6
+- Entity: "26"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "9"
+        Z:
+            Now: -40
+            Spawn: -40
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -140, -30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "27"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, 30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "25"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -140, 30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector7
+- Entity: "27"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "9"
+        Z:
+            Now: -50
+            Spawn: -50
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, -30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "28"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, 30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "26"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -160, 30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector8
+- Entity: "28"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "10"
+        Z:
+            Now: -60
+            Spawn: -60
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "30"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, -30
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, -10
+          Surface:
+            Material: "5"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, 10
+          Surface:
+            Material: "3"
+        - AdjacentSector: "32"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, 30
+          Surface: {}
+        - AdjacentSector: "27"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, 30
+          Surface: {}
+    Top:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -6
+            Spawn: -6
+  ecs.Named:
+    Name: sector9
+- Entity: "29"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -240, 0, -30
+        Spawn: -240, 0, -30
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 0.1, 1, 0.1
+    Strength: 2
+- Entity: "30"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "10"
+        Z:
+            Now: -60
+            Spawn: -60
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "28"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, -30
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, -140
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, -140
+          Surface:
+            Material: "3"
+    Top:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -6
+            Spawn: -6
+  ecs.Named:
+    Name: sector10
+- Entity: "31"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -240, -100, -30
+        Spawn: -240, -100, -30
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "32"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "10"
+        Z:
+            Now: -60
+            Spawn: -60
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "28"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, 30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, 30
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -300, 140
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -180, 140
+          Surface:
+            Material: "3"
+    Top:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -6
+            Spawn: -6
+  ecs.Named:
+    Name: sector11
+- Entity: "33"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -240, 100, -30
+        Spawn: -240, 100, -30
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 0.1, 1, 0.1
+    Strength: 2
+- Entity: "34"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "51"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 105, -30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 105, 30
+          Surface:
+            Material: "6"
+        - AdjacentSector: "35"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 115, 30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 150, 30
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 150, -30
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "12"
+        Z:
+            Now: 60
+            Spawn: 60
+  ecs.Named:
+    Name: sector12
+- Entity: "35"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "34"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 115, 30
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 150, 30
+          Surface:
+            Material: "6"
+        - AdjacentSector: "36"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 150, 70
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 150, 100
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 115, 100
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "12"
+        Z:
+            Now: 60
+            Spawn: 60
+  ecs.Named:
+    Name: sector13
+- Entity: "36"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "35"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 150, 100
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 150, 70
+          Surface:
+            Material: "6"
+        - AdjacentSector: "37"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 70
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 100
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "9"
+        Z:
+            Now: 60
+            Spawn: 60
+  ecs.Named:
+    Name: sector14
+- Entity: "37"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "13"
+        Target: "40"
+        Z:
+            Now: -20
+            Spawn: -20
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 20
+          Surface:
+            Material: "6"
+        - AdjacentSector: "36"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 70
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 100
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 150
+          Surface:
+            Material: "6"
+        - AdjacentSector: "39"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 370, 150
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 400, 150
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 400, 20
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 100
+            Spawn: 100
+  ecs.Named:
+    Name: sector15
+- Entity: "38"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 350, 80, 90
+        Spawn: 350, 80, 90
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.1
+    Diffuse: 0.4, 0.6, 1
+    Strength: 2
+  ecs.Named:
+    Name: cl5anh5mdsrmm6mqtu70
+- Entity: "39"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -2
+            Spawn: -2
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "37"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 370, 150
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 400, 150
+          Surface:
+            Material: "3"
+        - AdjacentSector: "44"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 400, 400
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 370, 400
+          Surface:
+            Material: "3"
+    Top:
+        Surface:
+            Material: "9"
+        Z:
+            Now: 60
+            Spawn: 60
+  ecs.Named:
+    Name: sector16
+- Entity: "40"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -170
+            Spawn: -170
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 280
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 310
+          Surface:
+            Material: "6"
+        - AdjacentSector: "41"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 360
+          Surface: {}
+        - AdjacentSector: "41"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 680, 360
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 360
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 230
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 230
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "13"
+        Target: "37"
+        Z:
+            Now: -20
+            Spawn: -20
+  ecs.Named:
+    Name: sector17
+- Entity: "41"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -230
+            Spawn: -230
+    FloorFriction: 0.85
+    Gravity: 0, 0, -0.1
+    Segments:
+        - AdjacentSector: "40"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 360
+          Surface: {}
+        - AdjacentSector: "40"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 680, 360
+          Surface: {}
+        - AdjacentSector: "43"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 360
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 410
+          Surface:
+            Material: "6"
+        - AdjacentSector: "45"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 780, 610
+          Surface:
+            Material: "6"
+        - AdjacentSector: "45"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 610
+          Surface:
+            Material: "6"
+        - AdjacentSector: "45"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 680, 610
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 610
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 410
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -20
+            Spawn: -20
+  ecs.Named:
+    Name: sector18
+- Entity: "42"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 630, 390, -125
+        Spawn: 630, 390, -125
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0
+    Diffuse: 0.8, 0.8, 1
+    Strength: 2
+  ecs.Named:
+    Name: cl5anh5mdsrmm6mqtub0
+- Entity: "43"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -58
+            Spawn: -58
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 900, 360
+          Surface:
+            Material: "6"
+        - AdjacentSector: "41"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 360
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 410
+          Surface:
+            Material: "6"
+        - AdjacentSector: "46"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 900, 410
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -20
+            Spawn: -20
+  ecs.Named:
+    Name: sector19
+- Entity: "44"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "13"
+        Target: "45"
+        Z:
+            Now: -14
+            Spawn: -14
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "39"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 400, 400
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 370, 400
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 400
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 300, 450
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 480, 450
+          Surface:
+            Material: "3"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 480, 400
+          Surface:
+            Material: "3"
+    Top:
+        Surface:
+            Material: "9"
+        Z:
+            Now: 60
+            Spawn: 60
+  ecs.Named:
+    Name: sector20
+- Entity: "45"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -200
+            Spawn: -200
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "41"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 700, 610
+          Surface: {}
+        - AdjacentSector: "41"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 680, 610
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 610
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 660
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 780, 660
+          Surface:
+            Material: "6"
+        - AdjacentSector: "41"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 780, 610
+          Surface: {}
+    Top:
+        Surface:
+            Material: "13"
+        Target: "44"
+        Z:
+            Now: -14
+            Spawn: -14
+  ecs.Named:
+    Name: sector21
+- Entity: "46"
+  behaviors.Underwater: {}
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: -70
+            Spawn: -70
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 920, 360
+          Surface:
+            Material: "6"
+        - AdjacentSector: "43"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 900, 360
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 900, 410
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 920, 410
+          Surface:
+            Material: "6"
+    Top:
+        Surface:
+            Material: "13"
+        Target: "48"
+        Z:
+            Now: -20
+            Spawn: -20
+  ecs.Named:
+    Name: sector22
+- Entity: "47"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 610, 175, -50
+        Spawn: 610, 175, -50
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0
+    Diffuse: 0.8, 0.8, 1
+    Strength: 2
+  ecs.Named:
+    Name: cl5anh5mdsrmm6mqtug0
+- Entity: "48"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "13"
+        Target: "46"
+        Z:
+            Now: -20
+            Spawn: -20
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 620, 150
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 150
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 600, 200
+          Surface:
+            Material: "6"
+        - AdjacentSector: "49"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 620, 200
+          Surface: {}
+    Top:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 50
+            Spawn: 50
+  ecs.Named:
+    Name: sector23
+- Entity: "49"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "3"
+        Z:
+            Now: -10
+            Spawn: -10
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 620, 150
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 740, 150
+          Surface:
+            Material: "6"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 740, 200
+          Surface:
+            Material: "6"
+        - AdjacentSector: "48"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 620, 200
+          Surface: {}
+    Top:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 70
+            Spawn: 70
+  ecs.Named:
+    Name: sector24
+- Entity: "50"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 700, 175, 50
+        Spawn: 700, 175, 50
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: cl5anh5mdsrmm6mqtuj0
+- Entity: "51"
+  behaviors.Proximity:
+    Hysteresis: 0
+    InRange:
+        Code: |-
+            if body == nil { return }
+            m := core.GetMobile(s.ECS, body.Entity)
+            vd := behaviors.GetVerticalDoor(s.ECS,onEntity)
+            if m == nil || vd == nil { return }
+            if m.Mass >10 { vd.Intent = behaviors.DoorIntentOpen }
+  behaviors.VerticalDoor:
+    Duration: 1000
+    TweeningFunc: EaseInOut2
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "2"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "34"
+          Hi:
+            Material: "7"
+          Lo:
+            Material: "2"
+          P: 105, -30
+          Surface: {}
+        - Hi:
+            Material: "7"
+          Lo:
+            Material: "2"
+          P: 105, 30
+          Surface:
+            Material: "2"
+        - AdjacentSector: "16"
+          Hi:
+            Material: "7"
+          Lo:
+            Material: "2"
+          P: 100, 30
+          Surface: {}
+        - Hi:
+            Material: "7"
+          Lo:
+            Material: "2"
+          P: 100, -30
+          Surface:
+            Material: "2"
+    Top:
+        Surface:
+            Material: "6"
+        Z:
+            Animation:
+                Active: false
+                Coordinates: AnimationCoordinatesAbsolute
+                Duration: 1000
+                End: 0
+                Lifetime: AnimationLifetimeOnce
+                Percent: 1
+                Reverse: false
+                Start: 64
+                TweeningFunc: EaseInOut2
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector25
+- Entity: "52"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 15
+            Spawn: 15
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "18"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 100
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 100
+          Surface:
+            Material: "4"
+        - AdjacentSector: "53"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 120
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 120
+          Surface:
+            Material: "14"
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector26
+- Entity: "53"
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: "8"
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: "52"
+          Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 120
+          Surface: {}
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 120
+          Surface:
+            Material: "14"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: 100, 3000
+          Surface:
+            Material: "14"
+        - Hi:
+            Material: "2"
+          Lo:
+            Material: "2"
+          P: -100, 3000
+          Surface:
+            Material: "14"
+    Top:
+        Surface:
+            Material: "14"
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: sector27
+- Entity: "54"
+  behaviors.Alive:
+    Health: 100
+  behaviors.Player:
+    Spawn: true
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 0, -70, 0
+        Spawn: 0, -70, 0
+    Size:
+        Now: 15, 15
+        Spawn: 15, 15
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+        Now: 0, 0, 0
+        Spawn: 0, 0, 0
+- Entity: "55"
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: false
+    Source: data/game/sky.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "57"
+  ecs.Named:
+    Name: Painful Slime
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: true
+    Source: data/FSlime.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
+- Entity: "58"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 130, 80, 30
+        Spawn: 130, 80, 30
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+- Entity: "59"
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 380, 420, 20
+        Spawn: 380, 420, 20
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
