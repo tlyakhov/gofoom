@@ -61,7 +61,7 @@ func initializeMenus() {
 		}}
 
 	filepath.Walk("data/worlds/", func(path string, info fs.FileInfo, err error) error {
-		if !strings.HasSuffix(path, ".json") {
+		if !strings.HasSuffix(path, ".yaml") {
 			return nil
 		}
 		name := filepath.Base(path)

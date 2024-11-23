@@ -14,6 +14,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/puzpuzpuz/xsync/v3"
+	"github.com/spf13/cast"
 )
 
 type Sector struct {
@@ -219,10 +220,10 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Gravity"]; ok {
-		s.Gravity.Deserialize(v.(map[string]any))
+		s.Gravity.Deserialize(v.(string))
 	}
 	if v, ok := data["FloorFriction"]; ok {
-		s.FloorFriction = v.(float64)
+		s.FloorFriction = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["EnterScripts"]; ok {

@@ -4,7 +4,6 @@
 package ecs
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -13,6 +12,7 @@ import (
 	"tlyakhov/gofoom/dynamic"
 
 	"github.com/kelindar/bitmap"
+	"gopkg.in/yaml.v3"
 )
 
 // The architecture is like this:
@@ -381,7 +381,8 @@ func (db *ECS) Load(filename string) error {
 	}
 
 	var parsed any
-	err = json.Unmarshal(fileContents, &parsed)
+	err = yaml.Unmarshal(fileContents, &parsed)
+	//err = json.Unmarshal(fileContents, &parsed)
 	if err != nil {
 		return err
 	}
@@ -457,7 +458,8 @@ func (db *ECS) Save(filename string) {
 		jsonECS = append(jsonECS, jsonEntity)
 	})
 
-	bytes, err := json.MarshalIndent(jsonECS, "", "  ")
+	bytes, err := yaml.Marshal(jsonECS)
+	//bytes, err := json.MarshalIndent(jsonECS, "", "  ")
 
 	if err != nil {
 		panic(err)

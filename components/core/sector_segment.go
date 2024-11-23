@@ -4,10 +4,11 @@
 package core
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 const (
@@ -141,7 +142,9 @@ func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
 		return
 	}
 
-	s.P.Deserialize(data)
+	if v, ok := data["P"]; ok {
+		s.P.Deserialize(v.(string))
+	}
 
 	if v, ok := data["WallUVIgnoreSlope"]; ok {
 		s.WallUVIgnoreSlope = v.(bool)
@@ -159,8 +162,8 @@ func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
 		s.AdjacentSector, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["AdjacentSegment"]; ok {
-		if parsed, err := strconv.ParseInt(v.(string), 10, 64); err == nil {
-			s.AdjacentSegmentIndex = int(parsed)
+		if parsed, err := cast.ToIntE(v); err == nil {
+			s.AdjacentSegmentIndex = parsed
 		}
 	}
 	if v, ok := data["Lo"]; ok {
@@ -173,8 +176,7 @@ func (s *SectorSegment) Construct(db *ecs.ECS, data map[string]any) {
 
 func (s *SectorSegment) Serialize() map[string]any {
 	result := s.Segment.Serialize(false)
-	result["X"] = s.P[0]
-	result["Y"] = s.P[1]
+	result["P"] = s.P.Serialize()
 
 	if s.WallUVIgnoreSlope {
 		result["WallUVIgnoreSlope"] = true
@@ -188,7 +190,7 @@ func (s *SectorSegment) Serialize() map[string]any {
 	if s.PortalTeleports {
 		result["PortalTeleports"] = true
 		if s.AdjacentSegment != nil {
-			result["AdjacentSegment"] = strconv.FormatInt(int64(s.AdjacentSegment.Index), 10)
+			result["AdjacentSegment"] = s.AdjacentSegment.Index
 		}
 	}
 

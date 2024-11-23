@@ -6,6 +6,8 @@ package behaviors
 import (
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type Actor struct {
@@ -57,7 +59,7 @@ func (a *Actor) Construct(data map[string]any) {
 		}
 	}
 	if v, ok := data["Speed"]; ok {
-		a.Speed = v.(float64)
+		a.Speed = cast.ToFloat64(v)
 	}
 	if v, ok := data["FaceNextWaypoint"]; ok {
 		a.FaceNextWaypoint = v.(bool)

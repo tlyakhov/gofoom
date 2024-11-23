@@ -181,16 +181,9 @@ func (v *Vector3) ClampSelf(min, max float64) *Vector3 {
 }
 
 // Deserialize assigns this vector's fields from a parsed JSON map.
-func (v *Vector3) Deserialize(data map[string]any) {
-	if val, ok := data["X"]; ok {
-		v[0] = val.(float64)
-	}
-	if val, ok := data["Y"]; ok {
-		v[1] = val.(float64)
-	}
-	if val, ok := data["Z"]; ok {
-		v[2] = val.(float64)
-	}
+func (v *Vector3) Deserialize(data string) {
+	vx, _ := ParseVector3(data)
+	*v = *vx
 }
 
 func (v *Vector3) ToInt32Color() uint32 {
@@ -228,8 +221,8 @@ func (v *Vector3) StringHuman() string {
 }
 
 // Serialize formats the vector as a JSON key-value map.
-func (v *Vector3) Serialize() map[string]any {
-	return map[string]any{"X": v[0], "Y": v[1], "Z": v[2]}
+func (v *Vector3) Serialize() string {
+	return v.String()
 }
 
 // ParseVector3 parses strings in the form "X, Y, Z" into vectors.

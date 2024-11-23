@@ -7,6 +7,8 @@ import (
 	"log"
 	"strconv"
 	"tlyakhov/gofoom/concepts"
+
+	"github.com/spf13/cast"
 )
 
 type Spawned[T DynamicType] struct {
@@ -77,17 +79,17 @@ func (s *Spawned[T]) Construct(data map[string]any) {
 	if v, ok := data["Spawn"]; ok {
 		switch sc := any(s).(type) {
 		case *Spawned[int]:
-			sc.Spawn, _ = strconv.Atoi(v.(string))
+			sc.Spawn = cast.ToInt(v)
 		case *Spawned[float64]:
-			sc.Spawn = v.(float64)
+			sc.Spawn = cast.ToFloat64(v)
 		case *Spawned[concepts.Vector2]:
-			sc.Spawn.Deserialize(v.(map[string]any))
+			sc.Spawn.Deserialize(v.(string))
 		case *Spawned[concepts.Vector3]:
-			sc.Spawn.Deserialize(v.(map[string]any))
+			sc.Spawn.Deserialize(v.(string))
 		case *Spawned[concepts.Vector4]:
-			sc.Spawn.Deserialize(v.(map[string]any), false)
+			sc.Spawn.Deserialize(v.(string))
 		case *Spawned[concepts.Matrix2]:
-			sc.Spawn.Deserialize(v.([]any))
+			sc.Spawn.Deserialize(v.(string))
 		default:
 			log.Panicf("Tried to deserialize Spawned[T] %v where T has no serializer", s)
 		}
@@ -95,17 +97,17 @@ func (s *Spawned[T]) Construct(data map[string]any) {
 	if v, ok := data["Now"]; ok {
 		switch sc := any(s).(type) {
 		case *Spawned[int]:
-			sc.Now, _ = strconv.Atoi(v.(string))
+			sc.Now = cast.ToInt(v)
 		case *Spawned[float64]:
-			sc.Now = v.(float64)
+			sc.Now = cast.ToFloat64(v)
 		case *Spawned[concepts.Vector2]:
-			sc.Now.Deserialize(v.(map[string]any))
+			sc.Now.Deserialize(v.(string))
 		case *Spawned[concepts.Vector3]:
-			sc.Now.Deserialize(v.(map[string]any))
+			sc.Now.Deserialize(v.(string))
 		case *Spawned[concepts.Vector4]:
-			sc.Now.Deserialize(v.(map[string]any), false)
+			sc.Now.Deserialize(v.(string))
 		case *Spawned[concepts.Matrix2]:
-			sc.Now.Deserialize(v.([]any))
+			sc.Now.Deserialize(v.(string))
 		default:
 			log.Panicf("Tried to deserialize Spawned[T] %v where T has no serializer", s)
 		}

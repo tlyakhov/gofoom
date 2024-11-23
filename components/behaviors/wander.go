@@ -5,6 +5,8 @@ package behaviors
 
 import (
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type Wander struct {
@@ -47,7 +49,7 @@ func (w *Wander) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Force"]; ok {
-		w.Force = v.(float64)
+		w.Force = cast.ToFloat64(v)
 	}
 	if v, ok := data["AsImpulse"]; ok {
 		w.AsImpulse = v.(bool)

@@ -6,6 +6,8 @@ package core
 import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 // InternalSegments must be sorted back-to-front alongside entities
@@ -88,10 +90,10 @@ func (s *InternalSegment) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Top"]; ok {
-		s.Top = v.(float64)
+		s.Top = cast.ToFloat64(v)
 	}
 	if v, ok := data["Bottom"]; ok {
-		s.Bottom = v.(float64)
+		s.Bottom = cast.ToFloat64(v)
 	}
 	if v, ok := data["TwoSided"]; ok {
 		s.TwoSided = v.(bool)

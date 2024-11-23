@@ -8,6 +8,8 @@ import (
 	"math"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+
+	"github.com/spf13/cast"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=DynamicStage -json
@@ -249,13 +251,13 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 		d.Procedural = v.(bool)
 	}
 	if v, ok := data["Freq"]; ok {
-		d.Freq = v.(float64)
+		d.Freq = cast.ToFloat64(v)
 	}
 	if v, ok := data["Damping"]; ok {
-		d.Damping = v.(float64)
+		d.Damping = cast.ToFloat64(v)
 	}
 	if v, ok := data["Response"]; ok {
-		d.Response = v.(float64)
+		d.Response = cast.ToFloat64(v)
 	}
 	//	TODO: Serialize Input as well?
 

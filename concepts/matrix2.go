@@ -222,21 +222,13 @@ func (m Matrix2) GetTransform() (angle float64, translation Vector2, scale Vecto
 	return
 }
 
-func (m *Matrix2) Deserialize(data []any) {
-	for i, v := range data {
-		if i >= 6 {
-			break
-		}
-		m[i] = v.(float64)
-	}
+func (m *Matrix2) Deserialize(data string) {
+	v, _ := ParseMatrix2(data)
+	*m = *v
 }
 
-func (m *Matrix2) Serialize() []any {
-	result := make([]any, 6)
-	for i, e := range m {
-		result[i] = e
-	}
-	return result
+func (m *Matrix2) Serialize() string {
+	return m.String()
 }
 
 // ParseMatrix2 parses strings in the form "x,y,z,a,b,c" into matrices.

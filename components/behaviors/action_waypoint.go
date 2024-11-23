@@ -42,14 +42,14 @@ func (waypoint *ActionWaypoint) Construct(data map[string]any) {
 		return
 	}
 
-	waypoint.P.Deserialize(data)
+	if v, ok := data["P"]; ok {
+		waypoint.P.Deserialize(v.(string))
+	}
 }
 
 func (waypoint *ActionWaypoint) Serialize() map[string]any {
 	result := waypoint.ActionTimed.Serialize()
-	result["X"] = waypoint.P[0]
-	result["Y"] = waypoint.P[1]
-	result["Z"] = waypoint.P[2]
+	result["P"] = waypoint.P.Serialize()
 
 	return result
 }

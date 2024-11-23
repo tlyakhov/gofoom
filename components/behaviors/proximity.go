@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/puzpuzpuz/xsync/v3"
+	"github.com/spf13/cast"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=ProximityFlags -json
@@ -81,11 +82,11 @@ func (p *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Range"]; ok {
-		p.Range = v.(float64)
+		p.Range = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["Hysteresis"]; ok {
-		p.Hysteresis = v.(float64)
+		p.Hysteresis = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["RequiresPlayerAction"]; ok {

@@ -10,6 +10,8 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/concepts"
+
+	"github.com/spf13/cast"
 )
 
 type Body struct {
@@ -115,7 +117,7 @@ func (b *Body) RenderSector() *Sector {
 	return nil
 }
 
-var defaultBodySize = map[string]any{"Spawn": map[string]any{"X": 10.0, "Y": 10.0}}
+var defaultBodySize = map[string]any{"Spawn": "10,10"}
 
 func (b *Body) Construct(data map[string]any) {
 	b.Attached.Construct(data)
@@ -146,7 +148,7 @@ func (b *Body) Construct(data map[string]any) {
 		b.Size.Construct(v2)
 	}
 	if v, ok := data["Angle"]; ok {
-		if v2, ok2 := v.(float64); ok2 {
+		if v2, err := cast.ToFloat64E(v); err == nil {
 			v = map[string]any{"Spawn": v2}
 		}
 		b.Angle.Construct(v.(map[string]any))

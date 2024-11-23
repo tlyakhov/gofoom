@@ -114,14 +114,12 @@ func (table *EntityTable) Delete(entity Entity) bool {
 }
 
 func (table EntityTable) Serialize() []string {
-	result := make([]string, len(table))
-	i := 0
+	result := make([]string, 0)
 	for _, e := range table {
 		if e == 0 {
 			continue
 		}
-		result[i] = e.String()
-		i++
+		result = append(result, e.String())
 	}
 	return result
 }

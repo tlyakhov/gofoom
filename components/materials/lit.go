@@ -45,15 +45,10 @@ func (m *Lit) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Ambient"]; ok {
-		m.Ambient.Deserialize(v.(map[string]any))
+		m.Ambient.Deserialize(v.(string))
 	}
 	if v, ok := data["Diffuse"]; ok {
-		vmap := v.(map[string]any)
-		if len(vmap) == 4 {
-			m.Diffuse.Deserialize(vmap, true)
-		} else if len(vmap) == 3 {
-			m.Diffuse.To3D().Deserialize(vmap)
-		}
+		m.Diffuse.Deserialize(v.(string))
 	}
 }
 

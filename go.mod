@@ -17,6 +17,7 @@ require (
 	github.com/traefik/yaegi v0.16.1
 	golang.org/x/image v0.21.0
 	golang.org/x/tools v0.26.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -49,7 +50,6 @@ require (
 	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
@@ -60,5 +60,6 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.4.1 // indirect
 	github.com/rymdport/portal v0.2.6 // indirect
+	github.com/spf13/cast v1.7.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 )

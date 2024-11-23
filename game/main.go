@@ -173,7 +173,7 @@ func run() {
 	db.Simulation.Render = renderGame
 	//controllers.CreateTestWorld3(db)
 	//db.Save("bin/exported_test.json")
-	if err = db.Load("data/worlds/hall.json"); err != nil {
+	if err = db.Load("data/worlds/hall.yaml"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}

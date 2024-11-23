@@ -4,6 +4,7 @@
 package archetypes
 
 import (
+	_ "tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/ecs"

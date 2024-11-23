@@ -6,6 +6,8 @@ package core
 import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type Light struct {
@@ -46,13 +48,13 @@ func (l *Light) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Diffuse"]; ok {
-		l.Diffuse.Deserialize(v.(map[string]any))
+		l.Diffuse.Deserialize(v.(string))
 	}
 	if v, ok := data["Strength"]; ok {
-		l.Strength = v.(float64)
+		l.Strength = cast.ToFloat64(v)
 	}
 	if v, ok := data["Attenuation"]; ok {
-		l.Attenuation = v.(float64)
+		l.Attenuation = cast.ToFloat64(v)
 	}
 }
 
