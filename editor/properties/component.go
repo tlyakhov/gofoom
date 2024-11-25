@@ -20,7 +20,6 @@ import (
 )
 
 func (g *Grid) fieldComponent(field *state.PropertyGridField) {
-	// This will be a pointer
 	parentType := ""
 	var parent ecs.Attachable
 	var parentCID ecs.ComponentID
@@ -42,7 +41,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	label := widget.NewLabel("Entities: " + concepts.TruncateString(allEntities.String(), 20))
 
 	removeButton := widget.NewButton("", nil)
-	removeButton.Text = fmt.Sprintf("%v from [%v]", parentType, concepts.TruncateString(selEntities.String(), 10))
+	removeButton.Text = fmt.Sprintf("Remove %v from [%v]", parentType, concepts.TruncateString(selEntities.String(), 10))
 	if len(removeButton.Text) > 32 {
 		removeButton.Text = removeButton.Text[:32] + "..."
 	}
@@ -93,5 +92,9 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewVBoxLayout()
-	c.Objects = []fyne.CanvasObject{label, addButton, removeButton}
+	if parent.MultiAttachable() {
+		c.Objects = []fyne.CanvasObject{label, addButton, removeButton}
+	} else {
+		c.Objects = []fyne.CanvasObject{removeButton}
+	}
 }

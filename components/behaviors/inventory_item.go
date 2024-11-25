@@ -6,6 +6,8 @@ package behaviors
 import (
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type InventoryItem struct {
@@ -45,7 +47,7 @@ func (item *InventoryItem) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Class"]; ok {
-		item.Class = v.(string)
+		item.Class = cast.ToString(v)
 	}
 	if v, ok := data["Count"]; ok {
 		item.Count.Construct(v.(map[string]any))

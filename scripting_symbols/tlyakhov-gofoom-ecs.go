@@ -21,8 +21,10 @@ func init() {
 		"ControllerLoaded":         reflect.ValueOf(ecs.ControllerLoaded),
 		"ControllerRecalculate":    reflect.ValueOf(ecs.ControllerRecalculate),
 		"EntityTableGrowthRate":    reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
+		"GetLinked":                reflect.ValueOf(ecs.GetLinked),
 		"GetNamed":                 reflect.ValueOf(ecs.GetNamed),
-		"LoadEntitiesFromJson":     reflect.ValueOf(ecs.LoadEntitiesFromJson),
+		"LinkedCID":                reflect.ValueOf(&ecs.LinkedCID).Elem(),
+		"LoadEntitiesFromMap":      reflect.ValueOf(ecs.LoadEntitiesFromMap),
 		"NamedCID":                 reflect.ValueOf(&ecs.NamedCID).Elem(),
 		"NewECS":                   reflect.ValueOf(ecs.NewECS),
 		"ParseEntity":              reflect.ValueOf(ecs.ParseEntity),
@@ -41,6 +43,8 @@ func init() {
 		"ECS":              reflect.ValueOf((*ecs.ECS)(nil)),
 		"Entity":           reflect.ValueOf((*ecs.Entity)(nil)),
 		"EntityTable":      reflect.ValueOf((*ecs.EntityTable)(nil)),
+		"Linked":           reflect.ValueOf((*ecs.Linked)(nil)),
+		"LinkedController": reflect.ValueOf((*ecs.LinkedController)(nil)),
 		"Named":            reflect.ValueOf((*ecs.Named)(nil)),
 		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
 		"SubSerializable":  reflect.ValueOf((*ecs.SubSerializable)(nil)),
@@ -169,7 +173,7 @@ type _tlyakhov_gofoom_ecs_Controller struct {
 	WLoaded              func()
 	WMethods             func() ecs.ControllerMethod
 	WRecalculate         func()
-	WTarget              func(a0 ecs.Attachable) bool
+	WTarget              func(a0 ecs.Attachable, a1 ecs.Entity) bool
 }
 
 func (W _tlyakhov_gofoom_ecs_Controller) Always() {
@@ -190,8 +194,8 @@ func (W _tlyakhov_gofoom_ecs_Controller) Methods() ecs.ControllerMethod {
 func (W _tlyakhov_gofoom_ecs_Controller) Recalculate() {
 	W.WRecalculate()
 }
-func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable) bool {
-	return W.WTarget(a0)
+func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable, a1 ecs.Entity) bool {
+	return W.WTarget(a0, a1)
 }
 
 // _tlyakhov_gofoom_ecs_Serializable is an interface wrapper for Serializable type

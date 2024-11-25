@@ -1463,11 +1463,9 @@
   behaviors.PlayerTargetable:
     Frob:
       Code: |
-        if body == nil { return }
-        item := behaviors.GetInventoryItem(s.ECS, body.Entity)
-        if player == nil || item == nil { return }
-        controllers.PickUpInventoryItem(player, item)
-    Message: Pick up item
+        if player == nil || body == nil { return }
+        controllers.PickUpInventoryItem(player, body.Entity)
+    Message: Pick up item {{.}}
   behaviors.Proximity:
     Hysteresis: 0
     InRange:

@@ -27,10 +27,9 @@ const (
 type Proximity struct {
 	ecs.Attached `editable:"^"`
 
-	RequiresPlayerAction bool    `editable:"Requires Player Action?"`
-	ActsOnSectors        bool    `editable:"Acts on Sectors?"`
-	Range                float64 `editable:"Range"`
-	Hysteresis           float64 `editable:"Hysteresis (ms)"`
+	ActsOnSectors bool    `editable:"Acts on Sectors?"`
+	Range         float64 `editable:"Range"`
+	Hysteresis    float64 `editable:"Hysteresis (ms)"`
 
 	ValidComponents containers.Set[ecs.ComponentID] `editable:"ValidComponents"`
 
@@ -71,7 +70,6 @@ func (p *Proximity) Construct(data map[string]any) {
 	p.Attached.Construct(data)
 	p.Range = 100
 	p.Hysteresis = 200
-	p.RequiresPlayerAction = false
 	p.ActsOnSectors = false
 	p.ValidComponents = make(containers.Set[ecs.ComponentID])
 	// TODO: Serialize this
@@ -89,11 +87,8 @@ func (p *Proximity) Construct(data map[string]any) {
 		p.Hysteresis = cast.ToFloat64(v)
 	}
 
-	if v, ok := data["RequiresPlayerAction"]; ok {
-		p.RequiresPlayerAction = v.(bool)
-	}
 	if v, ok := data["ActsOnSectors"]; ok {
-		p.ActsOnSectors = v.(bool)
+		p.ActsOnSectors = cast.ToBool(v)
 	}
 
 	if v, ok := data["InRange"]; ok {
@@ -125,10 +120,6 @@ func (p *Proximity) Serialize() map[string]any {
 	}
 	if p.Hysteresis != 200 {
 		result["Hysteresis"] = p.Hysteresis
-	}
-
-	if p.RequiresPlayerAction {
-		result["RequiresPlayerAction"] = true
 	}
 
 	if p.ActsOnSectors {

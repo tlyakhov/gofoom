@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"strconv"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=ProximityStatus -json
@@ -26,6 +28,7 @@ type ProximityState struct {
 	PrevStatus ProximityStatus
 	Source     ecs.Entity
 	Target     ecs.Entity
+	Flags      ProximityFlags
 }
 
 var ProximityStateCID ecs.ComponentID
@@ -60,12 +63,14 @@ func (p *ProximityState) Construct(data map[string]any) {
 		p.Target, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["LastFired"]; ok {
-		p.LastFired, _ = strconv.ParseInt(v.(string), 10, 64)
+		p.LastFired = cast.ToInt64(v)
 	}
 	if v, ok := data["Status"]; ok {
 		p.Status, _ = ProximityStatusString(v.(string))
 	}
-
+	if v, ok := data["Flags"]; ok {
+		p.Flags, _ = ProximityFlagsString(v.(string))
+	}
 }
 
 func (p *ProximityState) Serialize() map[string]any {
@@ -74,6 +79,7 @@ func (p *ProximityState) Serialize() map[string]any {
 	result["Target"] = p.Target.String()
 	result["LastFired"] = strconv.FormatInt(p.LastFired, 10)
 	result["Status"] = p.Status.String()
+	result["Flags"] = p.Flags.String()
 
 	return result
 }

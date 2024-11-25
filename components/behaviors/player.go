@@ -9,6 +9,8 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type Player struct {
@@ -63,7 +65,7 @@ func (p *Player) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Spawn"]; ok {
-		p.Spawn = v.(bool)
+		p.Spawn = cast.ToBool(v)
 	}
 
 	if v, ok := data["Inventory"]; ok {

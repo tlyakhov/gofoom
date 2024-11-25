@@ -51,7 +51,7 @@ func (a *Actor) Construct(data map[string]any) {
 		a.Start, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["NoZ"]; ok {
-		a.NoZ = v.(bool)
+		a.NoZ = cast.ToBool(v)
 	}
 	if v, ok := data["Lifetime"]; ok {
 		if l, err := dynamic.AnimationLifetimeString(v.(string)); err == nil {

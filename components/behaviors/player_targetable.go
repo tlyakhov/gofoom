@@ -4,8 +4,13 @@
 package behaviors
 
 import (
+	"bytes"
+	"fmt"
+	"text/template"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type PlayerTargetable struct {
@@ -14,6 +19,8 @@ type PlayerTargetable struct {
 	Selected     core.Script `editable:"Selected"`
 	UnSelected   core.Script `editable:"UnSelected"`
 	Message      string      `editable:"Message"`
+
+	MessageTemplate *template.Template
 }
 
 var PlayerTargetableCID ecs.ComponentID
@@ -42,6 +49,19 @@ func (pt *PlayerTargetable) AttachECS(db *ecs.ECS) {
 	pt.UnSelected.AttachECS(db)
 }
 
+func (pt PlayerTargetable) ApplyMessage(e ecs.Entity) string {
+	if pt.MessageTemplate == nil {
+		return pt.Message
+	}
+
+	var buf bytes.Buffer
+	err := pt.MessageTemplate.Execute(&buf, e)
+	if err != nil {
+		return fmt.Sprintf("Error in message template %v: %v", pt.Message, err)
+	}
+	return buf.String()
+}
+
 func (pt *PlayerTargetable) Construct(data map[string]any) {
 	pt.Attached.Construct(data)
 
@@ -59,7 +79,7 @@ func (pt *PlayerTargetable) Construct(data map[string]any) {
 		pt.UnSelected.Construct(v.(map[string]any))
 	}
 	if v, ok := data["Message"]; ok {
-		pt.Message = v.(string)
+		pt.Message = cast.ToString(v)
 	}
 }
 
