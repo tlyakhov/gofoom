@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"text/template"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/ecs"
@@ -55,5 +56,10 @@ func (ptc *PlayerTargetableController) Recalculate() {
 	if !ptc.UnSelected.IsEmpty() {
 		ptc.UnSelected.Params = playerTargetableScriptParams
 		ptc.UnSelected.Compile()
+	}
+	var err error
+	ptc.MessageTemplate, err = template.New("message").Parse(ptc.Message)
+	if err != nil {
+		ptc.MessageTemplate, _ = template.New("error").Parse("Error: " + err.Error())
 	}
 }

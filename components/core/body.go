@@ -10,8 +10,6 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/concepts"
-
-	"github.com/spf13/cast"
 )
 
 type Body struct {
@@ -133,24 +131,13 @@ func (b *Body) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Pos"]; ok {
-		v3 := v.(map[string]any)
-		if _, ok2 := v3["X"]; ok2 {
-			v3 = map[string]any{"Spawn": v3}
-		}
-		b.Pos.Construct(v3)
+		b.Pos.Construct(v.(map[string]any))
 	}
 
 	if v, ok := data["Size"]; ok {
-		v2 := v.(map[string]any)
-		if _, ok2 := v2["X"]; ok2 {
-			v2 = map[string]any{"Spawn": v2}
-		}
-		b.Size.Construct(v2)
+		b.Size.Construct(v.(map[string]any))
 	}
 	if v, ok := data["Angle"]; ok {
-		if v2, err := cast.ToFloat64E(v); err == nil {
-			v = map[string]any{"Spawn": v2}
-		}
 		b.Angle.Construct(v.(map[string]any))
 	}
 }

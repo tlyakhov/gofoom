@@ -9,6 +9,8 @@ import (
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type InventorySlot struct {
@@ -30,7 +32,7 @@ func (s *InventorySlot) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Limit"]; ok {
-		s.Limit, _ = strconv.Atoi(v.(string))
+		s.Limit = cast.ToInt(v)
 	}
 	if v, ok := data["Count"]; ok {
 		s.Count.Construct(v.(map[string]any))

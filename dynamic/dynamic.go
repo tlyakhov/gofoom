@@ -248,7 +248,7 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Procedural"]; ok {
-		d.Procedural = v.(bool)
+		d.Procedural = cast.ToBool(v)
 	}
 	if v, ok := data["Freq"]; ok {
 		d.Freq = cast.ToFloat64(v)

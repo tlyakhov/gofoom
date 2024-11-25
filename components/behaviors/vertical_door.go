@@ -82,7 +82,7 @@ func (vd *VerticalDoor) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["AutoClose"]; ok {
-		vd.AutoClose = v.(bool)
+		vd.AutoClose = cast.ToBool(v)
 	}
 	if v, ok := data["TweeningFunc"]; ok {
 		name := v.(string)

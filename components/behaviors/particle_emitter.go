@@ -88,7 +88,7 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 		pe.Vel = cast.ToFloat64(v)
 	}
 	if v, ok := data["Limit"]; ok {
-		pe.Limit, _ = strconv.Atoi(v.(string))
+		pe.Limit = cast.ToInt(v)
 	}
 	if v, ok := data["Source"]; ok {
 		pe.Source, _ = ecs.ParseEntity(v.(string))

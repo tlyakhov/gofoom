@@ -203,7 +203,11 @@ func MovePlayerNoClip(db *ecs.ECS, e ecs.Entity, angle float64) {
 	}
 }
 
-func PickUpInventoryItem(p *behaviors.Player, item *behaviors.InventoryItem) {
+func PickUpInventoryItem(p *behaviors.Player, itemEntity ecs.Entity) {
+	item := behaviors.GetInventoryItem(p.ECS, itemEntity)
+	if item == nil || !item.Active {
+		return
+	}
 	for _, slot := range p.Inventory {
 		if !slot.ValidClasses.Contains(item.Class) {
 			continue
@@ -215,10 +219,10 @@ func PickUpInventoryItem(p *behaviors.Player, item *behaviors.InventoryItem) {
 		toAdd := concepts.Min(item.Count.Now, slot.Limit-slot.Count.Now)
 		slot.Count.Now += toAdd
 		p.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)
-		item.Count.Now -= toAdd
+		//item.Count.Now -= toAdd
 		// Disable all the entity components
-		for _, c := range item.ECS.AllComponents(item.Entity) {
-			if c != nil {
+		for _, c := range item.ECS.AllComponents(itemEntity) {
+			if c != nil && !c.MultiAttachable() {
 				c.Base().Active = false
 			}
 		}

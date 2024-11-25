@@ -121,7 +121,7 @@ func (db *ECS) Link(target Entity, source Entity) {
 // attached, this method will overwrite it.
 func (db *ECS) attach(entity Entity, component Attachable, componentID ComponentID) Attachable {
 	if entity == 0 {
-		log.Printf("Tried to attach 0 entity!")
+		log.Printf("ECS.attach: tried to attach 0 entity!")
 		return nil
 	}
 
@@ -150,13 +150,13 @@ func (db *ECS) attach(entity Entity, component Attachable, componentID Component
 	} else if ec != nil {
 		// We have a conflict between the provided component and an existing one
 		// with the same component ID. We should abort.
-		log.Printf("ECS.upsert: Entity %v already has a component %v. Aborting!", entity, Types().ColumnPlaceholders[componentID].String())
+		log.Printf("ECS.attach: Entity %v already has a component %v. Aborting!", entity, Types().ColumnPlaceholders[componentID].String())
 		return nil
 	}
 
 	a := component.Base()
 	if a.Attachments > 0 && !component.MultiAttachable() {
-		log.Printf("ECS.upsert: Component %v is already attached to %v and not multi-attachable.", component.String(), a.Entity)
+		log.Printf("ECS.attach: Component %v is already attached to %v and not multi-attachable.", component.String(), a.Entity)
 	}
 	a.Entities.Set(entity)
 	a.Entity = entity
@@ -174,7 +174,7 @@ func (db *ECS) NewAttachedComponent(entity Entity, id ComponentID) Attachable {
 }
 
 func (db *ECS) LoadAttachComponent(id ComponentID, data map[string]any, ignoreSerializedEntity bool) Attachable {
-	entities, attachments := LoadEntitiesFromJson(data)
+	entities, attachments := LoadEntitiesFromMap(data)
 	if ignoreSerializedEntity || attachments == 0 {
 		entities = make(EntityTable, 0)
 		entities.Set(db.NewEntity())
@@ -327,33 +327,33 @@ func (db *ECS) GetEntityByName(name string) Entity {
 	return 0
 }
 
-func (db *ECS) DeserializeAndAttachEntity(jsonEntityComponents map[string]any) {
-	var jsonEntity string
+func (db *ECS) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
+	var yamlEntity string
 	var entity Entity
 	var ok bool
 	var err error
-	if jsonEntityComponents["Entity"] == nil {
-		log.Printf("ECS.DeserializeAndAttachEntity: json object doesn't have entity key")
+	if yamlEntityComponents["Entity"] == nil {
+		log.Printf("ECS.DeserializeAndAttachEntity: yaml object doesn't have entity key")
 		return
 	}
-	if jsonEntity, ok = jsonEntityComponents["Entity"].(string); !ok {
-		log.Printf("ECS.DeserializeAndAttachEntity: json entity isn't string")
+	if yamlEntity, ok = yamlEntityComponents["Entity"].(string); !ok {
+		log.Printf("ECS.DeserializeAndAttachEntity: yaml entity isn't string")
 		return
 	}
-	if entity, err = ParseEntity(jsonEntity); err != nil {
-		log.Printf("ECS.DeserializeAndAttachEntity: json entity can't be parsed: %v", err)
+	if entity, err = ParseEntity(yamlEntity); err != nil {
+		log.Printf("ECS.DeserializeAndAttachEntity: yaml entity can't be parsed: %v", err)
 		return
 	}
 
 	db.Entities.Set(uint32(entity))
 
 	for name, cid := range Types().IDs {
-		jsonData := jsonEntityComponents[name]
-		if jsonData == nil {
+		yamlData := yamlEntityComponents[name]
+		if yamlData == nil {
 			continue
 		}
-		if jsonLink, ok := jsonData.(string); ok {
-			linkedEntity, _ := ParseEntity(jsonLink)
+		if yamlLink, ok := yamlData.(string); ok {
+			linkedEntity, _ := ParseEntity(yamlLink)
 			if linkedEntity != 0 {
 				c := db.Component(linkedEntity, cid)
 				if c != nil {
@@ -361,10 +361,10 @@ func (db *ECS) DeserializeAndAttachEntity(jsonEntityComponents map[string]any) {
 				}
 			}
 		} else {
-			jsonComponent := jsonData.(map[string]any)
+			yamlComponent := yamlData.(map[string]any)
 			attached := db.attach(entity, nil, cid)
 			if attached.Base().Attachments == 1 {
-				attached.Construct(jsonComponent)
+				attached.Construct(yamlComponent)
 			}
 		}
 	}
@@ -387,19 +387,19 @@ func (db *ECS) Load(filename string) error {
 		return err
 	}
 
-	var jsonEntities []any
+	var yamlEntities []any
 	var ok bool
-	if jsonEntities, ok = parsed.([]any); !ok || jsonEntities == nil {
-		return fmt.Errorf("ECS JSON root must be an array")
+	if yamlEntities, ok = parsed.([]any); !ok || yamlEntities == nil {
+		return fmt.Errorf("ECS.Load: YAML root must be an array")
 	}
 
-	for _, jsonData := range jsonEntities {
-		jsonEntity := jsonData.(map[string]any)
-		if jsonEntity == nil {
-			log.Printf("ECS JSON array element should be an object\n")
+	for _, yamlData := range yamlEntities {
+		yamlEntity := yamlData.(map[string]any)
+		if yamlEntity == nil {
+			log.Printf("ECS.Load: YAML array element should be an object")
 			continue
 		}
-		db.DeserializeAndAttachEntity(jsonEntity)
+		db.DeserializeAndAttachEntity(yamlEntity)
 	}
 
 	// After everything's loaded, trigger the controllers
@@ -409,8 +409,8 @@ func (db *ECS) Load(filename string) error {
 }
 
 func (db *ECS) serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {
-	jsonEntity := make(map[string]any)
-	jsonEntity["Entity"] = entity.String()
+	yamlEntity := make(map[string]any)
+	yamlEntity["Entity"] = entity.String()
 	for _, component := range db.rows[int(entity)] {
 		if component == nil || component.IsSystem() {
 			continue
@@ -418,26 +418,26 @@ func (db *ECS) serializeEntity(entity Entity, savedComponents map[uint64]Entity)
 		cid := component.Base().ComponentID
 		hash := (uint64(component.Base().indexInColumn) << 16) | (uint64(cid) & 0xFFFF)
 		col := Types().ColumnPlaceholders[cid]
-		jsonID := col.Type().String()
+		yamlID := col.Type().String()
 
 		if savedComponents == nil {
-			jsonComponent := component.Serialize()
-			delete(jsonComponent, "Entities")
-			jsonEntity[jsonID] = jsonComponent
+			yamlComponent := component.Serialize()
+			delete(yamlComponent, "Entities")
+			yamlEntity[yamlID] = yamlComponent
 		} else if savedEntity, ok := savedComponents[hash]; ok {
-			jsonEntity[jsonID] = savedEntity.String()
+			yamlEntity[yamlID] = savedEntity.String()
 		} else {
-			jsonComponent := component.Serialize()
-			delete(jsonComponent, "Entities")
-			jsonEntity[jsonID] = jsonComponent
+			yamlComponent := component.Serialize()
+			delete(yamlComponent, "Entities")
+			yamlEntity[yamlID] = yamlComponent
 			savedComponents[hash] = entity
 		}
 
 	}
-	if len(jsonEntity) == 1 {
+	if len(yamlEntity) == 1 {
 		return nil
 	}
-	return jsonEntity
+	return yamlEntity
 }
 
 func (db *ECS) SerializeEntity(entity Entity) map[string]any {
@@ -447,19 +447,19 @@ func (db *ECS) SerializeEntity(entity Entity) map[string]any {
 func (db *ECS) Save(filename string) {
 	db.Lock.Lock()
 	defer db.Lock.Unlock()
-	jsonECS := make([]any, 0)
+	yamlECS := make([]any, 0)
 	savedComponents := make(map[uint64]Entity)
 
 	db.Entities.Range(func(entity uint32) {
-		jsonEntity := db.serializeEntity(Entity(entity), savedComponents)
-		if len(jsonEntity) == 0 {
+		yamlEntity := db.serializeEntity(Entity(entity), savedComponents)
+		if len(yamlEntity) == 0 {
 			return
 		}
-		jsonECS = append(jsonECS, jsonEntity)
+		yamlECS = append(yamlECS, yamlEntity)
 	})
 
-	bytes, err := yaml.Marshal(jsonECS)
-	//bytes, err := json.MarshalIndent(jsonECS, "", "  ")
+	bytes, err := yaml.Marshal(yamlECS)
+	//bytes, err := json.MarshalIndent(yamlECS, "", "  ")
 
 	if err != nil {
 		panic(err)

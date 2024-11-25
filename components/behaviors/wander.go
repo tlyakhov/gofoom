@@ -52,7 +52,7 @@ func (w *Wander) Construct(data map[string]any) {
 		w.Force = cast.ToFloat64(v)
 	}
 	if v, ok := data["AsImpulse"]; ok {
-		w.AsImpulse = v.(bool)
+		w.AsImpulse = cast.ToBool(v)
 	}
 }
 

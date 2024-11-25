@@ -89,7 +89,7 @@ func ParseEntityCSV(csv string) EntityTable {
 	return entities
 }
 
-func LoadEntitiesFromJson(data map[string]any) (EntityTable, int) {
+func LoadEntitiesFromMap(data map[string]any) (EntityTable, int) {
 	jsonEntities := data["Entities"]
 	if v, ok := data["Entity"]; ok && jsonEntities == nil {
 		jsonEntities = v
