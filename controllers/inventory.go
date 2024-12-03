@@ -17,8 +17,14 @@ func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) 
 	}
 	player := behaviors.GetPlayer(ic.ECS, ic.Entity)
 
-	for _, slot := range ic.Inventory {
-		if !slot.ValidClasses.Contains(item.Class) {
+	for _, e := range ic.Inventory {
+		if e == 0 {
+			continue
+		}
+
+		slot := behaviors.GetInventorySlot(ic.ECS, e)
+
+		if slot == nil || slot.Class != item.Class {
 			continue
 		}
 		if slot.Count.Now >= slot.Limit {
@@ -39,18 +45,5 @@ func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) 
 				c.Base().Active = false
 			}
 		}
-	}
-}
-
-func LinkWeapons(ic *behaviors.InventoryCarrier, item *behaviors.InventoryItem) {
-	col := ecs.ColumnFor[behaviors.WeaponClass](item.ECS, behaviors.WeaponClassCID)
-	for i := range col.Cap() {
-		wc := col.Value(i)
-		if wc == nil || !wc.Active {
-			continue
-		}
-		if ecs.GetNamed(wc.ECS, wc.Entity) {
-		}
-
 	}
 }

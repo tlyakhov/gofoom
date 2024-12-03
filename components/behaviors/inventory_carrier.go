@@ -4,15 +4,18 @@
 package behaviors
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
+// Can be attached to either a player or an NPC
 type InventoryCarrier struct {
 	ecs.Attached `editable:"^"`
 
-	Inventory     []*InventorySlot `editable:"Inventory"`
-	CurrentWeapon *InventorySlot
+	Inventory ecs.EntityTable `editable:"Inventory" edit_type:"InventorySlot"`
+	// TODO: Add flexibility, e.g. dual wielding, alts, etc...
+	SelectedWeapon ecs.Entity
 }
 
 var InventoryCarrierCID ecs.ComponentID
@@ -36,31 +39,22 @@ func (ic *InventoryCarrier) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Inventory"]; ok {
-		ic.Inventory = ecs.ConstructSlice[*InventorySlot](ic.ECS, v, nil)
+		ic.Inventory = ecs.ParseEntityTable(v)
 	}
 
-	if v, ok := data["CurrentWeapon"]; ok {
-		index, _ := strconv.Atoi(v.(string))
-		if index >= 0 && index < len(ic.Inventory) {
-			ic.CurrentWeapon = ic.Inventory[index]
-		}
+	if v, ok := data["SelectedWeapon"]; ok {
+		ic.SelectedWeapon, _ = ecs.ParseEntity(cast.ToString(v))
 	}
 }
 
 func (ic *InventoryCarrier) Serialize() map[string]any {
 	result := ic.Attached.Serialize()
 
-	if len(ic.Inventory) > 0 {
-		result["Inventory"] = ecs.SerializeSlice(ic.Inventory)
+	result["Inventory"] = ic.Inventory.Serialize()
+
+	if ic.SelectedWeapon != 0 {
+		result["SelectedWeapon"] = ic.SelectedWeapon.String()
 	}
-	if ic.CurrentWeapon != nil {
-		for i, slot := range ic.Inventory {
-			if slot != ic.CurrentWeapon {
-				continue
-			}
-			result["CurrentWeapon"] = strconv.Itoa(i)
-			break
-		}
-	}
+
 	return result
 }

@@ -89,22 +89,27 @@ func ParseEntityCSV(csv string) EntityTable {
 	return entities
 }
 
-func LoadEntitiesFromMap(data map[string]any) (EntityTable, int) {
-	jsonEntities := data["Entities"]
-	if v, ok := data["Entity"]; ok && jsonEntities == nil {
-		jsonEntities = v
+func ParseEntityTable(data any) EntityTable {
+	var entities EntityTable
+	if s, ok := data.(string); ok {
+		entities = ParseEntityCSV(s)
+	} else if arr, ok := data.([]string); ok {
+		entities = DeserializeEntities(arr)
+	} else if arr, ok := data.([]any); ok {
+		entities = DeserializeEntities(arr)
 	}
-	if jsonEntities == nil {
+	return entities
+}
+
+func ParseEntitiesFromMap(data map[string]any) (EntityTable, int) {
+	dataEntities := data["Entities"]
+	if v, ok := data["Entity"]; ok && dataEntities == nil {
+		dataEntities = v
+	}
+	if dataEntities == nil {
 		return nil, 0
 	}
-	var entities EntityTable
-	if s, ok := jsonEntities.(string); ok {
-		entities = ParseEntityCSV(s)
-	} else if arr, ok := jsonEntities.([]string); ok {
-		entities = DeserializeEntities(arr)
-	} else if arr, ok := jsonEntities.([]any); ok {
-		entities = DeserializeEntities(arr)
-	}
+	entities := ParseEntityTable(dataEntities)
 	attachments := 0
 	for _, e := range entities {
 		if e != 0 {

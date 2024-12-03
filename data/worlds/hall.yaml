@@ -1,27 +1,16 @@
 - Entity: "1"
   behaviors.Alive:
     Health: 100
+  behaviors.InventoryCarrier:
+    Inventory: []
   behaviors.Player:
-    Inventory:
-      - Count:
-          Now: "0"
-          Spawn: "0"
-        Image: "133"
-        Limit: "1"
-        ValidClasses: WeirdGun
-      - Count:
-          Now: "0"
-          Spawn: "0"
-        Image: "98"
-        Limit: "100"
-        ValidClasses: Flower,Pluk
     Spawn: false
   core.Body:
     Angle:
-      Now: 257.34375
+      Now: 225
       Spawn: 0
     Pos:
-      Now: 53.70605949163325, -116.50775297605942, 20
+      Now: -275.3195281516606, 232.55363682259932, -44.00000000000001
       Spawn: -390, 180, -44
     Size:
       Now: 15, 40
@@ -34,7 +23,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.0000000000000000000000000000000000000000000000000000000000004600120415255853, -0.0000000000000000000000000000000000000000000000000000000000020485454785310526, 0.007001650411977742
+      Now: 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035, -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035, 0.007001650411977742
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -1465,7 +1454,7 @@
       Code: |
         if carrier == nil || body == nil { return }
         controllers.PickUpInventoryItem(carrier, body.Entity)
-    Message: Pick up item {{.}}
+    Message: Pick up item {{(ecs_Named .).Name}}
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
@@ -1482,11 +1471,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.953125
+        Percent: 0.9296875
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -400, 60, -51.912109375
+      Now: -400, 60, -51.80224609375
       Spawn: -400, 60, -52
     Size:
       Now: 20, 20
@@ -2051,18 +2040,17 @@
     Speed: 350
     Start: "135"
   behaviors.ActorState:
-    Action: "146"
+    Action: "147"
   behaviors.Alive:
     Health: 100
-  behaviors.WeaponInstant:
-    Class: "148"
+  behaviors.WeaponInstant: {}
   core.Body:
     Angle:
-      Now: 4859.675135926649
+      Now: 6205.78717092543
       Procedural: true
       Spawn: 155.9558816022554
     Pos:
-      Now: -136.13982251080697, -191.32979657979203, 16
+      Now: -306.1448847803722, 37.59051281980549, -47.99999999999999
       Spawn: -10, -30, -50
     Size:
       Now: 32, 32
@@ -2076,7 +2064,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: -1.049603385538073, 0.007591415451063641, 0.02608716004921969
+      Now: 0.0782176422899131, 1.0489823784836838, 0.0260871610303606
       Spawn: 0, 0, 0
   ecs.Named:
     Name: FlubTest
@@ -3869,7 +3857,7 @@
         Hi:
           Material: "123"
           Transform:
-            Now: 1, 0, 0, 0, 0.00015625, 0.99984130859375
+            Now: 1, 0, 0, 0, 1.28, -0.30000000000000004
             Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
         Lo:
           Material: "2"
@@ -3893,11 +3881,11 @@
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
-          Reverse: true
+          Percent: 1
+          Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: 64
+        Now: 0
         Spawn: 64
   ecs.Linked:
     Sources:
@@ -3919,7 +3907,7 @@
       - Hi:
           Material: "2"
           Transform:
-            Now: 1, 0, 0, 0, 0.003375000000000017, 0.996625
+            Now: 1, 0, 0, 0, 2.6367187500000132e-05, 0.9999736328125
             Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
         Lo:
           Material: "2"
@@ -3937,7 +3925,7 @@
       - Hi:
           Material: "2"
           Transform:
-            Now: 1, 0, 0, 0, 0.003375000000000017, 0.996625
+            Now: 1, 0, 0, 0, 2.6367187500000132e-05, 0.9999736328125
             Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
         Lo:
           Material: "2"
@@ -3948,7 +3936,7 @@
         Hi:
           Material: "123"
           Transform:
-            Now: 1, 0, 0, 0, 1.6, -0.6
+            Now: 1, 0, 0, 0, 0.0125, 0.9875
             Spawn: 1, 0, 0, 0, 1.6, -0.6
         Lo:
           Material: "2"
@@ -3960,16 +3948,16 @@
         Material: "122"
       Z:
         Animation:
-          Active: false
+          Active: true
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: -64
           Lifetime: AnimationLifetimeOnce
-          Percent: 1
-          Reverse: false
+          Percent: 0.0546875
+          Reverse: true
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: -64
+        Now: 63.234375
         Spawn: 64
   ecs.Linked:
     Sources:
@@ -5686,20 +5674,10 @@
 - Entity: "126"
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:  
+  behaviors.InventoryCarrier:
     Inventory:
-      - Count:
-          Now: "0"
-          Spawn: "0"
-        Image: "133"
-        Limit: "1"
-        ValidClasses: WeirdGun
-      - Count:
-          Now: "0"
-          Spawn: "0"
-        Image: "98"
-        Limit: "100"
-        ValidClasses: Flower,Pluk
+      - "189"
+      - "169"
   behaviors.Player:
     Spawn: true
   core.Body:
@@ -5798,11 +5776,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.6484375
+        Percent: 0.671875
         Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -260, 60, -47.88134765625
+      Now: -260, 60, -48.181640625
       Spawn: -260, 60, -52
     Size:
       Now: 20, 20
@@ -5942,6 +5920,8 @@
     Damage: 10
     MarkMaterial: "113"
     Spread: 0
+  ecs.Named:
+    Name: WeirdGun
 - Entity: "149"
   core.Sector:
     Bottom:
@@ -6025,7 +6005,6 @@
       - "166"
       - "167"
       - "168"
-      - "169"
       - "170"
       - "171"
       - "172"
@@ -6042,28 +6021,23 @@
       - "184"
       - "185"
       - "186"
-      - "187"
       - "188"
-      - "189"
-      - "157"
-      - "159"
+      - "156"
       - "160"
       - "161"
       - "162"
       - "163"
-      - "164"
     Source: "153"
     Vel: 15
     XYSpread: 10
     ZSpread: 10
-  behaviors.WeaponInstant:
-    Class: "148"
+  behaviors.WeaponInstant: {}
   core.Body:
     Angle:
       Now: 180
       Spawn: 180
     Pos:
-      Now: 860, -574.4801074230327, 32
+      Now: 860, -361.0354811857443, 32
       Procedural: true
       Spawn: 860, -710, 32
     Size:
@@ -6104,10 +6078,7 @@
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
-- Entity: "157"
-  materials.Image: "153"
-  materials.Lit: "153"
-- Entity: "159"
+- Entity: "156"
   materials.Image: "153"
   materials.Lit: "153"
 - Entity: "160"
@@ -6120,9 +6091,6 @@
   materials.Image: "153"
   materials.Lit: "153"
 - Entity: "163"
-  materials.Image: "153"
-  materials.Lit: "153"
-- Entity: "164"
   materials.Image: "153"
   materials.Lit: "153"
 - Entity: "165"
@@ -6138,8 +6106,18 @@
   materials.Image: "153"
   materials.Lit: "153"
 - Entity: "169"
-  materials.Image: "153"
-  materials.Lit: "153"
+  behaviors.InventorySlot:
+    Class: WeirdGun
+    Count:
+      Now: "0"
+      Spawn: "0"
+    Image: "132"
+    Limit: "1"
+  behaviors.WeaponClass:
+    Cooldown: 100
+    Damage: 10
+    MarkMaterial: "113"
+    Spread: 0
 - Entity: "170"
   materials.Image: "153"
   materials.Lit: "153"
@@ -6207,15 +6185,17 @@
 - Entity: "186"
   materials.Image: "153"
   materials.Lit: "153"
-- Entity: "187"
-  materials.Image: "153"
-  materials.Lit: "153"
 - Entity: "188"
   materials.Image: "153"
   materials.Lit: "153"
 - Entity: "189"
-  materials.Image: "153"
-  materials.Lit: "153"
+  behaviors.InventorySlot:
+    Class: Flower
+    Count:
+      Now: "0"
+      Spawn: "0"
+    Image: "98"
+    Limit: "100"
 - Entity: "191"
   core.Sector:
     Bottom:

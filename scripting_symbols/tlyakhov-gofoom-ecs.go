@@ -24,11 +24,12 @@ func init() {
 		"GetLinked":                reflect.ValueOf(ecs.GetLinked),
 		"GetNamed":                 reflect.ValueOf(ecs.GetNamed),
 		"LinkedCID":                reflect.ValueOf(&ecs.LinkedCID).Elem(),
-		"LoadEntitiesFromMap":      reflect.ValueOf(ecs.LoadEntitiesFromMap),
 		"NamedCID":                 reflect.ValueOf(&ecs.NamedCID).Elem(),
 		"NewECS":                   reflect.ValueOf(ecs.NewECS),
+		"ParseEntitiesFromMap":     reflect.ValueOf(ecs.ParseEntitiesFromMap),
 		"ParseEntity":              reflect.ValueOf(ecs.ParseEntity),
 		"ParseEntityCSV":           reflect.ValueOf(ecs.ParseEntityCSV),
+		"ParseEntityTable":         reflect.ValueOf(ecs.ParseEntityTable),
 		"Types":                    reflect.ValueOf(ecs.Types),
 
 		// type definitions

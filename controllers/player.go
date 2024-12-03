@@ -109,11 +109,24 @@ func (pc *PlayerController) Always() {
 	// If we have a weapon, select it
 	// TODO: This should be handled by an inventory UI of some kind,
 	// or at least a 1...N quick-select
-	/*for _, item := range pc.Inventory {
-		if w := behaviors.GetWeaponInstant(pc.ECS, item.Entity); w != nil {
-			pc.CurrentWeapon = item.Entity
+	for _, e := range pc.Carrier.Inventory {
+		if e == 0 {
+			continue
 		}
-	}*/
+		slot := behaviors.GetInventorySlot(pc.ECS, e)
+		// TODO: Put this into an InventoryCarrier controller
+		if slot.Carrier != pc.Carrier {
+			slot.Carrier = pc.Carrier
+		}
+
+		if slot.Count.Now <= 0 {
+			continue
+		}
+		if w := behaviors.GetWeaponInstant(pc.ECS, e); w != nil {
+			pc.Carrier.SelectedWeapon = e
+			break
+		}
+	}
 
 	// This section handles frobbing
 
