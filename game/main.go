@@ -107,8 +107,8 @@ func integrateGame() {
 	if inMenu {
 		menuInput()
 	} else if renderer.Player != nil {
-		if len(renderer.Player.Inventory) == 2 && renderer.Player.Inventory[InventoryWeirdGun].Count.Now > 0 {
-			renderer.Player.CurrentWeapon = renderer.Player.Inventory[InventoryWeirdGun]
+		if len(renderer.Carrier.Inventory) == 2 && renderer.Carrier.Inventory[InventoryWeirdGun].Count.Now > 0 {
+			renderer.Carrier.CurrentWeapon = renderer.Carrier.Inventory[InventoryWeirdGun]
 		}
 		gameInput()
 		db.ActAllControllers(ecs.ControllerAlways)

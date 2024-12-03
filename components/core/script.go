@@ -116,7 +116,7 @@ func (s *Script) IsEmpty() bool {
 	return len(s.Code) == 0
 }
 
-func (s *Script) AttachECS(db *ecs.ECS) {
+func (s *Script) OnAttach(db *ecs.ECS) {
 	s.ECS = db
 }
 

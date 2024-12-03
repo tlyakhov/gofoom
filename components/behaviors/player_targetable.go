@@ -42,11 +42,11 @@ func (pt *PlayerTargetable) String() string {
 	return "PlayerTargetable"
 }
 
-func (pt *PlayerTargetable) AttachECS(db *ecs.ECS) {
-	pt.Attached.AttachECS(db)
-	pt.Frob.AttachECS(db)
-	pt.Selected.AttachECS(db)
-	pt.UnSelected.AttachECS(db)
+func (pt *PlayerTargetable) OnAttach(db *ecs.ECS) {
+	pt.Attached.OnAttach(db)
+	pt.Frob.OnAttach(db)
+	pt.Selected.OnAttach(db)
+	pt.UnSelected.OnAttach(db)
 }
 
 func (pt PlayerTargetable) ApplyMessage(e ecs.Entity) string {

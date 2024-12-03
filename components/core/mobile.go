@@ -63,8 +63,8 @@ func (m *Mobile) OnDelete() {
 	}
 }
 
-func (m *Mobile) AttachECS(db *ecs.ECS) {
-	m.Attached.AttachECS(db)
+func (m *Mobile) OnAttach(db *ecs.ECS) {
+	m.Attached.OnAttach(db)
 	m.Vel.Attach(db.Simulation)
 }
 

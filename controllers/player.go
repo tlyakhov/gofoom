@@ -20,9 +20,10 @@ import (
 type PlayerController struct {
 	ecs.BaseController
 	*behaviors.Player
-	Alive  *behaviors.Alive
-	Body   *core.Body
-	Mobile *core.Mobile
+	Alive   *behaviors.Alive
+	Body    *core.Body
+	Mobile  *core.Mobile
+	Carrier *behaviors.InventoryCarrier
 }
 
 func init() {
@@ -49,6 +50,10 @@ func (pc *PlayerController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	}
 	pc.Alive = behaviors.GetAlive(pc.ECS, pc.Entity)
 	if pc.Alive == nil || !pc.Alive.IsActive() {
+		return false
+	}
+	pc.Carrier = behaviors.GetInventoryCarrier(pc.ECS, pc.Entity)
+	if pc.Carrier == nil || !pc.Carrier.IsActive() {
 		return false
 	}
 	pc.Mobile = core.GetMobile(pc.ECS, pc.Entity)
@@ -135,6 +140,7 @@ func (pc *PlayerController) Always() {
 			if pt := behaviors.GetPlayerTargetable(pc.ECS, prevTarget); pt != nil && pt.UnSelected.IsCompiled() {
 				pt.UnSelected.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
 				pt.UnSelected.Vars["player"] = pc.Player
+				pt.UnSelected.Vars["carrier"] = pc.Carrier
 				pt.UnSelected.Act()
 			}
 		}
@@ -142,6 +148,7 @@ func (pc *PlayerController) Always() {
 			if pt := behaviors.GetPlayerTargetable(pc.ECS, pc.SelectedTarget); pt != nil && pt.Selected.IsCompiled() {
 				pt.Selected.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
 				pt.Selected.Vars["player"] = pc.Player
+				pt.Selected.Vars["carrier"] = pc.Carrier
 				pt.Selected.Act()
 			}
 		}
@@ -151,6 +158,7 @@ func (pc *PlayerController) Always() {
 		if pt := behaviors.GetPlayerTargetable(pc.ECS, pc.SelectedTarget); pt != nil && pt.Frob.IsCompiled() {
 			pt.Frob.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
 			pt.Frob.Vars["player"] = pc.Player
+			pt.Frob.Vars["carrier"] = pc.Carrier
 			pt.Frob.Act()
 		}
 	}
@@ -203,22 +211,28 @@ func MovePlayerNoClip(db *ecs.ECS, e ecs.Entity, angle float64) {
 	}
 }
 
-func PickUpInventoryItem(p *behaviors.Player, itemEntity ecs.Entity) {
-	item := behaviors.GetInventoryItem(p.ECS, itemEntity)
+func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) {
+	item := behaviors.GetInventoryItem(ic.ECS, itemEntity)
 	if item == nil || !item.Active {
 		return
 	}
-	for _, slot := range p.Inventory {
+	player := behaviors.GetPlayer(ic.ECS, ic.Entity)
+
+	for _, slot := range ic.Inventory {
 		if !slot.ValidClasses.Contains(item.Class) {
 			continue
 		}
 		if slot.Count.Now >= slot.Limit {
-			p.Notices.Push("Can't pick up more " + item.Class)
+			if player != nil {
+				player.Notices.Push("Can't pick up more " + item.Class)
+			}
 			return
 		}
 		toAdd := concepts.Min(item.Count.Now, slot.Limit-slot.Count.Now)
 		slot.Count.Now += toAdd
-		p.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)
+		if player != nil {
+			player.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)
+		}
 		//item.Count.Now -= toAdd
 		// Disable all the entity components
 		for _, c := range item.ECS.AllComponents(itemEntity) {

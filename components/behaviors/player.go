@@ -4,7 +4,6 @@
 package behaviors
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
@@ -19,10 +18,8 @@ type Player struct {
 	Spawn         bool
 	FrameTint     concepts.Vector4
 	Crouching     bool
-	Inventory     []*InventorySlot `editable:"Inventory"`
 	Bob           float64
 	CameraZ       float64
-	CurrentWeapon *InventorySlot
 	ActionPressed bool
 
 	SelectedTarget  ecs.Entity
@@ -67,17 +64,6 @@ func (p *Player) Construct(data map[string]any) {
 	if v, ok := data["Spawn"]; ok {
 		p.Spawn = cast.ToBool(v)
 	}
-
-	if v, ok := data["Inventory"]; ok {
-		p.Inventory = ecs.ConstructSlice[*InventorySlot](p.ECS, v, nil)
-	}
-
-	if v, ok := data["CurrentWeapon"]; ok {
-		index, _ := strconv.Atoi(v.(string))
-		if index >= 0 && index < len(p.Inventory) {
-			p.CurrentWeapon = p.Inventory[index]
-		}
-	}
 }
 
 func (p *Player) Serialize() map[string]any {
@@ -85,17 +71,5 @@ func (p *Player) Serialize() map[string]any {
 
 	result["Spawn"] = p.Spawn
 
-	if len(p.Inventory) > 0 {
-		result["Inventory"] = ecs.SerializeSlice(p.Inventory)
-	}
-	if p.CurrentWeapon != nil {
-		for i, slot := range p.Inventory {
-			if slot != p.CurrentWeapon {
-				continue
-			}
-			result["CurrentWeapon"] = strconv.Itoa(i)
-			break
-		}
-	}
 	return result
 }

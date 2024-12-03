@@ -58,8 +58,8 @@ func (b *Body) OnDelete() {
 	}
 }
 
-func (b *Body) AttachECS(db *ecs.ECS) {
-	b.Attached.AttachECS(db)
+func (b *Body) OnAttach(db *ecs.ECS) {
+	b.Attached.OnAttach(db)
 	b.Pos.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
 	b.Angle.Attach(b.ECS.Simulation)

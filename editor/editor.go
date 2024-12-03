@@ -389,7 +389,7 @@ func (e *Editor) NewShader() {
 		eShader := e.ECS.NewEntity()
 		shader := e.ECS.NewAttachedComponent(eImg, materials.ShaderCID).(*materials.Shader)
 		stage := &materials.ShaderStage{}
-		stage.AttachECS(e.ECS)
+		stage.OnAttach(e.ECS)
 		stage.Construct(nil)
 		stage.Material = eImg
 		shader.Stages = append(shader.Stages, stage)
