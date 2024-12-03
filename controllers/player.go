@@ -5,7 +5,6 @@ package controllers
 
 import (
 	"math"
-	"strconv"
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -208,37 +207,5 @@ func MovePlayerNoClip(db *ecs.ECS, e ecs.Entity, angle float64) {
 		p.SectorEntity = sector.Entity
 		p.Pos.Now[2] = sector.Center[2]
 		player.CameraZ = p.Pos.Now[2]
-	}
-}
-
-func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) {
-	item := behaviors.GetInventoryItem(ic.ECS, itemEntity)
-	if item == nil || !item.Active {
-		return
-	}
-	player := behaviors.GetPlayer(ic.ECS, ic.Entity)
-
-	for _, slot := range ic.Inventory {
-		if !slot.ValidClasses.Contains(item.Class) {
-			continue
-		}
-		if slot.Count.Now >= slot.Limit {
-			if player != nil {
-				player.Notices.Push("Can't pick up more " + item.Class)
-			}
-			return
-		}
-		toAdd := concepts.Min(item.Count.Now, slot.Limit-slot.Count.Now)
-		slot.Count.Now += toAdd
-		if player != nil {
-			player.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)
-		}
-		//item.Count.Now -= toAdd
-		// Disable all the entity components
-		for _, c := range item.ECS.AllComponents(itemEntity) {
-			if c != nil && !c.MultiAttachable() {
-				c.Base().Active = false
-			}
-		}
 	}
 }
