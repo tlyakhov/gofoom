@@ -38,7 +38,7 @@ func (vd *VerticalDoorController) Target(target ecs.Attachable, e ecs.Entity) bo
 
 func (vd *VerticalDoorController) setupAnimation() {
 	a := vd.Sector.Top.Z.NewAnimation()
-	//a.AttachECS(vd.ECS)
+	//a.OnAttach(vd.ECS)
 	a.Construct(nil)
 	a.Start = vd.Sector.Top.Z.Spawn
 	a.End = vd.Sector.Bottom.Z.Spawn

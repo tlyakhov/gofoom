@@ -30,8 +30,8 @@ func (timed *ActionTimed) OnDelete() {
 	timed.Attached.OnDelete()
 }
 
-func (timed *ActionTimed) AttachECS(db *ecs.ECS) {
-	timed.Attached.AttachECS(db)
+func (timed *ActionTimed) OnAttach(db *ecs.ECS) {
+	timed.Attached.OnAttach(db)
 	timed.Delay.Attach(db.Simulation)
 }
 

@@ -46,8 +46,8 @@ func (t *Text) OnDelete() {
 		t.Color.Detach(t.ECS.Simulation)
 	}
 }
-func (t *Text) AttachECS(db *ecs.ECS) {
-	t.Attached.AttachECS(db)
+func (t *Text) OnAttach(db *ecs.ECS) {
+	t.Attached.OnAttach(db)
 	t.Color.Attach(db.Simulation)
 }
 

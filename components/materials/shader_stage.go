@@ -121,7 +121,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 	return result
 }
 
-func (s *ShaderStage) AttachECS(db *ecs.ECS) {
+func (s *ShaderStage) OnAttach(db *ecs.ECS) {
 	s.ECS = db
 }
 

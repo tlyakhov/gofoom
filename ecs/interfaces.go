@@ -11,7 +11,7 @@ type Serializable interface {
 	Construct(data map[string]any)
 	IsSystem() bool
 	Serialize() map[string]any
-	AttachECS(db *ECS)
+	OnAttach(db *ECS)
 	GetECS() *ECS
 }
 type SubSerializable interface {

@@ -58,7 +58,7 @@ func (a *Attached) SetColumnIndex(i int) {
 	a.indexInColumn = i
 }
 
-func (a *Attached) AttachECS(db *ECS) {
+func (a *Attached) OnAttach(db *ECS) {
 	a.ECS = db
 }
 
@@ -97,7 +97,7 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].AttachECS(db)
+			result[i].OnAttach(db)
 			if hook != nil {
 				hook(result[i])
 			}
@@ -107,7 +107,7 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].AttachECS(db)
+			result[i].OnAttach(db)
 			if hook != nil {
 				hook(result[i])
 			}

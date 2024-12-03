@@ -27,6 +27,7 @@ type Config struct {
 	FrameTint                 [4]float64
 	Player                    *behaviors.Player
 	PlayerBody                *core.Body
+	Carrier                   *behaviors.InventoryCarrier
 
 	RenderLock sync.Mutex
 }
@@ -56,7 +57,8 @@ func (c *Config) RefreshPlayer() {
 			continue
 		}
 		c.Player = player
-		c.PlayerBody = core.GetBody(c.ECS, c.Player.Entity)
+		c.PlayerBody = core.GetBody(c.ECS, player.Entity)
+		c.Carrier = behaviors.GetInventoryCarrier(c.ECS, player.Entity)
 		return
 	}
 }

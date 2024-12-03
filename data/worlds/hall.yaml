@@ -1463,8 +1463,8 @@
   behaviors.PlayerTargetable:
     Frob:
       Code: |
-        if player == nil || body == nil { return }
-        controllers.PickUpInventoryItem(player, body.Entity)
+        if carrier == nil || body == nil { return }
+        controllers.PickUpInventoryItem(carrier, body.Entity)
     Message: Pick up item {{.}}
   behaviors.Proximity:
     Hysteresis: 0
@@ -5686,7 +5686,7 @@
 - Entity: "126"
   behaviors.Alive:
     Health: 100
-  behaviors.Player:
+  behaviors.InventoryCarrier:  
     Inventory:
       - Count:
           Now: "0"
@@ -5700,6 +5700,7 @@
         Image: "98"
         Limit: "100"
         ValidClasses: Flower,Pluk
+  behaviors.Player:
     Spawn: true
   core.Body:
     Angle:

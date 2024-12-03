@@ -19,6 +19,11 @@ type InventorySlot struct {
 	Limit        int                    `editable:"Limit"`
 	Count        dynamic.Spawned[int]   `editable:"Count"`
 	Image        ecs.Entity             `editable:"Image" edit_type:"Material"`
+
+	// TODO: Instead, in the future, maybe it makes sense to have inventory slots
+	// be their own entities, and just hang WeaponInstant (or similar) function
+	// components off of those.
+	WeaponState ecs.Entity
 }
 
 func (s *InventorySlot) Construct(data map[string]any) {
@@ -40,6 +45,9 @@ func (s *InventorySlot) Construct(data map[string]any) {
 	if v, ok := data["Image"]; ok {
 		s.Image, _ = ecs.ParseEntity(v.(string))
 	}
+	if v, ok := data["State"]; ok {
+		s.WeaponState, _ = ecs.ParseEntity(v.(string))
+	}
 	if v, ok := data["ValidClasses"]; ok {
 		classes := strings.Split(v.(string), ",")
 		for _, c := range classes {
@@ -56,7 +64,12 @@ func (s *InventorySlot) Serialize() map[string]any {
 	data := make(map[string]any)
 	data["Limit"] = strconv.Itoa(s.Limit)
 	data["Count"] = s.Count.Serialize()
-	data["Image"] = s.Image.String()
+	if s.Image != 0 {
+		data["Image"] = s.Image.String()
+	}
+	if s.WeaponState != 0 {
+		data["WeaponState"] = s.WeaponState.String()
+	}
 	classes := ""
 	for c := range s.ValidClasses {
 		if len(classes) > 0 {
@@ -68,7 +81,7 @@ func (s *InventorySlot) Serialize() map[string]any {
 	return data
 }
 
-func (s *InventorySlot) AttachECS(db *ecs.ECS) {
+func (s *InventorySlot) OnAttach(db *ecs.ECS) {
 	s.ECS = db
 }
 func (s *InventorySlot) GetECS() *ecs.ECS {

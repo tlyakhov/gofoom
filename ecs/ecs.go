@@ -199,7 +199,7 @@ func (db *ECS) LoadComponentWithoutAttaching(id ComponentID, data map[string]any
 		return nil
 	}
 	component := Types().ColumnPlaceholders[id].New()
-	component.AttachECS(db)
+	component.OnAttach(db)
 	component.Construct(data)
 	return component
 }

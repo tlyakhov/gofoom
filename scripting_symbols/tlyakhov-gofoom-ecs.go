@@ -61,22 +61,19 @@ func init() {
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_ecs_Attachable struct {
 	IValue           interface{}
-	WAttachECS       func(db *ecs.ECS)
 	WBase            func() *ecs.Attached
 	WConstruct       func(data map[string]any)
 	WGetECS          func() *ecs.ECS
 	WIsActive        func() bool
 	WIsSystem        func() bool
 	WMultiAttachable func() bool
+	WOnAttach        func(db *ecs.ECS)
 	WOnDelete        func()
 	WOnDetach        func(a0 ecs.Entity)
 	WSerialize       func() map[string]any
 	WString          func() string
 }
 
-func (W _tlyakhov_gofoom_ecs_Attachable) AttachECS(db *ecs.ECS) {
-	W.WAttachECS(db)
-}
 func (W _tlyakhov_gofoom_ecs_Attachable) Base() *ecs.Attached {
 	return W.WBase()
 }
@@ -94,6 +91,9 @@ func (W _tlyakhov_gofoom_ecs_Attachable) IsSystem() bool {
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) MultiAttachable() bool {
 	return W.WMultiAttachable()
+}
+func (W _tlyakhov_gofoom_ecs_Attachable) OnAttach(db *ecs.ECS) {
+	W.WOnAttach(db)
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) OnDelete() {
 	W.WOnDelete()
@@ -201,16 +201,13 @@ func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable, a1 ecs.Entity
 // _tlyakhov_gofoom_ecs_Serializable is an interface wrapper for Serializable type
 type _tlyakhov_gofoom_ecs_Serializable struct {
 	IValue     interface{}
-	WAttachECS func(db *ecs.ECS)
 	WConstruct func(data map[string]any)
 	WGetECS    func() *ecs.ECS
 	WIsSystem  func() bool
+	WOnAttach  func(db *ecs.ECS)
 	WSerialize func() map[string]any
 }
 
-func (W _tlyakhov_gofoom_ecs_Serializable) AttachECS(db *ecs.ECS) {
-	W.WAttachECS(db)
-}
 func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
@@ -219,6 +216,9 @@ func (W _tlyakhov_gofoom_ecs_Serializable) GetECS() *ecs.ECS {
 }
 func (W _tlyakhov_gofoom_ecs_Serializable) IsSystem() bool {
 	return W.WIsSystem()
+}
+func (W _tlyakhov_gofoom_ecs_Serializable) OnAttach(db *ecs.ECS) {
+	W.WOnAttach(db)
 }
 func (W _tlyakhov_gofoom_ecs_Serializable) Serialize() map[string]any {
 	return W.WSerialize()

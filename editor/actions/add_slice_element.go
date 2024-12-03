@@ -44,7 +44,7 @@ func (a *AddSliceElement) Redo() {
 	}
 
 	if serializable, ok := newValue.Interface().(ecs.Serializable); ok {
-		serializable.AttachECS(a.State().ECS)
+		serializable.OnAttach(a.State().ECS)
 		serializable.Construct(nil)
 	} else if subSerializable, ok := newValue.Interface().(ecs.SubSerializable); ok {
 		subSerializable.Construct(a.State().ECS, nil)

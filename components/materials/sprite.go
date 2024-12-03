@@ -43,8 +43,8 @@ func (s *Sprite) OnDelete() {
 	}
 }
 
-func (s *Sprite) AttachECS(db *ecs.ECS) {
-	s.Attached.AttachECS(db)
+func (s *Sprite) OnAttach(db *ecs.ECS) {
+	s.Attached.OnAttach(db)
 	s.Frame.Attach(db.Simulation)
 
 }

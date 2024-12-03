@@ -35,8 +35,8 @@ func (s *Solid) OnDelete() {
 		s.Diffuse.Detach(s.ECS.Simulation)
 	}
 }
-func (s *Solid) AttachECS(db *ecs.ECS) {
-	s.Attached.AttachECS(db)
+func (s *Solid) OnAttach(db *ecs.ECS) {
+	s.Attached.OnAttach(db)
 	s.Diffuse.Attach(s.ECS.Simulation)
 }
 

@@ -40,10 +40,10 @@ func (r *Renderer) RenderHud() {
 		}
 	}
 
-	for i, slot := range r.Player.Inventory {
+	for i, slot := range r.Carrier.Inventory {
 		r.BitBlt(slot.Image, i*40+10, r.ScreenHeight-42, 32, 32)
 		r.Print(ts, i*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
-		if slot == r.Player.CurrentWeapon {
+		if slot == r.Carrier.CurrentWeapon {
 			r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128)
 		}
 	}

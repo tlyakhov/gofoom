@@ -119,8 +119,8 @@ func (s *Sector) OnDelete() {
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 }
 
-func (s *Sector) AttachECS(db *ecs.ECS) {
-	s.Attached.AttachECS(db)
+func (s *Sector) OnAttach(db *ecs.ECS) {
+	s.Attached.OnAttach(db)
 	s.Top.Z.Attach(db.Simulation)
 	s.Bottom.Z.Attach(db.Simulation)
 }
