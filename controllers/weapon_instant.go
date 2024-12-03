@@ -6,6 +6,7 @@ package controllers
 import (
 	"log"
 	"math"
+	"math/rand/v2"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -65,19 +66,24 @@ func (wc *WeaponInstantController) Target(target ecs.Attachable, e ecs.Entity) b
 // This is similar to the code for lighting
 func (wc *WeaponInstantController) Cast() *selection.Selectable {
 	var s *selection.Selectable
+
+	angle := wc.Body.Angle.Now + (rand.Float64()-0.5)*wc.Class.Spread
+	zSpread := (rand.Float64() - 0.5) * wc.Class.Spread
+
 	wc.MaterialSampler.Config = &render.Config{ECS: wc.Body.ECS}
-	wc.MaterialSampler.Ray = &render.Ray{Angle: wc.Body.Angle.Now}
+	wc.MaterialSampler.Ray = &render.Ray{Angle: angle}
 
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
 	idist2 := 0.0
 	p := &wc.Body.Pos.Now
-	wc.delta[0] = math.Cos(wc.Body.Angle.Now * concepts.Deg2rad)
-	wc.delta[1] = math.Sin(wc.Body.Angle.Now * concepts.Deg2rad)
+	wc.delta[0] = math.Cos(angle * concepts.Deg2rad)
+	wc.delta[1] = math.Sin(angle * concepts.Deg2rad)
+	wc.delta[2] = math.Sin(zSpread * concepts.Deg2rad)
 
 	rayEnd := &concepts.Vector3{
 		p[0] + wc.delta[0]*constants.MaxViewDistance,
 		p[1] + wc.delta[1]*constants.MaxViewDistance,
-		p[2]}
+		p[2] + wc.delta[2]*constants.MaxViewDistance}
 
 	sector := wc.Body.Sector()
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
@@ -240,7 +246,7 @@ func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *selection.Selectab
 	surf, bottom, top := wc.MarkSurface(s, wc.hit.To2D())
 	// This is reversed because our UV coordinates go top->bottom
 	transform[concepts.MatBasis2Y] = (bottom - top)
-	transform[concepts.MatTransY] = -(wc.Body.Pos.Now[2] - top)
+	transform[concepts.MatTransY] = -(wc.hit[2] - top)
 
 	transform[concepts.MatBasis1X] *= scale
 	transform[concepts.MatBasis2Y] *= scale
