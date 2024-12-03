@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
@@ -21,7 +22,7 @@ import (
 type StringLikeType interface {
 	concepts.Vector2 | concepts.Vector3 | concepts.Vector4 |
 		*concepts.Vector2 | *concepts.Vector3 | *concepts.Vector4 |
-		ecs.EntityTable | []ecs.Entity
+		ecs.EntityTable | []ecs.Entity | containers.Set[ecs.ComponentID]
 }
 
 func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
@@ -42,6 +43,8 @@ func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
 		return currentValue.String()
 	case *[]ecs.Entity:
 		return (ecs.EntityTable)(*currentValue).String()
+	case *containers.Set[ecs.ComponentID]:
+		return ecs.SerializeComponentIDs(*currentValue)
 	}
 	return ""
 }
@@ -75,6 +78,9 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			parsed, err = concepts.ParseVector3(text)
 		case **concepts.Vector4:
 			parsed, err = concepts.ParseVector4(text)
+		case *containers.Set[ecs.ComponentID]:
+			ids := ecs.ParseComponentIDs(text)
+			parsed = &ids
 		case *ecs.EntityTable:
 			entities := ecs.ParseEntityCSV(text)
 			parsed = &entities
@@ -119,6 +125,8 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 		case *ecs.EntityTable:
 			currentValue = parsed.(PT)
 		case *[]ecs.Entity:
+			currentValue = parsed.(PT)
+		case *containers.Set[ecs.ComponentID]:
 			currentValue = parsed.(PT)
 		}
 		g.ApplySetPropertyAction(field, reflect.ValueOf(currentValue).Elem())

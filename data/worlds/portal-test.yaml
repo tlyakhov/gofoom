@@ -5,13 +5,13 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 169.05739764584405
+      Now: 226.40625
       Spawn: 0
     Pos:
-      Now: -27.189815074812525, 419.82012877033515, 12
-      Spawn: -90, 60, 0
+      Now: -100, 70, 5
+      Spawn: -100, 70, 0
     Size:
-      Now: 10, 40
+      Now: 10, 10
       Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.000044332299942046354, 0.000008996979317273735, 0.007001650399223819
+      Now: 0.0000000000000000000000000000000000000000000000000000000000000000000000000000007868827880359441, 0.0000000000000000000000000000000000000000000000000000000000000000000000000000008264888384149453, 0.007001650399223597
       Spawn: 0, 0, 0
 - Entity: "2"
   ecs.Named:
@@ -125,6 +125,7 @@
   behaviors.Alive:
     Health: 100
   behaviors.InventoryCarrier:
+    Inventory: []
   behaviors.Player:
     Spawn: true
   core.Body:
@@ -342,32 +343,25 @@
     Speed: 50
     Start: "57"
   behaviors.ActorState:
-    Action: "76"
+    Action: "63"
   behaviors.ParticleEmitter:
     Limit: "10"
     Particles:
+      - "67"
       - "68"
       - "69"
       - "70"
-      - "71"
-      - "72"
-      - "73"
-      - "74"
-      - "77"
-      - "80"
-      - "66"
-      - "67"
     Source: "86"
     Vel: 15
     XYSpread: 10
     ZSpread: 10
   core.Body:
     Angle:
-      Now: -16729.329539410734
+      Now: -17901.294358226354
       Procedural: true
       Spawn: 0
     Pos:
-      Now: -279.3724350307221, -34.229415444844896, 25
+      Now: -83.41172387716057, 109.00353530392037, 25
       Procedural: true
       Spawn: -280, 30, 32
     Size:
@@ -519,7 +513,7 @@
         Hi:
           Material: "32"
           Transform:
-            Now: 1, 0, 0, 0, 0.8, 0
+            Now: 1, 0, 0, 0, 0.780859375, 0.02392578125
             Spawn: 1, 0, 0, 0, 0.8, 0
         Lo:
           Material: "2"
@@ -531,16 +525,16 @@
         Material: "2"
       Z:
         Animation:
-          Active: false
+          Active: true
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 1
+          Percent: 0.890625
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: 0
+        Now: 1.53125
         Spawn: 64
 - Entity: "17"
   core.Body:
@@ -1402,7 +1396,7 @@
         Surface:
           Material: "2"
           Transform:
-            Now: 0.1282051282051282, 0, 0, 0, 0, 1
+            Now: 0.1282051282051282, 0, 0, 0, 0.02392578125, 0.97607421875
             Spawn: 0.1282051282051282, 0, 0, 0, 1, 0
       - AdjacentSector: "50"
         Hi:
@@ -1420,13 +1414,13 @@
         Surface:
           Material: "2"
           Transform:
-            Now: 0.1282051320259389, 0, 0, 0, 0, 1
+            Now: 0.1282051320259389, 0, 0, 0, 0.02392578125, 0.97607421875
             Spawn: 0.1282051320259389, 0, 0, 0, 1, 0
       - AdjacentSector: "22"
         Hi:
           Material: "32"
           Transform:
-            Now: 1, 0, 0, 0, 1.1142857142857143, -0.1
+            Now: 1, 0, 0, 0, 1.0876255580357144, -0.073681640625
             Spawn: 1, 0, 0, 0, 1.1142857142857143, -0.1
         Lo:
           Material: "2"
@@ -1441,16 +1435,16 @@
         Material: "2"
       Z:
         Animation:
-          Active: false
+          Active: true
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: -14
           Lifetime: AnimationLifetimeOnce
-          Percent: 1
+          Percent: 0.890625
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: -14
+        Now: -12.1337890625
         Spawn: 64
 - Entity: "50"
   core.Sector:
@@ -1789,27 +1783,17 @@
       - "60"
   behaviors.ActionWaypoint:
     P: -90, 150, 25
-- Entity: "66"
+- Entity: "67"
   materials.Image:
     Filter: false
     GenerateMipMaps: true
     Source: data/game/acid-bubble.png
-- Entity: "67"
-  materials.Image: "66"
 - Entity: "68"
-  materials.Image: "66"
+  materials.Image: "67"
 - Entity: "69"
-  materials.Image: "66"
+  materials.Image: "67"
 - Entity: "70"
-  materials.Image: "66"
-- Entity: "71"
-  materials.Image: "66"
-- Entity: "72"
-  materials.Image: "66"
-- Entity: "73"
-  materials.Image: "66"
-- Entity: "74"
-  materials.Image: "66"
+  materials.Image: "67"
 - Entity: "75"
   behaviors.ActionTransition:
     Next:
@@ -1822,16 +1806,12 @@
       - "75"
   behaviors.ActionWaypoint:
     P: -310, -40, 25
-- Entity: "77"
-  materials.Image: "66"
 - Entity: "78"
   behaviors.Proximity: "56"
   ecs.Named:
     Name: Add Body to Player's targeting
-- Entity: "80"
-  materials.Image: "66"
 - Entity: "86"
-  materials.Image: "66"
+  materials.Image: "67"
 - Entity: "125"
   behaviors.ActorState:
     Action: "58"

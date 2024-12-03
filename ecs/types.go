@@ -8,6 +8,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"tlyakhov/gofoom/containers"
 
 	"github.com/traefik/yaegi/interp"
 )
@@ -82,4 +83,27 @@ func (ecsTypes *typeMetadata) ID(c Attachable) ComponentID {
 		return id
 	}
 	return 0
+}
+
+func SerializeComponentIDs(ids containers.Set[ComponentID]) string {
+	s := ""
+	for id := range ids {
+		if len(s) > 0 {
+			s += ","
+		}
+		s += Types().ColumnPlaceholders[id].String()
+	}
+	return s
+}
+
+func ParseComponentIDs(ids string) containers.Set[ComponentID] {
+	result := make(containers.Set[ComponentID])
+	split := strings.Split(ids, ",")
+	for _, s := range split {
+		id := Types().IDs[strings.Trim(s, " \t\r\n")]
+		if id != 0 {
+			result.Add(id)
+		}
+	}
+	return result
 }

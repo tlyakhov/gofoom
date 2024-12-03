@@ -82,7 +82,7 @@ func ParseEntityCSV(csv string) EntityTable {
 	entities := make(EntityTable, 0)
 	split := strings.Split(csv, ",")
 	for _, s := range split {
-		if e, err := ParseEntity(s); err == nil {
+		if e, err := ParseEntity(strings.Trim(s, " \t\r\n")); err == nil {
 			entities.Set(e)
 		}
 	}

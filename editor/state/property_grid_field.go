@@ -12,24 +12,34 @@ import (
 	"tlyakhov/gofoom/dynamic"
 )
 
-var EmbeddedTypes = [...]string{
-	reflect.TypeFor[*core.Script]().String(),
-	reflect.TypeFor[*core.SectorPlane]().String(),
-	reflect.TypeFor[*dynamic.DynamicValue[float64]]().String(),
-	reflect.TypeFor[*dynamic.DynamicValue[int]]().String(),
-	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector2]]().String(),
-	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector3]]().String(),
-	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector4]]().String(),
-	reflect.TypeFor[*dynamic.DynamicValue[concepts.Matrix2]]().String(),
-	reflect.TypeFor[*materials.Surface]().String(),
-	reflect.TypeFor[*materials.ShaderStage]().String(),
-	reflect.TypeFor[*materials.Sprite]().String(),
-	reflect.TypeFor[**dynamic.Animation[float64]]().String(),
-	reflect.TypeFor[**dynamic.Animation[int]]().String(),
-	reflect.TypeFor[**dynamic.Animation[concepts.Vector2]]().String(),
-	reflect.TypeFor[**dynamic.Animation[concepts.Vector3]]().String(),
-	reflect.TypeFor[**dynamic.Animation[concepts.Vector4]]().String(),
-	reflect.TypeFor[**dynamic.Animation[concepts.Matrix2]]().String(),
+var EmbeddedTypes = map[string]struct{}{
+	reflect.TypeFor[*core.Script]().String():      {},
+	reflect.TypeFor[*core.SectorPlane]().String(): {},
+
+	reflect.TypeFor[*dynamic.Spawned[float64]]().String():          {},
+	reflect.TypeFor[*dynamic.Spawned[int]]().String():              {},
+	reflect.TypeFor[*dynamic.Spawned[concepts.Vector2]]().String(): {},
+	reflect.TypeFor[*dynamic.Spawned[concepts.Vector3]]().String(): {},
+	reflect.TypeFor[*dynamic.Spawned[concepts.Vector4]]().String(): {},
+	reflect.TypeFor[*dynamic.Spawned[concepts.Matrix2]]().String(): {},
+
+	reflect.TypeFor[*dynamic.DynamicValue[float64]]().String():          {},
+	reflect.TypeFor[*dynamic.DynamicValue[int]]().String():              {},
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector2]]().String(): {},
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector3]]().String(): {},
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Vector4]]().String(): {},
+	reflect.TypeFor[*dynamic.DynamicValue[concepts.Matrix2]]().String(): {},
+
+	reflect.TypeFor[*materials.Surface]().String():     {},
+	reflect.TypeFor[*materials.ShaderStage]().String(): {},
+	reflect.TypeFor[*materials.Sprite]().String():      {},
+
+	reflect.TypeFor[**dynamic.Animation[float64]]().String():          {},
+	reflect.TypeFor[**dynamic.Animation[int]]().String():              {},
+	reflect.TypeFor[**dynamic.Animation[concepts.Vector2]]().String(): {},
+	reflect.TypeFor[**dynamic.Animation[concepts.Vector3]]().String(): {},
+	reflect.TypeFor[**dynamic.Animation[concepts.Vector4]]().String(): {},
+	reflect.TypeFor[**dynamic.Animation[concepts.Matrix2]]().String(): {},
 }
 
 type PropertyGridField struct {
@@ -69,12 +79,6 @@ func (f *PropertyGridField) Short() string {
 }
 
 func (f *PropertyGridField) IsEmbeddedType() bool {
-	s := f.Type.String()
-	for _, t := range EmbeddedTypes {
-		//log.Printf("%v - %v", f.Short(), f.Type.String())
-		if s == t {
-			return true
-		}
-	}
-	return false
+	_, ok := EmbeddedTypes[f.Type.String()]
+	return ok
 }

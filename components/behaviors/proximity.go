@@ -5,7 +5,6 @@ package behaviors
 
 import (
 	"fmt"
-	"strings"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
@@ -102,13 +101,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["ValidComponents"]; ok {
-		split := strings.Split(v.(string), ",")
-		for _, s := range split {
-			id := ecs.Types().IDs[s]
-			if id != 0 {
-				p.ValidComponents.Add(id)
-			}
-		}
+		p.ValidComponents = ecs.ParseComponentIDs(cast.ToString(v))
 	}
 }
 
@@ -137,14 +130,7 @@ func (p *Proximity) Serialize() map[string]any {
 	}
 
 	if len(p.ValidComponents) > 0 {
-		s := ""
-		for id := range p.ValidComponents {
-			if len(s) > 0 {
-				s += ","
-			}
-			s += ecs.Types().ColumnPlaceholders[id].String()
-		}
-		result["ValidComponents"] = s
+		result["ValidComponents"] = ecs.SerializeComponentIDs(p.ValidComponents)
 	}
 
 	return result

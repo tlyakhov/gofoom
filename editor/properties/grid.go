@@ -403,6 +403,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			fieldStringLikeType[ecs.EntityTable](g, field)
 		case *[]ecs.Entity:
 			fieldStringLikeType[[]ecs.Entity](g, field)
+		case *containers.Set[ecs.ComponentID]:
+			fieldStringLikeType[containers.Set[ecs.ComponentID]](g, field)
 		case *concepts.Matrix2:
 			g.fieldMatrix2(field)
 		case *core.CollisionResponse:
@@ -422,8 +424,6 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		case *[]*materials.Sprite:
 			g.fieldSlice(field)
 		case *[]*materials.ShaderStage:
-			g.fieldSlice(field)
-		case *[]*behaviors.InventorySlot:
 			g.fieldSlice(field)
 		case *[]dynamic.Animated:
 			g.fieldSlice(field)
@@ -445,7 +445,7 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldAnimation(field)
 		default:
 			g.refreshIndex++
-			g.GridWidget.Add(widget.NewLabel("Unavailable"))
+			g.GridWidget.Add(widget.NewLabel("Unavailable: " + reflect.TypeOf(x).String()))
 		}
 	}
 	if len(g.GridWidget.Objects) > g.refreshIndex {

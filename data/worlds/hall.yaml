@@ -1643,8 +1643,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3estnvn27i2m3satqg
 - Entity: "36"
   core.Sector:
     Bottom:
@@ -1750,8 +1748,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be26u9vvn27vmb5f7bcg
 - Entity: "38"
   core.Sector:
     Bottom:
@@ -2183,8 +2179,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3dsc7vn27ho9jt57u0
 - Entity: "45"
   core.Sector:
     Bottom:
@@ -2421,8 +2415,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3eq5fvn27i2m3sahpg
 - Entity: "50"
   core.Sector:
     Bottom:
@@ -3059,8 +3051,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be26u7fvn27vmb5f7790
 - Entity: "65"
   core.Sector:
     Bottom:
@@ -3276,8 +3266,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: ckqbdsdmdsrmu07rpqsg
 - Entity: "70"
   core.Sector:
     Bottom:
@@ -3326,8 +3314,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3esufvn27i2m3sav10
 - Entity: "71"
   core.Sector:
     Bottom:
@@ -3394,8 +3380,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3dsc7vn27ho9jt56fg
 - Entity: "72"
   core.Sector:
     Bottom:
@@ -3681,8 +3665,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: ckqbdl5mdsrmu07rpql0
 - Entity: "77"
   core.Sector:
     Bottom:
@@ -3735,8 +3717,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3eq5fvn27i2m3saigg
 - Entity: "78"
   core.Body:
     Angle:
@@ -4168,8 +4148,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be26u7fvn27vmb5f78bg
 - Entity: "87"
   core.Sector:
     Bottom:
@@ -4350,8 +4328,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3eq5fvn27i2m3sais0
 - Entity: "90"
   core.Sector:
     Bottom:
@@ -4453,8 +4429,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be26u9vvn27vmb5f7b10
 - Entity: "92"
   core.Sector:
     Bottom:
@@ -4841,8 +4815,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be26uavvn27vmb5f7edg
 - Entity: "100"
   core.Sector:
     Bottom:
@@ -4993,8 +4965,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: be3dsc7vn27ho9jt5740
 - Entity: "104"
   core.Body:
     Angle:
@@ -5130,8 +5100,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 108
 - Entity: "109"
   core.Sector:
     Bottom:
@@ -5181,8 +5149,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 109
 - Entity: "110"
   core.Sector:
     Bottom:
@@ -5231,8 +5197,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 110
 - Entity: "111"
   core.Sector:
     Bottom:
@@ -5281,8 +5245,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 111
 - Entity: "112"
   core.Sector:
     Bottom:
@@ -5322,8 +5284,6 @@
       Z:
         Now: 80
         Spawn: 80
-  ecs.Named:
-    Name: Sector 112
 - Entity: "113"
   ecs.Named:
     Name: Weapon Mark
@@ -5373,8 +5333,6 @@
       Z:
         Now: 85
         Spawn: 85
-  ecs.Named:
-    Name: Sector 114
 - Entity: "115"
   core.Sector:
     Bottom:
@@ -5414,8 +5372,6 @@
       Z:
         Now: 90
         Spawn: 90
-  ecs.Named:
-    Name: Sector 115
 - Entity: "116"
   core.Sector:
     Bottom:
@@ -5455,8 +5411,6 @@
       Z:
         Now: 95
         Spawn: 95
-  ecs.Named:
-    Name: Sector 116
 - Entity: "117"
   core.Sector:
     Bottom:
@@ -5496,8 +5450,6 @@
       Z:
         Now: 95
         Spawn: 95
-  ecs.Named:
-    Name: Sector 117
 - Entity: "118"
   core.Sector:
     Bottom:
@@ -5544,8 +5496,6 @@
       Z:
         Now: 100
         Spawn: 100
-  ecs.Named:
-    Name: Sector 118
 - Entity: "119"
   ecs.Named:
     Name: HUD Font 2
@@ -5609,8 +5559,6 @@
       Z:
         Now: 110
         Spawn: 110
-  ecs.Named:
-    Name: Sector 120
 - Entity: "121"
   core.Body:
     Angle:
@@ -5767,6 +5715,8 @@
   behaviors.PlayerTargetable: "32"
   behaviors.Proximity: "32"
   behaviors.WeaponInstant: {}
+  ecs.Named:
+    Name: Weird Gun
   core.Body:
     Angle:
       Now: 0
@@ -5919,7 +5869,8 @@
     Cooldown: 100
     Damage: 10
     MarkMaterial: "113"
-    Spread: 0
+    Spread: 3
+    MarkSize: 2.5
   ecs.Named:
     Name: WeirdGun
 - Entity: "149"
@@ -6113,11 +6064,7 @@
       Spawn: "0"
     Image: "132"
     Limit: "1"
-  behaviors.WeaponClass:
-    Cooldown: 100
-    Damage: 10
-    MarkMaterial: "113"
-    Spread: 0
+  behaviors.WeaponClass: "148"
 - Entity: "170"
   materials.Image: "153"
   materials.Lit: "153"
@@ -6316,8 +6263,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 108
 - Entity: "193"
   core.Sector:
     Bottom:
@@ -6366,8 +6311,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 109
 - Entity: "206"
   core.Light:
     Attenuation: 0.4
@@ -6417,8 +6360,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 110
 - Entity: "220"
   core.Sector:
     Bottom:
@@ -6466,8 +6407,6 @@
       Z:
         Now: 64
         Spawn: 64
-  ecs.Named:
-    Name: Sector 111
 - Entity: "221"
   core.Sector:
     Bottom:
