@@ -59,7 +59,11 @@ func (ptc *PlayerTargetableController) Recalculate() {
 		ptc.UnSelected.Compile()
 	}
 	var err error
-	ptc.MessageTemplate, err = template.New("message").Parse(ptc.Message)
+	ptc.MessageTemplate, err = template.New("message").
+		Funcs(template.FuncMap{
+			"ECS": func() *ecs.ECS { return ptc.ECS },
+		}).Parse(ptc.Message)
+
 	if err != nil {
 		ptc.MessageTemplate, _ = template.New("error").Parse("Error: " + err.Error())
 	}
