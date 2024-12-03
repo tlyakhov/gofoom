@@ -13,7 +13,7 @@ import (
 )
 
 func (r *Renderer) RenderHud() {
-	if r.Player == nil {
+	if r.Player == nil || r.Carrier == nil {
 		return
 	}
 	ts := r.textStyle
@@ -40,12 +40,18 @@ func (r *Renderer) RenderHud() {
 		}
 	}
 
-	for i, slot := range r.Carrier.Inventory {
-		r.BitBlt(slot.Image, i*40+10, r.ScreenHeight-42, 32, 32)
-		r.Print(ts, i*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
-		if slot == r.Carrier.CurrentWeapon {
+	index := 0
+	for _, e := range r.Carrier.Inventory {
+		if e == 0 {
+			continue
+		}
+		slot := behaviors.GetInventorySlot(r.ECS, e)
+		r.BitBlt(slot.Image, index*40+10, r.ScreenHeight-42, 32, 32)
+		r.Print(ts, index*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
+		if e == r.Carrier.SelectedWeapon {
 			r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128)
 		}
+		index++
 	}
 }
 

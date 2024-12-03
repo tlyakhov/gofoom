@@ -59,12 +59,7 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Particles"]; ok {
-		var particles ecs.EntityTable
-		if s, ok := v.(string); ok {
-			particles = ecs.ParseEntityCSV(s)
-		} else {
-			particles = ecs.DeserializeEntities(v.([]any))
-		}
+		particles := ecs.ParseEntityTable(v)
 		for _, e := range particles {
 			if e != 0 {
 				pe.Spawned[e] = pe.ECS.Timestamp

@@ -51,11 +51,7 @@ func (transition *ActionTransition) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Next"]; ok {
-		if s, ok := v.(string); ok {
-			transition.Next = ecs.ParseEntityCSV(s)
-		} else {
-			transition.Next = ecs.DeserializeEntities(v.([]any))
-		}
+		transition.Next = ecs.ParseEntityTable(v)
 	}
 }
 

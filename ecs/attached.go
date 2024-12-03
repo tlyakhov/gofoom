@@ -73,7 +73,7 @@ func (a *Attached) Construct(data map[string]any) {
 		a.Active = v.(bool)
 	}
 	// TODO: Is this construction used anywhere? This should be happening in ECS
-	//a.Entities, a.Attachments = LoadEntitiesFromJson(data)
+	//a.Entities, a.Attachments = ParseEntitiesFromMap(data)
 }
 
 func (a *Attached) Serialize() map[string]any {

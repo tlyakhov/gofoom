@@ -65,8 +65,10 @@ func gameInput() {
 		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
 	}
 	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
-		if w := behaviors.GetWeaponInstant(renderer.ECS, renderer.Player.Entity); w != nil {
-			w.FireNextFrame = true
+		if renderer.Carrier.SelectedWeapon != 0 {
+			if w := behaviors.GetWeaponInstant(renderer.ECS, renderer.Carrier.SelectedWeapon); w != nil {
+				w.FireNextFrame = true
+			}
 		}
 	}
 
@@ -107,9 +109,9 @@ func integrateGame() {
 	if inMenu {
 		menuInput()
 	} else if renderer.Player != nil {
-		if len(renderer.Carrier.Inventory) == 2 && renderer.Carrier.Inventory[InventoryWeirdGun].Count.Now > 0 {
-			renderer.Carrier.CurrentWeapon = renderer.Carrier.Inventory[InventoryWeirdGun]
-		}
+		/*if len(renderer.Carrier.Inventory) == 2 && renderer.Carrier.Inventory[InventoryWeirdGun].Count.Now > 0 {
+			renderer.Carrier.SelectedWeaponSlot = renderer.Carrier.Inventory[InventoryWeirdGun]
+		}*/
 		gameInput()
 		db.ActAllControllers(ecs.ControllerAlways)
 	}

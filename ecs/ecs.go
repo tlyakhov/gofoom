@@ -5,9 +5,11 @@ package ecs
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"reflect"
+	"strings"
 	"sync"
 	"tlyakhov/gofoom/dynamic"
 
@@ -23,6 +25,7 @@ type ECS struct {
 	*dynamic.Simulation
 	Entities bitmap.Bitmap
 	Lock     sync.RWMutex
+	FuncMap  template.FuncMap
 
 	rows    []ComponentTable
 	columns []AttachableColumn
@@ -43,6 +46,10 @@ func (db *ECS) Clear() {
 	db.rows = make([]ComponentTable, 1)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = dynamic.NewSimulation()
+	db.FuncMap = template.FuncMap{
+		"ECS": func() *ECS { return db },
+	}
+
 	for i, columnPlaceholder := range Types().ColumnPlaceholders {
 		if columnPlaceholder == nil {
 			continue
@@ -52,6 +59,9 @@ func (db *ECS) Clear() {
 		t := reflect.TypeOf(columnPlaceholder)
 		db.columns[i] = reflect.New(t.Elem()).Interface().(AttachableColumn)
 		db.columns[i].From(columnPlaceholder, db)
+		fmName := columnPlaceholder.Type().String()
+		fmName = strings.ReplaceAll(fmName, ".", "_")
+		db.FuncMap[fmName] = func(e Entity) Attachable { return db.Component(e, columnPlaceholder.ID()) }
 	}
 }
 
@@ -174,7 +184,7 @@ func (db *ECS) NewAttachedComponent(entity Entity, id ComponentID) Attachable {
 }
 
 func (db *ECS) LoadAttachComponent(id ComponentID, data map[string]any, ignoreSerializedEntity bool) Attachable {
-	entities, attachments := LoadEntitiesFromMap(data)
+	entities, attachments := ParseEntitiesFromMap(data)
 	if ignoreSerializedEntity || attachments == 0 {
 		entities = make(EntityTable, 0)
 		entities.Set(db.NewEntity())

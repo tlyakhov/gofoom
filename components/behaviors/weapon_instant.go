@@ -9,10 +9,9 @@ import (
 	"github.com/gammazero/deque"
 )
 
+// Represents state for an instant-hit weapon (think railgun rather than rocket launcher)
 type WeaponInstant struct {
 	ecs.Attached `editable:"^"`
-
-	Class ecs.Entity `editable:"Class" edit_type:"Weapon"`
 
 	// Internal state
 	FireNextFrame bool `editable:"Fire Next Frame"`
@@ -44,18 +43,10 @@ func (w *WeaponInstant) Construct(data map[string]any) {
 	if data == nil {
 		return
 	}
-
-	if v, ok := data["Class"]; ok {
-		w.Class, _ = ecs.ParseEntity(v.(string))
-	}
 }
 
 func (w *WeaponInstant) Serialize() map[string]any {
 	result := w.Attached.Serialize()
-
-	if w.Class != 0 {
-		result["Class"] = w.Class.String()
-	}
 
 	return result
 }

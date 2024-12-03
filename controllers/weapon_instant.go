@@ -21,8 +21,11 @@ type WeaponInstantController struct {
 	ecs.BaseController
 	*behaviors.WeaponInstant
 	render.MaterialSampler
-	Body  *core.Body
-	Class *behaviors.WeaponClass
+
+	Slot    *behaviors.InventorySlot
+	Carrier *behaviors.InventoryCarrier
+	Class   *behaviors.WeaponClass
+	Body    *core.Body
 
 	delta, isect, hit concepts.Vector3
 	transform         concepts.Matrix2
@@ -43,9 +46,20 @@ func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {
 func (wc *WeaponInstantController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	wc.Entity = e
 	wc.WeaponInstant = target.(*behaviors.WeaponInstant)
-	wc.Class = behaviors.GetWeaponClass(wc.WeaponInstant.ECS, wc.WeaponInstant.Class)
-	wc.Body = core.GetBody(wc.WeaponInstant.ECS, wc.Entity)
-	return wc.WeaponInstant.IsActive() && wc.Body != nil && wc.Body.IsActive()
+	wc.Class = behaviors.GetWeaponClass(wc.WeaponInstant.ECS, e)
+	if wc.Class == nil || !wc.Class.IsActive() {
+		return false
+	}
+	wc.Slot = behaviors.GetInventorySlot(wc.WeaponInstant.ECS, e)
+	if wc.Slot == nil || !wc.Slot.IsActive() ||
+		wc.Slot.Carrier == nil || !wc.Slot.Carrier.IsActive() {
+		return false
+	}
+	// The source of our shot is the body attached to the inventory carrier
+	wc.Body = core.GetBody(wc.WeaponInstant.ECS, wc.Slot.Carrier.Entity)
+	return wc.WeaponInstant.IsActive() &&
+		wc.Body != nil && wc.Body.IsActive() &&
+		wc.Class != nil && wc.Class.IsActive()
 }
 
 // This is similar to the code for lighting
@@ -69,7 +83,7 @@ func (wc *WeaponInstantController) Cast() *selection.Selectable {
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	for sector != nil {
 		for _, b := range sector.Bodies {
-			if !b.Active || b.Entity == wc.Entity {
+			if !b.Active || b.Entity == wc.Body.Entity {
 				continue
 			}
 			if ok := wc.InitializeRayBody(p, rayEnd, b); ok {
@@ -215,11 +229,7 @@ func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *selection.Selectab
 	// and finally the translation in slots [4] & [5], which we set to the
 	// world position of the mark, relative to the segment
 	switch s.Type {
-	case selection.SelectableHi:
-		fallthrough
-	case selection.SelectableLow:
-		fallthrough
-	case selection.SelectableMid:
+	case selection.SelectableHi, selection.SelectableLow, selection.SelectableMid:
 		transform[concepts.MatBasis1X] = s.SectorSegment.Length
 		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(&s.SectorSegment.P)
 	case selection.SelectableInternalSegment:
@@ -294,6 +304,8 @@ func (wc *WeaponInstantController) Always() {
 			IgnoreSurfaceTransform: false,
 			System:                 true}
 		es.OnAttach(s.ECS)
+		es.Construct(nil)
+		es.Flags = 0
 		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
 		surf.ExtraStages = append(surf.ExtraStages, es)
 		es.Transform.From(&surf.Transform.Now)
