@@ -461,6 +461,7 @@ func (db *ECS) Save(filename string) {
 	savedComponents := make(map[uint64]Entity)
 
 	db.Entities.Range(func(entity uint32) {
+		log.Printf("e: %v", entity)
 		yamlEntity := db.serializeEntity(Entity(entity), savedComponents)
 		if len(yamlEntity) == 0 {
 			return
