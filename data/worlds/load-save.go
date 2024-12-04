@@ -6,14 +6,16 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"tlyakhov/gofoom/archetypes"
+	_ "tlyakhov/gofoom/archetypes"
+	_ "tlyakhov/gofoom/components/behaviors"
+	_ "tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 )
 
 func main() {
 	os.Chdir("../..")
 	filepath.Walk("./data/worlds/", func(path string, info fs.FileInfo, err error) error {
-		if !strings.HasSuffix(path, ".json") {
+		if !strings.HasSuffix(path, ".yaml") {
 			return nil
 		}
 		log.Printf("%v", path)
@@ -24,8 +26,8 @@ func main() {
 			return nil
 		}
 		//controllers.Respawn(db, true)
-		archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
-		db.Save(strings.Replace(path, ".json", ".yaml", -1))
+		//archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
+		db.Save(path)
 		return nil
 	})
 }

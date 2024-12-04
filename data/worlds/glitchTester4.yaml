@@ -1,4 +1,4 @@
-- Entity: "1"
+- Entity: ∈⋮1
   behaviors.Alive:
     Health: 100
   behaviors.Player:
@@ -8,7 +8,7 @@
         Now: 0
         Spawn: 0
     Pos:
-        Now: 0, 0, 0
+        Now: 0, 0, 20
         Spawn: 0, 0, 0
     Size:
         Now: 20, 40
@@ -25,7 +25,7 @@
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
-- Entity: "2"
+- Entity: ∈⋮2
   ecs.Named:
     Name: Default
   materials.Image:
@@ -35,200 +35,200 @@
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
-- Entity: "3"
+- Entity: ∈⋮3
   core.Sector:
     Bottom:
         Normal: 0.14834045293024467, 0, 0.9889363528682976
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 0
             Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: "4"
+        - AdjacentSector: ∈⋮4
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -160
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: -100, -160
           Surface:
-            Material: "2"
-        - AdjacentSector: "6"
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮6
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: -100, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
     Top:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 64
             Spawn: 64
   ecs.Named:
     Name: upper
-- Entity: "4"
+- Entity: ∈⋮4
   core.Sector:
     Bottom:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 0
             Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: "5"
+        - AdjacentSector: ∈⋮5
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 160, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 160, -160
           Surface:
-            Material: "2"
-        - AdjacentSector: "3"
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮3
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -160
           Surface:
-            Material: "2"
+            Material: ∈⋮2
     Top:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 64
             Spawn: 64
   ecs.Named:
     Name: ckg76htmdsrlum5blid0
-- Entity: "5"
+- Entity: ∈⋮5
   core.Sector:
     Bottom:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 0
             Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: "6"
+        - AdjacentSector: ∈⋮6
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, 100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 160, 100
           Surface:
-            Material: "2"
-        - AdjacentSector: "4"
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮4
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 160, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
     Top:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 64
             Spawn: 64
   ecs.Named:
     Name: lower
-- Entity: "6"
+- Entity: ∈⋮6
   core.Sector:
     Bottom:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 0
             Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: "3"
+        - AdjacentSector: ∈⋮3
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: -100, -100
           Surface:
-            Material: "2"
-        - AdjacentSector: "5"
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮5
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, 100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: -100, 100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
     Top:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 64
             Spawn: 64
   ecs.Named:
     Name: Starting
-- Entity: "7"
+- Entity: ∈⋮7
   core.Body:
     Angle:
         Now: 0
@@ -245,7 +245,7 @@
     Strength: 2
   ecs.Named:
     Name: ckg769lmdsrlum5bli80
-- Entity: "8"
+- Entity: ∈⋮8
   behaviors.Alive:
     Health: 100
   behaviors.Player:

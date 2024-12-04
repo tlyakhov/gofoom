@@ -11,6 +11,7 @@ import (
 )
 
 // TODO: Implement scripting
+// TODO: Muzzle flash
 type WeaponClass struct {
 	ecs.Attached `editable:"^"`
 
@@ -49,7 +50,7 @@ func (w *WeaponClass) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 	w.MarkSize = 5
 	w.Damage = 10
-	w.Spread = 0
+	w.Spread = 1
 	w.Cooldown = 100
 
 	if data == nil {

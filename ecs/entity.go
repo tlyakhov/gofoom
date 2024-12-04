@@ -4,6 +4,7 @@
 package ecs
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -11,18 +12,38 @@ import (
 
 type Entity int
 
+// Why the unicode prefix?
+//
+//	0x2208 ELEMENT OF
+//	0x22EE VERTICAL ELLIPSIS
+//
+// Because it gives us a few benefits:
+//  1. This sequence is unlikely to be used in some other context. It's a
+//     human- and machine-readable way to identify entities when
+//     serializing/deserializing.
+//  2. We can do complex transformations on serialized data, even when the
+//     file format is untyped (e.g. YAML/JSON). For example, we can create
+//     "common" data files, like prefabs, and #include them in other files,
+//     and have the ECS intelligently map the entity IDs across file boundaries.
+//  3. It forces target systems to be UTF-8 compliant - serialization will be entirely broken otherwise.
+const EntityPrefix = "∈⋮"
+const entityPrefixLength = len(EntityPrefix)
+
 func (e Entity) String() string {
-	return strconv.FormatInt(int64(e), 10)
+	return EntityPrefix + strconv.FormatInt(int64(e), 10)
 }
 
 func ParseEntity(e string) (Entity, error) {
-	v, err := strconv.ParseInt(e, 10, 32)
+	if !strings.HasPrefix(e, EntityPrefix) {
+		return 0, errors.New("Entity string should start with " + EntityPrefix)
+	}
+	v, err := strconv.ParseInt(e[entityPrefixLength:], 10, 32)
 	return Entity(v), err
 }
 
 func (e Entity) Format(db *ECS) string {
 	if e == 0 {
-		return "[0] Nothing"
+		return "[" + EntityPrefix + "0] Nothing"
 	}
 	var sb strings.Builder
 
@@ -48,7 +69,7 @@ func (e Entity) Format(db *ECS) string {
 
 func (e Entity) NameString(db *ECS) string {
 	if e == 0 {
-		return "0 - Nothing"
+		return EntityPrefix + "0 - Nothing"
 	}
 	id := e.String()
 	if named := GetNamed(db, e); named != nil {

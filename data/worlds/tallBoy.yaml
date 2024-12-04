@@ -1,4 +1,4 @@
-- Entity: "2"
+- Entity: ∈⋮2
   ecs.Named:
     Name: Default
   materials.Image:
@@ -8,54 +8,54 @@
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
-- Entity: "3"
+- Entity: ∈⋮3
   core.Sector:
     Bottom:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 0
             Spawn: 0
     FloorFriction: 0.85
     Segments:
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: -320, -100
           Surface:
-            Material: "2"
-        - AdjacentSector: "5"
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮5
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, 100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: -320, 100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
     Top:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 64
             Spawn: 64
   ecs.Named:
     Name: Starting
-- Entity: "4"
+- Entity: ∈⋮4
   core.Body:
     Angle:
         Now: 0
@@ -72,62 +72,62 @@
     Strength: 2
   ecs.Named:
     Name: ckdpqi5mdsrj7p6jt8eg
-- Entity: "5"
+- Entity: ∈⋮5
   core.Sector:
     Bottom:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: -60
             Spawn: -60
     FloorFriction: 0.85
     Segments:
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, -260
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 190, -260
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 190, 170
           Surface:
-            Material: "2"
+            Material: ∈⋮2
         - Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, 170
           Surface:
-            Material: "2"
-        - AdjacentSector: "3"
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮3
           Hi:
-            Material: "2"
+            Material: ∈⋮2
           Lo:
-            Material: "2"
+            Material: ∈⋮2
           P: 100, 100
           Surface:
-            Material: "2"
+            Material: ∈⋮2
     Top:
         Surface:
-            Material: "2"
+            Material: ∈⋮2
         Z:
             Now: 112
             Spawn: 112
