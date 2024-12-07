@@ -18,7 +18,6 @@ func init() {
 		"ComponentTableGrowthRate": reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
 		"ConstructArray":           reflect.ValueOf(ecs.ConstructArray),
 		"ControllerAlways":         reflect.ValueOf(ecs.ControllerAlways),
-		"ControllerLoaded":         reflect.ValueOf(ecs.ControllerLoaded),
 		"ControllerRecalculate":    reflect.ValueOf(ecs.ControllerRecalculate),
 		"EntityTableGrowthRate":    reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
 		"GetLinked":                reflect.ValueOf(ecs.GetLinked),

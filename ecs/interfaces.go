@@ -52,7 +52,6 @@ type ControllerMethod uint32
 
 const (
 	ControllerAlways ControllerMethod = 1 << iota
-	ControllerLoaded
 	ControllerRecalculate
 )
 
@@ -63,6 +62,5 @@ type Controller interface {
 	// Return false if controller shouldn't run for this entity
 	Target(Attachable, Entity) bool
 	Always()
-	Loaded()
 	Recalculate()
 }

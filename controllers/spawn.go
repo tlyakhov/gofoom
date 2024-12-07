@@ -43,6 +43,9 @@ func Respawn(db *ecs.ECS, force bool) {
 	}
 
 	spawn := spawns[rand.Int()%len(spawns)]
+	// TODO: This kind of cloning operation is used in other places (e.g. the
+	// editor). Should this be pulled into ECS? Will need to figure out how to
+	// address deep vs. shallow cloning and wiring up any relationships.
 	copiedSpawn := db.SerializeEntity(spawn.Entity)
 	var pastedEntity ecs.Entity
 	for name, cid := range ecs.Types().IDs {

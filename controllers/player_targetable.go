@@ -24,13 +24,11 @@ func (ptc *PlayerTargetableController) ComponentID() ecs.ComponentID {
 }
 
 func (ptc *PlayerTargetableController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate |
-		ecs.ControllerLoaded
+	return ecs.ControllerRecalculate
 }
 
 func (ptc *PlayerTargetableController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate |
-		ecs.ControllerLoaded
+	return ecs.ControllerRecalculate
 }
 
 func (ptc *PlayerTargetableController) Target(target ecs.Attachable, e ecs.Entity) bool {

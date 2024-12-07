@@ -210,7 +210,6 @@ func CreateTestWorld(db *ecs.ECS) {
 	// After everything's loaded, trigger the controllers
 	db.ActAllControllers(ecs.ControllerRecalculate)
 	AutoPortal(db)
-	db.ActAllControllers(ecs.ControllerLoaded)
 }
 func CreateTestWorld2(db *ecs.ECS) {
 	CreateTestGrass(db)
@@ -241,7 +240,6 @@ func CreateTestWorld2(db *ecs.ECS) {
 	// After everything's loaded, trigger the controllers
 	db.ActAllControllers(ecs.ControllerRecalculate)
 	AutoPortal(db)
-	db.ActAllControllers(ecs.ControllerLoaded)
 }
 
 // TODO: Worth adapting this heightmap generator to be usable in editor?
@@ -330,5 +328,4 @@ func CreateTestWorld3(db *ecs.ECS) {
 	// After everything's loaded, trigger the controllers
 	db.ActAllControllers(ecs.ControllerRecalculate)
 	AutoPortal(db)
-	db.ActAllControllers(ecs.ControllerLoaded)
 }

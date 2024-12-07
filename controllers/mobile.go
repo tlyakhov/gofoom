@@ -29,13 +29,11 @@ func (mc *MobileController) ComponentID() ecs.ComponentID {
 
 func (mc *MobileController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways |
-		ecs.ControllerRecalculate |
-		ecs.ControllerLoaded
+		ecs.ControllerRecalculate
 }
 
 func (mc *MobileController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate |
-		ecs.ControllerLoaded
+	return ecs.ControllerRecalculate
 }
 
 func (mc *MobileController) Target(target ecs.Attachable, e ecs.Entity) bool {
@@ -114,9 +112,5 @@ func (mc *MobileController) Always() {
 }
 
 func (mc *MobileController) Recalculate() {
-	mc.Collide()
-}
-
-func (mc *MobileController) Loaded() {
 	mc.Collide()
 }

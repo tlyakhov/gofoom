@@ -31,8 +31,6 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 			switch method {
 			case ControllerAlways:
 				controller.Always()
-			case ControllerLoaded:
-				controller.Loaded()
 			case ControllerRecalculate:
 				controller.Recalculate()
 			}
@@ -47,8 +45,6 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 			switch method {
 			case ControllerAlways:
 				controller.Always()
-			case ControllerLoaded:
-				controller.Loaded()
 			case ControllerRecalculate:
 				controller.Recalculate()
 			}

@@ -46,7 +46,16 @@ func (r *Renderer) DefaultFont() *materials.Sprite {
 func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy int) {
 	fw := 1.0 / float64(s.CharWidth)
 	fh := 1.0 / float64(s.CharHeight)
+	// We use this unicode character to identify entity types. Do a substitution
+	// here so that when we do debug outputs, it looks reasonable.
+	if c == '∈' {
+		c = 'e'
+	}
 	index := uint32(c)
+	// Our fonts are just 16x16, avoid overflowing the texture.
+	if index > 255 {
+		index = 249 // substitute char
+	}
 	col := index % s.Sprite.Cols
 	row := index / s.Sprite.Cols
 	// Background first

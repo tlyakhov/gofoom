@@ -23,7 +23,7 @@ func (isc *InternalSegmentController) ComponentID() ecs.ComponentID {
 }
 
 func (isc *InternalSegmentController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate | ecs.ControllerLoaded
+	return ecs.ControllerRecalculate
 }
 
 func (isc *InternalSegmentController) Target(target ecs.Attachable, e ecs.Entity) bool {
@@ -34,8 +34,4 @@ func (isc *InternalSegmentController) Target(target ecs.Attachable, e ecs.Entity
 
 func (isc *InternalSegmentController) Recalculate() {
 	isc.AttachToSectors()
-}
-
-func (isc *InternalSegmentController) Loaded() {
-	isc.Recalculate()
 }

@@ -224,6 +224,9 @@ func (wc *WeaponInstantController) MarkSurface(s *selection.Selectable, p *conce
 	return
 }
 
+// TODO: This is more generally useful as a way to create transforms
+// that map world-space onto texture space. This should be refactored to be part
+// of anything with a surface
 func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *selection.Selectable, transform *concepts.Matrix2) *materials.Surface {
 	// Inverse of the size of bullet mark we want
 	scale := 1.0 / wc.Class.MarkSize
