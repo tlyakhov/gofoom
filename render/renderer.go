@@ -32,6 +32,8 @@ type Renderer struct {
 	xorSeed        uint64
 
 	ICacheHits, ICacheMisses atomic.Int64
+
+	flashOpacity dynamic.DynamicValue[float64]
 }
 
 // NewRenderer constructs a new Renderer.
@@ -69,6 +71,19 @@ func (r *Renderer) Initialize() {
 	}
 	r.textStyle = r.NewTextStyle()
 	r.xorSeed = concepts.RngXorShift64(uint64(hrtime.Now().Milliseconds()))
+
+	r.flashOpacity.Attach(r.ECS.Simulation)
+	r.flashOpacity.SetAll(0)
+	a := r.flashOpacity.NewAnimation()
+	r.flashOpacity.Animation = a
+	a.Duration = 250
+	a.Start = r.flashOpacity.Spawn
+	a.End = 1.0
+	a.TweeningFunc = dynamic.EaseInOut2
+	a.Lifetime = dynamic.AnimationLifetimeBounce
+	a.Reverse = false
+	a.Active = false
+	a.Coordinates = dynamic.AnimationCoordinatesAbsolute
 }
 
 func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
@@ -494,7 +509,17 @@ func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z floa
 	}
 }
 
-func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int) {
+func (r *Renderer) BlendSample(sample *concepts.Vector4, screenIndex int, z float64, blendFunc concepts.BlendingFunc) {
+	if sample[3] <= 0 {
+		return
+	}
+	blendFunc(&r.FrameBuffer[screenIndex], sample)
+	if sample[3] > 0.8 {
+		r.ZBuffer[screenIndex] = z
+	}
+}
+
+func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concepts.BlendingFunc) {
 	ms := MaterialSampler{
 		Config: r.Config,
 		ScaleW: uint32(w),
@@ -516,7 +541,11 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int) {
 			ms.U = ms.NU
 			ms.V = ms.NV
 			ms.SampleMaterial(nil)
-			r.ApplySample(&ms.Output, ms.ScreenX+ms.ScreenY*r.ScreenWidth, -1)
+			if blendFunc != nil {
+				r.BlendSample(&ms.Output, ms.ScreenX+ms.ScreenY*r.ScreenWidth, -1, blendFunc)
+			} else {
+				r.ApplySample(&ms.Output, ms.ScreenX+ms.ScreenY*r.ScreenWidth, -1)
+			}
 		}
 	}
 }

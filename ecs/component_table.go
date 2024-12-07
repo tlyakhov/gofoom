@@ -3,6 +3,8 @@
 
 package ecs
 
+import "sync/atomic"
+
 /*
 Closed hash table, indexed directly by component indices
 
@@ -12,6 +14,8 @@ Closed hash table, indexed directly by component indices
 type ComponentTable []Attachable
 
 const ComponentTableGrowthRate = 8
+
+var ComponentTableHit, ComponentTableMiss atomic.Uint64
 
 func (table *ComponentTable) Set(a Attachable) {
 	cid := a.Base().ComponentID
@@ -53,8 +57,10 @@ func (table ComponentTable) Get(cid ComponentID) Attachable {
 		if table[i] == nil {
 			break
 		} else if table[i].Base().ComponentID == cid {
+			//ComponentTableHit.Add(1)
 			return table[i]
 		}
+		//ComponentTableMiss.Add(1)
 		i = (i + 1) % size
 	}
 	return nil

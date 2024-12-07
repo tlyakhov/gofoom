@@ -12,6 +12,18 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
+func (r *Renderer) RenderWeapon(slot *behaviors.InventorySlot) {
+	wc := behaviors.GetWeaponClass(slot.ECS, slot.Entity)
+	wi := behaviors.GetWeaponInstant(slot.ECS, slot.Entity)
+	if wc != nil && wi != nil {
+		if wi.CoolingDown() {
+			r.BitBlt(wc.FlashMaterial, r.ScreenWidth/2-64, r.ScreenHeight-160, 128, 128, concepts.BlendScreen)
+		}
+	}
+	// TODO: This should be a separate image from the inventory item image
+	r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, nil)
+}
+
 func (r *Renderer) RenderHud() {
 	if r.Player == nil || r.Carrier == nil {
 		return
@@ -46,10 +58,10 @@ func (r *Renderer) RenderHud() {
 			continue
 		}
 		slot := behaviors.GetInventorySlot(r.ECS, e)
-		r.BitBlt(slot.Image, index*40+10, r.ScreenHeight-42, 32, 32)
+		r.BitBlt(slot.Image, index*40+10, r.ScreenHeight-42, 32, 32, nil)
 		r.Print(ts, index*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
 		if e == r.Carrier.SelectedWeapon {
-			r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128)
+			r.RenderWeapon(slot)
 		}
 		index++
 	}
@@ -100,6 +112,9 @@ func (r *Renderer) DebugInfo() {
 	hits := r.ICacheHits.Load()
 	misses := r.ICacheMisses.Load()
 	r.Print(ts, 4, 24, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
+	/*hits := ecs.ComponentTableHit.Load()
+	misses := ecs.ComponentTableMiss.Load()
+	r.Print(ts, 4, 24, fmt.Sprintf("ComponentTable hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))*/
 	if r.PlayerBody.SectorEntity != 0 {
 		entity := r.PlayerBody.SectorEntity
 		sector := core.GetSector(r.ECS, entity)

@@ -6,7 +6,6 @@ package properties
 import (
 	"reflect"
 	"slices"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/theme"
@@ -35,18 +34,18 @@ func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 	}
 }
 
-func (g *Grid) fieldTweeningFunc(field *state.PropertyGridField) {
+func fieldFunc[T any](g *Grid, field *state.PropertyGridField, funcMap map[string]T) {
 	origValue := field.Values[0].Deref().Pointer()
 
 	opts := make([]string, 0)
-	for name := range dynamic.TweeningFuncs {
+	for name := range funcMap {
 		opts = append(opts, name)
 	}
 	slices.Sort(opts)
 	optValues := make([]reflect.Value, 0)
 	selectedIndex := 0
 	for i, name := range opts {
-		f := reflect.ValueOf(dynamic.TweeningFuncs[name])
+		f := reflect.ValueOf(funcMap[name])
 		optValues = append(optValues, f)
 		if f.Pointer() == origValue {
 			selectedIndex = i
@@ -57,7 +56,7 @@ func (g *Grid) fieldTweeningFunc(field *state.PropertyGridField) {
 	s.Options = opts
 	s.OnChanged = nil
 	s.SetSelectedIndex(selectedIndex)
-	s.PlaceHolder = "Select tweening function"
+	s.PlaceHolder = "Select function"
 	s.OnChanged = func(opt string) {
 		g.ApplySetPropertyAction(field, optValues[s.SelectedIndex()])
 	}

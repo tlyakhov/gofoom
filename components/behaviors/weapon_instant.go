@@ -14,7 +14,8 @@ type WeaponInstant struct {
 	ecs.Attached `editable:"^"`
 
 	// Internal state
-	FireNextFrame bool `editable:"Fire Next Frame"`
+	FiredTimestamp int64 // in ms
+	FireNextFrame  bool  `editable:"Fire Next Frame"`
 	// TODO: We should serialize these
 	Marks deque.Deque[WeaponMark]
 }
@@ -30,6 +31,11 @@ func GetWeaponInstant(db *ecs.ECS, e ecs.Entity) *WeaponInstant {
 		return asserted
 	}
 	return nil
+}
+
+func (w *WeaponInstant) CoolingDown() bool {
+	wc := GetWeaponClass(w.ECS, w.Entity)
+	return wc != nil && w.ECS.Timestamp-w.FiredTimestamp < int64(wc.Cooldown)
 }
 
 func (w *WeaponInstant) String() string {

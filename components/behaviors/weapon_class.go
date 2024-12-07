@@ -19,6 +19,8 @@ type WeaponClass struct {
 	Spread   float64 `editable:"Spread"`   // In degrees
 	Cooldown float64 `editable:"Cooldown"` // In ms
 
+	FlashMaterial ecs.Entity `editable:"Flash Material" edit_type:"Material"`
+
 	// Bullets make marks on walls/internal segments
 	MarkMaterial ecs.Entity `editable:"Mark Material" edit_type:"Material"`
 	MarkSize     float64    `editable:"Mark Size"`
@@ -73,6 +75,10 @@ func (w *WeaponClass) Construct(data map[string]any) {
 		w.MarkMaterial, _ = ecs.ParseEntity(v.(string))
 	}
 
+	if v, ok := data["FlashMaterial"]; ok {
+		w.FlashMaterial, _ = ecs.ParseEntity(v.(string))
+	}
+
 	if v, ok := data["MarkSize"]; ok {
 		w.MarkSize = cast.ToFloat64(v)
 	}
@@ -87,6 +93,10 @@ func (w *WeaponClass) Serialize() map[string]any {
 
 	if w.MarkMaterial != 0 {
 		result["MarkMaterial"] = w.MarkMaterial.String()
+	}
+
+	if w.FlashMaterial != 0 {
+		result["FlashMaterial"] = w.FlashMaterial.String()
 	}
 
 	if w.MarkSize != 5 {
