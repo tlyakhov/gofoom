@@ -148,17 +148,15 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	if ms.pipelineIndex < len(ms.Materials) {
 		a = ms.Materials[ms.pipelineIndex]
 	}
+	ms.pipelineIndex++
 
 	switch m := a.(type) {
 	case *materials.Shader:
-		ms.pipelineIndex++
 		for _, stage := range m.Stages {
 			ms.sampleStage(stage)
-			ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
 		}
 		return
 	case *materials.Sprite:
-		ms.pipelineIndex++
 		frame := uint32(*m.Frame.Render)
 		if stage != nil {
 			frame += uint32(stage.Frame)
@@ -175,21 +173,32 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		ms.ScaleW /= m.Cols
 		ms.ScaleH /= m.Rows
 	case *materials.Image:
-		ms.pipelineIndex++
 		ms.StageOutput = m.Sample(u, v, ms.ScaleW, ms.ScaleH)
 	case *materials.Text:
-		ms.pipelineIndex++
 		ms.StageOutput = m.Sample(u, v, ms.ScaleW, ms.ScaleH)
 	case *materials.Solid:
-		ms.pipelineIndex++
 		ms.StageOutput = *m.Diffuse.Render
 	default:
-		ms.pipelineIndex++
 		ms.StageOutput = concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true
 	}
 	ms.frob(stage, &ms.StageOutput)
-	ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
+
+	if stage == nil {
+		ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
+		return
+	}
+
+	if opacity != 1 {
+		ms.StageOutput[3] *= opacity
+		ms.StageOutput[2] *= opacity
+		ms.StageOutput[1] *= opacity
+		ms.StageOutput[0] *= opacity
+	}
+	if opacity != 0 {
+		//concepts.BlendNormal(&ms.Output, &ms.StageOutput)
+		stage.BlendingFunc(&ms.Output, &ms.StageOutput)
+	}
 }
 
 func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {

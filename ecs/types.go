@@ -76,15 +76,6 @@ func (ecsTypes *typeMetadata) Type(name string) AttachableColumn {
 	return nil
 }
 
-// TODO: Benchmark this, seems painful
-func (ecsTypes *typeMetadata) ID(c Attachable) ComponentID {
-	name := reflect.TypeOf(c).Elem().String()
-	if id, ok := ecsTypes.IDs[name]; ok {
-		return id
-	}
-	return 0
-}
-
 func SerializeComponentIDs(ids containers.Set[ComponentID]) string {
 	s := ""
 	for id := range ids {

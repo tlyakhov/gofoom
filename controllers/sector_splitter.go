@@ -263,7 +263,7 @@ func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 		if origComponent == nil {
 			continue
 		}
-		id := ecs.Types().ID(origComponent)
+		id := origComponent.Base().ComponentID
 		clonedComponent := db.LoadComponentWithoutAttaching(id, origComponent.Serialize())
 		a.Result[i] = append(a.Result[i], clonedComponent)
 		switch target := clonedComponent.(type) {

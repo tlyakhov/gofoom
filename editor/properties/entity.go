@@ -5,7 +5,6 @@ package properties
 
 import (
 	"reflect"
-	"strconv"
 
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
@@ -83,7 +82,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		col := g.State().ECS.Column(cid)
 		for i := range col.Cap() {
 			if a := col.Attachable(i); a != nil {
-				entities = append(entities, strconv.Itoa(int(a.Base().Entity)))
+				entities = append(entities, a.Base().Entity.String())
 			}
 		}
 	}

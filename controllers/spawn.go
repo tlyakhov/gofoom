@@ -62,6 +62,9 @@ func Respawn(db *ecs.ECS, force bool) {
 		} else if cid == ecs.NamedCID {
 			named := c.(*ecs.Named)
 			named.Name = "Player"
+		} else if cid == behaviors.InventoryCarrierCID {
+			// carrier := c.(*behaviors.InventoryCarrier)
+			// TODO: Clone/respawn inventory
 		}
 	}
 	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerRecalculate)

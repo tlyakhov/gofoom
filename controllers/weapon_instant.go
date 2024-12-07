@@ -21,8 +21,8 @@ import (
 type WeaponInstantController struct {
 	ecs.BaseController
 	*behaviors.WeaponInstant
-	render.MaterialSampler
 
+	Sampler render.MaterialSampler
 	Slot    *behaviors.InventorySlot
 	Carrier *behaviors.InventoryCarrier
 	Class   *behaviors.WeaponClass
@@ -70,8 +70,8 @@ func (wc *WeaponInstantController) Cast() *selection.Selectable {
 	angle := wc.Body.Angle.Now + (rand.Float64()-0.5)*wc.Class.Spread
 	zSpread := (rand.Float64() - 0.5) * wc.Class.Spread
 
-	wc.MaterialSampler.Config = &render.Config{ECS: wc.Body.ECS}
-	wc.MaterialSampler.Ray = &render.Ray{Angle: angle}
+	wc.Sampler.Config = &render.Config{ECS: wc.Body.ECS}
+	wc.Sampler.Ray = &render.Ray{Angle: angle}
 
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
 	idist2 := 0.0
@@ -92,9 +92,9 @@ func (wc *WeaponInstantController) Cast() *selection.Selectable {
 			if !b.Active || b.Entity == wc.Body.Entity {
 				continue
 			}
-			if ok := wc.InitializeRayBody(p, rayEnd, b); ok {
-				wc.SampleMaterial(nil)
-				if wc.MaterialSampler.Output[3] < 0.9 {
+			if ok := wc.Sampler.InitializeRayBody(p, rayEnd, b); ok {
+				wc.Sampler.SampleMaterial(nil)
+				if wc.Sampler.Output[3] < 0.9 {
 					continue
 				}
 				idist2 = b.Pos.Now.Dist2(p)
@@ -275,6 +275,7 @@ func (wc *WeaponInstantController) Always() {
 		return
 	}
 	wc.FireNextFrame = false
+	wc.FiredTimestamp = wc.ECS.Timestamp
 	s := wc.Cast()
 
 	if s == nil {

@@ -264,7 +264,7 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 			if c == nil {
 				continue
 			}
-			componentList.Add(ecs.Types().ID(c))
+			componentList.Add(c.Base().ComponentID)
 		}
 	}
 
@@ -430,7 +430,9 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		case *[]*behaviors.ActionWaypoint:
 			g.fieldSlice(field)
 		case *dynamic.TweeningFunc:
-			g.fieldTweeningFunc(field)
+			fieldFunc(g, field, dynamic.TweeningFuncs)
+		case *concepts.BlendingFunc:
+			fieldFunc(g, field, concepts.BlendingFuncs)
 		case **dynamic.Animation[int]:
 			g.fieldAnimation(field)
 		case **dynamic.Animation[float64]:
