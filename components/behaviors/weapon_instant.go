@@ -38,6 +38,11 @@ func (w *WeaponInstant) CoolingDown() bool {
 	return wc != nil && w.ECS.Timestamp-w.FiredTimestamp < int64(wc.Cooldown)
 }
 
+func (w *WeaponInstant) Flashing() bool {
+	wc := GetWeaponClass(w.ECS, w.Entity)
+	return wc != nil && w.ECS.Timestamp-w.FiredTimestamp < int64(wc.FlashTime)
+}
+
 func (w *WeaponInstant) String() string {
 	return "WeaponInstant"
 }

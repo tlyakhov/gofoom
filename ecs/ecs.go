@@ -379,6 +379,30 @@ func (db *ECS) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
 		}
 	}
 }
+
+/***
+
+	TODO: Something really useful could be some kind of #include directive to be
+	able to combine multiple files into one structure. This way, common game
+	elements (say, all the various monster types, items, etc...) could be set up
+	in a "prefab" world file, and then referenced from actual levels/missions.
+
+	This has a lot of potential complexity - for example, how do we map entity
+	IDs across file boundaries? And then, after mapping, what happens when the
+	new combined world is saved or edited? How do we ensure that the "imported"
+	data stays untouched?
+
+	Seems like we would need a few things for this:
+	1. When loading, walk the YAML looking for entity IDs, creating a map of
+	   original->loaded IDs.
+	2. Some kind of "locked/included" flag at the entity level to prevent
+	   operations that would modify the original data (e.g. attaching new components)
+	3. When linking non-included and included entities together (via components
+	   or references), we would need both the mapped and original IDs there, since
+	   the mapped IDs are dynamic. This is kind of the worst part of it.
+
+**/
+
 func (db *ECS) Load(filename string) error {
 	db.Lock.Lock()
 	defer db.Lock.Unlock()
@@ -414,7 +438,6 @@ func (db *ECS) Load(filename string) error {
 
 	// After everything's loaded, trigger the controllers
 	db.ActAllControllers(ControllerRecalculate)
-	db.ActAllControllers(ControllerLoaded)
 	return nil
 }
 

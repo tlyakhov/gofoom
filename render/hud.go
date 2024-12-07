@@ -16,7 +16,7 @@ func (r *Renderer) RenderWeapon(slot *behaviors.InventorySlot) {
 	wc := behaviors.GetWeaponClass(slot.ECS, slot.Entity)
 	wi := behaviors.GetWeaponInstant(slot.ECS, slot.Entity)
 	if wc != nil && wi != nil {
-		if wi.CoolingDown() {
+		if wi.Flashing() {
 			r.BitBlt(wc.FlashMaterial, r.ScreenWidth/2-64, r.ScreenHeight-160, 128, 128, concepts.BlendScreen)
 		}
 	}

@@ -149,8 +149,8 @@ func run() {
 		defer pprof.StopCPUProfile()
 	}
 
-	w := 640
-	h := 360
+	w := 960 //640
+	h := 540 //360
 	cfg := opengl.WindowConfig{
 		Title:     "Foom",
 		Bounds:    pixel.R(0, 0, 1920, 1080),

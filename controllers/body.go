@@ -34,13 +34,11 @@ func (bc *BodyController) ComponentID() ecs.ComponentID {
 
 func (bc *BodyController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways |
-		ecs.ControllerRecalculate |
-		ecs.ControllerLoaded
+		ecs.ControllerRecalculate
 }
 
 func (bc *BodyController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate |
-		ecs.ControllerLoaded
+	return ecs.ControllerRecalculate
 }
 
 func (bc *BodyController) Target(target ecs.Attachable, e ecs.Entity) bool {
@@ -70,11 +68,6 @@ func (bc *BodyController) Always() {
 }
 
 func (bc *BodyController) Recalculate() {
-	//bc.Collide()
-	bc.findBodySector()
-}
-
-func (bc *BodyController) Loaded() {
 	//bc.Collide()
 	bc.findBodySector()
 }

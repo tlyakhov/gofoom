@@ -19,6 +19,7 @@ type WeaponClass struct {
 	Spread   float64 `editable:"Spread"`   // In degrees
 	Cooldown float64 `editable:"Cooldown"` // In ms
 
+	FlashTime     float64    `editable:"Flash Time"` // In ms
 	FlashMaterial ecs.Entity `editable:"Flash Material" edit_type:"Material"`
 
 	// Bullets make marks on walls/internal segments
@@ -54,6 +55,7 @@ func (w *WeaponClass) Construct(data map[string]any) {
 	w.Damage = 10
 	w.Spread = 1
 	w.Cooldown = 100
+	w.FlashTime = 100
 
 	if data == nil {
 		return
@@ -69,6 +71,10 @@ func (w *WeaponClass) Construct(data map[string]any) {
 
 	if v, ok := data["Cooldown"]; ok {
 		w.Cooldown = cast.ToFloat64(v)
+	}
+
+	if v, ok := data["FlashTime"]; ok {
+		w.FlashTime = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["MarkMaterial"]; ok {
@@ -90,6 +96,7 @@ func (w *WeaponClass) Serialize() map[string]any {
 	result["Damage"] = w.Damage
 	result["Spread"] = w.Spread
 	result["Cooldown"] = w.Cooldown
+	result["FlashTime"] = w.FlashTime
 
 	if w.MarkMaterial != 0 {
 		result["MarkMaterial"] = w.MarkMaterial.String()

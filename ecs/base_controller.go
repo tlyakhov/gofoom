@@ -24,5 +24,4 @@ func (c *BaseController) Target(a Attachable, entity Entity) bool {
 }
 
 func (c *BaseController) Always()      {}
-func (c *BaseController) Loaded()      {}
 func (c *BaseController) Recalculate() {}
