@@ -4,6 +4,7 @@
 package render
 
 import (
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 )
 
@@ -16,6 +17,7 @@ func wallHiPick(cp *columnPortal) {
 // wallHi renders the top portion of a portal segment.
 func wallHi(cp *columnPortal) {
 	mat := cp.AdjSegment.HiSurface.Material
+	lit := materials.GetLit(cp.ECS, cp.AdjSegment.HiSurface.Material)
 	extras := cp.AdjSegment.HiSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
 	transform := cp.AdjSegment.HiSurface.Transform.Render
@@ -38,7 +40,9 @@ func wallHi(cp *columnPortal) {
 			cp.MaterialSampler.U = transform[0]*cp.MaterialSampler.NU + transform[2]*cp.MaterialSampler.NV + transform[4]
 			cp.MaterialSampler.V = transform[1]*cp.MaterialSampler.NU + transform[3]*cp.MaterialSampler.NV + transform[5]
 			cp.SampleMaterial(extras)
-			cp.SampleLight(&cp.MaterialSampler.Output, mat, &cp.RaySegIntersect, cp.Distance)
+			if lit != nil {
+				cp.SampleLight(&cp.MaterialSampler.Output, lit, &cp.RaySegIntersect, cp.Distance)
+			}
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5
 			cp.MaterialSampler.Output[1] = 1
@@ -59,6 +63,7 @@ func wallLowPick(cp *columnPortal) {
 // wallLow renders the bottom portion of a portal segment.
 func wallLow(cp *columnPortal) {
 	mat := cp.AdjSegment.LoSurface.Material
+	lit := materials.GetLit(cp.ECS, cp.AdjSegment.LoSurface.Material)
 	extras := cp.AdjSegment.LoSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
 	transform := cp.AdjSegment.LoSurface.Transform.Render
@@ -81,7 +86,9 @@ func wallLow(cp *columnPortal) {
 			cp.MaterialSampler.U = transform[0]*cp.MaterialSampler.NU + transform[2]*cp.MaterialSampler.NV + transform[4]
 			cp.MaterialSampler.V = transform[1]*cp.MaterialSampler.NU + transform[3]*cp.MaterialSampler.NV + transform[5]
 			cp.SampleMaterial(extras)
-			cp.SampleLight(&cp.MaterialSampler.Output, mat, &cp.RaySegIntersect, cp.Distance)
+			if lit != nil {
+				cp.SampleLight(&cp.MaterialSampler.Output, lit, &cp.RaySegIntersect, cp.Distance)
+			}
 		} else {
 			cp.MaterialSampler.Output[0] = 0.5
 			cp.MaterialSampler.Output[1] = 1

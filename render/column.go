@@ -10,7 +10,6 @@ import (
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
-	"tlyakhov/gofoom/ecs"
 )
 
 type entityWithDist2 struct {
@@ -95,13 +94,7 @@ func (c *column) CalcScreen() {
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 }
 
-func (c *column) SampleLight(result *concepts.Vector4, material ecs.Entity, world *concepts.Vector3, dist float64) *concepts.Vector4 {
-	lit := materials.GetLit(c.ECS, material)
-
-	if lit == nil {
-		return result
-	}
-
+func (c *column) SampleLight(result *concepts.Vector4, lit *materials.Lit, world *concepts.Vector3, dist float64) *concepts.Vector4 {
 	// testing...
 	/*dbg := world.Mul(1.0 / 64.0)
 	result[0] = dbg[0] - math.Floor(dbg[0])

@@ -7,10 +7,10 @@ import (
 	"fmt"
 
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/dynamic"
 )
 
 func ceilingPick(s *column) {
@@ -28,16 +28,16 @@ func floorPick(s *column) {
 // planes renders the top/bottom (ceiling/floor) portion of a slice.
 func planes(c *column, plane *core.SectorPlane) {
 	mat := plane.Surface.Material
+	lit := materials.GetLit(c.ECS, plane.Surface.Material)
 	extras := plane.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)
 	transform := plane.Surface.Transform.Render
-	sectorMin := &c.Sector.Min
-	sectorMax := &c.Sector.Max
 
-	sw := (sectorMax[0] - sectorMin[0])
-	sh := (sectorMax[1] - sectorMin[1])
-	sw, sh = (transform[0]*sw+transform[2]*sh+transform[4])*c.ViewFix[c.ScreenX],
-		(transform[1]*sw+transform[3]*sh+transform[5])*c.ViewFix[c.ScreenX]
+	sectorWidth := (c.Sector.Max[0] - c.Sector.Min[0])
+	sectorDepth := (c.Sector.Max[1] - c.Sector.Min[1])
+	screenSpaceSectorWidth, screenSpaceSectorDepth :=
+		(transform[0]*sectorWidth+transform[2]*sectorDepth+transform[4])*c.ViewFix[c.ScreenX],
+		(transform[1]*sectorWidth+transform[3]*sectorDepth+transform[5])*c.ViewFix[c.ScreenX]
 
 	// Because of our sloped ceilings, we can't use simple linear interpolation
 	// to calculate the distance or world position of the ceiling sample, we
@@ -92,21 +92,24 @@ func planes(c *column, plane *core.SectorPlane) {
 
 		world[0] += c.Ray.Start[0]
 		world[1] += c.Ray.Start[1]
-		//		world[2] += c.CameraZ
-		world[2] = plane.ZAt(dynamic.DynamicRender, world.To2D())
-
-		tx := (world[0] - sectorMin[0]) / (sectorMax[0] - sectorMin[0])
-		ty := (world[1] - sectorMin[1]) / (sectorMax[1] - sectorMin[1])
+		if plane.Normal[2] == 1 || plane.Normal[2] == -1 {
+			world[2] = *plane.Z.Render
+		} else {
+			world[2] += c.CameraZ
+		}
+		//world[2] = plane.ZAt(dynamic.DynamicRender, world.To2D())
 
 		if mat != 0 {
-			c.MaterialSampler.NU = tx
-			c.MaterialSampler.NV = ty
+			c.MaterialSampler.NU = (world[0] - c.Sector.Min[0]) / sectorWidth
+			c.MaterialSampler.NV = (world[1] - c.Sector.Min[1]) / sectorDepth
 			c.MaterialSampler.U = transform[0]*c.MaterialSampler.NU + transform[2]*c.MaterialSampler.NV + transform[4]
 			c.MaterialSampler.V = transform[1]*c.MaterialSampler.NU + transform[3]*c.MaterialSampler.NV + transform[5]
-			c.ScaleW = uint32(sw / distToPlane)
-			c.ScaleH = uint32(sh / distToPlane)
+			c.ScaleW = uint32(screenSpaceSectorWidth / distToPlane)
+			c.ScaleH = uint32(screenSpaceSectorDepth / distToPlane)
 			c.SampleMaterial(extras)
-			c.SampleLight(&c.MaterialSampler.Output, mat, &world, distToPlane)
+			if lit != nil {
+				c.SampleLight(&c.MaterialSampler.Output, lit, &world, distToPlane)
+			}
 		}
 		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)
 		c.ZBuffer[screenIndex] = distToPlane
