@@ -149,8 +149,8 @@ func run() {
 		defer pprof.StopCPUProfile()
 	}
 
-	w := 960 //640
-	h := 540 //360
+	w := 640
+	h := 360
 	cfg := opengl.WindowConfig{
 		Title:     "Foom",
 		Bounds:    pixel.R(0, 0, 1920, 1080),
@@ -180,7 +180,7 @@ func run() {
 		return
 	}
 	controllers.Respawn(db, true)
-	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
+	archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
 
 	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
 	buffer = image.NewRGBA(image.Rect(0, 0, w, h))

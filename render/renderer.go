@@ -9,6 +9,7 @@ import (
 	"slices"
 	"sync"
 	"sync/atomic"
+	"unsafe"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -377,7 +378,7 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 			if s == nil || !s.IsActive() {
 				continue
 			}
-			dist := column.Ray.DistTo(&column.RaySegTest)
+			dist := column.Ray.DistTo(s.ClosestToPoint(&column.Ray.Start))
 			ewd2s = append(ewd2s, &entityWithDist2{
 				InternalSegment: s,
 				Dist2:           dist * dist,
@@ -450,63 +451,8 @@ func (r *Renderer) Render() {
 }
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
-	// TODO: How much faster would a 16-bit integer framebuffer be?
-	if r.FrameTint[3] != 0 {
-		for fbIndex := 0; fbIndex < r.ScreenWidth*r.ScreenHeight; fbIndex++ {
-			screenIndex := fbIndex * 4
-			inva := 1.0 - r.FrameTint[3]
-			buffer[screenIndex+3] = 0xFF
-			buffer[screenIndex+2] = concepts.ByteClamp((r.FrameBuffer[fbIndex][2]*inva + r.FrameTint[2]) * 0xFF)
-			buffer[screenIndex+1] = concepts.ByteClamp((r.FrameBuffer[fbIndex][1]*inva + r.FrameTint[1]) * 0xFF)
-			buffer[screenIndex+0] = concepts.ByteClamp((r.FrameBuffer[fbIndex][0]*inva + r.FrameTint[0]) * 0xFF)
-		}
-	} else {
-		for fbIndex := 0; fbIndex < r.ScreenWidth*r.ScreenHeight; fbIndex++ {
-			screenIndex := fbIndex * 4
-			buffer[screenIndex+3] = 0xFF
-			buffer[screenIndex+2] = concepts.ByteClamp(r.FrameBuffer[fbIndex][2] * 0xFF)
-			buffer[screenIndex+1] = concepts.ByteClamp(r.FrameBuffer[fbIndex][1] * 0xFF)
-			buffer[screenIndex+0] = concepts.ByteClamp(r.FrameBuffer[fbIndex][0] * 0xFF)
-		}
-	}
-}
-
-func (r *Renderer) ApplySample(sample *concepts.Vector4, screenIndex int, z float64) {
-	if sample[3] <= 0 {
-		return
-	}
-	if sample[3] >= 1 {
-		r.FrameBuffer[screenIndex] = *sample
-		r.ZBuffer[screenIndex] = z
-		return
-	}
-	inva := 1.0 - sample[3]
-	dst := &r.FrameBuffer[screenIndex]
-	dst[3] = dst[3]*inva + sample[3]
-	if sample[2] <= 0 {
-		dst[2] *= inva
-	} else if sample[2] >= 1 {
-		dst[2] = 1
-	} else {
-		dst[2] = dst[2]*inva + sample[2]
-	}
-	if sample[1] <= 0 {
-		dst[1] *= inva
-	} else if sample[1] >= 1 {
-		dst[1] = 1
-	} else {
-		dst[1] = dst[1]*inva + sample[1]
-	}
-	if sample[0] <= 0 {
-		dst[0] *= inva
-	} else if sample[0] >= 1 {
-		dst[0] = 1
-	} else {
-		dst[0] = dst[0]*inva + sample[0]
-	}
-	if sample[3] > 0.8 {
-		r.ZBuffer[screenIndex] = z
-	}
+	fb := unsafe.Slice((*[4]float64)(unsafe.Pointer(&r.FrameBuffer[0])), len(r.FrameBuffer))
+	concepts.BlendFrameBuffer(buffer, fb, (*[4]float64)(&r.FrameTint))
 }
 
 func (r *Renderer) BlendSample(sample *concepts.Vector4, screenIndex int, z float64, blendFunc concepts.BlendingFunc) {
@@ -541,10 +487,11 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concep
 			ms.U = ms.NU
 			ms.V = ms.NV
 			ms.SampleMaterial(nil)
+			screenIndex := ms.ScreenX + ms.ScreenY*r.ScreenWidth
 			if blendFunc != nil {
-				r.BlendSample(&ms.Output, ms.ScreenX+ms.ScreenY*r.ScreenWidth, -1, blendFunc)
+				r.BlendSample(&ms.Output, screenIndex, -1, blendFunc)
 			} else {
-				r.ApplySample(&ms.Output, ms.ScreenX+ms.ScreenY*r.ScreenWidth, -1)
+				concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex]), (*[4]float64)(&ms.Output), 1.0)
 			}
 		}
 	}

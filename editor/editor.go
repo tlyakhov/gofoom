@@ -270,7 +270,7 @@ func (e *Editor) Load(filename string) {
 		return
 	}
 	controllers.Respawn(db, true)
-	archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
+	archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
 	db.Simulation.Integrate = e.Integrate
 	db.Simulation.Render = e.GameWidget.Draw
 	e.ECS = db

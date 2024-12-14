@@ -70,7 +70,8 @@ func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy i
 					bgx++
 					continue
 				}
-				r.ApplySample(&s.BGColor, bgx+bgy*r.ScreenWidth, -1)
+				concepts.BlendColors((*[4]float64)(&r.FrameBuffer[bgx+bgy*r.ScreenWidth]), (*[4]float64)(&s.BGColor), 1.0)
+
 				bgx++
 			}
 			bgx -= s.CharWidth
@@ -97,13 +98,13 @@ func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy i
 			a *= s.Color[3]
 			if s.Shadow && dx < s.ClipX+s.ClipW-1 && dy < s.ClipY+s.ClipH-1 {
 				s.shadow[3] = a * 0.5
-				r.ApplySample(&s.shadow, screenIndex+1+r.ScreenWidth, -2)
+				concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex+1+r.ScreenWidth]), (*[4]float64)(&s.shadow), 1.0)
 			}
 			s.sample[3] = a
 			s.sample[2] = s.Color[2] * a
 			s.sample[1] = s.Color[1] * a
 			s.sample[0] = s.Color[0] * a
-			r.ApplySample(&s.sample, screenIndex, -3)
+			concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex]), (*[4]float64)(&s.sample), 1.0)
 			dx++
 		}
 		dx -= s.CharWidth

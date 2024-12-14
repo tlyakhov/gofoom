@@ -8,6 +8,8 @@ import (
 	"reflect"
 )
 
+//go:generate go run blend_asm.go -out blend_asm.s -stubs blend_asm_stub.go
+
 // Formulas are from https://en.wikipedia.org/wiki/Blend_modes
 type BlendingFunc func(a, b *Vector4) *Vector4
 

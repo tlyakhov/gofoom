@@ -34,7 +34,7 @@ func (pc *PlayerController) ComponentID() ecs.ComponentID {
 }
 
 func (pc *PlayerController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
+	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
 func (pc *PlayerController) Target(target ecs.Attachable, e ecs.Entity) bool {
@@ -93,6 +93,10 @@ func (pc *PlayerController) bob(uw bool) {
 			pc.CameraZ = cz
 		}
 	}
+}
+
+func (pc *PlayerController) Recalculate() {
+	pc.bob(pc.Underwater())
 }
 
 func (pc *PlayerController) Always() {

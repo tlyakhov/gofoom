@@ -184,21 +184,9 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	}
 	ms.frob(stage, &ms.StageOutput)
 
-	if stage == nil {
-		ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
-		return
-	}
-
-	if opacity != 1 {
-		ms.StageOutput[3] *= opacity
-		ms.StageOutput[2] *= opacity
-		ms.StageOutput[1] *= opacity
-		ms.StageOutput[0] *= opacity
-	}
-	if opacity != 0 {
-		//concepts.BlendNormal(&ms.Output, &ms.StageOutput)
-		stage.BlendingFunc(&ms.Output, &ms.StageOutput)
-	}
+	//ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
+	concepts.BlendColors((*[4]float64)(&ms.Output), (*[4]float64)(&ms.StageOutput), opacity)
+	// TODO: BlendFunc
 }
 
 func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {

@@ -73,8 +73,13 @@ func (bc *BodyController) Recalculate() {
 }
 
 func (bc *BodyController) findBodySector() {
+	if bc.Sector != nil && bc.Sector.IsPointInside2D(bc.pos2d) {
+		return
+	}
+
 	var closestSector *core.Sector
 
+	// This should be optimized
 	col := ecs.ColumnFor[core.Sector](bc.ECS, core.SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
@@ -112,7 +117,7 @@ func (bc *BodyController) findBodySector() {
 	}
 
 	floorZ, ceilZ := closestSector.ZAt(dynamic.DynamicNow, bc.pos2d)
-	//log.Printf("F: %v, C:%v\n", floorZ, ceilZ)
+	// log.Printf("E: %v, P: %v, F: %v, C:%v\n", bc.Entity, bc.pos, floorZ, ceilZ)
 	if bc.pos[2]-bc.halfHeight < floorZ {
 		bc.pos[2] = floorZ + bc.halfHeight
 	}

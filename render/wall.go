@@ -4,7 +4,9 @@
 package render
 
 import (
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
+	"tlyakhov/gofoom/concepts"
 )
 
 func wallPick(s *column) {
@@ -16,6 +18,7 @@ func wallPick(s *column) {
 // wall renders the wall portion (potentially over a portal).
 func (r *Renderer) wall(c *column) {
 	mat := c.Segment.Surface.Material
+	lit := materials.GetLit(c.ECS, c.Segment.Surface.Material)
 	extras := c.Segment.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)
 	transform := c.Segment.Surface.Transform.Render
@@ -53,8 +56,13 @@ func (r *Renderer) wall(c *column) {
 			c.MaterialSampler.U = transform[0]*c.MaterialSampler.NU + transform[2]*c.MaterialSampler.NV + transform[4]
 			c.MaterialSampler.V = transform[1]*c.MaterialSampler.NU + transform[3]*c.MaterialSampler.NV + transform[5]
 			c.SampleMaterial(extras)
-			c.SampleLight(&c.MaterialSampler.Output, mat, &c.RaySegIntersect, c.Distance)
+			if lit != nil {
+				c.SampleLight(&c.MaterialSampler.Output, lit, &c.RaySegIntersect, c.Distance)
+			}
 		}
-		r.ApplySample(&c.MaterialSampler.Output, int(screenIndex), c.Distance)
+		concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex]), (*[4]float64)(&c.MaterialSampler.Output), 1.0)
+		if c.MaterialSampler.Output[3] > 0.8 {
+			r.ZBuffer[screenIndex] = c.Distance
+		}
 	}
 }

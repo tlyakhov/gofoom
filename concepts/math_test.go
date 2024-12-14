@@ -6,7 +6,56 @@ package concepts_test
 import (
 	"math/rand"
 	"testing"
+	"tlyakhov/gofoom/concepts"
 )
+
+func BenchmarkColorasm(b *testing.B) {
+	ca := concepts.Vector4{rand.Float64(), rand.Float64(), rand.Float64(), rand.Float64()}
+	ca[0] *= ca[3]
+	ca[1] *= ca[3]
+	ca[2] *= ca[3]
+	//caa := ca
+	cb := concepts.Vector4{rand.Float64(), rand.Float64(), rand.Float64(), rand.Float64()}
+	cb[0] *= cb[3]
+	cb[1] *= cb[3]
+	cb[2] *= cb[3]
+	o := rand.Float64() * 1.2
+	b.Run("Color", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			//			b.StopTimer()
+
+			//b.StartTimer()
+			//ca.AddPreMulColorSelfOpacity(&cb, o)
+			concepts.BlendColors((*[4]float64)(&ca), (*[4]float64)(&cb), o)
+			//log.Printf("a:%v, b:%v, o: %v, result: %v", caa.StringHuman(), cb.StringHuman(), o, ca.StringHuman())
+		}
+	})
+}
+
+func BlendFrameBufferGo(buffer []uint8, fb [][4]float64, tint *concepts.Vector4) {
+	for fbIndex := 0; fbIndex < len(fb); fbIndex++ {
+		screenIndex := fbIndex * 4
+		inva := 1.0 - tint[3]
+		buffer[screenIndex+3] = 0xFF
+		buffer[screenIndex+2] = concepts.ByteClamp((fb[fbIndex][2]*inva + tint[2]) * 0xFF)
+		buffer[screenIndex+1] = concepts.ByteClamp((fb[fbIndex][1]*inva + tint[1]) * 0xFF)
+		buffer[screenIndex+0] = concepts.ByteClamp((fb[fbIndex][0]*inva + tint[0]) * 0xFF)
+	}
+}
+
+func BenchmarkBlendFrameBuffer(b *testing.B) {
+	w := 640
+	h := 360
+	target := make([]uint8, w*h*4)
+	fb := make([][4]float64, w*h)
+	tint := concepts.Vector4{0, 0, 0, 0}
+	b.Run("Color", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			concepts.BlendFrameBuffer(target, fb, (*[4]float64)(&tint))
+			//BlendFrameBufferGo(target, fb, &tint)
+		}
+	})
+}
 
 func BenchmarkByteClamp(b *testing.B) {
 	b.Run("Branchless", func(b *testing.B) {

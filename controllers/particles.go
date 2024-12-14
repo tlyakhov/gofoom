@@ -106,5 +106,8 @@ func (pc *ParticleController) Always() {
 		mobile.CrBody = core.CollideNone
 		mobile.CrPlayer = core.CollideNone
 		mobile.CrWall = core.CollideBounce
+		var bc BodyController
+		bc.Target(body, e)
+		bc.Enter(pc.Body.Sector())
 	}
 }

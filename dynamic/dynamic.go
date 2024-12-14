@@ -268,6 +268,11 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 		d.Animation.Construct(v.(map[string]any))
 		d.Animation.DynamicValue = d
 	}
+
+	// Ensure we have a reasonable value for render prior to simulation update
+	if d.Attached {
+		d.render = d.Now
+	}
 }
 
 func (d *DynamicValue[T]) GetAnimation() Animated {

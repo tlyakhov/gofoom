@@ -77,7 +77,7 @@ func initializeMenus() {
 					log.Printf("Error loading world %v: %v", path, err)
 					return
 				}
-				archetypes.CreateFont(db, "data/RDE_8x8.png", "Default Font")
+				archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
 				renderer.Initialize()
 				controllers.Respawn(db, true)
 				db.Simulation.Integrate = integrateGame
