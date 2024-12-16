@@ -26,13 +26,13 @@ func BenchmarkColorasm(b *testing.B) {
 
 			//b.StartTimer()
 			//ca.AddPreMulColorSelfOpacity(&cb, o)
-			concepts.BlendColors((*[4]float64)(&ca), (*[4]float64)(&cb), o)
+			concepts.BlendColors(&ca, &cb, o)
 			//log.Printf("a:%v, b:%v, o: %v, result: %v", caa.StringHuman(), cb.StringHuman(), o, ca.StringHuman())
 		}
 	})
 }
 
-func BlendFrameBufferGo(buffer []uint8, fb [][4]float64, tint *concepts.Vector4) {
+func BlendFrameBufferGo(buffer []uint8, fb []concepts.Vector4, tint *concepts.Vector4) {
 	for fbIndex := 0; fbIndex < len(fb); fbIndex++ {
 		screenIndex := fbIndex * 4
 		inva := 1.0 - tint[3]
@@ -47,11 +47,11 @@ func BenchmarkBlendFrameBuffer(b *testing.B) {
 	w := 640
 	h := 360
 	target := make([]uint8, w*h*4)
-	fb := make([][4]float64, w*h)
+	fb := make([]concepts.Vector4, w*h)
 	tint := concepts.Vector4{0, 0, 0, 0}
 	b.Run("Color", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			concepts.BlendFrameBuffer(target, fb, (*[4]float64)(&tint))
+			concepts.BlendFrameBuffer(target, fb, &tint)
 			//BlendFrameBufferGo(target, fb, &tint)
 		}
 	})

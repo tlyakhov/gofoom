@@ -6,9 +6,10 @@ package concepts
 import (
 	"math/rand/v2"
 	"reflect"
+	"unsafe"
 )
 
-//go:generate go run blend_asm.go -out blend_asm.s -stubs blend_asm_stub.go
+//go:generate go run blend_amd64.go -out blend_amd64.s -stubs blend_amd64_stub.go
 
 // Formulas are from https://en.wikipedia.org/wiki/Blend_modes
 type BlendingFunc func(a, b *Vector4) *Vector4
@@ -28,6 +29,17 @@ func init() {
 	for name, f := range BlendingFuncs {
 		BlendingFuncNames[reflect.ValueOf(f).Pointer()] = name
 	}
+}
+
+// BlendFrameBuffer converts float64 framebuffer to uint8 with an added tint
+func BlendFrameBuffer(target []uint8, frameBuffer []Vector4, tint *Vector4) {
+	fb := unsafe.Slice((*[4]float64)(unsafe.Pointer(&frameBuffer[0])), len(frameBuffer))
+	blendFrameBuffer(target, fb, (*[4]float64)(tint))
+}
+
+// BlendColors adds a and b * opacity.
+func BlendColors(a *Vector4, b *Vector4, opacity float64) {
+	blendColors((*[4]float64)(a), (*[4]float64)(b), opacity)
 }
 
 func BlendNormal(a, b *Vector4) *Vector4 {

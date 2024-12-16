@@ -60,7 +60,7 @@ func (r *Renderer) wall(c *column) {
 				c.SampleLight(&c.MaterialSampler.Output, lit, &c.RaySegIntersect, c.Distance)
 			}
 		}
-		concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex]), (*[4]float64)(&c.MaterialSampler.Output), 1.0)
+		concepts.BlendColors(&r.FrameBuffer[screenIndex], &c.MaterialSampler.Output, 1.0)
 		if c.MaterialSampler.Output[3] > 0.8 {
 			r.ZBuffer[screenIndex] = c.Distance
 		}

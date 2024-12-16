@@ -59,7 +59,6 @@ require (
 	github.com/gopxl/mainthread/v2 v2.1.1 // indirect
 	github.com/jeandeaual/go-locale v0.0.0-20241203095717-3de5a96e0d6d // indirect
 	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
-	github.com/mmcloughlin/avo v0.6.0 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.4.1 // indirect
 	github.com/rymdport/portal v0.3.0 // indirect
 	golang.org/x/sync v0.9.0 // indirect
