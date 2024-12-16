@@ -112,7 +112,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, c *column, xStart, xEnd int)
 			c.MaterialSampler.V = c.NV
 			c.SampleMaterial(nil)
 			c.MaterialSampler.Output.Mul4Self(&c.Light)
-			concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex]), (*[4]float64)(&c.MaterialSampler.Output), 1.0)
+			concepts.BlendColors(&r.FrameBuffer[screenIndex], &c.MaterialSampler.Output, 1.0)
 			if c.MaterialSampler.Output[3] > 0.8 {
 				r.ZBuffer[screenIndex] = c.Distance
 			}
@@ -148,7 +148,7 @@ func (r *Renderer) renderBodyPixel(ebd *entityWithDist2, c *column, sx, ex int) 
 	le.Get()*/
 	c.Light.From(&lit.Diffuse)
 	c.Light.To3D().AddSelf(&lit.Ambient)
-	concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex]), (*[4]float64)(&c.Light), 1.0)
+	concepts.BlendColors(&r.FrameBuffer[screenIndex], &c.Light, 1.0)
 	if c.Light[3] > 0.8 {
 		r.ZBuffer[screenIndex] = dist
 	}

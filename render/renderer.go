@@ -9,7 +9,6 @@ import (
 	"slices"
 	"sync"
 	"sync/atomic"
-	"unsafe"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -451,8 +450,7 @@ func (r *Renderer) Render() {
 }
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
-	fb := unsafe.Slice((*[4]float64)(unsafe.Pointer(&r.FrameBuffer[0])), len(r.FrameBuffer))
-	concepts.BlendFrameBuffer(buffer, fb, (*[4]float64)(&r.FrameTint))
+	concepts.BlendFrameBuffer(buffer, r.FrameBuffer, &r.FrameTint)
 }
 
 func (r *Renderer) BlendSample(sample *concepts.Vector4, screenIndex int, z float64, blendFunc concepts.BlendingFunc) {
@@ -491,7 +489,7 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concep
 			if blendFunc != nil {
 				r.BlendSample(&ms.Output, screenIndex, -1, blendFunc)
 			} else {
-				concepts.BlendColors((*[4]float64)(&r.FrameBuffer[screenIndex]), (*[4]float64)(&ms.Output), 1.0)
+				concepts.BlendColors(&r.FrameBuffer[screenIndex], &ms.Output, 1.0)
 			}
 		}
 	}

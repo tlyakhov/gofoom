@@ -24,7 +24,7 @@ type Config struct {
 	ViewFix                   []float64
 	ZBuffer                   []float64
 	FrameBuffer               []concepts.Vector4
-	FrameTint                 [4]float64
+	FrameTint                 concepts.Vector4
 	Player                    *behaviors.Player
 	PlayerBody                *core.Body
 	Carrier                   *behaviors.InventoryCarrier

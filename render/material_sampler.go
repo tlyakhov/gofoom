@@ -185,7 +185,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	ms.frob(stage, &ms.StageOutput)
 
 	//ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
-	concepts.BlendColors((*[4]float64)(&ms.Output), (*[4]float64)(&ms.StageOutput), opacity)
+	concepts.BlendColors(&ms.Output, &ms.StageOutput, opacity)
 	// TODO: BlendFunc
 }
 

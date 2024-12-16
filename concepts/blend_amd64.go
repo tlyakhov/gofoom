@@ -23,9 +23,9 @@ func avoidAVXSlowdowns() {
 
 func genBlendFramebuffer() {
 
-	TEXT("BlendFrameBuffer", NOSPLIT, "func(target []uint8, fb [][4]float64, tint *[4]float64)")
+	TEXT("blendFrameBuffer", NOSPLIT, "func(target []uint8, fb [][4]float64, tint *[4]float64)")
 	Pragma("noescape")
-	Doc("BlendFrameBuffer converts float64 framebuffer to uint8 with an added tint")
+	Doc("blendFrameBuffer converts float64 framebuffer to uint8 with an added tint")
 	fb := Load(Param("fb").Base(), GP64())
 	fbPtr := Mem{Base: fb}
 	target := Load(Param("target").Base(), GP64())
@@ -102,9 +102,9 @@ func genBlendFramebuffer() {
 
 func genBlendColors() {
 	Comment("Benchmarked call overhead is ~2.8 ns/op")
-	TEXT("BlendColors", NOSPLIT, "func(a, b *[4]float64, opacity float64)")
+	TEXT("blendColors", NOSPLIT, "func(a, b *[4]float64, opacity float64)")
 	Pragma("noescape")
-	Doc("BlendColors adds a and b * opacity.")
+	Doc("blendColors adds a and b * opacity.")
 	aptr := Mem{Base: Load(Param("a"), GP64())}
 	bptr := Mem{Base: Load(Param("b"), GP64())}
 	ob, _ := Param("opacity").Resolve()
