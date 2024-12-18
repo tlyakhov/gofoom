@@ -204,7 +204,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				if ls.MaterialSampler.Output[3] >= 0.99 {
 					return false
 				}
-				ls.Filter.AddPreMulColorSelf(&ls.MaterialSampler.Output)
+				concepts.BlendColors(&ls.Filter, &ls.MaterialSampler.Output, 1)
 			}
 
 			// Get the square of the distance to the intersection (from the target point)

@@ -62,13 +62,13 @@ func planes(c *column, plane *core.SectorPlane) {
 		screenIndex := uint32(c.ScreenX + c.ScreenY*c.ScreenWidth)
 		denom := plane.Normal.Dot(&c.RayPlane)
 		if denom == 0 {
-			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 0, 0, 1})
+			concepts.BlendColors(&c.FrameBuffer[screenIndex], &concepts.Vector4{1, 0, 0, 1}, 1)
 			continue
 		}
 
 		t := planeRayDelta.Dot(&plane.Normal) / denom
 		if t <= 0 {
-			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 1, 0, 1})
+			concepts.BlendColors(&c.FrameBuffer[screenIndex], &concepts.Vector4{1, 1, 0, 1}, 1)
 			dbg := fmt.Sprintf("%v plane t <= 0", c.Sector.Entity)
 			c.Player.Notices.Push(dbg)
 			continue
@@ -81,12 +81,12 @@ func planes(c *column, plane *core.SectorPlane) {
 		dist2 := world.To2D().Length2()
 
 		if distToPlane > c.ZBuffer[screenIndex] || dist2 > c.Distance*c.Distance+constants.IntersectEpsilon {
-			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 0, 0, 1})
+			concepts.BlendColors(&c.FrameBuffer[screenIndex], &concepts.Vector4{1, 0, 1, 1}, 1)
 			continue
 		}
 
 		if distToPlane <= 0 {
-			c.FrameBuffer[screenIndex].AddPreMulColorSelf(&concepts.Vector4{1, 0, 0, 1})
+			concepts.BlendColors(&c.FrameBuffer[screenIndex], &concepts.Vector4{0, 1, 0, 1}, 1)
 			continue
 		}
 
@@ -111,7 +111,7 @@ func planes(c *column, plane *core.SectorPlane) {
 				c.SampleLight(&c.MaterialSampler.Output, lit, &world, distToPlane)
 			}
 		}
-		c.FrameBuffer[screenIndex].AddPreMulColorSelf(&c.MaterialSampler.Output)
+		concepts.BlendColors(&c.FrameBuffer[screenIndex], &c.MaterialSampler.Output, 1)
 		c.ZBuffer[screenIndex] = distToPlane
 	}
 }

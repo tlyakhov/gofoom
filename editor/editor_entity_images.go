@@ -45,7 +45,7 @@ func (e *Editor) imageForMaterial(entity ecs.Entity) image.Image {
 				return e.noTextureImage
 			}
 			if x <= 1 || y <= 1 || x >= w-2 || y >= h-2 {
-				e.MaterialSampler.Output.AddPreMulColorSelf(border)
+				concepts.BlendColors(&e.MaterialSampler.Output, border, 1)
 			}
 			index := x*4 + y*img.Stride
 

@@ -1708,7 +1708,12 @@
               door.Intent = behaviors.DoorIntentClosed
             buttonStage.Frame=0
             }
-    Message: Open
+    Message: |-
+            {{with behaviors_VerticalDoor 16}}
+              {{if eq .Intent 1}}Close{{else}}Open{{end}}
+            {{else}}
+              No door 16
+            {{end}}
     Selected:
         Code: |-
             buttonSector := core.GetSector(s.ECS,10)

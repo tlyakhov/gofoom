@@ -21,7 +21,7 @@ func (r *Renderer) RenderWeapon(slot *behaviors.InventorySlot) {
 		}
 	}
 	// TODO: This should be a separate image from the inventory item image
-	r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, nil)
+	r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, concepts.BlendNormal)
 }
 
 func (r *Renderer) RenderHud() {
@@ -58,7 +58,7 @@ func (r *Renderer) RenderHud() {
 			continue
 		}
 		slot := behaviors.GetInventorySlot(r.ECS, e)
-		r.BitBlt(slot.Image, index*40+10, r.ScreenHeight-42, 32, 32, nil)
+		r.BitBlt(slot.Image, index*40+10, r.ScreenHeight-42, 32, 32, concepts.BlendNormal)
 		r.Print(ts, index*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
 		if e == r.Carrier.SelectedWeapon {
 			r.RenderWeapon(slot)

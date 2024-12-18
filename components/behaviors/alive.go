@@ -70,6 +70,8 @@ func (a *Alive) Hurt(source string, amount, cooldown float64) bool {
 	return true
 }
 
+var damageTintColor = concepts.Vector4{1, 0, 0, 1}
+
 func (alive *Alive) Tint(color *concepts.Vector4) {
 	allCooldowns := 0.0
 	maxCooldown := 0.0
@@ -80,7 +82,7 @@ func (alive *Alive) Tint(color *concepts.Vector4) {
 
 	if allCooldowns > 0 && maxCooldown > 0 {
 		a := allCooldowns * 0.6 / maxCooldown
-		color.AddPreMulColorSelf(&concepts.Vector4{1, 0, 0, a})
+		concepts.BlendColors(color, &damageTintColor, a)
 	}
 }
 

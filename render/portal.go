@@ -6,6 +6,7 @@ package render
 import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
+	"tlyakhov/gofoom/concepts"
 )
 
 func wallHiPick(cp *columnPortal) {
@@ -49,7 +50,7 @@ func wallHi(cp *columnPortal) {
 			cp.MaterialSampler.Output[2] = 0.5
 			cp.MaterialSampler.Output[3] = 1
 		}
-		cp.FrameBuffer[screenIndex].AddPreMulColorSelf(&cp.MaterialSampler.Output)
+		concepts.BlendColors(&cp.FrameBuffer[screenIndex], &cp.MaterialSampler.Output, 1)
 		cp.ZBuffer[screenIndex] = cp.Distance
 	}
 }
@@ -95,7 +96,7 @@ func wallLow(cp *columnPortal) {
 			cp.MaterialSampler.Output[2] = 0.5
 			cp.MaterialSampler.Output[3] = 1
 		}
-		cp.FrameBuffer[screenIndex].AddPreMulColorSelf(&cp.MaterialSampler.Output)
+		concepts.BlendColors(&cp.FrameBuffer[screenIndex], &cp.MaterialSampler.Output, 1)
 		cp.ZBuffer[screenIndex] = cp.Distance
 	}
 }
