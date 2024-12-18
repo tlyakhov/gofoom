@@ -453,17 +453,17 @@ func (r *Renderer) ApplyBuffer(buffer []uint8) {
 	concepts.BlendFrameBuffer(buffer, r.FrameBuffer, &r.FrameTint)
 }
 
-func (r *Renderer) BlendSample(sample *concepts.Vector4, screenIndex int, z float64, blendFunc concepts.BlendingFunc) {
+func (r *Renderer) BlendSample(sample *concepts.Vector4, screenIndex int, z float64, blendFunc concepts.BlendType) {
 	if sample[3] <= 0 {
 		return
 	}
-	blendFunc(&r.FrameBuffer[screenIndex], sample)
+	concepts.BlendingFuncs[blendFunc](&r.FrameBuffer[screenIndex], sample, 1)
 	if sample[3] > 0.8 {
 		r.ZBuffer[screenIndex] = z
 	}
 }
 
-func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concepts.BlendingFunc) {
+func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concepts.BlendType) {
 	ms := MaterialSampler{
 		Config: r.Config,
 		ScaleW: uint32(w),
@@ -486,7 +486,7 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concep
 			ms.V = ms.NV
 			ms.SampleMaterial(nil)
 			screenIndex := ms.ScreenX + ms.ScreenY*r.ScreenWidth
-			if blendFunc != nil {
+			if blendFunc != concepts.BlendNormal {
 				r.BlendSample(&ms.Output, screenIndex, -1, blendFunc)
 			} else {
 				concepts.BlendColors(&r.FrameBuffer[screenIndex], &ms.Output, 1.0)

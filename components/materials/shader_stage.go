@@ -4,7 +4,6 @@
 package materials
 
 import (
-	"reflect"
 	"strconv"
 	"strings"
 	"tlyakhov/gofoom/concepts"
@@ -25,14 +24,14 @@ const (
 )
 
 type ShaderStage struct {
-	ECS          *ecs.ECS
-	System       bool
-	Material     ecs.Entity            `editable:"Material" edit_type:"Material"`
-	Transform    concepts.Matrix2      `editable:"ℝ²→ℝ²"`
-	Flags        ShaderFlags           `editable:"Flags" edit_type:"Flags"`
-	Frame        int                   `editable:"Frame"`
-	Opacity      float64               `editable:"Opacity"`
-	BlendingFunc concepts.BlendingFunc `editable:"Blend"`
+	ECS       *ecs.ECS
+	System    bool
+	Material  ecs.Entity         `editable:"Material" edit_type:"Material"`
+	Transform concepts.Matrix2   `editable:"ℝ²→ℝ²"`
+	Flags     ShaderFlags        `editable:"Flags" edit_type:"Flags"`
+	Frame     int                `editable:"Frame"`
+	Opacity   float64            `editable:"Opacity"`
+	BlendFunc concepts.BlendType `editable:"Blend"`
 
 	IgnoreSurfaceTransform bool `editable:"Ignore Surface Transform"`
 }
@@ -41,7 +40,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	s.Transform = concepts.IdentityMatrix2
 	s.Flags = ShaderTiled
 	s.Opacity = 1
-	s.BlendingFunc = concepts.BlendNormal
+	s.BlendFunc = concepts.BlendNormal
 
 	if data == nil {
 		return
@@ -74,11 +73,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["BlendingFunc"]; ok {
-		name := v.(string)
-		s.BlendingFunc = concepts.BlendingFuncs[name]
-		if s.BlendingFunc == nil {
-			s.BlendingFunc = concepts.BlendNormal
-		}
+		s.BlendFunc, _ = concepts.BlendFuncString(cast.ToString(v))
 	}
 
 	if v, ok := data["Flags"]; ok {
@@ -107,7 +102,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 		result["Opacity"] = s.Opacity
 	}
 
-	result["BlendingFunc"] = concepts.BlendingFuncNames[reflect.ValueOf(s.BlendingFunc).Pointer()]
+	result["BlendingFunc"] = s.BlendFunc.String()
 
 	if s.Flags != ShaderTiled {
 		flags := ""

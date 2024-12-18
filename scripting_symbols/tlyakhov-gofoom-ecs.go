@@ -16,19 +16,24 @@ func init() {
 	Symbols["tlyakhov/gofoom/ecs/ecs"] = map[string]reflect.Value{
 		// function, constant and variable definitions
 		"ComponentTableGrowthRate": reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
+		"ComponentTableHit":        reflect.ValueOf(&ecs.ComponentTableHit).Elem(),
+		"ComponentTableMiss":       reflect.ValueOf(&ecs.ComponentTableMiss).Elem(),
 		"ConstructArray":           reflect.ValueOf(ecs.ConstructArray),
 		"ControllerAlways":         reflect.ValueOf(ecs.ControllerAlways),
 		"ControllerRecalculate":    reflect.ValueOf(ecs.ControllerRecalculate),
+		"EntityPrefix":             reflect.ValueOf(constant.MakeFromLiteral("\"∈⋮\"", token.STRING, 0)),
 		"EntityTableGrowthRate":    reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
 		"GetLinked":                reflect.ValueOf(ecs.GetLinked),
 		"GetNamed":                 reflect.ValueOf(ecs.GetNamed),
 		"LinkedCID":                reflect.ValueOf(&ecs.LinkedCID).Elem(),
 		"NamedCID":                 reflect.ValueOf(&ecs.NamedCID).Elem(),
 		"NewECS":                   reflect.ValueOf(ecs.NewECS),
+		"ParseComponentIDs":        reflect.ValueOf(ecs.ParseComponentIDs),
 		"ParseEntitiesFromMap":     reflect.ValueOf(ecs.ParseEntitiesFromMap),
 		"ParseEntity":              reflect.ValueOf(ecs.ParseEntity),
 		"ParseEntityCSV":           reflect.ValueOf(ecs.ParseEntityCSV),
 		"ParseEntityTable":         reflect.ValueOf(ecs.ParseEntityTable),
+		"SerializeComponentIDs":    reflect.ValueOf(ecs.SerializeComponentIDs),
 		"Types":                    reflect.ValueOf(ecs.Types),
 
 		// type definitions
@@ -170,7 +175,6 @@ type _tlyakhov_gofoom_ecs_Controller struct {
 	WAlways              func()
 	WComponentID         func() ecs.ComponentID
 	WEditorPausedMethods func() ecs.ControllerMethod
-	WLoaded              func()
 	WMethods             func() ecs.ControllerMethod
 	WRecalculate         func()
 	WTarget              func(a0 ecs.Attachable, a1 ecs.Entity) bool
@@ -184,9 +188,6 @@ func (W _tlyakhov_gofoom_ecs_Controller) ComponentID() ecs.ComponentID {
 }
 func (W _tlyakhov_gofoom_ecs_Controller) EditorPausedMethods() ecs.ControllerMethod {
 	return W.WEditorPausedMethods()
-}
-func (W _tlyakhov_gofoom_ecs_Controller) Loaded() {
-	W.WLoaded()
 }
 func (W _tlyakhov_gofoom_ecs_Controller) Methods() ecs.ControllerMethod {
 	return W.WMethods()

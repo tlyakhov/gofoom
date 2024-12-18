@@ -417,6 +417,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, dynamic.AnimationCoordinatesValues())
 		case *materials.ShaderFlags:
 			g.fieldEnum(field, materials.ShaderFlagsValues())
+		case *concepts.BlendType:
+			g.fieldEnum(field, concepts.BlendFuncValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]*core.Script:
@@ -431,8 +433,6 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldSlice(field)
 		case *dynamic.TweeningFunc:
 			fieldFunc(g, field, dynamic.TweeningFuncs)
-		case *concepts.BlendingFunc:
-			fieldFunc(g, field, concepts.BlendingFuncs)
 		case **dynamic.Animation[int]:
 			g.fieldAnimation(field)
 		case **dynamic.Animation[float64]:

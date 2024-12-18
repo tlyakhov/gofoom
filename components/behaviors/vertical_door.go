@@ -32,9 +32,10 @@ const (
 
 type VerticalDoor struct {
 	ecs.Attached `editable:"^"`
-	State        DoorState
-	Intent       DoorIntent `editable:"Intent"`
-	AutoClose    bool       `editable:"Auto-close"`
+	// TODO: Separate out state and make this multi-attachable
+	State     DoorState
+	Intent    DoorIntent `editable:"Intent"`
+	AutoClose bool       `editable:"Auto-close"`
 
 	// Passthroughs to Animation
 	TweeningFunc dynamic.TweeningFunc `editable:"Tweening Function"`
