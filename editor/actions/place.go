@@ -4,6 +4,7 @@
 package actions
 
 import (
+	"log"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -24,22 +25,25 @@ type Place struct {
 }
 
 func (a *Place) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool {
+	log.Printf("Place.BeginPoint: Mode = %v", a.Mode)
 	if a.Mode != "" {
 		return false
 	}
 
 	a.Modifier = m
 	a.Mode = "Begin"
-	a.SetMapCursor(desktop.TextCursor)
+	a.SetMapCursor(desktop.CrosshairCursor)
 	return true
 }
 
 func (a *Place) Point() bool {
+	log.Printf("Place.Point: Mode = %v", a.Mode)
 	return a.Mode != ""
 
 }
 
 func (a *Place) EndPoint() bool {
+	log.Printf("Place.EndPoint: Mode = %v", a.Mode)
 	if a.Mode == "" {
 		return false
 	}

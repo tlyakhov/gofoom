@@ -131,7 +131,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 
 		if (stage.Flags & materials.ShaderLiquid) != 0 {
-			lv, lu := math.Sincos(float64(stage.ECS.Frame) * constants.LiquidChurnSpeed * concepts.Deg2rad)
+			lv, lu := math.Sincos(float64(stage.ECS.Timestamp) * 0.05 * constants.LiquidChurnSpeed * concepts.Deg2rad)
 			u += lu * constants.LiquidChurnSize
 			v += lv * constants.LiquidChurnSize
 		}
@@ -187,17 +187,4 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	//ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
 	concepts.BlendColors(&ms.Output, &ms.StageOutput, opacity)
 	// TODO: BlendFunc
-}
-
-func WeightBlendedOIT(c *concepts.Vector4, z float64) float64 {
-	w := c[0]
-	if c[1] > c[0] {
-		w = c[1]
-	}
-	if c[2] > c[0] {
-		w = c[2]
-	}
-	w = concepts.Clamp(w*c[3], c[3], 1.0)
-	w *= concepts.Clamp(0.03/(1e-5+math.Pow(z/500, 4.0)), 1e-2, 3e3)
-	return w
 }

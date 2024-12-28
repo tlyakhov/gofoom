@@ -70,8 +70,7 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 		}
 		action.ValuesToAssign[i] = reflect.ValueOf(newTransform).Elem()
 	}
-	g.NewAction(action)
-	action.Act()
+	g.Act(action)
 }
 
 func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
@@ -121,8 +120,7 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 			m = m.TranslateSelf(delta)
 			action.ValuesToAssign[i] = reflect.ValueOf(m).Elem()
 		}
-		g.NewAction(action)
-		action.Act()
+		g.Act(action)
 	}
 	eDelta.SetText(origDelta)
 	f.Append("DX/DY", eDelta)
@@ -145,8 +143,7 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 			m = m.AxisScale(scale)
 			action.ValuesToAssign[i] = reflect.ValueOf(m).Elem()
 		}
-		g.NewAction(action)
-		action.Act()
+		g.Act(action)
 	}
 
 	ancestors := field.Values[0].Ancestors

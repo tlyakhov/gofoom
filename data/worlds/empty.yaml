@@ -1,18 +1,20 @@
 - Entity: ∈⋮1
   behaviors.Alive:
     Health: 100
+  behaviors.InventoryCarrier:
+    Inventory: []
   behaviors.Player:
     Spawn: false
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 0, 0, 5
-        Spawn: 0, 0, 0
+      Now: 0, 0, 5
+      Spawn: 0, 0, 0
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 40
+      Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -21,8 +23,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Now: 0, 0, 0
+      Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
 - Entity: ∈⋮2
@@ -38,60 +40,60 @@
 - Entity: ∈⋮3
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: -100, -100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: 100, -100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: 100, 100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: -100, 100
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: -100, -100
         Surface:
-            Material: ∈⋮2
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: 100, -100
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: 100, 100
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: -100, 100
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮2
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: -60, -70, 32
-        Spawn: -60, -70, 32
+      Now: -60, -70, 32
+      Spawn: -60, -70, 32
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -101,18 +103,20 @@
 - Entity: ∈⋮5
   behaviors.Alive:
     Health: 100
+  behaviors.InventoryCarrier:
+    Inventory: []
   behaviors.Player:
     Spawn: true
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Now: 0, 0, 0
+      Spawn: 0, 0, 0
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -121,7 +125,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Now: 0, 0, 0
+      Spawn: 0, 0, 0
   ecs.Named:
     Name: Spawn

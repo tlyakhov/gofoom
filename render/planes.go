@@ -92,12 +92,13 @@ func planes(c *column, plane *core.SectorPlane) {
 
 		world[0] += c.Ray.Start[0]
 		world[1] += c.Ray.Start[1]
-		if plane.Normal[2] == 1 || plane.Normal[2] == -1 {
+		switch plane.Normal[2] {
+		case 1, -1:
 			world[2] = *plane.Z.Render
-		} else {
+		default:
 			world[2] += c.CameraZ
+			//world[2] = plane.ZAt(dynamic.DynamicRender, world.To2D())
 		}
-		//world[2] = plane.ZAt(dynamic.DynamicRender, world.To2D())
 
 		if mat != 0 {
 			c.MaterialSampler.NU = (world[0] - c.Sector.Min[0]) / sectorWidth

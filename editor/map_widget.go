@@ -6,7 +6,6 @@ package main
 import (
 	"fmt"
 	"image"
-	"log"
 	"math"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -248,22 +247,22 @@ func (mw *MapWidget) setMouse(evt *fyne.PointEvent) bool {
 }
 
 func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
-	log.Printf("Mouse down")
+	//log.Printf("Mouse down")
 	if !mw.setMouseDown(&evt.PointEvent) {
 		return
 	}
 
 	switch {
 	case evt.Button == desktop.MouseButtonSecondary && editor.CurrentAction == nil:
-		editor.NewAction(&actions.Select{Place: actions.Place{IEditor: editor}})
+		editor.Act(&actions.Select{Place: actions.Place{IEditor: editor}})
 	case evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil:
-		editor.NewAction(&actions.Pan{IEditor: editor})
+		editor.Act(&actions.Pan{IEditor: editor})
 	case evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.SelectedObjects.Empty():
-		editor.NewAction(&actions.Transform{IEditor: editor})
+		editor.Act(&actions.Transform{IEditor: editor})
 	}
 
-	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
-		bp.BeginPoint(evt.Modifier, evt.Button)
+	if placeable, ok := editor.CurrentAction.(actions.Placeable); ok {
+		placeable.BeginPoint(evt.Modifier, evt.Button)
 	}
 	if m, ok := editor.CurrentAction.(desktop.Mouseable); ok {
 		m.MouseDown(evt)
@@ -272,7 +271,7 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 func (mw *MapWidget) MouseUp(evt *desktop.MouseEvent) {
 	editor.MousePressed = false
 
-	log.Printf("MouseUp")
+	//log.Printf("MouseUp")
 
 	if m, ok := editor.CurrentAction.(desktop.Mouseable); ok {
 		m.MouseUp(evt)
@@ -287,12 +286,13 @@ func (mw *MapWidget) Tapped(evt *fyne.PointEvent) {
 		return
 	}
 
-	log.Printf("Tapped")
+	//log.Printf("Tapped")
 
 	if m, ok := editor.CurrentAction.(fyne.Tappable); ok {
 		m.Tapped(evt)
 	}
-	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+	_, isDesktop := editor.App.(desktop.App)
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok && !isDesktop {
 		bp.BeginPoint(0, desktop.MouseButtonPrimary)
 		bp.EndPoint()
 	}
@@ -303,12 +303,13 @@ func (mw *MapWidget) TappedSecondary(evt *fyne.PointEvent) {
 		return
 	}
 
-	log.Printf("SecondaryTapped")
+	//log.Printf("SecondaryTapped")
 
 	if m, ok := editor.CurrentAction.(fyne.SecondaryTappable); ok {
 		m.TappedSecondary(evt)
 	}
-	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
+	_, isDesktop := editor.App.(desktop.App)
+	if bp, ok := editor.CurrentAction.(actions.Placeable); ok && !isDesktop {
 		bp.BeginPoint(0, desktop.MouseButtonSecondary)
 		bp.EndPoint()
 	}
@@ -392,7 +393,7 @@ func (mw *MapWidget) MouseMoved(ev *desktop.MouseEvent) {
 	}
 	//log.Printf("scale:%v, x,y: %v, %v - world: %v, %v", scale, x, y, editor.MouseWorld[0], editor.MouseWorld[1])
 	editor.UpdateStatus()
-	log.Printf("Moved")
+	//log.Printf("Moved")
 
 	if bp, ok := editor.CurrentAction.(actions.Placeable); ok {
 		bp.Point()
