@@ -33,6 +33,7 @@ type Simulation struct {
 func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
+		Timestamp:     hrtime.Now().Milliseconds(),
 		EditorPaused:  false,
 		Dynamics:      xsync.NewMapOf[Dynamic, struct{}](),
 		Spawnables:    xsync.NewMapOf[Spawnable, struct{}](),
@@ -40,9 +41,9 @@ func NewSimulation() *Simulation {
 }
 
 func (s *Simulation) Step() {
+	s.PrevTimestamp = s.Timestamp
 	s.Timestamp = hrtime.Now().Milliseconds()
 	s.FrameMillis = float64(s.Timestamp - s.PrevTimestamp)
-	s.PrevTimestamp = s.Timestamp
 	if s.FrameMillis != 0 {
 		s.FPS = 1000.0 / s.FrameMillis
 	}

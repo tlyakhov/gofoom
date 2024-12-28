@@ -50,6 +50,7 @@ type PropertyGridField struct {
 	Source     *reflect.StructField
 	Sort       int
 	Depth      int
+	SliceIndex int
 	Parent     *PropertyGridField
 
 	Values []*PropertyGridFieldValue

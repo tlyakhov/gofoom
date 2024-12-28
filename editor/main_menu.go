@@ -143,9 +143,7 @@ func CreateMainMenu() {
 	editor.EditDelete.NoModifier = true
 	editor.EditDelete.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyDelete, Modifier: 0}
 	editor.EditDelete.Menu = fyne.NewMenuItem("Delete", func() {
-		action := &actions.Delete{IEditor: editor}
-		editor.NewAction(action)
-		action.Act()
+		editor.Act(&actions.Delete{IEditor: editor})
 	})
 
 	editor.EditCut.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyX, Modifier: fyne.KeyModifierShortcutDefault}
@@ -154,16 +152,12 @@ func CreateMainMenu() {
 
 	editor.EditCopy.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyC, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.EditCopy.Menu = fyne.NewMenuItem("Copy", func() {
-		action := &actions.Copy{IEditor: editor}
-		editor.NewAction(action)
-		action.Act()
+		editor.Act(&actions.Copy{IEditor: editor})
 	})
 
 	editor.EditPaste.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyV, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.EditPaste.Menu = fyne.NewMenuItem("Paste", func() {
-		action := &actions.Paste{Transform: actions.Transform{IEditor: editor}}
-		editor.NewAction(action)
-		action.Act()
+		editor.Act(&actions.Paste{Transform: actions.Transform{IEditor: editor}})
 	})
 
 	editor.EditSelectSegment.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyApostrophe, Modifier: fyne.KeyModifierShortcutDefault}
@@ -190,9 +184,7 @@ func CreateMainMenu() {
 	editor.EditLowerFloorSlope.Menu = fyne.NewMenuItem("Lower Selection Floor Slope", func() { editor.MoveSurface(-0.05, true, true) })
 	editor.EditRotateAnchor.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyR, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.EditRotateAnchor.Menu = fyne.NewMenuItem("Rotate Slope Anchor", func() {
-		action := &actions.RotateSegments{IEditor: editor}
-		editor.NewAction(action)
-		action.Act()
+		editor.Act(&actions.RotateSegments{IEditor: editor})
 	})
 
 	editor.EditIncreaseGrid.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyUp, Modifier: fyne.KeyModifierShift}

@@ -56,8 +56,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		for _, e := range selEntities {
 			log.Printf("Detaching %v from %v", parentType, e)
 		}
-		g.NewAction(action)
-		action.Act()
+		g.Act(action)
 		g.Focus(g.GridWidget)
 	}
 
@@ -84,8 +83,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 					log.Printf("Attaching %v to %v", parentType, e)
 				}
 			}
-			g.NewAction(action)
-			action.Act()
+			g.Act(action)
 			g.Focus(g.GridWidget)
 		}, g.GridWindow)
 	}

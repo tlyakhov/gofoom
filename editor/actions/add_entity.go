@@ -34,12 +34,6 @@ func (a *AddEntity) DetachFromSector() {
 	//a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 
-func (a *AddEntity) AttachAll() {
-	for _, component := range a.Components {
-		a.State().ECS.Attach(component.Base().ComponentID, a.Entity, component)
-	}
-}
-
 func (a *AddEntity) AttachToSector() {
 	if body := core.GetBody(a.State().ECS, a.Entity); body != nil {
 		if a.ContainingSector != nil {
@@ -112,6 +106,10 @@ func (a *AddEntity) EndPoint() bool {
 }
 
 func (a *AddEntity) Act() {
+	a.Entity = a.State().ECS.NewEntity()
+	for i, component := range a.Components {
+		a.Components[i] = a.State().ECS.Attach(component.Base().ComponentID, a.Entity, component)
+	}
 	a.SelectObjects(true, selection.SelectableFromEntity(a.State().ECS, a.Entity))
 }
 func (a *AddEntity) Cancel() {
@@ -119,6 +117,7 @@ func (a *AddEntity) Cancel() {
 	a.DetachFromSector()
 	if a.Entity != 0 {
 		a.State().ECS.Delete(a.Entity)
+		a.Entity = 0
 	}
 	a.State().Lock.Unlock()
 	a.SelectObjects(true)
@@ -134,8 +133,7 @@ func (a *AddEntity) Undo() {
 func (a *AddEntity) Redo() {
 	a.State().Lock.Lock()
 	defer a.State().Lock.Unlock()
-
-	a.AttachAll()
+	a.Act()
 	a.AttachToSector()
 }
 

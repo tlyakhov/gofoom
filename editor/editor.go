@@ -19,9 +19,11 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/storage"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/puzpuzpuz/xsync/v3"
 
@@ -99,6 +101,14 @@ func NewEditor() *Editor {
 	e.MapViewGrid.Current = &e.Edit.MapView
 
 	return e
+}
+
+func (e *Editor) OnStarted() {
+	// This is used whenever we don't have a texture for something
+	img := canvas.NewImageFromResource(theme.QuestionIcon())
+	img.Resize(fyne.NewSquareSize(64))
+	img.Refresh()
+	editor.noTextureImage = img.Image
 }
 
 func (e *Editor) Content() string {
@@ -324,48 +334,51 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	}
 	e.SetMapCursor(desktop.DefaultCursor)
 	e.CurrentAction = nil
-	go e.ActTool()
+	go e.UseTool()
 }
 
-func (e *Editor) NewAction(a state.Actionable) {
+func (e *Editor) Act(a state.Actionable) {
 	e.CurrentAction = a
+	a.Act()
 }
 
-func (e *Editor) ActTool() {
+func (e *Editor) UseTool() {
 	switch e.Tool {
 	case state.ToolSplitSegment:
-		e.NewAction(&actions.SplitSegment{Place: actions.Place{IEditor: e}})
+		e.Act(&actions.SplitSegment{Place: actions.Place{IEditor: e}})
 	case state.ToolSplitSector:
-		e.NewAction(&actions.SplitSector{Place: actions.Place{IEditor: e}})
+		e.Act(&actions.SplitSector{Place: actions.Place{IEditor: e}})
 	case state.ToolAddSector:
-		entity := e.ECS.NewEntity()
-		s := e.ECS.NewAttachedComponent(entity, core.SectorCID).(*core.Sector)
+		s := &core.Sector{}
+		s.ComponentID = core.SectorCID
+		s.Construct(nil)
 		s.Bottom.Surface.Material = controllers.DefaultMaterial(e.ECS)
 		s.Top.Surface.Material = controllers.DefaultMaterial(e.ECS)
 		a := &actions.AddSector{Sector: s}
 		a.AddEntity.IEditor = e
-		a.AddEntity.Entity = entity
-		a.AddEntity.Components = e.ECS.AllComponents(entity)
-		e.NewAction(a)
+		a.AddEntity.Components = []ecs.Attachable{s}
+		e.Act(a)
 	case state.ToolAddInternalSegment:
-		entity := e.ECS.NewEntity()
-		seg := e.ECS.NewAttachedComponent(entity, core.InternalSegmentCID).(*core.InternalSegment)
+		seg := &core.InternalSegment{}
+		seg.ComponentID = core.InternalSegmentCID
+		seg.Construct(nil)
 		a := &actions.AddInternalSegment{InternalSegment: seg}
 		a.AddEntity.IEditor = e
-		a.AddEntity.Entity = entity
-		a.AddEntity.Components = e.ECS.AllComponents(entity)
-		e.NewAction(a)
+		a.AddEntity.Components = []ecs.Attachable{seg}
+		e.Act(a)
 	case state.ToolAddBody:
-		entity := e.ECS.NewEntity()
-		e.ECS.NewAttachedComponent(entity, core.BodyCID)
-		e.NewAction(&actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: entity, Components: e.ECS.AllComponents(entity)})
+		body := &core.Body{}
+		body.ComponentID = core.BodyCID
+		body.Construct(nil)
+		e.Act(&actions.AddEntity{
+			Place:      actions.Place{IEditor: e},
+			Components: []ecs.Attachable{body},
+		})
 	case state.ToolAlignGrid:
-		e.NewAction(&actions.AlignGrid{IEditor: e})
+		e.Act(&actions.AlignGrid{IEditor: e})
 	default:
 		return
 	}
-
-	e.CurrentAction.Act()
 }
 
 func (e *Editor) NewShader() {
@@ -383,7 +396,7 @@ func (e *Editor) NewShader() {
 		img.Source = uc.URI().Path()
 		img.Load()
 		a := &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
-		e.NewAction(a)
+		e.Act(a)
 		e.CurrentAction.Act()
 		// Next set up the shader
 		eShader := e.ECS.NewEntity()
@@ -396,7 +409,7 @@ func (e *Editor) NewShader() {
 		named := editor.ECS.NewAttachedComponent(eShader, ecs.NamedCID).(*ecs.Named)
 		named.Name = "Shader " + path.Base(img.Source)
 		a = &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
-		e.NewAction(a)
+		e.Act(a)
 		e.CurrentAction.Act()
 
 	}, e.Window)
@@ -412,7 +425,7 @@ func (e *Editor) SwitchTool(tool state.EditorTool) {
 	if m, ok := e.CurrentAction.(state.Cancelable); ok {
 		m.Cancel()
 	} else {
-		e.ActTool()
+		e.UseTool()
 	}
 }
 
@@ -616,7 +629,7 @@ func (e *Editor) ResizeRenderer(w, h int) {
 
 func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
 	action := &actions.MoveSurface{IEditor: e, Delta: delta, Floor: floor, Slope: slope}
-	e.NewAction(action)
+	e.Act(action)
 	action.Act()
 }
 

@@ -17,13 +17,13 @@ import (
 )
 
 func (g *Grid) fieldSliceAdd(field *state.PropertyGridField, concreteType reflect.Type) {
-	action := &actions.AddSliceElement{
-		IEditor:  g.IEditor,
-		SlicePtr: field.Values[0].Value,
-		Parent:   field.Values[0].Parent,
-		Concrete: concreteType}
-	g.NewAction(action)
-	action.Act()
+	g.Act(&actions.ChangeSlice{
+		IEditor:      g.IEditor,
+		SlicePtr:     field.Values[0].Value,
+		Parent:       field.Values[0].Parent,
+		ConcreteType: concreteType,
+		Mode:         actions.AddSliceElementMode,
+		Index:        -1})
 	g.Focus(g.GridWidget)
 }
 
@@ -55,4 +55,46 @@ func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 		button.Icon = theme.ContentAddIcon()
 		button.OnTapped = func() { g.fieldSliceAdd(field, nil) }
 	}
+}
+
+func (g *Grid) fieldChangeSlice(field *state.PropertyGridField) {
+	// field.Type is *[]<something>
+	//elemType := field.Type.Elem().Elem()
+	buttonDec := widget.NewButtonWithIcon("Up", theme.MoveUpIcon(), func() {
+		g.Act(&actions.ChangeSlice{
+			IEditor:  g.IEditor,
+			SlicePtr: field.Values[0].Value,
+			Parent:   field.Values[0].Parent,
+			Mode:     actions.DecSliceElementMode,
+			Index:    field.SliceIndex})
+		g.Focus(g.GridWidget)
+	})
+	buttonInc := widget.NewButtonWithIcon("Down", theme.MoveDownIcon(), func() {
+		g.Act(&actions.ChangeSlice{
+			IEditor:  g.IEditor,
+			SlicePtr: field.Values[0].Value,
+			Parent:   field.Values[0].Parent,
+			Mode:     actions.IncSliceElementMode,
+			Index:    field.SliceIndex})
+		g.Focus(g.GridWidget)
+	})
+	buttonDelete := widget.NewButtonWithIcon("Delete", theme.DeleteIcon(), func() {
+		g.Act(&actions.ChangeSlice{
+			IEditor:  g.IEditor,
+			SlicePtr: field.Values[0].Value,
+			Parent:   field.Values[0].Parent,
+			Mode:     actions.DeleteSliceElementMode,
+			Index:    field.SliceIndex})
+		g.Focus(g.GridWidget)
+	})
+	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
+	c.Layout = layout.NewHBoxLayout()
+	c.Objects = []fyne.CanvasObject{}
+	if field.SliceIndex != 0 {
+		c.Objects = append(c.Objects, buttonDec)
+	}
+	if field.SliceIndex < field.Values[0].Value.Elem().Len()-1 {
+		c.Objects = append(c.Objects, buttonInc)
+	}
+	c.Objects = append(c.Objects, buttonDelete)
 }

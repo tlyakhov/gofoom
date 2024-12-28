@@ -47,7 +47,7 @@ type Grid struct {
 	GridWindow      fyne.Window
 	MaterialSampler render.MaterialSampler
 
-	refreshIndex int
+	widgetIndex int
 }
 
 func (g *Grid) childFields(parentName string, childValue reflect.Value, state PropertyGridState, updateParent bool) {
@@ -57,7 +57,7 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state Pr
 	} else if childValue.Type().Kind() == reflect.Ptr || childValue.Type().Kind() == reflect.Interface {
 		child = childValue.Interface()
 	} else {
-		log.Printf("%v, %v", childValue.String(), childValue.Type())
+		log.Printf("Grid.childFields: childValue is not a struct, ptr, or interface: %v, %v", childValue.String(), childValue.Type())
 	}
 	if !state.Visited.Contains(child) {
 		state.ParentName = parentName
@@ -67,37 +67,39 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state Pr
 			ancestors[len(ancestors)-1] = child
 			state.Ancestors = ancestors
 		}
-		g.fieldsFromObject(child, state)
+		g.fieldsFromStruct(child, state)
 	}
 }
 
-func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
-	objValue := reflect.ValueOf(obj)
-	objType := objValue.Type().Elem()
-	if objValue.IsNil() {
+func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
+	targetValue := reflect.ValueOf(target)
+	targetType := targetValue.Type().Elem()
+	if targetValue.IsNil() {
 		return
 	}
 
 	pgs.Depth++
-	pgs.Visited.Add(obj)
+	pgs.Visited.Add(target)
 
-	for i := 0; i < objType.NumField(); i++ {
-		field := objType.FieldByIndex([]int{i})
-		fieldValue := objValue.Elem().Field(i)
+	for i := 0; i < targetType.NumField(); i++ {
+		field := targetType.FieldByIndex([]int{i})
+		fieldValue := targetValue.Elem().Field(i)
 		tag, ok := field.Tag.Lookup("editable")
 		if !ok {
 			continue
 		}
+		// Only include this field if a method on the struct returns true.
+		// Used for hiding unused fields.
 		if editConditionTag, ok := field.Tag.Lookup("edit_condition"); ok {
-			b := objValue.MethodByName(editConditionTag).Call(nil)
+			b := targetValue.MethodByName(editConditionTag).Call(nil)
 			if !b[0].Bool() {
 				continue
 			}
 		}
 
-		display := tag
+		name := tag
 		if pgs.ParentName != "" {
-			display = pgs.ParentName + "." + display
+			name = pgs.ParentName + "." + name
 		}
 
 		if tag == "^" {
@@ -108,10 +110,10 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			continue
 		}
 
-		gf, ok := pgs.Fields[display]
+		gf, ok := pgs.Fields[name]
 		if !ok {
 			gf = &state.PropertyGridField{
-				Name:       display,
+				Name:       name,
 				Depth:      pgs.Depth,
 				Type:       fieldValue.Addr().Type(),
 				Sort:       100,
@@ -120,7 +122,7 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 				Parent:     pgs.ParentField,
 				Unique:     make(map[string]reflect.Value),
 			}
-			pgs.Fields[display] = gf
+			pgs.Fields[name] = gf
 			if editTypeTag, ok := field.Tag.Lookup("edit_type"); ok {
 				gf.EditType = editTypeTag
 			}
@@ -130,33 +132,55 @@ func (g *Grid) fieldsFromObject(obj any, pgs PropertyGridState) {
 			}
 		}
 
-		gf.Values = append(gf.Values, &state.PropertyGridFieldValue{
+		valueMetadata := &state.PropertyGridFieldValue{
 			Entity:           pgs.Entity,
 			Value:            fieldValue.Addr(),
 			ParentCollection: pgs.ParentCollection,
 			Ancestors:        pgs.Ancestors,
-		})
+		}
+		gf.Values = append(gf.Values, valueMetadata)
 		gf.Unique[fieldValue.String()] = fieldValue.Addr()
 
 		if gf.IsEmbeddedType() {
 			// Animations are a special case. This is a bit ugly, could be more
 			// efficient.
 			if !strings.Contains(gf.Type.String(), "dynamic.Animation") {
-				delete(pgs.Fields, display)
+				delete(pgs.Fields, name)
 				//	log.Printf("%v", display)
 			}
-			name := display
 			g.childFields(name, fieldValue, pgs, true)
 		} else if field.Type.Kind() == reflect.Slice &&
 			(field.Type.Elem().Kind() == reflect.Pointer ||
 				field.Type.Elem().Kind() == reflect.Struct ||
 				field.Type.Elem().Kind() == reflect.Interface) {
 			for i := 0; i < fieldValue.Len(); i++ {
-				name := fmt.Sprintf("%v[%v]", display, i)
+				childName := fmt.Sprintf("%v[%v]", name, i)
+				// Add slice element inc/dec/delete controls
+				indexedValue := fieldValue.Index(i)
+				sliceElementField, ok := pgs.Fields[childName]
+				if !ok {
+					sliceElementField = &state.PropertyGridField{
+						Name:       childName,
+						EditType:   "SliceElement",
+						Depth:      pgs.Depth + 1,
+						Type:       indexedValue.Addr().Type(),
+						Sort:       100,
+						SliceIndex: i,
+						Source:     &field,
+						ParentName: name,
+						Parent:     gf,
+						Unique:     make(map[string]reflect.Value),
+					}
+					pgs.Fields[childName] = sliceElementField
+				}
+				sliceElementField.Values = append(sliceElementField.Values, valueMetadata)
+				gf.Unique[indexedValue.String()] = indexedValue.Addr()
+
+				// Recurse into slice element
 				pgsChild := pgs
 				pgsChild.ParentField = gf
 				pgsChild.ParentCollection = &fieldValue
-				g.childFields(name, fieldValue.Index(i), pgsChild, true)
+				g.childFields(childName, indexedValue, pgsChild, true)
 			}
 		}
 	}
@@ -176,7 +200,7 @@ func (g *Grid) fieldsFromSelection(sel *selection.Selection) *PropertyGridState 
 			pgs.Ancestors = []any{s.SectorSegment}
 			pgs.ParentName = "Segment"
 			pgs.Entity = s.Entity
-			g.fieldsFromObject(s.SectorSegment, pgs)
+			g.fieldsFromStruct(s.SectorSegment, pgs)
 			continue
 		}
 
@@ -191,7 +215,7 @@ func (g *Grid) fieldsFromSelection(sel *selection.Selection) *PropertyGridState 
 			n := strings.Split(reflect.TypeOf(c).String(), ".")
 			pgs.ParentName = n[len(n)-1]
 			pgs.Entity = s.Entity
-			g.fieldsFromObject(c, pgs)
+			g.fieldsFromStruct(c, pgs)
 		}
 	}
 	return &pgs
@@ -213,18 +237,18 @@ func gridAddOrUpdateAtIndex[PT interface {
 	*T
 	fyne.CanvasObject
 }, T any](g *Grid, newInstance PT) PT {
-	if g.refreshIndex < len(g.GridWidget.Objects) {
-		if element, ok := g.GridWidget.Objects[g.refreshIndex].(PT); ok {
-			g.refreshIndex++
+	if g.widgetIndex < len(g.GridWidget.Objects) {
+		if element, ok := g.GridWidget.Objects[g.widgetIndex].(PT); ok {
+			g.widgetIndex++
 			return element
 		}
-		g.GridWidget.Objects[g.refreshIndex] = newInstance
-		g.refreshIndex++
+		g.GridWidget.Objects[g.widgetIndex] = newInstance
+		g.widgetIndex++
 		return newInstance
 	}
 
 	g.GridWidget.Objects = append(g.GridWidget.Objects, newInstance)
-	g.refreshIndex++
+	g.widgetIndex++
 	return newInstance
 }
 
@@ -294,10 +318,10 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 		if optsIndex < 0 {
 			return
 		}
-		action := &actions.AddComponent{IEditor: g.IEditor, ID: optsComponentIDs[optsIndex], Entities: entities}
-		g.NewAction(action)
-		action.Act()
-
+		g.Act(&actions.AddComponent{
+			IEditor:  g.IEditor,
+			ID:       optsComponentIDs[optsIndex],
+			Entities: entities})
 	})
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewBorderLayout(nil, nil, nil, button)
@@ -319,7 +343,7 @@ func (g *Grid) sortedFields(state *PropertyGridState) []string {
 }
 
 func (g *Grid) Refresh(selection *selection.Selection) {
-	g.refreshIndex = 0
+	g.widgetIndex = 0
 
 	/*	distinctTypes := make(map[core.SelectableType]bool)
 		for _, s := range selection.Exact {
@@ -351,6 +375,11 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			label.Importance = widget.HighImportance
 			label.TextStyle.Bold = true
 			g.fieldComponent(field)
+			continue
+		} else if field.EditType == "SliceElement" {
+			label.Importance = widget.HighImportance
+			label.TextStyle.Italic = true
+			g.fieldChangeSlice(field)
 			continue
 		}
 		label.Importance = widget.MediumImportance
@@ -446,12 +475,12 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		case **dynamic.Animation[concepts.Matrix2]:
 			g.fieldAnimation(field)
 		default:
-			g.refreshIndex++
-			g.GridWidget.Add(widget.NewLabel("Unavailable: " + reflect.TypeOf(x).String()))
+			w := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
+			w.Text = "Unavailable: " + reflect.TypeOf(x).String()
 		}
 	}
-	if len(g.GridWidget.Objects) > g.refreshIndex {
-		g.GridWidget.Objects = g.GridWidget.Objects[:g.refreshIndex]
+	if len(g.GridWidget.Objects) > g.widgetIndex {
+		g.GridWidget.Objects = g.GridWidget.Objects[:g.widgetIndex]
 	}
 	g.GridWidget.Refresh()
 }
@@ -470,6 +499,5 @@ func (g *Grid) ApplySetPropertyAction(field *state.PropertyGridField, v reflect.
 		PropertyGridField: field,
 	}
 	action.AssignAll(v)
-	g.NewAction(action)
-	action.Act()
+	g.Act(action)
 }
