@@ -84,9 +84,9 @@ func (a *Select) EndPoint() bool {
 	return true
 }
 
-func (a *Select) Act()    {}
-func (a *Select) Cancel() {}
-func (a *Select) Frame()  {}
+func (a *Select) Activate() {}
+func (a *Select) Cancel()   {}
+func (a *Select) Frame()    {}
 
 func (a *Select) Undo() {
 	a.SetSelection(true, a.Original)

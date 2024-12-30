@@ -18,7 +18,7 @@ type UpdateLinks struct {
 	RemoveComponents containers.Set[ecs.ComponentID]
 }
 
-func (a *UpdateLinks) Act() {
+func (a *UpdateLinks) Activate() {
 	a.Redo()
 	a.ActionFinished(false, true, false)
 }
@@ -58,9 +58,6 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 	}
 }
 func (a *UpdateLinks) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-
 	a.OldComponents = make(map[ecs.Entity]ecs.ComponentTable)
 	for _, e := range a.Entities {
 		if e != 0 {

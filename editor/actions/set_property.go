@@ -68,10 +68,7 @@ func (a *SetProperty) FireHooks() {
 	}
 }
 
-func (a *SetProperty) Act() {
-	defer a.ActionFinished(false, true, false)
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
+func (a *SetProperty) Activate() {
 	for i, v := range a.Values {
 		origValue := reflect.ValueOf(v.Interface())
 		a.Original = append(a.Original, origValue)
@@ -80,11 +77,10 @@ func (a *SetProperty) Act() {
 
 	a.FireHooks()
 	a.State().Modified = true
+	a.ActionFinished(false, true, false)
 }
 
 func (a *SetProperty) Undo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
 	for i, v := range a.Values {
 		fmt.Printf("Undo: %v\n", a.Original[i].String())
 		v.Deref().Set(a.Original[i])
@@ -92,8 +88,6 @@ func (a *SetProperty) Undo() {
 	a.FireHooks()
 }
 func (a *SetProperty) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
 	for i, v := range a.Values {
 		fmt.Printf("Redo: %v\n", a.ValuesToAssign[i].String())
 		v.Deref().Set(a.ValuesToAssign[i])

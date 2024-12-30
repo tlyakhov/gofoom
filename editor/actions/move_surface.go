@@ -36,9 +36,7 @@ func (a *MoveSurface) Get(sector *core.Sector) *float64 {
 	}
 }
 
-func (a *MoveSurface) Act() {
-	a.State().Lock.Lock()
-
+func (a *MoveSurface) Activate() {
 	a.Original = make([]float64, 0)
 	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Sector == nil {
@@ -52,13 +50,10 @@ func (a *MoveSurface) Act() {
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
-	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, false)
 }
 
 func (a *MoveSurface) Undo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
 	i := 0
 	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Sector == nil {
@@ -74,9 +69,6 @@ func (a *MoveSurface) Undo() {
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *MoveSurface) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-
 	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Sector == nil {
 			continue

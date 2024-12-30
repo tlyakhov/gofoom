@@ -20,7 +20,7 @@ type AddEntity struct {
 	Place
 	ecs.Entity
 
-	Components       []ecs.Attachable
+	Components       ecs.ComponentTable
 	ContainingSector *core.Sector
 }
 
@@ -31,7 +31,6 @@ func (a *AddEntity) DetachFromSector() {
 		}
 		delete(body.Sector().Bodies, a.Entity)
 	}
-	//a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *AddEntity) AttachToSector() {
@@ -44,7 +43,6 @@ func (a *AddEntity) AttachToSector() {
 	if seg := core.GetInternalSegment(a.State().ECS, a.Entity); seg != nil {
 		seg.AttachToSectors()
 	}
-	//a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *AddEntity) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool {
@@ -56,6 +54,9 @@ func (a *AddEntity) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) b
 }
 func (a *AddEntity) Point() bool {
 	a.Place.Point()
+
+	// The rest of this is special sauce for components that need to be linked
+	// up to specific sectors (depending on where they're placed)
 	body := core.GetBody(a.State().ECS, a.Entity)
 	seg := core.GetInternalSegment(a.State().ECS, a.Entity)
 	if body == nil && seg == nil {
@@ -101,13 +102,16 @@ func (a *AddEntity) EndPoint() bool {
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
 	a.State().Lock.Unlock()
-	a.ActionFinished(false, true, false)
+	a.ActionFinished(false, true, a.Components.Get(core.SectorCID) != nil)
 	return true
 }
 
-func (a *AddEntity) Act() {
+func (a *AddEntity) Activate() {
 	a.Entity = a.State().ECS.NewEntity()
 	for i, component := range a.Components {
+		if component == nil {
+			continue
+		}
 		a.Components[i] = a.State().ECS.Attach(component.Base().ComponentID, a.Entity, component)
 	}
 	a.SelectObjects(true, selection.SelectableFromEntity(a.State().ECS, a.Entity))
@@ -124,16 +128,11 @@ func (a *AddEntity) Cancel() {
 	a.ActionFinished(true, true, false)
 }
 func (a *AddEntity) Undo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-
 	a.DetachFromSector()
 	a.State().ECS.Delete(a.Entity)
 }
 func (a *AddEntity) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-	a.Act()
+	a.Activate()
 	a.AttachToSector()
 }
 

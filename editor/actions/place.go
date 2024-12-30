@@ -15,6 +15,7 @@ type Placeable interface {
 	BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool
 	Point() bool
 	EndPoint() bool
+	Placing() bool
 }
 
 type Place struct {
@@ -31,7 +32,7 @@ func (a *Place) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool 
 	}
 
 	a.Modifier = m
-	a.Mode = "Begin"
+	a.Mode = "Placing"
 	a.SetMapCursor(desktop.CrosshairCursor)
 	return true
 }
@@ -49,4 +50,8 @@ func (a *Place) EndPoint() bool {
 	}
 	a.Mode = ""
 	return true
+}
+
+func (a *Place) Placing() bool {
+	return a.Mode != ""
 }

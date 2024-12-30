@@ -17,7 +17,7 @@ type AlignGrid struct {
 
 func (a *AlignGrid) OnMouseDown(evt *desktop.MouseEvent) {}
 func (a *AlignGrid) OnMouseMove()                        {}
-func (a *AlignGrid) Act()                                {}
+func (a *AlignGrid) Activate()                           {}
 
 func (a *AlignGrid) OnMouseUp() {
 	a.PrevA, a.PrevB = a.State().MapView.GridA, a.State().MapView.GridB

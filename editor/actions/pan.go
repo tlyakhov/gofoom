@@ -67,8 +67,8 @@ func (a *Pan) DragEnd() {
 func (a *Pan) MouseUp(evt *desktop.MouseEvent) {
 	a.end()
 }
-func (a *Pan) Act()    {}
-func (a *Pan) Cancel() {}
+func (a *Pan) Activate() {}
+func (a *Pan) Cancel()   {}
 
 func (a *Pan) Undo() {
 	a.State().Pos = a.OriginalPos

@@ -279,15 +279,10 @@ func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 			visitor := edge
 			for {
 				visitor.Visited = true
-				addedSegment := &core.SectorSegment{}
-				addedSegment.Sector = target
+				addedSegment := &core.SectorSegment{Sector: target}
 				addedSegment.Construct(target.ECS, visitor.Source.Serialize())
 				addedSegment.P = visitor.Start
 				target.Segments = append(target.Segments, addedSegment)
-				if visitor.Source.AdjacentSegment != nil {
-					visitor.Source.AdjacentSegment.AdjacentSector = target.Entity
-					visitor.Source.AdjacentSegment.AdjacentSegment = addedSegment
-				}
 				visitor = visitor.Next
 				if visitor == edge {
 					break

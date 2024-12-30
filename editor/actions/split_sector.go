@@ -4,6 +4,7 @@
 package actions
 
 import (
+	"log"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
@@ -19,7 +20,7 @@ type SplitSector struct {
 	Original  map[ecs.Entity]map[string]any
 }
 
-func (a *SplitSector) Act() {}
+func (a *SplitSector) Activate() {}
 
 func (a *SplitSector) Split(sector *core.Sector) {
 	s := &controllers.SectorSplitter{
@@ -42,6 +43,12 @@ func (a *SplitSector) Split(sector *core.Sector) {
 		entity := db.NewEntity()
 		for _, component := range added {
 			db.Attach(component.Base().ComponentID, entity, component)
+			log.Printf("%v", component.String())
+			if sector, ok := component.(*core.Sector); ok {
+				for i, s := range sector.Segments {
+					log.Printf("%v: %v (%v, %v)", i, s.P, s.AdjacentSector, s.AdjacentSegment)
+				}
+			}
 		}
 	}
 }

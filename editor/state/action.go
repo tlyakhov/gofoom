@@ -5,7 +5,7 @@ package state
 
 // Actionable represents a generic editor action.
 type Actionable interface {
-	Act()
+	Activate()
 	Undo()
 	Redo()
 }

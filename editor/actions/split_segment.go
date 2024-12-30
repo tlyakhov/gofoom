@@ -24,7 +24,7 @@ type SplitSegment struct {
 	NewSegments []*segmentSplitter
 }
 
-func (a *SplitSegment) Act() {}
+func (a *SplitSegment) Activate() {}
 
 func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	md := a.WorldGrid(&a.State().MouseDownWorld)

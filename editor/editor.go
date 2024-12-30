@@ -160,11 +160,12 @@ func (e *Editor) UpdateStatus() {
 	}
 
 	if e.MousePressed {
+		text += " Dragging "
 		text += e.WorldGrid(&e.MouseDownWorld).StringHuman() + " -> " + e.WorldGrid(&e.MouseWorld).StringHuman()
 		dist := e.WorldGrid(&e.MouseDownWorld).Sub(e.WorldGrid(&e.MouseWorld)).Length()
 		text += " Length: " + strconv.FormatFloat(dist, 'f', 2, 64)
 	} else {
-		text += e.WorldGrid(&e.MouseWorld).StringHuman()
+		text += " Cursor: " + e.WorldGrid(&e.MouseWorld).StringHuman()
 	}
 	/*list := ""
 	for _, s := range e.HoveringObjects.Exact {
@@ -338,8 +339,10 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 }
 
 func (e *Editor) Act(a state.Actionable) {
+	e.Lock.Lock()
+	defer e.Lock.Unlock()
 	e.CurrentAction = a
-	a.Act()
+	a.Activate()
 }
 
 func (e *Editor) UseTool() {
@@ -354,7 +357,7 @@ func (e *Editor) UseTool() {
 		s.Construct(nil)
 		s.Bottom.Surface.Material = controllers.DefaultMaterial(e.ECS)
 		s.Top.Surface.Material = controllers.DefaultMaterial(e.ECS)
-		a := &actions.AddSector{Sector: s}
+		a := &actions.AddSector{}
 		a.AddEntity.IEditor = e
 		a.AddEntity.Components = []ecs.Attachable{s}
 		e.Act(a)
@@ -362,7 +365,7 @@ func (e *Editor) UseTool() {
 		seg := &core.InternalSegment{}
 		seg.ComponentID = core.InternalSegmentCID
 		seg.Construct(nil)
-		a := &actions.AddInternalSegment{InternalSegment: seg}
+		a := &actions.AddInternalSegment{}
 		a.AddEntity.IEditor = e
 		a.AddEntity.Components = []ecs.Attachable{seg}
 		e.Act(a)
@@ -397,7 +400,7 @@ func (e *Editor) NewShader() {
 		img.Load()
 		a := &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
 		e.Act(a)
-		e.CurrentAction.Act()
+		e.CurrentAction.Activate()
 		// Next set up the shader
 		eShader := e.ECS.NewEntity()
 		shader := e.ECS.NewAttachedComponent(eImg, materials.ShaderCID).(*materials.Shader)
@@ -410,7 +413,7 @@ func (e *Editor) NewShader() {
 		named.Name = "Shader " + path.Base(img.Source)
 		a = &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
 		e.Act(a)
-		e.CurrentAction.Act()
+		e.CurrentAction.Activate()
 
 	}, e.Window)
 
@@ -445,6 +448,13 @@ func (e *Editor) UndoCurrent() {
 	if a == nil {
 		return
 	}
+	if e.CurrentAction != nil {
+		// Don't undo if we're in the middle of a placing action
+		if placeable, ok := e.CurrentAction.(actions.Placeable); ok && placeable.Placing() {
+			return
+		}
+	}
+
 	a.Undo()
 	controllers.AutoPortal(e.ECS)
 	e.refreshProperties()
@@ -468,6 +478,13 @@ func (e *Editor) RedoCurrent() {
 	if a == nil {
 		return
 	}
+	if e.CurrentAction != nil {
+		// Don't redo if we're in the middle of a placing action
+		if placeable, ok := e.CurrentAction.(actions.Placeable); ok && placeable.Placing() {
+			return
+		}
+	}
+
 	a.Redo()
 	controllers.AutoPortal(e.ECS)
 	e.refreshProperties()
@@ -630,7 +647,7 @@ func (e *Editor) ResizeRenderer(w, h int) {
 func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
 	action := &actions.MoveSurface{IEditor: e, Delta: delta, Floor: floor, Slope: slope}
 	e.Act(action)
-	action.Act()
+	action.Activate()
 }
 
 func (e *Editor) Alert(text string) {

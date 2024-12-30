@@ -123,6 +123,11 @@ func (s *Sector) OnAttach(db *ecs.ECS) {
 	s.Attached.OnAttach(db)
 	s.Top.Z.Attach(db.Simulation)
 	s.Bottom.Z.Attach(db.Simulation)
+	// When we attach a component, its address may change. Ensure segments don't
+	// wind up referencing an unattached sector.
+	for _, seg := range s.Segments {
+		seg.Sector = s
+	}
 }
 
 func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {

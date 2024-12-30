@@ -114,8 +114,10 @@ func (col *Column[T, PT]) Replace(component Attachable, index int) Attachable {
 }
 
 func (c *Column[T, PT]) New() Attachable {
-	var x T
-	return PT(&x)
+	var component T
+	attachable := PT(&component)
+	attachable.Base().ComponentID = c.componentID
+	return attachable
 }
 
 func (c *Column[T, PT]) Type() reflect.Type {
