@@ -16,22 +16,18 @@ type AddComponent struct {
 	ID       ecs.ComponentID
 }
 
-func (a *AddComponent) Act() {
+func (a *AddComponent) Activate() {
 	a.Redo()
 	a.ActionFinished(false, true, a.ID == core.SectorCID)
 }
 
 func (a *AddComponent) Undo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
 		a.State().ECS.DetachComponent(a.ID, entity)
 	}
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *AddComponent) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
 	for _, entity := range a.Entities {
 		a.State().ECS.NewAttachedComponent(entity, a.ID)
 	}

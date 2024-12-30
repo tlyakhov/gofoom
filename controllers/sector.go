@@ -37,7 +37,8 @@ func (sc *SectorController) Target(target ecs.Attachable, e ecs.Entity) bool {
 func (sc *SectorController) Recalculate() {
 	sc.Sector.Recalculate()
 	if len(sc.Sector.PVS) == 0 {
-		updatePVS(sc.Sector, make([]*concepts.Vector2, 0), nil, nil, nil)
+		pvs := PvsController{}
+		pvs.updatePVS(sc.Sector, make([]*concepts.Vector2, 0), nil, nil, nil)
 	}
 }
 

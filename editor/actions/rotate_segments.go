@@ -26,15 +26,13 @@ func (a *RotateSegments) Rotate(sector *core.Sector, backward bool) {
 		sector.Segments = append([]*core.SectorSegment{sector.Segments[length-1]}, sector.Segments[:(length-1)]...)
 	}
 }
-func (a *RotateSegments) Act() {
+func (a *RotateSegments) Activate() {
 	a.Redo()
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
 }
 
 func (a *RotateSegments) Undo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
 	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Type == selection.SelectableBody || s.Type == selection.SelectableEntity {
 			continue
@@ -44,8 +42,6 @@ func (a *RotateSegments) Undo() {
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *RotateSegments) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
 	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Type == selection.SelectableBody || s.Type == selection.SelectableEntity {
 			continue

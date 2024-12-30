@@ -28,15 +28,12 @@ type ChangeSlice struct {
 	Mode         ChangeSliceMode
 }
 
-func (a *ChangeSlice) Act() {
+func (a *ChangeSlice) Activate() {
 	a.Redo()
 	a.ActionFinished(false, true, false)
 }
 
 func (a *ChangeSlice) Undo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-
 	// SlicePtr is something like: *[]<some type>
 	oldSlice := a.SlicePtr.Elem()
 	switch a.Mode {
@@ -50,9 +47,6 @@ func (a *ChangeSlice) Undo() {
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *ChangeSlice) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-
 	// SlicePtr is something like: *[]<some type>
 	oldSlice := a.SlicePtr.Elem()
 	switch a.Mode {

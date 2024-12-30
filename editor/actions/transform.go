@@ -73,7 +73,7 @@ func (a *Transform) moved(_ fyne.KeyModifier) {
 	} else {
 		a.Mode = "translate"
 	}
-	a.Act()
+	a.Apply()
 }
 
 func (a *Transform) MouseMoved(evt *desktop.MouseEvent) {
@@ -103,9 +103,12 @@ func (a *Transform) MouseIn(evt *desktop.MouseEvent) {
 func (a *Transform) MouseOut() {
 }
 
-func (a *Transform) Act() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
+func (a *Transform) Activate() {
+}
+
+func (a *Transform) Apply() {
+	//a.State().Lock.Lock()
+	//defer a.State().Lock.Unlock()
 
 	a.Selected.LoadPositions()
 	m := &concepts.Matrix2{}
@@ -138,7 +141,7 @@ func (a *Transform) Undo() {
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *Transform) Redo() {
-	a.Act()
+	a.Apply()
 }
 
 func (a *Transform) RequiresLock() bool { return true }

@@ -8,7 +8,6 @@ import (
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/dynamic"
 
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
@@ -20,25 +19,11 @@ type AddInternalSegment struct {
 	*core.InternalSegment
 }
 
-func (a *AddInternalSegment) Act() {
-	a.AddEntity.Act()
+func (a *AddInternalSegment) Activate() {
+	a.AddEntity.Activate()
+	a.InternalSegment = a.Components.Get(core.InternalSegmentCID).(*core.InternalSegment)
+	a.Surface.Material = controllers.DefaultMaterial(a.State().ECS)
 	a.SetMapCursor(desktop.CrosshairCursor)
-}
-
-func (a *AddInternalSegment) BeginPoint(m fyne.KeyModifier, button desktop.MouseButton) bool {
-	if !a.Place.BeginPoint(m, button) {
-		return false
-	}
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-	switch a.Mode {
-	case "Begin":
-		a.Mode = "AddInternalSegmentA"
-		a.Surface.Material = controllers.DefaultMaterial(a.State().ECS)
-		a.AttachToSector()
-	case "AddInternalSegmentA":
-	}
-	return true
 }
 
 func (a *AddInternalSegment) Point() bool {
@@ -49,7 +34,7 @@ func (a *AddInternalSegment) Point() bool {
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
 	switch a.Mode {
-	case "Begin", "AddInternalSegmentA":
+	case "", "Placing":
 		a.A.From(worldGrid)
 		fallthrough
 	case "AddInternalSegmentB":
@@ -64,7 +49,7 @@ func (a *AddInternalSegment) Point() bool {
 
 func (a *AddInternalSegment) EndPoint() bool {
 	switch a.Mode {
-	case "AddInternalSegmentA":
+	case "Placing":
 		a.State().Lock.Lock()
 		a.A.From(a.WorldGrid(&a.State().MouseWorld))
 		a.State().Lock.Unlock()

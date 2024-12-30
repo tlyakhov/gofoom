@@ -12,6 +12,7 @@ import (
 type PvsController struct {
 	ecs.BaseController
 	*core.PvsQueue
+	visited ecs.EntityTable
 }
 
 func init() {
@@ -40,7 +41,7 @@ func (pvs *PvsController) Always() {
 			break
 		}
 		sector.LastPVSRefresh = pvs.ECS.Frame
-		updatePVS(sector, make([]*concepts.Vector2, 0), nil, nil, nil)
+		pvs.updatePVS(sector, make([]*concepts.Vector2, 0), nil, nil, nil)
 		// log.Printf("Refreshed pvs for %v", sector.Entity)
 	}
 }
@@ -48,14 +49,17 @@ func (pvs *PvsController) Always() {
 // TODO: This can be very expensive for large areas with lots of lights. How can
 // we optimize this?
 // TODO: Can we special-case doors to block invisible sectors when closed?
-func updatePVS(pvsSector *core.Sector, normals []*concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
+func (pvs *PvsController) updatePVS(pvsSector *core.Sector, normals []*concepts.Vector2, visitor *core.Sector, min, max *concepts.Vector3) {
 	if visitor == nil {
+		pvs.visited = make(ecs.EntityTable, 0)
 		pvsSector.PVS = make(map[ecs.Entity]*core.Sector)
 		pvsSector.PVL = make([]*core.Body, 0)
 		pvsSector.Colliders = make(map[ecs.Entity]*core.Mobile)
 		pvsSector.PVS[pvsSector.Entity] = pvsSector
 		visitor = pvsSector
 	}
+
+	pvs.visited.Set(visitor.Entity)
 
 	for entity, body := range visitor.Bodies {
 		if core.GetLight(body.ECS, entity) != nil {
@@ -75,7 +79,7 @@ func updatePVS(pvsSector *core.Sector, normals []*concepts.Vector2, visitor *cor
 
 	for _, seg := range visitor.Segments {
 		adj := seg.AdjacentSegment
-		if adj == nil {
+		if adj == nil || seg.AdjacentSector == 0 {
 			continue
 		}
 		correctSide := true
@@ -88,6 +92,10 @@ func updatePVS(pvsSector *core.Sector, normals []*concepts.Vector2, visitor *cor
 		if adj.Sector.Min[2] >= max[2] || adj.Sector.Max[2] <= min[2] {
 			continue
 		}
+		if pvs.visited.Contains(seg.AdjacentSector) {
+			continue
+		}
+
 		adjmax := max
 		adjmin := min
 		if adj.Sector.Max[2] < max[2] {
@@ -101,6 +109,6 @@ func updatePVS(pvsSector *core.Sector, normals []*concepts.Vector2, visitor *cor
 		pvsSector.PVS[seg.AdjacentSector] = adjsec
 
 		normals[nNormals] = &seg.Normal
-		updatePVS(pvsSector, normals, adjsec, adjmin, adjmax)
+		pvs.updatePVS(pvsSector, normals, adjsec, adjmin, adjmax)
 	}
 }

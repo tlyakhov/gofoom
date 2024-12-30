@@ -23,7 +23,7 @@ type Copy struct {
 	ClipboardData string
 }
 
-func (a *Copy) Act() {
+func (a *Copy) Activate() {
 	a.Saved = make(map[ecs.Entity]any)
 	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
 
@@ -50,9 +50,6 @@ func (a *Copy) Act() {
 func (a *Copy) Undo() {}
 
 func (a *Copy) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-
 	log.Printf("%v\n", a.ClipboardData)
 	a.IEditor.SetContent(a.ClipboardData)
 }

@@ -25,7 +25,7 @@ type Paste struct {
 	Center         concepts.Vector3
 }
 
-func (a *Paste) Act() {
+func (a *Paste) Activate() {
 	a.ClipboardData = a.IEditor.Content()
 
 	var parsed any
@@ -118,7 +118,7 @@ func (a *Paste) OnMouseDown(evt *desktop.MouseEvent) {
 }
 func (a *Paste) OnMouseMove() {
 	a.Delta = *a.State().MouseWorld.Sub(a.WorldGrid(a.Center.To2D()))
-	a.Transform.Act()
+	a.Transform.Apply()
 }
 func (a *Paste) OnMouseUp() {
 

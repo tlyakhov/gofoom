@@ -18,21 +18,18 @@ type Delete struct {
 	Saved    map[*selection.Selectable]any
 }
 
-func (a *Delete) Act() {
+func (a *Delete) Activate() {
 	a.Saved = make(map[*selection.Selectable]any)
 	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
 
 	for _, obj := range a.Selected.Exact {
 		a.Saved[obj] = obj.Serialize()
 	}
-	a.Redo()
+	a.apply()
 	a.ActionFinished(false, true, true)
 }
 
 func (a *Delete) Undo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
-
 	for s, saved := range a.Saved {
 		s.ECS.Delete(s.Entity)
 		s.ECS.DeserializeAndAttachEntity(saved.(map[string]any))
@@ -41,9 +38,10 @@ func (a *Delete) Undo() {
 	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *Delete) Redo() {
-	a.State().Lock.Lock()
-	defer a.State().Lock.Unlock()
+	a.apply()
+}
 
+func (a *Delete) apply() {
 	for s := range a.Saved {
 		switch s.Type {
 		case selection.SelectableSector:

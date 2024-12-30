@@ -9,7 +9,7 @@ type Attached struct {
 	ComponentID
 	Entity
 	Entities      EntityTable `editable:"Component" edit_type:"Component" edit_sort:"0"`
-	Attachments   int
+	Attachments   int         // Reference counter
 	ECS           *ECS
 	System        bool // Don't serialize this entity, disallow editing
 	Active        bool `editable:"Active?"`

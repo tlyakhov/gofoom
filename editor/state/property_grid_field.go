@@ -60,7 +60,7 @@ type PropertyGridField struct {
 func (f *PropertyGridField) Short() string {
 	result := f.Name
 	reduced := false
-	for len(result) > 32 {
+	for len(result) > 40 {
 		reduced = true
 		split := strings.Split(result, ".")
 		if len(split) == 1 {
@@ -69,14 +69,9 @@ func (f *PropertyGridField) Short() string {
 		result = strings.Join(split[1:], ".")
 	}
 	if reduced {
-		result = "{...}." + result
+		result = "{…}." + result
 	}
 	return result
-	/*split := strings.Split(f.Name, "[")
-	if len(split) > 1 {
-		return "[" + split[len(split)-1]
-	}
-	return f.Name*/
 }
 
 func (f *PropertyGridField) IsEmbeddedType() bool {
