@@ -70,10 +70,10 @@ func (a *Paste) Activate() {
 			c := db.LoadComponentWithoutAttaching(id, jsonComponent)
 
 			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
-				db.Attach(id, pastedEntity, c)
+				db.Attach(id, pastedEntity, &c)
 			} else {
 				pastedEntity = db.NewEntity()
-				db.Attach(id, pastedEntity, c)
+				db.Attach(id, pastedEntity, &c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 			}
 			a.State().Lock.Unlock()

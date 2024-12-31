@@ -42,7 +42,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	for _, added := range s.Result {
 		entity := db.NewEntity()
 		for _, component := range added {
-			db.Attach(component.Base().ComponentID, entity, component)
+			db.Attach(component.Base().ComponentID, entity, &component)
 			log.Printf("%v", component.String())
 			if sector, ok := component.(*core.Sector); ok {
 				for i, s := range sector.Segments {

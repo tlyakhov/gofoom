@@ -32,8 +32,8 @@ type Attachable interface {
 type AttachableColumn interface {
 	From(source AttachableColumn, ecs *ECS)
 	New() Attachable
-	Add(c Attachable) Attachable
-	Replace(c Attachable, index int) Attachable
+	Add(c *Attachable)
+	Replace(c *Attachable, index int)
 	Attachable(index int) Attachable
 	Detach(index int)
 	Type() reflect.Type

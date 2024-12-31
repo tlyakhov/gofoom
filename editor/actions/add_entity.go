@@ -112,7 +112,7 @@ func (a *AddEntity) Activate() {
 		if component == nil {
 			continue
 		}
-		a.Components[i] = a.State().ECS.Attach(component.Base().ComponentID, a.Entity, component)
+		a.State().ECS.Attach(component.Base().ComponentID, a.Entity, &a.Components[i])
 	}
 	a.SelectObjects(true, selection.SelectableFromEntity(a.State().ECS, a.Entity))
 }
