@@ -58,7 +58,7 @@ func Respawn(db *ecs.ECS, force bool) {
 		}
 		mappedComponent := mappedData.(map[string]any)
 		c := db.LoadComponentWithoutAttaching(cid, mappedComponent)
-		c = db.Attach(cid, pastedEntity, c)
+		db.Attach(cid, pastedEntity, &c)
 		if cid == behaviors.PlayerCID {
 			player := c.(*behaviors.Player)
 			player.Spawn = false

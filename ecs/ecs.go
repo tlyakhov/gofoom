@@ -123,16 +123,16 @@ func (db *ECS) Link(target Entity, source Entity) {
 		if c == nil || !c.MultiAttachable() {
 			continue
 		}
-		db.attach(target, c, c.Base().ComponentID)
+		db.attach(target, &c, c.Base().ComponentID)
 	}
 }
 
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
-func (db *ECS) attach(entity Entity, component Attachable, componentID ComponentID) Attachable {
+func (db *ECS) attach(entity Entity, component *Attachable, componentID ComponentID) {
 	if entity == 0 {
 		log.Printf("ECS.attach: tried to attach 0 entity!")
-		return nil
+		return
 	}
 
 	for int(entity) >= len(db.rows) {
@@ -145,40 +145,41 @@ func (db *ECS) attach(entity Entity, component Attachable, componentID Component
 	// Did the caller:
 	// 1. not provide a component?
 	// 2. the provided component is unattached?
-	if component == nil || component.Base().Attachments == 0 {
+	if *component == nil || (*component).Base().Attachments == 0 {
 		// Then we need to add a new element to the column:
 		column := db.columns[componentID]
 		if ec != nil {
 			// A component with this index is already attached to this entity, overwrite it.
 			indexInColumn := ec.Base().indexInColumn
-			component = column.Replace(component, indexInColumn)
+			column.Replace(component, indexInColumn)
 		} else {
 			// This entity doesn't have a component with this index attached. Extend the
 			// slice.
-			component = column.Add(component)
+			column.Add(component)
 		}
 	} else if ec != nil {
 		// We have a conflict between the provided component and an existing one
 		// with the same component ID. We should abort.
 		log.Printf("ECS.attach: Entity %v already has a component %v. Aborting!", entity, Types().ColumnPlaceholders[componentID].String())
-		return nil
+		return
 	}
 
-	a := component.Base()
-	if a.Attachments > 0 && !component.MultiAttachable() {
-		log.Printf("ECS.attach: Component %v is already attached to %v and not multi-attachable.", component.String(), a.Entity)
+	attachable := *component
+	a := attachable.Base()
+	if a.Attachments > 0 && !attachable.MultiAttachable() {
+		log.Printf("ECS.attach: Component %v is already attached to %v and not multi-attachable.", attachable.String(), a.Entity)
 	}
 	a.Entities.Set(entity)
 	a.Entity = entity
 	a.Attachments++
 	a.ComponentID = componentID
-	db.rows[int(entity)].Set(component)
-	return component
+	db.rows[int(entity)].Set(attachable)
 }
 
 // Create a new component with the given index and attach it.
 func (db *ECS) NewAttachedComponent(entity Entity, id ComponentID) Attachable {
-	attached := db.attach(entity, nil, id)
+	var attached Attachable
+	db.attach(entity, &attached, id)
 	attached.Construct(nil)
 	return attached
 }
@@ -196,7 +197,7 @@ func (db *ECS) LoadAttachComponent(id ComponentID, data map[string]any, ignoreSe
 			continue
 		}
 		db.Entities.Set(uint32(entity))
-		attached = db.attach(entity, attached, id)
+		db.attach(entity, &attached, id)
 		if attached.Base().Attachments == 1 {
 			attached.Construct(data)
 		}
@@ -223,12 +224,19 @@ func (db *ECS) NewAttachedComponentTyped(entity Entity, cType string) Attachable
 	return nil
 }
 
-func (db *ECS) Attach(id ComponentID, entity Entity, component Attachable) Attachable {
-	return db.attach(entity, component, id)
+// Attach a component to an entity. `component` is a pointer to an interface
+// because it's both an input and output - you can provide an entire component
+// to attach or a pointer to nil to get back a new one. Previously this method
+// had semantics like Go's `append`, but this was too error prone if the return
+// value was ignored.
+func (db *ECS) Attach(id ComponentID, entity Entity, component *Attachable) {
+	db.attach(entity, component, id)
 }
 
-func (db *ECS) AttachTyped(entity Entity, component Attachable) Attachable {
-	return db.attach(entity, component, component.Base().ComponentID)
+func AttachTyped[T any, PT GenericAttachable[T]](db *ECS, entity Entity, component *PT) {
+	attachable := Attachable(*component)
+	db.attach(entity, &attachable, attachable.Base().ComponentID)
+	*component = attachable.(PT)
 }
 
 func (db *ECS) detach(id ComponentID, entity Entity, checkForEmpty bool) {
@@ -367,12 +375,13 @@ func (db *ECS) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
 			if linkedEntity != 0 {
 				c := db.Component(linkedEntity, cid)
 				if c != nil {
-					db.attach(entity, c, cid)
+					db.attach(entity, &c, cid)
 				}
 			}
 		} else {
 			yamlComponent := yamlData.(map[string]any)
-			attached := db.attach(entity, nil, cid)
+			var attached Attachable
+			db.attach(entity, &attached, cid)
 			if attached.Base().Attachments == 1 {
 				attached.Construct(yamlComponent)
 			}

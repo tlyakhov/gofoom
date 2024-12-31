@@ -63,7 +63,7 @@ func (n *Linked) Recalculate() {
 				continue
 			}
 			n.SourceComponents.Set(c)
-			n.ECS.attach(n.Entity, c, c.Base().ComponentID)
+			n.ECS.attach(n.Entity, &c, c.Base().ComponentID)
 		}
 	}
 }

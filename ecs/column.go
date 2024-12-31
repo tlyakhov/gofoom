@@ -72,7 +72,13 @@ func (col *Column[T, PT]) Detach(index int) {
 	// TODO: Remove empty chunks
 }
 
-func (col *Column[T, PT]) Add(component Attachable) Attachable {
+func (col *Column[T, PT]) AddTyped(component *PT) {
+	attachable := Attachable(*component)
+	col.Add(&attachable)
+	*component = attachable.(PT)
+}
+
+func (col *Column[T, PT]) Add(component *Attachable) {
 	var nextFree uint32
 	var found bool
 	// First try an empty slot in the fill list
@@ -89,28 +95,27 @@ func (col *Column[T, PT]) Add(component Attachable) Attachable {
 
 	indexInChunk := nextFree % chunkSize
 
-	if component != nil {
-		col.data[chunk][indexInChunk] = *(component.(PT))
+	if *component != nil {
+		col.data[chunk][indexInChunk] = *(*component).(PT)
 	}
 
 	col.fill.Set(nextFree)
-	component = PT(&col.data[chunk][indexInChunk])
-	component.Base().indexInColumn = (int(nextFree))
-	component.OnAttach(col.ECS)
+	*component = PT(&col.data[chunk][indexInChunk])
+	(*component).Base().indexInColumn = (int(nextFree))
+	(*component).OnAttach(col.ECS)
 	col.Length++
-	return component
 }
 
-func (col *Column[T, PT]) Replace(component Attachable, index int) Attachable {
-	if component == nil {
-		return col.Value(index)
+func (col *Column[T, PT]) Replace(component *Attachable, index int) {
+	if *component == nil {
+		*component = col.Value(index)
+		return
 	}
 	ptr := col.Value(index)
-	*ptr = *(component.(PT))
-	component = ptr
-	component.Base().indexInColumn = index
-	component.OnAttach(col.ECS)
-	return component
+	*ptr = *((*component).(PT))
+	*component = ptr
+	ptr.Base().indexInColumn = index
+	ptr.OnAttach(col.ECS)
 }
 
 func (c *Column[T, PT]) New() Attachable {

@@ -53,7 +53,7 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 		cid := addComponent.Base().ComponentID
 		oldComponent := oldComponents.Get(cid)
 		if oldComponent == nil || addComponent != oldComponent {
-			db.Attach(cid, entity, addComponent)
+			db.Attach(cid, entity, &addComponent)
 		}
 	}
 }
