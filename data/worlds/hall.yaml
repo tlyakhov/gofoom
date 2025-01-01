@@ -10,10 +10,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 267.1875
+      Now: 25.3125
       Spawn: 0
     Pos:
-      Now: -294.47895263529074, 183.45371160038397, -44
+      Now: 526.7709796558901, -1237.7066826160342, 11.265586350896578
       Spawn: -390, 180, -44
     Size:
       Now: 15, 40
@@ -26,7 +26,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006227263108753479, 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003130656585118731, 0.007001650411977742
+      Now: 0.3198931762484677, 0.3376537248990551, -0.19060791209121689
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -91,7 +91,7 @@
 - Entity: ∈⋮4
   core.Sector:
     Bottom:
-      Normal: -0.5734623443633284, -0, 0.8192319205190405
+      Normal: -0.5735764363510462, -0.00000000000000007024285468436533, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -201,6 +201,9 @@
         P: 1000, -1040
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 2, 0, 0, 0, 2, 0
+            Spawn: 2, 0, 0, 0, 2, 0
       - AdjacentSector: ∈⋮13
         Hi:
           Material: ∈⋮2
@@ -401,7 +404,7 @@
 - Entity: ∈⋮12
   core.Sector:
     Bottom:
-      Normal: 0.6476484200955406, -0, 0.7619393177594593
+      Normal: 0.5735764363510462, -0, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -651,10 +654,10 @@
     Name: Test Shader
   materials.Shader:
     Stages:
-      - BlendingFunc: Normal
+      - BlendingFunc: BlendNormal
         Material: ∈⋮123
         Transform: 1, 0, 0.3, 0, 1, 0
-      - BlendingFunc: Normal
+      - BlendingFunc: BlendNormal
         Material: ∈⋮129
         Transform: 1, 0, 0.43500000000000033, 0, 1, 0.13500000000000006
 - Entity: ∈⋮17
@@ -721,6 +724,9 @@
         P: 480, -1040
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 2, 0, 0, 0, 2, 0
+            Spawn: 2, 0, 0, 0, 2, 0
       - AdjacentSector: ∈⋮95
         Hi:
           Material: ∈⋮2
@@ -769,6 +775,9 @@
         P: 840, -1380
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 2, 0, 0, 0, 2, 0
+            Spawn: 2, 0, 0, 0, 2, 0
       - AdjacentSector: ∈⋮39
         Hi:
           Material: ∈⋮2
@@ -1144,7 +1153,7 @@
 - Entity: ∈⋮26
   core.Sector:
     Bottom:
-      Normal: -0, -0.5734623443633284, 0.8192319205190405
+      Normal: 0.00000000000000003512142734218266, -0.5735764363510462, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -1476,11 +1485,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.8984375
-        Reverse: true
+        Percent: 0.703125
+        Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -400, 60, -51.58740234375
+      Now: -400, 60, -48.650390625
       Spawn: -400, 60, -52
     Size:
       Now: 20, 20
@@ -1599,7 +1608,7 @@
 - Entity: ∈⋮35
   core.Sector:
     Bottom:
-      Normal: 0, 0.6476484200955406, 0.7619393177594592
+      Normal: 0.00000000000000003512142734218266, 0.5735764363510462, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -1707,7 +1716,7 @@
 - Entity: ∈⋮37
   core.Sector:
     Bottom:
-      Normal: 0.6476484200955406, -0, 0.7619393177594593
+      Normal: 0.5735764363510462, -0, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -1853,7 +1862,7 @@
 - Entity: ∈⋮40
   core.Sector:
     Bottom:
-      Normal: 0.6476484200955405, -0, 0.7619393177594592
+      Normal: 0.5735764363510462, -0, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -1919,7 +1928,7 @@
         P: -280, 30
         Surface:
           ExtraStages:
-            - BlendingFunc: Normal
+            - BlendingFunc: BlendNormal
               Material: ∈⋮57
           Material: ∈⋮2
       - Hi:
@@ -2042,17 +2051,17 @@
     Speed: 350
     Start: ∈⋮135
   behaviors.ActorState:
-    Action: ∈⋮137
+    Action: ∈⋮147
   behaviors.Alive:
     Health: 100
   behaviors.WeaponInstant: {}
   core.Body:
     Angle:
-      Now: 7557.895385058766
+      Now: 12326.235697276852
       Procedural: true
       Spawn: 155.9558816022554
     Pos:
-      Now: -26.038741034070433, -196.50812603250756, 16
+      Now: -311.4699308367159, -33.82430952194005, -39.863961576892926
       Spawn: -10, -30, -50
     Size:
       Now: 32, 32
@@ -2066,7 +2075,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: 1.0489377309266816, -0.03813834158772448, 0.026087160049219696
+      Now: 0.11927281324307697, 1.5995823478001105, 0.10480654511027077
       Spawn: 0, 0, 0
   ecs.Named:
     Name: FlubTest
@@ -2372,7 +2381,7 @@
 - Entity: ∈⋮49
   core.Sector:
     Bottom:
-      Normal: 0, 0.6476484200955405, 0.7619393177594592
+      Normal: 0.00000000000000003512142734218266, 0.5735764363510462, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -2485,6 +2494,9 @@
         P: 640, -880
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 2, 0, 0, 0, 2, 0
+            Spawn: 2, 0, 0, 0, 2, 0
       - AdjacentSector: ∈⋮18
         Hi:
           Material: ∈⋮2
@@ -2585,7 +2597,7 @@
 - Entity: ∈⋮54
   core.Sector:
     Bottom:
-      Normal: -0.5734623443633283, -0, 0.8192319205190405
+      Normal: -0.5735764363510462, -0.00000000000000007024285468436533, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -3060,7 +3072,7 @@
 - Entity: ∈⋮65
   core.Sector:
     Bottom:
-      Normal: -0, -0.5734623443633284, 0.8192319205190405
+      Normal: 0.00000000000000003512142734218266, -0.5735764363510462, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -3258,6 +3270,9 @@
         P: 1020, -1040
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 19.44444444444439, 0, 0, 0, 1, 0
+            Spawn: 19.44444444444439, 0, 0, 0, 1, 0
       - Hi:
           Material: ∈⋮2
         Lo:
@@ -3389,7 +3404,7 @@
 - Entity: ∈⋮72
   core.Sector:
     Bottom:
-      Normal: -0.5734623443633283, -0, 0.8192319205190405
+      Normal: -0.5735764363510462, -0.00000000000000007024285468436533, 0.8191520442889918
       Surface:
         Material: ∈⋮122
         Transform:
@@ -3560,7 +3575,7 @@
 - Entity: ∈⋮75
   core.Sector:
     Bottom:
-      Normal: 0, 0.6476484200955406, 0.7619393177594592
+      Normal: 0.00000000000000003512142734218266, 0.5735764363510462, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -3622,11 +3637,17 @@
       - AdjacentSector: ∈⋮39
         Hi:
           Material: ∈⋮2
+          Transform:
+            Now: 2, 0, 0, 0, 1, 0
+            Spawn: 2, 0, 0, 0, 1, 0
         Lo:
           Material: ∈⋮2
         P: 1000, -1220
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 2.8125, 0, 0, 0, 1, 0
+            Spawn: 2.8125, 0, 0, 0, 1, 0
       - Hi:
           Material: ∈⋮2
         Lo:
@@ -3843,7 +3864,7 @@
         Hi:
           Material: ∈⋮123
           Transform:
-            Now: 1, 0, 0, 0, 0, 1
+            Now: 1, 0, 0, 0, 1.28, -0.30000000000000004
             Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
         Lo:
           Material: ∈⋮2
@@ -3862,16 +3883,16 @@
         Material: ∈⋮122
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: 64
+        Now: 0
         Spawn: 64
   ecs.Linked:
     Sources:
@@ -3893,7 +3914,7 @@
       - Hi:
           Material: ∈⋮2
           Transform:
-            Now: 1, 0, 0, 0, 0.003375000000000017, 0.996625
+            Now: 1, 0, 0, 0, 0.00044865417480468976, 0.9995513458251953
             Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
         Lo:
           Material: ∈⋮2
@@ -3911,7 +3932,7 @@
       - Hi:
           Material: ∈⋮2
           Transform:
-            Now: 1, 0, 0, 0, 0.003375000000000017, 0.996625
+            Now: 1, 0, 0, 0, 0.00044865417480468976, 0.9995513458251953
             Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
         Lo:
           Material: ∈⋮2
@@ -3922,7 +3943,7 @@
         Hi:
           Material: ∈⋮123
           Transform:
-            Now: 1, 0, 0, 0, 1.6, -0.6
+            Now: 1, 0, 0, 0, 0.2126953125, 0.7873046875
             Spawn: 1, 0, 0, 0, 1.6, -0.6
         Lo:
           Material: ∈⋮2
@@ -3934,16 +3955,16 @@
         Material: ∈⋮122
       Z:
         Animation:
-          Active: false
+          Active: true
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: -64
           Lifetime: AnimationLifetimeOnce
-          Percent: 1
-          Reverse: false
+          Percent: 0.25
+          Reverse: true
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: -64
+        Now: 48
         Spawn: 64
   ecs.Linked:
     Sources:
@@ -4105,7 +4126,7 @@
 - Entity: ∈⋮86
   core.Sector:
     Bottom:
-      Normal: 0.6476484200955405, -0, 0.7619393177594592
+      Normal: 0.5735764363510462, -0, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -4386,7 +4407,7 @@
 - Entity: ∈⋮91
   core.Sector:
     Bottom:
-      Normal: 0.6476484200955405, -0, 0.7619393177594592
+      Normal: 0.5735764363510463, 0, 0.8191520442889917
       Surface:
         Material: ∈⋮122
       Z:
@@ -4677,6 +4698,9 @@
         P: 480, -1220
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 2, 0, 0, 0, 2, 0
+            Spawn: 2, 0, 0, 0, 2, 0
       - AdjacentSector: ∈⋮90
         Hi:
           Material: ∈⋮2
@@ -4717,7 +4741,7 @@
 - Entity: ∈⋮97
   core.Sector:
     Bottom:
-      Normal: 0.6476484200955406, -0, 0.7619393177594593
+      Normal: 0.5735764363510462, -0, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -5140,6 +5164,9 @@
         P: 1020, -1220
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 7.777777777777755, 0, 0, 0, 1, 0
+            Spawn: 7.777777777777755, 0, 0, 0, 1, 0
       - AdjacentSector: ∈⋮110
         Hi:
           Material: ∈⋮2
@@ -5237,6 +5264,9 @@
         P: 1430, -1220
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 8.055555555555534, 0, 0, 0, 1, 0
+            Spawn: 8.055555555555534, 0, 0, 0, 1, 0
       - Hi:
           Material: ∈⋮2
         Lo:
@@ -5721,7 +5751,6 @@
   behaviors.PlayerTargetable: ∈⋮32
   behaviors.Proximity: ∈⋮32
   core.Body:
-    Active: true
     Angle:
       Now: 0
       Spawn: 0
@@ -5730,21 +5759,19 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.4921875
+        Percent: 0.8828125
         Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -260, 60, -47.00244140625
+      Now: -260, 60, -51.45068359375
       Spawn: -260, 60, -52
     Size:
       Now: 20, 20
       Spawn: 20, 20
   ecs.Linked:
-    Active: true
     Sources:
       - ∈⋮246
   ecs.Named:
-    Active: true
     Name: Weird Gun
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -5877,6 +5904,7 @@
     Cooldown: 100
     Damage: 10
     FlashMaterial: ∈⋮199
+    FlashTime: 100
     MarkMaterial: ∈⋮113
     MarkSize: 2.5
     Spread: 3
@@ -5961,30 +5989,36 @@
   behaviors.ParticleEmitter:
     Limit: "30"
     Particles:
+      - ∈⋮165
+      - ∈⋮195
+      - ∈⋮167
+      - ∈⋮168
+      - ∈⋮196
+      - ∈⋮171
+      - ∈⋮172
+      - ∈⋮173
+      - ∈⋮174
       - ∈⋮175
       - ∈⋮177
       - ∈⋮178
       - ∈⋮179
       - ∈⋮180
+      - ∈⋮182
+      - ∈⋮183
+      - ∈⋮184
+      - ∈⋮185
+      - ∈⋮186
+      - ∈⋮187
+      - ∈⋮188
       - ∈⋮156
       - ∈⋮157
-      - ∈⋮181
-      - ∈⋮159
-      - ∈⋮185
       - ∈⋮158
+      - ∈⋮159
+      - ∈⋮190
+      - ∈⋮161
       - ∈⋮162
       - ∈⋮163
-      - ∈⋮182
-      - ∈⋮165
-      - ∈⋮166
-      - ∈⋮167
-      - ∈⋮168
-      - ∈⋮186
-      - ∈⋮170
-      - ∈⋮171
-      - ∈⋮172
-      - ∈⋮173
-      - ∈⋮174
+      - ∈⋮194
     Source: ∈⋮153
     Vel: 15
     XYSpread: 10
@@ -5995,7 +6029,7 @@
       Now: 180
       Spawn: 180
     Pos:
-      Now: 860, -677.3749748270556, 32
+      Now: 860, -356.48533974925147, 32
       Procedural: true
       Spawn: 860, -710, 32
     Size:
@@ -6055,6 +6089,9 @@
     Filter: false
     GenerateMipMaps: true
     Source: data/muzzle.jpg
+- Entity: ∈⋮161
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮162
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
@@ -6062,9 +6099,6 @@
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮165
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮166
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮167
@@ -6082,9 +6116,6 @@
     Image: ∈⋮132
     Limit: "1"
   behaviors.WeaponClass: ∈⋮148
-- Entity: ∈⋮170
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
 - Entity: ∈⋮171
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
@@ -6131,16 +6162,25 @@
 - Entity: ∈⋮180
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
-- Entity: ∈⋮181
+- Entity: ∈⋮182
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
-- Entity: ∈⋮182
+- Entity: ∈⋮183
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮184
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮185
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮186
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮187
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮188
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮189
@@ -6151,6 +6191,9 @@
       Spawn: "0"
     Image: ∈⋮98
     Limit: "100"
+- Entity: ∈⋮190
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮191
   core.Sector:
     Bottom:
@@ -6164,6 +6207,9 @@
       - AdjacentSector: ∈⋮90
         Hi:
           Material: ∈⋮2
+          Transform:
+            Now: 2, 0, 0, 0, 1, 0
+            Spawn: 2, 0, 0, 0, 1, 0
         Lo:
           Material: ∈⋮2
         P: 640, -1380
@@ -6231,7 +6277,8 @@
         P: 660, -1400
         Surface:
           Material: ∈⋮2
-      - Hi: {}
+      - AdjacentSector: ∈⋮219
+        Hi: {}
         Lo: {}
         P: 660, -1710
         Surface:
@@ -6248,7 +6295,10 @@
           Material: ∈⋮2
         P: 660, -2120
         Surface:
-          Material: ∈⋮2
+          Material: ∈⋮243
+          Transform:
+            Now: 2.5, 0, 0, 0, 1, 0
+            Spawn: 2.5, 0, 0, 0, 1, 0
       - AdjacentSector: ∈⋮222
         Hi:
           Material: ∈⋮2
@@ -6274,7 +6324,7 @@
 - Entity: ∈⋮193
   core.Sector:
     Bottom:
-      Normal: 0, 0.5734623443633283, 0.8192319205190404
+      Normal: 0.5735764363510462, 0, 0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -6305,7 +6355,11 @@
         P: 640, -1400
         Surface:
           Material: ∈⋮2
-      - Hi:
+          Transform:
+            Now: 8.61309727420928, 0, 0, 0, 1, 0
+            Spawn: 8.61309727420928, 0, 0, 0, 1, 0
+      - AdjacentSector: ∈⋮219
+        Hi:
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
@@ -6313,18 +6367,28 @@
         Surface:
           Material: ∈⋮2
     Top:
-      Normal: 0, 0.5734623443633283, -0.8192319205190404
+      Normal: 0.5735764363510462, 0, -0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
         Now: 64
         Spawn: 64
+- Entity: ∈⋮194
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮195
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮196
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮199
   ecs.Named:
     Name: Muzzle Flash Shader
   materials.Shader:
     Stages:
-      - Material: ∈⋮160
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮160
 - Entity: ∈⋮206
   core.Light:
     Attenuation: 0.4
@@ -6340,32 +6404,35 @@
         Spawn: 0
     FloorFriction: 0.85
     Segments:
-      - Hi:
+      - AdjacentSector: ∈⋮220
+        Hi:
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
-        P: 520, -1860
+        P: 660, -1840
         Surface:
           Material: ∈⋮2
       - Hi:
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
-        P: 500, -1860
+        P: 640, -1840
         Surface:
           Material: ∈⋮2
-      - Hi:
+      - AdjacentSector: ∈⋮193
+        Hi:
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
-        P: 500, -1730
+        P: 640, -1710
         Surface:
           Material: ∈⋮2
-      - Hi:
+      - AdjacentSector: ∈⋮192
+        Hi:
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
-        P: 520, -1730
+        P: 660, -1710
         Surface:
           Material: ∈⋮2
     Top:
@@ -6377,7 +6444,7 @@
 - Entity: ∈⋮220
   core.Sector:
     Bottom:
-      Normal: 0, 0.5734623443633283, 0.8192319205190405
+      Normal: 0.5734623443633283, 0, 0.8192319205190405
       Surface:
         Material: ∈⋮122
       Z:
@@ -6393,7 +6460,8 @@
         P: 660, -2120
         Surface:
           Material: ∈⋮2
-      - Hi:
+      - AdjacentSector: ∈⋮219
+        Hi:
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
@@ -6407,6 +6475,9 @@
         P: 640, -1840
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 7.777777777777787, 0, 0, 0, 1, 0
+            Spawn: 7.777777777777787, 0, 0, 0, 1, 0
       - Hi:
           Material: ∈⋮2
         Lo:
@@ -6414,8 +6485,12 @@
         P: 640, -2120
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 0.5555555555555562, 0, 0, 0, 1, 0
+            Spawn: 0.5555555555555562, 0, 0, 0, 1, 0
+        WallUVIgnoreSlope: true
     Top:
-      Normal: 0, 0.5734623443633283, -0.8192319205190405
+      Normal: 0.5734623443633283, 0, -0.8192319205190405
       Surface:
         Material: ∈⋮122
       Z:
@@ -6435,14 +6510,14 @@
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
-        P: 640, -1710
+        P: 420, -1550
         Surface:
           Material: ∈⋮2
       - Hi:
           Material: ∈⋮2
         Lo:
           Material: ∈⋮2
-        P: 640, -1840
+        P: 420, -1680
         Surface:
           Material: ∈⋮2
     Top:
@@ -6454,6 +6529,7 @@
 - Entity: ∈⋮222
   core.Sector:
     Bottom:
+      Normal: -0.5735764363510464, 0.00000000000000007024285468436535, 0.8191520442889917
       Surface:
         Material: ∈⋮122
       Z:
@@ -6476,6 +6552,9 @@
         P: 840, -1400
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 20.00461302396996, 0, 0, 0, 1, 0
+            Spawn: 20.00461302396996, 0, 0, 0, 1, 0
       - Hi:
           Material: ∈⋮2
         Lo:
@@ -6483,6 +6562,10 @@
         P: 840, -2120
         Surface:
           Material: ∈⋮2
+          Transform:
+            Now: 0.5556836951102787, 0, 0, 0, 1, 0
+            Spawn: 0.5556836951102787, 0, 0, 0, 1, 0
+        WallUVIgnoreSlope: true
       - AdjacentSector: ∈⋮192
         Hi:
           Material: ∈⋮2
@@ -6492,7 +6575,7 @@
         Surface:
           Material: ∈⋮2
     Top:
-      Normal: -0, -0.5734623443633282, -0.8192319205190405
+      Normal: -0.5735764363510462, 0.00000000000000007024285468436533, -0.8191520442889918
       Surface:
         Material: ∈⋮122
       Z:
@@ -6503,15 +6586,18 @@
     Filter: false
     GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/glass.png
+  materials.Lit:
+    Ambient: 0.1, 0.1, 0.1
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮243
   ecs.Named:
     Name: Space Window
   materials.Shader:
     Stages:
-      - BlendingFunc: Normal
+      - BlendingFunc: BlendNormal
         Flags: ShaderTiled|ShaderSky
         Material: ∈⋮254
-      - BlendingFunc: Normal
+      - BlendingFunc: BlendNormal
         Material: ∈⋮239
 - Entity: ∈⋮246
   behaviors.PlayerTargetable: ∈⋮32
