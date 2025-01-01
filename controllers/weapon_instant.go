@@ -288,7 +288,7 @@ func (wc *WeaponInstantController) Always() {
 	// TODO: Account for bullet velocity travel time. Do this by calculating
 	// time it would take to hit the thing and delaying the outcome? could be
 	// buggy though if the object in question moves
-	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman())
+	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman(2))
 	if s.Type == selection.SelectableBody {
 		if mobile := core.GetMobile(s.Body.ECS, s.Body.Entity); mobile != nil {
 			// Push bodies away

@@ -34,7 +34,7 @@ func GetLight(db *ecs.ECS, e ecs.Entity) *Light {
 func (l *Light) MultiAttachable() bool { return true }
 
 func (l *Light) String() string {
-	return "Light: " + l.Diffuse.StringHuman()
+	return "Light: " + l.Diffuse.StringHuman(2)
 }
 
 func (l *Light) Construct(data map[string]any) {

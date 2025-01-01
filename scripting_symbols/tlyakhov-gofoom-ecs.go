@@ -119,7 +119,7 @@ func (W _tlyakhov_gofoom_ecs_Attachable) String() string {
 // _tlyakhov_gofoom_ecs_AttachableColumn is an interface wrapper for AttachableColumn type
 type _tlyakhov_gofoom_ecs_AttachableColumn struct {
 	IValue      interface{}
-	WAdd        func(c ecs.Attachable) ecs.Attachable
+	WAdd        func(c *ecs.Attachable)
 	WAttachable func(index int) ecs.Attachable
 	WCap        func() int
 	WDetach     func(index int)
@@ -127,13 +127,13 @@ type _tlyakhov_gofoom_ecs_AttachableColumn struct {
 	WID         func() ecs.ComponentID
 	WLen        func() int
 	WNew        func() ecs.Attachable
-	WReplace    func(c ecs.Attachable, index int) ecs.Attachable
+	WReplace    func(c *ecs.Attachable, index int)
 	WString     func() string
 	WType       func() reflect.Type
 }
 
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Add(c ecs.Attachable) ecs.Attachable {
-	return W.WAdd(c)
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Add(c *ecs.Attachable) {
+	W.WAdd(c)
 }
 func (W _tlyakhov_gofoom_ecs_AttachableColumn) Attachable(index int) ecs.Attachable {
 	return W.WAttachable(index)
@@ -156,8 +156,8 @@ func (W _tlyakhov_gofoom_ecs_AttachableColumn) Len() int {
 func (W _tlyakhov_gofoom_ecs_AttachableColumn) New() ecs.Attachable {
 	return W.WNew()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Replace(c ecs.Attachable, index int) ecs.Attachable {
-	return W.WReplace(c, index)
+func (W _tlyakhov_gofoom_ecs_AttachableColumn) Replace(c *ecs.Attachable, index int) {
+	W.WReplace(c, index)
 }
 func (W _tlyakhov_gofoom_ecs_AttachableColumn) String() string {
 	if W.WString == nil {
