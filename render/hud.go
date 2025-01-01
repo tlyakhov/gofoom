@@ -120,7 +120,7 @@ func (r *Renderer) DebugInfo() {
 		sector := core.GetSector(r.ECS, entity)
 		s := sector.Lightmap.Size()
 		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v, Colliders: %v", entity.Format(r.ECS), s, len(sector.Colliders)))
-		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(), playerMobile.Vel.Render.StringHuman(), r.PlayerBody.Pos.Render.StringHuman()))
+		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(2), playerMobile.Vel.Render.StringHuman(2), r.PlayerBody.Pos.Render.StringHuman(2)))
 	}
 
 	for i := 0; i < 20; i++ {

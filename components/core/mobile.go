@@ -42,7 +42,7 @@ func GetMobile(db *ecs.ECS, e ecs.Entity) *Mobile {
 }
 
 func (m *Mobile) String() string {
-	return "Mobile: " + m.Vel.Now.StringHuman()
+	return "Mobile: " + m.Vel.Now.StringHuman(2)
 }
 
 func (m *Mobile) OnDetach(e ecs.Entity) {

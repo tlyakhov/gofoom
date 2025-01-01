@@ -644,12 +644,6 @@ func (e *Editor) ResizeRenderer(w, h int) {
 	e.Grid.MaterialSampler.Config = e.Renderer.Config
 }
 
-func (e *Editor) MoveSurface(delta float64, floor bool, slope bool) {
-	action := &actions.MoveSurface{IEditor: e, Delta: delta, Floor: floor, Slope: slope}
-	e.Act(action)
-	action.Activate()
-}
-
 func (e *Editor) Alert(text string) {
 	dlg := dialog.NewInformation("Foom Editor", text, e.Window)
 	dlg.Show()

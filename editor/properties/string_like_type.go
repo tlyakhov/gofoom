@@ -30,7 +30,7 @@ func stringLikeTypeString[T StringLikeType, PT interface{ *T }](v PT) string {
 	case *concepts.Vector2:
 		return currentValue.String()
 	case *concepts.Vector3:
-		return currentValue.String()
+		return currentValue.StringHuman(4)
 	case *concepts.Vector4:
 		return currentValue.String()
 	case **concepts.Vector2:

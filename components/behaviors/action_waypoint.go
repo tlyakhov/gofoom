@@ -31,7 +31,7 @@ func GetActionWaypoint(db *ecs.ECS, e ecs.Entity) *ActionWaypoint {
 }
 
 func (waypoint *ActionWaypoint) String() string {
-	return "Waypoint: " + waypoint.P.StringHuman()
+	return "Waypoint: " + waypoint.P.StringHuman(2)
 }
 
 func (waypoint *ActionWaypoint) Construct(data map[string]any) {

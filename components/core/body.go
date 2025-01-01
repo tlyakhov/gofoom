@@ -36,7 +36,7 @@ func GetBody(db *ecs.ECS, e ecs.Entity) *Body {
 }
 
 func (b *Body) String() string {
-	return "Body: " + b.Pos.Now.StringHuman()
+	return "Body: " + b.Pos.Now.StringHuman(2)
 }
 
 func (b *Body) OnDetach(e ecs.Entity) {
