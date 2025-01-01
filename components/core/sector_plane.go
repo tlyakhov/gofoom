@@ -18,7 +18,7 @@ type SectorPlane struct {
 	*Sector
 
 	Z       dynamic.DynamicValue[float64] `editable:"Z"`
-	Normal  concepts.Vector3              `editable:"Normal"`
+	Normal  concepts.Vector3              `editable:"Normal" edit_type:"Normal"`
 	Target  ecs.Entity                    `editable:"Target" edit_type:"Sector"`
 	Surface materials.Surface             `editable:"Surf"`
 	Scripts []*Script                     `editable:"Scripts"`

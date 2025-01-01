@@ -370,21 +370,26 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		label.Text = field.Short()
 		//label.SetTooltipText(field.Name)
 		label.Alignment = fyne.TextAlignLeading
+		label.Importance = widget.MediumImportance
+		label.TextStyle.Bold = false
+		//label.Wrapping = fyne.TextWrapWord
 
-		if field.EditType == "Component" {
+		// Handle the special cases first
+		switch field.EditType {
+		case "Component":
 			label.Importance = widget.HighImportance
 			label.TextStyle.Bold = true
 			g.fieldComponent(field)
 			continue
-		} else if field.EditType == "SliceElement" {
+		case "SliceElement":
 			label.Importance = widget.HighImportance
 			label.TextStyle.Italic = true
 			g.fieldChangeSlice(field)
 			continue
+		case "Normal":
+			g.fieldNormal(field)
+			continue
 		}
-		label.Importance = widget.MediumImportance
-		label.TextStyle.Bold = false
-		//label.Wrapping = fyne.TextWrapWord
 
 		x := field.Values[0].Value.Interface()
 		/*		if x == nil {

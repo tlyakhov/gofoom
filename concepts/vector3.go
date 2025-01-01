@@ -213,11 +213,26 @@ func (v *Vector3) String() string {
 		strconv.FormatFloat(v[2], 'f', -1, 64)
 }
 
-// StringHuman formats the vector as a string with 2 digit precision.
+// StringHuman formats the vector as a string with arbitrary precision.
 func (v *Vector3) StringHuman(prec int) string {
-	return strconv.FormatFloat(v[0], 'G', prec, 64) + ", " +
-		strconv.FormatFloat(v[1], 'G', prec, 64) + ", " +
-		strconv.FormatFloat(v[2], 'G', prec, 64)
+	result := ""
+
+	if math.Abs(v[0]) < constants.HumanQuantityEpsilon {
+		result += "0, "
+	} else {
+		result += strconv.FormatFloat(v[0], 'G', prec, 64) + ", "
+	}
+	if math.Abs(v[1]) < constants.HumanQuantityEpsilon {
+		result += "0, "
+	} else {
+		result += strconv.FormatFloat(v[1], 'G', prec, 64) + ", "
+	}
+	if math.Abs(v[2]) < constants.HumanQuantityEpsilon {
+		result += "0"
+	} else {
+		result += strconv.FormatFloat(v[2], 'G', prec, 64)
+	}
+	return result
 }
 
 // Serialize formats the vector as a JSON key-value map.

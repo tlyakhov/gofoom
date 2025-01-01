@@ -30,6 +30,10 @@ const (
 	// memory and is very slow.
 	LightGrid = 4.0
 
+	// Misc constants
+
+	HumanQuantityEpsilon = 1e-10
+
 	// Audio constants
 	SourcesPerSound  = 8
 	AudioUnitsFactor = 12
