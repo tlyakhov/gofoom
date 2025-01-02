@@ -27,6 +27,7 @@ func init() {
 		"GameTextFadeTime":         reflect.ValueOf(constant.MakeFromLiteral("1000", token.INT, 0)),
 		"Gravity":                  reflect.ValueOf(constant.MakeFromLiteral("9.800000000000000000173472347597680709441192448139190673828125", token.FLOAT, 0)),
 		"GravitySwim":              reflect.ValueOf(constant.MakeFromLiteral("0.1000000000000000000013552527156068805425093160010874271392822266", token.FLOAT, 0)),
+		"HumanQuantityEpsilon":     reflect.ValueOf(constant.MakeFromLiteral("1.000000000000000000018377930495836641360156492146227247275191985e-10", token.FLOAT, 0)),
 		"InfoBarSrc":               reflect.ValueOf(constant.MakeFromLiteral("\"/data/game/infobar.png\"", token.STRING, 0)),
 		"InteractionDistance":      reflect.ValueOf(constant.MakeFromLiteral("70", token.INT, 0)),
 		"IntersectEpsilon":         reflect.ValueOf(constant.MakeFromLiteral("1.000000000000000000018377930495836641360156492146227247275191985e-10", token.FLOAT, 0)),

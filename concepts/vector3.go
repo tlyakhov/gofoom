@@ -203,6 +203,37 @@ func (v *Vector3) CrossSelf(vec1, vec2 *Vector3) *Vector3 {
 	return v
 }
 
+// From https://en.wikipedia.org/wiki/Spherical_coordinate_system#cartesian_coordinates
+func (v *Vector3) ToSpherical() (r, theta, phi float64) {
+	r = v[0]*v[0] + v[1]*v[1]
+	phi = math.Atan2(v[1], v[0])
+	r2d := math.Sqrt(r)
+	r = math.Sqrt(r + v[2]*v[2])
+	theta = math.Atan2(r2d, v[2])
+	return
+}
+
+func (v *Vector3) FromSpherical(r, theta, phi float64) {
+	v[2] = math.Cos(theta) * r
+	v[1] = math.Sin(phi) * math.Sin(theta) * r
+	v[0] = math.Cos(phi) * math.Sin(theta) * r
+}
+
+// Adapted from https://stackoverflow.com/questions/9038392/how-to-round-a-2d-vector-to-nearest-15-degrees?rq=4
+func (v *Vector3) SphericalQuantIncPhi(phiSnap float64, multiples float64) {
+	r2d := math.Sqrt(v[0]*v[0] + v[1]*v[1])
+	angle := math.Atan2(v[1], v[0])
+	phi := (math.Round(angle/phiSnap) + multiples) * phiSnap
+	v[0] = math.Cos(phi) * r2d
+	v[1] = math.Sin(phi) * r2d
+}
+
+func (v *Vector3) SphericalQuantIncTheta(thetaSnap float64, multiples float64) {
+	r, theta, phi := v.ToSpherical()
+	theta = (math.Round(theta/thetaSnap) + multiples) * thetaSnap
+	v.FromSpherical(r, theta, phi)
+}
+
 // String formats the vector as a string
 func (v *Vector3) String() string {
 	if v == nil {

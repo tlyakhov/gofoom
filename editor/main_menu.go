@@ -35,18 +35,18 @@ type EditorMenu struct {
 	EditCopy   MenuAction
 	EditPaste  MenuAction
 
-	EditSelectSegment    MenuAction
-	EditRaiseCeil        MenuAction
-	EditLowerCeil        MenuAction
-	EditRaiseFloor       MenuAction
-	EditLowerFloor       MenuAction
-	EditRotateCeilXYCW   MenuAction
-	EditRotateCeilXYCCW  MenuAction
-	EditRotateFloorXYCW  MenuAction
-	EditRotateFloorXYCCW MenuAction
-	EditRotateAnchor     MenuAction
-	EditIncreaseGrid     MenuAction
-	EditDecreaseGrid     MenuAction
+	EditSelectSegment         MenuAction
+	EditRaiseCeil             MenuAction
+	EditLowerCeil             MenuAction
+	EditRaiseFloor            MenuAction
+	EditLowerFloor            MenuAction
+	EditRotateCeilAzimuthCW   MenuAction
+	EditRotateCeilAzimuthCCW  MenuAction
+	EditRotateFloorAzimuthCW  MenuAction
+	EditRotateFloorAzimuthCCW MenuAction
+	EditRotateAnchor          MenuAction
+	EditIncreaseGrid          MenuAction
+	EditDecreaseGrid          MenuAction
 
 	EditTweakSurfaceLeft    MenuAction
 	EditTweakSurfaceRight   MenuAction
@@ -180,24 +180,24 @@ func CreateMainMenu() {
 	editor.EditLowerFloor.Menu = fyne.NewMenuItem("Lower Selection Floor", func() {
 		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModeLevel, Delta: -2, Floor: true})
 	})
-	editor.EditRotateCeilXYCW.NoModifier = true
-	editor.EditRotateCeilXYCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyRightBracket}
-	editor.EditRotateCeilXYCW.Menu = fyne.NewMenuItem("Rotate Selection Ceiling XY CW", func() {
-		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModeXYAngle, Delta: 1, Floor: false})
+	editor.EditRotateCeilAzimuthCW.NoModifier = true
+	editor.EditRotateCeilAzimuthCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyRightBracket}
+	editor.EditRotateCeilAzimuthCW.Menu = fyne.NewMenuItem("Rotate Selection Ceiling Azimuth CW", func() {
+		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModePhi, Delta: 1, Floor: false})
 	})
-	editor.EditRotateCeilXYCCW.NoModifier = true
-	editor.EditRotateCeilXYCCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyLeftBracket}
-	editor.EditRotateCeilXYCCW.Menu = fyne.NewMenuItem("Rotate Selection Ceiling XY CCW", func() {
-		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModeXYAngle, Delta: -1, Floor: false})
+	editor.EditRotateCeilAzimuthCCW.NoModifier = true
+	editor.EditRotateCeilAzimuthCCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyLeftBracket}
+	editor.EditRotateCeilAzimuthCCW.Menu = fyne.NewMenuItem("Rotate Selection Ceiling Azimuth CCW", func() {
+		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModePhi, Delta: -1, Floor: false})
 	})
 
-	editor.EditRotateFloorXYCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyRightBracket, Modifier: fyne.KeyModifierShortcutDefault}
-	editor.EditRotateFloorXYCW.Menu = fyne.NewMenuItem("Rotate Selection Floor XY CW", func() {
-		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModeXYAngle, Delta: 1, Floor: true})
+	editor.EditRotateFloorAzimuthCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyRightBracket, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditRotateFloorAzimuthCW.Menu = fyne.NewMenuItem("Rotate Selection Floor Azimuth CW", func() {
+		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModePhi, Delta: 1, Floor: true})
 	})
-	editor.EditRotateFloorXYCCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyLeftBracket, Modifier: fyne.KeyModifierShortcutDefault}
-	editor.EditRotateFloorXYCCW.Menu = fyne.NewMenuItem("Rotate Selection Floor XY CCW", func() {
-		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModeXYAngle, Delta: -1, Floor: true})
+	editor.EditRotateFloorAzimuthCCW.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyLeftBracket, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditRotateFloorAzimuthCCW.Menu = fyne.NewMenuItem("Rotate Selection Floor Azimuth CCW", func() {
+		editor.Act(&actions.MoveSurface{IEditor: editor, Mode: actions.SurfaceModePhi, Delta: -1, Floor: true})
 	})
 
 	// TODO: Instead, make two actions, to match floor/ceiling slope to a segment
@@ -304,8 +304,8 @@ func CreateMainMenu() {
 		editor.EditCut.Menu, editor.EditCopy.Menu, editor.EditPaste.Menu, editor.EditDelete.Menu, fyne.NewMenuItemSeparator(),
 		editor.EditSelectSegment.Menu,
 		editor.EditRaiseCeil.Menu, editor.EditLowerCeil.Menu, editor.EditRaiseFloor.Menu, editor.EditLowerFloor.Menu,
-		editor.EditRotateCeilXYCW.Menu, editor.EditRotateCeilXYCCW.Menu, editor.EditRotateFloorXYCW.Menu,
-		editor.EditRotateFloorXYCCW.Menu, editor.EditRotateAnchor.Menu, editor.EditIncreaseGrid.Menu, editor.EditDecreaseGrid.Menu, fyne.NewMenuItemSeparator(),
+		editor.EditRotateCeilAzimuthCW.Menu, editor.EditRotateCeilAzimuthCCW.Menu, editor.EditRotateFloorAzimuthCW.Menu,
+		editor.EditRotateFloorAzimuthCCW.Menu, editor.EditRotateAnchor.Menu, editor.EditIncreaseGrid.Menu, editor.EditDecreaseGrid.Menu, fyne.NewMenuItemSeparator(),
 		editor.EditTweakSurfaceLeft.Menu, editor.EditTweakSurfaceRight.Menu, editor.EditTweakSurfaceUp.Menu, editor.EditTweakSurfaceDown.Menu,
 	)
 	menuTools := fyne.NewMenu("Tools", editor.ToolsSelect.Menu,

@@ -307,9 +307,9 @@ func (e *Editor) Test() {
 
 func (e *Editor) autoPortal() {
 	defer concepts.ExecutionDuration(concepts.ExecutionTrack("AutoPortal"))
-	e.Lock.Lock()
+	//e.Lock.Lock()
 	controllers.AutoPortal(e.ECS)
-	e.Lock.Unlock()
+	//e.Lock.Unlock()
 }
 
 func (e *Editor) refreshProperties() {
