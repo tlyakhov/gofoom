@@ -14,20 +14,22 @@ type EntityTable []Entity
 const EntityTableGrowthRate = 8
 
 func (table *EntityTable) Set(entity Entity) {
-	size := uint32(len(*table))
+	slice := *table
+	size := uint32(len(slice))
 	if size == 0 {
 		*table = make(EntityTable, 1)
+		slice = *table
 		size = 1
 	}
 	// Fast path, common. Avoid doing modulus
-	if size == 1 && (*table)[0] == 0 {
-		(*table)[0] = entity
+	if size == 1 && slice[0] == 0 {
+		slice[0] = entity
 		return
 	}
 	i := uint32(entity) % size
 	for range size {
-		if (*table)[i] == 0 || (*table)[i] == entity {
-			(*table)[i] = entity
+		if slice[i] == 0 || slice[i] == entity {
+			slice[i] = entity
 			return
 		}
 		i = (i + 1) % size

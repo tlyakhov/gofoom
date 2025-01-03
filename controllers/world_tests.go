@@ -91,30 +91,31 @@ func CreateTestHeightmapSector(db *ecs.ECS, name string, x, y, size float64) (*c
 }
 
 func CreateTestGrass(db *ecs.ECS) ecs.Entity {
-	eGrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eGrass, ecs.NamedCID).(*ecs.Named)
-	nmat.Name = "Default Material"
-	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
-	tex := materials.GetImage(db, eGrass)
-	tex.Source = "data/grass.jpg"
-	tex.Filter = true
-	tex.GenerateMipMaps = true
-	tex.Load()
+	eGrass := db.NewEntity()
+	named := db.NewAttachedComponent(eGrass, ecs.NamedCID).(*ecs.Named)
+	named.Name = "Default Material"
+	//img.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
+	img := db.NewAttachedComponent(eGrass, materials.ImageCID).(*materials.Image)
+	img.Source = "data/grass.jpg"
+	img.Filter = true
+	img.GenerateMipMaps = true
+	img.Load()
+	db.NewAttachedComponent(eGrass, materials.LitCID)
 	return eGrass
 }
 func CreateTestSky(db *ecs.ECS) ecs.Entity {
-	img := db.NewAttachedComponent(db.NewEntity(), materials.ImageCID).(*materials.Image)
-	img.Source = "data/Sky.png"
-	img.Filter = false
-	img.GenerateMipMaps = false
-	img.Load()
+	skyImage := db.NewAttachedComponent(db.NewEntity(), materials.ImageCID).(*materials.Image)
+	skyImage.Source = "data/Sky.png"
+	skyImage.Filter = false
+	skyImage.GenerateMipMaps = false
+	skyImage.Load()
 
 	entity := db.NewEntity()
-	sky := db.NewAttachedComponent(entity, materials.ShaderCID).(*materials.Shader)
-	sky.Stages = append(sky.Stages, new(materials.ShaderStage))
-	sky.Stages[0].Construct(nil)
-	sky.Stages[0].Material = img.Entity
-	sky.Stages[0].Flags = materials.ShaderSky | materials.ShaderTiled
+	skyShader := db.NewAttachedComponent(entity, materials.ShaderCID).(*materials.Shader)
+	skyShader.Stages = append(skyShader.Stages, new(materials.ShaderStage))
+	skyShader.Stages[0].Construct(nil)
+	skyShader.Stages[0].Material = skyImage.Entity
+	skyShader.Stages[0].Flags = materials.ShaderSky | materials.ShaderTiled
 	named := db.NewAttachedComponent(entity, ecs.NamedCID).(*ecs.Named)
 	named.Name = "Sky"
 
@@ -122,34 +123,44 @@ func CreateTestSky(db *ecs.ECS) ecs.Entity {
 }
 
 func CreateTestDirt(db *ecs.ECS) ecs.Entity {
-	eDirt := archetypes.CreateBasicMaterial(db, true)
+	eDirt := db.NewEntity()
 	nmat := db.NewAttachedComponent(eDirt, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Dirt"
-	tex := materials.GetImage(db, eDirt)
+	tex := db.NewAttachedComponent(eDirt, materials.ImageCID).(*materials.Image)
 	tex.Source = "data/FDef.png"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.Load()
+	db.NewAttachedComponent(eDirt, materials.LitCID)
 	return eDirt
 }
 
 func CreateSpawn(db *ecs.ECS) {
 	e := db.NewEntity()
 	player := &behaviors.Player{}
+	player.ComponentID = behaviors.PlayerCID
 	player.Construct(nil)
 	player.Spawn = true
 	ecs.AttachTyped(db, e, &player)
 	body := &core.Body{}
+	body.ComponentID = core.BodyCID
 	body.Construct(nil)
 	body.Pos.SetAll(concepts.Vector3{50, 50, 40})
 	ecs.AttachTyped(db, e, &body)
 	mobile := &core.Mobile{}
+	mobile.ComponentID = core.MobileCID
 	mobile.Construct(nil)
 	mobile.Mass = 80
 	ecs.AttachTyped(db, e, &mobile)
 	alive := &behaviors.Alive{}
+	alive.ComponentID = behaviors.AliveCID
 	alive.Construct(nil)
 	ecs.AttachTyped(db, e, &alive)
+	carrier := &behaviors.InventoryCarrier{}
+	carrier.ComponentID = behaviors.InventoryCarrierCID
+	carrier.Construct(nil)
+	ecs.AttachTyped(db, e, &carrier)
+
 	Respawn(db, true)
 }
 
@@ -157,21 +168,9 @@ func CreateTestWorld(db *ecs.ECS) {
 	testw := 30
 	testh := 30
 
-	eGrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eGrass, ecs.NamedCID).(*ecs.Named)
-	nmat.Name = "Default Material"
-	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
-	tex := materials.GetImage(db, eGrass)
-	tex.Source = "data/grass.jpg"
-	tex.Filter = false
-	tex.GenerateMipMaps = true
-	tex.Load()
-	//tiled := materials.GetTiled(igrass)
-	//tiled.Scale = 5.0
-
 	CreateTestGrass(db)
-	isky := CreateTestSky(db)
-	idirt := CreateTestDirt(db)
+	eSky := CreateTestSky(db)
+	eDirt := CreateTestDirt(db)
 
 	scale := 75
 	for x := 0; x < testw; x++ {
@@ -180,10 +179,10 @@ func CreateTestWorld(db *ecs.ECS) {
 			sector.Top.Z.SetAll(300)
 			sector.Bottom.Z.SetAll(rand.Float64() * 30)
 			//sector.FloorSlope = rand.Float64() * 0.2
-			sector.Top.Surface.Material = isky
+			sector.Top.Surface.Material = eSky
 			for i := 0; i < len(sector.Segments); i++ {
-				sector.Segments[i].Surface.Material = isky
-				sector.Segments[i].LoSurface.Material = idirt
+				sector.Segments[i].Surface.Material = eSky
+				sector.Segments[i].LoSurface.Material = eDirt
 			}
 
 			if rand.Uint32()%45 == 0 {
@@ -246,34 +245,41 @@ func CreateTestWorld2(db *ecs.ECS) {
 // I think this is probably too performance-intensive for in-game, but maybe
 // with small heightmaps it could be viable.
 func CreateTestWorld3(db *ecs.ECS) {
-	// This is a pretty epic stress test: a 30*30 heightmap represents 900*2 =
-	// 1800 triangle-shaped sectors, total 5400 segments.
-	testw := 30
-	testh := 30
+	// This is a pretty epic stress test: a 64x64 heightmap represents 4096*2 =
+	// 8192 triangle-shaped sectors, total 24,576 segments. As of 2024-01-02,
+	// the worst performance offender is generating/maintaining the PVS,
+	// particularly dynamic recalculation, as well as lighting (which requires
+	// traversing the entire map for every lightmap texel!)
+	// Without lighting, this actually performs very well - 60fps comfortably.
+
+	heightImage := materials.Image{}
+	heightImage.ComponentID = materials.ImageCID
+	heightImage.Construct(map[string]any{
+		"Source":          "data/test-heightmap.jpg",
+		"Filter":          true,
+		"GenerateMipMaps": true,
+	})
+
+	testw := 64
+	testh := 64
 	heightmap := make([]float64, testw*testh)
 	for x := 0; x < testw; x++ {
 		for y := 0; y < testh; y++ {
-			heightmap[y*testw+x] = rand.Float64() * 50
+			//heightmap[y*testw+x] = rand.Float64() * 50
+			sample := heightImage.Sample(
+				float64(x)/float64(testw),
+				float64(y)/float64(testh),
+				uint32(testw),
+				uint32(testh))
+			heightmap[y*testw+x] = concepts.RGBtoHSP(sample.To3D())[2] * 250
 		}
 	}
 
-	eGrass := archetypes.CreateBasicMaterial(db, true)
-	nmat := db.NewAttachedComponent(eGrass, ecs.NamedCID).(*ecs.Named)
-	nmat.Name = "Default Material"
-	//tex.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
-	tex := materials.GetImage(db, eGrass)
-	tex.Source = "data/grass.jpg"
-	tex.Filter = false
-	tex.GenerateMipMaps = true
-	tex.Load()
-	//tiled := materials.GetTiled(igrass)
-	//tiled.Scale = 5.0
+	eGrass := CreateTestGrass(db)
+	eSky := CreateTestSky(db)
+	eDirt := CreateTestDirt(db)
 
-	CreateTestGrass(db)
-	isky := CreateTestSky(db)
-	idirt := CreateTestDirt(db)
-
-	scale := 75
+	scale := 50
 	for x := 0; x < testw-1; x++ {
 		for y := 0; y < testh-1; y++ {
 			sector1, sector2 := CreateTestHeightmapSector(db, fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
@@ -287,6 +293,11 @@ func CreateTestWorld3(db *ecs.ECS) {
 				heightmap[(y+1)*testw+x+0] - heightmap[(y+0)*testw+x+0]}
 			sector1.Bottom.Normal = *v1.Cross(v2).NormSelf()
 			sector1.Bottom.Z.SetAll(heightmap[(y+0)*testw+x+0])
+			if sector1.Bottom.Z.Spawn < 20 {
+				sector1.Bottom.Surface.Material = eDirt
+			} else {
+				sector1.Bottom.Surface.Material = eGrass
+			}
 			v1 = &concepts.Vector3{
 				sector2.Segments[1].P[0] - sector2.Segments[0].P[0],
 				sector2.Segments[1].P[1] - sector2.Segments[0].P[1],
@@ -297,35 +308,46 @@ func CreateTestWorld3(db *ecs.ECS) {
 				heightmap[(y+1)*testw+x+0] - heightmap[(y+1)*testw+x+1]}
 			sector2.Bottom.Normal = *v1.Cross(v2).NormSelf()
 			sector2.Bottom.Z.SetAll(heightmap[(y+0)*testw+x+1])
-
-			sector1.Top.Z.SetAll(300)
-			sector2.Top.Z.SetAll(300)
-
-			sector1.Top.Surface.Material = isky
-			for i := 0; i < len(sector1.Segments); i++ {
-				sector1.Segments[i].Surface.Material = isky
-				sector1.Segments[i].LoSurface.Material = idirt
+			if sector2.Bottom.Z.Spawn < 20 {
+				sector2.Bottom.Surface.Material = eDirt
+			} else {
+				sector2.Bottom.Surface.Material = eGrass
 			}
-			sector2.Top.Surface.Material = isky
+
+			sector1.Top.Z.SetAll(500)
+			sector2.Top.Z.SetAll(500)
+
+			sector1.Top.Surface.Material = eSky
+			for i := 0; i < len(sector1.Segments); i++ {
+				sector1.Segments[i].Surface.Material = eSky
+				sector1.Segments[i].LoSurface.Material = eDirt
+			}
+			sector2.Top.Surface.Material = eSky
 			for i := 0; i < len(sector2.Segments); i++ {
-				sector2.Segments[i].Surface.Material = isky
-				sector2.Segments[i].LoSurface.Material = idirt
+				sector2.Segments[i].Surface.Material = eSky
+				sector2.Segments[i].LoSurface.Material = eDirt
 			}
 			sector1.Recalculate()
 			sector2.Recalculate()
 		}
 	}
 
-	for range 5 {
+	for range 32 {
 		eLight := archetypes.CreateLightBody(db)
 		lightBody := core.GetBody(db, eLight)
-		lightBody.Pos.Spawn = concepts.Vector3{float64(testw*scale) * rand.Float64(), float64(testh*scale) * rand.Float64(), 200}
+		lightBody.Pos.Spawn = concepts.Vector3{float64(testw*scale) * rand.Float64(), float64(testh*scale) * rand.Float64(), 450}
 		lightBody.Pos.ResetToSpawn()
+		light := core.GetLight(db, eLight)
+		light.Strength = 3
+		light.Attenuation = 0.3
+		bc := BodyController{}
+		bc.Target(lightBody, eLight)
+		bc.findBodySector()
 		log.Println("Generated light")
 	}
 
 	CreateSpawn(db)
+	AutoPortal(db)
 	// After everything's loaded, trigger the controllers
 	db.ActAllControllers(ecs.ControllerRecalculate)
-	AutoPortal(db)
 }

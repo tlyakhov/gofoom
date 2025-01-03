@@ -173,12 +173,12 @@ func run() {
 	db = ecs.NewECS()
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
-	//controllers.CreateTestWorld3(db)
-	//db.Save("bin/exported_test.json")
-	if err = db.Load("data/worlds/hall.yaml"); err != nil {
+	controllers.CreateTestWorld3(db)
+	db.Save("bin/exported_test.json")
+	/*if err = db.Load("data/worlds/hall.yaml"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
-	}
+	}*/
 	controllers.Respawn(db, true)
 	archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
 

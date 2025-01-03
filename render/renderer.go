@@ -161,21 +161,30 @@ func (r *Renderer) RenderSegmentColumn(c *column) {
 
 	c.LightSampler.MaterialSampler.Config = r.Config
 	c.LightSampler.InputBody = 0
-	c.LightSampler.Normal = c.Sector.Top.Normal
 	c.LightSampler.Sector = c.Sector
 	c.LightSampler.Segment = nil
 
-	if c.Pick {
-		ceilingPick(c)
-	} else {
-		planes(c, &c.Sector.Top)
+	if c.ClippedTop > c.EdgeTop {
+		c.LightSampler.Normal = c.Sector.Top.Normal
+		if c.Pick {
+			ceilingPick(c)
+		} else {
+			planes(c, &c.Sector.Top)
+		}
 	}
-	c.LightSampler.Normal = c.Sector.Bottom.Normal
 
-	if c.Pick {
-		floorPick(c)
-	} else {
-		planes(c, &c.Sector.Bottom)
+	if c.ClippedBottom < c.EdgeBottom {
+		c.LightSampler.Normal = c.Sector.Bottom.Normal
+		if c.Pick {
+			floorPick(c)
+		} else {
+			planes(c, &c.Sector.Bottom)
+		}
+	}
+
+	if c.ClippedTop >= c.EdgeBottom || c.ClippedBottom <= c.EdgeTop {
+		// The segment/portal isn't visible
+		return
 	}
 
 	c.LightSampler.Segment = c.Segment

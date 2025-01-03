@@ -135,6 +135,11 @@ func (db *ECS) attach(entity Entity, component *Attachable, componentID Componen
 		return
 	}
 
+	if componentID == 0 {
+		log.Printf("ECS.attach: tried to attach 0 component ID!")
+		return
+	}
+
 	for int(entity) >= len(db.rows) {
 		db.rows = append(db.rows, nil)
 	}
