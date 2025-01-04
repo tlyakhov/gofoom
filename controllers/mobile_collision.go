@@ -403,9 +403,9 @@ func (mc *MobileController) Collide() {
 
 			mc.CollideZ()
 			//		mc.bodyBodyCollide(mc.Sector)
-			for _, sector := range mc.Sector.PVS {
-				mc.bodyBodyCollide(sector)
-			}
+			mc.Sector.PVS.Range(func(e uint32) {
+				mc.bodyBodyCollide(core.GetSector(mc.ECS, ecs.Entity(e)))
+			})
 		}
 
 		if len(mc.collidedSegments) == 0 {

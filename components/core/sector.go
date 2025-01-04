@@ -13,6 +13,7 @@ import (
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
+	"github.com/kelindar/bitmap"
 	"github.com/puzpuzpuz/xsync/v3"
 	"github.com/spf13/cast"
 )
@@ -37,7 +38,7 @@ type Sector struct {
 
 	// Potentially visible set
 	LastPVSRefresh uint64
-	PVS            map[ecs.Entity]*Sector
+	PVS            bitmap.Bitmap
 	// Potentially visible lights
 	PVL []*Body
 
@@ -142,7 +143,7 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
-	s.PVS = make(map[ecs.Entity]*Sector)
+	s.PVS = nil
 	s.PVL = make([]*Body, 0)
 	s.Lightmap = xsync.NewMapOf[uint64, *LightmapCell](xsync.WithPresize(1024))
 	s.Segments = make([]*SectorSegment, 0)

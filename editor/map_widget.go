@@ -77,9 +77,9 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 		if s.Sector == nil {
 			continue
 		}
-		for entity, sector := range s.Sector.PVS {
-			pvsSector[entity] = sector
-		}
+		s.Sector.PVS.Range(func(e uint32) {
+			pvsSector[ecs.Entity(e)] = core.GetSector(s.Sector.ECS, ecs.Entity(e))
+		})
 	}
 
 	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorCID)

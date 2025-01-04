@@ -39,7 +39,7 @@ func (sc *SectorController) Recalculate() {
 		// TODO: This has a bug when loading - it'll fail for sectors that
 		// haven't had .Recalculate() called on them yet while recursing PVS
 		pvs := PvsController{target: sc.Sector}
-		pvs.updatePVS(nil, nil, nil)
+		pvs.updatePVS(nil, nil, nil, nil)
 		// For debugging:
 		// log.Printf("Initial PVS. Sector %v, PVS size: %v, PVL size: %v", sc.Sector.Entity.String(), len(sc.Sector.PVS), len(sc.Sector.PVL))
 	}
