@@ -4,16 +4,11 @@
 package controllers
 
 import (
-	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
-type pvsState struct {
-	portalA *concepts.Vector2
-	portalB *concepts.Vector2
-}
 type PvsController struct {
 	ecs.BaseController
 	*core.PvsQueue
@@ -45,28 +40,12 @@ func (pvs *PvsController) Always() {
 		if pvs.target == nil {
 			break
 		}
-		pvs.updatePVS(nil, nil, nil)
+		pvs.updatePVS(nil, nil, nil, nil)
 		// log.Printf("Refreshed pvs for %v", sector.Entity)
 	}
 }
 
-func pvsEnsureOrder(seg *core.SectorSegment) (a *concepts.Vector2, b *concepts.Vector2) {
-	// Ensure the vectors are increasing in the major axis
-	a = seg.A
-	b = seg.B
-	if math.Abs(a[0]-b[0]) > math.Abs(a[1]-b[1]) {
-		if b[0] < a[0] {
-			a, b = b, a
-		}
-	} else {
-		if b[1] < a[1] {
-			a, b = b, a
-		}
-	}
-	return
-}
-
-func (pvs *PvsController) updatePVS(visitor *core.Sector, min, max *concepts.Vector3) {
+func (pvs *PvsController) updatePVS(visitor *core.Sector, min, max *concepts.Vector3, normals []*concepts.Vector2) {
 	// TODO: This can be very expensive for large areas with lots of connected
 	// sectors. How can we optimize this?
 	// TODO: Can we special-case doors to block invisible sectors when closed?
@@ -78,17 +57,11 @@ func (pvs *PvsController) updatePVS(visitor *core.Sector, min, max *concepts.Vec
 	// EntityTables have worse write performance but much better read
 	// performance
 
-	/*
-
-		1. Start at a portal
-		2. loop through next portals. If
-	*/
-
 	if visitor == nil {
-		pvs.target.PVS = make(map[ecs.Entity]*core.Sector)
+		pvs.target.PVS = nil
 		pvs.target.PVL = make([]*core.Body, 0)
 		pvs.target.Colliders = make(map[ecs.Entity]*core.Mobile)
-		pvs.target.PVS[pvs.target.Entity] = pvs.target
+		pvs.target.PVS.Set(uint32(pvs.target.Entity))
 		pvs.target.LastPVSRefresh = pvs.target.ECS.Frame
 		visitor = pvs.target
 	}
@@ -106,62 +79,27 @@ func (pvs *PvsController) updatePVS(visitor *core.Sector, min, max *concepts.Vec
 	if min == nil || max == nil {
 		min, max = &pvs.target.Min, &pvs.target.Max
 	}
+	nNormals := len(normals)
+	normals = append(normals, nil)
 
-	col := ecs.ColumnFor[core.Sector](pvs.target.ECS, core.SectorCID)
-
-	var isect concepts.Vector2
 	for _, seg := range visitor.Segments {
 		adj := seg.AdjacentSegment
 		if adj == nil || seg.AdjacentSector == 0 {
 			continue
 		}
 		if adj.Sector.Min[2] >= max[2] || adj.Sector.Max[2] <= min[2] {
-			//	continue
-		}
-		/*if _, ok := pvs.visited[seg.AdjacentSector]; ok {
 			continue
-		}*/
-		if pvs.target.PVS[adj.Sector.Entity] != nil {
+		}
+		if pvs.target.PVS.Contains(uint32(adj.Sector.Entity)) {
 			continue
 		}
 
-		if visitor != pvs.target {
-			blocked := true
-			for _, targetPortal := range pvs.target.Segments {
-				if targetPortal.AdjacentSegment == nil && targetPortal.AdjacentSector == 0 {
-					continue
-				}
-				blocked = false
-				for i := range col.Cap() {
-					sector := col.Value(i)
-					if sector == nil {
-						continue
-					}
-					for _, wall := range sector.Segments {
-						if wall.AdjacentSegment != nil || wall.AdjacentSector != 0 {
-							continue
-						}
-
-						if concepts.IntersectSegments(targetPortal.A, adj.A, wall.A, wall.B, &isect) != -1 &&
-							concepts.IntersectSegments(targetPortal.B, adj.B, wall.A, wall.B, &isect) != -1 &&
-							concepts.IntersectSegments(targetPortal.A, adj.B, wall.A, wall.B, &isect) != -1 &&
-							concepts.IntersectSegments(targetPortal.B, adj.A, wall.A, wall.B, &isect) != -1 {
-							blocked = true
-							break
-						}
-					}
-					if blocked {
-						break
-					}
-				}
-
-				if !blocked {
-					break
-				}
-			}
-			if blocked {
-				continue
-			}
+		correctSide := true
+		for _, normal := range normals[:nNormals] {
+			correctSide = correctSide && normal.Dot(&seg.Normal) >= 0
+		}
+		if !correctSide {
+			continue
 		}
 
 		adjmax := max
@@ -173,8 +111,9 @@ func (pvs *PvsController) updatePVS(visitor *core.Sector, min, max *concepts.Vec
 			adjmin = &adj.Sector.Min
 		}
 
-		pvs.target.PVS[seg.AdjacentSector] = adj.Sector
+		pvs.target.PVS.Set(uint32(seg.AdjacentSector))
 
-		pvs.updatePVS(adj.Sector, adjmin, adjmax)
+		normals[nNormals] = &seg.Normal
+		pvs.updatePVS(adj.Sector, adjmin, adjmax, normals)
 	}
 }

@@ -125,9 +125,10 @@ func (pc *ProximityController) sectorBodies(sector *core.Sector, pos *concepts.V
 
 func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 	pc.flags |= behaviors.ProximityOnSector
-	for _, pvs := range sector.PVS {
+	sector.PVS.Range(func(e uint32) {
+		pvs := core.GetSector(pc.ECS, ecs.Entity(e))
 		if !pvs.Active || pvs.Entity == pc.Entity {
-			continue
+			return
 		}
 		if pc.ActsOnSectors &&
 			sector.Center.Dist2(&pvs.Center) < pc.Range*pc.Range && pc.isValid(pvs.Entity) {
@@ -140,14 +141,15 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 		pc.flags |= behaviors.ProximityTargetsBody
 		pc.flags &= ^behaviors.ProximityTargetsSector
 		pc.sectorBodies(pvs, &sector.Center)
-	}
+	})
 }
 
 func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	pc.flags &= ^behaviors.ProximityOnSector
 	pc.flags |= behaviors.ProximityOnBody
 	container := body.Sector()
-	for _, sector := range container.PVS {
+	container.PVS.Range(func(e uint32) {
+		sector := core.GetSector(pc.ECS, ecs.Entity(e))
 		if sector.Active && pc.ActsOnSectors &&
 			sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range &&
 			pc.isValid(sector.Entity) {
@@ -160,7 +162,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 		pc.flags |= behaviors.ProximityTargetsBody
 		pc.flags &= ^behaviors.ProximityTargetsSector
 		pc.sectorBodies(sector, &body.Pos.Now)
-	}
+	})
 }
 
 func (pc *ProximityController) Always() {
