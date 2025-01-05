@@ -88,7 +88,7 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Pop()
 }
 
-func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
+func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	if len(sector.Segments) == 0 {
 		return
 	}
@@ -131,11 +131,11 @@ func (mw *MapWidget) DrawSector(sector *core.Sector, isPartOfPVS bool) {
 		} else if segmentSelected {
 			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		}
-		if isPartOfPVS && !segmentSelected && !sectorSelected {
-			mw.Context.SetDash(4, 8)
-		} else {
-			mw.Context.SetDash()
-		}
+		/*	if isPartOfPVS && !segmentSelected && !sectorSelected {
+				mw.Context.SetDash(4, 8)
+			} else {
+				mw.Context.SetDash()
+			}*/
 
 		// Draw segment
 		mw.Context.SetLineWidth(1)

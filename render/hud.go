@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 func (r *Renderer) RenderWeapon(slot *behaviors.InventorySlot) {
@@ -109,17 +110,25 @@ func (r *Renderer) DebugInfo() {
 
 	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v", r.ECS.Simulation.FPS, r.ECS.Entities.Count()))
 	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
-	hits := r.ICacheHits.Load()
-	misses := r.ICacheMisses.Load()
-	r.Print(ts, 4, 24, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
-	/*hits := ecs.ComponentTableHit.Load()
-	misses := ecs.ComponentTableMiss.Load()
-	r.Print(ts, 4, 24, fmt.Sprintf("ComponentTable hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))*/
+	switch 2 {
+	case 0:
+		hits := r.ICacheHits.Load()
+		misses := r.ICacheMisses.Load()
+		r.Print(ts, 4, 24, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
+	case 1:
+		hits := ecs.ComponentTableHit.Load()
+		misses := ecs.ComponentTableMiss.Load()
+		r.Print(ts, 4, 24, fmt.Sprintf("ComponentTable hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
+	case 2:
+		tests := LightSamplerLightsTested.Load()
+		total := LightSamplerCalcs.Load()
+		r.Print(ts, 4, 24, fmt.Sprintf("LightSampler average lights/sample: %.1f, %v, %v", float64(tests)/float64(total), tests, total))
+	}
 	if r.PlayerBody.SectorEntity != 0 {
 		entity := r.PlayerBody.SectorEntity
 		sector := core.GetSector(r.ECS, entity)
 		s := sector.Lightmap.Size()
-		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v, Colliders: %v", entity.Format(r.ECS), s, len(sector.Colliders)))
+		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v, Bodies: %v", entity.Format(r.ECS), s, len(sector.Bodies)))
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(2), playerMobile.Vel.Render.StringHuman(2), r.PlayerBody.Pos.Render.StringHuman(2)))
 	}
 

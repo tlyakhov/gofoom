@@ -6,7 +6,6 @@ package controllers
 import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -16,6 +15,8 @@ type ProximityController struct {
 	TargetBody   *core.Body
 	TargetSector *core.Sector
 	flags        behaviors.ProximityFlags
+
+	tree *core.Quadtree
 }
 
 func init() {
@@ -110,22 +111,23 @@ func (pc *ProximityController) react(target ecs.Entity) {
 
 }
 
-func (pc *ProximityController) sectorBodies(sector *core.Sector, pos *concepts.Vector3) {
-	for _, body := range sector.Bodies {
-		if !body.Active || body.Entity == pc.Entity {
-			continue
-		}
-		if pos.Dist2(&body.Pos.Now) < pc.Range*pc.Range && pc.isValid(body.Entity) {
-			pc.TargetBody = body
-			pc.TargetSector = nil
-			pc.react(body.Entity)
-		}
-	}
-}
-
 func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 	pc.flags |= behaviors.ProximityOnSector
-	sector.PVS.Range(func(e uint32) {
+
+	pc.flags |= behaviors.ProximityTargetsBody
+	pc.flags &= ^behaviors.ProximityTargetsSector
+	pc.tree.Root.RangeCircle(sector.Center.To2D(), pc.Range, func(b *core.Body) bool {
+		if !b.Active || !pc.isValid(b.Entity) {
+			return true
+		}
+		pc.TargetBody = b
+		pc.TargetSector = nil
+		pc.react(b.Entity)
+		return true
+	})
+
+	// TODO: Reimplement sector<->sector proximity
+	/*	sector.PVS.Range(func(e uint32) {
 		pvs := core.GetSector(pc.ECS, ecs.Entity(e))
 		if !pvs.Active || pvs.Entity == pc.Entity {
 			return
@@ -141,14 +143,27 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 		pc.flags |= behaviors.ProximityTargetsBody
 		pc.flags &= ^behaviors.ProximityTargetsSector
 		pc.sectorBodies(pvs, &sector.Center)
-	})
+	})*/
 }
 
 func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	pc.flags &= ^behaviors.ProximityOnSector
 	pc.flags |= behaviors.ProximityOnBody
-	container := body.Sector()
-	container.PVS.Range(func(e uint32) {
+
+	pc.flags |= behaviors.ProximityTargetsBody
+	pc.flags &= ^behaviors.ProximityTargetsSector
+	pc.tree.Root.RangeCircle(body.Pos.Now.To2D(), pc.Range, func(b *core.Body) bool {
+		if !b.Active || b == body || !pc.isValid(b.Entity) {
+			return true
+		}
+		pc.TargetBody = b
+		pc.TargetSector = nil
+		pc.react(b.Entity)
+		return true
+	})
+
+	// TODO: Implement proximityOnBody<->sector tests
+	/*container.PVS.Range(func(e uint32) {
 		sector := core.GetSector(pc.ECS, ecs.Entity(e))
 		if sector.Active && pc.ActsOnSectors &&
 			sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range &&
@@ -159,13 +174,14 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 			pc.TargetSector = sector
 			pc.react(sector.Entity)
 		}
-		pc.flags |= behaviors.ProximityTargetsBody
-		pc.flags &= ^behaviors.ProximityTargetsSector
-		pc.sectorBodies(sector, &body.Pos.Now)
-	})
+	})*/
 }
 
 func (pc *ProximityController) Always() {
+	if pc.tree == nil {
+		pc.tree = core.TheQuadtree(pc.ECS)
+	}
+
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
 		if state.Source != pc.Entity {
 			return true

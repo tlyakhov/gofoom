@@ -13,7 +13,6 @@ import (
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
-	"github.com/kelindar/bitmap"
 	"github.com/puzpuzpuz/xsync/v3"
 	"github.com/spf13/cast"
 )
@@ -27,20 +26,14 @@ type Sector struct {
 	FloorFriction    float64          `editable:"Floor Friction"`
 	Segments         []*SectorSegment
 	Bodies           map[ecs.Entity]*Body
-	Colliders        map[ecs.Entity]*Mobile
 	InternalSegments map[ecs.Entity]*InternalSegment
 	EnterScripts     []*Script `editable:"Enter Scripts"`
 	ExitScripts      []*Script `editable:"Exit Scripts"`
+	NoShadows        bool      `editable:"No Shadows"`
 
 	Concave          bool
 	Winding          int8
 	Min, Max, Center concepts.Vector3
-
-	// Potentially visible set
-	LastPVSRefresh uint64
-	PVS            bitmap.Bitmap
-	// Potentially visible lights
-	PVL []*Body
 
 	// Lightmap data
 	Lightmap      *xsync.MapOf[uint64, *LightmapCell]
@@ -116,7 +109,6 @@ func (s *Sector) OnDelete() {
 		b.SectorEntity = 0
 	}
 	s.Bodies = make(map[ecs.Entity]*Body)
-	s.Colliders = make(map[ecs.Entity]*Mobile)
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 }
 
@@ -143,12 +135,9 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 func (s *Sector) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
-	s.PVS = nil
-	s.PVL = make([]*Body, 0)
 	s.Lightmap = xsync.NewMapOf[uint64, *LightmapCell](xsync.WithPresize(1024))
 	s.Segments = make([]*SectorSegment, 0)
 	s.Bodies = make(map[ecs.Entity]*Body)
-	s.Colliders = make(map[ecs.Entity]*Mobile)
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 	s.Gravity[0] = 0
 	s.Gravity[1] = 0
@@ -225,6 +214,10 @@ func (s *Sector) Construct(data map[string]any) {
 		}
 	}
 
+	if v, ok := data["NoShadows"]; ok {
+		s.NoShadows = cast.ToBool(v)
+	}
+
 	if v, ok := data["Gravity"]; ok {
 		s.Gravity.Deserialize(v.(string))
 	}
@@ -247,6 +240,9 @@ func (s *Sector) Serialize() map[string]any {
 	result["Top"] = s.Top.Serialize()
 	result["Bottom"] = s.Bottom.Serialize()
 	result["FloorFriction"] = s.FloorFriction
+	if s.NoShadows {
+		result["NoShadows"] = s.NoShadows
+	}
 
 	if s.Gravity[0] != 0 || s.Gravity[1] != 0 || s.Gravity[2] != -constants.Gravity {
 		result["Gravity"] = s.Gravity.Serialize()

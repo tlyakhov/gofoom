@@ -6,6 +6,7 @@ package render
 import (
 	"fmt"
 	"math"
+	"sync/atomic"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -19,7 +20,6 @@ import (
 type LightSampler struct {
 	MaterialSampler
 	Hash         uint64
-	Delta        concepts.Vector3
 	Output       concepts.Vector3
 	Filter       concepts.Vector4
 	Intersection concepts.Vector3
@@ -32,7 +32,9 @@ type LightSampler struct {
 	Segment *core.Segment
 	Normal  concepts.Vector3
 
-	xorSeed uint64
+	xorSeed  uint64
+	maxDist2 float64
+	tree     *core.Quadtree
 }
 
 func (ls *LightSampler) Debug() *concepts.Vector3 {
@@ -79,6 +81,10 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 
 // lightVisible determines whether a given light is visible from a world location.
 func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool {
+	if ls.Sector.NoShadows {
+		return true
+	}
+
 	// Always check the starting sector
 	if ls.lightVisibleFromSector(p, body, ls.Sector) {
 		return true
@@ -110,23 +116,13 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 // lightVisibleFromSector determines whether a given light is visible from a world location.
 func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
 	lightPos := lightBody.Pos.Render
-
-	// log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(), lightPos)
-	ls.Delta[0] = lightPos[0]
-	ls.Delta[1] = lightPos[1]
-	ls.Delta[2] = lightPos[2]
-	ls.Delta.SubSelf(p)
-	maxDist2 := ls.Delta.Length2()
-	// Is the point right next to the light? Visible by definition.
-	if maxDist2 <= lightBody.Size.Render[0]*lightBody.Size.Render[0]*0.25 {
-		return true
-	}
+	// log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(),
+	// lightPos)
 
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
-	ls.Delta.NormSelf()
 	ls.Visited = ls.Visited[:0]
 	for sector != nil {
 		// log.Printf("Sector: %v\n", sector.Entity)
@@ -154,12 +150,12 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		var next *core.Sector
 		// Since our sectors can be concave, we can't just go through the first portal we find,
 		// we have to go through the NEAREST one. Use dist2 to keep track...
-		dist2 := maxDist2
+		dist2 := ls.maxDist2
 		for _, seg := range sector.Segments {
 			// Don't occlude the world location with the segment it's located on
 			// Segment facing backwards from our ray? skip it.
 			if &seg.Segment == ls.Segment ||
-				ls.Delta[0]*seg.Normal[0]+ls.Delta[1]*seg.Normal[1] > 0 {
+				ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0 {
 				// log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				continue
 			}
@@ -212,7 +208,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// If the difference between the intersected distance and the light distance is
 			// within the bounding radius of our light, our light is right on a portal boundary and visible.
-			if math.Abs(idist2-maxDist2) < lightBody.Size.Render[0]*0.5 {
+			if math.Abs(idist2-ls.maxDist2) < lightBody.Size.Render[0]*0.5 {
 				return true
 			}
 
@@ -311,66 +307,65 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	return true
 }
 
+var LightSamplerLightsTested, LightSamplerCalcs atomic.Uint64
+
 func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	ls.Output[0] = 0
 	ls.Output[1] = 0
 	ls.Output[2] = 0
 
-	/*refs := make([]ecs.Entity, 0)
-	for _, entity := range le.Sector.PVL {
-		refs = append(refs, entity)
-	}
-	sort.SliceStable(refs, func(i, j int) bool {
-		return refs[i].Entity < refs[j].Entity
-	})*/
-
-	for _, body := range ls.Sector.PVL {
+	LightSamplerCalcs.Add(1)
+	ls.tree.Root.RangePlane(world, &ls.Normal, true, func(body *core.Body) bool {
+		LightSamplerLightsTested.Add(1)
 		if !body.IsActive() {
-			continue
+			return true
 		}
-		light := core.GetLight(body.ECS, body.Entity)
-		if !light.IsActive() {
-			continue
+		light := core.GetLight(ls.ECS, body.Entity)
+		if light == nil || !light.IsActive() {
+			return true
 		}
-		ls.Filter[0] = 0
-		ls.Filter[1] = 0
-		ls.Filter[2] = 0
+		ls.LightWorld[2] = body.Pos.Render[2] - world[2]
+		ls.LightWorld[1] = body.Pos.Render[1] - world[1]
+		ls.LightWorld[0] = body.Pos.Render[0] - world[0]
+		ls.maxDist2 = ls.LightWorld.Length2()
 		ls.Filter[3] = 0
-		ls.LightWorld[0] = body.Pos.Render[0]
-		ls.LightWorld[1] = body.Pos.Render[1]
-		ls.LightWorld[2] = body.Pos.Render[2]
-		ls.LightWorld.SubSelf(world)
-		dist := ls.LightWorld.Length()
+
 		diffuseLight := 1.0
 		attenuation := 1.0
-		if dist != 0 {
+		// Is the point right next to the light? Visible by definition.
+		if ls.maxDist2 > body.Size.Render[0]*body.Size.Render[0]*0.25 {
+			ls.Filter[0] = 0
+			ls.Filter[1] = 0
+			ls.Filter[2] = 0
+			if !ls.lightVisible(world, body) {
+				//log.Printf("Shadowed: %v\n", world.StringHuman())
+				return true
+			}
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
 				//log.Printf("%v\n", dist)
+				dist := math.Sqrt(ls.maxDist2)
 				attenuation = light.Strength / math.Pow(dist*2/body.Size.Render[0]+1.0, light.Attenuation)
 				//attenuation = 100.0 / dist
 			}
 			// If it's too far away/dark, ignore it.
 			if attenuation < constants.LightAttenuationEpsilon {
 				//log.Printf("Too far: %v\n", world.StringHuman())
-				continue
-			}
-			if !ls.lightVisible(world, body) {
-				//log.Printf("Shadowed: %v\n", world.StringHuman())
-				continue
+				return true
 			}
 		}
+
 		if ls.InputBody != 0 {
 			diffuseLight = attenuation
 		} else {
 			// Normalize
-			ls.LightWorld.MulSelf(1.0 / dist)
+			ls.LightWorld.MulSelf(1.0 / math.Sqrt(ls.maxDist2))
 			diffuseLight = ls.Normal.Dot(&ls.LightWorld) * attenuation
 		}
 
 		if diffuseLight < 0 {
 			//le.Output[0] = 1
-			continue
+			return true
 		}
 		if ls.Filter[3] == 0 {
 			ls.Output[0] += light.Diffuse[0] * diffuseLight
@@ -382,6 +377,7 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			ls.Output[1] += light.Diffuse[1]*diffuseLight*a + ls.Filter[1]
 			ls.Output[2] += light.Diffuse[2]*diffuseLight*a + ls.Filter[2]
 		}
-	}
+		return true
+	})
 	return &ls.Output
 }

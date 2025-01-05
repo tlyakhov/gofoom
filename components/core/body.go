@@ -19,6 +19,7 @@ type Body struct {
 	Angle        dynamic.DynamicValue[float64]          `editable:"Angle"`
 
 	SectorEntity ecs.Entity
+	QuadNode     *QuadNode
 	OnGround     bool
 }
 
@@ -46,6 +47,10 @@ func (b *Body) OnDetach(e ecs.Entity) {
 	}
 	if sector := b.Sector(); sector != nil {
 		delete(sector.Bodies, e)
+	}
+
+	if b.QuadNode != nil {
+		b.QuadNode.Remove(b)
 	}
 }
 

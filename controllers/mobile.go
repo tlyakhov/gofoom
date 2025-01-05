@@ -79,6 +79,10 @@ func (mc *MobileController) Forces() {
 }
 
 func (mc *MobileController) Always() {
+	if mc.tree == nil {
+		mc.tree = core.TheQuadtree(mc.ECS)
+	}
+
 	if mc.Mass == 0 {
 		// Reset force for next frame
 		mc.ResetForce()
@@ -109,8 +113,14 @@ func (mc *MobileController) Always() {
 	}
 	// Reset force for next frame
 	mc.ResetForce()
+
+	// Update quadtree
+	mc.tree.Root.Update(mc.Body)
 }
 
 func (mc *MobileController) Recalculate() {
+	if mc.tree == nil {
+		mc.tree = core.TheQuadtree(mc.ECS)
+	}
 	mc.Collide()
 }

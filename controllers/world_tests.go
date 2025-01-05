@@ -51,6 +51,7 @@ func CreateTestHeightmapSector(db *ecs.ECS, name string, x, y, size float64) (*c
 	named := db.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_1"
 
+	sector1.NoShadows = true
 	mat := DefaultMaterial(db)
 	sector1.Bottom.Surface.Material = mat
 	sector1.Top.Surface.Material = mat
@@ -72,6 +73,7 @@ func CreateTestHeightmapSector(db *ecs.ECS, name string, x, y, size float64) (*c
 	named = db.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_2"
 
+	sector2.NoShadows = true
 	sector2.Bottom.Surface.Material = mat
 	sector2.Top.Surface.Material = mat
 	seg = sector2.AddSegment(x+size, y)
@@ -332,7 +334,7 @@ func CreateTestWorld3(db *ecs.ECS) {
 		}
 	}
 
-	for range 32 {
+	for range 8 {
 		eLight := archetypes.CreateLightBody(db)
 		lightBody := core.GetBody(db, eLight)
 		lightBody.Pos.Spawn = concepts.Vector3{float64(testw*scale) * rand.Float64(), float64(testh*scale) * rand.Float64(), 450}

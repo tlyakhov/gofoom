@@ -45,17 +45,6 @@ func (m *Mobile) String() string {
 	return "Mobile: " + m.Vel.Now.StringHuman(2)
 }
 
-func (m *Mobile) OnDetach(e ecs.Entity) {
-	defer m.Attached.OnDetach(e)
-	if b := GetBody(m.ECS, e); b != nil {
-		// Get the sector using this component's ECS reference, in case
-		// The body was just detached as well.
-		if sector := GetSector(m.ECS, b.SectorEntity); sector != nil {
-			delete(sector.Colliders, e)
-		}
-	}
-}
-
 func (m *Mobile) OnDelete() {
 	defer m.Attached.OnDelete()
 	if m.ECS != nil {
