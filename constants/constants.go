@@ -13,7 +13,7 @@ const (
 	MaxPortals              = 300 // avoid infinite portal traversal
 	IntersectEpsilon        = 1e-10
 	VelocityEpsilon         = 1e-15
-	LightAttenuationEpsilon = 0.001
+	LightAttenuationEpsilon = 0.1
 	MaxViewDistance         = 10000.0
 	DebugLevel              = 1
 	CollisionSteps          = 10

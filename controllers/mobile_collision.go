@@ -292,19 +292,19 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 	//fmt.Printf("%v <-> %v = %v\n", mc.Body.String(), body.String(), diff)
 }
 
-func (mc *MobileController) bodyBodyCollide(sector *core.Sector) {
-	// TODO: This is really expensive if there are lots of bodies in one sector
-	for _, mobile := range sector.Colliders {
-		if !mobile.Active {
-			continue
+func (mc *MobileController) bodyBodyCollide() {
+	mc.tree.Root.RangeCircle(mc.Body.Pos.Now.To2D(), mc.Body.Size.Now[0]*0.5, func(body *core.Body) bool {
+		if !body.Active || body == mc.Body {
+			return true
 		}
-		body := core.GetBody(mc.ECS, mobile.Entity)
-		if body == nil || body == mc.Body || !body.IsActive() {
-			continue
+		mobile := core.GetMobile(mc.ECS, body.Entity)
+		if mobile == nil || !mobile.Active {
+			return true
 		}
+
 		if p := behaviors.GetPlayer(body.ECS, body.Entity); p != nil && p.Spawn {
 			// Ignore spawn points
-			continue
+			return true
 		}
 		// From https://www.myphysicslab.com/engine2D/collision-en.html
 		d2 := mc.pos.Dist2(&body.Pos.Now)
@@ -313,7 +313,9 @@ func (mc *MobileController) bodyBodyCollide(sector *core.Sector) {
 		if d2 < (r_a+r_b)*(r_a+r_b) {
 			mc.resolveCollision(mobile, body)
 		}
-	}
+
+		return true
+	})
 }
 
 func (mc *MobileController) CollideZ() {
@@ -402,11 +404,9 @@ func (mc *MobileController) Collide() {
 			}
 
 			mc.CollideZ()
-			//		mc.bodyBodyCollide(mc.Sector)
-			mc.Sector.PVS.Range(func(e uint32) {
-				mc.bodyBodyCollide(core.GetSector(mc.ECS, ecs.Entity(e)))
-			})
 		}
+
+		mc.bodyBodyCollide()
 
 		if len(mc.collidedSegments) == 0 {
 			if mc.Sector != nil {

@@ -18,6 +18,7 @@ type BodyController struct {
 	*core.Body
 	Sector *core.Sector
 	Player *behaviors.Player
+	tree   *core.Quadtree
 
 	pos        *concepts.Vector3
 	pos2d      *concepts.Vector2
@@ -70,6 +71,10 @@ func (bc *BodyController) Always() {
 func (bc *BodyController) Recalculate() {
 	//bc.Collide()
 	bc.findBodySector()
+	if bc.tree == nil {
+		bc.tree = core.TheQuadtree(bc.ECS)
+	}
+	bc.tree.Root.Update(bc.Body)
 }
 
 func (bc *BodyController) findBodySector() {
@@ -141,16 +146,6 @@ func (bc *BodyController) Enter(sector *core.Sector) {
 	bc.Sector.Bodies[bc.Entity] = bc.Body
 	bc.Body.SectorEntity = sector.Entity
 
-	if core.GetLight(bc.ECS, bc.Entity) != nil {
-		bc.Sector.PVL = append(bc.Sector.PVL, bc.Body)
-	}
-
-	if m := core.GetMobile(bc.ECS, bc.Entity); m != nil {
-		if m.CrBody != core.CollideNone || m.CrPlayer != core.CollideNone {
-			bc.Sector.Colliders[m.Entity] = m
-		}
-	}
-
 	if bc.Body.OnGround {
 		floorZ := bc.Sector.Bottom.ZAt(dynamic.DynamicNow, bc.Pos.Now.To2D())
 		p := &bc.Pos.Now
@@ -169,11 +164,5 @@ func (bc *BodyController) Exit() {
 	}
 	BodySectorScript(bc.Sector.ExitScripts, bc.Body, bc.Sector)
 	delete(bc.Sector.Bodies, bc.Entity)
-	// Don't delete out of the PVL, avoid flickering
-	if m := core.GetMobile(bc.ECS, bc.Entity); m != nil {
-		if m.CrBody != core.CollideNone || m.CrPlayer != core.CollideNone {
-			delete(bc.Sector.Colliders, m.Entity)
-		}
-	}
 	bc.SectorEntity = 0
 }

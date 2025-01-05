@@ -287,6 +287,7 @@ func (e *Editor) Load(filename string) {
 	e.ECS = db
 	if e.Renderer != nil {
 		e.Renderer.ECS = db
+		e.Renderer.Initialize()
 	}
 	e.SelectObjects(true)
 }

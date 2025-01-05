@@ -67,6 +67,7 @@ func (r *Renderer) Initialize() {
 		r.Columns[i].Visited = make([]segmentIntersection, constants.MaxPortals)
 		r.Columns[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
+		r.Columns[i].LightSampler.tree = core.TheQuadtree(r.ECS)
 		r.Columns[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
 	r.textStyle = r.NewTextStyle()
@@ -420,6 +421,8 @@ func (r *Renderer) Render() {
 	r.RefreshPlayer()
 	r.ICacheHits.Store(0)
 	r.ICacheMisses.Store(0)
+	LightSamplerCalcs.Store(0)
+	LightSamplerLightsTested.Store(0)
 	r.xorSeed = concepts.RngXorShift64(r.xorSeed)
 
 	// Clear buffer, mainly useful for debugging

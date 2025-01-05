@@ -52,6 +52,25 @@ func TransformContext(context *gg.Context) {
 	context.Scale(editor.Scale, editor.Scale)
 }
 
+func (mw *MapWidget) DrawQuadNode(node *core.QuadNode) {
+	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
+	mw.Context.NewSubPath()
+	mw.Context.MoveTo(node.Min[0], node.Min[1])
+	mw.Context.LineTo(node.Max[0], node.Min[1])
+	mw.Context.LineTo(node.Max[0], node.Max[1])
+	mw.Context.LineTo(node.Min[0], node.Max[1])
+	mw.Context.ClosePath()
+	mw.Context.Stroke()
+	text := fmt.Sprintf("r: %.2f, b: %v, l: %v", node.MaxRadius, len(node.Bodies), len(node.Lights))
+	mw.Context.DrawStringAnchored(text, (node.Min[0]+node.Max[0])*0.5, (node.Min[1]+node.Max[1])*0.5, 0.5, 0.5)
+
+	if !node.IsLeaf() {
+		for _, child := range node.Children {
+			mw.DrawQuadNode(child)
+		}
+	}
+}
+
 func (mw *MapWidget) Draw(w, h int) image.Image {
 	editor.Lock.Lock()
 	defer editor.Lock.Unlock()
@@ -71,21 +90,10 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	TransformContext(mw.Context)
 	mw.Context.FontHeight()
 
-	// Highlight PVS sectors
-	pvsSector := make(map[ecs.Entity]*core.Sector)
-	for _, s := range editor.SelectedObjects.Exact {
-		if s.Sector == nil {
-			continue
-		}
-		s.Sector.PVS.Range(func(e uint32) {
-			pvsSector[ecs.Entity(e)] = core.GetSector(s.Sector.ECS, ecs.Entity(e))
-		})
-	}
-
 	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorCID)
 	for i := range colSector.Cap() {
 		if sector := colSector.Value(i); sector != nil && !sector.System {
-			mw.DrawSector(sector, pvsSector[colSector.Value(i).Entity] != nil)
+			mw.DrawSector(sector)
 		}
 	}
 	colSeg := ecs.ColumnFor[core.InternalSegment](editor.ECS, core.InternalSegmentCID)
@@ -108,6 +116,11 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 			}
 		}
 	}
+
+	// Quadtree testing code
+	q := editor.ECS.First(core.QuadtreeCID).(*core.Quadtree)
+	mw.DrawQuadNode(q.Root)
+
 	/*// Portal testing code
 	p := core.GetBody(editor.ECS, editor.Renderer.Player.Entity)
 	v := &concepts.Vector2{p.Pos.Now[0], p.Pos.Now[1]}

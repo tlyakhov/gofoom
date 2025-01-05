@@ -43,7 +43,6 @@ func init() {
 		"PlayerController":           reflect.ValueOf((*controllers.PlayerController)(nil)),
 		"PlayerTargetableController": reflect.ValueOf((*controllers.PlayerTargetableController)(nil)),
 		"ProximityController":        reflect.ValueOf((*controllers.ProximityController)(nil)),
-		"PvsController":              reflect.ValueOf((*controllers.PvsController)(nil)),
 		"SectorController":           reflect.ValueOf((*controllers.SectorController)(nil)),
 		"SectorSplitter":             reflect.ValueOf((*controllers.SectorSplitter)(nil)),
 		"UnderwaterController":       reflect.ValueOf((*controllers.UnderwaterController)(nil)),
