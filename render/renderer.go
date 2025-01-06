@@ -25,8 +25,8 @@ import (
 // Renderer holds all state related to a specific camera/map configuration.
 type Renderer struct {
 	*Config
-	Columns        []column
-	columnGroup    *sync.WaitGroup
+	Blocks         []block
+	blockGroup     *sync.WaitGroup
 	startingSector *core.Sector
 	textStyle      *TextStyle
 	xorSeed        uint64
@@ -44,12 +44,12 @@ func NewRenderer(db *ecs.ECS) *Renderer {
 			ScreenHeight:  360,
 			FOV:           constants.FieldOfView,
 			Multithreaded: constants.RenderMultiThreaded,
-			Blocks:        constants.RenderBlocks,
+			NumBlocks:     constants.RenderBlocks,
 			LightGrid:     constants.LightGrid,
 			MaxViewDist:   constants.MaxViewDistance,
 			ECS:           db,
 		},
-		columnGroup: new(sync.WaitGroup),
+		blockGroup: new(sync.WaitGroup),
 	}
 
 	r.Initialize()
@@ -59,15 +59,16 @@ func NewRenderer(db *ecs.ECS) *Renderer {
 func (r *Renderer) Initialize() {
 	r.Config.Initialize()
 
-	r.Columns = make([]column, r.Blocks)
+	r.Blocks = make([]block, r.NumBlocks)
 
-	for i := range r.Columns {
-		r.Columns[i].Config = r.Config
-		r.Columns[i].Visited = make([]segmentIntersection, constants.MaxPortals)
-		r.Columns[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
-		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
-		r.Columns[i].LightSampler.tree = core.TheQuadtree(r.ECS)
-		r.Columns[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
+	for i := range r.Blocks {
+		r.Blocks[i].column.Block = &r.Blocks[i]
+		r.Blocks[i].Config = r.Config
+		r.Blocks[i].Visited = make([]segmentIntersection, constants.MaxPortals)
+		r.Blocks[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
+		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
+		r.Blocks[i].LightSampler.tree = core.TheQuadtree(r.ECS)
+		r.Blocks[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
 	r.textStyle = r.NewTextStyle()
 	r.xorSeed = concepts.RngXorShift64(uint64(hrtime.Now().Milliseconds()))
@@ -105,27 +106,27 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 	return &concepts.Vector2{x, y}
 }
 
-func (r *Renderer) RenderPortal(c *column) {
-	if c.SectorSegment.AdjacentSegment.PortalTeleports {
-		c.SectorSegment.PortalMatrix.UnprojectSelf(&c.Ray.Start)
-		c.SectorSegment.PortalMatrix.UnprojectSelf(&c.Ray.End)
-		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&c.Ray.Start)
-		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&c.Ray.End)
-		c.Ray.AnglesFromStartEnd()
+func (r *Renderer) RenderPortal(b *block) {
+	if b.SectorSegment.AdjacentSegment.PortalTeleports {
+		b.SectorSegment.PortalMatrix.UnprojectSelf(&b.Ray.Start)
+		b.SectorSegment.PortalMatrix.UnprojectSelf(&b.Ray.End)
+		b.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&b.Ray.Start)
+		b.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&b.Ray.End)
+		b.Ray.AnglesFromStartEnd()
 		// TODO: this has a bug if the adjacent sector has a sloped floor.
 		// Getting the right floor height is a bit expensive because we have to
 		// project the intersection point. For now just use the sector minimum.
-		c.CameraZ = c.CameraZ - c.IntersectionBottom + c.SectorSegment.AdjacentSegment.Sector.Min[2]
-		c.RayPlane[0] = c.Ray.AngleCos * c.ViewFix[c.ScreenX]
-		c.RayPlane[1] = c.Ray.AngleSin * c.ViewFix[c.ScreenX]
-		c.MaterialSampler.Ray = c.Ray
+		b.CameraZ = b.CameraZ - b.IntersectionBottom + b.SectorSegment.AdjacentSegment.Sector.Min[2]
+		b.RayPlane[0] = b.Ray.AngleCos * b.ViewFix[b.ScreenX]
+		b.RayPlane[1] = b.Ray.AngleSin * b.ViewFix[b.ScreenX]
+		b.MaterialSampler.Ray = &b.Ray
 	}
 
 	// This allocation is ok, does not escape
-	portal := &columnPortal{column: c}
+	portal := &columnPortal{block: b}
 	portal.CalcScreen()
 	if portal.AdjSegment != nil {
-		if c.Pick {
+		if b.Pick {
 			wallHiPick(portal)
 			wallLowPick(portal)
 		} else {
@@ -134,94 +135,98 @@ func (r *Renderer) RenderPortal(c *column) {
 		}
 	}
 
-	c.Sector = portal.Adj
-	c.EdgeTop = portal.AdjClippedTop
-	c.EdgeBottom = portal.AdjClippedBottom
-	c.LastPortalDistance = c.Distance
-	c.Depth++
+	b.Sector = portal.Adj
+	b.EdgeTop = portal.AdjClippedTop
+	b.EdgeBottom = portal.AdjClippedBottom
+	b.LastPortalDistance = b.Distance
+	b.Depth++
 }
 
 // RenderSegmentColumn draws or picks a single pixel vertical column given a particular
 // segment intersection.
-func (r *Renderer) RenderSegmentColumn(c *column) {
-	c.CalcScreen()
+func (r *Renderer) RenderSegmentColumn(b *block) {
+	b.CalcScreen()
 
-	c.LightSampler.MaterialSampler.Config = r.Config
-	c.LightSampler.InputBody = 0
-	c.LightSampler.Sector = c.Sector
-	c.LightSampler.Segment = nil
+	b.LightSampler.MaterialSampler.Config = r.Config
+	b.LightSampler.InputBody = 0
+	b.LightSampler.Sector = b.Sector
+	b.LightSampler.Segment = nil
 
-	if c.ClippedTop > c.EdgeTop {
-		c.LightSampler.Normal = c.Sector.Top.Normal
-		if c.Pick {
-			ceilingPick(c)
+	if b.ClippedTop > b.EdgeTop {
+		b.LightSampler.Normal = b.Sector.Top.Normal
+		if b.Pick {
+			ceilingPick(b)
 		} else {
-			planes(c, &c.Sector.Top)
+			planes(b, &b.Sector.Top)
 		}
 	}
 
-	if c.ClippedBottom < c.EdgeBottom {
-		c.LightSampler.Normal = c.Sector.Bottom.Normal
-		if c.Pick {
-			floorPick(c)
+	if b.ClippedBottom < b.EdgeBottom {
+		b.LightSampler.Normal = b.Sector.Bottom.Normal
+		if b.Pick {
+			floorPick(b)
 		} else {
-			planes(c, &c.Sector.Bottom)
+			planes(b, &b.Sector.Bottom)
 		}
 	}
 
-	if c.ClippedTop >= c.EdgeBottom || c.ClippedBottom <= c.EdgeTop {
+	if b.ClippedTop >= b.EdgeBottom || b.ClippedBottom <= b.EdgeTop {
 		// The segment/portal isn't visible
 		return
 	}
 
-	c.LightSampler.Segment = c.Segment
-	c.Segment.Normal.To3D(&c.LightSampler.Normal)
+	b.LightSampler.Segment = b.Segment
+	b.Segment.Normal.To3D(&b.LightSampler.Normal)
 
-	hasPortal := c.SectorSegment.AdjacentSector != 0 && c.SectorSegment.AdjacentSegment != nil
-	if c.Pick {
-		if !hasPortal || c.SectorSegment.PortalHasMaterial {
-			wallPick(c)
+	hasPortal := b.SectorSegment.AdjacentSector != 0 && b.SectorSegment.AdjacentSegment != nil
+	if b.Pick {
+		if !hasPortal || b.SectorSegment.PortalHasMaterial {
+			wallPick(b)
 			return
 		}
-		r.RenderPortal(c)
+		r.RenderPortal(b)
 	} else {
-		// TODO: Fix walls over portals now that our columns get reused after portaling
-		if hasPortal {
-			r.RenderPortal(c)
-		}
-		if !hasPortal || c.SectorSegment.PortalHasMaterial {
-			r.wall(c)
+		switch {
+		case hasPortal && !b.SectorSegment.PortalHasMaterial:
+			r.RenderPortal(b)
+		case hasPortal && b.SectorSegment.PortalHasMaterial:
+			saved := b.column
+			saved.MaterialSampler.Ray = &saved.Ray
+			b.PortalWalls = append(b.PortalWalls, &saved)
+			r.RenderPortal(b)
+		default:
+			r.wall(&b.column)
 		}
 	}
 
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
-func (r *Renderer) RenderSector(c *column) {
+func (r *Renderer) RenderSector(block *block) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
-	c.Sector.LastSeenFrame.Store(int64(c.ECS.Frame))
+	block.Sector.LastSeenFrame.Store(int64(block.ECS.Frame))
 
 	// Store bodies & internal segments for later
-	for _, b := range c.Sector.Bodies {
+	for _, b := range block.Sector.Bodies {
 		if b == nil || !b.Active {
 			continue
 		}
-		c.Bodies.Add(b)
+		block.Bodies.Add(b)
 	}
-	for _, iseg := range c.Sector.InternalSegments {
+	for _, iseg := range block.Sector.InternalSegments {
 		if iseg == nil || !iseg.Active {
 			continue
 		}
-		c.InternalSegments[iseg] = c.Sector
+		block.InternalSegments[iseg] = block.Sector
 	}
 
 	// TODO: Fix data race here, since LightmapBias can be read in another goroutine
-	if c.Sector.LightmapBias[0] == math.MaxInt64 {
+	if block.Sector.LightmapBias[0] == math.MaxInt64 {
 		// Floor is important, needs to truncate towards -Infinity rather than 0
-		c.Sector.LightmapBias[2] = int64(math.Floor(c.Sector.Min[2] / r.LightGrid))
-		c.Sector.LightmapBias[1] = int64(math.Floor(c.Sector.Min[1] / r.LightGrid))
-		c.Sector.LightmapBias[0] = int64(math.Floor(c.Sector.Min[0] / r.LightGrid))
+		block.Sector.LightmapBias[2] = int64(math.Floor(block.Sector.Min[2] / r.LightGrid))
+		block.Sector.LightmapBias[1] = int64(math.Floor(block.Sector.Min[1] / r.LightGrid))
+		block.Sector.LightmapBias[0] = int64(math.Floor(block.Sector.Min[0] / r.LightGrid))
 	}
 
 	/*  The structure of this function is a bit complicated because we try to
@@ -241,16 +246,16 @@ func (r *Renderer) RenderSector(c *column) {
 		3. Render a column, potentially visiting portal sectors.
 	*/
 
-	c.segmentIntersection = &c.Visited[c.Depth]
-	cacheValid := !c.Sector.Concave && c.SectorSegment != nil && c.SectorSegment.Sector == c.Sector
+	block.segmentIntersection = &block.Visited[block.Depth]
+	cacheValid := !block.Sector.Concave && block.SectorSegment != nil && block.SectorSegment.Sector == block.Sector
 	if cacheValid {
-		u := c.SectorSegment.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
+		u := block.SectorSegment.Intersect2D(&block.Ray.Start, &block.Ray.End, &block.RaySegTest)
 		if u >= 0 {
 			r.ICacheHits.Add(1)
-			c.Distance = c.Ray.DistTo(&c.RaySegTest)
-			c.RaySegIntersect[0] = c.RaySegTest[0]
-			c.RaySegIntersect[1] = c.RaySegTest[1]
-			c.segmentIntersection.U = u
+			block.Distance = block.Ray.DistTo(&block.RaySegTest)
+			block.RaySegIntersect[0] = block.RaySegTest[0]
+			block.RaySegIntersect[1] = block.RaySegTest[1]
+			block.segmentIntersection.U = u
 		} else {
 			cacheValid = false
 		}
@@ -260,104 +265,114 @@ func (r *Renderer) RenderSector(c *column) {
 	if !cacheValid {
 		r.ICacheMisses.Add(1)
 		found := false
-		for _, sectorSeg := range c.Sector.Segments {
+		for _, sectorSeg := range block.Sector.Segments {
 			// Wall is facing away from us
-			if c.Ray.Delta.Dot(&sectorSeg.Normal) > 0 {
+			if block.Ray.Delta.Dot(&sectorSeg.Normal) > 0 {
 				continue
 			}
 
 			// Ray intersects?
-			u := sectorSeg.Intersect2D(&c.Ray.Start, &c.Ray.End, &c.RaySegTest)
+			u := sectorSeg.Intersect2D(&block.Ray.Start, &block.Ray.End, &block.RaySegTest)
 			if u < 0 {
 				continue
 			}
 
 			// Check if we've already found a closer segment
-			dist := c.Ray.DistTo(&c.RaySegTest)
-			if (found && dist > c.Distance) ||
-				dist < c.LastPortalDistance {
+			dist := block.Ray.DistTo(&block.RaySegTest)
+			if (found && dist > block.Distance) ||
+				dist < block.LastPortalDistance {
 				continue
 			}
 
 			found = true
-			c.Segment = &sectorSeg.Segment
-			c.SectorSegment = sectorSeg
-			c.Distance = dist
-			c.RaySegIntersect[0] = c.RaySegTest[0]
-			c.RaySegIntersect[1] = c.RaySegTest[1]
-			c.segmentIntersection.U = u
+			block.Segment = &sectorSeg.Segment
+			block.SectorSegment = sectorSeg
+			block.Distance = dist
+			block.RaySegIntersect[0] = block.RaySegTest[0]
+			block.RaySegIntersect[1] = block.RaySegTest[1]
+			block.segmentIntersection.U = u
 		}
 		if !found {
-			c.segmentIntersection = nil
+			block.segmentIntersection = nil
 		}
 	}
 
-	if c.segmentIntersection != nil {
-		c.IntersectionBottom, c.IntersectionTop = c.Sector.ZAt(dynamic.DynamicRender, c.RaySegIntersect.To2D())
-		r.RenderSegmentColumn(c)
+	if block.segmentIntersection != nil {
+		block.IntersectionBottom, block.IntersectionTop = block.Sector.ZAt(dynamic.DynamicRender, block.RaySegIntersect.To2D())
+		r.RenderSegmentColumn(block)
 	} else {
-		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", c.Sector.Entity, c.Depth)
+		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", block.Sector.Entity, block.Depth)
 		r.Player.Notices.Push(dbg)
 	}
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(column *column, x int, y int, pick bool) []*selection.Selectable {
+func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) []*selection.Selectable {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
 	}
 
 	// Reset the column
-	column.LastPortalDistance = 0
-	column.Depth = 0
-	column.EdgeTop = 0
-	column.EdgeBottom = r.ScreenHeight
-	column.Pick = pick
-	column.ScreenX = x
-	column.ScreenY = y
-	column.MaterialSampler.ScreenX = x
-	column.MaterialSampler.ScreenY = y
-	column.MaterialSampler.Angle = column.Angle
-	column.Ray.Set(*r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
-	column.RayPlane[0] = column.Ray.AngleCos * column.ViewFix[column.ScreenX]
-	column.RayPlane[1] = column.Ray.AngleSin * column.ViewFix[column.ScreenX]
+	block.LastPortalDistance = 0
+	block.Depth = 0
+	block.EdgeTop = 0
+	block.EdgeBottom = r.ScreenHeight
+	block.Pick = pick
+	block.ScreenX = x
+	block.ScreenY = y
+	block.MaterialSampler.ScreenX = x
+	block.MaterialSampler.ScreenY = y
+	block.MaterialSampler.Angle = block.Angle
+	block.CameraZ = r.Player.CameraZ
+	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
+	block.Ray.Set(*r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
+	block.RayPlane[0] = block.Ray.AngleCos * block.ViewFix[block.ScreenX]
+	block.RayPlane[1] = block.Ray.AngleSin * block.ViewFix[block.ScreenX]
+	block.PortalWalls = nil
 
 	if r.startingSector != nil {
-		column.Sector = r.startingSector
+		block.Sector = r.startingSector
 	}
-	if column.Sector == nil {
+	if block.Sector == nil {
 		return nil
 	}
 
 	for {
-		preSector := column.Sector
-		r.RenderSector(column)
-		if preSector == column.Sector {
+		preSector := block.Sector
+		r.RenderSector(block)
+		if preSector == block.Sector {
 			// No more portals
 			break
 		}
-		if column.Depth >= constants.MaxPortals-1 {
-			dbg := fmt.Sprintf("Maximum portal depth reached @ %v", column.Sector.Entity)
+		if block.Depth >= constants.MaxPortals-1 {
+			dbg := fmt.Sprintf("Maximum portal depth reached @ %v", block.Sector.Entity)
 			r.Player.Notices.Push(dbg)
 			break
 		}
 	}
-	return column.PickedSelection
+	if pick {
+		return block.PickedSelection
+	}
+
+	// Draw any walls over portals
+	for i := len(block.PortalWalls) - 1; i >= 0; i-- {
+		r.wall(block.PortalWalls[i])
+	}
+
+	return nil
 }
 
-func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
-	// Initialize a column...
-	column := &r.Columns[columnIndex]
-	column.CameraZ = r.Player.CameraZ
-	column.LightSampler.xorSeed = r.xorSeed
-	column.Ray = &Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
-	column.MaterialSampler = MaterialSampler{Config: r.Config, Ray: column.Ray}
+func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
+	// Initialize a block...
+	block := &r.Blocks[blockIndex]
+	block.LightSampler.xorSeed = r.xorSeed
+	block.MaterialSampler = MaterialSampler{Config: r.Config, Ray: &block.Ray}
 	ewd2s := make([]*entityWithDist2, 0, 64)
-	column.Bodies = make(containers.Set[*core.Body])
-	column.InternalSegments = make(map[*core.InternalSegment]*core.Sector)
-	for i := range column.LightLastColHashes {
-		column.LightLastColHashes[i] = 0
+	block.Bodies = make(containers.Set[*core.Body])
+	block.InternalSegments = make(map[*core.InternalSegment]*core.Sector)
+	for i := range block.LightLastColHashes {
+		block.LightLastColHashes[i] = 0
 	}
 
 	/*
@@ -374,27 +389,31 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 		if x >= r.ScreenWidth {
 			break
 		}
-		r.RenderColumn(column, x, 0, false)
+		r.RenderColumn(block, x, 0, false)
 	}
+
+	// Column going through portals affects this
+	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
+	block.CameraZ = r.Player.CameraZ
 
 	// TODO: This has a bug: we could have a body in a different sector actually
 	// show up in a block that hasn't visited that sector. We could either
 	// render bodies single-threaded, or attempt to do something more clever
 	// by attempting to render bodies for adjacent sectors.
 	// TODO: Replace this with a quad-tree raycast?
-	for b := range column.Bodies {
+	for b := range block.Bodies {
 		vis := materials.GetVisible(b.ECS, b.Entity)
 		if vis == nil || !vis.Active {
 			continue
 		}
 		ewd2s = append(ewd2s, &entityWithDist2{
 			Body:    b,
-			Dist2:   column.Ray.Start.Dist2(b.Pos.Render.To2D()),
+			Dist2:   block.Ray.Start.Dist2(b.Pos.Render.To2D()),
 			Visible: vis,
 		})
 	}
-	for iseg, sector := range column.InternalSegments {
-		dist := column.Ray.DistTo(iseg.ClosestToPoint(&column.Ray.Start))
+	for iseg, sector := range block.InternalSegments {
+		dist := block.Ray.DistTo(iseg.ClosestToPoint(&block.Ray.Start))
 		ewd2s = append(ewd2s, &entityWithDist2{
 			InternalSegment: iseg,
 			Dist2:           dist * dist,
@@ -407,20 +426,20 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	})
 	// This has a bug when rendering portals: these need to be transformed and
 	// clipped through portals appropriately.
-	column.segmentIntersection = &segmentIntersection{}
-	column.EdgeTop = 0
-	column.EdgeBottom = r.ScreenHeight
-	column.LightSampler.MaterialSampler.Config = r.Config
+	block.segmentIntersection = &segmentIntersection{}
+	block.EdgeTop = 0
+	block.EdgeBottom = r.ScreenHeight
+	block.LightSampler.MaterialSampler.Config = r.Config
 	for _, sorted := range ewd2s {
 		if sorted.Body != nil {
-			r.renderBody(sorted, column, xStart, xEnd)
+			r.renderBody(sorted, block, xStart, xEnd)
 		} else {
-			r.renderInternalSegment(sorted, column, xStart, xEnd)
+			r.renderInternalSegment(sorted, block, xStart, xEnd)
 		}
 	}
 
 	if r.Multithreaded {
-		r.columnGroup.Done()
+		r.blockGroup.Done()
 	}
 }
 
@@ -457,12 +476,12 @@ func (r *Renderer) Render() {
 	r.startingSector = r.PlayerBody.RenderSector()
 
 	if r.Multithreaded {
-		blockSize := r.ScreenWidth / r.Blocks
-		r.columnGroup.Add(r.Blocks)
-		for x := 0; x < r.Blocks; x++ {
+		blockSize := r.ScreenWidth / r.NumBlocks
+		r.blockGroup.Add(r.NumBlocks)
+		for x := 0; x < r.NumBlocks; x++ {
 			go r.RenderBlock(x, x*blockSize, x*blockSize+blockSize)
 		}
-		r.columnGroup.Wait()
+		r.blockGroup.Wait()
 	} else {
 		r.RenderBlock(0, 0, r.ScreenWidth)
 	}
@@ -519,18 +538,20 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
 		return nil
 	}
-	// Initialize a column...
-	column := &column{
-		EdgeTop:          0,
-		EdgeBottom:       r.ScreenHeight,
-		CameraZ:          r.Player.CameraZ,
+	// Initialize a block..
+	block := &block{
+		column: column{
+			EdgeTop:    0,
+			EdgeBottom: r.ScreenHeight,
+			CameraZ:    r.Player.CameraZ,
+		},
 		Visited:          make([]segmentIntersection, constants.MaxPortals),
 		Bodies:           make(containers.Set[*core.Body]),
 		InternalSegments: make(map[*core.InternalSegment]*core.Sector),
 	}
-	column.LightSampler.MaterialSampler.Config = r.Config
+	block.LightSampler.MaterialSampler.Config = r.Config
 
-	column.Ray = &Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
-	column.MaterialSampler = MaterialSampler{Config: r.Config, Ray: column.Ray}
-	return r.RenderColumn(column, x, y, true)
+	block.Ray = Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	block.MaterialSampler = MaterialSampler{Config: r.Config, Ray: &block.Ray}
+	return r.RenderColumn(block, x, y, true)
 }

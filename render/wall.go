@@ -9,7 +9,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-func wallPick(s *column) {
+func wallPick(s *block) {
 	if s.ScreenY >= s.ClippedTop && s.ScreenY < s.ClippedBottom {
 		s.PickedSelection = append(s.PickedSelection, selection.SelectableFromWall(s.SectorSegment, selection.SelectableMid))
 	}

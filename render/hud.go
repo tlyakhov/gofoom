@@ -6,6 +6,7 @@ package render
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -48,7 +49,8 @@ func (r *Renderer) RenderHud() {
 			top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
 			scr := r.WorldToScreen(top)
 			if scr != nil {
-				r.Print(ts, int(scr[0]), int(scr[1])-16, pt.ApplyMessage(r.Player.SelectedTarget))
+				msg := strings.TrimSpace(pt.ApplyMessage(r.Player.SelectedTarget))
+				r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
 			}
 		}
 	}
