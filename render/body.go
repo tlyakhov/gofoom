@@ -55,8 +55,8 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, c *column, xStart, xEnd int)
 	screenTop := c.ScreenHeight/2 - int(math.Floor(c.ProjectedTop))
 	screenBottom := c.ScreenHeight/2 - int(math.Floor(c.ProjectedBottom))
 	c.ScaleH = uint32(screenBottom - screenTop)
-	c.ClippedTop = concepts.Clamp(screenTop, c.EdgeTop, c.EdgeBottom)
-	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
+	c.ClippedTop = concepts.Clamp(screenTop, 0, r.ScreenHeight)
+	c.ClippedBottom = concepts.Clamp(screenBottom, 0, r.ScreenHeight)
 
 	if c.Pick &&
 		c.ScreenX >= x1 && c.ScreenX < x2 &&

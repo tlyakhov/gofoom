@@ -4,11 +4,12 @@
 package core
 
 import (
+	"math"
 	"tlyakhov/gofoom/concepts"
 )
 
 type QuadNode struct {
-	Min, Max  concepts.Vector2
+	Min, Max  concepts.Vector3
 	Depth     int
 	MaxRadius float64 // Maximum body radius in this node
 
@@ -208,12 +209,14 @@ func (node *QuadNode) planeOverlaps(center, normal *concepts.Vector3) bool {
 	if normal[0] == 0 && normal[1] == 0 {
 		return true
 	}
-	dx := node.Min[0] - center[0]
+	dz := node.Min[2] - center[2]
 	dy := node.Min[1] - center[1]
-	dx2 := node.Max[0] - center[0]
+	dx := node.Min[0] - center[0]
+	dz2 := node.Max[2] - center[2]
 	dy2 := node.Max[1] - center[1]
-	return dx*normal[0]+dy*normal[1] >= 0 ||
-		dx2*normal[0]+dy2*normal[1] >= 0
+	dx2 := node.Max[0] - center[0]
+	return dx*normal[0]+dy*normal[1]+dz*normal[2] >= 0 ||
+		dx2*normal[0]+dy2*normal[1]+dz2*normal[2] >= 0
 }
 
 func (node *QuadNode) RangePlane(center, normal *concepts.Vector3, lightsOnly bool, fn func(b *Body) bool) {
@@ -240,5 +243,45 @@ func (node *QuadNode) RangePlane(center, normal *concepts.Vector3, lightsOnly bo
 			continue
 		}
 		node.Children[i].RangePlane(center, normal, lightsOnly, fn)
+	}
+}
+
+func (node *QuadNode) rayOverlaps(start, dir *concepts.Vector3) bool {
+	invx := 1.0 / dir[0]
+	invy := 1.0 / dir[1]
+
+	tx1 := (node.Min[0] - start[0]) * invx
+	tx2 := (node.Max[0] - start[0]) * invx
+
+	tmin := math.Min(tx1, tx2)
+	tmax := math.Max(tx1, tx2)
+
+	ty1 := (node.Min[1] - start[1]) * invy
+	ty2 := (node.Max[1] - start[1]) * invy
+
+	tmin = math.Max(tmin, math.Min(ty1, ty2))
+	tmax = math.Min(tmax, math.Max(ty1, ty2))
+
+	return tmax >= math.Max(tmin, 0.0)
+}
+
+func (node *QuadNode) RangeRay(start, dir *concepts.Vector3, lightsOnly bool, fn func(b *Body) bool) {
+	if node.IsLeaf() {
+		slice := node.Bodies
+		if lightsOnly {
+			slice = node.Lights
+		}
+		for _, b := range slice {
+			if !fn(b) {
+				break
+			}
+		}
+		return
+	}
+	for i := range 4 {
+		if !node.Children[i].rayOverlaps(start, dir) {
+			continue
+		}
+		node.Children[i].RangeRay(start, dir, lightsOnly, fn)
 	}
 }

@@ -47,8 +47,10 @@ func (q *Quadtree) Build() {
 	// Find overall min/max
 	q.Root.Min[0] = math.Inf(1)
 	q.Root.Min[1] = math.Inf(1)
+	q.Root.Min[2] = math.Inf(1)
 	q.Root.Max[0] = math.Inf(-1)
 	q.Root.Max[1] = math.Inf(-1)
+	q.Root.Max[2] = math.Inf(-1)
 	col := ecs.ColumnFor[Sector](q.ECS, SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
@@ -66,6 +68,12 @@ func (q *Quadtree) Build() {
 		}
 		if sector.Max[1] > q.Root.Max[1] {
 			q.Root.Max[1] = sector.Max[1]
+		}
+		if sector.Min[2] < q.Root.Min[2] {
+			q.Root.Min[2] = sector.Min[2]
+		}
+		if sector.Max[2] > q.Root.Max[2] {
+			q.Root.Max[2] = sector.Max[2]
 		}
 	}
 

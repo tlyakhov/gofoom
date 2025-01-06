@@ -24,10 +24,12 @@ type Config struct {
 	ViewFix                   []float64
 	ZBuffer                   []float64
 	FrameBuffer               []concepts.Vector4
-	FrameTint                 concepts.Vector4
-	Player                    *behaviors.Player
-	PlayerBody                *core.Body
-	Carrier                   *behaviors.InventoryCarrier
+	// For walls over portals
+	ExtraBuffer []concepts.Vector4
+	FrameTint   concepts.Vector4
+	Player      *behaviors.Player
+	PlayerBody  *core.Body
+	Carrier     *behaviors.InventoryCarrier
 
 	RenderLock sync.Mutex
 }
@@ -45,6 +47,7 @@ func (c *Config) Initialize() {
 
 	c.ZBuffer = make([]float64, c.ScreenWidth*c.ScreenHeight)
 	c.FrameBuffer = make([]concepts.Vector4, c.ScreenWidth*c.ScreenHeight)
+	c.ExtraBuffer = make([]concepts.Vector4, c.ScreenWidth*c.ScreenHeight)
 
 	c.RefreshPlayer()
 }

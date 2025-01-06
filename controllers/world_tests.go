@@ -98,7 +98,7 @@ func CreateTestGrass(db *ecs.ECS) ecs.Entity {
 	named.Name = "Default Material"
 	//img.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	img := db.NewAttachedComponent(eGrass, materials.ImageCID).(*materials.Image)
-	img.Source = "data/grass.jpg"
+	img.Source = "data/grass2.png"
 	img.Filter = true
 	img.GenerateMipMaps = true
 	img.Load()
