@@ -63,7 +63,6 @@ func (r *Renderer) Initialize() {
 
 	for i := range r.Columns {
 		r.Columns[i].Config = r.Config
-		r.Columns[i].PortalColumns = make([]column, constants.MaxPortals)
 		r.Columns[i].Visited = make([]segmentIntersection, constants.MaxPortals)
 		r.Columns[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Columns[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
@@ -107,34 +106,23 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 }
 
 func (r *Renderer) RenderPortal(c *column) {
-	if c.Depth >= constants.MaxPortals-1 {
-		dbg := fmt.Sprintf("Maximum portal depth reached @ %v", c.Sector.Entity)
-		r.Player.Notices.Push(dbg)
-		return
-	}
-
-	// Copy current column into portal column
-	next := &c.PortalColumns[c.Depth]
-	*next = *c
-
 	if c.SectorSegment.AdjacentSegment.PortalTeleports {
-		next.Ray = &Ray{Start: c.Start, End: c.End}
-		c.SectorSegment.PortalMatrix.UnprojectSelf(&next.Ray.Start)
-		c.SectorSegment.PortalMatrix.UnprojectSelf(&next.Ray.End)
-		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&next.Ray.Start)
-		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&next.Ray.End)
-		next.Ray.AnglesFromStartEnd()
+		c.SectorSegment.PortalMatrix.UnprojectSelf(&c.Ray.Start)
+		c.SectorSegment.PortalMatrix.UnprojectSelf(&c.Ray.End)
+		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&c.Ray.Start)
+		c.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&c.Ray.End)
+		c.Ray.AnglesFromStartEnd()
 		// TODO: this has a bug if the adjacent sector has a sloped floor.
 		// Getting the right floor height is a bit expensive because we have to
 		// project the intersection point. For now just use the sector minimum.
-		next.CameraZ = c.CameraZ - c.IntersectionBottom + c.SectorSegment.AdjacentSegment.Sector.Min[2]
-		next.RayPlane[0] = next.Ray.AngleCos * c.ViewFix[c.ScreenX]
-		next.RayPlane[1] = next.Ray.AngleSin * c.ViewFix[c.ScreenX]
-		next.MaterialSampler.Ray = next.Ray
+		c.CameraZ = c.CameraZ - c.IntersectionBottom + c.SectorSegment.AdjacentSegment.Sector.Min[2]
+		c.RayPlane[0] = c.Ray.AngleCos * c.ViewFix[c.ScreenX]
+		c.RayPlane[1] = c.Ray.AngleSin * c.ViewFix[c.ScreenX]
+		c.MaterialSampler.Ray = c.Ray
 	}
 
 	// This allocation is ok, does not escape
-	portal := &columnPortal{column: next}
+	portal := &columnPortal{column: c}
 	portal.CalcScreen()
 	if portal.AdjSegment != nil {
 		if c.Pick {
@@ -146,13 +134,11 @@ func (r *Renderer) RenderPortal(c *column) {
 		}
 	}
 
-	next.Sector = portal.Adj
-	next.EdgeTop = portal.AdjClippedTop
-	next.EdgeBottom = portal.AdjClippedBottom
-	next.LastPortalDistance = c.Distance
-	next.Depth++
-	r.RenderSector(next)
-	c.PickedSelection = next.PickedSelection
+	c.Sector = portal.Adj
+	c.EdgeTop = portal.AdjClippedTop
+	c.EdgeBottom = portal.AdjClippedBottom
+	c.LastPortalDistance = c.Distance
+	c.Depth++
 }
 
 // RenderSegmentColumn draws or picks a single pixel vertical column given a particular
@@ -199,6 +185,7 @@ func (r *Renderer) RenderSegmentColumn(c *column) {
 		}
 		r.RenderPortal(c)
 	} else {
+		// TODO: Fix walls over portals now that our columns get reused after portaling
 		if hasPortal {
 			r.RenderPortal(c)
 		}
@@ -214,7 +201,20 @@ func (r *Renderer) RenderSector(c *column) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
 	c.Sector.LastSeenFrame.Store(int64(c.ECS.Frame))
-	c.Sectors.Add(c.Sector)
+
+	// Store bodies & internal segments for later
+	for _, b := range c.Sector.Bodies {
+		if b == nil || !b.Active {
+			continue
+		}
+		c.Bodies.Add(b)
+	}
+	for _, iseg := range c.Sector.InternalSegments {
+		if iseg == nil || !iseg.Active {
+			continue
+		}
+		c.InternalSegments[iseg] = c.Sector
+	}
 
 	// TODO: Fix data race here, since LightmapBias can be read in another goroutine
 	if c.Sector.LightmapBias[0] == math.MaxInt64 {
@@ -330,7 +330,19 @@ func (r *Renderer) RenderColumn(column *column, x int, y int, pick bool) []*sele
 		return nil
 	}
 
-	r.RenderSector(column)
+	for {
+		preSector := column.Sector
+		r.RenderSector(column)
+		if preSector == column.Sector {
+			// No more portals
+			break
+		}
+		if column.Depth >= constants.MaxPortals-1 {
+			dbg := fmt.Sprintf("Maximum portal depth reached @ %v", column.Sector.Entity)
+			r.Player.Notices.Push(dbg)
+			break
+		}
+	}
 	return column.PickedSelection
 }
 
@@ -342,7 +354,8 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	column.Ray = &Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
 	column.MaterialSampler = MaterialSampler{Config: r.Config, Ray: column.Ray}
 	ewd2s := make([]*entityWithDist2, 0, 64)
-	column.Sectors = make(containers.Set[*core.Sector])
+	column.Bodies = make(containers.Set[*core.Body])
+	column.InternalSegments = make(map[*core.InternalSegment]*core.Sector)
 	for i := range column.LightLastColHashes {
 		column.LightLastColHashes[i] = 0
 	}
@@ -368,32 +381,25 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// show up in a block that hasn't visited that sector. We could either
 	// render bodies single-threaded, or attempt to do something more clever
 	// by attempting to render bodies for adjacent sectors.
-	for sector := range column.Sectors {
-		for _, b := range sector.Bodies {
-			if b == nil || !b.Active {
-				continue
-			}
-			vis := materials.GetVisible(b.ECS, b.Entity)
-			if vis == nil || !vis.Active {
-				continue
-			}
-			ewd2s = append(ewd2s, &entityWithDist2{
-				Body:    b,
-				Dist2:   column.Ray.Start.Dist2(b.Pos.Render.To2D()),
-				Visible: vis,
-			})
+	// TODO: Replace this with a quad-tree raycast?
+	for b := range column.Bodies {
+		vis := materials.GetVisible(b.ECS, b.Entity)
+		if vis == nil || !vis.Active {
+			continue
 		}
-		for _, s := range sector.InternalSegments {
-			if s == nil || !s.IsActive() {
-				continue
-			}
-			dist := column.Ray.DistTo(s.ClosestToPoint(&column.Ray.Start))
-			ewd2s = append(ewd2s, &entityWithDist2{
-				InternalSegment: s,
-				Dist2:           dist * dist,
-				Sector:          sector,
-			})
-		}
+		ewd2s = append(ewd2s, &entityWithDist2{
+			Body:    b,
+			Dist2:   column.Ray.Start.Dist2(b.Pos.Render.To2D()),
+			Visible: vis,
+		})
+	}
+	for iseg, sector := range column.InternalSegments {
+		dist := column.Ray.DistTo(iseg.ClosestToPoint(&column.Ray.Start))
+		ewd2s = append(ewd2s, &entityWithDist2{
+			InternalSegment: iseg,
+			Dist2:           dist * dist,
+			Sector:          sector,
+		})
 	}
 
 	slices.SortFunc(ewd2s, func(a *entityWithDist2, b *entityWithDist2) int {
@@ -402,6 +408,8 @@ func (r *Renderer) RenderBlock(columnIndex, xStart, xEnd int) {
 	// This has a bug when rendering portals: these need to be transformed and
 	// clipped through portals appropriately.
 	column.segmentIntersection = &segmentIntersection{}
+	column.EdgeTop = 0
+	column.EdgeBottom = r.ScreenHeight
 	column.LightSampler.MaterialSampler.Config = r.Config
 	for _, sorted := range ewd2s {
 		if sorted.Body != nil {
@@ -513,12 +521,12 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 	}
 	// Initialize a column...
 	column := &column{
-		EdgeTop:       0,
-		EdgeBottom:    r.ScreenHeight,
-		CameraZ:       r.Player.CameraZ,
-		PortalColumns: make([]column, constants.MaxPortals),
-		Visited:       make([]segmentIntersection, constants.MaxPortals),
-		Sectors:       make(containers.Set[*core.Sector]),
+		EdgeTop:          0,
+		EdgeBottom:       r.ScreenHeight,
+		CameraZ:          r.Player.CameraZ,
+		Visited:          make([]segmentIntersection, constants.MaxPortals),
+		Bodies:           make(containers.Set[*core.Body]),
+		InternalSegments: make(map[*core.InternalSegment]*core.Sector),
 	}
 	column.LightSampler.MaterialSampler.Config = r.Config
 

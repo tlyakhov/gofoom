@@ -40,10 +40,9 @@ type column struct {
 	LightSampler LightSampler
 	// Pre-allocated stack of past intersections, for speed
 	Visited []segmentIntersection
-	// Pre-allocated stack of nested columns for portals
-	PortalColumns []column
-	// Pre-allocated slice for sorting bodies and internal segments
-	Sectors containers.Set[*core.Sector]
+	// Maps for sorting bodies and internal segments
+	Bodies           containers.Set[*core.Body]
+	InternalSegments map[*core.InternalSegment]*core.Sector
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
 	Ray                *Ray
