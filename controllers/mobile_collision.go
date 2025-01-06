@@ -91,6 +91,8 @@ func (mc *MobileController) bodyTeleport() bool {
 			v = segment.AdjacentSegment.MirrorPortalMatrix.Project(v)
 			mc.Body.Pos.Now[0] = v[0]
 			mc.Body.Pos.Now[1] = v[1]
+			mc.Body.Pos.Prev[0] = v[0]
+			mc.Body.Pos.Prev[1] = v[1]
 			// Teleport velocity
 			trans := *mc.Vel.Now.To2D()
 			trans[0] += segment.A[0]
@@ -106,6 +108,7 @@ func (mc *MobileController) bodyTeleport() bool {
 			for mc.Body.Angle.Now > 360 {
 				mc.Body.Angle.Now -= 360
 			}
+			mc.Body.Angle.Prev = mc.Body.Angle.Now
 			mc.Enter(core.GetSector(mc.ECS, segment.AdjacentSector))
 			return true
 		}

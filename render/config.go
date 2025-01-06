@@ -15,7 +15,7 @@ import (
 type Config struct {
 	ECS                       *ecs.ECS
 	Multithreaded             bool
-	Blocks                    int
+	NumBlocks                 int
 	ScreenWidth, ScreenHeight int
 	MaxViewDist, FOV          float64
 	LightGrid                 float64

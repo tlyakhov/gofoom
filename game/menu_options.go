@@ -26,7 +26,7 @@ func initMenuOptions() {
 		Title:    "Options",
 		Apply: func(p *ui.Page) {
 			renderer.Multithreaded = p.Widget("multiRender").(*ui.Checkbox).Value
-			renderer.Blocks = p.Widget("multiBlocks").(*ui.Slider).Value
+			renderer.NumBlocks = p.Widget("multiBlocks").(*ui.Slider).Value
 			renderer.FOV = float64(p.Widget("fov").(*ui.Slider).Value)
 			renderer.LightGrid = float64(p.Widget("lightGrid").(*ui.Slider).Value) / 10.0
 			// After everything's loaded, trigger the controllers
@@ -71,7 +71,7 @@ func initMenuOptions() {
 					Label:   "Rendering threads",
 					Tooltip: "Subdivide the screen into this many horizontal columns when rendering.\nIdeal seems to be ~2x physical cores. Heavy impact on performance.",
 				},
-				Min: 2, Max: 64, Value: int(renderer.Blocks), Step: 2,
+				Min: 2, Max: 64, Value: int(renderer.NumBlocks), Step: 2,
 			},
 			&ui.Slider{
 				Widget: ui.Widget{

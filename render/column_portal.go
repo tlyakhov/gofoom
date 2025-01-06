@@ -11,7 +11,7 @@ import (
 )
 
 type columnPortal struct {
-	*column
+	*block
 	Adj                                 *core.Sector
 	AdjSegment                          *core.SectorSegment
 	AdjTop, AdjBottom                   float64

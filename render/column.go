@@ -7,9 +7,7 @@ import (
 	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/containers"
 )
 
 type entityWithDist2 struct {
@@ -32,20 +30,18 @@ type segmentIntersection struct {
 }
 
 type column struct {
+	// parent
+	Block *block
 	// Samples shaders & images
 	MaterialSampler
 	// Stores current segment intersection
 	*segmentIntersection
 	// Stores light & shadow data
 	LightSampler LightSampler
-	// Pre-allocated stack of past intersections, for speed
-	Visited []segmentIntersection
-	// Maps for sorting bodies and internal segments
-	Bodies           containers.Set[*core.Body]
-	InternalSegments map[*core.InternalSegment]*core.Sector
+
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
-	Ray                *Ray
+	Ray                Ray
 	RaySegTest         concepts.Vector2
 	RayPlane           concepts.Vector3
 	LastPortalDistance float64
@@ -68,9 +64,6 @@ type column struct {
 	LightLastHash       uint64
 	LightLastColHashes  []uint64
 	LightLastColResults []concepts.Vector3
-	// For picking things in editor
-	Pick            bool
-	PickedSelection []*selection.Selectable
 }
 
 func (c *column) ProjectZ(z float64) float64 {
