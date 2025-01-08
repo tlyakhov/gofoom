@@ -243,6 +243,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		sector = next
 	}
 
+	// TODO: Use quadtree here, to avoid thrashing memory with the Visited slice
 	// Generate entity shadows last. That way if the light is blocked by sector
 	// walls, we don't waste time checking/blending lots of bodies or internal
 	// segments.

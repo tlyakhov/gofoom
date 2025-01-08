@@ -100,7 +100,9 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 		if block.ScreenX < xStart || block.ScreenX >= xEnd {
 			continue
 		}
-		block.MaterialSampler.NU = 0.5 + (float64(block.ScreenX)-xMid)/xScale
+		// TODO: Need to double-check the math here, this formula seems iffy at
+		// being texel/pixel-exact
+		block.MaterialSampler.NU = 0.5 + (float64(block.ScreenX)+1-xMid)/xScale
 
 		for y := block.ClippedTop; y < block.ClippedBottom; y++ {
 			screenIndex := (y*r.ScreenWidth + block.ScreenX)

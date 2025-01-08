@@ -118,8 +118,8 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	}
 
 	// Quadtree testing code
-	q := editor.ECS.First(core.QuadtreeCID).(*core.Quadtree)
-	mw.DrawQuadNode(q.Root)
+	//q := editor.ECS.First(core.QuadtreeCID).(*core.Quadtree)
+	//mw.DrawQuadNode(q.Root)
 
 	/*// Portal testing code
 	p := core.GetBody(editor.ECS, editor.Renderer.Player.Entity)

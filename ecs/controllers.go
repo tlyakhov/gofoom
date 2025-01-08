@@ -10,6 +10,8 @@ import (
 
 // TODO: We originally had way more different types of controllers. Now there
 // are only 3 methods. Can we make this simpler?
+// TODO: Multiple controllers acting on the same ID should only iterate over the
+// column once.
 
 func (types *typeMetadata) RegisterController(constructor func() Controller, priority int) {
 	types.lock.Lock()
