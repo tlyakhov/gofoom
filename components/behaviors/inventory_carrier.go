@@ -31,6 +31,20 @@ func GetInventoryCarrier(db *ecs.ECS, e ecs.Entity) *InventoryCarrier {
 	return nil
 }
 
+func (ic *InventoryCarrier) HasAtLeast(class string, min int) bool {
+	for _, e := range ic.Inventory {
+		if e == 0 {
+			continue
+		}
+		if slot := GetInventorySlot(ic.ECS, e); slot != nil {
+			if slot.Class == class && slot.Count.Now > min {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (ic *InventoryCarrier) Construct(data map[string]any) {
 	ic.Attached.Construct(data)
 

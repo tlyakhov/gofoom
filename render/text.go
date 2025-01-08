@@ -9,7 +9,7 @@ import (
 )
 
 type TextStyle struct {
-	Sprite                *materials.Sprite
+	SpriteSheet           *materials.SpriteSheet
 	CharWidth, CharHeight int
 	HSpacing, VSpacing    int
 	VAnchor, HAnchor      int
@@ -25,22 +25,22 @@ type TextStyle struct {
 
 func (r *Renderer) NewTextStyle() *TextStyle {
 	return &TextStyle{
-		Sprite:     r.DefaultFont(),
-		CharWidth:  8,
-		CharHeight: 8,
-		HSpacing:   0,
-		VSpacing:   0,
-		Color:      concepts.Vector4{1, 1, 1, 1},
-		Shadow:     false,
-		ClipW:      r.ScreenWidth,
-		ClipH:      r.ScreenHeight,
+		SpriteSheet: r.DefaultFont(),
+		CharWidth:   8,
+		CharHeight:  8,
+		HSpacing:    0,
+		VSpacing:    0,
+		Color:       concepts.Vector4{1, 1, 1, 1},
+		Shadow:      false,
+		ClipW:       r.ScreenWidth,
+		ClipH:       r.ScreenHeight,
 	}
 }
 
 // TODO: This should be more configurable
-func (r *Renderer) DefaultFont() *materials.Sprite {
+func (r *Renderer) DefaultFont() *materials.SpriteSheet {
 	// TODO: Avoid searching every time
-	return materials.GetSprite(r.ECS, r.ECS.GetEntityByName("Default Font"))
+	return materials.GetSpriteSheet(r.ECS, r.ECS.GetEntityByName("Default Font"))
 }
 
 func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy int) {
@@ -56,8 +56,8 @@ func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy i
 	if index > 255 {
 		index = 249 // substitute char
 	}
-	col := index % s.Sprite.Cols
-	row := index / s.Sprite.Cols
+	col := index % s.SpriteSheet.Cols
+	row := index / s.SpriteSheet.Cols
 	// Background first
 	if s.BGColor[3] > 0 {
 		bgx := dx
@@ -91,10 +91,10 @@ func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy i
 				continue
 			}
 			screenIndex := dx + dy*r.ScreenWidth
-			ur, vr := s.Sprite.TransformUV(float64(u)*fw, float64(v)*fh, col, row)
+			ur, vr := s.SpriteSheet.TransformUV(float64(u)*fw, float64(v)*fh, col, row)
 			a := img.SampleAlpha(ur, vr,
-				uint32(s.CharWidth)*s.Sprite.Cols,
-				uint32(s.CharHeight)*s.Sprite.Rows)
+				uint32(s.CharWidth)*s.SpriteSheet.Cols,
+				uint32(s.CharHeight)*s.SpriteSheet.Rows)
 			a *= s.Color[3]
 			if s.Shadow && dx < s.ClipX+s.ClipW-1 && dy < s.ClipY+s.ClipH-1 {
 				s.shadow[3] = a * 0.5
@@ -113,10 +113,10 @@ func (r *Renderer) DrawChar(s *TextStyle, img *materials.Image, c rune, dx, dy i
 }
 
 func (r *Renderer) Print(s *TextStyle, x, y int, text string) {
-	if s.Sprite == nil || s.CharWidth == 0 || s.CharHeight == 0 {
+	if s.SpriteSheet == nil || s.CharWidth == 0 || s.CharHeight == 0 {
 		return
 	}
-	img := materials.GetImage(s.Sprite.ECS, s.Sprite.Material)
+	img := materials.GetImage(s.SpriteSheet.ECS, s.SpriteSheet.Material)
 	if img == nil {
 		return
 	}

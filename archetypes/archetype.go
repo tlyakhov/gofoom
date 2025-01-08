@@ -32,7 +32,7 @@ func CreateFont(db *ecs.ECS, filename string, name string) ecs.Entity {
 	img.GenerateMipMaps = false
 	img.Filter = false
 	img.Load()
-	sprite := db.NewAttachedComponent(e, materials.SpriteCID).(*materials.Sprite)
+	sprite := db.NewAttachedComponent(e, materials.SpriteSheetCID).(*materials.SpriteSheet)
 	sprite.System = true
 	sprite.Rows = 16
 	sprite.Cols = 16

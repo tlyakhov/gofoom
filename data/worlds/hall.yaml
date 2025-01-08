@@ -11,10 +11,10 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 336.09375
+        Now: 184.21875
         Spawn: 0
     Pos:
-        Now: 452.2224286067537, -1709.1420052565259, 20
+        Now: 759.6819088925588, -1779.0013533887284, 20
         Spawn: -390, 180, -44
     Size:
         Now: 15, 40
@@ -27,7 +27,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0.002518051614906138, -0.0011161755152915489, 0.007001650413904548
+        Now: 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014020007406635365, 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010320949722780601, 0.007001650411977742
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -1486,11 +1486,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.5
+            Percent: 0.8515625
             Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: -400, 60, -47
+        Now: -400, 60, -51.11865234375
         Spawn: -400, 60, -52
     Size:
         Now: 20, 20
@@ -1500,7 +1500,7 @@
         - ∈⋮249
   ecs.Named:
     Name: Flower (Starting Room)
-  materials.Sprite:
+  materials.SpriteSheet:
     Angles: "0"
     Frame:
         Damping: 0
@@ -2052,17 +2052,17 @@
     Speed: 350
     Start: ∈⋮135
   behaviors.ActorState:
-    Action: ∈⋮136
+    Action: ∈⋮140
   behaviors.Alive:
     Health: 100
   behaviors.WeaponInstant: {}
   core.Body:
     Angle:
-        Now: 22593.63408365656
+        Now: 26606.295949423253
         Procedural: true
         Spawn: 155.9558816022554
     Pos:
-        Now: -343.307076963854, 25.179379364852768, -48
+        Now: -45.81072395954989, -101.89477490496108, 16
         Spawn: -10, -30, -50
     Size:
         Now: 32, 32
@@ -2076,7 +2076,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-        Now: 0.08631861826913365, -1.0389535793099747, 0.02608715697640676
+        Now: 0.5364563751382997, -0.8827081006946269, 0.026087152817218427
         Spawn: 0, 0, 0
   ecs.Named:
     Name: FlubTest
@@ -2087,7 +2087,7 @@
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
-  materials.Sprite:
+  materials.SpriteSheet:
     Angles: "8"
     Cols: "4"
     Frame:
@@ -3865,7 +3865,7 @@
           Hi:
             Material: ∈⋮123
             Transform:
-                Now: 1, 0, 0, 0, 1.28, -0.30000000000000004
+                Now: 1, 0, 0, 0, 0.330625, 0.664208984375
                 Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
           Lo:
             Material: ∈⋮2
@@ -3884,16 +3884,16 @@
             Material: ∈⋮122
         Z:
             Animation:
-                Active: false
+                Active: true
                 Coordinates: AnimationCoordinatesAbsolute
                 Duration: 1000
                 End: 0
                 Lifetime: AnimationLifetimeOnce
-                Percent: 1
-                Reverse: false
+                Percent: 0.359375
+                Reverse: true
                 Start: 64
                 TweeningFunc: EaseInOut2
-            Now: 0
+            Now: 47.46875
             Spawn: 64
   ecs.Linked:
     Sources:
@@ -3915,7 +3915,7 @@
         - Hi:
             Material: ∈⋮2
             Transform:
-                Now: 1, 0, 0, 0, 0, 1
+                Now: 1, 0, 0, 0, 0.003375000000000017, 0.996625
                 Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
           Lo:
             Material: ∈⋮2
@@ -3933,7 +3933,7 @@
         - Hi:
             Material: ∈⋮2
             Transform:
-                Now: 1, 0, 0, 0, 0, 1
+                Now: 1, 0, 0, 0, 0.003375000000000017, 0.996625
                 Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
           Lo:
             Material: ∈⋮2
@@ -3944,7 +3944,7 @@
           Hi:
             Material: ∈⋮123
             Transform:
-                Now: 1, 0, 0, 0, 0, 1
+                Now: 1, 0, 0, 0, 1.6, -0.6
                 Spawn: 1, 0, 0, 0, 1.6, -0.6
           Lo:
             Material: ∈⋮2
@@ -3956,16 +3956,16 @@
             Material: ∈⋮122
         Z:
             Animation:
-                Active: true
+                Active: false
                 Coordinates: AnimationCoordinatesAbsolute
                 Duration: 1000
                 End: -64
                 Lifetime: AnimationLifetimeOnce
-                Percent: 0
+                Percent: 1
                 Reverse: false
                 Start: 64
                 TweeningFunc: EaseInOut2
-            Now: 64
+            Now: -64
             Spawn: 64
   ecs.Linked:
     Sources:
@@ -5540,7 +5540,7 @@
     Filter: false
     GenerateMipMaps: false
     Source: data/Lord_Nightmare_6x6font02.png
-  materials.Sprite:
+  materials.SpriteSheet:
     Angles: "0"
     Cols: "16"
     Frame:
@@ -5761,11 +5761,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.9140625
-            Reverse: false
+            Percent: 0.7265625
+            Reverse: true
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: -260, 60, -51.70458984375
+        Now: -260, 60, -49.05322265625
         Spawn: -260, 60, -52
     Size:
         Now: 20, 20
@@ -5778,7 +5778,7 @@
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
-  materials.Sprite:
+  materials.SpriteSheet:
     Angles: "0"
     Frame:
         Damping: 0
@@ -5987,37 +5987,41 @@
     Speed: 100
     Start: ∈⋮150
   behaviors.ActorState:
-    Action: ∈⋮151
+    Action: ∈⋮150
   behaviors.ParticleEmitter:
     Limit: "30"
     Particles:
-        - ∈⋮165
+        - ∈⋮163
         - ∈⋮166
         - ∈⋮200
-        - ∈⋮198
-        - ∈⋮197
+        - ∈⋮201
+        - ∈⋮202
         - ∈⋮203
         - ∈⋮171
         - ∈⋮205
-        - ∈⋮202
-        - ∈⋮207
-        - ∈⋮175
-        - ∈⋮208
+        - ∈⋮196
+        - ∈⋮197
+        - ∈⋮174
+        - ∈⋮204
+        - ∈⋮198
         - ∈⋮178
         - ∈⋮179
-        - ∈⋮180
+        - ∈⋮165
         - ∈⋮181
-        - ∈⋮182
+        - ∈⋮175
         - ∈⋮183
         - ∈⋮184
         - ∈⋮186
         - ∈⋮187
+        - ∈⋮188
+        - ∈⋮190
         - ∈⋮158
         - ∈⋮159
+        - ∈⋮157
         - ∈⋮161
+        - ∈⋮195
         - ∈⋮162
-        - ∈⋮163
-        - ∈⋮196
+        - ∈⋮194
     Source: ∈⋮153
     Vel: 15
     XYSpread: 10
@@ -6028,7 +6032,7 @@
         Now: 180
         Spawn: 180
     Pos:
-        Now: 860, -499.83827329946456, 32
+        Now: 860, -512.807414021327, 32
         Procedural: true
         Spawn: 860, -710, 32
     Size:
@@ -6040,7 +6044,7 @@
     Strength: 5
   ecs.Named:
     Name: Trap Turret
-  materials.Sprite:
+  materials.SpriteSheet:
     Frame:
         Damping: 0
         Freq: 1e-06
@@ -6074,6 +6078,16 @@
     Filter: false
     GenerateMipMaps: true
     Source: data/game/keycard/keycard.png
+  materials.SpriteSheet:
+    Cols: "2"
+    Frame:
+        Now: "0"
+        Spawn: "0"
+    Material: ∈⋮156
+    Rows: "2"
+- Entity: ∈⋮157
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮158
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
@@ -6114,11 +6128,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.1171875
+            Percent: 0.4765625
             Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: 230, -860, -19.45068359375
+        Now: 230, -860, -15.02197265625
         Spawn: 230, -860, -20
     Size:
         Now: 15, 15
@@ -6130,13 +6144,10 @@
     Name: Red Keycard
   materials.Lit: ∈⋮132
   materials.Sprite:
-    Cols: "2"
     Frame:
         Now: "0"
         Spawn: "0"
-    Frames: "4"
     Material: ∈⋮156
-    Rows: "2"
   materials.Visible: ∈⋮32
 - Entity: ∈⋮165
   materials.Image: ∈⋮153
@@ -6204,7 +6215,27 @@
             Now: 64
             Spawn: 64
 - Entity: ∈⋮168
-  behaviors.Proximity: ∈⋮25
+  behaviors.PlayerTargetable:
+    Message: test
+    Frob:
+      Code: |-
+        door := behaviors.GetVerticalDoor(s.ECS,168)
+        if !carrier.HasAtLeast("RedKeycard",1) {
+          return
+        }
+        if door.State != behaviors.DoorStateOpen {
+          door.Intent = behaviors.DoorIntentOpen
+        } else if door.State != behaviors.DoorStateClosed {
+          door.Intent = behaviors.DoorIntentClosed
+        }
+  behaviors.Proximity:
+    Hysteresis: 0
+    InRange:
+      Code: |-
+        if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {
+          p.HoveringTargets.Add(onEntity)
+        }
+    ValidComponents: behaviors.Player
   behaviors.VerticalDoor:
     Duration: 1000
     TweeningFunc: EaseInOut2
@@ -6263,9 +6294,6 @@
                 TweeningFunc: EaseInOut2
             Now: 0
             Spawn: 64
-  ecs.Linked:
-    Sources:
-        - ∈⋮134
 - Entity: ∈⋮169
   behaviors.InventorySlot:
     Class: WeirdGun
@@ -6293,6 +6321,9 @@
 - Entity: ∈⋮171
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
+- Entity: ∈⋮174
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮175
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
@@ -6313,7 +6344,7 @@
   ecs.Linked:
     Sources:
         - ∈⋮249
-  materials.Sprite: ∈⋮32
+  materials.SpriteSheet: ∈⋮32
   materials.Visible: ∈⋮32
 - Entity: ∈⋮177
   behaviors.InventorySlot:
@@ -6330,12 +6361,21 @@
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮180
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 760, -1870, 32
+        Spawn: 760, -1870, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 0.8
+    Strength: 2
 - Entity: ∈⋮181
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮182
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮183
@@ -6396,6 +6436,9 @@
 - Entity: ∈⋮187
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
+- Entity: ∈⋮188
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮189
   behaviors.InventorySlot:
     Class: Flower
@@ -6404,6 +6447,9 @@
         Spawn: "0"
     Image: ∈⋮98
     Limit: "100"
+- Entity: ∈⋮190
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮191
   core.Sector:
     Bottom:
@@ -6583,6 +6629,12 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮194
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮195
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮196
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
@@ -6602,10 +6654,16 @@
 - Entity: ∈⋮200
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
+- Entity: ∈⋮201
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮202
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮203
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮204
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮205
@@ -6616,12 +6674,6 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 0.6
     Strength: 2
-- Entity: ∈⋮207
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮208
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
 - Entity: ∈⋮219
   core.Sector:
     Bottom:
@@ -6811,7 +6863,7 @@
   behaviors.Proximity: ∈⋮32
   ecs.Named:
     Name: Flower Inventory Item
-  materials.Sprite: ∈⋮32
+  materials.SpriteSheet: ∈⋮32
   materials.Visible: ∈⋮32
 - Entity: ∈⋮254
   materials.Image:

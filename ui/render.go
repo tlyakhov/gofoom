@@ -382,10 +382,10 @@ func (ui *UI) renderTextBuffer() {
 	s.VAnchor = -1
 	s.HSpacing = 0
 	s.VSpacing = 0
-	if s.Sprite == nil || s.CharWidth == 0 || s.CharHeight == 0 {
+	if s.SpriteSheet == nil || s.CharWidth == 0 || s.CharHeight == 0 {
 		return
 	}
-	img := materials.GetImage(s.Sprite.ECS, s.Sprite.Material)
+	img := materials.GetImage(s.SpriteSheet.ECS, s.SpriteSheet.Material)
 	if img == nil {
 		return
 	}
