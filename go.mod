@@ -15,10 +15,10 @@ require (
 	github.com/mmcloughlin/avo v0.6.0
 	github.com/puzpuzpuz/xsync/v3 v3.4.0
 	github.com/rs/xid v1.6.0
-	github.com/spf13/cast v1.7.0
+	github.com/spf13/cast v1.7.1
 	github.com/traefik/yaegi v0.16.1
 	golang.org/x/image v0.23.0
-	golang.org/x/tools v0.28.0
+	golang.org/x/tools v0.29.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -34,7 +34,7 @@ require (
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20240506104042-037f3cc74f2a // indirect
 	github.com/go-gl/mathgl v1.2.0 // indirect
 	github.com/go-text/render v0.2.0 // indirect
-	github.com/go-text/typesetting v0.2.0 // indirect
+	github.com/go-text/typesetting v0.2.1 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
@@ -47,10 +47,10 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/yuin/goldmark v1.7.8 // indirect
-	golang.org/x/mobile v0.0.0-20241213221354-a87c1cf6cf46 // indirect
+	golang.org/x/mobile v0.0.0-20250106192035-c31d5b91ecc3 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.32.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 )
 
@@ -58,7 +58,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/gopxl/glhf/v2 v2.1.0 // indirect
 	github.com/gopxl/mainthread/v2 v2.1.1 // indirect
-	github.com/jeandeaual/go-locale v0.0.0-20241204123234-32dda1c00a20 // indirect
+	github.com/jeandeaual/go-locale v0.0.0-20241217141322-fcc2cadd6f08 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.4.1 // indirect
 	github.com/rymdport/portal v0.3.0 // indirect
