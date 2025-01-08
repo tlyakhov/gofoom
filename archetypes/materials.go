@@ -13,6 +13,8 @@ func ComponentTableIsMaterial(components ecs.ComponentTable) bool {
 		switch c.(type) {
 		case *materials.Shader:
 			return true
+		case *materials.SpriteSheet:
+			return true
 		case *materials.Sprite:
 			return true
 		case *materials.Image:

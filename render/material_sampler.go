@@ -62,6 +62,9 @@ func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Attach
 		for _, stage := range shader.Stages {
 			ms.derefMaterials(stage.Material, shader)
 		}
+	} else if spriteSheet := materials.GetSpriteSheet(ms.ECS, material); spriteSheet != nil && spriteSheet != parent {
+		ms.Materials = append(ms.Materials, spriteSheet)
+		ms.derefMaterials(spriteSheet.Material, spriteSheet)
 	} else if sprite := materials.GetSprite(ms.ECS, material); sprite != nil && sprite != parent {
 		ms.Materials = append(ms.Materials, sprite)
 		ms.derefMaterials(sprite.Material, sprite)
@@ -157,6 +160,30 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 		return
 	case *materials.Sprite:
+		if ms.pipelineIndex >= len(ms.Materials) {
+			return
+		}
+		if sheet, ok := ms.Materials[ms.pipelineIndex].(*materials.SpriteSheet); ok {
+			// TODO: Would it be better to store the row/col for the next pass instead?
+			ms.pipelineIndex++
+
+			frame := uint32(*m.Frame.Render)
+			if stage != nil {
+				frame += uint32(stage.Frame)
+			}
+			cell := uint32(ms.SpriteAngle) * sheet.Angles / 360
+			cell += sheet.Angles * (frame % sheet.Frames)
+
+			c := cell % sheet.Cols
+			r := cell / sheet.Cols
+			ms.U, ms.V = sheet.TransformUV(u, v, c, r)
+			ms.ScaleW *= sheet.Cols
+			ms.ScaleH *= sheet.Rows
+			ms.sampleStage(nil)
+			ms.ScaleW /= sheet.Cols
+			ms.ScaleH /= sheet.Rows
+		}
+	case *materials.SpriteSheet:
 		frame := uint32(*m.Frame.Render)
 		if stage != nil {
 			frame += uint32(stage.Frame)
