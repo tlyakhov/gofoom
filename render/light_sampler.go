@@ -4,7 +4,6 @@
 package render
 
 import (
-	"fmt"
 	"math"
 	"sync/atomic"
 
@@ -231,8 +230,8 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		prevDist = dist2
 		depth++
 		if depth > constants.MaxPortals { // Avoid infinite looping.
-			dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
-			ls.Player.Notices.Push(dbg)
+			//	dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
+			//	ls.Player.Notices.Push(dbg)
 			return false
 		}
 		if next == nil && lightBody.SectorEntity != 0 && sector.Entity != lightBody.SectorEntity {

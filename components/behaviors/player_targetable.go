@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"text/template"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
@@ -38,6 +39,19 @@ func GetPlayerTargetable(db *ecs.ECS, e ecs.Entity) *PlayerTargetable {
 
 func (pt *PlayerTargetable) MultiAttachable() bool { return true }
 
+func (pt *PlayerTargetable) Pos(e ecs.Entity) *concepts.Vector3 {
+	if b := core.GetBody(pt.ECS, e); b != nil {
+		top := &concepts.Vector3{}
+		top[0] = b.Pos.Render[0]
+		top[1] = b.Pos.Render[1]
+		top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
+		return top
+	} else if sector := core.GetSector(pt.ECS, e); sector != nil {
+		return &sector.Center
+	}
+	return nil
+}
+
 func (pt *PlayerTargetable) String() string {
 	return "PlayerTargetable"
 }
@@ -49,13 +63,20 @@ func (pt *PlayerTargetable) OnAttach(db *ecs.ECS) {
 	pt.UnSelected.OnAttach(db)
 }
 
-func (pt PlayerTargetable) ApplyMessage(e ecs.Entity) string {
+type PlayerMessageParams struct {
+	TargetableEntity ecs.Entity
+	PlayerTargetable *PlayerTargetable
+	Player           *Player
+	InventoryCarrier *InventoryCarrier
+}
+
+func (pt PlayerTargetable) ApplyMessage(params *PlayerMessageParams) string {
 	if pt.MessageTemplate == nil {
 		return pt.Message
 	}
 
 	var buf bytes.Buffer
-	err := pt.MessageTemplate.Execute(&buf, e)
+	err := pt.MessageTemplate.Execute(&buf, params)
 	if err != nil {
 		return fmt.Sprintf("Error in message template %v: %v", pt.Message, err)
 	}
