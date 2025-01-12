@@ -139,11 +139,11 @@ func (pc *PlayerController) Always() {
 	pc.SelectedTarget = 0
 	closestDist2 := math.MaxFloat64
 	for e := range pc.HoveringTargets {
-		body := core.GetBody(pc.ECS, e)
-		if body == nil {
+		pt := behaviors.GetPlayerTargetable(pc.ECS, e)
+		if pt == nil {
 			continue
 		}
-		d2 := body.Pos.Now.Dist2(&pc.Body.Pos.Now)
+		d2 := pt.Pos(e).Dist2(&pc.Body.Pos.Now)
 		if d2 > closestDist2 {
 			continue
 		}

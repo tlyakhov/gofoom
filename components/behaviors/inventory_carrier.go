@@ -4,6 +4,7 @@
 package behaviors
 
 import (
+	"strings"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
@@ -37,7 +38,8 @@ func (ic *InventoryCarrier) HasAtLeast(class string, min int) bool {
 			continue
 		}
 		if slot := GetInventorySlot(ic.ECS, e); slot != nil {
-			if slot.Class == class && slot.Count.Now > min {
+			// log.Printf("HasAtLeast %v, %v ? %v, %v", class, min, slot.Class, slot.Count.Now)
+			if slot.Class == strings.TrimSpace(class) && slot.Count.Now >= min {
 				return true
 			}
 		}

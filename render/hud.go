@@ -40,16 +40,17 @@ func (r *Renderer) RenderHud() {
 	ts.VAnchor = 0
 
 	if r.Player.SelectedTarget != 0 {
-		b := core.GetBody(r.ECS, r.Player.SelectedTarget)
 		pt := behaviors.GetPlayerTargetable(r.ECS, r.Player.SelectedTarget)
 		if pt != nil && len(pt.Message) > 0 {
-			top := &concepts.Vector3{}
-			top[0] = b.Pos.Render[0]
-			top[1] = b.Pos.Render[1]
-			top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
-			scr := r.WorldToScreen(top)
+			scr := r.WorldToScreen(pt.Pos(r.Player.SelectedTarget))
 			if scr != nil {
-				msg := strings.TrimSpace(pt.ApplyMessage(r.Player.SelectedTarget))
+				params := &behaviors.PlayerMessageParams{
+					TargetableEntity: r.Player.SelectedTarget,
+					PlayerTargetable: pt,
+					Player:           r.Player,
+					InventoryCarrier: r.Carrier,
+				}
+				msg := strings.TrimSpace(pt.ApplyMessage(params))
 				r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
 			}
 		}

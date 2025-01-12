@@ -1469,7 +1469,7 @@
         Code: |
             if carrier == nil || body == nil { return }
             controllers.PickUpInventoryItem(carrier, body.Entity)
-    Message: Pick up {{with ecs_Named .}}{{.Name}}{{else}}item{{end}}
+    Message: Pick up {{with ecs_Named .TargetableEntity}}{{.Name}}{{else}}item{{end}}
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
@@ -6216,11 +6216,11 @@
             Spawn: 64
 - Entity: ∈⋮168
   behaviors.PlayerTargetable:
-    Message: test
+    Message: Door - {{if .InventoryCarrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need red keycard to open{{end}}
     Frob:
       Code: |-
         door := behaviors.GetVerticalDoor(s.ECS,168)
-        if !carrier.HasAtLeast("RedKeycard",1) {
+        if !carrier.HasAtLeast("Red Keycard",1) {
           return
         }
         if door.State != behaviors.DoorStateOpen {
