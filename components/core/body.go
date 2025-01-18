@@ -51,6 +51,7 @@ func (b *Body) OnDetach(e ecs.Entity) {
 
 	if b.QuadNode != nil {
 		b.QuadNode.Remove(b)
+		b.QuadNode = nil
 	}
 }
 
@@ -68,6 +69,10 @@ func (b *Body) OnAttach(db *ecs.ECS) {
 	b.Pos.Attach(db.Simulation)
 	b.Size.Attach(db.Simulation)
 	b.Angle.Attach(b.ECS.Simulation)
+
+	if tree := db.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
+		tree.Update(b)
+	}
 }
 
 func (b *Body) Sector() *Sector {

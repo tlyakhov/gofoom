@@ -67,7 +67,7 @@ func (r *Renderer) Initialize() {
 		r.Blocks[i].Visited = make([]segmentIntersection, constants.MaxPortals)
 		r.Blocks[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
-		r.Blocks[i].LightSampler.tree = core.TheQuadtree(r.ECS)
+		r.Blocks[i].LightSampler.tree = r.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
 		r.Blocks[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
 	r.textStyle = r.NewTextStyle()

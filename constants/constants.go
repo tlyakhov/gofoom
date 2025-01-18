@@ -15,6 +15,7 @@ const (
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.1
 	MaxViewDistance         = 10000.0
+	QuadtreeInitDim         = 256.0
 	DebugLevel              = 1
 	CollisionSteps          = 10
 	MaxLightmapAge          = 3 // in frames

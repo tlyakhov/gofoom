@@ -80,7 +80,7 @@ func (mc *MobileController) Forces() {
 
 func (mc *MobileController) Always() {
 	if mc.tree == nil {
-		mc.tree = core.TheQuadtree(mc.ECS)
+		mc.tree = mc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
 
 	if mc.Mass == 0 {
@@ -115,12 +115,12 @@ func (mc *MobileController) Always() {
 	mc.ResetForce()
 
 	// Update quadtree
-	mc.tree.Root.Update(mc.Body)
+	mc.tree.Update(mc.Body)
 }
 
 func (mc *MobileController) Recalculate() {
 	if mc.tree == nil {
-		mc.tree = core.TheQuadtree(mc.ECS)
+		mc.tree = mc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
 	mc.Collide()
 }

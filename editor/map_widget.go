@@ -52,8 +52,17 @@ func TransformContext(context *gg.Context) {
 	context.Scale(editor.Scale, editor.Scale)
 }
 
-func (mw *MapWidget) DrawQuadNode(node *core.QuadNode) {
-	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
+func (mw *MapWidget) DrawQuadNode(node *core.QuadNode, index int) {
+	switch index {
+	case 0:
+		mw.Context.SetRGBA(1.0, 0.0, 0.0, 0.25)
+	case 1:
+		mw.Context.SetRGBA(1.0, 0.6, 0.0, 0.25)
+	case 2:
+		mw.Context.SetRGBA(1.0, 0.0, 0.6, 0.25)
+	case 3:
+		mw.Context.SetRGBA(1.0, 0.6, 0.6, 0.25)
+	}
 	mw.Context.NewSubPath()
 	mw.Context.MoveTo(node.Min[0], node.Min[1])
 	mw.Context.LineTo(node.Max[0], node.Min[1])
@@ -65,8 +74,8 @@ func (mw *MapWidget) DrawQuadNode(node *core.QuadNode) {
 	mw.Context.DrawStringAnchored(text, (node.Min[0]+node.Max[0])*0.5, (node.Min[1]+node.Max[1])*0.5, 0.5, 0.5)
 
 	if !node.IsLeaf() {
-		for _, child := range node.Children {
-			mw.DrawQuadNode(child)
+		for i, child := range node.Children {
+			mw.DrawQuadNode(child, i)
 		}
 	}
 }
@@ -118,8 +127,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	}
 
 	// Quadtree testing code
-	//q := editor.ECS.First(core.QuadtreeCID).(*core.Quadtree)
-	//mw.DrawQuadNode(q.Root)
+	mw.DrawQuadNode(editor.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree).Root, 0)
 
 	/*// Portal testing code
 	p := core.GetBody(editor.ECS, editor.Renderer.Player.Entity)

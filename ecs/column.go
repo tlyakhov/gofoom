@@ -39,8 +39,8 @@ func (col *Column[T, PT]) From(source AttachableColumn, ecs *ECS) {
 	col.Getter = placeholder.Getter
 }
 
-// No bounds checking for performance. This should always be inlined
 func (col *Column[T, PT]) Value(index int) PT {
+	// No bounds checking for performance. This should always be inlined
 	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
 	if ptr.GetECS() == nil {
 		return nil
@@ -48,9 +48,10 @@ func (col *Column[T, PT]) Value(index int) PT {
 	return ptr
 }
 
-// No bounds checking for performance. This should always be inlined
-// Duplicates code in .Value() because the return type is different here
 func (col *Column[T, PT]) Attachable(index int) Attachable {
+	// No bounds checking for performance. This should always be inlined
+	// Duplicates code in .Value() because the return type is different here and nil
+	// in golang behaves idiosyncratically
 	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
 	if ptr.GetECS() == nil {
 		return nil
@@ -102,7 +103,6 @@ func (col *Column[T, PT]) Add(component *Attachable) {
 	col.fill.Set(nextFree)
 	*component = PT(&col.data[chunk][indexInChunk])
 	(*component).Base().indexInColumn = (int(nextFree))
-	(*component).OnAttach(col.ECS)
 	col.Length++
 }
 
@@ -115,7 +115,6 @@ func (col *Column[T, PT]) Replace(component *Attachable, index int) {
 	*ptr = *((*component).(PT))
 	*component = ptr
 	ptr.Base().indexInColumn = index
-	ptr.OnAttach(col.ECS)
 }
 
 func (c *Column[T, PT]) New() Attachable {

@@ -72,9 +72,9 @@ func (bc *BodyController) Recalculate() {
 	//bc.Collide()
 	bc.findBodySector()
 	if bc.tree == nil {
-		bc.tree = core.TheQuadtree(bc.ECS)
+		bc.tree = bc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
-	bc.tree.Root.Update(bc.Body)
+	bc.tree.Update(bc.Body)
 }
 
 func (bc *BodyController) findBodySector() {

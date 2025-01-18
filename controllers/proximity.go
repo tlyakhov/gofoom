@@ -179,7 +179,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 
 func (pc *ProximityController) Always() {
 	if pc.tree == nil {
-		pc.tree = core.TheQuadtree(pc.ECS)
+		pc.tree = pc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
 
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
