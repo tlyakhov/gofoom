@@ -103,6 +103,14 @@ func (db *ECS) Component(entity Entity, id ComponentID) Attachable {
 	return db.rows[int(entity)].Get(id)
 }
 
+func (db *ECS) Singleton(id ComponentID) Attachable {
+	c := db.columns[id]
+	if c.Len() != 0 {
+		return c.Attachable(0)
+	}
+	return db.NewAttachedComponent(db.NewEntity(), id)
+}
+
 func (db *ECS) First(id ComponentID) Attachable {
 	c := db.columns[id]
 	for i := 0; i < c.Cap(); i++ {
@@ -179,6 +187,7 @@ func (db *ECS) attach(entity Entity, component *Attachable, componentID Componen
 	a.Attachments++
 	a.ComponentID = componentID
 	db.rows[int(entity)].Set(attachable)
+	attachable.OnAttach(db)
 }
 
 // Create a new component with the given index and attach it.

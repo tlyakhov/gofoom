@@ -31,6 +31,49 @@ func GetLight(db *ecs.ECS, e ecs.Entity) *Light {
 	return nil
 }
 
+func (l *Light) OnDetach(e ecs.Entity) {
+	defer l.Attached.OnDetach(e)
+	if l.ECS == nil {
+		return
+	}
+
+	if b := GetBody(l.ECS, e); b != nil && b.QuadNode != nil {
+		b.QuadNode.Remove(b)
+		b.QuadNode = nil
+
+	}
+}
+
+func (l *Light) OnDelete() {
+	defer l.Attached.OnDelete()
+	if l.ECS != nil {
+		for _, e := range l.Entities {
+			if e == 0 {
+				continue
+			}
+			if b := GetBody(l.ECS, e); b != nil && b.QuadNode != nil {
+				b.QuadNode.Remove(b)
+				b.QuadNode = nil
+			}
+		}
+	}
+}
+
+func (l *Light) OnAttach(db *ecs.ECS) {
+	l.Attached.OnAttach(db)
+
+	if tree := db.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
+		for _, e := range l.Entities {
+			if e == 0 {
+				continue
+			}
+			if b := GetBody(db, e); b != nil {
+				tree.Update(b)
+			}
+		}
+	}
+}
+
 func (l *Light) MultiAttachable() bool { return true }
 
 func (l *Light) String() string {

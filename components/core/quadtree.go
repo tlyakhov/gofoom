@@ -4,12 +4,14 @@
 package core
 
 import (
-	"math"
+	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
 )
 
 type Quadtree struct {
 	ecs.Attached `editable:"^"`
+
+	MinZ, MaxZ float64
 
 	Root *QuadNode
 }
@@ -21,10 +23,11 @@ func init() {
 }
 
 func GetQuadtree(db *ecs.ECS, e ecs.Entity) *Quadtree {
-	if asserted, ok := db.Component(e, QuadtreeCID).(*Quadtree); ok {
+	panic("Tried to behaviors.GetQuadtree. Use ECS.Singleton(behaviors.QuadtreeCID) instead.")
+	/*if asserted, ok := db.Component(e, QuadtreeCID).(*Quadtree); ok {
 		return asserted
 	}
-	return nil
+	return nil*/
 }
 
 func (q *Quadtree) String() string {
@@ -33,6 +36,9 @@ func (q *Quadtree) String() string {
 
 func (q *Quadtree) Construct(data map[string]any) {
 	q.Attached.Construct(data)
+
+	q.System = true // never serialize this
+	q.Build()
 }
 
 func (q *Quadtree) Serialize() map[string]any {
@@ -41,41 +47,29 @@ func (q *Quadtree) Serialize() map[string]any {
 	return result
 }
 
-func (q *Quadtree) Build() {
-	q.Root = &QuadNode{}
-
-	// Find overall min/max
-	q.Root.Min[0] = math.Inf(1)
-	q.Root.Min[1] = math.Inf(1)
-	q.Root.Min[2] = math.Inf(1)
-	q.Root.Max[0] = math.Inf(-1)
-	q.Root.Max[1] = math.Inf(-1)
-	q.Root.Max[2] = math.Inf(-1)
-	col := ecs.ColumnFor[Sector](q.ECS, SectorCID)
-	for i := range col.Cap() {
-		sector := col.Value(i)
-		if sector == nil {
-			continue
-		}
-		if sector.Min[0] < q.Root.Min[0] {
-			q.Root.Min[0] = sector.Min[0]
-		}
-		if sector.Max[0] > q.Root.Max[0] {
-			q.Root.Max[0] = sector.Max[0]
-		}
-		if sector.Min[1] < q.Root.Min[1] {
-			q.Root.Min[1] = sector.Min[1]
-		}
-		if sector.Max[1] > q.Root.Max[1] {
-			q.Root.Max[1] = sector.Max[1]
-		}
-		if sector.Min[2] < q.Root.Min[2] {
-			q.Root.Min[2] = sector.Min[2]
-		}
-		if sector.Max[2] > q.Root.Max[2] {
-			q.Root.Max[2] = sector.Max[2]
-		}
+func (q *Quadtree) Update(body *Body) {
+	if body.QuadNode == nil {
+		q.Root.insert(body, 0)
+		return
+	} else if body.QuadNode.Contains(body.Pos.Now.To2D()) {
+		return
 	}
+
+	body.QuadNode.Remove(body)
+	body.QuadNode = nil
+	q.Root.insert(body, 0)
+}
+
+func (q *Quadtree) Build() {
+	q.Root = &QuadNode{Tree: q}
+
+	offset := constants.QuadtreeInitDim / 16
+	q.Root.Min[0] = offset
+	q.Root.Min[1] = offset
+	q.MinZ = 0
+	q.Root.Max[0] = offset + constants.QuadtreeInitDim
+	q.Root.Max[1] = offset + constants.QuadtreeInitDim
+	q.MaxZ = 0
 
 	colBody := ecs.ColumnFor[Body](q.ECS, BodyCID)
 	for i := range colBody.Cap() {
@@ -83,18 +77,6 @@ func (q *Quadtree) Build() {
 		if body == nil {
 			continue
 		}
-		q.Root.Insert(body)
+		q.Update(body)
 	}
-}
-
-func TheQuadtree(db *ecs.ECS) *Quadtree {
-	a := db.First(QuadtreeCID)
-	if a != nil {
-		return a.(*Quadtree)
-	}
-
-	q := db.NewAttachedComponent(db.NewEntity(), QuadtreeCID).(*Quadtree)
-	q.System = true
-	q.Build()
-	return q
 }

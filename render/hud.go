@@ -26,6 +26,29 @@ func (r *Renderer) RenderWeapon(slot *behaviors.InventorySlot) {
 	r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, concepts.BlendNormal)
 }
 
+func (r *Renderer) renderSelectedTarget() {
+	ts := r.textStyle
+
+	pt := behaviors.GetPlayerTargetable(r.ECS, r.Player.SelectedTarget)
+	if pt == nil || len(pt.Message) == 0 {
+		return
+	}
+
+	scr := r.WorldToScreen(pt.Pos(r.Player.SelectedTarget))
+	if scr == nil {
+		return
+	}
+
+	params := &behaviors.PlayerMessageParams{
+		TargetableEntity: r.Player.SelectedTarget,
+		PlayerTargetable: pt,
+		Player:           r.Player,
+		InventoryCarrier: r.Carrier,
+	}
+	msg := strings.TrimSpace(pt.ApplyMessage(params))
+	r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
+}
+
 func (r *Renderer) RenderHud() {
 	if r.Player == nil || r.Carrier == nil {
 		return
@@ -40,20 +63,7 @@ func (r *Renderer) RenderHud() {
 	ts.VAnchor = 0
 
 	if r.Player.SelectedTarget != 0 {
-		pt := behaviors.GetPlayerTargetable(r.ECS, r.Player.SelectedTarget)
-		if pt != nil && len(pt.Message) > 0 {
-			scr := r.WorldToScreen(pt.Pos(r.Player.SelectedTarget))
-			if scr != nil {
-				params := &behaviors.PlayerMessageParams{
-					TargetableEntity: r.Player.SelectedTarget,
-					PlayerTargetable: pt,
-					Player:           r.Player,
-					InventoryCarrier: r.Carrier,
-				}
-				msg := strings.TrimSpace(pt.ApplyMessage(params))
-				r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
-			}
-		}
+		r.renderSelectedTarget()
 	}
 
 	index := 0
