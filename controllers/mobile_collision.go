@@ -59,14 +59,16 @@ func (mc *MobileController) PushBack(segment *core.SectorSegment) bool {
 func (mc *MobileController) checkBodySegmentCollisions() {
 	// See if we need to push back into the current sector.
 	for _, segment := range mc.Sector.Segments {
-		if segment.AdjacentSector != 0 && segment.PortalIsPassable {
-			adj := core.GetSector(mc.Sector.ECS, segment.AdjacentSector)
-			// We can still collide with a portal if the heights don't match.
-			// If we're within limits, ignore the portal.
-			floorZ, ceilZ := adj.ZAt(dynamic.DynamicNow, mc.pos2d)
-			if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
-				mc.pos[2]+mc.halfHeight < ceilZ {
-				continue
+		if segment.AdjacentSegment != nil && segment.PortalIsPassable {
+			adj := segment.AdjacentSegment.Sector
+			if adj != nil {
+				// We can still collide with a portal if the heights don't match.
+				// If we're within limits, ignore the portal.
+				floorZ, ceilZ := adj.ZAt(dynamic.DynamicNow, mc.pos2d)
+				if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
+					mc.pos[2]+mc.halfHeight < ceilZ {
+					continue
+				}
 			}
 		}
 		if mc.PushBack(segment) {
