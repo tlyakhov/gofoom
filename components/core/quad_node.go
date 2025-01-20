@@ -6,21 +6,34 @@ package core
 import (
 	"log"
 	"math"
+	"strings"
 	"tlyakhov/gofoom/concepts"
 )
 
 type QuadNode struct {
 	Min, Max  concepts.Vector2
 	MaxRadius float64 // Maximum body radius in this node
-	Dead      bool
-
-	Bodies  []*Body
-	Lights  []*Body
-	Sectors []*Sector
+	Bodies    []*Body
+	Lights    []*Body
 
 	Tree     *Quadtree
 	Parent   *QuadNode
 	Children [4]*QuadNode
+}
+
+func (node *QuadNode) print(depth int) {
+	ds := strings.Repeat("  ", depth)
+	if node.IsLeaf() {
+		log.Printf("%vLeaf %p: %v -> %v (%v bodies, %v lights)",
+			ds, node,
+			node.Min.StringHuman(), node.Max.StringHuman(),
+			len(node.Bodies), (node.Lights))
+	} else {
+		log.Printf("%vNode %p: %v -> %v", ds, node, node.Min.StringHuman(), node.Max.StringHuman())
+		for i := range 4 {
+			node.Children[i].print(depth + 1)
+		}
+	}
 }
 
 func (node *QuadNode) IsLeaf() bool {
@@ -42,6 +55,10 @@ func (node *QuadNode) recalcRadii() {
 	if test.IsLeaf() {
 		test = test.Parent
 	}
+	if test != nil && test.Children[0] == nil {
+		log.Printf("QuadNode.recalcRadii: multiple leaves in a row?")
+		return
+	}
 	for test != nil {
 		test.MaxRadius = 0
 		for i := range 4 {
@@ -54,15 +71,16 @@ func (node *QuadNode) recalcRadii() {
 }
 
 func (node *QuadNode) Remove(body *Body) {
-	if node.Dead {
-		panic("wtf")
+	if !node.IsLeaf() {
+		log.Printf("QuadNode.Remove: node is not a leaf!")
 	}
+
 	found := false
 	node.MaxRadius = 0
 	// Find the body in the slice and trim
-	for i, b := range node.Bodies {
-		if b != body {
-			r := b.Size.Now[0] * 0.5
+	for i, test := range node.Bodies {
+		if test != body {
+			r := test.Size.Now[0] * 0.5
 			if r > node.MaxRadius {
 				node.MaxRadius = r
 			}
@@ -71,6 +89,7 @@ func (node *QuadNode) Remove(body *Body) {
 		l := len(node.Bodies) - 1
 		node.Bodies[i] = node.Bodies[l]
 		node.Bodies = node.Bodies[:l]
+		body.QuadNode = nil
 		found = true
 		break
 	}
@@ -81,8 +100,8 @@ func (node *QuadNode) Remove(body *Body) {
 
 	if light := GetLight(body.ECS, body.Entity); light != nil {
 		// Find the light in the slice and trim
-		for i, b := range node.Lights {
-			if b != body {
+		for i, test := range node.Lights {
+			if test != body {
 				continue
 			}
 			l := len(node.Lights) - 1
@@ -102,23 +121,45 @@ func (node *QuadNode) Remove(body *Body) {
 	// Next, check if all siblings are empty to move the leaf up.
 
 	c := &parent.Children
-	sum := len(c[0].Bodies) + len(c[1].Bodies) + len(c[2].Bodies) + len(c[3].Bodies)
+
+	if c[0] != node && c[1] != node && c[2] != node && c[3] != node {
+		log.Printf("QuadNode.Remove: node is not part of parent's children.")
+		return
+	}
+
+	sum := 0
+
+	for i := range 4 {
+		if !c[i].IsLeaf() {
+			// Can't remove children because not all are leaves.
+			return
+		}
+		sum += len(c[i].Bodies)
+	}
 
 	if sum >= 4 {
 		return
 	}
 
-	parent.Bodies = make([]*Body, sum)
-	copied := 0
+	if len(parent.Bodies) > 0 {
+		log.Printf("QuadNode.Remove: non-leaf has bodies?")
+	}
+
+	parent.Bodies = make([]*Body, 0, sum)
 	for i := range 4 {
-		copied += copy(parent.Bodies[copied:], c[i].Bodies)
+		if len(c[i].Bodies) == 0 {
+			continue
+		}
+		parent.Bodies = append(parent.Bodies, c[i].Bodies...)
 		c[i].Bodies = nil
 	}
 	sumLights := len(c[0].Lights) + len(c[1].Lights) + len(c[2].Lights) + len(c[3].Lights)
-	parent.Lights = make([]*Body, sumLights)
-	copied = 0
+	parent.Lights = make([]*Body, 0, sumLights)
 	for i := range 4 {
-		copied += copy(parent.Lights[copied:], c[i].Lights)
+		if len(c[i].Lights) == 0 {
+			continue
+		}
+		parent.Lights = append(parent.Lights, c[i].Lights...)
 		c[i].Lights = nil
 	}
 
@@ -129,7 +170,6 @@ func (node *QuadNode) Remove(body *Body) {
 	parent.Children[1] = nil
 	parent.Children[2] = nil
 	parent.Children[3] = nil
-	node.Dead = true
 	node.Bodies = nil
 	node.Lights = nil
 	node.Tree = nil
@@ -156,105 +196,121 @@ func (node *QuadNode) subdivide() {
 	node.Children[3] = &QuadNode{Max: node.Max, Parent: node, Tree: node.Tree}
 	node.Children[3].Min[0] = halfx
 	node.Children[3].Min[1] = halfy
-
-	log.Printf("Subdivide %v -> %v", node.Min.StringHuman(), node.Max.StringHuman())
-	for i := range 4 {
-		log.Printf("Child %v: %v -> %v", i, node.Children[i].Min.StringHuman(), node.Children[i].Max.StringHuman())
-	}
 }
 
+func (node *QuadNode) expandRoot(pos *concepts.Vector3) {
+	if node != node.Tree.Root {
+		log.Printf("QuadNode.insert: parent is nil but this node isn't root :(")
+		return
+	}
+	// We need to expand the tree outwards.
+	newRoot := &QuadNode{
+		Tree:   node.Tree,
+		Parent: nil,
+	}
+	centerx := (node.Min[0] + node.Max[0]) * 0.5
+	centery := (node.Min[1] + node.Max[1]) * 0.5
+	index := 0
+	if pos[0] < centerx {
+		index |= 1
+		newRoot.Min[0] = node.Min[0] - (node.Max[0] - node.Min[0])
+		newRoot.Max[0] = node.Max[0]
+	} else {
+		newRoot.Min[0] = node.Min[0]
+		newRoot.Max[0] = node.Max[0] + (node.Max[0] - node.Min[0])
+	}
+	if pos[1] < centery {
+		index |= 2
+		newRoot.Min[1] = node.Min[1] - (node.Max[1] - node.Min[1])
+		newRoot.Max[1] = node.Max[1]
+	} else {
+		newRoot.Min[1] = node.Min[1]
+		newRoot.Max[1] = node.Max[1] + (node.Max[1] - node.Min[1])
+	}
+	newRoot.subdivide()
+	newRoot.Children[index] = node
+	node.Parent = newRoot
+	node.Tree.Root = newRoot
+}
+
+func (node *QuadNode) addToLeaf(body *Body) {
+	if body.Pos.Now[2] < node.Tree.MinZ {
+		node.Tree.MinZ = body.Pos.Now[2]
+	}
+	if body.Pos.Now[2] > node.Tree.MaxZ {
+		node.Tree.MaxZ = body.Pos.Now[2]
+	}
+	node.increaseRadii(body.Size.Now[0] * 0.5)
+	node.Bodies = append(node.Bodies, body)
+	if light := GetLight(body.ECS, body.Entity); light != nil {
+		node.Lights = append(node.Lights, body)
+	}
+	body.QuadNode = node
+}
+
+func (node *QuadNode) increaseDepth(depth int) {
+	node.subdivide()
+	oldBodies := node.Bodies
+	node.Bodies = nil
+	node.Lights = nil
+	// We are no longer a leaf. Insert into children
+	for _, oldBody := range oldBodies {
+		found := false
+		for _, child := range node.Children {
+			if child.Contains3D(&oldBody.Pos.Now) {
+				child.insert(oldBody, depth+1)
+				found = true
+				break
+			}
+		}
+		if !found {
+			// This is the case when a body has moved outside of its current
+			// node, but hasn't been updated yet. We need to make sure the body
+			// remains in a leaf to avoid messing up the references. It doesn't
+			// matter which leaf it's in since it's outside of all of them.
+			//log.Printf("QuadNode.increaseDepth: %v was not in any children during subdivision. Inserting into first leaf.", oldBody.Entity)
+			node.Children[0].addToLeaf(oldBody)
+		}
+	}
+}
 func (node *QuadNode) insert(body *Body, depth int) {
-	if node.Dead {
-		panic("wtf")
+	contains := node.Contains3D(&body.Pos.Now)
+
+	if !contains {
+		if node.Parent == nil {
+			node.expandRoot(&body.Pos.Now)
+			node.Tree.Root.insert(body, 0)
+		} else {
+			log.Printf("QuadNode.insert: body %v is not contained in this node, but also not at root?", body.Entity)
+		}
+		return
 	}
 
-	leaf := node.IsLeaf()
-	contains := node.Contains3D(&body.Pos.Now)
-	switch {
-	case node.Parent != nil && !contains:
-		log.Printf("QuadNode.insert: body %v is not contained in this node, but also not at root?", body.Entity)
-		return
-	case node.Parent == nil && !contains:
-		if node != node.Tree.Root {
-			log.Printf("QuadNode.insert: parent is nil but this node isn't root :(")
-			return
-		}
-		// We need to expand the tree outwards.
-		newRoot := &QuadNode{
-			Tree:   node.Tree,
-			Parent: nil,
-		}
-		centerx := (node.Min[0] + node.Max[0]) * 0.5
-		centery := (node.Min[1] + node.Max[1]) * 0.5
-		index := 0
-		if body.Pos.Now[0] < centerx {
-			index |= 1
-			newRoot.Min[0] = node.Min[0] - (node.Max[0] - node.Min[0])
-			newRoot.Max[0] = node.Max[0]
-		} else {
-			newRoot.Min[0] = node.Min[0]
-			newRoot.Max[0] = node.Max[0] + (node.Max[0] - node.Min[0])
-		}
-		if body.Pos.Now[1] < centery {
-			index |= 2
-			newRoot.Min[1] = node.Min[1] - (node.Max[1] - node.Min[1])
-			newRoot.Max[1] = node.Max[1]
-		} else {
-			newRoot.Min[1] = node.Min[1]
-			newRoot.Max[1] = node.Max[1] + (node.Max[1] - node.Min[1])
-		}
-		newRoot.subdivide()
-		newRoot.Children[index] = node
-		node.Parent = newRoot
-		node.Tree.Root = newRoot
-		newRoot.insert(body, 0)
-		return
-	case leaf && (len(node.Bodies) < 4 || depth > 8):
+	if node.IsLeaf() {
 		if !contains {
 			log.Printf("QuadNode.insert: reached leaf, but node doesn't contain body.")
 			return
 		}
-		// We can insert here!
-		if body.Pos.Now[2] < node.Tree.MinZ {
-			node.Tree.MinZ = body.Pos.Now[2]
-		}
-		if body.Pos.Now[2] > node.Tree.MaxZ {
-			node.Tree.MaxZ = body.Pos.Now[2]
-		}
-		node.increaseRadii(body.Size.Now[0] * 0.5)
-		node.Bodies = append(node.Bodies, body)
-		if light := GetLight(body.ECS, body.Entity); light != nil {
-			node.Lights = append(node.Lights, body)
-		}
-		body.QuadNode = node
-		return
-	case leaf:
-		// Full, need to break it up
-		node.subdivide()
-		oldBodies := node.Bodies
-		node.Bodies = nil
-		node.Lights = nil
-		// We are no longer a leaf. Insert into children
-		for _, b := range oldBodies {
-			b.QuadNode = nil
-			for _, child := range node.Children {
-				if child.Contains3D(&body.Pos.Now) {
-					child.insert(body, depth+1)
-					return
-				}
-			}
-			if b.QuadNode == nil {
-				node.Children[0].Bodies = append(node.Children[0].Bodies, b)
-			}
+		// Don't recurse too far
+		if depth > 8 || len(node.Bodies) < 8 {
+			// We can insert here!
+			node.addToLeaf(body)
+			return
+		} else {
+			// Full, need to break it up
+			node.increaseDepth(depth)
+			// Don't return, still need to insert this body into a child node.
 		}
 	}
 
+	// Not at a leaf, recurse into children
 	for _, child := range node.Children {
 		if child.Contains3D(&body.Pos.Now) {
 			child.insert(body, depth+1)
 			return
 		}
 	}
+	log.Printf("QuadNode.insert: tried to insert body %v, but node children don't contain it.", body.Entity)
 }
 
 func (node *QuadNode) circleOverlaps(center *concepts.Vector2, r float64) bool {

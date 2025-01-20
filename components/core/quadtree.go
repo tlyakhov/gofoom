@@ -4,6 +4,7 @@
 package core
 
 import (
+	"log"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
 )
@@ -51,7 +52,7 @@ func (q *Quadtree) Update(body *Body) {
 	if body.QuadNode == nil {
 		q.Root.insert(body, 0)
 		return
-	} else if body.QuadNode.Contains(body.Pos.Now.To2D()) {
+	} else if body.QuadNode.Contains3D(&body.Pos.Now) {
 		return
 	}
 
@@ -74,9 +75,14 @@ func (q *Quadtree) Build() {
 	colBody := ecs.ColumnFor[Body](q.ECS, BodyCID)
 	for i := range colBody.Cap() {
 		body := colBody.Value(i)
-		if body == nil {
+		if body == nil || !body.Active {
 			continue
 		}
 		q.Update(body)
 	}
+}
+
+func (q *Quadtree) Print() {
+	log.Println("Tree:")
+	q.Root.print(0)
 }
