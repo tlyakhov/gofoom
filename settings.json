@@ -1,0 +1,22 @@
+{
+  "Options": {
+    "Title": "Options",
+    "Widgets": {
+      "fov": {
+        "Value": "90"
+      },
+      "gamma": {
+        "Value": "24"
+      },
+      "lightGrid": {
+        "Value": "40"
+      },
+      "multiBlocks": {
+        "Value": "32"
+      },
+      "multiRender": {
+        "Value": true
+      }
+    }
+  }
+}

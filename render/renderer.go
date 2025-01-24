@@ -179,26 +179,19 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	b.Segment.Normal.To3D(&b.LightSampler.Normal)
 
 	hasPortal := b.SectorSegment.AdjacentSector != 0 && b.SectorSegment.AdjacentSegment != nil
-	if b.Pick {
-		if !hasPortal || b.SectorSegment.PortalHasMaterial {
-			wallPick(b)
-			return
-		}
+	switch {
+	case hasPortal && !b.SectorSegment.PortalHasMaterial:
 		r.RenderPortal(b)
-	} else {
-		switch {
-		case hasPortal && !b.SectorSegment.PortalHasMaterial:
-			r.RenderPortal(b)
-		case hasPortal && b.SectorSegment.PortalHasMaterial:
-			saved := b.column
-			saved.MaterialSampler.Ray = &saved.Ray
-			b.PortalWalls = append(b.PortalWalls, &saved)
-			r.RenderPortal(b)
-		default:
-			r.wall(&b.column)
-		}
+	case b.Pick:
+		wallPick(b)
+	case hasPortal && b.SectorSegment.PortalHasMaterial:
+		saved := b.column
+		saved.MaterialSampler.Ray = &saved.Ray
+		b.PortalWalls = append(b.PortalWalls, &saved)
+		r.RenderPortal(b)
+	default:
+		r.wall(&b.column)
 	}
-
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
@@ -338,6 +331,9 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) []*select
 		return nil
 	}
 
+	// This used to be recursive, but got expensive for large chains of portals.
+	// The iterative approach is faster, but harder to understand as the
+	// rendering pipeline manipulates the block/column as it walks the portals.
 	for {
 		preSector := block.Sector
 		r.RenderSector(block)
@@ -489,6 +485,14 @@ func (r *Renderer) Render() {
 }
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
+	tm := r.ECS.Singleton(materials.ToneMapCID).(*materials.ToneMap)
+
+	for i := 0; i < len(r.FrameBuffer); i++ {
+		fb := &r.FrameBuffer[i]
+		fb[0] = tm.LutLinearToSRGB[concepts.ByteClamp(fb[0]*255)]
+		fb[1] = tm.LutLinearToSRGB[concepts.ByteClamp(fb[1]*255)]
+		fb[2] = tm.LutLinearToSRGB[concepts.ByteClamp(fb[2]*255)]
+	}
 	concepts.BlendFrameBuffer(buffer, r.FrameBuffer, &r.FrameTint)
 }
 

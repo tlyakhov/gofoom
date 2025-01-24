@@ -20,16 +20,19 @@ import (
 type Sector struct {
 	ecs.Attached `editable:"^"`
 
-	Bottom           SectorPlane      `editable:"Bottom"`
-	Top              SectorPlane      `editable:"Top"`
-	Gravity          concepts.Vector3 `editable:"Gravity"`
-	FloorFriction    float64          `editable:"Floor Friction"`
+	Bottom        SectorPlane      `editable:"Bottom"`
+	Top           SectorPlane      `editable:"Top"`
+	Gravity       concepts.Vector3 `editable:"Gravity"`
+	FloorFriction float64          `editable:"Floor Friction"`
+
 	Segments         []*SectorSegment
 	Bodies           map[ecs.Entity]*Body
 	InternalSegments map[ecs.Entity]*InternalSegment
-	EnterScripts     []*Script `editable:"Enter Scripts"`
-	ExitScripts      []*Script `editable:"Exit Scripts"`
-	NoShadows        bool      `editable:"No Shadows"`
+	Inner            ecs.EntityTable `editable:"Inner Sectors"`
+
+	EnterScripts []*Script `editable:"Enter Scripts"`
+	ExitScripts  []*Script `editable:"Exit Scripts"`
+	NoShadows    bool      `editable:"No Shadows"`
 
 	Concave          bool
 	Winding          int8
@@ -157,45 +160,6 @@ func (s *Sector) Construct(data map[string]any) {
 		return
 	}
 
-	// TODO: Remove the following after all the world files are migrated
-	if _, ok := data["Bottom"]; !ok {
-		data["Bottom"] = make(map[string]any)
-	}
-	if _, ok := data["Top"]; !ok {
-		data["Top"] = make(map[string]any)
-	}
-	if v, ok := data["Bottom.Z"]; ok {
-		data["Bottom"].(map[string]any)["Z"] = v
-	}
-	if v, ok := data["Top.Z"]; ok {
-		data["Top"].(map[string]any)["Z"] = v
-	}
-	if v, ok := data["Bottom.Normal"]; ok {
-		data["Bottom"].(map[string]any)["Normal"] = v
-	}
-	if v, ok := data["Top.Normal"]; ok {
-		data["Top"].(map[string]any)["Normal"] = v
-	}
-	if v, ok := data["Bottom.Target"]; ok {
-		data["Bottom"].(map[string]any)["Target"] = v
-	}
-	if v, ok := data["Top.Target"]; ok {
-		data["Top"].(map[string]any)["Target"] = v
-	}
-	if v, ok := data["Bottom.Surface"]; ok {
-		data["Bottom"].(map[string]any)["Surface"] = v
-	}
-	if v, ok := data["Top.Surface"]; ok {
-		data["Top"].(map[string]any)["Surface"] = v
-	}
-	if v, ok := data["Bottom.Scripts"]; ok {
-		data["Bottom"].(map[string]any)["Scripts"] = v
-	}
-	if v, ok := data["Top.Scripts"]; ok {
-		data["Top"].(map[string]any)["Scripts"] = v
-	}
-	// END TODO
-
 	if v, ok := data["Bottom"]; ok {
 		s.Bottom.Construct(s, v.(map[string]any))
 	}
@@ -231,6 +195,9 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["ExitScripts"]; ok {
 		s.ExitScripts = ecs.ConstructSlice[*Script](s.ECS, v, nil)
 	}
+	if v, ok := data["Inner"]; ok {
+		s.Inner = ecs.ParseEntityTable(v)
+	}
 
 	s.Recalculate()
 }
@@ -252,6 +219,10 @@ func (s *Sector) Serialize() map[string]any {
 	}
 	if len(s.ExitScripts) > 0 {
 		result["ExitScripts"] = ecs.SerializeSlice(s.ExitScripts)
+	}
+
+	if s.Inner.Len() > 0 {
+		result["Inner"] = s.Inner.Serialize()
 	}
 
 	segments := []any{}
