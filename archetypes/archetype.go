@@ -38,5 +38,6 @@ func CreateFont(db *ecs.ECS, filename string, name string) ecs.Entity {
 	sprite.Cols = 16
 	sprite.Material = e
 	sprite.Angles = 0
+	db.ActAllControllersOneEntity(e, ecs.ControllerRecalculate)
 	return e
 }

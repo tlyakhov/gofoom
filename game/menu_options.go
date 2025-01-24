@@ -4,6 +4,7 @@
 package main
 
 import (
+	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
 )
@@ -20,6 +21,7 @@ LightmapRefreshDither   = 6 // in frames
 var uiPageSettings, uiPageKeyBindings *ui.Page
 
 func initMenuOptions() {
+	toneMap := db.Singleton(materials.ToneMapCID).(*materials.ToneMap)
 	uiPageSettings = &ui.Page{
 		Parent:   uiPageMain,
 		IsDialog: true,
@@ -29,6 +31,8 @@ func initMenuOptions() {
 			renderer.NumBlocks = p.Widget("multiBlocks").(*ui.Slider).Value
 			renderer.FOV = float64(p.Widget("fov").(*ui.Slider).Value)
 			renderer.LightGrid = float64(p.Widget("lightGrid").(*ui.Slider).Value) / 10.0
+			toneMap.Gamma = float64(p.Widget("gamma").(*ui.Slider).Value) / 10.0
+			toneMap.Recalculate()
 			// After everything's loaded, trigger the controllers
 			db.ActAllControllers(ecs.ControllerRecalculate)
 			renderer.Initialize()
@@ -57,6 +61,14 @@ func initMenuOptions() {
 				Clicked: func(b *ui.Button) {
 					uiPageSettings.Apply(uiPageSettings)
 				}},
+			&ui.Slider{
+				Widget: ui.Widget{
+					ID:      "gamma",
+					Label:   "Brightness (Gamma)",
+					Tooltip: "Default is 2.4",
+				},
+				Min: 10, Max: 30, Value: int(toneMap.Gamma * 10), Step: 1,
+			},
 			&ui.Checkbox{
 				Widget: ui.Widget{
 					ID:      "multiRender",

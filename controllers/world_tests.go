@@ -137,6 +137,19 @@ func CreateTestDirt(db *ecs.ECS) ecs.Entity {
 	return eDirt
 }
 
+func CreateTestTree(db *ecs.ECS) ecs.Entity {
+	eTree := db.NewEntity()
+	nmat := db.NewAttachedComponent(eTree, ecs.NamedCID).(*ecs.Named)
+	nmat.Name = "Tree"
+	tex := db.NewAttachedComponent(eTree, materials.ImageCID).(*materials.Image)
+	tex.Source = "data/tree.png"
+	tex.Filter = false
+	tex.GenerateMipMaps = true
+	tex.Load()
+	db.NewAttachedComponent(eTree, materials.LitCID)
+	return eTree
+}
+
 func CreateSpawn(db *ecs.ECS) {
 	e := db.NewEntity()
 	player := &behaviors.Player{}
@@ -254,13 +267,16 @@ func CreateTestWorld3(db *ecs.ECS) {
 	// traversing the entire map for every lightmap texel!)
 	// Without lighting, this actually performs very well - 60fps comfortably.
 
-	heightImage := materials.Image{}
+	heightImage := db.NewAttachedComponent(db.NewEntity(), materials.ImageCID).(*materials.Image)
 	heightImage.ComponentID = materials.ImageCID
+	heightImage.System = true
 	heightImage.Construct(map[string]any{
 		"Source":          "data/test-heightmap.jpg",
 		"Filter":          true,
 		"GenerateMipMaps": true,
+		"ConvertSRGB":     false,
 	})
+	db.ActAllControllersOneEntity(heightImage.Entity, ecs.ControllerRecalculate)
 
 	testw := 64
 	testh := 64
@@ -280,6 +296,7 @@ func CreateTestWorld3(db *ecs.ECS) {
 	eGrass := CreateTestGrass(db)
 	eSky := CreateTestSky(db)
 	eDirt := CreateTestDirt(db)
+	eTree := CreateTestTree(db)
 
 	scale := 50
 	for x := 0; x < testw-1; x++ {
@@ -348,6 +365,25 @@ func CreateTestWorld3(db *ecs.ECS) {
 		log.Println("Generated light")
 	}
 
+	for range 32 {
+		eTreeBody := db.NewEntity()
+		body := db.NewAttachedComponent(eTreeBody, core.BodyCID).(*core.Body)
+		x := float64(testw*scale) * rand.Float64()
+		y := float64(testh*scale) * rand.Float64()
+		z := heightmap[(int(y/float64(scale))*testw + int(x/float64(scale)))]
+		body.Pos.Spawn = concepts.Vector3{x, y, z + 25}
+		body.Pos.ResetToSpawn()
+		body.Size.Spawn[0] = 50
+		body.Size.Spawn[1] = 50
+		body.Size.ResetToSpawn()
+		vis := db.NewAttachedComponent(eTreeBody, materials.VisibleCID).(*materials.Visible)
+		vis.Shadow = materials.ShadowImage
+		shader := db.NewAttachedComponent(eTreeBody, materials.ShaderCID).(*materials.Shader)
+		stage := &materials.ShaderStage{ECS: db}
+		stage.Construct(nil)
+		stage.Material = eTree
+		shader.Stages = append(shader.Stages, stage)
+	}
 	CreateSpawn(db)
 	AutoPortal(db)
 	// After everything's loaded, trigger the controllers

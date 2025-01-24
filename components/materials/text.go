@@ -76,15 +76,17 @@ func (t *Text) RasterizeText() {
 	img := new(Image)
 	img.Width = uint32(w)
 	img.Height = uint32(h)
-	img.Data = make([]uint32, int(img.Width)*int(img.Height))
+	img.PixelsRGBA = make([]uint32, int(img.Width)*int(img.Height))
+	img.PixelsLinear = make([]concepts.Vector4, int(img.Width)*int(img.Height))
 	img.GenerateMipMaps = false
 	img.Filter = true
 	rgba := c.Image().(*image.RGBA)
 	for i := 0; i < len(rgba.Pix)/4; i++ {
 		// Only need the alpha, the rest is for editing/debugging
 		a := uint32(rgba.Pix[i*4+3])
-		r := uint32(255 * a)
-		img.Data[i] = ((r & 0xFF) << 24) | ((r & 0xFF) << 16) | ((r & 0xFF) << 8) | (a & 0xFF)
+		r := uint32(a)
+		img.PixelsRGBA[i] = ((r & 0xFF) << 24) | ((r & 0xFF) << 16) | ((r & 0xFF) << 8) | (a & 0xFF)
+		img.PixelsLinear[i][3] = float64(a) / 255
 	}
 
 	t.Rendered = img
