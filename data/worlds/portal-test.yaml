@@ -33,7 +33,6 @@
     GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/wool_colored_white.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮3
   core.Sector:
@@ -210,7 +209,6 @@
   ecs.Named:
     Name: Portal
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
   materials.Shader:
     Stages:
@@ -662,7 +660,6 @@
   ecs.Named:
     Name: Shader Grass
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
   materials.Shader:
     Stages:
@@ -952,7 +949,6 @@
   ecs.Named:
     Name: Shader DGarage.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
   materials.Shader:
     Stages:
@@ -1012,7 +1008,6 @@
   ecs.Named:
     Name: Shader Water
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
   materials.Shader:
     Stages:

@@ -57,6 +57,7 @@ func init() {
 		"PlayerSwimStrength":       reflect.ValueOf(constant.MakeFromLiteral("12500", token.FLOAT, 0)),
 		"PlayerTurnSpeed":          reflect.ValueOf(constant.MakeFromLiteral("180", token.FLOAT, 0)),
 		"PlayerWalkForce":          reflect.ValueOf(constant.MakeFromLiteral("6250", token.FLOAT, 0)),
+		"QuadtreeInitDim":          reflect.ValueOf(constant.MakeFromLiteral("256", token.FLOAT, 0)),
 		"RenderBlocks":             reflect.ValueOf(constant.MakeFromLiteral("32", token.INT, 0)),
 		"RenderMultiThreaded":      reflect.ValueOf(constants.RenderMultiThreaded),
 		"SourcesPerSound":          reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),

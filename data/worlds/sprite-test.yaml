@@ -7,14 +7,14 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 39.375
-        Spawn: 0
+      Now: 39.375
+      Spawn: 0
     Pos:
-        Now: -27.55992944639569, -60.799774635098785, 20
-        Spawn: 0, 0, 0
+      Now: -27.55992944639569, -60.799774635098785, 20
+      Spawn: 0, 0, 0
     Size:
-        Now: 10, 40
-        Spawn: 10, 10
+      Now: 10, 40
+      Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -23,8 +23,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: -0.00000000000010968520272380682, -0.00000000000021790709031294815, 0.007001650399223597
-        Spawn: 0, 0, 0
+      Now: -0.00000000000010968520272380682, -0.00000000000021790709031294815, 0.007001650399223597
+      Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
 - Entity: ∈⋮2
@@ -35,65 +35,64 @@
     GenerateMipMaps: true
     Source: data/WDef.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮3
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: -100, -100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: 100, -100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: 100, 100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: -100, 100
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: -100, -100
         Surface:
-            Material: ∈⋮2
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: 100, -100
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: 100, 100
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮2
+        Lo:
+          Material: ∈⋮2
+        P: -100, 100
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮2
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: -60, -70, 32
-        Spawn: -60, -70, 32
+      Now: -60, -70, 32
+      Spawn: -60, -70, 32
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -109,14 +108,14 @@
     Spawn: true
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Now: 0, 0, 0
+      Spawn: 0, 0, 0
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -125,8 +124,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Now: 0, 0, 0
+      Spawn: 0, 0, 0
   ecs.Named:
     Name: Spawn
 - Entity: ∈⋮8
@@ -137,8 +136,8 @@
   materials.Sprite:
     Cols: "2"
     Frame:
-        Now: "0"
-        Spawn: "0"
+      Now: "0"
+      Spawn: "0"
     Material: ∈⋮8
     Rows: "2"
 - Entity: ∈⋮9
@@ -147,23 +146,23 @@
     B: 70, -40
     Bottom: 0
     Surface:
-        Material: ∈⋮8
+      Material: ∈⋮8
     Top: 64
     TwoSided: true
 - Entity: ∈⋮10
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 40, 40, 32
-        Spawn: 40, 40, 32
+      Now: 40, 40, 32
+      Spawn: 40, 40, 32
     Size:
-        Now: 40, 40
-        Spawn: 40, 40
+      Now: 40, 40
+      Spawn: 40, 40
   materials.Shader:
     Stages:
-        - BlendingFunc: BlendNormal
-          Material: ∈⋮8
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮8
   materials.Visible:
     Ambient: 1

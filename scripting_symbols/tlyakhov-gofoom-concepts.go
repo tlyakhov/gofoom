@@ -39,7 +39,6 @@ func init() {
 		"IdentityMatrix2":         reflect.ValueOf(&concepts.IdentityMatrix2).Elem(),
 		"Int32ToNRGBA":            reflect.ValueOf(concepts.Int32ToNRGBA),
 		"Int32ToRGBA":             reflect.ValueOf(concepts.Int32ToRGBA),
-		"Int32ToVector3":          reflect.ValueOf(concepts.Int32ToVector3),
 		"Int32ToVector4PreMul":    reflect.ValueOf(concepts.Int32ToVector4PreMul),
 		"Intersect":               reflect.ValueOf(concepts.Intersect),
 		"IntersectLineAABB":       reflect.ValueOf(concepts.IntersectLineAABB),

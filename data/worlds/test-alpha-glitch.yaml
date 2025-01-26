@@ -6,7 +6,6 @@
     GenerateMipMaps: true
     Source: data/WDef.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮3
   core.Body:
@@ -20,7 +19,6 @@
       Now: 64, 64
       Spawn: 64, 64
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮4
   core.Body:
@@ -84,7 +82,6 @@
     GenerateMipMaps: true
     Source: /Users/tim/Documents/gofoom/data/space_tiles_hyptosis/ladder.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮8
   ecs.Named:
@@ -184,5 +181,4 @@
     GenerateMipMaps: true
     Source: ""
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 0.4, 0.4, 0.4, 0.4

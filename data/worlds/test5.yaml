@@ -6,7 +6,6 @@
     GenerateMipMaps: true
     Source: data/WDef.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮3
   core.Sector:

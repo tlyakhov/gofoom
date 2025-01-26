@@ -25,7 +25,8 @@ type Entity int
 //     file format is untyped (e.g. YAML/JSON). For example, we can create
 //     "common" data files, like prefabs, and #include them in other files,
 //     and have the ECS intelligently map the entity IDs across file boundaries.
-//  3. It forces target systems to be UTF-8 compliant - serialization will be entirely broken otherwise.
+//  3. It forces target systems to be UTF-8 compliant - serialization will be
+//     entirely broken otherwise.
 const EntityPrefix = "∈⋮"
 const entityPrefixLength = len(EntityPrefix)
 
@@ -36,6 +37,15 @@ func (e Entity) String() string {
 func ParseEntity(e string) (Entity, error) {
 	if !strings.HasPrefix(e, EntityPrefix) {
 		return 0, errors.New("Entity string should start with " + EntityPrefix)
+	}
+	v, err := strconv.ParseInt(e[entityPrefixLength:], 10, 32)
+	return Entity(v), err
+}
+
+func ParseEntityPrefixOptional(e string) (Entity, error) {
+	if !strings.HasPrefix(e, EntityPrefix) {
+		v, err := strconv.ParseInt(e, 10, 32)
+		return Entity(v), err
 	}
 	v, err := strconv.ParseInt(e[entityPrefixLength:], 10, 32)
 	return Entity(v), err
@@ -99,11 +109,16 @@ func DeserializeEntities[T ~string | any](data []T) EntityTable {
 	return result
 }
 
-func ParseEntityCSV(csv string) EntityTable {
+func ParseEntityCSV(csv string, prefixOptional bool) EntityTable {
 	entities := make(EntityTable, 0)
 	split := strings.Split(csv, ",")
+	fParse := ParseEntity
+	if prefixOptional {
+		fParse = ParseEntityPrefixOptional
+	}
 	for _, s := range split {
-		if e, err := ParseEntity(strings.Trim(s, " \t\r\n")); err == nil {
+		trimmed := strings.Trim(s, " \t\r\n")
+		if e, err := fParse(trimmed); err == nil {
 			entities.Set(e)
 		}
 	}
@@ -113,7 +128,7 @@ func ParseEntityCSV(csv string) EntityTable {
 func ParseEntityTable(data any) EntityTable {
 	var entities EntityTable
 	if s, ok := data.(string); ok {
-		entities = ParseEntityCSV(s)
+		entities = ParseEntityCSV(s, false)
 	} else if arr, ok := data.([]string); ok {
 		entities = DeserializeEntities(arr)
 	} else if arr, ok := data.([]any); ok {

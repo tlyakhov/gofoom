@@ -6,7 +6,6 @@
     GenerateMipMaps: true
     Source: data/WDirty.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮3
   ecs.Named:
@@ -16,7 +15,6 @@
     GenerateMipMaps: true
     Source: data/FRedLight.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮4
   ecs.Named:
@@ -26,7 +24,6 @@
     GenerateMipMaps: true
     Source: data/FHexMetal.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮5
   ecs.Named:
@@ -36,7 +33,6 @@
     GenerateMipMaps: true
     Source: data/Water.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮6
   ecs.Named:
@@ -53,7 +49,6 @@
     GenerateMipMaps: true
     Source: data/WSlimy.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮8
   ecs.Named:
@@ -63,7 +58,6 @@
     GenerateMipMaps: true
     Source: data/WMetal.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮9
   ecs.Named:
@@ -73,7 +67,6 @@
     GenerateMipMaps: true
     Source: data/DGarage.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮10
   ecs.Named:
@@ -83,7 +76,6 @@
     GenerateMipMaps: true
     Source: data/FDef.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮11
   ecs.Named:
@@ -93,7 +85,6 @@
     GenerateMipMaps: true
     Source: data/FGrayTile.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮12
   ecs.Named:
@@ -103,7 +94,6 @@
     GenerateMipMaps: true
     Source: data/FSlime.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮13
   ecs.Named:
@@ -113,7 +103,6 @@
     GenerateMipMaps: true
     Source: data/WDef.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮14
   ecs.Named:
@@ -123,7 +112,6 @@
     GenerateMipMaps: true
     Source: data/WSlimeGrate.png
   materials.Lit:
-    Ambient: 0.1, 0.1, 0.1
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮15
   core.Sector:

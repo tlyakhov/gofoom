@@ -18,7 +18,9 @@ func init() {
 		"GetShader":              reflect.ValueOf(materials.GetShader),
 		"GetSolid":               reflect.ValueOf(materials.GetSolid),
 		"GetSprite":              reflect.ValueOf(materials.GetSprite),
+		"GetSpriteSheet":         reflect.ValueOf(materials.GetSpriteSheet),
 		"GetText":                reflect.ValueOf(materials.GetText),
+		"GetToneMap":             reflect.ValueOf(materials.GetToneMap),
 		"GetVisible":             reflect.ValueOf(materials.GetVisible),
 		"ImageCID":               reflect.ValueOf(&materials.ImageCID).Elem(),
 		"LitCID":                 reflect.ValueOf(&materials.LitCID).Elem(),
@@ -40,11 +42,14 @@ func init() {
 		"ShadowSphere":           reflect.ValueOf(materials.ShadowSphere),
 		"SolidCID":               reflect.ValueOf(&materials.SolidCID).Elem(),
 		"SpriteCID":              reflect.ValueOf(&materials.SpriteCID).Elem(),
+		"SpriteSheetCID":         reflect.ValueOf(&materials.SpriteSheetCID).Elem(),
 		"TextCID":                reflect.ValueOf(&materials.TextCID).Elem(),
+		"ToneMapCID":             reflect.ValueOf(&materials.ToneMapCID).Elem(),
 		"VisibleCID":             reflect.ValueOf(&materials.VisibleCID).Elem(),
 
 		// type definitions
 		"Image":          reflect.ValueOf((*materials.Image)(nil)),
+		"ImageMipMap":    reflect.ValueOf((*materials.ImageMipMap)(nil)),
 		"Lit":            reflect.ValueOf((*materials.Lit)(nil)),
 		"MaterialShadow": reflect.ValueOf((*materials.MaterialShadow)(nil)),
 		"Shader":         reflect.ValueOf((*materials.Shader)(nil)),
@@ -52,8 +57,10 @@ func init() {
 		"ShaderStage":    reflect.ValueOf((*materials.ShaderStage)(nil)),
 		"Solid":          reflect.ValueOf((*materials.Solid)(nil)),
 		"Sprite":         reflect.ValueOf((*materials.Sprite)(nil)),
+		"SpriteSheet":    reflect.ValueOf((*materials.SpriteSheet)(nil)),
 		"Surface":        reflect.ValueOf((*materials.Surface)(nil)),
 		"Text":           reflect.ValueOf((*materials.Text)(nil)),
+		"ToneMap":        reflect.ValueOf((*materials.ToneMap)(nil)),
 		"Visible":        reflect.ValueOf((*materials.Visible)(nil)),
 	}
 }

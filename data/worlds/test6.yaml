@@ -1,0 +1,359 @@
+- Entity: ∈⋮1
+  behaviors.Alive:
+    Health: 100
+  behaviors.InventoryCarrier:
+    Inventory: []
+  behaviors.Player:
+    Spawn: false
+  core.Body:
+    Angle:
+        Now: 555.46875
+        Spawn: 0
+    Pos:
+        Now: 123.85532844859743, 10.91722291025488, 20
+        Spawn: 0, 0, 0
+    Size:
+        Now: 10, 40
+        Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+        Now: 0.00000000041609308909583485, 0.00000000011515976694064067, 0.007001650399223597
+        Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Player
+- Entity: ∈⋮2
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: false
+    Source: data/WDef.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮3
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: ∈⋮10
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -100, 50
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -100, -20
+          Surface:
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮9
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -100, -100
+          Surface:
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮8
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 100, -100
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 100, 100
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -100, 100
+          Surface:
+            Material: ∈⋮2
+    Top:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: Starting
+- Entity: ∈⋮4
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -60, -70, 32
+        Spawn: -60, -70, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮5
+  behaviors.Alive:
+    Health: 100
+  behaviors.InventoryCarrier:
+    Inventory: []
+  behaviors.Player:
+    Spawn: true
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 0, 0, 0
+        Spawn: 0, 0, 0
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+        Now: 0, 0, 0
+        Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Spawn
+- Entity: ∈⋮8
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: ∈⋮9
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 100, -100
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 220, -100
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 220, 100
+          Surface:
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮3
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 100, 100
+          Surface:
+            Material: ∈⋮2
+    Top:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮9
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - AdjacentSector: ∈⋮3
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 100, -100
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -100, -100
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 100, -200
+          Surface:
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮8
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: 220, -100
+          Surface:
+            Material: ∈⋮2
+    Top:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮10
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -100, 50
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -350, 50
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -350, -20
+          Surface:
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮11
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -300, -20
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -200, -20
+          Surface:
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮3
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -100, -20
+          Surface:
+            Material: ∈⋮2
+    Top:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮11
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -300, -20
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -300, -200
+          Surface:
+            Material: ∈⋮2
+        - Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -200, -200
+          Surface:
+            Material: ∈⋮2
+        - AdjacentSector: ∈⋮10
+          Hi:
+            Material: ∈⋮2
+          Lo:
+            Material: ∈⋮2
+          P: -200, -20
+          Surface:
+            Material: ∈⋮2
+    Top:
+        Surface:
+            Material: ∈⋮2
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮12
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: -250, -160, 32
+        Spawn: -250, -160, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 0.8, 1, 1
+    Strength: 2

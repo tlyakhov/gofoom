@@ -69,17 +69,11 @@ func ByteClamp(x float64) uint8 {
 }
 
 func NormalizeAngle(a float64) float64 {
-	for a < 0 {
-		a += 360.0
-	}
-	for a >= 360.0 {
-		a -= 360.0
+	a = math.Mod(a, 360) + 360
+	if a < 0 {
+		return a + 360
 	}
 	return a
-}
-
-func Int32ToVector3(c uint32) Vector3 {
-	return Vector3{float64((c >> 24) & 0xFF), float64((c >> 16) & 0xFF), float64((c >> 8) & 0xFF)}
 }
 
 func RngXorShift64(xorSeed uint64) uint64 {

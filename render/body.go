@@ -25,16 +25,10 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 
 	// Calculate angles for picking the right sprite, and also relative to camera
 	angleFromPlayer := r.PlayerBody.Angle2DTo(b.Pos.Render)
-	// This formula seems magic, what's happening here?
-	block.SpriteAngle = 270 - angleFromPlayer + *b.Angle.Render + 360
-	for block.SpriteAngle > 360 {
-		block.SpriteAngle -= 360
-	}
-	angleRender := angleFromPlayer - *r.PlayerBody.Angle.Render
-	for angleRender < -180.0 {
-		angleRender += 360.0
-	}
-	for angleRender > 180.0 {
+	// 0 degrees is facing right. Why do we need to adjust by 90 degrees?
+	block.SpriteAngle = concepts.NormalizeAngle(*b.Angle.Render - angleFromPlayer + 270)
+	angleRender := concepts.NormalizeAngle(angleFromPlayer - *r.PlayerBody.Angle.Render)
+	if angleRender >= 180.0 {
 		angleRender -= 360.0
 	}
 	// Calculate screenspace coordinates
