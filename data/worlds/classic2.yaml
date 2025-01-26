@@ -128,230 +128,230 @@
 - Entity: ∈⋮15
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮11
-        Z:
-            Now: -20
-            Spawn: -20
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: -20
+        Spawn: -20
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮27
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -120, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -120, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, -30
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮27
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -120, -30
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -120, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮20
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector5
 - Entity: ∈⋮16
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 10
-            Spawn: 10
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 10
+        Spawn: 10
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮18
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 380, 150
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 150
-          Surface:
-            Material: ∈⋮7
-        - AdjacentSector: ∈⋮24
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 400
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 380, 400
-          Surface:
-            Material: ∈⋮7
-    Top:
+      - AdjacentSector: ∈⋮18
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 380, 150
         Surface:
-            Material: ∈⋮11
-        Z:
-            Now: 60
-            Spawn: 60
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 150
+        Surface:
+          Material: ∈⋮7
+      - AdjacentSector: ∈⋮24
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 400
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 380, 400
+        Surface:
+          Material: ∈⋮7
+    Top:
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: 60
+        Spawn: 60
   ecs.Named:
     Name: sector16
 - Entity: ∈⋮17
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮41
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 150, 100
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 150, 70
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮18
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 70
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 100
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - AdjacentSector: ∈⋮41
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 150, 100
         Surface:
-            Material: ∈⋮11
-        Z:
-            Now: 60
-            Spawn: 60
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 150, 70
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮18
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 70
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 100
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: 60
+        Spawn: 60
   ecs.Named:
     Name: sector14
 - Entity: ∈⋮18
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮5
-        Target: ∈⋮55
-        Z:
-            Now: -20
-            Spawn: -20
+      Surface:
+        Material: ∈⋮5
+      Target: ∈⋮55
+      Z:
+        Now: -20
+        Spawn: -20
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 20
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮17
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 70
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 150
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮16
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 380, 150
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮55
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 150
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮55
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 20
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 20
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 100
-            Spawn: 100
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮17
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 70
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 100
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 150
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮16
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 380, 150
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮55
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 150
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮55
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 20
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 100
+        Spawn: 100
   ecs.Named:
     Name: sector15
 - Entity: ∈⋮19
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 350, 80, 90
-        Spawn: 350, 80, 90
+      Now: 350, 80, 90
+      Spawn: 350, 80, 90
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 1.2
     Diffuse: 0.4, 0.6, 1
@@ -361,127 +361,127 @@
 - Entity: ∈⋮20
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -10
-            Spawn: -10
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -10
+        Spawn: -10
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮15
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -30, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮23
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -30, -30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - AdjacentSector: ∈⋮15
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, -30
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮39
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮35
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -30, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮23
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -30, -30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector2
 - Entity: ∈⋮21
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮12
-        Z:
-            Now: -60
-            Spawn: -60
+      Surface:
+        Material: ∈⋮12
+      Z:
+        Now: -60
+        Spawn: -60
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮53
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, -30
-          Surface:
-            Material: ∈⋮7
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, -10
-          Surface:
-            Material: ∈⋮14
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, 10
-          Surface:
-            Material: ∈⋮7
-        - AdjacentSector: ∈⋮29
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮26
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, 30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - AdjacentSector: ∈⋮53
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, -30
         Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -6
-            Spawn: -6
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, -30
+        Surface:
+          Material: ∈⋮7
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, -10
+        Surface:
+          Material: ∈⋮14
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, 10
+        Surface:
+          Material: ∈⋮7
+      - AdjacentSector: ∈⋮29
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮26
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, 30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -6
+        Spawn: -6
   ecs.Named:
     Name: sector9
 - Entity: ∈⋮22
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: -240, 0, -30
-        Spawn: -240, 0, -30
+      Now: -240, 0, -30
+      Spawn: -240, 0, -30
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 1.2
     Diffuse: 0.1, 1, 0.1
@@ -491,379 +491,379 @@
 - Entity: ∈⋮23
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -30, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, -30
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮38
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, -110
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮50
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -10, -190
-          Surface:
-            Material: ∈⋮8
-    Top:
+      - AdjacentSector: ∈⋮20
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -30, -30
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, -30
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮38
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, -110
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮50
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: be25rp7vn27v99df1mgg
 - Entity: ∈⋮24
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮5
-        Target: ∈⋮31
-        Z:
-            Now: -20
-            Spawn: -20
+      Surface:
+        Material: ∈⋮5
+      Target: ∈⋮31
+      Z:
+        Now: -20
+        Spawn: -20
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮16
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 400
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 380, 400
-          Surface:
-            Material: ∈⋮7
-        - AdjacentSector: ∈⋮31
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 400
-          Surface:
-            Material: ∈⋮7
-        - AdjacentSector: ∈⋮31
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 450
-          Surface:
-            Material: ∈⋮7
-        - AdjacentSector: ∈⋮31
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 480, 450
-          Surface:
-            Material: ∈⋮7
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 480, 400
-          Surface:
-            Material: ∈⋮7
-    Top:
+      - AdjacentSector: ∈⋮16
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 400
         Surface:
-            Material: ∈⋮11
-        Z:
-            Now: 60
-            Spawn: 60
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 380, 400
+        Surface:
+          Material: ∈⋮7
+      - AdjacentSector: ∈⋮31
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 400
+        Surface:
+          Material: ∈⋮7
+      - AdjacentSector: ∈⋮31
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 450
+        Surface:
+          Material: ∈⋮7
+      - AdjacentSector: ∈⋮31
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 480, 450
+        Surface:
+          Material: ∈⋮7
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 480, 400
+        Surface:
+          Material: ∈⋮7
+    Top:
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: 60
+        Spawn: 60
   ecs.Named:
     Name: sector20
 - Entity: ∈⋮25
   behaviors.Proximity:
     InRange:
-        Code: sectors.GetVerticalDoor(s.Ref("sector")).Intent = sectors.DoorIntentOpen
+      Code: sectors.GetVerticalDoor(s.Ref("sector")).Intent = sectors.DoorIntentOpen
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮13
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮13
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮44
-          Hi:
-            Material: ∈⋮9
-          Lo:
-            Material: ∈⋮13
-          P: 105, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮9
-          Lo:
-            Material: ∈⋮13
-          P: 105, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮34
-          Hi:
-            Material: ∈⋮9
-          Lo:
-            Material: ∈⋮13
-          P: 100, 30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮9
-          Lo:
-            Material: ∈⋮13
-          P: 100, -30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - AdjacentSector: ∈⋮44
+        Hi:
+          Material: ∈⋮9
+        Lo:
+          Material: ∈⋮13
+        P: 105, -30
         Surface:
-            Material: ∈⋮2
-        Z:
-            Animation:
-                Active: true
-                Coordinates: AnimationCoordinatesAbsolute
-                Duration: 1000
-                End: 0
-                Percent: 1.0083333333333333
-                Reverse: false
-                Start: 0
-                TweeningFunc: Lerp
-            Now: 0
-            Spawn: 0
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮9
+        Lo:
+          Material: ∈⋮13
+        P: 105, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮34
+        Hi:
+          Material: ∈⋮9
+        Lo:
+          Material: ∈⋮13
+        P: 100, 30
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮9
+        Lo:
+          Material: ∈⋮13
+        P: 100, -30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮2
+      Z:
+        Animation:
+          Active: true
+          Coordinates: AnimationCoordinatesAbsolute
+          Duration: 1000
+          End: 0
+          Percent: 1.0083333333333333
+          Reverse: false
+          Start: 0
+          TweeningFunc: Lerp
+        Now: 0
+        Spawn: 0
   ecs.Named:
     Name: sector25
 - Entity: ∈⋮26
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮11
-        Z:
-            Now: -50
-            Spawn: -50
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: -50
+        Spawn: -50
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -160, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮21
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮28
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -160, 30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -160, -30
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮21
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, -30
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮28
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -160, 30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector8
 - Entity: ∈⋮27
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮11
-        Z:
-            Now: -30
-            Spawn: -30
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: -30
+        Spawn: -30
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -120, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮28
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -140, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -140, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮15
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -120, 30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -120, -30
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮28
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -140, -30
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -140, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮15
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -120, 30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector6
 - Entity: ∈⋮28
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮11
-        Z:
-            Now: -40
-            Spawn: -40
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: -40
+        Spawn: -40
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -140, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮26
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -160, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -160, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮27
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -140, 30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -140, -30
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮26
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -160, -30
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -160, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮27
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -140, 30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector7
 - Entity: ∈⋮29
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮12
-        Z:
-            Now: -60
-            Spawn: -60
+      Surface:
+        Material: ∈⋮12
+      Z:
+        Now: -60
+        Spawn: -60
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮21
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, 30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, 30
-          Surface:
-            Material: ∈⋮7
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, 140
-          Surface:
-            Material: ∈⋮7
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, 140
-          Surface:
-            Material: ∈⋮7
-    Top:
+      - AdjacentSector: ∈⋮21
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, 30
         Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -6
-            Spawn: -6
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, 30
+        Surface:
+          Material: ∈⋮7
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, 140
+        Surface:
+          Material: ∈⋮7
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, 140
+        Surface:
+          Material: ∈⋮7
+    Top:
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -6
+        Spawn: -6
   ecs.Named:
     Name: sector11
 - Entity: ∈⋮30
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: -240, 100, -30
-        Spawn: -240, 100, -30
+      Now: -240, 100, -30
+      Spawn: -240, 100, -30
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 1.2
     Diffuse: 0.1, 1, 0.1
@@ -873,311 +873,311 @@
 - Entity: ∈⋮31
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -200
-            Spawn: -200
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -200
+        Spawn: -200
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮24
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 400
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮24
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 450
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮24
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 480, 450
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮45
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 480, 400
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - AdjacentSector: ∈⋮24
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 400
         Surface:
-            Material: ∈⋮5
-        Target: ∈⋮24
-        Z:
-            Now: -20
-            Spawn: -20
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮24
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 450
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮24
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 480, 450
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮45
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 480, 400
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮5
+      Target: ∈⋮24
+      Z:
+        Now: -20
+        Spawn: -20
   ecs.Named:
     Name: sector21
 - Entity: ∈⋮32
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮5
-        Target: ∈⋮48
-        Z:
-            Now: -20
-            Spawn: -20
+      Surface:
+        Material: ∈⋮5
+      Target: ∈⋮48
+      Z:
+        Now: -20
+        Spawn: -20
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮48
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 620, 150
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮47
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 600, 150
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮48
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 600, 200
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮48
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 620, 200
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - AdjacentSector: ∈⋮48
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 620, 150
         Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 50
-            Spawn: 50
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮47
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 600, 150
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮48
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 600, 200
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮48
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 620, 200
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 50
+        Spawn: 50
   ecs.Named:
     Name: sector23
 - Entity: ∈⋮33
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 15
-            Spawn: 15
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 15
+        Spawn: 15
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 100
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, 100
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮42
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, 120
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 120
-          Surface:
-            Material: ∈⋮6
-    Top:
+      - AdjacentSector: ∈⋮39
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 100
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, 100
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮42
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, 120
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 120
+        Surface:
+          Material: ∈⋮6
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector26
 - Entity: ∈⋮34
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮25
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 30, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮50
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 30, -30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - AdjacentSector: ∈⋮25
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, -30
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮39
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮35
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 30, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮50
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 30, -30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector1
 - Entity: ∈⋮35
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮11
-        Z:
-            Now: -3
-            Spawn: -3
+      Surface:
+        Material: ∈⋮11
+      Z:
+        Now: -3
+        Spawn: -3
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮50
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -30, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮34
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 30, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 30, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -30, 30
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - AdjacentSector: ∈⋮50
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -30, -30
         Surface:
-            Material: ∈⋮3
-        Z:
-            Now: 50
-            Spawn: 50
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮34
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 30, -30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮39
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 30, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮20
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -30, 30
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮3
+      Z:
+        Now: 50
+        Spawn: 50
   ecs.Named:
     Name: sector4
 - Entity: ∈⋮36
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮7
-        Z:
-            Now: -10
-            Spawn: -10
+      Surface:
+        Material: ∈⋮7
+      Z:
+        Now: -10
+        Spawn: -10
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 620, 150
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 740, 150
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 740, 200
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮48
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 620, 200
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 620, 150
         Surface:
-            Material: ∈⋮13
-        Z:
-            Now: 70
-            Spawn: 70
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 740, 150
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 740, 200
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮48
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 620, 200
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮13
+      Z:
+        Now: 70
+        Spawn: 70
   ecs.Named:
     Name: sector24
 - Entity: ∈⋮37
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 700, 175, 50
-        Spawn: 700, 175, 50
+      Now: 700, 175, 50
+      Spawn: 700, 175, 50
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 1.2
     Diffuse: 1, 1, 1
@@ -1187,126 +1187,126 @@
 - Entity: ∈⋮38
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, -160
-          Surface:
-            Material: ∈⋮6
-        - AdjacentSector: ∈⋮43
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -40, -270
-          Surface:
-            Material: ∈⋮6
-        - AdjacentSector: ∈⋮23
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -10, -190
-          Surface:
-            Material: ∈⋮8
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, -110
-          Surface:
-            Material: ∈⋮8
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, -160
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮6
+      - AdjacentSector: ∈⋮43
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -40, -270
+        Surface:
+          Material: ∈⋮6
+      - AdjacentSector: ∈⋮23
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, -110
+        Surface:
+          Material: ∈⋮8
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: be25rp7vn27v99df1n7g
 - Entity: ∈⋮39
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮33
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 100
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, 100
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮34
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 30, 30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -30, 30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 30
-          Surface:
-            Material: ∈⋮8
-    Top:
+      - AdjacentSector: ∈⋮33
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 100
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, 100
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮34
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮35
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 30, 30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮20
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -30, 30
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 30
+        Surface:
+          Material: ∈⋮8
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector3
 - Entity: ∈⋮40
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 0, 68, 32
-        Spawn: 0, 68, 32
+      Now: 0, 68, 32
+      Spawn: 0, 68, 32
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0
     Diffuse: 1, 1, 1
@@ -1316,283 +1316,283 @@
 - Entity: ∈⋮41
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮44
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 115, 30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 150, 30
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮17
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 150, 70
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 150, 100
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 115, 100
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - AdjacentSector: ∈⋮44
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 115, 30
         Surface:
-            Material: ∈⋮4
-        Z:
-            Now: 60
-            Spawn: 60
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 150, 30
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮17
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 150, 70
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 150, 100
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 115, 100
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮4
+      Z:
+        Now: 60
+        Spawn: 60
   ecs.Named:
     Name: sector13
 - Entity: ∈⋮42
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮33
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 120
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, 120
-          Surface:
-            Material: ∈⋮6
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, 3000
-          Surface:
-            Material: ∈⋮6
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -100, 3000
-          Surface:
-            Material: ∈⋮6
-    Top:
+      - AdjacentSector: ∈⋮33
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 120
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, 120
+        Surface:
+          Material: ∈⋮6
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, 3000
+        Surface:
+          Material: ∈⋮6
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -100, 3000
+        Surface:
+          Material: ∈⋮6
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: sector27
 - Entity: ∈⋮43
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -40, -270
-          Surface:
-            Material: ∈⋮6
-        - AdjacentSector: ∈⋮52
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 170, -280
-          Surface:
-            Material: ∈⋮6
-        - AdjacentSector: ∈⋮50
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 70, -200
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮38
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -10, -190
-          Surface:
-            Material: ∈⋮8
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -40, -270
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮6
+      - AdjacentSector: ∈⋮52
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 170, -280
+        Surface:
+          Material: ∈⋮6
+      - AdjacentSector: ∈⋮50
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 70, -200
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮38
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: be25rpfvn27v99df1ofg
 - Entity: ∈⋮44
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮25
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 105, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 105, 30
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮41
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 115, 30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 150, 30
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 150, -30
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - AdjacentSector: ∈⋮25
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 105, -30
         Surface:
-            Material: ∈⋮4
-        Z:
-            Now: 60
-            Spawn: 60
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 105, 30
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮41
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 115, 30
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 150, 30
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 150, -30
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮4
+      Z:
+        Now: 60
+        Spawn: 60
   ecs.Named:
     Name: sector12
 - Entity: ∈⋮45
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -230
-            Spawn: -230
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -230
+        Spawn: -230
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮55
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 150
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮47
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 150
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 200
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮31
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 480, 400
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 400
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 200
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - AdjacentSector: ∈⋮55
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 150
         Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -20
-            Spawn: -20
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮47
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 150
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 200
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮31
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 480, 400
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 400
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 200
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -20
+        Spawn: -20
   ecs.Named:
     Name: sector18
 - Entity: ∈⋮46
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 340, 260, -125
-        Spawn: 340, 260, -125
+      Now: 340, 260, -125
+      Spawn: 340, 260, -125
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0
     Diffuse: 0.8, 0.8, 1
@@ -1602,113 +1602,113 @@
 - Entity: ∈⋮47
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -50
-            Spawn: -50
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -50
+        Spawn: -50
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 600, 150
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮45
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 150
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 200
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮48
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 600, 200
-          Surface:
-            Material: ∈⋮13
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 600, 150
         Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -20
-            Spawn: -20
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮45
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 150
+        Surface:
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 200
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮48
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 600, 200
+        Surface:
+          Material: ∈⋮13
+    Top:
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -20
+        Spawn: -20
   ecs.Named:
     Name: sector19
 - Entity: ∈⋮48
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -70
-            Spawn: -70
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -70
+        Spawn: -70
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮32
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 620, 150
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮47
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 600, 150
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮32
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 600, 200
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮36
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 620, 200
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - AdjacentSector: ∈⋮32
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 620, 150
         Surface:
-            Material: ∈⋮5
-        Target: ∈⋮32
-        Z:
-            Now: -20
-            Spawn: -20
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮47
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 600, 150
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮32
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 600, 200
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮36
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 620, 200
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮5
+      Target: ∈⋮32
+      Z:
+        Now: -20
+        Spawn: -20
   ecs.Named:
     Name: sector22
 - Entity: ∈⋮49
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 610, 175, -15
-        Spawn: 610, 175, -50
+      Now: 610, 175, -15
+      Spawn: 610, 175, -50
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0
     Diffuse: 0.8, 0.8, 1
@@ -1718,187 +1718,187 @@
 - Entity: ∈⋮50
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, -110
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮34
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 30, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮23
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -30, -30
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮43
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -10, -190
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮52
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 70, -200
-          Surface:
-            Material: ∈⋮8
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, -110
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮34
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, -30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮35
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 30, -30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮23
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -30, -30
+        Surface:
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮43
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮52
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 70, -200
+        Surface:
+          Material: ∈⋮8
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: be25rpfvn27v99df1o10
 - Entity: ∈⋮51
   core.Body:
     Angle:
-        Now: 292.73134280000005
-        Spawn: 292.73134280000005
+      Now: 292.73134280000005
+      Spawn: 292.73134280000005
     Pos:
-        Now: 0, -70, 5
-        Spawn: 0, -70, 0
+      Now: 0, -70, 5
+      Spawn: 0, -70, 0
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   ecs.Named:
     Name: be25rlnvn27v99df1jng
 - Entity: ∈⋮52
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: 0
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 170, -280
-          Surface:
-            Material: ∈⋮6
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 280, -160
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮50
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 100, -110
-          Surface:
-            Material: ∈⋮8
-        - AdjacentSector: ∈⋮43
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 70, -200
-          Surface:
-            Material: ∈⋮8
-    Top:
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 170, -280
         Surface:
-            Material: ∈⋮6
-        Z:
-            Now: 64
-            Spawn: 64
+          Material: ∈⋮6
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 280, -160
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮50
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 100, -110
+        Surface:
+          Material: ∈⋮8
+      - AdjacentSector: ∈⋮43
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 70, -200
+        Surface:
+          Material: ∈⋮8
+    Top:
+      Surface:
+        Material: ∈⋮6
+      Z:
+        Now: 64
+        Spawn: 64
   ecs.Named:
     Name: be25rpfvn27v99df1or0
 - Entity: ∈⋮53
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮12
-        Z:
-            Now: -60
-            Spawn: -60
+      Surface:
+        Material: ∈⋮12
+      Z:
+        Now: -60
+        Spawn: -60
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮21
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, -30
-          Surface:
-            Material: ∈⋮13
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, -30
-          Surface:
-            Material: ∈⋮7
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -300, -140
-          Surface:
-            Material: ∈⋮7
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: -180, -140
-          Surface:
-            Material: ∈⋮7
-    Top:
+      - AdjacentSector: ∈⋮21
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, -30
         Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -6
-            Spawn: -6
+          Material: ∈⋮13
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, -30
+        Surface:
+          Material: ∈⋮7
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -300, -140
+        Surface:
+          Material: ∈⋮7
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: -180, -140
+        Surface:
+          Material: ∈⋮7
+    Top:
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -6
+        Spawn: -6
   ecs.Named:
     Name: sector10
 - Entity: ∈⋮54
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: -240, -100, -30
-        Spawn: -240, -100, -30
+      Now: -240, -100, -30
+      Spawn: -240, -100, -30
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Now: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -1908,51 +1908,51 @@
 - Entity: ∈⋮55
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮10
-        Z:
-            Now: -170
-            Spawn: -170
+      Surface:
+        Material: ∈⋮10
+      Z:
+        Now: -170
+        Spawn: -170
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮45
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 150
-          Surface:
-            Material: ∈⋮13
-        - AdjacentSector: ∈⋮18
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 150
-          Surface:
-            Material: ∈⋮2
-        - AdjacentSector: ∈⋮18
-          Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 400, 20
-          Surface:
-            Material: ∈⋮2
-        - Hi:
-            Material: ∈⋮13
-          Lo:
-            Material: ∈⋮13
-          P: 300, 20
-          Surface:
-            Material: ∈⋮2
-    Top:
+      - AdjacentSector: ∈⋮45
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 150
         Surface:
-            Material: ∈⋮5
-        Target: ∈⋮18
-        Z:
-            Now: -20
-            Spawn: -20
+          Material: ∈⋮13
+      - AdjacentSector: ∈⋮18
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 150
+        Surface:
+          Material: ∈⋮2
+      - AdjacentSector: ∈⋮18
+        Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 400, 20
+        Surface:
+          Material: ∈⋮2
+      - Hi:
+          Material: ∈⋮13
+        Lo:
+          Material: ∈⋮13
+        P: 300, 20
+        Surface:
+          Material: ∈⋮2
+    Top:
+      Surface:
+        Material: ∈⋮5
+      Target: ∈⋮18
+      Z:
+        Now: -20
+        Spawn: -20
   ecs.Named:
     Name: sector17
 - Entity: ∈⋮56
@@ -1960,16 +1960,18 @@
     Health: 100
   behaviors.Player:
     Spawn: true
+  behaviors.InventoryCarrier:
+    Inventory: []
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Now: 0
+      Spawn: 0
     Pos:
-        Now: 0, -70, 0
-        Spawn: 0, -70, 0
+      Now: 0, -70, 0
+      Spawn: 0, -70, 0
     Size:
-        Now: 15, 15
-        Spawn: 15, 15
+      Now: 15, 15
+      Spawn: 15, 15
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -1978,7 +1980,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Now: 0, 0, 0
+      Spawn: 0, 0, 0
   ecs.Named:
     Name: Spawn

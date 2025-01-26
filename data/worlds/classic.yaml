@@ -1,17 +1,19 @@
 - Entity: ∈⋮1
   behaviors.Alive:
-    Health: 100
+    Health: 98
+  behaviors.InventoryCarrier:
+    Inventory: []
   behaviors.Player:
     Spawn: false
   core.Body:
     Angle:
-        Now: 0
+        Now: 337.5
         Spawn: 0
     Pos:
-        Now: 0, -70, 7.5
+        Now: -33.050993453102905, -36.555658658016156, 20
         Spawn: 0, -70, 0
     Size:
-        Now: 15, 15
+        Now: 15, 40
         Spawn: 15, 15
   core.Mobile:
     CrMoving: CollideNone
@@ -21,14 +23,13 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0
+        Now: 0.0000011011852281107505, -0.00000039644467002995725, 0.007001650411977742
         Spawn: 0, 0, 0
 - Entity: ∈⋮2
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/WDef.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -38,7 +39,6 @@
     Name: mat1
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/WSlimy.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -48,7 +48,6 @@
     Name: mat2
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/WMetal.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -58,7 +57,6 @@
     Name: mat3
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/WSlimeGrate.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -68,7 +66,6 @@
     Name: mat6
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/WDirty.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -78,7 +75,6 @@
     Name: Doom Garage Door
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/DGarage.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -88,7 +84,6 @@
     Name: Default Floor
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/FDef.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -98,7 +93,6 @@
     Name: f1
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/FGrayTile.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -108,7 +102,8 @@
     Name: Painful Slime Shader
   materials.Shader:
     Stages:
-        - Flags: ShaderTiled|ShaderLiquid
+        - BlendingFunc: BlendNormal
+          Flags: ShaderTiled|ShaderLiquid
           Material: ∈⋮57
           Transform: 2, 0, 0, 0, 2, 0
 - Entity: ∈⋮11
@@ -116,7 +111,6 @@
     Name: f5
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/FRedLight.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -126,7 +120,6 @@
     Name: f6
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/FHexMetal.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -136,7 +129,6 @@
     Name: Water
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/Water.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1
@@ -146,7 +138,8 @@
     Name: Sky
   materials.Shader:
     Stages:
-        - Flags: ShaderTiled|ShaderSky
+        - BlendingFunc: BlendNormal
+          Flags: ShaderTiled|ShaderSky
           Material: ∈⋮55
 - Entity: ∈⋮15
   core.Sector:
@@ -777,6 +770,11 @@
 - Entity: ∈⋮32
   core.Sector:
     Bottom:
+        Scripts:
+            - Code: |-
+                if alive := behaviors.GetAlive(s.ECS,body.Entity); alive != nil {
+                  alive.Hurt("Slime", 2, 500)
+                }
         Surface:
             Material: ∈⋮10
         Z:
@@ -1695,16 +1693,16 @@
             Material: ∈⋮6
         Z:
             Animation:
-                Active: true
+                Active: false
                 Coordinates: AnimationCoordinatesAbsolute
                 Duration: 1000
                 End: 0
                 Lifetime: AnimationLifetimeOnce
-                Percent: 0
+                Percent: 1
                 Reverse: false
                 Start: 64
                 TweeningFunc: EaseInOut2
-            Now: 64
+            Now: 0
             Spawn: 64
   ecs.Named:
     Name: sector25
@@ -1732,13 +1730,13 @@
           P: 100, 100
           Surface:
             Material: ∈⋮4
-        - AdjacentSector: ∈⋮53
-          Hi:
+        - Hi:
             Material: ∈⋮2
           Lo:
             Material: ∈⋮2
           P: 100, 120
-          Surface: {}
+          Surface:
+            Material: ∈⋮14
         - Hi:
             Material: ∈⋮2
           Lo:
@@ -1754,55 +1752,11 @@
             Spawn: 64
   ecs.Named:
     Name: sector26
-- Entity: ∈⋮53
-  core.Sector:
-    Bottom:
-        Surface:
-            Material: ∈⋮8
-        Z:
-            Now: 0
-            Spawn: 0
-    FloorFriction: 0.85
-    Segments:
-        - AdjacentSector: ∈⋮52
-          Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: -100, 120
-          Surface: {}
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: 100, 120
-          Surface:
-            Material: ∈⋮14
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: 100, 3000
-          Surface:
-            Material: ∈⋮14
-        - Hi:
-            Material: ∈⋮2
-          Lo:
-            Material: ∈⋮2
-          P: -100, 3000
-          Surface:
-            Material: ∈⋮14
-    Top:
-        Surface:
-            Material: ∈⋮14
-        Z:
-            Now: 64
-            Spawn: 64
-  ecs.Named:
-    Name: sector27
 - Entity: ∈⋮54
   behaviors.Alive:
     Health: 100
+  behaviors.InventoryCarrier:
+    Inventory: []
   behaviors.Player:
     Spawn: true
   core.Body:
@@ -1838,7 +1792,6 @@
     Name: Painful Slime
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/FSlime.png
   materials.Lit:
     Ambient: 0.1, 0.1, 0.1

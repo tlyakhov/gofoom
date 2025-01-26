@@ -104,6 +104,8 @@
     Health: 100
   behaviors.Player:
     Spawn: true
+  behaviors.InventoryCarrier:
+    Inventory: []
   core.Body:
     Angle:
       Now: 0
