@@ -32,8 +32,9 @@ func (a *AliveController) Target(target ecs.Attachable, e ecs.Entity) bool {
 }
 
 func (a *AliveController) Always() {
+	// TODO: Refactor cooldowns to be time-based rather than frames
 	for source, d := range a.Damages {
-		if d.Cooldown.Input <= 0 {
+		if d.Cooldown.Now <= 0 {
 			d.Cooldown.Detach(a.Alive.ECS.Simulation)
 			delete(a.Damages, source)
 			continue
@@ -44,6 +45,10 @@ func (a *AliveController) Always() {
 			}
 			d.Amount = 0
 		}
-		d.Cooldown.Input--
+		if d.Cooldown.IsProcedural() {
+			d.Cooldown.Input--
+		} else {
+			d.Cooldown.Now--
+		}
 	}
 }

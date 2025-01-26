@@ -174,7 +174,7 @@ func run() {
 	db.Simulation.Integrate = integrateGame
 	db.Simulation.Render = renderGame
 	// Debug
-	if true {
+	if false {
 		controllers.CreateTestWorld3(db)
 		// db.Save("bin/exported_test.yaml")
 	} else if err = db.Load("data/worlds/hall.yaml"); err != nil {

@@ -72,6 +72,9 @@ func (r *Renderer) RenderHud() {
 			continue
 		}
 		slot := behaviors.GetInventorySlot(r.ECS, e)
+		if slot == nil {
+			continue
+		}
 		r.BitBlt(slot.Image, index*40+10, r.ScreenHeight-42, 32, 32, concepts.BlendNormal)
 		r.Print(ts, index*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
 		if e == r.Carrier.SelectedWeapon {

@@ -67,8 +67,8 @@ func (l *Light) OnAttach(db *ecs.ECS) {
 			if e == 0 {
 				continue
 			}
-			if b := GetBody(db, e); b != nil {
-				tree.Update(b)
+			if b := GetBody(db, e); b != nil && b.QuadNode != nil {
+				b.QuadNode.Lights = append(b.QuadNode.Lights, b)
 			}
 		}
 	}
