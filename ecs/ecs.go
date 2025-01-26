@@ -359,6 +359,21 @@ func (db *ECS) GetEntityByName(name string) Entity {
 	return 0
 }
 
+func (db *ECS) EntityAllSystem(entity Entity) bool {
+	if entity == 0 || len(db.rows) <= int(entity) {
+		return false
+	}
+	for _, c := range db.rows[int(entity)] {
+		if c == nil {
+			continue
+		}
+		if !c.IsSystem() {
+			return false
+		}
+	}
+	return true
+}
+
 func (db *ECS) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
 	var yamlEntity string
 	var entity Entity

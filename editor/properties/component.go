@@ -74,7 +74,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 			}
 			action := &actions.UpdateLinks{
 				IEditor:       g.IEditor,
-				Entities:      ecs.ParseEntityCSV(entitiesEntry.Text),
+				Entities:      ecs.ParseEntityCSV(entitiesEntry.Text, true),
 				AddComponents: make(ecs.ComponentTable, 0),
 			}
 			action.AddComponents.Set(parent)

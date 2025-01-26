@@ -107,9 +107,7 @@ func (mc *MobileController) bodyTeleport() bool {
 			mc.Body.Angle.Now = mc.Body.Angle.Now -
 				math.Atan2(segment.Normal[1], segment.Normal[0])*concepts.Rad2deg +
 				math.Atan2(segment.AdjacentSegment.Normal[1], segment.AdjacentSegment.Normal[0])*concepts.Rad2deg + 180
-			for mc.Body.Angle.Now > 360 {
-				mc.Body.Angle.Now -= 360
-			}
+			mc.Body.Angle.Now = concepts.NormalizeAngle(mc.Body.Angle.Now)
 			mc.Body.Angle.Prev = mc.Body.Angle.Now
 			mc.Enter(core.GetSector(mc.ECS, segment.AdjacentSector))
 			return true

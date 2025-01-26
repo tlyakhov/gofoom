@@ -82,13 +82,13 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			ids := ecs.ParseComponentIDs(text)
 			parsed = &ids
 		case *ecs.EntityTable:
-			entities := ecs.ParseEntityCSV(text)
+			entities := ecs.ParseEntityCSV(text, true)
 			parsed = &entities
 		case *[]ecs.Entity:
 			split := strings.Split(text, ",")
 			entities := make([]ecs.Entity, len(split))
 			for i, s := range split {
-				entity, subError := ecs.ParseEntity(s)
+				entity, subError := ecs.ParseEntityPrefixOptional(s)
 				if subError != nil {
 					err = subError
 					break

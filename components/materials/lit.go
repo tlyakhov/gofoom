@@ -37,7 +37,7 @@ func (m *Lit) String() string {
 func (m *Lit) Construct(data map[string]any) {
 	m.Attached.Construct(data)
 
-	m.Ambient = concepts.Vector3{0.1, 0.1, 0.1}
+	m.Ambient = concepts.Vector3{0, 0, 0}
 	m.Diffuse = concepts.Vector4{1, 1, 1, 1}
 
 	if data == nil {

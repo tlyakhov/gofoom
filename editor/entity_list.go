@@ -185,10 +185,12 @@ func (list *EntityList) Update() {
 		rowColor := theme.Color(theme.ColorNameForeground)
 		parentDesc := ""
 		rank := 0
+		allSystem := true
 		for _, c := range list.State().ECS.AllComponents(ecs.Entity(entity)) {
 			if c == nil || c.IsSystem() {
 				continue
 			}
+			allSystem = false
 			desc := c.String()
 
 			if searchValid {
@@ -213,7 +215,7 @@ func (list *EntityList) Update() {
 				rowColor = colornames.Lightpink
 			}
 		}
-		if len(parentDesc) == 0 {
+		if len(parentDesc) == 0 || allSystem {
 			return
 		}
 		dispRank := 100
