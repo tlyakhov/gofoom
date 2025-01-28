@@ -1,6 +1,6 @@
 - Entity: ∈⋮1
   behaviors.Alive:
-    Health: 100
+    Health: 66
   behaviors.InventoryCarrier:
     Inventory:
       - ∈⋮189
@@ -11,10 +11,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 184.21875
+      Now: 547.03125
       Spawn: 0
     Pos:
-      Now: 759.6819088925588, -1779.0013533887284, 20
+      Now: 353.00141060413, -349.7552728213356, 20
       Spawn: -390, 180, -44
     Size:
       Now: 15, 40
@@ -27,7 +27,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014020007406635365, 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010320949722780601, 0.007001650411977742
+      Now: -0.00008169408355893228, -0.000009956947882252096, 0.007001650411979532
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -36,9 +36,9 @@
     Name: Default
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/wool_colored_white.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮3
   core.Sector:
@@ -1485,11 +1485,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.8515625
-        Reverse: false
+        Percent: 0.546875
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -400, 60, -51.11865234375
+      Now: -400, 60, -47.087890625
       Spawn: -400, 60, -52
     Size:
       Now: 20, 20
@@ -2051,17 +2051,17 @@
     Speed: 350
     Start: ∈⋮135
   behaviors.ActorState:
-    Action: ∈⋮140
+    Action: ∈⋮146
   behaviors.Alive:
     Health: 100
   behaviors.WeaponInstant: {}
   core.Body:
     Angle:
-      Now: 26606.295949423253
+      Now: 32585.54630662584
       Procedural: true
       Spawn: 155.9558816022554
     Pos:
-      Now: -45.81072395954989, -101.89477490496108, 16
+      Now: -79.72370982046336, -191.74137606660355, 16
       Spawn: -10, -30, -50
     Size:
       Now: 32, 32
@@ -2075,15 +2075,15 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: 0.5364563751382997, -0.8827081006946269, 0.026087152817218427
+      Now: -1.0496032735009142, 0.007606884605486792, 0.026087160049219668
       Spawn: 0, 0, 0
   ecs.Named:
     Name: FlubTest
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/game/flub/flub.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
   materials.SpriteSheet:
     Angles: "8"
@@ -3863,7 +3863,7 @@
         Hi:
           Material: ∈⋮123
           Transform:
-            Now: 1, 0, 0, 0, 0.330625, 0.664208984375
+            Now: 1, 0, 0, 0, 0.00015625, 0.99984130859375
             Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
         Lo:
           Material: ∈⋮2
@@ -3887,11 +3887,11 @@
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0.359375
+          Percent: 0.0078125
           Reverse: true
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: 47.46875
+        Now: 63.9921875
         Spawn: 64
   ecs.Linked:
     Sources:
@@ -4794,7 +4794,6 @@
     Name: Pluk
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/game/pluk.png
 - Entity: ∈⋮99
   core.Sector:
@@ -5324,9 +5323,9 @@
     Name: Weapon Mark
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/weapon-mark.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮114
   core.Sector:
@@ -5613,27 +5612,27 @@
     Name: Floor
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/ggrass_top.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮123
   ecs.Named:
     Name: Door Metal
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/wool_colored_gray.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮124
   ecs.Named:
     Name: Wall Variation
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/wool_colored_red.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮125
   core.Body:
@@ -5687,36 +5686,36 @@
     Name: Toxic
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/FSlime.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮128
   ecs.Named:
     Name: Glass
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/glass-test.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮129
   ecs.Named:
     Name: Ladder
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/ladder.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮130
   ecs.Named:
     Name: Stained Glass
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/stained-glass.jpeg
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 0.5, 0.5, 0.5, 0.5
 - Entity: ∈⋮131
   core.Body:
@@ -5751,11 +5750,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.7265625
+        Percent: 0.125
         Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -260, 60, -49.05322265625
+      Now: -260, 60, -51.375
       Spawn: -260, 60, -52
     Size:
       Now: 20, 20
@@ -5766,6 +5765,7 @@
   ecs.Named:
     Name: Weird Gun
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
   materials.SpriteSheet:
     Angles: "0"
@@ -5780,9 +5780,9 @@
 - Entity: ∈⋮133
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/weird-gun.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮134
   behaviors.Proximity: ∈⋮25
@@ -5975,41 +5975,39 @@
     Speed: 100
     Start: ∈⋮150
   behaviors.ActorState:
-    Action: ∈⋮150
+    Action: ∈⋮151
   behaviors.ParticleEmitter:
     Limit: "30"
     Particles:
-      - ∈⋮163
-      - ∈⋮166
+      - ∈⋮165
+      - ∈⋮197
       - ∈⋮200
-      - ∈⋮201
+      - ∈⋮195
       - ∈⋮202
-      - ∈⋮203
+      - ∈⋮204
       - ∈⋮171
       - ∈⋮205
-      - ∈⋮196
-      - ∈⋮197
       - ∈⋮174
-      - ∈⋮204
-      - ∈⋮198
-      - ∈⋮178
-      - ∈⋮179
-      - ∈⋮165
-      - ∈⋮181
       - ∈⋮175
+      - ∈⋮207
+      - ∈⋮209
+      - ∈⋮211
+      - ∈⋮213
+      - ∈⋮214
+      - ∈⋮182
       - ∈⋮183
+      - ∈⋮217
       - ∈⋮184
-      - ∈⋮186
-      - ∈⋮187
+      - ∈⋮216
+      - ∈⋮218
       - ∈⋮188
+      - ∈⋮187
       - ∈⋮190
-      - ∈⋮158
-      - ∈⋮159
-      - ∈⋮157
+      - ∈⋮223
       - ∈⋮161
-      - ∈⋮195
       - ∈⋮162
-      - ∈⋮194
+      - ∈⋮196
+      - ∈⋮163
     Source: ∈⋮153
     Vel: 15
     XYSpread: 10
@@ -6020,7 +6018,7 @@
       Now: 180
       Spawn: 180
     Pos:
-      Now: 860, -512.807414021327, 32
+      Now: 860, -601.1142896329563, 32
       Procedural: true
       Spawn: 860, -710, 32
     Size:
@@ -6044,25 +6042,28 @@
     Ambient: 1
     Shadow: ShadowImage
 - Entity: ∈⋮153
+  behaviors.Proximity:
+    InRange:
+      Code: "if alive := behaviors.GetAlive(s.ECS, body.Entity); alive != nil {\n  alive.Hurt(\"bubble\", 2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
   ecs.Named:
     Name: Bubble
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/game/transparent-bubble.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮154
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/sand.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮156
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/game/keycard/keycard.png
   materials.SpriteSheet:
     Cols: "2"
@@ -6071,29 +6072,22 @@
       Spawn: "0"
     Material: ∈⋮156
     Rows: "2"
-- Entity: ∈⋮157
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮158
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮159
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
 - Entity: ∈⋮160
   ecs.Named:
     Name: Muzzle Flash
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/muzzle.jpg
 - Entity: ∈⋮161
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮162
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮163
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮164
@@ -6114,11 +6108,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.4765625
-        Reverse: false
+        Percent: 0.9140625
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 230, -860, -15.02197265625
+      Now: 230, -860, -19.70458984375
       Spawn: 230, -860, -20
     Size:
       Now: 15, 15
@@ -6136,11 +6130,51 @@
     Material: ∈⋮156
   materials.Visible: ∈⋮32
 - Entity: ∈⋮165
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮166
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
+  behaviors.Alive:
+    Health: 100
+  core.Body:
+    Angle:
+      Now: 0
+      Spawn: 0
+    Pos:
+      Now: -544.5150644174821, -522.7988635527026, -26
+      Spawn: -530, -520, 9
+    Size:
+      Now: 40, 40
+      Spawn: 40, 40
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideSeparate
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: 0, 0, 0.026086733494677383
+      Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Evil Flub Test
+  materials.Image:
+    Filter: false
+    Source: data/game/flub/flub.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 0.2, 0.2, 1
+  materials.SpriteSheet:
+    Angles: "8"
+    Cols: "4"
+    Frame:
+      Now: "0"
+      Spawn: "0"
+    Material: ∈⋮166
+    Rows: "2"
+  materials.Visible:
+    Ambient: 1
+    Shadow: ShadowImage
 - Entity: ∈⋮167
   core.Sector:
     Bottom:
@@ -6202,7 +6236,6 @@
         Spawn: 64
 - Entity: ∈⋮168
   behaviors.PlayerTargetable:
-    Message: Door - {{if .InventoryCarrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need red keycard to open{{end}}
     Frob:
       Code: |-
         door := behaviors.GetVerticalDoor(s.ECS,168)
@@ -6214,6 +6247,7 @@
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
         }
+    Message: Door - {{if .InventoryCarrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need red keycard to open{{end}}
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
@@ -6305,12 +6339,15 @@
     Diffuse: 1, 1, 1
     Strength: 2
 - Entity: ∈⋮171
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮174
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮175
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮176
@@ -6340,12 +6377,6 @@
       Spawn: "0"
     Image: ∈⋮156
     Limit: "1"
-- Entity: ∈⋮178
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮179
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
 - Entity: ∈⋮180
   core.Body:
     Angle:
@@ -6361,13 +6392,16 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 0.8
     Strength: 2
-- Entity: ∈⋮181
+- Entity: ∈⋮182
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮183
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮184
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮185
@@ -6416,13 +6450,12 @@
       Z:
         Now: 64
         Spawn: 64
-- Entity: ∈⋮186
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
 - Entity: ∈⋮187
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮188
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮189
@@ -6434,6 +6467,7 @@
     Image: ∈⋮98
     Limit: "100"
 - Entity: ∈⋮190
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮191
@@ -6615,19 +6649,16 @@
       Z:
         Now: 64
         Spawn: 64
-- Entity: ∈⋮194
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
 - Entity: ∈⋮195
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮196
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮197
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮198
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮199
@@ -6638,21 +6669,19 @@
       - BlendingFunc: BlendNormal
         Material: ∈⋮160
 - Entity: ∈⋮200
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮201
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮202
-  materials.Image: ∈⋮153
-  materials.Lit: ∈⋮153
-- Entity: ∈⋮203
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮204
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮205
+  behaviors.Proximity: ∈⋮153
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮206
@@ -6660,6 +6689,38 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 0.6
     Strength: 2
+- Entity: ∈⋮207
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮209
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮211
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮213
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮214
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮216
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮217
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
+- Entity: ∈⋮218
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮219
   core.Sector:
     Bottom:
@@ -6818,12 +6879,16 @@
       Z:
         Now: 64
         Spawn: 64
+- Entity: ∈⋮223
+  behaviors.Proximity: ∈⋮153
+  materials.Image: ∈⋮153
+  materials.Lit: ∈⋮153
 - Entity: ∈⋮239
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/space_tiles_hyptosis/glass.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮243
   ecs.Named:

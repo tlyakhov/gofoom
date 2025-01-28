@@ -75,6 +75,9 @@ func (p *Proximity) Construct(data map[string]any) {
 	p.State = xsync.NewMapOf[uint64, *ProximityState]()
 
 	if data == nil {
+		p.InRange.Construct(nil)
+		p.Enter.Construct(nil)
+		p.Exit.Construct(nil)
 		return
 	}
 

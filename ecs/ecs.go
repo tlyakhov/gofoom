@@ -172,8 +172,8 @@ func (db *ECS) attach(entity Entity, component *Attachable, componentID Componen
 		}
 	} else if ec != nil {
 		// We have a conflict between the provided component and an existing one
-		// with the same component ID. We should abort.
-		log.Printf("ECS.attach: Entity %v already has a component %v. Aborting!", entity, Types().ColumnPlaceholders[componentID].String())
+		// with the same component ID. We should abort. This happens with Linked components.
+		// log.Printf("ECS.attach: Entity %v already has a component %v. Aborting!", entity, Types().ColumnPlaceholders[componentID].String())
 		return
 	}
 

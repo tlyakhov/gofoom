@@ -45,7 +45,8 @@ func (a *SetProperty) FireHooks() {
 			}
 		case *core.Script:
 			// TODO: use a nicer source code editor for script properties.
-			target.Compile()
+			a.State().ECS.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			//target.Compile()
 		case *materials.Text:
 			target.RasterizeText()
 		case *core.SectorSegment:

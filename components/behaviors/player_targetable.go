@@ -87,6 +87,9 @@ func (pt *PlayerTargetable) Construct(data map[string]any) {
 	pt.Attached.Construct(data)
 
 	if data == nil {
+		pt.Frob.Construct(nil)
+		pt.Selected.Construct(nil)
+		pt.UnSelected.Construct(nil)
 		return
 	}
 
