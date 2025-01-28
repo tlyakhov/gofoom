@@ -41,9 +41,7 @@ func (a *Attached) OnDetach(entity Entity) {
 	if a.Entities.Delete(entity) {
 		a.Attachments--
 	}
-	if a.Attachments == 1 {
-		a.Entity = a.Entities.First()
-	}
+	a.Entity = a.Entities.First()
 }
 
 func (a *Attached) OnDelete() {
