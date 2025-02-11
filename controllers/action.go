@@ -123,7 +123,7 @@ func (ac *ActionController) Jump(jump *behaviors.ActionJump) bool {
 }
 
 func (ac *ActionController) Fire(fire *behaviors.ActionFire) bool {
-	weapon := behaviors.GetWeaponInstant(ac.ECS, ac.Body.Entity)
+	weapon := behaviors.GetWeapon(ac.ECS, ac.Body.Entity)
 
 	if weapon == nil {
 		return true

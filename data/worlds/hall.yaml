@@ -2054,7 +2054,7 @@
     Action: ∈⋮146
   behaviors.Alive:
     Health: 100
-  behaviors.WeaponInstant: {}
+  behaviors.Weapon: {}
   core.Body:
     Angle:
       Now: 32585.54630662584
@@ -6012,7 +6012,7 @@
     Vel: 15
     XYSpread: 10
     ZSpread: 10
-  behaviors.WeaponInstant: {}
+  behaviors.Weapon: {}
   core.Body:
     Angle:
       Now: 180

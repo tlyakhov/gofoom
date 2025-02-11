@@ -4,67 +4,18 @@
 package controllers
 
 import (
-	"log"
 	"math"
 	"math/rand/v2"
-	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
-	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render"
 )
 
-type WeaponInstantController struct {
-	ecs.BaseController
-	*behaviors.WeaponInstant
-
-	Sampler render.MaterialSampler
-	Slot    *behaviors.InventorySlot
-	Carrier *behaviors.InventoryCarrier
-	Class   *behaviors.WeaponClass
-	Body    *core.Body
-
-	delta, isect, hit concepts.Vector3
-	transform         concepts.Matrix2
-}
-
-func init() {
-	ecs.Types().RegisterController(func() ecs.Controller { return &WeaponInstantController{} }, 100)
-}
-
-func (wc *WeaponInstantController) ComponentID() ecs.ComponentID {
-	return behaviors.WeaponInstantCID
-}
-
-func (wc *WeaponInstantController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
-}
-
-func (wc *WeaponInstantController) Target(target ecs.Attachable, e ecs.Entity) bool {
-	wc.Entity = e
-	wc.WeaponInstant = target.(*behaviors.WeaponInstant)
-	wc.Class = behaviors.GetWeaponClass(wc.WeaponInstant.ECS, e)
-	if wc.Class == nil || !wc.Class.IsActive() {
-		return false
-	}
-	wc.Slot = behaviors.GetInventorySlot(wc.WeaponInstant.ECS, e)
-	if wc.Slot == nil || !wc.Slot.IsActive() ||
-		wc.Slot.Carrier == nil || !wc.Slot.Carrier.IsActive() {
-		return false
-	}
-	// The source of our shot is the body attached to the inventory carrier
-	wc.Body = core.GetBody(wc.WeaponInstant.ECS, wc.Slot.Carrier.Entity)
-	return wc.WeaponInstant.IsActive() &&
-		wc.Body != nil && wc.Body.IsActive() &&
-		wc.Class != nil && wc.Class.IsActive()
-}
-
 // This is similar to the code for lighting
-func (wc *WeaponInstantController) Cast() *selection.Selectable {
+func (wc *WeaponController) Cast() *selection.Selectable {
 	var s *selection.Selectable
 
 	angle := wc.Body.Angle.Now + (rand.Float64()-0.5)*wc.Class.Spread
@@ -188,141 +139,4 @@ func (wc *WeaponInstantController) Cast() *selection.Selectable {
 	}
 
 	return s
-}
-
-func (wc *WeaponInstantController) MarkSurface(s *selection.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
-	switch s.Type {
-	case selection.SelectableHi:
-		top = s.Sector.Top.ZAt(dynamic.DynamicNow, p)
-		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjTop := adj.Top.ZAt(dynamic.DynamicNow, p)
-		if adjTop <= top {
-			bottom = adjTop
-			surf = &s.SectorSegment.AdjacentSegment.HiSurface
-		} else {
-			bottom, top = top, adjTop
-			surf = &s.SectorSegment.HiSurface
-		}
-	case selection.SelectableLow:
-		bottom = s.Sector.Bottom.ZAt(dynamic.DynamicNow, p)
-		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom := adj.Bottom.ZAt(dynamic.DynamicNow, p)
-		if bottom <= adjBottom {
-			top = adjBottom
-			surf = &s.SectorSegment.AdjacentSegment.LoSurface
-		} else {
-			bottom, top = adjBottom, bottom
-			surf = &s.SectorSegment.LoSurface
-		}
-	case selection.SelectableMid:
-		bottom, top = s.Sector.ZAt(dynamic.DynamicNow, p)
-		surf = &s.SectorSegment.Surface
-	case selection.SelectableInternalSegment:
-		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
-		surf = &s.InternalSegment.Surface
-	}
-	return
-}
-
-// TODO: This is more generally useful as a way to create transforms
-// that map world-space onto texture space. This should be refactored to be part
-// of anything with a surface
-func (wc *WeaponInstantController) MarkSurfaceAndTransform(s *selection.Selectable, transform *concepts.Matrix2) *materials.Surface {
-	// Inverse of the size of bullet mark we want
-	scale := 1.0 / wc.Class.MarkSize
-	// 3x2 transformation matrixes are composed of
-	// the horizontal basis vector in slots [0] & [1], which we set to the
-	// width of the segment, scaled
-	// the vertical basis vector in slots [2] & [3], which we set to the
-	// height of the segment
-	// and finally the translation in slots [4] & [5], which we set to the
-	// world position of the mark, relative to the segment
-	switch s.Type {
-	case selection.SelectableHi, selection.SelectableLow, selection.SelectableMid:
-		transform[concepts.MatBasis1X] = s.SectorSegment.Length
-		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(&s.SectorSegment.P)
-	case selection.SelectableInternalSegment:
-		transform[concepts.MatBasis1X] = s.InternalSegment.Length
-		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(s.InternalSegment.A)
-	}
-
-	surf, bottom, top := wc.MarkSurface(s, wc.hit.To2D())
-	// This is reversed because our UV coordinates go top->bottom
-	transform[concepts.MatBasis2Y] = (bottom - top)
-	transform[concepts.MatTransY] = -(wc.hit[2] - top)
-
-	transform[concepts.MatBasis1X] *= scale
-	transform[concepts.MatBasis2Y] *= scale
-	transform[concepts.MatTransX] *= scale
-	transform[concepts.MatTransY] *= scale
-
-	return surf
-}
-
-func (wc *WeaponInstantController) updateMarks(mark behaviors.WeaponMark) {
-	wc.Marks.PushBack(mark)
-	for wc.Marks.Len() > constants.MaxWeaponMarks {
-		wm := wc.Marks.PopFront()
-		for i, stage := range wm.Surface.ExtraStages {
-			if stage != wm.ShaderStage {
-				continue
-			}
-			wm.Surface.ExtraStages = append(wm.Surface.ExtraStages[:i], wm.Surface.ExtraStages[i+1:]...)
-			break
-		}
-	}
-}
-
-func (wc *WeaponInstantController) Always() {
-	if !wc.FireNextFrame {
-		return
-	}
-	wc.FireNextFrame = false
-	wc.FiredTimestamp = wc.ECS.Timestamp
-	s := wc.Cast()
-
-	if s == nil {
-		return
-	}
-
-	// TODO: Account for bullet velocity travel time. Do this by calculating
-	// time it would take to hit the thing and delaying the outcome? could be
-	// buggy though if the object in question moves
-	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman(2))
-	if s.Type == selection.SelectableBody {
-		if mobile := core.GetMobile(s.Body.ECS, s.Body.Entity); mobile != nil {
-			// Push bodies away
-			// TODO: Parameterize in WeaponInstant
-			mobile.Vel.Now.AddSelf(wc.delta.Mul(3))
-		}
-		// Hurt anything alive
-		if alive := behaviors.GetAlive(wc.Body.ECS, s.Body.Entity); alive != nil {
-			// TODO: Parameterize in WeaponInstant
-			alive.Hurt("Weapon "+s.Entity.String(), wc.Class.Damage, 20)
-		}
-		// TODO: Death animations/entity deactivation
-	} else if s.Type == selection.SelectableSectorSegment ||
-		s.Type == selection.SelectableHi ||
-		s.Type == selection.SelectableLow ||
-		s.Type == selection.SelectableMid ||
-		s.Type == selection.SelectableInternalSegment {
-		// Make a mark on walls
-
-		// TODO: Include floors and ceilings
-		es := &materials.ShaderStage{
-			Material:               wc.Class.MarkMaterial,
-			IgnoreSurfaceTransform: false,
-			System:                 true}
-		es.OnAttach(s.ECS)
-		es.Construct(nil)
-		es.Flags = 0
-		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
-		surf.ExtraStages = append(surf.ExtraStages, es)
-		es.Transform.From(&surf.Transform.Now)
-		es.Transform.AffineInverseSelf().MulSelf(&wc.transform)
-		wc.updateMarks(behaviors.WeaponMark{
-			ShaderStage: es,
-			Surface:     surf,
-		})
-	}
 }

@@ -50,6 +50,6 @@ func init() {
 		"UnderwaterController":       reflect.ValueOf((*controllers.UnderwaterController)(nil)),
 		"VerticalDoorController":     reflect.ValueOf((*controllers.VerticalDoorController)(nil)),
 		"WanderController":           reflect.ValueOf((*controllers.WanderController)(nil)),
-		"WeaponInstantController":    reflect.ValueOf((*controllers.WeaponInstantController)(nil)),
+		"WeaponController":    reflect.ValueOf((*controllers.WeaponController)(nil)),
 	}
 }

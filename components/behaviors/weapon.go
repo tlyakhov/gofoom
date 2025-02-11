@@ -10,7 +10,7 @@ import (
 )
 
 // Represents state for an instant-hit weapon (think railgun rather than rocket launcher)
-type WeaponInstant struct {
+type Weapon struct {
 	ecs.Attached `editable:"^"`
 
 	// Internal state
@@ -20,34 +20,34 @@ type WeaponInstant struct {
 	Marks deque.Deque[WeaponMark]
 }
 
-var WeaponInstantCID ecs.ComponentID
+var WeaponCID ecs.ComponentID
 
 func init() {
-	WeaponInstantCID = ecs.RegisterComponent(&ecs.Column[WeaponInstant, *WeaponInstant]{Getter: GetWeaponInstant})
+	WeaponCID = ecs.RegisterComponent(&ecs.Column[Weapon, *Weapon]{Getter: GetWeapon})
 }
 
-func GetWeaponInstant(db *ecs.ECS, e ecs.Entity) *WeaponInstant {
-	if asserted, ok := db.Component(e, WeaponInstantCID).(*WeaponInstant); ok {
+func GetWeapon(db *ecs.ECS, e ecs.Entity) *Weapon {
+	if asserted, ok := db.Component(e, WeaponCID).(*Weapon); ok {
 		return asserted
 	}
 	return nil
 }
 
-func (w *WeaponInstant) CoolingDown() bool {
+func (w *Weapon) CoolingDown() bool {
 	wc := GetWeaponClass(w.ECS, w.Entity)
 	return wc != nil && w.ECS.Timestamp-w.FiredTimestamp < int64(wc.Cooldown)
 }
 
-func (w *WeaponInstant) Flashing() bool {
+func (w *Weapon) Flashing() bool {
 	wc := GetWeaponClass(w.ECS, w.Entity)
 	return wc != nil && w.ECS.Timestamp-w.FiredTimestamp < int64(wc.FlashTime)
 }
 
-func (w *WeaponInstant) String() string {
-	return "WeaponInstant"
+func (w *Weapon) String() string {
+	return "Weapon"
 }
 
-func (w *WeaponInstant) Construct(data map[string]any) {
+func (w *Weapon) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 	w.Marks = deque.Deque[WeaponMark]{}
 
@@ -56,7 +56,7 @@ func (w *WeaponInstant) Construct(data map[string]any) {
 	}
 }
 
-func (w *WeaponInstant) Serialize() map[string]any {
+func (w *Weapon) Serialize() map[string]any {
 	result := w.Attached.Serialize()
 
 	return result

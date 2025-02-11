@@ -126,7 +126,7 @@ func (pc *PlayerController) Always() {
 		if slot.Count.Now <= 0 {
 			continue
 		}
-		if w := behaviors.GetWeaponInstant(pc.ECS, e); w != nil {
+		if w := behaviors.GetWeapon(pc.ECS, e); w != nil {
 			pc.Carrier.SelectedWeapon = e
 			break
 		}
