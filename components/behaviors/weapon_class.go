@@ -15,6 +15,8 @@ import (
 type WeaponClass struct {
 	ecs.Attached `editable:"^"`
 
+	InstantHit bool `editable:"InstantHit"`
+
 	Damage   float64 `editable:"Damage"`
 	Spread   float64 `editable:"Spread"`   // In degrees
 	Cooldown float64 `editable:"Cooldown"` // In ms
@@ -22,7 +24,7 @@ type WeaponClass struct {
 	FlashTime     float64    `editable:"Flash Time"` // In ms
 	FlashMaterial ecs.Entity `editable:"Flash Material" edit_type:"Material"`
 
-	// Bullets make marks on walls/internal segments
+	// Projectiles make marks on walls/internal segments
 	MarkMaterial ecs.Entity `editable:"Mark Material" edit_type:"Material"`
 	MarkSize     float64    `editable:"Mark Size"`
 }

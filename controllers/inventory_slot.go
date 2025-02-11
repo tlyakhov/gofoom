@@ -11,8 +11,8 @@ import (
 type InventorySlotController struct {
 	ecs.BaseController
 	*behaviors.InventorySlot
-	WeaponClass   *behaviors.WeaponClass
-	WeaponInstant *behaviors.WeaponInstant
+	WeaponClass *behaviors.WeaponClass
+	Weapon      *behaviors.Weapon
 }
 
 func init() {
@@ -35,13 +35,13 @@ func (isc *InventorySlotController) Target(target ecs.Attachable, e ecs.Entity) 
 	isc.Entity = e
 	isc.InventorySlot = target.(*behaviors.InventorySlot)
 	isc.WeaponClass = behaviors.GetWeaponClass(isc.ECS, e)
-	isc.WeaponInstant = behaviors.GetWeaponInstant(isc.ECS, e)
+	isc.Weapon = behaviors.GetWeapon(isc.ECS, e)
 	return isc.InventorySlot != nil && isc.InventorySlot.IsActive()
 }
 
 func (isc *InventorySlotController) Recalculate() {
-	if isc.WeaponClass != nil && isc.WeaponInstant == nil {
-		isc.WeaponInstant = isc.ECS.NewAttachedComponent(isc.Entity, behaviors.WeaponInstantCID).(*behaviors.WeaponInstant)
-		isc.WeaponInstant.System = true
+	if isc.WeaponClass != nil && isc.Weapon == nil {
+		isc.Weapon = isc.ECS.NewAttachedComponent(isc.Entity, behaviors.WeaponCID).(*behaviors.Weapon)
+		isc.Weapon.System = true
 	}
 }

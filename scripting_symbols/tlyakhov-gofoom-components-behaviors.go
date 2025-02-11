@@ -52,7 +52,7 @@ func init() {
 		"GetVerticalDoor":        reflect.ValueOf(behaviors.GetVerticalDoor),
 		"GetWander":              reflect.ValueOf(behaviors.GetWander),
 		"GetWeaponClass":         reflect.ValueOf(behaviors.GetWeaponClass),
-		"GetWeaponInstant":       reflect.ValueOf(behaviors.GetWeaponInstant),
+		"GetWeapon":       reflect.ValueOf(behaviors.GetWeapon),
 		"InventoryCarrierCID":    reflect.ValueOf(&behaviors.InventoryCarrierCID).Elem(),
 		"InventoryItemCID":       reflect.ValueOf(&behaviors.InventoryItemCID).Elem(),
 		"InventorySlotCID":       reflect.ValueOf(&behaviors.InventorySlotCID).Elem(),
@@ -79,7 +79,7 @@ func init() {
 		"VerticalDoorCID":        reflect.ValueOf(&behaviors.VerticalDoorCID).Elem(),
 		"WanderCID":              reflect.ValueOf(&behaviors.WanderCID).Elem(),
 		"WeaponClassCID":         reflect.ValueOf(&behaviors.WeaponClassCID).Elem(),
-		"WeaponInstantCID":       reflect.ValueOf(&behaviors.WeaponInstantCID).Elem(),
+		"WeaponCID":       reflect.ValueOf(&behaviors.WeaponCID).Elem(),
 
 		// type definitions
 		"ActionFire":          reflect.ValueOf((*behaviors.ActionFire)(nil)),
@@ -108,7 +108,7 @@ func init() {
 		"VerticalDoor":        reflect.ValueOf((*behaviors.VerticalDoor)(nil)),
 		"Wander":              reflect.ValueOf((*behaviors.Wander)(nil)),
 		"WeaponClass":         reflect.ValueOf((*behaviors.WeaponClass)(nil)),
-		"WeaponInstant":       reflect.ValueOf((*behaviors.WeaponInstant)(nil)),
+		"Weapon":       reflect.ValueOf((*behaviors.Weapon)(nil)),
 		"WeaponMark":          reflect.ValueOf((*behaviors.WeaponMark)(nil)),
 	}
 }

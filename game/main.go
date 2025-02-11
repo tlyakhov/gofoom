@@ -66,7 +66,7 @@ func gameInput() {
 	}
 	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
 		if renderer.Carrier.SelectedWeapon != 0 {
-			if w := behaviors.GetWeaponInstant(renderer.ECS, renderer.Carrier.SelectedWeapon); w != nil {
+			if w := behaviors.GetWeapon(renderer.ECS, renderer.Carrier.SelectedWeapon); w != nil {
 				w.FireNextFrame = true
 			}
 		}
