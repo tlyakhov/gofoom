@@ -425,3 +425,37 @@ func (node *QuadNode) RangeRay(start, dir *concepts.Vector3, lightsOnly bool, fn
 		node.Children[i].RangeRay(start, dir, lightsOnly, fn)
 	}
 }
+
+func (node *QuadNode) aabbOverlaps(min, max *concepts.Vector2) bool {
+	if max[0]+node.MaxRadius < node.Min[0] ||
+		max[1]+node.MaxRadius < node.Min[1] ||
+		min[0]-node.MaxRadius >= node.Max[0] ||
+		min[1]-node.MaxRadius >= node.Max[1] {
+		return false
+	}
+	return true
+}
+
+func (node *QuadNode) RangeAABB(min, max *concepts.Vector2, fn func(b *Body) bool) {
+	if node.IsLeaf() {
+		for _, b := range node.Bodies {
+			br := b.Size.Now[0] * 0.5
+			if b.Pos.Now[0]+br < min[0] ||
+				b.Pos.Now[1]+br < min[1] ||
+				b.Pos.Now[0]-br >= max[0] ||
+				b.Pos.Now[1]-br >= max[1] {
+				continue
+			}
+			if !fn(b) {
+				break
+			}
+		}
+		return
+	}
+	for i := range 4 {
+		if !node.Children[i].aabbOverlaps(min, max) {
+			continue
+		}
+		node.Children[i].RangeAABB(min, max, fn)
+	}
+}
