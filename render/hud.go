@@ -124,7 +124,11 @@ func (r *Renderer) DebugInfo() {
 	ts.HAnchor = -1
 	ts.VAnchor = -1
 
-	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v", r.ECS.Simulation.FPS, r.ECS.Entities.Count()))
+	bodiesPerBlock := 0
+	for _, block := range r.Blocks {
+		bodiesPerBlock += len(block.Bodies)
+	}
+	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v, BodiesPerBlock: %.1f", r.ECS.Simulation.FPS, r.ECS.Entities.Count(), float64(bodiesPerBlock)/float64(len(r.Blocks))))
 	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	switch 2 {
 	case 0:

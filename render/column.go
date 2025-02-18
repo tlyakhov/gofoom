@@ -10,14 +10,6 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-type entityWithDist2 struct {
-	Body            *core.Body
-	Visible         *materials.Visible
-	InternalSegment *core.InternalSegment
-	Sector          *core.Sector
-	Dist2           float64
-}
-
 type segmentIntersection struct {
 	Segment         *core.Segment
 	SectorSegment   *core.SectorSegment

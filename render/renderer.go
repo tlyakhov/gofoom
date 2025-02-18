@@ -30,6 +30,7 @@ type Renderer struct {
 	startingSector *core.Sector
 	textStyle      *TextStyle
 	xorSeed        uint64
+	tree           *core.Quadtree
 
 	ICacheHits, ICacheMisses atomic.Int64
 
@@ -201,12 +202,13 @@ func (r *Renderer) RenderSector(block *block) {
 	block.Sector.LastSeenFrame.Store(int64(block.ECS.Frame))
 
 	// Store bodies & internal segments for later
-	for _, b := range block.Sector.Bodies {
+	r.tree.Root.RangeAABB(block.Sector.Min.To2D(), block.Sector.Max.To2D(), func(b *core.Body) bool {
 		if b == nil || !b.Active {
-			continue
+			return true
 		}
 		block.Bodies.Add(b)
-	}
+		return true
+	})
 	for _, iseg := range block.Sector.InternalSegments {
 		if iseg == nil || !iseg.Active {
 			continue
@@ -392,11 +394,6 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
 	block.CameraZ = r.Player.CameraZ
 
-	// TODO: This has a bug: we could have a body in a different sector actually
-	// show up in a block that hasn't visited that sector. We could either
-	// render bodies single-threaded, or attempt to do something more clever
-	// by attempting to render bodies for adjacent sectors.
-	// TODO: Replace this with a quad-tree raycast?
 	for b := range block.Bodies {
 		vis := materials.GetVisible(b.ECS, b.Entity)
 		if vis == nil || !vis.Active {
@@ -441,6 +438,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 
 // Render a frame.
 func (r *Renderer) Render() {
+	r.tree = r.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	r.RefreshPlayer()
 	r.ICacheHits.Store(0)
 	r.ICacheMisses.Store(0)
