@@ -70,7 +70,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	case "Sector":
 		cids = append(cids, core.SectorCID)
 	case "Material":
-		cids = append(cids, materials.ShaderCID, materials.SpriteCID,
+		cids = append(cids, materials.ShaderCID, materials.SpriteSheetCID,
 			materials.ImageCID, materials.TextCID, materials.SolidCID)
 	case "Action":
 		cids = append(cids, behaviors.ActionWaypointCID, behaviors.ActionJumpCID,
@@ -80,7 +80,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	}
 	for _, cid := range cids {
 		col := g.State().ECS.Column(cid)
-		for i := range col.Cap() {
+		for i := range col.Len() {
 			if a := col.Attachable(i); a != nil {
 				entities = append(entities, a.Base().Entity.String())
 			}

@@ -172,7 +172,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 				frame += uint32(stage.Frame)
 			}
 			cell := uint32(ms.SpriteAngle) * sheet.Angles / 360
-			cell += sheet.Angles * (frame % sheet.Frames)
+			cell = cell*sheet.Frames + frame%sheet.Frames
 
 			c := cell % sheet.Cols
 			r := cell / sheet.Cols

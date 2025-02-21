@@ -235,10 +235,10 @@ func (node *QuadNode) expandRoot(pos *concepts.Vector3) {
 
 func (node *QuadNode) addToLeaf(body *Body) {
 	if body.Pos.Now[2] < node.Tree.MinZ {
-		node.Tree.MinZ = body.Pos.Now[2]
+		node.Tree.MinZ = body.Pos.Now[2] - body.Size.Now[1]
 	}
 	if body.Pos.Now[2] > node.Tree.MaxZ {
-		node.Tree.MaxZ = body.Pos.Now[2]
+		node.Tree.MaxZ = body.Pos.Now[2] + body.Size.Now[1]
 	}
 	node.increaseRadii(body.Size.Now[0] * 0.5)
 	node.Bodies = append(node.Bodies, body)
@@ -349,12 +349,12 @@ func (node *QuadNode) planeOverlaps(center, normal *concepts.Vector3) bool {
 	if normal[0] == 0 && normal[1] == 0 {
 		return true
 	}
-	dz := node.Tree.MinZ - center[2]
-	dy := node.Min[1] - center[1]
-	dx := node.Min[0] - center[0]
-	dz2 := node.Tree.MaxZ - center[2]
-	dy2 := node.Max[1] - center[1]
-	dx2 := node.Max[0] - center[0]
+	dz := node.Tree.MinZ - node.MaxRadius - center[2]
+	dy := node.Min[1] - node.MaxRadius - center[1]
+	dx := node.Min[0] - node.MaxRadius - center[0]
+	dz2 := node.Tree.MaxZ + node.MaxRadius - center[2]
+	dy2 := node.Max[1] + node.MaxRadius - center[1]
+	dx2 := node.Max[0] + node.MaxRadius - center[0]
 	return dx*normal[0]+dy*normal[1]+dz*normal[2] >= 0 ||
 		dx2*normal[0]+dy2*normal[1]+dz2*normal[2] >= 0
 }
