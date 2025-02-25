@@ -13,20 +13,35 @@ func init() {
 	Types().RegisterController(func() Controller { return &LinkedController{} }, 0)
 }
 
-func (ic *LinkedController) ComponentID() ComponentID {
+func (lc *LinkedController) ComponentID() ComponentID {
 	return LinkedCID
 }
 
-func (ic *LinkedController) Methods() ControllerMethod {
+func (lc *LinkedController) Methods() ControllerMethod {
 	return ControllerRecalculate
 }
 
-func (ic *LinkedController) Target(target Attachable, e Entity) bool {
-	ic.Entity = e
-	ic.Linked = target.(*Linked)
-	return ic.Linked.IsActive()
+func (lc *LinkedController) Target(target Attachable, e Entity) bool {
+	lc.Entity = e
+	lc.Linked = target.(*Linked)
+	return lc.Linked.IsActive()
 }
 
-func (ic *LinkedController) Recalculate() {
-	ic.Linked.Recalculate()
+func (lc *LinkedController) Recalculate() {
+	// Remove this entity from any linked copies
+	for _, c := range lc.SourceComponents {
+		if c != nil {
+			lc.ECS.detach(c.Base().ComponentID, lc.Entity, false)
+		}
+	}
+	lc.SourceComponents = make(ComponentTable, 0)
+	for _, sourceEntity := range lc.Sources {
+		for _, c := range lc.ECS.AllComponents(sourceEntity) {
+			if c == nil || !c.MultiAttachable() {
+				continue
+			}
+			lc.SourceComponents.Set(c)
+			lc.ECS.attach(lc.Entity, &c, c.Base().ComponentID)
+		}
+	}
 }

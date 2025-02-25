@@ -39,6 +39,7 @@ func init() {
 		"BodyController":             reflect.ValueOf((*controllers.BodyController)(nil)),
 		"ImageController":            reflect.ValueOf((*controllers.ImageController)(nil)),
 		"InternalSegmentController":  reflect.ValueOf((*controllers.InternalSegmentController)(nil)),
+		"InventoryItemController":    reflect.ValueOf((*controllers.InventoryItemController)(nil)),
 		"InventorySlotController":    reflect.ValueOf((*controllers.InventorySlotController)(nil)),
 		"MobileController":           reflect.ValueOf((*controllers.MobileController)(nil)),
 		"ParticleController":         reflect.ValueOf((*controllers.ParticleController)(nil)),

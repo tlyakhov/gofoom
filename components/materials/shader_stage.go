@@ -5,7 +5,6 @@ package materials
 
 import (
 	"strconv"
-	"strings"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
@@ -77,13 +76,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Flags"]; ok {
-		parsedFlags := strings.Split(v.(string), "|")
-		s.Flags = 0
-		for _, parsedFlag := range parsedFlags {
-			if f, err := ShaderFlagsString(parsedFlag); err == nil {
-				s.Flags |= f
-			}
-		}
+		s.Flags = concepts.ParseFlags(cast.ToString(v), ShaderFlagsString)
 	}
 }
 
@@ -105,17 +98,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 	result["BlendingFunc"] = s.BlendFunc.String()
 
 	if s.Flags != ShaderTiled {
-		flags := ""
-		for _, f := range ShaderFlagsValues() {
-			if s.Flags&f == 0 {
-				continue
-			}
-			if len(flags) > 0 {
-				flags += "|"
-			}
-			flags += f.String()
-		}
-		result["Flags"] = flags
+		result["Flags"] = concepts.SerializeFlags(s.Flags, ShaderFlagsValues())
 	}
 	if !s.Transform.IsIdentity() {
 		result["Transform"] = s.Transform.Serialize()

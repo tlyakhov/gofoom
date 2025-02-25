@@ -27,13 +27,24 @@ func (node *QuadNode) print(depth int) {
 		log.Printf("%vLeaf %p: %v -> %v (%v bodies, %v lights)",
 			ds, node,
 			node.Min.StringHuman(), node.Max.StringHuman(),
-			len(node.Bodies), (node.Lights))
+			node.BodyEntitiesString(), len(node.Lights))
 	} else {
 		log.Printf("%vNode %p: %v -> %v", ds, node, node.Min.StringHuman(), node.Max.StringHuman())
 		for i := range 4 {
 			node.Children[i].print(depth + 1)
 		}
 	}
+}
+
+func (node *QuadNode) BodyEntitiesString() string {
+	result := ""
+	for _, b := range node.Bodies {
+		if result != "" {
+			result += ";"
+		}
+		result += b.Entities.String()
+	}
+	return result
 }
 
 func (node *QuadNode) IsLeaf() bool {
@@ -75,28 +86,28 @@ func (node *QuadNode) Remove(body *Body) {
 		log.Printf("QuadNode.Remove: node is not a leaf!")
 	}
 
-	found := false
+	foundIndex := -1
 	node.MaxRadius = 0
 	// Find the body in the slice and trim
 	for i, test := range node.Bodies {
-		if test != body {
-			r := test.Size.Now[0] * 0.5
-			if r > node.MaxRadius {
-				node.MaxRadius = r
-			}
+		if test == body {
+			// Don't break, we still need to keep track of radii
+			foundIndex = i
 			continue
 		}
-		l := len(node.Bodies) - 1
-		node.Bodies[i] = node.Bodies[l]
-		node.Bodies = node.Bodies[:l]
-		body.QuadNode = nil
-		found = true
-		break
+		r := test.Size.Now[0] * 0.5
+		if r > node.MaxRadius {
+			node.MaxRadius = r
+		}
 	}
-	if !found {
+	if foundIndex < 0 {
 		log.Printf("QuadNode.Remove: Tried to remove body %v from a node that doesn't include it.", body.Entity)
 		return
 	}
+	size := len(node.Bodies) - 1
+	node.Bodies[foundIndex] = node.Bodies[size]
+	node.Bodies = node.Bodies[:size]
+	body.QuadNode = nil
 
 	if light := GetLight(body.ECS, body.Entity); light != nil {
 		// Find the light in the slice and trim

@@ -1,0 +1,105 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
+package controllers
+
+import (
+	"math/rand/v2"
+	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/dynamic"
+	"tlyakhov/gofoom/ecs"
+)
+
+type InventoryItemController struct {
+	ecs.BaseController
+	*behaviors.InventoryItem
+	body *core.Body
+
+	autoProximity        *behaviors.Proximity
+	autoPlayerTargetable *behaviors.PlayerTargetable
+}
+
+func init() {
+	ecs.Types().RegisterController(func() ecs.Controller { return &InventoryItemController{} }, 75)
+}
+
+func (iic *InventoryItemController) ComponentID() ecs.ComponentID {
+	return behaviors.InventoryItemCID
+}
+
+func (iic *InventoryItemController) Methods() ecs.ControllerMethod {
+	return ecs.ControllerRecalculate
+}
+
+func (iic *InventoryItemController) EditorPausedMethods() ecs.ControllerMethod {
+	return ecs.ControllerRecalculate
+}
+
+func (iic *InventoryItemController) Target(target ecs.Attachable, e ecs.Entity) bool {
+	iic.Entity = e
+	iic.InventoryItem = target.(*behaviors.InventoryItem)
+	if iic.InventoryItem == nil || !iic.InventoryItem.IsActive() {
+		return false
+	}
+	iic.body = core.GetBody(iic.ECS, iic.Entity)
+	return true
+}
+
+func (iic *InventoryItemController) cacheAutoProximity() {
+	if ecs.CachedGeneratedComponent(iic.ECS, &iic.autoProximity, "_InventoryItemAutoProximity", behaviors.ProximityCID) {
+		iic.autoProximity.Hysteresis = 0
+		iic.autoProximity.InRange.Code = `
+				if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {
+					p.HoveringTargets.Add(onEntity)
+				}`
+
+		iic.ECS.ActAllControllersOneEntity(iic.autoProximity.Entity, ecs.ControllerRecalculate)
+	}
+}
+
+func (iic *InventoryItemController) cacheAutoTargetable() {
+	if ecs.CachedGeneratedComponent(iic.ECS, &iic.autoPlayerTargetable, "_InventoryItemAutoTargetable", behaviors.PlayerTargetableCID) {
+		iic.autoPlayerTargetable.Frob.Code = `
+			if carrier == nil || body == nil { return }
+			controllers.PickUpInventoryItem(carrier, body.Entity)`
+		iic.autoPlayerTargetable.Message = `Pick up {{with ecs_Named .TargetableEntity}}{{.Name}}{{else}}item{{end}}`
+		iic.ECS.ActAllControllersOneEntity(iic.autoPlayerTargetable.Entity, ecs.ControllerRecalculate)
+	}
+}
+
+func (iic *InventoryItemController) Recalculate() {
+	if iic.body != nil && (iic.Flags&behaviors.InventoryItemBounce != 0) {
+		a := iic.body.Pos.NewAnimation()
+		a.TweeningFunc = dynamic.EaseInOut2
+		a.End[2] = 5
+		a.Duration = 1000
+		// Make inventory items bounce differently for variety
+		a.Percent = rand.Float64()
+	}
+
+	if iic.Flags&behaviors.InventoryItemAutoProximity != 0 {
+		iic.cacheAutoProximity()
+		p := behaviors.GetProximity(iic.ECS, iic.Entity)
+		if p != nil && p != iic.autoProximity {
+			iic.ECS.DetachComponent(behaviors.ProximityCID, iic.Entity)
+			p = nil
+		}
+		if p == nil {
+			var a ecs.Attachable = iic.autoProximity
+			iic.ECS.Attach(behaviors.ProximityCID, iic.Entity, &a)
+		}
+	}
+	if iic.Flags&behaviors.InventoryItemAutoPlayerTargetable != 0 {
+		iic.cacheAutoTargetable()
+		pt := behaviors.GetPlayerTargetable(iic.ECS, iic.Entity)
+		if pt != nil && pt != iic.autoPlayerTargetable {
+			iic.ECS.DetachComponent(behaviors.PlayerTargetableCID, iic.Entity)
+			pt = nil
+		}
+		if pt == nil {
+			var a ecs.Attachable = iic.autoPlayerTargetable
+			iic.ECS.Attach(behaviors.PlayerTargetableCID, iic.Entity, &a)
+		}
+	}
+}

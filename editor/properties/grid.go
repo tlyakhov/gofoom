@@ -453,6 +453,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, materials.ShaderFlagsValues())
 		case *concepts.BlendType:
 			g.fieldEnum(field, concepts.BlendFuncValues())
+		case *behaviors.InventoryItemFlags:
+			g.fieldEnum(field, behaviors.InventoryItemFlagsValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]*core.Script:

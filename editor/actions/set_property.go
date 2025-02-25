@@ -35,7 +35,7 @@ func (a *SetProperty) FireHooks() {
 	for _, v := range a.Values {
 		switch target := v.Parent().(type) {
 		case *ecs.Linked:
-			target.Recalculate()
+			a.State().ECS.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
 		case dynamic.Dynamic:
 			target.ResetToSpawn()
 			target.Recalculate()

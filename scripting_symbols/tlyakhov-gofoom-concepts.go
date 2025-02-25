@@ -77,9 +77,26 @@ func init() {
 
 		// type definitions
 		"BlendType": reflect.ValueOf((*concepts.BlendType)(nil)),
+		//"Flaggable": reflect.ValueOf((*concepts.Flaggable)(nil)),
 		"Matrix2":   reflect.ValueOf((*concepts.Matrix2)(nil)),
 		"Vector2":   reflect.ValueOf((*concepts.Vector2)(nil)),
 		"Vector3":   reflect.ValueOf((*concepts.Vector3)(nil)),
 		"Vector4":   reflect.ValueOf((*concepts.Vector4)(nil)),
+
+		// interface wrapper definitions
+		"_Flaggable": reflect.ValueOf((*_tlyakhov_gofoom_concepts_Flaggable)(nil)),
 	}
+}
+
+// _tlyakhov_gofoom_concepts_Flaggable is an interface wrapper for Flaggable type
+type _tlyakhov_gofoom_concepts_Flaggable struct {
+	IValue  interface{}
+	WString func() string
+}
+
+func (W _tlyakhov_gofoom_concepts_Flaggable) String() string {
+	if W.WString == nil {
+		return ""
+	}
+	return W.WString()
 }
