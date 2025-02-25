@@ -224,7 +224,7 @@ func (db *ECS) LoadComponentWithoutAttaching(id ComponentID, data map[string]any
 		return nil
 	}
 	component := Types().ColumnPlaceholders[id].New()
-	component.OnAttach(db)
+	component.Base().ECS = db
 	component.Construct(data)
 	return component
 }
@@ -605,4 +605,29 @@ func Archetype3[T1 any, T2 any, T3 any,
 		}
 	}
 	return
+}
+
+// Returns true if a new one was created.
+func CachedGeneratedComponent[T any, PT GenericAttachable[T]](db *ECS, field *PT, name string, cid ComponentID) bool {
+	if *field != nil {
+		return false
+	}
+	e := db.GetEntityByName(name)
+	if e != 0 {
+		*field = db.Component(e, cid).(PT)
+		if *field != nil {
+			return false
+		}
+	} else {
+		e = db.NewEntity()
+	}
+
+	*field = db.NewAttachedComponent(e, cid).(PT)
+	base := (*field).Base()
+	base.System = true
+	n := db.NewAttachedComponent(base.Entity, NamedCID).(*Named)
+	n.Name = name
+	n.System = true
+
+	return true
 }

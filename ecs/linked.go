@@ -49,25 +49,6 @@ func (n *Linked) OnDetach(e Entity) {
 	n.SourceComponents = make(ComponentTable, 0)
 }
 
-func (n *Linked) Recalculate() {
-	// Remove this entity from any linked copies
-	for _, c := range n.SourceComponents {
-		if c != nil {
-			n.ECS.detach(c.Base().ComponentID, n.Entity, false)
-		}
-	}
-	n.SourceComponents = make(ComponentTable, 0)
-	for _, sourceEntity := range n.Sources {
-		for _, c := range n.ECS.AllComponents(sourceEntity) {
-			if c == nil || !c.MultiAttachable() {
-				continue
-			}
-			n.SourceComponents.Set(c)
-			n.ECS.attach(n.Entity, &c, c.Base().ComponentID)
-		}
-	}
-}
-
 func (n *Linked) Construct(data map[string]any) {
 	n.Attached.Construct(data)
 

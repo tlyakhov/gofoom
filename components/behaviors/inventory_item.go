@@ -4,10 +4,20 @@
 package behaviors
 
 import (
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
+)
+
+//go:generate go run github.com/dmarkham/enumer -type=InventoryItemFlags -json
+type InventoryItemFlags int
+
+const (
+	InventoryItemBounce InventoryItemFlags = 1 << iota
+	InventoryItemAutoProximity
+	InventoryItemAutoPlayerTargetable
 )
 
 type InventoryItem struct {
@@ -16,6 +26,7 @@ type InventoryItem struct {
 	Class string               `editable:"Class"`
 	Count dynamic.Spawned[int] `editable:"Count"`
 	Image ecs.Entity           `editable:"Image" edit_type:"Material"`
+	Flags InventoryItemFlags   `editable:"Flags" edit_type:"Flags"`
 }
 
 var InventoryItemCID ecs.ComponentID
@@ -41,6 +52,7 @@ func (item *InventoryItem) Construct(data map[string]any) {
 	item.Attached.Construct(data)
 	item.Class = "GenericItem"
 	item.Count.SetAll(1)
+	item.Flags = InventoryItemBounce | InventoryItemAutoProximity | InventoryItemAutoPlayerTargetable
 
 	if data == nil {
 		return
@@ -55,6 +67,9 @@ func (item *InventoryItem) Construct(data map[string]any) {
 	if v, ok := data["Image"]; ok {
 		item.Image, _ = ecs.ParseEntity(v.(string))
 	}
+	if v, ok := data["Flags"]; ok {
+		item.Flags = concepts.ParseFlags(cast.ToString(v), InventoryItemFlagsString)
+	}
 }
 
 func (item *InventoryItem) Serialize() map[string]any {
@@ -67,6 +82,9 @@ func (item *InventoryItem) Serialize() map[string]any {
 	}
 	if item.Image != 0 {
 		result["Image"] = item.Image.String()
+	}
+	if item.Flags != InventoryItemBounce|InventoryItemAutoProximity|InventoryItemAutoPlayerTargetable {
+		result["Flags"] = concepts.SerializeFlags(item.Flags, InventoryItemFlagsValues())
 	}
 
 	return result
