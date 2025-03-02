@@ -6,30 +6,41 @@ package ecs
 import (
 	"errors"
 	"fmt"
+	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 )
 
-type Entity int
+type Entity int64
+type EntitySourceID int16
 
-// Why the unicode prefix?
-//
-//	0x2208 ELEMENT OF
-//	0x22EE VERTICAL ELLIPSIS
-//
-// Because it gives us a few benefits:
-//  1. This sequence is unlikely to be used in some other context. It's a
-//     human- and machine-readable way to identify entities when
-//     serializing/deserializing.
-//  2. We can do complex transformations on serialized data, even when the
-//     file format is untyped (e.g. YAML/JSON). For example, we can create
-//     "common" data files, like prefabs, and #include them in other files,
-//     and have the ECS intelligently map the entity IDs across file boundaries.
-//  3. It forces target systems to be UTF-8 compliant - serialization will be
-//     entirely broken otherwise.
+/*
+Entity serialization format is:
+"(Prefix)(16 bit Source ID + 48 bit Entity ID)[(Prefix)Name (url encoded)
+
+Why the unicode prefix?
+
+	0x2208 ELEMENT OF
+	0x22EE VERTICAL ELLIPSIS
+
+Because it gives us a few benefits:
+ 1. This sequence is unlikely to be used in some other context. It's a
+    human- and machine-readable way to identify entities when
+    serializing/deserializing.
+ 2. We can do complex transformations on serialized data, even when the
+    file format is untyped (e.g. YAML/JSON). For example, we can create
+    "common" data files, like prefabs, and #include them in other files,
+    and have the ECS intelligently map the entity IDs across file boundaries.
+ 3. It forces target systems to be UTF-8 compliant - serialization will be
+    entirely broken otherwise.
+*/
 const EntityPrefix = "∈⋮"
 const entityPrefixLength = len(EntityPrefix)
 
+var EntityRegexp = regexp.MustCompile(`^∈⋮([0-9]+)(?:∈⋮([^∈]+)(?:∈⋮(.+))?)?$`)
+
+// Ignores name/original file
 func (e Entity) String() string {
 	return EntityPrefix + strconv.FormatInt(int64(e), 10)
 }
@@ -38,52 +49,42 @@ func ParseEntity(e string) (Entity, error) {
 	if !strings.HasPrefix(e, EntityPrefix) {
 		return 0, errors.New("Entity string should start with " + EntityPrefix)
 	}
-	v, err := strconv.ParseInt(e[entityPrefixLength:], 10, 32)
+	parts := EntityRegexp.FindStringSubmatch(e)
+	if parts == nil {
+		return 0, errors.New("Can't parse entity " + e)
+	}
+	v, err := strconv.ParseInt(parts[1], 10, 64)
+	// TODO: return name
 	return Entity(v), err
 }
 
 func ParseEntityPrefixOptional(e string) (Entity, error) {
 	if !strings.HasPrefix(e, EntityPrefix) {
-		v, err := strconv.ParseInt(e, 10, 32)
+		v, err := strconv.ParseInt(e, 10, 64)
 		return Entity(v), err
 	}
-	v, err := strconv.ParseInt(e[entityPrefixLength:], 10, 32)
+	v, err := strconv.ParseInt(e[entityPrefixLength:], 10, 64)
 	return Entity(v), err
 }
 
 func (e Entity) Format(db *ECS) string {
 	if e == 0 {
-		return "[" + EntityPrefix + "0] Nothing"
-	}
-	var sb strings.Builder
-
-	sb.WriteString("[")
-	sb.WriteString(e.String())
-	sb.WriteString("] ")
-	first := true
-	for _, c := range db.AllComponents(e) {
-		if c == nil {
-			continue
-		}
-		if !first {
-			sb.WriteString("|")
-		}
-		first = false
-		sb.WriteString(c.String())
-		/*t := reflect.TypeOf(c).Elem().String()
-		split := strings.Split(t, ".")
-		sb.WriteString(split[len(split)-1])*/
-	}
-	return sb.String()
-}
-
-func (e Entity) NameString(db *ECS) string {
-	if e == 0 {
-		return EntityPrefix + "0 - Nothing"
+		return EntityPrefix + "0 Nothing"
 	}
 	id := e.String()
 	if named := GetNamed(db, e); named != nil {
-		return id + " - " + named.Name
+		return id + " " + named.Name
+	}
+	return id
+}
+
+func (e Entity) Serialize(db *ECS) string {
+	id := e.String()
+	if e == 0 {
+		return id
+	}
+	if named := GetNamed(db, e); named != nil {
+		return id + EntityPrefix + url.QueryEscape(named.Name)
 	}
 	return id
 }
@@ -99,10 +100,14 @@ func DeserializeEntities[T ~string | any](data []T) EntityTable {
 		case string:
 			if entity, err := ParseEntity(c); err == nil {
 				result.Set(entity)
+			} else {
+				fmt.Printf("ecs.DeserializeEntities: Error %v parsing entity %v", err, e)
 			}
 		case fmt.Stringer:
 			if entity, err := ParseEntity(c.String()); err == nil {
 				result.Set(entity)
+			} else {
+				fmt.Printf("ecs.DeserializeEntities: Error %v parsing entity %v", err, e)
 			}
 		}
 	}

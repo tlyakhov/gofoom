@@ -269,7 +269,7 @@ func CreateTestWorld3(db *ecs.ECS) {
 
 	heightImage := db.NewAttachedComponent(db.NewEntity(), materials.ImageCID).(*materials.Image)
 	heightImage.ComponentID = materials.ImageCID
-	heightImage.System = true
+	heightImage.Flags = ecs.ComponentInternal
 	heightImage.Construct(map[string]any{
 		"Source":          "data/test-heightmap.jpg",
 		"Filter":          true,

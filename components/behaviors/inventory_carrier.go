@@ -66,10 +66,10 @@ func (ic *InventoryCarrier) Construct(data map[string]any) {
 func (ic *InventoryCarrier) Serialize() map[string]any {
 	result := ic.Attached.Serialize()
 
-	result["Inventory"] = ic.Inventory.Serialize()
+	result["Inventory"] = ic.Inventory.Serialize(ic.ECS)
 
 	if ic.SelectedWeapon != 0 {
-		result["SelectedWeapon"] = ic.SelectedWeapon.String()
+		result["SelectedWeapon"] = ic.SelectedWeapon.Serialize(ic.ECS)
 	}
 
 	return result

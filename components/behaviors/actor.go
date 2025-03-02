@@ -70,7 +70,7 @@ func (a *Actor) Construct(data map[string]any) {
 func (a *Actor) Serialize() map[string]any {
 	result := a.Attached.Serialize()
 
-	result["Start"] = a.Start.String()
+	result["Start"] = a.Start.Serialize(a.ECS)
 	result["Speed"] = a.Speed
 
 	if a.NoZ {

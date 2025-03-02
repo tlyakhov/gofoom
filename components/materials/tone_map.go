@@ -51,7 +51,7 @@ func (tm *ToneMap) Recalculate() {
 
 func (tm *ToneMap) Construct(data map[string]any) {
 	tm.Attached.Construct(data)
-	tm.System = true
+	tm.Flags = ecs.ComponentInternal
 	tm.Gamma = 2.4
 	defer tm.Recalculate()
 

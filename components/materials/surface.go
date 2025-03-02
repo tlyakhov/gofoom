@@ -57,7 +57,7 @@ func (s *Surface) Serialize() map[string]any {
 	}
 
 	if s.Material != 0 {
-		result["Material"] = s.Material.String()
+		result["Material"] = s.Material.Serialize(s.ECS)
 	}
 
 	if !s.Transform.Spawn.IsIdentity() {

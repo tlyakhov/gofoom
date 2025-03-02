@@ -109,9 +109,9 @@ func integrateGame() {
 	if inMenu {
 		menuInput()
 	} else if renderer.Player != nil {
-		/*if len(renderer.Carrier.Inventory) == 2 && renderer.Carrier.Inventory[InventoryWeirdGun].Count.Now > 0 {
-			renderer.Carrier.SelectedWeaponSlot = renderer.Carrier.Inventory[InventoryWeirdGun]
-		}*/
+		if gunSlot != nil && gunSlot.Count.Now > 0 {
+			renderer.Carrier.SelectedWeapon = gunSlot.Entity
+		}
 		gameInput()
 		db.ActAllControllers(ecs.ControllerAlways)
 	}
@@ -181,6 +181,7 @@ func run() {
 		log.Printf("Error loading world %v", err)
 		return
 	}
+	validateSpawn(db)
 	controllers.Respawn(db, true)
 	archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
 

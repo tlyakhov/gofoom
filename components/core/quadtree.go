@@ -38,7 +38,7 @@ func (q *Quadtree) String() string {
 func (q *Quadtree) Construct(data map[string]any) {
 	q.Attached.Construct(data)
 
-	q.System = true // never serialize this
+	q.Flags = ecs.ComponentInternal // never serialize this
 	q.Build()
 }
 

@@ -37,7 +37,7 @@ func (transition *ActionTransition) String() string {
 		if len(s) > 0 {
 			s += ", "
 		}
-		s += e.NameString(transition.ECS)
+		s += e.Format(transition.ECS)
 	}
 	return "Transition to " + s
 }
@@ -59,7 +59,7 @@ func (transition *ActionTransition) Serialize() map[string]any {
 	result := transition.Attached.Serialize()
 
 	if len(transition.Next) > 0 {
-		result["Next"] = transition.Next.Serialize()
+		result["Next"] = transition.Next.Serialize(transition.ECS)
 	}
 
 	return result

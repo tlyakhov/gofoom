@@ -187,7 +187,7 @@ func (list *EntityList) Update() {
 		rank := 0
 		allSystem := true
 		for _, c := range list.State().ECS.AllComponents(ecs.Entity(entity)) {
-			if c == nil || c.IsSystem() {
+			if c == nil || c.Base().Flags&ecs.ComponentHideInEditor != 0 {
 				continue
 			}
 			allSystem = false

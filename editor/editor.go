@@ -252,6 +252,7 @@ func (e *Editor) Integrate() {
 }
 
 // TODO: This should be an action
+
 func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 	for _, t := range e.State().SelectedTransformables {
 		switch target := t.(type) {
@@ -394,6 +395,8 @@ func (e *Editor) NewShader() {
 		if uc == nil {
 			return
 		}
+
+		// TODO: This is all broken, fix it
 		// First, load the image
 		eImg := e.ECS.NewEntity()
 		img := e.ECS.NewAttachedComponent(eImg, materials.ImageCID).(*materials.Image)
@@ -401,7 +404,6 @@ func (e *Editor) NewShader() {
 		img.Load()
 		a := &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
 		e.Act(a)
-		e.CurrentAction.Activate()
 		// Next set up the shader
 		eShader := e.ECS.NewEntity()
 		shader := e.ECS.NewAttachedComponent(eImg, materials.ShaderCID).(*materials.Shader)
@@ -414,7 +416,6 @@ func (e *Editor) NewShader() {
 		named.Name = "Shader " + path.Base(img.Source)
 		a = &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
 		e.Act(a)
-		e.CurrentAction.Activate()
 
 	}, e.Window)
 

@@ -29,7 +29,6 @@ type Script struct {
 	Vars         map[string]any
 	Params       []ScriptParam
 	ECS          *ecs.ECS
-	System       bool
 	runFunc      any
 	execCode     string
 }
@@ -122,10 +121,6 @@ func (s *Script) OnAttach(db *ecs.ECS) {
 
 func (s *Script) GetECS() *ecs.ECS {
 	return s.ECS
-}
-
-func (s *Script) IsSystem() bool {
-	return s.System
 }
 
 func (s *Script) Construct(data map[string]any) {

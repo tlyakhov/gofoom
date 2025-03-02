@@ -50,7 +50,7 @@ func (p *ProximityState) String() string {
 
 func (p *ProximityState) Construct(data map[string]any) {
 	p.Attached.Construct(data)
-	p.System = true
+	p.Attached.Flags = ecs.ComponentInternal
 
 	if data == nil {
 		return
@@ -75,8 +75,8 @@ func (p *ProximityState) Construct(data map[string]any) {
 
 func (p *ProximityState) Serialize() map[string]any {
 	result := p.Attached.Serialize()
-	result["Source"] = p.Source.String()
-	result["Target"] = p.Target.String()
+	result["Source"] = p.Source.Serialize(p.ECS)
+	result["Target"] = p.Target.Serialize(p.ECS)
 	result["LastFired"] = strconv.FormatInt(p.LastFired, 10)
 	result["Status"] = p.Status.String()
 	result["Flags"] = p.Flags.String()

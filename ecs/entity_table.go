@@ -115,13 +115,13 @@ func (table *EntityTable) Delete(entity Entity) bool {
 	return true
 }
 
-func (table EntityTable) Serialize() []string {
+func (table EntityTable) Serialize(db *ECS) []string {
 	result := make([]string, 0)
 	for _, e := range table {
 		if e == 0 {
 			continue
 		}
-		result = append(result, e.String())
+		result = append(result, e.Serialize(db))
 	}
 	return result
 }

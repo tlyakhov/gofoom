@@ -84,7 +84,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	}
 
 	if editor.ComponentNamesVisible {
-		text := body.NameString(body.ECS)
+		text := body.Format(body.ECS)
 		mw.Context.Push()
 		mw.Context.SetRGB(0.3, 0.3, 0.5)
 		mw.Context.DrawStringAnchored(text, body.Pos.Now[0], body.Pos.Now[1], 0.5, 0.5)

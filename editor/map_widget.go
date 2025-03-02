@@ -101,26 +101,26 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 
 	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorCID)
 	for i := range colSector.Cap() {
-		if sector := colSector.Value(i); sector != nil && !sector.System {
+		if sector := colSector.Value(i); sector != nil && (sector.Flags&ecs.ComponentHideInEditor) == 0 {
 			mw.DrawSector(sector)
 		}
 	}
 	colSeg := ecs.ColumnFor[core.InternalSegment](editor.ECS, core.InternalSegmentCID)
 	for i := range colSeg.Cap() {
-		if seg := colSeg.Value(i); seg != nil && !seg.System {
+		if seg := colSeg.Value(i); seg != nil && (seg.Flags&ecs.ComponentHideInEditor) == 0 {
 			mw.DrawInternalSegment(seg)
 		}
 	}
 	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](editor.ECS, behaviors.ActionWaypointCID)
 	for i := range colWaypoint.Cap() {
-		if waypoint := colWaypoint.Value(i); waypoint != nil && !waypoint.System {
+		if waypoint := colWaypoint.Value(i); waypoint != nil && (waypoint.Flags&ecs.ComponentHideInEditor) == 0 {
 			mw.DrawActions(waypoint.Entity)
 		}
 	}
 	if editor.BodiesVisible {
 		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyCID)
 		for i := range col3.Cap() {
-			if body := col3.Value(i); body != nil && !body.System {
+			if body := col3.Value(i); body != nil && (body.Flags&ecs.ComponentHideInEditor) == 0 {
 				mw.DrawBody(body)
 			}
 		}

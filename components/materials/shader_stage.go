@@ -24,7 +24,6 @@ const (
 
 type ShaderStage struct {
 	ECS       *ecs.ECS
-	System    bool
 	Material  ecs.Entity         `editable:"Material" edit_type:"Material"`
 	Transform concepts.Matrix2   `editable:"ℝ²→ℝ²"`
 	Flags     ShaderFlags        `editable:"Flags" edit_type:"Flags"`
@@ -84,7 +83,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 	result := make(map[string]any)
 
 	if s.Material != 0 {
-		result["Material"] = s.Material.String()
+		result["Material"] = s.Material.Serialize(s.ECS)
 	}
 
 	if s.Frame != 0 {
@@ -115,8 +114,4 @@ func (s *ShaderStage) OnAttach(db *ecs.ECS) {
 
 func (s *ShaderStage) GetECS() *ecs.ECS {
 	return s.ECS
-}
-
-func (s *ShaderStage) IsSystem() bool {
-	return s.System
 }

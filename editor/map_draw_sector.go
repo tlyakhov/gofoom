@@ -181,7 +181,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	}
 
 	if editor.SectorTypesVisible {
-		text := sector.Entity.NameString(editor.ECS)
+		text := sector.Entity.Format(editor.ECS)
 		mw.Context.Push()
 		mw.Context.SetRGB(0.3, 0.3, 0.3)
 		mw.Context.DrawStringAnchored(text, sector.Center[0], sector.Center[1], 0.5, 0.5)
