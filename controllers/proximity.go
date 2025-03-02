@@ -86,7 +86,7 @@ func (pc *ProximityController) react(target ecs.Entity) {
 	if state, loaded = pc.State.Load(key); !loaded {
 		// TODO: Think through the lifecycle of these. Should they be serialized?
 		state = pc.ECS.NewAttachedComponent(pc.ECS.NewEntity(), behaviors.ProximityStateCID).(*behaviors.ProximityState)
-		state.System = true
+		state.Attached.Flags = ecs.ComponentInternal
 		state.Source = pc.Entity
 		state.Target = target
 		state.PrevStatus = behaviors.ProximityIdle

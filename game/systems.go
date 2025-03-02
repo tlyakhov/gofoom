@@ -3,38 +3,47 @@
 
 package main
 
-//go:generate go run github.com/dmarkham/enumer -type=InventoryIndex -json
-type InventoryIndex int
-
-const (
-	InventoryWeirdGun InventoryIndex = iota
-	InventoryFlower
-	InventoryCount
+import (
+	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/ecs"
 )
 
-//entity := archetypes.CreatePlayerBody(db)
-//playerBody := core.GetBody(db, entity)
-/*if spawn != nil {
-	playerBody.Pos.Spawn = spawn.Spawn
-	playerBody.Pos.ResetToSpawn()
-}*/
-//player = behaviors.GetPlayer(db, entity)
+var flowerSlot *behaviors.InventorySlot
+var gunSlot *behaviors.InventorySlot
 
-/*playerBody := core.GetBody(db, player.Entity)
-playerBody.Elasticity = 0.1
+func validateSpawn(db *ecs.ECS) {
+	col := db.Column(behaviors.PlayerCID).(*ecs.Column[behaviors.Player, *behaviors.Player])
 
-player.Inventory = make([]*behaviors.InventorySlot, InventoryCount)
-slot := &behaviors.InventorySlot{
-	Image:        player.ECS.GetEntityByName("Pluk"),
-	Limit:        5,
-	ValidClasses: make(concepts.Set[string]),
+	for i := range col.Len() {
+		player := col.Value(i)
+		if player == nil || !player.Spawn {
+			continue
+		}
+		mobile := core.GetMobile(db, player.Entity)
+		if mobile == nil {
+			mobile = db.NewAttachedComponent(player.Entity, core.MobileCID).(*core.Mobile)
+		}
+		mobile.Elasticity = 0.1
+		carrier := behaviors.GetInventoryCarrier(db, player.Entity)
+		if carrier == nil {
+			carrier = db.NewAttachedComponent(player.Entity, behaviors.InventoryCarrierCID).(*behaviors.InventoryCarrier)
+		}
+		// TODO: What if the level creator has set up custom slots, or this is a
+		// savegame?
+		/*if ecs.CachedGeneratedComponent(db, &flowerSlot, "_PlayerInventoryFlower", behaviors.InventorySlotCID) {
+			flowerSlot.Class = "Flower"
+			flowerSlot.Limit = 5
+			flowerSlot.Image = db.GetEntityByName("Pluk")
+		}
+		if ecs.CachedGeneratedComponent(db, &gunSlot, "_PlayerInventoryGun", behaviors.InventorySlotCID) {
+			gunSlot.Class = "WeirdGun"
+			gunSlot.Limit = 1
+			gunSlot.Image = db.GetEntityByName("WeirdGun")
+		}
+
+		carrier.Inventory = nil
+		carrier.Inventory.Set(flowerSlot.Entity)
+		carrier.Inventory.Set(gunSlot.Entity)*/
+	}
 }
-slot.ValidClasses.Add("Flower")
-player.Inventory[InventoryFlower] = slot
-slot = &behaviors.InventorySlot{
-	Image:        133,
-	Limit:        1,
-	ValidClasses: make(concepts.Set[string]),
-}
-slot.ValidClasses.Add("WeirdGun")
-player.Inventory[InventoryWeirdGun] = slot*/

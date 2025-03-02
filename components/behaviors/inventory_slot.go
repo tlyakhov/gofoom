@@ -80,7 +80,7 @@ func (s *InventorySlot) Serialize() map[string]any {
 	data["Count"] = s.Count.Serialize()
 	data["Class"] = s.Class
 	if s.Image != 0 {
-		data["Image"] = s.Image.String()
+		data["Image"] = s.Image.Serialize(s.ECS)
 	}
 
 	return data

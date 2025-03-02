@@ -183,7 +183,9 @@ func (wc *WeaponController) Always() {
 		es := &materials.ShaderStage{
 			Material:               wc.Class.MarkMaterial,
 			IgnoreSurfaceTransform: false,
-			System:                 true}
+		}
+		// TODO: Fix this
+		//es.CFlags = ecs.ComponentInternal
 		es.OnAttach(s.ECS)
 		es.Construct(nil)
 		es.Flags = 0

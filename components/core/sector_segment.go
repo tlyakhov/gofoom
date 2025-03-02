@@ -198,7 +198,7 @@ func (s *SectorSegment) Serialize() map[string]any {
 	result["Hi"] = s.HiSurface.Serialize()
 
 	if s.AdjacentSector != 0 {
-		result["AdjacentSector"] = s.AdjacentSector.String()
+		result["AdjacentSector"] = s.AdjacentSector.Serialize(s.ECS)
 	}
 
 	return result

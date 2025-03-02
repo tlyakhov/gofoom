@@ -24,7 +24,7 @@ import (
 
 func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _ bool, co fyne.CanvasObject) {
 	entity, _ := ecs.ParseEntity(tni)
-	name := entity.NameString(g.State().ECS)
+	name := entity.Format(g.State().ECS)
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
 	img.Hidden = entity == 0
@@ -106,7 +106,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	title := "Select " + editTypeTag
 	if origValue != 0 {
 		tree.Select(origValue.String())
-		title = editTypeTag + ": " + origValue.NameString(g.State().ECS)
+		title = editTypeTag + ": " + origValue.Format(g.State().ECS)
 	}
 	tree.OnSelected = func(tni widget.TreeNodeID) {
 		entity, _ := ecs.ParseEntity(tni)

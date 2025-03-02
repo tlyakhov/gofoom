@@ -3,16 +3,27 @@
 
 package ecs
 
+//go:generate go run github.com/dmarkham/enumer -type=ComponentFlags -json
+type ComponentFlags int
+
+const (
+	ComponentNoSave ComponentFlags = 1 << iota
+	ComponentHideInEditor
+	ComponentLockedInEditor
+)
+
+const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLockedInEditor
+
 // Attached represents a set of fields common to every component and implements
 // the Attachable interface.
 type Attached struct {
 	ComponentID
 	Entity
 	Entities      EntityTable `editable:"Component" edit_type:"Component" edit_sort:"0"`
+	Active        bool        `editable:"Active?"`
 	Attachments   int         // Reference counter
 	ECS           *ECS
-	System        bool // Don't serialize this entity, disallow editing
-	Active        bool `editable:"Active?"`
+	Flags         ComponentFlags
 	indexInColumn int
 }
 
@@ -48,10 +59,6 @@ func (a *Attached) OnDelete() {
 	a.ECS = nil
 }
 
-func (a *Attached) IsSystem() bool {
-	return a.System
-}
-
 func (a *Attached) SetColumnIndex(i int) {
 	a.indexInColumn = i
 }
@@ -62,7 +69,7 @@ func (a *Attached) OnAttach(db *ECS) {
 
 func (a *Attached) Construct(data map[string]any) {
 	a.Active = true
-	a.System = false
+	a.Flags = 0
 
 	if data == nil {
 		return
@@ -75,7 +82,7 @@ func (a *Attached) Construct(data map[string]any) {
 }
 
 func (a *Attached) Serialize() map[string]any {
-	result := map[string]any{"Entities": a.Entities.Serialize()}
+	result := map[string]any{"Entities": a.Entities.Serialize(a.ECS)}
 	if !a.Active {
 		result["Active"] = a.Active
 	}
@@ -118,8 +125,11 @@ func ConstructSlice[PT interface {
 func SerializeSlice[T Serializable](elements []T) []map[string]any {
 	result := make([]map[string]any, 0, len(elements))
 	for _, element := range elements {
-		if element.IsSystem() {
-			continue
+		// Attachables can have a flag to not serialize them
+		if a, ok := any(element).(Attachable); ok {
+			if a.Base().Flags&ComponentNoSave != 0 {
+				continue
+			}
 		}
 		result = append(result, element.Serialize())
 	}

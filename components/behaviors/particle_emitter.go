@@ -98,7 +98,7 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 		for e := range pe.Spawned {
 			particles.Set(e)
 		}
-		result["Particles"] = particles.Serialize()
+		result["Particles"] = particles.Serialize(pe.ECS)
 	}
 
 	if pe.Lifetime != 5000 {
@@ -111,7 +111,7 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 		result["Limit"] = strconv.Itoa(pe.Limit)
 	}
 	if pe.Source != 0 {
-		result["Source"] = pe.Source.String()
+		result["Source"] = pe.Source.Serialize(pe.ECS)
 	}
 	result["XYSpread"] = pe.XYSpread
 	result["ZSpread"] = pe.ZSpread

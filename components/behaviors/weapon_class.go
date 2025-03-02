@@ -101,11 +101,11 @@ func (w *WeaponClass) Serialize() map[string]any {
 	result["FlashTime"] = w.FlashTime
 
 	if w.MarkMaterial != 0 {
-		result["MarkMaterial"] = w.MarkMaterial.String()
+		result["MarkMaterial"] = w.MarkMaterial.Serialize(w.ECS)
 	}
 
 	if w.FlashMaterial != 0 {
-		result["FlashMaterial"] = w.FlashMaterial.String()
+		result["FlashMaterial"] = w.FlashMaterial.Serialize(w.ECS)
 	}
 
 	if w.MarkSize != 5 {

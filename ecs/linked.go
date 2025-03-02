@@ -71,7 +71,7 @@ func (n *Linked) Serialize() map[string]any {
 	result := n.Attached.Serialize()
 	arr := make([]string, len(n.Sources))
 	for i, e := range n.Sources {
-		arr[i] = e.String()
+		arr[i] = e.Serialize(n.ECS)
 	}
 	result["Sources"] = arr
 	return result

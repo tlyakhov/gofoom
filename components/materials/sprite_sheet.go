@@ -106,7 +106,7 @@ func (s *SpriteSheet) Construct(data map[string]any) {
 func (s *SpriteSheet) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	if s.Material != 0 {
-		result["Material"] = s.Material.String()
+		result["Material"] = s.Material.Serialize(s.ECS)
 	}
 	if s.Rows != 1 {
 		result["Rows"] = strconv.FormatUint(uint64(s.Rows), 10)

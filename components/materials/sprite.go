@@ -64,7 +64,7 @@ func (s *Sprite) Construct(data map[string]any) {
 func (s *Sprite) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	if s.Material != 0 {
-		result["Material"] = s.Material.String()
+		result["Material"] = s.Material.Serialize(s.ECS)
 	}
 	result["Frame"] = s.Frame.Serialize()
 

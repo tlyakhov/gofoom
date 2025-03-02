@@ -23,9 +23,10 @@ import (
 // * A system (controller) is code that queries and operates on components and entities
 type ECS struct {
 	*dynamic.Simulation
-	Entities bitmap.Bitmap
-	Lock     sync.RWMutex
-	FuncMap  template.FuncMap
+	Entities       bitmap.Bitmap
+	Lock           sync.RWMutex
+	FuncMap        template.FuncMap
+	FileToSourceID map[string]EntitySourceID
 
 	rows    []ComponentTable
 	columns []AttachableColumn
@@ -46,6 +47,7 @@ func (db *ECS) Clear() {
 	db.rows = make([]ComponentTable, 1)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = dynamic.NewSimulation()
+	db.FileToSourceID = make(map[string]EntitySourceID)
 	db.FuncMap = template.FuncMap{
 		"ECS": func() *ECS { return db },
 	}
@@ -367,7 +369,7 @@ func (db *ECS) EntityAllSystem(entity Entity) bool {
 		if c == nil {
 			continue
 		}
-		if !c.IsSystem() {
+		if c.Base().Flags&ComponentNoSave == 0 {
 			return false
 		}
 	}
@@ -431,14 +433,27 @@ func (db *ECS) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
 	data stays untouched?
 
 	Seems like we would need a few things for this:
-	1. When loading, walk the YAML looking for entity IDs, creating a map of
-	   original->loaded IDs.
-	2. Some kind of "locked/included" flag at the entity level to prevent
+	1. A component for including data from other files.
+	2. When loading references, walk the YAML looking for entity IDs, creating a
+	   map of original->loaded IDs.
+	3. Some kind of "locked/included" flag at the entity level to prevent
 	   operations that would modify the original data (e.g. attaching new components)
-	3. When linking non-included and included entities together (via components
+	4. When linking non-included and included entities together (via components
 	   or references), we would need both the mapped and original IDs there, since
 	   the mapped IDs are dynamic. This is kind of the worst part of it.
-
+	   a. Idea: what if for included files, the reference MUST be to a named
+	      entity?
+	   b. Idea: use child ecs.ECS instances. This wouldn't require any kind of
+	      changes to the entity IDs themselves. The only thing would be that
+		  references would need to include which ECS they're a part of. When
+		  serializing, record the child ECS along with the entity ID and name.
+	      When deserializing, if it's for a child ECS, perhaps use the name if it
+		  exists as the key, with the entity ID as a backup if there is no name,
+		  or there are duplicates?
+	5. How to deal with edge cases?
+	   a. User deletes the include, what happens to the references?
+	   b. Included file changes components/references/etc... How does the main
+	      file change?
 **/
 
 func (db *ECS) Load(filename string) error {
@@ -483,7 +498,7 @@ func (db *ECS) serializeEntity(entity Entity, savedComponents map[uint64]Entity)
 	yamlEntity := make(map[string]any)
 	yamlEntity["Entity"] = entity.String()
 	for _, component := range db.rows[int(entity)] {
-		if component == nil || component.IsSystem() {
+		if component == nil || (component.Base().Flags&ComponentNoSave != 0) {
 			continue
 		}
 		cid := component.Base().ComponentID
@@ -624,10 +639,10 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](db *ECS, field *PT
 
 	*field = db.NewAttachedComponent(e, cid).(PT)
 	base := (*field).Base()
-	base.System = true
+	base.Flags = ComponentInternal
 	n := db.NewAttachedComponent(base.Entity, NamedCID).(*Named)
 	n.Name = name
-	n.System = true
+	n.Flags = ComponentInternal
 
 	return true
 }

@@ -5,6 +5,7 @@ package ecs
 
 import (
 	"github.com/rs/xid"
+	"github.com/spf13/cast"
 )
 
 type Named struct {
@@ -38,7 +39,7 @@ func (n *Named) Construct(data map[string]any) {
 		return
 	}
 	if v, ok := data["Name"]; ok {
-		n.Name = v.(string)
+		n.Name = cast.ToString(v)
 	}
 }
 

@@ -81,7 +81,7 @@ func (item *InventoryItem) Serialize() map[string]any {
 		result["Class"] = item.Class
 	}
 	if item.Image != 0 {
-		result["Image"] = item.Image.String()
+		result["Image"] = item.Image.Serialize(item.ECS)
 	}
 	if item.Flags != InventoryItemBounce|InventoryItemAutoProximity|InventoryItemAutoPlayerTargetable {
 		result["Flags"] = concepts.SerializeFlags(item.Flags, InventoryItemFlagsValues())

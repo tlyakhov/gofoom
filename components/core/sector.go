@@ -222,7 +222,7 @@ func (s *Sector) Serialize() map[string]any {
 	}
 
 	if s.Inner.Len() > 0 {
-		result["Inner"] = s.Inner.Serialize()
+		result["Inner"] = s.Inner.Serialize(s.ECS)
 	}
 
 	segments := []any{}

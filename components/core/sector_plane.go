@@ -63,7 +63,7 @@ func (s *SectorPlane) Serialize() map[string]any {
 		result["Normal"] = s.Normal.Serialize()
 	}
 	if s.Target != 0 {
-		result["Target"] = s.Target.String()
+		result["Target"] = s.Target.Serialize(s.ECS)
 	}
 	if len(s.Scripts) > 0 {
 		result["Scripts"] = ecs.SerializeSlice(s.Scripts)

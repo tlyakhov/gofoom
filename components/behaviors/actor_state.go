@@ -48,7 +48,7 @@ func (a *ActorState) Construct(data map[string]any) {
 func (a *ActorState) Serialize() map[string]any {
 	result := a.Attached.Serialize()
 
-	result["Action"] = a.Action.String()
+	result["Action"] = a.Action.Serialize(a.ECS)
 
 	return result
 }
