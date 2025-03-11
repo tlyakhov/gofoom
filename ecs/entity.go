@@ -12,8 +12,14 @@ import (
 	"strings"
 )
 
-type Entity int64
-type EntitySourceID int16
+// If this is enlarged to 64 bit, then the bitmaps need to support iterating
+// over larger ranges, or we need to use an entity bitmap per source
+type Entity uint32
+type EntitySourceID uint8
+
+const EntityBits = 24
+const EntitySourceIDBits = 8
+const MaxEntities = (1 << EntityBits) - 1
 
 /*
 Entity serialization format is:
@@ -38,16 +44,32 @@ Because it gives us a few benefits:
 const EntityPrefix = "∈⋮"
 const entityPrefixLength = len(EntityPrefix)
 
-var EntityRegexp = regexp.MustCompile(`^∈⋮([0-9]+)(?:∈⋮([^∈]+)(?:∈⋮(.+))?)?$`)
+var EntityRegexp = regexp.MustCompile(`^∈⋮([0-9]+)(?:∈⋮([^∈ \r\n\t]+)(?:∈⋮([^∈ \r\n\t]+))?)?`)
 
 // Ignores name/original file
 func (e Entity) String() string {
 	return EntityPrefix + strconv.FormatInt(int64(e), 10)
 }
 
+func (e Entity) SourceID() EntitySourceID {
+	return EntitySourceID(e >> EntityBits)
+}
+
+func (e Entity) ExcludeSourceID() Entity {
+	return e & MaxEntities
+}
+
+func (e Entity) IsExternal() bool {
+	return e.SourceID() != 0
+}
+
+func (e Entity) Local() Entity {
+	return e & MaxEntities
+}
+
 func ParseEntity(e string) (Entity, error) {
 	if !strings.HasPrefix(e, EntityPrefix) {
-		return 0, errors.New("Entity string should start with " + EntityPrefix)
+		return 0, fmt.Errorf("Entity string `%v` should start with %v", e, EntityPrefix)
 	}
 	parts := EntityRegexp.FindStringSubmatch(e)
 	if parts == nil {
@@ -75,6 +97,21 @@ func (e Entity) Format(db *ECS) string {
 	if named := GetNamed(db, e); named != nil {
 		return id + " " + named.Name
 	}
+
+	return id
+}
+
+func (e Entity) SerializeRaw(name string, file string) string {
+	id := e.String()
+	if e == 0 {
+		return id
+	}
+	if len(name) != 0 {
+		id += EntityPrefix + url.QueryEscape(name)
+	}
+	if len(file) != 0 {
+		id += EntityPrefix + url.QueryEscape(file)
+	}
 	return id
 }
 
@@ -84,7 +121,10 @@ func (e Entity) Serialize(db *ECS) string {
 		return id
 	}
 	if named := GetNamed(db, e); named != nil {
-		return id + EntityPrefix + url.QueryEscape(named.Name)
+		id += EntityPrefix + url.QueryEscape(named.Name)
+	}
+	if e.IsExternal() {
+		id += EntityPrefix + url.QueryEscape(db.SourceFileIDs[e.SourceID()].Source)
 	}
 	return id
 }

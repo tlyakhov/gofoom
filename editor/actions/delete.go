@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/editor/state"
 )
 
+// TODO: Prevent deletion of entities from SourceFiles
 type Delete struct {
 	state.IEditor
 
