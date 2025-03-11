@@ -4,7 +4,6 @@
 package ecs
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"os"
@@ -23,13 +22,13 @@ import (
 // * A system (controller) is code that queries and operates on components and entities
 type ECS struct {
 	*dynamic.Simulation
-	Entities       bitmap.Bitmap
-	Lock           sync.RWMutex
-	FuncMap        template.FuncMap
-	FileToSourceID map[string]EntitySourceID
-
-	rows    []ComponentTable
-	columns []AttachableColumn
+	Entities        bitmap.Bitmap
+	Lock            sync.RWMutex
+	FuncMap         template.FuncMap
+	SourceFileNames map[string]*SourceFile
+	SourceFileIDs   map[EntitySourceID]*SourceFile
+	rows            []ComponentTable
+	columns         []AttachableColumn
 }
 
 func NewECS() *ECS {
@@ -47,7 +46,8 @@ func (db *ECS) Clear() {
 	db.rows = make([]ComponentTable, 1)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = dynamic.NewSimulation()
-	db.FileToSourceID = make(map[string]EntitySourceID)
+	db.SourceFileNames = make(map[string]*SourceFile)
+	db.SourceFileIDs = make(map[EntitySourceID]*SourceFile)
 	db.FuncMap = template.FuncMap{
 		"ECS": func() *ECS { return db },
 	}
@@ -79,6 +79,16 @@ func (db *ECS) NewEntity() Entity {
 	}
 	db.Entities.Set(uint32(nextFree))
 	return Entity(nextFree)
+}
+
+func (db *ECS) nextFreeEntitySourceID() EntitySourceID {
+	for i := range 1 << EntitySourceIDBits {
+		id := EntitySourceID(i)
+		if _, ok := db.SourceFileIDs[id]; !ok {
+			return id
+		}
+	}
+	return EntitySourceID(1<<EntitySourceIDBits - 1)
 }
 
 func ColumnFor[T any, PT GenericAttachable[T]](db *ECS, id ComponentID) *Column[T, PT] {
@@ -115,7 +125,7 @@ func (db *ECS) Singleton(id ComponentID) Attachable {
 
 func (db *ECS) First(id ComponentID) Attachable {
 	c := db.columns[id]
-	for i := 0; i < c.Cap(); i++ {
+	for i := range c.Cap() {
 		a := db.columns[id].Attachable(i)
 		if a != nil {
 			return a
@@ -197,27 +207,6 @@ func (db *ECS) NewAttachedComponent(entity Entity, id ComponentID) Attachable {
 	var attached Attachable
 	db.attach(entity, &attached, id)
 	attached.Construct(nil)
-	return attached
-}
-
-func (db *ECS) LoadAttachComponent(id ComponentID, data map[string]any, ignoreSerializedEntity bool) Attachable {
-	entities, attachments := ParseEntitiesFromMap(data)
-	if ignoreSerializedEntity || attachments == 0 {
-		entities = make(EntityTable, 0)
-		entities.Set(db.NewEntity())
-	}
-
-	var attached Attachable
-	for _, entity := range entities {
-		if entity == 0 {
-			continue
-		}
-		db.Entities.Set(uint32(entity))
-		db.attach(entity, &attached, id)
-		if attached.Base().Attachments == 1 {
-			attached.Construct(data)
-		}
-	}
 	return attached
 }
 
@@ -350,6 +339,7 @@ func (db *ECS) Delete(entity Entity) {
 	db.Entities.Remove(uint32(entity))
 }
 
+// TODO: Optimize this and add ability to wildcard search
 func (db *ECS) GetEntityByName(name string) Entity {
 	col := ColumnFor[Named](db, NamedCID)
 	for i := range col.Cap() {
@@ -361,7 +351,7 @@ func (db *ECS) GetEntityByName(name string) Entity {
 	return 0
 }
 
-func (db *ECS) EntityAllSystem(entity Entity) bool {
+func (db *ECS) EntityAllNoSave(entity Entity) bool {
 	if entity == 0 || len(db.rows) <= int(entity) {
 		return false
 	}
@@ -376,6 +366,7 @@ func (db *ECS) EntityAllSystem(entity Entity) bool {
 	return true
 }
 
+// TODO: Reuse code in SourceFile for this
 func (db *ECS) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
 	var yamlEntity string
 	var entity Entity
@@ -420,78 +411,12 @@ func (db *ECS) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
 	}
 }
 
-/***
-
-	TODO: Something really useful could be some kind of #include directive to be
-	able to combine multiple files into one structure. This way, common game
-	elements (say, all the various monster types, items, etc...) could be set up
-	in a "prefab" world file, and then referenced from actual levels/missions.
-
-	This has a lot of potential complexity - for example, how do we map entity
-	IDs across file boundaries? And then, after mapping, what happens when the
-	new combined world is saved or edited? How do we ensure that the "imported"
-	data stays untouched?
-
-	Seems like we would need a few things for this:
-	1. A component for including data from other files.
-	2. When loading references, walk the YAML looking for entity IDs, creating a
-	   map of original->loaded IDs.
-	3. Some kind of "locked/included" flag at the entity level to prevent
-	   operations that would modify the original data (e.g. attaching new components)
-	4. When linking non-included and included entities together (via components
-	   or references), we would need both the mapped and original IDs there, since
-	   the mapped IDs are dynamic. This is kind of the worst part of it.
-	   a. Idea: what if for included files, the reference MUST be to a named
-	      entity?
-	   b. Idea: use child ecs.ECS instances. This wouldn't require any kind of
-	      changes to the entity IDs themselves. The only thing would be that
-		  references would need to include which ECS they're a part of. When
-		  serializing, record the child ECS along with the entity ID and name.
-	      When deserializing, if it's for a child ECS, perhaps use the name if it
-		  exists as the key, with the entity ID as a backup if there is no name,
-		  or there are duplicates?
-	5. How to deal with edge cases?
-	   a. User deletes the include, what happens to the references?
-	   b. Included file changes components/references/etc... How does the main
-	      file change?
-**/
-
 func (db *ECS) Load(filename string) error {
-	db.Lock.Lock()
-	defer db.Lock.Unlock()
-
-	// TODO: Streaming loads?
-	fileContents, err := os.ReadFile(filename)
-
-	if err != nil {
-		return err
-	}
-
-	var parsed any
-	err = yaml.Unmarshal(fileContents, &parsed)
-	//err = json.Unmarshal(fileContents, &parsed)
-	if err != nil {
-		return err
-	}
-
-	var yamlEntities []any
-	var ok bool
-	if yamlEntities, ok = parsed.([]any); !ok || yamlEntities == nil {
-		return fmt.Errorf("ECS.Load: YAML root must be an array")
-	}
-
-	for _, yamlData := range yamlEntities {
-		yamlEntity := yamlData.(map[string]any)
-		if yamlEntity == nil {
-			log.Printf("ECS.Load: YAML array element should be an object")
-			continue
-		}
-		db.DeserializeAndAttachEntity(yamlEntity)
-	}
-
-	// After everything's loaded, trigger the controllers
-	db.ActAllControllers(ControllerRecalculate)
-	return nil
+	file := db.NewAttachedComponent(db.NewEntity(), SourceFileCID).(*SourceFile)
+	file.Source = filename
+	file.ID = 0
+	file.Flags = ComponentInternal
+	return file.load()
 }
 
 func (db *ECS) serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {
@@ -506,16 +431,17 @@ func (db *ECS) serializeEntity(entity Entity, savedComponents map[uint64]Entity)
 		col := Types().ColumnPlaceholders[cid]
 		yamlID := col.Type().String()
 
-		if savedComponents == nil {
-			yamlComponent := component.Serialize()
-			delete(yamlComponent, "Entities")
-			yamlEntity[yamlID] = yamlComponent
-		} else if savedEntity, ok := savedComponents[hash]; ok {
-			yamlEntity[yamlID] = savedEntity.String()
-		} else {
-			yamlComponent := component.Serialize()
-			delete(yamlComponent, "Entities")
-			yamlEntity[yamlID] = yamlComponent
+		if savedComponents != nil {
+			if savedEntity, ok := savedComponents[hash]; ok {
+				yamlEntity[yamlID] = savedEntity.Serialize(db)
+				continue
+			}
+		}
+
+		yamlComponent := component.Serialize()
+		delete(yamlComponent, "Entities")
+		yamlEntity[yamlID] = yamlComponent
+		if savedComponents != nil {
 			savedComponents[hash] = entity
 		}
 
@@ -537,8 +463,11 @@ func (db *ECS) Save(filename string) {
 	savedComponents := make(map[uint64]Entity)
 
 	db.Entities.Range(func(entity uint32) {
-		log.Printf("e: %v", entity)
-		yamlEntity := db.serializeEntity(Entity(entity), savedComponents)
+		e := Entity(entity)
+		if e.IsExternal() {
+			return
+		}
+		yamlEntity := db.serializeEntity(e, savedComponents)
 		if len(yamlEntity) == 0 {
 			return
 		}
@@ -567,59 +496,6 @@ func ConstructArray(parent any, arrayPtr any, data any) {
 		item.Construct(child.(map[string]any))
 		arrayValue.Set(reflect.Append(arrayValue, reflect.ValueOf(item)))
 	}
-}
-
-// Shortcut methods for retrieving multiple components at a time
-func Archetype2[T1 any, T2 any,
-	PT1 GenericAttachable[T1], PT2 GenericAttachable[T2]](db *ECS, entity Entity) (pt1 PT1, pt2 PT2) {
-	pt1 = nil
-	pt2 = nil
-	if entity == 0 || len(db.rows) <= int(entity) {
-		return
-	}
-	for _, attachable := range db.rows[int(entity)] {
-		if attachable == nil {
-			continue
-		}
-		if ct, ok := attachable.(PT1); ok {
-			pt1 = ct
-		} else if ct, ok := attachable.(PT2); ok {
-			pt2 = ct
-		}
-		if pt1 != nil && pt2 != nil {
-			return
-		}
-	}
-	return
-}
-
-func Archetype3[T1 any, T2 any, T3 any,
-	PT1 GenericAttachable[T1],
-	PT2 GenericAttachable[T2],
-	PT3 GenericAttachable[T3]](db *ECS, entity Entity) (pt1 PT1, pt2 PT2, pt3 PT3) {
-	pt1 = nil
-	pt2 = nil
-	pt3 = nil
-	if entity == 0 || len(db.rows) <= int(entity) {
-		return
-	}
-	for _, attachable := range db.rows[int(entity)] {
-		if attachable == nil {
-			continue
-		}
-		if ct, ok := attachable.(PT1); ok {
-			pt1 = ct
-		} else if ct, ok := attachable.(PT2); ok {
-			pt2 = ct
-		} else if ct, ok := attachable.(PT3); ok {
-			pt3 = ct
-		}
-
-		if pt1 != nil && pt2 != nil && pt3 != nil {
-			return
-		}
-	}
-	return
 }
 
 // Returns true if a new one was created.
