@@ -40,9 +40,9 @@ func NewECS() *ECS {
 
 func (db *ECS) Clear() {
 	db.Entities = bitmap.Bitmap{}
-	// 0 is reserved
+	// 0 is reserved and represents 'null' entity
 	db.Entities.Set(0)
-	// 0 is reserved
+	// rows are indexed by entity ID, so we need to reserve the 0th row
 	db.rows = make([]ComponentTable, 1)
 	db.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	db.Simulation = dynamic.NewSimulation()
@@ -52,6 +52,7 @@ func (db *ECS) Clear() {
 		"ECS": func() *ECS { return db },
 	}
 
+	// Initialize component columns based on registered component types.
 	for i, columnPlaceholder := range Types().ColumnPlaceholders {
 		if columnPlaceholder == nil {
 			continue
@@ -68,19 +69,23 @@ func (db *ECS) Clear() {
 }
 
 // Reserves an entity ID in the database (no components attached)
-func (db *ECS) NewEntity() Entity {
-	if free, found := db.Entities.MinZero(); found {
-		db.Entities.Set(free)
-		return Entity(free)
-	}
-	nextFree := len(db.rows)
-	for len(db.rows) < (nextFree + 1) {
-		db.rows = append(db.rows, nil)
-	}
-	db.Entities.Set(uint32(nextFree))
-	return Entity(nextFree)
-}
++
++// It finds the smallest available entity ID, marks it as used, and returns it.
++func (db *ECS) NewEntity() Entity {
++	if free, found := db.Entities.MinZero(); found {
++		db.Entities.Set(free)
++		return Entity(free)
++	}
++	nextFree := len(db.rows)
++	for len(db.rows) < (nextFree + 1) {
++		db.rows = append(db.rows, nil)
++	}
++	db.Entities.Set(uint32(nextFree))
++	return Entity(nextFree)
++}
 
+// NextFreeEntitySourceID returns the next available entity source ID.
+// It iterates through all possible source IDs and returns the first one that is not currently in use.
 func (db *ECS) NextFreeEntitySourceID() EntitySourceID {
 	for i := range 1 << EntitySourceIDBits {
 		id := EntitySourceID(i)
@@ -99,12 +104,13 @@ func (db *ECS) Column(id ComponentID) AttachableColumn {
 	return db.columns[id]
 }
 
-func (db *ECS) AllComponents(entity Entity) ComponentTable {
-	if entity == 0 || len(db.rows) <= int(entity) {
-		return nil
-	}
-	return db.rows[int(entity)]
-}
+// AllComponents retrieves the component table for a specific entity.
++func (db *ECS) AllComponents(entity Entity) ComponentTable {
++	if entity == 0 || len(db.rows) <= int(entity) {
++		return nil
++	}
++	return db.rows[int(entity)]
++}
 
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The Get* methods are better.
