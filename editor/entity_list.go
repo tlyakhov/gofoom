@@ -7,7 +7,6 @@ import (
 	"image/color"
 	"log"
 	"sort"
-	"strconv"
 	"strings"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -73,7 +72,8 @@ func (list *EntityList) tableUpdate(tci widget.TableCellID, template fyne.Canvas
 	case int(elcEntity):
 		progress.Hide()
 		text.Color = row[elcColor].(color.Color)
-		text.Text = strconv.Itoa(row[elcEntity].(int))
+		e := ecs.Entity(row[elcEntity].(int))
+		text.Text = e.ShortString()
 		text.Show()
 		text.Refresh()
 	case int(elcDesc):

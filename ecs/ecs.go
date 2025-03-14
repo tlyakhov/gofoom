@@ -81,7 +81,7 @@ func (db *ECS) NewEntity() Entity {
 	return Entity(nextFree)
 }
 
-func (db *ECS) nextFreeEntitySourceID() EntitySourceID {
+func (db *ECS) NextFreeEntitySourceID() EntitySourceID {
 	for i := range 1 << EntitySourceIDBits {
 		id := EntitySourceID(i)
 		if _, ok := db.SourceFileIDs[id]; !ok {
@@ -239,8 +239,14 @@ func (db *ECS) Attach(id ComponentID, entity Entity, component *Attachable) {
 }
 
 func AttachTyped[T any, PT GenericAttachable[T]](db *ECS, entity Entity, component *PT) {
-	attachable := Attachable(*component)
-	db.attach(entity, &attachable, attachable.Base().ComponentID)
+	var attachable Attachable
+	if *component != nil {
+		attachable = *component
+		db.attach(entity, &attachable, attachable.Base().ComponentID)
+	} else {
+		cid := Types().IDs[reflect.TypeFor[PT]().String()]
+		db.attach(entity, &attachable, cid)
+	}
 	*component = attachable.(PT)
 }
 
@@ -320,6 +326,8 @@ func (db *ECS) Delete(entity Entity) {
 		return
 	}
 
+	db.Entities.Remove(uint32(entity))
+
 	if len(db.rows) <= int(entity) {
 		return
 	}
@@ -336,7 +344,6 @@ func (db *ECS) Delete(entity Entity) {
 		}
 	}
 	db.rows[int(entity)] = nil
-	db.Entities.Remove(uint32(entity))
 }
 
 // TODO: Optimize this and add ability to wildcard search
@@ -416,7 +423,7 @@ func (db *ECS) Load(filename string) error {
 	file.Source = filename
 	file.ID = 0
 	file.Flags = ComponentInternal
-	return file.load()
+	return file.Load()
 }
 
 func (db *ECS) serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {

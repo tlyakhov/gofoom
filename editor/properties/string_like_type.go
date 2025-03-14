@@ -88,7 +88,7 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			split := strings.Split(text, ",")
 			entities := make([]ecs.Entity, len(split))
 			for i, s := range split {
-				entity, subError := ecs.ParseEntityPrefixOptional(s)
+				entity, subError := ecs.ParseEntityRawOrPrefixed(s)
 				if subError != nil {
 					err = subError
 					break
@@ -155,6 +155,14 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			g.State().SelectedTransformables = append(g.State().SelectedTransformables, field.Values[0].Interface())
 		}
 
+	}
+
+	if field.Disabled() {
+		entry.Disable()
+		cb.Disable()
+	} else {
+		entry.Enable()
+		cb.Enable()
 	}
 
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)

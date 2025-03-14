@@ -57,6 +57,18 @@ type PropertyGridField struct {
 	Unique map[string]reflect.Value
 }
 
+func (f *PropertyGridField) Disabled() bool {
+	if len(f.Values) == 0 {
+		return false
+	}
+
+	disabled := true
+	for _, v := range f.Values {
+		disabled = disabled && v.Entity.IsExternal()
+	}
+	return disabled
+}
+
 func (f *PropertyGridField) Short() string {
 	result := f.Name
 	reduced := false

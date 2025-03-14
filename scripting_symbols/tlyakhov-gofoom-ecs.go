@@ -32,7 +32,7 @@ func init() {
 		"ParseEntitiesFromMap":      reflect.ValueOf(ecs.ParseEntitiesFromMap),
 		"ParseEntity":               reflect.ValueOf(ecs.ParseEntity),
 		"ParseEntityCSV":            reflect.ValueOf(ecs.ParseEntityCSV),
-		"ParseEntityPrefixOptional": reflect.ValueOf(ecs.ParseEntityPrefixOptional),
+		"ParseEntityPrefixOptional": reflect.ValueOf(ecs.ParseEntityRawOrPrefixed),
 		"ParseEntityTable":          reflect.ValueOf(ecs.ParseEntityTable),
 		"SerializeComponentIDs":     reflect.ValueOf(ecs.SerializeComponentIDs),
 		"Types":                     reflect.ValueOf(ecs.Types),

@@ -25,4 +25,9 @@ func (g *Grid) fieldBool(field *state.PropertyGridField) {
 		origValue = active
 		g.Focus(g.GridWidget)
 	}
+	if field.Disabled() {
+		cb.Disable()
+	} else {
+		cb.Enable()
+	}
 }

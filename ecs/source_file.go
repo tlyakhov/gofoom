@@ -39,12 +39,12 @@ func GetSourceFile(db *ECS, e Entity) *SourceFile {
 
 type processFileEntitiesFunc func(builder *strings.Builder, e Entity, name string, file string) bool
 
-func (file *SourceFile) processFileEntities(contents string, fn processFileEntitiesFunc) string {
+func iterateFileEntities(contents string, fn processFileEntitiesFunc) string {
 	builder := strings.Builder{}
 	builder.Grow(len(contents))
 
-	prefixRunes := []rune(EntityPrefix)
-	limit := len(contents) - entityPrefixLength
+	prefixRunes := []rune(EntityDelimiter)
+	limit := len(contents) - entityDelimiterLength
 	skip := 0
 	// Look for entity strings, parse them, call `fn`.
 	for i, r := range contents {
@@ -85,6 +85,7 @@ func (file *SourceFile) processFileEntities(contents string, fn processFileEntit
 		skip = len([]rune(parts[0])) - 1
 	}
 
+	fmt.Println(builder.String())
 	return builder.String()
 }
 
@@ -132,8 +133,39 @@ func (file *SourceFile) rangeFile(contents string, fn func(entity Entity, data m
 	return nil
 }
 
-func (file *SourceFile) mapAllNestedFiles(contents string) {
-	file.rangeFile(contents, func(entity Entity, data map[string]any) {
+func (file *SourceFile) mapFile() (string, error) {
+	// TODO: there's bugs here if the user tries to map a file with the same
+	// source filename.
+
+	// Check if the source file ID we're loading is free or if it's
+	// already mapped. If it's mapped, we have to pick a new one.
+	file.OriginalID = file.ID
+	file.Loaded = false
+	if _, ok := file.ECS.SourceFileIDs[file.ID]; ok {
+		file.ID = file.ECS.NextFreeEntitySourceID()
+	}
+	file.ECS.SourceFileNames[file.Source] = file
+	file.ECS.SourceFileIDs[file.ID] = file
+
+	contents, err := file.read()
+	if err != nil {
+		log.Printf("SourceFile.mapFile: error loading file %v: %v", file.Source, err)
+		return contents, err
+	}
+
+	contentsSubbed := iterateFileEntities(contents,
+		func(builder *strings.Builder, e Entity, name, filename string) bool {
+			// Skip any external entities, we only care about SourceFiles,
+			// so this should be safe, despite the fact that we may have
+			// ID overlaps in nested files.
+			if e.IsExternal() {
+				return false
+			}
+			e += Entity(file.ID) << EntityBits
+			builder.WriteString(e.SerializeRaw(name, filename))
+			return true
+		})
+	file.rangeFile(contentsSubbed, func(entity Entity, data map[string]any) {
 		yamlSourceFile := data["ecs.SourceFile"]
 		if yamlSourceFile == nil {
 			return
@@ -151,56 +183,31 @@ func (file *SourceFile) mapAllNestedFiles(contents string) {
 			}
 			if _, ok := file.ECS.SourceFileNames[nfile.Source]; ok {
 				// This file is already mapped. We can skip it.
+
+				// TODO: We need to refcount the dependency, to ensure we don't
+				// delete it when unloading
 				return
 			}
 
 			// If we're here, this file doesn't exist in the ECS yet. Let's map
 			// it and attach it.
-
-			// Check if the source file ID we're loading is free or if it's
-			// already mapped. If it's mapped, we have to pick a new one.
-			nfile.OriginalID = nfile.ID
-			nfile.Loaded = false
-			if _, ok := file.ECS.SourceFileIDs[nfile.ID]; ok {
-				nfile.ID = file.ECS.nextFreeEntitySourceID()
-			}
-			file.ECS.SourceFileNames[nfile.Source] = nfile
-			file.ECS.SourceFileIDs[nfile.ID] = nfile
-			file.ECS.attach(entity, &a, SourceFileCID)
+			nfile.ECS.attach(entity, &a, SourceFileCID)
 			// the attach method will change where *a is.
 			nfile = a.(*SourceFile)
-
-			ncontents, err := nfile.read()
-			if err != nil {
-				log.Printf("SourceFile.mapAllNestedFiles: error loading file %v: %v", nfile.Source, err)
-				return
-			}
-			ncontents = file.processFileEntities(ncontents,
-				func(builder *strings.Builder, e Entity, name, filename string) bool {
-					// Skip any external entities, we only care about SourceFiles,
-					// so this should be safe, despite the fact that we may have
-					// ID overlaps in nested files.
-					if e.IsExternal() {
-						return false
-					}
-					e += Entity(nfile.ID) << EntityBits
-					builder.WriteString(e.SerializeRaw(name, filename))
-					return true
-				})
-
-			nfile.mapAllNestedFiles(ncontents)
+			nfile.mapFile()
 		}
 	})
+	return contents, nil
 }
 
-func (file *SourceFile) loadAllNestedFiles(contents string) {
-	contents = file.processFileEntities(contents,
+func (file *SourceFile) loadAllNestedFiles(contents string) error {
+	contents = iterateFileEntities(contents,
 		func(builder *strings.Builder, e Entity, name, filename string) bool {
 			// This entity is a member of the file we're processing, which may
 			// have an ID that we need to substitute in
 			if !e.IsExternal() {
 				e += Entity(file.ID) << EntityBits
-				builder.WriteString(e.SerializeRaw(name, filename))
+				builder.WriteString(e.SerializeRaw(name, file.Source))
 				return true
 			}
 
@@ -221,8 +228,9 @@ func (file *SourceFile) loadAllNestedFiles(contents string) {
 			return true
 		})
 
+	fmt.Println(contents)
 	file.Loaded = true
-	file.rangeFile(contents, func(entity Entity, data map[string]any) {
+	err := file.rangeFile(contents, func(entity Entity, data map[string]any) {
 		file.ECS.Entities.Set(uint32(entity))
 
 		for name, cid := range Types().IDs {
@@ -269,6 +277,7 @@ func (file *SourceFile) loadAllNestedFiles(contents string) {
 			}
 		}
 	})
+	return err
 }
 
 func (file *SourceFile) read() (string, error) {
@@ -277,38 +286,31 @@ func (file *SourceFile) read() (string, error) {
 	return string(bytes), err
 }
 
-func (file *SourceFile) load() error {
-	if file.ID != 0 {
-		panic("SourceFile.load should only be called on root files with ID 0")
-	}
-
-	file.Loaded = false
-	contents, err := file.read()
-	if err != nil {
-		log.Printf("SourceFile.load: error loading file %v: %v", file.Source, err)
-		return err
-	}
-
+func (file *SourceFile) Load() error {
 	file.ECS.Lock.Lock()
 	defer file.ECS.Lock.Unlock()
 
-	file.mapAllNestedFiles(contents)
-	file.loadAllNestedFiles(contents)
+	if contents, err := file.mapFile(); err == nil {
+		fmt.Println(contents)
+		err = file.loadAllNestedFiles(contents)
+		if err != nil {
+			return err
+		}
+	}
 
 	// After everything's loaded, trigger the controllers
 	file.ECS.ActAllControllers(ControllerRecalculate)
 	return nil
 }
 
-func (file *SourceFile) String() string {
-	return strconv.FormatInt(int64(file.Entity), 10)
-}
-
-func (file *SourceFile) OnDetach(e Entity) {
-	defer file.Attached.OnDetach(e)
+func (file *SourceFile) Unload() {
 	if file.ECS == nil || file.ID == 0 || !file.Loaded {
 		return
 	}
+
+	file.ECS.Lock.Lock()
+	defer file.ECS.Lock.Unlock()
+
 	// We need to detach/delete all the entities from this file and unmap this ID.
 	// References will end up broken unless cleaned up beforehand.
 	toDelete := make([]Entity, 0)
@@ -322,6 +324,19 @@ func (file *SourceFile) OnDetach(e Entity) {
 	for _, e := range toDelete {
 		file.ECS.Delete(e)
 	}
+
+	delete(file.ECS.SourceFileNames, file.Source)
+	delete(file.ECS.SourceFileIDs, file.ID)
+}
+
+func (file *SourceFile) String() string {
+	return strconv.FormatInt(int64(file.Entity), 10)
+}
+
+func (file *SourceFile) OnDetach(e Entity) {
+	defer file.Attached.OnDetach(e)
+
+	file.Unload()
 }
 
 func (file *SourceFile) Construct(data map[string]any) {

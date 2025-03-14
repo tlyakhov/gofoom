@@ -108,10 +108,16 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		tree.Select(origValue.String())
 		title = editTypeTag + ": " + origValue.Format(g.State().ECS)
 	}
-	tree.OnSelected = func(tni widget.TreeNodeID) {
-		entity, _ := ecs.ParseEntity(tni)
-		g.ApplySetPropertyAction(field, reflect.ValueOf(entity).Convert(field.Type.Elem()))
+
+	if field.Disabled() {
+		tree.OnSelected = nil
+	} else {
+		tree.OnSelected = func(tni widget.TreeNodeID) {
+			entity, _ := ecs.ParseEntity(tni)
+			g.ApplySetPropertyAction(field, reflect.ValueOf(entity).Convert(field.Type.Elem()))
+		}
 	}
+
 	c := container.New(&gridEntitySelectorLayout{Child: layout.NewStackLayout()}, tree)
 	aiTree := widget.NewAccordionItem(title, c)
 	accordion := gridAddOrUpdateWidgetAtIndex[*widget.Accordion](g)
