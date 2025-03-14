@@ -69,6 +69,15 @@ func (g *Grid) fieldFile(field *state.PropertyGridField) {
 		dlg.SetDismissText("Cancel")
 		dlg.Show()
 	})
+
+	if field.Disabled() {
+		button.Disable()
+		entry.Disable()
+	} else {
+		button.Enable()
+		entry.Enable()
+	}
+
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewBorderLayout(nil, nil, nil, button)
 	c.Objects = []fyne.CanvasObject{entry, button}

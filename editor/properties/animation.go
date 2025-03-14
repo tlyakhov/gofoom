@@ -14,8 +14,16 @@ import (
 
 func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 	origValue := field.Values[0].Deref()
+
+	button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
+
+	if field.Disabled() {
+		button.Disable()
+	} else {
+		button.Enable()
+	}
+
 	if origValue.IsNil() {
-		button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
 		button.Text = "Add Animation"
 		button.Icon = theme.ContentAddIcon()
 		button.OnTapped = func() {
@@ -25,7 +33,6 @@ func (g *Grid) fieldAnimation(field *state.PropertyGridField) {
 			g.ApplySetPropertyAction(field, newAnimation)
 		}
 	} else {
-		button := gridAddOrUpdateWidgetAtIndex[*widget.Button](g)
 		button.Text = "Remove Animation"
 		button.Icon = theme.ContentClearIcon()
 		button.OnTapped = func() {
@@ -59,5 +66,10 @@ func fieldFunc[T any](g *Grid, field *state.PropertyGridField, funcMap map[strin
 	s.PlaceHolder = "Select function"
 	s.OnChanged = func(opt string) {
 		g.ApplySetPropertyAction(field, optValues[s.SelectedIndex()])
+	}
+	if field.Disabled() {
+		s.Disable()
+	} else {
+		s.Enable()
 	}
 }

@@ -88,6 +88,14 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		}, g.GridWindow)
 	}
 
+	if field.Disabled() {
+		addButton.Disable()
+		removeButton.Disable()
+	} else {
+		addButton.Enable()
+		removeButton.Enable()
+	}
+
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewVBoxLayout()
 	if parent.MultiAttachable() {

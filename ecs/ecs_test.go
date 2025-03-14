@@ -7,6 +7,23 @@ import (
 	"testing"
 )
 
+type mockComponent struct {
+	Attached
+}
+
+var mockCID ComponentID
+
+func init() {
+	mockCID = RegisterComponent(&Column[mockComponent, *mockComponent]{Getter: GetMockComponent})
+}
+
+func GetMockComponent(db *ECS, e Entity) *mockComponent {
+	if asserted, ok := db.Component(e, mockCID).(*mockComponent); ok {
+		return asserted
+	}
+	return nil
+}
+
 func TestNewECS(t *testing.T) {
 	db := NewECS()
 	if db == nil {
@@ -28,12 +45,13 @@ func TestNewEntity(t *testing.T) {
 func TestAttach(t *testing.T) {
 	db := NewECS()
 	entity := db.NewEntity()
-	component := &Attached{}
-	db.Attach(1, entity, &component)
-	if component.Entity != entity {
+	component := &mockComponent{}
+	var a Attachable = component
+	db.Attach(mockCID, entity, &a)
+	if a.Base().Entity != entity {
 		t.Errorf("Attach did not set entity")
 	}
-	if component.ECS != db {
+	if a.Base().ECS != db {
 		t.Errorf("Attach did not set ECS")
 	}
 }
@@ -41,14 +59,17 @@ func TestAttach(t *testing.T) {
 func TestDetachComponent(t *testing.T) {
 	db := NewECS()
 	entity := db.NewEntity()
-	component := &Attached{}
-	db.Attach(1, entity, &component)
-	db.DetachComponent(1, entity)
+	component := &mockComponent{}
+	var a Attachable = component
+	db.Attach(mockCID, entity, &a)
+	db.DetachComponent(mockCID, entity)
 	if component.Attachments != 0 {
 		t.Errorf("DetachComponent did not remove all attachments")
 	}
-	if len(db.rows) != 1 {
-		t.Errorf("DetachComponent did not remove the row")
+	for _, row := range db.rows {
+		if len(row) > 0 {
+			t.Errorf("DetachComponent did not remove the row")
+		}
 	}
 }
 
@@ -87,7 +108,7 @@ func TestSingleton(t *testing.T) {
 func TestAttachTyped(t *testing.T) {
 	db := NewECS()
 	entity := db.NewEntity()
-	var component *Attached
+	var component *mockComponent
 	AttachTyped(db, entity, &component)
 	if component.Entity != entity {
 		t.Errorf("AttachTyped did not set entity")

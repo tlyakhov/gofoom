@@ -42,6 +42,11 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		checkGroup := gridAddOrUpdateWidgetAtIndex[*widget.CheckGroup](g)
 		checkGroup.Options = opts
 		checkGroup.OnChanged = nil
+		if field.Disabled() {
+			checkGroup.Disable()
+		} else {
+			checkGroup.Enable()
+		}
 		checkGroup.SetSelected(selectedOpts)
 		checkGroup.OnChanged = func(s []string) {
 			flags := int64(0)
@@ -54,6 +59,11 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 		selectEntry := gridAddOrUpdateWidgetAtIndex[*widget.Select](g)
 		selectEntry.Options = opts
 		selectEntry.OnChanged = nil
+		if field.Disabled() {
+			selectEntry.Disable()
+		} else {
+			selectEntry.Enable()
+		}
 		selectEntry.SetSelectedIndex(selectedIndex)
 		selectEntry.OnChanged = func(opt string) {
 			g.ApplySetPropertyAction(field, optsValues[selectEntry.SelectedIndex()])

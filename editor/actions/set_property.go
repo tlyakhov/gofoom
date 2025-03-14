@@ -33,9 +33,17 @@ func (a *SetProperty) FireHooks() {
 	// TODO: Optimize this by remembering visited parents to avoid firing these
 	// multiple times for the same selection.
 	for _, v := range a.Values {
+		if v.Entity.IsExternal() {
+			continue
+		}
 		switch target := v.Parent().(type) {
 		case *ecs.Linked:
 			a.State().ECS.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+		case *ecs.SourceFile:
+			if target.Loaded {
+				target.Unload()
+			}
+			target.Load()
 		case dynamic.Dynamic:
 			target.ResetToSpawn()
 			target.Recalculate()
@@ -71,6 +79,9 @@ func (a *SetProperty) FireHooks() {
 
 func (a *SetProperty) Activate() {
 	for i, v := range a.Values {
+		if v.Entity.IsExternal() {
+			continue
+		}
 		origValue := reflect.ValueOf(v.Interface())
 		a.Original = append(a.Original, origValue)
 		v.Deref().Set(a.ValuesToAssign[i])
@@ -83,6 +94,9 @@ func (a *SetProperty) Activate() {
 
 func (a *SetProperty) Undo() {
 	for i, v := range a.Values {
+		if v.Entity.IsExternal() {
+			continue
+		}
 		fmt.Printf("Undo: %v\n", a.Original[i].String())
 		v.Deref().Set(a.Original[i])
 	}
@@ -90,6 +104,9 @@ func (a *SetProperty) Undo() {
 }
 func (a *SetProperty) Redo() {
 	for i, v := range a.Values {
+		if v.Entity.IsExternal() {
+			continue
+		}
 		fmt.Printf("Redo: %v\n", a.ValuesToAssign[i].String())
 		v.Deref().Set(a.ValuesToAssign[i])
 	}
