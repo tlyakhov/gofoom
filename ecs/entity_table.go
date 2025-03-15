@@ -135,7 +135,7 @@ func (table EntityTable) String() string {
 		if len(result) > 0 {
 			result += ","
 		}
-		result += e.String()
+		result += e.ShortString()
 	}
 	return result
 }

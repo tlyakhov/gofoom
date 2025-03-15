@@ -146,19 +146,37 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		g.Act(action)
 	}
 
+	bReset := widget.NewButtonWithIcon("Reset/Fill", theme.ContentClearIcon(), func() {
+		toSet := &concepts.Matrix2{}
+		toSet.SetIdentity()
+		g.ApplySetPropertyAction(field, reflect.ValueOf(toSet).Elem())
+	})
+	bScaleW := widget.NewButtonWithIcon("Scale W", theme.ViewFullScreenIcon(), func() { g.fieldMatrix2Aspect(field, false) })
+	bScaleH := widget.NewButtonWithIcon("Scale H", theme.ViewFullScreenIcon(), func() { g.fieldMatrix2Aspect(field, true) })
+
 	ancestors := field.Values[0].Ancestors
-	if len(ancestors) < 2 {
-		return
+	if len(ancestors) >= 2 {
+		switch ancestors[len(ancestors)-2].(type) {
+		case *materials.Surface:
+			f.Append("", bReset)
+			f.Append("Aspect", container.NewHBox(bScaleW, bScaleH))
+		}
 	}
-	switch ancestors[len(ancestors)-2].(type) {
-	case *materials.Surface:
-		f.Append("", widget.NewButtonWithIcon("Reset/Fill", theme.ContentClearIcon(), func() {
-			toSet := &concepts.Matrix2{}
-			toSet.SetIdentity()
-			g.ApplySetPropertyAction(field, reflect.ValueOf(toSet).Elem())
-		}))
-		f.Append("Aspect", container.NewHBox(
-			widget.NewButtonWithIcon("Scale W", theme.ViewFullScreenIcon(), func() { g.fieldMatrix2Aspect(field, false) }),
-			widget.NewButtonWithIcon("Scale H", theme.ViewFullScreenIcon(), func() { g.fieldMatrix2Aspect(field, true) })))
+
+	if field.Disabled() {
+		eDelta.Disable()
+		eAngle.Disable()
+		eScale.Disable()
+		bReset.Disable()
+		bScaleW.Disable()
+		bScaleH.Disable()
+	} else {
+		eDelta.Enable()
+		eAngle.Enable()
+		eScale.Enable()
+		bReset.Enable()
+		bScaleW.Enable()
+		bScaleH.Enable()
 	}
+	f.Refresh()
 }

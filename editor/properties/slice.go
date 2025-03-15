@@ -43,7 +43,13 @@ func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 		i := 0
 		for name, t := range animationTypes {
 			t := t // To ensure correct scope for closure
-			buttons[i] = widget.NewButtonWithIcon("Add "+name, theme.ContentAddIcon(), func() { g.fieldSliceAdd(field, t) })
+			b := widget.NewButtonWithIcon("Add "+name, theme.ContentAddIcon(), func() { g.fieldSliceAdd(field, t) })
+			if field.Disabled() {
+				b.Disable()
+			} else {
+				b.Enable()
+			}
+			buttons[i] = b
 			i++
 		}
 		c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
@@ -54,6 +60,11 @@ func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 		button.Text = "Add " + elemType.String()
 		button.Icon = theme.ContentAddIcon()
 		button.OnTapped = func() { g.fieldSliceAdd(field, nil) }
+		if field.Disabled() {
+			button.Disable()
+		} else {
+			button.Enable()
+		}
 	}
 }
 
@@ -87,6 +98,16 @@ func (g *Grid) fieldChangeSlice(field *state.PropertyGridField) {
 			Index:    field.SliceIndex})
 		g.Focus(g.GridWidget)
 	})
+
+	if field.Disabled() {
+		buttonDec.Disable()
+		buttonInc.Disable()
+		buttonDelete.Disable()
+	} else {
+		buttonDec.Enable()
+		buttonInc.Enable()
+		buttonDelete.Enable()
+	}
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewHBoxLayout()
 	c.Objects = []fyne.CanvasObject{}
