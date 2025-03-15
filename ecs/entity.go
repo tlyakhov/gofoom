@@ -23,7 +23,8 @@ const MaxEntities = (1 << EntityBits) - 1
 
 /*
 Entity serialization format is:
-"(Delimiter)(16 bit Source ID + 48 bit Entity ID)[(Delimiter)Name (url encoded)
+"(Delimiter)(24 bit Entity ID)[(Delimiter)(Name url encoded)(Delimiter)(8 bit
+Source ID)(Delimiter)(File name url encoded)]
 
 Why the unicode delimiter?
 
@@ -62,10 +63,6 @@ func (e Entity) ShortString() string {
 
 func (e Entity) SourceID() EntitySourceID {
 	return EntitySourceID(e >> EntityBits)
-}
-
-func (e Entity) ExcludeSourceID() Entity {
-	return e & MaxEntities
 }
 
 func (e Entity) IsExternal() bool {
@@ -109,7 +106,7 @@ func (e Entity) Format(db *ECS) string {
 	if e == 0 {
 		return EntityDelimiter + "0 Nothing"
 	}
-	id := e.ExcludeSourceID().String()
+	id := e.Local().String()
 	if named := GetNamed(db, e); named != nil {
 		return id + " " + named.Name
 	}
@@ -122,7 +119,7 @@ func (e Entity) Format(db *ECS) string {
 }
 
 func (e Entity) SerializeRaw(name string, file string) string {
-	id := e.ExcludeSourceID().String()
+	id := e.Local().String()
 	if e == 0 {
 		return id
 	}
@@ -139,7 +136,7 @@ func (e Entity) SerializeRaw(name string, file string) string {
 }
 
 func (e Entity) Serialize(db *ECS) string {
-	id := e.ExcludeSourceID().String()
+	id := e.Local().String()
 	if e == 0 {
 		return id
 	}

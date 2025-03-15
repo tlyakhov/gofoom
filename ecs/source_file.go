@@ -228,7 +228,6 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 			return true
 		})
 
-	fmt.Println(contents)
 	file.Loaded = true
 	err := file.rangeFile(contents, func(entity Entity, data map[string]any) {
 		file.ECS.Entities.Set(uint32(entity))
@@ -330,7 +329,7 @@ func (file *SourceFile) Unload() {
 }
 
 func (file *SourceFile) String() string {
-	return strconv.FormatInt(int64(file.Entity), 10)
+	return fmt.Sprintf("Source file (%v): %v", file.ID, file.Source)
 }
 
 func (file *SourceFile) OnDetach(e Entity) {

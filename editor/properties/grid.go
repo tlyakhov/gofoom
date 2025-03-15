@@ -256,17 +256,14 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 	entities := make([]ecs.Entity, 0)
 	entityList := ""
 	componentList := make(containers.Set[ecs.ComponentID])
+	disabled := true
 	for _, s := range sel.Exact {
 		if len(entityList) > 0 {
 			entityList += ", "
 		}
 
 		switch s.Type {
-		case selection.SelectableHi:
-			fallthrough
-		case selection.SelectableLow:
-			fallthrough
-		case selection.SelectableMid:
+		case selection.SelectableHi, selection.SelectableLow, selection.SelectableMid:
 			fallthrough
 		case selection.SelectableSectorSegment:
 			label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
@@ -282,8 +279,9 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 				g.SelectObjects(true, selection.SelectableFromEntity(g.State().ECS, s.Sector.Entity))
 			}
 		}
+		disabled = disabled && s.Entity.IsExternal()
 		entities = append(entities, s.Entity)
-		entityList += s.Entity.String()
+		entityList += s.Entity.ShortString()
 		for _, c := range s.ECS.AllComponents(s.Entity) {
 			if c == nil {
 				continue
@@ -323,6 +321,15 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 			ID:       optsComponentIDs[optsIndex],
 			Entities: entities})
 	})
+
+	if disabled {
+		selectComponent.Disable()
+		button.Disable()
+	} else {
+		selectComponent.Enable()
+		button.Enable()
+	}
+
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewBorderLayout(nil, nil, nil, button)
 	c.Objects = []fyne.CanvasObject{selectComponent, button}
