@@ -115,7 +115,7 @@ func (db *ECS) AllComponents(entity Entity) ComponentTable {
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The Get* methods are better.
 func (db *ECS) Component(entity Entity, id ComponentID) Attachable {
-	if entity == 0 || id == 0 || len(db.rows) <= int(entity) {
+	if entity == 0 || id == 0 || db == nil || len(db.rows) <= int(entity) {
 		return nil
 	}
 	return db.rows[int(entity)].Get(id)

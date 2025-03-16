@@ -80,11 +80,6 @@ func (e Entity) SourceID() EntitySourceID {
 	return EntitySourceID(e >> EntityBits)
 }
 
-// ExcludeSourceID returns the entity ID without the source ID.
-func (e Entity) ExcludeSourceID() Entity {
-	return e & MaxEntities
-}
-
 // IsExternal checks if the entity is external (i.e., its source ID is not 0).
 func (e Entity) IsExternal() bool {
 	return e.SourceID() != 0
