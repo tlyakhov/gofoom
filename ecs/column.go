@@ -10,31 +10,32 @@ import (
 	"github.com/kelindar/bitmap"
 )
 
-// chunkSize is the size of each chunk in the column. Columns are split into chunks to improve memory management and reduce the cost of resizing.
+// chunkSize is the size of each chunk in the column. Columns are split into
+// chunks to improve memory management and reduce the cost of resizing.
 const chunkSize = 64
 
 // componentChunk represents a fixed-size array of components.
 // Note: we can't use a slice for the data, because we use long-lived pointers to
-// components, and slices can reallocate the backing array when resized, invalidating existing pointers.
+// components, and slices can reallocate the backing array when resized,
+// invalidating existing pointers.
 // See https://utcc.utoronto.ca/~cks/space/blog/programming/GoSlicesVsPointers
 type componentChunk[T any, PT GenericAttachable[T]] [chunkSize]T
 
 // Column is a sparse columnar storage for components of a specific type.
-// It stores components in chunks of fixed size, allowing for efficient access and iteration.
+// It stores components in chunks of fixed size, allowing for efficient access
+// and iteration.
 // The type parameters are:
-//   - T: The type of the component data.
-//   - PT: A pointer to the component type, which must implement the GenericAttachable interface.
+//   - T: The type of the component struct.
+//   - PT: A pointer to the component type, which must implement the
+//     GenericAttachable interface.
 type Column[T any, PT GenericAttachable[T]] struct {
 	// ECS is a pointer to the ECS instance that manages this column.
 	*ECS
-	// Index is the index of this column within the ECS.
-	Index int
 	// Length is the number of components currently stored in the column.
 	Length int
 	// Getter is a function that retrieves a component of this type for a given entity.
 	Getter func(ecs *ECS, e Entity) PT
 
-	// data is a slice of pointers to component chunks, where the actual component data is stored.
 	data []*componentChunk[T, PT]
 	// fill is a bitmap that tracks which slots in the column are occupied by components.
 	fill bitmap.Bitmap
@@ -44,7 +45,8 @@ type Column[T any, PT GenericAttachable[T]] struct {
 	componentID ComponentID
 }
 
-// From initializes a column from another column of the same type, copying metadata and setting the ECS instance.
+// From initializes a column from another column of the same type, copying
+// metadata and setting the ECS instance.
 func (col *Column[T, PT]) From(source AttachableColumn, ecs *ECS) {
 	placeholder := source.(*Column[T, PT])
 	col.ECS = ecs
@@ -93,7 +95,8 @@ func (col *Column[T, PT]) Detach(index int) {
 	// TODO: Remove empty chunks
 }
 
-// AddTyped adds a component to the column, automatically handling the Attachable interface conversion.
+// AddTyped adds a component to the column, automatically handling the Attachable
+// interface conversion.
 func (col *Column[T, PT]) AddTyped(component *PT) {
 	attachable := Attachable(*component)
 	col.Add(&attachable)
@@ -129,7 +132,9 @@ func (col *Column[T, PT]) Add(component *Attachable) {
 	col.Length++
 }
 
-// Replace replaces the component at the given index with the provided component.
+// Replace replaces the component at the given index with the provided
+// component. Importantly, the argument is a pointer - it will be replaced with
+// the resulting memory location.
 func (col *Column[T, PT]) Replace(component *Attachable, index int) {
 	if *component == nil {
 		*component = col.Value(index)
@@ -169,7 +174,7 @@ func (c *Column[T, PT]) ID() ComponentID {
 	return c.componentID
 }
 
-// String returns a string representation of the component type stored in this column.
+// String returns the component type stored in this column.
 func (c *Column[T, PT]) String() string {
 	return c.typeOfT.String()
 }

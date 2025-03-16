@@ -99,6 +99,14 @@ func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 	f.Append("Cartesian", entryCartesian)
 	f.Append("Azimuth (°)", entryPhi)
 	f.Append("Polar (°)", entrySlope)
+	if field.Disabled() {
+		entryCartesian.Disable()
+		entryPhi.Disable()
+		entrySlope.Disable()
+	} else {
+		entryCartesian.Enable()
+		entryPhi.Enable()
+		entrySlope.Enable()
+	}
 	f.Refresh()
-
 }

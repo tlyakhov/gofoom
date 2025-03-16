@@ -57,6 +57,12 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 		entry = gridAddOrUpdateWidgetAtIndex[*widget.Entry](g)
 	}
 
+	if field.Disabled() {
+		entry.Disable()
+	} else {
+		entry.Enable()
+	}
+
 	entry.MultiLine = multiline
 	entry.OnSubmitted = nil
 	entry.SetText(origValue)

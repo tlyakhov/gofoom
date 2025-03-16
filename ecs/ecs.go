@@ -69,7 +69,6 @@ func (db *ECS) Clear() {
 }
 
 // Reserves an entity ID in the database (no components attached)
-
 // It finds the smallest available entity ID, marks it as used, and returns it.
 func (db *ECS) NewEntity() Entity {
 	if free, found := db.Entities.MinZero(); found {
@@ -85,7 +84,8 @@ func (db *ECS) NewEntity() Entity {
 }
 
 // NextFreeEntitySourceID returns the next available entity source ID.
-// It iterates through all possible source IDs and returns the first one that is not currently in use.
+// It iterates through all possible source IDs and returns the first one that
+// is not currently in use.
 func (db *ECS) NextFreeEntitySourceID() EntitySourceID {
 	for i := range 1 << EntitySourceIDBits {
 		id := EntitySourceID(i)

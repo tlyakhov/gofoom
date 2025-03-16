@@ -440,6 +440,9 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 func (r *Renderer) Render() {
 	r.tree = r.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	r.RefreshPlayer()
+	if r.PlayerBody == nil {
+		return
+	}
 	r.ICacheHits.Store(0)
 	r.ICacheMisses.Store(0)
 	LightSamplerCalcs.Store(0)

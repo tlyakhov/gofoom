@@ -26,12 +26,14 @@ const EntityBits = 24
 // EntitySourceIDBits is the number of bits used to store the entity source ID.
 const EntitySourceIDBits = 8
 
-// MaxEntities is the maximum number of entities that can be stored, based on the number of bits allocated for the entity ID.
+// MaxEntities is the maximum number of entities that can be stored, based on
+// the number of bits allocated for the entity ID.
 const MaxEntities = (1 << EntityBits) - 1
 
 /*
 Entity serialization format is:
-"(Delimiter)(16 bit Source ID + 48 bit Entity ID)[(Delimiter)Name (url encoded)
+"(Delimiter)(24 bit Entity ID)[(Delimiter)(Name url encoded)(Delimiter)(8 bit
+Source ID)(Delimiter)(File name url encoded)]
 
 Why the unicode delimiter?
 
@@ -56,12 +58,14 @@ const entityDelimiterLength = len(EntityDelimiter)
 // EntityRegexp is a regular expression used to parse entity strings.
 var EntityRegexp = regexp.MustCompile(`^∈⋮(?<entity>[0-9]+)(?:∈⋮(?<name>[^∈\s]*))?(?:∈⋮(?<file_id>[0-9]+)∈⋮(?<file>[^∈\s]+))?`)
 
-// String returns a string representation of the entity, ignoring the name and original file.
+// String returns a human-readable version string representation of the entity,
+// ignoring the name and original file.
 func (e Entity) String() string {
 	return EntityDelimiter + strconv.FormatInt(int64(e), 10)
 }
 
-// ShortString returns a সংক্ষিপ্ত string representation of the entity, including the source ID if it's external.
+// ShortString returns a concise human-readable version of the entity, including
+// the source ID if it's external.
 func (e Entity) ShortString() string {
 	if e.IsExternal() {
 		return strconv.FormatInt(int64(e&MaxEntities), 10) +
@@ -112,7 +116,8 @@ func ParseEntity(e string) (Entity, error) {
 	return Entity(parsedEntity), err
 }
 
-// ParseEntityRawOrPrefixed parses an entity string that may or may not have the entity delimiter prefix.
+// ParseEntityRawOrPrefixed parses an entity string that may or may not have the
+// entity delimiter prefix.
 func ParseEntityRawOrPrefixed(e string) (Entity, error) {
 	if !strings.HasPrefix(e, EntityDelimiter) {
 		v, err := strconv.ParseInt(e, 10, 64)
@@ -122,12 +127,13 @@ func ParseEntityRawOrPrefixed(e string) (Entity, error) {
 	return Entity(v), err
 }
 
-// Format returns a formatted string representation of the entity, including its name (if available) and source file (if external).
+// Format returns a formatted string representation of the entity, including its
+// name (if available) and source file (if external).
 func (e Entity) Format(db *ECS) string {
 	if e == 0 {
 		return EntityDelimiter + "0 Nothing"
 	}
-	id := e.ExcludeSourceID().String()
+	id := e.Local().String()
 	if named := GetNamed(db, e); named != nil {
 		return id + " " + named.Name
 	}
@@ -139,9 +145,10 @@ func (e Entity) Format(db *ECS) string {
 	return id
 }
 
-// SerializeRaw serializes the entity to a string without considering the ECS context, allowing specifying a name and file.
+// SerializeRaw serializes the entity to a string without considering the ECS
+// context, allowing specifying a name and file.
 func (e Entity) SerializeRaw(name string, file string) string {
-	id := e.ExcludeSourceID().String()
+	id := e.Local().String()
 	if e == 0 {
 		return id
 	}
@@ -157,9 +164,10 @@ func (e Entity) SerializeRaw(name string, file string) string {
 	return id
 }
 
-// Serialize serializes the entity to a string, including its name and source file information based on the ECS context.
+// Serialize serializes the entity to a string, including its name and source
+// file information based on the ECS context.
 func (e Entity) Serialize(db *ECS) string {
-	id := e.ExcludeSourceID().String()
+	id := e.Local().String()
 	if e == 0 {
 		return id
 	}
@@ -219,7 +227,8 @@ func ParseEntityCSV(csv string, prefixOptional bool) EntityTable {
 	return entities
 }
 
-// ParseEntityTable parses a generic data type representing a list of entities into an EntityTable.
+// ParseEntityTable parses a generic data type representing a list of entities
+// into an EntityTable.
 func ParseEntityTable(data any) EntityTable {
 	var entities EntityTable
 	if s, ok := data.(string); ok {
@@ -232,7 +241,8 @@ func ParseEntityTable(data any) EntityTable {
 	return entities
 }
 
-// ParseEntitiesFromMap extracts an EntityTable and attachment count from a map, handling different possible key names for the entities.
+// ParseEntitiesFromMap extracts an EntityTable and attachment count from a map,
+// handling different possible key names for the entities.
 func ParseEntitiesFromMap(data map[string]any) (EntityTable, int) {
 	dataEntities := data["Entities"]
 	if v, ok := data["Entity"]; ok && dataEntities == nil {

@@ -11,7 +11,8 @@ EntityTable is a closed hash table, indexed directly by entities.
 */
 type EntityTable []Entity
 
-// EntityTableGrowthRate determines how much the table grows when it needs to be resized.
+// EntityTableGrowthRate determines how much the table grows when it needs to be
+// resized.
 const EntityTableGrowthRate = 8
 
 // Set adds or updates an entity in the table.
@@ -72,7 +73,8 @@ func (table EntityTable) Contains(entity Entity) bool {
 	return false
 }
 
-// Delete removes an entity from the table. It returns true if the entity was found and removed, false otherwise.
+// Delete removes an entity from the table. It returns true if the entity was
+// found and removed, false otherwise.
 func (table *EntityTable) Delete(entity Entity) bool {
 	size := uint32(len(*table))
 	if size == 0 {
@@ -141,7 +143,7 @@ func (table EntityTable) String() string {
 		if len(result) > 0 {
 			result += ","
 		}
-		result += e.String()
+		result += e.ShortString()
 	}
 	return result
 }
