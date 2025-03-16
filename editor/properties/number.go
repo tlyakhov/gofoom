@@ -35,6 +35,12 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 	}
 
 	entry := gridAddOrUpdateWidgetAtIndex[*widget.Entry](g)
+	if field.Disabled() {
+		entry.Disable()
+	} else {
+		entry.Enable()
+	}
+
 	entry.OnSubmitted = nil
 	entry.SetText(origValue)
 	entry.OnSubmitted = func(text string) {

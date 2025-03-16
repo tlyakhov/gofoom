@@ -6,15 +6,18 @@ package ecs
 import "sync/atomic"
 
 /*
-ComponentTable is a closed hash table that stores components, indexed by their component IDs.
+ComponentTable is a closed hash table that stores components, indexed by their
+component IDs.
 It is designed for high performance due to direct hashing and a small number of elements.
 */
 type ComponentTable []Attachable
 
-// ComponentTableGrowthRate is the rate at which the component table grows when it needs to be resized.
+// ComponentTableGrowthRate is the rate at which the component table grows when
+// it needs to be resized.
 const ComponentTableGrowthRate = 8
 
-// ComponentTableHit and ComponentTableMiss are atomic counters used for performance analysis of the component table.
+// ComponentTableHit and ComponentTableMiss are atomic counters used for
+// performance analysis of the component table.
 var ComponentTableHit, ComponentTableMiss atomic.Uint64
 
 // Set adds or updates a component in the table.
@@ -39,8 +42,8 @@ func (table *ComponentTable) Set(a Attachable) {
 		i = (i + 1) % size
 	}
 
-	// If we're here, that means we didn't find an empty slot within the current table size.
-	// We need to expand the table and rehash.
+	// If we're here, that means we didn't find an empty slot within the current
+	// table size. We need to expand the table and rehash.
 	newTable := make(ComponentTable, size+ComponentTableGrowthRate)
 	// Copy existing components to the new table.
 	for _, c := range *table {

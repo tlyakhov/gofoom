@@ -28,7 +28,8 @@ func (types *typeMetadata) RegisterController(constructor func() Controller, pri
 }
 
 // act calls a specific controller method on a component.
-// It checks if the controller's target conditions are met for the component and its associated entities.
+// It checks if the controller's target conditions are met for the component and
+// its associated entities.
 func act(controller Controller, component Attachable, method ControllerMethod) {
 	if component.Base().Attachments == 1 {
 		// If the component is attached to only one entity, check the target condition for that entity.
@@ -42,7 +43,8 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 		}
 		return
 	}
-	// If the component is attached to multiple entities, iterate through them and check the target condition for each.
+	// If the component is attached to multiple entities, iterate through them
+	// and check the target condition for each.
 	for _, e := range component.Base().Entities {
 		if e == 0 {
 			continue
