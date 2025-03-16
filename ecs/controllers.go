@@ -27,8 +27,12 @@ func (types *typeMetadata) RegisterController(constructor func() Controller, pri
 	})
 }
 
+// act calls a specific controller method on a component.
+// It checks if the controller's target conditions are met for the component and
+// its associated entities.
 func act(controller Controller, component Attachable, method ControllerMethod) {
 	if component.Base().Attachments == 1 {
+		// If the component is attached to only one entity, check the target condition for that entity.
 		if controller.Target(component, component.Base().Entity) {
 			switch method {
 			case ControllerAlways:
@@ -39,6 +43,8 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 		}
 		return
 	}
+	// If the component is attached to multiple entities, iterate through them
+	// and check the target condition for each.
 	for _, e := range component.Base().Entities {
 		if e == 0 {
 			continue
@@ -54,31 +60,42 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 	}
 }
 
+// Act runs controllers for a specific component, based on the provided component ID and method.
 func (db *ECS) Act(component Attachable, id ComponentID, method ControllerMethod) {
 	for _, meta := range Types().Controllers {
+		// Create a new instance of the controller.
 		controller := meta.Constructor()
+		// Check if the controller handles the specified method.
 		if controller.Methods()&method == 0 {
 			continue
 		}
+		// Check if the controller should be active based on the editor's pause state.
 		if (db.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
 			(!db.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
+		// Check if the controller's component ID matches the provided ID.
 		if controller.ComponentID() != id {
 			continue
 		}
+		// Call the controller's method on the component.
 		act(controller, component, method)
 	}
 }
 
+// ActAllControllers runs all controllers for all components that have the specified method.
 func (db *ECS) ActAllControllers(method ControllerMethod) {
 	for _, meta := range Types().Controllers {
+		// Create a new instance of the controller.
 		controller := meta.Constructor()
+		// Check if the controller should be active based on the editor's pause state and if it handles the specified method.
 		if (db.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
 			(!db.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
+		// Get the column for the controller's component type.
 		col := db.columns[controller.ComponentID()]
+		// Iterate through the components in the column and call the controller's method on each active component.
 		for i := range col.Cap() {
 			if component := col.Attachable(i); component != nil {
 				act(controller, component, method)
@@ -87,22 +104,27 @@ func (db *ECS) ActAllControllers(method ControllerMethod) {
 	}
 }
 
+// ActAllControllersOneEntity runs all controllers for a specific entity that have the specified method.
 func (db *ECS) ActAllControllersOneEntity(entity Entity, method ControllerMethod) {
 	if entity == 0 || len(db.rows) <= int(entity) {
 		return
 	}
 
 	for _, meta := range Types().Controllers {
+		// Create a new instance of the controller.
 		controller := meta.Constructor()
+		// Check if the controller should be active based on the editor's pause state and if it handles the specified method.
 		if (db.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
 			(!db.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
+		// Iterate through the components attached to the entity.
 		for _, component := range db.rows[entity] {
 			if component == nil ||
 				component.Base().ComponentID != controller.ComponentID() {
 				continue
 			}
+			// Call the controller's method on the component.
 			act(controller, component, method)
 		}
 	}
