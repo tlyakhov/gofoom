@@ -4,15 +4,18 @@
 package ecs
 
 /*
-Closed hash table, indexed directly by entities
+EntityTable is a closed hash table, indexed directly by entities.
 
 	This is designed to be extremely fast due to the direct hashing, small
 	number of elements, etc...
 */
 type EntityTable []Entity
 
+// EntityTableGrowthRate determines how much the table grows when it needs to be
+// resized.
 const EntityTableGrowthRate = 8
 
+// Set adds or updates an entity in the table.
 func (table *EntityTable) Set(entity Entity) {
 	slice := *table
 	size := uint32(len(slice))
@@ -48,6 +51,7 @@ func (table *EntityTable) Set(entity Entity) {
 	*table = newTable
 }
 
+// Contains checks if the table contains a specific entity.
 // This method should be as efficient as possible, it gets called a lot!
 func (table EntityTable) Contains(entity Entity) bool {
 	size := uint32(len(table))
@@ -69,6 +73,8 @@ func (table EntityTable) Contains(entity Entity) bool {
 	return false
 }
 
+// Delete removes an entity from the table. It returns true if the entity was
+// found and removed, false otherwise.
 func (table *EntityTable) Delete(entity Entity) bool {
 	size := uint32(len(*table))
 	if size == 0 {
@@ -115,6 +121,7 @@ func (table *EntityTable) Delete(entity Entity) bool {
 	return true
 }
 
+// Serialize converts the EntityTable to a slice of strings, serializing each entity.
 func (table EntityTable) Serialize(db *ECS) []string {
 	result := make([]string, 0)
 	for _, e := range table {
@@ -126,6 +133,7 @@ func (table EntityTable) Serialize(db *ECS) []string {
 	return result
 }
 
+// String returns a comma-separated string representation of the entities in the table.
 func (table EntityTable) String() string {
 	result := ""
 	for _, e := range table {
@@ -140,6 +148,7 @@ func (table EntityTable) String() string {
 	return result
 }
 
+// First returns the first entity in the table, or 0 if the table is empty.
 func (table EntityTable) First() Entity {
 	for _, e := range table {
 		if e != 0 {
@@ -149,6 +158,7 @@ func (table EntityTable) First() Entity {
 	return 0
 }
 
+// Len returns the number of entities in the table.
 func (table EntityTable) Len() int {
 	size := 0
 	for _, e := range table {
