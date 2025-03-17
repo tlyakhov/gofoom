@@ -30,8 +30,8 @@ func init() {
 	ParticleEmitterCID = ecs.RegisterComponent(&ecs.Column[ParticleEmitter, *ParticleEmitter]{Getter: GetParticleEmitter})
 }
 
-func GetParticleEmitter(db *ecs.ECS, e ecs.Entity) *ParticleEmitter {
-	if asserted, ok := db.Component(e, ParticleEmitterCID).(*ParticleEmitter); ok {
+func GetParticleEmitter(u *ecs.Universe, e ecs.Entity) *ParticleEmitter {
+	if asserted, ok := u.Component(e, ParticleEmitterCID).(*ParticleEmitter); ok {
 		return asserted
 	}
 	return nil
@@ -62,7 +62,7 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 		particles := ecs.ParseEntityTable(v)
 		for _, e := range particles {
 			if e != 0 {
-				pe.Spawned[e] = pe.ECS.Timestamp
+				pe.Spawned[e] = pe.Universe.Timestamp
 			}
 		}
 	}
@@ -98,7 +98,7 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 		for e := range pe.Spawned {
 			particles.Set(e)
 		}
-		result["Particles"] = particles.Serialize(pe.ECS)
+		result["Particles"] = particles.Serialize(pe.Universe)
 	}
 
 	if pe.Lifetime != 5000 {
@@ -111,7 +111,7 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 		result["Limit"] = strconv.Itoa(pe.Limit)
 	}
 	if pe.Source != 0 {
-		result["Source"] = pe.Source.Serialize(pe.ECS)
+		result["Source"] = pe.Source.Serialize(pe.Universe)
 	}
 	result["XYSpread"] = pe.XYSpread
 	result["ZSpread"] = pe.ZSpread

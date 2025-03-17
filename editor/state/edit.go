@@ -30,8 +30,8 @@ const (
 
 type Edit struct {
 	MapView
-	ECS  *ecs.ECS
-	Lock sync.Mutex
+	Universe *ecs.Universe
+	Lock     sync.Mutex
 
 	// Map view positions in world/screen space.
 	Mouse          concepts.Vector2 // Screen

@@ -45,8 +45,8 @@ func init() {
 	ProximityCID = ecs.RegisterComponent(&ecs.Column[Proximity, *Proximity]{Getter: GetProximity})
 }
 
-func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {
-	if asserted, ok := db.Component(e, ProximityCID).(*Proximity); ok {
+func GetProximity(u *ecs.Universe, e ecs.Entity) *Proximity {
+	if asserted, ok := u.Component(e, ProximityCID).(*Proximity); ok {
 		return asserted
 	}
 	return nil
@@ -54,11 +54,11 @@ func GetProximity(db *ecs.ECS, e ecs.Entity) *Proximity {
 
 func (p *Proximity) MultiAttachable() bool { return true }
 
-func (p *Proximity) OnAttach(db *ecs.ECS) {
-	p.Attached.OnAttach(db)
-	p.InRange.OnAttach(db)
-	p.Enter.OnAttach(db)
-	p.Exit.OnAttach(db)
+func (p *Proximity) OnAttach(u *ecs.Universe) {
+	p.Attached.OnAttach(u)
+	p.InRange.OnAttach(u)
+	p.Enter.OnAttach(u)
+	p.Exit.OnAttach(u)
 }
 
 func (p *Proximity) String() string {

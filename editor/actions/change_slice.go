@@ -44,7 +44,7 @@ func (a *ChangeSlice) Undo() {
 	default:
 		log.Printf("ChangeSlice.Undo: unimplemented: %v", a.Mode)
 	}
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *ChangeSlice) Redo() {
 	// SlicePtr is something like: *[]<some type>
@@ -60,10 +60,10 @@ func (a *ChangeSlice) Redo() {
 		}
 
 		if serializable, ok := newValue.Interface().(ecs.Serializable); ok {
-			serializable.OnAttach(a.State().ECS)
+			serializable.OnAttach(a.State().Universe)
 			serializable.Construct(nil)
 		} else if subSerializable, ok := newValue.Interface().(ecs.SubSerializable); ok {
-			subSerializable.Construct(a.State().ECS, nil)
+			subSerializable.Construct(a.State().Universe, nil)
 		}
 	case DeleteSliceElementMode:
 
@@ -96,5 +96,5 @@ func (a *ChangeSlice) Redo() {
 		oldSlice.Index(a.Index + 1).Set(reflect.ValueOf(v))
 		oldSlice.Index(a.Index).Set(reflect.ValueOf(next))
 	}
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 }

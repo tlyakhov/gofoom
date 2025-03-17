@@ -19,8 +19,8 @@ func init() {
 	ShaderCID = ecs.RegisterComponent(&ecs.Column[Shader, *Shader]{Getter: GetShader})
 }
 
-func GetShader(db *ecs.ECS, e ecs.Entity) *Shader {
-	if asserted, ok := db.Component(e, ShaderCID).(*Shader); ok {
+func GetShader(u *ecs.Universe, e ecs.Entity) *Shader {
+	if asserted, ok := u.Component(e, ShaderCID).(*Shader); ok {
 		return asserted
 	}
 	return nil
@@ -38,7 +38,7 @@ func (s *Shader) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Stages"]; ok {
-		s.Stages = ecs.ConstructSlice[*ShaderStage](s.ECS, v, nil)
+		s.Stages = ecs.ConstructSlice[*ShaderStage](s.Universe, v, nil)
 	}
 }
 

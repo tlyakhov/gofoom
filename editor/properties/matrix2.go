@@ -43,13 +43,13 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 			switch field.Name {
 			case "Segment.Low.ℝ²→ℝ².Spawn":
 				if typed.AdjacentSegment != nil {
-					adj := core.GetSector(g.State().ECS, typed.AdjacentSector)
+					adj := core.GetSector(g.State().Universe, typed.AdjacentSector)
 					afz := adj.Bottom.ZAt(dynamic.DynamicNow, typed.A)
 					worldHeight = math.Abs(fz - afz)
 				}
 			case "Segment.High.ℝ²→ℝ².Spawn":
 				if typed.AdjacentSegment != nil {
-					adj := core.GetSector(g.State().ECS, typed.AdjacentSector)
+					adj := core.GetSector(g.State().Universe, typed.AdjacentSector)
 					acz := adj.Top.ZAt(dynamic.DynamicNow, typed.A)
 					worldHeight = math.Abs(cz - acz)
 				}

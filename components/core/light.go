@@ -24,8 +24,8 @@ func init() {
 	LightCID = ecs.RegisterComponent(&ecs.Column[Light, *Light]{Getter: GetLight})
 }
 
-func GetLight(db *ecs.ECS, e ecs.Entity) *Light {
-	if asserted, ok := db.Component(e, LightCID).(*Light); ok {
+func GetLight(u *ecs.Universe, e ecs.Entity) *Light {
+	if asserted, ok := u.Component(e, LightCID).(*Light); ok {
 		return asserted
 	}
 	return nil
@@ -33,11 +33,11 @@ func GetLight(db *ecs.ECS, e ecs.Entity) *Light {
 
 func (l *Light) OnDetach(e ecs.Entity) {
 	defer l.Attached.OnDetach(e)
-	if l.ECS == nil {
+	if l.Universe == nil {
 		return
 	}
 
-	if b := GetBody(l.ECS, e); b != nil && b.QuadNode != nil {
+	if b := GetBody(l.Universe, e); b != nil && b.QuadNode != nil {
 		b.QuadNode.Remove(b)
 		b.QuadNode = nil
 
@@ -46,12 +46,12 @@ func (l *Light) OnDetach(e ecs.Entity) {
 
 func (l *Light) OnDelete() {
 	defer l.Attached.OnDelete()
-	if l.ECS != nil {
+	if l.Universe != nil {
 		for _, e := range l.Entities {
 			if e == 0 {
 				continue
 			}
-			if b := GetBody(l.ECS, e); b != nil && b.QuadNode != nil {
+			if b := GetBody(l.Universe, e); b != nil && b.QuadNode != nil {
 				b.QuadNode.Remove(b)
 				b.QuadNode = nil
 			}
@@ -59,15 +59,15 @@ func (l *Light) OnDelete() {
 	}
 }
 
-func (l *Light) OnAttach(db *ecs.ECS) {
-	l.Attached.OnAttach(db)
+func (l *Light) OnAttach(u *ecs.Universe) {
+	l.Attached.OnAttach(u)
 
-	if tree := db.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
+	if tree := u.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
 		for _, e := range l.Entities {
 			if e == 0 {
 				continue
 			}
-			if b := GetBody(db, e); b != nil && b.QuadNode != nil {
+			if b := GetBody(u, e); b != nil && b.QuadNode != nil {
 				b.QuadNode.Lights = append(b.QuadNode.Lights, b)
 			}
 		}

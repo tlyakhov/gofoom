@@ -17,8 +17,8 @@ func init() {
 	ActionFireCID = ecs.RegisterComponent(&ecs.Column[ActionFire, *ActionFire]{Getter: GetActionFire})
 }
 
-func GetActionFire(db *ecs.ECS, e ecs.Entity) *ActionFire {
-	if asserted, ok := db.Component(e, ActionFireCID).(*ActionFire); ok {
+func GetActionFire(u *ecs.Universe, e ecs.Entity) *ActionFire {
+	if asserted, ok := u.Component(e, ActionFireCID).(*ActionFire); ok {
 		return asserted
 	}
 	return nil

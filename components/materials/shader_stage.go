@@ -23,7 +23,7 @@ const (
 )
 
 type ShaderStage struct {
-	ECS       *ecs.ECS
+	Universe  *ecs.Universe
 	Material  ecs.Entity         `editable:"Material" edit_type:"Material"`
 	Transform concepts.Matrix2   `editable:"ℝ²→ℝ²"`
 	Flags     ShaderFlags        `editable:"Flags" edit_type:"Flags"`
@@ -83,7 +83,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 	result := make(map[string]any)
 
 	if s.Material != 0 {
-		result["Material"] = s.Material.Serialize(s.ECS)
+		result["Material"] = s.Material.Serialize(s.Universe)
 	}
 
 	if s.Frame != 0 {
@@ -108,10 +108,10 @@ func (s *ShaderStage) Serialize() map[string]any {
 	return result
 }
 
-func (s *ShaderStage) OnAttach(db *ecs.ECS) {
-	s.ECS = db
+func (s *ShaderStage) OnAttach(u *ecs.Universe) {
+	s.Universe = u
 }
 
-func (s *ShaderStage) GetECS() *ecs.ECS {
-	return s.ECS
+func (s *ShaderStage) GetECS() *ecs.Universe {
+	return s.Universe
 }

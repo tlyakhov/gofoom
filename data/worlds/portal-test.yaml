@@ -1380,8 +1380,8 @@
     InRange:
       Code: |-
         if body == nil { return }
-        m := core.GetMobile(s.ECS, body.Entity)
-        vd := behaviors.GetVerticalDoor(s.ECS,onEntity)
+        m := core.GetMobile(s.Universe, body.Entity)
+        vd := behaviors.GetVerticalDoor(s.Universe,onEntity)
         if m == nil || vd == nil { return }
         if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
   behaviors.VerticalDoor:
@@ -1706,8 +1706,8 @@
   behaviors.PlayerTargetable:
     Frob:
       Code: |-
-        door := behaviors.GetVerticalDoor(s.ECS,16)
-        buttonSector := core.GetSector(s.ECS,10)
+        door := behaviors.GetVerticalDoor(s.Universe,16)
+        buttonSector := core.GetSector(s.Universe,10)
         buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
         if door.State != behaviors.DoorStateOpen {
           door.Intent = behaviors.DoorIntentOpen
@@ -1724,19 +1724,19 @@
       {{end}}
     Selected:
       Code: |-
-        buttonSector := core.GetSector(s.ECS,10)
+        buttonSector := core.GetSector(s.Universe,10)
         buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
         buttonStage.Flags |= materials.ShaderFrob
     UnSelected:
       Code: |-
-        buttonSector := core.GetSector(s.ECS,10)
+        buttonSector := core.GetSector(s.Universe,10)
         buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
         buttonStage.Flags &= ^materials.ShaderFrob
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
       Code: |-
-        if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {
+        if p := behaviors.GetPlayer(s.Universe, body.Entity); p != nil {
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: behaviors.Player

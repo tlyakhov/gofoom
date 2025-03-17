@@ -34,8 +34,8 @@ func init() {
 	MobileCID = ecs.RegisterComponent(&ecs.Column[Mobile, *Mobile]{Getter: GetMobile})
 }
 
-func GetMobile(db *ecs.ECS, e ecs.Entity) *Mobile {
-	if asserted, ok := db.Component(e, MobileCID).(*Mobile); ok {
+func GetMobile(u *ecs.Universe, e ecs.Entity) *Mobile {
+	if asserted, ok := u.Component(e, MobileCID).(*Mobile); ok {
 		return asserted
 	}
 	return nil
@@ -47,14 +47,14 @@ func (m *Mobile) String() string {
 
 func (m *Mobile) OnDelete() {
 	defer m.Attached.OnDelete()
-	if m.ECS != nil {
-		m.Vel.Detach(m.ECS.Simulation)
+	if m.Universe != nil {
+		m.Vel.Detach(m.Universe.Simulation)
 	}
 }
 
-func (m *Mobile) OnAttach(db *ecs.ECS) {
-	m.Attached.OnAttach(db)
-	m.Vel.Attach(db.Simulation)
+func (m *Mobile) OnAttach(u *ecs.Universe) {
+	m.Attached.OnAttach(u)
+	m.Vel.Attach(u.Simulation)
 }
 
 func (m *Mobile) Construct(data map[string]any) {

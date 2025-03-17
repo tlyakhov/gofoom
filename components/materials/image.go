@@ -44,8 +44,8 @@ func init() {
 	ImageCID = ecs.RegisterComponent(&ecs.Column[Image, *Image]{Getter: GetImage})
 }
 
-func GetImage(db *ecs.ECS, e ecs.Entity) *Image {
-	if asserted, ok := db.Component(e, ImageCID).(*Image); ok {
+func GetImage(u *ecs.Universe, e ecs.Entity) *Image {
+	if asserted, ok := u.Component(e, ImageCID).(*Image); ok {
 		return asserted
 	}
 	return nil

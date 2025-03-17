@@ -62,7 +62,7 @@ func (pc *ProximityController) Recalculate() {
 
 func (pc *ProximityController) isValid(e ecs.Entity) bool {
 	for cid := range pc.ValidComponents {
-		if pc.ECS.Component(e, cid) == nil {
+		if pc.Universe.Component(e, cid) == nil {
 			return false
 		}
 	}
@@ -85,7 +85,7 @@ func (pc *ProximityController) react(target ecs.Entity) {
 	key := uint64(uint32(pc.Entity)) | uint64(uint32(target))
 	if state, loaded = pc.State.Load(key); !loaded {
 		// TODO: Think through the lifecycle of these. Should they be serialized?
-		state = pc.ECS.NewAttachedComponent(pc.ECS.NewEntity(), behaviors.ProximityStateCID).(*behaviors.ProximityState)
+		state = pc.Universe.NewAttachedComponent(pc.Universe.NewEntity(), behaviors.ProximityStateCID).(*behaviors.ProximityState)
 		state.Attached.Flags = ecs.ComponentInternal
 		state.Source = pc.Entity
 		state.Target = target
@@ -95,11 +95,11 @@ func (pc *ProximityController) react(target ecs.Entity) {
 		pc.State.Store(key, state)
 	}
 
-	if state.PrevStatus != behaviors.ProximityIdle && pc.Hysteresis > 0 && state.LastFired+int64(pc.Hysteresis) > pc.ECS.Timestamp {
+	if state.PrevStatus != behaviors.ProximityIdle && pc.Hysteresis > 0 && state.LastFired+int64(pc.Hysteresis) > pc.Universe.Timestamp {
 		state.Status = behaviors.ProximityWaiting
 		return
 	}
-	state.LastFired = pc.ECS.Timestamp
+	state.LastFired = pc.Universe.Timestamp
 	if state.PrevStatus == behaviors.ProximityIdle && pc.Enter.IsCompiled() {
 		pc.actScript(&pc.Enter)
 	}
@@ -128,7 +128,7 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 
 	// TODO: Reimplement sector<->sector proximity
 	/*	sector.PVS.Range(func(e uint32) {
-		pvs := core.GetSector(pc.ECS, ecs.Entity(e))
+		pvs := core.GetSector(pc.Universe, ecs.Entity(e))
 		if !pvs.Active || pvs.Entity == pc.Entity {
 			return
 		}
@@ -164,7 +164,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 
 	// TODO: Implement proximityOnBody<->sector tests
 	/*container.PVS.Range(func(e uint32) {
-		sector := core.GetSector(pc.ECS, ecs.Entity(e))
+		sector := core.GetSector(pc.Universe, ecs.Entity(e))
 		if sector.Active && pc.ActsOnSectors &&
 			sector.Center.Dist2(&body.Pos.Now) < pc.Range*pc.Range &&
 			pc.isValid(sector.Entity) {
@@ -179,7 +179,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 
 func (pc *ProximityController) Always() {
 	if pc.tree == nil {
-		pc.tree = pc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
+		pc.tree = pc.Universe.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
 
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
@@ -200,9 +200,9 @@ func (pc *ProximityController) Always() {
 
 	pc.flags = 0
 	// TODO: Add InternalSegments
-	if sector := core.GetSector(pc.ECS, pc.Entity); sector != nil && sector.Active {
+	if sector := core.GetSector(pc.Universe, pc.Entity); sector != nil && sector.Active {
 		pc.proximityOnSector(sector)
-	} else if body := core.GetBody(pc.ECS, pc.Entity); body != nil && body.SectorEntity != 0 && body.Active {
+	} else if body := core.GetBody(pc.Universe, pc.Entity); body != nil && body.SectorEntity != 0 && body.Active {
 		pc.proximityOnBody(body)
 	}
 
@@ -213,16 +213,16 @@ func (pc *ProximityController) Always() {
 		if state.Status == behaviors.ProximityIdle {
 			if state.PrevStatus != behaviors.ProximityIdle && pc.Exit.IsCompiled() {
 				if state.Flags&behaviors.ProximityOnBody != 0 {
-					pc.TargetBody = core.GetBody(pc.ECS, state.Target)
+					pc.TargetBody = core.GetBody(pc.Universe, state.Target)
 					pc.TargetSector = nil
 				} else if state.Flags&behaviors.ProximityOnSector != 0 {
-					pc.TargetSector = core.GetSector(pc.ECS, state.Target)
+					pc.TargetSector = core.GetSector(pc.Universe, state.Target)
 					pc.TargetBody = nil
 				}
 				pc.actScript(&pc.Exit)
 			}
 			pc.State.Delete(key)
-			pc.ECS.Delete(state.Entity)
+			pc.Universe.Delete(state.Entity)
 		}
 		return true
 	})

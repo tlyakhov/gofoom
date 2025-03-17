@@ -49,14 +49,14 @@ func BenchmarkGet(b *testing.B) {
 	RegisterComponent(&Column[mockC6, *mockC6]{})
 	RegisterComponent(&Column[mockC7, *mockC7]{})
 	RegisterComponent(&Column[mockC8, *mockC8]{})
-	db := NewECS()
+	u := NewUniverse()
 	cp := Types().ColumnPlaceholders
 	numEntities := 1000
 	for range numEntities {
-		entity := db.NewEntity()
+		entity := u.NewEntity()
 		for range 5 {
 			index := rand.Intn(len(cp)-1) + 1
-			db.NewAttachedComponent(entity, cp[index].ID())
+			u.NewAttachedComponent(entity, cp[index].ID())
 		}
 	}
 	// Divide the result by 1000
@@ -69,7 +69,7 @@ func BenchmarkGet(b *testing.B) {
 			cid := cp[index].ID()
 			b.StartTimer()
 			for range 1000 {
-				db.Component(entity, cid)
+				u.Component(entity, cid)
 			}
 		}
 	})

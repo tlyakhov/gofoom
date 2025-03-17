@@ -13,28 +13,28 @@ type Serializable interface {
 	Construct(data map[string]any)
 	// Serialize returns a map representing the component's data for serialization.
 	Serialize() map[string]any
-	// OnAttach is called when the component is attached to an ECS instance.
-	OnAttach(db *ECS)
-	// GetECS returns the ECS instance associated with the component.
-	GetECS() *ECS
+	// OnAttach is called when the component is attached to an Universe instance.
+	OnAttach(u *Universe)
+	// GetECS returns the Universe instance associated with the component.
+	GetECS() *Universe
 }
 
 // SubSerializable is an interface for sub-components that can be serialized and deserialized.
 type SubSerializable interface {
-	// Construct initializes the sub-component from a map of data and an ECS instance.
-	Construct(ecs *ECS, data map[string]any)
+	// Construct initializes the sub-component from a map of data and an Universe instance.
+	Construct(ecs *Universe, data map[string]any)
 	// Serialize returns a map representing the sub-component's data for serialization.
 	Serialize() map[string]any
 }
 
-// Attachable is an interface for components that can be attached to entities in the ECS.
+// Attachable is an interface for components that can be attached to entities in the Universe.
 type Attachable interface {
 	Serializable
 	// String returns a string representation of the component.
 	String() string
 	// OnDetach is called when the component is detached from an entity.
 	OnDetach(Entity)
-	// OnDelete is called when the component is deleted from the ECS.
+	// OnDelete is called when the component is deleted from the Universe.
 	OnDelete()
 	// IsActive checks if the component is active.
 	IsActive() bool
@@ -47,7 +47,7 @@ type Attachable interface {
 // AttachableColumn is an interface for managing a column of attachable components of a specific type.
 type AttachableColumn interface {
 	// From initializes a column from another column of the same type.
-	From(source AttachableColumn, ecs *ECS)
+	From(source AttachableColumn, ecs *Universe)
 	// New creates a new Attachable component of the type stored in this column.
 	New() Attachable
 	// Add adds a component to the column.
@@ -86,7 +86,7 @@ const (
 	ControllerRecalculate
 )
 
-// Controller is an interface for defining controllers that act on components within the ECS.
+// Controller is an interface for defining controllers that act on components within the Universe.
 type Controller interface {
 	// ComponentID returns the ID of the component type that this controller operates on.
 	ComponentID() ComponentID

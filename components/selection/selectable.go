@@ -59,7 +59,7 @@ var typeGroups = map[SelectableType]SelectableType{
 // types. (for example, only one point of an internal segment)
 type Selectable struct {
 	ecs.Entity
-	ECS             *ecs.ECS
+	Universe        *ecs.Universe
 	Type            SelectableType
 	Sector          *core.Sector
 	Body            *core.Body
@@ -86,15 +86,15 @@ func (s *Selectable) GroupHash() uint64 {
 }
 
 func SelectableFromSector(s *core.Sector) *Selectable {
-	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, ECS: s.ECS}
+	return &Selectable{Type: SelectableSector, Sector: s, Entity: s.Entity, Universe: s.Universe}
 }
 
 func SelectableFromFloor(s *core.Sector) *Selectable {
-	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, ECS: s.ECS}
+	return &Selectable{Type: SelectableFloor, Sector: s, Entity: s.Entity, Universe: s.Universe}
 }
 
 func SelectableFromCeil(s *core.Sector) *Selectable {
-	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, ECS: s.ECS}
+	return &Selectable{Type: SelectableCeiling, Sector: s, Entity: s.Entity, Universe: s.Universe}
 }
 
 func SelectableFromSegment(s *core.SectorSegment) *Selectable {
@@ -103,7 +103,7 @@ func SelectableFromSegment(s *core.SectorSegment) *Selectable {
 		Sector:        s.Sector,
 		SectorSegment: s,
 		Entity:        s.Sector.Entity,
-		ECS:           s.ECS}
+		Universe:      s.Universe}
 }
 
 func SelectableFromWall(s *core.SectorSegment, t SelectableType) *Selectable {
@@ -112,16 +112,16 @@ func SelectableFromWall(s *core.SectorSegment, t SelectableType) *Selectable {
 		Sector:        s.Sector,
 		SectorSegment: s,
 		Entity:        s.Sector.Entity,
-		ECS:           s.ECS}
+		Universe:      s.Universe}
 }
 
 func SelectableFromBody(b *core.Body) *Selectable {
 	return &Selectable{
-		Type:   SelectableBody,
-		Sector: b.Sector(),
-		Body:   b,
-		Entity: b.Entity,
-		ECS:    b.ECS}
+		Type:     SelectableBody,
+		Sector:   b.Sector(),
+		Body:     b,
+		Entity:   b.Entity,
+		Universe: b.Universe}
 }
 
 func SelectableFromInternalSegment(s *core.InternalSegment) *Selectable {
@@ -129,21 +129,21 @@ func SelectableFromInternalSegment(s *core.InternalSegment) *Selectable {
 		Type:            SelectableInternalSegment,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		ECS:             s.ECS}
+		Universe:        s.Universe}
 }
 
 func SelectableFromInternalSegmentA(s *core.InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentA,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		ECS:             s.ECS}
+		Universe:        s.Universe}
 }
 
 func SelectableFromInternalSegmentB(s *core.InternalSegment) *Selectable {
 	return &Selectable{Type: SelectableInternalSegmentB,
 		InternalSegment: s,
 		Entity:          s.Entity,
-		ECS:             s.ECS}
+		Universe:        s.Universe}
 }
 
 func SelectableFromActionWaypoint(s *behaviors.ActionWaypoint) *Selectable {
@@ -151,29 +151,29 @@ func SelectableFromActionWaypoint(s *behaviors.ActionWaypoint) *Selectable {
 		Type:           SelectableActionWaypoint,
 		ActionWaypoint: s,
 		Entity:         s.Entity,
-		ECS:            s.ECS}
+		Universe:       s.Universe}
 }
 
-func SelectableFromEntity(db *ecs.ECS, e ecs.Entity) *Selectable {
-	if sector := core.GetSector(db, e); sector != nil {
+func SelectableFromEntity(u *ecs.Universe, e ecs.Entity) *Selectable {
+	if sector := core.GetSector(u, e); sector != nil {
 		return SelectableFromSector(sector)
 	}
-	if body := core.GetBody(db, e); body != nil {
+	if body := core.GetBody(u, e); body != nil {
 		return SelectableFromBody(body)
 	}
-	if seg := core.GetInternalSegment(db, e); seg != nil {
+	if seg := core.GetInternalSegment(u, e); seg != nil {
 		return SelectableFromInternalSegment(seg)
 	}
-	if aw := behaviors.GetActionWaypoint(db, e); aw != nil {
+	if aw := behaviors.GetActionWaypoint(u, e); aw != nil {
 		return SelectableFromActionWaypoint(aw)
 	}
-	return &Selectable{Type: SelectableEntity, Entity: e, ECS: db}
+	return &Selectable{Type: SelectableEntity, Entity: e, Universe: u}
 }
 
 // Serialize saves the data for whatever the selectable is holding, which may or
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {
-	return s.ECS.SerializeEntity(s.Entity)
+	return s.Universe.SerializeEntity(s.Entity)
 }
 
 func (s *Selectable) PositionRange(f func(p *concepts.Vector2)) {

@@ -19,15 +19,15 @@ func main() {
 			return nil
 		}
 		log.Printf("%v", path)
-		db := ecs.NewECS()
-		//controllers.CreateTestWorld3(db)
-		if err = db.Load(path); err != nil {
+		u := ecs.NewUniverse()
+		//controllers.CreateTestWorld3(u)
+		if err = u.Load(path); err != nil {
 			log.Printf("Error loading world %v", err)
 			return nil
 		}
-		//controllers.Respawn(db, true)
-		//archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
-		db.Save(path)
+		//controllers.Respawn(u, true)
+		//archetypes.CreateFont(u, "data/vga-font-8x8.png", "Default Font")
+		u.Save(path)
 		return nil
 	})
 }

@@ -28,7 +28,7 @@ type Script struct {
 	interp       *interp.Interpreter
 	Vars         map[string]any
 	Params       []ScriptParam
-	ECS          *ecs.ECS
+	Universe     *ecs.Universe
 	runFunc      any
 	execCode     string
 }
@@ -70,8 +70,8 @@ func init() {
 }
 
 func (s *Script) Compile() {
-	if s.ECS == nil {
-		log.Println("Script.Compile: ECS is nil. Stack trace:")
+	if s.Universe == nil {
+		log.Println("Script.Compile: Universe is nil. Stack trace:")
 		log.Println(concepts.StackTrace())
 		return
 	}
@@ -115,12 +115,12 @@ func (s *Script) IsEmpty() bool {
 	return len(s.Code) == 0
 }
 
-func (s *Script) OnAttach(db *ecs.ECS) {
-	s.ECS = db
+func (s *Script) OnAttach(u *ecs.Universe) {
+	s.Universe = u
 }
 
-func (s *Script) GetECS() *ecs.ECS {
-	return s.ECS
+func (s *Script) GetECS() *ecs.Universe {
+	return s.Universe
 }
 
 func (s *Script) Construct(data map[string]any) {

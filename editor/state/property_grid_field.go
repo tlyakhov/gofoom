@@ -62,9 +62,9 @@ func (f *PropertyGridField) Disabled() bool {
 		return false
 	}
 
-	disabled := true
+	disabled := false
 	for _, v := range f.Values {
-		disabled = disabled && v.Entity.IsExternal()
+		disabled = disabled || v.Entity.IsExternal()
 	}
 	return disabled
 }

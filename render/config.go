@@ -13,7 +13,7 @@ import (
 )
 
 type Config struct {
-	ECS                       *ecs.ECS
+	Universe                  *ecs.Universe
 	Multithreaded             bool
 	NumBlocks                 int
 	ScreenWidth, ScreenHeight int
@@ -53,15 +53,15 @@ func (c *Config) Initialize() {
 }
 
 func (c *Config) RefreshPlayer() {
-	col := ecs.ColumnFor[behaviors.Player](c.ECS, behaviors.PlayerCID)
+	col := ecs.ColumnFor[behaviors.Player](c.Universe, behaviors.PlayerCID)
 	for i := range col.Cap() {
 		player := col.Value(i)
 		if player == nil || !player.Active || player.Spawn {
 			continue
 		}
 		c.Player = player
-		c.PlayerBody = core.GetBody(c.ECS, player.Entity)
-		c.Carrier = behaviors.GetInventoryCarrier(c.ECS, player.Entity)
+		c.PlayerBody = core.GetBody(c.Universe, player.Entity)
+		c.Carrier = behaviors.GetInventoryCarrier(c.Universe, player.Entity)
 		return
 	}
 }

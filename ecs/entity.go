@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// Entity represents an entity identifier within the ECS.
+// Entity represents an entity identifier within the Universe.
 // If this is enlarged to 64 bit, then the bitmaps need to support iterating
 // over larger ranges, or we need to use an entity bitmap per source
 type Entity uint32
@@ -47,7 +47,7 @@ Because it gives us a few benefits:
  2. We can do complex transformations on serialized data, even when the
     file format is untyped (e.g. YAML/JSON). For example, we can create
     "common" data files, like prefabs, and #include them in other files,
-    and have the ECS intelligently map the entity IDs across file boundaries.
+    and have the Universe intelligently map the entity IDs across file boundaries.
  3. It forces target systems to be UTF-8 compliant - serialization will be
     entirely broken otherwise.
 */
@@ -124,23 +124,23 @@ func ParseEntityRawOrPrefixed(e string) (Entity, error) {
 
 // Format returns a formatted string representation of the entity, including its
 // name (if available) and source file (if external).
-func (e Entity) Format(db *ECS) string {
+func (e Entity) Format(u *Universe) string {
 	if e == 0 {
 		return EntityDelimiter + "0 Nothing"
 	}
 	id := e.Local().String()
-	if named := GetNamed(db, e); named != nil {
+	if named := GetNamed(u, e); named != nil {
 		return id + " " + named.Name
 	}
 	if e.IsExternal() {
 		sourceID := e.SourceID()
-		id += " (from " + db.SourceFileIDs[sourceID].Source + ")"
+		id += " (from " + u.SourceFileIDs[sourceID].Source + ")"
 	}
 
 	return id
 }
 
-// SerializeRaw serializes the entity to a string without considering the ECS
+// SerializeRaw serializes the entity to a string without considering the Universe
 // context, allowing specifying a name and file.
 func (e Entity) SerializeRaw(name string, file string) string {
 	id := e.Local().String()
@@ -160,13 +160,13 @@ func (e Entity) SerializeRaw(name string, file string) string {
 }
 
 // Serialize serializes the entity to a string, including its name and source
-// file information based on the ECS context.
-func (e Entity) Serialize(db *ECS) string {
+// file information based on the Universe context.
+func (e Entity) Serialize(u *Universe) string {
 	id := e.Local().String()
 	if e == 0 {
 		return id
 	}
-	if named := GetNamed(db, e); named != nil {
+	if named := GetNamed(u, e); named != nil {
 		id += EntityDelimiter + url.QueryEscape(named.Name)
 	} else if e.IsExternal() {
 		id += EntityDelimiter
@@ -174,7 +174,7 @@ func (e Entity) Serialize(db *ECS) string {
 
 	if e.IsExternal() {
 		id += EntityDelimiter + strconv.FormatUint(uint64(e.SourceID()), 10)
-		id += EntityDelimiter + url.QueryEscape(db.SourceFileIDs[e.SourceID()].Source)
+		id += EntityDelimiter + url.QueryEscape(u.SourceFileIDs[e.SourceID()].Source)
 	}
 	return id
 }

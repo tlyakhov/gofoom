@@ -207,7 +207,7 @@ func (g *Grid) fieldsFromSelection(sel *selection.Selection) *PropertyGridState 
 		if s.Entity == 0 {
 			continue
 		}
-		for _, c := range s.ECS.AllComponents(s.Entity) {
+		for _, c := range s.Universe.AllComponents(s.Entity) {
 			if c == nil {
 				continue
 			}
@@ -276,13 +276,13 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 			button.SetText("Select parent sector")
 			button.SetIcon(theme.LoginIcon())
 			button.OnTapped = func() {
-				g.SelectObjects(true, selection.SelectableFromEntity(g.State().ECS, s.Sector.Entity))
+				g.SelectObjects(true, selection.SelectableFromEntity(g.State().Universe, s.Sector.Entity))
 			}
 		}
 		disabled = disabled && s.Entity.IsExternal()
 		entities = append(entities, s.Entity)
 		entityList += s.Entity.ShortString()
-		for _, c := range s.ECS.AllComponents(s.Entity) {
+		for _, c := range s.Universe.AllComponents(s.Entity) {
 			if c == nil {
 				continue
 			}

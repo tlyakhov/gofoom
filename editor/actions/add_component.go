@@ -23,13 +23,13 @@ func (a *AddComponent) Activate() {
 
 func (a *AddComponent) Undo() {
 	for _, entity := range a.Entities {
-		a.State().ECS.DetachComponent(a.ID, entity)
+		a.State().Universe.DetachComponent(a.ID, entity)
 	}
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *AddComponent) Redo() {
 	for _, entity := range a.Entities {
-		a.State().ECS.NewAttachedComponent(entity, a.ID)
+		a.State().Universe.NewAttachedComponent(entity, a.ID)
 	}
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 }

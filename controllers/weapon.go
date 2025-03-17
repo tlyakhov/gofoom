@@ -45,17 +45,17 @@ func (wc *WeaponController) Methods() ecs.ControllerMethod {
 func (wc *WeaponController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	wc.Entity = e
 	wc.Weapon = target.(*behaviors.Weapon)
-	wc.Class = behaviors.GetWeaponClass(wc.Weapon.ECS, e)
+	wc.Class = behaviors.GetWeaponClass(wc.Weapon.Universe, e)
 	if wc.Class == nil || !wc.Class.IsActive() {
 		return false
 	}
-	wc.Slot = behaviors.GetInventorySlot(wc.Weapon.ECS, e)
+	wc.Slot = behaviors.GetInventorySlot(wc.Weapon.Universe, e)
 	if wc.Slot == nil || !wc.Slot.IsActive() ||
 		wc.Slot.Carrier == nil || !wc.Slot.Carrier.IsActive() {
 		return false
 	}
 	// The source of our shot is the body attached to the inventory carrier
-	wc.Body = core.GetBody(wc.Weapon.ECS, wc.Slot.Carrier.Entity)
+	wc.Body = core.GetBody(wc.Weapon.Universe, wc.Slot.Carrier.Entity)
 	return wc.Weapon.IsActive() &&
 		wc.Body != nil && wc.Body.IsActive() &&
 		wc.Class != nil && wc.Class.IsActive()
@@ -149,7 +149,7 @@ func (wc *WeaponController) Always() {
 		return
 	}
 	wc.FireNextFrame = false
-	wc.FiredTimestamp = wc.ECS.Timestamp
+	wc.FiredTimestamp = wc.Universe.Timestamp
 	s := wc.Cast()
 
 	if s == nil {
@@ -161,13 +161,13 @@ func (wc *WeaponController) Always() {
 	// buggy though if the object in question moves
 	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman(2))
 	if s.Type == selection.SelectableBody {
-		if mobile := core.GetMobile(s.Body.ECS, s.Body.Entity); mobile != nil {
+		if mobile := core.GetMobile(s.Body.Universe, s.Body.Entity); mobile != nil {
 			// Push bodies away
 			// TODO: Parameterize in Weapon
 			mobile.Vel.Now.AddSelf(wc.delta.Mul(3))
 		}
 		// Hurt anything alive
-		if alive := behaviors.GetAlive(wc.Body.ECS, s.Body.Entity); alive != nil {
+		if alive := behaviors.GetAlive(wc.Body.Universe, s.Body.Entity); alive != nil {
 			// TODO: Parameterize in Weapon
 			alive.Hurt("Weapon "+s.Entity.String(), wc.Class.Damage, 20)
 		}
@@ -186,7 +186,7 @@ func (wc *WeaponController) Always() {
 		}
 		// TODO: Fix this
 		//es.CFlags = ecs.ComponentInternal
-		es.OnAttach(s.ECS)
+		es.OnAttach(s.Universe)
 		es.Construct(nil)
 		es.Flags = 0
 		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)

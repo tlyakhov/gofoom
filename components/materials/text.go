@@ -31,8 +31,8 @@ func init() {
 	TextCID = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText})
 }
 
-func GetText(db *ecs.ECS, e ecs.Entity) *Text {
-	if asserted, ok := db.Component(e, TextCID).(*Text); ok {
+func GetText(u *ecs.Universe, e ecs.Entity) *Text {
+	if asserted, ok := u.Component(e, TextCID).(*Text); ok {
 		return asserted
 	}
 	return nil
@@ -42,13 +42,13 @@ func (t *Text) MultiAttachable() bool { return true }
 
 func (t *Text) OnDelete() {
 	defer t.Attached.OnDelete()
-	if t.ECS != nil {
-		t.Color.Detach(t.ECS.Simulation)
+	if t.Universe != nil {
+		t.Color.Detach(t.Universe.Simulation)
 	}
 }
-func (t *Text) OnAttach(db *ecs.ECS) {
-	t.Attached.OnAttach(db)
-	t.Color.Attach(db.Simulation)
+func (t *Text) OnAttach(u *ecs.Universe) {
+	t.Attached.OnAttach(u)
+	t.Color.Attach(u.Simulation)
 }
 
 func (t *Text) RasterizeText() {

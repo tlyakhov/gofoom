@@ -26,21 +26,21 @@ func init() {
 	WeaponCID = ecs.RegisterComponent(&ecs.Column[Weapon, *Weapon]{Getter: GetWeapon})
 }
 
-func GetWeapon(db *ecs.ECS, e ecs.Entity) *Weapon {
-	if asserted, ok := db.Component(e, WeaponCID).(*Weapon); ok {
+func GetWeapon(u *ecs.Universe, e ecs.Entity) *Weapon {
+	if asserted, ok := u.Component(e, WeaponCID).(*Weapon); ok {
 		return asserted
 	}
 	return nil
 }
 
 func (w *Weapon) CoolingDown() bool {
-	wc := GetWeaponClass(w.ECS, w.Entity)
-	return wc != nil && w.ECS.Timestamp-w.FiredTimestamp < int64(wc.Cooldown)
+	wc := GetWeaponClass(w.Universe, w.Entity)
+	return wc != nil && w.Universe.Timestamp-w.FiredTimestamp < int64(wc.Cooldown)
 }
 
 func (w *Weapon) Flashing() bool {
-	wc := GetWeaponClass(w.ECS, w.Entity)
-	return wc != nil && w.ECS.Timestamp-w.FiredTimestamp < int64(wc.FlashTime)
+	wc := GetWeaponClass(w.Universe, w.Entity)
+	return wc != nil && w.Universe.Timestamp-w.FiredTimestamp < int64(wc.FlashTime)
 }
 
 func (w *Weapon) String() string {

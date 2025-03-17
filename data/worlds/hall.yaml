@@ -1006,8 +1006,8 @@
     InRange:
       Code: |-
         if body == nil { return }
-        m := core.GetMobile(s.ECS, body.Entity)
-        vd := behaviors.GetVerticalDoor(s.ECS,onEntity)
+        m := core.GetMobile(s.Universe, body.Entity)
+        vd := behaviors.GetVerticalDoor(s.Universe,onEntity)
         if m == nil || vd == nil { return }
         if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
   behaviors.VerticalDoor:
@@ -6025,7 +6025,7 @@
 - Entity: ∈⋮153
   behaviors.Proximity:
     InRange:
-      Code: "if alive := behaviors.GetAlive(s.ECS, body.Entity); alive != nil {\n  alive.Hurt(\"bubble\", 2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+      Code: "if alive := behaviors.GetAlive(s.Universe, body.Entity); alive != nil {\n  alive.Hurt(\"bubble\", 2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
     Range: 5
   ecs.Named:
     Name: Bubble
@@ -6217,7 +6217,7 @@
         if !carrier.HasAtLeast("Red Keycard",1) {
           return
         }
-        door := behaviors.GetVerticalDoor(s.ECS,168)
+        door := behaviors.GetVerticalDoor(s.Universe,168)
         if door.State != behaviors.DoorStateOpen {
           door.Intent = behaviors.DoorIntentOpen
         } else if door.State != behaviors.DoorStateClosed {
@@ -6228,7 +6228,7 @@
     Hysteresis: 0
     InRange:
       Code: |-
-        if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {
+        if p := behaviors.GetPlayer(s.Universe, body.Entity); p != nil {
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: behaviors.Player

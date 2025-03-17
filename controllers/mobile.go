@@ -42,7 +42,7 @@ func (mc *MobileController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	if !mc.Mobile.IsActive() {
 		return false
 	}
-	return mc.BodyController.Target(core.GetBody(mc.ECS, mc.BaseController.Entity), e)
+	return mc.BodyController.Target(core.GetBody(mc.Universe, mc.BaseController.Entity), e)
 }
 
 func (mc *MobileController) ResetForce() {
@@ -80,7 +80,7 @@ func (mc *MobileController) Forces() {
 
 func (mc *MobileController) Always() {
 	if mc.tree == nil {
-		mc.tree = mc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
+		mc.tree = mc.Universe.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
 
 	if mc.Mass == 0 {
@@ -120,7 +120,7 @@ func (mc *MobileController) Always() {
 
 func (mc *MobileController) Recalculate() {
 	if mc.tree == nil {
-		mc.tree = mc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
+		mc.tree = mc.Universe.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
 	mc.Collide()
 }

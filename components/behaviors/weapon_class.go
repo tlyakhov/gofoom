@@ -40,8 +40,8 @@ func init() {
 	WeaponClassCID = ecs.RegisterComponent(&ecs.Column[WeaponClass, *WeaponClass]{Getter: GetWeaponClass})
 }
 
-func GetWeaponClass(db *ecs.ECS, e ecs.Entity) *WeaponClass {
-	if asserted, ok := db.Component(e, WeaponClassCID).(*WeaponClass); ok {
+func GetWeaponClass(u *ecs.Universe, e ecs.Entity) *WeaponClass {
+	if asserted, ok := u.Component(e, WeaponClassCID).(*WeaponClass); ok {
 		return asserted
 	}
 	return nil
@@ -101,11 +101,11 @@ func (w *WeaponClass) Serialize() map[string]any {
 	result["FlashTime"] = w.FlashTime
 
 	if w.MarkMaterial != 0 {
-		result["MarkMaterial"] = w.MarkMaterial.Serialize(w.ECS)
+		result["MarkMaterial"] = w.MarkMaterial.Serialize(w.Universe)
 	}
 
 	if w.FlashMaterial != 0 {
-		result["FlashMaterial"] = w.FlashMaterial.Serialize(w.ECS)
+		result["FlashMaterial"] = w.FlashMaterial.Serialize(w.Universe)
 	}
 
 	if w.MarkSize != 5 {

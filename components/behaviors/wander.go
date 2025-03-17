@@ -27,8 +27,8 @@ func init() {
 	WanderCID = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander})
 }
 
-func GetWander(db *ecs.ECS, e ecs.Entity) *Wander {
-	if asserted, ok := db.Component(e, WanderCID).(*Wander); ok {
+func GetWander(u *ecs.Universe, e ecs.Entity) *Wander {
+	if asserted, ok := u.Component(e, WanderCID).(*Wander); ok {
 		return asserted
 	}
 	return nil
@@ -42,7 +42,7 @@ func (w *Wander) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 
 	w.Force = 10
-	w.LastTurn = w.ECS.Timestamp
+	w.LastTurn = w.Universe.Timestamp
 
 	if data == nil {
 		return

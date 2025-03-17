@@ -43,19 +43,19 @@ func (pc *PlayerController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	if !pc.Player.IsActive() || pc.Player.Spawn {
 		return false
 	}
-	pc.Body = core.GetBody(pc.ECS, pc.Entity)
+	pc.Body = core.GetBody(pc.Universe, pc.Entity)
 	if pc.Body == nil || !pc.Body.IsActive() {
 		return false
 	}
-	pc.Alive = behaviors.GetAlive(pc.ECS, pc.Entity)
+	pc.Alive = behaviors.GetAlive(pc.Universe, pc.Entity)
 	if pc.Alive == nil || !pc.Alive.IsActive() {
 		return false
 	}
-	pc.Carrier = behaviors.GetInventoryCarrier(pc.ECS, pc.Entity)
+	pc.Carrier = behaviors.GetInventoryCarrier(pc.Universe, pc.Entity)
 	if pc.Carrier == nil || !pc.Carrier.IsActive() {
 		return false
 	}
-	pc.Mobile = core.GetMobile(pc.ECS, pc.Entity)
+	pc.Mobile = core.GetMobile(pc.Universe, pc.Entity)
 	return pc.Mobile != nil && pc.Mobile.IsActive()
 }
 
@@ -117,7 +117,7 @@ func (pc *PlayerController) Always() {
 		if e == 0 {
 			continue
 		}
-		slot := behaviors.GetInventorySlot(pc.ECS, e)
+		slot := behaviors.GetInventorySlot(pc.Universe, e)
 		// TODO: Put this into an InventoryCarrier controller
 		if slot.Carrier != pc.Carrier {
 			slot.Carrier = pc.Carrier
@@ -126,7 +126,7 @@ func (pc *PlayerController) Always() {
 		if slot.Count.Now <= 0 {
 			continue
 		}
-		if w := behaviors.GetWeapon(pc.ECS, e); w != nil {
+		if w := behaviors.GetWeapon(pc.Universe, e); w != nil {
 			pc.Carrier.SelectedWeapon = e
 			break
 		}
@@ -139,7 +139,7 @@ func (pc *PlayerController) Always() {
 	pc.SelectedTarget = 0
 	closestDist2 := math.MaxFloat64
 	for e := range pc.HoveringTargets {
-		pt := behaviors.GetPlayerTargetable(pc.ECS, e)
+		pt := behaviors.GetPlayerTargetable(pc.Universe, e)
 		if pt == nil {
 			continue
 		}
@@ -153,16 +153,16 @@ func (pc *PlayerController) Always() {
 	// If our selection has changed, run scripts
 	if pc.SelectedTarget != prevTarget {
 		if prevTarget != 0 {
-			if pt := behaviors.GetPlayerTargetable(pc.ECS, prevTarget); pt != nil && pt.UnSelected.IsCompiled() {
-				pt.UnSelected.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
+			if pt := behaviors.GetPlayerTargetable(pc.Universe, prevTarget); pt != nil && pt.UnSelected.IsCompiled() {
+				pt.UnSelected.Vars["body"] = core.GetBody(pc.Universe, pc.SelectedTarget)
 				pt.UnSelected.Vars["player"] = pc.Player
 				pt.UnSelected.Vars["carrier"] = pc.Carrier
 				pt.UnSelected.Act()
 			}
 		}
 		if pc.SelectedTarget != 0 {
-			if pt := behaviors.GetPlayerTargetable(pc.ECS, pc.SelectedTarget); pt != nil && pt.Selected.IsCompiled() {
-				pt.Selected.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
+			if pt := behaviors.GetPlayerTargetable(pc.Universe, pc.SelectedTarget); pt != nil && pt.Selected.IsCompiled() {
+				pt.Selected.Vars["body"] = core.GetBody(pc.Universe, pc.SelectedTarget)
 				pt.Selected.Vars["player"] = pc.Player
 				pt.Selected.Vars["carrier"] = pc.Carrier
 				pt.Selected.Act()
@@ -171,8 +171,8 @@ func (pc *PlayerController) Always() {
 	}
 	// If we have a selected item and the player is pressing the key, frob!
 	if pc.SelectedTarget != 0 && pc.ActionPressed {
-		if pt := behaviors.GetPlayerTargetable(pc.ECS, pc.SelectedTarget); pt != nil && pt.Frob.IsCompiled() {
-			pt.Frob.Vars["body"] = core.GetBody(pc.ECS, pc.SelectedTarget)
+		if pt := behaviors.GetPlayerTargetable(pc.Universe, pc.SelectedTarget); pt != nil && pt.Frob.IsCompiled() {
+			pt.Frob.Vars["body"] = core.GetBody(pc.Universe, pc.SelectedTarget)
 			pt.Frob.Vars["player"] = pc.Player
 			pt.Frob.Vars["carrier"] = pc.Carrier
 			pt.Frob.Act()
@@ -182,21 +182,21 @@ func (pc *PlayerController) Always() {
 	pc.HoveringTargets = make(containers.Set[ecs.Entity])
 }
 
-func MovePlayer(db *ecs.ECS, e ecs.Entity, angle float64) {
-	if db.EditorPaused {
-		MovePlayerNoClip(db, e, angle)
+func MovePlayer(u *ecs.Universe, e ecs.Entity, angle float64) {
+	if u.EditorPaused {
+		MovePlayerNoClip(u, e, angle)
 	} else {
-		MovePlayerForce(db, e, angle)
+		MovePlayerForce(u, e, angle)
 	}
 }
 
-func MovePlayerForce(db *ecs.ECS, e ecs.Entity, angle float64) {
-	p := core.GetBody(db, e)
-	m := core.GetMobile(db, e)
+func MovePlayerForce(u *ecs.Universe, e ecs.Entity, angle float64) {
+	p := core.GetBody(u, e)
+	m := core.GetMobile(u, e)
 	if p == nil || m == nil {
 		return
 	}
-	uw := behaviors.GetUnderwater(db, p.SectorEntity) != nil
+	uw := behaviors.GetUnderwater(u, p.SectorEntity) != nil
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce
@@ -207,16 +207,16 @@ func MovePlayerForce(db *ecs.ECS, e ecs.Entity, angle float64) {
 	}
 }
 
-func MovePlayerNoClip(db *ecs.ECS, e ecs.Entity, angle float64) {
-	p := core.GetBody(db, e)
-	m := core.GetMobile(db, e)
+func MovePlayerNoClip(u *ecs.Universe, e ecs.Entity, angle float64) {
+	p := core.GetBody(u, e)
+	m := core.GetMobile(u, e)
 	if p == nil || m == nil {
 		return
 	}
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce
-	player := behaviors.GetPlayer(db, e)
+	player := behaviors.GetPlayer(u, e)
 	p.Pos.Now[0] += dx * 0.02 / m.Mass
 	p.Pos.Now[1] += dy * 0.02 / m.Mass
 	sector := p.RenderSector()

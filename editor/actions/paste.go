@@ -49,12 +49,12 @@ func (a *Paste) Activate() {
 	// Copied -> Pasted
 	a.CopiedToPasted = make(map[ecs.Entity]ecs.Entity)
 	a.Selected = selection.NewSelection()
-	db := a.State().ECS
+	u := a.State().Universe
 	for copiedEntityString, jsonData := range jsonEntities {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
 		jsonEntity := jsonData.(map[string]any)
 		if jsonEntity == nil {
-			log.Printf("ECS JSON object element should be an object\n")
+			log.Printf("Universe JSON object element should be an object\n")
 			continue
 		}
 
@@ -67,19 +67,19 @@ func (a *Paste) Activate() {
 			}
 			jsonComponent := jsonData.(map[string]any)
 			a.State().Lock.Lock()
-			c := db.LoadComponentWithoutAttaching(id, jsonComponent)
+			c := u.LoadComponentWithoutAttaching(id, jsonComponent)
 
 			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
-				db.Attach(id, pastedEntity, &c)
+				u.Attach(id, pastedEntity, &c)
 			} else {
-				pastedEntity = db.NewEntity()
-				db.Attach(id, pastedEntity, &c)
+				pastedEntity = u.NewEntity()
+				u.Attach(id, pastedEntity, &c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 			}
 			a.State().Lock.Unlock()
 		}
 		if pastedEntity != 0 {
-			a.Selected.Add(selection.SelectableFromEntity(db, pastedEntity))
+			a.Selected.Add(selection.SelectableFromEntity(u, pastedEntity))
 		}
 	}
 
@@ -89,10 +89,10 @@ func (a *Paste) Activate() {
 	// pasted bodies to sectors
 	// pasted internal segments to sectors
 	for _, pastedEntity := range a.CopiedToPasted {
-		if seg := core.GetInternalSegment(db, pastedEntity); seg != nil {
+		if seg := core.GetInternalSegment(u, pastedEntity); seg != nil {
 			seg.AttachToSectors()
 		}
-		if body := core.GetBody(db, pastedEntity); body != nil {
+		if body := core.GetBody(u, pastedEntity); body != nil {
 			body.SectorEntity = 0
 		}
 		// TODO: materials

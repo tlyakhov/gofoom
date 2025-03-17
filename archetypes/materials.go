@@ -28,19 +28,19 @@ func ComponentTableIsMaterial(components ecs.ComponentTable) bool {
 	return false
 }
 
-func EntityIsMaterial(db *ecs.ECS, e ecs.Entity) bool {
-	return ComponentTableIsMaterial(db.AllComponents(e))
+func EntityIsMaterial(u *ecs.Universe, e ecs.Entity) bool {
+	return ComponentTableIsMaterial(u.AllComponents(e))
 }
 
-func CreateBasicMaterial(db *ecs.ECS, textured bool) ecs.Entity {
-	e := db.NewEntity()
-	named := db.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)
-	named.Name = "Material " + e.Format(db)
-	db.NewAttachedComponent(e, materials.LitCID)
+func CreateBasicMaterial(u *ecs.Universe, textured bool) ecs.Entity {
+	e := u.NewEntity()
+	named := u.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)
+	named.Name = "Material " + e.Format(u)
+	u.NewAttachedComponent(e, materials.LitCID)
 	if textured {
-		db.NewAttachedComponent(e, materials.ImageCID)
+		u.NewAttachedComponent(e, materials.ImageCID)
 	} else {
-		db.NewAttachedComponent(e, materials.SolidCID)
+		u.NewAttachedComponent(e, materials.SolidCID)
 	}
 	return e
 }

@@ -26,8 +26,8 @@ func init() {
 	InternalSegmentCID = ecs.RegisterComponent(&ecs.Column[InternalSegment, *InternalSegment]{Getter: GetInternalSegment})
 }
 
-func GetInternalSegment(db *ecs.ECS, e ecs.Entity) *InternalSegment {
-	if asserted, ok := db.Component(e, InternalSegmentCID).(*InternalSegment); ok {
+func GetInternalSegment(u *ecs.Universe, e ecs.Entity) *InternalSegment {
+	if asserted, ok := u.Component(e, InternalSegmentCID).(*InternalSegment); ok {
 		return asserted
 	}
 	return nil
@@ -38,7 +38,7 @@ func (s *InternalSegment) String() string {
 }
 
 func (s *InternalSegment) DetachFromSectors() {
-	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
+	col := ecs.ColumnFor[Sector](s.Universe, SectorCID)
 	for i := range col.Cap() {
 		if sector := col.Value(i); sector != nil {
 			delete(sector.InternalSegments, s.Entity)
@@ -55,7 +55,7 @@ func (s *InternalSegment) AttachToSectors() {
 	if min[1] > max[1] {
 		min[1], max[1] = max[1], min[1]
 	}
-	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
+	col := ecs.ColumnFor[Sector](s.Universe, SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
 		if sector == nil {
@@ -80,7 +80,7 @@ func (s *InternalSegment) AttachToSectors() {
 
 func (s *InternalSegment) Construct(data map[string]any) {
 	s.Attached.Construct(data)
-	s.Segment.Construct(s.ECS, data)
+	s.Segment.Construct(s.Universe, data)
 	s.Bottom = 0
 	s.Top = 64
 	s.TwoSided = false

@@ -29,8 +29,8 @@ func init() {
 	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody})
 }
 
-func GetBody(db *ecs.ECS, e ecs.Entity) *Body {
-	if asserted, ok := db.Component(e, BodyCID).(*Body); ok {
+func GetBody(u *ecs.Universe, e ecs.Entity) *Body {
+	if asserted, ok := u.Component(e, BodyCID).(*Body); ok {
 		return asserted
 	}
 	return nil
@@ -42,7 +42,7 @@ func (b *Body) String() string {
 
 func (b *Body) OnDetach(e ecs.Entity) {
 	defer b.Attached.OnDetach(e)
-	if b.ECS == nil {
+	if b.Universe == nil {
 		return
 	}
 	if sector := b.Sector(); sector != nil {
@@ -57,26 +57,26 @@ func (b *Body) OnDetach(e ecs.Entity) {
 
 func (b *Body) OnDelete() {
 	defer b.Attached.OnDelete()
-	if b.ECS != nil {
-		b.Pos.Detach(b.ECS.Simulation)
-		b.Size.Detach(b.ECS.Simulation)
-		b.Angle.Detach(b.ECS.Simulation)
+	if b.Universe != nil {
+		b.Pos.Detach(b.Universe.Simulation)
+		b.Size.Detach(b.Universe.Simulation)
+		b.Angle.Detach(b.Universe.Simulation)
 	}
 }
 
-func (b *Body) OnAttach(db *ecs.ECS) {
-	b.Attached.OnAttach(db)
-	b.Pos.Attach(db.Simulation)
-	b.Size.Attach(db.Simulation)
-	b.Angle.Attach(b.ECS.Simulation)
+func (b *Body) OnAttach(u *ecs.Universe) {
+	b.Attached.OnAttach(u)
+	b.Pos.Attach(u.Simulation)
+	b.Size.Attach(u.Simulation)
+	b.Angle.Attach(b.Universe.Simulation)
 
-	if tree := db.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
+	if tree := u.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
 		tree.Update(b)
 	}
 }
 
 func (b *Body) Sector() *Sector {
-	return GetSector(b.ECS, b.SectorEntity)
+	return GetSector(b.Universe, b.SectorEntity)
 }
 
 func (b *Body) Normal() *concepts.Vector2 {
@@ -116,7 +116,7 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	col := ecs.ColumnFor[Sector](b.ECS, SectorCID)
+	col := ecs.ColumnFor[Sector](b.Universe, SectorCID)
 	for i := range col.Cap() {
 		if sector := col.Value(i); sector != nil && sector.IsPointInside2D(p) {
 			return sector

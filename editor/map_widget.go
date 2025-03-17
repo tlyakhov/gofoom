@@ -99,26 +99,26 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	TransformContext(mw.Context)
 	mw.Context.FontHeight()
 
-	colSector := ecs.ColumnFor[core.Sector](editor.ECS, core.SectorCID)
+	colSector := ecs.ColumnFor[core.Sector](editor.Universe, core.SectorCID)
 	for i := range colSector.Cap() {
 		if sector := colSector.Value(i); sector != nil && (sector.Flags&ecs.ComponentHideInEditor) == 0 {
 			mw.DrawSector(sector)
 		}
 	}
-	colSeg := ecs.ColumnFor[core.InternalSegment](editor.ECS, core.InternalSegmentCID)
+	colSeg := ecs.ColumnFor[core.InternalSegment](editor.Universe, core.InternalSegmentCID)
 	for i := range colSeg.Cap() {
 		if seg := colSeg.Value(i); seg != nil && (seg.Flags&ecs.ComponentHideInEditor) == 0 {
 			mw.DrawInternalSegment(seg)
 		}
 	}
-	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](editor.ECS, behaviors.ActionWaypointCID)
+	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](editor.Universe, behaviors.ActionWaypointCID)
 	for i := range colWaypoint.Cap() {
 		if waypoint := colWaypoint.Value(i); waypoint != nil && (waypoint.Flags&ecs.ComponentHideInEditor) == 0 {
 			mw.DrawActions(waypoint.Entity)
 		}
 	}
 	if editor.BodiesVisible {
-		col3 := ecs.ColumnFor[core.Body](editor.ECS, core.BodyCID)
+		col3 := ecs.ColumnFor[core.Body](editor.Universe, core.BodyCID)
 		for i := range col3.Cap() {
 			if body := col3.Value(i); body != nil && (body.Flags&ecs.ComponentHideInEditor) == 0 {
 				mw.DrawBody(body)
@@ -127,10 +127,10 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	}
 
 	// Quadtree testing code
-	mw.DrawQuadNode(editor.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree).Root, 0)
+	mw.DrawQuadNode(editor.Universe.Singleton(core.QuadtreeCID).(*core.Quadtree).Root, 0)
 
 	/*// Portal testing code
-	p := core.GetBody(editor.ECS, editor.Renderer.Player.Entity)
+	p := core.GetBody(editor.Universe, editor.Renderer.Player.Entity)
 	v := &concepts.Vector2{p.Pos.Now[0], p.Pos.Now[1]}
 	v2 := v.Add(&concepts.Vector2{math.Cos(p.Angle.Now*concepts.Deg2rad) * 10, math.Sin(p.Angle.Now*concepts.Deg2rad) * 10})
 	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
@@ -140,9 +140,9 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	mw.Context.ClosePath()
 	mw.Context.Stroke()
 
-	portalSector1 := core.GetSector(editor.ECS, 44)
+	portalSector1 := core.GetSector(editor.Universe, 44)
 	portalSegment1 := portalSector1.Segments[4]
-	portalSector2 := core.GetSector(editor.ECS, 19)
+	portalSector2 := core.GetSector(editor.Universe, 19)
 	portalSegment2 := portalSector2.Segments[1]
 	v3 := portalSegment1.PortalMatrix.Unproject(v)
 	v3 = portalSegment2.MirrorPortalMatrix.Project(v3)

@@ -11,18 +11,18 @@ import (
 )
 
 func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) {
-	item := behaviors.GetInventoryItem(ic.ECS, itemEntity)
+	item := behaviors.GetInventoryItem(ic.Universe, itemEntity)
 	if item == nil || !item.Active {
 		return
 	}
-	player := behaviors.GetPlayer(ic.ECS, ic.Entity)
+	player := behaviors.GetPlayer(ic.Universe, ic.Entity)
 
 	for _, e := range ic.Inventory {
 		if e == 0 {
 			continue
 		}
 
-		slot := behaviors.GetInventorySlot(ic.ECS, e)
+		slot := behaviors.GetInventorySlot(ic.Universe, e)
 
 		if slot == nil || slot.Class != item.Class {
 			continue
@@ -40,7 +40,7 @@ func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) 
 		}
 		//item.Count.Now -= toAdd
 		// Disable all the entity components
-		for _, c := range item.ECS.AllComponents(itemEntity) {
+		for _, c := range item.Universe.AllComponents(itemEntity) {
 			if c != nil && !c.MultiAttachable() {
 				c.Base().Active = false
 			}

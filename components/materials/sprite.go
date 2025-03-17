@@ -21,8 +21,8 @@ func init() {
 	SpriteCID = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite})
 }
 
-func GetSprite(db *ecs.ECS, e ecs.Entity) *Sprite {
-	if asserted, ok := db.Component(e, SpriteCID).(*Sprite); ok {
+func GetSprite(u *ecs.Universe, e ecs.Entity) *Sprite {
+	if asserted, ok := u.Component(e, SpriteCID).(*Sprite); ok {
 		return asserted
 	}
 	return nil
@@ -32,14 +32,14 @@ func (s *Sprite) MultiAttachable() bool { return true }
 
 func (s *Sprite) OnDelete() {
 	defer s.Attached.OnDelete()
-	if s.ECS != nil {
-		s.Frame.Detach(s.ECS.Simulation)
+	if s.Universe != nil {
+		s.Frame.Detach(s.Universe.Simulation)
 	}
 }
 
-func (s *Sprite) OnAttach(db *ecs.ECS) {
-	s.Attached.OnAttach(db)
-	s.Frame.Attach(db.Simulation)
+func (s *Sprite) OnAttach(u *ecs.Universe) {
+	s.Attached.OnAttach(u)
+	s.Frame.Attach(u.Simulation)
 
 }
 
@@ -64,7 +64,7 @@ func (s *Sprite) Construct(data map[string]any) {
 func (s *Sprite) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	if s.Material != 0 {
-		result["Material"] = s.Material.Serialize(s.ECS)
+		result["Material"] = s.Material.Serialize(s.Universe)
 	}
 	result["Frame"] = s.Frame.Serialize()
 
