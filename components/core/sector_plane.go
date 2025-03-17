@@ -25,7 +25,7 @@ type SectorPlane struct {
 
 func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
 	s.Sector = sector
-	s.Surface.Construct(sector.ECS, data)
+	s.Surface.Construct(sector.Universe, data)
 	s.Z.Construct(nil)
 
 	if data == nil {
@@ -42,13 +42,13 @@ func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
 		s.Normal.Deserialize(v.(string))
 	}
 	if v, ok := data["Surface"]; ok {
-		s.Surface.Construct(s.ECS, v.(map[string]any))
+		s.Surface.Construct(s.Universe, v.(map[string]any))
 	}
 	if v, ok := data["Target"]; ok {
 		s.Target, _ = ecs.ParseEntity(v.(string))
 	}
 	if v, ok := data["Scripts"]; ok {
-		s.Scripts = ecs.ConstructSlice[*Script](s.ECS, v, nil)
+		s.Scripts = ecs.ConstructSlice[*Script](s.Universe, v, nil)
 	}
 }
 
@@ -61,7 +61,7 @@ func (s *SectorPlane) Serialize() map[string]any {
 		result["Normal"] = s.Normal.Serialize()
 	}
 	if s.Target != 0 {
-		result["Target"] = s.Target.Serialize(s.ECS)
+		result["Target"] = s.Target.Serialize(s.Universe)
 	}
 	if len(s.Scripts) > 0 {
 		result["Scripts"] = ecs.SerializeSlice(s.Scripts)

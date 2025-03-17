@@ -23,9 +23,9 @@ func init() {
 	QuadtreeCID = ecs.RegisterComponent(&ecs.Column[Quadtree, *Quadtree]{Getter: GetQuadtree})
 }
 
-func GetQuadtree(db *ecs.ECS, e ecs.Entity) *Quadtree {
-	panic("Tried to behaviors.GetQuadtree. Use ECS.Singleton(behaviors.QuadtreeCID) instead.")
-	/*if asserted, ok := db.Component(e, QuadtreeCID).(*Quadtree); ok {
+func GetQuadtree(u *ecs.Universe, e ecs.Entity) *Quadtree {
+	panic("Tried to behaviors.GetQuadtree. Use Universe.Singleton(behaviors.QuadtreeCID) instead.")
+	/*if asserted, ok := u.Component(e, QuadtreeCID).(*Quadtree); ok {
 		return asserted
 	}
 	return nil*/
@@ -72,7 +72,7 @@ func (q *Quadtree) Build() {
 	q.Root.Max[1] = offset + constants.QuadtreeInitDim
 	q.MaxZ = 0
 
-	colBody := ecs.ColumnFor[Body](q.ECS, BodyCID)
+	colBody := ecs.ColumnFor[Body](q.Universe, BodyCID)
 	for i := range colBody.Cap() {
 		body := colBody.Value(i)
 		if body == nil || !body.Active {

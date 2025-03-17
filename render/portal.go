@@ -18,7 +18,7 @@ func wallHiPick(cp *columnPortal) {
 // wallHi renders the top portion of a portal segment.
 func wallHi(cp *columnPortal) {
 	mat := cp.AdjSegment.HiSurface.Material
-	lit := materials.GetLit(cp.ECS, cp.AdjSegment.HiSurface.Material)
+	lit := materials.GetLit(cp.Universe, cp.AdjSegment.HiSurface.Material)
 	extras := cp.AdjSegment.HiSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
 	transform := cp.AdjSegment.HiSurface.Transform.Render
@@ -64,7 +64,7 @@ func wallLowPick(cp *columnPortal) {
 // wallLow renders the bottom portion of a portal segment.
 func wallLow(cp *columnPortal) {
 	mat := cp.AdjSegment.LoSurface.Material
-	lit := materials.GetLit(cp.ECS, cp.AdjSegment.LoSurface.Material)
+	lit := materials.GetLit(cp.Universe, cp.AdjSegment.LoSurface.Material)
 	extras := cp.AdjSegment.LoSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
 	transform := cp.AdjSegment.LoSurface.Transform.Render

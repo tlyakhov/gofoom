@@ -109,7 +109,7 @@ func (node *QuadNode) Remove(body *Body) {
 	node.Bodies = node.Bodies[:size]
 	body.QuadNode = nil
 
-	if light := GetLight(body.ECS, body.Entity); light != nil {
+	if light := GetLight(body.Universe, body.Entity); light != nil {
 		// Find the light in the slice and trim
 		for i, test := range node.Lights {
 			if test != body {
@@ -253,7 +253,7 @@ func (node *QuadNode) addToLeaf(body *Body) {
 	}
 	node.increaseRadii(body.Size.Now[0] * 0.5)
 	node.Bodies = append(node.Bodies, body)
-	if light := GetLight(body.ECS, body.Entity); light != nil {
+	if light := GetLight(body.Universe, body.Entity); light != nil {
 		node.Lights = append(node.Lights, body)
 	}
 	body.QuadNode = node

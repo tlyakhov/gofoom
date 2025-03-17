@@ -45,7 +45,7 @@ func (sc *SectorController) Always() {
 	}
 
 	// Cache for a maximum number of frames
-	if sc.ECS.Frame-uint64(frame) < 120 {
+	if sc.Universe.Frame-uint64(frame) < 120 {
 		return
 	}
 	sc.Lightmap.Clear()

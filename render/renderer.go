@@ -38,7 +38,7 @@ type Renderer struct {
 }
 
 // NewRenderer constructs a new Renderer.
-func NewRenderer(db *ecs.ECS) *Renderer {
+func NewRenderer(u *ecs.Universe) *Renderer {
 	r := Renderer{
 		Config: &Config{
 			ScreenWidth:   640,
@@ -48,7 +48,7 @@ func NewRenderer(db *ecs.ECS) *Renderer {
 			NumBlocks:     constants.RenderBlocks,
 			LightGrid:     constants.LightGrid,
 			MaxViewDist:   constants.MaxViewDistance,
-			ECS:           db,
+			Universe:      u,
 		},
 		blockGroup: new(sync.WaitGroup),
 	}
@@ -68,13 +68,13 @@ func (r *Renderer) Initialize() {
 		r.Blocks[i].Visited = make([]segmentIntersection, constants.MaxPortals)
 		r.Blocks[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
-		r.Blocks[i].LightSampler.tree = r.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
+		r.Blocks[i].LightSampler.tree = r.Universe.Singleton(core.QuadtreeCID).(*core.Quadtree)
 		r.Blocks[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
 	r.textStyle = r.NewTextStyle()
 	r.xorSeed = concepts.RngXorShift64(uint64(hrtime.Now().Milliseconds()))
 
-	r.flashOpacity.Attach(r.ECS.Simulation)
+	r.flashOpacity.Attach(r.Universe.Simulation)
 	r.flashOpacity.SetAll(0)
 	a := r.flashOpacity.NewAnimation()
 	r.flashOpacity.Animation = a
@@ -199,7 +199,7 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 func (r *Renderer) RenderSector(block *block) {
 	// Remember the frame # we rendered this sector. This is used when trying to
 	// invalidate lighting caches (Sector.Lightmap)
-	block.Sector.LastSeenFrame.Store(int64(block.ECS.Frame))
+	block.Sector.LastSeenFrame.Store(int64(block.Universe.Frame))
 
 	// Store bodies & internal segments for later
 	r.tree.Root.RangeAABB(block.Sector.Min.To2D(), block.Sector.Max.To2D(), func(b *core.Body) bool {
@@ -395,7 +395,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	block.CameraZ = r.Player.CameraZ
 
 	for b := range block.Bodies {
-		vis := materials.GetVisible(b.ECS, b.Entity)
+		vis := materials.GetVisible(b.Universe, b.Entity)
 		if vis == nil || !vis.Active {
 			continue
 		}
@@ -438,7 +438,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 
 // Render a frame.
 func (r *Renderer) Render() {
-	r.tree = r.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
+	r.tree = r.Universe.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	r.RefreshPlayer()
 	if r.PlayerBody == nil {
 		return
@@ -486,7 +486,7 @@ func (r *Renderer) Render() {
 }
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
-	tm := r.ECS.Singleton(materials.ToneMapCID).(*materials.ToneMap)
+	tm := r.Universe.Singleton(materials.ToneMapCID).(*materials.ToneMap)
 
 	for i := 0; i < len(r.FrameBuffer); i++ {
 		fb := &r.FrameBuffer[i]

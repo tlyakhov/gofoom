@@ -50,8 +50,8 @@ func init() {
 	SectorCID = ecs.RegisterComponent(&ecs.Column[Sector, *Sector]{Getter: GetSector})
 }
 
-func GetSector(db *ecs.ECS, e ecs.Entity) *Sector {
-	if asserted, ok := db.Component(e, SectorCID).(*Sector); ok {
+func GetSector(u *ecs.Universe, e ecs.Entity) *Sector {
+	if asserted, ok := u.Component(e, SectorCID).(*Sector); ok {
 		return asserted
 	}
 	return nil
@@ -82,11 +82,11 @@ func (s *Sector) ZAt(stage dynamic.DynamicStage, p *concepts.Vector2) (fz, cz fl
 }
 
 func (s *Sector) removeAdjacentReferences() {
-	if s.Attachments == 0 || s.ECS == nil {
+	if s.Attachments == 0 || s.Universe == nil {
 		return
 	}
 
-	col := ecs.ColumnFor[Sector](s.ECS, SectorCID)
+	col := ecs.ColumnFor[Sector](s.Universe, SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
 		if sector == nil {
@@ -103,9 +103,9 @@ func (s *Sector) removeAdjacentReferences() {
 }
 func (s *Sector) OnDelete() {
 	defer s.Attached.OnDelete()
-	if s.ECS != nil {
-		s.Top.Z.Detach(s.ECS.Simulation)
-		s.Bottom.Z.Detach(s.ECS.Simulation)
+	if s.Universe != nil {
+		s.Top.Z.Detach(s.Universe.Simulation)
+		s.Bottom.Z.Detach(s.Universe.Simulation)
 		s.removeAdjacentReferences()
 	}
 	for _, b := range s.Bodies {
@@ -115,10 +115,10 @@ func (s *Sector) OnDelete() {
 	s.InternalSegments = make(map[ecs.Entity]*InternalSegment)
 }
 
-func (s *Sector) OnAttach(db *ecs.ECS) {
-	s.Attached.OnAttach(db)
-	s.Top.Z.Attach(db.Simulation)
-	s.Bottom.Z.Attach(db.Simulation)
+func (s *Sector) OnAttach(u *ecs.Universe) {
+	s.Attached.OnAttach(u)
+	s.Top.Z.Attach(u.Simulation)
+	s.Bottom.Z.Attach(u.Simulation)
 	// When we attach a component, its address may change. Ensure segments don't
 	// wind up referencing an unattached sector.
 	for _, seg := range s.Segments {
@@ -128,7 +128,7 @@ func (s *Sector) OnAttach(db *ecs.ECS) {
 
 func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 	segment := new(SectorSegment)
-	segment.Construct(s.ECS, nil)
+	segment.Construct(s.Universe, nil)
 	segment.Sector = s
 	segment.P = concepts.Vector2{x, y}
 	s.Segments = append(s.Segments, segment)
@@ -173,7 +173,7 @@ func (s *Sector) Construct(data map[string]any) {
 		for i, jsonSegment := range jsonSegments {
 			segment := new(SectorSegment)
 			segment.Sector = s
-			segment.Construct(s.ECS, jsonSegment.(map[string]any))
+			segment.Construct(s.Universe, jsonSegment.(map[string]any))
 			s.Segments[i] = segment
 		}
 	}
@@ -190,10 +190,10 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["EnterScripts"]; ok {
-		s.EnterScripts = ecs.ConstructSlice[*Script](s.ECS, v, nil)
+		s.EnterScripts = ecs.ConstructSlice[*Script](s.Universe, v, nil)
 	}
 	if v, ok := data["ExitScripts"]; ok {
-		s.ExitScripts = ecs.ConstructSlice[*Script](s.ECS, v, nil)
+		s.ExitScripts = ecs.ConstructSlice[*Script](s.Universe, v, nil)
 	}
 	if v, ok := data["Inner"]; ok {
 		s.Inner = ecs.ParseEntityTable(v)
@@ -222,7 +222,7 @@ func (s *Sector) Serialize() map[string]any {
 	}
 
 	if s.Inner.Len() > 0 {
-		result["Inner"] = s.Inner.Serialize(s.ECS)
+		result["Inner"] = s.Inner.Serialize(s.Universe)
 	}
 
 	segments := []any{}

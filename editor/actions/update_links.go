@@ -28,9 +28,9 @@ func (a *UpdateLinks) Undo() {
 }
 
 func (a *UpdateLinks) attach(entity ecs.Entity) {
-	db := a.State().ECS
+	u := a.State().Universe
 
-	all := db.AllComponents(entity)
+	all := u.AllComponents(entity)
 	oldComponents := make(ecs.ComponentTable, len(all))
 	copy(oldComponents, all)
 	a.OldComponents[entity] = oldComponents
@@ -42,7 +42,7 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 		cid := oldComponent.Base().ComponentID
 		addComponent := a.AddComponents.Get(cid)
 		if a.RemoveComponents.Contains(cid) || (addComponent != nil && addComponent != oldComponent) {
-			db.DetachComponent(cid, entity)
+			u.DetachComponent(cid, entity)
 		}
 	}
 
@@ -53,7 +53,7 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 		cid := addComponent.Base().ComponentID
 		oldComponent := oldComponents.Get(cid)
 		if oldComponent == nil || addComponent != oldComponent {
-			db.Attach(cid, entity, &addComponent)
+			u.Attach(cid, entity, &addComponent)
 		}
 	}
 }
@@ -64,5 +64,5 @@ func (a *UpdateLinks) Redo() {
 			a.attach(e)
 		}
 	}
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 }

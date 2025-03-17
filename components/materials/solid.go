@@ -20,8 +20,8 @@ func init() {
 	SolidCID = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid})
 }
 
-func GetSolid(db *ecs.ECS, e ecs.Entity) *Solid {
-	if asserted, ok := db.Component(e, SolidCID).(*Solid); ok {
+func GetSolid(u *ecs.Universe, e ecs.Entity) *Solid {
+	if asserted, ok := u.Component(e, SolidCID).(*Solid); ok {
 		return asserted
 	}
 	return nil
@@ -31,13 +31,13 @@ func (s *Solid) MultiAttachable() bool { return true }
 
 func (s *Solid) OnDelete() {
 	defer s.Attached.OnDelete()
-	if s.ECS != nil {
-		s.Diffuse.Detach(s.ECS.Simulation)
+	if s.Universe != nil {
+		s.Diffuse.Detach(s.Universe.Simulation)
 	}
 }
-func (s *Solid) OnAttach(db *ecs.ECS) {
-	s.Attached.OnAttach(db)
-	s.Diffuse.Attach(s.ECS.Simulation)
+func (s *Solid) OnAttach(u *ecs.Universe) {
+	s.Attached.OnAttach(u)
+	s.Diffuse.Attach(s.Universe.Simulation)
 }
 
 func (s *Solid) Construct(data map[string]any) {

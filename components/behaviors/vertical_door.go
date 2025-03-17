@@ -53,8 +53,8 @@ func init() {
 	}
 }
 
-func GetVerticalDoor(db *ecs.ECS, e ecs.Entity) *VerticalDoor {
-	if asserted, ok := db.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
+func GetVerticalDoor(u *ecs.Universe, e ecs.Entity) *VerticalDoor {
+	if asserted, ok := u.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
 		return asserted
 	}
 	return nil

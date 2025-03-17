@@ -72,16 +72,16 @@ func initializeMenus() {
 				Tooltip: path,
 			},
 			Clicked: func(b *ui.Button) {
-				db.Clear()
-				if err := db.Load(path); err != nil {
+				u.Clear()
+				if err := u.Load(path); err != nil {
 					log.Printf("Error loading world %v: %v", path, err)
 					return
 				}
-				archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
+				archetypes.CreateFont(u, "data/vga-font-8x8.png", "Default Font")
 				renderer.Initialize()
-				controllers.Respawn(db, true)
-				db.Simulation.Integrate = integrateGame
-				db.Simulation.Render = renderGame
+				controllers.Respawn(u, true)
+				u.Simulation.Integrate = integrateGame
+				u.Simulation.Render = renderGame
 				gameUI.Config.TextStyle = renderer.NewTextStyle()
 				inMenu = false
 				gameUI.SetPage(nil)

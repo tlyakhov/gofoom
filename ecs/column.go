@@ -29,12 +29,12 @@ type componentChunk[T any, PT GenericAttachable[T]] [chunkSize]T
 //   - PT: A pointer to the component type, which must implement the
 //     GenericAttachable interface.
 type Column[T any, PT GenericAttachable[T]] struct {
-	// ECS is a pointer to the ECS instance that manages this column.
-	*ECS
+	// Universe is a pointer to the Universe instance that manages this column.
+	*Universe
 	// Length is the number of components currently stored in the column.
 	Length int
 	// Getter is a function that retrieves a component of this type for a given entity.
-	Getter func(ecs *ECS, e Entity) PT
+	Getter func(ecs *Universe, e Entity) PT
 
 	data []*componentChunk[T, PT]
 	// fill is a bitmap that tracks which slots in the column are occupied by components.
@@ -46,10 +46,10 @@ type Column[T any, PT GenericAttachable[T]] struct {
 }
 
 // From initializes a column from another column of the same type, copying
-// metadata and setting the ECS instance.
-func (col *Column[T, PT]) From(source AttachableColumn, ecs *ECS) {
+// metadata and setting the Universe instance.
+func (col *Column[T, PT]) From(source AttachableColumn, ecs *Universe) {
 	placeholder := source.(*Column[T, PT])
-	col.ECS = ecs
+	col.Universe = ecs
 	col.typeOfT = placeholder.typeOfT
 	col.componentID = placeholder.componentID
 	col.Getter = placeholder.Getter

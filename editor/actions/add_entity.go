@@ -25,7 +25,7 @@ type AddEntity struct {
 }
 
 func (a *AddEntity) DetachFromSector() {
-	if body := core.GetBody(a.State().ECS, a.Entity); body != nil {
+	if body := core.GetBody(a.State().Universe, a.Entity); body != nil {
 		if body.SectorEntity == 0 {
 			return
 		}
@@ -34,13 +34,13 @@ func (a *AddEntity) DetachFromSector() {
 }
 
 func (a *AddEntity) AttachToSector() {
-	if body := core.GetBody(a.State().ECS, a.Entity); body != nil {
+	if body := core.GetBody(a.State().Universe, a.Entity); body != nil {
 		if a.ContainingSector != nil {
 			body.SectorEntity = a.ContainingSector.Entity
 			a.ContainingSector.Bodies[a.Entity] = body
 		}
 	}
-	if seg := core.GetInternalSegment(a.State().ECS, a.Entity); seg != nil {
+	if seg := core.GetInternalSegment(a.State().Universe, a.Entity); seg != nil {
 		seg.AttachToSectors()
 	}
 }
@@ -57,8 +57,8 @@ func (a *AddEntity) Point() bool {
 
 	// The rest of this is special sauce for components that need to be linked
 	// up to specific sectors (depending on where they're placed)
-	body := core.GetBody(a.State().ECS, a.Entity)
-	seg := core.GetInternalSegment(a.State().ECS, a.Entity)
+	body := core.GetBody(a.State().Universe, a.Entity)
+	seg := core.GetInternalSegment(a.State().Universe, a.Entity)
 	if body == nil && seg == nil {
 		return true
 	}
@@ -68,7 +68,7 @@ func (a *AddEntity) Point() bool {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
+	col := ecs.ColumnFor[core.Sector](a.State().Universe, core.SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
 		if sector == nil {
@@ -99,7 +99,7 @@ func (a *AddEntity) EndPoint() bool {
 		return false
 	}
 	a.State().Lock.Lock()
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
 	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, a.Components.Get(core.SectorCID) != nil)
@@ -107,20 +107,20 @@ func (a *AddEntity) EndPoint() bool {
 }
 
 func (a *AddEntity) Activate() {
-	a.Entity = a.State().ECS.NewEntity()
+	a.Entity = a.State().Universe.NewEntity()
 	for i, component := range a.Components {
 		if component == nil {
 			continue
 		}
-		a.State().ECS.Attach(component.Base().ComponentID, a.Entity, &a.Components[i])
+		a.State().Universe.Attach(component.Base().ComponentID, a.Entity, &a.Components[i])
 	}
-	a.SelectObjects(true, selection.SelectableFromEntity(a.State().ECS, a.Entity))
+	a.SelectObjects(true, selection.SelectableFromEntity(a.State().Universe, a.Entity))
 }
 func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()
 	a.DetachFromSector()
 	if a.Entity != 0 {
-		a.State().ECS.Delete(a.Entity)
+		a.State().Universe.Delete(a.Entity)
 		a.Entity = 0
 	}
 	a.State().Lock.Unlock()
@@ -129,7 +129,7 @@ func (a *AddEntity) Cancel() {
 }
 func (a *AddEntity) Undo() {
 	a.DetachFromSector()
-	a.State().ECS.Delete(a.Entity)
+	a.State().Universe.Delete(a.Entity)
 }
 func (a *AddEntity) Redo() {
 	a.Activate()

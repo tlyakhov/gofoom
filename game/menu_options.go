@@ -21,7 +21,7 @@ LightmapRefreshDither   = 6 // in frames
 var uiPageSettings, uiPageKeyBindings *ui.Page
 
 func initMenuOptions() {
-	toneMap := db.Singleton(materials.ToneMapCID).(*materials.ToneMap)
+	toneMap := u.Singleton(materials.ToneMapCID).(*materials.ToneMap)
 	uiPageSettings = &ui.Page{
 		Parent:   uiPageMain,
 		IsDialog: true,
@@ -34,7 +34,7 @@ func initMenuOptions() {
 			toneMap.Gamma = float64(p.Widget("gamma").(*ui.Slider).Value) / 10.0
 			toneMap.Recalculate()
 			// After everything's loaded, trigger the controllers
-			db.ActAllControllers(ecs.ControllerRecalculate)
+			u.ActAllControllers(ecs.ControllerRecalculate)
 			renderer.Initialize()
 			saveSettings()
 		},

@@ -24,8 +24,8 @@ func init() {
 	LinkedCID = RegisterComponent(&Column[Linked, *Linked]{Getter: GetLinked})
 }
 
-func GetLinked(db *ECS, e Entity) *Linked {
-	if asserted, ok := db.Component(e, LinkedCID).(*Linked); ok {
+func GetLinked(u *Universe, e Entity) *Linked {
+	if asserted, ok := u.Component(e, LinkedCID).(*Linked); ok {
 		return asserted
 	}
 	return nil
@@ -37,13 +37,13 @@ func (n *Linked) String() string {
 
 func (n *Linked) OnDetach(e Entity) {
 	defer n.Attached.OnDetach(e)
-	if n.ECS == nil {
+	if n.Universe == nil {
 		return
 	}
 	// Remove this entity from any linked copies
 	for _, c := range n.SourceComponents {
 		if c != nil {
-			n.ECS.detach(c.Base().ComponentID, n.Entity, false)
+			n.Universe.detach(c.Base().ComponentID, n.Entity, false)
 		}
 	}
 	n.SourceComponents = make(ComponentTable, 0)
@@ -71,7 +71,7 @@ func (n *Linked) Serialize() map[string]any {
 	result := n.Attached.Serialize()
 	arr := make([]string, len(n.Sources))
 	for i, e := range n.Sources {
-		arr[i] = e.Serialize(n.ECS)
+		arr[i] = e.Serialize(n.Universe)
 	}
 	result["Sources"] = arr
 	return result

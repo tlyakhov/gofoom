@@ -20,8 +20,8 @@ func init() {
 	ActorStateCID = ecs.RegisterComponent(&ecs.Column[ActorState, *ActorState]{Getter: GetActorState})
 }
 
-func GetActorState(db *ecs.ECS, e ecs.Entity) *ActorState {
-	if asserted, ok := db.Component(e, ActorStateCID).(*ActorState); ok {
+func GetActorState(u *ecs.Universe, e ecs.Entity) *ActorState {
+	if asserted, ok := u.Component(e, ActorStateCID).(*ActorState); ok {
 		return asserted
 	}
 	return nil
@@ -48,7 +48,7 @@ func (a *ActorState) Construct(data map[string]any) {
 func (a *ActorState) Serialize() map[string]any {
 	result := a.Attached.Serialize()
 
-	result["Action"] = a.Action.Serialize(a.ECS)
+	result["Action"] = a.Action.Serialize(a.Universe)
 
 	return result
 }

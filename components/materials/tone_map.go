@@ -26,10 +26,10 @@ func init() {
 	ToneMapCID = ecs.RegisterComponent(&ecs.Column[ToneMap, *ToneMap]{Getter: GetToneMap})
 }
 
-func GetToneMap(db *ecs.ECS, e ecs.Entity) *ToneMap {
-	panic("Tried to materials.GetToneMap. Use ECS.Singleton(materials.ToneMapCID) instead.")
+func GetToneMap(u *ecs.Universe, e ecs.Entity) *ToneMap {
+	panic("Tried to materials.GetToneMap. Use Universe.Singleton(materials.ToneMapCID) instead.")
 	/*
-		if asserted, ok := db.Component(e, ToneMapCID).(*ToneMap); ok {
+		if asserted, ok := u.Component(e, ToneMapCID).(*ToneMap); ok {
 			return asserted
 		}
 		return nil*/

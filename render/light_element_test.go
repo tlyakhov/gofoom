@@ -21,8 +21,8 @@ func BenchmarkLightmapConversion(b *testing.B) {
 	b.Run("Correctness", func(b *testing.B) {
 		s := new(core.Sector)
 		s.Construct(nil)
-		ecs := ecs.NewECS()
-		c := render.Config{ECS: ecs}
+		ecs := ecs.NewUniverse()
+		c := render.Config{Universe: ecs}
 		c.Initialize()
 		v := new(concepts.Vector3)
 		n := new(concepts.Vector3)

@@ -32,11 +32,11 @@ func (a *Delete) Activate() {
 
 func (a *Delete) Undo() {
 	for s, saved := range a.Saved {
-		s.ECS.Delete(s.Entity)
-		s.ECS.DeserializeAndAttachEntity(saved.(map[string]any))
+		s.Universe.Delete(s.Entity)
+		s.Universe.DeserializeAndAttachEntity(saved.(map[string]any))
 	}
 
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *Delete) Redo() {
 	a.apply()
@@ -48,7 +48,7 @@ func (a *Delete) apply() {
 		case selection.SelectableSector:
 			s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 			s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
-			s.ECS.Delete(s.Sector.Entity)
+			s.Universe.Delete(s.Sector.Entity)
 		case selection.SelectableSectorSegment:
 			for i, seg := range s.Sector.Segments {
 				if seg != s.SectorSegment {
@@ -58,25 +58,25 @@ func (a *Delete) apply() {
 				if len(s.Sector.Segments) == 0 {
 					s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 					s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
-					s.ECS.Delete(s.Sector.Entity)
+					s.Universe.Delete(s.Sector.Entity)
 				}
 				break
 			}
 		case selection.SelectableBody:
-			if behaviors.GetPlayer(s.ECS, s.Entity) != nil {
+			if behaviors.GetPlayer(s.Universe, s.Entity) != nil {
 				// Otherwise weird things happen...
 				continue
 			}
-			a.State().ECS.Delete(s.Entity)
+			a.State().Universe.Delete(s.Entity)
 		case selection.SelectableInternalSegment:
 			fallthrough
 		case selection.SelectableInternalSegmentA:
 			fallthrough
 		case selection.SelectableInternalSegmentB:
-			s.ECS.Delete(s.InternalSegment.Entity)
+			s.Universe.Delete(s.InternalSegment.Entity)
 		case selection.SelectableEntity:
-			s.ECS.Delete(s.Entity)
+			s.Universe.Delete(s.Entity)
 		}
 	}
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 }

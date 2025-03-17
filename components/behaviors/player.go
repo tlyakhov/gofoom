@@ -34,16 +34,16 @@ func init() {
 	PlayerCID = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer})
 }
 
-func GetPlayer(db *ecs.ECS, e ecs.Entity) *Player {
-	if asserted, ok := db.Component(e, PlayerCID).(*Player); ok {
+func GetPlayer(u *ecs.Universe, e ecs.Entity) *Player {
+	if asserted, ok := u.Component(e, PlayerCID).(*Player); ok {
 		return asserted
 	}
 	return nil
 }
 
 func (p *Player) Underwater() bool {
-	if b := core.GetBody(p.ECS, p.Entities.First()); b != nil {
-		if u := GetUnderwater(p.ECS, b.SectorEntity); u != nil {
+	if b := core.GetBody(p.Universe, p.Entities.First()); b != nil {
+		if u := GetUnderwater(p.Universe, b.SectorEntity); u != nil {
 			return true
 		}
 	}

@@ -30,8 +30,8 @@ func init() {
 	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Column[PlayerTargetable, *PlayerTargetable]{Getter: GetPlayerTargetable})
 }
 
-func GetPlayerTargetable(db *ecs.ECS, e ecs.Entity) *PlayerTargetable {
-	if asserted, ok := db.Component(e, PlayerTargetableCID).(*PlayerTargetable); ok {
+func GetPlayerTargetable(u *ecs.Universe, e ecs.Entity) *PlayerTargetable {
+	if asserted, ok := u.Component(e, PlayerTargetableCID).(*PlayerTargetable); ok {
 		return asserted
 	}
 	return nil
@@ -40,13 +40,13 @@ func GetPlayerTargetable(db *ecs.ECS, e ecs.Entity) *PlayerTargetable {
 func (pt *PlayerTargetable) MultiAttachable() bool { return true }
 
 func (pt *PlayerTargetable) Pos(e ecs.Entity) *concepts.Vector3 {
-	if b := core.GetBody(pt.ECS, e); b != nil {
+	if b := core.GetBody(pt.Universe, e); b != nil {
 		top := &concepts.Vector3{}
 		top[0] = b.Pos.Render[0]
 		top[1] = b.Pos.Render[1]
 		top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
 		return top
-	} else if sector := core.GetSector(pt.ECS, e); sector != nil {
+	} else if sector := core.GetSector(pt.Universe, e); sector != nil {
 		return &sector.Center
 	}
 	return nil
@@ -56,11 +56,11 @@ func (pt *PlayerTargetable) String() string {
 	return "PlayerTargetable"
 }
 
-func (pt *PlayerTargetable) OnAttach(db *ecs.ECS) {
-	pt.Attached.OnAttach(db)
-	pt.Frob.OnAttach(db)
-	pt.Selected.OnAttach(db)
-	pt.UnSelected.OnAttach(db)
+func (pt *PlayerTargetable) OnAttach(u *ecs.Universe) {
+	pt.Attached.OnAttach(u)
+	pt.Frob.OnAttach(u)
+	pt.Selected.OnAttach(u)
+	pt.UnSelected.OnAttach(u)
 }
 
 type PlayerMessageParams struct {

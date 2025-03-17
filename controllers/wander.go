@@ -36,8 +36,8 @@ func (wc *WanderController) Methods() ecs.ControllerMethod {
 func (wc *WanderController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	wc.Entity = e
 	wc.Wander = target.(*behaviors.Wander)
-	wc.Body = core.GetBody(wc.ECS, wc.Entity)
-	wc.Mobile = core.GetMobile(wc.ECS, wc.Entity)
+	wc.Body = core.GetBody(wc.Universe, wc.Entity)
+	wc.Mobile = core.GetMobile(wc.Universe, wc.Entity)
 	return wc.Wander.IsActive() && wc.Body.IsActive() && wc.Mobile.IsActive()
 }
 
@@ -52,14 +52,14 @@ func (wc *WanderController) Always() {
 		wc.NextSector = wc.Body.SectorEntity
 	}
 
-	if wc.ECS.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
+	if wc.Universe.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
 		a := wc.Body.Angle.NewAnimation()
 		a.Coordinates = dynamic.AnimationCoordinatesAbsolute
 		a.Start = wc.Body.Angle.Now
 		// Bias towards the center of the sector
 		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
 		end := start
-		if sector := core.GetSector(wc.Body.ECS, wc.NextSector); sector != nil {
+		if sector := core.GetSector(wc.Body.Universe, wc.NextSector); sector != nil {
 			end = wc.Body.Angle2DTo(&sector.Center)
 		}
 		a.End = dynamic.TweenAngles(start, end, 0.2, dynamic.Lerp)
@@ -67,9 +67,9 @@ func (wc *WanderController) Always() {
 		a.Duration = 300
 		a.TweeningFunc = dynamic.EaseInOut2
 		a.Lifetime = dynamic.AnimationLifetimeOnce
-		wc.LastTurn = wc.ECS.Timestamp
+		wc.LastTurn = wc.Universe.Timestamp
 	}
-	if wc.ECS.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {
+	if wc.Universe.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {
 		sector := wc.Body.Sector()
 		if sector == nil {
 			return
@@ -90,6 +90,6 @@ func (wc *WanderController) Always() {
 		if closestSegment != nil {
 			wc.NextSector = closestSegment.AdjacentSector
 		}
-		wc.LastTarget = wc.ECS.Timestamp
+		wc.LastTarget = wc.Universe.Timestamp
 	}
 }

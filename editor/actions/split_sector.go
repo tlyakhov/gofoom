@@ -33,16 +33,16 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	if len(s.Result) == 0 {
 		return
 	}
-	db := a.State().ECS
+	u := a.State().Universe
 	// Copy original sector's components to preserve them
-	a.Original[sector.Entity] = db.SerializeEntity(sector.Entity)
-	// Detach the original from the ECS
-	db.Delete(sector.Entity)
+	a.Original[sector.Entity] = u.SerializeEntity(sector.Entity)
+	// Detach the original from the Universe
+	u.Delete(sector.Entity)
 	// Attach the cloned entities/components
 	for _, added := range s.Result {
-		entity := db.NewEntity()
+		entity := u.NewEntity()
 		for _, component := range added {
-			db.Attach(component.Base().ComponentID, entity, &component)
+			u.Attach(component.Base().ComponentID, entity, &component)
 			log.Printf("%v", component.String())
 			if sector, ok := component.(*core.Sector); ok {
 				for i, s := range sector.Segments {
@@ -66,7 +66,7 @@ func (a *SplitSector) EndPoint() bool {
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
 	if a.State().SelectedObjects.Empty() {
-		col := ecs.ColumnFor[core.Sector](a.State().ECS, core.SectorCID)
+		col := ecs.ColumnFor[core.Sector](a.State().Universe, core.SectorCID)
 		sectors = make([]*core.Sector, 0)
 		for i := range col.Cap() {
 			if sector := col.Value(i); sector != nil {
@@ -118,7 +118,7 @@ func (a *SplitSector) Undo() {
 				body.SectorEntity = 0
 			}
 			sector.Bodies = make(map[ecs.Entity]*core.Body)
-			a.State().ECS.DetachAll(sector.Entity)
+			a.State().Universe.DetachAll(sector.Entity)
 		}
 	}
 	for entity, originalComponents := range a.Original {
@@ -126,10 +126,10 @@ func (a *SplitSector) Undo() {
 			if component == nil {
 				continue
 			}
-			a.State().ECS.Attach(ecs.Types().ID(component), entity, component)
+			a.State().Universe.Attach(ecs.Types().ID(component), entity, component)
 			if sector, ok := component.(*core.Sector); ok {
 				for _, entity := range bodies {
-					if body := core.GetBody(a.State().ECS, entity); body != nil {
+					if body := core.GetBody(a.State().Universe, entity); body != nil {
 						if sector.IsPointInside2D(body.Pos.Original.To2D()) {
 							body.SectorEntity = sector.Entity
 							sector.Bodies[entity] = body
@@ -150,7 +150,7 @@ func (a *SplitSector) Redo() {
 				body.SectorEntity = 0
 			}
 			sector.Bodies = make(map[ecs.Entity]*core.Body)
-			a.State().ECS.DetachAll(entity)
+			a.State().Universe.DetachAll(entity)
 		}
 
 		for _, splitter := range a.Splitters {
@@ -162,10 +162,10 @@ func (a *SplitSector) Redo() {
 					if component == nil {
 						continue
 					}
-					a.State().ECS.Attach(ecs.Types().ID(component), component.GetEntity(), component)
+					a.State().Universe.Attach(ecs.Types().ID(component), component.GetEntity(), component)
 					if sector, ok := component.(*core.Sector); ok {
 						for _, entity := range bodies {
-							if body := core.GetBody(a.State().ECS, entity); body != nil {
+							if body := core.GetBody(a.State().Universe, entity); body != nil {
 								if sector.IsPointInside2D(body.Pos.Original.To2D()) {
 									body.SectorEntity = sector.Entity
 									sector.Bodies[entity] = body

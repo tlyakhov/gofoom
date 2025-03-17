@@ -24,7 +24,7 @@ import (
 
 func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _ bool, co fyne.CanvasObject) {
 	entity, _ := ecs.ParseEntity(tni)
-	name := entity.Format(g.State().ECS)
+	name := entity.Format(g.State().Universe)
 	box := co.(*fyne.Container)
 	img := box.Objects[0].(*canvas.Image)
 	img.Hidden = entity == 0
@@ -43,7 +43,7 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 		}
 		img.SetMinSize(fyne.NewSquareSize(64))
 		button.OnTapped = func() {
-			g.SelectObjects(true, selection.SelectableFromEntity(g.State().ECS, entity))
+			g.SelectObjects(true, selection.SelectableFromEntity(g.State().Universe, entity))
 		}
 	}
 }
@@ -79,7 +79,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		cids = append(cids, behaviors.WeaponClassCID)
 	}
 	for _, cid := range cids {
-		col := g.State().ECS.Column(cid)
+		col := g.State().Universe.Column(cid)
 		for i := range col.Len() {
 			if a := col.Attachable(i); a != nil {
 				entities = append(entities, a.Base().Entity.String())
@@ -106,7 +106,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	title := "Select " + editTypeTag
 	if origValue != 0 {
 		tree.Select(origValue.String())
-		title = editTypeTag + ": " + origValue.Format(g.State().ECS)
+		title = editTypeTag + ": " + origValue.Format(g.State().Universe)
 	}
 
 	if field.Disabled() {

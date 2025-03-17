@@ -48,9 +48,9 @@ func (ac *ActionController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	}
 	ac.Entity = e
 	ac.Actor = target.(*behaviors.Actor)
-	ac.State = behaviors.GetActorState(ac.ECS, ac.Entity)
-	ac.Body = core.GetBody(ac.ECS, ac.Entity)
-	ac.Mobile = core.GetMobile(ac.ECS, ac.Entity)
+	ac.State = behaviors.GetActorState(ac.Universe, ac.Entity)
+	ac.Body = core.GetBody(ac.Universe, ac.Entity)
+	ac.Mobile = core.GetMobile(ac.Universe, ac.Entity)
 	return ac.Actor.IsActive() &&
 		ac.Body != nil && ac.Body.IsActive() &&
 		(ac.State == nil || ac.State.IsActive())
@@ -58,7 +58,7 @@ func (ac *ActionController) Target(target ecs.Attachable, e ecs.Entity) bool {
 
 func (ac *ActionController) Recalculate() {
 	if ac.State == nil {
-		ac.State = ac.ECS.NewAttachedComponent(ac.Entity, behaviors.ActorStateCID).(*behaviors.ActorState)
+		ac.State = ac.Universe.NewAttachedComponent(ac.Entity, behaviors.ActorStateCID).(*behaviors.ActorState)
 	}
 
 	if ac.State.Action != 0 {
@@ -70,8 +70,8 @@ func (ac *ActionController) Recalculate() {
 
 	closestDist2 := math.MaxFloat64
 
-	behaviors.IterateActions(ac.ECS, ac.Start, func(action ecs.Entity, _ *concepts.Vector3) {
-		waypoint := behaviors.GetActionWaypoint(ac.ECS, action)
+	behaviors.IterateActions(ac.Universe, ac.Start, func(action ecs.Entity, _ *concepts.Vector3) {
+		waypoint := behaviors.GetActionWaypoint(ac.Universe, action)
 		if waypoint == nil {
 			return
 		}
@@ -88,7 +88,7 @@ func (ac *ActionController) Recalculate() {
 
 	if closest != nil {
 		ac.State.Action = closest.Entity
-		ac.State.LastTransition = ac.ECS.Timestamp
+		ac.State.LastTransition = ac.Universe.Timestamp
 	}
 }
 
@@ -96,7 +96,7 @@ func (ac *ActionController) timedAction(timed *behaviors.ActionTimed) timedState
 	if timed.Fired.Contains(ac.Body.Entity) {
 		return timedFired
 	}
-	if ac.ECS.Timestamp-ac.State.LastTransition < int64(timed.Delay.Now) {
+	if ac.Universe.Timestamp-ac.State.LastTransition < int64(timed.Delay.Now) {
 		return timedDelayed
 	}
 
@@ -123,7 +123,7 @@ func (ac *ActionController) Jump(jump *behaviors.ActionJump) bool {
 }
 
 func (ac *ActionController) Fire(fire *behaviors.ActionFire) bool {
-	weapon := behaviors.GetWeapon(ac.ECS, ac.Body.Entity)
+	weapon := behaviors.GetWeapon(ac.Universe, ac.Body.Entity)
 
 	if weapon == nil {
 		return true
@@ -213,18 +213,18 @@ func (ac *ActionController) Always() {
 
 	var timed *behaviors.ActionTimed
 
-	if waypoint := behaviors.GetActionWaypoint(ac.ECS, ac.State.Action); waypoint != nil {
+	if waypoint := behaviors.GetActionWaypoint(ac.Universe, ac.State.Action); waypoint != nil {
 		doTransition = ac.Waypoint(waypoint) && doTransition
 		timed = &waypoint.ActionTimed
 	}
 
-	if jump := behaviors.GetActionJump(ac.ECS, ac.State.Action); jump != nil {
+	if jump := behaviors.GetActionJump(ac.Universe, ac.State.Action); jump != nil {
 		// Order of ops matters - the && short circuits on false
 		doTransition = ac.Jump(jump) && doTransition
 		timed = &jump.ActionTimed
 	}
 
-	if fire := behaviors.GetActionFire(ac.ECS, ac.State.Action); fire != nil {
+	if fire := behaviors.GetActionFire(ac.Universe, ac.State.Action); fire != nil {
 		// Order of ops matters - the && short circuits on false
 		doTransition = ac.Fire(fire) && doTransition
 		timed = &fire.ActionTimed
@@ -238,8 +238,8 @@ func (ac *ActionController) Always() {
 		timed.Fired.Delete(ac.Body.Entity)
 	}
 
-	if t := behaviors.GetActionTransition(ac.ECS, ac.State.Action); t != nil {
-		ac.State.LastTransition = ac.ECS.Timestamp
+	if t := behaviors.GetActionTransition(ac.Universe, ac.State.Action); t != nil {
+		ac.State.LastTransition = ac.Universe.Timestamp
 		if len(t.Next) > 0 {
 			i := rand.Intn(len(t.Next))
 			for _, next := range t.Next {

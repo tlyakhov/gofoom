@@ -25,8 +25,8 @@ func init() {
 	InventoryCarrierCID = ecs.RegisterComponent(&ecs.Column[InventoryCarrier, *InventoryCarrier]{Getter: GetInventoryCarrier})
 }
 
-func GetInventoryCarrier(db *ecs.ECS, e ecs.Entity) *InventoryCarrier {
-	if asserted, ok := db.Component(e, InventoryCarrierCID).(*InventoryCarrier); ok {
+func GetInventoryCarrier(u *ecs.Universe, e ecs.Entity) *InventoryCarrier {
+	if asserted, ok := u.Component(e, InventoryCarrierCID).(*InventoryCarrier); ok {
 		return asserted
 	}
 	return nil
@@ -37,7 +37,7 @@ func (ic *InventoryCarrier) HasAtLeast(class string, min int) bool {
 		if e == 0 {
 			continue
 		}
-		if slot := GetInventorySlot(ic.ECS, e); slot != nil {
+		if slot := GetInventorySlot(ic.Universe, e); slot != nil {
 			// log.Printf("HasAtLeast %v, %v ? %v, %v", class, min, slot.Class, slot.Count.Now)
 			if slot.Class == strings.TrimSpace(class) && slot.Count.Now >= min {
 				return true
@@ -66,10 +66,10 @@ func (ic *InventoryCarrier) Construct(data map[string]any) {
 func (ic *InventoryCarrier) Serialize() map[string]any {
 	result := ic.Attached.Serialize()
 
-	result["Inventory"] = ic.Inventory.Serialize(ic.ECS)
+	result["Inventory"] = ic.Inventory.Serialize(ic.Universe)
 
 	if ic.SelectedWeapon != 0 {
-		result["SelectedWeapon"] = ic.SelectedWeapon.Serialize(ic.ECS)
+		result["SelectedWeapon"] = ic.SelectedWeapon.Serialize(ic.Universe)
 	}
 
 	return result

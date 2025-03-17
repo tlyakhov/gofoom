@@ -385,7 +385,7 @@ func (ui *UI) renderTextBuffer() {
 	if s.SpriteSheet == nil || s.CharWidth == 0 || s.CharHeight == 0 {
 		return
 	}
-	img := materials.GetImage(s.SpriteSheet.ECS, s.SpriteSheet.Material)
+	img := materials.GetImage(s.SpriteSheet.Universe, s.SpriteSheet.Material)
 	if img == nil {
 		return
 	}

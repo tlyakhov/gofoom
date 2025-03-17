@@ -125,10 +125,10 @@ func main() {
 	go func() {
 		t := time.NewTicker(time.Second / 60)
 		for range t.C {
-			if editor.ECS == nil {
+			if editor.Universe == nil {
 				return
 			}
-			editor.ECS.Simulation.Step()
+			editor.Universe.Simulation.Step()
 			editor.MapWidget.Raster.Refresh()
 		}
 	}()

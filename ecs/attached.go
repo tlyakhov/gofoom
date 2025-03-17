@@ -24,7 +24,7 @@ const (
 const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLockedInEditor
 
 // Attached has a set of fields common to every component and implements
-// the Attachable interface. It is required for every component in the ECS.
+// the Attachable interface. It is required for every component in the Universe.
 type Attached struct {
 	// ComponentID is the unique identifier for the component type. See `RegisterComponent`
 	ComponentID
@@ -39,12 +39,12 @@ type Attached struct {
 	// Attachments is a reference counter tracking the number of entities this
 	// component is attached to.
 	Attachments int
-	// ECS is a pointer to the ECS instance that manages this component.
-	ECS *ECS
+	// Universe is a pointer to the Universe instance that manages this component.
+	Universe *Universe
 	// Flags are bit flags that control the behavior of the component, such as
 	// whether it is saved or visible in the editor.
 	Flags ComponentFlags
-	// indexInColumn is the index of this component within its column in the ECS.
+	// indexInColumn is the index of this component within its column in the Universe.
 	indexInColumn int
 }
 
@@ -53,9 +53,9 @@ func (a *Attached) IsActive() bool {
 	return a != nil && a.Attachments > 0 && a.Active
 }
 
-// GetECS returns the ECS instance associated with this component.
-func (a *Attached) GetECS() *ECS {
-	return a.ECS
+// GetECS returns the Universe instance associated with this component.
+func (a *Attached) GetECS() *Universe {
+	return a.Universe
 }
 
 // String returns a string representation - helpful in the editor or debugging
@@ -85,9 +85,9 @@ func (a *Attached) OnDetach(entity Entity) {
 	a.Entity = a.Entities.First()
 }
 
-// OnDelete is called when the component is deleted from the ECS.
+// OnDelete is called when the component is deleted from the Universe.
 func (a *Attached) OnDelete() {
-	a.ECS = nil
+	a.Universe = nil
 }
 
 // SetColumnIndex sets the index of this component within its column.
@@ -95,9 +95,9 @@ func (a *Attached) SetColumnIndex(i int) {
 	a.indexInColumn = i
 }
 
-// OnAttach is called when the component is attached to an ECS. It sets the ECS pointer.
-func (a *Attached) OnAttach(db *ECS) {
-	a.ECS = db
+// OnAttach is called when the component is attached to an Universe. It sets the Universe pointer.
+func (a *Attached) OnAttach(u *Universe) {
+	a.Universe = u
 }
 
 // Construct initializes the component with data from a map. It sets the active
@@ -112,14 +112,14 @@ func (a *Attached) Construct(data map[string]any) {
 	if v, ok := data["Active"]; ok {
 		a.Active = v.(bool)
 	}
-	// TODO: Is this construction used anywhere? This should be happening in ECS
+	// TODO: Is this construction used anywhere? This should be happening in Universe
 	//a.Entities, a.Attachments = ParseEntitiesFromMap(data)
 }
 
 // Serialize returns a map representing the component's data for serialization.
 // It includes the entities and the active flag if it's false.
 func (a *Attached) Serialize() map[string]any {
-	result := map[string]any{"Entities": a.Entities.Serialize(a.ECS)}
+	result := map[string]any{"Entities": a.Entities.Serialize(a.Universe)}
 	if !a.Active {
 		result["Active"] = a.Active
 	}
@@ -133,14 +133,14 @@ func (a *Attached) Serialize() map[string]any {
 func ConstructSlice[PT interface {
 	*T
 	Serializable
-}, T any](db *ECS, data any, hook func(item PT)) []PT {
+}, T any](u *Universe, data any, hook func(item PT)) []PT {
 	var result []PT
 
 	if dataSlice, ok := data.([]any); ok {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].OnAttach(db)
+			result[i].OnAttach(u)
 			if hook != nil {
 				hook(result[i])
 			}
@@ -150,7 +150,7 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].OnAttach(db)
+			result[i].OnAttach(u)
 			if hook != nil {
 				hook(result[i])
 			}
@@ -160,8 +160,8 @@ func ConstructSlice[PT interface {
 	return result
 }
 
-// SerializeSlice serializes a slice of Serializable components into a slice of maps.
-// It skips components that have the ComponentNoSave flag set.
+// SerializeSlice turns a slice of Serializable components into a slice of maps
+// suitable for yaml/json. It skips components that have the ComponentNoSave flag set.
 func SerializeSlice[T Serializable](elements []T) []map[string]any {
 	result := make([]map[string]any, 0, len(elements))
 	for _, element := range elements {

@@ -136,8 +136,8 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // most cases each comparison is pretty cheap. For really large worlds, we could
 // give the user the option of disabling auto-portalling in the editor and only
 // doing it manually every once in a while.
-func AutoPortal(db *ecs.ECS) {
-	col := ecs.ColumnFor[core.Sector](db, core.SectorCID)
+func AutoPortal(u *ecs.Universe) {
+	col := ecs.ColumnFor[core.Sector](u, core.SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
 		if sector == nil {

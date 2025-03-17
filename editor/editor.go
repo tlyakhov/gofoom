@@ -78,7 +78,7 @@ func (e *Editor) State() *state.Edit {
 func NewEditor() *Editor {
 	e := &Editor{
 		Edit: state.Edit{
-			ECS: ecs.NewECS(),
+			Universe: ecs.NewUniverse(),
 			MapView: state.MapView{
 				Scale: 1.0,
 				Step:  10,
@@ -203,20 +203,20 @@ func (e *Editor) Integrate() {
 	if player == nil {
 		return
 	}
-	playerBody := core.GetBody(player.ECS, player.Entity)
-	playerMobile := core.GetMobile(player.ECS, player.Entity)
+	playerBody := core.GetBody(player.Universe, player.Entity)
+	playerMobile := core.GetMobile(player.Universe, player.Entity)
 
 	if e.GameWidget.KeyMap.Contains("W") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now)
+		controllers.MovePlayer(e.Universe, player.Entity, playerBody.Angle.Now)
 	}
 	if e.GameWidget.KeyMap.Contains("S") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+180.0)
+		controllers.MovePlayer(e.Universe, player.Entity, playerBody.Angle.Now+180.0)
 	}
 	if e.GameWidget.KeyMap.Contains("E") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+90.0)
+		controllers.MovePlayer(e.Universe, player.Entity, playerBody.Angle.Now+90.0)
 	}
 	if e.GameWidget.KeyMap.Contains("Q") {
-		controllers.MovePlayer(e.ECS, player.Entity, playerBody.Angle.Now+270.0)
+		controllers.MovePlayer(e.Universe, player.Entity, playerBody.Angle.Now+270.0)
 	}
 	if e.GameWidget.KeyMap.Contains("A") {
 		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
@@ -230,7 +230,7 @@ func (e *Editor) Integrate() {
 	player.ActionPressed = e.GameWidget.KeyMap.Contains("F")
 
 	if e.GameWidget.KeyMap.Contains("Space") {
-		if behaviors.GetUnderwater(player.ECS, playerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(player.Universe, playerBody.SectorEntity) != nil {
 			playerMobile.Force[2] += constants.PlayerSwimStrength
 		} else if playerBody.OnGround {
 			playerMobile.Force[2] += constants.PlayerJumpForce
@@ -238,7 +238,7 @@ func (e *Editor) Integrate() {
 		}
 	}
 	if e.GameWidget.KeyMap.Contains("C") {
-		if behaviors.GetUnderwater(player.ECS, playerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(player.Universe, playerBody.SectorEntity) != nil {
 			playerMobile.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			player.Crouching = true
@@ -247,7 +247,7 @@ func (e *Editor) Integrate() {
 		player.Crouching = false
 	}
 
-	e.ECS.ActAllControllers(ecs.ControllerAlways)
+	e.Universe.ActAllControllers(ecs.ControllerAlways)
 	e.GatherHoveringObjects()
 }
 
@@ -275,19 +275,19 @@ func (e *Editor) Load(filename string) {
 	e.OpenFile = filename
 	e.Modified = false
 	e.UpdateTitle()
-	db := ecs.NewECS()
-	err := db.Load(e.OpenFile)
+	u := ecs.NewUniverse()
+	err := u.Load(e.OpenFile)
 	if err != nil {
 		e.Alert(fmt.Sprintf("Error loading world: %v", err))
 		return
 	}
-	controllers.Respawn(db, true)
-	archetypes.CreateFont(db, "data/vga-font-8x8.png", "Default Font")
-	db.Simulation.Integrate = e.Integrate
-	db.Simulation.Render = e.GameWidget.Draw
-	e.ECS = db
+	controllers.Respawn(u, true)
+	archetypes.CreateFont(u, "data/vga-font-8x8.png", "Default Font")
+	u.Simulation.Integrate = e.Integrate
+	u.Simulation.Render = e.GameWidget.Draw
+	e.Universe = u
 	if e.Renderer != nil {
-		e.Renderer.ECS = db
+		e.Renderer.Universe = u
 		e.Renderer.Initialize()
 	}
 	e.SelectObjects(true)
@@ -300,17 +300,17 @@ func (e *Editor) Test() {
 	e.Modified = false
 	e.UpdateTitle()
 
-	e.ECS.Clear()
-	controllers.CreateTestWorld2(e.ECS)
-	e.ECS.Simulation.Integrate = e.Integrate
-	e.ECS.Simulation.Render = e.GameWidget.Draw
+	e.Universe.Clear()
+	controllers.CreateTestWorld2(e.Universe)
+	e.Universe.Simulation.Integrate = e.Integrate
+	e.Universe.Simulation.Render = e.GameWidget.Draw
 	e.SelectObjects(true)
 }
 
 func (e *Editor) autoPortal() {
 	defer concepts.ExecutionDuration(concepts.ExecutionTrack("AutoPortal"))
 	//e.Lock.Lock()
-	controllers.AutoPortal(e.ECS)
+	controllers.AutoPortal(e.Universe)
 	//e.Lock.Unlock()
 }
 
@@ -357,8 +357,8 @@ func (e *Editor) UseTool() {
 		s := &core.Sector{}
 		s.ComponentID = core.SectorCID
 		s.Construct(nil)
-		s.Bottom.Surface.Material = controllers.DefaultMaterial(e.ECS)
-		s.Top.Surface.Material = controllers.DefaultMaterial(e.ECS)
+		s.Bottom.Surface.Material = controllers.DefaultMaterial(e.Universe)
+		s.Top.Surface.Material = controllers.DefaultMaterial(e.Universe)
 		a := &actions.AddSector{}
 		a.AddEntity.IEditor = e
 		a.AddEntity.Components = []ecs.Attachable{s}
@@ -398,23 +398,23 @@ func (e *Editor) NewShader() {
 
 		// TODO: This is all broken, fix it
 		// First, load the image
-		eImg := e.ECS.NewEntity()
-		img := e.ECS.NewAttachedComponent(eImg, materials.ImageCID).(*materials.Image)
+		eImg := e.Universe.NewEntity()
+		img := e.Universe.NewAttachedComponent(eImg, materials.ImageCID).(*materials.Image)
 		img.Source = uc.URI().Path()
 		img.Load()
-		a := &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eImg, Components: e.ECS.AllComponents(eImg)}
+		a := &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eImg, Components: e.Universe.AllComponents(eImg)}
 		e.Act(a)
 		// Next set up the shader
-		eShader := e.ECS.NewEntity()
-		shader := e.ECS.NewAttachedComponent(eImg, materials.ShaderCID).(*materials.Shader)
+		eShader := e.Universe.NewEntity()
+		shader := e.Universe.NewAttachedComponent(eImg, materials.ShaderCID).(*materials.Shader)
 		stage := &materials.ShaderStage{}
-		stage.OnAttach(e.ECS)
+		stage.OnAttach(e.Universe)
 		stage.Construct(nil)
 		stage.Material = eImg
 		shader.Stages = append(shader.Stages, stage)
-		named := editor.ECS.NewAttachedComponent(eShader, ecs.NamedCID).(*ecs.Named)
+		named := editor.Universe.NewAttachedComponent(eShader, ecs.NamedCID).(*ecs.Named)
 		named.Name = "Shader " + path.Base(img.Source)
-		a = &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eShader, Components: e.ECS.AllComponents(eShader)}
+		a = &actions.AddEntity{Place: actions.Place{IEditor: e}, Entity: eShader, Components: e.Universe.AllComponents(eShader)}
 		e.Act(a)
 
 	}, e.Window)
@@ -458,7 +458,7 @@ func (e *Editor) UndoCurrent() {
 	}
 
 	a.Undo()
-	controllers.AutoPortal(e.ECS)
+	controllers.AutoPortal(e.Universe)
 	e.refreshProperties()
 	e.RedoHistory = append(e.RedoHistory, a)
 }
@@ -488,7 +488,7 @@ func (e *Editor) RedoCurrent() {
 	}
 
 	a.Redo()
-	controllers.AutoPortal(e.ECS)
+	controllers.AutoPortal(e.Universe)
 	e.refreshProperties()
 	e.UndoHistory = append(e.UndoHistory, a)
 }
@@ -534,7 +534,7 @@ func (e *Editor) GatherHoveringObjects() {
 
 	e.HoveringObjects.Clear()
 
-	colSector := ecs.ColumnFor[core.Sector](e.ECS, core.SectorCID)
+	colSector := ecs.ColumnFor[core.Sector](e.Universe, core.SectorCID)
 	for i := range colSector.Cap() {
 		sector := colSector.Value(i)
 
@@ -563,7 +563,7 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	colSeg := ecs.ColumnFor[core.InternalSegment](e.ECS, core.InternalSegmentCID)
+	colSeg := ecs.ColumnFor[core.InternalSegment](e.Universe, core.InternalSegmentCID)
 	for i := range colSeg.Cap() {
 		seg := colSeg.Value(i)
 		if seg == nil {
@@ -592,7 +592,7 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](e.ECS, behaviors.ActionWaypointCID)
+	colWaypoint := ecs.ColumnFor[behaviors.ActionWaypoint](e.Universe, behaviors.ActionWaypointCID)
 	for i := range colWaypoint.Cap() {
 		aw := colWaypoint.Value(i)
 
@@ -614,7 +614,7 @@ func (e *Editor) GatherHoveringObjects() {
 		}
 	}
 
-	colBody := ecs.ColumnFor[core.Body](e.ECS, core.BodyCID)
+	colBody := ecs.ColumnFor[core.Body](e.Universe, core.BodyCID)
 	for i := range colBody.Cap() {
 		body := colBody.Value(i)
 		if body == nil {
@@ -638,7 +638,7 @@ func (e *Editor) GatherHoveringObjects() {
 
 func (e *Editor) ResizeRenderer(w, h int) {
 	if e.Renderer == nil {
-		e.Renderer = render.NewRenderer(e.ECS)
+		e.Renderer = render.NewRenderer(e.Universe)
 	}
 	e.Renderer.ScreenWidth = w
 	e.Renderer.ScreenHeight = h

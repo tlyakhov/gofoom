@@ -10,10 +10,10 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func CreateLightBody(db *ecs.ECS) ecs.Entity {
-	e := db.NewEntity()
-	body := db.NewAttachedComponent(e, core.BodyCID).(*core.Body)
-	db.NewAttachedComponent(e, core.LightCID)
+func CreateLightBody(u *ecs.Universe) ecs.Entity {
+	e := u.NewEntity()
+	body := u.NewAttachedComponent(e, core.BodyCID).(*core.Body)
+	u.NewAttachedComponent(e, core.LightCID)
 	body.Size.Spawn[0] = 2
 	body.Size.Spawn[1] = 2
 	body.Size.ResetToSpawn()
@@ -21,23 +21,23 @@ func CreateLightBody(db *ecs.ECS) ecs.Entity {
 	return e
 }
 
-func CreateFont(db *ecs.ECS, filename string, name string) ecs.Entity {
-	e := db.NewEntity()
-	named := db.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)
+func CreateFont(u *ecs.Universe, filename string, name string) ecs.Entity {
+	e := u.NewEntity()
+	named := u.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)
 	named.Flags = ecs.ComponentInternal
 	named.Name = name
-	img := db.NewAttachedComponent(e, materials.ImageCID).(*materials.Image)
+	img := u.NewAttachedComponent(e, materials.ImageCID).(*materials.Image)
 	img.Flags = ecs.ComponentInternal
 	img.Source = filename
 	img.GenerateMipMaps = false
 	img.Filter = false
 	img.Load()
-	sprite := db.NewAttachedComponent(e, materials.SpriteSheetCID).(*materials.SpriteSheet)
+	sprite := u.NewAttachedComponent(e, materials.SpriteSheetCID).(*materials.SpriteSheet)
 	sprite.Flags = ecs.ComponentInternal
 	sprite.Rows = 16
 	sprite.Cols = 16
 	sprite.Material = e
 	sprite.Angles = 0
-	db.ActAllControllersOneEntity(e, ecs.ControllerRecalculate)
+	u.ActAllControllersOneEntity(e, ecs.ControllerRecalculate)
 	return e
 }

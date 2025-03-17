@@ -48,7 +48,7 @@ func (bc *BodyController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	if bc.Body == nil || !bc.Body.IsActive() {
 		return false
 	}
-	bc.Player = behaviors.GetPlayer(bc.Body.ECS, bc.Entity)
+	bc.Player = behaviors.GetPlayer(bc.Body.Universe, bc.Entity)
 	if bc.Player != nil && bc.Player.Spawn {
 		// If this is a spawn point, skip it
 		return false
@@ -72,7 +72,7 @@ func (bc *BodyController) Recalculate() {
 	//bc.Collide()
 	bc.findBodySector()
 	if bc.tree == nil {
-		bc.tree = bc.ECS.Singleton(core.QuadtreeCID).(*core.Quadtree)
+		bc.tree = bc.Universe.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	}
 	bc.tree.Update(bc.Body)
 }
@@ -85,7 +85,7 @@ func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
 	// This should be optimized
-	col := ecs.ColumnFor[core.Sector](bc.ECS, core.SectorCID)
+	col := ecs.ColumnFor[core.Sector](bc.Universe, core.SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
 		if sector == nil {

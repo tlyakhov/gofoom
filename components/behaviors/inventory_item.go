@@ -35,8 +35,8 @@ func init() {
 	InventoryItemCID = ecs.RegisterComponent(&ecs.Column[InventoryItem, *InventoryItem]{Getter: GetInventoryItem})
 }
 
-func GetInventoryItem(db *ecs.ECS, e ecs.Entity) *InventoryItem {
-	if asserted, ok := db.Component(e, InventoryItemCID).(*InventoryItem); ok {
+func GetInventoryItem(u *ecs.Universe, e ecs.Entity) *InventoryItem {
+	if asserted, ok := u.Component(e, InventoryItemCID).(*InventoryItem); ok {
 		return asserted
 	}
 	return nil
@@ -81,7 +81,7 @@ func (item *InventoryItem) Serialize() map[string]any {
 		result["Class"] = item.Class
 	}
 	if item.Image != 0 {
-		result["Image"] = item.Image.Serialize(item.ECS)
+		result["Image"] = item.Image.Serialize(item.Universe)
 	}
 	if item.Flags != InventoryItemBounce|InventoryItemAutoProximity|InventoryItemAutoPlayerTargetable {
 		result["Flags"] = concepts.SerializeFlags(item.Flags, InventoryItemFlagsValues())

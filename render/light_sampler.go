@@ -48,7 +48,7 @@ func (ls *LightSampler) Debug() *concepts.Vector3 {
 func (ls *LightSampler) Get() *concepts.Vector3 {
 	if lmResult, exists := ls.Sector.Lightmap.Load(ls.Hash); exists {
 		r := concepts.RngXorShift64(ls.xorSeed ^ ls.Hash ^ uint64(ls.ScreenY))
-		if lmResult.Timestamp+constants.MaxLightmapAge >= ls.ECS.Frame ||
+		if lmResult.Timestamp+constants.MaxLightmapAge >= ls.Universe.Frame ||
 			!concepts.RngDecide(r, constants.LightmapRefreshDither) {
 			ls.Output = lmResult.Light
 			return &ls.Output
@@ -72,7 +72,7 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 			ls.Output[0],
 			ls.Output[1],
 			ls.Output[2]},
-		Timestamp: ls.ECS.Frame,
+		Timestamp: ls.Universe.Frame,
 	})
 	return &ls.Output
 
@@ -193,7 +193,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				ls.U = ls.NU
 				ls.V = ls.NV
 				ls.SampleMaterial(seg.Surface.ExtraStages)
-				if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
+				if lit := materials.GetLit(seg.Universe, seg.Surface.Material); lit != nil {
 					lit.Apply(&ls.MaterialSampler.Output, nil)
 				}
 				if ls.MaterialSampler.Output[3] >= 0.99 {
@@ -264,7 +264,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			ls.U = ls.NU
 			ls.V = ls.NV
 			ls.SampleMaterial(seg.Surface.ExtraStages)
-			if lit := materials.GetLit(seg.ECS, seg.Surface.Material); lit != nil {
+			if lit := materials.GetLit(seg.Universe, seg.Surface.Material); lit != nil {
 				lit.Apply(&ls.MaterialSampler.Output, nil)
 			}
 			if ls.MaterialSampler.Output[3] >= 0.99 {
@@ -278,7 +278,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				b.Entity == ls.InputBody {
 				continue
 			}
-			vis := materials.GetVisible(ls.ECS, b.Entity)
+			vis := materials.GetVisible(ls.Universe, b.Entity)
 			if vis == nil || !vis.Active || vis.Shadow == materials.ShadowNone {
 				continue
 			}
@@ -320,7 +320,7 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		if !body.IsActive() {
 			return true
 		}
-		light := core.GetLight(ls.ECS, body.Entity)
+		light := core.GetLight(ls.Universe, body.Entity)
 		if light == nil || !light.IsActive() {
 			return true
 		}

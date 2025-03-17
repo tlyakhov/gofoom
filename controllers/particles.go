@@ -39,20 +39,20 @@ func (pc *ParticleController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	if !pc.ParticleEmitter.IsActive() {
 		return false
 	}
-	pc.Body = core.GetBody(pc.ECS, pc.Entity)
+	pc.Body = core.GetBody(pc.Universe, pc.Entity)
 	if pc.Body == nil || !pc.Body.IsActive() {
 		return false
 	}
-	pc.Mobile = core.GetMobile(pc.ECS, pc.Entity)
+	pc.Mobile = core.GetMobile(pc.Universe, pc.Entity)
 	return true
 }
 
 func (pc *ParticleController) Always() {
 	toRemove := make([]ecs.Entity, 0, 10)
 	for e, timestamp := range pc.Spawned {
-		age := float64(pc.ECS.Timestamp - timestamp)
+		age := float64(pc.Universe.Timestamp - timestamp)
 
-		if vis := materials.GetVisible(pc.ECS, e); vis != nil {
+		if vis := materials.GetVisible(pc.Universe, e); vis != nil {
 			fade := (age - (pc.Lifetime - pc.FadeTime)) / pc.FadeTime
 			vis.Opacity = 1.0 - concepts.Clamp(fade, 0.0, 1.0)
 		}
@@ -61,7 +61,7 @@ func (pc *ParticleController) Always() {
 			continue
 		}
 		toRemove = append(toRemove, e)
-		pc.ECS.Delete(e)
+		pc.Universe.Delete(e)
 	}
 
 	for _, e := range toRemove {
@@ -86,16 +86,16 @@ func (pc *ParticleController) Always() {
 			return
 		}
 
-		e := pc.ECS.NewEntity()
-		pc.Spawned[e] = pc.ECS.Timestamp
-		body := pc.ECS.NewAttachedComponent(e, core.BodyCID).(*core.Body)
+		e := pc.Universe.NewEntity()
+		pc.Spawned[e] = pc.Universe.Timestamp
+		body := pc.Universe.NewAttachedComponent(e, core.BodyCID).(*core.Body)
 		body.Flags = ecs.ComponentInternal
-		vis := pc.ECS.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
+		vis := pc.Universe.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
 		vis.Flags = ecs.ComponentInternal
-		mobile := pc.ECS.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
+		mobile := pc.Universe.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
 		mobile.Flags = ecs.ComponentInternal
 
-		pc.ECS.Link(e, pc.Source)
+		pc.Universe.Link(e, pc.Source)
 		body.Pos.Now.From(&pc.Body.Pos.Now)
 		hAngle := pc.Body.Angle.Now + (rand.Float64()-0.5)*pc.XYSpread
 		vAngle := (rand.Float64() - 0.5) * pc.ZSpread

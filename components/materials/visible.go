@@ -34,8 +34,8 @@ func init() {
 	VisibleCID = ecs.RegisterComponent(&ecs.Column[Visible, *Visible]{Getter: GetVisible})
 }
 
-func GetVisible(db *ecs.ECS, e ecs.Entity) *Visible {
-	if asserted, ok := db.Component(e, VisibleCID).(*Visible); ok {
+func GetVisible(u *ecs.Universe, e ecs.Entity) *Visible {
+	if asserted, ok := u.Component(e, VisibleCID).(*Visible); ok {
 		return asserted
 	}
 	return nil

@@ -30,8 +30,8 @@ func init() {
 	SourceFileCID = RegisterComponent(&Column[SourceFile, *SourceFile]{Getter: GetSourceFile})
 }
 
-func GetSourceFile(db *ECS, e Entity) *SourceFile {
-	if asserted, ok := db.Component(e, SourceFileCID).(*SourceFile); ok {
+func GetSourceFile(u *Universe, e Entity) *SourceFile {
+	if asserted, ok := u.Component(e, SourceFileCID).(*SourceFile); ok {
 		return asserted
 	}
 	return nil
@@ -119,13 +119,13 @@ func (file *SourceFile) rangeFile(contents string, fn func(entity Entity, data m
 	var yamlEntities []any
 	var ok bool
 	if yamlEntities, ok = parsed.([]any); !ok || yamlEntities == nil {
-		return fmt.Errorf("ECS.Load: YAML root must be an array")
+		return fmt.Errorf("Universe.Load: YAML root must be an array")
 	}
 
 	for _, yamlData := range yamlEntities {
 		yamlEntity := yamlData.(map[string]any)
 		if yamlEntity == nil {
-			log.Printf("ECS.Load: YAML array element should be an object")
+			log.Printf("Universe.Load: YAML array element should be an object")
 			continue
 		}
 		file.visitFileEntity(yamlEntity, fn)
@@ -141,11 +141,11 @@ func (file *SourceFile) mapFile() (string, error) {
 	// already mapped. If it's mapped, we have to pick a new one.
 	file.OriginalID = file.ID
 	file.Loaded = false
-	if _, ok := file.ECS.SourceFileIDs[file.ID]; ok {
-		file.ID = file.ECS.NextFreeEntitySourceID()
+	if _, ok := file.Universe.SourceFileIDs[file.ID]; ok {
+		file.ID = file.Universe.NextFreeEntitySourceID()
 	}
-	file.ECS.SourceFileNames[file.Source] = file
-	file.ECS.SourceFileIDs[file.ID] = file
+	file.Universe.SourceFileNames[file.Source] = file
+	file.Universe.SourceFileIDs[file.ID] = file
 
 	contents, err := file.read()
 	if err != nil {
@@ -172,16 +172,16 @@ func (file *SourceFile) mapFile() (string, error) {
 		}
 		if data, ok := yamlSourceFile.(map[string]any); ok {
 			// Let's deserialize this reference and check if this file already
-			// exists in the ECS. If it does, we don't need to map it again.
-			a := file.ECS.LoadComponentWithoutAttaching(SourceFileCID, data)
+			// exists in the Universe. If it does, we don't need to map it again.
+			a := file.Universe.LoadComponentWithoutAttaching(SourceFileCID, data)
 			nfile := a.(*SourceFile)
 			if len(nfile.Source) == 0 {
 				// Since the source is blank, maybe the user intends to fill
 				// this in later. Let's attach it and not do any mapping.
-				file.ECS.attach(entity, &a, SourceFileCID)
+				file.Universe.attach(entity, &a, SourceFileCID)
 				return
 			}
-			if _, ok := file.ECS.SourceFileNames[nfile.Source]; ok {
+			if _, ok := file.Universe.SourceFileNames[nfile.Source]; ok {
 				// This file is already mapped. We can skip it.
 
 				// TODO: We need to refcount the dependency, to ensure we don't
@@ -189,9 +189,9 @@ func (file *SourceFile) mapFile() (string, error) {
 				return
 			}
 
-			// If we're here, this file doesn't exist in the ECS yet. Let's map
+			// If we're here, this file doesn't exist in the Universe yet. Let's map
 			// it and attach it.
-			nfile.ECS.attach(entity, &a, SourceFileCID)
+			nfile.Universe.attach(entity, &a, SourceFileCID)
 			// the attach method will change where *a is.
 			nfile = a.(*SourceFile)
 			nfile.mapFile()
@@ -222,7 +222,7 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 				log.Printf("SourceFile.loadAllNestedFiles: %v,%v,%v is external and has no filename", e, name, filename)
 				return false
 			}
-			nestedFile := file.ECS.SourceFileNames[filename]
+			nestedFile := file.Universe.SourceFileNames[filename]
 			e = Entity(nestedFile.ID)<<EntityBits + e&MaxEntities
 			builder.WriteString(e.SerializeRaw(name, filename))
 			return true
@@ -230,7 +230,7 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 
 	file.Loaded = true
 	err := file.rangeFile(contents, func(entity Entity, data map[string]any) {
-		file.ECS.Entities.Set(uint32(entity))
+		file.Universe.Entities.Set(uint32(entity))
 
 		for name, cid := range Types().IDs {
 			yamlData := data[name]
@@ -244,7 +244,7 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 				if len(nestedFilename) == 0 {
 					continue
 				}
-				nfile := file.ECS.SourceFileNames[nestedFilename]
+				nfile := file.Universe.SourceFileNames[nestedFilename]
 				// Let's not do it twice!
 				if nfile.Loaded {
 					continue
@@ -261,15 +261,15 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 			if yamlLink, ok := yamlData.(string); ok {
 				linkedEntity, _ := ParseEntity(yamlLink)
 				if linkedEntity != 0 {
-					c := file.ECS.Component(linkedEntity, cid)
+					c := file.Universe.Component(linkedEntity, cid)
 					if c != nil {
-						file.ECS.attach(entity, &c, cid)
+						file.Universe.attach(entity, &c, cid)
 					}
 				}
 			} else {
 				yamlComponent := yamlData.(map[string]any)
 				var attached Attachable
-				file.ECS.attach(entity, &attached, cid)
+				file.Universe.attach(entity, &attached, cid)
 				if attached.Base().Attachments == 1 {
 					attached.Construct(yamlComponent)
 				}
@@ -286,8 +286,8 @@ func (file *SourceFile) read() (string, error) {
 }
 
 func (file *SourceFile) Load() error {
-	file.ECS.Lock.Lock()
-	defer file.ECS.Lock.Unlock()
+	file.Universe.Lock.Lock()
+	defer file.Universe.Lock.Unlock()
 
 	if contents, err := file.mapFile(); err == nil {
 		fmt.Println(contents)
@@ -298,22 +298,22 @@ func (file *SourceFile) Load() error {
 	}
 
 	// After everything's loaded, trigger the controllers
-	file.ECS.ActAllControllers(ControllerRecalculate)
+	file.Universe.ActAllControllers(ControllerRecalculate)
 	return nil
 }
 
 func (file *SourceFile) Unload() {
-	if file.ECS == nil || file.ID == 0 || !file.Loaded {
+	if file.Universe == nil || file.ID == 0 || !file.Loaded {
 		return
 	}
 
-	file.ECS.Lock.Lock()
-	defer file.ECS.Lock.Unlock()
+	file.Universe.Lock.Lock()
+	defer file.Universe.Lock.Unlock()
 
 	// We need to detach/delete all the entities from this file and unmap this ID.
 	// References will end up broken unless cleaned up beforehand.
 	toDelete := make([]Entity, 0)
-	file.ECS.Entities.Range(func(entity uint32) {
+	file.Universe.Entities.Range(func(entity uint32) {
 		e := Entity(entity)
 		if !e.IsExternal() || e.SourceID() != file.ID {
 			return
@@ -321,11 +321,11 @@ func (file *SourceFile) Unload() {
 		toDelete = append(toDelete, e)
 	})
 	for _, e := range toDelete {
-		file.ECS.Delete(e)
+		file.Universe.Delete(e)
 	}
 
-	delete(file.ECS.SourceFileNames, file.Source)
-	delete(file.ECS.SourceFileIDs, file.ID)
+	delete(file.Universe.SourceFileNames, file.Source)
+	delete(file.Universe.SourceFileIDs, file.ID)
 }
 
 func (file *SourceFile) String() string {

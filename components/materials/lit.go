@@ -21,8 +21,8 @@ func init() {
 	LitCID = ecs.RegisterComponent(&ecs.Column[Lit, *Lit]{Getter: GetLit})
 }
 
-func GetLit(db *ecs.ECS, e ecs.Entity) *Lit {
-	if asserted, ok := db.Component(e, LitCID).(*Lit); ok {
+func GetLit(u *ecs.Universe, e ecs.Entity) *Lit {
+	if asserted, ok := u.Component(e, LitCID).(*Lit); ok {
 		return asserted
 	}
 	return nil

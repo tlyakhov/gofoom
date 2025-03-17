@@ -28,11 +28,11 @@ func (a *AddSector) Activate() {
 
 func (a *AddSector) newSegment() {
 	seg := core.SectorSegment{}
-	seg.Construct(a.State().ECS, nil)
+	seg.Construct(a.State().Universe, nil)
 	seg.Sector = a.Sector
-	seg.HiSurface.Material = controllers.DefaultMaterial(a.State().ECS)
-	seg.LoSurface.Material = controllers.DefaultMaterial(a.State().ECS)
-	seg.Surface.Material = controllers.DefaultMaterial(a.State().ECS)
+	seg.HiSurface.Material = controllers.DefaultMaterial(a.State().Universe)
+	seg.LoSurface.Material = controllers.DefaultMaterial(a.State().Universe)
+	seg.Surface.Material = controllers.DefaultMaterial(a.State().Universe)
 	seg.P = *a.WorldGrid(&a.State().MouseDownWorld)
 
 	segs := a.Sector.Segments

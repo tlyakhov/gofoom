@@ -31,17 +31,17 @@ func (lc *LinkedController) Recalculate() {
 	// Remove this entity from any linked copies
 	for _, c := range lc.SourceComponents {
 		if c != nil {
-			lc.ECS.detach(c.Base().ComponentID, lc.Entity, false)
+			lc.Universe.detach(c.Base().ComponentID, lc.Entity, false)
 		}
 	}
 	lc.SourceComponents = make(ComponentTable, 0)
 	for _, sourceEntity := range lc.Sources {
-		for _, c := range lc.ECS.AllComponents(sourceEntity) {
+		for _, c := range lc.Universe.AllComponents(sourceEntity) {
 			if c == nil || !c.MultiAttachable() {
 				continue
 			}
 			lc.SourceComponents.Set(c)
-			lc.ECS.attach(lc.Entity, &c, c.Base().ComponentID)
+			lc.Universe.attach(lc.Entity, &c, c.Base().ComponentID)
 		}
 	}
 }

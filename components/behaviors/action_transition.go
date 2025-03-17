@@ -20,8 +20,8 @@ func init() {
 	ActionTransitionCID = ecs.RegisterComponent(&ecs.Column[ActionTransition, *ActionTransition]{Getter: GetActionTransition})
 }
 
-func GetActionTransition(db *ecs.ECS, e ecs.Entity) *ActionTransition {
-	if asserted, ok := db.Component(e, ActionTransitionCID).(*ActionTransition); ok {
+func GetActionTransition(u *ecs.Universe, e ecs.Entity) *ActionTransition {
+	if asserted, ok := u.Component(e, ActionTransitionCID).(*ActionTransition); ok {
 		return asserted
 	}
 	return nil
@@ -37,7 +37,7 @@ func (transition *ActionTransition) String() string {
 		if len(s) > 0 {
 			s += ", "
 		}
-		s += e.Format(transition.ECS)
+		s += e.Format(transition.Universe)
 	}
 	return "Transition to " + s
 }
@@ -59,13 +59,13 @@ func (transition *ActionTransition) Serialize() map[string]any {
 	result := transition.Attached.Serialize()
 
 	if len(transition.Next) > 0 {
-		result["Next"] = transition.Next.Serialize(transition.ECS)
+		result["Next"] = transition.Next.Serialize(transition.Universe)
 	}
 
 	return result
 }
 
-func IterateActions(db *ecs.ECS, start ecs.Entity, f func(action ecs.Entity, parentPosition *concepts.Vector3)) {
+func IterateActions(u *ecs.Universe, start ecs.Entity, f func(action ecs.Entity, parentPosition *concepts.Vector3)) {
 	var parentP *concepts.Vector3
 	visited := make(map[ecs.Entity]*concepts.Vector3, 1)
 	actions := make(map[ecs.Entity]ecs.Entity)
@@ -84,7 +84,7 @@ func IterateActions(db *ecs.ECS, start ecs.Entity, f func(action ecs.Entity, par
 
 		visited[action] = nil
 
-		if waypoint := GetActionWaypoint(db, action); waypoint != nil {
+		if waypoint := GetActionWaypoint(u, action); waypoint != nil {
 			visited[action] = &waypoint.P
 
 			if actions[action] != 0 {
@@ -96,7 +96,7 @@ func IterateActions(db *ecs.ECS, start ecs.Entity, f func(action ecs.Entity, par
 
 		f(action, parentP)
 
-		transition := GetActionTransition(db, action)
+		transition := GetActionTransition(u, action)
 		if transition == nil {
 			continue
 		}

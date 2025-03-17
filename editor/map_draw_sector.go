@@ -181,7 +181,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	}
 
 	if editor.SectorTypesVisible {
-		text := sector.Entity.Format(editor.ECS)
+		text := sector.Entity.Format(editor.Universe)
 		mw.Context.Push()
 		mw.Context.SetRGB(0.3, 0.3, 0.3)
 		mw.Context.DrawStringAnchored(text, sector.Center[0], sector.Center[1], 0.5, 0.5)
@@ -192,11 +192,11 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 }
 
 func (mw *MapWidget) DrawActions(start ecs.Entity) {
-	behaviors.IterateActions(editor.ECS, start, func(action ecs.Entity, parentP *concepts.Vector3) {
-		sel := selection.SelectableFromEntity(editor.ECS, action)
+	behaviors.IterateActions(editor.Universe, start, func(action ecs.Entity, parentP *concepts.Vector3) {
+		sel := selection.SelectableFromEntity(editor.Universe, action)
 
 		mw.Context.Push()
-		waypoint := behaviors.GetActionWaypoint(editor.ECS, action)
+		waypoint := behaviors.GetActionWaypoint(editor.Universe, action)
 		if waypoint == nil {
 			return
 		}

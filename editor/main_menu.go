@@ -106,7 +106,7 @@ func CreateMainMenu() {
 			if uc == nil {
 				return
 			}
-			editor.ECS.Save(uc.URI().Path())
+			editor.Universe.Save(uc.URI().Path())
 			editor.OpenFile = uc.URI().Path()
 			editor.Modified = false
 			editor.UpdateTitle()
@@ -129,7 +129,7 @@ func CreateMainMenu() {
 			editor.FileSaveAs.Menu.Action()
 			return
 		}
-		editor.ECS.Save(editor.OpenFile)
+		editor.Universe.Save(editor.OpenFile)
 		editor.Modified = false
 		editor.UpdateTitle()
 	})
@@ -280,12 +280,12 @@ func CreateMainMenu() {
 	editor.ViewSectorEntities.Menu = fyne.NewMenuItem("Toggle Sector Labels", func() { editor.SectorTypesVisible = !editor.SectorTypesVisible })
 
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
-	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() { controllers.ResetAllSpawnables(editor.ECS) })
+	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() { controllers.ResetAllSpawnables(editor.Universe) })
 	editor.BehaviorsPause.NoModifier = true
 	editor.BehaviorsPause.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5}
 	editor.BehaviorsPause.Menu = fyne.NewMenuItem("Pause simulation", func() {
-		editor.ECS.EditorPaused = !editor.ECS.EditorPaused
-		if editor.ECS.EditorPaused {
+		editor.Universe.EditorPaused = !editor.Universe.EditorPaused
+		if editor.Universe.EditorPaused {
 			editor.BehaviorsPause.Menu.Label = "Resume simulation"
 		} else {
 			editor.BehaviorsPause.Menu.Label = "Pause simulation"
@@ -296,7 +296,7 @@ func CreateMainMenu() {
 	editor.BehaviorsRespawn.Menu = fyne.NewMenuItem("Respawn", func() {
 		editor.Lock.Lock()
 		defer editor.Lock.Unlock()
-		controllers.Respawn(editor.ECS, true)
+		controllers.Respawn(editor.Universe, true)
 	})
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)

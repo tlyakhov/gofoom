@@ -170,11 +170,11 @@ func (s *Segment) WhichSide(p *concepts.Vector2) float64 {
 	return s.Normal.Dot(p.Sub(s.A))
 }
 
-func (s *Segment) Construct(db *ecs.ECS, data map[string]any) {
+func (s *Segment) Construct(u *ecs.Universe, data map[string]any) {
 	s.A = new(concepts.Vector2)
 	s.B = new(concepts.Vector2)
 	s.Normal = concepts.Vector2{}
-	s.Surface.Construct(db, nil)
+	s.Surface.Construct(u, nil)
 
 	if data == nil {
 		return
@@ -187,13 +187,13 @@ func (s *Segment) Construct(db *ecs.ECS, data map[string]any) {
 		s.B.Deserialize(v.(string))
 	}
 	if v, ok := data["Mid"]; ok {
-		s.Surface.Construct(db, v.(map[string]any))
+		s.Surface.Construct(u, v.(map[string]any))
 	}
 	if v, ok := data["Surface"]; ok {
-		s.Surface.Construct(db, v.(map[string]any))
+		s.Surface.Construct(u, v.(map[string]any))
 	}
 	if v, ok := data["ContactScripts"]; ok {
-		s.ContactScripts = ecs.ConstructSlice[*Script](db, v, nil)
+		s.ContactScripts = ecs.ConstructSlice[*Script](u, v, nil)
 	}
 	s.Recalculate()
 }

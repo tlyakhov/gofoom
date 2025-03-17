@@ -42,29 +42,29 @@ func (iic *InventoryItemController) Target(target ecs.Attachable, e ecs.Entity) 
 	if iic.InventoryItem == nil || !iic.InventoryItem.IsActive() {
 		return false
 	}
-	iic.body = core.GetBody(iic.ECS, iic.Entity)
+	iic.body = core.GetBody(iic.Universe, iic.Entity)
 	return true
 }
 
 func (iic *InventoryItemController) cacheAutoProximity() {
-	if ecs.CachedGeneratedComponent(iic.ECS, &iic.autoProximity, "_InventoryItemAutoProximity", behaviors.ProximityCID) {
+	if ecs.CachedGeneratedComponent(iic.Universe, &iic.autoProximity, "_InventoryItemAutoProximity", behaviors.ProximityCID) {
 		iic.autoProximity.Hysteresis = 0
 		iic.autoProximity.InRange.Code = `
-				if p := behaviors.GetPlayer(s.ECS, body.Entity); p != nil {
+				if p := behaviors.GetPlayer(s.Universe, body.Entity); p != nil {
 					p.HoveringTargets.Add(onEntity)
 				}`
 
-		iic.ECS.ActAllControllersOneEntity(iic.autoProximity.Entity, ecs.ControllerRecalculate)
+		iic.Universe.ActAllControllersOneEntity(iic.autoProximity.Entity, ecs.ControllerRecalculate)
 	}
 }
 
 func (iic *InventoryItemController) cacheAutoTargetable() {
-	if ecs.CachedGeneratedComponent(iic.ECS, &iic.autoPlayerTargetable, "_InventoryItemAutoTargetable", behaviors.PlayerTargetableCID) {
+	if ecs.CachedGeneratedComponent(iic.Universe, &iic.autoPlayerTargetable, "_InventoryItemAutoTargetable", behaviors.PlayerTargetableCID) {
 		iic.autoPlayerTargetable.Frob.Code = `
 			if carrier == nil || body == nil { return }
 			controllers.PickUpInventoryItem(carrier, body.Entity)`
 		iic.autoPlayerTargetable.Message = `Pick up {{with ecs_Named .TargetableEntity}}{{.Name}}{{else}}item{{end}}`
-		iic.ECS.ActAllControllersOneEntity(iic.autoPlayerTargetable.Entity, ecs.ControllerRecalculate)
+		iic.Universe.ActAllControllersOneEntity(iic.autoPlayerTargetable.Entity, ecs.ControllerRecalculate)
 	}
 }
 
@@ -80,26 +80,26 @@ func (iic *InventoryItemController) Recalculate() {
 
 	if iic.Flags&behaviors.InventoryItemAutoProximity != 0 {
 		iic.cacheAutoProximity()
-		p := behaviors.GetProximity(iic.ECS, iic.Entity)
+		p := behaviors.GetProximity(iic.Universe, iic.Entity)
 		if p != nil && p != iic.autoProximity {
-			iic.ECS.DetachComponent(behaviors.ProximityCID, iic.Entity)
+			iic.Universe.DetachComponent(behaviors.ProximityCID, iic.Entity)
 			p = nil
 		}
 		if p == nil {
 			var a ecs.Attachable = iic.autoProximity
-			iic.ECS.Attach(behaviors.ProximityCID, iic.Entity, &a)
+			iic.Universe.Attach(behaviors.ProximityCID, iic.Entity, &a)
 		}
 	}
 	if iic.Flags&behaviors.InventoryItemAutoPlayerTargetable != 0 {
 		iic.cacheAutoTargetable()
-		pt := behaviors.GetPlayerTargetable(iic.ECS, iic.Entity)
+		pt := behaviors.GetPlayerTargetable(iic.Universe, iic.Entity)
 		if pt != nil && pt != iic.autoPlayerTargetable {
-			iic.ECS.DetachComponent(behaviors.PlayerTargetableCID, iic.Entity)
+			iic.Universe.DetachComponent(behaviors.PlayerTargetableCID, iic.Entity)
 			pt = nil
 		}
 		if pt == nil {
 			var a ecs.Attachable = iic.autoPlayerTargetable
-			iic.ECS.Attach(behaviors.PlayerTargetableCID, iic.Entity, &a)
+			iic.Universe.Attach(behaviors.PlayerTargetableCID, iic.Entity, &a)
 		}
 	}
 }

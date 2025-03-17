@@ -10,10 +10,10 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func Respawn(db *ecs.ECS, force bool) {
+func Respawn(u *ecs.Universe, force bool) {
 	spawns := make([]*behaviors.Player, 0)
 	players := make([]*behaviors.Player, 0)
-	col := ecs.ColumnFor[behaviors.Player](db, behaviors.PlayerCID)
+	col := ecs.ColumnFor[behaviors.Player](u, behaviors.PlayerCID)
 	for i := range col.Cap() {
 		p := col.Value(i)
 		if p == nil || !p.Active {
@@ -34,7 +34,7 @@ func Respawn(db *ecs.ECS, force bool) {
 	}
 
 	for len(players) > maxPlayers {
-		db.Delete(players[len(players)-1].Entity)
+		u.Delete(players[len(players)-1].Entity)
 		players = players[:len(players)-1]
 	}
 
@@ -44,9 +44,9 @@ func Respawn(db *ecs.ECS, force bool) {
 
 	spawn := spawns[rand.Int()%len(spawns)]
 	// TODO: This kind of cloning operation is used in other places (e.g. the
-	// editor). Should this be pulled into ECS? Will need to figure out how to
+	// editor). Should this be pulled into Universe? Will need to figure out how to
 	// address deep vs. shallow cloning and wiring up any relationships.
-	copiedSpawn := db.SerializeEntity(spawn.Entity)
+	copiedSpawn := u.SerializeEntity(spawn.Entity)
 	var pastedEntity ecs.Entity
 	for name, cid := range ecs.Types().IDs {
 		mappedData := copiedSpawn[name]
@@ -54,11 +54,11 @@ func Respawn(db *ecs.ECS, force bool) {
 			continue
 		}
 		if pastedEntity == 0 {
-			pastedEntity = db.NewEntity()
+			pastedEntity = u.NewEntity()
 		}
 		mappedComponent := mappedData.(map[string]any)
-		c := db.LoadComponentWithoutAttaching(cid, mappedComponent)
-		db.Attach(cid, pastedEntity, &c)
+		c := u.LoadComponentWithoutAttaching(cid, mappedComponent)
+		u.Attach(cid, pastedEntity, &c)
 		if cid == behaviors.PlayerCID {
 			player := c.(*behaviors.Player)
 			player.Spawn = false
@@ -70,11 +70,11 @@ func Respawn(db *ecs.ECS, force bool) {
 			// TODO: Clone/respawn inventory
 		}
 	}
-	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerRecalculate)
-	db.ActAllControllersOneEntity(pastedEntity, ecs.ControllerAlways)
+	u.ActAllControllersOneEntity(pastedEntity, ecs.ControllerRecalculate)
+	u.ActAllControllersOneEntity(pastedEntity, ecs.ControllerAlways)
 }
 
-func ResetAllSpawnables(ecs *ecs.ECS) {
+func ResetAllSpawnables(ecs *ecs.Universe) {
 	ecs.Simulation.Spawnables.Range(func(d dynamic.Spawnable, _ struct{}) bool {
 		d.ResetToSpawn()
 		return true

@@ -53,7 +53,7 @@ func (a *MoveSurface) Undo() {
 		i++
 	}
 
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
 }
 
@@ -84,6 +84,6 @@ func (a *MoveSurface) Redo() {
 			plane.Z.ResetToSpawn()
 		}
 	}
-	a.State().ECS.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
 }

@@ -27,8 +27,8 @@ func init() {
 	SpriteSheetCID = ecs.RegisterComponent(&ecs.Column[SpriteSheet, *SpriteSheet]{Getter: GetSpriteSheet})
 }
 
-func GetSpriteSheet(db *ecs.ECS, e ecs.Entity) *SpriteSheet {
-	if asserted, ok := db.Component(e, SpriteSheetCID).(*SpriteSheet); ok {
+func GetSpriteSheet(u *ecs.Universe, e ecs.Entity) *SpriteSheet {
+	if asserted, ok := u.Component(e, SpriteSheetCID).(*SpriteSheet); ok {
 		return asserted
 	}
 	return nil
@@ -38,14 +38,14 @@ func (s *SpriteSheet) MultiAttachable() bool { return true }
 
 func (s *SpriteSheet) OnDelete() {
 	defer s.Attached.OnDelete()
-	if s.ECS != nil {
-		s.Frame.Detach(s.ECS.Simulation)
+	if s.Universe != nil {
+		s.Frame.Detach(s.Universe.Simulation)
 	}
 }
 
-func (s *SpriteSheet) OnAttach(db *ecs.ECS) {
-	s.Attached.OnAttach(db)
-	s.Frame.Attach(db.Simulation)
+func (s *SpriteSheet) OnAttach(u *ecs.Universe) {
+	s.Attached.OnAttach(u)
+	s.Frame.Attach(u.Simulation)
 
 }
 
@@ -106,7 +106,7 @@ func (s *SpriteSheet) Construct(data map[string]any) {
 func (s *SpriteSheet) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	if s.Material != 0 {
-		result["Material"] = s.Material.Serialize(s.ECS)
+		result["Material"] = s.Material.Serialize(s.Universe)
 	}
 	if s.Rows != 1 {
 		result["Rows"] = strconv.FormatUint(uint64(s.Rows), 10)

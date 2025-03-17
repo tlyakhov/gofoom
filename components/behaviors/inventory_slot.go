@@ -32,8 +32,8 @@ func init() {
 	InventorySlotCID = ecs.RegisterComponent(&ecs.Column[InventorySlot, *InventorySlot]{Getter: GetInventorySlot})
 }
 
-func GetInventorySlot(db *ecs.ECS, e ecs.Entity) *InventorySlot {
-	if asserted, ok := db.Component(e, InventorySlotCID).(*InventorySlot); ok {
+func GetInventorySlot(u *ecs.Universe, e ecs.Entity) *InventorySlot {
+	if asserted, ok := u.Component(e, InventorySlotCID).(*InventorySlot); ok {
 		return asserted
 	}
 	return nil
@@ -80,7 +80,7 @@ func (s *InventorySlot) Serialize() map[string]any {
 	data["Count"] = s.Count.Serialize()
 	data["Class"] = s.Class
 	if s.Image != 0 {
-		data["Image"] = s.Image.Serialize(s.ECS)
+		data["Image"] = s.Image.Serialize(s.Universe)
 	}
 
 	return data
