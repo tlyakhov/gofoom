@@ -53,6 +53,35 @@ func (a *Attached) IsActive() bool {
 	return a != nil && a.Attachments > 0 && a.Active
 }
 
+// IsExternal checks if the component is sourced from another file.
+func (a *Attached) IsExternal() bool {
+	if a.Entity.IsExternal() {
+		return true
+	}
+
+	for _, e := range a.Entities {
+		if e != 0 && e.IsExternal() {
+			return true
+		}
+	}
+	return false
+}
+
+// ExternalEntities returns an array of external file entities
+func (a *Attached) ExternalEntities() []Entity {
+	if a.Entity.IsExternal() {
+		return []Entity{a.Entity}
+	}
+
+	result := []Entity{}
+	for _, e := range a.Entities {
+		if e != 0 && e.IsExternal() {
+			result = append(result, e)
+		}
+	}
+	return result
+}
+
 // GetECS returns the Universe instance associated with this component.
 func (a *Attached) GetECS() *Universe {
 	return a.Universe

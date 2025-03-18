@@ -198,7 +198,7 @@ func (u *Universe) attach(entity Entity, component *Attachable, componentID Comp
 	attachable := *component
 	a := attachable.Base()
 	if a.Attachments > 0 && !attachable.MultiAttachable() {
-		log.Printf("Universe.attach: Component %v is already attached to %v and not multi-attachable.", attachable.String(), a.Entity)
+		log.Printf("Universe.attach: Component %v is already attached to %v and not multi-attachable.", attachable.String(), a.Entity.ShortString())
 	}
 	a.Entities.Set(entity)
 	a.Entity = entity
@@ -449,6 +449,14 @@ func (u *Universe) serializeEntity(entity Entity, savedComponents map[uint64]Ent
 				yamlEntity[yamlID] = savedEntity.Serialize(u)
 				continue
 			}
+		}
+
+		if component.Base().IsExternal() {
+			// Just pick one
+			// TODO: This has a code smell. Should there be a particular way
+			// to pick an entity ID to reference when saving?
+			yamlEntity[yamlID] = component.Base().ExternalEntities()[0].Serialize(u)
+			continue
 		}
 
 		yamlComponent := component.Serialize()

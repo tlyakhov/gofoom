@@ -58,18 +58,32 @@ const entityDelimiterLength = len(EntityDelimiter)
 // EntityRegexp is a regular expression used to parse entity strings.
 var EntityRegexp = regexp.MustCompile(`^∈⋮(?<entity>[0-9]+)(?:∈⋮(?<name>[^∈\s]*))?(?:∈⋮(?<file_id>[0-9]+)∈⋮(?<file>[^∈\s]+))?`)
 
+// These are indexes into regexp matches for `EntityRegexp`
+const (
+	EntityRegexpIdxMatch    = 0
+	EntityRegexpIdxEntity   = 1
+	EntityRegexpIdxName     = 2
+	EntityRegexpIdxSourceID = 3
+	EntityRegexpIdxFile     = 4
+)
+
 // String returns a human-readable version string representation of the entity,
 // ignoring the name and original file.
 func (e Entity) String() string {
-	return EntityDelimiter + strconv.FormatInt(int64(e), 10)
+	if e.IsExternal() {
+		return EntityDelimiter + strconv.FormatInt(int64(e.Local()), 10) +
+			" (source: " + strconv.FormatInt(int64(e.SourceID()), 10) + ")"
+	} else {
+		return EntityDelimiter + strconv.FormatInt(int64(e), 10)
+	}
 }
 
 // ShortString returns a concise human-readable version of the entity, including
 // the source ID if it's external.
 func (e Entity) ShortString() string {
 	if e.IsExternal() {
-		return strconv.FormatInt(int64(e&MaxEntities), 10) +
-			" (" + strconv.FormatInt(int64(e>>EntityBits), 10) + ")"
+		return strconv.FormatInt(int64(e.Local()), 10) +
+			" (" + strconv.FormatInt(int64(e.SourceID()), 10) + ")"
 	} else {
 		return strconv.FormatInt(int64(e), 10)
 	}
@@ -99,9 +113,9 @@ func ParseEntity(e string) (Entity, error) {
 	if parts == nil {
 		return 0, errors.New("Can't parse entity " + e)
 	}
-	parsedEntity, err := strconv.ParseInt(parts[1], 10, EntityBits+EntitySourceIDBits)
-	if len(parts) >= 4 && len(parts[3]) > 0 {
-		parsedID, err := strconv.ParseInt(parts[3], 10, EntitySourceIDBits)
+	parsedEntity, err := strconv.ParseInt(parts[EntityRegexpIdxEntity], 10, EntityBits+EntitySourceIDBits)
+	if len(parts) >= 4 && len(parts[EntityRegexpIdxSourceID]) > 0 {
+		parsedID, err := strconv.ParseInt(parts[EntityRegexpIdxSourceID], 10, EntitySourceIDBits)
 		if err != nil {
 			return Entity(parsedEntity), err
 		}
@@ -162,7 +176,7 @@ func (e Entity) SerializeRaw(name string, file string) string {
 // Serialize serializes the entity to a string, including its name and source
 // file information based on the Universe context.
 func (e Entity) Serialize(u *Universe) string {
-	id := e.Local().String()
+	id := EntityDelimiter + strconv.FormatUint(uint64(e.Local()), 10)
 	if e == 0 {
 		return id
 	}
