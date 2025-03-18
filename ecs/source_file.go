@@ -63,7 +63,7 @@ func iterateFileEntities(contents string, fn processFileEntitiesFunc) string {
 			builder.WriteRune(r)
 			continue
 		}
-		v, err := strconv.ParseInt(parts[1], 10, 64)
+		v, err := strconv.ParseInt(parts[EntityRegexpIdxEntity], 10, 64)
 		if err != nil {
 			log.Printf("SourceFile.replaceSourceID: error parsing entity %v", contents[i:i+3])
 			builder.WriteRune(r)
@@ -72,20 +72,22 @@ func iterateFileEntities(contents string, fn processFileEntitiesFunc) string {
 		entity := Entity(v)
 		name := ""
 		file := ""
-		if len(parts) > 2 {
-			name, _ = url.QueryUnescape(parts[2])
+		if len(parts) > EntityRegexpIdxName {
+			name, _ = url.QueryUnescape(parts[EntityRegexpIdxName])
 		}
-		if len(parts) > 3 {
-			file, _ = url.QueryUnescape(parts[3])
+		if len(parts) > 4 {
+			if len(parts[EntityRegexpIdxSourceID]) > 0 {
+				sourceID, _ := strconv.ParseUint(parts[EntityRegexpIdxSourceID], 10, EntitySourceIDBits)
+				entity += Entity(sourceID) << EntityBits
+			}
+			file, _ = url.QueryUnescape(parts[EntityRegexpIdxFile])
 		}
 
 		if !fn(&builder, entity, name, file) {
-			builder.WriteString(parts[0])
+			builder.WriteString(parts[EntityRegexpIdxMatch])
 		}
-		skip = len([]rune(parts[0])) - 1
+		skip = len([]rune(parts[EntityRegexpIdxMatch])) - 1
 	}
-
-	fmt.Println(builder.String())
 	return builder.String()
 }
 
@@ -162,7 +164,7 @@ func (file *SourceFile) mapFile() (string, error) {
 				return false
 			}
 			e += Entity(file.ID) << EntityBits
-			builder.WriteString(e.SerializeRaw(name, filename))
+			builder.WriteString(e.SerializeRaw(name, file.Source))
 			return true
 		})
 	file.rangeFile(contentsSubbed, func(entity Entity, data map[string]any) {
@@ -223,7 +225,9 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 				return false
 			}
 			nestedFile := file.Universe.SourceFileNames[filename]
-			e = Entity(nestedFile.ID)<<EntityBits + e&MaxEntities
+			e2 := Entity(nestedFile.ID)<<EntityBits + e&MaxEntities
+			log.Printf("%v (name=%v,file=%v) -> %v. Serialized to %v", e.String(), name, file, e2, e2.SerializeRaw(name, filename))
+			e = e2
 			builder.WriteString(e.SerializeRaw(name, filename))
 			return true
 		})

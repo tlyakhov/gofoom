@@ -56,6 +56,9 @@ func Respawn(u *ecs.Universe, force bool) {
 		if pastedEntity == 0 {
 			pastedEntity = u.NewEntity()
 		}
+		if _, ok := mappedData.(string); ok {
+			continue
+		}
 		mappedComponent := mappedData.(map[string]any)
 		c := u.LoadComponentWithoutAttaching(cid, mappedComponent)
 		u.Attach(cid, pastedEntity, &c)
