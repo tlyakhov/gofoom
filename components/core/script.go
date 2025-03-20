@@ -119,7 +119,7 @@ func (s *Script) OnAttach(u *ecs.Universe) {
 	s.Universe = u
 }
 
-func (s *Script) GetECS() *ecs.Universe {
+func (s *Script) GetUniverse() *ecs.Universe {
 	return s.Universe
 }
 

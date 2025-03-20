@@ -11,6 +11,8 @@
   behaviors.VerticalDoor:
     Duration: 1000
     TweeningFunc: EaseInOut2
+  ecs.Named:
+    Name: Basic Vertical Door
 - Entity: ∈⋮2
   behaviors.InventoryItem:
     Class: Flower
@@ -216,63 +218,6 @@
     Spread: 3
   ecs.Named:
     Name: WeirdGun
-- Entity: ∈⋮149
-  core.Sector:
-    Bottom:
-      Surface:
-        Material: ∈⋮2
-      Z:
-        Damping: 0
-        Freq: 1e-06
-        Now: 16
-        Response: 0
-        Spawn: 16
-    FloorFriction: 0.85
-    Segments:
-      - Hi:
-          Material: ∈⋮2
-        Lo:
-          Material: ∈⋮2
-        P: 840, -330
-        Surface:
-          Material: ∈⋮154
-      - Hi:
-          Material: ∈⋮2
-        Lo:
-          Material: ∈⋮2
-          Transform:
-            Now: 1, 0, 0, 0, 0.09411764705882353, 0
-            Spawn: 1, 0, 0, 0, 0.09411764705882353, 0
-        P: 880, -330
-        Surface:
-          Material: ∈⋮154
-          Transform:
-            Now: 10.625, 0, 0, 0, 1, 0
-            Spawn: 10.625, 0, 0, 0, 1, 0
-      - Hi:
-          Material: ∈⋮2
-        Lo:
-          Material: ∈⋮2
-        P: 880, -730
-        Surface:
-          Material: ∈⋮154
-      - AdjacentSector: ∈⋮72
-        Hi:
-          Material: ∈⋮2
-        Lo:
-          Material: ∈⋮2
-        P: 840, -730
-        Surface:
-          Material: ∈⋮2
-    Top:
-      Surface:
-        Material: ∈⋮2
-      Z:
-        Damping: 0
-        Freq: 1e-06
-        Now: 48
-        Response: 0
-        Spawn: 48
 - Entity: ∈⋮153
   behaviors.Proximity:
     InRange:

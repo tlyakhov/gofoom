@@ -112,6 +112,6 @@ func (s *ShaderStage) OnAttach(u *ecs.Universe) {
 	s.Universe = u
 }
 
-func (s *ShaderStage) GetECS() *ecs.Universe {
+func (s *ShaderStage) GetUniverse() *ecs.Universe {
 	return s.Universe
 }
