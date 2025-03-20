@@ -82,8 +82,8 @@ func (a *Attached) ExternalEntities() []Entity {
 	return result
 }
 
-// GetECS returns the Universe instance associated with this component.
-func (a *Attached) GetECS() *Universe {
+// GetUniverse returns the Universe instance associated with this component.
+func (a *Attached) GetUniverse() *Universe {
 	return a.Universe
 }
 

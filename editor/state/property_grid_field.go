@@ -62,11 +62,16 @@ func (f *PropertyGridField) Disabled() bool {
 		return false
 	}
 
-	disabled := false
+	// TODO: Reconsider this logic... need to be careful
+	// If any of the user's selected entities are internal, keep enabled.
+	// ...aka if all of the selected entities are external, disable.
+	externalEntitiesOnly := true
+	externalComponentsOnly := true
 	for _, v := range f.Values {
-		disabled = disabled || v.Entity.IsExternal()
+		externalEntitiesOnly = externalEntitiesOnly && v.Entity.IsExternal()
+		externalComponentsOnly = externalComponentsOnly && v.Component.Base().IsExternal()
 	}
-	return disabled
+	return externalEntitiesOnly || externalComponentsOnly
 }
 
 func (f *PropertyGridField) Short() string {

@@ -82,7 +82,7 @@ type _tlyakhov_gofoom_ecs_Attachable struct {
 	IValue           interface{}
 	WBase            func() *ecs.Attached
 	WConstruct       func(data map[string]any)
-	WGetECS          func() *ecs.Universe
+	WGetUniverse          func() *ecs.Universe
 	WIsActive        func() bool
 	WMultiAttachable func() bool
 	WOnAttach        func(u *ecs.Universe)
@@ -98,8 +98,8 @@ func (W _tlyakhov_gofoom_ecs_Attachable) Base() *ecs.Attached {
 func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) GetECS() *ecs.Universe {
-	return W.WGetECS()
+func (W _tlyakhov_gofoom_ecs_Attachable) GetUniverse() *ecs.Universe {
+	return W.WGetUniverse()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) IsActive() bool {
 	return W.WIsActive()
@@ -213,7 +213,7 @@ func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable, a1 ecs.Entity
 type _tlyakhov_gofoom_ecs_Serializable struct {
 	IValue     interface{}
 	WConstruct func(data map[string]any)
-	WGetECS    func() *ecs.Universe
+	WGetUniverse    func() *ecs.Universe
 	WOnAttach  func(u *ecs.Universe)
 	WSerialize func() map[string]any
 }
@@ -221,8 +221,8 @@ type _tlyakhov_gofoom_ecs_Serializable struct {
 func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
-func (W _tlyakhov_gofoom_ecs_Serializable) GetECS() *ecs.Universe {
-	return W.WGetECS()
+func (W _tlyakhov_gofoom_ecs_Serializable) GetUniverse() *ecs.Universe {
+	return W.WGetUniverse()
 }
 func (W _tlyakhov_gofoom_ecs_Serializable) OnAttach(u *ecs.Universe) {
 	W.WOnAttach(u)

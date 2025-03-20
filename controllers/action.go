@@ -43,7 +43,7 @@ func (ac *ActionController) Methods() ecs.ControllerMethod {
 }
 
 func (ac *ActionController) Target(target ecs.Attachable, e ecs.Entity) bool {
-	if target.GetECS().Simulation.EditorPaused {
+	if target.GetUniverse().Simulation.EditorPaused {
 		return false
 	}
 	ac.Entity = e

@@ -60,7 +60,7 @@ func (col *Column[T, PT]) From(source AttachableColumn, ecs *Universe) {
 func (col *Column[T, PT]) Value(index int) PT {
 	// No bounds checking for performance. This should always be inlined
 	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
-	if ptr.GetECS() == nil {
+	if ptr.GetUniverse() == nil {
 		return nil
 	}
 	return ptr
@@ -73,7 +73,7 @@ func (col *Column[T, PT]) Attachable(index int) Attachable {
 	// Duplicates code in .Value() because the return type is different here and nil
 	// in golang behaves idiosyncratically
 	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
-	if ptr.GetECS() == nil {
+	if ptr.GetUniverse() == nil {
 		return nil
 	}
 	return ptr

@@ -15,8 +15,8 @@ type Serializable interface {
 	Serialize() map[string]any
 	// OnAttach is called when the component is attached to an Universe instance.
 	OnAttach(u *Universe)
-	// GetECS returns the Universe instance associated with the component.
-	GetECS() *Universe
+	// GetUniverse returns the Universe instance associated with the component.
+	GetUniverse() *Universe
 }
 
 // SubSerializable is an interface for sub-components that can be serialized and deserialized.

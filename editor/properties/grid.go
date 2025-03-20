@@ -39,6 +39,7 @@ type PropertyGridState struct {
 	Ancestors        []any
 	ParentField      *state.PropertyGridField
 	Entity           ecs.Entity
+	Component        ecs.Attachable
 }
 
 type Grid struct {
@@ -81,7 +82,7 @@ func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
 	pgs.Depth++
 	pgs.Visited.Add(target)
 
-	for i := 0; i < targetType.NumField(); i++ {
+	for i := range targetType.NumField() {
 		field := targetType.FieldByIndex([]int{i})
 		fieldValue := targetValue.Elem().Field(i)
 		tag, ok := field.Tag.Lookup("editable")
@@ -134,6 +135,7 @@ func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
 
 		valueMetadata := &state.PropertyGridFieldValue{
 			Entity:           pgs.Entity,
+			Component:        pgs.Component,
 			Value:            fieldValue.Addr(),
 			ParentCollection: pgs.ParentCollection,
 			Ancestors:        pgs.Ancestors,
@@ -153,7 +155,7 @@ func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
 			(field.Type.Elem().Kind() == reflect.Pointer ||
 				field.Type.Elem().Kind() == reflect.Struct ||
 				field.Type.Elem().Kind() == reflect.Interface) {
-			for i := 0; i < fieldValue.Len(); i++ {
+			for i := range fieldValue.Len() {
 				childName := fmt.Sprintf("%v[%v]", name, i)
 				// Add slice element inc/dec/delete controls
 				indexedValue := fieldValue.Index(i)
@@ -190,16 +192,12 @@ func (g *Grid) fieldsFromSelection(sel *selection.Selection) *PropertyGridState 
 	pgs := PropertyGridState{Visited: make(containers.Set[any]), Fields: make(map[string]*state.PropertyGridField)}
 	for _, s := range sel.Exact {
 		switch s.Type {
-		case selection.SelectableHi:
-			fallthrough
-		case selection.SelectableLow:
-			fallthrough
-		case selection.SelectableMid:
-			fallthrough
-		case selection.SelectableSectorSegment:
+		case selection.SelectableHi, selection.SelectableLow,
+			selection.SelectableMid, selection.SelectableSectorSegment:
 			pgs.Ancestors = []any{s.SectorSegment}
 			pgs.ParentName = "Segment"
 			pgs.Entity = s.Entity
+			pgs.Component = s.Sector
 			g.fieldsFromStruct(s.SectorSegment, pgs)
 			continue
 		}
@@ -215,6 +213,7 @@ func (g *Grid) fieldsFromSelection(sel *selection.Selection) *PropertyGridState 
 			n := strings.Split(reflect.TypeOf(c).String(), ".")
 			pgs.ParentName = n[len(n)-1]
 			pgs.Entity = s.Entity
+			pgs.Component = c
 			g.fieldsFromStruct(c, pgs)
 		}
 	}

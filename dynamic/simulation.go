@@ -41,6 +41,9 @@ func NewSimulation() *Simulation {
 }
 
 func (s *Simulation) Step() {
+	// TODO: We should add some functionality to save all sim values including
+	// time to a ledger. Would be great for DOOM style "demos", replays, and
+	// also for debugging weird edge cases.
 	s.PrevTimestamp = s.Timestamp
 	s.Timestamp = hrtime.Now().Milliseconds()
 	s.FrameMillis = float64(s.Timestamp - s.PrevTimestamp)
