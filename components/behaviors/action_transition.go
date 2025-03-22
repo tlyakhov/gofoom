@@ -51,7 +51,7 @@ func (transition *ActionTransition) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Next"]; ok {
-		transition.Next = ecs.ParseEntityTable(v)
+		transition.Next = ecs.ParseEntityTable(v, false)
 	}
 }
 

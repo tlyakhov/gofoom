@@ -76,8 +76,8 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 		return
 	} else if _, ok := field.Values[0].Interface().(containers.Set[ecs.Entity]); ok {
 		entry.OnSubmitted = func(text string) {
-			split := strings.Split(text, ",")
-			g.ApplySetPropertyAction(field, reflect.ValueOf(ecs.DeserializeEntities(split)))
+			panic("unimplemented")
+			//g.ApplySetPropertyAction(field, reflect.ValueOf(ecs.DeserializeEntities(split)))
 		}
 		return
 	}

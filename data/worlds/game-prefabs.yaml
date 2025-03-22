@@ -131,10 +131,6 @@
       - ∈⋮189
       - ∈⋮177
       - ∈⋮169
-  behaviors.Player:
-    Spawn: true
-  ecs.Named:
-    Name: Spawn
 - Entity: ∈⋮127
   ecs.Named:
     Name: Toxic

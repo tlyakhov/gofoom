@@ -37,6 +37,10 @@ func GetAlive(u *ecs.Universe, e ecs.Entity) *Alive {
 	return nil
 }
 
+func (a *Alive) MultiAttachable() bool {
+	return true
+}
+
 func (a *Alive) String() string {
 	return fmt.Sprintf("Alive: %.2f", a.Health)
 }

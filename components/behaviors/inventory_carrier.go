@@ -32,6 +32,10 @@ func GetInventoryCarrier(u *ecs.Universe, e ecs.Entity) *InventoryCarrier {
 	return nil
 }
 
+func (ic *InventoryCarrier) MultiAttachable() bool {
+	return true
+}
+
 func (ic *InventoryCarrier) HasAtLeast(class string, min int) bool {
 	for _, e := range ic.Inventory {
 		if e == 0 {
@@ -55,7 +59,7 @@ func (ic *InventoryCarrier) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Inventory"]; ok {
-		ic.Inventory = ecs.ParseEntityTable(v)
+		ic.Inventory = ecs.ParseEntityTable(v, false)
 	}
 
 	if v, ok := data["SelectedWeapon"]; ok {
