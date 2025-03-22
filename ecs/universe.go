@@ -379,51 +379,6 @@ func (u *Universe) EntityAllNoSave(entity Entity) bool {
 	return true
 }
 
-// TODO: Reuse code in SourceFile for this
-func (u *Universe) DeserializeAndAttachEntity(yamlEntityComponents map[string]any) {
-	var yamlEntity string
-	var entity Entity
-	var ok bool
-	var err error
-	if yamlEntityComponents["Entity"] == nil {
-		log.Printf("Universe.DeserializeAndAttachEntity: yaml object doesn't have entity key")
-		return
-	}
-	if yamlEntity, ok = yamlEntityComponents["Entity"].(string); !ok {
-		log.Printf("Universe.DeserializeAndAttachEntity: yaml entity isn't string")
-		return
-	}
-	if entity, err = ParseEntity(yamlEntity); err != nil {
-		log.Printf("Universe.DeserializeAndAttachEntity: yaml entity can't be parsed: %v", err)
-		return
-	}
-
-	u.Entities.Set(uint32(entity))
-
-	for name, cid := range Types().IDs {
-		yamlData := yamlEntityComponents[name]
-		if yamlData == nil {
-			continue
-		}
-		if yamlLink, ok := yamlData.(string); ok {
-			linkedEntity, _ := ParseEntity(yamlLink)
-			if linkedEntity != 0 {
-				c := u.Component(linkedEntity, cid)
-				if c != nil {
-					u.attach(entity, &c, cid)
-				}
-			}
-		} else {
-			yamlComponent := yamlData.(map[string]any)
-			var attached Attachable
-			u.attach(entity, &attached, cid)
-			if attached.Base().Attachments == 1 {
-				attached.Construct(yamlComponent)
-			}
-		}
-	}
-}
-
 func (u *Universe) Load(filename string) error {
 	file := u.NewAttachedComponent(u.NewEntity(), SourceFileCID).(*SourceFile)
 	file.Source = filename

@@ -41,6 +41,9 @@ func (lc *LinkedController) Recalculate() {
 				continue
 			}
 			lc.SourceComponents.Set(c)
+			if lc.AlwaysReplace {
+				lc.Universe.detach(c.Base().ComponentID, lc.Entity, false)
+			}
 			lc.Universe.attach(lc.Entity, &c, c.Base().ComponentID)
 		}
 	}

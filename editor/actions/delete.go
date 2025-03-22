@@ -31,9 +31,32 @@ func (a *Delete) Activate() {
 }
 
 func (a *Delete) Undo() {
+	u := a.State().Universe
 	for s, saved := range a.Saved {
-		s.Universe.Delete(s.Entity)
-		s.Universe.DeserializeAndAttachEntity(saved.(map[string]any))
+		data := saved.(map[string]any)
+		for name, cid := range ecs.Types().IDs {
+			yamlData := data[name]
+			if yamlData == nil {
+				continue
+			}
+
+			if yamlLink, ok := yamlData.(string); ok {
+				linkedEntity, _ := ecs.ParseEntity(yamlLink)
+				if linkedEntity != 0 {
+					c := u.Component(linkedEntity, cid)
+					if c != nil {
+						u.Attach(cid, s.Entity, &c)
+					}
+				}
+			} else {
+				yamlComponent := yamlData.(map[string]any)
+				var attached ecs.Attachable
+				u.Attach(cid, s.Entity, &attached)
+				if attached.Base().Attachments == 1 {
+					attached.Construct(yamlComponent)
+				}
+			}
+		}
 	}
 
 	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
@@ -46,10 +69,16 @@ func (a *Delete) apply() {
 	for s := range a.Saved {
 		switch s.Type {
 		case selection.SelectableSector:
+			if s.Sector.IsExternal() {
+				continue
+			}
 			s.Sector.Bodies = make(map[ecs.Entity]*core.Body)
 			s.Sector.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
 			s.Universe.Delete(s.Sector.Entity)
 		case selection.SelectableSectorSegment:
+			if s.Sector.IsExternal() {
+				continue
+			}
 			for i, seg := range s.Sector.Segments {
 				if seg != s.SectorSegment {
 					continue
@@ -63,18 +92,23 @@ func (a *Delete) apply() {
 				break
 			}
 		case selection.SelectableBody:
+			if s.Body.IsExternal() {
+				continue
+			}
 			if behaviors.GetPlayer(s.Universe, s.Entity) != nil {
 				// Otherwise weird things happen...
 				continue
 			}
 			a.State().Universe.Delete(s.Entity)
-		case selection.SelectableInternalSegment:
-			fallthrough
-		case selection.SelectableInternalSegmentA:
-			fallthrough
-		case selection.SelectableInternalSegmentB:
+		case selection.SelectableInternalSegment, selection.SelectableInternalSegmentA, selection.SelectableInternalSegmentB:
+			if s.InternalSegment.IsExternal() {
+				continue
+			}
 			s.Universe.Delete(s.InternalSegment.Entity)
 		case selection.SelectableEntity:
+			if s.Entity.IsExternal() {
+				continue
+			}
 			s.Universe.Delete(s.Entity)
 		}
 	}
