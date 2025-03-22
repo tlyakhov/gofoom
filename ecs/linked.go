@@ -5,6 +5,8 @@ package ecs
 
 import (
 	"strconv"
+
+	"github.com/spf13/cast"
 )
 
 // Adding an Linked component to an entity makes it possible for that entity
@@ -13,6 +15,8 @@ type Linked struct {
 	Attached `editable:"^"`
 	// Ordered list, can be layered
 	Sources []Entity `editable:"Source Entities"`
+
+	AlwaysReplace bool `editable:"Always Replace?"`
 
 	// Internal state
 	SourceComponents ComponentTable
@@ -53,6 +57,7 @@ func (n *Linked) Construct(data map[string]any) {
 	n.Attached.Construct(data)
 
 	n.Sources = make([]Entity, 0)
+	n.AlwaysReplace = false
 
 	if data == nil {
 		return
@@ -65,6 +70,10 @@ func (n *Linked) Construct(data map[string]any) {
 			n.Sources[i], _ = ParseEntity(e.(string))
 		}
 	}
+
+	if v, ok := data["AlwaysReplace"]; ok {
+		n.AlwaysReplace = cast.ToBool(v)
+	}
 }
 
 func (n *Linked) Serialize() map[string]any {
@@ -74,5 +83,8 @@ func (n *Linked) Serialize() map[string]any {
 		arr[i] = e.Serialize(n.Universe)
 	}
 	result["Sources"] = arr
+	if n.AlwaysReplace {
+		result["AlwaysReplace"] = true
+	}
 	return result
 }
