@@ -64,11 +64,7 @@ func (n *Linked) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Sources"]; ok {
-		arr := v.([]any)
-		n.Sources = make([]Entity, len(arr))
-		for i, e := range arr {
-			n.Sources[i], _ = ParseEntity(e.(string))
-		}
+		n.Sources = ParseEntitySlice(v, true)
 	}
 
 	if v, ok := data["AlwaysReplace"]; ok {

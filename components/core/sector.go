@@ -196,7 +196,7 @@ func (s *Sector) Construct(data map[string]any) {
 		s.ExitScripts = ecs.ConstructSlice[*Script](s.Universe, v, nil)
 	}
 	if v, ok := data["Inner"]; ok {
-		s.Inner = ecs.ParseEntityTable(v)
+		s.Inner = ecs.ParseEntityTable(v, false)
 	}
 
 	s.Recalculate()

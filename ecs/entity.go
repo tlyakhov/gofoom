@@ -17,7 +17,7 @@ import (
 // over larger ranges, or we need to use an entity bitmap per source
 type Entity uint32
 
-// EntitySourceID represents the identifier for the source file of an entity.
+// EntitySourceID is the identifier for the source file of an entity.
 type EntitySourceID uint8
 
 // EntityBits is the number of bits used to store the entity ID.
@@ -58,6 +58,10 @@ const entityDelimiterLength = len(EntityDelimiter)
 // EntityRegexp is a regular expression used to parse entity strings.
 var EntityRegexp = regexp.MustCompile(`^∈⋮(?<entity>[0-9]+)(?:∈⋮(?<name>[^∈\s]*))?(?:∈⋮(?<file_id>[0-9]+)∈⋮(?<file>[^∈\s]+))?`)
 
+// EntityHumanRegexp is a regular expression used to parse entity strings
+// provided by humans.
+var EntityHumanRegexp = regexp.MustCompile(`\s*(?<entity>[0-9]+)\s*(?:[(](?<file_d>[0-9]+)[)])?`)
+
 // These are indexes into regexp matches for `EntityRegexp`
 const (
 	EntityRegexpIdxMatch    = 0
@@ -65,6 +69,13 @@ const (
 	EntityRegexpIdxName     = 2
 	EntityRegexpIdxSourceID = 3
 	EntityRegexpIdxFile     = 4
+)
+
+// These are indexes into regexp matches for `EntityHumanRegexp`
+const (
+	EntityHumanRegexpIdxMatch    = 0
+	EntityHumanRegexpIdxEntity   = 1
+	EntityHumanRegexpIdxSourceID = 2
 )
 
 // String returns a human-readable version string representation of the entity,
@@ -125,15 +136,25 @@ func ParseEntity(e string) (Entity, error) {
 	return Entity(parsedEntity), err
 }
 
-// ParseEntityRawOrPrefixed parses an entity string that may or may not have the
-// entity delimiter prefix.
-func ParseEntityRawOrPrefixed(e string) (Entity, error) {
-	if !strings.HasPrefix(e, EntityDelimiter) {
-		v, err := strconv.ParseInt(e, 10, 64)
-		return Entity(v), err
+// ParseEntityHumanOrCanonical parses an entity string that may be in any of the
+// valid forms.
+func ParseEntityHumanOrCanonical(e string) (Entity, error) {
+	if strings.HasPrefix(e, EntityDelimiter) {
+		return ParseEntity(e)
 	}
-	v, err := strconv.ParseInt(e[entityDelimiterLength:], 10, 64)
-	return Entity(v), err
+	parts := EntityHumanRegexp.FindStringSubmatch(e)
+	if parts == nil {
+		return 0, errors.New("Can't parse entity " + e)
+	}
+	parsedEntity, err := strconv.ParseInt(parts[EntityHumanRegexpIdxEntity], 10, EntityBits+EntitySourceIDBits)
+	if len(parts) >= 3 && len(parts[EntityHumanRegexpIdxSourceID]) > 0 {
+		parsedID, err := strconv.ParseInt(parts[EntityHumanRegexpIdxSourceID], 10, EntitySourceIDBits)
+		if err != nil {
+			return Entity(parsedEntity), err
+		}
+		parsedEntity |= parsedID << EntityBits
+	}
+	return Entity(parsedEntity), err
 }
 
 // Format returns a formatted string representation of the entity, including its
@@ -193,42 +214,74 @@ func (e Entity) Serialize(u *Universe) string {
 	return id
 }
 
-// DeserializeEntities deserializes a slice of entity strings to an EntityTable.
-func DeserializeEntities[T ~string | any](data []T) EntityTable {
+// parseEntityTableFromSlice deserializes a slice of entity strings to an EntityTable.
+func parseEntityTableFromSlice[T ~string | any](data []T, humanAllowed bool) EntityTable {
 	if data == nil {
 		return nil
 	}
-
+	fParse := ParseEntity
+	if humanAllowed {
+		fParse = ParseEntityHumanOrCanonical
+	}
 	result := make(EntityTable, 0)
 	for _, e := range data {
 		switch c := any(e).(type) {
 		case string:
-			if entity, err := ParseEntity(c); err == nil {
+			if entity, err := fParse(c); err == nil {
 				result.Set(entity)
 			} else {
-				fmt.Printf("ecs.DeserializeEntities: Error %v parsing entity %v", err, e)
+				fmt.Printf("ecs.parseEntityTableFromSlice: Error %v parsing entity %v", err, e)
 			}
 		case fmt.Stringer:
-			if entity, err := ParseEntity(c.String()); err == nil {
+			if entity, err := fParse(c.String()); err == nil {
 				result.Set(entity)
 			} else {
-				fmt.Printf("ecs.DeserializeEntities: Error %v parsing entity %v", err, e)
+				fmt.Printf("ecs.parseEntityTableFromSlice: Error %v parsing entity %v", err, e)
 			}
 		}
 	}
 	return result
 }
 
-// ParseEntityCSV parses a comma-separated string of entities into an EntityTable.
-func ParseEntityCSV(csv string, prefixOptional bool) EntityTable {
+// parseEntitySliceFromSlice deserializes a slice of entity strings
+func parseEntitySliceFromSlice[T ~string | any](data []T, humanAllowed bool) []Entity {
+	if data == nil {
+		return nil
+	}
+	fParse := ParseEntity
+	if humanAllowed {
+		fParse = ParseEntityHumanOrCanonical
+	}
+	result := make([]Entity, 0)
+	for _, e := range data {
+		switch c := any(e).(type) {
+		case string:
+			if entity, err := fParse(c); err == nil {
+				result = append(result, entity)
+			} else {
+				fmt.Printf("ecs.parseEntitySliceFromSlice: Error %v parsing entity %v", err, e)
+			}
+		case fmt.Stringer:
+			if entity, err := fParse(c.String()); err == nil {
+				result = append(result, entity)
+			} else {
+				fmt.Printf("ecs.parseEntitySliceFromSlice: Error %v parsing entity %v", err, e)
+			}
+		}
+	}
+	return result
+}
+
+// parseEntityTableCSV parses a comma-separated string of entities into an EntityTable.
+func parseEntityTableCSV(csv string, humanAllowed bool) EntityTable {
 	entities := make(EntityTable, 0)
 	split := strings.Split(csv, ",")
 	fParse := ParseEntity
-	if prefixOptional {
-		fParse = ParseEntityRawOrPrefixed
+	if humanAllowed {
+		fParse = ParseEntityHumanOrCanonical
 	}
 	for _, s := range split {
-		trimmed := strings.Trim(s, " \t\r\n")
+		trimmed := strings.TrimSpace(s)
 		if e, err := fParse(trimmed); err == nil {
 			entities.Set(e)
 		}
@@ -236,16 +289,46 @@ func ParseEntityCSV(csv string, prefixOptional bool) EntityTable {
 	return entities
 }
 
+// parseEntitySliceCSV parses a comma-separated string of entities
+func parseEntitySliceCSV(csv string, humanAllowed bool) []Entity {
+	entities := make([]Entity, 0)
+	split := strings.Split(csv, ",")
+	fParse := ParseEntity
+	if humanAllowed {
+		fParse = ParseEntityHumanOrCanonical
+	}
+	for _, s := range split {
+		trimmed := strings.TrimSpace(s)
+		if e, err := fParse(trimmed); err == nil {
+			entities = append(entities, e)
+		}
+	}
+	return entities
+}
+
 // ParseEntityTable parses a generic data type representing a list of entities
 // into an EntityTable.
-func ParseEntityTable(data any) EntityTable {
+func ParseEntityTable(data any, humanAllowed bool) EntityTable {
 	var entities EntityTable
 	if s, ok := data.(string); ok {
-		entities = ParseEntityCSV(s, false)
+		entities = parseEntityTableCSV(s, humanAllowed)
 	} else if arr, ok := data.([]string); ok {
-		entities = DeserializeEntities(arr)
+		entities = parseEntityTableFromSlice(arr, humanAllowed)
 	} else if arr, ok := data.([]any); ok {
-		entities = DeserializeEntities(arr)
+		entities = parseEntityTableFromSlice(arr, humanAllowed)
+	}
+	return entities
+}
+
+// ParseEntitySlice parses a generic data type representing a list of entities
+func ParseEntitySlice(data any, humanAllowed bool) []Entity {
+	var entities []Entity
+	if s, ok := data.(string); ok {
+		entities = parseEntitySliceCSV(s, humanAllowed)
+	} else if arr, ok := data.([]string); ok {
+		entities = parseEntitySliceFromSlice(arr, humanAllowed)
+	} else if arr, ok := data.([]any); ok {
+		entities = parseEntitySliceFromSlice(arr, humanAllowed)
 	}
 	return entities
 }
@@ -260,7 +343,7 @@ func ParseEntitiesFromMap(data map[string]any) (EntityTable, int) {
 	if dataEntities == nil {
 		return nil, 0
 	}
-	entities := ParseEntityTable(dataEntities)
+	entities := ParseEntityTable(dataEntities, false)
 	attachments := 0
 	for _, e := range entities {
 		if e != 0 {

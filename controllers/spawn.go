@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"log"
 	"math/rand"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/dynamic"
@@ -48,6 +49,7 @@ func Respawn(u *ecs.Universe, force bool) {
 	// address deep vs. shallow cloning and wiring up any relationships.
 	copiedSpawn := u.SerializeEntity(spawn.Entity)
 	var pastedEntity ecs.Entity
+	var mappedComponent map[string]any
 	for name, cid := range ecs.Types().IDs {
 		mappedData := copiedSpawn[name]
 		if mappedData == nil {
@@ -56,10 +58,17 @@ func Respawn(u *ecs.Universe, force bool) {
 		if pastedEntity == 0 {
 			pastedEntity = u.NewEntity()
 		}
-		if _, ok := mappedData.(string); ok {
-			continue
+		// This component is a reference to another entity.
+		if refData, ok := mappedData.(string); ok {
+			eRef, err := ecs.ParseEntity(refData)
+			if err != nil {
+				log.Printf("controllers.Respawn: error parsing referenced entity %v", refData)
+				continue
+			}
+			mappedComponent = u.Component(eRef, cid).Serialize()
+		} else {
+			mappedComponent = mappedData.(map[string]any)
 		}
-		mappedComponent := mappedData.(map[string]any)
 		c := u.LoadComponentWithoutAttaching(cid, mappedComponent)
 		u.Attach(cid, pastedEntity, &c)
 		if cid == behaviors.PlayerCID {

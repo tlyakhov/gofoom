@@ -6,7 +6,6 @@ package properties
 import (
 	"log"
 	"reflect"
-	"strings"
 
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
@@ -82,19 +81,10 @@ func fieldStringLikeType[T StringLikeType, PT interface{ *T }](g *Grid, field *s
 			ids := ecs.ParseComponentIDs(text)
 			parsed = &ids
 		case *ecs.EntityTable:
-			entities := ecs.ParseEntityCSV(text, true)
+			entities := ecs.ParseEntityTable(text, true)
 			parsed = &entities
 		case *[]ecs.Entity:
-			split := strings.Split(text, ",")
-			entities := make([]ecs.Entity, len(split))
-			for i, s := range split {
-				entity, subError := ecs.ParseEntityRawOrPrefixed(s)
-				if subError != nil {
-					err = subError
-					break
-				}
-				entities[i] = entity
-			}
+			entities := ecs.ParseEntitySlice(text, true)
 			parsed = &entities
 		}
 		if err != nil {

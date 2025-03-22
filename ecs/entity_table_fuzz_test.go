@@ -10,7 +10,7 @@ import (
 
 func TestEntityTableFuzz(t *testing.T) {
 	table := make(EntityTable, 0)
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		table.Set(Entity(rand.Int() % 1000))
 		table.Contains(Entity(rand.Int() % 1000))
 		if rand.Int()%10 == 0 {
