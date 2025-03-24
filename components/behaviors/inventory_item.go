@@ -45,7 +45,7 @@ func GetInventoryItem(u *ecs.Universe, e ecs.Entity) *InventoryItem {
 func (item *InventoryItem) MultiAttachable() bool { return true }
 
 func (item *InventoryItem) String() string {
-	return "InventoryItem"
+	return "InventoryItem (" + item.Class + ")"
 }
 
 func (item *InventoryItem) Construct(data map[string]any) {

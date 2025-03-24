@@ -683,3 +683,9 @@ func (e *Editor) ToolSelectSegment() {
 		}
 	}
 }
+
+func (e *Editor) FocusedShortcut(s fyne.Shortcut) {
+	if focused, ok := e.Window.Canvas().Focused().(fyne.Shortcutable); ok {
+		focused.TypedShortcut(s)
+	}
+}

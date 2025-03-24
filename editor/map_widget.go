@@ -235,9 +235,24 @@ func (mw *MapWidget) FocusGained()     {}
 func (mw *MapWidget) TypedRune(r rune) {}
 func (mw *MapWidget) TypedKey(evt *fyne.KeyEvent) {
 	for _, action := range editor.MenuActions {
-		if action.NoModifier && evt.Name == action.Shortcut.KeyName {
-			action.Menu.Action()
+		if ks, ok := action.Shortcut.(*desktop.CustomShortcut); ok {
+			if action.NoModifier && evt.Name == ks.KeyName {
+				action.Menu.Action()
+			}
 		}
+	}
+}
+
+func (mw *MapWidget) TypedShortcut(s fyne.Shortcut) {
+	switch s.ShortcutName() {
+	case "Undo":
+		editor.UndoCurrent()
+	case "Redo":
+		editor.RedoCurrent()
+	case "Copy":
+		editor.Act(&actions.Copy{IEditor: editor})
+	case "Paste":
+		editor.Act(&actions.Paste{Transform: actions.Transform{IEditor: editor}})
 	}
 }
 

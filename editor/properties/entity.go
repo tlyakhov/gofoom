@@ -61,6 +61,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		return
 	}
 
+	entitySet := make(ecs.EntityTable, 0)
 	entities := make([]widget.TreeNodeID, 1)
 	entities[0] = "0"
 
@@ -82,7 +83,12 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		col := g.State().Universe.Column(cid)
 		for i := range col.Len() {
 			if a := col.Attachable(i); a != nil {
-				entities = append(entities, a.Base().Entity.String())
+				e := a.Base().Entity
+				if entitySet.Contains(e) {
+					continue
+				}
+				entitySet.Set(e)
+				entities = append(entities, e.Serialize(g.State().Universe))
 			}
 		}
 	}
@@ -105,7 +111,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	})
 	title := "Select " + editTypeTag
 	if origValue != 0 {
-		tree.Select(origValue.String())
+		tree.Select(origValue.Serialize(g.State().Universe))
 		title = editTypeTag + ": " + origValue.Format(g.State().Universe)
 	}
 

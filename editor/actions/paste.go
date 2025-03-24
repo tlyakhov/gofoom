@@ -4,7 +4,6 @@
 package actions
 
 import (
-	"encoding/json"
 	"log"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
@@ -12,6 +11,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2/driver/desktop"
+	"gopkg.in/yaml.v3"
 )
 
 // TODO: Be more flexible with what we can delete/cut/copy/paste. Should be
@@ -29,16 +29,16 @@ func (a *Paste) Activate() {
 	a.ClipboardData = a.IEditor.Content()
 
 	var parsed any
-	err := json.Unmarshal([]byte(a.ClipboardData), &parsed)
+	err := yaml.Unmarshal([]byte(a.ClipboardData), &parsed)
 	if err != nil {
-		log.Printf("Clipboard data is not valid JSON set of entities: %v\n", err)
+		log.Printf("Paste.Activate: Clipboard data is not valid YAML set of entities: %v\n", err)
 		return
 	}
 
-	var jsonEntities map[string]any
+	var yamlEntities map[string]any
 	var ok bool
-	if jsonEntities, ok = parsed.(map[string]any); !ok || jsonEntities == nil {
-		log.Printf("Clipboard JSON root must be an object")
+	if yamlEntities, ok = parsed.(map[string]any); !ok || yamlEntities == nil {
+		log.Printf("Paste.Activate: Clipboard YAML root must be an object")
 		return
 	}
 
@@ -50,10 +50,10 @@ func (a *Paste) Activate() {
 	a.CopiedToPasted = make(map[ecs.Entity]ecs.Entity)
 	a.Selected = selection.NewSelection()
 	u := a.State().Universe
-	for copiedEntityString, jsonData := range jsonEntities {
+	for copiedEntityString, yamlData := range yamlEntities {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
-		jsonEntity := jsonData.(map[string]any)
-		if jsonEntity == nil {
+		yamlEntity := yamlData.(map[string]any)
+		if yamlEntity == nil {
 			log.Printf("Universe JSON object element should be an object\n")
 			continue
 		}
@@ -61,13 +61,13 @@ func (a *Paste) Activate() {
 		var pastedEntity ecs.Entity
 		var ok bool
 		for name, id := range ecs.Types().IDs {
-			jsonData := jsonEntity[name]
-			if jsonData == nil {
+			yamlData := yamlEntity[name]
+			if yamlData == nil {
 				continue
 			}
-			jsonComponent := jsonData.(map[string]any)
-			a.State().Lock.Lock()
-			c := u.LoadComponentWithoutAttaching(id, jsonComponent)
+			yamlComponent := yamlData.(map[string]any)
+			//a.State().Lock.Lock()
+			c := u.LoadComponentWithoutAttaching(id, yamlComponent)
 
 			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
 				u.Attach(id, pastedEntity, &c)
@@ -76,14 +76,14 @@ func (a *Paste) Activate() {
 				u.Attach(id, pastedEntity, &c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 			}
-			a.State().Lock.Unlock()
+			//a.State().Lock.Unlock()
 		}
 		if pastedEntity != 0 {
 			a.Selected.Add(selection.SelectableFromEntity(u, pastedEntity))
 		}
 	}
 
-	a.State().Lock.Lock()
+	//a.State().Lock.Lock()
 	// We need to wire up:
 	// pasted materials to surfaces
 	// pasted bodies to sectors
@@ -105,7 +105,7 @@ func (a *Paste) Activate() {
 	}
 	a.Center.MulSelf(1.0 / float64(len(a.Selected.Positions)))
 
-	a.State().Lock.Unlock()
+	//a.State().Lock.Unlock()
 
 	// Change selection
 	a.SetSelection(true, a.Selected)

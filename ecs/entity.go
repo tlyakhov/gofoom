@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -165,11 +166,12 @@ func (e Entity) Format(u *Universe) string {
 	}
 	id := e.Local().String()
 	if named := GetNamed(u, e); named != nil {
-		return id + " " + named.Name
+		id = id + " " + named.Name
 	}
 	if e.IsExternal() {
 		sourceID := e.SourceID()
-		id += " (from " + u.SourceFileIDs[sourceID].Source + ")"
+		file := path.Base(u.SourceFileIDs[sourceID].Source)
+		id += " (from " + file + ")"
 	}
 
 	return id

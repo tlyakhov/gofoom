@@ -79,7 +79,7 @@ func (list *EntityList) tableUpdate(tci widget.TableCellID, template fyne.Canvas
 	case int(elcDesc):
 		progress.Hide()
 		text.Color = row[elcColor].(color.Color)
-		text.Text = concepts.TruncateString(row[elcDesc].(string), 30)
+		text.Text = concepts.TruncateString(row[elcDesc].(string), 50)
 		text.Show()
 		text.Refresh()
 	case int(elcRank):

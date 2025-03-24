@@ -4,8 +4,6 @@
 package ecs
 
 import (
-	"strconv"
-
 	"github.com/spf13/cast"
 )
 
@@ -36,7 +34,14 @@ func GetLinked(u *Universe, e Entity) *Linked {
 }
 
 func (n *Linked) String() string {
-	return strconv.FormatInt(int64(n.Entity), 10)
+	result := ""
+	for _, e := range n.Sources {
+		if len(result) > 0 {
+			result += ", "
+		}
+		result += e.String()
+	}
+	return "Linked: " + result
 }
 
 func (n *Linked) OnDetach(e Entity) {
