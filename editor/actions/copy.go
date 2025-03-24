@@ -4,12 +4,12 @@
 package actions
 
 import (
-	"encoding/json"
 	"log"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/selection"
-	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
+
+	"gopkg.in/yaml.v3"
 )
 
 // TODO: Be more flexible with what we can delete/cut/copy/paste. Should be
@@ -19,12 +19,12 @@ type Copy struct {
 	state.IEditor
 
 	Selected      *selection.Selection
-	Saved         map[ecs.Entity]any
+	Saved         map[string]any
 	ClipboardData string
 }
 
 func (a *Copy) Activate() {
-	a.Saved = make(map[ecs.Entity]any)
+	a.Saved = make(map[string]any)
 	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
 
 	for _, obj := range a.Selected.Exact {
@@ -32,13 +32,15 @@ func (a *Copy) Activate() {
 		if p := behaviors.GetPlayer(obj.Universe, obj.Entity); p != nil && !p.Spawn {
 			continue
 		}
-		a.Saved[obj.Entity] = obj.Serialize()
+		a.Saved[obj.Entity.Serialize(obj.Universe)] = obj.Serialize()
 	}
 
-	bytes, err := json.MarshalIndent(a.Saved, "", "  ")
+	bytes, err := yaml.Marshal(a.Saved)
 
 	if err != nil {
-		panic(err)
+		log.Printf("Copy.Activate: error serializing to YAML: %v", err)
+		a.ActionFinished(true, false, false)
+		return
 	}
 
 	a.ClipboardData = string(bytes)

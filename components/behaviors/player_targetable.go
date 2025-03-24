@@ -53,7 +53,12 @@ func (pt *PlayerTargetable) Pos(e ecs.Entity) *concepts.Vector3 {
 }
 
 func (pt *PlayerTargetable) String() string {
-	return "PlayerTargetable"
+	if pt.MessageTemplate != nil {
+		return pt.MessageTemplate.Root.String()
+	} else {
+		return "PlayerTargetable"
+	}
+
 }
 
 func (pt *PlayerTargetable) OnAttach(u *ecs.Universe) {

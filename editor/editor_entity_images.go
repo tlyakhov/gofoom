@@ -31,8 +31,8 @@ func (e *Editor) imageForMaterial(entity ecs.Entity) image.Image {
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
 	buffer := img.Pix
 	border := e.materialSelectionBorderColor(entity)
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			e.MaterialSampler.NU = float64(x) / float64(w)
 			e.MaterialSampler.NV = float64(y) / float64(h)
 			e.MaterialSampler.U = e.MaterialSampler.NU

@@ -32,6 +32,10 @@ func GetInventoryCarrier(u *ecs.Universe, e ecs.Entity) *InventoryCarrier {
 	return nil
 }
 
+func (ic *InventoryCarrier) String() string {
+	return "Carrier: " + ic.Inventory.String()
+}
+
 func (ic *InventoryCarrier) MultiAttachable() bool {
 	return true
 }

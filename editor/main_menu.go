@@ -17,7 +17,7 @@ import (
 )
 
 type MenuAction struct {
-	Shortcut   *desktop.CustomShortcut
+	Shortcut   fyne.Shortcut
 	Menu       *fyne.MenuItem
 	NoModifier bool
 }
@@ -135,10 +135,14 @@ func CreateMainMenu() {
 	})
 	editor.FileQuit.Menu = fyne.NewMenuItem("Quit", func() {})
 
-	editor.EditUndo.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyZ, Modifier: fyne.KeyModifierShortcutDefault}
-	editor.EditUndo.Menu = fyne.NewMenuItem("Undo", editor.UndoCurrent)
-	editor.EditRedo.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyY, Modifier: fyne.KeyModifierShortcutDefault}
-	editor.EditRedo.Menu = fyne.NewMenuItem("Redo", editor.RedoCurrent)
+	editor.EditUndo.Shortcut = &fyne.ShortcutUndo{}
+	editor.EditUndo.Menu = fyne.NewMenuItem("Undo", func() {
+		editor.FocusedShortcut(editor.EditUndo.Shortcut)
+	})
+	editor.EditRedo.Shortcut = &fyne.ShortcutRedo{}
+	editor.EditRedo.Menu = fyne.NewMenuItem("Redo", func() {
+		editor.FocusedShortcut(editor.EditRedo.Shortcut)
+	})
 
 	editor.EditDelete.NoModifier = true
 	editor.EditDelete.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyDelete, Modifier: 0}
@@ -146,19 +150,23 @@ func CreateMainMenu() {
 		editor.Act(&actions.Delete{IEditor: editor})
 	})
 
-	editor.EditCut.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyX, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditCut.Shortcut = &fyne.ShortcutCut{Clipboard: editor.Window.Clipboard()}
 	editor.EditCut.Menu = fyne.NewMenuItem("Cut", func() {
+		editor.FocusedShortcut(editor.EditCut.Shortcut)
 	})
 
-	editor.EditCopy.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyC, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditCopy.Shortcut = &fyne.ShortcutCopy{Clipboard: editor.Window.Clipboard()}
 	editor.EditCopy.Menu = fyne.NewMenuItem("Copy", func() {
-		editor.Act(&actions.Copy{IEditor: editor})
+		editor.FocusedShortcut(editor.EditCopy.Shortcut)
 	})
 
-	editor.EditPaste.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyV, Modifier: fyne.KeyModifierShortcutDefault}
+	editor.EditPaste.Shortcut = &fyne.ShortcutPaste{Clipboard: editor.Window.Clipboard()}
 	editor.EditPaste.Menu = fyne.NewMenuItem("Paste", func() {
-		editor.Act(&actions.Paste{Transform: actions.Transform{IEditor: editor}})
+		editor.FocusedShortcut(editor.EditPaste.Shortcut)
+
 	})
+
+	// TODO: Select all would be nice as well
 
 	editor.EditSelectSegment.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyApostrophe, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.EditSelectSegment.Menu = fyne.NewMenuItem("Select First/Next Segment", editor.ToolSelectSegment)

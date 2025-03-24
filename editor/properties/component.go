@@ -20,6 +20,7 @@ import (
 )
 
 func (g *Grid) fieldComponent(field *state.PropertyGridField) {
+	disable := true
 	parentType := ""
 	var parent ecs.Attachable
 	var parentCID ecs.ComponentID
@@ -33,6 +34,9 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 			}
 		}
 		selEntities.Set(v.Entity)
+		if !v.Entity.IsExternal() {
+			disable = false
+		}
 		parent = v.Parent().(ecs.Attachable)
 		parentCID = parent.Base().ComponentID
 		parentType = ecs.Types().ColumnPlaceholders[parentCID].Type().Name()
@@ -88,7 +92,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		}, g.GridWindow)
 	}
 
-	if field.Disabled() {
+	if disable {
 		addButton.Disable()
 		removeButton.Disable()
 	} else {

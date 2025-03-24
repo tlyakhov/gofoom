@@ -41,6 +41,14 @@ func GetPlayer(u *ecs.Universe, e ecs.Entity) *Player {
 	return nil
 }
 
+func (p *Player) String() string {
+	if p.Spawn {
+		return "Spawn"
+	} else {
+		return "Player"
+	}
+}
+
 func (p *Player) Underwater() bool {
 	if b := core.GetBody(p.Universe, p.Entities.First()); b != nil {
 		if u := GetUnderwater(p.Universe, b.SectorEntity); u != nil {
