@@ -25,9 +25,7 @@ type Paste struct {
 	Center         concepts.Vector3
 }
 
-func (a *Paste) Activate() {
-	a.ClipboardData = a.IEditor.Content()
-
+func (a *Paste) apply() {
 	var parsed any
 	err := yaml.Unmarshal([]byte(a.ClipboardData), &parsed)
 	if err != nil {
@@ -54,7 +52,7 @@ func (a *Paste) Activate() {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
 		yamlEntity := yamlData.(map[string]any)
 		if yamlEntity == nil {
-			log.Printf("Universe JSON object element should be an object\n")
+			log.Printf("Paste.Activate: Universe YAML object element should be an object")
 			continue
 		}
 
@@ -66,7 +64,6 @@ func (a *Paste) Activate() {
 				continue
 			}
 			yamlComponent := yamlData.(map[string]any)
-			//a.State().Lock.Lock()
 			c := u.LoadComponentWithoutAttaching(id, yamlComponent)
 
 			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
@@ -76,14 +73,12 @@ func (a *Paste) Activate() {
 				u.Attach(id, pastedEntity, &c)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 			}
-			//a.State().Lock.Unlock()
 		}
 		if pastedEntity != 0 {
 			a.Selected.Add(selection.SelectableFromEntity(u, pastedEntity))
 		}
 	}
 
-	//a.State().Lock.Lock()
 	// We need to wire up:
 	// pasted materials to surfaces
 	// pasted bodies to sectors
@@ -99,16 +94,22 @@ func (a *Paste) Activate() {
 	}
 
 	a.Selected.SavePositions()
+	a.Center[0] = 0
+	a.Center[1] = 0
+	a.Center[2] = 0
 	// Calculate the center of the selection
 	for _, pos := range a.Selected.Positions {
 		a.Center.AddSelf(pos)
 	}
 	a.Center.MulSelf(1.0 / float64(len(a.Selected.Positions)))
 
-	//a.State().Lock.Unlock()
-
 	// Change selection
 	a.SetSelection(true, a.Selected)
+}
+
+func (a *Paste) Activate() {
+	a.ClipboardData = a.IEditor.Content()
+	a.apply()
 }
 func (a *Paste) Cancel() {}
 
@@ -125,10 +126,14 @@ func (a *Paste) OnMouseUp() {
 }
 
 func (a *Paste) Undo() {
-	// TODO: Implement
+	for _, pasted := range a.CopiedToPasted {
+		a.State().Universe.Delete(pasted)
+	}
 }
+
 func (a *Paste) Redo() {
-	// TODO: Implement
+	a.apply()
+	a.Transform.Apply()
 }
 
 func (a *Paste) Status() string {

@@ -17,7 +17,9 @@ import (
 // just grab EntityRefs
 type Copy struct {
 	state.IEditor
+	CutDelete *Delete
 
+	Cut           bool
 	Selected      *selection.Selection
 	Saved         map[string]any
 	ClipboardData string
@@ -45,13 +47,27 @@ func (a *Copy) Activate() {
 
 	a.ClipboardData = string(bytes)
 
-	a.Redo()
-	a.ActionFinished(false, false, false)
+	if a.Cut {
+		a.IEditor.SetContent(a.ClipboardData)
+		a.CutDelete = &Delete{IEditor: a.IEditor}
+		// This will run ActionFinished
+		a.CutDelete.Activate()
+	} else {
+		a.Redo()
+		a.ActionFinished(false, false, false)
+	}
 }
 
-func (a *Copy) Undo() {}
+func (a *Copy) Undo() {
+	if a.Cut {
+		a.CutDelete.Undo()
+	}
+}
 
 func (a *Copy) Redo() {
 	log.Printf("%v\n", a.ClipboardData)
 	a.IEditor.SetContent(a.ClipboardData)
+	if a.Cut {
+		a.CutDelete.Redo()
+	}
 }
