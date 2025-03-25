@@ -249,8 +249,10 @@ func (mw *MapWidget) TypedShortcut(s fyne.Shortcut) {
 		editor.UndoCurrent()
 	case "Redo":
 		editor.RedoCurrent()
+	case "Cut":
+		editor.Act(&actions.Copy{IEditor: editor, Cut: true})
 	case "Copy":
-		editor.Act(&actions.Copy{IEditor: editor})
+		editor.Act(&actions.Copy{IEditor: editor, Cut: false})
 	case "Paste":
 		editor.Act(&actions.Paste{Transform: actions.Transform{IEditor: editor}})
 	}
