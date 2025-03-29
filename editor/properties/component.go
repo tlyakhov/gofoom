@@ -52,7 +52,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	removeButton.Icon = theme.ContentRemoveIcon()
 	removeButton.OnTapped = func() {
 		action := &actions.UpdateLinks{
-			IEditor:          g.IEditor,
+			Action:           state.Action{IEditor: g.IEditor},
 			Entities:         selEntities,
 			RemoveComponents: make(containers.Set[ecs.ComponentID]),
 		}
@@ -77,7 +77,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 				return
 			}
 			action := &actions.UpdateLinks{
-				IEditor:       g.IEditor,
+				Action:        state.Action{IEditor: g.IEditor},
 				Entities:      ecs.ParseEntityTable(entitiesEntry.Text, true),
 				AddComponents: make(ecs.ComponentTable, 0),
 			}

@@ -11,7 +11,7 @@ import (
 )
 
 type RotateSegments struct {
-	state.IEditor
+	state.Action
 }
 
 func (a *RotateSegments) Rotate(sector *core.Sector, backward bool) {

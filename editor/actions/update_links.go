@@ -10,7 +10,7 @@ import (
 )
 
 type UpdateLinks struct {
-	state.IEditor
+	state.Action
 
 	Entities         ecs.EntityTable
 	OldComponents    map[ecs.Entity]ecs.ComponentTable

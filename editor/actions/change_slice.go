@@ -20,7 +20,7 @@ const (
 )
 
 type ChangeSlice struct {
-	state.IEditor
+	state.Action
 	Parent       any
 	SlicePtr     reflect.Value
 	Index        int
@@ -58,9 +58,11 @@ func (a *ChangeSlice) Redo() {
 			// TODO: Use the a.ConcreteType field here?
 			newValue.Set(reflect.New(newValue.Type().Elem()))
 		}
+		if universal, ok := newValue.Interface().(ecs.Universal); ok {
+			universal.OnAttach(a.State().Universe)
+		}
 
 		if serializable, ok := newValue.Interface().(ecs.Serializable); ok {
-			serializable.OnAttach(a.State().Universe)
 			serializable.Construct(nil)
 		} else if subSerializable, ok := newValue.Interface().(ecs.SubSerializable); ok {
 			subSerializable.Construct(a.State().Universe, nil)

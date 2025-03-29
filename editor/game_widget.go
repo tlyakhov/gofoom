@@ -8,6 +8,7 @@ import (
 	"log"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/editor/actions"
+	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -113,11 +114,11 @@ func (g *GameWidget) TypedShortcut(s fyne.Shortcut) {
 	case "Redo":
 		editor.RedoCurrent()
 	case "Cut":
-		editor.Act(&actions.Copy{IEditor: editor, Cut: true})
+		editor.Act(&actions.Copy{Action: state.Action{IEditor: editor}, Cut: true})
 	case "Copy":
-		editor.Act(&actions.Copy{IEditor: editor, Cut: false})
+		editor.Act(&actions.Copy{Action: state.Action{IEditor: editor}, Cut: false})
 	case "Paste":
-		editor.Act(&actions.Paste{Transform: actions.Transform{IEditor: editor}})
+		editor.Act(&actions.Paste{Transform: actions.Transform{Action: state.Action{IEditor: editor}}})
 	}
 }
 

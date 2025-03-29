@@ -22,7 +22,7 @@ var _ desktop.Hoverable = (*Transform)(nil)
 var _ desktop.Mouseable = (*Transform)(nil)
 
 type Transform struct {
-	state.IEditor
+	state.Action
 
 	Selected  *selection.Selection
 	mouseDown concepts.Vector2

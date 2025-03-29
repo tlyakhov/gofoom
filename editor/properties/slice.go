@@ -18,7 +18,7 @@ import (
 
 func (g *Grid) fieldSliceAdd(field *state.PropertyGridField, concreteType reflect.Type) {
 	g.Act(&actions.ChangeSlice{
-		IEditor:      g.IEditor,
+		Action:       state.Action{IEditor: g},
 		SlicePtr:     field.Values[0].Value,
 		Parent:       field.Values[0].Parent,
 		ConcreteType: concreteType,
@@ -73,7 +73,7 @@ func (g *Grid) fieldChangeSlice(field *state.PropertyGridField) {
 	//elemType := field.Type.Elem().Elem()
 	buttonDec := widget.NewButtonWithIcon("Up", theme.MoveUpIcon(), func() {
 		g.Act(&actions.ChangeSlice{
-			IEditor:  g.IEditor,
+			Action:   state.Action{IEditor: g},
 			SlicePtr: field.Values[0].Value,
 			Parent:   field.Values[0].Parent,
 			Mode:     actions.DecSliceElementMode,
@@ -82,7 +82,7 @@ func (g *Grid) fieldChangeSlice(field *state.PropertyGridField) {
 	})
 	buttonInc := widget.NewButtonWithIcon("Down", theme.MoveDownIcon(), func() {
 		g.Act(&actions.ChangeSlice{
-			IEditor:  g.IEditor,
+			Action:   state.Action{IEditor: g},
 			SlicePtr: field.Values[0].Value,
 			Parent:   field.Values[0].Parent,
 			Mode:     actions.IncSliceElementMode,
@@ -91,7 +91,7 @@ func (g *Grid) fieldChangeSlice(field *state.PropertyGridField) {
 	})
 	buttonDelete := widget.NewButtonWithIcon("Delete", theme.DeleteIcon(), func() {
 		g.Act(&actions.ChangeSlice{
-			IEditor:  g.IEditor,
+			Action:   state.Action{IEditor: g},
 			SlicePtr: field.Values[0].Value,
 			Parent:   field.Values[0].Parent,
 			Mode:     actions.DeleteSliceElementMode,

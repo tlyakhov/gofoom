@@ -113,15 +113,15 @@ func (a *Paste) Activate() {
 }
 func (a *Paste) Cancel() {}
 
-func (a *Paste) OnMouseDown(evt *desktop.MouseEvent) {
+func (a *Paste) MouseDown(evt *desktop.MouseEvent) {
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
 }
-func (a *Paste) OnMouseMove() {
+func (a *Paste) MouseMoved(evt *desktop.MouseEvent) {
 	a.Delta = *a.State().MouseWorld.Sub(a.WorldGrid(a.Center.To2D()))
 	a.Transform.Apply()
 }
-func (a *Paste) OnMouseUp() {
+func (a *Paste) MouseUp(evt *desktop.MouseEvent) {
 
 }
 

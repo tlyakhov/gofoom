@@ -13,7 +13,7 @@ import (
 
 // TODO: Prevent deletion of entities from SourceFiles
 type Delete struct {
-	state.IEditor
+	state.Action
 
 	Selected *selection.Selection
 	Saved    map[*selection.Selectable]any

@@ -16,7 +16,7 @@ import (
 // possible to only grab a "hi" part of a segment, for example. For now,
 // just grab EntityRefs
 type Copy struct {
-	state.IEditor
+	state.Action
 	CutDelete *Delete
 
 	Cut           bool
@@ -49,7 +49,7 @@ func (a *Copy) Activate() {
 
 	if a.Cut {
 		a.IEditor.SetContent(a.ClipboardData)
-		a.CutDelete = &Delete{IEditor: a.IEditor}
+		a.CutDelete = &Delete{Action: state.Action{IEditor: a.IEditor}}
 		// This will run ActionFinished
 		a.CutDelete.Activate()
 	} else {

@@ -301,7 +301,7 @@
     Class: WeirdGun
     Count:
       Now: "1"
-      Spawn: "0"
+      Spawn: "1"
     Image: ∈⋮132
     Limit: "1"
   behaviors.WeaponClass: ∈⋮148
