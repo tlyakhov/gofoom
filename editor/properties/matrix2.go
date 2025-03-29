@@ -21,7 +21,7 @@ import (
 
 func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bool) {
 	action := &actions.SetProperty{
-		IEditor:           g.IEditor,
+		Action:            state.Action{IEditor: g},
 		PropertyGridField: field,
 		ValuesToAssign:    make([]reflect.Value, len(field.Values)),
 	}
@@ -114,7 +114,11 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 			eDelta.SetText(origDelta)
 			return
 		}
-		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ValuesToAssign: make([]reflect.Value, len(field.Values))}
+		action := &actions.SetProperty{
+			Action:            state.Action{IEditor: g},
+			PropertyGridField: field,
+			ValuesToAssign:    make([]reflect.Value, len(field.Values)),
+		}
 		for i, v := range field.Values {
 			m := v.Value.Interface().(*concepts.Matrix2)
 			m = m.TranslateSelf(delta)
@@ -137,7 +141,11 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 			eScale.SetText(origScale)
 			return
 		}
-		action := &actions.SetProperty{IEditor: g.IEditor, PropertyGridField: field, ValuesToAssign: make([]reflect.Value, len(field.Values))}
+		action := &actions.SetProperty{
+			Action:            state.Action{IEditor: g},
+			PropertyGridField: field,
+			ValuesToAssign:    make([]reflect.Value, len(field.Values)),
+		}
 		for i, v := range field.Values {
 			m := v.Value.Interface().(*concepts.Matrix2)
 			m = m.AxisScale(scale)

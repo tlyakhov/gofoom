@@ -136,6 +136,8 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // most cases each comparison is pretty cheap. For really large worlds, we could
 // give the user the option of disabling auto-portalling in the editor and only
 // doing it manually every once in a while.
+// This could be optimized using the quadtree, but that would require storing
+// sectors in the quadtree which has a runtime cost.
 func AutoPortal(u *ecs.Universe) {
 	col := ecs.ColumnFor[core.Sector](u, core.SectorCID)
 	for i := range col.Cap() {

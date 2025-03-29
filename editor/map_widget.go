@@ -250,11 +250,11 @@ func (mw *MapWidget) TypedShortcut(s fyne.Shortcut) {
 	case "Redo":
 		editor.RedoCurrent()
 	case "Cut":
-		editor.Act(&actions.Copy{IEditor: editor, Cut: true})
+		editor.Act(&actions.Copy{Action: state.Action{IEditor: editor}, Cut: true})
 	case "Copy":
-		editor.Act(&actions.Copy{IEditor: editor, Cut: false})
+		editor.Act(&actions.Copy{Action: state.Action{IEditor: editor}, Cut: false})
 	case "Paste":
-		editor.Act(&actions.Paste{Transform: actions.Transform{IEditor: editor}})
+		editor.Act(&actions.Paste{Transform: actions.Transform{Action: state.Action{IEditor: editor}}})
 	}
 }
 
@@ -292,11 +292,11 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 
 	switch {
 	case evt.Button == desktop.MouseButtonSecondary && editor.CurrentAction == nil:
-		editor.Act(&actions.Select{Place: actions.Place{IEditor: editor}})
+		editor.Act(&actions.Select{Place: actions.Place{Action: state.Action{IEditor: editor}}})
 	case evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil:
-		editor.Act(&actions.Pan{IEditor: editor})
+		editor.Act(&actions.Pan{Action: state.Action{IEditor: editor}})
 	case evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.SelectedObjects.Empty():
-		editor.Act(&actions.Transform{IEditor: editor})
+		editor.Act(&actions.Transform{Action: state.Action{IEditor: editor}})
 	}
 
 	if placeable, ok := editor.CurrentAction.(actions.Placeable); ok {

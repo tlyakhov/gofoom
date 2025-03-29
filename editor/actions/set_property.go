@@ -16,7 +16,7 @@ import (
 )
 
 type SetProperty struct {
-	state.IEditor
+	state.Action
 	*state.PropertyGridField
 	Original       []reflect.Value
 	ValuesToAssign []reflect.Value

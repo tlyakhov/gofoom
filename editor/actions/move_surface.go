@@ -18,7 +18,7 @@ const (
 )
 
 type MoveSurface struct {
-	state.IEditor
+	state.Action
 
 	Original []any
 	Mode     SurfaceMode

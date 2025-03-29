@@ -19,7 +19,7 @@ type Placeable interface {
 }
 
 type Place struct {
-	state.IEditor
+	state.Action
 
 	Mode     string
 	Modifier fyne.KeyModifier

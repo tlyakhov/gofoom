@@ -64,3 +64,7 @@ func (a *AddInternalSegment) EndPoint() bool {
 func (a *AddInternalSegment) Status() string {
 	return "Click to place " + a.Mode
 }
+
+func (a *AddInternalSegment) Serialize() map[string]any {
+	return nil
+}

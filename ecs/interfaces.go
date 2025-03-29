@@ -7,16 +7,19 @@ import (
 	"reflect"
 )
 
+type Universal interface {
+	// OnAttach is called when the component is attached to an Universe instance.
+	OnAttach(u *Universe)
+	// GetUniverse returns the Universe instance associated with the component.
+	GetUniverse() *Universe
+}
+
 // Serializable is an interface for components that can be serialized and deserialized.
 type Serializable interface {
 	// Construct initializes the component from a map of data.
 	Construct(data map[string]any)
 	// Serialize returns a map representing the component's data for serialization.
 	Serialize() map[string]any
-	// OnAttach is called when the component is attached to an Universe instance.
-	OnAttach(u *Universe)
-	// GetUniverse returns the Universe instance associated with the component.
-	GetUniverse() *Universe
 }
 
 // SubSerializable is an interface for sub-components that can be serialized and deserialized.
@@ -29,6 +32,7 @@ type SubSerializable interface {
 
 // Attachable is an interface for components that can be attached to entities in the Universe.
 type Attachable interface {
+	Universal
 	Serializable
 	// String returns a string representation of the component.
 	String() string

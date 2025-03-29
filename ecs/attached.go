@@ -162,6 +162,7 @@ func (a *Attached) Serialize() map[string]any {
 func ConstructSlice[PT interface {
 	*T
 	Serializable
+	Universal
 }, T any](u *Universe, data any, hook func(item PT)) []PT {
 	var result []PT
 

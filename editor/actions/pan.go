@@ -17,7 +17,7 @@ var _ desktop.Hoverable = (*Pan)(nil)
 var _ desktop.Mouseable = (*Pan)(nil)
 
 type Pan struct {
-	state.IEditor
+	state.Action
 
 	Mode        string
 	OriginalPos concepts.Vector2

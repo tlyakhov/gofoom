@@ -10,7 +10,7 @@ import (
 )
 
 type AddComponent struct {
-	state.IEditor
+	state.Action
 
 	Entities []ecs.Entity
 	ID       ecs.ComponentID
@@ -32,4 +32,11 @@ func (a *AddComponent) Redo() {
 		a.State().Universe.NewAttachedComponent(entity, a.ID)
 	}
 	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
+}
+
+func (a *AddComponent) Construct(data map[string]any) {
+}
+
+func (a *AddComponent) Serialize() map[string]any {
+	return nil
 }

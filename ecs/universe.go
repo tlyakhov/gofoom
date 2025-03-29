@@ -27,8 +27,13 @@ type Universe struct {
 	FuncMap         template.FuncMap
 	SourceFileNames map[string]*SourceFile
 	SourceFileIDs   map[EntitySourceID]*SourceFile
-	rows            []ComponentTable
-	columns         []AttachableColumn
+	// TODO: With the way source file entity IDs work, we get potentially large
+	// (multi-MB) gaps in between consecutive runs of entity IDs. If we ever
+	// need to make entity counts larger, we should probably store a slice of
+	// rows per source ID. It would cost an indirect access, but it would save
+	// gobs of RAM.
+	rows    []ComponentTable
+	columns []AttachableColumn
 }
 
 func NewUniverse() *Universe {

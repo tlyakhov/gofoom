@@ -316,7 +316,7 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 			return
 		}
 		g.Act(&actions.AddComponent{
-			IEditor:  g.IEditor,
+			Action:   state.Action{IEditor: g},
 			ID:       optsComponentIDs[optsIndex],
 			Entities: entities})
 	})
@@ -508,7 +508,7 @@ func (g *Grid) Focus(o fyne.CanvasObject) {
 
 func (g *Grid) ApplySetPropertyAction(field *state.PropertyGridField, v reflect.Value) {
 	action := &actions.SetProperty{
-		IEditor:           g.IEditor,
+		Action:            state.Action{IEditor: g},
 		PropertyGridField: field,
 	}
 	action.AssignAll(v)

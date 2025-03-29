@@ -11,7 +11,7 @@ import (
 )
 
 type AlignGrid struct {
-	state.IEditor
+	state.Action
 	PrevA, PrevB, A, B concepts.Vector2
 }
 
