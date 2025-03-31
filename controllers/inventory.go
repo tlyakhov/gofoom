@@ -12,7 +12,7 @@ import (
 
 func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) {
 	item := behaviors.GetInventoryItem(ic.Universe, itemEntity)
-	if item == nil || !item.Active {
+	if item == nil || !item.IsActive() {
 		return
 	}
 	player := behaviors.GetPlayer(ic.Universe, ic.Entity)
@@ -42,7 +42,7 @@ func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) 
 		// Disable all the entity components
 		for _, c := range item.Universe.AllComponents(itemEntity) {
 			if c != nil && !c.MultiAttachable() {
-				c.Base().Active = false
+				c.Base().Flags &= ^ecs.ComponentActive
 			}
 		}
 	}

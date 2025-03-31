@@ -56,7 +56,7 @@ func (c *Config) RefreshPlayer() {
 	col := ecs.ColumnFor[behaviors.Player](c.Universe, behaviors.PlayerCID)
 	for i := range col.Cap() {
 		player := col.Value(i)
-		if player == nil || !player.Active || player.Spawn {
+		if player == nil || !player.IsActive() || player.Spawn {
 			continue
 		}
 		c.Player = player

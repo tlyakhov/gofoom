@@ -528,10 +528,10 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](u *Universe, field
 
 	*field = u.NewAttachedComponent(e, cid).(PT)
 	base := (*field).Base()
-	base.Flags = ComponentInternal
+	base.Flags |= ComponentInternal
 	n := u.NewAttachedComponent(base.Entity, NamedCID).(*Named)
 	n.Name = name
-	n.Flags = ComponentInternal
+	n.Flags |= ComponentInternal
 
 	return true
 }

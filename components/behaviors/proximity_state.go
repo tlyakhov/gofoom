@@ -50,7 +50,7 @@ func (p *ProximityState) String() string {
 
 func (p *ProximityState) Construct(data map[string]any) {
 	p.Attached.Construct(data)
-	p.Attached.Flags = ecs.ComponentInternal
+	p.Attached.Flags |= ecs.ComponentInternal
 
 	if data == nil {
 		return

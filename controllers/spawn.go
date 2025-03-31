@@ -17,7 +17,7 @@ func Respawn(u *ecs.Universe, force bool) {
 	col := ecs.ColumnFor[behaviors.Player](u, behaviors.PlayerCID)
 	for i := range col.Cap() {
 		p := col.Value(i)
-		if p == nil || !p.Active {
+		if p == nil || !p.IsActive() {
 			continue
 		}
 		if p.Spawn {

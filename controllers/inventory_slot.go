@@ -42,6 +42,6 @@ func (isc *InventorySlotController) Target(target ecs.Attachable, e ecs.Entity) 
 func (isc *InventorySlotController) Recalculate() {
 	if isc.WeaponClass != nil && isc.Weapon == nil {
 		isc.Weapon = isc.Universe.NewAttachedComponent(isc.Entity, behaviors.WeaponCID).(*behaviors.Weapon)
-		isc.Weapon.Flags = ecs.ComponentInternal
+		isc.Weapon.Flags |= ecs.ComponentInternal
 	}
 }

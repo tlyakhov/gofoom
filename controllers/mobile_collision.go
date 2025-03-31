@@ -221,7 +221,7 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 
 	// Next handle the other cases and check if we need to do a bounce
 	if aResponse&core.CollideDeactivate != 0 {
-		mc.Body.Active = false
+		mc.Body.Flags &= ^ecs.ComponentActive
 	}
 	if aResponse&core.CollideStop != 0 {
 		mc.Vel.Now[0] = 0
@@ -234,7 +234,7 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 	}
 
 	if bResponse&core.CollideDeactivate != 0 {
-		bMobile.Active = false
+		bMobile.Flags &= ^ecs.ComponentActive
 	}
 	if bResponse&core.CollideStop != 0 {
 		bMobile.Vel.Now[0] = 0
@@ -297,11 +297,11 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 
 func (mc *MobileController) bodyBodyCollide() {
 	mc.tree.Root.RangeCircle(mc.Body.Pos.Now.To2D(), mc.Body.Size.Now[0]*0.5, func(body *core.Body) bool {
-		if !body.Active || body == mc.Body {
+		if !body.IsActive() || body == mc.Body {
 			return true
 		}
 		mobile := core.GetMobile(mc.Universe, body.Entity)
-		if mobile == nil || !mobile.Active {
+		if mobile == nil || !mobile.IsActive() {
 			return true
 		}
 

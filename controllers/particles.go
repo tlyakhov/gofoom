@@ -89,11 +89,11 @@ func (pc *ParticleController) Always() {
 		e := pc.Universe.NewEntity()
 		pc.Spawned[e] = pc.Universe.Timestamp
 		body := pc.Universe.NewAttachedComponent(e, core.BodyCID).(*core.Body)
-		body.Flags = ecs.ComponentInternal
+		body.Flags |= ecs.ComponentInternal
 		vis := pc.Universe.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
-		vis.Flags = ecs.ComponentInternal
+		vis.Flags |= ecs.ComponentInternal
 		mobile := pc.Universe.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
-		mobile.Flags = ecs.ComponentInternal
+		mobile.Flags |= ecs.ComponentInternal
 
 		pc.Universe.Link(e, pc.Source)
 		body.Pos.Now.From(&pc.Body.Pos.Now)

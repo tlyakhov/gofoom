@@ -24,16 +24,16 @@ func CreateLightBody(u *ecs.Universe) ecs.Entity {
 func CreateFont(u *ecs.Universe, filename string, name string) ecs.Entity {
 	e := u.NewEntity()
 	named := u.NewAttachedComponent(e, ecs.NamedCID).(*ecs.Named)
-	named.Flags = ecs.ComponentInternal
+	named.Flags |= ecs.ComponentInternal
 	named.Name = name
 	img := u.NewAttachedComponent(e, materials.ImageCID).(*materials.Image)
-	img.Flags = ecs.ComponentInternal
+	img.Flags |= ecs.ComponentInternal
 	img.Source = filename
 	img.GenerateMipMaps = false
 	img.Filter = false
 	img.Load()
 	sprite := u.NewAttachedComponent(e, materials.SpriteSheetCID).(*materials.SpriteSheet)
-	sprite.Flags = ecs.ComponentInternal
+	sprite.Flags |= ecs.ComponentInternal
 	sprite.Rows = 16
 	sprite.Cols = 16
 	sprite.Material = e

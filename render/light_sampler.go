@@ -273,13 +273,13 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			ls.Filter[3] += ls.MaterialSampler.Output[3]
 		}
 		for _, b := range sector.Bodies {
-			if !b.Active ||
+			if !b.IsActive() ||
 				b.Entity == lightBody.Entity ||
 				b.Entity == ls.InputBody {
 				continue
 			}
 			vis := materials.GetVisible(ls.Universe, b.Entity)
-			if vis == nil || !vis.Active || vis.Shadow == materials.ShadowNone {
+			if vis == nil || !vis.IsActive() || vis.Shadow == materials.ShadowNone {
 				continue
 			}
 			switch vis.Shadow {

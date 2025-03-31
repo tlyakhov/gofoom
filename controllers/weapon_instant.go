@@ -40,7 +40,7 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	for sector != nil {
 		for _, b := range sector.Bodies {
-			if !b.Active || b.Entity == wc.Body.Entity {
+			if !b.IsActive() || b.Entity == wc.Body.Entity {
 				continue
 			}
 			if ok := wc.Sampler.InitializeRayBody(p, rayEnd, b); ok {

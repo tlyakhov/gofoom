@@ -86,7 +86,7 @@ func (pc *ProximityController) react(target ecs.Entity) {
 	if state, loaded = pc.State.Load(key); !loaded {
 		// TODO: Think through the lifecycle of these. Should they be serialized?
 		state = pc.Universe.NewAttachedComponent(pc.Universe.NewEntity(), behaviors.ProximityStateCID).(*behaviors.ProximityState)
-		state.Attached.Flags = ecs.ComponentInternal
+		state.Attached.Flags |= ecs.ComponentInternal
 		state.Source = pc.Entity
 		state.Target = target
 		state.PrevStatus = behaviors.ProximityIdle
@@ -117,7 +117,7 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 	pc.flags |= behaviors.ProximityTargetsBody
 	pc.flags &= ^behaviors.ProximityTargetsSector
 	pc.tree.Root.RangeCircle(sector.Center.To2D(), pc.Range, func(b *core.Body) bool {
-		if !b.Active || !pc.isValid(b.Entity) {
+		if !b.IsActive() || !pc.isValid(b.Entity) {
 			return true
 		}
 		pc.TargetBody = b
@@ -153,7 +153,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	pc.flags |= behaviors.ProximityTargetsBody
 	pc.flags &= ^behaviors.ProximityTargetsSector
 	pc.tree.Root.RangeCircle(body.Pos.Now.To2D(), pc.Range, func(b *core.Body) bool {
-		if !b.Active || b == body || !pc.isValid(b.Entity) {
+		if !b.IsActive() || b == body || !pc.isValid(b.Entity) {
 			return true
 		}
 		pc.TargetBody = b
@@ -200,9 +200,9 @@ func (pc *ProximityController) Always() {
 
 	pc.flags = 0
 	// TODO: Add InternalSegments
-	if sector := core.GetSector(pc.Universe, pc.Entity); sector != nil && sector.Active {
+	if sector := core.GetSector(pc.Universe, pc.Entity); sector != nil && sector.IsActive() {
 		pc.proximityOnSector(sector)
-	} else if body := core.GetBody(pc.Universe, pc.Entity); body != nil && body.SectorEntity != 0 && body.Active {
+	} else if body := core.GetBody(pc.Universe, pc.Entity); body != nil && body.SectorEntity != 0 && body.IsActive() {
 		pc.proximityOnBody(body)
 	}
 

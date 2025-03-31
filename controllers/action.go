@@ -254,7 +254,7 @@ func (ac *ActionController) Always() {
 			case dynamic.AnimationLifetimeLoop:
 				ac.State.Action = ac.Start
 			case dynamic.AnimationLifetimeOnce:
-				ac.State.Active = false
+				ac.State.Flags &= ^ecs.ComponentActive
 			case dynamic.AnimationLifetimeBounce:
 			case dynamic.AnimationLifetimeBounceOnce:
 			}
