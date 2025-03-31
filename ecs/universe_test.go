@@ -66,7 +66,7 @@ func TestDetachComponent(t *testing.T) {
 	if component.Attachments != 0 {
 		t.Errorf("DetachComponent did not remove all attachments")
 	}
-	for _, row := range u.rows {
+	for _, row := range u.rows[0] {
 		if len(row) > 0 {
 			t.Errorf("DetachComponent did not remove the row")
 		}

@@ -27,12 +27,8 @@ type Universe struct {
 	FuncMap         template.FuncMap
 	SourceFileNames map[string]*SourceFile
 	SourceFileIDs   map[EntitySourceID]*SourceFile
-	// TODO: With the way source file entity IDs work, we get potentially large
-	// (multi-MB) gaps in between consecutive runs of entity IDs. If we ever
-	// need to make entity counts larger, we should probably store a slice of
-	// rows per source ID. It would cost an indirect access, but it would save
-	// gobs of RAM.
-	rows    []ComponentTable
+
+	rows    [EntitySourceIDBits][]ComponentTable
 	columns []AttachableColumn
 }
 
@@ -47,8 +43,9 @@ func (u *Universe) Clear() {
 	u.Entities = bitmap.Bitmap{}
 	// 0 is reserved and represents 'null' entity
 	u.Entities.Set(0)
-	// rows are indexed by entity ID, so we need to reserve the 0th row
-	u.rows = make([]ComponentTable, 1)
+	for i := range len(u.rows) {
+		u.rows[i] = nil
+	}
 	u.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
 	u.Simulation = dynamic.NewSimulation()
 	u.SourceFileNames = make(map[string]*SourceFile)
@@ -80,9 +77,9 @@ func (u *Universe) NewEntity() Entity {
 		u.Entities.Set(free)
 		return Entity(free)
 	}
-	nextFree := len(u.rows)
-	for len(u.rows) < (nextFree + 1) {
-		u.rows = append(u.rows, nil)
+	nextFree := len(u.rows[0])
+	for len(u.rows[0]) < (nextFree + 1) {
+		u.rows[0] = append(u.rows[0], nil)
 	}
 	u.Entities.Set(uint32(nextFree))
 	return Entity(nextFree)
@@ -109,21 +106,35 @@ func (u *Universe) Column(id ComponentID) AttachableColumn {
 	return u.columns[id]
 }
 
+func (u *Universe) localizeEntity(entity Entity) (sid EntitySourceID, local Entity) {
+	if entity == 0 {
+		return 0, 0
+	}
+	sid, local = entity.SourceID(), entity.Local()
+	if len(u.rows[sid]) <= int(local) {
+		return 0, 0
+	}
+	return
+}
+
 // AllComponents retrieves the component table for a specific entity.
 func (u *Universe) AllComponents(entity Entity) ComponentTable {
-	if entity == 0 || len(u.rows) <= int(entity) {
-		return nil
+	if sid, local := u.localizeEntity(entity); local != 0 {
+		return u.rows[sid][int(local)]
 	}
-	return u.rows[int(entity)]
+	return nil
 }
 
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The Get* methods are better.
 func (u *Universe) Component(entity Entity, id ComponentID) Attachable {
-	if entity == 0 || id == 0 || u == nil || len(u.rows) <= int(entity) {
+	if id == 0 || u == nil {
 		return nil
 	}
-	return u.rows[int(entity)].Get(id)
+	if sid, local := u.localizeEntity(entity); local != 0 {
+		return u.rows[sid][int(local)].Get(id)
+	}
+	return nil
 }
 
 func (u *Universe) Singleton(id ComponentID) Attachable {
@@ -146,15 +157,32 @@ func (u *Universe) First(id ComponentID) Attachable {
 }
 
 func (u *Universe) Link(target Entity, source Entity) {
-	if target == 0 || source == 0 ||
-		len(u.rows) <= int(source) || len(u.rows) <= int(target) {
+	sourceID, sourceLocal := u.localizeEntity(source)
+	if sourceLocal == 0 {
 		return
 	}
-	for _, c := range u.rows[int(source)] {
+	_, targetLocal := u.localizeEntity(target)
+	if targetLocal == 0 {
+		return
+	}
+	for _, c := range u.rows[sourceID][int(sourceLocal)] {
 		if c == nil || !c.MultiAttachable() {
 			continue
 		}
 		u.attach(target, &c, c.Base().ComponentID)
+	}
+}
+
+func (u *Universe) expandRows(sid EntitySourceID, size int) {
+	if size < cap(u.rows[sid]) {
+		for size >= len(u.rows[sid]) {
+			u.rows[sid] = append(u.rows[sid], nil)
+		}
+	} else {
+		newSize := (((size + 1) / 256) + 1) * 256
+		tmp := u.rows[sid]
+		u.rows[sid] = make([]ComponentTable, size+1, newSize)
+		copy(u.rows[sid], tmp)
 	}
 }
 
@@ -171,12 +199,11 @@ func (u *Universe) attach(entity Entity, component *Attachable, componentID Comp
 		return
 	}
 
-	for int(entity) >= len(u.rows) {
-		u.rows = append(u.rows, nil)
-	}
+	sid, local := entity.SourceID(), entity.Local()
+	u.expandRows(sid, int(local))
 
 	// Try to retrieve the existing component for this entity
-	ec := u.rows[int(entity)].Get(componentID)
+	ec := u.rows[sid][int(local)].Get(componentID)
 
 	// Did the caller:
 	// 1. not provide a component?
@@ -209,7 +236,7 @@ func (u *Universe) attach(entity Entity, component *Attachable, componentID Comp
 	a.Entity = entity
 	a.Attachments++
 	a.ComponentID = componentID
-	u.rows[int(entity)].Set(attachable)
+	u.rows[sid][int(local)].Set(attachable)
 	attachable.OnAttach(u)
 }
 
@@ -271,11 +298,13 @@ func (u *Universe) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 		return
 	}
 
-	if len(u.rows) <= int(entity) {
-		log.Printf("Universe.Detach: entity %v is >= length of list %v.", entity, len(u.rows))
+	sid, local := entity.SourceID(), entity.Local()
+
+	if len(u.rows[sid]) <= int(local) {
+		log.Printf("Universe.Detach: entity %v is >= length of list %v.", local, len(u.rows[sid]))
 		return
 	}
-	ec := u.rows[int(entity)].Get(id)
+	ec := u.rows[sid][int(local)].Get(id)
 	column := u.columns[id]
 	if ec == nil {
 		// This component is not attached
@@ -288,11 +317,11 @@ func (u *Universe) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 		column.Detach(ec.Base().indexInColumn)
 		ec.OnDelete()
 	}
-	u.rows[int(entity)].Delete(id)
+	u.rows[sid][int(local)].Delete(id)
 
 	if checkForEmpty {
 		allNil := true
-		for _, a := range u.rows[int(entity)] {
+		for _, a := range u.rows[sid][int(local)] {
 			if a != nil {
 				allNil = false
 				break
@@ -300,7 +329,7 @@ func (u *Universe) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 		}
 		if allNil {
 			u.Entities.Remove(uint32(entity))
-			u.rows[int(entity)] = nil
+			u.rows[sid][int(local)] = nil
 		}
 	}
 }
@@ -339,11 +368,12 @@ func (u *Universe) Delete(entity Entity) {
 
 	u.Entities.Remove(uint32(entity))
 
-	if len(u.rows) <= int(entity) {
+	sid, local := u.localizeEntity(entity)
+	if local == 0 {
 		return
 	}
 
-	for _, c := range u.rows[int(entity)] {
+	for _, c := range u.rows[sid][int(local)] {
 		if c == nil {
 			continue
 		}
@@ -354,7 +384,7 @@ func (u *Universe) Delete(entity Entity) {
 			u.columns[id].Detach(c.Base().indexInColumn)
 		}
 	}
-	u.rows[int(entity)] = nil
+	u.rows[sid][int(local)] = nil
 }
 
 // TODO: Optimize this and add ability to wildcard search
@@ -370,10 +400,11 @@ func (u *Universe) GetEntityByName(name string) Entity {
 }
 
 func (u *Universe) EntityAllNoSave(entity Entity) bool {
-	if entity == 0 || len(u.rows) <= int(entity) {
+	sid, local := u.localizeEntity(entity)
+	if local == 0 {
 		return false
 	}
-	for _, c := range u.rows[int(entity)] {
+	for _, c := range u.rows[sid][int(local)] {
 		if c == nil {
 			continue
 		}
@@ -395,7 +426,8 @@ func (u *Universe) Load(filename string) error {
 func (u *Universe) serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {
 	yamlEntity := make(map[string]any)
 	yamlEntity["Entity"] = entity.String()
-	for _, component := range u.rows[int(entity)] {
+	sid, local := entity.SourceID(), entity.Local()
+	for _, component := range u.rows[sid][int(local)] {
 		if component == nil || (component.Base().Flags&ComponentNoSave != 0) {
 			continue
 		}
