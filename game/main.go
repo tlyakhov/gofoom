@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"image"
 	"log"
+	_ "net/http/pprof"
 	"os"
+	"runtime"
 	"runtime/pprof"
 
 	"tlyakhov/gofoom/archetypes"
@@ -34,6 +36,7 @@ import (
 )
 
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
+var memProfile = flag.String("memprofile", "", "Write Memory profile to file")
 var win *opengl.Window
 var u *ecs.Universe
 var renderer *render.Renderer
@@ -148,7 +151,6 @@ func run() {
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
 	}
-
 	w := 640
 	h := 360
 	cfg := opengl.WindowConfig{
@@ -199,6 +201,21 @@ func run() {
 
 	for !win.Closed() {
 		u.Simulation.Step()
+	}
+
+	if *memProfile != "" {
+		f, err := os.Create(*memProfile)
+		if err != nil {
+			log.Fatal("could not create memory profile: ", err)
+		}
+		defer f.Close() // error handling omitted for example
+		runtime.GC()    // get up-to-date statistics
+		// Lookup("allocs") creates a profile similar to go test -memprofile.
+		// Alternatively, use Lookup("heap") for a profile
+		// that has inuse_space as the default index.
+		if err := pprof.Lookup("heap").WriteTo(f, 0); err != nil {
+			log.Fatal("could not write memory profile: ", err)
+		}
 	}
 }
 

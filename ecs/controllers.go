@@ -106,7 +106,8 @@ func (u *Universe) ActAllControllers(method ControllerMethod) {
 
 // ActAllControllersOneEntity runs all controllers for a specific entity that have the specified method.
 func (u *Universe) ActAllControllersOneEntity(entity Entity, method ControllerMethod) {
-	if entity == 0 || len(u.rows) <= int(entity) {
+	sid, local := u.localizeEntity(entity)
+	if local == 0 {
 		return
 	}
 
@@ -119,7 +120,7 @@ func (u *Universe) ActAllControllersOneEntity(entity Entity, method ControllerMe
 			continue
 		}
 		// Iterate through the components attached to the entity.
-		for _, component := range u.rows[entity] {
+		for _, component := range u.rows[sid][local] {
 			if component == nil ||
 				component.Base().ComponentID != controller.ComponentID() {
 				continue
