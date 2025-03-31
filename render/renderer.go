@@ -203,14 +203,14 @@ func (r *Renderer) RenderSector(block *block) {
 
 	// Store bodies & internal segments for later
 	r.tree.Root.RangeAABB(block.Sector.Min.To2D(), block.Sector.Max.To2D(), func(b *core.Body) bool {
-		if b == nil || !b.Active {
+		if b == nil || !b.IsActive() {
 			return true
 		}
 		block.Bodies.Add(b)
 		return true
 	})
 	for _, iseg := range block.Sector.InternalSegments {
-		if iseg == nil || !iseg.Active {
+		if iseg == nil || !iseg.IsActive() {
 			continue
 		}
 		block.InternalSegments[iseg] = block.Sector
@@ -396,7 +396,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 
 	for b := range block.Bodies {
 		vis := materials.GetVisible(b.Universe, b.Entity)
-		if vis == nil || !vis.Active {
+		if vis == nil || !vis.IsActive() {
 			continue
 		}
 		ewd2s = append(ewd2s, &entityWithDist2{

@@ -38,7 +38,7 @@ func (q *Quadtree) String() string {
 func (q *Quadtree) Construct(data map[string]any) {
 	q.Attached.Construct(data)
 
-	q.Flags = ecs.ComponentInternal // never serialize this
+	q.Flags |= ecs.ComponentInternal // never serialize this
 	q.Build()
 }
 
@@ -75,7 +75,7 @@ func (q *Quadtree) Build() {
 	colBody := ecs.ColumnFor[Body](q.Universe, BodyCID)
 	for i := range colBody.Cap() {
 		body := colBody.Value(i)
-		if body == nil || !body.Active {
+		if body == nil || !body.IsActive() {
 			continue
 		}
 		q.Update(body)

@@ -3,14 +3,22 @@
 
 package ecs
 
+import (
+	"tlyakhov/gofoom/concepts"
+
+	"github.com/spf13/cast"
+)
+
 // ComponentFlags represents flags that can be associated with a component.
 //
 //go:generate go run github.com/dmarkham/enumer -type=ComponentFlags -json
 type ComponentFlags int
 
 const (
+	// ComponentActive indicates that the component should be processed by controllers.
+	ComponentActive ComponentFlags = 1 << iota
 	// ComponentNoSave indicates that the component should not be saved to disk.
-	ComponentNoSave ComponentFlags = 1 << iota
+	ComponentNoSave
 	// ComponentHideInEditor indicates that the component should be hidden in
 	// the editor.
 	ComponentHideInEditor
@@ -33,9 +41,6 @@ type Attached struct {
 	// Entities is a table of entities to which this component is attached. This
 	// is used for components that can be attached to multiple entities.
 	Entities EntityTable `editable:"Component" edit_type:"Component" edit_sort:"0"`
-	// Active indicates whether the component is active. Inactive components
-	// are not processed by controllers.
-	Active bool `editable:"Active?"`
 	// Attachments is a reference counter tracking the number of entities this
 	// component is attached to.
 	Attachments int
@@ -43,14 +48,14 @@ type Attached struct {
 	Universe *Universe
 	// Flags are bit flags that control the behavior of the component, such as
 	// whether it is saved or visible in the editor.
-	Flags ComponentFlags
+	Flags ComponentFlags `editable:"Flags"`
 	// indexInColumn is the index of this component within its column in the Universe.
 	indexInColumn int
 }
 
 // IsActive checks if the component is active, attached to any entities, and not nil.
 func (a *Attached) IsActive() bool {
-	return a != nil && a.Attachments > 0 && a.Active
+	return a != nil && a.Attachments > 0 && (a.Flags&ComponentActive != 0)
 }
 
 // IsExternal checks if the component is sourced from another file.
@@ -132,14 +137,13 @@ func (a *Attached) OnAttach(u *Universe) {
 // Construct initializes the component with data from a map. It sets the active
 // flag to true and applies any provided data.
 func (a *Attached) Construct(data map[string]any) {
-	a.Active = true
-	a.Flags = 0
+	a.Flags = ComponentActive
 
 	if data == nil {
 		return
 	}
-	if v, ok := data["Active"]; ok {
-		a.Active = v.(bool)
+	if v, ok := data["_Flags"]; ok {
+		a.Flags = concepts.ParseFlags(cast.ToString(v), ComponentFlagsString)
 	}
 	// TODO: Is this construction used anywhere? This should be happening in Universe
 	//a.Entities, a.Attachments = ParseEntitiesFromMap(data)
@@ -149,8 +153,8 @@ func (a *Attached) Construct(data map[string]any) {
 // It includes the entities and the active flag if it's false.
 func (a *Attached) Serialize() map[string]any {
 	result := map[string]any{"Entities": a.Entities.Serialize(a.Universe)}
-	if !a.Active {
-		result["Active"] = a.Active
+	if a.Flags != ComponentActive {
+		result["_Flags"] = concepts.SerializeFlags(a.Flags, ComponentFlagsValues())
 	}
 
 	return result
