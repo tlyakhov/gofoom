@@ -112,7 +112,7 @@ func (a *AddEntity) Activate() {
 		if component == nil {
 			continue
 		}
-		a.State().Universe.Attach(component.Base().ComponentID, a.Entity, &a.Components[i])
+		a.State().Universe.Attach(component.ComponentID(), a.Entity, &a.Components[i])
 	}
 	a.SelectObjects(true, selection.SelectableFromEntity(a.State().Universe, a.Entity))
 }

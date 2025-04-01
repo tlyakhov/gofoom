@@ -53,6 +53,9 @@ func init() {
 	}
 }
 
+func (x *VerticalDoor) ComponentID() ecs.ComponentID {
+	return VerticalDoorCID
+}
 func GetVerticalDoor(u *ecs.Universe, e ecs.Entity) *VerticalDoor {
 	if asserted, ok := u.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
 		return asserted

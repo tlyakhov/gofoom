@@ -26,6 +26,9 @@ func init() {
 	ToneMapCID = ecs.RegisterComponent(&ecs.Column[ToneMap, *ToneMap]{Getter: GetToneMap})
 }
 
+func (x *ToneMap) ComponentID() ecs.ComponentID {
+	return ToneMapCID
+}
 func GetToneMap(u *ecs.Universe, e ecs.Entity) *ToneMap {
 	panic("Tried to materials.GetToneMap. Use Universe.Singleton(materials.ToneMapCID) instead.")
 	/*

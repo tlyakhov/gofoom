@@ -31,11 +31,15 @@ const (
 // internal to the engine and should not be saved or modified by the user.
 const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLockedInEditor
 
+// There are architectural issues here. The whole point of the ECS is to have
+// all the data for a given component be next to each other in memory and enable
+// efficient access by controllers. However, with the `Attached` mixin, we lose
+// that by having to include all these extra fields. On top of that, accessing
+// those fields via interface is wasteful and makes it much harder to optimize.
+
 // Attached has a set of fields common to every component and implements
 // the Attachable interface. It is required for every component in the Universe.
 type Attached struct {
-	// ComponentID is the unique identifier for the component type. See `RegisterComponent`
-	ComponentID
 	// Entity is the ID of the primary entity to which this component is attached.
 	Entity
 	// Entities is a table of entities to which this component is attached. This

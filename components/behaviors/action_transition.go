@@ -20,6 +20,10 @@ func init() {
 	ActionTransitionCID = ecs.RegisterComponent(&ecs.Column[ActionTransition, *ActionTransition]{Getter: GetActionTransition})
 }
 
+func (*ActionTransition) ComponentID() ecs.ComponentID {
+	return ActionTransitionCID
+}
+
 func GetActionTransition(u *ecs.Universe, e ecs.Entity) *ActionTransition {
 	if asserted, ok := u.Component(e, ActionTransitionCID).(*ActionTransition); ok {
 		return asserted

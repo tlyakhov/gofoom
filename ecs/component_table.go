@@ -22,7 +22,7 @@ var ComponentTableHit, ComponentTableMiss atomic.Uint64
 
 // Set adds or updates a component in the table.
 func (table *ComponentTable) Set(a Attachable) {
-	cid := a.Base().ComponentID
+	cid := a.ComponentID()
 	size := ComponentID(len(*table))
 	if size == 0 {
 		// If the table is empty, initialize it with the growth rate.
@@ -33,7 +33,7 @@ func (table *ComponentTable) Set(a Attachable) {
 	i := cid % size
 	// Use linear probing to find an empty slot or a slot with the same component ID.
 	for range size {
-		if (*table)[i] == nil || (*table)[i].Base().ComponentID == cid {
+		if (*table)[i] == nil || (*table)[i].ComponentID() == cid {
 			// Place the component in the found slot.
 			(*table)[i] = a
 			return
@@ -72,7 +72,7 @@ func (table ComponentTable) Get(cid ComponentID) Attachable {
 		if table[i] == nil {
 			// If an empty slot is encountered, the component is not in the table.
 			break
-		} else if table[i].Base().ComponentID == cid {
+		} else if table[i].ComponentID() == cid {
 			// If a component with the matching ID is found, return it.
 			//ComponentTableHit.Add(1)
 			return table[i]
@@ -99,7 +99,7 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 			// Already nil, nothing to do
 			return
 		}
-		if (*table)[i].Base().ComponentID == cid {
+		if (*table)[i].ComponentID() == cid {
 			found = true
 			break
 		}
@@ -119,7 +119,7 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 		if (*table)[i] == nil {
 			return
 		}
-		cid := (*table)[i].Base().ComponentID
+		cid := (*table)[i].ComponentID()
 		hash := cid % size
 		if hash != i {
 			(*table)[prev], (*table)[i] = (*table)[i], nil

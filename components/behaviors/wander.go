@@ -27,6 +27,9 @@ func init() {
 	WanderCID = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander})
 }
 
+func (x *Wander) ComponentID() ecs.ComponentID {
+	return WanderCID
+}
 func GetWander(u *ecs.Universe, e ecs.Entity) *Wander {
 	if asserted, ok := u.Component(e, WanderCID).(*Wander); ok {
 		return asserted

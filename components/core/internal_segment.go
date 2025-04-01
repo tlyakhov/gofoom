@@ -26,6 +26,9 @@ func init() {
 	InternalSegmentCID = ecs.RegisterComponent(&ecs.Column[InternalSegment, *InternalSegment]{Getter: GetInternalSegment})
 }
 
+func (x *InternalSegment) ComponentID() ecs.ComponentID {
+	return InternalSegmentCID
+}
 func GetInternalSegment(u *ecs.Universe, e ecs.Entity) *InternalSegment {
 	if asserted, ok := u.Component(e, InternalSegmentCID).(*InternalSegment); ok {
 		return asserted

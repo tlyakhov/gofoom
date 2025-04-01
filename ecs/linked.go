@@ -33,6 +33,10 @@ func GetLinked(u *Universe, e Entity) *Linked {
 	return nil
 }
 
+func (*Linked) ComponentID() ComponentID {
+	return LinkedCID
+}
+
 func (n *Linked) String() string {
 	result := ""
 	for _, e := range n.Sources {
@@ -52,7 +56,7 @@ func (n *Linked) OnDetach(e Entity) {
 	// Remove this entity from any linked copies
 	for _, c := range n.SourceComponents {
 		if c != nil {
-			n.Universe.detach(c.Base().ComponentID, n.Entity, false)
+			n.Universe.detach(c.ComponentID(), n.Entity, false)
 		}
 	}
 	n.SourceComponents = make(ComponentTable, 0)

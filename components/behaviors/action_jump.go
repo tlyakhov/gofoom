@@ -17,6 +17,9 @@ func init() {
 	ActionJumpCID = ecs.RegisterComponent(&ecs.Column[ActionJump, *ActionJump]{Getter: GetActionJump})
 }
 
+func (x *ActionJump) ComponentID() ecs.ComponentID {
+	return ActionJumpCID
+}
 func GetActionJump(u *ecs.Universe, e ecs.Entity) *ActionJump {
 	if asserted, ok := u.Component(e, ActionJumpCID).(*ActionJump); ok {
 		return asserted

@@ -285,7 +285,7 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 			if c == nil {
 				continue
 			}
-			componentList.Add(c.Base().ComponentID)
+			componentList.Add(c.ComponentID())
 		}
 	}
 
@@ -461,6 +461,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, concepts.BlendFuncValues())
 		case *behaviors.InventoryItemFlags:
 			g.fieldEnum(field, behaviors.InventoryItemFlagsValues())
+		case *ecs.ComponentFlags:
+			g.fieldEnum(field, ecs.ComponentFlagsValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]*core.Script:

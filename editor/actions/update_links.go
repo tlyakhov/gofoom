@@ -39,7 +39,7 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 		if oldComponent == nil {
 			continue
 		}
-		cid := oldComponent.Base().ComponentID
+		cid := oldComponent.ComponentID()
 		addComponent := a.AddComponents.Get(cid)
 		if a.RemoveComponents.Contains(cid) || (addComponent != nil && addComponent != oldComponent) {
 			u.DetachComponent(cid, entity)
@@ -50,7 +50,7 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 		if addComponent == nil {
 			continue
 		}
-		cid := addComponent.Base().ComponentID
+		cid := addComponent.ComponentID()
 		oldComponent := oldComponents.Get(cid)
 		if oldComponent == nil || addComponent != oldComponent {
 			u.Attach(cid, entity, &addComponent)

@@ -23,6 +23,9 @@ func init() {
 	QuadtreeCID = ecs.RegisterComponent(&ecs.Column[Quadtree, *Quadtree]{Getter: GetQuadtree})
 }
 
+func (x *Quadtree) ComponentID() ecs.ComponentID {
+	return QuadtreeCID
+}
 func GetQuadtree(u *ecs.Universe, e ecs.Entity) *Quadtree {
 	panic("Tried to behaviors.GetQuadtree. Use Universe.Singleton(behaviors.QuadtreeCID) instead.")
 	/*if asserted, ok := u.Component(e, QuadtreeCID).(*Quadtree); ok {

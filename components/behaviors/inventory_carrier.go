@@ -25,6 +25,9 @@ func init() {
 	InventoryCarrierCID = ecs.RegisterComponent(&ecs.Column[InventoryCarrier, *InventoryCarrier]{Getter: GetInventoryCarrier})
 }
 
+func (*InventoryCarrier) ComponentID() ecs.ComponentID {
+	return InventoryCarrierCID
+}
 func GetInventoryCarrier(u *ecs.Universe, e ecs.Entity) *InventoryCarrier {
 	if asserted, ok := u.Component(e, InventoryCarrierCID).(*InventoryCarrier); ok {
 		return asserted

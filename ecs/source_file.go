@@ -30,6 +30,10 @@ func init() {
 	SourceFileCID = RegisterComponent(&Column[SourceFile, *SourceFile]{Getter: GetSourceFile})
 }
 
+func (*SourceFile) ComponentID() ComponentID {
+	return SourceFileCID
+}
+
 func GetSourceFile(u *Universe, e Entity) *SourceFile {
 	if asserted, ok := u.Component(e, SourceFileCID).(*SourceFile); ok {
 		return asserted

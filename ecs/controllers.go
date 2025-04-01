@@ -122,7 +122,7 @@ func (u *Universe) ActAllControllersOneEntity(entity Entity, method ControllerMe
 		// Iterate through the components attached to the entity.
 		for _, component := range u.rows[sid][local] {
 			if component == nil ||
-				component.Base().ComponentID != controller.ComponentID() {
+				component.ComponentID() != controller.ComponentID() {
 				continue
 			}
 			// Call the controller's method on the component.

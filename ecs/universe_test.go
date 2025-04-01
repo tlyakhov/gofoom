@@ -11,6 +11,10 @@ type mockComponent struct {
 	Attached
 }
 
+func (*mockComponent) ComponentID() ComponentID {
+	return mockCID
+}
+
 var mockCID ComponentID
 
 func init() {
@@ -89,7 +93,7 @@ func TestComponent(t *testing.T) {
 	if component == nil {
 		t.Errorf("Component returned nil")
 	}
-	if component.Base().ComponentID != 1 {
+	if component.ComponentID() != 1 {
 		t.Errorf("Component did not have correct ComponentID")
 	}
 }
@@ -100,7 +104,7 @@ func TestSingleton(t *testing.T) {
 	if component == nil {
 		t.Errorf("Singleton returned nil")
 	}
-	if component.Base().ComponentID != 1 {
+	if component.ComponentID() != 1 {
 		t.Errorf("Singleton did not have correct ComponentID")
 	}
 }

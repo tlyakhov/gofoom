@@ -38,7 +38,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 			disable = false
 		}
 		parent = v.Parent().(ecs.Attachable)
-		parentCID = parent.Base().ComponentID
+		parentCID = parent.ComponentID()
 		parentType = ecs.Types().ColumnPlaceholders[parentCID].Type().Name()
 	}
 

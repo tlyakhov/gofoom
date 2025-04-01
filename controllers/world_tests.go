@@ -153,26 +153,21 @@ func CreateTestTree(u *ecs.Universe) ecs.Entity {
 func CreateSpawn(u *ecs.Universe) {
 	e := u.NewEntity()
 	player := &behaviors.Player{}
-	player.ComponentID = behaviors.PlayerCID
 	player.Construct(nil)
 	player.Spawn = true
 	ecs.AttachTyped(u, e, &player)
 	body := &core.Body{}
-	body.ComponentID = core.BodyCID
 	body.Construct(nil)
 	body.Pos.SetAll(concepts.Vector3{50, 50, 40})
 	ecs.AttachTyped(u, e, &body)
 	mobile := &core.Mobile{}
-	mobile.ComponentID = core.MobileCID
 	mobile.Construct(nil)
 	mobile.Mass = 80
 	ecs.AttachTyped(u, e, &mobile)
 	alive := &behaviors.Alive{}
-	alive.ComponentID = behaviors.AliveCID
 	alive.Construct(nil)
 	ecs.AttachTyped(u, e, &alive)
 	carrier := &behaviors.InventoryCarrier{}
-	carrier.ComponentID = behaviors.InventoryCarrierCID
 	carrier.Construct(nil)
 	ecs.AttachTyped(u, e, &carrier)
 
@@ -268,7 +263,6 @@ func CreateTestWorld3(u *ecs.Universe) {
 	// Without lighting, this actually performs very well - 60fps comfortably.
 
 	heightImage := u.NewAttachedComponent(u.NewEntity(), materials.ImageCID).(*materials.Image)
-	heightImage.ComponentID = materials.ImageCID
 	heightImage.Flags |= ecs.ComponentInternal
 	heightImage.Construct(map[string]any{
 		"Source":          "data/test-heightmap.jpg",

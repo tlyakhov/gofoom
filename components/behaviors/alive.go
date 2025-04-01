@@ -30,6 +30,9 @@ func init() {
 	AliveCID = ecs.RegisterComponent(&ecs.Column[Alive, *Alive]{Getter: GetAlive})
 }
 
+func (*Alive) ComponentID() ecs.ComponentID {
+	return AliveCID
+}
 func GetAlive(u *ecs.Universe, e ecs.Entity) *Alive {
 	if asserted, ok := u.Component(e, AliveCID).(*Alive); ok {
 		return asserted

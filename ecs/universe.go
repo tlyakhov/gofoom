@@ -169,7 +169,7 @@ func (u *Universe) Link(target Entity, source Entity) {
 		if c == nil || !c.MultiAttachable() {
 			continue
 		}
-		u.attach(target, &c, c.Base().ComponentID)
+		u.attach(target, &c, c.ComponentID())
 	}
 }
 
@@ -235,7 +235,6 @@ func (u *Universe) attach(entity Entity, component *Attachable, componentID Comp
 	a.Entities.Set(entity)
 	a.Entity = entity
 	a.Attachments++
-	a.ComponentID = componentID
 	u.rows[sid][int(local)].Set(attachable)
 	attachable.OnAttach(u)
 }
@@ -280,7 +279,7 @@ func AttachTyped[T any, PT GenericAttachable[T]](u *Universe, entity Entity, com
 	var attachable Attachable
 	if *component != nil {
 		attachable = *component
-		u.attach(entity, &attachable, attachable.Base().ComponentID)
+		u.attach(entity, &attachable, attachable.ComponentID())
 	} else {
 		cid := Types().IDs[reflect.TypeFor[PT]().String()]
 		u.attach(entity, &attachable, cid)
@@ -377,7 +376,7 @@ func (u *Universe) Delete(entity Entity) {
 		if c == nil {
 			continue
 		}
-		id := c.Base().ComponentID
+		id := c.ComponentID()
 		c.OnDetach(entity)
 		if c.Base().Attachments == 0 {
 			c.OnDelete()
@@ -431,7 +430,7 @@ func (u *Universe) serializeEntity(entity Entity, savedComponents map[uint64]Ent
 		if component == nil || (component.Base().Flags&ComponentNoSave != 0) {
 			continue
 		}
-		cid := component.Base().ComponentID
+		cid := component.ComponentID()
 		hash := (uint64(component.Base().indexInColumn) << 16) | (uint64(cid) & 0xFFFF)
 		col := Types().ColumnPlaceholders[cid]
 		yamlID := col.Type().String()

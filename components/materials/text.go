@@ -31,6 +31,9 @@ func init() {
 	TextCID = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText})
 }
 
+func (x *Text) ComponentID() ecs.ComponentID {
+	return TextCID
+}
 func GetText(u *ecs.Universe, e ecs.Entity) *Text {
 	if asserted, ok := u.Component(e, TextCID).(*Text); ok {
 		return asserted

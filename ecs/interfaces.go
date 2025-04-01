@@ -30,16 +30,12 @@ type SubSerializable interface {
 	Serialize() map[string]any
 }
 
-// There are architectural issues here. The whole point of the ECS is to have
-// all the data for a given component be next to each other in memory and enable
-// efficient access by controllers. However, with the `Attached` mixin, we lose
-// that by having to include all these extra fields. On top of that, accessing
-// those fields via interface is wasteful and makes it much harder to optimize.
-
 // Attachable is an interface for components that can be attached to entities in the Universe.
 type Attachable interface {
 	Universal
 	Serializable
+	// ComponentID returns the ID of this component type (see RegisterComponent).
+	ComponentID() ComponentID
 	// String returns a string representation of the component.
 	String() string
 	// OnDetach is called when the component is detached from an entity.

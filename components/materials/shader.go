@@ -19,6 +19,9 @@ func init() {
 	ShaderCID = ecs.RegisterComponent(&ecs.Column[Shader, *Shader]{Getter: GetShader})
 }
 
+func (x *Shader) ComponentID() ecs.ComponentID {
+	return ShaderCID
+}
 func GetShader(u *ecs.Universe, e ecs.Entity) *Shader {
 	if asserted, ok := u.Component(e, ShaderCID).(*Shader); ok {
 		return asserted
