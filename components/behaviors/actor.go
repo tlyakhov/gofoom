@@ -25,6 +25,9 @@ func init() {
 	ActorCID = ecs.RegisterComponent(&ecs.Column[Actor, *Actor]{Getter: GetActor})
 }
 
+func (*Actor) ComponentID() ecs.ComponentID {
+	return ActorCID
+}
 func GetActor(u *ecs.Universe, e ecs.Entity) *Actor {
 	if asserted, ok := u.Component(e, ActorCID).(*Actor); ok {
 		return asserted

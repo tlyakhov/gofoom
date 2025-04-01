@@ -23,6 +23,9 @@ func init() {
 	ActionWaypointCID = ecs.RegisterComponent(&ecs.Column[ActionWaypoint, *ActionWaypoint]{Getter: GetActionWaypoint})
 }
 
+func (*ActionWaypoint) ComponentID() ecs.ComponentID {
+	return ActionWaypointCID
+}
 func GetActionWaypoint(u *ecs.Universe, e ecs.Entity) *ActionWaypoint {
 	if asserted, ok := u.Component(e, ActionWaypointCID).(*ActionWaypoint); ok {
 		return asserted

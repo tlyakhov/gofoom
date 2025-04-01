@@ -20,6 +20,9 @@ func init() {
 	ActorStateCID = ecs.RegisterComponent(&ecs.Column[ActorState, *ActorState]{Getter: GetActorState})
 }
 
+func (*ActorState) ComponentID() ecs.ComponentID {
+	return ActorStateCID
+}
 func GetActorState(u *ecs.Universe, e ecs.Entity) *ActorState {
 	if asserted, ok := u.Component(e, ActorStateCID).(*ActorState); ok {
 		return asserted

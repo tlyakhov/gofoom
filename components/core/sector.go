@@ -50,6 +50,9 @@ func init() {
 	SectorCID = ecs.RegisterComponent(&ecs.Column[Sector, *Sector]{Getter: GetSector})
 }
 
+func (x *Sector) ComponentID() ecs.ComponentID {
+	return SectorCID
+}
 func GetSector(u *ecs.Universe, e ecs.Entity) *Sector {
 	if asserted, ok := u.Component(e, SectorCID).(*Sector); ok {
 		return asserted

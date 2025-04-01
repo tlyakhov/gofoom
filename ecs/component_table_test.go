@@ -12,34 +12,65 @@ type mockC1 struct {
 	Attached
 }
 
+func (m *mockC1) ComponentID() ComponentID {
+	return 1
+}
+
 type mockC2 struct {
 	Attached
+}
+
+func (m *mockC2) ComponentID() ComponentID {
+	return 2
 }
 
 type mockC3 struct {
 	Attached
 }
 
+func (m *mockC3) ComponentID() ComponentID {
+	return 3
+}
+
 type mockC4 struct {
 	Attached
+}
+
+func (m *mockC4) ComponentID() ComponentID {
+	return 4
 }
 
 type mockC5 struct {
 	Attached
 }
 
+func (m *mockC5) ComponentID() ComponentID {
+	return 5
+}
+
 type mockC6 struct {
 	Attached
+}
+
+func (m *mockC6) ComponentID() ComponentID {
+	return 6
 }
 
 type mockC7 struct {
 	Attached
 }
 
+func (m *mockC7) ComponentID() ComponentID {
+	return 7
+}
+
 type mockC8 struct {
 	Attached
 }
 
+func (m *mockC8) ComponentID() ComponentID {
+	return 8
+}
 func BenchmarkGet(b *testing.B) {
 	RegisterComponent(&Column[mockC1, *mockC1]{})
 	RegisterComponent(&Column[mockC2, *mockC2]{})

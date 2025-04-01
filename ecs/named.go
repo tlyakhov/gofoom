@@ -19,6 +19,10 @@ func init() {
 	NamedCID = RegisterComponent(&Column[Named, *Named]{Getter: GetNamed})
 }
 
+func (*Named) ComponentID() ComponentID {
+	return NamedCID
+}
+
 func GetNamed(u *Universe, e Entity) *Named {
 	if asserted, ok := u.Component(e, NamedCID).(*Named); ok {
 		return asserted

@@ -24,6 +24,9 @@ func init() {
 	LightCID = ecs.RegisterComponent(&ecs.Column[Light, *Light]{Getter: GetLight})
 }
 
+func (x *Light) ComponentID() ecs.ComponentID {
+	return LightCID
+}
 func GetLight(u *ecs.Universe, e ecs.Entity) *Light {
 	if asserted, ok := u.Component(e, LightCID).(*Light); ok {
 		return asserted

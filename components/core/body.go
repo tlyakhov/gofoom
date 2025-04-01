@@ -29,6 +29,9 @@ func init() {
 	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody})
 }
 
+func (x *Body) ComponentID() ecs.ComponentID {
+	return BodyCID
+}
 func GetBody(u *ecs.Universe, e ecs.Entity) *Body {
 	if asserted, ok := u.Component(e, BodyCID).(*Body); ok {
 		return asserted

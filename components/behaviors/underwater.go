@@ -17,6 +17,9 @@ func init() {
 	UnderwaterCID = ecs.RegisterComponent(&ecs.Column[Underwater, *Underwater]{Getter: GetUnderwater})
 }
 
+func (x *Underwater) ComponentID() ecs.ComponentID {
+	return UnderwaterCID
+}
 func GetUnderwater(u *ecs.Universe, e ecs.Entity) *Underwater {
 	if asserted, ok := u.Component(e, UnderwaterCID).(*Underwater); ok {
 		return asserted

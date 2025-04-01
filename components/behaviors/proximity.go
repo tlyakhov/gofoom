@@ -45,6 +45,9 @@ func init() {
 	ProximityCID = ecs.RegisterComponent(&ecs.Column[Proximity, *Proximity]{Getter: GetProximity})
 }
 
+func (x *Proximity) ComponentID() ecs.ComponentID {
+	return ProximityCID
+}
 func GetProximity(u *ecs.Universe, e ecs.Entity) *Proximity {
 	if asserted, ok := u.Component(e, ProximityCID).(*Proximity); ok {
 		return asserted

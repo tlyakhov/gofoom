@@ -358,7 +358,6 @@ func (e *Editor) UseTool() {
 		e.Act(&actions.SplitSector{Place: actions.Place{Action: state.Action{IEditor: e}}})
 	case state.ToolAddSector:
 		s := &core.Sector{}
-		s.ComponentID = core.SectorCID
 		s.Construct(nil)
 		s.Bottom.Surface.Material = controllers.DefaultMaterial(e.Universe)
 		s.Top.Surface.Material = controllers.DefaultMaterial(e.Universe)
@@ -368,7 +367,6 @@ func (e *Editor) UseTool() {
 		e.Act(a)
 	case state.ToolAddInternalSegment:
 		seg := &core.InternalSegment{}
-		seg.ComponentID = core.InternalSegmentCID
 		seg.Construct(nil)
 		a := &actions.AddInternalSegment{}
 		a.AddEntity.IEditor = e
@@ -376,7 +374,6 @@ func (e *Editor) UseTool() {
 		e.Act(a)
 	case state.ToolAddBody:
 		body := &core.Body{}
-		body.ComponentID = core.BodyCID
 		body.Construct(nil)
 		e.Act(&actions.AddEntity{
 			Place:      actions.Place{Action: state.Action{IEditor: e}},

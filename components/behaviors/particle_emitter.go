@@ -30,6 +30,9 @@ func init() {
 	ParticleEmitterCID = ecs.RegisterComponent(&ecs.Column[ParticleEmitter, *ParticleEmitter]{Getter: GetParticleEmitter})
 }
 
+func (x *ParticleEmitter) ComponentID() ecs.ComponentID {
+	return ParticleEmitterCID
+}
 func GetParticleEmitter(u *ecs.Universe, e ecs.Entity) *ParticleEmitter {
 	if asserted, ok := u.Component(e, ParticleEmitterCID).(*ParticleEmitter); ok {
 		return asserted

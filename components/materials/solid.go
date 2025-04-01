@@ -20,6 +20,9 @@ func init() {
 	SolidCID = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid})
 }
 
+func (x *Solid) ComponentID() ecs.ComponentID {
+	return SolidCID
+}
 func GetSolid(u *ecs.Universe, e ecs.Entity) *Solid {
 	if asserted, ok := u.Component(e, SolidCID).(*Solid); ok {
 		return asserted

@@ -31,7 +31,7 @@ func (lc *LinkedController) Recalculate() {
 	// Remove this entity from any linked copies
 	for _, c := range lc.SourceComponents {
 		if c != nil {
-			lc.Universe.detach(c.Base().ComponentID, lc.Entity, false)
+			lc.Universe.detach(c.ComponentID(), lc.Entity, false)
 		}
 	}
 	lc.SourceComponents = make(ComponentTable, 0)
@@ -42,9 +42,9 @@ func (lc *LinkedController) Recalculate() {
 			}
 			lc.SourceComponents.Set(c)
 			if lc.AlwaysReplace {
-				lc.Universe.detach(c.Base().ComponentID, lc.Entity, false)
+				lc.Universe.detach(c.ComponentID(), lc.Entity, false)
 			}
-			lc.Universe.attach(lc.Entity, &c, c.Base().ComponentID)
+			lc.Universe.attach(lc.Entity, &c, c.ComponentID())
 		}
 	}
 }

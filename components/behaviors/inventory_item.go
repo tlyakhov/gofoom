@@ -35,6 +35,9 @@ func init() {
 	InventoryItemCID = ecs.RegisterComponent(&ecs.Column[InventoryItem, *InventoryItem]{Getter: GetInventoryItem})
 }
 
+func (x *InventoryItem) ComponentID() ecs.ComponentID {
+	return InventoryItemCID
+}
 func GetInventoryItem(u *ecs.Universe, e ecs.Entity) *InventoryItem {
 	if asserted, ok := u.Component(e, InventoryItemCID).(*InventoryItem); ok {
 		return asserted

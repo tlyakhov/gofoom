@@ -26,6 +26,9 @@ func init() {
 	WeaponCID = ecs.RegisterComponent(&ecs.Column[Weapon, *Weapon]{Getter: GetWeapon})
 }
 
+func (x *Weapon) ComponentID() ecs.ComponentID {
+	return WeaponCID
+}
 func GetWeapon(u *ecs.Universe, e ecs.Entity) *Weapon {
 	if asserted, ok := u.Component(e, WeaponCID).(*Weapon); ok {
 		return asserted

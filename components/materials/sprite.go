@@ -21,6 +21,9 @@ func init() {
 	SpriteCID = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite})
 }
 
+func (x *Sprite) ComponentID() ecs.ComponentID {
+	return SpriteCID
+}
 func GetSprite(u *ecs.Universe, e ecs.Entity) *Sprite {
 	if asserted, ok := u.Component(e, SpriteCID).(*Sprite); ok {
 		return asserted

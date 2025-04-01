@@ -34,6 +34,9 @@ func init() {
 	PlayerCID = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer})
 }
 
+func (x *Player) ComponentID() ecs.ComponentID {
+	return PlayerCID
+}
 func GetPlayer(u *ecs.Universe, e ecs.Entity) *Player {
 	if asserted, ok := u.Component(e, PlayerCID).(*Player); ok {
 		return asserted

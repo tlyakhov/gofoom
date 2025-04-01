@@ -150,7 +150,6 @@ func (col *Column[T, PT]) Replace(component *Attachable, index int) {
 func (c *Column[T, PT]) New() Attachable {
 	var component T
 	attachable := PT(&component)
-	attachable.Base().ComponentID = c.componentID
 	return attachable
 }
 

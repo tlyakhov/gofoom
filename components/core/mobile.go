@@ -34,6 +34,9 @@ func init() {
 	MobileCID = ecs.RegisterComponent(&ecs.Column[Mobile, *Mobile]{Getter: GetMobile})
 }
 
+func (x *Mobile) ComponentID() ecs.ComponentID {
+	return MobileCID
+}
 func GetMobile(u *ecs.Universe, e ecs.Entity) *Mobile {
 	if asserted, ok := u.Component(e, MobileCID).(*Mobile); ok {
 		return asserted
