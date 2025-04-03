@@ -77,7 +77,7 @@ func gameInput() {
 			}
 		}
 	}
-
+	// renderer.Player.ShearZ = (win.MousePosition().Y - win.Bounds().H()*0.5) * 0.8
 	renderer.Player.ActionPressed = (win.JustPressed(pixel.MouseButton2) || win.Repeated(pixel.MouseButton2))
 
 	if win.Pressed(pixel.KeySpace) {

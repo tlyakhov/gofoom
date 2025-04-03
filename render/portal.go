@@ -4,6 +4,7 @@
 package render
 
 import (
+	"math"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
@@ -26,7 +27,7 @@ func wallHi(cp *columnPortal) {
 	cp.ScaleH = uint32(cp.ProjectedTop - cp.AdjProjectedTop)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
-	vStart := float64(cp.ScreenHeight/2) - cp.ProjectedTop
+	vStart := float64(cp.ScreenHeight/2) - cp.ProjectedTop + math.Floor(cp.ShearZ)
 	for cp.ScreenY = cp.ClippedTop; cp.ScreenY < cp.AdjClippedTop; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
 		if cp.Distance >= cp.ZBuffer[screenIndex] {
@@ -72,7 +73,7 @@ func wallLow(cp *columnPortal) {
 	cp.ScaleH = uint32(cp.AdjProjectedBottom - cp.ProjectedBottom)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
-	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjectedBottom
+	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjectedBottom + math.Floor(cp.ShearZ)
 	for cp.ScreenY = cp.AdjClippedBottom; cp.ScreenY < cp.ClippedBottom; cp.ScreenY++ {
 		screenIndex := uint32(cp.ScreenX + cp.ScreenY*cp.ScreenWidth)
 		if cp.Distance >= cp.ZBuffer[screenIndex] {

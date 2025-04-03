@@ -47,7 +47,7 @@ func (r *Renderer) wall(c *column) {
 			continue
 		}
 
-		v := (float64(c.ScreenY) - vTop) * dv
+		v := (float64(c.ScreenY-int(c.ShearZ)) - vTop) * dv
 		c.RaySegIntersect[2] = c.IntersectionTop*(1.0-v) + v*c.IntersectionBottom
 
 		if mat != 0 {
