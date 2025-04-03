@@ -5,24 +5,25 @@ package controllers
 
 import (
 	"strconv"
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
-func PickUpInventoryItem(ic *behaviors.InventoryCarrier, itemEntity ecs.Entity) {
-	item := behaviors.GetInventoryItem(ic.Universe, itemEntity)
+func PickUpInventoryItem(ic *inventory.Carrier, itemEntity ecs.Entity) {
+	item := inventory.GetItem(ic.Universe, itemEntity)
 	if item == nil || !item.IsActive() {
 		return
 	}
-	player := behaviors.GetPlayer(ic.Universe, ic.Entity)
+	player := character.GetPlayer(ic.Universe, ic.Entity)
 
-	for _, e := range ic.Inventory {
+	for _, e := range ic.Slots {
 		if e == 0 {
 			continue
 		}
 
-		slot := behaviors.GetInventorySlot(ic.Universe, e)
+		slot := inventory.GetSlot(ic.Universe, e)
 
 		if slot == nil || slot.Class != item.Class {
 			continue

@@ -40,9 +40,9 @@
 - Entity: ∈⋮5
   behaviors.Alive:
     Health: 100
-  behaviors.Player:
+  character.Player:
     Spawn: true
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory: []
   core.Body:
     Angle:

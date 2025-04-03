@@ -1,9 +1,10 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package behaviors
+package character
 
 import (
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
@@ -54,7 +55,7 @@ func (p *Player) String() string {
 
 func (p *Player) Underwater() bool {
 	if b := core.GetBody(p.Universe, p.Entities.First()); b != nil {
-		if u := GetUnderwater(p.Universe, b.SectorEntity); u != nil {
+		if u := behaviors.GetUnderwater(p.Universe, b.SectorEntity); u != nil {
 			return true
 		}
 	}

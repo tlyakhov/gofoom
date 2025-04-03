@@ -4,19 +4,29 @@
 package render
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
-func (r *Renderer) RenderWeapon(slot *behaviors.InventorySlot) {
-	wc := behaviors.GetWeaponClass(slot.Universe, slot.Entity)
-	wi := behaviors.GetWeapon(slot.Universe, slot.Entity)
+type playerMessageParams struct {
+	TargetableEntity ecs.Entity
+	PlayerTargetable *behaviors.PlayerTargetable
+	Player           *character.Player
+	Carrier          *inventory.Carrier
+}
+
+func (r *Renderer) RenderWeapon(slot *inventory.Slot) {
+	wc := inventory.GetWeaponClass(slot.Universe, slot.Entity)
+	wi := inventory.GetWeapon(slot.Universe, slot.Entity)
 	if wc != nil && wi != nil {
 		if wi.Flashing() {
 			r.BitBlt(wc.FlashMaterial, r.ScreenWidth/2-64, r.ScreenHeight-160, 128, 128, concepts.BlendScreen)
@@ -24,6 +34,19 @@ func (r *Renderer) RenderWeapon(slot *behaviors.InventorySlot) {
 	}
 	// TODO: This should be a separate image from the inventory item image
 	r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, concepts.BlendNormal)
+}
+
+func applyPlayerMessage(pt *behaviors.PlayerTargetable, params *playerMessageParams) string {
+	if pt.MessageTemplate == nil {
+		return pt.Message
+	}
+
+	var buf bytes.Buffer
+	err := pt.MessageTemplate.Execute(&buf, params)
+	if err != nil {
+		return fmt.Sprintf("Error in message template %v: %v", pt.Message, err)
+	}
+	return buf.String()
 }
 
 func (r *Renderer) renderSelectedTarget() {
@@ -39,13 +62,13 @@ func (r *Renderer) renderSelectedTarget() {
 		return
 	}
 
-	params := &behaviors.PlayerMessageParams{
+	params := &playerMessageParams{
 		TargetableEntity: r.Player.SelectedTarget,
 		PlayerTargetable: pt,
 		Player:           r.Player,
-		InventoryCarrier: r.Carrier,
+		Carrier:          r.Carrier,
 	}
-	msg := strings.TrimSpace(pt.ApplyMessage(params))
+	msg := strings.TrimSpace(applyPlayerMessage(pt, params))
 	r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
 }
 
@@ -67,11 +90,11 @@ func (r *Renderer) RenderHud() {
 	}
 
 	index := 0
-	for _, e := range r.Carrier.Inventory {
+	for _, e := range r.Carrier.Slots {
 		if e == 0 {
 			continue
 		}
-		slot := behaviors.GetInventorySlot(r.Universe, e)
+		slot := inventory.GetSlot(r.Universe, e)
 		if slot == nil {
 			continue
 		}

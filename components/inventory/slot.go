@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package behaviors
+package inventory
 
 import (
 	"strconv"
@@ -13,40 +13,44 @@ import (
 
 // Represents a slot in an inventory that can be filled with an item,
 // a weapon, ammo, or other resource.
-type InventorySlot struct {
+type Slot struct {
 	ecs.Attached `editable:"^"`
 
-	// TODO: Give this some physical structure (e.g. an inventory grid)
+	// TODO: Give this some physical structure (e.g. an inventory grid?)
+	// TODO: Maybe items could also have mass/weight and player could have a
+	// limit? Would enable some RPG mechanics.
+
 	// Should we just use ecs.Named for this?
-	Class string               `editable:"Class"`
+	Class string `editable:"Class"`
+
 	Limit int                  `editable:"Limit"`
 	Count dynamic.Spawned[int] `editable:"Count"`
 	Image ecs.Entity           `editable:"Image" edit_type:"Material"`
 
-	Carrier *InventoryCarrier
+	Carrier *Carrier
 }
 
-var InventorySlotCID ecs.ComponentID
+var SlotCID ecs.ComponentID
 
 func init() {
-	InventorySlotCID = ecs.RegisterComponent(&ecs.Column[InventorySlot, *InventorySlot]{Getter: GetInventorySlot})
+	SlotCID = ecs.RegisterComponent(&ecs.Column[Slot, *Slot]{Getter: GetSlot})
 }
 
-func (x *InventorySlot) ComponentID() ecs.ComponentID {
-	return InventorySlotCID
+func (x *Slot) ComponentID() ecs.ComponentID {
+	return SlotCID
 }
-func GetInventorySlot(u *ecs.Universe, e ecs.Entity) *InventorySlot {
-	if asserted, ok := u.Component(e, InventorySlotCID).(*InventorySlot); ok {
+func GetSlot(u *ecs.Universe, e ecs.Entity) *Slot {
+	if asserted, ok := u.Component(e, SlotCID).(*Slot); ok {
 		return asserted
 	}
 	return nil
 }
 
-func (slot *InventorySlot) String() string {
+func (slot *Slot) String() string {
 	return "InventorySlot"
 }
 
-func (s *InventorySlot) Construct(data map[string]any) {
+func (s *Slot) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 
 	s.Limit = 100
@@ -72,11 +76,11 @@ func (s *InventorySlot) Construct(data map[string]any) {
 	}
 }
 
-func (s *InventorySlot) IsSystem() bool {
+func (s *Slot) IsSystem() bool {
 	return false
 }
 
-func (s *InventorySlot) Serialize() map[string]any {
+func (s *Slot) Serialize() map[string]any {
 	data := s.Attached.Serialize()
 
 	data["Limit"] = strconv.Itoa(s.Limit)

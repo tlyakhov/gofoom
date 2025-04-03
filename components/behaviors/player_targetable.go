@@ -4,8 +4,6 @@
 package behaviors
 
 import (
-	"bytes"
-	"fmt"
 	"text/template"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -69,26 +67,6 @@ func (pt *PlayerTargetable) OnAttach(u *ecs.Universe) {
 	pt.Frob.OnAttach(u)
 	pt.Selected.OnAttach(u)
 	pt.UnSelected.OnAttach(u)
-}
-
-type PlayerMessageParams struct {
-	TargetableEntity ecs.Entity
-	PlayerTargetable *PlayerTargetable
-	Player           *Player
-	InventoryCarrier *InventoryCarrier
-}
-
-func (pt PlayerTargetable) ApplyMessage(params *PlayerMessageParams) string {
-	if pt.MessageTemplate == nil {
-		return pt.Message
-	}
-
-	var buf bytes.Buffer
-	err := pt.MessageTemplate.Execute(&buf, params)
-	if err != nil {
-		return fmt.Sprintf("Error in message template %v: %v", pt.Message, err)
-	}
-	return buf.String()
 }
 
 func (pt *PlayerTargetable) Construct(data map[string]any) {

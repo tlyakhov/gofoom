@@ -14,7 +14,7 @@
   ecs.Named:
     Name: Basic Vertical Door
 - Entity: ∈⋮2
-  behaviors.InventoryItem:
+  inventory.Item:
     Class: Flower
     Count:
       Now: "1"
@@ -40,7 +40,7 @@
 - Entity: ∈⋮42
   behaviors.Alive:
     Health: 100
-  behaviors.Weapon: {}
+  inventory.Weapon: {}
   ecs.Named:
     Name: Flub
   materials.Image:
@@ -126,7 +126,7 @@
 - Entity: ∈⋮126
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory:
       - ∈⋮189
       - ∈⋮177
@@ -168,7 +168,7 @@
     Ambient: 0, 0, 0
     Diffuse: 0.5, 0.5, 0.5, 0.5
 - Entity: ∈⋮132
-  behaviors.InventoryItem:
+  inventory.Item:
     Class: WeirdGun
     Count:
       Now: "1"
@@ -204,7 +204,7 @@
   ecs.Named:
     Name: Proximity (Vertical Doors)
 - Entity: ∈⋮148
-  behaviors.WeaponClass:
+  inventory.WeaponClass:
     Cooldown: 100
     Damage: 10
     FlashMaterial: ∈⋮199
@@ -253,7 +253,7 @@
     Filter: false
     Source: data/muzzle.jpg
 - Entity: ∈⋮164
-  behaviors.InventoryItem:
+  inventory.Item:
     Class: Red Keycard
     Count:
       Now: "1"
@@ -284,36 +284,36 @@
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
         }
-    Message: Door - {{if .InventoryCarrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need red keycard to open{{end}}
+    Message: Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need red keycard to open{{end}}
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
       Code: |-
-        if p := behaviors.GetPlayer(s.Universe, body.Entity); p != nil {
+        if p := character.GetPlayer(s.Universe, body.Entity); p != nil {
           p.HoveringTargets.Add(onEntity)
         }
-    ValidComponents: behaviors.Player
+    ValidComponents: character.Player
   behaviors.VerticalDoor:
     Duration: 1000
     TweeningFunc: EaseInOut2
 - Entity: ∈⋮169
-  behaviors.InventorySlot:
+  inventory.Slot:
     Class: WeirdGun
     Count:
       Now: "1"
       Spawn: "1"
     Image: ∈⋮132
     Limit: "1"
-  behaviors.WeaponClass: ∈⋮148
+  inventory.WeaponClass: ∈⋮148
 - Entity: ∈⋮176
-  behaviors.InventoryItem: ∈⋮2
+  inventory.Item: ∈⋮2
   ecs.Linked:
     Sources:
       - ∈⋮249
   materials.SpriteSheet: ∈⋮2
   materials.Visible: ∈⋮2
 - Entity: ∈⋮177
-  behaviors.InventorySlot:
+  inventory.Slot:
     Class: Red Keycard
     Count:
       Now: "0"
@@ -321,7 +321,7 @@
     Image: ∈⋮156
     Limit: "1"
 - Entity: ∈⋮189
-  behaviors.InventorySlot:
+  inventory.Slot:
     Class: Flower
     Count:
       Now: "0"
@@ -358,7 +358,7 @@
   materials.Lit: ∈⋮132
   materials.Visible: ∈⋮2
 - Entity: ∈⋮249
-  behaviors.InventoryItem: ∈⋮2
+  inventory.Item: ∈⋮2
   ecs.Named:
     Name: Flower Inventory Item
   materials.SpriteSheet: ∈⋮2

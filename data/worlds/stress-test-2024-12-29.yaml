@@ -1,9 +1,9 @@
 - Entity: ∈⋮1
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory: []
-  behaviors.Player:
+  character.Player:
     Spawn: false
   core.Body:
     Angle:
@@ -103,9 +103,9 @@
 - Entity: ∈⋮5
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory: []
-  behaviors.Player:
+  character.Player:
     Spawn: true
   core.Body:
     Angle:

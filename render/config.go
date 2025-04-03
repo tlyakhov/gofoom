@@ -6,8 +6,9 @@ package render
 import (
 	"math"
 	"sync"
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
@@ -27,9 +28,9 @@ type Config struct {
 	// For walls over portals
 	ExtraBuffer []concepts.Vector4
 	FrameTint   concepts.Vector4
-	Player      *behaviors.Player
+	Player      *character.Player
 	PlayerBody  *core.Body
-	Carrier     *behaviors.InventoryCarrier
+	Carrier     *inventory.Carrier
 
 	RenderLock sync.Mutex
 }
@@ -53,7 +54,7 @@ func (c *Config) Initialize() {
 }
 
 func (c *Config) RefreshPlayer() {
-	col := ecs.ColumnFor[behaviors.Player](c.Universe, behaviors.PlayerCID)
+	col := ecs.ColumnFor[character.Player](c.Universe, character.PlayerCID)
 	for i := range col.Cap() {
 		player := col.Value(i)
 		if player == nil || !player.IsActive() || player.Spawn {
@@ -61,7 +62,7 @@ func (c *Config) RefreshPlayer() {
 		}
 		c.Player = player
 		c.PlayerBody = core.GetBody(c.Universe, player.Entity)
-		c.Carrier = behaviors.GetInventoryCarrier(c.Universe, player.Entity)
+		c.Carrier = inventory.GetCarrier(c.Universe, player.Entity)
 		return
 	}
 }

@@ -6,6 +6,7 @@ package main
 import (
 	"math"
 
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
@@ -37,7 +38,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	}
 
 	mw.Context.SetRGB(0.6, 0.6, 0.6)
-	if player := behaviors.GetPlayer(body.Universe, body.Entity); player != nil {
+	if player := character.GetPlayer(body.Universe, body.Entity); player != nil {
 		// Let's get fancy:
 		mw.Context.SetRGB(0.6, 0.6, 0.6)
 		mw.Context.SetLineWidth(1)

@@ -1,9 +1,9 @@
 - Entity: ∈⋮1
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory: []
-  behaviors.Player:
+  character.Player:
     Spawn: false
   core.Body:
     Angle:
@@ -125,9 +125,9 @@
 - Entity: ∈⋮5
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory: []
-  behaviors.Player:
+  character.Player:
     Spawn: true
   core.Body:
     Angle:
@@ -1736,10 +1736,10 @@
     Hysteresis: 0
     InRange:
       Code: |-
-        if p := behaviors.GetPlayer(s.Universe, body.Entity); p != nil {
+        if p := character.GetPlayer(s.Universe, body.Entity); p != nil {
           p.HoveringTargets.Add(onEntity)
         }
-    ValidComponents: behaviors.Player
+    ValidComponents: character.Player
   core.Body:
     Angle:
       Now: 0

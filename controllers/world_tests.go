@@ -9,7 +9,9 @@ import (
 	"math/rand"
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
@@ -152,7 +154,7 @@ func CreateTestTree(u *ecs.Universe) ecs.Entity {
 
 func CreateSpawn(u *ecs.Universe) {
 	e := u.NewEntity()
-	player := &behaviors.Player{}
+	player := &character.Player{}
 	player.Construct(nil)
 	player.Spawn = true
 	ecs.AttachTyped(u, e, &player)
@@ -167,7 +169,7 @@ func CreateSpawn(u *ecs.Universe) {
 	alive := &behaviors.Alive{}
 	alive.Construct(nil)
 	ecs.AttachTyped(u, e, &alive)
-	carrier := &behaviors.InventoryCarrier{}
+	carrier := &inventory.Carrier{}
 	carrier.Construct(nil)
 	ecs.AttachTyped(u, e, &carrier)
 

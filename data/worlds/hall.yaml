@@ -1,13 +1,13 @@
 - Entity: ∈⋮1
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory:
       - ∈⋮189
       - ∈⋮177
       - ∈⋮169
     SelectedWeapon: ∈⋮169
-  behaviors.Player:
+  character.Player:
     Spawn: false
   core.Body:
     Angle:
@@ -1457,7 +1457,7 @@
         Now: 64
         Spawn: 64
 - Entity: ∈⋮32
-  behaviors.InventoryItem:
+  inventory.Item:
     Class: Flower
     Count:
       Now: "1"
@@ -2041,7 +2041,7 @@
     Action: ∈⋮137
   behaviors.Alive:
     Health: 100
-  behaviors.Weapon: {}
+  inventory.Weapon: {}
   core.Body:
     Angle:
       Now: 33477.961677769534
@@ -5639,12 +5639,12 @@
 - Entity: ∈⋮126
   behaviors.Alive:
     Health: 100
-  behaviors.InventoryCarrier:
+  inventory.Carrier:
     Inventory:
       - ∈⋮189
       - ∈⋮177
       - ∈⋮169
-  behaviors.Player:
+  character.Player:
     Spawn: true
   core.Body:
     Angle:
@@ -5720,7 +5720,7 @@
     Diffuse: 1, 1, 1
     Strength: 1.5
 - Entity: ∈⋮132
-  behaviors.InventoryItem:
+  inventory.Item:
     Class: WeirdGun
     Count:
       Now: "1"
@@ -5875,7 +5875,7 @@
   behaviors.ActionWaypoint:
     P: -300, 120, 0
 - Entity: ∈⋮148
-  behaviors.WeaponClass:
+  inventory.WeaponClass:
     Cooldown: 100
     Damage: 10
     FlashMaterial: ∈⋮199
@@ -5993,7 +5993,7 @@
     Vel: 15
     XYSpread: 10
     ZSpread: 10
-  behaviors.Weapon: {}
+  inventory.Weapon: {}
   core.Body:
     Angle:
       Now: 180
@@ -6073,7 +6073,7 @@
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮164
-  behaviors.InventoryItem:
+  inventory.Item:
     Class: Red Keycard
     Count:
       Now: "1"
@@ -6223,15 +6223,15 @@
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
         }
-    Message: Door - {{if .InventoryCarrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need red keycard to open{{end}}
+    Message: Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need red keycard to open{{end}}
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
       Code: |-
-        if p := behaviors.GetPlayer(s.Universe, body.Entity); p != nil {
+        if p := character.GetPlayer(s.Universe, body.Entity); p != nil {
           p.HoveringTargets.Add(onEntity)
         }
-    ValidComponents: behaviors.Player
+    ValidComponents: character.Player
   behaviors.VerticalDoor:
     Duration: 1000
     TweeningFunc: EaseInOut2
@@ -6291,14 +6291,14 @@
         Now: 0
         Spawn: 64
 - Entity: ∈⋮169
-  behaviors.InventorySlot:
+  inventory.Slot:
     Class: WeirdGun
     Count:
       Now: "1"
       Spawn: "0"
     Image: ∈⋮132
     Limit: "1"
-  behaviors.WeaponClass: ∈⋮148
+  inventory.WeaponClass: ∈⋮148
 - Entity: ∈⋮170
   core.Body:
     Angle:
@@ -6327,7 +6327,7 @@
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮176
-  behaviors.InventoryItem: ∈⋮32
+  inventory.Item: ∈⋮32
   core.Body:
     Angle:
       Now: 0
@@ -6344,7 +6344,7 @@
   materials.SpriteSheet: ∈⋮32
   materials.Visible: ∈⋮32
 - Entity: ∈⋮177
-  behaviors.InventorySlot:
+  inventory.Slot:
     Class: Red Keycard
     Count:
       Now: "0"
@@ -6437,7 +6437,7 @@
   materials.Image: ∈⋮153
   materials.Lit: ∈⋮153
 - Entity: ∈⋮189
-  behaviors.InventorySlot:
+  inventory.Slot:
     Class: Flower
     Count:
       Now: "0"
@@ -6868,7 +6868,7 @@
   materials.Lit: ∈⋮132
   materials.Visible: ∈⋮32
 - Entity: ∈⋮249
-  behaviors.InventoryItem: ∈⋮32
+  inventory.Item: ∈⋮32
   ecs.Named:
     Name: Flower Inventory Item
   materials.SpriteSheet: ∈⋮32

@@ -21,6 +21,7 @@ import (
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 
@@ -459,8 +460,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, materials.ShaderFlagsValues())
 		case *concepts.BlendType:
 			g.fieldEnum(field, concepts.BlendFuncValues())
-		case *behaviors.InventoryItemFlags:
-			g.fieldEnum(field, behaviors.InventoryItemFlagsValues())
+		case *inventory.ItemFlags:
+			g.fieldEnum(field, inventory.ItemFlagsValues())
 		case *ecs.ComponentFlags:
 			g.fieldEnum(field, ecs.ComponentFlagsValues())
 		case *ecs.Entity:

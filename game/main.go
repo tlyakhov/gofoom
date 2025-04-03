@@ -16,6 +16,7 @@ import (
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
@@ -44,6 +45,8 @@ var canvas *opengl.Canvas
 var buffer *image.RGBA
 var inMenu = true
 
+// TODO: unify this with editor, and also add ability to customize keybinds.
+// TODO: Mouse look?
 func gameInput() {
 	playerMobile := core.GetMobile(renderer.Universe, renderer.Player.Entity)
 
@@ -69,7 +72,7 @@ func gameInput() {
 	}
 	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
 		if renderer.Carrier.SelectedWeapon != 0 {
-			if w := behaviors.GetWeapon(renderer.Universe, renderer.Carrier.SelectedWeapon); w != nil {
+			if w := inventory.GetWeapon(renderer.Universe, renderer.Carrier.SelectedWeapon); w != nil {
 				w.FireNextFrame = true
 			}
 		}

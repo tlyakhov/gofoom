@@ -39,8 +39,8 @@ func (ptc *PlayerTargetableController) Target(target ecs.Attachable, e ecs.Entit
 
 var playerTargetableScriptParams = []core.ScriptParam{
 	{Name: "body", TypeName: "*core.Body"},
-	{Name: "player", TypeName: "*behaviors.Player"},
-	{Name: "carrier", TypeName: "*behaviors.InventoryCarrier"},
+	{Name: "player", TypeName: "*character.Player"},
+	{Name: "carrier", TypeName: "*inventory.Carrier"},
 }
 
 func (ptc *PlayerTargetableController) Recalculate() {

@@ -6,7 +6,7 @@ package controllers
 import (
 	"log"
 	"math"
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
@@ -17,7 +17,7 @@ type BodyController struct {
 	ecs.BaseController
 	*core.Body
 	Sector *core.Sector
-	Player *behaviors.Player
+	Player *character.Player
 	tree   *core.Quadtree
 
 	pos        *concepts.Vector3
@@ -48,7 +48,7 @@ func (bc *BodyController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	if bc.Body == nil || !bc.Body.IsActive() {
 		return false
 	}
-	bc.Player = behaviors.GetPlayer(bc.Body.Universe, bc.Entity)
+	bc.Player = character.GetPlayer(bc.Body.Universe, bc.Entity)
 	if bc.Player != nil && bc.Player.Spawn {
 		// If this is a spawn point, skip it
 		return false

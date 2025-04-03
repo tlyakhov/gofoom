@@ -7,13 +7,14 @@ import (
 	"math/rand/v2"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
 type InventoryItemController struct {
 	ecs.BaseController
-	*behaviors.InventoryItem
+	*inventory.Item
 	body *core.Body
 
 	autoProximity        *behaviors.Proximity
@@ -25,7 +26,7 @@ func init() {
 }
 
 func (iic *InventoryItemController) ComponentID() ecs.ComponentID {
-	return behaviors.InventoryItemCID
+	return inventory.ItemCID
 }
 
 func (iic *InventoryItemController) Methods() ecs.ControllerMethod {
@@ -38,8 +39,8 @@ func (iic *InventoryItemController) EditorPausedMethods() ecs.ControllerMethod {
 
 func (iic *InventoryItemController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	iic.Entity = e
-	iic.InventoryItem = target.(*behaviors.InventoryItem)
-	if iic.InventoryItem == nil || !iic.InventoryItem.IsActive() {
+	iic.Item = target.(*inventory.Item)
+	if iic.Item == nil || !iic.Item.IsActive() {
 		return false
 	}
 	iic.body = core.GetBody(iic.Universe, iic.Entity)
@@ -50,7 +51,7 @@ func (iic *InventoryItemController) cacheAutoProximity() {
 	if ecs.CachedGeneratedComponent(iic.Universe, &iic.autoProximity, "_InventoryItemAutoProximity", behaviors.ProximityCID) {
 		iic.autoProximity.Hysteresis = 0
 		iic.autoProximity.InRange.Code = `
-				if p := behaviors.GetPlayer(s.Universe, body.Entity); p != nil {
+				if p := character.GetPlayer(s.Universe, body.Entity); p != nil {
 					p.HoveringTargets.Add(onEntity)
 				}`
 
@@ -69,7 +70,7 @@ func (iic *InventoryItemController) cacheAutoTargetable() {
 }
 
 func (iic *InventoryItemController) Recalculate() {
-	if iic.body != nil && (iic.Flags&behaviors.InventoryItemBounce != 0) {
+	if iic.body != nil && (iic.Flags&inventory.ItemBounce != 0) {
 		a := iic.body.Pos.NewAnimation()
 		a.TweeningFunc = dynamic.EaseInOut2
 		a.End[2] = 5
@@ -78,7 +79,7 @@ func (iic *InventoryItemController) Recalculate() {
 		a.Percent = rand.Float64()
 	}
 
-	if iic.Flags&behaviors.InventoryItemAutoProximity != 0 {
+	if iic.Flags&inventory.ItemAutoProximity != 0 {
 		iic.cacheAutoProximity()
 		p := behaviors.GetProximity(iic.Universe, iic.Entity)
 		if p != nil && p != iic.autoProximity {
@@ -90,7 +91,7 @@ func (iic *InventoryItemController) Recalculate() {
 			iic.Universe.Attach(behaviors.ProximityCID, iic.Entity, &a)
 		}
 	}
-	if iic.Flags&behaviors.InventoryItemAutoPlayerTargetable != 0 {
+	if iic.Flags&inventory.ItemAutoPlayerTargetable != 0 {
 		iic.cacheAutoTargetable()
 		pt := behaviors.GetPlayerTargetable(iic.Universe, iic.Entity)
 		if pt != nil && pt != iic.autoPlayerTargetable {

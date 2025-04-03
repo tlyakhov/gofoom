@@ -1,7 +1,7 @@
 - Entity: ∈⋮1
   behaviors.Alive:
     Health: 100
-  behaviors.Player:
+  character.Player:
     Spawn: false
   core.Body:
     Angle:
@@ -148,7 +148,7 @@
 - Entity: ∈⋮6
   behaviors.Alive:
     Health: 100
-  behaviors.Player:
+  character.Player:
     Spawn: true
   core.Body:
     Angle:
