@@ -46,8 +46,8 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 
 	block.ProjectedTop = (b.Pos.Render[2] + b.Size.Render[1]*0.5 - block.CameraZ) * depthScale
 	block.ProjectedBottom = block.ProjectedTop - b.Size.Render[1]*depthScale
-	screenTop := block.ScreenHeight/2 - int(math.Floor(block.ProjectedTop))
-	screenBottom := block.ScreenHeight/2 - int(math.Floor(block.ProjectedBottom))
+	screenTop := block.ScreenHeight/2 - int(math.Floor(block.ProjectedTop)) + int(block.ShearZ)
+	screenBottom := block.ScreenHeight/2 - int(math.Floor(block.ProjectedBottom)) + int(block.ShearZ)
 	block.ScaleH = uint32(screenBottom - screenTop)
 	block.ClippedTop = concepts.Clamp(screenTop, 0, r.ScreenHeight)
 	block.ClippedBottom = concepts.Clamp(screenBottom, 0, r.ScreenHeight)
@@ -87,7 +87,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 		alive.Tint(&block.Light)
 	}
 
-	vStart := float64(block.ScreenHeight/2) - block.ProjectedTop
+	vStart := float64(block.ScreenHeight/2) - block.ProjectedTop + math.Floor(block.ShearZ)
 	block.Light.MulSelf(ebd.Visible.Opacity)
 	block.MaterialSampler.Initialize(b.Entity, nil)
 	for block.ScreenX = x1; block.ScreenX < x2; block.ScreenX++ {

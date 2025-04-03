@@ -41,6 +41,8 @@ type column struct {
 	Depth int
 	// Height of camera above ground
 	CameraZ float64
+	// Fake look up/down
+	ShearZ float64
 	// Scaled screenspace boundaries of current column (unclipped)
 	EdgeTop, EdgeBottom int
 	// Projected height of floor/ceiling at current segment intersection
@@ -72,8 +74,8 @@ func (c *column) CalcScreen() {
 		c.ProjectedSectorBottom = c.ProjectZ(*c.Sector.Bottom.Z.Render - c.CameraZ)
 	}
 
-	screenTop := c.ScreenHeight/2 - int(math.Floor(c.ProjectedTop))
-	screenBottom := c.ScreenHeight/2 - int(math.Floor(c.ProjectedBottom))
+	screenTop := c.ScreenHeight/2 - int(math.Floor(c.ProjectedTop)) + int(c.ShearZ)
+	screenBottom := c.ScreenHeight/2 - int(math.Floor(c.ProjectedBottom)) + int(c.ShearZ)
 	c.ClippedTop = concepts.Clamp(screenTop, c.EdgeTop, c.EdgeBottom)
 	c.ClippedBottom = concepts.Clamp(screenBottom, c.EdgeTop, c.EdgeBottom)
 }

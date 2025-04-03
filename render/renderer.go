@@ -320,6 +320,7 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) []*select
 	block.MaterialSampler.ScreenY = y
 	block.MaterialSampler.Angle = block.Angle
 	block.CameraZ = r.Player.CameraZ
+	block.ShearZ = r.Player.ShearZ
 	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
 	block.Ray.Set(*r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
 	block.RayPlane[0] = block.Ray.AngleCos * block.ViewFix[block.ScreenX]
@@ -393,6 +394,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	// Column going through portals affects this
 	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
 	block.CameraZ = r.Player.CameraZ
+	block.ShearZ = r.Player.ShearZ
 
 	for b := range block.Bodies {
 		vis := materials.GetVisible(b.Universe, b.Entity)
@@ -549,6 +551,7 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 			EdgeTop:    0,
 			EdgeBottom: r.ScreenHeight,
 			CameraZ:    r.Player.CameraZ,
+			ShearZ:     r.Player.ShearZ,
 		},
 		Visited:          make([]segmentIntersection, constants.MaxPortals),
 		Bodies:           make(containers.Set[*core.Body]),

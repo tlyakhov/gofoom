@@ -21,6 +21,7 @@ type Player struct {
 	Crouching     bool
 	Bob           float64
 	CameraZ       float64
+	ShearZ        float64
 	ActionPressed bool
 
 	SelectedTarget  ecs.Entity

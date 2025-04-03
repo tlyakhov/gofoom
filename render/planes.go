@@ -58,7 +58,7 @@ func planes(block *block, plane *core.SectorPlane) {
 		end = block.EdgeBottom
 	}
 	for block.ScreenY = start; block.ScreenY < end; block.ScreenY++ {
-		block.RayPlane[2] = float64(block.ScreenHeight/2 - block.ScreenY)
+		block.RayPlane[2] = float64(block.ScreenHeight/2 - block.ScreenY + int(block.ShearZ))
 		screenIndex := uint32(block.ScreenX + block.ScreenY*block.ScreenWidth)
 		denom := plane.Normal.Dot(&block.RayPlane)
 		if denom == 0 {
