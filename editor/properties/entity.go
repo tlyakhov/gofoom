@@ -11,6 +11,7 @@ import (
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 
@@ -77,7 +78,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		cids = append(cids, behaviors.ActionWaypointCID, behaviors.ActionJumpCID,
 			behaviors.ActionFireCID, behaviors.ActionTransitionCID)
 	case "Weapon":
-		cids = append(cids, behaviors.WeaponClassCID)
+		cids = append(cids, inventory.WeaponClassCID)
 	}
 	for _, cid := range cids {
 		col := g.State().Universe.Column(cid)

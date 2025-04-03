@@ -7,7 +7,9 @@ import (
 	"math"
 
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
@@ -18,11 +20,11 @@ import (
 
 type PlayerController struct {
 	ecs.BaseController
-	*behaviors.Player
+	*character.Player
 	Alive   *behaviors.Alive
 	Body    *core.Body
 	Mobile  *core.Mobile
-	Carrier *behaviors.InventoryCarrier
+	Carrier *inventory.Carrier
 }
 
 func init() {
@@ -30,7 +32,7 @@ func init() {
 }
 
 func (pc *PlayerController) ComponentID() ecs.ComponentID {
-	return behaviors.PlayerCID
+	return character.PlayerCID
 }
 
 func (pc *PlayerController) Methods() ecs.ControllerMethod {
@@ -39,7 +41,7 @@ func (pc *PlayerController) Methods() ecs.ControllerMethod {
 
 func (pc *PlayerController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	pc.Entity = e
-	pc.Player = target.(*behaviors.Player)
+	pc.Player = target.(*character.Player)
 	if !pc.Player.IsActive() || pc.Player.Spawn {
 		return false
 	}
@@ -51,7 +53,7 @@ func (pc *PlayerController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	if pc.Alive == nil || !pc.Alive.IsActive() {
 		return false
 	}
-	pc.Carrier = behaviors.GetInventoryCarrier(pc.Universe, pc.Entity)
+	pc.Carrier = inventory.GetCarrier(pc.Universe, pc.Entity)
 	if pc.Carrier == nil || !pc.Carrier.IsActive() {
 		return false
 	}
@@ -113,12 +115,12 @@ func (pc *PlayerController) Always() {
 	// If we have a weapon, select it
 	// TODO: This should be handled by an inventory UI of some kind,
 	// or at least a 1...N quick-select
-	for _, e := range pc.Carrier.Inventory {
+	for _, e := range pc.Carrier.Slots {
 		if e == 0 {
 			continue
 		}
-		slot := behaviors.GetInventorySlot(pc.Universe, e)
-		// TODO: Put this into an InventoryCarrier controller
+		slot := inventory.GetSlot(pc.Universe, e)
+		// TODO: Put this into an Carrier controller
 		if slot.Carrier != pc.Carrier {
 			slot.Carrier = pc.Carrier
 		}
@@ -126,7 +128,7 @@ func (pc *PlayerController) Always() {
 		if slot.Count.Now <= 0 {
 			continue
 		}
-		if w := behaviors.GetWeapon(pc.Universe, e); w != nil {
+		if w := inventory.GetWeapon(pc.Universe, e); w != nil {
 			pc.Carrier.SelectedWeapon = e
 			break
 		}
@@ -216,7 +218,7 @@ func MovePlayerNoClip(u *ecs.Universe, e ecs.Entity, angle float64) {
 	dy, dx := math.Sincos(angle * concepts.Deg2rad)
 	dy *= constants.PlayerWalkForce
 	dx *= constants.PlayerWalkForce
-	player := behaviors.GetPlayer(u, e)
+	player := character.GetPlayer(u, e)
 	p.Pos.Now[0] += dx * 0.02 / m.Mass
 	p.Pos.Now[1] += dy * 0.02 / m.Mass
 	sector := p.RenderSector()

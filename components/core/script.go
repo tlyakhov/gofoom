@@ -42,7 +42,9 @@ func init() {
 
 	import "tlyakhov/gofoom/archetypes"
 	import "tlyakhov/gofoom/components/behaviors"
+	import "tlyakhov/gofoom/components/character"
 	import "tlyakhov/gofoom/components/core"
+	import "tlyakhov/gofoom/components/inventory"
 	import "tlyakhov/gofoom/components/materials"
 	import "tlyakhov/gofoom/concepts"
 	import "tlyakhov/gofoom/constants"

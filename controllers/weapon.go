@@ -7,6 +7,7 @@ import (
 	"log"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
@@ -18,12 +19,12 @@ import (
 
 type WeaponController struct {
 	ecs.BaseController
-	*behaviors.Weapon
+	*inventory.Weapon
 
 	Sampler render.MaterialSampler
-	Slot    *behaviors.InventorySlot
-	Carrier *behaviors.InventoryCarrier
-	Class   *behaviors.WeaponClass
+	Slot    *inventory.Slot
+	Carrier *inventory.Carrier
+	Class   *inventory.WeaponClass
 	Body    *core.Body
 
 	delta, isect, hit concepts.Vector3
@@ -35,7 +36,7 @@ func init() {
 }
 
 func (wc *WeaponController) ComponentID() ecs.ComponentID {
-	return behaviors.WeaponCID
+	return inventory.WeaponCID
 }
 
 func (wc *WeaponController) Methods() ecs.ControllerMethod {
@@ -44,12 +45,12 @@ func (wc *WeaponController) Methods() ecs.ControllerMethod {
 
 func (wc *WeaponController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	wc.Entity = e
-	wc.Weapon = target.(*behaviors.Weapon)
-	wc.Class = behaviors.GetWeaponClass(wc.Weapon.Universe, e)
+	wc.Weapon = target.(*inventory.Weapon)
+	wc.Class = inventory.GetWeaponClass(wc.Weapon.Universe, e)
 	if wc.Class == nil || !wc.Class.IsActive() {
 		return false
 	}
-	wc.Slot = behaviors.GetInventorySlot(wc.Weapon.Universe, e)
+	wc.Slot = inventory.GetSlot(wc.Weapon.Universe, e)
 	if wc.Slot == nil || !wc.Slot.IsActive() ||
 		wc.Slot.Carrier == nil || !wc.Slot.Carrier.IsActive() {
 		return false
@@ -130,7 +131,7 @@ func (wc *WeaponController) MarkSurfaceAndTransform(s *selection.Selectable, tra
 	return surf
 }
 
-func (wc *WeaponController) updateMarks(mark behaviors.WeaponMark) {
+func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 	wc.Marks.PushBack(mark)
 	for wc.Marks.Len() > constants.MaxWeaponMarks {
 		wm := wc.Marks.PopFront()
@@ -193,7 +194,7 @@ func (wc *WeaponController) Always() {
 		surf.ExtraStages = append(surf.ExtraStages, es)
 		es.Transform.From(&surf.Transform.Now)
 		es.Transform.AffineInverseSelf().MulSelf(&wc.transform)
-		wc.updateMarks(behaviors.WeaponMark{
+		wc.updateMarks(inventory.WeaponMark{
 			ShaderStage: es,
 			Surface:     surf,
 		})

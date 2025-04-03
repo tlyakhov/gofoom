@@ -4,15 +4,15 @@
 package controllers
 
 import (
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/ecs"
 )
 
 type InventorySlotController struct {
 	ecs.BaseController
-	*behaviors.InventorySlot
-	WeaponClass *behaviors.WeaponClass
-	Weapon      *behaviors.Weapon
+	*inventory.Slot
+	WeaponClass *inventory.WeaponClass
+	Weapon      *inventory.Weapon
 }
 
 func init() {
@@ -20,7 +20,7 @@ func init() {
 }
 
 func (isc *InventorySlotController) ComponentID() ecs.ComponentID {
-	return behaviors.InventorySlotCID
+	return inventory.SlotCID
 }
 
 func (isc *InventorySlotController) Methods() ecs.ControllerMethod {
@@ -33,15 +33,15 @@ func (isc *InventorySlotController) EditorPausedMethods() ecs.ControllerMethod {
 
 func (isc *InventorySlotController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	isc.Entity = e
-	isc.InventorySlot = target.(*behaviors.InventorySlot)
-	isc.WeaponClass = behaviors.GetWeaponClass(isc.Universe, e)
-	isc.Weapon = behaviors.GetWeapon(isc.Universe, e)
-	return isc.InventorySlot != nil && isc.InventorySlot.IsActive()
+	isc.Slot = target.(*inventory.Slot)
+	isc.WeaponClass = inventory.GetWeaponClass(isc.Universe, e)
+	isc.Weapon = inventory.GetWeapon(isc.Universe, e)
+	return isc.Slot != nil && isc.Slot.IsActive()
 }
 
 func (isc *InventorySlotController) Recalculate() {
 	if isc.WeaponClass != nil && isc.Weapon == nil {
-		isc.Weapon = isc.Universe.NewAttachedComponent(isc.Entity, behaviors.WeaponCID).(*behaviors.Weapon)
+		isc.Weapon = isc.Universe.NewAttachedComponent(isc.Entity, inventory.WeaponCID).(*inventory.Weapon)
 		isc.Weapon.Flags |= ecs.ComponentInternal
 	}
 }

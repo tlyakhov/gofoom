@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
@@ -123,7 +124,7 @@ func (ac *ActionController) Jump(jump *behaviors.ActionJump) bool {
 }
 
 func (ac *ActionController) Fire(fire *behaviors.ActionFire) bool {
-	weapon := behaviors.GetWeapon(ac.Universe, ac.Body.Entity)
+	weapon := inventory.GetWeapon(ac.Universe, ac.Body.Entity)
 
 	if weapon == nil {
 		return true

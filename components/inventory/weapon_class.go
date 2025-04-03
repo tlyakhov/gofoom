@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package behaviors
+package inventory
 
 import (
 	"tlyakhov/gofoom/components/materials"
@@ -11,7 +11,6 @@ import (
 )
 
 // TODO: Implement scripting
-// TODO: Muzzle flash
 type WeaponClass struct {
 	ecs.Attached `editable:"^"`
 

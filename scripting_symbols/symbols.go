@@ -12,7 +12,9 @@ package scripting_symbols
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/ecs
 
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/behaviors
+//go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/character
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/core
+//go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/inventory
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/materials
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/components/selection
 

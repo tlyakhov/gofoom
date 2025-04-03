@@ -6,15 +6,16 @@ package controllers
 import (
 	"log"
 	"math/rand"
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
 func Respawn(u *ecs.Universe, force bool) {
-	spawns := make([]*behaviors.Player, 0)
-	players := make([]*behaviors.Player, 0)
-	col := ecs.ColumnFor[behaviors.Player](u, behaviors.PlayerCID)
+	spawns := make([]*character.Player, 0)
+	players := make([]*character.Player, 0)
+	col := ecs.ColumnFor[character.Player](u, character.PlayerCID)
 	for i := range col.Cap() {
 		p := col.Value(i)
 		if p == nil || !p.IsActive() {
@@ -71,14 +72,14 @@ func Respawn(u *ecs.Universe, force bool) {
 		}
 		c := u.LoadComponentWithoutAttaching(cid, mappedComponent)
 		u.Attach(cid, pastedEntity, &c)
-		if cid == behaviors.PlayerCID {
-			player := c.(*behaviors.Player)
+		if cid == character.PlayerCID {
+			player := c.(*character.Player)
 			player.Spawn = false
 		} else if cid == ecs.NamedCID {
 			named := c.(*ecs.Named)
 			named.Name = "Player"
-		} else if cid == behaviors.InventoryCarrierCID {
-			// carrier := c.(*behaviors.InventoryCarrier)
+		} else if cid == inventory.CarrierCID {
+			// carrier := c.(*inventory.Carrier)
 			// TODO: Clone/respawn inventory
 		}
 	}

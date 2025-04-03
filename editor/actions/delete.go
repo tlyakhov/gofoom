@@ -4,7 +4,7 @@
 package actions
 
 import (
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
@@ -95,7 +95,7 @@ func (a *Delete) apply() {
 			if s.Body.IsExternal() {
 				continue
 			}
-			if behaviors.GetPlayer(s.Universe, s.Entity) != nil {
+			if p := character.GetPlayer(s.Universe, s.Entity); p != nil && !p.Spawn {
 				// Otherwise weird things happen...
 				continue
 			}

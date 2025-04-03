@@ -15,6 +15,10 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/ecs/ecs"] = map[string]reflect.Value{
 		// function, constant and variable definitions
+		"ComponentActive":              reflect.ValueOf(ecs.ComponentActive),
+		"ComponentFlagsString":         reflect.ValueOf(ecs.ComponentFlagsString),
+		"ComponentFlagsStrings":        reflect.ValueOf(ecs.ComponentFlagsStrings),
+		"ComponentFlagsValues":         reflect.ValueOf(ecs.ComponentFlagsValues),
 		"ComponentHideInEditor":        reflect.ValueOf(ecs.ComponentHideInEditor),
 		"ComponentInternal":            reflect.ValueOf(ecs.ComponentInternal),
 		"ComponentLockedInEditor":      reflect.ValueOf(ecs.ComponentLockedInEditor),
@@ -75,6 +79,7 @@ func init() {
 		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
 		"SourceFile":       reflect.ValueOf((*ecs.SourceFile)(nil)),
 		"SubSerializable":  reflect.ValueOf((*ecs.SubSerializable)(nil)),
+		"Universal":        reflect.ValueOf((*ecs.Universal)(nil)),
 		"Universe":         reflect.ValueOf((*ecs.Universe)(nil)),
 
 		// interface wrapper definitions
@@ -83,6 +88,7 @@ func init() {
 		"_Controller":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
 		"_Serializable":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
 		"_SubSerializable":  reflect.ValueOf((*_tlyakhov_gofoom_ecs_SubSerializable)(nil)),
+		"_Universal":        reflect.ValueOf((*_tlyakhov_gofoom_ecs_Universal)(nil)),
 	}
 }
 
@@ -90,6 +96,7 @@ func init() {
 type _tlyakhov_gofoom_ecs_Attachable struct {
 	IValue           interface{}
 	WBase            func() *ecs.Attached
+	WComponentID     func() ecs.ComponentID
 	WConstruct       func(data map[string]any)
 	WGetUniverse     func() *ecs.Universe
 	WIsActive        func() bool
@@ -103,6 +110,9 @@ type _tlyakhov_gofoom_ecs_Attachable struct {
 
 func (W _tlyakhov_gofoom_ecs_Attachable) Base() *ecs.Attached {
 	return W.WBase()
+}
+func (W _tlyakhov_gofoom_ecs_Attachable) ComponentID() ecs.ComponentID {
+	return W.WComponentID()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
@@ -220,21 +230,13 @@ func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable, a1 ecs.Entity
 
 // _tlyakhov_gofoom_ecs_Serializable is an interface wrapper for Serializable type
 type _tlyakhov_gofoom_ecs_Serializable struct {
-	IValue       interface{}
-	WConstruct   func(data map[string]any)
-	WGetUniverse func() *ecs.Universe
-	WOnAttach    func(u *ecs.Universe)
-	WSerialize   func() map[string]any
+	IValue     interface{}
+	WConstruct func(data map[string]any)
+	WSerialize func() map[string]any
 }
 
 func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {
 	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_ecs_Serializable) GetUniverse() *ecs.Universe {
-	return W.WGetUniverse()
-}
-func (W _tlyakhov_gofoom_ecs_Serializable) OnAttach(u *ecs.Universe) {
-	W.WOnAttach(u)
 }
 func (W _tlyakhov_gofoom_ecs_Serializable) Serialize() map[string]any {
 	return W.WSerialize()
@@ -252,4 +254,18 @@ func (W _tlyakhov_gofoom_ecs_SubSerializable) Construct(ecs *ecs.Universe, data 
 }
 func (W _tlyakhov_gofoom_ecs_SubSerializable) Serialize() map[string]any {
 	return W.WSerialize()
+}
+
+// _tlyakhov_gofoom_ecs_Universal is an interface wrapper for Universal type
+type _tlyakhov_gofoom_ecs_Universal struct {
+	IValue       interface{}
+	WGetUniverse func() *ecs.Universe
+	WOnAttach    func(u *ecs.Universe)
+}
+
+func (W _tlyakhov_gofoom_ecs_Universal) GetUniverse() *ecs.Universe {
+	return W.WGetUniverse()
+}
+func (W _tlyakhov_gofoom_ecs_Universal) OnAttach(u *ecs.Universe) {
+	W.WOnAttach(u)
 }

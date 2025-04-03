@@ -5,7 +5,7 @@ package actions
 
 import (
 	"log"
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/editor/state"
 
@@ -31,7 +31,7 @@ func (a *Copy) Activate() {
 
 	for _, obj := range a.Selected.Exact {
 		// Don't copy/paste active players
-		if p := behaviors.GetPlayer(obj.Universe, obj.Entity); p != nil && !p.Spawn {
+		if p := character.GetPlayer(obj.Universe, obj.Entity); p != nil && !p.Spawn {
 			continue
 		}
 		a.Saved[obj.Entity.Serialize(obj.Universe)] = obj.Serialize()

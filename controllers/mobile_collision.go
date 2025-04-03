@@ -7,7 +7,7 @@ import (
 	"log"
 	"math"
 	"math/rand/v2"
-	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -175,7 +175,7 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 		bResponse = bMobile.CrBody
 		otherElasticity = bMobile.Elasticity
 		otherVel = &bMobile.Vel.Now
-		if behaviors.GetPlayer(bMobile.Universe, bMobile.Entity) != nil {
+		if character.GetPlayer(bMobile.Universe, bMobile.Entity) != nil {
 			aResponse = mc.CrPlayer
 		}
 		if mc.Player != nil {
@@ -305,7 +305,7 @@ func (mc *MobileController) bodyBodyCollide() {
 			return true
 		}
 
-		if p := behaviors.GetPlayer(body.Universe, body.Entity); p != nil && p.Spawn {
+		if p := character.GetPlayer(body.Universe, body.Entity); p != nil && p.Spawn {
 			// Ignore spawn points
 			return true
 		}
