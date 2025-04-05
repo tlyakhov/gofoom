@@ -22,6 +22,13 @@ const (
 	ShaderFrob
 )
 
+// TODO: this is a bit ugly - the stages conflate several types of operations:
+//  1. Sampling - e.g. "give me a color based on this UV"
+//  2. Pick source - e.g. "give me something that generates pixels"
+//  3. UV transformation or replacement
+//  4. Blending
+//
+// We should separate these ideas, there's a bunch of prior art here.
 type ShaderStage struct {
 	Universe  *ecs.Universe
 	Material  ecs.Entity         `editable:"Material" edit_type:"Material"`
