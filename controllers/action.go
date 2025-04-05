@@ -138,7 +138,7 @@ func (ac *ActionController) Fire(fire *behaviors.ActionFire) bool {
 	case timedDelayed:
 		return false
 	default:
-		weapon.FireNextFrame = true
+		weapon.Intent = inventory.WeaponFire
 		return true
 	}
 }

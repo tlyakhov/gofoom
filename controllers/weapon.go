@@ -145,12 +145,10 @@ func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 	}
 }
 
-func (wc *WeaponController) Always() {
-	if !wc.FireNextFrame {
-		return
-	}
-	wc.FireNextFrame = false
-	wc.FiredTimestamp = wc.Universe.Timestamp
+func (wc *WeaponController) stateFiring() {
+	// TODO: Sound effect
+	wc.Intent = inventory.WeaponHeld
+	wc.LastStateTimestamp = wc.Universe.Timestamp
 	s := wc.Cast()
 
 	if s == nil {
@@ -199,4 +197,11 @@ func (wc *WeaponController) Always() {
 			Surface:     surf,
 		})
 	}
+}
+
+func (wc *WeaponController) Always() {
+	if wc.Intent == inventory.WeaponFire && wc.State == inventory.WeaponIdle {
+		wc.stateFiring()
+	}
+
 }

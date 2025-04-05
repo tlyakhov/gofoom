@@ -73,7 +73,7 @@ func gameInput() {
 	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
 		if renderer.Carrier.SelectedWeapon != 0 {
 			if w := inventory.GetWeapon(renderer.Universe, renderer.Carrier.SelectedWeapon); w != nil {
-				w.FireNextFrame = true
+				w.Intent = inventory.WeaponFire
 			}
 		}
 	}
@@ -179,7 +179,7 @@ func run() {
 	u.Simulation.Integrate = integrateGame
 	u.Simulation.Render = renderGame
 	// Debug
-	if false {
+	if true {
 		controllers.CreateTestWorld3(u)
 		// u.Save("bin/exported_test.yaml")
 	} else if err = u.Load("data/worlds/hall.yaml"); err != nil {
