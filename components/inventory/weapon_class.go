@@ -5,6 +5,7 @@ package inventory
 
 import (
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
@@ -16,11 +17,10 @@ type WeaponClass struct {
 
 	InstantHit bool `editable:"InstantHit"`
 
-	Damage   float64 `editable:"Damage"`
-	Spread   float64 `editable:"Spread"`   // In degrees
-	Cooldown float64 `editable:"Cooldown"` // In ms
+	Damage float64                             `editable:"Damage"`
+	Spread float64                             `editable:"Spread"` // In degrees
+	Params [WeaponStateCount]WeaponStateParams `editable:"Params"`
 
-	FlashTime     float64    `editable:"Flash Time"` // In ms
 	FlashMaterial ecs.Entity `editable:"Flash Material" edit_type:"Material"`
 
 	// Projectiles make marks on walls/internal segments
@@ -58,11 +58,20 @@ func (w *WeaponClass) Construct(data map[string]any) {
 	w.MarkSize = 5
 	w.Damage = 10
 	w.Spread = 1
-	w.Cooldown = 100
-	w.FlashTime = 100
+
+	for i := range WeaponStateCount {
+		w.Params[i].Construct(nil)
+	}
 
 	if data == nil {
 		return
+	}
+
+	if v, ok := data["Params"]; ok {
+		arr := v.([]any)
+		for i := range concepts.Min(int(WeaponStateCount), len(arr)) {
+			w.Params[i].Construct(arr[i].(map[string]any))
+		}
 	}
 
 	if v, ok := data["Damage"]; ok {
@@ -71,14 +80,6 @@ func (w *WeaponClass) Construct(data map[string]any) {
 
 	if v, ok := data["Spread"]; ok {
 		w.Spread = cast.ToFloat64(v)
-	}
-
-	if v, ok := data["Cooldown"]; ok {
-		w.Cooldown = cast.ToFloat64(v)
-	}
-
-	if v, ok := data["FlashTime"]; ok {
-		w.FlashTime = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["MarkMaterial"]; ok {
@@ -99,8 +100,12 @@ func (w *WeaponClass) Serialize() map[string]any {
 
 	result["Damage"] = w.Damage
 	result["Spread"] = w.Spread
-	result["Cooldown"] = w.Cooldown
-	result["FlashTime"] = w.FlashTime
+
+	p := make([]map[string]any, WeaponStateCount)
+	for i := range w.Params {
+		p[i] = w.Params[i].Serialize(w.Universe)
+	}
+	result["Params"] = p
 
 	if w.MarkMaterial != 0 {
 		result["MarkMaterial"] = w.MarkMaterial.Serialize(w.Universe)

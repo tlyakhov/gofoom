@@ -26,14 +26,13 @@ type playerMessageParams struct {
 
 func (r *Renderer) RenderWeapon(slot *inventory.Slot) {
 	wc := inventory.GetWeaponClass(slot.Universe, slot.Entity)
-	wi := inventory.GetWeapon(slot.Universe, slot.Entity)
-	if wc != nil && wi != nil {
-		if wi.Flashing() {
+	w := inventory.GetWeapon(slot.Universe, slot.Entity)
+	if wc != nil && w != nil {
+		if w.State == inventory.WeaponFiring {
 			r.BitBlt(wc.FlashMaterial, r.ScreenWidth/2-64, r.ScreenHeight-160, 128, 128, concepts.BlendScreen)
 		}
+		r.BitBlt(wc.Params[w.State].Material, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, concepts.BlendNormal)
 	}
-	// TODO: This should be a separate image from the inventory item image
-	r.BitBlt(slot.Image, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, concepts.BlendNormal)
 }
 
 func applyPlayerMessage(pt *behaviors.PlayerTargetable, params *playerMessageParams) string {

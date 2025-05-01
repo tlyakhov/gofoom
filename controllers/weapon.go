@@ -31,8 +31,16 @@ type WeaponController struct {
 	transform         concepts.Matrix2
 }
 
+var weaponFuncs = [inventory.WeaponStateCount]func(*WeaponController){}
+
 func init() {
 	ecs.Types().RegisterController(func() ecs.Controller { return &WeaponController{} }, 100)
+	weaponFuncs[inventory.WeaponIdle] = weaponIdle
+	weaponFuncs[inventory.WeaponUnholstering] = weaponUnholstering
+	weaponFuncs[inventory.WeaponFiring] = weaponFiring
+	weaponFuncs[inventory.WeaponCooling] = weaponCooling
+	weaponFuncs[inventory.WeaponReloading] = weaponReloading
+	weaponFuncs[inventory.WeaponHolstering] = weaponHolstering
 }
 
 func (wc *WeaponController) ComponentID() ecs.ComponentID {
@@ -145,10 +153,29 @@ func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 	}
 }
 
-func (wc *WeaponController) stateFiring() {
+func weaponIdle(wc *WeaponController) {
+	if wc.Intent == inventory.WeaponFire {
+		wc.NewState(inventory.WeaponFiring)
+		return
+	}
+}
+
+func weaponUnholstering(wc *WeaponController) {
+	if wc.StateCompleted() {
+		wc.NewState(inventory.WeaponIdle)
+	}
+	if wc.Intent == inventory.WeaponHolstered {
+		wc.NewState(inventory.WeaponHolstering)
+	}
+}
+
+func weaponFiring(wc *WeaponController) {
+	if wc.Intent != inventory.WeaponFire {
+		return
+	}
 	// TODO: Sound effect
 	wc.Intent = inventory.WeaponHeld
-	wc.LastStateTimestamp = wc.Universe.Timestamp
+	wc.NewState(inventory.WeaponCooling)
 	s := wc.Cast()
 
 	if s == nil {
@@ -199,9 +226,25 @@ func (wc *WeaponController) stateFiring() {
 	}
 }
 
-func (wc *WeaponController) Always() {
-	if wc.Intent == inventory.WeaponFire && wc.State == inventory.WeaponIdle {
-		wc.stateFiring()
+func weaponCooling(wc *WeaponController) {
+	if wc.StateCompleted() {
+		if wc.Intent == inventory.WeaponFire {
+			wc.NewState(inventory.WeaponFiring)
+		} else {
+			wc.NewState(inventory.WeaponIdle)
+		}
+		return
 	}
+	if wc.Intent == inventory.WeaponHolstered {
+		wc.NewState(inventory.WeaponHolstering)
+	}
+}
+func weaponReloading(wc *WeaponController) {
+}
+func weaponHolstering(wc *WeaponController) {
+}
 
+func (wc *WeaponController) Always() {
+	// Run our gun state machine
+	weaponFuncs[wc.State](wc)
 }

@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _WeaponStateName = "WeaponIdleWeaponUnholsteringWeaponFiringWeaponCoolingWeaponReloadingWeaponHolstering"
+const _WeaponStateName = "WeaponIdleWeaponUnholsteringWeaponFiringWeaponCoolingWeaponReloadingWeaponHolsteringWeaponStateCount"
 
-var _WeaponStateIndex = [...]uint8{0, 10, 28, 40, 53, 68, 84}
+var _WeaponStateIndex = [...]uint8{0, 10, 28, 40, 53, 68, 84, 100}
 
-const _WeaponStateLowerName = "weaponidleweaponunholsteringweaponfiringweaponcoolingweaponreloadingweaponholstering"
+const _WeaponStateLowerName = "weaponidleweaponunholsteringweaponfiringweaponcoolingweaponreloadingweaponholsteringweaponstatecount"
 
 func (i WeaponState) String() string {
 	if i < 0 || i >= WeaponState(len(_WeaponStateIndex)-1) {
@@ -31,23 +31,26 @@ func _WeaponStateNoOp() {
 	_ = x[WeaponCooling-(3)]
 	_ = x[WeaponReloading-(4)]
 	_ = x[WeaponHolstering-(5)]
+	_ = x[WeaponStateCount-(6)]
 }
 
-var _WeaponStateValues = []WeaponState{WeaponIdle, WeaponUnholstering, WeaponFiring, WeaponCooling, WeaponReloading, WeaponHolstering}
+var _WeaponStateValues = []WeaponState{WeaponIdle, WeaponUnholstering, WeaponFiring, WeaponCooling, WeaponReloading, WeaponHolstering, WeaponStateCount}
 
 var _WeaponStateNameToValueMap = map[string]WeaponState{
-	_WeaponStateName[0:10]:       WeaponIdle,
-	_WeaponStateLowerName[0:10]:  WeaponIdle,
-	_WeaponStateName[10:28]:      WeaponUnholstering,
-	_WeaponStateLowerName[10:28]: WeaponUnholstering,
-	_WeaponStateName[28:40]:      WeaponFiring,
-	_WeaponStateLowerName[28:40]: WeaponFiring,
-	_WeaponStateName[40:53]:      WeaponCooling,
-	_WeaponStateLowerName[40:53]: WeaponCooling,
-	_WeaponStateName[53:68]:      WeaponReloading,
-	_WeaponStateLowerName[53:68]: WeaponReloading,
-	_WeaponStateName[68:84]:      WeaponHolstering,
-	_WeaponStateLowerName[68:84]: WeaponHolstering,
+	_WeaponStateName[0:10]:        WeaponIdle,
+	_WeaponStateLowerName[0:10]:   WeaponIdle,
+	_WeaponStateName[10:28]:       WeaponUnholstering,
+	_WeaponStateLowerName[10:28]:  WeaponUnholstering,
+	_WeaponStateName[28:40]:       WeaponFiring,
+	_WeaponStateLowerName[28:40]:  WeaponFiring,
+	_WeaponStateName[40:53]:       WeaponCooling,
+	_WeaponStateLowerName[40:53]:  WeaponCooling,
+	_WeaponStateName[53:68]:       WeaponReloading,
+	_WeaponStateLowerName[53:68]:  WeaponReloading,
+	_WeaponStateName[68:84]:       WeaponHolstering,
+	_WeaponStateLowerName[68:84]:  WeaponHolstering,
+	_WeaponStateName[84:100]:      WeaponStateCount,
+	_WeaponStateLowerName[84:100]: WeaponStateCount,
 }
 
 var _WeaponStateNames = []string{
@@ -57,6 +60,7 @@ var _WeaponStateNames = []string{
 	_WeaponStateName[40:53],
 	_WeaponStateName[53:68],
 	_WeaponStateName[68:84],
+	_WeaponStateName[84:100],
 }
 
 // WeaponStateString retrieves an enum value from the enum constants string name.
