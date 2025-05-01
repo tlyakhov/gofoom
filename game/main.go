@@ -179,7 +179,7 @@ func run() {
 	u.Simulation.Integrate = integrateGame
 	u.Simulation.Render = renderGame
 	// Debug
-	if true {
+	if false {
 		controllers.CreateTestWorld3(u)
 		// u.Save("bin/exported_test.yaml")
 	} else if err = u.Load("data/worlds/hall.yaml"); err != nil {

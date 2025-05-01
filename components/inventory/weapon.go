@@ -4,21 +4,10 @@
 package inventory
 
 import (
+	"log"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/gammazero/deque"
-)
-
-//go:generate go run github.com/dmarkham/enumer -type=WeaponState -json
-type WeaponState int
-
-const (
-	WeaponIdle WeaponState = iota
-	WeaponUnholstering
-	WeaponFiring
-	WeaponCooling
-	WeaponReloading
-	WeaponHolstering
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=WeaponIntent -json
@@ -61,14 +50,18 @@ func GetWeapon(u *ecs.Universe, e ecs.Entity) *Weapon {
 func (w *Weapon) StateDuration() int64 {
 	return w.Universe.Timestamp - w.LastStateTimestamp
 }
-func (w *Weapon) CoolingDown() bool {
-	wc := GetWeaponClass(w.Universe, w.Entity)
-	return wc != nil && w.StateDuration() < int64(wc.Cooldown)
+
+func (w *Weapon) StateCompleted() bool {
+	if wc := GetWeaponClass(w.Universe, w.Entity); wc != nil {
+		return float64(w.StateDuration()) >= wc.Params[w.State].Time
+	}
+	return false
 }
 
-func (w *Weapon) Flashing() bool {
-	wc := GetWeaponClass(w.Universe, w.Entity)
-	return wc != nil && w.StateDuration() < int64(wc.FlashTime)
+func (w *Weapon) NewState(s WeaponState) {
+	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, w.Universe.Timestamp-w.LastStateTimestamp)
+	w.State = s
+	w.LastStateTimestamp = w.Universe.Timestamp
 }
 
 func (w *Weapon) String() string {
