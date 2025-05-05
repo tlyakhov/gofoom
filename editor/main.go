@@ -129,7 +129,7 @@ func main() {
 				return
 			}
 			editor.Universe.Simulation.Step()
-			editor.MapWidget.Raster.Refresh()
+			fyne.Do(editor.MapWidget.Raster.Refresh)
 		}
 	}()
 

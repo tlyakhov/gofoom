@@ -174,6 +174,8 @@ func weaponFiring(wc *WeaponController) {
 		return
 	}
 	// TODO: Sound effect
+	// TODO: This should be a parameter somewhere, whether to reset the intent
+	// or not.
 	wc.Intent = inventory.WeaponHeld
 	wc.NewState(inventory.WeaponCooling)
 	s := wc.Cast()
