@@ -80,7 +80,7 @@ func (g *GameWidget) Draw() {
 	editor.Lock.Unlock()
 
 	copy(g.Surface.Pix, pixels)
-	g.Raster.Refresh()
+	fyne.Do(g.Raster.Refresh)
 }
 
 func (g *GameWidget) KeyDown(evt *fyne.KeyEvent) {

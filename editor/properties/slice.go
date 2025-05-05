@@ -38,6 +38,11 @@ var animationTypes = map[string]reflect.Type{
 func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 	// field.Type is *[]<something>
 	elemType := field.Type.Elem().Elem()
+	if field.Type.Elem().Kind() == reflect.Array {
+		label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
+		label.Text = "Fixed Array"
+		return
+	}
 	if elemType == reflect.TypeFor[dynamic.Animated]() {
 		buttons := make([]fyne.CanvasObject, len(animationTypes))
 		i := 0
@@ -117,5 +122,7 @@ func (g *Grid) fieldChangeSlice(field *state.PropertyGridField) {
 	if field.SliceIndex < field.Values[0].Value.Elem().Len()-1 {
 		c.Objects = append(c.Objects, buttonInc)
 	}
-	c.Objects = append(c.Objects, buttonDelete)
+	if field.Type.Kind() == reflect.Slice {
+		c.Objects = append(c.Objects, buttonDelete)
+	}
 }

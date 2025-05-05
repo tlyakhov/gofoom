@@ -73,6 +73,45 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state Pr
 	}
 }
 
+func (g *Grid) fieldsFromSlice(field *state.PropertyGridField, valueMetadata *state.PropertyGridFieldValue, pgs PropertyGridState) {
+	sliceValue := valueMetadata.Value.Elem()
+	for i := range sliceValue.Len() {
+		childName := fmt.Sprintf("%v[%v]", field.Name, i)
+		// TODO: Fix this hideous hack
+		if field.Type == reflect.TypeFor[*[inventory.WeaponStateCount]inventory.WeaponStateParams]() {
+			s := inventory.WeaponStateStrings()[i]
+			s = strings.Replace(s, "Weapon", "", 1)
+			childName = fmt.Sprintf("%v[%v]", field.Name, s)
+		}
+		// Add slice/arry element inc/dec/delete controls
+		indexedValue := sliceValue.Index(i)
+		sliceElementField, ok := pgs.Fields[childName]
+		if !ok {
+			sliceElementField = &state.PropertyGridField{
+				Name:       childName,
+				EditType:   "SliceArrayElement",
+				Depth:      pgs.Depth + 1,
+				Type:       indexedValue.Addr().Type(),
+				Sort:       100,
+				SliceIndex: i,
+				Source:     field.Source,
+				ParentName: field.Name,
+				Parent:     field,
+				Unique:     make(map[string]reflect.Value),
+			}
+			pgs.Fields[childName] = sliceElementField
+		}
+		sliceElementField.Values = append(sliceElementField.Values, valueMetadata)
+		field.Unique[indexedValue.String()] = indexedValue.Addr()
+
+		// Recurse into slice/array element
+		pgsChild := pgs
+		pgsChild.ParentField = field
+		pgsChild.ParentCollection = &sliceValue
+		g.childFields(childName, indexedValue, pgsChild, true)
+	}
+}
+
 func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
 	targetValue := reflect.ValueOf(target)
 	targetType := targetValue.Type().Elem()
@@ -152,38 +191,12 @@ func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
 				//	log.Printf("%v", display)
 			}
 			g.childFields(name, fieldValue, pgs, true)
-		} else if field.Type.Kind() == reflect.Slice &&
-			(field.Type.Elem().Kind() == reflect.Pointer ||
-				field.Type.Elem().Kind() == reflect.Struct ||
-				field.Type.Elem().Kind() == reflect.Interface) {
-			for i := range fieldValue.Len() {
-				childName := fmt.Sprintf("%v[%v]", name, i)
-				// Add slice element inc/dec/delete controls
-				indexedValue := fieldValue.Index(i)
-				sliceElementField, ok := pgs.Fields[childName]
-				if !ok {
-					sliceElementField = &state.PropertyGridField{
-						Name:       childName,
-						EditType:   "SliceElement",
-						Depth:      pgs.Depth + 1,
-						Type:       indexedValue.Addr().Type(),
-						Sort:       100,
-						SliceIndex: i,
-						Source:     &field,
-						ParentName: name,
-						Parent:     gf,
-						Unique:     make(map[string]reflect.Value),
-					}
-					pgs.Fields[childName] = sliceElementField
-				}
-				sliceElementField.Values = append(sliceElementField.Values, valueMetadata)
-				gf.Unique[indexedValue.String()] = indexedValue.Addr()
-
-				// Recurse into slice element
-				pgsChild := pgs
-				pgsChild.ParentField = gf
-				pgsChild.ParentCollection = &fieldValue
-				g.childFields(childName, indexedValue, pgsChild, true)
+		} else if field.Type.Kind() == reflect.Slice || field.Type.Kind() == reflect.Array {
+			childKind := field.Type.Elem().Kind()
+			if childKind == reflect.Pointer ||
+				childKind == reflect.Struct ||
+				childKind == reflect.Interface {
+				g.fieldsFromSlice(gf, valueMetadata, pgs)
 			}
 		}
 	}
@@ -388,7 +401,7 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			label.TextStyle.Bold = true
 			g.fieldComponent(field)
 			continue
-		case "SliceElement":
+		case "SliceArrayElement":
 			label.Importance = widget.HighImportance
 			label.TextStyle.Italic = true
 			g.fieldChangeSlice(field)
@@ -464,6 +477,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, inventory.ItemFlagsValues())
 		case *ecs.ComponentFlags:
 			g.fieldEnum(field, ecs.ComponentFlagsValues())
+		case *inventory.WeaponIntent:
+			g.fieldEnum(field, inventory.WeaponIntentValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]*core.Script:
@@ -475,6 +490,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		case *[]dynamic.Animated:
 			g.fieldSlice(field)
 		case *[]*behaviors.ActionWaypoint:
+			g.fieldSlice(field)
+		case *[inventory.WeaponStateCount]inventory.WeaponStateParams:
 			g.fieldSlice(field)
 		case *dynamic.TweeningFunc:
 			fieldFunc(g, field, dynamic.TweeningFuncs)
