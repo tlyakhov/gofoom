@@ -11,6 +11,7 @@ import (
 
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -42,7 +43,9 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 	}
 
 	entry.OnSubmitted = nil
-	entry.SetText(origValue)
+	fyne.Do(func() {
+		entry.SetText(origValue)
+	})
 	entry.OnSubmitted = func(text string) {
 		var toSet reflect.Value
 		switch field.Type.String() {

@@ -42,9 +42,6 @@ func NewGameWidget() *GameWidget {
 }
 
 func (g *GameWidget) generateRaster(requestedWidth, requestedHeight int) image.Image {
-	editor.Lock.Lock()
-	defer editor.Lock.Unlock()
-
 	w := 640
 	h := w * requestedHeight / requestedWidth
 	if g.Surface != nil && g.Context != nil &&

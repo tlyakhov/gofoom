@@ -12,6 +12,7 @@ import (
 
 	"tlyakhov/gofoom/concepts"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
 	"github.com/spf13/cast"
 )
@@ -94,11 +95,6 @@ func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 		g.Focus(g.GridWidget)
 	}
 
-	f := gridAddOrUpdateWidgetAtIndex[*widget.Form](g)
-	f.Items = make([]*widget.FormItem, 0)
-	f.Append("Cartesian", entryCartesian)
-	f.Append("Azimuth (°)", entryPhi)
-	f.Append("Polar (°)", entrySlope)
 	if field.Disabled() {
 		entryCartesian.Disable()
 		entryPhi.Disable()
@@ -108,5 +104,13 @@ func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 		entryPhi.Enable()
 		entrySlope.Enable()
 	}
-	f.Refresh()
+
+	f := gridAddOrUpdateWidgetAtIndex[*widget.Form](g)
+	fyne.Do(func() {
+		f.Items = make([]*widget.FormItem, 0)
+		f.Append("Cartesian", entryCartesian)
+		f.Append("Azimuth (°)", entryPhi)
+		f.Append("Polar (°)", entrySlope)
+		f.Refresh()
+	})
 }
