@@ -239,15 +239,17 @@ func (list *EntityList) Select(selection *selection.Selection) {
 	for i, row := range list.BackingStore {
 		for _, s := range selection.Exact {
 			if row[elcEntity].(int) == int(s.Entity) {
-				// Save and restore the handlers to avoid recursive selection
-				fs1 := list.Table.OnSelected
-				fs2 := list.Table.OnUnselected
-				list.Table.OnSelected = nil
-				list.Table.OnUnselected = nil
-				list.Table.Select(widget.TableCellID{Row: i, Col: 0})
-				list.Table.ScrollTo(widget.TableCellID{Row: i, Col: 0})
-				list.Table.OnSelected = fs1
-				list.Table.OnUnselected = fs2
+				go fyne.Do(func() {
+					// Save and restore the handlers to avoid recursive selection
+					fs1 := list.Table.OnSelected
+					fs2 := list.Table.OnUnselected
+					list.Table.OnSelected = nil
+					list.Table.OnUnselected = nil
+					list.Table.Select(widget.TableCellID{Row: i, Col: 0})
+					list.Table.ScrollTo(widget.TableCellID{Row: i, Col: 0})
+					list.Table.OnSelected = fs1
+					list.Table.OnUnselected = fs2
+				})
 				return
 			}
 		}
@@ -273,7 +275,7 @@ func (list *EntityList) AdvanceSort(col int) {
 func (list *EntityList) applySort() {
 	var order elSortDir
 	var col int
-	for i := 0; i < int(elcNumColumns); i++ {
+	for i := range int(elcNumColumns) {
 		if list.Sorts[i] != elsdSortOff {
 			order = list.Sorts[i]
 			col = i
@@ -304,6 +306,6 @@ func (list *EntityList) applySort() {
 		}
 	})
 	if list.Table != nil {
-		list.Table.Refresh()
+		fyne.Do(func() { list.Table.Refresh() })
 	}
 }

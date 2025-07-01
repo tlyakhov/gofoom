@@ -8,6 +8,7 @@ import (
 
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -51,32 +52,36 @@ func (g *Grid) fieldEnum(field *state.PropertyGridField, enumValues any) {
 	if isFlags {
 		checkGroup := gridAddOrUpdateWidgetAtIndex[*widget.CheckGroup](g)
 		checkGroup.Options = opts
-		checkGroup.OnChanged = nil
 		if field.Disabled() {
 			checkGroup.Disable()
 		} else {
 			checkGroup.Enable()
 		}
-		checkGroup.SetSelected(selectedOpts)
-		checkGroup.OnChanged = func(s []string) {
-			flags := uint64(0)
-			for _, v := range s {
-				flags = flags | optsMap[v].Convert(reflect.TypeFor[uint64]()).Uint()
+		fyne.Do(func() {
+			checkGroup.OnChanged = nil
+			checkGroup.SetSelected(selectedOpts)
+			checkGroup.OnChanged = func(s []string) {
+				flags := uint64(0)
+				for _, v := range s {
+					flags = flags | optsMap[v].Convert(reflect.TypeFor[uint64]()).Uint()
+				}
+				g.ApplySetPropertyAction(field, reflect.ValueOf(flags).Convert(field.Type.Elem()))
 			}
-			g.ApplySetPropertyAction(field, reflect.ValueOf(flags).Convert(field.Type.Elem()))
-		}
+		})
 	} else {
 		selectEntry := gridAddOrUpdateWidgetAtIndex[*widget.Select](g)
 		selectEntry.Options = opts
-		selectEntry.OnChanged = nil
 		if field.Disabled() {
 			selectEntry.Disable()
 		} else {
 			selectEntry.Enable()
 		}
-		selectEntry.SetSelectedIndex(selectedIndex)
-		selectEntry.OnChanged = func(opt string) {
-			g.ApplySetPropertyAction(field, optsValues[selectEntry.SelectedIndex()])
-		}
+		fyne.Do(func() {
+			selectEntry.OnChanged = nil
+			selectEntry.SetSelectedIndex(selectedIndex)
+			selectEntry.OnChanged = func(opt string) {
+				g.ApplySetPropertyAction(field, optsValues[selectEntry.SelectedIndex()])
+			}
+		})
 	}
 }

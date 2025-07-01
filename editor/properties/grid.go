@@ -346,7 +346,7 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewBorderLayout(nil, nil, nil, button)
 	c.Objects = []fyne.CanvasObject{selectComponent, button}
-	c.Refresh()
+	fyne.Do(c.Refresh)
 }
 
 func (g *Grid) sortedFields(state *PropertyGridState) []string {
@@ -515,7 +515,7 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 	if len(g.GridWidget.Objects) > g.widgetIndex {
 		g.GridWidget.Objects = g.GridWidget.Objects[:g.widgetIndex]
 	}
-	g.GridWidget.Refresh()
+	fyne.Do(func() { g.GridWidget.Refresh() })
 }
 
 func (g *Grid) Focus(o fyne.CanvasObject) {

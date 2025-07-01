@@ -14,6 +14,7 @@ import (
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -93,8 +94,6 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		origScale += s.String()
 	}
 
-	f := gridAddOrUpdateWidgetAtIndex[*widget.Form](g)
-	f.Items = make([]*widget.FormItem, 0)
 	entry := widget.NewEntry()
 	entry.SetText(origMatrix)
 	entry.OnSubmitted = func(text string) {
@@ -105,7 +104,6 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 			entry.SetText(origMatrix)
 		}
 	}
-	f.Append("Matrix", entry)
 	eDelta := widget.NewEntry()
 	eDelta.OnSubmitted = func(text string) {
 		var delta *concepts.Vector2
@@ -127,13 +125,10 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		g.Act(action)
 	}
 	eDelta.SetText(origDelta)
-	f.Append("DX/DY", eDelta)
 	eAngle := widget.NewEntry()
 	eAngle.SetText(origAngle)
-	f.Append("Angle", eAngle)
 	eScale := widget.NewEntry()
 	eScale.SetText(origScale)
-	f.Append("SX/SY", eScale)
 	eScale.OnSubmitted = func(text string) {
 		var scale *concepts.Vector2
 		var err error
@@ -162,15 +157,6 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 	bScaleW := widget.NewButtonWithIcon("Scale W", theme.ViewFullScreenIcon(), func() { g.fieldMatrix2Aspect(field, false) })
 	bScaleH := widget.NewButtonWithIcon("Scale H", theme.ViewFullScreenIcon(), func() { g.fieldMatrix2Aspect(field, true) })
 
-	ancestors := field.Values[0].Ancestors
-	if len(ancestors) >= 2 {
-		switch ancestors[len(ancestors)-2].(type) {
-		case *materials.Surface:
-			f.Append("", bReset)
-			f.Append("Aspect", container.NewHBox(bScaleW, bScaleH))
-		}
-	}
-
 	if field.Disabled() {
 		eDelta.Disable()
 		eAngle.Disable()
@@ -186,5 +172,21 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		bScaleW.Enable()
 		bScaleH.Enable()
 	}
-	f.Refresh()
+	f := gridAddOrUpdateWidgetAtIndex[*widget.Form](g)
+	fyne.Do(func() {
+		f.Items = make([]*widget.FormItem, 0)
+		f.Append("Matrix", entry)
+		f.Append("DX/DY", eDelta)
+		f.Append("Angle", eAngle)
+		f.Append("SX/SY", eScale)
+		ancestors := field.Values[0].Ancestors
+		if len(ancestors) >= 2 {
+			switch ancestors[len(ancestors)-2].(type) {
+			case *materials.Surface:
+				f.Append("", bReset)
+				f.Append("Aspect", container.NewHBox(bScaleW, bScaleH))
+			}
+		}
+		f.Refresh()
+	})
 }

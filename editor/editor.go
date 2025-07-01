@@ -112,11 +112,11 @@ func (e *Editor) OnStarted() {
 }
 
 func (e *Editor) Content() string {
-	return e.Window.Clipboard().Content()
+	return e.App.Clipboard().Content()
 }
 
 func (e *Editor) SetContent(c string) {
-	e.Window.Clipboard().SetContent(c)
+	e.App.Clipboard().SetContent(c)
 }
 
 func (e *Editor) ScreenToWorld(p *concepts.Vector2) *concepts.Vector2 {
@@ -197,8 +197,9 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) Integrate() {
-	editor.Lock.Lock()
-	defer editor.Lock.Unlock()
+	// Try to fix deadlocks with Fyne v2.6
+	//editor.Lock.Lock()
+	//defer editor.Lock.Unlock()
 	player := e.Renderer.Player
 	if player == nil {
 		return
