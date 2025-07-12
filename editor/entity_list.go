@@ -6,6 +6,7 @@ package main
 import (
 	"image/color"
 	"log"
+	"slices"
 	"sort"
 	"strings"
 	"tlyakhov/gofoom/components/core"
@@ -29,6 +30,7 @@ type EntityListColumnID int
 //go:generate go run github.com/dmarkham/enumer -type=EntityListColumnID -json
 const (
 	elcEntity EntityListColumnID = iota
+	elcImage
 	elcDesc
 	elcRank
 	elcColor
@@ -54,7 +56,7 @@ type EntityList struct {
 }
 
 func (list *EntityList) tableLength() (rows int, cols int) {
-	cols = 3
+	cols = 4
 	rows = len(list.BackingStore)
 	return
 }
@@ -68,21 +70,33 @@ func (list *EntityList) tableUpdate(tci widget.TableCellID, template fyne.Canvas
 	stack := template.(*fyne.Container)
 	text := stack.Objects[0].(*canvas.Text)
 	progress := stack.Objects[1].(*widget.ProgressBar)
+	img := stack.Objects[2].(*canvas.Image)
+
 	switch tci.Col {
 	case int(elcEntity):
 		progress.Hide()
+		img.Hide()
 		text.Color = row[elcColor].(color.Color)
 		e := ecs.Entity(row[elcEntity].(int))
 		text.Text = e.ShortString()
 		text.Show()
 		text.Refresh()
+	case int(elcImage):
+		progress.Hide()
+		text.Hide()
+		e := ecs.Entity(row[elcEntity].(int))
+		img.Image = list.IEditor.EntityImage(e)
+		img.Show()
+		img.Refresh()
 	case int(elcDesc):
 		progress.Hide()
+		img.Hide()
 		text.Color = row[elcColor].(color.Color)
 		text.Text = concepts.TruncateString(row[elcDesc].(string), 50)
 		text.Show()
 		text.Refresh()
 	case int(elcRank):
+		img.Hide()
 		text.Hide()
 		progress.SetValue(float64(row[elcRank].(int)) / 100)
 		progress.Show()
@@ -97,7 +111,11 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	list.Table = widget.NewTableWithHeaders(list.tableLength, func() fyne.CanvasObject {
 		text := canvas.NewText("Template", theme.Color(theme.ColorNameForeground))
 		progress := widget.NewProgressBar()
-		return container.NewStack(text, progress)
+		img := canvas.NewImageFromImage(nil)
+		img.ScaleMode = canvas.ImageScaleSmooth
+		img.FillMode = canvas.ImageFillContain
+		//	img.SetMinSize(fyne.NewSquareSize(64))
+		return container.NewStack(text, progress, img)
 	}, list.tableUpdate)
 
 	list.Table.SetColumnWidth(int(elcEntity), 70)
@@ -116,6 +134,8 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		switch id.Col {
 		case int(elcEntity):
 			b.SetText("Entity")
+		case int(elcImage):
+			b.SetText("")
 		case int(elcDesc):
 			b.SetText("Desc")
 		case int(elcRank):
@@ -177,7 +197,13 @@ func (list *EntityList) Build() fyne.CanvasObject {
 func (list *EntityList) Update() {
 	list.BackingStore = make([][elcNumColumns]any, 0)
 	searchValid := len(list.State().SearchTerms) > 0
-
+	searchFields := strings.Fields(list.State().SearchTerms)
+	searchEntities := make([]ecs.Entity, 0)
+	for _, f := range searchFields {
+		if e, err := ecs.ParseEntityHumanOrCanonical(f); err == nil {
+			searchEntities = append(searchEntities, e)
+		}
+	}
 	list.State().Universe.Entities.Range(func(entity uint32) {
 		if entity == 0 {
 			return
@@ -185,6 +211,10 @@ func (list *EntityList) Update() {
 		rowColor := theme.Color(theme.ColorNameForeground)
 		parentDesc := ""
 		rank := 0
+		if slices.Contains(searchEntities, ecs.Entity(entity)) {
+			rank = 100
+		}
+
 		allSystem := true
 		for _, c := range list.State().Universe.AllComponents(ecs.Entity(entity)) {
 			if c == nil || c.Base().Flags&ecs.ComponentHideInEditor != 0 {
@@ -222,8 +252,9 @@ func (list *EntityList) Update() {
 		if searchValid {
 			dispRank = concepts.Max(concepts.Min(rank+50, 100), 0)
 		}
-		backingRow := [4]any{
+		backingRow := [5]any{
 			int(entity),
+			nil,
 			parentDesc,
 			dispRank,
 			rowColor,

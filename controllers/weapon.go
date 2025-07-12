@@ -188,7 +188,8 @@ func weaponFiring(wc *WeaponController) {
 	// time it would take to hit the thing and delaying the outcome? could be
 	// buggy though if the object in question moves
 	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman(2))
-	if s.Type == selection.SelectableBody {
+	switch s.Type {
+	case selection.SelectableBody:
 		if mobile := core.GetMobile(s.Body.Universe, s.Body.Entity); mobile != nil {
 			// Push bodies away
 			// TODO: Parameterize in Weapon
@@ -200,11 +201,9 @@ func weaponFiring(wc *WeaponController) {
 			alive.Hurt("Weapon "+s.Entity.String(), wc.Class.Damage, 20)
 		}
 		// TODO: Death animations/entity deactivation
-	} else if s.Type == selection.SelectableSectorSegment ||
-		s.Type == selection.SelectableHi ||
-		s.Type == selection.SelectableLow ||
-		s.Type == selection.SelectableMid ||
-		s.Type == selection.SelectableInternalSegment {
+	case selection.SelectableSectorSegment, selection.SelectableHi,
+		selection.SelectableLow, selection.SelectableMid,
+		selection.SelectableInternalSegment:
 		// Make a mark on walls
 
 		// TODO: Include floors and ceilings

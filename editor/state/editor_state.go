@@ -28,7 +28,7 @@ const (
 	ToolAlignGrid
 )
 
-type Edit struct {
+type EditorState struct {
 	MapView
 	Universe *ecs.Universe
 	Lock     sync.Mutex
@@ -62,7 +62,7 @@ type Edit struct {
 
 type IEditor interface {
 	fyne.Clipboard
-	State() *Edit
+	State() *EditorState
 	ScreenToWorld(p *concepts.Vector2) *concepts.Vector2
 	WorldToScreen(p *concepts.Vector2) *concepts.Vector2
 	WorldGrid(p *concepts.Vector2) *concepts.Vector2
@@ -82,5 +82,5 @@ type IEditor interface {
 	SelectionBox() (v1 *concepts.Vector2, v2 *concepts.Vector2)
 	Alert(text string)
 	SetDialogLocation(dlg *dialog.FileDialog, target string)
-	EntityImage(entity ecs.Entity, sector bool) image.Image
+	EntityImage(entity ecs.Entity) image.Image
 }

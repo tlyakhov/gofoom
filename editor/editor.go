@@ -49,7 +49,7 @@ type EditorWidgets struct {
 }
 
 type Editor struct {
-	state.Edit
+	state.EditorState
 	// What we're editing.
 
 	MapViewGrid
@@ -71,13 +71,13 @@ type entityIconCacheItem struct {
 	LastUpdated int64
 }
 
-func (e *Editor) State() *state.Edit {
-	return &e.Edit
+func (e *Editor) State() *state.EditorState {
+	return &e.EditorState
 }
 
 func NewEditor() *Editor {
 	e := &Editor{
-		Edit: state.Edit{
+		EditorState: state.EditorState{
 			Universe: ecs.NewUniverse(),
 			MapView: state.MapView{
 				Scale: 1.0,
@@ -98,7 +98,7 @@ func NewEditor() *Editor {
 	e.Grid.IEditor = e
 	e.Grid.MaterialSampler.Ray = &render.Ray{}
 	e.ResizeRenderer(320, 240)
-	e.MapViewGrid.Current = &e.Edit.MapView
+	e.MapViewGrid.Current = &e.EditorState.MapView
 
 	return e
 }
@@ -287,6 +287,7 @@ func (e *Editor) Load(filename string) {
 	u.Simulation.Integrate = e.Integrate
 	u.Simulation.Render = e.GameWidget.Draw
 	e.Universe = u
+	e.entityIconCache.Clear()
 	if e.Renderer != nil {
 		e.Renderer.Universe = u
 		e.Renderer.Initialize()

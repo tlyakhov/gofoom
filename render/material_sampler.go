@@ -16,6 +16,7 @@ import (
 type MaterialSampler struct {
 	*Config
 	*Ray
+	BillboardSegment core.Segment
 	Output           concepts.Vector4
 	StageOutput      concepts.Vector4
 	ScreenX, ScreenY int
@@ -36,17 +37,30 @@ func (ms *MaterialSampler) Initialize(material ecs.Entity, extraStages []*materi
 	}
 }
 
+func (ms *MaterialSampler) setBillboardSegment(b *core.Body, unitView *concepts.Vector3, ds dynamic.DynamicStage) {
+	p := b.Pos.Value(ds)
+	s := b.Size.Value(ds)
+	if ms.BillboardSegment.A == nil {
+		ms.BillboardSegment.A = &concepts.Vector2{}
+		ms.BillboardSegment.B = &concepts.Vector2{}
+	}
+	ms.BillboardSegment.A[0] = p[0] + unitView[1]*s[0]*0.5
+	ms.BillboardSegment.A[1] = p[1] - unitView[0]*s[0]*0.5
+	ms.BillboardSegment.B[0] = p[0] - unitView[1]*s[0]*0.5
+	ms.BillboardSegment.B[1] = p[1] + unitView[0]*s[0]*0.5
+}
+
 func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core.Body) bool {
 	delta := &concepts.Vector3{dst[0] - src[0], dst[1] - src[1], dst[2] - src[2]}
 	delta.NormSelf()
 	isect := concepts.Vector3{}
-	seg := b.BillboardSegment(delta, dynamic.DynamicRender)
-	ok := seg.Intersect3D(src, dst, &isect)
+	ms.setBillboardSegment(b, delta, dynamic.DynamicRender)
+	ok := ms.BillboardSegment.Intersect3D(src, dst, &isect)
 	if !ok {
 		return false
 	}
 	ms.Initialize(b.Entity, nil)
-	ms.NU = isect.To2D().Dist(seg.A) / b.Size.Render[0]
+	ms.NU = isect.To2D().Dist(ms.BillboardSegment.A) / b.Size.Render[0]
 	ms.NV = (b.Pos.Render[2] + b.Size.Render[0]*0.5 - isect[2]) / (b.Size.Render[1])
 	if ms.NV < 0 || ms.NV > 1 {
 		return false

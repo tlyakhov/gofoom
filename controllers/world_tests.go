@@ -53,7 +53,7 @@ func CreateTestHeightmapSector(u *ecs.Universe, name string, x, y, size float64)
 	named := u.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_1"
 
-	sector1.NoShadows = true
+	sector1.NoShadows = false
 	mat := DefaultMaterial(u)
 	sector1.Bottom.Surface.Material = mat
 	sector1.Top.Surface.Material = mat
@@ -75,7 +75,7 @@ func CreateTestHeightmapSector(u *ecs.Universe, name string, x, y, size float64)
 	named = u.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_2"
 
-	sector2.NoShadows = true
+	sector2.NoShadows = false
 	sector2.Bottom.Surface.Material = mat
 	sector2.Top.Surface.Material = mat
 	seg = sector2.AddSegment(x+size, y)
@@ -206,13 +206,13 @@ func CreateTestWorld(u *ecs.Universe) {
 			}
 		}
 	}
-	for x := 0; x < testw; x++ {
-		for y := 0; y < testh; y++ {
+	for x := range testw {
+		for y := range testh {
 			eSector := u.GetEntityByName(fmt.Sprintf("land_%v_%v", x, y))
 			sector := core.GetSector(u, eSector)
 			// Randomly rotate the segments
 			rot := int(rand.Uint32() % 3)
-			for r := 0; r < rot; r++ {
+			for range rot {
 				sector.Segments = append(sector.Segments[1:], sector.Segments[0])
 			}
 		}
@@ -277,8 +277,8 @@ func CreateTestWorld3(u *ecs.Universe) {
 	testw := 64
 	testh := 64
 	heightmap := make([]float64, testw*testh)
-	for x := 0; x < testw; x++ {
-		for y := 0; y < testh; y++ {
+	for x := range testw {
+		for y := range testh {
 			//heightmap[y*testw+x] = rand.Float64() * 50
 			sample := heightImage.Sample(
 				float64(x)/float64(testw),
