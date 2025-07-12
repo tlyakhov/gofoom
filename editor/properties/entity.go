@@ -40,12 +40,13 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 		img.FillMode = canvas.ImageFillContain
 		if editTypeTag == "Sector" || editTypeTag == "Material" {
 			// TODO: Make images for other entity types like actions
-			img.Image = g.IEditor.EntityImage(entity, editTypeTag != "Material")
+			img.Image = g.IEditor.EntityImage(entity)
 		}
 		img.SetMinSize(fyne.NewSquareSize(64))
 		button.OnTapped = func() {
 			g.SelectObjects(true, selection.SelectableFromEntity(g.State().Universe, entity))
 		}
+		fyne.Do(img.Refresh)
 	}
 }
 
@@ -138,8 +139,8 @@ type gridEntitySelectorLayout struct {
 
 func (erl *gridEntitySelectorLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 	s := erl.Child.MinSize(objects)
-	if s.Height < 200 {
-		s.Height = 200
+	if s.Height < 500 {
+		s.Height = 500
 	}
 	return s
 }

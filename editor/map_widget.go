@@ -94,7 +94,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	}
 
 	mw.Context.Identity()
-	editor.MapViewGrid.Draw(&editor.Edit)
+	editor.MapViewGrid.Draw(&editor.EditorState)
 	copy(mw.Context.Image().(*image.RGBA).Pix, editor.MapViewGrid.pixels())
 	TransformContext(mw.Context)
 	mw.Context.FontHeight()

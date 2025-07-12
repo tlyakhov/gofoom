@@ -93,20 +93,6 @@ func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
 	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
 }
 
-func (b *Body) BillboardSegment(unitView *concepts.Vector3, ds dynamic.DynamicStage) *Segment {
-	p := b.Pos.Value(ds)
-	s := b.Size.Value(ds)
-	return &Segment{
-		A: &concepts.Vector2{
-			p[0] + unitView[1]*s[0]*0.5,
-			p[1] - unitView[0]*s[0]*0.5,
-		},
-		B: &concepts.Vector2{
-			p[0] - unitView[1]*s[0]*0.5,
-			p[1] + unitView[0]*s[0]*0.5,
-		}}
-}
-
 func (b *Body) RenderSector() *Sector {
 	// Figure out the sector to use for rendering this body based on the current
 	// render position. This may be different from Body.Sector(), since

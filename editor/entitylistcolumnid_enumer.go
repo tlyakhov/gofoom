@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _EntityListColumnIDName = "elcEntityelcDescelcRank"
+const _EntityListColumnIDName = "elcEntityelcImageelcDescelcRankelcColorelcNumColumns"
 
-var _EntityListColumnIDIndex = [...]uint8{0, 9, 16, 23}
+var _EntityListColumnIDIndex = [...]uint8{0, 9, 17, 24, 31, 39, 52}
 
-const _EntityListColumnIDLowerName = "elcentityelcdescelcrank"
+const _EntityListColumnIDLowerName = "elcentityelcimageelcdescelcrankelccolorelcnumcolumns"
 
 func (i EntityListColumnID) String() string {
 	if i < 0 || i >= EntityListColumnID(len(_EntityListColumnIDIndex)-1) {
@@ -26,25 +26,37 @@ func (i EntityListColumnID) String() string {
 func _EntityListColumnIDNoOp() {
 	var x [1]struct{}
 	_ = x[elcEntity-(0)]
-	_ = x[elcDesc-(1)]
-	_ = x[elcRank-(2)]
+	_ = x[elcImage-(1)]
+	_ = x[elcDesc-(2)]
+	_ = x[elcRank-(3)]
+	_ = x[elcColor-(4)]
+	_ = x[elcNumColumns-(5)]
 }
 
-var _EntityListColumnIDValues = []EntityListColumnID{elcEntity, elcDesc, elcRank}
+var _EntityListColumnIDValues = []EntityListColumnID{elcEntity, elcImage, elcDesc, elcRank, elcColor, elcNumColumns}
 
 var _EntityListColumnIDNameToValueMap = map[string]EntityListColumnID{
 	_EntityListColumnIDName[0:9]:        elcEntity,
 	_EntityListColumnIDLowerName[0:9]:   elcEntity,
-	_EntityListColumnIDName[9:16]:       elcDesc,
-	_EntityListColumnIDLowerName[9:16]:  elcDesc,
-	_EntityListColumnIDName[16:23]:      elcRank,
-	_EntityListColumnIDLowerName[16:23]: elcRank,
+	_EntityListColumnIDName[9:17]:       elcImage,
+	_EntityListColumnIDLowerName[9:17]:  elcImage,
+	_EntityListColumnIDName[17:24]:      elcDesc,
+	_EntityListColumnIDLowerName[17:24]: elcDesc,
+	_EntityListColumnIDName[24:31]:      elcRank,
+	_EntityListColumnIDLowerName[24:31]: elcRank,
+	_EntityListColumnIDName[31:39]:      elcColor,
+	_EntityListColumnIDLowerName[31:39]: elcColor,
+	_EntityListColumnIDName[39:52]:      elcNumColumns,
+	_EntityListColumnIDLowerName[39:52]: elcNumColumns,
 }
 
 var _EntityListColumnIDNames = []string{
 	_EntityListColumnIDName[0:9],
-	_EntityListColumnIDName[9:16],
-	_EntityListColumnIDName[16:23],
+	_EntityListColumnIDName[9:17],
+	_EntityListColumnIDName[17:24],
+	_EntityListColumnIDName[24:31],
+	_EntityListColumnIDName[31:39],
+	_EntityListColumnIDName[39:52],
 }
 
 // EntityListColumnIDString retrieves an enum value from the enum constants string name.

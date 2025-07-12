@@ -72,13 +72,14 @@ func Respawn(u *ecs.Universe, force bool) {
 		}
 		c := u.LoadComponentWithoutAttaching(cid, mappedComponent)
 		u.Attach(cid, pastedEntity, &c)
-		if cid == character.PlayerCID {
+		switch cid {
+		case character.PlayerCID:
 			player := c.(*character.Player)
 			player.Spawn = false
-		} else if cid == ecs.NamedCID {
+		case ecs.NamedCID:
 			named := c.(*ecs.Named)
 			named.Name = "Player"
-		} else if cid == inventory.CarrierCID {
+		case inventory.CarrierCID:
 			// carrier := c.(*inventory.Carrier)
 			// TODO: Clone/respawn inventory
 		}

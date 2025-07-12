@@ -87,14 +87,14 @@ func (e *Editor) imageForSector(entity ecs.Entity) image.Image {
 	return context.Image()
 }
 
-func (e *Editor) EntityImage(entity ecs.Entity, sector bool) image.Image {
+func (e *Editor) EntityImage(entity ecs.Entity) image.Image {
 	item, exists := e.entityIconCache.Load(entity)
 	now := time.Now().UnixMilli()
 	if exists && now-item.LastUpdated < 1000*60 {
 		return item.Image
 	}
 	item.Image = nil
-	if sector {
+	if core.GetSector(e.Universe, entity) != nil {
 		item.Image = e.imageForSector(entity)
 	} else {
 		item.Image = e.imageForMaterial(entity)

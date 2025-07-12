@@ -356,45 +356,42 @@ func (node *QuadNode) RangeCircle(center *concepts.Vector2, r float64, fn func(b
 	}
 }
 
-func (node *QuadNode) planeOverlaps(center, normal *concepts.Vector3) bool {
-	if normal[0] == 0 && normal[1] == 0 {
-		return true
-	}
-	dz := node.Tree.MinZ - node.MaxRadius - center[2]
-	dy := node.Min[1] - node.MaxRadius - center[1]
-	dx := node.Min[0] - node.MaxRadius - center[0]
-	dz2 := node.Tree.MaxZ + node.MaxRadius - center[2]
-	dy2 := node.Max[1] + node.MaxRadius - center[1]
-	dx2 := node.Max[0] + node.MaxRadius - center[0]
-	return dx*normal[0]+dy*normal[1]+dz*normal[2] >= 0 ||
-		dx2*normal[0]+dy2*normal[1]+dz2*normal[2] >= 0
-}
-
-func (node *QuadNode) RangePlane(center, normal *concepts.Vector3, lightsOnly bool, fn func(b *Body) bool) {
+// TODO: this is dumb, should implement https://observablehq.com/@llb4ll/k-nearest-neighbor-search-using-d3-quadtrees
+func (node *QuadNode) RangeClosest(center *concepts.Vector3, lightsOnly bool, fn func(b *Body) bool) bool {
 	if node.IsLeaf() {
 		slice := node.Bodies
 		if lightsOnly {
 			slice = node.Lights
 		}
+		// TODO: Should we sort by distance? would require some memory thrashing
 		for _, b := range slice {
-			dx := b.Pos.Now[0] - center[0]
-			dy := b.Pos.Now[1] - center[1]
-			dz := b.Pos.Now[2] - center[2]
-			if dx*normal[0]+dy*normal[1]+dz*normal[2] < 0 {
-				continue
-			}
 			if !fn(b) {
-				break
+				return false
 			}
 		}
-		return
+		return true
+	}
+	cx := (node.Min[0] + node.Max[0]) * 0.5
+	cy := (node.Min[1] + node.Max[1]) * 0.5
+	first := 0
+	if center[0] > cx {
+		first = 1
+	}
+	if center[1] > cy {
+		first |= 2
+	}
+	if !node.Children[first].RangeClosest(center, lightsOnly, fn) {
+		return false
 	}
 	for i := range 4 {
-		if !node.Children[i].planeOverlaps(center, normal) {
+		if i == first {
 			continue
 		}
-		node.Children[i].RangePlane(center, normal, lightsOnly, fn)
+		if !node.Children[i].RangeClosest(center, lightsOnly, fn) {
+			return false
+		}
 	}
+	return true
 }
 
 func (node *QuadNode) rayOverlaps(start, dir *concepts.Vector3) bool {

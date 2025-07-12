@@ -46,7 +46,7 @@ func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
 	return r
 }
 
-func (g *MapViewGrid) Draw(e *state.Edit) {
+func (g *MapViewGrid) Draw(e *state.EditorState) {
 	if !g.Visible || e.Scale*g.Current.Step < 5.0 {
 		g.Clear()
 		return
@@ -79,7 +79,7 @@ func (g *MapViewGrid) Clear() {
 	}
 }
 
-func (g *MapViewGrid) Refresh(e *state.Edit) {
+func (g *MapViewGrid) Refresh(e *state.EditorState) {
 	down := g.Current.GridB.Sub(&g.Current.GridA).Norm().Mul(g.Current.Step)
 	right := &concepts.Vector2{down[1], -down[0]}
 	if math.Abs(down[0]) > math.Abs(right[0]) {

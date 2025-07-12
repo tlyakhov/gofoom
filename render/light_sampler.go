@@ -176,11 +176,19 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
 			i2d := ls.Intersection.To2D()
+			if ls.Intersection[2] < sector.Min[2] || ls.Intersection[2] > sector.Max[2] {
+				// log.Printf("Occluded by sector min/max %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				return false // Same as wall, we're occluded.
+			}
 			floorZ, ceilZ := sector.ZAt(dynamic.DynamicRender, i2d)
+			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
+			if ls.Intersection[2] < floorZ || ls.Intersection[2] > ceilZ {
+				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				return false // Same as wall, we're occluded.
+			}
 			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
-			if ls.Intersection[2] < floorZ2 || ls.Intersection[2] > ceilZ2 ||
-				ls.Intersection[2] < floorZ || ls.Intersection[2] > ceilZ {
+			if ls.Intersection[2] < floorZ2 || ls.Intersection[2] > ceilZ2 {
 				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				return false // Same as wall, we're occluded.
 			}
@@ -315,7 +323,12 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	ls.Output[2] = 0
 
 	LightSamplerCalcs.Add(1)
-	ls.tree.Root.RangePlane(world, &ls.Normal, true, func(body *core.Body) bool {
+	lightsTested := 0
+	ls.tree.Root.RangeClosest(world, true, func(body *core.Body) bool {
+		if lightsTested > 10 {
+			return false
+		}
+		lightsTested++
 		LightSamplerLightsTested.Add(1)
 		if !body.IsActive() {
 			return true

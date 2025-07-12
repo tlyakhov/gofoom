@@ -63,7 +63,7 @@ func iterateFileEntities(contents string, fn processFileEntitiesFunc) string {
 
 		parts := EntityRegexp.FindStringSubmatch(contents[i:])
 		if parts == nil {
-			log.Printf("Can't parse entity " + contents[i:i+3])
+			log.Printf("Can't parse entity %v", contents[i:i+3])
 			builder.WriteRune(r)
 			continue
 		}

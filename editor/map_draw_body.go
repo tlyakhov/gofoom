@@ -54,7 +54,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	selected := editor.SelectedObjects.Contains(selection.SelectableFromBody(body))
 
 	if selected || hovering {
-		img := editor.EntityImage(body.Entity, false)
+		img := editor.EntityImage(body.Entity)
 		mw.Context.Push()
 		mw.Context.Translate(body.Pos.Now[0]+2*body.Size.Now[0], body.Pos.Now[1])
 		mw.Context.Scale(2*body.Size.Now[0]/64, 2*body.Size.Now[0]/64)

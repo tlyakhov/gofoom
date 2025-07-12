@@ -37,7 +37,7 @@ type Animated interface {
 
 type Animation[T DynamicType] struct {
 	*DynamicValue[T]
-	TweeningFunc `editable:"Tweening Function"`
+	TweeningFunc `editable:"Function"`
 
 	Start       T                    `editable:"Start"`
 	End         T                    `editable:"End"`

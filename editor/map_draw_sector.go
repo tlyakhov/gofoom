@@ -159,7 +159,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 			mw.Context.DrawStringAnchored(txtLength, ne[0], ne[1], 0.5, 0.5)
 
 			if segment.AdjacentSegment == nil || segment.PortalHasMaterial {
-				img := editor.EntityImage(segment.Surface.Material, false)
+				img := editor.EntityImage(segment.Surface.Material)
 				mw.Context.Push()
 				ne = ns.Add(segment.Normal.Mul(-20.0))
 				mw.Context.ScaleAbout(0.3, 0.3, ne[0], ne[1])
