@@ -184,7 +184,7 @@ func (ui *UI) renderBox(widget *Widget, label string, x, y, hStart, hEnd int) {
 		index = x + i + y*ui.cols
 		ui.textBuffer[index].Color = &ui.LabelColor
 		if i >= hStart && i < hEnd {
-			ui.textBuffer[index].BGColor = widget.highlight.Render
+			ui.textBuffer[index].BGColor = &widget.highlight.Render
 		} else {
 			ui.textBuffer[index].BGColor = &ui.WidgetColor
 		}
@@ -259,7 +259,7 @@ func (ui *UI) renderTooltip(p *Page, widget *Widget) {
 
 	ui.renderDialog(lightDialog, "?",
 		x-w/2-ui.Padding, y,
-		w+ui.Padding*2, h+ui.Padding*2, -1, *p.tooltipAlpha.Render)
+		w+ui.Padding*2, h+ui.Padding*2, -1, p.tooltipAlpha.Render)
 	xx := x - w/2
 	for i := 0; i < len(widget.Tooltip); i++ {
 		r := []rune(widget.Tooltip)[i]
@@ -272,8 +272,8 @@ func (ui *UI) renderTooltip(p *Page, widget *Widget) {
 			continue
 		}
 		t := &ui.textBuffer[xx+(y+2)*ui.cols]
-		t.Color = ui.LabelColor.Mul(*p.tooltipAlpha.Render)
-		t.BGColor = ui.BGColor.Mul(*p.tooltipAlpha.Render)
+		t.Color = ui.LabelColor.Mul(p.tooltipAlpha.Render)
+		t.BGColor = ui.BGColor.Mul(p.tooltipAlpha.Render)
 		t.Rune = r
 		t.Shadow = ui.ShadowText
 		xx++

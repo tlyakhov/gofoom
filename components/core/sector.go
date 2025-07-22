@@ -61,7 +61,7 @@ func GetSector(u *ecs.Universe, e ecs.Entity) *Sector {
 }
 
 func (s *Sector) String() string {
-	return "Sector: " + s.Center.StringHuman(2)
+	return "Sector " + s.Center.StringHuman(0)
 }
 
 func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {

@@ -24,10 +24,10 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 	}
 
 	// Calculate angles for picking the right sprite, and also relative to camera
-	angleFromPlayer := r.PlayerBody.Angle2DTo(b.Pos.Render)
+	angleFromPlayer := r.PlayerBody.Angle2DTo(&b.Pos.Render)
 	// 0 degrees is facing right. Why do we need to adjust by 90 degrees?
-	block.SpriteAngle = concepts.NormalizeAngle(*b.Angle.Render - angleFromPlayer + 270)
-	angleRender := concepts.NormalizeAngle(angleFromPlayer - *r.PlayerBody.Angle.Render)
+	block.SpriteAngle = concepts.NormalizeAngle(b.Angle.Render - angleFromPlayer + 270)
+	angleRender := concepts.NormalizeAngle(angleFromPlayer - r.PlayerBody.Angle.Render)
 	if angleRender >= 180.0 {
 		angleRender -= 360.0
 	}
@@ -63,10 +63,10 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 	if lit := materials.GetLit(r.Universe, b.Entity); lit != nil {
 		ls := &block.LightSampler
 		ls.Sector = b.Sector()
-		ls.Normal[0] = math.Cos(*b.Angle.Render * concepts.Deg2rad)
-		ls.Normal[1] = math.Sin(*b.Angle.Render * concepts.Deg2rad)
+		ls.Normal[0] = math.Cos(b.Angle.Render * concepts.Deg2rad)
+		ls.Normal[1] = math.Sin(b.Angle.Render * concepts.Deg2rad)
 		ls.Normal[2] = 0
-		ls.Hash = block.WorldToLightmapHash(ls.Sector, b.Pos.Render, &ls.Normal)
+		ls.Hash = block.WorldToLightmapHash(ls.Sector, &b.Pos.Render, &ls.Normal)
 		ls.Segment = nil
 		ls.InputBody = b.Entity
 		ls.Get()
@@ -119,7 +119,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 func (r *Renderer) renderBodyPixel(ebd *entityWithDist2, block *block, sx, ex int) {
 	b := ebd.Body
 	lit := materials.GetLit(r.Universe, b.Entity)
-	scr := r.WorldToScreen(b.Pos.Render)
+	scr := r.WorldToScreen(&b.Pos.Render)
 	if scr == nil || lit == nil {
 		return
 	}

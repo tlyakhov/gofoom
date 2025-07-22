@@ -36,7 +36,7 @@ func GetCarrier(u *ecs.Universe, e ecs.Entity) *Carrier {
 }
 
 func (c *Carrier) String() string {
-	return "Carrier: " + c.Slots.String()
+	return "Carrier " + c.Slots.String()
 }
 
 func (c *Carrier) MultiAttachable() bool {

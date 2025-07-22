@@ -19,7 +19,7 @@ func (r *Renderer) renderInternalSegment(ewd *entityWithDist2, block *block, xSt
 	ewd.InternalSegment.Normal.To3D(&block.LightSampler.Normal)
 
 	for x := xStart; x < xEnd; x++ {
-		block.Ray.Set(*r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
+		block.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
 
 		// Is the segment facing away?
 		if !ewd.InternalSegment.TwoSided && block.Ray.Delta.Dot(&ewd.InternalSegment.Normal) > 0 {

@@ -70,8 +70,8 @@ func (c *column) CalcScreen() {
 	c.ProjectedBottom = c.ProjectZ(c.IntersectionBottom - c.CameraZ)
 
 	if c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope {
-		c.ProjectedSectorTop = c.ProjectZ(*c.Sector.Top.Z.Render - c.CameraZ)
-		c.ProjectedSectorBottom = c.ProjectZ(*c.Sector.Bottom.Z.Render - c.CameraZ)
+		c.ProjectedSectorTop = c.ProjectZ(c.Sector.Top.Z.Render - c.CameraZ)
+		c.ProjectedSectorBottom = c.ProjectZ(c.Sector.Bottom.Z.Render - c.CameraZ)
 	}
 
 	screenTop := c.ScreenHeight/2 - int(math.Floor(c.ProjectedTop)) + int(c.ShearZ)

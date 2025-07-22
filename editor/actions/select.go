@@ -63,19 +63,20 @@ func (a *Select) EndPoint() bool {
 		}
 	}
 
-	if a.Modifier == SelectAdd {
+	switch a.Modifier {
+	case SelectAdd:
 		a.Selected = selection.NewSelectionClone(a.Original)
 		for _, s := range hovering.Exact {
 			a.Selected.Add(s)
 		}
-	} else if a.Modifier == SelectSub {
+	case SelectSub:
 		a.Selected = selection.NewSelection()
 		for _, obj := range a.Original.Exact {
 			if !hovering.Contains(obj) {
 				a.Selected.Add(obj)
 			}
 		}
-	} else {
+	default:
 		a.Selected = selection.NewSelectionClone(hovering)
 	}
 	a.Selected.Normalize()
