@@ -4,7 +4,6 @@
 package dynamic
 
 import (
-	"log"
 	"math"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -36,10 +35,8 @@ type DynamicValue[T DynamicType] struct {
 	*Animation[T] `editable:"Animation"`
 	Spawned[T]    `editable:"^"`
 
-	Prev T
-	// If there are runtime errors about this field being nil, it's probably
-	// because the .Attach() method was never called
-	Render  *T
+	Prev    T
+	Render  T
 	IsAngle bool // Only relevant for T=float64
 
 	// Do we need these? not used anywhere currently
@@ -55,8 +52,6 @@ type DynamicValue[T DynamicType] struct {
 
 	outputV, prevInput T
 	k1, k2, k3         float64
-
-	render T
 }
 
 func (d *DynamicValue[T]) IsProcedural() bool {
@@ -72,19 +67,14 @@ func (d *DynamicValue[T]) Value(s DynamicStage) T {
 	case DynamicNow:
 		return d.Now
 	default:
-		return *d.Render
+		return d.Render
 	}
 }
 
 func (d *DynamicValue[T]) ResetToSpawn() {
-	if d.Render == nil {
-		log.Println("DynamicValue[T].ResetToSpawn: value is unattached to Simulation. Stack trace:")
-		log.Println(concepts.StackTrace())
-		return
-	}
 	d.Spawned.ResetToSpawn()
 	d.Prev = d.Spawn
-	*d.Render = d.Spawn
+	d.Render = d.Spawn
 	d.Input = d.Spawn
 	d.prevInput = d.Spawn
 }
@@ -98,11 +88,10 @@ func (d *DynamicValue[T]) Attach(sim *Simulation) {
 	sim.Dynamics.Store(d, struct{}{})
 	sim.Spawnables.Store(d, struct{}{})
 	d.Attached = true
-	d.Render = &d.render
 }
 
 func (d *DynamicValue[T]) Detach(sim *Simulation) {
-	d.Render = &d.Now
+	d.Render = d.Now
 	d.Attached = false
 	sim.Spawnables.Delete(d)
 	sim.Dynamics.Delete(d)
@@ -173,7 +162,7 @@ func (d *DynamicValue[T]) Update(blend float64) {
 		d.UpdateProcedural()
 	}
 	if d.NoRenderBlend {
-		d.Render = &d.Now
+		d.Render = d.Now
 		if d.OnRender != nil {
 			d.OnRender(blend)
 		}
@@ -181,27 +170,27 @@ func (d *DynamicValue[T]) Update(blend float64) {
 	}
 	switch dc := any(d).(type) {
 	case *DynamicValue[int]:
-		dc.render = int(Lerp(float64(dc.Prev), float64(dc.Now), blend))
+		dc.Render = int(Lerp(float64(dc.Prev), float64(dc.Now), blend))
 	case *DynamicValue[float64]:
 		if dc.IsAngle {
-			dc.render = TweenAngles(dc.Prev, dc.Now, blend, Lerp)
+			dc.Render = TweenAngles(dc.Prev, dc.Now, blend, Lerp)
 		} else {
-			dc.render = Lerp(dc.Prev, dc.Now, blend)
+			dc.Render = Lerp(dc.Prev, dc.Now, blend)
 		}
 	case *DynamicValue[concepts.Vector2]:
-		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.Render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.Render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
 	case *DynamicValue[concepts.Vector3]:
-		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
+		dc.Render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.Render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.Render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
 	case *DynamicValue[concepts.Vector4]:
-		dc.render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
-		dc.render[3] = Lerp(dc.Prev[3], dc.Now[3], blend)
+		dc.Render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
+		dc.Render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.Render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
+		dc.Render[3] = Lerp(dc.Prev[3], dc.Now[3], blend)
 	case *DynamicValue[concepts.Matrix2]:
-		d.Render = &d.Now
+		d.Render = d.Now
 	}
 
 	if d.OnRender != nil {
@@ -239,9 +228,8 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	d.Prev = d.Now
 	d.Input = d.Now
 	d.prevInput = d.Now
-	if !d.Attached {
-		d.Render = &d.Now
-	}
+	// Ensure we have a reasonable value for render prior to simulation update
+	d.Render = d.Now
 
 	if data == nil {
 		return
@@ -267,11 +255,6 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 		d.Animation = new(Animation[T])
 		d.Animation.Construct(v.(map[string]any))
 		d.Animation.DynamicValue = d
-	}
-
-	// Ensure we have a reasonable value for render prior to simulation update
-	if d.Attached {
-		d.render = d.Now
 	}
 }
 

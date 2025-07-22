@@ -63,14 +63,26 @@ func (a *Paste) apply() {
 			if yamlData == nil {
 				continue
 			}
-			yamlComponent := yamlData.(map[string]any)
-			c := u.LoadComponentWithoutAttaching(id, yamlComponent)
-
+			var toAttach ecs.Attachable
+			switch yamlDataTyped := yamlData.(type) {
+			case string: // It's an entity reference
+				entityRef, err := ecs.ParseEntity(yamlDataTyped)
+				if err != nil {
+					log.Printf("Paste.Activate: Error parsing copied entity %v (component %v)", yamlDataTyped, name)
+					continue
+				}
+				toAttach = u.Component(entityRef, id)
+			case map[string]any:
+				toAttach = u.LoadComponentWithoutAttaching(id, yamlDataTyped)
+			default:
+				log.Printf("Paste.Activate: Unexpected type of copied component %v: %v", name, yamlDataTyped)
+				continue
+			}
 			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
-				u.Attach(id, pastedEntity, &c)
+				u.Attach(id, pastedEntity, &toAttach)
 			} else {
 				pastedEntity = u.NewEntity()
-				u.Attach(id, pastedEntity, &c)
+				u.Attach(id, pastedEntity, &toAttach)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 			}
 		}

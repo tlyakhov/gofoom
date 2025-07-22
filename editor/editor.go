@@ -198,8 +198,8 @@ func (e *Editor) UpdateStatus() {
 
 func (e *Editor) Integrate() {
 	// Try to fix deadlocks with Fyne v2.6
-	//editor.Lock.Lock()
-	//defer editor.Lock.Unlock()
+	editor.GameInputLock.Lock()
+	defer editor.GameInputLock.Unlock()
 	player := e.Renderer.Player
 	if player == nil {
 		return

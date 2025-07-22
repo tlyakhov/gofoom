@@ -40,7 +40,7 @@ func GetBody(u *ecs.Universe, e ecs.Entity) *Body {
 }
 
 func (b *Body) String() string {
-	return "Body: " + b.Pos.Now.StringHuman(2)
+	return "Body " + b.Pos.Now.StringHuman(0)
 }
 
 func (b *Body) OnDetach(e ecs.Entity) {
@@ -83,7 +83,7 @@ func (b *Body) Sector() *Sector {
 }
 
 func (b *Body) Normal() *concepts.Vector2 {
-	dy, dx := math.Sincos(*b.Angle.Render * concepts.Deg2rad)
+	dy, dx := math.Sincos(b.Angle.Render * concepts.Deg2rad)
 	return &concepts.Vector2{dx, dy}
 }
 

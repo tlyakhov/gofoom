@@ -92,7 +92,7 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 	relative := concepts.Vector2{world[0], world[1]}
 	relative[0] -= r.PlayerBody.Pos.Render[0]
 	relative[1] -= r.PlayerBody.Pos.Render[1]
-	radians := math.Atan2(relative[1], relative[0]) - *r.PlayerBody.Angle.Render*concepts.Deg2rad
+	radians := math.Atan2(relative[1], relative[0]) - r.PlayerBody.Angle.Render*concepts.Deg2rad
 	for radians < -math.Pi {
 		radians += 2 * math.Pi
 	}
@@ -322,7 +322,7 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) []*select
 	block.CameraZ = r.Player.CameraZ
 	block.ShearZ = r.Player.ShearZ
 	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
-	block.Ray.Set(*r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
+	block.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
 	block.RayPlane[0] = block.Ray.AngleCos * block.ViewFix[block.ScreenX]
 	block.RayPlane[1] = block.Ray.AngleSin * block.ViewFix[block.ScreenX]
 	block.PortalWalls = nil

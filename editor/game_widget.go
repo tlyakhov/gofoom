@@ -81,13 +81,13 @@ func (g *GameWidget) Draw() {
 }
 
 func (g *GameWidget) KeyDown(evt *fyne.KeyEvent) {
-	editor.Lock.Lock()
-	defer editor.Lock.Unlock()
+	editor.GameInputLock.Lock()
+	defer editor.GameInputLock.Unlock()
 	g.KeyMap[evt.Name] = struct{}{}
 }
 func (g *GameWidget) KeyUp(evt *fyne.KeyEvent) {
-	editor.Lock.Lock()
-	defer editor.Lock.Unlock()
+	editor.GameInputLock.Lock()
+	defer editor.GameInputLock.Unlock()
 	delete(g.KeyMap, evt.Name)
 }
 

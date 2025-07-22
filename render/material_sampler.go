@@ -181,7 +181,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 			// TODO: Would it be better to store the row/col for the next pass instead?
 			ms.pipelineIndex++
 
-			frame := uint32(*m.Frame.Render)
+			frame := uint32(m.Frame.Render)
 			if stage != nil {
 				frame += uint32(stage.Frame)
 			}
@@ -198,7 +198,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 			ms.ScaleH /= sheet.Rows
 		}
 	case *materials.SpriteSheet:
-		frame := uint32(*m.Frame.Render)
+		frame := uint32(m.Frame.Render)
 		if stage != nil {
 			frame += uint32(stage.Frame)
 		}
@@ -218,7 +218,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	case *materials.Text:
 		ms.StageOutput = m.Sample(u, v, ms.ScaleW, ms.ScaleH)
 	case *materials.Solid:
-		ms.StageOutput = *m.Diffuse.Render
+		ms.StageOutput = m.Diffuse.Render
 	default:
 		ms.StageOutput = concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true

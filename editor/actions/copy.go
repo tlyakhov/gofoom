@@ -65,7 +65,6 @@ func (a *Copy) Undo() {
 }
 
 func (a *Copy) Redo() {
-	log.Printf("%v\n", a.ClipboardData)
 	a.IEditor.SetContent(a.ClipboardData)
 	if a.Cut {
 		a.CutDelete.Redo()

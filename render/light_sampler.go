@@ -114,7 +114,7 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 
 // lightVisibleFromSector determines whether a given light is visible from a world location.
 func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
-	lightPos := lightBody.Pos.Render
+	lightPos := &lightBody.Pos.Render
 	// log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(),
 	// lightPos)
 
@@ -299,12 +299,12 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 					}
 				}
 			case materials.ShadowSphere:
-				if concepts.IntersectLineSphere(p, lightPos, b.Pos.Render, b.Size.Render[0]*0.5) {
+				if concepts.IntersectLineSphere(p, lightPos, &b.Pos.Render, b.Size.Render[0]*0.5) {
 					return false
 				}
 			case materials.ShadowAABB:
 				ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
-				if concepts.IntersectLineAABB(p, lightPos, b.Pos.Render, ext) {
+				if concepts.IntersectLineAABB(p, lightPos, &b.Pos.Render, ext) {
 					return false
 				}
 			}

@@ -79,6 +79,7 @@ func (list *EntityList) tableUpdate(tci widget.TableCellID, template fyne.Canvas
 		text.Color = row[elcColor].(color.Color)
 		e := ecs.Entity(row[elcEntity].(int))
 		text.Text = e.ShortString()
+		text.TextSize = theme.TextSize()
 		text.Show()
 		text.Refresh()
 	case int(elcImage):
@@ -92,7 +93,8 @@ func (list *EntityList) tableUpdate(tci widget.TableCellID, template fyne.Canvas
 		progress.Hide()
 		img.Hide()
 		text.Color = row[elcColor].(color.Color)
-		text.Text = concepts.TruncateString(row[elcDesc].(string), 50)
+		text.Text = concepts.TruncateString(row[elcDesc].(string), 60)
+		text.TextSize = 10
 		text.Show()
 		text.Refresh()
 	case int(elcRank):
@@ -119,7 +121,8 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	}, list.tableUpdate)
 
 	list.Table.SetColumnWidth(int(elcEntity), 70)
-	list.Table.SetColumnWidth(int(elcDesc), 280)
+	list.Table.SetColumnWidth(int(elcImage), 64)
+	list.Table.SetColumnWidth(int(elcDesc), 240)
 	list.Table.SetColumnWidth(int(elcRank), 100)
 	list.Table.ShowHeaderColumn = false
 	list.Table.CreateHeader = func() fyne.CanvasObject {
@@ -322,9 +325,7 @@ func (list *EntityList) applySort() {
 			return a[0].(int) < b[0].(int)
 		}
 		switch col {
-		case 0:
-			fallthrough
-		case 2:
+		case 0, 1, 2:
 			if order == elsdSortDesc {
 				return a[col].(int) > b[col].(int)
 			}

@@ -30,8 +30,9 @@ const (
 
 type EditorState struct {
 	MapView
-	Universe *ecs.Universe
-	Lock     sync.Mutex
+	Universe      *ecs.Universe
+	Lock          sync.Mutex
+	GameInputLock sync.Mutex
 
 	// Map view positions in world/screen space.
 	Mouse          concepts.Vector2 // Screen

@@ -47,7 +47,7 @@ func GetSlot(u *ecs.Universe, e ecs.Entity) *Slot {
 }
 
 func (slot *Slot) String() string {
-	return "InventorySlot"
+	return "Slot " + slot.Class
 }
 
 func (s *Slot) Construct(data map[string]any) {

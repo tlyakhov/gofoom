@@ -62,13 +62,14 @@ func (a *SetProperty) FireHooks() {
 			// are pointers to SectorSegment.P and SectorSegment.Next.P
 			// respectively. If the user edits the A or B field, we need to
 			// propagate that setting.
-			if a.Name == "Segment.A" {
+			switch a.Name {
+			case "Segment.A":
 				target.P = *target.A
 				target.Recalculate()
-			} else if a.Name == "Segment.B" {
+			case "Segment.B":
 				target.Next.P = *target.B
 				target.Recalculate()
-			} else if a.Name == "Segment.Portal sector" {
+			case "Segment.Portal sector":
 				target.Recalculate()
 			}
 

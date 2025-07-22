@@ -49,7 +49,7 @@ func planes(block *block, plane *core.SectorPlane) {
 	planeRayDelta := concepts.Vector3{
 		block.Sector.Segments[0].P[0] - block.Ray.Start[0],
 		block.Sector.Segments[0].P[1] - block.Ray.Start[1],
-		*plane.Z.Render - block.CameraZ}
+		plane.Z.Render - block.CameraZ}
 	// Top (ceiling)
 	start := block.EdgeTop
 	end := block.ClippedTop
@@ -94,7 +94,7 @@ func planes(block *block, plane *core.SectorPlane) {
 		world[1] += block.Ray.Start[1]
 		switch plane.Normal[2] {
 		case 1, -1:
-			world[2] = *plane.Z.Render
+			world[2] = plane.Z.Render
 		default:
 			world[2] += block.CameraZ
 			//world[2] = plane.ZAt(dynamic.DynamicRender, world.To2D())

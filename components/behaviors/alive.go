@@ -83,7 +83,7 @@ func (alive *Alive) Tint(color *concepts.Vector4) {
 	allCooldowns := 0.0
 	maxCooldown := 0.0
 	for _, d := range alive.Damages {
-		allCooldowns += *d.Cooldown.Render
+		allCooldowns += d.Cooldown.Render
 		maxCooldown += d.Cooldown.Spawn
 	}
 
