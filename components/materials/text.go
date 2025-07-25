@@ -28,14 +28,14 @@ type Text struct {
 var TextCID ecs.ComponentID
 
 func init() {
-	TextCID = ecs.RegisterComponent(&ecs.Column[Text, *Text]{Getter: GetText})
+	TextCID = ecs.RegisterComponent(&ecs.Arena[Text, *Text]{Getter: GetText})
 }
 
 func (x *Text) ComponentID() ecs.ComponentID {
 	return TextCID
 }
-func GetText(u *ecs.Universe, e ecs.Entity) *Text {
-	if asserted, ok := u.Component(e, TextCID).(*Text); ok {
+func GetText(e ecs.Entity) *Text {
+	if asserted, ok := ecs.Component(e, TextCID).(*Text); ok {
 		return asserted
 	}
 	return nil
@@ -45,13 +45,13 @@ func (t *Text) MultiAttachable() bool { return true }
 
 func (t *Text) OnDelete() {
 	defer t.Attached.OnDelete()
-	if t.Universe != nil {
-		t.Color.Detach(t.Universe.Simulation)
+	if t.IsAttached() {
+		t.Color.Detach(ecs.Simulation)
 	}
 }
-func (t *Text) OnAttach(u *ecs.Universe) {
-	t.Attached.OnAttach(u)
-	t.Color.Attach(u.Simulation)
+func (t *Text) OnAttach() {
+	t.Attached.OnAttach()
+	t.Color.Attach(ecs.Simulation)
 }
 
 func (t *Text) RasterizeText() {

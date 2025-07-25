@@ -20,14 +20,14 @@ type ActionWaypoint struct {
 var ActionWaypointCID ecs.ComponentID
 
 func init() {
-	ActionWaypointCID = ecs.RegisterComponent(&ecs.Column[ActionWaypoint, *ActionWaypoint]{Getter: GetActionWaypoint})
+	ActionWaypointCID = ecs.RegisterComponent(&ecs.Arena[ActionWaypoint, *ActionWaypoint]{Getter: GetActionWaypoint})
 }
 
 func (*ActionWaypoint) ComponentID() ecs.ComponentID {
 	return ActionWaypointCID
 }
-func GetActionWaypoint(u *ecs.Universe, e ecs.Entity) *ActionWaypoint {
-	if asserted, ok := u.Component(e, ActionWaypointCID).(*ActionWaypoint); ok {
+func GetActionWaypoint(e ecs.Entity) *ActionWaypoint {
+	if asserted, ok := ecs.Component(e, ActionWaypointCID).(*ActionWaypoint); ok {
 		return asserted
 	}
 	return nil

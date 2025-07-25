@@ -31,14 +31,14 @@ type Visible struct {
 var VisibleCID ecs.ComponentID
 
 func init() {
-	VisibleCID = ecs.RegisterComponent(&ecs.Column[Visible, *Visible]{Getter: GetVisible})
+	VisibleCID = ecs.RegisterComponent(&ecs.Arena[Visible, *Visible]{Getter: GetVisible})
 }
 
 func (x *Visible) ComponentID() ecs.ComponentID {
 	return VisibleCID
 }
-func GetVisible(u *ecs.Universe, e ecs.Entity) *Visible {
-	if asserted, ok := u.Component(e, VisibleCID).(*Visible); ok {
+func GetVisible(e ecs.Entity) *Visible {
+	if asserted, ok := ecs.Component(e, VisibleCID).(*Visible); ok {
 		return asserted
 	}
 	return nil

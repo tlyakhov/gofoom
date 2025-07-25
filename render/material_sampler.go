@@ -71,22 +71,22 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 }
 
 func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Attachable) {
-	if shader := materials.GetShader(ms.Universe, material); shader != nil && shader != parent {
+	if shader := materials.GetShader(material); shader != nil && shader != parent {
 		ms.Materials = append(ms.Materials, shader)
 		for _, stage := range shader.Stages {
 			ms.derefMaterials(stage.Material, shader)
 		}
-	} else if spriteSheet := materials.GetSpriteSheet(ms.Universe, material); spriteSheet != nil && spriteSheet != parent {
+	} else if spriteSheet := materials.GetSpriteSheet(material); spriteSheet != nil && spriteSheet != parent {
 		ms.Materials = append(ms.Materials, spriteSheet)
 		ms.derefMaterials(spriteSheet.Material, spriteSheet)
-	} else if sprite := materials.GetSprite(ms.Universe, material); sprite != nil && sprite != parent {
+	} else if sprite := materials.GetSprite(material); sprite != nil && sprite != parent {
 		ms.Materials = append(ms.Materials, sprite)
 		ms.derefMaterials(sprite.Material, sprite)
-	} else if image := materials.GetImage(ms.Universe, material); image != nil {
+	} else if image := materials.GetImage(material); image != nil {
 		ms.Materials = append(ms.Materials, image)
-	} else if text := materials.GetText(ms.Universe, material); text != nil {
+	} else if text := materials.GetText(material); text != nil {
 		ms.Materials = append(ms.Materials, text)
-	} else if solid := materials.GetSolid(ms.Universe, material); solid != nil {
+	} else if solid := materials.GetSolid(material); solid != nil {
 		ms.Materials = append(ms.Materials, solid)
 	}
 
@@ -115,7 +115,7 @@ func (ms *MaterialSampler) frob(stage *materials.ShaderStage, sample *concepts.V
 		return
 	}
 
-	pulse := math.Sin(float64(ms.Universe.Timestamp)*0.005)*0.5 + 1.0
+	pulse := math.Sin(float64(ecs.Simulation.Timestamp)*0.005)*0.5 + 1.0
 	hsp := concepts.RGBtoHSP(sample.To3D())
 	hsp[2] *= 2.0 * pulse
 	hsp[0] = 0.15
@@ -148,7 +148,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 
 		if (stage.Flags & materials.ShaderLiquid) != 0 {
-			lv, lu := math.Sincos(float64(stage.Universe.Timestamp) * 0.05 * constants.LiquidChurnSpeed * concepts.Deg2rad)
+			lv, lu := math.Sincos(float64(ecs.Simulation.Timestamp) * 0.05 * constants.LiquidChurnSpeed * concepts.Deg2rad)
 			u += lu * constants.LiquidChurnSize
 			v += lv * constants.LiquidChurnSize
 		}

@@ -14,6 +14,7 @@ import (
 	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
 )
 
@@ -72,16 +73,16 @@ func initializeMenus() {
 				Tooltip: path,
 			},
 			Clicked: func(b *ui.Button) {
-				u.Clear()
-				if err := u.Load(path); err != nil {
+				ecs.Initialize()
+				if err := ecs.Load(path); err != nil {
 					log.Printf("Error loading world %v: %v", path, err)
 					return
 				}
-				archetypes.CreateFont(u, "data/vga-font-8x8.png", "Default Font")
+				archetypes.CreateFont("data/vga-font-8x8.png", "Default Font")
 				renderer.Initialize()
-				controllers.Respawn(u, true)
-				u.Simulation.Integrate = integrateGame
-				u.Simulation.Render = renderGame
+				controllers.Respawn(true)
+				ecs.Simulation.Integrate = integrateGame
+				ecs.Simulation.Render = renderGame
 				gameUI.Config.TextStyle = renderer.NewTextStyle()
 				inMenu = false
 				gameUI.SetPage(nil)

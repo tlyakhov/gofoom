@@ -18,14 +18,14 @@ type Lit struct {
 var LitCID ecs.ComponentID
 
 func init() {
-	LitCID = ecs.RegisterComponent(&ecs.Column[Lit, *Lit]{Getter: GetLit})
+	LitCID = ecs.RegisterComponent(&ecs.Arena[Lit, *Lit]{Getter: GetLit})
 }
 
 func (x *Lit) ComponentID() ecs.ComponentID {
 	return LitCID
 }
-func GetLit(u *ecs.Universe, e ecs.Entity) *Lit {
-	if asserted, ok := u.Component(e, LitCID).(*Lit); ok {
+func GetLit(e ecs.Entity) *Lit {
+	if asserted, ok := ecs.Component(e, LitCID).(*Lit); ok {
 		return asserted
 	}
 	return nil

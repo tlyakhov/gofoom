@@ -47,7 +47,6 @@ func (a *Paste) apply() {
 	// Copied -> Pasted
 	a.CopiedToPasted = make(map[ecs.Entity]ecs.Entity)
 	a.Selected = selection.NewSelection()
-	u := a.State().Universe
 	for copiedEntityString, yamlData := range yamlEntities {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
 		yamlEntity := yamlData.(map[string]any)
@@ -71,23 +70,23 @@ func (a *Paste) apply() {
 					log.Printf("Paste.Activate: Error parsing copied entity %v (component %v)", yamlDataTyped, name)
 					continue
 				}
-				toAttach = u.Component(entityRef, id)
+				toAttach = ecs.Component(entityRef, id)
 			case map[string]any:
-				toAttach = u.LoadComponentWithoutAttaching(id, yamlDataTyped)
+				toAttach = ecs.LoadComponentWithoutAttaching(id, yamlDataTyped)
 			default:
 				log.Printf("Paste.Activate: Unexpected type of copied component %v: %v", name, yamlDataTyped)
 				continue
 			}
 			if pastedEntity, ok = a.CopiedToPasted[copiedEntity]; ok {
-				u.Attach(id, pastedEntity, &toAttach)
+				ecs.Attach(id, pastedEntity, &toAttach)
 			} else {
-				pastedEntity = u.NewEntity()
-				u.Attach(id, pastedEntity, &toAttach)
+				pastedEntity = ecs.NewEntity()
+				ecs.Attach(id, pastedEntity, &toAttach)
 				a.CopiedToPasted[copiedEntity] = pastedEntity
 			}
 		}
 		if pastedEntity != 0 {
-			a.Selected.Add(selection.SelectableFromEntity(u, pastedEntity))
+			a.Selected.Add(selection.SelectableFromEntity(pastedEntity))
 		}
 	}
 
@@ -96,10 +95,10 @@ func (a *Paste) apply() {
 	// pasted bodies to sectors
 	// pasted internal segments to sectors
 	for _, pastedEntity := range a.CopiedToPasted {
-		if seg := core.GetInternalSegment(u, pastedEntity); seg != nil {
+		if seg := core.GetInternalSegment(pastedEntity); seg != nil {
 			seg.AttachToSectors()
 		}
-		if body := core.GetBody(u, pastedEntity); body != nil {
+		if body := core.GetBody(pastedEntity); body != nil {
 			body.SectorEntity = 0
 		}
 		// TODO: materials
@@ -139,7 +138,7 @@ func (a *Paste) MouseUp(evt *desktop.MouseEvent) {
 
 func (a *Paste) Undo() {
 	for _, pasted := range a.CopiedToPasted {
-		a.State().Universe.Delete(pasted)
+		ecs.Delete(pasted)
 	}
 }
 

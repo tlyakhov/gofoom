@@ -72,22 +72,21 @@ func (m *mockC8) ComponentID() ComponentID {
 	return 8
 }
 func BenchmarkGet(b *testing.B) {
-	RegisterComponent(&Column[mockC1, *mockC1]{})
-	RegisterComponent(&Column[mockC2, *mockC2]{})
-	RegisterComponent(&Column[mockC3, *mockC3]{})
-	RegisterComponent(&Column[mockC4, *mockC4]{})
-	RegisterComponent(&Column[mockC5, *mockC5]{})
-	RegisterComponent(&Column[mockC6, *mockC6]{})
-	RegisterComponent(&Column[mockC7, *mockC7]{})
-	RegisterComponent(&Column[mockC8, *mockC8]{})
-	u := NewUniverse()
-	cp := Types().ColumnPlaceholders
+	RegisterComponent(&Arena[mockC1, *mockC1]{})
+	RegisterComponent(&Arena[mockC2, *mockC2]{})
+	RegisterComponent(&Arena[mockC3, *mockC3]{})
+	RegisterComponent(&Arena[mockC4, *mockC4]{})
+	RegisterComponent(&Arena[mockC5, *mockC5]{})
+	RegisterComponent(&Arena[mockC6, *mockC6]{})
+	RegisterComponent(&Arena[mockC7, *mockC7]{})
+	RegisterComponent(&Arena[mockC8, *mockC8]{})
+	cp := Types().ArenaPlaceholders
 	numEntities := 1000
 	for range numEntities {
-		entity := u.NewEntity()
+		entity := NewEntity()
 		for range 5 {
 			index := rand.Intn(len(cp)-1) + 1
-			u.NewAttachedComponent(entity, cp[index].ID())
+			NewAttachedComponent(entity, cp[index].ID())
 		}
 	}
 	// Divide the result by 1000
@@ -100,7 +99,7 @@ func BenchmarkGet(b *testing.B) {
 			cid := cp[index].ID()
 			b.StartTimer()
 			for range 1000 {
-				u.Component(entity, cid)
+				Component(entity, cid)
 			}
 		}
 	})

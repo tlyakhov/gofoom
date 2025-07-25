@@ -17,15 +17,15 @@ type ActionTransition struct {
 var ActionTransitionCID ecs.ComponentID
 
 func init() {
-	ActionTransitionCID = ecs.RegisterComponent(&ecs.Column[ActionTransition, *ActionTransition]{Getter: GetActionTransition})
+	ActionTransitionCID = ecs.RegisterComponent(&ecs.Arena[ActionTransition, *ActionTransition]{Getter: GetActionTransition})
 }
 
 func (*ActionTransition) ComponentID() ecs.ComponentID {
 	return ActionTransitionCID
 }
 
-func GetActionTransition(u *ecs.Universe, e ecs.Entity) *ActionTransition {
-	if asserted, ok := u.Component(e, ActionTransitionCID).(*ActionTransition); ok {
+func GetActionTransition(e ecs.Entity) *ActionTransition {
+	if asserted, ok := ecs.Component(e, ActionTransitionCID).(*ActionTransition); ok {
 		return asserted
 	}
 	return nil
@@ -41,7 +41,7 @@ func (transition *ActionTransition) String() string {
 		if len(s) > 0 {
 			s += ", "
 		}
-		s += e.Format(transition.Universe)
+		s += e.Format()
 	}
 	return "Transition to " + s
 }
@@ -63,13 +63,13 @@ func (transition *ActionTransition) Serialize() map[string]any {
 	result := transition.Attached.Serialize()
 
 	if len(transition.Next) > 0 {
-		result["Next"] = transition.Next.Serialize(transition.Universe)
+		result["Next"] = transition.Next.Serialize()
 	}
 
 	return result
 }
 
-func IterateActions(u *ecs.Universe, start ecs.Entity, f func(action ecs.Entity, parentPosition *concepts.Vector3)) {
+func IterateActions(start ecs.Entity, f func(action ecs.Entity, parentPosition *concepts.Vector3)) {
 	var parentP *concepts.Vector3
 	visited := make(map[ecs.Entity]*concepts.Vector3, 1)
 	actions := make(map[ecs.Entity]ecs.Entity)
@@ -88,7 +88,7 @@ func IterateActions(u *ecs.Universe, start ecs.Entity, f func(action ecs.Entity,
 
 		visited[action] = nil
 
-		if waypoint := GetActionWaypoint(u, action); waypoint != nil {
+		if waypoint := GetActionWaypoint(action); waypoint != nil {
 			visited[action] = &waypoint.P
 
 			if actions[action] != 0 {
@@ -100,7 +100,7 @@ func IterateActions(u *ecs.Universe, start ecs.Entity, f func(action ecs.Entity,
 
 		f(action, parentP)
 
-		transition := GetActionTransition(u, action)
+		transition := GetActionTransition(action)
 		if transition == nil {
 			continue
 		}

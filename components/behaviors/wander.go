@@ -24,14 +24,14 @@ type Wander struct {
 var WanderCID ecs.ComponentID
 
 func init() {
-	WanderCID = ecs.RegisterComponent(&ecs.Column[Wander, *Wander]{Getter: GetWander})
+	WanderCID = ecs.RegisterComponent(&ecs.Arena[Wander, *Wander]{Getter: GetWander})
 }
 
 func (x *Wander) ComponentID() ecs.ComponentID {
 	return WanderCID
 }
-func GetWander(u *ecs.Universe, e ecs.Entity) *Wander {
-	if asserted, ok := u.Component(e, WanderCID).(*Wander); ok {
+func GetWander(e ecs.Entity) *Wander {
+	if asserted, ok := ecs.Component(e, WanderCID).(*Wander); ok {
 		return asserted
 	}
 	return nil
@@ -45,7 +45,7 @@ func (w *Wander) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 
 	w.Force = 10
-	w.LastTurn = w.Universe.Timestamp
+	w.LastTurn = ecs.Simulation.Timestamp
 
 	if data == nil {
 		return

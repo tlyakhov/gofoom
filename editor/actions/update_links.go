@@ -28,9 +28,7 @@ func (a *UpdateLinks) Undo() {
 }
 
 func (a *UpdateLinks) attach(entity ecs.Entity) {
-	u := a.State().Universe
-
-	all := u.AllComponents(entity)
+	all := ecs.AllComponents(entity)
 	oldComponents := make(ecs.ComponentTable, len(all))
 	copy(oldComponents, all)
 	a.OldComponents[entity] = oldComponents
@@ -42,7 +40,7 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 		cid := oldComponent.ComponentID()
 		addComponent := a.AddComponents.Get(cid)
 		if a.RemoveComponents.Contains(cid) || (addComponent != nil && addComponent != oldComponent) {
-			u.DetachComponent(cid, entity)
+			ecs.DetachComponent(cid, entity)
 		}
 	}
 
@@ -53,7 +51,7 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 		cid := addComponent.ComponentID()
 		oldComponent := oldComponents.Get(cid)
 		if oldComponent == nil || addComponent != oldComponent {
-			u.Attach(cid, entity, &addComponent)
+			ecs.Attach(cid, entity, &addComponent)
 		}
 	}
 }
@@ -64,5 +62,5 @@ func (a *UpdateLinks) Redo() {
 			a.attach(e)
 		}
 	}
-	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerRecalculate)
 }

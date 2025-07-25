@@ -31,14 +31,14 @@ type Mobile struct {
 var MobileCID ecs.ComponentID
 
 func init() {
-	MobileCID = ecs.RegisterComponent(&ecs.Column[Mobile, *Mobile]{Getter: GetMobile})
+	MobileCID = ecs.RegisterComponent(&ecs.Arena[Mobile, *Mobile]{Getter: GetMobile})
 }
 
 func (x *Mobile) ComponentID() ecs.ComponentID {
 	return MobileCID
 }
-func GetMobile(u *ecs.Universe, e ecs.Entity) *Mobile {
-	if asserted, ok := u.Component(e, MobileCID).(*Mobile); ok {
+func GetMobile(e ecs.Entity) *Mobile {
+	if asserted, ok := ecs.Component(e, MobileCID).(*Mobile); ok {
 		return asserted
 	}
 	return nil
@@ -50,14 +50,14 @@ func (m *Mobile) String() string {
 
 func (m *Mobile) OnDelete() {
 	defer m.Attached.OnDelete()
-	if m.Universe != nil {
-		m.Vel.Detach(m.Universe.Simulation)
+	if m.IsAttached() {
+		m.Vel.Detach(ecs.Simulation)
 	}
 }
 
-func (m *Mobile) OnAttach(u *ecs.Universe) {
-	m.Attached.OnAttach(u)
-	m.Vel.Attach(u.Simulation)
+func (m *Mobile) OnAttach() {
+	m.Attached.OnAttach()
+	m.Vel.Attach(ecs.Simulation)
 }
 
 func (m *Mobile) Construct(data map[string]any) {

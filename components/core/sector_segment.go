@@ -16,8 +16,7 @@ const (
 )
 
 type SectorSegment struct {
-	Universe *ecs.Universe
-	Segment  `editable:"^"`
+	Segment `editable:"^"`
 
 	P         concepts.Vector2  `editable:"X/Y"`
 	LoSurface materials.Surface `editable:"Low"`
@@ -81,7 +80,7 @@ func (s *SectorSegment) RealizeAdjacentSector() {
 		return
 	}
 
-	if adj := GetSector(s.Universe, s.AdjacentSector); adj != nil {
+	if adj := GetSector(s.AdjacentSector); adj != nil {
 		// Get the actual segment using the index
 		if s.PortalTeleports && s.AdjacentSegmentIndex != -1 {
 			s.AdjacentSegment = adj.Segments[s.AdjacentSegmentIndex]
@@ -113,7 +112,7 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	// Make a copy to preserve everything other than the point.
 	copied := new(SectorSegment)
 	copied.Sector = s.Sector
-	copied.Construct(s.Universe, s.Serialize())
+	copied.Construct(s.Serialize())
 	copied.P = p
 	// Insert into the sector
 	s.Sector.Segments = append(s.Sector.Segments[:index+1], s.Sector.Segments[index:]...)
@@ -125,17 +124,16 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	return copied
 }
 
-func (s *SectorSegment) Construct(u *ecs.Universe, data map[string]any) {
-	s.Universe = u
-	s.Segment.Construct(u, data)
+func (s *SectorSegment) Construct(data map[string]any) {
+	s.Segment.Construct(data)
 	s.P = concepts.Vector2{}
 	s.Normal = concepts.Vector2{}
 	s.WallUVIgnoreSlope = false
 	s.PortalHasMaterial = false
 	s.PortalIsPassable = true
 	s.PortalTeleports = false
-	s.HiSurface.Construct(s.Universe, nil)
-	s.LoSurface.Construct(s.Universe, nil)
+	s.HiSurface.Construct(nil)
+	s.LoSurface.Construct(nil)
 	s.AdjacentSegmentIndex = -1
 
 	if data == nil {
@@ -167,10 +165,10 @@ func (s *SectorSegment) Construct(u *ecs.Universe, data map[string]any) {
 		}
 	}
 	if v, ok := data["Lo"]; ok {
-		s.LoSurface.Construct(s.Universe, v.(map[string]any))
+		s.LoSurface.Construct(v.(map[string]any))
 	}
 	if v, ok := data["Hi"]; ok {
-		s.HiSurface.Construct(s.Universe, v.(map[string]any))
+		s.HiSurface.Construct(v.(map[string]any))
 	}
 }
 
@@ -198,7 +196,7 @@ func (s *SectorSegment) Serialize() map[string]any {
 	result["Hi"] = s.HiSurface.Serialize()
 
 	if s.AdjacentSector != 0 {
-		result["AdjacentSector"] = s.AdjacentSector.Serialize(s.Universe)
+		result["AdjacentSector"] = s.AdjacentSector.Serialize()
 	}
 
 	return result

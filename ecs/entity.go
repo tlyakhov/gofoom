@@ -160,17 +160,17 @@ func ParseEntityHumanOrCanonical(e string) (Entity, error) {
 
 // Format returns a formatted string representation of the entity, including its
 // name (if available) and source file (if external).
-func (e Entity) Format(u *Universe) string {
+func (e Entity) Format() string {
 	if e == 0 {
 		return EntityDelimiter + "0 Nothing"
 	}
 	id := e.Local().String()
-	if named := GetNamed(u, e); named != nil {
+	if named := GetNamed(e); named != nil {
 		id = id + " " + named.Name
 	}
 	if e.IsExternal() {
 		sourceID := e.SourceID()
-		file := path.Base(u.SourceFileIDs[sourceID].Source)
+		file := path.Base(SourceFileIDs[sourceID].Source)
 		id += " (from " + file + ")"
 	}
 
@@ -198,12 +198,12 @@ func (e Entity) SerializeRaw(name string, file string) string {
 
 // Serialize serializes the entity to a string, including its name and source
 // file information based on the Universe context.
-func (e Entity) Serialize(u *Universe) string {
+func (e Entity) Serialize() string {
 	id := EntityDelimiter + strconv.FormatUint(uint64(e.Local()), 10)
 	if e == 0 {
 		return id
 	}
-	if named := GetNamed(u, e); named != nil {
+	if named := GetNamed(e); named != nil {
 		id += EntityDelimiter + url.QueryEscape(named.Name)
 	} else if e.IsExternal() {
 		id += EntityDelimiter
@@ -211,7 +211,7 @@ func (e Entity) Serialize(u *Universe) string {
 
 	if e.IsExternal() {
 		id += EntityDelimiter + strconv.FormatUint(uint64(e.SourceID()), 10)
-		id += EntityDelimiter + url.QueryEscape(u.SourceFileIDs[e.SourceID()].Source)
+		id += EntityDelimiter + url.QueryEscape(SourceFileIDs[e.SourceID()].Source)
 	}
 	return id
 }

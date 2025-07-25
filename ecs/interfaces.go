@@ -9,9 +9,7 @@ import (
 
 type Universal interface {
 	// OnAttach is called when the component is attached to an Universe instance.
-	OnAttach(u *Universe)
-	// GetUniverse returns the Universe instance associated with the component.
-	GetUniverse() *Universe
+	OnAttach()
 }
 
 // Serializable is an interface for components that can be serialized and deserialized.
@@ -19,14 +17,6 @@ type Serializable interface {
 	// Construct initializes the component from a map of data.
 	Construct(data map[string]any)
 	// Serialize returns a map representing the component's data for serialization.
-	Serialize() map[string]any
-}
-
-// SubSerializable is an interface for sub-components that can be serialized and deserialized.
-type SubSerializable interface {
-	// Construct initializes the sub-component from a map of data and an Universe instance.
-	Construct(ecs *Universe, data map[string]any)
-	// Serialize returns a map representing the sub-component's data for serialization.
 	Serialize() map[string]any
 }
 
@@ -48,31 +38,32 @@ type Attachable interface {
 	MultiAttachable() bool
 	// Base returns a pointer to the base Attached struct.
 	Base() *Attached
+	IsAttached() bool
 }
 
-// AttachableColumn is an interface for managing a column of attachable components of a specific type.
-type AttachableColumn interface {
-	// From initializes a column from another column of the same type.
-	From(source AttachableColumn, ecs *Universe)
-	// New creates a new Attachable component of the type stored in this column.
+// AttachableArena is an interface for managing a arena of attachable components of a specific type.
+type AttachableArena interface {
+	// From initializes a arena from another arena of the same type.
+	From(source AttachableArena)
+	// New creates a new Attachable component of the type stored in this arena.
 	New() Attachable
-	// Add adds a component to the column.
+	// Add adds a component to the arena.
 	Add(c *Attachable)
 	// Replace replaces the component at the given index with the provided component.
 	Replace(c *Attachable, index int)
 	// Attachable retrieves the component at the given index as an Attachable interface.
 	Attachable(index int) Attachable
-	// Detach removes the component at the given index from the column.
+	// Detach removes the component at the given index from the arena.
 	Detach(index int)
-	// Type returns the reflect.Type of the component data stored in this column.
+	// Type returns the reflect.Type of the component data stored in this arena.
 	Type() reflect.Type
-	// Len returns the number of components currently stored in this column.
+	// Len returns the number of components currently stored in this arena.
 	Len() int
-	// Cap returns the total capacity of this column.
+	// Cap returns the total capacity of this arena.
 	Cap() int
-	// ID returns the component ID associated with this column.
+	// ID returns the component ID associated with this arena.
 	ID() ComponentID
-	// String returns a string representation of the component type stored in this column.
+	// String returns a string representation of the component type stored in this arena.
 	String() string
 }
 

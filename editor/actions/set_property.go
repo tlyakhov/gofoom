@@ -38,7 +38,7 @@ func (a *SetProperty) FireHooks() {
 		}
 		switch target := v.Parent().(type) {
 		case *ecs.Linked:
-			a.State().Universe.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
 		case *ecs.SourceFile:
 			if target.Loaded {
 				target.Unload()
@@ -53,7 +53,7 @@ func (a *SetProperty) FireHooks() {
 			}
 		case *core.Script:
 			// TODO: use a nicer source code editor for script properties.
-			a.State().Universe.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
 			//target.Compile()
 		case *materials.Text:
 			target.RasterizeText()

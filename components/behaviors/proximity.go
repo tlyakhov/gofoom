@@ -42,14 +42,14 @@ type Proximity struct {
 var ProximityCID ecs.ComponentID
 
 func init() {
-	ProximityCID = ecs.RegisterComponent(&ecs.Column[Proximity, *Proximity]{Getter: GetProximity})
+	ProximityCID = ecs.RegisterComponent(&ecs.Arena[Proximity, *Proximity]{Getter: GetProximity})
 }
 
 func (x *Proximity) ComponentID() ecs.ComponentID {
 	return ProximityCID
 }
-func GetProximity(u *ecs.Universe, e ecs.Entity) *Proximity {
-	if asserted, ok := u.Component(e, ProximityCID).(*Proximity); ok {
+func GetProximity(e ecs.Entity) *Proximity {
+	if asserted, ok := ecs.Component(e, ProximityCID).(*Proximity); ok {
 		return asserted
 	}
 	return nil
@@ -57,11 +57,11 @@ func GetProximity(u *ecs.Universe, e ecs.Entity) *Proximity {
 
 func (p *Proximity) MultiAttachable() bool { return true }
 
-func (p *Proximity) OnAttach(u *ecs.Universe) {
-	p.Attached.OnAttach(u)
-	p.InRange.OnAttach(u)
-	p.Enter.OnAttach(u)
-	p.Exit.OnAttach(u)
+func (p *Proximity) OnAttach() {
+	p.Attached.OnAttach()
+	p.InRange.OnAttach()
+	p.Enter.OnAttach()
+	p.Exit.OnAttach()
 }
 
 func (p *Proximity) String() string {

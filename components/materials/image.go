@@ -41,14 +41,14 @@ type Image struct {
 var ImageCID ecs.ComponentID
 
 func init() {
-	ImageCID = ecs.RegisterComponent(&ecs.Column[Image, *Image]{Getter: GetImage})
+	ImageCID = ecs.RegisterComponent(&ecs.Arena[Image, *Image]{Getter: GetImage})
 }
 
 func (x *Image) ComponentID() ecs.ComponentID {
 	return ImageCID
 }
-func GetImage(u *ecs.Universe, e ecs.Entity) *Image {
-	if asserted, ok := u.Component(e, ImageCID).(*Image); ok {
+func GetImage(e ecs.Entity) *Image {
+	if asserted, ok := ecs.Component(e, ImageCID).(*Image); ok {
 		return asserted
 	}
 	return nil

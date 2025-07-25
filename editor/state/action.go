@@ -27,7 +27,6 @@ func (a *Action) Construct(data map[string]any) {}
 func (a *Action) Serialize() map[string]any {
 	return nil
 }
-func (a *Action) OnAttach(u *ecs.Universe) {}
-func (a *Action) GetUniverse() *ecs.Universe {
-	return a.State().Universe
-}
+func (a *Action) OnAttach() {}
+
+func (a *Action) IsAttached() bool { return true }

@@ -43,13 +43,13 @@ func (w *WeaponStateParams) Construct(data map[string]any) {
 	}
 }
 
-func (w *WeaponStateParams) Serialize(u *ecs.Universe) map[string]any {
+func (w *WeaponStateParams) Serialize() map[string]any {
 	result := make(map[string]any)
 
 	result["Time"] = w.Time
 
 	if w.Material != 0 {
-		result["Material"] = w.Material.Serialize(u)
+		result["Material"] = w.Material.Serialize()
 	}
 
 	return result

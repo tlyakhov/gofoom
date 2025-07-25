@@ -60,7 +60,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 		return
 	}
 
-	if lit := materials.GetLit(r.Universe, b.Entity); lit != nil {
+	if lit := materials.GetLit(b.Entity); lit != nil {
 		ls := &block.LightSampler
 		ls.Sector = b.Sector()
 		ls.Normal[0] = math.Cos(b.Angle.Render * concepts.Deg2rad)
@@ -83,7 +83,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 		block.Light[2] = 1
 		block.Light[3] = 1
 	}
-	if alive := behaviors.GetAlive(r.Universe, b.Entity); alive != nil {
+	if alive := behaviors.GetAlive(b.Entity); alive != nil {
 		alive.Tint(&block.Light)
 	}
 
@@ -118,7 +118,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 
 func (r *Renderer) renderBodyPixel(ebd *entityWithDist2, block *block, sx, ex int) {
 	b := ebd.Body
-	lit := materials.GetLit(r.Universe, b.Entity)
+	lit := materials.GetLit(b.Entity)
 	scr := r.WorldToScreen(&b.Pos.Render)
 	if scr == nil || lit == nil {
 		return

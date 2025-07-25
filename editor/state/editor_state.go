@@ -30,7 +30,6 @@ const (
 
 type EditorState struct {
 	MapView
-	Universe      *ecs.Universe
 	Lock          sync.Mutex
 	GameInputLock sync.Mutex
 

@@ -25,14 +25,14 @@ type PlayerTargetable struct {
 var PlayerTargetableCID ecs.ComponentID
 
 func init() {
-	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Column[PlayerTargetable, *PlayerTargetable]{Getter: GetPlayerTargetable})
+	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Arena[PlayerTargetable, *PlayerTargetable]{Getter: GetPlayerTargetable})
 }
 
 func (x *PlayerTargetable) ComponentID() ecs.ComponentID {
 	return PlayerTargetableCID
 }
-func GetPlayerTargetable(u *ecs.Universe, e ecs.Entity) *PlayerTargetable {
-	if asserted, ok := u.Component(e, PlayerTargetableCID).(*PlayerTargetable); ok {
+func GetPlayerTargetable(e ecs.Entity) *PlayerTargetable {
+	if asserted, ok := ecs.Component(e, PlayerTargetableCID).(*PlayerTargetable); ok {
 		return asserted
 	}
 	return nil
@@ -41,13 +41,13 @@ func GetPlayerTargetable(u *ecs.Universe, e ecs.Entity) *PlayerTargetable {
 func (pt *PlayerTargetable) MultiAttachable() bool { return true }
 
 func (pt *PlayerTargetable) Pos(e ecs.Entity) *concepts.Vector3 {
-	if b := core.GetBody(pt.Universe, e); b != nil {
+	if b := core.GetBody(e); b != nil {
 		top := &concepts.Vector3{}
 		top[0] = b.Pos.Render[0]
 		top[1] = b.Pos.Render[1]
 		top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
 		return top
-	} else if sector := core.GetSector(pt.Universe, e); sector != nil {
+	} else if sector := core.GetSector(e); sector != nil {
 		return &sector.Center
 	}
 	return nil
@@ -62,11 +62,11 @@ func (pt *PlayerTargetable) String() string {
 
 }
 
-func (pt *PlayerTargetable) OnAttach(u *ecs.Universe) {
-	pt.Attached.OnAttach(u)
-	pt.Frob.OnAttach(u)
-	pt.Selected.OnAttach(u)
-	pt.UnSelected.OnAttach(u)
+func (pt *PlayerTargetable) OnAttach() {
+	pt.Attached.OnAttach()
+	pt.Frob.OnAttach()
+	pt.Selected.OnAttach()
+	pt.UnSelected.OnAttach()
 }
 
 func (pt *PlayerTargetable) Construct(data map[string]any) {

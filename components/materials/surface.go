@@ -20,14 +20,12 @@ import (
 */
 
 type Surface struct {
-	Universe    *ecs.Universe
 	Material    ecs.Entity                             `editable:"Material" edit_type:"Material"`
 	ExtraStages []*ShaderStage                         `editable:"Extra Shader Stages"`
 	Transform   dynamic.DynamicValue[concepts.Matrix2] `editable:"ℝ²→ℝ²"`
 }
 
-func (s *Surface) Construct(u *ecs.Universe, data map[string]any) {
-	s.Universe = u
+func (s *Surface) Construct(data map[string]any) {
 	s.ExtraStages = make([]*ShaderStage, 0)
 	s.Transform.Construct(nil)
 
@@ -36,7 +34,7 @@ func (s *Surface) Construct(u *ecs.Universe, data map[string]any) {
 	}
 
 	if v, ok := data["ExtraStages"]; ok {
-		s.ExtraStages = ecs.ConstructSlice[*ShaderStage](u, v, nil)
+		s.ExtraStages = ecs.ConstructSlice[*ShaderStage](v, nil)
 	}
 	if v, ok := data["Material"]; ok {
 		s.Material, _ = ecs.ParseEntity(v.(string))
@@ -57,7 +55,7 @@ func (s *Surface) Serialize() map[string]any {
 	}
 
 	if s.Material != 0 {
-		result["Material"] = s.Material.Serialize(s.Universe)
+		result["Material"] = s.Material.Serialize()
 	}
 
 	if !s.Transform.Spawn.IsIdentity() {

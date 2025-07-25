@@ -45,7 +45,7 @@ type VerticalDoor struct {
 var VerticalDoorCID ecs.ComponentID
 
 func init() {
-	VerticalDoorCID = ecs.RegisterComponent(&ecs.Column[VerticalDoor, *VerticalDoor]{Getter: GetVerticalDoor})
+	VerticalDoorCID = ecs.RegisterComponent(&ecs.Arena[VerticalDoor, *VerticalDoor]{Getter: GetVerticalDoor})
 	dis := DoorIntentStrings()
 	div := DoorIntentValues()
 	for i, s := range dis {
@@ -56,8 +56,8 @@ func init() {
 func (x *VerticalDoor) ComponentID() ecs.ComponentID {
 	return VerticalDoorCID
 }
-func GetVerticalDoor(u *ecs.Universe, e ecs.Entity) *VerticalDoor {
-	if asserted, ok := u.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
+func GetVerticalDoor(e ecs.Entity) *VerticalDoor {
+	if asserted, ok := ecs.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
 		return asserted
 	}
 	return nil

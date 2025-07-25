@@ -22,14 +22,14 @@ type Carrier struct {
 var CarrierCID ecs.ComponentID
 
 func init() {
-	CarrierCID = ecs.RegisterComponent(&ecs.Column[Carrier, *Carrier]{Getter: GetCarrier})
+	CarrierCID = ecs.RegisterComponent(&ecs.Arena[Carrier, *Carrier]{Getter: GetCarrier})
 }
 
 func (*Carrier) ComponentID() ecs.ComponentID {
 	return CarrierCID
 }
-func GetCarrier(u *ecs.Universe, e ecs.Entity) *Carrier {
-	if asserted, ok := u.Component(e, CarrierCID).(*Carrier); ok {
+func GetCarrier(e ecs.Entity) *Carrier {
+	if asserted, ok := ecs.Component(e, CarrierCID).(*Carrier); ok {
 		return asserted
 	}
 	return nil
@@ -48,7 +48,7 @@ func (c *Carrier) HasAtLeast(class string, min int) bool {
 		if e == 0 {
 			continue
 		}
-		if slot := GetSlot(c.Universe, e); slot != nil {
+		if slot := GetSlot(e); slot != nil {
 			// log.Printf("HasAtLeast %v, %v ? %v, %v", class, min, slot.Class, slot.Count.Now)
 			if slot.Class == strings.TrimSpace(class) && slot.Count.Now >= min {
 				return true
@@ -77,10 +77,10 @@ func (c *Carrier) Construct(data map[string]any) {
 func (c *Carrier) Serialize() map[string]any {
 	result := c.Attached.Serialize()
 
-	result["Inventory"] = c.Slots.Serialize(c.Universe)
+	result["Inventory"] = c.Slots.Serialize()
 
 	if c.SelectedWeapon != 0 {
-		result["SelectedWeapon"] = c.SelectedWeapon.Serialize(c.Universe)
+		result["SelectedWeapon"] = c.SelectedWeapon.Serialize()
 	}
 
 	return result

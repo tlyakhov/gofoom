@@ -20,10 +20,10 @@ type controllerMetadata struct {
 	Priority    int
 }
 type typeMetadata struct {
-	ColumnIndexes        map[string]int
+	ArenaIndexes         map[string]int
 	IDs                  map[string]ComponentID
 	LenGroupedComponents int
-	ColumnPlaceholders   []AttachableColumn
+	ArenaPlaceholders    []AttachableArena
 	nextFreeComponent    uint32
 	Controllers          []controllerMetadata
 	ExprEnv              map[string]any
@@ -37,41 +37,41 @@ var once sync.Once
 func Types() *typeMetadata {
 	once.Do(func() {
 		globalTypeMetadata = &typeMetadata{
-			Controllers:   make([]controllerMetadata, 0),
-			IDs:           make(map[string]ComponentID),
-			ColumnIndexes: make(map[string]int),
-			ExprEnv:       make(map[string]any),
+			Controllers:  make([]controllerMetadata, 0),
+			IDs:          make(map[string]ComponentID),
+			ArenaIndexes: make(map[string]int),
+			ExprEnv:      make(map[string]any),
 		}
 	})
 	return globalTypeMetadata
 }
 
-func RegisterComponent[T any, PT GenericAttachable[T]](column *Column[T, PT]) ComponentID {
+func RegisterComponent[T any, PT GenericAttachable[T]](arena *Arena[T, PT]) ComponentID {
 	ecsTypes := Types()
 	ecsTypes.lock.Lock()
 	defer ecsTypes.lock.Unlock()
-	columnIndex := (int)(atomic.AddUint32(&ecsTypes.nextFreeComponent, 1))
-	for len(ecsTypes.ColumnPlaceholders) < columnIndex+1 {
-		ecsTypes.ColumnPlaceholders = append(ecsTypes.ColumnPlaceholders, nil)
+	arenaIndex := (int)(atomic.AddUint32(&ecsTypes.nextFreeComponent, 1))
+	for len(ecsTypes.ArenaPlaceholders) < arenaIndex+1 {
+		ecsTypes.ArenaPlaceholders = append(ecsTypes.ArenaPlaceholders, nil)
 	}
 	// Remove the package prefix (e.g. "core.Body" -> "Body")
 	// see core.Expression
-	column.typeOfT = reflect.TypeFor[T]()
-	tSplit := strings.Split(column.Type().String(), ".")
+	arena.typeOfT = reflect.TypeFor[T]()
+	tSplit := strings.Split(arena.Type().String(), ".")
 	noPackage := tSplit[len(tSplit)-1]
-	column.componentID = ComponentID(columnIndex)
-	ecsTypes.ColumnPlaceholders[columnIndex] = column
-	ecsTypes.ColumnIndexes[reflect.PointerTo(column.Type()).String()] = columnIndex
-	ecsTypes.ColumnIndexes[column.String()] = columnIndex
-	ecsTypes.IDs[reflect.PointerTo(column.Type()).String()] = column.componentID
-	ecsTypes.IDs[column.String()] = column.componentID
-	ecsTypes.ExprEnv[noPackage] = column.Getter
-	return column.componentID
+	arena.componentID = ComponentID(arenaIndex)
+	ecsTypes.ArenaPlaceholders[arenaIndex] = arena
+	ecsTypes.ArenaIndexes[reflect.PointerTo(arena.Type()).String()] = arenaIndex
+	ecsTypes.ArenaIndexes[arena.String()] = arenaIndex
+	ecsTypes.IDs[reflect.PointerTo(arena.Type()).String()] = arena.componentID
+	ecsTypes.IDs[arena.String()] = arena.componentID
+	ecsTypes.ExprEnv[noPackage] = arena.Getter
+	return arena.componentID
 }
 
-func (ecsTypes *typeMetadata) Type(name string) AttachableColumn {
-	if index, ok := ecsTypes.ColumnIndexes[name]; ok {
-		return ecsTypes.ColumnPlaceholders[index]
+func (ecsTypes *typeMetadata) Type(name string) AttachableArena {
+	if index, ok := ecsTypes.ArenaIndexes[name]; ok {
+		return ecsTypes.ArenaPlaceholders[index]
 	}
 	return nil
 }
@@ -82,7 +82,7 @@ func SerializeComponentIDs(ids containers.Set[ComponentID]) string {
 		if len(s) > 0 {
 			s += ","
 		}
-		s += Types().ColumnPlaceholders[id].String()
+		s += Types().ArenaPlaceholders[id].String()
 	}
 	return s
 }

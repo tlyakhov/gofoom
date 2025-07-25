@@ -32,14 +32,14 @@ type Item struct {
 var ItemCID ecs.ComponentID
 
 func init() {
-	ItemCID = ecs.RegisterComponent(&ecs.Column[Item, *Item]{Getter: GetItem})
+	ItemCID = ecs.RegisterComponent(&ecs.Arena[Item, *Item]{Getter: GetItem})
 }
 
 func (x *Item) ComponentID() ecs.ComponentID {
 	return ItemCID
 }
-func GetItem(u *ecs.Universe, e ecs.Entity) *Item {
-	if asserted, ok := u.Component(e, ItemCID).(*Item); ok {
+func GetItem(e ecs.Entity) *Item {
+	if asserted, ok := ecs.Component(e, ItemCID).(*Item); ok {
 		return asserted
 	}
 	return nil
@@ -84,7 +84,7 @@ func (item *Item) Serialize() map[string]any {
 		result["Class"] = item.Class
 	}
 	if item.Image != 0 {
-		result["Image"] = item.Image.Serialize(item.Universe)
+		result["Image"] = item.Image.Serialize()
 	}
 	if item.Flags != ItemBounce|ItemAutoProximity|ItemAutoPlayerTargetable {
 		result["Flags"] = concepts.SerializeFlags(item.Flags, ItemFlagsValues())

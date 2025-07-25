@@ -27,14 +27,14 @@ type Alive struct {
 var AliveCID ecs.ComponentID
 
 func init() {
-	AliveCID = ecs.RegisterComponent(&ecs.Column[Alive, *Alive]{Getter: GetAlive})
+	AliveCID = ecs.RegisterComponent(&ecs.Arena[Alive, *Alive]{Getter: GetAlive})
 }
 
 func (*Alive) ComponentID() ecs.ComponentID {
 	return AliveCID
 }
-func GetAlive(u *ecs.Universe, e ecs.Entity) *Alive {
-	if asserted, ok := u.Component(e, AliveCID).(*Alive); ok {
+func GetAlive(e ecs.Entity) *Alive {
+	if asserted, ok := ecs.Component(e, AliveCID).(*Alive); ok {
 		return asserted
 	}
 	return nil
@@ -69,7 +69,7 @@ func (a *Alive) Hurt(source string, amount, cooldown float64) bool {
 	}
 	d := Damage{Amount: amount}
 	if !d.Cooldown.Attached {
-		d.Cooldown.Attach(a.Universe.Simulation)
+		d.Cooldown.Attach(ecs.Simulation)
 	}
 	d.Cooldown.SetAll(cooldown)
 	a.Damages[source] = &d

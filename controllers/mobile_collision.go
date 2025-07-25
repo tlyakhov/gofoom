@@ -109,7 +109,7 @@ func (mc *MobileController) bodyTeleport() bool {
 				math.Atan2(segment.AdjacentSegment.Normal[1], segment.AdjacentSegment.Normal[0])*concepts.Rad2deg + 180
 			mc.Body.Angle.Now = concepts.NormalizeAngle(mc.Body.Angle.Now)
 			mc.Body.Angle.Prev = mc.Body.Angle.Now
-			mc.Enter(core.GetSector(mc.Universe, segment.AdjacentSector))
+			mc.Enter(core.GetSector(segment.AdjacentSector))
 			return true
 		}
 	}
@@ -128,7 +128,7 @@ func (mc *MobileController) bodyExitsSector() {
 		if segment.AdjacentSector == 0 {
 			continue
 		}
-		adj := core.GetSector(mc.Sector.Universe, segment.AdjacentSector)
+		adj := core.GetSector(segment.AdjacentSector)
 		floorZ, ceilZ := adj.ZAt(dynamic.DynamicNow, mc.pos2d)
 		if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
 			mc.pos[2]+mc.halfHeight < ceilZ &&
@@ -146,7 +146,7 @@ func (mc *MobileController) bodyExitsSector() {
 
 	if mc.Sector == nil {
 		// Case 6! This is the worst.
-		col := ecs.ColumnFor[core.Sector](mc.Body.Universe, core.SectorCID)
+		col := ecs.ArenaFor[core.Sector](core.SectorCID)
 		for i := range col.Cap() {
 			sector := col.Value(i)
 			if sector == nil {
@@ -175,7 +175,7 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 		bResponse = bMobile.CrBody
 		otherElasticity = bMobile.Elasticity
 		otherVel = &bMobile.Vel.Now
-		if character.GetPlayer(bMobile.Universe, bMobile.Entity) != nil {
+		if character.GetPlayer(bMobile.Entity) != nil {
 			aResponse = mc.CrPlayer
 		}
 		if mc.Player != nil {
@@ -230,7 +230,7 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 	}
 	if aResponse&core.CollideRemove != 0 {
 		mc.Sector = nil
-		mc.Body.Universe.Delete(mc.Body.Entity)
+		ecs.Delete(mc.Body.Entity)
 	}
 
 	if bResponse&core.CollideDeactivate != 0 {
@@ -242,7 +242,7 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 		bMobile.Vel.Now[2] = 0
 	}
 	if bResponse&core.CollideRemove != 0 {
-		bBody.Universe.Delete(bBody.Entity)
+		ecs.Delete(bBody.Entity)
 	}
 
 	if aResponse&core.CollideBounce == 0 && bResponse&core.CollideBounce == 0 {
@@ -300,12 +300,12 @@ func (mc *MobileController) bodyBodyCollide() {
 		if !body.IsActive() || body == mc.Body {
 			return true
 		}
-		mobile := core.GetMobile(mc.Universe, body.Entity)
+		mobile := core.GetMobile(body.Entity)
 		if mobile == nil || !mobile.IsActive() {
 			return true
 		}
 
-		if p := character.GetPlayer(body.Universe, body.Entity); p != nil && p.Spawn {
+		if p := character.GetPlayer(body.Entity); p != nil && p.Spawn {
 			// Ignore spawn points
 			return true
 		}
@@ -330,7 +330,7 @@ func (mc *MobileController) CollideZ() {
 	if mc.Sector.Bottom.Target != 0 && bodyTop < floorZ {
 		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center)
 		mc.Exit()
-		mc.Enter(core.GetSector(mc.Universe, mc.Sector.Bottom.Target))
+		mc.Enter(core.GetSector(mc.Sector.Bottom.Target))
 		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
 		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
 		ceilZ = mc.Sector.Top.ZAt(dynamic.DynamicNow, mc.Body.Pos.Now.To2D())
@@ -353,7 +353,7 @@ func (mc *MobileController) CollideZ() {
 	if mc.Sector.Top.Target != 0 && bodyTop > ceilZ {
 		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center)
 		mc.Exit()
-		mc.Enter(core.GetSector(mc.Universe, mc.Sector.Top.Target))
+		mc.Enter(core.GetSector(mc.Sector.Top.Target))
 		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
 		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
 		floorZ = mc.Sector.Bottom.ZAt(dynamic.DynamicNow, mc.Body.Pos.Now.To2D())
@@ -435,7 +435,7 @@ func (mc *MobileController) Collide() {
 		}
 		if mc.CrWall&core.CollideRemove != 0 {
 			mc.Sector = nil
-			mc.Body.Universe.Delete(mc.Body.Entity)
+			ecs.Delete(mc.Body.Entity)
 		}
 	}
 }

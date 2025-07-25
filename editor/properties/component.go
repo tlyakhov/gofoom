@@ -39,7 +39,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		}
 		parent = v.Parent().(ecs.Attachable)
 		parentCID = parent.ComponentID()
-		parentType = ecs.Types().ColumnPlaceholders[parentCID].Type().Name()
+		parentType = ecs.Types().ArenaPlaceholders[parentCID].Type().Name()
 	}
 
 	label := widget.NewLabel("Entities: " + concepts.TruncateString(allEntities.String(), 20))

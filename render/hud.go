@@ -25,8 +25,8 @@ type playerMessageParams struct {
 }
 
 func (r *Renderer) RenderWeapon(slot *inventory.Slot) {
-	wc := inventory.GetWeaponClass(slot.Universe, slot.Entity)
-	w := inventory.GetWeapon(slot.Universe, slot.Entity)
+	wc := inventory.GetWeaponClass(slot.Entity)
+	w := inventory.GetWeapon(slot.Entity)
 	if wc != nil && w != nil {
 		if w.State == inventory.WeaponFiring {
 			r.BitBlt(wc.FlashMaterial, r.ScreenWidth/2-64, r.ScreenHeight-160, 128, 128, concepts.BlendScreen)
@@ -51,7 +51,7 @@ func applyPlayerMessage(pt *behaviors.PlayerTargetable, params *playerMessagePar
 func (r *Renderer) renderSelectedTarget() {
 	ts := r.textStyle
 
-	pt := behaviors.GetPlayerTargetable(r.Universe, r.Player.SelectedTarget)
+	pt := behaviors.GetPlayerTargetable(r.Player.SelectedTarget)
 	if pt == nil || len(pt.Message) == 0 {
 		return
 	}
@@ -93,7 +93,7 @@ func (r *Renderer) RenderHud() {
 		if e == 0 {
 			continue
 		}
-		slot := inventory.GetSlot(r.Universe, e)
+		slot := inventory.GetSlot(e)
 		if slot == nil {
 			continue
 		}
@@ -109,8 +109,8 @@ func (r *Renderer) RenderHud() {
 func (r *Renderer) DebugInfo() {
 	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("DebugInfo"))
 
-	playerAlive := behaviors.GetAlive(r.Universe, r.Player.Entity)
-	playerMobile := core.GetMobile(r.Universe, r.Player.Entity)
+	playerAlive := behaviors.GetAlive(r.Player.Entity)
+	playerMobile := core.GetMobile(r.Player.Entity)
 
 	if playerAlive == nil || playerMobile == nil {
 		return
@@ -136,7 +136,7 @@ func (r *Renderer) DebugInfo() {
 				continue
 			}
 			text := fmt.Sprintf("%v", b.String())
-			if alive := behaviors.GetAlive(r.Universe, b.Entity); alive != nil {
+			if alive := behaviors.GetAlive(b.Entity); alive != nil {
 				text = fmt.Sprintf("%v", alive.Health)
 			}
 			r.Print(ts, int(scr[0]), int(scr[1])-16, text)
@@ -150,7 +150,7 @@ func (r *Renderer) DebugInfo() {
 	for _, block := range r.Blocks {
 		bodiesPerBlock += len(block.Bodies)
 	}
-	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v, BodiesPerBlock: %.1f", r.Universe.Simulation.FPS, r.Universe.Entities.Count(), float64(bodiesPerBlock)/float64(len(r.Blocks))))
+	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v, BodiesPerBlock: %.1f", ecs.Simulation.FPS, ecs.Entities.Count(), float64(bodiesPerBlock)/float64(len(r.Blocks))))
 	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
 	switch 2 {
 	case 0:
@@ -168,9 +168,9 @@ func (r *Renderer) DebugInfo() {
 	}
 	if r.PlayerBody.SectorEntity != 0 {
 		entity := r.PlayerBody.SectorEntity
-		sector := core.GetSector(r.Universe, entity)
+		sector := core.GetSector(entity)
 		s := sector.Lightmap.Size()
-		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v, Bodies: %v", entity.Format(r.Universe), s, len(sector.Bodies)))
+		r.Print(ts, 4, 34, fmt.Sprintf("Sector: %v, LM:%v, Bodies: %v", entity.Format(), s, len(sector.Bodies)))
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(2), playerMobile.Vel.Render.StringHuman(2), r.PlayerBody.Pos.Render.StringHuman(2)))
 	}
 

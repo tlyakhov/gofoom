@@ -20,15 +20,15 @@ type Quadtree struct {
 var QuadtreeCID ecs.ComponentID
 
 func init() {
-	QuadtreeCID = ecs.RegisterComponent(&ecs.Column[Quadtree, *Quadtree]{Getter: GetQuadtree})
+	QuadtreeCID = ecs.RegisterComponent(&ecs.Arena[Quadtree, *Quadtree]{Getter: GetQuadtree})
 }
 
 func (x *Quadtree) ComponentID() ecs.ComponentID {
 	return QuadtreeCID
 }
-func GetQuadtree(u *ecs.Universe, e ecs.Entity) *Quadtree {
+func GetQuadtree(e ecs.Entity) *Quadtree {
 	panic("Tried to behaviors.GetQuadtree. Use Universe.Singleton(behaviors.QuadtreeCID) instead.")
-	/*if asserted, ok := u.Component(e, QuadtreeCID).(*Quadtree); ok {
+	/*if asserted, ok := ecs.Component(e, QuadtreeCID).(*Quadtree); ok {
 		return asserted
 	}
 	return nil*/
@@ -75,7 +75,7 @@ func (q *Quadtree) Build() {
 	q.Root.Max[1] = offset + constants.QuadtreeInitDim
 	q.MaxZ = 0
 
-	colBody := ecs.ColumnFor[Body](q.Universe, BodyCID)
+	colBody := ecs.ArenaFor[Body](BodyCID)
 	for i := range colBody.Cap() {
 		body := colBody.Value(i)
 		if body == nil || !body.IsActive() {

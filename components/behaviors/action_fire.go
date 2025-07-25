@@ -14,14 +14,14 @@ type ActionFire struct {
 var ActionFireCID ecs.ComponentID
 
 func init() {
-	ActionFireCID = ecs.RegisterComponent(&ecs.Column[ActionFire, *ActionFire]{Getter: GetActionFire})
+	ActionFireCID = ecs.RegisterComponent(&ecs.Arena[ActionFire, *ActionFire]{Getter: GetActionFire})
 }
 
 func (*ActionFire) ComponentID() ecs.ComponentID {
 	return ActionFireCID
 }
-func GetActionFire(u *ecs.Universe, e ecs.Entity) *ActionFire {
-	if asserted, ok := u.Component(e, ActionFireCID).(*ActionFire); ok {
+func GetActionFire(e ecs.Entity) *ActionFire {
+	if asserted, ok := ecs.Component(e, ActionFireCID).(*ActionFire); ok {
 		return asserted
 	}
 	return nil

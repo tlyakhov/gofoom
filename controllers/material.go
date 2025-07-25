@@ -8,12 +8,12 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func DefaultMaterial(u *ecs.Universe) ecs.Entity {
-	entity := u.GetEntityByName("Default Material")
+func DefaultMaterial() ecs.Entity {
+	entity := ecs.GetEntityByName("Default Material")
 	if entity != 0 {
 		return entity
 	}
 
 	// Otherwise try a random one?
-	return u.First(materials.LitCID).Base().Entity
+	return ecs.First(materials.LitCID).Base().Entity
 }

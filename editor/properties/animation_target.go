@@ -6,6 +6,7 @@ package properties
 import (
 	"log"
 	"reflect"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/widget"
@@ -21,7 +22,7 @@ func (g *Grid) fieldAnimationTarget(field *state.PropertyGridField) {
 
 	// **concepts.SimVariable[float64] -> concepts.SimVariable[float64]
 	searchType := field.Type.Elem().Elem()
-	for _, component := range g.State().Universe.AllComponents(field.Values[0].Entity) {
+	for _, component := range ecs.AllComponents(field.Values[0].Entity) {
 		if component == nil {
 			continue
 		}

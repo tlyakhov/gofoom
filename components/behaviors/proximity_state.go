@@ -34,14 +34,14 @@ type ProximityState struct {
 var ProximityStateCID ecs.ComponentID
 
 func init() {
-	ProximityStateCID = ecs.RegisterComponent(&ecs.Column[ProximityState, *ProximityState]{Getter: GetProximityState})
+	ProximityStateCID = ecs.RegisterComponent(&ecs.Arena[ProximityState, *ProximityState]{Getter: GetProximityState})
 }
 
 func (x *ProximityState) ComponentID() ecs.ComponentID {
 	return ProximityStateCID
 }
-func GetProximityState(u *ecs.Universe, e ecs.Entity) *ProximityState {
-	if asserted, ok := u.Component(e, ProximityStateCID).(*ProximityState); ok {
+func GetProximityState(e ecs.Entity) *ProximityState {
+	if asserted, ok := ecs.Component(e, ProximityStateCID).(*ProximityState); ok {
 		return asserted
 	}
 	return nil
@@ -78,8 +78,8 @@ func (p *ProximityState) Construct(data map[string]any) {
 
 func (p *ProximityState) Serialize() map[string]any {
 	result := p.Attached.Serialize()
-	result["Source"] = p.Source.Serialize(p.Universe)
-	result["Target"] = p.Target.Serialize(p.Universe)
+	result["Source"] = p.Source.Serialize()
+	result["Target"] = p.Target.Serialize()
 	result["LastFired"] = strconv.FormatInt(p.LastFired, 10)
 	result["Status"] = p.Status.String()
 	result["Flags"] = p.Flags.String()

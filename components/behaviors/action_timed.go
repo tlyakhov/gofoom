@@ -24,15 +24,15 @@ func (timed *ActionTimed) String() string {
 }
 
 func (timed *ActionTimed) OnDelete() {
-	if timed.Universe != nil {
-		timed.Delay.Detach(timed.Universe.Simulation)
+	if timed.IsAttached() {
+		timed.Delay.Detach(ecs.Simulation)
 	}
 	timed.Attached.OnDelete()
 }
 
-func (timed *ActionTimed) OnAttach(u *ecs.Universe) {
-	timed.Attached.OnAttach(u)
-	timed.Delay.Attach(u.Simulation)
+func (timed *ActionTimed) OnAttach() {
+	timed.Attached.OnAttach()
+	timed.Delay.Attach(ecs.Simulation)
 }
 
 func (timed *ActionTimed) Construct(data map[string]any) {

@@ -36,14 +36,14 @@ type WeaponMark struct {
 var WeaponClassCID ecs.ComponentID
 
 func init() {
-	WeaponClassCID = ecs.RegisterComponent(&ecs.Column[WeaponClass, *WeaponClass]{Getter: GetWeaponClass})
+	WeaponClassCID = ecs.RegisterComponent(&ecs.Arena[WeaponClass, *WeaponClass]{Getter: GetWeaponClass})
 }
 
 func (x *WeaponClass) ComponentID() ecs.ComponentID {
 	return WeaponClassCID
 }
-func GetWeaponClass(u *ecs.Universe, e ecs.Entity) *WeaponClass {
-	if asserted, ok := u.Component(e, WeaponClassCID).(*WeaponClass); ok {
+func GetWeaponClass(e ecs.Entity) *WeaponClass {
+	if asserted, ok := ecs.Component(e, WeaponClassCID).(*WeaponClass); ok {
 		return asserted
 	}
 	return nil
@@ -103,16 +103,16 @@ func (w *WeaponClass) Serialize() map[string]any {
 
 	p := make([]map[string]any, WeaponStateCount)
 	for i := range w.Params {
-		p[i] = w.Params[i].Serialize(w.Universe)
+		p[i] = w.Params[i].Serialize()
 	}
 	result["Params"] = p
 
 	if w.MarkMaterial != 0 {
-		result["MarkMaterial"] = w.MarkMaterial.Serialize(w.Universe)
+		result["MarkMaterial"] = w.MarkMaterial.Serialize()
 	}
 
 	if w.FlashMaterial != 0 {
-		result["FlashMaterial"] = w.FlashMaterial.Serialize(w.Universe)
+		result["FlashMaterial"] = w.FlashMaterial.Serialize()
 	}
 
 	if w.MarkSize != 5 {

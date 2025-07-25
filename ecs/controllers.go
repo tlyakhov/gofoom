@@ -11,7 +11,7 @@ import (
 // TODO: We originally had way more different types of controllers. Now there
 // are only 3 methods. Can we make this simpler?
 // TODO: Multiple controllers acting on the same ID should only iterate over the
-// column once.
+// arena once.
 
 func (types *typeMetadata) RegisterController(constructor func() Controller, priority int) {
 	types.lock.Lock()
@@ -61,7 +61,7 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 }
 
 // Act runs controllers for a specific component, based on the provided component ID and method.
-func (u *Universe) Act(component Attachable, id ComponentID, method ControllerMethod) {
+func Act(component Attachable, id ComponentID, method ControllerMethod) {
 	for _, meta := range Types().Controllers {
 		// Create a new instance of the controller.
 		controller := meta.Constructor()
@@ -70,8 +70,8 @@ func (u *Universe) Act(component Attachable, id ComponentID, method ControllerMe
 			continue
 		}
 		// Check if the controller should be active based on the editor's pause state.
-		if (u.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
-			(!u.EditorPaused && controller.Methods()&method == 0) {
+		if (Simulation.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
+			(!Simulation.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
 		// Check if the controller's component ID matches the provided ID.
@@ -84,18 +84,18 @@ func (u *Universe) Act(component Attachable, id ComponentID, method ControllerMe
 }
 
 // ActAllControllers runs all controllers for all components that have the specified method.
-func (u *Universe) ActAllControllers(method ControllerMethod) {
+func ActAllControllers(method ControllerMethod) {
 	for _, meta := range Types().Controllers {
 		// Create a new instance of the controller.
 		controller := meta.Constructor()
 		// Check if the controller should be active based on the editor's pause state and if it handles the specified method.
-		if (u.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
-			(!u.EditorPaused && controller.Methods()&method == 0) {
+		if (Simulation.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
+			(!Simulation.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
-		// Get the column for the controller's component type.
-		col := u.columns[controller.ComponentID()]
-		// Iterate through the components in the column and call the controller's method on each active component.
+		// Get the arena for the controller's component type.
+		col := arenas[controller.ComponentID()]
+		// Iterate through the components in the arena and call the controller's method on each active component.
 		for i := range col.Cap() {
 			if component := col.Attachable(i); component != nil {
 				act(controller, component, method)
@@ -105,8 +105,8 @@ func (u *Universe) ActAllControllers(method ControllerMethod) {
 }
 
 // ActAllControllersOneEntity runs all controllers for a specific entity that have the specified method.
-func (u *Universe) ActAllControllersOneEntity(entity Entity, method ControllerMethod) {
-	sid, local := u.localizeEntity(entity)
+func ActAllControllersOneEntity(entity Entity, method ControllerMethod) {
+	sid, local := localizeEntity(entity)
 	if local == 0 {
 		return
 	}
@@ -115,12 +115,12 @@ func (u *Universe) ActAllControllersOneEntity(entity Entity, method ControllerMe
 		// Create a new instance of the controller.
 		controller := meta.Constructor()
 		// Check if the controller should be active based on the editor's pause state and if it handles the specified method.
-		if (u.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
-			(!u.EditorPaused && controller.Methods()&method == 0) {
+		if (Simulation.EditorPaused && controller.EditorPausedMethods()&method == 0) ||
+			(!Simulation.EditorPaused && controller.Methods()&method == 0) {
 			continue
 		}
 		// Iterate through the components attached to the entity.
-		for _, component := range u.rows[sid][local] {
+		for _, component := range rows[sid][local] {
 			if component == nil ||
 				component.ComponentID() != controller.ComponentID() {
 				continue

@@ -27,15 +27,15 @@ type SourceFile struct {
 var SourceFileCID ComponentID
 
 func init() {
-	SourceFileCID = RegisterComponent(&Column[SourceFile, *SourceFile]{Getter: GetSourceFile})
+	SourceFileCID = RegisterComponent(&Arena[SourceFile, *SourceFile]{Getter: GetSourceFile})
 }
 
 func (*SourceFile) ComponentID() ComponentID {
 	return SourceFileCID
 }
 
-func GetSourceFile(u *Universe, e Entity) *SourceFile {
-	if asserted, ok := u.Component(e, SourceFileCID).(*SourceFile); ok {
+func GetSourceFile(e Entity) *SourceFile {
+	if asserted, ok := Component(e, SourceFileCID).(*SourceFile); ok {
 		return asserted
 	}
 	return nil
@@ -147,11 +147,11 @@ func (file *SourceFile) mapFile() (string, error) {
 	// already mapped. If it's mapped, we have to pick a new one.
 	file.OriginalID = file.ID
 	file.Loaded = false
-	if _, ok := file.Universe.SourceFileIDs[file.ID]; ok {
-		file.ID = file.Universe.NextFreeEntitySourceID()
+	if _, ok := SourceFileIDs[file.ID]; ok {
+		file.ID = NextFreeEntitySourceID()
 	}
-	file.Universe.SourceFileNames[file.Source] = file
-	file.Universe.SourceFileIDs[file.ID] = file
+	SourceFileNames[file.Source] = file
+	SourceFileIDs[file.ID] = file
 
 	contents, err := file.read()
 	if err != nil {
@@ -179,15 +179,15 @@ func (file *SourceFile) mapFile() (string, error) {
 		if data, ok := yamlSourceFile.(map[string]any); ok {
 			// Let's deserialize this reference and check if this file already
 			// exists in the Universe. If it does, we don't need to map it again.
-			a := file.Universe.LoadComponentWithoutAttaching(SourceFileCID, data)
+			a := LoadComponentWithoutAttaching(SourceFileCID, data)
 			nfile := a.(*SourceFile)
 			if len(nfile.Source) == 0 {
 				// Since the source is blank, maybe the user intends to fill
 				// this in later. Let's attach it and not do any mapping.
-				file.Universe.attach(entity, &a, SourceFileCID)
+				attach(entity, &a, SourceFileCID)
 				return
 			}
-			if _, ok := file.Universe.SourceFileNames[nfile.Source]; ok {
+			if _, ok := SourceFileNames[nfile.Source]; ok {
 				// This file is already mapped. We can skip it.
 
 				// TODO: We need to refcount the dependency, to ensure we don't
@@ -197,7 +197,7 @@ func (file *SourceFile) mapFile() (string, error) {
 
 			// If we're here, this file doesn't exist in the Universe yet. Let's map
 			// it and attach it.
-			nfile.Universe.attach(entity, &a, SourceFileCID)
+			attach(entity, &a, SourceFileCID)
 			// the attach method will change where *a is.
 			nfile = a.(*SourceFile)
 			nfile.mapFile()
@@ -228,7 +228,7 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 				log.Printf("SourceFile.loadAllNestedFiles: %v,%v,%v is external and has no filename", e, name, filename)
 				return false
 			}
-			nestedFile := file.Universe.SourceFileNames[filename]
+			nestedFile := SourceFileNames[filename]
 			e2 := Entity(nestedFile.ID)<<EntityBits + e&MaxEntities
 			log.Printf("%v (name=%v,file=%v) -> %v. Serialized to %v", e.String(), name, file, e2, e2.SerializeRaw(name, filename))
 			e = e2
@@ -238,7 +238,7 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 
 	file.Loaded = true
 	err := file.rangeFile(contents, func(entity Entity, data map[string]any) {
-		file.Universe.Entities.Set(uint32(entity))
+		Entities.Set(uint32(entity))
 
 		for name, cid := range Types().IDs {
 			yamlData := data[name]
@@ -252,7 +252,7 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 				if len(nestedFilename) == 0 {
 					continue
 				}
-				nfile := file.Universe.SourceFileNames[nestedFilename]
+				nfile := SourceFileNames[nestedFilename]
 				// Let's not do it twice!
 				if nfile.Loaded {
 					continue
@@ -269,15 +269,15 @@ func (file *SourceFile) loadAllNestedFiles(contents string) error {
 			if yamlLink, ok := yamlData.(string); ok {
 				linkedEntity, _ := ParseEntity(yamlLink)
 				if linkedEntity != 0 {
-					c := file.Universe.Component(linkedEntity, cid)
+					c := Component(linkedEntity, cid)
 					if c != nil {
-						file.Universe.attach(entity, &c, cid)
+						attach(entity, &c, cid)
 					}
 				}
 			} else {
 				yamlComponent := yamlData.(map[string]any)
 				var attached Attachable
-				file.Universe.attach(entity, &attached, cid)
+				attach(entity, &attached, cid)
 				if attached.Base().Attachments == 1 {
 					attached.Construct(yamlComponent)
 				}
@@ -294,8 +294,8 @@ func (file *SourceFile) read() (string, error) {
 }
 
 func (file *SourceFile) Load() error {
-	file.Universe.Lock.Lock()
-	defer file.Universe.Lock.Unlock()
+	Lock.Lock()
+	defer Lock.Unlock()
 
 	if contents, err := file.mapFile(); err == nil {
 		fmt.Println(contents)
@@ -306,22 +306,22 @@ func (file *SourceFile) Load() error {
 	}
 
 	// After everything's loaded, trigger the controllers
-	file.Universe.ActAllControllers(ControllerRecalculate)
+	ActAllControllers(ControllerRecalculate)
 	return nil
 }
 
 func (file *SourceFile) Unload() {
-	if file.Universe == nil || file.ID == 0 || !file.Loaded {
+	if file.ID == 0 || !file.Loaded {
 		return
 	}
 
-	file.Universe.Lock.Lock()
-	defer file.Universe.Lock.Unlock()
+	Lock.Lock()
+	defer Lock.Unlock()
 
 	// We need to detach/delete all the entities from this file and unmap this ID.
 	// References will end up broken unless cleaned up beforehand.
 	toDelete := make([]Entity, 0)
-	file.Universe.Entities.Range(func(entity uint32) {
+	Entities.Range(func(entity uint32) {
 		e := Entity(entity)
 		if !e.IsExternal() || e.SourceID() != file.ID {
 			return
@@ -329,11 +329,11 @@ func (file *SourceFile) Unload() {
 		toDelete = append(toDelete, e)
 	})
 	for _, e := range toDelete {
-		file.Universe.Delete(e)
+		Delete(e)
 	}
 
-	delete(file.Universe.SourceFileNames, file.Source)
-	delete(file.Universe.SourceFileIDs, file.ID)
+	delete(SourceFileNames, file.Source)
+	delete(SourceFileIDs, file.ID)
 }
 
 func (file *SourceFile) String() string {

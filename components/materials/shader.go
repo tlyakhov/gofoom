@@ -16,14 +16,14 @@ type Shader struct {
 var ShaderCID ecs.ComponentID
 
 func init() {
-	ShaderCID = ecs.RegisterComponent(&ecs.Column[Shader, *Shader]{Getter: GetShader})
+	ShaderCID = ecs.RegisterComponent(&ecs.Arena[Shader, *Shader]{Getter: GetShader})
 }
 
 func (x *Shader) ComponentID() ecs.ComponentID {
 	return ShaderCID
 }
-func GetShader(u *ecs.Universe, e ecs.Entity) *Shader {
-	if asserted, ok := u.Component(e, ShaderCID).(*Shader); ok {
+func GetShader(e ecs.Entity) *Shader {
+	if asserted, ok := ecs.Component(e, ShaderCID).(*Shader); ok {
 		return asserted
 	}
 	return nil
@@ -41,7 +41,7 @@ func (s *Shader) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Stages"]; ok {
-		s.Stages = ecs.ConstructSlice[*ShaderStage](s.Universe, v, nil)
+		s.Stages = ecs.ConstructSlice[*ShaderStage](v, nil)
 	}
 }
 

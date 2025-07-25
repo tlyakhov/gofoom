@@ -22,7 +22,7 @@ type AddInternalSegment struct {
 func (a *AddInternalSegment) Activate() {
 	a.AddEntity.Activate()
 	a.InternalSegment = a.Components.Get(core.InternalSegmentCID).(*core.InternalSegment)
-	a.Surface.Material = controllers.DefaultMaterial(a.State().Universe)
+	a.Surface.Material = controllers.DefaultMaterial()
 	a.SetMapCursor(desktop.CrosshairCursor)
 }
 
