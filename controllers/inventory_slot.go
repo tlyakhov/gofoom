@@ -34,14 +34,14 @@ func (isc *InventorySlotController) EditorPausedMethods() ecs.ControllerMethod {
 func (isc *InventorySlotController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	isc.Entity = e
 	isc.Slot = target.(*inventory.Slot)
-	isc.WeaponClass = inventory.GetWeaponClass(isc.Universe, e)
-	isc.Weapon = inventory.GetWeapon(isc.Universe, e)
+	isc.WeaponClass = inventory.GetWeaponClass(e)
+	isc.Weapon = inventory.GetWeapon(e)
 	return isc.Slot != nil && isc.Slot.IsActive()
 }
 
 func (isc *InventorySlotController) Recalculate() {
 	if isc.WeaponClass != nil && isc.Weapon == nil {
-		isc.Weapon = isc.Universe.NewAttachedComponent(isc.Entity, inventory.WeaponCID).(*inventory.Weapon)
+		isc.Weapon = ecs.NewAttachedComponent(isc.Entity, inventory.WeaponCID).(*inventory.Weapon)
 		isc.Weapon.Flags |= ecs.ComponentInternal
 	}
 }

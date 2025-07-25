@@ -17,14 +17,14 @@ type ActorState struct {
 var ActorStateCID ecs.ComponentID
 
 func init() {
-	ActorStateCID = ecs.RegisterComponent(&ecs.Column[ActorState, *ActorState]{Getter: GetActorState})
+	ActorStateCID = ecs.RegisterComponent(&ecs.Arena[ActorState, *ActorState]{Getter: GetActorState})
 }
 
 func (*ActorState) ComponentID() ecs.ComponentID {
 	return ActorStateCID
 }
-func GetActorState(u *ecs.Universe, e ecs.Entity) *ActorState {
-	if asserted, ok := u.Component(e, ActorStateCID).(*ActorState); ok {
+func GetActorState(e ecs.Entity) *ActorState {
+	if asserted, ok := ecs.Component(e, ActorStateCID).(*ActorState); ok {
 		return asserted
 	}
 	return nil
@@ -51,7 +51,7 @@ func (a *ActorState) Construct(data map[string]any) {
 func (a *ActorState) Serialize() map[string]any {
 	result := a.Attached.Serialize()
 
-	result["Action"] = a.Action.Serialize(a.Universe)
+	result["Action"] = a.Action.Serialize()
 
 	return result
 }

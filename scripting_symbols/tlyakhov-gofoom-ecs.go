@@ -15,54 +15,83 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/ecs/ecs"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"ComponentActive":              reflect.ValueOf(ecs.ComponentActive),
-		"ComponentFlagsString":         reflect.ValueOf(ecs.ComponentFlagsString),
-		"ComponentFlagsStrings":        reflect.ValueOf(ecs.ComponentFlagsStrings),
-		"ComponentFlagsValues":         reflect.ValueOf(ecs.ComponentFlagsValues),
-		"ComponentHideInEditor":        reflect.ValueOf(ecs.ComponentHideInEditor),
-		"ComponentInternal":            reflect.ValueOf(ecs.ComponentInternal),
-		"ComponentLockedInEditor":      reflect.ValueOf(ecs.ComponentLockedInEditor),
-		"ComponentNoSave":              reflect.ValueOf(ecs.ComponentNoSave),
-		"ComponentTableGrowthRate":     reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
-		"ComponentTableHit":            reflect.ValueOf(&ecs.ComponentTableHit).Elem(),
-		"ComponentTableMiss":           reflect.ValueOf(&ecs.ComponentTableMiss).Elem(),
-		"ConstructArray":               reflect.ValueOf(ecs.ConstructArray),
-		"ControllerAlways":             reflect.ValueOf(ecs.ControllerAlways),
-		"ControllerRecalculate":        reflect.ValueOf(ecs.ControllerRecalculate),
-		"EntityBits":                   reflect.ValueOf(constant.MakeFromLiteral("24", token.INT, 0)),
-		"EntityDelimiter":              reflect.ValueOf(constant.MakeFromLiteral("\"∈⋮\"", token.STRING, 0)),
-		"EntityHumanRegexp":            reflect.ValueOf(&ecs.EntityHumanRegexp).Elem(),
-		"EntityHumanRegexpIdxEntity":   reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
-		"EntityHumanRegexpIdxMatch":    reflect.ValueOf(constant.MakeFromLiteral("0", token.INT, 0)),
-		"EntityHumanRegexpIdxSourceID": reflect.ValueOf(constant.MakeFromLiteral("2", token.INT, 0)),
-		"EntityRegexp":                 reflect.ValueOf(&ecs.EntityRegexp).Elem(),
-		"EntityRegexpIdxEntity":        reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
-		"EntityRegexpIdxFile":          reflect.ValueOf(constant.MakeFromLiteral("4", token.INT, 0)),
-		"EntityRegexpIdxMatch":         reflect.ValueOf(constant.MakeFromLiteral("0", token.INT, 0)),
-		"EntityRegexpIdxName":          reflect.ValueOf(constant.MakeFromLiteral("2", token.INT, 0)),
-		"EntityRegexpIdxSourceID":      reflect.ValueOf(constant.MakeFromLiteral("3", token.INT, 0)),
-		"EntitySourceIDBits":           reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
-		"EntityTableGrowthRate":        reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
-		"GetLinked":                    reflect.ValueOf(ecs.GetLinked),
-		"GetNamed":                     reflect.ValueOf(ecs.GetNamed),
-		"GetSourceFile":                reflect.ValueOf(ecs.GetSourceFile),
-		"LinkedCID":                    reflect.ValueOf(&ecs.LinkedCID).Elem(),
-		"MaxEntities":                  reflect.ValueOf(constant.MakeFromLiteral("16777215", token.INT, 0)),
-		"NamedCID":                     reflect.ValueOf(&ecs.NamedCID).Elem(),
-		"NewUniverse":                  reflect.ValueOf(ecs.NewUniverse),
-		"ParseComponentIDs":            reflect.ValueOf(ecs.ParseComponentIDs),
-		"ParseEntitiesFromMap":         reflect.ValueOf(ecs.ParseEntitiesFromMap),
-		"ParseEntity":                  reflect.ValueOf(ecs.ParseEntity),
-		"ParseEntityHumanOrCanonical":  reflect.ValueOf(ecs.ParseEntityHumanOrCanonical),
-		"ParseEntitySlice":             reflect.ValueOf(ecs.ParseEntitySlice),
-		"ParseEntityTable":             reflect.ValueOf(ecs.ParseEntityTable),
-		"SerializeComponentIDs":        reflect.ValueOf(ecs.SerializeComponentIDs),
-		"SourceFileCID":                reflect.ValueOf(&ecs.SourceFileCID).Elem(),
-		"Types":                        reflect.ValueOf(ecs.Types),
+		"Act":                           reflect.ValueOf(ecs.Act),
+		"ActAllControllers":             reflect.ValueOf(ecs.ActAllControllers),
+		"ActAllControllersOneEntity":    reflect.ValueOf(ecs.ActAllControllersOneEntity),
+		"AllComponents":                 reflect.ValueOf(ecs.AllComponents),
+		"ArenaByID":                     reflect.ValueOf(ecs.ArenaByID),
+		"Attach":                        reflect.ValueOf(ecs.Attach),
+		"Component":                     reflect.ValueOf(ecs.Component),
+		"ComponentActive":               reflect.ValueOf(ecs.ComponentActive),
+		"ComponentFlagsString":          reflect.ValueOf(ecs.ComponentFlagsString),
+		"ComponentFlagsStrings":         reflect.ValueOf(ecs.ComponentFlagsStrings),
+		"ComponentFlagsValues":          reflect.ValueOf(ecs.ComponentFlagsValues),
+		"ComponentHideInEditor":         reflect.ValueOf(ecs.ComponentHideInEditor),
+		"ComponentInternal":             reflect.ValueOf(ecs.ComponentInternal),
+		"ComponentLockedInEditor":       reflect.ValueOf(ecs.ComponentLockedInEditor),
+		"ComponentNoSave":               reflect.ValueOf(ecs.ComponentNoSave),
+		"ComponentTableGrowthRate":      reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
+		"ComponentTableHit":             reflect.ValueOf(&ecs.ComponentTableHit).Elem(),
+		"ComponentTableMiss":            reflect.ValueOf(&ecs.ComponentTableMiss).Elem(),
+		"ConstructArray":                reflect.ValueOf(ecs.ConstructArray),
+		"ControllerAlways":              reflect.ValueOf(ecs.ControllerAlways),
+		"ControllerRecalculate":         reflect.ValueOf(ecs.ControllerRecalculate),
+		"Delete":                        reflect.ValueOf(ecs.Delete),
+		"DeleteByType":                  reflect.ValueOf(ecs.DeleteByType),
+		"DetachComponent":               reflect.ValueOf(ecs.DetachComponent),
+		"Entities":                      reflect.ValueOf(&ecs.Entities).Elem(),
+		"EntityAllNoSave":               reflect.ValueOf(ecs.EntityAllNoSave),
+		"EntityBits":                    reflect.ValueOf(constant.MakeFromLiteral("24", token.INT, 0)),
+		"EntityDelimiter":               reflect.ValueOf(constant.MakeFromLiteral("\"∈⋮\"", token.STRING, 0)),
+		"EntityHumanRegexp":             reflect.ValueOf(&ecs.EntityHumanRegexp).Elem(),
+		"EntityHumanRegexpIdxEntity":    reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
+		"EntityHumanRegexpIdxMatch":     reflect.ValueOf(constant.MakeFromLiteral("0", token.INT, 0)),
+		"EntityHumanRegexpIdxSourceID":  reflect.ValueOf(constant.MakeFromLiteral("2", token.INT, 0)),
+		"EntityRegexp":                  reflect.ValueOf(&ecs.EntityRegexp).Elem(),
+		"EntityRegexpIdxEntity":         reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
+		"EntityRegexpIdxFile":           reflect.ValueOf(constant.MakeFromLiteral("4", token.INT, 0)),
+		"EntityRegexpIdxMatch":          reflect.ValueOf(constant.MakeFromLiteral("0", token.INT, 0)),
+		"EntityRegexpIdxName":           reflect.ValueOf(constant.MakeFromLiteral("2", token.INT, 0)),
+		"EntityRegexpIdxSourceID":       reflect.ValueOf(constant.MakeFromLiteral("3", token.INT, 0)),
+		"EntitySourceIDBits":            reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
+		"EntityTableGrowthRate":         reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
+		"First":                         reflect.ValueOf(ecs.First),
+		"FuncMap":                       reflect.ValueOf(&ecs.FuncMap).Elem(),
+		"GetEntityByName":               reflect.ValueOf(ecs.GetEntityByName),
+		"GetLinked":                     reflect.ValueOf(ecs.GetLinked),
+		"GetNamed":                      reflect.ValueOf(ecs.GetNamed),
+		"GetSourceFile":                 reflect.ValueOf(ecs.GetSourceFile),
+		"Initialize":                    reflect.ValueOf(ecs.Initialize),
+		"Link":                          reflect.ValueOf(ecs.Link),
+		"LinkedCID":                     reflect.ValueOf(&ecs.LinkedCID).Elem(),
+		"Load":                          reflect.ValueOf(ecs.Load),
+		"LoadComponentWithoutAttaching": reflect.ValueOf(ecs.LoadComponentWithoutAttaching),
+		"Lock":                          reflect.ValueOf(&ecs.Lock).Elem(),
+		"MaxEntities":                   reflect.ValueOf(constant.MakeFromLiteral("16777215", token.INT, 0)),
+		"NamedCID":                      reflect.ValueOf(&ecs.NamedCID).Elem(),
+		"NewAttachedComponent":          reflect.ValueOf(ecs.NewAttachedComponent),
+		"NewAttachedComponentTyped":     reflect.ValueOf(ecs.NewAttachedComponentTyped),
+		"NewEntity":                     reflect.ValueOf(ecs.NewEntity),
+		"NextFreeEntitySourceID":        reflect.ValueOf(ecs.NextFreeEntitySourceID),
+		"ParseComponentIDs":             reflect.ValueOf(ecs.ParseComponentIDs),
+		"ParseEntitiesFromMap":          reflect.ValueOf(ecs.ParseEntitiesFromMap),
+		"ParseEntity":                   reflect.ValueOf(ecs.ParseEntity),
+		"ParseEntityHumanOrCanonical":   reflect.ValueOf(ecs.ParseEntityHumanOrCanonical),
+		"ParseEntitySlice":              reflect.ValueOf(ecs.ParseEntitySlice),
+		"ParseEntityTable":              reflect.ValueOf(ecs.ParseEntityTable),
+		"Save":                          reflect.ValueOf(ecs.Save),
+		"SerializeComponentIDs":         reflect.ValueOf(ecs.SerializeComponentIDs),
+		"SerializeEntity":               reflect.ValueOf(ecs.SerializeEntity),
+		"Simulation":                    reflect.ValueOf(&ecs.Simulation).Elem(),
+		"Singleton":                     reflect.ValueOf(ecs.Singleton),
+		"SourceFileCID":                 reflect.ValueOf(&ecs.SourceFileCID).Elem(),
+		"SourceFileIDs":                 reflect.ValueOf(&ecs.SourceFileIDs).Elem(),
+		"SourceFileNames":               reflect.ValueOf(&ecs.SourceFileNames).Elem(),
+		"Types":                         reflect.ValueOf(ecs.Types),
 
 		// type definitions
 		"Attachable":       reflect.ValueOf((*ecs.Attachable)(nil)),
-		"AttachableColumn": reflect.ValueOf((*ecs.AttachableColumn)(nil)),
+		"AttachableArena":  reflect.ValueOf((*ecs.AttachableArena)(nil)),
 		"Attached":         reflect.ValueOf((*ecs.Attached)(nil)),
 		"BaseController":   reflect.ValueOf((*ecs.BaseController)(nil)),
 		"ComponentFlags":   reflect.ValueOf((*ecs.ComponentFlags)(nil)),
@@ -78,17 +107,15 @@ func init() {
 		"Named":            reflect.ValueOf((*ecs.Named)(nil)),
 		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
 		"SourceFile":       reflect.ValueOf((*ecs.SourceFile)(nil)),
-		"SubSerializable":  reflect.ValueOf((*ecs.SubSerializable)(nil)),
 		"Universal":        reflect.ValueOf((*ecs.Universal)(nil)),
-		"Universe":         reflect.ValueOf((*ecs.Universe)(nil)),
 
 		// interface wrapper definitions
-		"_Attachable":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
-		"_AttachableColumn": reflect.ValueOf((*_tlyakhov_gofoom_ecs_AttachableColumn)(nil)),
-		"_Controller":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
-		"_Serializable":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
-		"_SubSerializable":  reflect.ValueOf((*_tlyakhov_gofoom_ecs_SubSerializable)(nil)),
-		"_Universal":        reflect.ValueOf((*_tlyakhov_gofoom_ecs_Universal)(nil)),
+		"_Attachable":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
+		"_AttachableArena": reflect.ValueOf((*_tlyakhov_gofoom_ecs_AttachableArena)(nil)),
+		"_Controller":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
+		"_Serializable":    reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
+		"_SubSerializable": reflect.ValueOf((*_tlyakhov_gofoom_ecs_SubSerializable)(nil)),
+		"_Universal":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Universal)(nil)),
 	}
 }
 
@@ -98,10 +125,10 @@ type _tlyakhov_gofoom_ecs_Attachable struct {
 	WBase            func() *ecs.Attached
 	WComponentID     func() ecs.ComponentID
 	WConstruct       func(data map[string]any)
-	WGetUniverse     func() *ecs.Universe
 	WIsActive        func() bool
+	WIsAttached      func() bool
 	WMultiAttachable func() bool
-	WOnAttach        func(u *ecs.Universe)
+	WOnAttach        func()
 	WOnDelete        func()
 	WOnDetach        func(a0 ecs.Entity)
 	WSerialize       func() map[string]any
@@ -117,17 +144,17 @@ func (W _tlyakhov_gofoom_ecs_Attachable) ComponentID() ecs.ComponentID {
 func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) GetUniverse() *ecs.Universe {
-	return W.WGetUniverse()
-}
 func (W _tlyakhov_gofoom_ecs_Attachable) IsActive() bool {
 	return W.WIsActive()
+}
+func (W _tlyakhov_gofoom_ecs_Attachable) IsAttached() bool {
+	return W.WIsAttached()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) MultiAttachable() bool {
 	return W.WMultiAttachable()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) OnAttach(u *ecs.Universe) {
-	W.WOnAttach(u)
+func (W _tlyakhov_gofoom_ecs_Attachable) OnAttach() {
+	W.WOnAttach()
 }
 func (W _tlyakhov_gofoom_ecs_Attachable) OnDelete() {
 	W.WOnDelete()
@@ -145,14 +172,14 @@ func (W _tlyakhov_gofoom_ecs_Attachable) String() string {
 	return W.WString()
 }
 
-// _tlyakhov_gofoom_ecs_AttachableColumn is an interface wrapper for AttachableColumn type
-type _tlyakhov_gofoom_ecs_AttachableColumn struct {
+// _tlyakhov_gofoom_ecs_AttachableArena is an interface wrapper for AttachableArena type
+type _tlyakhov_gofoom_ecs_AttachableArena struct {
 	IValue      interface{}
 	WAdd        func(c *ecs.Attachable)
 	WAttachable func(index int) ecs.Attachable
 	WCap        func() int
 	WDetach     func(index int)
-	WFrom       func(source ecs.AttachableColumn, ecs *ecs.Universe)
+	WFrom       func(source ecs.AttachableArena)
 	WID         func() ecs.ComponentID
 	WLen        func() int
 	WNew        func() ecs.Attachable
@@ -161,40 +188,40 @@ type _tlyakhov_gofoom_ecs_AttachableColumn struct {
 	WType       func() reflect.Type
 }
 
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Add(c *ecs.Attachable) {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Add(c *ecs.Attachable) {
 	W.WAdd(c)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Attachable(index int) ecs.Attachable {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Attachable(index int) ecs.Attachable {
 	return W.WAttachable(index)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Cap() int {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Cap() int {
 	return W.WCap()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Detach(index int) {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Detach(index int) {
 	W.WDetach(index)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) From(source ecs.AttachableColumn, ecs *ecs.Universe) {
-	W.WFrom(source, ecs)
+func (W _tlyakhov_gofoom_ecs_AttachableArena) From(source ecs.AttachableArena) {
+	W.WFrom(source)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) ID() ecs.ComponentID {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) ID() ecs.ComponentID {
 	return W.WID()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Len() int {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Len() int {
 	return W.WLen()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) New() ecs.Attachable {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) New() ecs.Attachable {
 	return W.WNew()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Replace(c *ecs.Attachable, index int) {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Replace(c *ecs.Attachable, index int) {
 	W.WReplace(c, index)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) String() string {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) String() string {
 	if W.WString == nil {
 		return ""
 	}
 	return W.WString()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableColumn) Type() reflect.Type {
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Type() reflect.Type {
 	return W.WType()
 }
 
@@ -245,12 +272,12 @@ func (W _tlyakhov_gofoom_ecs_Serializable) Serialize() map[string]any {
 // _tlyakhov_gofoom_ecs_SubSerializable is an interface wrapper for SubSerializable type
 type _tlyakhov_gofoom_ecs_SubSerializable struct {
 	IValue     interface{}
-	WConstruct func(ecs *ecs.Universe, data map[string]any)
+	WConstruct func(data map[string]any)
 	WSerialize func() map[string]any
 }
 
-func (W _tlyakhov_gofoom_ecs_SubSerializable) Construct(ecs *ecs.Universe, data map[string]any) {
-	W.WConstruct(ecs, data)
+func (W _tlyakhov_gofoom_ecs_SubSerializable) Construct(data map[string]any) {
+	W.WConstruct(data)
 }
 func (W _tlyakhov_gofoom_ecs_SubSerializable) Serialize() map[string]any {
 	return W.WSerialize()
@@ -258,14 +285,10 @@ func (W _tlyakhov_gofoom_ecs_SubSerializable) Serialize() map[string]any {
 
 // _tlyakhov_gofoom_ecs_Universal is an interface wrapper for Universal type
 type _tlyakhov_gofoom_ecs_Universal struct {
-	IValue       interface{}
-	WGetUniverse func() *ecs.Universe
-	WOnAttach    func(u *ecs.Universe)
+	IValue    interface{}
+	WOnAttach func()
 }
 
-func (W _tlyakhov_gofoom_ecs_Universal) GetUniverse() *ecs.Universe {
-	return W.WGetUniverse()
-}
-func (W _tlyakhov_gofoom_ecs_Universal) OnAttach(u *ecs.Universe) {
-	W.WOnAttach(u)
+func (W _tlyakhov_gofoom_ecs_Universal) OnAttach() {
+	W.WOnAttach()
 }

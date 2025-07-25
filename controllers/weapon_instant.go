@@ -21,7 +21,7 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 	angle := wc.Body.Angle.Now + (rand.Float64()-0.5)*wc.Class.Spread
 	zSpread := (rand.Float64() - 0.5) * wc.Class.Spread
 
-	wc.Sampler.Config = &render.Config{Universe: wc.Body.Universe}
+	wc.Sampler.Config = &render.Config{}
 	wc.Sampler.Ray = &render.Ray{Angle: angle}
 
 	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance

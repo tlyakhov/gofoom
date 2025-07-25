@@ -18,14 +18,14 @@ type Sprite struct {
 var SpriteCID ecs.ComponentID
 
 func init() {
-	SpriteCID = ecs.RegisterComponent(&ecs.Column[Sprite, *Sprite]{Getter: GetSprite})
+	SpriteCID = ecs.RegisterComponent(&ecs.Arena[Sprite, *Sprite]{Getter: GetSprite})
 }
 
 func (x *Sprite) ComponentID() ecs.ComponentID {
 	return SpriteCID
 }
-func GetSprite(u *ecs.Universe, e ecs.Entity) *Sprite {
-	if asserted, ok := u.Component(e, SpriteCID).(*Sprite); ok {
+func GetSprite(e ecs.Entity) *Sprite {
+	if asserted, ok := ecs.Component(e, SpriteCID).(*Sprite); ok {
 		return asserted
 	}
 	return nil
@@ -35,14 +35,14 @@ func (s *Sprite) MultiAttachable() bool { return true }
 
 func (s *Sprite) OnDelete() {
 	defer s.Attached.OnDelete()
-	if s.Universe != nil {
-		s.Frame.Detach(s.Universe.Simulation)
+	if s.IsAttached() {
+		s.Frame.Detach(ecs.Simulation)
 	}
 }
 
-func (s *Sprite) OnAttach(u *ecs.Universe) {
-	s.Attached.OnAttach(u)
-	s.Frame.Attach(u.Simulation)
+func (s *Sprite) OnAttach() {
+	s.Attached.OnAttach()
+	s.Frame.Attach(ecs.Simulation)
 
 }
 
@@ -67,7 +67,7 @@ func (s *Sprite) Construct(data map[string]any) {
 func (s *Sprite) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	if s.Material != 0 {
-		result["Material"] = s.Material.Serialize(s.Universe)
+		result["Material"] = s.Material.Serialize()
 	}
 	result["Frame"] = s.Frame.Serialize()
 

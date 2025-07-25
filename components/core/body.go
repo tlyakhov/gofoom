@@ -26,14 +26,14 @@ type Body struct {
 var BodyCID ecs.ComponentID
 
 func init() {
-	BodyCID = ecs.RegisterComponent(&ecs.Column[Body, *Body]{Getter: GetBody})
+	BodyCID = ecs.RegisterComponent(&ecs.Arena[Body, *Body]{Getter: GetBody})
 }
 
 func (x *Body) ComponentID() ecs.ComponentID {
 	return BodyCID
 }
-func GetBody(u *ecs.Universe, e ecs.Entity) *Body {
-	if asserted, ok := u.Component(e, BodyCID).(*Body); ok {
+func GetBody(e ecs.Entity) *Body {
+	if asserted, ok := ecs.Component(e, BodyCID).(*Body); ok {
 		return asserted
 	}
 	return nil
@@ -45,7 +45,7 @@ func (b *Body) String() string {
 
 func (b *Body) OnDetach(e ecs.Entity) {
 	defer b.Attached.OnDetach(e)
-	if b.Universe == nil {
+	if !b.IsAttached() {
 		return
 	}
 	if sector := b.Sector(); sector != nil {
@@ -60,26 +60,26 @@ func (b *Body) OnDetach(e ecs.Entity) {
 
 func (b *Body) OnDelete() {
 	defer b.Attached.OnDelete()
-	if b.Universe != nil {
-		b.Pos.Detach(b.Universe.Simulation)
-		b.Size.Detach(b.Universe.Simulation)
-		b.Angle.Detach(b.Universe.Simulation)
+	if b.IsAttached() {
+		b.Pos.Detach(ecs.Simulation)
+		b.Size.Detach(ecs.Simulation)
+		b.Angle.Detach(ecs.Simulation)
 	}
 }
 
-func (b *Body) OnAttach(u *ecs.Universe) {
-	b.Attached.OnAttach(u)
-	b.Pos.Attach(u.Simulation)
-	b.Size.Attach(u.Simulation)
-	b.Angle.Attach(b.Universe.Simulation)
+func (b *Body) OnAttach() {
+	b.Attached.OnAttach()
+	b.Pos.Attach(ecs.Simulation)
+	b.Size.Attach(ecs.Simulation)
+	b.Angle.Attach(ecs.Simulation)
 
-	if tree := u.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
+	if tree := ecs.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
 		tree.Update(b)
 	}
 }
 
 func (b *Body) Sector() *Sector {
-	return GetSector(b.Universe, b.SectorEntity)
+	return GetSector(b.SectorEntity)
 }
 
 func (b *Body) Normal() *concepts.Vector2 {
@@ -105,7 +105,7 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	col := ecs.ColumnFor[Sector](b.Universe, SectorCID)
+	col := ecs.ArenaFor[Sector](SectorCID)
 	for i := range col.Cap() {
 		if sector := col.Value(i); sector != nil && sector.IsPointInside2D(p) {
 			return sector

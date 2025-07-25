@@ -122,13 +122,13 @@ func (table *EntityTable) Delete(entity Entity) bool {
 }
 
 // Serialize converts the EntityTable to a slice of strings, serializing each entity.
-func (table EntityTable) Serialize(u *Universe) []string {
+func (table EntityTable) Serialize() []string {
 	result := make([]string, 0)
 	for _, e := range table {
 		if e == 0 {
 			continue
 		}
-		result = append(result, e.Serialize(u))
+		result = append(result, e.Serialize())
 	}
 	return result
 }

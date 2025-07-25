@@ -18,7 +18,7 @@ func wallPick(s *block) {
 // wall renders the wall portion (potentially over a portal).
 func (r *Renderer) wall(c *column) {
 	mat := c.Segment.Surface.Material
-	lit := materials.GetLit(c.Universe, c.Segment.Surface.Material)
+	lit := materials.GetLit(c.Segment.Surface.Material)
 	extras := c.Segment.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)
 	transform := c.Segment.Surface.Transform.Render

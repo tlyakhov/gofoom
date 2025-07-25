@@ -33,14 +33,14 @@ type Player struct {
 var PlayerCID ecs.ComponentID
 
 func init() {
-	PlayerCID = ecs.RegisterComponent(&ecs.Column[Player, *Player]{Getter: GetPlayer})
+	PlayerCID = ecs.RegisterComponent(&ecs.Arena[Player, *Player]{Getter: GetPlayer})
 }
 
 func (x *Player) ComponentID() ecs.ComponentID {
 	return PlayerCID
 }
-func GetPlayer(u *ecs.Universe, e ecs.Entity) *Player {
-	if asserted, ok := u.Component(e, PlayerCID).(*Player); ok {
+func GetPlayer(e ecs.Entity) *Player {
+	if asserted, ok := ecs.Component(e, PlayerCID).(*Player); ok {
 		return asserted
 	}
 	return nil
@@ -55,8 +55,8 @@ func (p *Player) String() string {
 }
 
 func (p *Player) Underwater() bool {
-	if b := core.GetBody(p.Universe, p.Entities.First()); b != nil {
-		if u := behaviors.GetUnderwater(p.Universe, b.SectorEntity); u != nil {
+	if b := core.GetBody(p.Entities.First()); b != nil {
+		if u := behaviors.GetUnderwater(b.SectorEntity); u != nil {
 			return true
 		}
 	}

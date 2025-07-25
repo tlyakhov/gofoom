@@ -31,12 +31,12 @@ const (
 // internal to the engine and should not be saved or modified by the user.
 const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLockedInEditor
 
-// There are architectural issues here. The whole point of the ECS is to have
+// There are architectural tradeoffs here. The whole point of the ECS is to have
 // all the data for a given component be next to each other in memory and enable
 // efficient access by controllers. However, with the `Attached` mixin, we lose
 // that by having to include all these extra fields. On top of that, accessing
 // those fields via interface is wasteful and makes it much harder to optimize.
-// That said, the fields here are 8+2+2+4+8+8=64 bytes, so maybe it's not too
+// That said, the fields here are 8+2+2+4+8=24 bytes, so maybe it's not too
 // bad.
 // Is the right approach to store this extra data separately? maybe
 
@@ -51,10 +51,8 @@ type Attached struct {
 	// Flags are bit flags that control the behavior of the component, such as
 	// whether it is saved or visible in the editor.
 	Flags ComponentFlags `editable:"Flags" edit_type:"Flags"`
-	// indexInColumn is the index of this component within its column in the Universe.
-	indexInColumn int
-	// Universe is a pointer to the Universe instance that manages this component.
-	Universe *Universe
+	// indexInArena is the index of this component within its arena in the Universe.
+	indexInArena int
 	// Entities is a table of entities to which this component is attached. This
 	// is used for components that can be attached to multiple entities.
 	Entities EntityTable `editable:"Component" edit_type:"Component" edit_sort:"0"`
@@ -62,7 +60,12 @@ type Attached struct {
 
 // IsActive checks if the component is active, attached to any entities, and not nil.
 func (a *Attached) IsActive() bool {
-	return a != nil && a.Attachments > 0 && (a.Flags&ComponentActive != 0)
+	return a.IsAttached() && (a.Flags&ComponentActive != 0)
+}
+
+// IsAttached checks if the component is active, attached to any entities, and not nil.
+func (a *Attached) IsAttached() bool {
+	return a != nil && a.Attachments > 0
 }
 
 // IsExternal checks if the component is sourced from another file.
@@ -94,11 +97,6 @@ func (a *Attached) ExternalEntities() []Entity {
 	return result
 }
 
-// GetUniverse returns the Universe instance associated with this component.
-func (a *Attached) GetUniverse() *Universe {
-	return a.Universe
-}
-
 // String returns a string representation - helpful in the editor or debugging
 func (a *Attached) String() string {
 	return "Attached"
@@ -128,17 +126,16 @@ func (a *Attached) OnDetach(entity Entity) {
 
 // OnDelete is called when the component is deleted from the Universe.
 func (a *Attached) OnDelete() {
-	a.Universe = nil
+	a.Attachments = 0
 }
 
-// SetColumnIndex sets the index of this component within its column.
-func (a *Attached) SetColumnIndex(i int) {
-	a.indexInColumn = i
+// SetArenaIndex sets the index of this component within its arena.
+func (a *Attached) SetArenaIndex(i int) {
+	a.indexInArena = i
 }
 
-// OnAttach is called when the component is attached to an Universe. It sets the Universe pointer.
-func (a *Attached) OnAttach(u *Universe) {
-	a.Universe = u
+// OnAttach is called when the component is attached.
+func (a *Attached) OnAttach() {
 }
 
 // Construct initializes the component with data from a map. It sets the active
@@ -159,7 +156,7 @@ func (a *Attached) Construct(data map[string]any) {
 // Serialize returns a map representing the component's data for serialization.
 // It includes the entities and the active flag if it's false.
 func (a *Attached) Serialize() map[string]any {
-	result := map[string]any{"Entities": a.Entities.Serialize(a.Universe)}
+	result := map[string]any{"Entities": a.Entities.Serialize()}
 	if a.Flags != ComponentActive {
 		result["_Flags"] = concepts.SerializeFlags(a.Flags, ComponentFlagsValues())
 	}
@@ -174,14 +171,14 @@ func ConstructSlice[PT interface {
 	*T
 	Serializable
 	Universal
-}, T any](u *Universe, data any, hook func(item PT)) []PT {
+}, T any](data any, hook func(item PT)) []PT {
 	var result []PT
 
 	if dataSlice, ok := data.([]any); ok {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].OnAttach(u)
+			result[i].OnAttach()
 			if hook != nil {
 				hook(result[i])
 			}
@@ -191,7 +188,7 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].OnAttach(u)
+			result[i].OnAttach()
 			if hook != nil {
 				hook(result[i])
 			}

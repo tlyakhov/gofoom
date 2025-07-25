@@ -12,20 +12,19 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func setup() *ecs.Universe {
-	u := ecs.NewUniverse()
-	controllers.CreateTestWorld2(u)
-	return u
+func setup() {
+	ecs.Initialize()
+	controllers.CreateTestWorld2()
 }
 
 func BenchmarkScriptedCode(b *testing.B) {
-	u := setup()
-	s := core.Script{Universe: u}
+	setup()
+	s := core.Script{}
 	s.Construct(map[string]any{
 		"Code":  "core.GetSector(sectorEntity).Bottom.Z.Spawn=5",
 		"Style": "ScriptStyleStatement",
 	})
-	s.Vars["sector"] = u.GetEntityByName("sector1")
+	s.Vars["sector"] = ecs.GetEntityByName("sector1")
 	b.Run("Script", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			s.Act()
@@ -33,7 +32,7 @@ func BenchmarkScriptedCode(b *testing.B) {
 	})
 	b.Run("Native", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			core.GetSector(u, s.Vars["sector"].(ecs.Entity)).Bottom.Z.Spawn = rand.Float64()
+			core.GetSector(s.Vars["sector"].(ecs.Entity)).Bottom.Z.Spawn = rand.Float64()
 		}
 	})
 }

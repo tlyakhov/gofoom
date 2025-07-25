@@ -19,10 +19,10 @@ const bounds = 30000
 
 func BenchmarkLightmapConversion(b *testing.B) {
 	b.Run("Correctness", func(b *testing.B) {
+		ecs.Initialize()
 		s := new(core.Sector)
 		s.Construct(nil)
-		ecs := ecs.NewUniverse()
-		c := render.Config{Universe: ecs}
+		c := render.Config{}
 		c.Initialize()
 		v := new(concepts.Vector3)
 		n := new(concepts.Vector3)

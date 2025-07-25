@@ -35,7 +35,7 @@ func (a *AliveController) Always() {
 	// TODO: Refactor cooldowns to be time-based rather than frames
 	for source, d := range a.Damages {
 		if d.Cooldown.Now <= 0 {
-			d.Cooldown.Detach(a.Alive.Universe.Simulation)
+			d.Cooldown.Detach(ecs.Simulation)
 			delete(a.Damages, source)
 			continue
 		}

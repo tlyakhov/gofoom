@@ -32,13 +32,13 @@ func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
 func (uc *UnderwaterController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	uc.Entity = e
 	uc.Underwater = target.(*behaviors.Underwater)
-	uc.Sector = core.GetSector(uc.Universe, uc.Entity)
+	uc.Sector = core.GetSector(uc.Entity)
 	return uc.IsActive() && uc.Sector.IsActive()
 }
 
 func (uc *UnderwaterController) Always() {
 	for e := range uc.Sector.Bodies {
-		if mobile := core.GetMobile(uc.Universe, e); mobile != nil {
+		if mobile := core.GetMobile(e); mobile != nil {
 			mobile.Vel.Now.MulSelf(1.0 / constants.SwimDamping)
 		}
 	}

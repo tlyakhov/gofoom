@@ -13,6 +13,7 @@ import (
 	"runtime/pprof"
 	"time"
 
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/resources"
 	_ "tlyakhov/gofoom/scripting_symbols"
 
@@ -52,6 +53,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
+	ecs.Initialize()
 	editor = NewEditor()
 	editor.App = app.NewWithID("com.foom.editor")
 	editor.App.Lifecycle().SetOnStopped(func() { pprof.StopCPUProfile() })
@@ -125,10 +127,7 @@ func main() {
 	go func() {
 		t := time.NewTicker(time.Second / 60)
 		for range t.C {
-			if editor.Universe == nil {
-				return
-			}
-			editor.Universe.Simulation.Step()
+			ecs.Simulation.Step()
 			fyne.DoAndWait(editor.MapWidget.Raster.Refresh)
 		}
 	}()

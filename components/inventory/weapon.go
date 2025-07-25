@@ -34,34 +34,34 @@ type Weapon struct {
 var WeaponCID ecs.ComponentID
 
 func init() {
-	WeaponCID = ecs.RegisterComponent(&ecs.Column[Weapon, *Weapon]{Getter: GetWeapon})
+	WeaponCID = ecs.RegisterComponent(&ecs.Arena[Weapon, *Weapon]{Getter: GetWeapon})
 }
 
 func (x *Weapon) ComponentID() ecs.ComponentID {
 	return WeaponCID
 }
-func GetWeapon(u *ecs.Universe, e ecs.Entity) *Weapon {
-	if asserted, ok := u.Component(e, WeaponCID).(*Weapon); ok {
+func GetWeapon(e ecs.Entity) *Weapon {
+	if asserted, ok := ecs.Component(e, WeaponCID).(*Weapon); ok {
 		return asserted
 	}
 	return nil
 }
 
 func (w *Weapon) StateDuration() int64 {
-	return w.Universe.Timestamp - w.LastStateTimestamp
+	return ecs.Simulation.Timestamp - w.LastStateTimestamp
 }
 
 func (w *Weapon) StateCompleted() bool {
-	if wc := GetWeaponClass(w.Universe, w.Entity); wc != nil {
+	if wc := GetWeaponClass(w.Entity); wc != nil {
 		return float64(w.StateDuration()) >= wc.Params[w.State].Time
 	}
 	return false
 }
 
 func (w *Weapon) NewState(s WeaponState) {
-	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, w.Universe.Timestamp-w.LastStateTimestamp)
+	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, ecs.Simulation.Timestamp-w.LastStateTimestamp)
 	w.State = s
-	w.LastStateTimestamp = w.Universe.Timestamp
+	w.LastStateTimestamp = ecs.Simulation.Timestamp
 }
 
 func (w *Weapon) String() string {

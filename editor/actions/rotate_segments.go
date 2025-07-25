@@ -39,7 +39,7 @@ func (a *RotateSegments) Undo() {
 		}
 		a.Rotate(s.Sector, true)
 	}
-	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *RotateSegments) Redo() {
 	for _, s := range a.State().SelectedObjects.Exact {
@@ -48,7 +48,7 @@ func (a *RotateSegments) Redo() {
 		}
 		a.Rotate(s.Sector, false)
 	}
-	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *RotateSegments) RequiresLock() bool { return true }

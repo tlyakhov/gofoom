@@ -17,7 +17,7 @@ import (
 )
 
 func (e *Editor) materialSelectionBorderColor(entity ecs.Entity) *concepts.Vector4 {
-	if materials.GetShader(e.Universe, entity) != nil {
+	if materials.GetShader(entity) != nil {
 		return &concepts.Vector4{1.0, 0.0, 1.0, 0.5}
 	}
 	return &concepts.Vector4{0.0, 0.0, 0.0, 0.0}
@@ -65,7 +65,7 @@ func (e *Editor) imageForSector(entity ecs.Entity) image.Image {
 	w, h := 64, 64
 	context := gg.NewContext(w, h)
 
-	sector := core.GetSector(e.Universe, entity)
+	sector := core.GetSector(entity)
 	context.SetLineWidth(1)
 	for _, segment := range sector.Segments {
 		if segment.AdjacentSegment != nil {
@@ -94,7 +94,7 @@ func (e *Editor) EntityImage(entity ecs.Entity) image.Image {
 		return item.Image
 	}
 	item.Image = nil
-	if core.GetSector(e.Universe, entity) != nil {
+	if core.GetSector(entity) != nil {
 		item.Image = e.imageForSector(entity)
 	} else {
 		item.Image = e.imageForMaterial(entity)

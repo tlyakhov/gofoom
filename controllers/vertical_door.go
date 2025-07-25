@@ -32,7 +32,7 @@ func (vd *VerticalDoorController) Methods() ecs.ControllerMethod {
 func (vd *VerticalDoorController) Target(target ecs.Attachable, e ecs.Entity) bool {
 	vd.Entity = e
 	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
-	vd.Sector = core.GetSector(vd.VerticalDoor.Universe, vd.VerticalDoor.Entity)
+	vd.Sector = core.GetSector(vd.VerticalDoor.Entity)
 	return vd.VerticalDoor.IsActive() && vd.Sector != nil && vd.Sector.IsActive()
 }
 
@@ -78,7 +78,7 @@ func (vd *VerticalDoorController) adjustTransforms() {
 		t[concepts.MatBasis2Y] = 1.0 - v
 		t[concepts.MatTransY] = v
 		if !seg.Surface.Transform.Attached {
-			seg.Surface.Transform.Attach(vd.Universe.Simulation)
+			seg.Surface.Transform.Attach(ecs.Simulation)
 		}
 		seg.Surface.Transform.Now.From(&seg.Surface.Transform.Spawn)
 		seg.Surface.Transform.Now.MulSelf(&t)
@@ -86,7 +86,7 @@ func (vd *VerticalDoorController) adjustTransforms() {
 		t[concepts.MatBasis2Y] = v
 		t[concepts.MatTransY] = 1.0 - v
 		if !seg.HiSurface.Transform.Attached {
-			seg.HiSurface.Transform.Attach(vd.Universe.Simulation)
+			seg.HiSurface.Transform.Attach(ecs.Simulation)
 		}
 		seg.HiSurface.Transform.Now.From(&seg.HiSurface.Transform.Spawn)
 		seg.HiSurface.Transform.Now.MulSelf(&t)

@@ -256,15 +256,14 @@ func (a *SectorSplitter) verifyCycles() {
 }
 
 func (a *SectorSplitter) collectEdge(edge *splitEdge) {
-	u := a.Sector.Universe
 	i := len(a.Result)
 	a.Result = append(a.Result, make([]ecs.Attachable, 0))
-	for _, origComponent := range u.AllComponents(a.Sector.Entity) {
+	for _, origComponent := range ecs.AllComponents(a.Sector.Entity) {
 		if origComponent == nil {
 			continue
 		}
 		id := origComponent.ComponentID()
-		clonedComponent := u.LoadComponentWithoutAttaching(id, origComponent.Serialize())
+		clonedComponent := ecs.LoadComponentWithoutAttaching(id, origComponent.Serialize())
 		a.Result[i] = append(a.Result[i], clonedComponent)
 		switch target := clonedComponent.(type) {
 		case *ecs.Named:
@@ -279,7 +278,7 @@ func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 			for {
 				visitor.Visited = true
 				addedSegment := &core.SectorSegment{Sector: target}
-				addedSegment.Construct(target.Universe, visitor.Source.Serialize())
+				addedSegment.Construct(visitor.Source.Serialize())
 				addedSegment.P = visitor.Start
 				target.Segments = append(target.Segments, addedSegment)
 				visitor = visitor.Next

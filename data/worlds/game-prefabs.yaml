@@ -4,7 +4,7 @@
     InRange:
       Code: |-
         if body == nil { return }
-        m := core.GetMobile(s.Universe, body.Entity)
+        m := core.GetMobile(body.Entity)
         vd := behaviors.GetVerticalDoor(s.Universe,onEntity)
         if m == nil || vd == nil { return }
         if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
@@ -217,7 +217,7 @@
 - Entity: ∈⋮153
   behaviors.Proximity:
     InRange:
-      Code: "if alive := behaviors.GetAlive(s.Universe, body.Entity); alive != nil {\n  alive.Hurt(\"bubble\", 2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\", 2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
     Range: 5
   ecs.Named:
     Name: Bubble
@@ -289,7 +289,7 @@
     Hysteresis: 0
     InRange:
       Code: |-
-        if p := character.GetPlayer(s.Universe, body.Entity); p != nil {
+        if p := character.GetPlayer(body.Entity); p != nil {
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: character.Player

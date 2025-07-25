@@ -38,7 +38,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	}
 
 	mw.Context.SetRGB(0.6, 0.6, 0.6)
-	if player := character.GetPlayer(body.Universe, body.Entity); player != nil {
+	if player := character.GetPlayer(body.Entity); player != nil {
 		// Let's get fancy:
 		mw.Context.SetRGB(0.6, 0.6, 0.6)
 		mw.Context.SetLineWidth(1)
@@ -46,7 +46,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 		mw.Context.DrawArc(body.Pos.Now[0], body.Pos.Now[1], body.Size.Now[0]*0.25, 0, math.Pi*2)
 		mw.Context.ClosePath()
 		mw.Context.Stroke()
-	} else if light := core.GetLight(body.Universe, body.Entity); light != nil {
+	} else if light := core.GetLight(body.Entity); light != nil {
 		mw.Context.SetRGB(light.Diffuse[0], light.Diffuse[1], light.Diffuse[2])
 	} // Sprite...
 
@@ -76,7 +76,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	mw.Context.SetRGB(0.33, 0.33, 0.33)
 	mw.DrawBodyAngle(body)
 
-	if prox := behaviors.GetProximity(body.Universe, body.Entity); prox != nil {
+	if prox := behaviors.GetProximity(body.Entity); prox != nil {
 		mw.Context.SetRGB(0, 0.33, 0.33)
 		mw.Context.NewSubPath()
 		mw.Context.DrawArc(body.Pos.Now[0], body.Pos.Now[1], prox.Range, 0, math.Pi*2)
@@ -85,7 +85,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	}
 
 	if editor.ComponentNamesVisible {
-		text := body.Format(body.Universe)
+		text := body.Format()
 		mw.Context.Push()
 		mw.Context.SetRGB(0.3, 0.3, 0.5)
 		mw.Context.DrawStringAnchored(text, body.Pos.Now[0], body.Pos.Now[1], 0.5, 0.5)

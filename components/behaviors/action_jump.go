@@ -14,14 +14,14 @@ type ActionJump struct {
 var ActionJumpCID ecs.ComponentID
 
 func init() {
-	ActionJumpCID = ecs.RegisterComponent(&ecs.Column[ActionJump, *ActionJump]{Getter: GetActionJump})
+	ActionJumpCID = ecs.RegisterComponent(&ecs.Arena[ActionJump, *ActionJump]{Getter: GetActionJump})
 }
 
 func (x *ActionJump) ComponentID() ecs.ComponentID {
 	return ActionJumpCID
 }
-func GetActionJump(u *ecs.Universe, e ecs.Entity) *ActionJump {
-	if asserted, ok := u.Component(e, ActionJumpCID).(*ActionJump); ok {
+func GetActionJump(e ecs.Entity) *ActionJump {
+	if asserted, ok := ecs.Component(e, ActionJumpCID).(*ActionJump); ok {
 		return asserted
 	}
 	return nil

@@ -19,136 +19,128 @@ import (
 // The architecture is like this:
 // * An entity is a globally unique integer (uint32), e.g. primary key
 // * An entity can be associated with multiple components (one of each kind)
-// * A system (controller) is code that queries and operates on components and entities
-type Universe struct {
-	*dynamic.Simulation
+// * A system (controller) is code that queries and operates on components and
+// entities
+var (
+	Simulation      *dynamic.Simulation
 	Entities        bitmap.Bitmap
 	Lock            sync.RWMutex
 	FuncMap         template.FuncMap
 	SourceFileNames map[string]*SourceFile
 	SourceFileIDs   map[EntitySourceID]*SourceFile
 
-	rows    [EntitySourceIDBits][]ComponentTable
-	columns []AttachableColumn
-}
+	rows   [EntitySourceIDBits][]ComponentTable
+	arenas []AttachableArena
+)
 
-func NewUniverse() *Universe {
-	u := &Universe{}
-	u.Clear()
-
-	return u
-}
-
-func (u *Universe) Clear() {
-	u.Entities = bitmap.Bitmap{}
+func Initialize() {
+	Entities = bitmap.Bitmap{}
 	// 0 is reserved and represents 'null' entity
-	u.Entities.Set(0)
-	for i := range len(u.rows) {
-		u.rows[i] = nil
+	Entities.Set(0)
+	for i := range len(rows) {
+		rows[i] = nil
 	}
-	u.columns = make([]AttachableColumn, len(Types().ColumnPlaceholders))
-	u.Simulation = dynamic.NewSimulation()
-	u.SourceFileNames = make(map[string]*SourceFile)
-	u.SourceFileIDs = make(map[EntitySourceID]*SourceFile)
-	u.FuncMap = template.FuncMap{
-		"Universe": func() *Universe { return u },
-	}
+	arenas = make([]AttachableArena, len(Types().ArenaPlaceholders))
+	Simulation = dynamic.NewSimulation()
+	SourceFileNames = make(map[string]*SourceFile)
+	SourceFileIDs = make(map[EntitySourceID]*SourceFile)
+	FuncMap = template.FuncMap{}
 
-	// Initialize component columns based on registered component types.
-	for i, columnPlaceholder := range Types().ColumnPlaceholders {
-		if columnPlaceholder == nil {
+	// Initialize component arenas based on registered component types.
+	for i, arenaPlaceholder := range Types().ArenaPlaceholders {
+		if arenaPlaceholder == nil {
 			continue
 		}
-		// log.Printf("Component %v, index: %v", columnPlaceholder.Type().String(), i)
-		// t = *ComponentColumn[T]
-		t := reflect.TypeOf(columnPlaceholder)
-		u.columns[i] = reflect.New(t.Elem()).Interface().(AttachableColumn)
-		u.columns[i].From(columnPlaceholder, u)
-		fmName := columnPlaceholder.Type().String()
+		// log.Printf("Component %v, index: %v", arenaPlaceholder.Type().String(), i)
+		// t = *ComponentArena[T]
+		t := reflect.TypeOf(arenaPlaceholder)
+		arenas[i] = reflect.New(t.Elem()).Interface().(AttachableArena)
+		arenas[i].From(arenaPlaceholder)
+		fmName := arenaPlaceholder.Type().String()
 		fmName = strings.ReplaceAll(fmName, ".", "_")
-		u.FuncMap[fmName] = func(e Entity) Attachable { return u.Component(e, columnPlaceholder.ID()) }
+		FuncMap[fmName] = func(e Entity) Attachable { return Component(e, arenaPlaceholder.ID()) }
 	}
 }
 
 // Reserves an entity ID in the database (no components attached)
 // It finds the smallest available entity ID, marks it as used, and returns it.
-func (u *Universe) NewEntity() Entity {
-	if free, found := u.Entities.MinZero(); found {
-		u.Entities.Set(free)
+func NewEntity() Entity {
+	if free, found := Entities.MinZero(); found {
+		Entities.Set(free)
 		return Entity(free)
 	}
-	nextFree := len(u.rows[0])
-	for len(u.rows[0]) < (nextFree + 1) {
-		u.rows[0] = append(u.rows[0], nil)
+	nextFree := len(rows[0])
+	for len(rows[0]) < (nextFree + 1) {
+		rows[0] = append(rows[0], nil)
 	}
-	u.Entities.Set(uint32(nextFree))
+	Entities.Set(uint32(nextFree))
 	return Entity(nextFree)
 }
 
 // NextFreeEntitySourceID returns the next available entity source ID.
 // It iterates through all possible source IDs and returns the first one that
 // is not currently in use.
-func (u *Universe) NextFreeEntitySourceID() EntitySourceID {
+func NextFreeEntitySourceID() EntitySourceID {
 	for i := range 1 << EntitySourceIDBits {
 		id := EntitySourceID(i)
-		if _, ok := u.SourceFileIDs[id]; !ok {
+		if _, ok := SourceFileIDs[id]; !ok {
 			return id
 		}
 	}
 	return EntitySourceID(1<<EntitySourceIDBits - 1)
 }
 
-func ColumnFor[T any, PT GenericAttachable[T]](u *Universe, id ComponentID) *Column[T, PT] {
-	return u.columns[id].(*Column[T, PT])
+func ArenaFor[T any, PT GenericAttachable[T]](id ComponentID) *Arena[T, PT] {
+	return arenas[id].(*Arena[T, PT])
 }
 
-func (u *Universe) Column(id ComponentID) AttachableColumn {
-	return u.columns[id]
+func ArenaByID(id ComponentID) AttachableArena {
+	return arenas[id]
 }
 
-func (u *Universe) localizeEntity(entity Entity) (sid EntitySourceID, local Entity) {
+func localizeEntity(entity Entity) (sid EntitySourceID, local Entity) {
 	if entity == 0 {
 		return 0, 0
 	}
 	sid, local = entity.SourceID(), entity.Local()
-	if len(u.rows[sid]) <= int(local) {
+	if len(rows[sid]) <= int(local) {
 		return 0, 0
 	}
 	return
 }
 
 // AllComponents retrieves the component table for a specific entity.
-func (u *Universe) AllComponents(entity Entity) ComponentTable {
-	if sid, local := u.localizeEntity(entity); local != 0 {
-		return u.rows[sid][int(local)]
+func AllComponents(entity Entity) ComponentTable {
+	if sid, local := localizeEntity(entity); local != 0 {
+		return rows[sid][int(local)]
 	}
 	return nil
 }
 
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The Get* methods are better.
-func (u *Universe) Component(entity Entity, id ComponentID) Attachable {
-	if id == 0 || u == nil {
+func Component(entity Entity, id ComponentID) Attachable {
+	if id == 0 {
 		return nil
 	}
-	if sid, local := u.localizeEntity(entity); local != 0 {
-		return u.rows[sid][int(local)].Get(id)
+	if sid, local := localizeEntity(entity); local != 0 {
+		return rows[sid][int(local)].Get(id)
 	}
 	return nil
 }
 
-func (u *Universe) Singleton(id ComponentID) Attachable {
-	c := u.columns[id]
+func Singleton(id ComponentID) Attachable {
+	c := arenas[id]
 	if c.Len() != 0 {
 		return c.Attachable(0)
 	}
-	return u.NewAttachedComponent(u.NewEntity(), id)
+	return NewAttachedComponent(NewEntity(), id)
 }
 
-func (u *Universe) First(id ComponentID) Attachable {
-	c := u.columns[id]
+func First(id ComponentID) Attachable {
+	c := arenas[id]
 	for i := range c.Cap() {
-		a := u.columns[id].Attachable(i)
+		a := arenas[id].Attachable(i)
 		if a != nil {
 			return a
 		}
@@ -156,39 +148,39 @@ func (u *Universe) First(id ComponentID) Attachable {
 	return nil
 }
 
-func (u *Universe) Link(target Entity, source Entity) {
-	sourceID, sourceLocal := u.localizeEntity(source)
+func Link(target Entity, source Entity) {
+	sourceID, sourceLocal := localizeEntity(source)
 	if sourceLocal == 0 {
 		return
 	}
-	_, targetLocal := u.localizeEntity(target)
+	_, targetLocal := localizeEntity(target)
 	if targetLocal == 0 {
 		return
 	}
-	for _, c := range u.rows[sourceID][int(sourceLocal)] {
+	for _, c := range rows[sourceID][int(sourceLocal)] {
 		if c == nil || !c.MultiAttachable() {
 			continue
 		}
-		u.attach(target, &c, c.ComponentID())
+		attach(target, &c, c.ComponentID())
 	}
 }
 
-func (u *Universe) expandRows(sid EntitySourceID, size int) {
-	if size < cap(u.rows[sid]) {
-		for size >= len(u.rows[sid]) {
-			u.rows[sid] = append(u.rows[sid], nil)
+func expandRows(sid EntitySourceID, size int) {
+	if size < cap(rows[sid]) {
+		for size >= len(rows[sid]) {
+			rows[sid] = append(rows[sid], nil)
 		}
 	} else {
 		newSize := (((size + 1) / 256) + 1) * 256
-		tmp := u.rows[sid]
-		u.rows[sid] = make([]ComponentTable, size+1, newSize)
-		copy(u.rows[sid], tmp)
+		tmp := rows[sid]
+		rows[sid] = make([]ComponentTable, size+1, newSize)
+		copy(rows[sid], tmp)
 	}
 }
 
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
-func (u *Universe) attach(entity Entity, component *Attachable, componentID ComponentID) {
+func attach(entity Entity, component *Attachable, componentID ComponentID) {
 	if entity == 0 {
 		log.Printf("Universe.attach: tried to attach 0 entity!")
 		return
@@ -200,30 +192,30 @@ func (u *Universe) attach(entity Entity, component *Attachable, componentID Comp
 	}
 
 	sid, local := entity.SourceID(), entity.Local()
-	u.expandRows(sid, int(local))
+	expandRows(sid, int(local))
 
 	// Try to retrieve the existing component for this entity
-	ec := u.rows[sid][int(local)].Get(componentID)
+	ec := rows[sid][int(local)].Get(componentID)
 
 	// Did the caller:
 	// 1. not provide a component?
 	// 2. the provided component is unattached?
 	if *component == nil || (*component).Base().Attachments == 0 {
-		// Then we need to add a new element to the column:
-		column := u.columns[componentID]
+		// Then we need to add a new element to the arena:
+		arena := arenas[componentID]
 		if ec != nil {
 			// A component with this index is already attached to this entity, overwrite it.
-			indexInColumn := ec.Base().indexInColumn
-			column.Replace(component, indexInColumn)
+			indexInArena := ec.Base().indexInArena
+			arena.Replace(component, indexInArena)
 		} else {
 			// This entity doesn't have a component with this index attached. Extend the
 			// slice.
-			column.Add(component)
+			arena.Add(component)
 		}
 	} else if ec != nil {
 		// We have a conflict between the provided component and an existing one
 		// with the same component ID. We should abort. This happens with Linked components.
-		// log.Printf("Universe.attach: Entity %v already has a component %v. Aborting!", entity, Types().ColumnPlaceholders[componentID].String())
+		// log.Printf("Universe.attach: Entity %v already has a component %v. Aborting!", entity, Types().ArenaPlaceholders[componentID].String())
 		return
 	}
 
@@ -235,31 +227,30 @@ func (u *Universe) attach(entity Entity, component *Attachable, componentID Comp
 	a.Entities.Set(entity)
 	a.Entity = entity
 	a.Attachments++
-	u.rows[sid][int(local)].Set(attachable)
-	attachable.OnAttach(u)
+	rows[sid][int(local)].Set(attachable)
+	attachable.OnAttach()
 }
 
 // Create a new component with the given index and attach it.
-func (u *Universe) NewAttachedComponent(entity Entity, id ComponentID) Attachable {
+func NewAttachedComponent(entity Entity, id ComponentID) Attachable {
 	var attached Attachable
-	u.attach(entity, &attached, id)
+	attach(entity, &attached, id)
 	attached.Construct(nil)
 	return attached
 }
 
-func (u *Universe) LoadComponentWithoutAttaching(id ComponentID, data map[string]any) Attachable {
+func LoadComponentWithoutAttaching(id ComponentID, data map[string]any) Attachable {
 	if data == nil {
 		return nil
 	}
-	component := Types().ColumnPlaceholders[id].New()
-	component.Base().Universe = u
+	component := Types().ArenaPlaceholders[id].New()
 	component.Construct(data)
 	return component
 }
 
-func (u *Universe) NewAttachedComponentTyped(entity Entity, cType string) Attachable {
+func NewAttachedComponentTyped(entity Entity, cType string) Attachable {
 	if index, ok := Types().IDs[cType]; ok {
-		return u.NewAttachedComponent(entity, index)
+		return NewAttachedComponent(entity, index)
 	}
 
 	log.Printf("NewComponent: unregistered type %v for entity %v\n", cType, entity)
@@ -271,23 +262,23 @@ func (u *Universe) NewAttachedComponentTyped(entity Entity, cType string) Attach
 // to attach or a pointer to nil to get back a new one. Previously this method
 // had semantics like Go's `append`, but this was too error prone if the return
 // value was ignored.
-func (u *Universe) Attach(id ComponentID, entity Entity, component *Attachable) {
-	u.attach(entity, component, id)
+func Attach(id ComponentID, entity Entity, component *Attachable) {
+	attach(entity, component, id)
 }
 
-func AttachTyped[T any, PT GenericAttachable[T]](u *Universe, entity Entity, component *PT) {
+func AttachTyped[T any, PT GenericAttachable[T]](entity Entity, component *PT) {
 	var attachable Attachable
 	if *component != nil {
 		attachable = *component
-		u.attach(entity, &attachable, attachable.ComponentID())
+		attach(entity, &attachable, attachable.ComponentID())
 	} else {
 		cid := Types().IDs[reflect.TypeFor[PT]().String()]
-		u.attach(entity, &attachable, cid)
+		attach(entity, &attachable, cid)
 	}
 	*component = attachable.(PT)
 }
 
-func (u *Universe) detach(id ComponentID, entity Entity, checkForEmpty bool) {
+func detach(id ComponentID, entity Entity, checkForEmpty bool) {
 	if entity == 0 {
 		log.Printf("Universe.Detach: tried to detach 0 entity.")
 		return
@@ -299,45 +290,45 @@ func (u *Universe) detach(id ComponentID, entity Entity, checkForEmpty bool) {
 
 	sid, local := entity.SourceID(), entity.Local()
 
-	if len(u.rows[sid]) <= int(local) {
-		log.Printf("Universe.Detach: entity %v is >= length of list %v.", local, len(u.rows[sid]))
+	if len(rows[sid]) <= int(local) {
+		log.Printf("Universe.Detach: entity %v is >= length of list %v.", local, len(rows[sid]))
 		return
 	}
-	ec := u.rows[sid][int(local)].Get(id)
-	column := u.columns[id]
+	ec := rows[sid][int(local)].Get(id)
+	arena := arenas[id]
 	if ec == nil {
 		// This component is not attached
-		log.Printf("Universe.Detach: tried to detach unattached component %v from entity %v", column.String(), entity)
+		log.Printf("Universe.Detach: tried to detach unattached component %v from entity %v", arena.String(), entity)
 		return
 	}
 
 	ec.OnDetach(entity)
 	if ec.Base().Attachments == 0 {
-		column.Detach(ec.Base().indexInColumn)
+		arena.Detach(ec.Base().indexInArena)
 		ec.OnDelete()
 	}
-	u.rows[sid][int(local)].Delete(id)
+	rows[sid][int(local)].Delete(id)
 
 	if checkForEmpty {
 		allNil := true
-		for _, a := range u.rows[sid][int(local)] {
+		for _, a := range rows[sid][int(local)] {
 			if a != nil {
 				allNil = false
 				break
 			}
 		}
 		if allNil {
-			u.Entities.Remove(uint32(entity))
-			u.rows[sid][int(local)] = nil
+			Entities.Remove(uint32(entity))
+			rows[sid][int(local)] = nil
 		}
 	}
 }
 
-func (u *Universe) DetachComponent(id ComponentID, entity Entity) {
-	u.detach(id, entity, true)
+func DetachComponent(id ComponentID, entity Entity) {
+	detach(id, entity, true)
 }
 
-func (u *Universe) DeleteByType(component Attachable) {
+func DeleteByType(component Attachable) {
 	if component == nil {
 		return
 	}
@@ -355,24 +346,24 @@ func (u *Universe) DeleteByType(component Attachable) {
 
 	for _, entity := range component.Base().Entities {
 		if entity != 0 {
-			u.detach(id, entity, true)
+			detach(id, entity, true)
 		}
 	}
 }
 
-func (u *Universe) Delete(entity Entity) {
+func Delete(entity Entity) {
 	if entity == 0 {
 		return
 	}
 
-	u.Entities.Remove(uint32(entity))
+	Entities.Remove(uint32(entity))
 
-	sid, local := u.localizeEntity(entity)
+	sid, local := localizeEntity(entity)
 	if local == 0 {
 		return
 	}
 
-	for _, c := range u.rows[sid][int(local)] {
+	for _, c := range rows[sid][int(local)] {
 		if c == nil {
 			continue
 		}
@@ -380,15 +371,15 @@ func (u *Universe) Delete(entity Entity) {
 		c.OnDetach(entity)
 		if c.Base().Attachments == 0 {
 			c.OnDelete()
-			u.columns[id].Detach(c.Base().indexInColumn)
+			arenas[id].Detach(c.Base().indexInArena)
 		}
 	}
-	u.rows[sid][int(local)] = nil
+	rows[sid][int(local)] = nil
 }
 
 // TODO: Optimize this and add ability to wildcard search
-func (u *Universe) GetEntityByName(name string) Entity {
-	col := ColumnFor[Named](u, NamedCID)
+func GetEntityByName(name string) Entity {
+	col := ArenaFor[Named](NamedCID)
 	for i := range col.Cap() {
 		if named := col.Value(i); named != nil && named.Name == name {
 			return named.Entity
@@ -398,12 +389,12 @@ func (u *Universe) GetEntityByName(name string) Entity {
 	return 0
 }
 
-func (u *Universe) EntityAllNoSave(entity Entity) bool {
-	sid, local := u.localizeEntity(entity)
+func EntityAllNoSave(entity Entity) bool {
+	sid, local := localizeEntity(entity)
 	if local == 0 {
 		return false
 	}
-	for _, c := range u.rows[sid][int(local)] {
+	for _, c := range rows[sid][int(local)] {
 		if c == nil {
 			continue
 		}
@@ -414,30 +405,30 @@ func (u *Universe) EntityAllNoSave(entity Entity) bool {
 	return true
 }
 
-func (u *Universe) Load(filename string) error {
-	file := u.NewAttachedComponent(u.NewEntity(), SourceFileCID).(*SourceFile)
+func Load(filename string) error {
+	file := NewAttachedComponent(NewEntity(), SourceFileCID).(*SourceFile)
 	file.Source = filename
 	file.ID = 0
 	file.Flags = ComponentInternal
 	return file.Load()
 }
 
-func (u *Universe) serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {
+func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {
 	yamlEntity := make(map[string]any)
 	yamlEntity["Entity"] = entity.String()
 	sid, local := entity.SourceID(), entity.Local()
-	for _, component := range u.rows[sid][int(local)] {
+	for _, component := range rows[sid][int(local)] {
 		if component == nil || (component.Base().Flags&ComponentNoSave != 0) {
 			continue
 		}
 		cid := component.ComponentID()
-		hash := (uint64(component.Base().indexInColumn) << 16) | (uint64(cid) & 0xFFFF)
-		col := Types().ColumnPlaceholders[cid]
+		hash := (uint64(component.Base().indexInArena) << 16) | (uint64(cid) & 0xFFFF)
+		col := Types().ArenaPlaceholders[cid]
 		yamlID := col.Type().String()
 
 		if savedComponents != nil {
 			if savedEntity, ok := savedComponents[hash]; ok {
-				yamlEntity[yamlID] = savedEntity.Serialize(u)
+				yamlEntity[yamlID] = savedEntity.Serialize()
 				continue
 			}
 		}
@@ -446,7 +437,7 @@ func (u *Universe) serializeEntity(entity Entity, savedComponents map[uint64]Ent
 			// Just pick one
 			// TODO: This has a code smell. Should there be a particular way
 			// to pick an entity ID to reference when saving?
-			yamlEntity[yamlID] = component.Base().ExternalEntities()[0].Serialize(u)
+			yamlEntity[yamlID] = component.Base().ExternalEntities()[0].Serialize()
 			continue
 		}
 
@@ -464,22 +455,22 @@ func (u *Universe) serializeEntity(entity Entity, savedComponents map[uint64]Ent
 	return yamlEntity
 }
 
-func (u *Universe) SerializeEntity(entity Entity) map[string]any {
-	return u.serializeEntity(entity, nil)
+func SerializeEntity(entity Entity) map[string]any {
+	return serializeEntity(entity, nil)
 }
 
-func (u *Universe) Save(filename string) {
-	u.Lock.Lock()
-	defer u.Lock.Unlock()
+func Save(filename string) {
+	Lock.Lock()
+	defer Lock.Unlock()
 	yamlECS := make([]any, 0)
 	savedComponents := make(map[uint64]Entity)
 
-	u.Entities.Range(func(entity uint32) {
+	Entities.Range(func(entity uint32) {
 		e := Entity(entity)
 		if e.IsExternal() {
 			return
 		}
-		yamlEntity := u.serializeEntity(e, savedComponents)
+		yamlEntity := serializeEntity(e, savedComponents)
 		if len(yamlEntity) == 0 {
 			return
 		}
@@ -511,24 +502,24 @@ func ConstructArray(parent any, arrayPtr any, data any) {
 }
 
 // Returns true if a new one was created.
-func CachedGeneratedComponent[T any, PT GenericAttachable[T]](u *Universe, field *PT, name string, cid ComponentID) bool {
+func CachedGeneratedComponent[T any, PT GenericAttachable[T]](field *PT, name string, cid ComponentID) bool {
 	if *field != nil {
 		return false
 	}
-	e := u.GetEntityByName(name)
+	e := GetEntityByName(name)
 	if e != 0 {
-		*field = u.Component(e, cid).(PT)
+		*field = Component(e, cid).(PT)
 		if *field != nil {
 			return false
 		}
 	} else {
-		e = u.NewEntity()
+		e = NewEntity()
 	}
 
-	*field = u.NewAttachedComponent(e, cid).(PT)
+	*field = NewAttachedComponent(e, cid).(PT)
 	base := (*field).Base()
 	base.Flags |= ComponentInternal
-	n := u.NewAttachedComponent(base.Entity, NamedCID).(*Named)
+	n := NewAttachedComponent(base.Entity, NamedCID).(*Named)
 	n.Name = name
 	n.Flags |= ComponentInternal
 

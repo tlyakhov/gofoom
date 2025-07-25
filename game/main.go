@@ -39,7 +39,6 @@ import (
 var cpuProfile = flag.String("cpuprofile", "", "Write CPU profile to file")
 var memProfile = flag.String("memprofile", "", "Write Memory profile to file")
 var win *opengl.Window
-var u *ecs.Universe
 var renderer *render.Renderer
 var canvas *opengl.Canvas
 var buffer *image.RGBA
@@ -48,19 +47,19 @@ var inMenu = true
 // TODO: unify this with editor, and also add ability to customize keybinds.
 // TODO: Mouse look?
 func gameInput() {
-	playerMobile := core.GetMobile(renderer.Universe, renderer.Player.Entity)
+	playerMobile := core.GetMobile(renderer.Player.Entity)
 
 	if win.Pressed(pixel.KeyW) {
-		controllers.MovePlayer(renderer.Universe, renderer.Player.Entity, renderer.PlayerBody.Angle.Now)
+		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now)
 	}
 	if win.Pressed(pixel.KeyS) {
-		controllers.MovePlayer(renderer.Universe, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+180.0)
+		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now+180.0)
 	}
 	if win.Pressed(pixel.KeyE) {
-		controllers.MovePlayer(renderer.Universe, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+90.0)
+		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now+90.0)
 	}
 	if win.Pressed(pixel.KeyQ) {
-		controllers.MovePlayer(renderer.Universe, renderer.Player.Entity, renderer.PlayerBody.Angle.Now+270.0)
+		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now+270.0)
 	}
 	if win.Pressed(pixel.KeyA) {
 		renderer.PlayerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
@@ -72,7 +71,7 @@ func gameInput() {
 	}
 	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
 		if renderer.Carrier.SelectedWeapon != 0 {
-			if w := inventory.GetWeapon(renderer.Universe, renderer.Carrier.SelectedWeapon); w != nil {
+			if w := inventory.GetWeapon(renderer.Carrier.SelectedWeapon); w != nil {
 				w.Intent = inventory.WeaponFire
 			}
 		}
@@ -82,7 +81,7 @@ func gameInput() {
 
 	if win.Pressed(pixel.KeySpace) {
 
-		if behaviors.GetUnderwater(renderer.Universe, renderer.PlayerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(renderer.PlayerBody.SectorEntity) != nil {
 			playerMobile.Force[2] += constants.PlayerSwimStrength
 		} else if renderer.PlayerBody.OnGround {
 			playerMobile.Force[2] += constants.PlayerJumpForce
@@ -90,7 +89,7 @@ func gameInput() {
 		}
 	}
 	if win.Pressed(pixel.KeyC) {
-		if behaviors.GetUnderwater(renderer.Universe, renderer.PlayerBody.SectorEntity) != nil {
+		if behaviors.GetUnderwater(renderer.PlayerBody.SectorEntity) != nil {
 			playerMobile.Force[2] -= constants.PlayerSwimStrength
 		} else {
 			renderer.Player.Crouching = true
@@ -119,7 +118,7 @@ func integrateGame() {
 			renderer.Carrier.SelectedWeapon = gunSlot.Entity
 		}
 		gameInput()
-		u.ActAllControllers(ecs.ControllerAlways)
+		ecs.ActAllControllers(ecs.ControllerAlways)
 	}
 	win.UpdateInput()
 }
@@ -172,27 +171,27 @@ func run() {
 
 	win.SetSmooth(false)
 
+	ecs.Initialize()
 	for _, meta := range ecs.Types().Controllers {
 		fmt.Printf("%v, priority %v\n", meta.Type.String(), meta.Priority)
 	}
-	u = ecs.NewUniverse()
-	u.Simulation.Integrate = integrateGame
-	u.Simulation.Render = renderGame
+	ecs.Simulation.Integrate = integrateGame
+	ecs.Simulation.Render = renderGame
 	// Debug
 	if false {
-		controllers.CreateTestWorld3(u)
-		// u.Save("bin/exported_test.yaml")
-	} else if err = u.Load("data/worlds/hall.yaml"); err != nil {
+		controllers.CreateTestWorld3()
+		// ecs.Save("bin/exported_test.yaml")
+	} else if err = ecs.Load("data/worlds/hall.yaml"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
-	validateSpawn(u)
-	controllers.Respawn(u, true)
-	archetypes.CreateFont(u, "data/vga-font-8x8.png", "Default Font")
+	validateSpawn()
+	controllers.Respawn(true)
+	archetypes.CreateFont("data/vga-font-8x8.png", "Default Font")
 
 	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
 	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
-	renderer = render.NewRenderer(u)
+	renderer = render.NewRenderer()
 	renderer.ScreenWidth = w
 	renderer.ScreenHeight = h
 	renderer.Initialize()
@@ -203,7 +202,7 @@ func run() {
 	ui.LoadSettings(constants.UserSettings, uiPageMain, uiPageSettings, uiPageKeyBindings)
 
 	for !win.Closed() {
-		u.Simulation.Step()
+		ecs.Simulation.Step()
 	}
 
 	if *memProfile != "" {

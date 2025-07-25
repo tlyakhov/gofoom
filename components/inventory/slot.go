@@ -33,14 +33,14 @@ type Slot struct {
 var SlotCID ecs.ComponentID
 
 func init() {
-	SlotCID = ecs.RegisterComponent(&ecs.Column[Slot, *Slot]{Getter: GetSlot})
+	SlotCID = ecs.RegisterComponent(&ecs.Arena[Slot, *Slot]{Getter: GetSlot})
 }
 
 func (x *Slot) ComponentID() ecs.ComponentID {
 	return SlotCID
 }
-func GetSlot(u *ecs.Universe, e ecs.Entity) *Slot {
-	if asserted, ok := u.Component(e, SlotCID).(*Slot); ok {
+func GetSlot(e ecs.Entity) *Slot {
+	if asserted, ok := ecs.Component(e, SlotCID).(*Slot); ok {
 		return asserted
 	}
 	return nil
@@ -87,7 +87,7 @@ func (s *Slot) Serialize() map[string]any {
 	data["Count"] = s.Count.Serialize()
 	data["Class"] = s.Class
 	if s.Image != 0 {
-		data["Image"] = s.Image.Serialize(s.Universe)
+		data["Image"] = s.Image.Serialize()
 	}
 
 	return data

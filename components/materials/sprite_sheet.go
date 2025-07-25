@@ -24,14 +24,14 @@ type SpriteSheet struct {
 var SpriteSheetCID ecs.ComponentID
 
 func init() {
-	SpriteSheetCID = ecs.RegisterComponent(&ecs.Column[SpriteSheet, *SpriteSheet]{Getter: GetSpriteSheet})
+	SpriteSheetCID = ecs.RegisterComponent(&ecs.Arena[SpriteSheet, *SpriteSheet]{Getter: GetSpriteSheet})
 }
 
 func (x *SpriteSheet) ComponentID() ecs.ComponentID {
 	return SpriteSheetCID
 }
-func GetSpriteSheet(u *ecs.Universe, e ecs.Entity) *SpriteSheet {
-	if asserted, ok := u.Component(e, SpriteSheetCID).(*SpriteSheet); ok {
+func GetSpriteSheet(e ecs.Entity) *SpriteSheet {
+	if asserted, ok := ecs.Component(e, SpriteSheetCID).(*SpriteSheet); ok {
 		return asserted
 	}
 	return nil
@@ -41,14 +41,14 @@ func (s *SpriteSheet) MultiAttachable() bool { return true }
 
 func (s *SpriteSheet) OnDelete() {
 	defer s.Attached.OnDelete()
-	if s.Universe != nil {
-		s.Frame.Detach(s.Universe.Simulation)
+	if s.IsAttached() {
+		s.Frame.Detach(ecs.Simulation)
 	}
 }
 
-func (s *SpriteSheet) OnAttach(u *ecs.Universe) {
-	s.Attached.OnAttach(u)
-	s.Frame.Attach(u.Simulation)
+func (s *SpriteSheet) OnAttach() {
+	s.Attached.OnAttach()
+	s.Frame.Attach(ecs.Simulation)
 
 }
 
@@ -109,7 +109,7 @@ func (s *SpriteSheet) Construct(data map[string]any) {
 func (s *SpriteSheet) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 	if s.Material != 0 {
-		result["Material"] = s.Material.Serialize(s.Universe)
+		result["Material"] = s.Material.Serialize()
 	}
 	if s.Rows != 1 {
 		result["Rows"] = strconv.FormatUint(uint64(s.Rows), 10)

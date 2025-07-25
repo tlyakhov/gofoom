@@ -23,15 +23,15 @@ func (a *AddComponent) Activate() {
 
 func (a *AddComponent) Undo() {
 	for _, entity := range a.Entities {
-		a.State().Universe.DetachComponent(a.ID, entity)
+		ecs.DetachComponent(a.ID, entity)
 	}
-	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerRecalculate)
 }
 func (a *AddComponent) Redo() {
 	for _, entity := range a.Entities {
-		a.State().Universe.NewAttachedComponent(entity, a.ID)
+		ecs.NewAttachedComponent(entity, a.ID)
 	}
-	a.State().Universe.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerRecalculate)
 }
 
 func (a *AddComponent) Construct(data map[string]any) {

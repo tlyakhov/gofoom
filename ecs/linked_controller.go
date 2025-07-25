@@ -31,20 +31,20 @@ func (lc *LinkedController) Recalculate() {
 	// Remove this entity from any linked copies
 	for _, c := range lc.SourceComponents {
 		if c != nil {
-			lc.Universe.detach(c.ComponentID(), lc.Entity, false)
+			detach(c.ComponentID(), lc.Entity, false)
 		}
 	}
 	lc.SourceComponents = make(ComponentTable, 0)
 	for _, sourceEntity := range lc.Sources {
-		for _, c := range lc.Universe.AllComponents(sourceEntity) {
+		for _, c := range AllComponents(sourceEntity) {
 			if c == nil || !c.MultiAttachable() {
 				continue
 			}
 			lc.SourceComponents.Set(c)
 			if lc.AlwaysReplace {
-				lc.Universe.detach(c.ComponentID(), lc.Entity, false)
+				detach(c.ComponentID(), lc.Entity, false)
 			}
-			lc.Universe.attach(lc.Entity, &c, c.ComponentID())
+			attach(lc.Entity, &c, c.ComponentID())
 		}
 	}
 }

@@ -14,14 +14,14 @@ type Underwater struct {
 var UnderwaterCID ecs.ComponentID
 
 func init() {
-	UnderwaterCID = ecs.RegisterComponent(&ecs.Column[Underwater, *Underwater]{Getter: GetUnderwater})
+	UnderwaterCID = ecs.RegisterComponent(&ecs.Arena[Underwater, *Underwater]{Getter: GetUnderwater})
 }
 
 func (x *Underwater) ComponentID() ecs.ComponentID {
 	return UnderwaterCID
 }
-func GetUnderwater(u *ecs.Universe, e ecs.Entity) *Underwater {
-	if asserted, ok := u.Component(e, UnderwaterCID).(*Underwater); ok {
+func GetUnderwater(e ecs.Entity) *Underwater {
+	if asserted, ok := ecs.Component(e, UnderwaterCID).(*Underwater); ok {
 		return asserted
 	}
 	return nil

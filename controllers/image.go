@@ -38,7 +38,7 @@ func (ic *ImageController) Target(target ecs.Attachable, e ecs.Entity) bool {
 
 func (ic *ImageController) Recalculate() {
 	if ic.toneMap == nil {
-		ic.toneMap = ic.Universe.Singleton(materials.ToneMapCID).(*materials.ToneMap)
+		ic.toneMap = ecs.Singleton(materials.ToneMapCID).(*materials.ToneMap)
 	}
 
 	for y := 0; y < int(ic.Height); y++ {

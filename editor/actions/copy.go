@@ -31,10 +31,10 @@ func (a *Copy) Activate() {
 
 	for _, obj := range a.Selected.Exact {
 		// Don't copy/paste active players
-		if p := character.GetPlayer(obj.Universe, obj.Entity); p != nil && !p.Spawn {
+		if p := character.GetPlayer(obj.Entity); p != nil && !p.Spawn {
 			continue
 		}
-		a.Saved[obj.Entity.Serialize(obj.Universe)] = obj.Serialize()
+		a.Saved[obj.Entity.Serialize()] = obj.Serialize()
 	}
 
 	bytes, err := yaml.Marshal(a.Saved)

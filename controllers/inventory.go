@@ -12,18 +12,18 @@ import (
 )
 
 func PickUpInventoryItem(ic *inventory.Carrier, itemEntity ecs.Entity) {
-	item := inventory.GetItem(ic.Universe, itemEntity)
+	item := inventory.GetItem(itemEntity)
 	if item == nil || !item.IsActive() {
 		return
 	}
-	player := character.GetPlayer(ic.Universe, ic.Entity)
+	player := character.GetPlayer(ic.Entity)
 
 	for _, e := range ic.Slots {
 		if e == 0 {
 			continue
 		}
 
-		slot := inventory.GetSlot(ic.Universe, e)
+		slot := inventory.GetSlot(e)
 
 		if slot == nil || slot.Class != item.Class {
 			continue
@@ -41,7 +41,7 @@ func PickUpInventoryItem(ic *inventory.Carrier, itemEntity ecs.Entity) {
 		}
 		//item.Count.Now -= toAdd
 		// Disable all the entity components
-		for _, c := range item.Universe.AllComponents(itemEntity) {
+		for _, c := range ecs.AllComponents(itemEntity) {
 			if c != nil && !c.MultiAttachable() {
 				c.Base().Flags &= ^ecs.ComponentActive
 			}

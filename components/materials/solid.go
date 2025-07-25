@@ -17,14 +17,14 @@ type Solid struct {
 var SolidCID ecs.ComponentID
 
 func init() {
-	SolidCID = ecs.RegisterComponent(&ecs.Column[Solid, *Solid]{Getter: GetSolid})
+	SolidCID = ecs.RegisterComponent(&ecs.Arena[Solid, *Solid]{Getter: GetSolid})
 }
 
 func (x *Solid) ComponentID() ecs.ComponentID {
 	return SolidCID
 }
-func GetSolid(u *ecs.Universe, e ecs.Entity) *Solid {
-	if asserted, ok := u.Component(e, SolidCID).(*Solid); ok {
+func GetSolid(e ecs.Entity) *Solid {
+	if asserted, ok := ecs.Component(e, SolidCID).(*Solid); ok {
 		return asserted
 	}
 	return nil
@@ -34,13 +34,13 @@ func (s *Solid) MultiAttachable() bool { return true }
 
 func (s *Solid) OnDelete() {
 	defer s.Attached.OnDelete()
-	if s.Universe != nil {
-		s.Diffuse.Detach(s.Universe.Simulation)
+	if s.IsAttached() {
+		s.Diffuse.Detach(ecs.Simulation)
 	}
 }
-func (s *Solid) OnAttach(u *ecs.Universe) {
-	s.Attached.OnAttach(u)
-	s.Diffuse.Attach(s.Universe.Simulation)
+func (s *Solid) OnAttach() {
+	s.Attached.OnAttach()
+	s.Diffuse.Attach(ecs.Simulation)
 }
 
 func (s *Solid) Construct(data map[string]any) {

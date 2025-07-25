@@ -138,8 +138,8 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // doing it manually every once in a while.
 // This could be optimized using the quadtree, but that would require storing
 // sectors in the quadtree which has a runtime cost.
-func AutoPortal(u *ecs.Universe) {
-	col := ecs.ColumnFor[core.Sector](u, core.SectorCID)
+func AutoPortal() {
+	col := ecs.ArenaFor[core.Sector](core.SectorCID)
 	for i := range col.Cap() {
 		sector := col.Value(i)
 		if sector == nil {

@@ -1380,8 +1380,8 @@
     InRange:
       Code: |-
         if body == nil { return }
-        m := core.GetMobile(s.Universe, body.Entity)
-        vd := behaviors.GetVerticalDoor(s.Universe,onEntity)
+        m := core.GetMobile(body.Entity)
+        vd := behaviors.GetVerticalDoor(onEntity)
         if m == nil || vd == nil { return }
         if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
   behaviors.VerticalDoor:
@@ -1706,15 +1706,15 @@
   behaviors.PlayerTargetable:
     Frob:
       Code: |-
-        door := behaviors.GetVerticalDoor(s.Universe,16)
-        buttonSector := core.GetSector(s.Universe,10)
+        door := behaviors.GetVerticalDoor(16)
+        buttonSector := core.GetSector(10)
         buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
         if door.State != behaviors.DoorStateOpen {
           door.Intent = behaviors.DoorIntentOpen
-        buttonStage.Frame = 1
+          buttonStage.Frame = 1
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
-        buttonStage.Frame=0
+          buttonStage.Frame=0
         }
     Message: |-
       {{- with behaviors_VerticalDoor 16}}
@@ -1724,19 +1724,19 @@
       {{end}}
     Selected:
       Code: |-
-        buttonSector := core.GetSector(s.Universe,10)
+        buttonSector := core.GetSector(10)
         buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
         buttonStage.Flags |= materials.ShaderFrob
     UnSelected:
       Code: |-
-        buttonSector := core.GetSector(s.Universe,10)
+        buttonSector := core.GetSector(10)
         buttonStage := buttonSector.Segments[2].Surface.ExtraStages[0]
         buttonStage.Flags &= ^materials.ShaderFrob
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
       Code: |-
-        if p := character.GetPlayer(s.Universe, body.Entity); p != nil {
+        if p := character.GetPlayer(body.Entity); p != nil {
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: character.Player

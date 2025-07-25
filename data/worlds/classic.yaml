@@ -761,7 +761,7 @@
     Bottom:
       Scripts:
         - Code: |-
-            if alive := behaviors.GetAlive(s.Universe,body.Entity); alive != nil {
+            if alive := behaviors.GetAlive(body.Entity); alive != nil {
               alive.Hurt("Slime", 2, 500)
             }
       Surface:
@@ -1633,8 +1633,8 @@
     InRange:
       Code: |-
         if body == nil { return }
-        m := core.GetMobile(s.Universe, body.Entity)
-        vd := behaviors.GetVerticalDoor(s.Universe,onEntity)
+        m := core.GetMobile(body.Entity)
+        vd := behaviors.GetVerticalDoor(onEntity)
         if m == nil || vd == nil { return }
         if m.Mass >10 { vd.Intent = behaviors.DoorIntentOpen }
   behaviors.VerticalDoor:
