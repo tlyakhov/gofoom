@@ -33,7 +33,7 @@ type Slot struct {
 var SlotCID ecs.ComponentID
 
 func init() {
-	SlotCID = ecs.RegisterComponent(&ecs.Arena[Slot, *Slot]{Getter: GetSlot})
+	SlotCID = ecs.RegisterComponent(&ecs.Arena[Slot, *Slot]{})
 }
 
 func (x *Slot) ComponentID() ecs.ComponentID {

@@ -23,7 +23,7 @@ type Linked struct {
 var LinkedCID ComponentID
 
 func init() {
-	LinkedCID = RegisterComponent(&Arena[Linked, *Linked]{Getter: GetLinked})
+	LinkedCID = RegisterComponent(&Arena[Linked, *Linked]{})
 }
 
 func GetLinked(e Entity) *Linked {

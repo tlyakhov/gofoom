@@ -18,7 +18,7 @@ type Lit struct {
 var LitCID ecs.ComponentID
 
 func init() {
-	LitCID = ecs.RegisterComponent(&ecs.Arena[Lit, *Lit]{Getter: GetLit})
+	LitCID = ecs.RegisterComponent(&ecs.Arena[Lit, *Lit]{})
 }
 
 func (x *Lit) ComponentID() ecs.ComponentID {

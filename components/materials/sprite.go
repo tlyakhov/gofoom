@@ -18,7 +18,7 @@ type Sprite struct {
 var SpriteCID ecs.ComponentID
 
 func init() {
-	SpriteCID = ecs.RegisterComponent(&ecs.Arena[Sprite, *Sprite]{Getter: GetSprite})
+	SpriteCID = ecs.RegisterComponent(&ecs.Arena[Sprite, *Sprite]{})
 }
 
 func (x *Sprite) ComponentID() ecs.ComponentID {

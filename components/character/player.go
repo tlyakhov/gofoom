@@ -33,7 +33,7 @@ type Player struct {
 var PlayerCID ecs.ComponentID
 
 func init() {
-	PlayerCID = ecs.RegisterComponent(&ecs.Arena[Player, *Player]{Getter: GetPlayer})
+	PlayerCID = ecs.RegisterComponent(&ecs.Arena[Player, *Player]{})
 }
 
 func (x *Player) ComponentID() ecs.ComponentID {

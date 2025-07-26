@@ -27,7 +27,7 @@ type ParticleEmitter struct {
 var ParticleEmitterCID ecs.ComponentID
 
 func init() {
-	ParticleEmitterCID = ecs.RegisterComponent(&ecs.Arena[ParticleEmitter, *ParticleEmitter]{Getter: GetParticleEmitter})
+	ParticleEmitterCID = ecs.RegisterComponent(&ecs.Arena[ParticleEmitter, *ParticleEmitter]{})
 }
 
 func (x *ParticleEmitter) ComponentID() ecs.ComponentID {

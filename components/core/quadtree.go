@@ -20,7 +20,7 @@ type Quadtree struct {
 var QuadtreeCID ecs.ComponentID
 
 func init() {
-	QuadtreeCID = ecs.RegisterComponent(&ecs.Arena[Quadtree, *Quadtree]{Getter: GetQuadtree})
+	QuadtreeCID = ecs.RegisterComponent(&ecs.Arena[Quadtree, *Quadtree]{})
 }
 
 func (x *Quadtree) ComponentID() ecs.ComponentID {

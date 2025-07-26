@@ -14,7 +14,7 @@ type ActionFire struct {
 var ActionFireCID ecs.ComponentID
 
 func init() {
-	ActionFireCID = ecs.RegisterComponent(&ecs.Arena[ActionFire, *ActionFire]{Getter: GetActionFire})
+	ActionFireCID = ecs.RegisterComponent(&ecs.Arena[ActionFire, *ActionFire]{})
 }
 
 func (*ActionFire) ComponentID() ecs.ComponentID {

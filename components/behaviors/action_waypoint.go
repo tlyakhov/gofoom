@@ -20,7 +20,7 @@ type ActionWaypoint struct {
 var ActionWaypointCID ecs.ComponentID
 
 func init() {
-	ActionWaypointCID = ecs.RegisterComponent(&ecs.Arena[ActionWaypoint, *ActionWaypoint]{Getter: GetActionWaypoint})
+	ActionWaypointCID = ecs.RegisterComponent(&ecs.Arena[ActionWaypoint, *ActionWaypoint]{})
 }
 
 func (*ActionWaypoint) ComponentID() ecs.ComponentID {

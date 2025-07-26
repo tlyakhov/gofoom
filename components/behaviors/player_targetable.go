@@ -25,7 +25,7 @@ type PlayerTargetable struct {
 var PlayerTargetableCID ecs.ComponentID
 
 func init() {
-	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Arena[PlayerTargetable, *PlayerTargetable]{Getter: GetPlayerTargetable})
+	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Arena[PlayerTargetable, *PlayerTargetable]{})
 }
 
 func (x *PlayerTargetable) ComponentID() ecs.ComponentID {

@@ -27,7 +27,7 @@ type Alive struct {
 var AliveCID ecs.ComponentID
 
 func init() {
-	AliveCID = ecs.RegisterComponent(&ecs.Arena[Alive, *Alive]{Getter: GetAlive})
+	AliveCID = ecs.RegisterComponent(&ecs.Arena[Alive, *Alive]{})
 }
 
 func (*Alive) ComponentID() ecs.ComponentID {

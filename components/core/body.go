@@ -26,12 +26,13 @@ type Body struct {
 var BodyCID ecs.ComponentID
 
 func init() {
-	BodyCID = ecs.RegisterComponent(&ecs.Arena[Body, *Body]{Getter: GetBody})
+	BodyCID = ecs.RegisterComponent(&ecs.Arena[Body, *Body]{})
 }
 
 func (x *Body) ComponentID() ecs.ComponentID {
 	return BodyCID
 }
+
 func GetBody(e ecs.Entity) *Body {
 	if asserted, ok := ecs.Component(e, BodyCID).(*Body); ok {
 		return asserted

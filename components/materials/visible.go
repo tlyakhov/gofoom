@@ -31,7 +31,7 @@ type Visible struct {
 var VisibleCID ecs.ComponentID
 
 func init() {
-	VisibleCID = ecs.RegisterComponent(&ecs.Arena[Visible, *Visible]{Getter: GetVisible})
+	VisibleCID = ecs.RegisterComponent(&ecs.Arena[Visible, *Visible]{})
 }
 
 func (x *Visible) ComponentID() ecs.ComponentID {

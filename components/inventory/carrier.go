@@ -22,7 +22,7 @@ type Carrier struct {
 var CarrierCID ecs.ComponentID
 
 func init() {
-	CarrierCID = ecs.RegisterComponent(&ecs.Arena[Carrier, *Carrier]{Getter: GetCarrier})
+	CarrierCID = ecs.RegisterComponent(&ecs.Arena[Carrier, *Carrier]{})
 }
 
 func (*Carrier) ComponentID() ecs.ComponentID {

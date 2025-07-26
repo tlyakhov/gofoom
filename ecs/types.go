@@ -59,7 +59,14 @@ func RegisterComponent[T any, PT GenericAttachable[T]](arena *Arena[T, PT]) Comp
 	arena.typeOfT = reflect.TypeFor[T]()
 	tSplit := strings.Split(arena.Type().String(), ".")
 	noPackage := tSplit[len(tSplit)-1]
-	arena.componentID = ComponentID(arenaIndex)
+	cid := ComponentID(arenaIndex)
+	arena.componentID = cid
+	arena.Getter = func(e Entity) PT {
+		if asserted, ok := Component(e, cid).(PT); ok {
+			return asserted
+		}
+		return nil
+	}
 	ecsTypes.ArenaPlaceholders[arenaIndex] = arena
 	ecsTypes.ArenaIndexes[reflect.PointerTo(arena.Type()).String()] = arenaIndex
 	ecsTypes.ArenaIndexes[arena.String()] = arenaIndex

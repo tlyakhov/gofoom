@@ -32,7 +32,7 @@ type Item struct {
 var ItemCID ecs.ComponentID
 
 func init() {
-	ItemCID = ecs.RegisterComponent(&ecs.Arena[Item, *Item]{Getter: GetItem})
+	ItemCID = ecs.RegisterComponent(&ecs.Arena[Item, *Item]{})
 }
 
 func (x *Item) ComponentID() ecs.ComponentID {

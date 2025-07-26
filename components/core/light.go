@@ -21,7 +21,7 @@ type Light struct {
 var LightCID ecs.ComponentID
 
 func init() {
-	LightCID = ecs.RegisterComponent(&ecs.Arena[Light, *Light]{Getter: GetLight})
+	LightCID = ecs.RegisterComponent(&ecs.Arena[Light, *Light]{})
 }
 
 func (x *Light) ComponentID() ecs.ComponentID {

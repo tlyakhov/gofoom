@@ -27,7 +27,7 @@ type SourceFile struct {
 var SourceFileCID ComponentID
 
 func init() {
-	SourceFileCID = RegisterComponent(&Arena[SourceFile, *SourceFile]{Getter: GetSourceFile})
+	SourceFileCID = RegisterComponent(&Arena[SourceFile, *SourceFile]{})
 }
 
 func (*SourceFile) ComponentID() ComponentID {

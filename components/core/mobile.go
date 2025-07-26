@@ -31,7 +31,7 @@ type Mobile struct {
 var MobileCID ecs.ComponentID
 
 func init() {
-	MobileCID = ecs.RegisterComponent(&ecs.Arena[Mobile, *Mobile]{Getter: GetMobile})
+	MobileCID = ecs.RegisterComponent(&ecs.Arena[Mobile, *Mobile]{})
 }
 
 func (x *Mobile) ComponentID() ecs.ComponentID {
