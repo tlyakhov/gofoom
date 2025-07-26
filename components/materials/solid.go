@@ -17,7 +17,7 @@ type Solid struct {
 var SolidCID ecs.ComponentID
 
 func init() {
-	SolidCID = ecs.RegisterComponent(&ecs.Arena[Solid, *Solid]{Getter: GetSolid})
+	SolidCID = ecs.RegisterComponent(&ecs.Arena[Solid, *Solid]{})
 }
 
 func (x *Solid) ComponentID() ecs.ComponentID {

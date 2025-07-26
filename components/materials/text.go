@@ -28,7 +28,7 @@ type Text struct {
 var TextCID ecs.ComponentID
 
 func init() {
-	TextCID = ecs.RegisterComponent(&ecs.Arena[Text, *Text]{Getter: GetText})
+	TextCID = ecs.RegisterComponent(&ecs.Arena[Text, *Text]{})
 }
 
 func (x *Text) ComponentID() ecs.ComponentID {

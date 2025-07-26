@@ -36,7 +36,7 @@ type WeaponMark struct {
 var WeaponClassCID ecs.ComponentID
 
 func init() {
-	WeaponClassCID = ecs.RegisterComponent(&ecs.Arena[WeaponClass, *WeaponClass]{Getter: GetWeaponClass})
+	WeaponClassCID = ecs.RegisterComponent(&ecs.Arena[WeaponClass, *WeaponClass]{})
 }
 
 func (x *WeaponClass) ComponentID() ecs.ComponentID {

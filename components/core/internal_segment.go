@@ -23,7 +23,7 @@ type InternalSegment struct {
 var InternalSegmentCID ecs.ComponentID
 
 func init() {
-	InternalSegmentCID = ecs.RegisterComponent(&ecs.Arena[InternalSegment, *InternalSegment]{Getter: GetInternalSegment})
+	InternalSegmentCID = ecs.RegisterComponent(&ecs.Arena[InternalSegment, *InternalSegment]{})
 }
 
 func (x *InternalSegment) ComponentID() ecs.ComponentID {

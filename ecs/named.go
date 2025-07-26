@@ -13,10 +13,14 @@ type Named struct {
 	Name     string `editable:"Name"`
 }
 
+// TODO: Write a code generator to automate this boiler plate
+// (RegisterComponent, ComponentID, Get*) for components.
+// There's not much here, but it's annoying to manage and error-prone.
+
 var NamedCID ComponentID
 
 func init() {
-	NamedCID = RegisterComponent(&Arena[Named, *Named]{Getter: GetNamed})
+	NamedCID = RegisterComponent(&Arena[Named, *Named]{})
 }
 
 func (*Named) ComponentID() ComponentID {

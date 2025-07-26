@@ -22,7 +22,7 @@ type Actor struct {
 var ActorCID ecs.ComponentID
 
 func init() {
-	ActorCID = ecs.RegisterComponent(&ecs.Arena[Actor, *Actor]{Getter: GetActor})
+	ActorCID = ecs.RegisterComponent(&ecs.Arena[Actor, *Actor]{})
 }
 
 func (*Actor) ComponentID() ecs.ComponentID {

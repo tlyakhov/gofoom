@@ -23,7 +23,7 @@ type ToneMap struct {
 var ToneMapCID ecs.ComponentID
 
 func init() {
-	ToneMapCID = ecs.RegisterComponent(&ecs.Arena[ToneMap, *ToneMap]{Getter: GetToneMap})
+	ToneMapCID = ecs.RegisterComponent(&ecs.Arena[ToneMap, *ToneMap]{})
 }
 
 func (x *ToneMap) ComponentID() ecs.ComponentID {

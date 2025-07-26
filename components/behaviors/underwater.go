@@ -14,7 +14,7 @@ type Underwater struct {
 var UnderwaterCID ecs.ComponentID
 
 func init() {
-	UnderwaterCID = ecs.RegisterComponent(&ecs.Arena[Underwater, *Underwater]{Getter: GetUnderwater})
+	UnderwaterCID = ecs.RegisterComponent(&ecs.Arena[Underwater, *Underwater]{})
 }
 
 func (x *Underwater) ComponentID() ecs.ComponentID {

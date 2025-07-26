@@ -18,7 +18,7 @@ func (*mockComponent) ComponentID() ComponentID {
 var mockCID ComponentID
 
 func init() {
-	mockCID = RegisterComponent(&Arena[mockComponent, *mockComponent]{Getter: GetMockComponent})
+	mockCID = RegisterComponent(&Arena[mockComponent, *mockComponent]{})
 }
 
 func GetMockComponent(e Entity) *mockComponent {

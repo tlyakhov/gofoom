@@ -24,7 +24,7 @@ type SpriteSheet struct {
 var SpriteSheetCID ecs.ComponentID
 
 func init() {
-	SpriteSheetCID = ecs.RegisterComponent(&ecs.Arena[SpriteSheet, *SpriteSheet]{Getter: GetSpriteSheet})
+	SpriteSheetCID = ecs.RegisterComponent(&ecs.Arena[SpriteSheet, *SpriteSheet]{})
 }
 
 func (x *SpriteSheet) ComponentID() ecs.ComponentID {

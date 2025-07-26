@@ -17,7 +17,7 @@ type ActionTransition struct {
 var ActionTransitionCID ecs.ComponentID
 
 func init() {
-	ActionTransitionCID = ecs.RegisterComponent(&ecs.Arena[ActionTransition, *ActionTransition]{Getter: GetActionTransition})
+	ActionTransitionCID = ecs.RegisterComponent(&ecs.Arena[ActionTransition, *ActionTransition]{})
 }
 
 func (*ActionTransition) ComponentID() ecs.ComponentID {

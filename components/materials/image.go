@@ -41,7 +41,7 @@ type Image struct {
 var ImageCID ecs.ComponentID
 
 func init() {
-	ImageCID = ecs.RegisterComponent(&ecs.Arena[Image, *Image]{Getter: GetImage})
+	ImageCID = ecs.RegisterComponent(&ecs.Arena[Image, *Image]{})
 }
 
 func (x *Image) ComponentID() ecs.ComponentID {

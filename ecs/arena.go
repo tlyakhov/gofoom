@@ -43,7 +43,7 @@ type Arena[T any, PT GenericAttachable[T]] struct {
 	componentID ComponentID
 }
 
-// From initializes a arena from another arena of the same type, copying
+// From initializes an arena from another arena of the same type, copying
 // metadata and setting the Universe instance.
 func (col *Arena[T, PT]) From(source AttachableArena) {
 	placeholder := source.(*Arena[T, PT])
