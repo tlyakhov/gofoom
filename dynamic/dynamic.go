@@ -7,18 +7,9 @@ import (
 	"math"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"unsafe"
 
 	"github.com/spf13/cast"
-)
-
-//go:generate go run github.com/dmarkham/enumer -type=DynamicStage -json
-type DynamicStage int
-
-const (
-	DynamicSpawn DynamicStage = iota
-	DynamicPrev
-	DynamicRender
-	DynamicNow
 )
 
 // A DynamicValue is anything in the engine that evolves over time.
@@ -32,11 +23,14 @@ const (
 // * Procedurally animated values use second-order dynamics for organic movement
 // * Values can also have Animations that use easing (e.g. inventory item bobbing)
 type DynamicValue[T DynamicType] struct {
-	*Animation[T] `editable:"Animation"`
-	Spawned[T]    `editable:"^"`
+	Spawned[T] `editable:"^"`
+	// Warning: the location within the struct matters for fast access. Do not
+	// move or change order without updating Dynamic.Value
+	Prev   T
+	Render T
 
-	Prev    T
-	Render  T
+	*Animation[T] `editable:"Animation"`
+
 	IsAngle bool // Only relevant for T=float64
 
 	// Do we need these? not used anywhere currently
@@ -58,17 +52,14 @@ func (d *DynamicValue[T]) IsProcedural() bool {
 	return d.Procedural
 }
 
-func (d *DynamicValue[T]) Value(s DynamicStage) T {
-	switch s {
-	case DynamicSpawn:
-		return d.Spawn
-	case DynamicPrev:
-		return d.Prev
-	case DynamicNow:
-		return d.Now
-	default:
-		return d.Render
-	}
+func (d *DynamicValue[T]) Value(s DynamicState) T {
+	// This is very unsafe because it depends on the struct layout matching the
+	// order of the DynamicState enum. It's much
+	// faster than a switch/branch.
+	start := unsafe.Offsetof(d.Spawn)
+	delta := unsafe.Offsetof(d.Now) - unsafe.Offsetof(d.Spawn)
+	p := unsafe.Pointer(uintptr(unsafe.Pointer(d)) + start + delta*uintptr(s))
+	return *(*T)(p)
 }
 
 func (d *DynamicValue[T]) ResetToSpawn() {

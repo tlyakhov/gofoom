@@ -96,8 +96,8 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.ZAt(dynamic.DynamicNow, wc.isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicNow, wc.isect.To2D())
+			floorZ, ceilZ := sector.ZAt(dynamic.Now, wc.isect.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.Now, wc.isect.To2D())
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
 				idist2 = wc.isect.Dist2(p)
 				if idist2 < hitDist2 {

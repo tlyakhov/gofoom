@@ -121,7 +121,7 @@ func (bc *BodyController) findBodySector() {
 		bc.Body.Pos.Input[1] = p[1]
 	}
 
-	floorZ, ceilZ := closestSector.ZAt(dynamic.DynamicNow, bc.pos2d)
+	floorZ, ceilZ := closestSector.ZAt(dynamic.Now, bc.pos2d)
 	// log.Printf("E: %v, P: %v, F: %v, C:%v\n", bc.Entity, bc.pos, floorZ, ceilZ)
 	if bc.pos[2]-bc.halfHeight < floorZ {
 		bc.pos[2] = floorZ + bc.halfHeight
@@ -147,7 +147,7 @@ func (bc *BodyController) Enter(sector *core.Sector) {
 	bc.Body.SectorEntity = sector.Entity
 
 	if bc.Body.OnGround {
-		floorZ := bc.Sector.Bottom.ZAt(dynamic.DynamicNow, bc.Pos.Now.To2D())
+		floorZ := bc.Sector.Bottom.ZAt(dynamic.Now, bc.Pos.Now.To2D())
 		p := &bc.Pos.Now
 		h := bc.Size.Now[1] * 0.5
 		if bc.Sector.Bottom.Target == 0 && p[2]-h < floorZ {

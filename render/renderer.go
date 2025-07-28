@@ -292,7 +292,7 @@ func (r *Renderer) RenderSector(block *block) {
 	}
 
 	if block.segmentIntersection != nil {
-		block.IntersectionBottom, block.IntersectionTop = block.Sector.ZAt(dynamic.DynamicRender, block.RaySegIntersect.To2D())
+		block.IntersectionBottom, block.IntersectionTop = block.Sector.ZAt(dynamic.Render, block.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(block)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", block.Sector.Entity, block.Depth)

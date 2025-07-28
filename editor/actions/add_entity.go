@@ -86,7 +86,7 @@ func (a *AddEntity) Point() bool {
 		body.Pos.Spawn[0] = worldGrid[0]
 		body.Pos.Spawn[1] = worldGrid[1]
 		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.DynamicSpawn, worldGrid)
+			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.Spawn, worldGrid)
 			body.Pos.Spawn[2] = (floorZ + ceilZ) / 2
 		}
 		body.Pos.ResetToSpawn()

@@ -95,7 +95,7 @@ func (c *column) SampleLight(result *concepts.Vector4, lit *materials.Lit, world
 
 	// Don't filter far away lightmaps. Tolerate a ~2px snap-in
 	if dist > float64(c.ScreenWidth)*c.LightGrid*0.25 {
-		c.LightUnfiltered(&c.Light, world)
+		c.LightUnfiltered(world)
 		return lit.Apply(result, &c.Light)
 	}
 
@@ -166,7 +166,7 @@ func (c *column) SampleLight(result *concepts.Vector4, lit *materials.Lit, world
 	return lit.Apply(result, &c.Light)
 }
 
-func (c *column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vector3) *concepts.Vector4 {
+func (c *column) LightUnfiltered(world *concepts.Vector3) {
 	/*
 		Fun dithered look, maybe leverage as an effect later?
 		jitter := *world
@@ -175,10 +175,29 @@ func (c *column) LightUnfiltered(result *concepts.Vector4, world *concepts.Vecto
 		jitter[2] += (rand.Float64() - 0.5) * constants.LightGrid
 	*/
 	c.LightSampler.Hash = c.WorldToLightmapHash(c.Sector, world, &c.LightSampler.Normal)
-	c.LightSampler.Get()
-	result[0] = c.LightSampler.Output[0]
-	result[1] = c.LightSampler.Output[1]
-	result[2] = c.LightSampler.Output[2]
-	result[3] = 1
-	return result
+
+	// We XOR with the sector entity to avoid problems across sector boundaries
+	cacheHash := c.LightSampler.Hash ^ concepts.RngXorShift64(uint64(c.Sector.Entity))
+	if cacheHash != c.LightLastHash {
+		if cacheHash == c.LightLastColHashes[c.ScreenY] && c.LightLastColHashes[c.ScreenY] != 0 {
+			copy(c.LightResult[:], c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8])
+		} else {
+			c.LightSampler.Get()
+			c.LightResult[0] = c.LightSampler.Output
+			c.LightLastColHashes[c.ScreenY] = cacheHash
+			for i := 1; i < 8; i++ {
+				// Some bit shifting to generate our light voxel hash without
+				// branches. See LightmapHashToWorld for details
+				c.LightSampler.Hash = c.LightSampler.Hash + uint64(i&1)<<16 + uint64(i&2)<<(32-1) + uint64(i&4)<<(48-2)
+				c.LightResult[i] = c.LightSampler.Output
+			}
+			copy(c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8], c.LightResult[:])
+		}
+		c.LightLastHash = cacheHash
+	}
+
+	c.Light[0] = c.LightResult[0][0]
+	c.Light[1] = c.LightResult[0][1]
+	c.Light[2] = c.LightResult[0][2]
+	c.Light[3] = 1
 }

@@ -218,17 +218,17 @@ func (s *Selectable) Recalculate() {
 func (s *Selectable) PointZ(p *concepts.Vector2) (bottom float64, top float64) {
 	switch s.Type {
 	case SelectableHi:
-		_, top = s.Sector.ZAt(dynamic.DynamicNow, p)
+		_, top = s.Sector.ZAt(dynamic.Now, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.ZAt(dynamic.DynamicNow, p)
+		_, adjTop := adj.ZAt(dynamic.Now, p)
 		bottom, top = math.Min(adjTop, top), math.Max(adjTop, top)
 	case SelectableLow:
-		bottom, _ = s.Sector.ZAt(dynamic.DynamicNow, p)
+		bottom, _ = s.Sector.ZAt(dynamic.Now, p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.ZAt(dynamic.DynamicNow, p)
+		adjBottom, _ := adj.ZAt(dynamic.Now, p)
 		bottom, top = math.Min(adjBottom, bottom), math.Max(adjBottom, bottom)
 	case SelectableMid:
-		bottom, top = s.Sector.ZAt(dynamic.DynamicNow, p)
+		bottom, top = s.Sector.ZAt(dynamic.Now, p)
 	case SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
 	}

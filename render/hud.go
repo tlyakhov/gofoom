@@ -174,7 +174,7 @@ func (r *Renderer) DebugInfo() {
 		r.Print(ts, 4, 44, fmt.Sprintf("f: %v, v: %v, p: %v\n", playerMobile.Force.StringHuman(2), playerMobile.Vel.Render.StringHuman(2), r.PlayerBody.Pos.Render.StringHuman(2)))
 	}
 
-	for i := 0; i < 20; i++ {
+	for i := range 20 {
 		if i >= r.Player.Notices.Length() {
 			break
 		}

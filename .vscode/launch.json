@@ -37,7 +37,10 @@
             "mode": "auto",
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}",
-            "output": "${workspaceFolder}/bin/game"
+            "output": "${workspaceFolder}/bin/game",
+            "env": {
+                "GOFLAGS": "-pgo=${workspaceFolder}/game.pgo"
+              }
         },
         {
             "name": "Launch Game [check for races]",

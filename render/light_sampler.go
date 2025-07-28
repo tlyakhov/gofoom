@@ -57,7 +57,7 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 	ls.LightmapHashToWorld(ls.Sector, &ls.Q, ls.Hash)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
-	fz, cz := ls.Sector.ZAt(dynamic.DynamicRender, ls.Q.To2D())
+	fz, cz := ls.Sector.ZAt(dynamic.Render, ls.Q.To2D())
 	if ls.Q[2] < fz {
 		ls.Q[2] = fz
 	}
@@ -100,7 +100,7 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(dynamic.Render, p.To2D())
 		if p[2]-ceilZ > ls.LightGrid || floorZ-p[2] > ls.LightGrid {
 			continue
 		}
@@ -114,6 +114,10 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 
 // lightVisibleFromSector determines whether a given light is visible from a world location.
 func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
+	// Help the compiler out by pre-defining all the local stuff in the outer
+	// scope.
+	var i2d *concepts.Vector2
+	var floorZ, floorZ2, ceilZ, ceilZ2, idist2 float64
 	lightPos := &lightBody.Pos.Render
 	// log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(),
 	// lightPos)
@@ -122,6 +126,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	prevDist := -1.0
+	ok := true
 	ls.Visited = ls.Visited[:0]
 	for sector != nil {
 		// log.Printf("Sector: %v\n", sector.Entity)
@@ -160,7 +165,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			}
 
 			// Find the intersection with this segment.
-			ok := seg.Intersect3D(p, lightPos, &ls.Intersection)
+			ok = seg.Intersect3D(p, lightPos, &ls.Intersection)
 			if !ok {
 				// log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				continue // No intersection, skip it!
@@ -175,18 +180,18 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			i2d := ls.Intersection.To2D()
+			i2d = ls.Intersection.To2D()
 			if ls.Intersection[2] < sector.Min[2] || ls.Intersection[2] > sector.Max[2] {
 				// log.Printf("Occluded by sector min/max %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				return false // Same as wall, we're occluded.
 			}
-			floorZ, ceilZ := sector.ZAt(dynamic.DynamicRender, i2d)
+			floorZ, ceilZ = sector.ZAt(dynamic.Render, i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			if ls.Intersection[2] < floorZ || ls.Intersection[2] > ceilZ {
 				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 				return false // Same as wall, we're occluded.
 			}
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.DynamicRender, i2d)
+			floorZ2, ceilZ2 = seg.AdjacentSegment.Sector.ZAt(dynamic.Render, i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			if ls.Intersection[2] < floorZ2 || ls.Intersection[2] > ceilZ2 {
 				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
@@ -211,7 +216,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			}
 
 			// Get the square of the distance to the intersection (from the target point)
-			idist2 := ls.Intersection.Dist2(p)
+			idist2 = ls.Intersection.Dist2(p)
 
 			// If the difference between the intersected distance and the light distance is
 			// within the bounding radius of our light, our light is right on a portal boundary and visible.
