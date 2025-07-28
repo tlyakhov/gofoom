@@ -80,7 +80,7 @@ func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	return inside
 }
 
-func (s *Sector) ZAt(stage dynamic.DynamicStage, p *concepts.Vector2) (fz, cz float64) {
+func (s *Sector) ZAt(stage dynamic.DynamicState, p *concepts.Vector2) (fz, cz float64) {
 	return s.Bottom.ZAt(stage, p), s.Top.ZAt(stage, p)
 }
 
@@ -280,7 +280,7 @@ func (s *Sector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		bz, tz := s.ZAt(dynamic.DynamicSpawn, &segment.P)
+		bz, tz := s.ZAt(dynamic.Spawn, &segment.P)
 		s.Center[2] += (bz + tz) * 0.5
 		if bz < s.Min[2] {
 			s.Min[2] = bz
@@ -297,6 +297,9 @@ func (s *Sector) Recalculate() {
 		segment.Sector = s
 		segment.Recalculate()
 	}
+
+	s.Top.Recalculate()
+	s.Bottom.Recalculate()
 
 	if len(s.Segments) > 1 {
 		// Figure out if this sector is concave.

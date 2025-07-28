@@ -21,6 +21,8 @@ type SectorPlane struct {
 	Target  ecs.Entity                    `editable:"Target" edit_type:"Sector"`
 	Surface materials.Surface             `editable:"Surf"`
 	Scripts []*Script                     `editable:"Scripts"`
+
+	XYDet float64
 }
 
 func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
@@ -70,15 +72,18 @@ func (s *SectorPlane) Serialize() map[string]any {
 	return result
 }
 
-func (s *SectorPlane) ZAt(stage dynamic.DynamicStage, isect *concepts.Vector2) float64 {
-	z := s.Z.Value(stage)
+func (s *SectorPlane) Recalculate() {
 	if s.Sector == nil || len(s.Sector.Segments) == 0 {
-		return z
+		s.XYDet = 0
+		return
 	}
-	det := s.Normal[2]*z + s.Normal[1]*s.Segments[0].P[1] +
+
+	s.XYDet = s.Normal[1]*s.Segments[0].P[1] +
 		s.Normal[0]*s.Segments[0].P[0]
+}
 
-	z = (det - s.Normal[0]*isect[0] - s.Normal[1]*isect[1]) / s.Normal[2]
+func (s *SectorPlane) ZAt(stage dynamic.DynamicState, isect *concepts.Vector2) float64 {
+	det := s.Normal[2]*s.Z.Value(stage) + s.XYDet
 
-	return z
+	return (det - s.Normal[0]*isect[0] - s.Normal[1]*isect[1]) / s.Normal[2]
 }

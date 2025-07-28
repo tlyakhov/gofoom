@@ -114,7 +114,6 @@ func init() {
 		"_AttachableArena": reflect.ValueOf((*_tlyakhov_gofoom_ecs_AttachableArena)(nil)),
 		"_Controller":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
 		"_Serializable":    reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
-		"_SubSerializable": reflect.ValueOf((*_tlyakhov_gofoom_ecs_SubSerializable)(nil)),
 		"_Universal":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Universal)(nil)),
 	}
 }
@@ -266,20 +265,6 @@ func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
 func (W _tlyakhov_gofoom_ecs_Serializable) Serialize() map[string]any {
-	return W.WSerialize()
-}
-
-// _tlyakhov_gofoom_ecs_SubSerializable is an interface wrapper for SubSerializable type
-type _tlyakhov_gofoom_ecs_SubSerializable struct {
-	IValue     interface{}
-	WConstruct func(data map[string]any)
-	WSerialize func() map[string]any
-}
-
-func (W _tlyakhov_gofoom_ecs_SubSerializable) Construct(data map[string]any) {
-	W.WConstruct(data)
-}
-func (W _tlyakhov_gofoom_ecs_SubSerializable) Serialize() map[string]any {
 	return W.WSerialize()
 }
 

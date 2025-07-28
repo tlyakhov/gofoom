@@ -325,11 +325,16 @@ func (list *EntityList) applySort() {
 			return a[0].(int) < b[0].(int)
 		}
 		switch col {
-		case 0, 1, 2:
+		case int(elcEntity):
 			if order == elsdSortDesc {
-				return a[col].(int) > b[col].(int)
+				return a[elcEntity].(int) > b[elcEntity].(int)
 			}
-			return a[col].(int) < b[col].(int)
+			return a[elcEntity].(int) < b[elcEntity].(int)
+		case int(elcRank), int(elcImage):
+			if order == elsdSortDesc {
+				return a[elcRank].(int) > b[elcRank].(int)
+			}
+			return a[elcRank].(int) < b[elcRank].(int)
 		default:
 			if order == elsdSortAsc {
 				return strings.Compare(a[col].(string), b[col].(string)) < 0

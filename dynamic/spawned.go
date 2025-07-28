@@ -12,9 +12,11 @@ import (
 )
 
 type Spawned[T DynamicType] struct {
-	Spawn    T `editable:"Spawn"`
-	Now      T
 	Attached bool
+	// Warning: the location within the struct matters for fast access. Do not
+	// move or change order without updating Dynamic.Value
+	Spawn T `editable:"Spawn"`
+	Now   T
 }
 
 func (s *Spawned[T]) ResetToSpawn() {
