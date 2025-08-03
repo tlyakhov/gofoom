@@ -5,7 +5,7 @@
       Code: |-
         if body == nil { return }
         m := core.GetMobile(body.Entity)
-        vd := behaviors.GetVerticalDoor(s.Universe,onEntity)
+        vd := behaviors.GetVerticalDoor(onEntity)
         if m == nil || vd == nil { return }
         if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
   behaviors.VerticalDoor:
@@ -278,7 +278,7 @@
         if !carrier.HasAtLeast("Red Keycard",1) {
           return
         }
-        door := behaviors.GetVerticalDoor(s.Universe,168)
+        door := behaviors.GetVerticalDoor(168)
         if door.State != behaviors.DoorStateOpen {
           door.Intent = behaviors.DoorIntentOpen
         } else if door.State != behaviors.DoorStateClosed {

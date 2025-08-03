@@ -27,7 +27,7 @@ func (x *Quadtree) ComponentID() ecs.ComponentID {
 	return QuadtreeCID
 }
 func GetQuadtree(e ecs.Entity) *Quadtree {
-	panic("Tried to behaviors.GetQuadtree. Use Universe.Singleton(behaviors.QuadtreeCID) instead.")
+	panic("Tried to behaviors.GetQuadtree. Use ecs.Singleton(behaviors.QuadtreeCID) instead.")
 	/*if asserted, ok := ecs.Component(e, QuadtreeCID).(*Quadtree); ok {
 		return asserted
 	}

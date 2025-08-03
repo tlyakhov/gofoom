@@ -4,25 +4,23 @@
 package materials
 
 import (
+	"fmt"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
-/*
-	regex:
-
-["](Floor|Ceil|Mid|Lo|Hi)Material["][:] (["]\d+["])
-"$1Surface": { "Material": $2 }
-
-["](Mid|Lo|Hi)Surface["]
-"$1"
-*/
-
 type Surface struct {
 	Material    ecs.Entity                             `editable:"Material" edit_type:"Material"`
 	ExtraStages []*ShaderStage                         `editable:"Extra Shader Stages"`
 	Transform   dynamic.DynamicValue[concepts.Matrix2] `editable:"ℝ²→ℝ²"`
+}
+
+func (s *Surface) String() string {
+	if len(s.ExtraStages) == 0 {
+		return fmt.Sprintf("Surface (%v)", s.Material)
+	}
+	return fmt.Sprintf("Surface (%v) + %v extra stages", s.Material, len(s.ExtraStages))
 }
 
 func (s *Surface) Construct(data map[string]any) {

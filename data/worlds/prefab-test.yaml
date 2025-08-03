@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 0
+        Now: 662.34375
         Spawn: 0
     Pos:
-        Now: 0, 0, 20
+        Now: -23.522050854731514, 53.62755184556202, 20
         Spawn: 0, 0, 0
     Size:
         Now: 10, 40
@@ -21,12 +21,19 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0.007001650836370665
+        Now: 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001007834406344842, -0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000015352531707057192, 0.007001650399223597
         Spawn: 0, 0, 0
+  ecs.Linked:
+    Sources:
+        - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   ecs.Named:
     Name: Player
   inventory.Carrier:
-    Inventory: []
+    Inventory:
+        - ∈⋮189∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+        - ∈⋮177∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+        - ∈⋮169∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+    SelectedWeapon: ∈⋮169∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮2
   ecs.Named:
     Name: Default
@@ -124,7 +131,42 @@
     Vel:
         Now: 0, 0, 0
         Spawn: 0, 0, 0
+  ecs.Linked:
+    Sources:
+        - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   ecs.Named:
     Name: Spawn
-  inventory.Carrier:
-    Inventory: []
+  inventory.Carrier: ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+- Entity: ∈⋮8
+  ecs.SourceFile:
+    ID: 1
+    Source: data/worlds/game-prefabs.yaml
+- Entity: ∈⋮11
+  behaviors.Alive: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 60, -50, 16
+        Spawn: 60, -50, 32
+    Size:
+        Now: 32, 32
+        Spawn: 32, 32
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 50
+    MountHeight: 15
+    Vel:
+        Now: 0, 0, 0.026086733697319987
+        Spawn: 0, 0, 0
+  ecs.Linked:
+    Sources:
+        - ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Image: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Lit: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.SpriteSheet: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml

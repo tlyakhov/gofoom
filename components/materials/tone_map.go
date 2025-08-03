@@ -30,7 +30,7 @@ func (x *ToneMap) ComponentID() ecs.ComponentID {
 	return ToneMapCID
 }
 func GetToneMap(e ecs.Entity) *ToneMap {
-	panic("Tried to materials.GetToneMap. Use Universe.Singleton(materials.ToneMapCID) instead.")
+	panic("Tried to materials.GetToneMap. Use ecs.Singleton(materials.ToneMapCID) instead.")
 	/*
 		if asserted, ok := ecs.Component(e, ToneMapCID).(*ToneMap); ok {
 			return asserted

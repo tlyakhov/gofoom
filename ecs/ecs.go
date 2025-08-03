@@ -182,12 +182,12 @@ func expandRows(sid EntitySourceID, size int) {
 // attached, this method will overwrite it.
 func attach(entity Entity, component *Attachable, componentID ComponentID) {
 	if entity == 0 {
-		log.Printf("Universe.attach: tried to attach 0 entity!")
+		log.Printf("ecs.attach: tried to attach 0 entity!")
 		return
 	}
 
 	if componentID == 0 {
-		log.Printf("Universe.attach: tried to attach 0 component ID!")
+		log.Printf("ecs.attach: tried to attach 0 component ID!")
 		return
 	}
 
@@ -215,14 +215,14 @@ func attach(entity Entity, component *Attachable, componentID ComponentID) {
 	} else if ec != nil {
 		// We have a conflict between the provided component and an existing one
 		// with the same component ID. We should abort. This happens with Linked components.
-		// log.Printf("Universe.attach: Entity %v already has a component %v. Aborting!", entity, Types().ArenaPlaceholders[componentID].String())
+		// log.Printf("ecs.attach: Entity %v already has a component %v. Aborting!", entity, Types().ArenaPlaceholders[componentID].String())
 		return
 	}
 
 	attachable := *component
 	a := attachable.Base()
 	if a.Attachments > 0 && !attachable.MultiAttachable() {
-		log.Printf("Universe.attach: Component %v is already attached to %v and not multi-attachable.", attachable.String(), a.Entity.ShortString())
+		log.Printf("ecs.attach: Component %v is already attached to %v and not multi-attachable.", attachable.String(), a.Entity.ShortString())
 	}
 	a.Entities.Set(entity)
 	a.Entity = entity
@@ -280,25 +280,25 @@ func AttachTyped[T any, PT GenericAttachable[T]](entity Entity, component *PT) {
 
 func detach(id ComponentID, entity Entity, checkForEmpty bool) {
 	if entity == 0 {
-		log.Printf("Universe.Detach: tried to detach 0 entity.")
+		log.Printf("ecs.Detach: tried to detach 0 entity.")
 		return
 	}
 	if id == 0 {
-		log.Printf("Universe.Detach: tried to detach 0 component index.")
+		log.Printf("ecs.Detach: tried to detach 0 component index.")
 		return
 	}
 
 	sid, local := entity.SourceID(), entity.Local()
 
 	if len(rows[sid]) <= int(local) {
-		log.Printf("Universe.Detach: entity %v is >= length of list %v.", local, len(rows[sid]))
+		log.Printf("ecs.Detach: entity %v is >= length of list %v.", local, len(rows[sid]))
 		return
 	}
 	ec := rows[sid][int(local)].Get(id)
 	arena := arenas[id]
 	if ec == nil {
 		// This component is not attached
-		log.Printf("Universe.Detach: tried to detach unattached component %v from entity %v", arena.String(), entity)
+		log.Printf("ecs.Detach: tried to detach unattached component %v from entity %v", arena.String(), entity)
 		return
 	}
 

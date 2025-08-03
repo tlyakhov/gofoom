@@ -19,7 +19,7 @@ type Body struct {
 	Angle        dynamic.DynamicValue[float64]          `editable:"Angle"`
 
 	SectorEntity ecs.Entity
-	QuadNode     *QuadNode
+	QuadNode     *QuadNode `ecs:"norelation"`
 	OnGround     bool
 }
 

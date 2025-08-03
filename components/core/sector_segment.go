@@ -173,7 +173,11 @@ func (s *SectorSegment) Construct(data map[string]any) {
 }
 
 func (s *SectorSegment) Serialize() map[string]any {
-	result := s.Segment.Serialize(false)
+	result := s.Segment.Serialize()
+	// These are pointers to s.P and s.Next.P, don't save them.
+	delete(result, "A")
+	delete(result, "B")
+
 	result["P"] = s.P.Serialize()
 
 	if s.WallUVIgnoreSlope {

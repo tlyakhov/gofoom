@@ -149,11 +149,13 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Gravity[1] = 0
 	s.Gravity[2] = -constants.Gravity
 	s.FloorFriction = 0.85
-	s.Bottom.Construct(s, nil)
+	s.Bottom.Sector = s
+	s.Bottom.Construct(nil)
 	s.Bottom.Normal[2] = 1
 	s.Bottom.Normal[1] = 0
 	s.Bottom.Normal[0] = 0
-	s.Top.Construct(s, nil)
+	s.Top.Sector = s
+	s.Top.Construct(nil)
 	s.Top.Normal[2] = -1
 	s.Top.Normal[1] = 0
 	s.Top.Normal[0] = 0
@@ -164,10 +166,10 @@ func (s *Sector) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Bottom"]; ok {
-		s.Bottom.Construct(s, v.(map[string]any))
+		s.Bottom.Construct(v.(map[string]any))
 	}
 	if v, ok := data["Top"]; ok {
-		s.Top.Construct(s, v.(map[string]any))
+		s.Top.Construct(v.(map[string]any))
 	}
 
 	if v, ok := data["Segments"]; ok {

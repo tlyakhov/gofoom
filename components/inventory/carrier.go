@@ -36,6 +36,9 @@ func GetCarrier(e ecs.Entity) *Carrier {
 }
 
 func (c *Carrier) String() string {
+	if len(c.Slots) == 0 {
+		return "Empty Carrier"
+	}
 	return "Carrier " + c.Slots.String()
 }
 

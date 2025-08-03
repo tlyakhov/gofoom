@@ -47,7 +47,7 @@ func TestAttach(t *testing.T) {
 		t.Errorf("Attach did not set entity")
 	}
 	if a.Base().Attachments != 1 {
-		t.Errorf("Attach did not set Universe")
+		t.Errorf("Attach did not increase refcount")
 	}
 }
 
@@ -104,7 +104,7 @@ func TestAttachTyped(t *testing.T) {
 		t.Errorf("AttachTyped did not set entity")
 	}
 	if !component.IsAttached() {
-		t.Errorf("AttachTyped did not set Universe")
+		t.Errorf("AttachTyped did not set attach")
 	}
 }
 

@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-// Entity represents an entity identifier within the Universe.
+// Entity represents an entity identifier within the ECS.
 // If this is enlarged to 64 bit, then the bitmaps need to support iterating
 // over larger ranges, or we need to use an entity bitmap per source
 type Entity uint32
@@ -48,13 +48,12 @@ Because it gives us a few benefits:
  2. We can do complex transformations on serialized data, even when the
     file format is untyped (e.g. YAML/JSON). For example, we can create
     "common" data files, like prefabs, and #include them in other files,
-    and have the Universe intelligently map the entity IDs across file boundaries.
+    and have the ECS intelligently map the entity IDs across file boundaries.
  3. It forces target systems to be UTF-8 compliant - serialization will be
     entirely broken otherwise.
 */
 // EntityDelimiter is the delimiter used in entity serialization.
 const EntityDelimiter = "∈⋮"
-const entityDelimiterLength = len(EntityDelimiter)
 
 // EntityRegexp is a regular expression used to parse entity strings.
 var EntityRegexp = regexp.MustCompile(`^∈⋮(?<entity>[0-9]+)(?:∈⋮(?<name>[^∈\s]*))?(?:∈⋮(?<file_id>[0-9]+)∈⋮(?<file>[^∈\s]+))?`)
@@ -114,6 +113,10 @@ func (e Entity) IsExternal() bool {
 // Local returns the local entity ID (excluding the source ID).
 func (e Entity) Local() Entity {
 	return e & MaxEntities
+}
+
+func (e Entity) WithFileID(id EntitySourceID) Entity {
+	return (e & MaxEntities) | Entity(id)<<EntityBits
 }
 
 // ParseEntity parses an entity string and returns the corresponding Entity value.
@@ -177,8 +180,8 @@ func (e Entity) Format() string {
 	return id
 }
 
-// SerializeRaw serializes the entity to a string without considering the Universe
-// context, allowing specifying a name and file.
+// SerializeRaw serializes the entity to a string with any ECS context, allowing
+// specifying a name and file.
 func (e Entity) SerializeRaw(name string, file string) string {
 	id := e.Local().String()
 	if e == 0 {
@@ -197,7 +200,7 @@ func (e Entity) SerializeRaw(name string, file string) string {
 }
 
 // Serialize serializes the entity to a string, including its name and source
-// file information based on the Universe context.
+// file information based on what was loaded.
 func (e Entity) Serialize() string {
 	id := EntityDelimiter + strconv.FormatUint(uint64(e.Local()), 10)
 	if e == 0 {

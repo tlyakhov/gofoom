@@ -35,7 +35,7 @@ func (a *SplitSector) Split(sector *core.Sector) {
 	}
 	// Copy original sector's components to preserve them
 	a.Original[sector.Entity] = ecs.SerializeEntity(sector.Entity)
-	// Detach the original from the Universe
+	// Detach the original from the arena
 	ecs.Delete(sector.Entity)
 	// Attach the cloned entities/components
 	for _, added := range s.Result {

@@ -8,7 +8,7 @@ import (
 )
 
 type Universal interface {
-	// OnAttach is called when the component is attached to an Universe instance.
+	// OnAttach is called when the component is attached to an arena.
 	OnAttach()
 }
 
@@ -20,7 +20,7 @@ type Serializable interface {
 	Serialize() map[string]any
 }
 
-// Attachable is an interface for components that can be attached to entities in the Universe.
+// Attachable is an interface for components that can be attached to entities in the ECS.
 type Attachable interface {
 	Universal
 	Serializable
@@ -30,7 +30,7 @@ type Attachable interface {
 	String() string
 	// OnDetach is called when the component is detached from an entity.
 	OnDetach(Entity)
-	// OnDelete is called when the component is deleted from the Universe.
+	// OnDelete is called when the component is deleted from the arena.
 	OnDelete()
 	// IsActive checks if the component is active.
 	IsActive() bool

@@ -202,7 +202,7 @@ func (r *Renderer) RenderSector(block *block) {
 
 	// Store bodies & internal segments for later
 	r.tree.Root.RangeAABB(block.Sector.Min.To2D(), block.Sector.Max.To2D(), func(b *core.Body) bool {
-		if b == nil || !b.IsActive() {
+		if b == nil || !b.IsActive() || b.SectorEntity == 0 {
 			return true
 		}
 		block.Bodies.Add(b)

@@ -44,7 +44,7 @@ type Arena[T any, PT GenericAttachable[T]] struct {
 }
 
 // From initializes an arena from another arena of the same type, copying
-// metadata and setting the Universe instance.
+// metadata
 func (col *Arena[T, PT]) From(source AttachableArena) {
 	placeholder := source.(*Arena[T, PT])
 	col.typeOfT = placeholder.typeOfT
