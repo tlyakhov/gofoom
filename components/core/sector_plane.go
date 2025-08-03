@@ -4,6 +4,7 @@
 package core
 
 import (
+	"fmt"
 	"math"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
@@ -25,8 +26,11 @@ type SectorPlane struct {
 	XYDet float64
 }
 
-func (s *SectorPlane) Construct(sector *Sector, data map[string]any) {
-	s.Sector = sector
+func (s *SectorPlane) String() string {
+	return fmt.Sprintf("Plane (Z: %v, Normal: %v)", s.Z.Now, s.Normal)
+}
+
+func (s *SectorPlane) Construct(data map[string]any) {
 	s.Surface.Construct(data)
 	s.Z.Construct(nil)
 

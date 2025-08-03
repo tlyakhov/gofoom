@@ -4,6 +4,7 @@
 package core
 
 import (
+	"maps"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
@@ -105,10 +106,7 @@ func (s *InternalSegment) Construct(data map[string]any) {
 
 func (s *InternalSegment) Serialize() map[string]any {
 	result := s.Attached.Serialize()
-	seg := s.Segment.Serialize(true)
-	for k, v := range seg {
-		result[k] = v
-	}
+	maps.Copy(result, s.Segment.Serialize())
 
 	result["Top"] = s.Top
 	result["Bottom"] = s.Bottom

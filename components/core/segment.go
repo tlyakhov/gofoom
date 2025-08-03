@@ -198,12 +198,10 @@ func (s *Segment) Construct(data map[string]any) {
 	s.Recalculate()
 }
 
-func (s *Segment) Serialize(storePositions bool) map[string]any {
+func (s *Segment) Serialize() map[string]any {
 	result := make(map[string]any)
-	if storePositions {
-		result["A"] = s.A.Serialize()
-		result["B"] = s.B.Serialize()
-	}
+	result["A"] = s.A.Serialize()
+	result["B"] = s.B.Serialize()
 	result["Surface"] = s.Surface.Serialize()
 
 	if len(s.ContactScripts) > 0 {

@@ -9,7 +9,6 @@ import (
 	"log"
 	"maps"
 	"text/template"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/traefik/yaegi/interp"
@@ -71,11 +70,12 @@ func init() {
 }
 
 func (s *Script) Compile() {
-	if !s.IsAttached() {
+	/*if !s.IsAttached() {
 		log.Println("Script.Compile: Universe is nil. Stack trace:")
 		log.Println(concepts.StackTrace())
 		return
-	}
+	}*/
+
 	s.ErrorMessage = ""
 	s.interp = interp.New(interp.Options{})
 	s.interp.Use(stdlib.Symbols)

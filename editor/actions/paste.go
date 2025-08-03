@@ -25,6 +25,52 @@ type Paste struct {
 	Center         concepts.Vector3
 }
 
+func (a *Paste) updateRelations(pastedEntity ecs.Entity) {
+	ecs.RangeRelations(pastedEntity, func(r *ecs.Relation) bool {
+		switch r.Type {
+		case ecs.RelationOne:
+			if pastedRelationEntity, ok := a.CopiedToPasted[r.One]; ok {
+				r.One = pastedRelationEntity
+				r.Update()
+			}
+		case ecs.RelationSet:
+			for e := range r.Set {
+				if pastedRelationEntity, ok := a.CopiedToPasted[e]; ok {
+					r.Set.Delete(e)
+					r.Set.Add(pastedRelationEntity)
+				}
+			}
+			r.Update()
+		case ecs.RelationSlice:
+			for i, e := range r.Slice {
+				if pastedRelationEntity, ok := a.CopiedToPasted[e]; ok {
+					r.Slice[i] = pastedRelationEntity
+				}
+			}
+			r.Update()
+		case ecs.RelationTable:
+			toDelete := make([]ecs.Entity, 0)
+			for _, e := range r.Table {
+				if e == 0 {
+					continue
+				}
+				if pastedRelationEntity, ok := a.CopiedToPasted[e]; ok {
+					toDelete = append(toDelete, e)
+					r.Table.Set(pastedRelationEntity)
+				}
+			}
+			for _, e := range toDelete {
+				r.Table.Delete(e)
+			}
+			r.Update()
+		}
+		return true
+	})
+	if seg := core.GetInternalSegment(pastedEntity); seg != nil {
+		seg.AttachToSectors()
+	}
+}
+
 func (a *Paste) apply() {
 	var parsed any
 	err := yaml.Unmarshal([]byte(a.ClipboardData), &parsed)
@@ -51,7 +97,7 @@ func (a *Paste) apply() {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
 		yamlEntity := yamlData.(map[string]any)
 		if yamlEntity == nil {
-			log.Printf("Paste.Activate: Universe YAML object element should be an object")
+			log.Printf("Paste.Activate: ECS YAML object element should be an object")
 			continue
 		}
 
@@ -90,18 +136,8 @@ func (a *Paste) apply() {
 		}
 	}
 
-	// We need to wire up:
-	// pasted materials to surfaces
-	// pasted bodies to sectors
-	// pasted internal segments to sectors
 	for _, pastedEntity := range a.CopiedToPasted {
-		if seg := core.GetInternalSegment(pastedEntity); seg != nil {
-			seg.AttachToSectors()
-		}
-		if body := core.GetBody(pastedEntity); body != nil {
-			body.SectorEntity = 0
-		}
-		// TODO: materials
+		a.updateRelations(pastedEntity)
 	}
 
 	a.Selected.SavePositions()

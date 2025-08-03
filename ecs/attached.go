@@ -41,7 +41,7 @@ const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLoc
 // Is the right approach to store this extra data separately? maybe
 
 // Attached has a set of fields common to every component and implements
-// the Attachable interface. It is required for every component in the Universe.
+// the Attachable interface. It is required for every component in the ECS.
 type Attached struct {
 	// Entity is the ID of the primary entity to which this component is attached.
 	Entity
@@ -51,7 +51,7 @@ type Attached struct {
 	// Flags are bit flags that control the behavior of the component, such as
 	// whether it is saved or visible in the editor.
 	Flags ComponentFlags `editable:"Flags" edit_type:"Flags"`
-	// indexInArena is the index of this component within its arena in the Universe.
+	// indexInArena is the index of this component within its arena in the ECS.
 	indexInArena int
 	// Entities is a table of entities to which this component is attached. This
 	// is used for components that can be attached to multiple entities.
@@ -124,7 +124,7 @@ func (a *Attached) OnDetach(entity Entity) {
 	a.Entity = a.Entities.First()
 }
 
-// OnDelete is called when the component is deleted from the Universe.
+// OnDelete is called when the component is deleted from the arena.
 func (a *Attached) OnDelete() {
 	a.Attachments = 0
 }
@@ -149,7 +149,7 @@ func (a *Attached) Construct(data map[string]any) {
 	if v, ok := data["_Flags"]; ok {
 		a.Flags = concepts.ParseFlags(cast.ToString(v), ComponentFlagsString)
 	}
-	// TODO: Is this construction used anywhere? This should be happening in Universe
+	// TODO: Is this construction used anywhere? This should be happening outside
 	//a.Entities, a.Attachments = ParseEntitiesFromMap(data)
 }
 

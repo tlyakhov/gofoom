@@ -46,7 +46,7 @@ func Respawn(force bool) {
 
 	spawn := spawns[rand.Int()%len(spawns)]
 	// TODO: This kind of cloning operation is used in other places (e.g. the
-	// editor). Should this be pulled into Universe? Will need to figure out how to
+	// editor). Should this be pulled into ecs? Will need to figure out how to
 	// address deep vs. shallow cloning and wiring up any relationships.
 	copiedSpawn := ecs.SerializeEntity(spawn.Entity)
 	var pastedEntity ecs.Entity

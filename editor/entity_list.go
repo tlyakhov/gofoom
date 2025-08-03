@@ -291,7 +291,7 @@ func (list *EntityList) Select(selection *selection.Selection) {
 }
 
 func (list *EntityList) SetSort(col int, dir elSortDir) {
-	for i := 0; i < int(elcNumColumns); i++ {
+	for i := range int(elcNumColumns) {
 		list.Sorts[i] = elsdSortOff
 	}
 	list.Sorts[col] = dir
