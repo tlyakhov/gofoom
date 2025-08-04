@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
@@ -135,6 +134,11 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 	case dynamic.Spawnable:
 		// Dynamics have no relations
 		return true
+	case Attachable:
+		// If we're at least one level deep, don't go into other components.
+		if len(visited) > 0 {
+			return true
+		}
 	}
 
 	// We've already processed this
@@ -162,7 +166,7 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 		r := relationFromField(&field, ownerValue.Field(i))
 		if r.Type != RelationUnknown {
 			r.Owner = owner
-			log.Print(r.String())
+			//log.Print(r.String())
 			if !f(&r) {
 				return false
 			}

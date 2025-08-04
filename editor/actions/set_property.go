@@ -73,7 +73,7 @@ func (a *SetProperty) FireHooks() {
 				target.Recalculate()
 			}
 
-			log.Printf("%v", a.Name)
+			log.Printf("SetProperty.FireHooks for *core.SectorSegment: %v", a.Name)
 		}
 	}
 }

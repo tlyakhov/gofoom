@@ -48,8 +48,10 @@ const (
 type EntityList struct {
 	state.IEditor
 
-	Table     *widget.Table
-	Container *fyne.Container
+	Table         *widget.Table
+	Container     *fyne.Container
+	search        *widget.Entry
+	hideUnmatched *widget.Check
 
 	BackingStore [][elcNumColumns]any
 	Sorts        [elcNumColumns]elSortDir
@@ -104,6 +106,63 @@ func (list *EntityList) tableUpdate(tci widget.TableCellID, template fyne.Canvas
 		progress.Show()
 		progress.Refresh()
 	}
+}
+
+func (list *EntityList) findAllReferences() {
+	sel := make(ecs.EntityTable, 0)
+	found := make(ecs.EntityTable, 0)
+
+	for _, s := range editor.SelectedObjects.Exact {
+		sel.Set(s.Entity)
+		found.Set(s.Entity)
+	}
+
+	ecs.Entities.Range(func(e uint32) {
+		if e == 0 {
+			return
+		}
+		entity := ecs.Entity(e)
+		ecs.RangeRelations(entity, func(r *ecs.Relation) bool {
+			switch r.Type {
+			case ecs.RelationOne:
+				if sel.Contains(r.One) {
+					found.Set(entity)
+				}
+			case ecs.RelationSet:
+				for e := range r.Set {
+					if sel.Contains(e) {
+						found.Set(entity)
+					}
+				}
+			case ecs.RelationSlice:
+				for _, e := range r.Slice {
+					if sel.Contains(e) {
+						found.Set(entity)
+					}
+				}
+			case ecs.RelationTable:
+				for _, e := range r.Table {
+					if e != 0 && sel.Contains(e) {
+						found.Set(entity)
+					}
+				}
+			}
+
+			return true
+		})
+	})
+	result := ""
+	for _, e := range found {
+		if e == 0 {
+			continue
+		}
+		if len(result) > 0 {
+			result += " "
+		}
+		result += e.ShortString()
+	}
+	list.search.SetText(result)
+	list.SetSort(int(elcEntity), elsdSortAsc)
 }
 
 func (list *EntityList) Build() fyne.CanvasObject {
@@ -161,17 +220,17 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		b.Refresh()
 	}
 
-	button := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
+	newEntity := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
 		list.State().Lock.Lock()
 		editor.SelectObjects(true, selection.SelectableFromEntity(ecs.NewEntity()))
 		list.State().Lock.Unlock()
 	})
-	search := widget.NewEntry()
-	search.ActionItem = widget.NewIcon(theme.SearchIcon())
-	search.SetPlaceHolder("Search for entity...")
-	search.OnChanged = func(s string) {
+	list.search = widget.NewEntry()
+	list.search.ActionItem = widget.NewIcon(theme.SearchIcon())
+	list.search.SetPlaceHolder("Search for entity...")
+	list.search.OnChanged = func(s string) {
 		list.State().SearchTerms = s
-		list.SetSort(2, elsdSortDesc)
+		list.SetSort(int(elcRank), elsdSortDesc)
 		list.Update()
 	}
 
@@ -184,17 +243,24 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		if !editor.SelectedObjects.Contains(s) {
 			editor.SelectObjects(false, s)
 		}
-		log.Printf("select: %v", entity)
+		log.Printf("select: %v", ecs.Entity(entity).String())
 	}
 	list.Table.OnUnselected = func(id widget.TableCellID) {
 		if list.BackingStore == nil || id.Row < 0 || id.Row >= len(list.BackingStore) {
 			return
 		}
 		entity := list.BackingStore[id.Row][0].(int)
-		log.Printf("unselect: %v", entity)
+		log.Printf("unselect: %v", ecs.Entity(entity).String())
 	}
 
-	list.Container = container.NewBorder(container.NewVBox(button, search), nil, nil, nil, list.Table)
+	list.hideUnmatched = widget.NewCheck("Hide unmatched entities", func(b bool) {
+		list.Update()
+	})
+	list.hideUnmatched.Checked = true
+
+	findReferences := widget.NewButtonWithIcon("Find All References", theme.SearchIcon(), list.findAllReferences)
+
+	list.Container = container.NewBorder(container.NewVBox(newEntity, list.search, list.hideUnmatched, findReferences), nil, nil, nil, list.Table)
 	return list.Container
 }
 func (list *EntityList) Update() {
@@ -254,6 +320,9 @@ func (list *EntityList) Update() {
 		dispRank := 100
 		if searchValid {
 			dispRank = concepts.Max(concepts.Min(rank+50, 100), 0)
+		}
+		if list.hideUnmatched.Checked && dispRank < 95 {
+			return
 		}
 		backingRow := [5]any{
 			int(entity),

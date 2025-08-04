@@ -54,13 +54,15 @@ type Grid struct {
 
 func (g *Grid) childFields(parentName string, childValue reflect.Value, state PropertyGridState, updateParent bool) {
 	var child any
-	if childValue.Type().Kind() == reflect.Struct {
+	switch childValue.Type().Kind() {
+	case reflect.Struct:
 		child = childValue.Addr().Interface()
-	} else if childValue.Type().Kind() == reflect.Ptr || childValue.Type().Kind() == reflect.Interface {
+	case reflect.Ptr, reflect.Interface:
 		child = childValue.Interface()
-	} else {
+	default:
 		log.Printf("Grid.childFields: childValue is not a struct, ptr, or interface: %v, %v", childValue.String(), childValue.Type())
 	}
+
 	if !state.Visited.Contains(child) {
 		state.ParentName = parentName
 		if updateParent {

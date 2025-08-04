@@ -27,8 +27,8 @@ type SectorSegment struct {
 	PortalIsPassable  bool `editable:"Portal is passable"`
 	PortalTeleports   bool `editable:"Portal sector not adjacent"`
 
-	AdjacentSector  ecs.Entity `editable:"Portal sector" edit_type:"Sector"`
-	AdjacentSegment *SectorSegment
+	AdjacentSector  ecs.Entity     `editable:"Portal sector" edit_type:"Sector"`
+	AdjacentSegment *SectorSegment `ecs:"norelation"`
 	// Only when loading or linking
 	AdjacentSegmentIndex int `editable:"Portal segment index"`
 
