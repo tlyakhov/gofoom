@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
@@ -99,12 +100,31 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	TransformContext(mw.Context)
 	mw.Context.FontHeight()
 
+	highlightedSectors := make(containers.Set[*core.Sector])
+	for _, s := range editor.SelectedObjects.Exact {
+		if s.Sector != nil && (s.Sector.Flags&ecs.ComponentHideInEditor) == 0 {
+			highlightedSectors.Add(s.Sector)
+		}
+	}
+	for _, s := range editor.HoveringObjects.Exact {
+		if s.Sector != nil && (s.Sector.Flags&ecs.ComponentHideInEditor) == 0 {
+			highlightedSectors.Add(s.Sector)
+		}
+	}
+
 	colSector := ecs.ArenaFor[core.Sector](core.SectorCID)
 	for i := range colSector.Cap() {
 		if sector := colSector.Value(i); sector != nil && (sector.Flags&ecs.ComponentHideInEditor) == 0 {
+			if _, ok := highlightedSectors[sector]; ok {
+				continue
+			}
 			mw.DrawSector(sector)
 		}
 	}
+	for sector := range highlightedSectors {
+		mw.DrawSector(sector)
+	}
+
 	colSeg := ecs.ArenaFor[core.InternalSegment](core.InternalSegmentCID)
 	for i := range colSeg.Cap() {
 		if seg := colSeg.Value(i); seg != nil && (seg.Flags&ecs.ComponentHideInEditor) == 0 {
