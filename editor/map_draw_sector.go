@@ -93,6 +93,9 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		return
 	}
 
+	sectorHovering := editor.HoveringObjects.Contains(selection.SelectableFromSector(sector))
+	sectorSelected := editor.SelectedObjects.Contains(selection.SelectableFromSector(sector))
+
 	start := editor.ScreenToWorld(new(concepts.Vector2))
 	end := editor.ScreenToWorld(&editor.Size)
 	if !concepts.Vector2AABBIntersect(sector.Min.To2D(), sector.Max.To2D(), start, end, true) {
@@ -100,9 +103,6 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	}
 
 	mw.Context.Push()
-
-	sectorHovering := editor.HoveringObjects.Contains(selection.SelectableFromSector(sector))
-	sectorSelected := editor.SelectedObjects.Contains(selection.SelectableFromSector(sector))
 
 	for _, segment := range sector.Segments {
 		if segment.Next == nil || segment.P == segment.Next.P {

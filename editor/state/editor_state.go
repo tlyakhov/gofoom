@@ -43,7 +43,7 @@ type EditorState struct {
 
 	SelectedObjects        *selection.Selection
 	HoveringObjects        *selection.Selection
-	SearchTerms            string
+	SearchQuery            string
 	SelectedTransformables []any
 
 	Tool          EditorTool

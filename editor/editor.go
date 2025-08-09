@@ -283,6 +283,7 @@ func (e *Editor) Load(filename string) {
 	}
 	controllers.Respawn(true)
 	archetypes.CreateFont("data/vga-font-8x8.png", "Default Font")
+	e.EntityList.ReIndex()
 	ecs.Simulation.Integrate = e.Integrate
 	ecs.Simulation.Render = e.GameWidget.Draw
 	e.entityIconCache.Clear()
@@ -301,8 +302,13 @@ func (e *Editor) Test() {
 
 	ecs.Initialize()
 	controllers.CreateTestWorld2()
+	e.EntityList.ReIndex()
 	ecs.Simulation.Integrate = e.Integrate
 	ecs.Simulation.Render = e.GameWidget.Draw
+	e.entityIconCache.Clear()
+	if e.Renderer != nil {
+		e.Renderer.Initialize()
+	}
 	e.SelectObjects(true)
 }
 
@@ -333,6 +339,9 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	}
 	if refreshProperties {
 		e.refreshProperties()
+		for _, s := range e.SelectedObjects.Exact {
+			e.EntityList.ReIndexComponents(s.Entity)
+		}
 	}
 	e.SetMapCursor(desktop.DefaultCursor)
 	e.CurrentAction = nil

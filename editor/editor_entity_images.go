@@ -64,9 +64,22 @@ var patternSecondary = gg.NewSolidPattern(color.NRGBA{255, 255, 0, 255})
 func (e *Editor) imageForSector(entity ecs.Entity) image.Image {
 	w, h := 64, 64
 	context := gg.NewContext(w, h)
+	context.SetLineWidth(1)
 
 	sector := core.GetSector(entity)
-	context.SetLineWidth(1)
+	dx := sector.Max[0] - sector.Min[0]
+	dy := sector.Max[1] - sector.Min[1]
+	if dy < dx && dx != 0 {
+		dy /= dx
+		dx = 1
+	} else if dx < dy && dy != 0 {
+		dx /= dy
+		dy = 1
+	} else {
+		dx = 1
+		dy = 1
+	}
+
 	for _, segment := range sector.Segments {
 		if segment.AdjacentSegment != nil {
 			context.SetStrokeStyle(patternSecondary)
@@ -74,11 +87,11 @@ func (e *Editor) imageForSector(entity ecs.Entity) image.Image {
 			context.SetStrokeStyle(patternPrimary)
 		}
 		context.NewSubPath()
-		x := (segment.P[0] - sector.Min[0]) * float64(w) / (sector.Max[0] - sector.Min[0])
-		y := (segment.P[1] - sector.Min[1]) * float64(h) / (sector.Max[1] - sector.Min[1])
+		x := (segment.P[0] - sector.Min[0]) * float64(w) * dx / (sector.Max[0] - sector.Min[0])
+		y := (segment.P[1] - sector.Min[1]) * float64(h) * dy / (sector.Max[1] - sector.Min[1])
 		context.MoveTo(x, y)
-		x = (segment.Next.P[0] - sector.Min[0]) * float64(w) / (sector.Max[0] - sector.Min[0])
-		y = (segment.Next.P[1] - sector.Min[1]) * float64(h) / (sector.Max[1] - sector.Min[1])
+		x = (segment.Next.P[0] - sector.Min[0]) * float64(w) * dx / (sector.Max[0] - sector.Min[0])
+		y = (segment.Next.P[1] - sector.Min[1]) * float64(h) * dy / (sector.Max[1] - sector.Min[1])
 		context.LineTo(x, y)
 		context.ClosePath()
 		context.Stroke()

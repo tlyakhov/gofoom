@@ -21,7 +21,8 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/lithammer/fuzzysearch/fuzzy"
+	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/mapping"
 	"golang.org/x/image/colornames"
 )
 
@@ -52,6 +53,8 @@ type EntityList struct {
 	Container     *fyne.Container
 	search        *widget.Entry
 	hideUnmatched *widget.Check
+	mapping       mapping.IndexMapping
+	SearchIndex   bleve.Index
 
 	BackingStore [][elcNumColumns]any
 	Sorts        [elcNumColumns]elSortDir
@@ -166,6 +169,8 @@ func (list *EntityList) findAllReferences() {
 }
 
 func (list *EntityList) Build() fyne.CanvasObject {
+	list.ReIndex()
+
 	list.Sorts[0] = elsdSortAsc
 	list.Update()
 
@@ -229,7 +234,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	list.search.ActionItem = widget.NewIcon(theme.SearchIcon())
 	list.search.SetPlaceHolder("Search for entity...")
 	list.search.OnChanged = func(s string) {
-		list.State().SearchTerms = s
+		list.State().SearchQuery = s
 		list.SetSort(int(elcRank), elsdSortDesc)
 		list.Update()
 	}
@@ -263,15 +268,44 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	list.Container = container.NewBorder(container.NewVBox(newEntity, list.search, list.hideUnmatched, findReferences), nil, nil, nil, list.Table)
 	return list.Container
 }
+
+func (list *EntityList) ReIndexComponents(entity ecs.Entity) {
+	// TODO: curate the things we index - for example, don't index relations
+	list.SearchIndex.Index(entity.Serialize(), ecs.SerializeEntity(entity))
+}
+
+func (list *EntityList) ReIndex() {
+	// TODO: Pull all the search stuff into its own struct
+	var err error
+	list.mapping = bleve.NewIndexMapping()
+	list.SearchIndex, err = bleve.NewMemOnly(list.mapping)
+	if err != nil {
+		log.Printf("EntityList.Build: error: %v", err)
+	}
+	ecs.Entities.Range(func(entity uint32) {
+		if entity == 0 {
+			return
+		}
+		list.ReIndexComponents(ecs.Entity(entity))
+	})
+}
+
 func (list *EntityList) Update() {
 	list.BackingStore = make([][elcNumColumns]any, 0)
-	searchValid := len(list.State().SearchTerms) > 0
-	searchFields := strings.Fields(list.State().SearchTerms)
+	searchValid := len(list.State().SearchQuery) > 0
+	searchFields := strings.Fields(list.State().SearchQuery)
 	searchEntities := make([]ecs.Entity, 0)
 	for _, f := range searchFields {
 		if e, err := ecs.ParseEntityHumanOrCanonical(f); err == nil {
 			searchEntities = append(searchEntities, e)
 		}
+	}
+	query := bleve.NewQueryStringQuery(list.State().SearchQuery)
+	searchRequest := bleve.NewSearchRequest(query)
+	searchRequest.Size = 100
+	searchResult, _ := list.SearchIndex.Search(searchRequest)
+	if searchResult != nil {
+		log.Printf("Search result: %v", searchResult.String())
 	}
 	ecs.Entities.Range(func(entity uint32) {
 		if entity == 0 {
@@ -279,22 +313,15 @@ func (list *EntityList) Update() {
 		}
 		rowColor := theme.Color(theme.ColorNameForeground)
 		parentDesc := ""
-		rank := 0
-		if slices.Contains(searchEntities, ecs.Entity(entity)) {
-			rank = 100
-		}
 
 		allSystem := true
 		for _, c := range ecs.AllComponents(ecs.Entity(entity)) {
 			if c == nil || c.Base().Flags&ecs.ComponentHideInEditor != 0 {
 				continue
 			}
+
 			allSystem = false
 			desc := c.String()
-
-			if searchValid {
-				rank += fuzzy.RankMatchFold(list.State().SearchTerms, desc)
-			}
 
 			if len(parentDesc) > 0 {
 				parentDesc += "|"
@@ -317,18 +344,29 @@ func (list *EntityList) Update() {
 		if len(parentDesc) == 0 || allSystem {
 			return
 		}
-		dispRank := 100
-		if searchValid {
-			dispRank = concepts.Max(concepts.Min(rank+50, 100), 0)
+
+		rank := 100
+		if searchValid && searchResult != nil {
+			if !slices.Contains(searchEntities, ecs.Entity(entity)) {
+				rank = 0
+				for _, hit := range searchResult.Hits {
+					e, _ := ecs.ParseEntity(hit.ID)
+					if e != 0 && e == ecs.Entity(entity) {
+						rank += int(hit.Score * 50)
+					}
+				}
+				rank = concepts.Max(concepts.Min(rank, 100), 0)
+			}
 		}
-		if list.hideUnmatched.Checked && dispRank < 95 {
+
+		if list.hideUnmatched.Checked && rank == 0 {
 			return
 		}
 		backingRow := [5]any{
 			int(entity),
 			nil,
 			parentDesc,
-			dispRank,
+			rank,
 			rowColor,
 		}
 		list.BackingStore = append(list.BackingStore, backingRow)
