@@ -19,22 +19,6 @@ type Carrier struct {
 	SelectedWeapon ecs.Entity
 }
 
-var CarrierCID ecs.ComponentID
-
-func init() {
-	CarrierCID = ecs.RegisterComponent(&ecs.Arena[Carrier, *Carrier]{})
-}
-
-func (*Carrier) ComponentID() ecs.ComponentID {
-	return CarrierCID
-}
-func GetCarrier(e ecs.Entity) *Carrier {
-	if asserted, ok := ecs.Component(e, CarrierCID).(*Carrier); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (c *Carrier) String() string {
 	if len(c.Slots) == 0 {
 		return "Empty Carrier"

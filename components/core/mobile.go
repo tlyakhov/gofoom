@@ -4,6 +4,7 @@
 package core
 
 import (
+	"fmt"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
@@ -28,24 +29,8 @@ type Mobile struct {
 	CrWall     CollisionResponse `editable:"Collision (Wall)"`
 }
 
-var MobileCID ecs.ComponentID
-
-func init() {
-	MobileCID = ecs.RegisterComponent(&ecs.Arena[Mobile, *Mobile]{})
-}
-
-func (x *Mobile) ComponentID() ecs.ComponentID {
-	return MobileCID
-}
-func GetMobile(e ecs.Entity) *Mobile {
-	if asserted, ok := ecs.Component(e, MobileCID).(*Mobile); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (m *Mobile) String() string {
-	return "Mobile: " + m.Vel.Now.StringHuman(2)
+	return fmt.Sprintf("Mobile: %vkg", m.Mass)
 }
 
 func (m *Mobile) OnDelete() {

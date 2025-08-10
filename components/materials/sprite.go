@@ -15,22 +15,6 @@ type Sprite struct {
 	Frame    dynamic.DynamicValue[int] `editable:"Frame"`
 }
 
-var SpriteCID ecs.ComponentID
-
-func init() {
-	SpriteCID = ecs.RegisterComponent(&ecs.Arena[Sprite, *Sprite]{})
-}
-
-func (x *Sprite) ComponentID() ecs.ComponentID {
-	return SpriteCID
-}
-func GetSprite(e ecs.Entity) *Sprite {
-	if asserted, ok := ecs.Component(e, SpriteCID).(*Sprite); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (s *Sprite) MultiAttachable() bool { return true }
 
 func (s *Sprite) OnDelete() {

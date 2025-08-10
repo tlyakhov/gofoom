@@ -13,22 +13,6 @@ type Shader struct {
 	Stages []*ShaderStage `editable:"Stages"`
 }
 
-var ShaderCID ecs.ComponentID
-
-func init() {
-	ShaderCID = ecs.RegisterComponent(&ecs.Arena[Shader, *Shader]{})
-}
-
-func (x *Shader) ComponentID() ecs.ComponentID {
-	return ShaderCID
-}
-func GetShader(e ecs.Entity) *Shader {
-	if asserted, ok := ecs.Component(e, ShaderCID).(*Shader); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (s *Shader) MultiAttachable() bool { return true }
 
 func (s *Shader) Construct(data map[string]any) {

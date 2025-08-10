@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 573.75
+        Now: 666.5625
         Spawn: 0
     Pos:
-        Now: 399.4790071587131, 120.97478351700855, 20
+        Now: -95, 33.429430386224624, 20
         Spawn: 0, 0, 0
     Size:
         Now: 10, 40
@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0.00009596285211944152, 0.00006400878551981747, 0.007001650399225165
+        Now: -0.0000000000000000007020574258612461, 0.00000001385158160997744, -0.00000000000765625000071583
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -52,14 +52,20 @@
             Material: ∈⋮2∈⋮Default
           P: -100, -100
           Surface:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮47
+            Transform:
+                Now: 3.125, 0, 0, 0, 1, 0
+                Spawn: 3.125, 0, 0, 0, 1, 0
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
             Material: ∈⋮2∈⋮Default
           P: 100, -100
           Surface:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮47
+            Transform:
+                Now: 1.09375, 0, 0, 0, 1, 0
+                Spawn: 1.09375, 0, 0, 0, 1, 0
         - AdjacentSector: ∈⋮8
           Hi:
             Material: ∈⋮2∈⋮Default
@@ -74,21 +80,30 @@
             Material: ∈⋮2∈⋮Default
           P: 100, 50
           Surface:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮47
+            Transform:
+                Now: 0.78125, 0, 0, 0, 1, 0
+                Spawn: 0.78125, 0, 0, 0, 1, 0
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
             Material: ∈⋮2∈⋮Default
           P: 100, 100
           Surface:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮47
+            Transform:
+                Now: 3.125, 0, 0, 0, 1, 0
+                Spawn: 3.125, 0, 0, 0, 1, 0
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
             Material: ∈⋮2∈⋮Default
           P: -100, 100
           Surface:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮47
+            Transform:
+                Now: 3.125, 0, 0, 0, 1, 0
+                Spawn: 3.125, 0, 0, 0, 1, 0
     Top:
         Surface:
             Material: ∈⋮2∈⋮Default
@@ -876,11 +891,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.5234375
-            Reverse: true
+            Percent: 0.625
+            Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: 200, 10, 14.97802734375
+        Now: 200, 10, 14.375
         Spawn: 200, 10, 10
     Size:
         Now: 20, 20
@@ -890,7 +905,7 @@
         - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮29
   core.Sector:
     Bottom:
@@ -1518,11 +1533,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.9140625
-            Reverse: true
+            Percent: 0.390625
+            Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: 820, 10, 10.29541015625
+        Now: 820, 10, 14.521484375
         Spawn: 820, 10, 10
     Size:
         Now: 20, 20
@@ -1532,7 +1547,7 @@
         - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮45
   core.Sector:
     Bottom:
@@ -1640,3 +1655,16 @@
         Z:
             Now: 128
             Spawn: 128
+- Entity: ∈⋮47
+  materials.Image:
+    Filter: false
+    Source: data/FHexMetal.png
+  materials.Shader:
+    Stages:
+        - BlendingFunc: BlendNormal
+          Material: ∈⋮47
+- Entity: ∈⋮49
+  ecs.Named:
+    Name: Shader FHexMetal.png
+- Entity: ∈⋮50
+  ecs.Named: ∈⋮49∈⋮Shader+FHexMetal.png

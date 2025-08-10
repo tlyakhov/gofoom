@@ -31,22 +31,6 @@ type ProximityState struct {
 	Flags      ProximityFlags
 }
 
-var ProximityStateCID ecs.ComponentID
-
-func init() {
-	ProximityStateCID = ecs.RegisterComponent(&ecs.Arena[ProximityState, *ProximityState]{})
-}
-
-func (x *ProximityState) ComponentID() ecs.ComponentID {
-	return ProximityStateCID
-}
-func GetProximityState(e ecs.Entity) *ProximityState {
-	if asserted, ok := ecs.Component(e, ProximityStateCID).(*ProximityState); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (p *ProximityState) String() string {
 	return fmt.Sprintf("ProximityState (%v is close to %v, status %v)", p.Target.String(), p.Source.String(), p.Status.String())
 }

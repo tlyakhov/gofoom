@@ -14,23 +14,6 @@ type ActionTransition struct {
 	Next ecs.EntityTable `editable:"Next" edit_type:"Action"`
 }
 
-var ActionTransitionCID ecs.ComponentID
-
-func init() {
-	ActionTransitionCID = ecs.RegisterComponent(&ecs.Arena[ActionTransition, *ActionTransition]{})
-}
-
-func (*ActionTransition) ComponentID() ecs.ComponentID {
-	return ActionTransitionCID
-}
-
-func GetActionTransition(e ecs.Entity) *ActionTransition {
-	if asserted, ok := ecs.Component(e, ActionTransitionCID).(*ActionTransition); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (transition *ActionTransition) String() string {
 	var s string
 

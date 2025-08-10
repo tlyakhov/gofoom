@@ -24,22 +24,6 @@ type ParticleEmitter struct {
 	Spawned map[ecs.Entity]int64
 }
 
-var ParticleEmitterCID ecs.ComponentID
-
-func init() {
-	ParticleEmitterCID = ecs.RegisterComponent(&ecs.Arena[ParticleEmitter, *ParticleEmitter]{})
-}
-
-func (x *ParticleEmitter) ComponentID() ecs.ComponentID {
-	return ParticleEmitterCID
-}
-func GetParticleEmitter(e ecs.Entity) *ParticleEmitter {
-	if asserted, ok := ecs.Component(e, ParticleEmitterCID).(*ParticleEmitter); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (pe *ParticleEmitter) String() string {
 	return "Particle Emitter"
 }

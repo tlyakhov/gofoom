@@ -28,22 +28,6 @@ type Visible struct {
 	PixelOnly bool           `editable:"Pixel only?"`
 }
 
-var VisibleCID ecs.ComponentID
-
-func init() {
-	VisibleCID = ecs.RegisterComponent(&ecs.Arena[Visible, *Visible]{})
-}
-
-func (x *Visible) ComponentID() ecs.ComponentID {
-	return VisibleCID
-}
-func GetVisible(e ecs.Entity) *Visible {
-	if asserted, ok := ecs.Component(e, VisibleCID).(*Visible); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (v *Visible) MultiAttachable() bool { return true }
 
 func (v *Visible) String() string {

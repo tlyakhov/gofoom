@@ -21,22 +21,6 @@ type SpriteSheet struct {
 	Frame  dynamic.DynamicValue[int] `editable:"Frame"`
 }
 
-var SpriteSheetCID ecs.ComponentID
-
-func init() {
-	SpriteSheetCID = ecs.RegisterComponent(&ecs.Arena[SpriteSheet, *SpriteSheet]{})
-}
-
-func (x *SpriteSheet) ComponentID() ecs.ComponentID {
-	return SpriteSheetCID
-}
-func GetSpriteSheet(e ecs.Entity) *SpriteSheet {
-	if asserted, ok := ecs.Component(e, SpriteSheetCID).(*SpriteSheet); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (s *SpriteSheet) MultiAttachable() bool { return true }
 
 func (s *SpriteSheet) OnDelete() {

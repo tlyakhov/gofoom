@@ -29,22 +29,6 @@ type Item struct {
 	Flags ItemFlags            `editable:"Flags" edit_type:"Flags"`
 }
 
-var ItemCID ecs.ComponentID
-
-func init() {
-	ItemCID = ecs.RegisterComponent(&ecs.Arena[Item, *Item]{})
-}
-
-func (x *Item) ComponentID() ecs.ComponentID {
-	return ItemCID
-}
-func GetItem(e ecs.Entity) *Item {
-	if asserted, ok := ecs.Component(e, ItemCID).(*Item); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (item *Item) MultiAttachable() bool { return true }
 
 func (item *Item) String() string {

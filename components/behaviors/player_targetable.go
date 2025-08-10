@@ -4,6 +4,8 @@
 package behaviors
 
 import (
+	"bytes"
+	"fmt"
 	"text/template"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -20,22 +22,6 @@ type PlayerTargetable struct {
 	Message      string      `editable:"Message"`
 
 	MessageTemplate *template.Template
-}
-
-var PlayerTargetableCID ecs.ComponentID
-
-func init() {
-	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Arena[PlayerTargetable, *PlayerTargetable]{})
-}
-
-func (x *PlayerTargetable) ComponentID() ecs.ComponentID {
-	return PlayerTargetableCID
-}
-func GetPlayerTargetable(e ecs.Entity) *PlayerTargetable {
-	if asserted, ok := ecs.Component(e, PlayerTargetableCID).(*PlayerTargetable); ok {
-		return asserted
-	}
-	return nil
 }
 
 func (pt *PlayerTargetable) MultiAttachable() bool { return true }
@@ -55,7 +41,12 @@ func (pt *PlayerTargetable) Pos(e ecs.Entity) *concepts.Vector3 {
 
 func (pt *PlayerTargetable) String() string {
 	if pt.MessageTemplate != nil {
-		return pt.MessageTemplate.Root.String()
+		var buf bytes.Buffer
+		err := pt.MessageTemplate.Execute(&buf, nil)
+		if err != nil {
+			return fmt.Sprintf("Error in message template %v: %v", pt.Message, err)
+		}
+		return buf.String()
 	} else {
 		return "PlayerTargetable"
 	}

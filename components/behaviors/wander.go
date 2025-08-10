@@ -21,22 +21,6 @@ type Wander struct {
 	NextSector ecs.Entity
 }
 
-var WanderCID ecs.ComponentID
-
-func init() {
-	WanderCID = ecs.RegisterComponent(&ecs.Arena[Wander, *Wander]{})
-}
-
-func (x *Wander) ComponentID() ecs.ComponentID {
-	return WanderCID
-}
-func GetWander(e ecs.Entity) *Wander {
-	if asserted, ok := ecs.Component(e, WanderCID).(*Wander); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (w *Wander) String() string {
 	return "Wander"
 }

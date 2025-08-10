@@ -42,25 +42,12 @@ type VerticalDoor struct {
 	Duration     float64              `editable:"Duration"`
 }
 
-var VerticalDoorCID ecs.ComponentID
-
 func init() {
-	VerticalDoorCID = ecs.RegisterComponent(&ecs.Arena[VerticalDoor, *VerticalDoor]{})
 	dis := DoorIntentStrings()
 	div := DoorIntentValues()
 	for i, s := range dis {
 		ecs.Types().ExprEnv[s] = div[i]
 	}
-}
-
-func (x *VerticalDoor) ComponentID() ecs.ComponentID {
-	return VerticalDoorCID
-}
-func GetVerticalDoor(e ecs.Entity) *VerticalDoor {
-	if asserted, ok := ecs.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
-		return asserted
-	}
-	return nil
 }
 
 func (vd *VerticalDoor) String() string {

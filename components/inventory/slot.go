@@ -30,22 +30,6 @@ type Slot struct {
 	Carrier *Carrier
 }
 
-var SlotCID ecs.ComponentID
-
-func init() {
-	SlotCID = ecs.RegisterComponent(&ecs.Arena[Slot, *Slot]{})
-}
-
-func (x *Slot) ComponentID() ecs.ComponentID {
-	return SlotCID
-}
-func GetSlot(e ecs.Entity) *Slot {
-	if asserted, ok := ecs.Component(e, SlotCID).(*Slot); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (slot *Slot) String() string {
 	return "Slot " + slot.Class
 }

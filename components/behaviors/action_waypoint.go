@@ -5,7 +5,6 @@ package behaviors
 
 import (
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/ecs"
 )
 
 // This component represents a target position an entity should go to. Examples:
@@ -15,22 +14,6 @@ type ActionWaypoint struct {
 	ActionTimed `editable:"^"`
 
 	P concepts.Vector3 `editable:"Position"`
-}
-
-var ActionWaypointCID ecs.ComponentID
-
-func init() {
-	ActionWaypointCID = ecs.RegisterComponent(&ecs.Arena[ActionWaypoint, *ActionWaypoint]{})
-}
-
-func (*ActionWaypoint) ComponentID() ecs.ComponentID {
-	return ActionWaypointCID
-}
-func GetActionWaypoint(e ecs.Entity) *ActionWaypoint {
-	if asserted, ok := ecs.Component(e, ActionWaypointCID).(*ActionWaypoint); ok {
-		return asserted
-	}
-	return nil
 }
 
 func (waypoint *ActionWaypoint) String() string {

@@ -31,22 +31,6 @@ type Weapon struct {
 	Marks deque.Deque[WeaponMark]
 }
 
-var WeaponCID ecs.ComponentID
-
-func init() {
-	WeaponCID = ecs.RegisterComponent(&ecs.Arena[Weapon, *Weapon]{})
-}
-
-func (x *Weapon) ComponentID() ecs.ComponentID {
-	return WeaponCID
-}
-func GetWeapon(e ecs.Entity) *Weapon {
-	if asserted, ok := ecs.Component(e, WeaponCID).(*Weapon); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (w *Weapon) StateDuration() int64 {
 	return ecs.Simulation.Timestamp - w.LastStateTimestamp
 }
