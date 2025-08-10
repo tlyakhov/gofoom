@@ -44,24 +44,8 @@ type Sector struct {
 	LastSeenFrame atomic.Int64
 }
 
-var SectorCID ecs.ComponentID
-
-func init() {
-	SectorCID = ecs.RegisterComponent(&ecs.Arena[Sector, *Sector]{})
-}
-
-func (x *Sector) ComponentID() ecs.ComponentID {
-	return SectorCID
-}
-func GetSector(e ecs.Entity) *Sector {
-	if asserted, ok := ecs.Component(e, SectorCID).(*Sector); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (s *Sector) String() string {
-	return "Sector " + s.Center.StringHuman(0)
+	return "Sector"
 }
 
 func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {

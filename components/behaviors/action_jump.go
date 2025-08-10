@@ -3,28 +3,8 @@
 
 package behaviors
 
-import (
-	"tlyakhov/gofoom/ecs"
-)
-
 type ActionJump struct {
 	ActionTimed `editable:"^"`
-}
-
-var ActionJumpCID ecs.ComponentID
-
-func init() {
-	ActionJumpCID = ecs.RegisterComponent(&ecs.Arena[ActionJump, *ActionJump]{})
-}
-
-func (x *ActionJump) ComponentID() ecs.ComponentID {
-	return ActionJumpCID
-}
-func GetActionJump(e ecs.Entity) *ActionJump {
-	if asserted, ok := ecs.Component(e, ActionJumpCID).(*ActionJump); ok {
-		return asserted
-	}
-	return nil
 }
 
 func (jump *ActionJump) String() string {

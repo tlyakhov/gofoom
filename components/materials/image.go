@@ -38,22 +38,6 @@ type Image struct {
 	Image           image.Image
 }
 
-var ImageCID ecs.ComponentID
-
-func init() {
-	ImageCID = ecs.RegisterComponent(&ecs.Arena[Image, *Image]{})
-}
-
-func (x *Image) ComponentID() ecs.ComponentID {
-	return ImageCID
-}
-func GetImage(e ecs.Entity) *Image {
-	if asserted, ok := ecs.Component(e, ImageCID).(*Image); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (img *Image) MultiAttachable() bool { return true }
 
 func (img *Image) String() string {

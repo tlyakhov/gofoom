@@ -15,22 +15,6 @@ type Lit struct {
 	Diffuse concepts.Vector4 `editable:"Diffuse Color" edit_type:"color"`
 }
 
-var LitCID ecs.ComponentID
-
-func init() {
-	LitCID = ecs.RegisterComponent(&ecs.Arena[Lit, *Lit]{})
-}
-
-func (x *Lit) ComponentID() ecs.ComponentID {
-	return LitCID
-}
-func GetLit(e ecs.Entity) *Lit {
-	if asserted, ok := ecs.Component(e, LitCID).(*Lit); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (m *Lit) MultiAttachable() bool { return true }
 
 func (m *Lit) String() string {

@@ -18,22 +18,6 @@ type Light struct {
 	Attenuation float64          `editable:"Attenuation"`
 }
 
-var LightCID ecs.ComponentID
-
-func init() {
-	LightCID = ecs.RegisterComponent(&ecs.Arena[Light, *Light]{})
-}
-
-func (x *Light) ComponentID() ecs.ComponentID {
-	return LightCID
-}
-func GetLight(e ecs.Entity) *Light {
-	if asserted, ok := ecs.Component(e, LightCID).(*Light); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (l *Light) OnDetach(e ecs.Entity) {
 	defer l.Attached.OnDetach(e)
 	if !l.IsAttached() {

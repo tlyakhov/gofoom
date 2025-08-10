@@ -33,22 +33,6 @@ type WeaponMark struct {
 	*materials.Surface
 }
 
-var WeaponClassCID ecs.ComponentID
-
-func init() {
-	WeaponClassCID = ecs.RegisterComponent(&ecs.Arena[WeaponClass, *WeaponClass]{})
-}
-
-func (x *WeaponClass) ComponentID() ecs.ComponentID {
-	return WeaponClassCID
-}
-func GetWeaponClass(e ecs.Entity) *WeaponClass {
-	if asserted, ok := ecs.Component(e, WeaponClassCID).(*WeaponClass); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (w *WeaponClass) String() string {
 	return "WeaponClass"
 }

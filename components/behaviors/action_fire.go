@@ -3,28 +3,8 @@
 
 package behaviors
 
-import (
-	"tlyakhov/gofoom/ecs"
-)
-
 type ActionFire struct {
 	ActionTimed `editable:"^"`
-}
-
-var ActionFireCID ecs.ComponentID
-
-func init() {
-	ActionFireCID = ecs.RegisterComponent(&ecs.Arena[ActionFire, *ActionFire]{})
-}
-
-func (*ActionFire) ComponentID() ecs.ComponentID {
-	return ActionFireCID
-}
-func GetActionFire(e ecs.Entity) *ActionFire {
-	if asserted, ok := ecs.Component(e, ActionFireCID).(*ActionFire); ok {
-		return asserted
-	}
-	return nil
 }
 
 func (fire *ActionFire) String() string {

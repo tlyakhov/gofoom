@@ -14,22 +14,6 @@ type Solid struct {
 	Diffuse      dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
-var SolidCID ecs.ComponentID
-
-func init() {
-	SolidCID = ecs.RegisterComponent(&ecs.Arena[Solid, *Solid]{})
-}
-
-func (x *Solid) ComponentID() ecs.ComponentID {
-	return SolidCID
-}
-func GetSolid(e ecs.Entity) *Solid {
-	if asserted, ok := ecs.Component(e, SolidCID).(*Solid); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (s *Solid) MultiAttachable() bool { return true }
 
 func (s *Solid) OnDelete() {

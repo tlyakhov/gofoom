@@ -24,22 +24,6 @@ type Alive struct {
 	Damages      map[string]*Damage
 }
 
-var AliveCID ecs.ComponentID
-
-func init() {
-	AliveCID = ecs.RegisterComponent(&ecs.Arena[Alive, *Alive]{})
-}
-
-func (*Alive) ComponentID() ecs.ComponentID {
-	return AliveCID
-}
-func GetAlive(e ecs.Entity) *Alive {
-	if asserted, ok := ecs.Component(e, AliveCID).(*Alive); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (a *Alive) MultiAttachable() bool {
 	return true
 }

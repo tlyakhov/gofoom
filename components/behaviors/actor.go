@@ -19,22 +19,6 @@ type Actor struct {
 	FaceNextWaypoint bool                      `editable:"Face Waypoint?"`
 }
 
-var ActorCID ecs.ComponentID
-
-func init() {
-	ActorCID = ecs.RegisterComponent(&ecs.Arena[Actor, *Actor]{})
-}
-
-func (*Actor) ComponentID() ecs.ComponentID {
-	return ActorCID
-}
-func GetActor(e ecs.Entity) *Actor {
-	if asserted, ok := ecs.Component(e, ActorCID).(*Actor); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (a *Actor) String() string {
 	return "Actor"
 }

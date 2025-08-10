@@ -12,6 +12,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
+//go:generate gofoom_ecs_generator $GOFILE
 type Body struct {
 	ecs.Attached `editable:"^"`
 	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`
@@ -23,25 +24,8 @@ type Body struct {
 	OnGround     bool
 }
 
-var BodyCID ecs.ComponentID
-
-func init() {
-	BodyCID = ecs.RegisterComponent(&ecs.Arena[Body, *Body]{})
-}
-
-func (x *Body) ComponentID() ecs.ComponentID {
-	return BodyCID
-}
-
-func GetBody(e ecs.Entity) *Body {
-	if asserted, ok := ecs.Component(e, BodyCID).(*Body); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (b *Body) String() string {
-	return "Body " + b.Pos.Now.StringHuman(0)
+	return "Body"
 }
 
 func (b *Body) OnDetach(e ecs.Entity) {

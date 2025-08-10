@@ -23,6 +23,16 @@ func (e *Editor) materialSelectionBorderColor(entity ecs.Entity) *concepts.Vecto
 	return &concepts.Vector4{0.0, 0.0, 0.0, 0.0}
 }
 
+func (e *Editor) fallbackImage(entity ecs.Entity) image.Image {
+	if l := core.GetLight(entity); l != nil {
+		return e.lightImage
+	}
+	if b := core.GetBody(entity); b != nil {
+		return e.bodyImage
+	}
+	return e.noTextureImage
+}
+
 func (e *Editor) imageForMaterial(entity ecs.Entity) image.Image {
 	w, h := 64, 64
 	e.MaterialSampler.Initialize(entity, nil)
@@ -42,7 +52,7 @@ func (e *Editor) imageForMaterial(entity ecs.Entity) image.Image {
 			e.MaterialSampler.Angle = float64(x) * math.Pi * 2.0 / float64(w)
 			e.MaterialSampler.SampleMaterial(nil)
 			if e.MaterialSampler.NoTexture {
-				return e.noTextureImage
+				return e.fallbackImage(entity)
 			}
 			if x <= 1 || y <= 1 || x >= w-2 || y >= h-2 {
 				concepts.BlendColors(&e.MaterialSampler.Output, border, 1)

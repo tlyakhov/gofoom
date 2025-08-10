@@ -39,22 +39,6 @@ type Proximity struct {
 	State *xsync.MapOf[uint64, *ProximityState]
 }
 
-var ProximityCID ecs.ComponentID
-
-func init() {
-	ProximityCID = ecs.RegisterComponent(&ecs.Arena[Proximity, *Proximity]{})
-}
-
-func (x *Proximity) ComponentID() ecs.ComponentID {
-	return ProximityCID
-}
-func GetProximity(e ecs.Entity) *Proximity {
-	if asserted, ok := ecs.Component(e, ProximityCID).(*Proximity); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (p *Proximity) MultiAttachable() bool { return true }
 
 func (p *Proximity) OnAttach() {

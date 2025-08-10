@@ -30,22 +30,6 @@ type Player struct {
 	Notices containers.SyncUniqueQueue[string]
 }
 
-var PlayerCID ecs.ComponentID
-
-func init() {
-	PlayerCID = ecs.RegisterComponent(&ecs.Arena[Player, *Player]{})
-}
-
-func (x *Player) ComponentID() ecs.ComponentID {
-	return PlayerCID
-}
-func GetPlayer(e ecs.Entity) *Player {
-	if asserted, ok := ecs.Component(e, PlayerCID).(*Player); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (p *Player) String() string {
 	if p.Spawn {
 		return "Spawn"

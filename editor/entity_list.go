@@ -186,8 +186,8 @@ func (list *EntityList) Build() fyne.CanvasObject {
 
 	list.Table.SetColumnWidth(int(elcEntity), 70)
 	list.Table.SetColumnWidth(int(elcImage), 64)
-	list.Table.SetColumnWidth(int(elcDesc), 240)
-	list.Table.SetColumnWidth(int(elcRank), 100)
+	list.Table.SetColumnWidth(int(elcDesc), 260)
+	list.Table.SetColumnWidth(int(elcRank), 64)
 	list.Table.ShowHeaderColumn = false
 	list.Table.CreateHeader = func() fyne.CanvasObject {
 		return widget.NewButton("Template", func() {})
@@ -307,16 +307,23 @@ func (list *EntityList) Update() {
 	if searchResult != nil {
 		log.Printf("Search result: %v", searchResult.String())
 	}
-	ecs.Entities.Range(func(entity uint32) {
-		if entity == 0 {
+	ecs.Entities.Range(func(index uint32) {
+		if index == 0 {
 			return
 		}
+		entity := ecs.Entity(index)
+
 		rowColor := theme.Color(theme.ColorNameForeground)
+
 		parentDesc := ""
+		if n := ecs.GetNamed(entity); n != nil {
+			parentDesc = n.Name
+		}
 
 		allSystem := true
-		for _, c := range ecs.AllComponents(ecs.Entity(entity)) {
-			if c == nil || c.Base().Flags&ecs.ComponentHideInEditor != 0 {
+		for _, c := range ecs.AllComponents(entity) {
+			if c == nil || c.ComponentID() == ecs.NamedCID ||
+				c.Base().Flags&ecs.ComponentHideInEditor != 0 {
 				continue
 			}
 

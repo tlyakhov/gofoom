@@ -98,6 +98,18 @@
             "program": "${workspaceFolder}/game/",
             "cwd": "${workspaceFolder}",
             "output": "${workspaceFolder}/bin/game-prof"
-        }
+        },
+          {
+            "name": "Debug generator",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/ecs/cmd/gofoom_ecs_generator",
+            "cwd": "${workspaceFolder}/components/",
+            "output": "${workspaceFolder}/bin/gofoom_ecs_generator",
+            "args": [
+                "."
+            ],
+        },
     ]
 }

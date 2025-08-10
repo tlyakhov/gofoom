@@ -64,6 +64,8 @@ type Editor struct {
 
 	entityIconCache *xsync.MapOf[ecs.Entity, entityIconCacheItem]
 	noTextureImage  image.Image
+	lightImage      image.Image
+	bodyImage       image.Image
 }
 
 type entityIconCacheItem struct {
@@ -108,6 +110,16 @@ func (e *Editor) OnStarted() {
 	img.Resize(fyne.NewSquareSize(64))
 	img.Refresh()
 	editor.noTextureImage = img.Image
+
+	img = canvas.NewImageFromResource(theme.RadioButtonCheckedIcon())
+	img.Resize(fyne.NewSquareSize(64))
+	img.Refresh()
+	editor.lightImage = img.Image
+
+	img = canvas.NewImageFromResource(theme.AccountIcon())
+	img.Resize(fyne.NewSquareSize(64))
+	img.Refresh()
+	editor.bodyImage = img.Image
 }
 
 func (e *Editor) Content() string {

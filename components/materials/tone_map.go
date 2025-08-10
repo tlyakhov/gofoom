@@ -20,24 +20,6 @@ type ToneMap struct {
 	LutSRGBToLinear [256]float64
 }
 
-var ToneMapCID ecs.ComponentID
-
-func init() {
-	ToneMapCID = ecs.RegisterComponent(&ecs.Arena[ToneMap, *ToneMap]{})
-}
-
-func (x *ToneMap) ComponentID() ecs.ComponentID {
-	return ToneMapCID
-}
-func GetToneMap(e ecs.Entity) *ToneMap {
-	panic("Tried to materials.GetToneMap. Use ecs.Singleton(materials.ToneMapCID) instead.")
-	/*
-		if asserted, ok := ecs.Component(e, ToneMapCID).(*ToneMap); ok {
-			return asserted
-		}
-		return nil*/
-}
-
 func (tm *ToneMap) MultiAttachable() bool { return true }
 
 func (tm *ToneMap) String() string {

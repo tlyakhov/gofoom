@@ -4,25 +4,16 @@
 package render
 
 import (
-	"bytes"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
-
-type playerMessageParams struct {
-	TargetableEntity ecs.Entity
-	PlayerTargetable *behaviors.PlayerTargetable
-	Player           *character.Player
-	Carrier          *inventory.Carrier
-}
 
 func (r *Renderer) RenderWeapon(slot *inventory.Slot) {
 	wc := inventory.GetWeaponClass(slot.Entity)
@@ -33,19 +24,6 @@ func (r *Renderer) RenderWeapon(slot *inventory.Slot) {
 		}
 		r.BitBlt(wc.Params[w.State].Material, r.ScreenWidth/2-64, r.ScreenHeight-128, 128, 128, concepts.BlendNormal)
 	}
-}
-
-func applyPlayerMessage(pt *behaviors.PlayerTargetable, params *playerMessageParams) string {
-	if pt.MessageTemplate == nil {
-		return pt.Message
-	}
-
-	var buf bytes.Buffer
-	err := pt.MessageTemplate.Execute(&buf, params)
-	if err != nil {
-		return fmt.Sprintf("Error in message template %v: %v", pt.Message, err)
-	}
-	return buf.String()
 }
 
 func (r *Renderer) renderSelectedTarget() {
@@ -61,13 +39,13 @@ func (r *Renderer) renderSelectedTarget() {
 		return
 	}
 
-	params := &playerMessageParams{
+	params := &PlayerMessageParams{
 		TargetableEntity: r.Player.SelectedTarget,
 		PlayerTargetable: pt,
 		Player:           r.Player,
 		Carrier:          r.Carrier,
 	}
-	msg := strings.TrimSpace(applyPlayerMessage(pt, params))
+	msg := strings.TrimSpace(ApplyPlayerMessage(pt, params))
 	r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
 }
 

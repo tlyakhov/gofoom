@@ -14,22 +14,6 @@ type ActorState struct {
 	LastTransition int64
 }
 
-var ActorStateCID ecs.ComponentID
-
-func init() {
-	ActorStateCID = ecs.RegisterComponent(&ecs.Arena[ActorState, *ActorState]{})
-}
-
-func (*ActorState) ComponentID() ecs.ComponentID {
-	return ActorStateCID
-}
-func GetActorState(e ecs.Entity) *ActorState {
-	if asserted, ok := ecs.Component(e, ActorStateCID).(*ActorState); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (a *ActorState) String() string {
 	return "ActorState"
 }

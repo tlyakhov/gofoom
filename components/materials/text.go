@@ -25,22 +25,6 @@ type Text struct {
 	Color dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
-var TextCID ecs.ComponentID
-
-func init() {
-	TextCID = ecs.RegisterComponent(&ecs.Arena[Text, *Text]{})
-}
-
-func (x *Text) ComponentID() ecs.ComponentID {
-	return TextCID
-}
-func GetText(e ecs.Entity) *Text {
-	if asserted, ok := ecs.Component(e, TextCID).(*Text); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (t *Text) MultiAttachable() bool { return true }
 
 func (t *Text) OnDelete() {

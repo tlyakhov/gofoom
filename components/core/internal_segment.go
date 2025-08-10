@@ -21,22 +21,6 @@ type InternalSegment struct {
 	TwoSided bool    `editable:"Two sided?"`
 }
 
-var InternalSegmentCID ecs.ComponentID
-
-func init() {
-	InternalSegmentCID = ecs.RegisterComponent(&ecs.Arena[InternalSegment, *InternalSegment]{})
-}
-
-func (x *InternalSegment) ComponentID() ecs.ComponentID {
-	return InternalSegmentCID
-}
-func GetInternalSegment(e ecs.Entity) *InternalSegment {
-	if asserted, ok := ecs.Component(e, InternalSegmentCID).(*InternalSegment); ok {
-		return asserted
-	}
-	return nil
-}
-
 func (s *InternalSegment) String() string {
 	return "Segment: (" + s.Segment.A.StringHuman() + ")-(" + s.Segment.B.StringHuman() + ")"
 }
