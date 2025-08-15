@@ -8,6 +8,7 @@ import (
 	"log"
 	"reflect"
 
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/dynamic"
@@ -48,6 +49,10 @@ func (a *SetProperty) FireHooks() {
 			target.ResetToSpawn()
 			target.Recalculate()
 		case *materials.Image:
+			if a.Source.Name == "Source" {
+				target.Load()
+			}
+		case *audio.Sound:
 			if a.Source.Name == "Source" {
 				target.Load()
 			}

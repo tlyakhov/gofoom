@@ -95,10 +95,7 @@ func (*Text) ComponentID() ecs.ComponentID {
 	return TextCID
 }
 func GetToneMap(e ecs.Entity) *ToneMap {
-	if asserted, ok := ecs.Component(e, ToneMapCID).(*ToneMap); ok {
-		return asserted
-	}
-	return nil
+	panic("Tried to GetToneMap, which is a singleton. use ecs.Singleton instead")
 }
 
 func (*ToneMap) ComponentID() ecs.ComponentID {

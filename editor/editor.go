@@ -416,28 +416,24 @@ func (e *Editor) NewShader() {
 			return
 		}
 
-		// TODO: This is all broken, fix it
-		// First, load the image
-		eImg := ecs.NewEntity()
-		img := ecs.NewAttachedComponent(eImg, materials.ImageCID).(*materials.Image)
+		img := &materials.Image{}
+		img.Construct(nil)
 		img.Source = uc.URI().Path()
 		img.Load()
-		a := &actions.AddEntity{Entity: eImg, Components: ecs.AllComponents(eImg)}
-		a.IEditor = e
-		e.Act(a)
-		// Next set up the shader
-		eShader := ecs.NewEntity()
-		shader := ecs.NewAttachedComponent(eImg, materials.ShaderCID).(*materials.Shader)
+		shader := &materials.Shader{}
 		stage := &materials.ShaderStage{}
-		stage.OnAttach()
 		stage.Construct(nil)
-		stage.Material = eImg
 		shader.Stages = append(shader.Stages, stage)
-		named := ecs.NewAttachedComponent(eShader, ecs.NamedCID).(*ecs.Named)
+		named := &ecs.Named{}
+		named.Construct(nil)
 		named.Name = "Shader " + path.Base(img.Source)
-		a = &actions.AddEntity{Entity: eShader, Components: ecs.AllComponents(eShader)}
+
+		a := &actions.AddEntity{}
 		a.IEditor = e
+		a.Components = []ecs.Attachable{img, shader, named}
 		e.Act(a)
+
+		stage.Material = a.Entity
 
 	}, e.Window)
 

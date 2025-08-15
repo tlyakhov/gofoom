@@ -10,7 +10,7 @@ import (
 )
 
 type Quadtree struct {
-	ecs.Attached `editable:"^"`
+	ecs.Attached `ecs:"singleton"`
 
 	MinZ, MaxZ float64
 

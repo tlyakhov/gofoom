@@ -82,12 +82,18 @@ func (p *Proximity) Construct(data map[string]any) {
 
 	if v, ok := data["InRange"]; ok {
 		p.InRange.Construct(v.(map[string]any))
+	} else {
+		p.InRange.Construct(nil)
 	}
 	if v, ok := data["Enter"]; ok {
 		p.Enter.Construct(v.(map[string]any))
+	} else {
+		p.Enter.Construct(nil)
 	}
 	if v, ok := data["Exit"]; ok {
 		p.Exit.Construct(v.(map[string]any))
+	} else {
+		p.Exit.Construct(nil)
 	}
 
 	if v, ok := data["ValidComponents"]; ok {
