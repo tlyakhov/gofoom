@@ -69,6 +69,8 @@ benefits as far as dynamic sectors, lighting, etc...
   - Scripted actions for objects and enemies
   - Particle systems
   - In-game UI, retro DOS style
+- Audio
+  - WAV, MP3, FLAC support via SDL
 - World editor:
   - Realtime 3D view, allowing live manipulation of the world by clicking.
   - Edit any sector/segment/entity property.

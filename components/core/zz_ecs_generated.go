@@ -59,10 +59,7 @@ func (*Mobile) ComponentID() ecs.ComponentID {
 	return MobileCID
 }
 func GetQuadtree(e ecs.Entity) *Quadtree {
-	if asserted, ok := ecs.Component(e, QuadtreeCID).(*Quadtree); ok {
-		return asserted
-	}
-	return nil
+	panic("Tried to GetQuadtree, which is a singleton. use ecs.Singleton instead")
 }
 
 func (*Quadtree) ComponentID() ecs.ComponentID {

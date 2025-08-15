@@ -11,7 +11,7 @@ import (
 )
 
 type ToneMap struct {
-	ecs.Attached `editable:"^"`
+	ecs.Attached `ecs:"singleton"`
 
 	// 2.4 by default
 	Gamma float64 `editable:"Gamma"`

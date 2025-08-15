@@ -44,7 +44,7 @@ func (img *Image) String() string {
 	return "Image: " + img.Source
 }
 
-// Load a texture from a file (pre-processing mipmaps if set)
+// Load a texture from a file
 func (img *Image) Load() error {
 	if img.Source == "" {
 		return nil

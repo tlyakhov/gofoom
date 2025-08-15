@@ -4,18 +4,20 @@ go 1.24.0
 
 require (
 	fyne.io/fyne/v2 v2.6.2
+	github.com/blevesearch/bleve v1.0.14
 	github.com/disintegration/gift v1.2.1
 	github.com/fogleman/gg v1.3.0
 	github.com/gammazero/deque v1.1.0
 	github.com/gopxl/pixel/v2 v2.3.0
 	github.com/kelindar/bitmap v1.5.3
-	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/loov/hrtime v1.0.3
 	github.com/puzpuzpuz/xsync/v3 v3.5.1
 	github.com/rs/xid v1.6.0
 	github.com/spf13/cast v1.9.2
 	github.com/traefik/yaegi v0.16.1
+	github.com/veandco/go-sdl2 v0.4.40
 	golang.org/x/image v0.29.0
+	golang.org/x/tools v0.35.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -43,7 +45,6 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/yuin/goldmark v1.7.13 // indirect
-	golang.org/x/mobile v0.0.0-20250711185624-d5bb5ecc55c0 // indirect
 	golang.org/x/mod v0.26.0 // indirect
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sys v0.34.0 // indirect
@@ -53,7 +54,6 @@ require (
 require (
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/RoaringBitmap/roaring v0.4.23 // indirect
-	github.com/blevesearch/bleve v1.0.14 // indirect
 	github.com/blevesearch/go-porterstemmer v1.0.3 // indirect
 	github.com/blevesearch/mmap-go v1.0.2 // indirect
 	github.com/blevesearch/segment v0.9.0 // indirect
@@ -65,11 +65,14 @@ require (
 	github.com/blevesearch/zap/v15 v15.0.3 // indirect
 	github.com/couchbase/vellum v1.0.2 // indirect
 	github.com/dmarkham/enumer v1.5.11 // indirect
+	github.com/fyne-io/oksvg v0.1.0 // indirect
 	github.com/glycerine/go-unsnap-stream v0.0.0-20181221182339-f9677308dec2 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gopxl/glhf/v2 v2.1.0 // indirect
 	github.com/gopxl/mainthread/v2 v2.1.1 // indirect
+	github.com/hack-pad/go-indexeddb v0.3.2 // indirect
+	github.com/hack-pad/safejs v0.1.0 // indirect
 	github.com/jeandeaual/go-locale v0.0.0-20250612000132-0ef82f21eade // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/mmcloughlin/avo v0.6.0 // indirect
@@ -83,7 +86,6 @@ require (
 	github.com/willf/bitset v1.1.10 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
 	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/tools v0.35.0 // indirect
 )
 
 tool (

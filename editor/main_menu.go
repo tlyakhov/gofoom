@@ -151,17 +151,17 @@ func CreateMainMenu() {
 		editor.Act(&actions.Delete{Action: state.Action{IEditor: editor}})
 	})
 
-	editor.EditCut.Shortcut = &fyne.ShortcutCut{Clipboard: editor.Window.Clipboard()}
+	editor.EditCut.Shortcut = &fyne.ShortcutCut{Clipboard: editor.App.Clipboard()}
 	editor.EditCut.Menu = fyne.NewMenuItem("Cut", func() {
 		editor.FocusedShortcut(editor.EditCut.Shortcut)
 	})
 
-	editor.EditCopy.Shortcut = &fyne.ShortcutCopy{Clipboard: editor.Window.Clipboard()}
+	editor.EditCopy.Shortcut = &fyne.ShortcutCopy{Clipboard: editor.App.Clipboard()}
 	editor.EditCopy.Menu = fyne.NewMenuItem("Copy", func() {
 		editor.FocusedShortcut(editor.EditCopy.Shortcut)
 	})
 
-	editor.EditPaste.Shortcut = &fyne.ShortcutPaste{Clipboard: editor.Window.Clipboard()}
+	editor.EditPaste.Shortcut = &fyne.ShortcutPaste{Clipboard: editor.App.Clipboard()}
 	editor.EditPaste.Menu = fyne.NewMenuItem("Paste", func() {
 		editor.FocusedShortcut(editor.EditPaste.Shortcut)
 

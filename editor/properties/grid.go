@@ -481,6 +481,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, ecs.ComponentFlagsValues())
 		case *inventory.WeaponIntent:
 			g.fieldEnum(field, inventory.WeaponIntentValues())
+		case *behaviors.DoorIntent:
+			g.fieldEnum(field, behaviors.DoorIntentValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]*core.Script:

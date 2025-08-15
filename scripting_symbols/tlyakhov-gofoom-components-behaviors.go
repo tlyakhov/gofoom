@@ -15,6 +15,7 @@ func init() {
 		// function, constant and variable definitions
 		"ActionFireCID":          reflect.ValueOf(&behaviors.ActionFireCID).Elem(),
 		"ActionJumpCID":          reflect.ValueOf(&behaviors.ActionJumpCID).Elem(),
+		"ActionTimedCID":         reflect.ValueOf(&behaviors.ActionTimedCID).Elem(),
 		"ActionTransitionCID":    reflect.ValueOf(&behaviors.ActionTransitionCID).Elem(),
 		"ActionWaypointCID":      reflect.ValueOf(&behaviors.ActionWaypointCID).Elem(),
 		"ActorCID":               reflect.ValueOf(&behaviors.ActorCID).Elem(),
@@ -35,6 +36,7 @@ func init() {
 		"DoorStateValues":        reflect.ValueOf(behaviors.DoorStateValues),
 		"GetActionFire":          reflect.ValueOf(behaviors.GetActionFire),
 		"GetActionJump":          reflect.ValueOf(behaviors.GetActionJump),
+		"GetActionTimed":         reflect.ValueOf(behaviors.GetActionTimed),
 		"GetActionTransition":    reflect.ValueOf(behaviors.GetActionTransition),
 		"GetActionWaypoint":      reflect.ValueOf(behaviors.GetActionWaypoint),
 		"GetActor":               reflect.ValueOf(behaviors.GetActor),

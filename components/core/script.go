@@ -39,6 +39,7 @@ func init() {
 	package main
 
 	import "tlyakhov/gofoom/archetypes"
+	import "tlyakhov/gofoom/components/audio"
 	import "tlyakhov/gofoom/components/behaviors"
 	import "tlyakhov/gofoom/components/character"
 	import "tlyakhov/gofoom/components/core"

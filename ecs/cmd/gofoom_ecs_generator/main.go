@@ -8,6 +8,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
+	"strconv"
 	"text/template"
 
 	"golang.org/x/tools/go/packages"
@@ -20,9 +22,6 @@ SET UP: go install ./ecs/cmd/gofoom_ecs_generator
 Then, add `//go:generate gofoom_ecs_generator .` in a file to any directory with
 components.
 
-TODO: Bring back some panics/asserts for Get* functions on singletons
-(specifically QuadTree and ToneMap)
-
 ***/
 
 // attachableTemplate is for boilerplate code for Attachable components.
@@ -32,22 +31,26 @@ package {{.PackageName}}
 
 import "tlyakhov/gofoom/ecs"
 
-{{range $name, $v := .Components }}
+{{range $name, $attached := .Components }}
 var {{$name}}CID ecs.ComponentID
 {{- end }}
 
 func init() {
-{{- range $name, $v := .Components }}
+{{- range $name, $attached := .Components }}
 	{{$name}}CID = ecs.RegisterComponent(&ecs.Arena[{{$name}}, *{{$name}}]{})
 {{- end }}
 }
 
-{{- range $name, $v := .Components }}
+{{- range $name, $attached := .Components }}
 func Get{{$name}}(e ecs.Entity) *{{$name}} {
+{{- if $attached.Singleton}}
+	panic("Tried to Get{{$name}}, which is a singleton. use ecs.Singleton instead")
+{{- else}}
     if asserted, ok := ecs.Component(e, {{$name}}CID).(*{{$name}}); ok {
         return asserted
     }
-    return nil
+	return nil
+{{- end}}
 }
 
 func (*{{$name}}) ComponentID() ecs.ComponentID {
@@ -56,22 +59,26 @@ func (*{{$name}}) ComponentID() ecs.ComponentID {
 {{- end }}
 `
 
+type AttachedStruct struct {
+	Singleton bool
+}
+
 type TemplateData struct {
-	Components  map[string]struct{}
+	Components  map[string]AttachedStruct
 	PackageName string
 }
 
 // A slice to store the names of structs that embed "Attached".
-var componentsByPackage = make(map[*packages.Package]map[string]struct{})
+var componentsByPackage = make(map[*packages.Package]map[string]AttachedStruct)
 var numComponents = 0
 
-func addComponent(pkg *packages.Package, name string) {
+func addComponent(pkg *packages.Package, name string, singleton bool) {
 	if _, ok := componentsByPackage[pkg]; !ok {
-		componentsByPackage[pkg] = make(map[string]struct{})
+		componentsByPackage[pkg] = make(map[string]AttachedStruct)
 	}
 
 	if _, ok := componentsByPackage[pkg][name]; !ok {
-		componentsByPackage[pkg][name] = struct{}{}
+		componentsByPackage[pkg][name] = AttachedStruct{Singleton: singleton}
 		numComponents++
 	}
 }
@@ -102,8 +109,8 @@ func inspectTypes(pkg *packages.Package, n ast.Node) bool {
 
 		// This is the case for an embedding in the same package.
 		if ident, ok := field.Type.(*ast.Ident); ok {
-			if _, ok := componentsByPackage[pkg][ident.Name]; ok {
-				addComponent(pkg, typeSpec.Name.Name)
+			if child, ok := componentsByPackage[pkg][ident.Name]; ok {
+				addComponent(pkg, typeSpec.Name.Name, child.Singleton)
 			}
 			continue
 		}
@@ -122,7 +129,16 @@ func inspectTypes(pkg *packages.Package, n ast.Node) bool {
 		// We found a struct that embeds "ecs.Attached".
 		// Add its name to our list.
 
-		addComponent(pkg, typeSpec.Name.Name)
+		// Check if it should be a singleton
+		singleton := false
+		if field.Tag != nil {
+			if s, err := strconv.Unquote(field.Tag.Value); err == nil {
+				tag := reflect.StructTag(s)
+				singleton = tag.Get("ecs") == "singleton"
+			}
+		}
+
+		addComponent(pkg, typeSpec.Name.Name, singleton)
 
 		// We can break since we only need to know it embeds it once.
 		break
@@ -139,8 +155,6 @@ func main() {
 	}
 	dir := os.Args[1]
 
-	d, _ := os.Getwd()
-	log.Printf(d)
 	// --- 2. Package Loading ---
 	// Configure the package loader. We need to parse syntax trees.
 	cfg := &packages.Config{
