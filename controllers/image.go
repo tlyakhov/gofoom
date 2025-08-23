@@ -96,10 +96,10 @@ func (ic *ImageController) Recalculate() {
 
 		img.MipMaps = append(img.MipMaps, mm)
 		if w > 4 {
-			w = concepts.Max(4, w/2)
+			w = max(4, w/2)
 		}
 		if h > 4 {
-			h = concepts.Max(4, h/2)
+			h = max(4, h/2)
 		}
 	}
 }
@@ -121,8 +121,8 @@ func (img *ImageController) generateSimpleMipMaps() {
 			for x = 0; x < w; x++ {
 				px = x * (prev.Width - 1) / (w - 1)
 				py = y * (prev.Height - 1) / (h - 1)
-				pcx = concepts.Min(px+1, prev.Width-1)
-				pcy = concepts.Min(py+1, prev.Height-1)
+				pcx = min(px+1, prev.Width-1)
+				pcy = min(py+1, prev.Height-1)
 				c := [16]color.RGBA{
 					concepts.Int32ToRGBA(prev.PixelsLinear[py*prev.Width+px]),
 					concepts.Int32ToRGBA(prev.PixelsLinear[py*prev.Width+pcx]),
@@ -141,10 +141,10 @@ func (img *ImageController) generateSimpleMipMaps() {
 		img.MipMaps = append(img.MipMaps, mm)
 		prev = mm
 		if w > 2 {
-			w = concepts.Max(2, w/2)
+			w = max(2, w/2)
 		}
 		if h > 2 {
-			h = concepts.Max(2, h/2)
+			h = max(2, h/2)
 		}
 	}
 }*/

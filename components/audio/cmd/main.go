@@ -17,27 +17,36 @@ func main() {
 	}
 	defer mixer.Close()
 
-	eMusic := ecs.NewEntity()
+	/*eMusic := ecs.NewEntity()
 	sndMusic := ecs.NewAttachedComponent(eMusic, audio.SoundCID).(*audio.Sound)
-	sndMusic.Source = "../../../data/sounds/r2beepboop.mp3"
-	sndMusic.Stream = true
+	sndMusic.Source = "data/sounds/r2beepboop.mp3"
 	if err := sndMusic.Load(); err != nil {
 		fmt.Printf("Failed to load music: %v\n", err)
 	}
 
-	if _, err := mixer.Play(sndMusic, nil, 0.5); err != nil {
+	if _, err := audio.PlaySound(sndMusic.Entity, 0); err != nil {
 		fmt.Printf("Failed to play music: %v\n", err)
+	}*/
+
+	eIR := ecs.NewEntity()
+	sndIR := ecs.NewAttachedComponent(eIR, audio.SoundCID).(*audio.Sound)
+	sndIR.Source = "data/sounds/impulses/empty_corridor.wav"
+	if err := sndIR.Load(); err != nil {
+		fmt.Printf("Failed to load sound: %v\n", err)
 	}
 
 	eCollect := ecs.NewEntity()
 	sndCollect := ecs.NewAttachedComponent(eCollect, audio.SoundCID).(*audio.Sound)
-	sndCollect.Source = "../../../data/sounds/collect.wav"
+	sndCollect.Source = "data/sounds/collect.wav"
 	if err := sndCollect.Load(); err != nil {
 		fmt.Printf("Failed to load sound: %v\n", err)
 	}
 
+	event, err := audio.PlaySound(sndCollect.Entity, 0, "test", false)
 	//event, err := mixer.Play(sndCollect, []audio.Effect{&audio.BitCrush{Bits: 8}}, 0.5)
-	event, err := mixer.Play(sndCollect, []audio.Effect{audio.NewDelay(12000, 0.5, 0.5)}, 0.5)
+	//event, err := mixer.Play(sndCollect, []audio.Effect{audio.NewDelay(12000, 0.5, 0.5)}, 0.5)
+	//event.Effects = []audio.Effect{&audio.DistortionEffect{Mix: 1, Drive:
+	//300000}}
 	if err != nil {
 		fmt.Printf("Failed to play sound: %v\n", err)
 	}

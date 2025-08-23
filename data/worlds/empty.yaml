@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0.007001650836370665
+        Now: 0, 0, 0.007001650399223597
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player

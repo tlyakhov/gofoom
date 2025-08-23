@@ -5,7 +5,6 @@ package ui
 
 import (
 	"strconv"
-	"tlyakhov/gofoom/concepts"
 )
 
 type Slider struct {
@@ -26,7 +25,7 @@ func (s *Slider) Serialize() map[string]any {
 func (s *Slider) Construct(data map[string]any) {
 	if v, ok := data["Value"]; ok {
 		if v2, err := strconv.ParseInt(v.(string), 10, 64); err == nil {
-			s.Value = concepts.Max(concepts.Min(int(v2), s.Max), s.Min)
+			s.Value = max(min(int(v2), s.Max), s.Min)
 		}
 	}
 }

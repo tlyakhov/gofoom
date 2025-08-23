@@ -8,6 +8,8 @@ require (
 	github.com/disintegration/gift v1.2.1
 	github.com/fogleman/gg v1.3.0
 	github.com/gammazero/deque v1.1.0
+	github.com/go-audio/audio v1.0.0
+	github.com/go-audio/wav v1.1.0
 	github.com/gopxl/pixel/v2 v2.3.0
 	github.com/kelindar/bitmap v1.5.3
 	github.com/loov/hrtime v1.0.3
@@ -15,9 +17,10 @@ require (
 	github.com/rs/xid v1.6.0
 	github.com/spf13/cast v1.9.2
 	github.com/traefik/yaegi v0.16.1
-	github.com/veandco/go-sdl2 v0.4.40
-	golang.org/x/image v0.29.0
-	golang.org/x/tools v0.35.0
+	golang.org/x/image v0.30.0
+	golang.org/x/mobile v0.0.0-20250813145510-f12310a0cfd9
+	golang.org/x/tools v0.36.0
+	gonum.org/v1/gonum v0.16.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -45,10 +48,10 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/yuin/goldmark v1.7.13 // indirect
-	golang.org/x/mod v0.26.0 // indirect
-	golang.org/x/net v0.42.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
-	golang.org/x/text v0.27.0 // indirect
+	golang.org/x/mod v0.27.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 )
 
 require (
@@ -67,6 +70,7 @@ require (
 	github.com/dmarkham/enumer v1.5.11 // indirect
 	github.com/fyne-io/oksvg v0.1.0 // indirect
 	github.com/glycerine/go-unsnap-stream v0.0.0-20181221182339-f9677308dec2 // indirect
+	github.com/go-audio/riff v1.0.0 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gopxl/glhf/v2 v2.1.0 // indirect

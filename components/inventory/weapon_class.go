@@ -5,7 +5,6 @@ package inventory
 
 import (
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
@@ -53,7 +52,7 @@ func (w *WeaponClass) Construct(data map[string]any) {
 
 	if v, ok := data["Params"]; ok {
 		arr := v.([]any)
-		for i := range concepts.Min(int(WeaponStateCount), len(arr)) {
+		for i := range min(int(WeaponStateCount), len(arr)) {
 			w.Params[i].Construct(arr[i].(map[string]any))
 		}
 	}

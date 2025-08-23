@@ -1,49 +1,51 @@
 package audio
 
 import (
-	"sync"
-
-	"github.com/veandco/go-sdl2/mix"
+	"tlyakhov/gofoom/components/audio/al"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 )
 
 // SoundEvent represents an active piece of audio. These are dynamically created when
 // a sound is triggered by a source.
 type SoundEvent struct {
-	chunk *mix.Chunk
-	// Channel the sound is playing on
-	channel int
-	// Effects applied to this sound
-	Effects []Effect
-	// Mutex for thread-safe operations
-	mu sync.Mutex
+	ecs.Attached
+
+	SourceEntity ecs.Entity
+	Sound        ecs.Entity
+	Tag          string
+
+	source al.Source
 }
 
-// SetVolume adjusts the volume of the sound.
-func (s *SoundEvent) SetVolume(volume float64) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	if s.chunk != nil {
-		mix.Volume(s.channel, int(volume*float64(mix.MAX_VOLUME)))
-	}
+func (s *SoundEvent) String() string {
+	return "Sound Event for " + s.SourceEntity.Format()
 }
 
-// SetVolume adjusts the volume of the sound.
-func (s *SoundEvent) SetPosition(angle, distance float64) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *SoundEvent) Construct(data map[string]any) {
+	s.Attached.Construct(data)
+	s.Flags |= ecs.ComponentInternal // never serialize this
+}
 
-	if s.chunk != nil {
-		mix.SetPosition(s.channel, int16(angle), uint8(distance*0.1))
-	}
+func (s *SoundEvent) Serialize() map[string]any {
+	result := s.Attached.Serialize()
+
+	return result
+}
+
+func (s *SoundEvent) SetPosition(v *concepts.Vector3) {
+	s.source.SetPosition(alVector(v))
+}
+
+func (s *SoundEvent) SetVelocity(v *concepts.Vector3) {
+	s.source.SetVelocity(alVector(v))
+}
+
+func (s *SoundEvent) SetOrientation(dir *concepts.Vector3) {
+	s.source.SetOrientation(al.Orientation{Forward: alVector(dir), Up: alUpVector})
 }
 
 // Stop halts playback of the sound.
 func (s *SoundEvent) Stop() {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	if s.chunk != nil {
-		mix.HaltChannel(s.channel)
-	}
+	al.StopSources(s.source)
 }

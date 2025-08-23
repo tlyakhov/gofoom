@@ -103,7 +103,7 @@ func (mc *MobileController) Always() {
 	mc.Vel.Now.AddSelf(mc.Force.Mul(constants.TimeStepS / mc.Mass))
 	if mc.Vel.Now.Length2() > constants.VelocityEpsilon {
 		speed := mc.Vel.Now.Length() * constants.TimeStepS
-		steps := concepts.Min(concepts.Max(int(speed/constants.CollisionCheck), 1), 10)
+		steps := min(max(int(speed/constants.CollisionCheck), 1), 10)
 		dt := constants.TimeStepS / float64(steps)
 		for step := 0; step < steps; step++ {
 			mc.Body.Pos.Now.AddSelf(mc.Vel.Now.Mul(dt * constants.UnitsPerMeter))

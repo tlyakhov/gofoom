@@ -6,7 +6,6 @@ package ui
 import (
 	"strconv"
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 )
 
@@ -172,7 +171,7 @@ func (ui *UI) renderDialog(weight [6]rune, title string, x, y, w, h int, scrollP
 func (ui *UI) renderBox(widget *Widget, label string, x, y, hStart, hEnd int) {
 	var index int
 	extent := ui.Padding*2 + len(label)
-	hStart = concepts.Max(0, hStart)
+	hStart = max(0, hStart)
 	if hEnd < 0 || hEnd > ui.Padding*2+len(label) {
 		hEnd = ui.Padding*2 + len(label)
 	}
@@ -326,7 +325,7 @@ func (ui *UI) renderPage(page *Page) {
 			mx, my+ui.Padding, scrollPos, 1)
 	}
 
-	limit := concepts.Min(len(page.Widgets), page.ScrollPos+visibleWidgets)
+	limit := min(len(page.Widgets), page.ScrollPos+visibleWidgets)
 	for i := page.ScrollPos; i < limit; i++ {
 		selected := i == page.SelectedItem
 		switch w := page.Widgets[i].(type) {

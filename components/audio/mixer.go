@@ -2,12 +2,15 @@ package audio
 
 import (
 	"fmt"
+	"log"
 	"sync"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
-	"unsafe"
 
-	"github.com/veandco/go-sdl2/mix"
-	"github.com/veandco/go-sdl2/sdl"
+	"tlyakhov/gofoom/components/audio/al"
+
+	"github.com/kelindar/bitmap"
 )
 
 // Mixer manages the audio state and playback. It should be a singleton
@@ -23,14 +26,65 @@ type Mixer struct {
 	MasterEffects []Effect
 	Error         error // We should expose this somewhere
 
-	spec     *sdl.AudioSpec
-	channels []*SoundEvent
+	formats     map[string]al.Enum
+	events      map[al.Source]*SoundEvent
+	usedSources bitmap.Bitmap
+	sources     []al.Source
 	// Mutex for thread-safe operations
 	mu sync.Mutex
 }
 
 func (m *Mixer) String() string {
 	return "Audio Mixer"
+}
+
+func (m *Mixer) deleteSoundEvent(source al.Source) {
+	if event, ok := m.events[source]; ok {
+		if event.IsAttached() {
+			ecs.Delete(event.Entity)
+		}
+		delete(m.events, source)
+	}
+}
+
+func (m *Mixer) paramsToFormat(channels int, bits int, isFloat bool) al.Enum {
+	switch {
+	case channels == 1 && bits == 8 && !isFloat:
+		return al.FormatMono8
+	case channels == 2 && bits == 8 && !isFloat:
+		return al.FormatStereo8
+	case channels == 1 && bits == 16 && !isFloat:
+		return al.FormatMono16
+	case channels == 2 && bits == 16 && !isFloat:
+		return al.FormatStereo16
+	case channels == 1 && bits == 32 && !isFloat:
+		return m.formats["AL_FORMAT_MONO_I32"]
+	case channels == 2 && bits == 32 && !isFloat:
+		return m.formats["AL_FORMAT_STEREO_I32"]
+	case channels == 1 && bits == 32 && isFloat:
+		return m.formats["AL_FORMAT_MONO_FLOAT32"]
+	case channels == 2 && bits == 32 && isFloat:
+		return m.formats["AL_FORMAT_STEREO_FLOAT32"]
+	}
+	return 0
+}
+
+var extFormats = []string{
+	"AL_FORMAT_QUAD16",
+	"AL_FORMAT_MONO_FLOAT32",
+	"AL_FORMAT_STEREO_FLOAT32",
+	"AL_FORMAT_MONO_I32",
+	"AL_FORMAT_STEREO_I32",
+	"AL_FORMAT_REAR_I32",
+	"AL_FORMAT_REAR_FLOAT32",
+	"AL_FORMAT_QUAD_I32",
+	"AL_FORMAT_QUAD_FLOAT32",
+	"AL_FORMAT_51CHN_I32",
+	"AL_FORMAT_51CHN_FLOAT32",
+	"AL_FORMAT_61CHN_I32",
+	"AL_FORMAT_61CHN_FLOAT32",
+	"AL_FORMAT_71CHN_I32",
+	"AL_FORMAT_71CHN_FLOAT32",
 }
 
 func (m *Mixer) Construct(data map[string]any) {
@@ -40,38 +94,24 @@ func (m *Mixer) Construct(data map[string]any) {
 	m.Error = nil
 	m.Channels = 2
 	m.SampleRate = 48000
-	m.spec = nil
+	m.formats = make(map[string]al.Enum)
 
-	if err := sdl.Init(sdl.INIT_AUDIO); err != nil {
-		m.Error = fmt.Errorf("could not initialize SDL: %v", err)
+	if err := al.OpenDevice(); err != nil {
+		m.Error = fmt.Errorf("failed to open OpenAL device: %w", err)
 		return
 	}
 
-	if err := mix.Init(mix.INIT_MP3 | mix.INIT_FLAC); err != nil {
-		m.Error = fmt.Errorf("could not initialize mixer: %v", err)
-		return
+	// Populate enum values for extended audio formats
+	for _, f := range extFormats {
+		m.formats[f] = al.GetEnumValue(f)
 	}
 
-	m.spec = &sdl.AudioSpec{
-		Freq:     int32(m.SampleRate),
-		Format:   sdl.AUDIO_S16SYS,
-		Channels: uint8(m.Channels),
-		Samples:  4096,
-	}
+	numVoices := 8
+	m.sources = al.GenSources(numVoices)
+	m.events = make(map[al.Source]*SoundEvent)
+	m.usedSources.Grow(uint32(len(m.sources)))
 
-	if err := sdl.OpenAudio(m.spec, m.spec); err != nil {
-		m.Error = fmt.Errorf("could not open audio: %v", err)
-		return
-	}
-
-	if err := mix.OpenAudio(int(m.spec.Freq), uint16(m.spec.Format),
-		int(m.spec.Channels), int(m.spec.Samples)); err != nil {
-		m.Error = fmt.Errorf("could not open audio: %v", err)
-		return
-	}
-
-	numChannels := mix.AllocateChannels(16)
-	m.channels = make([]*SoundEvent, numChannels)
+	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices. Extensions: %v", m.SampleRate, m.Channels, numVoices, al.Extensions())
 }
 
 func (m *Mixer) Serialize() map[string]any {
@@ -80,78 +120,107 @@ func (m *Mixer) Serialize() map[string]any {
 	return result
 }
 
-// SetChannels sets the number of output channels (e.g., 2 for stereo, 6 for 5.1).
-func (m *Mixer) SetChannels(channels uint8) error {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-
-	mix.CloseAudio()
-	m.spec.Channels = channels
-	if err := mix.OpenAudio(int(m.spec.Freq), sdl.AUDIO_S16, int(m.spec.Channels), int(m.spec.Samples)); err != nil {
-		return fmt.Errorf("could not reopen audio with %d channels: %v", channels, err)
-	}
-	return nil
-}
-
 // Close shuts down the audio engine.
 func (m *Mixer) Close() {
-	for _, event := range m.channels {
+	for _, event := range m.events {
+		if event == nil {
+			continue
+		}
 		event.Stop()
 	}
-	m.channels = nil
-	mix.CloseAudio()
-	mix.Quit()
-	sdl.Quit()
+	m.events = nil
 }
 
-func (m *Mixer) fxCallback(channel int, stream []byte) {
-	e := m.channels[channel]
-	if e == nil {
-		return
-	}
-	converted := unsafe.Slice((*int16)(unsafe.Pointer(&stream[0])), len(stream)/2)
-
-	for _, fx := range e.Effects {
-		fx.Process(converted)
-	}
-}
-
-func (m *Mixer) Play(snd *Sound, fx []Effect, volume float64) (*SoundEvent, error) {
+func (m *Mixer) play(snd *Sound) (al.Source, error) {
 	if snd == nil {
-		return nil, nil
+		return 0, nil
 	}
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	if snd.Stream {
-		if err := snd.Music.Play(-1); err != nil {
-			return nil, err
-		}
-		return nil, nil
-	} else {
-		channel, err := snd.Chunk.Play(-1, 0)
-		if err != nil {
-			return nil, err
-		}
-		event := &SoundEvent{chunk: snd.Chunk, channel: channel, Effects: fx}
-		m.channels[event.channel] = event
-		mix.UnregisterAllEffects(channel)
-		mix.RegisterEffect(channel, m.fxCallback, func(channel int) {})
-		event.SetVolume(volume)
-
-		return event, nil
+	voice, ok := m.usedSources.MinZero()
+	if !ok || int(voice) >= len(m.sources) {
+		return 0, fmt.Errorf("audio.Mixer: Ran out of voices, can't play %v", snd)
 	}
+
+	source := m.sources[voice]
+	log.Printf("Playing on %v", source)
+	source.QueueBuffers(snd.buffer)
+	al.PlaySources(source)
+	m.usedSources.Set(voice)
+
+	return source, nil
 }
 
-// Convenience function for scripts
-func PlaySound(e ecs.Entity) (*SoundEvent, error) {
+func (m *Mixer) PollSources() {
+	m.usedSources.Range(func(index uint32) {
+		src := m.sources[index]
+		state := src.Geti(al.ParamSourceState)
+		if state == al.Stopped {
+			m.deleteSoundEvent(src)
+			m.usedSources.Remove(index)
+		}
+	})
+
+}
+
+func (m *Mixer) SetListenerPosition(v *concepts.Vector3) {
+	al.SetListenerPosition(alVector(v))
+}
+
+var alUpVector = alVector(&concepts.Vector3{0, 0, constants.UnitsPerMeter})
+
+func (m *Mixer) SetListenerOrientation(v *concepts.Vector3) {
+	al.SetListenerOrientation(al.Orientation{Forward: alVector(v), Up: alUpVector})
+}
+
+func (m *Mixer) SetListenerVelocity(v *concepts.Vector3) {
+	al.SetListenerVelocity(alVector(v))
+}
+
+// PlaySound initiates playback for a sound asset, optionally attached to a
+// source (e.g. a body, a sector)
+func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag bool) (*SoundEvent, error) {
 	m := ecs.Singleton(MixerCID).(*Mixer)
-	if m == nil || m.spec == nil {
+	if m == nil {
 		return nil, nil
 	}
-	snd := GetSound(e)
+	snd := GetSound(sound)
 	if snd == nil {
 		return nil, nil
 	}
-	return m.Play(snd, nil, 1.0)
+
+	if onePerTag {
+		arena := ecs.ArenaFor[SoundEvent](SoundEventCID)
+		for i := range arena.Len() {
+			event := arena.Value(i)
+			if event == nil {
+				continue
+			}
+			if event.Tag == tag {
+				log.Printf("Already playing %v with tag %v", snd.Source, tag)
+				return event, nil
+			}
+		}
+	}
+
+	var source al.Source
+	var err error
+	if source, err = m.play(snd); err != nil {
+		return nil, err
+	}
+	event := ecs.NewAttachedComponent(ecs.NewEntity(), SoundEventCID).(*SoundEvent)
+	event.Sound = snd.Entity
+	event.SourceEntity = sourceEntity
+	event.source = source
+	event.Tag = tag
+	m.deleteSoundEvent(source)
+	m.events[source] = event
+	return event, nil
+}
+
+func alVector(v *concepts.Vector3) al.Vector {
+	return al.Vector{float32(v[0] / constants.UnitsPerMeter),
+		float32(v[1] / constants.UnitsPerMeter),
+		float32(v[2] / constants.UnitsPerMeter)}
 }

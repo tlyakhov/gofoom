@@ -24,20 +24,6 @@ func Clamp[T cmp.Ordered](x, min, max T) T {
 	return x
 }
 
-func Min[T cmp.Ordered](x, y T) T {
-	if x < y {
-		return x
-	}
-	return y
-}
-
-func Max[T cmp.Ordered](x, y T) T {
-	if x > y {
-		return x
-	}
-	return y
-}
-
 func NearestPow2(n uint32) uint32 {
 	if n == 0 {
 		return 0

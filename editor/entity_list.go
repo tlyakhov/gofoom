@@ -362,7 +362,7 @@ func (list *EntityList) Update() {
 						rank += int(hit.Score * 50)
 					}
 				}
-				rank = concepts.Max(concepts.Min(rank, 100), 0)
+				rank = max(min(rank, 100), 0)
 			}
 		}
 
