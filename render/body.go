@@ -38,8 +38,8 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 	depthScale /= block.Distance
 	xScale := depthScale * b.Size.Render[0]
 	block.ScaleW = uint32(xScale)
-	x1 := concepts.Max(int(xMid-xScale*0.5), xStart)
-	x2 := concepts.Min(int(xMid+xScale*0.5), xEnd)
+	x1 := max(int(xMid-xScale*0.5), xStart)
+	x2 := min(int(xMid+xScale*0.5), xEnd)
 	if x1 == x2 || x2 < xStart || x1 >= xEnd {
 		return
 	}

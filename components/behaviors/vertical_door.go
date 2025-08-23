@@ -5,6 +5,7 @@ package behaviors
 
 import (
 	"reflect"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
@@ -34,8 +35,10 @@ type VerticalDoor struct {
 	ecs.Attached `editable:"^"`
 	// TODO: Separate out state and make this multi-attachable
 	State     DoorState
-	Intent    DoorIntent `editable:"Intent"`
-	AutoClose bool       `editable:"Auto-close"`
+	Intent    DoorIntent  `editable:"Intent"`
+	AutoClose bool        `editable:"Auto-close"`
+	Open      core.Script `editable:"On Open"`
+	Close     core.Script `editable:"On Close"`
 
 	// Passthroughs to Animation
 	TweeningFunc dynamic.TweeningFunc `editable:"Tweening Function"`
@@ -54,6 +57,11 @@ func (vd *VerticalDoor) String() string {
 	return "VerticalDoor"
 }
 
+func (vd *VerticalDoor) OnAttach() {
+	vd.Open.OnAttach()
+	vd.Close.OnAttach()
+}
+
 func (vd *VerticalDoor) Construct(data map[string]any) {
 	vd.Attached.Construct(data)
 	vd.AutoClose = true
@@ -61,6 +69,8 @@ func (vd *VerticalDoor) Construct(data map[string]any) {
 	vd.Duration = 1000
 
 	if data == nil {
+		vd.Open.Construct(nil)
+		vd.Close.Construct(nil)
 		return
 	}
 
@@ -85,6 +95,16 @@ func (vd *VerticalDoor) Construct(data map[string]any) {
 	if v, ok := data["Duration"]; ok {
 		vd.Duration = cast.ToFloat64(v)
 	}
+	if v, ok := data["Open"]; ok {
+		vd.Open.Construct(v.(map[string]any))
+	} else {
+		vd.Open.Construct(nil)
+	}
+	if v, ok := data["Close"]; ok {
+		vd.Close.Construct(v.(map[string]any))
+	} else {
+		vd.Close.Construct(nil)
+	}
 }
 
 func (vd *VerticalDoor) Serialize() map[string]any {
@@ -92,6 +112,12 @@ func (vd *VerticalDoor) Serialize() map[string]any {
 
 	if !vd.AutoClose {
 		result["AutoClose"] = false
+	}
+	if !vd.Open.IsEmpty() {
+		result["Open"] = vd.Open.Serialize()
+	}
+	if !vd.Close.IsEmpty() {
+		result["Close"] = vd.Close.Serialize()
 	}
 	result["Duration"] = vd.Duration
 	result["TweeningFunc"] = dynamic.TweeningFuncNames[reflect.ValueOf(vd.TweeningFunc).Pointer()]

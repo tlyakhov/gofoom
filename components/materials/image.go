@@ -117,8 +117,8 @@ func (img *Image) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 		return data[fy*w+fx]
 	}
 
-	fx = concepts.Min(fx, w-1)
-	fy = concepts.Min(fy, h-1)
+	fx = min(fx, w-1)
+	fy = min(fy, h-1)
 	cx := (fx + 1) % w
 	cy := (fy + 1) % h
 	t00 := data[fy*w+fx]
@@ -207,8 +207,8 @@ func (img *Image) SampleAlpha(x, y float64, sw, sh uint32) float64 {
 		return data[fy*w+fx][3]
 	}
 
-	fx = concepts.Min(fx, w-1)
-	fy = concepts.Min(fy, h-1)
+	fx = min(fx, w-1)
+	fy = min(fy, h-1)
 	cx := (fx + 1) % w
 	cy := (fy + 1) % h
 	wx := x*float64(w) - float64(fx)

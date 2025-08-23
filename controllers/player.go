@@ -6,6 +6,7 @@ package controllers
 import (
 	"math"
 
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
@@ -133,6 +134,14 @@ func (pc *PlayerController) Always() {
 			break
 		}
 	}
+
+	// Audio
+	mixer := ecs.Singleton(audio.MixerCID).(*audio.Mixer)
+	mixer.PollSources()
+	mixer.SetListenerPosition(&pc.Body.Pos.Now)
+	dy, dx := math.Sincos(pc.Body.Angle.Now)
+	mixer.SetListenerOrientation(&concepts.Vector3{dx * constants.UnitsPerMeter, dy * constants.UnitsPerMeter, 0})
+	mixer.SetListenerVelocity(&pc.Mobile.Vel.Now)
 
 	// This section handles frobbing
 

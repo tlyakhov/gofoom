@@ -1,8 +1,15 @@
 package audio
 
+import "math"
+
+// TODO: The OpenAL implementation makes all this moot.
+// TODO: Fix all these to make them work with multi-channel audio
+// TODO: implement
+// https://signalsmith-audio.co.uk/writing/2021/lets-write-a-reverb/
+
 // Effect represents a DSP effect that can be applied to audio.
 type Effect interface {
-	Process(data []int16)
+	Process(data []int16, channels int)
 }
 
 // Delay effect.
@@ -29,7 +36,7 @@ func NewDelay(delay int, feedback, mix float64) *Delay {
 }
 
 // Process applies the reverb effect to the audio data.
-func (r *Delay) Process(data []int16) {
+func (r *Delay) Process(data []int16, channels int) {
 	for i, sample := range data {
 		// Simple reverb logic
 		delayedSample := r.buffer[r.index]
@@ -46,9 +53,28 @@ type BitCrush struct {
 }
 
 // Process applies the bit crush effect.
-func (bc *BitCrush) Process(data []int16) {
+func (bc *BitCrush) Process(data []int16, channels int) {
 	step := 1 << (16 - bc.Bits)
 	for i, sample := range data {
 		data[i] = sample / int16(step) * int16(step)
+	}
+}
+
+type DistortionEffect struct {
+	Drive float64
+	Mix   float64
+}
+
+func (e *DistortionEffect) Process(buffer []int16, channels int) {
+	if e.Mix == 0 {
+		return
+	}
+	//amount := 1.0 - e.Drive
+	for i, s := range buffer {
+		/*k := (2 * amount) / (1 - amount)
+		distorted := int16((1 + k) * float64(s) / (1 +
+		k*math.Abs(float64(s))/32767.0))*/
+		distorted := int16(math.Tanh(float64(s)*e.Drive/32767.0) * 32767.0)
+		buffer[i] = int16(float64(s)*(1-e.Mix) + float64(distorted)*e.Mix)
 	}
 }

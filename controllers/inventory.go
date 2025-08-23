@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/inventory"
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -34,7 +33,7 @@ func PickUpInventoryItem(ic *inventory.Carrier, itemEntity ecs.Entity) {
 			}
 			return
 		}
-		toAdd := concepts.Min(item.Count.Now, slot.Limit-slot.Count.Now)
+		toAdd := min(item.Count.Now, slot.Limit-slot.Count.Now)
 		slot.Count.Now += toAdd
 		if player != nil {
 			player.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)

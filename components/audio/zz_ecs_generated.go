@@ -5,11 +5,13 @@ import "tlyakhov/gofoom/ecs"
 
 var MixerCID ecs.ComponentID
 var SoundCID ecs.ComponentID
+var SoundEventCID ecs.ComponentID
 var SourceCID ecs.ComponentID
 
 func init() {
 	MixerCID = ecs.RegisterComponent(&ecs.Arena[Mixer, *Mixer]{})
 	SoundCID = ecs.RegisterComponent(&ecs.Arena[Sound, *Sound]{})
+	SoundEventCID = ecs.RegisterComponent(&ecs.Arena[SoundEvent, *SoundEvent]{})
 	SourceCID = ecs.RegisterComponent(&ecs.Arena[Source, *Source]{})
 }
 func GetMixer(e ecs.Entity) *Mixer {
@@ -28,6 +30,16 @@ func GetSound(e ecs.Entity) *Sound {
 
 func (*Sound) ComponentID() ecs.ComponentID {
 	return SoundCID
+}
+func GetSoundEvent(e ecs.Entity) *SoundEvent {
+	if asserted, ok := ecs.Component(e, SoundEventCID).(*SoundEvent); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*SoundEvent) ComponentID() ecs.ComponentID {
+	return SoundEventCID
 }
 func GetSource(e ecs.Entity) *Source {
 	if asserted, ok := ecs.Component(e, SourceCID).(*Source); ok {

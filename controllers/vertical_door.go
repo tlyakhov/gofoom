@@ -100,6 +100,20 @@ func (vd *VerticalDoorController) Always() {
 
 	a := vd.Sector.Top.Z.Animation
 
+	if vd.Intent == behaviors.DoorIntentOpen && vd.State != behaviors.DoorStateOpen && vd.State != behaviors.DoorStateOpening {
+		vd.State = behaviors.DoorStateOpening
+		a.Reverse = true
+		a.Active = true
+		vd.Open.Vars["door"] = vd.VerticalDoor
+		vd.Open.Act()
+	} else if vd.Intent == behaviors.DoorIntentClosed && vd.State != behaviors.DoorStateClosed && vd.State != behaviors.DoorStateClosing {
+		vd.State = behaviors.DoorStateClosing
+		a.Reverse = false
+		a.Active = true
+		vd.Close.Vars["door"] = vd.VerticalDoor
+		vd.Close.Act()
+	}
+
 	if a.Percent <= 0 {
 		vd.State = behaviors.DoorStateOpen
 		if vd.Intent == behaviors.DoorIntentOpen && vd.AutoClose {
@@ -113,21 +127,19 @@ func (vd *VerticalDoorController) Always() {
 		}
 	}
 
-	if vd.Intent == behaviors.DoorIntentOpen && vd.State != behaviors.DoorStateOpen && vd.State != behaviors.DoorStateOpening {
-		vd.State = behaviors.DoorStateOpening
-		a.Reverse = true
-		a.Active = true
-	} else if vd.Intent == behaviors.DoorIntentClosed && vd.State != behaviors.DoorStateClosed && vd.State != behaviors.DoorStateClosing {
-		vd.State = behaviors.DoorStateClosing
-		a.Reverse = false
-		a.Active = true
-	}
-
 	vd.adjustTransforms()
 }
 
 func (vd *VerticalDoorController) Recalculate() {
 	if vd.Sector != nil {
 		vd.setupAnimation()
+	}
+	if !vd.Open.IsEmpty() {
+		vd.Open.Params = []core.ScriptParam{{Name: "door", TypeName: "*behaviors.VerticalDoor"}}
+		vd.Open.Compile()
+	}
+	if !vd.Close.IsEmpty() {
+		vd.Close.Params = []core.ScriptParam{{Name: "door", TypeName: "*behaviors.VerticalDoor"}}
+		vd.Close.Compile()
 	}
 }
