@@ -226,9 +226,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 	}
 
 	newEntity := widget.NewButtonWithIcon("Add Empty Entity", theme.ContentAddIcon(), func() {
-		list.State().Lock.Lock()
 		editor.SelectObjects(true, selection.SelectableFromEntity(ecs.NewEntity()))
-		list.State().Lock.Unlock()
 	})
 	list.search = widget.NewEntry()
 	list.search.ActionItem = widget.NewIcon(theme.SearchIcon())

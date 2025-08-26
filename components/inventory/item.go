@@ -23,10 +23,11 @@ const (
 type Item struct {
 	ecs.Attached `editable:"^"`
 
-	Class string               `editable:"Class"`
-	Count dynamic.Spawned[int] `editable:"Count"`
-	Image ecs.Entity           `editable:"Image" edit_type:"Material"`
-	Flags ItemFlags            `editable:"Flags" edit_type:"Flags"`
+	Class       string               `editable:"Class"`
+	Count       dynamic.Spawned[int] `editable:"Count"`
+	Image       ecs.Entity           `editable:"Image" edit_type:"Material"`
+	PickupSound ecs.Entity           `editable:"Pickup Sound" edit_type:"Sound"`
+	Flags       ItemFlags            `editable:"Flags" edit_type:"Flags"`
 }
 
 func (item *Item) MultiAttachable() bool { return true }
@@ -54,6 +55,9 @@ func (item *Item) Construct(data map[string]any) {
 	if v, ok := data["Image"]; ok {
 		item.Image, _ = ecs.ParseEntity(v.(string))
 	}
+	if v, ok := data["PickupSound"]; ok {
+		item.PickupSound, _ = ecs.ParseEntity(v.(string))
+	}
 	if v, ok := data["Flags"]; ok {
 		item.Flags = concepts.ParseFlags(cast.ToString(v), ItemFlagsString)
 	}
@@ -69,6 +73,9 @@ func (item *Item) Serialize() map[string]any {
 	}
 	if item.Image != 0 {
 		result["Image"] = item.Image.Serialize()
+	}
+	if item.PickupSound != 0 {
+		result["PickupSound"] = item.PickupSound.Serialize()
 	}
 	if item.Flags != ItemBounce|ItemAutoProximity|ItemAutoPlayerTargetable {
 		result["Flags"] = concepts.SerializeFlags(item.Flags, ItemFlagsValues())

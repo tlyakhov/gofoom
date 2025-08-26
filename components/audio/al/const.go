@@ -8,6 +8,7 @@ package al
 
 // Error returns one of these error codes.
 const (
+	NoError          = 0x0000
 	InvalidName      = 0xA001
 	InvalidEnum      = 0xA002
 	InvalidValue     = 0xA003
@@ -39,12 +40,14 @@ const (
 
 // Source and listener parameters.
 const (
-	paramGain             = 0x100A
 	paramPosition         = 0x1004
 	paramVelocity         = 0x1006
-	paramOrientation      = 0x100F
+	paramLooping          = 0x1007
+	paramBuffer           = 0x1009
+	paramGain             = 0x100A
 	paramMinGain          = 0x100D
 	paramMaxGain          = 0x100E
+	paramOrientation      = 0x100F
 	ParamSourceState      = 0x1010
 	paramBuffersQueued    = 0x1015
 	paramBuffersProcessed = 0x1016

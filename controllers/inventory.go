@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"strconv"
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/ecs"
@@ -37,6 +38,7 @@ func PickUpInventoryItem(ic *inventory.Carrier, itemEntity ecs.Entity) {
 		slot.Count.Now += toAdd
 		if player != nil {
 			player.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)
+			audio.PlaySound(item.PickupSound, ic.Entity, "inventorypickup", false)
 		}
 		//item.Count.Now -= toAdd
 		// Disable all the entity components

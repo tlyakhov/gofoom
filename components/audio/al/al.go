@@ -106,7 +106,7 @@ func GetEnumValue(key string) Enum {
 }
 
 // GetString returns the string value of the given parameter.
-func GetString(param int) string {
+func GetString(param Enum) string {
 	return alGetString(param)
 }
 
@@ -171,7 +171,7 @@ func Extensions() string {
 }
 
 // Error returns the most recently generated error.
-func Error() int32 {
+func Error() Enum {
 	return alGetError()
 }
 

@@ -152,6 +152,11 @@ func (s Source) Seti(param int, v int32) {
 	alSourcei(s, param, v)
 }
 
+// Seti sets 3 int32 values for the given parameter.
+func (s Source) Set3i(param int, v1, v2, v3 int32) {
+	alSource3i(s, param, v1, v2, v3)
+}
+
 // Setf sets a float32 value for the given parameter.
 func (s Source) Setf(param int, v float32) {
 	alSourcef(s, param, v)
@@ -170,4 +175,8 @@ func (s Source) QueueBuffers(buffer ...Buffer) {
 // UnqueueBuffers removes the specified buffers from the buffer queue.
 func (s Source) UnqueueBuffers(buffer ...Buffer) {
 	alSourceUnqueueBuffers(s, buffer)
+}
+
+func (s Source) SetBuffer(buffer Buffer) {
+	alSourcei(s, paramBuffer, int32(buffer))
 }

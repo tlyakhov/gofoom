@@ -25,10 +25,13 @@ const (
 type WeaponStateParams struct {
 	Time     float64    `editable:"Time"` // In ms
 	Material ecs.Entity `editable:"Material" edit_type:"Material"`
+	Sound    ecs.Entity `editable:"Sound" edit_type:"Sound"`
 }
 
 func (w *WeaponStateParams) Construct(data map[string]any) {
 	w.Time = 100
+	w.Material = 0
+	w.Sound = 0
 
 	if data == nil {
 		return
@@ -37,9 +40,11 @@ func (w *WeaponStateParams) Construct(data map[string]any) {
 	if v, ok := data["Time"]; ok {
 		w.Time = cast.ToFloat64(v)
 	}
-
 	if v, ok := data["Material"]; ok {
 		w.Material, _ = ecs.ParseEntity(v.(string))
+	}
+	if v, ok := data["Sound"]; ok {
+		w.Sound, _ = ecs.ParseEntity(v.(string))
 	}
 }
 
@@ -50,6 +55,9 @@ func (w *WeaponStateParams) Serialize() map[string]any {
 
 	if w.Material != 0 {
 		result["Material"] = w.Material.Serialize()
+	}
+	if w.Sound != 0 {
+		result["Sound"] = w.Sound.Serialize()
 	}
 
 	return result

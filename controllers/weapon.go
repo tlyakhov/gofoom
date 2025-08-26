@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"log"
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
@@ -150,6 +151,16 @@ func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 			wm.Surface.ExtraStages = append(wm.Surface.ExtraStages[:i], wm.Surface.ExtraStages[i+1:]...)
 			break
 		}
+	}
+}
+
+func (w *WeaponController) NewState(s inventory.WeaponState) {
+	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, ecs.Simulation.Timestamp-w.LastStateTimestamp)
+	w.State = s
+	w.LastStateTimestamp = ecs.Simulation.Timestamp
+	p := w.Class.Params[w.State]
+	if p.Sound != 0 {
+		audio.PlaySound(p.Sound, w.Body.Entity, "weapon "+s.String(), false)
 	}
 }
 

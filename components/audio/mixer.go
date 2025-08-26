@@ -30,6 +30,7 @@ type Mixer struct {
 	events      map[al.Source]*SoundEvent
 	usedSources bitmap.Bitmap
 	sources     []al.Source
+	fxSlots     []al.AuxEffectSlot
 	// Mutex for thread-safe operations
 	mu sync.Mutex
 }
@@ -106,10 +107,20 @@ func (m *Mixer) Construct(data map[string]any) {
 		m.formats[f] = al.GetEnumValue(f)
 	}
 
-	numVoices := 8
+	numVoices := 32
 	m.sources = al.GenSources(numVoices)
 	m.events = make(map[al.Source]*SoundEvent)
 	m.usedSources.Grow(uint32(len(m.sources)))
+
+	// Testing EAX reverb effects:
+	// References:
+	// https://github.com/kcat/openal-soft/blob/master/examples/almultireverb.c
+
+	fx := al.GenEffects(1)
+	fx[0].LoadEffect(&al.EfxReverbPresetSpacestationHall)
+
+	m.fxSlots = al.GenAuxEffectSlots(1)
+	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(fx[0]))
 
 	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices. Extensions: %v", m.SampleRate, m.Channels, numVoices, al.Extensions())
 }
@@ -144,9 +155,13 @@ func (m *Mixer) play(snd *Sound) (al.Source, error) {
 	}
 
 	source := m.sources[voice]
-	log.Printf("Playing on %v", source)
-	source.QueueBuffers(snd.buffer)
+	log.Printf("Playing %v on source %v", snd.Source, source)
+	source.SetBuffer(snd.buffer)
+	source.Set3i(al.AuxiliarySendFilter, int32(m.fxSlots[0]), 0, al.FilterNull)
+	// source.QueueBuffers(snd.buffer)
+	//if source.Geti(al.ParamSourceState) != al.Playing {
 	al.PlaySources(source)
+	//}
 	m.usedSources.Set(voice)
 
 	return source, nil
@@ -178,6 +193,7 @@ func (m *Mixer) SetListenerVelocity(v *concepts.Vector3) {
 	al.SetListenerVelocity(alVector(v))
 }
 
+// TODO: Add hysteresis rather than just the onePerTag param
 // PlaySound initiates playback for a sound asset, optionally attached to a
 // source (e.g. a body, a sector)
 func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag bool) (*SoundEvent, error) {
