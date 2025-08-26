@@ -4,7 +4,6 @@
 package inventory
 
 import (
-	"log"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/gammazero/deque"
@@ -40,12 +39,6 @@ func (w *Weapon) StateCompleted() bool {
 		return float64(w.StateDuration()) >= wc.Params[w.State].Time
 	}
 	return false
-}
-
-func (w *Weapon) NewState(s WeaponState) {
-	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, ecs.Simulation.Timestamp-w.LastStateTimestamp)
-	w.State = s
-	w.LastStateTimestamp = ecs.Simulation.Timestamp
 }
 
 func (w *Weapon) String() string {

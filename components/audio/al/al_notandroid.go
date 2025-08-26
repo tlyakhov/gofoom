@@ -17,18 +17,24 @@ package al
 #ifdef GOOS_darwin
 #include <stdlib.h>
 #include <AL/al.h>
+#include <AL/efx.h>
 #endif
 
 #ifdef GOOS_linux
 #include <stdlib.h>
 #include <AL/al.h>  // install on Ubuntu with: sudo apt-get install libopenal-dev
+#include <AL/efx.h>
 #endif
 
 #ifdef GOOS_windows
 #include <windows.h>
 #include <stdlib.h>
 #include <AL/al.h>
+#include <AL/efx.h>
 #endif
+
+
+#include "al_proc.h"
 */
 import "C"
 import "unsafe"
@@ -83,7 +89,7 @@ func alGetBooleanv(k int, v []bool) {
 	C.alGetBooleanv(C.ALenum(k), &val[0])
 }
 
-func alGetString(v int) string {
+func alGetString(v Enum) string {
 	value := C.alGetString(C.ALenum(v))
 	return C.GoString((*C.char)(value))
 }
@@ -104,8 +110,8 @@ func alSpeedOfSound(v float32) {
 	C.alSpeedOfSound(C.ALfloat(v))
 }
 
-func alGetError() int32 {
-	return int32(C.alGetError())
+func alGetError() Enum {
+	return Enum(C.alGetError())
 }
 
 func alGenSources(n int) []Source {
@@ -153,6 +159,10 @@ func alGetSourcefv(s Source, k int, v []float32) {
 
 func alSourcei(s Source, k int, v int32) {
 	C.alSourcei(C.ALuint(s), C.ALenum(k), C.ALint(v))
+}
+
+func alSource3i(s Source, k int, v1, v2, v3 int32) {
+	C.alSource3i(C.ALuint(s), C.ALenum(k), C.ALint(v1), C.ALint(v2), C.ALint(v3))
 }
 
 func alSourcef(s Source, k int, v float32) {
@@ -211,4 +221,38 @@ func alBufferData(b Buffer, format Enum, data []byte, freq int32) {
 
 func alIsBuffer(b Buffer) bool {
 	return C.alIsBuffer(C.ALuint(b)) == C.AL_TRUE
+}
+
+/* Effects */
+
+func alGenAuxiliaryEffectSlots(n int) []AuxEffectSlot {
+	fx := make([]AuxEffectSlot, n)
+	C.alGenAuxiliaryEffectSlots(C.ALsizei(n), (*C.ALuint)(unsafe.Pointer(&fx[0])))
+	return fx
+}
+
+func alAuxiliaryEffectSloti(e AuxEffectSlot, k Enum, v int32) {
+	C.alAuxiliaryEffectSloti(C.ALuint(e), C.ALenum(k), C.ALint(v))
+}
+
+func alGenEffects(n int) []Effect {
+	fx := make([]Effect, n)
+	C.alGenEffects(C.ALsizei(n), (*C.ALuint)(unsafe.Pointer(&fx[0])))
+	return fx
+}
+
+func alEffectf(e Effect, k Enum, v float32) {
+	C.alEffectf(C.ALuint(e), C.ALenum(k), C.ALfloat(v))
+}
+
+func alEffectfv(e Effect, k Enum, v [3]float32) {
+	C.alEffectfv(C.ALuint(e), C.ALenum(k), (*C.ALfloat)(unsafe.Pointer(&v[0])))
+}
+
+func alEffecti(e Effect, k Enum, v int32) {
+	C.alEffecti(C.ALuint(e), C.ALenum(k), C.ALint(v))
+}
+
+func alLoadEAXProcs() {
+	C.alLoadEAXProcs()
 }

@@ -8,6 +8,7 @@ import (
 	"image/color"
 	"math"
 	"time"
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
@@ -29,6 +30,9 @@ func (e *Editor) fallbackImage(entity ecs.Entity) image.Image {
 	}
 	if b := core.GetBody(entity); b != nil {
 		return e.bodyImage
+	}
+	if s := audio.GetSound(entity); s != nil {
+		return e.soundImage
 	}
 	return e.noTextureImage
 }

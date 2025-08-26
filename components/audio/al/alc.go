@@ -23,9 +23,6 @@ func DeviceError() int32 {
 	return alcGetError(device)
 }
 
-// TODO(jbd): Investigate the cases where multiple audio output
-// devices might be needed.
-
 // OpenDevice opens the default audio device.
 // Calls to OpenDevice are safe for concurrent use.
 func OpenDevice() error {
@@ -50,6 +47,9 @@ func OpenDevice() error {
 		alcCloseDevice(dev)
 		return errors.New("al: cannot make context current")
 	}
+
+	alLoadEAXProcs()
+
 	device = dev
 	context = ctx
 	return nil

@@ -9,6 +9,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
@@ -38,10 +39,10 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 	if entity != 0 {
 		img.ScaleMode = canvas.ImageScaleSmooth
 		img.FillMode = canvas.ImageFillContain
-		if editTypeTag == "Sector" || editTypeTag == "Material" {
-			// TODO: Make images for other entity types like actions
-			img.Image = g.IEditor.EntityImage(entity)
-		}
+		//		if editTypeTag == "Sector" || editTypeTag == "Material" {
+		// TODO: Make images for other entity types like actions
+		img.Image = g.IEditor.EntityImage(entity)
+		//		}
 		img.SetMinSize(fyne.NewSquareSize(64))
 		button.OnTapped = func() {
 			g.SelectObjects(true, selection.SelectableFromEntity(entity))
@@ -80,6 +81,8 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 			behaviors.ActionFireCID, behaviors.ActionTransitionCID)
 	case "Weapon":
 		cids = append(cids, inventory.WeaponClassCID)
+	case "Sound":
+		cids = append(cids, audio.SoundCID)
 	}
 	for _, cid := range cids {
 		col := ecs.ArenaByID(cid)

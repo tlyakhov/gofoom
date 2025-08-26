@@ -66,6 +66,7 @@ type Editor struct {
 	noTextureImage  image.Image
 	lightImage      image.Image
 	bodyImage       image.Image
+	soundImage      image.Image
 }
 
 type entityIconCacheItem struct {
@@ -120,6 +121,11 @@ func (e *Editor) OnStarted() {
 	img.Resize(fyne.NewSquareSize(64))
 	img.Refresh()
 	editor.bodyImage = img.Image
+
+	img = canvas.NewImageFromResource(theme.VolumeUpIcon())
+	img.Resize(fyne.NewSquareSize(64))
+	img.Refresh()
+	editor.soundImage = img.Image
 }
 
 func (e *Editor) Content() string {
@@ -283,6 +289,7 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 
 func (e *Editor) Load(filename string) {
 	e.Lock.Lock()
+	defer e.SelectObjects(true)
 	defer e.Lock.Unlock()
 	e.OpenFile = filename
 	e.Modified = false
@@ -302,11 +309,11 @@ func (e *Editor) Load(filename string) {
 	if e.Renderer != nil {
 		e.Renderer.Initialize()
 	}
-	e.SelectObjects(true)
 }
 
 func (e *Editor) Test() {
 	e.Lock.Lock()
+	defer e.SelectObjects(true)
 	defer e.Lock.Unlock()
 
 	e.Modified = false
@@ -321,7 +328,6 @@ func (e *Editor) Test() {
 	if e.Renderer != nil {
 		e.Renderer.Initialize()
 	}
-	e.SelectObjects(true)
 }
 
 func (e *Editor) autoPortal() {
@@ -512,6 +518,8 @@ func (e *Editor) RedoCurrent() {
 }
 
 func (e *Editor) SelectObjects(updateEntityList bool, s ...*selection.Selectable) {
+	editor.Lock.Lock()
+	defer editor.Lock.Unlock()
 	e.SelectedObjects.Clear()
 	e.SelectedObjects.Add(s...)
 	e.SetSelection(updateEntityList, e.SelectedObjects)
