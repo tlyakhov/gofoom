@@ -94,10 +94,10 @@ func ActAllControllers(method ControllerMethod) {
 			continue
 		}
 		// Get the arena for the controller's component type.
-		col := arenas[controller.ComponentID()]
+		arena := arenas[controller.ComponentID()]
 		// Iterate through the components in the arena and call the controller's method on each active component.
-		for i := range col.Cap() {
-			if component := col.Attachable(i); component != nil {
+		for i := range arena.Cap() {
+			if component := arena.Attachable(i); component != nil {
 				act(controller, component, method)
 			}
 		}

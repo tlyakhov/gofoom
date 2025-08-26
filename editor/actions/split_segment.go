@@ -53,10 +53,10 @@ func (a *SplitSegment) EndPoint() bool {
 	// TODO: also split internal segments
 	var segments containers.Set[*core.SectorSegment]
 	if a.State().SelectedObjects.Empty() {
-		col := ecs.ArenaFor[core.Sector](core.SectorCID)
+		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
 		segments = make(containers.Set[*core.SectorSegment])
-		for i := range col.Cap() {
-			if sector := col.Value(i); sector != nil {
+		for i := range arena.Cap() {
+			if sector := arena.Value(i); sector != nil {
 				segments.AddAll(sector.Segments...)
 			}
 		}

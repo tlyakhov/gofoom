@@ -65,10 +65,10 @@ func (a *SplitSector) EndPoint() bool {
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
 	if a.State().SelectedObjects.Empty() {
-		col := ecs.ArenaFor[core.Sector](core.SectorCID)
+		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
 		sectors = make([]*core.Sector, 0)
-		for i := range col.Cap() {
-			if sector := col.Value(i); sector != nil {
+		for i := range arena.Cap() {
+			if sector := arena.Value(i); sector != nil {
 				sectors = append(sectors, sector)
 			}
 		}

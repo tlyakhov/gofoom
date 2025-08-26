@@ -170,7 +170,6 @@ func (a *Attached) Serialize() map[string]any {
 func ConstructSlice[PT interface {
 	*T
 	Serializable
-	Universal
 }, T any](data any, hook func(item PT)) []PT {
 	var result []PT
 
@@ -178,7 +177,9 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].OnAttach()
+			if u, ok := any(result[i]).(Universal); ok {
+				u.OnAttach()
+			}
 			if hook != nil {
 				hook(result[i])
 			}
@@ -188,7 +189,9 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			result[i].OnAttach()
+			if u, ok := any(result[i]).(Universal); ok {
+				u.OnAttach()
+			}
 			if hook != nil {
 				hook(result[i])
 			}

@@ -45,18 +45,18 @@ type Arena[T any, PT GenericAttachable[T]] struct {
 
 // From initializes an arena from another arena of the same type, copying
 // metadata
-func (col *Arena[T, PT]) From(source AttachableArena) {
+func (arena *Arena[T, PT]) From(source AttachableArena) {
 	placeholder := source.(*Arena[T, PT])
-	col.typeOfT = placeholder.typeOfT
-	col.componentID = placeholder.componentID
-	col.Getter = placeholder.Getter
+	arena.typeOfT = placeholder.typeOfT
+	arena.componentID = placeholder.componentID
+	arena.Getter = placeholder.Getter
 }
 
 // Value retrieves the component at the given index in the arena.
 // It performs no bounds checking for performance reasons.
-func (col *Arena[T, PT]) Value(index int) PT {
+func (arena *Arena[T, PT]) Value(index int) PT {
 	// No bounds checking for performance. This should always be inlined
-	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
+	ptr := PT(&(arena.data[index/chunkSize][index%chunkSize]))
 	if !ptr.IsAttached() {
 		return nil
 	}
@@ -65,11 +65,11 @@ func (col *Arena[T, PT]) Value(index int) PT {
 
 // Attachable retrieves the component at the given index as an Attachable interface.
 // It performs no bounds checking for performance reasons.
-func (col *Arena[T, PT]) Attachable(index int) Attachable {
+func (arena *Arena[T, PT]) Attachable(index int) Attachable {
 	// No bounds checking for performance. This should always be inlined
 	// Duplicates code in .Value() because the return type is different here and nil
 	// in golang behaves idiosyncratically
-	ptr := PT(&(col.data[index/chunkSize][index%chunkSize]))
+	ptr := PT(&(arena.data[index/chunkSize][index%chunkSize]))
 	if !ptr.IsAttached() {
 		return nil
 	}
@@ -78,8 +78,8 @@ func (col *Arena[T, PT]) Attachable(index int) Attachable {
 
 // Detach removes the component at the given index from the arena.
 // It uses a fill bitmap to mark the slot as empty instead of shifting elements.
-func (col *Arena[T, PT]) Detach(index int) {
-	if index >= col.Cap() {
+func (arena *Arena[T, PT]) Detach(index int) {
+	if index >= arena.Cap() {
 		log.Printf("ecs.Arena.Detach: found component index %v, but component list is too short.", index)
 		return
 	}
@@ -87,57 +87,57 @@ func (col *Arena[T, PT]) Detach(index int) {
 	// shrink the chunk, but unfortunately, we can't do that because it
 	// would affect any pointers to that last element (which would now
 	// become invalid). Instead we use a bitmap fill list.
-	col.fill.Remove(uint32(index))
-	col.Length--
+	arena.fill.Remove(uint32(index))
+	arena.Length--
 	// TODO: Remove empty chunks
 }
 
 // AddTyped adds a component to the arena, automatically handling the Attachable
 // interface conversion.
-func (col *Arena[T, PT]) AddTyped(component *PT) {
+func (arena *Arena[T, PT]) AddTyped(component *PT) {
 	attachable := Attachable(*component)
-	col.Add(&attachable)
+	arena.Add(&attachable)
 	*component = attachable.(PT)
 }
 
 // Add adds a component to the arena at the next available slot.
 // It uses a fill bitmap to find the next free index.
-func (col *Arena[T, PT]) Add(component *Attachable) {
+func (arena *Arena[T, PT]) Add(component *Attachable) {
 	var nextFree uint32
 	var found bool
 	// First try an empty slot in the fill list
-	if nextFree, found = col.fill.MinZero(); !found {
+	if nextFree, found = arena.fill.MinZero(); !found {
 		// No empty slots, put it at the end
-		nextFree = uint32(col.Cap())
+		nextFree = uint32(arena.Cap())
 	}
 
 	chunk := nextFree / chunkSize
-	if chunk >= uint32(len(col.data)) {
+	if chunk >= uint32(len(arena.data)) {
 		// Create a new chunk
-		col.data = append(col.data, new(componentChunk[T, PT]))
+		arena.data = append(arena.data, new(componentChunk[T, PT]))
 	}
 
 	indexInChunk := nextFree % chunkSize
 
 	if *component != nil {
-		col.data[chunk][indexInChunk] = *(*component).(PT)
+		arena.data[chunk][indexInChunk] = *(*component).(PT)
 	}
 
-	col.fill.Set(nextFree)
-	*component = PT(&col.data[chunk][indexInChunk])
+	arena.fill.Set(nextFree)
+	*component = PT(&arena.data[chunk][indexInChunk])
 	(*component).Base().indexInArena = (int(nextFree))
-	col.Length++
+	arena.Length++
 }
 
 // Replace replaces the component at the given index with the provided
 // component. Importantly, the argument is a pointer - it will be replaced with
 // the resulting memory location.
-func (col *Arena[T, PT]) Replace(component *Attachable, index int) {
+func (arena *Arena[T, PT]) Replace(component *Attachable, index int) {
 	if *component == nil {
-		*component = col.Value(index)
+		*component = arena.Value(index)
 		return
 	}
-	ptr := col.Value(index)
+	ptr := arena.Value(index)
 	*ptr = *((*component).(PT))
 	*component = ptr
 	ptr.Base().indexInArena = index

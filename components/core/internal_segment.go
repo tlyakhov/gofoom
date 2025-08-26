@@ -26,9 +26,9 @@ func (s *InternalSegment) String() string {
 }
 
 func (s *InternalSegment) DetachFromSectors() {
-	col := ecs.ArenaFor[Sector](SectorCID)
-	for i := range col.Cap() {
-		if sector := col.Value(i); sector != nil {
+	arena := ecs.ArenaFor[Sector](SectorCID)
+	for i := range arena.Cap() {
+		if sector := arena.Value(i); sector != nil {
 			delete(sector.InternalSegments, s.Entity)
 		}
 	}
@@ -43,9 +43,9 @@ func (s *InternalSegment) AttachToSectors() {
 	if min[1] > max[1] {
 		min[1], max[1] = max[1], min[1]
 	}
-	col := ecs.ArenaFor[Sector](SectorCID)
-	for i := range col.Cap() {
-		sector := col.Value(i)
+	arena := ecs.ArenaFor[Sector](SectorCID)
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
 		if sector == nil {
 			continue
 		}

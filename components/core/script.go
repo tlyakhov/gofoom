@@ -117,13 +117,6 @@ func (s *Script) IsEmpty() bool {
 	return len(s.Code) == 0
 }
 
-func (s *Script) OnAttach() {
-}
-
-func (s *Script) IsAttached() bool {
-	return true
-}
-
 func (s *Script) Construct(data map[string]any) {
 	s.ErrorMessage = ""
 	s.Vars = maps.Clone(ecs.Types().ExprEnv)

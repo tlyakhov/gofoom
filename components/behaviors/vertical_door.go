@@ -57,11 +57,6 @@ func (vd *VerticalDoor) String() string {
 	return "VerticalDoor"
 }
 
-func (vd *VerticalDoor) OnAttach() {
-	vd.Open.OnAttach()
-	vd.Close.OnAttach()
-}
-
 func (vd *VerticalDoor) Construct(data map[string]any) {
 	vd.Attached.Construct(data)
 	vd.AutoClose = true

@@ -12,9 +12,11 @@ import (
 	"unsafe"
 )
 
+type Device unsafe.Pointer
+
 var (
 	mu      sync.Mutex
-	device  unsafe.Pointer
+	device  Device
 	context unsafe.Pointer
 )
 
@@ -25,34 +27,34 @@ func DeviceError() int32 {
 
 // OpenDevice opens the default audio device.
 // Calls to OpenDevice are safe for concurrent use.
-func OpenDevice() error {
+func OpenDevice() (Device, error) {
 	mu.Lock()
 	defer mu.Unlock()
 
 	// already opened
 	if device != nil {
-		return nil
+		return nil, nil
 	}
 
 	dev := alcOpenDevice("")
 	if dev == nil {
-		return errors.New("al: cannot open the default audio device")
+		return nil, errors.New("al: cannot open the default audio device")
 	}
 	ctx := alcCreateContext(dev, nil)
 	if ctx == nil {
 		alcCloseDevice(dev)
-		return errors.New("al: cannot create a new context")
+		return nil, errors.New("al: cannot create a new context")
 	}
 	if !alcMakeContextCurrent(ctx) {
 		alcCloseDevice(dev)
-		return errors.New("al: cannot make context current")
+		return nil, errors.New("al: cannot make context current")
 	}
 
 	alLoadEAXProcs()
 
 	device = dev
 	context = ctx
-	return nil
+	return dev, nil
 }
 
 // CloseDevice closes the device and frees related resources.
@@ -71,4 +73,8 @@ func CloseDevice() {
 	}
 	device = nil
 	context = nil
+}
+
+func IsExtensionPresent(d Device, name string) bool {
+	return alcIsExtensionPresent(d, name)
 }

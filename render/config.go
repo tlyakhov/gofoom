@@ -53,9 +53,9 @@ func (c *Config) Initialize() {
 }
 
 func (c *Config) RefreshPlayer() {
-	col := ecs.ArenaFor[character.Player](character.PlayerCID)
-	for i := range col.Cap() {
-		player := col.Value(i)
+	arena := ecs.ArenaFor[character.Player](character.PlayerCID)
+	for i := range arena.Cap() {
+		player := arena.Value(i)
 		if player == nil || !player.IsActive() || player.Spawn {
 			continue
 		}

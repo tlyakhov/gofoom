@@ -73,9 +73,9 @@ func (s *Sector) removeAdjacentReferences() {
 		return
 	}
 
-	col := ecs.ArenaFor[Sector](SectorCID)
-	for i := range col.Cap() {
-		sector := col.Value(i)
+	arena := ecs.ArenaFor[Sector](SectorCID)
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
 		if sector == nil {
 			continue
 		}

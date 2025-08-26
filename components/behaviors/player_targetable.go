@@ -53,13 +53,6 @@ func (pt *PlayerTargetable) String() string {
 
 }
 
-func (pt *PlayerTargetable) OnAttach() {
-	pt.Attached.OnAttach()
-	pt.Frob.OnAttach()
-	pt.Selected.OnAttach()
-	pt.UnSelected.OnAttach()
-}
-
 func (pt *PlayerTargetable) Construct(data map[string]any) {
 	pt.Attached.Construct(data)
 
