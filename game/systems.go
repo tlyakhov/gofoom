@@ -14,10 +14,10 @@ var flowerSlot *inventory.Slot
 var gunSlot *inventory.Slot
 
 func validateSpawn() {
-	col := ecs.ArenaByID(character.PlayerCID).(*ecs.Arena[character.Player, *character.Player])
+	arena := ecs.ArenaByID(character.PlayerCID).(*ecs.Arena[character.Player, *character.Player])
 
-	for i := range col.Len() {
-		player := col.Value(i)
+	for i := range arena.Len() {
+		player := arena.Value(i)
 		if player == nil || !player.Spawn {
 			continue
 		}

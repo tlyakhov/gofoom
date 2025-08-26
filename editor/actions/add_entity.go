@@ -68,9 +68,9 @@ func (a *AddEntity) Point() bool {
 
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 
-	col := ecs.ArenaFor[core.Sector](core.SectorCID)
-	for i := range col.Cap() {
-		sector := col.Value(i)
+	arena := ecs.ArenaFor[core.Sector](core.SectorCID)
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
 		if sector == nil {
 			continue
 		}

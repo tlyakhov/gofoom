@@ -90,9 +90,9 @@ func (b *Body) RenderSector() *Sector {
 	}
 	// Go through all sectors to find the containing one. Optimize this later if
 	// necessary.
-	col := ecs.ArenaFor[Sector](SectorCID)
-	for i := range col.Cap() {
-		if sector := col.Value(i); sector != nil && sector.IsPointInside2D(p) {
+	arena := ecs.ArenaFor[Sector](SectorCID)
+	for i := range arena.Cap() {
+		if sector := arena.Value(i); sector != nil && sector.IsPointInside2D(p) {
 			return sector
 		}
 	}

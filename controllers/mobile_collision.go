@@ -146,9 +146,9 @@ func (mc *MobileController) bodyExitsSector() {
 
 	if mc.Sector == nil {
 		// Case 6! This is the worst.
-		col := ecs.ArenaFor[core.Sector](core.SectorCID)
-		for i := range col.Cap() {
-			sector := col.Value(i)
+		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
+		for i := range arena.Cap() {
+			sector := arena.Value(i)
 			if sector == nil {
 				continue
 			}

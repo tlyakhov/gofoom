@@ -402,29 +402,29 @@ func (list *EntityList) Select(selection *selection.Selection) {
 	}
 }
 
-func (list *EntityList) SetSort(col int, dir elSortDir) {
+func (list *EntityList) SetSort(arena int, dir elSortDir) {
 	for i := range int(elcNumColumns) {
 		list.Sorts[i] = elsdSortOff
 	}
-	list.Sorts[col] = dir
+	list.Sorts[arena] = dir
 }
 
-func (list *EntityList) AdvanceSort(col int) {
-	order := list.Sorts[col]
+func (list *EntityList) AdvanceSort(arena int) {
+	order := list.Sorts[arena]
 	order++
 	if order > elsdSortDesc {
 		order = elsdSortOff
 	}
-	list.SetSort(col, order)
+	list.SetSort(arena, order)
 }
 
 func (list *EntityList) applySort() {
 	var order elSortDir
-	var col int
+	var arena int
 	for i := range int(elcNumColumns) {
 		if list.Sorts[i] != elsdSortOff {
 			order = list.Sorts[i]
-			col = i
+			arena = i
 			break
 		}
 	}
@@ -436,7 +436,7 @@ func (list *EntityList) applySort() {
 		if order == elsdSortOff {
 			return a[0].(int) < b[0].(int)
 		}
-		switch col {
+		switch arena {
 		case int(elcEntity):
 			if order == elsdSortDesc {
 				return a[elcEntity].(int) > b[elcEntity].(int)
@@ -449,9 +449,9 @@ func (list *EntityList) applySort() {
 			return a[elcRank].(int) < b[elcRank].(int)
 		default:
 			if order == elsdSortAsc {
-				return strings.Compare(a[col].(string), b[col].(string)) < 0
+				return strings.Compare(a[arena].(string), b[arena].(string)) < 0
 			}
-			return strings.Compare(a[col].(string), b[col].(string)) > 0
+			return strings.Compare(a[arena].(string), b[arena].(string)) > 0
 		}
 	})
 	if list.Table != nil {

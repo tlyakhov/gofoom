@@ -379,9 +379,9 @@ func Delete(entity Entity) {
 
 // TODO: Optimize this and add ability to wildcard search
 func GetEntityByName(name string) Entity {
-	col := ArenaFor[Named](NamedCID)
-	for i := range col.Cap() {
-		if named := col.Value(i); named != nil && named.Name == name {
+	arena := ArenaFor[Named](NamedCID)
+	for i := range arena.Cap() {
+		if named := arena.Value(i); named != nil && named.Name == name {
 			return named.Entity
 		}
 	}
@@ -423,8 +423,8 @@ func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[strin
 		}
 		cid := component.ComponentID()
 		hash := (uint64(component.Base().indexInArena) << 16) | (uint64(cid) & 0xFFFF)
-		col := Types().ArenaPlaceholders[cid]
-		yamlID := col.Type().String()
+		arena := Types().ArenaPlaceholders[cid]
+		yamlID := arena.Type().String()
 
 		if savedComponents != nil {
 			if savedEntity, ok := savedComponents[hash]; ok {

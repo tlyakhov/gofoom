@@ -51,9 +51,9 @@ func (a *Select) EndPoint() bool {
 	hovering := a.State().HoveringObjects
 	if hovering.Empty() { // User is trying to select a sector?
 		hovering = selection.NewSelection()
-		col := ecs.ArenaFor[core.Sector](core.SectorCID)
-		for i := range col.Cap() {
-			sector := col.Value(i)
+		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
+		for i := range arena.Cap() {
+			sector := arena.Value(i)
 			if sector == nil {
 				continue
 			}

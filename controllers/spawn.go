@@ -15,9 +15,9 @@ import (
 func Respawn(force bool) {
 	spawns := make([]*character.Player, 0)
 	players := make([]*character.Player, 0)
-	col := ecs.ArenaFor[character.Player](character.PlayerCID)
-	for i := range col.Cap() {
-		p := col.Value(i)
+	arena := ecs.ArenaFor[character.Player](character.PlayerCID)
+	for i := range arena.Cap() {
+		p := arena.Value(i)
 		if p == nil || !p.IsActive() {
 			continue
 		}

@@ -97,7 +97,9 @@ func (m *Mixer) Construct(data map[string]any) {
 	m.SampleRate = 48000
 	m.formats = make(map[string]al.Enum)
 
-	if err := al.OpenDevice(); err != nil {
+	var dev al.Device
+	var err error
+	if dev, err = al.OpenDevice(); err != nil {
 		m.Error = fmt.Errorf("failed to open OpenAL device: %w", err)
 		return
 	}
@@ -106,6 +108,23 @@ func (m *Mixer) Construct(data map[string]any) {
 	for _, f := range extFormats {
 		m.formats[f] = al.GetEnumValue(f)
 	}
+
+	if !al.IsExtensionPresent(dev, "ALC_EXT_EFX") {
+		m.Error = fmt.Errorf("error: EFX not supported")
+		//CloseAL();
+		return
+	}
+
+	/* num_sends = 0;
+
+	   alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &num_sends);
+	   if(alcGetError(device) != ALC_NO_ERROR || num_sends < 2)
+	   {
+	       fprintf(stderr, "Error: Device does not support multiple sends (got %d, need 2)\n",
+	               num_sends);
+	       CloseAL();
+	       return 1;
+	   }*/
 
 	numVoices := 32
 	m.sources = al.GenSources(numVoices)

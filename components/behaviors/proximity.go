@@ -41,13 +41,6 @@ type Proximity struct {
 
 func (p *Proximity) MultiAttachable() bool { return true }
 
-func (p *Proximity) OnAttach() {
-	p.Attached.OnAttach()
-	p.InRange.OnAttach()
-	p.Enter.OnAttach()
-	p.Exit.OnAttach()
-}
-
 func (p *Proximity) String() string {
 	return fmt.Sprintf("Proximity: %.2f", p.Range)
 }

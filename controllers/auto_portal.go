@@ -139,9 +139,9 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 // This could be optimized using the quadtree, but that would require storing
 // sectors in the quadtree which has a runtime cost.
 func AutoPortal() {
-	col := ecs.ArenaFor[core.Sector](core.SectorCID)
-	for i := range col.Cap() {
-		sector := col.Value(i)
+	arena := ecs.ArenaFor[core.Sector](core.SectorCID)
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
 		if sector == nil {
 			continue
 		}
@@ -154,15 +154,15 @@ func AutoPortal() {
 			segment.AdjacentSegment = nil
 		}
 	}
-	for i := range col.Cap() {
-		sector := col.Value(i)
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
 
 		if sector == nil {
 			continue
 		}
 
-		for j := i + 1; j < col.Cap(); j++ {
-			sector2 := col.Value(j)
+		for j := i + 1; j < arena.Cap(); j++ {
+			sector2 := arena.Value(j)
 
 			if sector2 == nil || !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
 				continue

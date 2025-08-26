@@ -85,9 +85,9 @@ func (bc *BodyController) findBodySector() {
 	var closestSector *core.Sector
 
 	// This should be optimized
-	col := ecs.ArenaFor[core.Sector](core.SectorCID)
-	for i := range col.Cap() {
-		sector := col.Value(i)
+	arena := ecs.ArenaFor[core.Sector](core.SectorCID)
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
 		if sector == nil {
 			continue
 		}
@@ -102,8 +102,8 @@ func (bc *BodyController) findBodySector() {
 		p := bc.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
 		closestDistance2 := math.MaxFloat64
-		for i := range col.Cap() {
-			sector := col.Value(i)
+		for i := range arena.Cap() {
+			sector := arena.Value(i)
 			if sector == nil {
 				continue
 			}

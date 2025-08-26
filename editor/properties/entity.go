@@ -85,9 +85,9 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		cids = append(cids, audio.SoundCID)
 	}
 	for _, cid := range cids {
-		col := ecs.ArenaByID(cid)
-		for i := range col.Len() {
-			if a := col.Attachable(i); a != nil {
+		arena := ecs.ArenaByID(cid)
+		for i := range arena.Len() {
+			if a := arena.Attachable(i); a != nil {
 				e := a.Base().Entity
 				if entitySet.Contains(e) {
 					continue
