@@ -193,6 +193,7 @@ type _tlyakhov_gofoom_ecs_AttachableArena struct {
 	WLen        func() int
 	WNew        func() ecs.Attachable
 	WReplace    func(c *ecs.Attachable, index int)
+	WSingleton  func() bool
 	WString     func() string
 	WType       func() reflect.Type
 }
@@ -223,6 +224,9 @@ func (W _tlyakhov_gofoom_ecs_AttachableArena) New() ecs.Attachable {
 }
 func (W _tlyakhov_gofoom_ecs_AttachableArena) Replace(c *ecs.Attachable, index int) {
 	W.WReplace(c, index)
+}
+func (W _tlyakhov_gofoom_ecs_AttachableArena) Singleton() bool {
+	return W.WSingleton()
 }
 func (W _tlyakhov_gofoom_ecs_AttachableArena) String() string {
 	if W.WString == nil {

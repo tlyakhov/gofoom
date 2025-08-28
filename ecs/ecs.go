@@ -34,6 +34,25 @@ var (
 )
 
 func Initialize() {
+	// We may have existing entities and components. Let's run any delete
+	// functions to clean up stuff like non-Go data.
+	for i, arena := range arenas {
+		if i == 0 {
+			continue
+		}
+		for j := range arena.Len() {
+			a := arena.Attachable(j)
+			if a == nil {
+				continue
+			}
+			for _, e := range a.Base().Entities {
+				if e != 0 {
+					a.OnDetach(e)
+				}
+			}
+			a.OnDelete()
+		}
+	}
 	Entities = bitmap.Bitmap{}
 	// 0 is reserved and represents 'null' entity
 	Entities.Set(0)

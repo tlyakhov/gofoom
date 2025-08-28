@@ -67,6 +67,13 @@ func RegisterComponent[T any, PT GenericAttachable[T]](arena *Arena[T, PT]) Comp
 		}
 		return nil
 	}
+	arena.isSingleton = false
+	if sf, ok := arena.typeOfT.FieldByName("Attached"); ok {
+		if sf.Tag.Get("ecs") == "singleton" {
+			arena.isSingleton = true
+		}
+	}
+
 	ecsTypes.ArenaPlaceholders[arenaIndex] = arena
 	ecsTypes.ArenaIndexes[reflect.PointerTo(arena.Type()).String()] = arenaIndex
 	ecsTypes.ArenaIndexes[arena.String()] = arenaIndex

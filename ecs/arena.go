@@ -34,6 +34,9 @@ type Arena[T any, PT GenericAttachable[T]] struct {
 	// Getter is a function that retrieves a component of this type for a given entity.
 	Getter func(e Entity) PT
 
+	// There should only be one element in this arena.
+	isSingleton bool
+	// The actual data
 	data []*componentChunk[T, PT]
 	// fill is a bitmap that tracks which slots in the arena are occupied by components.
 	fill bitmap.Bitmap
@@ -50,6 +53,7 @@ func (arena *Arena[T, PT]) From(source AttachableArena) {
 	arena.typeOfT = placeholder.typeOfT
 	arena.componentID = placeholder.componentID
 	arena.Getter = placeholder.Getter
+	arena.isSingleton = placeholder.isSingleton
 }
 
 // Value retrieves the component at the given index in the arena.
@@ -168,6 +172,10 @@ func (c *Arena[T, PT]) Cap() int {
 // ID returns the component ID associated with this arena.
 func (c *Arena[T, PT]) ID() ComponentID {
 	return c.componentID
+}
+
+func (c *Arena[T, PT]) Singleton() bool {
+	return c.isSingleton
 }
 
 // String returns the component type stored in this arena.

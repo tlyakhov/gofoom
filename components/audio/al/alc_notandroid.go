@@ -38,26 +38,32 @@ On Ubuntu 14.04 'Trusty', you may have to install these libraries:
 sudo apt-get install libopenal-dev
 */
 
-func alcGetError(d Device) int32 {
+func alcGetError(d alDevice) int32 {
 	dev := (*C.ALCdevice)(d)
 	return int32(C.alcGetError(dev))
 }
 
-func alcOpenDevice(name string) Device {
+func alcOpenDevice(name string) alDevice {
 	n := C.CString(name)
 	defer C.free(unsafe.Pointer(n))
 
-	return (Device)(C.alcOpenDevice((*C.ALCchar)(unsafe.Pointer(n))))
+	return (alDevice)(C.alcOpenDevice((*C.ALCchar)(unsafe.Pointer(n))))
 }
 
-func alcCloseDevice(d Device) bool {
+func alcCloseDevice(d alDevice) bool {
 	dev := (*C.ALCdevice)(d)
 	return C.alcCloseDevice(dev) == C.ALC_TRUE
 }
 
-func alcCreateContext(d Device, attrs []int32) unsafe.Pointer {
+func alcCreateContext(d alDevice, attrs []int32) unsafe.Pointer {
 	dev := (*C.ALCdevice)(d)
-	return (unsafe.Pointer)(C.alcCreateContext(dev, nil))
+
+	var ptr *C.ALCint = nil
+	if len(attrs) > 0 {
+		zeroTerminated := append(make([]int32, 0, len(attrs)+1), attrs...)
+		ptr = (*C.ALCint)(unsafe.Pointer(&zeroTerminated[0]))
+	}
+	return (unsafe.Pointer)(C.alcCreateContext(dev, ptr))
 }
 
 func alcMakeContextCurrent(c unsafe.Pointer) bool {
@@ -69,9 +75,14 @@ func alcDestroyContext(c unsafe.Pointer) {
 	C.alcDestroyContext((*C.ALCcontext)(c))
 }
 
-func alcIsExtensionPresent(d Device, name string) bool {
+func alcIsExtensionPresent(d alDevice, name string) bool {
 	dev := (*C.ALCdevice)(d)
 	n := C.CString(name)
 	defer C.free(unsafe.Pointer(n))
 	return C.alcIsExtensionPresent(dev, (*C.ALCchar)(unsafe.Pointer(n))) == C.ALC_TRUE
+}
+
+func alcGetIntegerv(d alDevice, k Enum, v []int32) {
+	dev := (*C.ALCdevice)(d)
+	C.alcGetIntegerv(dev, C.ALCenum(k), C.ALCsizei(len(v)), (*C.ALCint)(unsafe.Pointer(&v[0])))
 }

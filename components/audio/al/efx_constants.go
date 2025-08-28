@@ -1,7 +1,5 @@
 package al
 
-import "fmt"
-
 const ExtEfxName = "ALC_EXT_EFX"
 
 const EfxMajorVersion = 0x20001
@@ -190,66 +188,3 @@ const FilterNull = 0x0000
 const FilterLowpass = 0x0001
 const FilterHighpass = 0x0002
 const FilterBandpass = 0x0003
-
-type Effect uint32
-type AuxEffectSlot uint32
-
-func (slot AuxEffectSlot) AuxiliaryEffectSloti(key Enum, v int32) {
-	alAuxiliaryEffectSloti(slot, key, v)
-}
-
-// GenEffects generates n new effects. The generated effects should be deleted
-// once they are no longer in use.
-func GenEffects(n int) []Effect {
-	return alGenEffects(n)
-}
-
-// GenAuxEffectSlotss generates n new effects. The generated effects should be deleted
-// once they are no longer in use.
-func GenAuxEffectSlots(n int) []AuxEffectSlot {
-	return alGenAuxiliaryEffectSlots(n)
-}
-
-/* LoadEffect loads the given initial reverb properties into the given OpenAL
- * effect object, and returns non-zero on success.
- */
-func (effect Effect) LoadEffect(params *EaxReverbParams) error {
-	/* Prepare the effect for EAX Reverb (standard reverb doesn't contain
-	 * the needed panning vectors).
-	 */
-	alEffecti(effect, EffectType, EffectEAXReverb)
-
-	if err := Error(); err != NoError {
-		return fmt.Errorf("failed to set EAX reverb: %s", alGetString(err))
-	}
-
-	/* Load the reverb properties. */
-	alEffectf(effect, EAXReverbDensity, params.Density)
-	alEffectf(effect, EAXReverbDiffusion, params.Diffusion)
-	alEffectf(effect, EAXReverbGain, params.Gain)
-	alEffectf(effect, EAXReverbGainhf, params.GainHF)
-	alEffectf(effect, EAXReverbGainlf, params.GainLF)
-	alEffectf(effect, EAXReverbDecayTime, params.DecayTime)
-	alEffectf(effect, EAXReverbDecayHfratio, params.DecayHFRatio)
-	alEffectf(effect, EAXReverbDecayLfratio, params.DecayLFRatio)
-	alEffectf(effect, EAXReverbReflectionsGain, params.ReflectionsGain)
-	alEffectf(effect, EAXReverbReflectionsDelay, params.ReflectionsDelay)
-	alEffectfv(effect, EAXReverbReflectionsPan, params.ReflectionsPan)
-	alEffectf(effect, EAXReverbLateReverbGain, params.LateReverbGain)
-	alEffectf(effect, EAXReverbLateReverbDelay, params.LateReverbDelay)
-	alEffectfv(effect, EAXReverbLateReverbPan, params.LateReverbPan)
-	alEffectf(effect, EAXReverbEchoTime, params.EchoTime)
-	alEffectf(effect, EAXReverbEchoDepth, params.EchoDepth)
-	alEffectf(effect, EAXReverbModulationTime, params.ModulationTime)
-	alEffectf(effect, EAXReverbModulationDepth, params.ModulationDepth)
-	alEffectf(effect, EAXReverbAirAbsorptionGainhf, params.AirAbsorptionGainHF)
-	alEffectf(effect, EAXReverbHfreference, params.HFReference)
-	alEffectf(effect, EAXReverbLfreference, params.LFReference)
-	alEffectf(effect, EAXReverbRoomRolloffFactor, params.RoomRolloffFactor)
-	alEffecti(effect, EAXReverbDecayHflimit, params.DecayHFLimit)
-
-	if err := Error(); err != NoError {
-		return fmt.Errorf("Error setting up reverb: %s", alGetString(err))
-	}
-	return nil
-}

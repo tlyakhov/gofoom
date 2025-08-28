@@ -15,7 +15,7 @@ func main() {
 		fmt.Printf("Failed to initialize audio engine: %v\n", mixer.Error)
 		return
 	}
-	defer mixer.Close()
+	defer mixer.OnDelete()
 
 	/*eMusic := ecs.NewEntity()
 	sndMusic := ecs.NewAttachedComponent(eMusic, audio.SoundCID).(*audio.Sound)

@@ -65,6 +65,8 @@ type AttachableArena interface {
 	ID() ComponentID
 	// String returns a string representation of the component type stored in this arena.
 	String() string
+	// Singleton returns whether there should only be one element in this arena
+	Singleton() bool
 }
 
 // GenericAttachable is a generic interface constraint for types that can be attached as components.

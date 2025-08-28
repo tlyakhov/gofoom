@@ -22,15 +22,16 @@ type Mixer struct {
 	// 2 for stereo, 6 for 5.1 surround
 	Channels int `editable:"Channels"`
 
-	// Effects can be applied to the master output
-	MasterEffects []Effect
-	Error         error // We should expose this somewhere
+	Error error // We should expose this somewhere
 
 	formats     map[string]al.Enum
 	events      map[al.Source]*SoundEvent
 	usedSources bitmap.Bitmap
 	sources     []al.Source
+	fx          []al.Effect
 	fxSlots     []al.AuxEffectSlot
+
+	device *al.Device
 	// Mutex for thread-safe operations
 	mu sync.Mutex
 }
@@ -97,9 +98,8 @@ func (m *Mixer) Construct(data map[string]any) {
 	m.SampleRate = 48000
 	m.formats = make(map[string]al.Enum)
 
-	var dev al.Device
 	var err error
-	if dev, err = al.OpenDevice(); err != nil {
+	if m.device, err = al.OpenDevice(); err != nil {
 		m.Error = fmt.Errorf("failed to open OpenAL device: %w", err)
 		return
 	}
@@ -109,22 +109,18 @@ func (m *Mixer) Construct(data map[string]any) {
 		m.formats[f] = al.GetEnumValue(f)
 	}
 
-	if !al.IsExtensionPresent(dev, "ALC_EXT_EFX") {
-		m.Error = fmt.Errorf("error: EFX not supported")
+	if !m.device.IsExtensionPresent("ALC_EXT_EFX") {
+		m.Error = fmt.Errorf("EFX not supported")
 		//CloseAL();
 		return
 	}
 
-	/* num_sends = 0;
-
-	   alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &num_sends);
-	   if(alcGetError(device) != ALC_NO_ERROR || num_sends < 2)
-	   {
-	       fprintf(stderr, "Error: Device does not support multiple sends (got %d, need 2)\n",
-	               num_sends);
-	       CloseAL();
-	       return 1;
-	   }*/
+	numSends := m.device.GetIntegerv(al.MaxAuxiliarySends, 1)[0]
+	if m.device.Error() != al.NoError || numSends < 2 {
+		m.Error = fmt.Errorf("device does not support multiple sends (got %d, need 2)", numSends)
+		//CloseAL()
+		return
+	}
 
 	numVoices := 32
 	m.sources = al.GenSources(numVoices)
@@ -135,13 +131,25 @@ func (m *Mixer) Construct(data map[string]any) {
 	// References:
 	// https://github.com/kcat/openal-soft/blob/master/examples/almultireverb.c
 
-	fx := al.GenEffects(1)
-	fx[0].LoadEffect(&al.EfxReverbPresetSpacestationHall)
+	m.fx = al.GenEffects(1)
+	m.fx[0].Load(al.EfxReverbPresets["Stonecorridor"])
 
 	m.fxSlots = al.GenAuxEffectSlots(1)
-	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(fx[0]))
+	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
 
-	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices. Extensions: %v", m.SampleRate, m.Channels, numVoices, al.Extensions())
+	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends. Extensions: %v", m.SampleRate, m.Channels, numVoices, numSends, al.Extensions())
+}
+
+func (m *Mixer) SetReverbPreset(preset string) {
+	if len(m.fx) == 0 {
+		return
+	}
+	efx, ok := al.EfxReverbPresets[preset]
+	if !ok {
+		return
+	}
+	m.fx[0].Load(efx)
+	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
 }
 
 func (m *Mixer) Serialize() map[string]any {
@@ -151,7 +159,7 @@ func (m *Mixer) Serialize() map[string]any {
 }
 
 // Close shuts down the audio engine.
-func (m *Mixer) Close() {
+func (m *Mixer) OnDelete() {
 	for _, event := range m.events {
 		if event == nil {
 			continue
@@ -159,6 +167,9 @@ func (m *Mixer) Close() {
 		event.Stop()
 	}
 	m.events = nil
+	al.DeleteSources(m.sources...)
+	al.DeleteEffects(m.fx...)
+	m.device.Close()
 }
 
 func (m *Mixer) play(snd *Sound) (al.Source, error) {
@@ -174,7 +185,7 @@ func (m *Mixer) play(snd *Sound) (al.Source, error) {
 	}
 
 	source := m.sources[voice]
-	log.Printf("Playing %v on source %v", snd.Source, source)
+	// log.Printf("Playing %v on source %v", snd.Source, source)
 	source.SetBuffer(snd.buffer)
 	source.Set3i(al.AuxiliarySendFilter, int32(m.fxSlots[0]), 0, al.FilterNull)
 	// source.QueueBuffers(snd.buffer)
@@ -233,7 +244,7 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag 
 				continue
 			}
 			if event.Tag == tag {
-				log.Printf("Already playing %v with tag %v", snd.Source, tag)
+				//log.Printf("Already playing %v with tag %v", snd.Source, tag)
 				return event, nil
 			}
 		}
@@ -258,4 +269,11 @@ func alVector(v *concepts.Vector3) al.Vector {
 	return al.Vector{float32(v[0] / constants.UnitsPerMeter),
 		float32(v[1] / constants.UnitsPerMeter),
 		float32(v[2] / constants.UnitsPerMeter)}
+}
+func SetReverbPreset(preset string) {
+	m := ecs.Singleton(MixerCID).(*Mixer)
+	if m == nil {
+		return
+	}
+	m.SetReverbPreset(preset)
 }

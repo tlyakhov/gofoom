@@ -231,6 +231,10 @@ func alGenAuxiliaryEffectSlots(n int) []AuxEffectSlot {
 	return fx
 }
 
+func alDeleteAuxiliaryEffectSlots(slots []AuxEffectSlot) {
+	C.alDeleteAuxiliaryEffectSlots(C.ALsizei(len(slots)), (*C.ALuint)(unsafe.Pointer(&slots[0])))
+}
+
 func alAuxiliaryEffectSloti(e AuxEffectSlot, k Enum, v int32) {
 	C.alAuxiliaryEffectSloti(C.ALuint(e), C.ALenum(k), C.ALint(v))
 }
@@ -239,6 +243,10 @@ func alGenEffects(n int) []Effect {
 	fx := make([]Effect, n)
 	C.alGenEffects(C.ALsizei(n), (*C.ALuint)(unsafe.Pointer(&fx[0])))
 	return fx
+}
+
+func alDeleteEffects(fx []Effect) {
+	C.alDeleteEffects(C.ALsizei(len(fx)), (*C.ALuint)(unsafe.Pointer(&fx[0])))
 }
 
 func alEffectf(e Effect, k Enum, v float32) {

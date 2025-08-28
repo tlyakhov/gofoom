@@ -48,6 +48,8 @@ func init() {
 		"ProximityController":        reflect.ValueOf((*controllers.ProximityController)(nil)),
 		"SectorController":           reflect.ValueOf((*controllers.SectorController)(nil)),
 		"SectorSplitter":             reflect.ValueOf((*controllers.SectorSplitter)(nil)),
+		"SoundController":            reflect.ValueOf((*controllers.SoundController)(nil)),
+		"SoundEventController":       reflect.ValueOf((*controllers.SoundEventController)(nil)),
 		"UnderwaterController":       reflect.ValueOf((*controllers.UnderwaterController)(nil)),
 		"VerticalDoorController":     reflect.ValueOf((*controllers.VerticalDoorController)(nil)),
 		"WanderController":           reflect.ValueOf((*controllers.WanderController)(nil)),

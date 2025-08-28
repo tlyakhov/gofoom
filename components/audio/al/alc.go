@@ -12,69 +12,72 @@ import (
 	"unsafe"
 )
 
-type Device unsafe.Pointer
+type alDevice unsafe.Pointer
+type Device struct {
+	Name string
 
-var (
-	mu      sync.Mutex
-	device  Device
-	context unsafe.Pointer
-)
+	ctx    unsafe.Pointer
+	device alDevice
+}
+
+var globalLock sync.Mutex
 
 // DeviceError returns the last known error from the current device.
-func DeviceError() int32 {
-	return alcGetError(device)
+func (d *Device) Error() int32 {
+	return alcGetError(d.device)
 }
 
 // OpenDevice opens the default audio device.
-// Calls to OpenDevice are safe for concurrent use.
-func OpenDevice() (Device, error) {
-	mu.Lock()
-	defer mu.Unlock()
+func OpenDevice() (*Device, error) {
+	globalLock.Lock()
+	defer globalLock.Unlock()
 
-	// already opened
-	if device != nil {
-		return nil, nil
+	result := &Device{
+		Name: "",
 	}
-
-	dev := alcOpenDevice("")
-	if dev == nil {
+	result.device = alcOpenDevice("")
+	if result.device == nil {
 		return nil, errors.New("al: cannot open the default audio device")
 	}
-	ctx := alcCreateContext(dev, nil)
-	if ctx == nil {
-		alcCloseDevice(dev)
+	result.ctx = alcCreateContext(result.device, nil)
+	if result.ctx == nil {
+		alcCloseDevice(result.device)
 		return nil, errors.New("al: cannot create a new context")
 	}
-	if !alcMakeContextCurrent(ctx) {
-		alcCloseDevice(dev)
+	if !alcMakeContextCurrent(result.ctx) {
+		alcCloseDevice(result.device)
 		return nil, errors.New("al: cannot make context current")
 	}
 
 	alLoadEAXProcs()
-
-	device = dev
-	context = ctx
-	return dev, nil
+	return result, nil
 }
 
-// CloseDevice closes the device and frees related resources.
-// Calls to CloseDevice are safe for concurrent use.
-func CloseDevice() {
-	mu.Lock()
-	defer mu.Unlock()
+// Close closes the device and frees related resources.
+// Calls are safe for concurrent use.
+func (d *Device) Close() {
+	globalLock.Lock()
+	defer globalLock.Unlock()
 
-	if device == nil {
+	if d.device == nil {
 		return
 	}
 
-	alcCloseDevice(device)
-	if context != nil {
-		alcDestroyContext(context)
+	alcCloseDevice(d.device)
+	d.device = nil
+
+	if d.ctx != nil {
+		alcDestroyContext(d.ctx)
+		d.ctx = nil
 	}
-	device = nil
-	context = nil
 }
 
-func IsExtensionPresent(d Device, name string) bool {
-	return alcIsExtensionPresent(d, name)
+func (d *Device) IsExtensionPresent(name string) bool {
+	return alcIsExtensionPresent(d.device, name)
+}
+
+func (d *Device) GetIntegerv(k Enum, num int) []int32 {
+	v := make([]int32, num)
+	alcGetIntegerv(d.device, k, v)
+	return v
 }

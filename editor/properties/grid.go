@@ -318,7 +318,7 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 	opts := make([]string, 0)
 	optsComponentIDs := make([]ecs.ComponentID, 0)
 	for _, t := range ecs.Types().ArenaPlaceholders {
-		if t == nil || componentList.Contains(t.ID()) {
+		if t == nil || componentList.Contains(t.ID()) || t.Singleton() {
 			continue
 		}
 		opts = append(opts, t.String())
