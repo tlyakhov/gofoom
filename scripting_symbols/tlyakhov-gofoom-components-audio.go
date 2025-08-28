@@ -6,6 +6,8 @@
 package scripting_symbols
 
 import (
+	"go/constant"
+	"go/token"
 	"reflect"
 	"tlyakhov/gofoom/components/audio"
 )
@@ -13,35 +15,27 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/components/audio/audio"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"GetMixer":  reflect.ValueOf(audio.GetMixer),
-		"GetSound":  reflect.ValueOf(audio.GetSound),
-		"GetSource": reflect.ValueOf(audio.GetSource),
-		"MixerCID":  reflect.ValueOf(&audio.MixerCID).Elem(),
-		"NewDelay":  reflect.ValueOf(audio.NewDelay),
-		"PlaySound": reflect.ValueOf(audio.PlaySound),
-		"SoundCID":  reflect.ValueOf(&audio.SoundCID).Elem(),
-		"SourceCID": reflect.ValueOf(&audio.SourceCID).Elem(),
+		"GetMixer":           reflect.ValueOf(audio.GetMixer),
+		"GetSound":           reflect.ValueOf(audio.GetSound),
+		"GetSoundEvent":      reflect.ValueOf(audio.GetSoundEvent),
+		"GetSource":          reflect.ValueOf(audio.GetSource),
+		"MixerCID":           reflect.ValueOf(&audio.MixerCID).Elem(),
+		"NewConvReverb":      reflect.ValueOf(audio.NewConvReverb),
+		"PlaySound":          reflect.ValueOf(audio.PlaySound),
+		"SetReverbPreset":    reflect.ValueOf(audio.SetReverbPreset),
+		"SoundCID":           reflect.ValueOf(&audio.SoundCID).Elem(),
+		"SoundEventCID":      reflect.ValueOf(&audio.SoundEventCID).Elem(),
+		"SourceCID":          reflect.ValueOf(&audio.SourceCID).Elem(),
+		"WavFormatALaw":      reflect.ValueOf(constant.MakeFromLiteral("6", token.INT, 0)),
+		"WavFormatIEEEFloat": reflect.ValueOf(constant.MakeFromLiteral("3", token.INT, 0)),
+		"WavFormatMuLaw":     reflect.ValueOf(constant.MakeFromLiteral("7", token.INT, 0)),
+		"WavFormatPCM":       reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
 
 		// type definitions
-		"BitCrush":   reflect.ValueOf((*audio.BitCrush)(nil)),
-		"Delay":      reflect.ValueOf((*audio.Delay)(nil)),
-		"Effect":     reflect.ValueOf((*audio.Effect)(nil)),
+		"ConvReverb": reflect.ValueOf((*audio.ConvReverb)(nil)),
 		"Mixer":      reflect.ValueOf((*audio.Mixer)(nil)),
 		"Sound":      reflect.ValueOf((*audio.Sound)(nil)),
 		"SoundEvent": reflect.ValueOf((*audio.SoundEvent)(nil)),
 		"Source":     reflect.ValueOf((*audio.Source)(nil)),
-
-		// interface wrapper definitions
-		"_Effect": reflect.ValueOf((*_tlyakhov_gofoom_components_audio_Effect)(nil)),
 	}
-}
-
-// _tlyakhov_gofoom_components_audio_Effect is an interface wrapper for Effect type
-type _tlyakhov_gofoom_components_audio_Effect struct {
-	IValue   interface{}
-	WProcess func(data []int16)
-}
-
-func (W _tlyakhov_gofoom_components_audio_Effect) Process(data []int16) {
-	W.WProcess(data)
 }

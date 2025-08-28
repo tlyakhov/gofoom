@@ -258,7 +258,7 @@ func DeleteBuffers(buffer ...Buffer) {
 
 // Geti returns the int32 value of the given parameter.
 func (b Buffer) Geti(param int) int32 {
-	return b.Geti(param)
+	return alGetBufferi(b, param)
 }
 
 // Frequency returns the frequency of the buffer data in Hertz (Hz).

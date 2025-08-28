@@ -83,3 +83,64 @@ const (
 // CapabilityDistanceModel represents the capability of specifying a different distance
 // model for each source.
 const CapabilityDistanceModel = Capability(0x200)
+
+/* ALC constants */
+
+// Context attribute: <int> Hz.
+const AlcFrequency = 0x1007
+
+// Context attribute: <int> Hz.
+const AlcRefresh = 0x1008
+
+// Context attribute: AL_TRUE or AL_FALSE synchronous context?
+const AlcSync = 0x1009
+
+// Context attribute: <int> requested Mono (3D) Sources.
+const AlcMonoSources = 0x1010
+
+// Context attribute: <int> requested Stereo Sources.
+const AlcStereoSources = 0x1011
+
+// No error.
+const AlcNoError = 0
+
+// Invalid device handle.
+const AlcInvalidDevice = 0xA001
+
+// Invalid context handle.
+const AlcInvalidContext = 0xA002
+
+// Invalid enumeration passed to an ALC call.
+const AlcInvalidEnum = 0xA003
+
+// Invalid value passed to an ALC call.
+const AlcInvalidValue = 0xA004
+
+// Out of memory.
+const AlcOutOfMemory = 0xA005
+
+// Runtime ALC major version.
+const AlcMajorVersion = 0x1000
+
+// Runtime ALC minor version.
+const AlcMinorVersion = 0x1001
+
+// Context attribute list size.
+const AlcAttributesSize = 0x1002
+
+// Context attribute list properties.
+const AlcAllAttributes = 0x1003
+
+// String for the default device specifier.
+const AlcDefaultDeviceSpecifier = 0x1004
+
+/**
+ * Device specifier string.
+ *
+ * If device handle is NULL, it is instead a null-character separated list of
+ * strings of known device specifiers (list ends with an empty string).
+ */
+const AlcDeviceSpecifier = 0x1005
+
+// String for space-separated list of ALC extensions.
+const AlcExtensions = 0x1006
