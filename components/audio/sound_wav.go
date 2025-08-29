@@ -5,7 +5,6 @@ import (
 	"math"
 	"os"
 	"tlyakhov/gofoom/components/audio/al"
-	"tlyakhov/gofoom/ecs"
 
 	"github.com/go-audio/audio"
 	"github.com/go-audio/wav"
@@ -55,18 +54,7 @@ func intSampleToBytes(sample int, incomingBytes uint16, asFloat bool, bytes []by
 	}
 }
 
-func (snd *Sound) loadWav() error {
-	var mixer *Mixer
-	// Ensure sound system is initialized
-	if mixer = ecs.Singleton(MixerCID).(*Mixer); mixer == nil {
-		return nil
-	}
-
-	f, err := os.Open(snd.Source)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
+func (snd *Sound) loadWav(mixer *Mixer, f *os.File) error {
 	d := wav.NewDecoder(f)
 	d.ReadMetadata()
 	d.Rewind()
@@ -110,5 +98,7 @@ func (snd *Sound) loadWav() error {
 	snd.buffer = al.GenBuffers(1)[0]
 	format := mixer.paramsToFormat(outgoingChannels, int(outgoingBytes)*8, outgoingBytes == 4)
 	snd.buffer.BufferData(format, snd.bytes, int32(d.SampleRate))
+	snd.loaded = true
+
 	return nil
 }

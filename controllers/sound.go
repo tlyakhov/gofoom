@@ -34,6 +34,6 @@ func (sc *SoundController) Target(target ecs.Attachable, e ecs.Entity) bool {
 
 func (sc *SoundController) Recalculate() {
 	if err := sc.Load(); err != nil {
-		log.Printf("SoundController.Recalculate: %v", err)
+		log.Printf("SoundController.Recalculate: %v for %v", err, sc.Source)
 	}
 }

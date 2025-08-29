@@ -189,8 +189,9 @@ func (m *Mixer) play(snd *Sound) (al.Source, error) {
 
 	source := m.sources[voice]
 	// log.Printf("Playing %v on source %v", snd.Source, source)
-	source.SetBuffer(snd.buffer)
 	source.Set3i(al.AuxiliarySendFilter, int32(m.fxSlots[0]), 0, al.FilterNull)
+	source.SetGain(float32(snd.Gain))
+	source.SetBuffer(snd.buffer)
 	// source.QueueBuffers(snd.buffer)
 	//if source.Geti(al.ParamSourceState) != al.Playing {
 	al.PlaySources(source)

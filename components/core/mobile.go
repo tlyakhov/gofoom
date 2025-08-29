@@ -27,6 +27,9 @@ type Mobile struct {
 	CrBody     CollisionResponse `editable:"Collision (Body)"`
 	CrPlayer   CollisionResponse `editable:"Collision (Player)"`
 	CrWall     CollisionResponse `editable:"Collision (Wall)"`
+
+	// Internal tracking
+	MovementSoundDistance float64
 }
 
 func (m *Mobile) String() string {

@@ -6,24 +6,11 @@ import (
 	"math"
 	"os"
 	"tlyakhov/gofoom/components/audio/al"
-	"tlyakhov/gofoom/ecs"
 
 	"github.com/jfreymuth/oggvorbis"
 )
 
-func (snd *Sound) loadOgg() error {
-	var mixer *Mixer
-	// Ensure sound system is initialized
-	if mixer = ecs.Singleton(MixerCID).(*Mixer); mixer == nil {
-		return nil
-	}
-
-	f, err := os.Open(snd.Source)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
+func (snd *Sound) loadOgg(mixer *Mixer, f *os.File) error {
 	r, err := oggvorbis.NewReader(f)
 	if err != nil {
 		return err
@@ -68,5 +55,7 @@ func (snd *Sound) loadOgg() error {
 	snd.buffer = al.GenBuffers(1)[0]
 	format := mixer.paramsToFormat(outgoingChannels, 32, true)
 	snd.buffer.BufferData(format, snd.bytes, int32(r.SampleRate()))
+	snd.loaded = true
+
 	return nil
 }

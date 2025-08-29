@@ -40,6 +40,7 @@ const (
 
 // Source and listener parameters.
 const (
+	ParamPitch            = 0x1003
 	paramPosition         = 0x1004
 	paramVelocity         = 0x1006
 	paramLooping          = 0x1007

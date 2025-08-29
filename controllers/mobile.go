@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"math"
+	"math/rand"
 
 	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
@@ -101,6 +102,7 @@ func (mc *MobileController) Always() {
 	// a = f/m
 	// v = ∫a dt
 	// p = ∫v dt
+	prePos := mc.Body.Pos.Now
 	mc.Vel.Now.AddSelf(mc.Force.Mul(constants.TimeStepS / mc.Mass))
 	speedSquared := mc.Vel.Now.Length2()
 	if speedSquared > constants.VelocityEpsilon {
@@ -113,9 +115,22 @@ func (mc *MobileController) Always() {
 			mc.Collide()
 		}
 	}
-	if speedSquared > 1 && mc.OnGround {
-		if mc.StepSound != 0 {
-			audio.PlaySound(mc.StepSound, mc.Body.Entity, mc.Body.Entity.String()+" step", true)
+	if mc.StepSound != 0 {
+		// TODO: Handle flying things
+		if mc.OnGround {
+			// How much did we actually move?
+			mc.MovementSoundDistance += mc.Body.Pos.Now.Dist(&prePos)
+		}
+		// TODO: Parameterize this
+		stepDist := 70 + rand.Float64()*10
+		if mc.MovementSoundDistance > stepDist || speedSquared <= constants.VelocityEpsilon {
+			event, _ := audio.PlaySound(mc.StepSound, mc.Body.Entity, mc.Body.Entity.String()+" step", false)
+			// TODO: Parameterize this
+			event.Offset[2] = -mc.Body.Size.Now[1] * 0.5
+			event.Offset[1] = 0
+			event.Offset[0] = 0
+			event.SetPitchMultiplier(0.9 + rand.Float64()*0.2)
+			mc.MovementSoundDistance = 0
 		}
 	}
 	// Reset force for next frame
