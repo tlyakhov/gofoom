@@ -49,17 +49,12 @@ func (a *SetProperty) FireHooks() {
 			target.ResetToSpawn()
 			target.Recalculate()
 		case *materials.Image:
-			if a.Source.Name == "Source" {
-				target.Load()
-			}
+			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
 		case *audio.Sound:
-			if a.Source.Name == "Source" {
-				target.Load()
-			}
+			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
 		case *core.Script:
 			// TODO: use a nicer source code editor for script properties.
 			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
-			//target.Compile()
 		case *materials.Text:
 			target.RasterizeText()
 		case *core.SectorSegment:

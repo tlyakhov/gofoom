@@ -3,6 +3,7 @@ package audio
 import (
 	"tlyakhov/gofoom/components/audio/al"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -14,6 +15,7 @@ type SoundEvent struct {
 	SourceEntity ecs.Entity
 	Sound        ecs.Entity
 	Tag          string
+	Offset       concepts.Vector3
 
 	source al.Source
 }
@@ -34,7 +36,10 @@ func (s *SoundEvent) Serialize() map[string]any {
 }
 
 func (s *SoundEvent) SetPosition(v *concepts.Vector3) {
-	s.source.SetPosition(alVector(v))
+	p := al.Vector{float32((v[0] + s.Offset[0]) / constants.UnitsPerMeter),
+		float32((v[1] + s.Offset[1]) / constants.UnitsPerMeter),
+		float32((v[2] + s.Offset[2]) / constants.UnitsPerMeter)}
+	s.source.SetPosition(p)
 }
 
 func (s *SoundEvent) SetVelocity(v *concepts.Vector3) {
@@ -43,6 +48,10 @@ func (s *SoundEvent) SetVelocity(v *concepts.Vector3) {
 
 func (s *SoundEvent) SetOrientation(dir *concepts.Vector3) {
 	s.source.SetOrientation(al.Orientation{Forward: alVector(dir), Up: alUpVector})
+}
+
+func (s *SoundEvent) SetPitchMultiplier(p float64) {
+	s.source.Setf(al.ParamPitch, float32(p))
 }
 
 // Stop halts playback of the sound.
