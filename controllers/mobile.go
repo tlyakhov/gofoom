@@ -6,6 +6,7 @@ package controllers
 import (
 	"math"
 
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -101,14 +102,20 @@ func (mc *MobileController) Always() {
 	// v = ∫a dt
 	// p = ∫v dt
 	mc.Vel.Now.AddSelf(mc.Force.Mul(constants.TimeStepS / mc.Mass))
-	if mc.Vel.Now.Length2() > constants.VelocityEpsilon {
+	speedSquared := mc.Vel.Now.Length2()
+	if speedSquared > constants.VelocityEpsilon {
 		speed := mc.Vel.Now.Length() * constants.TimeStepS
 		steps := min(max(int(speed/constants.CollisionCheck), 1), 10)
 		dt := constants.TimeStepS / float64(steps)
-		for step := 0; step < steps; step++ {
+		for range steps {
 			mc.Body.Pos.Now.AddSelf(mc.Vel.Now.Mul(dt * constants.UnitsPerMeter))
 			// Constraint impulses
 			mc.Collide()
+		}
+	}
+	if speedSquared > 1 && mc.OnGround {
+		if mc.StepSound != 0 {
+			audio.PlaySound(mc.StepSound, mc.Body.Entity, mc.Body.Entity.String()+" step", true)
 		}
 	}
 	// Reset force for next frame

@@ -10,6 +10,8 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/concepts"
+
+	"github.com/spf13/cast"
 )
 
 //go:generate gofoom_ecs_generator $GOFILE
@@ -18,6 +20,8 @@ type Body struct {
 	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`
 	Size         dynamic.DynamicValue[concepts.Vector2] `editable:"Size"`
 	Angle        dynamic.DynamicValue[float64]          `editable:"Angle"`
+
+	StepSound ecs.Entity `editable:"Step Sound" edit_type:"Sound"`
 
 	SectorEntity ecs.Entity
 	QuadNode     *QuadNode `ecs:"norelation"`
@@ -124,6 +128,9 @@ func (b *Body) Construct(data map[string]any) {
 	if v, ok := data["Angle"]; ok {
 		b.Angle.Construct(v.(map[string]any))
 	}
+	if v, ok := data["StepSound"]; ok {
+		b.StepSound, _ = ecs.ParseEntity(cast.ToString(v))
+	}
 }
 
 func (b *Body) Serialize() map[string]any {
@@ -131,5 +138,8 @@ func (b *Body) Serialize() map[string]any {
 	result["Pos"] = b.Pos.Serialize()
 	result["Size"] = b.Size.Serialize()
 	result["Angle"] = b.Angle.Serialize()
+	if b.StepSound != 0 {
+		result["StepSound"] = b.StepSound.Serialize()
+	}
 	return result
 }

@@ -8,6 +8,7 @@ package al
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 	"unsafe"
 )
@@ -27,17 +28,17 @@ func (d *Device) Error() int32 {
 	return alcGetError(d.device)
 }
 
-// OpenDevice opens the default audio device.
-func OpenDevice() (*Device, error) {
+// OpenDevice opens an audio device.
+func OpenDevice(name string) (*Device, error) {
 	globalLock.Lock()
 	defer globalLock.Unlock()
 
 	result := &Device{
-		Name: "",
+		Name: name,
 	}
-	result.device = alcOpenDevice("")
+	result.device = alcOpenDevice(name)
 	if result.device == nil {
-		return nil, errors.New("al: cannot open the default audio device")
+		return nil, fmt.Errorf("al: cannot open the audio device %v", name)
 	}
 	result.ctx = alcCreateContext(result.device, nil)
 	if result.ctx == nil {
@@ -72,8 +73,12 @@ func (d *Device) Close() {
 	}
 }
 
-func (d *Device) IsExtensionPresent(name string) bool {
-	return alcIsExtensionPresent(d.device, name)
+func IsExtensionPresent(name string) bool {
+	return alcIsExtensionPresent(nil, name)
+}
+
+func AllDevices() []string {
+	return alcGetStrings(nil, AlcAllDevicesSpecifier)
 }
 
 func (d *Device) GetIntegerv(k Enum, num int) []int32 {

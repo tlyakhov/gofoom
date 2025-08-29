@@ -30,7 +30,8 @@ Constraints are key! This project has the following goals:
   may have performance limitations, overall level size should be unconstrained.
   - Requires high quality, efficient editing tools.
 - Cross-platform compatibility (Linux, Mac, Windows all work)
-- Avoid non-Golang integrations (e.g. cgo, assembly)
+- Avoid non-Golang integrations where possible (e.g. cgo, assembly) or provide
+  cross-platform fallbacks.
 
 This project takes inspiration from Ken Silverman's BUILD engine used for Duke
 Nukem 3D for the portal concept and Doom of course, but as mentioned above
@@ -70,7 +71,7 @@ benefits as far as dynamic sectors, lighting, etc...
   - Particle systems
   - In-game UI, retro DOS style
 - Audio
-  - WAV, MP3, FLAC support via SDL
+  - Environmental audio support via OpenAL
 - World editor:
   - Realtime 3D view, allowing live manipulation of the world by clicking.
   - Edit any sector/segment/entity property.

@@ -144,3 +144,16 @@ const AlcDeviceSpecifier = 0x1005
 
 // String for space-separated list of ALC extensions.
 const AlcExtensions = 0x1006
+
+const AlcEnumerateAllExt = 1
+
+// String for the default extended device specifier.
+const AlcDefaultAllDevicesSpecifier = 0x1012
+
+/**
+ * Device's extended specifier string.
+ *
+ * If device handle is NULL, it is instead a null-character separated list of
+ * strings of known extended device specifiers (list ends with an empty string).
+ */
+const AlcAllDevicesSpecifier = 0x1013
