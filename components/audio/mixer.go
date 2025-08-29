@@ -20,7 +20,8 @@ type Mixer struct {
 	// 44100, 48000, 96000 etc
 	SampleRate int `editable:"Sample Rate"`
 	// 2 for stereo, 6 for 5.1 surround
-	Channels int `editable:"Channels"`
+	Channels   int    `editable:"Channels"`
+	DeviceName string `edtiable:"Device Name"`
 
 	Error error // We should expose this somewhere
 
@@ -96,10 +97,11 @@ func (m *Mixer) Construct(data map[string]any) {
 	m.Error = nil
 	m.Channels = 2
 	m.SampleRate = 48000
+	m.DeviceName = ""
 	m.formats = make(map[string]al.Enum)
 
 	var err error
-	if m.device, err = al.OpenDevice(); err != nil {
+	if m.device, err = al.OpenDevice(m.DeviceName); err != nil {
 		m.Error = fmt.Errorf("failed to open OpenAL device: %w", err)
 		return
 	}
@@ -109,7 +111,7 @@ func (m *Mixer) Construct(data map[string]any) {
 		m.formats[f] = al.GetEnumValue(f)
 	}
 
-	if !m.device.IsExtensionPresent("ALC_EXT_EFX") {
+	if !al.IsExtensionPresent("ALC_EXT_EFX") {
 		m.Error = fmt.Errorf("EFX not supported")
 		//CloseAL();
 		return
@@ -127,6 +129,9 @@ func (m *Mixer) Construct(data map[string]any) {
 	m.events = make(map[al.Source]*SoundEvent)
 	m.usedSources.Grow(uint32(len(m.sources)))
 
+	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends. Extensions: %v", m.SampleRate, m.Channels, len(m.sources), numSends, al.Extensions())
+	log.Printf("Devices: %v", al.AllDevices())
+
 	// Testing EAX reverb effects:
 	// References:
 	// https://github.com/kcat/openal-soft/blob/master/examples/almultireverb.c
@@ -136,8 +141,6 @@ func (m *Mixer) Construct(data map[string]any) {
 
 	m.fxSlots = al.GenAuxEffectSlots(1)
 	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
-
-	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends. Extensions: %v", m.SampleRate, m.Channels, numVoices, numSends, al.Extensions())
 }
 
 func (m *Mixer) SetReverbPreset(preset string) {

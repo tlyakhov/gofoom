@@ -34,11 +34,14 @@ func (snd *Sound) Load() error {
 	if snd.Source == "" {
 		return nil
 	}
-	if !strings.HasSuffix(snd.Source, ".wav") {
-		return fmt.Errorf("Sound.Load: tried to load non-wav format audio file %v", snd.Source)
-	}
 
-	return snd.loadWav()
+	if strings.HasSuffix(snd.Source, ".ogg") {
+		return snd.loadOgg()
+	} else if strings.HasSuffix(snd.Source, ".wav") {
+		return snd.loadWav()
+	} else {
+		return fmt.Errorf("Sound.Load: tried to load unknown (not wav, ogg) format audio file %v", snd.Source)
+	}
 }
 
 func (snd *Sound) Construct(data map[string]any) {

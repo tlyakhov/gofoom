@@ -86,3 +86,28 @@ func alcGetIntegerv(d alDevice, k Enum, v []int32) {
 	dev := (*C.ALCdevice)(d)
 	C.alcGetIntegerv(dev, C.ALCenum(k), C.ALCsizei(len(v)), (*C.ALCint)(unsafe.Pointer(&v[0])))
 }
+
+func alcGetString(d alDevice, v Enum) string {
+	dev := (*C.ALCdevice)(d)
+	value := C.alcGetString(dev, C.ALCenum(v))
+	return C.GoString((*C.char)(value))
+}
+
+func alcGetStrings(d alDevice, v Enum) []string {
+	dev := (*C.ALCdevice)(d)
+	// OpenAL has an incredibly dangerous way of returning a list of strings,
+	// where each string is null-terminated, and the list ends with two nulls in
+	// a row.
+	value := C.alcGetString(dev, C.ALCenum(v))
+	result := make([]string, 0)
+
+	for {
+		current := C.GoString((*C.char)(value))
+		if len(current) == 0 {
+			break
+		}
+		result = append(result, current)
+		value = (*C.char)(unsafe.Pointer(uintptr(unsafe.Pointer(value)) + uintptr(len(current)+1)))
+	}
+	return result
+}
