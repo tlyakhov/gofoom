@@ -108,7 +108,7 @@ func (a *Paste) apply() {
 			if yamlData == nil {
 				continue
 			}
-			var toAttach ecs.Attachable
+			var toAttach ecs.Component
 			switch yamlDataTyped := yamlData.(type) {
 			case string: // It's an entity reference
 				entityRef, err := ecs.ParseEntity(yamlDataTyped)
@@ -116,7 +116,7 @@ func (a *Paste) apply() {
 					log.Printf("Paste.Activate: Error parsing copied entity %v (component %v)", yamlDataTyped, name)
 					continue
 				}
-				toAttach = ecs.Component(entityRef, id)
+				toAttach = ecs.GetComponent(entityRef, id)
 			case map[string]any:
 				toAttach = ecs.LoadComponentWithoutAttaching(id, yamlDataTyped)
 			default:

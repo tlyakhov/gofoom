@@ -330,11 +330,6 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 	LightSamplerCalcs.Add(1)
 	lightsTested := 0
 	ls.tree.Root.RangeClosest(world, true, func(body *core.Body) bool {
-		if lightsTested > 10 {
-			return false
-		}
-		lightsTested++
-		LightSamplerLightsTested.Add(1)
 		if !body.IsActive() {
 			return true
 		}
@@ -342,6 +337,11 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		if light == nil || !light.IsActive() {
 			return true
 		}
+		if lightsTested > 10 {
+			return false
+		}
+		lightsTested++
+		LightSamplerLightsTested.Add(1)
 		ls.LightWorld[2] = body.Pos.Render[2] - world[2]
 		ls.LightWorld[1] = body.Pos.Render[1] - world[1]
 		ls.LightWorld[0] = body.Pos.Render[0] - world[0]

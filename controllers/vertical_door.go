@@ -29,7 +29,7 @@ func (vd *VerticalDoorController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (vd *VerticalDoorController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (vd *VerticalDoorController) Target(target ecs.Component, e ecs.Entity) bool {
 	vd.Entity = e
 	vd.VerticalDoor = target.(*behaviors.VerticalDoor)
 	vd.Sector = core.GetSector(vd.VerticalDoor.Entity)

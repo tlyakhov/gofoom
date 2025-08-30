@@ -29,7 +29,7 @@ func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (uc *UnderwaterController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (uc *UnderwaterController) Target(target ecs.Component, e ecs.Entity) bool {
 	uc.Entity = e
 	uc.Underwater = target.(*behaviors.Underwater)
 	uc.Sector = core.GetSector(uc.Entity)

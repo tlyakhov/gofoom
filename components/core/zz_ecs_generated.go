@@ -19,7 +19,7 @@ func init() {
 	SectorCID = ecs.RegisterComponent(&ecs.Arena[Sector, *Sector]{})
 }
 func GetBody(e ecs.Entity) *Body {
-	if asserted, ok := ecs.Component(e, BodyCID).(*Body); ok {
+	if asserted, ok := ecs.GetComponent(e, BodyCID).(*Body); ok {
 		return asserted
 	}
 	return nil
@@ -29,7 +29,7 @@ func (*Body) ComponentID() ecs.ComponentID {
 	return BodyCID
 }
 func GetInternalSegment(e ecs.Entity) *InternalSegment {
-	if asserted, ok := ecs.Component(e, InternalSegmentCID).(*InternalSegment); ok {
+	if asserted, ok := ecs.GetComponent(e, InternalSegmentCID).(*InternalSegment); ok {
 		return asserted
 	}
 	return nil
@@ -39,7 +39,7 @@ func (*InternalSegment) ComponentID() ecs.ComponentID {
 	return InternalSegmentCID
 }
 func GetLight(e ecs.Entity) *Light {
-	if asserted, ok := ecs.Component(e, LightCID).(*Light); ok {
+	if asserted, ok := ecs.GetComponent(e, LightCID).(*Light); ok {
 		return asserted
 	}
 	return nil
@@ -49,7 +49,7 @@ func (*Light) ComponentID() ecs.ComponentID {
 	return LightCID
 }
 func GetMobile(e ecs.Entity) *Mobile {
-	if asserted, ok := ecs.Component(e, MobileCID).(*Mobile); ok {
+	if asserted, ok := ecs.GetComponent(e, MobileCID).(*Mobile); ok {
 		return asserted
 	}
 	return nil
@@ -66,7 +66,7 @@ func (*Quadtree) ComponentID() ecs.ComponentID {
 	return QuadtreeCID
 }
 func GetSector(e ecs.Entity) *Sector {
-	if asserted, ok := ecs.Component(e, SectorCID).(*Sector); ok {
+	if asserted, ok := ecs.GetComponent(e, SectorCID).(*Sector); ok {
 		return asserted
 	}
 	return nil

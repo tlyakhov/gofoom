@@ -31,7 +31,7 @@ func (isc *InventorySlotController) EditorPausedMethods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate
 }
 
-func (isc *InventorySlotController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (isc *InventorySlotController) Target(target ecs.Component, e ecs.Entity) bool {
 	isc.Entity = e
 	isc.Slot = target.(*inventory.Slot)
 	isc.WeaponClass = inventory.GetWeaponClass(e)

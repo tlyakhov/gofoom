@@ -41,7 +41,7 @@ const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLoc
 // Is the right approach to store this extra data separately? maybe
 
 // Attached has a set of fields common to every component and implements
-// the Attachable interface. It is required for every component in the ECS.
+// the Component interface. It is required for every component in the ECS.
 type Attached struct {
 	// Entity is the ID of the primary entity to which this component is attached.
 	Entity
@@ -177,7 +177,7 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			if u, ok := any(result[i]).(Universal); ok {
+			if u, ok := any(result[i]).(Attachable); ok {
 				u.OnAttach()
 			}
 			if hook != nil {
@@ -189,7 +189,7 @@ func ConstructSlice[PT interface {
 		result = make([]PT, len(dataSlice))
 		for i, dataElement := range dataSlice {
 			result[i] = new(T)
-			if u, ok := any(result[i]).(Universal); ok {
+			if u, ok := any(result[i]).(Attachable); ok {
 				u.OnAttach()
 			}
 			if hook != nil {
@@ -207,7 +207,7 @@ func SerializeSlice[T Serializable](elements []T) []map[string]any {
 	result := make([]map[string]any, 0, len(elements))
 	for _, element := range elements {
 		// Attachables can have a flag to not serialize them
-		if a, ok := any(element).(Attachable); ok {
+		if a, ok := any(element).(Component); ok {
 			if a.Base().Flags&ComponentNoSave != 0 {
 				continue
 			}

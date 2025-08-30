@@ -42,14 +42,14 @@ func (a *Delete) Undo() {
 			if yamlLink, ok := yamlData.(string); ok {
 				linkedEntity, _ := ecs.ParseEntity(yamlLink)
 				if linkedEntity != 0 {
-					c := ecs.Component(linkedEntity, cid)
+					c := ecs.GetComponent(linkedEntity, cid)
 					if c != nil {
 						ecs.Attach(cid, s.Entity, &c)
 					}
 				}
 			} else {
 				yamlComponent := yamlData.(map[string]any)
-				var attached ecs.Attachable
+				var attached ecs.Component
 				ecs.Attach(cid, s.Entity, &attached)
 				if attached.Base().Attachments == 1 {
 					attached.Construct(yamlComponent)

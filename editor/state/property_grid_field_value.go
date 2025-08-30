@@ -10,7 +10,7 @@ import (
 
 type PropertyGridFieldValue struct {
 	Entity           ecs.Entity
-	Component        ecs.Attachable
+	Component        ecs.Component
 	Value            reflect.Value
 	ParentCollection *reflect.Value
 	Ancestors        []any

@@ -25,7 +25,7 @@ func init() {
 	VisibleCID = ecs.RegisterComponent(&ecs.Arena[Visible, *Visible]{})
 }
 func GetImage(e ecs.Entity) *Image {
-	if asserted, ok := ecs.Component(e, ImageCID).(*Image); ok {
+	if asserted, ok := ecs.GetComponent(e, ImageCID).(*Image); ok {
 		return asserted
 	}
 	return nil
@@ -35,7 +35,7 @@ func (*Image) ComponentID() ecs.ComponentID {
 	return ImageCID
 }
 func GetLit(e ecs.Entity) *Lit {
-	if asserted, ok := ecs.Component(e, LitCID).(*Lit); ok {
+	if asserted, ok := ecs.GetComponent(e, LitCID).(*Lit); ok {
 		return asserted
 	}
 	return nil
@@ -45,7 +45,7 @@ func (*Lit) ComponentID() ecs.ComponentID {
 	return LitCID
 }
 func GetShader(e ecs.Entity) *Shader {
-	if asserted, ok := ecs.Component(e, ShaderCID).(*Shader); ok {
+	if asserted, ok := ecs.GetComponent(e, ShaderCID).(*Shader); ok {
 		return asserted
 	}
 	return nil
@@ -55,7 +55,7 @@ func (*Shader) ComponentID() ecs.ComponentID {
 	return ShaderCID
 }
 func GetSolid(e ecs.Entity) *Solid {
-	if asserted, ok := ecs.Component(e, SolidCID).(*Solid); ok {
+	if asserted, ok := ecs.GetComponent(e, SolidCID).(*Solid); ok {
 		return asserted
 	}
 	return nil
@@ -65,7 +65,7 @@ func (*Solid) ComponentID() ecs.ComponentID {
 	return SolidCID
 }
 func GetSprite(e ecs.Entity) *Sprite {
-	if asserted, ok := ecs.Component(e, SpriteCID).(*Sprite); ok {
+	if asserted, ok := ecs.GetComponent(e, SpriteCID).(*Sprite); ok {
 		return asserted
 	}
 	return nil
@@ -75,7 +75,7 @@ func (*Sprite) ComponentID() ecs.ComponentID {
 	return SpriteCID
 }
 func GetSpriteSheet(e ecs.Entity) *SpriteSheet {
-	if asserted, ok := ecs.Component(e, SpriteSheetCID).(*SpriteSheet); ok {
+	if asserted, ok := ecs.GetComponent(e, SpriteSheetCID).(*SpriteSheet); ok {
 		return asserted
 	}
 	return nil
@@ -85,7 +85,7 @@ func (*SpriteSheet) ComponentID() ecs.ComponentID {
 	return SpriteSheetCID
 }
 func GetText(e ecs.Entity) *Text {
-	if asserted, ok := ecs.Component(e, TextCID).(*Text); ok {
+	if asserted, ok := ecs.GetComponent(e, TextCID).(*Text); ok {
 		return asserted
 	}
 	return nil
@@ -102,7 +102,7 @@ func (*ToneMap) ComponentID() ecs.ComponentID {
 	return ToneMapCID
 }
 func GetVisible(e ecs.Entity) *Visible {
-	if asserted, ok := ecs.Component(e, VisibleCID).(*Visible); ok {
+	if asserted, ok := ecs.GetComponent(e, VisibleCID).(*Visible); ok {
 		return asserted
 	}
 	return nil

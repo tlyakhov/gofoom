@@ -31,7 +31,7 @@ func (pc *ProximityController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (pc *ProximityController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (pc *ProximityController) Target(target ecs.Component, e ecs.Entity) bool {
 	pc.Entity = e
 	pc.Proximity = target.(*behaviors.Proximity)
 	return pc.Proximity.IsActive()
@@ -62,7 +62,7 @@ func (pc *ProximityController) Recalculate() {
 
 func (pc *ProximityController) isValid(e ecs.Entity) bool {
 	for cid := range pc.ValidComponents {
-		if ecs.Component(e, cid) == nil {
+		if ecs.GetComponent(e, cid) == nil {
 			return false
 		}
 	}

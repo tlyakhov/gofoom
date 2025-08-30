@@ -99,7 +99,7 @@ func BenchmarkGet(b *testing.B) {
 			cid := cp[index].ID()
 			b.StartTimer()
 			for range 1000 {
-				Component(entity, cid)
+				GetComponent(entity, cid)
 			}
 		}
 	})

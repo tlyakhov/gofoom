@@ -40,7 +40,7 @@ func (pc *PlayerController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (pc *PlayerController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (pc *PlayerController) Target(target ecs.Component, e ecs.Entity) bool {
 	pc.Entity = e
 	pc.Player = target.(*character.Player)
 	if !pc.Player.IsActive() || pc.Player.Spawn {

@@ -66,7 +66,7 @@ func Respawn(force bool) {
 				log.Printf("controllers.Respawn: error parsing referenced entity %v", refData)
 				continue
 			}
-			mappedComponent = ecs.Component(eRef, cid).Serialize()
+			mappedComponent = ecs.GetComponent(eRef, cid).Serialize()
 		} else {
 			mappedComponent = mappedData.(map[string]any)
 		}

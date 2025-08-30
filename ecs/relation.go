@@ -134,7 +134,7 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 	case dynamic.Spawnable:
 		// Dynamics have no relations
 		return true
-	case Attachable:
+	case Component:
 		// If we're at least one level deep, don't go into other components.
 		if len(visited) > 0 {
 			return true

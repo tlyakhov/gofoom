@@ -26,7 +26,7 @@ func (isc *InternalSegmentController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate
 }
 
-func (isc *InternalSegmentController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (isc *InternalSegmentController) Target(target ecs.Component, e ecs.Entity) bool {
 	isc.Entity = e
 	isc.InternalSegment = target.(*core.InternalSegment)
 	return isc.InternalSegment.IsActive()

@@ -10,7 +10,7 @@ ComponentTable is a closed hash table that stores components, indexed by their
 component IDs.
 It is designed for high performance due to direct hashing and a small number of elements.
 */
-type ComponentTable []Attachable
+type ComponentTable []Component
 
 // ComponentTableGrowthRate is the rate at which the component table grows when
 // it needs to be resized.
@@ -21,7 +21,7 @@ const ComponentTableGrowthRate = 8
 var ComponentTableHit, ComponentTableMiss atomic.Uint64
 
 // Set adds or updates a component in the table.
-func (table *ComponentTable) Set(a Attachable) {
+func (table *ComponentTable) Set(a Component) {
 	cid := a.ComponentID()
 	size := ComponentID(len(*table))
 	if size == 0 {
@@ -60,7 +60,7 @@ func (table *ComponentTable) Set(a Attachable) {
 
 // Get retrieves a component from the table by its component ID.
 // This method is performance-critical and should be as efficient as possible.
-func (table ComponentTable) Get(cid ComponentID) Attachable {
+func (table ComponentTable) Get(cid ComponentID) Component {
 	size := ComponentID(len(table))
 	if size == 0 {
 		return nil

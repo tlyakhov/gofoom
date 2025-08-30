@@ -37,7 +37,7 @@ func init() {
 	WanderCID = ecs.RegisterComponent(&ecs.Arena[Wander, *Wander]{})
 }
 func GetActionFire(e ecs.Entity) *ActionFire {
-	if asserted, ok := ecs.Component(e, ActionFireCID).(*ActionFire); ok {
+	if asserted, ok := ecs.GetComponent(e, ActionFireCID).(*ActionFire); ok {
 		return asserted
 	}
 	return nil
@@ -47,7 +47,7 @@ func (*ActionFire) ComponentID() ecs.ComponentID {
 	return ActionFireCID
 }
 func GetActionJump(e ecs.Entity) *ActionJump {
-	if asserted, ok := ecs.Component(e, ActionJumpCID).(*ActionJump); ok {
+	if asserted, ok := ecs.GetComponent(e, ActionJumpCID).(*ActionJump); ok {
 		return asserted
 	}
 	return nil
@@ -57,7 +57,7 @@ func (*ActionJump) ComponentID() ecs.ComponentID {
 	return ActionJumpCID
 }
 func GetActionTimed(e ecs.Entity) *ActionTimed {
-	if asserted, ok := ecs.Component(e, ActionTimedCID).(*ActionTimed); ok {
+	if asserted, ok := ecs.GetComponent(e, ActionTimedCID).(*ActionTimed); ok {
 		return asserted
 	}
 	return nil
@@ -67,7 +67,7 @@ func (*ActionTimed) ComponentID() ecs.ComponentID {
 	return ActionTimedCID
 }
 func GetActionTransition(e ecs.Entity) *ActionTransition {
-	if asserted, ok := ecs.Component(e, ActionTransitionCID).(*ActionTransition); ok {
+	if asserted, ok := ecs.GetComponent(e, ActionTransitionCID).(*ActionTransition); ok {
 		return asserted
 	}
 	return nil
@@ -77,7 +77,7 @@ func (*ActionTransition) ComponentID() ecs.ComponentID {
 	return ActionTransitionCID
 }
 func GetActionWaypoint(e ecs.Entity) *ActionWaypoint {
-	if asserted, ok := ecs.Component(e, ActionWaypointCID).(*ActionWaypoint); ok {
+	if asserted, ok := ecs.GetComponent(e, ActionWaypointCID).(*ActionWaypoint); ok {
 		return asserted
 	}
 	return nil
@@ -87,7 +87,7 @@ func (*ActionWaypoint) ComponentID() ecs.ComponentID {
 	return ActionWaypointCID
 }
 func GetActor(e ecs.Entity) *Actor {
-	if asserted, ok := ecs.Component(e, ActorCID).(*Actor); ok {
+	if asserted, ok := ecs.GetComponent(e, ActorCID).(*Actor); ok {
 		return asserted
 	}
 	return nil
@@ -97,7 +97,7 @@ func (*Actor) ComponentID() ecs.ComponentID {
 	return ActorCID
 }
 func GetActorState(e ecs.Entity) *ActorState {
-	if asserted, ok := ecs.Component(e, ActorStateCID).(*ActorState); ok {
+	if asserted, ok := ecs.GetComponent(e, ActorStateCID).(*ActorState); ok {
 		return asserted
 	}
 	return nil
@@ -107,7 +107,7 @@ func (*ActorState) ComponentID() ecs.ComponentID {
 	return ActorStateCID
 }
 func GetAlive(e ecs.Entity) *Alive {
-	if asserted, ok := ecs.Component(e, AliveCID).(*Alive); ok {
+	if asserted, ok := ecs.GetComponent(e, AliveCID).(*Alive); ok {
 		return asserted
 	}
 	return nil
@@ -117,7 +117,7 @@ func (*Alive) ComponentID() ecs.ComponentID {
 	return AliveCID
 }
 func GetParticleEmitter(e ecs.Entity) *ParticleEmitter {
-	if asserted, ok := ecs.Component(e, ParticleEmitterCID).(*ParticleEmitter); ok {
+	if asserted, ok := ecs.GetComponent(e, ParticleEmitterCID).(*ParticleEmitter); ok {
 		return asserted
 	}
 	return nil
@@ -127,7 +127,7 @@ func (*ParticleEmitter) ComponentID() ecs.ComponentID {
 	return ParticleEmitterCID
 }
 func GetPlayerTargetable(e ecs.Entity) *PlayerTargetable {
-	if asserted, ok := ecs.Component(e, PlayerTargetableCID).(*PlayerTargetable); ok {
+	if asserted, ok := ecs.GetComponent(e, PlayerTargetableCID).(*PlayerTargetable); ok {
 		return asserted
 	}
 	return nil
@@ -137,7 +137,7 @@ func (*PlayerTargetable) ComponentID() ecs.ComponentID {
 	return PlayerTargetableCID
 }
 func GetProximity(e ecs.Entity) *Proximity {
-	if asserted, ok := ecs.Component(e, ProximityCID).(*Proximity); ok {
+	if asserted, ok := ecs.GetComponent(e, ProximityCID).(*Proximity); ok {
 		return asserted
 	}
 	return nil
@@ -147,7 +147,7 @@ func (*Proximity) ComponentID() ecs.ComponentID {
 	return ProximityCID
 }
 func GetProximityState(e ecs.Entity) *ProximityState {
-	if asserted, ok := ecs.Component(e, ProximityStateCID).(*ProximityState); ok {
+	if asserted, ok := ecs.GetComponent(e, ProximityStateCID).(*ProximityState); ok {
 		return asserted
 	}
 	return nil
@@ -157,7 +157,7 @@ func (*ProximityState) ComponentID() ecs.ComponentID {
 	return ProximityStateCID
 }
 func GetUnderwater(e ecs.Entity) *Underwater {
-	if asserted, ok := ecs.Component(e, UnderwaterCID).(*Underwater); ok {
+	if asserted, ok := ecs.GetComponent(e, UnderwaterCID).(*Underwater); ok {
 		return asserted
 	}
 	return nil
@@ -167,7 +167,7 @@ func (*Underwater) ComponentID() ecs.ComponentID {
 	return UnderwaterCID
 }
 func GetVerticalDoor(e ecs.Entity) *VerticalDoor {
-	if asserted, ok := ecs.Component(e, VerticalDoorCID).(*VerticalDoor); ok {
+	if asserted, ok := ecs.GetComponent(e, VerticalDoorCID).(*VerticalDoor); ok {
 		return asserted
 	}
 	return nil
@@ -177,7 +177,7 @@ func (*VerticalDoor) ComponentID() ecs.ComponentID {
 	return VerticalDoorCID
 }
 func GetWander(e ecs.Entity) *Wander {
-	if asserted, ok := ecs.Component(e, WanderCID).(*Wander); ok {
+	if asserted, ok := ecs.GetComponent(e, WanderCID).(*Wander); ok {
 		return asserted
 	}
 	return nil

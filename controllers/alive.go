@@ -25,7 +25,7 @@ func (a *AliveController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (a *AliveController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (a *AliveController) Target(target ecs.Component, e ecs.Entity) bool {
 	a.Entity = e
 	a.Alive = target.(*behaviors.Alive)
 	return a.IsActive()

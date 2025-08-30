@@ -33,7 +33,7 @@ func (wc *WanderController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (wc *WanderController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (wc *WanderController) Target(target ecs.Component, e ecs.Entity) bool {
 	wc.Entity = e
 	wc.Wander = target.(*behaviors.Wander)
 	wc.Body = core.GetBody(wc.Entity)

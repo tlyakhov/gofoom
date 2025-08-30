@@ -28,7 +28,7 @@ func (*Named) ComponentID() ComponentID {
 }
 
 func GetNamed(e Entity) *Named {
-	if asserted, ok := Component(e, NamedCID).(*Named); ok {
+	if asserted, ok := GetComponent(e, NamedCID).(*Named); ok {
 		return asserted
 	}
 	return nil

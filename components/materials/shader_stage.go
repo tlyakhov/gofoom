@@ -113,6 +113,3 @@ func (s *ShaderStage) Serialize() map[string]any {
 	}
 	return result
 }
-
-func (s *ShaderStage) OnAttach() {
-}

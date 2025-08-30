@@ -34,7 +34,7 @@ type Mixer struct {
 
 	device *al.Device
 	// Mutex for thread-safe operations
-	mu sync.Mutex
+	Lock sync.Mutex
 }
 
 func (m *Mixer) String() string {
@@ -179,8 +179,8 @@ func (m *Mixer) play(snd *Sound) (al.Source, error) {
 	if snd == nil {
 		return 0, nil
 	}
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.Lock.Lock()
+	defer m.Lock.Unlock()
 
 	voice, ok := m.usedSources.MinZero()
 	if !ok || int(voice) >= len(m.sources) {

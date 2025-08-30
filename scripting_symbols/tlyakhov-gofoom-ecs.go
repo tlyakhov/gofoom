@@ -21,7 +21,6 @@ func init() {
 		"AllComponents":                   reflect.ValueOf(ecs.AllComponents),
 		"ArenaByID":                       reflect.ValueOf(ecs.ArenaByID),
 		"Attach":                          reflect.ValueOf(ecs.Attach),
-		"Component":                       reflect.ValueOf(ecs.Component),
 		"ComponentActive":                 reflect.ValueOf(ecs.ComponentActive),
 		"ComponentFlagsString":            reflect.ValueOf(ecs.ComponentFlagsString),
 		"ComponentFlagsStrings":           reflect.ValueOf(ecs.ComponentFlagsStrings),
@@ -57,6 +56,7 @@ func init() {
 		"EntityTableGrowthRate":           reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
 		"First":                           reflect.ValueOf(ecs.First),
 		"FuncMap":                         reflect.ValueOf(&ecs.FuncMap).Elem(),
+		"GetComponent":                    reflect.ValueOf(ecs.GetComponent),
 		"GetEntityByName":                 reflect.ValueOf(ecs.GetEntityByName),
 		"GetLinked":                       reflect.ValueOf(ecs.GetLinked),
 		"GetNamed":                        reflect.ValueOf(ecs.GetNamed),
@@ -99,9 +99,10 @@ func init() {
 
 		// type definitions
 		"Attachable":       reflect.ValueOf((*ecs.Attachable)(nil)),
-		"AttachableArena":  reflect.ValueOf((*ecs.AttachableArena)(nil)),
 		"Attached":         reflect.ValueOf((*ecs.Attached)(nil)),
 		"BaseController":   reflect.ValueOf((*ecs.BaseController)(nil)),
+		"Component":        reflect.ValueOf((*ecs.Component)(nil)),
+		"ComponentArena":   reflect.ValueOf((*ecs.ComponentArena)(nil)),
 		"ComponentFlags":   reflect.ValueOf((*ecs.ComponentFlags)(nil)),
 		"ComponentID":      reflect.ValueOf((*ecs.ComponentID)(nil)),
 		"ComponentTable":   reflect.ValueOf((*ecs.ComponentTable)(nil)),
@@ -117,19 +118,28 @@ func init() {
 		"RelationType":     reflect.ValueOf((*ecs.RelationType)(nil)),
 		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
 		"SourceFile":       reflect.ValueOf((*ecs.SourceFile)(nil)),
-		"Universal":        reflect.ValueOf((*ecs.Universal)(nil)),
 
 		// interface wrapper definitions
-		"_Attachable":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
-		"_AttachableArena": reflect.ValueOf((*_tlyakhov_gofoom_ecs_AttachableArena)(nil)),
-		"_Controller":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
-		"_Serializable":    reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
-		"_Universal":       reflect.ValueOf((*_tlyakhov_gofoom_ecs_Universal)(nil)),
+		"_Attachable":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
+		"_Component":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Component)(nil)),
+		"_ComponentArena": reflect.ValueOf((*_tlyakhov_gofoom_ecs_ComponentArena)(nil)),
+		"_Controller":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
+		"_Serializable":   reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
 	}
 }
 
 // _tlyakhov_gofoom_ecs_Attachable is an interface wrapper for Attachable type
 type _tlyakhov_gofoom_ecs_Attachable struct {
+	IValue    interface{}
+	WOnAttach func()
+}
+
+func (W _tlyakhov_gofoom_ecs_Attachable) OnAttach() {
+	W.WOnAttach()
+}
+
+// _tlyakhov_gofoom_ecs_Component is an interface wrapper for Component type
+type _tlyakhov_gofoom_ecs_Component struct {
 	IValue           interface{}
 	WBase            func() *ecs.Attached
 	WComponentID     func() ecs.ComponentID
@@ -144,97 +154,97 @@ type _tlyakhov_gofoom_ecs_Attachable struct {
 	WString          func() string
 }
 
-func (W _tlyakhov_gofoom_ecs_Attachable) Base() *ecs.Attached {
+func (W _tlyakhov_gofoom_ecs_Component) Base() *ecs.Attached {
 	return W.WBase()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) ComponentID() ecs.ComponentID {
+func (W _tlyakhov_gofoom_ecs_Component) ComponentID() ecs.ComponentID {
 	return W.WComponentID()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) Construct(data map[string]any) {
+func (W _tlyakhov_gofoom_ecs_Component) Construct(data map[string]any) {
 	W.WConstruct(data)
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) IsActive() bool {
+func (W _tlyakhov_gofoom_ecs_Component) IsActive() bool {
 	return W.WIsActive()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) IsAttached() bool {
+func (W _tlyakhov_gofoom_ecs_Component) IsAttached() bool {
 	return W.WIsAttached()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) MultiAttachable() bool {
+func (W _tlyakhov_gofoom_ecs_Component) MultiAttachable() bool {
 	return W.WMultiAttachable()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) OnAttach() {
+func (W _tlyakhov_gofoom_ecs_Component) OnAttach() {
 	W.WOnAttach()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) OnDelete() {
+func (W _tlyakhov_gofoom_ecs_Component) OnDelete() {
 	W.WOnDelete()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) OnDetach(a0 ecs.Entity) {
+func (W _tlyakhov_gofoom_ecs_Component) OnDetach(a0 ecs.Entity) {
 	W.WOnDetach(a0)
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) Serialize() map[string]any {
+func (W _tlyakhov_gofoom_ecs_Component) Serialize() map[string]any {
 	return W.WSerialize()
 }
-func (W _tlyakhov_gofoom_ecs_Attachable) String() string {
+func (W _tlyakhov_gofoom_ecs_Component) String() string {
 	if W.WString == nil {
 		return ""
 	}
 	return W.WString()
 }
 
-// _tlyakhov_gofoom_ecs_AttachableArena is an interface wrapper for AttachableArena type
-type _tlyakhov_gofoom_ecs_AttachableArena struct {
-	IValue      interface{}
-	WAdd        func(c *ecs.Attachable)
-	WAttachable func(index int) ecs.Attachable
-	WCap        func() int
-	WDetach     func(index int)
-	WFrom       func(source ecs.AttachableArena)
-	WID         func() ecs.ComponentID
-	WLen        func() int
-	WNew        func() ecs.Attachable
-	WReplace    func(c *ecs.Attachable, index int)
-	WSingleton  func() bool
-	WString     func() string
-	WType       func() reflect.Type
+// _tlyakhov_gofoom_ecs_ComponentArena is an interface wrapper for ComponentArena type
+type _tlyakhov_gofoom_ecs_ComponentArena struct {
+	IValue     interface{}
+	WAdd       func(c *ecs.Component)
+	WCap       func() int
+	WComponent func(index int) ecs.Component
+	WDetach    func(index int)
+	WFrom      func(source ecs.ComponentArena)
+	WID        func() ecs.ComponentID
+	WLen       func() int
+	WNew       func() ecs.Component
+	WReplace   func(c *ecs.Component, index int)
+	WSingleton func() bool
+	WString    func() string
+	WType      func() reflect.Type
 }
 
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Add(c *ecs.Attachable) {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Add(c *ecs.Component) {
 	W.WAdd(c)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Attachable(index int) ecs.Attachable {
-	return W.WAttachable(index)
-}
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Cap() int {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Cap() int {
 	return W.WCap()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Detach(index int) {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Component(index int) ecs.Component {
+	return W.WComponent(index)
+}
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Detach(index int) {
 	W.WDetach(index)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) From(source ecs.AttachableArena) {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) From(source ecs.ComponentArena) {
 	W.WFrom(source)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) ID() ecs.ComponentID {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) ID() ecs.ComponentID {
 	return W.WID()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Len() int {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Len() int {
 	return W.WLen()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) New() ecs.Attachable {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) New() ecs.Component {
 	return W.WNew()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Replace(c *ecs.Attachable, index int) {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Replace(c *ecs.Component, index int) {
 	W.WReplace(c, index)
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Singleton() bool {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Singleton() bool {
 	return W.WSingleton()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) String() string {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) String() string {
 	if W.WString == nil {
 		return ""
 	}
 	return W.WString()
 }
-func (W _tlyakhov_gofoom_ecs_AttachableArena) Type() reflect.Type {
+func (W _tlyakhov_gofoom_ecs_ComponentArena) Type() reflect.Type {
 	return W.WType()
 }
 
@@ -246,7 +256,7 @@ type _tlyakhov_gofoom_ecs_Controller struct {
 	WEditorPausedMethods func() ecs.ControllerMethod
 	WMethods             func() ecs.ControllerMethod
 	WRecalculate         func()
-	WTarget              func(a0 ecs.Attachable, a1 ecs.Entity) bool
+	WTarget              func(a0 ecs.Component, a1 ecs.Entity) bool
 }
 
 func (W _tlyakhov_gofoom_ecs_Controller) Always() {
@@ -264,7 +274,7 @@ func (W _tlyakhov_gofoom_ecs_Controller) Methods() ecs.ControllerMethod {
 func (W _tlyakhov_gofoom_ecs_Controller) Recalculate() {
 	W.WRecalculate()
 }
-func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Attachable, a1 ecs.Entity) bool {
+func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Component, a1 ecs.Entity) bool {
 	return W.WTarget(a0, a1)
 }
 
@@ -280,14 +290,4 @@ func (W _tlyakhov_gofoom_ecs_Serializable) Construct(data map[string]any) {
 }
 func (W _tlyakhov_gofoom_ecs_Serializable) Serialize() map[string]any {
 	return W.WSerialize()
-}
-
-// _tlyakhov_gofoom_ecs_Universal is an interface wrapper for Universal type
-type _tlyakhov_gofoom_ecs_Universal struct {
-	IValue    interface{}
-	WOnAttach func()
-}
-
-func (W _tlyakhov_gofoom_ecs_Universal) OnAttach() {
-	W.WOnAttach()
 }

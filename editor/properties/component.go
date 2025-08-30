@@ -22,7 +22,7 @@ import (
 func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 	disable := true
 	parentType := ""
-	var parent ecs.Attachable
+	var parent ecs.Component
 	var parentCID ecs.ComponentID
 	allEntities := make(ecs.EntityTable, 0)
 	selEntities := make(ecs.EntityTable, 0)
@@ -37,7 +37,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 		if !v.Entity.IsExternal() {
 			disable = false
 		}
-		parent = v.Parent().(ecs.Attachable)
+		parent = v.Parent().(ecs.Component)
 		parentCID = parent.ComponentID()
 		parentType = ecs.Types().ArenaPlaceholders[parentCID].Type().Name()
 	}

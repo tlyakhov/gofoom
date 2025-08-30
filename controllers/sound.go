@@ -26,7 +26,7 @@ func (sc *SoundController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate
 }
 
-func (sc *SoundController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (sc *SoundController) Target(target ecs.Component, e ecs.Entity) bool {
 	sc.Entity = e
 	sc.Sound = target.(*audio.Sound)
 	return sc.IsActive()

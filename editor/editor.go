@@ -389,21 +389,21 @@ func (e *Editor) UseTool() {
 		s.Top.Surface.Material = controllers.DefaultMaterial()
 		a := &actions.AddSector{}
 		a.AddEntity.IEditor = e
-		a.AddEntity.Components = []ecs.Attachable{s}
+		a.AddEntity.Components = []ecs.Component{s}
 		e.Act(a)
 	case state.ToolAddInternalSegment:
 		seg := &core.InternalSegment{}
 		seg.Construct(nil)
 		a := &actions.AddInternalSegment{}
 		a.AddEntity.IEditor = e
-		a.AddEntity.Components = []ecs.Attachable{seg}
+		a.AddEntity.Components = []ecs.Component{seg}
 		e.Act(a)
 	case state.ToolAddBody:
 		body := &core.Body{}
 		body.Construct(nil)
 		e.Act(&actions.AddEntity{
 			Place:      actions.Place{Action: state.Action{IEditor: e}},
-			Components: []ecs.Attachable{body},
+			Components: []ecs.Component{body},
 		})
 	case state.ToolAlignGrid:
 		e.Act(&actions.AlignGrid{Action: state.Action{IEditor: e}})
@@ -436,7 +436,7 @@ func (e *Editor) NewShader() {
 
 		a := &actions.AddEntity{}
 		a.IEditor = e
-		a.Components = []ecs.Attachable{img, shader, named}
+		a.Components = []ecs.Component{img, shader, named}
 		e.Act(a)
 
 		stage.Material = a.Entity

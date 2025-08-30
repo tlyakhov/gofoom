@@ -40,7 +40,7 @@ func (*SourceFile) ComponentID() ComponentID {
 }
 
 func GetSourceFile(e Entity) *SourceFile {
-	if asserted, ok := Component(e, SourceFileCID).(*SourceFile); ok {
+	if asserted, ok := GetComponent(e, SourceFileCID).(*SourceFile); ok {
 		return asserted
 	}
 	return nil
@@ -242,13 +242,13 @@ func (file *SourceFile) loadEntities() error {
 					log.Printf("SourceFile.loadEntities: linked entity %v[%v] = %v had source ID %v, which doesn't have a mapping!", entity, name, linkedEntity, loadedID)
 				}
 				linkedEntity = linkedEntity.WithFileID(mappedID)
-				c := Component(linkedEntity, cid)
+				c := GetComponent(linkedEntity, cid)
 				if c != nil {
 					attach(entity, &c, cid)
 				}
 			} else {
 				yamlComponent := yamlData.(map[string]any)
-				var attached Attachable
+				var attached Component
 				attach(entity, &attached, cid)
 				if attached.Base().Attachments == 1 {
 					attached.Construct(yamlComponent)
