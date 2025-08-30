@@ -58,7 +58,7 @@ func (a *ChangeSlice) Redo() {
 			// TODO: Use the a.ConcreteType field here?
 			newValue.Set(reflect.New(newValue.Type().Elem()))
 		}
-		if universal, ok := newValue.Interface().(ecs.Universal); ok {
+		if universal, ok := newValue.Interface().(ecs.Attachable); ok {
 			universal.OnAttach()
 		}
 

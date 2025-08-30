@@ -37,7 +37,7 @@ func (iic *InventoryItemController) EditorPausedMethods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate
 }
 
-func (iic *InventoryItemController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (iic *InventoryItemController) Target(target ecs.Component, e ecs.Entity) bool {
 	iic.Entity = e
 	iic.Item = target.(*inventory.Item)
 	if iic.Item == nil || !iic.Item.IsActive() {
@@ -87,7 +87,7 @@ func (iic *InventoryItemController) Recalculate() {
 			p = nil
 		}
 		if p == nil {
-			var a ecs.Attachable = iic.autoProximity
+			var a ecs.Component = iic.autoProximity
 			ecs.Attach(behaviors.ProximityCID, iic.Entity, &a)
 		}
 	}
@@ -99,7 +99,7 @@ func (iic *InventoryItemController) Recalculate() {
 			pt = nil
 		}
 		if pt == nil {
-			var a ecs.Attachable = iic.autoPlayerTargetable
+			var a ecs.Component = iic.autoPlayerTargetable
 			ecs.Attach(behaviors.PlayerTargetableCID, iic.Entity, &a)
 		}
 	}

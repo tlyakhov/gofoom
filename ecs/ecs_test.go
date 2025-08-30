@@ -22,7 +22,7 @@ func init() {
 }
 
 func GetMockComponent(e Entity) *mockComponent {
-	if asserted, ok := Component(e, mockCID).(*mockComponent); ok {
+	if asserted, ok := GetComponent(e, mockCID).(*mockComponent); ok {
 		return asserted
 	}
 	return nil
@@ -41,7 +41,7 @@ func TestNewEntity(t *testing.T) {
 func TestAttach(t *testing.T) {
 	entity := NewEntity()
 	component := &mockComponent{}
-	var a Attachable = component
+	var a Component = component
 	Attach(mockCID, entity, &a)
 	if a.Base().Entity != entity {
 		t.Errorf("Attach did not set entity")
@@ -54,7 +54,7 @@ func TestAttach(t *testing.T) {
 func TestDetachComponent(t *testing.T) {
 	entity := NewEntity()
 	component := &mockComponent{}
-	var a Attachable = component
+	var a Component = component
 	Attach(mockCID, entity, &a)
 	DetachComponent(mockCID, entity)
 	if component.Attachments != 0 {

@@ -23,7 +23,7 @@ type typeMetadata struct {
 	ArenaIndexes         map[string]int
 	IDs                  map[string]ComponentID
 	LenGroupedComponents int
-	ArenaPlaceholders    []AttachableArena
+	ArenaPlaceholders    []ComponentArena
 	nextFreeComponent    uint32
 	Controllers          []controllerMetadata
 	ExprEnv              map[string]any
@@ -62,7 +62,7 @@ func RegisterComponent[T any, PT GenericAttachable[T]](arena *Arena[T, PT]) Comp
 	cid := ComponentID(arenaIndex)
 	arena.componentID = cid
 	arena.Getter = func(e Entity) PT {
-		if asserted, ok := Component(e, cid).(PT); ok {
+		if asserted, ok := GetComponent(e, cid).(PT); ok {
 			return asserted
 		}
 		return nil
@@ -83,7 +83,7 @@ func RegisterComponent[T any, PT GenericAttachable[T]](arena *Arena[T, PT]) Comp
 	return arena.componentID
 }
 
-func (ecsTypes *typeMetadata) Type(name string) AttachableArena {
+func (ecsTypes *typeMetadata) Type(name string) ComponentArena {
 	if index, ok := ecsTypes.ArenaIndexes[name]; ok {
 		return ecsTypes.ArenaPlaceholders[index]
 	}

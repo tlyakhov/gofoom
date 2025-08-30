@@ -28,7 +28,7 @@ type SectorSplitter struct {
 	EdgesOnLine          []*splitEdge
 	Splitter1, Splitter2 concepts.Vector2
 	Sector               *core.Sector
-	Result               [][]ecs.Attachable
+	Result               [][]ecs.Component
 }
 
 type splitEdge struct {
@@ -257,7 +257,7 @@ func (a *SectorSplitter) verifyCycles() {
 
 func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 	i := len(a.Result)
-	a.Result = append(a.Result, make([]ecs.Attachable, 0))
+	a.Result = append(a.Result, make([]ecs.Component, 0))
 	for _, origComponent := range ecs.AllComponents(a.Sector.Entity) {
 		if origComponent == nil {
 			continue
@@ -292,7 +292,7 @@ func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 }
 
 func (a *SectorSplitter) collect() {
-	a.Result = make([][]ecs.Attachable, 0)
+	a.Result = make([][]ecs.Component, 0)
 	for _, edge := range a.SplitSector {
 		if edge.Visited {
 			continue

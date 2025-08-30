@@ -42,7 +42,7 @@ func (bc *BodyController) EditorPausedMethods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate
 }
 
-func (bc *BodyController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (bc *BodyController) Target(target ecs.Component, e ecs.Entity) bool {
 	bc.Entity = e
 	bc.Body = target.(*core.Body)
 	if bc.Body == nil || !bc.Body.IsActive() {

@@ -9,7 +9,7 @@ func init() {
 	PlayerCID = ecs.RegisterComponent(&ecs.Arena[Player, *Player]{})
 }
 func GetPlayer(e ecs.Entity) *Player {
-	if asserted, ok := ecs.Component(e, PlayerCID).(*Player); ok {
+	if asserted, ok := ecs.GetComponent(e, PlayerCID).(*Player); ok {
 		return asserted
 	}
 	return nil

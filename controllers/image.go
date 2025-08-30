@@ -30,7 +30,7 @@ func (ic *ImageController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate
 }
 
-func (ic *ImageController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (ic *ImageController) Target(target ecs.Component, e ecs.Entity) bool {
 	ic.Entity = e
 	ic.Image = target.(*materials.Image)
 	return ic.IsActive()

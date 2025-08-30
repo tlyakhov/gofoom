@@ -30,7 +30,7 @@ var (
 	SourceFileIDs   map[EntitySourceID]*SourceFile
 
 	rows   [EntitySourceIDBits][]ComponentTable
-	arenas []AttachableArena
+	arenas []ComponentArena
 )
 
 func Initialize() {
@@ -41,7 +41,7 @@ func Initialize() {
 			continue
 		}
 		for j := range arena.Len() {
-			a := arena.Attachable(j)
+			a := arena.Component(j)
 			if a == nil {
 				continue
 			}
@@ -59,7 +59,7 @@ func Initialize() {
 	for i := range len(rows) {
 		rows[i] = nil
 	}
-	arenas = make([]AttachableArena, len(Types().ArenaPlaceholders))
+	arenas = make([]ComponentArena, len(Types().ArenaPlaceholders))
 	Simulation = dynamic.NewSimulation()
 	SourceFileNames = make(map[string]*SourceFile)
 	SourceFileIDs = make(map[EntitySourceID]*SourceFile)
@@ -73,11 +73,11 @@ func Initialize() {
 		// log.Printf("Component %v, index: %v", arenaPlaceholder.Type().String(), i)
 		// t = *ComponentArena[T]
 		t := reflect.TypeOf(arenaPlaceholder)
-		arenas[i] = reflect.New(t.Elem()).Interface().(AttachableArena)
+		arenas[i] = reflect.New(t.Elem()).Interface().(ComponentArena)
 		arenas[i].From(arenaPlaceholder)
 		fmName := arenaPlaceholder.Type().String()
 		fmName = strings.ReplaceAll(fmName, ".", "_")
-		FuncMap[fmName] = func(e Entity) Attachable { return Component(e, arenaPlaceholder.ID()) }
+		FuncMap[fmName] = func(e Entity) Component { return GetComponent(e, arenaPlaceholder.ID()) }
 	}
 }
 
@@ -113,7 +113,7 @@ func ArenaFor[T any, PT GenericAttachable[T]](id ComponentID) *Arena[T, PT] {
 	return arenas[id].(*Arena[T, PT])
 }
 
-func ArenaByID(id ComponentID) AttachableArena {
+func ArenaByID(id ComponentID) ComponentArena {
 	return arenas[id]
 }
 
@@ -138,7 +138,7 @@ func AllComponents(entity Entity) ComponentTable {
 
 // Callers need to be careful, this function can return nil that's not castable
 // to an actual component type. The Get* methods are better.
-func Component(entity Entity, id ComponentID) Attachable {
+func GetComponent(entity Entity, id ComponentID) Component {
 	if id == 0 {
 		return nil
 	}
@@ -148,18 +148,18 @@ func Component(entity Entity, id ComponentID) Attachable {
 	return nil
 }
 
-func Singleton(id ComponentID) Attachable {
+func Singleton(id ComponentID) Component {
 	c := arenas[id]
 	if c.Len() != 0 {
-		return c.Attachable(0)
+		return c.Component(0)
 	}
 	return NewAttachedComponent(NewEntity(), id)
 }
 
-func First(id ComponentID) Attachable {
+func First(id ComponentID) Component {
 	c := arenas[id]
 	for i := range c.Cap() {
-		a := arenas[id].Attachable(i)
+		a := arenas[id].Component(i)
 		if a != nil {
 			return a
 		}
@@ -199,7 +199,7 @@ func expandRows(sid EntitySourceID, size int) {
 
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
-func attach(entity Entity, component *Attachable, componentID ComponentID) {
+func attach(entity Entity, component *Component, componentID ComponentID) {
 	if entity == 0 {
 		log.Printf("ecs.attach: tried to attach 0 entity!")
 		return
@@ -251,14 +251,14 @@ func attach(entity Entity, component *Attachable, componentID ComponentID) {
 }
 
 // Create a new component with the given index and attach it.
-func NewAttachedComponent(entity Entity, id ComponentID) Attachable {
-	var attached Attachable
+func NewAttachedComponent(entity Entity, id ComponentID) Component {
+	var attached Component
 	attach(entity, &attached, id)
 	attached.Construct(nil)
 	return attached
 }
 
-func LoadComponentWithoutAttaching(id ComponentID, data map[string]any) Attachable {
+func LoadComponentWithoutAttaching(id ComponentID, data map[string]any) Component {
 	if data == nil {
 		return nil
 	}
@@ -267,7 +267,7 @@ func LoadComponentWithoutAttaching(id ComponentID, data map[string]any) Attachab
 	return component
 }
 
-func NewAttachedComponentTyped(entity Entity, cType string) Attachable {
+func NewAttachedComponentTyped(entity Entity, cType string) Component {
 	if index, ok := Types().IDs[cType]; ok {
 		return NewAttachedComponent(entity, index)
 	}
@@ -281,12 +281,12 @@ func NewAttachedComponentTyped(entity Entity, cType string) Attachable {
 // to attach or a pointer to nil to get back a new one. Previously this method
 // had semantics like Go's `append`, but this was too error prone if the return
 // value was ignored.
-func Attach(id ComponentID, entity Entity, component *Attachable) {
+func Attach(id ComponentID, entity Entity, component *Component) {
 	attach(entity, component, id)
 }
 
 func AttachTyped[T any, PT GenericAttachable[T]](entity Entity, component *PT) {
-	var attachable Attachable
+	var attachable Component
 	if *component != nil {
 		attachable = *component
 		attach(entity, &attachable, attachable.ComponentID())
@@ -347,7 +347,7 @@ func DetachComponent(id ComponentID, entity Entity) {
 	detach(id, entity, true)
 }
 
-func DeleteByType(component Attachable) {
+func DeleteByType(component Component) {
 	if component == nil {
 		return
 	}
@@ -513,7 +513,7 @@ func ConstructArray(parent any, arrayPtr any, data any) {
 	itemType := reflect.TypeOf(arrayPtr).Elem().Elem()
 	arrayValue.Set(reflect.Zero(arrayValue.Type()))
 	for _, child := range data.([]any) {
-		item := reflect.New(itemType.Elem()).Interface().(Attachable)
+		item := reflect.New(itemType.Elem()).Interface().(Component)
 		//item.SetParent(parent)
 		item.Construct(child.(map[string]any))
 		arrayValue.Set(reflect.Append(arrayValue, reflect.ValueOf(item)))
@@ -527,7 +527,7 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](field *PT, name st
 	}
 	e := GetEntityByName(name)
 	if e != 0 {
-		*field = Component(e, cid).(PT)
+		*field = GetComponent(e, cid).(PT)
 		if *field != nil {
 			return false
 		}

@@ -17,7 +17,7 @@ func init() {
 	WeaponClassCID = ecs.RegisterComponent(&ecs.Arena[WeaponClass, *WeaponClass]{})
 }
 func GetCarrier(e ecs.Entity) *Carrier {
-	if asserted, ok := ecs.Component(e, CarrierCID).(*Carrier); ok {
+	if asserted, ok := ecs.GetComponent(e, CarrierCID).(*Carrier); ok {
 		return asserted
 	}
 	return nil
@@ -27,7 +27,7 @@ func (*Carrier) ComponentID() ecs.ComponentID {
 	return CarrierCID
 }
 func GetItem(e ecs.Entity) *Item {
-	if asserted, ok := ecs.Component(e, ItemCID).(*Item); ok {
+	if asserted, ok := ecs.GetComponent(e, ItemCID).(*Item); ok {
 		return asserted
 	}
 	return nil
@@ -37,7 +37,7 @@ func (*Item) ComponentID() ecs.ComponentID {
 	return ItemCID
 }
 func GetSlot(e ecs.Entity) *Slot {
-	if asserted, ok := ecs.Component(e, SlotCID).(*Slot); ok {
+	if asserted, ok := ecs.GetComponent(e, SlotCID).(*Slot); ok {
 		return asserted
 	}
 	return nil
@@ -47,7 +47,7 @@ func (*Slot) ComponentID() ecs.ComponentID {
 	return SlotCID
 }
 func GetWeapon(e ecs.Entity) *Weapon {
-	if asserted, ok := ecs.Component(e, WeaponCID).(*Weapon); ok {
+	if asserted, ok := ecs.GetComponent(e, WeaponCID).(*Weapon); ok {
 		return asserted
 	}
 	return nil
@@ -57,7 +57,7 @@ func (*Weapon) ComponentID() ecs.ComponentID {
 	return WeaponCID
 }
 func GetWeaponClass(e ecs.Entity) *WeaponClass {
-	if asserted, ok := ecs.Component(e, WeaponClassCID).(*WeaponClass); ok {
+	if asserted, ok := ecs.GetComponent(e, WeaponClassCID).(*WeaponClass); ok {
 		return asserted
 	}
 	return nil

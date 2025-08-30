@@ -27,6 +27,5 @@ func (a *Action) Construct(data map[string]any) {}
 func (a *Action) Serialize() map[string]any {
 	return nil
 }
-func (a *Action) OnAttach() {}
 
 func (a *Action) IsAttached() bool { return true }

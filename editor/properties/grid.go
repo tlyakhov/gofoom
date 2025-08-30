@@ -40,7 +40,7 @@ type PropertyGridState struct {
 	Ancestors        []any
 	ParentField      *state.PropertyGridField
 	Entity           ecs.Entity
-	Component        ecs.Attachable
+	Component        ecs.Component
 }
 
 type Grid struct {

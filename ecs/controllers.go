@@ -30,7 +30,7 @@ func (types *typeMetadata) RegisterController(constructor func() Controller, pri
 // act calls a specific controller method on a component.
 // It checks if the controller's target conditions are met for the component and
 // its associated entities.
-func act(controller Controller, component Attachable, method ControllerMethod) {
+func act(controller Controller, component Component, method ControllerMethod) {
 	if component.Base().Attachments == 1 {
 		// If the component is attached to only one entity, check the target condition for that entity.
 		if controller.Target(component, component.Base().Entity) {
@@ -61,7 +61,7 @@ func act(controller Controller, component Attachable, method ControllerMethod) {
 }
 
 // Act runs controllers for a specific component, based on the provided component ID and method.
-func Act(component Attachable, id ComponentID, method ControllerMethod) {
+func Act(component Component, id ComponentID, method ControllerMethod) {
 	for _, meta := range Types().Controllers {
 		// Create a new instance of the controller.
 		controller := meta.Constructor()
@@ -97,7 +97,7 @@ func ActAllControllers(method ControllerMethod) {
 		arena := arenas[controller.ComponentID()]
 		// Iterate through the components in the arena and call the controller's method on each active component.
 		for i := range arena.Cap() {
-			if component := arena.Attachable(i); component != nil {
+			if component := arena.Component(i); component != nil {
 				act(controller, component, method)
 			}
 		}

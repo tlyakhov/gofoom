@@ -23,7 +23,7 @@ type MaterialSampler struct {
 	ScaleW, ScaleH   uint32
 	NoTexture        bool
 	SpriteAngle      float64
-	Materials        []ecs.Attachable
+	Materials        []ecs.Component
 	pipelineIndex    int
 	U, V             float64
 	NU, NV           float64
@@ -70,7 +70,7 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 	return true
 }
 
-func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Attachable) {
+func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Component) {
 	if shader := materials.GetShader(material); shader != nil && shader != parent {
 		ms.Materials = append(ms.Materials, shader)
 		for _, stage := range shader.Stages {
@@ -161,7 +161,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	}
 
 	ms.NoTexture = false
-	var a ecs.Attachable
+	var a ecs.Component
 	if ms.pipelineIndex < len(ms.Materials) {
 		a = ms.Materials[ms.pipelineIndex]
 	}

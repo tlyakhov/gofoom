@@ -48,7 +48,7 @@ type Arena[T any, PT GenericAttachable[T]] struct {
 
 // From initializes an arena from another arena of the same type, copying
 // metadata
-func (arena *Arena[T, PT]) From(source AttachableArena) {
+func (arena *Arena[T, PT]) From(source ComponentArena) {
 	placeholder := source.(*Arena[T, PT])
 	arena.typeOfT = placeholder.typeOfT
 	arena.componentID = placeholder.componentID
@@ -67,9 +67,9 @@ func (arena *Arena[T, PT]) Value(index int) PT {
 	return ptr
 }
 
-// Attachable retrieves the component at the given index as an Attachable interface.
+// Component retrieves the component at the given index as an Component interface.
 // It performs no bounds checking for performance reasons.
-func (arena *Arena[T, PT]) Attachable(index int) Attachable {
+func (arena *Arena[T, PT]) Component(index int) Component {
 	// No bounds checking for performance. This should always be inlined
 	// Duplicates code in .Value() because the return type is different here and nil
 	// in golang behaves idiosyncratically
@@ -96,17 +96,17 @@ func (arena *Arena[T, PT]) Detach(index int) {
 	// TODO: Remove empty chunks
 }
 
-// AddTyped adds a component to the arena, automatically handling the Attachable
+// AddTyped adds a component to the arena, automatically handling the Component
 // interface conversion.
 func (arena *Arena[T, PT]) AddTyped(component *PT) {
-	attachable := Attachable(*component)
+	attachable := Component(*component)
 	arena.Add(&attachable)
 	*component = attachable.(PT)
 }
 
 // Add adds a component to the arena at the next available slot.
 // It uses a fill bitmap to find the next free index.
-func (arena *Arena[T, PT]) Add(component *Attachable) {
+func (arena *Arena[T, PT]) Add(component *Component) {
 	var nextFree uint32
 	var found bool
 	// First try an empty slot in the fill list
@@ -136,7 +136,7 @@ func (arena *Arena[T, PT]) Add(component *Attachable) {
 // Replace replaces the component at the given index with the provided
 // component. Importantly, the argument is a pointer - it will be replaced with
 // the resulting memory location.
-func (arena *Arena[T, PT]) Replace(component *Attachable, index int) {
+func (arena *Arena[T, PT]) Replace(component *Component, index int) {
 	if *component == nil {
 		*component = arena.Value(index)
 		return
@@ -148,7 +148,7 @@ func (arena *Arena[T, PT]) Replace(component *Attachable, index int) {
 }
 
 // New creates a new Attachable component of the type stored in this arena.
-func (c *Arena[T, PT]) New() Attachable {
+func (c *Arena[T, PT]) New() Component {
 	var component T
 	attachable := PT(&component)
 	return attachable

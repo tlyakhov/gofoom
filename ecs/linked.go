@@ -27,7 +27,7 @@ func init() {
 }
 
 func GetLinked(e Entity) *Linked {
-	if asserted, ok := Component(e, LinkedCID).(*Linked); ok {
+	if asserted, ok := GetComponent(e, LinkedCID).(*Linked); ok {
 		return asserted
 	}
 	return nil

@@ -43,7 +43,7 @@ func (ac *ActionController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways | ecs.ControllerRecalculate
 }
 
-func (ac *ActionController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (ac *ActionController) Target(target ecs.Component, e ecs.Entity) bool {
 	if ecs.Simulation.EditorPaused {
 		return false
 	}

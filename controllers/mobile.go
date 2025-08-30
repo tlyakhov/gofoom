@@ -38,7 +38,7 @@ func (mc *MobileController) EditorPausedMethods() ecs.ControllerMethod {
 	return ecs.ControllerRecalculate
 }
 
-func (mc *MobileController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (mc *MobileController) Target(target ecs.Component, e ecs.Entity) bool {
 	mc.BaseController.Entity = e
 	mc.Mobile = target.(*core.Mobile)
 	if !mc.Mobile.IsActive() {

@@ -22,7 +22,7 @@ func (*Mixer) ComponentID() ecs.ComponentID {
 	return MixerCID
 }
 func GetSound(e ecs.Entity) *Sound {
-	if asserted, ok := ecs.Component(e, SoundCID).(*Sound); ok {
+	if asserted, ok := ecs.GetComponent(e, SoundCID).(*Sound); ok {
 		return asserted
 	}
 	return nil
@@ -32,7 +32,7 @@ func (*Sound) ComponentID() ecs.ComponentID {
 	return SoundCID
 }
 func GetSoundEvent(e ecs.Entity) *SoundEvent {
-	if asserted, ok := ecs.Component(e, SoundEventCID).(*SoundEvent); ok {
+	if asserted, ok := ecs.GetComponent(e, SoundEventCID).(*SoundEvent); ok {
 		return asserted
 	}
 	return nil
@@ -42,7 +42,7 @@ func (*SoundEvent) ComponentID() ecs.ComponentID {
 	return SoundEventCID
 }
 func GetSource(e ecs.Entity) *Source {
-	if asserted, ok := ecs.Component(e, SourceCID).(*Source); ok {
+	if asserted, ok := ecs.GetComponent(e, SourceCID).(*Source); ok {
 		return asserted
 	}
 	return nil

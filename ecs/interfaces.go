@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-type Universal interface {
+type Attachable interface {
 	// OnAttach is called when the component is attached to an arena.
 	OnAttach()
 }
@@ -20,11 +20,11 @@ type Serializable interface {
 	Serialize() map[string]any
 }
 
-// Attachable is an interface for components that can be attached to entities in the ECS.
-type Attachable interface {
-	Universal
+// Component is an interface for components that can be attached to entities in the ECS.
+type Component interface {
+	Attachable
 	Serializable
-	// ComponentID returns the ID of this component type (see RegisterComponent).
+	// ComponentID returns the unique ID of this component type (see RegisterComponent).
 	ComponentID() ComponentID
 	// String returns a string representation of the component.
 	String() string
@@ -41,18 +41,18 @@ type Attachable interface {
 	IsAttached() bool
 }
 
-// AttachableArena is an interface for managing a arena of attachable components of a specific type.
-type AttachableArena interface {
+// ComponentArena is an interface for managing a arena of attachable components of a specific type.
+type ComponentArena interface {
 	// From initializes a arena from another arena of the same type.
-	From(source AttachableArena)
+	From(source ComponentArena)
 	// New creates a new Attachable component of the type stored in this arena.
-	New() Attachable
+	New() Component
 	// Add adds a component to the arena.
-	Add(c *Attachable)
+	Add(c *Component)
 	// Replace replaces the component at the given index with the provided component.
-	Replace(c *Attachable, index int)
-	// Attachable retrieves the component at the given index as an Attachable interface.
-	Attachable(index int) Attachable
+	Replace(c *Component, index int)
+	// Component retrieves the component at the given index as a Component interface.
+	Component(index int) Component
 	// Detach removes the component at the given index from the arena.
 	Detach(index int)
 	// Type returns the reflect.Type of the component data stored in this arena.
@@ -72,7 +72,7 @@ type AttachableArena interface {
 // GenericAttachable is a generic interface constraint for types that can be attached as components.
 type GenericAttachable[T any] interface {
 	*T
-	Attachable
+	Component
 }
 
 // ControllerMethod represents a bitmask of methods that a controller can implement.
@@ -95,7 +95,7 @@ type Controller interface {
 	EditorPausedMethods() ControllerMethod
 	// Target determines whether the controller should act on a specific entity and component.
 	// Return false if controller shouldn't run for this entity
-	Target(Attachable, Entity) bool
+	Target(Component, Entity) bool
 	// Always is called every tick for entities that match the controller's component ID and target criteria.
 	Always()
 	// Recalculate is called when a component is attached or detached, or when a linked component changes.

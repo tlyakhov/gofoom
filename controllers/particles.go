@@ -33,7 +33,7 @@ func (pc *ParticleController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (pc *ParticleController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (pc *ParticleController) Target(target ecs.Component, e ecs.Entity) bool {
 	pc.Entity = e
 	pc.ParticleEmitter = target.(*behaviors.ParticleEmitter)
 	if !pc.ParticleEmitter.IsActive() {

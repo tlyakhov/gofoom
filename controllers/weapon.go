@@ -52,7 +52,7 @@ func (wc *WeaponController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (wc *WeaponController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (wc *WeaponController) Target(target ecs.Component, e ecs.Entity) bool {
 	wc.Entity = e
 	wc.Weapon = target.(*inventory.Weapon)
 	wc.Class = inventory.GetWeaponClass(e)
@@ -224,7 +224,6 @@ func weaponFiring(wc *WeaponController) {
 		}
 		// TODO: Fix this
 		//es.CFlags = ecs.ComponentInternal
-		es.OnAttach()
 		es.Construct(nil)
 		es.Flags = 0
 		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)

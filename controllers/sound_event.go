@@ -32,7 +32,7 @@ func (sc *SoundEventController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerAlways
 }
 
-func (sc *SoundEventController) Target(target ecs.Attachable, e ecs.Entity) bool {
+func (sc *SoundEventController) Target(target ecs.Component, e ecs.Entity) bool {
 	sc.Entity = e
 	sc.SoundEvent = target.(*audio.SoundEvent)
 	if !sc.SoundEvent.IsActive() {
