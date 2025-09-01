@@ -86,7 +86,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	}
 	for _, cid := range cids {
 		arena := ecs.ArenaByID(cid)
-		for i := range arena.Len() {
+		for i := range arena.Cap() {
 			if a := arena.Component(i); a != nil {
 				e := a.Base().Entity
 				if entitySet.Contains(e) {

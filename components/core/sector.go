@@ -29,6 +29,7 @@ type Sector struct {
 	Bodies           map[ecs.Entity]*Body
 	InternalSegments map[ecs.Entity]*InternalSegment
 	Inner            ecs.EntityTable `editable:"Inner Sectors"`
+	Outer            *Sector
 
 	EnterScripts []*Script `editable:"Enter Scripts"`
 	ExitScripts  []*Script `editable:"Exit Scripts"`
@@ -309,6 +310,16 @@ func (s *Sector) Recalculate() {
 
 	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
 	s.LightmapBias[0] = math.MaxInt64
+
+	for _, e := range s.Inner {
+		if e == 0 {
+			continue
+		}
+		if inner := GetSector(e); inner != nil {
+			inner.Outer = s
+		}
+	}
+
 	for _, script := range s.EnterScripts {
 		script.Params = contactScriptParams
 		script.Compile()

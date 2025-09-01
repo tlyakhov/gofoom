@@ -114,7 +114,7 @@ func (a *AddEntity) Activate() {
 		}
 		ecs.Attach(component.ComponentID(), a.Entity, &a.Components[i])
 	}
-	a.SelectObjects(true, selection.SelectableFromEntity(a.Entity))
+	go a.SelectObjects(true, selection.SelectableFromEntity(a.Entity))
 }
 func (a *AddEntity) Cancel() {
 	a.State().Lock.Lock()

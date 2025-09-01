@@ -130,16 +130,12 @@ func (r *Renderer) DebugInfo() {
 	}
 	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v, BodiesPerBlock: %.1f", ecs.Simulation.FPS, ecs.Entities.Count(), float64(bodiesPerBlock)/float64(len(r.Blocks))))
 	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
-	switch 2 {
+	switch 1 {
 	case 0:
-		hits := r.ICacheHits.Load()
-		misses := r.ICacheMisses.Load()
-		r.Print(ts, 4, 24, fmt.Sprintf("ICache hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
-	case 1:
 		hits := ecs.ComponentTableHit.Load()
 		misses := ecs.ComponentTableMiss.Load()
 		r.Print(ts, 4, 24, fmt.Sprintf("ComponentTable hit percentage: %.1f, %v, %v", float64(hits)*100.0/float64(hits+misses), hits, misses))
-	case 2:
+	case 1:
 		tests := LightSamplerLightsTested.Load()
 		total := LightSamplerCalcs.Load()
 		r.Print(ts, 4, 24, fmt.Sprintf("LightSampler average lights/sample: %.1f, %v, %v", float64(tests)/float64(total), tests, total))

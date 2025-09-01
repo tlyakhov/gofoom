@@ -40,7 +40,7 @@ func Initialize() {
 		if i == 0 {
 			continue
 		}
-		for j := range arena.Len() {
+		for j := range arena.Cap() {
 			a := arena.Component(j)
 			if a == nil {
 				continue
@@ -241,7 +241,8 @@ func attach(entity Entity, component *Component, componentID ComponentID) {
 	attachable := *component
 	a := attachable.Base()
 	if a.Attachments > 0 && !attachable.MultiAttachable() {
-		log.Printf("ecs.attach: Component %v is already attached to %v and not multi-attachable.", attachable.String(), a.Entity.ShortString())
+		log.Printf("ecs.attach: tried to attach Component %v to %v, but it is already attached to %v and not multi-attachable.", attachable.String(), entity, a.Entity.ShortString())
+		return
 	}
 	a.Entities.Set(entity)
 	a.Entity = entity

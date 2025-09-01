@@ -53,7 +53,7 @@ func CreateTestHeightmapSector(name string, x, y, size float64) (*core.Sector, *
 	named := ecs.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_1"
 
-	sector1.NoShadows = false
+	sector1.NoShadows = true
 	mat := DefaultMaterial()
 	sector1.Bottom.Surface.Material = mat
 	sector1.Top.Surface.Material = mat
@@ -75,7 +75,7 @@ func CreateTestHeightmapSector(name string, x, y, size float64) (*core.Sector, *
 	named = ecs.NewAttachedComponent(eSector, ecs.NamedCID).(*ecs.Named)
 	named.Name = name + "_2"
 
-	sector2.NoShadows = false
+	sector2.NoShadows = true
 	sector2.Bottom.Surface.Material = mat
 	sector2.Top.Surface.Material = mat
 	seg = sector2.AddSegment(x+size, y)
@@ -185,8 +185,8 @@ func CreateTestWorld() {
 	eDirt := CreateTestDirt()
 
 	scale := 75
-	for x := 0; x < testw; x++ {
-		for y := 0; y < testh; y++ {
+	for x := range testw {
+		for y := range testh {
 			sector := CreateTestSector(fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
 			sector.Top.Z.SetAll(300)
 			sector.Bottom.Z.SetAll(rand.Float64() * 30)

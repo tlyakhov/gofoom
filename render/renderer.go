@@ -8,7 +8,6 @@ import (
 	"math"
 	"slices"
 	"sync"
-	"sync/atomic"
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
@@ -31,8 +30,6 @@ type Renderer struct {
 	textStyle      *TextStyle
 	xorSeed        uint64
 	tree           *core.Quadtree
-
-	ICacheHits, ICacheMisses atomic.Int64
 
 	flashOpacity dynamic.DynamicValue[float64]
 }
@@ -64,7 +61,6 @@ func (r *Renderer) Initialize() {
 	for i := range r.Blocks {
 		r.Blocks[i].column.Block = &r.Blocks[i]
 		r.Blocks[i].Config = r.Config
-		r.Blocks[i].Visited = make([]segmentIntersection, constants.MaxPortals)
 		r.Blocks[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 		r.Blocks[i].LightSampler.tree = ecs.Singleton(core.QuadtreeCID).(*core.Quadtree)
@@ -107,23 +103,26 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 }
 
 func (r *Renderer) RenderPortal(b *block) {
-	if b.SectorSegment.AdjacentSegment.PortalTeleports {
-		b.SectorSegment.PortalMatrix.UnprojectSelf(&b.Ray.Start)
-		b.SectorSegment.PortalMatrix.UnprojectSelf(&b.Ray.End)
-		b.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&b.Ray.Start)
-		b.SectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&b.Ray.End)
-		b.Ray.AnglesFromStartEnd()
-		// TODO: this has a bug if the adjacent sector has a sloped floor.
-		// Getting the right floor height is a bit expensive because we have to
-		// project the intersection point. For now just use the sector minimum.
-		b.CameraZ = b.CameraZ - b.IntersectionBottom + b.SectorSegment.AdjacentSegment.Sector.Min[2]
-		b.RayPlane[0] = b.Ray.AngleCos * b.ViewFix[b.ScreenX]
-		b.RayPlane[1] = b.Ray.AngleSin * b.ViewFix[b.ScreenX]
-		b.MaterialSampler.Ray = &b.Ray
-	}
-
 	// This allocation is ok, does not escape
 	portal := &columnPortal{block: b}
+	if b.Sector != b.SectorSegment.Sector {
+		// We're going into an inner sector
+		portal.Adj = b.SectorSegment.Sector
+		portal.AdjSegment = b.SectorSegment
+	} else if b.SectorSegment.AdjacentSegment != nil {
+		// This is an adjacent sector
+		portal.Adj = core.GetSector(b.SectorSegment.AdjacentSector)
+		portal.AdjSegment = b.SectorSegment.AdjacentSegment
+		if b.SectorSegment.AdjacentSegment.PortalTeleports {
+			b.teleportRay()
+		}
+	} else {
+		// We are leaving an inner sector
+		portal.Adj = b.Sector.Outer
+		portal.AdjSegment = b.SectorSegment
+	}
+	b.LastPortalSegment = portal.AdjSegment
+
 	portal.CalcScreen()
 	if portal.AdjSegment != nil {
 		if b.Pick {
@@ -135,9 +134,9 @@ func (r *Renderer) RenderPortal(b *block) {
 		}
 	}
 
-	b.Sector = portal.Adj
 	b.EdgeTop = portal.AdjClippedTop
 	b.EdgeBottom = portal.AdjClippedBottom
+	b.Sector = portal.Adj
 	b.LastPortalDistance = b.Distance
 	b.Depth++
 }
@@ -179,6 +178,11 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	b.Segment.Normal.To3D(&b.LightSampler.Normal)
 
 	hasPortal := b.SectorSegment.AdjacentSector != 0 && b.SectorSegment.AdjacentSegment != nil
+	hasPortal = hasPortal || b.Sector.Outer != nil
+	if b.Sector != b.SectorSegment.Sector {
+		hasPortal = true
+		b.LightSampler.Normal.MulSelf(-1)
+	}
 	switch {
 	case hasPortal && !b.SectorSegment.PortalHasMaterial:
 		r.RenderPortal(b)
@@ -192,6 +196,43 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	default:
 		r.wall(&b.column)
 	}
+}
+
+func (r *Renderer) findIntersection(block *block, sector *core.Sector, found bool) bool {
+	inner := sector != block.Sector
+	for _, sectorSeg := range sector.Segments {
+		if sectorSeg == block.LastPortalSegment {
+			continue
+		}
+		// Wall is facing away from us
+		if !inner && block.Ray.Delta.Dot(&sectorSeg.Normal) > 0 {
+			continue
+		} else if inner && block.Ray.Delta.Dot(&sectorSeg.Normal) < 0 {
+			continue
+		}
+
+		// Ray intersects?
+		u := sectorSeg.Intersect2D(&block.Ray.Start, &block.Ray.End, &block.RaySegTest)
+		if u < 0 {
+			continue
+		}
+
+		// Check if we've already found a closer segment
+		dist := block.Ray.DistTo(&block.RaySegTest)
+		if (found && dist > block.Distance) ||
+			dist <= block.LastPortalDistance {
+			continue
+		}
+
+		found = true
+		block.Segment = &sectorSeg.Segment
+		block.SectorSegment = sectorSeg
+		block.Distance = dist
+		block.RaySegIntersect[0] = block.RaySegTest[0]
+		block.RaySegIntersect[1] = block.RaySegTest[1]
+		block.segmentIntersection.U = u
+	}
+	return found
 }
 
 // RenderSector intersects a camera ray for a single pixel column with a map sector.
@@ -223,75 +264,16 @@ func (r *Renderer) RenderSector(block *block) {
 		block.Sector.LightmapBias[0] = int64(math.Floor(block.Sector.Min[0] / r.LightGrid))
 	}
 
-	/*  The structure of this function is a bit complicated because we try to
-		remember successful ray/segment intersections for convex sectors. This
-		is most beneficial for sectors with a lot of segments.
+	found := r.findIntersection(block, block.Sector, false)
 
-		Summary of Renderer.RenderSector overall:
-
-		1. If the sector is not concave, and the contents of the cache at the
-		    current portal depth match the current sector, and the cached segment
-	        is intersected by the ray, use the cached data, avoiding visiting the
-		    rest of the segments for the sector.
-
-		2. Otherwise, iterate through all the segments looking for
-		   intersections.
-
-		3. Render a column, potentially visiting portal sectors.
-	*/
-
-	block.segmentIntersection = &block.Visited[block.Depth]
-	cacheValid := !block.Sector.Concave && block.SectorSegment != nil && block.SectorSegment.Sector == block.Sector
-	if cacheValid {
-		u := block.SectorSegment.Intersect2D(&block.Ray.Start, &block.Ray.End, &block.RaySegTest)
-		if u >= 0 {
-			r.ICacheHits.Add(1)
-			block.Distance = block.Ray.DistTo(&block.RaySegTest)
-			block.RaySegIntersect[0] = block.RaySegTest[0]
-			block.RaySegIntersect[1] = block.RaySegTest[1]
-			block.segmentIntersection.U = u
-		} else {
-			cacheValid = false
+	for _, inner := range block.Sector.Inner {
+		if inner == 0 {
+			continue
 		}
+		found = r.findIntersection(block, core.GetSector(inner), found)
 	}
 
-	// Check again, we may have a valid cache, but no intersection
-	if !cacheValid {
-		r.ICacheMisses.Add(1)
-		found := false
-		for _, sectorSeg := range block.Sector.Segments {
-			// Wall is facing away from us
-			if block.Ray.Delta.Dot(&sectorSeg.Normal) > 0 {
-				continue
-			}
-
-			// Ray intersects?
-			u := sectorSeg.Intersect2D(&block.Ray.Start, &block.Ray.End, &block.RaySegTest)
-			if u < 0 {
-				continue
-			}
-
-			// Check if we've already found a closer segment
-			dist := block.Ray.DistTo(&block.RaySegTest)
-			if (found && dist > block.Distance) ||
-				dist < block.LastPortalDistance {
-				continue
-			}
-
-			found = true
-			block.Segment = &sectorSeg.Segment
-			block.SectorSegment = sectorSeg
-			block.Distance = dist
-			block.RaySegIntersect[0] = block.RaySegTest[0]
-			block.RaySegIntersect[1] = block.RaySegTest[1]
-			block.segmentIntersection.U = u
-		}
-		if !found {
-			block.segmentIntersection = nil
-		}
-	}
-
-	if block.segmentIntersection != nil {
+	if found {
 		block.IntersectionBottom, block.IntersectionTop = block.Sector.ZAt(dynamic.Render, block.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(block)
 	} else {
@@ -309,6 +291,7 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) []*select
 
 	// Reset the column
 	block.LastPortalDistance = 0
+	block.LastPortalSegment = nil
 	block.Depth = 0
 	block.EdgeTop = 0
 	block.EdgeBottom = r.ScreenHeight
@@ -419,8 +402,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 		return int(b.Dist2 - a.Dist2)
 	})
 	// This has a bug when rendering portals: these need to be transformed and
-	// clipped through portals appropriately.
-	block.segmentIntersection = &segmentIntersection{}
+	// clipped through portals appropriately.1
 	block.EdgeTop = 0
 	block.EdgeBottom = r.ScreenHeight
 	block.LightSampler.MaterialSampler.Config = r.Config
@@ -444,8 +426,6 @@ func (r *Renderer) Render() {
 	if r.PlayerBody == nil {
 		return
 	}
-	r.ICacheHits.Store(0)
-	r.ICacheMisses.Store(0)
 	LightSamplerCalcs.Store(0)
 	LightSamplerLightsTested.Store(0)
 	r.xorSeed = concepts.RngXorShift64(r.xorSeed)
@@ -515,8 +495,8 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concep
 		ScaleH: uint32(h),
 	}
 	ms.Initialize(src, nil)
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			ms.ScreenX = x + dstx
 			if ms.ScreenX < 0 || ms.ScreenX >= r.ScreenWidth {
 				continue
@@ -552,7 +532,6 @@ func (r *Renderer) Pick(x, y int) []*selection.Selectable {
 			CameraZ:    r.Player.CameraZ,
 			ShearZ:     r.Player.ShearZ,
 		},
-		Visited:          make([]segmentIntersection, constants.MaxPortals),
 		Bodies:           make(containers.Set[*core.Body]),
 		InternalSegments: make(map[*core.InternalSegment]*core.Sector),
 	}
