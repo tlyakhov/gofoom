@@ -10,13 +10,13 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-var flowerSlot *inventory.Slot
+// var flowerSlot *inventory.Slot
 var gunSlot *inventory.Slot
 
 func validateSpawn() {
 	arena := ecs.ArenaByID(character.PlayerCID).(*ecs.Arena[character.Player, *character.Player])
 
-	for i := range arena.Len() {
+	for i := range arena.Cap() {
 		player := arena.Value(i)
 		if player == nil || !player.Spawn {
 			continue
@@ -28,7 +28,7 @@ func validateSpawn() {
 		mobile.Elasticity = 0.1
 		carrier := inventory.GetCarrier(player.Entity)
 		if carrier == nil {
-			carrier = ecs.NewAttachedComponent(player.Entity, inventory.CarrierCID).(*inventory.Carrier)
+			_ = ecs.NewAttachedComponent(player.Entity, inventory.CarrierCID).(*inventory.Carrier)
 		}
 		// TODO: What if the level creator has set up custom slots, or this is a
 		// savegame?

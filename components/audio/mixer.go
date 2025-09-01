@@ -242,7 +242,7 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag 
 
 	if onePerTag {
 		arena := ecs.ArenaFor[SoundEvent](SoundEventCID)
-		for i := range arena.Len() {
+		for i := range arena.Cap() {
 			event := arena.Value(i)
 			if event == nil {
 				continue

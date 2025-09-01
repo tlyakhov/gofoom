@@ -116,7 +116,22 @@ func (mc *MobileController) bodyTeleport() bool {
 	return false
 }
 
+func (mc *MobileController) tryEnter(next *core.Sector) bool {
+	if next == nil {
+		return false
+	}
+	floorZ, ceilZ := next.ZAt(dynamic.Now, mc.pos2d)
+	if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
+		mc.pos[2]+mc.halfHeight < ceilZ &&
+		next.IsPointInside2D(mc.pos2d) {
+		mc.Enter(next)
+		return true
+	}
+	return false
+}
+
 func (mc *MobileController) bodyExitsSector() {
+	previous := mc.Sector
 	// Exit the current sector.
 	mc.Exit()
 
@@ -128,41 +143,43 @@ func (mc *MobileController) bodyExitsSector() {
 		if segment.AdjacentSector == 0 {
 			continue
 		}
-		adj := core.GetSector(segment.AdjacentSector)
-		floorZ, ceilZ := adj.ZAt(dynamic.Now, mc.pos2d)
-		if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
-			mc.pos[2]+mc.halfHeight < ceilZ &&
-			adj.IsPointInside2D(mc.pos2d) {
-			// Hooray, we've handled case 5! Make sure Z is good.
-			//log.Printf("Case 5! body = %v in sector %v, floor z = %v\n", p.StringHuman(), adj.Entity, floorZ)
-			/*if p[2] < floorZ {
-				e.Pos[2] = floorZ
-				log.Println("Entity entering adjacent sector is lower than floorZ")
-			}*/
-			mc.Enter(adj)
-			break
+		if mc.tryEnter(core.GetSector(segment.AdjacentSector)) {
+			return
+		}
+
+	}
+
+	if mc.tryEnter(previous.Outer) {
+		return
+	}
+
+	for _, e := range previous.Inner {
+		if e == 0 {
+			continue
+		}
+		if mc.tryEnter(core.GetSector(e)) {
+			return
 		}
 	}
 
-	if mc.Sector == nil {
-		// Case 6! This is the worst.
-		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
-		for i := range arena.Cap() {
-			sector := arena.Value(i)
-			if sector == nil {
-				continue
-			}
-			floorZ, ceilZ := sector.ZAt(dynamic.Now, mc.pos2d)
-			if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
-				mc.pos[2]+mc.halfHeight < ceilZ {
-				for _, segment := range sector.Segments {
-					if mc.PushBack(segment) {
-						mc.collidedSegments = append(mc.collidedSegments, segment)
-					}
+	// Case 7! This is the worst.
+	arena := ecs.ArenaFor[core.Sector](core.SectorCID)
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
+		if sector == nil {
+			continue
+		}
+		floorZ, ceilZ := sector.ZAt(dynamic.Now, mc.pos2d)
+		if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
+			mc.pos[2]+mc.halfHeight < ceilZ {
+			for _, segment := range sector.Segments {
+				if mc.PushBack(segment) {
+					mc.collidedSegments = append(mc.collidedSegments, segment)
 				}
 			}
 		}
 	}
+
 }
 
 func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.Body) {
@@ -377,17 +394,20 @@ func (mc *MobileController) Collide() {
 	// 2.   The body is outside of all sectors. Put it into the nearest sector.
 	// 3.   The body is still in its current sector, but it's gotten too close to a wall and needs to be pushed back.
 	// 4.   The body is outside of the current sector because it's gone past a wall and needs to be pushed back.
-	// 5.   The body is outside of the current sector because it's gone through a portal and needs to change sectors.
-	// 6.   The body is outside of the current sector because it's gone through a portal, but it winds up outside of
+	// 5.   The body is outside of the current sector because it's gone through
+	//      a portal and needs to change sectors.
+	// 6.   The body is outside of the current sector because it's gone to the
+	//      outer sector.
+	// 7.   The body is outside of the current sector because it's gone through a portal, but it winds up outside of
 	//      any sectors and needs to be pushed back into a valid sector using any walls within bounds.
-	// 7.   The body has collided with another body nearby. Both bodies need to
+	// 8.   The body has collided with another body nearby. Both bodies need to
 	//      be pushed apart.
-	// 8.   No collision occured.
+	// 9.   No collision occured.
 
 	// The central method here is to push back, but the wall that's doing the pushing requires some logic to get.
 
 	// Do 10 collision iterations to avoid spending too much time here.
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		// Avoid GC thrash
 		mc.collidedSegments = mc.collidedSegments[:0]
 		// Cases 1 & 2.
@@ -402,7 +422,7 @@ func (mc *MobileController) Collide() {
 
 		if mc.Sector != nil {
 			if !mc.Sector.IsPointInside2D(mc.pos2d) {
-				// Cases 5 & 6
+				// Cases 5, 6, and 7
 				mc.bodyExitsSector()
 			}
 

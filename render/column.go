@@ -27,7 +27,7 @@ type column struct {
 	// Samples shaders & images
 	MaterialSampler
 	// Stores current segment intersection
-	*segmentIntersection
+	segmentIntersection
 	// Stores light & shadow data
 	LightSampler LightSampler
 
@@ -37,6 +37,7 @@ type column struct {
 	RaySegTest         concepts.Vector2
 	RayPlane           concepts.Vector3
 	LastPortalDistance float64
+	LastPortalSegment  *core.SectorSegment
 	// How many portals have we traversed so far?
 	Depth int
 	// Height of camera above ground

@@ -181,7 +181,7 @@ func run() {
 	if false {
 		controllers.CreateTestWorld3()
 		// ecs.Save("bin/exported_test.yaml")
-	} else if err = ecs.Load("data/worlds/hall.yaml"); err != nil {
+	} else if err = ecs.Load("data/worlds/inner-test.yaml"); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
