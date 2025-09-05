@@ -11,6 +11,8 @@ require (
 	github.com/go-audio/audio v1.0.0
 	github.com/go-audio/wav v1.1.0
 	github.com/gopxl/pixel/v2 v2.3.0
+	github.com/hajimehoshi/go-mp3 v0.3.4
+	github.com/jfreymuth/oggvorbis v1.0.5
 	github.com/kelindar/bitmap v1.5.3
 	github.com/loov/hrtime v1.0.3
 	github.com/puzpuzpuz/xsync/v3 v3.5.1
@@ -18,7 +20,6 @@ require (
 	github.com/spf13/cast v1.9.2
 	github.com/traefik/yaegi v0.16.1
 	golang.org/x/image v0.30.0
-	golang.org/x/mobile v0.0.0-20250813145510-f12310a0cfd9
 	golang.org/x/tools v0.36.0
 	gonum.org/v1/gonum v0.16.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -77,9 +78,7 @@ require (
 	github.com/gopxl/mainthread/v2 v2.1.1 // indirect
 	github.com/hack-pad/go-indexeddb v0.3.2 // indirect
 	github.com/hack-pad/safejs v0.1.0 // indirect
-	github.com/hajimehoshi/go-mp3 v0.3.4 // indirect
 	github.com/jeandeaual/go-locale v0.0.0-20250612000132-0ef82f21eade // indirect
-	github.com/jfreymuth/oggvorbis v1.0.5 // indirect
 	github.com/jfreymuth/vorbis v1.0.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/mmcloughlin/avo v0.6.0 // indirect

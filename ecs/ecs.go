@@ -34,6 +34,8 @@ var (
 )
 
 func Initialize() {
+	Lock.Lock()
+	defer Lock.Unlock()
 	// We may have existing entities and components. Let's run any delete
 	// functions to clean up stuff like non-Go data.
 	for i, arena := range arenas {
@@ -50,6 +52,7 @@ func Initialize() {
 					a.OnDetach(e)
 				}
 			}
+			arena.Detach(j)
 			a.OnDelete()
 		}
 	}

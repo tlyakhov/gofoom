@@ -132,10 +132,10 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			// log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 			continue
 		}
-		if inner && ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] < 0 {
+		/*	if inner && ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] < 0 {
 			// log.Printf("Ignoring inner segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 			continue
-		}
+		}*/
 
 		// Find the intersection with this segment.
 		if !seg.Intersect3D(p, lightPos, &ls.IntersectionTest) {
@@ -149,10 +149,13 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		if seg.AdjacentSector != 0 {
 			// A portal!
 			adj = seg.AdjacentSegment.Sector
-		} else if !inner && sector.Outer != nil {
+		} else if inner {
+			// An inner segment!
+			adj = sector
+		} else if !sector.Outer.Empty() {
 			// We're not checking inner sector, but our sector itself is an
 			// inner one. Let's go out
-			adj = sector.Outer
+			adj = sector.OuterAt(ls.IntersectionTest.To2D())
 		} else {
 			// A wall!
 			// log.Printf("Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
@@ -172,11 +175,13 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 			return seg, nil // Same as wall, we're occluded.
 		}
-		floorZ2, ceilZ2 = adj.ZAt(dynamic.Render, i2d)
-		// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
-		if ls.IntersectionTest[2] < floorZ2 || ls.IntersectionTest[2] > ceilZ2 {
-			// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
-			return seg, nil // Same as wall, we're occluded.
+		if !inner {
+			floorZ2, ceilZ2 = adj.ZAt(dynamic.Render, i2d)
+			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
+			if ls.IntersectionTest[2] < floorZ2 || ls.IntersectionTest[2] > ceilZ2 {
+				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				return seg, nil // Same as wall, we're occluded.
+			}
 		}
 
 		// Get the square of the distance to the intersection (from the target point)

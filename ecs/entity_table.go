@@ -168,3 +168,13 @@ func (table EntityTable) Len() int {
 	}
 	return size
 }
+
+// Empty returns true if the table has no valid entities.
+func (table EntityTable) Empty() bool {
+	for _, e := range table {
+		if e != 0 {
+			return false
+		}
+	}
+	return true
+}

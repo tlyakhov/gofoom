@@ -289,6 +289,8 @@ func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 
 func (e *Editor) Load(filename string) {
 	e.Lock.Lock()
+	e.GameInputLock.Lock()
+	defer e.GameInputLock.Unlock()
 	defer e.SelectObjects(true)
 	defer e.Lock.Unlock()
 	e.OpenFile = filename

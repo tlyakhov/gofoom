@@ -18,7 +18,7 @@ type MobileController struct {
 	BodyController
 	*core.Mobile
 
-	collidedSegments []*core.SectorSegment
+	collidedSegments []*core.Segment
 }
 
 func init() {
