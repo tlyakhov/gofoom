@@ -192,6 +192,7 @@ func (m *Mixer) play(snd *Sound) (al.Source, error) {
 	source.Set3i(al.AuxiliarySendFilter, int32(m.fxSlots[0]), 0, al.FilterNull)
 	source.SetGain(float32(snd.Gain))
 	source.SetBuffer(snd.buffer)
+	source.Setf(al.ParamPitch, 1)
 	// source.QueueBuffers(snd.buffer)
 	//if source.Geti(al.ParamSourceState) != al.Playing {
 	al.PlaySources(source)

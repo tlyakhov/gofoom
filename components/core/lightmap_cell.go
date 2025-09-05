@@ -3,9 +3,7 @@
 
 package core
 
-import "tlyakhov/gofoom/concepts"
-
 type LightmapCell struct {
-	Light     concepts.Vector3
-	Timestamp uint64
+	Light     uint32
+	Timestamp uint32
 }

@@ -47,7 +47,13 @@ func blendColors(a *[4]float64, b *[4]float64, o float64) {
 func AsmVector4Mul4Self(a *[4]float64, b *[4]float64) {}
 
 // AsmInt32ToVector4 converts a uint32 color to a vector.
-func AsmInt32ToVector4(c uint32, a *[4]float64) {}
+func AsmInt32ToVector4(c uint32, a *[4]float64) {
+	//return uint32(v[0]*255)<<24 | uint32(v[1]*255)<<16 | uint32(v[2]*255)<<8 | uint32(v[3]*255)
+	a[0] = float64(c>>24) / 255.0
+	a[1] = float64((c>>16)&0xFF) / 255.0
+	a[2] = float64((c>>8)&0xFF) / 255.0
+	a[3] = float64(c&0xFF) / 255.0
+}
 
 // AsmInt32ToVector4PreMul converts a uint32 color to a vector with pre-multiplied alpha.
 func AsmInt32ToVector4PreMul(c uint32, a *[4]float64) {}

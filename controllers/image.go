@@ -41,6 +41,8 @@ func (ic *ImageController) Recalculate() {
 		ic.toneMap = ecs.Singleton(materials.ToneMapCID).(*materials.ToneMap)
 	}
 
+	ic.Load()
+
 	for y := 0; y < int(ic.Height); y++ {
 		for x := 0; x < int(ic.Width); x++ {
 			index := x + y*int(ic.Width)
