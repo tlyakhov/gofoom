@@ -247,7 +247,6 @@ func (img *Image) Construct(data map[string]any) {
 	if v, ok := data["ConvertSRGB"]; ok {
 		img.ConvertSRGB = cast.ToBool(v)
 	}
-	img.Load()
 }
 
 func (img *Image) Serialize() map[string]any {

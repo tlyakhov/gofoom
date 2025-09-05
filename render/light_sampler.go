@@ -38,6 +38,22 @@ type LightSampler struct {
 	tree    *core.Quadtree
 }
 
+const PackedLightBits = 10
+const PackedLightMax = (1 << PackedLightBits) - 1
+const PackedLightRange = 8
+
+func (ls *LightSampler) packLight() uint32 {
+	return uint32(ls.Output[0]*PackedLightMax/PackedLightRange)<<(PackedLightBits+PackedLightBits) |
+		uint32(ls.Output[1]*PackedLightMax/PackedLightRange)<<PackedLightBits |
+		uint32(ls.Output[2]*PackedLightMax/PackedLightRange)
+}
+
+func (ls *LightSampler) unpackLight(c uint32) {
+	ls.Output[0] = float64((c>>(PackedLightBits+PackedLightBits))&PackedLightMax) * PackedLightRange / PackedLightMax
+	ls.Output[1] = float64((c>>PackedLightBits)&PackedLightMax) * PackedLightRange / PackedLightMax
+	ls.Output[2] = float64(c&PackedLightMax) * PackedLightRange / PackedLightMax
+}
+
 func (ls *LightSampler) Debug() *concepts.Vector3 {
 	ls.LightmapHashToWorld(ls.Sector, &ls.Q, ls.Hash)
 	dbg := ls.Q.Mul(1.0 / 64.0)
@@ -50,9 +66,9 @@ func (ls *LightSampler) Debug() *concepts.Vector3 {
 func (ls *LightSampler) Get() *concepts.Vector3 {
 	if lmResult, exists := ls.Sector.Lightmap.Load(ls.Hash); exists {
 		r := concepts.RngXorShift64(ls.xorSeed ^ ls.Hash ^ uint64(ls.ScreenY))
-		if lmResult.Timestamp+constants.MaxLightmapAge >= ecs.Simulation.Frame ||
+		if lmResult.Timestamp+constants.MaxLightmapAge >= uint32(ecs.Simulation.Frame) ||
 			!concepts.RngDecide(r, constants.LightmapRefreshDither) {
-			ls.Output = lmResult.Light
+			ls.unpackLight(lmResult.Light)
 			return &ls.Output
 		}
 	}
@@ -70,11 +86,8 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 	ls.ScaleH = 64
 	ls.Calculate(&ls.Q)
 	ls.Sector.Lightmap.Store(ls.Hash, &core.LightmapCell{
-		Light: concepts.Vector3{
-			ls.Output[0],
-			ls.Output[1],
-			ls.Output[2]},
-		Timestamp: ecs.Simulation.Frame,
+		Light:     ls.packLight(),
+		Timestamp: uint32(ecs.Simulation.Frame),
 	})
 	return &ls.Output
 
@@ -128,14 +141,16 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		if &seg.Segment == ls.Segment {
 			continue
 		}
-		if !inner && ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0 {
+		/*	inner	  n>0  result
+			   	0		1		1
+				0		0		0
+				1		0		1
+				1		1		0
+		*/
+		if inner != (ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0) {
 			// log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 			continue
 		}
-		/*	if inner && ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] < 0 {
-			// log.Printf("Ignoring inner segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
-			continue
-		}*/
 
 		// Find the intersection with this segment.
 		if !seg.Intersect3D(p, lightPos, &ls.IntersectionTest) {
@@ -153,8 +168,8 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			// An inner segment!
 			adj = sector
 		} else if !sector.Outer.Empty() {
-			// We're not checking inner sector, but our sector itself is an
-			// inner one. Let's go out
+			// We have a non-portal segment and we're not checking inner sector,
+			// but our sector itself is an inner one. Let's go out
 			adj = sector.OuterAt(ls.IntersectionTest.To2D())
 		} else {
 			// A wall!
@@ -193,13 +208,13 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			return nil, nil
 		}
 
-		if intersectionDistSq-ls.hitDistSq > constants.IntersectEpsilon {
+		if intersectionDistSq-ls.hitDistSq >= -constants.IntersectEpsilon {
 			// log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
 			// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
 			continue
 		}
 
-		if ls.prevDistSq-intersectionDistSq > constants.IntersectEpsilon {
+		if ls.prevDistSq-intersectionDistSq >= -constants.IntersectEpsilon {
 			// log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
 			// If the current intersection point is BEHIND the last one, we went backwards?
 			continue

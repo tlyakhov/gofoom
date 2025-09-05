@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 386.71875
+        Now: 675
         Spawn: 180
     Pos:
-        Now: 52.22808392346749, -152.10785843211062, 20
+        Now: 171.17054441286572, 6.026036169678867, 20
         Spawn: 210, 10, 0
     Size:
         Now: 10, 40
@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: -0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003988876081069059, -0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020092263778049814, 0.007001650399223597
+        Now: 0.0000268540909154947, -0.000010358791025269488, 0.007001650399223694
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -206,29 +206,53 @@
     Segments:
         - Hi:
             Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 0.5882352941176471, 0, 0, 0, 1, 0
+                Spawn: 0.5882352941176471, 0, 0, 0, 1, 0
           Lo:
             Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 1.7, 0
+                Spawn: 1, 0, 0, 0, 1.7, 0
           P: -10, 20
           Surface:
             Material: ∈⋮12
         - Hi:
             Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 0.8823529411764706, 0, 0, 0, 1, 0
+                Spawn: 0.8823529411764706, 0, 0, 0, 1, 0
           Lo:
             Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 1.1333333333333333, 0
+                Spawn: 1, 0, 0, 0, 1.1333333333333333, 0
           P: -10, 0
           Surface:
             Material: ∈⋮12
         - Hi:
             Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 0.6576670522058206, 0, 0, 0, 1, 0
+                Spawn: 0.6576670522058206, 0, 0, 0, 1, 0
           Lo:
             Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 1.520526224699857, 0
+                Spawn: 1, 0, 0, 0, 1.520526224699857, 0
           P: 20, 0
           Surface:
             Material: ∈⋮12
         - Hi:
             Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 1.1764705882352942, 0, 0, 0, 1, 0
+                Spawn: 1.1764705882352942, 0, 0, 0, 1, 0
           Lo:
             Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 0.85, 0
+                Spawn: 1, 0, 0, 0, 0.85, 0
           P: 30, 20
           Surface:
             Material: ∈⋮12
@@ -286,7 +310,7 @@
 - Entity: ∈⋮12
   materials.Image:
     Filter: false
-    Source: data/ceil.jpg
+    Source: data/space_tiles_hyptosis/wool_colored_red.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
@@ -365,63 +389,63 @@
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 240, -100
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 360, -130
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 360, -40
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 340, -40
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 340, -90
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 250, -70
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 260, 0
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 230, 0
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮12
           P: 220, -100
           Surface:
             Material: ∈⋮2∈⋮Default
@@ -429,8 +453,8 @@
         Surface:
             Material: ∈⋮2∈⋮Default
         Z:
-            Now: 64
-            Spawn: 64
+            Now: 40
+            Spawn: 40
 - Entity: ∈⋮16
   core.Body:
     Angle:

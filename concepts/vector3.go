@@ -187,7 +187,7 @@ func (v *Vector3) Deserialize(data string) {
 }
 
 func (v *Vector3) ToInt32Color() uint32 {
-	return uint32(v[0])<<24 | uint32(v[1])<<16 | uint32(v[2])<<8 | 0xFF
+	return uint32(v[0]*255)<<24 | uint32(v[1]*255)<<16 | uint32(v[2]*255)<<8 | 0xFF
 }
 
 // Cross computes the cross product of two vectors.

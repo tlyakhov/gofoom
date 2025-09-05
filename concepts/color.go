@@ -202,3 +202,9 @@ func Int32ToNRGBA(c uint32) color.NRGBA {
 func Int32ToRGBA(c uint32) color.RGBA {
 	return color.RGBA{uint8((c >> 24) & 0xFF), uint8((c >> 16) & 0xFF), uint8((c >> 8) & 0xFF), uint8(c & 0xFF)}
 }
+
+func Int32ToVector3(c uint32, a *Vector3) {
+	a[0] = float64((c>>24)&0xFF) / 255.0
+	a[1] = float64((c>>16)&0xFF) / 255.0
+	a[2] = float64((c>>8)&0xFF) / 255.0
+}
