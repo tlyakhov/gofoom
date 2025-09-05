@@ -118,8 +118,8 @@ func (r *Renderer) RenderPortal(b *block) {
 		}
 	} else {
 		// We are leaving an inner sector
-		portal.Adj = b.Sector.Outer
 		portal.AdjSegment = b.SectorSegment
+		portal.Adj = b.Sector.OuterAt(b.RaySegIntersect.To2D())
 	}
 	b.LastPortalSegment = portal.AdjSegment
 
@@ -178,7 +178,7 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	b.Segment.Normal.To3D(&b.LightSampler.Normal)
 
 	hasPortal := b.SectorSegment.AdjacentSector != 0 && b.SectorSegment.AdjacentSegment != nil
-	hasPortal = hasPortal || b.Sector.Outer != nil
+	hasPortal = hasPortal || !b.Sector.Outer.Empty()
 	if b.Sector != b.SectorSegment.Sector {
 		hasPortal = true
 		b.LightSampler.Normal.MulSelf(-1)

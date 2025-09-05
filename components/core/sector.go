@@ -28,8 +28,9 @@ type Sector struct {
 	Segments         []*SectorSegment
 	Bodies           map[ecs.Entity]*Body
 	InternalSegments map[ecs.Entity]*InternalSegment
-	Inner            ecs.EntityTable `editable:"Inner Sectors"`
-	Outer            *Sector
+	// TODO: Should be automatic:
+	Inner ecs.EntityTable `editable:"Inner Sectors"`
+	Outer ecs.EntityTable
 
 	EnterScripts []*Script `editable:"Enter Scripts"`
 	ExitScripts  []*Script `editable:"Exit Scripts"`
@@ -63,6 +64,22 @@ func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 		flag1 = flag2
 	}
 	return inside
+}
+
+func (s *Sector) OuterAt(p *concepts.Vector2) (result *Sector) {
+	for _, e := range s.Outer {
+		if e == 0 {
+			continue
+		}
+		if outer := GetSector(e); outer != nil {
+			// This could ensure we pick at least one if there are any
+			//			result = outer
+			if outer.IsPointInside2D(p) {
+				return outer
+			}
+		}
+	}
+	return
 }
 
 func (s *Sector) ZAt(stage dynamic.DynamicState, p *concepts.Vector2) (fz, cz float64) {
@@ -211,7 +228,7 @@ func (s *Sector) Serialize() map[string]any {
 		result["ExitScripts"] = ecs.SerializeSlice(s.ExitScripts)
 	}
 
-	if s.Inner.Len() > 0 {
+	if !s.Inner.Empty() {
 		result["Inner"] = s.Inner.Serialize()
 	}
 
@@ -316,7 +333,7 @@ func (s *Sector) Recalculate() {
 			continue
 		}
 		if inner := GetSector(e); inner != nil {
-			inner.Outer = s
+			inner.Outer.Set(s.Entity)
 		}
 	}
 

@@ -23,57 +23,83 @@ func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sect
 	}
 }
 
-func (mc *MobileController) PushBack(segment *core.SectorSegment) bool {
+func (mc *MobileController) PushBack(sector *core.Sector, segment *core.Segment, inner bool) bool {
 	d := segment.DistanceToPoint2(mc.pos2d)
 	if d > mc.Body.Size.Now[0]*mc.Body.Size.Now[0]*0.25 {
 		return false
 	}
+
+	// What we are trying to do is ensure the body is always at least half of
+	// Body.Size.Now[0] distance away from a wall, but when we push away, we do
+	// it tangent to the wall so the body can slide along walls. To achieve
+	// this, we first create the (unit length) vector `delta`, which points from
+	// wall->body. Then, we scale that by -d to move the player to align with
+	// the wall, and +mc.Body.Size.Now[0]*0.5 to get them the right distance
+	// away.
+
+	// side > 0 if the body is in the direction of the normal, or < 0 if on
+	// opposite side.
 	side := segment.WhichSide(mc.pos2d)
+	// Closest point to body along segment.
 	closest := segment.ClosestToPoint(mc.pos2d)
 	delta := mc.pos2d.Sub(closest)
+	// Store the distance away, then normalize the delta vector.
 	d = delta.Length()
 	if d > constants.IntersectEpsilon {
 		delta[0] /= d
 		delta[1] /= d
 	} else {
+		// If d is too close, use the segment normal, but a d of zero!
 		delta.From(&segment.Normal)
 		delta[0] = -delta[0]
 		delta[1] = -delta[1]
 		d = 0
+		side = 1
 	}
+
+	// `inner` is only true if we are pushing backwards from the OUTSIDE of the
+	// inner sector.
+	if inner {
+		side *= -1
+	}
+
+	// For debugging collisions with segments:
+	//log.Printf("PushBack: sector=%v,p=%v, closest=%v, side=%v, delta=%v, d=%.2f, xsize=%.2f",
+	//	sector.Entity.String(), mc.pos2d.StringHuman(), closest.StringHuman(), side >= 0, delta.StringHuman(), d, mc.Body.Size.Now[0])
+
 	if side > 0 {
-		delta.MulSelf(mc.Body.Size.Now[0]*0.5 - d)
+		delta.MulSelf(-d + mc.Body.Size.Now[0]*0.5)
 	} else {
+		delta.MulSelf(-d - mc.Body.Size.Now[0]*0.5)
+	}
+
+	if side < 0 {
 		log.Printf("PushBack: body is on the front-facing side of segment (%v units)\n", d)
-		delta.MulSelf(-mc.Body.Size.Now[0]*0.5 - d)
 	}
 	// Apply the impulse at the same time
 	mc.pos.To2D().AddSelf(delta)
 	if d > 0 {
 		mc.Vel.Now.To2D().AddSelf(delta)
 	}
-
+	mc.collidedSegments = append(mc.collidedSegments, segment)
 	return true
 }
 
 func (mc *MobileController) checkBodySegmentCollisions() {
+	var adj *core.Sector
 	// See if we need to push back into the current sector.
 	for _, segment := range mc.Sector.Segments {
 		if segment.AdjacentSegment != nil && segment.PortalIsPassable {
-			adj := segment.AdjacentSegment.Sector
-			if adj != nil {
-				// We can still collide with a portal if the heights don't match.
-				// If we're within limits, ignore the portal.
-				floorZ, ceilZ := adj.ZAt(dynamic.Now, mc.pos2d)
-				if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
-					mc.pos[2]+mc.halfHeight < ceilZ {
-					continue
-				}
-			}
+			adj = segment.AdjacentSegment.Sector
+		} else if !mc.Sector.Outer.Empty() {
+			adj = mc.Sector.OuterAt(mc.pos2d)
+		} else {
+			adj = nil
 		}
-		if mc.PushBack(segment) {
-			mc.collidedSegments = append(mc.collidedSegments, segment)
+		if adj != nil && mc.sectorEnterable(adj) {
+			continue
 		}
+		mc.PushBack(mc.Sector, &segment.Segment, false)
 	}
 }
 
@@ -116,18 +142,39 @@ func (mc *MobileController) bodyTeleport() bool {
 	return false
 }
 
-func (mc *MobileController) tryEnter(next *core.Sector) bool {
-	if next == nil {
+func (mc *MobileController) sectorEnterable(test *core.Sector) bool {
+	if test == nil {
 		return false
 	}
-	floorZ, ceilZ := next.ZAt(dynamic.Now, mc.pos2d)
+	floorZ, ceilZ := test.ZAt(dynamic.Now, mc.pos2d)
 	if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
-		mc.pos[2]+mc.halfHeight < ceilZ &&
-		next.IsPointInside2D(mc.pos2d) {
-		mc.Enter(next)
+		mc.pos[2]+mc.halfHeight < ceilZ {
 		return true
 	}
 	return false
+}
+
+func (mc *MobileController) checkInnerSectors(test *core.Sector) *core.Sector {
+	var inner *core.Sector
+	result := test
+	for _, e := range test.Inner {
+		if e == 0 {
+			continue
+		}
+		if inner = core.GetSector(e); inner == nil {
+			continue
+		}
+		if mc.sectorEnterable(inner) {
+			if inner.IsPointInside2D(mc.pos2d) {
+				return mc.checkInnerSectors(inner)
+			}
+		} else {
+			for _, seg := range inner.Segments {
+				mc.PushBack(inner, &seg.Segment, true)
+			}
+		}
+	}
+	return result
 }
 
 func (mc *MobileController) bodyExitsSector() {
@@ -143,23 +190,18 @@ func (mc *MobileController) bodyExitsSector() {
 		if segment.AdjacentSector == 0 {
 			continue
 		}
-		if mc.tryEnter(core.GetSector(segment.AdjacentSector)) {
+
+		if adj := core.GetSector(segment.AdjacentSector); mc.sectorEnterable(adj) && adj.IsPointInside2D(mc.pos2d) {
+			mc.Enter(adj)
 			return
 		}
 
 	}
 
-	if mc.tryEnter(previous.Outer) {
+	outer := previous.OuterAt(mc.pos2d)
+	if mc.sectorEnterable(outer) {
+		mc.Enter(outer)
 		return
-	}
-
-	for _, e := range previous.Inner {
-		if e == 0 {
-			continue
-		}
-		if mc.tryEnter(core.GetSector(e)) {
-			return
-		}
 	}
 
 	// Case 7! This is the worst.
@@ -173,9 +215,7 @@ func (mc *MobileController) bodyExitsSector() {
 		if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
 			mc.pos[2]+mc.halfHeight < ceilZ {
 			for _, segment := range sector.Segments {
-				if mc.PushBack(segment) {
-					mc.collidedSegments = append(mc.collidedSegments, segment)
-				}
+				mc.PushBack(sector, &segment.Segment, false)
 			}
 		}
 	}
@@ -421,6 +461,12 @@ func (mc *MobileController) Collide() {
 		}
 
 		if mc.Sector != nil {
+			inner := mc.checkInnerSectors(mc.Sector)
+			if inner != mc.Sector {
+				mc.Exit()
+				mc.Enter(inner)
+			}
+
 			if !mc.Sector.IsPointInside2D(mc.pos2d) {
 				// Cases 5, 6, and 7
 				mc.bodyExitsSector()

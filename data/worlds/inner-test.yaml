@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 548.4375
+        Now: 386.71875
         Spawn: 180
     Pos:
-        Now: 169.66118702659548, 44.95526796803806, 20
+        Now: 52.22808392346749, -152.10785843211062, 20
         Spawn: 210, 10, 0
     Size:
         Now: 10, 40
@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: -0.000000000937470694861192, 0.00000000041685657292688235, 0.007001650399223597
+        Now: -0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003988876081069059, -0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020092263778049814, 0.007001650399223597
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -48,6 +48,7 @@
     Inner:
         - ∈⋮9
         - ∈⋮11
+        - ∈⋮15
     Segments:
         - Hi:
             Material: ∈⋮2∈⋮Default
@@ -61,6 +62,21 @@
           Lo:
             Material: ∈⋮2∈⋮Default
           P: 290, -220
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - AdjacentSector: ∈⋮14
+          Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, -160
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, 30
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
@@ -288,4 +304,145 @@
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 1
+    Strength: 2
+- Entity: ∈⋮14
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Inner:
+        - ∈⋮15
+    Segments:
+        - AdjacentSector: ∈⋮3∈⋮Starting
+          Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, -160
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, 30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 400, 30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 400, -160
+          Surface:
+            Material: ∈⋮2∈⋮Default
+    Top:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮15
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: -10
+            Spawn: -10
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 240, -100
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 360, -130
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 360, -40
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 340, -40
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 340, -90
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 250, -70
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 260, 0
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 230, 0
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 220, -100
+          Surface:
+            Material: ∈⋮2∈⋮Default
+    Top:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮16
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 340, -10, 32
+        Spawn: 340, -10, 32
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
     Strength: 2
