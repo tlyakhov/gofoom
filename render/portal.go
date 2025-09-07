@@ -11,9 +11,19 @@ import (
 )
 
 func wallHiPick(cp *columnPortal) {
-	if cp.ScreenY >= cp.ClippedTop && cp.ScreenY < cp.AdjClippedTop {
-		cp.PickedSelection = append(cp.PickedSelection, selection.SelectableFromWall(cp.AdjSegment, selection.SelectableHi))
+	if cp.ScreenY < cp.ClippedTop || cp.ScreenY >= cp.AdjClippedTop {
+		return
 	}
+	vStart := float64(cp.ScreenHeight/2) - cp.ProjectedTop + math.Floor(cp.ShearZ)
+	v := (float64(cp.ScreenY) - vStart) / (cp.ProjectedTop - cp.AdjProjectedTop)
+	// TODO: Is it right to always select SectorSegment? What about AdjSegment?
+	cp.PickResult.Selection = append(cp.PickResult.Selection, selection.SelectableFromWall(cp.SectorSegment, selection.SelectableHi))
+	cp.PickResult.World[0] = cp.RaySegIntersect[0]
+	cp.PickResult.World[1] = cp.RaySegIntersect[1]
+	cp.PickResult.World[2] = (1.0-v)*cp.IntersectionTop + v*cp.AdjTop
+	cp.PickResult.Normal[0] = cp.SectorSegment.Normal[0]
+	cp.PickResult.Normal[1] = cp.SectorSegment.Normal[1]
+	cp.PickResult.Normal[2] = 0
 }
 
 // wallHi renders the top portion of a portal segment.
@@ -57,9 +67,18 @@ func wallHi(cp *columnPortal) {
 }
 
 func wallLowPick(cp *columnPortal) {
-	if cp.ScreenY >= cp.AdjClippedBottom && cp.ScreenY < cp.ClippedBottom {
-		cp.PickedSelection = append(cp.PickedSelection, selection.SelectableFromWall(cp.AdjSegment, selection.SelectableLow))
+	if cp.ScreenY < cp.AdjClippedBottom || cp.ScreenY >= cp.ClippedBottom {
+		return
 	}
+	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjectedBottom + math.Floor(cp.ShearZ)
+	v := (float64(cp.ScreenY) - vStart) / (cp.AdjProjectedBottom - cp.ProjectedBottom)
+	cp.PickResult.Selection = append(cp.PickResult.Selection, selection.SelectableFromWall(cp.SectorSegment, selection.SelectableLow))
+	cp.PickResult.World[0] = cp.RaySegIntersect[0]
+	cp.PickResult.World[1] = cp.RaySegIntersect[1]
+	cp.PickResult.World[2] = (1.0-v)*cp.AdjBottom + v*cp.IntersectionBottom
+	cp.PickResult.Normal[0] = cp.SectorSegment.Normal[0]
+	cp.PickResult.Normal[1] = cp.SectorSegment.Normal[1]
+	cp.PickResult.Normal[2] = 0
 }
 
 // wallLow renders the bottom portion of a portal segment.

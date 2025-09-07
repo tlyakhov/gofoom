@@ -5,21 +5,21 @@ package actions
 
 import (
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/editor/state"
-
-	"fyne.io/fyne/v2/driver/desktop"
 )
 
 type AlignGrid struct {
-	state.Action
+	Place
 	PrevA, PrevB, A, B concepts.Vector2
 }
 
-func (a *AlignGrid) OnMouseDown(evt *desktop.MouseEvent) {}
-func (a *AlignGrid) OnMouseMove()                        {}
-func (a *AlignGrid) Activate()                           {}
+func (a *AlignGrid) Activate() {}
 
-func (a *AlignGrid) OnMouseUp() {
+func (a *AlignGrid) EndPoint() bool {
+	if !a.Place.EndPoint() {
+		return false
+	}
+	a.State().Lock.Lock()
+
 	a.PrevA, a.PrevB = a.State().MapView.GridA, a.State().MapView.GridB
 	a.A = *a.WorldGrid(&a.State().MouseDownWorld)
 	a.B = *a.WorldGrid(&a.State().MouseWorld)
@@ -28,7 +28,9 @@ func (a *AlignGrid) OnMouseUp() {
 		a.B = concepts.Vector2{0, 1}
 	}
 	a.State().MapView.GridA, a.State().MapView.GridB = a.A, a.B
+	a.State().Lock.Unlock()
 	a.ActionFinished(false, false, false)
+	return true
 }
 
 func (a *AlignGrid) Cancel() {

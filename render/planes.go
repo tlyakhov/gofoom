@@ -13,15 +13,45 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
-func ceilingPick(block *block) {
-	if block.ScreenY >= block.EdgeTop && block.ScreenY < block.ClippedTop {
-		block.PickedSelection = append(block.PickedSelection, selection.SelectableFromCeil(block.Sector))
+func planePick(block *block, plane *core.SectorPlane) {
+	start := block.EdgeTop
+	end := block.ClippedTop
+	s := selection.SelectableFromCeil(block.Sector)
+	if plane == &block.Sector.Bottom {
+		start = block.ClippedBottom
+		end = block.EdgeBottom
+		s = selection.SelectableFromFloor(block.Sector)
 	}
-}
 
-func floorPick(block *block) {
-	if block.ScreenY >= block.ClippedBottom && block.ScreenY < block.EdgeBottom {
-		block.PickedSelection = append(block.PickedSelection, selection.SelectableFromFloor(block.Sector))
+	if block.ScreenY < start && block.ScreenY >= end {
+		return
+	}
+
+	planeRayDelta := concepts.Vector3{
+		block.Sector.Segments[0].P[0] - block.Ray.Start[0],
+		block.Sector.Segments[0].P[1] - block.Ray.Start[1],
+		plane.Z.Render - block.CameraZ}
+
+	block.RayPlane[2] = float64(block.ScreenHeight/2 - block.ScreenY + int(block.ShearZ))
+	denom := plane.Normal.Dot(&block.RayPlane)
+	if denom == 0 {
+		return
+	}
+
+	t := planeRayDelta.Dot(&plane.Normal) / denom
+	if t <= 0 {
+		return
+	}
+
+	block.PickResult.World[0] = block.Ray.Start[0] + block.RayPlane[0]*t
+	block.PickResult.World[1] = block.Ray.Start[1] + block.RayPlane[1]*t
+	block.PickResult.World[2] = block.CameraZ + block.RayPlane[2]*t
+	block.PickResult.Normal = plane.Normal
+	block.PickResult.Selection = append(block.PickResult.Selection, s)
+
+	if plane.Normal[2] == -1 || plane.Normal[2] == 1 {
+		// This avoid precision errors for flat floors
+		block.PickResult.World[2] = plane.Z.Render
 	}
 }
 
@@ -94,6 +124,7 @@ func planes(block *block, plane *core.SectorPlane) {
 		world[1] += block.Ray.Start[1]
 		switch plane.Normal[2] {
 		case 1, -1:
+			// This avoid precision errors for flat floors
 			world[2] = plane.Z.Render
 		default:
 			world[2] += block.CameraZ

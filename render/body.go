@@ -56,7 +56,15 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 		block.ScreenX >= x1 && block.ScreenX < x2 &&
 		block.ScreenY >= block.ClippedTop && block.ScreenY <= block.ClippedBottom {
 
-		block.PickedSelection = append(block.PickedSelection, selection.SelectableFromBody(b))
+		block.PickResult.Selection = append(block.PickResult.Selection, selection.SelectableFromBody(b))
+		xWorld := (float64(block.ScreenX) - xMid) * b.Size.Render[0] / xScale
+		yWorld := (float64(block.ScreenY) - float64(screenTop+screenBottom)*0.5) * b.Size.Render[1] / float64(screenBottom-screenTop)
+		block.PickResult.World[0] = b.Pos.Render[0] + math.Cos((r.PlayerBody.Angle.Render+90)*concepts.Deg2rad)*xWorld
+		block.PickResult.World[1] = b.Pos.Render[1] + math.Sin((r.PlayerBody.Angle.Render+90)*concepts.Deg2rad)*xWorld
+		block.PickResult.World[2] = b.Pos.Render[2] + yWorld
+		block.PickResult.Normal[0] = math.Cos(b.Angle.Render * concepts.Deg2rad)
+		block.PickResult.Normal[1] = math.Sin(b.Angle.Render * concepts.Deg2rad)
+		block.PickResult.Normal[2] = 0
 		return
 	}
 

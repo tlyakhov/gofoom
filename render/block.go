@@ -6,8 +6,15 @@ package render
 import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
 )
+
+type PickResult struct {
+	Selection []*selection.Selectable
+	World     concepts.Vector3
+	Normal    concepts.Vector3
+}
 
 type block struct {
 	column
@@ -18,8 +25,8 @@ type block struct {
 	Bodies           containers.Set[*core.Body]
 	InternalSegments map[*core.InternalSegment]*core.Sector
 	// For picking things in editor
-	Pick            bool
-	PickedSelection []*selection.Selectable
+	Pick       bool
+	PickResult PickResult
 }
 
 func (b *block) teleportRay() {

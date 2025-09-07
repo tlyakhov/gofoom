@@ -40,7 +40,7 @@ type LightSampler struct {
 
 const PackedLightBits = 10
 const PackedLightMax = (1 << PackedLightBits) - 1
-const PackedLightRange = 8
+const PackedLightRange = 12
 
 func (ls *LightSampler) packLight() uint32 {
 	return uint32(ls.Output[0]*PackedLightMax/PackedLightRange)<<(PackedLightBits+PackedLightBits) |
@@ -208,13 +208,13 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			return nil, nil
 		}
 
-		if intersectionDistSq-ls.hitDistSq >= -constants.IntersectEpsilon {
+		if intersectionDistSq-ls.hitDistSq >= 0 {
 			// log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
 			// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
 			continue
 		}
 
-		if ls.prevDistSq-intersectionDistSq >= -constants.IntersectEpsilon {
+		if ls.prevDistSq-intersectionDistSq >= 0 {
 			// log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
 			// If the current intersection point is BEHIND the last one, we went backwards?
 			continue
