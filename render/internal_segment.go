@@ -41,7 +41,19 @@ func (r *Renderer) renderInternalSegment(ewd *entityWithDist2, block *block, xSt
 		block.CalcScreen()
 
 		if block.Pick && block.ScreenY >= block.ClippedTop && block.ScreenY <= block.ClippedBottom {
-			block.PickedSelection = append(block.PickedSelection, selection.SelectableFromInternalSegment(ewd.InternalSegment))
+			vTop := float64(block.ScreenHeight/2) - block.ProjectedTop
+			dv := (block.ProjectedTop - block.ProjectedBottom)
+			if dv != 0 {
+				dv = 1.0 / dv
+			}
+			v := (float64(block.ScreenY-int(block.ShearZ)) - vTop) * dv
+			block.PickResult.Selection = append(block.PickResult.Selection, selection.SelectableFromInternalSegment(ewd.InternalSegment))
+			block.PickResult.World[0] = block.RaySegTest[0]
+			block.PickResult.World[1] = block.RaySegTest[1]
+			block.PickResult.World[2] = block.IntersectionTop*(1.0-v) + v*block.IntersectionBottom
+			block.PickResult.Normal[0] = ewd.InternalSegment.Normal[0]
+			block.PickResult.Normal[1] = ewd.InternalSegment.Normal[1]
+			block.PickResult.Normal[2] = 0
 			return
 		}
 		r.wall(&block.column)

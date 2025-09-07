@@ -11,7 +11,6 @@ import (
 
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
-	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/containers"
@@ -154,7 +153,7 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	if b.ClippedTop > b.EdgeTop {
 		b.LightSampler.Normal = b.Sector.Top.Normal
 		if b.Pick {
-			ceilingPick(b)
+			planePick(b, &b.Sector.Top)
 		} else {
 			planes(b, &b.Sector.Top)
 		}
@@ -163,7 +162,7 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	if b.ClippedBottom < b.EdgeBottom {
 		b.LightSampler.Normal = b.Sector.Bottom.Normal
 		if b.Pick {
-			floorPick(b)
+			planePick(b, &b.Sector.Bottom)
 		} else {
 			planes(b, &b.Sector.Bottom)
 		}
@@ -283,7 +282,7 @@ func (r *Renderer) RenderSector(block *block) {
 }
 
 // RenderColumn draws a single pixel column to an 8bit RGBA buffer.
-func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) []*selection.Selectable {
+func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) *PickResult {
 	// Reset the z-buffer to maximum viewing distance.
 	for i := x; i < r.ScreenHeight*r.ScreenWidth+x; i += r.ScreenWidth {
 		r.ZBuffer[i] = r.MaxViewDist
@@ -333,7 +332,7 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) []*select
 		}
 	}
 	if pick {
-		return block.PickedSelection
+		return &block.PickResult
 	}
 
 	// Draw any walls over portals
@@ -520,7 +519,7 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concep
 	}
 }
 
-func (r *Renderer) Pick(x, y int) []*selection.Selectable {
+func (r *Renderer) Pick(x, y int) *PickResult {
 	if x < 0 || y < 0 || x >= r.ScreenWidth || y >= r.ScreenHeight {
 		return nil
 	}

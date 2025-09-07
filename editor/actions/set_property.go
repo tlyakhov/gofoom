@@ -38,8 +38,9 @@ func (a *SetProperty) FireHooks() {
 			continue
 		}
 		switch target := v.Parent().(type) {
-		case *ecs.Linked:
+		case *ecs.Linked, *materials.Image, *audio.Sound, *core.Script, *core.SectorPlane, *core.Sector:
 			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			// TODO: use a nicer source code editor for script properties.
 		case *ecs.SourceFile:
 			if target.Loaded {
 				target.Unload()
@@ -48,13 +49,6 @@ func (a *SetProperty) FireHooks() {
 		case dynamic.Dynamic:
 			target.ResetToSpawn()
 			target.Recalculate()
-		case *materials.Image:
-			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
-		case *audio.Sound:
-			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
-		case *core.Script:
-			// TODO: use a nicer source code editor for script properties.
-			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
 		case *materials.Text:
 			target.RasterizeText()
 		case *core.SectorSegment:

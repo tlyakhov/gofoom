@@ -4,11 +4,14 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"log"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/render"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -30,6 +33,8 @@ type GameWidget struct {
 	Context *gg.Context
 	Surface *image.RGBA
 	KeyMap  containers.Set[fyne.KeyName]
+
+	lastPick *render.PickResult
 }
 
 func NewGameWidget() *GameWidget {
@@ -66,16 +71,53 @@ func (g *GameWidget) CreateRenderer() fyne.WidgetRenderer {
 	return widget.NewSimpleRenderer(g.Raster)
 }
 
+func (g *GameWidget) renderLastPick() {
+	if g.lastPick == nil {
+		return
+	}
+
+	r := editor.Renderer
+	ts := r.NewTextStyle()
+	ts.Color[0] = 0.2
+	ts.Color[1] = 0.2
+	ts.Color[2] = 1
+	ts.Color[3] = 0.5
+	ts.Shadow = false
+	ts.HAnchor = 0
+	ts.VAnchor = 0
+
+	scr := r.WorldToScreen(&g.lastPick.World)
+	if scr == nil {
+		return
+	}
+	text := fmt.Sprintf("%v", g.lastPick.World.StringHuman(2))
+	var sector *core.Sector
+	for _, s := range g.lastPick.Selection {
+		if s.Sector != nil {
+			sector = s.Sector
+		}
+	}
+	if sector != nil {
+		text += fmt.Sprintf(" (%v)", r.WorldToLightmapHash(sector, &g.lastPick.World, &g.lastPick.Normal))
+	}
+	r.Print(ts, int(scr[0]), int(scr[1]), text)
+}
+
 func (g *GameWidget) Draw() {
-	if g.Context == nil || editor.Renderer == nil {
+	r := editor.Renderer
+
+	if g.Context == nil || r == nil {
 		return
 	}
 
 	editor.Lock.Lock()
 	pixels := g.Context.Image().(*image.RGBA).Pix
-	editor.Renderer.Render()
-	editor.Renderer.DebugInfo()
-	editor.Renderer.ApplyBuffer(pixels)
+	r.Render()
+	r.DebugInfo()
+
+	g.renderLastPick()
+
+	r.ApplyBuffer(pixels)
 	editor.Lock.Unlock()
 
 	copy(g.Surface.Pix, pixels)
@@ -124,24 +166,31 @@ func (g *GameWidget) TypedShortcut(s fyne.Shortcut) {
 func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 	g.requestFocus()
 
+	daw := g.Raster.Size().Width
+	dah := g.Raster.Size().Height
+	rw := editor.Renderer.ScreenWidth
+	rh := editor.Renderer.ScreenHeight
+	x := float64(evt.Position.X) * float64(rw) / float64(daw)
+	y := float64(evt.Position.Y) * float64(rh) / float64(dah)
+
+	if evt.Button == desktop.MouseButtonTertiary {
+		g.lastPick = editor.Renderer.Pick(int(x), int(y))
+
+	}
+
 	// TODO: make this more granular, and also support bodies
 	if evt.Button == desktop.MouseButtonSecondary {
-		daw := g.Raster.Size().Width
-		dah := g.Raster.Size().Height
-		rw := editor.Renderer.ScreenWidth
-		rh := editor.Renderer.ScreenHeight
-		x := float64(evt.Position.X) * float64(rw) / float64(daw)
-		y := float64(evt.Position.Y) * float64(rh) / float64(dah)
-		picked := editor.Renderer.Pick(int(x), int(y))
+		g.lastPick = editor.Renderer.Pick(int(x), int(y))
 		if evt.Modifier&fyne.KeyModifierShift != 0 {
-			editor.SelectedObjects.Add(picked...)
+			editor.SelectedObjects.Add(g.lastPick.Selection...)
 			editor.SetSelection(true, editor.SelectedObjects)
 		} else if evt.Modifier&fyne.KeyModifierSuper != 0 {
 			log.Printf("Subtracting game picking unimplemented")
 		} else {
-			editor.SelectObjects(true, picked...)
+			editor.SelectObjects(true, g.lastPick.Selection...)
 		}
 	}
+
 }
 func (g *GameWidget) MouseUp(evt *desktop.MouseEvent) {}
 

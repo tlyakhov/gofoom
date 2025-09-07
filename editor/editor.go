@@ -408,7 +408,7 @@ func (e *Editor) UseTool() {
 			Components: []ecs.Component{body},
 		})
 	case state.ToolAlignGrid:
-		e.Act(&actions.AlignGrid{Action: state.Action{IEditor: e}})
+		e.Act(&actions.AlignGrid{Place: actions.Place{Action: state.Action{IEditor: e}}})
 	default:
 		return
 	}
@@ -562,6 +562,8 @@ func (e *Editor) GatherHoveringObjects() {
 
 	e.HoveringObjects.Clear()
 
+	// TODO: Make a "sector selection" mode where click-dragging selects sectors
+	// rather than just segments.
 	colSector := ecs.ArenaFor[core.Sector](core.SectorCID)
 	for i := range colSector.Cap() {
 		sector := colSector.Value(i)

@@ -399,3 +399,24 @@ func (s *Sector) DbgPrintSegments() {
 		log.Printf("%v: %v", i, seg.P.StringHuman())
 	}
 }
+
+func (s *Sector) InnermostContaining(p *concepts.Vector2) (result *Sector) {
+	if s == nil {
+		return nil
+	} else if s.IsPointInside2D(p) {
+		result = s
+	} else {
+		return nil
+	}
+
+	for _, e := range s.Inner {
+		if e == 0 {
+			continue
+		}
+		inner := GetSector(e)
+		if inner = inner.InnermostContaining(p); inner != nil {
+			result = inner
+		}
+	}
+	return
+}

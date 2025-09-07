@@ -9,10 +9,24 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-func wallPick(s *block) {
-	if s.ScreenY >= s.ClippedTop && s.ScreenY < s.ClippedBottom {
-		s.PickedSelection = append(s.PickedSelection, selection.SelectableFromWall(s.SectorSegment, selection.SelectableMid))
+func wallPick(b *block) {
+	if b.ScreenY < b.ClippedTop || b.ScreenY >= b.ClippedBottom {
+		return
 	}
+	vTop := float64(b.ScreenHeight/2) - b.ProjectedTop
+	dv := (b.ProjectedTop - b.ProjectedBottom)
+	if dv != 0 {
+		dv = 1.0 / dv
+	}
+	v := (float64(b.ScreenY-int(b.ShearZ)) - vTop) * dv
+	b.PickResult.Selection = append(b.PickResult.Selection, selection.SelectableFromWall(b.SectorSegment, selection.SelectableMid))
+	b.PickResult.World[0] = b.RaySegIntersect[0]
+	b.PickResult.World[1] = b.RaySegIntersect[1]
+	b.PickResult.World[2] = b.IntersectionTop*(1.0-v) + v*b.IntersectionBottom
+	b.PickResult.Normal[0] = b.SectorSegment.Normal[0]
+	b.PickResult.Normal[1] = b.SectorSegment.Normal[1]
+	b.PickResult.Normal[2] = 0
+
 }
 
 // wall renders the wall portion (potentially over a portal).
