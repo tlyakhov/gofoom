@@ -253,10 +253,16 @@ func gridAddOrUpdateAtIndex[PT interface {
 	fyne.CanvasObject
 }, T any](g *Grid, newInstance PT) PT {
 	if g.widgetIndex < len(g.GridWidget.Objects) {
-		if element, ok := g.GridWidget.Objects[g.widgetIndex].(PT); ok {
-			g.widgetIndex++
-			return element
+		switch any(newInstance).(type) {
+		case *widget.Form:
+			// Always return new, Forms are broken as far as updating FormItems
+		default:
+			if element, ok := g.GridWidget.Objects[g.widgetIndex].(PT); ok {
+				g.widgetIndex++
+				return element
+			}
 		}
+
 		g.GridWidget.Objects[g.widgetIndex] = newInstance
 		g.widgetIndex++
 		return newInstance

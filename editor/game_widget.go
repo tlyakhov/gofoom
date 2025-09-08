@@ -98,7 +98,7 @@ func (g *GameWidget) renderLastPick() {
 		}
 	}
 	if sector != nil {
-		text += fmt.Sprintf(" (%v)", r.WorldToLightmapHash(sector, &g.lastPick.World, &g.lastPick.Normal))
+		text += fmt.Sprintf(" (0x%x)", r.WorldToLightmapHash(sector, &g.lastPick.World, &g.lastPick.Normal))
 	}
 	r.Print(ts, int(scr[0]), int(scr[1]), text)
 }

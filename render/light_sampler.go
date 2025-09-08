@@ -4,6 +4,7 @@
 package render
 
 import (
+	"log"
 	"math"
 	"sync/atomic"
 
@@ -37,6 +38,17 @@ type LightSampler struct {
 	xorSeed uint64
 	tree    *core.Quadtree
 }
+
+const LogDebug = false
+
+// For glitchTester5.yml (vertical shadow line)
+// const LogDebugLightHash = 0x41005900097a40
+// For inner-test.yml (diagonal shadow line)
+// const LogDebugLightHash = 0x1c000f00064400
+// For hall.yml (black ceil slope in hallway)
+const LogDebugLightHash = 0x1900320013600c
+
+const LogDebugLightEntity = 16
 
 const PackedLightBits = 10
 const PackedLightMax = (1 << PackedLightBits) - 1
@@ -127,7 +139,7 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 	return false
 }
 
-func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, lightBody *core.Body, inner bool) (hitSegment *core.SectorSegment, next *core.Sector) {
+func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, lightBody *core.Body, peekIntoInner bool) (hitSegment *core.SectorSegment, next *core.Sector) {
 	lightPos := &lightBody.Pos.Render
 
 	// Help the compiler out by pre-defining all the local stuff in the outer
@@ -137,43 +149,79 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 	var adj *core.Sector
 	var floorZ, floorZ2, ceilZ, ceilZ2, intersectionDistSq float64
 	for _, seg := range sector.Segments {
+		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+			log.Printf("    Checking segment [%v]-[%v]\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+		}
 		// Don't occlude the world location with the segment it's located on
 		if &seg.Segment == ls.Segment {
 			continue
 		}
-		/*	inner	  n>0  result
-			   	0		1		1
-				0		0		0
-				1		0		1
-				1		1		0
+		// When peeking into inner sectors, ignore their portals. We only care
+		// about the light ray _entering_ the inner sector.
+		if peekIntoInner && seg.AdjacentSector != 0 {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Ignoring portal to %v in inner sector.", seg.AdjacentSector)
+			}
+			continue
+		}
+		/*		inner	  n>0  result
+				   	0		1		1
+					0		0		0
+					1		0		1
+					1		1		0
 		*/
-		if inner != (ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0) {
-			// log.Printf("Ignoring segment [or behind] for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+		normalFacing := (ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0)
+		if peekIntoInner != normalFacing {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Ignoring segment [or behind]. inner? = %v, normal? = %v", peekIntoInner, normalFacing)
+			}
 			continue
 		}
 
 		// Find the intersection with this segment.
 		if !seg.Intersect3D(p, lightPos, &ls.IntersectionTest) {
-			// log.Printf("No intersection for seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    No intersection\n")
+			}
 			continue // No intersection, skip it!
 		}
 
-		// log.Printf("Intersection for seg %v|%v = %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman(), le.Intersection.StringHuman())
+		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+			log.Printf("    Intersection = [%v]\n", ls.IntersectionTest.StringHuman(2))
+		}
 
+		nudgeExitingRay := 0.0
 		// This segment could either be:
 		if seg.AdjacentSector != 0 {
 			// A portal!
 			adj = seg.AdjacentSegment.Sector
-		} else if inner {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Portal to %v", adj.Entity)
+			}
+		} else if peekIntoInner {
 			// An inner segment!
 			adj = sector
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Inner to %v", adj.Entity)
+			}
 		} else if !sector.Outer.Empty() {
 			// We have a non-portal segment and we're not checking inner sector,
 			// but our sector itself is an inner one. Let's go out
 			adj = sector.OuterAt(ls.IntersectionTest.To2D())
+			// Why? This is to handle the edge case when we have a light ray
+			// grazing a corner of an inner sector. If this happens, we need to
+			// nudge the intersection distance for the _exiting_ light ray to
+			// avoid an infinite loop of intersections, ping-ponging between the
+			// inner and outer sector.
+			nudgeExitingRay = constants.IntersectEpsilon
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Out to %v", adj.Entity)
+			}
 		} else {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+			}
 			// A wall!
-			// log.Printf("Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
 			return seg, nil // This is a wall, that means the light is occluded for sure.
 		}
 
@@ -181,45 +229,61 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		// bottom/top portions could be in the way.
 		i2d = ls.IntersectionTest.To2D()
 		if ls.IntersectionTest[2] < sector.Min[2] || ls.IntersectionTest[2] > sector.Max[2] {
-			// log.Printf("Occluded by sector min/max %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Occluded by sector min/max %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+			}
 			return seg, nil // Same as wall, we're occluded.
 		}
 		floorZ, ceilZ = sector.ZAt(dynamic.Render, i2d)
 		// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 		if ls.IntersectionTest[2] < floorZ || ls.IntersectionTest[2] > ceilZ {
-			// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+			}
 			return seg, nil // Same as wall, we're occluded.
 		}
-		if !inner {
+		if !peekIntoInner {
 			floorZ2, ceilZ2 = adj.ZAt(dynamic.Render, i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			if ls.IntersectionTest[2] < floorZ2 || ls.IntersectionTest[2] > ceilZ2 {
-				// log.Printf("Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+					log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				}
 				return seg, nil // Same as wall, we're occluded.
 			}
 		}
 
 		// Get the square of the distance to the intersection (from the target point)
-		intersectionDistSq = ls.IntersectionTest.Dist2(p)
+		intersectionDistSq = ls.IntersectionTest.Dist2(p) + nudgeExitingRay
 
 		// If the difference between the intersected distance and the light distance is
 		// within the bounding radius of our light, our light is right on a portal boundary and visible.
 		if math.Abs(intersectionDistSq-ls.maxDist2) < lightBody.Size.Render[0]*0.5 {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Light is within size on portal boundary. Intersection: %v vs. Max Dist %v", math.Sqrt(intersectionDistSq), math.Sqrt(ls.maxDist2))
+			}
 			return nil, nil
 		}
 
 		if intersectionDistSq-ls.hitDistSq >= 0 {
-			// log.Printf("Found intersection point farther than one we've already discovered for this sector: %v > %v\n", idist2, dist2)
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Found intersection point farther than one we've already discovered for this sector: %v > %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ls.hitDistSq))
+			}
 			// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
 			continue
 		}
 
-		if ls.prevDistSq-intersectionDistSq >= 0 {
-			// log.Printf("Found intersection point before the previous sector: %v < %v\n", idist2, prevDist)
+		if ls.prevDistSq-intersectionDistSq > 0 {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Found intersection point before the previous sector: %v <= %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ls.prevDistSq))
+			}
 			// If the current intersection point is BEHIND the last one, we went backwards?
 			continue
 		}
 
+		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+			log.Printf("    Found a portal to %v without impediment at dist %v.\n", adj.Entity, math.Sqrt(intersectionDistSq))
+		}
 		// We're in the clear! We have a portal (or boundary between inner/outer
 		// sector) without anything impending the light.
 		ls.hitDistSq = intersectionDistSq
@@ -232,10 +296,12 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 
 // lightVisibleFromSector determines whether a given light is visible from a world location.
 func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
+	if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+		log.Printf("LightSampler.lightVisibleFromSector: START")
+		log.Printf("world=%v, light=%v\n", p.StringHuman(2), lightBody.Pos.Render.StringHuman(2))
+	}
 	var next *core.Sector
 	var hitSegment *core.SectorSegment
-	// log.Printf("lightVisible: world=%v, light=%v\n", p.StringHuman(),
-	// lightPos)
 
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
@@ -247,6 +313,10 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		// can't just go through the first portal we find, we have to go through
 		// the NEAREST one. Use hitDistSq to keep track...
 		ls.hitDistSq = ls.maxDist2
+
+		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDist2))
+		}
 		//Intersect this sector
 		seg, adj := ls.intersect(sector, p, lightBody, false)
 		if seg != nil && adj == nil {
@@ -260,6 +330,9 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		for _, e := range sector.Inner {
 			if e == 0 {
 				continue
+			}
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("  Visiting inner sector %v, max dist %v", e, ls.maxDist2)
 			}
 			if inner := core.GetSector(e); inner != nil {
 				seg, adj = ls.intersect(inner, p, lightBody, true)
@@ -309,7 +382,9 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	}
 	// Some kind of an edge case
 	if lightBody.SectorEntity != 0 && ls.Visited[len(ls.Visited)-1].Entity != lightBody.SectorEntity {
-		// log.Printf("No intersections, but ended up in a different sector than the light!\n")
+		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+			log.Printf("No intersections, but ended up in a different sector %v than the light sector %v!", ls.Visited[len(ls.Visited)-1].Entity, lightBody.SectorEntity)
+		}
 		return false
 	}
 
@@ -374,8 +449,10 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			}
 		}
 	}
+	if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+		log.Printf("Lit!\n")
+	}
 
-	// log.Printf("Lit!\n")
 	return true
 }
 
@@ -396,8 +473,8 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		if light == nil || !light.IsActive() {
 			return true
 		}
-		if lightsTested > 10 {
-			return false
+		if lightsTested > 100 {
+			//	return false
 		}
 		lightsTested++
 		LightSamplerLightsTested.Add(1)
