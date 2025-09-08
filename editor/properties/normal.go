@@ -37,6 +37,7 @@ func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 
 	entryCartesian := widget.NewEntry()
 	entryCartesian.SetText(origCartesian)
+	log.Printf("entryCartesian: %v", origCartesian)
 	entryCartesian.OnSubmitted = func(text string) {
 		parsed, err := concepts.ParseVector3(text)
 		if err != nil {
@@ -107,10 +108,8 @@ func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 
 	f := gridAddOrUpdateWidgetAtIndex[*widget.Form](g)
 	fyne.Do(func() {
-		f.Items = make([]*widget.FormItem, 0)
 		f.Append("Cartesian", entryCartesian)
 		f.Append("Azimuth (°)", entryPhi)
 		f.Append("Polar (°)", entrySlope)
-		f.Refresh()
 	})
 }

@@ -1,0 +1,440 @@
+- Entity: ∈⋮1
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    Spawn: false
+  core.Body:
+    Angle:
+        Now: 476.71875
+        Spawn: 180
+    Pos:
+        Now: 128.90835231233044, 45.177841066998155, 20
+        Spawn: 210, 10, 0
+    Size:
+        Now: 10, 40
+        Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+        Now: 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003510767521997896, -0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006974725995841553, 0.007001650399223597
+        Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Player
+  inventory.Carrier:
+    Inventory: []
+- Entity: ∈⋮2
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: false
+    Source: data/WDef.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮3
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Inner:
+        - ∈⋮9
+        - ∈⋮11
+        - ∈⋮15
+    Segments:
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: -100, -220
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, -220
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - AdjacentSector: ∈⋮14
+          Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, -160
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, 30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, 100
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: -200, 180
+          Surface:
+            Material: ∈⋮2∈⋮Default
+    Top:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 64
+            Spawn: 64
+  ecs.Named:
+    Name: Starting
+- Entity: ∈⋮5
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    Spawn: true
+  core.Body:
+    Angle:
+        Now: 180
+        Spawn: 180
+    Pos:
+        Now: 210, 10, 0
+        Spawn: 210, 10, 0
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+        Now: 0, 0, 0
+        Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Spawn
+  inventory.Carrier:
+    Inventory: []
+- Entity: ∈⋮9
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: -20
+            Spawn: -20
+    FloorFriction: 0.85
+    Inner:
+        - ∈⋮10
+    Segments:
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: -30, -30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: -40, 30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 50, 40
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - AdjacentSector: ∈⋮11
+          Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 60, -20
+          Surface:
+            Material: ∈⋮2∈⋮Default
+    Top:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 90
+            Spawn: 90
+- Entity: ∈⋮10
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 30
+            Spawn: 30
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 0.5882352941176471, 0, 0, 0, 1, 0
+                Spawn: 0.5882352941176471, 0, 0, 0, 1, 0
+          Lo:
+            Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 1.7, 0
+                Spawn: 1, 0, 0, 0, 1.7, 0
+          P: -10, 20
+          Surface:
+            Material: ∈⋮12
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 0.8823529411764706, 0, 0, 0, 1, 0
+                Spawn: 0.8823529411764706, 0, 0, 0, 1, 0
+          Lo:
+            Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 1.1333333333333333, 0
+                Spawn: 1, 0, 0, 0, 1.1333333333333333, 0
+          P: -10, 0
+          Surface:
+            Material: ∈⋮12
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 0.6576670522058206, 0, 0, 0, 1, 0
+                Spawn: 0.6576670522058206, 0, 0, 0, 1, 0
+          Lo:
+            Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 1.520526224699857, 0
+                Spawn: 1, 0, 0, 0, 1.520526224699857, 0
+          P: 20, 0
+          Surface:
+            Material: ∈⋮12
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+            Transform:
+                Now: 1.1764705882352942, 0, 0, 0, 1, 0
+                Spawn: 1.1764705882352942, 0, 0, 0, 1, 0
+          Lo:
+            Material: ∈⋮12
+            Transform:
+                Now: 1, 0, 0, 0, 0.85, 0
+                Spawn: 1, 0, 0, 0, 0.85, 0
+          P: 30, 20
+          Surface:
+            Material: ∈⋮12
+    Top:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮11
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮12
+        Z:
+            Now: 10
+            Spawn: 10
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 60, -20
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 60, -60
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: -40, -60
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - AdjacentSector: ∈⋮9
+          Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: -30, -30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+    Top:
+        Surface:
+            Material: ∈⋮12
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮12
+  materials.Image:
+    Filter: false
+    Source: data/space_tiles_hyptosis/wool_colored_red.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮13
+  core.Body:
+    Angle:
+        Now: 0
+        Spawn: 0
+    Pos:
+        Now: 60, -140, 10
+        Spawn: 60, -140, 10
+    Size:
+        Now: 10, 10
+        Spawn: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 0.5, 1
+    Strength: 2
+- Entity: ∈⋮14
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 0
+            Spawn: 0
+    FloorFriction: 0.85
+    Inner:
+        - ∈⋮15
+    Segments:
+        - AdjacentSector: ∈⋮3∈⋮Starting
+          Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, -160
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 290, 30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 400, 30
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮2∈⋮Default
+          P: 400, -160
+          Surface:
+            Material: ∈⋮2∈⋮Default
+    Top:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 64
+            Spawn: 64
+- Entity: ∈⋮15
+  core.Sector:
+    Bottom:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: -10
+            Spawn: -10
+    FloorFriction: 0.85
+    Segments:
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 240, -100
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 360, -130
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 360, -40
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 340, -40
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 340, -90
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 250, -70
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 260, 0
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 230, 0
+          Surface:
+            Material: ∈⋮2∈⋮Default
+        - Hi:
+            Material: ∈⋮2∈⋮Default
+          Lo:
+            Material: ∈⋮12
+          P: 220, -100
+          Surface:
+            Material: ∈⋮2∈⋮Default
+    Top:
+        Surface:
+            Material: ∈⋮2∈⋮Default
+        Z:
+            Now: 40
+            Spawn: 40

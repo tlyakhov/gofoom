@@ -1,14 +1,14 @@
 - Entity: ∈⋮1
   behaviors.Alive:
-    Health: 94
+    Health: 100
   character.Player:
     Spawn: false
   core.Body:
     Angle:
-        Now: 414.84375
+        Now: 400.78125
         Spawn: 0
     Pos:
-        Now: 240.82281527280227, -399.8148395210602, 20
+        Now: 212.4966520723989, -482.09810852824916, 20
         Spawn: -390, 180, -44
     Size:
         Now: 15, 40
@@ -22,7 +22,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0.0000000004287141424754345, 0.0000000006087272999124675, 0.007001650411977742
+        Now: -0.006929757269850878, 0.009273720781317094, 0.0070016504354520614
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -1471,11 +1471,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.984375
+            Percent: 0.03125
             Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: -400, 60, -51.990234375
+        Now: -400, 60, -51.9609375
         Spawn: -400, 60, -52
     Size:
         Now: 20, 20
@@ -2046,16 +2046,16 @@
     Speed: 350
     Start: ∈⋮135
   behaviors.ActorState:
-    Action: ∈⋮137
+    Action: ∈⋮136
   behaviors.Alive:
     Health: 100
   core.Body:
     Angle:
-        Now: 57237.31523222424
+        Now: 60393.67680020033
         Procedural: true
         Spawn: 155.9558816022554
     Pos:
-        Now: -80.84209170222813, -194.63384545813497, 16
+        Now: -331.86692393369736, -151.0455460426937, -15.999999999999996
         Spawn: -10, -30, -50
     Size:
         Now: 32, 32
@@ -2070,7 +2070,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-        Now: 1.0489420159753655, -0.03725573924314405, 0.026087160037336556
+        Now: 0.06753780286283005, -1.047455746896258, 0.026087160049219696
         Spawn: 0, 0, 0
   ecs.Named:
     Name: FlubTest
@@ -3103,7 +3103,7 @@
           Surface:
             Material: ∈⋮2∈⋮Default
     Top:
-        Normal: 0, -0.5734623443633284, -0.8192319205190405
+        Normal: 0.5000000000000001, -0.5, -0.7071067811865475
         Surface:
             Material: ∈⋮122∈⋮Floor
         Z:
@@ -3860,7 +3860,7 @@
           Hi:
             Material: ∈⋮123∈⋮Door+Metal
             Transform:
-                Now: 1, 0, 0, 0, 0, 1
+                Now: 1, 0, 0, 0, 1.28, -0.30000000000000004
                 Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
           Lo:
             Material: ∈⋮2∈⋮Default
@@ -3884,11 +3884,11 @@
                 Duration: 1000
                 End: 0
                 Lifetime: AnimationLifetimeOnce
-                Percent: 0
-                Reverse: true
+                Percent: 1
+                Reverse: false
                 Start: 64
                 TweeningFunc: EaseInOut2
-            Now: 64
+            Now: 0
             Spawn: 64
   ecs.Linked:
     Sources:
@@ -5754,11 +5754,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.921875
+            Percent: 0.375
             Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: -260, 60, -51.755859375
+        Now: -260, 60, -47.625
         Spawn: -260, 60, -52
     Size:
         Now: 20, 20
@@ -6003,30 +6003,32 @@
   behaviors.ParticleEmitter:
     Limit: "30"
     Particles:
-        - ∈⋮208
-        - ∈⋮226
-        - ∈⋮227
-        - ∈⋮202
-        - ∈⋮179
-        - ∈⋮205
+        - ∈⋮194
         - ∈⋮232
-        - ∈⋮182
+        - ∈⋮195
+        - ∈⋮196
+        - ∈⋮202
+        - ∈⋮233
+        - ∈⋮205
+        - ∈⋮174
+        - ∈⋮207
         - ∈⋮209
         - ∈⋮210
-        - ∈⋮161
-        - ∈⋮212
-        - ∈⋮186
-        - ∈⋮183
+        - ∈⋮179
         - ∈⋮213
+        - ∈⋮181
+        - ∈⋮215
+        - ∈⋮183
+        - ∈⋮216
         - ∈⋮214
+        - ∈⋮186
         - ∈⋮188
-        - ∈⋮218
-        - ∈⋮194
-        - ∈⋮195
-        - ∈⋮221
-        - ∈⋮172
-        - ∈⋮196
-        - ∈⋮174
+        - ∈⋮223
+        - ∈⋮224
+        - ∈⋮227
+        - ∈⋮228
+        - ∈⋮161
+        - ∈⋮162
     Source: ∈⋮153∈⋮Bubble
     Vel: 15
     XYSpread: 10
@@ -6036,7 +6038,7 @@
         Now: 180
         Spawn: 180
     Pos:
-        Now: 860, -633.1819344786174, 32
+        Now: 860, -564.9422980310685, 32
         Procedural: true
         Spawn: 860, -710, 32
     Size:
@@ -6102,6 +6104,10 @@
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮162
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮164
   core.Body:
     Angle:
@@ -6112,11 +6118,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.6875
-            Reverse: true
+            Percent: 0.4140625
+            Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: 230, -860, -16.40625
+        Now: 230, -860, -15.29541015625
         Spawn: 230, -860, -20
     Size:
         Now: 15, 15
@@ -6167,7 +6173,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0.026086733494677383
+        Now: 0, 0, 0.026086733494677397
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Evil Flub Test
@@ -6355,10 +6361,6 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 1
     Strength: 2
-- Entity: ∈⋮172
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮173
   core.Sector:
     Bottom:
@@ -6401,9 +6403,9 @@
           Surface:
             Material: ∈⋮2∈⋮Default
     Top:
-        Normal: 0.573576436351046, 0, 0.8191520442889918
+        Normal: -0.5735764363510459, 0.0000000000000000702428546843653, -0.8191520442889919
         Surface:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮122∈⋮Floor
         Z:
             Now: 64
             Spawn: 64
@@ -6421,11 +6423,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.6171875
-            Reverse: true
+            Percent: 0.171875
+            Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: 40, -250, 8.45068359375
+        Now: 40, -250, 5.181640625
         Spawn: 40, -250, 4
     Size:
         Now: 20, 20
@@ -6469,7 +6471,7 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 0.8
     Strength: 2
-- Entity: ∈⋮182
+- Entity: ∈⋮181
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6888,7 +6890,7 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 0.6
     Strength: 2
-- Entity: ∈⋮208
+- Entity: ∈⋮207
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6903,7 +6905,7 @@
 - Entity: ∈⋮211
   core.Sector:
     Bottom:
-        Normal: -0.5792279653395691, -0.405579787672639, 0.7071067811865476
+        Normal: -0.4999999999999999, -0.5, 0.7071067811865476
         Surface:
             Material: ∈⋮122∈⋮Floor
         Z:
@@ -6942,21 +6944,25 @@
                 Now: 9.166666666666666, 0, 0, 0, 1, 0
                 Spawn: 9.166666666666666, 0, 0, 0, 1, 0
     Top:
-        Normal: 0, -0.5734623443633284, -0.8192319205190405
+        Normal: -0.5, -0.5000000000000001, -0.7071067811865475
         Surface:
             Material: ∈⋮122∈⋮Floor
         Z:
             Now: 64
             Spawn: 64
-- Entity: ∈⋮212
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮213
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮214
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮215
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮216
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -7002,16 +7008,12 @@
           Surface:
             Material: ∈⋮2∈⋮Default
     Top:
-        Normal: -0.573576436351046, 0.00000000000000007024285468436531, 0.8191520442889918
+        Normal: 0.5735764363510459, 0, -0.8191520442889919
         Surface:
-            Material: ∈⋮2∈⋮Default
+            Material: ∈⋮122∈⋮Floor
         Z:
             Now: 64
             Spawn: 64
-- Entity: ∈⋮218
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮219
   core.Sector:
     Bottom:
@@ -7115,10 +7117,6 @@
         Z:
             Now: 64
             Spawn: 64
-- Entity: ∈⋮221
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮222
   core.Sector:
     Bottom:
@@ -7174,6 +7172,14 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮223
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮224
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮225
   core.Sector:
     Bottom:
@@ -7222,11 +7228,11 @@
         Z:
             Now: 64
             Spawn: 64
-- Entity: ∈⋮226
+- Entity: ∈⋮227
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮227
+- Entity: ∈⋮228
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -7241,6 +7247,10 @@
   ecs.Named:
     Name: Door Close
 - Entity: ∈⋮232
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮233
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
