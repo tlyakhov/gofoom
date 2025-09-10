@@ -120,7 +120,7 @@ func main() {
 
 	editor.App.Lifecycle().SetOnStarted(func() {
 		editor.OnStarted()
-		editor.Load("data/worlds/inner-test.yaml")
+		editor.Load("data/worlds/glitchTester6.yaml")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 

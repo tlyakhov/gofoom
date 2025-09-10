@@ -203,10 +203,14 @@ func (r *Renderer) findIntersection(block *block, sector *core.Sector, found boo
 		if sectorSeg == block.LastPortalSegment {
 			continue
 		}
-		// Wall is facing away from us
-		if !inner && block.Ray.Delta.Dot(&sectorSeg.Normal) > 0 {
+		// When peeking into inner sectors, ignore their portals. We only care
+		// about the ray _entering_ the inner sector.
+		if inner && sectorSeg.AdjacentSector != 0 {
 			continue
-		} else if inner && block.Ray.Delta.Dot(&sectorSeg.Normal) < 0 {
+		}
+
+		// Wall is facing away from us
+		if inner != (block.Ray.Delta.Dot(&sectorSeg.Normal) > 0) {
 			continue
 		}
 
@@ -291,6 +295,7 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) *PickResu
 	// Reset the column
 	block.LastPortalDistance = 0
 	block.LastPortalSegment = nil
+	block.LightLastHash = 0
 	block.Depth = 0
 	block.EdgeTop = 0
 	block.EdgeBottom = r.ScreenHeight
