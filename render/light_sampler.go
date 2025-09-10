@@ -16,6 +16,24 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
+const LogDebug = false
+
+// For glitchTester5.yml (vertical shadow line)
+// const LogDebugLightHash = 0x41005900097a40
+// For inner-test.yml (diagonal shadow line)
+// const LogDebugLightHash = 0x1c000f00064400
+// For hall.yml (black ceil slope in hallway)
+// const LogDebugLightHash = 0x1900320013600c
+// For glitchTester6.yml (weird flickering shadows on edges)
+// const LogDebugLightHash = 0x4000270000000f
+const LogDebugLightHash = 0x4100280000000f
+
+const LogDebugLightEntity = 4
+
+const PackedLightBits = 10
+const PackedLightMax = (1 << PackedLightBits) - 1
+const PackedLightRange = 12
+
 // All the data and state required to retrieve/calculate a lightmap voxel
 type LightSampler struct {
 	MaterialSampler
@@ -38,21 +56,6 @@ type LightSampler struct {
 	xorSeed uint64
 	tree    *core.Quadtree
 }
-
-const LogDebug = false
-
-// For glitchTester5.yml (vertical shadow line)
-// const LogDebugLightHash = 0x41005900097a40
-// For inner-test.yml (diagonal shadow line)
-// const LogDebugLightHash = 0x1c000f00064400
-// For hall.yml (black ceil slope in hallway)
-const LogDebugLightHash = 0x1900320013600c
-
-const LogDebugLightEntity = 16
-
-const PackedLightBits = 10
-const PackedLightMax = (1 << PackedLightBits) - 1
-const PackedLightRange = 12
 
 func (ls *LightSampler) packLight() uint32 {
 	return uint32(ls.Output[0]*PackedLightMax/PackedLightRange)<<(PackedLightBits+PackedLightBits) |
@@ -81,6 +84,9 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 		if lmResult.Timestamp+constants.MaxLightmapAge >= uint32(ecs.Simulation.Frame) ||
 			!concepts.RngDecide(r, constants.LightmapRefreshDither) {
 			ls.unpackLight(lmResult.Light)
+			/*	if LogDebug && LogDebugLightHash == ls.Hash {
+				log.Printf("Lightmap value exists: %v\n", ls.Output.StringHuman(2))
+			}*/
 			return &ls.Output
 		}
 	}
@@ -173,7 +179,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		normalFacing := (ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0)
 		if peekIntoInner != normalFacing {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Ignoring segment [or behind]. inner? = %v, normal? = %v", peekIntoInner, normalFacing)
+				log.Printf("    Ignoring segment [or behind]. inner? = %v, normal? = %v. Dot: %v", peekIntoInner, normalFacing, ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1])
 			}
 			continue
 		}
@@ -298,7 +304,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
 	if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 		log.Printf("LightSampler.lightVisibleFromSector: START")
-		log.Printf("world=%v, light=%v\n", p.StringHuman(2), lightBody.Pos.Render.StringHuman(2))
+		log.Printf("world=%v, light=%v\n", p.String(), lightBody.Pos.Render.String())
 	}
 	var next *core.Sector
 	var hitSegment *core.SectorSegment
@@ -481,6 +487,9 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		ls.LightWorld[2] = body.Pos.Render[2] - world[2]
 		ls.LightWorld[1] = body.Pos.Render[1] - world[1]
 		ls.LightWorld[0] = body.Pos.Render[0] - world[0]
+		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == body.Entity {
+			log.Printf("Body: %v, World: %v, LightWorld: %v", body.Pos.Render.String(), world.String(), ls.LightWorld.String())
+		}
 		ls.maxDist2 = ls.LightWorld.Length2()
 		ls.Filter[3] = 0
 
@@ -533,5 +542,8 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		}
 		return true
 	})
+	if LogDebug && LogDebugLightHash == ls.Hash {
+		log.Printf("Lightmap value fresh: %v\n", ls.Output.StringHuman(2))
+	}
 	return &ls.Output
 }

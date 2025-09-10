@@ -168,6 +168,7 @@ func (c *column) SampleLight(result *concepts.Vector4, lit *materials.Lit, world
 }
 
 func (c *column) LightUnfiltered(world *concepts.Vector3) {
+
 	/*
 		Fun dithered look, maybe leverage as an effect later?
 		jitter := *world
@@ -177,12 +178,22 @@ func (c *column) LightUnfiltered(world *concepts.Vector3) {
 	*/
 	c.LightSampler.Hash = c.WorldToLightmapHash(c.Sector, world, &c.LightSampler.Normal)
 
+	/*	c.LightSampler.Get()
+		c.Light[0] = c.LightSampler.Output[0]
+		c.Light[1] = c.LightSampler.Output[1]
+		c.Light[2] = c.LightSampler.Output[2]
+		c.Light[3] = 1
+		return*/
+
 	// We XOR with the sector entity to avoid problems across sector boundaries
 	cacheHash := c.LightSampler.Hash ^ concepts.RngXorShift64(uint64(c.Sector.Entity))
+	//debugVoxel := false
+
 	if cacheHash != c.LightLastHash {
 		if cacheHash == c.LightLastColHashes[c.ScreenY] && c.LightLastColHashes[c.ScreenY] != 0 {
 			copy(c.LightResult[:], c.LightLastColResults[c.ScreenY*8:c.ScreenY*8+8])
 		} else {
+			//debugVoxel = true
 			c.LightSampler.Get()
 			c.LightResult[0] = c.LightSampler.Output
 			c.LightLastColHashes[c.ScreenY] = cacheHash
@@ -201,4 +212,10 @@ func (c *column) LightUnfiltered(world *concepts.Vector3) {
 	c.Light[1] = c.LightResult[0][1]
 	c.Light[2] = c.LightResult[0][2]
 	c.Light[3] = 1
+
+	/*if debugVoxel {
+		c.Light[0] = 1
+		c.Light[1] = 0
+		c.Light[2] = 0
+	}*/
 }

@@ -23,7 +23,7 @@ func planePick(block *block, plane *core.SectorPlane) {
 		s = selection.SelectableFromFloor(block.Sector)
 	}
 
-	if block.ScreenY < start && block.ScreenY >= end {
+	if block.ScreenY < start || block.ScreenY >= end {
 		return
 	}
 

@@ -152,11 +152,14 @@ func (d *DynamicValue[T]) Update(blend float64) {
 	if d.Procedural {
 		d.UpdateProcedural()
 	}
-	if d.NoRenderBlend {
+	if d.OnRender != nil {
+		defer d.OnRender(blend)
+	}
+
+	// The check for prev == now lets us avoid the linear interpolation, which
+	// can introduce precision errors for static float quantities.
+	if d.NoRenderBlend || d.Prev == d.Now {
 		d.Render = d.Now
-		if d.OnRender != nil {
-			d.OnRender(blend)
-		}
 		return
 	}
 	switch dc := any(d).(type) {
@@ -182,10 +185,6 @@ func (d *DynamicValue[T]) Update(blend float64) {
 		dc.Render[3] = Lerp(dc.Prev[3], dc.Now[3], blend)
 	case *DynamicValue[concepts.Matrix2]:
 		d.Render = d.Now
-	}
-
-	if d.OnRender != nil {
-		d.OnRender(blend)
 	}
 }
 
