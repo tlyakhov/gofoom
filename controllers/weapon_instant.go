@@ -15,6 +15,7 @@ import (
 )
 
 // This is similar to the code for lighting
+// TODO: Implement inner sector casting
 func (wc *WeaponController) Cast() *selection.Selectable {
 	var s *selection.Selectable
 
@@ -24,8 +25,8 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 	wc.Sampler.Config = &render.Config{}
 	wc.Sampler.Ray = &render.Ray{Angle: angle}
 
-	hitDist2 := constants.MaxViewDistance * constants.MaxViewDistance
-	idist2 := 0.0
+	hitDistSq := constants.MaxViewDistance * constants.MaxViewDistance
+	idistSq := 0.0
 	p := &wc.Body.Pos.Now
 	wc.delta[0] = math.Cos(angle * concepts.Deg2rad)
 	wc.delta[1] = math.Sin(angle * concepts.Deg2rad)
@@ -48,10 +49,10 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 				if wc.Sampler.Output[3] < 0.9 {
 					continue
 				}
-				idist2 = b.Pos.Now.Dist2(p)
-				if idist2 < hitDist2 {
+				idistSq = b.Pos.Now.DistSq(p)
+				if idistSq < hitDistSq {
 					s = selection.SelectableFromBody(b)
-					hitDist2 = idist2
+					hitDistSq = idistSq
 					wc.hit = b.Pos.Now
 				}
 			}
@@ -59,18 +60,18 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 		for _, seg := range sector.InternalSegments {
 			// Find the intersection with this segment.
 			if ok := seg.Intersect3D(p, rayEnd, &wc.isect); ok {
-				idist2 = wc.isect.Dist2(p)
-				if idist2 < hitDist2 {
+				idistSq = wc.isect.DistSq(p)
+				if idistSq < hitDistSq {
 					s = selection.SelectableFromInternalSegment(seg)
-					hitDist2 = idist2
+					hitDistSq = idistSq
 					wc.hit = wc.isect
 				}
 			}
 		}
 
 		// Since our sectors can be concave, we can't just go through the first portal we find,
-		// we have to go through the NEAREST one. Use dist2 to keep track...
-		dist2 := constants.MaxViewDistance * constants.MaxViewDistance
+		// we have to go through the NEAREST one. Use distSq to keep track...
+		distSq := constants.MaxViewDistance * constants.MaxViewDistance
 		var next *core.Sector
 		for _, seg := range sector.Segments {
 			// Segment facing backwards from our ray? skip it.
@@ -85,10 +86,10 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 			}
 
 			if seg.AdjacentSector == 0 {
-				idist2 = wc.isect.Dist2(p)
-				if idist2 < hitDist2 {
+				idistSq = wc.isect.DistSq(p)
+				if idistSq < hitDistSq {
 					s = selection.SelectableFromWall(seg, selection.SelectableMid)
-					hitDist2 = idist2
+					hitDistSq = idistSq
 					wc.hit = wc.isect
 				}
 				continue
@@ -99,28 +100,28 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 			floorZ, ceilZ := sector.ZAt(dynamic.Now, wc.isect.To2D())
 			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.Now, wc.isect.To2D())
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
-				idist2 = wc.isect.Dist2(p)
-				if idist2 < hitDist2 {
+				idistSq = wc.isect.DistSq(p)
+				if idistSq < hitDistSq {
 					s = selection.SelectableFromWall(seg, selection.SelectableLow)
-					hitDist2 = idist2
+					hitDistSq = idistSq
 					wc.hit = wc.isect
 				}
 				continue
 			}
 			if wc.isect[2] < floorZ2 || wc.isect[2] > ceilZ2 ||
 				wc.isect[2] < floorZ || wc.isect[2] > ceilZ {
-				idist2 = wc.isect.Dist2(p)
-				if idist2 < hitDist2 {
+				idistSq = wc.isect.DistSq(p)
+				if idistSq < hitDistSq {
 					s = selection.SelectableFromWall(seg, selection.SelectableHi)
-					hitDist2 = idist2
+					hitDistSq = idistSq
 					wc.hit = wc.isect
 				}
 				continue
 			}
 
 			// Get the square of the distance to the intersection
-			idist2 := wc.isect.Dist2(p)
-			if idist2-dist2 > constants.IntersectEpsilon {
+			idistSq := wc.isect.DistSq(p)
+			if idistSq-distSq > constants.IntersectEpsilon {
 				// If the current intersection point is farther than one we
 				// already have for this sector, we have a concavity, body, or
 				// internal segment. Keep looking.
@@ -128,7 +129,7 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 			}
 
 			// We're in the clear! Move to the next adjacent sector.
-			dist2 = idist2
+			distSq = idistSq
 			next = seg.AdjacentSegment.Sector
 		}
 		depth++

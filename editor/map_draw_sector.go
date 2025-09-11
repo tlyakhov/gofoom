@@ -40,7 +40,7 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	}
 
 	// Draw segment
-	if segment.A.Dist2(segment.B) > state.SegmentSelectionEpsilon {
+	if segment.A.DistSq(segment.B) > state.SegmentSelectionEpsilon {
 		mw.Context.SetLineWidth(1)
 		mw.Context.NewSubPath()
 		mw.Context.MoveTo(segment.A[0], segment.A[1])

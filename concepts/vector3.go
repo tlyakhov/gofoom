@@ -112,8 +112,8 @@ func (v *Vector3) Length2() float64 {
 	return v[0]*v[0] + v[1]*v[1] + v[2]*v[2]
 }
 
-// Dist2 calculates the squared distance between two vectors.
-func (v *Vector3) Dist2(v2 *Vector3) float64 {
+// DistSq calculates the squared distance between two vectors.
+func (v *Vector3) DistSq(v2 *Vector3) float64 {
 	return (v[0]-v2[0])*(v[0]-v2[0]) +
 		(v[1]-v2[1])*(v[1]-v2[1]) +
 		(v[2]-v2[2])*(v[2]-v2[2])
@@ -121,7 +121,7 @@ func (v *Vector3) Dist2(v2 *Vector3) float64 {
 
 // Dist calculates the distance between two vectors.
 func (v *Vector3) Dist(v2 *Vector3) float64 {
-	return math.Sqrt(v.Dist2(v2))
+	return math.Sqrt(v.DistSq(v2))
 }
 
 // Norm normalizes a vector and returns a new vector.

@@ -11,7 +11,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd int) {
+func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd int) {
 	b := ebd.Body
 	// If it's lit, render a pixel
 	if ebd.Visible.PixelOnly {
@@ -32,7 +32,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 		angleRender -= 360.0
 	}
 	// Calculate screenspace coordinates
-	block.Distance = math.Sqrt(ebd.Dist2)
+	block.Distance = math.Sqrt(ebd.DistSq)
 	xMid := math.Tan(angleRender*concepts.Deg2rad)*r.CameraToProjectionPlane + float64(r.ScreenWidth)*0.5
 	depthScale := r.CameraToProjectionPlane / math.Cos(angleRender*concepts.Deg2rad)
 	depthScale /= block.Distance
@@ -124,7 +124,7 @@ func (r *Renderer) renderBody(ebd *entityWithDist2, block *block, xStart, xEnd i
 	}
 }
 
-func (r *Renderer) renderBodyPixel(ebd *entityWithDist2, block *block, sx, ex int) {
+func (r *Renderer) renderBodyPixel(ebd *entityWithDistSq, block *block, sx, ex int) {
 	b := ebd.Body
 	lit := materials.GetLit(b.Entity)
 	scr := r.WorldToScreen(&b.Pos.Render)
@@ -136,7 +136,7 @@ func (r *Renderer) renderBodyPixel(ebd *entityWithDist2, block *block, sx, ex in
 	if x < sx || x >= ex || y < 0 || y >= r.ScreenHeight {
 		return
 	}
-	dist := math.Sqrt(ebd.Dist2)
+	dist := math.Sqrt(ebd.DistSq)
 	screenIndex := x + y*r.ScreenWidth
 	if dist >= r.ZBuffer[screenIndex] {
 		return

@@ -108,9 +108,9 @@ func planes(block *block, plane *core.SectorPlane) {
 		world[1] = block.RayPlane[1] * t
 		world[0] = block.RayPlane[0] * t
 		distToPlane := world.Length()
-		dist2 := world.To2D().Length2()
+		distSq := world.To2D().Length2()
 
-		if distToPlane > block.ZBuffer[screenIndex] || dist2 > block.Distance*block.Distance+constants.IntersectEpsilon {
+		if distToPlane > block.ZBuffer[screenIndex] || distSq > block.Distance*block.Distance+constants.IntersectEpsilon {
 			concepts.BlendColors(&block.FrameBuffer[screenIndex], &concepts.Vector4{1, 0, 1, 1}, 1)
 			continue
 		}

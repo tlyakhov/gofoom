@@ -128,34 +128,34 @@ func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
 	return minY <= maxY // If Y-projections do not intersect return false
 }
 
-func (s *Segment) DistanceToPoint2(p *concepts.Vector2) float64 {
-	l2 := s.A.Dist2(s.B)
+func (s *Segment) DistanceToPointSq(p *concepts.Vector2) float64 {
+	l2 := s.A.DistSq(s.B)
 	if l2 == 0 {
-		return p.Dist2(s.A)
+		return p.DistSq(s.A)
 	}
 	delta := &concepts.Vector2{s.B[0] - s.A[0], s.B[1] - s.A[1]}
 	t := (&concepts.Vector2{p[0], p[1]}).SubSelf(s.A).Dot(delta) / l2
 	if t < 0 {
-		return p.Dist2(s.A)
+		return p.DistSq(s.A)
 	}
 	if t > 1 {
-		return p.Dist2(s.B)
+		return p.DistSq(s.B)
 	}
-	return p.Dist2(delta.MulSelf(t).AddSelf(s.A))
+	return p.DistSq(delta.MulSelf(t).AddSelf(s.A))
 }
 
 func (s *Segment) DistanceToPoint(p *concepts.Vector2) float64 {
-	return math.Sqrt(s.DistanceToPoint2(p))
+	return math.Sqrt(s.DistanceToPointSq(p))
 }
 
 func (s *Segment) ClosestToPoint(p *concepts.Vector2) *concepts.Vector2 {
 	delta := s.B.Sub(s.A)
-	dist2 := delta[0]*delta[0] + delta[1]*delta[1]
-	if dist2 == 0 {
+	distSq := delta[0]*delta[0] + delta[1]*delta[1]
+	if distSq == 0 {
 		return s.A
 	}
 	ap := p.Sub(s.A)
-	t := ap.Dot(delta) / dist2
+	t := ap.Dot(delta) / distSq
 
 	if t < 0 {
 		return s.A

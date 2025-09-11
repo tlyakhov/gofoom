@@ -69,7 +69,7 @@ func (ac *ActionController) Recalculate() {
 	var d2 float64
 	var closest *behaviors.ActionWaypoint
 
-	closestDist2 := math.MaxFloat64
+	closestDistSq := math.MaxFloat64
 
 	behaviors.IterateActions(ac.Start, func(action ecs.Entity, _ *concepts.Vector3) {
 		waypoint := behaviors.GetActionWaypoint(action)
@@ -77,12 +77,12 @@ func (ac *ActionController) Recalculate() {
 			return
 		}
 		if ac.NoZ {
-			d2 = waypoint.P.To2D().Dist2(ac.Body.Pos.Now.To2D())
+			d2 = waypoint.P.To2D().DistSq(ac.Body.Pos.Now.To2D())
 		} else {
-			d2 = waypoint.P.Dist2(&ac.Body.Pos.Now)
+			d2 = waypoint.P.DistSq(&ac.Body.Pos.Now)
 		}
-		if d2 < closestDist2 {
-			closestDist2 = d2
+		if d2 < closestDistSq {
+			closestDistSq = d2
 			closest = waypoint
 		}
 	})
@@ -157,7 +157,7 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	}
 
 	// Have we reached the target?
-	if pos.To2D().Dist2(waypoint.P.To2D()) < 1 {
+	if pos.To2D().DistSq(waypoint.P.To2D()) < 1 {
 		return true
 	}
 

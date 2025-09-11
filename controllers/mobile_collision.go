@@ -24,7 +24,7 @@ func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sect
 }
 
 func (mc *MobileController) PushBack(sector *core.Sector, segment *core.Segment, inner bool) bool {
-	d := segment.DistanceToPoint2(mc.pos2d)
+	d := segment.DistanceToPointSq(mc.pos2d)
 	if d > mc.Body.Size.Now[0]*mc.Body.Size.Now[0]*0.25 {
 		return false
 	}
@@ -108,7 +108,7 @@ func (mc *MobileController) bodyTeleport() bool {
 		if !segment.PortalTeleports || segment.AdjacentSegment == nil {
 			continue
 		}
-		d := segment.DistanceToPoint2(mc.pos2d)
+		d := segment.DistanceToPointSq(mc.pos2d)
 		if d > mc.Body.Size.Now[0]*mc.Body.Size.Now[0]*0.25 {
 			continue
 		}
@@ -367,7 +367,7 @@ func (mc *MobileController) bodyBodyCollide() {
 			return true
 		}
 		// From https://www.myphysicslab.com/engine2D/collision-en.html
-		d2 := mc.pos.Dist2(&body.Pos.Now)
+		d2 := mc.pos.DistSq(&body.Pos.Now)
 		r_a := mc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {

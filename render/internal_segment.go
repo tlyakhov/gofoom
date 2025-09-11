@@ -8,7 +8,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 )
 
-func (r *Renderer) renderInternalSegment(ewd *entityWithDist2, block *block, xStart, xEnd int) {
+func (r *Renderer) renderInternalSegment(ewd *entityWithDistSq, block *block, xStart, xEnd int) {
 	block.Sector = ewd.Sector
 	block.Segment = &ewd.InternalSegment.Segment
 	block.IntersectionTop = ewd.InternalSegment.Top
