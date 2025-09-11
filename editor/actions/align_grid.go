@@ -23,7 +23,7 @@ func (a *AlignGrid) EndPoint() bool {
 	a.PrevA, a.PrevB = a.State().MapView.GridA, a.State().MapView.GridB
 	a.A = *a.WorldGrid(&a.State().MouseDownWorld)
 	a.B = *a.WorldGrid(&a.State().MouseWorld)
-	if a.A.Dist2(&a.B) < 0.001 {
+	if a.A.DistSq(&a.B) < 0.001 {
 		a.A = concepts.Vector2{}
 		a.B = concepts.Vector2{0, 1}
 	}

@@ -353,7 +353,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	block := &r.Blocks[blockIndex]
 	block.LightSampler.xorSeed = r.xorSeed
 	block.MaterialSampler = MaterialSampler{Config: r.Config, Ray: &block.Ray}
-	ewd2s := make([]*entityWithDist2, 0, 64)
+	ewd2s := make([]*entityWithDistSq, 0, 64)
 	block.Bodies = make(containers.Set[*core.Body])
 	block.InternalSegments = make(map[*core.InternalSegment]*core.Sector)
 	for i := range block.LightLastColHashes {
@@ -387,23 +387,23 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 		if vis == nil || !vis.IsActive() {
 			continue
 		}
-		ewd2s = append(ewd2s, &entityWithDist2{
+		ewd2s = append(ewd2s, &entityWithDistSq{
 			Body:    b,
-			Dist2:   block.Ray.Start.Dist2(b.Pos.Render.To2D()),
+			DistSq:  block.Ray.Start.DistSq(b.Pos.Render.To2D()),
 			Visible: vis,
 		})
 	}
 	for iseg, sector := range block.InternalSegments {
 		dist := block.Ray.DistTo(iseg.ClosestToPoint(&block.Ray.Start))
-		ewd2s = append(ewd2s, &entityWithDist2{
+		ewd2s = append(ewd2s, &entityWithDistSq{
 			InternalSegment: iseg,
-			Dist2:           dist * dist,
+			DistSq:          dist * dist,
 			Sector:          sector,
 		})
 	}
 
-	slices.SortFunc(ewd2s, func(a *entityWithDist2, b *entityWithDist2) int {
-		return int(b.Dist2 - a.Dist2)
+	slices.SortFunc(ewd2s, func(a *entityWithDistSq, b *entityWithDistSq) int {
+		return int(b.DistSq - a.DistSq)
 	})
 	// This has a bug when rendering portals: these need to be transformed and
 	// clipped through portals appropriately.1

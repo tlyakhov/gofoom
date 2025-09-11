@@ -148,17 +148,17 @@ func (pc *PlayerController) Always() {
 	// Figure out closest body out of the ones the player can select
 	prevTarget := pc.SelectedTarget
 	pc.SelectedTarget = 0
-	closestDist2 := math.MaxFloat64
+	closestDistSq := math.MaxFloat64
 	for e := range pc.HoveringTargets {
 		pt := behaviors.GetPlayerTargetable(e)
 		if pt == nil {
 			continue
 		}
-		d2 := pt.Pos(e).Dist2(&pc.Body.Pos.Now)
-		if d2 > closestDist2 {
+		distSq := pt.Pos(e).DistSq(&pc.Body.Pos.Now)
+		if distSq > closestDistSq {
 			continue
 		}
-		closestDist2 = d2
+		closestDistSq = distSq
 		pc.SelectedTarget = e
 	}
 	// If our selection has changed, run scripts

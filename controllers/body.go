@@ -114,16 +114,16 @@ func (bc *BodyController) findBodySector() {
 		// Find the closest segment and use its sector
 		p := bc.Pos.Now.To2D()
 		var closestSeg *core.SectorSegment
-		closestDistance2 := math.MaxFloat64
+		closestDistanceSq := math.MaxFloat64
 		for i := range arena.Cap() {
 			sector := arena.Value(i)
 			if sector == nil {
 				continue
 			}
 			for _, seg := range sector.Segments {
-				dist2 := seg.DistanceToPoint2(p)
-				if closestSector == nil || dist2 < closestDistance2 {
-					closestDistance2 = dist2
+				distSq := seg.DistanceToPointSq(p)
+				if closestSector == nil || distSq < closestDistanceSq {
+					closestDistanceSq = distSq
 					closestSector = sector
 					closestSeg = seg
 				}

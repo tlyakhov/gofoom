@@ -8,10 +8,10 @@ import (
 	"tlyakhov/gofoom/components/materials"
 )
 
-type entityWithDist2 struct {
+type entityWithDistSq struct {
 	Body            *core.Body
 	Visible         *materials.Visible
 	InternalSegment *core.InternalSegment
 	Sector          *core.Sector
-	Dist2           float64
+	DistSq          float64
 }

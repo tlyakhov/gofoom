@@ -51,7 +51,7 @@ type LightSampler struct {
 	Segment *core.Segment
 	Normal  concepts.Vector3
 
-	prevDistSq, hitDistSq, maxDist2 float64
+	prevDistSq, hitDistSq, maxDistSq float64
 
 	xorSeed uint64
 	tree    *core.Quadtree
@@ -128,7 +128,7 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 		if seg.AdjacentSector == 0 || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
 			continue
 		}
-		d2 := seg.AdjacentSegment.DistanceToPoint2(p.To2D())
+		d2 := seg.AdjacentSegment.DistanceToPointSq(p.To2D())
 		if d2 >= ls.LightGrid*ls.LightGrid*2 {
 			continue
 		}
@@ -260,13 +260,13 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		}
 
 		// Get the square of the distance to the intersection (from the target point)
-		intersectionDistSq = ls.IntersectionTest.Dist2(p) + nudgeExitingRay
+		intersectionDistSq = ls.IntersectionTest.DistSq(p) + nudgeExitingRay
 
 		// If the difference between the intersected distance and the light distance is
 		// within the bounding radius of our light, our light is right on a portal boundary and visible.
-		if math.Abs(intersectionDistSq-ls.maxDist2) < lightBody.Size.Render[0]*0.5 {
+		if math.Abs(intersectionDistSq-ls.maxDistSq) < lightBody.Size.Render[0]*0.5 {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Light is within size on portal boundary. Intersection: %v vs. Max Dist %v", math.Sqrt(intersectionDistSq), math.Sqrt(ls.maxDist2))
+				log.Printf("    Light is within size on portal boundary. Intersection: %v vs. Max Dist %v", math.Sqrt(intersectionDistSq), math.Sqrt(ls.maxDistSq))
 			}
 			return nil, nil
 		}
@@ -318,10 +318,10 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		// Since our sectors can be concave or have inner sectors (holes), we
 		// can't just go through the first portal we find, we have to go through
 		// the NEAREST one. Use hitDistSq to keep track...
-		ls.hitDistSq = ls.maxDist2
+		ls.hitDistSq = ls.maxDistSq
 
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDist2))
+			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDistSq))
 		}
 		//Intersect this sector
 		seg, adj := ls.intersect(sector, p, lightBody, false)
@@ -338,7 +338,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				continue
 			}
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("  Visiting inner sector %v, max dist %v", e, ls.maxDist2)
+				log.Printf("  Visiting inner sector %v, max dist %v", e, ls.maxDistSq)
 			}
 			if inner := core.GetSector(e); inner != nil {
 				seg, adj = ls.intersect(inner, p, lightBody, true)
@@ -373,6 +373,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if ls.MaterialSampler.Output[3] >= 0.99 {
 				return false
 			}
+			//		log.Printf("Filter: %v, Material: %v", ls.Filter, ls.MaterialSampler.Output)
 			concepts.BlendColors(&ls.Filter, &ls.MaterialSampler.Output, 1)
 		}
 
@@ -423,7 +424,10 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if ls.MaterialSampler.Output[3] >= 0.99 {
 				return false
 			}
-			ls.Filter[3] += ls.MaterialSampler.Output[3]
+			ls.MaterialSampler.Output[0] = 0
+			ls.MaterialSampler.Output[1] = 0
+			ls.MaterialSampler.Output[2] = 0
+			concepts.BlendColors(&ls.Filter, &ls.MaterialSampler.Output, 1)
 		}
 		for _, b := range sector.Bodies {
 			if !b.IsActive() ||
@@ -480,7 +484,7 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			return true
 		}
 		if lightsTested > 100 {
-			//	return false
+			return false
 		}
 		lightsTested++
 		LightSamplerLightsTested.Add(1)
@@ -490,13 +494,16 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == body.Entity {
 			log.Printf("Body: %v, World: %v, LightWorld: %v", body.Pos.Render.String(), world.String(), ls.LightWorld.String())
 		}
-		ls.maxDist2 = ls.LightWorld.Length2()
+		ls.maxDistSq = ls.LightWorld.Length2()
 		ls.Filter[3] = 0
 
+		if ls.Normal.Dot(&ls.LightWorld) < 0 {
+			return true
+		}
 		diffuseLight := 1.0
 		attenuation := 1.0
 		// Is the point right next to the light? Visible by definition.
-		if ls.maxDist2 > body.Size.Render[0]*body.Size.Render[0]*0.25 {
+		if ls.maxDistSq > body.Size.Render[0]*body.Size.Render[0]*0.25 {
 			ls.Filter[0] = 0
 			ls.Filter[1] = 0
 			ls.Filter[2] = 0
@@ -507,7 +514,7 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
 				//log.Printf("%v\n", dist)
-				dist := math.Sqrt(ls.maxDist2)
+				dist := math.Sqrt(ls.maxDistSq)
 				attenuation = light.Strength / math.Pow(dist*2/body.Size.Render[0]+1.0, light.Attenuation)
 				//attenuation = 100.0 / dist
 			}
@@ -522,13 +529,8 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			diffuseLight = attenuation
 		} else {
 			// Normalize
-			ls.LightWorld.MulSelf(1.0 / math.Sqrt(ls.maxDist2))
+			ls.LightWorld.MulSelf(1.0 / math.Sqrt(ls.maxDistSq))
 			diffuseLight = ls.Normal.Dot(&ls.LightWorld) * attenuation
-		}
-
-		if diffuseLight < 0 {
-			//le.Output[0] = 1
-			return true
 		}
 		if ls.Filter[3] == 0 {
 			ls.Output[0] += light.Diffuse[0] * diffuseLight

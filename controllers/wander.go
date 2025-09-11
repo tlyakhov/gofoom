@@ -80,7 +80,7 @@ func (wc *WanderController) Always() {
 			if seg.AdjacentSector == 0 || !seg.PortalIsPassable {
 				continue
 			}
-			dist := seg.DistanceToPoint2(wc.Body.Pos.Now.To2D())
+			dist := seg.DistanceToPointSq(wc.Body.Pos.Now.To2D())
 			if dist > closestDist {
 				continue
 			}
