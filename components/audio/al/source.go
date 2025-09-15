@@ -33,6 +33,9 @@ func RewindSources(source ...Source) {
 
 // DeleteSources deletes the sources.
 func DeleteSources(source ...Source) {
+	if len(source) == 0 {
+		return
+	}
 	alDeleteSources(source)
 }
 
