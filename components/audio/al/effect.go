@@ -12,6 +12,9 @@ func GenEffects(n int) []Effect {
 
 // DeleteEffects deletes the effects.
 func DeleteEffects(effects ...Effect) {
+	if len(effects) == 0 {
+		return
+	}
 	alDeleteEffects(effects)
 }
 

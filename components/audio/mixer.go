@@ -103,6 +103,7 @@ func (m *Mixer) Construct(data map[string]any) {
 	var err error
 	if m.device, err = al.OpenDevice(m.DeviceName); err != nil {
 		m.Error = fmt.Errorf("failed to open OpenAL device: %w", err)
+		log.Printf("Error: %v", m.Error)
 		return
 	}
 
@@ -113,13 +114,15 @@ func (m *Mixer) Construct(data map[string]any) {
 
 	if !al.IsExtensionPresent("ALC_EXT_EFX") {
 		m.Error = fmt.Errorf("EFX not supported")
-		//CloseAL();
-		return
+		log.Printf("Error: %v", m.Error)
+		//CloseAL();//
+		//return
 	}
 
 	numSends := m.device.GetIntegerv(al.MaxAuxiliarySends, 1)[0]
 	if m.device.Error() != al.NoError || numSends < 2 {
 		m.Error = fmt.Errorf("device does not support multiple sends (got %d, need 2)", numSends)
+		log.Printf("Error: %v", m.Error)
 		//CloseAL()
 		return
 	}
@@ -130,7 +133,7 @@ func (m *Mixer) Construct(data map[string]any) {
 	m.usedSources.Grow(uint32(len(m.sources)))
 
 	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends. Extensions: %v", m.SampleRate, m.Channels, len(m.sources), numSends, al.Extensions())
-	log.Printf("Devices: %v", al.AllDevices())
+	log.Printf("Devices: %v", al.AllDevices()) //
 
 	// Testing EAX reverb effects:
 	// References:

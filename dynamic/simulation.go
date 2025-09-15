@@ -28,6 +28,7 @@ type Simulation struct {
 	Render           func()
 	Dynamics         *xsync.MapOf[Dynamic, struct{}]
 	Spawnables       *xsync.MapOf[Spawnable, struct{}]
+	Events           EventQueue
 }
 
 func NewSimulation() *Simulation {
