@@ -24,6 +24,7 @@ type Simulation struct {
 	Timestamp        int64 // Milliseconds
 	Counter          uint64
 	Frame            uint64
+	NewFrame         func()
 	Integrate        func()
 	Render           func()
 	Dynamics         *xsync.MapOf[Dynamic, struct{}]
@@ -58,6 +59,10 @@ func (s *Simulation) Step() {
 
 	s.RenderTime += s.FrameMillis
 
+	if s.NewFrame != nil {
+		s.NewFrame()
+	}
+
 	for s.RenderTime >= constants.TimeStep {
 		s.Dynamics.Range(func(d Dynamic, _ struct{}) bool {
 			d.NewFrame()
@@ -69,6 +74,10 @@ func (s *Simulation) Step() {
 
 		if s.Integrate != nil {
 			s.Integrate()
+		}
+
+		for s.Events.Head != s.Events.Tail {
+			s.Events.ConsumeEvent()
 		}
 
 		s.Counter++
@@ -91,4 +100,13 @@ func (s *Simulation) Step() {
 		s.Render()
 		s.Frame++
 	}
+}
+
+// NewEvent wraps adding a timestamped event to the queue
+func (s *Simulation) NewEvent(id EventID, data any) {
+	s.Events.PushEvent(&Event{
+		ID:        id,
+		Timestamp: s.Timestamp,
+		Data:      data,
+	})
 }

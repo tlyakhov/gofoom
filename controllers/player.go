@@ -78,6 +78,7 @@ func (pc *PlayerController) bob(uw bool) {
 	// an unintentional jump.
 	if pc.Crouching {
 		pc.Body.Size.Now[1] = constants.PlayerCrouchHeight
+		pc.Crouching = false
 	} else {
 		pc.Body.Size.Now[1] = constants.PlayerHeight
 	}
@@ -187,6 +188,7 @@ func (pc *PlayerController) Always() {
 			pt.Frob.Vars["player"] = pc.Player
 			pt.Frob.Vars["carrier"] = pc.Carrier
 			pt.Frob.Act()
+			pc.ActionPressed = false
 		}
 	}
 	// Reset our potential selection for next frame
