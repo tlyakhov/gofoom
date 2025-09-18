@@ -84,6 +84,7 @@ func (mw *MapWidget) DrawQuadNode(node *core.QuadNode, index int) {
 func (mw *MapWidget) Draw(w, h int) image.Image {
 	editor.Lock.Lock()
 	defer editor.Lock.Unlock()
+	editor.GatherHoveringObjects()
 
 	w /= state.MapViewRenderScale
 	h /= state.MapViewRenderScale

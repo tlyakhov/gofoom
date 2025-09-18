@@ -213,7 +213,7 @@ func (e *Editor) UpdateStatus() {
 	e.LabelStatus.SetText(text)
 }
 
-func (e *Editor) Integrate() {
+func (e *Editor) NewFrame() {
 	// Try to fix deadlocks with Fyne v2.6
 	editor.GameInputLock.Lock()
 	defer editor.GameInputLock.Unlock()
@@ -264,9 +264,10 @@ func (e *Editor) Integrate() {
 	} else {
 		player.Crouching = false
 	}
+}
 
+func (e *Editor) Integrate() {
 	ecs.ActAllControllers(ecs.ControllerAlways)
-	e.GatherHoveringObjects()
 }
 
 // TODO: This should be an action
@@ -305,6 +306,7 @@ func (e *Editor) Load(filename string) {
 	controllers.Respawn(true)
 	archetypes.CreateFont("data/vga-font-8x8.png", "Default Font")
 	e.EntityList.ReIndex()
+	ecs.Simulation.NewFrame = e.NewFrame
 	ecs.Simulation.Integrate = e.Integrate
 	ecs.Simulation.Render = e.GameWidget.Draw
 	e.entityIconCache.Clear()
@@ -324,6 +326,7 @@ func (e *Editor) Test() {
 	ecs.Initialize()
 	controllers.CreateTestWorld2()
 	e.EntityList.ReIndex()
+	ecs.Simulation.NewFrame = e.NewFrame
 	ecs.Simulation.Integrate = e.Integrate
 	ecs.Simulation.Render = e.GameWidget.Draw
 	e.entityIconCache.Clear()

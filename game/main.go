@@ -14,14 +14,10 @@ import (
 	"runtime/pprof"
 
 	"tlyakhov/gofoom/archetypes"
-	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
 
-	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/render"
 	_ "tlyakhov/gofoom/scripting_symbols"
@@ -47,55 +43,48 @@ var inMenu = true
 // TODO: unify this with editor, and also add ability to customize keybinds.
 // TODO: Mouse look?
 func gameInput() {
-	playerMobile := core.GetMobile(renderer.Player.Entity)
-
 	if win.Pressed(pixel.KeyW) {
-		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now)
+		ecs.Simulation.NewEvent(controllers.EventIdForward, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
 	if win.Pressed(pixel.KeyS) {
-		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now+180.0)
+		ecs.Simulation.NewEvent(controllers.EventIdBack, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
 	if win.Pressed(pixel.KeyE) {
-		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now+90.0)
+		ecs.Simulation.NewEvent(controllers.EventIdRight, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
 	if win.Pressed(pixel.KeyQ) {
-		controllers.MovePlayer(renderer.Player.Entity, renderer.PlayerBody.Angle.Now+270.0)
+		ecs.Simulation.NewEvent(controllers.EventIdLeft, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
 	if win.Pressed(pixel.KeyA) {
-		renderer.PlayerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
-		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
+		ecs.Simulation.NewEvent(controllers.EventIdTurnLeft, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
 	if win.Pressed(pixel.KeyD) {
-		renderer.PlayerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
-		renderer.PlayerBody.Angle.Now = concepts.NormalizeAngle(renderer.PlayerBody.Angle.Now)
+		ecs.Simulation.NewEvent(controllers.EventIdTurnRight, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
 	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
-		if renderer.Carrier.SelectedWeapon != 0 {
-			if w := inventory.GetWeapon(renderer.Carrier.SelectedWeapon); w != nil {
-				w.Intent = inventory.WeaponFire
-			}
-		}
+		ecs.Simulation.NewEvent(controllers.EventIdPrimaryAction, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
-	// renderer.Player.ShearZ = (win.MousePosition().Y - win.Bounds().H()*0.5) * 0.8
-	renderer.Player.ActionPressed = (win.JustPressed(pixel.MouseButton2) || win.Repeated(pixel.MouseButton2))
-
+	if win.JustPressed(pixel.MouseButton2) || win.Repeated(pixel.MouseButton2) {
+		ecs.Simulation.NewEvent(controllers.EventIdSecondaryAction, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
+	}
 	if win.Pressed(pixel.KeySpace) {
-
-		if behaviors.GetUnderwater(renderer.PlayerBody.SectorEntity) != nil {
-			playerMobile.Force[2] += constants.PlayerSwimStrength
-		} else if renderer.PlayerBody.OnGround {
-			playerMobile.Force[2] += constants.PlayerJumpForce
-			renderer.PlayerBody.OnGround = false
-		}
+		ecs.Simulation.NewEvent(controllers.EventIdUp, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
 	}
 	if win.Pressed(pixel.KeyC) {
-		if behaviors.GetUnderwater(renderer.PlayerBody.SectorEntity) != nil {
-			playerMobile.Force[2] -= constants.PlayerSwimStrength
-		} else {
-			renderer.Player.Crouching = true
-		}
-	} else {
-		renderer.Player.Crouching = false
+		ecs.Simulation.NewEvent(controllers.EventIdDown, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
+	}
+	if win.MousePreviousPosition().X != win.MousePosition().X {
+		ecs.Simulation.NewEvent(controllers.EventIdYaw, &controllers.EntityAxisEventParams{
+			Entity:    renderer.Player.Entity,
+			AxisValue: (win.MousePosition().X - win.Bounds().W()*0.5),
+		})
+	}
+
+	if win.MousePreviousPosition().Y != win.MousePosition().Y {
+		ecs.Simulation.NewEvent(controllers.EventIdPitch, &controllers.EntityAxisEventParams{
+			Entity:    renderer.Player.Entity,
+			AxisValue: (win.MousePosition().Y - win.Bounds().H()*0.5),
+		})
 	}
 }
 

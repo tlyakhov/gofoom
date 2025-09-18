@@ -10,7 +10,7 @@ import (
 )
 
 type Quadtree struct {
-	ecs.Attached `ecs:"singleton"`
+	ecs.Attached `ecs:"singleton"` // TODO: Does this need to be attached to an arena?
 
 	MinZ, MaxZ float64
 
