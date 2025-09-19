@@ -23,10 +23,13 @@ type IWidget interface {
 }
 
 type Widget struct {
-	ID        string
-	Label     string
-	Tooltip   string
+	ID      string
+	Label   string
+	Tooltip string
+	Justify int8
+
 	highlight dynamic.DynamicValue[concepts.Vector4]
+	page      *Page
 }
 
 type Button struct {

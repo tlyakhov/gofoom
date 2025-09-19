@@ -19,23 +19,27 @@ type Page struct {
 
 	ScrollPos      int
 	VisibleWidgets int
+	// TODO: Make this private again after input bindings are realized elsewhere
+	Mapped map[string]IWidget
 
-	mapped         map[string]IWidget
 	tooltipCurrent IWidget
 	tooltipAlpha   dynamic.DynamicValue[float64]
 	tooltipQueue   deque.Deque[IWidget]
+	lastMeasuredX  int
+	lastMeasuredY  int
 }
 
 func (p *Page) Initialize() {
-	p.mapped = make(map[string]IWidget)
+	p.Mapped = make(map[string]IWidget)
 
 	for _, w := range p.Widgets {
-		p.mapped[w.GetWidget().ID] = w
+		p.Mapped[w.GetWidget().ID] = w
+		w.GetWidget().page = p
 	}
 }
 
 func (p *Page) Widget(id string) IWidget {
-	return p.mapped[id]
+	return p.Mapped[id]
 }
 
 func (p *Page) SelectedWidget() IWidget {
@@ -52,6 +56,8 @@ func (p *Page) Serialize() map[string]any {
 		case *Slider:
 			jsonWidgets[ww.ID] = ww.Serialize()
 		case *Checkbox:
+			jsonWidgets[ww.ID] = ww.Serialize()
+		case *InputBinding:
 			jsonWidgets[ww.ID] = ww.Serialize()
 		}
 	}
@@ -81,6 +87,11 @@ func (p *Page) Construct(data map[string]any) {
 						ww.Construct(jsonWidget)
 						if ww.Checked != nil {
 							ww.Checked(ww)
+						}
+					case *InputBinding:
+						ww.Construct(jsonWidget)
+						if ww.Changed != nil {
+							ww.Changed(ww)
 						}
 					}
 				}
