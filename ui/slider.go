@@ -29,3 +29,15 @@ func (s *Slider) Construct(data map[string]any) {
 		}
 	}
 }
+
+func (ui *UI) measureSlider(s *Slider) (int, int) {
+	label := s.Label + " [ " + strconv.Itoa(s.Value) + string(rune(29)) + "]"
+
+	return ui.measureBox(label)
+}
+
+func (ui *UI) renderSlider(s *Slider, x, y int) {
+	label := s.Label + " [ " + strconv.Itoa(s.Value) + string(rune(29)) + "]"
+
+	ui.renderBox(&s.Widget, label, x, y, ui.Padding+len(s.Label)+1, ui.Padding+len(label))
+}

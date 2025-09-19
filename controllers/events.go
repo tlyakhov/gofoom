@@ -85,17 +85,6 @@ func eventTurn(evt *dynamic.Event) bool {
 	return false
 }
 
-func eventYaw(evt *dynamic.Event) bool {
-	p := evt.Data.(*EntityAxisEventParams)
-	b := core.GetBody(p.Entity)
-	if b == nil {
-		return false
-	}
-	b.Angle.Now = p.AxisValue * 0.25 * constants.PlayerTurnSpeed * constants.TimeStepS
-	b.Angle.Now = concepts.NormalizeAngle(b.Angle.Now)
-	return false
-}
-
 func eventUp(evt *dynamic.Event) bool {
 	p := evt.Data.(*EntityEventParams)
 	b := core.GetBody(p.Entity)
@@ -152,12 +141,23 @@ func eventSecondaryAction(evt *dynamic.Event) bool {
 	return false
 }
 
+func eventYaw(evt *dynamic.Event) bool {
+	p := evt.Data.(*EntityAxisEventParams)
+	b := core.GetBody(p.Entity)
+	if b == nil {
+		return false
+	}
+	b.Angle.Now += p.AxisValue * 0.25 * constants.PlayerTurnSpeed * constants.TimeStepS
+	b.Angle.Now = concepts.NormalizeAngle(b.Angle.Now)
+	return false
+}
+
 func eventPitch(evt *dynamic.Event) bool {
 	p := evt.Data.(*EntityAxisEventParams)
 	player := character.GetPlayer(p.Entity)
 	if player == nil {
 		return false
 	}
-	player.ShearZ = p.AxisValue * 0.8
+	player.ShearZ += p.AxisValue * 0.8
 	return false
 }

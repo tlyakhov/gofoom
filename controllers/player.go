@@ -188,10 +188,10 @@ func (pc *PlayerController) Always() {
 			pt.Frob.Vars["player"] = pc.Player
 			pt.Frob.Vars["carrier"] = pc.Carrier
 			pt.Frob.Act()
-			pc.ActionPressed = false
 		}
 	}
 	// Reset our potential selection for next frame
+	pc.ActionPressed = false
 	pc.HoveringTargets = make(containers.Set[ecs.Entity])
 }
 

@@ -4,7 +4,6 @@
 package ui
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/dynamic"
 )
@@ -175,8 +174,15 @@ func (ui *UI) renderBox(widget *Widget, label string, x, y, hStart, hEnd int) {
 	if hEnd < 0 || hEnd > ui.Padding*2+len(label) {
 		hEnd = ui.Padding*2 + len(label)
 	}
-	x -= extent / 2
-	for i := 0; i < extent; i++ {
+	switch {
+	case widget.Justify < 0:
+		x = x - widget.page.lastMeasuredX/2 + ui.Padding*2
+	case widget.Justify > 0:
+		x = x - extent + widget.page.lastMeasuredX/2 - ui.Padding*2
+	default:
+		x -= extent / 2
+	}
+	for i := range extent {
 		if !ui.inRange(x+i, y) {
 			continue
 		}
@@ -220,32 +226,6 @@ func (ui *UI) renderButton(b *Button, x, y int) {
 
 func (ui *UI) measureButton(b *Button) (int, int) {
 	return ui.measureBox(b.Label)
-}
-
-func (ui *UI) renderCheckbox(cb *Checkbox, x, y int) {
-	label := cb.Label + " ["
-	if cb.Value {
-		label += "X]"
-	} else {
-		label += " ]"
-	}
-	ui.renderBox(&cb.Widget, label, x, y, ui.Padding+len(cb.Label)+1, ui.Padding+len(label))
-}
-
-func (ui *UI) measureCheckbox(cb *Checkbox) (int, int) {
-	return ui.measureBox(cb.Label + " [X]")
-}
-
-func (ui *UI) measureSlider(s *Slider) (int, int) {
-	label := s.Label + " [ " + strconv.Itoa(s.Value) + string(rune(29)) + "]"
-
-	return ui.measureBox(label)
-}
-
-func (ui *UI) renderSlider(s *Slider, x, y int) {
-	label := s.Label + " [ " + strconv.Itoa(s.Value) + string(rune(29)) + "]"
-
-	ui.renderBox(&s.Widget, label, x, y, ui.Padding+len(s.Label)+1, ui.Padding+len(label))
 }
 
 func (ui *UI) renderTooltip(p *Page, widget *Widget) {
@@ -296,6 +276,8 @@ func (ui *UI) measurePage(page *Page) (mx, my, visibleWidgets int) {
 			dx, dy = ui.measureCheckbox(w)
 		case *Slider:
 			dx, dy = ui.measureSlider(w)
+		case *InputBinding:
+			dx, dy = ui.measureInputBinding(w)
 		}
 		if dx > mx {
 			mx = dx
@@ -310,19 +292,20 @@ func (ui *UI) measurePage(page *Page) (mx, my, visibleWidgets int) {
 }
 
 func (ui *UI) renderPage(page *Page) {
-	mx, my, visibleWidgets := ui.measurePage(page)
+	var visibleWidgets int
+	page.lastMeasuredX, page.lastMeasuredY, visibleWidgets = ui.measurePage(page)
 	page.VisibleWidgets = visibleWidgets
 	x := ui.cols / 2
-	y := ui.rows/2 - my/2
+	y := ui.rows/2 - page.lastMeasuredY/2
 	if page.IsDialog {
 		scrollPos := -1.0
 		if page.VisibleWidgets != len(page.Widgets) {
 			scrollPos = float64(page.ScrollPos) / float64(len(page.Widgets)-page.VisibleWidgets)
 		}
-		mx += ui.Padding*2 + 2
+		page.lastMeasuredX += ui.Padding*2 + 2
 		ui.renderDialog(heavyDialog, page.Title,
-			x-mx/2, y-ui.Padding,
-			mx, my+ui.Padding, scrollPos, 1)
+			x-page.lastMeasuredX/2, y-ui.Padding,
+			page.lastMeasuredX, page.lastMeasuredY+ui.Padding, scrollPos, 1)
 	}
 
 	limit := min(len(page.Widgets), page.ScrollPos+visibleWidgets)
@@ -335,6 +318,8 @@ func (ui *UI) renderPage(page *Page) {
 			ui.renderCheckbox(w, x, y)
 		case *Slider:
 			ui.renderSlider(w, x, y)
+		case *InputBinding:
+			ui.renderInputBinding(w, x, y)
 		}
 		y += 3
 		w := page.Widgets[i].GetWidget()

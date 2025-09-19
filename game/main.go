@@ -40,54 +40,6 @@ var canvas *opengl.Canvas
 var buffer *image.RGBA
 var inMenu = true
 
-// TODO: unify this with editor, and also add ability to customize keybinds.
-// TODO: Mouse look?
-func gameInput() {
-	if win.Pressed(pixel.KeyW) {
-		ecs.Simulation.NewEvent(controllers.EventIdForward, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.Pressed(pixel.KeyS) {
-		ecs.Simulation.NewEvent(controllers.EventIdBack, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.Pressed(pixel.KeyE) {
-		ecs.Simulation.NewEvent(controllers.EventIdRight, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.Pressed(pixel.KeyQ) {
-		ecs.Simulation.NewEvent(controllers.EventIdLeft, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.Pressed(pixel.KeyA) {
-		ecs.Simulation.NewEvent(controllers.EventIdTurnLeft, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.Pressed(pixel.KeyD) {
-		ecs.Simulation.NewEvent(controllers.EventIdTurnRight, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.JustPressed(pixel.MouseButton1) || win.Repeated(pixel.MouseButton1) {
-		ecs.Simulation.NewEvent(controllers.EventIdPrimaryAction, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.JustPressed(pixel.MouseButton2) || win.Repeated(pixel.MouseButton2) {
-		ecs.Simulation.NewEvent(controllers.EventIdSecondaryAction, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.Pressed(pixel.KeySpace) {
-		ecs.Simulation.NewEvent(controllers.EventIdUp, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.Pressed(pixel.KeyC) {
-		ecs.Simulation.NewEvent(controllers.EventIdDown, &controllers.EntityEventParams{Entity: renderer.Player.Entity})
-	}
-	if win.MousePreviousPosition().X != win.MousePosition().X {
-		ecs.Simulation.NewEvent(controllers.EventIdYaw, &controllers.EntityAxisEventParams{
-			Entity:    renderer.Player.Entity,
-			AxisValue: (win.MousePosition().X - win.Bounds().W()*0.5),
-		})
-	}
-
-	if win.MousePreviousPosition().Y != win.MousePosition().Y {
-		ecs.Simulation.NewEvent(controllers.EventIdPitch, &controllers.EntityAxisEventParams{
-			Entity:    renderer.Player.Entity,
-			AxisValue: (win.MousePosition().Y - win.Bounds().H()*0.5),
-		})
-	}
-}
-
 func integrateGame() {
 	if win.JustReleased(pixel.KeyEscape) {
 		if inMenu && gameUI.Page != nil && gameUI.Page.Parent != nil {
@@ -149,6 +101,7 @@ func run() {
 		Bounds:    pixel.R(0, 0, 1920, 1080),
 		VSync:     false,
 		Resizable: true,
+
 		//Undecorated: true,
 		//Monitor:     opengl.PrimaryMonitor(),
 	}
@@ -159,6 +112,7 @@ func run() {
 	}
 
 	win.SetSmooth(false)
+	win.SetCursorDisabled()
 
 	ecs.Initialize()
 	for _, meta := range ecs.Types().Controllers {

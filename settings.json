@@ -1,4 +1,57 @@
 {
+  "Key Bindings": {
+    "Title": "Key Bindings",
+    "Widgets": {
+      "inputBack": {
+        "Input1": "S",
+        "Input2": "Down"
+      },
+      "inputDown": {
+        "Input1": "C",
+        "Input2": ""
+      },
+      "inputForward": {
+        "Input1": "W",
+        "Input2": "Up"
+      },
+      "inputLeft": {
+        "Input1": "A",
+        "Input2": "Left"
+      },
+      "inputPitch": {
+        "Input1": "MouseY",
+        "Input2": ""
+      },
+      "inputPrimaryAction": {
+        "Input1": "MouseButton1",
+        "Input2": "Enter"
+      },
+      "inputRight": {
+        "Input1": "D",
+        "Input2": "Right"
+      },
+      "inputSecondaryAction": {
+        "Input1": "MouseButton2",
+        "Input2": "F"
+      },
+      "inputTurnLeft": {
+        "Input1": "Q",
+        "Input2": ""
+      },
+      "inputTurnRight": {
+        "Input1": "E",
+        "Input2": ""
+      },
+      "inputUp": {
+        "Input1": "Space",
+        "Input2": ""
+      },
+      "inputYaw": {
+        "Input1": "MouseX",
+        "Input2": ""
+      }
+    }
+  },
   "Options": {
     "Title": "Options",
     "Widgets": {

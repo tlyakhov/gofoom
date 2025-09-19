@@ -66,6 +66,7 @@ func initMenuOptions() {
 					ID:      "gamma",
 					Label:   "Brightness (Gamma)",
 					Tooltip: "Default is 2.4",
+					Justify: 1,
 				},
 				Min: 10, Max: 30, Value: int(toneMap.Gamma * 10), Step: 1,
 			},
@@ -74,6 +75,7 @@ func initMenuOptions() {
 					ID:      "multiRender",
 					Label:   "Multithreaded Rendering",
 					Tooltip: "Whether to parallelize rendering across multiple cores.\nHeavy impact on performance.",
+					Justify: 1,
 				},
 				Value: renderer.Multithreaded,
 			},
@@ -82,6 +84,7 @@ func initMenuOptions() {
 					ID:      "multiBlocks",
 					Label:   "Rendering threads",
 					Tooltip: "Subdivide the screen into this many horizontal columns when rendering.\nIdeal seems to be ~2x physical cores. Heavy impact on performance.",
+					Justify: 1,
 				},
 				Min: 2, Max: 64, Value: int(renderer.NumBlocks), Step: 2,
 			},
@@ -90,6 +93,7 @@ func initMenuOptions() {
 					ID:      "fov",
 					Label:   "Field of View",
 					Tooltip: "Angular extent of the player camera, in degrees.",
+					Justify: 1,
 				},
 				Min: 45, Max: 160, Value: int(renderer.FOV), Step: 5,
 			},
@@ -98,6 +102,7 @@ func initMenuOptions() {
 					ID:      "lightGrid",
 					Label:   "Lighting Fidelity",
 					Tooltip: "Size of lightmap texels, in 1/10 of a world unit.\nLower is better, but impacts performance.",
+					Justify: 1,
 				},
 				Min: 5, Max: 100, Value: int(renderer.LightGrid * 10), Step: 1,
 			},
@@ -109,10 +114,141 @@ func initMenuOptions() {
 		Parent:   uiPageSettings,
 		IsDialog: true,
 		Title:    "Key Bindings",
+		Apply: func(p *ui.Page) {
+			saveSettings()
+		},
 		Widgets: []ui.IWidget{
 			&ui.Button{Widget: ui.Widget{Label: string(rune(17)) + " Options"}, Clicked: func(b *ui.Button) {
 				gameUI.SetPage(uiPageSettings)
 			}},
+			&ui.Button{
+				Widget: ui.Widget{
+					Label:   "Apply & Save",
+					Tooltip: "Apply and save settings",
+				},
+				Clicked: func(b *ui.Button) {
+					uiPageKeyBindings.Apply(uiPageSettings)
+				}},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputForward",
+					Label:   "Move Forward",
+					Tooltip: "Input for moving forward",
+					Justify: -1,
+				},
+				Input1: "W",
+				Input2: "Up",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputBack",
+					Label:   "Move Backward",
+					Tooltip: "Input for moving backward",
+					Justify: -1,
+				},
+				Input1: "S",
+				Input2: "Down",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputLeft",
+					Label:   "Move Left",
+					Tooltip: "Input for strafing left",
+					Justify: -1,
+				},
+				Input1: "A",
+				Input2: "Left",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputRight",
+					Label:   "Move Right",
+					Tooltip: "Input for strafing right",
+					Justify: -1,
+				},
+				Input1: "D",
+				Input2: "Right",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputTurnLeft",
+					Label:   "Turn Left",
+					Tooltip: "Input for turning left",
+					Justify: -1,
+				},
+				Input1: "Q",
+				Input2: "",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputTurnRight",
+					Label:   "Turn Right",
+					Tooltip: "Input for turning right",
+					Justify: -1,
+				},
+				Input1: "E",
+				Input2: "",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputUp",
+					Label:   "Jump/Swim up",
+					Tooltip: "Input for moving up",
+					Justify: -1,
+				},
+				Input1: "Space",
+				Input2: "",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputDown",
+					Label:   "Crouch/Swim down",
+					Tooltip: "Input for moving down",
+					Justify: -1,
+				},
+				Input1: "C",
+				Input2: "",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputPrimaryAction",
+					Label:   "Primary/Fire",
+					Tooltip: "Input for primary action, like firing weapon",
+					Justify: -1,
+				},
+				Input1: "MouseButton1",
+				Input2: "Enter",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputSecondaryAction",
+					Label:   "Secondary/Use",
+					Tooltip: "Input for secondary action, like opening a door",
+					Justify: -1,
+				},
+				Input1: "MouseButton2",
+				Input2: "F",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputYaw",
+					Label:   "Yaw (turn axis)",
+					Tooltip: "Mouse/joystick/gamepad axis for turning",
+					Justify: -1,
+				},
+				Input1: "MouseX",
+				Input2: "",
+			},
+			&ui.InputBinding{
+				Widget: ui.Widget{
+					ID:      "inputPitch",
+					Label:   "Pitch (vertical axis)",
+					Tooltip: "Mouse/joystick/gamepad axis for looking up/down",
+					Justify: -1,
+				},
+				Input1: "MouseY",
+				Input2: "",
+			},
 		},
 	}
 	uiPageKeyBindings.Initialize()
