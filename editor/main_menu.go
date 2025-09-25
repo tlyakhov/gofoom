@@ -68,6 +68,7 @@ type EditorMenu struct {
 	ToolsNewShader          MenuAction
 
 	ViewSectorEntities MenuAction
+	ViewSnapToGrid     MenuAction
 
 	BehaviorsPause   MenuAction
 	BehaviorsReset   MenuAction
@@ -286,7 +287,16 @@ func CreateMainMenu() {
 
 	editor.ToolsNewShader.Menu = fyne.NewMenuItem("New Shader...", editor.NewShader)
 
-	editor.ViewSectorEntities.Menu = fyne.NewMenuItem("Toggle Sector Labels", func() { editor.SectorTypesVisible = !editor.SectorTypesVisible })
+	editor.ViewSectorEntities.Menu = fyne.NewMenuItem("Toggle Sector Labels", func() {
+		editor.SectorTypesVisible = !editor.SectorTypesVisible
+		editor.ViewSectorEntities.Menu.Checked = editor.SectorTypesVisible
+	})
+	editor.ViewSectorEntities.Menu.Checked = editor.SectorTypesVisible
+	editor.ViewSnapToGrid.Menu = fyne.NewMenuItem("Toggle Snap to Grid", func() {
+		editor.Snap = !editor.Snap
+		editor.ViewSnapToGrid.Menu.Checked = editor.Snap
+	})
+	editor.ViewSnapToGrid.Menu.Checked = editor.Snap
 
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() { controllers.ResetAllSpawnables() })
@@ -322,7 +332,7 @@ func CreateMainMenu() {
 		editor.ToolsSplitSector.Menu, editor.ToolsAlignGrid.Menu, fyne.NewMenuItemSeparator(),
 		editor.ToolsNewShader.Menu)
 
-	menuView := fyne.NewMenu("View", editor.ViewSectorEntities.Menu)
+	menuView := fyne.NewMenu("View", editor.ViewSectorEntities.Menu, editor.ViewSnapToGrid.Menu)
 
 	menuBehaviors := fyne.NewMenu("Behaviors", editor.BehaviorsReset.Menu, editor.BehaviorsPause.Menu, editor.BehaviorsRespawn.Menu)
 

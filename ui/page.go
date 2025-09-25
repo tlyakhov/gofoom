@@ -17,11 +17,11 @@ type Page struct {
 	Parent       *Page
 	Apply        func(p *Page)
 
-	ScrollPos      int
-	VisibleWidgets int
-	// TODO: Make this private again after input bindings are realized elsewhere
-	Mapped map[string]IWidget
+	ScrollPos       int
+	VisibleWidgets  int
+	HijackAllInputs bool // For input binding
 
+	mapped         map[string]IWidget
 	tooltipCurrent IWidget
 	tooltipAlpha   dynamic.DynamicValue[float64]
 	tooltipQueue   deque.Deque[IWidget]
@@ -30,16 +30,16 @@ type Page struct {
 }
 
 func (p *Page) Initialize() {
-	p.Mapped = make(map[string]IWidget)
+	p.mapped = make(map[string]IWidget)
 
 	for _, w := range p.Widgets {
-		p.Mapped[w.GetWidget().ID] = w
+		p.mapped[w.GetWidget().ID] = w
 		w.GetWidget().page = p
 	}
 }
 
 func (p *Page) Widget(id string) IWidget {
-	return p.Mapped[id]
+	return p.mapped[id]
 }
 
 func (p *Page) SelectedWidget() IWidget {
@@ -68,6 +68,25 @@ func (p *Page) Serialize() map[string]any {
 	return result
 }
 
+func (p *Page) constructWidget(w IWidget, jsonWidget map[string]any) {
+	switch ww := w.(type) {
+	case *Slider:
+		ww.Construct(jsonWidget)
+		if ww.Moved != nil {
+			ww.Moved(ww)
+		}
+	case *Checkbox:
+		ww.Construct(jsonWidget)
+		if ww.Checked != nil {
+			ww.Checked(ww)
+		}
+	case *InputBinding:
+		ww.Construct(jsonWidget)
+		if ww.Changed != nil {
+			ww.Changed(ww)
+		}
+	}
+}
 func (p *Page) Construct(data map[string]any) {
 	vw := data["Widgets"]
 	if vw == nil {
@@ -77,23 +96,7 @@ func (p *Page) Construct(data map[string]any) {
 		for _, w := range p.Widgets {
 			if v, ok := jsonWidgets[w.GetWidget().ID]; ok {
 				if jsonWidget, ok := v.(map[string]any); ok {
-					switch ww := w.(type) {
-					case *Slider:
-						ww.Construct(jsonWidget)
-						if ww.Moved != nil {
-							ww.Moved(ww)
-						}
-					case *Checkbox:
-						ww.Construct(jsonWidget)
-						if ww.Checked != nil {
-							ww.Checked(ww)
-						}
-					case *InputBinding:
-						ww.Construct(jsonWidget)
-						if ww.Changed != nil {
-							ww.Changed(ww)
-						}
-					}
+					p.constructWidget(w, jsonWidget)
 				}
 			}
 		}

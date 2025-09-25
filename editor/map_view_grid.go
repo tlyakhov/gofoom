@@ -17,11 +17,12 @@ type MapViewGrid struct {
 	Current     *state.MapView
 	Prev        *state.MapView
 	Visible     bool
+	Snap        bool
 	GridContext *gg.Context
 }
 
 func (g *MapViewGrid) WorldGrid(p *concepts.Vector2) *concepts.Vector2 {
-	if !g.Visible {
+	if !g.Visible || !g.Snap {
 		return p
 	}
 
@@ -36,7 +37,7 @@ func (g *MapViewGrid) WorldGrid(p *concepts.Vector2) *concepts.Vector2 {
 }
 
 func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
-	if !g.Visible {
+	if !g.Visible || !g.Snap {
 		return p
 	}
 

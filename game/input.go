@@ -50,32 +50,19 @@ func processBindingInput(eventID dynamic.EventID, input string) {
 	}
 }
 
-func processBinding(name string, eventID dynamic.EventID) {
-	binding := uiPageKeyBindings.Mapped[name].(*ui.InputBinding)
+func processBinding(binding *ui.InputBinding) {
 	if binding.Input1 != "" {
-		processBindingInput(eventID, binding.Input1)
+		processBindingInput(binding.EventID, binding.Input1)
 	}
 	if binding.Input2 != "" {
-		processBindingInput(eventID, binding.Input2)
+		processBindingInput(binding.EventID, binding.Input2)
 	}
 }
 
-// TODO: unify this with editor.
-// TODO: Improve Mouse look (or any axis-based bindings) by relying on deltas
-// rather than absolute amounts.
 func gameInput() {
-	// TODO: This is a lot of polling. Instead, let's use the callback approach
-	// the pixel package provides, e.g. win.SetButtonCallback
-	processBinding("inputForward", controllers.EventIdForward)
-	processBinding("inputBack", controllers.EventIdBack)
-	processBinding("inputLeft", controllers.EventIdLeft)
-	processBinding("inputRight", controllers.EventIdRight)
-	processBinding("inputTurnLeft", controllers.EventIdTurnLeft)
-	processBinding("inputTurnRight", controllers.EventIdTurnRight)
-	processBinding("inputUp", controllers.EventIdUp)
-	processBinding("inputDown", controllers.EventIdDown)
-	processBinding("inputPrimaryAction", controllers.EventIdPrimaryAction)
-	processBinding("inputSecondaryAction", controllers.EventIdSecondaryAction)
-	processBinding("inputYaw", controllers.EventIdYaw)
-	processBinding("inputPitch", controllers.EventIdPitch)
+	for _, w := range uiPageKeyBindings.Widgets {
+		if binding, ok := w.(*ui.InputBinding); ok {
+			processBinding(binding)
+		}
+	}
 }

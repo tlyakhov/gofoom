@@ -13,8 +13,8 @@ import (
 	"strconv"
 
 	"tlyakhov/gofoom/archetypes"
-	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/containers"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 
@@ -38,6 +38,19 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
 )
+
+var eventKeyMap = map[string]dynamic.EventID{
+	"W":      controllers.EventIdForward,
+	"S":      controllers.EventIdBack,
+	"E":      controllers.EventIdRight,
+	"Q":      controllers.EventIdLeft,
+	"A":      controllers.EventIdTurnLeft,
+	"D":      controllers.EventIdTurnRight,
+	"Return": controllers.EventIdPrimaryAction,
+	"F":      controllers.EventIdSecondaryAction,
+	"Space":  controllers.EventIdUp,
+	"C":      controllers.EventIdDown,
+}
 
 type EditorWidgets struct {
 	App          fyne.App
@@ -94,7 +107,7 @@ func NewEditor() *Editor {
 			SelectedObjects:       selection.NewSelection(),
 			KeysDown:              make(containers.Set[fyne.KeyName]),
 		},
-		MapViewGrid:     MapViewGrid{Visible: true},
+		MapViewGrid:     MapViewGrid{Visible: true, Snap: true},
 		entityIconCache: xsync.NewMapOf[ecs.Entity, entityIconCacheItem](),
 	}
 	e.Grid.IEditor = e
@@ -214,64 +227,24 @@ func (e *Editor) UpdateStatus() {
 }
 
 func (e *Editor) NewFrame() {
-	// Try to fix deadlocks with Fyne v2.6
-	editor.GameInputLock.Lock()
-	defer editor.GameInputLock.Unlock()
-	player := e.Renderer.Player
-	if player == nil {
-		return
-	}
-	playerBody := core.GetBody(player.Entity)
-	playerMobile := core.GetMobile(player.Entity)
 
-	if e.GameWidget.KeyMap.Contains("W") {
-		controllers.MovePlayer(player.Entity, playerBody.Angle.Now)
-	}
-	if e.GameWidget.KeyMap.Contains("S") {
-		controllers.MovePlayer(player.Entity, playerBody.Angle.Now+180.0)
-	}
-	if e.GameWidget.KeyMap.Contains("E") {
-		controllers.MovePlayer(player.Entity, playerBody.Angle.Now+90.0)
-	}
-	if e.GameWidget.KeyMap.Contains("Q") {
-		controllers.MovePlayer(player.Entity, playerBody.Angle.Now+270.0)
-	}
-	if e.GameWidget.KeyMap.Contains("A") {
-		playerBody.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
-		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
-	}
-	if e.GameWidget.KeyMap.Contains("D") {
-		playerBody.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
-		playerBody.Angle.Now = concepts.NormalizeAngle(playerBody.Angle.Now)
-	}
-
-	player.ActionPressed = e.GameWidget.KeyMap.Contains("F")
-
-	if e.GameWidget.KeyMap.Contains("Space") {
-		if behaviors.GetUnderwater(playerBody.SectorEntity) != nil {
-			playerMobile.Force[2] += constants.PlayerSwimStrength
-		} else if playerBody.OnGround {
-			playerMobile.Force[2] += constants.PlayerJumpForce
-			playerBody.OnGround = false
-		}
-	}
-	if e.GameWidget.KeyMap.Contains("C") {
-		if behaviors.GetUnderwater(playerBody.SectorEntity) != nil {
-			playerMobile.Force[2] -= constants.PlayerSwimStrength
-		} else {
-			player.Crouching = true
-		}
-	} else {
-		player.Crouching = false
-	}
 }
 
 func (e *Editor) Integrate() {
+	if player := e.Renderer.Player; player != nil {
+		editor.GameInputLock.Lock()
+		for key, eid := range eventKeyMap {
+			if e.GameWidget.KeyMap.Contains(fyne.KeyName(key)) {
+				ecs.Simulation.NewEvent(eid, &controllers.EntityEventParams{Entity: player.Entity})
+			}
+		}
+		editor.GameInputLock.Unlock()
+	}
+
 	ecs.ActAllControllers(ecs.ControllerAlways)
 }
 
 // TODO: This should be an action
-
 func (e *Editor) ChangeSelectedTransformables(m *concepts.Matrix2) {
 	for _, t := range e.State().SelectedTransformables {
 		switch target := t.(type) {

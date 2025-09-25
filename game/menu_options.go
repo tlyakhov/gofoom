@@ -5,6 +5,8 @@ package main
 
 import (
 	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
 )
@@ -47,16 +49,18 @@ func initMenuOptions() {
 			}},
 			&ui.Button{
 				Widget: ui.Widget{
-					Label:   "Controls " + string(rune(16)),
-					Tooltip: "Keyboard input bindings, control options",
+					Label:      "Controls " + string(rune(16)),
+					LabelColor: &concepts.Vector4{1, 1, 0.3, 1},
+					Tooltip:    "Keyboard input bindings, control options",
 				},
 				Clicked: func(b *ui.Button) {
 					gameUI.SetPage(uiPageKeyBindings)
 				}},
 			&ui.Button{
 				Widget: ui.Widget{
-					Label:   "Apply & Save",
-					Tooltip: "Apply and save settings",
+					Label:      "Apply & Save",
+					LabelColor: &concepts.Vector4{1, 0.3, 0.3, 1},
+					Tooltip:    "Apply and save settings",
 				},
 				Clicked: func(b *ui.Button) {
 					uiPageSettings.Apply(uiPageSettings)
@@ -123,8 +127,9 @@ func initMenuOptions() {
 			}},
 			&ui.Button{
 				Widget: ui.Widget{
-					Label:   "Apply & Save",
-					Tooltip: "Apply and save settings",
+					Label:      "Apply & Save",
+					LabelColor: &concepts.Vector4{1, 0.3, 0.3, 1},
+					Tooltip:    "Apply and save settings",
 				},
 				Clicked: func(b *ui.Button) {
 					uiPageKeyBindings.Apply(uiPageSettings)
@@ -136,8 +141,9 @@ func initMenuOptions() {
 					Tooltip: "Input for moving forward",
 					Justify: -1,
 				},
-				Input1: "W",
-				Input2: "Up",
+				EventID: controllers.EventIdForward,
+				Input1:  "W",
+				Input2:  "Up",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -146,8 +152,9 @@ func initMenuOptions() {
 					Tooltip: "Input for moving backward",
 					Justify: -1,
 				},
-				Input1: "S",
-				Input2: "Down",
+				EventID: controllers.EventIdBack,
+				Input1:  "S",
+				Input2:  "Down",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -156,8 +163,9 @@ func initMenuOptions() {
 					Tooltip: "Input for strafing left",
 					Justify: -1,
 				},
-				Input1: "A",
-				Input2: "Left",
+				EventID: controllers.EventIdLeft,
+				Input1:  "A",
+				Input2:  "Left",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -166,8 +174,9 @@ func initMenuOptions() {
 					Tooltip: "Input for strafing right",
 					Justify: -1,
 				},
-				Input1: "D",
-				Input2: "Right",
+				EventID: controllers.EventIdRight,
+				Input1:  "D",
+				Input2:  "Right",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -176,8 +185,9 @@ func initMenuOptions() {
 					Tooltip: "Input for turning left",
 					Justify: -1,
 				},
-				Input1: "Q",
-				Input2: "",
+				EventID: controllers.EventIdTurnLeft,
+				Input1:  "Q",
+				Input2:  "",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -186,8 +196,9 @@ func initMenuOptions() {
 					Tooltip: "Input for turning right",
 					Justify: -1,
 				},
-				Input1: "E",
-				Input2: "",
+				EventID: controllers.EventIdTurnRight,
+				Input1:  "E",
+				Input2:  "",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -196,8 +207,9 @@ func initMenuOptions() {
 					Tooltip: "Input for moving up",
 					Justify: -1,
 				},
-				Input1: "Space",
-				Input2: "",
+				EventID: controllers.EventIdUp,
+				Input1:  "Space",
+				Input2:  "",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -206,8 +218,9 @@ func initMenuOptions() {
 					Tooltip: "Input for moving down",
 					Justify: -1,
 				},
-				Input1: "C",
-				Input2: "",
+				EventID: controllers.EventIdDown,
+				Input1:  "C",
+				Input2:  "",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -216,8 +229,9 @@ func initMenuOptions() {
 					Tooltip: "Input for primary action, like firing weapon",
 					Justify: -1,
 				},
-				Input1: "MouseButton1",
-				Input2: "Enter",
+				EventID: controllers.EventIdPrimaryAction,
+				Input1:  "MouseButton1",
+				Input2:  "Enter",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -226,8 +240,9 @@ func initMenuOptions() {
 					Tooltip: "Input for secondary action, like opening a door",
 					Justify: -1,
 				},
-				Input1: "MouseButton2",
-				Input2: "F",
+				EventID: controllers.EventIdSecondaryAction,
+				Input1:  "MouseButton2",
+				Input2:  "F",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -236,8 +251,9 @@ func initMenuOptions() {
 					Tooltip: "Mouse/joystick/gamepad axis for turning",
 					Justify: -1,
 				},
-				Input1: "MouseX",
-				Input2: "",
+				EventID: controllers.EventIdYaw,
+				Input1:  "MouseX",
+				Input2:  "",
 			},
 			&ui.InputBinding{
 				Widget: ui.Widget{
@@ -246,8 +262,9 @@ func initMenuOptions() {
 					Tooltip: "Mouse/joystick/gamepad axis for looking up/down",
 					Justify: -1,
 				},
-				Input1: "MouseY",
-				Input2: "",
+				EventID: controllers.EventIdPitch,
+				Input1:  "MouseY",
+				Input2:  "",
 			},
 		},
 	}

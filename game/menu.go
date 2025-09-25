@@ -95,9 +95,36 @@ func initializeMenus() {
 	initMenuOptions()
 }
 
+func applyBinding(name string) {
+	for _, w := range gameUI.Page.Widgets {
+		if binding, ok := w.(*ui.InputBinding); ok {
+			binding.Input1 = name
+			binding.Input2 = name
+			binding.Changed(binding)
+			break
+		}
+	}
+	gameUI.Page.Apply(gameUI.Page)
+}
 func menuInput() {
 	if gameUI.Page == nil {
 		gameUI.SetPage(uiPageMain)
+	}
+
+	if gameUI.Page.HijackAllInputs {
+		// Inefficient, but it doesn't matter
+		for name, button := range buttonBindings {
+			if win.Pressed(button) {
+				applyBinding(name)
+				break
+			}
+		}
+		for name, button := range gamepadButtonBindings {
+			if win.JoystickPressed(pixel.Joystick1, button) {
+				applyBinding(name)
+				break
+			}
+		}
 	}
 
 	if win.JustPressed(pixel.KeyW) || win.Repeated(pixel.KeyW) {
