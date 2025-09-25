@@ -36,11 +36,11 @@
       },
       "inputTurnLeft": {
         "Input1": "Q",
-        "Input2": ""
+        "Input2": "MouseButton5"
       },
       "inputTurnRight": {
         "Input1": "E",
-        "Input2": ""
+        "Input2": "MouseButton4"
       },
       "inputUp": {
         "Input1": "Space",

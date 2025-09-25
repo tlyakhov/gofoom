@@ -129,6 +129,7 @@ func (ui *UI) MoveDown() {
 	}
 
 }
+
 func (ui *UI) Action() {
 	if ui.Page == nil {
 		return
@@ -145,6 +146,8 @@ func (ui *UI) Action() {
 			w.Checked(w)
 		}
 		ui.OnChanged(item)
+	case *InputBinding:
+		ui.SetPage(ui.inputBindingPage(w, ui.Page))
 	}
 }
 

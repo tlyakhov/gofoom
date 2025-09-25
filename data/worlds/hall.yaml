@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 632.8125
+        Now: 442.96875
         Spawn: 0
     Pos:
-        Now: -287.5, -143.42936956136782, -16.000000000000004
+        Now: 309.78497715187996, -125.10426721398142, 20
         Spawn: -390, 180, -44
     Size:
         Now: 15, 40
@@ -22,7 +22,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0.0000000000000000000000000000000005736678251473132, -0.00000000000000000000005073539950779075, -0.000007656250000715817
+        Now: 0.00000000000000005236023332825738, 0.00000000000000015849671041399313, 0.007001650411977742
         Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -1471,11 +1471,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.65625
+            Percent: 0.109375
             Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: -400, 60, -47.9765625
+        Now: -400, 60, -51.521484375
         Spawn: -400, 60, -52
     Size:
         Now: 20, 20
@@ -2046,16 +2046,16 @@
     Speed: 350
     Start: ∈⋮135
   behaviors.ActorState:
-    Action: ∈⋮147
+    Action: ∈⋮137
   behaviors.Alive:
     Health: 100
   core.Body:
     Angle:
-        Now: 62733.69483246188
+        Now: 62997.95528377228
         Procedural: true
         Spawn: 155.9558816022554
     Pos:
-        Now: -317.99080367273115, -121.27704523968755, -23.210130915486886
+        Now: 4.862862874924345, -197.68250726808083, 16
         Spawn: -10, -30, -50
     Size:
         Now: 32, 32
@@ -2070,7 +2070,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-        Now: 0.09743720997039755, 1.3067977978660192, 0.12688695339744777
+        Now: 1.0489671349632819, -0.037320855944728185, 0.026087160049219682
         Spawn: 0, 0, 0
   ecs.Named:
     Name: FlubTest
@@ -3860,7 +3860,7 @@
           Hi:
             Material: ∈⋮123∈⋮Door+Metal
             Transform:
-                Now: 1, 0, 0, 0, 1.28, -0.30000000000000004
+                Now: 1, 0, 0, 0, 0, 1
                 Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
           Lo:
             Material: ∈⋮2∈⋮Default
@@ -3884,11 +3884,11 @@
                 Duration: 1000
                 End: 0
                 Lifetime: AnimationLifetimeOnce
-                Percent: 1
-                Reverse: false
+                Percent: 0
+                Reverse: true
                 Start: 64
                 TweeningFunc: EaseInOut2
-            Now: 0
+            Now: 64
             Spawn: 64
   ecs.Linked:
     Sources:
@@ -5754,11 +5754,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.8046875
+            Percent: 0.5234375
             Reverse: true
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: -260, 60, -50.47412109375
+        Now: -260, 60, -47.02197265625
         Spawn: -260, 60, -52
     Size:
         Now: 20, 20
@@ -5999,19 +5999,37 @@
     Speed: 100
     Start: ∈⋮150
   behaviors.ActorState:
-    Action: ∈⋮151
+    Action: ∈⋮150
   behaviors.ParticleEmitter:
     Limit: "30"
     Particles:
-        - ∈⋮162
-        - ∈⋮181
-        - ∈⋮207
-        - ∈⋮179
-        - ∈⋮175
+        - ∈⋮230
+        - ∈⋮196
+        - ∈⋮234
+        - ∈⋮202
+        - ∈⋮236
+        - ∈⋮237
+        - ∈⋮238
         - ∈⋮174
+        - ∈⋮208
+        - ∈⋮241
+        - ∈⋮210
+        - ∈⋮179
+        - ∈⋮213
+        - ∈⋮181
+        - ∈⋮212
+        - ∈⋮183
+        - ∈⋮215
+        - ∈⋮218
+        - ∈⋮186
+        - ∈⋮188
+        - ∈⋮221
+        - ∈⋮223
+        - ∈⋮226
+        - ∈⋮227
         - ∈⋮195
-        - ∈⋮187
-        - ∈⋮205
+        - ∈⋮228
+        - ∈⋮162
     Source: ∈⋮153∈⋮Bubble
     Vel: 15
     XYSpread: 10
@@ -6021,7 +6039,7 @@
         Now: 180
         Spawn: 180
     Pos:
-        Now: 860, -463.03811307250277, 32
+        Now: 860, -658.7865679747355, 32
         Procedural: true
         Spawn: 860, -710, 32
     Size:
@@ -6097,11 +6115,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.9921875
+            Percent: 0.203125
             Reverse: false
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: 230, -860, -19.99755859375
+        Now: 230, -860, -18.349609375
         Spawn: 230, -860, -20
     Size:
         Now: 15, 15
@@ -6392,10 +6410,6 @@
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮175
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮176
   core.Body:
     Angle:
@@ -6406,11 +6420,11 @@
             Active: true
             Duration: 1000
             End: 0, 0, 5
-            Percent: 0.9453125
+            Percent: 0.28125
             Reverse: true
             Start: 0, 0, 0
             TweeningFunc: EaseInOut2
-        Now: 40, -250, 4.11962890625
+        Now: 40, -250, 7.0859375
         Spawn: 40, -250, 4
     Size:
         Now: 20, 20
@@ -6455,6 +6469,10 @@
     Diffuse: 1, 1, 0.8
     Strength: 2
 - Entity: ∈⋮181
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮183
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6519,7 +6537,11 @@
         Z:
             Now: 64
             Spawn: 64
-- Entity: ∈⋮187
+- Entity: ∈⋮186
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮188
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6720,6 +6742,10 @@
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮196
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮197
   audio.Sound:
     Source: data/sounds/blip1.wav
@@ -6750,28 +6776,28 @@
             Material: ∈⋮2∈⋮Default
           Lo:
             Material: ∈⋮2∈⋮Default
-          P: 21.213203435596423, 285.3553390593274
+          P: 282.17282518837453, 81.38687521951789
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
             Material: ∈⋮123∈⋮Door+Metal
-          P: -14.14213562373095, 250
+          P: 246.81748612904715, 46.03153616019051
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
             Material: ∈⋮123∈⋮Door+Metal
-          P: 28.284271247461895, 207.57359312880715
+          P: 289.24389300024, 3.6051292889976594
           Surface:
             Material: ∈⋮2∈⋮Default
         - Hi:
             Material: ∈⋮2∈⋮Default
           Lo:
             Material: ∈⋮2∈⋮Default
-          P: 63.639610306789265, 242.92893218813452
+          P: 324.5992320595674, 38.96046834832504
           Surface:
             Material: ∈⋮2∈⋮Default
     Top:
@@ -6789,6 +6815,10 @@
         Spawn: 1, 1, 1, 1
     Label: Cooling
     LineSpacing: 1.05
+- Entity: ∈⋮202
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮203
   core.Sector:
     Bottom:
@@ -6844,16 +6874,16 @@
     Source: data/sounds/collect.wav
   ecs.Named:
     Name: Collect
-- Entity: ∈⋮205
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮206
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 0.6
     Strength: 2
-- Entity: ∈⋮207
+- Entity: ∈⋮208
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮210
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6905,6 +6935,18 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮212
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮213
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮215
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮217
   core.Sector:
     Bottom:
@@ -6953,6 +6995,10 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮218
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮219
   core.Sector:
     Bottom:
@@ -7056,6 +7102,10 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮221
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮222
   core.Sector:
     Bottom:
@@ -7111,6 +7161,10 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮223
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮225
   core.Sector:
     Bottom:
@@ -7159,7 +7213,23 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮226
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮227
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮228
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮229
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮230
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -7169,6 +7239,22 @@
     Source: data/sounds/spell.wav
   ecs.Named:
     Name: Door Close
+- Entity: ∈⋮234
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮236
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮237
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮238
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮239
   materials.Image:
     Filter: false
@@ -7231,6 +7317,10 @@
         Z:
             Now: 64
             Spawn: 64
+- Entity: ∈⋮241
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮243
   ecs.Named:
     Name: Space Window

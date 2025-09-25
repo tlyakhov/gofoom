@@ -187,7 +187,11 @@ func (ui *UI) renderBox(widget *Widget, label string, x, y, hStart, hEnd int) {
 			continue
 		}
 		index = x + i + y*ui.cols
-		ui.textBuffer[index].Color = &ui.LabelColor
+		if widget.LabelColor != nil {
+			ui.textBuffer[index].Color = widget.LabelColor
+		} else {
+			ui.textBuffer[index].Color = &ui.LabelColor
+		}
 		if i >= hStart && i < hEnd {
 			ui.textBuffer[index].BGColor = &widget.highlight.Render
 		} else {
