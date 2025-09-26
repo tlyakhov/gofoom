@@ -11,7 +11,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2/driver/desktop"
-	"gopkg.in/yaml.v3"
+	"sigs.k8s.io/yaml"
 )
 
 // TODO: Be more flexible with what we can delete/cut/copy/paste. Should be

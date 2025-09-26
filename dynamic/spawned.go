@@ -64,6 +64,10 @@ func (s *Spawned[T]) Serialize() map[string]any {
 		log.Panicf("Tried to serialize Spawned[T] %v where T has no serializer", s)
 	}
 
+	if result["Spawn"] == result["Now"] {
+		delete(result, "Now")
+	}
+
 	return result
 }
 

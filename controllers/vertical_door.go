@@ -15,6 +15,8 @@ type VerticalDoorController struct {
 	ecs.BaseController
 	*behaviors.VerticalDoor
 	Sector *core.Sector
+
+	autoProximity *behaviors.Proximity
 }
 
 func init() {
@@ -141,5 +143,32 @@ func (vd *VerticalDoorController) Recalculate() {
 	if !vd.Close.IsEmpty() {
 		vd.Close.Params = []core.ScriptParam{{Name: "door", TypeName: "*behaviors.VerticalDoor"}}
 		vd.Close.Compile()
+	}
+
+	if vd.AutoProximity {
+		vd.cacheAutoProximity()
+		p := behaviors.GetProximity(vd.Entity)
+		if p != nil && p != vd.autoProximity {
+			ecs.DetachComponent(behaviors.ProximityCID, vd.Entity)
+			p = nil
+		}
+		if p == nil {
+			var a ecs.Component = vd.autoProximity
+			ecs.Attach(behaviors.ProximityCID, vd.Entity, &a)
+		}
+	}
+}
+
+func (vd *VerticalDoorController) cacheAutoProximity() {
+	if ecs.CachedGeneratedComponent(&vd.autoProximity, "_VerticalDoorAutoProximity", behaviors.ProximityCID) {
+		vd.autoProximity.Hysteresis = 0
+		vd.autoProximity.InRange.Code = `
+			if body == nil { return }
+   			m := core.GetMobile(body.Entity)
+   			vd := behaviors.GetVerticalDoor(onEntity)
+   			if m == nil || vd == nil { return }
+   			if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }`
+
+		ecs.ActAllControllersOneEntity(vd.autoProximity.Entity, ecs.ControllerRecalculate)
 	}
 }

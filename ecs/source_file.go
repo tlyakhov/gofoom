@@ -11,7 +11,7 @@ import (
 	"reflect"
 
 	"github.com/spf13/cast"
-	"gopkg.in/yaml.v3"
+	"sigs.k8s.io/yaml"
 )
 
 type SourceFile struct {
