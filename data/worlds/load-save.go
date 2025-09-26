@@ -20,6 +20,7 @@ func main() {
 		}
 		log.Printf("%v", path)
 		//controllers.CreateTestWorld3(u)
+		ecs.Initialize()
 		if err = ecs.Load(path); err != nil {
 			log.Printf("Error loading world %v", err)
 			return nil

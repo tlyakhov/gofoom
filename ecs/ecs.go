@@ -13,7 +13,7 @@ import (
 	"tlyakhov/gofoom/dynamic"
 
 	"github.com/kelindar/bitmap"
-	"gopkg.in/yaml.v3"
+	"sigs.k8s.io/yaml"
 )
 
 // The architecture is like this:

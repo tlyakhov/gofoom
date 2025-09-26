@@ -5,14 +5,14 @@
     Spawn: false
   core.Body:
     Angle:
-        Now: 666.5625
-        Spawn: 0
+      Now: 666.5625
+      Spawn: 0
     Pos:
-        Now: -95, 33.429430386224624, 20
-        Spawn: 0, 0, 0
+      Now: -95, 33.429430386224624, 20
+      Spawn: 0, 0, 0
     Size:
-        Now: 10, 40
-        Spawn: 10, 10
+      Now: 10, 40
+      Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -21,8 +21,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: -0.0000000000000000007020574258612461, 0.00000001385158160997744, -0.00000000000765625000071583
-        Spawn: 0, 0, 0
+      Now: -0.0000000000000000007020574258612461, 0.00000001385158160997744, -0.0000000000000000000007656250000715842
+      Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
   inventory.Carrier:
@@ -39,90 +39,82 @@
 - Entity: ∈⋮3
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: -100, -100
-          Surface:
-            Material: ∈⋮47
-            Transform:
-                Now: 3.125, 0, 0, 0, 1, 0
-                Spawn: 3.125, 0, 0, 0, 1, 0
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 100, -100
-          Surface:
-            Material: ∈⋮47
-            Transform:
-                Now: 1.09375, 0, 0, 0, 1, 0
-                Spawn: 1.09375, 0, 0, 0, 1, 0
-        - AdjacentSector: ∈⋮8
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 100, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 100, 50
-          Surface:
-            Material: ∈⋮47
-            Transform:
-                Now: 0.78125, 0, 0, 0, 1, 0
-                Spawn: 0.78125, 0, 0, 0, 1, 0
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 100, 100
-          Surface:
-            Material: ∈⋮47
-            Transform:
-                Now: 3.125, 0, 0, 0, 1, 0
-                Spawn: 3.125, 0, 0, 0, 1, 0
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: -100, 100
-          Surface:
-            Material: ∈⋮47
-            Transform:
-                Now: 3.125, 0, 0, 0, 1, 0
-                Spawn: 3.125, 0, 0, 0, 1, 0
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: -100, -100
+      Surface:
+        Material: ∈⋮47
+        Transform:
+          Spawn: 3.125, 0, 0, 0, 1, 0
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -100
+      Surface:
+        Material: ∈⋮47
+        Transform:
+          Spawn: 1.09375, 0, 0, 0, 1, 0
+    - AdjacentSector: ∈⋮8
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, 50
+      Surface:
+        Material: ∈⋮47
+        Transform:
+          Spawn: 0.78125, 0, 0, 0, 1, 0
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, 100
+      Surface:
+        Material: ∈⋮47
+        Transform:
+          Spawn: 3.125, 0, 0, 0, 1, 0
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: -100, 100
+      Surface:
+        Material: ∈⋮47
+        Transform:
+          Spawn: 3.125, 0, 0, 0, 1, 0
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 64
-            Spawn: 64
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 64
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: -60, -70, 32
-        Spawn: -60, -70, 32
+      Spawn: -60, -70, 32
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -136,14 +128,11 @@
     Spawn: true
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Spawn: 0, 0, 0
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -152,8 +141,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-        Now: 0, 0, 0
-        Spawn: 0, 0, 0
+      Spawn: 0, 0, 0
   ecs.Named:
     Name: Spawn
   inventory.Carrier:
@@ -161,444 +149,441 @@
 - Entity: ∈⋮8
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 100, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮11
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮3∈⋮Starting
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 100, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮11
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮3∈⋮Starting
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 64
-            Spawn: 64
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 64
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮9
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮13
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮11
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮13
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮11
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮10
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮11
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮15
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮11
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮15
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮11
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮9
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮12
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮10
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮8
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 140, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮9
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮12
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮10
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮8
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 140, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮12
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮14
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮11
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 360, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮14
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮11
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 360, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮13
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮9
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮17
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮14
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮9
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮17
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮14
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮14
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: -10
-            Spawn: -10
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: -10
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮15
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮19
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮13
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮12
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮15
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮19
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮13
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮12
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮15
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮10
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮14
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 390, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮18
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮10
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮14
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 390, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮18
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮16
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 430, 10, 32
-        Spawn: 430, 10, 32
+      Spawn: 430, 10, 32
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.6
     Diffuse: 1, 1, 1
@@ -606,228 +591,225 @@
 - Entity: ∈⋮17
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮13
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮20
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮13
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮18
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮15
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮20
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮15
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮19
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮14
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 470, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮20
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮14
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 470, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮20
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮32
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮17
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮19
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮18
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 500, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮32
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮17
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮19
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮18
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 500, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮21
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 170, -250, 64
-        Spawn: 170, -250, 64
+      Spawn: 170, -250, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 0
@@ -835,14 +817,11 @@
 - Entity: ∈⋮22
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 690, -240, 64
-        Spawn: 690, -240, 64
+      Spawn: 690, -240, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 0
@@ -850,14 +829,11 @@
 - Entity: ∈⋮23
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 690, 270, 64
-        Spawn: 690, 270, 64
+      Spawn: 690, 270, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 0
@@ -865,14 +841,11 @@
 - Entity: ∈⋮24
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 170, 270, 64
-        Spawn: 170, 270, 64
+      Spawn: 170, 270, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 0
@@ -884,86 +857,81 @@
 - Entity: ∈⋮28
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Animation:
-            Active: true
-            Duration: 1000
-            End: 0, 0, 5
-            Percent: 0.625
-            Reverse: false
-            Start: 0, 0, 0
-            TweeningFunc: EaseInOut2
-        Now: 200, 10, 14.375
-        Spawn: 200, 10, 10
+      Animation:
+        Active: true
+        Duration: 1000
+        End: 0, 0, 5
+        Percent: 0.23896028879043896
+        Reverse: false
+        Start: 0, 0, 0
+        TweeningFunc: EaseInOut2
+      Now: 200, 10, 14.375
+      Spawn: 200, 10, 10
     Size:
-        Now: 20, 20
-        Spawn: 20, 20
+      Spawn: 20, 20
   ecs.Linked:
     Sources:
-        - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+    - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮29
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1340, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮36
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1340, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮46
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1120, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮41
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1120, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1340, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮36
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1340, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮46
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1120, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮41
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1120, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮30
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 790, -250, 64
-        Spawn: 790, -250, 64
+      Spawn: 790, -250, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 1
@@ -971,14 +939,11 @@
 - Entity: ∈⋮31
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 790, 270, 64
-        Spawn: 790, 270, 64
+      Spawn: 790, 270, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 1
@@ -986,295 +951,290 @@
 - Entity: ∈⋮32
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮20
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 720, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮39
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮20
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 720, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 64
-            Spawn: 64
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 64
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮33
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮45
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮39
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮45
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮34
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮38
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮36
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮38
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮36
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮35
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮35
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: -10
-            Spawn: -10
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: -10
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮45
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮46
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮34
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮42
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮45
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮46
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮34
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮42
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮36
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1340, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮29
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1340, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-            Transform:
-                Now: 1, 0, 0, 0, 4.266666666666667, 0
-                Spawn: 1, 0, 0, 0, 4.266666666666667, 0
-          P: 1120, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-            Transform:
-                Now: 1, 0, 0, 0, 4.266666666666667, 0
-                Spawn: 1, 0, 0, 0, 4.266666666666667, 0
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1120, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮34
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1340, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮29
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1340, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+        Transform:
+          Spawn: 1, 0, 0, 0, 4.266666666666667, 0
+      P: 1120, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+        Transform:
+          Spawn: 1, 0, 0, 0, 4.266666666666667, 0
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1120, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮34
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮37
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 1310, -240, 64
-        Spawn: 1310, -240, 64
+      Spawn: 1310, -240, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 1
@@ -1282,122 +1242,119 @@
 - Entity: ∈⋮38
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮34
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, -280
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, -60
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮34
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, -280
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, -60
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮39
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮39
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮38
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮42
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮33
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮32
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 760, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮38
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮42
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮33
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮32
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 760, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮40
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 1050, 10, 32
-        Spawn: 1050, 10, 32
+      Spawn: 1050, 10, 32
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.6
     Diffuse: 0, 1, 1
@@ -1405,120 +1362,117 @@
 - Entity: ∈⋮41
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1340, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮29
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1340, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1120, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1120, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮45
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1340, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮29
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1340, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1120, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1120, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮45
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮42
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮39
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 980, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮35
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮39
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 980, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮43
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Now: 1310, 270, 64
-        Spawn: 1310, 270, 64
+      Spawn: 1310, 270, 64
     Size:
-        Now: 10, 10
-        Spawn: 10, 10
+      Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 1
@@ -1526,145 +1480,141 @@
 - Entity: ∈⋮44
   core.Body:
     Angle:
-        Now: 0
-        Spawn: 0
+      Spawn: 0
     Pos:
-        Animation:
-            Active: true
-            Duration: 1000
-            End: 0, 0, 5
-            Percent: 0.390625
-            Reverse: false
-            Start: 0, 0, 0
-            TweeningFunc: EaseInOut2
-        Now: 820, 10, 14.521484375
-        Spawn: 820, 10, 10
+      Animation:
+        Active: true
+        Duration: 1000
+        End: 0, 0, 5
+        Percent: 0.791004640652074
+        Reverse: false
+        Start: 0, 0, 0
+        TweeningFunc: EaseInOut2
+      Now: 820, 10, 14.521484375
+      Spawn: 820, 10, 10
     Size:
-        Now: 20, 20
-        Spawn: 20, 20
+      Spawn: 20, 20
   ecs.Linked:
     Sources:
-        - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+    - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮45
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - AdjacentSector: ∈⋮33
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1010, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮41
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, 80
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, 300
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮33
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮35
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1010, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮41
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, 80
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, 300
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮46
   core.Sector:
     Bottom:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 0
-            Spawn: 0
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 0
     FloorFriction: 0.85
     Segments:
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮29
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1120, 50
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1120, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
-        - AdjacentSector: ∈⋮35
-          Hi:
-            Material: ∈⋮2∈⋮Default
-          Lo:
-            Material: ∈⋮2∈⋮Default
-          P: 1090, -30
-          Surface:
-            Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮29
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1120, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1120, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮35
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 1090, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
     Top:
-        Surface:
-            Material: ∈⋮2∈⋮Default
-        Z:
-            Now: 128
-            Spawn: 128
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z:
+        Spawn: 128
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮47
   materials.Image:
     Filter: false
     Source: data/FHexMetal.png
   materials.Shader:
     Stages:
-        - BlendingFunc: BlendNormal
-          Material: ∈⋮47
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮47
 - Entity: ∈⋮49
   ecs.Named:
     Name: Shader FHexMetal.png
-- Entity: ∈⋮50
-  ecs.Named: ∈⋮49∈⋮Shader+FHexMetal.png

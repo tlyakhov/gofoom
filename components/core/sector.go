@@ -29,8 +29,9 @@ type Sector struct {
 	Bodies           map[ecs.Entity]*Body
 	InternalSegments map[ecs.Entity]*InternalSegment
 	// TODO: Should be automatic:
-	Inner ecs.EntityTable `editable:"Inner Sectors"`
-	Outer ecs.EntityTable
+	Inner     ecs.EntityTable `editable:"Inner Sectors"`
+	Outer     ecs.EntityTable
+	Transform dynamic.DynamicValue[concepts.Matrix2] `editable:"Transform"`
 
 	EnterScripts []*Script `editable:"Enter Scripts"`
 	ExitScripts  []*Script `editable:"Exit Scripts"`
@@ -111,6 +112,7 @@ func (s *Sector) OnDelete() {
 	if s.IsAttached() {
 		s.Top.Z.Detach(ecs.Simulation)
 		s.Bottom.Z.Detach(ecs.Simulation)
+		s.Transform.Detach(ecs.Simulation)
 		s.removeAdjacentReferences()
 	}
 	for _, b := range s.Bodies {
@@ -124,6 +126,10 @@ func (s *Sector) OnAttach() {
 	s.Attached.OnAttach()
 	s.Top.Z.Attach(ecs.Simulation)
 	s.Bottom.Z.Attach(ecs.Simulation)
+	s.Transform.Attach(ecs.Simulation)
+	s.Transform.OnRender = func(blend float64) {
+		// TODO: to be able to do this, we need P to be a DynamicValue
+	}
 	// When we attach a component, its address may change. Ensure segments don't
 	// wind up referencing an unattached sector.
 	for _, seg := range s.Segments {
@@ -162,6 +168,7 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Top.Normal[1] = 0
 	s.Top.Normal[0] = 0
 	s.Top.Z.SetAll(64.0)
+	s.Transform.Construct(nil)
 
 	if data == nil {
 		return
@@ -205,6 +212,9 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["Inner"]; ok {
 		s.Inner = ecs.ParseEntityTable(v, false)
 	}
+	if v, ok := data["Transform"]; ok {
+		s.Transform.Construct(v.(map[string]any))
+	}
 
 	s.Recalculate()
 }
@@ -231,6 +241,8 @@ func (s *Sector) Serialize() map[string]any {
 	if !s.Inner.Empty() {
 		result["Inner"] = s.Inner.Serialize()
 	}
+
+	result["Transform"] = s.Transform.Serialize()
 
 	segments := []any{}
 	for _, seg := range s.Segments {

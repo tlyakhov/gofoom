@@ -9,7 +9,7 @@ import (
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/editor/state"
 
-	"gopkg.in/yaml.v3"
+	"sigs.k8s.io/yaml"
 )
 
 // TODO: Be more flexible with what we can delete/cut/copy/paste. Should be

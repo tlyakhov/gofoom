@@ -50,19 +50,15 @@ func processBindingInput(eventID dynamic.EventID, input string) {
 	}
 }
 
-func processBinding(binding *ui.InputBinding) {
-	if binding.Input1 != "" {
-		processBindingInput(binding.EventID, binding.Input1)
-	}
-	if binding.Input2 != "" {
-		processBindingInput(binding.EventID, binding.Input2)
-	}
-}
-
 func gameInput() {
 	for _, w := range uiPageKeyBindings.Widgets {
 		if binding, ok := w.(*ui.InputBinding); ok {
-			processBinding(binding)
+			if binding.Input1 != "" {
+				processBindingInput(binding.EventID, binding.Input1)
+			}
+			if binding.Input2 != "" {
+				processBindingInput(binding.EventID, binding.Input2)
+			}
 		}
 	}
 }

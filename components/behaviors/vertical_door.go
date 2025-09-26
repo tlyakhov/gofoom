@@ -34,11 +34,12 @@ const (
 type VerticalDoor struct {
 	ecs.Attached `editable:"^"`
 	// TODO: Separate out state and make this multi-attachable
-	State     DoorState
-	Intent    DoorIntent  `editable:"Intent"`
-	AutoClose bool        `editable:"Auto-close"`
-	Open      core.Script `editable:"On Open"`
-	Close     core.Script `editable:"On Close"`
+	State         DoorState
+	Intent        DoorIntent  `editable:"Intent"`
+	AutoClose     bool        `editable:"Auto-close"`
+	Open          core.Script `editable:"On Open"`
+	Close         core.Script `editable:"On Close"`
+	AutoProximity bool        `editable:"Auto Proximity"`
 
 	// Passthroughs to Animation
 	TweeningFunc dynamic.TweeningFunc `editable:"Tweening Function"`
@@ -60,6 +61,7 @@ func (vd *VerticalDoor) String() string {
 func (vd *VerticalDoor) Construct(data map[string]any) {
 	vd.Attached.Construct(data)
 	vd.AutoClose = true
+	vd.AutoProximity = true
 	vd.TweeningFunc = dynamic.EaseInOut2
 	vd.Duration = 1000
 
@@ -79,6 +81,9 @@ func (vd *VerticalDoor) Construct(data map[string]any) {
 
 	if v, ok := data["AutoClose"]; ok {
 		vd.AutoClose = cast.ToBool(v)
+	}
+	if v, ok := data["AutoProximity"]; ok {
+		vd.AutoProximity = cast.ToBool(v)
 	}
 	if v, ok := data["TweeningFunc"]; ok {
 		name := v.(string)
@@ -107,6 +112,9 @@ func (vd *VerticalDoor) Serialize() map[string]any {
 
 	if !vd.AutoClose {
 		result["AutoClose"] = false
+	}
+	if !vd.AutoProximity {
+		result["AutoProximity"] = false
 	}
 	if !vd.Open.IsEmpty() {
 		result["Open"] = vd.Open.Serialize()

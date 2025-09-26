@@ -3,33 +3,29 @@
     Name: Default
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: data/WDef.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮3
   core.Body:
     Angle:
-      Now: 0
       Spawn: 0
     Pos:
       Now: 110, 0, 32
       Spawn: 110, 0, 0
     Size:
-      Now: 64, 64
       Spawn: 64, 64
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮4
   core.Body:
     Angle:
-      Now: 0
       Spawn: 0
     Pos:
-      Now: 40, -50, 32
       Spawn: 40, -50, 32
     Size:
-      Now: 10, 10
       Spawn: 10, 10
   core.Light:
     Attenuation: 0.4
@@ -42,17 +38,12 @@
     Health: 100
   character.Player:
     Spawn: true
-  inventory.Carrier:
-    Inventory: []
   core.Body:
     Angle:
-      Now: 0
       Spawn: 0
     Pos:
-      Now: 0, 0, 0
       Spawn: 0, 0, 0
     Size:
-      Now: 10, 10
       Spawn: 10, 10
   core.Mobile:
     CrMoving: CollideNone
@@ -62,123 +53,119 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0, 0, 0
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Spawn
+  inventory.Carrier:
+    Inventory: []
 - Entity: ∈⋮6
   core.Body:
     Angle:
-      Now: 0
       Spawn: 0
     Pos:
       Now: 50, 0, 32
       Spawn: 50, 0, 0
     Size:
-      Now: 64, 64
       Spawn: 64, 64
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: /Users/tim/Documents/gofoom/data/space_tiles_hyptosis/ladder.png
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮8
   ecs.Named:
     Name: SolidBlue
   materials.Solid:
     Diffuse:
-      Now: 0, 0, 1, 0.5
       Spawn: 0, 0, 1, 0.5
 - Entity: ∈⋮13
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮2
+        Material: ∈⋮2∈⋮Default
       Z:
-        Now: 0
         Spawn: 0
     FloorFriction: 0.85
     Segments:
-      - Hi: {}
-        Lo: {}
-        P: -100, -100
-        Surface:
-          Material: ∈⋮2
-      - AdjacentSector: ∈⋮14
-        Hi: {}
-        Lo: {}
-        P: 90, -100
-        Surface: {}
-      - Hi: {}
-        Lo: {}
-        P: 90, 100
-        Surface:
-          Material: ∈⋮2
-      - Hi: {}
-        Lo: {}
-        P: -100, 100
-        Surface: {}
+    - Hi: {}
+      Lo: {}
+      P: -100, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮14∈⋮Split+Starting+%282%29
+      Hi: {}
+      Lo: {}
+      P: 90, -100
+      Surface: {}
+    - Hi: {}
+      Lo: {}
+      P: 90, 100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi: {}
+      Lo: {}
+      P: -100, 100
+      Surface: {}
     Top:
       Surface:
-        Material: ∈⋮2
+        Material: ∈⋮2∈⋮Default
       Z:
-        Now: 64
         Spawn: 64
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Split Starting (1)
 - Entity: ∈⋮14
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮2
+        Material: ∈⋮2∈⋮Default
       Z:
-        Now: 0
         Spawn: 0
     FloorFriction: 0.85
     Segments:
-      - Hi: {}
-        Lo: {}
-        P: 90, -100
-        Surface:
-          Material: ∈⋮2
-      - Hi: {}
-        Lo: {}
-        P: 240, -100
-        Surface:
-          Material: ∈⋮2
-      - Hi: {}
-        Lo: {}
-        P: 240, 100
-        Surface:
-          Material: ∈⋮2
-      - AdjacentSector: ∈⋮13
-        Hi: {}
-        Lo: {}
-        P: 90, 100
-        Surface: {}
+    - Hi: {}
+      Lo: {}
+      P: 90, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi: {}
+      Lo: {}
+      P: 240, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi: {}
+      Lo: {}
+      P: 240, 100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮13∈⋮Split+Starting+%281%29
+      Hi: {}
+      Lo: {}
+      P: 90, 100
+      Surface: {}
     Top:
       Surface:
-        Material: ∈⋮2
+        Material: ∈⋮2∈⋮Default
       Z:
-        Now: 64
         Spawn: 64
+    Transform:
+      Spawn: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Split Starting (2)
 - Entity: ∈⋮15
   core.Body:
     Angle:
-      Now: 0
       Spawn: 0
     Pos:
       Now: 80, 0, 32
       Spawn: 80, 0, 0
     Size:
-      Now: 64, 64
       Spawn: 64, 64
   materials.Image:
     Filter: false
-    GenerateMipMaps: true
     Source: ""
   materials.Lit:
+    Ambient: 0, 0, 0
     Diffuse: 0.4, 0.4, 0.4, 0.4
