@@ -9,7 +9,6 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -37,9 +36,9 @@ func (ms *MaterialSampler) Initialize(material ecs.Entity, extraStages []*materi
 	}
 }
 
-func (ms *MaterialSampler) setBillboardSegment(b *core.Body, unitView *concepts.Vector3, ds dynamic.DynamicState) {
-	p := b.Pos.Value(ds)
-	s := b.Size.Value(ds)
+func (ms *MaterialSampler) setBillboardSegment(b *core.Body, unitView *concepts.Vector3) {
+	p := b.Pos.Render
+	s := b.Size.Render
 	if ms.BillboardSegment.A == nil {
 		ms.BillboardSegment.A = &concepts.Vector2{}
 		ms.BillboardSegment.B = &concepts.Vector2{}
@@ -54,7 +53,7 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 	delta := &concepts.Vector3{dst[0] - src[0], dst[1] - src[1], dst[2] - src[2]}
 	delta.NormSelf()
 	isect := concepts.Vector3{}
-	ms.setBillboardSegment(b, delta, dynamic.Render)
+	ms.setBillboardSegment(b, delta)
 	ok := ms.BillboardSegment.Intersect3D(src, dst, &isect)
 	if !ok {
 		return false

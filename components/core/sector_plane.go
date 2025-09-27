@@ -86,8 +86,8 @@ func (s *SectorPlane) Recalculate() {
 		s.Normal[0]*s.Segments[0].P[0]
 }
 
-func (s *SectorPlane) ZAt(stage dynamic.DynamicState, isect *concepts.Vector2) float64 {
-	det := s.Normal[2]*s.Z.Value(stage) + s.XYDet
+func (s *SectorPlane) ZAt(isect *concepts.Vector2) float64 {
+	det := s.Normal[2]*s.Z.Render + s.XYDet
 
 	return (det - s.Normal[0]*isect[0] - s.Normal[1]*isect[1]) / s.Normal[2]
 }

@@ -6,7 +6,6 @@ package actions
 import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/controllers"
-	"tlyakhov/gofoom/dynamic"
 
 	"fyne.io/fyne/v2/driver/desktop"
 )
@@ -41,7 +40,7 @@ func (a *AddInternalSegment) Point() bool {
 		a.B.From(worldGrid)
 	}
 	if a.ContainingSector != nil {
-		a.Bottom, a.Top = a.ContainingSector.ZAt(dynamic.Spawn, worldGrid)
+		a.Bottom, a.Top = a.ContainingSector.ZAt(worldGrid)
 	}
 	a.Recalculate()
 	return true

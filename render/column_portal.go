@@ -7,7 +7,6 @@ import (
 	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/dynamic"
 )
 
 type columnPortal struct {
@@ -20,7 +19,7 @@ type columnPortal struct {
 }
 
 func (cp *columnPortal) CalcScreen() {
-	cp.AdjBottom, cp.AdjTop = cp.Adj.ZAt(dynamic.Render, cp.RaySegIntersect.To2D())
+	cp.AdjBottom, cp.AdjTop = cp.Adj.ZAt(cp.RaySegIntersect.To2D())
 	cp.AdjProjectedTop = cp.ProjectZ(cp.AdjTop - cp.CameraZ)
 	cp.AdjProjectedBottom = cp.ProjectZ(cp.AdjBottom - cp.CameraZ)
 

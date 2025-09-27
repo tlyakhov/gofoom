@@ -7,7 +7,6 @@ import (
 	"math"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"unsafe"
 
 	"github.com/spf13/cast"
 )
@@ -24,9 +23,12 @@ import (
 // * Values can also have Animations that use easing (e.g. inventory item bobbing)
 type DynamicValue[T DynamicType] struct {
 	Spawned[T] `editable:"^"`
-	// Warning: the location within the struct matters for fast access. Do not
-	// move or change order without updating Dynamic.Value
-	Prev   T
+	// The previous frame's value
+	Prev T
+	// Prior to rendering a frame, this value should be == .Now
+	// During rendering, this will be a value blended between .Prev and .Now
+	// depending on how much "leftover" dt there is
+	// (see https://gafferongames.com/post/fix_your_timestep/)
 	Render T
 
 	*Animation[T] `editable:"Animation"`
@@ -52,16 +54,6 @@ func (d *DynamicValue[T]) IsProcedural() bool {
 	return d.Procedural
 }
 
-func (d *DynamicValue[T]) Value(s DynamicState) T {
-	// This is very unsafe because it depends on the struct layout matching the
-	// order of the DynamicState enum. It's much
-	// faster than a switch/branch.
-	start := unsafe.Offsetof(d.Spawn)
-	delta := unsafe.Offsetof(d.Now) - unsafe.Offsetof(d.Spawn)
-	p := unsafe.Pointer(uintptr(unsafe.Pointer(d)) + start + delta*uintptr(s))
-	return *(*T)(p)
-}
-
 func (d *DynamicValue[T]) ResetToSpawn() {
 	d.Spawned.ResetToSpawn()
 	d.Prev = d.Spawn
@@ -76,16 +68,16 @@ func (d *DynamicValue[T]) SetAll(v T) {
 }
 
 func (d *DynamicValue[T]) Attach(sim *Simulation) {
-	sim.Dynamics.Store(d, struct{}{})
-	sim.Spawnables.Store(d, struct{}{})
+	sim.Dynamics[d] = struct{}{}
+	sim.Spawnables[d] = struct{}{}
 	d.Attached = true
 }
 
 func (d *DynamicValue[T]) Detach(sim *Simulation) {
 	d.Render = d.Now
 	d.Attached = false
-	sim.Spawnables.Delete(d)
-	sim.Dynamics.Delete(d)
+	delete(sim.Spawnables, d)
+	delete(sim.Dynamics, d)
 }
 
 func (d *DynamicValue[T]) NewAnimation() *Animation[T] {
@@ -97,6 +89,7 @@ func (d *DynamicValue[T]) NewAnimation() *Animation[T] {
 
 func (d *DynamicValue[T]) NewFrame() {
 	d.Prev = d.Now
+	d.Render = d.Now
 }
 
 func fixAngle(src float64, dst *float64) {

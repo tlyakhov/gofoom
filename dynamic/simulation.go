@@ -7,7 +7,6 @@ import (
 	"tlyakhov/gofoom/constants"
 
 	"github.com/loov/hrtime"
-	"github.com/puzpuzpuz/xsync/v3"
 )
 
 // This is based on the "Fix your timestep" blog post here:
@@ -27,8 +26,8 @@ type Simulation struct {
 	NewFrame         func()
 	Integrate        func()
 	Render           func()
-	Dynamics         *xsync.MapOf[Dynamic, struct{}]
-	Spawnables       *xsync.MapOf[Spawnable, struct{}]
+	Dynamics         map[Dynamic]struct{}   // *xsync.MapOf[Dynamic, struct{}]
+	Spawnables       map[Spawnable]struct{} //  *xsync.MapOf[Spawnable, struct{}]
 	Events           EventQueue
 }
 
@@ -37,8 +36,8 @@ func NewSimulation() *Simulation {
 		PrevTimestamp: hrtime.Now().Milliseconds(),
 		Timestamp:     hrtime.Now().Milliseconds(),
 		EditorPaused:  false,
-		Dynamics:      xsync.NewMapOf[Dynamic, struct{}](),
-		Spawnables:    xsync.NewMapOf[Spawnable, struct{}](),
+		Dynamics:      make(map[Dynamic]struct{}),
+		Spawnables:    make(map[Spawnable]struct{}),
 	}
 }
 
@@ -63,14 +62,16 @@ func (s *Simulation) Step() {
 		s.NewFrame()
 	}
 
+	for d := range s.Dynamics {
+		d.NewFrame()
+	}
+
 	for s.RenderTime >= constants.TimeStep {
-		s.Dynamics.Range(func(d Dynamic, _ struct{}) bool {
-			d.NewFrame()
+		for d := range s.Dynamics {
 			if a := d.GetAnimation(); a != nil && !s.EditorPaused {
 				a.Animate()
 			}
-			return true
-		})
+		}
 
 		if s.Integrate != nil {
 			s.Integrate()
@@ -88,13 +89,12 @@ func (s *Simulation) Step() {
 	// Update the blended values
 	s.RenderStateBlend = s.RenderTime / constants.TimeStep
 
-	s.Dynamics.Range(func(d Dynamic, _ struct{}) bool {
+	for d := range s.Dynamics {
 		if s.Recalculate {
 			d.Recalculate()
 		}
 		d.Update(s.RenderStateBlend)
-		return true
-	})
+	}
 
 	if s.Render != nil {
 		s.Render()

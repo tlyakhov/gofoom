@@ -12,7 +12,6 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -93,7 +92,7 @@ func (ls *LightSampler) Get() *concepts.Vector3 {
 	ls.LightmapHashToWorld(ls.Sector, &ls.Q, ls.Hash)
 	// Ensure our quantized world location is within Z bounds to avoid
 	// weird shadowing.
-	fz, cz := ls.Sector.ZAt(dynamic.Render, ls.Q.To2D())
+	fz, cz := ls.Sector.ZAt(ls.Q.To2D())
 	if ls.Q[2] < fz {
 		ls.Q[2] = fz
 	}
@@ -133,7 +132,7 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(dynamic.Render, p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(p.To2D())
 		if p[2]-ceilZ > ls.LightGrid || floorZ-p[2] > ls.LightGrid {
 			continue
 		}
@@ -240,7 +239,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			}
 			return seg, nil // Same as wall, we're occluded.
 		}
-		floorZ, ceilZ = sector.ZAt(dynamic.Render, i2d)
+		floorZ, ceilZ = sector.ZAt(i2d)
 		// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 		if ls.IntersectionTest[2] < floorZ || ls.IntersectionTest[2] > ceilZ {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
@@ -249,7 +248,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			return seg, nil // Same as wall, we're occluded.
 		}
 		if !peekIntoInner {
-			floorZ2, ceilZ2 = adj.ZAt(dynamic.Render, i2d)
+			floorZ2, ceilZ2 = adj.ZAt(i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			if ls.IntersectionTest[2] < floorZ2 || ls.IntersectionTest[2] > ceilZ2 {
 				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
@@ -360,7 +359,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		// If the portal has a transparent material, we need to filter the light
 		if hitSegment.PortalHasMaterial {
 			i2d := ls.Hit.To2D()
-			floorZ, ceilZ := sector.ZAt(dynamic.Render, i2d)
+			floorZ, ceilZ := sector.ZAt(i2d)
 			ls.Initialize(hitSegment.Surface.Material, hitSegment.Surface.ExtraStages)
 			ls.NU = ls.Hit.To2D().Dist(&hitSegment.P) / hitSegment.Length
 			ls.NV = (ceilZ - ls.Hit[2]) / (ceilZ - floorZ)

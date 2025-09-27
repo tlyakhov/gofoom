@@ -82,6 +82,10 @@ func (mw *MapWidget) DrawQuadNode(node *core.QuadNode, index int) {
 }
 
 func (mw *MapWidget) Draw(w, h int) image.Image {
+	// TODO: Decouple rendering the map view from drawing the widget. Because
+	// these happen on different threads, sync is painful and error-prone.
+	// Instead, drawing should happen at the same time as rendering the game
+	// view, and the widget code should just copy a buffer.
 	editor.Lock.Lock()
 	defer editor.Lock.Unlock()
 	editor.GatherHoveringObjects()
@@ -152,8 +156,8 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 
 	/*// Portal testing code
 	p := core.GetBody(editor.Renderer.Player.Entity)
-	v := &concepts.Vector2{p.Pos.Now[0], p.Pos.Now[1]}
-	v2 := v.Add(&concepts.Vector2{math.Cos(p.Angle.Now*concepts.Deg2rad) * 10, math.Sin(p.Angle.Now*concepts.Deg2rad) * 10})
+	v := &concepts.Vector2{p.Pos.Render[0], p.Pos.Render[1]}
+	v2 := v.Add(&concepts.Vector2{math.Cos(p.Angle.Render*concepts.Deg2rad) * 10, math.Sin(p.Angle.Render*concepts.Deg2rad) * 10})
 	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
 	mw.Context.NewSubPath()
 	mw.Context.MoveTo(v[0], v[1])
@@ -167,7 +171,7 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	portalSegment2 := portalSector2.Segments[1]
 	v3 := portalSegment1.PortalMatrix.Unproject(v)
 	v3 = portalSegment2.MirrorPortalMatrix.Project(v3)
-	a := p.Angle.Now - math.Atan2(portalSegment1.Normal[1], portalSegment1.Normal[0])*concepts.Rad2deg + math.Atan2(portalSegment2.Normal[1], portalSegment2.Normal[0])*concepts.Rad2deg + 180
+	a := p.Angle.Render - math.Atan2(portalSegment1.Normal[1], portalSegment1.Normal[0])*concepts.Rad2deg + math.Atan2(portalSegment2.Normal[1], portalSegment2.Normal[0])*concepts.Rad2deg + 180
 	v4 := v3.Add(&concepts.Vector2{math.Cos(a*concepts.Deg2rad) * 10, math.Sin(a*concepts.Deg2rad) * 10})
 
 	mw.Context.SetRGBA(1.0, 0.0, 0.0, 1.0)
