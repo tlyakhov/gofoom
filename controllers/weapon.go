@@ -13,7 +13,6 @@ import (
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/render"
 )
@@ -74,9 +73,9 @@ func (wc *WeaponController) Target(target ecs.Component, e ecs.Entity) bool {
 func (wc *WeaponController) MarkSurface(s *selection.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
 	switch s.Type {
 	case selection.SelectableHi:
-		top = s.Sector.Top.ZAt(dynamic.Now, p)
+		top = s.Sector.Top.ZAt(p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjTop := adj.Top.ZAt(dynamic.Now, p)
+		adjTop := adj.Top.ZAt(p)
 		if adjTop <= top {
 			bottom = adjTop
 			surf = &s.SectorSegment.AdjacentSegment.HiSurface
@@ -85,9 +84,9 @@ func (wc *WeaponController) MarkSurface(s *selection.Selectable, p *concepts.Vec
 			surf = &s.SectorSegment.HiSurface
 		}
 	case selection.SelectableLow:
-		bottom = s.Sector.Bottom.ZAt(dynamic.Now, p)
+		bottom = s.Sector.Bottom.ZAt(p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom := adj.Bottom.ZAt(dynamic.Now, p)
+		adjBottom := adj.Bottom.ZAt(p)
 		if bottom <= adjBottom {
 			top = adjBottom
 			surf = &s.SectorSegment.AdjacentSegment.LoSurface
@@ -96,7 +95,7 @@ func (wc *WeaponController) MarkSurface(s *selection.Selectable, p *concepts.Vec
 			surf = &s.SectorSegment.LoSurface
 		}
 	case selection.SelectableMid:
-		bottom, top = s.Sector.ZAt(dynamic.Now, p)
+		bottom, top = s.Sector.ZAt(p)
 		surf = &s.SectorSegment.Surface
 	case selection.SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top

@@ -8,7 +8,6 @@ import (
 	"math/rand"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/inventory"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -89,14 +88,13 @@ func Respawn(force bool) {
 }
 
 func ResetAllSpawnables() {
-	ecs.Simulation.Spawnables.Range(func(d dynamic.Spawnable, _ struct{}) bool {
+	for d := range ecs.Simulation.Spawnables {
 		d.ResetToSpawn()
-		return true
-	})
-	ecs.Simulation.Dynamics.Range(func(d dynamic.Dynamic, _ struct{}) bool {
+	}
+
+	for d := range ecs.Simulation.Dynamics {
 		if a := d.GetAnimation(); a != nil {
 			a.Reset()
 		}
-		return true
-	})
+	}
 }

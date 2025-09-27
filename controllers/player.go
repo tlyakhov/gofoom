@@ -13,7 +13,6 @@ import (
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/constants"
@@ -87,7 +86,7 @@ func (pc *PlayerController) bob(uw bool) {
 	pc.CameraZ = pc.Body.Pos.Render[2] + pc.Body.Size.Render[1]*0.5 + bob - 5
 
 	if sector := pc.Body.Sector(); sector != nil {
-		fz, cz := sector.ZAt(dynamic.Render, pc.Body.Pos.Render.To2D())
+		fz, cz := sector.ZAt(pc.Body.Pos.Render.To2D())
 		fz += constants.IntersectEpsilon
 		cz -= constants.IntersectEpsilon
 		if pc.CameraZ < fz {

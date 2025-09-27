@@ -11,7 +11,6 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -146,7 +145,7 @@ func (mc *MobileController) sectorEnterable(test *core.Sector) bool {
 	if test == nil {
 		return false
 	}
-	floorZ, ceilZ := test.ZAt(dynamic.Now, mc.pos2d)
+	floorZ, ceilZ := test.ZAt(mc.pos2d)
 	if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
 		mc.pos[2]+mc.halfHeight < ceilZ {
 		return true
@@ -211,7 +210,7 @@ func (mc *MobileController) bodyExitsSector() {
 		if sector == nil {
 			continue
 		}
-		floorZ, ceilZ := sector.ZAt(dynamic.Now, mc.pos2d)
+		floorZ, ceilZ := sector.ZAt(mc.pos2d)
 		if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
 			mc.pos[2]+mc.halfHeight < ceilZ {
 			for _, segment := range sector.Segments {
@@ -381,7 +380,7 @@ func (mc *MobileController) bodyBodyCollide() {
 func (mc *MobileController) CollideZ() {
 	halfHeight := mc.Body.Size.Now[1] * 0.5
 	bodyTop := mc.Body.Pos.Now[2] + halfHeight
-	floorZ, ceilZ := mc.Sector.ZAt(dynamic.Now, mc.Body.Pos.Now.To2D())
+	floorZ, ceilZ := mc.Sector.ZAt(mc.Body.Pos.Now.To2D())
 
 	mc.Body.OnGround = false
 	if mc.Sector.Bottom.Target != 0 && bodyTop < floorZ {
@@ -390,7 +389,7 @@ func (mc *MobileController) CollideZ() {
 		mc.Enter(core.GetSector(mc.Sector.Bottom.Target))
 		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
 		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
-		ceilZ = mc.Sector.Top.ZAt(dynamic.Now, mc.Body.Pos.Now.To2D())
+		ceilZ = mc.Sector.Top.ZAt(mc.Body.Pos.Now.To2D())
 		mc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
 	} else if mc.Sector.Bottom.Target != 0 && mc.Body.Pos.Now[2]-halfHeight <= floorZ && mc.Vel.Now[2] > 0 {
 		mc.Vel.Now[2] = constants.PlayerJumpForce
@@ -413,7 +412,7 @@ func (mc *MobileController) CollideZ() {
 		mc.Enter(core.GetSector(mc.Sector.Top.Target))
 		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
 		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
-		floorZ = mc.Sector.Bottom.ZAt(dynamic.Now, mc.Body.Pos.Now.To2D())
+		floorZ = mc.Sector.Bottom.ZAt(mc.Body.Pos.Now.To2D())
 		mc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
 	} else if mc.Sector.Top.Target == 0 && bodyTop >= ceilZ {
 		dist := -mc.Sector.Top.Normal[2] * (bodyTop - ceilZ + 1.0)

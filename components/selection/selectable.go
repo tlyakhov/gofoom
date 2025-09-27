@@ -8,7 +8,6 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -218,17 +217,17 @@ func (s *Selectable) Recalculate() {
 func (s *Selectable) PointZ(p *concepts.Vector2) (bottom float64, top float64) {
 	switch s.Type {
 	case SelectableHi:
-		_, top = s.Sector.ZAt(dynamic.Now, p)
+		_, top = s.Sector.ZAt(p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		_, adjTop := adj.ZAt(dynamic.Now, p)
+		_, adjTop := adj.ZAt(p)
 		bottom, top = math.Min(adjTop, top), math.Max(adjTop, top)
 	case SelectableLow:
-		bottom, _ = s.Sector.ZAt(dynamic.Now, p)
+		bottom, _ = s.Sector.ZAt(p)
 		adj := s.SectorSegment.AdjacentSegment.Sector
-		adjBottom, _ := adj.ZAt(dynamic.Now, p)
+		adjBottom, _ := adj.ZAt(p)
 		bottom, top = math.Min(adjBottom, bottom), math.Max(adjBottom, bottom)
 	case SelectableMid:
-		bottom, top = s.Sector.ZAt(dynamic.Now, p)
+		bottom, top = s.Sector.ZAt(p)
 	case SelectableInternalSegment:
 		bottom, top = s.InternalSegment.Bottom, s.InternalSegment.Top
 	}

@@ -13,10 +13,8 @@ import (
 
 type Spawned[T DynamicType] struct {
 	Attached bool
-	// Warning: the location within the struct matters for fast access. Do not
-	// move or change order without updating Dynamic.Value
-	Spawn T `editable:"Spawn"`
-	Now   T
+	Spawn    T `editable:"Spawn"`
+	Now      T
 }
 
 func (s *Spawned[T]) ResetToSpawn() {
@@ -29,12 +27,12 @@ func (s *Spawned[T]) SetAll(v T) {
 }
 
 func (s *Spawned[T]) Attach(sim *Simulation) {
-	sim.Spawnables.Store(s, struct{}{})
+	sim.Spawnables[s] = struct{}{}
 	s.Attached = true
 }
 
 func (s *Spawned[T]) Detach(sim *Simulation) {
-	sim.Spawnables.Delete(s)
+	delete(sim.Spawnables, s)
 	s.Attached = false
 }
 

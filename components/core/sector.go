@@ -29,13 +29,14 @@ type Sector struct {
 	Bodies           map[ecs.Entity]*Body
 	InternalSegments map[ecs.Entity]*InternalSegment
 	// TODO: Should be automatic:
-	Inner     ecs.EntityTable `editable:"Inner Sectors"`
-	Outer     ecs.EntityTable
-	Transform dynamic.DynamicValue[concepts.Matrix2] `editable:"Transform"`
+	Inner ecs.EntityTable `editable:"Inner Sectors"`
+	Outer ecs.EntityTable
 
 	EnterScripts []*Script `editable:"Enter Scripts"`
 	ExitScripts  []*Script `editable:"Exit Scripts"`
 	NoShadows    bool      `editable:"No Shadows"`
+
+	Transform dynamic.DynamicValue[concepts.Matrix2] `editable:"Transform"`
 
 	Concave          bool
 	Winding          int8
@@ -83,8 +84,8 @@ func (s *Sector) OuterAt(p *concepts.Vector2) (result *Sector) {
 	return
 }
 
-func (s *Sector) ZAt(stage dynamic.DynamicState, p *concepts.Vector2) (fz, cz float64) {
-	return s.Bottom.ZAt(stage, p), s.Top.ZAt(stage, p)
+func (s *Sector) ZAt(p *concepts.Vector2) (fz, cz float64) {
+	return s.Bottom.ZAt(p), s.Top.ZAt(p)
 }
 
 func (s *Sector) removeAdjacentReferences() {
@@ -296,7 +297,7 @@ func (s *Sector) Recalculate() {
 		if segment.P[1] > s.Max[1] {
 			s.Max[1] = segment.P[1]
 		}
-		bz, tz := s.ZAt(dynamic.Spawn, &segment.P)
+		bz, tz := s.ZAt(&segment.P)
 		s.Center[2] += (bz + tz) * 0.5
 		if bz < s.Min[2] {
 			s.Min[2] = bz

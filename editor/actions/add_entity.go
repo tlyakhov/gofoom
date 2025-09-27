@@ -6,7 +6,6 @@ package actions
 import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"fyne.io/fyne/v2"
@@ -86,7 +85,7 @@ func (a *AddEntity) Point() bool {
 		body.Pos.Spawn[0] = worldGrid[0]
 		body.Pos.Spawn[1] = worldGrid[1]
 		if a.ContainingSector != nil {
-			floorZ, ceilZ := a.ContainingSector.ZAt(dynamic.Spawn, worldGrid)
+			floorZ, ceilZ := a.ContainingSector.ZAt(worldGrid)
 			body.Pos.Spawn[2] = (floorZ + ceilZ) / 2
 		}
 		body.Pos.ResetToSpawn()

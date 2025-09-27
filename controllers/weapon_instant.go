@@ -10,7 +10,6 @@ import (
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
-	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/render"
 )
 
@@ -97,8 +96,8 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 
 			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
 			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.ZAt(dynamic.Now, wc.isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(dynamic.Now, wc.isect.To2D())
+			floorZ, ceilZ := sector.ZAt(wc.isect.To2D())
+			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(wc.isect.To2D())
 			if wc.isect[2] < floorZ2 || wc.isect[2] < floorZ {
 				idistSq = wc.isect.DistSq(p)
 				if idistSq < hitDistSq {
