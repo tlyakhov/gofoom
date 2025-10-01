@@ -6,6 +6,8 @@
 package scripting_symbols
 
 import (
+	"go/constant"
+	"go/token"
 	"reflect"
 	"tlyakhov/gofoom/dynamic"
 )
@@ -41,17 +43,21 @@ func init() {
 		"ElasticIn":                    reflect.ValueOf(dynamic.ElasticIn),
 		"ElasticInOut":                 reflect.ValueOf(dynamic.ElasticInOut),
 		"ElasticOut":                   reflect.ValueOf(dynamic.ElasticOut),
+		"EventClasses":                 reflect.ValueOf(dynamic.EventClasses),
 		"Lerp":                         reflect.ValueOf(dynamic.Lerp),
+		"MaxEvents":                    reflect.ValueOf(constant.MakeFromLiteral("1024", token.INT, 0)),
 		"NewSimulation":                reflect.ValueOf(dynamic.NewSimulation),
 		"Now":                          reflect.ValueOf(dynamic.Now),
 		"Prev":                         reflect.ValueOf(dynamic.Prev),
 		"Random":                       reflect.ValueOf(dynamic.Random),
+		"RegisterEventClass":           reflect.ValueOf(dynamic.RegisterEventClass),
 		"Render":                       reflect.ValueOf(dynamic.Render),
 		"Spawn":                        reflect.ValueOf(dynamic.Spawn),
 		"Spike":                        reflect.ValueOf(dynamic.Spike),
 		"Spike2":                       reflect.ValueOf(dynamic.Spike2),
 		"Spike3":                       reflect.ValueOf(dynamic.Spike3),
 		"Spike4":                       reflect.ValueOf(dynamic.Spike4),
+		"SubscribeToEvent":             reflect.ValueOf(dynamic.SubscribeToEvent),
 		"TweenAngles":                  reflect.ValueOf(dynamic.TweenAngles),
 		"TweeningFuncNames":            reflect.ValueOf(&dynamic.TweeningFuncNames).Elem(),
 		"TweeningFuncs":                reflect.ValueOf(&dynamic.TweeningFuncs).Elem(),
@@ -62,6 +68,11 @@ func init() {
 		"AnimationLifetime":    reflect.ValueOf((*dynamic.AnimationLifetime)(nil)),
 		"Dynamic":              reflect.ValueOf((*dynamic.Dynamic)(nil)),
 		"DynamicState":         reflect.ValueOf((*dynamic.DynamicState)(nil)),
+		"Event":                reflect.ValueOf((*dynamic.Event)(nil)),
+		"EventClass":           reflect.ValueOf((*dynamic.EventClass)(nil)),
+		"EventConsumer":        reflect.ValueOf((*dynamic.EventConsumer)(nil)),
+		"EventID":              reflect.ValueOf((*dynamic.EventID)(nil)),
+		"EventQueue":           reflect.ValueOf((*dynamic.EventQueue)(nil)),
 		"Simulation":           reflect.ValueOf((*dynamic.Simulation)(nil)),
 		"Spawnable":            reflect.ValueOf((*dynamic.Spawnable)(nil)),
 		"TweeningFunc":         reflect.ValueOf((*dynamic.TweeningFunc)(nil)),

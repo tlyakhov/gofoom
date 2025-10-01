@@ -222,6 +222,16 @@ func (m Matrix2) GetTransform() (angle float64, translation Vector2, scale Vecto
 	return
 }
 
+func (m *Matrix2) SetTransform(angle float64, translation Vector2, scale Vector2) {
+	sint, cost := math.Sincos(angle)
+	m[0] = cost * scale[0]
+	m[1] = sint * scale[0]
+	m[2] = -sint * scale[1]
+	m[3] = cost * scale[1]
+	m[4] = translation[0]
+	m[5] = translation[1]
+}
+
 func (m *Matrix2) Deserialize(data string) {
 	v, _ := ParseMatrix2(data)
 	*m = *v

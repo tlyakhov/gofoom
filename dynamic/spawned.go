@@ -36,40 +36,64 @@ func (s *Spawned[T]) Detach(sim *Simulation) {
 	s.Attached = false
 }
 
-func (s *Spawned[T]) Serialize() map[string]any {
-	result := make(map[string]any)
-
-	switch sc := any(s).(type) {
-	case *Spawned[int]:
-		result["Spawn"] = strconv.Itoa(sc.Spawn)
-		result["Now"] = strconv.Itoa(sc.Now)
-	case *Spawned[float64]:
-		result["Spawn"] = sc.Spawn
-		result["Now"] = sc.Now
-	case *Spawned[concepts.Vector2]:
-		result["Spawn"] = sc.Spawn.Serialize()
-		result["Now"] = sc.Now.Serialize()
-	case *Spawned[concepts.Vector3]:
-		result["Spawn"] = sc.Spawn.Serialize()
-		result["Now"] = sc.Now.Serialize()
-	case *Spawned[concepts.Vector4]:
-		result["Spawn"] = sc.Spawn.Serialize(false)
-		result["Now"] = sc.Now.Serialize(false)
-	case *Spawned[concepts.Matrix2]:
-		result["Spawn"] = sc.Spawn.Serialize()
-		result["Now"] = sc.Now.Serialize()
+func (s *Spawned[T]) serializeValue(v T) any {
+	switch typed := any(v).(type) {
+	case int:
+		return strconv.Itoa(typed)
+	case float64:
+		return typed
+	case concepts.Vector2:
+		return typed.Serialize()
+	case concepts.Vector3:
+		return typed.Serialize()
+	case concepts.Vector4:
+		return typed.Serialize(false)
+	case concepts.Matrix2:
+		return typed.Serialize()
 	default:
 		log.Panicf("Tried to serialize Spawned[T] %v where T has no serializer", s)
 	}
+	return nil
+}
 
-	if result["Spawn"] == result["Now"] {
-		delete(result, "Now")
+func (s *Spawned[T]) deserializeValue(v any) any {
+	var r T
+	switch typed := any(r).(type) {
+	case int:
+		return cast.ToInt(v)
+	case float64:
+		return cast.ToFloat64(v)
+	case concepts.Vector2:
+		typed.Deserialize(v.(string))
+		return typed
+	case concepts.Vector3:
+		typed.Deserialize(v.(string))
+		return typed
+	case concepts.Vector4:
+		typed.Deserialize(v.(string))
+		return typed
+	case concepts.Matrix2:
+		typed.Deserialize(v.(string))
+		return typed
+	default:
+		log.Panicf("Tried to deserialize Spawned[T] %v where T has no serializer", s)
 	}
+	return r
+}
+
+func (s *Spawned[T]) Serialize() any {
+	if s.Spawn == s.Now {
+		return s.serializeValue(s.Spawn)
+	}
+
+	result := make(map[string]any)
+	result["Spawn"] = s.serializeValue(s.Spawn)
+	result["Now"] = s.serializeValue(s.Now)
 
 	return result
 }
 
-func (s *Spawned[T]) Construct(data map[string]any) {
+func (s *Spawned[T]) Construct(data any) {
 	switch sc := any(s).(type) {
 	case *Spawned[concepts.Matrix2]:
 		sc.Spawn.SetIdentity()
@@ -79,42 +103,19 @@ func (s *Spawned[T]) Construct(data map[string]any) {
 		s.ResetToSpawn()
 		return
 	}
-
-	if v, ok := data["Spawn"]; ok {
-		switch sc := any(s).(type) {
-		case *Spawned[int]:
-			sc.Spawn = cast.ToInt(v)
-		case *Spawned[float64]:
-			sc.Spawn = cast.ToFloat64(v)
-		case *Spawned[concepts.Vector2]:
-			sc.Spawn.Deserialize(v.(string))
-		case *Spawned[concepts.Vector3]:
-			sc.Spawn.Deserialize(v.(string))
-		case *Spawned[concepts.Vector4]:
-			sc.Spawn.Deserialize(v.(string))
-		case *Spawned[concepts.Matrix2]:
-			sc.Spawn.Deserialize(v.(string))
-		default:
-			log.Panicf("Tried to deserialize Spawned[T] %v where T has no serializer", s)
-		}
+	var params map[string]any
+	var ok bool
+	if params, ok = data.(map[string]any); !ok || params["Spawn"] == nil {
+		s.Spawn = s.deserializeValue(data).(T)
+		s.ResetToSpawn()
+		return
 	}
-	if v, ok := data["Now"]; ok {
-		switch sc := any(s).(type) {
-		case *Spawned[int]:
-			sc.Now = cast.ToInt(v)
-		case *Spawned[float64]:
-			sc.Now = cast.ToFloat64(v)
-		case *Spawned[concepts.Vector2]:
-			sc.Now.Deserialize(v.(string))
-		case *Spawned[concepts.Vector3]:
-			sc.Now.Deserialize(v.(string))
-		case *Spawned[concepts.Vector4]:
-			sc.Now.Deserialize(v.(string))
-		case *Spawned[concepts.Matrix2]:
-			sc.Now.Deserialize(v.(string))
-		default:
-			log.Panicf("Tried to deserialize Spawned[T] %v where T has no serializer", s)
-		}
+
+	if v, ok := params["Spawn"]; ok {
+		s.Spawn = s.deserializeValue(v).(T)
+	}
+	if v, ok := params["Now"]; ok {
+		s.Now = s.deserializeValue(v).(T)
 	} else {
 		s.ResetToSpawn()
 	}

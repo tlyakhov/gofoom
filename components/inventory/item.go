@@ -50,7 +50,7 @@ func (item *Item) Construct(data map[string]any) {
 		item.Class = cast.ToString(v)
 	}
 	if v, ok := data["Count"]; ok {
-		item.Count.Construct(v.(map[string]any))
+		item.Count.Construct(v)
 	}
 	if v, ok := data["Image"]; ok {
 		item.Image, _ = ecs.ParseEntity(v.(string))

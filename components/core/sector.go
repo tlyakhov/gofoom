@@ -54,12 +54,13 @@ func (s *Sector) String() string {
 
 func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	inside := false
-	flag1 := (p[1] >= s.Segments[0].P[1])
+	flag1 := (p[1] >= s.Segments[0].P.Render[1])
 
 	for _, segment := range s.Segments {
-		flag2 := (p[1] >= segment.Next.P[1])
+		flag2 := (p[1] >= segment.Next.P.Render[1])
 		if flag1 != flag2 {
-			if ((segment.Next.P[1]-p[1])*(segment.P[0]-segment.Next.P[0]) >= (segment.Next.P[0]-p[0])*(segment.P[1]-segment.Next.P[1])) == flag2 {
+			if ((segment.Next.P.Render[1]-p[1])*(segment.P.Render[0]-segment.Next.P.Render[0]) >=
+				(segment.Next.P.Render[0]-p[0])*(segment.P.Render[1]-segment.Next.P.Render[1])) == flag2 {
 				inside = !inside
 			}
 		}
@@ -115,6 +116,9 @@ func (s *Sector) OnDelete() {
 		s.Bottom.Z.Detach(ecs.Simulation)
 		s.Transform.Detach(ecs.Simulation)
 		s.removeAdjacentReferences()
+		for _, seg := range s.Segments {
+			seg.P.Detach(ecs.Simulation)
+		}
 	}
 	for _, b := range s.Bodies {
 		b.SectorEntity = 0
@@ -128,13 +132,12 @@ func (s *Sector) OnAttach() {
 	s.Top.Z.Attach(ecs.Simulation)
 	s.Bottom.Z.Attach(ecs.Simulation)
 	s.Transform.Attach(ecs.Simulation)
-	s.Transform.OnRender = func(blend float64) {
-		// TODO: to be able to do this, we need P to be a DynamicValue
-	}
+
 	// When we attach a component, its address may change. Ensure segments don't
 	// wind up referencing an unattached sector.
 	for _, seg := range s.Segments {
 		seg.Sector = s
+		seg.P.Attach(ecs.Simulation)
 	}
 }
 
@@ -142,7 +145,7 @@ func (s *Sector) AddSegment(x float64, y float64) *SectorSegment {
 	segment := new(SectorSegment)
 	segment.Construct(nil)
 	segment.Sector = s
-	segment.P = concepts.Vector2{x, y}
+	segment.P.SetAll(concepts.Vector2{x, y})
 	s.Segments = append(s.Segments, segment)
 	return segment
 }
@@ -188,6 +191,7 @@ func (s *Sector) Construct(data map[string]any) {
 		for i, jsonSegment := range jsonSegments {
 			segment := new(SectorSegment)
 			segment.Sector = s
+			segment.P.Attach(ecs.Simulation)
 			segment.Construct(jsonSegment.(map[string]any))
 			s.Segments[i] = segment
 		}
@@ -214,7 +218,7 @@ func (s *Sector) Construct(data map[string]any) {
 		s.Inner = ecs.ParseEntityTable(v, false)
 	}
 	if v, ok := data["Transform"]; ok {
-		s.Transform.Construct(v.(map[string]any))
+		s.Transform.Construct(v)
 	}
 
 	s.Recalculate()
@@ -268,7 +272,7 @@ func (s *Sector) Recalculate() {
 	for i, segment := range s.Segments {
 		// Can't use prev/next pointers because they haven't been initialized yet.
 		next := s.Segments[(i+1)%len(s.Segments)]
-		sum += (next.P[0] - segment.P[0]) * (segment.P[1] + next.P[1])
+		sum += (next.P.Render[0] - segment.P.Render[0]) * (segment.P.Render[1] + next.P.Render[1])
 	}
 
 	if sum < 0 {
@@ -283,21 +287,21 @@ func (s *Sector) Recalculate() {
 		segment.Next = next
 		next.Prev = segment
 		//prev = segment
-		s.Center[0] += segment.P[0]
-		s.Center[1] += segment.P[1]
-		if segment.P[0] < s.Min[0] {
-			s.Min[0] = segment.P[0]
+		s.Center[0] += segment.P.Render[0]
+		s.Center[1] += segment.P.Render[1]
+		if segment.P.Render[0] < s.Min[0] {
+			s.Min[0] = segment.P.Render[0]
 		}
-		if segment.P[1] < s.Min[1] {
-			s.Min[1] = segment.P[1]
+		if segment.P.Render[1] < s.Min[1] {
+			s.Min[1] = segment.P.Render[1]
 		}
-		if segment.P[0] > s.Max[0] {
-			s.Max[0] = segment.P[0]
+		if segment.P.Render[0] > s.Max[0] {
+			s.Max[0] = segment.P.Render[0]
 		}
-		if segment.P[1] > s.Max[1] {
-			s.Max[1] = segment.P[1]
+		if segment.P.Render[1] > s.Max[1] {
+			s.Max[1] = segment.P.Render[1]
 		}
-		bz, tz := s.ZAt(&segment.P)
+		bz, tz := s.ZAt(&segment.P.Render)
 		s.Center[2] += (bz + tz) * 0.5
 		if bz < s.Min[2] {
 			s.Min[2] = bz
@@ -325,8 +329,8 @@ func (s *Sector) Recalculate() {
 		for _, s1 := range s.Segments {
 			s2 := s1.Next
 			s3 := s2.Next
-			d1 := s2.P.Sub(&s1.P)
-			d2 := s3.P.Sub(&s2.P)
+			d1 := s2.P.Render.Sub(&s1.P.Render)
+			d2 := s3.P.Render.Sub(&s2.P.Render)
 			c := d1.Cross(d2)
 			if c != 0 {
 				if c*prev < 0 {
@@ -409,7 +413,7 @@ func (s *Sector) AABBIntersect2D(min, max *concepts.Vector2, includeEdges bool) 
 func (s *Sector) DbgPrintSegments() {
 	log.Printf("Segments:")
 	for i, seg := range s.Segments {
-		log.Printf("%v: %v", i, seg.P.StringHuman())
+		log.Printf("%v: %v", i, seg.P.Render.StringHuman())
 	}
 }
 

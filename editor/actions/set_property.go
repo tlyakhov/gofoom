@@ -58,10 +58,10 @@ func (a *SetProperty) FireHooks() {
 			// propagate that setting.
 			switch a.Name {
 			case "Segment.A":
-				target.P = *target.A
+				target.P.SetAll(*target.A)
 				target.Recalculate()
 			case "Segment.B":
-				target.Next.P = *target.B
+				target.Next.P.SetAll(*target.B)
 				target.Recalculate()
 			case "Segment.Portal sector":
 				target.Recalculate()

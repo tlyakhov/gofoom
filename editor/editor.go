@@ -550,7 +550,7 @@ func (e *Editor) GatherHoveringObjects() {
 
 		for _, segment := range sector.Segments {
 			if editor.Selecting() {
-				if segment.P[0] >= v1[0] && segment.P[1] >= v1[1] && segment.P[0] <= v2[0] && segment.P[1] <= v2[1] {
+				if segment.P.Render[0] >= v1[0] && segment.P.Render[1] >= v1[1] && segment.P.Render[0] <= v2[0] && segment.P.Render[1] <= v2[1] {
 					e.HoveringObjects.Add(selection.SelectableFromSegment(segment))
 				}
 				/*if segment.AABBIntersect(v1[0], v1[1], v2[0], v2[1]) {
@@ -559,7 +559,7 @@ func (e *Editor) GatherHoveringObjects() {
 					}
 				}*/
 			} else {
-				if e.MouseWorld.Sub(&segment.P).Length() < state.SegmentSelectionEpsilon {
+				if e.MouseWorld.Sub(&segment.P.Render).Length() < state.SegmentSelectionEpsilon {
 					e.HoveringObjects.Add(selection.SelectableFromSegment(segment))
 				}
 				if segment.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {

@@ -96,7 +96,7 @@ func (sel *Selection) SavePositions() {
 			for _, seg := range s.Sector.Segments {
 				// 4 bits for type, 16 bits for segment index, 44 bits for entity
 				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | uint64(s.Entity)
-				sel.Positions[hash] = &concepts.Vector3{seg.P[0], seg.P[1], 0}
+				sel.Positions[hash] = &concepts.Vector3{seg.P.Render[0], seg.P.Render[1], 0}
 			}
 		case SelectableLow:
 			fallthrough
@@ -105,7 +105,7 @@ func (sel *Selection) SavePositions() {
 		case SelectableHi:
 			fallthrough
 		case SelectableSectorSegment:
-			sel.Positions[s.Hash()] = &concepts.Vector3{s.SectorSegment.P[0], s.SectorSegment.P[1]}
+			sel.Positions[s.Hash()] = &concepts.Vector3{s.SectorSegment.P.Render[0], s.SectorSegment.P.Render[1]}
 		case SelectableActionWaypoint:
 			sel.Positions[s.Hash()] = s.ActionWaypoint.P.Clone()
 		case SelectableBody:
@@ -131,7 +131,7 @@ func (sel *Selection) LoadPositions() {
 			for _, seg := range s.Sector.Segments {
 				// 4 bits for type, 16 bits for segment index, 44 bits for entity
 				hash := (uint64(s.Type) << 60) | uint64(seg.Index<<44) | uint64(s.Entity)
-				seg.P.From(sel.Positions[hash].To2D())
+				seg.P.SetAll(*sel.Positions[hash].To2D())
 			}
 		case SelectableLow:
 			fallthrough
@@ -140,7 +140,7 @@ func (sel *Selection) LoadPositions() {
 		case SelectableHi:
 			fallthrough
 		case SelectableSectorSegment:
-			s.SectorSegment.P.From(sel.Positions[s.Hash()].To2D())
+			s.SectorSegment.P.Render.From(sel.Positions[s.Hash()].To2D())
 		case SelectableActionWaypoint:
 			s.ActionWaypoint.P.From(sel.Positions[s.Hash()])
 		case SelectableBody:

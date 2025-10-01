@@ -50,7 +50,7 @@ func (s *Slot) Construct(data map[string]any) {
 		s.Limit = cast.ToInt(v)
 	}
 	if v, ok := data["Count"]; ok {
-		s.Count.Construct(v.(map[string]any))
+		s.Count.Construct(v)
 	}
 	if v, ok := data["Image"]; ok {
 		s.Image, _ = ecs.ParseEntity(v.(string))

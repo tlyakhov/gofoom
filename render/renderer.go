@@ -119,6 +119,9 @@ func (r *Renderer) RenderPortal(b *block) {
 		// We are leaving an inner sector
 		portal.AdjSegment = b.SectorSegment
 		portal.Adj = b.Sector.OuterAt(b.RaySegIntersect.To2D())
+		if portal.Adj == nil {
+			portal.Adj = core.GetSector(b.Sector.Outer.First())
+		}
 	}
 	b.LastPortalSegment = portal.AdjSegment
 

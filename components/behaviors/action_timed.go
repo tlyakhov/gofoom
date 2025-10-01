@@ -46,7 +46,7 @@ func (timed *ActionTimed) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Delay"]; ok {
-		timed.Delay.Construct(v.(map[string]any))
+		timed.Delay.Construct(v)
 	}
 }
 

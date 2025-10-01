@@ -44,7 +44,7 @@ func (s *Sprite) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Frame"]; ok {
-		s.Frame.Construct(v.(map[string]any))
+		s.Frame.Construct(v)
 	}
 }
 

@@ -299,12 +299,12 @@ func CreateTestWorld3() {
 		for y := 0; y < testh-1; y++ {
 			sector1, sector2 := CreateTestHeightmapSector(fmt.Sprintf("land_%v_%v", x, y), float64(x*scale), float64(y*scale), float64(scale))
 			v1 := &concepts.Vector3{
-				sector1.Segments[1].P[0] - sector1.Segments[0].P[0],
-				sector1.Segments[1].P[1] - sector1.Segments[0].P[1],
+				sector1.Segments[1].P.Spawn[0] - sector1.Segments[0].P.Spawn[0],
+				sector1.Segments[1].P.Spawn[1] - sector1.Segments[0].P.Spawn[1],
 				heightmap[(y+0)*testw+x+1] - heightmap[(y+0)*testw+x+0]}
 			v2 := &concepts.Vector3{
-				sector1.Segments[2].P[0] - sector1.Segments[0].P[0],
-				sector1.Segments[2].P[1] - sector1.Segments[0].P[1],
+				sector1.Segments[2].P.Spawn[0] - sector1.Segments[0].P.Spawn[0],
+				sector1.Segments[2].P.Spawn[1] - sector1.Segments[0].P.Spawn[1],
 				heightmap[(y+1)*testw+x+0] - heightmap[(y+0)*testw+x+0]}
 			sector1.Bottom.Normal = *v1.Cross(v2).NormSelf()
 			sector1.Bottom.Z.SetAll(heightmap[(y+0)*testw+x+0])
@@ -314,12 +314,12 @@ func CreateTestWorld3() {
 				sector1.Bottom.Surface.Material = eGrass
 			}
 			v1 = &concepts.Vector3{
-				sector2.Segments[1].P[0] - sector2.Segments[0].P[0],
-				sector2.Segments[1].P[1] - sector2.Segments[0].P[1],
+				sector2.Segments[1].P.Spawn[0] - sector2.Segments[0].P.Spawn[0],
+				sector2.Segments[1].P.Spawn[1] - sector2.Segments[0].P.Spawn[1],
 				heightmap[(y+1)*testw+x+1] - heightmap[(y+0)*testw+x+1]}
 			v2 = &concepts.Vector3{
-				sector2.Segments[2].P[0] - sector2.Segments[1].P[0],
-				sector2.Segments[2].P[1] - sector2.Segments[1].P[1],
+				sector2.Segments[2].P.Spawn[0] - sector2.Segments[1].P.Spawn[0],
+				sector2.Segments[2].P.Spawn[1] - sector2.Segments[1].P.Spawn[1],
 				heightmap[(y+1)*testw+x+0] - heightmap[(y+1)*testw+x+1]}
 			sector2.Bottom.Normal = *v1.Cross(v2).NormSelf()
 			sector2.Bottom.Z.SetAll(heightmap[(y+0)*testw+x+1])

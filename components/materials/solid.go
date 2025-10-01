@@ -36,7 +36,7 @@ func (s *Solid) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Diffuse"]; ok {
-		s.Diffuse.Construct(v.(map[string]any))
+		s.Diffuse.Construct(v)
 	}
 }
 

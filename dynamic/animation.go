@@ -92,7 +92,11 @@ func (a *Animation[T]) Animate() {
 			c.Now += c.Spawn
 		}
 	case *Animation[float64]:
-		c.Now = c.TweeningFunc(c.Start, c.End, percent)
+		if c.IsAngle {
+			c.Now = TweenAngles(c.Start, c.End, percent, c.TweeningFunc)
+		} else {
+			c.Now = c.TweeningFunc(c.Start, c.End, percent)
+		}
 		if a.Coordinates == AnimationCoordinatesRelative {
 			c.Now += c.Spawn
 		}
@@ -117,6 +121,26 @@ func (a *Animation[T]) Animate() {
 		if a.Coordinates == AnimationCoordinatesRelative {
 			c.Now.AddSelf(&c.Spawn)
 		}
+	case *Animation[concepts.Matrix2]:
+		// TODO: Should this be optimized? Seems like a lot of ops
+		aStart, tStart, sStart := c.Start.GetTransform()
+		aEnd, tEnd, sEnd := c.End.GetTransform()
+		aTweened := TweenAngles(aStart, aEnd, percent, c.TweeningFunc)
+		tStart[0] = c.TweeningFunc(tStart[0], tEnd[0], percent)
+		tStart[1] = c.TweeningFunc(tStart[1], tEnd[1], percent)
+		sStart[0] = c.TweeningFunc(sStart[0], sEnd[0], percent)
+		sStart[1] = c.TweeningFunc(sStart[1], sEnd[1], percent)
+
+		if a.Coordinates == AnimationCoordinatesRelative {
+			a, t, s := c.Spawn.GetTransform()
+			aTweened += a
+			tStart[0] += t[0]
+			tStart[1] += t[1]
+			sStart[0] *= s[0]
+			sStart[1] *= s[1]
+		}
+		c.Now.SetTransform(aTweened, tStart, sStart)
+
 	}
 
 	if (a.Percent >= 1 && !a.Reverse) || (a.Percent <= 0 && a.Reverse) {
@@ -217,6 +241,13 @@ func (a *Animation[T]) Construct(data map[string]any) {
 		if v, ok := data["End"]; ok {
 			c.End.Deserialize(v.(string))
 		}
+	case *Animation[concepts.Matrix2]:
+		if v, ok := data["Start"]; ok {
+			c.Start.Deserialize(v.(string))
+		}
+		if v, ok := data["End"]; ok {
+			c.End.Deserialize(v.(string))
+		}
 	}
 }
 func (a *Animation[T]) Serialize() map[string]any {
@@ -249,6 +280,9 @@ func (a *Animation[T]) Serialize() map[string]any {
 	case *Animation[concepts.Vector4]:
 		result["Start"] = c.Start.Serialize(false)
 		result["End"] = c.End.Serialize(false)
+	case *Animation[concepts.Matrix2]:
+		result["Start"] = c.Start.Serialize()
+		result["End"] = c.End.Serialize()
 	}
 	return result
 }

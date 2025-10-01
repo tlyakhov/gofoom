@@ -120,7 +120,7 @@ func (wc *WeaponController) MarkSurfaceAndTransform(s *selection.Selectable, tra
 	switch s.Type {
 	case selection.SelectableHi, selection.SelectableLow, selection.SelectableMid:
 		transform[concepts.MatBasis1X] = s.SectorSegment.Length
-		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(&s.SectorSegment.P)
+		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(&s.SectorSegment.P.Render)
 	case selection.SelectableInternalSegment:
 		transform[concepts.MatBasis1X] = s.InternalSegment.Length
 		transform[concepts.MatTransX] = -wc.hit.To2D().Dist(s.InternalSegment.A)

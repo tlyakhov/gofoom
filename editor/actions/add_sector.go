@@ -33,7 +33,7 @@ func (a *AddSector) newSegment() {
 	seg.HiSurface.Material = controllers.DefaultMaterial()
 	seg.LoSurface.Material = controllers.DefaultMaterial()
 	seg.Surface.Material = controllers.DefaultMaterial()
-	seg.P = *a.WorldGrid(&a.State().MouseDownWorld)
+	seg.P.SetAll(*a.WorldGrid(&a.State().MouseDownWorld))
 
 	segs := a.Sector.Segments
 	if len(segs) > 0 {
@@ -60,7 +60,7 @@ func (a *AddSector) Point() bool {
 	segs := a.Sector.Segments
 	seg := segs[len(segs)-1]
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
-	seg.P = *worldGrid
+	seg.P.SetAll(*worldGrid)
 	seg.Recalculate()
 	if len(segs) > 1 {
 		seg.Prev.Recalculate()
@@ -77,7 +77,7 @@ func (a *AddSector) EndPoint() bool {
 	if len(segs) > 1 {
 		first := segs[0]
 		last := segs[len(segs)-1]
-		if last.P.Sub(&first.P).Length() < state.SegmentSelectionEpsilon {
+		if last.P.Render.Sub(&first.P.Render).Length() < state.SegmentSelectionEpsilon {
 			a.State().Lock.Lock()
 			a.Sector.Segments = segs[:(len(segs) - 1)]
 			a.State().Lock.Unlock()

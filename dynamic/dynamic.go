@@ -181,8 +181,8 @@ func (d *DynamicValue[T]) Update(blend float64) {
 	}
 }
 
-func (d *DynamicValue[T]) Serialize() map[string]any {
-	result := d.Spawned.Serialize()
+func (d *DynamicValue[T]) Serialize() any {
+	result := make(map[string]any)
 
 	if d.Procedural {
 		result["Procedural"] = d.Procedural
@@ -200,10 +200,17 @@ func (d *DynamicValue[T]) Serialize() map[string]any {
 	if d.Animation != nil {
 		result["Animation"] = d.Animation.Serialize()
 	}
-	return result
+
+	if len(result) > 0 {
+		result["Spawn"] = d.serializeValue(d.Spawn)
+		result["Now"] = d.serializeValue(d.Now)
+		return result
+	} else {
+		return d.Spawned.Serialize()
+	}
 }
 
-func (d *DynamicValue[T]) Construct(data map[string]any) {
+func (d *DynamicValue[T]) Construct(data any) {
 	d.Spawned.Construct(data)
 	d.Freq = 4.58
 	d.Damping = 0.35
@@ -217,24 +224,29 @@ func (d *DynamicValue[T]) Construct(data map[string]any) {
 	if data == nil {
 		return
 	}
+	var params map[string]any
+	var ok bool
+	if params, ok = data.(map[string]any); !ok || params["Spawn"] == nil {
+		return
+	}
 
-	if v, ok := data["Procedural"]; ok {
+	if v, ok := params["Procedural"]; ok {
 		d.Procedural = cast.ToBool(v)
 	}
-	if v, ok := data["Freq"]; ok {
+	if v, ok := params["Freq"]; ok {
 		d.Freq = cast.ToFloat64(v)
 	}
-	if v, ok := data["Damping"]; ok {
+	if v, ok := params["Damping"]; ok {
 		d.Damping = cast.ToFloat64(v)
 	}
-	if v, ok := data["Response"]; ok {
+	if v, ok := params["Response"]; ok {
 		d.Response = cast.ToFloat64(v)
 	}
 	//	TODO: Serialize Input as well?
 
 	d.Recalculate()
 
-	if v, ok := data["Animation"]; ok {
+	if v, ok := params["Animation"]; ok {
 		d.Animation = new(Animation[T])
 		d.Animation.Construct(v.(map[string]any))
 		d.Animation.DynamicValue = d
