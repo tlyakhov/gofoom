@@ -21,14 +21,14 @@
     Name: Flower (Starting Room)
   inventory.Item:
     Class: Flower
-    Count:
-      Spawn: "1"
+    Count: "1"
     Image: ∈⋮98∈⋮Pluk
   materials.SpriteSheet:
     Angles: "0"
     Frame:
       Damping: 0
       Freq: 1e-06
+      Now: "0"
       Response: 0
       Spawn: "0"
     Material: ∈⋮98∈⋮Pluk
@@ -53,6 +53,7 @@
     Frame:
       Damping: 0
       Freq: 1e-06
+      Now: "0"
       Response: 0
       Spawn: "0"
     Material: ∈⋮42∈⋮Flub
@@ -88,6 +89,7 @@
     Frame:
       Damping: 0
       Freq: 1e-06
+      Now: "0"
       Response: 0
       Spawn: "0"
     Material: ∈⋮119∈⋮HUD+Font+2
@@ -171,8 +173,7 @@
     Name: Weird Gun
   inventory.Item:
     Class: WeirdGun
-    Count:
-      Spawn: "1"
+    Count: "1"
     Image: ∈⋮133
   materials.Lit:
     Ambient: 0, 0, 0
@@ -182,6 +183,7 @@
     Frame:
       Damping: 0
       Freq: 1e-06
+      Now: "0"
       Response: 0
       Spawn: "0"
     Material: ∈⋮133
@@ -239,8 +241,7 @@
     Source: data/game/keycard/keycard.png
   materials.SpriteSheet:
     Cols: "2"
-    Frame:
-      Spawn: "0"
+    Frame: "0"
     Frames: "4"
     Material: ∈⋮156
     Rows: "2"
@@ -258,13 +259,11 @@
     Name: Red Keycard
   inventory.Item:
     Class: Red Keycard
-    Count:
-      Spawn: "1"
+    Count: "1"
     Image: ∈⋮156
   materials.Lit: ∈⋮132∈⋮Weird+Gun
   materials.Sprite:
-    Frame:
-      Spawn: "0"
+    Frame: "0"
     Material: ∈⋮156
   materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29
 - Entity: ∈⋮168
@@ -296,8 +295,7 @@
 - Entity: ∈⋮169
   inventory.Slot:
     Class: WeirdGun
-    Count:
-      Spawn: "1"
+    Count: "1"
     Image: ∈⋮132∈⋮Weird+Gun
     Limit: "1"
   inventory.WeaponClass: ∈⋮148∈⋮WeirdGun
@@ -311,15 +309,13 @@
 - Entity: ∈⋮177
   inventory.Slot:
     Class: Red Keycard
-    Count:
-      Spawn: "0"
+    Count: "0"
     Image: ∈⋮156
     Limit: "1"
 - Entity: ∈⋮189
   inventory.Slot:
     Class: Flower
-    Count:
-      Spawn: "0"
+    Count: "0"
     Image: ∈⋮98∈⋮Pluk
     Limit: "100"
 - Entity: ∈⋮199

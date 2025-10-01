@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.050904313931759454, 0.002774609303035019, -0.0007001650468669105
+      Now: 0.050904313931759454, 0.002774609303035019, 0.0000700165046866911
       Spawn: 0, 0, 0
   inventory.Carrier:
     Inventory: []
@@ -39,8 +39,7 @@
     Bottom:
       Surface:
         Material: ∈⋮21∈⋮Shader+Grass
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -101,20 +100,15 @@
     Top:
       Surface:
         Material: ∈⋮13∈⋮Shader+Night+Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -60, -70, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -60, -70, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -125,12 +119,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -90, 60, 0
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -90, 60, 0
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -138,8 +129,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   inventory.Carrier:
     Inventory: []
 - Entity: ∈⋮6
@@ -147,8 +137,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -8
+      Z: -8
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -194,10 +183,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮7
   ecs.Named:
     Name: Portal
@@ -210,12 +197,9 @@
       Material: ∈⋮9
 - Entity: ∈⋮8
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -10, 350, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -10, 350, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0, 1
@@ -229,8 +213,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -321,10 +304,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮11
   materials.Image:
     Filter: true
@@ -343,9 +324,9 @@
     - ∈⋮74
     - ∈⋮67
     - ∈⋮77
-    - ∈⋮68
     - ∈⋮69
     - ∈⋮79
+    - ∈⋮68
     Source: ∈⋮86
     Vel: 15
     XYSpread: 10
@@ -359,8 +340,7 @@
       Now: -186.2503104590687, 178.50979081676513, 25
       Procedural: true
       Spawn: -280, 30, 32
-    Size:
-      Spawn: 10, 10
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -379,8 +359,7 @@
       Normal: -0.19611613513818404, 0, 0.9805806756909201
       Surface:
         Material: ∈⋮21∈⋮Shader+Grass
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮3∈⋮Starting
@@ -417,17 +396,14 @@
     Top:
       Surface:
         Material: ∈⋮13∈⋮Shader+Night+Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮15
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮21∈⋮Shader+Grass
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -455,10 +431,8 @@
     Top:
       Surface:
         Material: ∈⋮13∈⋮Shader+Night+Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮16
   behaviors.VerticalDoor:
     AutoClose: false
@@ -469,15 +443,12 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Now: 1, 0, 0, 0, 0, 1
-          Spawn: 1, 0, 0, 0, -0, 1
+        Transform: 1, 0, 0, 0, -0, 1
       Lo:
         Material: ∈⋮2∈⋮Default
       P: -250, 380
@@ -486,9 +457,7 @@
     - AdjacentSector: ∈⋮19
       Hi:
         Material: ∈⋮32∈⋮Shader+DGarage.png
-        Transform:
-          Now: 1, 0, 0, 0, 0, 1
-          Spawn: 1, 0, 0, 0, -0, 1
+        Transform: 1, 0, 0, 0, -0, 1
       Lo:
         Material: ∈⋮2∈⋮Default
       P: -260, 380
@@ -496,9 +465,7 @@
         Material: ∈⋮2∈⋮Default
     - Hi:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Now: 1, 0, 0, 0, 0, 1
-          Spawn: 1, 0, 0, 0, -0, 1
+        Transform: 1, 0, 0, 0, -0, 1
       Lo:
         Material: ∈⋮2∈⋮Default
       P: -260, 460
@@ -507,8 +474,7 @@
     - AdjacentSector: ∈⋮10
       Hi:
         Material: ∈⋮32∈⋮Shader+DGarage.png
-        Transform:
-          Spawn: 1, 0, 0, 0, 0.8, 0
+        Transform: 1, 0, 0, 0, 0.8, 0
       Lo:
         Material: ∈⋮2∈⋮Default
       P: -250, 460
@@ -530,16 +496,12 @@
           TweeningFunc: EaseInOut2
         Now: 0
         Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮17
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -150, -120, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -150, -120, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 0.8, 0.8, 1
@@ -558,8 +520,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -633,10 +594,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮20
   materials.Image:
     Filter: false
@@ -656,8 +615,7 @@
     Bottom:
       Surface:
         Material: ∈⋮21∈⋮Shader+Grass
-      Z:
-        Spawn: -22
+      Z: -22
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -711,8 +669,7 @@
       P: -430, 0
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 1, 0, 0.3, 0, 0.8432993810941913, 0
+        Transform: 1, 0, 0.3, 0, 0.8432993810941913, 0
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
@@ -759,10 +716,8 @@
     Top:
       Surface:
         Material: ∈⋮13∈⋮Shader+Night+Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮23
   materials.Image:
     Filter: false
@@ -807,8 +762,7 @@
       Surface:
         Material: ∈⋮37∈⋮Shader+Water
       Target: ∈⋮30
-      Z:
-        Spawn: -26
+      Z: -26
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -843,18 +797,13 @@
     Top:
       Surface:
         Material: ∈⋮13∈⋮Shader+Night+Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮29
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -410, 470, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -410, 470, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -865,8 +814,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -200
+      Z: -200
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -878,8 +826,7 @@
       P: -730, 0
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 1, 0, 0, 0, 1.3384615384615384, 0
+        Transform: 1, 0, 0, 0, 1.3384615384615384, 0
     - AdjacentSector: ∈⋮55
       Hi:
         Material: ∈⋮2∈⋮Default
@@ -888,8 +835,7 @@
       P: -730, -130
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 1, 0, 0, 0, 1.2428571428571429, 0
+        Transform: 1, 0, 0, 0, 1.2428571428571429, 0
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
@@ -897,8 +843,7 @@
       P: -870, -130
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 4, 0, 0, 0, 4, 0
+        Transform: 4, 0, 0, 0, 4, 0
     - AdjacentSector: ∈⋮55
       Hi:
         Material: ∈⋮2∈⋮Default
@@ -907,16 +852,13 @@
       P: -870, 0
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 1, 0, 0, 0, 1.2428571428571429, 0
+        Transform: 1, 0, 0, 0, 1.2428571428571429, 0
     Top:
       Surface:
         Material: ∈⋮37∈⋮Shader+Water
       Target: ∈⋮28
-      Z:
-        Spawn: -26
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -26
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮31
   materials.Image:
     Filter: false
@@ -937,30 +879,23 @@
     Source: data/red-button.png
   materials.SpriteSheet:
     Cols: "2"
-    Frame:
-      Spawn: "0"
+    Frame: "0"
     Frames: "2"
     Material: ∈⋮33
 - Entity: ∈⋮34
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -500, -70, 19
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -500, -70, 19
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 0.6, 0.6, 1
     Strength: 2
 - Entity: ∈⋮35
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -800, -70, -50
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -800, -70, -50
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -986,8 +921,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -82
+      Z: -82
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1024,10 +958,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -38
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -38
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮39
   core.InternalSegment:
     A: -1140, 370
@@ -1043,8 +975,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -100
+      Z: -100
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1081,18 +1012,13 @@
       Surface:
         Material: ∈⋮37∈⋮Shader+Water
       Target: ∈⋮43
-      Z:
-        Spawn: 20
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 20
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮41
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -1140, -170, -50
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -1140, -170, -50
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 0.5, 1
@@ -1103,8 +1029,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -100
+      Z: -100
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1155,18 +1080,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 20
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 20
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮43
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮37∈⋮Shader+Water
       Target: ∈⋮40
-      Z:
-        Spawn: 20
+      Z: 20
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -1201,17 +1123,14 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 100
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 100
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮44
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 20
+      Z: 20
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -1267,8 +1186,7 @@
       P: -1280, 430
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 0.7905694150420948, 0, 0, 0, 1, 0
+        Transform: 0.7905694150420948, 0, 0, 0, 1, 0
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
@@ -1276,8 +1194,7 @@
       P: -1260, 370
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 0.375, 0, 0, 0, 1, 0
+        Transform: 0.375, 0, 0, 0, 1, 0
     - AdjacentSector: ∈⋮43
       Hi:
         Material: ∈⋮2∈⋮Default
@@ -1289,10 +1206,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 100
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 100
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮45
   core.InternalSegment:
     A: -1140, 400
@@ -1304,12 +1219,9 @@
     TwoSided: true
 - Entity: ∈⋮46
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -1190, 340, 60
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -1190, 340, 60
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -1340,8 +1252,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -14
+      Z: -14
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -1375,12 +1286,10 @@
     - AdjacentSector: ∈⋮22
       Hi:
         Material: ∈⋮32∈⋮Shader+DGarage.png
-        Transform:
-          Spawn: 1, 0, 0, 0, 1.1142857142857143, -0.1
+        Transform: 1, 0, 0, 0, 1.1142857142857143, -0.1
       Lo:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 1, 0, 0, 0, 0.11428571428571428, 0
+        Transform: 1, 0, 0, 0, 0.11428571428571428, 0
       P: -230, -100
       Surface:
         Material: ∈⋮2∈⋮Default
@@ -1400,15 +1309,13 @@
           TweeningFunc: EaseInOut2
         Now: -14
         Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮50
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -8
+      Z: -8
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -1451,19 +1358,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮51
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮21∈⋮Shader+Grass
-        Transform:
-          Spawn: 3.357142857142857, 0, 0, 0, 1, 0
-      Z:
-        Spawn: 0
+        Transform: 3.357142857142857, 0, 0, 0, 1, 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮50
@@ -1488,8 +1391,7 @@
       P: -360, -350
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 7.34375, 0, 0, 0, 1, 0
+        Transform: 7.34375, 0, 0, 0, 1, 0
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
@@ -1507,30 +1409,22 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮52
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -260, -170, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -260, -170, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
     Strength: 2
 - Entity: ∈⋮54
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -330, 130, 21
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -330, 130, 21
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -1541,10 +1435,8 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 4, 0, 0, 0, 4, 0
-      Z:
-        Spawn: -240
+        Transform: 4, 0, 0, 0, 4, 0
+      Z: -240
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1577,8 +1469,7 @@
       P: -870, -280
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 4, 0, 0, 0, 4, 0
+        Transform: 4, 0, 0, 0, 4, 0
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
@@ -1586,8 +1477,7 @@
       P: -610, -280
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 5.7894736842105265, 0, 0, 0, 4, 0
+        Transform: 5.7894736842105265, 0, 0, 0, 4, 0
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
@@ -1595,8 +1485,7 @@
       P: -610, 160
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 4, 0, 0, 0, 4, 0
+        Transform: 4, 0, 0, 0, 4, 0
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
@@ -1604,8 +1493,7 @@
       P: -870, 160
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 4, 0, 0, 0, 4, 0
+        Transform: 4, 0, 0, 0, 4, 0
     - AdjacentSector: ∈⋮30
       Hi:
         Material: ∈⋮2∈⋮Default
@@ -1633,10 +1521,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮56
   behaviors.PlayerTargetable:
     Frob:
@@ -1676,12 +1562,9 @@
         }
     ValidComponents: character.Player
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -250, 362, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -250, 362, 32
+    Size: 10, 10
   ecs.Linked:
     Sources:
     - ∈⋮78∈⋮Add+Body+to+Player%27s+targeting
@@ -1775,8 +1658,7 @@
     Pos:
       Now: -212.68554067316234, 239.21816717685027, 24.999999999999996
       Spawn: -180, 420, 0
-    Size:
-      Spawn: 10, 10
+    Size: 10, 10
   core.Light: ∈⋮12
   ecs.Linked:
     Sources:

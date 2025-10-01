@@ -37,6 +37,17 @@ func (sc *SectorController) Recalculate() {
 }
 
 func (sc *SectorController) Always() {
+	// Transform segments if we need to
+	if sc.Transform.Now != sc.Transform.Prev {
+		for _, seg := range sc.Segments {
+			seg.P.Now = seg.P.Spawn
+			sc.Transform.Now.ProjectSelf(&seg.P.Now)
+		}
+		sc.Recalculate()
+	}
+
+	// This section is for some rendering cache invalidation
+
 	frame := sc.LastSeenFrame.Load()
 
 	// This sector hasn't been observed recently

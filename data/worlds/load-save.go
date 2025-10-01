@@ -10,6 +10,7 @@ import (
 	_ "tlyakhov/gofoom/components/behaviors"
 	_ "tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
+	_ "tlyakhov/gofoom/scripting_symbols"
 )
 
 func main() {

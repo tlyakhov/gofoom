@@ -105,7 +105,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 	mw.Context.Push()
 
 	for _, segment := range sector.Segments {
-		if segment.Next == nil || segment.P == segment.Next.P {
+		if segment.Next == nil || segment.P.Render == segment.Next.P.Render {
 			continue
 		}
 
@@ -140,13 +140,13 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		// Draw segment
 		mw.Context.SetLineWidth(1)
 		mw.Context.NewSubPath()
-		mw.Context.MoveTo(segment.P[0], segment.P[1])
-		mw.Context.LineTo(segment.Next.P[0], segment.Next.P[1])
+		mw.Context.MoveTo(segment.P.Render[0], segment.P.Render[1])
+		mw.Context.LineTo(segment.Next.P.Render[0], segment.Next.P.Render[1])
 		mw.Context.ClosePath()
 		mw.Context.Stroke()
 		// Draw normal
 		mw.Context.NewSubPath()
-		ns := segment.Next.P.Add(&segment.P).Mul(0.5)
+		ns := segment.Next.P.Render.Add(&segment.P.Render).Mul(0.5)
 		ne := ns.Add(segment.Normal.Mul(4.0))
 		mw.Context.MoveTo(ns[0], ns[1])
 		mw.Context.LineTo(ne[0], ne[1])
@@ -170,12 +170,12 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 
 		if segmentSelected {
 			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
-			mw.DrawHandle(&segment.P)
+			mw.DrawHandle(&segment.P.Render)
 		} else if segmentHovering {
 			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
-			mw.DrawHandle(&segment.P)
+			mw.DrawHandle(&segment.P.Render)
 		} else {
-			mw.Context.DrawRectangle(segment.P[0]-1, segment.P[1]-1, 2, 2)
+			mw.Context.DrawRectangle(segment.P.Render[0]-1, segment.P.Render[1]-1, 2, 2)
 			mw.Context.Stroke()
 		}
 	}

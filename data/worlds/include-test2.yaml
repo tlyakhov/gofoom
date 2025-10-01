@@ -22,7 +22,7 @@
     MountHeight: 15
     Vel:
       Now: 0.000000000000000000000000000000000000000000004133620315853336, 0.00000000000000000000000000000000008656330800133991,
-        -0.0000000000000000000007656250000715842
+        -0.0000000000000000000000000000000765625000071585
       Spawn: 0, 0, 0
   ecs.Linked:
     Sources:
@@ -49,8 +49,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -99,20 +98,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -60, -60, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -60, -60, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -122,12 +116,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, 0, 0
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 0, 0, 0
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -135,8 +126,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Linked:
     Sources:
     - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -155,8 +145,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -205,8 +194,7 @@
           TweeningFunc: EaseInOut2
         Now: 0
         Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Linked:
     Sources:
     - ∈⋮1∈⋮Basic+Vertical+Door∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -215,8 +203,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -265,18 +252,13 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮13
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 170, 90, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 170, 90, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 0.8, 1, 1

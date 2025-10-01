@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.0000011011852281107505, -0.00000039644467002995725, -0.0007001650411977743
+      Now: 0.0000011011852281107505, -0.00000039644467002995725, 0.00007001650411977739
       Spawn: 0, 0, 0
   inventory.Carrier:
     Inventory: []
@@ -146,8 +146,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -195,10 +194,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector0
 - Entity: ∈⋮16
@@ -206,8 +203,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮51∈⋮sector25
@@ -241,10 +237,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector1
 - Entity: ∈⋮17
@@ -252,8 +246,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -10
+      Z: -10
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮24∈⋮sector5
@@ -287,10 +280,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector2
 - Entity: ∈⋮18
@@ -298,8 +289,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮52∈⋮sector26
@@ -347,47 +337,36 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector3
 - Entity: ∈⋮19
   core.Body:
-    Angle:
-      Spawn: 0
+    Angle: 0
     Pos:
       Now: -17, 68, 5
       Spawn: -17, 68, 0
-    Size:
-      Spawn: 10, 10
+    Size: 10, 10
 - Entity: ∈⋮20
   core.Body:
-    Angle:
-      Spawn: 0
+    Angle: 0
     Pos:
       Now: 45, 68, 5
       Spawn: 45, 68, 0
-    Size:
-      Spawn: 10, 10
+    Size: 10, 10
 - Entity: ∈⋮21
   core.Body:
-    Angle:
-      Spawn: 0
+    Angle: 0
     Pos:
       Now: 85, 68, 5
       Spawn: 85, 68, 0
-    Size:
-      Spawn: 10, 10
+    Size: 10, 10
 - Entity: ∈⋮22
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, 68, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 0, 68, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0
     Diffuse: 1, 1, 1
@@ -397,8 +376,7 @@
     Bottom:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: -3
+      Z: -3
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮15∈⋮sector0
@@ -432,10 +410,8 @@
     Top:
       Surface:
         Material: ∈⋮11∈⋮f5
-      Z:
-        Spawn: 50
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 50
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector4
 - Entity: ∈⋮24
@@ -443,8 +419,7 @@
     Bottom:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: -20
+      Z: -20
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -478,10 +453,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector5
 - Entity: ∈⋮25
@@ -489,8 +462,7 @@
     Bottom:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: -30
+      Z: -30
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -524,10 +496,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector6
 - Entity: ∈⋮26
@@ -535,8 +505,7 @@
     Bottom:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: -40
+      Z: -40
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -570,10 +539,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector7
 - Entity: ∈⋮27
@@ -581,8 +548,7 @@
     Bottom:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: -50
+      Z: -50
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -616,10 +582,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector8
 - Entity: ∈⋮28
@@ -627,8 +591,7 @@
     Bottom:
       Surface:
         Material: ∈⋮10∈⋮Painful+Slime+Shader
-      Z:
-        Spawn: -60
+      Z: -60
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮30∈⋮sector10
@@ -676,20 +639,15 @@
     Top:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -6
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -6
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector9
 - Entity: ∈⋮29
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -240, 0, -30
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -240, 0, -30
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 0.1, 1, 0.1
@@ -699,8 +657,7 @@
     Bottom:
       Surface:
         Material: ∈⋮10∈⋮Painful+Slime+Shader
-      Z:
-        Spawn: -60
+      Z: -60
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮28∈⋮sector9
@@ -734,20 +691,15 @@
     Top:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -6
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -6
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector10
 - Entity: ∈⋮31
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -240, -100, -30
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -240, -100, -30
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -762,8 +714,7 @@
           }
       Surface:
         Material: ∈⋮10∈⋮Painful+Slime+Shader
-      Z:
-        Spawn: -60
+      Z: -60
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮28∈⋮sector9
@@ -797,20 +748,15 @@
     Top:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -6
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -6
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector11
 - Entity: ∈⋮33
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -240, 100, -30
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -240, 100, -30
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 0.1, 1, 0.1
@@ -820,8 +766,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮51∈⋮sector25
@@ -862,10 +807,8 @@
     Top:
       Surface:
         Material: ∈⋮12∈⋮f6
-      Z:
-        Spawn: 60
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 60
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector12
 - Entity: ∈⋮35
@@ -873,8 +816,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮34∈⋮sector12
@@ -915,10 +857,8 @@
     Top:
       Surface:
         Material: ∈⋮12∈⋮f6
-      Z:
-        Spawn: 60
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 60
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector13
 - Entity: ∈⋮36
@@ -926,8 +866,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮35∈⋮sector13
@@ -961,10 +900,8 @@
     Top:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: 60
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 60
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector14
 - Entity: ∈⋮37
@@ -973,8 +910,7 @@
       Surface:
         Material: ∈⋮13∈⋮Water
       Target: ∈⋮40∈⋮sector17
-      Z:
-        Spawn: -20
+      Z: -20
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -1029,20 +965,15 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 100
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 100
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector15
 - Entity: ∈⋮38
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 350, 80, 90
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 350, 80, 90
+    Size: 10, 10
   core.Light:
     Attenuation: 0.1
     Diffuse: 0.4, 0.6, 1
@@ -1054,8 +985,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -2
+      Z: -2
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮37∈⋮sector15
@@ -1089,10 +1019,8 @@
     Top:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: 60
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 60
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector16
 - Entity: ∈⋮40
@@ -1101,8 +1029,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -170
+      Z: -170
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1159,10 +1086,8 @@
       Surface:
         Material: ∈⋮13∈⋮Water
       Target: ∈⋮37∈⋮sector15
-      Z:
-        Spawn: -20
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -20
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector17
 - Entity: ∈⋮41
@@ -1171,8 +1096,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -230
+      Z: -230
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1245,20 +1169,15 @@
     Top:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -20
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -20
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector18
 - Entity: ∈⋮42
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 630, 390, -125
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 630, 390, -125
+    Size: 10, 10
   core.Light:
     Attenuation: 0
     Diffuse: 0.8, 0.8, 1
@@ -1271,8 +1190,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -58
+      Z: -58
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1308,10 +1226,8 @@
     Top:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -20
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -20
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector19
 - Entity: ∈⋮44
@@ -1320,8 +1236,7 @@
       Surface:
         Material: ∈⋮13∈⋮Water
       Target: ∈⋮45∈⋮sector21
-      Z:
-        Spawn: -14
+      Z: -14
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮39∈⋮sector16
@@ -1369,10 +1284,8 @@
     Top:
       Surface:
         Material: ∈⋮9∈⋮f1
-      Z:
-        Spawn: 60
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 60
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector20
 - Entity: ∈⋮45
@@ -1381,8 +1294,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -200
+      Z: -200
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1432,10 +1344,8 @@
       Surface:
         Material: ∈⋮13∈⋮Water
       Target: ∈⋮44∈⋮sector20
-      Z:
-        Spawn: -14
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -14
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector21
 - Entity: ∈⋮46
@@ -1444,8 +1354,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: -70
+      Z: -70
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
@@ -1481,21 +1390,17 @@
       Surface:
         Material: ∈⋮13∈⋮Water
       Target: ∈⋮48∈⋮sector23
-      Z:
-        Spawn: -20
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: -20
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector22
 - Entity: ∈⋮47
   core.Body:
-    Angle:
-      Spawn: 0
+    Angle: 0
     Pos:
       Now: 610, 175, -15
       Spawn: 610, 175, -50
-    Size:
-      Spawn: 10, 10
+    Size: 10, 10
   core.Light:
     Attenuation: 0
     Diffuse: 0.8, 0.8, 1
@@ -1508,8 +1413,7 @@
       Surface:
         Material: ∈⋮13∈⋮Water
       Target: ∈⋮46∈⋮sector22
-      Z:
-        Spawn: -20
+      Z: -20
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -1543,10 +1447,8 @@
     Top:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 50
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 50
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector23
 - Entity: ∈⋮49
@@ -1554,8 +1456,7 @@
     Bottom:
       Surface:
         Material: ∈⋮3∈⋮mat1
-      Z:
-        Spawn: -10
+      Z: -10
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -1589,20 +1490,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 70
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 70
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector24
 - Entity: ∈⋮50
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 700, 175, 50
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 700, 175, 50
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -1617,8 +1513,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮34∈⋮sector12
@@ -1665,8 +1560,7 @@
           TweeningFunc: EaseInOut2
         Now: 0
         Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector25
 - Entity: ∈⋮52
@@ -1674,8 +1568,7 @@
     Bottom:
       Surface:
         Material: ∈⋮8∈⋮Default+Floor
-      Z:
-        Spawn: 15
+      Z: 15
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮18∈⋮sector3
@@ -1709,10 +1602,8 @@
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: sector26
 - Entity: ∈⋮54
@@ -1721,12 +1612,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, -70, 0
-    Size:
-      Spawn: 15, 15
+    Angle: 0
+    Pos: 0, -70, 0
+    Size: 15, 15
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -1734,8 +1622,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   inventory.Carrier:
     Inventory: []
 - Entity: ∈⋮55
@@ -1757,24 +1644,18 @@
     Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮58
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 130, 80, 30
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 130, 80, 30
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
     Strength: 2
 - Entity: ∈⋮59
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 380, 420, 20
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 380, 420, 20
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1

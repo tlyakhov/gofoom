@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.00000000041609308909583485, 0.00000000011515976694064067, -0.0007001650399223597
+      Now: 0.00000000041609308909583485, 0.00000000011515976694064067, 0.00007001650399223608
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -41,8 +41,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮10
@@ -93,20 +92,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -60, -70, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -60, -70, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -119,12 +113,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, 0, 0
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 0, 0, 0
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -132,8 +123,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Spawn
   inventory.Carrier:
@@ -143,8 +133,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮9
@@ -180,17 +169,14 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮9
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮3∈⋮Starting
@@ -226,17 +212,14 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮10
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -286,17 +269,14 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮11
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -331,18 +311,13 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮12
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -250, -160, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -250, -160, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 0.8, 1, 1

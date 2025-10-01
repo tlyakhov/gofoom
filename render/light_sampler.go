@@ -155,7 +155,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 	var floorZ, floorZ2, ceilZ, ceilZ2, intersectionDistSq float64
 	for _, seg := range sector.Segments {
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-			log.Printf("    Checking segment [%v]-[%v]\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+			log.Printf("    Checking segment [%v]-[%v]\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 		}
 		// Don't occlude the world location with the segment it's located on
 		if &seg.Segment == ls.Segment {
@@ -213,6 +213,13 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			// We have a non-portal segment and we're not checking inner sector,
 			// but our sector itself is an inner one. Let's go out
 			adj = sector.OuterAt(ls.IntersectionTest.To2D())
+			if adj == nil {
+				// We've hit some occlusion edge case.
+				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+					log.Printf("    Tried to get outer sector at intersection %v, but didn't get anything.", ls.IntersectionTest.To2D())
+				}
+				return seg, nil
+			}
 			// Why? This is to handle the edge case when we have a light ray
 			// grazing a corner of an inner sector. If this happens, we need to
 			// nudge the intersection distance for the _exiting_ light ray to
@@ -224,7 +231,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			}
 		} else {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Occluded behind wall seg %v|%v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				log.Printf("    Occluded behind wall seg %v|%v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 			}
 			// A wall!
 			return seg, nil // This is a wall, that means the light is occluded for sure.
@@ -235,7 +242,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		i2d = ls.IntersectionTest.To2D()
 		if ls.IntersectionTest[2] < sector.Min[2] || ls.IntersectionTest[2] > sector.Max[2] {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Occluded by sector min/max %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				log.Printf("    Occluded by sector min/max %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 			}
 			return seg, nil // Same as wall, we're occluded.
 		}
@@ -243,7 +250,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 		if ls.IntersectionTest[2] < floorZ || ls.IntersectionTest[2] > ceilZ {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+				log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 			}
 			return seg, nil // Same as wall, we're occluded.
 		}
@@ -252,7 +259,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			if ls.IntersectionTest[2] < floorZ2 || ls.IntersectionTest[2] > ceilZ2 {
 				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-					log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.StringHuman(), seg.Next.P.StringHuman())
+					log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 				}
 				return seg, nil // Same as wall, we're occluded.
 			}
@@ -361,7 +368,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			i2d := ls.Hit.To2D()
 			floorZ, ceilZ := sector.ZAt(i2d)
 			ls.Initialize(hitSegment.Surface.Material, hitSegment.Surface.ExtraStages)
-			ls.NU = ls.Hit.To2D().Dist(&hitSegment.P) / hitSegment.Length
+			ls.NU = ls.Hit.To2D().Dist(&hitSegment.P.Render) / hitSegment.Length
 			ls.NV = (ceilZ - ls.Hit[2]) / (ceilZ - floorZ)
 			ls.U = ls.NU
 			ls.V = ls.NV

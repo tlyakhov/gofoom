@@ -171,13 +171,15 @@ func (s *Selectable) PositionRange(f func(p *concepts.Vector2)) {
 	switch s.Type {
 	case SelectableSector:
 		for _, seg := range s.Sector.Segments {
-			f(&seg.P)
+			f(&seg.P.Spawn)
+			seg.P.ResetToSpawn()
 		}
 		s.Sector.Recalculate()
 	case SelectableLow, SelectableMid, SelectableHi:
 		fallthrough
 	case SelectableSectorSegment:
-		f(&s.SectorSegment.P)
+		f(&s.SectorSegment.P.Spawn)
+		s.SectorSegment.P.ResetToSpawn()
 		s.Sector.Recalculate()
 	case SelectableActionWaypoint:
 		f(s.ActionWaypoint.P.To2D())

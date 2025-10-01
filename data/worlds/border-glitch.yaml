@@ -4,13 +4,11 @@
   character.Player:
     Spawn: false
   core.Body:
-    Angle:
-      Spawn: 0
+    Angle: 0
     Pos:
       Now: 0, 0, 5
       Spawn: 0, 0, 0
-    Size:
-      Spawn: 10, 10
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -18,8 +16,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Player
 - Entity: ∈⋮2
@@ -36,8 +33,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -72,20 +68,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -40, -70, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -40, -70, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -98,12 +89,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, 0, 0
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 0, 0, 0
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -111,8 +99,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Spawn
   inventory.Carrier:
@@ -122,8 +109,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -167,18 +153,13 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 70
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 70
+    Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮8
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 180, -70, 35
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 180, -70, 35
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1

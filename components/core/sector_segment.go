@@ -6,6 +6,7 @@ package core
 import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
@@ -18,9 +19,9 @@ const (
 type SectorSegment struct {
 	Segment `editable:"^"`
 
-	P         concepts.Vector2  `editable:"X/Y"`
-	LoSurface materials.Surface `editable:"Low"`
-	HiSurface materials.Surface `editable:"High"`
+	P         dynamic.DynamicValue[concepts.Vector2] `editable:"X/Y"`
+	LoSurface materials.Surface                      `editable:"Low"`
+	HiSurface materials.Surface                      `editable:"High"`
 	// TODO: This should also be implemented for hi/lo surfaces
 	WallUVIgnoreSlope bool `editable:"Wall U/V ignore slope"`
 	PortalHasMaterial bool `editable:"Portal has material"`
@@ -45,9 +46,9 @@ type SectorSegment struct {
 }
 
 func (s *SectorSegment) Recalculate() {
-	s.Segment.A = &s.P
+	s.Segment.A = &s.P.Render
 	if s.Next != nil {
-		s.Segment.B = &s.Next.P
+		s.Segment.B = &s.Next.P.Render
 	}
 	s.Segment.Recalculate()
 
@@ -113,7 +114,7 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	copied := new(SectorSegment)
 	copied.Sector = s.Sector
 	copied.Construct(s.Serialize())
-	copied.P = p
+	copied.P.SetAll(p)
 	// Insert into the sector
 	s.Sector.Segments = append(s.Sector.Segments[:index+1], s.Sector.Segments[index:]...)
 	s.Sector.Segments[index] = copied
@@ -126,7 +127,7 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 
 func (s *SectorSegment) Construct(data map[string]any) {
 	s.Segment.Construct(data)
-	s.P = concepts.Vector2{}
+	s.P.Construct(nil)
 	s.Normal = concepts.Vector2{}
 	s.WallUVIgnoreSlope = false
 	s.PortalHasMaterial = false
@@ -141,9 +142,8 @@ func (s *SectorSegment) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["P"]; ok {
-		s.P.Deserialize(v.(string))
+		s.P.Construct(v)
 	}
-
 	if v, ok := data["WallUVIgnoreSlope"]; ok {
 		s.WallUVIgnoreSlope = v.(bool)
 	}

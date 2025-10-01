@@ -28,8 +28,8 @@ func planePick(block *block, plane *core.SectorPlane) {
 	}
 
 	planeRayDelta := concepts.Vector3{
-		block.Sector.Segments[0].P[0] - block.Ray.Start[0],
-		block.Sector.Segments[0].P[1] - block.Ray.Start[1],
+		block.Sector.Segments[0].P.Render[0] - block.Ray.Start[0],
+		block.Sector.Segments[0].P.Render[1] - block.Ray.Start[1],
 		plane.Z.Render - block.CameraZ}
 
 	block.RayPlane[2] = float64(block.ScreenHeight/2 - block.ScreenY + int(block.ShearZ))
@@ -77,8 +77,8 @@ func planes(block *block, plane *core.SectorPlane) {
 	// math ops and adds branches, so seems unnecessary.
 	world := concepts.Vector3{}
 	planeRayDelta := concepts.Vector3{
-		block.Sector.Segments[0].P[0] - block.Ray.Start[0],
-		block.Sector.Segments[0].P[1] - block.Ray.Start[1],
+		block.Sector.Segments[0].P.Render[0] - block.Ray.Start[0],
+		block.Sector.Segments[0].P.Render[1] - block.Ray.Start[1],
 		plane.Z.Render - block.CameraZ}
 	// Top (ceiling)
 	start := block.EdgeTop

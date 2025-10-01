@@ -12,8 +12,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -48,20 +47,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 80, 20, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 80, 20, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.2
     Diffuse: 1, 1, 1
@@ -73,8 +67,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -60
+      Z: -60
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -123,10 +116,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 112
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 112
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: tallBoy
 - Entity: ∈⋮6
@@ -135,12 +126,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, 0, 0
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 0, 0, 0
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -148,8 +136,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Spawn
   inventory.Carrier:

@@ -32,12 +32,12 @@ func (a *SplitSegment) Split(ss *segmentSplitter) bool {
 	isect := new(concepts.Vector2)
 	u := ss.original.Intersect2D(md, m, isect)
 
-	if u < 0 || *isect == ss.original.P || *isect == ss.original.Next.P {
+	if u < 0 || *isect == ss.original.P.Render || *isect == ss.original.Next.P.Render {
 		return false
 	}
 
 	ss.added = ss.original.Split(*isect)
-	ss.added.P = *isect
+	ss.added.P.SetAll(*isect)
 	ss.added.Sector.Recalculate()
 	a.NewSegments = append(a.NewSegments, ss)
 	return true

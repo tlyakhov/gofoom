@@ -113,7 +113,7 @@ func (t *Text) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Color"]; ok {
-		t.Color.Construct(v.(map[string]any))
+		t.Color.Construct(v)
 	}
 }
 

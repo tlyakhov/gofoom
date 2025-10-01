@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.00000000000010968520272380682, -0.00000000000021790709031294815, -0.0007001650399223597
+      Now: -0.00000000000010968520272380682, -0.00000000000021790709031294815, 0.00007001650399223608
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -41,8 +41,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -76,20 +75,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -60, -70, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -60, -70, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -102,12 +96,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, 0, 0
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 0, 0, 0
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -115,8 +106,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Spawn
   inventory.Carrier:
@@ -126,8 +116,7 @@
     Filter: false
     Source: data/game/keycard/keycard.png
   materials.Sprite:
-    Frame:
-      Spawn: "0"
+    Frame: "0"
     Material: ∈⋮8
 - Entity: ∈⋮9
   core.InternalSegment:
@@ -140,12 +129,9 @@
     TwoSided: true
 - Entity: ∈⋮10
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 40, 40, 32
-    Size:
-      Spawn: 40, 40
+    Angle: 0
+    Pos: 40, 40, 32
+    Size: 40, 40
   materials.Shader:
     Stages:
     - BlendingFunc: BlendNormal

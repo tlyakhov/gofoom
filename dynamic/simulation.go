@@ -14,27 +14,32 @@ import (
 type Simulation struct {
 	EditorPaused     bool
 	Recalculate      bool
-	SimTime          float64
-	RenderTime       float64
 	FrameMillis      float64 // Milliseconds
 	RenderStateBlend float64
 	FPS              float64
 	PrevTimestamp    int64 // Milliseconds
-	Timestamp        int64 // Milliseconds
-	Counter          uint64
-	Frame            uint64
-	NewFrame         func()
-	Integrate        func()
-	Render           func()
-	Dynamics         map[Dynamic]struct{}   // *xsync.MapOf[Dynamic, struct{}]
-	Spawnables       map[Spawnable]struct{} //  *xsync.MapOf[Spawnable, struct{}]
-	Events           EventQueue
+	// Wall clock time
+	Timestamp int64 // Milliseconds
+	// Simulation time (excludes rendering, increments at constant rate)
+	SimTimestamp int64 // Milliseconds
+	Counter      uint64
+	Frame        uint64
+	NewFrame     func()
+	Integrate    func()
+	Render       func()
+	Dynamics     map[Dynamic]struct{}   // *xsync.MapOf[Dynamic, struct{}]
+	Spawnables   map[Spawnable]struct{} //  *xsync.MapOf[Spawnable, struct{}]
+	Events       EventQueue
+
+	simTime    float64
+	renderTime float64
 }
 
 func NewSimulation() *Simulation {
 	return &Simulation{
 		PrevTimestamp: hrtime.Now().Milliseconds(),
 		Timestamp:     hrtime.Now().Milliseconds(),
+		SimTimestamp:  0,
 		EditorPaused:  false,
 		Dynamics:      make(map[Dynamic]struct{}),
 		Spawnables:    make(map[Spawnable]struct{}),
@@ -56,7 +61,7 @@ func (s *Simulation) Step() {
 		s.FrameMillis = constants.MinMillisPerFrame
 	}
 
-	s.RenderTime += s.FrameMillis
+	s.renderTime += s.FrameMillis
 
 	if s.NewFrame != nil {
 		s.NewFrame()
@@ -66,7 +71,7 @@ func (s *Simulation) Step() {
 		d.NewFrame()
 	}
 
-	for s.RenderTime >= constants.TimeStep {
+	for s.renderTime >= constants.TimeStep {
 		for d := range s.Dynamics {
 			if a := d.GetAnimation(); a != nil && !s.EditorPaused {
 				a.Animate()
@@ -82,12 +87,12 @@ func (s *Simulation) Step() {
 		}
 
 		s.Counter++
-		s.RenderTime -= constants.TimeStep
-		s.SimTime += constants.TimeStep
+		s.renderTime -= constants.TimeStep
+		s.simTime += constants.TimeStep
 	}
 
 	// Update the blended values
-	s.RenderStateBlend = s.RenderTime / constants.TimeStep
+	s.RenderStateBlend = s.renderTime / constants.TimeStep
 
 	for d := range s.Dynamics {
 		if s.Recalculate {
@@ -100,6 +105,12 @@ func (s *Simulation) Step() {
 		s.Render()
 		s.Frame++
 	}
+
+	/*
+		if s.Counter%60 == 0 {
+			log.Printf("%v dynamics, %v spawnables", len(s.Dynamics), len(s.Spawnables))
+		}
+	*/
 }
 
 // NewEvent wraps adding a timestamped event to the queue

@@ -15,8 +15,7 @@
     Bottom:
       Surface:
         Material: ∈⋮3∈⋮Blue
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi: {}
@@ -42,9 +41,7 @@
     Top:
       Surface:
         Material: ∈⋮3∈⋮Blue
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: cl5anh5mdsrmm6mqu5d0

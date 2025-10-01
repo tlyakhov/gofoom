@@ -32,9 +32,9 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 	}
 
 	// Check for co-linearity
-	aDelta := &concepts.Vector2{a.P[0] - a.Next.P[0], a.P[1] - a.Next.P[1]}
-	bDelta := &concepts.Vector2{a.P[0] - b.Next.P[0], a.P[1] - b.Next.P[1]}
-	abDelta := &concepts.Vector2{a.P[0] - b.P[0], a.P[1] - b.P[1]}
+	aDelta := &concepts.Vector2{a.P.Render[0] - a.Next.P.Render[0], a.P.Render[1] - a.Next.P.Render[1]}
+	bDelta := &concepts.Vector2{a.P.Render[0] - b.Next.P.Render[0], a.P.Render[1] - b.Next.P.Render[1]}
+	abDelta := &concepts.Vector2{a.P.Render[0] - b.P.Render[0], a.P.Render[1] - b.P.Render[1]}
 	c1 := aDelta.Cross(bDelta)
 	c2 := aDelta.Cross(abDelta)
 
@@ -50,16 +50,16 @@ func autoCheckSegment(a, b *core.SectorSegment) bool {
 	b.Sector.Entity, b.P.StringHuman(), b.Next.P.StringHuman())*/
 
 	// which axis should we use for comparisons?
-	xRange := math.Max(math.Abs(a.P[0]-a.Next.P[0]), math.Abs(b.P[0]-b.Next.P[0]))
-	yRange := math.Max(math.Abs(a.P[1]-a.Next.P[1]), math.Abs(b.P[1]-b.Next.P[1]))
+	xRange := math.Max(math.Abs(a.P.Render[0]-a.Next.P.Render[0]), math.Abs(b.P.Render[0]-b.Next.P.Render[0]))
+	yRange := math.Max(math.Abs(a.P.Render[1]-a.Next.P.Render[1]), math.Abs(b.P.Render[1]-b.Next.P.Render[1]))
 	axis := 0
 	if yRange > xRange {
 		axis = 1
 	}
-	a1 := a.P
-	a2 := a.Next.P
-	b1 := b.P
-	b2 := b.Next.P
+	a1 := a.P.Render
+	a2 := a.Next.P.Render
+	b1 := b.P.Render
+	b2 := b.Next.P.Render
 
 	// Ensure the comparison order is the same for both segments
 	aSwap := false

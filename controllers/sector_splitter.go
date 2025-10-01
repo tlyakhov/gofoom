@@ -114,9 +114,9 @@ func (a *SectorSplitter) splitEdges() {
 		}
 		segment := a.Sector.Segments[i]
 		next := a.Sector.Segments[j]
-		edgeStartSide := a.whichSide(&a.Splitter1, &a.Splitter2, &segment.P)
-		edgeEndSide := a.whichSide(&a.Splitter1, &a.Splitter2, &next.P)
-		se := &splitEdge{SectorSplitter: a, Source: segment, Start: segment.P, Side: edgeStartSide}
+		edgeStartSide := a.whichSide(&a.Splitter1, &a.Splitter2, &segment.P.Render)
+		edgeEndSide := a.whichSide(&a.Splitter1, &a.Splitter2, &next.P.Render)
+		se := &splitEdge{SectorSplitter: a, Source: segment, Start: segment.P.Render, Side: edgeStartSide}
 		a.SplitSector = append(a.SplitSector, se)
 		// fmt.Printf("Added %v to SplitSector...\n", se.String())
 
@@ -124,7 +124,7 @@ func (a *SectorSplitter) splitEdges() {
 			a.EdgesOnLine = append(a.EdgesOnLine, se)
 			// fmt.Printf("Edge on line!\n")
 		} else if edgeStartSide != edgeEndSide && edgeEndSide != sideOn {
-			isect, ok := concepts.Intersect(&segment.P, &next.P, &a.Splitter1, &a.Splitter2)
+			isect, ok := concepts.Intersect(&segment.P.Render, &next.P.Render, &a.Splitter1, &a.Splitter2)
 			// fmt.Printf("Edge intersects at %v\n", isect.String())
 			if !ok {
 				// The splitter line is not fully bisecting the a.Sector. Ignore, and continue.
@@ -279,7 +279,7 @@ func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 				visitor.Visited = true
 				addedSegment := &core.SectorSegment{Sector: target}
 				addedSegment.Construct(visitor.Source.Serialize())
-				addedSegment.P = visitor.Start
+				addedSegment.P.SetAll(visitor.Start)
 				target.Segments = append(target.Segments, addedSegment)
 				visitor = visitor.Next
 				if visitor == edge {

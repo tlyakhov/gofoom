@@ -4,13 +4,11 @@
   character.Player:
     Spawn: false
   core.Body:
-    Angle:
-      Spawn: 0
+    Angle: 0
     Pos:
       Now: 0, 0, 20
       Spawn: 0, 0, 0
-    Size:
-      Spawn: 20, 40
+    Size: 20, 40
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -18,8 +16,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Player
 - Entity: ∈⋮2
@@ -37,8 +34,7 @@
       Normal: 0.14834045293024467, 0, 0.9889363528682976
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮5∈⋮ckg76htmdsrlum5blid0
@@ -74,20 +70,15 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: upper
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: -50, -120, 40
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: -50, -120, 40
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -99,8 +90,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮6∈⋮lower
@@ -136,10 +126,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: ckg76htmdsrlum5blid0
 - Entity: ∈⋮6
@@ -147,8 +135,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮7∈⋮Starting
@@ -184,10 +171,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: lower
 - Entity: ∈⋮7
@@ -195,8 +180,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮3∈⋮upper
@@ -232,10 +216,8 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
-    Transform:
-      Spawn: 1, 0, 0, 0, 1, 0
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮8
@@ -244,12 +226,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 0, 0, 0
-    Size:
-      Spawn: 20, 40
+    Angle: 0
+    Pos: 0, 0, 0
+    Size: 20, 40
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -257,8 +236,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Spawn
   inventory.Carrier:

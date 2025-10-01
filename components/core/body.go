@@ -103,7 +103,7 @@ func (b *Body) RenderSector() *Sector {
 	return nil
 }
 
-var defaultBodySize = map[string]any{"Spawn": "10,10"}
+var defaultBodySize = "10,10"
 
 func (b *Body) Construct(data map[string]any) {
 	b.Attached.Construct(data)
@@ -119,14 +119,14 @@ func (b *Body) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Pos"]; ok {
-		b.Pos.Construct(v.(map[string]any))
+		b.Pos.Construct(v)
 	}
 
 	if v, ok := data["Size"]; ok {
-		b.Size.Construct(v.(map[string]any))
+		b.Size.Construct(v)
 	}
 	if v, ok := data["Angle"]; ok {
-		b.Angle.Construct(v.(map[string]any))
+		b.Angle.Construct(v)
 	}
 	if v, ok := data["StepSound"]; ok {
 		b.StepSound, _ = ecs.ParseEntity(cast.ToString(v))

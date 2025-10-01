@@ -5,9 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
+      Now: 710.15625
       Spawn: 180
     Pos:
-      Now: 210, 10, 20
+      Now: -145.35012632175628, -17.98396658488654, 20
       Spawn: 210, 10, 0
     Size:
       Now: 10, 40
@@ -20,7 +21,9 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0, 0, -0.0007001650399223597
+      Now: 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000016158019430035888,
+        -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000014071978620805134,
+        0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -40,8 +43,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Inner:
     - ∈⋮9
@@ -94,23 +96,20 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
+      Z: 64
     Transform:
       Damping: 0
       Freq: 1e-06
+      Now: 0, 0, 0, 0, 0, 0
       Response: 0
       Spawn: 0, 0, 0, 0, 0, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
   core.Body:
-    Angle:
-      Spawn: 0
-    Pos:
-      Spawn: 110, -60, 32
-    Size:
-      Spawn: 10, 10
+    Angle: 0
+    Pos: 110, -60, 32
+    Size: 10, 10
   core.Light:
     Attenuation: 0.4
     Diffuse: 1, 1, 1
@@ -123,12 +122,9 @@
   character.Player:
     Spawn: true
   core.Body:
-    Angle:
-      Spawn: 180
-    Pos:
-      Spawn: 210, 10, 0
-    Size:
-      Spawn: 10, 10
+    Angle: 180
+    Pos: 210, 10, 0
+    Size: 10, 10
   core.Mobile:
     CrMoving: CollideNone
     CrPlayer: CollideNone
@@ -136,8 +132,7 @@
     Elasticity: 0.1
     Mass: 80
     MountHeight: 15
-    Vel:
-      Spawn: 0, 0, 0
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Spawn
   inventory.Carrier:
@@ -147,8 +142,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -20
+      Z: -20
     FloorFriction: 0.85
     Inner:
     - ∈⋮10
@@ -185,11 +179,11 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 90
+      Z: 90
     Transform:
       Damping: 0
       Freq: 1e-06
+      Now: 0, 0, 0, 0, 0, 0
       Response: 0
       Spawn: 0, 0, 0, 0, 0, 0
 - Entity: ∈⋮10
@@ -197,71 +191,79 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 30
+      Z: 30
     FloorFriction: 0.85
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 0.5882352941176471, 0, 0, 0, 1, 0
+        Transform: 0.5882352941176471, 0, 0, 0, 1, 0
       Lo:
         Material: ∈⋮12
-        Transform:
-          Spawn: 1, 0, 0, 0, 1.7, 0
-      P: -10, 20
+        Transform: 1, 0, 0, 0, 1.7, 0
+      P:
+        Now: -18.184754724426945, 8.119183513440735
+        Spawn: -10, 20
       Surface:
         Material: ∈⋮12
     - Hi:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 0.8823529411764706, 0, 0, 0, 1, 0
+        Transform: 0.8823529411764706, 0, 0, 0, 1, 0
       Lo:
         Material: ∈⋮12
-        Transform:
-          Spawn: 1, 0, 0, 0, 1.1333333333333333, 0
-      P: -10, 0
+        Transform: 1, 0, 0, 0, 1.1333333333333333, 0
+      P:
+        Now: -6.884624350261683, -5.650065187082632
+        Spawn: -10, 0
       Surface:
         Material: ∈⋮12
     - Hi:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 0.6576670522058206, 0, 0, 0, 1, 0
+        Transform: 0.6576670522058206, 0, 0, 0, 1, 0
       Lo:
         Material: ∈⋮12
-        Transform:
-          Spawn: 1, 0, 0, 0, 1.520526224699857, 0
-      P: 20, 0
+        Transform: 1, 0, 0, 0, 1.520526224699857, 0
+      P:
+        Now: 13.769248700523367, 11.300130374165263
+        Spawn: 20, 0
       Surface:
         Material: ∈⋮12
     - Hi:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Spawn: 1.1764705882352942, 0, 0, 0, 1, 0
+        Transform: 1.1764705882352942, 0, 0, 0, 1, 0
       Lo:
         Material: ∈⋮12
-        Transform:
-          Spawn: 1, 0, 0, 0, 0.85, 0
-      P: 30, 20
+        Transform: 1, 0, 0, 0, 0.85, 0
+      P:
+        Now: 9.353742676619788, 30.71944426177126
+        Spawn: 30, 20
       Surface:
         Material: ∈⋮12
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
+      Z: 64
     Transform:
+      Animation:
+        Active: true
+        Coordinates: AnimationCoordinatesAbsolute
+        Duration: 5000
+        End: 1, 0, 0, 0, 1, 0
+        Percent: 0.6093750000000044
+        Reverse: false
+        Start: 0, -0.5, 0, 0.5, 0, 0
+        TweeningFunc: Lerp
       Damping: 0
       Freq: 1e-06
+      Now: 0.6884624350261683, -0.5650065187082631, 0, 0.5650065187082631, 0.6884624350261683,
+        0
       Response: 0
-      Spawn: 0, 0, 0, 0, 0, 0
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮11
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮12
-      Z:
-        Spawn: 10
+      Z: 10
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -296,11 +298,11 @@
     Top:
       Surface:
         Material: ∈⋮12
-      Z:
-        Spawn: 64
+      Z: 64
     Transform:
       Damping: 0
       Freq: 1e-06
+      Now: 0, 0, 0, 0, 0, 0
       Response: 0
       Spawn: 0, 0, 0, 0, 0, 0
 - Entity: ∈⋮12
@@ -315,8 +317,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 0
+      Z: 0
     FloorFriction: 0.85
     Inner:
     - ∈⋮15
@@ -353,11 +354,11 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 64
+      Z: 64
     Transform:
       Damping: 0
       Freq: 1e-06
+      Now: 0, 0, 0, 0, 0, 0
       Response: 0
       Spawn: 0, 0, 0, 0, 0, 0
 - Entity: ∈⋮15
@@ -365,8 +366,7 @@
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: -10
+      Z: -10
     FloorFriction: 0.85
     Segments:
     - Hi:
@@ -435,10 +435,10 @@
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
-      Z:
-        Spawn: 40
+      Z: 40
     Transform:
       Damping: 0
       Freq: 1e-06
+      Now: 0, 0, 0, 0, 0, 0
       Response: 0
       Spawn: 0, 0, 0, 0, 0, 0
