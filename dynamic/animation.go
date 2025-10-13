@@ -139,7 +139,7 @@ func (a *Animation[T]) Animate() {
 			sStart[0] *= s[0]
 			sStart[1] *= s[1]
 		}
-		c.Now.SetTransform(aTweened, tStart, sStart)
+		c.Now.SetTransform(aTweened, &tStart, &sStart)
 
 	}
 

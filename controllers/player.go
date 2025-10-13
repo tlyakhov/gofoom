@@ -234,7 +234,7 @@ func MovePlayerNoClip(e ecs.Entity, angle float64) {
 	sector := p.RenderSector()
 	if sector != nil {
 		p.SectorEntity = sector.Entity
-		p.Pos.Now[2] = sector.Center[2]
+		p.Pos.Now[2] = sector.Center.Now[2]
 		player.CameraZ = p.Pos.Now[2]
 	}
 }

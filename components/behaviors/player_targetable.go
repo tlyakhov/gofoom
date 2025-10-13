@@ -34,7 +34,7 @@ func (pt *PlayerTargetable) Pos(e ecs.Entity) *concepts.Vector3 {
 		top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
 		return top
 	} else if sector := core.GetSector(e); sector != nil {
-		return &sector.Center
+		return &sector.Center.Render
 	}
 	return nil
 }

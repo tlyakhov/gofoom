@@ -60,7 +60,7 @@ func (wc *WanderController) Always() {
 		start := wc.Body.Angle.Now + rand.Float64()*60 - 30
 		end := start
 		if sector := core.GetSector(wc.NextSector); sector != nil {
-			end = wc.Body.Angle2DTo(&sector.Center)
+			end = wc.Body.Angle2DTo(&sector.Center.Now)
 		}
 		a.End = dynamic.TweenAngles(start, end, 0.2, dynamic.Lerp)
 

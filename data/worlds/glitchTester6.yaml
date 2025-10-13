@@ -4,11 +4,9 @@
   character.Player:
     Spawn: false
   core.Body:
-    Angle:
-      Now: 710.15625
-      Spawn: 180
+    Angle: 180
     Pos:
-      Now: -145.35012632175628, -17.98396658488654, 20
+      Now: 210, 10, 20
       Spawn: 210, 10, 0
     Size:
       Now: 10, 40
@@ -21,9 +19,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000016158019430035888,
-        -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000014071978620805134,
-        0.007001650399223597
+      Now: 0, 0, 0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -100,9 +96,9 @@
     Transform:
       Damping: 0
       Freq: 1e-06
-      Now: 0, 0, 0, 0, 0, 0
+      Now: 1, 0, 0, 0, 1, 0
       Response: 0
-      Spawn: 0, 0, 0, 0, 0, 0
+      Spawn: 1, 0, 0, 0, 1, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
@@ -183,10 +179,16 @@
     Transform:
       Damping: 0
       Freq: 1e-06
-      Now: 0, 0, 0, 0, 0, 0
+      Now: 1, 0, 0, 0, 1, 0
       Response: 0
-      Spawn: 0, 0, 0, 0, 0, 0
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮10
+  behaviors.Actor:
+    FaceNextWaypoint: false
+    Speed: 10
+    Start: ∈⋮13
+  behaviors.ActorState:
+    Action: ∈⋮13
   core.Sector:
     Bottom:
       Surface:
@@ -201,7 +203,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 1.7, 0
       P:
-        Now: -18.184754724426945, 8.119183513440735
+        Now: -7.980755059611132, 20.000000000010218
         Spawn: -10, 20
       Surface:
         Material: ∈⋮12
@@ -212,7 +214,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 1.1333333333333333, 0
       P:
-        Now: -6.884624350261683, -5.650065187082632
+        Now: -7.980755059611132, 0.00000000001021582818339084
         Spawn: -10, 0
       Surface:
         Material: ∈⋮12
@@ -223,7 +225,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 1.520526224699857, 0
       P:
-        Now: 13.769248700523367, 11.300130374165263
+        Now: 22.019244940388866, 0.00000000001021582818339084
         Spawn: 20, 0
       Surface:
         Material: ∈⋮12
@@ -234,7 +236,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 0.85, 0
       P:
-        Now: 9.353742676619788, 30.71944426177126
+        Now: 32.019244940388866, 20.000000000010218
         Spawn: 30, 20
       Surface:
         Material: ∈⋮12
@@ -244,19 +246,15 @@
       Z: 64
     Transform:
       Animation:
-        Active: true
-        Coordinates: AnimationCoordinatesAbsolute
+        Active: false
         Duration: 5000
         End: 1, 0, 0, 0, 1, 0
-        Percent: 0.6093750000000044
-        Reverse: false
-        Start: 0, -0.5, 0, 0.5, 0, 0
+        Percent: 0.4781249999999926
+        Reverse: true
+        Start: 0.5, 0, 0, 0, 0.5, 0
         TweeningFunc: Lerp
-      Damping: 0
-      Freq: 1e-06
-      Now: 0.6884624350261683, -0.5650065187082631, 0, 0.5650065187082631, 0.6884624350261683,
-        0
-      Response: 0
+      Now: 1, -0, 1.6202747866429972, 0, 1, 8.16327976290026e-12
+      Procedural: true
       Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮11
   core.Sector:
@@ -302,9 +300,9 @@
     Transform:
       Damping: 0
       Freq: 1e-06
-      Now: 0, 0, 0, 0, 0, 0
+      Now: 1, 0, 0, 0, 1, 0
       Response: 0
-      Spawn: 0, 0, 0, 0, 0, 0
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮12
   materials.Image:
     Filter: false
@@ -312,6 +310,15 @@
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮13
+  behaviors.ActionFace:
+    Angle: 0
+    Speed: 51
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮16
+  behaviors.ActionWaypoint:
+    P: 30, 10, 0
 - Entity: ∈⋮14
   core.Sector:
     Bottom:
@@ -358,9 +365,9 @@
     Transform:
       Damping: 0
       Freq: 1e-06
-      Now: 0, 0, 0, 0, 0, 0
+      Now: 1, 0, 0, 0, 1, 0
       Response: 0
-      Spawn: 0, 0, 0, 0, 0, 0
+      Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮15
   core.Sector:
     Bottom:
@@ -439,6 +446,15 @@
     Transform:
       Damping: 0
       Freq: 1e-06
-      Now: 0, 0, 0, 0, 0, 0
+      Now: 1, 0, 0, 0, 1, 0
       Response: 0
-      Spawn: 0, 0, 0, 0, 0, 0
+      Spawn: 1, 0, 0, 0, 1, 0
+- Entity: ∈⋮16
+  behaviors.ActionFace:
+    Angle: 90
+    Speed: 51
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮13
+  behaviors.ActionWaypoint:
+    P: -20, -10, 0

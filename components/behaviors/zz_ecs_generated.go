@@ -3,6 +3,7 @@ package behaviors
 
 import "tlyakhov/gofoom/ecs"
 
+var ActionFaceCID ecs.ComponentID
 var ActionFireCID ecs.ComponentID
 var ActionJumpCID ecs.ComponentID
 var ActionTimedCID ecs.ComponentID
@@ -20,6 +21,7 @@ var VerticalDoorCID ecs.ComponentID
 var WanderCID ecs.ComponentID
 
 func init() {
+	ActionFaceCID = ecs.RegisterComponent(&ecs.Arena[ActionFace, *ActionFace]{})
 	ActionFireCID = ecs.RegisterComponent(&ecs.Arena[ActionFire, *ActionFire]{})
 	ActionJumpCID = ecs.RegisterComponent(&ecs.Arena[ActionJump, *ActionJump]{})
 	ActionTimedCID = ecs.RegisterComponent(&ecs.Arena[ActionTimed, *ActionTimed]{})
@@ -35,6 +37,16 @@ func init() {
 	UnderwaterCID = ecs.RegisterComponent(&ecs.Arena[Underwater, *Underwater]{})
 	VerticalDoorCID = ecs.RegisterComponent(&ecs.Arena[VerticalDoor, *VerticalDoor]{})
 	WanderCID = ecs.RegisterComponent(&ecs.Arena[Wander, *Wander]{})
+}
+func GetActionFace(e ecs.Entity) *ActionFace {
+	if asserted, ok := ecs.GetComponent(e, ActionFaceCID).(*ActionFace); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*ActionFace) ComponentID() ecs.ComponentID {
+	return ActionFaceCID
 }
 func GetActionFire(e ecs.Entity) *ActionFire {
 	if asserted, ok := ecs.GetComponent(e, ActionFireCID).(*ActionFire); ok {

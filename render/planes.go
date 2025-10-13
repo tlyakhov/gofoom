@@ -132,6 +132,11 @@ func planes(block *block, plane *core.SectorPlane) {
 		}
 
 		if mat != 0 {
+			world[0] -= plane.Sector.Center.Spawn[0]
+			world[1] -= plane.Sector.Center.Spawn[1]
+			plane.Sector.Transform.Render.UnprojectSelf(world.To2D())
+			world[0] += plane.Sector.Center.Spawn[0]
+			world[1] += plane.Sector.Center.Spawn[1]
 			block.MaterialSampler.NU = (world[0] - block.Sector.Min[0]) / sectorWidth
 			block.MaterialSampler.NV = (world[1] - block.Sector.Min[1]) / sectorDepth
 			block.MaterialSampler.U = transform[0]*block.MaterialSampler.NU + transform[2]*block.MaterialSampler.NV + transform[4]

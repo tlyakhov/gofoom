@@ -184,7 +184,7 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		text := sector.Entity.Format()
 		mw.Context.Push()
 		mw.Context.SetRGB(0.3, 0.3, 0.3)
-		mw.Context.DrawStringAnchored(text, sector.Center[0], sector.Center[1], 0.5, 0.5)
+		mw.Context.DrawStringAnchored(text, sector.Center.Render[0], sector.Center.Render[1], 0.5, 0.5)
 		mw.Context.Pop()
 	}
 

@@ -41,9 +41,14 @@ func (sc *SectorController) Always() {
 	if sc.Transform.Now != sc.Transform.Prev {
 		for _, seg := range sc.Segments {
 			seg.P.Now = seg.P.Spawn
+			seg.P.Now[0] -= sc.Center.Spawn[0]
+			seg.P.Now[1] -= sc.Center.Spawn[1]
 			sc.Transform.Now.ProjectSelf(&seg.P.Now)
+			seg.P.Now[0] += sc.Center.Spawn[0]
+			seg.P.Now[1] += sc.Center.Spawn[1]
+			seg.P.Render = seg.P.Now
 		}
-		sc.Recalculate()
+		sc.RecalculateNonTopological()
 	}
 
 	// This section is for some rendering cache invalidation

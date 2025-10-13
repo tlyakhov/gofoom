@@ -116,7 +116,7 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 
 	pc.flags |= behaviors.ProximityTargetsBody
 	pc.flags &= ^behaviors.ProximityTargetsSector
-	pc.tree.Root.RangeCircle(sector.Center.To2D(), pc.Range, func(b *core.Body) bool {
+	pc.tree.Root.RangeCircle(sector.Center.Now.To2D(), pc.Range, func(b *core.Body) bool {
 		if !b.IsActive() || !pc.isValid(b.Entity) {
 			return true
 		}

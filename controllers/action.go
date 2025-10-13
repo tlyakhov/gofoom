@@ -29,6 +29,7 @@ type ActionController struct {
 	State  *behaviors.ActorState
 	Body   *core.Body
 	Mobile *core.Mobile
+	Sector *core.Sector
 }
 
 func init() {
@@ -49,12 +50,37 @@ func (ac *ActionController) Target(target ecs.Component, e ecs.Entity) bool {
 	}
 	ac.Entity = e
 	ac.Actor = target.(*behaviors.Actor)
+	if !ac.Actor.IsActive() {
+		return false
+	}
+
 	ac.State = behaviors.GetActorState(ac.Entity)
+
+	if ac.State != nil && !ac.State.IsActive() {
+		return false
+	}
+
 	ac.Body = core.GetBody(ac.Entity)
 	ac.Mobile = core.GetMobile(ac.Entity)
-	return ac.Actor.IsActive() &&
-		ac.Body != nil && ac.Body.IsActive() &&
-		(ac.State == nil || ac.State.IsActive())
+	if ac.Body == nil {
+		ac.Sector = core.GetSector(ac.Entity)
+	}
+	return (ac.Body != nil && ac.Body.IsActive()) ||
+		(ac.Sector != nil && ac.Sector.IsActive())
+}
+
+func (ac *ActionController) pos(checkProcedural bool) *concepts.Vector3 {
+	if ac.Body == nil {
+		if checkProcedural && ac.Sector.Transform.Procedural {
+			return &ac.Sector.Center.Now
+		}
+		return &ac.Sector.Center.Now
+	}
+
+	if checkProcedural && ac.Body.Pos.Procedural {
+		return &ac.Body.Pos.Input
+	}
+	return &ac.Body.Pos.Now
 }
 
 func (ac *ActionController) Recalculate() {
@@ -77,9 +103,9 @@ func (ac *ActionController) Recalculate() {
 			return
 		}
 		if ac.NoZ {
-			d2 = waypoint.P.To2D().DistSq(ac.Body.Pos.Now.To2D())
+			d2 = waypoint.P.To2D().DistSq(ac.pos(false).To2D())
 		} else {
-			d2 = waypoint.P.DistSq(&ac.Body.Pos.Now)
+			d2 = waypoint.P.DistSq(ac.pos(false))
 		}
 		if d2 < closestDistSq {
 			closestDistSq = d2
@@ -94,14 +120,14 @@ func (ac *ActionController) Recalculate() {
 }
 
 func (ac *ActionController) timedAction(timed *behaviors.ActionTimed) timedState {
-	if timed.Fired.Contains(ac.Body.Entity) {
+	if timed.Fired.Contains(ac.Entity) {
 		return timedFired
 	}
 	if ecs.Simulation.Timestamp-ac.State.LastTransition < int64(timed.Delay.Now) {
 		return timedDelayed
 	}
 
-	timed.Fired.Add(ac.Body.Entity)
+	timed.Fired.Add(ac.Entity)
 	return timedReady
 }
 
@@ -124,7 +150,7 @@ func (ac *ActionController) Jump(jump *behaviors.ActionJump) bool {
 }
 
 func (ac *ActionController) Fire(fire *behaviors.ActionFire) bool {
-	weapon := inventory.GetWeapon(ac.Body.Entity)
+	weapon := inventory.GetWeapon(ac.Entity)
 
 	if weapon == nil {
 		return true
@@ -151,35 +177,43 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 		return false
 	}
 
-	pos := &ac.Body.Pos.Now
-	if ac.Body.Pos.Procedural {
-		pos = &ac.Body.Pos.Input
-	}
+	pos := ac.pos(true)
 
 	// Have we reached the target?
-	if pos.To2D().DistSq(waypoint.P.To2D()) < 1 {
+	if pos.To2D().DistSq(waypoint.P.To2D()) < ac.Speed*constants.TimeStepS {
 		return true
 	}
 
 	force := waypoint.P.Sub(pos)
-	if ac.NoZ {
+	if ac.NoZ || ac.Sector != nil {
 		force[2] = 0
-		if ac.Body.Pos.Procedural {
+		if ac.Body != nil && ac.Body.Pos.Procedural {
 			ac.Body.Pos.Input[2] = ac.Body.Pos.Now[2]
 		}
 	}
 	dist := force.Length()
 	if dist > 0 {
 		angle := math.Atan2(force[1], force[0]) * concepts.Rad2deg
-		if ac.FaceNextWaypoint && ac.Body.Angle.Procedural {
-			ac.Body.Angle.Input = angle
-		} else if ac.FaceNextWaypoint {
-			ac.Body.Angle.Now = angle
-		}
 		speed := ac.Speed / dist
 		force.MulSelf(speed)
+		if ac.FaceNextWaypoint {
+			switch {
+			case ac.Sector != nil && ac.Sector.Transform.Procedural:
+				ac.Sector.Transform.Input.SetRotation(angle)
+			case ac.Sector != nil:
+				ac.Sector.Transform.Now.SetRotation(angle)
+			case ac.Body.Angle.Procedural:
+				ac.Body.Angle.Input = angle
+			default:
+				ac.Body.Angle.Now = angle
+			}
+		}
 	}
 	switch {
+	case ac.Sector != nil && ac.Sector.Transform.Procedural:
+		ac.Sector.Transform.Input.TranslateSelf(force.To2D().MulSelf(constants.TimeStepS))
+	case ac.Sector != nil:
+		ac.Sector.Transform.Now.TranslateSelf(force.To2D().MulSelf(constants.TimeStepS))
 	case ac.Mobile != nil:
 		// TODO: Is this a hack?
 		if !ac.Body.OnGround {
@@ -201,6 +235,55 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	return false
 }
 
+func (ac *ActionController) Face(face *behaviors.ActionFace) bool {
+	state := ac.timedAction(&face.ActionTimed)
+
+	switch state {
+	case timedDelayed:
+		return false
+	}
+
+	angle := 0.0
+
+	switch {
+	case ac.Sector != nil && ac.Sector.Transform.Procedural:
+		angle, _, _ = ac.Sector.Transform.Input.GetTransform()
+	case ac.Sector != nil:
+		angle, _, _ = ac.Sector.Transform.Now.GetTransform()
+	case ac.Body.Angle.Procedural:
+		angle = ac.Body.Angle.Input
+	default:
+		angle = ac.Body.Angle.Now
+	}
+
+	target := face.Angle
+	//	log.Printf("Target: %v, Angle: %v", target, angle)
+	concepts.MinimizeAngleDistance(angle, &target)
+	//	log.Printf("Minimized Target: %v", target)
+
+	// Have we reached the target?
+	if math.Abs(target-angle) < ac.AngularSpeed*constants.TimeStepS {
+		return true
+	}
+
+	delta := ac.AngularSpeed * constants.TimeStepS
+	if target-angle < 0 {
+		delta = -delta
+	}
+
+	switch {
+	case ac.Sector != nil && ac.Sector.Transform.Procedural:
+		ac.Sector.Transform.Input.SetRotation(angle + delta)
+	case ac.Sector != nil:
+		ac.Sector.Transform.Now.SetRotation(angle + delta)
+	case ac.Body.Angle.Procedural:
+		ac.Body.Angle.Input += delta
+	default:
+		ac.Body.Angle.Now += delta
+	}
+	return false
+}
+
 func (ac *ActionController) Always() {
 	if ac.State == nil {
 		ac.Recalculate()
@@ -211,12 +294,21 @@ func (ac *ActionController) Always() {
 	}
 
 	doTransition := true
+	ignoreFace := false
 
 	var timed *behaviors.ActionTimed
 
 	if waypoint := behaviors.GetActionWaypoint(ac.State.Action); waypoint != nil {
+		// Order of ops matters - the && short circuits on false
 		doTransition = ac.Waypoint(waypoint) && doTransition
 		timed = &waypoint.ActionTimed
+		ignoreFace = ac.FaceNextWaypoint
+	}
+
+	if face := behaviors.GetActionFace(ac.State.Action); face != nil && !ignoreFace {
+		// Order of ops matters - the && short circuits on false
+		doTransition = ac.Face(face) && doTransition
+		timed = &face.ActionTimed
 	}
 
 	if jump := behaviors.GetActionJump(ac.State.Action); jump != nil {
@@ -236,7 +328,7 @@ func (ac *ActionController) Always() {
 	}
 
 	if timed != nil {
-		timed.Fired.Delete(ac.Body.Entity)
+		timed.Fired.Delete(ac.Entity)
 	}
 
 	if t := behaviors.GetActionTransition(ac.State.Action); t != nil {

@@ -77,8 +77,8 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		cids = append(cids, materials.ShaderCID, materials.SpriteSheetCID,
 			materials.ImageCID, materials.TextCID, materials.SolidCID)
 	case "Action":
-		cids = append(cids, behaviors.ActionWaypointCID, behaviors.ActionJumpCID,
-			behaviors.ActionFireCID, behaviors.ActionTransitionCID)
+		cids = append(cids, behaviors.ActionFaceCID, behaviors.ActionWaypointCID,
+			behaviors.ActionJumpCID, behaviors.ActionFireCID, behaviors.ActionTransitionCID)
 	case "Weapon":
 		cids = append(cids, inventory.WeaponClassCID)
 	case "Sound":

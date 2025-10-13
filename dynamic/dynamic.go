@@ -92,15 +92,6 @@ func (d *DynamicValue[T]) NewFrame() {
 	d.Render = d.Now
 }
 
-func fixAngle(src float64, dst *float64) {
-	for *dst-src > 180 {
-		*dst -= 360
-	}
-	for *dst-src < -180 {
-		*dst += 360
-	}
-}
-
 func (d *DynamicValue[T]) UpdateProcedural() {
 	// Based on "Giving Personality to Procedural Animations using Math"
 	// https://www.youtube.com/watch?v=KPoeNZZ6H4s
@@ -111,8 +102,8 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 		if dc.IsAngle {
 			// |Input-prevInput| should be < 180
 			// |Input-Now| should be < 180
-			fixAngle(dc.Now, &dc.Input)
-			fixAngle(dc.Input, &dc.prevInput)
+			concepts.MinimizeAngleDistance(dc.Now, &dc.Input)
+			concepts.MinimizeAngleDistance(dc.Input, &dc.prevInput)
 		}
 		inputV := dc.Input - dc.prevInput
 		dc.Now += dc.outputV * dt
@@ -136,8 +127,44 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 		dc.outputV[2] += dt * (dc.Input[2] + d.k3*inputV[2] - dc.Now[2] - d.k1*dc.outputV[2]) / k2Stable
 		dc.outputV[1] += dt * (dc.Input[1] + d.k3*inputV[1] - dc.Now[1] - d.k1*dc.outputV[1]) / k2Stable
 		dc.outputV[0] += dt * (dc.Input[0] + d.k3*inputV[0] - dc.Now[0] - d.k1*dc.outputV[0]) / k2Stable
+	case *DynamicValue[concepts.Matrix2]:
+		// This seems expensive, probably worth profiling
+		// Could at least prevent .[Get|Set]Transform on prevInput, outputV
+		prevInputA, prevInputT, prevInputS := dc.prevInput.GetTransform()
+		inputA, inputT, inputS := dc.Input.GetTransform()
+		nowA, nowT, nowS := dc.Now.GetTransform()
+		outputVA, outputVT, outputVS := dc.outputV.GetTransform()
+		concepts.MinimizeAngleDistance(nowA, &inputA)
+		concepts.MinimizeAngleDistance(inputA, &prevInputA)
+		inputVA := inputA - prevInputA
+		inputVT := concepts.Vector2{
+			inputT[0] - prevInputT[0],
+			inputT[1] - prevInputT[1],
+		}
+		inputVS := concepts.Vector2{
+			inputS[0] / prevInputS[0],
+			inputS[1] / prevInputS[1],
+		}
+		nowA += outputVA * dt
+		nowT[0] += outputVT[0] * dt
+		nowT[1] += outputVT[1] * dt
+		//nowS[0] *= outputVS[0] * dt
+		//nowS[1] *= outputVS[1] * dt
+		dc.Now.SetTransform(nowA, &nowT, &nowS)
+		outputVA += dt * (inputA + d.k3*inputVA - nowA - d.k1*outputVA) / k2Stable
+		outputVT[0] += dt * (inputT[0] + d.k3*inputVT[0] - nowT[0] - d.k1*outputVT[0]) / k2Stable
+		outputVT[1] += dt * (inputT[1] + d.k3*inputVT[1] - nowT[1] - d.k1*outputVT[1]) / k2Stable
+		outputVS[0] *= dt * (inputS[0] + d.k3*inputVS[0] - nowS[0] - d.k1*outputVS[0]) / k2Stable
+		outputVS[1] *= dt * (inputS[1] + d.k3*inputVS[1] - nowS[1] - d.k1*outputVS[1]) / k2Stable
+		if outputVS[0] == 0 {
+			outputVS[0] = 1
+		}
+		if outputVS[1] == 0 {
+			outputVS[1] = 1
+		}
+		dc.outputV.SetTransform(outputVA, &outputVT, &outputVS)
 	default:
-		panic("DynamicValue[T] procedural animations only implemented for float64, vector2, vector3")
+		panic("DynamicValue[T] procedural animations only implemented for float64, vector2, vector3, matrix2")
 	}
 	d.prevInput = d.Input
 }

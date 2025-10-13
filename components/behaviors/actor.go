@@ -11,12 +11,17 @@ import (
 )
 
 type Actor struct {
-	ecs.Attached     `editable:"^"`
-	Start            ecs.Entity                `editable:"Starting Action" edit_type:"Action"`
-	NoZ              bool                      `editable:"2D only"`
-	Lifetime         dynamic.AnimationLifetime `editable:"Lifetime"`
-	Speed            float64                   `editable:"Speed"`
-	FaceNextWaypoint bool                      `editable:"Face Waypoint?"`
+	ecs.Attached `editable:"^"`
+	Start        ecs.Entity                `editable:"Starting Action" edit_type:"Action"`
+	NoZ          bool                      `editable:"2D only"`
+	Lifetime     dynamic.AnimationLifetime `editable:"Lifetime"`
+
+	// Units per second
+	Speed float64 `editable:"Speed"`
+	// Degrees per second
+	AngularSpeed float64 `editable:"Angular Speed"`
+
+	FaceNextWaypoint bool `editable:"Face Waypoint?"`
 }
 
 func (a *Actor) String() string {
@@ -27,6 +32,7 @@ func (a *Actor) Construct(data map[string]any) {
 	a.Attached.Construct(data)
 	a.NoZ = false
 	a.Speed = 10
+	a.AngularSpeed = 15
 	a.Lifetime = dynamic.AnimationLifetimeLoop
 	a.FaceNextWaypoint = true
 
@@ -48,6 +54,9 @@ func (a *Actor) Construct(data map[string]any) {
 	if v, ok := data["Speed"]; ok {
 		a.Speed = cast.ToFloat64(v)
 	}
+	if v, ok := data["AngularSpeed"]; ok {
+		a.AngularSpeed = cast.ToFloat64(v)
+	}
 	if v, ok := data["FaceNextWaypoint"]; ok {
 		a.FaceNextWaypoint = v.(bool)
 	}
@@ -59,6 +68,7 @@ func (a *Actor) Serialize() map[string]any {
 
 	result["Start"] = a.Start.Serialize()
 	result["Speed"] = a.Speed
+	result["AngularSpeed"] = a.AngularSpeed
 
 	if a.NoZ {
 		result["NoZ"] = a.NoZ

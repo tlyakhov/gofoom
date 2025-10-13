@@ -38,9 +38,10 @@ type Sector struct {
 
 	Transform dynamic.DynamicValue[concepts.Matrix2] `editable:"Transform"`
 
-	Concave          bool
-	Winding          int8
-	Min, Max, Center concepts.Vector3
+	Concave  bool
+	Winding  int8
+	Min, Max concepts.Vector3
+	Center   dynamic.DynamicValue[concepts.Vector3]
 
 	// Lightmap data
 	Lightmap      *xsync.MapOf[uint64, *LightmapCell]
@@ -115,6 +116,7 @@ func (s *Sector) OnDelete() {
 		s.Top.Z.Detach(ecs.Simulation)
 		s.Bottom.Z.Detach(ecs.Simulation)
 		s.Transform.Detach(ecs.Simulation)
+		s.Center.Detach(ecs.Simulation)
 		s.removeAdjacentReferences()
 		for _, seg := range s.Segments {
 			seg.P.Detach(ecs.Simulation)
@@ -132,6 +134,7 @@ func (s *Sector) OnAttach() {
 	s.Top.Z.Attach(ecs.Simulation)
 	s.Bottom.Z.Attach(ecs.Simulation)
 	s.Transform.Attach(ecs.Simulation)
+	s.Center.Attach(ecs.Simulation)
 
 	// When we attach a component, its address may change. Ensure segments don't
 	// wind up referencing an unattached sector.
@@ -262,12 +265,59 @@ var contactScriptParams = []ScriptParam{
 	{Name: "sector", TypeName: "*core.Sector"},
 }
 
-func (s *Sector) Recalculate() {
-	// TODO: Make this method more efficient
-	concepts.V3(&s.Center, 0, 0, 0)
+func (s *Sector) RecalculateNonTopological() {
+	s.Center.SetAll(concepts.Vector3{0, 0, 0})
 	concepts.V3(&s.Min, math.Inf(1), math.Inf(1), math.Inf(1))
 	concepts.V3(&s.Max, math.Inf(-1), math.Inf(-1), math.Inf(-1))
 
+	for _, seg := range s.Segments {
+		// TODO: Maybe optimize this by not recalculating spawn values unless
+		// points have changed? maybe too complicated
+		s.Center.Now[0] += seg.P.Render[0]
+		s.Center.Now[1] += seg.P.Render[1]
+		s.Center.Spawn[0] += seg.P.Spawn[0]
+		s.Center.Spawn[1] += seg.P.Spawn[1]
+		if seg.P.Render[0] < s.Min[0] {
+			s.Min[0] = seg.P.Render[0]
+		}
+		if seg.P.Render[1] < s.Min[1] {
+			s.Min[1] = seg.P.Render[1]
+		}
+		if seg.P.Render[0] > s.Max[0] {
+			s.Max[0] = seg.P.Render[0]
+		}
+		if seg.P.Render[1] > s.Max[1] {
+			s.Max[1] = seg.P.Render[1]
+		}
+		bz, tz := s.ZAt(&seg.P.Render)
+		s.Center.Now[2] += (bz + tz) * 0.5
+		sbz, stz := s.ZAt(&seg.P.Spawn)
+		s.Center.Spawn[2] += (sbz + stz) * 0.5
+		if bz < s.Min[2] {
+			s.Min[2] = bz
+		}
+		if tz < s.Min[2] {
+			s.Min[2] = tz
+		}
+		if bz > s.Max[2] {
+			s.Max[2] = bz
+		}
+		if tz > s.Max[2] {
+			s.Max[2] = tz
+		}
+		seg.Recalculate()
+	}
+
+	s.Center.Now.MulSelf(1.0 / float64(len(s.Segments)))
+	s.Center.Spawn.MulSelf(1.0 / float64(len(s.Segments)))
+	s.LightmapBias[0] = math.MaxInt64
+
+	s.Top.Recalculate()
+	s.Bottom.Recalculate()
+}
+
+func (s *Sector) Recalculate() {
+	// TODO: Make this method more efficient
 	sum := 0.0
 	for i, segment := range s.Segments {
 		// Can't use prev/next pointers because they haven't been initialized yet.
@@ -281,46 +331,13 @@ func (s *Sector) Recalculate() {
 		s.Winding = -1
 	}
 
-	for i, segment := range s.Segments {
+	for i, seg := range s.Segments {
 		next := s.Segments[(i+1)%len(s.Segments)]
-		segment.Index = i
-		segment.Next = next
-		next.Prev = segment
-		//prev = segment
-		s.Center[0] += segment.P.Render[0]
-		s.Center[1] += segment.P.Render[1]
-		if segment.P.Render[0] < s.Min[0] {
-			s.Min[0] = segment.P.Render[0]
-		}
-		if segment.P.Render[1] < s.Min[1] {
-			s.Min[1] = segment.P.Render[1]
-		}
-		if segment.P.Render[0] > s.Max[0] {
-			s.Max[0] = segment.P.Render[0]
-		}
-		if segment.P.Render[1] > s.Max[1] {
-			s.Max[1] = segment.P.Render[1]
-		}
-		bz, tz := s.ZAt(&segment.P.Render)
-		s.Center[2] += (bz + tz) * 0.5
-		if bz < s.Min[2] {
-			s.Min[2] = bz
-		}
-		if tz < s.Min[2] {
-			s.Min[2] = tz
-		}
-		if bz > s.Max[2] {
-			s.Max[2] = bz
-		}
-		if tz > s.Max[2] {
-			s.Max[2] = tz
-		}
-		segment.Sector = s
-		segment.Recalculate()
+		seg.Index = i
+		seg.Next = next
+		next.Prev = seg
+		seg.Sector = s
 	}
-
-	s.Top.Recalculate()
-	s.Bottom.Recalculate()
 
 	if len(s.Segments) > 1 {
 		// Figure out if this sector is concave.
@@ -342,8 +359,7 @@ func (s *Sector) Recalculate() {
 		}
 	}
 
-	s.Center.MulSelf(1.0 / float64(len(s.Segments)))
-	s.LightmapBias[0] = math.MaxInt64
+	s.RecalculateNonTopological()
 
 	for _, e := range s.Inner {
 		if e == 0 {
