@@ -61,6 +61,12 @@ func (m *Matrix2) StringHuman() string {
 	)
 }
 
+func (m *Matrix2) ResetTranslation() *Matrix2 {
+	m[4] = 0
+	m[5] = 0
+	return m
+}
+
 func (m *Matrix2) TranslateSelf(delta *Vector2) *Matrix2 {
 	m[4] += delta[0]
 	m[5] += delta[1]
@@ -92,6 +98,17 @@ func (m *Matrix2) ScaleBasis(basis *Vector2, scale float64) *Matrix2 {
 	m[0], m[2], m[4] = m[0]*scale, m[2]*scale, m[4]*scale
 	m[1], m[3], m[5] = m[1]*scale, m[3]*scale, m[5]*scale
 	m[4], m[5] = m[4]+basis[0], m[5]+basis[1]
+	return m
+}
+
+func (m *Matrix2) SetRotation(angle float64) *Matrix2 {
+	sint, cost := math.Sincos(angle * Deg2rad)
+	scale0 := math.Sqrt(m[0]*m[0] + m[1]*m[1])
+	scale1 := math.Sqrt(m[2]*m[2] + m[3]*m[3])
+	m[0] = cost * scale0
+	m[1] = sint * scale1
+	m[2] = -sint * scale0
+	m[3] = cost * scale1
 	return m
 }
 
@@ -212,18 +229,16 @@ func (m *Matrix2) AffineInverseSelf() *Matrix2 {
 }
 
 func (m Matrix2) GetTransform() (angle float64, translation Vector2, scale Vector2) {
-	basis1 := &Vector2{m[0], m[1]}
-	basis2 := &Vector2{m[2], m[3]}
-	scale[0] = basis1.Length()
-	scale[1] = basis2.Length()
+	scale[0] = math.Sqrt(m[0]*m[0] + m[1]*m[1])
+	scale[1] = math.Sqrt(m[2]*m[2] + m[3]*m[3])
 	translation[0] = m[4]
 	translation[1] = m[5]
-	angle = math.Atan2(basis1[1], basis1[0]) + math.Atan2(basis2[1], basis2[0]) - math.Pi*0.5
+	angle = math.Atan2(m[1], m[0]) * Rad2deg
 	return
 }
 
-func (m *Matrix2) SetTransform(angle float64, translation Vector2, scale Vector2) {
-	sint, cost := math.Sincos(angle)
+func (m *Matrix2) SetTransform(angle float64, translation *Vector2, scale *Vector2) {
+	sint, cost := math.Sincos(angle * Deg2rad)
 	m[0] = cost * scale[0]
 	m[1] = sint * scale[0]
 	m[2] = -sint * scale[1]

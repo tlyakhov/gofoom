@@ -384,11 +384,11 @@ func (mc *MobileController) CollideZ() {
 
 	mc.Body.OnGround = false
 	if mc.Sector.Bottom.Target != 0 && bodyTop < floorZ {
-		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center)
+		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center.Now)
 		mc.Exit()
 		mc.Enter(core.GetSector(mc.Sector.Bottom.Target))
-		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
-		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
+		mc.Body.Pos.Now[0] = mc.Sector.Center.Now[0] + delta[0]
+		mc.Body.Pos.Now[1] = mc.Sector.Center.Now[1] + delta[1]
 		ceilZ = mc.Sector.Top.ZAt(mc.Body.Pos.Now.To2D())
 		mc.Body.Pos.Now[2] = ceilZ - halfHeight - 1.0
 	} else if mc.Sector.Bottom.Target != 0 && mc.Body.Pos.Now[2]-halfHeight <= floorZ && mc.Vel.Now[2] > 0 {
@@ -407,11 +407,11 @@ func (mc *MobileController) CollideZ() {
 	}
 
 	if mc.Sector.Top.Target != 0 && bodyTop > ceilZ {
-		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center)
+		delta := mc.Body.Pos.Now.Sub(&mc.Sector.Center.Now)
 		mc.Exit()
 		mc.Enter(core.GetSector(mc.Sector.Top.Target))
-		mc.Body.Pos.Now[0] = mc.Sector.Center[0] + delta[0]
-		mc.Body.Pos.Now[1] = mc.Sector.Center[1] + delta[1]
+		mc.Body.Pos.Now[0] = mc.Sector.Center.Now[0] + delta[0]
+		mc.Body.Pos.Now[1] = mc.Sector.Center.Now[1] + delta[1]
 		floorZ = mc.Sector.Bottom.ZAt(mc.Body.Pos.Now.To2D())
 		mc.Body.Pos.Now[2] = floorZ + halfHeight + 1.0
 	} else if mc.Sector.Top.Target == 0 && bodyTop >= ceilZ {

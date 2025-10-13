@@ -53,7 +53,7 @@ func (sc *SoundEventController) Always() {
 		dy, dx := math.Sincos(sc.Body.Angle.Now)
 		sc.SetOrientation(&concepts.Vector3{dx * constants.UnitsPerMeter, dy * constants.UnitsPerMeter, 0})
 	} else if sc.Sector != nil {
-		sc.SetPosition(&sc.Sector.Center)
+		sc.SetPosition(&sc.Sector.Center.Now)
 	}
 
 	if sc.Mobile != nil {

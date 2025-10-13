@@ -101,7 +101,7 @@ func run() {
 		Bounds:    pixel.R(0, 0, 1920, 1080),
 		VSync:     false,
 		Resizable: true,
-
+		Maximized: true,
 		//Undecorated: true,
 		//Monitor:     opengl.PrimaryMonitor(),
 	}

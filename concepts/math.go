@@ -54,3 +54,12 @@ func NormalizeAngle(a float64) float64 {
 	}
 	return a
 }
+
+func MinimizeAngleDistance(src float64, dst *float64) {
+	for *dst-src > 180 {
+		*dst -= 360
+	}
+	for *dst-src < -180 {
+		*dst += 360
+	}
+}
