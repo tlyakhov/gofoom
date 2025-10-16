@@ -15,13 +15,6 @@ import (
 // Vector3 is a simple 3d vector type.
 type Vector3 [3]float64
 
-func V3(v *Vector3, x, y, z float64) *Vector3 {
-	v[0] = x
-	v[1] = y
-	v[2] = z
-	return v
-}
-
 func (v *Vector3) To2D() *Vector2 {
 	// In place cast works since it's just an array.
 	return (*Vector2)(unsafe.Pointer(v))

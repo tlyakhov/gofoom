@@ -14,14 +14,6 @@ import (
 // Vector4 is a simple 4d vector type.
 type Vector4 [4]float64
 
-func V4(v *Vector4, x, y, z, w float64) *Vector4 {
-	v[0] = x
-	v[1] = y
-	v[2] = z
-	v[3] = w
-	return v
-}
-
 func (v *Vector4) To3D() *Vector3 {
 	// In place cast works since it's just an array.
 	return (*Vector3)(unsafe.Pointer(v))

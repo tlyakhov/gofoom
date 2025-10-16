@@ -15,12 +15,6 @@ import (
 // Vector2 is a simple 2d vector type.
 type Vector2 [2]float64
 
-func V2(v *Vector2, x, y float64) *Vector2 {
-	v[0] = x
-	v[1] = y
-	return v
-}
-
 // Zero returns true if all components are 0.
 func (v *Vector2) Zero() bool {
 	return v[0] == 0 && v[1] == 0

@@ -111,6 +111,7 @@ func (g *GameWidget) Draw() {
 	}
 
 	editor.Lock.Lock()
+	editor.MapWidget.render()
 	pixels := g.Context.Image().(*image.RGBA).Pix
 	r.Render()
 	r.DebugInfo()

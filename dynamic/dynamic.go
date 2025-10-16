@@ -37,7 +37,8 @@ type DynamicValue[T DynamicType] struct {
 
 	// Do we need these? not used anywhere currently
 	NoRenderBlend bool // Always use next frame value
-	OnRender      func(blend float64)
+	OnRender      func(d Dynamic, blend float64)
+	OnPostUpdate  func(d Dynamic)
 
 	// Procedural dynamics
 	Procedural bool    `editable:"Procedural?"`
@@ -130,8 +131,8 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 	case *DynamicValue[concepts.Matrix2]:
 		// This seems expensive, probably worth profiling
 		// Could at least prevent .[Get|Set]Transform on prevInput, outputV
-		prevInputA, prevInputT, prevInputS := dc.prevInput.GetTransform()
-		inputA, inputT, inputS := dc.Input.GetTransform()
+		prevInputA, prevInputT, _ := dc.prevInput.GetTransform()
+		inputA, inputT, _ := dc.Input.GetTransform()
 		nowA, nowT, nowS := dc.Now.GetTransform()
 		outputVA, outputVT, outputVS := dc.outputV.GetTransform()
 		concepts.MinimizeAngleDistance(nowA, &inputA)
@@ -141,10 +142,10 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 			inputT[0] - prevInputT[0],
 			inputT[1] - prevInputT[1],
 		}
-		inputVS := concepts.Vector2{
+		/*inputVS := concepts.Vector2{
 			inputS[0] / prevInputS[0],
 			inputS[1] / prevInputS[1],
-		}
+		}*/
 		nowA += outputVA * dt
 		nowT[0] += outputVT[0] * dt
 		nowT[1] += outputVT[1] * dt
@@ -154,14 +155,14 @@ func (d *DynamicValue[T]) UpdateProcedural() {
 		outputVA += dt * (inputA + d.k3*inputVA - nowA - d.k1*outputVA) / k2Stable
 		outputVT[0] += dt * (inputT[0] + d.k3*inputVT[0] - nowT[0] - d.k1*outputVT[0]) / k2Stable
 		outputVT[1] += dt * (inputT[1] + d.k3*inputVT[1] - nowT[1] - d.k1*outputVT[1]) / k2Stable
-		outputVS[0] *= dt * (inputS[0] + d.k3*inputVS[0] - nowS[0] - d.k1*outputVS[0]) / k2Stable
-		outputVS[1] *= dt * (inputS[1] + d.k3*inputVS[1] - nowS[1] - d.k1*outputVS[1]) / k2Stable
-		if outputVS[0] == 0 {
+		//outputVS[0] *= dt * (inputS[0] * d.k3 * inputVS[0] / nowS[0] / d.k1 * outputVS[0]) / k2Stable
+		//outputVS[1] *= dt * (inputS[1] * d.k3 * inputVS[1] / nowS[1] / d.k1 * outputVS[1]) / k2Stable
+		/*if outputVS[0] == 0 {
 			outputVS[0] = 1
 		}
 		if outputVS[1] == 0 {
 			outputVS[1] = 1
-		}
+		}*/
 		dc.outputV.SetTransform(outputVA, &outputVT, &outputVS)
 	default:
 		panic("DynamicValue[T] procedural animations only implemented for float64, vector2, vector3, matrix2")
@@ -172,8 +173,11 @@ func (d *DynamicValue[T]) Update(blend float64) {
 	if d.Procedural {
 		d.UpdateProcedural()
 	}
+	if d.OnPostUpdate != nil {
+		d.OnPostUpdate(d)
+	}
 	if d.OnRender != nil {
-		defer d.OnRender(blend)
+		defer d.OnRender(d, blend)
 	}
 
 	// The check for prev == now lets us avoid the linear interpolation, which
@@ -298,4 +302,9 @@ func (d *DynamicValue[T]) Recalculate() {
 	// d.tCrit = 0.8 * (math.Sqrt(4*d.k2+d.k1*d.k1) - d.k1)
 	var zero T
 	d.outputV = zero
+
+	switch dc := any(d).(type) {
+	case *DynamicValue[concepts.Matrix2]:
+		dc.outputV.SetIdentity()
+	}
 }
