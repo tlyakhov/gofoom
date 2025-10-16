@@ -81,23 +81,8 @@ func (mw *MapWidget) DrawQuadNode(node *core.QuadNode, index int) {
 	}
 }
 
-func (mw *MapWidget) Draw(w, h int) image.Image {
-	// TODO: Decouple rendering the map view from drawing the widget. Because
-	// these happen on different threads, sync is painful and error-prone.
-	// Instead, drawing should happen at the same time as rendering the game
-	// view, and the widget code should just copy a buffer.
-	editor.Lock.Lock()
-	defer editor.Lock.Unlock()
+func (mw *MapWidget) render() {
 	editor.GatherHoveringObjects()
-
-	w /= state.MapViewRenderScale
-	h /= state.MapViewRenderScale
-	if mw.Context == nil || mw.Surface.Rect.Max.X != w || mw.Surface.Rect.Max.Y != h {
-		mw.Surface = image.NewRGBA(image.Rect(0, 0, w, h))
-		mw.Context = gg.NewContext(w, h)
-		editor.MapViewGrid.GridContext = gg.NewContext(w, h)
-		editor.Size = concepts.Vector2{float64(w), float64(h)}
-	}
 
 	mw.Context.Identity()
 	editor.MapViewGrid.Draw(&editor.EditorState)
@@ -232,6 +217,19 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 	}
 
 	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse[0], Mouse[1]))*/
+}
+
+func (mw *MapWidget) Draw(w, h int) image.Image {
+	w /= state.MapViewRenderScale
+	h /= state.MapViewRenderScale
+	if mw.Context == nil || mw.Surface.Rect.Max.X != w || mw.Surface.Rect.Max.Y != h {
+		editor.Lock.Lock()
+		mw.Surface = image.NewRGBA(image.Rect(0, 0, w, h))
+		mw.Context = gg.NewContext(w, h)
+		editor.MapViewGrid.GridContext = gg.NewContext(w, h)
+		editor.Size = concepts.Vector2{float64(w), float64(h)}
+		editor.Lock.Unlock()
+	}
 
 	pixels := mw.Context.Image().(*image.RGBA).Pix
 	copy(mw.Surface.Pix, pixels)

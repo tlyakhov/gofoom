@@ -53,6 +53,7 @@ func init() {
 		"MatBasis2Y":              reflect.ValueOf(concepts.MatBasis2Y),
 		"MatTransX":               reflect.ValueOf(concepts.MatTransX),
 		"MatTransY":               reflect.ValueOf(concepts.MatTransY),
+		"MinimizeAngleDistance":   reflect.ValueOf(concepts.MinimizeAngleDistance),
 		"NRGBAToInt32":            reflect.ValueOf(concepts.NRGBAToInt32),
 		"NearestPow2":             reflect.ValueOf(concepts.NearestPow2),
 		"NormalizeAngle":          reflect.ValueOf(concepts.NormalizeAngle),
@@ -71,9 +72,6 @@ func init() {
 		"RngXorShift64":           reflect.ValueOf(concepts.RngXorShift64),
 		"StackTrace":              reflect.ValueOf(concepts.StackTrace),
 		"TruncateString":          reflect.ValueOf(concepts.TruncateString),
-		"V2":                      reflect.ValueOf(concepts.V2),
-		"V3":                      reflect.ValueOf(concepts.V3),
-		"V4":                      reflect.ValueOf(concepts.V4),
 		"Vector2AABBIntersect":    reflect.ValueOf(concepts.Vector2AABBIntersect),
 
 		// type definitions

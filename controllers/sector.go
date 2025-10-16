@@ -4,7 +4,10 @@
 package controllers
 
 import (
+	"log"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -32,25 +35,36 @@ func (sc *SectorController) Target(target ecs.Component, e ecs.Entity) bool {
 	return sc.Sector.IsActive()
 }
 
+func applySectorTransform(sector *core.Sector, d dynamic.Dynamic) {
+	transform := d.(*dynamic.DynamicValue[concepts.Matrix2])
+	// Transform segments if we need to
+	if transform.Procedural {
+		log.Printf("Input: %v, now: %v, prev: %v", transform.Input.StringHuman(), transform.Now.StringHuman(), transform.Prev.StringHuman())
+	}
+	if transform.Now == transform.Prev {
+		return
+	}
+	for _, seg := range sector.Segments {
+		seg.P.Now = seg.P.Spawn
+		seg.P.Now[0] -= sector.Center.Spawn[0]
+		seg.P.Now[1] -= sector.Center.Spawn[1]
+		sector.Transform.Now.ProjectSelf(&seg.P.Now)
+		seg.P.Now[0] += sector.Center.Spawn[0]
+		seg.P.Now[1] += sector.Center.Spawn[1]
+		seg.P.Render = seg.P.Now
+	}
+	sector.RecalculateNonTopological()
+}
+
 func (sc *SectorController) Recalculate() {
+	sector := sc.Sector
+	sc.Sector.Transform.OnPostUpdate = func(d dynamic.Dynamic) {
+		applySectorTransform(sector, d)
+	}
 	sc.Sector.Recalculate()
 }
 
 func (sc *SectorController) Always() {
-	// Transform segments if we need to
-	if sc.Transform.Now != sc.Transform.Prev {
-		for _, seg := range sc.Segments {
-			seg.P.Now = seg.P.Spawn
-			seg.P.Now[0] -= sc.Center.Spawn[0]
-			seg.P.Now[1] -= sc.Center.Spawn[1]
-			sc.Transform.Now.ProjectSelf(&seg.P.Now)
-			seg.P.Now[0] += sc.Center.Spawn[0]
-			seg.P.Now[1] += sc.Center.Spawn[1]
-			seg.P.Render = seg.P.Now
-		}
-		sc.RecalculateNonTopological()
-	}
-
 	// This section is for some rendering cache invalidation
 
 	frame := sc.LastSeenFrame.Load()

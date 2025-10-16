@@ -267,8 +267,12 @@ var contactScriptParams = []ScriptParam{
 
 func (s *Sector) RecalculateNonTopological() {
 	s.Center.SetAll(concepts.Vector3{0, 0, 0})
-	concepts.V3(&s.Min, math.Inf(1), math.Inf(1), math.Inf(1))
-	concepts.V3(&s.Max, math.Inf(-1), math.Inf(-1), math.Inf(-1))
+	s.Min[0] = math.Inf(1)
+	s.Min[1] = math.Inf(1)
+	s.Min[2] = math.Inf(1)
+	s.Max[0] = math.Inf(-1)
+	s.Max[1] = math.Inf(-1)
+	s.Max[2] = math.Inf(-1)
 
 	for _, seg := range s.Segments {
 		// TODO: Maybe optimize this by not recalculating spawn values unless

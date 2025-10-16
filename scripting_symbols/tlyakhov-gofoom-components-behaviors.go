@@ -13,6 +13,7 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/components/behaviors/behaviors"] = map[string]reflect.Value{
 		// function, constant and variable definitions
+		"ActionFaceCID":          reflect.ValueOf(&behaviors.ActionFaceCID).Elem(),
 		"ActionFireCID":          reflect.ValueOf(&behaviors.ActionFireCID).Elem(),
 		"ActionJumpCID":          reflect.ValueOf(&behaviors.ActionJumpCID).Elem(),
 		"ActionTimedCID":         reflect.ValueOf(&behaviors.ActionTimedCID).Elem(),
@@ -34,6 +35,7 @@ func init() {
 		"DoorStateString":        reflect.ValueOf(behaviors.DoorStateString),
 		"DoorStateStrings":       reflect.ValueOf(behaviors.DoorStateStrings),
 		"DoorStateValues":        reflect.ValueOf(behaviors.DoorStateValues),
+		"GetActionFace":          reflect.ValueOf(behaviors.GetActionFace),
 		"GetActionFire":          reflect.ValueOf(behaviors.GetActionFire),
 		"GetActionJump":          reflect.ValueOf(behaviors.GetActionJump),
 		"GetActionTimed":         reflect.ValueOf(behaviors.GetActionTimed),
@@ -72,6 +74,7 @@ func init() {
 		"WanderCID":              reflect.ValueOf(&behaviors.WanderCID).Elem(),
 
 		// type definitions
+		"ActionFace":       reflect.ValueOf((*behaviors.ActionFace)(nil)),
 		"ActionFire":       reflect.ValueOf((*behaviors.ActionFire)(nil)),
 		"ActionJump":       reflect.ValueOf((*behaviors.ActionJump)(nil)),
 		"ActionTimed":      reflect.ValueOf((*behaviors.ActionTimed)(nil)),

@@ -228,7 +228,7 @@ func (m *Matrix2) AffineInverseSelf() *Matrix2 {
 	return m
 }
 
-func (m Matrix2) GetTransform() (angle float64, translation Vector2, scale Vector2) {
+func (m *Matrix2) GetTransform() (angle float64, translation Vector2, scale Vector2) {
 	scale[0] = math.Sqrt(m[0]*m[0] + m[1]*m[1])
 	scale[1] = math.Sqrt(m[2]*m[2] + m[3]*m[3])
 	translation[0] = m[4]

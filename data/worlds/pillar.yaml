@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 580.78125
+      Now: 714.375
       Spawn: 0
     Pos:
-      Now: 650.1930628755689, -71.0557735595233, 20
+      Now: 379.9726120758317, -127.80162749517922, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
@@ -21,7 +21,9 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.000000000006849083171067684, 0.000000000005908058900455583, 0.007001650399223597
+      Now: 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035,
+        -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000035,
+        0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -798,11 +800,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.6015625
+        Percent: 0.0703125
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 200, 10, 14.58740234375
+      Now: 200, 10, 10.19775390625
       Spawn: 200, 10, 10
     Size: 20, 20
   ecs.Linked:
@@ -1372,11 +1374,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.359375
+        Percent: 0.65625
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 820, 10, 14.208984375
+      Now: 820, 10, 14.0234375
       Spawn: 820, 10, 10
     Size: 20, 20
   ecs.Linked:
@@ -1498,6 +1500,13 @@
   ecs.Named:
     Name: Shader FHexMetal.png
 - Entity: ∈⋮50
+  behaviors.Actor:
+    AngularSpeed: 15
+    FaceNextWaypoint: false
+    Speed: 10
+    Start: ∈⋮51
+  behaviors.ActorState:
+    Action: ∈⋮53
   core.Sector:
     Bottom:
       Surface:
@@ -1510,7 +1519,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 593.823883251672, -198.29516111175843
+        Now: 577.2516160687277, -203.36116625778453
         Spawn: 550, -100
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1519,7 +1528,7 @@
       Lo:
         Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 553.9447698637912, -201.40262235794367
+        Now: 538.4503659409514, -193.6419590616561
         Spawn: 590, -100
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1528,7 +1537,7 @@
       Lo:
         Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 521.7048388882416, -173.823883251672
+        Now: 516.6388337422155, -157.25161606872763
         Spawn: 620, -130
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1537,7 +1546,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 518.5973776420564, -133.94476986379115
+        Now: 526.3580409383438, -118.45036594095137
         Spawn: 620, -170
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1546,7 +1555,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 546.176116748328, -101.70483888824158
+        Now: 562.7483839312723, -96.63883374221548
         Spawn: 590, -200
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1555,7 +1564,7 @@
       Lo:
         Material: ∈⋮122∈⋮Floor∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 586.0552301362088, -98.59737764205633
+        Now: 601.5496340590486, -106.35804093834388
         Spawn: 550, -200
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1564,7 +1573,7 @@
       Lo:
         Material: ∈⋮122∈⋮Floor∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 618.2951611117584, -126.17611674832803
+        Now: 623.3611662577845, -142.74838393127237
         Spawn: 520, -170
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1573,7 +1582,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 621.4026223579436, -166.05523013620885
+        Now: 613.6419590616562, -181.54963405904863
         Spawn: 520, -130
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1583,15 +1592,39 @@
       Z: 300
     Transform:
       Animation:
-        Active: true
+        Active: false
         Coordinates: AnimationCoordinatesAbsolute
         Duration: 2000
         End: 1, 0, 0, 0, -1, 0
         Lifetime: AnimationLifetimeLoop
-        Percent: 0.81640625
+        Percent: 0.44140625
         Reverse: false
         Start: 1, 0, 0, 0, 1, 0
         TweeningFunc: EaseInOut3
-      Now: -0.996977834697021, 0.07768653115463116, 0, -0.07768653115463116, -0.996977834697021,
+      Now: -0.9700312531944064, -0.24298017990320991, 0, 0.24298017990320991, -0.9700312531944064,
         0
       Spawn: 1, 0, 0, 0, 1, 0
+- Entity: ∈⋮51
+  behaviors.ActionFace:
+    Angle: 0
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮54
+- Entity: ∈⋮52
+  behaviors.ActionFace:
+    Angle: 270
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮51
+- Entity: ∈⋮53
+  behaviors.ActionFace:
+    Angle: 180
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮52
+- Entity: ∈⋮54
+  behaviors.ActionFace:
+    Angle: 90
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮53
