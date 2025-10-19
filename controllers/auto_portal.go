@@ -164,7 +164,12 @@ func AutoPortal() {
 		for j := i + 1; j < arena.Cap(); j++ {
 			sector2 := arena.Value(j)
 
-			if sector2 == nil || !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
+			// Don't connect sectors on different layers
+			if sector2 == nil || sector2.Layer != sector.Layer {
+				continue
+			}
+			// If sector AABBs don't overlap, they don't have any portals together.
+			if !sector.AABBIntersect(&sector2.Min, &sector2.Max, true) {
 				continue
 			}
 

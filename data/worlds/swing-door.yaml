@@ -1,0 +1,305 @@
+- Entity: ∈⋮1
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    Spawn: false
+  core.Body:
+    Angle:
+      Now: 511.875
+      Spawn: 0
+    Pos:
+      Now: 258.86317469382794, -2.2312070962060058, 20
+      Spawn: 0, 0, 0
+    Size:
+      Now: 10, 40
+      Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: -0.005833828930628071, 0.0031131623120815364, 0.007001650403479526
+      Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Player
+  inventory.Carrier:
+    Inventory: []
+- Entity: ∈⋮2
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: false
+    Source: data/WDef.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮3
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: -100, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮9
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -20
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, 100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: -100, 100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+  ecs.Named:
+    Name: Starting
+- Entity: ∈⋮4
+  core.Body:
+    Angle: 0
+    Pos: -60, -70, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮5
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    Spawn: true
+  core.Body:
+    Angle: 0
+    Pos: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel: 0, 0, 0
+  ecs.Named:
+    Name: Spawn
+  inventory.Carrier:
+    Inventory: []
+- Entity: ∈⋮9
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -20
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮10
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, -20
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮3∈⋮Starting
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+- Entity: ∈⋮10
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, -20
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 330, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 330, 210
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, 210
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮9
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, 50
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+- Entity: ∈⋮11
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Layer: 1
+    Segments:
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P:
+        Now: 79.89810093630993, 19.22571675843455
+        Spawn: 110, -20
+      PortalHasMaterial: true
+      PortalIsPassable: false
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P:
+        Now: 149.88102379350414, 20.77184364973605
+        Spawn: 110, 50
+      PortalHasMaterial: true
+      PortalIsPassable: false
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P:
+        Now: 150.10189906369007, 10.774283241565449
+        Spawn: 120, 50
+      PortalHasMaterial: true
+      PortalIsPassable: false
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P:
+        Now: 80.11897620649586, 9.228156350263951
+        Spawn: 120, -20
+      PortalHasMaterial: true
+      PortalIsPassable: false
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 64
+    Transform:
+      Animation:
+        Active: true
+        Duration: 10000
+        End: 0, 1, 0, -1, 0, 0
+        Percent: 0.5070312500000046
+        Reverse: false
+        Start: 1, 0, 0, 0, 1, 0
+        TweeningFunc: Lerp
+      Now: 0.022087527018592797, 0.9997560408170599, 0, -0.9997560408170599, 0.022087527018592797,
+        0
+      Spawn: 1, 0, 0, 0, 1, 0
+- Entity: ∈⋮12
+  core.Body:
+    Angle: 0
+    Pos: 260, 140, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 0.8
+    Strength: 2

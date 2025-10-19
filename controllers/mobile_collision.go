@@ -153,7 +153,7 @@ func (mc *MobileController) sectorEnterable(test *core.Sector) bool {
 	return false
 }
 
-func (mc *MobileController) checkOverlappingSectors(test *core.Sector) *core.Sector {
+func (mc *MobileController) checkHigherLayerSectors(test *core.Sector) *core.Sector {
 	var overlap *core.Sector
 	result := test
 	for _, e := range test.HigherLayers {
@@ -164,8 +164,15 @@ func (mc *MobileController) checkOverlappingSectors(test *core.Sector) *core.Sec
 			continue
 		}
 		if mc.sectorEnterable(overlap) {
+			for _, seg := range overlap.Segments {
+				// This higher layer segment could be marked not passable, in
+				// which case we should collide with it
+				if !seg.PortalIsPassable {
+					mc.PushBack(overlap, &seg.Segment, true)
+				}
+			}
 			if overlap.IsPointInside2D(mc.pos2d) {
-				return mc.checkOverlappingSectors(overlap)
+				return mc.checkHigherLayerSectors(overlap)
 			}
 		} else {
 			for _, seg := range overlap.Segments {
@@ -460,7 +467,7 @@ func (mc *MobileController) Collide() {
 		}
 
 		if mc.Sector != nil {
-			higherLayer := mc.checkOverlappingSectors(mc.Sector)
+			higherLayer := mc.checkHigherLayerSectors(mc.Sector)
 			if higherLayer != mc.Sector {
 				mc.Exit()
 				mc.Enter(higherLayer)

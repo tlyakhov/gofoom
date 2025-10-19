@@ -27,7 +27,7 @@ func (tm *ToneMap) String() string {
 }
 
 func (tm *ToneMap) Recalculate() {
-	for i := 0; i < len(tm.LutLinearToSRGB); i++ {
+	for i := range len(tm.LutLinearToSRGB) {
 		f := float64(i) / 255.0
 		tm.LutLinearToSRGB[i] = tm.LinearTosRGB(f)
 		tm.LutSRGBToLinear[i] = tm.SRGBToLinear(f)

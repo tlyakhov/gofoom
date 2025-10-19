@@ -5,8 +5,10 @@ package actions
 
 import (
 	"log"
+	"math"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/controllers"
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2/driver/desktop"
@@ -68,6 +70,23 @@ func (a *AddSector) Point() bool {
 	return true
 }
 
+func (a *AddSector) guessLayer() {
+	arena := ecs.ArenaFor[core.Sector](core.SectorCID)
+	highestLayer := math.MinInt32
+	for i := range arena.Cap() {
+		sector := arena.Value(i)
+		if sector == nil {
+			continue
+		}
+		if sector.Layer > highestLayer && sector.Contains2D(a.Sector) {
+			highestLayer = sector.Layer
+		}
+	}
+	if highestLayer != math.MinInt32 {
+		a.Sector.Layer = highestLayer + 1
+	}
+}
+
 func (a *AddSector) EndPoint() bool {
 	log.Printf("Tried to EndPoint on AddSector: %v", a.Sector.String())
 	if a.Mode != "Placing" {
@@ -80,6 +99,8 @@ func (a *AddSector) EndPoint() bool {
 		if last.P.Render.Sub(&first.P.Render).Length() < state.SegmentSelectionEpsilon {
 			a.State().Lock.Lock()
 			a.Sector.Segments = segs[:(len(segs) - 1)]
+			a.Sector.Recalculate()
+			a.guessLayer()
 			a.State().Lock.Unlock()
 			return a.AddEntity.EndPoint()
 		}

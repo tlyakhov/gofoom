@@ -55,6 +55,10 @@ func (s *Sector) String() string {
 }
 
 func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
+	if len(s.Segments) == 0 {
+		return false
+	}
+
 	inside := false
 	flag1 := (p[1] >= s.Segments[0].P.Render[1])
 
@@ -482,4 +486,23 @@ func (s *Sector) TopmostSector(p *concepts.Vector2) (result *Sector) {
 		}
 	}
 	return
+}
+
+func (s *Sector) Contains2D(s2 *Sector) bool {
+	if !s.AABBIntersect2D(s2.Min.To2D(), s2.Max.To2D(), true) {
+		return false
+	}
+	r := concepts.Vector2{}
+	for _, seg2 := range s2.Segments {
+		for _, seg := range s.Segments {
+			if seg.Intersect2D(&seg2.P.Render, &seg2.Next.P.Render, &r) >= 0 {
+				return false
+			}
+		}
+		if !s.IsPointInside2D(&seg2.P.Render) {
+			return false
+		}
+	}
+
+	return true
 }
