@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 442.96875
+      Now: 455.625
       Spawn: 0
     Pos:
-      Now: 309.78497715187996, -125.10426721398142, 20
+      Now: 341.9166224289545, -415.32740908836104, 20
       Spawn: -390, 180, -44
     Size: 15, 40
     StepSound: ∈⋮165∈⋮Step
@@ -20,8 +20,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.00000000000000005236023332825738, 0.00000000000000015849671041399313,
-        0.00007001650411977739
+      Now: -0.000000000000000000000000000000000000000000000000000474220062580162,
+        0.000000000000000000000000000000000000000000000000004842139367773308, 0.007001650411977742
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -1051,12 +1051,12 @@
         Material: ∈⋮122∈⋮Floor
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -1352,11 +1352,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.8217189464343655
+        Percent: 0.3203125
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -400, 60, -51.521484375
+      Now: -400, 60, -48.29150390625
       Spawn: -400, 60, -52
     Size: 20, 20
   ecs.Linked:
@@ -1882,20 +1882,21 @@
     Transform: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮42
   behaviors.Actor:
+    AngularSpeed: 15
     NoZ: true
     Speed: 350
     Start: ∈⋮135
   behaviors.ActorState:
-    Action: ∈⋮137
+    Action: ∈⋮147
   behaviors.Alive:
     Health: 100
   core.Body:
     Angle:
-      Now: 62997.95528377228
+      Now: 63092.668090206964
       Procedural: true
       Spawn: 155.9558816022554
     Pos:
-      Now: 4.862862874924345, -197.68250726808083, 16
+      Now: -316.2325491021458, -103.56035287714705, -28.000000000000004
       Spawn: -10, -30, -50
     Size:
       Now: 32, 32
@@ -1910,7 +1911,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: 1.0489671349632819, -0.037320855944728185, 0.0065217900123049205
+      Now: 0.09708094089829783, 1.3370563315159314, 0.7911063299282137
       Spawn: 0, 0, 0
   ecs.Named:
     Name: FlubTest
@@ -3453,9 +3454,7 @@
       P: 330, -520
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Now: 1, 0, 0, 0, 0, 1
-          Spawn: 1, 0, 0, 0, 6.399999809265137, 0
+        Transform: 1, 0, 0, 0, 6.399999809265137, 0
     - AdjacentSector: ∈⋮70
       Hi:
         Material: ∈⋮123∈⋮Door+Metal
@@ -3466,15 +3465,15 @@
         Material: ∈⋮2∈⋮Default
     - Hi:
         Material: ∈⋮2∈⋮Default
-        Transform: 1, 0, 0, 0, 6.4, 0
+        Transform:
+          Now: 1, 0, 0, 0, 0, 1
+          Spawn: 1, 0, 0, 0, 6.4, 0
       Lo:
         Material: ∈⋮2∈⋮Default
       P: 410, -510
       Surface:
         Material: ∈⋮2∈⋮Default
-        Transform:
-          Now: 1, 0, 0, 0, 0, 1
-          Spawn: 1, 0, 0, 0, 6.399999809265137, 0
+        Transform: 1, 0, 0, 0, 6.399999809265137, 0
     - AdjacentSector: ∈⋮67
       Hi:
         Material: ∈⋮123∈⋮Door+Metal
@@ -3488,16 +3487,16 @@
         Material: ∈⋮122∈⋮Floor
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
           Percent: 0
-          Reverse: false
+          Reverse: true
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: 0
+        Now: 64
         Spawn: 64
     Transform: 1, 0, 0, 0, 1, 0
   ecs.Linked:
@@ -3536,9 +3535,7 @@
     - AdjacentSector: ∈⋮53
       Hi:
         Material: ∈⋮123∈⋮Door+Metal
-        Transform:
-          Now: 1, 0, 0, 0, 0, 1
-          Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
+        Transform: 1, 0, 0, 0, 1.28, -0.30000000000000004
       Lo:
         Material: ∈⋮2∈⋮Default
       P: -110, -210
@@ -3556,16 +3553,16 @@
         Material: ∈⋮122∈⋮Floor
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: 64
+        Now: 0
         Spawn: 64
     Transform: 1, 0, 0, 0, 1, 0
   ecs.Linked:
@@ -3624,12 +3621,12 @@
         Material: ∈⋮122∈⋮Floor
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: -64
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -5259,11 +5256,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.8693599023000717
+        Percent: 0.21875
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -260, 60, -47.02197265625
+      Now: -260, 60, -50.0859375
       Spawn: -260, 60, -52
     Size: 20, 20
   ecs.Linked:
@@ -5501,41 +5498,34 @@
     P: 860, -350, 32
 - Entity: ∈⋮152
   behaviors.Actor:
+    AngularSpeed: 15
     FaceNextWaypoint: false
     Speed: 100
     Start: ∈⋮150
   behaviors.ActorState:
-    Action: ∈⋮150
+    Action: ∈⋮151
   behaviors.ParticleEmitter:
     Limit: "30"
     Particles:
-    - ∈⋮195
-    - ∈⋮196
-    - ∈⋮234
-    - ∈⋮202
-    - ∈⋮236
-    - ∈⋮237
-    - ∈⋮238
     - ∈⋮174
-    - ∈⋮241
-    - ∈⋮208
-    - ∈⋮210
-    - ∈⋮179
-    - ∈⋮212
+    - ∈⋮202
     - ∈⋮181
-    - ∈⋮213
+    - ∈⋮207
     - ∈⋮183
-    - ∈⋮215
-    - ∈⋮218
+    - ∈⋮208
     - ∈⋮186
-    - ∈⋮188
-    - ∈⋮221
-    - ∈⋮223
-    - ∈⋮226
-    - ∈⋮227
-    - ∈⋮228
+    - ∈⋮187
     - ∈⋮162
-    - ∈⋮230
+    - ∈⋮163
+    - ∈⋮215
+    - ∈⋮216
+    - ∈⋮218
+    - ∈⋮194
+    - ∈⋮195
+    - ∈⋮221
+    - ∈⋮172
+    - ∈⋮223
+    - ∈⋮224
     Source: ∈⋮153∈⋮Bubble
     Vel: 15
     XYSpread: 10
@@ -5543,7 +5533,7 @@
   core.Body:
     Angle: 180
     Pos:
-      Now: 860, -658.7865679747355, 32
+      Now: 860, -592.8663955367656, 32
       Procedural: true
       Spawn: 860, -710, 32
     Size: 20, 20
@@ -5606,6 +5596,10 @@
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮163
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮164
   core.Body:
     Angle: 0
@@ -5614,11 +5608,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.36244504138614186
-        Reverse: false
+        Percent: 0.078125
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 230, -860, -18.349609375
+      Now: 230, -860, -19.755859375
       Spawn: 230, -860, -20
     Size: 15, 15
   ecs.Linked:
@@ -5659,7 +5653,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0, 0, 0.006521683373669346
+      Now: 0, 0, 0.026086733494677383
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Evil Flub Test
@@ -5807,12 +5801,12 @@
         Material: ∈⋮2∈⋮Default
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -5837,6 +5831,10 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 1
     Strength: 2
+- Entity: ∈⋮172
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮173
   core.Sector:
     Bottom:
@@ -5894,11 +5892,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.4207856198968498
-        Reverse: false
+        Percent: 0.2890625
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 40, -250, 10
+      Now: 40, -250, 7.22021484375
       Spawn: 40, -250, 4
     Size: 20, 20
   ecs.Linked:
@@ -5919,10 +5917,6 @@
   materials.Image:
     Filter: false
     Source: data/weird-gun-cooling.png
-- Entity: ∈⋮179
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮180
   core.Body:
     Angle: 0
@@ -5996,7 +5990,7 @@
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮188
+- Entity: ∈⋮187
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6176,11 +6170,11 @@
         Material: ∈⋮122∈⋮Floor
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
-- Entity: ∈⋮195
+- Entity: ∈⋮194
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮196
+- Entity: ∈⋮195
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6207,6 +6201,7 @@
         Material: ∈⋮122∈⋮Floor
       Z: 30
     FloorFriction: 0.85
+    Layer: 1
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -6259,8 +6254,6 @@
         Material: ∈⋮122∈⋮Floor
       Z: 0
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮200
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -6309,11 +6302,11 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 0.6
     Strength: 2
-- Entity: ∈⋮208
+- Entity: ∈⋮207
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮210
+- Entity: ∈⋮208
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6358,15 +6351,11 @@
         Material: ∈⋮122∈⋮Floor
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
-- Entity: ∈⋮212
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮213
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮215
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮216
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6568,6 +6557,10 @@
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
+- Entity: ∈⋮224
+  behaviors.Proximity: ∈⋮153∈⋮Bubble
+  materials.Image: ∈⋮153∈⋮Bubble
+  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮225
   core.Sector:
     Bottom:
@@ -6613,23 +6606,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
-- Entity: ∈⋮226
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮227
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮228
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮229
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮230
   behaviors.Proximity: ∈⋮153∈⋮Bubble
   materials.Image: ∈⋮153∈⋮Bubble
   materials.Lit: ∈⋮153∈⋮Bubble
@@ -6639,22 +6616,6 @@
     Source: data/sounds/spell.wav
   ecs.Named:
     Name: Door Close
-- Entity: ∈⋮234
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮236
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮237
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
-- Entity: ∈⋮238
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮239
   materials.Image:
     Filter: false
@@ -6710,10 +6671,6 @@
         Material: ∈⋮122∈⋮Floor
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
-- Entity: ∈⋮241
-  behaviors.Proximity: ∈⋮153∈⋮Bubble
-  materials.Image: ∈⋮153∈⋮Bubble
-  materials.Lit: ∈⋮153∈⋮Bubble
 - Entity: ∈⋮243
   ecs.Named:
     Name: Space Window

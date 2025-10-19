@@ -1,9 +1,9 @@
 module tlyakhov/gofoom
 
-go 1.24.0
+go 1.25.0
 
 require (
-	fyne.io/fyne/v2 v2.6.2
+	fyne.io/fyne/v2 v2.7.0
 	github.com/blevesearch/bleve v1.0.14
 	github.com/disintegration/gift v1.2.1
 	github.com/fogleman/gg v1.3.0
@@ -26,9 +26,9 @@ require (
 )
 
 require (
-	fyne.io/systray v1.11.0 // indirect
+	fyne.io/systray v1.11.1-0.20250603113521-ca66a66d8b58 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fredbi/uri v1.1.0 // indirect
+	github.com/fredbi/uri v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/fyne-io/gl-js v0.2.0 // indirect
 	github.com/fyne-io/glfw-js v0.3.0 // indirect
@@ -47,7 +47,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c // indirect
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
+	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/yuin/goldmark v1.7.13 // indirect
 	golang.org/x/mod v0.27.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
@@ -69,7 +69,7 @@ require (
 	github.com/blevesearch/zap/v15 v15.0.3 // indirect
 	github.com/couchbase/vellum v1.0.2 // indirect
 	github.com/dmarkham/enumer v1.5.11 // indirect
-	github.com/fyne-io/oksvg v0.1.0 // indirect
+	github.com/fyne-io/oksvg v0.2.0 // indirect
 	github.com/glycerine/go-unsnap-stream v0.0.0-20181221182339-f9677308dec2 // indirect
 	github.com/go-audio/riff v1.0.0 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect

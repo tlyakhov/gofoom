@@ -64,7 +64,30 @@ func (sc *SectorController) Recalculate() {
 	sc.Sector.Recalculate()
 }
 
+func (sc *SectorController) TidyOverlaps(table *ecs.EntityTable) {
+	if len(*table) == 0 {
+		return
+	}
+	updated := make(ecs.EntityTable, len(*table))
+	copy(updated, *table)
+	for _, e := range updated {
+		if e == 0 {
+			continue
+		}
+		overlap := core.GetSector(e)
+		if overlap == nil || sc.AABBIntersect(&overlap.Min, &overlap.Max, true) {
+			continue
+		}
+		table.Delete(e)
+	}
+}
+
 func (sc *SectorController) Always() {
+	// Tidy every 5 frames
+	if ecs.Simulation.Frame%5 == 0 {
+		sc.TidyOverlaps(&sc.HigherLayers)
+		sc.TidyOverlaps(&sc.LowerLayers)
+	}
 	// This section is for some rendering cache invalidation
 
 	frame := sc.LastSeenFrame.Load()

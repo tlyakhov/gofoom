@@ -144,7 +144,7 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 	return false
 }
 
-func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, lightBody *core.Body, peekIntoInner bool) (hitSegment *core.SectorSegment, next *core.Sector) {
+func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, lightBody *core.Body, testHigherLayer bool) (hitSegment *core.SectorSegment, next *core.Sector) {
 	lightPos := &lightBody.Pos.Render
 
 	// Help the compiler out by pre-defining all the local stuff in the outer
@@ -161,11 +161,11 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		if &seg.Segment == ls.Segment {
 			continue
 		}
-		// When peeking into inner sectors, ignore their portals. We only care
-		// about the light ray _entering_ the inner sector.
-		if peekIntoInner && seg.AdjacentSector != 0 {
+		// When peeking into higher layer sectors, ignore their portals. We only care
+		// about the light ray _entering_ the higher layer sector.
+		if testHigherLayer && seg.AdjacentSector != 0 {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Ignoring portal to %v in inner sector.", seg.AdjacentSector)
+				log.Printf("    Ignoring portal to %v in higher layer sector.", seg.AdjacentSector)
 			}
 			continue
 		}
@@ -176,9 +176,9 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 					1		1		0
 		*/
 		normalFacing := (ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0)
-		if peekIntoInner != normalFacing {
+		if testHigherLayer != normalFacing {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Ignoring segment [or behind]. inner? = %v, normal? = %v. Dot: %v", peekIntoInner, normalFacing, ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1])
+				log.Printf("    Ignoring segment [or behind]. higher layer? = %v, normal? = %v. Dot: %v", testHigherLayer, normalFacing, ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1])
 			}
 			continue
 		}
@@ -203,38 +203,32 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 				log.Printf("    Portal to %v", adj.Entity)
 			}
-		} else if peekIntoInner {
-			// An inner segment!
+		} else if testHigherLayer {
+			// A higher layer segment!
 			adj = sector
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Inner to %v", adj.Entity)
+				log.Printf("    Higher layer to %v", adj.Entity)
 			}
-		} else if !sector.Outer.Empty() {
-			// We have a non-portal segment and we're not checking inner sector,
-			// but our sector itself is an inner one. Let's go out
-			adj = sector.OuterAt(ls.IntersectionTest.To2D())
+		} else {
+			// We have a non-portal segment and we're not checking higher layer sector,
+			// but we have a lower layer sector overlap. Let's go there.
+			adj = sector.OverlapAt(ls.IntersectionTest.To2D(), true)
 			if adj == nil {
-				// We've hit some occlusion edge case.
 				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-					log.Printf("    Tried to get outer sector at intersection %v, but didn't get anything.", ls.IntersectionTest.To2D())
+					log.Printf("    Occluded behind wall seg %v|%v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 				}
-				return seg, nil
+				// A wall!
+				return seg, nil // This is a wall, that means the light is occluded for sure.
 			}
 			// Why? This is to handle the edge case when we have a light ray
-			// grazing a corner of an inner sector. If this happens, we need to
-			// nudge the intersection distance for the _exiting_ light ray to
-			// avoid an infinite loop of intersections, ping-ponging between the
-			// inner and outer sector.
+			// grazing a corner of a higher layer overlapping sector. If this
+			// happens, we need to nudge the intersection distance for the
+			// _exiting_ light ray to avoid an infinite loop of intersections,
+			// ping-ponging between the inner and outer sector.
 			nudgeExitingRay = constants.IntersectEpsilon
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 				log.Printf("    Out to %v", adj.Entity)
 			}
-		} else {
-			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Occluded behind wall seg %v|%v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
-			}
-			// A wall!
-			return seg, nil // This is a wall, that means the light is occluded for sure.
 		}
 
 		// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
@@ -254,7 +248,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			}
 			return seg, nil // Same as wall, we're occluded.
 		}
-		if !peekIntoInner {
+		if !testHigherLayer {
 			floorZ2, ceilZ2 = adj.ZAt(i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
 			if ls.IntersectionTest[2] < floorZ2 || ls.IntersectionTest[2] > ceilZ2 {
@@ -312,7 +306,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		log.Printf("LightSampler.lightVisibleFromSector: START")
 		log.Printf("world=%v, light=%v\n", p.String(), lightBody.Pos.Render.String())
 	}
-	var next *core.Sector
+	var next, overlap *core.Sector
 	var hitSegment *core.SectorSegment
 
 	// The outer loop traverses portals starting from the sector our target point is in,
@@ -338,24 +332,26 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		next = adj
 		hitSegment = seg
 
-		// Check the inner sectors
-		for _, e := range sector.Inner {
+		// Check higher layer sectors for intersections
+		for _, e := range sector.HigherLayers {
 			if e == 0 {
 				continue
 			}
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("  Visiting inner sector %v, max dist %v", e, ls.maxDistSq)
+				log.Printf("  Visiting higher layer sector %v, max dist %v", e, ls.maxDistSq)
 			}
-			if inner := core.GetSector(e); inner != nil {
-				seg, adj = ls.intersect(inner, p, lightBody, true)
-				if seg != nil && adj == nil {
-					// Occluded
-					return false
-				}
-				if adj != nil {
-					next = adj
-					hitSegment = seg
-				}
+			if overlap = core.GetSector(e); overlap == nil {
+				continue
+			}
+
+			seg, adj = ls.intersect(overlap, p, lightBody, true)
+			if seg != nil && adj == nil {
+				// Occluded
+				return false
+			}
+			if adj != nil {
+				next = adj
+				hitSegment = seg
 			}
 		}
 		if next == nil {

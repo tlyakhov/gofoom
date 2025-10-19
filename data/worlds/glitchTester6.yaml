@@ -4,9 +4,11 @@
   character.Player:
     Spawn: false
   core.Body:
-    Angle: 180
+    Angle:
+      Now: 631.40625
+      Spawn: 180
     Pos:
-      Now: 210, 10, 20
+      Now: -42.463683916956946, 120.73515523966576, 20
       Spawn: 210, 10, 0
     Size:
       Now: 10, 40
@@ -19,7 +21,9 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0, 0, 0.007001650399223597
+      Now: -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013516026525697863,
+        -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004368739873942349,
+        0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -41,10 +45,6 @@
         Material: ∈⋮2∈⋮Default
       Z: 0
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮9
-    - ∈⋮11
-    - ∈⋮15
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -140,8 +140,7 @@
         Material: ∈⋮2∈⋮Default
       Z: -20
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮10
+    Layer: 1
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -184,6 +183,7 @@
       Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮10
   behaviors.Actor:
+    AngularSpeed: 15
     FaceNextWaypoint: false
     Speed: 10
     Start: ∈⋮13
@@ -195,6 +195,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 30
     FloorFriction: 0.85
+    Layer: 2
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -203,7 +204,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 1.7, 0
       P:
-        Now: -7.980755059611132, 20.000000000010218
+        Now: -7.870273600851684, 6.399029895156913
         Spawn: -10, 20
       Surface:
         Material: ∈⋮12
@@ -214,7 +215,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 1.1333333333333333, 0
       P:
-        Now: -7.980755059611132, 0.00000000001021582818339084
+        Now: -7.831969660311545, -13.600933425010638
         Spawn: -10, 0
       Surface:
         Material: ∈⋮12
@@ -225,7 +226,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 1.520526224699857, 0
       P:
-        Now: 22.019244940388866, 0.00000000001021582818339084
+        Now: 22.16797531993978, -13.543477514200436
         Spawn: 20, 0
       Surface:
         Material: ∈⋮12
@@ -236,7 +237,7 @@
         Material: ∈⋮12
         Transform: 1, 0, 0, 0, 0.85, 0
       P:
-        Now: 32.019244940388866, 20.000000000010218
+        Now: 32.12965303948342, 6.475637776237184
         Spawn: 30, 20
       Surface:
         Material: ∈⋮12
@@ -253,7 +254,8 @@
         Reverse: true
         Start: 0.5, 0, 0, 0, 0.5, 0
         TweeningFunc: Lerp
-      Now: 1, -0, 1.6202747866429972, 0, 1, 8.16327976290026e-12
+      Now: 0.9999981660083777, -0.001915197027006778, 2.1488462745649937, 0.001915197027006778,
+        0.9999981660083777, -13.567435816954244
       Procedural: true
       Spawn: 1, 0, 0, 0, 1, 0
 - Entity: ∈⋮11
@@ -263,6 +265,7 @@
         Material: ∈⋮12
       Z: 10
     FloorFriction: 0.85
+    Layer: 1
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -313,7 +316,6 @@
 - Entity: ∈⋮13
   behaviors.ActionFace:
     Angle: 0
-    Speed: 51
   behaviors.ActionTransition:
     Next:
     - ∈⋮16
@@ -326,8 +328,6 @@
         Material: ∈⋮2∈⋮Default
       Z: 0
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮15
     Segments:
     - AdjacentSector: ∈⋮3∈⋮Starting
       Hi:
@@ -375,6 +375,7 @@
         Material: ∈⋮2∈⋮Default
       Z: -10
     FloorFriction: 0.85
+    Layer: 1
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -452,9 +453,17 @@
 - Entity: ∈⋮16
   behaviors.ActionFace:
     Angle: 90
-    Speed: 51
   behaviors.ActionTransition:
     Next:
     - ∈⋮13
   behaviors.ActionWaypoint:
-    P: -20, -10, 0
+    P: -60, -50, 0
+- Entity: ∈⋮17
+  core.Body:
+    Angle: 0
+    Pos: -110, 90, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 0.4
+    Strength: 2

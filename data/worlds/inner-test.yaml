@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 675
+      Now: 587.8125
       Spawn: 180
     Pos:
-      Now: 171.17054441286572, 6.026036169678867, 20
+      Now: 155.09654096897884, 62.66238300015064, 20
       Spawn: 210, 10, 0
     Size:
       Now: 10, 40
@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.0000268540909154947, -0.000010358791025269488, 0.00007001650399223694
+      Now: -0.0014542677043338091, -0.0005609726467904401, 0.007001650399505455
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -43,10 +43,6 @@
         Material: ∈⋮2∈⋮Default
       Z: 0
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮9
-    - ∈⋮11
-    - ∈⋮15
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -137,8 +133,7 @@
         Material: ∈⋮2∈⋮Default
       Z: -20
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮10
+    Layer: 1
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -181,6 +176,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 30
     FloorFriction: 0.85
+    Layer: 2
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -230,6 +226,7 @@
         Material: ∈⋮12
       Z: 10
     FloorFriction: 0.85
+    Layer: 1
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -288,8 +285,6 @@
         Material: ∈⋮2∈⋮Default
       Z: 0
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮15
     Segments:
     - AdjacentSector: ∈⋮3∈⋮Starting
       Hi:
@@ -332,6 +327,7 @@
         Material: ∈⋮2∈⋮Default
       Z: -10
     FloorFriction: 0.85
+    Layer: 1
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
