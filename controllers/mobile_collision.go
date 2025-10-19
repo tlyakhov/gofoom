@@ -22,7 +22,7 @@ func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sect
 	}
 }
 
-func (mc *MobileController) PushBack(sector *core.Sector, segment *core.Segment, inner bool) bool {
+func (mc *MobileController) PushBack(sector *core.Sector, segment *core.Segment, outsideOfHigherLayer bool) bool {
 	d := segment.DistanceToPointSq(mc.pos2d)
 	if d > mc.Body.Size.Now[0]*mc.Body.Size.Now[0]*0.25 {
 		return false
@@ -56,9 +56,9 @@ func (mc *MobileController) PushBack(sector *core.Sector, segment *core.Segment,
 		side = 1
 	}
 
-	// `inner` is only true if we are pushing backwards from the OUTSIDE of the
-	// inner sector.
-	if inner {
+	// outsideOfHigherLayer is only true if we are pushing backwards from the
+	// OUTSIDE of a higher layer sector.
+	if outsideOfHigherLayer {
 		side *= -1
 	}
 
@@ -90,8 +90,8 @@ func (mc *MobileController) checkBodySegmentCollisions() {
 	for _, segment := range mc.Sector.Segments {
 		if segment.AdjacentSegment != nil && segment.PortalIsPassable {
 			adj = segment.AdjacentSegment.Sector
-		} else if !mc.Sector.Outer.Empty() {
-			adj = mc.Sector.OuterAt(mc.pos2d)
+		} else if !mc.Sector.LowerLayers.Empty() {
+			adj = mc.Sector.OverlapAt(mc.pos2d, true)
 		} else {
 			adj = nil
 		}
@@ -153,23 +153,23 @@ func (mc *MobileController) sectorEnterable(test *core.Sector) bool {
 	return false
 }
 
-func (mc *MobileController) checkInnerSectors(test *core.Sector) *core.Sector {
-	var inner *core.Sector
+func (mc *MobileController) checkOverlappingSectors(test *core.Sector) *core.Sector {
+	var overlap *core.Sector
 	result := test
-	for _, e := range test.Inner {
+	for _, e := range test.HigherLayers {
 		if e == 0 {
 			continue
 		}
-		if inner = core.GetSector(e); inner == nil {
+		if overlap = core.GetSector(e); overlap == nil {
 			continue
 		}
-		if mc.sectorEnterable(inner) {
-			if inner.IsPointInside2D(mc.pos2d) {
-				return mc.checkInnerSectors(inner)
+		if mc.sectorEnterable(overlap) {
+			if overlap.IsPointInside2D(mc.pos2d) {
+				return mc.checkOverlappingSectors(overlap)
 			}
 		} else {
-			for _, seg := range inner.Segments {
-				mc.PushBack(inner, &seg.Segment, true)
+			for _, seg := range overlap.Segments {
+				mc.PushBack(overlap, &seg.Segment, true)
 			}
 		}
 	}
@@ -197,7 +197,7 @@ func (mc *MobileController) bodyExitsSector() {
 
 	}
 
-	outer := previous.OuterAt(mc.pos2d)
+	outer := previous.OverlapAt(mc.pos2d, true)
 	if mc.sectorEnterable(outer) {
 		mc.Enter(outer)
 		return
@@ -460,10 +460,10 @@ func (mc *MobileController) Collide() {
 		}
 
 		if mc.Sector != nil {
-			inner := mc.checkInnerSectors(mc.Sector)
-			if inner != mc.Sector {
+			higherLayer := mc.checkOverlappingSectors(mc.Sector)
+			if higherLayer != mc.Sector {
 				mc.Exit()
-				mc.Enter(inner)
+				mc.Enter(higherLayer)
 			}
 
 			if !mc.Sector.IsPointInside2D(mc.pos2d) {

@@ -105,7 +105,7 @@ func (r *Renderer) RenderPortal(b *block) {
 	// This allocation is ok, does not escape
 	portal := &columnPortal{block: b}
 	if b.Sector != b.SectorSegment.Sector {
-		// We're going into an inner sector
+		// We're going into a higher layer sector
 		portal.Adj = b.SectorSegment.Sector
 		portal.AdjSegment = b.SectorSegment
 	} else if b.SectorSegment.AdjacentSegment != nil {
@@ -116,11 +116,11 @@ func (r *Renderer) RenderPortal(b *block) {
 			b.teleportRay()
 		}
 	} else {
-		// We are leaving an inner sector
+		// We are leaving a higher layer sector
 		portal.AdjSegment = b.SectorSegment
-		portal.Adj = b.Sector.OuterAt(b.RaySegIntersect.To2D())
+		portal.Adj = b.Sector.OverlapAt(b.RaySegIntersect.To2D(), true)
 		if portal.Adj == nil {
-			portal.Adj = core.GetSector(b.Sector.Outer.First())
+			portal.Adj = core.GetSector(b.Sector.LowerLayers.First())
 		}
 	}
 	b.LastPortalSegment = portal.AdjSegment
@@ -180,7 +180,7 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	b.Segment.Normal.To3D(&b.LightSampler.Normal)
 
 	hasPortal := b.SectorSegment.AdjacentSector != 0 && b.SectorSegment.AdjacentSegment != nil
-	hasPortal = hasPortal || !b.Sector.Outer.Empty()
+	hasPortal = hasPortal || !b.Sector.LowerLayers.Empty()
 	if b.Sector != b.SectorSegment.Sector {
 		hasPortal = true
 		b.LightSampler.Normal.MulSelf(-1)
@@ -201,19 +201,19 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 }
 
 func (r *Renderer) findIntersection(block *block, sector *core.Sector, found bool) bool {
-	inner := sector != block.Sector
+	higherLayer := sector != block.Sector
 	for _, sectorSeg := range sector.Segments {
 		if sectorSeg == block.LastPortalSegment {
 			continue
 		}
-		// When peeking into inner sectors, ignore their portals. We only care
-		// about the ray _entering_ the inner sector.
-		if inner && sectorSeg.AdjacentSector != 0 {
+		// When peeking into higher layer sectors, ignore their portals. We only
+		// care about the ray _entering_ the higher layer sector.
+		if higherLayer && sectorSeg.AdjacentSector != 0 {
 			continue
 		}
 
 		// Wall is facing away from us
-		if inner != (block.Ray.Delta.Dot(&sectorSeg.Normal) > 0) {
+		if higherLayer != (block.Ray.Delta.Dot(&sectorSeg.Normal) > 0) {
 			continue
 		}
 
@@ -272,11 +272,11 @@ func (r *Renderer) RenderSector(block *block) {
 
 	found := r.findIntersection(block, block.Sector, false)
 
-	for _, inner := range block.Sector.Inner {
-		if inner == 0 {
+	for _, overlap := range block.Sector.HigherLayers {
+		if overlap == 0 {
 			continue
 		}
-		found = r.findIntersection(block, core.GetSector(inner), found)
+		found = r.findIntersection(block, core.GetSector(overlap), found)
 	}
 
 	if found {

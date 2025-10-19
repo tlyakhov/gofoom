@@ -54,11 +54,11 @@ func (a *Select) EndPoint() bool {
 		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
 		for i := range arena.Cap() {
 			sector := arena.Value(i)
-			if sector == nil || sector.Outer.Len() > 0 {
+			if sector == nil {
 				continue
 			}
-			if inner := sector.InnermostContaining(&a.State().MouseDownWorld); inner != nil {
-				hovering.Add(selection.SelectableFromSector(inner))
+			if topmost := sector.TopmostSector(&a.State().MouseDownWorld); topmost != nil {
+				hovering.Add(selection.SelectableFromSector(topmost))
 			}
 		}
 	}

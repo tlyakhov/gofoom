@@ -28,9 +28,10 @@ type Sector struct {
 	Segments         []*SectorSegment
 	Bodies           map[ecs.Entity]*Body
 	InternalSegments map[ecs.Entity]*InternalSegment
-	// TODO: Should be automatic:
-	Inner ecs.EntityTable `editable:"Inner Sectors"`
-	Outer ecs.EntityTable
+
+	Layer        int `editable:"Layer"` // TODO: Add more editor support
+	HigherLayers ecs.EntityTable
+	LowerLayers  ecs.EntityTable
 
 	EnterScripts []*Script `editable:"Enter Scripts"`
 	ExitScripts  []*Script `editable:"Exit Scripts"`
@@ -70,16 +71,18 @@ func (s *Sector) IsPointInside2D(p *concepts.Vector2) bool {
 	return inside
 }
 
-func (s *Sector) OuterAt(p *concepts.Vector2) (result *Sector) {
-	for _, e := range s.Outer {
+func (s *Sector) OverlapAt(p *concepts.Vector2, lower bool) (result *Sector) {
+	overlaps := s.HigherLayers
+	if lower {
+		overlaps = s.LowerLayers
+	}
+	for _, e := range overlaps {
 		if e == 0 {
 			continue
 		}
-		if outer := GetSector(e); outer != nil {
-			// This could ensure we pick at least one if there are any
-			//			result = outer
-			if outer.IsPointInside2D(p) {
-				return outer
+		if overlap := GetSector(e); overlap != nil {
+			if overlap.IsPointInside2D(p) {
+				return overlap
 			}
 		}
 	}
@@ -176,11 +179,15 @@ func (s *Sector) Construct(data map[string]any) {
 	s.Top.Normal[0] = 0
 	s.Top.Z.SetAll(64.0)
 	s.Transform.Construct(nil)
+	s.Layer = 0
 
 	if data == nil {
 		return
 	}
 
+	if v, ok := data["Layer"]; ok {
+		s.Layer = cast.ToInt(v)
+	}
 	if v, ok := data["Bottom"]; ok {
 		s.Bottom.Construct(v.(map[string]any))
 	}
@@ -217,9 +224,6 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["ExitScripts"]; ok {
 		s.ExitScripts = ecs.ConstructSlice[*Script](v, nil)
 	}
-	if v, ok := data["Inner"]; ok {
-		s.Inner = ecs.ParseEntityTable(v, false)
-	}
 	if v, ok := data["Transform"]; ok {
 		s.Transform.Construct(v)
 	}
@@ -229,6 +233,9 @@ func (s *Sector) Construct(data map[string]any) {
 
 func (s *Sector) Serialize() map[string]any {
 	result := s.Attached.Serialize()
+	if s.Layer != 0 {
+		result["Layer"] = s.Layer
+	}
 	result["Top"] = s.Top.Serialize()
 	result["Bottom"] = s.Bottom.Serialize()
 	result["FloorFriction"] = s.FloorFriction
@@ -244,10 +251,6 @@ func (s *Sector) Serialize() map[string]any {
 	}
 	if len(s.ExitScripts) > 0 {
 		result["ExitScripts"] = ecs.SerializeSlice(s.ExitScripts)
-	}
-
-	if !s.Inner.Empty() {
-		result["Inner"] = s.Inner.Serialize()
 	}
 
 	result["Transform"] = s.Transform.Serialize()
@@ -318,6 +321,28 @@ func (s *Sector) RecalculateNonTopological() {
 
 	s.Top.Recalculate()
 	s.Bottom.Recalculate()
+
+	s.HigherLayers = ecs.EntityTable{}
+	s.LowerLayers = ecs.EntityTable{}
+	arena := ecs.ArenaFor[Sector](SectorCID)
+	// TODO: Optimize this to not have to iterate all of the sectors. Easiest
+	// would probably be to use the quad tree.
+	for i := range arena.Cap() {
+		test := arena.Value(i)
+		// Ignore overlaps that have the same layer
+		if test == nil || s.Layer == test.Layer {
+			continue
+		}
+		if s.AABBIntersect(&test.Min, &test.Max, true) {
+			if test.Layer > s.Layer {
+				s.HigherLayers.Set(test.Entity)
+				test.LowerLayers.Set(s.Entity)
+			} else {
+				s.LowerLayers.Set(test.Entity)
+				test.HigherLayers.Set(s.Entity)
+			}
+		}
+	}
 }
 
 func (s *Sector) Recalculate() {
@@ -364,15 +389,6 @@ func (s *Sector) Recalculate() {
 	}
 
 	s.RecalculateNonTopological()
-
-	for _, e := range s.Inner {
-		if e == 0 {
-			continue
-		}
-		if inner := GetSector(e); inner != nil {
-			inner.Outer.Set(s.Entity)
-		}
-	}
 
 	for _, script := range s.EnterScripts {
 		script.Params = contactScriptParams
@@ -430,6 +446,16 @@ func (s *Sector) AABBIntersect2D(min, max *concepts.Vector2, includeEdges bool) 
 	}
 }
 
+// From https://web.archive.org/web/20100405070507/http://valis.cs.uiuc.edu/~sariel/research/CG/compgeom/msg00831.html
+func (s *Sector) Area() float64 {
+	sum := 0.0
+	for _, seg := range s.Segments {
+		sum += seg.P.Render[0] * seg.Next.P.Render[1]
+		sum -= seg.P.Render[1] * seg.Next.P.Render[0]
+	}
+	return math.Abs(sum) * 0.5
+}
+
 func (s *Sector) DbgPrintSegments() {
 	log.Printf("Segments:")
 	for i, seg := range s.Segments {
@@ -437,7 +463,7 @@ func (s *Sector) DbgPrintSegments() {
 	}
 }
 
-func (s *Sector) InnermostContaining(p *concepts.Vector2) (result *Sector) {
+func (s *Sector) TopmostSector(p *concepts.Vector2) (result *Sector) {
 	if s == nil {
 		return nil
 	} else if s.IsPointInside2D(p) {
@@ -446,13 +472,13 @@ func (s *Sector) InnermostContaining(p *concepts.Vector2) (result *Sector) {
 		return nil
 	}
 
-	for _, e := range s.Inner {
+	for _, e := range s.HigherLayers {
 		if e == 0 {
 			continue
 		}
-		inner := GetSector(e)
-		if inner = inner.InnermostContaining(p); inner != nil {
-			result = inner
+		overlap := GetSector(e)
+		if overlap = overlap.TopmostSector(p); overlap != nil {
+			result = overlap
 		}
 	}
 	return

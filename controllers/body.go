@@ -76,37 +76,27 @@ func (bc *BodyController) Recalculate() {
 	bc.tree.Update(bc.Body)
 }
 
-func (bc *BodyController) findInnerSector(container *core.Sector) *core.Sector {
-	// We've found a sector for the body, but we may be in an inner sector.
-	// Go deeper!
-	for _, e := range container.Inner {
-		if e == 0 {
-			continue
-		}
-		if inner := core.GetSector(e); inner != nil && inner.IsPointInside2D(bc.pos2d) {
-			return bc.findInnerSector(inner)
-		}
-	}
-	return container
-}
 func (bc *BodyController) findBodySector() {
 	if bc.Sector != nil && bc.Sector.IsPointInside2D(bc.pos2d) {
 		return
 	}
 
 	var closestSector *core.Sector
+	layer := 0
 
 	// This should be optimized
 	arena := ecs.ArenaFor[core.Sector](core.SectorCID)
 	for i := range arena.Cap() {
 		sector := arena.Value(i)
-		if sector == nil {
+		if sector == nil || !sector.IsPointInside2D(bc.pos2d) {
 			continue
 		}
-		if sector.IsPointInside2D(bc.pos2d) {
-			closestSector = bc.findInnerSector(sector)
-			break
+		if closestSector == nil || sector.Layer > layer {
+			closestSector = sector
+			layer = sector.Layer
+			continue
 		}
+
 	}
 
 	if closestSector == nil {
