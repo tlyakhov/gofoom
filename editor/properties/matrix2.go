@@ -124,8 +124,29 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		g.Act(action)
 	}
 	eDelta.SetText(origDelta)
+
 	eAngle := widget.NewEntry()
+	eAngle.OnSubmitted = func(text string) {
+		var angle float64
+		var err error
+		if angle, err = strconv.ParseFloat(text, 64); err != nil {
+			eAngle.SetText(origAngle)
+			return
+		}
+		action := &actions.SetProperty{
+			Action:            state.Action{IEditor: g},
+			PropertyGridField: field,
+			ValuesToAssign:    make([]reflect.Value, len(field.Values)),
+		}
+		for i, v := range field.Values {
+			m := v.Value.Interface().(*concepts.Matrix2)
+			m = m.RotateSelf(angle)
+			action.ValuesToAssign[i] = reflect.ValueOf(m).Elem()
+		}
+		g.Act(action)
+	}
 	eAngle.SetText(origAngle)
+
 	eScale := widget.NewEntry()
 	eScale.SetText(origScale)
 	eScale.OnSubmitted = func(text string) {

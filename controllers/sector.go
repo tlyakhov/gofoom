@@ -4,7 +4,6 @@
 package controllers
 
 import (
-	"log"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
@@ -38,9 +37,9 @@ func (sc *SectorController) Target(target ecs.Component, e ecs.Entity) bool {
 func applySectorTransform(sector *core.Sector, d dynamic.Dynamic) {
 	transform := d.(*dynamic.DynamicValue[concepts.Matrix2])
 	// Transform segments if we need to
-	if transform.Procedural {
+	/*	if transform.Procedural {
 		log.Printf("Input: %v, now: %v, prev: %v", transform.Input.StringHuman(), transform.Now.StringHuman(), transform.Prev.StringHuman())
-	}
+	}*/
 	if transform.Now == transform.Prev {
 		return
 	}

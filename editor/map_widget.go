@@ -217,6 +217,8 @@ func (mw *MapWidget) render() {
 	}
 
 	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse[0], Mouse[1]))*/
+	pixels := mw.Context.Image().(*image.RGBA).Pix
+	copy(mw.Surface.Pix, pixels)
 }
 
 func (mw *MapWidget) Draw(w, h int) image.Image {
@@ -230,9 +232,6 @@ func (mw *MapWidget) Draw(w, h int) image.Image {
 		editor.Size = concepts.Vector2{float64(w), float64(h)}
 		editor.Lock.Unlock()
 	}
-
-	pixels := mw.Context.Image().(*image.RGBA).Pix
-	copy(mw.Surface.Pix, pixels)
 
 	return mw.Surface
 }
