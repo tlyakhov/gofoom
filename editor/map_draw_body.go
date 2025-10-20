@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/ecs"
 
 	"tlyakhov/gofoom/components/behaviors"
 )
@@ -25,6 +26,26 @@ func (mw *MapWidget) DrawBodyAngle(e *core.Body) {
 	mw.Context.DrawArc(e.Pos.Render[0], e.Pos.Render[1], diameter, astart, aend)
 	mw.Context.MoveTo(e.Pos.Render[0], e.Pos.Render[1])
 	mw.Context.LineTo(e.Pos.Render[0]+math.Cos(aend)*diameter, e.Pos.Render[1]+math.Sin(aend)*diameter)
+	mw.Context.ClosePath()
+	mw.Context.Stroke()
+}
+
+func (mw *MapWidget) DrawProximity(e ecs.Entity) {
+	prox := behaviors.GetProximity(e)
+	if prox == nil {
+		return
+	}
+	mw.Context.SetRGB(0, 0.33, 0.33)
+	mw.Context.NewSubPath()
+	if body := core.GetBody(e); body != nil {
+		mw.Context.DrawArc(body.Pos.Render[0], body.Pos.Render[1], prox.Range, 0, math.Pi*2)
+	} else if sector := core.GetSector(e); sector != nil {
+		if prox.IgnoreSectorTransform {
+			mw.Context.DrawArc(sector.Center.Spawn[0], sector.Center.Spawn[1], prox.Range, 0, math.Pi*2)
+		} else {
+			mw.Context.DrawArc(sector.Center.Render[0], sector.Center.Render[1], prox.Range, 0, math.Pi*2)
+		}
+	}
 	mw.Context.ClosePath()
 	mw.Context.Stroke()
 }
@@ -76,13 +97,7 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 	mw.Context.SetRGB(0.33, 0.33, 0.33)
 	mw.DrawBodyAngle(body)
 
-	if prox := behaviors.GetProximity(body.Entity); prox != nil {
-		mw.Context.SetRGB(0, 0.33, 0.33)
-		mw.Context.NewSubPath()
-		mw.Context.DrawArc(body.Pos.Render[0], body.Pos.Render[1], prox.Range, 0, math.Pi*2)
-		mw.Context.ClosePath()
-		mw.Context.Stroke()
-	}
+	mw.DrawProximity(body.Entity)
 
 	if editor.ComponentNamesVisible {
 		text := body.Format()

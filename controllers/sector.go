@@ -45,11 +45,11 @@ func applySectorTransform(sector *core.Sector, d dynamic.Dynamic) {
 	}
 	for _, seg := range sector.Segments {
 		seg.P.Now = seg.P.Spawn
-		seg.P.Now[0] -= sector.Center.Spawn[0]
-		seg.P.Now[1] -= sector.Center.Spawn[1]
+		seg.P.Now[0] -= sector.TransformOrigin[0]
+		seg.P.Now[1] -= sector.TransformOrigin[1]
 		sector.Transform.Now.ProjectSelf(&seg.P.Now)
-		seg.P.Now[0] += sector.Center.Spawn[0]
-		seg.P.Now[1] += sector.Center.Spawn[1]
+		seg.P.Now[0] += sector.TransformOrigin[0]
+		seg.P.Now[1] += sector.TransformOrigin[1]
 		seg.P.Render = seg.P.Now
 	}
 	sector.RecalculateNonTopological()

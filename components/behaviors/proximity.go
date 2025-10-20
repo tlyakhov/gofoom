@@ -30,6 +30,8 @@ type Proximity struct {
 	Range         float64 `editable:"Range"`
 	Hysteresis    float64 `editable:"Hysteresis (ms)"`
 
+	IgnoreSectorTransform bool `editable:"Ignore Sector Transform"`
+
 	ValidComponents containers.Set[ecs.ComponentID] `editable:"ValidComponents"`
 
 	InRange core.Script `editable:"InRange"`
@@ -50,6 +52,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	p.Range = 100
 	p.Hysteresis = 200
 	p.ActsOnSectors = false
+	p.IgnoreSectorTransform = true
 	p.ValidComponents = make(containers.Set[ecs.ComponentID])
 	// TODO: Serialize this
 	p.State = xsync.NewMapOf[uint64, *ProximityState]()
@@ -71,6 +74,9 @@ func (p *Proximity) Construct(data map[string]any) {
 
 	if v, ok := data["ActsOnSectors"]; ok {
 		p.ActsOnSectors = cast.ToBool(v)
+	}
+	if v, ok := data["IgnoreSectorTransform"]; ok {
+		p.IgnoreSectorTransform = cast.ToBool(v)
 	}
 
 	if v, ok := data["InRange"]; ok {
@@ -106,6 +112,9 @@ func (p *Proximity) Serialize() map[string]any {
 
 	if p.ActsOnSectors {
 		result["ActsOnSectors"] = true
+	}
+	if !p.IgnoreSectorTransform {
+		result["IgnoreSectorTransform"] = false
 	}
 
 	if !p.InRange.IsEmpty() {

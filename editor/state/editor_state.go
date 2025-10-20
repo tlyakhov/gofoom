@@ -83,4 +83,5 @@ type IEditor interface {
 	Alert(text string)
 	SetDialogLocation(dlg *dialog.FileDialog, target string)
 	EntityImage(entity ecs.Entity) image.Image
+	FlushEntityImage(entity ecs.Entity)
 }

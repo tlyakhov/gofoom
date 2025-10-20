@@ -118,7 +118,11 @@ func (r *Renderer) RenderPortal(b *block) {
 	} else {
 		// We are leaving a higher layer sector
 		portal.AdjSegment = b.SectorSegment
-		portal.Adj = b.Sector.OverlapAt(b.RaySegIntersect.To2D(), true)
+		// Nudge to handle situations where our overlap is right on an edge
+		nudge := *b.RaySegIntersect.To2D()
+		nudge[0] += b.Ray.Delta[0] * constants.IntersectEpsilon
+		nudge[1] += b.Ray.Delta[1] * constants.IntersectEpsilon
+		portal.Adj = b.Sector.OverlapAt(&nudge, true)
 		if portal.Adj == nil {
 			portal.Adj = core.GetSector(b.Sector.LowerLayers.First())
 		}

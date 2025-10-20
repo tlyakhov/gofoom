@@ -188,6 +188,16 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		mw.Context.Pop()
 	}
 
+	if sectorSelected && !sector.TransformOrigin.Zero() {
+		mw.Context.SetRGB(1, 1, 0)
+		mw.Context.MoveTo(sector.TransformOrigin[0], sector.TransformOrigin[1]-4)
+		mw.Context.LineTo(sector.TransformOrigin[0], sector.TransformOrigin[1]+4)
+		mw.Context.MoveTo(sector.TransformOrigin[0]-4, sector.TransformOrigin[1])
+		mw.Context.LineTo(sector.TransformOrigin[0]+4, sector.TransformOrigin[1])
+	}
+
+	mw.DrawProximity(sector.Entity)
+
 	mw.Context.Pop()
 }
 

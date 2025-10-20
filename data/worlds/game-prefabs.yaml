@@ -5,10 +5,10 @@
       Code: |-
         if body == nil { return }
         m := core.GetMobile(body.Entity)
-        vd := behaviors.GetVerticalDoor(onEntity)
+        vd := behaviors.GetDoor(onEntity)
         if m == nil || vd == nil { return }
         if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
-  behaviors.VerticalDoor:
+  behaviors.Door:
     Duration: 1000
     TweeningFunc: EaseInOut2
   ecs.Named:
@@ -16,7 +16,7 @@
 - Entity: ∈⋮2
   ecs.Linked:
     Sources:
-    - ∈⋮249∈⋮Flower+Inventory+Item
+      - ∈⋮249∈⋮Flower+Inventory+Item
   ecs.Named:
     Name: Flower (Starting Room)
   inventory.Item:
@@ -126,9 +126,9 @@
     Health: 100
   inventory.Carrier:
     Inventory:
-    - ∈⋮189
-    - ∈⋮177
-    - ∈⋮169
+      - ∈⋮189
+      - ∈⋮177
+      - ∈⋮169
 - Entity: ∈⋮127
   ecs.Named:
     Name: Toxic
@@ -168,7 +168,7 @@
 - Entity: ∈⋮132
   ecs.Linked:
     Sources:
-    - ∈⋮246∈⋮Inventory+Item+Base
+      - ∈⋮246∈⋮Inventory+Item+Base
   ecs.Named:
     Name: Weird Gun
   inventory.Item:
@@ -207,17 +207,18 @@
     MarkMaterial: ∈⋮113∈⋮Weapon+Mark
     MarkSize: 2.5
     Params:
-    - Time: 100
-    - Time: 100
-    - Time: 100
-    - Time: 100
-    - Time: 100
-    - Time: 100
+      - Time: 100
+      - Time: 100
+      - Time: 100
+      - Time: 100
+      - Time: 100
+      - Time: 100
     Spread: 3
 - Entity: ∈⋮153
   behaviors.Proximity:
     InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+      Code:
+        "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
         2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
     Range: 5
   ecs.Named:
@@ -254,7 +255,7 @@
 - Entity: ∈⋮164
   ecs.Linked:
     Sources:
-    - ∈⋮246∈⋮Inventory+Item+Base
+      - ∈⋮246∈⋮Inventory+Item+Base
   ecs.Named:
     Name: Red Keycard
   inventory.Item:
@@ -273,13 +274,14 @@
         if !carrier.HasAtLeast("Red Keycard",1) {
           return
         }
-        door := behaviors.GetVerticalDoor(168)
+        door := behaviors.GetDoor(168)
         if door.State != behaviors.DoorStateOpen {
           door.Intent = behaviors.DoorIntentOpen
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
         }
-    Message: Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
+    Message:
+      Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
       red keycard to open{{end}}
   behaviors.Proximity:
     Hysteresis: 0
@@ -289,7 +291,7 @@
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: character.Player
-  behaviors.VerticalDoor:
+  behaviors.Door:
     Duration: 1000
     TweeningFunc: EaseInOut2
 - Entity: ∈⋮169
@@ -302,7 +304,7 @@
 - Entity: ∈⋮176
   ecs.Linked:
     Sources:
-    - ∈⋮249∈⋮Flower+Inventory+Item
+      - ∈⋮249∈⋮Flower+Inventory+Item
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29
   materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29
@@ -323,8 +325,8 @@
     Name: Muzzle Flash Shader
   materials.Shader:
     Stages:
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮160∈⋮Muzzle+Flash
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮160∈⋮Muzzle+Flash
 - Entity: ∈⋮239
   materials.Image:
     Filter: false
@@ -337,11 +339,11 @@
     Name: Space Window
   materials.Shader:
     Stages:
-    - BlendingFunc: BlendNormal
-      Flags: ShaderTiled|ShaderSky
-      Material: ∈⋮254
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮239
+      - BlendingFunc: BlendNormal
+        Flags: ShaderTiled|ShaderSky
+        Material: ∈⋮254
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮239
 - Entity: ∈⋮246
   ecs.Named:
     Name: Inventory Item Base

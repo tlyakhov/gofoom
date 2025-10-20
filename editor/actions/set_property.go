@@ -40,6 +40,7 @@ func (a *SetProperty) FireHooks() {
 		switch target := v.Parent().(type) {
 		case *ecs.Linked, *materials.Image, *audio.Sound, *core.Script, *core.SectorPlane, *core.Sector:
 			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			a.FlushEntityImage(v.Entity)
 			// TODO: use a nicer source code editor for script properties.
 		case *ecs.SourceFile:
 			if target.Loaded {

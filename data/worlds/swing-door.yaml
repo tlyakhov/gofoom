@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 511.875
+      Now: 360
       Spawn: 0
     Pos:
-      Now: 258.86317469382794, -2.2312070962060058, 20
+      Now: 20.26815081580744, -0.3467845565248778, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
@@ -21,7 +21,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.005833828930628071, 0.0031131623120815364, 0.007001650403479526
+      Now: 0.000000000000000009150481237765875, 0.0000000000000000000000005412693251314856,
+        0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -92,6 +93,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
@@ -169,6 +171,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮10
   core.Sector:
     Bottom:
@@ -225,7 +228,15 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮11
+  behaviors.Door:
+    Duration: 1000
+    Intent: DoorIntentOpen
+    Limit: -90
+    TweeningFunc: EaseInOut2
+    Type: DoorTypeSwing
+    UseLimit: true
   core.Sector:
     Bottom:
       Surface:
@@ -239,18 +250,18 @@
       Lo:
         Material: ∈⋮2∈⋮Default
       P:
-        Now: 79.89810093630993, 19.22571675843455
+        Now: 115, -15
         Spawn: 110, -20
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:
-        Material: ∈⋮2∈⋮Default
+        Material: ∈⋮14
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
       P:
-        Now: 149.88102379350414, 20.77184364973605
+        Now: 185, -14.999999999999996
         Spawn: 110, 50
       PortalHasMaterial: true
       PortalIsPassable: false
@@ -261,18 +272,18 @@
       Lo:
         Material: ∈⋮2∈⋮Default
       P:
-        Now: 150.10189906369007, 10.774283241565449
+        Now: 185, -24.999999999999996
         Spawn: 120, 50
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:
-        Material: ∈⋮2∈⋮Default
+        Material: ∈⋮14
     - Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
       P:
-        Now: 80.11897620649586, 9.228156350263951
+        Now: 115, -25
         Spawn: 120, -20
       PortalHasMaterial: true
       PortalIsPassable: false
@@ -284,16 +295,18 @@
       Z: 64
     Transform:
       Animation:
-        Active: true
-        Duration: 10000
-        End: 0, 1, 0, -1, 0, 0
-        Percent: 0.5070312500000046
-        Reverse: false
-        Start: 1, 0, 0, 0, 1, 0
-        TweeningFunc: Lerp
-      Now: 0.022087527018592797, 0.9997560408170599, 0, -0.9997560408170599, 0.022087527018592797,
-        0
+        Active: false
+        Coordinates: AnimationCoordinatesAbsolute
+        Duration: 1000
+        End: 1, 0, 0, 0, 1, 0
+        Lifetime: AnimationLifetimeOnce
+        Percent: 0
+        Reverse: true
+        Start: 6.123233995736757e-17, 1, 0, -1, 6.123233995736757e-17, 0
+        TweeningFunc: EaseInOut2
+      Now: 6.123233995736757e-17, 1, 0, -1, 6.123233995736757e-17, 0
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 115, -20
 - Entity: ∈⋮12
   core.Body:
     Angle: 0
@@ -303,3 +316,10 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 0.8
     Strength: 2
+- Entity: ∈⋮14
+  materials.Image:
+    Filter: false
+    Source: data/glass-test.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1

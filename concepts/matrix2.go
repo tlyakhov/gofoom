@@ -126,10 +126,11 @@ func (m *Matrix2) RotateSelf(angle float64) *Matrix2 {
 
 func (m *Matrix2) RotateBasis(basis *Vector2, angle float64) *Matrix2 {
 	sint, cost := math.Sincos(angle)
-	m[4], m[5] = m[4]-basis[0], m[5]-basis[1]
-	m = m.Mul(&Matrix2{cost, sint, -sint, cost, 0, 0})
-	m[4], m[5] = m[4]+basis[0], m[5]+basis[1]
-	return m
+	result := *m
+	result[4], result[5] = result[4]-basis[0], result[5]-basis[1]
+	result.MulSelf(&Matrix2{cost, sint, -sint, cost, 0, 0})
+	result[4], result[5] = result[4]+basis[0], result[5]+basis[1]
+	return &result
 }
 
 func (m *Matrix2) Mul(next *Matrix2) *Matrix2 {

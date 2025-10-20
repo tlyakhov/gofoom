@@ -17,7 +17,7 @@ var PlayerTargetableCID ecs.ComponentID
 var ProximityCID ecs.ComponentID
 var ProximityStateCID ecs.ComponentID
 var UnderwaterCID ecs.ComponentID
-var VerticalDoorCID ecs.ComponentID
+var DoorCID ecs.ComponentID
 var WanderCID ecs.ComponentID
 
 func init() {
@@ -35,7 +35,7 @@ func init() {
 	ProximityCID = ecs.RegisterComponent(&ecs.Arena[Proximity, *Proximity]{})
 	ProximityStateCID = ecs.RegisterComponent(&ecs.Arena[ProximityState, *ProximityState]{})
 	UnderwaterCID = ecs.RegisterComponent(&ecs.Arena[Underwater, *Underwater]{})
-	VerticalDoorCID = ecs.RegisterComponent(&ecs.Arena[VerticalDoor, *VerticalDoor]{})
+	DoorCID = ecs.RegisterComponent(&ecs.Arena[Door, *Door]{})
 	WanderCID = ecs.RegisterComponent(&ecs.Arena[Wander, *Wander]{})
 }
 func GetActionFace(e ecs.Entity) *ActionFace {
@@ -178,15 +178,15 @@ func GetUnderwater(e ecs.Entity) *Underwater {
 func (*Underwater) ComponentID() ecs.ComponentID {
 	return UnderwaterCID
 }
-func GetVerticalDoor(e ecs.Entity) *VerticalDoor {
-	if asserted, ok := ecs.GetComponent(e, VerticalDoorCID).(*VerticalDoor); ok {
+func GetDoor(e ecs.Entity) *Door {
+	if asserted, ok := ecs.GetComponent(e, DoorCID).(*Door); ok {
 		return asserted
 	}
 	return nil
 }
 
-func (*VerticalDoor) ComponentID() ecs.ComponentID {
-	return VerticalDoorCID
+func (*Door) ComponentID() ecs.ComponentID {
+	return DoorCID
 }
 func GetWander(e ecs.Entity) *Wander {
 	if asserted, ok := ecs.GetComponent(e, WanderCID).(*Wander); ok {

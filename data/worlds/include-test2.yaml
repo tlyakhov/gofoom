@@ -21,19 +21,20 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.000000000000000000000000000000000000000000004133620315853336, 0.00000000000000000000000000000000008656330800133991,
+      Now:
+        0.000000000000000000000000000000000000000000004133620315853336, 0.00000000000000000000000000000000008656330800133991,
         -0.0000000000000000000000000000000765625000071585
       Spawn: 0, 0, 0
   ecs.Linked:
     Sources:
-    - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+      - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   ecs.Named:
     Name: Player
   inventory.Carrier:
     Inventory:
-    - ∈⋮189∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-    - ∈⋮177∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-    - ∈⋮169∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+      - ∈⋮189∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+      - ∈⋮177∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+      - ∈⋮169∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
     SelectedWeapon: ∈⋮169∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮2
   ecs.Named:
@@ -52,49 +53,49 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: -100, -100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, -100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - AdjacentSector: ∈⋮11
-      Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, -50
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, 40
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, 100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: -100, 100
-      Surface:
-        Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: -100, -100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, -100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮11
+        Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, -50
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, 40
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, 100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: -100, 100
+        Surface:
+          Material: ∈⋮2∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
@@ -129,7 +130,7 @@
     Vel: 0, 0, 0
   ecs.Linked:
     Sources:
-    - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+      - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   ecs.Named:
     Name: Spawn
   inventory.Carrier: ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -138,7 +139,7 @@
     ID: 1
     Source: data/worlds/game-prefabs.yaml
 - Entity: ∈⋮11
-  behaviors.VerticalDoor:
+  behaviors.Door:
     Duration: 1000
     TweeningFunc: EaseInOut2
   core.Sector:
@@ -148,36 +149,36 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, 40
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - AdjacentSector: ∈⋮12
-      Hi:
-        Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 130, 40
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 130, -50
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - AdjacentSector: ∈⋮3∈⋮Starting
-      Hi:
-        Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, -50
-      Surface:
-        Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, 40
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮12
+        Hi:
+          Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 130, 40
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 130, -50
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮3∈⋮Starting
+        Hi:
+          Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, -50
+        Surface:
+          Material: ∈⋮2∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
@@ -197,7 +198,7 @@
     Transform: 1, 0, 0, 0, 1, 0
   ecs.Linked:
     Sources:
-    - ∈⋮1∈⋮Basic+Vertical+Door∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+      - ∈⋮1∈⋮Basic+Vertical+Door∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮12
   core.Sector:
     Bottom:
@@ -206,49 +207,49 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 130, -50
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 130, -200
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 320, -200
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 320, 150
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 130, 150
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - AdjacentSector: ∈⋮11
-      Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 130, 40
-      Surface:
-        Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 130, -50
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 130, -200
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 320, -200
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 320, 150
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 130, 150
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮11
+        Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 130, 40
+        Surface:
+          Material: ∈⋮2∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default

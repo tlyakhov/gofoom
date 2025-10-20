@@ -131,3 +131,7 @@ func (e *Editor) EntityImage(entity ecs.Entity) image.Image {
 	e.entityIconCache.Store(entity, item)
 	return item.Image
 }
+
+func (e *Editor) FlushEntityImage(entity ecs.Entity) {
+	e.entityIconCache.Delete(entity)
+}

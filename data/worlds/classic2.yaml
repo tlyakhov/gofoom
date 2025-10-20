@@ -120,36 +120,36 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮27∈⋮sector6
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -120, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -120, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮20∈⋮sector2
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮27∈⋮sector6
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -120, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -120, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮20∈⋮sector2
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -165,36 +165,36 @@
       Z: 10
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮18∈⋮sector15
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 380, 150
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 150
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - AdjacentSector: ∈⋮24∈⋮sector20
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 400
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 380, 400
-      Surface:
-        Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮18∈⋮sector15
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 380, 150
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 150
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮24∈⋮sector20
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 400
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 380, 400
+        Surface:
+          Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮11∈⋮f1
@@ -210,36 +210,36 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮41∈⋮sector13
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 150, 100
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 150, 70
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮18∈⋮sector15
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 70
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 100
-      Surface:
-        Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮41∈⋮sector13
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 150, 100
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 150, 70
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮18∈⋮sector15
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 70
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 100
+        Surface:
+          Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮11∈⋮f1
@@ -256,59 +256,59 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 20
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮17∈⋮sector14
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 70
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 100
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮16∈⋮sector16
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 380, 150
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮55∈⋮sector17
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮55∈⋮sector17
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 20
-      Surface:
-        Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 20
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮17∈⋮sector14
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 70
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 100
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮16∈⋮sector16
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 380, 150
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮55∈⋮sector17
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮55∈⋮sector17
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 20
+        Surface:
+          Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -335,38 +335,38 @@
       Z: -10
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮15∈⋮sector5
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮39∈⋮sector3
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮35∈⋮sector4
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -30, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -30, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮15∈⋮sector5
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮39∈⋮sector3
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮35∈⋮sector4
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -30, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -30, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -382,51 +382,51 @@
       Z: -60
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮53∈⋮sector10
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, -30
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, -10
-      Surface:
-        Material: ∈⋮14∈⋮mat3
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, 10
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - AdjacentSector: ∈⋮29∈⋮sector11
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮26∈⋮sector8
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮53∈⋮sector10
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, -30
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, -10
+        Surface:
+          Material: ∈⋮14∈⋮mat3
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, 10
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮29∈⋮sector11
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮26∈⋮sector8
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
@@ -453,37 +453,37 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮20∈⋮sector2
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -30, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, -30
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, -110
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -10, -190
-      Surface:
-        Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮20∈⋮sector2
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -30, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, -30
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, -110
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -500,52 +500,52 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮16∈⋮sector16
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 400
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 380, 400
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - AdjacentSector: ∈⋮31∈⋮sector21
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 400
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - AdjacentSector: ∈⋮31∈⋮sector21
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 450
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - AdjacentSector: ∈⋮31∈⋮sector21
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 480, 450
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 480, 400
-      Surface:
-        Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮16∈⋮sector16
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 400
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 380, 400
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮31∈⋮sector21
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 400
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮31∈⋮sector21
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 450
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮31∈⋮sector21
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 480, 450
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 480, 400
+        Surface:
+          Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮11∈⋮f1
@@ -556,7 +556,7 @@
 - Entity: ∈⋮25
   behaviors.Proximity:
     InRange:
-      Code: sectors.GetVerticalDoor(s.Ref("sector")).Intent = sectors.DoorIntentOpen
+      Code: sectors.GetDoor(s.Ref("sector")).Intent = sectors.DoorIntentOpen
   core.Sector:
     Bottom:
       Surface:
@@ -564,36 +564,36 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮44∈⋮sector12
-      Hi:
-        Material: ∈⋮9∈⋮Doom+Garage+Door
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 105, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮9∈⋮Doom+Garage+Door
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 105, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮34∈⋮sector1
-      Hi:
-        Material: ∈⋮9∈⋮Doom+Garage+Door
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮9∈⋮Doom+Garage+Door
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮44∈⋮sector12
+        Hi:
+          Material: ∈⋮9∈⋮Doom+Garage+Door
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 105, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮9∈⋮Doom+Garage+Door
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 105, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮34∈⋮sector1
+        Hi:
+          Material: ∈⋮9∈⋮Doom+Garage+Door
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮9∈⋮Doom+Garage+Door
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮mat6
@@ -620,36 +620,36 @@
       Z: -50
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -160, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮21∈⋮sector9
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮28∈⋮sector7
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -160, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -160, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮21∈⋮sector9
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮28∈⋮sector7
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -160, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -665,36 +665,36 @@
       Z: -30
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -120, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮28∈⋮sector7
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -140, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -140, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮15∈⋮sector5
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -120, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -120, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮28∈⋮sector7
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -140, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -140, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮15∈⋮sector5
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -120, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -710,36 +710,36 @@
       Z: -40
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -140, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮26∈⋮sector8
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -160, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -160, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮27∈⋮sector6
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -140, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -140, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮26∈⋮sector8
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -160, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -160, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮27∈⋮sector6
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -140, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -755,35 +755,35 @@
       Z: -60
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮21∈⋮sector9
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, 30
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, 140
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, 140
-      Surface:
-        Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮21∈⋮sector9
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, 30
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, 140
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, 140
+        Surface:
+          Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
@@ -810,38 +810,38 @@
       Z: -200
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮24∈⋮sector20
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 400
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮24∈⋮sector20
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 450
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮24∈⋮sector20
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 480, 450
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮45∈⋮sector18
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 480, 400
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮24∈⋮sector20
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 400
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮24∈⋮sector20
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 450
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮24∈⋮sector20
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 480, 450
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮45∈⋮sector18
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 480, 400
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮5∈⋮Water
@@ -859,38 +859,38 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮48∈⋮sector22
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 620, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮47∈⋮sector19
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 600, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮48∈⋮sector22
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 600, 200
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮48∈⋮sector22
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 620, 200
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮48∈⋮sector22
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 620, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮47∈⋮sector19
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 600, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮48∈⋮sector22
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 600, 200
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮48∈⋮sector22
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 620, 200
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
@@ -906,36 +906,36 @@
       Z: 15
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮39∈⋮sector3
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 100
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 100
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮42∈⋮sector27
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 120
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 120
-      Surface:
-        Material: ∈⋮6∈⋮Sky
+      - AdjacentSector: ∈⋮39∈⋮sector3
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 100
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 100
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮42∈⋮sector27
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 120
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 120
+        Surface:
+          Material: ∈⋮6∈⋮Sky
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -951,38 +951,38 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮25∈⋮sector25
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮39∈⋮sector3
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮35∈⋮sector4
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 30, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 30, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮25∈⋮sector25
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮39∈⋮sector3
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮35∈⋮sector4
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 30, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 30, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -998,38 +998,38 @@
       Z: -3
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -30, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮34∈⋮sector1
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 30, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮39∈⋮sector3
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 30, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮20∈⋮sector2
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -30, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -30, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮34∈⋮sector1
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 30, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮39∈⋮sector3
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 30, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮20∈⋮sector2
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -30, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮3∈⋮f5
@@ -1045,35 +1045,35 @@
       Z: -10
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 620, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 740, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 740, 200
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮48∈⋮sector22
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 620, 200
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 620, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 740, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 740, 200
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮48∈⋮sector22
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 620, 200
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮13∈⋮Default
@@ -1100,36 +1100,36 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, -160
-      Surface:
-        Material: ∈⋮6∈⋮Sky
-    - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -40, -270
-      Surface:
-        Material: ∈⋮6∈⋮Sky
-    - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -10, -190
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, -110
-      Surface:
-        Material: ∈⋮8∈⋮mat2
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, -160
+        Surface:
+          Material: ∈⋮6∈⋮Sky
+      - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -40, -270
+        Surface:
+          Material: ∈⋮6∈⋮Sky
+      - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, -110
+        Surface:
+          Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -1145,52 +1145,52 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮33∈⋮sector26
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 100
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 100
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮34∈⋮sector1
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮35∈⋮sector4
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 30, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮20∈⋮sector2
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -30, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 30
-      Surface:
-        Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮33∈⋮sector26
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 100
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 100
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮34∈⋮sector1
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮35∈⋮sector4
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 30, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮20∈⋮sector2
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -30, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 30
+        Surface:
+          Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -1217,43 +1217,43 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮44∈⋮sector12
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 115, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 150, 30
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮17∈⋮sector14
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 150, 70
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 150, 100
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 115, 100
-      Surface:
-        Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮44∈⋮sector12
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 115, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 150, 30
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮17∈⋮sector14
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 150, 70
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 150, 100
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 115, 100
+        Surface:
+          Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮4∈⋮f6
@@ -1269,35 +1269,35 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮33∈⋮sector26
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 120
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 120
-      Surface:
-        Material: ∈⋮6∈⋮Sky
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, 3000
-      Surface:
-        Material: ∈⋮6∈⋮Sky
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -100, 3000
-      Surface:
-        Material: ∈⋮6∈⋮Sky
+      - AdjacentSector: ∈⋮33∈⋮sector26
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 120
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 120
+        Surface:
+          Material: ∈⋮6∈⋮Sky
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, 3000
+        Surface:
+          Material: ∈⋮6∈⋮Sky
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -100, 3000
+        Surface:
+          Material: ∈⋮6∈⋮Sky
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -1313,37 +1313,37 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -40, -270
-      Surface:
-        Material: ∈⋮6∈⋮Sky
-    - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 170, -280
-      Surface:
-        Material: ∈⋮6∈⋮Sky
-    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 70, -200
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -10, -190
-      Surface:
-        Material: ∈⋮8∈⋮mat2
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -40, -270
+        Surface:
+          Material: ∈⋮6∈⋮Sky
+      - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 170, -280
+        Surface:
+          Material: ∈⋮6∈⋮Sky
+      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 70, -200
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -1359,43 +1359,43 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮25∈⋮sector25
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 105, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 105, 30
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮41∈⋮sector13
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 115, 30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 150, 30
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 150, -30
-      Surface:
-        Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮25∈⋮sector25
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 105, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 105, 30
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮41∈⋮sector13
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 115, 30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 150, 30
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 150, -30
+        Surface:
+          Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮4∈⋮f6
@@ -1411,51 +1411,51 @@
       Z: -230
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮55∈⋮sector17
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 150
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮47∈⋮sector19
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 150
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 200
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮31∈⋮sector21
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 480, 400
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 400
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 200
-      Surface:
-        Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮55∈⋮sector17
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 150
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮47∈⋮sector19
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 150
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 200
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮31∈⋮sector21
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 480, 400
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 400
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 200
+        Surface:
+          Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
@@ -1482,36 +1482,36 @@
       Z: -50
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 600, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮45∈⋮sector18
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 150
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 200
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮48∈⋮sector22
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 600, 200
-      Surface:
-        Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 600, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮45∈⋮sector18
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 150
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 200
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮48∈⋮sector22
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 600, 200
+        Surface:
+          Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
@@ -1527,38 +1527,38 @@
       Z: -70
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮32∈⋮sector23
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 620, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮47∈⋮sector19
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 600, 150
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮32∈⋮sector23
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 600, 200
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮36∈⋮sector24
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 620, 200
-      Surface:
-        Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮32∈⋮sector23
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 620, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮47∈⋮sector19
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 600, 150
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮32∈⋮sector23
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 600, 200
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮36∈⋮sector24
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 620, 200
+        Surface:
+          Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮5∈⋮Water
@@ -1588,53 +1588,53 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, -110
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮34∈⋮sector1
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮35∈⋮sector4
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 30, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -30, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -10, -190
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 70, -200
-      Surface:
-        Material: ∈⋮8∈⋮mat2
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, -110
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮34∈⋮sector1
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮35∈⋮sector4
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 30, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -30, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -10, -190
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 70, -200
+        Surface:
+          Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -1659,36 +1659,36 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 170, -280
-      Surface:
-        Material: ∈⋮6∈⋮Sky
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 280, -160
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 100, -110
-      Surface:
-        Material: ∈⋮8∈⋮mat2
-    - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 70, -200
-      Surface:
-        Material: ∈⋮8∈⋮mat2
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 170, -280
+        Surface:
+          Material: ∈⋮6∈⋮Sky
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 280, -160
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 100, -110
+        Surface:
+          Material: ∈⋮8∈⋮mat2
+      - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 70, -200
+        Surface:
+          Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
@@ -1704,35 +1704,35 @@
       Z: -60
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮21∈⋮sector9
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, -30
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, -30
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -300, -140
-      Surface:
-        Material: ∈⋮7∈⋮mat1
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: -180, -140
-      Surface:
-        Material: ∈⋮7∈⋮mat1
+      - AdjacentSector: ∈⋮21∈⋮sector9
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, -30
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, -30
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -300, -140
+        Surface:
+          Material: ∈⋮7∈⋮mat1
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: -180, -140
+        Surface:
+          Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
@@ -1759,37 +1759,37 @@
       Z: -170
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮45∈⋮sector18
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 150
-      Surface:
-        Material: ∈⋮13∈⋮Default
-    - AdjacentSector: ∈⋮18∈⋮sector15
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 150
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - AdjacentSector: ∈⋮18∈⋮sector15
-      Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 400, 20
-      Surface:
-        Material: ∈⋮2∈⋮mat6
-    - Hi:
-        Material: ∈⋮13∈⋮Default
-      Lo:
-        Material: ∈⋮13∈⋮Default
-      P: 300, 20
-      Surface:
-        Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮45∈⋮sector18
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 150
+        Surface:
+          Material: ∈⋮13∈⋮Default
+      - AdjacentSector: ∈⋮18∈⋮sector15
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 150
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - AdjacentSector: ∈⋮18∈⋮sector15
+        Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 400, 20
+        Surface:
+          Material: ∈⋮2∈⋮mat6
+      - Hi:
+          Material: ∈⋮13∈⋮Default
+        Lo:
+          Material: ∈⋮13∈⋮Default
+        P: 300, 20
+        Surface:
+          Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮5∈⋮Water

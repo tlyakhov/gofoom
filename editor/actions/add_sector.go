@@ -100,6 +100,7 @@ func (a *AddSector) EndPoint() bool {
 			a.State().Lock.Lock()
 			a.Sector.Segments = segs[:(len(segs) - 1)]
 			a.Sector.Recalculate()
+			a.Sector.TransformOrigin = *a.Sector.Center.Spawn.To2D()
 			a.guessLayer()
 			a.State().Lock.Unlock()
 			return a.AddEntity.EndPoint()

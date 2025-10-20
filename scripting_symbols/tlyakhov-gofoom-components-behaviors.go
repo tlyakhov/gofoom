@@ -49,7 +49,7 @@ func init() {
 		"GetProximity":           reflect.ValueOf(behaviors.GetProximity),
 		"GetProximityState":      reflect.ValueOf(behaviors.GetProximityState),
 		"GetUnderwater":          reflect.ValueOf(behaviors.GetUnderwater),
-		"GetVerticalDoor":        reflect.ValueOf(behaviors.GetVerticalDoor),
+		"GetDoor":                reflect.ValueOf(behaviors.GetDoor),
 		"GetWander":              reflect.ValueOf(behaviors.GetWander),
 		"IterateActions":         reflect.ValueOf(behaviors.IterateActions),
 		"ParticleEmitterCID":     reflect.ValueOf(&behaviors.ParticleEmitterCID).Elem(),
@@ -70,7 +70,7 @@ func init() {
 		"ProximityTargetsSector": reflect.ValueOf(behaviors.ProximityTargetsSector),
 		"ProximityWaiting":       reflect.ValueOf(behaviors.ProximityWaiting),
 		"UnderwaterCID":          reflect.ValueOf(&behaviors.UnderwaterCID).Elem(),
-		"VerticalDoorCID":        reflect.ValueOf(&behaviors.VerticalDoorCID).Elem(),
+		"DoorCID":                reflect.ValueOf(&behaviors.DoorCID).Elem(),
 		"WanderCID":              reflect.ValueOf(&behaviors.WanderCID).Elem(),
 
 		// type definitions
@@ -93,7 +93,7 @@ func init() {
 		"ProximityState":   reflect.ValueOf((*behaviors.ProximityState)(nil)),
 		"ProximityStatus":  reflect.ValueOf((*behaviors.ProximityStatus)(nil)),
 		"Underwater":       reflect.ValueOf((*behaviors.Underwater)(nil)),
-		"VerticalDoor":     reflect.ValueOf((*behaviors.VerticalDoor)(nil)),
+		"Door":             reflect.ValueOf((*behaviors.Door)(nil)),
 		"Wander":           reflect.ValueOf((*behaviors.Wander)(nil)),
 	}
 }
