@@ -37,7 +37,8 @@ type Sector struct {
 	ExitScripts  []*Script `editable:"Exit Scripts"`
 	NoShadows    bool      `editable:"No Shadows"`
 
-	Transform dynamic.DynamicValue[concepts.Matrix2] `editable:"Transform"`
+	Transform       dynamic.DynamicValue[concepts.Matrix2] `editable:"Transform"`
+	TransformOrigin concepts.Vector2                       `editable:"Transform Origin"`
 
 	Concave  bool
 	Winding  int8
@@ -231,6 +232,9 @@ func (s *Sector) Construct(data map[string]any) {
 	if v, ok := data["Transform"]; ok {
 		s.Transform.Construct(v)
 	}
+	if v, ok := data["TransformOrigin"]; ok {
+		s.TransformOrigin.Deserialize(v.(string))
+	}
 
 	s.Recalculate()
 }
@@ -258,6 +262,7 @@ func (s *Sector) Serialize() map[string]any {
 	}
 
 	result["Transform"] = s.Transform.Serialize()
+	result["TransformOrigin"] = s.TransformOrigin.Serialize()
 
 	segments := []any{}
 	for _, seg := range s.Segments {

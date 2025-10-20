@@ -65,7 +65,7 @@ func init() {
 		"SoundController":            reflect.ValueOf((*controllers.SoundController)(nil)),
 		"SoundEventController":       reflect.ValueOf((*controllers.SoundEventController)(nil)),
 		"UnderwaterController":       reflect.ValueOf((*controllers.UnderwaterController)(nil)),
-		"VerticalDoorController":     reflect.ValueOf((*controllers.VerticalDoorController)(nil)),
+		"DoorController":             reflect.ValueOf((*controllers.DoorController)(nil)),
 		"WanderController":           reflect.ValueOf((*controllers.WanderController)(nil)),
 		"WeaponController":           reflect.ValueOf((*controllers.WeaponController)(nil)),
 	}
