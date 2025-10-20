@@ -52,6 +52,8 @@ type LightSampler struct {
 
 	prevDistSq, hitDistSq, maxDistSq float64
 
+	maxDist float64
+
 	xorSeed uint64
 	tree    *core.Quadtree
 }
@@ -195,7 +197,6 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			log.Printf("    Intersection = [%v]\n", ls.IntersectionTest.StringHuman(2))
 		}
 
-		nudgeExitingRay := 0.0
 		// This segment could either be:
 		if seg.AdjacentSector != 0 {
 			// A portal!
@@ -212,6 +213,21 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		} else {
 			// We have a non-portal segment and we're not checking higher layer sector,
 			// but we have a lower layer sector overlap. Let's go there.
+
+			// Why? This is to handle the edge case when we have a light ray
+			// grazing a corner of a higher layer overlapping sector. If this
+			// happens, we need to nudge the intersection distance for the
+			// _exiting_ light ray to avoid an infinite loop of intersections,
+			// ping-ponging between the inner and outer sector.
+			// Additionally if we have a segment sitting on an edge, we need to
+			// make sure the overlap check is over the edge and actually inside
+			// the overlapping sector.
+			if ls.maxDist < 0 {
+				ls.maxDist = math.Sqrt(ls.maxDistSq)
+			}
+			ls.IntersectionTest[0] += (ls.LightWorld[0] / ls.maxDist) * constants.IntersectEpsilon
+			ls.IntersectionTest[1] += (ls.LightWorld[1] / ls.maxDist) * constants.IntersectEpsilon
+
 			adj = sector.OverlapAt(ls.IntersectionTest.To2D(), true)
 			if adj == nil {
 				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
@@ -220,12 +236,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 				// A wall!
 				return seg, nil // This is a wall, that means the light is occluded for sure.
 			}
-			// Why? This is to handle the edge case when we have a light ray
-			// grazing a corner of a higher layer overlapping sector. If this
-			// happens, we need to nudge the intersection distance for the
-			// _exiting_ light ray to avoid an infinite loop of intersections,
-			// ping-ponging between the inner and outer sector.
-			nudgeExitingRay = constants.IntersectEpsilon
+
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 				log.Printf("    Out to %v", adj.Entity)
 			}
@@ -260,11 +271,13 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		}
 
 		// Get the square of the distance to the intersection (from the target point)
-		intersectionDistSq = ls.IntersectionTest.DistSq(p) + nudgeExitingRay
+		intersectionDistSq = ls.IntersectionTest.DistSq(p)
 
 		// If the difference between the intersected distance and the light distance is
 		// within the bounding radius of our light, our light is right on a portal boundary and visible.
-		if math.Abs(intersectionDistSq-ls.maxDistSq) < lightBody.Size.Render[0]*0.5 {
+		sizeSq := lightBody.Size.Render[0] * 0.5
+		sizeSq *= sizeSq
+		if math.Abs(intersectionDistSq-ls.maxDistSq) < sizeSq {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 				log.Printf("    Light is within size on portal boundary. Intersection: %v vs. Max Dist %v", math.Sqrt(intersectionDistSq), math.Sqrt(ls.maxDistSq))
 			}
@@ -497,6 +510,7 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			log.Printf("Body: %v, World: %v, LightWorld: %v", body.Pos.Render.String(), world.String(), ls.LightWorld.String())
 		}
 		ls.maxDistSq = ls.LightWorld.Length2()
+		ls.maxDist = -1 // Only calculate when necessary
 		ls.Filter[3] = 0
 
 		if ls.Normal.Dot(&ls.LightWorld) < 0 {
@@ -516,8 +530,10 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
 				//log.Printf("%v\n", dist)
-				dist := math.Sqrt(ls.maxDistSq)
-				attenuation = light.Strength / math.Pow(dist*2/body.Size.Render[0]+1.0, light.Attenuation)
+				if ls.maxDist < 0 {
+					ls.maxDist = math.Sqrt(ls.maxDistSq)
+				}
+				attenuation = light.Strength / math.Pow(ls.maxDist*2/body.Size.Render[0]+1.0, light.Attenuation)
 				//attenuation = 100.0 / dist
 			}
 			// If it's too far away/dark, ignore it.

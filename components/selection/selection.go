@@ -140,7 +140,7 @@ func (sel *Selection) LoadPositions() {
 		case SelectableHi:
 			fallthrough
 		case SelectableSectorSegment:
-			s.SectorSegment.P.Render.From(sel.Positions[s.Hash()].To2D())
+			s.SectorSegment.P.SetAll(*sel.Positions[s.Hash()].To2D())
 		case SelectableActionWaypoint:
 			s.ActionWaypoint.P.From(sel.Positions[s.Hash()])
 		case SelectableBody:
