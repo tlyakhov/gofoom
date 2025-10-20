@@ -11,10 +11,10 @@ import (
 )
 
 type segmentIntersection struct {
-	Segment         *core.Segment
-	SectorSegment   *core.SectorSegment
-	RaySegIntersect concepts.Vector3
-	Distance        float64
+	IntersectedSegment       *core.Segment
+	IntersectedSectorSegment *core.SectorSegment
+	RaySegIntersect          concepts.Vector3
+	Distance                 float64
 	// Horizontal texture coordinate on segment
 	U float64
 	// Height of floor/ceiling at current segment intersection
@@ -70,7 +70,7 @@ func (c *column) CalcScreen() {
 	c.ProjectedTop = c.ProjectZ(c.IntersectionTop - c.CameraZ)
 	c.ProjectedBottom = c.ProjectZ(c.IntersectionBottom - c.CameraZ)
 
-	if c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope {
+	if c.IntersectedSectorSegment != nil && c.IntersectedSectorSegment.WallUVIgnoreSlope {
 		c.ProjectedSectorTop = c.ProjectZ(c.Sector.Top.Z.Render - c.CameraZ)
 		c.ProjectedSectorBottom = c.ProjectZ(c.Sector.Bottom.Z.Render - c.CameraZ)
 	}

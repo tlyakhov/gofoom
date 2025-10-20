@@ -19,24 +19,24 @@ func wallPick(b *block) {
 		dv = 1.0 / dv
 	}
 	v := (float64(b.ScreenY-int(b.ShearZ)) - vTop) * dv
-	b.PickResult.Selection = append(b.PickResult.Selection, selection.SelectableFromWall(b.SectorSegment, selection.SelectableMid))
+	b.PickResult.Selection = append(b.PickResult.Selection, selection.SelectableFromWall(b.IntersectedSectorSegment, selection.SelectableMid))
 	b.PickResult.World[0] = b.RaySegIntersect[0]
 	b.PickResult.World[1] = b.RaySegIntersect[1]
 	b.PickResult.World[2] = b.IntersectionTop*(1.0-v) + v*b.IntersectionBottom
-	b.PickResult.Normal[0] = b.SectorSegment.Normal[0]
-	b.PickResult.Normal[1] = b.SectorSegment.Normal[1]
+	b.PickResult.Normal[0] = b.IntersectedSectorSegment.Normal[0]
+	b.PickResult.Normal[1] = b.IntersectedSectorSegment.Normal[1]
 	b.PickResult.Normal[2] = 0
 
 }
 
 // wall renders the wall portion (potentially over a portal).
 func (r *Renderer) wall(c *column) {
-	mat := c.Segment.Surface.Material
-	lit := materials.GetLit(c.Segment.Surface.Material)
-	extras := c.Segment.Surface.ExtraStages
+	mat := c.IntersectedSegment.Surface.Material
+	lit := materials.GetLit(c.IntersectedSegment.Surface.Material)
+	extras := c.IntersectedSegment.Surface.ExtraStages
 	c.MaterialSampler.Initialize(mat, extras)
-	transform := c.Segment.Surface.Transform.Render
-	noSlope := c.SectorSegment != nil && c.SectorSegment.WallUVIgnoreSlope
+	transform := c.IntersectedSegment.Surface.Transform.Render
+	noSlope := c.IntersectedSectorSegment != nil && c.IntersectedSectorSegment.WallUVIgnoreSlope
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
 	dv := 0.0
@@ -48,7 +48,7 @@ func (r *Renderer) wall(c *column) {
 		vTop -= c.ProjectedTop
 		dv = (c.ProjectedTop - c.ProjectedBottom)
 	}
-	c.ScaleW = uint32(c.ProjectZ(c.Segment.Length))
+	c.ScaleW = uint32(c.ProjectZ(c.IntersectedSegment.Length))
 	c.ScaleH = uint32(dv)
 	if dv != 0 {
 		dv = 1.0 / dv

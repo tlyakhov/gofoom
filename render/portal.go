@@ -17,12 +17,12 @@ func wallHiPick(cp *columnPortal) {
 	vStart := float64(cp.ScreenHeight/2) - cp.ProjectedTop + math.Floor(cp.ShearZ)
 	v := (float64(cp.ScreenY) - vStart) / (cp.ProjectedTop - cp.AdjProjectedTop)
 	// TODO: Is it right to always select SectorSegment? What about AdjSegment?
-	cp.PickResult.Selection = append(cp.PickResult.Selection, selection.SelectableFromWall(cp.SectorSegment, selection.SelectableHi))
+	cp.PickResult.Selection = append(cp.PickResult.Selection, selection.SelectableFromWall(cp.IntersectedSectorSegment, selection.SelectableHi))
 	cp.PickResult.World[0] = cp.RaySegIntersect[0]
 	cp.PickResult.World[1] = cp.RaySegIntersect[1]
 	cp.PickResult.World[2] = (1.0-v)*cp.IntersectionTop + v*cp.AdjTop
-	cp.PickResult.Normal[0] = cp.SectorSegment.Normal[0]
-	cp.PickResult.Normal[1] = cp.SectorSegment.Normal[1]
+	cp.PickResult.Normal[0] = cp.IntersectedSectorSegment.Normal[0]
+	cp.PickResult.Normal[1] = cp.IntersectedSectorSegment.Normal[1]
 	cp.PickResult.Normal[2] = 0
 }
 
@@ -33,7 +33,7 @@ func wallHi(cp *columnPortal) {
 	extras := cp.AdjSegment.HiSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
 	transform := cp.AdjSegment.HiSurface.Transform.Render
-	cp.ScaleW = uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
+	cp.ScaleW = uint32(cp.ProjectZ(cp.IntersectedSectorSegment.Segment.Length))
 	cp.ScaleH = uint32(cp.ProjectedTop - cp.AdjProjectedTop)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats
@@ -72,12 +72,12 @@ func wallLowPick(cp *columnPortal) {
 	}
 	vStart := float64(cp.ScreenHeight/2) - cp.AdjProjectedBottom + math.Floor(cp.ShearZ)
 	v := (float64(cp.ScreenY) - vStart) / (cp.AdjProjectedBottom - cp.ProjectedBottom)
-	cp.PickResult.Selection = append(cp.PickResult.Selection, selection.SelectableFromWall(cp.SectorSegment, selection.SelectableLow))
+	cp.PickResult.Selection = append(cp.PickResult.Selection, selection.SelectableFromWall(cp.IntersectedSectorSegment, selection.SelectableLow))
 	cp.PickResult.World[0] = cp.RaySegIntersect[0]
 	cp.PickResult.World[1] = cp.RaySegIntersect[1]
 	cp.PickResult.World[2] = (1.0-v)*cp.AdjBottom + v*cp.IntersectionBottom
-	cp.PickResult.Normal[0] = cp.SectorSegment.Normal[0]
-	cp.PickResult.Normal[1] = cp.SectorSegment.Normal[1]
+	cp.PickResult.Normal[0] = cp.IntersectedSectorSegment.Normal[0]
+	cp.PickResult.Normal[1] = cp.IntersectedSectorSegment.Normal[1]
 	cp.PickResult.Normal[2] = 0
 }
 
@@ -88,7 +88,7 @@ func wallLow(cp *columnPortal) {
 	extras := cp.AdjSegment.LoSurface.ExtraStages
 	cp.MaterialSampler.Initialize(mat, extras)
 	transform := cp.AdjSegment.LoSurface.Transform.Render
-	cp.ScaleW = uint32(cp.ProjectZ(cp.SectorSegment.Segment.Length))
+	cp.ScaleW = uint32(cp.ProjectZ(cp.IntersectedSectorSegment.Segment.Length))
 	cp.ScaleH = uint32(cp.AdjProjectedBottom - cp.ProjectedBottom)
 	// To calculate the vertical texture coordinate, we can't use the integer
 	// screen coordinates, we need to use the precise floats

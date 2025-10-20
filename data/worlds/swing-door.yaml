@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 360
+      Now: 718.59375
       Spawn: 0
     Pos:
-      Now: 20.26815081580744, -0.3467845565248778, 20
+      Now: -41.188049754910885, 32.90127712407008, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
@@ -21,8 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.000000000000000009150481237765875, 0.0000000000000000000000005412693251314856,
-        0.007001650399223597
+      Now: -0.02734228084992204, 0.0006193970860932595, 0.007001650432608364
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -57,6 +56,15 @@
       Lo:
         Material: ∈⋮2∈⋮Default
       P: 100, -100
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮15
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -30
+      PortalHasMaterial: true
       Surface:
         Material: ∈⋮2∈⋮Default
     - AdjacentSector: ∈⋮9
@@ -136,11 +144,13 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
+    - AdjacentSector: ∈⋮15
+      Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
       P: 100, -20
+      PortalHasMaterial: true
       Surface:
         Material: ∈⋮2∈⋮Default
     - AdjacentSector: ∈⋮10
@@ -180,11 +190,20 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
+    - AdjacentSector: ∈⋮15
+      Hi:
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
       P: 120, -20
+      PortalHasMaterial: true
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, -30
       Surface:
         Material: ∈⋮2∈⋮Default
     - Hi:
@@ -232,7 +251,7 @@
 - Entity: ∈⋮11
   behaviors.Door:
     Duration: 1000
-    Intent: DoorIntentOpen
+    Intent: DoorIntentReset
     Limit: -90
     TweeningFunc: EaseInOut2
     Type: DoorTypeSwing
@@ -249,9 +268,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P:
-        Now: 115, -15
-        Spawn: 110, -20
+      P: 110, -20
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:
@@ -260,9 +277,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P:
-        Now: 185, -14.999999999999996
-        Spawn: 110, 50
+      P: 110, 50
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:
@@ -271,9 +286,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P:
-        Now: 185, -24.999999999999996
-        Spawn: 120, 50
+      P: 120, 50
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:
@@ -282,9 +295,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P:
-        Now: 115, -25
-        Spawn: 120, -20
+      P: 120, -20
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:
@@ -300,11 +311,11 @@
         Duration: 1000
         End: 1, 0, 0, 0, 1, 0
         Lifetime: AnimationLifetimeOnce
-        Percent: 0
-        Reverse: true
+        Percent: 1
+        Reverse: false
         Start: 6.123233995736757e-17, 1, 0, -1, 6.123233995736757e-17, 0
         TweeningFunc: EaseInOut2
-      Now: 6.123233995736757e-17, 1, 0, -1, 6.123233995736757e-17, 0
+      Now: 1, -0, 0, 0, 1, 0
       Spawn: 1, 0, 0, 0, 1, 0
     TransformOrigin: 115, -20
 - Entity: ∈⋮12
@@ -323,3 +334,54 @@
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮15
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - AdjacentSector: ∈⋮3∈⋮Starting
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -20
+      PortalHasMaterial: true
+      PortalIsPassable: false
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 100, -30
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮10
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, -30
+      PortalHasMaterial: true
+      PortalIsPassable: false
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    - AdjacentSector: ∈⋮9
+      Hi:
+        Material: ∈⋮2∈⋮Default
+      Lo:
+        Material: ∈⋮2∈⋮Default
+      P: 120, -20
+      PortalHasMaterial: true
+      PortalIsPassable: false
+      Surface:
+        Material: ∈⋮2∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮2∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 110, -25

@@ -10,7 +10,7 @@ import (
 
 func (r *Renderer) renderInternalSegment(ewd *entityWithDistSq, block *block, xStart, xEnd int) {
 	block.Sector = ewd.Sector
-	block.Segment = &ewd.InternalSegment.Segment
+	block.IntersectedSegment = &ewd.InternalSegment.Segment
 	block.IntersectionTop = ewd.InternalSegment.Top
 	block.IntersectionBottom = ewd.InternalSegment.Bottom
 	block.LightSampler.InputBody = 0

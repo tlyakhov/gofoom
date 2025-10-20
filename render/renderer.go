@@ -102,31 +102,49 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 }
 
 func (r *Renderer) RenderPortal(b *block) {
+	/* First, decide what our adjacent segment is */
+
 	// This allocation is ok, does not escape
 	portal := &columnPortal{block: b}
-	if b.Sector != b.SectorSegment.Sector {
+	if b.Sector != b.IntersectedSectorSegment.Sector {
 		// We're going into a higher layer sector
-		portal.Adj = b.SectorSegment.Sector
-		portal.AdjSegment = b.SectorSegment
-	} else if b.SectorSegment.AdjacentSegment != nil {
+		portal.Adj = b.IntersectedSectorSegment.Sector
+		portal.AdjSegment = b.IntersectedSectorSegment
+	} else if b.IntersectedSectorSegment.AdjacentSegment != nil {
 		// This is an adjacent sector
-		portal.Adj = core.GetSector(b.SectorSegment.AdjacentSector)
-		portal.AdjSegment = b.SectorSegment.AdjacentSegment
-		if b.SectorSegment.AdjacentSegment.PortalTeleports {
-			b.teleportRay()
-		}
+		portal.Adj = core.GetSector(b.IntersectedSectorSegment.AdjacentSector)
+		portal.AdjSegment = b.IntersectedSectorSegment.AdjacentSegment
 	} else {
 		// We are leaving a higher layer sector
-		portal.AdjSegment = b.SectorSegment
+		portal.AdjSegment = b.IntersectedSectorSegment
 		// Nudge to handle situations where our overlap is right on an edge
 		nudge := *b.RaySegIntersect.To2D()
 		nudge[0] += b.Ray.Delta[0] * constants.IntersectEpsilon
 		nudge[1] += b.Ray.Delta[1] * constants.IntersectEpsilon
 		portal.Adj = b.Sector.OverlapAt(&nudge, true)
-		if portal.Adj == nil {
+		/*if portal.Adj == nil {
 			portal.Adj = core.GetSector(b.Sector.LowerLayers.First())
-		}
+		}*/
 	}
+
+	// We don't have an adjacent sector. Draw a wall instead of a portal.
+	if portal.Adj == nil {
+		r.wall(&b.column)
+		return
+	}
+
+	if b.IntersectedSectorSegment.PortalHasMaterial {
+		// TODO: we can optimize this if the portal material is fully opaque,
+		// avoiding drawing everything through the portal.
+		saved := b.column
+		saved.MaterialSampler.Ray = &saved.Ray
+		b.PortalWalls = append(b.PortalWalls, &saved)
+	}
+
+	if portal.AdjSegment.PortalTeleports {
+		b.teleportRay()
+	}
+
 	b.LastPortalSegment = portal.AdjSegment
 
 	portal.CalcScreen()
@@ -180,25 +198,24 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 		return
 	}
 
-	b.LightSampler.Segment = b.Segment
-	b.Segment.Normal.To3D(&b.LightSampler.Normal)
+	b.LightSampler.Segment = b.IntersectedSegment
+	b.IntersectedSegment.Normal.To3D(&b.LightSampler.Normal)
 
-	hasPortal := b.SectorSegment.AdjacentSector != 0 && b.SectorSegment.AdjacentSegment != nil
+	// Do we have an adjacent segment?
+	hasPortal := b.IntersectedSectorSegment.AdjacentSector != 0 && b.IntersectedSectorSegment.AdjacentSegment != nil
+	// Do we have at least one lower layer overlap?
 	hasPortal = hasPortal || !b.Sector.LowerLayers.Empty()
-	if b.Sector != b.SectorSegment.Sector {
+	// Did we intersect a higher layer segment?
+	if b.Sector != b.IntersectedSectorSegment.Sector {
 		hasPortal = true
 		b.LightSampler.Normal.MulSelf(-1)
 	}
+
 	switch {
-	case hasPortal && !b.SectorSegment.PortalHasMaterial:
+	case hasPortal:
 		r.RenderPortal(b)
 	case b.Pick:
 		wallPick(b)
-	case hasPortal && b.SectorSegment.PortalHasMaterial:
-		saved := b.column
-		saved.MaterialSampler.Ray = &saved.Ray
-		b.PortalWalls = append(b.PortalWalls, &saved)
-		r.RenderPortal(b)
 	default:
 		r.wall(&b.column)
 	}
@@ -235,8 +252,8 @@ func (r *Renderer) findIntersection(block *block, sector *core.Sector, found boo
 		}
 
 		found = true
-		block.Segment = &sectorSeg.Segment
-		block.SectorSegment = sectorSeg
+		block.IntersectedSegment = &sectorSeg.Segment
+		block.IntersectedSectorSegment = sectorSeg
 		block.Distance = dist
 		block.RaySegIntersect[0] = block.RaySegTest[0]
 		block.RaySegIntersect[1] = block.RaySegTest[1]
