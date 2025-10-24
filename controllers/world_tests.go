@@ -277,14 +277,14 @@ func CreateTestWorld3() {
 	testw := 64
 	testh := 64
 	heightmap := make([]float64, testw*testh)
+	var sample concepts.Vector4
 	for x := range testw {
 		for y := range testh {
 			//heightmap[y*testw+x] = rand.Float64() * 50
-			sample := heightImage.Sample(
+			heightImage.Sample(
 				float64(x)/float64(testw),
 				float64(y)/float64(testh),
-				uint32(testw),
-				uint32(testh))
+				uint32(testw), uint32(testh), &sample)
 			heightmap[y*testw+x] = concepts.RGBtoHSP(sample.To3D())[2] * 250
 		}
 	}

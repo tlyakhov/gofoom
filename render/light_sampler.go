@@ -502,7 +502,6 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			return false
 		}
 		lightsTested++
-		LightSamplerLightsTested.Add(1)
 		ls.LightWorld[2] = body.Pos.Render[2] - world[2]
 		ls.LightWorld[1] = body.Pos.Render[1] - world[1]
 		ls.LightWorld[0] = body.Pos.Render[0] - world[0]
@@ -523,10 +522,12 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			ls.Filter[0] = 0
 			ls.Filter[1] = 0
 			ls.Filter[2] = 0
+			LightSamplerLightsTested.Add(1)
 			if !ls.lightVisible(world, body) {
 				//log.Printf("Shadowed: %v\n", world.StringHuman())
 				return true
 			}
+
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
 				//log.Printf("%v\n", dist)

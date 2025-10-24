@@ -109,7 +109,7 @@ func (pc *PlayerController) Always() {
 	} else {
 		pc.FrameTint = concepts.Vector4{}
 	}
-	pc.Alive.Tint(&pc.FrameTint)
+	pc.Alive.Tint(&pc.FrameTint, &concepts.Vector4{1, 0, 0, 1})
 
 	pc.bob(uw)
 

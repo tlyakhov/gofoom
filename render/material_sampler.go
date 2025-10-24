@@ -213,9 +213,9 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		ms.ScaleW /= m.Cols
 		ms.ScaleH /= m.Rows
 	case *materials.Image:
-		ms.StageOutput = m.Sample(u, v, ms.ScaleW, ms.ScaleH)
+		m.Sample(u, v, ms.ScaleW, ms.ScaleH, &ms.StageOutput)
 	case *materials.Text:
-		ms.StageOutput = m.Sample(u, v, ms.ScaleW, ms.ScaleH)
+		m.Sample(u, v, ms.ScaleW, ms.ScaleH, &ms.StageOutput)
 	case *materials.Solid:
 		ms.StageOutput = m.Diffuse.Render
 	default:

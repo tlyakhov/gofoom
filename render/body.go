@@ -92,7 +92,7 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 		block.Light[3] = 1
 	}
 	if alive := behaviors.GetAlive(b.Entity); alive != nil {
-		alive.Tint(&block.Light)
+		alive.Tint(&block.Light, &concepts.Vector4{1, 0, 0, 1})
 	}
 
 	vStart := float64(block.ScreenHeight/2) - block.ProjectedTop + math.Floor(block.ShearZ)

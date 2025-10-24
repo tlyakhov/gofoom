@@ -10,14 +10,16 @@ import (
 	"github.com/spf13/cast"
 )
 
+const ToneMapMax = 1023
+
 type ToneMap struct {
 	ecs.Attached `ecs:"singleton"`
 
 	// 2.4 by default
 	Gamma float64 `editable:"Gamma"`
 
-	LutLinearToSRGB [256]float64
-	LutSRGBToLinear [256]float64
+	LutLinearToSRGB [ToneMapMax + 1]float64
+	LutSRGBToLinear [ToneMapMax + 1]float64
 }
 
 func (tm *ToneMap) MultiAttachable() bool { return true }
@@ -28,7 +30,7 @@ func (tm *ToneMap) String() string {
 
 func (tm *ToneMap) Recalculate() {
 	for i := range len(tm.LutLinearToSRGB) {
-		f := float64(i) / 255.0
+		f := float64(i) / ToneMapMax
 		tm.LutLinearToSRGB[i] = tm.LinearTosRGB(f)
 		tm.LutSRGBToLinear[i] = tm.SRGBToLinear(f)
 	}
@@ -89,4 +91,13 @@ func (tm *ToneMap) SRGBToLinear(x float64) float64 {
 	} else {
 		return math.Pow((x+0.055)/1.055, tm.Gamma)
 	}
+}
+
+func (tm *ToneMap) ClampedLinearToSRGB(x float64) float64 {
+	if x < 0 {
+		x = 0
+	} else if x > 1.0 {
+		x = 1
+	}
+	return tm.LutLinearToSRGB[uint32(x*ToneMapMax)]
 }

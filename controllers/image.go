@@ -46,20 +46,21 @@ func (ic *ImageController) Recalculate() {
 	for y := 0; y < int(ic.Height); y++ {
 		for x := 0; x < int(ic.Width); x++ {
 			index := x + y*int(ic.Width)
+			r := (ic.PixelsRGBA[index] >> 24) & 0xFF
+			g := (ic.PixelsRGBA[index] >> 16) & 0xFF
+			b := (ic.PixelsRGBA[index] >> 8) & 0xFF
+			a := ic.PixelsRGBA[index] & 0xFF
 			if !ic.ConvertSRGB {
 				ic.PixelsLinear[index] = concepts.Vector4{
-					float64((ic.PixelsRGBA[index]>>24)&0xFF) / 255,
-					float64((ic.PixelsRGBA[index]>>16)&0xFF) / 255,
-					float64((ic.PixelsRGBA[index]>>8)&0xFF) / 255,
-					float64(ic.PixelsRGBA[index]&0xFF) / 255,
+					float64(r) / 255, float64(g) / 255, float64(b) / 255, float64(a) / 255,
 				}
 				continue
 			}
 			ic.PixelsLinear[index] = concepts.Vector4{
-				ic.toneMap.LutSRGBToLinear[(ic.PixelsRGBA[index]>>24)&0xFF],
-				ic.toneMap.LutSRGBToLinear[(ic.PixelsRGBA[index]>>16)&0xFF],
-				ic.toneMap.LutSRGBToLinear[(ic.PixelsRGBA[index]>>8)&0xFF],
-				float64(ic.PixelsRGBA[index]&0xFF) / 255,
+				ic.toneMap.LutSRGBToLinear[r*materials.ToneMapMax/255],
+				ic.toneMap.LutSRGBToLinear[g*materials.ToneMapMax/255],
+				ic.toneMap.LutSRGBToLinear[b*materials.ToneMapMax/255],
+				float64(a) / 255,
 			}
 		}
 	}
@@ -178,9 +179,9 @@ func (ic *ImageController) generateMipMaps() {
 					continue
 				}
 				mm.PixelsLinear[y*int(mm.Width)+x] = concepts.Vector4{
-					ic.toneMap.LutSRGBToLinear[mm.Image.Pix[index]],
-					ic.toneMap.LutSRGBToLinear[mm.Image.Pix[index+1]],
-					ic.toneMap.LutSRGBToLinear[mm.Image.Pix[index+2]],
+					ic.toneMap.LutSRGBToLinear[uint32(mm.Image.Pix[index])*materials.ToneMapMax/255],
+					ic.toneMap.LutSRGBToLinear[uint32(mm.Image.Pix[index+1])*materials.ToneMapMax/255],
+					ic.toneMap.LutSRGBToLinear[uint32(mm.Image.Pix[index+2])*materials.ToneMapMax/255],
 					float64(mm.Image.Pix[index+3]) / 255,
 				}
 			}
