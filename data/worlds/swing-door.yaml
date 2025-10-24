@@ -5,10 +5,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 718.59375
+      Now: 382.5
       Spawn: 0
     Pos:
-      Now: -41.188049754910885, 32.90127712407008, 20
+      Now: -66.31294296277676, -62.35493763296632, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
@@ -21,7 +21,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.02734228084992204, 0.0006193970860932595, 0.007001650432608364
+      Now: 0.0000000000000026596953002317704, -0.000000000000018332622435064795, 0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -79,7 +79,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P: 100, 50
+      P: 100, 30
       Surface:
         Material: ∈⋮2∈⋮Default
     - Hi:
@@ -165,7 +165,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P: 120, 50
+      P: 120, 30
       Surface:
         Material: ∈⋮2∈⋮Default
     - AdjacentSector: ∈⋮3∈⋮Starting
@@ -173,7 +173,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P: 100, 50
+      P: 100, 30
       Surface:
         Material: ∈⋮2∈⋮Default
     Top:
@@ -239,7 +239,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P: 120, 50
+      P: 120, 30
       Surface:
         Material: ∈⋮2∈⋮Default
     Top:
@@ -277,7 +277,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P: 110, 50
+      P: 110, 30
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:
@@ -286,7 +286,7 @@
         Material: ∈⋮2∈⋮Default
       Lo:
         Material: ∈⋮2∈⋮Default
-      P: 120, 50
+      P: 120, 30
       PortalHasMaterial: true
       PortalIsPassable: false
       Surface:

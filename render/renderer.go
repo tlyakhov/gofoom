@@ -97,7 +97,7 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 	dist := relative.Length()
 	y := (world[2] - r.Player.CameraZ) / dist
 	y *= r.CameraToProjectionPlane / math.Cos(radians)
-	y = float64(r.ScreenHeight/2) - math.Floor(y)
+	y = float64(r.ScreenHeight/2) - math.Floor(y) + r.Player.ShearZ
 	return &concepts.Vector2{x, y}
 }
 
@@ -136,7 +136,10 @@ func (r *Renderer) RenderPortal(b *block) {
 	if b.IntersectedSectorSegment.PortalHasMaterial {
 		// TODO: we can optimize this if the portal material is fully opaque,
 		// avoiding drawing everything through the portal.
+		// This is very very expensive:
 		saved := b.column
+		// 2,312 bytes :-O
+		// log.Printf("size: %v", unsafe.Sizeof(b.column))
 		saved.MaterialSampler.Ray = &saved.Ray
 		b.PortalWalls = append(b.PortalWalls, &saved)
 	}
@@ -491,7 +494,7 @@ func (r *Renderer) Render() {
 	} else {
 		r.RenderBlock(0, 0, r.ScreenWidth)
 	}
-	r.RenderHud()
+	r.renderHUD()
 }
 
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
@@ -499,9 +502,9 @@ func (r *Renderer) ApplyBuffer(buffer []uint8) {
 
 	for i := 0; i < len(r.FrameBuffer); i++ {
 		fb := &r.FrameBuffer[i]
-		fb[0] = tm.LutLinearToSRGB[concepts.ByteClamp(fb[0]*255)]
-		fb[1] = tm.LutLinearToSRGB[concepts.ByteClamp(fb[1]*255)]
-		fb[2] = tm.LutLinearToSRGB[concepts.ByteClamp(fb[2]*255)]
+		fb[0] = tm.ClampedLinearToSRGB(fb[0])
+		fb[1] = tm.ClampedLinearToSRGB(fb[1])
+		fb[2] = tm.ClampedLinearToSRGB(fb[2])
 	}
 	concepts.BlendFrameBuffer(buffer, r.FrameBuffer, &r.FrameTint)
 }
@@ -524,13 +527,13 @@ func (r *Renderer) BitBlt(src ecs.Entity, dstx, dsty, w, h int, blendFunc concep
 	}
 	ms.Initialize(src, nil)
 	for y := range h {
+		ms.ScreenY = y + dsty
+		if ms.ScreenY < 0 || ms.ScreenY >= r.ScreenHeight {
+			continue
+		}
 		for x := range w {
 			ms.ScreenX = x + dstx
 			if ms.ScreenX < 0 || ms.ScreenX >= r.ScreenWidth {
-				continue
-			}
-			ms.ScreenY = y + dsty
-			if ms.ScreenY < 0 || ms.ScreenY >= r.ScreenHeight {
 				continue
 			}
 			ms.NU = float64(x) / float64(w)

@@ -15,7 +15,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func (r *Renderer) RenderWeapon(slot *inventory.Slot) {
+func (r *Renderer) renderWeapon(slot *inventory.Slot) {
 	wc := inventory.GetWeaponClass(slot.Entity)
 	w := inventory.GetWeapon(slot.Entity)
 	if wc != nil && w != nil {
@@ -49,10 +49,29 @@ func (r *Renderer) renderSelectedTarget() {
 	r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
 }
 
-func (r *Renderer) RenderHud() {
+func (r *Renderer) renderHUD() {
 	if r.Player == nil || r.Carrier == nil {
 		return
 	}
+
+	// All visible bodies
+	visited := ecs.EntityTable{}
+	for i := range r.Blocks {
+		block := &r.Blocks[i]
+		for b := range block.Bodies {
+			if visited.Contains(b.Entity) {
+				continue
+			}
+			r.renderHealthBar(b)
+			visited.Set(b.Entity)
+			/*text := fmt.Sprintf("%v", b.String())
+			if alive := behaviors.GetAlive(b.Entity); alive != nil {
+				text = fmt.Sprintf("%v", alive.Health)
+			}
+			r.Print(ts, int(scr[0]), int(scr[1])-16, text)*/
+		}
+	}
+
 	ts := r.textStyle
 	ts.Color[0] = 1
 	ts.Color[1] = 1
@@ -78,9 +97,71 @@ func (r *Renderer) RenderHud() {
 		r.BitBlt(slot.Image, index*40+10, r.ScreenHeight-42, 32, 32, concepts.BlendNormal)
 		r.Print(ts, index*40+16+10, r.ScreenHeight-50, strconv.Itoa(slot.Count.Now))
 		if e == r.Carrier.SelectedWeapon {
-			r.RenderWeapon(slot)
+			r.renderWeapon(slot)
 		}
 		index++
+	}
+}
+
+func (r *Renderer) renderHealthBar(b *core.Body) {
+	// TODO: Profile memory usage here. How many of these allocations escape
+	// to the heap?
+	alive := behaviors.GetAlive(b.Entity)
+	if alive == nil {
+		return
+	}
+	top := &concepts.Vector3{}
+	top[0] = b.Pos.Render[0]
+	top[1] = b.Pos.Render[1]
+	top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
+	scr := r.WorldToScreen(top)
+	if scr == nil {
+		return
+	}
+
+	yStart := int(scr[1]) - 7
+	yEnd := int(scr[1]) - 3
+	xStart := int(scr[0]) - 10
+	xEnd := int(scr[0]) + 11
+	// TODO: Should these be in a constants file?
+	// TODO: Maybe we should load these kinds of style constants from a YAML
+	// file to enable more modding.
+	edge := &concepts.Vector4{0, 0, 0, 1}
+	blank := &concepts.Vector4{0, 0, 0, 0.5}
+	health := &concepts.Vector4{0, 1, 0, 1}
+
+	alive.Tint(edge, &concepts.Vector4{1, 1, 1, 1})
+	alive.Tint(blank, &concepts.Vector4{1, 1, 1, 1})
+
+	switch {
+	case alive.Health >= 33 && alive.Health < 66:
+		health[0] = 1
+		health[1] = 1
+		health[2] = 0
+	case alive.Health < 33:
+		health[0] = 1
+		health[1] = 0
+		health[2] = 0
+	}
+
+	for y := yStart; y < yEnd; y++ {
+		if y < 0 || y >= r.ScreenHeight {
+			continue
+		}
+		for x := xStart; x < xEnd; x++ {
+			if x < 0 || x >= r.ScreenWidth {
+				continue
+			}
+			pixel := &r.FrameBuffer[x+y*r.ScreenWidth]
+			switch {
+			case x == xStart || y == yStart || x == xEnd-1 || y == yEnd-1:
+				concepts.BlendColors(pixel, edge, 1.0)
+			case x < xStart+int(alive.Health*float64(xEnd-xStart)/100.0):
+				concepts.BlendColors(pixel, health, 1.0)
+			default:
+				concepts.BlendColors(pixel, blank, 1.0)
+			}
+		}
 	}
 }
 
@@ -102,16 +183,23 @@ func (r *Renderer) DebugInfo() {
 	ts.Shadow = true
 	ts.HAnchor = 0
 	ts.VAnchor = 0
-	/*for x := 0; x < r.Blocks; x++ {
-		c := r.Columns[x]
-		for _, b := range c.BodiesSeen {
+
+	// All visible bodies
+	/*visited := ecs.EntityTable{}
+	for i := range r.Blocks {
+		block := &r.Blocks[i]
+		for b := range block.Bodies {
+			if visited.Contains(b.Entity) {
+				continue
+			}
+			visited.Set(b.Entity)
 			top := &concepts.Vector3{}
 			top[0] = b.Pos.Render[0]
 			top[1] = b.Pos.Render[1]
 			top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
 			scr := r.WorldToScreen(top)
 			if scr == nil {
-				continue
+				return
 			}
 			text := fmt.Sprintf("%v", b.String())
 			if alive := behaviors.GetAlive(b.Entity); alive != nil {

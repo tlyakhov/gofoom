@@ -80,16 +80,15 @@ func (t *Text) RasterizeText() {
 	t.Rendered.Image = rgba
 }
 
-func (t *Text) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
+func (t *Text) Sample(x, y float64, sw, sh uint32, result *concepts.Vector4) {
 	if t.Rendered == nil {
 		t.RasterizeText()
 	}
-	c := t.Rendered.Sample(x, y, sw, sh)
-	c[0] = t.Color.Render[0] * c[3]
-	c[1] = t.Color.Render[1] * c[3]
-	c[2] = t.Color.Render[2] * c[3]
-	c[3] *= t.Color.Render[3]
-	return c
+	t.Rendered.Sample(x, y, sw, sh, result)
+	result[0] = t.Color.Render[0] * result[3]
+	result[1] = t.Color.Render[1] * result[3]
+	result[2] = t.Color.Render[2] * result[3]
+	result[3] *= t.Color.Render[3]
 }
 
 var defaultTextColor = map[string]any{"Spawn": "1,1,1,1"}

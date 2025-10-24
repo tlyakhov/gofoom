@@ -77,7 +77,7 @@ func (img *Image) Load() error {
 	return nil
 }
 
-func (img *Image) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
+func (img *Image) Sample(x, y float64, sw, sh uint32, result *concepts.Vector4) {
 	// Testing:
 	// return (0xAF << 24) | 0xFF
 	data := img.PixelsLinear
@@ -102,19 +102,31 @@ func (img *Image) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 
 	if data == nil || w == 0 || h == 0 {
 		// Debug values
-		return concepts.Vector4{x, y, 0, 1} // full alpha
+		result[0] = x
+		result[1] = y
+		result[2] = 0
+		result[3] = 1 // full alpha
+		return
 	}
 
 	if x < 0 || y < 0 || x >= 1 || y >= 1 {
-		return concepts.Vector4{0, 0, 0, 0}
+		result[0] = 0
+		result[1] = 0
+		result[2] = 0
+		result[3] = 0
+		return
 	}
 
 	fx := uint32(x * float64(w))
 	fy := uint32(y * float64(h))
 
 	if !img.Filter {
-		// TODO: avoid allocating a vector here.
-		return data[fy*w+fx]
+		r := &data[fy*w+fx]
+		result[0] = r[0]
+		result[1] = r[1]
+		result[2] = r[2]
+		result[3] = r[3]
+		return
 	}
 
 	fx = min(fx, w-1)
@@ -165,7 +177,10 @@ func (img *Image) Sample(x, y float64, sw, sh uint32) concepts.Vector4 {
 	} else {
 		a = c00*(1.0-wx)*(1.0-wy) + c10*wx*(1.0-wy) + c11*wx*wy + c01*(1.0-wx)*wy
 	}
-	return concepts.Vector4{r, g, b, a}
+	result[0] = r
+	result[1] = g
+	result[2] = b
+	result[3] = a
 }
 
 func (img *Image) SampleAlpha(x, y float64, sw, sh uint32) float64 {
