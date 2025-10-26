@@ -4,8 +4,6 @@
 package actions
 
 import (
-	"tlyakhov/gofoom/components/character"
-	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 )
@@ -13,22 +11,13 @@ import (
 type SetEntity struct {
 	state.Action
 
-	Selected    *selection.Selection
-	StartEntity ecs.Entity
+	From ecs.Entity
+	To   ecs.Entity
 }
 
 func (a *SetEntity) Activate() {
-	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
-
-	for _, obj := range a.Selected.Exact {
-		// Don't setentity for active players
-		if p := character.GetPlayer(obj.Entity); p != nil && !p.Spawn {
-			continue
-		}
-	}
-
 	a.Redo()
-	a.ActionFinished(false, false, false)
+	a.ActionFinished(false, true, true)
 }
 
 func (a *SetEntity) Undo() {
@@ -36,8 +25,5 @@ func (a *SetEntity) Undo() {
 }
 
 func (a *SetEntity) Redo() {
-	/*
-	   for _, s := range a.Selected.Exact {
-	   }
-	*/
+	ecs.MoveEntityComponents(a.From, a.To)
 }

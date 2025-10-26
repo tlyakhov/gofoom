@@ -207,12 +207,20 @@
     MarkMaterial: ∈⋮113∈⋮Weapon+Mark
     MarkSize: 2.5
     Params:
-      - Time: 100
-      - Time: 100
-      - Time: 100
-      - Time: 100
-      - Time: 100
-      - Time: 100
+      - Material: ∈⋮133
+        Time: 100
+      - Material: ∈⋮133
+        Time: 100
+      - Material: ∈⋮133
+        Sound: ∈⋮190∈⋮Rifle
+        Time: 100
+      - Material: ∈⋮178∈⋮WeirdGun+Cooling
+        Sound: ∈⋮197
+        Time: 100
+      - Material: ∈⋮133
+        Time: 100
+      - Material: ∈⋮133
+        Time: 100
     Spread: 3
 - Entity: ∈⋮153
   behaviors.Proximity:
@@ -314,6 +322,12 @@
     Count: "0"
     Image: ∈⋮156
     Limit: "1"
+- Entity: ∈⋮178
+  ecs.Named:
+    Name: WeirdGun Cooling
+  materials.Image:
+    Filter: false
+    Source: data/weird-gun-cooling.png
 - Entity: ∈⋮189
   inventory.Slot:
     Class: Flower

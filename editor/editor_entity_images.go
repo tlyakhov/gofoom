@@ -10,6 +10,7 @@ import (
 	"time"
 	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
@@ -121,11 +122,16 @@ func (e *Editor) EntityImage(entity ecs.Entity) image.Image {
 		return item.Image
 	}
 	item.Image = nil
-	if core.GetSector(entity) != nil {
+	slot := inventory.GetSlot(entity)
+	switch {
+	case core.GetSector(entity) != nil:
 		item.Image = e.imageForSector(entity)
-	} else {
+	case slot != nil:
+		item.Image = e.imageForMaterial(slot.Image)
+	default:
 		item.Image = e.imageForMaterial(entity)
 	}
+
 	item.LastUpdated = now
 	// TODO: Clean this cache periodically
 	e.entityIconCache.Store(entity, item)

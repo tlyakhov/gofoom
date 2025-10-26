@@ -120,7 +120,7 @@ func main() {
 
 	editor.App.Lifecycle().SetOnStarted(func() {
 		editor.OnStarted()
-		editor.Load("data/worlds/swing-door.yaml")
+		editor.Load("data/worlds/pillar.yaml")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 

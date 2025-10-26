@@ -26,6 +26,7 @@ import (
 	"tlyakhov/gofoom/components/selection"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -273,7 +274,34 @@ func gridAddOrUpdateAtIndex[PT interface {
 	return newInstance
 }
 
-func (g *Grid) AddEntityControls(sel *selection.Selection) {
+func (g *Grid) switchEntityUI(entity ecs.Entity) *widget.Button {
+	entityEntry := widget.NewEntry()
+	entityEntry.Text = ""
+	entityEntry.PlaceHolder = "e.g. 123"
+	title := "Switch ID"
+	sw := widget.NewButtonWithIcon(title, theme.ViewRefreshIcon(), func() {
+		dialog.ShowForm(title, "Switch", "Cancel", []*widget.FormItem{
+			{Text: "New Entity ID", Widget: entityEntry},
+		}, func(b bool) {
+			if !b {
+				return
+			}
+			newEntity, err := ecs.ParseEntityHumanOrCanonical(entityEntry.Text)
+			if err != nil {
+				log.Printf("Error: %v", err)
+				return
+			}
+			g.Act(&actions.SetEntity{
+				Action: state.Action{IEditor: g},
+				From:   entity,
+				To:     newEntity})
+			g.Focus(g.GridWidget)
+		}, g.GridWindow)
+	})
+	return sw
+}
+
+func (g *Grid) addEntityControls(sel *selection.Selection) {
 	entities := make([]ecs.Entity, 0)
 	entityList := ""
 	componentList := make(containers.Set[ecs.ComponentID])
@@ -351,9 +379,15 @@ func (g *Grid) AddEntityControls(sel *selection.Selection) {
 		button.Enable()
 	}
 
+	var sw *widget.Button
+	if len(sel.Exact) == 1 {
+		sw = g.switchEntityUI(sel.First().Entity)
+	}
+
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
-	c.Layout = layout.NewBorderLayout(nil, nil, nil, button)
-	c.Objects = []fyne.CanvasObject{selectComponent, button}
+	c.Layout = layout.NewBorderLayout(nil, sw, nil, button)
+	c.Objects = []fyne.CanvasObject{selectComponent, button, sw}
+
 	fyne.Do(c.Refresh)
 }
 
@@ -384,7 +418,7 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		}*/
 
 	if len(selection.Exact) > 0 {
-		g.AddEntityControls(selection)
+		g.addEntityControls(selection)
 	}
 
 	state := g.fieldsFromSelection(selection)

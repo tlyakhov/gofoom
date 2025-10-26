@@ -4,11 +4,9 @@
   character.Player:
     Spawn: false
   core.Body:
-    Angle:
-      Now: 705.9375
-      Spawn: 0
+    Angle: 0
     Pos:
-      Now: 316.0990504603179, -100.89355839169944, 20
+      Now: 0, 0, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
@@ -21,7 +19,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.0003898192844819104, -0.00009764464759382336, 0.007001650399242568
+      Now: 0, 0, 0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
@@ -97,6 +95,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮4
@@ -127,10 +126,12 @@
     Mass: 80
     MountHeight: 15
     Vel: 0, 0, 0
+  ecs.Linked:
+    Sources:
+    - ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   ecs.Named:
     Name: Spawn
-  inventory.Carrier:
-    Inventory: []
+  inventory.Carrier: ∈⋮126∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮8
   core.Sector:
     Bottom:
@@ -174,6 +175,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮9
   core.Sector:
     Bottom:
@@ -231,6 +233,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮10
   core.Sector:
     Bottom:
@@ -288,6 +291,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮11
   core.Sector:
     Bottom:
@@ -333,6 +337,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮12
   core.Sector:
     Bottom:
@@ -376,6 +381,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮13
   core.Sector:
     Bottom:
@@ -434,6 +440,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮14
   core.Sector:
     Bottom:
@@ -479,6 +486,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮15
   core.Sector:
     Bottom:
@@ -537,6 +545,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮16
   core.Body:
     Angle: 0
@@ -603,6 +612,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮18
   core.Sector:
     Bottom:
@@ -660,6 +670,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮19
   core.Sector:
     Bottom:
@@ -703,6 +714,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮20
   core.Sector:
     Bottom:
@@ -748,6 +760,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮21
   core.Body:
     Angle: 0
@@ -796,11 +809,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.671875
+        Percent: 0.578125
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 200, 10, 13.818359375
+      Now: 200, 10, 14.755859375
       Spawn: 200, 10, 10
     Size: 20, 20
   ecs.Linked:
@@ -808,7 +821,7 @@
     - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮29
   core.Sector:
     Bottom:
@@ -853,6 +866,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮30
   core.Body:
     Angle: 0
@@ -914,6 +928,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮33
   core.Sector:
     Bottom:
@@ -971,6 +986,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮34
   core.Sector:
     Bottom:
@@ -1029,6 +1045,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮35
   core.Sector:
     Bottom:
@@ -1074,6 +1091,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮36
   core.Sector:
     Bottom:
@@ -1133,6 +1151,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮37
   core.Body:
     Angle: 0
@@ -1199,6 +1218,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮39
   core.Sector:
     Bottom:
@@ -1244,6 +1264,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮40
   core.Body:
     Angle: 0
@@ -1310,6 +1331,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮42
   core.Sector:
     Bottom:
@@ -1353,6 +1375,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮43
   core.Body:
     Angle: 0
@@ -1370,11 +1393,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.28125
+        Percent: 0.203125
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 820, 10, 13.0859375
+      Now: 820, 10, 11.650390625
       Spawn: 820, 10, 10
     Size: 20, 20
   ecs.Linked:
@@ -1382,7 +1405,7 @@
     - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮45
   core.Sector:
     Bottom:
@@ -1441,6 +1464,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮46
   core.Sector:
     Bottom:
@@ -1484,6 +1508,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 128
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮47
   materials.Image:
     Filter: false
@@ -1516,7 +1541,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 591.5165148981087, -100.63361886224449
+        Now: 565.1559938469214, -96.36665585302464
         Spawn: 550, -100
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1525,7 +1550,7 @@
       Lo:
         Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 619.6267046763928, -129.09090669204508
+        Now: 603.480784611202, -107.82136723627399
         Spawn: 590, -100
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1534,7 +1559,7 @@
       Lo:
         Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 619.3663811377555, -171.51651489810865
+        Now: 623.6333441469753, -145.1559938469214
         Spawn: 620, -130
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1543,7 +1568,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 590.9090933079549, -199.62670467639282
+        Now: 612.178632763726, -183.48078461120195
         Spawn: 620, -170
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1552,7 +1577,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 548.4834851018913, -199.36638113775552
+        Now: 574.8440061530786, -203.63334414697536
         Spawn: 590, -200
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1561,7 +1586,7 @@
       Lo:
         Material: ∈⋮122∈⋮Floor∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 520.3732953236072, -170.90909330795492
+        Now: 536.519215388798, -192.178632763726
         Spawn: 550, -200
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1570,7 +1595,7 @@
       Lo:
         Material: ∈⋮122∈⋮Floor∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 520.6336188622445, -128.48348510189135
+        Now: 516.3666558530247, -154.8440061530786
         Spawn: 520, -170
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1579,7 +1604,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 549.0909066920451, -100.37329532360718
+        Now: 527.821367236274, -116.51921538879803
         Spawn: 520, -130
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1594,13 +1619,14 @@
         Duration: 2000
         End: 1, 0, 0, 0, -1, 0
         Lifetime: AnimationLifetimeLoop
-        Percent: 0.44140625
+        Percent: 0
         Reverse: false
         Start: 1, 0, 0, 0, 1, 0
         TweeningFunc: EaseInOut3
-      Now: 0.7027547444571043, 0.7114321957450146, 0, -0.7114321957450146, 0.7027547444571043,
+      Now: 0.9581197691070137, 0.28636778458123385, 0, -0.28636778458123385, 0.9581197691070137,
         0
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 570, -150
 - Entity: ∈⋮51
   behaviors.ActionFace:
     Angle: 0

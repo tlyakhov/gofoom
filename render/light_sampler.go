@@ -129,8 +129,8 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 		if seg.AdjacentSector == 0 || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
 			continue
 		}
-		d2 := seg.AdjacentSegment.DistanceToPointSq(p.To2D())
-		if d2 >= ls.LightGrid*ls.LightGrid*2 {
+		distSq := seg.AdjacentSegment.DistanceToPointSq(p.To2D())
+		if distSq >= ls.LightGrid*ls.LightGrid*2 {
 			continue
 		}
 
@@ -214,11 +214,11 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			// We have a non-portal segment and we're not checking higher layer sector,
 			// but we have a lower layer sector overlap. Let's go there.
 
-			// Why? This is to handle the edge case when we have a light ray
-			// grazing a corner of a higher layer overlapping sector. If this
-			// happens, we need to nudge the intersection distance for the
-			// _exiting_ light ray to avoid an infinite loop of intersections,
-			// ping-ponging between the inner and outer sector.
+			// Why this <0 check? This is to handle the edge case when we have a
+			// light ray grazing a corner of a higher layer overlapping sector.
+			// If this happens, we need to nudge the intersection distance for
+			// the _exiting_ light ray to avoid an infinite loop of
+			// intersections, ping-ponging between the inner and outer sector.
 			// Additionally if we have a segment sitting on an edge, we need to
 			// make sure the overlap check is over the edge and actually inside
 			// the overlapping sector.

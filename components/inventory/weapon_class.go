@@ -86,7 +86,7 @@ func (w *WeaponClass) Serialize() map[string]any {
 	result["Damage"] = w.Damage
 	result["Spread"] = w.Spread
 
-	p := make([]map[string]any, WeaponStateCount)
+	p := make([]any, WeaponStateCount)
 	for i := range w.Params {
 		p[i] = w.Params[i].Serialize()
 	}
