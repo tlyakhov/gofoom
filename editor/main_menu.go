@@ -309,7 +309,7 @@ func CreateMainMenu() {
 		} else {
 			editor.BehaviorsPause.Menu.Label = "Pause simulation"
 		}
-		editor.Window.MainMenu().Items[3].Refresh()
+		fyne.Do(editor.Window.MainMenu().Items[3].Refresh)
 	})
 	editor.BehaviorsRespawn.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierAlt}
 	editor.BehaviorsRespawn.Menu = fyne.NewMenuItem("Respawn", func() {

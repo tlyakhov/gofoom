@@ -39,6 +39,17 @@ func (s *Selection) Empty() bool {
 	return len(s.Exact) == 0
 }
 
+func (s *Selection) Len() int {
+	return len(s.Exact)
+}
+
+func (s *Selection) First() *Selectable {
+	for _, sel := range s.Exact {
+		return sel
+	}
+	return nil
+}
+
 func (s *Selection) Add(list ...*Selectable) {
 	for _, item := range list {
 		s.Exact[item.Hash()] = item

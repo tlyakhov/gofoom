@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
+	"tlyakhov/gofoom/ecs"
 )
 
 var EmbeddedTypes = map[string]struct{}{
@@ -65,13 +66,23 @@ func (f *PropertyGridField) Disabled() bool {
 	// TODO: Reconsider this logic... need to be careful
 	// If any of the user's selected entities are internal, keep enabled.
 	// ...aka if all of the selected entities are external, disable.
+	// Also, if all of the selected entities have an ecs.Linked entity with this
+	// component, disable.
 	externalEntitiesOnly := true
 	externalComponentsOnly := true
+	linkedComponentsOnly := true
 	for _, v := range f.Values {
 		externalEntitiesOnly = externalEntitiesOnly && v.Entity.IsExternal()
 		externalComponentsOnly = externalComponentsOnly && v.Component.Base().IsExternal()
+		if linked := ecs.GetLinked(v.Entity); linked != nil {
+			if linked.SourceComponents.Get(v.Component.ComponentID()) == nil {
+				linkedComponentsOnly = false
+			}
+		} else {
+			linkedComponentsOnly = false
+		}
 	}
-	return externalEntitiesOnly || externalComponentsOnly
+	return externalEntitiesOnly || externalComponentsOnly || linkedComponentsOnly
 }
 
 func (f *PropertyGridField) Short() string {

@@ -200,6 +200,12 @@ func expandRows(sid EntitySourceID, size int) {
 	}
 }
 
+func CreateEntity(entity Entity) {
+	sid, local := entity.SourceID(), entity.Local()
+	expandRows(sid, int(local))
+	Entities.Set(uint32(entity))
+}
+
 // Attach a component to an entity. If a component with this type is already
 // attached, this method will overwrite it.
 func attach(entity Entity, component *Component, componentID ComponentID) {
@@ -215,6 +221,10 @@ func attach(entity Entity, component *Component, componentID ComponentID) {
 
 	sid, local := entity.SourceID(), entity.Local()
 	expandRows(sid, int(local))
+
+	if !Entities.Contains(uint32(entity)) {
+		log.Printf("ecs.attach: warning: ecs.Entities does not contain entity.")
+	}
 
 	// Try to retrieve the existing component for this entity
 	ec := rows[sid][int(local)].Get(componentID)
@@ -547,4 +557,83 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](field *PT, name st
 	n.Flags |= ComponentInternal
 
 	return true
+}
+
+func MoveEntityComponents(from Entity, to Entity) {
+	sidFrom, localFrom := localizeEntity(from)
+	if localFrom == 0 || to == 0 {
+		return
+	}
+
+	if Entities.Contains(uint32(to)) {
+		MoveEntityComponents(to, NewEntity())
+	}
+	CreateEntity(to)
+
+	sidTo, localTo := localizeEntity(to)
+	if localTo == 0 {
+		return
+	}
+
+	tableFrom := &rows[sidFrom][int(localFrom)]
+	tableTo := &rows[sidTo][int(localTo)]
+
+	for _, c := range *tableFrom {
+		if c == nil {
+			continue
+		}
+		base := c.Base()
+		if base.Entities.Contains(from) {
+			base.Entities.Delete(from)
+			base.Entities.Set(to)
+		}
+		if base.Entity == from {
+			base.Entity = to
+		}
+	}
+
+	*tableTo = *tableFrom
+	*tableFrom = nil
+	Entities.Remove(uint32(from))
+
+	Entities.Range(func(entity uint32) {
+		e := Entity(entity)
+		if e == from || e.IsExternal() {
+			return
+		}
+		RangeRelations(e, func(r *Relation) bool {
+			switch r.Type {
+			case RelationOne:
+				if r.One != from {
+					return true
+				}
+				r.One = to
+			case RelationSet:
+				if !r.Set.Contains(from) {
+					return true
+				}
+				r.Set.Delete(e)
+				r.Set.Add(to)
+			case RelationSlice:
+				found := false
+				for i, e := range r.Slice {
+					if e == from {
+						r.Slice[i] = to
+						found = true
+					}
+				}
+				if !found {
+					return true
+				}
+			case RelationTable:
+				if !r.Table.Contains(from) {
+					return true
+				}
+				r.Table.Delete(from)
+				r.Table.Set(to)
+			}
+			r.Update()
+			return true
+		})
+	})
 }
