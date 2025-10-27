@@ -49,10 +49,14 @@ func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
 		} else {
 			label.Importance = widget.SuccessImportance
 		}
+		if field.Disabled() {
+			label.Importance = widget.LowImportance
+		}
 		entry = widget.NewEntry()
 		c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 		c.Layout = layout.NewVBoxLayout()
 		c.Objects = []fyne.CanvasObject{entry, label}
+
 	} else {
 		entry = gridAddOrUpdateWidgetAtIndex[*widget.Entry](g)
 	}

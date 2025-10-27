@@ -20,7 +20,7 @@ debug
 editor-glade.glade~
 ssa.html
 
-.DS_Store
+**/.DS_Store
 
 bin
 editor/.DS_Store

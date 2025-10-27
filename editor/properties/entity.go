@@ -39,10 +39,7 @@ func (g *Grid) updateTreeNodeEntity(editTypeTag string, tni widget.TreeNodeID, _
 	if entity != 0 {
 		img.ScaleMode = canvas.ImageScaleSmooth
 		img.FillMode = canvas.ImageFillContain
-		//		if editTypeTag == "Sector" || editTypeTag == "Material" {
-		// TODO: Make images for other entity types like actions
 		img.Image = g.IEditor.EntityImage(entity)
-		//		}
 		img.SetMinSize(fyne.NewSquareSize(64))
 		button.OnTapped = func() {
 			g.SelectObjects(true, selection.SelectableFromEntity(entity))

@@ -20,6 +20,12 @@ import (
 )
 
 func (g *Grid) fieldComponent(field *state.PropertyGridField) {
+	if linkedOnly, sources := field.IsLinked(); linkedOnly {
+		label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
+		label.Text = fmt.Sprintf("Linked from %v", sources.String())
+		return
+	}
+
 	disable := true
 	parentType := ""
 	var parent ecs.Component

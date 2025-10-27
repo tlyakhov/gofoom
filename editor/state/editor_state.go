@@ -50,9 +50,21 @@ type EditorState struct {
 	OpenFile      string
 	Modified      bool
 	CurrentAction Actionable
-	UndoHistory   []Actionable
-	RedoHistory   []Actionable
-	KeysDown      containers.Set[fyne.KeyName]
+	/*
+		TODO: Re-implement undo/redo by serializing/deserializing the entire world
+		state instead. The current system is too brittle and requires a ton of work
+		for every individual action to store and apply diffs.
+
+		Tricky aspects:
+		1. SourceFiles. Restoring in-memory snapshots will involve reloading source
+		   files every undo/redo. That seems expensive and unnecessary. Can we avoid
+		   doing this?
+		2. Dynamics/Simulation details. Probably nothing will break, but diffs will
+		   have noise from this.
+	*/
+	UndoHistory []Actionable
+	RedoHistory []Actionable
+	KeysDown    containers.Set[fyne.KeyName]
 
 	// Map view filters
 	BodiesVisible         bool

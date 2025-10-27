@@ -6,6 +6,8 @@
 package scripting_symbols
 
 import (
+	"go/constant"
+	"go/token"
 	"reflect"
 	"tlyakhov/gofoom/components/materials"
 )
@@ -45,6 +47,7 @@ func init() {
 		"SpriteSheetCID":         reflect.ValueOf(&materials.SpriteSheetCID).Elem(),
 		"TextCID":                reflect.ValueOf(&materials.TextCID).Elem(),
 		"ToneMapCID":             reflect.ValueOf(&materials.ToneMapCID).Elem(),
+		"ToneMapMax":             reflect.ValueOf(constant.MakeFromLiteral("1023", token.INT, 0)),
 		"VisibleCID":             reflect.ValueOf(&materials.VisibleCID).Elem(),
 
 		// type definitions

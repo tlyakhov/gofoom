@@ -278,6 +278,7 @@ func (g *Grid) switchEntityUI(entity ecs.Entity) *widget.Button {
 	entityEntry := widget.NewEntry()
 	entityEntry.Text = ""
 	entityEntry.PlaceHolder = "e.g. 123"
+	entityEntry.Resize(fyne.NewSize(200, 0))
 	title := "Switch ID"
 	sw := widget.NewButtonWithIcon(title, theme.ViewRefreshIcon(), func() {
 		dialog.ShowForm(title, "Switch", "Cancel", []*widget.FormItem{
