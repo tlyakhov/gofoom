@@ -58,6 +58,31 @@ type PropertyGridField struct {
 	Unique map[string]reflect.Value
 }
 
+func (f *PropertyGridField) IsLinked() (linkedOnly bool, sources ecs.EntityTable) {
+	if len(f.Values) == 0 {
+		return false, nil
+	}
+
+	linkedOnly = true
+	for _, v := range f.Values {
+		if linked := ecs.GetLinked(v.Entity); linked != nil {
+			if c := linked.SourceComponents.Get(v.Component.ComponentID()); c != nil {
+				for _, e := range linked.Sources {
+					if e == 0 || !c.Base().Entities.Contains(e) {
+						continue
+					}
+					sources.Set(e)
+				}
+			} else {
+				linkedOnly = false
+			}
+		} else {
+			linkedOnly = false
+		}
+	}
+	return
+}
+
 func (f *PropertyGridField) Disabled() bool {
 	if len(f.Values) == 0 {
 		return false
@@ -70,19 +95,12 @@ func (f *PropertyGridField) Disabled() bool {
 	// component, disable.
 	externalEntitiesOnly := true
 	externalComponentsOnly := true
-	linkedComponentsOnly := true
 	for _, v := range f.Values {
 		externalEntitiesOnly = externalEntitiesOnly && v.Entity.IsExternal()
 		externalComponentsOnly = externalComponentsOnly && v.Component.Base().IsExternal()
-		if linked := ecs.GetLinked(v.Entity); linked != nil {
-			if linked.SourceComponents.Get(v.Component.ComponentID()) == nil {
-				linkedComponentsOnly = false
-			}
-		} else {
-			linkedComponentsOnly = false
-		}
 	}
-	return externalEntitiesOnly || externalComponentsOnly || linkedComponentsOnly
+	linkedOnly, _ := f.IsLinked()
+	return externalEntitiesOnly || externalComponentsOnly || linkedOnly
 }
 
 func (f *PropertyGridField) Short() string {

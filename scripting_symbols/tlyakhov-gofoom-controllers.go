@@ -15,6 +15,7 @@ func init() {
 		// function, constant and variable definitions
 		"AutoPortal":                reflect.ValueOf(controllers.AutoPortal),
 		"BodySectorScript":          reflect.ValueOf(controllers.BodySectorScript),
+		"CloneEntity":               reflect.ValueOf(controllers.CloneEntity),
 		"CreateSpawn":               reflect.ValueOf(controllers.CreateSpawn),
 		"CreateTestDirt":            reflect.ValueOf(controllers.CreateTestDirt),
 		"CreateTestGrass":           reflect.ValueOf(controllers.CreateTestGrass),
@@ -44,11 +45,13 @@ func init() {
 		"PickUpInventoryItem":       reflect.ValueOf(controllers.PickUpInventoryItem),
 		"ResetAllSpawnables":        reflect.ValueOf(controllers.ResetAllSpawnables),
 		"Respawn":                   reflect.ValueOf(controllers.Respawn),
+		"RespawnInventory":          reflect.ValueOf(controllers.RespawnInventory),
 
 		// type definitions
 		"ActionController":           reflect.ValueOf((*controllers.ActionController)(nil)),
 		"AliveController":            reflect.ValueOf((*controllers.AliveController)(nil)),
 		"BodyController":             reflect.ValueOf((*controllers.BodyController)(nil)),
+		"DoorController":             reflect.ValueOf((*controllers.DoorController)(nil)),
 		"EntityAxisEventParams":      reflect.ValueOf((*controllers.EntityAxisEventParams)(nil)),
 		"EntityEventParams":          reflect.ValueOf((*controllers.EntityEventParams)(nil)),
 		"ImageController":            reflect.ValueOf((*controllers.ImageController)(nil)),
@@ -65,7 +68,6 @@ func init() {
 		"SoundController":            reflect.ValueOf((*controllers.SoundController)(nil)),
 		"SoundEventController":       reflect.ValueOf((*controllers.SoundEventController)(nil)),
 		"UnderwaterController":       reflect.ValueOf((*controllers.UnderwaterController)(nil)),
-		"DoorController":             reflect.ValueOf((*controllers.DoorController)(nil)),
 		"WanderController":           reflect.ValueOf((*controllers.WanderController)(nil)),
 		"WeaponController":           reflect.ValueOf((*controllers.WeaponController)(nil)),
 	}

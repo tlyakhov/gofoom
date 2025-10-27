@@ -4,7 +4,6 @@
 package actions
 
 import (
-	"log"
 	"math"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/ecs"
@@ -64,7 +63,7 @@ func (a *Transform) moved(_ fyne.KeyModifier) {
 	}
 	a.mouseDown.From(&a.State().MouseDownWorld)
 	a.Delta = *a.State().MouseWorld.Sub(&a.mouseDown)
-	log.Printf("Delta: %v, %v -> %v", a.Delta, a.mouseDown.StringHuman(), a.State().MouseWorld.StringHuman())
+	//log.Printf("Delta: %v, %v -> %v", a.Delta, a.mouseDown.StringHuman(), a.State().MouseWorld.StringHuman())
 	a.Angle = a.Delta[0] / 60.0
 	if a.State().KeysDown.Contains(desktop.KeyShiftLeft) && a.State().KeysDown.Contains(desktop.KeyAltLeft) {
 		a.Mode = "rotate"
@@ -107,9 +106,6 @@ func (a *Transform) Activate() {
 }
 
 func (a *Transform) Apply() {
-	//a.State().Lock.Lock()
-	//defer a.State().Lock.Unlock()
-
 	a.Selected.LoadPositions()
 	m := &concepts.Matrix2{}
 	m.SetIdentity()

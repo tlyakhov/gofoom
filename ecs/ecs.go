@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 
 	"github.com/kelindar/bitmap"
@@ -422,22 +423,6 @@ func GetEntityByName(name string) Entity {
 	return 0
 }
 
-func EntityAllNoSave(entity Entity) bool {
-	sid, local := localizeEntity(entity)
-	if local == 0 {
-		return false
-	}
-	for _, c := range rows[sid][int(local)] {
-		if c == nil {
-			continue
-		}
-		if c.Base().Flags&ComponentNoSave == 0 {
-			return false
-		}
-	}
-	return true
-}
-
 func Load(filename string) error {
 	file := NewAttachedComponent(NewEntity(), SourceFileCID).(*SourceFile)
 	file.Source = filename
@@ -447,8 +432,8 @@ func Load(filename string) error {
 }
 
 func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {
-	yamlEntity := make(map[string]any)
-	yamlEntity["Entity"] = entity.String()
+	serialized := make(map[string]any)
+	serialized["Entity"] = entity.String()
 	sid, local := entity.SourceID(), entity.Local()
 	for _, component := range rows[sid][int(local)] {
 		if component == nil || (component.Base().Flags&ComponentNoSave != 0) {
@@ -461,7 +446,7 @@ func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[strin
 
 		if savedComponents != nil {
 			if savedEntity, ok := savedComponents[hash]; ok {
-				yamlEntity[yamlID] = savedEntity.Serialize()
+				serialized[yamlID] = savedEntity.Serialize()
 				continue
 			}
 		}
@@ -470,32 +455,34 @@ func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[strin
 			// Just pick one
 			// TODO: This has a code smell. Should there be a particular way
 			// to pick an entity ID to reference when saving?
-			yamlEntity[yamlID] = component.Base().ExternalEntities()[0].Serialize()
+			serialized[yamlID] = component.Base().ExternalEntities()[0].Serialize()
 			continue
 		}
 
 		yamlComponent := component.Serialize()
 		delete(yamlComponent, "Entities")
-		yamlEntity[yamlID] = yamlComponent
+		serialized[yamlID] = yamlComponent
 		if savedComponents != nil {
 			savedComponents[hash] = entity
 		}
 
 	}
-	if len(yamlEntity) == 1 {
+	if len(serialized) == 1 {
 		return nil
 	}
-	return yamlEntity
+	return serialized
 }
 
 func SerializeEntity(entity Entity) map[string]any {
 	return serializeEntity(entity, nil)
 }
 
-func Save(filename string) {
+func SerializeAll() []any {
+	defer concepts.ExecutionDuration(concepts.ExecutionTrack("ecs.SerializeAll"))
 	Lock.Lock()
 	defer Lock.Unlock()
-	yamlECS := make([]any, 0)
+
+	all := []any{}
 	savedComponents := make(map[uint64]Entity)
 
 	Entities.Range(func(entity uint32) {
@@ -503,14 +490,17 @@ func Save(filename string) {
 		if e.IsExternal() {
 			return
 		}
-		yamlEntity := serializeEntity(e, savedComponents)
-		if len(yamlEntity) == 0 {
+		serialized := serializeEntity(e, savedComponents)
+		if len(serialized) == 0 {
 			return
 		}
-		yamlECS = append(yamlECS, yamlEntity)
+		all = append(all, serialized)
 	})
+	return all
+}
 
-	bytes, err := yaml.Marshal(yamlECS)
+func Save(filename string) {
+	bytes, err := yaml.Marshal(SerializeAll())
 	//bytes, err := json.MarshalIndent(yamlECS, "", "  ")
 
 	if err != nil {
@@ -518,20 +508,6 @@ func Save(filename string) {
 	}
 
 	os.WriteFile(filename, bytes, os.ModePerm)
-}
-
-func ConstructArray(parent any, arrayPtr any, data any) {
-	valuePtr := reflect.ValueOf(arrayPtr)
-	arrayValue := valuePtr.Elem()
-
-	itemType := reflect.TypeOf(arrayPtr).Elem().Elem()
-	arrayValue.Set(reflect.Zero(arrayValue.Type()))
-	for _, child := range data.([]any) {
-		item := reflect.New(itemType.Elem()).Interface().(Component)
-		//item.SetParent(parent)
-		item.Construct(child.(map[string]any))
-		arrayValue.Set(reflect.Append(arrayValue, reflect.ValueOf(item)))
-	}
 }
 
 // Returns true if a new one was created.
