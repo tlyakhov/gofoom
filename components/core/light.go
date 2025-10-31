@@ -49,14 +49,12 @@ func (l *Light) OnDelete() {
 func (l *Light) OnAttach() {
 	l.Attached.OnAttach()
 
-	if tree := ecs.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
-		for _, e := range l.Entities {
-			if e == 0 {
-				continue
-			}
-			if b := GetBody(e); b != nil && b.QuadNode != nil {
-				b.QuadNode.Lights = append(b.QuadNode.Lights, b)
-			}
+	for _, e := range l.Entities {
+		if e == 0 {
+			continue
+		}
+		if b := GetBody(e); b != nil && b.QuadNode != nil {
+			b.QuadNode.Lights = append(b.QuadNode.Lights, b)
 		}
 	}
 }

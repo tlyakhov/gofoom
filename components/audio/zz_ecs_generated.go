@@ -3,23 +3,14 @@ package audio
 
 import "tlyakhov/gofoom/ecs"
 
-var MixerCID ecs.ComponentID
 var SoundCID ecs.ComponentID
 var SoundEventCID ecs.ComponentID
 var SourceCID ecs.ComponentID
 
 func init() {
-	MixerCID = ecs.RegisterComponent(&ecs.Arena[Mixer, *Mixer]{})
 	SoundCID = ecs.RegisterComponent(&ecs.Arena[Sound, *Sound]{})
 	SoundEventCID = ecs.RegisterComponent(&ecs.Arena[SoundEvent, *SoundEvent]{})
 	SourceCID = ecs.RegisterComponent(&ecs.Arena[Source, *Source]{})
-}
-func GetMixer(e ecs.Entity) *Mixer {
-	panic("Tried to GetMixer, which is a singleton. use ecs.Singleton instead")
-}
-
-func (*Mixer) ComponentID() ecs.ComponentID {
-	return MixerCID
 }
 func GetSound(e ecs.Entity) *Sound {
 	if asserted, ok := ecs.GetComponent(e, SoundCID).(*Sound); ok {

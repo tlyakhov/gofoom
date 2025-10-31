@@ -54,7 +54,7 @@ func intSampleToBytes(sample int, incomingBytes uint16, asFloat bool, bytes []by
 	}
 }
 
-func (snd *Sound) loadWav(mixer *Mixer, f *os.File) error {
+func (snd *Sound) loadWav(f *os.File) error {
 	d := wav.NewDecoder(f)
 	d.ReadMetadata()
 	d.Rewind()
@@ -96,7 +96,8 @@ func (snd *Sound) loadWav(mixer *Mixer, f *os.File) error {
 	}
 
 	snd.buffer = al.GenBuffers(1)[0]
-	format := mixer.paramsToFormat(outgoingChannels, int(outgoingBytes)*8, outgoingBytes == 4)
+	Mixer.buffers = append(Mixer.buffers, snd.buffer)
+	format := Mixer.paramsToFormat(outgoingChannels, int(outgoingBytes)*8, outgoingBytes == 4)
 	snd.buffer.BufferData(format, snd.bytes, int32(d.SampleRate))
 	snd.loaded = true
 

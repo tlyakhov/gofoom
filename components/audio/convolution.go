@@ -42,10 +42,9 @@ func NewConvReverb(irEntity ecs.Entity, blockSize int) (*ConvReverb, error) {
 	if snd == nil {
 		return nil, fmt.Errorf("no IR")
 	}
-	mixer := ecs.Singleton(MixerCID).(*Mixer)
 
 	result := &ConvReverb{
-		channels:  make([]convReverbChannel, mixer.Channels),
+		channels:  make([]convReverbChannel, Mixer.Channels),
 		blockSize: blockSize,
 	}
 
@@ -55,7 +54,7 @@ func NewConvReverb(irEntity ecs.Entity, blockSize int) (*ConvReverb, error) {
 		irSamples[i] = float64(sndSamples[i]) / 32768.0
 	}
 	// --- 2. Setup FFT parameters ---
-	irSize := len(irSamples) / mixer.Channels
+	irSize := len(irSamples) / Mixer.Channels
 	// The FFT size must be large enough to hold the convolution result without aliasing.
 	// Convolution length = blockSize + irSize - 1
 	result.fftSize = nextPowerOfTwo(blockSize + irSize - 1)

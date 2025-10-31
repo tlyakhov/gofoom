@@ -137,7 +137,7 @@ func (mw *MapWidget) render() {
 	}
 
 	// Quadtree testing code
-	mw.DrawQuadNode(ecs.Singleton(core.QuadtreeCID).(*core.Quadtree).Root, 0)
+	mw.DrawQuadNode(core.QuadTree.Root, 0)
 
 	/*// Portal testing code
 	p := core.GetBody(editor.Renderer.Player.Entity)

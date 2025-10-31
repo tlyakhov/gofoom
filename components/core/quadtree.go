@@ -9,32 +9,23 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-type Quadtree struct {
-	ecs.Attached `ecs:"singleton"` // TODO: Does this need to be attached to an arena?
-
+type quadtree struct {
 	MinZ, MaxZ float64
 
 	Root *QuadNode
 }
 
-func (q *Quadtree) String() string {
+var QuadTree quadtree
+
+func (q *quadtree) String() string {
 	return "Quadtree"
 }
 
-func (q *Quadtree) Construct(data map[string]any) {
-	q.Attached.Construct(data)
-
-	q.Flags |= ecs.ComponentInternal // never serialize this
-	q.Build()
-}
-
-func (q *Quadtree) Serialize() map[string]any {
-	result := q.Attached.Serialize()
-
-	return result
-}
-
-func (q *Quadtree) Update(body *Body) {
+func (q *quadtree) Update(body *Body) {
+	if q.Root == nil {
+		q.Reset()
+		return
+	}
 	if body.QuadNode == nil {
 		q.Root.insert(body, 0)
 		return
@@ -47,7 +38,7 @@ func (q *Quadtree) Update(body *Body) {
 	q.Root.insert(body, 0)
 }
 
-func (q *Quadtree) Build() {
+func (q *quadtree) Reset() {
 	q.Root = &QuadNode{Tree: q}
 
 	offset := constants.QuadtreeInitDim / 16
@@ -64,11 +55,12 @@ func (q *Quadtree) Build() {
 		if body == nil || !body.IsActive() {
 			continue
 		}
+		body.QuadNode = nil
 		q.Update(body)
 	}
 }
 
-func (q *Quadtree) Print() {
+func (q *quadtree) Print() {
 	log.Println("Tree:")
 	q.Root.print(0)
 }

@@ -6,6 +6,7 @@ package controllers
 import (
 	"math"
 	"math/rand/v2"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
@@ -19,7 +20,7 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 	var s *selection.Selectable
 
 	angle := wc.Body.Angle.Now + (rand.Float64()-0.5)*wc.Class.Spread
-	zSpread := (rand.Float64() - 0.5) * wc.Class.Spread
+	pitchSpread := (rand.Float64() - 0.5) * wc.Class.Spread
 
 	wc.Sampler.Config = &render.Config{}
 	wc.Sampler.Ray = &render.Ray{Angle: angle}
@@ -29,7 +30,13 @@ func (wc *WeaponController) Cast() *selection.Selectable {
 	p := &wc.Body.Pos.Now
 	wc.delta[0] = math.Cos(angle * concepts.Deg2rad)
 	wc.delta[1] = math.Sin(angle * concepts.Deg2rad)
-	wc.delta[2] = math.Sin(zSpread * concepts.Deg2rad)
+
+	// TODO: All bodies should probably be able to pitch
+	if p := character.GetPlayer(wc.Body.Entity); p != nil {
+		wc.delta[2] = math.Sin((p.Pitch + pitchSpread) * concepts.Deg2rad)
+	} else {
+		wc.delta[2] = math.Sin(pitchSpread * concepts.Deg2rad)
+	}
 
 	rayEnd := &concepts.Vector3{
 		p[0] + wc.delta[0]*constants.MaxViewDistance,

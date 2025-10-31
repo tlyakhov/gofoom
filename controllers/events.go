@@ -158,6 +158,12 @@ func eventPitch(evt *dynamic.Event) bool {
 	if player == nil {
 		return false
 	}
-	player.ShearZ += p.AxisValue * 0.8
+	player.Pitch += p.AxisValue * 0.5
+	if player.Pitch > 90 {
+		player.Pitch = 90
+	}
+	if player.Pitch < -90 {
+		player.Pitch = -90
+	}
 	return false
 }

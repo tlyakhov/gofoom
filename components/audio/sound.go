@@ -26,20 +26,34 @@ func (snd *Sound) String() string {
 	return "Sound File"
 }
 
+func (snd *Sound) deleteBuffer() {
+	for i, b := range Mixer.buffers {
+		if b != snd.buffer {
+			continue
+		}
+		lastIndex := len(Mixer.buffers) - 1
+		Mixer.buffers[i] = Mixer.buffers[lastIndex]
+		Mixer.buffers = Mixer.buffers[:lastIndex]
+		break
+	}
+	al.DeleteBuffers(snd.buffer)
+	snd.loaded = false
+	snd.buffer = 0
+	snd.bytes = nil
+}
+
+func (snd *Sound) OnDelete() {
+	if snd.loaded {
+		snd.deleteBuffer()
+	}
+	snd.Attached.OnDelete()
+}
+
 func (snd *Sound) Load() error {
 	if snd.loaded {
-		al.DeleteBuffers(snd.buffer)
-		snd.loaded = false
-		snd.buffer = 0
-		snd.bytes = nil
+		snd.deleteBuffer()
 	}
 	if snd.Source == "" {
-		return nil
-	}
-
-	var mixer *Mixer
-	// Ensure sound system is initialized
-	if mixer = ecs.Singleton(MixerCID).(*Mixer); mixer == nil {
 		return nil
 	}
 
@@ -50,11 +64,11 @@ func (snd *Sound) Load() error {
 	defer f.Close()
 
 	if strings.HasSuffix(snd.Source, ".ogg") {
-		return snd.loadOgg(mixer, f)
+		return snd.loadOgg(f)
 	} else if strings.HasSuffix(snd.Source, ".wav") {
-		return snd.loadWav(mixer, f)
+		return snd.loadWav(f)
 	} else if strings.HasSuffix(snd.Source, ".mp3") {
-		return snd.loadMP3(mixer, f)
+		return snd.loadMP3(f)
 	} else {
 		return fmt.Errorf("Sound.Load: tried to load unknown (not wav, ogg) format audio file %v", snd.Source)
 	}

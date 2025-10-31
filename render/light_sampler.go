@@ -55,7 +55,6 @@ type LightSampler struct {
 	maxDist float64
 
 	xorSeed uint64
-	tree    *core.Quadtree
 }
 
 func (ls *LightSampler) packLight() uint32 {
@@ -490,7 +489,7 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 
 	LightSamplerCalcs.Add(1)
 	lightsTested := 0
-	ls.tree.Root.RangeClosest(world, true, func(body *core.Body) bool {
+	core.QuadTree.Root.RangeClosest(world, true, func(body *core.Body) bool {
 		if !body.IsActive() {
 			return true
 		}

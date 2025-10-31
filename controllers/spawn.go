@@ -7,6 +7,7 @@ import (
 	"log"
 	"math/rand"
 	"tlyakhov/gofoom/components/character"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/ecs"
 )
@@ -87,6 +88,8 @@ func RespawnInventory(c *inventory.Carrier) {
 }
 
 func Respawn(force bool) {
+	core.QuadTree.Reset()
+
 	spawns := make([]*character.Player, 0)
 	players := make([]*character.Player, 0)
 	arena := ecs.ArenaFor[character.Player](character.PlayerCID)

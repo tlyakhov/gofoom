@@ -5,7 +5,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"image"
 	"log"
 	_ "net/http/pprof"
@@ -14,6 +13,7 @@ import (
 	"runtime/pprof"
 
 	"tlyakhov/gofoom/archetypes"
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
@@ -65,6 +65,26 @@ func integrateGame() {
 }
 
 func renderGame() {
+	winw := win.Bounds().W()
+	winh := win.Bounds().H()
+
+	w := 640
+	h := 360
+	if winw/winh < float64(w)/float64(h) {
+		w = int(winw * float64(h) / winh)
+	} else {
+		h = int(winh * float64(w) / winw)
+	}
+	if w != renderer.ScreenWidth || h != renderer.ScreenHeight {
+		log.Printf("New game canvas size: %vx%v", w, h)
+		canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
+		buffer = image.NewRGBA(image.Rect(0, 0, w, h))
+		renderer.ScreenWidth = w
+		renderer.ScreenHeight = h
+		renderer.Initialize()
+		gameUI.Initialize()
+	}
+
 	renderer.Render()
 	renderer.DebugInfo()
 	if inMenu {
@@ -73,8 +93,7 @@ func renderGame() {
 	renderer.ApplyBuffer(buffer.Pix)
 
 	canvas.SetPixels(buffer.Pix)
-	winw := win.Bounds().W()
-	winh := win.Bounds().H()
+
 	mat := pixel.IM
 	mat = mat.ScaledXY(pixel.ZV, pixel.Vec{X: winw / float64(renderer.ScreenWidth), Y: winh / float64(renderer.ScreenHeight)})
 	win.SetMatrix(mat)
@@ -94,8 +113,6 @@ func run() {
 		pprof.StartCPUProfile(f)
 		defer pprof.StopCPUProfile()
 	}
-	w := 640
-	h := 360
 	cfg := opengl.WindowConfig{
 		Title:     "Foom",
 		Bounds:    pixel.R(0, 0, 1920, 1080),
@@ -115,11 +132,11 @@ func run() {
 	win.SetCursorDisabled()
 
 	ecs.Initialize()
-	for _, meta := range ecs.Types().Controllers {
-		fmt.Printf("%v, priority %v\n", meta.Type.String(), meta.Priority)
-	}
 	ecs.Simulation.Integrate = integrateGame
 	ecs.Simulation.Render = renderGame
+	audio.Mixer.Initialize()
+	defer audio.Mixer.Close()
+
 	// Debug
 	if false {
 		controllers.CreateTestWorld3()
@@ -132,12 +149,7 @@ func run() {
 	controllers.Respawn(true)
 	archetypes.CreateFont("data/vga-font-8x8.png", "Default Font")
 
-	canvas = opengl.NewCanvas(pixel.R(0, 0, float64(w), float64(h)))
-	buffer = image.NewRGBA(image.Rect(0, 0, w, h))
 	renderer = render.NewRenderer()
-	renderer.ScreenWidth = w
-	renderer.ScreenHeight = h
-	renderer.Initialize()
 	gameUI = &ui.UI{Renderer: renderer}
 	gameUI.OnChanged = onWidgetChanged
 	gameUI.Initialize()
