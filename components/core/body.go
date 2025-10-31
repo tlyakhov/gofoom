@@ -61,10 +61,7 @@ func (b *Body) OnAttach() {
 	b.Pos.Attach(ecs.Simulation)
 	b.Size.Attach(ecs.Simulation)
 	b.Angle.Attach(ecs.Simulation)
-
-	if tree := ecs.Singleton(QuadtreeCID).(*Quadtree); tree != nil {
-		tree.Update(b)
-	}
+	QuadTree.Update(b)
 }
 
 func (b *Body) Sector() *Sector {

@@ -14,9 +14,7 @@ import (
 )
 
 // Mixer manages the audio state and playback. It should be a singleton
-type Mixer struct {
-	ecs.Attached `ecs:"singleton"`
-
+type mixer struct {
 	// 44100, 48000, 96000 etc
 	SampleRate int `editable:"Sample Rate"`
 	// 2 for stereo, 6 for 5.1 surround
@@ -29,6 +27,7 @@ type Mixer struct {
 	events      map[al.Source]*SoundEvent
 	usedSources bitmap.Bitmap
 	sources     []al.Source
+	buffers     []al.Buffer
 	fx          []al.Effect
 	fxSlots     []al.AuxEffectSlot
 
@@ -37,11 +36,13 @@ type Mixer struct {
 	Lock sync.Mutex
 }
 
-func (m *Mixer) String() string {
+var Mixer mixer
+
+func (m *mixer) String() string {
 	return "Audio Mixer"
 }
 
-func (m *Mixer) deleteSoundEvent(source al.Source) {
+func (m *mixer) deleteSoundEvent(source al.Source) {
 	if event, ok := m.events[source]; ok {
 		if event.IsAttached() {
 			ecs.Delete(event.Entity)
@@ -50,7 +51,7 @@ func (m *Mixer) deleteSoundEvent(source al.Source) {
 	}
 }
 
-func (m *Mixer) paramsToFormat(channels int, bits int, isFloat bool) al.Enum {
+func (m *mixer) paramsToFormat(channels int, bits int, isFloat bool) al.Enum {
 	switch {
 	case channels == 1 && bits == 8 && !isFloat:
 		return al.FormatMono8
@@ -90,10 +91,7 @@ var extFormats = []string{
 	"AL_FORMAT_71CHN_FLOAT32",
 }
 
-func (m *Mixer) Construct(data map[string]any) {
-	m.Attached.Construct(data)
-
-	m.Flags |= ecs.ComponentInternal // never serialize this
+func (m *mixer) Initialize() {
 	m.Error = nil
 	m.Channels = 2
 	m.SampleRate = 48000
@@ -146,7 +144,7 @@ func (m *Mixer) Construct(data map[string]any) {
 	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
 }
 
-func (m *Mixer) SetReverbPreset(preset string) {
+func (m *mixer) SetReverbPreset(preset string) {
 	if len(m.fx) == 0 {
 		return
 	}
@@ -158,14 +156,8 @@ func (m *Mixer) SetReverbPreset(preset string) {
 	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
 }
 
-func (m *Mixer) Serialize() map[string]any {
-	result := m.Attached.Serialize()
-
-	return result
-}
-
 // Close shuts down the audio engine.
-func (m *Mixer) OnDelete() {
+func (m *mixer) Close() {
 	for _, event := range m.events {
 		if event == nil {
 			continue
@@ -173,12 +165,13 @@ func (m *Mixer) OnDelete() {
 		event.Stop()
 	}
 	m.events = nil
+	al.DeleteBuffers(m.buffers...)
 	al.DeleteSources(m.sources...)
 	al.DeleteEffects(m.fx...)
 	m.device.Close()
 }
 
-func (m *Mixer) play(snd *Sound) (al.Source, error) {
+func (m *mixer) play(snd *Sound) (al.Source, error) {
 	if snd == nil {
 		return 0, nil
 	}
@@ -205,7 +198,7 @@ func (m *Mixer) play(snd *Sound) (al.Source, error) {
 	return source, nil
 }
 
-func (m *Mixer) PollSources() {
+func (m *mixer) PollSources() {
 	m.usedSources.Range(func(index uint32) {
 		src := m.sources[index]
 		state := src.Geti(al.ParamSourceState)
@@ -217,17 +210,17 @@ func (m *Mixer) PollSources() {
 
 }
 
-func (m *Mixer) SetListenerPosition(v *concepts.Vector3) {
+func (m *mixer) SetListenerPosition(v *concepts.Vector3) {
 	al.SetListenerPosition(alVector(v))
 }
 
 var alUpVector = alVector(&concepts.Vector3{0, 0, constants.UnitsPerMeter})
 
-func (m *Mixer) SetListenerOrientation(v *concepts.Vector3) {
+func (m *mixer) SetListenerOrientation(v *concepts.Vector3) {
 	al.SetListenerOrientation(al.Orientation{Forward: alVector(v), Up: alUpVector})
 }
 
-func (m *Mixer) SetListenerVelocity(v *concepts.Vector3) {
+func (m *mixer) SetListenerVelocity(v *concepts.Vector3) {
 	al.SetListenerVelocity(alVector(v))
 }
 
@@ -235,10 +228,6 @@ func (m *Mixer) SetListenerVelocity(v *concepts.Vector3) {
 // PlaySound initiates playback for a sound asset, optionally attached to a
 // source (e.g. a body, a sector)
 func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag bool) (*SoundEvent, error) {
-	m := ecs.Singleton(MixerCID).(*Mixer)
-	if m == nil {
-		return nil, nil
-	}
 	snd := GetSound(sound)
 	if snd == nil {
 		return nil, nil
@@ -260,7 +249,7 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag 
 
 	var source al.Source
 	var err error
-	if source, err = m.play(snd); err != nil {
+	if source, err = Mixer.play(snd); err != nil {
 		return nil, err
 	}
 	event := ecs.NewAttachedComponent(ecs.NewEntity(), SoundEventCID).(*SoundEvent)
@@ -268,8 +257,8 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag 
 	event.SourceEntity = sourceEntity
 	event.source = source
 	event.Tag = tag
-	m.deleteSoundEvent(source)
-	m.events[source] = event
+	Mixer.deleteSoundEvent(source)
+	Mixer.events[source] = event
 	return event, nil
 }
 
@@ -279,9 +268,5 @@ func alVector(v *concepts.Vector3) al.Vector {
 		float32(v[2] / constants.UnitsPerMeter)}
 }
 func SetReverbPreset(preset string) {
-	m := ecs.Singleton(MixerCID).(*Mixer)
-	if m == nil {
-		return
-	}
-	m.SetReverbPreset(preset)
+	Mixer.SetReverbPreset(preset)
 }

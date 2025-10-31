@@ -81,10 +81,6 @@ func (mc *MobileController) Forces() {
 }
 
 func (mc *MobileController) Always() {
-	if mc.tree == nil {
-		mc.tree = ecs.Singleton(core.QuadtreeCID).(*core.Quadtree)
-	}
-
 	if mc.Mass == 0 {
 		// Reset force for next frame
 		mc.ResetForce()
@@ -125,11 +121,13 @@ func (mc *MobileController) Always() {
 		stepDist := 70 + rand.Float64()*10
 		if mc.MovementSoundDistance > stepDist || speedSquared <= constants.VelocityEpsilon {
 			event, _ := audio.PlaySound(mc.StepSound, mc.Body.Entity, mc.Body.Entity.String()+" step", false)
-			// TODO: Parameterize this
-			event.Offset[2] = -mc.Body.Size.Now[1] * 0.5
-			event.Offset[1] = 0
-			event.Offset[0] = 0
-			event.SetPitchMultiplier(0.9 + rand.Float64()*0.2)
+			if event != nil {
+				// TODO: Parameterize this
+				event.Offset[2] = -mc.Body.Size.Now[1] * 0.5
+				event.Offset[1] = 0
+				event.Offset[0] = 0
+				event.SetPitchMultiplier(0.9 + rand.Float64()*0.2)
+			}
 			mc.MovementSoundDistance = 0
 		}
 	}
@@ -137,12 +135,9 @@ func (mc *MobileController) Always() {
 	mc.ResetForce()
 
 	// Update quadtree
-	mc.tree.Update(mc.Body)
+	core.QuadTree.Update(mc.Body)
 }
 
 func (mc *MobileController) Recalculate() {
-	if mc.tree == nil {
-		mc.tree = ecs.Singleton(core.QuadtreeCID).(*core.Quadtree)
-	}
 	mc.Collide()
 }

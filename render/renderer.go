@@ -28,7 +28,6 @@ type Renderer struct {
 	startingSector *core.Sector
 	textStyle      *TextStyle
 	xorSeed        uint64
-	tree           *core.Quadtree
 
 	flashOpacity dynamic.DynamicValue[float64]
 }
@@ -62,7 +61,6 @@ func (r *Renderer) Initialize() {
 		r.Blocks[i].Config = r.Config
 		r.Blocks[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
-		r.Blocks[i].LightSampler.tree = ecs.Singleton(core.QuadtreeCID).(*core.Quadtree)
 		r.Blocks[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
 	r.textStyle = r.NewTextStyle()
@@ -82,6 +80,16 @@ func (r *Renderer) Initialize() {
 	a.Coordinates = dynamic.AnimationCoordinatesAbsolute
 }
 
+func (r *Renderer) shearZ() float64 {
+	if r.Player.Pitch >= 90 {
+		return r.CameraToProjectionPlane
+	}
+	if r.Player.Pitch <= -90 {
+		return -r.CameraToProjectionPlane
+	}
+	return math.Sin(r.Player.Pitch*concepts.Deg2rad) * r.CameraToProjectionPlane
+}
+
 func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 	relative := concepts.Vector2{world[0], world[1]}
 	relative[0] -= r.PlayerBody.Pos.Render[0]
@@ -97,7 +105,7 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 	dist := relative.Length()
 	y := (world[2] - r.Player.CameraZ) / dist
 	y *= r.CameraToProjectionPlane / math.Cos(radians)
-	y = float64(r.ScreenHeight/2) - math.Floor(y) + r.Player.ShearZ
+	y = float64(r.ScreenHeight/2) - math.Floor(y) + r.shearZ()
 	return &concepts.Vector2{x, y}
 }
 
@@ -272,7 +280,7 @@ func (r *Renderer) RenderSector(block *block) {
 	block.Sector.LastSeenFrame.Store(int64(ecs.Simulation.Frame))
 
 	// Store bodies & internal segments for later
-	r.tree.Root.RangeAABB(block.Sector.Min.To2D(), block.Sector.Max.To2D(), func(b *core.Body) bool {
+	core.QuadTree.Root.RangeAABB(block.Sector.Min.To2D(), block.Sector.Max.To2D(), func(b *core.Body) bool {
 		if b == nil || !b.IsActive() || b.SectorEntity == 0 {
 			return true
 		}
@@ -333,7 +341,7 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) *PickResu
 	block.MaterialSampler.ScreenY = y
 	block.MaterialSampler.Angle = block.Angle
 	block.CameraZ = r.Player.CameraZ
-	block.ShearZ = r.Player.ShearZ
+	block.ShearZ = r.shearZ()
 	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
 	block.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
 	block.RayPlane[0] = block.Ray.AngleCos * block.ViewFix[block.ScreenX]
@@ -407,7 +415,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	// Column going through portals affects this
 	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
 	block.CameraZ = r.Player.CameraZ
-	block.ShearZ = r.Player.ShearZ
+	block.ShearZ = r.shearZ()
 
 	for b := range block.Bodies {
 		vis := materials.GetVisible(b.Entity)
@@ -452,7 +460,6 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 
 // Render a frame.
 func (r *Renderer) Render() {
-	r.tree = ecs.Singleton(core.QuadtreeCID).(*core.Quadtree)
 	r.RefreshPlayer()
 	if r.PlayerBody == nil {
 		return
@@ -561,7 +568,7 @@ func (r *Renderer) Pick(x, y int) *PickResult {
 			EdgeTop:    0,
 			EdgeBottom: r.ScreenHeight,
 			CameraZ:    r.Player.CameraZ,
-			ShearZ:     r.Player.ShearZ,
+			ShearZ:     r.shearZ(),
 		},
 		Bodies:           make(containers.Set[*core.Body]),
 		InternalSegments: make(map[*core.InternalSegment]*core.Sector),

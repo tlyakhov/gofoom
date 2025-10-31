@@ -95,9 +95,9 @@ func (tm *ToneMap) SRGBToLinear(x float64) float64 {
 
 func (tm *ToneMap) ClampedLinearToSRGB(x float64) float64 {
 	if x < 0 {
-		x = 0
+		return tm.LutLinearToSRGB[0]
 	} else if x > 1.0 {
-		x = 1
+		return tm.LutLinearToSRGB[ToneMapMax]
 	}
 	return tm.LutLinearToSRGB[uint32(x*ToneMapMax)]
 }

@@ -136,12 +136,11 @@ func (pc *PlayerController) Always() {
 	}
 
 	// Audio
-	mixer := ecs.Singleton(audio.MixerCID).(*audio.Mixer)
-	mixer.PollSources()
-	mixer.SetListenerPosition(&pc.Body.Pos.Now)
+	audio.Mixer.PollSources()
+	audio.Mixer.SetListenerPosition(&pc.Body.Pos.Now)
 	dy, dx := math.Sincos(pc.Body.Angle.Now)
-	mixer.SetListenerOrientation(&concepts.Vector3{dx * constants.UnitsPerMeter, dy * constants.UnitsPerMeter, 0})
-	mixer.SetListenerVelocity(&pc.Mobile.Vel.Now)
+	audio.Mixer.SetListenerOrientation(&concepts.Vector3{dx * constants.UnitsPerMeter, dy * constants.UnitsPerMeter, 0})
+	audio.Mixer.SetListenerVelocity(&pc.Mobile.Vel.Now)
 
 	// This section handles frobbing
 

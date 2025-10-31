@@ -206,6 +206,9 @@ func alGenBuffers(n int) []Buffer {
 }
 
 func alDeleteBuffers(b []Buffer) {
+	if len(b) == 0 {
+		return
+	}
 	C.alDeleteBuffers(C.ALsizei(len(b)), (*C.ALuint)(unsafe.Pointer(&b[0])))
 }
 

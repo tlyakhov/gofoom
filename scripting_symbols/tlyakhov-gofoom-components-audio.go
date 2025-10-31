@@ -15,11 +15,10 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/components/audio/audio"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"GetMixer":           reflect.ValueOf(audio.GetMixer),
 		"GetSound":           reflect.ValueOf(audio.GetSound),
 		"GetSoundEvent":      reflect.ValueOf(audio.GetSoundEvent),
 		"GetSource":          reflect.ValueOf(audio.GetSource),
-		"MixerCID":           reflect.ValueOf(&audio.MixerCID).Elem(),
+		"Mixer":              reflect.ValueOf(&audio.Mixer).Elem(),
 		"NewConvReverb":      reflect.ValueOf(audio.NewConvReverb),
 		"PlaySound":          reflect.ValueOf(audio.PlaySound),
 		"SetReverbPreset":    reflect.ValueOf(audio.SetReverbPreset),
@@ -33,7 +32,6 @@ func init() {
 
 		// type definitions
 		"ConvReverb": reflect.ValueOf((*audio.ConvReverb)(nil)),
-		"Mixer":      reflect.ValueOf((*audio.Mixer)(nil)),
 		"Sound":      reflect.ValueOf((*audio.Sound)(nil)),
 		"SoundEvent": reflect.ValueOf((*audio.SoundEvent)(nil)),
 		"Source":     reflect.ValueOf((*audio.Source)(nil)),

@@ -13,6 +13,7 @@ import (
 	"runtime/pprof"
 	"time"
 
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/resources"
 	_ "tlyakhov/gofoom/scripting_symbols"
@@ -54,6 +55,9 @@ func main() {
 	}
 
 	ecs.Initialize()
+	audio.Mixer.Initialize()
+	defer audio.Mixer.Close()
+
 	editor = NewEditor()
 	editor.App = app.NewWithID("com.foom.editor")
 	editor.App.Lifecycle().SetOnStopped(func() { pprof.StopCPUProfile() })

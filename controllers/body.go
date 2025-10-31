@@ -17,7 +17,6 @@ type BodyController struct {
 	*core.Body
 	Sector *core.Sector
 	Player *character.Player
-	tree   *core.Quadtree
 
 	pos        *concepts.Vector3
 	pos2d      *concepts.Vector2
@@ -70,10 +69,7 @@ func (bc *BodyController) Always() {
 func (bc *BodyController) Recalculate() {
 	//bc.Collide()
 	bc.findBodySector()
-	if bc.tree == nil {
-		bc.tree = ecs.Singleton(core.QuadtreeCID).(*core.Quadtree)
-	}
-	bc.tree.Update(bc.Body)
+	core.QuadTree.Update(bc.Body)
 }
 
 func (bc *BodyController) findBodySector() {

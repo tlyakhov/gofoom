@@ -15,8 +15,6 @@ type ProximityController struct {
 	TargetBody   *core.Body
 	TargetSector *core.Sector
 	flags        behaviors.ProximityFlags
-
-	tree *core.Quadtree
 }
 
 func init() {
@@ -120,7 +118,7 @@ func (pc *ProximityController) proximityOnSector(sector *core.Sector) {
 	if pc.IgnoreSectorTransform {
 		center = sector.Center.Spawn.To2D()
 	}
-	pc.tree.Root.RangeCircle(center, pc.Range, func(b *core.Body) bool {
+	core.QuadTree.Root.RangeCircle(center, pc.Range, func(b *core.Body) bool {
 		if !b.IsActive() || !pc.isValid(b.Entity) {
 			return true
 		}
@@ -156,7 +154,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 
 	pc.flags |= behaviors.ProximityTargetsBody
 	pc.flags &= ^behaviors.ProximityTargetsSector
-	pc.tree.Root.RangeCircle(body.Pos.Now.To2D(), pc.Range, func(b *core.Body) bool {
+	core.QuadTree.Root.RangeCircle(body.Pos.Now.To2D(), pc.Range, func(b *core.Body) bool {
 		if !b.IsActive() || b == body || !pc.isValid(b.Entity) {
 			return true
 		}
@@ -182,10 +180,6 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 }
 
 func (pc *ProximityController) Always() {
-	if pc.tree == nil {
-		pc.tree = ecs.Singleton(core.QuadtreeCID).(*core.Quadtree)
-	}
-
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
 		if state.Source != pc.Entity {
 			return true

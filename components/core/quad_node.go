@@ -16,7 +16,7 @@ type QuadNode struct {
 	Bodies    []*Body
 	Lights    []*Body
 
-	Tree     *Quadtree
+	Tree     *quadtree
 	Parent   *QuadNode
 	Children [4]*QuadNode
 }

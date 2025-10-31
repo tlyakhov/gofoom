@@ -359,7 +359,7 @@ func (mc *MobileController) resolveCollision(bMobile *core.Mobile, bBody *core.B
 }
 
 func (mc *MobileController) bodyBodyCollide() {
-	mc.tree.Root.RangeCircle(mc.Body.Pos.Now.To2D(), mc.Body.Size.Now[0]*0.5, func(body *core.Body) bool {
+	core.QuadTree.Root.RangeCircle(mc.Body.Pos.Now.To2D(), mc.Body.Size.Now[0]*0.5, func(body *core.Body) bool {
 		if !body.IsActive() || body == mc.Body {
 			return true
 		}

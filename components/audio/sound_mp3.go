@@ -8,7 +8,7 @@ import (
 	gomp3 "github.com/hajimehoshi/go-mp3"
 )
 
-func (snd *Sound) loadMP3(mixer *Mixer, f *os.File) error {
+func (snd *Sound) loadMP3(f *os.File) error {
 	d, err := gomp3.NewDecoder(f)
 	if err != nil {
 		return err
@@ -45,7 +45,8 @@ func (snd *Sound) loadMP3(mixer *Mixer, f *os.File) error {
 	}
 
 	snd.buffer = al.GenBuffers(1)[0]
-	format := mixer.paramsToFormat(outgoingChannels, 16, false)
+	Mixer.buffers = append(Mixer.buffers, snd.buffer)
+	format := Mixer.paramsToFormat(outgoingChannels, 16, false)
 	snd.buffer.BufferData(format, snd.bytes, int32(d.SampleRate()))
 	snd.loaded = true
 	return nil

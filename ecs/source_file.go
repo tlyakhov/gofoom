@@ -23,8 +23,8 @@ type SourceFile struct {
 	Loaded     bool
 	References int
 
-	yamlEntities []any
-	children     []*SourceFile
+	serializedContents []any
+	children           []*SourceFile
 	// Scope is just this file and its children
 	loadedIDsToNewIDs map[EntitySourceID]EntitySourceID
 }
@@ -68,7 +68,7 @@ func (file *SourceFile) visitFileEntity(yamlMap map[string]any, fn funcFileVisto
 }
 
 func (file *SourceFile) rangeFile(fn funcFileVistor) error {
-	for _, yamlData := range file.yamlEntities {
+	for _, yamlData := range file.serializedContents {
 		yamlEntity := yamlData.(map[string]any)
 		if yamlEntity == nil {
 			log.Printf("SourceFile.rangeFile: YAML array element should be an object")
@@ -97,7 +97,7 @@ func (file *SourceFile) read() error {
 	}
 
 	var ok bool
-	if file.yamlEntities, ok = yamlTree.([]any); !ok || file.yamlEntities == nil {
+	if file.serializedContents, ok = yamlTree.([]any); !ok || file.serializedContents == nil {
 		return fmt.Errorf("SourceFile.read: YAML root must be an array")
 	}
 
@@ -204,6 +204,7 @@ func (file *SourceFile) Load() error {
 		return err
 	}
 	err := file.loadEntities()
+	file.serializedContents = nil
 	// After everything's loaded, trigger the controllers
 	ActAllControllers(ControllerRecalculate)
 	return err
@@ -226,6 +227,10 @@ func (file *SourceFile) loadEntities() error {
 		Entities.Set(uint32(entity))
 
 		for name, cid := range Types().IDs {
+			if cid == SourceFileCID {
+				// We've already attached SourceFiles in readAndMapNestedFiles
+				continue
+			}
 			yamlData := data[name]
 			if yamlData == nil {
 				continue
@@ -276,9 +281,6 @@ func (file *SourceFile) Unload() {
 	if file.ID == 0 || !file.Loaded {
 		return
 	}
-
-	Lock.Lock()
-	defer Lock.Unlock()
 
 	// First unload any children
 	for _, nestedFile := range file.children {

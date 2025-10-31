@@ -7,7 +7,6 @@ var BodyCID ecs.ComponentID
 var InternalSegmentCID ecs.ComponentID
 var LightCID ecs.ComponentID
 var MobileCID ecs.ComponentID
-var QuadtreeCID ecs.ComponentID
 var SectorCID ecs.ComponentID
 
 func init() {
@@ -15,7 +14,6 @@ func init() {
 	InternalSegmentCID = ecs.RegisterComponent(&ecs.Arena[InternalSegment, *InternalSegment]{})
 	LightCID = ecs.RegisterComponent(&ecs.Arena[Light, *Light]{})
 	MobileCID = ecs.RegisterComponent(&ecs.Arena[Mobile, *Mobile]{})
-	QuadtreeCID = ecs.RegisterComponent(&ecs.Arena[Quadtree, *Quadtree]{})
 	SectorCID = ecs.RegisterComponent(&ecs.Arena[Sector, *Sector]{})
 }
 func GetBody(e ecs.Entity) *Body {
@@ -57,13 +55,6 @@ func GetMobile(e ecs.Entity) *Mobile {
 
 func (*Mobile) ComponentID() ecs.ComponentID {
 	return MobileCID
-}
-func GetQuadtree(e ecs.Entity) *Quadtree {
-	panic("Tried to GetQuadtree, which is a singleton. use ecs.Singleton instead")
-}
-
-func (*Quadtree) ComponentID() ecs.ComponentID {
-	return QuadtreeCID
 }
 func GetSector(e ecs.Entity) *Sector {
 	if asserted, ok := ecs.GetComponent(e, SectorCID).(*Sector); ok {

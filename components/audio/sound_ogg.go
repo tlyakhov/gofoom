@@ -10,7 +10,7 @@ import (
 	"github.com/jfreymuth/oggvorbis"
 )
 
-func (snd *Sound) loadOgg(mixer *Mixer, f *os.File) error {
+func (snd *Sound) loadOgg(f *os.File) error {
 	r, err := oggvorbis.NewReader(f)
 	if err != nil {
 		return err
@@ -53,7 +53,8 @@ func (snd *Sound) loadOgg(mixer *Mixer, f *os.File) error {
 	}
 
 	snd.buffer = al.GenBuffers(1)[0]
-	format := mixer.paramsToFormat(outgoingChannels, 32, true)
+	Mixer.buffers = append(Mixer.buffers, snd.buffer)
+	format := Mixer.paramsToFormat(outgoingChannels, 32, true)
 	snd.buffer.BufferData(format, snd.bytes, int32(r.SampleRate()))
 	snd.loaded = true
 

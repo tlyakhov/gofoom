@@ -10,12 +10,12 @@ import (
 func main() {
 	ecs.Initialize()
 
-	mixer := ecs.Singleton(audio.MixerCID).(*audio.Mixer)
-	if mixer.Error != nil {
-		fmt.Printf("Failed to initialize audio engine: %v\n", mixer.Error)
+	audio.Mixer.Initialize()
+	if audio.Mixer.Error != nil {
+		fmt.Printf("Failed to initialize audio engine: %v\n", audio.Mixer.Error)
 		return
 	}
-	defer mixer.OnDelete()
+	defer audio.Mixer.Close()
 
 	/*eMusic := ecs.NewEntity()
 	sndMusic := ecs.NewAttachedComponent(eMusic, audio.SoundCID).(*audio.Sound)
