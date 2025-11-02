@@ -28,6 +28,9 @@ func wallHiPick(cp *columnPortal) {
 
 // wallHi renders the top portion of a portal segment.
 func wallHi(cp *columnPortal) {
+	if cp.ClippedTop >= cp.AdjClippedTop {
+		return
+	}
 	mat := cp.AdjSegment.HiSurface.Material
 	lit := materials.GetLit(cp.AdjSegment.HiSurface.Material)
 	extras := cp.AdjSegment.HiSurface.ExtraStages
@@ -83,6 +86,9 @@ func wallLowPick(cp *columnPortal) {
 
 // wallLow renders the bottom portion of a portal segment.
 func wallLow(cp *columnPortal) {
+	if cp.AdjClippedBottom >= cp.ClippedBottom {
+		return
+	}
 	mat := cp.AdjSegment.LoSurface.Material
 	lit := materials.GetLit(cp.AdjSegment.LoSurface.Material)
 	extras := cp.AdjSegment.LoSurface.ExtraStages

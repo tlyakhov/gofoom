@@ -15,6 +15,7 @@ func (r *Renderer) renderInternalSegment(ewd *entityWithDistSq, block *block, xS
 	block.IntersectionBottom = ewd.InternalSegment.Bottom
 	block.LightSampler.InputBody = 0
 	block.LightSampler.Sector = block.Sector
+	block.LightSampler.SegmentSector = block.Sector
 	block.LightSampler.Segment = &ewd.InternalSegment.Segment
 	ewd.InternalSegment.Normal.To3D(&block.LightSampler.Normal)
 

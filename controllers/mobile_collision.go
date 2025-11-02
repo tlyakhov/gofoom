@@ -485,10 +485,10 @@ func (mc *MobileController) Collide() {
 				// This math is probably not quite right, but close enough for
 				// now.
 				delta := &concepts.Vector2{mc.Pos.Now[0], mc.Pos.Now[1]}
-				delta.SubSelf(mc.Sector.Center.Spawn.To2D())
+				delta.SubSelf(&mc.Sector.TransformOrigin)
 				t.Prev.UnprojectSelf(delta)
 				t.Now.ProjectSelf(delta)
-				delta.AddSelf(mc.Sector.Center.Spawn.To2D())
+				delta.AddSelf(&mc.Sector.TransformOrigin)
 				delta.SubSelf(mc.Pos.Now.To2D())
 				// TODO: Scale this velocity using the moment of inertia:
 				mc.Vel.Now[0] += delta[0]

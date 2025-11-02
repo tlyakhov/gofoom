@@ -48,7 +48,9 @@ type LightSampler struct {
 
 	Sector  *core.Sector
 	Segment *core.Segment
-	Normal  concepts.Vector3
+	// This will be different from .Sector for inner segments.
+	SegmentSector *core.Sector
+	Normal        concepts.Vector3
 
 	prevDistSq, hitDistSq, maxDistSq float64
 
@@ -117,23 +119,53 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 		return true
 	}
 
-	// Always check the starting sector
+	p2d := p.To2D()
+
+	// Check higher level sectors - this is valuable for edge cases where our voxel
+	// is near a boundary with an inner sector
+	for _, e := range ls.Sector.HigherLayers {
+		if e == 0 {
+			continue
+		}
+		overlap := core.GetSector(e)
+		// If our light sample is on the segment itself, don't shadow it.
+		if ls.SegmentSector == overlap && ls.Normal[2] == 0 {
+			continue
+		}
+
+		// Check if the lightmap sample is inside the overlapped sector.
+		if !overlap.IsPointInside2D(p2d) {
+			continue
+		}
+		// If we're here, our lightmap sample is inside a higher layer sector,
+		// If it's under the floor or above the ceiling, it's shadowed for sure.
+		floorZ, ceilZ := overlap.ZAt(p2d)
+		if p[2]-ceilZ > ls.LightGrid || floorZ-p[2] > ls.LightGrid {
+			return false
+		}
+		// TODO: This should be recursive, probably?
+		if ls.lightVisibleFromSector(p, body, overlap) {
+			return true
+		}
+	}
+
+	// Check the starting sector
 	if ls.lightVisibleFromSector(p, body, ls.Sector) {
 		return true
 	}
 
-	// Check adjacent sectors - this is valuable for edge cases where our voxel
-	// is near a boundary
+	// Check exterior sectors in case our lighting sample is just outside the
+	// test sector. First, check adjacencies:
 	for _, seg := range ls.Sector.Segments {
 		if seg.AdjacentSector == 0 || seg.AdjacentSegment == nil || seg.PortalHasMaterial {
 			continue
 		}
-		distSq := seg.AdjacentSegment.DistanceToPointSq(p.To2D())
+		distSq := seg.AdjacentSegment.DistanceToPointSq(p2d)
 		if distSq >= ls.LightGrid*ls.LightGrid*2 {
 			continue
 		}
 
-		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(p.To2D())
+		floorZ, ceilZ := seg.AdjacentSegment.Sector.ZAt(p2d)
 		if p[2]-ceilZ > ls.LightGrid || floorZ-p[2] > ls.LightGrid {
 			continue
 		}
@@ -141,7 +173,23 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 			return true
 		}
 	}
-
+	// Check lower level sectors, maybe we escaped outside of an inner sector:
+	for _, e := range ls.Sector.LowerLayers {
+		if e == 0 {
+			continue
+		}
+		overlap := core.GetSector(e)
+		if !overlap.IsPointInside2D(p2d) {
+			continue
+		}
+		floorZ, ceilZ := overlap.ZAt(p2d)
+		if p[2]-ceilZ > ls.LightGrid || floorZ-p[2] > ls.LightGrid {
+			return false
+		}
+		if ls.lightVisibleFromSector(p, body, overlap) {
+			return true
+		}
+	}
 	return false
 }
 
