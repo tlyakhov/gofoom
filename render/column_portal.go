@@ -19,7 +19,19 @@ type columnPortal struct {
 }
 
 func (cp *columnPortal) CalcScreen() {
-	cp.AdjBottom, cp.AdjTop = cp.Adj.ZAt(cp.RaySegIntersect.To2D())
+	if cp.Adj.Top.Ignore {
+		cp.AdjTop = cp.IntersectionTop
+	} else {
+		cp.AdjTop = cp.Adj.Top.ZAt(cp.RaySegIntersect.To2D())
+		cp.TopPlane = &cp.Adj.Top
+	}
+	if cp.Adj.Bottom.Ignore {
+		cp.AdjBottom = cp.IntersectionBottom
+	} else {
+		cp.AdjBottom = cp.Adj.Bottom.ZAt(cp.RaySegIntersect.To2D())
+		cp.BottomPlane = &cp.Adj.Bottom
+	}
+
 	cp.AdjProjectedTop = cp.ProjectZ(cp.AdjTop - cp.CameraZ)
 	cp.AdjProjectedBottom = cp.ProjectZ(cp.AdjBottom - cp.CameraZ)
 
@@ -27,6 +39,4 @@ func (cp *columnPortal) CalcScreen() {
 	adjScreenBottom := cp.ScreenHeight/2 - int(math.Floor(cp.AdjProjectedBottom)) + int(cp.ShearZ)
 	cp.AdjClippedTop = concepts.Clamp(adjScreenTop, cp.ClippedTop, cp.ClippedBottom)
 	cp.AdjClippedBottom = concepts.Clamp(adjScreenBottom, cp.ClippedTop, cp.ClippedBottom)
-	//cp.AdjClippedTop = concepts.Clamp(cp.AdjClippedTop, cp.EdgeTop, cp.EdgeBottom)
-	//cp.AdjClippedBottom = concepts.Clamp(cp.AdjClippedBottom, cp.EdgeTop, cp.EdgeBottom)
 }

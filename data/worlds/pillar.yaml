@@ -4,9 +4,11 @@
   character.Player:
     Spawn: false
   core.Body:
-    Angle: 0
+    Angle:
+      Now: 705.9375
+      Spawn: 0
     Pos:
-      Now: 0, 0, 20
+      Now: 252.76927004435765, -74.23834083803794, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
@@ -19,12 +21,18 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0, 0, 0.007001650399223597
+      Now: 0.00000000000000000000000000000000000000000000000000000000000000000000000045878800364611494,
+        -0.0000000000000000000000000000000000000000000000000000000000000000000000004654828010252526,
+        0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player
   inventory.Carrier:
-    Inventory: []
+    Inventory:
+    - ∈⋮27
+    - ∈⋮55
+    - ∈⋮48
+    SelectedWeapon: ∈⋮55
 - Entity: ∈⋮2
   ecs.Named:
     Name: Default
@@ -801,6 +809,12 @@
   ecs.SourceFile:
     ID: 1
     Source: data/worlds/game-prefabs.yaml
+- Entity: ∈⋮27
+  inventory.Slot:
+    Class: Flower
+    Count: "0"
+    Image: ∈⋮98∈⋮Pluk∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+    Limit: "100"
 - Entity: ∈⋮28
   core.Body:
     Angle: 0
@@ -809,11 +823,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.578125
-        Reverse: false
+        Percent: 0.296875
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 200, 10, 14.755859375
+      Now: 200, 10, 13.349609375
       Spawn: 200, 10, 10
     Size: 20, 20
   ecs.Linked:
@@ -821,7 +835,7 @@
     - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮29
   core.Sector:
     Bottom:
@@ -1393,11 +1407,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.203125
-        Reverse: false
+        Percent: 0.0078125
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 820, 10, 11.650390625
+      Now: 820, 10, 10.00244140625
       Spawn: 820, 10, 10
     Size: 20, 20
   ecs.Linked:
@@ -1405,7 +1419,7 @@
     - ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
   materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
-  materials.Visible: ∈⋮164∈⋮Red+Keycard∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
 - Entity: ∈⋮45
   core.Sector:
     Bottom:
@@ -1517,6 +1531,12 @@
     Stages:
     - BlendingFunc: BlendNormal
       Material: ∈⋮47
+- Entity: ∈⋮48
+  inventory.Slot:
+    Class: Red Keycard
+    Count: "0"
+    Image: ∈⋮156∈⋮∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+    Limit: "1"
 - Entity: ∈⋮49
   ecs.Named:
     Name: Shader FHexMetal.png
@@ -1527,7 +1547,7 @@
     Speed: 10
     Start: ∈⋮51
   behaviors.ActorState:
-    Action: ∈⋮51
+    Action: ∈⋮52
   core.Sector:
     Bottom:
       Surface:
@@ -1541,7 +1561,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 565.1559938469214, -96.36665585302464
+        Now: 623.3012701892078, -157.6794919243041
         Spawn: 550, -100
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1550,7 +1570,7 @@
       Lo:
         Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 603.480784611202, -107.82136723627399
+        Now: 603.3012701892167, -192.3205080756739
         Spawn: 590, -100
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1559,7 +1579,7 @@
       Lo:
         Material: ∈⋮123∈⋮Door+Metal∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 623.6333441469753, -145.1559938469214
+        Now: 562.3205080756959, -203.30127018920783
         Spawn: 620, -130
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1568,7 +1588,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 612.178632763726, -183.48078461120195
+        Now: 527.6794919243262, -183.30127018921664
         Spawn: 620, -170
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1577,7 +1597,7 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 574.8440061530786, -203.63334414697536
+        Now: 516.6987298107922, -142.3205080756959
         Spawn: 590, -200
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1586,7 +1606,7 @@
       Lo:
         Material: ∈⋮122∈⋮Floor∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 536.519215388798, -192.178632763726
+        Now: 536.6987298107833, -107.6794919243261
         Spawn: 550, -200
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1595,7 +1615,7 @@
       Lo:
         Material: ∈⋮122∈⋮Floor∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 516.3666558530247, -154.8440061530786
+        Now: 577.6794919243041, -96.69872981079217
         Spawn: 520, -170
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
@@ -1604,11 +1624,12 @@
       Lo:
         Material: ∈⋮124∈⋮Wall+Variation∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       P:
-        Now: 527.821367236274, -116.51921538879803
+        Now: 612.3205080756738, -116.69872981078336
         Spawn: 520, -130
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
     Top:
+      Ignore: true
       Surface:
         Material: ∈⋮42∈⋮Flub∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
       Z: 300
@@ -1623,7 +1644,7 @@
         Reverse: false
         Start: 1, 0, 0, 0, 1, 0
         TweeningFunc: EaseInOut3
-      Now: 0.9581197691070137, 0.28636778458123385, 0, -0.28636778458123385, 0.9581197691070137,
+      Now: -0.49999999999978006, 0.8660254037842446, 0, -0.8660254037842446, -0.49999999999978006,
         0
       Spawn: 1, 0, 0, 0, 1, 0
     TransformOrigin: 570, -150
@@ -1651,3 +1672,10 @@
   behaviors.ActionTransition:
     Next:
     - ∈⋮53
+- Entity: ∈⋮55
+  inventory.Slot:
+    Class: WeirdGun
+    Count: "1"
+    Image: ∈⋮132∈⋮Weird+Gun∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml
+    Limit: "1"
+  inventory.WeaponClass: ∈⋮148∈⋮WeirdGun∈⋮1∈⋮data%2Fworlds%2Fgame-prefabs.yaml

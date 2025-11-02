@@ -63,8 +63,8 @@ func planes(block *block, plane *core.SectorPlane) {
 	block.MaterialSampler.Initialize(mat, extras)
 	transform := plane.Surface.Transform.Render
 
-	sectorWidth := (block.Sector.Max[0] - block.Sector.Min[0])
-	sectorDepth := (block.Sector.Max[1] - block.Sector.Min[1])
+	sectorWidth := (plane.Sector.Max[0] - plane.Sector.Min[0])
+	sectorDepth := (plane.Sector.Max[1] - plane.Sector.Min[1])
 	screenSpaceSectorWidth, screenSpaceSectorDepth :=
 		(transform[0]*sectorWidth+transform[2]*sectorDepth+transform[4])*block.ViewFix[block.ScreenX],
 		(transform[1]*sectorWidth+transform[3]*sectorDepth+transform[5])*block.ViewFix[block.ScreenX]
@@ -77,10 +77,9 @@ func planes(block *block, plane *core.SectorPlane) {
 	// math ops and adds branches, so seems unnecessary.
 	world := concepts.Vector3{}
 	planeRayDelta := concepts.Vector3{
-		block.Sector.Segments[0].P.Render[0] - block.Ray.Start[0],
-		block.Sector.Segments[0].P.Render[1] - block.Ray.Start[1],
+		plane.Sector.Segments[0].P.Render[0] - block.Ray.Start[0],
+		plane.Sector.Segments[0].P.Render[1] - block.Ray.Start[1],
 		plane.Z.Render - block.CameraZ}
-	// Top (ceiling)
 	start := block.EdgeTop
 	end := block.ClippedTop
 	if plane == &block.Sector.Bottom {
@@ -120,8 +119,8 @@ func planes(block *block, plane *core.SectorPlane) {
 			continue
 		}
 
-		world[0] += block.Ray.Start[0]
-		world[1] += block.Ray.Start[1]
+		world[0] += block.Ray.Start[0] - plane.Sector.TransformOrigin[0]
+		world[1] += block.Ray.Start[1] - plane.Sector.TransformOrigin[1]
 		switch plane.Normal[2] {
 		case 1, -1:
 			// This avoid precision errors for flat floors
@@ -132,19 +131,18 @@ func planes(block *block, plane *core.SectorPlane) {
 		}
 
 		if mat != 0 {
-			world[0] -= plane.Sector.Center.Spawn[0]
-			world[1] -= plane.Sector.Center.Spawn[1]
+			// TODO: We shouldn't need to do this per pixel, optimize this.
 			plane.Sector.Transform.Render.UnprojectSelf(world.To2D())
-			world[0] += plane.Sector.Center.Spawn[0]
-			world[1] += plane.Sector.Center.Spawn[1]
-			block.MaterialSampler.NU = (world[0] - block.Sector.Min[0]) / sectorWidth
-			block.MaterialSampler.NV = (world[1] - block.Sector.Min[1]) / sectorDepth
+			block.MaterialSampler.NU = world[0] / sectorWidth
+			block.MaterialSampler.NV = world[1] / sectorDepth
 			block.MaterialSampler.U = transform[0]*block.MaterialSampler.NU + transform[2]*block.MaterialSampler.NV + transform[4]
 			block.MaterialSampler.V = transform[1]*block.MaterialSampler.NU + transform[3]*block.MaterialSampler.NV + transform[5]
 			block.ScaleW = uint32(screenSpaceSectorWidth / distToPlane)
 			block.ScaleH = uint32(screenSpaceSectorDepth / distToPlane)
 			block.SampleMaterial(extras)
 			if lit != nil {
+				world[0] += plane.Sector.TransformOrigin[0]
+				world[1] += plane.Sector.TransformOrigin[1]
 				block.SampleLight(&block.MaterialSampler.Output, lit, &world, distToPlane)
 			}
 		}

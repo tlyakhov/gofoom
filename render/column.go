@@ -38,6 +38,10 @@ type column struct {
 	RayPlane           concepts.Vector3
 	LastPortalDistance float64
 	LastPortalSegment  *core.SectorSegment
+	// For inner sectors, the top/bottom planes may be ignored, resulting in
+	// using the outer sector for rendering those planes
+	TopPlane    *core.SectorPlane
+	BottomPlane *core.SectorPlane
 	// How many portals have we traversed so far?
 	Depth int
 	// Height of camera above ground

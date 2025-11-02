@@ -164,8 +164,12 @@ func (r *Renderer) RenderPortal(b *block) {
 			wallHiPick(portal)
 			wallLowPick(portal)
 		} else {
-			wallHi(portal)
-			wallLow(portal)
+			if !portal.Adj.Top.Ignore {
+				wallHi(portal)
+			}
+			if !portal.Adj.Bottom.Ignore {
+				wallLow(portal)
+			}
 		}
 	}
 
@@ -179,28 +183,31 @@ func (r *Renderer) RenderPortal(b *block) {
 // RenderSegmentColumn draws or picks a single pixel vertical column given a particular
 // segment intersection.
 func (r *Renderer) RenderSegmentColumn(b *block) {
+	b.IntersectionTop = b.TopPlane.ZAt(b.RaySegIntersect.To2D())
+	b.IntersectionBottom = b.BottomPlane.ZAt(b.RaySegIntersect.To2D())
 	b.CalcScreen()
 
 	b.LightSampler.MaterialSampler.Config = r.Config
 	b.LightSampler.InputBody = 0
 	b.LightSampler.Sector = b.Sector
+	b.LightSampler.SegmentSector = b.IntersectedSectorSegment.Sector
 	b.LightSampler.Segment = nil
 
 	if b.ClippedTop > b.EdgeTop {
 		b.LightSampler.Normal = b.Sector.Top.Normal
 		if b.Pick {
-			planePick(b, &b.Sector.Top)
+			planePick(b, b.TopPlane)
 		} else {
-			planes(b, &b.Sector.Top)
+			planes(b, b.TopPlane)
 		}
 	}
 
 	if b.ClippedBottom < b.EdgeBottom {
 		b.LightSampler.Normal = b.Sector.Bottom.Normal
 		if b.Pick {
-			planePick(b, &b.Sector.Bottom)
+			planePick(b, b.BottomPlane)
 		} else {
-			planes(b, &b.Sector.Bottom)
+			planes(b, b.BottomPlane)
 		}
 	}
 
@@ -312,7 +319,6 @@ func (r *Renderer) RenderSector(block *block) {
 	}
 
 	if found {
-		block.IntersectionBottom, block.IntersectionTop = block.Sector.ZAt(block.RaySegIntersect.To2D())
 		r.RenderSegmentColumn(block)
 	} else {
 		dbg := fmt.Sprintf("No intersections for sector %v at depth: %v", block.Sector.Entity, block.Depth)
@@ -350,6 +356,8 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) *PickResu
 
 	if r.startingSector != nil {
 		block.Sector = r.startingSector
+		block.TopPlane = &block.Sector.Top
+		block.BottomPlane = &block.Sector.Bottom
 	}
 	if block.Sector == nil {
 		return nil

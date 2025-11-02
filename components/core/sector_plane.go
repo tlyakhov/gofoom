@@ -10,6 +10,8 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type SectorPlane struct {
@@ -20,6 +22,9 @@ type SectorPlane struct {
 	Target  ecs.Entity                    `editable:"Target" edit_type:"Sector"`
 	Surface materials.Surface             `editable:"Surf"`
 	Scripts []*Script                     `editable:"Scripts"`
+
+	// This is only valid for inner sectors
+	Ignore bool `editable:"Ignore"`
 
 	XYDet float64
 }
@@ -51,6 +56,10 @@ func (s *SectorPlane) Construct(data map[string]any) {
 	if v, ok := data["Scripts"]; ok {
 		s.Scripts = ecs.ConstructSlice[*Script](v, nil)
 	}
+	if v, ok := data["Ignore"]; ok {
+		s.Ignore = cast.ToBool(v)
+	}
+
 }
 
 func (s *SectorPlane) Serialize() map[string]any {
@@ -66,6 +75,10 @@ func (s *SectorPlane) Serialize() map[string]any {
 	}
 	if len(s.Scripts) > 0 {
 		result["Scripts"] = ecs.SerializeSlice(s.Scripts)
+	}
+
+	if s.Ignore {
+		result["Ignore"] = true
 	}
 
 	return result
