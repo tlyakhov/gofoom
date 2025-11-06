@@ -35,6 +35,7 @@ var (
 )
 
 func Initialize() {
+	defer concepts.ExecutionDuration(concepts.ExecutionTrack("ecs.Initialize"))
 	Lock.Lock()
 	defer Lock.Unlock()
 	// We may have existing entities and components. Let's run any delete
@@ -64,7 +65,16 @@ func Initialize() {
 		rows[i] = nil
 	}
 	arenas = make([]ComponentArena, len(Types().ArenaPlaceholders))
-	Simulation = dynamic.NewSimulation()
+
+	// Preserve simulation callbacks
+	sim := dynamic.NewSimulation()
+	if Simulation != nil {
+		sim.Integrate = Simulation.Integrate
+		sim.Render = Simulation.Render
+		sim.NewFrame = Simulation.NewFrame
+	}
+	Simulation = sim
+
 	SourceFileNames = make(map[string]*SourceFile)
 	SourceFileIDs = make(map[EntitySourceID]*SourceFile)
 	FuncMap = template.FuncMap{}
@@ -435,12 +445,12 @@ func Load(filename string) error {
 	return file.Load()
 }
 
-func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[string]any {
+func serializeEntity(entity Entity, savedComponents map[uint64]Entity, includeCaches bool) map[string]any {
 	serialized := make(map[string]any)
-	serialized["Entity"] = entity.String()
+	serialized["Entity"] = entity.Serialize()
 	sid, local := entity.SourceID(), entity.Local()
 	for _, component := range rows[sid][int(local)] {
-		if component == nil || (component.Base().Flags&ComponentNoSave != 0) {
+		if component == nil || (!includeCaches && component.Base().Flags&ComponentNoSave != 0) {
 			continue
 		}
 		cid := component.ComponentID()
@@ -448,6 +458,8 @@ func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[strin
 		arena := Types().ArenaPlaceholders[cid]
 		yamlID := arena.Type().String()
 
+		// If the caller is tracking serialized components and this component
+		// is already saved, just reference the entity.
 		if savedComponents != nil {
 			if savedEntity, ok := savedComponents[hash]; ok {
 				serialized[yamlID] = savedEntity.Serialize()
@@ -455,7 +467,7 @@ func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[strin
 			}
 		}
 
-		if component.Base().IsExternal() {
+		if !includeCaches && component.Base().IsExternal() {
 			// Just pick one
 			// TODO: This has a code smell. Should there be a particular way
 			// to pick an entity ID to reference when saving?
@@ -464,6 +476,17 @@ func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[strin
 		}
 
 		yamlComponent := component.Serialize()
+		if !includeCaches {
+			toDelete := []string{}
+			for key := range yamlComponent {
+				if strings.HasPrefix(key, "_cache_") {
+					toDelete = append(toDelete, key)
+				}
+			}
+			for _, key := range toDelete {
+				delete(yamlComponent, key)
+			}
+		}
 		delete(yamlComponent, "Entities")
 		serialized[yamlID] = yamlComponent
 		if savedComponents != nil {
@@ -472,39 +495,14 @@ func serializeEntity(entity Entity, savedComponents map[uint64]Entity) map[strin
 
 	}
 	if len(serialized) == 1 {
+		// No components were serialized, only the "Entity" field.
 		return nil
 	}
 	return serialized
 }
 
-func SerializeEntity(entity Entity) map[string]any {
-	return serializeEntity(entity, nil)
-}
-
-func SerializeAll() []any {
-	defer concepts.ExecutionDuration(concepts.ExecutionTrack("ecs.SerializeAll"))
-	Lock.Lock()
-	defer Lock.Unlock()
-
-	all := []any{}
-	savedComponents := make(map[uint64]Entity)
-
-	Entities.Range(func(entity uint32) {
-		e := Entity(entity)
-		if e.IsExternal() {
-			return
-		}
-		serialized := serializeEntity(e, savedComponents)
-		if len(serialized) == 0 {
-			return
-		}
-		all = append(all, serialized)
-	})
-	return all
-}
-
 func Save(filename string) {
-	bytes, err := yaml.Marshal(SerializeAll())
+	bytes, err := yaml.Marshal(SaveSnapshot(false))
 	//bytes, err := json.MarshalIndent(yamlECS, "", "  ")
 
 	if err != nil {

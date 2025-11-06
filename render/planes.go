@@ -57,6 +57,9 @@ func planePick(block *block, plane *core.SectorPlane) {
 
 // planes renders the top/bottom (ceiling/floor) portion of a slice.
 func planes(block *block, plane *core.SectorPlane) {
+	if len(plane.Sector.Segments) == 0 {
+		return
+	}
 	mat := plane.Surface.Material
 	lit := materials.GetLit(plane.Surface.Material)
 	extras := plane.Surface.ExtraStages

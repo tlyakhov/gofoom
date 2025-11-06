@@ -53,20 +53,10 @@ func (a *Copy) Activate() {
 		// This will run ActionFinished
 		a.CutDelete.Activate()
 	} else {
-		a.Redo()
+		a.IEditor.SetContent(a.ClipboardData)
+		if a.Cut {
+			a.CutDelete.apply()
+		}
 		a.ActionFinished(false, false, false)
-	}
-}
-
-func (a *Copy) Undo() {
-	if a.Cut {
-		a.CutDelete.Undo()
-	}
-}
-
-func (a *Copy) Redo() {
-	a.IEditor.SetContent(a.ClipboardData)
-	if a.Cut {
-		a.CutDelete.Redo()
 	}
 }

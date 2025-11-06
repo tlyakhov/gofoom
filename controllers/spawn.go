@@ -16,7 +16,7 @@ func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.Compo
 	// TODO: This kind of cloning operation is used in other places (e.g. the
 	// editor). Should this be pulled into ecs? Will need to figure out how to
 	// address deep vs. shallow cloning and wiring up any relationships.
-	copiedEntityData := ecs.SerializeEntity(e)
+	copiedEntityData := ecs.SerializeEntity(e, false)
 	pastedEntity := ecs.NewEntity()
 	var originalComponent ecs.Component
 	var pastedComponentData map[string]any

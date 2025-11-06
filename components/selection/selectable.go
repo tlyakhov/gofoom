@@ -164,7 +164,7 @@ func SelectableFromEntity(e ecs.Entity) *Selectable {
 // Serialize saves the data for whatever the selectable is holding, which may or
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {
-	return ecs.SerializeEntity(s.Entity)
+	return ecs.SerializeEntity(s.Entity, false)
 }
 
 func (s *Selectable) PositionRange(f func(p *concepts.Vector2)) {

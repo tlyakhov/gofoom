@@ -89,7 +89,6 @@ func (s *Spawned[T]) Serialize() any {
 	result := make(map[string]any)
 	result["Spawn"] = s.serializeValue(s.Spawn)
 	result["Now"] = s.serializeValue(s.Now)
-
 	return result
 }
 

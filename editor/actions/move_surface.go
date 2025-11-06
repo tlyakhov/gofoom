@@ -27,37 +27,6 @@ type MoveSurface struct {
 }
 
 func (a *MoveSurface) Activate() {
-	a.Redo()
-	a.ActionFinished(false, true, false)
-}
-
-func (a *MoveSurface) Undo() {
-	i := 0
-	for _, s := range a.State().SelectedObjects.Exact {
-		if s.Sector == nil {
-			continue
-		}
-
-		plane := &s.Sector.Top
-		if a.Floor {
-			plane = &s.Sector.Bottom
-		}
-
-		switch a.Mode {
-		case SurfaceModePhi, SurfaceModeTheta:
-			plane.Normal = a.Original[i].(concepts.Vector3)
-		default:
-			plane.Z.Spawn = a.Original[i].(float64)
-			plane.Z.ResetToSpawn()
-		}
-		i++
-	}
-
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
-	a.State().Modified = true
-}
-
-func (a *MoveSurface) Redo() {
 	a.Original = make([]any, 0)
 	for _, s := range a.State().SelectedObjects.Exact {
 		if s.Sector == nil {
@@ -86,4 +55,5 @@ func (a *MoveSurface) Redo() {
 	}
 	ecs.ActAllControllers(ecs.ControllerRecalculate)
 	a.State().Modified = true
+	a.ActionFinished(false, true, false)
 }

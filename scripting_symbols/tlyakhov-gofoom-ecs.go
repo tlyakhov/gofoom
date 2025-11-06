@@ -65,6 +65,7 @@ func init() {
 		"LinkedCID":                       reflect.ValueOf(&ecs.LinkedCID).Elem(),
 		"Load":                            reflect.ValueOf(ecs.Load),
 		"LoadComponentWithoutAttaching":   reflect.ValueOf(ecs.LoadComponentWithoutAttaching),
+		"LoadSnapshot":                    reflect.ValueOf(ecs.LoadSnapshot),
 		"Lock":                            reflect.ValueOf(&ecs.Lock).Elem(),
 		"MaxEntities":                     reflect.ValueOf(constant.MakeFromLiteral("16777215", token.INT, 0)),
 		"ModifyComponentRelationEntities": reflect.ValueOf(ecs.ModifyComponentRelationEntities),
@@ -88,7 +89,7 @@ func init() {
 		"RelationTable":                   reflect.ValueOf(ecs.RelationTable),
 		"RelationUnknown":                 reflect.ValueOf(ecs.RelationUnknown),
 		"Save":                            reflect.ValueOf(ecs.Save),
-		"SerializeAll":                    reflect.ValueOf(ecs.SerializeAll),
+		"SaveSnapshot":                    reflect.ValueOf(ecs.SaveSnapshot),
 		"SerializeComponentIDs":           reflect.ValueOf(ecs.SerializeComponentIDs),
 		"SerializeEntity":                 reflect.ValueOf(ecs.SerializeEntity),
 		"Simulation":                      reflect.ValueOf(&ecs.Simulation).Elem(),
@@ -118,6 +119,7 @@ func init() {
 		"Relation":         reflect.ValueOf((*ecs.Relation)(nil)),
 		"RelationType":     reflect.ValueOf((*ecs.RelationType)(nil)),
 		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
+		"Snapshot":         reflect.ValueOf((*ecs.Snapshot)(nil)),
 		"SourceFile":       reflect.ValueOf((*ecs.SourceFile)(nil)),
 
 		// interface wrapper definitions

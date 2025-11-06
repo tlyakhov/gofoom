@@ -269,7 +269,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 
 func (list *EntityList) ReIndexComponents(entity ecs.Entity) {
 	// TODO: curate the things we index - for example, don't index relations
-	list.SearchIndex.Index(entity.Serialize(), ecs.SerializeEntity(entity))
+	list.SearchIndex.Index(entity.Serialize(), ecs.SerializeEntity(entity, false))
 }
 
 func (list *EntityList) ReIndex() {

@@ -126,14 +126,6 @@ func (a *AddEntity) Cancel() {
 	a.SelectObjects(true)
 	a.ActionFinished(true, true, false)
 }
-func (a *AddEntity) Undo() {
-	a.DetachFromSector()
-	ecs.Delete(a.Entity)
-}
-func (a *AddEntity) Redo() {
-	a.Activate()
-	a.AttachToSector()
-}
 
 func (a *AddEntity) Status() string {
 	return "Click to place entity"

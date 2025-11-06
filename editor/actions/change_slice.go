@@ -4,7 +4,6 @@
 package actions
 
 import (
-	"log"
 	"reflect"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
@@ -29,24 +28,6 @@ type ChangeSlice struct {
 }
 
 func (a *ChangeSlice) Activate() {
-	a.Redo()
-	a.ActionFinished(false, true, false)
-}
-
-func (a *ChangeSlice) Undo() {
-	// SlicePtr is something like: *[]<some type>
-	oldSlice := a.SlicePtr.Elem()
-	switch a.Mode {
-	case AddSliceElementMode:
-		if oldSlice.Len() > 0 {
-			oldSlice.Slice(0, a.SlicePtr.Len()-1)
-		}
-	default:
-		log.Printf("ChangeSlice.Undo: unimplemented: %v", a.Mode)
-	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
-}
-func (a *ChangeSlice) Redo() {
 	// SlicePtr is something like: *[]<some type>
 	oldSlice := a.SlicePtr.Elem()
 	switch a.Mode {
@@ -99,4 +80,5 @@ func (a *ChangeSlice) Redo() {
 		oldSlice.Index(a.Index).Set(reflect.ValueOf(next))
 	}
 	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	a.ActionFinished(false, true, false)
 }
