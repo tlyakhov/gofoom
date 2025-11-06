@@ -151,8 +151,8 @@ func (d *Door) Serialize() map[string]any {
 	if !d.Close.IsEmpty() {
 		result["Close"] = d.Close.Serialize()
 	}
-	result["Intent"] = d.Intent
-	result["Type"] = d.Type
+	result["Intent"] = d.Intent.String()
+	result["Type"] = d.Type.String()
 	result["Duration"] = d.Duration
 	result["Limit"] = d.Limit
 	result["UseLimit"] = d.UseLimit

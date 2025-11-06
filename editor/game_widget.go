@@ -152,9 +152,9 @@ func (g *GameWidget) TypedKey(evt *fyne.KeyEvent) {
 func (g *GameWidget) TypedShortcut(s fyne.Shortcut) {
 	switch s.ShortcutName() {
 	case "Undo":
-		editor.UndoCurrent()
+		editor.UndoOrRedo(false)
 	case "Redo":
-		editor.RedoCurrent()
+		editor.UndoOrRedo(true)
 	case "Cut":
 		editor.Act(&actions.Copy{Action: state.Action{IEditor: editor}, Cut: true})
 	case "Copy":

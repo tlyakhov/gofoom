@@ -37,12 +37,15 @@ func (ic *ImageController) Target(target ecs.Component, e ecs.Entity) bool {
 }
 
 func (ic *ImageController) Recalculate() {
-	if ic.toneMap == nil {
-		ic.toneMap = ecs.Singleton(materials.ToneMapCID).(*materials.ToneMap)
+	if ic.PixelsLinear != nil {
+		return
 	}
 
 	ic.Load()
 
+	if ic.toneMap == nil {
+		ic.toneMap = ecs.Singleton(materials.ToneMapCID).(*materials.ToneMap)
+	}
 	for y := 0; y < int(ic.Height); y++ {
 		for x := 0; x < int(ic.Width); x++ {
 			index := x + y*int(ic.Width)

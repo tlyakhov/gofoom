@@ -4,7 +4,6 @@
 package ecs
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -23,8 +22,8 @@ type SourceFile struct {
 	Loaded     bool
 	References int
 
-	serializedContents []any
-	children           []*SourceFile
+	serializedContents Snapshot
+	children           EntityTable
 	// Scope is just this file and its children
 	loadedIDsToNewIDs map[EntitySourceID]EntitySourceID
 }
@@ -46,39 +45,8 @@ func GetSourceFile(e Entity) *SourceFile {
 	return nil
 }
 
-type funcFileVistor func(entity Entity, data map[string]any) error
-
-func (file *SourceFile) visitFileEntity(yamlMap map[string]any, fn funcFileVistor) error {
-	var yamlEntity string
-	var entity Entity
-	var ok bool
-	var err error
-
-	if yamlMap["Entity"] == nil {
-		return errors.New("SourceFile.visitFileEntity: yaml object doesn't have entity key")
-	}
-	if yamlEntity, ok = yamlMap["Entity"].(string); !ok {
-		return errors.New("SourceFile.visitFileEntity: yaml entity isn't string")
-	}
-	if entity, err = ParseEntity(yamlEntity); err != nil {
-		return fmt.Errorf("SourceFile.visitFileEntity: yaml entity can't be parsed: %w", err)
-	}
-
-	return fn(entity, yamlMap)
-}
-
-func (file *SourceFile) rangeFile(fn funcFileVistor) error {
-	for _, yamlData := range file.serializedContents {
-		yamlEntity := yamlData.(map[string]any)
-		if yamlEntity == nil {
-			log.Printf("SourceFile.rangeFile: YAML array element should be an object")
-			continue
-		}
-		if err := file.visitFileEntity(yamlEntity, fn); err != nil {
-			return err
-		}
-	}
-	return nil
+func (file *SourceFile) SetContents(contents []any) {
+	file.serializedContents = contents
 }
 
 func (file *SourceFile) read() error {
@@ -129,9 +97,11 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 	   	Afterwards, we can load the rest of the entities & components,
 	   	substituting the file IDs that we have mapped for all relations. */
 
-	// Read in the file
-	if err := file.read(); err != nil {
-		return err
+	// Read in the file if we need to
+	if file.serializedContents == nil {
+		if err := file.read(); err != nil {
+			return err
+		}
 	}
 
 	// Check if the source file ID we're loading is free or if it's
@@ -146,7 +116,7 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 	SourceFileNames[file.Source] = file
 	SourceFileIDs[file.ID] = file
 
-	err := file.rangeFile(func(entity Entity, data map[string]any) error {
+	err := rangeSnapshot(file.serializedContents, func(entity Entity, data map[string]any) error {
 		// Sanity check:
 		if entity.IsExternal() {
 			return fmt.Errorf("SourceFile.readAndMapNestedFiles: Warning, entity %v from file %v is external", entity, file.Source)
@@ -176,7 +146,7 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 			// This file is already mapped. We can skip loading it. We still
 			// need to keep track of the loaded ID -> mapped ID though.
 			file.loadedIDsToNewIDs[nestedFile.ID] = mappedFile.ID
-			file.children = append(file.children, mappedFile)
+			file.children.Set(mappedFile.Entity)
 			mappedFile.References++
 			return nil
 		}
@@ -189,7 +159,7 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 		nestedFile = a.(*SourceFile)
 		nestedFile.readAndMapNestedFiles()
 		file.loadedIDsToNewIDs[nestedFile.LoadedID] = nestedFile.ID
-		file.children = append(file.children, nestedFile)
+		file.children.Set(nestedFile.Entity)
 		return nil
 	})
 	return err
@@ -213,13 +183,17 @@ func (file *SourceFile) Load() error {
 func (file *SourceFile) loadEntities() error {
 	file.Loaded = true
 	// Go depth first so that references resolve right away.
-	for _, nestedFile := range file.children {
+	for _, e := range file.children {
+		nestedFile := GetSourceFile(e)
+		if nestedFile == nil {
+			continue
+		}
 		if nestedFile.Loaded {
 			continue
 		}
 		nestedFile.loadEntities()
 	}
-	err := file.rangeFile(func(entity Entity, data map[string]any) error {
+	err := rangeSnapshot(file.serializedContents, func(entity Entity, data map[string]any) error {
 		// This file has an ID assigned to it, so every entity and component in
 		// the file has to include this file ID. We also need to map any
 		// relations.
@@ -283,7 +257,11 @@ func (file *SourceFile) Unload() {
 	}
 
 	// First unload any children
-	for _, nestedFile := range file.children {
+	for _, e := range file.children {
+		nestedFile := GetSourceFile(e)
+		if nestedFile == nil {
+			continue
+		}
 		nestedFile.References--
 		if nestedFile.References == 0 {
 			nestedFile.Unload()
@@ -307,6 +285,7 @@ func (file *SourceFile) Unload() {
 	delete(SourceFileNames, file.Source)
 	delete(SourceFileIDs, file.ID)
 	file.Loaded = false
+	file.serializedContents = nil
 }
 
 func (file *SourceFile) String() string {
@@ -325,6 +304,7 @@ func (file *SourceFile) Construct(data map[string]any) {
 	file.LoadedID = 0xFF
 	file.Loaded = false
 	file.References = 0
+	file.serializedContents = nil
 
 	if data == nil {
 		return
@@ -337,6 +317,19 @@ func (file *SourceFile) Construct(data map[string]any) {
 	if v, ok := data["ID"]; ok {
 		file.ID = EntitySourceID(cast.ToUint8(v))
 	}
+
+	if v, ok := data["_cache_LoadedID"]; ok {
+		file.LoadedID = EntitySourceID(cast.ToUint8(v))
+	}
+	if v, ok := data["_cache_References"]; ok {
+		file.References = v.(int)
+	}
+	if v, ok := data["_cache_children"]; ok {
+		file.children = v.(EntityTable)
+	}
+	if v, ok := data["_cache_loadedIDsToNewIDs"]; ok {
+		file.loadedIDsToNewIDs = v.(map[EntitySourceID]EntitySourceID)
+	}
 }
 
 func (file *SourceFile) Serialize() map[string]any {
@@ -344,5 +337,12 @@ func (file *SourceFile) Serialize() map[string]any {
 
 	result["Source"] = file.Source
 	result["ID"] = file.ID
+
+	// Cached data
+	result["_cache_LoadedID"] = file.LoadedID
+	result["_cache_Loaded"] = file.Loaded
+	result["_cache_References"] = file.References
+	result["_cache_children"] = file.children
+	result["_cache_loadedIDsToNewIDs"] = file.loadedIDsToNewIDs
 	return result
 }

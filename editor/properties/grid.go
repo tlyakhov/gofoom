@@ -26,6 +26,7 @@ import (
 	"tlyakhov/gofoom/components/selection"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
@@ -386,9 +387,9 @@ func (g *Grid) addEntityControls(sel *selection.Selection) {
 	}
 
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
-	c.Layout = layout.NewBorderLayout(nil, sw, nil, button)
-	c.Objects = []fyne.CanvasObject{selectComponent, button, sw}
-
+	c2 := container.NewBorder(nil, nil, nil, button, selectComponent)
+	c.Layout = layout.NewVBoxLayout()
+	c.Objects = []fyne.CanvasObject{c2, sw}
 	fyne.Do(c.Refresh)
 }
 

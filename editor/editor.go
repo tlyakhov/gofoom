@@ -321,17 +321,31 @@ func (e *Editor) refreshProperties() {
 	e.EntityList.Update()
 }
 
+func (e *Editor) Snapshot(worldState bool) state.EditorSnapshot {
+	result := state.EditorSnapshot{
+		MapView:         e.MapView,
+		Tool:            e.Tool,
+		SearchQuery:     e.SearchQuery,
+		SelectedObjects: selection.NewSelectionClone(e.SelectedObjects),
+	}
+	if worldState {
+		result.Snapshot = ecs.SaveSnapshot(true)
+	}
+	return result
+}
+
 func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	e.UpdateTitle()
 	if autoPortal {
 		e.autoPortal()
 	}
 	if !canceled {
-		e.UndoHistory = append(e.UndoHistory, e.CurrentAction)
+		e.UndoHistory = append(e.UndoHistory, e.Snapshot(true))
 		if len(e.UndoHistory) > 100 {
+			// TODO: Make ring buffer
 			e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
 		}
-		e.RedoHistory = []state.Actionable{}
+		e.RedoHistory = []state.EditorSnapshot{}
 	}
 	if refreshProperties {
 		e.refreshProperties()
@@ -436,63 +450,36 @@ func (e *Editor) SwitchTool(tool state.EditorTool) {
 	}
 }
 
-func (e *Editor) UndoCurrent() {
+func (e *Editor) UndoOrRedo(redo bool) {
+	if m, ok := e.CurrentAction.(state.Cancelable); ok {
+		m.Cancel()
+	}
 	e.Lock.Lock()
 	defer e.Lock.Unlock()
-	index := len(e.UndoHistory) - 1
+	forward := &e.RedoHistory
+	back := &e.UndoHistory
+	if redo {
+		forward, back = back, forward
+	}
+	*forward = append(*forward, e.Snapshot(true))
+
+	index := len(*back) - 1
 	if index < 0 {
 		return
 	}
-	a := e.UndoHistory[index]
-	// Don't undo the current action!
-	if a == e.CurrentAction {
-		return
+	snapshot := (*back)[index]
+	*back = (*back)[:index]
+	if snapshot.Snapshot != nil {
+		ecs.LoadSnapshot(snapshot.Snapshot)
 	}
-	e.UndoHistory = e.UndoHistory[:index]
-	if a == nil {
-		return
+	e.Renderer.RefreshPlayer()
+	if snapshot.SelectedObjects != nil {
+		e.SetSelection(true, e.SelectedObjects)
+	} else {
+		e.SetSelection(true, selection.NewSelection())
 	}
-	if e.CurrentAction != nil {
-		// Don't undo if we're in the middle of a placing action
-		if placeable, ok := e.CurrentAction.(actions.Placeable); ok && placeable.Placing() {
-			return
-		}
-	}
-
-	a.Undo()
-	controllers.AutoPortal()
+	e.MapView = snapshot.MapView
 	e.refreshProperties()
-	e.RedoHistory = append(e.RedoHistory, a)
-}
-
-func (e *Editor) RedoCurrent() {
-	e.Lock.Lock()
-	defer e.Lock.Unlock()
-
-	index := len(e.RedoHistory) - 1
-	if index < 0 {
-		return
-	}
-	a := e.RedoHistory[index]
-	// Don't redo the current action!
-	if a == e.CurrentAction {
-		return
-	}
-	e.RedoHistory = e.RedoHistory[:index]
-	if a == nil {
-		return
-	}
-	if e.CurrentAction != nil {
-		// Don't redo if we're in the middle of a placing action
-		if placeable, ok := e.CurrentAction.(actions.Placeable); ok && placeable.Placing() {
-			return
-		}
-	}
-
-	a.Redo()
-	controllers.AutoPortal()
-	e.refreshProperties()
-	e.UndoHistory = append(e.UndoHistory, a)
 }
 
 func (e *Editor) SelectObjects(updateEntityList bool, s ...*selection.Selectable) {

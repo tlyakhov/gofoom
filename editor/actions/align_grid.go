@@ -38,6 +38,7 @@ func (a *AlignGrid) Cancel() {
 }
 
 func (a *AlignGrid) Undo() {
+	// TODO: Apply this
 	a.State().MapView.GridA, a.State().MapView.GridB = a.PrevA, a.PrevB
 }
 func (a *AlignGrid) Redo() {

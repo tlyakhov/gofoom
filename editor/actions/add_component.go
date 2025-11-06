@@ -17,21 +17,11 @@ type AddComponent struct {
 }
 
 func (a *AddComponent) Activate() {
-	a.Redo()
-	a.ActionFinished(false, true, a.ID == core.SectorCID)
-}
-
-func (a *AddComponent) Undo() {
-	for _, entity := range a.Entities {
-		ecs.DetachComponent(a.ID, entity)
-	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
-}
-func (a *AddComponent) Redo() {
 	for _, entity := range a.Entities {
 		ecs.NewAttachedComponent(entity, a.ID)
 	}
 	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	a.ActionFinished(false, true, a.ID == core.SectorCID)
 }
 
 func (a *AddComponent) Construct(data map[string]any) {

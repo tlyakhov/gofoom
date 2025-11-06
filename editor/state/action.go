@@ -9,8 +9,6 @@ import "tlyakhov/gofoom/ecs"
 type Actionable interface {
 	ecs.Serializable
 	Activate()
-	Undo()
-	Redo()
 }
 
 type Cancelable interface {

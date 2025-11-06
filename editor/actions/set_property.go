@@ -38,7 +38,11 @@ func (a *SetProperty) FireHooks() {
 			continue
 		}
 		switch target := v.Parent().(type) {
-		case *ecs.Linked, *materials.Image, *audio.Sound, *core.Script, *core.SectorPlane, *core.Sector:
+		case *materials.Image:
+			target.MarkDirty()
+			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			a.FlushEntityImage(v.Entity)
+		case *ecs.Linked, *audio.Sound, *core.Script, *core.SectorPlane, *core.Sector:
 			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
 			a.FlushEntityImage(v.Entity)
 			// TODO: use a nicer source code editor for script properties.

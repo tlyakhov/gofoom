@@ -30,40 +30,6 @@ func (a *Delete) Activate() {
 	a.ActionFinished(false, true, true)
 }
 
-func (a *Delete) Undo() {
-	for s, saved := range a.Saved {
-		data := saved.(map[string]any)
-		for name, cid := range ecs.Types().IDs {
-			yamlData := data[name]
-			if yamlData == nil {
-				continue
-			}
-
-			if yamlLink, ok := yamlData.(string); ok {
-				linkedEntity, _ := ecs.ParseEntity(yamlLink)
-				if linkedEntity != 0 {
-					c := ecs.GetComponent(linkedEntity, cid)
-					if c != nil {
-						ecs.Attach(cid, s.Entity, &c)
-					}
-				}
-			} else {
-				yamlComponent := yamlData.(map[string]any)
-				var attached ecs.Component
-				ecs.Attach(cid, s.Entity, &attached)
-				if attached.Base().Attachments == 1 {
-					attached.Construct(yamlComponent)
-				}
-			}
-		}
-	}
-
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
-}
-func (a *Delete) Redo() {
-	a.apply()
-}
-
 func (a *Delete) apply() {
 	for s := range a.Saved {
 		switch s.Type {

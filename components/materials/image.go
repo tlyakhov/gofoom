@@ -27,15 +27,16 @@ type ImageMipMap struct {
 type Image struct {
 	ecs.Attached `editable:"^"`
 
-	Width, Height   uint32
 	Source          string `editable:"File" edit_type:"file"`
 	GenerateMipMaps bool   `editable:"Generate Mip Maps?" edit_type:"bool"`
 	Filter          bool   `editable:"Filter?" edit_type:"bool"`
 	ConvertSRGB     bool   `editable:"sRGB->Linear?"`
-	PixelsRGBA      []uint32
-	PixelsLinear    []concepts.Vector4
-	MipMaps         []ImageMipMap
-	Image           image.Image
+
+	Width, Height uint32
+	PixelsRGBA    []uint32
+	PixelsLinear  []concepts.Vector4
+	MipMaps       []ImageMipMap
+	Image         image.Image
 }
 
 func (img *Image) MultiAttachable() bool { return true }
@@ -44,9 +45,19 @@ func (img *Image) String() string {
 	return "Image: " + img.Source
 }
 
+func (img *Image) MarkDirty() {
+	img.Image = nil
+	img.PixelsRGBA = nil
+	img.PixelsLinear = nil
+	img.MipMaps = nil
+}
+
 // Load a texture from a file
 func (img *Image) Load() error {
 	if img.Source == "" {
+		return nil
+	}
+	if img.PixelsRGBA != nil {
 		return nil
 	}
 
@@ -262,6 +273,25 @@ func (img *Image) Construct(data map[string]any) {
 	if v, ok := data["ConvertSRGB"]; ok {
 		img.ConvertSRGB = cast.ToBool(v)
 	}
+	// Cached data
+	if v, ok := data["_cache_Width"]; ok {
+		img.Width = v.(uint32)
+	}
+	if v, ok := data["_cache_Height"]; ok {
+		img.Height = v.(uint32)
+	}
+	if v, ok := data["_cache_PixelsRGBA"]; ok {
+		img.PixelsRGBA = v.([]uint32)
+	}
+	if v, ok := data["_cache_PixelsLinear"]; ok {
+		img.PixelsLinear = v.([]concepts.Vector4)
+	}
+	if v, ok := data["_cache_MipMaps"]; ok {
+		img.MipMaps = v.([]ImageMipMap)
+	}
+	if v, ok := data["_cache_Image"]; ok {
+		img.Image = v.(image.Image)
+	}
 }
 
 func (img *Image) Serialize() map[string]any {
@@ -274,5 +304,13 @@ func (img *Image) Serialize() map[string]any {
 	if !img.ConvertSRGB {
 		result["ConvertSRGB"] = img.ConvertSRGB
 	}
+
+	// Cached data
+	result["_cache_Width"] = img.Width
+	result["_cache_Height"] = img.Height
+	result["_cache_PixelsRGBA"] = img.PixelsRGBA
+	result["_cache_PixelsLinear"] = img.PixelsLinear
+	result["_cache_MipMaps"] = img.MipMaps
+	result["_cache_Image"] = img.Image
 	return result
 }
