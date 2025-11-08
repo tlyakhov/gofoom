@@ -54,6 +54,7 @@ func NewRenderer() *Renderer {
 func (r *Renderer) Initialize() {
 	r.Config.Initialize()
 
+	r.RefreshFont()
 	r.Blocks = make([]block, r.NumBlocks)
 
 	for i := range r.Blocks {
@@ -63,9 +64,8 @@ func (r *Renderer) Initialize() {
 		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 		r.Blocks[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 	}
-	r.textStyle = r.NewTextStyle()
-	r.xorSeed = concepts.RngXorShift64(uint64(hrtime.Now().Milliseconds()))
 
+	r.xorSeed = concepts.RngXorShift64(uint64(hrtime.Now().Milliseconds()))
 	r.flashOpacity.Attach(ecs.Simulation)
 	r.flashOpacity.SetAll(0)
 	a := r.flashOpacity.NewAnimation()
@@ -78,6 +78,11 @@ func (r *Renderer) Initialize() {
 	a.Reverse = false
 	a.Active = false
 	a.Coordinates = dynamic.AnimationCoordinatesAbsolute
+
+}
+
+func (r *Renderer) RefreshFont() {
+	r.textStyle = r.NewTextStyle()
 }
 
 func (r *Renderer) shearZ() float64 {

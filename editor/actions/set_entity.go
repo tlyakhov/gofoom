@@ -16,14 +16,6 @@ type SetEntity struct {
 }
 
 func (a *SetEntity) Activate() {
-	a.Redo()
-	a.ActionFinished(false, true, true)
-}
-
-func (a *SetEntity) Undo() {
-
-}
-
-func (a *SetEntity) Redo() {
 	ecs.MoveEntityComponents(a.From, a.To)
+	a.ActionFinished(false, true, true)
 }

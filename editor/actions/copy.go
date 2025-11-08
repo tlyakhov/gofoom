@@ -27,7 +27,7 @@ type Copy struct {
 
 func (a *Copy) Activate() {
 	a.Saved = make(map[string]any)
-	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
+	a.Selected = selection.NewSelectionClone(a.State().Selection)
 
 	for _, obj := range a.Selected.Exact {
 		// Don't copy/paste active players

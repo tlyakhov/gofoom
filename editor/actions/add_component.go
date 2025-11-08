@@ -23,10 +23,3 @@ func (a *AddComponent) Activate() {
 	ecs.ActAllControllers(ecs.ControllerRecalculate)
 	a.ActionFinished(false, true, a.ID == core.SectorCID)
 }
-
-func (a *AddComponent) Construct(data map[string]any) {
-}
-
-func (a *AddComponent) Serialize() map[string]any {
-	return nil
-}

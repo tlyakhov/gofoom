@@ -21,7 +21,7 @@ type Delete struct {
 
 func (a *Delete) Activate() {
 	a.Saved = make(map[*selection.Selectable]any)
-	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
+	a.Selected = selection.NewSelectionClone(a.State().Selection)
 
 	for _, obj := range a.Selected.Exact {
 		a.Saved[obj] = obj.Serialize()

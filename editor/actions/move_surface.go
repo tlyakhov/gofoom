@@ -28,7 +28,7 @@ type MoveSurface struct {
 
 func (a *MoveSurface) Activate() {
 	a.Original = make([]any, 0)
-	for _, s := range a.State().SelectedObjects.Exact {
+	for _, s := range a.State().Selection.Exact {
 		if s.Sector == nil {
 			continue
 		}

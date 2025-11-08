@@ -161,6 +161,43 @@ func SelectableFromEntity(e ecs.Entity) *Selectable {
 	return &Selectable{Type: SelectableEntity, Entity: e}
 }
 
+// Helpful for prserving selections after loading snapshots
+func (s *Selectable) Refresh() bool {
+	if s.ActionWaypoint != nil {
+		s.ActionWaypoint = behaviors.GetActionWaypoint(s.Entity)
+		if s.ActionWaypoint == nil {
+			return false
+		}
+	}
+	if s.Body != nil {
+		s.Body = core.GetBody(s.Entity)
+		if s.Body == nil {
+			return false
+		}
+	}
+	if s.InternalSegment != nil {
+		s.InternalSegment = core.GetInternalSegment(s.Entity)
+		if s.InternalSegment == nil {
+			return false
+		}
+	}
+	if s.Sector != nil {
+		s.Sector = core.GetSector(s.Entity)
+		if s.Sector == nil &&
+			(s.Type == SelectableSector || s.Type == SelectableCeiling || s.Type == SelectableFloor) {
+			return false
+		}
+	}
+	if s.SectorSegment != nil {
+		index := s.SectorSegment.Index
+		if s.Sector == nil || index >= len(s.Sector.Segments) {
+			return false
+		}
+		s.SectorSegment = s.Sector.Segments[index]
+	}
+	return true
+}
+
 // Serialize saves the data for whatever the selectable is holding, which may or
 // may not be an Entity (could be a component of one)
 func (s *Selectable) Serialize() any {

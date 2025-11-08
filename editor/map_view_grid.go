@@ -14,8 +14,8 @@ import (
 )
 
 type MapViewGrid struct {
-	Current     *state.MapView
-	Prev        *state.MapView
+	Current     *state.EditorSnapshot
+	Prev        *state.EditorSnapshot
 	Visible     bool
 	Snap        bool
 	GridContext *gg.Context
@@ -47,13 +47,39 @@ func (g *MapViewGrid) WorldGrid3D(p *concepts.Vector3) *concepts.Vector3 {
 	return r
 }
 
+func (g *MapViewGrid) needsUpdate() bool {
+	if g.Prev == nil {
+		return true
+	}
+	if g.Prev.Pos != g.Current.Pos {
+		return true
+	}
+	if g.Prev.Scale != g.Current.Scale {
+		return true
+	}
+	if g.Prev.Size != g.Current.Size {
+		return true
+	}
+	if g.Prev.Step != g.Current.Step {
+		return true
+	}
+	if g.Prev.GridA != g.Current.GridA {
+		return true
+	}
+	if g.Prev.GridB != g.Current.GridB {
+		return true
+	}
+
+	return false
+}
+
 func (g *MapViewGrid) Draw(e *state.EditorState) {
 	if !g.Visible || e.Scale*g.Current.Step < 5.0 {
 		g.Clear()
 		return
 	}
 
-	if g.Prev == nil || *g.Prev != *g.Current {
+	if g.needsUpdate() {
 		g.Refresh(e)
 		mv := *g.Current
 		g.Prev = &mv

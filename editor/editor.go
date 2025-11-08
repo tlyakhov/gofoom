@@ -94,17 +94,17 @@ func (e *Editor) State() *state.EditorState {
 func NewEditor() *Editor {
 	e := &Editor{
 		EditorState: state.EditorState{
-			MapView: state.MapView{
-				Scale: 1.0,
-				Step:  10,
-				GridB: concepts.Vector2{1, 0},
+			EditorSnapshot: state.EditorSnapshot{
+				Scale:     1.0,
+				Step:      10,
+				GridB:     concepts.Vector2{1, 0},
+				Selection: selection.NewSelection(),
 			},
 			Modified:              false,
 			BodiesVisible:         true,
 			SectorTypesVisible:    false,
 			ComponentNamesVisible: true,
-			HoveringObjects:       selection.NewSelection(),
-			SelectedObjects:       selection.NewSelection(),
+			HoveringSelection:     selection.NewSelection(),
 			KeysDown:              make(containers.Set[fyne.KeyName]),
 		},
 		MapViewGrid:     MapViewGrid{Visible: true, Snap: true},
@@ -113,7 +113,7 @@ func NewEditor() *Editor {
 	e.Grid.IEditor = e
 	e.Grid.MaterialSampler.Ray = &render.Ray{}
 	e.ResizeRenderer(320, 240)
-	e.MapViewGrid.Current = &e.EditorState.MapView
+	e.MapViewGrid.Current = &e.EditorState.EditorSnapshot
 
 	return e
 }
@@ -317,17 +317,13 @@ func (e *Editor) autoPortal() {
 
 func (e *Editor) refreshProperties() {
 	defer concepts.ExecutionDuration(concepts.ExecutionTrack("RefreshProperties"))
-	e.Grid.Refresh(e.SelectedObjects)
+	e.Grid.Refresh(e.Selection)
 	e.EntityList.Update()
 }
 
 func (e *Editor) Snapshot(worldState bool) state.EditorSnapshot {
-	result := state.EditorSnapshot{
-		MapView:         e.MapView,
-		Tool:            e.Tool,
-		SearchQuery:     e.SearchQuery,
-		SelectedObjects: selection.NewSelectionClone(e.SelectedObjects),
-	}
+	result := e.EditorSnapshot
+
 	if worldState {
 		result.Snapshot = ecs.SaveSnapshot(true)
 	}
@@ -340,6 +336,12 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 		e.autoPortal()
 	}
 	if !canceled {
+		// TODO: Be smarter about when to snapshot, particularly avoid ECS
+		// snapshots when actions don't modify the world. Also, for orthogonal
+		// EditorState changes (for example, a pan followed by selection), we
+		// should merge undo states somehow. Maybe add some kind of Flags enum
+		// that actions could categorize themselves into, and sets of
+		// consecutive actions of different flags could be merged.
 		e.UndoHistory = append(e.UndoHistory, e.Snapshot(true))
 		if len(e.UndoHistory) > 100 {
 			// TODO: Make ring buffer
@@ -349,7 +351,7 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	}
 	if refreshProperties {
 		e.refreshProperties()
-		for _, s := range e.SelectedObjects.Exact {
+		for _, s := range e.Selection.Exact {
 			e.EntityList.ReIndexComponents(s.Entity)
 		}
 	}
@@ -461,40 +463,44 @@ func (e *Editor) UndoOrRedo(redo bool) {
 	if redo {
 		forward, back = back, forward
 	}
-	*forward = append(*forward, e.Snapshot(true))
-
 	index := len(*back) - 1
 	if index < 0 {
 		return
 	}
 	snapshot := (*back)[index]
 	*back = (*back)[:index]
+	*forward = append(*forward, e.Snapshot(true))
 	if snapshot.Snapshot != nil {
 		ecs.LoadSnapshot(snapshot.Snapshot)
 	}
+	e.Renderer.RefreshFont()
 	e.Renderer.RefreshPlayer()
-	if snapshot.SelectedObjects != nil {
-		e.SetSelection(true, e.SelectedObjects)
+	prev := e.EditorSnapshot
+	e.EditorSnapshot = snapshot
+	if snapshot.Selection != nil {
+		e.SetSelection(true, selection.NewSelectionClone(snapshot.Selection))
 	} else {
 		e.SetSelection(true, selection.NewSelection())
 	}
-	e.MapView = snapshot.MapView
+	if prev.Tool != snapshot.Tool {
+		e.SwitchTool(snapshot.Tool)
+	}
 	e.refreshProperties()
 }
 
 func (e *Editor) SelectObjects(updateEntityList bool, s ...*selection.Selectable) {
 	editor.Lock.Lock()
 	defer editor.Lock.Unlock()
-	e.SelectedObjects.Clear()
-	e.SelectedObjects.Add(s...)
-	e.SetSelection(updateEntityList, e.SelectedObjects)
+	e.Selection.Clear()
+	e.Selection.Add(s...)
+	e.SetSelection(updateEntityList, e.Selection)
 }
 
 func (e *Editor) SetSelection(updateEntityList bool, s *selection.Selection) {
-	e.SelectedObjects = s
+	e.Selection = s
 	e.refreshProperties()
 	if updateEntityList {
-		e.EntityList.Select(e.SelectedObjects)
+		e.EntityList.Select(e.Selection)
 	}
 }
 
@@ -523,7 +529,7 @@ func (e *Editor) GatherHoveringObjects() {
 	// Hovering
 	v1, v2 := e.SelectionBox()
 
-	e.HoveringObjects.Clear()
+	e.HoveringSelection.Clear()
 
 	// TODO: Make a "sector selection" mode where click-dragging selects sectors
 	// rather than just segments.
@@ -538,7 +544,7 @@ func (e *Editor) GatherHoveringObjects() {
 		for _, segment := range sector.Segments {
 			if editor.Selecting() {
 				if segment.P.Render[0] >= v1[0] && segment.P.Render[1] >= v1[1] && segment.P.Render[0] <= v2[0] && segment.P.Render[1] <= v2[1] {
-					e.HoveringObjects.Add(selection.SelectableFromSegment(segment))
+					e.HoveringSelection.Add(selection.SelectableFromSegment(segment))
 				}
 				/*if segment.AABBIntersect(v1[0], v1[1], v2[0], v2[1]) {
 					if state.IndexOf(e.HoveringObjects, segment) == -1 {
@@ -547,10 +553,10 @@ func (e *Editor) GatherHoveringObjects() {
 				}*/
 			} else {
 				if e.MouseWorld.Sub(&segment.P.Render).Length() < state.SegmentSelectionEpsilon {
-					e.HoveringObjects.Add(selection.SelectableFromSegment(segment))
+					e.HoveringSelection.Add(selection.SelectableFromSegment(segment))
 				}
 				if segment.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
-					e.HoveringObjects.Add(selection.SelectableFromSegment(segment))
+					e.HoveringSelection.Add(selection.SelectableFromSegment(segment))
 				}
 			}
 		}
@@ -566,21 +572,21 @@ func (e *Editor) GatherHoveringObjects() {
 			a := (seg.A[0] >= v1[0] && seg.A[1] >= v1[1] && seg.A[0] <= v2[0] && seg.A[1] <= v2[1])
 			b := (seg.B[0] >= v1[0] && seg.B[1] >= v1[1] && seg.B[0] <= v2[0] && seg.B[1] <= v2[1])
 			if a && b {
-				e.HoveringObjects.Add(selection.SelectableFromInternalSegment(seg))
+				e.HoveringSelection.Add(selection.SelectableFromInternalSegment(seg))
 			} else if a {
-				e.HoveringObjects.Add(selection.SelectableFromInternalSegmentA(seg))
+				e.HoveringSelection.Add(selection.SelectableFromInternalSegmentA(seg))
 			} else if b {
-				e.HoveringObjects.Add(selection.SelectableFromInternalSegmentB(seg))
+				e.HoveringSelection.Add(selection.SelectableFromInternalSegmentB(seg))
 			}
 		} else {
 			if e.MouseWorld.Sub(seg.A).Length() < state.SegmentSelectionEpsilon {
-				e.HoveringObjects.Add(selection.SelectableFromInternalSegmentA(seg))
+				e.HoveringSelection.Add(selection.SelectableFromInternalSegmentA(seg))
 			}
 			if e.MouseWorld.Sub(seg.B).Length() < state.SegmentSelectionEpsilon {
-				e.HoveringObjects.Add(selection.SelectableFromInternalSegmentB(seg))
+				e.HoveringSelection.Add(selection.SelectableFromInternalSegmentB(seg))
 			}
 			if seg.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
-				e.HoveringObjects.Add(selection.SelectableFromInternalSegment(seg))
+				e.HoveringSelection.Add(selection.SelectableFromInternalSegment(seg))
 			}
 		}
 	}
@@ -595,11 +601,11 @@ func (e *Editor) GatherHoveringObjects() {
 
 		if editor.Selecting() {
 			if aw.P[0] >= v1[0] && aw.P[1] >= v1[1] && aw.P[0] <= v2[0] && aw.P[1] <= v2[1] {
-				e.HoveringObjects.Add(selection.SelectableFromActionWaypoint(aw))
+				e.HoveringSelection.Add(selection.SelectableFromActionWaypoint(aw))
 			}
 		} else {
 			if e.MouseWorld.Sub(aw.P.To2D()).Length() < state.SegmentSelectionEpsilon {
-				e.HoveringObjects.Add(selection.SelectableFromActionWaypoint(aw))
+				e.HoveringSelection.Add(selection.SelectableFromActionWaypoint(aw))
 			}
 			/*if segment.DistanceToPoint(&e.MouseWorld) < state.SegmentSelectionEpsilon {
 				e.HoveringObjects.Add(core.SelectableFromPathSegment(segment))
@@ -618,12 +624,12 @@ func (e *Editor) GatherHoveringObjects() {
 		if e.Selecting() {
 			if p[0]+size >= v1[0] && p[0]-size <= v2[0] &&
 				p[1]+size >= v1[1] && p[1]-size <= v2[1] {
-				e.HoveringObjects.Add(selection.SelectableFromBody(body))
+				e.HoveringSelection.Add(selection.SelectableFromBody(body))
 			}
 		} else {
 			if p[0]+size > e.MouseWorld[0] && p[0]-size < e.MouseWorld[0] &&
 				p[1]+size > e.MouseWorld[1] && p[1]-size < e.MouseWorld[1] {
-				e.HoveringObjects.Add(selection.SelectableFromBody(body))
+				e.HoveringSelection.Add(selection.SelectableFromBody(body))
 			}
 		}
 	}
@@ -665,7 +671,7 @@ func (e *Editor) SetDialogLocation(dlg *dialog.FileDialog, target string) {
 }
 
 func (e *Editor) ToolSelectSegment() {
-	for _, s := range editor.SelectedObjects.Grouped {
+	for _, s := range editor.Selection.Grouped {
 		switch s.Type {
 		case selection.SelectableSector:
 			editor.SelectObjects(true, selection.SelectableFromSegment(s.Sector.Segments[0]))

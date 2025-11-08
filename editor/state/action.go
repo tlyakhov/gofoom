@@ -3,11 +3,8 @@
 
 package state
 
-import "tlyakhov/gofoom/ecs"
-
 // Actionable represents a generic editor action.
 type Actionable interface {
-	ecs.Serializable
 	Activate()
 }
 
@@ -19,11 +16,3 @@ type Cancelable interface {
 type Action struct {
 	IEditor
 }
-
-func (a *Action) Construct(data map[string]any) {}
-
-func (a *Action) Serialize() map[string]any {
-	return nil
-}
-
-func (a *Action) IsAttached() bool { return true }

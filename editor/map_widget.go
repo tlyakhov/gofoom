@@ -91,12 +91,12 @@ func (mw *MapWidget) render() {
 	mw.Context.FontHeight()
 
 	highlightedSectors := make(containers.Set[*core.Sector])
-	for _, s := range editor.SelectedObjects.Exact {
+	for _, s := range editor.Selection.Exact {
 		if s.Sector != nil && (s.Sector.Flags&ecs.ComponentHideInEditor) == 0 {
 			highlightedSectors.Add(s.Sector)
 		}
 	}
-	for _, s := range editor.HoveringObjects.Exact {
+	for _, s := range editor.HoveringSelection.Exact {
 		if s.Sector != nil && (s.Sector.Flags&ecs.ComponentHideInEditor) == 0 {
 			highlightedSectors.Add(s.Sector)
 		}
@@ -317,7 +317,7 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 		editor.Act(&actions.Select{Place: actions.Place{Action: state.Action{IEditor: editor}}})
 	case evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil:
 		editor.Act(&actions.Pan{Action: state.Action{IEditor: editor}})
-	case evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.SelectedObjects.Empty():
+	case evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.Selection.Empty():
 		editor.Act(&actions.Transform{Action: state.Action{IEditor: editor}})
 	}
 

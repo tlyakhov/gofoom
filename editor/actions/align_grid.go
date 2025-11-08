@@ -20,14 +20,14 @@ func (a *AlignGrid) EndPoint() bool {
 	}
 	a.State().Lock.Lock()
 
-	a.PrevA, a.PrevB = a.State().MapView.GridA, a.State().MapView.GridB
+	a.PrevA, a.PrevB = a.State().GridA, a.State().GridB
 	a.A = *a.WorldGrid(&a.State().MouseDownWorld)
 	a.B = *a.WorldGrid(&a.State().MouseWorld)
 	if a.A.DistSq(&a.B) < 0.001 {
 		a.A = concepts.Vector2{}
 		a.B = concepts.Vector2{0, 1}
 	}
-	a.State().MapView.GridA, a.State().MapView.GridB = a.A, a.B
+	a.State().GridA, a.State().GridB = a.A, a.B
 	a.State().Lock.Unlock()
 	a.ActionFinished(false, false, false)
 	return true
@@ -35,14 +35,6 @@ func (a *AlignGrid) EndPoint() bool {
 
 func (a *AlignGrid) Cancel() {
 	a.ActionFinished(true, false, false)
-}
-
-func (a *AlignGrid) Undo() {
-	// TODO: Apply this
-	a.State().MapView.GridA, a.State().MapView.GridB = a.PrevA, a.PrevB
-}
-func (a *AlignGrid) Redo() {
-	a.State().MapView.GridA, a.State().MapView.GridB = a.A, a.B
 }
 
 func (a *AlignGrid) Status() string {
