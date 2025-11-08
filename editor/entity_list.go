@@ -115,7 +115,7 @@ func (list *EntityList) findAllReferences() {
 	sel := make(ecs.EntityTable, 0)
 	found := make(ecs.EntityTable, 0)
 
-	for _, s := range editor.SelectedObjects.Exact {
+	for _, s := range editor.Selection.Exact {
 		sel.Set(s.Entity)
 		found.Set(s.Entity)
 	}
@@ -243,7 +243,7 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		}
 		entity := list.BackingStore[id.Row][0].(int)
 		s := selection.SelectableFromEntity(ecs.Entity(entity))
-		if !editor.SelectedObjects.Contains(s) {
+		if !editor.Selection.Contains(s) {
 			editor.SelectObjects(false, s)
 		}
 		log.Printf("select: %v", ecs.Entity(entity).String())

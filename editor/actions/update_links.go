@@ -13,25 +13,24 @@ type UpdateLinks struct {
 	state.Action
 
 	Entities         ecs.EntityTable
-	OldComponents    map[ecs.Entity]ecs.ComponentTable
 	AddComponents    ecs.ComponentTable
 	RemoveComponents containers.Set[ecs.ComponentID]
 }
 
 func (a *UpdateLinks) Activate() {
-	a.Redo()
+	for _, e := range a.Entities {
+		if e != 0 {
+			a.attach(e)
+		}
+	}
+	ecs.ActAllControllers(ecs.ControllerRecalculate)
 	a.ActionFinished(false, true, false)
-}
-
-func (a *UpdateLinks) Undo() {
-	panic("Unimplemented")
 }
 
 func (a *UpdateLinks) attach(entity ecs.Entity) {
 	all := ecs.AllComponents(entity)
 	oldComponents := make(ecs.ComponentTable, len(all))
 	copy(oldComponents, all)
-	a.OldComponents[entity] = oldComponents
 
 	for _, oldComponent := range oldComponents {
 		if oldComponent == nil {
@@ -54,13 +53,4 @@ func (a *UpdateLinks) attach(entity ecs.Entity) {
 			ecs.Attach(cid, entity, &addComponent)
 		}
 	}
-}
-func (a *UpdateLinks) Redo() {
-	a.OldComponents = make(map[ecs.Entity]ecs.ComponentTable)
-	for _, e := range a.Entities {
-		if e != 0 {
-			a.attach(e)
-		}
-	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
 }

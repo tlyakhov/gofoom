@@ -37,7 +37,7 @@ func (a *Transform) begin() {
 
 	a.SetMapCursor(desktop.PointerCursor)
 
-	a.Selected = selection.NewSelectionClone(a.State().SelectedObjects)
+	a.Selected = selection.NewSelectionClone(a.State().Selection)
 	a.Mode = "translate"
 
 	a.State().Lock.Lock()
@@ -127,18 +127,6 @@ func (a *Transform) Apply() {
 	}
 }
 func (a *Transform) Cancel() {}
-func (a *Transform) Frame()  {}
-
-func (a *Transform) Undo() {
-	a.Selected.LoadPositions()
-	for _, s := range a.Selected.Exact {
-		s.Recalculate()
-	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
-}
-func (a *Transform) Redo() {
-	a.Apply()
-}
 
 func (a *Transform) RequiresLock() bool { return true }
 

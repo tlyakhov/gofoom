@@ -110,7 +110,7 @@ func (g *GameWidget) Draw() {
 		return
 	}
 
-	editor.Lock.Lock()
+	//editor.Lock.Lock()
 	editor.MapWidget.render()
 	pixels := g.Context.Image().(*image.RGBA).Pix
 	r.Render()
@@ -119,7 +119,7 @@ func (g *GameWidget) Draw() {
 	g.renderLastPick()
 
 	r.ApplyBuffer(pixels)
-	editor.Lock.Unlock()
+	//editor.Lock.Unlock()
 
 	copy(g.Surface.Pix, pixels)
 	fyne.Do(g.Raster.Refresh)
@@ -183,8 +183,8 @@ func (g *GameWidget) MouseDown(evt *desktop.MouseEvent) {
 	if evt.Button == desktop.MouseButtonSecondary {
 		g.lastPick = editor.Renderer.Pick(int(x), int(y))
 		if evt.Modifier&fyne.KeyModifierShift != 0 {
-			editor.SelectedObjects.Add(g.lastPick.Selection...)
-			editor.SetSelection(true, editor.SelectedObjects)
+			editor.Selection.Add(g.lastPick.Selection...)
+			editor.SetSelection(true, editor.Selection)
 		} else if evt.Modifier&fyne.KeyModifierSuper != 0 {
 			log.Printf("Subtracting game picking unimplemented")
 		} else {

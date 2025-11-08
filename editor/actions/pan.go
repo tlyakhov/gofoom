@@ -70,13 +70,6 @@ func (a *Pan) MouseUp(evt *desktop.MouseEvent) {
 func (a *Pan) Activate() {}
 func (a *Pan) Cancel()   {}
 
-func (a *Pan) Undo() {
-	a.State().Pos = a.OriginalPos
-}
-func (a *Pan) Redo() {
-	a.State().Pos = *a.OriginalPos.Sub(&a.Delta)
-}
-
 func (a *Pan) RequiresLock() bool { return true }
 
 func (a *Pan) Status() string {

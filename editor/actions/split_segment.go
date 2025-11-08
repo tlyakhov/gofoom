@@ -4,7 +4,6 @@
 package actions
 
 import (
-	"slices"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
@@ -26,7 +25,7 @@ type SplitSegment struct {
 
 func (a *SplitSegment) Activate() {}
 
-func (a *SplitSegment) Split(ss *segmentSplitter) bool {
+func (a *SplitSegment) split(ss *segmentSplitter) bool {
 	md := a.WorldGrid(&a.State().MouseDownWorld)
 	m := a.WorldGrid(&a.State().MouseWorld)
 	isect := new(concepts.Vector2)
@@ -52,7 +51,7 @@ func (a *SplitSegment) EndPoint() bool {
 	// Split only selected if any, otherwise all sectors/segments.
 	// TODO: also split internal segments
 	var segments containers.Set[*core.SectorSegment]
-	if a.State().SelectedObjects.Empty() {
+	if a.State().Selection.Empty() {
 		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
 		segments = make(containers.Set[*core.SectorSegment])
 		for i := range arena.Cap() {
@@ -62,7 +61,7 @@ func (a *SplitSegment) EndPoint() bool {
 		}
 	} else {
 		segments = make(containers.Set[*core.SectorSegment])
-		for _, s := range a.State().SelectedObjects.Exact {
+		for _, s := range a.State().Selection.Exact {
 			switch s.Type {
 			// Segments:
 			case selection.SelectableLow, selection.SelectableMid,
@@ -79,7 +78,7 @@ func (a *SplitSegment) EndPoint() bool {
 	}
 
 	for seg := range segments {
-		a.Split(&segmentSplitter{original: seg})
+		a.split(&segmentSplitter{original: seg})
 	}
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
@@ -88,33 +87,6 @@ func (a *SplitSegment) EndPoint() bool {
 
 func (a *SplitSegment) Cancel() {
 	a.ActionFinished(true, true, true)
-}
-
-func (a *SplitSegment) Undo() {
-	for _, ss := range a.NewSegments {
-		reset := make([]*core.SectorSegment, 0)
-		segments := ss.original.Sector.Segments
-		for _, seg := range segments {
-			if seg != ss.added {
-				reset = append(reset, seg)
-			}
-		}
-		ss.original.Sector.Segments = reset
-		ss.added.Sector.Recalculate()
-	}
-}
-func (a *SplitSegment) Redo() {
-	for _, ss := range a.NewSegments {
-		index := 0
-		for i, seg := range ss.original.Sector.Segments {
-			if seg == ss.original {
-				index = i
-				break
-			}
-		}
-		ss.original.Sector.Segments = slices.Insert(ss.original.Sector.Segments, index+1, ss.added)
-		ss.added.Sector.Recalculate()
-	}
 }
 
 func (a *SplitSegment) RequiresLock() bool { return true }

@@ -71,8 +71,8 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 		mw.Context.SetRGB(light.Diffuse[0], light.Diffuse[1], light.Diffuse[2])
 	} // Sprite...
 
-	hovering := editor.HoveringObjects.Contains(selection.SelectableFromBody(body))
-	selected := editor.SelectedObjects.Contains(selection.SelectableFromBody(body))
+	hovering := editor.HoveringSelection.Contains(selection.SelectableFromBody(body))
+	selected := editor.Selection.Contains(selection.SelectableFromBody(body))
 
 	if selected || hovering {
 		img := editor.EntityImage(body.Entity)

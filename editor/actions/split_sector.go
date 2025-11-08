@@ -64,7 +64,7 @@ func (a *SplitSector) EndPoint() bool {
 
 	var sectors []*core.Sector
 	// Split only selected if any, otherwise all sectors.
-	if a.State().SelectedObjects.Empty() {
+	if a.State().Selection.Empty() {
 		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
 		sectors = make([]*core.Sector, 0)
 		for i := range arena.Cap() {
@@ -75,7 +75,7 @@ func (a *SplitSector) EndPoint() bool {
 	} else {
 		sectors = make([]*core.Sector, 0)
 		visited := make(containers.Set[ecs.Entity])
-		for _, s := range a.State().SelectedObjects.Exact {
+		for _, s := range a.State().Selection.Exact {
 			// We could just check for the .Sector field being valid, but then
 			// the user may be surprised to have a sector split when they've
 			// selected a body or something else.
@@ -101,81 +101,6 @@ func (a *SplitSector) EndPoint() bool {
 
 func (a *SplitSector) Cancel() {
 	a.ActionFinished(true, true, true)
-}
-
-func (a *SplitSector) Undo() {
-	/*bodies := make([]ecs.Entity, 0)
-
-	for _, splitter := range a.Splitters {
-		if splitter.Result == nil {
-			continue
-		}
-		for _, addedComponents := range splitter.Result {
-			sector := addedComponents[core.SectorCID].(*core.Sector)
-			for entity, body := range sector.Bodies {
-				bodies = append(bodies, entity)
-				body.SectorEntity = 0
-			}
-			sector.Bodies = make(map[ecs.Entity]*core.Body)
-			ecs.DetachAll(sector.Entity)
-		}
-	}
-	for entity, originalComponents := range a.Original {
-		for _, component := range originalComponents {
-			if component == nil {
-				continue
-			}
-			ecs.Attach(ecs.Types().ID(component), entity, component)
-			if sector, ok := component.(*core.Sector); ok {
-				for _, entity := range bodies {
-					if body := core.GetBody(entity); body != nil {
-						if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-							body.SectorEntity = sector.Entity
-							sector.Bodies[entity] = body
-						}
-					}
-				}
-			}
-		}
-	}*/
-}
-func (a *SplitSector) Redo() {
-	/*	bodies := make([]ecs.Entity, 0)
-
-		for entity, originalComponents := range a.Original {
-			sector := originalComponents[core.SectorCID].(*core.Sector)
-			for entity, body := range sector.Bodies {
-				bodies = append(bodies, entity)
-				body.SectorEntity = 0
-			}
-			sector.Bodies = make(map[ecs.Entity]*core.Body)
-			ecs.DetachAll(entity)
-		}
-
-		for _, splitter := range a.Splitters {
-			if splitter.Result == nil {
-				continue
-			}
-			for _, addedComponents := range splitter.Result {
-				for _, component := range addedComponents {
-					if component == nil {
-						continue
-					}
-					ecs.Attach(ecs.Types().ID(component), component.GetEntity(), component)
-					if sector, ok := component.(*core.Sector); ok {
-						for _, entity := range bodies {
-							if body := core.GetBody(entity); body != nil {
-								if sector.IsPointInside2D(body.Pos.Original.To2D()) {
-									body.SectorEntity = sector.Entity
-									sector.Bodies[entity] = body
-								}
-							}
-						}
-					}
-				}
-			}
-		}*/
-
 }
 
 func (a *SplitSector) Status() string {

@@ -130,7 +130,3 @@ func (a *AddEntity) Cancel() {
 func (a *AddEntity) Status() string {
 	return "Click to place entity"
 }
-
-func (a *AddEntity) Serialize() map[string]any {
-	return nil
-}

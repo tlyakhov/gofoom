@@ -29,15 +29,20 @@ const (
 )
 
 type EditorSnapshot struct {
-	Snapshot        ecs.Snapshot
-	SelectedObjects *selection.Selection
-	SearchQuery     string
-	Tool            EditorTool
-	MapView         MapView
+	Scale                  float64
+	Pos                    concepts.Vector2 // World
+	Size                   concepts.Vector2 // Screen
+	Step                   float64          // Grid step
+	GridA, GridB           concepts.Vector2 // World, lock grid to axis.
+	Snapshot               ecs.Snapshot
+	Selection              *selection.Selection
+	SelectedTransformables []any
+	SearchQuery            string
+	Tool                   EditorTool
 }
 
 type EditorState struct {
-	MapView
+	EditorSnapshot
 	Lock          sync.Mutex
 	GameInputLock sync.Mutex
 
@@ -49,12 +54,8 @@ type EditorState struct {
 	MousePressed   bool
 	Dragging       bool
 
-	SelectedObjects        *selection.Selection
-	HoveringObjects        *selection.Selection
-	SearchQuery            string
-	SelectedTransformables []any
+	HoveringSelection *selection.Selection
 
-	Tool          EditorTool
 	OpenFile      string
 	Modified      bool
 	CurrentAction Actionable

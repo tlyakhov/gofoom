@@ -4,7 +4,6 @@
 package actions
 
 import (
-	"fmt"
 	"log"
 	"reflect"
 
@@ -90,25 +89,4 @@ func (a *SetProperty) Activate() {
 	a.FireHooks()
 	a.State().Modified = true
 	a.ActionFinished(false, true, false)
-}
-
-func (a *SetProperty) Undo() {
-	for i, v := range a.Values {
-		if v.Entity.IsExternal() {
-			continue
-		}
-		fmt.Printf("Undo: %v\n", a.Original[i].String())
-		v.Deref().Set(a.Original[i])
-	}
-	a.FireHooks()
-}
-func (a *SetProperty) Redo() {
-	for i, v := range a.Values {
-		if v.Entity.IsExternal() {
-			continue
-		}
-		fmt.Printf("Redo: %v\n", a.ValuesToAssign[i].String())
-		v.Deref().Set(a.ValuesToAssign[i])
-	}
-	a.FireHooks()
 }

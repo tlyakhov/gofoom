@@ -172,17 +172,6 @@ func (a *Paste) MouseUp(evt *desktop.MouseEvent) {
 
 }
 
-func (a *Paste) Undo() {
-	for _, pasted := range a.CopiedToPasted {
-		ecs.Delete(pasted)
-	}
-}
-
-func (a *Paste) Redo() {
-	a.apply()
-	a.Transform.Apply()
-}
-
 func (a *Paste) Status() string {
 	return "Click to place pasted entity/entities"
 }

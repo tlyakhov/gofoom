@@ -39,7 +39,7 @@ func (a *Select) BeginPoint(m fyne.KeyModifier, b desktop.MouseButton) bool {
 		a.Modifier = SelectSub
 	}
 
-	a.Original = selection.NewSelectionClone(a.State().SelectedObjects)
+	a.Original = selection.NewSelectionClone(a.State().Selection)
 	return true
 }
 
@@ -48,7 +48,7 @@ func (a *Select) EndPoint() bool {
 		return false
 	}
 
-	hovering := a.State().HoveringObjects
+	hovering := a.State().HoveringSelection
 	if hovering.Empty() { // User is trying to select a sector?
 		hovering = selection.NewSelection()
 		arena := ecs.ArenaFor[core.Sector](core.SectorCID)
@@ -87,14 +87,7 @@ func (a *Select) EndPoint() bool {
 
 func (a *Select) Activate() {}
 func (a *Select) Cancel()   {}
-func (a *Select) Frame()    {}
 
-func (a *Select) Undo() {
-	a.SetSelection(true, a.Original)
-}
-func (a *Select) Redo() {
-	a.SetSelection(true, a.Selected)
-}
 func (a *Select) RequiresLock() bool { return false }
 
 func (a *Select) Status() string {

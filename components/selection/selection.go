@@ -26,6 +26,16 @@ func NewSelectionClone(toCopy *Selection) *Selection {
 	s.Exact = maps.Clone(toCopy.Exact)
 	s.Grouped = maps.Clone(toCopy.Grouped)
 	s.Positions = maps.Clone(toCopy.Positions)
+	for hash, sel := range s.Exact {
+		if !sel.Refresh() {
+			delete(s.Exact, hash)
+		}
+	}
+	for hash, sel := range s.Grouped {
+		if !sel.Refresh() {
+			delete(s.Exact, hash)
+		}
+	}
 	return s
 }
 

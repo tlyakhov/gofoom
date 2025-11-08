@@ -129,9 +129,11 @@ func main() {
 	editor.App.Lifecycle().SetOnStopped(func() {})
 
 	go func() {
-		t := time.NewTicker(time.Second / 60)
+		t := time.NewTicker(time.Second / 30)
 		for range t.C {
+			editor.Lock.Lock()
 			ecs.Simulation.Step()
+			editor.Lock.Unlock()
 			fyne.DoAndWait(editor.MapWidget.Raster.Refresh)
 		}
 	}()

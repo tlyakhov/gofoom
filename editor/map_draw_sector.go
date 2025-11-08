@@ -24,12 +24,12 @@ func (mw *MapWidget) DrawHandle(v *concepts.Vector2) {
 
 func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	mw.Context.Push()
-	segmentHovering := editor.HoveringObjects.Contains(selection.SelectableFromInternalSegment(segment))
-	segmentSelected := editor.SelectedObjects.Contains(selection.SelectableFromInternalSegment(segment))
-	aHovering := segmentHovering || editor.HoveringObjects.Contains(selection.SelectableFromInternalSegmentA(segment))
-	aSelected := segmentSelected || editor.SelectedObjects.Contains(selection.SelectableFromInternalSegmentA(segment))
-	bHovering := segmentHovering || editor.HoveringObjects.Contains(selection.SelectableFromInternalSegmentB(segment))
-	bSelected := segmentSelected || editor.SelectedObjects.Contains(selection.SelectableFromInternalSegmentB(segment))
+	segmentHovering := editor.HoveringSelection.Contains(selection.SelectableFromInternalSegment(segment))
+	segmentSelected := editor.Selection.Contains(selection.SelectableFromInternalSegment(segment))
+	aHovering := segmentHovering || editor.HoveringSelection.Contains(selection.SelectableFromInternalSegmentA(segment))
+	aSelected := segmentSelected || editor.Selection.Contains(selection.SelectableFromInternalSegmentA(segment))
+	bHovering := segmentHovering || editor.HoveringSelection.Contains(selection.SelectableFromInternalSegmentB(segment))
+	bSelected := segmentSelected || editor.Selection.Contains(selection.SelectableFromInternalSegmentB(segment))
 
 	if segmentHovering {
 		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
@@ -93,8 +93,8 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 		return
 	}
 
-	sectorHovering := editor.HoveringObjects.Contains(selection.SelectableFromSector(sector))
-	sectorSelected := editor.SelectedObjects.Contains(selection.SelectableFromSector(sector))
+	sectorHovering := editor.HoveringSelection.Contains(selection.SelectableFromSector(sector))
+	sectorSelected := editor.Selection.Contains(selection.SelectableFromSector(sector))
 
 	start := editor.ScreenToWorld(new(concepts.Vector2))
 	end := editor.ScreenToWorld(&editor.Size)
@@ -109,8 +109,8 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 			continue
 		}
 
-		segmentHovering := editor.HoveringObjects.ContainsGrouped(selection.SelectableFromSegment(segment))
-		segmentSelected := editor.SelectedObjects.ContainsGrouped(selection.SelectableFromSegment(segment))
+		segmentHovering := editor.HoveringSelection.ContainsGrouped(selection.SelectableFromSegment(segment))
+		segmentSelected := editor.Selection.ContainsGrouped(selection.SelectableFromSegment(segment))
 
 		if segment.AdjacentSector == 0 {
 			mw.Context.SetRGB(1, 1, 1)
@@ -210,8 +210,8 @@ func (mw *MapWidget) DrawActions(start ecs.Entity) {
 		if waypoint == nil {
 			return
 		}
-		waypointHovering := editor.HoveringObjects.ContainsGrouped(sel)
-		waypointSelected := editor.SelectedObjects.ContainsGrouped(sel)
+		waypointHovering := editor.HoveringSelection.ContainsGrouped(sel)
+		waypointSelected := editor.Selection.ContainsGrouped(sel)
 
 		if parentP != nil {
 			mw.Context.SetRGB(0.4, 1, 0.6)

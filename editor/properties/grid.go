@@ -389,7 +389,11 @@ func (g *Grid) addEntityControls(sel *selection.Selection) {
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c2 := container.NewBorder(nil, nil, nil, button, selectComponent)
 	c.Layout = layout.NewVBoxLayout()
-	c.Objects = []fyne.CanvasObject{c2, sw}
+	c.RemoveAll()
+	c.Add(c2)
+	if sw != nil {
+		c.Add(sw)
+	}
 	fyne.Do(c.Refresh)
 }
 
