@@ -110,33 +110,5 @@ func LoadSnapshot(snapshot Snapshot) error {
 		return nil
 	})
 	ActAllControllers(ControllerRecalculate)
-	log.Printf("err: %v", err)
 	return err
-	/*
-	   // Preserve the filename for SourceFile 0 if we have one
-	   var primaryFile *SourceFile
-	   arena := ArenaFor[SourceFile](SourceFileCID)
-
-	   	for i := range arena.Cap() {
-	   		file := arena.Value(i)
-	   		if file == nil || file.ID != 0 {
-	   			continue
-	   		}
-	   		primaryFile = &SourceFile{Source: file.Source}
-	   		break
-	   	}
-
-	   	if primaryFile == nil {
-	   		primaryFile = &SourceFile{}
-	   	}
-
-	   Initialize()
-	   var a Component = primaryFile
-	   Attach(SourceFileCID, NewEntity(), &a)
-	   primaryFile = a.(*SourceFile)
-	   primaryFile.ID = 0
-	   primaryFile.Flags = ComponentInternal
-	   primaryFile.SetContents(snapshot)
-	   return primaryFile.Load()
-	*/
 }

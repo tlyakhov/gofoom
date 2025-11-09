@@ -29,9 +29,9 @@ type Sector struct {
 	Bodies           map[ecs.Entity]*Body
 	InternalSegments map[ecs.Entity]*InternalSegment
 
-	Layer        int `editable:"Layer"` // TODO: Add more editor support
-	HigherLayers ecs.EntityTable
-	LowerLayers  ecs.EntityTable
+	Layer        int             `editable:"Layer"` // TODO: Add more editor support
+	HigherLayers ecs.EntityTable `ecs:"norelation"`
+	LowerLayers  ecs.EntityTable `ecs:"norelation"`
 
 	EnterScripts []*Script `editable:"Enter Scripts"`
 	ExitScripts  []*Script `editable:"Exit Scripts"`

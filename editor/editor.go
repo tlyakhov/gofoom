@@ -335,20 +335,6 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 	if autoPortal {
 		e.autoPortal()
 	}
-	if !canceled {
-		// TODO: Be smarter about when to snapshot, particularly avoid ECS
-		// snapshots when actions don't modify the world. Also, for orthogonal
-		// EditorState changes (for example, a pan followed by selection), we
-		// should merge undo states somehow. Maybe add some kind of Flags enum
-		// that actions could categorize themselves into, and sets of
-		// consecutive actions of different flags could be merged.
-		e.UndoHistory = append(e.UndoHistory, e.Snapshot(true))
-		if len(e.UndoHistory) > 100 {
-			// TODO: Make ring buffer
-			e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
-		}
-		e.RedoHistory = []state.EditorSnapshot{}
-	}
 	if refreshProperties {
 		e.refreshProperties()
 		for _, s := range e.Selection.Exact {
@@ -363,6 +349,18 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 func (e *Editor) Act(a state.Actionable) {
 	e.Lock.Lock()
 	defer e.Lock.Unlock()
+	// TODO: Be smarter about when to snapshot, particularly avoid ECS
+	// snapshots when actions don't modify the world. Also, for orthogonal
+	// EditorState changes (for example, a pan followed by selection), we
+	// should merge undo states somehow. Maybe add some kind of Flags enum
+	// that actions could categorize themselves into, and sets of
+	// consecutive actions of different flags could be merged.
+	e.UndoHistory = append(e.UndoHistory, e.Snapshot(true))
+	if len(e.UndoHistory) > 100 {
+		// TODO: Make ring buffer
+		e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
+	}
+	e.RedoHistory = []state.EditorSnapshot{}
 	e.CurrentAction = a
 	a.Activate()
 }

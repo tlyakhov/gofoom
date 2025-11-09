@@ -37,8 +37,8 @@ type SectorSegment struct {
 
 	// Pre-calculated attributes
 	Index              int
-	Next               *SectorSegment
-	Prev               *SectorSegment
+	Next               *SectorSegment `ecs:"norelation"`
+	Prev               *SectorSegment `ecs:"norelation"`
 	PortalMatrix       concepts.Matrix2
 	MirrorPortalMatrix concepts.Matrix2
 

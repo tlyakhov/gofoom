@@ -103,8 +103,7 @@ func SerializeComponentIDs(ids containers.Set[ComponentID]) string {
 
 func ParseComponentIDs(ids string) containers.Set[ComponentID] {
 	result := make(containers.Set[ComponentID])
-	split := strings.Split(ids, ",")
-	for _, s := range split {
+	for s := range strings.SplitSeq(ids, ",") {
 		id := Types().IDs[strings.Trim(s, " \t\r\n")]
 		if id != 0 {
 			result.Add(id)

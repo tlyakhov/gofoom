@@ -441,7 +441,7 @@ func Load(filename string) error {
 	file := NewAttachedComponent(NewEntity(), SourceFileCID).(*SourceFile)
 	file.Source = filename
 	file.ID = 0
-	file.Flags = ComponentInternal
+	file.Flags = EntityInternal
 	return file.Load()
 }
 
@@ -529,10 +529,10 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](field *PT, name st
 
 	*field = NewAttachedComponent(e, cid).(PT)
 	base := (*field).Base()
-	base.Flags |= ComponentInternal
+	base.Flags |= EntityInternal
 	n := NewAttachedComponent(base.Entity, NamedCID).(*Named)
 	n.Name = name
-	n.Flags |= ComponentInternal
+	n.Flags |= EntityInternal
 
 	return true
 }
@@ -542,16 +542,15 @@ func MoveEntityComponents(from Entity, to Entity) {
 	if localFrom == 0 || to == 0 {
 		return
 	}
-
-	if Entities.Contains(uint32(to)) {
-		MoveEntityComponents(to, NewEntity())
-	}
-	CreateEntity(to)
-
 	sidTo, localTo := localizeEntity(to)
 	if localTo == 0 {
 		return
 	}
+
+	if Entities.Contains(uint32(to)) && len(rows[sidTo][localTo]) != 0 {
+		MoveEntityComponents(to, NewEntity())
+	}
+	CreateEntity(to)
 
 	tableFrom := &rows[sidFrom][int(localFrom)]
 	tableTo := &rows[sidTo][int(localTo)]
@@ -586,18 +585,21 @@ func MoveEntityComponents(from Entity, to Entity) {
 					return true
 				}
 				r.One = to
+				log.Printf("%v", r.String())
 			case RelationSet:
 				if !r.Set.Contains(from) {
 					return true
 				}
 				r.Set.Delete(e)
 				r.Set.Add(to)
+				log.Printf("%v", r.String())
 			case RelationSlice:
 				found := false
 				for i, e := range r.Slice {
 					if e == from {
 						r.Slice[i] = to
 						found = true
+						log.Printf("%v", r.String())
 					}
 				}
 				if !found {
@@ -609,6 +611,7 @@ func MoveEntityComponents(from Entity, to Entity) {
 				}
 				r.Table.Delete(from)
 				r.Table.Set(to)
+				log.Printf("%v", r.String())
 			}
 			r.Update()
 			return true
