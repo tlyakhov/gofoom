@@ -14,9 +14,8 @@ type Flaggable interface {
 }
 
 func ParseFlags[EnumType Flaggable](serialized string, initializer func(string) (EnumType, error)) EnumType {
-	parsedFlags := strings.Split(serialized, "|")
 	result := EnumType(0)
-	for _, parsedFlag := range parsedFlags {
+	for parsedFlag := range strings.SplitSeq(serialized, "|") {
 		if f, err := initializer(parsedFlag); err == nil {
 			result |= f
 		}

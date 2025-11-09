@@ -265,7 +265,7 @@ func CreateTestWorld3() {
 	// Without lighting, this actually performs very well - 60fps comfortably.
 
 	heightImage := ecs.NewAttachedComponent(ecs.NewEntity(), materials.ImageCID).(*materials.Image)
-	heightImage.Flags |= ecs.ComponentInternal
+	heightImage.Flags |= ecs.EntityInternal
 	heightImage.Construct(map[string]any{
 		"Source":          "data/test-heightmap.jpg",
 		"Filter":          true,

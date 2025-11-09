@@ -280,12 +280,11 @@ func parseEntitySliceFromSlice[T ~string | any](data []T, humanAllowed bool) []E
 // parseEntityTableCSV parses a comma-separated string of entities into an EntityTable.
 func parseEntityTableCSV(csv string, humanAllowed bool) EntityTable {
 	entities := make(EntityTable, 0)
-	split := strings.Split(csv, ",")
 	fParse := ParseEntity
 	if humanAllowed {
 		fParse = ParseEntityHumanOrCanonical
 	}
-	for _, s := range split {
+	for s := range strings.SplitSeq(csv, ",") {
 		trimmed := strings.TrimSpace(s)
 		if e, err := fParse(trimmed); err == nil {
 			entities.Set(e)
@@ -297,12 +296,11 @@ func parseEntityTableCSV(csv string, humanAllowed bool) EntityTable {
 // parseEntitySliceCSV parses a comma-separated string of entities
 func parseEntitySliceCSV(csv string, humanAllowed bool) []Entity {
 	entities := make([]Entity, 0)
-	split := strings.Split(csv, ",")
 	fParse := ParseEntity
 	if humanAllowed {
 		fParse = ParseEntityHumanOrCanonical
 	}
-	for _, s := range split {
+	for s := range strings.SplitSeq(csv, ",") {
 		trimmed := strings.TrimSpace(s)
 		if e, err := fParse(trimmed); err == nil {
 			entities = append(entities, e)

@@ -318,14 +318,20 @@ func (list *EntityList) Update() {
 			parentDesc = n.Name
 		}
 
-		allSystem := true
+		allHidden := true
 		for _, c := range ecs.AllComponents(entity) {
-			if c == nil || c.ComponentID() == ecs.NamedCID ||
+			if c == nil {
+				continue
+			}
+			if c.Base().Flags&ecs.ComponentHideEntityInEditor != 0 {
+				// Ignore this entire entity
+				return
+			}
+			if c.ComponentID() == ecs.NamedCID ||
 				c.Base().Flags&ecs.ComponentHideInEditor != 0 {
 				continue
 			}
-
-			allSystem = false
+			allHidden = false
 			desc := c.String()
 
 			if len(parentDesc) > 0 {
@@ -346,7 +352,7 @@ func (list *EntityList) Update() {
 				rowColor = colornames.Lightpink
 			}
 		}
-		if len(parentDesc) == 0 || allSystem {
+		if len(parentDesc) == 0 || allHidden {
 			return
 		}
 

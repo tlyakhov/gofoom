@@ -2,6 +2,7 @@ package ecs
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
@@ -45,7 +46,7 @@ func (r *Relation) String() string {
 	case RelationTable:
 		return fmt.Sprintf("Relation [table]: %v.%v = %v", owner, r.Name, r.Table.String())
 	}
-	return fmt.Sprintf("Relation [unknwon]: %v.%v", owner, r.Name)
+	return fmt.Sprintf("Relation [unknown]: %v.%v", owner, r.Name)
 }
 
 func (r *Relation) Update() {
@@ -108,6 +109,8 @@ func ensurePointerToStruct(v reflect.Value) any {
 	return nil
 }
 
+const debugRelationWalk = true
+
 // This is a bit ugly and has some fragile aspects:
 //  1. The way we walk types is pretty greedy. There's a good chance we're
 //     walking into internal caches or unrelated data if they haven't been
@@ -119,7 +122,7 @@ func ensurePointerToStruct(v reflect.Value) any {
 //     probably improve performance as well, but there are problems too, for
 //     example, how to handle arrays and maps.
 //  2. We currently ignore maps, unexported fields, etc...
-func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[any]struct{}) bool {
+func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[any]struct{}, debugPath string) bool {
 	if owner == nil {
 		return true
 	}
@@ -136,7 +139,11 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 		return true
 	case Component:
 		// If we're at least one level deep, don't go into other components.
-		if len(visited) > 0 {
+		_, isRegistered := Types().IDs[ownerValue.Type().String()]
+		if len(visited) > 0 && isRegistered {
+			if debugRelationWalk {
+				log.Printf("ecs.rangeComponentRelations: %v - skipping component field: %v", debugPath, ownerValue.Type().String())
+			}
 			return true
 		}
 	}
@@ -162,11 +169,17 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 			continue
 		}
 
+		if debugRelationWalk {
+			log.Printf("ecs.rangeComponentRelations: %v.%v", debugPath, field.Name)
+		}
+
 		// Is this field a relation? Run the visitor func.
 		r := relationFromField(&field, ownerValue.Field(i))
 		if r.Type != RelationUnknown {
 			r.Owner = owner
-			//log.Print(r.String())
+			if debugRelationWalk {
+				log.Printf("ecs.rangeComponentRelations: relation found: %v", r.String())
+			}
 			if !f(&r) {
 				return false
 			}
@@ -181,13 +194,21 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 			}
 			for i := range r.Value.Len() {
 				item := r.Value.Index(i)
-				keepGoing := rangeComponentRelations(ensurePointerToStruct(item), f, visited)
+				debugPathChild := ""
+				if debugRelationWalk {
+					debugPathChild = fmt.Sprintf("%v.%v[%v]", debugPath, field.Name, i)
+				}
+				keepGoing := rangeComponentRelations(ensurePointerToStruct(item), f, visited, debugPathChild)
 				if !keepGoing {
 					return false
 				}
 			}
 		case reflect.Struct, reflect.Pointer:
-			keepGoing := rangeComponentRelations(ensurePointerToStruct(r.Value), f, visited)
+			debugPathChild := ""
+			if debugRelationWalk {
+				debugPathChild = fmt.Sprintf("%v.%v", debugPath, field.Name)
+			}
+			keepGoing := rangeComponentRelations(ensurePointerToStruct(r.Value), f, visited, debugPathChild)
 			if !keepGoing {
 				return false
 			}
@@ -196,7 +217,11 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 	return true
 }
 func RangeComponentRelations(owner any, f func(r *Relation) bool) bool {
-	return rangeComponentRelations(owner, f, make(map[any]struct{}))
+	debugPath := ""
+	if debugRelationWalk {
+		debugPath = owner.(Component).Base().Entity.String()
+	}
+	return rangeComponentRelations(owner, f, make(map[any]struct{}), debugPath)
 }
 
 func RangeRelations(e Entity, f func(r *Relation) bool) {

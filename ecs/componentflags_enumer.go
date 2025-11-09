@@ -13,14 +13,17 @@ const (
 	_ComponentFlagsLowerName_0 = "componentactivecomponentnosave"
 	_ComponentFlagsName_1      = "ComponentHideInEditor"
 	_ComponentFlagsLowerName_1 = "componenthideineditor"
-	_ComponentFlagsName_2      = "ComponentLockedInEditor"
-	_ComponentFlagsLowerName_2 = "componentlockedineditor"
+	_ComponentFlagsName_2      = "ComponentHideEntityInEditor"
+	_ComponentFlagsLowerName_2 = "componenthideentityineditor"
+	_ComponentFlagsName_3      = "ComponentLockedInEditor"
+	_ComponentFlagsLowerName_3 = "componentlockedineditor"
 )
 
 var (
 	_ComponentFlagsIndex_0 = [...]uint8{0, 15, 30}
 	_ComponentFlagsIndex_1 = [...]uint8{0, 21}
-	_ComponentFlagsIndex_2 = [...]uint8{0, 23}
+	_ComponentFlagsIndex_2 = [...]uint8{0, 27}
+	_ComponentFlagsIndex_3 = [...]uint8{0, 23}
 )
 
 func (i ComponentFlags) String() string {
@@ -32,6 +35,8 @@ func (i ComponentFlags) String() string {
 		return _ComponentFlagsName_1
 	case i == 8:
 		return _ComponentFlagsName_2
+	case i == 16:
+		return _ComponentFlagsName_3
 	default:
 		return fmt.Sprintf("ComponentFlags(%d)", i)
 	}
@@ -44,10 +49,11 @@ func _ComponentFlagsNoOp() {
 	_ = x[ComponentActive-(1)]
 	_ = x[ComponentNoSave-(2)]
 	_ = x[ComponentHideInEditor-(4)]
-	_ = x[ComponentLockedInEditor-(8)]
+	_ = x[ComponentHideEntityInEditor-(8)]
+	_ = x[ComponentLockedInEditor-(16)]
 }
 
-var _ComponentFlagsValues = []ComponentFlags{ComponentActive, ComponentNoSave, ComponentHideInEditor, ComponentLockedInEditor}
+var _ComponentFlagsValues = []ComponentFlags{ComponentActive, ComponentNoSave, ComponentHideInEditor, ComponentHideEntityInEditor, ComponentLockedInEditor}
 
 var _ComponentFlagsNameToValueMap = map[string]ComponentFlags{
 	_ComponentFlagsName_0[0:15]:       ComponentActive,
@@ -56,15 +62,18 @@ var _ComponentFlagsNameToValueMap = map[string]ComponentFlags{
 	_ComponentFlagsLowerName_0[15:30]: ComponentNoSave,
 	_ComponentFlagsName_1[0:21]:       ComponentHideInEditor,
 	_ComponentFlagsLowerName_1[0:21]:  ComponentHideInEditor,
-	_ComponentFlagsName_2[0:23]:       ComponentLockedInEditor,
-	_ComponentFlagsLowerName_2[0:23]:  ComponentLockedInEditor,
+	_ComponentFlagsName_2[0:27]:       ComponentHideEntityInEditor,
+	_ComponentFlagsLowerName_2[0:27]:  ComponentHideEntityInEditor,
+	_ComponentFlagsName_3[0:23]:       ComponentLockedInEditor,
+	_ComponentFlagsLowerName_3[0:23]:  ComponentLockedInEditor,
 }
 
 var _ComponentFlagsNames = []string{
 	_ComponentFlagsName_0[0:15],
 	_ComponentFlagsName_0[15:30],
 	_ComponentFlagsName_1[0:21],
-	_ComponentFlagsName_2[0:23],
+	_ComponentFlagsName_2[0:27],
+	_ComponentFlagsName_3[0:23],
 }
 
 // ComponentFlagsString retrieves an enum value from the enum constants string name.

@@ -22,6 +22,9 @@ const (
 	// ComponentHideInEditor indicates that the component should be hidden in
 	// the editor.
 	ComponentHideInEditor
+	// ComponentHideEntityInEditor indicates that the entire entity this
+	// component is attached to should be hidden in the editor.
+	ComponentHideEntityInEditor
 	// ComponentLockedInEditor indicates that the component should be locked in
 	// the editor, preventing modifications.
 	ComponentLockedInEditor
@@ -30,6 +33,10 @@ const (
 // ComponentInternal is a combination of flags indicating that the component is
 // internal to the engine and should not be saved or modified by the user.
 const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLockedInEditor
+
+// EntityInternal is a combination of flags indicating that the entire entity is
+// internal to the engine and should not be saved or modified by the user.
+const EntityInternal = ComponentInternal | ComponentHideEntityInEditor
 
 // There are architectural tradeoffs here. The whole point of the ECS is to have
 // all the data for a given component be next to each other in memory and enable

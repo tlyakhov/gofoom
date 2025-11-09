@@ -31,7 +31,9 @@ func (a *SetProperty) AssignAll(v reflect.Value) {
 
 func (a *SetProperty) FireHooks() {
 	// TODO: Optimize this by remembering visited parents to avoid firing these
-	// multiple times for the same selection.
+	//       multiple times for the same selection.
+	// TODO: Instead of this giant switch, we should use the "mark dirty" and
+	//       recalculate pattern.
 	for _, v := range a.Values {
 		if v.Entity.IsExternal() {
 			continue
