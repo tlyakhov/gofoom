@@ -26,7 +26,7 @@ func (d *DoorController) ComponentID() ecs.ComponentID {
 }
 
 func (d *DoorController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerRecalculate
 }
 
 func (d *DoorController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -62,7 +62,7 @@ func (d *DoorController) close() {
 	d.Close.Act()
 }
 
-func (d *DoorController) Always() {
+func (d *DoorController) Frame() {
 	switch d.Type {
 	case behaviors.DoorTypeVertical:
 		d.setupVerticalDoorAnimation(false)

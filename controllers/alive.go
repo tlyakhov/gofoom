@@ -22,7 +22,7 @@ func (a *AliveController) ComponentID() ecs.ComponentID {
 }
 
 func (a *AliveController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
+	return ecs.ControllerFrame
 }
 
 func (a *AliveController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -31,7 +31,7 @@ func (a *AliveController) Target(target ecs.Component, e ecs.Entity) bool {
 	return a.IsActive()
 }
 
-func (a *AliveController) Always() {
+func (a *AliveController) Frame() {
 	// TODO: Refactor cooldowns to be time-based rather than frames
 	for source, d := range a.Damages {
 		if d.Cooldown.Now <= 0 {

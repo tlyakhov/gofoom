@@ -41,7 +41,7 @@ func (ac *ActionController) ComponentID() ecs.ComponentID {
 }
 
 func (ac *ActionController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerRecalculate
 }
 
 func (ac *ActionController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -284,7 +284,7 @@ func (ac *ActionController) Face(face *behaviors.ActionFace) bool {
 	return false
 }
 
-func (ac *ActionController) Always() {
+func (ac *ActionController) Frame() {
 	if ac.State == nil {
 		ac.Recalculate()
 	}

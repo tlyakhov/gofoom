@@ -49,7 +49,7 @@ func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.Compo
 		}
 		// We attached at least one component to the new entity.
 		ecs.ActAllControllersOneEntity(pastedEntity, ecs.ControllerRecalculate)
-		ecs.ActAllControllersOneEntity(pastedEntity, ecs.ControllerAlways)
+		ecs.ActAllControllersOneEntity(pastedEntity, ecs.ControllerFrame)
 		return pastedEntity
 	}
 

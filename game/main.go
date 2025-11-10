@@ -59,7 +59,7 @@ func integrateGame() {
 			renderer.Carrier.SelectedWeapon = gunSlot.Entity
 		}
 		gameInput()
-		ecs.ActAllControllers(ecs.ControllerAlways)
+		ecs.ActAllControllers(ecs.ControllerFrame)
 	}
 	win.UpdateInput()
 }

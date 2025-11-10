@@ -48,7 +48,7 @@ func (wc *WeaponController) ComponentID() ecs.ComponentID {
 }
 
 func (wc *WeaponController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
+	return ecs.ControllerFrame
 }
 
 func (wc *WeaponController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -254,7 +254,7 @@ func weaponReloading(wc *WeaponController) {
 func weaponHolstering(wc *WeaponController) {
 }
 
-func (wc *WeaponController) Always() {
+func (wc *WeaponController) Frame() {
 	// Run our gun state machine
 	weaponFuncs[wc.State](wc)
 }

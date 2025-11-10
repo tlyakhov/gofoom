@@ -26,7 +26,7 @@ func (pc *ProximityController) ComponentID() ecs.ComponentID {
 }
 
 func (pc *ProximityController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerRecalculate
 }
 
 func (pc *ProximityController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -179,7 +179,7 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	})*/
 }
 
-func (pc *ProximityController) Always() {
+func (pc *ProximityController) Frame() {
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
 		if state.Source != pc.Entity {
 			return true

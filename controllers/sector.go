@@ -25,7 +25,7 @@ func (sc *SectorController) ComponentID() ecs.ComponentID {
 }
 
 func (sc *SectorController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate | ecs.ControllerAlways
+	return ecs.ControllerRecalculate | ecs.ControllerFrame
 }
 
 func (sc *SectorController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -81,7 +81,7 @@ func (sc *SectorController) TidyOverlaps(table *ecs.EntityTable) {
 	}
 }
 
-func (sc *SectorController) Always() {
+func (sc *SectorController) Frame() {
 	// Tidy every 5 frames
 	if ecs.Simulation.Frame%5 == 0 {
 		sc.TidyOverlaps(&sc.HigherLayers)

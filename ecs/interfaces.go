@@ -79,8 +79,8 @@ type GenericAttachable[T any] interface {
 type ControllerMethod uint32
 
 const (
-	// ControllerAlways indicates that the controller's Always method should be called every tick.
-	ControllerAlways ControllerMethod = 1 << iota
+	// ControllerFrame indicates that the controller's Always method should be called every tick.
+	ControllerFrame ControllerMethod = 1 << iota
 	// ControllerRecalculate indicates that the controller's Recalculate method should be called when a component is attached or detached.
 	ControllerRecalculate
 )
@@ -96,8 +96,8 @@ type Controller interface {
 	// Target determines whether the controller should act on a specific entity and component.
 	// Return false if controller shouldn't run for this entity
 	Target(Component, Entity) bool
-	// Always is called every tick for entities that match the controller's component ID and target criteria.
-	Always()
+	// Frame is called every tick for entities that match the controller's component ID and target criteria.
+	Frame()
 	// Recalculate is called when a component is attached or detached, or when a linked component changes.
 	Recalculate()
 }

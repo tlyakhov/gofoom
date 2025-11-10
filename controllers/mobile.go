@@ -30,7 +30,7 @@ func (mc *MobileController) ComponentID() ecs.ComponentID {
 }
 
 func (mc *MobileController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways |
+	return ecs.ControllerFrame |
 		ecs.ControllerRecalculate
 }
 
@@ -80,7 +80,7 @@ func (mc *MobileController) Forces() {
 	}
 }
 
-func (mc *MobileController) Always() {
+func (mc *MobileController) Frame() {
 	if mc.Mass == 0 {
 		// Reset force for next frame
 		mc.ResetForce()

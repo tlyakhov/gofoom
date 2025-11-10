@@ -35,8 +35,8 @@ func act(controller Controller, component Component, method ControllerMethod) {
 		// If the component is attached to only one entity, check the target condition for that entity.
 		if controller.Target(component, component.Base().Entity) {
 			switch method {
-			case ControllerAlways:
-				controller.Always()
+			case ControllerFrame:
+				controller.Frame()
 			case ControllerRecalculate:
 				controller.Recalculate()
 			}
@@ -51,8 +51,8 @@ func act(controller Controller, component Component, method ControllerMethod) {
 		}
 		if controller.Target(component, e) {
 			switch method {
-			case ControllerAlways:
-				controller.Always()
+			case ControllerFrame:
+				controller.Frame()
 			case ControllerRecalculate:
 				controller.Recalculate()
 			}
