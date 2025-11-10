@@ -241,7 +241,7 @@ func (e *Editor) Integrate() {
 		editor.GameInputLock.Unlock()
 	}
 
-	ecs.ActAllControllers(ecs.ControllerAlways)
+	ecs.ActAllControllers(ecs.ControllerFrame)
 }
 
 // TODO: This should be an action

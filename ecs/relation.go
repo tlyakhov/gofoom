@@ -109,7 +109,7 @@ func ensurePointerToStruct(v reflect.Value) any {
 	return nil
 }
 
-const debugRelationWalk = true
+const debugRelationWalk = false
 
 // This is a bit ugly and has some fragile aspects:
 //  1. The way we walk types is pretty greedy. There's a good chance we're

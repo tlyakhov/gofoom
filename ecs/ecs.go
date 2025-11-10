@@ -538,6 +538,8 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](field *PT, name st
 }
 
 func MoveEntityComponents(from Entity, to Entity) {
+	// Break down our entity IDs into source file IDs and local entities,
+	// sanity check our input.
 	sidFrom, localFrom := localizeEntity(from)
 	if localFrom == 0 || to == 0 {
 		return
@@ -547,14 +549,18 @@ func MoveEntityComponents(from Entity, to Entity) {
 		return
 	}
 
+	// The entity we are moving to already exists, move components to a new entity.
 	if Entities.Contains(uint32(to)) && len(rows[sidTo][localTo]) != 0 {
 		MoveEntityComponents(to, NewEntity())
 	}
+	// Create the target.
 	CreateEntity(to)
 
+	// Get the source/target tables
 	tableFrom := &rows[sidFrom][int(localFrom)]
 	tableTo := &rows[sidTo][int(localTo)]
 
+	// Fix up the entities the component is attached to.
 	for _, c := range *tableFrom {
 		if c == nil {
 			continue
@@ -569,10 +575,14 @@ func MoveEntityComponents(from Entity, to Entity) {
 		}
 	}
 
+	// Actually move the table.
 	*tableTo = *tableFrom
+
+	// Delete the source.
 	*tableFrom = nil
 	Entities.Remove(uint32(from))
 
+	// Wire up any relations.
 	Entities.Range(func(entity uint32) {
 		e := Entity(entity)
 		if e == from || e.IsExternal() {
@@ -585,21 +595,27 @@ func MoveEntityComponents(from Entity, to Entity) {
 					return true
 				}
 				r.One = to
-				log.Printf("%v", r.String())
+				if debugRelationWalk {
+					log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
+				}
 			case RelationSet:
 				if !r.Set.Contains(from) {
 					return true
 				}
 				r.Set.Delete(e)
 				r.Set.Add(to)
-				log.Printf("%v", r.String())
+				if debugRelationWalk {
+					log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
+				}
 			case RelationSlice:
 				found := false
 				for i, e := range r.Slice {
 					if e == from {
 						r.Slice[i] = to
 						found = true
-						log.Printf("%v", r.String())
+						if debugRelationWalk {
+							log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
+						}
 					}
 				}
 				if !found {
@@ -611,7 +627,9 @@ func MoveEntityComponents(from Entity, to Entity) {
 				}
 				r.Table.Delete(from)
 				r.Table.Set(to)
-				log.Printf("%v", r.String())
+				if debugRelationWalk {
+					log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
+				}
 			}
 			r.Update()
 			return true

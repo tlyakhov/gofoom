@@ -30,7 +30,7 @@ func (pc *ParticleController) ComponentID() ecs.ComponentID {
 }
 
 func (pc *ParticleController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
+	return ecs.ControllerFrame
 }
 
 func (pc *ParticleController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -47,7 +47,7 @@ func (pc *ParticleController) Target(target ecs.Component, e ecs.Entity) bool {
 	return true
 }
 
-func (pc *ParticleController) Always() {
+func (pc *ParticleController) Frame() {
 	toRemove := make([]ecs.Entity, 0, 10)
 	for e, timestamp := range pc.Spawned {
 		age := float64(ecs.Simulation.Timestamp - timestamp)

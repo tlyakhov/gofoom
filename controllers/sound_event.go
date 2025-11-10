@@ -29,7 +29,7 @@ func (sc *SoundEventController) ComponentID() ecs.ComponentID {
 }
 
 func (sc *SoundEventController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
+	return ecs.ControllerFrame
 }
 
 func (sc *SoundEventController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -44,7 +44,7 @@ func (sc *SoundEventController) Target(target ecs.Component, e ecs.Entity) bool 
 	return true
 }
 
-func (sc *SoundEventController) Always() {
+func (sc *SoundEventController) Frame() {
 	if sc.Body == nil && sc.Sector == nil {
 		return
 	}

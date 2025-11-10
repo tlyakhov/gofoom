@@ -35,9 +35,9 @@ func (c *BaseController) Target(a Component, entity Entity) bool {
 	return false
 }
 
-// Always is a controller method that is called every tick. The base
+// Frame is a controller method that is called every tick. The base
 // implementation does nothing.
-func (c *BaseController) Always() {}
+func (c *BaseController) Frame() {}
 
 // Recalculate is a controller method that is called when a component is
 // attached or detached, or when a linked component changes. The base implementation does nothing.

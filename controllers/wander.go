@@ -30,7 +30,7 @@ func (wc *WanderController) ComponentID() ecs.ComponentID {
 }
 
 func (wc *WanderController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways
+	return ecs.ControllerFrame
 }
 
 func (wc *WanderController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -41,7 +41,7 @@ func (wc *WanderController) Target(target ecs.Component, e ecs.Entity) bool {
 	return wc.Wander.IsActive() && wc.Body.IsActive() && wc.Mobile.IsActive()
 }
 
-func (wc *WanderController) Always() {
+func (wc *WanderController) Frame() {
 	// Applying an impulse directly is helpful for objects without mass.
 	f := concepts.Vector3{}
 	f[1], f[0] = math.Sincos(wc.Body.Angle.Now * concepts.Deg2rad)

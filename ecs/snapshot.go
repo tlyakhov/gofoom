@@ -18,13 +18,13 @@ func visitSnapshotEntity(snapshotMap map[string]any, fn funcFileVistor) error {
 	var err error
 
 	if snapshotMap["Entity"] == nil {
-		return errors.New("ecs.visitSnapshotEntity: yaml object doesn't have entity key")
+		return errors.New("ecs.visitSnapshotEntity: snapshot map doesn't have entity key")
 	}
 	if snapshotEntity, ok = snapshotMap["Entity"].(string); !ok {
-		return errors.New("ecs.visitSnapshotEntity: yaml entity isn't string")
+		return errors.New("ecs.visitSnapshotEntity: snapshot entity isn't string")
 	}
 	if entity, err = ParseEntity(snapshotEntity); err != nil {
-		return fmt.Errorf("ecs.visitSnapshotEntity: yaml entity can't be parsed: %w", err)
+		return fmt.Errorf("ecs.visitSnapshotEntity: snapshot entity can't be parsed: %w", err)
 	}
 
 	return fn(entity, snapshotMap)
@@ -34,7 +34,7 @@ func rangeSnapshot(snapshot Snapshot, fn funcFileVistor) error {
 	for _, snapshotMap := range snapshot {
 		snapshotEntity := snapshotMap.(map[string]any)
 		if snapshotEntity == nil {
-			log.Printf("ecs.rangeSnapshot: YAML array element should be an object")
+			log.Printf("ecs.rangeSnapshot: snapshot array element should be a map")
 			continue
 		}
 		if err := visitSnapshotEntity(snapshotEntity, fn); err != nil {
@@ -49,11 +49,11 @@ func SerializeEntity(entity Entity, includeCaches bool) map[string]any {
 }
 
 func SaveSnapshot(includeCaches bool) Snapshot {
-	defer concepts.ExecutionDuration(concepts.ExecutionTrack("ecs.Snapshot"))
+	defer concepts.ExecutionDuration(concepts.ExecutionTrack("ecs.SaveSnapshot"))
 	Lock.Lock()
 	defer Lock.Unlock()
 
-	snapshot := []any{}
+	snapshot := Snapshot{}
 	savedComponents := make(map[uint64]Entity)
 
 	Entities.Range(func(entity uint32) {
@@ -67,7 +67,7 @@ func SaveSnapshot(includeCaches bool) Snapshot {
 		}
 		snapshot = append(snapshot, serialized)
 	})
-	return Snapshot(snapshot)
+	return snapshot
 }
 
 func LoadSnapshot(snapshot Snapshot) error {

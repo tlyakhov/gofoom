@@ -32,7 +32,7 @@ func (bc *BodyController) ComponentID() ecs.ComponentID {
 }
 
 func (bc *BodyController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways |
+	return ecs.ControllerFrame |
 		ecs.ControllerRecalculate
 }
 
@@ -58,7 +58,7 @@ func (bc *BodyController) Target(target ecs.Component, e ecs.Entity) bool {
 	return true
 }
 
-func (bc *BodyController) Always() {
+func (bc *BodyController) Frame() {
 	//if bc.Sector == nil {
 	// Try to put this body into a sector
 	//	bc.Collide()

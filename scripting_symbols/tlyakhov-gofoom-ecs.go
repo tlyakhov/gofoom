@@ -25,6 +25,7 @@ func init() {
 		"ComponentFlagsString":            reflect.ValueOf(ecs.ComponentFlagsString),
 		"ComponentFlagsStrings":           reflect.ValueOf(ecs.ComponentFlagsStrings),
 		"ComponentFlagsValues":            reflect.ValueOf(ecs.ComponentFlagsValues),
+		"ComponentHideEntityInEditor":     reflect.ValueOf(ecs.ComponentHideEntityInEditor),
 		"ComponentHideInEditor":           reflect.ValueOf(ecs.ComponentHideInEditor),
 		"ComponentInternal":               reflect.ValueOf(ecs.ComponentInternal),
 		"ComponentLockedInEditor":         reflect.ValueOf(ecs.ComponentLockedInEditor),
@@ -32,7 +33,7 @@ func init() {
 		"ComponentTableGrowthRate":        reflect.ValueOf(constant.MakeFromLiteral("8", token.INT, 0)),
 		"ComponentTableHit":               reflect.ValueOf(&ecs.ComponentTableHit).Elem(),
 		"ComponentTableMiss":              reflect.ValueOf(&ecs.ComponentTableMiss).Elem(),
-		"ControllerAlways":                reflect.ValueOf(ecs.ControllerAlways),
+		"ControllerFrame":                 reflect.ValueOf(ecs.ControllerFrame),
 		"ControllerRecalculate":           reflect.ValueOf(ecs.ControllerRecalculate),
 		"CreateEntity":                    reflect.ValueOf(ecs.CreateEntity),
 		"Delete":                          reflect.ValueOf(ecs.Delete),
@@ -45,6 +46,7 @@ func init() {
 		"EntityHumanRegexpIdxEntity":      reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
 		"EntityHumanRegexpIdxMatch":       reflect.ValueOf(constant.MakeFromLiteral("0", token.INT, 0)),
 		"EntityHumanRegexpIdxSourceID":    reflect.ValueOf(constant.MakeFromLiteral("2", token.INT, 0)),
+		"EntityInternal":                  reflect.ValueOf(ecs.EntityInternal),
 		"EntityRegexp":                    reflect.ValueOf(&ecs.EntityRegexp).Elem(),
 		"EntityRegexpIdxEntity":           reflect.ValueOf(constant.MakeFromLiteral("1", token.INT, 0)),
 		"EntityRegexpIdxFile":             reflect.ValueOf(constant.MakeFromLiteral("4", token.INT, 0)),
@@ -254,22 +256,22 @@ func (W _tlyakhov_gofoom_ecs_ComponentArena) Type() reflect.Type {
 // _tlyakhov_gofoom_ecs_Controller is an interface wrapper for Controller type
 type _tlyakhov_gofoom_ecs_Controller struct {
 	IValue               interface{}
-	WAlways              func()
 	WComponentID         func() ecs.ComponentID
 	WEditorPausedMethods func() ecs.ControllerMethod
+	WFrame               func()
 	WMethods             func() ecs.ControllerMethod
 	WRecalculate         func()
 	WTarget              func(a0 ecs.Component, a1 ecs.Entity) bool
 }
 
-func (W _tlyakhov_gofoom_ecs_Controller) Always() {
-	W.WAlways()
-}
 func (W _tlyakhov_gofoom_ecs_Controller) ComponentID() ecs.ComponentID {
 	return W.WComponentID()
 }
 func (W _tlyakhov_gofoom_ecs_Controller) EditorPausedMethods() ecs.ControllerMethod {
 	return W.WEditorPausedMethods()
+}
+func (W _tlyakhov_gofoom_ecs_Controller) Frame() {
+	W.WFrame()
 }
 func (W _tlyakhov_gofoom_ecs_Controller) Methods() ecs.ControllerMethod {
 	return W.WMethods()

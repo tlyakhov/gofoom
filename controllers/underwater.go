@@ -26,7 +26,7 @@ func (uc *UnderwaterController) ComponentID() ecs.ComponentID {
 }
 
 func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerAlways | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerRecalculate
 }
 
 func (uc *UnderwaterController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -36,7 +36,7 @@ func (uc *UnderwaterController) Target(target ecs.Component, e ecs.Entity) bool 
 	return uc.IsActive() && uc.Sector.IsActive()
 }
 
-func (uc *UnderwaterController) Always() {
+func (uc *UnderwaterController) Frame() {
 	for e := range uc.Sector.Bodies {
 		if mobile := core.GetMobile(e); mobile != nil {
 			mobile.Vel.Now.MulSelf(1.0 / constants.SwimDamping)
