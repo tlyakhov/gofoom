@@ -24,7 +24,7 @@ type Body struct {
 	StepSound ecs.Entity `editable:"Step Sound" edit_type:"Sound"`
 
 	SectorEntity ecs.Entity
-	QuadNode     *QuadNode `ecs:"norelation"`
+	QuadNode     *QuadNode `ecs:"nocache"`
 	OnGround     bool
 }
 

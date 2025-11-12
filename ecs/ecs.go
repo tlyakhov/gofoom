@@ -445,62 +445,6 @@ func Load(filename string) error {
 	return file.Load()
 }
 
-func serializeEntity(entity Entity, savedComponents map[uint64]Entity, includeCaches bool) map[string]any {
-	serialized := make(map[string]any)
-	serialized["Entity"] = entity.Serialize()
-	sid, local := entity.SourceID(), entity.Local()
-	for _, component := range rows[sid][int(local)] {
-		if component == nil || (!includeCaches && component.Base().Flags&ComponentNoSave != 0) {
-			continue
-		}
-		cid := component.ComponentID()
-		hash := (uint64(component.Base().indexInArena) << 16) | (uint64(cid) & 0xFFFF)
-		arena := Types().ArenaPlaceholders[cid]
-		yamlID := arena.Type().String()
-
-		// If the caller is tracking serialized components and this component
-		// is already saved, just reference the entity.
-		if savedComponents != nil {
-			if savedEntity, ok := savedComponents[hash]; ok {
-				serialized[yamlID] = savedEntity.Serialize()
-				continue
-			}
-		}
-
-		if !includeCaches && component.Base().IsExternal() {
-			// Just pick one
-			// TODO: This has a code smell. Should there be a particular way
-			// to pick an entity ID to reference when saving?
-			serialized[yamlID] = component.Base().ExternalEntities()[0].Serialize()
-			continue
-		}
-
-		yamlComponent := component.Serialize()
-		if !includeCaches {
-			toDelete := []string{}
-			for key := range yamlComponent {
-				if strings.HasPrefix(key, "_cache_") {
-					toDelete = append(toDelete, key)
-				}
-			}
-			for _, key := range toDelete {
-				delete(yamlComponent, key)
-			}
-		}
-		delete(yamlComponent, "Entities")
-		serialized[yamlID] = yamlComponent
-		if savedComponents != nil {
-			savedComponents[hash] = entity
-		}
-
-	}
-	if len(serialized) == 1 {
-		// No components were serialized, only the "Entity" field.
-		return nil
-	}
-	return serialized
-}
-
 func Save(filename string) {
 	bytes, err := yaml.Marshal(SaveSnapshot(false))
 	//bytes, err := json.MarshalIndent(yamlECS, "", "  ")

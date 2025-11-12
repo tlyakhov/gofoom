@@ -317,19 +317,6 @@ func (file *SourceFile) Construct(data map[string]any) {
 	if v, ok := data["ID"]; ok {
 		file.ID = EntitySourceID(cast.ToUint8(v))
 	}
-
-	if v, ok := data["_cache_LoadedID"]; ok {
-		file.LoadedID = EntitySourceID(cast.ToUint8(v))
-	}
-	if v, ok := data["_cache_References"]; ok {
-		file.References = v.(int)
-	}
-	if v, ok := data["_cache_children"]; ok {
-		file.children = v.(EntityTable)
-	}
-	if v, ok := data["_cache_loadedIDsToNewIDs"]; ok {
-		file.loadedIDsToNewIDs = v.(map[EntitySourceID]EntitySourceID)
-	}
 }
 
 func (file *SourceFile) Serialize() map[string]any {
@@ -338,11 +325,5 @@ func (file *SourceFile) Serialize() map[string]any {
 	result["Source"] = file.Source
 	result["ID"] = file.ID
 
-	// Cached data
-	result["_cache_LoadedID"] = file.LoadedID
-	result["_cache_Loaded"] = file.Loaded
-	result["_cache_References"] = file.References
-	result["_cache_children"] = file.children
-	result["_cache_loadedIDsToNewIDs"] = file.loadedIDsToNewIDs
 	return result
 }

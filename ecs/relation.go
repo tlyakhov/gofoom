@@ -165,7 +165,7 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 		field := ownerType.Field(i)
 
 		// Ignore unexported fields or specifically tagged fields.
-		if !field.IsExported() || field.Tag.Get("ecs") == "norelation" {
+		if !field.IsExported() || field.Tag.Get("ecs") == "norelation" || field.Tag.Get("ecs") == "nocache" {
 			continue
 		}
 
