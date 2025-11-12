@@ -25,9 +25,10 @@ type Sector struct {
 	Gravity       concepts.Vector3 `editable:"Gravity"`
 	FloorFriction float64          `editable:"Floor Friction"`
 
-	Segments         []*SectorSegment
-	Bodies           map[ecs.Entity]*Body
-	InternalSegments map[ecs.Entity]*InternalSegment
+	Segments []*SectorSegment `editable:"Segments"`
+
+	Bodies           map[ecs.Entity]*Body            `ecs:"nocache"`
+	InternalSegments map[ecs.Entity]*InternalSegment `ecs:"nocache"`
 
 	Layer        int             `editable:"Layer"` // TODO: Add more editor support
 	HigherLayers ecs.EntityTable `ecs:"norelation"`
@@ -46,8 +47,8 @@ type Sector struct {
 	Center   dynamic.DynamicValue[concepts.Vector3]
 
 	// Lightmap data
-	Lightmap      *xsync.MapOf[uint64, *LightmapCell]
-	LightmapBias  [3]int64 // Quantized Min
+	Lightmap      *xsync.MapOf[uint64, *LightmapCell] `ecs:"snapshotDirect"`
+	LightmapBias  [3]int64                            // Quantized Min
 	LastSeenFrame atomic.Int64
 }
 

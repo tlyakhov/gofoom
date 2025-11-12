@@ -217,11 +217,6 @@ func (d *DynamicValue[T]) Serialize() any {
 
 	if d.Procedural {
 		result["Procedural"] = d.Procedural
-		result["_cache_outputV"] = d.serializeValue(d.outputV)
-		result["_cache_prevInput"] = d.serializeValue(d.prevInput)
-		result["_cache_k1"] = d.k1
-		result["_cache_k2"] = d.k2
-		result["_cache_k3"] = d.k3
 	}
 	if d.Freq != 4.58 {
 		result["Freq"] = d.Freq
@@ -238,8 +233,6 @@ func (d *DynamicValue[T]) Serialize() any {
 	}
 
 	if len(result) > 0 {
-		result["_cache_Prev"] = d.serializeValue(d.Prev)
-		result["_cache_Input"] = d.serializeValue(d.Input)
 		result["Spawn"] = d.serializeValue(d.Spawn)
 		result["Now"] = d.serializeValue(d.Now)
 		return result
@@ -281,39 +274,7 @@ func (d *DynamicValue[T]) Construct(data any) {
 		d.Response = cast.ToFloat64(v)
 	}
 
-	hasCache := false
-	if v, ok := params["_cache_k1"]; ok {
-		d.k1 = cast.ToFloat64(v)
-		hasCache = true
-	}
-	if v, ok := params["_cache_k2"]; ok {
-		d.k2 = cast.ToFloat64(v)
-		hasCache = true
-	}
-	if v, ok := params["_cache_k3"]; ok {
-		d.k3 = cast.ToFloat64(v)
-		hasCache = true
-	}
-	if v, ok := params["_cache_Prev"]; ok {
-		d.Prev = d.deserializeValue(v).(T)
-		hasCache = true
-	}
-	if v, ok := params["_cache_Input"]; ok {
-		d.Input = d.deserializeValue(v).(T)
-		hasCache = true
-	}
-	if v, ok := params["_cache_prevInput"]; ok {
-		d.prevInput = d.deserializeValue(v).(T)
-		hasCache = true
-	}
-	if v, ok := params["_cache_outputV"]; ok {
-		d.outputV = d.deserializeValue(v).(T)
-		hasCache = true
-	}
-
-	if !hasCache {
-		d.Recalculate()
-	}
+	d.Recalculate()
 
 	if v, ok := params["Animation"]; ok {
 		d.Animation = new(Animation[T])
