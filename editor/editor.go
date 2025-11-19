@@ -25,6 +25,7 @@ import (
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/loov/hrtime"
 	"github.com/puzpuzpuz/xsync/v3"
 
 	"tlyakhov/gofoom/components/behaviors"
@@ -70,6 +71,8 @@ type Editor struct {
 	EditorMenu
 	EntityList
 	properties.Grid
+
+	lastUndo int64
 
 	// Game View state
 	Renderer       *render.Renderer
@@ -349,16 +352,21 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 func (e *Editor) Act(a state.Actionable) {
 	e.Lock.Lock()
 	defer e.Lock.Unlock()
-	// TODO: Be smarter about when to snapshot, particularly avoid ECS
-	// snapshots when actions don't modify the world. Also, for orthogonal
-	// EditorState changes (for example, a pan followed by selection), we
-	// should merge undo states somehow. Maybe add some kind of Flags enum
-	// that actions could categorize themselves into, and sets of
-	// consecutive actions of different flags could be merged.
-	e.UndoHistory = append(e.UndoHistory, e.Snapshot(true))
-	if len(e.UndoHistory) > 100 {
-		// TODO: Make ring buffer
-		e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
+	now := hrtime.Now().Milliseconds()
+
+	// Wait at least 5sec between undo states for better performance.
+	if now-e.lastUndo > 5*1000 {
+		// TODO: Be smarter about when to snapshot, particularly avoid ECS
+		// snapshots when actions don't modify the world. Also, for orthogonal
+		// EditorState changes (for example, a pan followed by selection), we
+		// should merge undo states somehow. Maybe add some kind of Flags enum
+		// that actions could categorize themselves into, and sets of
+		// consecutive actions of different flags could be merged.
+		e.UndoHistory = append(e.UndoHistory, e.Snapshot(a.AffectsWorld()))
+		if len(e.UndoHistory) > 100 {
+			// TODO: Make ring buffer
+			e.UndoHistory = e.UndoHistory[(len(e.UndoHistory) - 100):]
+		}
 	}
 	e.RedoHistory = []state.EditorSnapshot{}
 	e.CurrentAction = a
@@ -467,6 +475,7 @@ func (e *Editor) UndoOrRedo(redo bool) {
 	}
 	snapshot := (*back)[index]
 	*back = (*back)[:index]
+	// TODO: Remember whether the world state has been changed across actions
 	*forward = append(*forward, e.Snapshot(true))
 	if snapshot.Snapshot != nil {
 		ecs.LoadSnapshot(snapshot.Snapshot)

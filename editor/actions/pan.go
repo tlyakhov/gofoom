@@ -75,3 +75,5 @@ func (a *Pan) RequiresLock() bool { return true }
 func (a *Pan) Status() string {
 	return "Panning"
 }
+
+func (a *Pan) AffectsWorld() bool { return false }

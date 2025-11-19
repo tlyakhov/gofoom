@@ -25,7 +25,9 @@ type Sector struct {
 	Gravity       concepts.Vector3 `editable:"Gravity"`
 	FloorFriction float64          `editable:"Floor Friction"`
 
-	Segments []*SectorSegment `editable:"Segments"`
+	// TODO: These should be "editable", but the Fyne refresh takes way too
+	// long. Figure out some approach for improving performance here.
+	Segments []*SectorSegment `ecs:"nocache"`
 
 	Bodies           map[ecs.Entity]*Body            `ecs:"nocache"`
 	InternalSegments map[ecs.Entity]*InternalSegment `ecs:"nocache"`
