@@ -6,6 +6,7 @@ package state
 // Actionable represents a generic editor action.
 type Actionable interface {
 	Activate()
+	AffectsWorld() bool
 }
 
 type Cancelable interface {
@@ -16,3 +17,5 @@ type Cancelable interface {
 type Action struct {
 	IEditor
 }
+
+func (a *Action) AffectsWorld() bool { return true }

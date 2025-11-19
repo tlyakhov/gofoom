@@ -40,3 +40,5 @@ func (a *AlignGrid) Cancel() {
 func (a *AlignGrid) Status() string {
 	return "Click to align grid"
 }
+
+func (a *AlignGrid) AffectsWorld() bool { return false }

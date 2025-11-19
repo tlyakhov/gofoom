@@ -93,3 +93,5 @@ func (a *Select) RequiresLock() bool { return false }
 func (a *Select) Status() string {
 	return "Selecting"
 }
+
+func (a *Select) AffectsWorld() bool { return false }

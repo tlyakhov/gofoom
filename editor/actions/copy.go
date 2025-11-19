@@ -60,3 +60,5 @@ func (a *Copy) Activate() {
 		a.ActionFinished(false, false, false)
 	}
 }
+
+func (a *Copy) AffectsWorld() bool { return a.Cut }

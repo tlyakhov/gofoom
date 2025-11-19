@@ -59,22 +59,25 @@ func (g *Grid) childFields(parentName string, childValue reflect.Value, state Pr
 	switch childValue.Type().Kind() {
 	case reflect.Struct:
 		child = childValue.Addr().Interface()
-	case reflect.Ptr, reflect.Interface:
+	case reflect.Pointer, reflect.Interface:
 		child = childValue.Interface()
 	default:
 		log.Printf("Grid.childFields: childValue is not a struct, ptr, or interface: %v, %v", childValue.String(), childValue.Type())
 	}
 
-	if !state.Visited.Contains(child) {
-		state.ParentName = parentName
-		if updateParent {
-			ancestors := make([]any, len(state.Ancestors)+1)
-			copy(ancestors, state.Ancestors)
-			ancestors[len(ancestors)-1] = child
-			state.Ancestors = ancestors
-		}
-		g.fieldsFromStruct(child, state)
+	if state.Visited.Contains(child) {
+		return
 	}
+
+	state.ParentName = parentName
+	if updateParent {
+		ancestors := make([]any, len(state.Ancestors)+1)
+		copy(ancestors, state.Ancestors)
+		ancestors[len(ancestors)-1] = child
+		state.Ancestors = ancestors
+	}
+
+	g.fieldsFromStruct(child, state)
 }
 
 func (g *Grid) fieldsFromSlice(field *state.PropertyGridField, valueMetadata *state.PropertyGridFieldValue, pgs PropertyGridState) {
@@ -280,7 +283,7 @@ func (g *Grid) switchEntityUI(entity ecs.Entity) *widget.Button {
 	entityEntry.Text = ""
 	entityEntry.PlaceHolder = "e.g. 123"
 	entityEntry.Resize(fyne.NewSize(200, 0))
-	title := "Switch ID"
+	title := "Switch ID for Entity"
 	sw := widget.NewButtonWithIcon(title, theme.ViewRefreshIcon(), func() {
 		dialog.ShowForm(title, "Switch", "Cancel", []*widget.FormItem{
 			{Text: "New Entity ID", Widget: entityEntry},
@@ -533,6 +536,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, behaviors.DoorTypeValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
+		case *[]*core.SectorSegment:
+			g.fieldSlice(field)
 		case *[]*core.Script:
 			g.fieldSlice(field)
 		case *[]*materials.Sprite:
