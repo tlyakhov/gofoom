@@ -228,6 +228,9 @@ func (m *mixer) SetListenerVelocity(v *concepts.Vector3) {
 // PlaySound initiates playback for a sound asset, optionally attached to a
 // source (e.g. a body, a sector)
 func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag bool) (*SoundEvent, error) {
+	if Mixer.events == nil {
+		return nil, nil
+	}
 	snd := GetSound(sound)
 	if snd == nil {
 		return nil, nil

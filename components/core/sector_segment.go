@@ -29,7 +29,7 @@ type SectorSegment struct {
 	PortalTeleports   bool `editable:"Portal sector not adjacent"`
 
 	AdjacentSector  ecs.Entity     `editable:"Portal sector" edit_type:"Sector"`
-	AdjacentSegment *SectorSegment `ecs:"norelation"`
+	AdjacentSegment *SectorSegment `ecs:"non-traversable,shallow-cacheable"`
 	// Only when loading or linking
 	AdjacentSegmentIndex int `editable:"Portal segment index"`
 
@@ -37,8 +37,8 @@ type SectorSegment struct {
 
 	// Pre-calculated attributes
 	Index              int
-	Next               *SectorSegment `ecs:"norelation"`
-	Prev               *SectorSegment `ecs:"norelation"`
+	Next               *SectorSegment `ecs:"non-traversable,shallow-cacheable"`
+	Prev               *SectorSegment `ecs:"non-traversable,shallow-cacheable"`
 	PortalMatrix       concepts.Matrix2
 	MirrorPortalMatrix concepts.Matrix2
 

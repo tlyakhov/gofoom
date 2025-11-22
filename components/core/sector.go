@@ -27,14 +27,14 @@ type Sector struct {
 
 	// TODO: These should be "editable", but the Fyne refresh takes way too
 	// long. Figure out some approach for improving performance here.
-	Segments []*SectorSegment `ecs:"nocache"`
+	Segments []*SectorSegment `ecs:"non-cacheable"`
 
-	Bodies           map[ecs.Entity]*Body            `ecs:"nocache"`
-	InternalSegments map[ecs.Entity]*InternalSegment `ecs:"nocache"`
+	Bodies           map[ecs.Entity]*Body            `ecs:"non-cacheable"`
+	InternalSegments map[ecs.Entity]*InternalSegment `ecs:"non-cacheable"`
 
-	Layer        int             `editable:"Layer"` // TODO: Add more editor support
-	HigherLayers ecs.EntityTable `ecs:"norelation"`
-	LowerLayers  ecs.EntityTable `ecs:"norelation"`
+	Layer        int `editable:"Layer"` // TODO: Add more editor support
+	HigherLayers ecs.EntityTable
+	LowerLayers  ecs.EntityTable
 
 	EnterScripts []*Script `editable:"Enter Scripts"`
 	ExitScripts  []*Script `editable:"Exit Scripts"`
@@ -49,7 +49,7 @@ type Sector struct {
 	Center   dynamic.DynamicValue[concepts.Vector3]
 
 	// Lightmap data
-	Lightmap      *xsync.MapOf[uint64, *LightmapCell] `ecs:"snapshotDirect"`
+	Lightmap      *xsync.MapOf[uint64, *LightmapCell] `ecs:"non-traversable,shallow-cacheable"`
 	LightmapBias  [3]int64                            // Quantized Min
 	LastSeenFrame atomic.Int64
 }

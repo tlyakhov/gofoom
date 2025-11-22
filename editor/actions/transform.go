@@ -128,8 +128,6 @@ func (a *Transform) Apply() {
 }
 func (a *Transform) Cancel() {}
 
-func (a *Transform) RequiresLock() bool { return true }
-
 func (a *Transform) Status() string {
 	return ""
 }

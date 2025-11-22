@@ -166,6 +166,9 @@ func (r *Renderer) renderHealthBar(b *core.Body) {
 }
 
 func (r *Renderer) DebugInfo() {
+	if r.Player == nil {
+		return
+	}
 	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("DebugInfo"))
 
 	playerAlive := behaviors.GetAlive(r.Player.Entity)

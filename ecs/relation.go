@@ -16,6 +16,7 @@ const (
 	RelationSet
 	RelationSlice
 	RelationTable
+	RelationMap
 )
 
 type Relation struct {
@@ -45,6 +46,13 @@ func (r *Relation) String() string {
 		return fmt.Sprintf("Relation [slice]: %v.%v = %v", owner, r.Name, r.Slice)
 	case RelationTable:
 		return fmt.Sprintf("Relation [table]: %v.%v = %v", owner, r.Name, r.Table.String())
+	case RelationMap:
+		keys := r.Value.MapKeys()
+		entities := ""
+		for _, v := range keys {
+			entities += v.Interface().(Entity).String()
+		}
+		return fmt.Sprintf("Relation [map]: %v.%v = %v", owner, r.Name, entities)
 	}
 	return fmt.Sprintf("Relation [unknown]: %v.%v", owner, r.Name)
 }
@@ -64,6 +72,8 @@ func (r *Relation) Update() {
 		updated = r.Slice
 	case RelationTable:
 		updated = r.Table
+	case RelationMap:
+		return
 	}
 	r.Value.Set(reflect.ValueOf(updated))
 }
@@ -74,10 +84,19 @@ func isStructOrPtrToStruct(t reflect.Type) bool {
 			t.Elem().Kind() == reflect.Struct)
 }
 
+func isMapOfEntities(t reflect.Type) bool {
+	return t.Kind() == reflect.Map && t.Key() == reflect.TypeFor[Entity]()
+}
+
 func relationFromField(field *reflect.StructField, v reflect.Value) Relation {
 	r := Relation{
 		Value: v,
 		Name:  field.Name,
+	}
+
+	if isMapOfEntities(v.Type()) {
+		r.Type = RelationMap
+		return r
 	}
 
 	x := v.Interface()
@@ -114,7 +133,7 @@ const debugRelationWalk = false
 // This is a bit ugly and has some fragile aspects:
 //  1. The way we walk types is pretty greedy. There's a good chance we're
 //     walking into internal caches or unrelated data if they haven't been
-//     tagged with ecs:norelation. We should probably decouple the type checking
+//     tagged with ecs:non-traversable. We should probably decouple the type checking
 //     from going through the actual reflected values. A good improvement would
 //     be to do the type walk in RegisterComponent, store it in globalTypeMetadata
 //     somehow, and then when actually going through an Entity/Component, just
@@ -165,7 +184,11 @@ func rangeComponentRelations(owner any, f func(r *Relation) bool, visited map[an
 		field := ownerType.Field(i)
 
 		// Ignore unexported fields or specifically tagged fields.
-		if !field.IsExported() || field.Tag.Get("ecs") == "norelation" || field.Tag.Get("ecs") == "nocache" {
+		if !field.IsExported() {
+			continue
+		}
+		flags := FieldFlagsFromTag(field.Tag)
+		if (flags & FieldNonTraversable) != 0 {
 			continue
 		}
 
@@ -273,7 +296,89 @@ func ModifyComponentRelationEntities(owner any, f func(r *Relation, e Entity) En
 			}
 			r.Table = newTable
 			r.Update()
+		case RelationMap:
+			newMap := reflect.MakeMap(r.Value.Type())
+			iter := r.Value.MapRange()
+			for iter.Next() {
+				e := iter.Key().Interface().(Entity)
+				newMap.SetMapIndex(reflect.ValueOf(f(r, e)), iter.Value())
+			}
+			r.Value.Set(newMap)
+			r.Update()
 		}
 		return true
 	})
+}
+
+func ModifyEntityRelationEntities(owner Entity, f func(r *Relation, e Entity) Entity) {
+	for _, c := range AllComponents(owner) {
+		if c == nil {
+			continue
+		}
+		ModifyComponentRelationEntities(c, f)
+	}
+}
+
+func FindReplaceRelations(from Entity, to Entity) {
+	Entities.Range(func(entity uint32) {
+		e := Entity(entity)
+		if e == from || e.IsExternal() {
+			return
+		}
+		ModifyEntityRelationEntities(e, func(r *Relation, e Entity) Entity {
+			if e == from {
+				return to
+			}
+			return e
+		})
+	})
+}
+
+func MoveEntityComponents(from Entity, to Entity) {
+	// Break down our entity IDs into source file IDs and local entities,
+	// sanity check our input.
+	sidFrom, localFrom := localizeEntity(from)
+	if localFrom == 0 || to == 0 {
+		return
+	}
+	sidTo, localTo := localizeEntity(to)
+	if localTo == 0 {
+		return
+	}
+
+	// The entity we are moving to already exists, move components to a new entity.
+	if Entities.Contains(uint32(to)) && len(rows[sidTo][localTo]) != 0 {
+		MoveEntityComponents(to, NewEntity())
+	}
+	// Create the target.
+	CreateEntity(to)
+
+	// Get the source/target tables
+	tableFrom := &rows[sidFrom][int(localFrom)]
+	tableTo := &rows[sidTo][int(localTo)]
+
+	// Fix up the entities the component is attached to.
+	for _, c := range *tableFrom {
+		if c == nil {
+			continue
+		}
+		base := c.Base()
+		if base.Entities.Contains(from) {
+			base.Entities.Delete(from)
+			base.Entities.Set(to)
+		}
+		if base.Entity == from {
+			base.Entity = to
+		}
+	}
+
+	// Actually move the table.
+	*tableTo = *tableFrom
+
+	// Delete the source.
+	*tableFrom = nil
+	Entities.Remove(uint32(from))
+
+	// Wire up any relations.
+	FindReplaceRelations(from, to)
 }

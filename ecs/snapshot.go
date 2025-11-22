@@ -26,20 +26,20 @@ func processNonSerializedFields(object any, serialized map[string]any, save bool
 		field := objectType.Field(i)
 
 		// Ignore editable, unexported, or specifically tagged fields.
-		ecsTag := field.Tag.Get("ecs")
-		snapshotDirect := ecsTag == "snapshotDirect"
-		editableTag := field.Tag.Get("editable")
+		flags := FieldFlagsFromTag(field.Tag)
+		shallowCache := (flags & FieldShallowCacheable) != 0
+		isEditable := field.Tag.Get("editable") != ""
 		isSliceOfStruct := field.Type.Kind() == reflect.Slice && isStructOrPtrToStruct(field.Type.Elem())
-		isEditableNonStruct := (editableTag != "" && field.Type.Kind() != reflect.Struct && !isSliceOfStruct)
+		isEditableNonStruct := (isEditable && field.Type.Kind() != reflect.Struct && !isSliceOfStruct)
 		isAttached := field.Type == attachedType
-		if !field.IsExported() || isEditableNonStruct || ecsTag == "nocache" || isAttached {
+		if !field.IsExported() || isEditableNonStruct || (flags&FieldNonCacheable) != 0 || isAttached {
 			continue
 		}
 		// Shallow copy by default, except for embedded structs/value types
 		v := objectValue.Field(i)
 		name := "_cache_" + field.Name
 		switch {
-		case !snapshotDirect && field.Type.Kind() == reflect.Struct:
+		case !shallowCache && field.Type.Kind() == reflect.Struct:
 			child := v.Addr().Interface()
 			childMap := make(map[string]any)
 			if save {
@@ -48,7 +48,7 @@ func processNonSerializedFields(object any, serialized map[string]any, save bool
 				childMap = loaded.(map[string]any)
 			}
 			processNonSerializedFields(child, childMap, save)
-		case !snapshotDirect && isSliceOfStruct:
+		case !shallowCache && isSliceOfStruct:
 			if save {
 				childSlice := make([]map[string]any, v.Len())
 				for i := range v.Len() {
@@ -173,6 +173,9 @@ func SaveSnapshot(includeNonSerialized bool) Snapshot {
 
 	Entities.Range(func(entity uint32) {
 		e := Entity(entity)
+		if e == 0 {
+			return
+		}
 		if !includeNonSerialized && e.IsExternal() {
 			return
 		}

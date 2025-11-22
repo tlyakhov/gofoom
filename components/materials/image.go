@@ -35,8 +35,8 @@ type Image struct {
 	Width, Height uint32
 	PixelsRGBA    []uint32
 	PixelsLinear  []concepts.Vector4
-	MipMaps       []ImageMipMap `ecs:"snapshotDirect"`
-	Image         image.Image   `ecs:"snapshotDirect"`
+	MipMaps       []ImageMipMap `ecs:"non-traversable,shallow-cacheable"`
+	Image         image.Image   `ecs:"non-traversable,shallow-cacheable"`
 }
 
 func (img *Image) MultiAttachable() bool { return true }

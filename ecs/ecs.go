@@ -58,12 +58,14 @@ func Initialize() {
 			a.OnDelete()
 		}
 	}
-	Entities = bitmap.Bitmap{}
-	// 0 is reserved and represents 'null' entity
-	Entities.Set(0)
 	for i := range len(rows) {
 		rows[i] = nil
 	}
+	Entities = bitmap.Bitmap{}
+	// 0 is reserved and represents 'null' entity
+	Entities.Set(0)
+	// 1 is reserved and represents the root file.
+	CreateEntity(1)
 	arenas = make([]ComponentArena, len(Types().ArenaPlaceholders))
 
 	// Preserve simulation callbacks
@@ -102,15 +104,13 @@ func Initialize() {
 // Reserves an entity ID in the database (no components attached)
 // It finds the smallest available entity ID, marks it as used, and returns it.
 func NewEntity() Entity {
-	if free, found := Entities.MinZero(); found {
-		Entities.Set(free)
-		return Entity(free)
+	var nextFree uint32
+	var found bool
+	if nextFree, found = Entities.MinZero(); !found {
+		nextFree = uint32(len(rows[0]))
 	}
-	nextFree := len(rows[0])
-	for len(rows[0]) < (nextFree + 1) {
-		rows[0] = append(rows[0], nil)
-	}
-	Entities.Set(uint32(nextFree))
+	Entities.Set(nextFree)
+	expandRows(0, int(nextFree+1))
 	return Entity(nextFree)
 }
 
@@ -438,7 +438,8 @@ func GetEntityByName(name string) Entity {
 }
 
 func Load(filename string) error {
-	file := NewAttachedComponent(NewEntity(), SourceFileCID).(*SourceFile)
+	// Root file is attached to entity 1
+	file := NewAttachedComponent(1, SourceFileCID).(*SourceFile)
 	file.Source = filename
 	file.ID = 0
 	file.Flags = EntityInternal
@@ -479,104 +480,4 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](field *PT, name st
 	n.Flags |= EntityInternal
 
 	return true
-}
-
-func MoveEntityComponents(from Entity, to Entity) {
-	// Break down our entity IDs into source file IDs and local entities,
-	// sanity check our input.
-	sidFrom, localFrom := localizeEntity(from)
-	if localFrom == 0 || to == 0 {
-		return
-	}
-	sidTo, localTo := localizeEntity(to)
-	if localTo == 0 {
-		return
-	}
-
-	// The entity we are moving to already exists, move components to a new entity.
-	if Entities.Contains(uint32(to)) && len(rows[sidTo][localTo]) != 0 {
-		MoveEntityComponents(to, NewEntity())
-	}
-	// Create the target.
-	CreateEntity(to)
-
-	// Get the source/target tables
-	tableFrom := &rows[sidFrom][int(localFrom)]
-	tableTo := &rows[sidTo][int(localTo)]
-
-	// Fix up the entities the component is attached to.
-	for _, c := range *tableFrom {
-		if c == nil {
-			continue
-		}
-		base := c.Base()
-		if base.Entities.Contains(from) {
-			base.Entities.Delete(from)
-			base.Entities.Set(to)
-		}
-		if base.Entity == from {
-			base.Entity = to
-		}
-	}
-
-	// Actually move the table.
-	*tableTo = *tableFrom
-
-	// Delete the source.
-	*tableFrom = nil
-	Entities.Remove(uint32(from))
-
-	// Wire up any relations.
-	Entities.Range(func(entity uint32) {
-		e := Entity(entity)
-		if e == from || e.IsExternal() {
-			return
-		}
-		RangeRelations(e, func(r *Relation) bool {
-			switch r.Type {
-			case RelationOne:
-				if r.One != from {
-					return true
-				}
-				r.One = to
-				if debugRelationWalk {
-					log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
-				}
-			case RelationSet:
-				if !r.Set.Contains(from) {
-					return true
-				}
-				r.Set.Delete(e)
-				r.Set.Add(to)
-				if debugRelationWalk {
-					log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
-				}
-			case RelationSlice:
-				found := false
-				for i, e := range r.Slice {
-					if e == from {
-						r.Slice[i] = to
-						found = true
-						if debugRelationWalk {
-							log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
-						}
-					}
-				}
-				if !found {
-					return true
-				}
-			case RelationTable:
-				if !r.Table.Contains(from) {
-					return true
-				}
-				r.Table.Delete(from)
-				r.Table.Set(to)
-				if debugRelationWalk {
-					log.Printf("ecs.MoveEntityComponents (%v->%v): %v", from, to, r.String())
-				}
-			}
-			r.Update()
-			return true
-		})
-	})
 }
