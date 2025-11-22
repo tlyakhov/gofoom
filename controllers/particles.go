@@ -86,14 +86,15 @@ func (pc *ParticleController) Frame() {
 			return
 		}
 
+		flags := ecs.ComponentActive | ecs.ComponentHideEntityInEditor | ecs.ComponentLockedInEditor
 		e := ecs.NewEntity()
 		pc.Spawned[e] = ecs.Simulation.Timestamp
 		body := ecs.NewAttachedComponent(e, core.BodyCID).(*core.Body)
-		body.Flags |= ecs.EntityInternal
+		body.Flags |= flags
 		vis := ecs.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
-		vis.Flags |= ecs.EntityInternal
+		vis.Flags |= flags
 		mobile := ecs.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
-		mobile.Flags |= ecs.EntityInternal
+		mobile.Flags |= flags
 
 		ecs.Link(e, pc.Source)
 		body.Pos.Now.From(&pc.Body.Pos.Now)

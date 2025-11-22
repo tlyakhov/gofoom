@@ -19,6 +19,7 @@ type AddComponent struct {
 func (a *AddComponent) Activate() {
 	for _, entity := range a.Entities {
 		ecs.NewAttachedComponent(entity, a.ID)
+		a.FlushEntityImage(entity)
 	}
 	ecs.ActAllControllers(ecs.ControllerRecalculate)
 	a.ActionFinished(false, true, a.ID == core.SectorCID)

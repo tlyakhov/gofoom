@@ -27,6 +27,7 @@ func (a *Delete) Activate() {
 		a.Saved[obj] = obj.Serialize()
 	}
 	a.apply()
+	a.State().Modified = true
 	a.ActionFinished(false, true, true)
 }
 

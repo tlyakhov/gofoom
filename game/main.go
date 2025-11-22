@@ -147,7 +147,7 @@ func run() {
 	}
 	validateSpawn()
 	controllers.Respawn(true)
-	archetypes.CreateFont("data/vga-font-8x8.png", "Default Font")
+	archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 
 	renderer = render.NewRenderer()
 	gameUI = &ui.UI{Renderer: renderer}

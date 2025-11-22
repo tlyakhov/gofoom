@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/controllers"
@@ -15,6 +16,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
+	"fyne.io/fyne/v2/widget"
 )
 
 type MenuAction struct {
@@ -29,12 +31,13 @@ type EditorMenu struct {
 	FileSave   MenuAction
 	FileQuit   MenuAction
 
-	EditUndo   MenuAction
-	EditRedo   MenuAction
-	EditDelete MenuAction
-	EditCut    MenuAction
-	EditCopy   MenuAction
-	EditPaste  MenuAction
+	EditUndo        MenuAction
+	EditRedo        MenuAction
+	EditDelete      MenuAction
+	EditCut         MenuAction
+	EditCopy        MenuAction
+	EditPaste       MenuAction
+	EditFindReplace MenuAction
 
 	EditSelectSegment         MenuAction
 	EditRaiseCeil             MenuAction
@@ -165,6 +168,45 @@ func CreateMainMenu() {
 	editor.EditPaste.Shortcut = &fyne.ShortcutPaste{Clipboard: editor.App.Clipboard()}
 	editor.EditPaste.Menu = fyne.NewMenuItem("Paste", func() {
 		editor.FocusedShortcut(editor.EditPaste.Shortcut)
+
+	})
+
+	editor.EditFindReplace.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF, Modifier: fyne.KeyModifierShortcutDefault | fyne.KeyModifierShift}
+	editor.EditFindReplace.Menu = fyne.NewMenuItem("Find & Replace all references", func() {
+		fromEntry := widget.NewEntry()
+		fromEntry.Text = ""
+		fromEntry.PlaceHolder = "e.g. 123"
+		toEntry := widget.NewEntry()
+		toEntry.Text = ""
+		toEntry.PlaceHolder = "e.g. 123"
+
+		title := "Find & Replace all references"
+
+		dialog.ShowForm(title, "Find & Replace", "Cancel", []*widget.FormItem{
+			{Text: "From", Widget: fromEntry},
+			{Text: "To", Widget: toEntry},
+		}, func(b bool) {
+			if !b {
+				return
+			}
+			fromEntity, err := ecs.ParseEntityHumanOrCanonical(fromEntry.Text)
+			if err != nil {
+				log.Printf("Error: %v", err)
+				return
+			}
+			toEntity, err := ecs.ParseEntityHumanOrCanonical(toEntry.Text)
+			if err != nil {
+				log.Printf("Error: %v", err)
+				return
+			}
+			if fromEntity.Local() <= 1 || toEntity.Local() <= 1 {
+				log.Printf("Can't find/replace entity 0 or 1")
+				return
+			}
+			editor.Act(&actions.FindReplace{
+				Action: state.Action{IEditor: editor},
+				From:   fromEntity, To: toEntity})
+		}, editor.GridWindow)
 
 	})
 
@@ -320,7 +362,7 @@ func CreateMainMenu() {
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)
 	menuEdit := fyne.NewMenu("Edit", editor.EditUndo.Menu, editor.EditRedo.Menu, fyne.NewMenuItemSeparator(),
-		editor.EditCut.Menu, editor.EditCopy.Menu, editor.EditPaste.Menu, editor.EditDelete.Menu, fyne.NewMenuItemSeparator(),
+		editor.EditCut.Menu, editor.EditCopy.Menu, editor.EditPaste.Menu, editor.EditDelete.Menu, editor.EditFindReplace.Menu, fyne.NewMenuItemSeparator(),
 		editor.EditSelectSegment.Menu,
 		editor.EditRaiseCeil.Menu, editor.EditLowerCeil.Menu, editor.EditRaiseFloor.Menu, editor.EditLowerFloor.Menu,
 		editor.EditRotateCeilAzimuthCW.Menu, editor.EditRotateCeilAzimuthCCW.Menu, editor.EditRotateFloorAzimuthCW.Menu,

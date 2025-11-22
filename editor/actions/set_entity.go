@@ -17,5 +17,8 @@ type SetEntity struct {
 
 func (a *SetEntity) Activate() {
 	ecs.MoveEntityComponents(a.From, a.To)
+	a.IEditor.FlushEntityImage(a.From)
+	a.IEditor.FlushEntityImage(a.To)
+	a.State().Modified = true
 	a.ActionFinished(false, true, true)
 }

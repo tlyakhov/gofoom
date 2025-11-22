@@ -149,6 +149,9 @@ func (list *EntityList) findAllReferences() {
 						found.Set(entity)
 					}
 				}
+			case ecs.RelationMap:
+				// TODO
+
 			}
 
 			return true

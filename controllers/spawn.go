@@ -12,7 +12,7 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.ComponentID, originalComponent ecs.Component, copiedComponent ecs.Component) bool) ecs.Entity {
+func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.ComponentID, copiedComponent ecs.Component, pastedComponent ecs.Component) bool) ecs.Entity {
 	// TODO: This kind of cloning operation is used in other places (e.g. the
 	// editor). Should this be pulled into ecs? Will need to figure out how to
 	// address deep vs. shallow cloning and wiring up any relationships.
@@ -66,8 +66,9 @@ func RespawnInventory(c *inventory.Carrier) {
 		if copied == 0 {
 			continue
 		}
-		pasted := CloneEntity(copied, func(e ecs.Entity, cid ecs.ComponentID, original ecs.Component, _ ecs.Component) bool {
+		pasted := CloneEntity(copied, func(e ecs.Entity, cid ecs.ComponentID, original ecs.Component, pasted ecs.Component) bool {
 			if cid == inventory.SlotCID {
+				pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
 				return true
 			}
 			// Otherwise, just attach the original.
@@ -141,6 +142,7 @@ func Respawn(force bool) {
 		case character.PlayerCID:
 			player := pasted.(*character.Player)
 			player.Spawn = false
+			player.Flags |= ecs.ComponentHideEntityInEditor
 		case ecs.NamedCID:
 			named := pasted.(*ecs.Named)
 			named.Name = "Player"

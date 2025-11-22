@@ -63,6 +63,8 @@ func (a *Paste) updateRelations(pastedEntity ecs.Entity) {
 				r.Table.Delete(e)
 			}
 			r.Update()
+		case ecs.RelationMap:
+			// TODO
 		}
 		return true
 	})

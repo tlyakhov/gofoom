@@ -280,7 +280,7 @@ func (e *Editor) Load(filename string) {
 		return
 	}
 	controllers.Respawn(true)
-	archetypes.CreateFont("data/vga-font-8x8.png", "Default Font")
+	archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 	e.EntityList.ReIndex()
 	ecs.Simulation.NewFrame = e.NewFrame
 	ecs.Simulation.Integrate = e.Integrate

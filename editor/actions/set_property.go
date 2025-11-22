@@ -38,14 +38,13 @@ func (a *SetProperty) FireHooks() {
 		if v.Entity.IsExternal() {
 			continue
 		}
+		a.FlushEntityImage(v.Entity)
 		switch target := v.Parent().(type) {
 		case *materials.Image:
 			target.MarkDirty()
 			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
-			a.FlushEntityImage(v.Entity)
 		case *ecs.Linked, *audio.Sound, *core.Script, *core.SectorPlane, *core.Sector:
 			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
-			a.FlushEntityImage(v.Entity)
 			// TODO: use a nicer source code editor for script properties.
 		case *ecs.SourceFile:
 			if target.Loaded {

@@ -89,8 +89,6 @@ func (a *SplitSegment) Cancel() {
 	a.ActionFinished(true, true, true)
 }
 
-func (a *SplitSegment) RequiresLock() bool { return true }
-
 func (a *SplitSegment) Status() string {
 	return ""
 }

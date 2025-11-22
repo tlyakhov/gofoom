@@ -24,6 +24,7 @@ func (a *UpdateLinks) Activate() {
 		}
 	}
 	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	a.State().Modified = true
 	a.ActionFinished(false, true, false)
 }
 
