@@ -40,10 +40,13 @@ func (lc *LinkedController) Recalculate() {
 			if c == nil || !c.MultiAttachable() {
 				continue
 			}
-			lc.SourceComponents.Set(c)
-			if lc.AlwaysReplace {
+			existing := GetComponent(lc.Entity, c.ComponentID())
+			if lc.AlwaysReplace && existing != nil {
 				detach(c.ComponentID(), lc.Entity, false)
+			} else if existing != nil {
+				continue
 			}
+			lc.SourceComponents.Set(c)
 			attach(lc.Entity, &c, c.ComponentID())
 		}
 	}
