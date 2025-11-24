@@ -130,6 +130,8 @@ func main() {
 				sprite.Cols = 16
 				sprite.Material = e
 				sprite.Angles = 0
+			} else {
+				ecs.NewAttachedComponent(e, materials.LitCID)
 			}
 		case ".wav", ".mp3", ".ogg":
 			if strings.Contains(path, "music") {

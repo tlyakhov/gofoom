@@ -239,8 +239,12 @@ func (file *SourceFile) loadEntities() error {
 					loadedID := e.SourceID()
 					mappedID, ok := file.loadedIDsToNewIDs[loadedID]
 					if !ok {
+						// TODO: This has a nasty bug. When nesting files and
+						// loading them, this does not properly treat all the
+						// remapping. I *think* we need to store nested
+						// "loadedIDsToNewIDs" in parent file maps.
 						log.Printf("SourceFile.loadEntities: relation %v.%v=%v had source ID %v, which doesn't have a mapping!", entity, r.Name, e, loadedID)
-						return 0
+						return e
 					}
 					return e.WithFileID(mappedID)
 				})

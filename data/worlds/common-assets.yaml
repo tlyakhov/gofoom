@@ -108,621 +108,933 @@
   materials.Image:
     Filter: false
     Source: data/sprites/acid-bubble.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮18∈⋮aqua+bubble+%28sprites%29
   ecs.Named:
     Name: aqua bubble (sprites)
   materials.Image:
     Filter: false
     Source: data/sprites/aqua-bubble.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮19∈⋮avatar+%28sprites%29
   ecs.Named:
     Name: avatar (sprites)
   materials.Image:
     Filter: false
     Source: data/sprites/avatar.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮20∈⋮evil+flub+back+left+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub back left (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-back-left.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮21∈⋮evil+flub+back+right+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub back right (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-back-right.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮22∈⋮evil+flub+back+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub back (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-back.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮23∈⋮evil+flub+front+left+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub front left (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-front-left.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮24∈⋮evil+flub+front+right+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub front right (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-front-right.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮25∈⋮evil+flub+front+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub front (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-front.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮26∈⋮evil+flub+left+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub left (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-left.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮27∈⋮evil+flub+right+%28sprites+evil+flub%29
   ecs.Named:
     Name: evil flub right (sprites evil flub)
   materials.Image:
     Filter: false
     Source: data/sprites/evil-flub/evil-flub-right.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮28∈⋮dead+%28sprites+flub%29
   ecs.Named:
     Name: dead (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/dead.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮29∈⋮flub+back+left+%28sprites+flub%29
   ecs.Named:
     Name: flub back left (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-back-left.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮30∈⋮flub+back+right+%28sprites+flub%29
   ecs.Named:
     Name: flub back right (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-back-right.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮31∈⋮flub+back+%28sprites+flub%29
   ecs.Named:
     Name: flub back (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-back.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮32∈⋮flub+front+left+%28sprites+flub%29
   ecs.Named:
     Name: flub front left (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-front-left.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮33∈⋮flub+front+right+%28sprites+flub%29
   ecs.Named:
     Name: flub front right (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-front-right.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮34∈⋮flub+front+%28sprites+flub%29
   ecs.Named:
     Name: flub front (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-front.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮35∈⋮flub+left+%28sprites+flub%29
   ecs.Named:
     Name: flub left (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-left.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮36∈⋮flub+right+%28sprites+flub%29
   ecs.Named:
     Name: flub right (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub-right.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮37∈⋮flub+%28sprites+flub%29
   ecs.Named:
     Name: flub (sprites flub)
   materials.Image:
     Filter: false
     Source: data/sprites/flub/flub.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮38∈⋮infobar+%28sprites%29
   ecs.Named:
     Name: infobar (sprites)
   materials.Image:
     Filter: false
     Source: data/sprites/infobar.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮39∈⋮keycard+%28sprites+keycard%29
   ecs.Named:
     Name: keycard (sprites keycard)
   materials.Image:
     Filter: false
     Source: data/sprites/keycard/keycard.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮40∈⋮pluk+%28sprites%29
   ecs.Named:
     Name: pluk (sprites)
   materials.Image:
     Filter: false
     Source: data/sprites/pluk.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮41∈⋮red+button+%28sprites%29
   ecs.Named:
     Name: red button (sprites)
   materials.Image:
     Filter: false
     Source: data/sprites/red-button.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮42∈⋮transparent+bubble+%28sprites%29
   ecs.Named:
     Name: transparent bubble (sprites)
   materials.Image:
     Filter: false
     Source: data/sprites/transparent-bubble.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮43∈⋮tree+%28sprites%29
   ecs.Named:
     Name: tree (sprites)
   materials.Image:
     Filter: false
     Source: data/sprites/tree.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29
   ecs.Named:
     Name: muzzle (sprites weird gun)
   materials.Image:
     Filter: false
     Source: data/sprites/weird-gun/muzzle.jpg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29
   ecs.Named:
     Name: weapon mark (sprites weird gun)
   materials.Image:
     Filter: false
     Source: data/sprites/weird-gun/weapon-mark.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29
   ecs.Named:
     Name: weird gun cooling (sprites weird gun)
   materials.Image:
     Filter: false
     Source: data/sprites/weird-gun/weird-gun-cooling.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29
   ecs.Named:
     Name: weird gun (sprites weird gun)
   materials.Image:
     Filter: false
     Source: data/sprites/weird-gun/weird-gun.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮48∈⋮DGarage+%28textures%29
   ecs.Named:
     Name: DGarage (textures)
   materials.Image:
     Filter: false
     Source: data/textures/DGarage.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮49∈⋮FDef+%28textures%29
   ecs.Named:
     Name: FDef (textures)
   materials.Image:
     Filter: false
     Source: data/textures/FDef.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮50∈⋮FGrayTile+%28textures%29
   ecs.Named:
     Name: FGrayTile (textures)
   materials.Image:
     Filter: false
     Source: data/textures/FGrayTile.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮51∈⋮FHexMetal+%28textures%29
   ecs.Named:
     Name: FHexMetal (textures)
   materials.Image:
     Filter: false
     Source: data/textures/FHexMetal.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮52∈⋮FRedLight+%28textures%29
   ecs.Named:
     Name: FRedLight (textures)
   materials.Image:
     Filter: false
     Source: data/textures/FRedLight.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮53∈⋮FSlime+%28textures%29
   ecs.Named:
     Name: FSlime (textures)
   materials.Image:
     Filter: false
     Source: data/textures/FSlime.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮54∈⋮WDef+%28textures%29
   ecs.Named:
     Name: WDef (textures)
   materials.Image:
     Filter: false
     Source: data/textures/WDef.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮55∈⋮WDirty+%28textures%29
   ecs.Named:
     Name: WDirty (textures)
   materials.Image:
     Filter: false
     Source: data/textures/WDirty.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮56∈⋮WMetal+%28textures%29
   ecs.Named:
     Name: WMetal (textures)
   materials.Image:
     Filter: false
     Source: data/textures/WMetal.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮57∈⋮WSlimeGrate+%28textures%29
   ecs.Named:
     Name: WSlimeGrate (textures)
   materials.Image:
     Filter: false
     Source: data/textures/WSlimeGrate.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮58∈⋮WSlimy+%28textures%29
   ecs.Named:
     Name: WSlimy (textures)
   materials.Image:
     Filter: false
     Source: data/textures/WSlimy.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮59∈⋮Water+%28textures%29
   ecs.Named:
     Name: Water (textures)
   materials.Image:
     Filter: false
     Source: data/textures/Water.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮60∈⋮bricks+%28textures%29
   ecs.Named:
     Name: bricks (textures)
   materials.Image:
     Filter: false
     Source: data/textures/bricks.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮61∈⋮ceil+%28textures%29
   ecs.Named:
     Name: ceil (textures)
   materials.Image:
     Filter: false
     Source: data/textures/ceil.jpg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮62∈⋮glass+test+%28textures%29
   ecs.Named:
     Name: glass test (textures)
   materials.Image:
     Filter: false
     Source: data/textures/glass-test.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮63∈⋮grass+%28textures%29
   ecs.Named:
     Name: grass (textures)
   materials.Image:
     Filter: false
     Source: data/textures/grass.jpg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮64∈⋮grass2+%28textures%29
   ecs.Named:
     Name: grass2 (textures)
   materials.Image:
     Filter: false
     Source: data/textures/grass2.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮65∈⋮grate+%28textures%29
   ecs.Named:
     Name: grate (textures)
   materials.Image:
     Filter: false
     Source: data/textures/grate.jpg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮66∈⋮nightsky+%28textures%29
   ecs.Named:
     Name: nightsky (textures)
   materials.Image:
     Filter: false
     Source: data/textures/nightsky.jpg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮67∈⋮planks+%28textures%29
   ecs.Named:
     Name: planks (textures)
   materials.Image:
     Filter: false
     Source: data/textures/planks.jpg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮68∈⋮portal+%28textures%29
   ecs.Named:
     Name: portal (textures)
   materials.Image:
     Filter: false
     Source: data/textures/portal.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮69∈⋮sky+gradient+%28textures%29
   ecs.Named:
     Name: sky gradient (textures)
   materials.Image:
     Filter: false
     Source: data/textures/sky-gradient.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮70∈⋮sky+%28textures%29
   ecs.Named:
     Name: sky (textures)
   materials.Image:
     Filter: false
     Source: data/textures/sky.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮71∈⋮space+%28textures%29
   ecs.Named:
     Name: space (textures)
   materials.Image:
     Filter: false
     Source: data/textures/space.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮72∈⋮bed_feet_end+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: bed_feet_end (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/bed_feet_end.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮73∈⋮bed_feet_side+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: bed_feet_side (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/bed_feet_side.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮74∈⋮bed_feet_top+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: bed_feet_top (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/bed_feet_top.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮75∈⋮bed_head_end+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: bed_head_end (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/bed_head_end.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮76∈⋮bed_head_side+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: bed_head_side (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/bed_head_side.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮77∈⋮bed_head_top+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: bed_head_top (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/bed_head_top.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮78∈⋮cactus_side+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: cactus_side (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/cactus_side.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮79∈⋮cactus_top+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: cactus_top (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/cactus_top.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮80∈⋮coarse_dirt+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: coarse_dirt (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/coarse_dirt.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮81∈⋮deadbush+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: deadbush (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/deadbush.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮82∈⋮ggrass_top+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: ggrass_top (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/ggrass_top.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮84∈⋮glass_black+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass_black (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass_black.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮85∈⋮glass_blue+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass_blue (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass_blue.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮86∈⋮glass_brown+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass_brown (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass_brown.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮87∈⋮glass_gray+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass_gray (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass_gray.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮88∈⋮glass_green+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass_green (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass_green.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮89∈⋮glass_lime+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass_lime (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass_lime.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮90∈⋮glass_orange+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glass_orange (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glass_orange.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮91∈⋮glowstone+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: glowstone (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/glowstone.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮92∈⋮hay_block_side+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: hay_block_side (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/hay_block_side.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮93∈⋮hay_block_top+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: hay_block_top (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/hay_block_top.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮94∈⋮ladder+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: ladder (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/ladder.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮95∈⋮planks_birch+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: planks_birch (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/planks_birch.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮96∈⋮pumpkin_face_on+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: pumpkin_face_on (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/pumpkin_face_on.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮97∈⋮pumpkin_side+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: pumpkin_side (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/pumpkin_side.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮98∈⋮pumpkin_top+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: pumpkin_top (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/pumpkin_top.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮99∈⋮purpur_block+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: purpur_block (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/purpur_block.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮100∈⋮red_sand+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: red_sand (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/red_sand.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮101∈⋮sand+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: sand (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/sand.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮102∈⋮stone_andesite_smooth+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: stone_andesite_smooth (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/stone_andesite_smooth.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮103∈⋮wool_colored_black+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_black (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_black.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮104∈⋮wool_colored_blue+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_blue (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_blue.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮105∈⋮wool_colored_brown+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_brown (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_brown.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮106∈⋮wool_colored_cyan+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_cyan (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_cyan.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮107∈⋮wool_colored_gray+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_gray (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_gray.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮108∈⋮wool_colored_green+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_green (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_green.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮109∈⋮wool_colored_light_blue+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_light_blue (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_light_blue.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮110∈⋮wool_colored_lime+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_lime (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_lime.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮111∈⋮wool_colored_magenta+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_magenta (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_magenta.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮112∈⋮wool_colored_orange+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_orange (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_orange.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮113∈⋮wool_colored_pink+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_pink (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_pink.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮114∈⋮wool_colored_purple+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_purple (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_purple.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮115∈⋮wool_colored_red+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_red (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_red.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮116∈⋮wool_colored_silver+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_silver (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_silver.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_white (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_white.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮118∈⋮wool_colored_yellow+%28textures+space_tiles_hyptosis%29
   ecs.Named:
     Name: wool_colored_yellow (textures space_tiles_hyptosis)
   materials.Image:
     Filter: false
     Source: data/textures/space_tiles_hyptosis/wool_colored_yellow.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮119∈⋮stained+glass+%28textures%29
   ecs.Named:
     Name: stained glass (textures)
   materials.Image:
     Filter: false
     Source: data/textures/stained-glass.jpeg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
 - Entity: ∈⋮120∈⋮test+heightmap+%28textures%29
   ecs.Named:
     Name: test heightmap (textures)
   materials.Image:
     Filter: false
     Source: data/textures/test-heightmap.jpg
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1

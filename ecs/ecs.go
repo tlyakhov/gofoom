@@ -202,6 +202,9 @@ func Link(target Entity, source Entity) {
 	}
 }
 
+// TODO: This approach of reallocating and copying is probably not scalable.
+// We should benchmark this for large entity counts and potentially replace with
+// some kind of chunked arena, or at least tweak the grow rate.
 func expandRows(sid EntitySourceID, size int) {
 	if size < cap(rows[sid]) {
 		for size >= len(rows[sid]) {

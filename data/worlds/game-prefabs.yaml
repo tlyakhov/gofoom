@@ -1,4 +1,11 @@
-- Entity: ∈⋮1
+- Entity: ∈⋮1∈⋮Basic+Vertical+Door
+  behaviors.Door:
+    Duration: 1000
+    Intent: DoorIntentReset
+    Limit: 0
+    TweeningFunc: EaseInOut2
+    Type: DoorTypeVertical
+    UseLimit: false
   behaviors.Proximity:
     Hysteresis: 0
     InRange:
@@ -8,45 +15,23 @@
         vd := behaviors.GetDoor(onEntity)
         if m == nil || vd == nil { return }
         if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
-  behaviors.Door:
-    Duration: 1000
-    TweeningFunc: EaseInOut2
   ecs.Named:
     Name: Basic Vertical Door
 - Entity: ∈⋮2
-  ecs.Linked:
-    Sources:
-      - ∈⋮249∈⋮Flower+Inventory+Item
-  ecs.Named:
-    Name: Flower (Starting Room)
-  inventory.Item:
-    Class: Flower
-    Count: "1"
-    Image: ∈⋮98∈⋮Pluk
-  materials.SpriteSheet:
-    Angles: "0"
-    Frame:
-      Damping: 0
-      Freq: 1e-06
-      Now: "0"
-      Response: 0
-      Spawn: "0"
-    Material: ∈⋮98∈⋮Pluk
-  materials.Visible:
-    Ambient: 1
-    Shadow: ShadowImage
-- Entity: ∈⋮42
+  ecs.SourceFile:
+    ID: 1
+    Source: data/worlds/common-assets.yaml
+- Entity: ∈⋮3∈⋮Flub
   behaviors.Alive:
     Health: 100
+  ecs.Linked:
+    Sources:
+    - ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
   ecs.Named:
     Name: Flub
   inventory.Weapon: {}
-  materials.Image:
-    Filter: false
-    Source: data/game/flub/flub.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Lit: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
   materials.SpriteSheet:
     Angles: "8"
     Cols: "4"
@@ -56,226 +41,112 @@
       Now: "0"
       Response: 0
       Spawn: "0"
-    Material: ∈⋮42∈⋮Flub
+    Material: ∈⋮3∈⋮Flub
     Rows: "2"
   materials.Visible:
     Ambient: 1
     Shadow: ShadowImage
-- Entity: ∈⋮98
-  ecs.Named:
-    Name: Pluk
-  materials.Image:
-    Filter: false
-    Source: data/game/pluk.png
-- Entity: ∈⋮113
-  ecs.Named:
-    Name: Weapon Mark
-  materials.Image:
-    Filter: false
-    Source: data/weapon-mark.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮119
-  ecs.Named:
-    Name: HUD Font 2
-  materials.Image:
-    Filter: false
-    GenerateMipMaps: false
-    Source: data/Lord_Nightmare_6x6font02.png
-  materials.SpriteSheet:
-    Angles: "0"
-    Cols: "16"
-    Frame:
-      Damping: 0
-      Freq: 1e-06
-      Now: "0"
-      Response: 0
-      Spawn: "0"
-    Material: ∈⋮119∈⋮HUD+Font+2
-    Rows: "16"
-- Entity: ∈⋮122
-  ecs.Named:
-    Name: Floor
-  materials.Image:
-    Filter: false
-    Source: data/space_tiles_hyptosis/ggrass_top.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮123
-  ecs.Named:
-    Name: Door Metal
-  materials.Image:
-    Filter: false
-    Source: data/space_tiles_hyptosis/wool_colored_gray.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮124
-  ecs.Named:
-    Name: Wall Variation
-  materials.Image:
-    Filter: false
-    Source: data/space_tiles_hyptosis/wool_colored_red.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮126
-  behaviors.Alive:
-    Health: 100
-  inventory.Carrier:
-    Inventory:
-      - ∈⋮189
-      - ∈⋮177
-      - ∈⋮169
-- Entity: ∈⋮127
-  ecs.Named:
-    Name: Toxic
-  materials.Image:
-    Filter: false
-    Source: data/FSlime.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮128
-  ecs.Named:
-    Name: Glass
-  materials.Image:
-    Filter: false
-    Source: data/glass-test.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮129
-  ecs.Named:
-    Name: Ladder
-  materials.Image:
-    Filter: false
-    Source: data/space_tiles_hyptosis/ladder.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮130
-  ecs.Named:
-    Name: Stained Glass
-  materials.Image:
-    Filter: false
-    Source: data/stained-glass.jpeg
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 0.5, 0.5, 0.5, 0.5
-- Entity: ∈⋮132
-  ecs.Linked:
-    Sources:
-      - ∈⋮246∈⋮Inventory+Item+Base
-  ecs.Named:
-    Name: Weird Gun
-  inventory.Item:
-    Class: WeirdGun
-    Count: "1"
-    Image: ∈⋮133
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.SpriteSheet:
-    Angles: "0"
-    Frame:
-      Damping: 0
-      Freq: 1e-06
-      Now: "0"
-      Response: 0
-      Spawn: "0"
-    Material: ∈⋮133
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29
-- Entity: ∈⋮133
-  materials.Image:
-    Filter: false
-    Source: data/weird-gun.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮134
-  ecs.Named:
-    Name: Proximity (Vertical Doors)
-- Entity: ∈⋮148
-  ecs.Named:
-    Name: WeirdGun
-  inventory.WeaponClass:
-    Damage: 10
-    FlashMaterial: ∈⋮199∈⋮Muzzle+Flash+Shader
-    MarkMaterial: ∈⋮113∈⋮Weapon+Mark
-    MarkSize: 2.5
-    Params:
-      - Material: ∈⋮133
-        Time: 100
-      - Material: ∈⋮133
-        Time: 100
-      - Material: ∈⋮133
-        Sound: ∈⋮190∈⋮Rifle
-        Time: 100
-      - Material: ∈⋮178∈⋮WeirdGun+Cooling
-        Sound: ∈⋮197
-        Time: 100
-      - Material: ∈⋮133
-        Time: 100
-      - Material: ∈⋮133
-        Time: 100
-    Spread: 3
-- Entity: ∈⋮153
+- Entity: ∈⋮4∈⋮Bubble
   behaviors.Proximity:
     InRange:
-      Code:
-        "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
         2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
     Range: 5
+  ecs.Linked:
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
   ecs.Named:
     Name: Bubble
-  materials.Image:
-    Filter: false
-    Source: data/game/transparent-bubble.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮154
-  materials.Image:
-    Filter: false
-    Source: data/space_tiles_hyptosis/sand.png
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮156
-  materials.Image:
-    Filter: false
-    Source: data/game/keycard/keycard.png
+  materials.Image: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Lit: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+- Entity: ∈⋮5
+  ecs.Linked:
+    Sources:
+    - ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Image: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Lit: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
   materials.SpriteSheet:
     Cols: "2"
     Frame: "0"
     Frames: "4"
-    Material: ∈⋮156
+    Material: ∈⋮5
     Rows: "2"
-- Entity: ∈⋮160
+- Entity: ∈⋮6∈⋮Muzzle+Flash+Shader
   ecs.Named:
-    Name: Muzzle Flash
-  materials.Image:
-    Filter: false
-    Source: data/muzzle.jpg
-- Entity: ∈⋮164
-  ecs.Linked:
-    Sources:
-      - ∈⋮246∈⋮Inventory+Item+Base
+    Name: Muzzle Flash Shader
+  materials.Shader:
+    Stages:
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+- Entity: ∈⋮7∈⋮Space+Window
   ecs.Named:
-    Name: Red Keycard
-  inventory.Item:
-    Class: Red Keycard
+    Name: Space Window
+  materials.Shader:
+    Stages:
+    - BlendingFunc: BlendNormal
+      Flags: ShaderTiled|ShaderSky
+      Material: ∈⋮71∈⋮space+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+- Entity: ∈⋮8
+  behaviors.Alive:
+    Health: 100
+  inventory.Carrier:
+    Inventory:
+    - ∈⋮9
+    - ∈⋮10
+    - ∈⋮11
+- Entity: ∈⋮9
+  inventory.Slot:
+    Class: WeirdGun
     Count: "1"
-    Image: ∈⋮156
-  materials.Lit: ∈⋮132∈⋮Weird+Gun
-  materials.Sprite:
-    Frame: "0"
-    Material: ∈⋮156
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29
-- Entity: ∈⋮168
+    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    Limit: "1"
+  inventory.WeaponClass:
+    Damage: 10
+    FlashMaterial: ∈⋮6∈⋮Muzzle+Flash+Shader
+    MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    MarkSize: 2.5
+    Params:
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Sound: ∈⋮190
+      Time: 100
+    - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Sound: ∈⋮197
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Time: 100
+    Spread: 3
+- Entity: ∈⋮10
+  inventory.Slot:
+    Class: Red Keycard
+    Count: "0"
+    Image: ∈⋮5
+    Limit: "1"
+- Entity: ∈⋮11
+  inventory.Slot:
+    Class: Flower
+    Count: "0"
+    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    Limit: "100"
+- Entity: ∈⋮12∈⋮WeirdGun
+  ecs.Named:
+    Name: WeirdGun
+  inventory.WeaponClass: ∈⋮9
+- Entity: ∈⋮13
+  behaviors.Door:
+    Duration: 1000
+    Intent: DoorIntentReset
+    Limit: 0
+    TweeningFunc: EaseInOut2
+    Type: DoorTypeVertical
+    UseLimit: false
   behaviors.PlayerTargetable:
     Frob:
       Code: |-
@@ -288,8 +159,7 @@
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
         }
-    Message:
-      Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
+    Message: Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
       red keycard to open{{end}}
   behaviors.Proximity:
     Hysteresis: 0
@@ -299,78 +169,84 @@
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: character.Player
-  behaviors.Door:
-    Duration: 1000
-    TweeningFunc: EaseInOut2
-- Entity: ∈⋮169
-  inventory.Slot:
-    Class: WeirdGun
-    Count: "1"
-    Image: ∈⋮132∈⋮Weird+Gun
-    Limit: "1"
-  inventory.WeaponClass: ∈⋮148∈⋮WeirdGun
-- Entity: ∈⋮176
-  ecs.Linked:
-    Sources:
-      - ∈⋮249∈⋮Flower+Inventory+Item
-  inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29
-  materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29
-- Entity: ∈⋮177
-  inventory.Slot:
-    Class: Red Keycard
-    Count: "0"
-    Image: ∈⋮156
-    Limit: "1"
-- Entity: ∈⋮178
+- Entity: ∈⋮14∈⋮Inventory+Item+Base
   ecs.Named:
-    Name: WeirdGun Cooling
-  materials.Image:
-    Filter: false
-    Source: data/weird-gun-cooling.png
-- Entity: ∈⋮189
-  inventory.Slot:
-    Class: Flower
-    Count: "0"
-    Image: ∈⋮98∈⋮Pluk
-    Limit: "100"
-- Entity: ∈⋮199
-  ecs.Named:
-    Name: Muzzle Flash Shader
-  materials.Shader:
-    Stages:
-      - BlendingFunc: BlendNormal
-        Material: ∈⋮160∈⋮Muzzle+Flash
-- Entity: ∈⋮239
-  materials.Image:
-    Filter: false
-    Source: data/space_tiles_hyptosis/glass.png
+    Name: Inventory Item Base
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮243
+  materials.Visible:
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮19∈⋮Flower+%28Starting+Room%29
+  ecs.Linked:
+    Sources:
+    - ∈⋮249∈⋮Flower+Inventory+Item
   ecs.Named:
-    Name: Space Window
-  materials.Shader:
-    Stages:
-      - BlendingFunc: BlendNormal
-        Flags: ShaderTiled|ShaderSky
-        Material: ∈⋮254
-      - BlendingFunc: BlendNormal
-        Material: ∈⋮239
-- Entity: ∈⋮246
+    Name: Flower (Starting Room)
+  inventory.Item:
+    Class: Flower
+    Count: "1"
+    Image: ∈⋮98
+  materials.SpriteSheet:
+    Angles: "0"
+    Frame:
+      Damping: 0
+      Freq: 1e-06
+      Now: "0"
+      Response: 0
+      Spawn: "0"
+    Material: ∈⋮98
+  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
+- Entity: ∈⋮132∈⋮Weird+Gun
+  ecs.Linked:
+    Sources:
+    - ∈⋮14∈⋮Inventory+Item+Base
   ecs.Named:
-    Name: Inventory Item Base
-  materials.Lit: ∈⋮132∈⋮Weird+Gun
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29
-- Entity: ∈⋮249
+    Name: Weird Gun
+  inventory.Item:
+    Class: WeirdGun
+    Count: "1"
+    Image: ∈⋮133
+  materials.Lit: ∈⋮14∈⋮Inventory+Item+Base
+  materials.SpriteSheet:
+    Angles: "0"
+    Frame:
+      Damping: 0
+      Freq: 1e-06
+      Now: "0"
+      Response: 0
+      Spawn: "0"
+    Material: ∈⋮133
+  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
+- Entity: ∈⋮134∈⋮Proximity+%28Vertical+Doors%29
+  ecs.Named:
+    Name: Proximity (Vertical Doors)
+- Entity: ∈⋮164∈⋮Red+Keycard
+  ecs.Linked:
+    Sources:
+    - ∈⋮14∈⋮Inventory+Item+Base
+  ecs.Named:
+    Name: Red Keycard
+  inventory.Item:
+    Class: Red Keycard
+    Count: "1"
+    Image: ∈⋮5
+  materials.Lit: ∈⋮14∈⋮Inventory+Item+Base
+  materials.Sprite:
+    Frame: "0"
+    Material: ∈⋮5
+  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
+- Entity: ∈⋮176
+  ecs.Linked:
+    Sources:
+    - ∈⋮249∈⋮Flower+Inventory+Item
+  inventory.Item: ∈⋮19∈⋮Flower+%28Starting+Room%29
+  materials.SpriteSheet: ∈⋮19∈⋮Flower+%28Starting+Room%29
+  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
+- Entity: ∈⋮249∈⋮Flower+Inventory+Item
   ecs.Named:
     Name: Flower Inventory Item
-  inventory.Item: ∈⋮2∈⋮Flower+%28Starting+Room%29
-  materials.SpriteSheet: ∈⋮2∈⋮Flower+%28Starting+Room%29
-  materials.Visible: ∈⋮2∈⋮Flower+%28Starting+Room%29
-- Entity: ∈⋮254
-  materials.Image:
-    Filter: false
-    GenerateMipMaps: false
-    Source: data/space.png
+  inventory.Item: ∈⋮19∈⋮Flower+%28Starting+Room%29
+  materials.SpriteSheet: ∈⋮19∈⋮Flower+%28Starting+Room%29
+  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
