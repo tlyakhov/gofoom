@@ -15,6 +15,7 @@ require (
 	github.com/jfreymuth/oggvorbis v1.0.5
 	github.com/kelindar/bitmap v1.5.3
 	github.com/loov/hrtime v1.0.3
+	github.com/pierrec/xxHash v0.1.5
 	github.com/puzpuzpuz/xsync/v3 v3.5.1
 	github.com/rs/xid v1.6.0
 	github.com/spf13/cast v1.10.0

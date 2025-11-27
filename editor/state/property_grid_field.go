@@ -84,6 +84,10 @@ func (f *PropertyGridField) IsLinked() (linkedOnly bool, sources ecs.EntityTable
 }
 
 func (f *PropertyGridField) Disabled() bool {
+	if f.Source.Tag.Get("viewable") != "" {
+		return true
+	}
+
 	if len(f.Values) == 0 {
 		return false
 	}

@@ -166,6 +166,7 @@ func GetComponent(entity Entity, id ComponentID) Component {
 	return nil
 }
 
+// TODO: kill this, doesn't make sense to use arenas for singletons
 func Singleton(id ComponentID) Component {
 	c := arenas[id]
 	if c.Len() != 0 {
@@ -262,10 +263,13 @@ func attach(entity Entity, component *Component, componentID ComponentID) {
 			// slice.
 			arena.Add(component)
 		}
+	} else if ec == *component {
+		// Caller tried to reattach an existing component
+		return
 	} else if ec != nil {
 		// We have a conflict between the provided component and an existing one
 		// with the same component ID. We should abort. This happens with Linked components.
-		// log.Printf("ecs.attach: Entity %v already has a component %v. Aborting!", entity, Types().ArenaPlaceholders[componentID].String())
+		log.Printf("ecs.attach: Entity %v already has a component %v. Aborting!", entity, Types().ArenaPlaceholders[componentID].String())
 		return
 	}
 
@@ -445,7 +449,7 @@ func Load(filename string) error {
 	file := NewAttachedComponent(1, SourceFileCID).(*SourceFile)
 	file.Source = filename
 	file.ID = 0
-	file.Flags = EntityInternal
+	file.Flags = ComponentLockedInEditor
 	return file.Load()
 }
 

@@ -124,7 +124,7 @@ func main() {
 
 	editor.App.Lifecycle().SetOnStarted(func() {
 		editor.OnStarted()
-		editor.Load("data/worlds/hall.yaml")
+		editor.Load("data/worlds/portal-test.yaml")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 

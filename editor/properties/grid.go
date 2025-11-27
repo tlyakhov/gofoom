@@ -132,9 +132,13 @@ func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
 	for i := range targetType.NumField() {
 		field := targetType.FieldByIndex([]int{i})
 		fieldValue := targetValue.Elem().Field(i)
-		tag, ok := field.Tag.Lookup("editable")
-		if !ok {
-			continue
+		tag, isEditable := field.Tag.Lookup("editable")
+		if !isEditable {
+			var isViewable bool
+			tag, isViewable = field.Tag.Lookup("viewable")
+			if !isViewable {
+				continue
+			}
 		}
 		// Only include this field if a method on the struct returns true.
 		// Used for hiding unused fields.
@@ -491,6 +495,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		case *uint32:
 			g.fieldNumber(field)
 		case *uint64:
+			g.fieldNumber(field)
+		case *ecs.SourceFileHash:
 			g.fieldNumber(field)
 		case *concepts.Vector2:
 			fieldStringLikeType[concepts.Vector2](g, field)
