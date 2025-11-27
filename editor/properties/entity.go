@@ -6,6 +6,7 @@ package properties
 import (
 	"reflect"
 
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
@@ -127,7 +128,7 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 	}
 
 	c := container.New(&gridEntitySelectorLayout{Child: layout.NewStackLayout()}, tree)
-	aiTree := widget.NewAccordionItem(title, c)
+	aiTree := widget.NewAccordionItem(concepts.TruncateString(title, 40), c)
 	accordion := gridAddOrUpdateWidgetAtIndex[*widget.Accordion](g)
 	accordion.Items = []*widget.AccordionItem{aiTree}
 }

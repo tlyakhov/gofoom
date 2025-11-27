@@ -1,34 +1,19 @@
 - Entity: ∈⋮1
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    Spawn: false
-  core.Body:
-    Angle: 0
-    Pos:
-      Now: 0, 0, 20
-      Spawn: 0, 0, 0
-    Size: 20, 40
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel: 0, 0, 0
-  ecs.Named:
-    Name: Player
-- Entity: ∈⋮2
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x2adc43dd"
+    ID: 0
+    Source: data/worlds/glitchTester.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -71,9 +56,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮ckg769lmdsrlum5bli80
   core.Body:
     Angle: 0
     Pos: -60, -50, 40
@@ -84,7 +70,7 @@
     Strength: 2
   ecs.Named:
     Name: ckg769lmdsrlum5bli80
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮upper
   core.Sector:
     Bottom:
       Normal: 0.14834045293024467, 0, 0.9889363528682976
@@ -128,9 +114,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: upper
-- Entity: ∈⋮6
+- Entity: ∈⋮6∈⋮ckg76htmdsrlum5blid0
   core.Sector:
     Bottom:
       Surface:
@@ -173,9 +160,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckg76htmdsrlum5blid0
-- Entity: ∈⋮7
+- Entity: ∈⋮7∈⋮lower
   core.Sector:
     Bottom:
       Surface:
@@ -218,9 +206,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: lower
-- Entity: ∈⋮8
+- Entity: ∈⋮8∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:

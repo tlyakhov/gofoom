@@ -1,24 +1,12 @@
-- Entity: ∈⋮1∈⋮Basic+Vertical+Door
-  behaviors.Door:
-    Duration: 1000
-    Intent: DoorIntentReset
-    Limit: 0
-    TweeningFunc: EaseInOut2
-    Type: DoorTypeVertical
-    UseLimit: false
-  behaviors.Proximity:
-    Hysteresis: 0
-    InRange:
-      Code: |-
-        if body == nil { return }
-        m := core.GetMobile(body.Entity)
-        vd := behaviors.GetDoor(onEntity)
-        if m == nil || vd == nil { return }
-        if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }
-  ecs.Named:
-    Name: Basic Vertical Door
+- Entity: ∈⋮1
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x2edae4ab"
+    ID: 0
+    Source: data/worlds/game-prefabs.yaml
 - Entity: ∈⋮2
   ecs.SourceFile:
+    Hash: "0x62bf0202"
     ID: 1
     Source: data/worlds/common-assets.yaml
 - Entity: ∈⋮3∈⋮Flub
@@ -26,12 +14,12 @@
     Health: 100
   ecs.Linked:
     Sources:
-    - ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
   ecs.Named:
     Name: Flub
   inventory.Weapon: {}
-  materials.Image: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Image: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
+  materials.Lit: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
   materials.SpriteSheet:
     Angles: "8"
     Cols: "4"
@@ -54,17 +42,17 @@
     Range: 5
   ecs.Linked:
     Sources:
-    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     Name: Bubble
-  materials.Image: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Image: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
 - Entity: ∈⋮5
   ecs.Linked:
     Sources:
-    - ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Image: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
+  materials.Image: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
+  materials.Lit: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
   materials.SpriteSheet:
     Cols: "2"
     Frame: "0"
@@ -77,7 +65,7 @@
   materials.Shader:
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29∈⋮62bf0202
 - Entity: ∈⋮7∈⋮Space+Window
   ecs.Named:
     Name: Space Window
@@ -85,9 +73,9 @@
     Stages:
     - BlendingFunc: BlendNormal
       Flags: ShaderTiled|ShaderSky
-      Material: ∈⋮71∈⋮space+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮71∈⋮space+%28textures%29∈⋮62bf0202
     - BlendingFunc: BlendNormal
-      Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
 - Entity: ∈⋮8
   behaviors.Alive:
     Health: 100
@@ -100,27 +88,27 @@
   inventory.Slot:
     Class: WeirdGun
     Count: "1"
-    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
     Limit: "1"
   inventory.WeaponClass:
     Damage: 10
     FlashMaterial: ∈⋮6∈⋮Muzzle+Flash+Shader
-    MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮62bf0202
     MarkSize: 2.5
     Params:
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
       Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
       Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
-      Sound: ∈⋮190
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Sound: ∈⋮12∈⋮rifle+%28sounds%29∈⋮62bf0202
       Time: 100
-    - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
-      Sound: ∈⋮197
+    - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
+      Sound: ∈⋮6∈⋮blip1+%28sounds%29∈⋮62bf0202
       Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
       Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
       Time: 100
     Spread: 3
 - Entity: ∈⋮10
@@ -133,7 +121,7 @@
   inventory.Slot:
     Class: Flower
     Count: "0"
-    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
     Limit: "100"
 - Entity: ∈⋮12∈⋮WeirdGun
   ecs.Named:
@@ -198,6 +186,38 @@
       Spawn: "0"
     Material: ∈⋮98
   materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
+- Entity: ∈⋮20∈⋮Rotate+360+Loop+1
+  behaviors.ActionFace:
+    Angle: 0
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮21∈⋮Rotate+360+Loop+2
+  ecs.Named:
+    Name: Rotate 360 Loop 1
+- Entity: ∈⋮21∈⋮Rotate+360+Loop+2
+  behaviors.ActionFace:
+    Angle: 90
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮22∈⋮Rotate+360+Loop+3
+  ecs.Named:
+    Name: Rotate 360 Loop 2
+- Entity: ∈⋮22∈⋮Rotate+360+Loop+3
+  behaviors.ActionFace:
+    Angle: 180
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮23∈⋮Rotate+360+Loop+4
+  ecs.Named:
+    Name: Rotate 360 Loop 3
+- Entity: ∈⋮23∈⋮Rotate+360+Loop+4
+  behaviors.ActionFace:
+    Angle: 270
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮20∈⋮Rotate+360+Loop+1
+  ecs.Named:
+    Name: Rotate 360 Loop 4
 - Entity: ∈⋮132∈⋮Weird+Gun
   ecs.Linked:
     Sources:

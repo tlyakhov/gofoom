@@ -1,118 +1,124 @@
-- Entity: ∈⋮2
+- Entity: ∈⋮1
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x1dc1cf6d"
+    ID: 0
+    Source: data/worlds/classic2.yaml
+- Entity: ∈⋮2∈⋮mat6
   ecs.Named:
     Name: mat6
   materials.Image:
     Filter: false
-    Source: data/WDirty.png
+    Source: data/textures/WDirty.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮f5
   ecs.Named:
     Name: f5
   materials.Image:
     Filter: false
-    Source: data/FRedLight.png
+    Source: data/textures/FRedLight.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮f6
   ecs.Named:
     Name: f6
   materials.Image:
     Filter: false
-    Source: data/FHexMetal.png
+    Source: data/textures/FHexMetal.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮Water
   ecs.Named:
     Name: Water
   materials.Image:
     Filter: false
-    Source: data/Water.png
+    Source: data/textures/Water.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮6
+- Entity: ∈⋮6∈⋮Sky
   ecs.Named:
     Name: Sky
   materials.Image:
     Filter: false
-    Source: data/game/sky.png
-- Entity: ∈⋮7
+    Source: data/textures/sky.png
+- Entity: ∈⋮7∈⋮mat1
   ecs.Named:
     Name: mat1
   materials.Image:
     Filter: false
-    Source: data/WSlimy.png
+    Source: data/textures/WSlimy.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮8
+- Entity: ∈⋮8∈⋮mat2
   ecs.Named:
     Name: mat2
   materials.Image:
     Filter: false
-    Source: data/WMetal.png
+    Source: data/textures/WMetal.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮9
+- Entity: ∈⋮9∈⋮Doom+Garage+Door
   ecs.Named:
     Name: Doom Garage Door
   materials.Image:
     Filter: false
-    Source: data/DGarage.png
+    Source: data/textures/DGarage.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮10
+- Entity: ∈⋮10∈⋮Default+Floor
   ecs.Named:
     Name: Default Floor
   materials.Image:
     Filter: false
-    Source: data/FDef.png
+    Source: data/textures/FDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮11
+- Entity: ∈⋮11∈⋮f1
   ecs.Named:
     Name: f1
   materials.Image:
     Filter: false
-    Source: data/FGrayTile.png
+    Source: data/textures/FGrayTile.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮12
+- Entity: ∈⋮12∈⋮Painful+Slime
   ecs.Named:
     Name: Painful Slime
   materials.Image:
     Filter: false
-    Source: data/FSlime.png
+    Source: data/textures/FSlime.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮13
+- Entity: ∈⋮13∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮14
+- Entity: ∈⋮14∈⋮mat3
   ecs.Named:
     Name: mat3
   materials.Image:
     Filter: false
-    Source: data/WSlimeGrate.png
+    Source: data/textures/WSlimeGrate.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮15
+- Entity: ∈⋮15∈⋮sector5
   core.Sector:
     Bottom:
       Surface:
@@ -120,44 +126,45 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮27∈⋮sector6
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -120, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -120, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮20∈⋮sector2
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮27∈⋮sector6
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -120, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -120, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮20∈⋮sector2
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector5
-- Entity: ∈⋮16
+- Entity: ∈⋮16∈⋮sector16
   core.Sector:
     Bottom:
       Surface:
@@ -165,44 +172,45 @@
       Z: 10
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮18∈⋮sector15
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 380, 150
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 150
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - AdjacentSector: ∈⋮24∈⋮sector20
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 400
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 380, 400
-        Surface:
-          Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮18∈⋮sector15
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 380, 150
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 150
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮24∈⋮sector20
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 400
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 380, 400
+      Surface:
+        Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮11∈⋮f1
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector16
-- Entity: ∈⋮17
+- Entity: ∈⋮17∈⋮sector14
   core.Sector:
     Bottom:
       Surface:
@@ -210,44 +218,45 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮41∈⋮sector13
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 150, 100
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 150, 70
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮18∈⋮sector15
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 70
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 100
-        Surface:
-          Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮41∈⋮sector13
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 150, 100
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 150, 70
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮18∈⋮sector15
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 70
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 100
+      Surface:
+        Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮11∈⋮f1
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector14
-- Entity: ∈⋮18
+- Entity: ∈⋮18∈⋮sector15
   core.Sector:
     Bottom:
       Surface:
@@ -256,67 +265,68 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 20
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮17∈⋮sector14
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 70
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 100
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮16∈⋮sector16
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 380, 150
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮55∈⋮sector17
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮55∈⋮sector17
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 20
-        Surface:
-          Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 20
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮17∈⋮sector14
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 70
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 100
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮16∈⋮sector16
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 380, 150
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮55∈⋮sector17
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮55∈⋮sector17
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 20
+      Surface:
+        Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 100
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector15
-- Entity: ∈⋮19
+- Entity: ∈⋮19∈⋮be25rlnvn27v99df1he0
   core.Body:
     Angle: 0
     Pos: 350, 80, 90
@@ -327,7 +337,7 @@
     Strength: 25
   ecs.Named:
     Name: be25rlnvn27v99df1he0
-- Entity: ∈⋮20
+- Entity: ∈⋮20∈⋮sector2
   core.Sector:
     Bottom:
       Surface:
@@ -335,46 +345,47 @@
       Z: -10
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮15∈⋮sector5
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮39∈⋮sector3
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮35∈⋮sector4
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -30, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -30, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮15∈⋮sector5
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮39∈⋮sector3
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮35∈⋮sector4
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -30, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -30, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector2
-- Entity: ∈⋮21
+- Entity: ∈⋮21∈⋮sector9
   core.Sector:
     Bottom:
       Surface:
@@ -382,59 +393,60 @@
       Z: -60
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮53∈⋮sector10
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, -30
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, -10
-        Surface:
-          Material: ∈⋮14∈⋮mat3
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, 10
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - AdjacentSector: ∈⋮29∈⋮sector11
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮26∈⋮sector8
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮53∈⋮sector10
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, -30
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, -10
+      Surface:
+        Material: ∈⋮14∈⋮mat3
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, 10
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮29∈⋮sector11
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮26∈⋮sector8
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
       Z: -6
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector9
-- Entity: ∈⋮22
+- Entity: ∈⋮22∈⋮be25rlnvn27v99df1g50
   core.Body:
     Angle: 0
     Pos: -240, 0, -30
@@ -445,7 +457,7 @@
     Strength: 15
   ecs.Named:
     Name: be25rlnvn27v99df1g50
-- Entity: ∈⋮23
+- Entity: ∈⋮23∈⋮be25rp7vn27v99df1mgg
   core.Sector:
     Bottom:
       Surface:
@@ -453,45 +465,46 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮20∈⋮sector2
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -30, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, -30
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, -110
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -10, -190
-        Surface:
-          Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮20∈⋮sector2
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -30, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, -30
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, -110
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -10, -190
+      Surface:
+        Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: be25rp7vn27v99df1mgg
-- Entity: ∈⋮24
+- Entity: ∈⋮24∈⋮sector20
   core.Sector:
     Bottom:
       Surface:
@@ -500,60 +513,61 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮16∈⋮sector16
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 400
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 380, 400
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - AdjacentSector: ∈⋮31∈⋮sector21
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 400
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - AdjacentSector: ∈⋮31∈⋮sector21
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 450
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - AdjacentSector: ∈⋮31∈⋮sector21
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 480, 450
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 480, 400
-        Surface:
-          Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮16∈⋮sector16
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 400
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 380, 400
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮31∈⋮sector21
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 400
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮31∈⋮sector21
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 450
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮31∈⋮sector21
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 480, 450
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 480, 400
+      Surface:
+        Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮11∈⋮f1
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector20
-- Entity: ∈⋮25
+- Entity: ∈⋮25∈⋮sector25
   behaviors.Proximity:
     InRange:
       Code: sectors.GetDoor(s.Ref("sector")).Intent = sectors.DoorIntentOpen
@@ -564,36 +578,36 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮44∈⋮sector12
-        Hi:
-          Material: ∈⋮9∈⋮Doom+Garage+Door
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 105, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮9∈⋮Doom+Garage+Door
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 105, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮34∈⋮sector1
-        Hi:
-          Material: ∈⋮9∈⋮Doom+Garage+Door
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮9∈⋮Doom+Garage+Door
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮44∈⋮sector12
+      Hi:
+        Material: ∈⋮9∈⋮Doom+Garage+Door
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 105, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮9∈⋮Doom+Garage+Door
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 105, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮34∈⋮sector1
+      Hi:
+        Material: ∈⋮9∈⋮Doom+Garage+Door
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮9∈⋮Doom+Garage+Door
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮mat6
@@ -610,9 +624,10 @@
         Now: 0
         Spawn: 0
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector25
-- Entity: ∈⋮26
+- Entity: ∈⋮26∈⋮sector8
   core.Sector:
     Bottom:
       Surface:
@@ -620,44 +635,45 @@
       Z: -50
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -160, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮21∈⋮sector9
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮28∈⋮sector7
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -160, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -160, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮21∈⋮sector9
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮28∈⋮sector7
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -160, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector8
-- Entity: ∈⋮27
+- Entity: ∈⋮27∈⋮sector6
   core.Sector:
     Bottom:
       Surface:
@@ -665,44 +681,45 @@
       Z: -30
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -120, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮28∈⋮sector7
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -140, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -140, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮15∈⋮sector5
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -120, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -120, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮28∈⋮sector7
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -140, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -140, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮15∈⋮sector5
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -120, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector6
-- Entity: ∈⋮28
+- Entity: ∈⋮28∈⋮sector7
   core.Sector:
     Bottom:
       Surface:
@@ -710,44 +727,45 @@
       Z: -40
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -140, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮26∈⋮sector8
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -160, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -160, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮27∈⋮sector6
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -140, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -140, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮26∈⋮sector8
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -160, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -160, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮27∈⋮sector6
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -140, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector7
-- Entity: ∈⋮29
+- Entity: ∈⋮29∈⋮sector11
   core.Sector:
     Bottom:
       Surface:
@@ -755,43 +773,44 @@
       Z: -60
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮21∈⋮sector9
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, 30
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, 140
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, 140
-        Surface:
-          Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮21∈⋮sector9
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, 30
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, 140
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, 140
+      Surface:
+        Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
       Z: -6
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector11
-- Entity: ∈⋮30
+- Entity: ∈⋮30∈⋮be25rlnvn27v99df1gig
   core.Body:
     Angle: 0
     Pos: -240, 100, -30
@@ -802,7 +821,7 @@
     Strength: 15
   ecs.Named:
     Name: be25rlnvn27v99df1gig
-- Entity: ∈⋮31
+- Entity: ∈⋮31∈⋮sector21
   core.Sector:
     Bottom:
       Surface:
@@ -810,47 +829,48 @@
       Z: -200
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮24∈⋮sector20
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 400
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮24∈⋮sector20
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 450
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮24∈⋮sector20
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 480, 450
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮45∈⋮sector18
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 480, 400
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮24∈⋮sector20
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 400
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮24∈⋮sector20
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 450
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮24∈⋮sector20
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 480, 450
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮45∈⋮sector18
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 480, 400
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮5∈⋮Water
       Target: ∈⋮24∈⋮sector20
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector21
-- Entity: ∈⋮32
+- Entity: ∈⋮32∈⋮sector23
   core.Sector:
     Bottom:
       Surface:
@@ -859,46 +879,47 @@
       Z: -20
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮48∈⋮sector22
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 620, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮47∈⋮sector19
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 600, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮48∈⋮sector22
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 600, 200
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮48∈⋮sector22
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 620, 200
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮48∈⋮sector22
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 620, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮47∈⋮sector19
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 600, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮48∈⋮sector22
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 600, 200
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮48∈⋮sector22
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 620, 200
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
       Z: 50
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector23
-- Entity: ∈⋮33
+- Entity: ∈⋮33∈⋮sector26
   core.Sector:
     Bottom:
       Surface:
@@ -906,44 +927,45 @@
       Z: 15
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮39∈⋮sector3
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 100
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 100
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮42∈⋮sector27
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 120
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 120
-        Surface:
-          Material: ∈⋮6∈⋮Sky
+    - AdjacentSector: ∈⋮39∈⋮sector3
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 100
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 100
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮42∈⋮sector27
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 120
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 120
+      Surface:
+        Material: ∈⋮6∈⋮Sky
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector26
-- Entity: ∈⋮34
+- Entity: ∈⋮34∈⋮sector1
   core.Sector:
     Bottom:
       Surface:
@@ -951,46 +973,47 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮25∈⋮sector25
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮39∈⋮sector3
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮35∈⋮sector4
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 30, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 30, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮25∈⋮sector25
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮39∈⋮sector3
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮35∈⋮sector4
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 30, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 30, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector1
-- Entity: ∈⋮35
+- Entity: ∈⋮35∈⋮sector4
   core.Sector:
     Bottom:
       Surface:
@@ -998,46 +1021,47 @@
       Z: -3
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -30, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮34∈⋮sector1
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 30, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮39∈⋮sector3
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 30, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮20∈⋮sector2
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -30, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -30, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮34∈⋮sector1
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 30, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮39∈⋮sector3
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 30, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮20∈⋮sector2
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -30, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮3∈⋮f5
       Z: 50
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector4
-- Entity: ∈⋮36
+- Entity: ∈⋮36∈⋮sector24
   core.Sector:
     Bottom:
       Surface:
@@ -1045,43 +1069,44 @@
       Z: -10
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 620, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 740, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 740, 200
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮48∈⋮sector22
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 620, 200
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 620, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 740, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 740, 200
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮48∈⋮sector22
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 620, 200
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮13∈⋮Default
       Z: 70
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector24
-- Entity: ∈⋮37
+- Entity: ∈⋮37∈⋮be25rlnvn27v99df1j6g
   core.Body:
     Angle: 0
     Pos: 700, 175, 50
@@ -1092,7 +1117,7 @@
     Strength: 15
   ecs.Named:
     Name: be25rlnvn27v99df1j6g
-- Entity: ∈⋮38
+- Entity: ∈⋮38∈⋮be25rp7vn27v99df1n7g
   core.Sector:
     Bottom:
       Surface:
@@ -1100,44 +1125,45 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, -160
-        Surface:
-          Material: ∈⋮6∈⋮Sky
-      - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -40, -270
-        Surface:
-          Material: ∈⋮6∈⋮Sky
-      - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -10, -190
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, -110
-        Surface:
-          Material: ∈⋮8∈⋮mat2
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, -160
+      Surface:
+        Material: ∈⋮6∈⋮Sky
+    - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -40, -270
+      Surface:
+        Material: ∈⋮6∈⋮Sky
+    - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -10, -190
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, -110
+      Surface:
+        Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: be25rp7vn27v99df1n7g
-- Entity: ∈⋮39
+- Entity: ∈⋮39∈⋮sector3
   core.Sector:
     Bottom:
       Surface:
@@ -1145,60 +1171,61 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮33∈⋮sector26
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 100
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 100
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮34∈⋮sector1
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮35∈⋮sector4
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 30, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮20∈⋮sector2
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -30, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 30
-        Surface:
-          Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮33∈⋮sector26
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 100
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 100
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮34∈⋮sector1
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮35∈⋮sector4
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 30, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮20∈⋮sector2
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -30, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 30
+      Surface:
+        Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector3
-- Entity: ∈⋮40
+- Entity: ∈⋮40∈⋮be25rlnvn27v99df1f2g
   core.Body:
     Angle: 0
     Pos: 0, 68, 32
@@ -1209,7 +1236,7 @@
     Strength: 15
   ecs.Named:
     Name: be25rlnvn27v99df1f2g
-- Entity: ∈⋮41
+- Entity: ∈⋮41∈⋮sector13
   core.Sector:
     Bottom:
       Surface:
@@ -1217,51 +1244,52 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮44∈⋮sector12
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 115, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 150, 30
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮17∈⋮sector14
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 150, 70
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 150, 100
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 115, 100
-        Surface:
-          Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮44∈⋮sector12
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 115, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 150, 30
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮17∈⋮sector14
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 150, 70
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 150, 100
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 115, 100
+      Surface:
+        Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮4∈⋮f6
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector13
-- Entity: ∈⋮42
+- Entity: ∈⋮42∈⋮sector27
   core.Sector:
     Bottom:
       Surface:
@@ -1269,43 +1297,44 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮33∈⋮sector26
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 120
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 120
-        Surface:
-          Material: ∈⋮6∈⋮Sky
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, 3000
-        Surface:
-          Material: ∈⋮6∈⋮Sky
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -100, 3000
-        Surface:
-          Material: ∈⋮6∈⋮Sky
+    - AdjacentSector: ∈⋮33∈⋮sector26
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 120
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 120
+      Surface:
+        Material: ∈⋮6∈⋮Sky
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, 3000
+      Surface:
+        Material: ∈⋮6∈⋮Sky
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -100, 3000
+      Surface:
+        Material: ∈⋮6∈⋮Sky
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector27
-- Entity: ∈⋮43
+- Entity: ∈⋮43∈⋮be25rpfvn27v99df1ofg
   core.Sector:
     Bottom:
       Surface:
@@ -1313,45 +1342,46 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -40, -270
-        Surface:
-          Material: ∈⋮6∈⋮Sky
-      - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 170, -280
-        Surface:
-          Material: ∈⋮6∈⋮Sky
-      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 70, -200
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -10, -190
-        Surface:
-          Material: ∈⋮8∈⋮mat2
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -40, -270
+      Surface:
+        Material: ∈⋮6∈⋮Sky
+    - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 170, -280
+      Surface:
+        Material: ∈⋮6∈⋮Sky
+    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 70, -200
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮38∈⋮be25rp7vn27v99df1n7g
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -10, -190
+      Surface:
+        Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: be25rpfvn27v99df1ofg
-- Entity: ∈⋮44
+- Entity: ∈⋮44∈⋮sector12
   core.Sector:
     Bottom:
       Surface:
@@ -1359,51 +1389,52 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮25∈⋮sector25
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 105, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 105, 30
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮41∈⋮sector13
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 115, 30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 150, 30
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 150, -30
-        Surface:
-          Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮25∈⋮sector25
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 105, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 105, 30
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮41∈⋮sector13
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 115, 30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 150, 30
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 150, -30
+      Surface:
+        Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮4∈⋮f6
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector12
-- Entity: ∈⋮45
+- Entity: ∈⋮45∈⋮sector18
   core.Sector:
     Bottom:
       Surface:
@@ -1411,59 +1442,60 @@
       Z: -230
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮55∈⋮sector17
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 150
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮47∈⋮sector19
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 150
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 200
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮31∈⋮sector21
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 480, 400
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 400
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 200
-        Surface:
-          Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮55∈⋮sector17
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 150
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮47∈⋮sector19
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 150
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 200
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮31∈⋮sector21
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 480, 400
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 400
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 200
+      Surface:
+        Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector18
-- Entity: ∈⋮46
+- Entity: ∈⋮46∈⋮be25rlnvn27v99df1i1g
   core.Body:
     Angle: 0
     Pos: 340, 260, -125
@@ -1474,7 +1506,7 @@
     Strength: 15
   ecs.Named:
     Name: be25rlnvn27v99df1i1g
-- Entity: ∈⋮47
+- Entity: ∈⋮47∈⋮sector19
   core.Sector:
     Bottom:
       Surface:
@@ -1482,44 +1514,45 @@
       Z: -50
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 600, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮45∈⋮sector18
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 150
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 200
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮48∈⋮sector22
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 600, 200
-        Surface:
-          Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 600, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮45∈⋮sector18
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 150
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 200
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮48∈⋮sector22
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 600, 200
+      Surface:
+        Material: ∈⋮13∈⋮Default
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector19
-- Entity: ∈⋮48
+- Entity: ∈⋮48∈⋮sector22
   core.Sector:
     Bottom:
       Surface:
@@ -1527,47 +1560,48 @@
       Z: -70
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮32∈⋮sector23
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 620, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮47∈⋮sector19
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 600, 150
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮32∈⋮sector23
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 600, 200
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮36∈⋮sector24
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 620, 200
-        Surface:
-          Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮32∈⋮sector23
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 620, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮47∈⋮sector19
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 600, 150
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮32∈⋮sector23
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 600, 200
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮36∈⋮sector24
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 620, 200
+      Surface:
+        Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮5∈⋮Water
       Target: ∈⋮32∈⋮sector23
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector22
-- Entity: ∈⋮49
+- Entity: ∈⋮49∈⋮be25rlnvn27v99df1iq0
   core.Body:
     Angle: 0
     Pos:
@@ -1580,7 +1614,7 @@
     Strength: 15
   ecs.Named:
     Name: be25rlnvn27v99df1iq0
-- Entity: ∈⋮50
+- Entity: ∈⋮50∈⋮be25rpfvn27v99df1o10
   core.Sector:
     Bottom:
       Surface:
@@ -1588,61 +1622,62 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, -110
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮34∈⋮sector1
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮35∈⋮sector4
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 30, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -30, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -10, -190
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 70, -200
-        Surface:
-          Material: ∈⋮8∈⋮mat2
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, -110
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮34∈⋮sector1
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮35∈⋮sector4
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 30, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮23∈⋮be25rp7vn27v99df1mgg
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -30, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -10, -190
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮52∈⋮be25rpfvn27v99df1or0
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 70, -200
+      Surface:
+        Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: be25rpfvn27v99df1o10
-- Entity: ∈⋮51
+- Entity: ∈⋮51∈⋮be25rlnvn27v99df1jng
   core.Body:
     Angle: 292.73134280000005
     Pos:
@@ -1651,7 +1686,7 @@
     Size: 10, 10
   ecs.Named:
     Name: be25rlnvn27v99df1jng
-- Entity: ∈⋮52
+- Entity: ∈⋮52∈⋮be25rpfvn27v99df1or0
   core.Sector:
     Bottom:
       Surface:
@@ -1659,44 +1694,45 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 170, -280
-        Surface:
-          Material: ∈⋮6∈⋮Sky
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 280, -160
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 100, -110
-        Surface:
-          Material: ∈⋮8∈⋮mat2
-      - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 70, -200
-        Surface:
-          Material: ∈⋮8∈⋮mat2
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 170, -280
+      Surface:
+        Material: ∈⋮6∈⋮Sky
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 280, -160
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮50∈⋮be25rpfvn27v99df1o10
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 100, -110
+      Surface:
+        Material: ∈⋮8∈⋮mat2
+    - AdjacentSector: ∈⋮43∈⋮be25rpfvn27v99df1ofg
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 70, -200
+      Surface:
+        Material: ∈⋮8∈⋮mat2
     Top:
       Surface:
         Material: ∈⋮6∈⋮Sky
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: be25rpfvn27v99df1or0
-- Entity: ∈⋮53
+- Entity: ∈⋮53∈⋮sector10
   core.Sector:
     Bottom:
       Surface:
@@ -1704,43 +1740,44 @@
       Z: -60
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮21∈⋮sector9
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, -30
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, -30
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -300, -140
-        Surface:
-          Material: ∈⋮7∈⋮mat1
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: -180, -140
-        Surface:
-          Material: ∈⋮7∈⋮mat1
+    - AdjacentSector: ∈⋮21∈⋮sector9
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, -30
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, -30
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -300, -140
+      Surface:
+        Material: ∈⋮7∈⋮mat1
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: -180, -140
+      Surface:
+        Material: ∈⋮7∈⋮mat1
     Top:
       Surface:
         Material: ∈⋮10∈⋮Default+Floor
       Z: -6
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector10
-- Entity: ∈⋮54
+- Entity: ∈⋮54∈⋮be25rlnvn27v99df1gcg
   core.Body:
     Angle: 0
     Pos: -240, -100, -30
@@ -1751,7 +1788,7 @@
     Strength: 2
   ecs.Named:
     Name: be25rlnvn27v99df1gcg
-- Entity: ∈⋮55
+- Entity: ∈⋮55∈⋮sector17
   core.Sector:
     Bottom:
       Surface:
@@ -1759,46 +1796,47 @@
       Z: -170
     FloorFriction: 0.85
     Segments:
-      - AdjacentSector: ∈⋮45∈⋮sector18
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 150
-        Surface:
-          Material: ∈⋮13∈⋮Default
-      - AdjacentSector: ∈⋮18∈⋮sector15
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 150
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - AdjacentSector: ∈⋮18∈⋮sector15
-        Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 400, 20
-        Surface:
-          Material: ∈⋮2∈⋮mat6
-      - Hi:
-          Material: ∈⋮13∈⋮Default
-        Lo:
-          Material: ∈⋮13∈⋮Default
-        P: 300, 20
-        Surface:
-          Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮45∈⋮sector18
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 150
+      Surface:
+        Material: ∈⋮13∈⋮Default
+    - AdjacentSector: ∈⋮18∈⋮sector15
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 150
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - AdjacentSector: ∈⋮18∈⋮sector15
+      Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 400, 20
+      Surface:
+        Material: ∈⋮2∈⋮mat6
+    - Hi:
+        Material: ∈⋮13∈⋮Default
+      Lo:
+        Material: ∈⋮13∈⋮Default
+      P: 300, 20
+      Surface:
+        Material: ∈⋮2∈⋮mat6
     Top:
       Surface:
         Material: ∈⋮5∈⋮Water
       Target: ∈⋮18∈⋮sector15
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: sector17
-- Entity: ∈⋮56
+- Entity: ∈⋮56∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:

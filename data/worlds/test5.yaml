@@ -1,13 +1,19 @@
-- Entity: ∈⋮2
+- Entity: ∈⋮1
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x1844062f"
+    ID: 0
+    Source: data/worlds/test5.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮ckmr71tmdsri8tolfq30
   core.Sector:
     Bottom:
       Surface:
@@ -50,9 +56,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr71tmdsri8tolfq30
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮ckmr7gdmdsri8tolfqg0
   core.Sector:
     Bottom:
       Surface:
@@ -109,9 +116,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 94
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr7gdmdsri8tolfqg0
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮ckmr7odmdsri8tolfqu0
   core.Body:
     Angle: 0
     Pos: -220, -80, 32
@@ -122,7 +130,7 @@
     Strength: 2
   ecs.Named:
     Name: ckmr7odmdsri8tolfqu0
-- Entity: ∈⋮6
+- Entity: ∈⋮6∈⋮cknes4tmdsru23m3nip0
   core.Sector:
     Bottom:
       Surface:
@@ -164,9 +172,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 80
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: cknes4tmdsru23m3nip0
-- Entity: ∈⋮7
+- Entity: ∈⋮7∈⋮cknes7dmdsru23m3nitg
   core.Body:
     Angle: 0
     Pos: 170, 370, 32
@@ -177,7 +186,7 @@
     Strength: 2
   ecs.Named:
     Name: cknes7dmdsru23m3nitg
-- Entity: ∈⋮8
+- Entity: ∈⋮8∈⋮ckmr7dtmdsri8tolfq8g
   core.Sector:
     Bottom:
       Surface:
@@ -227,9 +236,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr7dtmdsri8tolfq8g
-- Entity: ∈⋮9
+- Entity: ∈⋮9∈⋮ckmr7f5mdsri8tolfqc0
   core.Sector:
     Bottom:
       Surface:
@@ -286,9 +296,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr7f5mdsri8tolfqc0
-- Entity: ∈⋮10
+- Entity: ∈⋮10∈⋮ckmr6tlmdsri8tolfoq0
   core.Sector:
     Bottom:
       Surface:
@@ -330,9 +341,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr6tlmdsri8tolfoq0
-- Entity: ∈⋮11
+- Entity: ∈⋮11∈⋮ckmr6vtmdsri8tolfph0
   core.Sector:
     Bottom:
       Surface:
@@ -376,9 +388,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr6vtmdsri8tolfph0
-- Entity: ∈⋮12
+- Entity: ∈⋮12∈⋮ckmr7b5mdsri8tolfq6g
   core.Body:
     Angle: 0
     Pos: 40, -20, 32
@@ -389,7 +402,7 @@
     Strength: 2
   ecs.Named:
     Name: ckmr7b5mdsri8tolfq6g
-- Entity: ∈⋮13
+- Entity: ∈⋮13∈⋮cknes35mdsru23m3nilg
   core.Sector:
     Bottom:
       Surface:
@@ -439,9 +452,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 80
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: cknes35mdsru23m3nilg
-- Entity: ∈⋮14
+- Entity: ∈⋮14∈⋮cknes75mdsru23m3nisg
   core.Body:
     Angle: 0
     Pos: 130, 210, 32
@@ -452,7 +466,7 @@
     Strength: 2
   ecs.Named:
     Name: cknes75mdsru23m3nisg
-- Entity: ∈⋮15
+- Entity: ∈⋮15∈⋮ckmr7kdmdsri8tolfqng
   core.Sector:
     Bottom:
       Normal: 0.19611613513818404, -0, 0.9805806756909202
@@ -496,9 +510,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr7kdmdsri8tolfqng
-- Entity: ∈⋮16
+- Entity: ∈⋮16∈⋮ckmr6vtmdsri8tolfpsg
   core.Sector:
     Bottom:
       Surface:
@@ -540,9 +555,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr6vtmdsri8tolfpsg
-- Entity: ∈⋮17
+- Entity: ∈⋮17∈⋮ckmr7ilmdsri8tolfqk0
   core.Sector:
     Bottom:
       Surface:
@@ -593,9 +609,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 116
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr7ilmdsri8tolfqk0
-- Entity: ∈⋮18
+- Entity: ∈⋮18∈⋮ckmr7ltmdsri8tolfqqg
   core.Sector:
     Bottom:
       Surface:
@@ -637,9 +654,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 116
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: ckmr7ltmdsri8tolfqqg
-- Entity: ∈⋮19
+- Entity: ∈⋮19∈⋮cknes7lmdsru23m3niug
   core.Body:
     Angle: 0
     Pos: -260, 150, 32
@@ -650,7 +668,7 @@
     Strength: 2
   ecs.Named:
     Name: cknes7lmdsru23m3niug
-- Entity: ∈⋮20
+- Entity: ∈⋮20∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:

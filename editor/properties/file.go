@@ -48,21 +48,6 @@ func (g *Grid) fieldFile(field *state.PropertyGridField) {
 
 		if entry.Text != "" {
 			g.SetDialogLocation(dlg, entry.Text)
-
-			/*			dlg.SetFileName(filepath.Base(entry.Text))
-						absPath, err := filepath.Abs(entry.Text)
-						if err != nil {
-							log.Printf("Load file: error making absolute path from %v", entry.Text)
-							absPath, _ = os.Getwd()
-						}
-						dir := filepath.Dir(absPath)
-						uri := storage.NewFileURI(dir)
-						lister, err := storage.ListerForURI(uri)
-						if err != nil {
-							log.Printf("Load file: error making lister from %v", dir)
-						} else {
-							dlg.SetLocation(lister)
-						}*/
 		}
 		dlg.Resize(fyne.NewSize(1000, 700))
 		dlg.SetConfirmText("Load file")

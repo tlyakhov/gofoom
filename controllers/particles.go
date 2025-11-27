@@ -80,7 +80,7 @@ func (pc *ParticleController) Frame() {
 	// frame.
 	iterations := int(probability) + 1
 	probability /= float64(iterations)
-
+	var bc BodyController
 	for range iterations {
 		if rand.Float64() > probability {
 			return
@@ -107,7 +107,7 @@ func (pc *ParticleController) Frame() {
 		mobile.CrBody = core.CollideNone
 		mobile.CrPlayer = core.CollideNone
 		mobile.CrWall = core.CollideBounce
-		var bc BodyController
+
 		bc.Target(body, e)
 		bc.Enter(pc.Body.Sector())
 	}

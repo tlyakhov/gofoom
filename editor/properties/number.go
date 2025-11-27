@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
 	"fyne.io/fyne/v2"
@@ -22,6 +23,8 @@ func (g *Grid) fieldNumber(field *state.PropertyGridField) {
 			origValue += ", "
 		}
 		switch v.Value.Interface().(type) {
+		case *ecs.SourceFileHash:
+			origValue += "0x" + strconv.FormatUint(v.Deref().Uint(), 16)
 		case *float32:
 			origValue += strconv.FormatFloat(v.Deref().Float(), 'f', -1, 32)
 		case *float64:

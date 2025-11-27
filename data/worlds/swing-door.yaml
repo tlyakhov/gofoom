@@ -1,42 +1,19 @@
 - Entity: ∈⋮1
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    Spawn: false
-  core.Body:
-    Angle:
-      Now: 382.5
-      Spawn: 0
-    Pos:
-      Now: -66.31294296277676, -62.35493763296632, 20
-      Spawn: 0, 0, 0
-    Size:
-      Now: 10, 40
-      Spawn: 10, 10
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel:
-      Now: 0.0000000000000026596953002317704, -0.000000000000018332622435064795, 0.007001650399223597
-      Spawn: 0, 0, 0
-  ecs.Named:
-    Name: Player
-  inventory.Carrier:
-    Inventory: []
-- Entity: ∈⋮2
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x37df7fcb"
+    ID: 0
+    Source: data/worlds/swing-door.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -104,7 +81,7 @@
     TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮ckpvt5dmdsrrj1r5a5pg
   core.Body:
     Angle: 0
     Pos: -60, -70, 32
@@ -115,7 +92,7 @@
     Strength: 2
   ecs.Named:
     Name: ckpvt5dmdsrrj1r5a5pg
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:
@@ -306,12 +283,12 @@
       Z: 64
     Transform:
       Animation:
-        Active: false
+        Active: true
         Coordinates: AnimationCoordinatesAbsolute
         Duration: 1000
         End: 1, 0, 0, 0, 1, 0
         Lifetime: AnimationLifetimeOnce
-        Percent: 1
+        Percent: 0
         Reverse: false
         Start: 6.123233995736757e-17, 1, 0, -1, 6.123233995736757e-17, 0
         TweeningFunc: EaseInOut2
@@ -330,7 +307,7 @@
 - Entity: ∈⋮14
   materials.Image:
     Filter: false
-    Source: data/glass-test.png
+    Source: data/textures/glass-test.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
@@ -385,3 +362,32 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 110, -25
+- Entity: ∈⋮16∈⋮Player
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    Spawn: false
+  core.Body:
+    Angle:
+      Now: 382.5
+      Spawn: 0
+    Pos:
+      Now: -66.31294296277676, -62.35493763296632, 20
+      Spawn: 0, 0, 0
+    Size:
+      Now: 10, 40
+      Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: 0.0000000000000026596953002317704, -0.000000000000018332622435064795, 0.00007001650399223608
+      Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Player
+  inventory.Carrier:
+    Inventory: []

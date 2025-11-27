@@ -1,44 +1,19 @@
 - Entity: ∈⋮1
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    Spawn: false
-  core.Body:
-    Angle:
-      Now: 631.40625
-      Spawn: 180
-    Pos:
-      Now: -42.463683916956946, 120.73515523966576, 20
-      Spawn: 210, 10, 0
-    Size:
-      Now: 10, 40
-      Spawn: 10, 10
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel:
-      Now: -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013516026525697863,
-        -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004368739873942349,
-        0.007001650399223597
-      Spawn: 0, 0, 0
-  ecs.Named:
-    Name: Player
-  inventory.Carrier:
-    Inventory: []
-- Entity: ∈⋮2
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0xe21ad4e8"
+    ID: 0
+    Source: data/worlds/glitchTester6.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -99,9 +74,10 @@
       Now: 1, 0, 0, 0, 1, 0
       Response: 0
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮ckpvt5dmdsrrj1r5a5pg
   core.Body:
     Angle: 0
     Pos: 110, -60, 32
@@ -112,7 +88,7 @@
     Strength: 2
   ecs.Named:
     Name: ckpvt5dmdsrrj1r5a5pg
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:
@@ -181,6 +157,7 @@
       Now: 1, 0, 0, 0, 1, 0
       Response: 0
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮10
   behaviors.Actor:
     AngularSpeed: 15
@@ -258,6 +235,7 @@
         0.9999981660083777, -13.567435816954244
       Procedural: true
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮11
   core.Sector:
     Bottom:
@@ -306,6 +284,7 @@
       Now: 1, 0, 0, 0, 1, 0
       Response: 0
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮12
   materials.Image:
     Filter: false
@@ -368,6 +347,7 @@
       Now: 1, 0, 0, 0, 1, 0
       Response: 0
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮15
   core.Sector:
     Bottom:
@@ -450,6 +430,7 @@
       Now: 1, 0, 0, 0, 1, 0
       Response: 0
       Spawn: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮16
   behaviors.ActionFace:
     Angle: 90

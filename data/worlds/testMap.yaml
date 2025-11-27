@@ -1,16 +1,22 @@
-- Entity: ∈⋮2
+- Entity: ∈⋮1
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x20419bc9"
+    ID: 0
+    Source: data/worlds/testMap.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: true
-    Source: data/WDef.png
-- Entity: ∈⋮3
+    Source: data/textures/WDef.png
+- Entity: ∈⋮3∈⋮Blue
   ecs.Named:
     Name: Blue
   materials.Image:
     Filter: true
     Source: data/grass.jpg
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮cl5anh5mdsrmm6mqu5d0
   core.Sector:
     Bottom:
       Surface:
@@ -43,5 +49,6 @@
         Material: ∈⋮3∈⋮Blue
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: cl5anh5mdsrmm6mqu5d0

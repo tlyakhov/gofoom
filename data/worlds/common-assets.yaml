@@ -1,16 +1,9 @@
-- Entity: ∈⋮1∈⋮Lord_Nightmare_6x6font02+%28fonts%29
-  ecs.Named:
-    Name: Lord_Nightmare_6x6font02 (fonts)
-  materials.Image:
-    Filter: false
-    GenerateMipMaps: false
-    Source: data/fonts/Lord_Nightmare_6x6font02.png
-  materials.SpriteSheet:
-    Angles: "0"
-    Cols: "16"
-    Frame: "0"
-    Material: ∈⋮1∈⋮Lord_Nightmare_6x6font02+%28fonts%29
-    Rows: "16"
+- Entity: ∈⋮1
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x62bf0202"
+    ID: 0
+    Source: data/worlds/common-assets.yaml
 - Entity: ∈⋮2∈⋮RDE_8x8+%28fonts%29
   ecs.Named:
     Name: RDE_8x8 (fonts)
@@ -1038,3 +1031,16 @@
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮121∈⋮Lord_Nightmare_6x6font02+%28fonts%29
+  ecs.Named:
+    Name: Lord_Nightmare_6x6font02 (fonts)
+  materials.Image:
+    Filter: false
+    GenerateMipMaps: false
+    Source: data/fonts/Lord_Nightmare_6x6font02.png
+  materials.SpriteSheet:
+    Angles: "0"
+    Cols: "16"
+    Frame: "0"
+    Material: ∈⋮121∈⋮Lord_Nightmare_6x6font02+%28fonts%29
+    Rows: "16"

@@ -1,44 +1,19 @@
 - Entity: ∈⋮1
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    Spawn: false
-  core.Body:
-    Angle:
-      Now: 178.59375
-      Spawn: 0
-    Pos:
-      Now: 104.81035122385369, -387.30821172371566, 20
-      Spawn: 0, 0, 0
-    Size:
-      Now: 10, 40
-      Spawn: 10, 10
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel:
-      Now: -0.00000000000000000000000000000000000000000000000000000000000000000000000006297286640444227,
-        0.000000000000000000000000000000000000000000000000000000000000000000000000001545720458997961,
-        0.00007001650399223608
-      Spawn: 0, 0, 0
-  ecs.Named:
-    Name: Player
-  inventory.Carrier:
-    Inventory: []
-- Entity: ∈⋮2
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0xb23499f8"
+    ID: 0
+    Source: data/worlds/stress-test-2024-12-29.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -80,9 +55,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮ckpvt5dmdsrrj1r5a5pg
   core.Body:
     Angle: 0
     Pos: -60, -70, 32
@@ -93,7 +69,7 @@
     Strength: 2
   ecs.Named:
     Name: ckpvt5dmdsrrj1r5a5pg
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:
@@ -178,6 +154,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮9
   core.Sector:
     Bottom:
@@ -235,6 +212,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮10
   core.Sector:
     Bottom:
@@ -299,6 +277,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮11
   core.Sector:
     Bottom:
@@ -355,8 +334,40 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮12
   core.Body:
     Angle: 0
     Pos: -280, -400, 32
     Size: 10, 10
+- Entity: ∈⋮13∈⋮Player
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    Spawn: false
+  core.Body:
+    Angle:
+      Now: 178.59375
+      Spawn: 0
+    Pos:
+      Now: 104.81035122385369, -387.30821172371566, 20
+      Spawn: 0, 0, 0
+    Size:
+      Now: 10, 40
+      Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: -0.00000000000000000000000000000000000000000000000000000000000000000000000006297286640444227,
+        0.000000000000000000000000000000000000000000000000000000000000000000000000001545720458997961,
+        0.0000007001650399223617
+      Spawn: 0, 0, 0
+  ecs.Named:
+    Name: Player
+  inventory.Carrier:
+    Inventory: []

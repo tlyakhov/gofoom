@@ -6,10 +6,10 @@
     Spawn: false
   core.Body:
     Angle:
-      Now: 539.2085452916881
+      Now: 690.46875
       Spawn: 0
     Pos:
-      Now: -121.0056702298052, 354.220831220796, 20
+      Now: -90, 60, 20
       Spawn: -90, 60, 0
     Size:
       Now: 10, 40
@@ -22,12 +22,17 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.0003376483402474067, -0.000004664398833014834, 0.007001650399237003
+      Now: 0, 0, 0.007001650399223597
       Spawn: 0, 0, 0
   inventory.Carrier:
-    Inventory: []
+    Inventory:
+    - ∈⋮64
+    - ∈⋮65
+    - ∈⋮73
+    SelectedWeapon: ∈⋮64
 - Entity: ∈⋮2
   ecs.SourceFile:
+    Hash: "0x2edae4ab"
     ID: 1
     Source: data/worlds/game-prefabs.yaml
 - Entity: ∈⋮3∈⋮Portal
@@ -39,7 +44,7 @@
   materials.Shader:
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮68∈⋮portal+%28textures%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮68∈⋮portal+%28textures%29∈⋮62bf0202
 - Entity: ∈⋮4∈⋮Shader+Night+Sky
   ecs.Named:
     Name: Shader Night Sky
@@ -47,7 +52,7 @@
     Stages:
     - BlendingFunc: BlendNormal
       Flags: ShaderTiled|ShaderSky
-      Material: ∈⋮66∈⋮nightsky+%28textures%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮66∈⋮nightsky+%28textures%29∈⋮62bf0202
 - Entity: ∈⋮5∈⋮Shader+Grass
   ecs.Named:
     Name: Shader Grass
@@ -57,14 +62,14 @@
   materials.Shader:
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮63∈⋮grass+%28textures%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮63∈⋮grass+%28textures%29∈⋮62bf0202
 - Entity: ∈⋮6∈⋮Shader+Ladder
   ecs.Named:
     Name: Shader Ladder
   materials.Shader:
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮94∈⋮ladder+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮94∈⋮ladder+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
 - Entity: ∈⋮7∈⋮Shader+DGarage.png
   ecs.Named:
     Name: Shader DGarage.png
@@ -74,13 +79,13 @@
   materials.Shader:
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮62bf0202
 - Entity: ∈⋮8
   ecs.Linked:
     Sources:
-    - ∈⋮41∈⋮red+button+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Image: ∈⋮41∈⋮red+button+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮41∈⋮red+button+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - ∈⋮41∈⋮red+button+%28sprites%29∈⋮62bf0202
+  materials.Image: ∈⋮41∈⋮red+button+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮41∈⋮red+button+%28sprites%29∈⋮62bf0202
   materials.SpriteSheet:
     Cols: "2"
     Frame: "0"
@@ -96,13 +101,13 @@
     Stages:
     - BlendingFunc: BlendNormal
       Flags: ShaderTiled|ShaderLiquid
-      Material: ∈⋮59∈⋮Water+%28textures%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮59∈⋮Water+%28textures%29∈⋮62bf0202
 - Entity: ∈⋮10
   ecs.Linked:
     Sources:
-    - ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+    - ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
 - Entity: ∈⋮11∈⋮Starting
   core.Sector:
     Bottom:
@@ -112,57 +117,57 @@
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -100, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 100, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮13
       AdjacentSegment: 1
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 100, -20
       PortalHasMaterial: true
       PortalTeleports: true
       Surface:
         Material: ∈⋮3∈⋮Portal
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 100, 80
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 100, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮67
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -30, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮14
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -100, 100
       Surface:
         Material: ∈⋮4∈⋮Shader+Night+Sky
@@ -180,15 +185,19 @@
     Speed: 50
     Start: ∈⋮57
   behaviors.ActorState:
-    Action: ∈⋮75
+    Action: ∈⋮62
   behaviors.ParticleEmitter:
     Limit: "10"
     Particles:
+    - ∈⋮69
     - ∈⋮36
-    - ∈⋮20
-    - ∈⋮21
+    - ∈⋮71
+    - ∈⋮72
+    - ∈⋮70
     - ∈⋮23
     - ∈⋮24
+    - ∈⋮80
+    - ∈⋮66
     - ∈⋮32
     Source: ∈⋮10
     Vel: 15
@@ -196,11 +205,11 @@
     ZSpread: 10
   core.Body:
     Angle:
-      Now: -49302.71471247913
+      Now: -77060.78253837599
       Procedural: true
       Spawn: 0
     Pos:
-      Now: -102.57730099653978, 20.49295937085992, 25
+      Now: -62.84500776783594, 169.94392641899552, 25
       Procedural: true
       Spawn: -280, 30, 32
     Size: 10, 10
@@ -212,53 +221,53 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -8
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 10, 220
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮11∈⋮Starting
       AdjacentSegment: 2
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 220, 400
       PortalHasMaterial: true
       PortalTeleports: true
       Surface:
         Material: ∈⋮3∈⋮Portal
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 160, 480
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮67
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -110, 460
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -110, 290
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -273,35 +282,35 @@
     Segments:
     - AdjacentSector: ∈⋮11∈⋮Starting
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -100, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮15
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -100, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮22
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -210, -100
       Surface:
         Material: ∈⋮4∈⋮Shader+Night+Sky
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -210, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮4∈⋮Shader+Night+Sky
@@ -317,27 +326,27 @@
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -100, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -150, -150
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮14
       Hi:
         Material: ∈⋮4∈⋮Shader+Night+Sky
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -210, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮4∈⋮Shader+Night+Sky
@@ -357,47 +366,47 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 1, 0, 0, 0, -0, 1
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -250, 380
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮19
       Hi:
         Material: ∈⋮7∈⋮Shader+DGarage.png
         Transform: 1, 0, 0, 0, -0, 1
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -260, 380
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 1, 0, 0, 0, -0, 1
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -260, 460
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮67
       Hi:
         Material: ∈⋮7∈⋮Shader+DGarage.png
         Transform: 1, 0, 0, 0, 0.8, 0
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -250, 460
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
           Active: false
@@ -435,132 +444,84 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -260, 380
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮44
       AdjacentSegment: 4
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -370, 380
       PortalHasMaterial: true
       PortalTeleports: true
       Surface:
         Material: ∈⋮3∈⋮Portal
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -430, 280
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -520, 310
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -490, 600
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -270, 610
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -300, 530
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -280, 490
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮16
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -260, 460
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮20
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: -408.6637973070728, 81.18591589667221, -17
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.000000000000033118745403765745, 0.00000000000016559372701886554, -0.00007483639275053687
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 0.843
-- Entity: ∈⋮21
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 94.76411117932345, 80.64614939038448, 5.503563576526388
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 5.995440842090819, 1.814994754394005, 0.24600596059797386
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮22
   core.Sector:
     Bottom:
@@ -570,100 +531,100 @@
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -210, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮49
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -230, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -300, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -320, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -380, -210
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮28
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -430, -130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -430, 0
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 1, 0, 0.3, 0, 0.8432993810941913, 0
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -410, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -380, 180
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -310, 210
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -280, 170
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -270, 120
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮14
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -210, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮4∈⋮Shader+Night+Sky
@@ -675,7 +636,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 14.341327942684982, 95, 5
+      Now: -35, 181.23680678891282, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -687,10 +648,10 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.000003074493749705658, 0.0000000000000000015627680909224995, -0.00007483639275053305
+      Now: 0.000038954550440674316, 0.2042602219570082, -0.00007483638111256647
       Spawn: 0, 0, 0
-  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
@@ -699,7 +660,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 30.946551400834142, 89.0273505921337, 5
+      Now: -245, 239.02501167868104, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -711,10 +672,11 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.00035372327726402523, 0.00014892163922444006, 0.026086893942021724
+      Now: -0.0000000000000000000000021077135438040324, 0.0000000000010507091164853045,
+        -0.0000748363927505369
       Spawn: 0, 0, 0
-  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
@@ -755,34 +717,34 @@
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -430, -130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -570, -130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -570, 0
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮22
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -430, 0
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮4∈⋮Shader+Night+Sky
@@ -803,45 +765,45 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -200
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - AdjacentSector: ∈⋮55
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -730, 0
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 1, 0, 0, 0, 1.3384615384615384, 0
     - AdjacentSector: ∈⋮55
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -730, -130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 1, 0, 0, 0, 1.2428571428571429, 0
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, -130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 4, 0, 0, 0, 4, 0
     - AdjacentSector: ∈⋮55
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, 0
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 1, 0, 0, 0, 1.2428571428571429, 0
     Top:
       Surface:
@@ -864,7 +826,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 73.20768860097216, 78.68380819668589, 5
+      Now: -245, 268.0387597732698, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -876,10 +838,11 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.002530811272025399, 0.0008040143360247044, 0.026086894876403838
+      Now: -0.000000000000000000000004210754811779257, 0.000000000004396577913129711,
+        -0.0000748363927505369
       Spawn: 0, 0, 0
-  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
@@ -906,7 +869,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 85.03313464141472, 64.19156417594219, 5
+      Now: -245, 292.6786600365408, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -918,10 +881,11 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.008088997223894718, 0.00202569161002843, 0.02608690311072133
+      Now: -0.00000000000000000000006169442355991597, 0.00000000011585029661394529,
+        -0.0000748363927505369
       Spawn: 0, 0, 0
-  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
-  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
@@ -930,44 +894,44 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -82
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, -250
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮42
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -250
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -190
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮55
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, -190
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -38
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -985,40 +949,40 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -100
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -10
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1170, -20
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮42
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1170, -90
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -90
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮9∈⋮Shader+Water
@@ -1040,58 +1004,58 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -100
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1170, -90
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1170, -320
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -320
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮38
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -250
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -190
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮40
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1090, -90
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 20
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1105,37 +1069,37 @@
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1260, 340
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1340, 330
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1340, 260
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮44
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1260, 260
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 100
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1143,83 +1107,83 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 20
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1260, 260
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1110, 260
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1100, 340
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1030, 390
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮19
       AdjacentSegment: 1
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1050, 510
       PortalHasMaterial: true
       PortalTeleports: true
       Surface:
         Material: ∈⋮3∈⋮Portal
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1160, 510
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1280, 430
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 0.7905694150420948, 0, 0, 0, 1, 0
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1260, 370
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 0.375, 0, 0, 0, 1, 0
     - AdjacentSector: ∈⋮43
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -1260, 340
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 100
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1270,17 +1234,17 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -14
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -300, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform:
           Now: 0.1282051282051282, 0, 0, 0, 0, 1
           Spawn: 0.1282051282051282, 0, 0, 0, 1, 0
@@ -1288,17 +1252,17 @@
       Hi:
         Material: ∈⋮7∈⋮Shader+DGarage.png
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -300, -110
       Surface:
         Material: ∈⋮7∈⋮Shader+DGarage.png
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -230, -110
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform:
           Now: 0.1282051320259389, 0, 0, 0, 0, 1
           Spawn: 0.1282051320259389, 0, 0, 0, 1, 0
@@ -1307,14 +1271,14 @@
         Material: ∈⋮7∈⋮Shader+DGarage.png
         Transform: 1, 0, 0, 0, 1.1142857142857143, -0.1
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 1, 0, 0, 0, 0.11428571428571428, 0
       P: -230, -100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
           Active: false
@@ -1334,50 +1298,50 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: -8
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -300, -110
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮51
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -360, -210
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -160, -210
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -160, -160
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮49
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -230, -110
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1392,44 +1356,44 @@
     Segments:
     - AdjacentSector: ∈⋮50
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -160, -210
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -360, -210
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -360, -350
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 7.34375, 0, 0, 0, 1, 0
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 110, -350
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: 110, -210
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1456,93 +1420,93 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 4, 0, 0, 0, 4, 0
       Z: -240
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, -130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮38
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, -190
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, -250
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, -280
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 4, 0, 0, 0, 4, 0
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -610, -280
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 5.7894736842105265, 0, 0, 0, 4, 0
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -610, 160
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 4, 0, 0, 0, 4, 0
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, 160
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
         Transform: 4, 0, 0, 0, 4, 0
     - AdjacentSector: ∈⋮30
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -870, 0
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮30
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -730, 0
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮30
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -730, -130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1634,33 +1598,72 @@
     - ∈⋮60
   behaviors.ActionWaypoint:
     P: -90, 150, 25
+- Entity: ∈⋮64
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: WeirdGun
+    Count: "1"
+    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+    Limit: "1"
+  inventory.WeaponClass: ∈⋮9∈⋮∈⋮2edae4ab
+- Entity: ∈⋮65
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Red Keycard
+    Count: "0"
+    Image: ∈⋮5∈⋮∈⋮2edae4ab
+    Limit: "1"
+- Entity: ∈⋮66
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: -53.318615220707414, 441.56261705021046, -3.0000000000000004
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.000008028313301893577, -0.000008357494924889362, 0.026086893922049118
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮67
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -110, 460
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮16
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -250, 460
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -250, 380
       Surface:
         ExtraStages:
@@ -1668,71 +1671,175 @@
           Flags: ""
           Material: ∈⋮8
           Transform: 14, 0, -0.5, 0, 5, -2
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -250, 140
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -100, 130
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮11∈⋮Starting
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -100, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -30, 100
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -30, 200
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -130, 230
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -130, 290
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - AdjacentSector: ∈⋮13
       Hi:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -110, 290
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮2∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
+- Entity: ∈⋮69
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: -245, 318.54921412795255, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.0000000000000000000003240231063634892, 0.0000000009667339947831258,
+        -0.0000748363927505369
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮70
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: -245, 411.7072365950749, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.000000000000000000023910189955071854, 0.000000023274188018414663, -0.0000748363927505369
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮71
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: -34.854234532335155, 70.70325674493189, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.00000005322621800387696, -0.000010916095964188542, 0.026086893922047064
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮72
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: -35, 139.18747913154417, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.00000000000000002754548617034228, -0.00004556594206030697, -0.00007483639274976584
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮73
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Flower
+    Count: "0"
+    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
+    Limit: "100"
 - Entity: ∈⋮74
   behaviors.Alive:
     Health: 100
@@ -1750,8 +1857,10 @@
     Mass: 80
     MountHeight: 15
     Vel: 0, 0, 0
-  inventory.Carrier:
-    Inventory: []
+  ecs.Linked:
+    Sources:
+    - ∈⋮8∈⋮∈⋮2edae4ab
+  inventory.Carrier: ∈⋮8∈⋮∈⋮2edae4ab
 - Entity: ∈⋮75
   behaviors.ActionTransition:
     Next:
@@ -1777,6 +1886,30 @@
     Attenuation: 0.4
     Diffuse: 1, 0, 1
     Strength: 2
+- Entity: ∈⋮80
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: -36.375157101549924, 194.008881516443, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.000019992855444803967, -0.00003418134543124855, 0.026086893922243712
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮125∈⋮Instanced+LightActor+test
   behaviors.ActorState:
     Action: ∈⋮58

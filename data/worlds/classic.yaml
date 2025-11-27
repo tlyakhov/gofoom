@@ -1,7 +1,46 @@
+- Entity: ∈⋮1
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0xab8b2ca4"
+    ID: 0
+    Source: data/worlds/classic.yaml
 - Entity: ∈⋮2
   ecs.SourceFile:
+    Hash: "0x2edae4ab"
     ID: 1
-    Source: data/worlds/common-assets.yaml
+    Source: data/worlds/game-prefabs.yaml
+- Entity: ∈⋮7
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Spawn: false
+  core.Body:
+    Angle:
+      Now: 711.5625
+      Spawn: 0
+    Pos:
+      Now: -26.985343502822662, -3.3842250434704084, 17
+      Spawn: 0, -70, 0
+    Size:
+      Now: 15, 40
+      Spawn: 15, 15
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: 0.0017549971492184621, -0.00031155075692289346, -0.0007001650412803619
+      Spawn: 0, 0, 0
+  inventory.Carrier:
+    Inventory:
+    - ∈⋮12
+    - ∈⋮13
+    - ∈⋮15
+    SelectedWeapon: ∈⋮12
 - Entity: ∈⋮10∈⋮Painful+Slime+Shader
   ecs.Named:
     Name: Painful Slime Shader
@@ -9,8 +48,23 @@
     Stages:
     - BlendingFunc: BlendNormal
       Flags: ShaderTiled|ShaderLiquid
-      Material: ∈⋮53∈⋮FSlime+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮53∈⋮FSlime+%28textures%29∈⋮62bf0202
       Transform: 2, 0, 0, 0, 2, 0
+- Entity: ∈⋮12
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: WeirdGun
+    Count: "1"
+    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+    Limit: "1"
+  inventory.WeaponClass: ∈⋮9∈⋮∈⋮2edae4ab
+- Entity: ∈⋮13
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Red Keycard
+    Count: "0"
+    Image: ∈⋮5∈⋮∈⋮2edae4ab
+    Limit: "1"
 - Entity: ∈⋮14∈⋮Sky
   ecs.Named:
     Name: Sky
@@ -18,41 +72,48 @@
     Stages:
     - BlendingFunc: BlendNormal
       Flags: ShaderTiled|ShaderSky
-      Material: ∈⋮70∈⋮sky+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+      Material: ∈⋮70∈⋮sky+%28textures%29∈⋮62bf0202
+- Entity: ∈⋮15
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Flower
+    Count: "0"
+    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
+    Limit: "100"
 - Entity: ∈⋮17∈⋮sector2
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -10
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮24∈⋮sector5
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, -30
       Surface: {}
     - AdjacentSector: ∈⋮18∈⋮sector3
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, 30
       Surface: {}
     - AdjacentSector: ∈⋮23∈⋮sector4
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -30, 30
       Surface: {}
     - AdjacentSector: ∈⋮55∈⋮sector0
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -30, -30
       Surface: {}
     Top:
@@ -67,52 +128,52 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮52∈⋮sector26
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, 100
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, 100
       Surface:
-        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮63∈⋮sector1
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, 30
       Surface: {}
     - AdjacentSector: ∈⋮23∈⋮sector4
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 30, 30
       Surface: {}
     - AdjacentSector: ∈⋮17∈⋮sector2
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -30, 30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, 30
       Surface:
-        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
@@ -155,41 +216,41 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: -3
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮55∈⋮sector0
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -30, -30
       Surface: {}
     - AdjacentSector: ∈⋮63∈⋮sector1
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 30, -30
       Surface: {}
     - AdjacentSector: ∈⋮18∈⋮sector3
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 30, 30
       Surface: {}
     - AdjacentSector: ∈⋮17∈⋮sector2
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -30, 30
       Surface: {}
     Top:
       Surface:
-        Material: ∈⋮52∈⋮FRedLight+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮52∈⋮FRedLight+%28textures%29∈⋮62bf0202
       Z: 50
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -199,36 +260,36 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: -20
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, -30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮25∈⋮sector6
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -120, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -120, 30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮17∈⋮sector2
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, 30
       Surface: {}
     Top:
@@ -243,36 +304,36 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: -30
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -120, -30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮26∈⋮sector7
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -140, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -140, 30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮24∈⋮sector5
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -120, 30
       Surface: {}
     Top:
@@ -287,36 +348,36 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: -40
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -140, -30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮27∈⋮sector8
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -160, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -160, 30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮25∈⋮sector6
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -140, 30
       Surface: {}
     Top:
@@ -331,36 +392,36 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: -50
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -160, -30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮28∈⋮sector9
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, 30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮26∈⋮sector7
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -160, 30
       Surface: {}
     Top:
@@ -381,49 +442,49 @@
     Segments:
     - AdjacentSector: ∈⋮30∈⋮sector10
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, -30
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, -10
       Surface:
-        Material: ∈⋮57∈⋮WSlimeGrate+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮57∈⋮WSlimeGrate+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, 10
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮32∈⋮sector11
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, 30
       Surface: {}
     - AdjacentSector: ∈⋮27∈⋮sector8
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, 30
       Surface: {}
     Top:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -6
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -448,35 +509,35 @@
     Segments:
     - AdjacentSector: ∈⋮28∈⋮sector9
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, -30
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, -140
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, -140
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -6
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -506,35 +567,35 @@
     Segments:
     - AdjacentSector: ∈⋮28∈⋮sector9
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, 30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, 30
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -300, 140
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -180, 140
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -6
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -553,48 +614,48 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮51∈⋮sector25
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 105, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 105, 30
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮35∈⋮sector13
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 115, 30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 150, 30
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 150, -30
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮51∈⋮FHexMetal+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮51∈⋮FHexMetal+%28textures%29∈⋮62bf0202
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -604,48 +665,48 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮34∈⋮sector12
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 115, 30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 150, 30
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮36∈⋮sector14
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 150, 70
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 150, 100
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 115, 100
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮51∈⋮FHexMetal+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮51∈⋮FHexMetal+%28textures%29∈⋮62bf0202
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -655,41 +716,41 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮35∈⋮sector13
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 150, 100
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 150, 70
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮37∈⋮sector15
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 70
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 100
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -699,60 +760,60 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮62bf0202
       Target: ∈⋮40∈⋮sector17
       Z: -20
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 20
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮36∈⋮sector14
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 70
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 100
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 150
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮39∈⋮sector16
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 370, 150
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 400, 150
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 400, 20
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
@@ -776,41 +837,41 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -2
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮37∈⋮sector15
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 370, 150
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 400, 150
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮44∈⋮sector20
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 400, 400
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 370, 400
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -821,63 +882,63 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -170
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 280
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 310
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮41∈⋮sector18
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 360
       Surface: {}
     - AdjacentSector: ∈⋮41∈⋮sector18
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 680, 360
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 360
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 230
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 230
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮62bf0202
       Target: ∈⋮37∈⋮sector15
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
@@ -889,80 +950,80 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -230
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - AdjacentSector: ∈⋮40∈⋮sector17
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 360
       Surface: {}
     - AdjacentSector: ∈⋮40∈⋮sector17
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 680, 360
       Surface: {}
     - AdjacentSector: ∈⋮43∈⋮sector19
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 360
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 410
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮45∈⋮sector21
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 780, 610
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮45∈⋮sector21
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 610
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮45∈⋮sector21
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 680, 610
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 610
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 410
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -984,43 +1045,43 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -58
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 900, 360
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮41∈⋮sector18
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 360
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 410
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮46∈⋮sector22
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 900, 410
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1030,56 +1091,56 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮62bf0202
       Target: ∈⋮45∈⋮sector21
       Z: -14
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮39∈⋮sector16
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 400, 400
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 370, 400
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 400
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 300, 450
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 480, 450
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 480, 400
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮50∈⋮FGrayTile+%28textures%29∈⋮62bf0202
       Z: 60
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1090,56 +1151,56 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -200
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - AdjacentSector: ∈⋮41∈⋮sector18
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 700, 610
       Surface: {}
     - AdjacentSector: ∈⋮41∈⋮sector18
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 680, 610
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 610
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 660
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 780, 660
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮41∈⋮sector18
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 780, 610
       Surface: {}
     Top:
       Surface:
-        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮62bf0202
       Target: ∈⋮44∈⋮sector20
       Z: -14
     Transform: 1, 0, 0, 0, 1, 0
@@ -1151,42 +1212,42 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: -70
     FloorFriction: 0.85
     Gravity: 0, 0, -0.1
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 920, 360
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮43∈⋮sector19
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 900, 360
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 900, 410
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 920, 410
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮62bf0202
       Target: ∈⋮48∈⋮sector23
       Z: -20
     Transform: 1, 0, 0, 0, 1, 0
@@ -1210,42 +1271,42 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮59∈⋮Water+%28textures%29∈⋮62bf0202
       Target: ∈⋮46∈⋮sector22
       Z: -20
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 620, 150
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 150
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 600, 200
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮49∈⋮sector24
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 620, 200
       Surface: {}
     Top:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 50
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1255,41 +1316,41 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮58∈⋮WSlimy+%28textures%29∈⋮62bf0202
       Z: -10
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 620, 150
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 740, 150
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 740, 200
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮48∈⋮sector23
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 620, 200
       Surface: {}
     Top:
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Z: 70
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -1317,49 +1378,49 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮34∈⋮sector12
       Hi:
-        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 105, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 105, 30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮63∈⋮sector1
       Hi:
-        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, 30
       Surface: {}
     - Hi:
-        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮48∈⋮DGarage+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, -30
       Surface:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
     Top:
       Surface:
-        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮55∈⋮WDirty+%28textures%29∈⋮62bf0202
       Z:
         Animation:
-          Active: false
+          Active: true
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 1
+          Percent: 0
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -1373,35 +1434,35 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 15
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮18∈⋮sector3
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, 100
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, 100
       Surface:
-        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮62bf0202
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, 120
       Surface:
         Material: ∈⋮14∈⋮Sky
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, 120
       Surface:
         Material: ∈⋮14∈⋮Sky
@@ -1430,58 +1491,60 @@
     Mass: 80
     MountHeight: 15
     Vel: 0, 0, 0
-  inventory.Carrier:
-    Inventory: []
+  ecs.Linked:
+    Sources:
+    - ∈⋮8∈⋮∈⋮2edae4ab
+  inventory.Carrier: ∈⋮8∈⋮∈⋮2edae4ab
 - Entity: ∈⋮55∈⋮sector0
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, -100
       Surface:
         Material: ∈⋮14∈⋮Sky
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, -100
       Surface:
-        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮63∈⋮sector1
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, -30
       Surface: {}
     - AdjacentSector: ∈⋮23∈⋮sector4
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 30, -30
       Surface: {}
     - AdjacentSector: ∈⋮17∈⋮sector2
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -30, -30
       Surface: {}
     - Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: -100, -30
       Surface:
-        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮56∈⋮WMetal+%28textures%29∈⋮62bf0202
     Top:
       Surface:
         Material: ∈⋮14∈⋮Sky
@@ -1490,34 +1553,6 @@
     TransformOrigin: 0, 0
   ecs.Named:
     Name: sector0
-- Entity: ∈⋮57
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Spawn: false
-  core.Body:
-    Angle:
-      Now: 427.5
-      Spawn: 0
-    Pos:
-      Now: 0, -70, 20
-      Spawn: 0, -70, 0
-    Size:
-      Now: 15, 40
-      Spawn: 15, 15
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel:
-      Now: 0, 0, 0.007001650411977742
-      Spawn: 0, 0, 0
-  inventory.Carrier:
-    Inventory: []
 - Entity: ∈⋮58
   core.Body:
     Angle: 0
@@ -1540,36 +1575,36 @@
   core.Sector:
     Bottom:
       Surface:
-        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Z: 0
     FloorFriction: 0.85
     Segments:
     - AdjacentSector: ∈⋮51∈⋮sector25
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, -30
       Surface: {}
     - AdjacentSector: ∈⋮18∈⋮sector3
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 100, 30
       Surface: {}
     - AdjacentSector: ∈⋮23∈⋮sector4
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 30, 30
       Surface: {}
     - AdjacentSector: ∈⋮55∈⋮sector0
       Hi:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       Lo:
-        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮1∈⋮data%2Fworlds%2Fcommon-assets.yaml
+        Material: ∈⋮54∈⋮WDef+%28textures%29∈⋮62bf0202
       P: 30, -30
       Surface: {}
     Top:

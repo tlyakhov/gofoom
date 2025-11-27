@@ -1,54 +1,25 @@
 - Entity: ∈⋮1
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    Spawn: false
-  core.Body:
-    Angle:
-      Now: 476.71875
-      Spawn: 180
-    Pos:
-      Now: 128.90835231233044, 45.177841066998155, 20
-      Spawn: 210, 10, 0
-    Size:
-      Now: 10, 40
-      Spawn: 10, 10
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel:
-      Now: 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003510767521997896,
-        -0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006974725995841553,
-        0.00007001650399223608
-      Spawn: 0, 0, 0
-  ecs.Named:
-    Name: Player
-  inventory.Carrier:
-    Inventory: []
-- Entity: ∈⋮2
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x2c38f86b"
+    ID: 0
+    Source: data/worlds/glitchTester5.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
         Material: ∈⋮2∈⋮Default
       Z: 0
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮9
-    - ∈⋮11
-    - ∈⋮15
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -98,9 +69,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:
@@ -128,8 +100,6 @@
         Material: ∈⋮2∈⋮Default
       Z: -20
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮10
     Segments:
     - Hi:
         Material: ∈⋮2∈⋮Default
@@ -165,6 +135,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 90
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮10
   core.Sector:
     Bottom:
@@ -214,6 +185,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮11
   core.Sector:
     Bottom:
@@ -256,6 +228,7 @@
         Material: ∈⋮12
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮12
   materials.Image:
     Filter: false
@@ -279,8 +252,6 @@
         Material: ∈⋮2∈⋮Default
       Z: 0
     FloorFriction: 0.85
-    Inner:
-    - ∈⋮15
     Segments:
     - AdjacentSector: ∈⋮3∈⋮Starting
       Hi:
@@ -316,6 +287,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
 - Entity: ∈⋮15
   core.Sector:
     Bottom:
@@ -392,3 +364,4 @@
         Material: ∈⋮2∈⋮Default
       Z: 40
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0

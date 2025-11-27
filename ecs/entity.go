@@ -33,8 +33,7 @@ const MaxEntities = (1 << EntityBits) - 1
 
 /*
 Entity serialization format is:
-"(Delimiter)(24 bit Entity ID)[(Delimiter)(Name url encoded)(Delimiter)(8 bit
-Source ID)(Delimiter)(File name url encoded)]
+"(Delimiter)(24 bit Entity ID)[(Delimiter)(Name url encoded)(Delimiter)(File hash url encoded)]
 
 Why the unicode delimiter?
 
@@ -56,19 +55,18 @@ Because it gives us a few benefits:
 const EntityDelimiter = "∈⋮"
 
 // EntityRegexp is a regular expression used to parse entity strings.
-var EntityRegexp = regexp.MustCompile(`^∈⋮(?<entity>[0-9]+)(?:∈⋮(?<name>[^∈\s]*))?(?:∈⋮(?<file_id>[0-9]+)∈⋮(?<file>[^∈\s]+))?`)
+var EntityRegexp = regexp.MustCompile(`^∈⋮(?<entity>[0-9]+)(?:∈⋮(?<name>[^∈\s]*))?(?:∈⋮(?<file_hash>[0-9A-Fa-f]+))?`)
 
 // EntityHumanRegexp is a regular expression used to parse entity strings
 // provided by humans.
-var EntityHumanRegexp = regexp.MustCompile(`\s*(?<entity>[0-9]+)\s*(?:[(](?<file_d>[0-9]+)[)])?`)
+var EntityHumanRegexp = regexp.MustCompile(`\s*(?<entity>[0-9]+)\s*(?:[(](?<file_id>[0-9]+)[)])?`)
 
 // These are indexes into regexp matches for `EntityRegexp`
 const (
 	EntityRegexpIdxMatch    = 0
 	EntityRegexpIdxEntity   = 1
 	EntityRegexpIdxName     = 2
-	EntityRegexpIdxSourceID = 3
-	EntityRegexpIdxFile     = 4
+	EntityRegexpIdxFileHash = 3
 )
 
 // These are indexes into regexp matches for `EntityHumanRegexp`
@@ -129,12 +127,16 @@ func ParseEntity(e string) (Entity, error) {
 		return 0, errors.New("Can't parse entity " + e)
 	}
 	parsedEntity, err := strconv.ParseInt(parts[EntityRegexpIdxEntity], 10, EntityBits+EntitySourceIDBits)
-	if len(parts) >= 4 && len(parts[EntityRegexpIdxSourceID]) > 0 {
-		parsedID, err := strconv.ParseInt(parts[EntityRegexpIdxSourceID], 10, EntitySourceIDBits)
+	if len(parts) >= 4 && len(parts[EntityRegexpIdxFileHash]) > 0 {
+		parsedHash, err := strconv.ParseUint(parts[EntityRegexpIdxFileHash], 16, 32)
 		if err != nil {
 			return Entity(parsedEntity), err
 		}
-		parsedEntity |= parsedID << EntityBits
+		if file := SourceFileFromHash(SourceFileHash(parsedHash)); file != nil {
+			parsedEntity |= int64(file.ID) << EntityBits
+		} else {
+			return Entity(parsedEntity), fmt.Errorf("ecs.ParseEntity: can't find ID for entity %v, hash %v", Entity(parsedEntity), parsedHash)
+		}
 	}
 	// TODO: return name
 	return Entity(parsedEntity), err
@@ -158,6 +160,7 @@ func ParseEntityHumanOrCanonical(e string) (Entity, error) {
 		}
 		parsedEntity |= parsedID << EntityBits
 	}
+	// TODO: return name
 	return Entity(parsedEntity), err
 }
 
@@ -182,7 +185,7 @@ func (e Entity) Format() string {
 
 // SerializeRaw serializes the entity to a string with any ECS context, allowing
 // specifying a name and file.
-func (e Entity) SerializeRaw(name string, file string) string {
+func (e Entity) SerializeRaw(name string, hash uint64) string {
 	id := e.Local().String()
 	if e == 0 {
 		return id
@@ -191,10 +194,7 @@ func (e Entity) SerializeRaw(name string, file string) string {
 		id += EntityDelimiter + url.QueryEscape(name)
 	}
 	if e.IsExternal() {
-		id += EntityDelimiter + strconv.FormatUint(uint64(e.SourceID()), 10)
-		if len(file) != 0 {
-			id += EntityDelimiter + url.QueryEscape(file)
-		}
+		id += EntityDelimiter + strconv.FormatUint(hash, 10)
 	}
 	return id
 }
@@ -213,8 +213,7 @@ func (e Entity) Serialize() string {
 	}
 
 	if e.IsExternal() {
-		id += EntityDelimiter + strconv.FormatUint(uint64(e.SourceID()), 10)
-		id += EntityDelimiter + url.QueryEscape(SourceFileIDs[e.SourceID()].Source)
+		id += EntityDelimiter + strconv.FormatUint(uint64(SourceFileIDs[e.SourceID()].Hash()), 16)
 	}
 	return id
 }

@@ -1,13 +1,19 @@
-- Entity: ∈⋮2
+- Entity: ∈⋮1
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0x8c04e9f5"
+    ID: 0
+    Source: data/worlds/tallBoy.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/WDef.png
+    Source: data/textures/WDef.png
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -49,9 +55,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮ckdpqi5mdsrj7p6jt8eg
   core.Body:
     Angle: 0
     Pos: 80, 20, 32
@@ -62,7 +69,7 @@
     Strength: 2
   ecs.Named:
     Name: ckdpqi5mdsrj7p6jt8eg
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮tallBoy
   core.Sector:
     Bottom:
       Surface:
@@ -118,9 +125,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 112
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: tallBoy
-- Entity: ∈⋮6
+- Entity: ∈⋮6∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:

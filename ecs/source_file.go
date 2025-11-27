@@ -5,27 +5,27 @@ package ecs
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"reflect"
+	"strconv"
 
+	"github.com/pierrec/xxHash/xxHash32"
 	"github.com/spf13/cast"
 	"sigs.k8s.io/yaml"
 )
+
+type SourceFileHash uint32
 
 type SourceFile struct {
 	Attached `editable:"^"`
 
 	Source     string `editable:"File" edit_type:"file"`
 	ID         EntitySourceID
-	LoadedID   EntitySourceID
 	Loaded     bool
 	References int
 
 	serializedContents Snapshot
 	children           EntityTable
-	// Scope is just this file and its children
-	loadedIDsToNewIDs map[EntitySourceID]EntitySourceID
 }
 
 var SourceFileCID ComponentID
@@ -47,6 +47,20 @@ func GetSourceFile(e Entity) *SourceFile {
 
 func (file *SourceFile) SetContents(contents []any) {
 	file.serializedContents = contents
+}
+
+func (file *SourceFile) Hash() SourceFileHash {
+	// TODO: Should we consider custom hashes?
+	switch {
+	case file.Source != "":
+		x := xxHash32.New(0xCAFE)
+		x.Write([]byte(file.Source))
+		return SourceFileHash(x.Sum32())
+	case file.Entity != 0:
+		return SourceFileHash(file.Entity)
+	default:
+		return 0
+	}
 }
 
 func (file *SourceFile) read() error {
@@ -104,14 +118,9 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 		}
 	}
 
-	// Check if the source file ID we're loading is free or if it's
-	// already mapped. If it's mapped, we have to pick a new one.
-	file.LoadedID = file.ID
-	if _, ok := SourceFileIDs[file.ID]; ok {
+	if file.Entity != 1 {
 		file.ID = NextFreeEntitySourceID()
 	}
-	file.loadedIDsToNewIDs = make(map[EntitySourceID]EntitySourceID)
-	file.loadedIDsToNewIDs[0] = file.ID
 	file.References = 1
 	SourceFileNames[file.Source] = file
 	SourceFileIDs[file.ID] = file
@@ -143,9 +152,7 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 			return nil
 		}
 		if mappedFile, ok := SourceFileNames[nestedFile.Source]; ok {
-			// This file is already mapped. We can skip loading it. We still
-			// need to keep track of the loaded ID -> mapped ID though.
-			file.loadedIDsToNewIDs[nestedFile.ID] = mappedFile.ID
+			// This file is already mapped. We can skip loading it.
 			file.children.Set(mappedFile.Entity)
 			mappedFile.References++
 			return nil
@@ -158,7 +165,6 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 		// the attach method will change where *a is.
 		nestedFile = a.(*SourceFile)
 		nestedFile.readAndMapNestedFiles()
-		file.loadedIDsToNewIDs[nestedFile.LoadedID] = nestedFile.ID
 		file.children.Set(nestedFile.Entity)
 		return nil
 	})
@@ -215,12 +221,9 @@ func (file *SourceFile) loadEntities() error {
 				if linkedEntity == 0 {
 					continue
 				}
-				loadedID := linkedEntity.SourceID()
-				mappedID, ok := file.loadedIDsToNewIDs[loadedID]
-				if !ok {
-					log.Printf("SourceFile.loadEntities: linked entity %v[%v] = %v had source ID %v, which doesn't have a mapping!", entity, name, linkedEntity, loadedID)
+				if !linkedEntity.IsExternal() {
+					linkedEntity = linkedEntity.WithFileID(file.ID)
 				}
-				linkedEntity = linkedEntity.WithFileID(mappedID)
 				c := GetComponent(linkedEntity, cid)
 				if c != nil {
 					attach(entity, &c, cid)
@@ -236,17 +239,10 @@ func (file *SourceFile) loadEntities() error {
 					if e == 0 {
 						return 0
 					}
-					loadedID := e.SourceID()
-					mappedID, ok := file.loadedIDsToNewIDs[loadedID]
-					if !ok {
-						// TODO: This has a nasty bug. When nesting files and
-						// loading them, this does not properly treat all the
-						// remapping. I *think* we need to store nested
-						// "loadedIDsToNewIDs" in parent file maps.
-						log.Printf("SourceFile.loadEntities: relation %v.%v=%v had source ID %v, which doesn't have a mapping!", entity, r.Name, e, loadedID)
-						return e
+					if !e.IsExternal() {
+						return e.WithFileID(file.ID)
 					}
-					return e.WithFileID(mappedID)
+					return e
 				})
 			}
 		}
@@ -305,10 +301,10 @@ func (file *SourceFile) OnDetach(e Entity) {
 func (file *SourceFile) Construct(data map[string]any) {
 	file.Attached.Construct(data)
 	file.ID = 0
-	file.LoadedID = 0xFF
 	file.Loaded = false
 	file.References = 0
 	file.serializedContents = nil
+	file.children = EntityTable{}
 
 	if data == nil {
 		return
@@ -328,6 +324,21 @@ func (file *SourceFile) Serialize() map[string]any {
 
 	result["Source"] = file.Source
 	result["ID"] = file.ID
+	result["Hash"] = "0x" + strconv.FormatUint(uint64(file.Hash()), 16) // To handle file moves and human readers
 
 	return result
+}
+
+func SourceFileFromHash(hash SourceFileHash) *SourceFile {
+	arena := ArenaFor[SourceFile](SourceFileCID)
+	for i := range arena.Cap() {
+		file := arena.Value(i)
+		if file == nil {
+			continue
+		}
+		if file.Hash() == hash {
+			return file
+		}
+	}
+	return nil
 }

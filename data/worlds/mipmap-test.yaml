@@ -1,34 +1,19 @@
 - Entity: ∈⋮1
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    Spawn: false
-  core.Body:
-    Angle: 0
-    Pos:
-      Now: 0, 0, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel: 0, 0, 0
-  ecs.Named:
-    Name: Player
-- Entity: ∈⋮2
+  ecs.SourceFile:
+    _Flags: ComponentLockedInEditor
+    Hash: "0xfe07de8"
+    ID: 0
+    Source: data/worlds/mipmap-test.yaml
+- Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
   materials.Image:
     Filter: false
-    Source: data/stained-glass.jpeg
+    Source: data/textures/stained-glass.jpeg
   materials.Lit:
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 1
-- Entity: ∈⋮3
+- Entity: ∈⋮3∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -73,9 +58,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮4
+- Entity: ∈⋮4∈⋮ckpvt5dmdsrrj1r5a5pg
   core.Body:
     Angle: 0
     Pos: -50, -70, 32
@@ -86,7 +72,7 @@
     Strength: 2
   ecs.Named:
     Name: ckpvt5dmdsrrj1r5a5pg
-- Entity: ∈⋮5
+- Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
   character.Player:
@@ -107,7 +93,7 @@
     Name: Spawn
   inventory.Carrier:
     Inventory: []
-- Entity: ∈⋮6
+- Entity: ∈⋮6∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -151,9 +137,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮7
+- Entity: ∈⋮7∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -196,9 +183,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮8
+- Entity: ∈⋮8∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -242,9 +230,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮9
+- Entity: ∈⋮9∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -287,9 +276,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮10
+- Entity: ∈⋮10∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -333,9 +323,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮11
+- Entity: ∈⋮11∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -378,9 +369,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮12
+- Entity: ∈⋮12∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -424,9 +416,10 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
-- Entity: ∈⋮13
+- Entity: ∈⋮13∈⋮Starting
   core.Sector:
     Bottom:
       Surface:
@@ -469,6 +462,7 @@
         Material: ∈⋮2∈⋮Default
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
   ecs.Named:
     Name: Starting
 - Entity: ∈⋮14
@@ -507,3 +501,24 @@
     Attenuation: 0.01
     Diffuse: 1, 1, 1
     Strength: 1
+- Entity: ∈⋮19∈⋮Player
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    Spawn: false
+  core.Body:
+    Angle: 0
+    Pos:
+      Now: 0, 0, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel: 0, 0, 0
+  ecs.Named:
+    Name: Player
