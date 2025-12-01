@@ -357,7 +357,7 @@ func CreateMainMenu() {
 	editor.BehaviorsRespawn.Menu = fyne.NewMenuItem("Respawn", func() {
 		editor.Lock.Lock()
 		defer editor.Lock.Unlock()
-		controllers.Respawn(true)
+		controllers.RespawnAll()
 	})
 
 	menuFile := fyne.NewMenu("File", editor.FileOpen.Menu, editor.FileSave.Menu, editor.FileSaveAs.Menu, editor.FileQuit.Menu)

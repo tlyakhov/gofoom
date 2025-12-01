@@ -1,35 +1,3 @@
-- Entity: ∈⋮1
-  behaviors.Alive:
-    Health: 100
-  character.Player:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Spawn: false
-  core.Body:
-    Angle:
-      Now: 690.46875
-      Spawn: 0
-    Pos:
-      Now: -90, 60, 20
-      Spawn: -90, 60, 0
-    Size:
-      Now: 10, 40
-      Spawn: 10, 10
-  core.Mobile:
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideSeparate
-    Elasticity: 0.1
-    Mass: 80
-    MountHeight: 15
-    Vel:
-      Now: 0, 0, 0.007001650399223597
-      Spawn: 0, 0, 0
-  inventory.Carrier:
-    Inventory:
-    - ∈⋮64
-    - ∈⋮65
-    - ∈⋮73
-    SelectedWeapon: ∈⋮64
 - Entity: ∈⋮2
   ecs.SourceFile:
     Hash: "0x2edae4ab"
@@ -191,14 +159,14 @@
     Particles:
     - ∈⋮69
     - ∈⋮36
+    - ∈⋮70
     - ∈⋮71
     - ∈⋮72
-    - ∈⋮70
     - ∈⋮23
     - ∈⋮24
     - ∈⋮80
-    - ∈⋮66
     - ∈⋮32
+    - ∈⋮66
     Source: ∈⋮10
     Vel: 15
     XYSpread: 10
@@ -409,12 +377,12 @@
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
-          Active: false
+          Active: true
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 1
+          Percent: 0
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -648,7 +616,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.000038954550440674316, 0.2042602219570082, -0.00007483638111256647
+      Now: 0.000038954550440674316, 0.2042602219570082, -0.00000000007136953459984443
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -673,7 +641,7 @@
     MountHeight: 15
     Vel:
       Now: -0.0000000000000000000000021077135438040324, 0.0000000000010507091164853045,
-        -0.0000748363927505369
+        -0.00000000007136954569867792
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -839,7 +807,7 @@
     MountHeight: 15
     Vel:
       Now: -0.000000000000000000000004210754811779257, 0.000000000004396577913129711,
-        -0.0000748363927505369
+        -0.00000000007136954569867792
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -882,7 +850,7 @@
     MountHeight: 15
     Vel:
       Now: -0.00000000000000000000006169442355991597, 0.00000000011585029661394529,
-        -0.0000748363927505369
+        -0.00000000007136954569867792
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -1281,12 +1249,12 @@
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
-          Active: false
+          Active: true
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: -14
           Lifetime: AnimationLifetimeOnce
-          Percent: 1
+          Percent: 0
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -1630,7 +1598,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.000008028313301893577, -0.000008357494924889362, 0.026086893922049118
+      Now: 0.000008028313301893577, -0.000008357494924889362, 0.006521723480512279
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -1754,7 +1722,7 @@
     MountHeight: 15
     Vel:
       Now: -0.0000000000000000000003240231063634892, 0.0000000009667339947831258,
-        -0.0000748363927505369
+        -0.00000000007136954569867792
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -1778,7 +1746,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.000000000000000000023910189955071854, 0.000000023274188018414663, -0.0000748363927505369
+      Now: -0.000000000000000000023910189955071854, 0.000000023274188018414663, -0.00000000007136954569867792
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -1802,7 +1770,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.00000005322621800387696, -0.000010916095964188542, 0.026086893922047064
+      Now: 0.00000005322621800387696, -0.000010916095964188542, 0.006521723480511766
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -1826,7 +1794,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.00000000000000002754548617034228, -0.00004556594206030697, -0.00007483639274976584
+      Now: 0.00000000000000002754548617034228, -0.00004556594206030697, -0.00000000007136954569794258
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -1843,8 +1811,10 @@
 - Entity: ∈⋮74
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: true
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮130
+  character.Player: {}
   core.Body:
     Angle: 0
     Pos: -90, 60, 0
@@ -1903,7 +1873,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.000019992855444803967, -0.00003418134543124855, 0.026086893922243712
+      Now: -0.000019992855444803967, -0.00003418134543124855, 0.006521723480560928
       Spawn: 0, 0, 0
   materials.Image: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
   materials.Lit: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
@@ -1928,3 +1898,34 @@
     - ∈⋮12
   ecs.Named:
     Name: Instanced LightActor test
+- Entity: ∈⋮130
+  behaviors.Alive:
+    Health: 100
+  character.Player:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+  core.Body:
+    Angle:
+      Now: 690.46875
+      Spawn: 0
+    Pos:
+      Now: -90, 60, 20
+      Spawn: -90, 60, 0
+    Size:
+      Now: 10, 40
+      Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: 0, 0, 0.00007001650399223608
+      Spawn: 0, 0, 0
+  inventory.Carrier:
+    Inventory:
+    - ∈⋮64
+    - ∈⋮65
+    - ∈⋮73
+    SelectedWeapon: ∈⋮64

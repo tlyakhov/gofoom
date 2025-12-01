@@ -1,9 +1,3 @@
-- Entity: ∈⋮1
-  ecs.SourceFile:
-    _Flags: ComponentLockedInEditor
-    Hash: "0x31b8894c"
-    ID: 0
-    Source: data/worlds/include-test2.yaml
 - Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
@@ -82,8 +76,10 @@
     Diffuse: 1, 1, 1
     Strength: 2
 - Entity: ∈⋮5∈⋮Spawn
-  character.Player:
-    Spawn: true
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮14∈⋮Player
+  character.Player: {}
   core.Body:
     Angle: 0
     Pos: 0, 0, 0
@@ -239,8 +235,7 @@
 - Entity: ∈⋮14∈⋮Player
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: false
+  character.Player: {}
   core.Body:
     Angle:
       Now: 548.4375
@@ -260,7 +255,7 @@
     MountHeight: 15
     Vel:
       Now: 0.000000000000000000000000000000000000000000004133620315853336, 0.00000000000000000000000000000000008656330800133991,
-        -0.0000000000000000000000000000000000000000000000000007656250000715909
+        -0.000000000000000000000000000000000000000000000000000000000000000000000007656250000715935
       Spawn: 0, 0, 0
   ecs.Linked:
     Sources: []

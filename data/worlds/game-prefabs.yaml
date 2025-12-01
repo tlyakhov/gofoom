@@ -1,9 +1,3 @@
-- Entity: ∈⋮1
-  ecs.SourceFile:
-    _Flags: ComponentLockedInEditor
-    Hash: "0x2edae4ab"
-    ID: 0
-    Source: data/worlds/game-prefabs.yaml
 - Entity: ∈⋮2
   ecs.SourceFile:
     Hash: "0x62bf0202"

@@ -80,7 +80,7 @@ func initializeMenus() {
 				}
 				archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 				renderer.Initialize()
-				controllers.Respawn(true)
+				controllers.RespawnAll()
 				ecs.Simulation.Integrate = integrateGame
 				ecs.Simulation.Render = renderGame
 				gameUI.Config.TextStyle = renderer.NewTextStyle()

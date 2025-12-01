@@ -1,9 +1,3 @@
-- Entity: ∈⋮1
-  ecs.SourceFile:
-    _Flags: ComponentLockedInEditor
-    Hash: "0x71b24659"
-    ID: 0
-    Source: data/worlds/inner-test.yaml
 - Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
@@ -86,8 +80,10 @@
 - Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: true
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮17∈⋮Player
+  character.Player: {}
   core.Body:
     Angle: 180
     Pos: 210, 10, 0
@@ -392,8 +388,7 @@
 - Entity: ∈⋮17∈⋮Player
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: false
+  character.Player: {}
   core.Body:
     Angle:
       Now: 587.8125
@@ -412,7 +407,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.0014542677043338091, -0.0005609726467904401, 0.00007001650399505457
+      Now: -0.0014542677043338091, -0.0005609726467904401, 0.0000007001650399505476
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player

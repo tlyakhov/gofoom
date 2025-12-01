@@ -1,9 +1,3 @@
-- Entity: ∈⋮1
-  ecs.SourceFile:
-    _Flags: ComponentLockedInEditor
-    Hash: "0x37df7fcb"
-    ID: 0
-    Source: data/worlds/swing-door.yaml
 - Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
@@ -95,8 +89,10 @@
 - Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: true
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮16∈⋮Player
+  character.Player: {}
   core.Body:
     Angle: 0
     Pos: 0, 0, 0
@@ -365,8 +361,7 @@
 - Entity: ∈⋮16∈⋮Player
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: false
+  character.Player: {}
   core.Body:
     Angle:
       Now: 382.5
@@ -385,7 +380,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.0000000000000026596953002317704, -0.000000000000018332622435064795, 0.00007001650399223608
+      Now: 0.0000000000000026596953002317704, -0.000000000000018332622435064795, 0.0000007001650399223617
       Spawn: 0, 0, 0
   ecs.Named:
     Name: Player

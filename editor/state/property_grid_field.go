@@ -99,12 +99,15 @@ func (f *PropertyGridField) Disabled() bool {
 	// component, disable.
 	externalEntitiesOnly := true
 	externalComponentsOnly := true
+	lockedOnly := true
 	for _, v := range f.Values {
 		externalEntitiesOnly = externalEntitiesOnly && v.Entity.IsExternal()
 		externalComponentsOnly = externalComponentsOnly && v.Component.Base().IsExternal()
+		lockedInEditor := (v.Component.Base().Flags&ecs.ComponentLockedInEditor != 0) || (v.Component.Base().Flags&ecs.ComponentLockedEntityInEditor != 0)
+		lockedOnly = lockedOnly && lockedInEditor
 	}
 	linkedOnly, _ := f.IsLinked()
-	return externalEntitiesOnly || externalComponentsOnly || linkedOnly
+	return externalEntitiesOnly || externalComponentsOnly || linkedOnly || lockedOnly
 }
 
 func (f *PropertyGridField) Short() string {

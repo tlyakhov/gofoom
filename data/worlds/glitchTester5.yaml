@@ -1,9 +1,3 @@
-- Entity: ∈⋮1
-  ecs.SourceFile:
-    _Flags: ComponentLockedInEditor
-    Hash: "0x2c38f86b"
-    ID: 0
-    Source: data/worlds/glitchTester5.yaml
 - Entity: ∈⋮2∈⋮Default
   ecs.Named:
     Name: Default
@@ -75,8 +69,8 @@
 - Entity: ∈⋮5∈⋮Spawn
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: true
+  behaviors.Spawner: {}
+  character.Player: {}
   core.Body:
     Angle: 180
     Pos: 210, 10, 0

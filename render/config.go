@@ -6,6 +6,7 @@ package render
 import (
 	"math"
 	"sync"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
@@ -56,7 +57,7 @@ func (c *Config) RefreshPlayer() {
 	arena := ecs.ArenaFor[character.Player](character.PlayerCID)
 	for i := range arena.Cap() {
 		player := arena.Value(i)
-		if player == nil || !player.IsActive() || player.Spawn {
+		if player == nil || !player.IsActive() || behaviors.GetSpawner(player.Entity) != nil {
 			continue
 		}
 		c.Player = player

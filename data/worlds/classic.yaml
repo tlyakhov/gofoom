@@ -1,9 +1,3 @@
-- Entity: ∈⋮1
-  ecs.SourceFile:
-    _Flags: ComponentLockedInEditor
-    Hash: "0xab8b2ca4"
-    ID: 0
-    Source: data/worlds/classic.yaml
 - Entity: ∈⋮2
   ecs.SourceFile:
     Hash: "0x2edae4ab"
@@ -14,7 +8,6 @@
     Health: 100
   character.Player:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Spawn: false
   core.Body:
     Angle:
       Now: 711.5625
@@ -33,7 +26,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.0017549971492184621, -0.00031155075692289346, -0.0007001650412803619
+      Now: 0.0017549971492184621, -0.00031155075692289346, -0.0000070016504128036356
       Spawn: 0, 0, 0
   inventory.Carrier:
     Inventory:
@@ -1477,8 +1470,10 @@
 - Entity: ∈⋮54
   behaviors.Alive:
     Health: 100
-  character.Player:
-    Spawn: true
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮7
+  character.Player: {}
   core.Body:
     Angle: 0
     Pos: 0, -70, 0

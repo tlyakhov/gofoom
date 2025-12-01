@@ -1,9 +1,3 @@
-- Entity: ∈⋮1
-  ecs.SourceFile:
-    _Flags: ComponentLockedInEditor
-    Hash: "0x62bf0202"
-    ID: 0
-    Source: data/worlds/common-assets.yaml
 - Entity: ∈⋮2∈⋮RDE_8x8+%28fonts%29
   ecs.Named:
     Name: RDE_8x8 (fonts)

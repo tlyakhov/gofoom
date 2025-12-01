@@ -288,16 +288,21 @@ func (g *Grid) switchEntityUI(entity ecs.Entity) *widget.Button {
 	entityEntry.PlaceHolder = "e.g. 123"
 	entityEntry.Resize(fyne.NewSize(200, 0))
 	title := "Switch ID for Entity"
-	sw := widget.NewButtonWithIcon(title, theme.ViewRefreshIcon(), func() {
+	button := widget.NewButtonWithIcon(title, theme.ViewRefreshIcon(), func() {
 		dialog.ShowForm(title, "Switch", "Cancel", []*widget.FormItem{
 			{Text: "New Entity ID", Widget: entityEntry},
-		}, func(b bool) {
-			if !b {
+		}, func(ok bool) {
+			if !ok {
 				return
 			}
 			newEntity, err := ecs.ParseEntityHumanOrCanonical(entityEntry.Text)
 			if err != nil {
 				log.Printf("Error: %v", err)
+				return
+			}
+			if newEntity <= 1 {
+				d := dialog.NewInformation(title, "Target entity should be > 1.", g.GridWindow)
+				d.Show()
 				return
 			}
 			g.Act(&actions.SetEntity{
@@ -307,7 +312,19 @@ func (g *Grid) switchEntityUI(entity ecs.Entity) *widget.Button {
 			g.Focus(g.GridWidget)
 		}, g.GridWindow)
 	})
-	return sw
+	return button
+}
+
+func entityLocked(e ecs.Entity) bool {
+	for _, c := range ecs.AllComponents(e) {
+		if c == nil {
+			continue
+		}
+		if c.Base().Flags&ecs.ComponentLockedEntityInEditor != 0 {
+			return true
+		}
+	}
+	return false
 }
 
 func (g *Grid) addEntityControls(sel *selection.Selection) {
@@ -337,7 +354,7 @@ func (g *Grid) addEntityControls(sel *selection.Selection) {
 				g.SelectObjects(true, selection.SelectableFromEntity(s.Sector.Entity))
 			}
 		}
-		disabled = disabled && s.Entity.IsExternal()
+		disabled = disabled && (s.Entity.IsExternal() || entityLocked(s.Entity))
 		entities = append(entities, s.Entity)
 		entityList += s.Entity.ShortString()
 		for _, c := range ecs.AllComponents(s.Entity) {
@@ -380,17 +397,22 @@ func (g *Grid) addEntityControls(sel *selection.Selection) {
 			Entities: entities})
 	})
 
+	var sw *widget.Button
+	if len(sel.Exact) == 1 {
+		sw = g.switchEntityUI(sel.First().Entity)
+		if disabled {
+			sw.Disable()
+		} else {
+			sw.Enable()
+		}
+	}
+
 	if disabled {
 		selectComponent.Disable()
 		button.Disable()
 	} else {
 		selectComponent.Enable()
 		button.Enable()
-	}
-
-	var sw *widget.Button
-	if len(sel.Exact) == 1 {
-		sw = g.switchEntityUI(sel.First().Entity)
 	}
 
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
