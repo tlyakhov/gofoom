@@ -279,7 +279,7 @@ func (e *Editor) Load(filename string) {
 		e.Alert(fmt.Sprintf("Error loading world: %v", err))
 		return
 	}
-	controllers.Respawn(true)
+	controllers.RespawnAll()
 	archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 	e.EntityList.ReIndex()
 	ecs.Simulation.NewFrame = e.NewFrame

@@ -9,14 +9,12 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/ecs"
-
-	"github.com/spf13/cast"
 )
 
 type Player struct {
 	ecs.Attached `editable:"^"`
 
-	Spawn         bool
+	// TODO: should we serialize any of this?
 	FrameTint     concepts.Vector4
 	Crouching     bool
 	Bob           float64
@@ -31,11 +29,7 @@ type Player struct {
 }
 
 func (p *Player) String() string {
-	if p.Spawn {
-		return "Spawn"
-	} else {
-		return "Player"
-	}
+	return "Player"
 }
 
 func (p *Player) Underwater() bool {
@@ -49,24 +43,15 @@ func (p *Player) Underwater() bool {
 
 func (p *Player) Construct(data map[string]any) {
 	p.Attached.Construct(data)
-	// By convention, we construct spawn points rather than active players to
-	// avoid weird behaviors.
-	p.Spawn = true
 	p.HoveringTargets = make(containers.Set[ecs.Entity])
 
 	if data == nil {
 		return
 	}
-
-	if v, ok := data["Spawn"]; ok {
-		p.Spawn = cast.ToBool(v)
-	}
 }
 
 func (p *Player) Serialize() map[string]any {
 	result := p.Attached.Serialize()
-
-	result["Spawn"] = p.Spawn
 
 	return result
 }

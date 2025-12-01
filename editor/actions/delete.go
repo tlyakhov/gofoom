@@ -4,6 +4,7 @@
 package actions
 
 import (
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/selection"
@@ -16,23 +17,17 @@ type Delete struct {
 	state.Action
 
 	Selected *selection.Selection
-	Saved    map[*selection.Selectable]any
 }
 
 func (a *Delete) Activate() {
-	a.Saved = make(map[*selection.Selectable]any)
 	a.Selected = selection.NewSelectionClone(a.State().Selection)
-
-	for _, obj := range a.Selected.Exact {
-		a.Saved[obj] = obj.Serialize()
-	}
 	a.apply()
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
 }
 
 func (a *Delete) apply() {
-	for s := range a.Saved {
+	for _, s := range a.Selected.Exact {
 		switch s.Type {
 		case selection.SelectableSector:
 			if s.Sector.IsExternal() {
@@ -61,9 +56,10 @@ func (a *Delete) apply() {
 			if s.Body.IsExternal() {
 				continue
 			}
-			if p := character.GetPlayer(s.Entity); p != nil && !p.Spawn {
-				// Otherwise weird things happen...
-				continue
+			if p := character.GetPlayer(s.Entity); p != nil {
+				if s := behaviors.GetSpawner(s.Entity); s == nil {
+					continue
+				}
 			}
 			ecs.Delete(s.Entity)
 		case selection.SelectableInternalSegment, selection.SelectableInternalSegmentA, selection.SelectableInternalSegmentB:

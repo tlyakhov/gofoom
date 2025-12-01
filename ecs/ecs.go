@@ -449,7 +449,7 @@ func Load(filename string) error {
 	file := NewAttachedComponent(1, SourceFileCID).(*SourceFile)
 	file.Source = filename
 	file.ID = 0
-	file.Flags = ComponentLockedInEditor
+	file.Flags = ComponentLockedEntityInEditor | ComponentNoSave | ComponentActive
 	return file.Load()
 }
 

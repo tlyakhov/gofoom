@@ -156,8 +156,10 @@ func CreateSpawn() {
 	e := ecs.NewEntity()
 	player := &character.Player{}
 	player.Construct(nil)
-	player.Spawn = true
 	ecs.AttachTyped(e, &player)
+	spawner := &behaviors.Spawner{}
+	spawner.Construct(nil)
+	ecs.AttachTyped(e, &spawner)
 	body := &core.Body{}
 	body.Construct(nil)
 	body.Pos.SetAll(concepts.Vector3{50, 50, 40})
@@ -173,7 +175,7 @@ func CreateSpawn() {
 	carrier.Construct(nil)
 	ecs.AttachTyped(e, &carrier)
 
-	Respawn(true)
+	Respawn(spawner)
 }
 
 func CreateTestWorld() {

@@ -4,6 +4,7 @@
 package materials
 
 import (
+	"bufio"
 	"image"
 	"os"
 
@@ -67,7 +68,7 @@ func (img *Image) Load() error {
 		return err
 	}
 	defer file.Close()
-	img.Image, _, err = image.Decode(file)
+	img.Image, _, err = image.Decode(bufio.NewReader(file))
 	if err != nil {
 		return err
 	}

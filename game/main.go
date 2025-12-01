@@ -18,15 +18,10 @@ import (
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/ui"
 
+	_ "image/png"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/render"
 	_ "tlyakhov/gofoom/scripting_symbols"
-
-	// "math"
-	// "math/rand"
-	// "os"
-
-	_ "image/png"
 
 	"github.com/gopxl/pixel/v2"
 	"github.com/gopxl/pixel/v2/backends/opengl"
@@ -55,9 +50,6 @@ func integrateGame() {
 	if inMenu {
 		menuInput()
 	} else if renderer.Player != nil {
-		if gunSlot != nil && gunSlot.Count.Now > 0 {
-			renderer.Carrier.SelectedWeapon = gunSlot.Entity
-		}
 		gameInput()
 		ecs.ActAllControllers(ecs.ControllerFrame)
 	}
@@ -145,8 +137,7 @@ func run() {
 		log.Printf("Error loading world %v", err)
 		return
 	}
-	validateSpawn()
-	controllers.Respawn(true)
+	controllers.RespawnAll()
 	archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 
 	renderer = render.NewRenderer()

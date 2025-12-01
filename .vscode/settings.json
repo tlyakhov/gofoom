@@ -10,5 +10,6 @@
         "escape": true
       }
     }
-  }
+  },
+  "workbench.tree.indent": 14
 }

@@ -7,6 +7,7 @@ import (
 	"log"
 	"math"
 	"math/rand/v2"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -368,10 +369,11 @@ func (mc *MobileController) bodyBodyCollide() {
 			return true
 		}
 
-		if p := character.GetPlayer(body.Entity); p != nil && p.Spawn {
-			// Ignore spawn points
+		if s := behaviors.GetSpawner(body.Entity); s != nil {
+			// If this is a spawn point, skip it
 			return true
 		}
+
 		// From https://www.myphysicslab.com/engine2D/collision-en.html
 		d2 := mc.pos.DistSq(&body.Pos.Now)
 		r_a := mc.Body.Size.Now[0] * 0.5

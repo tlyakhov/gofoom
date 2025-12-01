@@ -24,6 +24,9 @@ const (
 	// ComponentLockedInEditor indicates that the component should be locked in
 	// the editor, preventing modifications.
 	ComponentLockedInEditor
+	// ComponentLockedEntityInEditor indicates that the whole entity should be
+	// locked in the editor, preventing modifications.
+	ComponentLockedEntityInEditor
 )
 
 // ComponentInternal is a combination of flags indicating that the component is
@@ -32,7 +35,7 @@ const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLoc
 
 // EntityInternal is a combination of flags indicating that the entire entity is
 // internal to the engine and should not be saved or modified by the user.
-const EntityInternal = ComponentInternal | ComponentHideEntityInEditor
+const EntityInternal = ComponentInternal | ComponentHideEntityInEditor | ComponentLockedEntityInEditor
 
 //go:generate go run github.com/dmarkham/enumer -type=FieldFlags -json
 type FieldFlags uint16

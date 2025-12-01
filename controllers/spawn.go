@@ -4,9 +4,10 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
-	"tlyakhov/gofoom/components/character"
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/ecs"
@@ -88,70 +89,72 @@ func RespawnInventory(c *inventory.Carrier) {
 	}
 }
 
-func Respawn(force bool) {
-	core.QuadTree.Reset()
-
-	spawns := make([]*character.Player, 0)
-	players := make([]*character.Player, 0)
-	arena := ecs.ArenaFor[character.Player](character.PlayerCID)
-	for i := range arena.Cap() {
-		p := arena.Value(i)
-		if p == nil || !p.IsActive() {
-			continue
-		}
-		if p.Spawn {
-			spawns = append(spawns, p)
-		} else {
-			players = append(players, p)
-		}
-	}
-
-	// Remove extra players
-	// By default, avoid spawning a player if one exists
-	maxPlayers := 1
-	if force {
-		maxPlayers = 0
-	}
-
-	for len(players) > maxPlayers {
-		player := players[len(players)-1]
+func Respawn(s *behaviors.Spawner) {
+	// First, delete previously spawned entities
+	for e := range s.Spawned {
 		// Need to delete old inventory slots
-		if carrier := inventory.GetCarrier(player.Entity); carrier != nil {
+		if carrier := inventory.GetCarrier(e); carrier != nil {
 			for _, slot := range carrier.Slots {
 				// Don't need to check for zero, Delete will ignore it.
 				ecs.Delete(slot)
 			}
 			carrier.Slots = ecs.EntityTable{}
 		}
-		ecs.Delete(player.Entity)
-		players = players[:len(players)-1]
+		ecs.Delete(e)
 	}
 
-	if len(players) > 0 || len(spawns) == 0 {
+	// Pick a random spawner
+	randomSpawner := s.Entity
+	if s.Entities.Len() > 0 {
+		picked := rand.Int() % s.Entities.Len()
+		i := 0
+		for _, e := range s.Entities {
+			if e == 0 {
+				continue
+			}
+			if i == picked {
+				randomSpawner = e
+				break
+			}
+			i++
+		}
+	}
+	if randomSpawner == 0 {
+		log.Printf("Error, no spawners found for %v", s.Entity)
 		return
 	}
 
-	spawn := spawns[rand.Int()%len(spawns)]
-
-	CloneEntity(spawn.Entity, func(e ecs.Entity, cid ecs.ComponentID, _ ecs.Component, pasted ecs.Component) bool {
+	CloneEntity(randomSpawner, func(e ecs.Entity, cid ecs.ComponentID, _ ecs.Component, pasted ecs.Component) bool {
+		pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
 		switch cid {
+		case behaviors.SpawnerCID:
+			return false
 		case ecs.LinkedCID:
 			// Don't copy over linked components, we shouldn't tie anything
-			// to the newly spawned player.
+			// to the newly spawned entity.
 			return false
-		case character.PlayerCID:
-			player := pasted.(*character.Player)
-			player.Spawn = false
-			player.Flags |= ecs.ComponentHideEntityInEditor
 		case ecs.NamedCID:
 			named := pasted.(*ecs.Named)
-			named.Name = "Player"
+			named.Name = fmt.Sprintf("%v (spawned from %v)", named.Name, randomSpawner.ShortString())
 		case inventory.CarrierCID:
 			carrier := pasted.(*inventory.Carrier)
 			RespawnInventory(carrier)
 		}
 		return true
 	})
+}
+
+func RespawnAll() {
+	// TODO: move this out of here
+	core.QuadTree.Reset()
+	arena := ecs.ArenaFor[behaviors.Spawner](behaviors.SpawnerCID)
+	for i := range arena.Cap() {
+		s := arena.Value(i)
+		if s == nil {
+			continue
+		}
+		Respawn(s)
+	}
 }
 
 func ResetAllSpawnables() {
