@@ -115,7 +115,7 @@ func (ac *ActionController) Recalculate() {
 
 	if closest != nil {
 		ac.State.Action = closest.Entity
-		ac.State.LastTransition = ecs.Simulation.Timestamp
+		ac.State.LastTransition = ecs.Simulation.SimTimestamp
 	}
 }
 
@@ -123,7 +123,7 @@ func (ac *ActionController) timedAction(timed *behaviors.ActionTimed) timedState
 	if timed.Fired.Contains(ac.Entity) {
 		return timedFired
 	}
-	if ecs.Simulation.Timestamp-ac.State.LastTransition < int64(timed.Delay.Now) {
+	if ecs.Simulation.SimTimestamp-ac.State.LastTransition < concepts.MillisToNanos(timed.Delay.Now) {
 		return timedDelayed
 	}
 
@@ -332,7 +332,7 @@ func (ac *ActionController) Frame() {
 	}
 
 	if t := behaviors.GetActionTransition(ac.State.Action); t != nil {
-		ac.State.LastTransition = ecs.Simulation.Timestamp
+		ac.State.LastTransition = ecs.Simulation.SimTimestamp
 		if len(t.Next) > 0 {
 			i := rand.Intn(len(t.Next))
 			for _, next := range t.Next {

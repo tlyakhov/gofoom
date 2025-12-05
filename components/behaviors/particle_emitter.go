@@ -49,7 +49,7 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 		particles := ecs.ParseEntityTable(v, false)
 		for _, e := range particles {
 			if e != 0 {
-				pe.Spawned[e] = ecs.Simulation.Timestamp
+				pe.Spawned[e] = ecs.Simulation.SimTimestamp
 			}
 		}
 	}

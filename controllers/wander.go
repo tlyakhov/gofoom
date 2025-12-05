@@ -52,7 +52,7 @@ func (wc *WanderController) Frame() {
 		wc.NextSector = wc.Body.SectorEntity
 	}
 
-	if ecs.Simulation.Timestamp-wc.LastTurn > int64(300+rand.Intn(100)) {
+	if ecs.Simulation.SimTimestamp-wc.LastTurn > concepts.MillisToNanos(float64(300+rand.Intn(100))) {
 		a := wc.Body.Angle.NewAnimation()
 		a.Coordinates = dynamic.AnimationCoordinatesAbsolute
 		a.Start = wc.Body.Angle.Now
@@ -67,9 +67,9 @@ func (wc *WanderController) Frame() {
 		a.Duration = 300
 		a.TweeningFunc = dynamic.EaseInOut2
 		a.Lifetime = dynamic.AnimationLifetimeOnce
-		wc.LastTurn = ecs.Simulation.Timestamp
+		wc.LastTurn = ecs.Simulation.SimTimestamp
 	}
-	if ecs.Simulation.Timestamp-wc.LastTarget > int64(5000+rand.Intn(5000)) {
+	if ecs.Simulation.SimTimestamp-wc.LastTarget > concepts.MillisToNanos(float64(5000+rand.Intn(5000))) {
 		sector := wc.Body.Sector()
 		if sector == nil {
 			return
@@ -90,6 +90,6 @@ func (wc *WanderController) Frame() {
 		if closestSegment != nil {
 			wc.NextSector = closestSegment.AdjacentSector
 		}
-		wc.LastTarget = ecs.Simulation.Timestamp
+		wc.LastTarget = ecs.Simulation.SimTimestamp
 	}
 }

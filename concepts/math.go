@@ -63,3 +63,11 @@ func MinimizeAngleDistance(src float64, dst *float64) {
 		*dst += 360
 	}
 }
+
+func NanosToMillis(nanos int64) float64 {
+	return float64(nanos) / 1_000_000
+}
+
+func MillisToNanos(millis float64) int64 {
+	return int64(millis * 1_000_000)
+}

@@ -50,7 +50,7 @@ func (pc *ParticleController) Target(target ecs.Component, e ecs.Entity) bool {
 func (pc *ParticleController) Frame() {
 	toRemove := make([]ecs.Entity, 0, 10)
 	for e, timestamp := range pc.Spawned {
-		age := float64(ecs.Simulation.Timestamp - timestamp)
+		age := float64(ecs.Simulation.SimTimestamp-timestamp) / 1_000_000.0
 
 		if vis := materials.GetVisible(e); vis != nil {
 			fade := (age - (pc.Lifetime - pc.FadeTime)) / pc.FadeTime
@@ -75,7 +75,7 @@ func (pc *ParticleController) Frame() {
 	// Approximate the probability that we should spawn a particle this frame.
 	// For example, for 10 particles over 10,000ms, we would get:
 	// 10/(10000/7.8) = 0.0078
-	probability := float64(pc.Limit) / (pc.Lifetime / constants.TimeStep)
+	probability := float64(pc.Limit) / (pc.Lifetime / constants.TimeStepMS)
 	// if this probability is > 1, we need to spawn more than one particle per
 	// frame.
 	iterations := int(probability) + 1
@@ -88,7 +88,7 @@ func (pc *ParticleController) Frame() {
 
 		flags := ecs.ComponentActive | ecs.ComponentHideEntityInEditor | ecs.ComponentLockedInEditor
 		e := ecs.NewEntity()
-		pc.Spawned[e] = ecs.Simulation.Timestamp
+		pc.Spawned[e] = ecs.Simulation.SimTimestamp
 		body := ecs.NewAttachedComponent(e, core.BodyCID).(*core.Body)
 		body.Flags |= flags
 		vis := ecs.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)

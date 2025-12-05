@@ -5,8 +5,9 @@ package constants
 
 const (
 	// Simulation constants
-	TimeStep          = 1000.0 / 128.0 // calibrate to 128 frames per second
-	TimeStepS         = TimeStep / 1000.0
+	TimeStepNS        = 1_000_000_000.0 / 128.0 // calibrate to 128 frames per second
+	TimeStepMS        = TimeStepNS / 1_000_000.0
+	TimeStepS         = TimeStepMS / 1_000.0
 	MinMillisPerFrame = 1000.0 / 10.0 // Ensure we don't do a spiral of death at framerates < 10
 
 	// Rendering constants
@@ -57,10 +58,10 @@ const (
 	PlayerBoundingRadius = 10.0
 	PlayerHeight         = 40.0
 	PlayerCrouchHeight   = 16.0
-	PlayerWalkForce      = 10.0 * PlayerMass * TimeStep // Newtons (we work backwards and aim for X meters/time step)
-	PlayerTurnSpeed      = 180.0                        // Degrees per second
-	PlayerJumpForce      = 60.0 * PlayerMass * TimeStep // Newtons
-	PlayerSwimStrength   = 20.0 * PlayerMass * TimeStep
+	PlayerWalkForce      = 10.0 * PlayerMass * TimeStepMS // Newtons (we work backwards and aim for X meters/time step)
+	PlayerTurnSpeed      = 180.0                          // Degrees per second
+	PlayerJumpForce      = 60.0 * PlayerMass * TimeStepMS // Newtons
+	PlayerSwimStrength   = 20.0 * PlayerMass * TimeStepMS
 	PlayerHurtTime       = 30
 	PlayerMountHeight    = 15.0
 	PlayerMaxHealth      = 100

@@ -121,7 +121,7 @@ func run() {
 	}
 
 	win.SetSmooth(false)
-	win.SetCursorDisabled()
+	//win.SetCursorDisabled()
 
 	ecs.Initialize()
 	ecs.Simulation.Integrate = integrateGame
