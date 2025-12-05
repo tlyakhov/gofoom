@@ -25,18 +25,18 @@ type Weapon struct {
 	// Internal state
 	State              WeaponState
 	Intent             WeaponIntent `editable:"Intent"`
-	LastStateTimestamp int64        // in ms
+	LastStateTimestamp int64        // in ns
 	// TODO: We should serialize these
 	Marks deque.Deque[WeaponMark]
 }
 
 func (w *Weapon) StateDuration() int64 {
-	return ecs.Simulation.Timestamp - w.LastStateTimestamp
+	return ecs.Simulation.SimTimestamp - w.LastStateTimestamp
 }
 
 func (w *Weapon) StateCompleted() bool {
 	if wc := GetWeaponClass(w.Entity); wc != nil {
-		return float64(w.StateDuration()) >= wc.Params[w.State].Time
+		return w.StateDuration() >= int64(wc.Params[w.State].Time*1_000_000)
 	}
 	return false
 }

@@ -73,9 +73,9 @@ func (a *Animation[T]) Animate() {
 		return
 	}
 	if a.Reverse {
-		a.Percent -= constants.TimeStep / a.Duration
+		a.Percent -= constants.TimeStepMS / a.Duration
 	} else {
-		a.Percent += constants.TimeStep / a.Duration
+		a.Percent += constants.TimeStepMS / a.Duration
 	}
 	a.Percent = concepts.Clamp(a.Percent, 0, 1)
 	percent := a.Percent

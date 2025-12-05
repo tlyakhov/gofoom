@@ -16,7 +16,7 @@ type Wander struct {
 	AsImpulse bool    `editable:"Apply as impulse"`
 
 	// Internal state
-	LastTurn   int64
+	LastTurn   int64 // nanoseconds
 	LastTarget int64
 	NextSector ecs.Entity
 }
@@ -29,7 +29,7 @@ func (w *Wander) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 
 	w.Force = 10
-	w.LastTurn = ecs.Simulation.Timestamp
+	w.LastTurn = ecs.Simulation.SimTimestamp
 
 	if data == nil {
 		return

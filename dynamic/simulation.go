@@ -14,12 +14,12 @@ import (
 type Simulation struct {
 	EditorPaused     bool
 	Recalculate      bool
-	FrameMillis      float64 // Milliseconds
+	FrameNanos       int64 // Nanoseconds
 	RenderStateBlend float64
 	FPS              float64
-	PrevTimestamp    int64 // Milliseconds
+	PrevTimestamp    int64 // Nanoseconds
 	// Wall clock time
-	Timestamp int64 // Milliseconds
+	Timestamp int64 // Nanoseconds
 	// Simulation time (excludes rendering, increments at constant rate)
 	SimTimestamp int64 // Milliseconds
 	Counter      uint64
@@ -31,14 +31,13 @@ type Simulation struct {
 	Spawnables   map[Spawnable]struct{} //  *xsync.MapOf[Spawnable, struct{}]
 	Events       EventQueue
 
-	simTime    float64
-	renderTime float64
+	renderTime int64
 }
 
 func NewSimulation() *Simulation {
 	return &Simulation{
-		PrevTimestamp: hrtime.Now().Milliseconds(),
-		Timestamp:     hrtime.Now().Milliseconds(),
+		PrevTimestamp: hrtime.Now().Nanoseconds(),
+		Timestamp:     hrtime.Now().Nanoseconds(),
 		SimTimestamp:  0,
 		EditorPaused:  false,
 		Dynamics:      make(map[Dynamic]struct{}),
@@ -51,17 +50,17 @@ func (s *Simulation) Step() {
 	// time to a ledger. Would be great for DOOM style "demos", replays, and
 	// also for debugging weird edge cases.
 	s.PrevTimestamp = s.Timestamp
-	s.Timestamp = hrtime.Now().Milliseconds()
-	s.FrameMillis = float64(s.Timestamp - s.PrevTimestamp)
-	if s.FrameMillis != 0 {
-		s.FPS = 1000.0 / s.FrameMillis
+	s.Timestamp = hrtime.Now().Nanoseconds()
+	s.FrameNanos = s.Timestamp - s.PrevTimestamp
+	if s.FrameNanos != 0 {
+		s.FPS = float64(1_000_000_000) / float64(s.FrameNanos)
 	}
 
-	if s.FrameMillis > constants.MinMillisPerFrame {
-		s.FrameMillis = constants.MinMillisPerFrame
+	if s.FrameNanos > constants.MinMillisPerFrame*1_000_000 {
+		s.FrameNanos = constants.MinMillisPerFrame * 1_000_000
 	}
 
-	s.renderTime += s.FrameMillis
+	s.renderTime += s.FrameNanos
 
 	if s.NewFrame != nil {
 		s.NewFrame()
@@ -71,7 +70,7 @@ func (s *Simulation) Step() {
 		d.NewFrame()
 	}
 
-	for s.renderTime >= constants.TimeStep {
+	for s.renderTime >= constants.TimeStepNS {
 		for d := range s.Dynamics {
 			if a := d.GetAnimation(); a != nil && !s.EditorPaused {
 				a.Animate()
@@ -87,12 +86,12 @@ func (s *Simulation) Step() {
 		}
 
 		s.Counter++
-		s.renderTime -= constants.TimeStep
-		s.simTime += constants.TimeStep
+		s.renderTime -= constants.TimeStepNS
+		s.SimTimestamp += constants.TimeStepNS
 	}
 
 	// Update the blended values
-	s.RenderStateBlend = s.renderTime / constants.TimeStep
+	s.RenderStateBlend = float64(s.renderTime) / float64(constants.TimeStepNS)
 
 	for d := range s.Dynamics {
 		if s.Recalculate {
@@ -116,8 +115,9 @@ func (s *Simulation) Step() {
 // NewEvent wraps adding a timestamped event to the queue
 func (s *Simulation) NewEvent(id EventID, data any) {
 	s.Events.PushEvent(&Event{
-		ID:        id,
-		Timestamp: s.Timestamp,
-		Data:      data,
+		ID:           id,
+		Timestamp:    s.Timestamp,
+		SimTimestamp: s.SimTimestamp,
+		Data:         data,
 	})
 }

@@ -8,9 +8,10 @@ import (
 type EventID int
 
 type Event struct {
-	ID        EventID
-	Timestamp int64 // Milliseconds
-	Data      any
+	ID           EventID
+	Timestamp    int64 // Milliseconds
+	SimTimestamp int64 // Milliseconds
+	Data         any
 }
 
 type EventClass struct {

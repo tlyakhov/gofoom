@@ -154,9 +154,9 @@ func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 }
 
 func (w *WeaponController) NewState(s inventory.WeaponState) {
-	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, ecs.Simulation.Timestamp-w.LastStateTimestamp)
+	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, ecs.Simulation.SimTimestamp-w.LastStateTimestamp)
 	w.State = s
-	w.LastStateTimestamp = ecs.Simulation.Timestamp
+	w.LastStateTimestamp = ecs.Simulation.SimTimestamp
 	p := w.Class.Params[w.State]
 	if p.Sound != 0 {
 		audio.PlaySound(p.Sound, w.Body.Entity, "weapon "+s.String(), false)

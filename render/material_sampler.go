@@ -114,7 +114,7 @@ func (ms *MaterialSampler) frob(stage *materials.ShaderStage, sample *concepts.V
 		return
 	}
 
-	pulse := math.Sin(float64(ecs.Simulation.Timestamp)*0.005)*0.5 + 1.0
+	pulse := math.Sin(concepts.NanosToMillis(ecs.Simulation.SimTimestamp)*0.005)*0.5 + 1.0
 	hsp := concepts.RGBtoHSP(sample.To3D())
 	hsp[2] *= 2.0 * pulse
 	hsp[0] = 0.15
@@ -147,7 +147,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 
 		if (stage.Flags & materials.ShaderLiquid) != 0 {
-			lv, lu := math.Sincos(float64(ecs.Simulation.Timestamp) * 0.05 * constants.LiquidChurnSpeed * concepts.Deg2rad)
+			lv, lu := math.Sincos(concepts.NanosToMillis(ecs.Simulation.SimTimestamp) * 0.05 * constants.LiquidChurnSpeed * concepts.Deg2rad)
 			u += lu * constants.LiquidChurnSize
 			v += lv * constants.LiquidChurnSize
 		}

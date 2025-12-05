@@ -33,7 +33,7 @@ func (s *Spawner) Construct(data map[string]any) {
 		spawned := ecs.ParseEntityTable(v, false)
 		for _, e := range spawned {
 			if e != 0 {
-				s.Spawned[e] = ecs.Simulation.Timestamp
+				s.Spawned[e] = ecs.Simulation.SimTimestamp
 			}
 		}
 	}
