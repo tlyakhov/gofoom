@@ -111,22 +111,38 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 
 	// Erase current slot
 	(*table)[i] = nil
-	// Compact/rehash by moving non-nil elements in slots that don't match their
-	// hash value.
-	prev := i
-	i = (i + 1) % size
+
+	// Compact/rehash by moving non-nil elements that are displaced into the
+	// newly created hole.
+	j := (i + 1) % size
 	for range size {
-		if (*table)[i] == nil {
+		if (*table)[j] == nil {
 			return
 		}
-		cid := (*table)[i].ComponentID()
-		hash := cid % size
-		if hash != i {
-			(*table)[prev], (*table)[i] = (*table)[i], nil
+		cid := (*table)[j].ComponentID()
+		k := cid % size
+
+		// Check if the element at j is displaced and should fill the hole at i.
+		// The element at j should move to i if i is "between" k and j cyclically.
+		// That is, if i falls in the range [k, j).
+		shouldMove := false
+		if k <= j {
+			// Normal case: k <= j. Range is [k, j).
+			if k <= i && i < j {
+				shouldMove = true
+			}
 		} else {
-			return
+			// Wrap-around case: k > j. Range is [k, size) U [0, j).
+			if k <= i || i < j {
+				shouldMove = true
+			}
 		}
-		prev = i
-		i = (i + 1) % size
+
+		if shouldMove {
+			(*table)[i] = (*table)[j]
+			(*table)[j] = nil
+			i = j
+		}
+		j = (j + 1) % size
 	}
 }
