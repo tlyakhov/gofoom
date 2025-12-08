@@ -41,6 +41,13 @@ func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.Compo
 		}
 		pastedComponent := ecs.LoadComponentWithoutAttaching(cid, pastedComponentData)
 		if onCloneComponent == nil || onCloneComponent(pastedEntity, cid, originalComponent, pastedComponent) {
+			ecs.ModifyComponentRelationEntities(pastedComponent, func(r *ecs.Relation, ref ecs.Entity) ecs.Entity {
+				// Update self-references to the new entity
+				if ref == e {
+					return pastedEntity
+				}
+				return ref
+			})
 			ecs.Attach(cid, pastedEntity, &pastedComponent)
 		}
 	}
@@ -102,6 +109,7 @@ func Respawn(s *behaviors.Spawner) {
 		}
 		ecs.Delete(e)
 	}
+	s.Spawned = make(map[ecs.Entity]int64)
 
 	// Pick a random spawner
 	randomSpawner := s.Entity
@@ -124,7 +132,7 @@ func Respawn(s *behaviors.Spawner) {
 		return
 	}
 
-	CloneEntity(randomSpawner, func(e ecs.Entity, cid ecs.ComponentID, _ ecs.Component, pasted ecs.Component) bool {
+	pastedEntity := CloneEntity(randomSpawner, func(e ecs.Entity, cid ecs.ComponentID, _ ecs.Component, pasted ecs.Component) bool {
 		pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
 		switch cid {
 		case behaviors.SpawnerCID:
@@ -142,6 +150,12 @@ func Respawn(s *behaviors.Spawner) {
 		}
 		return true
 	})
+
+	if pastedEntity != 0 {
+		s.Spawned[pastedEntity] = ecs.Simulation.SimTimestamp
+		spawnee := ecs.NewAttachedComponent(pastedEntity, behaviors.SpawneeCID).(*behaviors.Spawnee)
+		spawnee.Flags = ecs.ComponentActive | ecs.ComponentLockedInEditor | ecs.ComponentHideEntityInEditor
+	}
 }
 
 func RespawnAll() {

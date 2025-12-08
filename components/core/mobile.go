@@ -52,6 +52,9 @@ func (m *Mobile) Construct(data map[string]any) {
 	m.Attached.Construct(data)
 
 	m.Vel.Construct(nil)
+	m.Force[0] = 0
+	m.Force[1] = 0
+	m.Force[2] = 0
 
 	m.Elasticity = 0.5
 	m.CrBody = CollideNone

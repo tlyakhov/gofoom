@@ -45,6 +45,7 @@ func init() {
 		"PickUpInventoryItem":       reflect.ValueOf(controllers.PickUpInventoryItem),
 		"ResetAllSpawnables":        reflect.ValueOf(controllers.ResetAllSpawnables),
 		"Respawn":                   reflect.ValueOf(controllers.Respawn),
+		"RespawnAll":                reflect.ValueOf(controllers.RespawnAll),
 		"RespawnInventory":          reflect.ValueOf(controllers.RespawnInventory),
 
 		// type definitions

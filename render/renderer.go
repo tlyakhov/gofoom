@@ -63,6 +63,8 @@ func (r *Renderer) Initialize() {
 		r.Blocks[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
 		r.Blocks[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
+		r.Blocks[i].Bodies = make(containers.Set[*core.Body])
+		r.Blocks[i].InternalSegments = make(map[*core.InternalSegment]*core.Sector)
 	}
 
 	r.xorSeed = concepts.RngXorShift64(uint64(hrtime.Now().Milliseconds()))
@@ -402,8 +404,8 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	block.LightSampler.xorSeed = r.xorSeed
 	block.MaterialSampler = MaterialSampler{Config: r.Config, Ray: &block.Ray}
 	ewd2s := make([]*entityWithDistSq, 0, 64)
-	block.Bodies = make(containers.Set[*core.Body])
-	block.InternalSegments = make(map[*core.InternalSegment]*core.Sector)
+	clear(block.Bodies)
+	clear(block.InternalSegments)
 	for i := range block.LightLastColHashes {
 		block.LightLastColHashes[i] = 0
 	}

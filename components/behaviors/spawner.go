@@ -5,11 +5,16 @@ package behaviors
 
 import (
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type Spawner struct {
 	ecs.Attached `editable:"^"`
 
+	DeleteSpawnedOnDetach bool `editable:"Delete Spawned on Detach"`
+
+	// See behaviors.Spawnee for the other side of this relation
 	Spawned map[ecs.Entity]int64
 }
 
@@ -21,12 +26,27 @@ func (s *Spawner) String() string {
 	return "Spawner"
 }
 
+func (s *Spawner) OnDetach(e ecs.Entity) {
+	defer s.Attached.OnDetach(e)
+	if !s.IsAttached() || !s.DeleteSpawnedOnDetach {
+		return
+	}
+	for e := range s.Spawned {
+		ecs.Delete(e)
+	}
+}
+
 func (s *Spawner) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Spawned = make(map[ecs.Entity]int64)
+	s.DeleteSpawnedOnDetach = true
 
 	if data == nil {
 		return
+	}
+
+	if v, ok := data["DeleteSpawnedOnDetach"]; ok {
+		s.DeleteSpawnedOnDetach = cast.ToBool(v)
 	}
 
 	if v, ok := data["Spawned"]; ok {
@@ -42,6 +62,9 @@ func (s *Spawner) Construct(data map[string]any) {
 func (s *Spawner) Serialize() map[string]any {
 	result := s.Attached.Serialize()
 
+	if !s.DeleteSpawnedOnDetach {
+		result["DeleteSpawnedOnDetach"] = false
+	}
 	if len(s.Spawned) > 0 {
 		spawned := make(ecs.EntityTable, 0)
 		for e := range s.Spawned {
