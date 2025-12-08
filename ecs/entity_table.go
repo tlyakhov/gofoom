@@ -100,23 +100,36 @@ func (table *EntityTable) Delete(entity Entity) bool {
 
 	// Erase current slot
 	(*table)[i] = 0
-	// Compact/rehash by moving non-nil elements in slots that don't match their
-	// hash value.
-	prev := i
-	i = (i + 1) % size
+
+	// See https://en.wikipedia.org/wiki/Open_addressing
+	// Compact/rehash by moving non-nil elements that are displaced into the
+	// newly created hole.
+	j := i
 	for range size {
-		if (*table)[i] == 0 {
+		j = (j + 1) % size
+		if (*table)[j] == 0 {
 			return true
 		}
-		e := (*table)[i]
-		hash := uint32(e) % size
-		if hash != i {
-			(*table)[prev], (*table)[i] = (*table)[i], 0
+		hash := uint32((*table)[j]) % size
+
+		// Check if the element at j is displaced and should fill the hole at i.
+		// The element at j should move to i if i is "between" hash and j cyclically.
+		// That is, if i falls in the range [hash, j).
+		if i <= j {
+			// Normal case: hash <= j. Range is [hash, j).
+			if i < hash && hash <= j {
+				continue
+			}
 		} else {
-			return true
+			// Wrap-around case: hash > j. Range is [hash, size) U [0, j).
+			if hash <= j || i < hash {
+				continue
+			}
 		}
-		prev = i
-		i = (i + 1) % size
+
+		(*table)[i] = (*table)[j]
+		(*table)[j] = 0
+		i = j
 	}
 	return true
 }

@@ -112,37 +112,35 @@ func (table *ComponentTable) Delete(cid ComponentID) {
 	// Erase current slot
 	(*table)[i] = nil
 
+	// See https://en.wikipedia.org/wiki/Open_addressing
 	// Compact/rehash by moving non-nil elements that are displaced into the
 	// newly created hole.
-	j := (i + 1) % size
+	j := i
 	for range size {
+		j = (j + 1) % size
 		if (*table)[j] == nil {
 			return
 		}
 		cid := (*table)[j].ComponentID()
-		k := cid % size
+		hash := cid % size
 
 		// Check if the element at j is displaced and should fill the hole at i.
-		// The element at j should move to i if i is "between" k and j cyclically.
-		// That is, if i falls in the range [k, j).
-		shouldMove := false
-		if k <= j {
-			// Normal case: k <= j. Range is [k, j).
-			if k <= i && i < j {
-				shouldMove = true
+		// The element at j should move to i if i is "between" hash and j cyclically.
+		// That is, if i falls in the range [hash, j).
+		if i <= j {
+			// Normal case: hash <= j. Range is [hash, j).
+			if i < hash && hash <= j {
+				continue
 			}
 		} else {
-			// Wrap-around case: k > j. Range is [k, size) U [0, j).
-			if k <= i || i < j {
-				shouldMove = true
+			// Wrap-around case: hash > j. Range is [hash, size) U [0, j).
+			if hash <= j || i < hash {
+				continue
 			}
 		}
 
-		if shouldMove {
-			(*table)[i] = (*table)[j]
-			(*table)[j] = nil
-			i = j
-		}
-		j = (j + 1) % size
+		(*table)[i] = (*table)[j]
+		(*table)[j] = nil
+		i = j
 	}
 }

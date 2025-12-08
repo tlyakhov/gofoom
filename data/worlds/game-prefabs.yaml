@@ -6,14 +6,9 @@
 - Entity: ∈⋮3∈⋮Flub
   behaviors.Alive:
     Health: 100
-  ecs.Linked:
-    Sources:
-    - ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
   ecs.Named:
     Name: Flub
   inventory.Weapon: {}
-  materials.Image: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
-  materials.Lit: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
   materials.SpriteSheet:
     Angles: "8"
     Cols: "4"
@@ -23,7 +18,7 @@
       Now: "0"
       Response: 0
       Spawn: "0"
-    Material: ∈⋮3∈⋮Flub
+    Material: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
     Rows: "2"
   materials.Visible:
     Ambient: 1

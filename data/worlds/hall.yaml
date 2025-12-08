@@ -28,21 +28,81 @@
       Text material on top of a regular
       Texture
     LineSpacing: 1.05
-- Entity: ∈⋮10∈⋮Player
+- Entity: ∈⋮9∈⋮FlubTest+%28spawned+from+42%29
+  behaviors.Actor:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AngularSpeed: 15
+    NoZ: true
+    Speed: 350
+    Start: ∈⋮138
+  behaviors.ActorState:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Action: ∈⋮139
   behaviors.Alive:
-    Health: 52
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Health: 100
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angle:
+      Now: 83453.31734993891
+      Procedural: true
+      Spawn: 155.9558816022554
+    Pos:
+      Now: 14.148480682020049, -46.169207741367494, 16
+      Spawn: -20, -30, -50
+    Size:
+      Now: 32, 32
+      Procedural: true
+      Spawn: 32, 32
+    StepSound: ∈⋮165∈⋮Step
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel:
+      Now: -0.8065303108470488, -0.5840621691860266, 0.02608713672588061
+      Spawn: 0, 0, 0
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: FlubTest (spawned from 42)
+  inventory.Weapon:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+  materials.SpriteSheet:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angles: "8"
+    Cols: "4"
+    Frame:
+      Damping: 0
+      Freq: 1e-06
+      Now: "0"
+      Response: 0
+      Spawn: "0"
+    Material: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
+    Rows: "2"
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮10∈⋮Spawn+%28spawned+from+126%29
+  behaviors.Alive:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Health: 100
   character.Player:
     _Flags: ComponentActive|ComponentHideEntityInEditor
   core.Body:
-    Angle:
-      Now: 659.53125
-      Spawn: 0
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angle: 0
     Pos:
-      Now: -380.76008031331423, 163.6892606931563, -44
+      Now: -390, 180, -44.00000000000001
       Spawn: -390, 180, -44
     Size: 15, 40
     StepSound: ∈⋮165∈⋮Step
   core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
     CrMoving: CollideNone
     CrPlayer: CollideNone
     CrWall: CollideSeparate
@@ -50,32 +110,43 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: -0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000014733379039253246,
-        0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026008051234953173,
-        0.0000007001650411977748
+      Now: 0, 0, 0.007001650411977742
       Spawn: 0, 0, 0
   ecs.Named:
-    Name: Player
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Spawn (spawned from 126)
   inventory.Carrier:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
     Inventory:
-    - ∈⋮11
-    - ∈⋮12
-    - ∈⋮14
-    SelectedWeapon: ∈⋮14
-- Entity: ∈⋮11
-  inventory.Slot:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Class: Flower
-    Count: "0"
-    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
-    Limit: "100"
+    - ∈⋮243
+    - ∈⋮245
+    - ∈⋮247
+    SelectedWeapon: ∈⋮243
 - Entity: ∈⋮12
-  inventory.Slot:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Class: Red Keycard
-    Count: "0"
-    Image: ∈⋮16
-    Limit: "1"
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 659.5609130668854, -584.6026126785374, 5.307451980496253
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.6776564772265727, -0.0002622310967368526, -0.44851242139813285
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮13∈⋮Stained+Glass
   ecs.Linked:
     Sources:
@@ -87,35 +158,55 @@
     Ambient: 0, 0, 0
     Diffuse: 1, 1, 1, 0.5
 - Entity: ∈⋮14
-  inventory.Slot:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Class: WeirdGun
-    Count:
-      Now: "1"
-      Spawn: "0"
-    Image: ∈⋮132∈⋮Weird+Gun
-    Limit: "1"
-  inventory.WeaponClass:
-    Damage: 10
-    FlashMaterial: ∈⋮17∈⋮Muzzle+Flash+Shader
-    MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮62bf0202
-    MarkSize: 2.5
-    Params:
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Sound: ∈⋮190
-      Time: 100
-    - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
-      Sound: ∈⋮197
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
-    Spread: 3
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 582.3161199032296, -354.27705407911816, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.000000000000021820590242985198, 0.0000000000000018764198291157637, 0.02608689392203089
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 0.2265625
+- Entity: ∈⋮15
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 591.7526697803468, -360.305309368853, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.00000000001880049459468573, 0.0000000000015314694939483903, 0.02608689392203089
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮16
   ecs.Linked:
     AlwaysReplace: true
@@ -475,12 +566,12 @@
         Material: ∈⋮82∈⋮ggrass_top+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -782,11 +873,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.9084640701239394
-        Reverse: false
+        Percent: 0.3203125
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -400, 60, -51.912109375
+      Now: -400, 60, -48.29150390625
       Spawn: -400, 60, -52
     Size: 20, 20
   ecs.Linked:
@@ -1333,19 +1424,19 @@
     AngularSpeed: 15
     NoZ: true
     Speed: 350
-    Start: ∈⋮135
+    Start: ∈⋮138
   behaviors.ActorState:
-    Action: ∈⋮147
-  behaviors.Alive:
-    Health: 94
+    Action: ∈⋮138
+  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮9∈⋮FlubTest+%28spawned+from+42%29
   core.Body:
     Angle:
-      Now: 83249.21040809622
+      Now: 83505.96375653206
       Procedural: true
       Spawn: 155.9558816022554
-    Pos:
-      Now: -314.8096347866883, -84.16204929987947, -31.162179651157548
-      Spawn: -10, -30, -50
+    Pos: -20, -30, -50
     Size:
       Now: 32, 32
       Procedural: true
@@ -1359,31 +1450,17 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: 0.09902897786502496, 1.365200729540725, -1.3529129004759275
+      Now: 1.047176015749189, -0.03337080885717754, 0.026087159215764336
       Spawn: 0, 0, 0
   ecs.Linked:
     AlwaysReplace: true
     Sources:
-    - ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
+    - ∈⋮3∈⋮Flub∈⋮2edae4ab
   ecs.Named:
     Name: FlubTest
   inventory.Weapon: {}
-  materials.Image: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
-  materials.Lit: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
-  materials.SpriteSheet:
-    Angles: "8"
-    Cols: "4"
-    Frame:
-      Damping: 0
-      Freq: 1e-06
-      Now: "0"
-      Response: 0
-      Spawn: "0"
-    Material: ∈⋮42∈⋮FlubTest
-    Rows: "2"
-  materials.Visible:
-    Ambient: 1
-    Shadow: ShadowImage
+  materials.SpriteSheet: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
 - Entity: ∈⋮43
   core.Sector:
     Bottom:
@@ -3006,12 +3083,12 @@
         Material: ∈⋮82∈⋮ggrass_top+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -3082,12 +3159,12 @@
         Material: ∈⋮82∈⋮ggrass_top+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -3106,7 +3183,7 @@
     Close:
       Code: audio.PlaySound(231,door.Entity, "Door " + door.Entity.String(), false)
     Duration: 1000
-    Intent: DoorIntentOpen
+    Intent: DoorIntentReset
     Limit: 0
     Open:
       Code: audio.PlaySound(198,door.Entity, "Door " + door.Entity.String(), false)
@@ -3122,9 +3199,7 @@
     Segments:
     - Hi:
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
-        Transform:
-          Now: 1, 0, 0, 0, 0.0032262725830078287, 0.9967737274169922
-          Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
+        Transform: 1, 0, 0, 0, 0.003375000000000017, 0.996625
       Lo:
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -360, 20
@@ -3157,9 +3232,7 @@
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
     - Hi:
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
-        Transform:
-          Now: 1, 0, 0, 0, 0.0032262725830078287, 0.9967737274169922
-          Spawn: 1, 0, 0, 0, 0.003375000000000017, 0.996625
+        Transform: 1, 0, 0, 0, 0.003375000000000017, 0.996625
       Lo:
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -280, 30
@@ -3168,9 +3241,7 @@
     - AdjacentSector: ∈⋮45
       Hi:
         Material: ∈⋮107∈⋮wool_colored_gray+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
-        Transform:
-          Now: 1, 0, 0, 0, 1.5294921875, -0.5294921874999999
-          Spawn: 1, 0, 0, 0, 1.6, -0.6
+        Transform: 1, 0, 0, 0, 1.6, -0.6
       Lo:
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -280, 20
@@ -3181,16 +3252,16 @@
         Material: ∈⋮82∈⋮ggrass_top+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: -64
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: -58.359375
+        Now: -64
         Spawn: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -3981,6 +4052,31 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
+- Entity: ∈⋮98
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 856.5432831400108, -644.4611596756586, 32.08398614310296
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -13.826867439956883, -0.9561775575819664, 0.3359445724118465
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮99
   core.Sector:
     Bottom:
@@ -4229,7 +4325,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 724.3104959034814, -408.8724137072121, 18.411991171188195
+      Now: 645, -669.9418310070166, 17.72425751401497
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -4241,7 +4337,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -9.330611959009213, 0.5117674674641285, -2.643198481612468
+      Now: -0.000000000028282217826652715, -0.1893864156700629, -3.5068941158103906
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
@@ -4483,31 +4579,6 @@
       Z: 80
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮113
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.2832183105356, -578.3108827528021, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.00000007495586055157861, 0.0000000000935267202081913, 0.0016304308701269301
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮114
   core.Sector:
     Bottom:
@@ -4700,6 +4771,31 @@
       Z: 100
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
+- Entity: ∈⋮119
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 645, -709.9490258662432, 26.179628865558787
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.9111227622907521, 0.002121536346414233, 3.0162306973707107
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮120
   core.Sector:
     Bottom:
@@ -4752,13 +4848,38 @@
     Attenuation: 0.4
     Diffuse: 1, 0.8, 0.1
     Strength: 2
+- Entity: ∈⋮122
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 733.7468556014958, -680.115928481129, 9.841538809443978
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -9.5790982633649, 0.2565272360553913, -3.2489183291966164
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮123
   behaviors.Proximity: ∈⋮3∈⋮Bubble
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 663.320611132546, -638.8504623398417, 5
+      Now: 576.8512762964883, -341.78107510373957, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -4770,38 +4891,13 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.0000006459992927585841, -0.0000000006604226653221462, 0.0016304308701269336
+      Now: -0.0000000000007652785819954644, 0.000000000000022664181303537624, 0.026086893922030896
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮124
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 601.725950046352, -448.39780038095597, 5.298006995694711
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -5.616411652462374, 0.36794089764190263, 0.556416338442201
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
+    Ambient: 0.6171875
 - Entity: ∈⋮125
   core.Body:
     Angle: 0
@@ -4812,11 +4908,10 @@
     Diffuse: 0, 0.5, 0
     Strength: 10
 - Entity: ∈⋮126∈⋮Spawn
-  behaviors.Alive:
-    Health: 52
+  behaviors.Alive: ∈⋮8∈⋮∈⋮2edae4ab
   behaviors.Spawner:
     Spawned:
-    - ∈⋮10∈⋮Player
+    - ∈⋮10∈⋮Spawn+%28spawned+from+126%29
   character.Player: {}
   core.Body:
     Angle: 0
@@ -4831,20 +4926,19 @@
     Mass: 80
     MountHeight: 15
     Vel: 0, 0, 0
+  ecs.Linked:
+    Sources:
+    - ∈⋮8∈⋮∈⋮2edae4ab
   ecs.Named:
     Name: Spawn
-  inventory.Carrier:
-    Inventory:
-    - ∈⋮189
-    - ∈⋮177
-    - ∈⋮169
+  inventory.Carrier: ∈⋮8∈⋮∈⋮2edae4ab
 - Entity: ∈⋮127
   behaviors.Proximity: ∈⋮3∈⋮Bubble
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 662.4268013472524, -676.437594082668, 5
+      Now: 785.4062137487202, -667.1777353465836, 31.781790298581704
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -4856,7 +4950,32 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.21683227086878934, 0.00015809436437632236, 0.0016305095404848665
+      Now: -11.206804834935486, 0.6722749908654494, -0.890414089099828
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮128
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 645, -666.3217571532857, 39.00835071160458
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.00000016952493096832157, 0.37679596193351633, -0.8778937227772846
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
@@ -4869,7 +4988,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 662.1119020929018, -666.9870344425757, 5
+      Now: 645, -651.547182222035, 35.61497119561514
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -4881,32 +5000,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.30387799878220606, 0.00033727991002218224, 0.0016306926693249518
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮130
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.234866200741, -586.1521063469821, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.000000012173810175477072, 0.000000000005321291461524825, 0.001630430870126931
+      Now: -0.000000023006703769351387, 0.4562753276584729, -1.4826208614653795
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
@@ -4930,11 +5024,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.3284264034501162
-        Reverse: false
+        Percent: 0.515625
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -260, 60, -47.70556640625
+      Now: -260, 60, -47.009765625
       Spawn: -260, 60, -52
     Size: 20, 20
   ecs.Linked:
@@ -5124,7 +5218,6 @@
 - Entity: ∈⋮148∈⋮WeirdGun
   ecs.Named:
     Name: WeirdGun
-  inventory.WeaponClass: ∈⋮14
 - Entity: ∈⋮149
   core.Sector:
     Bottom:
@@ -5199,40 +5292,39 @@
     Speed: 100
     Start: ∈⋮150
   behaviors.ActorState:
-    Action: ∈⋮150
+    Action: ∈⋮151
   behaviors.ParticleEmitter:
     Limit: "30"
     Particles:
-    - ∈⋮130
-    - ∈⋮161
-    - ∈⋮233
-    - ∈⋮194
-    - ∈⋮235
-    - ∈⋮188
-    - ∈⋮171
-    - ∈⋮172
-    - ∈⋮107
-    - ∈⋮174
-    - ∈⋮158
-    - ∈⋮124
-    - ∈⋮199
-    - ∈⋮178
-    - ∈⋮113
-    - ∈⋮212
-    - ∈⋮214
-    - ∈⋮215
-    - ∈⋮216
-    - ∈⋮187
-    - ∈⋮155
-    - ∈⋮221
-    - ∈⋮157
-    - ∈⋮123
-    - ∈⋮159
-    - ∈⋮127
-    - ∈⋮227
-    - ∈⋮228
+    - ∈⋮162
+    - ∈⋮223
     - ∈⋮129
-    - ∈⋮230
+    - ∈⋮234
+    - ∈⋮155
+    - ∈⋮236
+    - ∈⋮237
+    - ∈⋮205
+    - ∈⋮107
+    - ∈⋮239
+    - ∈⋮175
+    - ∈⋮233
+    - ∈⋮12
+    - ∈⋮154
+    - ∈⋮14
+    - ∈⋮15
+    - ∈⋮119
+    - ∈⋮153
+    - ∈⋮187
+    - ∈⋮188
+    - ∈⋮122
+    - ∈⋮190
+    - ∈⋮224
+    - ∈⋮123
+    - ∈⋮127
+    - ∈⋮128
+    - ∈⋮227
+    - ∈⋮161
+    - ∈⋮98
     Source: ∈⋮3∈⋮Bubble
     Vel: 15
     XYSpread: 10
@@ -5240,7 +5332,7 @@
   core.Body:
     Angle: 180
     Pos:
-      Now: 860, -369.72339847263726, 32
+      Now: 860, -629.4442698184084, 32
       Procedural: true
       Spawn: 860, -710, 32
     Size: 20, 20
@@ -5262,13 +5354,63 @@
   materials.Visible:
     Ambient: 1
     Shadow: ShadowImage
+- Entity: ∈⋮153
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 755.9072076493107, -671.3937309178707, 17.971663614118928
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -10.265304120837905, 0.025516554693706953, -2.6349113986254946
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮154
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 805.4781149214558, -655.9648891833624, 32.37196312723722
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -11.90403212774869, 0.5368858880347727, -0.5206517577239957
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮155
   behaviors.Proximity: ∈⋮3∈⋮Bubble
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 678.484432558546, -707.3269452098613, 5
+      Now: 591.8463448098231, -484.12665920607617, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -5280,82 +5422,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.000004659545737523759, -0.0000005703146828130071, 0.0016304308701271175
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮157
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.256783595785, -691.6709276520306, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.003116274596242036, 0.000002858211644270338, 0.0016304309521874292
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮158
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.5047559842146, -658.3971234686393, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.000005227566109016596, -0.00000003964722936813471, 0.0016304308701271626
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮159
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 598.0650237031492, -505, 32.3124580713802
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -2.4724066929646873, -0.0000007000849236715095, -2.065322014179746
+      Now: -0.000000016957078672057876, 0.00000000045929891609786676, 0.026086893922030882
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
@@ -5415,7 +5482,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 664.5133136358562, -635.4798921147961, 5
+      Now: 646.8022071920144, -602.110594050537, 14.241194011881417
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -5427,7 +5494,32 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.000017512371966140748, 0.0000017274130951039171, 0.0016304308701295565
+      Now: 0.5004761393114682, -0.007978433441919161, -0.32445084621277304
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮162
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 811.5302472639964, -654.9468018868145, 31.85951312719677
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -12.097812600103497, 0.867864267389219, -0.563107300084033
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
@@ -5442,11 +5534,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.11484742418323846
-        Reverse: false
+        Percent: 0.09375
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 230, -860, -15.478515625
+      Now: 230, -860, -19.6484375
       Spawn: 230, -860, -20
     Size: 15, 15
   ecs.Linked:
@@ -5487,7 +5579,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0, 0, 0.0016304208434173365
+      Now: 0, 0, 0.026086733494677383
       Spawn: 0, 0, 0
   ecs.Linked:
     AlwaysReplace: true
@@ -5640,12 +5732,12 @@
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       Z:
         Animation:
-          Active: true
+          Active: false
           Coordinates: AnimationCoordinatesAbsolute
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
+          Percent: 1
           Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
@@ -5653,15 +5745,6 @@
         Spawn: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮169
-  inventory.Slot:
-    Class: WeirdGun
-    Count:
-      Now: "1"
-      Spawn: "0"
-    Image: ∈⋮132∈⋮Weird+Gun
-    Limit: "1"
-  inventory.WeaponClass: ∈⋮14
 - Entity: ∈⋮170
   core.Body:
     Angle: 0
@@ -5671,56 +5754,6 @@
     Attenuation: 0.4
     Diffuse: 1, 1, 1
     Strength: 2
-- Entity: ∈⋮171
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.2639052860304, -737.7332421960797, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.012810361936929561, -0.00001632061024727619, 0.0016304321810917182
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮172
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.1362521111137, -682.7834524076968, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.028732349682628073, 0.000002005111041273279, 0.001630436418779268
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮173
   core.Sector:
     Bottom:
@@ -5767,13 +5800,13 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮174
+- Entity: ∈⋮175
   behaviors.Proximity: ∈⋮3∈⋮Bubble
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 654.952295924837, -660.7905531647654, 8.534440444081
+      Now: 581.8452779865505, -367.4726826750983, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -5785,13 +5818,13 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.6704502800803884, 0.0012915962668996767, -0.44346664649335515
+      Now: -0.0000000000006768751781788245, -0.00000000000004211323306112074, 0.02608689392203089
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
+    Ambient: 0.625
 - Entity: ∈⋮176
   core.Body:
     Angle: 0
@@ -5800,11 +5833,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.45849611710100746
-        Reverse: false
+        Percent: 0.359375
+        Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 40, -250, 10
+      Now: 40, -250, 8.208984375
       Spawn: 40, -250, 4
     Size: 20, 20
   ecs.Linked:
@@ -5813,37 +5846,6 @@
   inventory.Item: ∈⋮32∈⋮Flower+%28Starting+Room%29
   materials.SpriteSheet: ∈⋮32∈⋮Flower+%28Starting+Room%29
   materials.Visible: ∈⋮32∈⋮Flower+%28Starting+Room%29
-- Entity: ∈⋮177
-  inventory.Slot:
-    Class: Red Keycard
-    Count: "0"
-    Image: ∈⋮16
-    Limit: "1"
-- Entity: ∈⋮178
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 655.76060438607, -561.0109646587144, 7.968456766326964
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 1.2901281792868649, 0.21614271882841737, -0.8769874002544163
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮179
   core.Sector:
     Bottom:
@@ -6083,7 +6085,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 663.7580438774487, -661.4298606239983, 5
+      Now: 567.8396537861425, -346.18113522106904, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -6095,20 +6097,20 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.00022238520567249075, 0.000014066011713727382, 0.0016304308705481193
+      Now: -0.0000000000013663666457285706, 0.000000000000018639537184335934, 0.026086893922030882
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
+    Ambient: 0.640625
 - Entity: ∈⋮188
   behaviors.Proximity: ∈⋮3∈⋮Bubble
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 555.7770230340308, -468.45725381338247, 5
+      Now: 658.5649822091189, -556.2504421800313, 6.004810274640037
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -6120,19 +6122,38 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -1.7745132803346808, 0.1482758639978975, 0.0016311026000725782
+      Now: 0.676890302277378, 0.001051044243261049, -0.44797594615619873
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮189
-  inventory.Slot:
-    Class: Flower
-    Count: "0"
-    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
-    Limit: "100"
+- Entity: ∈⋮190
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 647.7284030119401, -608.9619939583021, 13.592664716911107
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.5571289688190091, -0.04918297011198213, -0.364119119856143
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮191
   core.Sector:
     Bottom:
@@ -6300,31 +6321,6 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮194
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 593.9892638728919, -470.7922352945649, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.5942937236368696, 0.020403067469392484, 0.001630672406916782
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮195
   core.Body:
     Angle: 0
@@ -6390,31 +6386,6 @@
     Source: data/sounds/warp2.ogg
   ecs.Named:
     Name: Door Open
-- Entity: ∈⋮199
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 661.4714071524787, -695.8994549612144, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.4877903076255403, -0.00028390981762476373, 0.0016012074265268255
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮200
   core.Sector:
     Bottom:
@@ -6526,6 +6497,31 @@
     Source: data/sounds/collect.wav
   ecs.Named:
     Name: Collect
+- Entity: ∈⋮205
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 646.7661474460036, -604.0550269304032, 14.266443317864091
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.4960345629150883, 0.056669175027029776, -0.321340847024442
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮206
   core.Light:
     Attenuation: 0.4
@@ -6620,31 +6616,6 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮212
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 625.8200645681657, -456.00360259014326, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -6.48434803991289, -0.16956585205359545, 0.046865869539542165
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮213
   core.Sector:
     Bottom:
@@ -6716,81 +6687,6 @@
       Z: 150
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮214
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 678.9506987276438, -685.8840995067383, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.1445892073968293, -0.017267896598630934, 0.0016304828570717807
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮215
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 669.8873753680538, -608.0359504135635, 5.050057744283553
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 1.8692068320317472, -0.25216090017749865, -0.009946116385175813
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮216
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 674.0547221316749, -658.6234817221105, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.020044309897109282, 0.00010904922140108516, 0.0016304338571305546
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮217
   core.Sector:
     Bottom:
@@ -6932,31 +6828,6 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮221
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 653.2710401949646, -656.2297280214495, 9.711668379795922
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.6519813627370415, -0.011468675773467725, -0.45489803764724696
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮222
   core.Sector:
     Bottom:
@@ -7006,6 +6877,56 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
+- Entity: ∈⋮223
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 575.8390178626804, -374.32724923210077, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.000000000006555461410124219, -0.000000000000425279857389888, 0.026086893922030882
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 0.859375
+- Entity: ∈⋮224
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 574.5495544517943, -416.19658926875337, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.00000000008418698675714193, -0.0000000000064271020828694336, 0.026086893922030896
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮225
   core.Sector:
     Bottom:
@@ -7104,7 +7025,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 671.6580138715885, -589.5397155578214, 5.345661937699223
+      Now: 586.2146802265075, -406.5133955921397, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7116,32 +7037,7 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.910213733140437, 0.13681925644384102, 0.3839502618377929
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮228
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 655.3237335726004, -646.070429152821, 8.274357003142207
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 1.2552919874521715, -0.27684196016809265, -0.877308427508115
+      Now: -0.00000000005837406319004844, -0.000000000002581773027168385, 0.02608689392203089
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
@@ -7156,31 +7052,6 @@
     - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-- Entity: ∈⋮230
-  behaviors.Proximity: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 647.9470658764712, -578.4251863148845, 13.439555330839882
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.5682994669104379, 0.0022973477915837117, -0.3719407085191056
-      Spawn: 0, 0, 0
-  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮231∈⋮Door+Close
   audio.Sound:
     ConvertToMono: true
@@ -7193,9 +7064,10 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 653.4636677292575, -608.0780252888619, 9.576789128217275
-      Spawn: 0, 0, 0
+      Now: 649.9507531133878, -580.863598098998, 12.036558423336384
+      Spawn: -390, 180, -44
     Size: 10, 10
+    StepSound: ∈⋮165∈⋮Step
   core.Mobile:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     CrMoving: CollideNone
@@ -7205,20 +7077,20 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.6529368036233953, -0.007880495077815675, -0.4555670440909772
+      Now: 0.6275592316801096, 0.028413056727262773, -0.4134343565114691
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮235
+- Entity: ∈⋮234
   behaviors.Proximity: ∈⋮3∈⋮Bubble
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 823.7308578757837, -390.15522379122785, 33.35144776160478
+      Now: 566.7952311575141, -480.485780290727, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7230,7 +7102,82 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -12.566752669539545, -0.49563870645081154, 0.08894385927255935
+      Now: -0.00000008433721368104213, 0.000000006682376517407004, 0.026086893922030896
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮236
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 647.6476971807156, -650.797835296621, 13.649175548311987
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.5542978024504238, -0.0724169863639011, -0.36213672394289825
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮237
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 645.5928782709465, -642.4654091188693, 15.08797523858819
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.3371518542848849, -0.014761763778585601, -0.21009007723369574
+      Spawn: 0, 0, 0
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮239
+  behaviors.Proximity: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 645, -647.2303817673129, 20.058592773312302
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.0013978862346075175, -0.09488313083166337, -0.11243465080122685
       Spawn: 0, 0, 0
   materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
@@ -7332,6 +7279,14 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
+- Entity: ∈⋮243
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: WeirdGun
+    Count: "1"
+    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+    Limit: "1"
+  inventory.WeaponClass: ∈⋮9∈⋮∈⋮2edae4ab
 - Entity: ∈⋮244
   core.Sector:
     Bottom:
@@ -7410,11 +7365,25 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
+- Entity: ∈⋮245
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Red Keycard
+    Count: "0"
+    Image: ∈⋮5∈⋮∈⋮2edae4ab
+    Limit: "1"
 - Entity: ∈⋮246∈⋮Inventory+Item+Base
   ecs.Named:
     Name: Inventory Item Base
   materials.Lit: ∈⋮132∈⋮Weird+Gun
   materials.Visible: ∈⋮32∈⋮Flower+%28Starting+Room%29
+- Entity: ∈⋮247
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Flower
+    Count: "0"
+    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
+    Limit: "100"
 - Entity: ∈⋮249∈⋮Flower+Inventory+Item
   ecs.Named:
     Name: Flower Inventory Item

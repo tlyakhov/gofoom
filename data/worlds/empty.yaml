@@ -15,34 +15,34 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: -100, -100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, -100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, 100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: -100, 100
-      Surface:
-        Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: -100, -100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, -100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, 100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: -100, 100
+        Surface:
+          Material: ∈⋮2∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
@@ -67,7 +67,7 @@
     Health: 100
   behaviors.Spawner:
     Spawned:
-    - ∈⋮6∈⋮Player
+      - ∈⋮6∈⋮Player
   character.Player: {}
   core.Body:
     Angle: 0
@@ -88,6 +88,8 @@
 - Entity: ∈⋮6∈⋮Player
   behaviors.Alive:
     Health: 100
+  behaviors.Spawnee:
+    Spawner: ∈⋮5
   character.Player: {}
   core.Body:
     Angle: 0

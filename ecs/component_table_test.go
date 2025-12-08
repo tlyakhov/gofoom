@@ -92,7 +92,7 @@ func BenchmarkGet(b *testing.B) {
 	// Divide the result by 1000
 	b.Run("Get", func(b *testing.B) {
 		b.ResetTimer()
-		for range b.N {
+		for b.Loop() {
 			b.StopTimer()
 			index := rand.Intn(len(cp)-1) + 1
 			entity := Entity(rand.Intn(numEntities-1) + 1)

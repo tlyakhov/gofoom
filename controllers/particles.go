@@ -89,13 +89,17 @@ func (pc *ParticleController) Frame() {
 		flags := ecs.ComponentActive | ecs.ComponentHideEntityInEditor | ecs.ComponentLockedInEditor
 		e := ecs.NewEntity()
 		pc.Spawned[e] = ecs.Simulation.SimTimestamp
+		// Each particle has its own position
 		body := ecs.NewAttachedComponent(e, core.BodyCID).(*core.Body)
 		body.Flags |= flags
+		// Each particle has its own opacity
 		vis := ecs.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
 		vis.Flags |= flags
+		// Each particle has its own dynamics
 		mobile := ecs.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
 		mobile.Flags |= flags
 
+		// TODO: Replace this with an ecs.Linked component?
 		ecs.Link(e, pc.Source)
 		body.Pos.Now.From(&pc.Body.Pos.Now)
 		hAngle := pc.Body.Angle.Now + (rand.Float64()-0.5)*pc.XYSpread

@@ -15,35 +15,35 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: -100, -100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - AdjacentSector: ∈⋮6
-      Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, -100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, 100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: -100, 100
-      Surface:
-        Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: -100, -100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮6
+        Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, -100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, 100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: -100, 100
+        Surface:
+          Material: ∈⋮2∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
@@ -68,7 +68,7 @@
     Health: 100
   behaviors.Spawner:
     Spawned:
-    - ∈⋮11∈⋮Player
+      - ∈⋮11∈⋮Player
   character.Player: {}
   core.Body:
     Angle: 0
@@ -94,57 +94,57 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - AdjacentSector: ∈⋮3∈⋮Starting
-      Hi: {}
-      Lo: {}
-      P: 100, 100
-      Surface: {}
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, -100
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, -530
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 280, -530
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - AdjacentSector: ∈⋮7
-      Hi: {}
-      Lo: {}
-      P: 280, -400
-      Surface: {}
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo: {}
-      P: 280, -310
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 280, 420
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 100, 420
-      Surface:
-        Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮3∈⋮Starting
+        Hi: {}
+        Lo: {}
+        P: 100, 100
+        Surface: {}
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, -100
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, -530
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 280, -530
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮7
+        Hi: {}
+        Lo: {}
+        P: 280, -400
+        Surface: {}
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo: {}
+        P: 280, -310
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 280, 420
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 100, 420
+        Surface:
+          Material: ∈⋮2∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
@@ -159,63 +159,63 @@
       Z: 0
     FloorFriction: 0.85
     Segments:
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 280, -400
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 380, -400
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 380, -530
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 620, -530
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 620, -200
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 380, -200
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 380, -310
-      Surface:
-        Material: ∈⋮2∈⋮Default
-    - AdjacentSector: ∈⋮6
-      Hi:
-        Material: ∈⋮2∈⋮Default
-      Lo:
-        Material: ∈⋮2∈⋮Default
-      P: 280, -310
-      Surface:
-        Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 280, -400
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 380, -400
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 380, -530
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 620, -530
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 620, -200
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 380, -200
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 380, -310
+        Surface:
+          Material: ∈⋮2∈⋮Default
+      - AdjacentSector: ∈⋮6
+        Hi:
+          Material: ∈⋮2∈⋮Default
+        Lo:
+          Material: ∈⋮2∈⋮Default
+        P: 280, -310
+        Surface:
+          Material: ∈⋮2∈⋮Default
     Top:
       Surface:
         Material: ∈⋮2∈⋮Default
@@ -243,6 +243,8 @@
 - Entity: ∈⋮11∈⋮Player
   behaviors.Alive:
     Health: 100
+  behaviors.Spawnee:
+    Spawner: ∈⋮5
   character.Player: {}
   core.Body:
     Angle: 0

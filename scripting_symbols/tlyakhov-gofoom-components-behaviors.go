@@ -55,6 +55,8 @@ func init() {
 		"GetPlayerTargetable":    reflect.ValueOf(behaviors.GetPlayerTargetable),
 		"GetProximity":           reflect.ValueOf(behaviors.GetProximity),
 		"GetProximityState":      reflect.ValueOf(behaviors.GetProximityState),
+		"GetSpawnee":             reflect.ValueOf(behaviors.GetSpawnee),
+		"GetSpawner":             reflect.ValueOf(behaviors.GetSpawner),
 		"GetUnderwater":          reflect.ValueOf(behaviors.GetUnderwater),
 		"GetWander":              reflect.ValueOf(behaviors.GetWander),
 		"IterateActions":         reflect.ValueOf(behaviors.IterateActions),
@@ -75,6 +77,8 @@ func init() {
 		"ProximityTargetsBody":   reflect.ValueOf(behaviors.ProximityTargetsBody),
 		"ProximityTargetsSector": reflect.ValueOf(behaviors.ProximityTargetsSector),
 		"ProximityWaiting":       reflect.ValueOf(behaviors.ProximityWaiting),
+		"SpawneeCID":             reflect.ValueOf(&behaviors.SpawneeCID).Elem(),
+		"SpawnerCID":             reflect.ValueOf(&behaviors.SpawnerCID).Elem(),
 		"UnderwaterCID":          reflect.ValueOf(&behaviors.UnderwaterCID).Elem(),
 		"WanderCID":              reflect.ValueOf(&behaviors.WanderCID).Elem(),
 
@@ -99,6 +103,8 @@ func init() {
 		"ProximityFlags":   reflect.ValueOf((*behaviors.ProximityFlags)(nil)),
 		"ProximityState":   reflect.ValueOf((*behaviors.ProximityState)(nil)),
 		"ProximityStatus":  reflect.ValueOf((*behaviors.ProximityStatus)(nil)),
+		"Spawnee":          reflect.ValueOf((*behaviors.Spawnee)(nil)),
+		"Spawner":          reflect.ValueOf((*behaviors.Spawner)(nil)),
 		"Underwater":       reflect.ValueOf((*behaviors.Underwater)(nil)),
 		"Wander":           reflect.ValueOf((*behaviors.Wander)(nil)),
 	}
