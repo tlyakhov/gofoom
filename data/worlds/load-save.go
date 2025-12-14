@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	_ "tlyakhov/gofoom/archetypes"
 	_ "tlyakhov/gofoom/components/behaviors"
 	_ "tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"

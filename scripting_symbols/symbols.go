@@ -3,7 +3,6 @@
 
 package scripting_symbols
 
-//go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/archetypes
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/concepts
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/constants
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/containers

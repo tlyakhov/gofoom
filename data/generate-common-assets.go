@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	_ "tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/audio"
 	_ "tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/materials"

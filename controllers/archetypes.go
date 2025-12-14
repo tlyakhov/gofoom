@@ -1,7 +1,7 @@
 // Copyright (c) Tim Lyakhovetskiy
 // SPDX-License-Identifier: MPL-2.0
 
-package archetypes
+package controllers
 
 import (
 	_ "tlyakhov/gofoom/components/behaviors"

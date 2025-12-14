@@ -11,7 +11,6 @@ import (
 
 	"github.com/gopxl/pixel/v2"
 
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
@@ -78,11 +77,9 @@ func initializeMenus() {
 					log.Printf("Error loading world %v: %v", path, err)
 					return
 				}
-				archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
+				controllers.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 				renderer.Initialize()
 				controllers.RespawnAll()
-				ecs.Simulation.Integrate = integrateGame
-				ecs.Simulation.Render = renderGame
 				gameUI.Config.TextStyle = renderer.NewTextStyle()
 				inMenu = false
 				gameUI.SetPage(nil)
