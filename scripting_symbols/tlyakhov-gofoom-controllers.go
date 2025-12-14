@@ -44,9 +44,8 @@ func init() {
 		"MovePlayerNoClip":          reflect.ValueOf(controllers.MovePlayerNoClip),
 		"PickUpInventoryItem":       reflect.ValueOf(controllers.PickUpInventoryItem),
 		"ResetAllSpawnables":        reflect.ValueOf(controllers.ResetAllSpawnables),
-		"Respawn":                   reflect.ValueOf(controllers.Respawn),
+		"Respawn":                   reflect.ValueOf(controllers.Spawn),
 		"RespawnAll":                reflect.ValueOf(controllers.RespawnAll),
-		"RespawnInventory":          reflect.ValueOf(controllers.RespawnInventory),
 
 		// type definitions
 		"ActionController":           reflect.ValueOf((*controllers.ActionController)(nil)),

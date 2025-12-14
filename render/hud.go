@@ -103,13 +103,24 @@ func (r *Renderer) renderHUD() {
 	}
 }
 
+// TODO: Should these be in a constants file?
+// TODO: Maybe we should load these kinds of style constants from a YAML
+// file to enable more modding.
+var healthBarEdgeColor = &concepts.Vector4{0, 0, 0, 1}
+var healthBarBlankColor = &concepts.Vector4{0, 0, 0, 0.5}
+var healthBarHealthColor = &concepts.Vector4{0, 1, 0, 1}
+var healthBarHighlightColor = &concepts.Vector4{1, 1, 1, 1}
+
 func (r *Renderer) renderHealthBar(b *core.Body) {
-	// TODO: Profile memory usage here. How many of these allocations escape
-	// to the heap?
+	// TODO: Profile this. Seems like a lot of logic here
 	alive := behaviors.GetAlive(b.Entity)
 	if alive == nil {
 		return
 	}
+	if spawner := behaviors.GetSpawner(b.Entity); spawner != nil {
+		return
+	}
+
 	top := &concepts.Vector3{}
 	top[0] = b.Pos.Render[0]
 	top[1] = b.Pos.Render[1]
@@ -123,25 +134,22 @@ func (r *Renderer) renderHealthBar(b *core.Body) {
 	yEnd := int(scr[1]) - 3
 	xStart := int(scr[0]) - 10
 	xEnd := int(scr[0]) + 11
-	// TODO: Should these be in a constants file?
-	// TODO: Maybe we should load these kinds of style constants from a YAML
-	// file to enable more modding.
-	edge := &concepts.Vector4{0, 0, 0, 1}
-	blank := &concepts.Vector4{0, 0, 0, 0.5}
-	health := &concepts.Vector4{0, 1, 0, 1}
 
-	alive.Tint(edge, &concepts.Vector4{1, 1, 1, 1})
-	alive.Tint(blank, &concepts.Vector4{1, 1, 1, 1})
+	edge := *healthBarEdgeColor
+	blank := *healthBarBlankColor
+
+	alive.Tint(&edge, healthBarHighlightColor)
+	alive.Tint(&blank, healthBarHighlightColor)
 
 	switch {
 	case alive.Health >= 33 && alive.Health < 66:
-		health[0] = 1
-		health[1] = 1
-		health[2] = 0
+		healthBarHealthColor[0] = 1
+		healthBarHealthColor[1] = 1
+		healthBarHealthColor[2] = 0
 	case alive.Health < 33:
-		health[0] = 1
-		health[1] = 0
-		health[2] = 0
+		healthBarHealthColor[0] = 1
+		healthBarHealthColor[1] = 0
+		healthBarHealthColor[2] = 0
 	}
 
 	for y := yStart; y < yEnd; y++ {
@@ -155,11 +163,11 @@ func (r *Renderer) renderHealthBar(b *core.Body) {
 			pixel := &r.FrameBuffer[x+y*r.ScreenWidth]
 			switch {
 			case x == xStart || y == yStart || x == xEnd-1 || y == yEnd-1:
-				concepts.BlendColors(pixel, edge, 1.0)
+				concepts.BlendColors(pixel, &edge, 1.0)
 			case x < xStart+int(alive.Health*float64(xEnd-xStart)/100.0):
-				concepts.BlendColors(pixel, health, 1.0)
+				concepts.BlendColors(pixel, healthBarHealthColor, 1.0)
 			default:
-				concepts.BlendColors(pixel, blank, 1.0)
+				concepts.BlendColors(pixel, &blank, 1.0)
 			}
 		}
 	}

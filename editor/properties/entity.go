@@ -81,6 +81,8 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		cids = append(cids, inventory.WeaponClassCID)
 	case "Sound":
 		cids = append(cids, audio.SoundCID)
+	case "Spawner":
+		cids = append(cids, behaviors.SpawnerCID)
 	}
 	for _, cid := range cids {
 		arena := ecs.ArenaByID(cid)

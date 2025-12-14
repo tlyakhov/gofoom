@@ -13,15 +13,14 @@ import (
 type ParticleEmitter struct {
 	ecs.Attached `editable:"^"`
 
-	Lifetime float64    `editable:"Lifetime"`  // ms
-	FadeTime float64    `editable:"Fade Time"` // ms
-	Limit    int        `editable:"Particle Count Limit"`
-	Source   ecs.Entity `editable:"Source" edit_type:"Material"`
-	XYSpread float64    `editable:"XY Spread"` // Degrees
-	ZSpread  float64    `editable:"Z Spread"`  // Degrees
-	Vel      float64    `editable:"Velocity"`
+	Lifetime float64 `editable:"Lifetime"`  // ms
+	FadeTime float64 `editable:"Fade Time"` // ms
+	Limit    int     `editable:"Particle Count Limit"`
+	XYSpread float64 `editable:"XY Spread"` // Degrees
+	ZSpread  float64 `editable:"Z Spread"`  // Degrees
+	Vel      float64 `editable:"Velocity"`
 
-	Spawned map[ecs.Entity]int64
+	Spawner ecs.Entity `editable:"Spawner" edit_type:"Spawner"`
 }
 
 func (pe *ParticleEmitter) String() string {
@@ -34,24 +33,13 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	pe.Lifetime = 5000
 	pe.FadeTime = 1000
 	pe.Limit = 30
-	pe.Source = 0
 	pe.XYSpread = 10
 	pe.ZSpread = 10
 	pe.Vel = 15
-
-	pe.Spawned = make(map[ecs.Entity]int64)
+	pe.Spawner = 0
 
 	if data == nil {
 		return
-	}
-
-	if v, ok := data["Particles"]; ok {
-		particles := ecs.ParseEntityTable(v, false)
-		for _, e := range particles {
-			if e != 0 {
-				pe.Spawned[e] = ecs.Simulation.SimTimestamp
-			}
-		}
 	}
 
 	if v, ok := data["Lifetime"]; ok {
@@ -72,21 +60,13 @@ func (pe *ParticleEmitter) Construct(data map[string]any) {
 	if v, ok := data["Limit"]; ok {
 		pe.Limit = cast.ToInt(v)
 	}
-	if v, ok := data["Source"]; ok {
-		pe.Source, _ = ecs.ParseEntity(v.(string))
+	if v, ok := data["Spawner"]; ok {
+		pe.Spawner, _ = ecs.ParseEntity(v.(string))
 	}
 }
 
 func (pe *ParticleEmitter) Serialize() map[string]any {
 	result := pe.Attached.Serialize()
-
-	if len(pe.Spawned) > 0 {
-		particles := make(ecs.EntityTable, 0)
-		for e := range pe.Spawned {
-			particles.Set(e)
-		}
-		result["Particles"] = particles.Serialize()
-	}
 
 	if pe.Lifetime != 5000 {
 		result["Lifetime"] = pe.Lifetime
@@ -97,8 +77,8 @@ func (pe *ParticleEmitter) Serialize() map[string]any {
 	if pe.Limit != 100 {
 		result["Limit"] = strconv.Itoa(pe.Limit)
 	}
-	if pe.Source != 0 {
-		result["Source"] = pe.Source.Serialize()
+	if pe.Spawner != 0 {
+		result["Spawner"] = pe.Spawner.Serialize()
 	}
 	result["XYSpread"] = pe.XYSpread
 	result["ZSpread"] = pe.ZSpread

@@ -30,6 +30,19 @@ func (c *Carrier) MultiAttachable() bool {
 	return true
 }
 
+func (c *Carrier) OnDetach(e ecs.Entity) {
+	defer c.Attached.OnDetach(e)
+	if !c.IsAttached() {
+		return
+	}
+	for _, slot := range c.Slots {
+		// Slots are not multi-attachable and therefore unique to their
+		// carriers. Spawners will copy them for players.
+		// Don't need to check for zero, Delete will ignore it.
+		ecs.Delete(slot)
+	}
+}
+
 func (c *Carrier) HasAtLeast(class string, min int) bool {
 	for _, e := range c.Slots {
 		if e == 0 {

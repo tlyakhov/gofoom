@@ -13,7 +13,9 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.ComponentID, copiedComponent ecs.Component, pastedComponent ecs.Component) bool) ecs.Entity {
+type cloneComponentFunc func(e ecs.Entity, cid ecs.ComponentID, copiedComponent ecs.Component, pastedComponent ecs.Component) bool
+
+func CloneEntity(e ecs.Entity, preserveLinks bool, onCloneComponent cloneComponentFunc) ecs.Entity {
 	// TODO: This kind of cloning operation is used in other places (e.g. the
 	// editor). Should this be pulled into ecs? Will need to figure out how to
 	// address deep vs. shallow cloning and wiring up any relationships.
@@ -34,6 +36,10 @@ func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.Compo
 				continue
 			}
 			originalComponent = ecs.GetComponent(refEntity, cid)
+			if preserveLinks {
+				ecs.Attach(cid, pastedEntity, &originalComponent)
+				continue
+			}
 			pastedComponentData = originalComponent.Serialize()
 		} else {
 			originalComponent = ecs.GetComponent(e, cid)
@@ -65,7 +71,7 @@ func CloneEntity(e ecs.Entity, onCloneComponent func(e ecs.Entity, cid ecs.Compo
 	return 0
 }
 
-func RespawnInventory(c *inventory.Carrier) {
+func spawnInventory(c *inventory.Carrier) {
 	// We have a copy of the spawn entity's carrier. Let's copy the slots over as
 	// well.
 	cloned := ecs.EntityTable{}
@@ -74,7 +80,7 @@ func RespawnInventory(c *inventory.Carrier) {
 		if copied == 0 {
 			continue
 		}
-		pasted := CloneEntity(copied, func(e ecs.Entity, cid ecs.ComponentID, original ecs.Component, pasted ecs.Component) bool {
+		pasted := CloneEntity(copied, false, func(e ecs.Entity, cid ecs.ComponentID, original ecs.Component, pasted ecs.Component) bool {
 			if cid == inventory.SlotCID {
 				pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
 				return true
@@ -96,21 +102,17 @@ func RespawnInventory(c *inventory.Carrier) {
 	}
 }
 
-func Respawn(s *behaviors.Spawner) {
-	// First, delete previously spawned entities
+func DeleteSpawned(s *behaviors.Spawner) {
 	for e := range s.Spawned {
-		// Need to delete old inventory slots
-		if carrier := inventory.GetCarrier(e); carrier != nil {
-			for _, slot := range carrier.Slots {
-				// Don't need to check for zero, Delete will ignore it.
-				ecs.Delete(slot)
-			}
-			carrier.Slots = ecs.EntityTable{}
+		// Validate that we have a link between Spawner and Spawnee.
+		if spawnee := behaviors.GetSpawnee(e); spawnee != nil && spawnee.Spawner == s.Entity {
+			ecs.Delete(e)
 		}
-		ecs.Delete(e)
 	}
 	s.Spawned = make(map[ecs.Entity]int64)
+}
 
+func Spawn(s *behaviors.Spawner) ecs.Entity {
 	// Pick a random spawner
 	randomSpawner := s.Entity
 	if s.Entities.Len() > 0 {
@@ -129,33 +131,37 @@ func Respawn(s *behaviors.Spawner) {
 	}
 	if randomSpawner == 0 {
 		log.Printf("Error, no spawners found for %v", s.Entity)
-		return
+		return 0
 	}
 
-	pastedEntity := CloneEntity(randomSpawner, func(e ecs.Entity, cid ecs.ComponentID, _ ecs.Component, pasted ecs.Component) bool {
-		pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
-		switch cid {
-		case behaviors.SpawnerCID:
-			return false
-		case ecs.LinkedCID:
-			// Don't copy over linked components, we shouldn't tie anything
-			// to the newly spawned entity.
-			return false
-		case ecs.NamedCID:
-			named := pasted.(*ecs.Named)
-			named.Name = fmt.Sprintf("%v (spawned from %v)", named.Name, randomSpawner.ShortString())
-		case inventory.CarrierCID:
-			carrier := pasted.(*inventory.Carrier)
-			RespawnInventory(carrier)
-		}
-		return true
-	})
+	pastedEntity := CloneEntity(randomSpawner, s.PreserveLinks,
+		func(e ecs.Entity, cid ecs.ComponentID, _ ecs.Component, pasted ecs.Component) bool {
+			pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
+			switch cid {
+			case behaviors.SpawnerCID:
+				// Don't copy over spawners
+				return false
+			case ecs.LinkedCID:
+				// By default, don't copy over linked components, we want spawned
+				// entities to have their own lifecycle without modifying the spawner.
+				return s.PreserveLinks
+			case ecs.NamedCID:
+				named := pasted.(*ecs.Named)
+				named.Name = fmt.Sprintf("%v (spawned from %v)", named.Name, randomSpawner.ShortString())
+			case inventory.CarrierCID:
+				carrier := pasted.(*inventory.Carrier)
+				spawnInventory(carrier)
+			}
+			return true
+		})
 
 	if pastedEntity != 0 {
 		s.Spawned[pastedEntity] = ecs.Simulation.SimTimestamp
 		spawnee := ecs.NewAttachedComponent(pastedEntity, behaviors.SpawneeCID).(*behaviors.Spawnee)
 		spawnee.Flags = ecs.ComponentActive | ecs.ComponentLockedInEditor | ecs.ComponentHideEntityInEditor
+		spawnee.Spawner = s.Entity
 	}
+	return pastedEntity
 }
 
 func RespawnAll() {
@@ -167,7 +173,8 @@ func RespawnAll() {
 		if s == nil {
 			continue
 		}
-		Respawn(s)
+		DeleteSpawned(s)
+		Spawn(s)
 	}
 }
 
