@@ -12,7 +12,6 @@ import (
 	"runtime"
 	"runtime/pprof"
 
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
@@ -121,7 +120,7 @@ func run() {
 	}
 
 	win.SetSmooth(false)
-	//win.SetCursorDisabled()
+	win.SetCursorDisabled()
 
 	ecs.Initialize()
 	ecs.Simulation.Integrate = integrateGame
@@ -138,7 +137,7 @@ func run() {
 		return
 	}
 	controllers.RespawnAll()
-	archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
+	controllers.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 
 	renderer = render.NewRenderer()
 	gameUI = &ui.UI{Renderer: renderer}

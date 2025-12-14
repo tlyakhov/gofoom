@@ -16,6 +16,8 @@ func init() {
 		"AutoPortal":                reflect.ValueOf(controllers.AutoPortal),
 		"BodySectorScript":          reflect.ValueOf(controllers.BodySectorScript),
 		"CloneEntity":               reflect.ValueOf(controllers.CloneEntity),
+		"CreateFont":                reflect.ValueOf(controllers.CreateFont),
+		"CreateLightBody":           reflect.ValueOf(controllers.CreateLightBody),
 		"CreateSpawn":               reflect.ValueOf(controllers.CreateSpawn),
 		"CreateTestDirt":            reflect.ValueOf(controllers.CreateTestDirt),
 		"CreateTestGrass":           reflect.ValueOf(controllers.CreateTestGrass),
@@ -27,6 +29,7 @@ func init() {
 		"CreateTestWorld2":          reflect.ValueOf(controllers.CreateTestWorld2),
 		"CreateTestWorld3":          reflect.ValueOf(controllers.CreateTestWorld3),
 		"DefaultMaterial":           reflect.ValueOf(controllers.DefaultMaterial),
+		"DeleteSpawned":             reflect.ValueOf(controllers.DeleteSpawned),
 		"EventIdBack":               reflect.ValueOf(&controllers.EventIdBack).Elem(),
 		"EventIdDown":               reflect.ValueOf(&controllers.EventIdDown).Elem(),
 		"EventIdForward":            reflect.ValueOf(&controllers.EventIdForward).Elem(),
@@ -44,8 +47,8 @@ func init() {
 		"MovePlayerNoClip":          reflect.ValueOf(controllers.MovePlayerNoClip),
 		"PickUpInventoryItem":       reflect.ValueOf(controllers.PickUpInventoryItem),
 		"ResetAllSpawnables":        reflect.ValueOf(controllers.ResetAllSpawnables),
-		"Respawn":                   reflect.ValueOf(controllers.Spawn),
 		"RespawnAll":                reflect.ValueOf(controllers.RespawnAll),
+		"Spawn":                     reflect.ValueOf(controllers.Spawn),
 
 		// type definitions
 		"ActionController":           reflect.ValueOf((*controllers.ActionController)(nil)),

@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
@@ -280,7 +279,7 @@ func (e *Editor) Load(filename string) {
 		return
 	}
 	controllers.RespawnAll()
-	archetypes.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
+	controllers.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
 	e.EntityList.ReIndex()
 	ecs.Simulation.NewFrame = e.NewFrame
 	ecs.Simulation.Integrate = e.Integrate

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"tlyakhov/gofoom/archetypes"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
@@ -200,7 +199,7 @@ func CreateTestWorld() {
 			}
 
 			if rand.Uint32()%45 == 0 {
-				eLight := archetypes.CreateLightBody()
+				eLight := CreateLightBody()
 				lightBody := core.GetBody(eLight)
 				lightBody.Pos.Spawn = concepts.Vector3{float64(x*scale) + rand.Float64()*float64(scale), float64(y*scale) + rand.Float64()*float64(scale), 200}
 				lightBody.Pos.ResetToSpawn()
@@ -242,7 +241,7 @@ func CreateTestWorld2() {
 	sector3.Top.Surface.Material = isky
 	sector3.Segments[1].Surface.Material = isky
 
-	eLight := archetypes.CreateLightBody()
+	eLight := CreateLightBody()
 	lightBody := core.GetBody(eLight)
 	lightBody.Pos.Spawn = concepts.Vector3{0, 0, 60}
 	lightBody.Pos.ResetToSpawn()
@@ -350,7 +349,7 @@ func CreateTestWorld3() {
 	}
 
 	for range 8 {
-		eLight := archetypes.CreateLightBody()
+		eLight := CreateLightBody()
 		lightBody := core.GetBody(eLight)
 		lightBody.Pos.Spawn = concepts.Vector3{float64(testw*scale) * rand.Float64(), float64(testh*scale) * rand.Float64(), 450}
 		lightBody.Pos.ResetToSpawn()

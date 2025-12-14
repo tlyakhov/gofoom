@@ -12,8 +12,6 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
-// TODO: Fix situations where sectors are on top of each other and shouldn't be
-// connected up
 func autoCheckSegment(a, b *core.SectorSegment) bool {
 	/* We have multiple cases:
 	1. The segments match, in which case their adjacencies should be wired up.
