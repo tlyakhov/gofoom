@@ -17,8 +17,9 @@ import (
 type ParticleController struct {
 	ecs.BaseController
 	*behaviors.ParticleEmitter
-	Body   *core.Body
-	Mobile *core.Mobile
+	Body    *core.Body
+	Mobile  *core.Mobile
+	Spawner *behaviors.Spawner
 }
 
 func init() {
@@ -44,12 +45,19 @@ func (pc *ParticleController) Target(target ecs.Component, e ecs.Entity) bool {
 		return false
 	}
 	pc.Mobile = core.GetMobile(pc.Entity)
+	pc.Spawner = behaviors.GetSpawner(pc.ParticleEmitter.Spawner)
+	if pc.Spawner != nil && !pc.Spawner.IsActive() {
+		return false
+	}
 	return true
 }
 
 func (pc *ParticleController) Frame() {
+	if pc.Spawner == nil {
+		return
+	}
 	toRemove := make([]ecs.Entity, 0, 10)
-	for e, timestamp := range pc.Spawned {
+	for e, timestamp := range pc.Spawner.Spawned {
 		age := float64(ecs.Simulation.SimTimestamp-timestamp) / 1_000_000.0
 
 		if vis := materials.GetVisible(e); vis != nil {
@@ -61,14 +69,13 @@ func (pc *ParticleController) Frame() {
 			continue
 		}
 		toRemove = append(toRemove, e)
-		ecs.Delete(e)
 	}
 
 	for _, e := range toRemove {
-		delete(pc.Spawned, e)
+		ecs.Delete(e)
 	}
 
-	if pc.Source == 0 || len(pc.Spawned) > pc.Limit {
+	if len(pc.Spawner.Spawned) > pc.Limit {
 		return
 	}
 	// Our goal is to spawn ~pc.Limit particles across pc.Lifetime.
@@ -86,21 +93,34 @@ func (pc *ParticleController) Frame() {
 			return
 		}
 
-		flags := ecs.ComponentActive | ecs.ComponentHideEntityInEditor | ecs.ComponentLockedInEditor
-		e := ecs.NewEntity()
-		pc.Spawned[e] = ecs.Simulation.SimTimestamp
-		// Each particle has its own position
-		body := ecs.NewAttachedComponent(e, core.BodyCID).(*core.Body)
-		body.Flags |= flags
-		// Each particle has its own opacity
-		vis := ecs.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
-		vis.Flags |= flags
-		// Each particle has its own dynamics
-		mobile := ecs.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
-		mobile.Flags |= flags
+		// TODO: Optimize this
+		e := Spawn(pc.Spawner)
 
-		// TODO: Replace this with an ecs.Linked component?
-		ecs.Link(e, pc.Source)
+		if e == 0 {
+			continue
+		}
+
+		flags := ecs.ComponentActive | ecs.ComponentHideEntityInEditor | ecs.ComponentLockedInEditor
+
+		body := core.GetBody(e)
+		if body == nil {
+			// Each particle has its own position
+			body = ecs.NewAttachedComponent(e, core.BodyCID).(*core.Body)
+			body.Flags |= flags
+		}
+		vis := materials.GetVisible(e)
+		if vis == nil {
+			// Each particle has its own opacity
+			vis = ecs.NewAttachedComponent(e, materials.VisibleCID).(*materials.Visible)
+			vis.Flags |= flags
+		}
+		mobile := core.GetMobile(e)
+		if mobile == nil {
+			// Each particle has its own dynamics
+			mobile = ecs.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
+			mobile.Flags |= flags
+		}
+
 		body.Pos.Now.From(&pc.Body.Pos.Now)
 		hAngle := pc.Body.Angle.Now + (rand.Float64()-0.5)*pc.XYSpread
 		vAngle := (rand.Float64() - 0.5) * pc.ZSpread

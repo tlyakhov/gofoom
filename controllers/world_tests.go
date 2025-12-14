@@ -100,19 +100,19 @@ func CreateTestGrass() ecs.Entity {
 	named.Name = "Default Material"
 	//img.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	img := ecs.NewAttachedComponent(eGrass, materials.ImageCID).(*materials.Image)
-	img.Source = "data/grass2.png"
+	img.Source = "data/textures/grass2.png"
 	img.Filter = true
 	img.GenerateMipMaps = true
-	img.Load()
+	img.MarkDirty()
 	ecs.NewAttachedComponent(eGrass, materials.LitCID)
 	return eGrass
 }
 func CreateTestSky() ecs.Entity {
 	skyImage := ecs.NewAttachedComponent(ecs.NewEntity(), materials.ImageCID).(*materials.Image)
-	skyImage.Source = "data/Sky.png"
+	skyImage.Source = "data/textures/Sky.png"
 	skyImage.Filter = false
 	skyImage.GenerateMipMaps = false
-	skyImage.Load()
+	skyImage.MarkDirty()
 
 	entity := ecs.NewEntity()
 	skyShader := ecs.NewAttachedComponent(entity, materials.ShaderCID).(*materials.Shader)
@@ -131,10 +131,10 @@ func CreateTestDirt() ecs.Entity {
 	nmat := ecs.NewAttachedComponent(eDirt, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Dirt"
 	tex := ecs.NewAttachedComponent(eDirt, materials.ImageCID).(*materials.Image)
-	tex.Source = "data/FDef.png"
+	tex.Source = "data/textures/FDef.png"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
-	tex.Load()
+	tex.MarkDirty()
 	ecs.NewAttachedComponent(eDirt, materials.LitCID)
 	return eDirt
 }
@@ -144,10 +144,10 @@ func CreateTestTree() ecs.Entity {
 	nmat := ecs.NewAttachedComponent(eTree, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Tree"
 	tex := ecs.NewAttachedComponent(eTree, materials.ImageCID).(*materials.Image)
-	tex.Source = "data/tree.png"
+	tex.Source = "data/sprites/tree.png"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
-	tex.Load()
+	tex.MarkDirty()
 	ecs.NewAttachedComponent(eTree, materials.LitCID)
 	return eTree
 }
@@ -162,7 +162,7 @@ func CreateSpawn() {
 	ecs.AttachTyped(e, &spawner)
 	body := &core.Body{}
 	body.Construct(nil)
-	body.Pos.SetAll(concepts.Vector3{50, 50, 40})
+	body.Pos.SetAll(concepts.Vector3{50, 50, 240})
 	ecs.AttachTyped(e, &body)
 	mobile := &core.Mobile{}
 	mobile.Construct(nil)
@@ -175,7 +175,7 @@ func CreateSpawn() {
 	carrier.Construct(nil)
 	ecs.AttachTyped(e, &carrier)
 
-	Respawn(spawner)
+	Spawn(spawner)
 }
 
 func CreateTestWorld() {
@@ -269,7 +269,7 @@ func CreateTestWorld3() {
 	heightImage := ecs.NewAttachedComponent(ecs.NewEntity(), materials.ImageCID).(*materials.Image)
 	heightImage.Flags |= ecs.EntityInternal
 	heightImage.Construct(map[string]any{
-		"Source":          "data/test-heightmap.jpg",
+		"Source":          "data/textures/test-heightmap.jpg",
 		"Filter":          true,
 		"GenerateMipMaps": true,
 		"ConvertSRGB":     false,

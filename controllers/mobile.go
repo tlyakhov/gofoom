@@ -54,30 +54,32 @@ func (mc *MobileController) ResetForce() {
 }
 
 func (mc *MobileController) Forces() {
-	f := &mc.Force
-	if mc.Mass > 0 {
-		// Weight = g*m
-		g := mc.Sector.Gravity
-		g.MulSelf(mc.Mass)
-		f.AddSelf(&g)
-		v := &mc.Vel.Now
-		if !v.Zero() {
-			// Air drag
-			r := mc.Body.Size.Now[0] * 0.5 * constants.MetersPerUnit
-			crossSectionArea := math.Pi * r * r
-			drag := concepts.Vector3{v[0], v[1], v[2]}
-			drag.MulSelf(drag.Length())
-			drag.MulSelf(-0.5 * constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
-			f.AddSelf(&drag)
-			if mc.Body.OnGround {
-				// Kinetic friction
-				drag.From(v)
-				drag.MulSelf(-mc.Sector.FloorFriction * mc.Sector.Bottom.Normal.Dot(g.MulSelf(-1)))
-				f.AddSelf(&drag)
-			}
-			//log.Printf("%v\n", drag)
-		}
+	if mc.Mass <= 0 {
+		return
 	}
+
+	// Weight = g*m
+	g := mc.Sector.Gravity
+	g.MulSelf(mc.Mass)
+	mc.Force.AddSelf(&g)
+	v := &mc.Vel.Now
+	if v.Zero() {
+		return
+	}
+	// Air drag
+	r := mc.Body.Size.Now[0] * 0.5 * constants.MetersPerUnit
+	crossSectionArea := math.Pi * r * r
+	drag := concepts.Vector3{v[0], v[1], v[2]}
+	drag.MulSelf(drag.Length())
+	drag.MulSelf(-0.5 * constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
+	mc.Force.AddSelf(&drag)
+	if mc.Body.OnGround {
+		// Kinetic friction
+		drag.From(v)
+		drag.MulSelf(-mc.Sector.FloorFriction * mc.Sector.Bottom.Normal.Dot(g.MulSelf(-1)))
+		mc.Force.AddSelf(&drag)
+	}
+	//log.Printf("%v\n", drag)
 }
 
 func (mc *MobileController) Frame() {

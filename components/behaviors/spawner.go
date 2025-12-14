@@ -13,6 +13,7 @@ type Spawner struct {
 	ecs.Attached `editable:"^"`
 
 	DeleteSpawnedOnDetach bool `editable:"Delete Spawned on Detach"`
+	PreserveLinks         bool `editable:"Preserve Links"`
 
 	// See behaviors.Spawnee for the other side of this relation
 	Spawned map[ecs.Entity]int64
@@ -40,6 +41,7 @@ func (s *Spawner) Construct(data map[string]any) {
 	s.Attached.Construct(data)
 	s.Spawned = make(map[ecs.Entity]int64)
 	s.DeleteSpawnedOnDetach = true
+	s.PreserveLinks = false
 
 	if data == nil {
 		return
@@ -47,6 +49,9 @@ func (s *Spawner) Construct(data map[string]any) {
 
 	if v, ok := data["DeleteSpawnedOnDetach"]; ok {
 		s.DeleteSpawnedOnDetach = cast.ToBool(v)
+	}
+	if v, ok := data["PreserveLinks"]; ok {
+		s.PreserveLinks = cast.ToBool(v)
 	}
 
 	if v, ok := data["Spawned"]; ok {
@@ -65,6 +70,10 @@ func (s *Spawner) Serialize() map[string]any {
 	if !s.DeleteSpawnedOnDetach {
 		result["DeleteSpawnedOnDetach"] = false
 	}
+	if s.PreserveLinks {
+		result["PreserveLinks"] = true
+	}
+
 	if len(s.Spawned) > 0 {
 		spawned := make(ecs.EntityTable, 0)
 		for e := range s.Spawned {
