@@ -195,6 +195,11 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 
 func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, lightBody *core.Body, testHigherLayer bool) (hitSegment *core.SectorSegment, next *core.Sector) {
 	lightPos := &lightBody.Pos.Render
+	// Precalculate ray delta
+	rayDx := ls.LightWorld[0]
+	rayDy := ls.LightWorld[1]
+	pX, pY, pZ := p[0], p[1], p[2]
+	lpZ := lightPos[2]
 
 	// Help the compiler out by pre-defining all the local stuff in the outer
 	// scope. I wonder how much performance cost we have with this stuff on the
@@ -202,6 +207,8 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 	var i2d *concepts.Vector2
 	var adj *core.Sector
 	var floorZ, floorZ2, ceilZ, ceilZ2, intersectionDistSq float64
+	var s1dx, s1dy, sNumerator, rNumerator, denom, s, r float64
+
 	for _, seg := range sector.Segments {
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 			log.Printf("    Checking segment [%v]-[%v]\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
@@ -224,7 +231,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 					1		0		1
 					1		1		0
 		*/
-		normalFacing := (ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1] > 0)
+		normalFacing := (rayDx*seg.Normal[0]+rayDy*seg.Normal[1] > 0)
 		if testHigherLayer != normalFacing {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 				log.Printf("    Ignoring segment [or behind]. higher layer? = %v, normal? = %v. Dot: %v", testHigherLayer, normalFacing, ls.LightWorld[0]*seg.Normal[0]+ls.LightWorld[1]*seg.Normal[1])
@@ -232,13 +239,75 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 			continue
 		}
 
-		// Find the intersection with this segment.
-		if !seg.Intersect3D(p, lightPos, &ls.IntersectionTest) {
+		// Inline Intersect3D
+		s1dx = seg.B[0] - seg.A[0]
+		s1dy = seg.B[1] - seg.A[1]
+
+		denom = s1dx*rayDy - rayDx*s1dy
+		if denom == 0 {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    No intersection\n")
+				log.Printf("    No intersection (parallel)\n")
 			}
-			continue // No intersection, skip it!
+			continue // Parallel, no intersection
 		}
+
+		originDistX := seg.A[0] - pX
+		originDistY := seg.A[1] - pY
+
+		sNumerator = originDistY*s1dx - originDistX*s1dy
+		rNumerator = originDistY*rayDy - originDistX*rayDx
+
+		if denom > 0 {
+			if sNumerator < 0 || sNumerator > denom || rNumerator < 0 || rNumerator > denom {
+				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+					log.Printf("    No intersection (out of bounds +)\n")
+				}
+				continue
+			}
+		} else {
+			if sNumerator > 0 || sNumerator < denom || rNumerator > 0 || rNumerator < denom {
+				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+					log.Printf("    No intersection (out of bounds -)\n")
+				}
+				continue
+			}
+		}
+
+		s = sNumerator / denom
+		intersectionDistSq = s * s * ls.maxDistSq
+
+		// If the difference between the intersected distance and the light distance is
+		// within the bounding radius of our light, our light is right on a portal boundary and visible.
+		sizeSq := lightBody.Size.Render[0] * 0.5
+		sizeSq *= sizeSq
+		if math.Abs(intersectionDistSq-ls.maxDistSq) < sizeSq {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Light is within size on portal boundary. Intersection: %v vs. Max Dist %v", math.Sqrt(intersectionDistSq), math.Sqrt(ls.maxDistSq))
+			}
+			return nil, nil
+		}
+
+		if intersectionDistSq >= ls.hitDistSq {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Found intersection point farther than one we've already discovered for this sector: %v > %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ls.hitDistSq))
+			}
+			// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
+			continue
+		}
+
+		if intersectionDistSq <= ls.prevDistSq {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+				log.Printf("    Found intersection point before the previous sector: %v <= %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ls.prevDistSq))
+			}
+			// If the current intersection point is BEHIND the last one, we went backwards?
+			continue
+		}
+
+		// Now calculate 3D point
+		r = rNumerator / denom
+		ls.IntersectionTest[0] = seg.A[0] + r*s1dx
+		ls.IntersectionTest[1] = seg.A[1] + r*s1dy
+		ls.IntersectionTest[2] = (1.0-s)*pZ + s*lpZ
 
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 			log.Printf("    Intersection = [%v]\n", ls.IntersectionTest.StringHuman(2))
@@ -315,36 +384,6 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 				}
 				return seg, nil // Same as wall, we're occluded.
 			}
-		}
-
-		// Get the square of the distance to the intersection (from the target point)
-		intersectionDistSq = ls.IntersectionTest.DistSq(p)
-
-		// If the difference between the intersected distance and the light distance is
-		// within the bounding radius of our light, our light is right on a portal boundary and visible.
-		sizeSq := lightBody.Size.Render[0] * 0.5
-		sizeSq *= sizeSq
-		if math.Abs(intersectionDistSq-ls.maxDistSq) < sizeSq {
-			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Light is within size on portal boundary. Intersection: %v vs. Max Dist %v", math.Sqrt(intersectionDistSq), math.Sqrt(ls.maxDistSq))
-			}
-			return nil, nil
-		}
-
-		if intersectionDistSq-ls.hitDistSq >= 0 {
-			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Found intersection point farther than one we've already discovered for this sector: %v > %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ls.hitDistSq))
-			}
-			// If the current intersection point is farther than one we already have for this sector, we have a concavity. Keep looking.
-			continue
-		}
-
-		if ls.prevDistSq-intersectionDistSq > 0 {
-			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
-				log.Printf("    Found intersection point before the previous sector: %v <= %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ls.prevDistSq))
-			}
-			// If the current intersection point is BEHIND the last one, we went backwards?
-			continue
 		}
 
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
@@ -458,6 +497,14 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	}
 
 	lightPos := &lightBody.Pos.Render
+	// Precalculate ray delta
+	rayDx := ls.LightWorld[0]
+	rayDy := ls.LightWorld[1]
+	pX, pY, pZ := p[0], p[1], p[2]
+	lpZ := lightPos[2]
+
+	var s1dx, s1dy, denom, sNumerator, rNumerator, s, r float64
+
 	// TODO: Use quadtree here, to avoid thrashing memory with the Visited slice
 	// Generate entity shadows last. That way if the light is blocked by sector
 	// walls, we don't waste time checking/blending lots of bodies or internal
@@ -467,12 +514,45 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if &seg.Segment == ls.Segment {
 				continue
 			}
-			// Find the intersection with this segment.
-			ok := seg.Intersect3D(p, lightPos, &ls.Hit)
-			if !ok || ls.Hit[2] < seg.Bottom || ls.Hit[2] > seg.Top {
-				// log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
-				continue // No intersection, skip it!
+
+			// Inline Intersect3D
+			s1dx = seg.B[0] - seg.A[0]
+			s1dy = seg.B[1] - seg.A[1]
+
+			denom = s1dx*rayDy - rayDx*s1dy
+			if denom == 0 {
+				continue
 			}
+
+			originDistX := seg.A[0] - pX
+			originDistY := seg.A[1] - pY
+
+			sNumerator = originDistY*s1dx - originDistX*s1dy
+			rNumerator = originDistY*rayDy - originDistX*rayDx
+
+			if denom > 0 {
+				if sNumerator < 0 || sNumerator > denom || rNumerator < 0 || rNumerator > denom {
+					continue
+				}
+			} else {
+				if sNumerator > 0 || sNumerator < denom || rNumerator > 0 || rNumerator < denom {
+					continue
+				}
+			}
+
+			s = sNumerator / denom
+			// Check Z bounds before full calculation
+			// Intersect Z = (1-s)*pZ + s*lpZ
+			// Range check seg.Bottom, seg.Top
+			intersectZ := (1.0-s)*pZ + s*lpZ
+			if intersectZ < seg.Bottom || intersectZ > seg.Top {
+				continue
+			}
+
+			r = rNumerator / denom
+			ls.Hit[0] = seg.A[0] + r*s1dx
+			ls.Hit[1] = seg.A[1] + r*s1dy
+			ls.Hit[2] = intersectZ
 
 			ls.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
 			ls.NU = ls.Hit.To2D().Dist(seg.A) / seg.Length
