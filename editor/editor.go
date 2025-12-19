@@ -319,8 +319,12 @@ func (e *Editor) autoPortal() {
 
 func (e *Editor) refreshProperties() {
 	defer concepts.ExecutionDuration(concepts.ExecutionTrack("RefreshProperties"))
-	e.Grid.Refresh(e.Selection)
-	e.EntityList.Update()
+	// Execute UI updates on the main thread to prevent deadlocks when called from a background goroutine (e.g. SelectObjects)
+	sel := e.Selection
+	fyne.Do(func() {
+		e.Grid.Refresh(sel)
+		e.EntityList.Update()
+	})
 }
 
 func (e *Editor) Snapshot(worldState bool) state.EditorSnapshot {
@@ -344,7 +348,9 @@ func (e *Editor) ActionFinished(canceled, refreshProperties, autoPortal bool) {
 		}
 	}
 	e.SetMapCursor(desktop.DefaultCursor)
+	e.Lock.Lock()
 	e.CurrentAction = nil
+	e.Lock.Unlock()
 	go e.UseTool()
 }
 
