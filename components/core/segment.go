@@ -78,6 +78,40 @@ func (s1 *Segment) Intersect3D(s2A, s2B, result *concepts.Vector3) bool {
 	return true
 }
 
+func (s1 *Segment) IntersectRay(origin *concepts.Vector3, rayD *concepts.Vector3, result *concepts.Vector3) bool {
+	// s1dx, s1dy using Normal and Length to avoid accessing s1.B
+	s1dx := s1.Normal[1] * s1.Length
+	s1dy := -s1.Normal[0] * s1.Length
+
+	// rayD is passed in
+	s2dx := rayD[0]
+	s2dy := rayD[1]
+
+	denom := s1dx*s2dy - s2dx*s1dy
+	if denom == 0 {
+		return false
+	}
+	r := (s1.A[1]-origin[1])*s2dx - (s1.A[0]-origin[0])*s2dy
+	if (denom < 0 && r >= constants.IntersectEpsilon) ||
+		(denom > 0 && r < -constants.IntersectEpsilon) {
+		return false
+	}
+	s := (s1.A[1]-origin[1])*s1dx - (s1.A[0]-origin[0])*s1dy
+	if (denom < 0 && s >= constants.IntersectEpsilon) ||
+		(denom > 0 && s < -constants.IntersectEpsilon) {
+		return false
+	}
+	r /= denom
+	s /= denom
+	if r < 0 || s < 0 || r > 1 || s > 1 {
+		return false
+	}
+	result[0] = s1.A[0] + r*s1dx
+	result[1] = s1.A[1] + r*s1dy
+	result[2] = origin[2] + s*rayD[2]
+	return true
+}
+
 func (s *Segment) AABBIntersect(xMin, yMin, xMax, yMax float64) bool {
 	// Find min and mA[0] X for the segment
 	minX := s.A[0]
