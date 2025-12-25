@@ -7,6 +7,7 @@ var BodyCID ecs.ComponentID
 var InternalSegmentCID ecs.ComponentID
 var LightCID ecs.ComponentID
 var MobileCID ecs.ComponentID
+var ScriptedCID ecs.ComponentID
 var SectorCID ecs.ComponentID
 
 func init() {
@@ -14,6 +15,7 @@ func init() {
 	InternalSegmentCID = ecs.RegisterComponent(&ecs.Arena[InternalSegment, *InternalSegment]{})
 	LightCID = ecs.RegisterComponent(&ecs.Arena[Light, *Light]{})
 	MobileCID = ecs.RegisterComponent(&ecs.Arena[Mobile, *Mobile]{})
+	ScriptedCID = ecs.RegisterComponent(&ecs.Arena[Scripted, *Scripted]{})
 	SectorCID = ecs.RegisterComponent(&ecs.Arena[Sector, *Sector]{})
 }
 func GetBody(e ecs.Entity) *Body {
@@ -55,6 +57,16 @@ func GetMobile(e ecs.Entity) *Mobile {
 
 func (*Mobile) ComponentID() ecs.ComponentID {
 	return MobileCID
+}
+func GetScripted(e ecs.Entity) *Scripted {
+	if asserted, ok := ecs.GetComponent(e, ScriptedCID).(*Scripted); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*Scripted) ComponentID() ecs.ComponentID {
+	return ScriptedCID
 }
 func GetSector(e ecs.Entity) *Sector {
 	if asserted, ok := ecs.GetComponent(e, SectorCID).(*Sector); ok {
