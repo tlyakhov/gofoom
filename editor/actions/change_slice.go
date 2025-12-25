@@ -45,8 +45,6 @@ func (a *ChangeSlice) Activate() {
 
 		if serializable, ok := newValue.Interface().(ecs.Serializable); ok {
 			serializable.Construct(nil)
-		} else if subSerializable, ok := newValue.Interface().(ecs.Serializable); ok {
-			subSerializable.Construct(nil)
 		}
 	case DeleteSliceElementMode:
 

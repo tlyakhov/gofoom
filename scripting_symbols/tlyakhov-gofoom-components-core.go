@@ -27,11 +27,13 @@ func init() {
 		"GetInternalSegment":       reflect.ValueOf(core.GetInternalSegment),
 		"GetLight":                 reflect.ValueOf(core.GetLight),
 		"GetMobile":                reflect.ValueOf(core.GetMobile),
+		"GetScripted":              reflect.ValueOf(core.GetScripted),
 		"GetSector":                reflect.ValueOf(core.GetSector),
 		"InternalSegmentCID":       reflect.ValueOf(&core.InternalSegmentCID).Elem(),
 		"LightCID":                 reflect.ValueOf(&core.LightCID).Elem(),
 		"MobileCID":                reflect.ValueOf(&core.MobileCID).Elem(),
 		"QuadTree":                 reflect.ValueOf(&core.QuadTree).Elem(),
+		"ScriptedCID":              reflect.ValueOf(&core.ScriptedCID).Elem(),
 		"SectorCID":                reflect.ValueOf(&core.SectorCID).Elem(),
 
 		// type definitions
@@ -44,6 +46,7 @@ func init() {
 		"QuadNode":          reflect.ValueOf((*core.QuadNode)(nil)),
 		"Script":            reflect.ValueOf((*core.Script)(nil)),
 		"ScriptParam":       reflect.ValueOf((*core.ScriptParam)(nil)),
+		"Scripted":          reflect.ValueOf((*core.Scripted)(nil)),
 		"Sector":            reflect.ValueOf((*core.Sector)(nil)),
 		"SectorPlane":       reflect.ValueOf((*core.SectorPlane)(nil)),
 		"SectorSegment":     reflect.ValueOf((*core.SectorSegment)(nil)),

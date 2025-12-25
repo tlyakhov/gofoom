@@ -24,12 +24,14 @@ const (
 )
 
 type Proximity struct {
-	ecs.Attached `editable:"^"`
+	ecs.Attached      `editable:"^"`
+	ecs.ApplyIndirect `editable:"^"`
 
 	ActsOnSectors bool    `editable:"Acts on Sectors?"`
 	Range         float64 `editable:"Range"`
 	Hysteresis    float64 `editable:"Hysteresis (ms)"`
 
+	// Useful for doors or traps
 	IgnoreSectorTransform bool `editable:"Ignore Sector Transform"`
 
 	ValidComponents containers.Set[ecs.ComponentID] `editable:"ValidComponents"`
@@ -54,6 +56,7 @@ func (p *Proximity) Construct(data map[string]any) {
 	p.ActsOnSectors = false
 	p.IgnoreSectorTransform = true
 	p.ValidComponents = make(containers.Set[ecs.ComponentID])
+	p.ApplyIndirect.Construct(data)
 	// TODO: Serialize this
 	p.State = xsync.NewMapOf[uint64, *ProximityState]()
 
@@ -102,6 +105,7 @@ func (p *Proximity) Construct(data map[string]any) {
 
 func (p *Proximity) Serialize() map[string]any {
 	result := p.Attached.Serialize()
+	p.ApplyIndirect.Serialize(result)
 
 	if p.Range != 100 {
 		result["Range"] = p.Range

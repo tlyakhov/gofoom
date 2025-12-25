@@ -54,6 +54,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
+	ecs.Initialize()
 	audio.Mixer.Initialize()
 	defer audio.Mixer.Close()
 

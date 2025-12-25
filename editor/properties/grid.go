@@ -206,7 +206,7 @@ func (g *Grid) fieldsFromStruct(target any, pgs PropertyGridState) {
 			childKind := field.Type.Elem().Kind()
 			if childKind == reflect.Pointer ||
 				childKind == reflect.Struct ||
-				childKind == reflect.Interface {
+				childKind == reflect.Interface || childKind == reflect.String {
 				g.fieldsFromSlice(gf, valueMetadata, pgs)
 			}
 		}
@@ -564,6 +564,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, behaviors.DoorTypeValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
+		case *[]string:
+			g.fieldSlice(field)
 		case *[]*core.SectorSegment:
 			g.fieldSlice(field)
 		case *[]*core.Script:

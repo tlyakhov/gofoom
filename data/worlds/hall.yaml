@@ -10,37 +10,34 @@
         2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
     Range: 5
   behaviors.Spawner:
+    PreserveLinks: true
     Spawned:
-    - ∈⋮297∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮296∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮266∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮330∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮199∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮363∈⋮Bubble+%28spawned+from+3%29
     - ∈⋮300∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮301∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮169∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮303∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮364∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮367∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮336∈⋮Bubble+%28spawned+from+3%29
     - ∈⋮304∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮305∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮306∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮107∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮368∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮295∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮340∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮370∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮342∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮324∈⋮Bubble+%28spawned+from+3%29
     - ∈⋮274∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮276∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮277∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮310∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮279∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮239∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮182∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮215∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮218∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮320∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮156∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮256∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮158∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮189∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮190∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮291∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮294∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮194∈⋮Bubble+%28spawned+from+3%29
-    - ∈⋮263∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮362∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮280∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮314∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮350∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮322∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮357∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮325∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮359∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮128∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮130∈⋮Bubble+%28spawned+from+3%29
+    - ∈⋮326∈⋮Bubble+%28spawned+from+3%29
   ecs.Linked:
     AlwaysReplace: true
     Sources:
@@ -69,7 +66,7 @@
     Start: ∈⋮138
   behaviors.ActorState:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Action: ∈⋮137
+    Action: ∈⋮139
   behaviors.Alive:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Health: 100
@@ -79,11 +76,11 @@
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Angle:
-      Now: 83519.11365820115
+      Now: 83758.25151679933
       Procedural: true
       Spawn: 155.9558816022554
     Pos:
-      Now: -174.29212135926824, -190.33580305577902, 8
+      Now: -26.172365077837835, -72.04406219438931, 16
       Spawn: -20, -30, -50
     Size:
       Now: 32, 32
@@ -99,7 +96,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: 0.39965556704502747, 0.4402680267382555, 0.014050468580424273
+      Now: -0.838263644349531, -0.6316949114024886, 0.026087160049116875
       Spawn: 0, 0, 0
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -125,7 +122,7 @@
 - Entity: ∈⋮10∈⋮Spawn+%28spawned+from+126%29
   behaviors.Alive:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Health: 100
+    Health: 92
   behaviors.Spawnee:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Spawner: ∈⋮126∈⋮Spawn
@@ -134,10 +131,10 @@
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Angle:
-      Now: 382.5
+      Now: 611.71875
       Spawn: 0
     Pos:
-      Now: -157.70716084027777, -204.93649027923385, 16
+      Now: 752.8195633170506, -337.25666977346765, 20
       Spawn: -390, 180, -44
     Size: 15, 40
     StepSound: ∈⋮165∈⋮Step
@@ -150,8 +147,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000047177607367823366,
-        0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007866879967627186,
+      Now: 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000632473368217062,
+        0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001914513020443928,
         0.007001650411977742
       Spawn: 0, 0, 0
   ecs.Named:
@@ -862,11 +859,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.21875
+        Percent: 0.8828125
         Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -400, 60, -50.22021484375
+      Now: -400, 60, -51.45068359375
       Spawn: -400, 60, -52
     Size: 20, 20
   ecs.Linked:
@@ -3090,7 +3087,7 @@
     Close:
       Code: audio.PlaySound(231,door.Entity, "Door " + door.Entity.String(), false)
     Duration: 1000
-    Intent: DoorIntentOpen
+    Intent: DoorIntentReset
     Limit: 0
     Open:
       Code: audio.PlaySound(198,door.Entity, "Door " + door.Entity.String(), false)
@@ -3122,9 +3119,7 @@
     - AdjacentSector: ∈⋮53
       Hi:
         Material: ∈⋮107∈⋮wool_colored_gray+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
-        Transform:
-          Now: 1, 0, 0, 0, 0, 1
-          Spawn: 1, 0, 0, 0, 1.28, -0.30000000000000004
+        Transform: 1, 0, 0, 0, 1.28, -0.30000000000000004
       Lo:
         Material: ∈⋮117∈⋮wool_colored_white+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
       P: -110, -210
@@ -3147,11 +3142,11 @@
           Duration: 1000
           End: 0
           Lifetime: AnimationLifetimeOnce
-          Percent: 0
-          Reverse: true
+          Percent: 1
+          Reverse: false
           Start: 64
           TweeningFunc: EaseInOut2
-        Now: 64
+        Now: 0
         Spawn: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
@@ -4265,48 +4260,6 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮107∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 581.4200300128783, -465.4036895358405, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000000001559643049367352, 0.00000000004460732898592153, 0.026086893922030882
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮108
   core.Sector:
     Bottom:
@@ -4820,6 +4773,88 @@
   ecs.Named:
     Name: Spawn
   inventory.Carrier: ∈⋮8∈⋮∈⋮2edae4ab
+- Entity: ∈⋮128∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 574.9424132090431, -406.0228295623613, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -1.4406257055458809, -0.08697939835821772, 0.026096467540898824
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮130∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 663.2746937229484, -633.5023298153196, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.00008795572936223842, 0.00000008886600608736641, 0.026086893923080876
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮131
   core.Body:
     Angle: 0
@@ -4837,11 +4872,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.3515625
+        Percent: 0.859375
         Reverse: true
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: -260, 60, -47.88134765625
+      Now: -260, 60, -51.208984375
       Spawn: -260, 60, -52
     Size: 20, 20
   ecs.Linked:
@@ -5105,7 +5140,7 @@
     Speed: 100
     Start: ∈⋮150
   behaviors.ActorState:
-    Action: ∈⋮151
+    Action: ∈⋮150
   behaviors.ParticleEmitter:
     Limit: "30"
     Spawner: ∈⋮3∈⋮Bubble
@@ -5115,7 +5150,7 @@
   core.Body:
     Angle: 180
     Pos:
-      Now: 860, -608.0041531878605, 32
+      Now: 860, -400.1189300202726, 32
       Procedural: true
       Spawn: 860, -710, 32
     Size: 20, 20
@@ -5137,90 +5172,6 @@
   materials.Visible:
     Ambient: 1
     Shadow: ShadowImage
-- Entity: ∈⋮156∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 569.975546371903, -329.16190653330256, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.00000000000009271083902784441, 0.000000000000006460042199354113, 0.026086893922030882
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 0.3359375
-- Entity: ∈⋮158∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 652.1149093386539, -600.1600545252596, 10.521199920541546
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.6553594198657933, -0.009870967786011346, -0.4329000348410258
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮160
   core.Sector:
     Bottom:
@@ -5303,11 +5254,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.171875
+        Percent: 0.9609375
         Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 230, -860, -18.818359375
+      Now: 230, -860, -19.93896484375
       Spawn: 230, -860, -20
     Size: 15, 15
   ecs.Linked:
@@ -5514,48 +5465,6 @@
         Spawn: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮169∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 646.4293104823944, -584.4999478942747, 14.502299098931008
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.4658848437898761, 0.13657135976101528, -0.30022993359672273
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮170
   core.Body:
     Angle: 0
@@ -5619,11 +5528,11 @@
         Active: true
         Duration: 1000
         End: 0, 0, 5
-        Percent: 0.34375
-        Reverse: true
+        Percent: 0.796875
+        Reverse: false
         Start: 0, 0, 0
         TweeningFunc: EaseInOut2
-      Now: 40, -250, 8.0234375
+      Now: 40, -250, 5.650390625
       Spawn: 40, -250, 4
     Size: 20, 20
   ecs.Linked:
@@ -5729,48 +5638,6 @@
       Z: -4
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮182∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 592.0122632574431, -486.2746376711525, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000000000546993047026983, -0.000000000026337055518210242, 0.026086893922030896
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮183
   core.Sector:
     Bottom:
@@ -5907,90 +5774,6 @@
       Z: 150
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮189∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 555.63521345747, -387.93509043337025, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.0000000000608599383678905, 0.000000000003790805239424833, 0.02608689392203089
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮190∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 573.2846167566089, -356.8772684282418, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.0000000000009916549019962365, -0.000000000000004060745705999902, 0.026086893922030896
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 0.6328125
 - Entity: ∈⋮191
   core.Sector:
     Bottom:
@@ -6158,48 +5941,6 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮194∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 559.5208134830752, -326.18448534172575, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.0000000000002634760564939126, 0.000000000000019982221622294384, 0.026086893922030896
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 0.40625
 - Entity: ∈⋮195
   core.Body:
     Angle: 0
@@ -6265,6 +6006,47 @@
     Source: data/sounds/warp2.ogg
   ecs.Named:
     Name: Door Open
+- Entity: ∈⋮199∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 661.6936249529953, -556.1210988465697, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.4559071480400621, -0.00008173878059962325, 0.026309393374442838
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
 - Entity: ∈⋮200
   core.Sector:
     Bottom:
@@ -6541,49 +6323,6 @@
       Z: 150
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮215∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 556.9584093962727, -382.0109348340976, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000000000000021713843895934857, -0.0000000000000012570371471286226,
-        0.026086893922030882
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 0.1015625
 - Entity: ∈⋮217
   core.Sector:
     Bottom:
@@ -6630,48 +6369,6 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮218∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 565.4589337346656, -396.1425673943831, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000000000004232941839465021, -0.0000000000003536063781335795, 0.026086893922030882
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 0.7578125
 - Entity: ∈⋮219
   core.Sector:
     Bottom:
@@ -6922,48 +6619,6 @@
     Source: data/sounds/spell.wav
   ecs.Named:
     Name: Door Close
-- Entity: ∈⋮239∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 645, -705.7021410489172, 39.224690712059676
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000165791956086655, 0.09438047692940361, 0.48765261394963866
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮240
   core.Sector:
     Bottom:
@@ -7195,90 +6850,6 @@
       Z: 64
     Transform: 1, 0, 0, 0, 1, 0
     TransformOrigin: 0, 0
-- Entity: ∈⋮256∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 553.1578241893044, -347.76730991684417, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000000000012819287398995012, 0.0000000000009930758781680786, 0.026086893922030896
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 0.8203125
-- Entity: ∈⋮263∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.1929059442747, -593.4036082642583, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.015767216405076438, -0.00016295987826996536, 0.026086924846196208
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
 - Entity: ∈⋮274∈⋮Bubble+%28spawned+from+3%29
   behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -7293,7 +6864,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 546.1846716132266, -465.88926769738526, 5
+      Now: 663.2317231139492, -640.984657017105, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7305,23 +6876,22 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.0000000008738668299321345, -0.00000000005137671606052311, 0.026086893922030882
+      Now: 0.00033800130471078383, -0.00000022626591965705883, 0.02608689393753609
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮276∈⋮Bubble+%28spawned+from+3%29
+- Entity: ∈⋮280∈⋮Bubble+%28spawned+from+3%29
   behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     InRange:
@@ -7335,7 +6905,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 645.9175128316183, -640.2922728343272, 14.860663672042373
+      Now: 594.8327103373866, -368.2298667088841, 5.719768307653326
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7347,23 +6917,22 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: 0.39811502220650896, -0.12917966570015504, -0.2527775259617303
+      Now: -5.527181192568822, 0.032494863223687345, -0.060754945020906226
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮277∈⋮Bubble+%28spawned+from+3%29
+- Entity: ∈⋮295∈⋮Bubble+%28spawned+from+3%29
   behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     InRange:
@@ -7377,7 +6946,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 575.2635042944515, -442.1698394014975, 5
+      Now: 707.8159106147306, -360.65933364086476, 7.787983488259934
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7389,229 +6958,18 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.00000000037281927669374535, 0.000000000006899580453776759, 0.02608689392203089
+      Now: -8.251859803769863, -0.42381645311531685, 0.9034552043271329
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮279∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 659.2311729022712, -569.3342192765216, 5.53833852940964
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.677430161588415, 0.0008855006697812289, -0.4483539553216893
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮291∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 563.3783156274872, -456.0642381090085, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000005907821815540719, 0.000008903383636555065, 0.026086893922046377
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮294∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 663.2460658304035, -513.1845101104703, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.002380670377206196, 0.0000015419220817572673, 0.026086894689529197
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮296∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 539.6138656135397, -456.034978725362, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -0.000019841391502741198, 0.0000224598097305388, 0.026086893922152785
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮297∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 696.2472531203082, -505.60618973641266, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.00027240524412415956, 0.000014779805994647189, 0.02608689393213167
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
@@ -7629,7 +6987,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 645, -689.2802332825365, 19.470105290702563
+      Now: 634.3589331882969, -359.09186466381783, 8.952568509223735
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7641,103 +6999,18 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.031091100078837357, -0.3023194598916679, 0.69824400279156
+      Now: -6.647497784272927, -0.1049173692083953, -0.3094576851369957
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮301∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 674.6949555000616, -563.5774962852329, 5
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: 0.3509326011673799, 0.06719063959071947, 0.02608816468855625
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Ambient: 1
-- Entity: ∈⋮303∈⋮Bubble+%28spawned+from+3%29
-  behaviors.Proximity:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
-        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
-    Range: 5
-  behaviors.Spawnee:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Spawner: ∈⋮3∈⋮Bubble
-  core.Body:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    Angle: 0
-    Pos:
-      Now: 724.1440461829243, -661.2859384107146, 17.95171722946277
-      Spawn: 0, 0, 0
-    Size: 10, 10
-  core.Mobile:
-    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
-    CrMoving: CollideNone
-    CrPlayer: CollideNone
-    CrWall: CollideBounce
-    Elasticity: 0.5
-    Mass: 0.25
-    MountHeight: 15
-    Vel:
-      Now: -9.341221348044416, 0.2084043038255196, -2.674686819233001
-      Spawn: 0, 0, 0
-  ecs.Named:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
@@ -7755,7 +7028,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 645, -723.9967518370177, 38.55455872819247
+      Now: 646.5303384897273, -350.1794631729962, 9.057056563452218
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7767,23 +7040,22 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.0004910116698320849, -0.30537245345824215, 1.006500858579586
+      Now: -6.894459828102632, 0.05311864926325068, -0.022582808774993038
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮305∈⋮Bubble+%28spawned+from+3%29
+- Entity: ∈⋮314∈⋮Bubble+%28spawned+from+3%29
   behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     InRange:
@@ -7797,7 +7069,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 645, -724.9956635503237, 39.026409945935086
+      Now: 663.0131082905876, -620.3395193422992, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7809,23 +7081,22 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.00020309071261269607, -0.3170044351499364, 0.5555716025074152
+      Now: 0.06029744690379707, -0.0001561501384906542, 0.026087167020246202
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮306∈⋮Bubble+%28spawned+from+3%29
+- Entity: ∈⋮322∈⋮Bubble+%28spawned+from+3%29
   behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     InRange:
@@ -7839,7 +7110,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 645, -646.9254194696578, 15.537970533997939
+      Now: 662.9181687432798, -625.57339946714, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7851,23 +7122,22 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.1270947785160082, 0.2635235566248168, -0.015490062367076424
+      Now: 0.07888921812762914, -0.000043589282123126034, 0.026087285488988587
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮310∈⋮Bubble+%28spawned+from+3%29
+- Entity: ∈⋮324∈⋮Bubble+%28spawned+from+3%29
   behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     InRange:
@@ -7881,7 +7151,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 758.7481010180674, -658.3082493582691, 18.738601213236997
+      Now: 585.8510535929566, -437.8694667023851, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7893,23 +7163,22 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -10.317889051939192, -0.7627187196293191, -2.567384324903634
+      Now: -0.024512498852815486, -0.0011475046681662963, 0.02608696198050421
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1
-- Entity: ∈⋮320∈⋮Bubble+%28spawned+from+3%29
+- Entity: ∈⋮325∈⋮Bubble+%28spawned+from+3%29
   behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     InRange:
@@ -7923,7 +7192,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Angle: 0
     Pos:
-      Now: 645, -731.1074194790604, 38.8425974785704
+      Now: 663.202070579487, -654.8286890197483, 5
       Spawn: 0, 0, 0
     Size: 10, 10
   core.Mobile:
@@ -7935,19 +7204,592 @@
     Mass: 0.25
     MountHeight: 15
     Vel:
-      Now: -0.0002503392678015772, -0.45152940745713843, 0.6957458652414237
+      Now: 0.000000040890343966560325, 0.00000000004678362284875987, 0.026086893922030896
       Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Name: Bubble (spawned from 3)
-  materials.Image:
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 0.328125
+- Entity: ∈⋮326∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Filter: false
-    Source: data/sprites/transparent-bubble.png
-  materials.Lit:
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 716.0559652336957, -502.1679497946137, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.10849583002963561, 0.011246639053274077, 0.02608748301483045
+      Spawn: 0, 0, 0
+  ecs.Linked:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮330∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 663.4748926877307, -623.0896302209284, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.00000000032802343278233273, 0.000000000010577927270793276, 0.026086893922030896
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 0.0078125
+- Entity: ∈⋮336∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 663.4797666010198, -639.0325405731584, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.0020893681418389905, -0.00007123659555076819, 0.026086894514188455
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮340∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 591.6785128224806, -472.46612302887894, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.00002263905327174632, 0.0000017584536712289563, 0.026086893922100875
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮342∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 551.6113903013195, -479.70047662949514, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.002395315321643848, -0.0001667629237155224, 0.026086894702736264
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮350∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 682.4283598422537, -356.1778506020133, 8.912330028207
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -7.662902004693543, -0.2283342343794643, -0.3191249441625885
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮357∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 578.9044179570052, -447.5564620287397, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.00030169686170329905, 0.000020361771588902675, 0.02608689393444054
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮359∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 695.517771021099, -498.6321481676065, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.007246002135311452, 0.0013020503672610472, 0.026086901125304353
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮362∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 550.6648235989817, -416.21066206050216, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.5980474095710735, -0.016994363706287954, 0.026090783197089365
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮363∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 663.275023253834, -674.126867638219, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.0000000050746521570730336, 0.000000000001982023956155635, 0.026086893922030882
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 0.3671875
+- Entity: ∈⋮364∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 654.5721509835773, -522.1140313429826, 8.800620797563363
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.6692413875961135, 0.0005650352809916284, -0.4426201807102624
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮367∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 655.7793230092275, -543.9113222331911, 7.955349845287197
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: 0.6768355549438786, -0.006776940101274721, -0.4479376119151928
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮368∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 548.4647027190321, -460.4758647994091, 5
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.0013904895969760035, 0.000027012037753452618, 0.026086894184346412
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Ambient: 1
+- Entity: ∈⋮370∈⋮Bubble+%28spawned+from+3%29
+  behaviors.Proximity:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    InRange:
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+        2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
+    Range: 5
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮3∈⋮Bubble
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Angle: 0
+    Pos:
+      Now: 585.4322169871762, -493.23040186706174, 7.261951738763356
+      Spawn: 0, 0, 0
+    Size: 10, 10
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideBounce
+    Elasticity: 0.5
+    Mass: 0.25
+    MountHeight: 15
+    Vel:
+      Now: -0.012127939613300087, 0.674614291078839, -0.44638228386252027
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Bubble (spawned from 3)
+  materials.Image: ∈⋮4∈⋮Bubble∈⋮2edae4ab
+  materials.Lit: ∈⋮4∈⋮Bubble∈⋮2edae4ab
   materials.Visible:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Ambient: 1

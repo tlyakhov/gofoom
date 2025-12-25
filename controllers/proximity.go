@@ -179,9 +179,10 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	})*/
 }
 
-func (pc *ProximityController) Frame() {
+func (pc *ProximityController) entityFrame(e ecs.Entity) {
+	// TODO: optimize this
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
-		if state.Source != pc.Entity {
+		if state.Source != e {
 			return true
 		}
 		state.PrevStatus = state.Status
@@ -198,14 +199,14 @@ func (pc *ProximityController) Frame() {
 
 	pc.flags = 0
 	// TODO: Add InternalSegments
-	if sector := core.GetSector(pc.Entity); sector != nil && sector.IsActive() {
+	if sector := core.GetSector(e); sector != nil && sector.IsActive() {
 		pc.proximityOnSector(sector)
-	} else if body := core.GetBody(pc.Entity); body != nil && body.SectorEntity != 0 && body.IsActive() {
+	} else if body := core.GetBody(e); body != nil && body.SectorEntity != 0 && body.IsActive() {
 		pc.proximityOnBody(body)
 	}
 
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
-		if state.Source != pc.Entity {
+		if state.Source != e {
 			return true
 		}
 		if state.Status == behaviors.ProximityIdle {
@@ -224,4 +225,8 @@ func (pc *ProximityController) Frame() {
 		}
 		return true
 	})
+}
+
+func (pc *ProximityController) Frame() {
+	pc.Apply(pc.Entity, pc.entityFrame)
 }

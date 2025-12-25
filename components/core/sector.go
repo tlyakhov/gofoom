@@ -142,11 +142,12 @@ func (s *Sector) OnDelete() {
 
 func (s *Sector) OnAttach() {
 	s.Attached.OnAttach()
+	s.Top.Sector = s
+	s.Bottom.Sector = s
 	s.Top.Z.Attach(ecs.Simulation)
 	s.Bottom.Z.Attach(ecs.Simulation)
 	s.Transform.Attach(ecs.Simulation)
 	s.Center.Attach(ecs.Simulation)
-
 	// When we attach a component, its address may change. Ensure segments don't
 	// wind up referencing an unattached sector.
 	for _, seg := range s.Segments {
