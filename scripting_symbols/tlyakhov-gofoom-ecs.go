@@ -35,7 +35,7 @@ func init() {
 		"ComponentTableHit":               reflect.ValueOf(&ecs.ComponentTableHit).Elem(),
 		"ComponentTableMiss":              reflect.ValueOf(&ecs.ComponentTableMiss).Elem(),
 		"ControllerFrame":                 reflect.ValueOf(ecs.ControllerFrame),
-		"ControllerRecalculate":           reflect.ValueOf(ecs.ControllerRecalculate),
+		"ControllerPrecompute":            reflect.ValueOf(ecs.ControllerPrecompute),
 		"CreateEntity":                    reflect.ValueOf(ecs.CreateEntity),
 		"Delete":                          reflect.ValueOf(ecs.Delete),
 		"DeleteByType":                    reflect.ValueOf(ecs.DeleteByType),
@@ -113,36 +113,39 @@ func init() {
 		"Types":                           reflect.ValueOf(ecs.Types),
 
 		// type definitions
-		"Attachable":       reflect.ValueOf((*ecs.Attachable)(nil)),
-		"Attached":         reflect.ValueOf((*ecs.Attached)(nil)),
-		"BaseController":   reflect.ValueOf((*ecs.BaseController)(nil)),
-		"Component":        reflect.ValueOf((*ecs.Component)(nil)),
-		"ComponentArena":   reflect.ValueOf((*ecs.ComponentArena)(nil)),
-		"ComponentFlags":   reflect.ValueOf((*ecs.ComponentFlags)(nil)),
-		"ComponentID":      reflect.ValueOf((*ecs.ComponentID)(nil)),
-		"ComponentTable":   reflect.ValueOf((*ecs.ComponentTable)(nil)),
-		"Controller":       reflect.ValueOf((*ecs.Controller)(nil)),
-		"ControllerMethod": reflect.ValueOf((*ecs.ControllerMethod)(nil)),
-		"Entity":           reflect.ValueOf((*ecs.Entity)(nil)),
-		"EntitySourceID":   reflect.ValueOf((*ecs.EntitySourceID)(nil)),
-		"EntityTable":      reflect.ValueOf((*ecs.EntityTable)(nil)),
-		"FieldFlags":       reflect.ValueOf((*ecs.FieldFlags)(nil)),
-		"Linked":           reflect.ValueOf((*ecs.Linked)(nil)),
-		"LinkedController": reflect.ValueOf((*ecs.LinkedController)(nil)),
-		"Named":            reflect.ValueOf((*ecs.Named)(nil)),
-		"Relation":         reflect.ValueOf((*ecs.Relation)(nil)),
-		"RelationType":     reflect.ValueOf((*ecs.RelationType)(nil)),
-		"Serializable":     reflect.ValueOf((*ecs.Serializable)(nil)),
-		"Snapshot":         reflect.ValueOf((*ecs.Snapshot)(nil)),
-		"SourceFile":       reflect.ValueOf((*ecs.SourceFile)(nil)),
-		"SourceFileHash":   reflect.ValueOf((*ecs.SourceFileHash)(nil)),
+		"Attachable":             reflect.ValueOf((*ecs.Attachable)(nil)),
+		"Attached":               reflect.ValueOf((*ecs.Attached)(nil)),
+		"AttachedWithIndirects":  reflect.ValueOf((*ecs.AttachedWithIndirects)(nil)),
+		"BaseController":         reflect.ValueOf((*ecs.BaseController)(nil)),
+		"Component":              reflect.ValueOf((*ecs.Component)(nil)),
+		"ComponentArena":         reflect.ValueOf((*ecs.ComponentArena)(nil)),
+		"ComponentFlags":         reflect.ValueOf((*ecs.ComponentFlags)(nil)),
+		"ComponentID":            reflect.ValueOf((*ecs.ComponentID)(nil)),
+		"ComponentTable":         reflect.ValueOf((*ecs.ComponentTable)(nil)),
+		"ComponentWithIndirects": reflect.ValueOf((*ecs.ComponentWithIndirects)(nil)),
+		"Controller":             reflect.ValueOf((*ecs.Controller)(nil)),
+		"ControllerMethod":       reflect.ValueOf((*ecs.ControllerMethod)(nil)),
+		"Entity":                 reflect.ValueOf((*ecs.Entity)(nil)),
+		"EntitySourceID":         reflect.ValueOf((*ecs.EntitySourceID)(nil)),
+		"EntityTable":            reflect.ValueOf((*ecs.EntityTable)(nil)),
+		"FieldFlags":             reflect.ValueOf((*ecs.FieldFlags)(nil)),
+		"Linked":                 reflect.ValueOf((*ecs.Linked)(nil)),
+		"LinkedController":       reflect.ValueOf((*ecs.LinkedController)(nil)),
+		"Named":                  reflect.ValueOf((*ecs.Named)(nil)),
+		"Relation":               reflect.ValueOf((*ecs.Relation)(nil)),
+		"RelationType":           reflect.ValueOf((*ecs.RelationType)(nil)),
+		"Serializable":           reflect.ValueOf((*ecs.Serializable)(nil)),
+		"Snapshot":               reflect.ValueOf((*ecs.Snapshot)(nil)),
+		"SourceFile":             reflect.ValueOf((*ecs.SourceFile)(nil)),
+		"SourceFileHash":         reflect.ValueOf((*ecs.SourceFileHash)(nil)),
 
 		// interface wrapper definitions
-		"_Attachable":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
-		"_Component":      reflect.ValueOf((*_tlyakhov_gofoom_ecs_Component)(nil)),
-		"_ComponentArena": reflect.ValueOf((*_tlyakhov_gofoom_ecs_ComponentArena)(nil)),
-		"_Controller":     reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
-		"_Serializable":   reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
+		"_Attachable":             reflect.ValueOf((*_tlyakhov_gofoom_ecs_Attachable)(nil)),
+		"_Component":              reflect.ValueOf((*_tlyakhov_gofoom_ecs_Component)(nil)),
+		"_ComponentArena":         reflect.ValueOf((*_tlyakhov_gofoom_ecs_ComponentArena)(nil)),
+		"_ComponentWithIndirects": reflect.ValueOf((*_tlyakhov_gofoom_ecs_ComponentWithIndirects)(nil)),
+		"_Controller":             reflect.ValueOf((*_tlyakhov_gofoom_ecs_Controller)(nil)),
+		"_Serializable":           reflect.ValueOf((*_tlyakhov_gofoom_ecs_Serializable)(nil)),
 	}
 }
 
@@ -158,18 +161,18 @@ func (W _tlyakhov_gofoom_ecs_Attachable) OnAttach() {
 
 // _tlyakhov_gofoom_ecs_Component is an interface wrapper for Component type
 type _tlyakhov_gofoom_ecs_Component struct {
-	IValue           interface{}
-	WBase            func() *ecs.Attached
-	WComponentID     func() ecs.ComponentID
-	WConstruct       func(data map[string]any)
-	WIsActive        func() bool
-	WIsAttached      func() bool
-	WMultiAttachable func() bool
-	WOnAttach        func()
-	WOnDelete        func()
-	WOnDetach        func(a0 ecs.Entity)
-	WSerialize       func() map[string]any
-	WString          func() string
+	IValue       interface{}
+	WBase        func() *ecs.Attached
+	WComponentID func() ecs.ComponentID
+	WConstruct   func(data map[string]any)
+	WIsActive    func() bool
+	WIsAttached  func() bool
+	WOnAttach    func()
+	WOnDelete    func()
+	WOnDetach    func(a0 ecs.Entity)
+	WSerialize   func() map[string]any
+	WShareable   func() bool
+	WString      func() string
 }
 
 func (W _tlyakhov_gofoom_ecs_Component) Base() *ecs.Attached {
@@ -187,9 +190,6 @@ func (W _tlyakhov_gofoom_ecs_Component) IsActive() bool {
 func (W _tlyakhov_gofoom_ecs_Component) IsAttached() bool {
 	return W.WIsAttached()
 }
-func (W _tlyakhov_gofoom_ecs_Component) MultiAttachable() bool {
-	return W.WMultiAttachable()
-}
 func (W _tlyakhov_gofoom_ecs_Component) OnAttach() {
 	W.WOnAttach()
 }
@@ -201,6 +201,9 @@ func (W _tlyakhov_gofoom_ecs_Component) OnDetach(a0 ecs.Entity) {
 }
 func (W _tlyakhov_gofoom_ecs_Component) Serialize() map[string]any {
 	return W.WSerialize()
+}
+func (W _tlyakhov_gofoom_ecs_Component) Shareable() bool {
+	return W.WShareable()
 }
 func (W _tlyakhov_gofoom_ecs_Component) String() string {
 	if W.WString == nil {
@@ -266,6 +269,63 @@ func (W _tlyakhov_gofoom_ecs_ComponentArena) Type() reflect.Type {
 	return W.WType()
 }
 
+// _tlyakhov_gofoom_ecs_ComponentWithIndirects is an interface wrapper for ComponentWithIndirects type
+type _tlyakhov_gofoom_ecs_ComponentWithIndirects struct {
+	IValue       interface{}
+	WBase        func() *ecs.Attached
+	WComponentID func() ecs.ComponentID
+	WConstruct   func(data map[string]any)
+	WIndirects   func() *ecs.EntityTable
+	WIsActive    func() bool
+	WIsAttached  func() bool
+	WOnAttach    func()
+	WOnDelete    func()
+	WOnDetach    func(a0 ecs.Entity)
+	WSerialize   func() map[string]any
+	WShareable   func() bool
+	WString      func() string
+}
+
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) Base() *ecs.Attached {
+	return W.WBase()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) ComponentID() ecs.ComponentID {
+	return W.WComponentID()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) Construct(data map[string]any) {
+	W.WConstruct(data)
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) Indirects() *ecs.EntityTable {
+	return W.WIndirects()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) IsActive() bool {
+	return W.WIsActive()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) IsAttached() bool {
+	return W.WIsAttached()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) OnAttach() {
+	W.WOnAttach()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) OnDelete() {
+	W.WOnDelete()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) OnDetach(a0 ecs.Entity) {
+	W.WOnDetach(a0)
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) Serialize() map[string]any {
+	return W.WSerialize()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) Shareable() bool {
+	return W.WShareable()
+}
+func (W _tlyakhov_gofoom_ecs_ComponentWithIndirects) String() string {
+	if W.WString == nil {
+		return ""
+	}
+	return W.WString()
+}
+
 // _tlyakhov_gofoom_ecs_Controller is an interface wrapper for Controller type
 type _tlyakhov_gofoom_ecs_Controller struct {
 	IValue               interface{}
@@ -273,7 +333,7 @@ type _tlyakhov_gofoom_ecs_Controller struct {
 	WEditorPausedMethods func() ecs.ControllerMethod
 	WFrame               func()
 	WMethods             func() ecs.ControllerMethod
-	WRecalculate         func()
+	WPrecompute          func()
 	WTarget              func(a0 ecs.Component, a1 ecs.Entity) bool
 }
 
@@ -289,8 +349,8 @@ func (W _tlyakhov_gofoom_ecs_Controller) Frame() {
 func (W _tlyakhov_gofoom_ecs_Controller) Methods() ecs.ControllerMethod {
 	return W.WMethods()
 }
-func (W _tlyakhov_gofoom_ecs_Controller) Recalculate() {
-	W.WRecalculate()
+func (W _tlyakhov_gofoom_ecs_Controller) Precompute() {
+	W.WPrecompute()
 }
 func (W _tlyakhov_gofoom_ecs_Controller) Target(a0 ecs.Component, a1 ecs.Entity) bool {
 	return W.WTarget(a0, a1)

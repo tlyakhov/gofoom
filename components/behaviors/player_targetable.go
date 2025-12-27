@@ -24,7 +24,7 @@ type PlayerTargetable struct {
 	MessageTemplate *template.Template
 }
 
-func (pt *PlayerTargetable) MultiAttachable() bool { return true }
+func (pt *PlayerTargetable) Shareable() bool { return true }
 
 func (pt *PlayerTargetable) Pos(e ecs.Entity) *concepts.Vector3 {
 	if b := core.GetBody(e); b != nil {

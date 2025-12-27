@@ -33,7 +33,7 @@ func (a *RotateSegments) Activate() {
 		}
 		a.Rotate(s.Sector, false)
 	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
 }

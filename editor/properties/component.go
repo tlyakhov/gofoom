@@ -108,7 +108,7 @@ func (g *Grid) fieldComponent(field *state.PropertyGridField) {
 
 	c := gridAddOrUpdateWidgetAtIndex[*fyne.Container](g)
 	c.Layout = layout.NewVBoxLayout()
-	if parent.MultiAttachable() {
+	if parent.Shareable() {
 		c.Objects = []fyne.CanvasObject{label, addButton, removeButton}
 	} else {
 		c.Objects = []fyne.CanvasObject{removeButton}

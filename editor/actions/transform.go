@@ -51,7 +51,7 @@ func (a *Transform) end() {
 	}
 
 	a.State().Lock.Lock()
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	a.State().Lock.Unlock()
 	a.State().Modified = true
 	a.ActionFinished(false, true, true)
@@ -123,7 +123,7 @@ func (a *Transform) Apply() {
 			m.ProjectSelf(p)
 			*p = *a.WorldGrid(p)
 		})
-		s.Recalculate()
+		s.Precompute()
 	}
 }
 func (a *Transform) Cancel() {}

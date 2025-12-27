@@ -98,7 +98,7 @@ func (a *AddEntity) EndPoint() bool {
 		return false
 	}
 	a.State().Lock.Lock()
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	a.State().Modified = true
 	a.State().Lock.Unlock()
 	a.ActionFinished(false, true, a.Components.Get(core.SectorCID) != nil)

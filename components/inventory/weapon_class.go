@@ -32,7 +32,7 @@ type WeaponMark struct {
 	*materials.Surface
 }
 
-func (w *WeaponClass) MultiAttachable() bool { return true }
+func (w *WeaponClass) Shareable() bool { return true }
 
 func (w *WeaponClass) String() string {
 	return "WeaponClass"

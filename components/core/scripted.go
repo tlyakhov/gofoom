@@ -10,18 +10,16 @@ import (
 )
 
 type Scripted struct {
-	ecs.Attached      `editable:"^"`
-	ecs.ApplyIndirect `editable:"^"`
+	ecs.AttachedWithIndirects `editable:"^"`
 
 	OnFrame Script   `editable:"OnFrame"`
 	Args    []string `editable:"Arguments"`
 }
 
-func (s *Scripted) MultiAttachable() bool { return true }
+func (s *Scripted) Shareable() bool { return true }
 
 func (s *Scripted) Construct(data map[string]any) {
-	s.Attached.Construct(data)
-	s.ApplyIndirect.Construct(data)
+	s.AttachedWithIndirects.Construct(data)
 
 	if data == nil {
 		s.OnFrame.Construct(nil)
@@ -40,8 +38,7 @@ func (s *Scripted) Construct(data map[string]any) {
 }
 
 func (s *Scripted) Serialize() map[string]any {
-	result := s.Attached.Serialize()
-	s.ApplyIndirect.Serialize(result)
+	result := s.AttachedWithIndirects.Serialize()
 
 	if !s.OnFrame.IsEmpty() {
 		result["OnFrame"] = s.OnFrame.Serialize()

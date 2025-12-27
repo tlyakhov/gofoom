@@ -40,7 +40,7 @@ type Image struct {
 	Image         image.Image   `ecs:"non-traversable,shallow-cacheable"`
 }
 
-func (img *Image) MultiAttachable() bool { return true }
+func (img *Image) Shareable() bool { return true }
 
 func (img *Image) String() string {
 	return "Image: " + img.Source

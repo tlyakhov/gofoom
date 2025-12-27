@@ -120,9 +120,9 @@ func inspectTypes(pkg *packages.Package, n ast.Node) bool {
 			continue
 		}
 
-		// We check if the field type is an identifier named "Attached".
+		// We check if the field type is an identifier named "Attached" or "AttachedWithIndirects".
 		if ident, ok := selector.X.(*ast.Ident); !ok || ident.Name != "ecs" ||
-			selector.Sel.Name != "Attached" {
+			(selector.Sel.Name != "Attached" && selector.Sel.Name != "AttachedWithIndirects") {
 			continue
 		}
 

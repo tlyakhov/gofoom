@@ -33,7 +33,7 @@ func (a *SetProperty) FireHooks() {
 	// TODO: Optimize this by remembering visited parents to avoid firing these
 	//       multiple times for the same selection.
 	// TODO: Instead of this giant switch, we should use the "mark dirty" and
-	//       recalculate pattern.
+	//       precompute pattern.
 	for _, v := range a.Values {
 		if v.Entity.IsExternal() {
 			continue
@@ -42,9 +42,9 @@ func (a *SetProperty) FireHooks() {
 		switch target := v.Parent().(type) {
 		case *materials.Image:
 			target.MarkDirty()
-			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerPrecompute)
 		case *ecs.Linked, *audio.Sound, *core.Script, *core.SectorPlane, *core.Sector:
-			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerRecalculate)
+			ecs.ActAllControllersOneEntity(v.Entity, ecs.ControllerPrecompute)
 			// TODO: use a nicer source code editor for script properties.
 		case *ecs.SourceFile:
 			if target.Loaded {
@@ -53,7 +53,7 @@ func (a *SetProperty) FireHooks() {
 			target.Load()
 		case dynamic.Dynamic:
 			target.ResetToSpawn()
-			target.Recalculate()
+			target.Precompute()
 		case *materials.Text:
 			target.RasterizeText()
 		case *core.SectorSegment:
@@ -64,12 +64,12 @@ func (a *SetProperty) FireHooks() {
 			switch a.Name {
 			case "Segment.A":
 				target.P.SetAll(*target.A)
-				target.Recalculate()
+				target.Precompute()
 			case "Segment.B":
 				target.Next.P.SetAll(*target.B)
-				target.Recalculate()
+				target.Precompute()
 			case "Segment.Portal sector":
-				target.Recalculate()
+				target.Precompute()
 			}
 
 			log.Printf("SetProperty.FireHooks for *core.SectorSegment: %v", a.Name)

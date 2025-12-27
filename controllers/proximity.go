@@ -26,7 +26,7 @@ func (pc *ProximityController) ComponentID() ecs.ComponentID {
 }
 
 func (pc *ProximityController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerPrecompute
 }
 
 func (pc *ProximityController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -43,7 +43,7 @@ var proximityScriptParams = []core.ScriptParam{
 	{Name: "flags", TypeName: "behaviors.ProximityFlags"},
 }
 
-func (pc *ProximityController) Recalculate() {
+func (pc *ProximityController) Precompute() {
 	if !pc.InRange.IsEmpty() {
 		pc.InRange.Params = proximityScriptParams
 		pc.InRange.Compile()
@@ -179,10 +179,10 @@ func (pc *ProximityController) proximityOnBody(body *core.Body) {
 	})*/
 }
 
-func (pc *ProximityController) entityFrame(e ecs.Entity) {
+func (pc *ProximityController) Frame() {
 	// TODO: optimize this
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
-		if state.Source != e {
+		if state.Source != pc.Entity {
 			return true
 		}
 		state.PrevStatus = state.Status
@@ -199,14 +199,14 @@ func (pc *ProximityController) entityFrame(e ecs.Entity) {
 
 	pc.flags = 0
 	// TODO: Add InternalSegments
-	if sector := core.GetSector(e); sector != nil && sector.IsActive() {
+	if sector := core.GetSector(pc.Entity); sector != nil && sector.IsActive() {
 		pc.proximityOnSector(sector)
-	} else if body := core.GetBody(e); body != nil && body.SectorEntity != 0 && body.IsActive() {
+	} else if body := core.GetBody(pc.Entity); body != nil && body.SectorEntity != 0 && body.IsActive() {
 		pc.proximityOnBody(body)
 	}
 
 	pc.State.Range(func(key uint64, state *behaviors.ProximityState) bool {
-		if state.Source != e {
+		if state.Source != pc.Entity {
 			return true
 		}
 		if state.Status == behaviors.ProximityIdle {
@@ -225,8 +225,4 @@ func (pc *ProximityController) entityFrame(e ecs.Entity) {
 		}
 		return true
 	})
-}
-
-func (pc *ProximityController) Frame() {
-	pc.Apply(pc.Entity, pc.entityFrame)
 }

@@ -25,7 +25,7 @@ type Text struct {
 	Color dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
-func (t *Text) MultiAttachable() bool { return true }
+func (t *Text) Shareable() bool { return true }
 
 func (t *Text) OnDelete() {
 	defer t.Attached.OnDelete()

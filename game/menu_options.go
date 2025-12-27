@@ -34,9 +34,9 @@ func initMenuOptions() {
 			renderer.FOV = float64(p.Widget("fov").(*ui.Slider).Value)
 			renderer.LightGrid = float64(p.Widget("lightGrid").(*ui.Slider).Value) / 10.0
 			toneMap.Gamma = float64(p.Widget("gamma").(*ui.Slider).Value) / 10.0
-			toneMap.Recalculate()
+			toneMap.Precompute()
 			// After everything's loaded, trigger the controllers
-			ecs.ActAllControllers(ecs.ControllerRecalculate)
+			ecs.ActAllControllers(ecs.ControllerPrecompute)
 			renderer.Initialize()
 			saveSettings()
 		},

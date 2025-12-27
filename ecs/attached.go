@@ -33,6 +33,8 @@ type Attached struct {
 	indexInArena int
 	// Entities is a table of entities to which this component is attached. This
 	// is used for components that can be attached to multiple entities.
+	// TODO: Consider breaking this out into a `Shared` mixin, to avoid wasting
+	// memory for components that can't be shared.
 	Entities EntityTable `editable:"Component" edit_type:"Component" edit_sort:"0"`
 }
 
@@ -86,9 +88,9 @@ func (a *Attached) Base() *Attached {
 	return a
 }
 
-// MultiAttachable returns whether this component type can be attached to
+// Shareable returns whether this component type can be attached to
 // multiple entities. By default, components cannot be shared.
-func (a *Attached) MultiAttachable() bool {
+func (a *Attached) Shareable() bool {
 	// By default, components cannot be shared
 	return false
 }

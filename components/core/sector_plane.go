@@ -84,7 +84,7 @@ func (s *SectorPlane) Serialize() map[string]any {
 	return result
 }
 
-func (s *SectorPlane) Recalculate() {
+func (s *SectorPlane) Precompute() {
 	if s.Sector == nil || len(s.Sector.Segments) == 0 {
 		s.XYDet = 0
 		return

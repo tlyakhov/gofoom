@@ -46,7 +46,7 @@ func (a *AddSector) newSegment() {
 	}
 
 	a.Sector.Segments = append(a.Sector.Segments, &seg)
-	a.Sector.Recalculate()
+	a.Sector.Precompute()
 }
 
 func (a *AddSector) Point() bool {
@@ -63,9 +63,9 @@ func (a *AddSector) Point() bool {
 	seg := segs[len(segs)-1]
 	worldGrid := a.WorldGrid(&a.State().MouseWorld)
 	seg.P.SetAll(*worldGrid)
-	seg.Recalculate()
+	seg.Precompute()
 	if len(segs) > 1 {
-		seg.Prev.Recalculate()
+		seg.Prev.Precompute()
 	}
 	return true
 }
@@ -99,7 +99,7 @@ func (a *AddSector) EndPoint() bool {
 		if last.P.Render.Sub(&first.P.Render).Length() < state.SegmentSelectionEpsilon {
 			a.State().Lock.Lock()
 			a.Sector.Segments = segs[:(len(segs) - 1)]
-			a.Sector.Recalculate()
+			a.Sector.Precompute()
 			a.Sector.TransformOrigin = *a.Sector.Center.Spawn.To2D()
 			a.guessLayer()
 			a.State().Lock.Unlock()

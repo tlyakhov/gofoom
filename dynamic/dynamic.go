@@ -274,7 +274,7 @@ func (d *DynamicValue[T]) Construct(data any) {
 		d.Response = cast.ToFloat64(v)
 	}
 
-	d.Recalculate()
+	d.Precompute()
 
 	if v, ok := params["Animation"]; ok {
 		d.Animation = new(Animation[T])
@@ -287,7 +287,7 @@ func (d *DynamicValue[T]) GetAnimation() Animated {
 	return d.Animation
 }
 
-func (d *DynamicValue[T]) Recalculate() {
+func (d *DynamicValue[T]) Precompute() {
 	// Based on "Giving Personality to Procedural Animations using Math"
 	// https://www.youtube.com/watch?v=KPoeNZZ6H4s
 	if d.Freq == 0 {

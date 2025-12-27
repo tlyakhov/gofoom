@@ -22,7 +22,7 @@ func (sc *ScriptedController) ComponentID() ecs.ComponentID {
 }
 
 func (sc *ScriptedController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerPrecompute
 }
 
 func (sc *ScriptedController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -37,7 +37,7 @@ var scriptedScriptParams = []core.ScriptParam{
 	{Name: "args", TypeName: "[]string"},
 }
 
-func (sc *ScriptedController) Recalculate() {
+func (sc *ScriptedController) Precompute() {
 	if !sc.OnFrame.IsEmpty() {
 		sc.OnFrame.Params = scriptedScriptParams
 		sc.OnFrame.Compile()
@@ -48,10 +48,8 @@ func (sc *ScriptedController) Frame() {
 	if !sc.OnFrame.IsCompiled() {
 		return
 	}
-	sc.Apply(sc.Entity, func(e ecs.Entity) {
-		sc.OnFrame.Vars["scripted"] = sc.Scripted
-		sc.OnFrame.Vars["onEntity"] = e
-		sc.OnFrame.Vars["args"] = sc.Args
-		sc.OnFrame.Act()
-	})
+	sc.OnFrame.Vars["scripted"] = sc.Scripted
+	sc.OnFrame.Vars["onEntity"] = sc.Entity
+	sc.OnFrame.Vars["args"] = sc.Args
+	sc.OnFrame.Act()
 }

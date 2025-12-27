@@ -53,7 +53,7 @@ func (a *MoveSurface) Activate() {
 			plane.Z.ResetToSpawn()
 		}
 	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	a.State().Modified = true
 	a.ActionFinished(false, true, false)
 }

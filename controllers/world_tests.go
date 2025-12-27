@@ -42,7 +42,7 @@ func CreateTestSector(name string, x, y, size float64) *core.Sector {
 	seg.HiSurface.Material = mat
 	seg.LoSurface.Material = mat
 
-	sector.Recalculate()
+	sector.Precompute()
 	return sector
 }
 
@@ -220,7 +220,7 @@ func CreateTestWorld() {
 	}
 	CreateSpawn()
 	// After everything's loaded, trigger the controllers
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	AutoPortal()
 }
 func CreateTestWorld2() {
@@ -250,7 +250,7 @@ func CreateTestWorld2() {
 	CreateSpawn()
 
 	// After everything's loaded, trigger the controllers
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	AutoPortal()
 }
 
@@ -273,7 +273,7 @@ func CreateTestWorld3() {
 		"GenerateMipMaps": true,
 		"ConvertSRGB":     false,
 	})
-	ecs.ActAllControllersOneEntity(heightImage.Entity, ecs.ControllerRecalculate)
+	ecs.ActAllControllersOneEntity(heightImage.Entity, ecs.ControllerPrecompute)
 
 	testw := 64
 	testh := 64
@@ -343,8 +343,8 @@ func CreateTestWorld3() {
 				sector2.Segments[i].Surface.Material = eSky
 				sector2.Segments[i].LoSurface.Material = eDirt
 			}
-			sector1.Recalculate()
-			sector2.Recalculate()
+			sector1.Precompute()
+			sector2.Precompute()
 		}
 	}
 
@@ -384,5 +384,5 @@ func CreateTestWorld3() {
 	CreateSpawn()
 	AutoPortal()
 	// After everything's loaded, trigger the controllers
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 }

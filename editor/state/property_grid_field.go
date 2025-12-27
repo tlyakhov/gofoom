@@ -42,7 +42,7 @@ var EmbeddedTypes = map[string]struct{}{
 	reflect.TypeFor[**dynamic.Animation[concepts.Vector4]]().String(): {},
 	reflect.TypeFor[**dynamic.Animation[concepts.Matrix2]]().String(): {},
 
-	reflect.TypeFor[*ecs.ApplyIndirect]().String(): {},
+	reflect.TypeFor[*ecs.AttachedWithIndirects]().String(): {},
 }
 
 type PropertyGridField struct {

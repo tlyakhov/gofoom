@@ -31,11 +31,11 @@ func (mc *MobileController) ComponentID() ecs.ComponentID {
 
 func (mc *MobileController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerFrame |
-		ecs.ControllerRecalculate
+		ecs.ControllerPrecompute
 }
 
 func (mc *MobileController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (mc *MobileController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -140,6 +140,6 @@ func (mc *MobileController) Frame() {
 	core.QuadTree.Update(mc.Body)
 }
 
-func (mc *MobileController) Recalculate() {
+func (mc *MobileController) Precompute() {
 	mc.Collide()
 }

@@ -196,7 +196,7 @@ func Link(target Entity, source Entity) {
 		return
 	}
 	for _, c := range rows[sourceID][int(sourceLocal)] {
-		if c == nil || !c.MultiAttachable() {
+		if c == nil || !c.Shareable() {
 			continue
 		}
 		attach(target, &c, c.ComponentID())
@@ -275,8 +275,8 @@ func attach(entity Entity, component *Component, componentID ComponentID) {
 
 	attachable := *component
 	a := attachable.Base()
-	if a.Attachments > 0 && !attachable.MultiAttachable() {
-		log.Printf("ecs.attach: tried to attach Component %v to %v, but it is already attached to %v and not multi-attachable.", attachable.String(), entity, a.Entity.ShortString())
+	if a.Attachments > 0 && !attachable.Shareable() {
+		log.Printf("ecs.attach: tried to attach Component %v to %v, but it is already attached to %v and not shareable.", attachable.String(), entity, a.Entity.ShortString())
 		return
 	}
 	a.Entities.Set(entity)
@@ -393,7 +393,7 @@ func DeleteByType(component Component) {
 
 	tLocal := reflect.ValueOf(component).Type()
 
-	if tLocal.Kind() == reflect.Ptr {
+	if tLocal.Kind() == reflect.Pointer {
 		tLocal = tLocal.Elem()
 	}
 

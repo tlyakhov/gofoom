@@ -45,12 +45,12 @@ type SectorSegment struct {
 	Flags int
 }
 
-func (s *SectorSegment) Recalculate() {
+func (s *SectorSegment) Precompute() {
 	s.Segment.A = &s.P.Render
 	if s.Next != nil {
 		s.Segment.B = &s.Next.P.Render
 	}
-	s.Segment.Recalculate()
+	s.Segment.Precompute()
 
 	if s.Sector != nil && s.Sector.Winding < 0 {
 		s.Segment.Normal.MulSelf(-1)
@@ -118,9 +118,9 @@ func (s *SectorSegment) Split(p concepts.Vector2) *SectorSegment {
 	// Insert into the sector
 	s.Sector.Segments = append(s.Sector.Segments[:index+1], s.Sector.Segments[index:]...)
 	s.Sector.Segments[index] = copied
-	// Recalculate metadata
+	// Precompute metadata
 	//DbgPrintSegments(seg.Sector)
-	s.Sector.Recalculate()
+	s.Sector.Precompute()
 	//DbgPrintSegments(seg.Sector)
 	return copied
 }

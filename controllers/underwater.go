@@ -26,7 +26,7 @@ func (uc *UnderwaterController) ComponentID() ecs.ComponentID {
 }
 
 func (uc *UnderwaterController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerPrecompute
 }
 
 func (uc *UnderwaterController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -44,7 +44,7 @@ func (uc *UnderwaterController) Frame() {
 	}
 }
 
-func (uc *UnderwaterController) Recalculate() {
+func (uc *UnderwaterController) Precompute() {
 	// TODO: This has a code smell. Should be set by the user
 	uc.Sector.Gravity = concepts.Vector3{0, 0, -constants.GravitySwim}
 }

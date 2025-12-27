@@ -39,6 +39,6 @@ func (c *BaseController) Target(a Component, entity Entity) bool {
 // implementation does nothing.
 func (c *BaseController) Frame() {}
 
-// Recalculate is a controller method that is called when a component is
+// Precompute is a controller method that is called when a component is
 // attached or detached, or when a linked component changes. The base implementation does nothing.
-func (c *BaseController) Recalculate() {}
+func (c *BaseController) Precompute() {}

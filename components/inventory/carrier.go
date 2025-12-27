@@ -26,7 +26,7 @@ func (c *Carrier) String() string {
 	return "Carrier " + c.Slots.String()
 }
 
-func (c *Carrier) MultiAttachable() bool {
+func (c *Carrier) Shareable() bool {
 	return true
 }
 
@@ -36,7 +36,7 @@ func (c *Carrier) OnDetach(e ecs.Entity) {
 		return
 	}
 	for _, slot := range c.Slots {
-		// Slots are not multi-attachable and therefore unique to their
+		// Slots are not shareable and therefore unique to their
 		// carriers. Spawners will copy them for players.
 		// Don't need to check for zero, Delete will ignore it.
 		ecs.Delete(slot)

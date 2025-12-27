@@ -23,7 +23,7 @@ type Segment struct {
 	Normal concepts.Vector2
 }
 
-func (s *Segment) Recalculate() {
+func (s *Segment) Precompute() {
 	s.Length = s.B.Dist(s.A)
 	s.Normal[0] = -(s.B[1] - s.A[1]) / s.Length
 	s.Normal[1] = (s.B[0] - s.A[0]) / s.Length
@@ -195,7 +195,7 @@ func (s *Segment) Construct(data map[string]any) {
 	if v, ok := data["ContactScripts"]; ok {
 		s.ContactScripts = ecs.ConstructSlice[*Script](v, nil)
 	}
-	s.Recalculate()
+	s.Precompute()
 }
 
 func (s *Segment) Serialize() map[string]any {

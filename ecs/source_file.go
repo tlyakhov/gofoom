@@ -182,7 +182,7 @@ func (file *SourceFile) Load() error {
 	err := file.loadEntities()
 	file.serializedContents = nil
 	// After everything's loaded, trigger the controllers
-	ActAllControllers(ControllerRecalculate)
+	ActAllControllers(ControllerPrecompute)
 	return err
 }
 

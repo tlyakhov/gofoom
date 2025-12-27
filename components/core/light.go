@@ -59,7 +59,7 @@ func (l *Light) OnAttach() {
 	}
 }
 
-func (l *Light) MultiAttachable() bool { return true }
+func (l *Light) Shareable() bool { return true }
 
 func (l *Light) String() string {
 	return "Light: " + l.Diffuse.StringHuman(2)

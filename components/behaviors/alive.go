@@ -24,7 +24,7 @@ type Alive struct {
 	Damages      map[string]*Damage
 }
 
-func (a *Alive) MultiAttachable() bool {
+func (a *Alive) Shareable() bool {
 	return true
 }
 

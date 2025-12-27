@@ -181,8 +181,8 @@ func AutoPortal() {
 						}
 					}
 					if split {
-						sector.Recalculate()
-						sector2.Recalculate()
+						sector.Precompute()
+						sector2.Precompute()
 						break
 					}
 				}

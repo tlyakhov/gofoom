@@ -18,7 +18,7 @@ func (lc *LinkedController) ComponentID() ComponentID {
 }
 
 func (lc *LinkedController) Methods() ControllerMethod {
-	return ControllerRecalculate
+	return ControllerPrecompute
 }
 
 func (lc *LinkedController) Target(target Component, e Entity) bool {
@@ -27,7 +27,7 @@ func (lc *LinkedController) Target(target Component, e Entity) bool {
 	return lc.Linked.IsActive()
 }
 
-func (lc *LinkedController) Recalculate() {
+func (lc *LinkedController) Precompute() {
 	// Remove this entity from any linked copies
 	for _, c := range lc.SourceComponents {
 		if c != nil {
@@ -37,7 +37,7 @@ func (lc *LinkedController) Recalculate() {
 	lc.SourceComponents = make(ComponentTable, 0)
 	for _, sourceEntity := range lc.Sources {
 		for _, c := range AllComponents(sourceEntity) {
-			if c == nil || !c.MultiAttachable() {
+			if c == nil || !c.Shareable() {
 				continue
 			}
 			existing := GetComponent(lc.Entity, c.ComponentID())

@@ -34,11 +34,16 @@ type Component interface {
 	OnDelete()
 	// IsActive checks if the component is active.
 	IsActive() bool
-	// MultiAttachable returns whether this component type can be attached to multiple entities.
-	MultiAttachable() bool
+	// Shareable returns whether this component type can be attached to multiple entities.
+	Shareable() bool
 	// Base returns a pointer to the base Attached struct.
 	Base() *Attached
 	IsAttached() bool
+}
+
+type ComponentWithIndirects interface {
+	Component
+	Indirects() *EntityTable
 }
 
 // ComponentArena is an interface for managing a arena of attachable components of a specific type.
@@ -79,10 +84,11 @@ type GenericAttachable[T any] interface {
 type ControllerMethod uint32
 
 const (
-	// ControllerFrame indicates that the controller's Always method should be called every tick.
+	// ControllerFrame represents a controller method that runs every frame
 	ControllerFrame ControllerMethod = 1 << iota
-	// ControllerRecalculate indicates that the controller's Recalculate method should be called when a component is attached or detached.
-	ControllerRecalculate
+	// ControllerPrecompute represents a controller methods that runs whenever
+	// precomputed values need to be updated
+	ControllerPrecompute
 )
 
 // Controller is an interface for defining controllers that act on components within the Universe.
@@ -98,6 +104,6 @@ type Controller interface {
 	Target(Component, Entity) bool
 	// Frame is called every tick for entities that match the controller's component ID and target criteria.
 	Frame()
-	// Recalculate is called when a component is attached or detached, or when a linked component changes.
-	Recalculate()
+	// Precompute is called when components need to update pre-calculated/static state
+	Precompute()
 }
