@@ -34,11 +34,11 @@ func (bc *BodyController) ComponentID() ecs.ComponentID {
 
 func (bc *BodyController) Methods() ecs.ControllerMethod {
 	return ecs.ControllerFrame |
-		ecs.ControllerRecalculate
+		ecs.ControllerPrecompute
 }
 
 func (bc *BodyController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (bc *BodyController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -67,7 +67,7 @@ func (bc *BodyController) Frame() {
 	//}
 }
 
-func (bc *BodyController) Recalculate() {
+func (bc *BodyController) Precompute() {
 	//bc.Collide()
 	bc.findBodySector()
 	core.QuadTree.Update(bc.Body)

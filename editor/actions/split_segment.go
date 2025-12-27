@@ -37,7 +37,7 @@ func (a *SplitSegment) split(ss *segmentSplitter) bool {
 
 	ss.added = ss.original.Split(*isect)
 	ss.added.P.SetAll(*isect)
-	ss.added.Sector.Recalculate()
+	ss.added.Sector.Precompute()
 	a.NewSegments = append(a.NewSegments, ss)
 	return true
 }

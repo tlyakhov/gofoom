@@ -227,6 +227,6 @@ func LoadSnapshot(snapshot Snapshot) error {
 		}
 		return nil
 	})
-	ActAllControllers(ControllerRecalculate)
+	ActAllControllers(ControllerPrecompute)
 	return err
 }

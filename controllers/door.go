@@ -26,7 +26,7 @@ func (d *DoorController) ComponentID() ecs.ComponentID {
 }
 
 func (d *DoorController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerPrecompute
 }
 
 func (d *DoorController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -87,7 +87,7 @@ func (d *DoorController) Frame() {
 	}
 }
 
-func (d *DoorController) Recalculate() {
+func (d *DoorController) Precompute() {
 	if d.Sector != nil {
 		switch d.Type {
 		case behaviors.DoorTypeVertical:
@@ -130,6 +130,6 @@ func (d *DoorController) cacheAutoProximity() {
    			if m == nil || vd == nil { return }
    			if m.Mass > 10 { vd.Intent = behaviors.DoorIntentOpen }`
 
-		ecs.ActAllControllersOneEntity(d.autoProximity.Entity, ecs.ControllerRecalculate)
+		ecs.ActAllControllersOneEntity(d.autoProximity.Entity, ecs.ControllerPrecompute)
 	}
 }

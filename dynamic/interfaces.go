@@ -29,7 +29,7 @@ const (
 type Dynamic interface {
 	Spawnable
 	Update(float64)
-	Recalculate()
+	Precompute()
 	NewFrame()
 	GetAnimation() Animated
 }

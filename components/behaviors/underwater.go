@@ -11,4 +11,4 @@ type Underwater struct {
 	ecs.Attached `editable:"^"`
 }
 
-func (u *Underwater) MultiAttachable() bool { return true }
+func (u *Underwater) Shareable() bool { return true }

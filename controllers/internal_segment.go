@@ -14,7 +14,7 @@ type InternalSegmentController struct {
 }
 
 func init() {
-	// Should run after the SectorController, which recalculates normals etc
+	// Should run after the SectorController, which precomputes normals etc
 	ecs.Types().RegisterController(func() ecs.Controller { return &InternalSegmentController{} }, 60)
 }
 
@@ -23,7 +23,7 @@ func (isc *InternalSegmentController) ComponentID() ecs.ComponentID {
 }
 
 func (isc *InternalSegmentController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (isc *InternalSegmentController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -32,6 +32,6 @@ func (isc *InternalSegmentController) Target(target ecs.Component, e ecs.Entity)
 	return isc.InternalSegment.IsActive()
 }
 
-func (isc *InternalSegmentController) Recalculate() {
+func (isc *InternalSegmentController) Precompute() {
 	isc.AttachToSectors()
 }

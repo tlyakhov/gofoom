@@ -286,7 +286,7 @@ func (a *SectorSplitter) collectEdge(edge *splitEdge) {
 					break
 				}
 			}
-			target.Recalculate()
+			target.Precompute()
 		}
 	}
 }

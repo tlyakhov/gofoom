@@ -24,11 +24,11 @@ func (ptc *PlayerTargetableController) ComponentID() ecs.ComponentID {
 }
 
 func (ptc *PlayerTargetableController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (ptc *PlayerTargetableController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (ptc *PlayerTargetableController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -43,7 +43,7 @@ var playerTargetableScriptParams = []core.ScriptParam{
 	{Name: "carrier", TypeName: "*inventory.Carrier"},
 }
 
-func (ptc *PlayerTargetableController) Recalculate() {
+func (ptc *PlayerTargetableController) Precompute() {
 	if !ptc.Frob.IsEmpty() {
 		ptc.Frob.Params = playerTargetableScriptParams
 		ptc.Frob.Compile()

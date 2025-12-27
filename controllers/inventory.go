@@ -43,7 +43,7 @@ func PickUpInventoryItem(ic *inventory.Carrier, itemEntity ecs.Entity) {
 		//item.Count.Now -= toAdd
 		// Disable all the entity components
 		for _, c := range ecs.AllComponents(itemEntity) {
-			if c != nil && !c.MultiAttachable() {
+			if c != nil && !c.Shareable() {
 				c.Base().Flags &= ^ecs.ComponentActive
 			}
 		}

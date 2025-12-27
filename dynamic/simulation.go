@@ -13,7 +13,7 @@ import (
 // https://gafferongames.com/post/fix_your_timestep/
 type Simulation struct {
 	EditorPaused     bool
-	Recalculate      bool
+	Precompute       bool
 	FrameNanos       int64 // Nanoseconds
 	RenderStateBlend float64
 	FPS              float64
@@ -94,8 +94,8 @@ func (s *Simulation) Step() {
 	s.RenderStateBlend = float64(s.renderTime) / float64(constants.TimeStepNS)
 
 	for d := range s.Dynamics {
-		if s.Recalculate {
-			d.Recalculate()
+		if s.Precompute {
+			d.Precompute()
 		}
 		d.Update(s.RenderStateBlend)
 	}

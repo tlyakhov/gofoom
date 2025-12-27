@@ -13,7 +13,7 @@ type Shader struct {
 	Stages []*ShaderStage `editable:"Stages"`
 }
 
-func (s *Shader) MultiAttachable() bool { return true }
+func (s *Shader) Shareable() bool { return true }
 
 func (s *Shader) Construct(data map[string]any) {
 	s.Attached.Construct(data)

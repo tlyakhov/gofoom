@@ -41,7 +41,7 @@ func (ac *ActionController) ComponentID() ecs.ComponentID {
 }
 
 func (ac *ActionController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerPrecompute
 }
 
 func (ac *ActionController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -83,7 +83,7 @@ func (ac *ActionController) pos(checkProcedural bool) *concepts.Vector3 {
 	return &ac.Body.Pos.Now
 }
 
-func (ac *ActionController) Recalculate() {
+func (ac *ActionController) Precompute() {
 	if ac.State == nil {
 		ac.State = ecs.NewAttachedComponent(ac.Entity, behaviors.ActorStateCID).(*behaviors.ActorState)
 	}
@@ -286,7 +286,7 @@ func (ac *ActionController) Face(face *behaviors.ActionFace) bool {
 
 func (ac *ActionController) Frame() {
 	if ac.State == nil {
-		ac.Recalculate()
+		ac.Precompute()
 	}
 
 	if ac.State.Action == 0 {

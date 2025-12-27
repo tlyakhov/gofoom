@@ -25,7 +25,7 @@ func (sc *SectorController) ComponentID() ecs.ComponentID {
 }
 
 func (sc *SectorController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate | ecs.ControllerFrame
+	return ecs.ControllerPrecompute | ecs.ControllerFrame
 }
 
 func (sc *SectorController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -52,15 +52,15 @@ func applySectorTransform(sector *core.Sector, d dynamic.Dynamic) {
 		seg.P.Now[1] += sector.TransformOrigin[1]
 		seg.P.Render = seg.P.Now
 	}
-	sector.RecalculateNonTopological()
+	sector.PrecomputeNonTopological()
 }
 
-func (sc *SectorController) Recalculate() {
+func (sc *SectorController) Precompute() {
 	sector := sc.Sector
 	sc.Sector.Transform.OnPostUpdate = func(d dynamic.Dynamic) {
 		applySectorTransform(sector, d)
 	}
-	sc.Sector.Recalculate()
+	sc.Sector.Precompute()
 }
 
 func (sc *SectorController) TidyOverlaps(table *ecs.EntityTable) {

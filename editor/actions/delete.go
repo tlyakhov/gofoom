@@ -74,5 +74,5 @@ func (a *Delete) apply() {
 			ecs.Delete(s.Entity)
 		}
 	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 }

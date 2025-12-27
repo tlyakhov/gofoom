@@ -19,7 +19,7 @@ type Spawner struct {
 	Spawned map[ecs.Entity]int64
 }
 
-func (s *Spawner) MultiAttachable() bool {
+func (s *Spawner) Shareable() bool {
 	return true
 }
 

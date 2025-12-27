@@ -14,7 +14,7 @@ type Solid struct {
 	Diffuse      dynamic.DynamicValue[concepts.Vector4] `editable:"Color"`
 }
 
-func (s *Solid) MultiAttachable() bool { return true }
+func (s *Solid) Shareable() bool { return true }
 
 func (s *Solid) OnDelete() {
 	defer s.Attached.OnDelete()

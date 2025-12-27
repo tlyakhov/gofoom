@@ -42,7 +42,7 @@ func (a *AddInternalSegment) Point() bool {
 	if a.ContainingSector != nil {
 		a.Bottom, a.Top = a.ContainingSector.ZAt(worldGrid)
 	}
-	a.Recalculate()
+	a.Precompute()
 	return true
 }
 

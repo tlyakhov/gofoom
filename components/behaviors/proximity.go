@@ -24,8 +24,7 @@ const (
 )
 
 type Proximity struct {
-	ecs.Attached      `editable:"^"`
-	ecs.ApplyIndirect `editable:"^"`
+	ecs.AttachedWithIndirects `editable:"^"`
 
 	ActsOnSectors bool    `editable:"Acts on Sectors?"`
 	Range         float64 `editable:"Range"`
@@ -43,20 +42,20 @@ type Proximity struct {
 	State *xsync.MapOf[uint64, *ProximityState]
 }
 
-func (p *Proximity) MultiAttachable() bool { return true }
+func (p *Proximity) Shareable() bool { return true }
 
 func (p *Proximity) String() string {
 	return fmt.Sprintf("Proximity: %.2f", p.Range)
 }
 
 func (p *Proximity) Construct(data map[string]any) {
-	p.Attached.Construct(data)
+	p.AttachedWithIndirects.Construct(data)
 	p.Range = 100
 	p.Hysteresis = 200
 	p.ActsOnSectors = false
 	p.IgnoreSectorTransform = true
 	p.ValidComponents = make(containers.Set[ecs.ComponentID])
-	p.ApplyIndirect.Construct(data)
+
 	// TODO: Serialize this
 	p.State = xsync.NewMapOf[uint64, *ProximityState]()
 
@@ -104,8 +103,7 @@ func (p *Proximity) Construct(data map[string]any) {
 }
 
 func (p *Proximity) Serialize() map[string]any {
-	result := p.Attached.Serialize()
-	p.ApplyIndirect.Serialize(result)
+	result := p.AttachedWithIndirects.Serialize()
 
 	if p.Range != 100 {
 		result["Range"] = p.Range

@@ -42,7 +42,7 @@ const (
 
 type Door struct {
 	ecs.Attached `editable:"^"`
-	// TODO: Separate out state and make this multi-attachable
+	// TODO: Separate out state and make this shareable
 	State         DoorState
 	Intent        DoorIntent  `editable:"Intent"`
 	Type          DoorType    `editable:"Type"`

@@ -15,7 +15,7 @@ type Lit struct {
 	Diffuse concepts.Vector4 `editable:"Diffuse Color" edit_type:"color"`
 }
 
-func (m *Lit) MultiAttachable() bool { return true }
+func (m *Lit) Shareable() bool { return true }
 
 func (m *Lit) String() string {
 	return "Lit: " + m.Diffuse.String()

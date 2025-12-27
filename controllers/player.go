@@ -36,7 +36,7 @@ func (pc *PlayerController) ComponentID() ecs.ComponentID {
 }
 
 func (pc *PlayerController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame | ecs.ControllerRecalculate
+	return ecs.ControllerFrame | ecs.ControllerPrecompute
 }
 
 func (pc *PlayerController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -103,7 +103,7 @@ func (pc *PlayerController) bob(uw bool) {
 	}
 }
 
-func (pc *PlayerController) Recalculate() {
+func (pc *PlayerController) Precompute() {
 	pc.bob(pc.Underwater())
 }
 

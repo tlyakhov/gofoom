@@ -240,7 +240,7 @@ func (s *Sector) Construct(data map[string]any) {
 		s.TransformOrigin.Deserialize(v.(string))
 	}
 
-	s.Recalculate()
+	s.Precompute()
 }
 
 func (s *Sector) Serialize() map[string]any {
@@ -281,7 +281,7 @@ var contactScriptParams = []ScriptParam{
 	{Name: "sector", TypeName: "*core.Sector"},
 }
 
-func (s *Sector) RecalculateNonTopological() {
+func (s *Sector) PrecomputeNonTopological() {
 	s.Center.SetAll(concepts.Vector3{0, 0, 0})
 	s.Min[0] = math.Inf(1)
 	s.Min[1] = math.Inf(1)
@@ -325,15 +325,15 @@ func (s *Sector) RecalculateNonTopological() {
 		if tz > s.Max[2] {
 			s.Max[2] = tz
 		}
-		seg.Recalculate()
+		seg.Precompute()
 	}
 
 	s.Center.Now.MulSelf(1.0 / float64(len(s.Segments)))
 	s.Center.Spawn.MulSelf(1.0 / float64(len(s.Segments)))
 	s.LightmapBias[0] = math.MaxInt64
 
-	s.Top.Recalculate()
-	s.Bottom.Recalculate()
+	s.Top.Precompute()
+	s.Bottom.Precompute()
 
 	s.HigherLayers = ecs.EntityTable{}
 	s.LowerLayers = ecs.EntityTable{}
@@ -358,7 +358,7 @@ func (s *Sector) RecalculateNonTopological() {
 	}
 }
 
-func (s *Sector) Recalculate() {
+func (s *Sector) Precompute() {
 	// TODO: Make this method more efficient
 	sum := 0.0
 	for i, segment := range s.Segments {
@@ -401,7 +401,7 @@ func (s *Sector) Recalculate() {
 		}
 	}
 
-	s.RecalculateNonTopological()
+	s.PrecomputeNonTopological()
 
 	for _, script := range s.EnterScripts {
 		script.Params = contactScriptParams

@@ -23,7 +23,7 @@ func (sc *SoundController) ComponentID() ecs.ComponentID {
 }
 
 func (sc *SoundController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (sc *SoundController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -32,8 +32,8 @@ func (sc *SoundController) Target(target ecs.Component, e ecs.Entity) bool {
 	return sc.IsActive()
 }
 
-func (sc *SoundController) Recalculate() {
+func (sc *SoundController) Precompute() {
 	if err := sc.Load(); err != nil {
-		log.Printf("SoundController.Recalculate: %v for %v", err, sc.Source)
+		log.Printf("SoundController.Precompute: %v for %v", err, sc.Source)
 	}
 }

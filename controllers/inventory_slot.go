@@ -24,11 +24,11 @@ func (isc *InventorySlotController) ComponentID() ecs.ComponentID {
 }
 
 func (isc *InventorySlotController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (isc *InventorySlotController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (isc *InventorySlotController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -39,7 +39,7 @@ func (isc *InventorySlotController) Target(target ecs.Component, e ecs.Entity) b
 	return isc.Slot != nil && isc.Slot.IsActive()
 }
 
-func (isc *InventorySlotController) Recalculate() {
+func (isc *InventorySlotController) Precompute() {
 	if isc.WeaponClass != nil && isc.Weapon == nil {
 		isc.Weapon = ecs.NewAttachedComponent(isc.Entity, inventory.WeaponCID).(*inventory.Weapon)
 		isc.Weapon.Flags |= ecs.ComponentInternal

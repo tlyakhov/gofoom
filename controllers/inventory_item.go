@@ -30,11 +30,11 @@ func (iic *InventoryItemController) ComponentID() ecs.ComponentID {
 }
 
 func (iic *InventoryItemController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (iic *InventoryItemController) EditorPausedMethods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (iic *InventoryItemController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -55,7 +55,7 @@ func (iic *InventoryItemController) cacheAutoProximity() {
 					p.HoveringTargets.Add(onEntity)
 				}`
 
-		ecs.ActAllControllersOneEntity(iic.autoProximity.Entity, ecs.ControllerRecalculate)
+		ecs.ActAllControllersOneEntity(iic.autoProximity.Entity, ecs.ControllerPrecompute)
 	}
 }
 
@@ -65,11 +65,11 @@ func (iic *InventoryItemController) cacheAutoTargetable() {
 			if carrier == nil || body == nil { return }
 			controllers.PickUpInventoryItem(carrier, body.Entity)`
 		iic.autoPlayerTargetable.Message = `Pick up {{with ecs_Named .TargetableEntity}}{{.Name}}{{else}}item{{end}}`
-		ecs.ActAllControllersOneEntity(iic.autoPlayerTargetable.Entity, ecs.ControllerRecalculate)
+		ecs.ActAllControllersOneEntity(iic.autoPlayerTargetable.Entity, ecs.ControllerPrecompute)
 	}
 }
 
-func (iic *InventoryItemController) Recalculate() {
+func (iic *InventoryItemController) Precompute() {
 	if iic.body != nil && (iic.Flags&inventory.ItemBounce != 0) {
 		a := iic.body.Pos.NewAnimation()
 		a.TweeningFunc = dynamic.EaseInOut2

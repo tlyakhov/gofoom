@@ -21,6 +21,6 @@ func (a *AddComponent) Activate() {
 		ecs.NewAttachedComponent(entity, a.ID)
 		a.FlushEntityImage(entity)
 	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	a.ActionFinished(false, true, a.ID == core.SectorCID)
 }

@@ -105,7 +105,7 @@ type _tlyakhov_gofoom_dynamic_Dynamic struct {
 	WDetach       func(sim *dynamic.Simulation)
 	WGetAnimation func() dynamic.Animated
 	WNewFrame     func()
-	WRecalculate  func()
+	WPrecompute   func()
 	WResetToSpawn func()
 	WUpdate       func(a0 float64)
 }
@@ -122,8 +122,8 @@ func (W _tlyakhov_gofoom_dynamic_Dynamic) GetAnimation() dynamic.Animated {
 func (W _tlyakhov_gofoom_dynamic_Dynamic) NewFrame() {
 	W.WNewFrame()
 }
-func (W _tlyakhov_gofoom_dynamic_Dynamic) Recalculate() {
-	W.WRecalculate()
+func (W _tlyakhov_gofoom_dynamic_Dynamic) Precompute() {
+	W.WPrecompute()
 }
 func (W _tlyakhov_gofoom_dynamic_Dynamic) ResetToSpawn() {
 	W.WResetToSpawn()

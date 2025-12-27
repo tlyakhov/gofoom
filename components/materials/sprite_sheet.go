@@ -21,7 +21,7 @@ type SpriteSheet struct {
 	Frame  dynamic.DynamicValue[int] `editable:"Frame"`
 }
 
-func (s *SpriteSheet) MultiAttachable() bool { return true }
+func (s *SpriteSheet) Shareable() bool { return true }
 
 func (s *SpriteSheet) OnDelete() {
 	defer s.Attached.OnDelete()

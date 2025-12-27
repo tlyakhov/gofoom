@@ -211,13 +211,13 @@ func (s *Selectable) PositionRange(f func(p *concepts.Vector2)) {
 			f(&seg.P.Spawn)
 			seg.P.ResetToSpawn()
 		}
-		s.Sector.Recalculate()
+		s.Sector.Precompute()
 	case SelectableLow, SelectableMid, SelectableHi:
 		fallthrough
 	case SelectableSectorSegment:
 		f(&s.SectorSegment.P.Spawn)
 		s.SectorSegment.P.ResetToSpawn()
-		s.Sector.Recalculate()
+		s.Sector.Precompute()
 	case SelectableActionWaypoint:
 		f(s.ActionWaypoint.P.To2D())
 	case SelectableBody:
@@ -225,23 +225,23 @@ func (s *Selectable) PositionRange(f func(p *concepts.Vector2)) {
 		s.Body.Pos.ResetToSpawn()
 	case SelectableInternalSegmentA:
 		f(s.InternalSegment.A)
-		s.InternalSegment.Recalculate()
+		s.InternalSegment.Precompute()
 	case SelectableInternalSegmentB:
 		f(s.InternalSegment.B)
-		s.InternalSegment.Recalculate()
+		s.InternalSegment.Precompute()
 	case SelectableInternalSegment:
 		f(s.InternalSegment.A)
 		f(s.InternalSegment.B)
-		s.InternalSegment.Recalculate()
+		s.InternalSegment.Precompute()
 	}
 }
 
-func (s *Selectable) Recalculate() {
+func (s *Selectable) Precompute() {
 	switch s.Type {
 	case SelectableSector, SelectableLow, SelectableMid, SelectableHi:
 		fallthrough
 	case SelectableSectorSegment:
-		s.Sector.Recalculate()
+		s.Sector.Precompute()
 	case SelectablePath:
 		fallthrough
 	case SelectableBody:
@@ -249,7 +249,7 @@ func (s *Selectable) Recalculate() {
 	case SelectableInternalSegmentA, SelectableInternalSegmentB:
 		fallthrough
 	case SelectableInternalSegment:
-		s.InternalSegment.Recalculate()
+		s.InternalSegment.Precompute()
 	}
 }
 

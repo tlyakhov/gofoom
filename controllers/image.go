@@ -27,7 +27,7 @@ func (ic *ImageController) ComponentID() ecs.ComponentID {
 }
 
 func (ic *ImageController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerRecalculate
+	return ecs.ControllerPrecompute
 }
 
 func (ic *ImageController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -36,7 +36,7 @@ func (ic *ImageController) Target(target ecs.Component, e ecs.Entity) bool {
 	return ic.IsActive()
 }
 
-func (ic *ImageController) Recalculate() {
+func (ic *ImageController) Precompute() {
 	if ic.PixelsLinear != nil {
 		return
 	}

@@ -28,7 +28,7 @@ type Visible struct {
 	PixelOnly bool           `editable:"Pixel only?"`
 }
 
-func (v *Visible) MultiAttachable() bool { return true }
+func (v *Visible) Shareable() bool { return true }
 
 func (v *Visible) String() string {
 	return "Visible (Opacity: " + strconv.FormatFloat(v.Opacity, 'f', 2, 64) + ")"

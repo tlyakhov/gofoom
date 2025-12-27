@@ -30,7 +30,7 @@ type Item struct {
 	Flags       ItemFlags            `editable:"Flags" edit_type:"Flags"`
 }
 
-func (item *Item) MultiAttachable() bool { return true }
+func (item *Item) Shareable() bool { return true }
 
 func (item *Item) String() string {
 	return "Item (" + item.Class + ")"

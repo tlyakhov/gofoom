@@ -22,13 +22,13 @@ type ToneMap struct {
 	LutSRGBToLinear [ToneMapMax + 1]float64
 }
 
-func (tm *ToneMap) MultiAttachable() bool { return true }
+func (tm *ToneMap) Shareable() bool { return true }
 
 func (tm *ToneMap) String() string {
 	return "ToneMap"
 }
 
-func (tm *ToneMap) Recalculate() {
+func (tm *ToneMap) Precompute() {
 	for i := range len(tm.LutLinearToSRGB) {
 		f := float64(i) / ToneMapMax
 		tm.LutLinearToSRGB[i] = tm.LinearTosRGB(f)
@@ -40,7 +40,7 @@ func (tm *ToneMap) Construct(data map[string]any) {
 	tm.Attached.Construct(data)
 	tm.Flags |= ecs.EntityInternal
 	tm.Gamma = 2.4
-	defer tm.Recalculate()
+	defer tm.Precompute()
 
 	if data == nil {
 		return

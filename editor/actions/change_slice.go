@@ -77,6 +77,6 @@ func (a *ChangeSlice) Activate() {
 		oldSlice.Index(a.Index + 1).Set(reflect.ValueOf(v))
 		oldSlice.Index(a.Index).Set(reflect.ValueOf(next))
 	}
-	ecs.ActAllControllers(ecs.ControllerRecalculate)
+	ecs.ActAllControllers(ecs.ControllerPrecompute)
 	a.ActionFinished(false, true, false)
 }
