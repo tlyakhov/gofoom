@@ -69,7 +69,7 @@ func (s1 *Segment) Intersect3D(s2A, s2B, result *concepts.Vector3) bool {
 	}
 	r /= denom
 	s /= denom
-	if r < 0 || s < 0 || r > 1 || s > 1 {
+	if r < -constants.IntersectEpsilon || s < -constants.IntersectEpsilon || r > 1+constants.IntersectEpsilon || s > 1+constants.IntersectEpsilon {
 		return false
 	}
 	result[0] = s1.A[0] + r*s1dx
