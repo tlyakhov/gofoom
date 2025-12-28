@@ -29,6 +29,8 @@ const LogDebugLightHash = 0x4100280000000f
 
 const LogDebugLightEntity = 4
 
+const LightEpsilon = 0.001
+
 const PackedLightBits = 10
 const PackedLightMax = (1 << PackedLightBits) - 1
 const PackedLightRange = 12
@@ -300,7 +302,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		}
 		floorZ, ceilZ = sector.ZAt(i2d)
 		// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
-		if ls.IntersectionTest[2] < floorZ-constants.IntersectEpsilon || ls.IntersectionTest[2] > ceilZ+constants.IntersectEpsilon {
+		if ls.IntersectionTest[2] < floorZ-LightEpsilon || ls.IntersectionTest[2] > ceilZ+LightEpsilon {
 			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 				log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 			}
@@ -309,7 +311,7 @@ func (ls *LightSampler) intersect(sector *core.Sector, p *concepts.Vector3, ligh
 		if !testHigherLayer {
 			floorZ2, ceilZ2 = adj.ZAt(i2d)
 			// log.Printf("floorZ: %v, ceilZ: %v, floorZ2: %v, ceilZ2: %v\n", floorZ, ceilZ, floorZ2, ceilZ2)
-			if ls.IntersectionTest[2] < floorZ2-constants.IntersectEpsilon || ls.IntersectionTest[2] > ceilZ2+constants.IntersectEpsilon {
+			if ls.IntersectionTest[2] < floorZ2-LightEpsilon || ls.IntersectionTest[2] > ceilZ2+LightEpsilon {
 				if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 					log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 				}
