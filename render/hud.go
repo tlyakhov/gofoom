@@ -142,11 +142,11 @@ func (r *Renderer) renderHealthBar(b *core.Body) {
 	alive.Tint(&blank, healthBarHighlightColor)
 
 	switch {
-	case alive.Health >= 33 && alive.Health < 66:
+	case alive.Health.Render >= 33 && alive.Health.Render < 66:
 		healthBarHealthColor[0] = 1
 		healthBarHealthColor[1] = 1
 		healthBarHealthColor[2] = 0
-	case alive.Health < 33:
+	case alive.Health.Render < 33:
 		healthBarHealthColor[0] = 1
 		healthBarHealthColor[1] = 0
 		healthBarHealthColor[2] = 0
@@ -164,7 +164,7 @@ func (r *Renderer) renderHealthBar(b *core.Body) {
 			switch {
 			case x == xStart || y == yStart || x == xEnd-1 || y == yEnd-1:
 				concepts.BlendColors(pixel, &edge, 1.0)
-			case x < xStart+int(alive.Health*float64(xEnd-xStart)/100.0):
+			case x < xStart+int(alive.Health.Render*float64(xEnd-xStart)/100.0):
 				concepts.BlendColors(pixel, healthBarHealthColor, 1.0)
 			default:
 				concepts.BlendColors(pixel, &blank, 1.0)
@@ -228,7 +228,7 @@ func (r *Renderer) DebugInfo() {
 		bodiesPerBlock += len(block.Bodies)
 	}
 	r.Print(ts, 4, 4, fmt.Sprintf("FPS: %.1f, Total Entities: %v, BodiesPerBlock: %.1f", ecs.Simulation.FPS, ecs.Entities.Count(), float64(bodiesPerBlock)/float64(len(r.Blocks))))
-	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health))
+	r.Print(ts, 4, 14, fmt.Sprintf("Health: %.1f", playerAlive.Health.Render))
 	switch 1 {
 	case 0:
 		hits := ecs.ComponentTableHit.Load()

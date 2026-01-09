@@ -64,16 +64,18 @@ func (a *Attached) IsExternal() bool {
 
 // ExternalEntities returns an array of external file entities
 func (a *Attached) ExternalEntities() []Entity {
-	if a.Entity.IsExternal() {
-		return []Entity{a.Entity}
-	}
-
 	result := []Entity{}
+
 	for _, e := range a.Entities {
 		if e != 0 && e.IsExternal() {
 			result = append(result, e)
 		}
 	}
+
+	if len(result) == 0 && a.Entity.IsExternal() {
+		return []Entity{a.Entity}
+	}
+
 	return result
 }
 
