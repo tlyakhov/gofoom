@@ -12,7 +12,7 @@ const (
 
 	// Rendering constants
 	MaxPortals              = 300 // avoid infinite portal traversal
-	IntersectEpsilon        = 1e-10
+	IntersectEpsilon        = 1e-8
 	VelocityEpsilon         = 1e-15
 	LightAttenuationEpsilon = 0.1
 	MaxViewDistance         = 10000.0

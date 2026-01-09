@@ -70,12 +70,6 @@ func init() {
 }
 
 func (s *Script) Compile() {
-	/*if !s.IsAttached() {
-		log.Println("Script.Compile: Universe is nil. Stack trace:")
-		log.Println(concepts.StackTrace())
-		return
-	}*/
-
 	s.ErrorMessage = ""
 	s.interp = interp.New(interp.Options{})
 	s.interp.Use(stdlib.Symbols)

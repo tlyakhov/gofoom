@@ -5,6 +5,8 @@
     Source: data/worlds/common-assets.yaml
 - Entity: ∈⋮3∈⋮Flub
   behaviors.Alive:
+    Die:
+      Code: fmt.Printf("Flub %v died.", onEntity)
     Health: 100
   ecs.Named:
     Name: Flub
