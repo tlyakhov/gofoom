@@ -72,6 +72,7 @@ func (s *Simulation) Step() {
 
 	for s.renderTime >= constants.TimeStepNS {
 		for d := range s.Dynamics {
+			d.NewSimStep()
 			if a := d.GetAnimation(); a != nil && !s.EditorPaused {
 				a.Animate()
 			}

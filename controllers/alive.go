@@ -70,7 +70,7 @@ func (a *AliveController) Frame() {
 	}
 
 	// TODO: We should also check our state when loading.
-	if a.Health.Now <= 0 && a.Health.Prev > 0 {
+	if a.Health.Now <= 0 && a.Health.PrevSimStep > 0 {
 		// We've become dead
 		toDeactivate := [...]ecs.Component{
 			ecs.GetComponent(a.Entity, core.MobileCID),
@@ -89,7 +89,7 @@ func (a *AliveController) Frame() {
 			a.Die.Vars["alive"] = a.Alive
 			a.Die.Act()
 		}
-	} else if a.Health.Now > 0 && a.Health.Prev <= 0 {
+	} else if a.Health.Now > 0 && a.Health.PrevSimStep <= 0 {
 		// We've come back to life!
 		toReactivate := [...]ecs.Component{
 			ecs.GetComponent(a.Entity, core.MobileCID),

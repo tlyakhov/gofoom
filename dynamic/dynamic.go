@@ -24,7 +24,9 @@ import (
 type DynamicValue[T DynamicType] struct {
 	Spawned[T] `editable:"^"`
 	// The previous frame's value
-	Prev T
+	PrevFrame T
+	// The previous simulation step's value
+	PrevSimStep T
 	// Prior to rendering a frame, this value should be == .Now
 	// During rendering, this will be a value blended between .Prev and .Now
 	// depending on how much "leftover" dt there is
@@ -57,7 +59,8 @@ func (d *DynamicValue[T]) IsProcedural() bool {
 
 func (d *DynamicValue[T]) ResetToSpawn() {
 	d.Spawned.ResetToSpawn()
-	d.Prev = d.Spawn
+	d.PrevFrame = d.Spawn
+	d.PrevSimStep = d.Spawn
 	d.Render = d.Spawn
 	d.Input = d.Spawn
 	d.prevInput = d.Spawn
@@ -89,8 +92,12 @@ func (d *DynamicValue[T]) NewAnimation() *Animation[T] {
 }
 
 func (d *DynamicValue[T]) NewFrame() {
-	d.Prev = d.Now
+	d.PrevFrame = d.Now
 	d.Render = d.Now
+}
+
+func (d *DynamicValue[T]) NewSimStep() {
+	d.PrevSimStep = d.Now
 }
 
 func (d *DynamicValue[T]) UpdateProcedural() {
@@ -182,31 +189,31 @@ func (d *DynamicValue[T]) Update(blend float64) {
 
 	// The check for prev == now lets us avoid the linear interpolation, which
 	// can introduce precision errors for static float quantities.
-	if d.NoRenderBlend || d.Prev == d.Now {
+	if d.NoRenderBlend || d.PrevFrame == d.Now {
 		d.Render = d.Now
 		return
 	}
 	switch dc := any(d).(type) {
 	case *DynamicValue[int]:
-		dc.Render = int(Lerp(float64(dc.Prev), float64(dc.Now), blend))
+		dc.Render = int(Lerp(float64(dc.PrevFrame), float64(dc.Now), blend))
 	case *DynamicValue[float64]:
 		if dc.IsAngle {
-			dc.Render = TweenAngles(dc.Prev, dc.Now, blend, Lerp)
+			dc.Render = TweenAngles(dc.PrevFrame, dc.Now, blend, Lerp)
 		} else {
-			dc.Render = Lerp(dc.Prev, dc.Now, blend)
+			dc.Render = Lerp(dc.PrevFrame, dc.Now, blend)
 		}
 	case *DynamicValue[concepts.Vector2]:
-		dc.Render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.Render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
+		dc.Render[0] = Lerp(dc.PrevFrame[0], dc.Now[0], blend)
+		dc.Render[1] = Lerp(dc.PrevFrame[1], dc.Now[1], blend)
 	case *DynamicValue[concepts.Vector3]:
-		dc.Render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.Render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.Render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
+		dc.Render[0] = Lerp(dc.PrevFrame[0], dc.Now[0], blend)
+		dc.Render[1] = Lerp(dc.PrevFrame[1], dc.Now[1], blend)
+		dc.Render[2] = Lerp(dc.PrevFrame[2], dc.Now[2], blend)
 	case *DynamicValue[concepts.Vector4]:
-		dc.Render[0] = Lerp(dc.Prev[0], dc.Now[0], blend)
-		dc.Render[1] = Lerp(dc.Prev[1], dc.Now[1], blend)
-		dc.Render[2] = Lerp(dc.Prev[2], dc.Now[2], blend)
-		dc.Render[3] = Lerp(dc.Prev[3], dc.Now[3], blend)
+		dc.Render[0] = Lerp(dc.PrevFrame[0], dc.Now[0], blend)
+		dc.Render[1] = Lerp(dc.PrevFrame[1], dc.Now[1], blend)
+		dc.Render[2] = Lerp(dc.PrevFrame[2], dc.Now[2], blend)
+		dc.Render[3] = Lerp(dc.PrevFrame[3], dc.Now[3], blend)
 	case *DynamicValue[concepts.Matrix2]:
 		d.Render = d.Now
 	}
@@ -246,7 +253,8 @@ func (d *DynamicValue[T]) Construct(data any) {
 	d.Freq = 4.58
 	d.Damping = 0.35
 	d.Response = -3.54
-	d.Prev = d.Now
+	d.PrevFrame = d.Now
+	d.PrevSimStep = d.Now
 	d.Input = d.Now
 	d.prevInput = d.Now
 	// Ensure we have a reasonable value for render prior to simulation update
