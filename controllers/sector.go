@@ -40,7 +40,7 @@ func applySectorTransform(sector *core.Sector, d dynamic.Dynamic) {
 	/*	if transform.Procedural {
 		log.Printf("Input: %v, now: %v, prev: %v", transform.Input.StringHuman(), transform.Now.StringHuman(), transform.Prev.StringHuman())
 	}*/
-	if transform.Now == transform.Prev {
+	if transform.Now == transform.PrevFrame {
 		return
 	}
 	for _, seg := range sector.Segments {

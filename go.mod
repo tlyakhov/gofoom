@@ -3,7 +3,7 @@ module tlyakhov/gofoom
 go 1.25.0
 
 require (
-	fyne.io/fyne/v2 v2.7.1
+	fyne.io/fyne/v2 v2.7.2
 	github.com/blevesearch/bleve v1.0.14
 	github.com/disintegration/gift v1.2.1
 	github.com/fogleman/gg v1.3.0
@@ -27,7 +27,7 @@ require (
 )
 
 require (
-	fyne.io/systray v1.11.1-0.20250603113521-ca66a66d8b58 // indirect
+	fyne.io/systray v1.12.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fredbi/uri v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect

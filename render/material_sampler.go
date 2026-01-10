@@ -32,6 +32,9 @@ func (ms *MaterialSampler) Initialize(material ecs.Entity, extraStages []*materi
 	ms.Materials = ms.Materials[:0]
 	ms.derefMaterials(material, nil)
 	for _, stage := range extraStages {
+		if stage.Opacity <= 0 {
+			continue
+		}
 		ms.derefMaterials(stage.Material, nil)
 	}
 }
@@ -72,14 +75,26 @@ func (ms *MaterialSampler) InitializeRayBody(src, dst *concepts.Vector3, b *core
 func (ms *MaterialSampler) derefMaterials(material ecs.Entity, parent ecs.Component) {
 	if shader := materials.GetShader(material); shader != nil && shader != parent {
 		ms.Materials = append(ms.Materials, shader)
+		if !shader.IsActive() {
+			return
+		}
 		for _, stage := range shader.Stages {
+			if stage.Opacity <= 0 {
+				continue
+			}
 			ms.derefMaterials(stage.Material, shader)
 		}
 	} else if spriteSheet := materials.GetSpriteSheet(material); spriteSheet != nil && spriteSheet != parent {
 		ms.Materials = append(ms.Materials, spriteSheet)
+		if !spriteSheet.IsActive() {
+			return
+		}
 		ms.derefMaterials(spriteSheet.Material, spriteSheet)
 	} else if sprite := materials.GetSprite(material); sprite != nil && sprite != parent {
 		ms.Materials = append(ms.Materials, sprite)
+		if !sprite.IsActive() {
+			return
+		}
 		ms.derefMaterials(sprite.Material, sprite)
 	} else if image := materials.GetImage(material); image != nil {
 		ms.Materials = append(ms.Materials, image)
@@ -130,6 +145,9 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 	opacity := 1.0
 	if stage != nil {
 		opacity = stage.Opacity
+		if opacity <= 0 {
+			return
+		}
 
 		if stage.IgnoreSurfaceTransform {
 			u, v = stage.Transform[0]*ms.NU+stage.Transform[2]*ms.NV+stage.Transform[4], stage.Transform[1]*ms.NU+stage.Transform[3]*ms.NV+stage.Transform[5]
@@ -165,7 +183,9 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		a = ms.Materials[ms.pipelineIndex]
 	}
 	ms.pipelineIndex++
-
+	if a == nil || !a.IsActive() {
+		return
+	}
 	switch m := a.(type) {
 	case *materials.Shader:
 		for _, stage := range m.Stages {

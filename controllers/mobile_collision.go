@@ -119,8 +119,8 @@ func (mc *MobileController) bodyTeleport() bool {
 			v = segment.AdjacentSegment.MirrorPortalMatrix.Project(v)
 			mc.Body.Pos.Now[0] = v[0]
 			mc.Body.Pos.Now[1] = v[1]
-			mc.Body.Pos.Prev[0] = v[0]
-			mc.Body.Pos.Prev[1] = v[1]
+			mc.Body.Pos.PrevFrame[0] = v[0]
+			mc.Body.Pos.PrevFrame[1] = v[1]
 			// Teleport velocity
 			trans := *mc.Vel.Now.To2D()
 			trans[0] += segment.A[0]
@@ -134,7 +134,7 @@ func (mc *MobileController) bodyTeleport() bool {
 				math.Atan2(segment.Normal[1], segment.Normal[0])*concepts.Rad2deg +
 				math.Atan2(segment.AdjacentSegment.Normal[1], segment.AdjacentSegment.Normal[0])*concepts.Rad2deg + 180
 			mc.Body.Angle.Now = concepts.NormalizeAngle(mc.Body.Angle.Now)
-			mc.Body.Angle.Prev = mc.Body.Angle.Now
+			mc.Body.Angle.PrevFrame = mc.Body.Angle.Now
 			mc.Enter(core.GetSector(segment.AdjacentSector))
 			return true
 		}
@@ -483,12 +483,12 @@ func (mc *MobileController) Collide() {
 			mc.CollideZ()
 			// Handle motion for sectors the entity is sitting on.
 			t := mc.Sector.Transform
-			if mc.OnGround && t.Prev != t.Now {
+			if mc.OnGround && t.PrevFrame != t.Now {
 				// This math is probably not quite right, but close enough for
 				// now.
 				delta := &concepts.Vector2{mc.Pos.Now[0], mc.Pos.Now[1]}
 				delta.SubSelf(&mc.Sector.TransformOrigin)
-				t.Prev.UnprojectSelf(delta)
+				t.PrevFrame.UnprojectSelf(delta)
 				t.Now.ProjectSelf(delta)
 				delta.AddSelf(&mc.Sector.TransformOrigin)
 				delta.SubSelf(mc.Pos.Now.To2D())

@@ -31,6 +31,7 @@ type Dynamic interface {
 	Update(float64)
 	Precompute()
 	NewFrame()
+	NewSimStep()
 	GetAnimation() Animated
 }
 
