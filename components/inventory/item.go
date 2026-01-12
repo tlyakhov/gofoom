@@ -25,12 +25,9 @@ type Item struct {
 
 	Class       string               `editable:"Class"`
 	Count       dynamic.Spawned[int] `editable:"Count"`
-	Image       ecs.Entity           `editable:"Image" edit_type:"Material"`
 	PickupSound ecs.Entity           `editable:"Pickup Sound" edit_type:"Sound"`
 	Flags       ItemFlags            `editable:"Flags" edit_type:"Flags"`
 }
-
-func (item *Item) Shareable() bool { return true }
 
 func (item *Item) String() string {
 	return "Item (" + item.Class + ")"
@@ -52,9 +49,6 @@ func (item *Item) Construct(data map[string]any) {
 	if v, ok := data["Count"]; ok {
 		item.Count.Construct(v)
 	}
-	if v, ok := data["Image"]; ok {
-		item.Image, _ = ecs.ParseEntity(v.(string))
-	}
 	if v, ok := data["PickupSound"]; ok {
 		item.PickupSound, _ = ecs.ParseEntity(v.(string))
 	}
@@ -70,9 +64,6 @@ func (item *Item) Serialize() map[string]any {
 
 	if item.Class != "GenericItem" {
 		result["Class"] = item.Class
-	}
-	if item.Image != 0 {
-		result["Image"] = item.Image.Serialize()
 	}
 	if item.PickupSound != 0 {
 		result["PickupSound"] = item.PickupSound.Serialize()

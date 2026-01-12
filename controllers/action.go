@@ -223,13 +223,15 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	case ac.Body.Pos.Procedural:
 		ac.Body.Pos.Input.AddSelf(force.MulSelf(constants.TimeStepS))
 		var bc BodyController
-		bc.Target(ac.Body, ac.Entity)
-		bc.findBodySector()
+		if bc.Target(ac.Body, ac.Entity) {
+			bc.findBodySector()
+		}
 	default:
 		ac.Body.Pos.Now.AddSelf(force.MulSelf(constants.TimeStepS))
 		var bc BodyController
-		bc.Target(ac.Body, ac.Entity)
-		bc.findBodySector()
+		if bc.Target(ac.Body, ac.Entity) {
+			bc.findBodySector()
+		}
 	}
 
 	return false

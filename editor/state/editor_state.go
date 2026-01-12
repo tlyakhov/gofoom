@@ -67,6 +67,8 @@ type EditorState struct {
 	BodiesVisible         bool
 	SectorTypesVisible    bool
 	ComponentNamesVisible bool
+
+	DisabledPropertiesVisible bool
 }
 
 type IEditor interface {

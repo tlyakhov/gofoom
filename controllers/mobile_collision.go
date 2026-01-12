@@ -121,6 +121,8 @@ func (mc *MobileController) bodyTeleport() bool {
 			mc.Body.Pos.Now[1] = v[1]
 			mc.Body.Pos.PrevFrame[0] = v[0]
 			mc.Body.Pos.PrevFrame[1] = v[1]
+			mc.Body.Pos.PrevSimStep[0] = v[0]
+			mc.Body.Pos.PrevSimStep[1] = v[1]
 			// Teleport velocity
 			trans := *mc.Vel.Now.To2D()
 			trans[0] += segment.A[0]
@@ -135,6 +137,7 @@ func (mc *MobileController) bodyTeleport() bool {
 				math.Atan2(segment.AdjacentSegment.Normal[1], segment.AdjacentSegment.Normal[0])*concepts.Rad2deg + 180
 			mc.Body.Angle.Now = concepts.NormalizeAngle(mc.Body.Angle.Now)
 			mc.Body.Angle.PrevFrame = mc.Body.Angle.Now
+			mc.Body.Angle.PrevSimStep = mc.Body.Angle.Now
 			mc.Enter(core.GetSector(segment.AdjacentSector))
 			return true
 		}
@@ -483,12 +486,17 @@ func (mc *MobileController) Collide() {
 			mc.CollideZ()
 			// Handle motion for sectors the entity is sitting on.
 			t := mc.Sector.Transform
+			// Checking the previous frame rather than sim step is a hack to cover for
+			// the possibility that the transform may be changed in this sim step but
+			// AFTER this code. This would mean .Now always equals .PrevSimStep. We either
+			// need to guarantee correct order of ops in all cases (hard) or find a
+			// different way to check that the transform has changed.
 			if mc.OnGround && t.PrevFrame != t.Now {
 				// This math is probably not quite right, but close enough for
 				// now.
 				delta := &concepts.Vector2{mc.Pos.Now[0], mc.Pos.Now[1]}
 				delta.SubSelf(&mc.Sector.TransformOrigin)
-				t.PrevFrame.UnprojectSelf(delta)
+				t.PrevSimStep.UnprojectSelf(delta)
 				t.Now.ProjectSelf(delta)
 				delta.AddSelf(&mc.Sector.TransformOrigin)
 				delta.SubSelf(mc.Pos.Now.To2D())

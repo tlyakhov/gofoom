@@ -30,9 +30,9 @@ func (c *BaseController) EditorPausedMethods() ControllerMethod {
 }
 
 // Target determines whether the controller should act on a specific entity and
-// component. The base implementation always returns false.
+// component. The base implementation always returns true.
 func (c *BaseController) Target(a Component, entity Entity) bool {
-	return false
+	return true
 }
 
 // Frame is a controller method that is called every tick. The base

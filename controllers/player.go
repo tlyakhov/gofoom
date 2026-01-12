@@ -45,11 +45,6 @@ func (pc *PlayerController) Target(target ecs.Component, e ecs.Entity) bool {
 	if !pc.Player.IsActive() {
 		return false
 	}
-	if s := behaviors.GetSpawner(pc.Entity); s != nil {
-		// If this is a spawn point, skip it
-		return false
-	}
-
 	pc.Body = core.GetBody(pc.Entity)
 	if pc.Body == nil || !pc.Body.IsActive() {
 		return false

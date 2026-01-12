@@ -127,7 +127,7 @@ func ActAllControllers(method ControllerMethod) {
 
 // ActAllControllersOneEntity runs all controllers for a specific entity that have the specified method.
 func ActAllControllersOneEntity(entity Entity, method ControllerMethod) {
-	sid, local := localizeEntity(entity)
+	sid, local := localizeEntityAndCheckRange(entity)
 	if local == 0 {
 		return
 	}

@@ -5,6 +5,7 @@
     Source: data/worlds/common-assets.yaml
 - Entity: ∈⋮3∈⋮Flub
   behaviors.Alive:
+    _Flags: ""
     Die:
       Code: |-
         fmt.Printf("Flub %v died.", onEntity)
@@ -16,29 +17,39 @@
           shader.Stages[1].Opacity = 1
         }
     Health: 100
+  core.Mobile:
+    _Flags: ""
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel: 0, 0, 0
   ecs.Named:
     Name: Flub
-  inventory.Weapon: {}
+  inventory.Weapon:
+    _Flags: ""
   materials.Shader:
     Stages:
-      - BlendingFunc: BlendNormal
-        Material: ∈⋮24∈⋮Flub+Spritesheet
-      - BlendingFunc: BlendNormal
-        Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
-        Opacity: 0
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮24∈⋮Flub+Spritesheet
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+      Opacity: 0
   materials.Visible:
+    _Flags: ""
     Ambient: 1
     Shadow: ShadowImage
 - Entity: ∈⋮4∈⋮Bubble
   behaviors.Proximity:
     InRange:
-      Code:
-        "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
         2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
     Range: 5
   ecs.Linked:
     Sources:
-      - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     Name: Bubble
   materials.Image: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
@@ -46,7 +57,7 @@
 - Entity: ∈⋮5
   ecs.Linked:
     Sources:
-      - ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
+    - ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
   materials.Image: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
   materials.Lit: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
   materials.SpriteSheet:
@@ -60,26 +71,26 @@
     Name: Muzzle Flash Shader
   materials.Shader:
     Stages:
-      - BlendingFunc: BlendNormal
-        Material: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29∈⋮62bf0202
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29∈⋮62bf0202
 - Entity: ∈⋮7∈⋮Space+Window
   ecs.Named:
     Name: Space Window
   materials.Shader:
     Stages:
-      - BlendingFunc: BlendNormal
-        Flags: ShaderTiled|ShaderSky
-        Material: ∈⋮71∈⋮space+%28textures%29∈⋮62bf0202
-      - BlendingFunc: BlendNormal
-        Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
+    - BlendingFunc: BlendNormal
+      Flags: ShaderTiled|ShaderSky
+      Material: ∈⋮71∈⋮space+%28textures%29∈⋮62bf0202
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
 - Entity: ∈⋮8
   behaviors.Alive:
     Health: 100
   inventory.Carrier:
     Inventory:
-      - ∈⋮9
-      - ∈⋮10
-      - ∈⋮11
+    - ∈⋮9
+    - ∈⋮10
+    - ∈⋮11
 - Entity: ∈⋮9
   inventory.Slot:
     Class: WeirdGun
@@ -92,20 +103,20 @@
     MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮62bf0202
     MarkSize: 2.5
     Params:
-      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-        Time: 100
-      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-        Time: 100
-      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-        Sound: ∈⋮12∈⋮rifle+%28sounds%29∈⋮62bf0202
-        Time: 100
-      - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
-        Sound: ∈⋮6∈⋮blip1+%28sounds%29∈⋮62bf0202
-        Time: 100
-      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-        Time: 100
-      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-        Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Sound: ∈⋮12∈⋮rifle+%28sounds%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
+      Sound: ∈⋮6∈⋮blip1+%28sounds%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
     Spread: 3
 - Entity: ∈⋮10
   inventory.Slot:
@@ -143,8 +154,7 @@
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
         }
-    Message:
-      Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
+    Message: Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
       red keycard to open{{end}}
   behaviors.Proximity:
     Hysteresis: 0
@@ -154,41 +164,12 @@
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: character.Player
-- Entity: ∈⋮14∈⋮Inventory+Item+Base
-  ecs.Named:
-    Name: Inventory Item Base
-  materials.Lit:
-    Ambient: 0, 0, 0
-    Diffuse: 1, 1, 1, 1
-  materials.Visible:
-    Ambient: 1
-    Shadow: ShadowImage
-- Entity: ∈⋮19∈⋮Flower+%28Starting+Room%29
-  ecs.Linked:
-    Sources:
-      - ∈⋮249∈⋮Flower+Inventory+Item
-  ecs.Named:
-    Name: Flower (Starting Room)
-  inventory.Item:
-    Class: Flower
-    Count: "1"
-    Image: ∈⋮98
-  materials.SpriteSheet:
-    Angles: "0"
-    Frame:
-      Damping: 0
-      Freq: 1e-06
-      Now: "0"
-      Response: 0
-      Spawn: "0"
-    Material: ∈⋮98
-  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
 - Entity: ∈⋮20∈⋮Rotate+360+Loop+1
   behaviors.ActionFace:
     Angle: 0
   behaviors.ActionTransition:
     Next:
-      - ∈⋮21∈⋮Rotate+360+Loop+2
+    - ∈⋮21∈⋮Rotate+360+Loop+2
   ecs.Named:
     Name: Rotate 360 Loop 1
 - Entity: ∈⋮21∈⋮Rotate+360+Loop+2
@@ -196,7 +177,7 @@
     Angle: 90
   behaviors.ActionTransition:
     Next:
-      - ∈⋮22∈⋮Rotate+360+Loop+3
+    - ∈⋮22∈⋮Rotate+360+Loop+3
   ecs.Named:
     Name: Rotate 360 Loop 2
 - Entity: ∈⋮22∈⋮Rotate+360+Loop+3
@@ -204,7 +185,7 @@
     Angle: 180
   behaviors.ActionTransition:
     Next:
-      - ∈⋮23∈⋮Rotate+360+Loop+4
+    - ∈⋮23∈⋮Rotate+360+Loop+4
   ecs.Named:
     Name: Rotate 360 Loop 3
 - Entity: ∈⋮23∈⋮Rotate+360+Loop+4
@@ -212,7 +193,7 @@
     Angle: 270
   behaviors.ActionTransition:
     Next:
-      - ∈⋮20∈⋮Rotate+360+Loop+1
+    - ∈⋮20∈⋮Rotate+360+Loop+1
   ecs.Named:
     Name: Rotate 360 Loop 4
 - Entity: ∈⋮24∈⋮Flub+Spritesheet
@@ -229,17 +210,27 @@
       Spawn: "0"
     Material: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
     Rows: "2"
-- Entity: ∈⋮132∈⋮Weird+Gun
-  ecs.Linked:
-    Sources:
-      - ∈⋮14∈⋮Inventory+Item+Base
+- Entity: ∈⋮247∈⋮Inventory+Item+Base
   ecs.Named:
-    Name: Weird Gun
+    Name: Inventory Item Base
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
+  materials.Visible:
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮248∈⋮WeirdGun+%28inventory+item%29
+  ecs.Linked:
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮247∈⋮Inventory+Item+Base
+  ecs.Named:
+    Name: WeirdGun (inventory item)
   inventory.Item:
     Class: WeirdGun
     Count: "1"
-    Image: ∈⋮133
-  materials.Lit: ∈⋮14∈⋮Inventory+Item+Base
+    PickupSound: ∈⋮7∈⋮collect+%28sounds%29∈⋮62bf0202
+  materials.Lit: ∈⋮247∈⋮Inventory+Item+Base
   materials.SpriteSheet:
     Angles: "0"
     Frame:
@@ -248,36 +239,41 @@
       Now: "0"
       Response: 0
       Spawn: "0"
-    Material: ∈⋮133
-  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
-- Entity: ∈⋮134∈⋮Proximity+%28Vertical+Doors%29
+    Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+  materials.Visible: ∈⋮247∈⋮Inventory+Item+Base
+- Entity: ∈⋮249∈⋮Flower+%28inventory+item%29
+  ecs.Linked:
+    AlwaysReplace: true
+    Sources:
+    - ∈⋮247∈⋮Inventory+Item+Base
   ecs.Named:
-    Name: Proximity (Vertical Doors)
-- Entity: ∈⋮164∈⋮Red+Keycard
+    Name: Flower (inventory item)
+  inventory.Item:
+    Class: Flower
+    Count: "1"
+    PickupSound: ∈⋮7∈⋮collect+%28sounds%29∈⋮62bf0202
+  materials.Lit: ∈⋮247∈⋮Inventory+Item+Base
+  materials.SpriteSheet:
+    Angles: "0"
+    Frame:
+      Damping: 0
+      Freq: 1e-06
+      Now: "0"
+      Response: 0
+      Spawn: "0"
+    Material: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
+  materials.Visible: ∈⋮247∈⋮Inventory+Item+Base
+- Entity: ∈⋮250∈⋮Red+Keycard+%28inventory+item%29
   ecs.Linked:
     Sources:
-      - ∈⋮14∈⋮Inventory+Item+Base
+    - ∈⋮247∈⋮Inventory+Item+Base
   ecs.Named:
-    Name: Red Keycard
+    Name: Red Keycard (inventory item)
   inventory.Item:
     Class: Red Keycard
     Count: "1"
-    Image: ∈⋮5
-  materials.Lit: ∈⋮14∈⋮Inventory+Item+Base
+  materials.Lit: ∈⋮247∈⋮Inventory+Item+Base
   materials.Sprite:
     Frame: "0"
     Material: ∈⋮5
-  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
-- Entity: ∈⋮176
-  ecs.Linked:
-    Sources:
-      - ∈⋮249∈⋮Flower+Inventory+Item
-  inventory.Item: ∈⋮19∈⋮Flower+%28Starting+Room%29
-  materials.SpriteSheet: ∈⋮19∈⋮Flower+%28Starting+Room%29
-  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
-- Entity: ∈⋮249∈⋮Flower+Inventory+Item
-  ecs.Named:
-    Name: Flower Inventory Item
-  inventory.Item: ∈⋮19∈⋮Flower+%28Starting+Room%29
-  materials.SpriteSheet: ∈⋮19∈⋮Flower+%28Starting+Room%29
-  materials.Visible: ∈⋮14∈⋮Inventory+Item+Base
+  materials.Visible: ∈⋮247∈⋮Inventory+Item+Base

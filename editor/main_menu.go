@@ -70,8 +70,9 @@ type EditorMenu struct {
 	ToolsAlignGrid          MenuAction
 	ToolsNewShader          MenuAction
 
-	ViewSectorEntities MenuAction
-	ViewSnapToGrid     MenuAction
+	ViewSectorEntities     MenuAction
+	ViewSnapToGrid         MenuAction
+	ViewDisabledProperties MenuAction
 
 	BehaviorsPause   MenuAction
 	BehaviorsReset   MenuAction
@@ -334,11 +335,18 @@ func CreateMainMenu() {
 		editor.ViewSectorEntities.Menu.Checked = editor.SectorTypesVisible
 	})
 	editor.ViewSectorEntities.Menu.Checked = editor.SectorTypesVisible
+
 	editor.ViewSnapToGrid.Menu = fyne.NewMenuItem("Toggle Snap to Grid", func() {
 		editor.Snap = !editor.Snap
 		editor.ViewSnapToGrid.Menu.Checked = editor.Snap
 	})
 	editor.ViewSnapToGrid.Menu.Checked = editor.Snap
+
+	editor.ViewDisabledProperties.Menu = fyne.NewMenuItem("Toggle disabled properties", func() {
+		editor.DisabledPropertiesVisible = !editor.DisabledPropertiesVisible
+		editor.ViewDisabledProperties.Menu.Checked = editor.DisabledPropertiesVisible
+	})
+	editor.ViewDisabledProperties.Menu.Checked = editor.DisabledPropertiesVisible
 
 	editor.BehaviorsReset.Shortcut = &desktop.CustomShortcut{KeyName: fyne.KeyF5, Modifier: fyne.KeyModifierShortcutDefault}
 	editor.BehaviorsReset.Menu = fyne.NewMenuItem("Reset all entities", func() { controllers.ResetAllSpawnables() })

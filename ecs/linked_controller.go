@@ -3,6 +3,8 @@
 
 package ecs
 
+import "log"
+
 type LinkedController struct {
 	BaseController
 	*Linked
@@ -34,20 +36,58 @@ func (lc *LinkedController) Precompute() {
 			detach(c.ComponentID(), lc.Entity, false)
 		}
 	}
+	// Populate this table with the actual components from our source entities.
 	lc.SourceComponents = make(ComponentTable, 0)
 	for _, sourceEntity := range lc.Sources {
 		for _, c := range AllComponents(sourceEntity) {
-			if c == nil || !c.Shareable() {
+			if c == nil {
 				continue
 			}
+			if c.ComponentID() == LinkedCID || c.ComponentID() == NamedCID {
+				continue
+			}
+			// If this components isn't shareable and Linked.CopyUnshareable isn't
+			// set, skip it.
+			if !lc.CopyUnshareable && !c.Shareable() {
+				continue
+			}
+			// Is there one already attached?
 			existing := GetComponent(lc.Entity, c.ComponentID())
-			if lc.AlwaysReplace && existing != nil {
-				detach(c.ComponentID(), lc.Entity, false)
-			} else if existing != nil {
-				continue
+			// We have an existing component with the same ID as the one form
+			// the source entity.
+			if existing != nil {
+				// Is it the same one?
+				if existing == c || existing.Base().Entities.Contains(sourceEntity) {
+					lc.SourceComponents.Set(existing)
+					continue
+				} else if existing.Base().Entities.Contains(sourceEntity) {
+					log.Printf("ecs.LinkedController: warning - found existing component %v on entity %v that is shared with source entity %v but is NOT the same pointer.", existing, lc.Entity, sourceEntity)
+					lc.SourceComponents.Set(existing)
+					continue
+				}
+				if lc.AlwaysReplace {
+					// Replace whatever this entity used to have.
+					detach(c.ComponentID(), lc.Entity, false)
+				} else {
+					// Skip this
+					continue
+				}
 			}
-			lc.SourceComponents.Set(c)
-			attach(lc.Entity, &c, c.ComponentID())
+			if c.Shareable() {
+				// Only set this for linked (not copied) components.
+				lc.SourceComponents.Set(c)
+				attach(lc.Entity, &c, c.ComponentID())
+			} else {
+				cloned := LoadComponentWithoutAttaching(c.ComponentID(), c.Serialize())
+				ModifyComponentRelationEntities(cloned, func(r *Relation, ref Entity) Entity {
+					// Update self-references to the new entity
+					if ref == sourceEntity {
+						return lc.Entity
+					}
+					return ref
+				})
+				attach(lc.Entity, &cloned, cloned.ComponentID())
+			}
 		}
 	}
 }

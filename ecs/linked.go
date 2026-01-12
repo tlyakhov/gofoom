@@ -14,7 +14,8 @@ type Linked struct {
 	// Ordered list, can be layered
 	Sources []Entity `editable:"Source Entities"`
 
-	AlwaysReplace bool `editable:"Always Replace?"`
+	AlwaysReplace   bool `editable:"Always Replace?"`
+	CopyUnshareable bool `editable:"Copy unshareable components?"`
 
 	// Internal state
 	SourceComponents ComponentTable
@@ -67,6 +68,7 @@ func (n *Linked) Construct(data map[string]any) {
 
 	n.Sources = make([]Entity, 0)
 	n.AlwaysReplace = false
+	n.CopyUnshareable = false
 
 	if data == nil {
 		return
@@ -79,6 +81,10 @@ func (n *Linked) Construct(data map[string]any) {
 	if v, ok := data["AlwaysReplace"]; ok {
 		n.AlwaysReplace = cast.ToBool(v)
 	}
+
+	if v, ok := data["CopyUnshareable"]; ok {
+		n.CopyUnshareable = cast.ToBool(v)
+	}
 }
 
 func (n *Linked) Serialize() map[string]any {
@@ -90,6 +96,9 @@ func (n *Linked) Serialize() map[string]any {
 	result["Sources"] = arr
 	if n.AlwaysReplace {
 		result["AlwaysReplace"] = true
+	}
+	if n.CopyUnshareable {
+		result["CopyUnshareable"] = true
 	}
 	return result
 }

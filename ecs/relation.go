@@ -337,11 +337,11 @@ func FindReplaceRelations(from Entity, to Entity) {
 func MoveEntityComponents(from Entity, to Entity) {
 	// Break down our entity IDs into source file IDs and local entities,
 	// sanity check our input.
-	sidFrom, localFrom := localizeEntity(from)
+	sidFrom, localFrom := localizeEntityAndCheckRange(from)
 	if localFrom == 0 || to == 0 {
 		return
 	}
-	sidTo, localTo := localizeEntity(to)
+	sidTo, localTo := to.SourceID(), to.Local()
 	if localTo == 0 {
 		return
 	}

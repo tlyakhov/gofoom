@@ -27,7 +27,7 @@ func (d *DoorController) setupVerticalDoorAnimation(refresh bool) {
 func (d *DoorController) calculateVerticalDoorTransforms() {
 	a := d.Sector.Top.Z.Animation
 
-	if a.Now == a.PrevFrame {
+	if a.Now == a.PrevSimStep {
 		return
 	}
 
