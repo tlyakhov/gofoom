@@ -40,6 +40,11 @@ func applySectorTransform(sector *core.Sector, d dynamic.Dynamic) {
 	/*	if transform.Procedural {
 		log.Printf("Input: %v, now: %v, prev: %v", transform.Input.StringHuman(), transform.Now.StringHuman(), transform.Prev.StringHuman())
 	}*/
+	// Checking the previous frame rather than sim step is a hack to cover for
+	// the possibility that the transform may be changed in this sim step but
+	// AFTER this code. This would mean .Now always equals .PrevSimStep. We either
+	// need to guarantee correct order of ops in all cases (hard) or find a
+	// different way to check that the transform has changed.
 	if transform.Now == transform.PrevFrame {
 		return
 	}

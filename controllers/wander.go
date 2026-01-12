@@ -36,9 +36,18 @@ func (wc *WanderController) Methods() ecs.ControllerMethod {
 func (wc *WanderController) Target(target ecs.Component, e ecs.Entity) bool {
 	wc.Entity = e
 	wc.Wander = target.(*behaviors.Wander)
+	if !wc.Wander.IsActive() {
+		return false
+	}
 	wc.Body = core.GetBody(wc.Entity)
+	if wc.Body == nil || !wc.Body.IsActive() {
+		return false
+	}
 	wc.Mobile = core.GetMobile(wc.Entity)
-	return wc.Wander.IsActive() && wc.Body.IsActive() && wc.Mobile.IsActive()
+	if wc.Mobile == nil || !wc.Mobile.IsActive() {
+		return false
+	}
+	return true
 }
 
 func (wc *WanderController) Frame() {

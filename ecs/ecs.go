@@ -135,7 +135,7 @@ func ArenaByID(id ComponentID) ComponentArena {
 	return arenas[id]
 }
 
-func localizeEntity(entity Entity) (sid EntitySourceID, local Entity) {
+func localizeEntityAndCheckRange(entity Entity) (sid EntitySourceID, local Entity) {
 	if entity == 0 {
 		return 0, 0
 	}
@@ -148,7 +148,7 @@ func localizeEntity(entity Entity) (sid EntitySourceID, local Entity) {
 
 // AllComponents retrieves the component table for a specific entity.
 func AllComponents(entity Entity) ComponentTable {
-	if sid, local := localizeEntity(entity); local != 0 {
+	if sid, local := localizeEntityAndCheckRange(entity); local != 0 {
 		return rows[sid][int(local)]
 	}
 	return nil
@@ -160,7 +160,7 @@ func GetComponent(entity Entity, id ComponentID) Component {
 	if id == 0 {
 		return nil
 	}
-	if sid, local := localizeEntity(entity); local != 0 {
+	if sid, local := localizeEntityAndCheckRange(entity); local != 0 {
 		return rows[sid][int(local)].Get(id)
 	}
 	return nil
@@ -187,11 +187,11 @@ func First(id ComponentID) Component {
 }
 
 func Link(target Entity, source Entity) {
-	sourceID, sourceLocal := localizeEntity(source)
+	sourceID, sourceLocal := localizeEntityAndCheckRange(source)
 	if sourceLocal == 0 {
 		return
 	}
-	_, targetLocal := localizeEntity(target)
+	_, targetLocal := localizeEntityAndCheckRange(target)
 	if targetLocal == 0 {
 		return
 	}
@@ -413,7 +413,7 @@ func Delete(entity Entity) {
 
 	Entities.Remove(uint32(entity))
 
-	sid, local := localizeEntity(entity)
+	sid, local := localizeEntityAndCheckRange(entity)
 	if local == 0 {
 		return
 	}
@@ -481,10 +481,10 @@ func CachedGeneratedComponent[T any, PT GenericAttachable[T]](field *PT, name st
 
 	*field = NewAttachedComponent(e, cid).(PT)
 	base := (*field).Base()
-	base.Flags |= EntityInternal
+	base.Flags |= ComponentInternal
 	n := NewAttachedComponent(base.Entity, NamedCID).(*Named)
 	n.Name = name
-	n.Flags |= EntityInternal
+	n.Flags |= ComponentInternal
 
 	return true
 }

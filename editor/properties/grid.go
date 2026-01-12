@@ -463,6 +463,11 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		if !field.Values[0].Value.CanInterface() {
 			continue
 		}
+
+		if !g.State().DisabledPropertiesVisible && field.Disabled() && field.EditType != "Component" {
+			continue
+		}
+
 		label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
 		label.Text = field.Short()
 		//label.SetTooltipText(field.Name)
@@ -474,9 +479,7 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 		// Handle the special cases first
 		switch field.EditType {
 		case "Component":
-			label.Importance = widget.HighImportance
-			label.TextStyle.Bold = true
-			g.fieldComponent(field)
+			g.fieldComponent(field, label)
 			continue
 		case "SliceArrayElement":
 			label.Importance = widget.HighImportance
@@ -562,6 +565,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, behaviors.DoorIntentValues())
 		case *behaviors.DoorType:
 			g.fieldEnum(field, behaviors.DoorTypeValues())
+		case *behaviors.AutoSpawn:
+			g.fieldEnum(field, behaviors.AutoSpawnValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]string:

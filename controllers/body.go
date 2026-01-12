@@ -6,7 +6,6 @@ package controllers
 import (
 	"log"
 	"math"
-	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
@@ -45,10 +44,6 @@ func (bc *BodyController) Target(target ecs.Component, e ecs.Entity) bool {
 	bc.Entity = e
 	bc.Body = target.(*core.Body)
 	if bc.Body == nil || !bc.Body.IsActive() {
-		return false
-	}
-	if s := behaviors.GetSpawner(bc.Entity); s != nil {
-		// If this is a spawn point, skip it
 		return false
 	}
 	bc.Player = character.GetPlayer(bc.Entity)

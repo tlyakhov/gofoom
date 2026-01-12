@@ -19,10 +19,21 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func (g *Grid) fieldComponent(field *state.PropertyGridField) {
+func (g *Grid) fieldComponent(field *state.PropertyGridField, fieldLabel *widget.Label) {
+	fieldLabel.TextStyle.Bold = true
+	fieldLabel.Importance = widget.HighImportance
+
 	if linkedOnly, sources := field.IsLinked(); linkedOnly {
+		fieldLabel.Importance = widget.WarningImportance
 		label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
 		label.Text = fmt.Sprintf("Linked from %v", sources.String())
+		return
+	}
+
+	if field.IsHidden() {
+		fieldLabel.Importance = widget.LowImportance
+		label := gridAddOrUpdateWidgetAtIndex[*widget.Label](g)
+		label.Text = "Hidden/Internal"
 		return
 	}
 

@@ -85,6 +85,19 @@ func (f *PropertyGridField) IsLinked() (linkedOnly bool, sources ecs.EntityTable
 	return
 }
 
+func (f *PropertyGridField) IsHidden() bool {
+	if len(f.Values) == 0 {
+		return false
+	}
+
+	hiddenOnly := true
+	for _, v := range f.Values {
+		hidden := (v.Component.Base().Flags&ecs.ComponentHideInEditor != 0) || (v.Component.Base().Flags&ecs.ComponentHideEntityInEditor != 0)
+		hiddenOnly = hiddenOnly && hidden
+	}
+	return hiddenOnly
+}
+
 func (f *PropertyGridField) Disabled() bool {
 	if f.Source.Tag.Get("viewable") != "" {
 		return true

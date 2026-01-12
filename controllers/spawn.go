@@ -115,10 +115,10 @@ func DeleteSpawned(s *behaviors.Spawner) {
 func Spawn(s *behaviors.Spawner) ecs.Entity {
 	// Pick a random spawner
 	randomSpawner := s.Entity
-	if s.Entities.Len() > 0 {
-		picked := rand.Int() % s.Entities.Len()
+	if s.Targets.Len() > 0 {
+		picked := rand.Int() % s.Targets.Len()
 		i := 0
-		for _, e := range s.Entities {
+		for _, e := range s.Targets {
 			if e == 0 {
 				continue
 			}
@@ -136,7 +136,7 @@ func Spawn(s *behaviors.Spawner) ecs.Entity {
 
 	pastedEntity := CloneEntity(randomSpawner, s.PreserveLinks,
 		func(e ecs.Entity, cid ecs.ComponentID, _ ecs.Component, pasted ecs.Component) bool {
-			pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
+			pasted.Base().Flags |= ecs.ComponentHideEntityInEditor | ecs.ComponentActive
 			switch cid {
 			case behaviors.SpawnerCID:
 				// Don't copy over spawners
@@ -173,8 +173,12 @@ func RespawnAll() {
 		if s == nil {
 			continue
 		}
-		DeleteSpawned(s)
-		Spawn(s)
+		if s.Auto != behaviors.AutoSpawnNone {
+			DeleteSpawned(s)
+		}
+		if s.Auto == behaviors.AutoSpawnOnLoad {
+			Spawn(s)
+		}
 	}
 }
 

@@ -172,8 +172,12 @@ func (list *EntityList) findAllReferences() {
 }
 
 func (list *EntityList) Build() fyne.CanvasObject {
-	list.ReIndex()
+	list.hideUnmatched = widget.NewCheck("Hide unmatched entities", func(b bool) {
+		list.Update()
+	})
+	list.hideUnmatched.Checked = true
 
+	list.ReIndex()
 	list.Sorts[0] = elsdSortAsc
 	list.Update()
 
@@ -259,11 +263,6 @@ func (list *EntityList) Build() fyne.CanvasObject {
 		log.Printf("unselect: %v", ecs.Entity(entity).String())
 	}
 
-	list.hideUnmatched = widget.NewCheck("Hide unmatched entities", func(b bool) {
-		list.Update()
-	})
-	list.hideUnmatched.Checked = true
-
 	findReferences := widget.NewButtonWithIcon("Find All References", theme.SearchIcon(), list.findAllReferences)
 
 	list.Container = container.NewBorder(container.NewVBox(newEntity, list.search, list.hideUnmatched, findReferences), nil, nil, nil, list.Table)
@@ -292,6 +291,9 @@ func (list *EntityList) ReIndex() {
 }
 
 func (list *EntityList) Update() {
+	list.State().Lock.Lock()
+	defer list.State().Lock.Unlock()
+
 	list.BackingStore = make([][elcNumColumns]any, 0)
 	searchValid := len(list.State().SearchQuery) > 0
 	searchFields := strings.Fields(list.State().SearchQuery)
@@ -318,6 +320,10 @@ func (list *EntityList) Update() {
 
 		parentDesc := ""
 		if n := ecs.GetNamed(entity); n != nil {
+			if n.Base().Flags&ecs.ComponentHideEntityInEditor != 0 {
+				// Ignore this entire entity
+				return
+			}
 			parentDesc = n.Name
 		}
 
@@ -330,11 +336,15 @@ func (list *EntityList) Update() {
 				// Ignore this entire entity
 				return
 			}
-			if c.ComponentID() == ecs.NamedCID ||
-				c.Base().Flags&ecs.ComponentHideInEditor != 0 {
+			if c.Base().Flags&ecs.ComponentHideInEditor != 0 {
 				continue
 			}
 			allHidden = false
+
+			if c.ComponentID() == ecs.NamedCID {
+				continue
+			}
+
 			desc := c.String()
 
 			if len(parentDesc) > 0 {
@@ -356,7 +366,8 @@ func (list *EntityList) Update() {
 			}
 		}
 		if len(parentDesc) == 0 || allHidden {
-			return
+			// TODO: Do we need this?
+			//	return
 		}
 
 		rank := 100

@@ -4,23 +4,31 @@
 package behaviors
 
 import (
+	"log"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
 )
 
+type AutoSpawn int
+
+//go:generate go run github.com/dmarkham/enumer -type=AutoSpawn -json
+const (
+	AutoSpawnNone AutoSpawn = iota
+	AutoSpawnOnLoad
+	AutoSpawnDeleteOnLoad
+)
+
 type Spawner struct {
 	ecs.Attached `editable:"^"`
 
-	DeleteSpawnedOnDetach bool `editable:"Delete Spawned on Detach"`
-	PreserveLinks         bool `editable:"Preserve Links"`
+	DeleteSpawnedOnDetach bool            `editable:"Delete Spawned on Detach"`
+	PreserveLinks         bool            `editable:"Preserve Links"`
+	Auto                  AutoSpawn       `editable:"Behavior on load"`
+	Targets               ecs.EntityTable `editable:"Targets"`
 
 	// See behaviors.Spawnee for the other side of this relation
 	Spawned map[ecs.Entity]int64
-}
-
-func (s *Spawner) Shareable() bool {
-	return true
 }
 
 func (s *Spawner) String() string {
@@ -42,6 +50,8 @@ func (s *Spawner) Construct(data map[string]any) {
 	s.Spawned = make(map[ecs.Entity]int64)
 	s.DeleteSpawnedOnDetach = true
 	s.PreserveLinks = false
+	s.Auto = AutoSpawnOnLoad
+	s.Targets = nil
 
 	if data == nil {
 		return
@@ -52,6 +62,16 @@ func (s *Spawner) Construct(data map[string]any) {
 	}
 	if v, ok := data["PreserveLinks"]; ok {
 		s.PreserveLinks = cast.ToBool(v)
+	}
+	if v, ok := data["Auto"]; ok {
+		if auto, err := AutoSpawnString(v.(string)); err == nil {
+			s.Auto = auto
+		} else {
+			log.Printf("error parsing spawner auto %v", v)
+		}
+	}
+	if v, ok := data["Targets"]; ok {
+		s.Targets = ecs.ParseEntityTable(v, true)
 	}
 
 	if v, ok := data["Spawned"]; ok {
@@ -72,6 +92,12 @@ func (s *Spawner) Serialize() map[string]any {
 	}
 	if s.PreserveLinks {
 		result["PreserveLinks"] = true
+	}
+	if s.Auto != AutoSpawnOnLoad {
+		result["Auto"] = s.Auto.String()
+	}
+	if len(s.Targets) != 0 {
+		result["Targets"] = s.Targets.Serialize()
 	}
 
 	if len(s.Spawned) > 0 {
