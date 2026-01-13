@@ -11,6 +11,7 @@ import (
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/containers"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
@@ -200,7 +201,7 @@ func (mw *MapWidget) render() {
 		gridMouse := editor.WorldGrid(&editor.MouseWorld)
 		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
 		mw.DrawHandle(gridMouse)
-	case *actions.SplitSector, *actions.SplitSegment, *actions.AlignGrid:
+	case *actions.SplitSector, *actions.SplitSegment, *actions.AlignGrid, *actions.PathDebug:
 		gridMouse := editor.WorldGrid(&editor.MouseWorld)
 		gridMouseDown := editor.WorldGrid(&editor.MouseDownWorld)
 		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
@@ -213,12 +214,24 @@ func (mw *MapWidget) render() {
 			mw.Context.Stroke()
 			mw.DrawHandle(gridMouseDown)
 		}
+	}
 
+	if editor.PathDebugStart != editor.PathDebugEnd {
+		path := controllers.ShortestPath(editor.PathDebugStart, editor.PathDebugEnd, 10)
+		mw.Context.SetRGBA(0.5, 0.5, 1.0, 1.0)
+		for _, v := range path {
+			mw.DrawHandle(&v)
+		}
 	}
 
 	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse[0], Mouse[1]))*/
 	pixels := mw.Context.Image().(*image.RGBA).Pix
 	copy(mw.Surface.Pix, pixels)
+}
+
+type PathNode struct {
+	World        concepts.Vector2
+	gridX, gridY int
 }
 
 func (mw *MapWidget) Draw(w, h int) image.Image {

@@ -69,6 +69,7 @@ type EditorMenu struct {
 	ToolsSplitSector        MenuAction
 	ToolsAlignGrid          MenuAction
 	ToolsNewShader          MenuAction
+	ToolsPathDebug          MenuAction
 
 	ViewSectorEntities     MenuAction
 	ViewSnapToGrid         MenuAction
@@ -329,6 +330,7 @@ func CreateMainMenu() {
 	editor.ToolsAlignGrid.Menu = fyne.NewMenuItem("Align Grid", func() { editor.SwitchTool(state.ToolAlignGrid) })
 
 	editor.ToolsNewShader.Menu = fyne.NewMenuItem("New Shader...", editor.NewShader)
+	editor.ToolsPathDebug.Menu = fyne.NewMenuItem("Path Debug", func() { editor.SwitchTool(state.ToolPathDebug) })
 
 	editor.ViewSectorEntities.Menu = fyne.NewMenuItem("Toggle Sector Labels", func() {
 		editor.SectorTypesVisible = !editor.SectorTypesVisible
@@ -380,7 +382,7 @@ func CreateMainMenu() {
 	menuTools := fyne.NewMenu("Tools", editor.ToolsSelect.Menu,
 		editor.ToolsAddBody.Menu, editor.ToolsAddSector.Menu, editor.ToolsAddInternalSegment.Menu, editor.ToolsSplitSegment.Menu,
 		editor.ToolsSplitSector.Menu, editor.ToolsAlignGrid.Menu, fyne.NewMenuItemSeparator(),
-		editor.ToolsNewShader.Menu)
+		editor.ToolsNewShader.Menu, editor.ToolsPathDebug.Menu)
 
 	menuView := fyne.NewMenu("View", editor.ViewSectorEntities.Menu, editor.ViewSnapToGrid.Menu)
 
