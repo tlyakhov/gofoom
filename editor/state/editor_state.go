@@ -26,6 +26,7 @@ const (
 	ToolAddBody
 	ToolAddInternalSegment
 	ToolAlignGrid
+	ToolPathDebug
 )
 
 type EditorSnapshot struct {
@@ -69,6 +70,9 @@ type EditorState struct {
 	ComponentNamesVisible bool
 
 	DisabledPropertiesVisible bool
+
+	PathDebugStart concepts.Vector2
+	PathDebugEnd   concepts.Vector2
 }
 
 type IEditor interface {

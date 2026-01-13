@@ -412,6 +412,11 @@ func (e *Editor) UseTool() {
 		})
 	case state.ToolAlignGrid:
 		e.Act(&actions.AlignGrid{Place: actions.Place{Action: state.Action{IEditor: e}}})
+	case state.ToolPathDebug:
+		e.Act(&actions.PathDebug{
+			Place: actions.Place{
+				Action: state.Action{IEditor: e},
+			}})
 	default:
 		return
 	}

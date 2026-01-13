@@ -86,11 +86,13 @@ require (
 	github.com/mschoch/smat v0.2.0 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.6.0 // indirect
+	github.com/oleiade/lane/v2 v2.0.0 // indirect
 	github.com/rymdport/portal v0.4.2 // indirect
 	github.com/steveyen/gtreap v0.1.0 // indirect
 	github.com/willf/bitset v1.1.11 // indirect
 	go.etcd.io/bbolt v1.4.3 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
+	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
 	golang.org/x/sync v0.18.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
