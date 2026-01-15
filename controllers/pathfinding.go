@@ -73,54 +73,142 @@ var directions = []struct{ dx, dy int }{
 	{1, 1}, {1, -1}, {-1, 1}, {-1, -1},
 }
 
-func (pf *PathFinder) sectorForNextPoint(sector *core.Sector, delta, next *concepts.Vector2, depth int) *core.Sector {
-	if sector.IsPointInside2D(next) {
-		for _, seg := range sector.Segments {
-			if seg.AdjacentSegment != nil && seg.PortalIsPassable {
-				continue
+func (pf *PathFinder) checkPath(startSector *core.Sector, start, end *concepts.Vector2) (*core.Sector, bool) {
+	currSector := startSector
+	currPos := *start
+	target := *end
+
+	// Safety break
+	for i := 0; i < 20; i++ {
+		// Find closest intersection with sector boundaries
+		var closestSeg *core.SectorSegment
+		closestDist := math.MaxFloat64
+
+		// Ray cast against all segments
+		rayDelta := target.Sub(&currPos)
+		distTotal := rayDelta.Length()
+
+		if distTotal < constants.IntersectEpsilon {
+			// Already there
+			if currSector.IsPointInside2D(&target) {
+				return currSector, true
 			}
-			if seg.DistanceToPointSq(next) < pf.Radius*pf.Radius {
-				return nil
+			return nil, false
+		}
+
+		for _, seg := range currSector.Segments {
+			// We use IntersectSegmentsRaw directly to get the ray parameter 's'
+			// seg.A, seg.B are the segment points.
+			// currPos, target are the ray points.
+			// The function returns r (segment param) and s (ray param).
+			// If r is in [0, 1] and s is in [0, 1], we have an intersection.
+			// However, IntersectSegmentsRaw might return -1 if no intersection.
+			// Wait, IntersectSegmentsRaw returns 4 values.
+			// r, s, dx, dy.
+			// If no intersection, it returns -1.
+
+			// We need to re-implement raw call because concepts pkg might clamp or reject if not exact.
+			// Actually IntersectSegmentsRaw logic:
+			// if r or s out of range, returns -1.
+			// We want intersections strictly on the segment (r in [0, 1]).
+			// And on the ray (s in [0, 1]).
+			// This matches exactly what we need.
+
+			r, s, _, _ := concepts.IntersectSegmentsRaw(seg.A, seg.B, &currPos, &target)
+
+			if r >= 0 {
+				// Intersection found.
+				// s is the fraction along the ray (currPos -> target).
+				// 0 <= s <= 1.
+				dist := s * distTotal
+				if dist < closestDist {
+					closestDist = dist
+					closestSeg = seg
+				}
 			}
 		}
-		return sector
+
+		if closestSeg == nil {
+			// No walls hit.
+			// Check if target is inside.
+			if currSector.IsPointInside2D(&target) {
+				// Valid!
+				// One final check: DistanceToPointSq for walls at destination?
+				for _, seg := range currSector.Segments {
+					if seg.DistanceToPointSq(&target) < pf.Radius*pf.Radius {
+						// If it's a portal, maybe ok?
+						if seg.AdjacentSegment != nil && seg.PortalIsPassable {
+							continue
+						}
+						return nil, false
+					}
+				}
+				return currSector, true
+			}
+			// Not inside, but no intersection?
+			// This can happen if start was outside or due to precision.
+			// Assuming robust geometry, return false.
+			return nil, false
+		}
+
+		// We hit a segment.
+		// If it is very close to target (s ~ 1), we are good?
+		// But IntersectSegmentsRaw guarantees s <= 1.
+		// If s is very close to 1, we hit the wall AT the target.
+		// Which is a collision.
+
+		if closestDist >= distTotal-constants.IntersectEpsilon {
+			// Hit is basically at target.
+			// Collision.
+			// Unless it is a portal we can pass through?
+			// But target is exactly on the portal/wall.
+			// Let's assume invalid if we end UP on a wall.
+			return nil, false
+		}
+
+		// We hit a wall/portal BEFORE target.
+		if closestSeg.AdjacentSegment != nil && closestSeg.PortalIsPassable {
+			// It is a portal.
+			nextSector := closestSeg.AdjacentSegment.Sector
+
+			// Calculate intersection point exactly
+			// intersection = currPos + (target - currPos) * (closestDist / distTotal)
+			// Or just use 's' if we had it.
+			// Recompute s for closestSeg?
+			// s = closestDist / distTotal.
+			s := closestDist / distTotal
+			intersection := *currPos.Add(rayDelta.Mul(s))
+
+			// Check Height / Door Logic AT THE PORTAL
+			fz, cz := currSector.ZAt(&intersection)
+			afz, acz := nextSector.ZAt(&intersection)
+
+			if afz-fz > pf.MountHeight || min(cz, acz)-max(fz, afz) < pf.Radius {
+				// Check for doors
+				door := behaviors.GetDoor(currSector.Entity)
+				adjDoor := behaviors.GetDoor(nextSector.Entity)
+				if door != nil || adjDoor != nil {
+					// TODO: Check for doors that NPCs can't walk through.
+				} else {
+					return nil, false
+				}
+			}
+
+			// Traverse
+			currSector = nextSector
+			// Advance currPos slightly past portal to avoid hitting it again
+			// Or just update currPos to intersection and trust the next iteration won't find the same wall behind us?
+			// To be safe, nudge it.
+			nudge := rayDelta.Norm().Mul(constants.IntersectEpsilon * 2.0)
+			currPos = *intersection.Add(nudge)
+			continue
+		} else {
+			// Hit a solid wall.
+			return nil, false
+		}
 	}
 
-	if depth > 2 {
-		return nil
-	}
-
-	fz, cz := sector.ZAt(next)
-	for _, seg := range sector.Segments {
-		if seg.AdjacentSegment == nil {
-			continue
-		}
-		// Don't move backwards
-		if seg.Normal[0]*delta[0]+seg.Normal[1]*delta[1] > 0 {
-			continue
-		}
-		if seg.DistanceToPointSq(next) < constants.IntersectEpsilon {
-			return sector
-		}
-		adj := seg.AdjacentSegment.Sector
-		afz, acz := adj.ZAt(next)
-		// Check that the sector height is mountable and isn't too narrow
-		if afz-fz > pf.MountHeight || min(cz, acz)-max(fz, afz) < pf.Radius {
-			// Maybe this or previous sector is a door?
-			door := behaviors.GetDoor(sector.Entity)
-			adjDoor := behaviors.GetDoor(adj.Entity)
-			if door != nil || adjDoor != nil {
-				// TODO: Check for doors that NPCs can't walk through.
-			} else {
-				// Not a door, impassable
-				continue
-			}
-		}
-		if adj = pf.sectorForNextPoint(seg.AdjacentSegment.Sector, delta, next, depth+1); adj != nil {
-			return adj
-		}
-	}
-	return nil
+	return nil, false
 }
 
 // Helper to convert grid key to world point
@@ -171,10 +259,12 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 	// Use a special key for the exact end point
 	endKey := pathNodeKey{math.MaxInt, math.MaxInt}
 
+	// Multipliers for dynamic step size
+	multipliers := []int{4, 2, 1}
+
 	for pq.Len() > 0 {
 		current := heap.Pop(&pq).(*pathNode)
 		currentPoint := pf.keyToPoint(current.key)
-		delta := concepts.Vector2{}
 		// Check if we are close enough to end to jump there directly
 		// Using 1.5 * stepSize to cover diagonals and a bit of slack
 		if currentPoint.Dist(&pf.End) <= pf.Step*1.5 {
@@ -184,32 +274,46 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 		}
 
 		for _, d := range directions {
-			nextKey := pathNodeKey{current.key.x + d.dx, current.key.y + d.dy}
-			delta[0] = float64(d.dx)
-			delta[1] = float64(d.dy)
-			nextPoint := pf.keyToPoint(nextKey)
-			nextSector := pf.sectorForNextPoint(current.sector, &delta, &nextPoint, 0)
-			if nextSector == nil {
-				continue
-			}
+			// Try multipliers in descending order
+			for _, mult := range multipliers {
+				nextKey := pathNodeKey{current.key.x + d.dx*mult, current.key.y + d.dy*mult}
+				// Skip if we already found a cheaper path to this exact node
+				// Note: with multipliers, we might reach the same node via different steps.
+				// e.g. 0->4 vs 0->2->4.
 
-			// Cost is strictly step size (or diagonal step size)
-			dist := pf.Step
-			if d.dx != 0 && d.dy != 0 {
-				dist = pf.Step * math.Sqrt2
-			}
-			nextCostFromStart := current.costFromStart + dist
+				// Wait, if we use multipliers, 'nextKey' is in grid coordinates (x/Step).
+				// So if mult=4, we jump 4 units in grid.
+				// We need to calculate cost properly.
 
-			if prevCost, exists := costSoFar[nextKey]; !exists || nextCostFromStart < prevCost {
-				costSoFar[nextKey] = nextCostFromStart
-				totalCost := nextCostFromStart + nextPoint.Dist(&pf.End) // Heuristic: Euclidean distance
-				heap.Push(&pq, &pathNode{
-					key:           nextKey,
-					sector:        nextSector,
-					totalCost:     totalCost,
-					costFromStart: nextCostFromStart,
-				})
-				cameFrom[nextKey] = current.key
+				nextPoint := pf.keyToPoint(nextKey)
+				nextSector, valid := pf.checkPath(current.sector, &currentPoint, &nextPoint)
+				if !valid {
+					continue
+				}
+
+				// Cost calculation
+				dist := pf.Step * float64(mult)
+				if d.dx != 0 && d.dy != 0 {
+					dist *= math.Sqrt2
+				}
+				nextCostFromStart := current.costFromStart + dist
+
+				if prevCost, exists := costSoFar[nextKey]; !exists || nextCostFromStart < prevCost {
+					costSoFar[nextKey] = nextCostFromStart
+					totalCost := nextCostFromStart + nextPoint.Dist(&pf.End) // Heuristic: Euclidean distance
+					heap.Push(&pq, &pathNode{
+						key:           nextKey,
+						sector:        nextSector,
+						totalCost:     totalCost,
+						costFromStart: nextCostFromStart,
+					})
+					cameFrom[nextKey] = current.key
+				}
+
+				// If we successfully found a valid path with a large step,
+				// we assume it is "good enough" for this direction and don't try smaller steps.
+				// This optimizes performance by reducing branching factor.
+				break
 			}
 		}
 	}
