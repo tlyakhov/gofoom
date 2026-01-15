@@ -4,12 +4,23 @@ import (
 	"container/heap"
 	"log"
 	"math"
+	"slices"
 
+	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
 )
+
+type PathFinder struct {
+	Start       concepts.Vector2
+	End         concepts.Vector2
+	Step        float64
+	Radius      float64
+	MountHeight float64
+	StartSector *core.Sector
+}
 
 // pathNodeKey represents a coordinate on the virtual grid.
 type pathNodeKey struct {
@@ -62,8 +73,16 @@ var directions = []struct{ dx, dy int }{
 	{1, 1}, {1, -1}, {-1, 1}, {-1, -1},
 }
 
-func nextPointValid(sector *core.Sector, next *concepts.Vector2, depth int) *core.Sector {
+func (pf *PathFinder) sectorForNextPoint(sector *core.Sector, delta, next *concepts.Vector2, depth int) *core.Sector {
 	if sector.IsPointInside2D(next) {
+		for _, seg := range sector.Segments {
+			if seg.AdjacentSegment != nil && seg.PortalIsPassable {
+				continue
+			}
+			if seg.DistanceToPointSq(next) < pf.Radius*pf.Radius {
+				return nil
+			}
+		}
 		return sector
 	}
 
@@ -71,41 +90,62 @@ func nextPointValid(sector *core.Sector, next *concepts.Vector2, depth int) *cor
 		return nil
 	}
 
+	fz, cz := sector.ZAt(next)
 	for _, seg := range sector.Segments {
 		if seg.AdjacentSegment == nil {
+			continue
+		}
+		// Don't move backwards
+		if seg.Normal[0]*delta[0]+seg.Normal[1]*delta[1] > 0 {
 			continue
 		}
 		if seg.DistanceToPointSq(next) < constants.IntersectEpsilon {
 			return sector
 		}
-		if adj := nextPointValid(seg.AdjacentSegment.Sector, next, depth+1); adj != nil {
+		adj := seg.AdjacentSegment.Sector
+		afz, acz := adj.ZAt(next)
+		// Check that the sector height is mountable and isn't too narrow
+		if afz-fz > pf.MountHeight || min(cz, acz)-max(fz, afz) < pf.Radius {
+			// Maybe this or previous sector is a door?
+			door := behaviors.GetDoor(sector.Entity)
+			adjDoor := behaviors.GetDoor(adj.Entity)
+			if door != nil || adjDoor != nil {
+				// TODO: Check for doors that NPCs can't walk through.
+			} else {
+				// Not a door, impassable
+				continue
+			}
+		}
+		if adj = pf.sectorForNextPoint(seg.AdjacentSegment.Sector, delta, next, depth+1); adj != nil {
 			return adj
 		}
 	}
 	return nil
 }
 
+// Helper to convert grid key to world point
+func (pf *PathFinder) keyToPoint(k pathNodeKey) concepts.Vector2 {
+	return concepts.Vector2{
+		pf.Start[0] + float64(k.x)*pf.Step,
+		pf.Start[1] + float64(k.y)*pf.Step,
+	}
+}
+
 // ShortestPath finds the shortest path between start and end points using the
 // A* algorithm. It builds the graph on the fly by moving in fixed increments
 // from the start point.
-func ShortestPath(start, end concepts.Vector2, stepSize float64) []concepts.Vector2 {
-	if stepSize <= 0 {
+func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
+	defer concepts.ExecutionDuration(concepts.ExecutionTrack("PathFinder.ShortestPath"))
+	if pf.Step <= 0 {
 		return nil
 	}
 
-	sector := pathPointValid(&start)
+	// TODO: Optimize these checks
+	sector := pathPointValid(&pf.Start)
 	// Check if start and end are valid
-	if sector == nil || pathPointValid(&end) == nil {
-		log.Printf("Invalid points: %v, %v", start, end)
+	if sector == nil || pathPointValid(&pf.End) == nil {
+		log.Printf("Invalid points: %v, %v", pf.Start, pf.End)
 		return nil
-	}
-
-	// Helper to convert grid key to world point
-	keyToPoint := func(k pathNodeKey) concepts.Vector2 {
-		return concepts.Vector2{
-			start[0] + float64(k.x)*stepSize,
-			start[1] + float64(k.y)*stepSize,
-		}
 	}
 
 	// cameFrom maps a node to its predecessor
@@ -133,11 +173,11 @@ func ShortestPath(start, end concepts.Vector2, stepSize float64) []concepts.Vect
 
 	for pq.Len() > 0 {
 		current := heap.Pop(&pq).(*pathNode)
-		currentPoint := keyToPoint(current.key)
-
+		currentPoint := pf.keyToPoint(current.key)
+		delta := concepts.Vector2{}
 		// Check if we are close enough to end to jump there directly
 		// Using 1.5 * stepSize to cover diagonals and a bit of slack
-		if currentPoint.Dist(&end) <= stepSize*1.5 {
+		if currentPoint.Dist(&pf.End) <= pf.Step*1.5 {
 			cameFrom[endKey] = current.key
 			finalKey = &endKey
 			break
@@ -145,23 +185,24 @@ func ShortestPath(start, end concepts.Vector2, stepSize float64) []concepts.Vect
 
 		for _, d := range directions {
 			nextKey := pathNodeKey{current.key.x + d.dx, current.key.y + d.dy}
-			nextPoint := keyToPoint(nextKey)
-
-			nextSector := nextPointValid(current.sector, &nextPoint, 0)
+			delta[0] = float64(d.dx)
+			delta[1] = float64(d.dy)
+			nextPoint := pf.keyToPoint(nextKey)
+			nextSector := pf.sectorForNextPoint(current.sector, &delta, &nextPoint, 0)
 			if nextSector == nil {
 				continue
 			}
 
 			// Cost is strictly step size (or diagonal step size)
-			dist := stepSize
+			dist := pf.Step
 			if d.dx != 0 && d.dy != 0 {
-				dist = stepSize * math.Sqrt2
+				dist = pf.Step * math.Sqrt2
 			}
 			nextCostFromStart := current.costFromStart + dist
 
 			if prevCost, exists := costSoFar[nextKey]; !exists || nextCostFromStart < prevCost {
 				costSoFar[nextKey] = nextCostFromStart
-				totalCost := nextCostFromStart + nextPoint.Dist(&end) // Heuristic: Euclidean distance
+				totalCost := nextCostFromStart + nextPoint.Dist(&pf.End) // Heuristic: Euclidean distance
 				heap.Push(&pq, &pathNode{
 					key:           nextKey,
 					sector:        nextSector,
@@ -179,7 +220,7 @@ func ShortestPath(start, end concepts.Vector2, stepSize float64) []concepts.Vect
 	}
 
 	// Reconstruct path
-	path := []concepts.Vector2{end}
+	path := []concepts.Vector2{pf.End}
 	key := *finalKey
 	ok := true
 
@@ -189,7 +230,7 @@ func ShortestPath(start, end concepts.Vector2, stepSize float64) []concepts.Vect
 	}
 
 	for {
-		path = append(path, keyToPoint(key))
+		path = append(path, pf.keyToPoint(key))
 		if key == startKey {
 			break
 		}
@@ -199,10 +240,7 @@ func ShortestPath(start, end concepts.Vector2, stepSize float64) []concepts.Vect
 		}
 	}
 
-	// Reverse path
-	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
-		path[i], path[j] = path[j], path[i]
-	}
+	slices.Reverse(path)
 
 	return path
 }

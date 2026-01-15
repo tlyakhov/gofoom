@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
@@ -217,7 +218,12 @@ func (mw *MapWidget) render() {
 	}
 
 	if editor.PathDebugStart != editor.PathDebugEnd {
-		path := controllers.ShortestPath(editor.PathDebugStart, editor.PathDebugEnd, 10)
+		pf := controllers.PathFinder{Start: editor.PathDebugStart,
+			End:         editor.PathDebugEnd,
+			Radius:      16,
+			Step:        10,
+			MountHeight: constants.PlayerMountHeight}
+		path := pf.ShortestPath()
 		mw.Context.SetRGBA(0.5, 0.5, 1.0, 1.0)
 		for _, v := range path {
 			mw.DrawHandle(&v)
