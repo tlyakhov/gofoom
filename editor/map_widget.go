@@ -10,12 +10,11 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/containers"
-	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
+	"tlyakhov/gofoom/pathfinding"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -218,11 +217,10 @@ func (mw *MapWidget) render() {
 	}
 
 	if editor.PathDebugStart != editor.PathDebugEnd {
-		pf := controllers.PathFinder{Start: &editor.PathDebugStart,
-			End:         &editor.PathDebugEnd,
-			Radius:      16,
-			Step:        10,
-			MountHeight: constants.PlayerMountHeight}
+		pf := pathfinding.Finder{Start: &editor.PathDebugStart,
+			End:    &editor.PathDebugEnd,
+			Radius: 16,
+			Step:   10}
 		mw.drawPath(pf.ShortestPath())
 	}
 

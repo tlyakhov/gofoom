@@ -41,3 +41,13 @@ func CreateFont(filename string, name string) ecs.Entity {
 	ecs.ActAllControllersOneEntity(e, ecs.ControllerPrecompute)
 	return e
 }
+
+func DefaultMaterial() ecs.Entity {
+	entity := ecs.GetEntityByName("Default Material")
+	if entity != 0 {
+		return entity
+	}
+
+	// Otherwise try a random one?
+	return ecs.First(materials.LitCID).Base().Entity
+}

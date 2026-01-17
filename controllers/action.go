@@ -83,6 +83,14 @@ func (ac *ActionController) pos(checkProcedural bool) *concepts.Vector3 {
 	return &ac.Body.Pos.Now
 }
 
+func (ac *ActionController) startSector() *core.Sector {
+	if ac.Body == nil {
+		// TODO: need to consider overlaps
+		return ac.Sector
+	}
+	return ac.Body.Sector()
+}
+
 func (ac *ActionController) Precompute() {
 	if ac.State == nil {
 		ac.State = ecs.NewAttachedComponent(ac.Entity, behaviors.ActorStateCID).(*behaviors.ActorState)
