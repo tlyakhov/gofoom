@@ -25,11 +25,18 @@ func (v *Vector3) Zero() bool {
 	return v[0] == 0 && v[1] == 0 && v[2] == 0
 }
 
-// Zero returns true if all components are within an epsilon.
+// WithinEpsilon returns true if all components are within an epsilon.
 func (v *Vector3) WithinEpsilon() bool {
 	return v[0] > -constants.IntersectEpsilon && v[0] < constants.IntersectEpsilon &&
 		v[1] > -constants.IntersectEpsilon && v[1] < constants.IntersectEpsilon &&
 		v[2] > -constants.IntersectEpsilon && v[2] < constants.IntersectEpsilon
+}
+
+// Zero returns true if all components are within an epsilon.
+func (v *Vector3) EqualEpsilon(v2 *Vector3) bool {
+	return math.Abs(v2[0]-v[0]) < constants.IntersectEpsilon &&
+		math.Abs(v2[1]-v[1]) < constants.IntersectEpsilon &&
+		math.Abs(v2[2]-v[2]) < constants.IntersectEpsilon
 }
 
 func (v *Vector3) Clone() *Vector3 {

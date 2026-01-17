@@ -207,10 +207,9 @@ func weaponFiring(wc *WeaponController) {
 		}
 		// Hurt anything alive
 		if alive := behaviors.GetAlive(s.Body.Entity); alive != nil {
-			// TODO: Parameterize in Weapon
+			// TODO: Parameterize CoolDown in Weapon?
 			alive.Hurt("Weapon "+s.Entity.String(), wc.Class.Damage, 20)
 		}
-		// TODO: Death animations/entity deactivation
 	case selection.SelectableSectorSegment, selection.SelectableHi,
 		selection.SelectableLow, selection.SelectableMid,
 		selection.SelectableInternalSegment:

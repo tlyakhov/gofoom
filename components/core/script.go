@@ -49,6 +49,7 @@ func init() {
 	import "tlyakhov/gofoom/containers"
 	import "tlyakhov/gofoom/controllers"
 	import "tlyakhov/gofoom/ecs"
+	import "tlyakhov/gofoom/pathfinding"
 	import "log"
 	import "fmt"
 

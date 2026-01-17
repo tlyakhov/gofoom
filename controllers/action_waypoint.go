@@ -3,10 +3,64 @@ package controllers
 import (
 	"math"
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
+	"tlyakhov/gofoom/pathfinding"
 )
+
+func (ac *ActionController) pathSectorValid(from, to *core.Sector, p *concepts.Vector2) bool {
+	// Maybe this or previous sector is a fromDoor?
+	fromDoor := behaviors.GetDoor(from.Entity)
+	toDoor := behaviors.GetDoor(to.Entity)
+	if fromDoor != nil || toDoor != nil {
+		// TODO: Check for doors that NPCs can't walk through.
+		return true
+	}
+
+	// If it's not a door, check that the sector height is mountable and isn't too narrow
+	fz, cz := from.ZAt(p)
+	afz, acz := to.ZAt(p)
+	if ac.Mobile != nil && afz-fz > ac.Mobile.MountHeight {
+		return false
+	}
+	if min(cz, acz)-max(fz, afz) < ac.Body.Size.Now[0]*0.5 {
+		return false
+	}
+	return true
+}
+
+func (ac *ActionController) repath(start, end concepts.Vector3) {
+	ac.State.Finder = &pathfinding.Finder{
+		Start:       &start,
+		StartSector: ac.startSector(),
+		End:         &end,
+		Radius:      ac.Body.Size.Now[0] * 0.5,
+		Step:        10,
+		SectorValid: ac.pathSectorValid,
+	}
+	ac.State.Path = ac.State.Finder.ShortestPath()
+	ac.State.LastPathGenerated = ecs.Simulation.SimTimestamp
+}
+
+func (ac *ActionController) pathTarget(pos *concepts.Vector3, target *concepts.Vector3) *concepts.Vector3 {
+	if len(ac.State.Path) == 0 {
+		return target
+	}
+	// Need to figure out which point to use as a target
+	targetIndex := len(ac.State.Path) - 1
+	lastDistSq := math.Inf(1)
+	for i, p := range ac.State.Path {
+		dist := p.DistSq(pos)
+		if dist > lastDistSq {
+			targetIndex = i
+			break
+		}
+		lastDistSq = dist
+	}
+	return &ac.State.Path[targetIndex]
+}
 
 func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	state := ac.timedAction(&waypoint.ActionTimed)
@@ -20,37 +74,12 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	target := &waypoint.P
 
 	// TODO: Be more clever about when we refresh this
-	pathStale := ecs.Simulation.SimTimestamp-ac.State.LastPathGenerated > concepts.MillisToNanos(1000)
-	if waypoint.UsePathFinder && (ac.State.Path == nil || ac.State.LastPathGenerated == 0 || pathStale) {
-		pf := PathFinder{
-			Start:  pos,
-			End:    target,
-			Radius: ac.Body.Size.Now[0] * 0.5,
-			Step:   10,
-		}
-		if ac.Mobile != nil {
-			pf.MountHeight = ac.Mobile.MountHeight
-		}
-		ac.State.Path = pf.ShortestPath()
-		ac.State.LastPathGenerated = ecs.Simulation.SimTimestamp
+	pathStale := ecs.Simulation.SimTimestamp-ac.State.LastPathGenerated > concepts.MillisToNanos(3000)
+	if waypoint.UsePathFinder && (ac.State.Finder == nil || ac.State.Path == nil || !ac.State.Finder.End.EqualEpsilon(target) || pathStale) {
+		ac.repath(*pos, *target)
 	}
 
-	if len(ac.State.Path) > 0 {
-		// Need to figure out which point to use as a target
-		closestIndex := 0
-		closestDist := math.Inf(1)
-		for i, p := range ac.State.Path {
-			dist := p.DistSq(pos)
-			if dist <= closestDist {
-				closestDist = dist
-				closestIndex = i
-			}
-		}
-		if closestIndex < len(ac.State.Path)-1 {
-			closestIndex++
-		}
-		target = &ac.State.Path[closestIndex]
-	}
+	target = ac.pathTarget(pos, target)
 
 	// Have we reached the target?
 	d := ac.Speed * constants.TimeStepS
@@ -92,7 +121,7 @@ func (ac *ActionController) Waypoint(waypoint *behaviors.ActionWaypoint) bool {
 	case ac.Mobile != nil:
 		// TODO: Is this a hack?
 		if !ac.Body.OnGround {
-			force.MulSelf(0.1)
+			force.MulSelf(0.01)
 		}
 		ac.Mobile.Force.AddSelf(force)
 	case ac.Body.Pos.Procedural:

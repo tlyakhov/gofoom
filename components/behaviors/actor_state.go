@@ -6,6 +6,7 @@ package behaviors
 import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
+	"tlyakhov/gofoom/pathfinding"
 )
 
 type ActorState struct {
@@ -13,6 +14,7 @@ type ActorState struct {
 
 	Action            ecs.Entity `editable:"Current Action" edit_type:"Action"`
 	LastTransition    int64
+	Finder            *pathfinding.Finder
 	Path              []concepts.Vector3
 	LastPathGenerated int64
 }
@@ -25,6 +27,8 @@ func (a *ActorState) Construct(data map[string]any) {
 	a.Attached.Construct(data)
 	a.Action = 0
 	a.LastTransition = 0
+	a.Path = nil
+	a.Finder = nil
 
 	if data == nil {
 		return
