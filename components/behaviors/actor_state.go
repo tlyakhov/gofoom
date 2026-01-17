@@ -4,14 +4,17 @@
 package behaviors
 
 import (
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
 type ActorState struct {
 	ecs.Attached
 
-	Action         ecs.Entity `editable:"Current Action" edit_type:"Action"`
-	LastTransition int64
+	Action            ecs.Entity `editable:"Current Action" edit_type:"Action"`
+	LastTransition    int64
+	Path              []concepts.Vector3
+	LastPathGenerated int64
 }
 
 func (a *ActorState) String() string {

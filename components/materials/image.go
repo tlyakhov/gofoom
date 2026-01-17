@@ -97,6 +97,7 @@ func (img *Image) Sample(x, y float64, sw, sh uint32, result *concepts.Vector4) 
 	h := img.Height
 	scaledArea := sw * sh
 
+	// TODO: optimize this
 	if scaledArea > 0 && img.GenerateMipMaps && len(img.MipMaps) > 1 {
 		mm := img.MipMaps[0]
 		for i := 1; i < len(img.MipMaps); i++ {

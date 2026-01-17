@@ -14,8 +14,8 @@ import (
 )
 
 type PathFinder struct {
-	Start       concepts.Vector2
-	End         concepts.Vector2
+	Start       *concepts.Vector3
+	End         *concepts.Vector3
 	Step        float64
 	Radius      float64
 	MountHeight float64
@@ -32,8 +32,9 @@ type pathNode struct {
 	key           pathNodeKey
 	sector        *core.Sector
 	totalCost     float64 // f = g + h
-	costFromStart float64 // cost from start
-	index         int     // The index of the item in the heap
+	costFromStart float64
+	costFromEnd   float64
+	index         int // The index of the item in the heap
 }
 
 type pathQueue []*pathNode
@@ -90,6 +91,9 @@ func (pf *PathFinder) sectorForNextPoint(sector *core.Sector, delta, next *conce
 		return nil
 	}
 
+	// TODO: Ignore dead ends (e.g. if there's only one portal segment
+	// and the end point isn't in the adj sector, break early)
+
 	fz, cz := sector.ZAt(next)
 	for _, seg := range sector.Segments {
 		if seg.AdjacentSegment == nil {
@@ -124,8 +128,8 @@ func (pf *PathFinder) sectorForNextPoint(sector *core.Sector, delta, next *conce
 }
 
 // Helper to convert grid key to world point
-func (pf *PathFinder) keyToPoint(k pathNodeKey) concepts.Vector2 {
-	return concepts.Vector2{
+func (pf *PathFinder) keyToPoint(k pathNodeKey) concepts.Vector3 {
+	return concepts.Vector3{
 		pf.Start[0] + float64(k.x)*pf.Step,
 		pf.Start[1] + float64(k.y)*pf.Step,
 	}
@@ -134,22 +138,22 @@ func (pf *PathFinder) keyToPoint(k pathNodeKey) concepts.Vector2 {
 // ShortestPath finds the shortest path between start and end points using the
 // A* algorithm. It builds the graph on the fly by moving in fixed increments
 // from the start point.
-func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
-	defer concepts.ExecutionDuration(concepts.ExecutionTrack("PathFinder.ShortestPath"))
+func (pf *PathFinder) ShortestPath() []concepts.Vector3 {
+	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("PathFinder.ShortestPath"))
 	if pf.Step <= 0 {
 		return nil
 	}
 
 	// TODO: Optimize these checks
-	sector := pathPointValid(&pf.Start)
-	// Check if start and end are valid
-	if sector == nil || pathPointValid(&pf.End) == nil {
-		log.Printf("Invalid points: %v, %v", pf.Start, pf.End)
+	sector := pathPointValid(pf.Start)
+	// Check if start is valid
+	if sector == nil {
+		log.Printf("Invalid point: %v, %v", pf.Start, pf.End)
 		return nil
 	}
 
 	// cameFrom maps a node to its predecessor
-	cameFrom := make(map[pathNodeKey]pathNodeKey)
+	cameFrom := make(map[pathNodeKey]*pathNode)
 	// costSoFar stores the g cost
 	costSoFar := make(map[pathNodeKey]float64)
 
@@ -163,11 +167,15 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 		sector:        sector,
 		totalCost:     0,
 		costFromStart: 0,
+		costFromEnd:   pf.Start.Dist(pf.End),
 	}
 	heap.Push(&pq, startNode)
 	costSoFar[startKey] = 0
 
 	var finalKey *pathNodeKey
+	path := []concepts.Vector3{}
+	lowestCost := math.Inf(1)
+
 	// Use a special key for the exact end point
 	endKey := pathNodeKey{math.MaxInt, math.MaxInt}
 
@@ -177,10 +185,15 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 		delta := concepts.Vector2{}
 		// Check if we are close enough to end to jump there directly
 		// Using 1.5 * stepSize to cover diagonals and a bit of slack
-		if currentPoint.Dist(&pf.End) <= pf.Step*1.5 {
-			cameFrom[endKey] = current.key
+		if currentPoint.DistSq(pf.End) <= (pf.Step * 1.5 * pf.Step * 1.5) {
+			cameFrom[endKey] = current
 			finalKey = &endKey
+			path = append(path, *pf.End)
 			break
+		}
+		if current.costFromEnd < lowestCost {
+			lowestCost = current.costFromEnd
+			finalKey = &current.key
 		}
 
 		for _, d := range directions {
@@ -188,7 +201,7 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 			delta[0] = float64(d.dx)
 			delta[1] = float64(d.dy)
 			nextPoint := pf.keyToPoint(nextKey)
-			nextSector := pf.sectorForNextPoint(current.sector, &delta, &nextPoint, 0)
+			nextSector := pf.sectorForNextPoint(current.sector, &delta, nextPoint.To2D(), 0)
 			if nextSector == nil {
 				continue
 			}
@@ -202,31 +215,30 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 
 			if prevCost, exists := costSoFar[nextKey]; !exists || nextCostFromStart < prevCost {
 				costSoFar[nextKey] = nextCostFromStart
-				totalCost := nextCostFromStart + nextPoint.Dist(&pf.End) // Heuristic: Euclidean distance
+				costFromEnd := nextPoint.Dist(pf.End)
+				totalCost := nextCostFromStart + costFromEnd // Heuristic: Euclidean distance
 				heap.Push(&pq, &pathNode{
 					key:           nextKey,
 					sector:        nextSector,
 					totalCost:     totalCost,
 					costFromStart: nextCostFromStart,
+					costFromEnd:   costFromEnd,
 				})
-				cameFrom[nextKey] = current.key
+				cameFrom[nextKey] = current
 			}
 		}
 	}
 
 	if finalKey == nil {
-		log.Printf("finalKey = nil")
 		return nil
 	}
 
 	// Reconstruct path
-	path := []concepts.Vector2{pf.End}
 	key := *finalKey
-	ok := true
 
 	// If we finished at the special end key, step back to the grid
 	if key == endKey {
-		key = cameFrom[key]
+		key = cameFrom[key].key
 	}
 
 	for {
@@ -234,10 +246,11 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 		if key == startKey {
 			break
 		}
-		key, ok = cameFrom[key]
+		node, ok := cameFrom[key]
 		if !ok {
 			break // Should not happen
 		}
+		key = node.key
 	}
 
 	slices.Reverse(path)
@@ -245,18 +258,19 @@ func (pf *PathFinder) ShortestPath() []concepts.Vector2 {
 	return path
 }
 
-func pathPointValid(p *concepts.Vector2) *core.Sector {
+func pathPointValid(p *concepts.Vector3) *core.Sector {
+	p2d := p.To2D()
 	arena := ecs.ArenaFor[core.Sector](core.SectorCID)
 	for i := range arena.Cap() {
 		sector := arena.Value(i)
 		if sector == nil {
 			continue
 		}
-		if sector.IsPointInside2D(p) {
+		if sector.IsPointInside2D(p2d) {
 			return sector
 		}
 		for _, seg := range sector.Segments {
-			if seg.AdjacentSector != 0 && seg.DistanceToPointSq(p) < constants.IntersectEpsilon {
+			if seg.AdjacentSector != 0 && seg.DistanceToPointSq(p2d) < constants.IntersectEpsilon {
 				return sector
 			}
 		}
