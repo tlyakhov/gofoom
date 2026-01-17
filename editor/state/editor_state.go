@@ -71,8 +71,8 @@ type EditorState struct {
 
 	DisabledPropertiesVisible bool
 
-	PathDebugStart concepts.Vector2
-	PathDebugEnd   concepts.Vector2
+	PathDebugStart concepts.Vector3
+	PathDebugEnd   concepts.Vector3
 }
 
 type IEditor interface {

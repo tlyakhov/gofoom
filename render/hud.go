@@ -150,6 +150,10 @@ func (r *Renderer) renderHealthBar(b *core.Body) {
 		healthBarHealthColor[0] = 1
 		healthBarHealthColor[1] = 0
 		healthBarHealthColor[2] = 0
+	default:
+		healthBarHealthColor[0] = 0
+		healthBarHealthColor[1] = 1
+		healthBarHealthColor[2] = 0
 	}
 
 	for y := yStart; y < yEnd; y++ {

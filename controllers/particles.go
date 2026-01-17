@@ -121,18 +121,22 @@ func (pc *ParticleController) Frame() {
 			mobile.Flags |= flags
 		}
 
-		body.Pos.Now.From(&pc.Body.Pos.Now)
+		body.Pos.Spawn.From(&pc.Body.Pos.Now)
+		body.Pos.ResetToSpawn()
 		hAngle := pc.Body.Angle.Now + (rand.Float64()-0.5)*pc.XYSpread
 		vAngle := (rand.Float64() - 0.5) * pc.ZSpread
-		mobile.Vel.Now[0] = math.Cos(hAngle*concepts.Deg2rad) * pc.Vel
-		mobile.Vel.Now[1] = math.Sin(hAngle*concepts.Deg2rad) * pc.Vel
-		mobile.Vel.Now[2] = math.Sin(vAngle*concepts.Deg2rad) * pc.Vel
+		mobile.Vel.Spawn[0] = math.Cos(hAngle*concepts.Deg2rad) * pc.Vel
+		mobile.Vel.Spawn[1] = math.Sin(hAngle*concepts.Deg2rad) * pc.Vel
+		mobile.Vel.Spawn[2] = math.Sin(vAngle*concepts.Deg2rad) * pc.Vel
+		mobile.Vel.ResetToSpawn()
 		mobile.Mass = 0.25
 		mobile.CrBody = core.CollideNone
 		mobile.CrPlayer = core.CollideNone
 		mobile.CrWall = core.CollideBounce
 
-		bc.Target(body, e)
-		bc.Enter(pc.Body.Sector())
+		if bc.Target(body, e) {
+			bc.Enter(pc.Body.Sector())
+			bc.Precompute()
+		}
 	}
 }

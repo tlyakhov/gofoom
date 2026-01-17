@@ -16,8 +16,8 @@ func (a *PathDebug) EndPoint() bool {
 		return false
 	}
 
-	a.State().PathDebugStart = *a.WorldGrid(&a.State().MouseDownWorld)
-	a.State().PathDebugEnd = *a.WorldGrid(&a.State().MouseWorld)
+	a.WorldGrid(&a.State().MouseDownWorld).To3D(&a.State().PathDebugStart)
+	a.WorldGrid(&a.State().MouseWorld).To3D(&a.State().PathDebugEnd)
 
 	a.ActionFinished(false, true, true)
 	return true

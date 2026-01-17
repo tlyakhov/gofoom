@@ -455,11 +455,12 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	slices.SortFunc(ewd2s, func(a *entityWithDistSq, b *entityWithDistSq) int {
 		return int(b.DistSq - a.DistSq)
 	})
-	// This has a bug when rendering portals: these need to be transformed and
-	// clipped through portals appropriately.1
+	// TODO: This has a bug when rendering portals: these need to be transformed
+	// and clipped through portals appropriately.
 	block.EdgeTop = 0
 	block.EdgeBottom = r.ScreenHeight
 	block.LightSampler.MaterialSampler.Config = r.Config
+	block.IntersectedSectorSegment = nil
 	for _, sorted := range ewd2s {
 		if sorted.Body != nil {
 			r.renderBody(sorted, block, xStart, xEnd)
@@ -519,15 +520,28 @@ func (r *Renderer) Render() {
 	r.renderHUD()
 }
 
+const DebugZBuffer = false
+
 func (r *Renderer) ApplyBuffer(buffer []uint8) {
 	tm := ecs.Singleton(materials.ToneMapCID).(*materials.ToneMap)
 
-	for i := 0; i < len(r.FrameBuffer); i++ {
-		fb := &r.FrameBuffer[i]
-		fb[0] = tm.ClampedLinearToSRGB(fb[0])
-		fb[1] = tm.ClampedLinearToSRGB(fb[1])
-		fb[2] = tm.ClampedLinearToSRGB(fb[2])
+	if DebugZBuffer {
+		for i := 0; i < len(r.FrameBuffer); i++ {
+			fb := &r.FrameBuffer[i]
+			z := tm.ClampedLinearToSRGB(r.ZBuffer[i] / 1000)
+			fb[0] = dynamic.Lerp(z, tm.ClampedLinearToSRGB(fb[0]), 0.04)
+			fb[1] = dynamic.Lerp(z, tm.ClampedLinearToSRGB(fb[1]), 0.04)
+			fb[2] = dynamic.Lerp(z, tm.ClampedLinearToSRGB(fb[2]), 0.04)
+		}
+	} else {
+		for i := 0; i < len(r.FrameBuffer); i++ {
+			fb := &r.FrameBuffer[i]
+			fb[0] = tm.ClampedLinearToSRGB(fb[0])
+			fb[1] = tm.ClampedLinearToSRGB(fb[1])
+			fb[2] = tm.ClampedLinearToSRGB(fb[2])
+		}
 	}
+
 	concepts.BlendFrameBuffer(buffer, r.FrameBuffer, &r.FrameTint)
 }
 

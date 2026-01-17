@@ -156,6 +156,8 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		}
 		if (stage.Flags & materials.ShaderSky) != 0 {
 			v = float64(ms.ScreenY) / (float64(ms.ScreenHeight) - 1)
+			ms.ScaleH = math.MaxInt32 //uint32(ms.ScreenHeight)
+			ms.ScaleW = math.MaxInt32 //uint32(ms.ScreenWidth)
 
 			if (stage.Flags & materials.ShaderStaticBackground) != 0 {
 				u = float64(ms.ScreenX) / (float64(ms.ScreenWidth) - 1)
