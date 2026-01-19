@@ -1,0 +1,922 @@
+- Entity: ∈⋮2
+  ecs.SourceFile:
+    Hash: "0x2edae4ab"
+    ID: 1
+    Source: data/worlds/game-prefabs.yaml
+- Entity: ∈⋮3∈⋮Starting
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - AdjacentSector: ∈⋮12
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -100, -20
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -100, -100
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮10
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 100, -100
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 100, 100
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -100, 100
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, 0
+  ecs.Named:
+    Name: Starting
+- Entity: ∈⋮4∈⋮ckpvt5dmdsrrj1r5a5pg
+  core.Body:
+    Angle: 0
+    Pos: -60, -70, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮5∈⋮Spawn
+  behaviors.Alive: ∈⋮8∈⋮∈⋮2edae4ab
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮6∈⋮Spawn+%28spawned+from+5%29
+  character.Player: {}
+  core.Body:
+    Angle: 0
+    Pos:
+      Now: 0, 0, 20
+      Spawn: 0, 0, 0
+    Size:
+      Now: 10, 40
+      Spawn: 10, 10
+  core.Mobile:
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: 0, 0, 0.007001650399223597
+      Spawn: 0, 0, 0
+  ecs.Linked:
+    AlwaysReplace: true
+    CopyUnshareable: true
+    Sources:
+    - ∈⋮8∈⋮∈⋮2edae4ab
+  ecs.Named:
+    Name: Spawn
+  inventory.Carrier: ∈⋮8∈⋮∈⋮2edae4ab
+- Entity: ∈⋮6∈⋮Spawn+%28spawned+from+5%29
+  behaviors.Alive:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Health: 100
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮5∈⋮Spawn
+  character.Player:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angle:
+      Now: 554.0625
+      Spawn: 0
+    Pos:
+      Now: 110.03882377532351, -24.354219150844738, 20
+      Spawn: 0, 0, 0
+    Size:
+      Now: 10, 40
+      Spawn: 10, 10
+    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    CrMoving: CollideNone
+    CrPlayer: CollideNone
+    CrWall: CollideSeparate
+    Elasticity: 0.1
+    Mass: 80
+    MountHeight: 15
+    Vel:
+      Now: 0.047543296558219504, 0.01190897583234219, 0.007001650465646214
+      Spawn: 0, 0, 0
+  ecs.Named:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Name: Spawn (spawned from 5)
+  inventory.Carrier:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Inventory:
+    - ∈⋮18
+    - ∈⋮31
+    - ∈⋮32
+    SelectedWeapon: ∈⋮18
+- Entity: ∈⋮9
+  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Pursuer:
+    _Flags: ""
+    ChaseSpeed: 1000
+    StrafeDistance: 200
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮21
+  core.Body:
+    Angle:
+      Now: -67.49999999999999
+      Spawn: 0
+    Pos: -50, 60, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ""
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel: 0, 0, 0
+  ecs.Linked:
+    AlwaysReplace: true
+    CopyUnshareable: true
+    Sources:
+    - ∈⋮3∈⋮Flub∈⋮2edae4ab
+  inventory.Weapon:
+    _Flags: ""
+  materials.Shader: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
+- Entity: ∈⋮10
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 100, -100
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮11
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 100, -230
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 190, -230
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 360, -230
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮26
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 360, -190
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 360, -110
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 360, 190
+      Surface:
+        ExtraStages:
+        - BlendingFunc: BlendNormal
+          Flags: ""
+          Material: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮62bf0202
+          Transform: 104, 0, -23.00178930569987, 0, -25.6, 19.717176221821
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 100, 190
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮3∈⋮Starting
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 100, 100
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 186.66666666666666, -13.333333333333332
+- Entity: ∈⋮11
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 100, -230
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮12
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -80, -230
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -80, -290
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮24
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -60, -290
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 40, -290
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 190, -290
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮10
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 190, -230
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 64, -254
+- Entity: ∈⋮12
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -100, -20
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -270, -20
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -270, -270
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮11
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -80, -290
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -80, -230
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -200, -200
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -190, -90
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - AdjacentSector: ∈⋮3∈⋮Starting
+      Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -100, -100
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    Top:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: -161.25, -152.5
+- Entity: ∈⋮13∈⋮ckpvt5dmdsrrj1r5a5pg
+  core.Body:
+    Angle: 0
+    Pos: -230, -50, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮14∈⋮ckpvt5dmdsrrj1r5a5pg
+  core.Body:
+    Angle: 0
+    Pos: -30, -270, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮15∈⋮ckpvt5dmdsrrj1r5a5pg
+  core.Body:
+    Angle: 0
+    Pos: 300, 30, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮16
+  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Pursuer:
+    _Flags: ""
+    ChaseSpeed: 1000
+    StrafeDistance: 200
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮20
+  core.Body:
+    Angle:
+      Now: -67.49999999999999
+      Spawn: 0
+    Pos: 240, 150, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ""
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel: 0, 0, 0
+  ecs.Linked:
+    AlwaysReplace: true
+    CopyUnshareable: true
+    Sources:
+    - ∈⋮3∈⋮Flub∈⋮2edae4ab
+  inventory.Weapon:
+    _Flags: ""
+  materials.Shader: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
+- Entity: ∈⋮17
+  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Pursuer:
+    _Flags: ""
+    ChaseSpeed: 1000
+    StrafeDistance: 200
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮22
+  core.Body:
+    Angle:
+      Now: -67.49999999999999
+      Spawn: 0
+    Pos: -240, -180, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ""
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel: 0, 0, 0
+  ecs.Linked:
+    AlwaysReplace: true
+    CopyUnshareable: true
+    Sources:
+    - ∈⋮3∈⋮Flub∈⋮2edae4ab
+  inventory.Weapon:
+    _Flags: ""
+  materials.Shader: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
+- Entity: ∈⋮18
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: WeirdGun
+    Count: "1"
+    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+    Limit: "1"
+  inventory.WeaponClass: ∈⋮9∈⋮∈⋮2edae4ab
+- Entity: ∈⋮20
+  behaviors.Alive:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Die:
+      Code: |-
+        fmt.Printf("Flub %v died.", onEntity)
+        shader := materials.GetShader(onEntity)
+        if shader != nil {
+          // Stage 0 is the regular spritesheet
+          shader.Stages[0].Opacity = 0
+          // Stage 1 is the death one
+          shader.Stages[1].Opacity = 1
+        }
+    Health: 100
+  behaviors.Pursuer:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    ChaseSpeed: 1000
+    StrafeDistance: 200
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮16
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angle:
+      Now: 155.1821579447813
+      Spawn: 0
+    Pos:
+      Now: 565.2451442259908, -234.86111025252768, 16
+      Spawn: 240, 150, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel:
+      Now: -0.2938194723520844, 0.5319501398305281, -0.024978684229147133
+      Spawn: 0, 0, 0
+  inventory.Weapon:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+  materials.Shader:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Stages:
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮24∈⋮Flub+Spritesheet∈⋮2edae4ab
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+      Opacity: 0
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮21
+  behaviors.Alive:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Die:
+      Code: |-
+        fmt.Printf("Flub %v died.", onEntity)
+        shader := materials.GetShader(onEntity)
+        if shader != nil {
+          // Stage 0 is the regular spritesheet
+          shader.Stages[0].Opacity = 0
+          // Stage 1 is the death one
+          shader.Stages[1].Opacity = 1
+        }
+    Health: 100
+  behaviors.Pursuer:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    ChaseSpeed: 1000
+    StrafeDistance: 200
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮9
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angle:
+      Now: 100.80606949171245
+      Spawn: 0
+    Pos:
+      Now: 137.46615524550265, -168.05062317826017, 16
+      Spawn: -50, 60, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel:
+      Now: 2.167794583671243, -0.8749705169421833, 0.0260876841478482
+      Spawn: 0, 0, 0
+  inventory.Weapon:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+  materials.Shader:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Stages:
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮24∈⋮Flub+Spritesheet∈⋮2edae4ab
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+      Opacity: 0
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮22
+  behaviors.Alive:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Die:
+      Code: |-
+        fmt.Printf("Flub %v died.", onEntity)
+        shader := materials.GetShader(onEntity)
+        if shader != nil {
+          // Stage 0 is the regular spritesheet
+          shader.Stages[0].Opacity = 0
+          // Stage 1 is the death one
+          shader.Stages[1].Opacity = 1
+        }
+    Health: 100
+  behaviors.Pursuer:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    ChaseSpeed: 1000
+    StrafeDistance: 200
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮17
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angle:
+      Now: -67.49999999999999
+      Spawn: 0
+    Pos:
+      Now: -240, -180, 16
+      Spawn: -240, -180, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel:
+      Now: 0, 0, 0.02608673585884131
+      Spawn: 0, 0, 0
+  inventory.Weapon:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+  materials.Shader:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Stages:
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮24∈⋮Flub+Spritesheet∈⋮2edae4ab
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+      Opacity: 0
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮24
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: -60, -290
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - AdjacentSector: ∈⋮25
+      Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: -60, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 40, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 40, -300
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - AdjacentSector: ∈⋮11
+      Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 40, -290
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    Top:
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 0, -360
+- Entity: ∈⋮25
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: -60, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: -240, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: -240, -590
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 300, -590
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - AdjacentSector: ∈⋮26
+      Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 300, -550
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 300, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - AdjacentSector: ∈⋮24
+      Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 40, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    Top:
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 16.666666666666664, -503.3333333333333
+- Entity: ∈⋮26
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Z: 0
+    FloorFriction: 0.85
+    Segments:
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 300, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 480, -460
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 550, -230
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - AdjacentSector: ∈⋮10
+      Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 360, -190
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 360, -110
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 650, -160
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 600, -410
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 520, -550
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    - AdjacentSector: ∈⋮25
+      Hi:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Lo:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      P: 300, -550
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+    Top:
+      Surface:
+        Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 448.88888888888886, -352.22222222222223
+- Entity: ∈⋮27∈⋮ckpvt5dmdsrrj1r5a5pg
+  core.Body:
+    Angle: 0
+    Pos: -170, -530, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮28∈⋮ckpvt5dmdsrrj1r5a5pg
+  core.Body:
+    Angle: 0
+    Pos: 400, -510, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮29∈⋮ckpvt5dmdsrrj1r5a5pg
+  core.Body:
+    Angle: 0
+    Pos: 580, -270, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 1, 1
+    Strength: 2
+  ecs.Named:
+    Name: ckpvt5dmdsrrj1r5a5pg
+- Entity: ∈⋮30∈⋮Default
+  ecs.Named:
+    Name: Default
+  materials.Image:
+    Filter: false
+    Source: data/textures/WDef.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
+- Entity: ∈⋮31
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Red Keycard
+    Count: "0"
+    Image: ∈⋮5∈⋮∈⋮2edae4ab
+    Limit: "1"
+- Entity: ∈⋮32
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Flower
+    Count: "0"
+    Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
+    Limit: "100"

@@ -92,13 +92,13 @@ func (a *Paste) apply() {
 	// exist, since the user could have deleted/updated between cut/copying and
 	// pasting.
 
+	var yamlEntity map[string]any
 	// Copied -> Pasted
 	a.CopiedToPasted = make(map[ecs.Entity]ecs.Entity)
 	a.Selected = selection.NewSelection()
 	for copiedEntityString, yamlData := range yamlEntities {
 		copiedEntity, _ := ecs.ParseEntity(copiedEntityString)
-		yamlEntity := yamlData.(map[string]any)
-		if yamlEntity == nil {
+		if yamlEntity, ok = yamlData.(map[string]any); !ok || yamlEntity == nil {
 			log.Printf("Paste.Activate: ECS YAML object element should be an object")
 			continue
 		}

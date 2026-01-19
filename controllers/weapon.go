@@ -27,8 +27,8 @@ type WeaponController struct {
 	Class   *inventory.WeaponClass
 	Body    *core.Body
 
-	delta, isect, hit concepts.Vector3
-	transform         concepts.Matrix2
+	delta, hit concepts.Vector3
+	transform  concepts.Matrix2
 }
 
 var weaponFuncs = [inventory.WeaponStateCount]func(*WeaponController){}
@@ -154,7 +154,7 @@ func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 }
 
 func (w *WeaponController) NewState(s inventory.WeaponState) {
-	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, ecs.Simulation.SimTimestamp-w.LastStateTimestamp)
+	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, (ecs.Simulation.SimTimestamp-w.LastStateTimestamp)/1_000_000)
 	w.State = s
 	w.LastStateTimestamp = ecs.Simulation.SimTimestamp
 	p := w.Class.Params[w.State]
@@ -188,7 +188,7 @@ func weaponFiring(wc *WeaponController) {
 	// or not.
 	wc.Intent = inventory.WeaponHeld
 	wc.NewState(inventory.WeaponCooling)
-	s := wc.Cast()
+	s := wc.fireWeaponInstant()
 
 	if s == nil {
 		return

@@ -1,3 +1,6 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
 package al
 
 const ExtEfxName = "ALC_EXT_EFX"

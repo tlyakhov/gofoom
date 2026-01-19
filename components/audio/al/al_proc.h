@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Tim Lyakhovetskiy
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <AL/al.h>

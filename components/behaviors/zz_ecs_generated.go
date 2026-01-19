@@ -17,6 +17,7 @@ var ParticleEmitterCID ecs.ComponentID
 var PlayerTargetableCID ecs.ComponentID
 var ProximityCID ecs.ComponentID
 var ProximityStateCID ecs.ComponentID
+var PursuerCID ecs.ComponentID
 var SpawneeCID ecs.ComponentID
 var SpawnerCID ecs.ComponentID
 var UnderwaterCID ecs.ComponentID
@@ -37,6 +38,7 @@ func init() {
 	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Arena[PlayerTargetable, *PlayerTargetable]{})
 	ProximityCID = ecs.RegisterComponent(&ecs.Arena[Proximity, *Proximity]{})
 	ProximityStateCID = ecs.RegisterComponent(&ecs.Arena[ProximityState, *ProximityState]{})
+	PursuerCID = ecs.RegisterComponent(&ecs.Arena[Pursuer, *Pursuer]{})
 	SpawneeCID = ecs.RegisterComponent(&ecs.Arena[Spawnee, *Spawnee]{})
 	SpawnerCID = ecs.RegisterComponent(&ecs.Arena[Spawner, *Spawner]{})
 	UnderwaterCID = ecs.RegisterComponent(&ecs.Arena[Underwater, *Underwater]{})
@@ -181,6 +183,16 @@ func GetProximityState(e ecs.Entity) *ProximityState {
 
 func (*ProximityState) ComponentID() ecs.ComponentID {
 	return ProximityStateCID
+}
+func GetPursuer(e ecs.Entity) *Pursuer {
+	if asserted, ok := ecs.GetComponent(e, PursuerCID).(*Pursuer); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*Pursuer) ComponentID() ecs.ComponentID {
+	return PursuerCID
 }
 func GetSpawnee(e ecs.Entity) *Spawnee {
 	if asserted, ok := ecs.GetComponent(e, SpawneeCID).(*Spawnee); ok {

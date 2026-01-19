@@ -14,15 +14,16 @@ require (
 	github.com/hajimehoshi/go-mp3 v0.3.4
 	github.com/jfreymuth/oggvorbis v1.0.5
 	github.com/kelindar/bitmap v1.5.3
-	github.com/loov/hrtime v1.0.3
+	github.com/loov/hrtime v1.0.4
 	github.com/pierrec/xxHash v0.1.5
 	github.com/puzpuzpuz/xsync/v3 v3.5.1
 	github.com/rs/xid v1.6.0
 	github.com/spf13/cast v1.10.0
+	github.com/srwiley/gheap v0.0.0-20250703211911-ec0f97f320ee
 	github.com/traefik/yaegi v0.16.1
-	golang.org/x/image v0.33.0
-	golang.org/x/tools v0.39.0
-	gonum.org/v1/gonum v0.16.0
+	golang.org/x/image v0.35.0
+	golang.org/x/tools v0.41.0
+	gonum.org/v1/gonum v0.17.0
 	sigs.k8s.io/yaml v1.6.0
 )
 
@@ -50,10 +51,10 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/yuin/goldmark v1.7.13 // indirect
-	golang.org/x/mod v0.30.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/mod v0.32.0 // indirect
+	golang.org/x/net v0.49.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 )
 
 require (
@@ -91,7 +92,7 @@ require (
 	github.com/willf/bitset v1.1.11 // indirect
 	go.etcd.io/bbolt v1.4.3 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
-	golang.org/x/sync v0.18.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

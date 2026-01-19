@@ -33,7 +33,7 @@ type column struct {
 
 	// Following data is for casting rays and intersecting them
 	Sector             *core.Sector
-	Ray                Ray
+	Ray                concepts.Ray
 	RaySegTest         concepts.Vector2
 	RayPlane           concepts.Vector3
 	LastPortalDistance float64

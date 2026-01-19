@@ -15,17 +15,21 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 )
 
-func (mw *MapWidget) DrawBodyAngle(e *core.Body) {
-	astart := (e.Angle.Render - editor.Renderer.FOV/2) * math.Pi / 180.0
-	aend := (e.Angle.Render + editor.Renderer.FOV/2) * math.Pi / 180.0
-	diameter := e.Size.Render[0]
+func (mw *MapWidget) DrawBodyAngle(body *core.Body) {
+	fov := editor.Renderer.FOV
+	if p := behaviors.GetPursuer(body.Entity); p != nil {
+		fov = p.FOV
+	}
+	astart := (body.Angle.Render - fov/2) * math.Pi / 180.0
+	aend := (body.Angle.Render + fov/2) * math.Pi / 180.0
+	diameter := body.Size.Render[0]
 	mw.Context.SetLineWidth(2)
 	mw.Context.NewSubPath()
-	mw.Context.MoveTo(e.Pos.Render[0], e.Pos.Render[1])
-	mw.Context.LineTo(e.Pos.Render[0]+math.Cos(astart)*diameter, e.Pos.Render[1]+math.Sin(astart)*diameter)
-	mw.Context.DrawArc(e.Pos.Render[0], e.Pos.Render[1], diameter, astart, aend)
-	mw.Context.MoveTo(e.Pos.Render[0], e.Pos.Render[1])
-	mw.Context.LineTo(e.Pos.Render[0]+math.Cos(aend)*diameter, e.Pos.Render[1]+math.Sin(aend)*diameter)
+	mw.Context.MoveTo(body.Pos.Render[0], body.Pos.Render[1])
+	mw.Context.LineTo(body.Pos.Render[0]+math.Cos(astart)*diameter, body.Pos.Render[1]+math.Sin(astart)*diameter)
+	mw.Context.DrawArc(body.Pos.Render[0], body.Pos.Render[1], diameter, astart, aend)
+	mw.Context.MoveTo(body.Pos.Render[0], body.Pos.Render[1])
+	mw.Context.LineTo(body.Pos.Render[0]+math.Cos(aend)*diameter, body.Pos.Render[1]+math.Sin(aend)*diameter)
 	mw.Context.ClosePath()
 	mw.Context.Stroke()
 }

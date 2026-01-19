@@ -124,7 +124,7 @@ func main() {
 
 	editor.App.Lifecycle().SetOnStarted(func() {
 		editor.OnStarted()
-		editor.Load("data/worlds/empty.yaml")
+		editor.Load("data/worlds/pursuer-test.yaml")
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 

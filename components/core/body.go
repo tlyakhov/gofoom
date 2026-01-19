@@ -74,9 +74,9 @@ func (b *Body) Normal() *concepts.Vector2 {
 }
 
 func (b *Body) Angle2DTo(p *concepts.Vector3) float64 {
-	dx := b.Pos.Now[0] - p[0]
-	dy := b.Pos.Now[1] - p[1]
-	return math.Atan2(dy, dx)*concepts.Rad2deg + 180.0
+	dx := p[0] - b.Pos.Now[0]
+	dy := p[1] - b.Pos.Now[1]
+	return math.Atan2(dy, dx) * concepts.Rad2deg
 }
 
 func (b *Body) RenderSector() *Sector {

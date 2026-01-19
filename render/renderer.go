@@ -259,12 +259,12 @@ func (r *Renderer) findIntersection(block *block, sector *core.Sector, found boo
 		}
 
 		// Wall is facing away from us
-		if higherLayer != (block.Ray.Delta.Dot(&sectorSeg.Normal) > 0) {
+		if higherLayer != (block.Ray.Delta.To2D().Dot(&sectorSeg.Normal) > 0) {
 			continue
 		}
 
 		// Ray intersects?
-		u := sectorSeg.Intersect2D(&block.Ray.Start, &block.Ray.End, &block.RaySegTest)
+		u := sectorSeg.Intersect2D(block.Ray.Start.To2D(), block.Ray.End.To2D(), &block.RaySegTest)
 		if u < 0 {
 			continue
 		}
@@ -355,8 +355,8 @@ func (r *Renderer) RenderColumn(block *block, x int, y int, pick bool) *PickResu
 	block.MaterialSampler.Angle = block.Angle
 	block.CameraZ = r.Player.CameraZ
 	block.ShearZ = r.shearZ()
-	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
-	block.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
+	block.Ray.Start = r.PlayerBody.Pos.Render
+	block.Ray.FromAngleAndLimit(r.PlayerBody.Angle.Render+r.ViewRadians[x]*concepts.Rad2deg, 0, constants.MaxViewDistance)
 	block.RayPlane[0] = block.Ray.AngleCos * block.ViewFix[block.ScreenX]
 	block.RayPlane[1] = block.Ray.AngleSin * block.ViewFix[block.ScreenX]
 	block.PortalWalls = nil
@@ -428,7 +428,7 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 	}
 
 	// Column going through portals affects this
-	block.Ray.Start = *r.PlayerBody.Pos.Render.To2D()
+	block.Ray.Start = r.PlayerBody.Pos.Render
 	block.CameraZ = r.Player.CameraZ
 	block.ShearZ = r.shearZ()
 
@@ -439,12 +439,12 @@ func (r *Renderer) RenderBlock(blockIndex, xStart, xEnd int) {
 		}
 		ewd2s = append(ewd2s, &entityWithDistSq{
 			Body:    b,
-			DistSq:  block.Ray.Start.DistSq(b.Pos.Render.To2D()),
+			DistSq:  block.Ray.Start.To2D().DistSq(b.Pos.Render.To2D()),
 			Visible: vis,
 		})
 	}
 	for iseg, sector := range block.InternalSegments {
-		dist := block.Ray.DistTo(iseg.ClosestToPoint(&block.Ray.Start))
+		dist := block.Ray.DistTo(iseg.ClosestToPoint(block.Ray.Start.To2D()))
 		ewd2s = append(ewd2s, &entityWithDistSq{
 			InternalSegment: iseg,
 			DistSq:          dist * dist,
@@ -604,7 +604,7 @@ func (r *Renderer) Pick(x, y int) *PickResult {
 	}
 	block.LightSampler.MaterialSampler.Config = r.Config
 
-	block.Ray = Ray{Start: *r.PlayerBody.Pos.Render.To2D()}
+	block.Ray = concepts.Ray{Start: r.PlayerBody.Pos.Render}
 	block.MaterialSampler = MaterialSampler{Config: r.Config, Ray: &block.Ray}
 	return r.RenderColumn(block, x, y, true)
 }
