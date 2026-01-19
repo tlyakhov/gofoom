@@ -6,6 +6,7 @@ package render
 import (
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/constants"
 )
 
 func (r *Renderer) renderInternalSegment(ewd *entityWithDistSq, block *block, xStart, xEnd int) {
@@ -20,14 +21,14 @@ func (r *Renderer) renderInternalSegment(ewd *entityWithDistSq, block *block, xS
 	ewd.InternalSegment.Normal.To3D(&block.LightSampler.Normal)
 
 	for x := xStart; x < xEnd; x++ {
-		block.Ray.Set(r.PlayerBody.Angle.Render*concepts.Deg2rad + r.ViewRadians[x])
+		block.Ray.FromAngleAndLimit(r.PlayerBody.Angle.Render+r.ViewRadians[x]*concepts.Rad2deg, 0, constants.MaxViewDistance)
 
 		// Is the segment facing away?
-		if !ewd.InternalSegment.TwoSided && block.Ray.Delta.Dot(&ewd.InternalSegment.Normal) > 0 {
+		if !ewd.InternalSegment.TwoSided && block.Ray.Delta.To2D().Dot(&ewd.InternalSegment.Normal) > 0 {
 			continue
 		}
 		// Ray intersection
-		u := ewd.InternalSegment.Intersect2D(&block.Ray.Start, &block.Ray.End, &block.RaySegTest)
+		u := ewd.InternalSegment.Intersect2D(block.Ray.Start.To2D(), block.Ray.End.To2D(), &block.RaySegTest)
 		if u < 0 {
 			continue
 		}

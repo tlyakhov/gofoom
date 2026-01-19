@@ -115,7 +115,7 @@ func NewEditor() *Editor {
 		entityIconCache: xsync.NewMapOf[ecs.Entity, entityIconCacheItem](),
 	}
 	e.Grid.IEditor = e
-	e.Grid.MaterialSampler.Ray = &render.Ray{}
+	e.Grid.MaterialSampler.Ray = &concepts.Ray{}
 	e.ResizeRenderer(320, 240)
 	e.MapViewGrid.Current = &e.EditorState.EditorSnapshot
 

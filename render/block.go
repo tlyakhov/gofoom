@@ -30,10 +30,10 @@ type block struct {
 }
 
 func (b *block) teleportRay() {
-	b.IntersectedSectorSegment.PortalMatrix.UnprojectSelf(&b.Ray.Start)
-	b.IntersectedSectorSegment.PortalMatrix.UnprojectSelf(&b.Ray.End)
-	b.IntersectedSectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&b.Ray.Start)
-	b.IntersectedSectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(&b.Ray.End)
+	b.IntersectedSectorSegment.PortalMatrix.UnprojectSelf(b.Ray.Start.To2D())
+	b.IntersectedSectorSegment.PortalMatrix.UnprojectSelf(b.Ray.End.To2D())
+	b.IntersectedSectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(b.Ray.Start.To2D())
+	b.IntersectedSectorSegment.AdjacentSegment.MirrorPortalMatrix.ProjectSelf(b.Ray.End.To2D())
 	b.Ray.AnglesFromStartEnd()
 	// TODO: this has a bug if the adjacent sector has a sloped floor.
 	// Getting the right floor height is a bit expensive because we have to

@@ -14,7 +14,7 @@ import (
 
 type MaterialSampler struct {
 	*Config
-	*Ray
+	*concepts.Ray
 	BillboardSegment core.Segment
 	Output           concepts.Vector4
 	StageOutput      concepts.Vector4

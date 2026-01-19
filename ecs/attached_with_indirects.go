@@ -1,3 +1,6 @@
+// Copyright (c) Tim Lyakhovetskiy
+// SPDX-License-Identifier: MPL-2.0
+
 package ecs
 
 // See ecs.act for how this is applied

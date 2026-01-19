@@ -78,4 +78,8 @@ const (
 	InfoBarSrc               = "/data/game/infobar.png"
 	AvatarSrc                = "/data/game/avatar.png"
 	FirstMap                 = "testMap"
+
+	// Pursuit
+	PursuitNpcAvoidDistance  = 50.0
+	PursuitWallAvoidDistance = 50.0
 )

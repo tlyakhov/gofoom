@@ -14,7 +14,6 @@ import (
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/actions"
 	"tlyakhov/gofoom/editor/state"
-	"tlyakhov/gofoom/pathfinding"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -216,44 +215,14 @@ func (mw *MapWidget) render() {
 		}
 	}
 
-	if editor.PathDebugStart != editor.PathDebugEnd {
-		pf := pathfinding.Finder{Start: &editor.PathDebugStart,
-			End:    &editor.PathDebugEnd,
-			Radius: 16,
-			Step:   10}
-		mw.drawPath(pf.ShortestPath())
-	}
-
-	arena := ecs.ArenaFor[behaviors.ActorState](behaviors.ActorStateCID)
-	for i := range arena.Cap() {
-		state := arena.Value(i)
-		if state == nil || len(state.Path) == 0 {
-			continue
-		}
-		mw.drawPath(state.Path)
-	}
+	mw.drawPaths()
+	mw.drawPursuers()
 
 	//cr.ShowText(fmt.Sprintf("%v, %v", Mouse[0], Mouse[1]))*/
 	pixels := mw.Context.Image().(*image.RGBA).Pix
 	copy(mw.Surface.Pix, pixels)
 }
 
-func (mw *MapWidget) drawPath(path []concepts.Vector3) {
-	if len(path) > 1 {
-		mw.Context.SetRGBA(0.5, 0.5, 1.0, 1.0)
-		mw.Context.NewSubPath()
-		vg := editor.WorldGrid(path[0].To2D())
-		mw.Context.MoveTo(vg[0], vg[1])
-		for i, v := range path {
-			if i == 0 {
-				continue
-			}
-			vg := editor.WorldGrid(v.To2D())
-			mw.Context.LineTo(vg[0], vg[1])
-		}
-		mw.Context.Stroke()
-	}
-}
 func (mw *MapWidget) Draw(w, h int) image.Image {
 	w /= state.MapViewRenderScale
 	h /= state.MapViewRenderScale

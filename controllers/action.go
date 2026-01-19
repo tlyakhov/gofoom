@@ -45,9 +45,6 @@ func (ac *ActionController) Methods() ecs.ControllerMethod {
 }
 
 func (ac *ActionController) Target(target ecs.Component, e ecs.Entity) bool {
-	if ecs.Simulation.EditorPaused {
-		return false
-	}
 	ac.Entity = e
 	ac.Actor = target.(*behaviors.Actor)
 	if !ac.Actor.IsActive() {

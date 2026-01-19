@@ -1,4 +1,7 @@
 #! /bin/bash
+# Copyright (c) Tim Lyakhovetskiy
+# SPDX-License-Identifier: MPL-2.0
+
 set -ex
 
 # env GOOS=windows GOARCH=amd64 go clean -modcache
