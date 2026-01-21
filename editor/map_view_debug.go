@@ -56,12 +56,12 @@ func (mw *MapWidget) drawPursuers() {
 			continue
 		}
 		mw.Context.SetRGBA(0.5, 0.5, 1.0, 1.0)
-		for _, e := range pursuer.Breadcrumbs {
+		/*for _, e := range pursuer.Breadcrumbs {
 			if e.Key == 0 {
 				continue
 			}
 			mw.DrawHandle(e.Data.Pos.To2D())
-		}
+		}*/
 
 		//best := pursuer.BestCandidate()
 

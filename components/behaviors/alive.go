@@ -9,6 +9,8 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
+
+	"github.com/spf13/cast"
 )
 
 type Damage struct {
@@ -20,7 +22,9 @@ type Damage struct {
 type Alive struct {
 	ecs.Attached `editable:"^"`
 	Health       dynamic.DynamicValue[float64] `editable:"Health"`
-	Damages      map[string]*Damage
+	Faction      string                        `editable:"Faction"`
+
+	Damages map[string]*Damage
 
 	Die  core.Script `editable:"Die"`
 	Live core.Script `editable:"Live"`
@@ -51,6 +55,7 @@ func (a *Alive) Construct(data map[string]any) {
 
 	a.Health.SetAll(100)
 	a.Damages = make(map[string]*Damage)
+	a.Faction = ""
 
 	if data == nil {
 		a.Die.Construct(nil)
@@ -60,6 +65,9 @@ func (a *Alive) Construct(data map[string]any) {
 
 	if v, ok := data["Health"]; ok {
 		a.Health.Construct(v)
+	}
+	if v, ok := data["Faction"]; ok {
+		a.Faction = cast.ToString(v)
 	}
 	if v, ok := data["Die"]; ok {
 		a.Die.Construct(v.(map[string]any))
@@ -104,6 +112,9 @@ func (a *Alive) Tint(color, damageTintColor *concepts.Vector4) {
 func (a *Alive) Serialize() map[string]any {
 	result := a.Attached.Serialize()
 	result["Health"] = a.Health.Serialize()
+	if a.Faction != "" {
+		result["Faction"] = a.Faction
+	}
 	if !a.Die.IsEmpty() {
 		result["Die"] = a.Die.Serialize()
 	}

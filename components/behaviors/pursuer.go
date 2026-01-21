@@ -6,6 +6,7 @@ package behaviors
 import (
 	"math"
 	"math/rand/v2"
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
@@ -13,10 +14,26 @@ import (
 	"github.com/srwiley/gheap"
 )
 
+type Breadcrumb struct {
+	Pos       concepts.Vector3
+	Timestamp int64
+}
+
 type Candidate struct {
 	concepts.Ray
 	Weight float64
 	Count  int
+}
+
+type PursuerEnemy struct {
+	Entity      ecs.Entity
+	Body        *core.Body
+	Pos         *concepts.Vector3
+	Delta       *concepts.Vector2
+	Dist        float64
+	InView      bool
+	Visited     bool
+	Breadcrumbs gheap.MinMaxHeap[int64, Breadcrumb]
 }
 
 type Pursuer struct {
@@ -27,9 +44,8 @@ type Pursuer struct {
 	FOV              float64 `editable:"FOV"`
 
 	// Internal state (TODO: maybe move into separate component like ActorState?)
-	TargetInView        bool
-	Breadcrumbs         gheap.MinMaxHeap[int64, Breadcrumb]
 	Candidates          []*Candidate
+	Enemies             map[ecs.Entity]*PursuerEnemy
 	ClockwisePreference bool
 	ClockwiseSwitchTime int64
 }
@@ -40,8 +56,7 @@ func (p *Pursuer) String() string {
 
 func (p *Pursuer) Construct(data map[string]any) {
 	p.Attached.Construct(data)
-	p.Breadcrumbs = gheap.MinMaxHeap[int64, Breadcrumb]{}
-	p.TargetInView = false
+	p.Enemies = make(map[ecs.Entity]*PursuerEnemy)
 	p.Candidates = make([]*Candidate, 16)
 	p.ClockwisePreference = rand.UintN(2) == 0
 	p.StrafeDistance = 100

@@ -29,17 +29,74 @@ var directions = []struct{ dx, dy int }{
 	{1, 1}, {1, -1}, {-1, 1}, {-1, -1},
 }
 
+func (f *Finder) insideSectorOrChildren(test *core.Sector, next *concepts.Vector2) *core.Sector {
+	if !test.IsPointInside2D(next) {
+		return nil
+	}
+
+	var overlap *core.Sector
+	result := test
+	for _, e := range test.HigherLayers {
+		if e == 0 {
+			continue
+		}
+		if overlap = core.GetSector(e); overlap == nil {
+			continue
+		}
+		child := f.insideSectorOrChildren(overlap, next)
+		if child != nil {
+			return child
+		}
+	}
+	return result
+}
+
+func (f *Finder) tooCloseToSegment(from *core.Sector, to *core.Sector, pos *concepts.Vector2) bool {
+	// Check if we're too close to a segment
+	for _, seg := range to.Segments {
+		if seg.AdjacentSegment != nil && seg.PortalIsPassable {
+			continue
+		}
+		if seg.DistanceToPointSq(pos) < f.Radius*f.Radius {
+			return true
+		}
+	}
+
+	var overlap *core.Sector
+	for _, e := range to.HigherLayers {
+		if e == 0 {
+			continue
+		}
+		if overlap = core.GetSector(e); overlap == nil {
+			continue
+		}
+		if f.SectorValid != nil && !f.SectorValid(from, overlap, pos) &&
+			f.tooCloseToSegment(from, overlap, pos) {
+			return true
+		}
+	}
+	return false
+}
 func (f *Finder) sectorForNextPoint(sector *core.Sector, delta, next *concepts.Vector2, depth int) *core.Sector {
-	if sector.IsPointInside2D(next) {
-		for _, seg := range sector.Segments {
-			if seg.AdjacentSegment != nil && seg.PortalIsPassable {
-				continue
+	// TODO: this logic is garbage, need to think it through better.
+	if test := f.insideSectorOrChildren(sector, next); test != nil {
+		if test == sector {
+			if f.tooCloseToSegment(sector, test, next) {
+				return nil
+			} else {
+				return sector
 			}
-			if seg.DistanceToPointSq(next) < f.Radius*f.Radius {
+		} else {
+			if f.SectorValid == nil || f.SectorValid(sector, test, next) {
+				if f.tooCloseToSegment(sector, test, next) {
+					return nil
+				} else {
+					return test
+				}
+			} else {
 				return nil
 			}
 		}
-		return sector
 	}
 
 	if depth > 2 {
@@ -63,10 +120,13 @@ func (f *Finder) sectorForNextPoint(sector *core.Sector, delta, next *concepts.V
 		if f.SectorValid != nil && !f.SectorValid(sector, adj, next) {
 			continue
 		}
-
 		if adj = f.sectorForNextPoint(seg.AdjacentSegment.Sector, delta, next, depth+1); adj != nil {
 			return adj
 		}
+	}
+	// Outer
+	if adj := sector.OverlapAt(next, true); adj != nil {
+		return adj
 	}
 	return nil
 }

@@ -20,6 +20,7 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 	}
 
 	if ebd.Visible.Opacity <= 0 {
+		block.Bodies.Delete(b)
 		return
 	}
 
@@ -41,6 +42,7 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 	x1 := max(int(xMid-xScale*0.5), xStart)
 	x2 := min(int(xMid+xScale*0.5), xEnd)
 	if x1 == x2 || x2 < xStart || x1 >= xEnd {
+		block.Bodies.Delete(b)
 		return
 	}
 
@@ -95,6 +97,7 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 		alive.Tint(&block.Light, &concepts.Vector4{1, 0, 0, 1})
 	}
 
+	anyRendered := false
 	vStart := float64(block.ScreenHeight/2) - block.ProjectedTop + math.Floor(block.ShearZ)
 	block.Light.MulSelf(ebd.Visible.Opacity)
 	block.MaterialSampler.Initialize(b.Entity, nil)
@@ -111,6 +114,7 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 			if block.Distance >= r.ZBuffer[screenIndex] {
 				continue
 			}
+			anyRendered = true
 			block.NV = (float64(y) - vStart) / (block.ProjectedTop - block.ProjectedBottom)
 			block.MaterialSampler.U = block.NU
 			block.MaterialSampler.V = block.NV
@@ -121,6 +125,9 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 				r.ZBuffer[screenIndex] = block.Distance
 			}
 		}
+	}
+	if !anyRendered {
+		block.Bodies.Delete(b)
 	}
 }
 
