@@ -1038,3 +1038,12 @@
     Frame: "0"
     Material: ∈⋮121∈⋮Lord_Nightmare_6x6font02+%28fonts%29
     Rows: "16"
+- Entity: ∈⋮123∈⋮evil+flub+%28sprites+evil+flub%29
+  ecs.Named:
+    Name: evil flub (sprites evil flub)
+  materials.Image:
+    Filter: false
+    Source: data/sprites/evil-flub/evil-flub.png
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1

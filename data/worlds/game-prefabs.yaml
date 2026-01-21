@@ -16,6 +16,7 @@
           // Stage 1 is the death one
           shader.Stages[1].Opacity = 1
         }
+    Faction: Flub
     Health: 100
   core.Mobile:
     _Flags: ""
@@ -85,6 +86,7 @@
       Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
 - Entity: ∈⋮8
   behaviors.Alive:
+    Faction: Player
     Health: 100
   inventory.Carrier:
     Inventory:
@@ -164,6 +166,62 @@
           p.HoveringTargets.Add(onEntity)
         }
     ValidComponents: character.Player
+- Entity: ∈⋮18∈⋮Evil+Flub
+  behaviors.Alive:
+    _Flags: ""
+    Die:
+      Code: |-
+        fmt.Printf("Evil Flub %v died.", onEntity)
+        shader := materials.GetShader(onEntity)
+        if shader != nil {
+          // Stage 0 is the regular spritesheet
+          shader.Stages[0].Opacity = 0
+          // Stage 1 is the death one
+          shader.Stages[1].Opacity = 1
+        }
+    Faction: Evil Flub
+    Health: 100
+  behaviors.Pursuer:
+    ChaseSpeed: 1000
+    StrafeDistance: 100
+  core.Mobile:
+    _Flags: ""
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel: 0, 0, 0
+  ecs.Named:
+    Name: Evil Flub
+  inventory.Weapon:
+    _Flags: ""
+  materials.Shader:
+    Stages:
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮19∈⋮Evil+Flub+Spritesheet
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+      Opacity: 0
+  materials.Visible:
+    _Flags: ""
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮19∈⋮Evil+Flub+Spritesheet
+  ecs.Named:
+    Name: Evil Flub Spritesheet
+  materials.SpriteSheet:
+    Angles: "8"
+    Cols: "4"
+    Frame:
+      Damping: 0
+      Freq: 1e-06
+      Now: "0"
+      Response: 0
+      Spawn: "0"
+    Material: ∈⋮123∈⋮evil+flub+%28sprites+evil+flub%29∈⋮62bf0202
+    Rows: "2"
 - Entity: ∈⋮20∈⋮Rotate+360+Loop+1
   behaviors.ActionFace:
     Angle: 0

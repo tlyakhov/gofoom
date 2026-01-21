@@ -80,6 +80,8 @@ const (
 	FirstMap                 = "testMap"
 
 	// Pursuit
-	PursuitNpcAvoidDistance  = 50.0
-	PursuitWallAvoidDistance = 50.0
+	PursuitNpcAvoidDistance    = 50.0
+	PursuitWallAvoidDistance   = 50.0
+	PursuitEnemyTargetDistance = 1000.0
+	PursuitMaxBreadcrumbs      = 20
 )

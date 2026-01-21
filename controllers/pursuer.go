@@ -28,11 +28,9 @@ type PursuerController struct {
 	*behaviors.Pursuer
 	Body   *core.Body
 	Mobile *core.Mobile
+	Alive  *behaviors.Alive
 
-	targetEntity   ecs.Entity
-	target         *concepts.Vector3
-	targetDelta    *concepts.Vector2
-	distFromTarget float64
+	faction string
 }
 
 func init() {
@@ -63,6 +61,13 @@ func (pc *PursuerController) Target(target ecs.Component, e ecs.Entity) bool {
 	if pc.Mobile == nil || !pc.Mobile.IsActive() {
 		return false
 	}
+	pc.Alive = behaviors.GetAlive(pc.Entity)
+	if pc.Alive != nil && pc.Alive.IsActive() {
+		pc.faction = pc.Alive.Faction
+	} else {
+		pc.faction = ""
+	}
+
 	return true
 }
 
@@ -111,44 +116,170 @@ func (pc *PursuerController) getObstacleBodies() []*core.Body {
 	return obstacles
 }
 
-func (pc *PursuerController) generateWeights() {
-	if pc.target != nil {
-		pc.targetDelta = pc.target.To2D().Sub(pc.Body.Pos.Now.To2D())
-		pc.distFromTarget = pc.targetDelta.Length()
-		pc.targetDelta[0] /= pc.distFromTarget
-		pc.targetDelta[1] /= pc.distFromTarget
+func (pc *PursuerController) targetOutOfView(enemy *behaviors.PursuerEnemy) {
+	if enemy.InView {
+		log.Printf("Pursuer %v lost sight of %v!", pc.Entity, enemy.Entity)
+		enemy.InView = false
+	}
+	if len(enemy.Breadcrumbs) == 0 {
+		enemy.Pos = nil
+		return
 	}
 
+	b := enemy.Breadcrumbs.PeekMax()
+	enemy.Pos = &b.Data.Pos
+	radius := pc.Body.Size.Now[0] * 0.75
+	if pc.Body.Pos.Now.DistSq(&b.Data.Pos) < radius*radius {
+		r := enemy.Breadcrumbs.RemoveMin()
+		r.Data.Timestamp = ecs.Simulation.SimTimestamp
+		r.Key = ecs.Simulation.SimTimestamp
+		enemy.Breadcrumbs.Insert(r)
+	}
+}
+
+func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
+	// For now, only use horizontal FOV to determine visibility, ignore vertical.
+	pursuerToTargetAngle := pc.Body.Angle2DTo(enemy.Pos)
+	angleInFOV := concepts.NormalizeAngle(pursuerToTargetAngle - pc.Body.Angle.Now)
+	if angleInFOV >= 180.0 {
+		angleInFOV -= 360.0
+	}
+	if angleInFOV < -pc.FOV*0.5 || angleInFOV > pc.FOV*0.5 {
+		pc.targetOutOfView(enemy)
+		return
+	}
+	// We're within FOV, check for obstacles:
+	ray := &concepts.Ray{Start: pc.Body.Pos.Now, End: *enemy.Pos}
+	ray.AnglesFromStartEnd()
+	s, _ := Cast(ray, pc.Body.Sector(), pc.Entity, false)
+	if s != nil && s.Entity != enemy.Entity {
+		// We're blocked by something
+		//log.Printf("%v: %v", pc.Entity, s.String())
+		pc.targetOutOfView(enemy)
+		return
+	}
+	if !enemy.InView {
+		log.Printf("Pursuer %v saw %v!", pc.Entity, enemy.Entity)
+	}
+	enemy.InView = true
+	// Only leave breadcrumbs every so often
+	// TODO: parameterize this
+	if len(enemy.Breadcrumbs) > 0 {
+		latest := enemy.Breadcrumbs.PeekMax()
+		if ecs.Simulation.SimTimestamp-latest.Key < concepts.MillisToNanos(500) {
+			return
+		}
+		radius := pc.Body.Size.Now[0] * 0.5
+		if enemy.Body.Pos.Now.DistSq(&latest.Data.Pos) < radius*radius {
+			return
+		}
+	}
+	// Leave breadcrumb
+	enemy.Breadcrumbs.Insert(gheap.HeapElement[int64, behaviors.Breadcrumb]{
+		Key: ecs.Simulation.SimTimestamp,
+		Data: behaviors.Breadcrumb{
+			Pos:       enemy.Body.Pos.Now,
+			Timestamp: ecs.Simulation.Timestamp,
+		},
+	})
+
+	// Remove breadcrumbs if we have too many
+	if len(enemy.Breadcrumbs) > constants.PursuitMaxBreadcrumbs {
+		enemy.Breadcrumbs.RemoveMin()
+	}
+}
+
+func (pc *PursuerController) populateEnemies() {
+	// Mark all existing enemies unvisited
+	for _, enemy := range pc.Enemies {
+		enemy.Visited = false
+	}
+	// Get potential enemies, update positions
+	core.QuadTree.Root.RangeCircle(pc.Body.Pos.Now.To2D(), constants.PursuitEnemyTargetDistance, func(body *core.Body) bool {
+		if !body.IsActive() || body == pc.Body {
+			return true
+		}
+		if a := behaviors.GetAlive(body.Entity); a == nil || !a.IsActive() || a.Faction == pc.faction {
+			// Skip entities of the same faction
+			return true
+		}
+		if s := behaviors.GetSpawner(body.Entity); s != nil {
+			// If this is a spawn point, skip it
+			return true
+		}
+
+		var enemy *behaviors.PursuerEnemy
+		var ok bool
+		if enemy, ok = pc.Enemies[body.Entity]; !ok {
+			enemy = &behaviors.PursuerEnemy{
+				Entity: body.Entity,
+			}
+			pc.Enemies[enemy.Entity] = enemy
+		}
+		enemy.Pos = &body.Pos.Now
+		enemy.Body = body
+		enemy.Visited = true
+		// Identify the position to target, either the enemy itself if in sight,
+		// or a breadcrumb
+		pc.targetEnemy(enemy)
+		if enemy.Pos == nil {
+			// Out of sight and no breadcrumbs!
+			return true
+		}
+		enemy.Delta = &concepts.Vector2{
+			enemy.Pos[0] - pc.Body.Pos.Now[0],
+			enemy.Pos[1] - pc.Body.Pos.Now[1]}
+		enemy.Dist = enemy.Delta.Length()
+		enemy.Delta[0] /= enemy.Dist
+		enemy.Delta[1] /= enemy.Dist
+
+		return true
+	})
+	for e, enemy := range pc.Enemies {
+		if !enemy.Visited {
+			delete(pc.Enemies, e)
+		}
+	}
+
+}
+
+func (pc *PursuerController) targetWeight(c *behaviors.Candidate, enemy *behaviors.PursuerEnemy) float64 {
+	// Don't bias against opposite directions
+	dot := c.Delta.To2D().Dot(enemy.Delta)
+	normal := c.Delta[0]*enemy.Delta[1] - c.Delta[1]*enemy.Delta[0]
+	targetWeight := max(dot, 0)
+	if !enemy.InView {
+		return targetWeight
+	}
+
+	// This encourages pursuers to strafe/retreat when they get close to enemies
+	strafeWeight := 1 - math.Abs(-dot-0.3)
+	// We need to bias the strafing to avoid equal opposing weights cancelling each other out
+	if (pc.ClockwisePreference && normal < 0) || (!pc.ClockwisePreference && normal >= 0) {
+		strafeWeight += 0.2
+	} else {
+		strafeWeight -= 0.2
+	}
+	c.Count++
+
+	// Consistent hash to separate NPCs circling a single enemy
+	r := concepts.RngXorShift64(uint64(pc.Entity))
+	strafeDistance := pc.StrafeDistance + float64(r%uint64(pc.StrafeDistance))
+	strafeFactor := 1 - max(min(enemy.Dist/strafeDistance, 1), 0)
+	return strafeWeight*strafeFactor + targetWeight*(1-strafeFactor)
+}
+
+func (pc *PursuerController) generateWeights() {
 	obstacles := pc.getObstacleBodies()
 	for i, c := range pc.Candidates {
 		// TODO: parameterize? obstacle avoidance distance
 		angle := float64(i) * 360 / float64(len(pc.Candidates))
 		c.Start.From(&pc.Body.Pos.Now)
 		c.FromAngleAndLimit(angle, 0, constants.PursuitWallAvoidDistance)
-		// First, weigh the target, if we have one
-		if pc.target != nil {
-			// Don't bias against opposite directions
-			dot := c.Delta.To2D().Dot(pc.targetDelta)
-			normal := c.Delta[0]*pc.targetDelta[1] - c.Delta[1]*pc.targetDelta[0]
-			targetWeight := max(dot, 0)
-			if pc.TargetInView {
-				// This encourages enemies to strafe/retreat when they get close
-				strafeWeight := 1 - math.Abs(-dot-0.3)
-				// We need to bias the strafing to avoid equal opposing weights cancelling each other out
-				if (pc.ClockwisePreference && normal < 0) || (!pc.ClockwisePreference && normal >= 0) {
-					strafeWeight += 0.2
-				} else {
-					strafeWeight -= 0.2
-				}
-				c.Count++
 
-				// Consistent hash to separate NPCs circling the player
-				r := concepts.RngXorShift64(uint64(pc.Entity))
-				strafeDistance := pc.StrafeDistance + float64(r%uint64(pc.StrafeDistance))
-				strafeFactor := 1 - max(min(pc.distFromTarget/strafeDistance, 1), 0)
-				c.Weight += strafeWeight*strafeFactor + targetWeight*(1-strafeFactor)
-			} else {
-				c.Weight += targetWeight
+		for _, enemy := range pc.Enemies {
+			if enemy.Pos != nil {
+				c.Weight += pc.targetWeight(c, enemy)
 			}
 		}
 
@@ -176,24 +307,18 @@ func (pc *PursuerController) generateWeights() {
 	}
 }
 
-func (pc *PursuerController) targetOutOfView() {
-	if len(pc.Breadcrumbs) == 0 {
-		pc.target = nil
-		return
-	}
-
-	b := pc.Breadcrumbs.PeekMax()
-	pc.target = &b.Data.Pos
-	radius := pc.Body.Size.Now[0] * 0.75
-	if pc.Body.Pos.Now.DistSq(&b.Data.Pos) < radius*radius {
-		r := pc.Breadcrumbs.RemoveMin()
-		r.Data.Timestamp = ecs.Simulation.SimTimestamp
-		r.Key = ecs.Simulation.SimTimestamp
-		pc.Breadcrumbs.Insert(r)
-	}
-	if pc.TargetInView {
-		log.Printf("Pursuer %v lost sight of %v!", pc.Entity, pc.targetEntity)
-		pc.TargetInView = false
+func (pc *PursuerController) pruneBreadcrumbs() {
+	for _, enemy := range pc.Enemies {
+		for len(enemy.Breadcrumbs) > 0 {
+			earliest := enemy.Breadcrumbs.PeekMin()
+			// 30 sec memory?
+			// TODO: Parameterize this
+			if ecs.Simulation.SimTimestamp-earliest.Key > concepts.MillisToNanos(30000) {
+				enemy.Breadcrumbs.RemoveMin()
+			} else {
+				break
+			}
+		}
 	}
 }
 
@@ -206,80 +331,11 @@ func (pc *PursuerController) Frame() {
 	for i := range pc.Candidates {
 		pc.Candidates[i] = &behaviors.Candidate{}
 	}
-	for len(pc.Breadcrumbs) > 0 {
-		earliest := pc.Breadcrumbs.PeekMin()
-		// 30 sec memory?
-		// TODO: Parameterize this
-		if ecs.Simulation.SimTimestamp-earliest.Key > concepts.MillisToNanos(30000) {
-			pc.Breadcrumbs.RemoveMin()
-		} else {
-			break
-		}
-	}
 
-	// For now, assume the pursued target is always the player
-	player := pc.getPlayer()
-	if player == nil {
-		return
-	}
-	targetBody := core.GetBody(player.Entity)
-	if targetBody == nil {
-		return
-	}
-	pc.targetEntity = player.Entity
-	pc.target = &targetBody.Pos.Now
-
-	// defers are LIFO
-	defer pc.pursue()
-	defer pc.generateWeights()
-
-	// For now, only use horizontal FOV to determine visibility, ignore vertical.
-	pursuerToTargetAngle := pc.Body.Angle2DTo(pc.target)
-	angleInFOV := concepts.NormalizeAngle(pursuerToTargetAngle - pc.Body.Angle.Now)
-	if angleInFOV >= 180.0 {
-		angleInFOV -= 360.0
-	}
-	if angleInFOV < -pc.FOV*0.5 || angleInFOV > pc.FOV*0.5 {
-		pc.targetOutOfView()
-		return
-	}
-	// We're within FOV, check for obstacles:
-	ray := &concepts.Ray{Start: pc.Body.Pos.Now, End: *pc.target}
-	ray.AnglesFromStartEnd()
-	s, _ := Cast(ray, pc.Body.Sector(), pc.Entity, false)
-	if s != nil && s.Entity != pc.targetEntity {
-		// We're blocked by something
-		//log.Printf("%v: %v", pc.Entity, s.String())
-		pc.targetOutOfView()
-		return
-	}
-	if !pc.TargetInView {
-		log.Printf("Pursuer %v saw %v!", pc.Entity, pc.targetEntity)
-	}
-	pc.TargetInView = true
-	// Only leave breadcrumbs every so often
-	// TODO: parameterize this
-	if len(pc.Breadcrumbs) > 0 {
-		latest := pc.Breadcrumbs.PeekMax()
-		if ecs.Simulation.SimTimestamp-latest.Key < concepts.MillisToNanos(500) {
-			return
-		}
-		if targetBody.Pos.Now.EqualEpsilon(&latest.Data.Pos) {
-			return
-		}
-	}
-	// Leave breadcrumb
-	pc.Breadcrumbs.Insert(gheap.HeapElement[int64, behaviors.Breadcrumb]{
-		Key: ecs.Simulation.SimTimestamp,
-		Data: behaviors.Breadcrumb{
-			Pos:       targetBody.Pos.Now,
-			Timestamp: ecs.Simulation.Timestamp,
-		},
-	})
-
-	if len(pc.Breadcrumbs) > 10 {
-		pc.Breadcrumbs.RemoveMin()
-	}
+	pc.pruneBreadcrumbs()
+	pc.populateEnemies()
+	pc.generateWeights()
+	pc.pursue()
 }
 
 func (pc *PursuerController) pursue() {
@@ -297,8 +353,22 @@ func (pc *PursuerController) pursue() {
 	}
 	delta.NormSelf()
 	NpcMove(pc.Body, pc.ChaseSpeed, &delta, !pc.AlwaysFaceTarget)
-	if pc.AlwaysFaceTarget && pc.target != nil {
-		angle := math.Atan2(pc.targetDelta[1], pc.targetDelta[0]) * concepts.Rad2deg
+	if pc.AlwaysFaceTarget {
+		angle := pc.Body.Angle.Now
+		closest := math.Inf(1)
+		// Pick closest angle to our current angle
+		for _, enemy := range pc.Enemies {
+			if enemy.Pos == nil {
+				continue
+			}
+			a := math.Atan2(enemy.Delta[1], enemy.Delta[0]) * concepts.Rad2deg
+			concepts.MinimizeAngleDistance(pc.Body.Angle.Now, &a)
+			d := math.Abs(a - pc.Body.Angle.Now)
+			if d < closest {
+				closest = d
+				angle = a
+			}
+		}
 		if pc.Body.Angle.Procedural {
 			pc.Body.Angle.Input = angle
 		} else {

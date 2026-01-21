@@ -7,14 +7,10 @@ import (
 	"reflect"
 
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/state"
 
-	"tlyakhov/gofoom/components/audio"
-	"tlyakhov/gofoom/components/behaviors"
-	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/components/inventory"
-	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 
 	"fyne.io/fyne/v2"
@@ -62,39 +58,13 @@ func (g *Grid) fieldEntity(field *state.PropertyGridField) {
 		return
 	}
 
-	entitySet := make(ecs.EntityTable, 0)
+	entitySet := controllers.EntitiesByClass(editTypeTag)
 	entities := make([]widget.TreeNodeID, 1)
 	entities[0] = "0"
 
-	cids := make([]ecs.ComponentID, 0)
-
-	switch editTypeTag {
-	case "Sector":
-		cids = append(cids, core.SectorCID)
-	case "Material":
-		cids = append(cids, materials.ShaderCID, materials.SpriteSheetCID,
-			materials.ImageCID, materials.TextCID, materials.SolidCID)
-	case "Action":
-		cids = append(cids, behaviors.ActionFaceCID, behaviors.ActionWaypointCID,
-			behaviors.ActionJumpCID, behaviors.ActionFireCID, behaviors.ActionTransitionCID)
-	case "Weapon":
-		cids = append(cids, inventory.WeaponClassCID)
-	case "Sound":
-		cids = append(cids, audio.SoundCID)
-	case "Spawner":
-		cids = append(cids, behaviors.SpawnerCID)
-	}
-	for _, cid := range cids {
-		arena := ecs.ArenaByID(cid)
-		for i := range arena.Cap() {
-			if a := arena.Component(i); a != nil {
-				e := a.Base().Entity
-				if entitySet.Contains(e) {
-					continue
-				}
-				entitySet.Set(e)
-				entities = append(entities, e.Serialize())
-			}
+	for _, e := range entitySet {
+		if e != 0 {
+			entities = append(entities, e.Serialize())
 		}
 	}
 

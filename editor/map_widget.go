@@ -318,6 +318,8 @@ func (mw *MapWidget) MouseDown(evt *desktop.MouseEvent) {
 	case evt.Button == desktop.MouseButtonSecondary && editor.CurrentAction == nil:
 		editor.Act(&actions.Select{Place: actions.Place{Action: state.Action{IEditor: editor}}})
 	case evt.Button == desktop.MouseButtonTertiary && editor.CurrentAction == nil:
+		fallthrough
+	case evt.Button == desktop.MouseButtonPrimary && evt.Modifier == fyne.KeyModifierAlt && editor.CurrentAction == nil:
 		editor.Act(&actions.Pan{Action: state.Action{IEditor: editor}})
 	case evt.Button == desktop.MouseButtonPrimary && editor.CurrentAction == nil && !editor.Selection.Empty():
 		editor.Act(&actions.Transform{Action: state.Action{IEditor: editor}})

@@ -72,8 +72,10 @@
   behaviors.Spawner:
     Spawned:
     - ∈⋮6∈⋮Spawn+%28spawned+from+5%29
-  character.Player: {}
+  character.Player:
+    _Flags: ""
   core.Body:
+    _Flags: ""
     Angle: 0
     Pos:
       Now: 0, 0, 20
@@ -81,7 +83,9 @@
     Size:
       Now: 10, 40
       Spawn: 10, 10
+    StepSound: ∈⋮15∈⋮step+%28sounds%29∈⋮62bf0202
   core.Mobile:
+    _Flags: ""
     CrMoving: CollideNone
     CrPlayer: CollideNone
     CrWall: CollideSeparate
@@ -102,6 +106,7 @@
 - Entity: ∈⋮6∈⋮Spawn+%28spawned+from+5%29
   behaviors.Alive:
     _Flags: ComponentActive|ComponentHideEntityInEditor
+    Faction: Player
     Health: 100
   behaviors.Spawnee:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
@@ -110,16 +115,14 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Angle:
-      Now: 554.0625
-      Spawn: 0
+    Angle: 0
     Pos:
-      Now: 110.03882377532351, -24.354219150844738, 20
+      Now: 0, 0, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
       Spawn: 10, 10
-    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
+    StepSound: ∈⋮15∈⋮step+%28sounds%29∈⋮62bf0202
   core.Mobile:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     CrMoving: CollideNone
@@ -129,7 +132,7 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0.047543296558219504, 0.01190897583234219, 0.007001650465646214
+      Now: 0, 0, 0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -137,16 +140,15 @@
   inventory.Carrier:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Inventory:
-    - ∈⋮18
+    - ∈⋮19
     - ∈⋮31
-    - ∈⋮32
-    SelectedWeapon: ∈⋮18
+    - ∈⋮23
+    SelectedWeapon: ∈⋮19
 - Entity: ∈⋮9
-  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Alive: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
   behaviors.Pursuer:
-    _Flags: ""
     ChaseSpeed: 1000
-    StrafeDistance: 200
+    StrafeDistance: 100
   behaviors.Spawner:
     Spawned:
     - ∈⋮21
@@ -156,6 +158,7 @@
       Spawn: 0
     Pos: -50, 60, 32
     Size: 32, 32
+    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
   core.Mobile:
     _Flags: ""
     CrMoving: CollideBounce
@@ -169,11 +172,11 @@
     AlwaysReplace: true
     CopyUnshareable: true
     Sources:
-    - ∈⋮3∈⋮Flub∈⋮2edae4ab
+    - ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
   inventory.Weapon:
     _Flags: ""
-  materials.Shader: ∈⋮3∈⋮Flub∈⋮2edae4ab
-  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  materials.Shader: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
 - Entity: ∈⋮10
   core.Sector:
     Bottom:
@@ -431,11 +434,10 @@
   ecs.Named:
     Name: ckpvt5dmdsrrj1r5a5pg
 - Entity: ∈⋮16
-  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Alive: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
   behaviors.Pursuer:
-    _Flags: ""
     ChaseSpeed: 1000
-    StrafeDistance: 200
+    StrafeDistance: 100
   behaviors.Spawner:
     Spawned:
     - ∈⋮20
@@ -445,6 +447,7 @@
       Spawn: 0
     Pos: 240, 150, 32
     Size: 32, 32
+    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
   core.Mobile:
     _Flags: ""
     CrMoving: CollideBounce
@@ -458,17 +461,16 @@
     AlwaysReplace: true
     CopyUnshareable: true
     Sources:
-    - ∈⋮3∈⋮Flub∈⋮2edae4ab
+    - ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
   inventory.Weapon:
     _Flags: ""
-  materials.Shader: ∈⋮3∈⋮Flub∈⋮2edae4ab
-  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  materials.Shader: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
 - Entity: ∈⋮17
-  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Alive: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
   behaviors.Pursuer:
-    _Flags: ""
     ChaseSpeed: 1000
-    StrafeDistance: 200
+    StrafeDistance: 100
   behaviors.Spawner:
     Spawned:
     - ∈⋮22
@@ -478,6 +480,7 @@
       Spawn: 0
     Pos: -240, -180, 32
     Size: 32, 32
+    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
   core.Mobile:
     _Flags: ""
     CrMoving: CollideBounce
@@ -491,25 +494,25 @@
     AlwaysReplace: true
     CopyUnshareable: true
     Sources:
-    - ∈⋮3∈⋮Flub∈⋮2edae4ab
+    - ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
   inventory.Weapon:
     _Flags: ""
-  materials.Shader: ∈⋮3∈⋮Flub∈⋮2edae4ab
-  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
-- Entity: ∈⋮18
+  materials.Shader: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
+- Entity: ∈⋮19
   inventory.Slot:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Class: WeirdGun
     Count: "1"
     Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
     Limit: "1"
-  inventory.WeaponClass: ∈⋮9∈⋮∈⋮2edae4ab
+  inventory.WeaponClass: ∈⋮12∈⋮WeirdGun∈⋮2edae4ab
 - Entity: ∈⋮20
   behaviors.Alive:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Die:
       Code: |-
-        fmt.Printf("Flub %v died.", onEntity)
+        fmt.Printf("Evil Flub %v died.", onEntity)
         shader := materials.GetShader(onEntity)
         if shader != nil {
           // Stage 0 is the regular spritesheet
@@ -517,23 +520,25 @@
           // Stage 1 is the death one
           shader.Stages[1].Opacity = 1
         }
+    Faction: Evil Flub
     Health: 100
   behaviors.Pursuer:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     ChaseSpeed: 1000
-    StrafeDistance: 200
+    StrafeDistance: 100
   behaviors.Spawnee:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Spawner: ∈⋮16
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Angle:
-      Now: 155.1821579447813
+      Now: 1202.9447815583983
       Spawn: 0
     Pos:
-      Now: 565.2451442259908, -234.86111025252768, 16
+      Now: 28.084023925341814, -43.33698391456723, 16
       Spawn: 240, 150, 32
     Size: 32, 32
+    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
   core.Mobile:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     CrMoving: CollideBounce
@@ -543,7 +548,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: -0.2938194723520844, 0.5319501398305281, -0.024978684229147133
+      Now: 2.408892646376048, 1.6104274508537555, 0.026087925010711187
       Spawn: 0, 0, 0
   inventory.Weapon:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -551,7 +556,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮24∈⋮Flub+Spritesheet∈⋮2edae4ab
+      Material: ∈⋮19∈⋮Evil+Flub+Spritesheet∈⋮2edae4ab
     - BlendingFunc: BlendNormal
       Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
       Opacity: 0
@@ -564,7 +569,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Die:
       Code: |-
-        fmt.Printf("Flub %v died.", onEntity)
+        fmt.Printf("Evil Flub %v died.", onEntity)
         shader := materials.GetShader(onEntity)
         if shader != nil {
           // Stage 0 is the regular spritesheet
@@ -572,23 +577,25 @@
           // Stage 1 is the death one
           shader.Stages[1].Opacity = 1
         }
+    Faction: Evil Flub
     Health: 100
   behaviors.Pursuer:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     ChaseSpeed: 1000
-    StrafeDistance: 200
+    StrafeDistance: 100
   behaviors.Spawnee:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Spawner: ∈⋮9
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Angle:
-      Now: 100.80606949171245
+      Now: 270.5914300040621
       Spawn: 0
     Pos:
-      Now: 137.46615524550265, -168.05062317826017, 16
+      Now: -0.6702674173635742, 64.93098066962645, 16
       Spawn: -50, 60, 32
     Size: 32, 32
+    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
   core.Mobile:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     CrMoving: CollideBounce
@@ -598,7 +605,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: 2.167794583671243, -0.8749705169421833, 0.0260876841478482
+      Now: -2.9768833621216437, 0.043490607215571235, 0.026087958369231445
       Spawn: 0, 0, 0
   inventory.Weapon:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -606,7 +613,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮24∈⋮Flub+Spritesheet∈⋮2edae4ab
+      Material: ∈⋮19∈⋮Evil+Flub+Spritesheet∈⋮2edae4ab
     - BlendingFunc: BlendNormal
       Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
       Opacity: 0
@@ -619,7 +626,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Die:
       Code: |-
-        fmt.Printf("Flub %v died.", onEntity)
+        fmt.Printf("Evil Flub %v died.", onEntity)
         shader := materials.GetShader(onEntity)
         if shader != nil {
           // Stage 0 is the regular spritesheet
@@ -627,11 +634,12 @@
           // Stage 1 is the death one
           shader.Stages[1].Opacity = 1
         }
+    Faction: Evil Flub
     Health: 100
   behaviors.Pursuer:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     ChaseSpeed: 1000
-    StrafeDistance: 200
+    StrafeDistance: 100
   behaviors.Spawnee:
     _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
     Spawner: ∈⋮17
@@ -644,6 +652,7 @@
       Now: -240, -180, 16
       Spawn: -240, -180, 32
     Size: 32, 32
+    StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
   core.Mobile:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     CrMoving: CollideBounce
@@ -661,7 +670,7 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Stages:
     - BlendingFunc: BlendNormal
-      Material: ∈⋮24∈⋮Flub+Spritesheet∈⋮2edae4ab
+      Material: ∈⋮19∈⋮Evil+Flub+Spritesheet∈⋮2edae4ab
     - BlendingFunc: BlendNormal
       Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
       Opacity: 0
@@ -669,6 +678,13 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Ambient: 1
     Shadow: ShadowImage
+- Entity: ∈⋮23
+  inventory.Slot:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Class: Red Keycard
+    Count: "0"
+    Image: ∈⋮5∈⋮∈⋮2edae4ab
+    Limit: "1"
 - Entity: ∈⋮24
   core.Sector:
     Bottom:
@@ -746,14 +762,14 @@
         Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Lo:
         Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
-      P: -240, -590
+      P: -240, -930
       Surface:
         Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
     - Hi:
         Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
       Lo:
         Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
-      P: 300, -590
+      P: 300, -930
       Surface:
         Material: ∈⋮49∈⋮FDef+%28textures%29∈⋮62bf0202
     - AdjacentSector: ∈⋮26
@@ -909,14 +925,193 @@
 - Entity: ∈⋮31
   inventory.Slot:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Class: Red Keycard
-    Count: "0"
-    Image: ∈⋮5∈⋮∈⋮2edae4ab
-    Limit: "1"
-- Entity: ∈⋮32
-  inventory.Slot:
-    _Flags: ComponentActive|ComponentHideEntityInEditor
     Class: Flower
     Count: "0"
     Image: ∈⋮40∈⋮pluk+%28sprites%29∈⋮62bf0202
     Limit: "100"
+- Entity: ∈⋮32
+  behaviors.Actor:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    AngularSpeed: 15
+    NoZ: true
+    Speed: 500
+    Start: ∈⋮40
+  behaviors.ActorState:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Action: ∈⋮40
+  behaviors.Alive:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Die:
+      Code: |-
+        fmt.Printf("Flub %v died.", onEntity)
+        shader := materials.GetShader(onEntity)
+        if shader != nil {
+          // Stage 0 is the regular spritesheet
+          shader.Stages[0].Opacity = 0
+          // Stage 1 is the death one
+          shader.Stages[1].Opacity = 1
+        }
+    Faction: Flub
+    Health: 100
+  behaviors.Spawnee:
+    _Flags: ComponentActive|ComponentHideEntityInEditor|ComponentLockedInEditor
+    Spawner: ∈⋮34
+  core.Body:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Angle:
+      Now: 113.7572754094763
+      Spawn: 0
+    Pos:
+      Now: 134.90550797858123, -787.9265466431981, 16
+      Spawn: 130, -830, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel:
+      Now: -0.11928059951055407, 0.2156785897601159, -0.024978877682474573
+      Spawn: 0, 0, 0
+  inventory.Weapon:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+  materials.Shader:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Stages:
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮24∈⋮Flub+Spritesheet∈⋮2edae4ab
+    - BlendingFunc: BlendNormal
+      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+      Opacity: 0
+  materials.Visible:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    Ambient: 1
+    Shadow: ShadowImage
+- Entity: ∈⋮33
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮38
+  behaviors.ActionWaypoint:
+    P: 220, -820, 32
+- Entity: ∈⋮34
+  behaviors.Actor:
+    _Flags: ""
+    AngularSpeed: 15
+    NoZ: true
+    Speed: 500
+    Start: ∈⋮40
+  behaviors.ActorState:
+    Action: ∈⋮33
+  behaviors.Alive: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  behaviors.Spawner:
+    Spawned:
+    - ∈⋮32
+  core.Body:
+    _Flags: ""
+    Angle:
+      Now: 90
+      Spawn: 0
+    Pos:
+      Now: 200, -864.8544603775724, 16
+      Spawn: 200, -870, 32
+    Size: 32, 32
+  core.Mobile:
+    _Flags: ""
+    CrMoving: CollideBounce
+    CrPlayer: CollideBounce
+    CrWall: CollideSeparate
+    Elasticity: 0.5
+    Mass: 40
+    MountHeight: 15
+    Vel: 0, 0, 0
+  ecs.Linked:
+    AlwaysReplace: true
+    CopyUnshareable: true
+    Sources:
+    - ∈⋮3∈⋮Flub∈⋮2edae4ab
+  inventory.Weapon:
+    _Flags: ""
+  materials.Shader: ∈⋮3∈⋮Flub∈⋮2edae4ab
+  materials.Visible: ∈⋮3∈⋮Flub∈⋮2edae4ab
+- Entity: ∈⋮37
+  core.Sector:
+    Bottom:
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 25
+    FloorFriction: 0.85
+    Layer: 1
+    Segments:
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -90, -660
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -90, -800
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -30, -840
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 160, -760
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: 170, -620
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    - Hi:
+        Material: ∈⋮30∈⋮Default
+      Lo:
+        Material: ∈⋮30∈⋮Default
+      P: -40, -570
+      Surface:
+        Material: ∈⋮30∈⋮Default
+    Top:
+      Ignore: true
+      Surface:
+        Material: ∈⋮30∈⋮Default
+      Z: 64
+    Transform: 1, 0, 0, 0, 1, 0
+    TransformOrigin: 13.333333333333332, -708.3333333333333
+- Entity: ∈⋮38
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮40
+  behaviors.ActionWaypoint:
+    P: -170, -690, 32
+- Entity: ∈⋮39
+  core.Body:
+    Angle: 0
+    Pos: 0, -880, 32
+    Size: 10, 10
+  core.Light:
+    Attenuation: 0.4
+    Diffuse: 1, 0.5, 0.5
+    Strength: 2
+- Entity: ∈⋮40
+  behaviors.ActionTransition:
+    Next:
+    - ∈⋮33
+  behaviors.ActionWaypoint:
+    P: 170, -540, 32
