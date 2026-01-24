@@ -5,6 +5,7 @@ package controllers
 
 import (
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -48,6 +49,10 @@ func (sc *ScriptedController) Frame() {
 	if !sc.OnFrame.IsCompiled() {
 		return
 	}
+	if sc.Timer != 0 && sc.TimerStart+concepts.MillisToNanos(sc.Timer) > ecs.Simulation.SimTimestamp {
+		return
+	}
+	sc.TimerStart = ecs.Simulation.SimTimestamp
 	sc.OnFrame.Vars["scripted"] = sc.Scripted
 	sc.OnFrame.Vars["onEntity"] = sc.Entity
 	sc.OnFrame.Vars["args"] = sc.Args

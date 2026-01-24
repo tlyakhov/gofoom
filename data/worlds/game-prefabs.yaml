@@ -29,15 +29,15 @@
     Vel: 0, 0, 0
   ecs.Named:
     Name: Flub
-  inventory.Weapon:
-    _Flags: ""
+  inventory.Carrier:
+    Inventory: []
   materials.Shader:
     Stages:
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮24∈⋮Flub+Spritesheet
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
-      Opacity: 0
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮24∈⋮Flub+Spritesheet
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+        Opacity: 0
   materials.Visible:
     _Flags: ""
     Ambient: 1
@@ -45,12 +45,13 @@
 - Entity: ∈⋮4∈⋮Bubble
   behaviors.Proximity:
     InRange:
-      Code: "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
+      Code:
+        "if alive := behaviors.GetAlive(body.Entity); alive != nil {\n  alive.Hurt(\"bubble\",
         2, 30)\n  // log.Printf(\"Hit %v\", body.Entity)\n} "
     Range: 5
   ecs.Linked:
     Sources:
-    - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
+      - ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
   ecs.Named:
     Name: Bubble
   materials.Image: ∈⋮42∈⋮transparent+bubble+%28sprites%29∈⋮62bf0202
@@ -58,7 +59,7 @@
 - Entity: ∈⋮5
   ecs.Linked:
     Sources:
-    - ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
+      - ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
   materials.Image: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
   materials.Lit: ∈⋮39∈⋮keycard+%28sprites+keycard%29∈⋮62bf0202
   materials.SpriteSheet:
@@ -72,54 +73,60 @@
     Name: Muzzle Flash Shader
   materials.Shader:
     Stages:
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29∈⋮62bf0202
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮44∈⋮muzzle+%28sprites+weird+gun%29∈⋮62bf0202
 - Entity: ∈⋮7∈⋮Space+Window
   ecs.Named:
     Name: Space Window
   materials.Shader:
     Stages:
-    - BlendingFunc: BlendNormal
-      Flags: ShaderTiled|ShaderSky
-      Material: ∈⋮71∈⋮space+%28textures%29∈⋮62bf0202
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
+      - BlendingFunc: BlendNormal
+        Flags: ShaderTiled|ShaderSky
+        Material: ∈⋮71∈⋮space+%28textures%29∈⋮62bf0202
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮83∈⋮glass+%28textures+space_tiles_hyptosis%29∈⋮62bf0202
 - Entity: ∈⋮8
   behaviors.Alive:
     Faction: Player
     Health: 100
   inventory.Carrier:
     Inventory:
-    - ∈⋮9
-    - ∈⋮10
-    - ∈⋮11
+      - ∈⋮9
+      - ∈⋮10
+      - ∈⋮11
+    SelectedWeapon: ∈⋮9
 - Entity: ∈⋮9
+  ecs.Linked:
+    AlwaysReplace: true
+    Sources:
+      - ∈⋮12∈⋮WeirdGun
   inventory.Slot:
     Class: WeirdGun
     Count: "1"
     Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
     Limit: "1"
   inventory.WeaponClass:
-    Damage: 10
     FlashMaterial: ∈⋮6∈⋮Muzzle+Flash+Shader
     MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮62bf0202
     MarkSize: 2.5
     Params:
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Sound: ∈⋮12∈⋮rifle+%28sounds%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
-      Sound: ∈⋮6∈⋮blip1+%28sounds%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
-    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
-      Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Sound: ∈⋮12∈⋮rifle+%28sounds%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
+        Sound: ∈⋮6∈⋮blip1+%28sounds%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
     Spread: 3
+  inventory.WeaponClassInstant:
+    Damage: 10
 - Entity: ∈⋮10
   inventory.Slot:
     Class: Red Keycard
@@ -136,6 +143,7 @@
   ecs.Named:
     Name: WeirdGun
   inventory.WeaponClass: ∈⋮9
+  inventory.WeaponClassInstant: ∈⋮9
 - Entity: ∈⋮13
   behaviors.Door:
     Duration: 1000
@@ -156,7 +164,8 @@
         } else if door.State != behaviors.DoorStateClosed {
           door.Intent = behaviors.DoorIntentClosed
         }
-    Message: Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
+    Message:
+      Door - {{if .Carrier.HasAtLeast "Red Keycard" 1}}Open using red keycard{{else}}Need
       red keycard to open{{end}}
   behaviors.Proximity:
     Hysteresis: 0
@@ -179,6 +188,21 @@
           // Stage 1 is the death one
           shader.Stages[1].Opacity = 1
         }
+        flubBody := core.GetBody(onEntity)
+        gibs := ecs.NewEntity()
+        body := ecs.NewAttachedComponent(gibs, core.BodyCID).(*core.Body)
+        particles := ecs.NewAttachedComponent(gibs, behaviors.ParticleEmitterCID).(*behaviors.ParticleEmitter)
+        scripted := ecs.NewAttachedComponent(gibs, core.ScriptedCID).(*core.Scripted)
+        body.Pos.SetAll(flubBody.Pos.Now)
+        body.Pos.Now[2] = 32
+        particles.Spawner = ecs.Entity(27).WithFileID(1)
+        particles.Limit = 30    
+        particles.Vel = 2.5
+        particles.XYSpread = 360
+        particles.ZSpread = 90
+        scripted.Timer = 5000
+        scripted.OnFrame.Code = "ecs.Delete(scripted.Entity)"
+        ecs.ActAllControllersOneEntity(gibs, ecs.ControllerPrecompute)
     Faction: Evil Flub
     Health: 100
   behaviors.Pursuer:
@@ -195,15 +219,16 @@
     Vel: 0, 0, 0
   ecs.Named:
     Name: Evil Flub
-  inventory.Weapon:
-    _Flags: ""
+  inventory.Carrier:
+    Inventory:
+      - ∈⋮25∈⋮Evil+Flub+Weapon+Slot
   materials.Shader:
     Stages:
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮19∈⋮Evil+Flub+Spritesheet
-    - BlendingFunc: BlendNormal
-      Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
-      Opacity: 0
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮19∈⋮Evil+Flub+Spritesheet
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮28∈⋮dead+%28sprites+flub%29∈⋮62bf0202
+        Opacity: 0
   materials.Visible:
     _Flags: ""
     Ambient: 1
@@ -227,7 +252,7 @@
     Angle: 0
   behaviors.ActionTransition:
     Next:
-    - ∈⋮21∈⋮Rotate+360+Loop+2
+      - ∈⋮21∈⋮Rotate+360+Loop+2
   ecs.Named:
     Name: Rotate 360 Loop 1
 - Entity: ∈⋮21∈⋮Rotate+360+Loop+2
@@ -235,7 +260,7 @@
     Angle: 90
   behaviors.ActionTransition:
     Next:
-    - ∈⋮22∈⋮Rotate+360+Loop+3
+      - ∈⋮22∈⋮Rotate+360+Loop+3
   ecs.Named:
     Name: Rotate 360 Loop 2
 - Entity: ∈⋮22∈⋮Rotate+360+Loop+3
@@ -243,7 +268,7 @@
     Angle: 180
   behaviors.ActionTransition:
     Next:
-    - ∈⋮23∈⋮Rotate+360+Loop+4
+      - ∈⋮23∈⋮Rotate+360+Loop+4
   ecs.Named:
     Name: Rotate 360 Loop 3
 - Entity: ∈⋮23∈⋮Rotate+360+Loop+4
@@ -251,7 +276,7 @@
     Angle: 270
   behaviors.ActionTransition:
     Next:
-    - ∈⋮20∈⋮Rotate+360+Loop+1
+      - ∈⋮20∈⋮Rotate+360+Loop+1
   ecs.Named:
     Name: Rotate 360 Loop 4
 - Entity: ∈⋮24∈⋮Flub+Spritesheet
@@ -268,6 +293,61 @@
       Spawn: "0"
     Material: ∈⋮37∈⋮flub+%28sprites+flub%29∈⋮62bf0202
     Rows: "2"
+- Entity: ∈⋮25∈⋮Evil+Flub+Weapon+Slot
+  ecs.Linked:
+    AlwaysReplace: true
+    Sources:
+      - ∈⋮26∈⋮EvilFlub+gun
+  ecs.Named:
+    Name: Evil Flub Weapon Slot
+  inventory.Slot:
+    Class: EvilFlubWeapon
+    Count:
+      Now: "0"
+      Spawn: "1"
+    Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+    Limit: "100"
+  inventory.WeaponClass:
+    FlashMaterial: ∈⋮6∈⋮Muzzle+Flash+Shader
+    MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮62bf0202
+    MarkSize: 2.5
+    Params:
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Sound: ∈⋮14∈⋮spell+%28sounds%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
+        Sound: ∈⋮6∈⋮blip1+%28sounds%29∈⋮62bf0202
+        Time: 800
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
+      - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+        Time: 100
+    Spread: 3
+  inventory.WeaponClassInstant:
+    Damage: 10
+- Entity: ∈⋮26∈⋮EvilFlub+gun
+  ecs.Named:
+    Name: EvilFlub gun
+  inventory.WeaponClass: ∈⋮25∈⋮Evil+Flub+Weapon+Slot
+  inventory.WeaponClassInstant: ∈⋮25∈⋮Evil+Flub+Weapon+Slot
+- Entity: ∈⋮27∈⋮Gib+particle
+  behaviors.Spawner:
+    Auto: AutoSpawnNone
+  ecs.Named:
+    Name: Gib particle
+  materials.Lit:
+    Ambient: 0, 0, 0
+    Diffuse: 1, 1, 1, 1
+  materials.Shader:
+    Stages:
+      - BlendingFunc: BlendNormal
+        Material: ∈⋮17∈⋮acid+bubble+%28sprites%29∈⋮62bf0202
+  materials.Visible:
+    Ambient: 1
 - Entity: ∈⋮247∈⋮Inventory+Item+Base
   ecs.Named:
     Name: Inventory Item Base
@@ -281,7 +361,7 @@
   ecs.Linked:
     AlwaysReplace: true
     Sources:
-    - ∈⋮247∈⋮Inventory+Item+Base
+      - ∈⋮247∈⋮Inventory+Item+Base
   ecs.Named:
     Name: WeirdGun (inventory item)
   inventory.Item:
@@ -303,7 +383,7 @@
   ecs.Linked:
     AlwaysReplace: true
     Sources:
-    - ∈⋮247∈⋮Inventory+Item+Base
+      - ∈⋮247∈⋮Inventory+Item+Base
   ecs.Named:
     Name: Flower (inventory item)
   inventory.Item:
@@ -324,7 +404,7 @@
 - Entity: ∈⋮250∈⋮Red+Keycard+%28inventory+item%29
   ecs.Linked:
     Sources:
-    - ∈⋮247∈⋮Inventory+Item+Base
+      - ∈⋮247∈⋮Inventory+Item+Base
   ecs.Named:
     Name: Red Keycard (inventory item)
   inventory.Item:

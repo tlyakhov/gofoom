@@ -115,9 +115,11 @@
     _Flags: ComponentActive|ComponentHideEntityInEditor
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
-    Angle: 0
+    Angle:
+      Now: 527.34375
+      Spawn: 0
     Pos:
-      Now: 0, 0, 20
+      Now: 205.74377283451443, -17.056264155185247, 20
       Spawn: 0, 0, 0
     Size:
       Now: 10, 40
@@ -132,7 +134,8 @@
     Mass: 80
     MountHeight: 15
     Vel:
-      Now: 0, 0, 0.007001650399223597
+      Now: 0.0000000000000000000000000000000029331988261909148, -0.000000000000000000000000000000014371213718527627,
+        0.007001650399223597
       Spawn: 0, 0, 0
   ecs.Named:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -173,8 +176,10 @@
     CopyUnshareable: true
     Sources:
     - ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
+    - ∈⋮12∈⋮WeirdGun∈⋮2edae4ab
   inventory.Weapon:
     _Flags: ""
+  inventory.WeaponClass: ∈⋮9∈⋮∈⋮2edae4ab
   materials.Shader: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
   materials.Visible: ∈⋮18∈⋮Evil+Flub∈⋮2edae4ab
 - Entity: ∈⋮10
@@ -506,7 +511,7 @@
     Count: "1"
     Image: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
     Limit: "1"
-  inventory.WeaponClass: ∈⋮12∈⋮WeirdGun∈⋮2edae4ab
+  inventory.WeaponClass: ∈⋮9∈⋮∈⋮2edae4ab
 - Entity: ∈⋮20
   behaviors.Alive:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -532,10 +537,10 @@
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Angle:
-      Now: 1202.9447815583983
+      Now: 640.8235650244821
       Spawn: 0
     Pos:
-      Now: 28.084023925341814, -43.33698391456723, 16
+      Now: 197.0939780005824, 28.186445503768176, 16
       Spawn: 240, 150, 32
     Size: 32, 32
     StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
@@ -548,7 +553,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: 2.408892646376048, 1.6104274508537555, 0.026087925010711187
+      Now: -2.799245451652749, -0.6439697224514015, 0.026087914707916965
       Spawn: 0, 0, 0
   inventory.Weapon:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -589,10 +594,10 @@
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Angle:
-      Now: 270.5914300040621
+      Now: 281.4962242256016
       Spawn: 0
     Pos:
-      Now: -0.6702674173635742, 64.93098066962645, 16
+      Now: 187.37518046750222, 73.25871593892134, 16
       Spawn: -50, 60, 32
     Size: 32, 32
     StepSound: ∈⋮13∈⋮sand+%28sounds%29∈⋮62bf0202
@@ -605,10 +610,31 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: -2.9768833621216437, 0.043490607215571235, 0.026087958369231445
+      Now: -2.0902840825864724, -1.0041625707839779, 0.026087714042173304
       Spawn: 0, 0, 0
   inventory.Weapon:
     _Flags: ComponentActive|ComponentHideEntityInEditor
+  inventory.WeaponClass:
+    _Flags: ComponentActive|ComponentHideEntityInEditor
+    FlashMaterial: ∈⋮6∈⋮Muzzle+Flash+Shader∈⋮2edae4ab
+    MarkMaterial: ∈⋮45∈⋮weapon+mark+%28sprites+weird+gun%29∈⋮62bf0202
+    MarkSize: 2.5
+    Params:
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Sound: ∈⋮12∈⋮rifle+%28sounds%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮46∈⋮weird+gun+cooling+%28sprites+weird+gun%29∈⋮62bf0202
+      Sound: ∈⋮6∈⋮blip1+%28sounds%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
+    - Material: ∈⋮47∈⋮weird+gun+%28sprites+weird+gun%29∈⋮62bf0202
+      Time: 100
+    Spread: 3
   materials.Shader:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Stages:
@@ -959,11 +985,11 @@
   core.Body:
     _Flags: ComponentActive|ComponentHideEntityInEditor
     Angle:
-      Now: 113.7572754094763
+      Now: 42.47002705598683
       Spawn: 0
     Pos:
-      Now: 134.90550797858123, -787.9265466431981, 16
-      Spawn: 130, -830, 32
+      Now: -51.30077025002519, -556.394063531769, 16
+      Spawn: 200, -870, 32
     Size: 32, 32
   core.Mobile:
     _Flags: ComponentActive|ComponentHideEntityInEditor
@@ -974,7 +1000,7 @@
     Mass: 40
     MountHeight: 15
     Vel:
-      Now: -0.11928059951055407, 0.2156785897601159, -0.024978877682474573
+      Now: 1.0759462161529445, 1.0389841043146897, 0.026087344771506225
       Spawn: 0, 0, 0
   inventory.Weapon:
     _Flags: ComponentActive|ComponentHideEntityInEditor

@@ -6,7 +6,6 @@ package controllers
 import (
 	"log"
 	"tlyakhov/gofoom/components/audio"
-	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
@@ -23,7 +22,6 @@ type WeaponController struct {
 
 	Sampler render.MaterialSampler
 	Slot    *inventory.Slot
-	Carrier *inventory.Carrier
 	Class   *inventory.WeaponClass
 	Body    *core.Body
 
@@ -153,7 +151,7 @@ func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 	}
 }
 
-func (w *WeaponController) NewState(s inventory.WeaponState) {
+func (w *WeaponController) newState(s inventory.WeaponState) {
 	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, (ecs.Simulation.SimTimestamp-w.LastStateTimestamp)/1_000_000)
 	w.State = s
 	w.LastStateTimestamp = ecs.Simulation.SimTimestamp
@@ -165,17 +163,17 @@ func (w *WeaponController) NewState(s inventory.WeaponState) {
 
 func weaponIdle(wc *WeaponController) {
 	if wc.Intent == inventory.WeaponFire {
-		wc.NewState(inventory.WeaponFiring)
+		wc.newState(inventory.WeaponFiring)
 		return
 	}
 }
 
 func weaponUnholstering(wc *WeaponController) {
 	if wc.StateCompleted() {
-		wc.NewState(inventory.WeaponIdle)
+		wc.newState(inventory.WeaponIdle)
 	}
 	if wc.Intent == inventory.WeaponHolstered {
-		wc.NewState(inventory.WeaponHolstering)
+		wc.newState(inventory.WeaponHolstering)
 	}
 }
 
@@ -183,69 +181,29 @@ func weaponFiring(wc *WeaponController) {
 	if wc.Intent != inventory.WeaponFire {
 		return
 	}
-	// TODO: Sound effect
 	// TODO: This should be a parameter somewhere, whether to reset the intent
 	// or not.
 	wc.Intent = inventory.WeaponHeld
-	wc.NewState(inventory.WeaponCooling)
-	s := wc.fireWeaponInstant()
-
-	if s == nil {
-		return
+	wc.newState(inventory.WeaponCooling)
+	if instant := inventory.GetWeaponClassInstant(wc.Entity); instant != nil {
+		wc.fireWeaponInstant(instant)
 	}
+	if projectile := inventory.GetWeaponClassProjectile(wc.Entity); projectile != nil {
 
-	// TODO: Account for bullet velocity travel time. Do this by calculating
-	// time it would take to hit the thing and delaying the outcome? could be
-	// buggy though if the object in question moves
-	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman(2))
-	switch s.Type {
-	case selection.SelectableBody:
-		if mobile := core.GetMobile(s.Body.Entity); mobile != nil {
-			// Push bodies away
-			// TODO: Parameterize in Weapon
-			mobile.Vel.Now.AddSelf(wc.delta.Mul(3))
-		}
-		// Hurt anything alive
-		if alive := behaviors.GetAlive(s.Body.Entity); alive != nil {
-			// TODO: Parameterize CoolDown in Weapon?
-			alive.Hurt("Weapon "+s.Entity.String(), wc.Class.Damage, 20)
-		}
-	case selection.SelectableSectorSegment, selection.SelectableHi,
-		selection.SelectableLow, selection.SelectableMid,
-		selection.SelectableInternalSegment:
-		// Make a mark on walls
-
-		// TODO: Include floors and ceilings
-		es := &materials.ShaderStage{
-			Material:               wc.Class.MarkMaterial,
-			IgnoreSurfaceTransform: false,
-		}
-		// TODO: Fix this
-		//es.CFlags = ecs.ComponentInternal
-		es.Construct(nil)
-		es.Flags = 0
-		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
-		surf.ExtraStages = append(surf.ExtraStages, es)
-		es.Transform.From(&surf.Transform.Now)
-		es.Transform.AffineInverseSelf().MulSelf(&wc.transform)
-		wc.updateMarks(inventory.WeaponMark{
-			ShaderStage: es,
-			Surface:     surf,
-		})
 	}
 }
 
 func weaponCooling(wc *WeaponController) {
 	if wc.StateCompleted() {
 		if wc.Intent == inventory.WeaponFire {
-			wc.NewState(inventory.WeaponFiring)
+			wc.newState(inventory.WeaponFiring)
 		} else {
-			wc.NewState(inventory.WeaponIdle)
+			wc.newState(inventory.WeaponIdle)
 		}
 		return
 	}
 	if wc.Intent == inventory.WeaponHolstered {
-		wc.NewState(inventory.WeaponHolstering)
+		wc.newState(inventory.WeaponHolstering)
 	}
 }
 func weaponReloading(wc *WeaponController) {

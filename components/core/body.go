@@ -18,8 +18,12 @@ import (
 type Body struct {
 	ecs.Attached `editable:"^"`
 	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`
-	Size         dynamic.DynamicValue[concepts.Vector2] `editable:"Size"`
-	Angle        dynamic.DynamicValue[float64]          `editable:"Angle"`
+	// TODO: Separate this out into 3 different fields, potentially in their own component:
+	// 1. Render size
+	// 2. Collision size
+	// 3. Hitbox size for weapon damage
+	Size  dynamic.DynamicValue[concepts.Vector2] `editable:"Size"`
+	Angle dynamic.DynamicValue[float64]          `editable:"Angle"`
 
 	StepSound ecs.Entity `editable:"Step Sound" edit_type:"Sound"`
 

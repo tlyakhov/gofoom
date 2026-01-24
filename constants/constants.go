@@ -84,4 +84,5 @@ const (
 	PursuitWallAvoidDistance   = 50.0
 	PursuitEnemyTargetDistance = 1000.0
 	PursuitMaxBreadcrumbs      = 20
+	PursuitBreadcrumbRateNs    = 250 * 1_000_000 // 250 ms
 )

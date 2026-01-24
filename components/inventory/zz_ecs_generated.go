@@ -8,6 +8,8 @@ var ItemCID ecs.ComponentID
 var SlotCID ecs.ComponentID
 var WeaponCID ecs.ComponentID
 var WeaponClassCID ecs.ComponentID
+var WeaponClassInstantCID ecs.ComponentID
+var WeaponClassProjectileCID ecs.ComponentID
 
 func init() {
 	CarrierCID = ecs.RegisterComponent(&ecs.Arena[Carrier, *Carrier]{})
@@ -15,6 +17,8 @@ func init() {
 	SlotCID = ecs.RegisterComponent(&ecs.Arena[Slot, *Slot]{})
 	WeaponCID = ecs.RegisterComponent(&ecs.Arena[Weapon, *Weapon]{})
 	WeaponClassCID = ecs.RegisterComponent(&ecs.Arena[WeaponClass, *WeaponClass]{})
+	WeaponClassInstantCID = ecs.RegisterComponent(&ecs.Arena[WeaponClassInstant, *WeaponClassInstant]{})
+	WeaponClassProjectileCID = ecs.RegisterComponent(&ecs.Arena[WeaponClassProjectile, *WeaponClassProjectile]{})
 }
 func GetCarrier(e ecs.Entity) *Carrier {
 	if asserted, ok := ecs.GetComponent(e, CarrierCID).(*Carrier); ok {
@@ -65,4 +69,24 @@ func GetWeaponClass(e ecs.Entity) *WeaponClass {
 
 func (*WeaponClass) ComponentID() ecs.ComponentID {
 	return WeaponClassCID
+}
+func GetWeaponClassInstant(e ecs.Entity) *WeaponClassInstant {
+	if asserted, ok := ecs.GetComponent(e, WeaponClassInstantCID).(*WeaponClassInstant); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*WeaponClassInstant) ComponentID() ecs.ComponentID {
+	return WeaponClassInstantCID
+}
+func GetWeaponClassProjectile(e ecs.Entity) *WeaponClassProjectile {
+	if asserted, ok := ecs.GetComponent(e, WeaponClassProjectileCID).(*WeaponClassProjectile); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*WeaponClassProjectile) ComponentID() ecs.ComponentID {
+	return WeaponClassProjectileCID
 }

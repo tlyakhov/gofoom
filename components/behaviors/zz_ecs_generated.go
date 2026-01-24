@@ -13,6 +13,7 @@ var ActorCID ecs.ComponentID
 var ActorStateCID ecs.ComponentID
 var AliveCID ecs.ComponentID
 var DoorCID ecs.ComponentID
+var EphemeralCID ecs.ComponentID
 var ParticleEmitterCID ecs.ComponentID
 var PlayerTargetableCID ecs.ComponentID
 var ProximityCID ecs.ComponentID
@@ -34,6 +35,7 @@ func init() {
 	ActorStateCID = ecs.RegisterComponent(&ecs.Arena[ActorState, *ActorState]{})
 	AliveCID = ecs.RegisterComponent(&ecs.Arena[Alive, *Alive]{})
 	DoorCID = ecs.RegisterComponent(&ecs.Arena[Door, *Door]{})
+	EphemeralCID = ecs.RegisterComponent(&ecs.Arena[Ephemeral, *Ephemeral]{})
 	ParticleEmitterCID = ecs.RegisterComponent(&ecs.Arena[ParticleEmitter, *ParticleEmitter]{})
 	PlayerTargetableCID = ecs.RegisterComponent(&ecs.Arena[PlayerTargetable, *PlayerTargetable]{})
 	ProximityCID = ecs.RegisterComponent(&ecs.Arena[Proximity, *Proximity]{})
@@ -143,6 +145,16 @@ func GetDoor(e ecs.Entity) *Door {
 
 func (*Door) ComponentID() ecs.ComponentID {
 	return DoorCID
+}
+func GetEphemeral(e ecs.Entity) *Ephemeral {
+	if asserted, ok := ecs.GetComponent(e, EphemeralCID).(*Ephemeral); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*Ephemeral) ComponentID() ecs.ComponentID {
+	return EphemeralCID
 }
 func GetParticleEmitter(e ecs.Entity) *ParticleEmitter {
 	if asserted, ok := ecs.GetComponent(e, ParticleEmitterCID).(*ParticleEmitter); ok {

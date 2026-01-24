@@ -121,15 +121,7 @@ func (pc *PlayerController) Frame() {
 			continue
 		}
 		slot := inventory.GetSlot(e)
-		if slot == nil {
-			continue
-		}
-		// TODO: Put this into an Carrier controller
-		if slot.Carrier != pc.Carrier {
-			slot.Carrier = pc.Carrier
-		}
-
-		if slot.Count.Now <= 0 {
+		if slot == nil || slot.Count.Now <= 0 {
 			continue
 		}
 		if w := inventory.GetWeapon(e); w != nil {

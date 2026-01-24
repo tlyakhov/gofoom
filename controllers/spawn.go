@@ -83,6 +83,7 @@ func spawnInventory(c *inventory.Carrier) {
 		pasted := CloneEntity(copied, false, func(e ecs.Entity, cid ecs.ComponentID, original ecs.Component, pasted ecs.Component) bool {
 			if cid == inventory.SlotCID {
 				pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
+				pasted.(*inventory.Slot).Count.ResetToSpawn()
 				return true
 			}
 			// Otherwise, just attach the original.

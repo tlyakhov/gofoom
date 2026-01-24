@@ -14,12 +14,18 @@ type Scripted struct {
 
 	OnFrame Script   `editable:"OnFrame"`
 	Args    []string `editable:"Arguments"`
+	Timer   float64  `editable:"ETA (timer)"` // ms
+
+	TimerStart int64 // ns
 }
 
 func (s *Scripted) Shareable() bool { return true }
 
 func (s *Scripted) Construct(data map[string]any) {
 	s.AttachedWithIndirects.Construct(data)
+	s.Args = nil
+	s.Timer = 0
+	s.TimerStart = ecs.Simulation.SimTimestamp
 
 	if data == nil {
 		s.OnFrame.Construct(nil)
@@ -35,6 +41,10 @@ func (s *Scripted) Construct(data map[string]any) {
 	if v, ok := data["Args"]; ok {
 		s.Args = cast.ToStringSlice(v)
 	}
+
+	if v, ok := data["Timer"]; ok {
+		s.Timer = cast.ToFloat64(v)
+	}
 }
 
 func (s *Scripted) Serialize() map[string]any {
@@ -46,6 +56,10 @@ func (s *Scripted) Serialize() map[string]any {
 
 	if len(s.Args) > 0 {
 		result["Args"] = s.Args
+	}
+
+	if s.Timer > 0 {
+		result["Timer"] = s.Timer
 	}
 
 	return result
