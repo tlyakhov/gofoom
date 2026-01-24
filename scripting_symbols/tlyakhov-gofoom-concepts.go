@@ -79,6 +79,7 @@ func init() {
 		// type definitions
 		"BlendType": reflect.ValueOf((*concepts.BlendType)(nil)),
 		"Matrix2":   reflect.ValueOf((*concepts.Matrix2)(nil)),
+		"Ray":       reflect.ValueOf((*concepts.Ray)(nil)),
 		"Vector2":   reflect.ValueOf((*concepts.Vector2)(nil)),
 		"Vector3":   reflect.ValueOf((*concepts.Vector3)(nil)),
 		"Vector4":   reflect.ValueOf((*concepts.Vector4)(nil)),

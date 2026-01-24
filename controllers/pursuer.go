@@ -10,6 +10,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
@@ -166,7 +167,7 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 	// TODO: parameterize this
 	if len(enemy.Breadcrumbs) > 0 {
 		latest := enemy.Breadcrumbs.PeekMax()
-		if ecs.Simulation.SimTimestamp-latest.Key < concepts.MillisToNanos(500) {
+		if ecs.Simulation.SimTimestamp-latest.Key < constants.PursuitBreadcrumbRateNs {
 			return
 		}
 		radius := pc.Body.Size.Now[0] * 0.5
@@ -199,8 +200,12 @@ func (pc *PursuerController) populateEnemies() {
 		if !body.IsActive() || body == pc.Body {
 			return true
 		}
-		if a := behaviors.GetAlive(body.Entity); a == nil || !a.IsActive() || a.Faction == pc.faction {
-			// Skip entities of the same faction
+		var a *behaviors.Alive
+		if a = behaviors.GetAlive(body.Entity); a == nil || !a.IsActive() {
+			return true
+		}
+		if a.Faction == pc.faction || a.Health.Now <= 0 {
+			// Skip entities of the same faction, or dead
 			return true
 		}
 		if s := behaviors.GetSpawner(body.Entity); s != nil {
@@ -336,6 +341,22 @@ func (pc *PursuerController) Frame() {
 	pc.populateEnemies()
 	pc.generateWeights()
 	pc.pursue()
+
+	for _, enemy := range pc.Enemies {
+		if !enemy.InView {
+			continue
+		}
+		// Fire
+		if carrier := inventory.GetCarrier(pc.Entity); carrier != nil {
+			if carrier.SelectedWeapon != 0 {
+				if weapon := inventory.GetWeapon(carrier.SelectedWeapon); weapon != nil {
+					weapon.Intent = inventory.WeaponFire
+				}
+			}
+		}
+
+		break
+	}
 }
 
 func (pc *PursuerController) pursue() {

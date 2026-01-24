@@ -334,7 +334,7 @@ func (list *EntityList) Update() {
 			}
 			if c.Base().Flags&ecs.ComponentHideEntityInEditor != 0 {
 				// Ignore this entire entity
-				return
+				//	return
 			}
 			if c.Base().Flags&ecs.ComponentHideInEditor != 0 {
 				continue

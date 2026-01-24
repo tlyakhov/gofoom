@@ -14,9 +14,6 @@ import (
 type WeaponClass struct {
 	ecs.Attached `editable:"^"`
 
-	InstantHit bool `editable:"InstantHit"`
-
-	Damage float64                             `editable:"Damage"`
 	Spread float64                             `editable:"Spread"` // In degrees
 	Params [WeaponStateCount]WeaponStateParams `editable:"Params"`
 
@@ -41,7 +38,6 @@ func (w *WeaponClass) String() string {
 func (w *WeaponClass) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 	w.MarkSize = 5
-	w.Damage = 10
 	w.Spread = 1
 
 	for i := range WeaponStateCount {
@@ -57,10 +53,6 @@ func (w *WeaponClass) Construct(data map[string]any) {
 		for i := range min(int(WeaponStateCount), len(arr)) {
 			w.Params[i].Construct(arr[i].(map[string]any))
 		}
-	}
-
-	if v, ok := data["Damage"]; ok {
-		w.Damage = cast.ToFloat64(v)
 	}
 
 	if v, ok := data["Spread"]; ok {
@@ -83,7 +75,6 @@ func (w *WeaponClass) Construct(data map[string]any) {
 func (w *WeaponClass) Serialize() map[string]any {
 	result := w.Attached.Serialize()
 
-	result["Damage"] = w.Damage
 	result["Spread"] = w.Spread
 
 	p := make([]any, WeaponStateCount)
