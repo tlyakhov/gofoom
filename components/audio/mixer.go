@@ -133,8 +133,8 @@ func (m *mixer) Initialize() {
 	m.events = make(map[al.Source]*SoundEvent)
 	m.usedSources.Grow(uint32(len(m.sources)))
 
-	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends. Extensions: %v", m.SampleRate, m.Channels, len(m.sources), numSends, al.Extensions())
-	log.Printf("Devices: %v", al.AllDevices()) //
+	// log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends. Extensions: %v", m.SampleRate, m.Channels, len(m.sources), numSends, al.Extensions())
+	//log.Printf("Devices: %v", al.AllDevices())
 
 	// Testing EAX reverb effects:
 	// References:

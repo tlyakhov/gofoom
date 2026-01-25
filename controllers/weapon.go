@@ -4,7 +4,6 @@
 package controllers
 
 import (
-	"log"
 	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
@@ -152,7 +151,7 @@ func (wc *WeaponController) updateMarks(mark inventory.WeaponMark) {
 }
 
 func (w *WeaponController) newState(s inventory.WeaponState) {
-	log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, (ecs.Simulation.SimTimestamp-w.LastStateTimestamp)/1_000_000)
+	//log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, (ecs.Simulation.SimTimestamp-w.LastStateTimestamp)/1_000_000)
 	w.State = s
 	w.LastStateTimestamp = ecs.Simulation.SimTimestamp
 	p := w.Class.Params[w.State]

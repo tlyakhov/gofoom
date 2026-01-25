@@ -1,5 +1,12 @@
 #include "textflag.h"
 
+/*	TODO, vectorize this. See references here:
+	https://github.com/Clement-Jean/simd-go/blob/main/arith_arm64.s
+	https://eclecticlight.co/wp-content/uploads/2021/08/simdlanes.png?w=2048
+	https://eclecticlight.co/2021/08/23/code-in-arm-assembly-lanes-and-loads-in-neon/
+	https://developer.arm.com/documentation/dui0204/j/neon-and-vfp-programming/neon-load---store-element-and-structure-instructions/vldn-and-vstn--multiple-n-element-structures-
+*/
+
 // Constants
 GLOBL ·data(SB), RODATA|NOPTR, $32
 DATA ·data+0(SB)/8, $1.0
@@ -23,15 +30,15 @@ TEXT ·blendFrameBuffer(SB), NOSPLIT, $0-56
 	MOVD $·data+8(SB), R10
 	FMOVD (R10), F21
 
-	// Load tint -> F2, F3, F4, F5
-	FMOVD (R3), F2  // R
-	FMOVD 8(R3), F3 // G
-	FMOVD 16(R3), F4 // B
-	FMOVD 24(R3), F5 // A
+	// Load tint -> F4, F5, F6, F7
+	FMOVD (R3), F4  // R
+	FMOVD 8(R3), F5 // G
+	FMOVD 16(R3), F6 // B
+	FMOVD 24(R3), F7 // A
 
-	// Calc (1 - tint.a) -> F6
-	FMOVD F20, F6
-	FSUBD F5, F6 // F6 = 1.0 - A
+	// Calc (1 - tint.a) -> F8
+	FMOVD F20, F8
+	FSUBD F7, F8 // F8 = 1.0 - A
 
 	// Prepare 255 constant integer -> R14
 	MOVD $255, R14
@@ -44,16 +51,16 @@ loop:
 	FMOVD 24(R2), F13
 
 	// fb * (1 - A)
-	FMULD F6, F10
-	FMULD F6, F11
-	FMULD F6, F12
-	FMULD F6, F13
+	FMULD F8, F10
+	FMULD F8, F11
+	FMULD F8, F12
+	FMULD F8, F13
 
 	// + tint
-	FADDD F2, F10
-	FADDD F3, F11
-	FADDD F4, F12
-	FADDD F5, F13
+	FADDD F4, F10
+	FADDD F5, F11
+	FADDD F6, F12
+	FADDD F7, F13
 
 	// * 255
 	FMULD F21, F10
@@ -93,7 +100,7 @@ loop:
 	// Advance
 	ADD $4, R0
 	ADD $32, R2
-	SUB $1, R1
+	SUB $4, R1
 	CBNZ R1, loop
 
 ret:

@@ -4,7 +4,6 @@
 package controllers
 
 import (
-	"log"
 	"math/rand/v2"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
@@ -37,7 +36,7 @@ func (wc *WeaponController) fireWeaponInstant(instant *inventory.WeaponClassInst
 	// TODO: Account for bullet velocity travel time. Do this by calculating
 	// time it would take to hit the thing and delaying the outcome? could be
 	// buggy though if the object in question moves
-	log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman(2))
+	//log.Printf("Weapon hit! %v[%v] at %v", s.Type, s.Entity, wc.hit.StringHuman(2))
 	switch s.Type {
 	case selection.SelectableBody:
 		if mobile := core.GetMobile(s.Body.Entity); mobile != nil {

@@ -110,9 +110,13 @@ func (bc *BodyController) findBodySector() {
 				}
 			}
 		}
-		p = closestSeg.ClosestToPoint(p)
-		bc.Body.Pos.Input[0] = p[0]
-		bc.Body.Pos.Input[1] = p[1]
+		if closestSeg != nil {
+			p = closestSeg.ClosestToPoint(p)
+			bc.Body.Pos.Input[0] = p[0]
+			bc.Body.Pos.Input[1] = p[1]
+		} else {
+			return
+		}
 	}
 
 	floorZ, ceilZ := closestSector.ZAt(bc.pos2d)
