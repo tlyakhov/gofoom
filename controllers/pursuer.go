@@ -4,9 +4,9 @@
 package controllers
 
 import (
-	"log"
 	"math"
 	"math/rand/v2"
+	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
@@ -14,6 +14,7 @@ import (
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
+	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/srwiley/gheap"
@@ -43,7 +44,7 @@ func (pc *PursuerController) ComponentID() ecs.ComponentID {
 }
 
 func (pc *PursuerController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame | ecs.ControllerPrecompute
+	return ecs.ControllerFrame
 }
 
 func (pc *PursuerController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -70,9 +71,6 @@ func (pc *PursuerController) Target(target ecs.Component, e ecs.Entity) bool {
 	}
 
 	return true
-}
-
-func (pc *PursuerController) Precompute() {
 }
 
 func (pc *PursuerController) getPlayer() *character.Player {
@@ -119,7 +117,8 @@ func (pc *PursuerController) getObstacleBodies() []*core.Body {
 
 func (pc *PursuerController) targetOutOfView(enemy *behaviors.PursuerEnemy) {
 	if enemy.InView {
-		log.Printf("Pursuer %v lost sight of %v!", pc.Entity, enemy.Entity)
+		//log.Printf("Pursuer %v lost sight of %v!", pc.Entity, enemy.Entity)
+		pc.playSound(pc.SoundsTargetLost)
 		enemy.InView = false
 	}
 	if len(enemy.Breadcrumbs) == 0 {
@@ -132,7 +131,7 @@ func (pc *PursuerController) targetOutOfView(enemy *behaviors.PursuerEnemy) {
 	radius := pc.Body.Size.Now[0] * 0.75
 	if pc.Body.Pos.Now.DistSq(&b.Data.Pos) < radius*radius {
 		r := enemy.Breadcrumbs.RemoveMin()
-		r.Data.Timestamp = ecs.Simulation.SimTimestamp
+		r.Data.TargetTime = ecs.Simulation.SimTimestamp
 		r.Key = ecs.Simulation.SimTimestamp
 		enemy.Breadcrumbs.Insert(r)
 	}
@@ -160,7 +159,8 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 		return
 	}
 	if !enemy.InView {
-		log.Printf("Pursuer %v saw %v!", pc.Entity, enemy.Entity)
+		//log.Printf("Pursuer %v saw %v!", pc.Entity, enemy.Entity)
+		pc.playSound(pc.SoundsTargetSeen)
 	}
 	enemy.InView = true
 	// Only leave breadcrumbs every so often
@@ -179,8 +179,9 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 	enemy.Breadcrumbs.Insert(gheap.HeapElement[int64, behaviors.Breadcrumb]{
 		Key: ecs.Simulation.SimTimestamp,
 		Data: behaviors.Breadcrumb{
-			Pos:       enemy.Body.Pos.Now,
-			Timestamp: ecs.Simulation.Timestamp,
+			Pos:         enemy.Body.Pos.Now,
+			TargetTime:  ecs.Simulation.Timestamp,
+			CreatedTime: ecs.Simulation.SimTimestamp,
 		},
 	})
 
@@ -258,7 +259,7 @@ func (pc *PursuerController) targetWeight(c *behaviors.Candidate, enemy *behavio
 	}
 
 	// This encourages pursuers to strafe/retreat when they get close to enemies
-	strafeWeight := 1 - math.Abs(-dot-0.3)
+	strafeWeight := 1 - math.Abs(-dot-0.65)
 	// We need to bias the strafing to avoid equal opposing weights cancelling each other out
 	if (pc.ClockwisePreference && normal < 0) || (!pc.ClockwisePreference && normal >= 0) {
 		strafeWeight += 0.2
@@ -281,6 +282,8 @@ func (pc *PursuerController) generateWeights() {
 		angle := float64(i) * 360 / float64(len(pc.Candidates))
 		c.Start.From(&pc.Body.Pos.Now)
 		c.FromAngleAndLimit(angle, 0, constants.PursuitWallAvoidDistance)
+		c.Weight = 0
+		c.Count = 0
 
 		for _, enemy := range pc.Enemies {
 			if enemy.Pos != nil {
@@ -316,9 +319,9 @@ func (pc *PursuerController) pruneBreadcrumbs() {
 	for _, enemy := range pc.Enemies {
 		for len(enemy.Breadcrumbs) > 0 {
 			earliest := enemy.Breadcrumbs.PeekMin()
-			// 30 sec memory?
+			// 45 sec memory?
 			// TODO: Parameterize this
-			if ecs.Simulation.SimTimestamp-earliest.Key > concepts.MillisToNanos(30000) {
+			if ecs.Simulation.SimTimestamp-earliest.Data.CreatedTime > concepts.MillisToNanos(45000) {
 				enemy.Breadcrumbs.RemoveMin()
 			} else {
 				break
@@ -332,16 +335,17 @@ func (pc *PursuerController) Frame() {
 		pc.ClockwisePreference = !pc.ClockwisePreference
 		pc.ClockwiseSwitchTime = ecs.Simulation.SimTimestamp + concepts.MillisToNanos(5000+10000*rand.Float64())
 	}
-
-	for i := range pc.Candidates {
-		pc.Candidates[i] = &behaviors.Candidate{}
-	}
-
 	pc.pruneBreadcrumbs()
 	pc.populateEnemies()
 	pc.generateWeights()
 	pc.pursue()
+	pc.fire()
+}
 
+func (pc *PursuerController) fire() {
+	if ecs.Simulation.SimTimestamp < pc.NextFireTime {
+		return
+	}
 	for _, enemy := range pc.Enemies {
 		if !enemy.InView {
 			continue
@@ -351,11 +355,51 @@ func (pc *PursuerController) Frame() {
 			if carrier.SelectedWeapon != 0 {
 				if weapon := inventory.GetWeapon(carrier.SelectedWeapon); weapon != nil {
 					weapon.Intent = inventory.WeaponFire
+					pc.NextFireTime = ecs.Simulation.SimTimestamp + concepts.MillisToNanos(pc.FireDelay*0.5) + concepts.MillisToNanos(rand.Float64()*pc.FireDelay)
 				}
 			}
 		}
 
 		break
+	}
+}
+
+func (pc *PursuerController) faceTarget() {
+	newAngle := pc.Body.Angle.Now
+	closest := math.Inf(1)
+	closestAngle := newAngle
+	// Pick closest angle to our current angle
+	for _, enemy := range pc.Enemies {
+		if enemy.Pos == nil {
+			continue
+		}
+		a := math.Atan2(enemy.Delta[1], enemy.Delta[0]) * concepts.Rad2deg
+		concepts.MinimizeAngleDistance(pc.Body.Angle.Now, &a)
+		d := math.Abs(a - pc.Body.Angle.Now)
+		if d < closest {
+			closest = d
+			closestAngle = a
+		}
+	}
+	newAngle = dynamic.Lerp(newAngle, closestAngle, 0.25)
+	if pc.Body.Angle.Procedural {
+		pc.Body.Angle.Input = newAngle
+	} else {
+		pc.Body.Angle.Now = newAngle
+	}
+}
+
+func (pc *PursuerController) idleFrame() {
+	//log.Printf("Nowhere to go! Delta: %v", delta.StringHuman(2))
+	if actor := behaviors.GetActor(pc.Entity); actor != nil {
+		actor.Flags |= ecs.ComponentActive
+	}
+	if ecs.Simulation.SimTimestamp > pc.NextIdleBark {
+		if pc.NextIdleBark != 0 {
+			pc.playSound(pc.SoundsIdle)
+		}
+		pc.NextIdleBark = ecs.Simulation.SimTimestamp + concepts.MillisToNanos(10000+rand.Float64()*10000)
+
 	}
 }
 
@@ -370,30 +414,41 @@ func (pc *PursuerController) pursue() {
 		}
 	}
 	if delta.Zero() || len(pc.Candidates) == 0 || allNegative {
+		pc.idleFrame()
 		return
+	}
+	if actor := behaviors.GetActor(pc.Entity); actor != nil {
+		actor.Flags &= ^ecs.ComponentActive
 	}
 	delta.NormSelf()
 	NpcMove(pc.Body, pc.ChaseSpeed, &delta, !pc.AlwaysFaceTarget)
 	if pc.AlwaysFaceTarget {
-		angle := pc.Body.Angle.Now
-		closest := math.Inf(1)
-		// Pick closest angle to our current angle
-		for _, enemy := range pc.Enemies {
-			if enemy.Pos == nil {
-				continue
-			}
-			a := math.Atan2(enemy.Delta[1], enemy.Delta[0]) * concepts.Rad2deg
-			concepts.MinimizeAngleDistance(pc.Body.Angle.Now, &a)
-			d := math.Abs(a - pc.Body.Angle.Now)
-			if d < closest {
-				closest = d
-				angle = a
-			}
+		pc.faceTarget()
+	}
+}
+
+func (pc *PursuerController) playSound(sounds ecs.EntityTable) {
+	sound := ecs.Entity(0)
+	r := rand.IntN(sounds.Len())
+	for _, e := range sounds {
+		if e == 0 {
+			continue
 		}
-		if pc.Body.Angle.Procedural {
-			pc.Body.Angle.Input = angle
-		} else {
-			pc.Body.Angle.Now = angle
+		if r <= 0 {
+			sound = e
+			break
 		}
+		r--
+	}
+	if sound == 0 {
+		return
+	}
+
+	event, _ := audio.PlaySound(sound, pc.Body.Entity, pc.Body.Entity.String()+" voice", true)
+	if event != nil {
+		// TODO: Parameterize this
+		event.Offset[2] = pc.Body.Size.Now[1] * 0.3
+		event.Offset[1] = 0
+		event.Offset[0] = 0
 	}
 }

@@ -140,11 +140,11 @@ func (m *mixer) Initialize() {
 	// References:
 	// https://github.com/kcat/openal-soft/blob/master/examples/almultireverb.c
 
-	m.fx = al.GenEffects(1)
-	m.fx[0].Load(al.EfxReverbPresets["Stonecorridor"])
+	//m.fx = al.GenEffects(1)
+	//m.fx[0].Load(al.EfxReverbPresets["Stonecorridor"])
 
 	m.fxSlots = al.GenAuxEffectSlots(1)
-	m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
+	//m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
 }
 
 func (m *mixer) SetReverbPreset(preset string) {
@@ -174,7 +174,7 @@ func (m *mixer) Close() {
 	m.device.Close()
 }
 
-func (m *mixer) play(snd *Sound) (al.Source, error) {
+func (m *mixer) newSource(snd *Sound) (al.Source, error) {
 	if snd == nil {
 		return 0, nil
 	}
@@ -187,15 +187,13 @@ func (m *mixer) play(snd *Sound) (al.Source, error) {
 	}
 
 	source := m.sources[voice]
-	// log.Printf("Playing %v on source %v", snd.Source, source)
+	//log.Printf("Playing %v on source %v", snd.Source, source)
+	source.SetLooping(false)
 	source.Set3i(al.AuxiliarySendFilter, int32(m.fxSlots[0]), 0, al.FilterNull)
 	source.SetGain(float32(snd.Gain))
 	source.SetBuffer(snd.buffer)
 	source.Setf(al.ParamPitch, 1)
-	// source.QueueBuffers(snd.buffer)
-	//if source.Geti(al.ParamSourceState) != al.Playing {
-	al.PlaySources(source)
-	//}
+	source.Setfv(al.ParamDirection, []float32{0, 0, 0})
 	m.usedSources.Set(voice)
 
 	return source, nil
@@ -214,17 +212,22 @@ func (m *mixer) PollSources() {
 }
 
 func (m *mixer) SetListenerPosition(v *concepts.Vector3) {
-	al.SetListenerPosition(alVector(v))
+	al.SetListenerPosition(alVectorFromUnits(v))
 }
 
-var alUpVector = alVector(&concepts.Vector3{0, 0, constants.UnitsPerMeter})
-
 func (m *mixer) SetListenerOrientation(v *concepts.Vector3) {
-	al.SetListenerOrientation(al.Orientation{Forward: alVector(v), Up: alUpVector})
+	var o al.Orientation
+	o.Forward[0] = float32(v[0])
+	o.Forward[1] = float32(v[1])
+	o.Forward[2] = float32(v[2])
+	o.Up[0] = 0
+	o.Up[1] = 0
+	o.Up[2] = -1 // TODO: make this 1 after converting to RHS coordinate system
+	al.SetListenerOrientation(o)
 }
 
 func (m *mixer) SetListenerVelocity(v *concepts.Vector3) {
-	al.SetListenerVelocity(alVector(v))
+	al.SetListenerVelocity(alVectorFromUnits(v))
 }
 
 // TODO: Add hysteresis rather than just the onePerTag param
@@ -255,7 +258,7 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag 
 
 	var source al.Source
 	var err error
-	if source, err = Mixer.play(snd); err != nil {
+	if source, err = Mixer.newSource(snd); err != nil {
 		return nil, err
 	}
 	event := ecs.NewAttachedComponent(ecs.NewEntity(), SoundEventCID).(*SoundEvent)
@@ -265,13 +268,19 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag 
 	event.Tag = tag
 	Mixer.deleteSoundEvent(source)
 	Mixer.events[source] = event
+	ecs.ActAllControllersOneEntity(event.Entity, ecs.ControllerPrecompute)
+	// source.QueueBuffers(snd.buffer)
+	//if source.Geti(al.ParamSourceState) != al.Playing {
+	al.PlaySources(source)
+	//}
 	return event, nil
 }
 
-func alVector(v *concepts.Vector3) al.Vector {
+func alVectorFromUnits(v *concepts.Vector3) al.Vector {
 	return al.Vector{float32(v[0] / constants.UnitsPerMeter),
 		float32(v[1] / constants.UnitsPerMeter),
-		float32(v[2] / constants.UnitsPerMeter)}
+		// TODO: remove the negative after converting to RHS coordinate system
+		float32(-v[2] / constants.UnitsPerMeter)}
 }
 func SetReverbPreset(preset string) {
 	Mixer.SetReverbPreset(preset)

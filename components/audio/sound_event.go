@@ -46,11 +46,18 @@ func (s *SoundEvent) SetPosition(v *concepts.Vector3) {
 }
 
 func (s *SoundEvent) SetVelocity(v *concepts.Vector3) {
-	s.source.SetVelocity(alVector(v))
+	s.source.SetVelocity(alVectorFromUnits(v))
 }
 
-func (s *SoundEvent) SetOrientation(dir *concepts.Vector3) {
-	s.source.SetOrientation(al.Orientation{Forward: alVector(dir), Up: alUpVector})
+func (s *SoundEvent) SetGain(gain float32) {
+	if snd := GetSound(s.Sound); snd != nil {
+		gain *= float32(snd.Gain)
+	}
+	s.source.SetGain(gain)
+}
+
+func (s *SoundEvent) SetDirection(dir *concepts.Vector3) {
+	s.source.SetDirection(al.Vector{float32(dir[0]), float32(dir[1]), float32(dir[2])})
 }
 
 func (s *SoundEvent) SetPitchMultiplier(p float64) {

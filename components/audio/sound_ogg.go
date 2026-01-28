@@ -60,6 +60,7 @@ func (snd *Sound) loadOgg(f *os.File) error {
 	format := Mixer.paramsToFormat(outgoingChannels, 32, true)
 	snd.buffer.BufferData(format, snd.bytes, int32(r.SampleRate()))
 	snd.loaded = true
+	snd.Gain = 4
 
 	return nil
 }

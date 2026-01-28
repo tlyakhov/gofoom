@@ -286,6 +286,9 @@ func (e *Editor) Load(filename string) {
 	ecs.Simulation.NewFrame = e.NewFrame
 	ecs.Simulation.Integrate = e.Integrate
 	ecs.Simulation.Render = e.GameWidget.Draw
+	// TODO: this is a clunky way to set editor to paused, fix it.
+	ecs.Simulation.EditorPaused = false
+	e.BehaviorsPause.Menu.Action()
 	e.entityIconCache.Clear()
 	if e.Renderer != nil {
 		e.Renderer.Initialize()

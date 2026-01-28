@@ -133,8 +133,8 @@ func (pc *PlayerController) Frame() {
 	// Audio
 	audio.Mixer.PollSources()
 	audio.Mixer.SetListenerPosition(&pc.Body.Pos.Now)
-	dy, dx := math.Sincos(pc.Body.Angle.Now)
-	audio.Mixer.SetListenerOrientation(&concepts.Vector3{dx * constants.UnitsPerMeter, dy * constants.UnitsPerMeter, 0})
+	dy, dx := math.Sincos(pc.Body.Angle.Now * concepts.Deg2rad)
+	audio.Mixer.SetListenerOrientation(&concepts.Vector3{dx, dy, 0})
 	audio.Mixer.SetListenerVelocity(&pc.Mobile.Vel.Now)
 
 	// This section handles frobbing

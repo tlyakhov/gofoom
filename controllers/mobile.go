@@ -129,6 +129,7 @@ func (mc *MobileController) Frame() {
 				event.Offset[1] = 0
 				event.Offset[0] = 0
 				event.SetPitchMultiplier(0.9 + rand.Float64()*0.2)
+				event.SetGain(0.2)
 			}
 			mc.MovementSoundDistance = 0
 		}

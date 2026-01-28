@@ -78,6 +78,7 @@ func eventTurn(evt *dynamic.Event) bool {
 	if b == nil {
 		return false
 	}
+	// TODO: Fix this - our coordinate system is messed up. Angles should increase from right to up
 	switch evt.ID {
 	case EventIdTurnLeft:
 		b.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS

@@ -15,8 +15,9 @@ import (
 )
 
 type Breadcrumb struct {
-	Pos       concepts.Vector3
-	Timestamp int64
+	Pos         concepts.Vector3
+	TargetTime  int64
+	CreatedTime int64
 }
 
 type Candidate struct {
@@ -42,12 +43,19 @@ type Pursuer struct {
 	ChaseSpeed       float64 `editable:"Chase Speed"`
 	AlwaysFaceTarget bool    `editable:"Always Face Target?"`
 	FOV              float64 `editable:"FOV"`
+	FireDelay        float64 `editable:"Fire Delay"` //ms
+
+	SoundsTargetSeen ecs.EntityTable `editable:"Sounds (target seen)"`
+	SoundsTargetLost ecs.EntityTable `editable:"Sounds (target lost)"`
+	SoundsIdle       ecs.EntityTable `editable:"Sounds (idle)"`
 
 	// Internal state (TODO: maybe move into separate component like ActorState?)
 	Candidates          []*Candidate
 	Enemies             map[ecs.Entity]*PursuerEnemy
 	ClockwisePreference bool
 	ClockwiseSwitchTime int64
+	NextFireTime        int64
+	NextIdleBark        int64
 }
 
 func (p *Pursuer) String() string {
@@ -57,12 +65,19 @@ func (p *Pursuer) String() string {
 func (p *Pursuer) Construct(data map[string]any) {
 	p.Attached.Construct(data)
 	p.Enemies = make(map[ecs.Entity]*PursuerEnemy)
-	p.Candidates = make([]*Candidate, 16)
 	p.ClockwisePreference = rand.UintN(2) == 0
 	p.StrafeDistance = 100
 	p.ChaseSpeed = 1000
 	p.AlwaysFaceTarget = true
 	p.FOV = 165
+	p.FireDelay = 1000
+	p.SoundsTargetSeen = ecs.EntityTable{}
+	p.SoundsTargetLost = ecs.EntityTable{}
+	p.SoundsIdle = ecs.EntityTable{}
+	p.Candidates = make([]*Candidate, 16)
+	for i := range p.Candidates {
+		p.Candidates[i] = &Candidate{}
+	}
 
 	if data == nil {
 		return
@@ -80,6 +95,18 @@ func (p *Pursuer) Construct(data map[string]any) {
 	if v, ok := data["FOV"]; ok {
 		p.FOV = cast.ToFloat64(v)
 	}
+	if v, ok := data["FireDelay"]; ok {
+		p.FireDelay = cast.ToFloat64(v)
+	}
+	if v, ok := data["SoundsTargetSeen"]; ok {
+		p.SoundsTargetSeen = ecs.ParseEntityTable(v, true)
+	}
+	if v, ok := data["SoundsTargetLost"]; ok {
+		p.SoundsTargetLost = ecs.ParseEntityTable(v, true)
+	}
+	if v, ok := data["SoundsIdle"]; ok {
+		p.SoundsIdle = ecs.ParseEntityTable(v, true)
+	}
 }
 
 func (p *Pursuer) Serialize() map[string]any {
@@ -92,6 +119,18 @@ func (p *Pursuer) Serialize() map[string]any {
 	}
 	if p.FOV != 165 {
 		result["FOV"] = p.FOV
+	}
+	if p.FireDelay != 1000 {
+		result["FireDelay"] = p.FireDelay
+	}
+	if len(p.SoundsTargetSeen) > 0 {
+		result["SoundsTargetSeen"] = p.SoundsTargetSeen.Serialize()
+	}
+	if len(p.SoundsTargetLost) > 0 {
+		result["SoundsTargetLost"] = p.SoundsTargetLost.Serialize()
+	}
+	if len(p.SoundsIdle) > 0 {
+		result["SoundsIdle"] = p.SoundsIdle.Serialize()
 	}
 	return result
 }

@@ -125,10 +125,6 @@ func (ms *MaterialSampler) SampleMaterial(extraStages []*materials.ShaderStage) 
 }
 
 func (ms *MaterialSampler) frob(stage *materials.ShaderStage, sample *concepts.Vector4) {
-	if stage == nil || (stage.Flags&materials.ShaderFrob) == 0 {
-		return
-	}
-
 	pulse := math.Sin(concepts.NanosToMillis(ecs.Simulation.SimTimestamp)*0.005)*0.5 + 1.0
 	hsp := concepts.RGBtoHSP(sample.To3D())
 	hsp[2] *= 2.0 * pulse
@@ -162,7 +158,7 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 			if (stage.Flags & materials.ShaderStaticBackground) != 0 {
 				u = float64(ms.ScreenX) / (float64(ms.ScreenWidth) - 1)
 			} else {
-				u = ms.Angle / (2.0 * math.Pi)
+				u = ms.Angle / 360.0
 			}
 		}
 
@@ -244,7 +240,9 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		ms.StageOutput = concepts.Vector4{0.5, 0, 0.5, 1}
 		ms.NoTexture = true
 	}
-	ms.frob(stage, &ms.StageOutput)
+	if stage != nil && (stage.Flags&materials.ShaderFrob) != 0 {
+		ms.frob(stage, &ms.StageOutput)
+	}
 
 	//ms.Output.AddPreMulColorSelfOpacity(&ms.StageOutput, opacity)
 	concepts.BlendColors(&ms.Output, &ms.StageOutput, opacity)

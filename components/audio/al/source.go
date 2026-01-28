@@ -96,16 +96,16 @@ func (s Source) SetVelocity(v Vector) {
 	s.Setfv(paramVelocity, v[:])
 }
 
-// Orientation returns the orientation of the source.
-func (s Source) Orientation() Orientation {
-	v := make([]float32, 6)
-	s.Getfv(paramOrientation, v)
-	return orientationFromSlice(v)
+// Direction returns the direction of the source.
+func (s Source) Direction() Vector {
+	v := Vector{}
+	s.Getfv(ParamDirection, v[:])
+	return v
 }
 
-// SetOrientation sets the orientation of the source.
-func (s Source) SetOrientation(o Orientation) {
-	s.Setfv(paramOrientation, o.slice())
+// SetDirection sets the direction of the source.
+func (s Source) SetDirection(v Vector) {
+	s.Setfv(ParamDirection, v[:])
 }
 
 // State returns the playing state of the source.
@@ -185,4 +185,13 @@ func (s Source) UnqueueBuffers(buffer ...Buffer) {
 
 func (s Source) SetBuffer(buffer Buffer) {
 	alSourcei(s, paramBuffer, int32(buffer))
+}
+
+// SetLooping sets whether the source loops
+func (s Source) SetLooping(loop bool) {
+	if loop {
+		s.Seti(paramLooping, 1)
+	} else {
+		s.Seti(paramLooping, 0)
+	}
 }

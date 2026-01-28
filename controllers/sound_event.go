@@ -4,11 +4,8 @@
 package controllers
 
 import (
-	"math"
 	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
-	"tlyakhov/gofoom/concepts"
-	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
 )
 
@@ -29,7 +26,7 @@ func (sc *SoundEventController) ComponentID() ecs.ComponentID {
 }
 
 func (sc *SoundEventController) Methods() ecs.ControllerMethod {
-	return ecs.ControllerFrame
+	return ecs.ControllerFrame | ecs.ControllerPrecompute
 }
 
 func (sc *SoundEventController) Target(target ecs.Component, e ecs.Entity) bool {
@@ -44,14 +41,16 @@ func (sc *SoundEventController) Target(target ecs.Component, e ecs.Entity) bool 
 	return true
 }
 
-func (sc *SoundEventController) Frame() {
+func (sc *SoundEventController) Precompute() {
 	if sc.Body == nil && sc.Sector == nil {
 		return
 	}
 	if sc.Body != nil {
 		sc.SetPosition(&sc.Body.Pos.Now)
-		dy, dx := math.Sincos(sc.Body.Angle.Now)
-		sc.SetOrientation(&concepts.Vector3{dx * constants.UnitsPerMeter, dy * constants.UnitsPerMeter, 0})
+		// Direction should be for specific things only, most sounds should be
+		// omni
+		//dy, dx := math.Sincos(sc.Body.Angle.Now)
+		//sc.SetDirection(&concepts.Vector3{dx * constants.UnitsPerMeter, dy * constants.UnitsPerMeter, 0})
 	} else if sc.Sector != nil {
 		sc.SetPosition(&sc.Sector.Center.Now)
 	}
@@ -59,4 +58,8 @@ func (sc *SoundEventController) Frame() {
 	if sc.Mobile != nil {
 		sc.SetVelocity(&sc.Mobile.Vel.Now)
 	}
+}
+
+func (sc *SoundEventController) Frame() {
+	sc.Precompute()
 }

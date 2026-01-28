@@ -42,6 +42,7 @@ const (
 const (
 	ParamPitch            = 0x1003
 	paramPosition         = 0x1004
+	ParamDirection        = 0x1005
 	paramVelocity         = 0x1006
 	paramLooping          = 0x1007
 	paramBuffer           = 0x1009
