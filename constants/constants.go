@@ -67,17 +67,9 @@ const (
 	PlayerMaxHealth      = 100
 
 	// Game constants
-	UserSettings             = "settings.json"
-	MaxGameTextTime          = 15 * 1000
-	MaxGameText              = 25
-	GameTextFadeTime         = 1000
-	InteractionDistance      = 70
-	WanderSectorProbability  = 0.25
-	InventoryGatherDistance  = 30
-	InventoryGatherTextStyle = "#666"
-	InfoBarSrc               = "/data/game/infobar.png"
-	AvatarSrc                = "/data/game/avatar.png"
-	FirstMap                 = "testMap"
+	UserSettings    = "settings.json"
+	DefaultFontPath = "data/fonts/vga-font-8x8.png"
+	TestWorldPath   = "data/worlds/pursuer-test.yaml"
 
 	// Pursuit
 	PursuitNpcAvoidDistance    = 50.0

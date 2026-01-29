@@ -10,6 +10,7 @@ project {
   # files or folders should be ignored
   header_ignore = [
     "data/**",
+    "resources/**",
     "bin/**",
     ".vscode/**",
     # "vendor/**",

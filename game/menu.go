@@ -77,7 +77,7 @@ func initializeMenus() {
 					log.Printf("Error loading world %v: %v", path, err)
 					return
 				}
-				controllers.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
+				controllers.CreateFont(constants.DefaultFontPath, "Default Font")
 				renderer.Initialize()
 				controllers.RespawnAll()
 				gameUI.Config.TextStyle = renderer.NewTextStyle()

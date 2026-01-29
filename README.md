@@ -1,14 +1,25 @@
 # gofoom
 
-<img src="data/resources/logo-flattened.svg" alt="gofoom logo" width="200">
+<img src="resources/logo-flattened.svg" alt="gofoom logo" width="200">
 
 gofoom is a very WIP golang 2.5D sector/portal-based software raycasting game
 engine. It continues on from my older project
 https://github.com/tlyakhov/jsfoom.
 
-The included game assets are programmer art & creative commons things I'm using
-for testing. As the engine gets closer, I hope to make something actually fun
-with it :)
+## Building and running
+
+The dev/testing data I'm using is not open source for licensing reasons and
+because I don't want to open source the game art I create (or commission).
+
+I plan to have some example data, but for now you will need to provide some
+basics yourself. See:
+
+- `constants.DefaultFontPath` - should be a 16x16 cell spritesheet png (each
+  cell can be any dimension, as long as all cells are the same size)
+- `TestWorldPath` - a world to load (YAML). You can generate this using methods
+  demonstrated in `controllers.world_tests.go`
+
+You will also need to install OpenAL.
 
 ## Motivation
 
@@ -45,9 +56,12 @@ benefits as far as dynamic sectors, lighting, etc...
   - Separation of game/engine code
   - Entity/Component/System architecture
   - Instancing for entities
+  - Ability to include external files and share data
   - No artificial limits on scale
+  - ORM-like features (e.g. find/replace entity references)
 - Rendering
   - Sectors with non-orthogonal walls of variable height.
+  - Nested sectors, including dynamic movement (rotating, translating platforms)
   - Texture mapped floors, ceilings, and walls.
   - Layered texture shaders
     - Arbitrary transforms on every stage
@@ -70,6 +84,12 @@ benefits as far as dynamic sectors, lighting, etc...
   - Scripted actions for objects and enemies
   - Particle systems
   - In-game UI, retro DOS style
+- NPCs
+  - Different behaviors (preset paths, random wandering, pursuit)
+  - Ability to use weapons
+  - Audio barks
+  - A\* pathfinding
+  - Flexible spawning behaviors
 - Audio
   - Environmental audio support via OpenAL
 - World editor:
@@ -114,11 +134,11 @@ benefits as far as dynamic sectors, lighting, etc...
   - [/sectors](/components/sectors/) - these modify the behavior of basic
     sectors (e.g. underwater, doors, etc...)
 - [/containers](/containers) - data structures like set and queue
-- [/data](/data/) - a bunch of test data.
 - [/dynamic](/dynamic/) - Animations, dynamic values, procedural animation
 - [/ecs](/ecs/) - The ECS "database", query methods, serialization.
 - [/editor](/editor/) - all the code for the world editor.
 - [/game](/game/) - the game executable.
 - [/render](/render/) - the renderer and its state.
+- [/resources](/resources/) - various static resources like editor icons/logo.
 - [/scripting_symbols](/scripting_symbols/) - bindings for the traefik/yaegi interpreter.
 - [/ui](/ui/) - the user interface framework.

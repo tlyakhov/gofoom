@@ -132,12 +132,12 @@ func run() {
 	if false {
 		controllers.CreateTestWorld3()
 		// ecs.Save("bin/exported_test.yaml")
-	} else if err = ecs.Load("data/worlds/pursuer-test.yaml"); err != nil {
+	} else if err = ecs.Load(constants.TestWorldPath); err != nil {
 		log.Printf("Error loading world %v", err)
 		return
 	}
 	controllers.RespawnAll()
-	controllers.CreateFont("data/fonts/vga-font-8x8.png", "Default Font")
+	controllers.CreateFont(constants.DefaultFontPath, "Default Font")
 
 	renderer = render.NewRenderer()
 	gameUI = &ui.UI{Renderer: renderer}

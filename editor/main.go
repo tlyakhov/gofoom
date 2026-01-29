@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"tlyakhov/gofoom/components/audio"
+	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/editor/resources"
 	_ "tlyakhov/gofoom/scripting_symbols"
@@ -124,7 +125,7 @@ func main() {
 
 	editor.App.Lifecycle().SetOnStarted(func() {
 		editor.OnStarted()
-		editor.Load("data/worlds/pursuer-test.yaml")
+		editor.Load(constants.TestWorldPath)
 	})
 	editor.App.Lifecycle().SetOnStopped(func() {})
 
