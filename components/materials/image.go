@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"image"
 	"os"
+	"path/filepath"
 
 	// Decoders for common image types
 	_ "image/jpeg"
@@ -63,7 +64,8 @@ func (img *Image) Load() error {
 	}
 
 	// Load the image from a file...
-	file, err := os.Open(img.Source)
+	path := filepath.Join(ecs.WorkingDirForEntity(img.Entity), img.Source)
+	file, err := os.Open(path)
 	if err != nil {
 		return err
 	}

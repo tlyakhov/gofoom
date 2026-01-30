@@ -28,7 +28,7 @@ func (ac *ActionController) pathSectorValid(from, to *core.Sector, p *concepts.V
 	if ac.Mobile != nil && afz-fz > ac.Mobile.MountHeight {
 		return false
 	}
-	if min(cz, acz)-max(fz, afz) < ac.Body.Size.Now[0]*0.5 {
+	if min(cz, acz)-max(fz, afz) < ac.State.Finder.Radius {
 		return false
 	}
 	return true
@@ -39,9 +39,13 @@ func (ac *ActionController) repath(start, end concepts.Vector3) {
 		Start:       &start,
 		StartSector: ac.startSector(),
 		End:         &end,
-		Radius:      ac.Body.Size.Now[0] * 0.5,
 		Step:        10,
 		SectorValid: ac.pathSectorValid,
+	}
+	if ac.Body != nil {
+		ac.State.Finder.Radius = ac.Body.Size.Now[0] * 0.5
+	} else if ac.Sector != nil {
+		ac.State.Finder.Radius = max(ac.Sector.Max[0]-ac.Sector.Min[0], ac.Sector.Max[1]-ac.Sector.Min[1]) * 0.5
 	}
 	ac.State.Path = ac.State.Finder.ShortestPath()
 	ac.State.LastPathGenerated = ecs.Simulation.SimTimestamp

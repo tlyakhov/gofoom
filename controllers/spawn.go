@@ -85,10 +85,14 @@ func spawnInventory(c *inventory.Carrier) {
 				pasted.Base().Flags |= ecs.ComponentHideEntityInEditor
 				pasted.(*inventory.Slot).Count.ResetToSpawn()
 				return true
+			} else if original.Shareable() {
+				// Keep links to shareables
+				ecs.Attach(cid, e, &original)
+				return false
+			} else {
+				// Make a copy otherwise
+				return true
 			}
-			// Otherwise, just attach the original.
-			ecs.Attach(cid, e, &original)
-			return false
 		})
 		if pasted != 0 {
 			cloned.Set(pasted)

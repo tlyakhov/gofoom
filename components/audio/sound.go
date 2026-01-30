@@ -6,6 +6,7 @@ package audio
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"tlyakhov/gofoom/components/audio/al"
 	"tlyakhov/gofoom/ecs"
@@ -60,7 +61,8 @@ func (snd *Sound) Load() error {
 		return nil
 	}
 
-	f, err := os.Open(snd.Source)
+	path := filepath.Join(ecs.WorkingDirForEntity(snd.Entity), snd.Source)
+	f, err := os.Open(path)
 	if err != nil {
 		return err
 	}

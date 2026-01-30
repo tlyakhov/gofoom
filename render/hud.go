@@ -114,7 +114,7 @@ var healthBarHighlightColor = &concepts.Vector4{1, 1, 1, 1}
 func (r *Renderer) renderHealthBar(b *core.Body) {
 	// TODO: Profile this. Seems like a lot of logic here
 	alive := behaviors.GetAlive(b.Entity)
-	if alive == nil {
+	if alive == nil || alive.Health.Now <= 0 {
 		return
 	}
 	if spawner := behaviors.GetSpawner(b.Entity); spawner != nil {

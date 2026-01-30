@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/pierrec/xxHash/xxHash32"
 	"github.com/spf13/cast"
@@ -30,6 +31,7 @@ type SourceFile struct {
 	serializedContents Snapshot
 	children           EntityTable
 	loadedHash         SourceFileHash
+	workingDir         string
 }
 
 var SourceFileCID ComponentID
@@ -70,9 +72,9 @@ func (file *SourceFile) Hash(forSerialization bool) SourceFileHash {
 	}
 }
 
-func (file *SourceFile) read() error {
+func (file *SourceFile) read(path string) error {
 	// TODO: Streaming or lazy loads?
-	bytes, err := os.ReadFile(file.Source)
+	bytes, err := os.ReadFile(path)
 
 	if err != nil {
 		return fmt.Errorf("SourceFile.read: reading file: %w", err)
@@ -95,7 +97,7 @@ func (file *SourceFile) read() error {
 
 var sourceFileTypeName = reflect.TypeFor[SourceFile]().String()
 
-func (file *SourceFile) readAndMapNestedFiles() error {
+func (file *SourceFile) readAndMapNestedFiles(parent *SourceFile) error {
 	/* 	The complexity in this code is due to handling the following case:
 	   	Let's say we have a list of yaml files like this:
 
@@ -118,9 +120,15 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 	   	Afterwards, we can load the rest of the entities & components,
 	   	substituting the file IDs that we have mapped for all relations. */
 
+	log.Printf("SourceFile.readAndMapNestedFiles - reading %v(%v): %v", file.Source, file.ID, file.workingDir)
+
 	// Read in the file if we need to
 	if file.serializedContents == nil {
-		if err := file.read(); err != nil {
+		path := file.Source
+		if parent != nil {
+			path = filepath.Join(parent.workingDir, path)
+		}
+		if err := file.read(path); err != nil {
 			return err
 		}
 	}
@@ -171,26 +179,35 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 		attach(entity, &a, SourceFileCID)
 		// the attach method will change where *a is.
 		nestedFile = a.(*SourceFile)
-		nestedFile.readAndMapNestedFiles()
+		nestedFile.setWorkingDir(file.workingDir)
+		nestedFile.readAndMapNestedFiles(file)
 		file.children.Set(nestedFile.Entity)
 		return nil
 	})
 	return err
 }
 
+func (file *SourceFile) setWorkingDir(parent string) {
+	file.workingDir = filepath.Join(parent, path.Dir(file.Source))
+	if strings.HasSuffix(file.workingDir, "worlds") {
+		// Only do this if our source matches expectations, to avoid unexpected path traversal.
+		file.workingDir = filepath.Join(file.workingDir, "..")
+	}
+}
+
+func (file *SourceFile) WorkingDir() string {
+	return file.workingDir
+}
+
 func (file *SourceFile) Load() error {
 	Lock.Lock()
 	defer Lock.Unlock()
-	if file.Source != "" {
-		// Push/pop working directory
-		dir, _ := os.Getwd()
-		// By convention, our working dir is one below worlds
-		os.Chdir(filepath.Join(path.Dir(file.Source), ".."))
-		defer os.Chdir(dir)
-	}
 
+	// By convention, our working directory is one level below the world.
+	wd, _ := os.Getwd()
+	file.setWorkingDir(wd)
 	file.Loaded = false
-	if err := file.readAndMapNestedFiles(); err != nil {
+	if err := file.readAndMapNestedFiles(nil); err != nil {
 		return err
 	}
 	err := file.loadEntities()
@@ -360,4 +377,24 @@ func SourceFileFromHash(hash SourceFileHash) *SourceFile {
 		}
 	}
 	return nil
+}
+
+func SourceFileForEntity(e Entity) *SourceFile {
+	if file, ok := SourceFileIDs[e.SourceID()]; ok {
+		return file
+	}
+	return nil
+}
+
+func WorkingDirForEntity(e Entity) string {
+	file := SourceFileForEntity(e)
+	if file == nil {
+		// Maybe unattached? in that case, try the topmost sourcefile
+		if file, ok := SourceFileIDs[0]; ok {
+			return file.workingDir
+		}
+		// No luck? return empty
+		return ""
+	}
+	return file.workingDir
 }

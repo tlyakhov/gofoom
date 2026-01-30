@@ -60,7 +60,8 @@ func initializeMenus() {
 			}},
 		}}
 
-	filepath.Walk("data/worlds/", func(path string, info fs.FileInfo, err error) error {
+	path := filepath.Dir(constants.TestWorldPath)
+	filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
 		if !strings.HasSuffix(path, ".yaml") {
 			return nil
 		}
