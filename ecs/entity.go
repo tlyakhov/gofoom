@@ -135,7 +135,7 @@ func ParseEntity(e string) (Entity, error) {
 		if file := SourceFileFromHash(SourceFileHash(parsedHash)); file != nil {
 			parsedEntity |= int64(file.ID) << EntityBits
 		} else {
-			return Entity(parsedEntity), fmt.Errorf("ecs.ParseEntity: can't find ID for entity %v, hash %v", Entity(parsedEntity), parsedHash)
+			return Entity(parsedEntity), fmt.Errorf("ecs.ParseEntity: can't find ID for entity %v, hash %x", Entity(parsedEntity), parsedHash)
 		}
 	}
 	// TODO: return name
@@ -213,7 +213,8 @@ func (e Entity) Serialize() string {
 	}
 
 	if e.IsExternal() {
-		id += EntityDelimiter + strconv.FormatUint(uint64(SourceFileIDs[e.SourceID()].Hash()), 16)
+		hash := SourceFileIDs[e.SourceID()].Hash(true)
+		id += EntityDelimiter + strconv.FormatUint(uint64(hash), 16)
 	}
 	return id
 }

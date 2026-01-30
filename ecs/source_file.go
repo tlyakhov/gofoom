@@ -5,7 +5,10 @@ package ecs
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"path"
+	"path/filepath"
 	"reflect"
 	"strconv"
 
@@ -26,6 +29,7 @@ type SourceFile struct {
 
 	serializedContents Snapshot
 	children           EntityTable
+	loadedHash         SourceFileHash
 }
 
 var SourceFileCID ComponentID
@@ -49,7 +53,10 @@ func (file *SourceFile) SetContents(contents []any) {
 	file.serializedContents = contents
 }
 
-func (file *SourceFile) Hash() SourceFileHash {
+func (file *SourceFile) Hash(forSerialization bool) SourceFileHash {
+	if !forSerialization && file.loadedHash != 0 {
+		return file.loadedHash
+	}
 	// TODO: Should we consider custom hashes?
 	switch {
 	case file.Source != "":
@@ -174,6 +181,13 @@ func (file *SourceFile) readAndMapNestedFiles() error {
 func (file *SourceFile) Load() error {
 	Lock.Lock()
 	defer Lock.Unlock()
+	if file.Source != "" {
+		// Push/pop working directory
+		dir, _ := os.Getwd()
+		// By convention, our working dir is one below worlds
+		os.Chdir(filepath.Join(path.Dir(file.Source), ".."))
+		defer os.Chdir(dir)
+	}
 
 	file.Loaded = false
 	if err := file.readAndMapNestedFiles(); err != nil {
@@ -313,9 +327,11 @@ func (file *SourceFile) Construct(data map[string]any) {
 	if v, ok := data["Source"]; ok {
 		file.Source = v.(string)
 	}
-
 	if v, ok := data["ID"]; ok {
 		file.ID = EntitySourceID(cast.ToUint8(v))
+	}
+	if v, ok := data["Hash"]; ok {
+		file.loadedHash = SourceFileHash(cast.ToUint32(v))
 	}
 }
 
@@ -324,7 +340,7 @@ func (file *SourceFile) Serialize() map[string]any {
 
 	result["Source"] = file.Source
 	result["ID"] = file.ID
-	result["Hash"] = "0x" + strconv.FormatUint(uint64(file.Hash()), 16) // To handle file moves and human readers
+	result["Hash"] = "0x" + strconv.FormatUint(uint64(file.Hash(true)), 16) // To handle file moves and human readers
 
 	return result
 }
@@ -336,7 +352,10 @@ func SourceFileFromHash(hash SourceFileHash) *SourceFile {
 		if file == nil {
 			continue
 		}
-		if file.Hash() == hash {
+		if file.Hash(true) == hash {
+			return file
+		} else if file.loadedHash == hash {
+			log.Printf("Warning: used loaded file hash %x when parsing entity.", hash)
 			return file
 		}
 	}

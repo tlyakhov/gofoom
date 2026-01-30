@@ -96,9 +96,9 @@ func Initialize() {
 		FuncMap[fmName] = func(e Entity) Component { return GetComponent(e, arenaPlaceholder.ID()) }
 	}
 
-	for _, meta := range Types().Controllers {
-		log.Printf("%v, priority %v\n", meta.Type.String(), meta.Priority)
-	}
+	//for _, meta := range Types().Controllers {
+	//		log.Printf("%v, priority %v\n", meta.Type.String(), meta.Priority)
+	//	}
 }
 
 // Reserves an entity ID in the database (no components attached)

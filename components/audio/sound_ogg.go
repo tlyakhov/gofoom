@@ -5,7 +5,6 @@ package audio
 
 import (
 	"io"
-	"log"
 	"math"
 	"os"
 	"tlyakhov/gofoom/components/audio/al"
@@ -19,8 +18,8 @@ func (snd *Sound) loadOgg(f *os.File) error {
 		return err
 	}
 
-	log.Println(r.SampleRate())
-	log.Println(r.Channels())
+	//log.Println(r.SampleRate())
+	//log.Println(r.Channels())
 
 	incomingChannels := r.Channels()
 	outgoingChannels := incomingChannels

@@ -68,8 +68,8 @@ const (
 
 	// Game constants
 	UserSettings    = "settings.json"
-	DefaultFontPath = "data/fonts/vga-font-8x8.png"
-	TestWorldPath   = "data/worlds/pursuer-test.yaml"
+	DefaultFontPath = "../gofoom-data/fonts/vga-font-8x8.png"
+	TestWorldPath   = "../gofoom-data/worlds/pursuer-test.yaml"
 
 	// Pursuit
 	PursuitNpcAvoidDistance    = 50.0
