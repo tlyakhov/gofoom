@@ -15,5 +15,4 @@ go build -o ./bin/editor-win.exe ./editor/
 # cp ./bin/*.exe /Volumes/Archive/Temp/gofoom
 # cp -r ./data/worlds /Volumes/Archive/Temp/gofoom/data
 scp ./bin/*.exe root@jane.home:/mnt/tank/Archive/Temp/gofoom/
-scp -r ./data/worlds root@jane.home:/mnt/tank/Archive/Temp/gofoom/data
 

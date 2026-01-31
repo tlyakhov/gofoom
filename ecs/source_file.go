@@ -188,7 +188,16 @@ func (file *SourceFile) readAndMapNestedFiles(parent *SourceFile) error {
 }
 
 func (file *SourceFile) setWorkingDir(parent string) {
-	file.workingDir = filepath.Join(parent, path.Dir(file.Source))
+	src := path.Dir(file.Source)
+	if filepath.IsAbs(src) {
+		var err error
+		src, err = filepath.Rel(parent, src)
+		if err != nil {
+			log.Printf("SourceFile.setWorkingDir: error making relative path %v, %v", parent, src)
+			src = path.Dir(file.Source)
+		}
+	}
+	file.workingDir = filepath.Join(parent, src)
 	if strings.HasSuffix(file.workingDir, "worlds") {
 		// Only do this if our source matches expectations, to avoid unexpected path traversal.
 		file.workingDir = filepath.Join(file.workingDir, "..")

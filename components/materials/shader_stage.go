@@ -77,7 +77,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["BlendingFunc"]; ok {
-		s.BlendFunc, _ = concepts.BlendFuncString(cast.ToString(v))
+		s.BlendFunc, _ = concepts.BlendTypeString(cast.ToString(v))
 	}
 
 	if v, ok := data["Flags"]; ok {

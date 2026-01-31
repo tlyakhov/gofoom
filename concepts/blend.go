@@ -12,7 +12,7 @@ import (
 
 type BlendType int
 
-//go:generate go run github.com/dmarkham/enumer -type=BlendFunc -json
+//go:generate go run github.com/dmarkham/enumer -type=BlendType -json
 const (
 	BlendNormal BlendType = iota
 	BlendDissolve

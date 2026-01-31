@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _SelectableTypeName = "SelectableEntitySelectableSectorSelectableSectorSegmentSelectableCeilingSelectableFloorSelectableHiSelectableLowSelectableMidSelectableInternalSegmentSelectableInternalSegmentASelectableInternalSegmentBSelectableBodySelectablePathSelectablePathSegment"
+const _SelectableTypeName = "SelectableEntitySelectableSectorSelectableSectorSegmentSelectableCeilingSelectableFloorSelectableHiSelectableLowSelectableMidSelectableInternalSegmentSelectableInternalSegmentASelectableInternalSegmentBSelectableBodySelectablePathSelectableActionWaypoint"
 
-var _SelectableTypeIndex = [...]uint8{0, 16, 32, 55, 72, 87, 99, 112, 125, 150, 176, 202, 216, 230, 251}
+var _SelectableTypeIndex = [...]uint8{0, 16, 32, 55, 72, 87, 99, 112, 125, 150, 176, 202, 216, 230, 254}
 
-const _SelectableTypeLowerName = "selectableentityselectablesectorselectablesectorsegmentselectableceilingselectablefloorselectablehiselectablelowselectablemidselectableinternalsegmentselectableinternalsegmentaselectableinternalsegmentbselectablebodyselectablepathselectablepathsegment"
+const _SelectableTypeLowerName = "selectableentityselectablesectorselectablesectorsegmentselectableceilingselectablefloorselectablehiselectablelowselectablemidselectableinternalsegmentselectableinternalsegmentaselectableinternalsegmentbselectablebodyselectablepathselectableactionwaypoint"
 
 func (i SelectableType) String() string {
 	if i < 0 || i >= SelectableType(len(_SelectableTypeIndex)-1) {
@@ -70,8 +70,8 @@ var _SelectableTypeNameToValueMap = map[string]SelectableType{
 	_SelectableTypeLowerName[202:216]: SelectableBody,
 	_SelectableTypeName[216:230]:      SelectablePath,
 	_SelectableTypeLowerName[216:230]: SelectablePath,
-	_SelectableTypeName[230:251]:      SelectableActionWaypoint,
-	_SelectableTypeLowerName[230:251]: SelectableActionWaypoint,
+	_SelectableTypeName[230:254]:      SelectableActionWaypoint,
+	_SelectableTypeLowerName[230:254]: SelectableActionWaypoint,
 }
 
 var _SelectableTypeNames = []string{
@@ -88,7 +88,7 @@ var _SelectableTypeNames = []string{
 	_SelectableTypeName[176:202],
 	_SelectableTypeName[202:216],
 	_SelectableTypeName[216:230],
-	_SelectableTypeName[230:251],
+	_SelectableTypeName[230:254],
 }
 
 // SelectableTypeString retrieves an enum value from the enum constants string name.

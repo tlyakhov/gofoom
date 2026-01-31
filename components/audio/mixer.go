@@ -133,18 +133,16 @@ func (m *mixer) Initialize() {
 	m.events = make(map[al.Source]*SoundEvent)
 	m.usedSources.Grow(uint32(len(m.sources)))
 
-	// log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends. Extensions: %v", m.SampleRate, m.Channels, len(m.sources), numSends, al.Extensions())
+	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends.", m.SampleRate, m.Channels, len(m.sources), numSends)
 	//log.Printf("Devices: %v", al.AllDevices())
 
 	// Testing EAX reverb effects:
 	// References:
 	// https://github.com/kcat/openal-soft/blob/master/examples/almultireverb.c
 
-	//m.fx = al.GenEffects(1)
-	//m.fx[0].Load(al.EfxReverbPresets["Stonecorridor"])
-
+	m.fx = al.GenEffects(1)
 	m.fxSlots = al.GenAuxEffectSlots(1)
-	//m.fxSlots[0].AuxiliaryEffectSloti(al.EffectSlotEffect, int32(m.fx[0]))
+	m.SetReverbPreset("Generic")
 }
 
 func (m *mixer) SetReverbPreset(preset string) {

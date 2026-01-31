@@ -14,7 +14,6 @@ import (
 	"github.com/spf13/cast"
 )
 
-//go:generate gofoom_ecs_generator $GOFILE
 type Body struct {
 	ecs.Attached `editable:"^"`
 	Pos          dynamic.DynamicValue[concepts.Vector3] `editable:"Position"`

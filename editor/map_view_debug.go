@@ -56,15 +56,12 @@ func (mw *MapWidget) drawPursuers() {
 			continue
 		}
 		mw.Context.SetRGBA(0.5, 0.5, 1.0, 1.0)
-		/*for _, e := range pursuer.Breadcrumbs {
-			if e.Key == 0 {
+		for _, e := range pursuer.Enemies {
+			if e.Pos == nil {
 				continue
 			}
-			mw.DrawHandle(e.Data.Pos.To2D())
-		}*/
-
-		//best := pursuer.BestCandidate()
-
+			mw.DrawHandle(e.Pos.To2D())
+		}
 		b := core.GetBody(pursuer.Entity)
 		for i, c := range pursuer.Candidates {
 			if c == nil || c.Count == 0 {
@@ -74,9 +71,6 @@ func (mw *MapWidget) drawPursuers() {
 			ray := &concepts.Ray{Start: b.Pos.Render}
 			ray.FromAngleAndLimit(float64(i)*360/float64(len(pursuer.Candidates)), 0, math.Abs(w)*64)
 			opacity := 1.0
-			//if best == c {
-			//	opacity = 1
-			//}
 			if w > 0 {
 				mw.Context.SetRGBA(0, 1, 0, opacity)
 			} else {

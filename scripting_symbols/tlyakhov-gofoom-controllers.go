@@ -60,6 +60,7 @@ func init() {
 		"DoorController":             reflect.ValueOf((*controllers.DoorController)(nil)),
 		"EntityAxisEventParams":      reflect.ValueOf((*controllers.EntityAxisEventParams)(nil)),
 		"EntityEventParams":          reflect.ValueOf((*controllers.EntityEventParams)(nil)),
+		"EphemeralController":        reflect.ValueOf((*controllers.EphemeralController)(nil)),
 		"ImageController":            reflect.ValueOf((*controllers.ImageController)(nil)),
 		"InternalSegmentController":  reflect.ValueOf((*controllers.InternalSegmentController)(nil)),
 		"InventoryCarrierController": reflect.ValueOf((*controllers.InventoryCarrierController)(nil)),

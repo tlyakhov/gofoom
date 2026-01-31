@@ -21,13 +21,13 @@ func init() {
 		"BlendColors":             reflect.ValueOf(concepts.BlendColors),
 		"BlendDissolve":           reflect.ValueOf(concepts.BlendDissolve),
 		"BlendFrameBuffer":        reflect.ValueOf(concepts.BlendFrameBuffer),
-		"BlendFuncString":         reflect.ValueOf(concepts.BlendFuncString),
-		"BlendFuncStrings":        reflect.ValueOf(concepts.BlendFuncStrings),
-		"BlendFuncValues":         reflect.ValueOf(concepts.BlendFuncValues),
 		"BlendMultiply":           reflect.ValueOf(concepts.BlendMultiply),
 		"BlendNormal":             reflect.ValueOf(concepts.BlendNormal),
 		"BlendOverlay":            reflect.ValueOf(concepts.BlendOverlay),
 		"BlendScreen":             reflect.ValueOf(concepts.BlendScreen),
+		"BlendTypeString":         reflect.ValueOf(concepts.BlendTypeString),
+		"BlendTypeStrings":        reflect.ValueOf(concepts.BlendTypeStrings),
+		"BlendTypeValues":         reflect.ValueOf(concepts.BlendTypeValues),
 		"BlendingFuncs":           reflect.ValueOf(&concepts.BlendingFuncs).Elem(),
 		"ByteClamp":               reflect.ValueOf(concepts.ByteClamp),
 		"ColorToInt32PreMul":      reflect.ValueOf(concepts.ColorToInt32PreMul),
@@ -83,21 +83,5 @@ func init() {
 		"Vector2":   reflect.ValueOf((*concepts.Vector2)(nil)),
 		"Vector3":   reflect.ValueOf((*concepts.Vector3)(nil)),
 		"Vector4":   reflect.ValueOf((*concepts.Vector4)(nil)),
-
-		// interface wrapper definitions
-		"_Flaggable": reflect.ValueOf((*_tlyakhov_gofoom_concepts_Flaggable)(nil)),
 	}
-}
-
-// _tlyakhov_gofoom_concepts_Flaggable is an interface wrapper for Flaggable type
-type _tlyakhov_gofoom_concepts_Flaggable struct {
-	IValue  interface{}
-	WString func() string
-}
-
-func (W _tlyakhov_gofoom_concepts_Flaggable) String() string {
-	if W.WString == nil {
-		return ""
-	}
-	return W.WString()
 }

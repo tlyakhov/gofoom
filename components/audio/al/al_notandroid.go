@@ -10,7 +10,7 @@ package al
 // Alternatively for darwin, try -I/opt/local/include
 #cgo darwin   CFLAGS:  -DGOOS_darwin -I/opt/homebrew/opt/openal-soft/include
 #cgo linux    CFLAGS:  -DGOOS_linux
-#cgo windows  CFLAGS:  -DGOOS_windows
+#cgo windows  CFLAGS:  -DGOOS_windows -I/opt/homebrew/opt/openal-soft/include
 // Alternatively for darwin, try -lopenal to use OpenAL.framework
 #cgo darwin   LDFLAGS: -L/opt/local/lib -L/opt/homebrew/opt/openal-soft/lib
 #cgo linux    LDFLAGS: -lopenal

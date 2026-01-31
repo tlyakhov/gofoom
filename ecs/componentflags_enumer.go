@@ -17,6 +17,8 @@ const (
 	_ComponentFlagsLowerName_2 = "componenthideentityineditor"
 	_ComponentFlagsName_3      = "ComponentLockedInEditor"
 	_ComponentFlagsLowerName_3 = "componentlockedineditor"
+	_ComponentFlagsName_4      = "ComponentLockedEntityInEditor"
+	_ComponentFlagsLowerName_4 = "componentlockedentityineditor"
 )
 
 var (
@@ -24,6 +26,7 @@ var (
 	_ComponentFlagsIndex_1 = [...]uint8{0, 21}
 	_ComponentFlagsIndex_2 = [...]uint8{0, 27}
 	_ComponentFlagsIndex_3 = [...]uint8{0, 23}
+	_ComponentFlagsIndex_4 = [...]uint8{0, 29}
 )
 
 func (i ComponentFlags) String() string {
@@ -37,6 +40,8 @@ func (i ComponentFlags) String() string {
 		return _ComponentFlagsName_2
 	case i == 16:
 		return _ComponentFlagsName_3
+	case i == 32:
+		return _ComponentFlagsName_4
 	default:
 		return fmt.Sprintf("ComponentFlags(%d)", i)
 	}
@@ -51,9 +56,10 @@ func _ComponentFlagsNoOp() {
 	_ = x[ComponentHideInEditor-(4)]
 	_ = x[ComponentHideEntityInEditor-(8)]
 	_ = x[ComponentLockedInEditor-(16)]
+	_ = x[ComponentLockedEntityInEditor-(32)]
 }
 
-var _ComponentFlagsValues = []ComponentFlags{ComponentActive, ComponentNoSave, ComponentHideInEditor, ComponentHideEntityInEditor, ComponentLockedInEditor}
+var _ComponentFlagsValues = []ComponentFlags{ComponentActive, ComponentNoSave, ComponentHideInEditor, ComponentHideEntityInEditor, ComponentLockedInEditor, ComponentLockedEntityInEditor}
 
 var _ComponentFlagsNameToValueMap = map[string]ComponentFlags{
 	_ComponentFlagsName_0[0:15]:       ComponentActive,
@@ -66,6 +72,8 @@ var _ComponentFlagsNameToValueMap = map[string]ComponentFlags{
 	_ComponentFlagsLowerName_2[0:27]:  ComponentHideEntityInEditor,
 	_ComponentFlagsName_3[0:23]:       ComponentLockedInEditor,
 	_ComponentFlagsLowerName_3[0:23]:  ComponentLockedInEditor,
+	_ComponentFlagsName_4[0:29]:       ComponentLockedEntityInEditor,
+	_ComponentFlagsLowerName_4[0:29]:  ComponentLockedEntityInEditor,
 }
 
 var _ComponentFlagsNames = []string{
@@ -74,6 +82,7 @@ var _ComponentFlagsNames = []string{
 	_ComponentFlagsName_1[0:21],
 	_ComponentFlagsName_2[0:27],
 	_ComponentFlagsName_3[0:23],
+	_ComponentFlagsName_4[0:29],
 }
 
 // ComponentFlagsString retrieves an enum value from the enum constants string name.

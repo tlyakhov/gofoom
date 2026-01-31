@@ -225,6 +225,7 @@ func genInt32ToVector4PreMul() {
 	RET()
 }
 func main() {
+	ConstraintExpr("amd64")
 	dataSection = GLOBL("data", RODATA|NOPTR)
 	idxOne = 0
 	DATA(0, U64(math.Float64bits(1.0)))

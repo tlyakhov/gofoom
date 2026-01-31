@@ -107,10 +107,12 @@ func init() {
 		"Simulation":                      reflect.ValueOf(&ecs.Simulation).Elem(),
 		"Singleton":                       reflect.ValueOf(ecs.Singleton),
 		"SourceFileCID":                   reflect.ValueOf(&ecs.SourceFileCID).Elem(),
+		"SourceFileForEntity":             reflect.ValueOf(ecs.SourceFileForEntity),
 		"SourceFileFromHash":              reflect.ValueOf(ecs.SourceFileFromHash),
 		"SourceFileIDs":                   reflect.ValueOf(&ecs.SourceFileIDs).Elem(),
 		"SourceFileNames":                 reflect.ValueOf(&ecs.SourceFileNames).Elem(),
 		"Types":                           reflect.ValueOf(ecs.Types),
+		"WorkingDirForEntity":             reflect.ValueOf(ecs.WorkingDirForEntity),
 
 		// type definitions
 		"Attachable":             reflect.ValueOf((*ecs.Attachable)(nil)),

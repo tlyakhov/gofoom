@@ -24,3 +24,5 @@ ssa.html
 
 bin
 editor/.DS_Store
+# Added by goreleaser init:
+dist/
