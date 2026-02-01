@@ -13,10 +13,24 @@ import (
 func init() {
 	Symbols["tlyakhov/gofoom/components/character/character"] = map[string]reflect.Value{
 		// function, constant and variable definitions
-		"GetPlayer": reflect.ValueOf(character.GetPlayer),
-		"PlayerCID": reflect.ValueOf(&character.PlayerCID).Elem(),
+		"GetNpc":             reflect.ValueOf(character.GetNpc),
+		"GetPlayer":          reflect.ValueOf(character.GetPlayer),
+		"NpcCID":             reflect.ValueOf(&character.NpcCID).Elem(),
+		"NpcStateCount":      reflect.ValueOf(character.NpcStateCount),
+		"NpcStateDead":       reflect.ValueOf(character.NpcStateDead),
+		"NpcStateIdle":       reflect.ValueOf(character.NpcStateIdle),
+		"NpcStateLostTarget": reflect.ValueOf(character.NpcStateLostTarget),
+		"NpcStatePursuit":    reflect.ValueOf(character.NpcStatePursuit),
+		"NpcStateSawTarget":  reflect.ValueOf(character.NpcStateSawTarget),
+		"NpcStateSearching":  reflect.ValueOf(character.NpcStateSearching),
+		"NpcStateString":     reflect.ValueOf(character.NpcStateString),
+		"NpcStateStrings":    reflect.ValueOf(character.NpcStateStrings),
+		"NpcStateValues":     reflect.ValueOf(character.NpcStateValues),
+		"PlayerCID":          reflect.ValueOf(&character.PlayerCID).Elem(),
 
 		// type definitions
-		"Player": reflect.ValueOf((*character.Player)(nil)),
+		"Npc":      reflect.ValueOf((*character.Npc)(nil)),
+		"NpcState": reflect.ValueOf((*character.NpcState)(nil)),
+		"Player":   reflect.ValueOf((*character.Player)(nil)),
 	}
 }

@@ -3,10 +3,22 @@ package character
 
 import "tlyakhov/gofoom/ecs"
 
+var NpcCID ecs.ComponentID
 var PlayerCID ecs.ComponentID
 
 func init() {
+	NpcCID = ecs.RegisterComponent(&ecs.Arena[Npc, *Npc]{})
 	PlayerCID = ecs.RegisterComponent(&ecs.Arena[Player, *Player]{})
+}
+func GetNpc(e ecs.Entity) *Npc {
+	if asserted, ok := ecs.GetComponent(e, NpcCID).(*Npc); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*Npc) ComponentID() ecs.ComponentID {
+	return NpcCID
 }
 func GetPlayer(e ecs.Entity) *Player {
 	if asserted, ok := ecs.GetComponent(e, PlayerCID).(*Player); ok {

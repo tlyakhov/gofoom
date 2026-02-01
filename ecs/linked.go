@@ -15,7 +15,7 @@ type Linked struct {
 	Sources []Entity `editable:"Source Entities"`
 
 	AlwaysReplace   bool `editable:"Always Replace?"`
-	CopyUnshareable bool `editable:"Copy unshareable components?"`
+	CopyUnshareable bool `editable:"Copy unshareable?"`
 
 	// Internal state
 	SourceComponents ComponentTable

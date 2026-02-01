@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/concepts"
@@ -49,6 +50,28 @@ func (r *Renderer) renderSelectedTarget() {
 	r.Print(ts, int(scr[0]), int(scr[1])-16, msg)
 }
 
+func (r *Renderer) renderBodyHUD(b *core.Body) {
+	r.renderHealthBar(b)
+
+	npc := character.GetNpc(b.Entity)
+	if npc == nil {
+		return
+	}
+
+	top := &concepts.Vector3{}
+	top[0] = b.Pos.Render[0]
+	top[1] = b.Pos.Render[1]
+	top[2] = b.Pos.Render[2] + b.Size.Render[1]*0.5
+	scr := r.WorldToScreen(top)
+	if scr == nil {
+		return
+	}
+
+	if npc.State == character.NpcStateSawTarget {
+		r.BitBlt(npc.HudAlarmed, int(scr[0]-8), int(scr[1]-24), 16, 16, concepts.BlendNormal)
+	}
+}
+
 func (r *Renderer) renderHUD() {
 	if r.Player == nil || r.Carrier == nil {
 		return
@@ -62,7 +85,7 @@ func (r *Renderer) renderHUD() {
 			if visited.Contains(b.Entity) {
 				continue
 			}
-			r.renderHealthBar(b)
+			r.renderBodyHUD(b)
 			visited.Set(b.Entity)
 			/*text := fmt.Sprintf("%v", b.String())
 			if alive := behaviors.GetAlive(b.Entity); alive != nil {

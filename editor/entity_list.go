@@ -368,6 +368,7 @@ func (list *EntityList) Update() {
 		if len(parentDesc) == 0 || allHidden {
 			// TODO: Do we need this?
 			//	return
+			rowColor = colornames.Darkgrey
 		}
 
 		rank := 100

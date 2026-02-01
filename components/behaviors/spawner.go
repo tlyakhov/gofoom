@@ -22,7 +22,7 @@ const (
 type Spawner struct {
 	ecs.Attached `editable:"^"`
 
-	DeleteSpawnedOnDetach bool            `editable:"Delete Spawned on Detach"`
+	DeleteSpawnedOnDetach bool            `editable:"Propagate deletion"`
 	PreserveLinks         bool            `editable:"Preserve Links"`
 	Auto                  AutoSpawn       `editable:"Behavior on load"`
 	Targets               ecs.EntityTable `editable:"Targets"`

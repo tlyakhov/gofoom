@@ -1,35 +1,25 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
-
-# The lines below are called `modelines`. See `:help modeline`
-# Feel free to remove those if you don't want/need to use them.
-# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
-
 version: 2
 
+# For cross-compiling to Windows/Linux:
+# 1. Install mingw-64 for Windows: brew install mingw-w64
+# 2. Install cross-compilers for linux:
+# brew tap messense/macos-cross-toolchains
+# brew install x86_64-unknown-linux-gnu
+# brew install aarch64-unknown-linux-gnu
+
+env:
+  - CGO_CFLAGS='-I/opt/local/include'
+  - CGO_LDFLAGS='-L/opt/local/lib'
+  - CGO_ENABLED=1
 before:
   hooks:
-    # You may remove this if you don't use go modules.
-    # - go mod tidy
-    # you may remove this if you don't need go generate
-    # - go generate ./...
+    - go mod tidy
+    - go generate ./...
 
 builds:
   - id: gofoom-game
     binary: gofoom-game
     main: ./game
-    env:
-      - >-
-        {{- if eq .Os "windows" }}
-          {{- if eq .Arch "amd64" }}
-            CGO_ENABLED=1
-            CXX='x86_64-w64-mingw32-g++'
-            CC='x86_64-w64-mingw32-gcc'
-            CGO_CFLAGS='-I/opt/local/include'
-            CGO_LDFLAGS='-L/opt/local/lib'            
-          {{- end }}
-        {{- end }}
     goarch:
       - amd64
       - arm64
@@ -37,26 +27,38 @@ builds:
       - linux
       - windows
       - darwin
-    goamd64:
-      - v1
     ignore:
       - goos: windows
         goarch: arm64
+    env:
+      - >-
+        {{- if and (eq .Os "windows") (eq .Arch "amd64") -}}
+          CXX='x86_64-w64-mingw32-g++'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "windows") (eq .Arch "amd64") -}}
+          CC='x86_64-w64-mingw32-gcc'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "amd64") -}}
+          CXX='x86_64-linux-gnu-g++'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "amd64") -}}
+          CC='x86_64-linux-gnu-gcc'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "arm64") -}}
+          CXX='aarch64-linux-gnu-g++'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "arm64") -}}
+          CC='aarch64-linux-gnu-gcc'
+        {{- end }}
 
   - id: gofoom-editor
     binary: gofoom-editor
     main: ./editor
-    env:
-      - >-
-        {{- if eq .Os "windows" }}
-          {{- if eq .Arch "amd64" }}
-            CGO_ENABLED=1
-            CXX='x86_64-w64-mingw32-g++'
-            CC='x86_64-w64-mingw32-gcc'
-            CGO_CFLAGS='-I/opt/local/include'
-            CGO_LDFLAGS='-L/opt/local/lib'            
-          {{- end }}
-        {{- end }}
     goarch:
       - amd64
       - arm64
@@ -64,11 +66,34 @@ builds:
       - linux
       - windows
       - darwin
-    goamd64:
-      - v1
     ignore:
       - goos: windows
         goarch: arm64
+    env:
+      - >-
+        {{- if and (eq .Os "windows") (eq .Arch "amd64") -}}
+          CXX='x86_64-w64-mingw32-g++'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "windows") (eq .Arch "amd64") -}}
+          CC='x86_64-w64-mingw32-gcc'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "amd64") -}}
+          CXX='x86_64-linux-gnu-g++'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "amd64") -}}
+          CC='x86_64-linux-gnu-gcc'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "arm64") -}}
+          CXX='aarch64-linux-gnu-g++'
+        {{- end }}
+      - >-
+        {{- if and (eq .Os "linux") (eq .Arch "arm64") -}}
+          CC='aarch64-linux-gnu-gcc'
+        {{- end }}
 
 archives:
   - formats: [tar.gz]

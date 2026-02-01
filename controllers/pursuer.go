@@ -6,7 +6,6 @@ package controllers
 import (
 	"math"
 	"math/rand/v2"
-	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
@@ -26,11 +25,9 @@ import (
 //	https://www.youtube.com/watch?v=6BrZryMz-ac
 
 type PursuerController struct {
-	ecs.BaseController
+	NpcController
 	*behaviors.Pursuer
-	Body   *core.Body
 	Mobile *core.Mobile
-	Alive  *behaviors.Alive
 
 	faction string
 }
@@ -48,26 +45,32 @@ func (pc *PursuerController) Methods() ecs.ControllerMethod {
 }
 
 func (pc *PursuerController) Target(target ecs.Component, e ecs.Entity) bool {
-	pc.Entity = e
 	pc.Pursuer = target.(*behaviors.Pursuer)
 	if !pc.Pursuer.IsActive() {
 		return false
 	}
 
-	pc.Body = core.GetBody(pc.Entity)
-	if pc.Body == nil || !pc.Body.IsActive() {
-		return false
+	pc.NpcController.Entity = e
+	pc.Npc = character.GetNpc(pc.NpcController.Entity)
+	if pc.Npc != nil && !pc.Npc.IsActive() {
+		pc.Npc = nil
 	}
 
-	pc.Mobile = core.GetMobile(pc.Entity)
-	if pc.Mobile == nil || !pc.Mobile.IsActive() {
-		return false
-	}
-	pc.Alive = behaviors.GetAlive(pc.Entity)
+	pc.Alive = behaviors.GetAlive(pc.NpcController.Entity)
 	if pc.Alive != nil && pc.Alive.IsActive() {
 		pc.faction = pc.Alive.Faction
 	} else {
 		pc.faction = ""
+	}
+
+	pc.Body = core.GetBody(pc.NpcController.Entity)
+	if pc.Body == nil || !pc.Body.IsActive() {
+		return false
+	}
+
+	pc.Mobile = core.GetMobile(pc.NpcController.Entity)
+	if pc.Mobile == nil || !pc.Mobile.IsActive() {
+		return false
 	}
 
 	return true
@@ -117,8 +120,9 @@ func (pc *PursuerController) getObstacleBodies() []*core.Body {
 
 func (pc *PursuerController) targetOutOfView(enemy *behaviors.PursuerEnemy) {
 	if enemy.InView {
-		//log.Printf("Pursuer %v lost sight of %v!", pc.Entity, enemy.Entity)
-		pc.playSound(pc.SoundsTargetLost)
+		if pc.Npc != nil {
+			pc.NextState = character.NpcStateLostTarget
+		}
 		enemy.InView = false
 	}
 	if len(enemy.Breadcrumbs) == 0 {
@@ -151,7 +155,7 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 	// We're within FOV, check for obstacles:
 	ray := &concepts.Ray{Start: pc.Body.Pos.Now, End: *enemy.Pos}
 	ray.AnglesFromStartEnd()
-	s, _ := Cast(ray, pc.Body.Sector(), pc.Entity, false)
+	s, _ := Cast(ray, pc.Body.Sector(), pc.NpcController.Entity, false)
 	if s != nil && s.Entity != enemy.Entity {
 		// We're blocked by something
 		//log.Printf("%v: %v", pc.Entity, s.String())
@@ -159,8 +163,9 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 		return
 	}
 	if !enemy.InView {
-		//log.Printf("Pursuer %v saw %v!", pc.Entity, enemy.Entity)
-		pc.playSound(pc.SoundsTargetSeen)
+		if pc.Npc != nil {
+			pc.NextState = character.NpcStateSawTarget
+		}
 	}
 	enemy.InView = true
 	// Only leave breadcrumbs every so often
@@ -269,7 +274,7 @@ func (pc *PursuerController) targetWeight(c *behaviors.Candidate, enemy *behavio
 	c.Count++
 
 	// Consistent hash to separate NPCs circling a single enemy
-	r := concepts.RngXorShift64(uint64(pc.Entity))
+	r := concepts.RngXorShift64(uint64(pc.NpcController.Entity))
 	strafeDistance := pc.StrafeDistance + float64(r%uint64(pc.StrafeDistance))
 	strafeFactor := 1 - max(min(enemy.Dist/strafeDistance, 1), 0)
 	return strafeWeight*strafeFactor + targetWeight*(1-strafeFactor)
@@ -305,7 +310,7 @@ func (pc *PursuerController) generateWeights() {
 		}
 
 		// Next, identify non-body obstacles
-		s, hit := Cast(&c.Ray, pc.Body.Sector(), pc.Entity, true)
+		s, hit := Cast(&c.Ray, pc.Body.Sector(), pc.NpcController.Entity, true)
 
 		// Geometry (e.g. walls)
 		if s != nil {
@@ -343,6 +348,14 @@ func (pc *PursuerController) Frame() {
 }
 
 func (pc *PursuerController) fire() {
+	if pc.Npc != nil && pc.State == character.NpcStatePursuit {
+		aboutToFire := pc.NextFireTime-ecs.Simulation.SimTimestamp < concepts.MillisToNanos(3000)
+		noRecentBark := ecs.Simulation.SimTimestamp-pc.LastFiringBark > concepts.MillisToNanos(5000)
+		if aboutToFire && noRecentBark {
+			pc.playSound(pc.BarksFiring)
+			pc.LastFiringBark = ecs.Simulation.SimTimestamp
+		}
+	}
 	if ecs.Simulation.SimTimestamp < pc.NextFireTime {
 		return
 	}
@@ -351,7 +364,7 @@ func (pc *PursuerController) fire() {
 			continue
 		}
 		// Fire
-		if carrier := inventory.GetCarrier(pc.Entity); carrier != nil {
+		if carrier := inventory.GetCarrier(pc.NpcController.Entity); carrier != nil {
 			if carrier.SelectedWeapon != 0 {
 				if weapon := inventory.GetWeapon(carrier.SelectedWeapon); weapon != nil {
 					weapon.Intent = inventory.WeaponFire
@@ -391,15 +404,8 @@ func (pc *PursuerController) faceTarget() {
 
 func (pc *PursuerController) idleFrame() {
 	//log.Printf("Nowhere to go! Delta: %v", delta.StringHuman(2))
-	if actor := behaviors.GetActor(pc.Entity); actor != nil {
+	if actor := behaviors.GetActor(pc.NpcController.Entity); actor != nil {
 		actor.Flags |= ecs.ComponentActive
-	}
-	if ecs.Simulation.SimTimestamp > pc.NextIdleBark {
-		if pc.NextIdleBark != 0 {
-			pc.playSound(pc.SoundsIdle)
-		}
-		pc.NextIdleBark = ecs.Simulation.SimTimestamp + concepts.MillisToNanos(10000+rand.Float64()*10000)
-
 	}
 }
 
@@ -417,38 +423,12 @@ func (pc *PursuerController) pursue() {
 		pc.idleFrame()
 		return
 	}
-	if actor := behaviors.GetActor(pc.Entity); actor != nil {
+	if actor := behaviors.GetActor(pc.NpcController.Entity); actor != nil {
 		actor.Flags &= ^ecs.ComponentActive
 	}
 	delta.NormSelf()
 	NpcMove(pc.Body, pc.ChaseSpeed, &delta, !pc.AlwaysFaceTarget)
 	if pc.AlwaysFaceTarget {
 		pc.faceTarget()
-	}
-}
-
-func (pc *PursuerController) playSound(sounds ecs.EntityTable) {
-	sound := ecs.Entity(0)
-	r := rand.IntN(sounds.Len())
-	for _, e := range sounds {
-		if e == 0 {
-			continue
-		}
-		if r <= 0 {
-			sound = e
-			break
-		}
-		r--
-	}
-	if sound == 0 {
-		return
-	}
-
-	event, _ := audio.PlaySound(sound, pc.Body.Entity, pc.Body.Entity.String()+" voice", true)
-	if event != nil {
-		// TODO: Parameterize this
-		event.Offset[2] = pc.Body.Size.Now[1] * 0.3
-		event.Offset[1] = 0
-		event.Offset[0] = 0
 	}
 }

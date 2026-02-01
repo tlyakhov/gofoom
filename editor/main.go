@@ -89,7 +89,7 @@ func main() {
 	splitEntitiesMap.SetOffset(0.3515)
 
 	splitMapProperties := container.NewHSplit(splitEntitiesMap, scrollProperties)
-	splitMapProperties.SetOffset(0.7)
+	splitMapProperties.SetOffset(0.65)
 
 	editor.LabelStatus = widget.NewLabel("")
 	editor.LabelStatus.Truncation = fyne.TextTruncateEllipsis

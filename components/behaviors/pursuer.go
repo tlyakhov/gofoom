@@ -45,17 +45,12 @@ type Pursuer struct {
 	FOV              float64 `editable:"FOV"`
 	FireDelay        float64 `editable:"Fire Delay"` //ms
 
-	SoundsTargetSeen ecs.EntityTable `editable:"Sounds (target seen)"`
-	SoundsTargetLost ecs.EntityTable `editable:"Sounds (target lost)"`
-	SoundsIdle       ecs.EntityTable `editable:"Sounds (idle)"`
-
 	// Internal state (TODO: maybe move into separate component like ActorState?)
 	Candidates          []*Candidate
 	Enemies             map[ecs.Entity]*PursuerEnemy
 	ClockwisePreference bool
 	ClockwiseSwitchTime int64
 	NextFireTime        int64
-	NextIdleBark        int64
 }
 
 func (p *Pursuer) String() string {
@@ -71,9 +66,6 @@ func (p *Pursuer) Construct(data map[string]any) {
 	p.AlwaysFaceTarget = true
 	p.FOV = 165
 	p.FireDelay = 1000
-	p.SoundsTargetSeen = ecs.EntityTable{}
-	p.SoundsTargetLost = ecs.EntityTable{}
-	p.SoundsIdle = ecs.EntityTable{}
 	p.Candidates = make([]*Candidate, 16)
 	for i := range p.Candidates {
 		p.Candidates[i] = &Candidate{}
@@ -98,15 +90,6 @@ func (p *Pursuer) Construct(data map[string]any) {
 	if v, ok := data["FireDelay"]; ok {
 		p.FireDelay = cast.ToFloat64(v)
 	}
-	if v, ok := data["SoundsTargetSeen"]; ok {
-		p.SoundsTargetSeen = ecs.ParseEntityTable(v, true)
-	}
-	if v, ok := data["SoundsTargetLost"]; ok {
-		p.SoundsTargetLost = ecs.ParseEntityTable(v, true)
-	}
-	if v, ok := data["SoundsIdle"]; ok {
-		p.SoundsIdle = ecs.ParseEntityTable(v, true)
-	}
 }
 
 func (p *Pursuer) Serialize() map[string]any {
@@ -122,15 +105,6 @@ func (p *Pursuer) Serialize() map[string]any {
 	}
 	if p.FireDelay != 1000 {
 		result["FireDelay"] = p.FireDelay
-	}
-	if len(p.SoundsTargetSeen) > 0 {
-		result["SoundsTargetSeen"] = p.SoundsTargetSeen.Serialize()
-	}
-	if len(p.SoundsTargetLost) > 0 {
-		result["SoundsTargetLost"] = p.SoundsTargetLost.Serialize()
-	}
-	if len(p.SoundsIdle) > 0 {
-		result["SoundsIdle"] = p.SoundsIdle.Serialize()
 	}
 	return result
 }

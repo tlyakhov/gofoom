@@ -20,6 +20,7 @@ import (
 	"tlyakhov/gofoom/render"
 
 	"tlyakhov/gofoom/components/behaviors"
+	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/inventory"
 	"tlyakhov/gofoom/components/materials"
@@ -567,6 +568,8 @@ func (g *Grid) Refresh(selection *selection.Selection) {
 			g.fieldEnum(field, behaviors.DoorTypeValues())
 		case *behaviors.AutoSpawn:
 			g.fieldEnum(field, behaviors.AutoSpawnValues())
+		case *character.NpcState:
+			g.fieldEnum(field, character.NpcStateValues())
 		case *ecs.Entity:
 			g.fieldEntity(field)
 		case *[]string:
