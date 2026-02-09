@@ -36,6 +36,7 @@ type ShaderStage struct {
 	Frame     int                `editable:"Frame"`
 	Opacity   float64            `editable:"Opacity"`
 	BlendFunc concepts.BlendType `editable:"Blend"`
+	Tag       string             `editable:"Tag"`
 
 	IgnoreSurfaceTransform bool `editable:"Ignore Surface Transform"`
 }
@@ -45,6 +46,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	s.Flags = ShaderTiled
 	s.Opacity = 1
 	s.BlendFunc = concepts.BlendNormal
+	s.Tag = ""
 
 	if data == nil {
 		return
@@ -83,6 +85,10 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	if v, ok := data["Flags"]; ok {
 		s.Flags = concepts.ParseFlags(cast.ToString(v), ShaderFlagsString)
 	}
+
+	if v, ok := data["Tag"]; ok {
+		s.Tag = cast.ToString(v)
+	}
 }
 
 func (s *ShaderStage) Serialize() map[string]any {
@@ -110,6 +116,9 @@ func (s *ShaderStage) Serialize() map[string]any {
 	}
 	if s.IgnoreSurfaceTransform {
 		result["IgnoreSurfaceTransform"] = s.IgnoreSurfaceTransform
+	}
+	if s.Tag != "" {
+		result["Tag"] = s.Tag
 	}
 	return result
 }

@@ -99,7 +99,7 @@ func CreateTestGrass() ecs.Entity {
 	named.Name = "Default Material"
 	//img.Diffuse = color.NRGBA{R: 128, G: 100, B: 50, A: 255}
 	img := ecs.NewAttachedComponent(eGrass, materials.ImageCID).(*materials.Image)
-	img.Source = "data/textures/grass2.png"
+	img.Source = "../gofoom-data/textures/grass2.png"
 	img.Filter = true
 	img.GenerateMipMaps = true
 	img.MarkDirty()
@@ -108,7 +108,7 @@ func CreateTestGrass() ecs.Entity {
 }
 func CreateTestSky() ecs.Entity {
 	skyImage := ecs.NewAttachedComponent(ecs.NewEntity(), materials.ImageCID).(*materials.Image)
-	skyImage.Source = "data/textures/Sky.png"
+	skyImage.Source = "../gofoom-data/textures/Sky.png"
 	skyImage.Filter = false
 	skyImage.GenerateMipMaps = false
 	skyImage.MarkDirty()
@@ -130,7 +130,7 @@ func CreateTestDirt() ecs.Entity {
 	nmat := ecs.NewAttachedComponent(eDirt, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Dirt"
 	tex := ecs.NewAttachedComponent(eDirt, materials.ImageCID).(*materials.Image)
-	tex.Source = "data/textures/FDef.png"
+	tex.Source = "../gofoom-data/textures/FDef.png"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.MarkDirty()
@@ -143,7 +143,7 @@ func CreateTestTree() ecs.Entity {
 	nmat := ecs.NewAttachedComponent(eTree, ecs.NamedCID).(*ecs.Named)
 	nmat.Name = "Tree"
 	tex := ecs.NewAttachedComponent(eTree, materials.ImageCID).(*materials.Image)
-	tex.Source = "data/sprites/tree.png"
+	tex.Source = "../gofoom-data/sprites/tree.png"
 	tex.Filter = false
 	tex.GenerateMipMaps = true
 	tex.MarkDirty()
@@ -268,7 +268,7 @@ func CreateTestWorld3() {
 	heightImage := ecs.NewAttachedComponent(ecs.NewEntity(), materials.ImageCID).(*materials.Image)
 	heightImage.Flags |= ecs.EntityInternal
 	heightImage.Construct(map[string]any{
-		"Source":          "data/textures/test-heightmap.jpg",
+		"Source":          "../gofoom-data/textures/test-heightmap.jpg",
 		"Filter":          true,
 		"GenerateMipMaps": true,
 		"ConvertSRGB":     false,

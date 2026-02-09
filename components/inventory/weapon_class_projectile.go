@@ -13,6 +13,7 @@ type WeaponClassProjectile struct {
 	ecs.Attached `editable:"^"`
 
 	Projectile ecs.Entity `editable:"Projectile" edit_type:"Spawner"`
+	Speed      float64    `editable:"Speed"`
 }
 
 func (w *WeaponClassProjectile) Shareable() bool { return true }
@@ -24,6 +25,7 @@ func (w *WeaponClassProjectile) String() string {
 func (w *WeaponClassProjectile) Construct(data map[string]any) {
 	w.Attached.Construct(data)
 	w.Projectile = 0
+	w.Speed = 25
 
 	if data == nil {
 		return
@@ -32,10 +34,14 @@ func (w *WeaponClassProjectile) Construct(data map[string]any) {
 	if v, ok := data["Projectile"]; ok {
 		w.Projectile, _ = ecs.ParseEntityHumanOrCanonical(cast.ToString(v))
 	}
+	if v, ok := data["Speed"]; ok {
+		w.Speed = cast.ToFloat64(v)
+	}
 }
 
 func (w *WeaponClassProjectile) Serialize() map[string]any {
 	result := w.Attached.Serialize()
+	result["Speed"] = w.Speed
 
 	if w.Projectile != 0 {
 		result["Projectile"] = w.Projectile.Serialize()

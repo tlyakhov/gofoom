@@ -45,7 +45,7 @@ func main() {
 		fmt.Printf("Failed to load sound: %v\n", err)
 	}
 
-	event, err := audio.PlaySound(sndCollect.Entity, 0, "test", false)
+	event, err := audio.PlaySound(sndCollect.Entity, 0, "test", audio.SoundPlayNormal)
 	//event, err := mixer.Play(sndCollect, []audio.Effect{&audio.BitCrush{Bits: 8}}, 0.5)
 	//event, err := mixer.Play(sndCollect, []audio.Effect{audio.NewDelay(12000, 0.5, 0.5)}, 0.5)
 	//event.Effects = []audio.Effect{&audio.DistortionEffect{Mix: 1, Drive:

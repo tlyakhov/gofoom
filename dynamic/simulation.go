@@ -29,6 +29,7 @@ type Simulation struct {
 	Render       func()
 	Dynamics     map[Dynamic]struct{}   // *xsync.MapOf[Dynamic, struct{}]
 	Spawnables   map[Spawnable]struct{} //  *xsync.MapOf[Spawnable, struct{}]
+	Timers       map[*Timer]struct{}
 	Events       EventQueue
 
 	renderTime int64
@@ -42,6 +43,7 @@ func NewSimulation() *Simulation {
 		EditorPaused:  false,
 		Dynamics:      make(map[Dynamic]struct{}),
 		Spawnables:    make(map[Spawnable]struct{}),
+		Timers:        make(map[*Timer]struct{}),
 	}
 }
 
@@ -75,6 +77,12 @@ func (s *Simulation) Step() {
 			d.NewSimStep()
 			if a := d.GetAnimation(); a != nil && !s.EditorPaused {
 				a.Animate()
+			}
+		}
+
+		for t := range s.Timers {
+			if s.SimTimestamp > t.End && t.OnExpiry != nil {
+				t.OnExpiry()
 			}
 		}
 
@@ -121,4 +129,22 @@ func (s *Simulation) NewEvent(id EventID, data any) {
 		SimTimestamp: s.SimTimestamp,
 		Data:         data,
 	})
+}
+
+func (s *Simulation) TimerAge(t *Timer) int64 {
+	return s.SimTimestamp - t.Start
+}
+
+func (s *Simulation) NewTimer(duration int64, onExpiry func()) *Timer {
+	t := &Timer{
+		Start:    s.SimTimestamp,
+		End:      s.SimTimestamp + duration,
+		OnExpiry: onExpiry,
+	}
+	s.Timers[t] = struct{}{}
+	return t
+}
+
+func (s *Simulation) DeleteTimer(t *Timer) {
+	delete(s.Timers, t)
 }

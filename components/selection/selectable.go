@@ -14,6 +14,7 @@ import (
 //go:generate go run github.com/dmarkham/enumer -type=SelectableType -json
 type SelectableType int
 
+// TODO: Higher/lower layer sector hi/lo?
 const (
 	SelectableEntity SelectableType = iota
 	SelectableSector

@@ -4,7 +4,6 @@
 package inventory
 
 import (
-	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/ecs"
 
 	"github.com/spf13/cast"
@@ -18,15 +17,6 @@ type WeaponClass struct {
 	Params [WeaponStateCount]WeaponStateParams `editable:"Params"`
 
 	FlashMaterial ecs.Entity `editable:"Flash Material" edit_type:"Material"`
-
-	// Projectiles make marks on walls/internal segments
-	MarkMaterial ecs.Entity `editable:"Mark Material" edit_type:"Material"`
-	MarkSize     float64    `editable:"Mark Size"`
-}
-
-type WeaponMark struct {
-	*materials.ShaderStage
-	*materials.Surface
 }
 
 func (w *WeaponClass) Shareable() bool { return true }
@@ -37,7 +27,6 @@ func (w *WeaponClass) String() string {
 
 func (w *WeaponClass) Construct(data map[string]any) {
 	w.Attached.Construct(data)
-	w.MarkSize = 5
 	w.Spread = 1
 
 	for i := range WeaponStateCount {
@@ -59,17 +48,10 @@ func (w *WeaponClass) Construct(data map[string]any) {
 		w.Spread = cast.ToFloat64(v)
 	}
 
-	if v, ok := data["MarkMaterial"]; ok {
-		w.MarkMaterial, _ = ecs.ParseEntity(v.(string))
-	}
-
 	if v, ok := data["FlashMaterial"]; ok {
 		w.FlashMaterial, _ = ecs.ParseEntity(v.(string))
 	}
 
-	if v, ok := data["MarkSize"]; ok {
-		w.MarkSize = cast.ToFloat64(v)
-	}
 }
 
 func (w *WeaponClass) Serialize() map[string]any {
@@ -83,16 +65,8 @@ func (w *WeaponClass) Serialize() map[string]any {
 	}
 	result["Params"] = p
 
-	if w.MarkMaterial != 0 {
-		result["MarkMaterial"] = w.MarkMaterial.Serialize()
-	}
-
 	if w.FlashMaterial != 0 {
 		result["FlashMaterial"] = w.FlashMaterial.Serialize()
-	}
-
-	if w.MarkSize != 5 {
-		result["MarkSize"] = w.MarkSize
 	}
 
 	return result

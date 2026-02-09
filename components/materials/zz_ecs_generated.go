@@ -5,6 +5,7 @@ import "tlyakhov/gofoom/ecs"
 
 var ImageCID ecs.ComponentID
 var LitCID ecs.ComponentID
+var MarkMakerCID ecs.ComponentID
 var ShaderCID ecs.ComponentID
 var SolidCID ecs.ComponentID
 var SpriteCID ecs.ComponentID
@@ -16,6 +17,7 @@ var VisibleCID ecs.ComponentID
 func init() {
 	ImageCID = ecs.RegisterComponent(&ecs.Arena[Image, *Image]{})
 	LitCID = ecs.RegisterComponent(&ecs.Arena[Lit, *Lit]{})
+	MarkMakerCID = ecs.RegisterComponent(&ecs.Arena[MarkMaker, *MarkMaker]{})
 	ShaderCID = ecs.RegisterComponent(&ecs.Arena[Shader, *Shader]{})
 	SolidCID = ecs.RegisterComponent(&ecs.Arena[Solid, *Solid]{})
 	SpriteCID = ecs.RegisterComponent(&ecs.Arena[Sprite, *Sprite]{})
@@ -43,6 +45,16 @@ func GetLit(e ecs.Entity) *Lit {
 
 func (*Lit) ComponentID() ecs.ComponentID {
 	return LitCID
+}
+func GetMarkMaker(e ecs.Entity) *MarkMaker {
+	if asserted, ok := ecs.GetComponent(e, MarkMakerCID).(*MarkMaker); ok {
+		return asserted
+	}
+	return nil
+}
+
+func (*MarkMaker) ComponentID() ecs.ComponentID {
+	return MarkMakerCID
 }
 func GetShader(e ecs.Entity) *Shader {
 	if asserted, ok := ecs.GetComponent(e, ShaderCID).(*Shader); ok {

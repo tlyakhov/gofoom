@@ -75,6 +75,7 @@ func init() {
 		"EventQueue":           reflect.ValueOf((*dynamic.EventQueue)(nil)),
 		"Simulation":           reflect.ValueOf((*dynamic.Simulation)(nil)),
 		"Spawnable":            reflect.ValueOf((*dynamic.Spawnable)(nil)),
+		"Timer":                reflect.ValueOf((*dynamic.Timer)(nil)),
 		"TweeningFunc":         reflect.ValueOf((*dynamic.TweeningFunc)(nil)),
 
 		// interface wrapper definitions

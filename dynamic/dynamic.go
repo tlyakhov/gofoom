@@ -15,7 +15,7 @@ import (
 //
 // * They store several states:
 //   - Spawn (what to use when loading a world or respawning)
-//   - Prev/Now (previous frame, next frame)
+//   - Prev/Now (previous frame/sim step, next frame)
 //   - Render (a value blended between Prev & Now based on last frame time)
 //   - Input (if this is a procedurally animated value, this is the input)
 //
@@ -35,12 +35,8 @@ type DynamicValue[T DynamicType] struct {
 
 	*Animation[T] `editable:"Animation"`
 
-	IsAngle bool // Only relevant for T=float64
-
-	// Do we need these? not used anywhere currently
-	NoRenderBlend bool // Always use next frame value
-	OnRender      func(d Dynamic, blend float64)
-	OnPostUpdate  func(d Dynamic)
+	IsAngle      bool // Only relevant for T=float64
+	OnPostUpdate func(d Dynamic)
 
 	// Procedural dynamics
 	Procedural bool    `editable:"Procedural?"`
@@ -183,13 +179,10 @@ func (d *DynamicValue[T]) Update(blend float64) {
 	if d.OnPostUpdate != nil {
 		d.OnPostUpdate(d)
 	}
-	if d.OnRender != nil {
-		defer d.OnRender(d, blend)
-	}
 
 	// The check for prev == now lets us avoid the linear interpolation, which
 	// can introduce precision errors for static float quantities.
-	if d.NoRenderBlend || d.PrevFrame == d.Now {
+	if d.PrevFrame == d.Now {
 		d.Render = d.Now
 		return
 	}

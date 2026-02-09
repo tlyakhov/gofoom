@@ -10,6 +10,8 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/materials"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
@@ -23,7 +25,14 @@ func BodySectorScript(scripts []*core.Script, body *core.Body, sector *core.Sect
 	}
 }
 
-func (mc *MobileController) PushBack(sector *core.Sector, segment *core.Segment, outsideOfHigherLayer bool) bool {
+func (mc *MobileController) pushBack(sector *core.Sector, s *selection.Selectable, outsideOfHigherLayer bool) bool {
+	var segment *core.Segment
+	if s.InternalSegment != nil {
+		segment = &s.InternalSegment.Segment
+	} else {
+		segment = &s.SectorSegment.Segment
+	}
+
 	d := segment.DistanceToPointSq(mc.pos2d)
 	if d > mc.Body.Size.Now[0]*mc.Body.Size.Now[0]*0.25 {
 		return false
@@ -81,7 +90,7 @@ func (mc *MobileController) PushBack(sector *core.Sector, segment *core.Segment,
 	if d > 0 {
 		mc.Vel.Now.To2D().AddSelf(delta)
 	}
-	mc.collidedSegments = append(mc.collidedSegments, segment)
+	mc.collided = append(mc.collided, s)
 	return true
 }
 
@@ -96,10 +105,19 @@ func (mc *MobileController) checkBodySegmentCollisions() {
 		} else {
 			adj = nil
 		}
-		if adj != nil && mc.sectorEnterable(adj) {
-			continue
+		if adj != nil {
+			e := mc.sectorEnterable(adj)
+			switch e {
+			case 1:
+				mc.pushBack(mc.Sector, selection.SelectableFromWall(segment, selection.SelectableHi), false)
+			case -1:
+				mc.pushBack(mc.Sector, selection.SelectableFromWall(segment, selection.SelectableLow), false)
+			default:
+				continue
+			}
+		} else {
+			mc.pushBack(mc.Sector, selection.SelectableFromWall(segment, selection.SelectableMid), false)
 		}
-		mc.PushBack(mc.Sector, &segment.Segment, false)
 	}
 }
 
@@ -145,16 +163,18 @@ func (mc *MobileController) bodyTeleport() bool {
 	return false
 }
 
-func (mc *MobileController) sectorEnterable(test *core.Sector) bool {
+func (mc *MobileController) sectorEnterable(test *core.Sector) int {
 	if test == nil {
-		return false
+		return 0
 	}
 	floorZ, ceilZ := test.ZAt(mc.pos2d)
-	if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
-		mc.pos[2]+mc.halfHeight < ceilZ {
-		return true
+	if mc.pos[2]-mc.halfHeight+mc.MountHeight < floorZ {
+		return -1
 	}
-	return false
+	if mc.pos[2]+mc.halfHeight >= ceilZ {
+		return 1
+	}
+	return 0
 }
 
 func (mc *MobileController) checkHigherLayerSectors(test *core.Sector) *core.Sector {
@@ -167,12 +187,13 @@ func (mc *MobileController) checkHigherLayerSectors(test *core.Sector) *core.Sec
 		if overlap = core.GetSector(e); overlap == nil {
 			continue
 		}
-		if mc.sectorEnterable(overlap) {
+		if enterable := mc.sectorEnterable(overlap); enterable == 0 {
 			for _, seg := range overlap.Segments {
 				// This higher layer segment could be marked not passable, in
 				// which case we should collide with it
 				if !seg.PortalIsPassable {
-					mc.PushBack(overlap, &seg.Segment, true)
+					sel := selection.SelectableFromWall(seg, selection.SelectableMid)
+					mc.pushBack(overlap, sel, true)
 				}
 			}
 			if overlap.IsPointInside2D(mc.pos2d) {
@@ -180,7 +201,11 @@ func (mc *MobileController) checkHigherLayerSectors(test *core.Sector) *core.Sec
 			}
 		} else {
 			for _, seg := range overlap.Segments {
-				mc.PushBack(overlap, &seg.Segment, true)
+				sel := selection.SelectableFromWall(seg, selection.SelectableHi)
+				if enterable < 0 {
+					sel.Type = selection.SelectableLow
+				}
+				mc.pushBack(overlap, sel, true)
 			}
 		}
 	}
@@ -201,7 +226,7 @@ func (mc *MobileController) bodyExitsSector() {
 			continue
 		}
 
-		if adj := core.GetSector(segment.AdjacentSector); mc.sectorEnterable(adj) && adj.IsPointInside2D(mc.pos2d) {
+		if adj := core.GetSector(segment.AdjacentSector); mc.sectorEnterable(adj) == 0 && adj.IsPointInside2D(mc.pos2d) {
 			mc.Enter(adj)
 			return
 		}
@@ -209,7 +234,7 @@ func (mc *MobileController) bodyExitsSector() {
 	}
 
 	outer := previous.OverlapAt(mc.pos2d, true)
-	if mc.sectorEnterable(outer) {
+	if mc.sectorEnterable(outer) == 0 {
 		mc.Enter(outer)
 		return
 	}
@@ -225,7 +250,8 @@ func (mc *MobileController) bodyExitsSector() {
 		if mc.pos[2]-mc.halfHeight+mc.MountHeight >= floorZ &&
 			mc.pos[2]+mc.halfHeight < ceilZ {
 			for _, segment := range sector.Segments {
-				mc.PushBack(sector, &segment.Segment, false)
+				sel := selection.SelectableFromWall(segment, selection.SelectableMid)
+				mc.pushBack(sector, sel, false)
 			}
 		}
 	}
@@ -411,7 +437,7 @@ func (mc *MobileController) CollideZ() {
 		c_a := delta.Cross(&mc.Sector.Bottom.Normal)
 		// Solid sphere moment of inertia
 		moment := mc.Mass * halfHeight * halfHeight * 2.0 / 5.0
-		j := -(1.0 + mc.Elasticity) * mc.Vel.Now.Dot(&mc.Sector.Bottom.Normal) / (1.0/mc.Mass + c_a.Dot(c_a)/moment)
+		j := -(1.0 + mc.Elasticity) * mc.Vel.Now.Dot(&mc.Sector.Bottom.Normal) / (1.0/mc.Mass + c_a.Length2()/moment)
 		mc.Vel.Now.AddSelf(mc.Sector.Bottom.Normal.Mul(j / mc.Mass))
 		mc.Body.Pos.Now.AddSelf(delta)
 		mc.Body.OnGround = true
@@ -432,7 +458,7 @@ func (mc *MobileController) CollideZ() {
 		c_a := delta.Cross(&mc.Sector.Top.Normal)
 		// Solid sphere moment of inertia
 		moment := mc.Mass * halfHeight * halfHeight * 2.0 / 5.0
-		j := -(1.0 + mc.Elasticity) * mc.Vel.Now.Dot(&mc.Sector.Top.Normal) / (1.0/mc.Mass + c_a.Dot(c_a)/moment)
+		j := -(1.0 + mc.Elasticity) * mc.Vel.Now.Dot(&mc.Sector.Top.Normal) / (1.0/mc.Mass + c_a.Length2()/moment)
 		mc.Vel.Now.AddSelf(mc.Sector.Top.Normal.Mul(j / mc.Mass))
 		mc.Body.Pos.Now.AddSelf(delta)
 		BodySectorScript(mc.Sector.Top.Scripts, mc.Body, mc.Sector)
@@ -460,7 +486,7 @@ func (mc *MobileController) Collide() {
 	// Do 10 collision iterations to avoid spending too much time here.
 	for range 10 {
 		// Avoid GC thrash
-		mc.collidedSegments = mc.collidedSegments[:0]
+		mc.collided = mc.collided[:0]
 		// Cases 1 & 2.
 		if mc.Sector == nil {
 			mc.findBodySector()
@@ -508,7 +534,7 @@ func (mc *MobileController) Collide() {
 
 		mc.bodyBodyCollide()
 
-		if len(mc.collidedSegments) == 0 {
+		if len(mc.collided) == 0 {
 			if mc.Sector != nil {
 				return
 			} else {
@@ -516,8 +542,13 @@ func (mc *MobileController) Collide() {
 			}
 		}
 
-		for _, seg := range mc.collidedSegments {
-			BodySectorScript(seg.ContactScripts, mc.Body, mc.Sector)
+		for _, sel := range mc.collided {
+			if sel.SectorSegment != nil {
+				BodySectorScript(sel.SectorSegment.ContactScripts, mc.Body, mc.Sector)
+			}
+			if mc.markController.Target(materials.GetMarkMaker(mc.Mobile.Entity), mc.Mobile.Entity) {
+				mc.markController.MakeMark(sel, &mc.Pos.Now)
+			}
 		}
 
 		if mc.CrWall&core.CollideStop != 0 {
@@ -525,7 +556,15 @@ func (mc *MobileController) Collide() {
 			mc.Vel.Now[1] = 0
 		}
 		if mc.CrWall&core.CollideBounce != 0 {
-			for _, segment := range mc.collidedSegments {
+			for _, sel := range mc.collided {
+				var segment *core.Segment
+				if sel.SectorSegment != nil {
+					segment = &sel.SectorSegment.Segment
+				} else if sel.InternalSegment != nil {
+					segment = &sel.InternalSegment.Segment
+				} else {
+					continue
+				}
 				n := segment.Normal.To3D(new(concepts.Vector3))
 				mc.Vel.Now.SubSelf(n.Mul(2 * mc.Vel.Now.Dot(n)))
 			}

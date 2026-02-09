@@ -60,7 +60,6 @@ func init() {
 		"WeaponClassInstant":    reflect.ValueOf((*inventory.WeaponClassInstant)(nil)),
 		"WeaponClassProjectile": reflect.ValueOf((*inventory.WeaponClassProjectile)(nil)),
 		"WeaponIntent":          reflect.ValueOf((*inventory.WeaponIntent)(nil)),
-		"WeaponMark":            reflect.ValueOf((*inventory.WeaponMark)(nil)),
 		"WeaponState":           reflect.ValueOf((*inventory.WeaponState)(nil)),
 		"WeaponStateParams":     reflect.ValueOf((*inventory.WeaponStateParams)(nil)),
 	}

@@ -16,18 +16,28 @@ import (
 	"github.com/kelindar/bitmap"
 )
 
+type SoundPlayMode int
+
+//go:generate go run github.com/dmarkham/enumer -type=SoundPlayMode -json
+const (
+	SoundPlayNormal SoundPlayMode = iota
+	SoundPlayOnePerTag
+	SoundPlayInterruptPerTag
+)
+
 // Mixer manages the audio state and playback. It should be a singleton
 type mixer struct {
 	// 44100, 48000, 96000 etc
-	SampleRate int `editable:"Sample Rate"`
+	SampleRate int
 	// 2 for stereo, 6 for 5.1 surround
-	Channels   int    `editable:"Channels"`
-	DeviceName string `edtiable:"Device Name"`
+	Channels   int
+	DeviceName string
 
 	Error error // We should expose this somewhere
 
 	formats     map[string]al.Enum
 	events      map[al.Source]*SoundEvent
+	tags        map[string]*SoundEvent
 	usedSources bitmap.Bitmap
 	sources     []al.Source
 	buffers     []al.Buffer
@@ -50,6 +60,7 @@ func (m *mixer) deleteSoundEvent(source al.Source) {
 		if event.IsAttached() {
 			ecs.Delete(event.Entity)
 		}
+		delete(m.tags, event.Tag)
 		delete(m.events, source)
 	}
 }
@@ -131,6 +142,7 @@ func (m *mixer) Initialize() {
 	numVoices := 32
 	m.sources = al.GenSources(numVoices)
 	m.events = make(map[al.Source]*SoundEvent)
+	m.tags = make(map[string]*SoundEvent)
 	m.usedSources.Grow(uint32(len(m.sources)))
 
 	log.Printf("Initialized OpenAL audio: %vhz %v channels, %v voices, %v aux sends.", m.SampleRate, m.Channels, len(m.sources), numSends)
@@ -228,10 +240,9 @@ func (m *mixer) SetListenerVelocity(v *concepts.Vector3) {
 	al.SetListenerVelocity(alVectorFromUnits(v))
 }
 
-// TODO: Add hysteresis rather than just the onePerTag param
 // PlaySound initiates playback for a sound asset, optionally attached to a
 // source (e.g. a body, a sector)
-func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag bool) (*SoundEvent, error) {
+func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, mode SoundPlayMode) (*SoundEvent, error) {
 	if Mixer.events == nil {
 		return nil, nil
 	}
@@ -240,31 +251,35 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, onePerTag 
 		return nil, nil
 	}
 
-	if onePerTag {
-		arena := ecs.ArenaFor[SoundEvent](SoundEventCID)
-		for i := range arena.Cap() {
-			event := arena.Value(i)
-			if event == nil {
-				continue
-			}
-			if event.Tag == tag {
-				//log.Printf("Already playing %v with tag %v", snd.Source, tag)
-				return event, nil
+	var source al.Source
+	var err error
+
+	switch mode {
+	case SoundPlayOnePerTag:
+		if _, ok := Mixer.tags[tag]; ok {
+			return nil, nil
+		}
+	case SoundPlayInterruptPerTag:
+		if existing, ok := Mixer.tags[tag]; ok {
+			source = existing.source
+			if existing.IsAttached() {
+				ecs.Delete(existing.Entity)
 			}
 		}
 	}
-
-	var source al.Source
-	var err error
-	if source, err = Mixer.newSource(snd); err != nil {
-		return nil, err
+	if source == 0 {
+		if source, err = Mixer.newSource(snd); err != nil {
+			return nil, err
+		}
 	}
+
 	event := ecs.NewAttachedComponent(ecs.NewEntity(), SoundEventCID).(*SoundEvent)
 	event.Sound = snd.Entity
 	event.SourceEntity = sourceEntity
 	event.source = source
 	event.Tag = tag
 	Mixer.deleteSoundEvent(source)
+	Mixer.tags[tag] = event
 	Mixer.events[source] = event
 	ecs.ActAllControllersOneEntity(event.Entity, ecs.ControllerPrecompute)
 	// source.QueueBuffers(snd.buffer)

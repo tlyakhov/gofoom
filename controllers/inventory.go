@@ -38,7 +38,7 @@ func PickUpInventoryItem(ic *inventory.Carrier, itemEntity ecs.Entity) {
 		slot.Count.Now += toAdd
 		if player != nil {
 			player.Notices.Push("Picked up " + strconv.Itoa(toAdd) + " " + item.Class)
-			audio.PlaySound(item.PickupSound, ic.Entity, "inventorypickup", false)
+			audio.PlaySound(item.PickupSound, ic.Entity, "inventorypickup", audio.SoundPlayNormal)
 		}
 		//item.Count.Now -= toAdd
 		// Disable all the entity components

@@ -126,7 +126,7 @@ func (npc *NpcController) playSound(sounds ecs.EntityTable) {
 		return
 	}
 
-	event, _ := audio.PlaySound(sound, npc.Body.Entity, npc.Body.Entity.String()+" voice", true)
+	event, _ := audio.PlaySound(sound, npc.Body.Entity, npc.Body.Entity.String()+" voice", audio.SoundPlayInterruptPerTag)
 	if event != nil {
 		// TODO: Parameterize this
 		event.Offset[2] = npc.Body.Size.Now[1] * 0.3

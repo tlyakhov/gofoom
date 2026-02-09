@@ -78,12 +78,19 @@ func (pc *ParticleController) spawn() {
 		// Each particle has its own lifetime
 		eph = ecs.NewAttachedComponent(e, behaviors.EphemeralCID).(*behaviors.Ephemeral)
 		eph.Flags |= flags
+		eph.Lifetime = pc.Lifetime
+		eph.FadeTime = pc.FadeTime
+		eph.DeleteEntityOnExpiry = true
 	}
 	mobile := core.GetMobile(e)
 	if mobile == nil {
 		// Each particle has its own dynamics
 		mobile = ecs.NewAttachedComponent(e, core.MobileCID).(*core.Mobile)
 		mobile.Flags |= flags
+		mobile.Mass = 0.25
+		mobile.CrBody = core.CollideNone
+		mobile.CrPlayer = core.CollideNone
+		mobile.CrWall = core.CollideBounce
 	}
 
 	body.Pos.SetAll(pc.Body.Pos.Now)
@@ -93,14 +100,7 @@ func (pc *ParticleController) spawn() {
 	mobile.Vel.Spawn[1] = math.Sin(hAngle*concepts.Deg2rad) * math.Cos(vAngle*concepts.Deg2rad) * pc.Vel
 	mobile.Vel.Spawn[2] = math.Sin(vAngle*concepts.Deg2rad) * pc.Vel
 	mobile.Vel.ResetToSpawn()
-	mobile.Mass = 0.25
-	mobile.CrBody = core.CollideNone
-	mobile.CrPlayer = core.CollideNone
-	mobile.CrWall = core.CollideBounce
 	eph.CreationTime = ecs.Simulation.SimTimestamp
-	eph.Lifetime = pc.Lifetime
-	eph.FadeTime = pc.FadeTime
-	eph.DeleteEntityOnExpiry = true
 
 	if pc.BodyController.Target(body, e) {
 		pc.BodyController.Enter(pc.Body.Sector())

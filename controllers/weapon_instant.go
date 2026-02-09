@@ -50,27 +50,11 @@ func (wc *WeaponController) fireWeaponInstant(instant *inventory.WeaponClassInst
 
 			alive.Hurt("Weapon "+s.Entity.String(), instant.Damage, 20)
 		}
-	case selection.SelectableSectorSegment, selection.SelectableHi,
-		selection.SelectableLow, selection.SelectableMid,
-		selection.SelectableInternalSegment:
-		// Make a mark on walls
-
-		// TODO: Include floors and ceilings
-		es := &materials.ShaderStage{
-			Material:               wc.Class.MarkMaterial,
-			IgnoreSurfaceTransform: false,
-		}
-		// TODO: Fix this
-		//es.CFlags = ecs.ComponentInternal
-		es.Construct(nil)
-		es.Flags = 0
-		surf := wc.MarkSurfaceAndTransform(s, &wc.transform)
-		surf.ExtraStages = append(surf.ExtraStages, es)
-		es.Transform.From(&surf.Transform.Now)
-		es.Transform.AffineInverseSelf().MulSelf(&wc.transform)
-		wc.updateMarks(inventory.WeaponMark{
-			ShaderStage: es,
-			Surface:     surf,
-		})
+	}
+	if wc.markController.Target(materials.GetMarkMaker(wc.Entity), wc.Entity) {
+		wc.markController.MakeMark(s, &wc.hit)
+	}
+	if wc.markController.Target(materials.GetMarkMaker(wc.Class.Entity), wc.Class.Entity) {
+		wc.markController.MakeMark(s, &wc.hit)
 	}
 }

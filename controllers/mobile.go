@@ -9,6 +9,7 @@ import (
 
 	"tlyakhov/gofoom/components/audio"
 	"tlyakhov/gofoom/components/core"
+	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/constants"
 	"tlyakhov/gofoom/ecs"
@@ -18,7 +19,8 @@ type MobileController struct {
 	BodyController
 	*core.Mobile
 
-	collidedSegments []*core.Segment
+	markController MarkMakerController
+	collided       []*selection.Selectable
 }
 
 func init() {
@@ -122,7 +124,7 @@ func (mc *MobileController) Frame() {
 		// TODO: Parameterize this
 		stepDist := 70 + rand.Float64()*10
 		if mc.MovementSoundDistance > stepDist || speedSquared <= constants.VelocityEpsilon {
-			event, _ := audio.PlaySound(mc.StepSound, mc.Body.Entity, mc.Body.Entity.String()+" step", false)
+			event, _ := audio.PlaySound(mc.StepSound, mc.Body.Entity, mc.Body.Entity.String()+" step", audio.SoundPlayInterruptPerTag)
 			if event != nil {
 				// TODO: Parameterize this
 				event.Offset[2] = -mc.Body.Size.Now[1] * 0.5

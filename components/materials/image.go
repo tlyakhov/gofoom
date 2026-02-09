@@ -94,6 +94,15 @@ func (img *Image) Load() error {
 func (img *Image) Sample(x, y float64, sw, sh uint32, result *concepts.Vector4) {
 	// Testing:
 	// return (0xAF << 24) | 0xFF
+
+	if x < 0 || y < 0 || x >= 1 || y >= 1 {
+		result[0] = 0
+		result[1] = 0
+		result[2] = 0
+		result[3] = 0
+		return
+	}
+
 	data := img.PixelsLinear
 	w := img.Width
 	h := img.Height
@@ -121,14 +130,6 @@ func (img *Image) Sample(x, y float64, sw, sh uint32, result *concepts.Vector4) 
 		result[1] = y
 		result[2] = 0
 		result[3] = 1 // full alpha
-		return
-	}
-
-	if x < 0 || y < 0 || x >= 1 || y >= 1 {
-		result[0] = 0
-		result[1] = 0
-		result[2] = 0
-		result[3] = 0
 		return
 	}
 
