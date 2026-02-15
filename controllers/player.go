@@ -176,11 +176,14 @@ func (pc *PlayerController) Frame() {
 	}
 	// If we have a selected item and the player is pressing the key, frob!
 	if pc.SelectedTarget != 0 && pc.ActionPressed {
-		if pt := behaviors.GetPlayerTargetable(pc.SelectedTarget); pt != nil && pt.Frob.IsCompiled() {
-			pt.Frob.Vars["body"] = core.GetBody(pc.SelectedTarget)
-			pt.Frob.Vars["player"] = pc.Player
-			pt.Frob.Vars["carrier"] = pc.Carrier
-			pt.Frob.Act()
+		if pc.FrobReadyTime == 0 || ecs.Simulation.SimTimestamp > pc.FrobReadyTime {
+			if pt := behaviors.GetPlayerTargetable(pc.SelectedTarget); pt != nil && pt.Frob.IsCompiled() {
+				pt.Frob.Vars["body"] = core.GetBody(pc.SelectedTarget)
+				pt.Frob.Vars["player"] = pc.Player
+				pt.Frob.Vars["carrier"] = pc.Carrier
+				pt.Frob.Act()
+			}
+			pc.FrobReadyTime = ecs.Simulation.SimTimestamp + concepts.MillisToNanos(250)
 		}
 	}
 	// Reset our potential selection for next frame

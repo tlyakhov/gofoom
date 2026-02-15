@@ -4,7 +4,6 @@
 package materials
 
 import (
-	"strconv"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
@@ -12,7 +11,7 @@ import (
 )
 
 //go:generate go run github.com/dmarkham/enumer -type=ShaderFlags -json
-type ShaderFlags int
+type ShaderFlags uint32
 
 const (
 	ShaderTiled ShaderFlags = 1 << iota
@@ -69,9 +68,7 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	}
 
 	if v, ok := data["Frame"]; ok {
-		if v2, err := strconv.Atoi(v.(string)); err != nil {
-			s.Frame = v2
-		}
+		s.Frame = cast.ToInt(v)
 	}
 
 	if v, ok := data["Opacity"]; ok {
@@ -99,7 +96,7 @@ func (s *ShaderStage) Serialize() map[string]any {
 	}
 
 	if s.Frame != 0 {
-		result["Frame"] = strconv.Itoa(s.Frame)
+		result["Frame"] = s.Frame
 	}
 
 	if s.Opacity != 1 {

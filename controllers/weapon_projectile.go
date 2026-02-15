@@ -71,6 +71,6 @@ func (wc *WeaponController) fireWeaponProjectile(wcp *inventory.WeaponClassProje
 
 	if wc.bodyController.Target(body, e) {
 		wc.bodyController.Enter(wc.Body.Sector())
-		wc.bodyController.Precompute()
 	}
+	ecs.ActAllControllersOneEntity(e, ecs.ControllerPrecompute)
 }

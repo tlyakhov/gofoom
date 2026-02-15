@@ -104,8 +104,8 @@ func (pc *ParticleController) spawn() {
 
 	if pc.BodyController.Target(body, e) {
 		pc.BodyController.Enter(pc.Body.Sector())
-		pc.BodyController.Precompute()
 	}
+	ecs.ActAllControllersOneEntity(e, ecs.ControllerPrecompute)
 }
 
 func (pc *ParticleController) Frame() {

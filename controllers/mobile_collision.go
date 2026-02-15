@@ -408,6 +408,15 @@ func (mc *MobileController) bodyBodyCollide() {
 		r_a := mc.Body.Size.Now[0] * 0.5
 		r_b := body.Size.Now[0] * 0.5
 		if d2 < (r_a+r_b)*(r_a+r_b) {
+			for _, s := range mc.ContactScripts {
+				if s.IsCompiled() {
+					s.Vars["onEntity"] = mc.BaseController.Entity
+					s.Vars["mobile"] = mc.Mobile
+					s.Vars["body"] = mc.Body
+					s.Vars["collided"] = selection.SelectableFromBody(body)
+					s.Act()
+				}
+			}
 			mc.resolveCollision(mobile, body)
 		}
 
@@ -545,6 +554,15 @@ func (mc *MobileController) Collide() {
 		for _, sel := range mc.collided {
 			if sel.SectorSegment != nil {
 				BodySectorScript(sel.SectorSegment.ContactScripts, mc.Body, mc.Sector)
+			}
+			for _, s := range mc.ContactScripts {
+				if s.IsCompiled() {
+					s.Vars["onEntity"] = mc.BaseController.Entity
+					s.Vars["mobile"] = mc.Mobile
+					s.Vars["body"] = mc.Body
+					s.Vars["collided"] = sel
+					s.Act()
+				}
 			}
 			if mc.markController.Target(materials.GetMarkMaker(mc.Mobile.Entity), mc.Mobile.Entity) {
 				mc.markController.MakeMark(sel, &mc.Pos.Now)

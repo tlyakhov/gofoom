@@ -148,7 +148,12 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 	if angleInFOV >= 180.0 {
 		angleInFOV -= 360.0
 	}
-	if angleInFOV < -pc.FOV*0.5 || angleInFOV > pc.FOV*0.5 {
+	fov := pc.FOV
+	if enemy.InView {
+		// Expand our FOV if our target is in view
+		fov = 160
+	}
+	if angleInFOV < -fov*0.5 || angleInFOV > fov*0.5 {
 		pc.targetOutOfView(enemy)
 		return
 	}

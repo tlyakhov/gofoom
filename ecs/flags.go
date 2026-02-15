@@ -11,7 +11,7 @@ import (
 // ComponentFlags represents flags that can be associated with a component.
 //
 //go:generate go run github.com/dmarkham/enumer -type=ComponentFlags -json
-type ComponentFlags uint16
+type ComponentFlags uint32
 
 const (
 	// ComponentActive indicates that the component should be processed by controllers.
@@ -41,7 +41,7 @@ const ComponentInternal = ComponentNoSave | ComponentHideInEditor | ComponentLoc
 const EntityInternal = ComponentInternal | ComponentHideEntityInEditor | ComponentLockedEntityInEditor
 
 //go:generate go run github.com/dmarkham/enumer -type=FieldFlags -json
-type FieldFlags uint16
+type FieldFlags uint32
 
 const (
 	FieldNonCacheable FieldFlags = 1 << iota

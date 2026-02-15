@@ -21,12 +21,15 @@ type Mobile struct {
 	Force        concepts.Vector3
 	Mass         float64 `editable:"Mass"`
 	MountHeight  float64 `editable:"Mount Height"`
+	AirDrag      bool    `editable:"Air drag?"`
+	Gravity      bool    `editable:"Gravity?"`
 
 	// "Bounciness" (0 = inelastic, 1 = perfectly elastic)
-	Elasticity float64           `editable:"Elasticity"`
-	CrBody     CollisionResponse `editable:"Collision (Body)"`
-	CrPlayer   CollisionResponse `editable:"Collision (Player)"`
-	CrWall     CollisionResponse `editable:"Collision (Wall)"`
+	Elasticity     float64           `editable:"Elasticity"`
+	CrBody         CollisionResponse `editable:"Collision (Body)"`
+	CrPlayer       CollisionResponse `editable:"Collision (Player)"`
+	CrWall         CollisionResponse `editable:"Collision (Wall)"`
+	ContactScripts []*Script         `editable:"Contact Scripts"`
 
 	// Internal tracking
 	MovementSoundDistance float64
@@ -56,6 +59,8 @@ func (m *Mobile) Construct(data map[string]any) {
 	m.Force[1] = 0
 	m.Force[2] = 0
 
+	m.AirDrag = true
+	m.Gravity = true
 	m.Elasticity = 0.5
 	m.CrBody = CollideNone
 	m.CrPlayer = CollideNone
@@ -75,6 +80,12 @@ func (m *Mobile) Construct(data map[string]any) {
 	}
 	if v, ok := data["Mass"]; ok {
 		m.Mass = cast.ToFloat64(v)
+	}
+	if v, ok := data["AirDrag"]; ok {
+		m.AirDrag = cast.ToBool(v)
+	}
+	if v, ok := data["Gravity"]; ok {
+		m.Gravity = cast.ToBool(v)
 	}
 	if v, ok := data["Elasticity"]; ok {
 		m.Elasticity = cast.ToFloat64(v)
@@ -97,6 +108,9 @@ func (m *Mobile) Construct(data map[string]any) {
 			m.CrWall = c
 		}
 	}
+	if v, ok := data["ContactScripts"]; ok {
+		m.ContactScripts = ecs.ConstructSlice[*Script](v, nil)
+	}
 }
 
 func (m *Mobile) Serialize() map[string]any {
@@ -108,5 +122,15 @@ func (m *Mobile) Serialize() map[string]any {
 	result["CrMoving"] = m.CrBody.String()
 	result["CrPlayer"] = m.CrPlayer.String()
 	result["CrWall"] = m.CrWall.String()
+	if len(m.ContactScripts) > 0 {
+		result["ContactScripts"] = ecs.SerializeSlice(m.ContactScripts)
+	}
+	if !m.AirDrag {
+		result["AirDrag"] = m.AirDrag
+	}
+	if !m.Gravity {
+		result["Gravity"] = m.Gravity
+	}
+
 	return result
 }

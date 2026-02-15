@@ -25,7 +25,8 @@ type Player struct {
 	SelectedTarget  ecs.Entity
 	HoveringTargets containers.Set[ecs.Entity]
 
-	Notices containers.SyncUniqueQueue[string]
+	Notices       containers.SyncUniqueQueue[string]
+	FrobReadyTime int64
 }
 
 func (p *Player) String() string {

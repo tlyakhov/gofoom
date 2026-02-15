@@ -63,25 +63,32 @@ func (mc *MobileController) Forces() {
 	// Weight = g*m
 	g := mc.Sector.Gravity
 	g.MulSelf(mc.Mass)
-	mc.Force.AddSelf(&g)
+
+	if mc.Gravity {
+		mc.Force.AddSelf(&g)
+	}
+
 	v := &mc.Vel.Now
 	if v.Zero() {
 		return
 	}
-	// Air drag
-	r := mc.Body.Size.Now[0] * 0.5 * constants.MetersPerUnit
-	crossSectionArea := math.Pi * r * r
-	drag := concepts.Vector3{v[0], v[1], v[2]}
-	drag.MulSelf(drag.Length())
-	drag.MulSelf(-0.5 * constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
-	mc.Force.AddSelf(&drag)
-	if mc.Body.OnGround {
-		// Kinetic friction
-		drag.From(v)
-		drag.MulSelf(-mc.Sector.FloorFriction * mc.Sector.Bottom.Normal.Dot(g.MulSelf(-1)))
+
+	if mc.AirDrag {
+		// Air drag
+		r := mc.Body.Size.Now[0] * 0.5 * constants.MetersPerUnit
+		crossSectionArea := math.Pi * r * r
+		drag := concepts.Vector3{v[0], v[1], v[2]}
+		drag.MulSelf(drag.Length())
+		drag.MulSelf(-0.5 * constants.AirDensity * crossSectionArea * constants.SphereDragCoefficient)
 		mc.Force.AddSelf(&drag)
+		if mc.Body.OnGround {
+			// Kinetic friction
+			drag.From(v)
+			drag.MulSelf(-mc.Sector.FloorFriction * mc.Sector.Bottom.Normal.Dot(g.MulSelf(-1)))
+			mc.Force.AddSelf(&drag)
+		}
+		//log.Printf("%v\n", drag)
 	}
-	//log.Printf("%v\n", drag)
 }
 
 func (mc *MobileController) Frame() {
@@ -143,6 +150,19 @@ func (mc *MobileController) Frame() {
 	core.QuadTree.Update(mc.Body)
 }
 
+var mobileContactScriptParams = []core.ScriptParam{
+	{Name: "onEntity", TypeName: "ecs.Entity"},
+	{Name: "mobile", TypeName: "*core.Mobile"},
+	{Name: "body", TypeName: "*core.Body"},
+	{Name: "collided", TypeName: "*selection.Selectable"},
+}
+
 func (mc *MobileController) Precompute() {
+	for _, s := range mc.ContactScripts {
+		if !s.IsEmpty() {
+			s.Params = mobileContactScriptParams
+			s.Compile()
+		}
+	}
 	mc.Collide()
 }

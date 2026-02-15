@@ -44,6 +44,7 @@ func init() {
 	import "tlyakhov/gofoom/components/core"
 	import "tlyakhov/gofoom/components/inventory"
 	import "tlyakhov/gofoom/components/materials"
+	import "tlyakhov/gofoom/components/selection"
 	import "tlyakhov/gofoom/concepts"
 	import "tlyakhov/gofoom/constants"
 	import "tlyakhov/gofoom/containers"
@@ -85,6 +86,21 @@ func (s *Script) Compile() {
 		return
 	}
 	s.execCode = buf.String()
+
+	// This handles panics inside the interpreter. It's a bit aggressive, but
+	// saves the game from crashing due to bad scripting
+	defer func() {
+		recovered := recover()
+		if recovered == nil {
+			return
+		}
+
+		log.Printf("Script compilation error: %v", recovered)
+		log.Printf("in code: %v", s.execCode)
+		s.ErrorMessage = fmt.Sprintf("Script error: %v", recovered)
+		s.interp = nil
+		s.runFunc = nil
+	}()
 
 	_, err = s.interp.Eval(s.execCode)
 	if err != nil {
