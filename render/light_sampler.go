@@ -212,11 +212,12 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	sizeSq *= sizeSq
 
 	// Initialize ray struct
-	ls.Intersection.Start = *p
-	ls.Intersection.End = lightBody.Pos.Render
-	ls.Intersection.Delta = ls.LightWorld
-	ls.Intersection.Limit = ls.maxDist
+	ls.Intersection.Ray = ls.Ray
 	ls.Intersection.IgnoreSegment = ls.Segment
+
+	ls.Intersection.Debug = (LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity)
+	ls.Intersection.DebugHash = ls.Hash
+	ls.Intersection.DebugTargetEntity = uint32(lightBody.Entity)
 
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
@@ -232,7 +233,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		ls.Intersection.MaxDistSq = ls.maxDistSq
 		ls.Intersection.CheckEntry = false
 
-		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+		if ls.Intersection.Debug {
 			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDistSq))
 		}
 		//Intersect this sector
@@ -263,7 +264,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if e == 0 {
 				continue
 			}
-			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+			if ls.Intersection.Debug {
 				log.Printf("  Visiting higher layer sector %v, max dist %v", e, ls.maxDistSq)
 			}
 			if overlap = core.GetSector(e); overlap == nil {
@@ -432,6 +433,12 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		ls.maxDist = -1 // Only calculate when necessary
 		ls.Filter[3] = 0
 
+		// Update ray
+		ls.Ray.Start = *world
+		ls.Ray.End = body.Pos.Render
+		ls.Ray.Delta = ls.LightWorld
+		// ls.Ray.Limit is set later
+
 		if ls.Normal.Dot(&ls.LightWorld) < 0 {
 			return true
 		}
@@ -454,6 +461,8 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 				if ls.maxDist < 0 {
 					ls.maxDist = math.Sqrt(ls.maxDistSq)
 				}
+				ls.Ray.Limit = ls.maxDist
+
 				attenuation = light.Strength / math.Pow(ls.maxDist*2/body.Size.Render[0]+1.0, light.Attenuation)
 				//attenuation = 100.0 / dist
 			}

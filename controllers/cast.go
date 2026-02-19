@@ -27,10 +27,7 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 	lastBoundaryDistSq := -1.0
 
 	// Initialize Ray State
-	ri.Start = ray.Start
-	ri.End = ray.End
-	ri.Delta = ray.Delta
-	ri.Limit = ray.Limit
+	ri.Ray = ray
 	ri.IgnoreSegment = nil
 
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
