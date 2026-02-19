@@ -10,10 +10,8 @@ import (
 
 type RayIntersection struct {
 	// Inputs
-	Start         *concepts.Vector3
-	End           *concepts.Vector3
-	Delta         *concepts.Vector3
-	Length        float64
+	concepts.Ray
+
 	IgnoreSegment *Segment
 	MinDistSq     float64
 	MaxDistSq     float64
@@ -73,7 +71,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 		}
 
 		// Find the intersection with this segment.
-		if !seg.Intersect3D(ri.Start, ri.End, &intersectionTest) {
+		if !seg.Intersect3D(&ri.Start, &ri.End, &intersectionTest) {
 			continue
 		}
 
@@ -90,8 +88,8 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 
 			// Nudge the intersection point slightly along the ray to see where we end up.
 			// This handles grazing corners where we might clip a corner and exit instantly.
-			nudgeX := (ri.Delta[0] / ri.Length) * constants.IntersectEpsilon
-			nudgeY := (ri.Delta[1] / ri.Length) * constants.IntersectEpsilon
+			nudgeX := (ri.Delta[0] / ri.Limit) * constants.IntersectEpsilon
+			nudgeY := (ri.Delta[1] / ri.Limit) * constants.IntersectEpsilon
 
 			testPoint := intersectionTest.To2D()
 			testPoint[0] += nudgeX
@@ -132,7 +130,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 		}
 
 		// Distance checks
-		intersectionDistSq = intersectionTest.DistSq(ri.Start)
+		intersectionDistSq = intersectionTest.DistSq(&ri.Start)
 
 		// 1. Is it better than current best?
 		if intersectionDistSq >= ri.HitDistSq {

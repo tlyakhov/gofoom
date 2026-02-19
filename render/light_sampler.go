@@ -52,7 +52,7 @@ type LightSampler struct {
 	SegmentSector *core.Sector
 	Normal        concepts.Vector3
 
-	Ray core.RayIntersection
+	Intersection core.RayIntersection
 
 	prevDistSq, hitDistSq, maxDistSq float64
 
@@ -212,11 +212,11 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	sizeSq *= sizeSq
 
 	// Initialize ray struct
-	ls.Ray.Start = p
-	ls.Ray.End = &lightBody.Pos.Render
-	ls.Ray.Delta = &ls.LightWorld
-	ls.Ray.Length = ls.maxDist
-	ls.Ray.IgnoreSegment = ls.Segment
+	ls.Intersection.Start = *p
+	ls.Intersection.End = lightBody.Pos.Render
+	ls.Intersection.Delta = ls.LightWorld
+	ls.Intersection.Limit = ls.maxDist
+	ls.Intersection.IgnoreSegment = ls.Segment
 
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
@@ -228,28 +228,28 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		// can't just go through the first portal we find, we have to go through
 		// the NEAREST one. Use hitDistSq to keep track...
 		ls.hitDistSq = ls.maxDistSq
-		ls.Ray.MinDistSq = ls.prevDistSq
-		ls.Ray.MaxDistSq = ls.maxDistSq
-		ls.Ray.CheckEntry = false
+		ls.Intersection.MinDistSq = ls.prevDistSq
+		ls.Intersection.MaxDistSq = ls.maxDistSq
+		ls.Intersection.CheckEntry = false
 
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDistSq))
 		}
 		//Intersect this sector
-		sector.IntersectRay(&ls.Ray)
+		sector.IntersectRay(&ls.Intersection)
 
-		if ls.Ray.HitSegment != nil {
-			ls.hitDistSq = ls.Ray.HitDistSq
-			ls.Hit = ls.Ray.HitPoint
-			if math.Abs(ls.Ray.HitDistSq-ls.maxDistSq) < sizeSq {
+		if ls.Intersection.HitSegment != nil {
+			ls.hitDistSq = ls.Intersection.HitDistSq
+			ls.Hit = ls.Intersection.HitPoint
+			if math.Abs(ls.Intersection.HitDistSq-ls.maxDistSq) < sizeSq {
 				hitSegment = nil
 				next = nil
 			} else {
-				if ls.Ray.NextSector == nil {
+				if ls.Intersection.NextSector == nil {
 					return false // Occluded by wall
 				}
-				hitSegment = ls.Ray.HitSegment
-				next = ls.Ray.NextSector
+				hitSegment = ls.Intersection.HitSegment
+				next = ls.Intersection.NextSector
 			}
 		} else {
 			hitSegment = nil
@@ -257,8 +257,8 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		}
 
 		// Check higher layer sectors for intersections
-		ls.Ray.MaxDistSq = ls.hitDistSq
-		ls.Ray.CheckEntry = true
+		ls.Intersection.MaxDistSq = ls.hitDistSq
+		ls.Intersection.CheckEntry = true
 		for _, e := range sector.HigherLayers {
 			if e == 0 {
 				continue
@@ -270,20 +270,20 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				continue
 			}
 
-			overlap.IntersectRay(&ls.Ray)
+			overlap.IntersectRay(&ls.Intersection)
 
-			if ls.Ray.HitSegment != nil {
-				ls.hitDistSq = ls.Ray.HitDistSq
-				ls.Hit = ls.Ray.HitPoint
-				if math.Abs(ls.Ray.HitDistSq-ls.maxDistSq) < sizeSq {
+			if ls.Intersection.HitSegment != nil {
+				ls.hitDistSq = ls.Intersection.HitDistSq
+				ls.Hit = ls.Intersection.HitPoint
+				if math.Abs(ls.Intersection.HitDistSq-ls.maxDistSq) < sizeSq {
 					hitSegment = nil
 					next = nil
 				} else {
-					if ls.Ray.NextSector == nil {
+					if ls.Intersection.NextSector == nil {
 						return false // Occluded by HigherLayer
 					}
-					hitSegment = ls.Ray.HitSegment
-					next = ls.Ray.NextSector
+					hitSegment = ls.Intersection.HitSegment
+					next = ls.Intersection.NextSector
 				}
 			}
 		}
