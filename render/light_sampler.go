@@ -242,27 +242,9 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		//Intersect this sector
 		sector.IntersectRay(&ls.Intersection)
 
-		if ls.Intersection.HitSegment != nil {
-			ls.hitDistSq = ls.Intersection.HitDistSq
-			ls.Hit = ls.Intersection.HitPoint
-			if math.Abs(ls.Intersection.HitDistSq-ls.maxDistSq) < sizeSq {
-				hitSegment = nil
-				next = nil
-			} else {
-				if ls.Intersection.NextSector == nil {
-					return false // Occluded by wall
-				}
-				hitSegment = ls.Intersection.HitSegment
-				next = ls.Intersection.NextSector
-			}
-		} else {
-			hitSegment = nil
-			next = nil
-		}
+		bestHit := ls.Intersection.IntersectionHit
 
 		// Check higher layer sectors for intersections
-		ls.Intersection.MaxDistSq = ls.hitDistSq
-		ls.Intersection.CheckEntry = true
 		for _, e := range sector.HigherLayers {
 			if e == 0 {
 				continue
@@ -274,22 +256,40 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				continue
 			}
 
+			// We want to check this overlap.
+			// Input: MaxDistSq should be the current best distance found.
+			// If bestHit found something, use bestHit.HitDistSq. Else use limit (maxDistSq).
+			currentBestDist := ls.maxDistSq
+			if bestHit.HitSegment != nil {
+				currentBestDist = bestHit.HitDistSq
+			}
+
+			ls.Intersection.MaxDistSq = currentBestDist
+			ls.Intersection.CheckEntry = true
+
 			overlap.IntersectRay(&ls.Intersection)
 
 			if ls.Intersection.HitSegment != nil {
-				ls.hitDistSq = ls.Intersection.HitDistSq
-				ls.Hit = ls.Intersection.HitPoint
-				if math.Abs(ls.Intersection.HitDistSq-ls.maxDistSq) < sizeSq {
-					hitSegment = nil
-					next = nil
-				} else {
-					if ls.Intersection.NextSector == nil {
-						return false // Occluded by HigherLayer
-					}
-					hitSegment = ls.Intersection.HitSegment
-					next = ls.Intersection.NextSector
-				}
+				bestHit = ls.Intersection.IntersectionHit
 			}
+		}
+
+		if bestHit.HitSegment != nil {
+			ls.hitDistSq = bestHit.HitDistSq
+			ls.Hit = bestHit.HitPoint
+			if math.Abs(bestHit.HitDistSq-ls.maxDistSq) < sizeSq {
+				hitSegment = nil
+				next = nil
+			} else {
+				if bestHit.NextSector == nil {
+					return false // Occluded by wall
+				}
+				hitSegment = bestHit.HitSegment
+				next = bestHit.NextSector
+			}
+		} else {
+			hitSegment = nil
+			next = nil
 		}
 		if next == nil {
 			// No portal sectors, not occluded
