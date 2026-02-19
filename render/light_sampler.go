@@ -207,6 +207,10 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	if ls.maxDist < 0 {
 		ls.maxDist = math.Sqrt(ls.maxDistSq)
 	}
+	// Setup the ray for intersection
+	ls.Ray.Delta = ls.LightWorld
+	ls.Ray.Delta.MulSelf(1.0 / ls.maxDist)
+	ls.Ray.Limit = ls.maxDist
 
 	sizeSq := lightBody.Size.Render[0] * 0.5
 	sizeSq *= sizeSq
@@ -435,8 +439,7 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		// Update ray
 		ls.Ray.Start = *world
 		ls.Ray.End = body.Pos.Render
-		ls.Ray.Delta = ls.LightWorld
-		// ls.Ray.Limit is set later
+		// ls.Ray.Delta and Limit are set later
 
 		if ls.Normal.Dot(&ls.LightWorld) < 0 {
 			return true
@@ -460,7 +463,8 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 				if ls.maxDist < 0 {
 					ls.maxDist = math.Sqrt(ls.maxDistSq)
 				}
-				ls.Ray.Limit = ls.maxDist
+				// ls.Ray.Limit is set in lightVisibleFromSector if called,
+				// but here we just need maxDist for attenuation.
 
 				attenuation = light.Strength / math.Pow(ls.maxDist*2/body.Size.Render[0]+1.0, light.Attenuation)
 				//attenuation = 100.0 / dist

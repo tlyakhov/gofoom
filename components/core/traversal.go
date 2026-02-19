@@ -132,8 +132,8 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 
 			// Nudge the intersection point slightly along the ray to see where we end up.
 			// This handles grazing corners where we might clip a corner and exit instantly.
-			nudgeX := (ri.Delta[0] / ri.Limit) * constants.IntersectEpsilon
-			nudgeY := (ri.Delta[1] / ri.Limit) * constants.IntersectEpsilon
+			nudgeX := ri.Delta[0] * constants.IntersectEpsilon
+			nudgeY := ri.Delta[1] * constants.IntersectEpsilon
 
 			testPoint := intersectionTest.To2D()
 			testPoint[0] += nudgeX
