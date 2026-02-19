@@ -408,6 +408,9 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 var LightSamplerLightsTested, LightSamplerCalcs atomic.Uint64
 
 func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
+	if ls.Ray == nil {
+		ls.Ray = new(concepts.Ray)
+	}
 	ls.Output[0] = 0
 	ls.Output[1] = 0
 	ls.Output[2] = 0
