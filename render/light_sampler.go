@@ -215,9 +215,8 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	ls.Intersection.Ray = ls.Ray
 	ls.Intersection.IgnoreSegment = ls.Segment
 
-	ls.Intersection.Debug = (LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity)
 	ls.Intersection.DebugHash = ls.Hash
-	ls.Intersection.DebugTargetEntity = uint32(lightBody.Entity)
+	ls.Intersection.DebugEntity = uint32(lightBody.Entity)
 
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
@@ -233,7 +232,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		ls.Intersection.MaxDistSq = ls.maxDistSq
 		ls.Intersection.CheckEntry = false
 
-		if ls.Intersection.Debug {
+		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDistSq))
 		}
 		//Intersect this sector
@@ -264,7 +263,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			if e == 0 {
 				continue
 			}
-			if ls.Intersection.Debug {
+			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 				log.Printf("  Visiting higher layer sector %v, max dist %v", e, ls.maxDistSq)
 			}
 			if overlap = core.GetSector(e); overlap == nil {

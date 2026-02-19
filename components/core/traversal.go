@@ -11,6 +11,14 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
+// Debugging constants - set these to true/specific values to debug ray casting issues
+const (
+	LogDebug            = false
+	LogDebugHash        = 0x4100280000000f
+	LogDebugTarget      = 4
+	LogDebugAllEntities = false
+)
+
 type RayIntersection struct {
 	// Inputs
 	*concepts.Ray
@@ -20,10 +28,9 @@ type RayIntersection struct {
 	MaxDistSq     float64
 	CheckEntry    bool
 
-	// Debugging
-	Debug             bool
-	DebugHash         uint64
-	DebugTargetEntity uint32
+	// Debugging (optional, set per-call if needed for filtering, otherwise use constants)
+	DebugHash   uint64
+	DebugEntity uint32
 
 	// Outputs
 	HitSegment *SectorSegment
@@ -39,6 +46,8 @@ type RayIntersection struct {
 //   - ri: A RayIntersection struct containing ray definition, traversal state, and output fields.
 //     The function will update ri.HitSegment, ri.HitPoint, ri.HitDistSq, and ri.NextSector.
 func (s *Sector) IntersectRay(ri *RayIntersection) {
+	debug := LogDebug && (LogDebugAllEntities || (ri.DebugHash == LogDebugHash && ri.DebugEntity == LogDebugTarget))
+
 	ri.HitSegment = nil
 	ri.NextSector = nil
 	ri.HitDistSq = ri.MaxDistSq
@@ -49,7 +58,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 	var floorZ, ceilZ, floorZ2, ceilZ2, intersectionDistSq float64
 
 	for _, seg := range s.Segments {
-		if ri.Debug {
+		if debug {
 			log.Printf("    Checking segment [%v]-[%v]\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 		}
 
@@ -61,7 +70,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 		// When checking higher layers (Entry check), we ignore portals in that layer.
 		// We only care about entering the sector via a solid boundary (conceptually).
 		if ri.CheckEntry && seg.AdjacentSector != 0 {
-			if ri.Debug {
+			if debug {
 				log.Printf("    Ignoring portal to %v in higher layer sector.", seg.AdjacentSector)
 			}
 			continue
@@ -82,7 +91,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 		normalFacing := dot > 0
 
 		if ri.CheckEntry != normalFacing {
-			if ri.Debug {
+			if debug {
 				log.Printf("    Ignoring segment [or behind]. higher layer? = %v, normal? = %v. Dot: %v", ri.CheckEntry, normalFacing, dot)
 			}
 			continue
@@ -90,13 +99,13 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 
 		// Find the intersection with this segment.
 		if !seg.Intersect3D(&ri.Start, &ri.End, &intersectionTest) {
-			if ri.Debug {
+			if debug {
 				log.Printf("    No intersection\n")
 			}
 			continue
 		}
 
-		if ri.Debug {
+		if debug {
 			log.Printf("    Intersection = [%v]\n", intersectionTest.StringHuman(2))
 		}
 
@@ -104,13 +113,13 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 		if seg.AdjacentSector != 0 {
 			// A portal!
 			adj = seg.AdjacentSegment.Sector
-			if ri.Debug {
+			if debug {
 				log.Printf("    Portal to %v", adj.Entity)
 			}
 		} else if ri.CheckEntry {
 			// A higher layer segment! If we hit it (entering), the next sector is THIS sector.
 			adj = s
-			if ri.Debug {
+			if debug {
 				log.Printf("    Higher layer to %v", adj.Entity)
 			}
 		} else {
@@ -131,12 +140,12 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 			adj = s.OverlapAt(testPoint, true)
 
 			if adj == nil {
-				if ri.Debug {
+				if debug {
 					log.Printf("    Occluded behind wall seg %v|%v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 				}
 				// A solid wall! Next sector is nil.
 			} else {
-				if ri.Debug {
+				if debug {
 					log.Printf("    Out to %v", adj.Entity)
 				}
 			}
@@ -146,7 +155,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 		// Even if we hit a portal segment, the portal might be blocked by floor/ceiling differences.
 
 		if intersectionTest[2] < s.Min[2] || intersectionTest[2] > s.Max[2] {
-			if ri.Debug {
+			if debug {
 				log.Printf("    Occluded by sector min/max %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 			}
 			// Outside sector bounds entirely? Occluded.
@@ -157,7 +166,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 			floorZ, ceilZ = s.ZAt(i2d)
 
 			if intersectionTest[2] < floorZ-constants.IntersectEpsilon || intersectionTest[2] > ceilZ+constants.IntersectEpsilon {
-				if ri.Debug {
+				if debug {
 					log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 				}
 				// Occluded by this sector's floor/ceiling
@@ -167,7 +176,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 				// (If checkEntry is true, adj is s, so we already checked it).
 				floorZ2, ceilZ2 = adj.ZAt(i2d)
 				if intersectionTest[2] < floorZ2-constants.IntersectEpsilon || intersectionTest[2] > ceilZ2+constants.IntersectEpsilon {
-					if ri.Debug {
+					if debug {
 						log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 					}
 					// Occluded by adjacent sector's floor/ceiling
@@ -187,7 +196,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 		// 2. Is it ahead of previous hit?
 		// Note: Using epsilon to be safe against floating point error.
 		if intersectionDistSq <= ri.MinDistSq+constants.IntersectEpsilon {
-			if ri.Debug {
+			if debug {
 				log.Printf("    Found intersection point before the previous sector: %v <= %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ri.MinDistSq))
 			}
 			// LightSampler: if prevDistSq - intersectionDistSq > 0 { continue }
@@ -196,7 +205,7 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 			continue
 		}
 
-		if ri.Debug {
+		if debug {
 			log.Printf("    Found a portal to %v without impediment at dist %v.\n", adj, math.Sqrt(intersectionDistSq))
 		}
 
