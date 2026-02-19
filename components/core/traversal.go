@@ -8,43 +8,49 @@ import (
 	"tlyakhov/gofoom/constants"
 )
 
+type RayIntersection struct {
+	// Inputs
+	Start         *concepts.Vector3
+	End           *concepts.Vector3
+	Delta         *concepts.Vector3
+	Length        float64
+	IgnoreSegment *Segment
+	MinDistSq     float64
+	MaxDistSq     float64
+	CheckEntry    bool
+
+	// Outputs
+	HitSegment *SectorSegment
+	HitPoint   concepts.Vector3
+	HitDistSq  float64
+	NextSector *Sector
+}
+
 // IntersectRay finds the nearest intersection of a ray with the sector's segments.
 // It handles portal transitions, higher layer checks, and grazing ray edge cases.
 //
 // Arguments:
-//   - rayStart, rayEnd: The start and end points of the ray segment to test against.
-//   - rayDelta: The direction vector of the ray (End - Start).
-//   - rayLength: The length of the ray (used for normalization in epsilon nudging).
-//   - ignoreSegment: A segment to ignore (usually the one the ray started from) to prevent self-intersection.
-//   - minDistSq: The squared distance from the ray start that must be exceeded (exclusive) for a hit to be valid.
-//     Used to prevent re-detecting intersections at the start point or "behind" the ray.
-//   - maxDistSq: The maximum squared distance (exclusive) for a hit to be considered.
-//     Serves as the initial "best found distance".
-//   - checkEntry: If true, checks for ray *entering* the sector (normal facing opposite to ray, dot > 0).
-//     If false, checks for ray *exiting* the sector (normal facing same as ray, dot <= 0).
-//
-// Returns:
-//   - hitSegment: The segment that was hit, or nil if no valid intersection found.
-//   - hitPoint: The point of intersection.
-//   - hitDistSq: The squared distance to the intersection point.
-//   - nextSector: The sector to transition to (portal adjacent, higher layer, or overlap), or nil if it's a solid wall.
-func (s *Sector) IntersectRay(rayStart, rayEnd, rayDelta *concepts.Vector3, rayLength float64, ignoreSegment *Segment, minDistSq, maxDistSq float64, checkEntry bool) (hitSegment *SectorSegment, hitPoint concepts.Vector3, hitDistSq float64, nextSector *Sector) {
-	hitDistSq = maxDistSq
-	var intersectionTest concepts.Vector3
+//   - ri: A RayIntersection struct containing ray definition, traversal state, and output fields.
+//     The function will update ri.HitSegment, ri.HitPoint, ri.HitDistSq, and ri.NextSector.
+func (s *Sector) IntersectRay(ri *RayIntersection) {
+	ri.HitSegment = nil
+	ri.NextSector = nil
+	ri.HitDistSq = ri.MaxDistSq
 
 	// Pre-declare variables for loop
+	var intersectionTest concepts.Vector3
 	var adj *Sector
 	var floorZ, ceilZ, floorZ2, ceilZ2, intersectionDistSq float64
 
 	for _, seg := range s.Segments {
 		// Don't intersect with the segment we started on
-		if &seg.Segment == ignoreSegment {
+		if &seg.Segment == ri.IgnoreSegment {
 			continue
 		}
 
 		// When checking higher layers (Entry check), we ignore portals in that layer.
 		// We only care about entering the sector via a solid boundary (conceptually).
-		if checkEntry && seg.AdjacentSector != 0 {
+		if ri.CheckEntry && seg.AdjacentSector != 0 {
 			continue
 		}
 
@@ -59,15 +65,15 @@ func (s *Sector) IntersectRay(rayStart, rayEnd, rayDelta *concepts.Vector3, rayL
 		// if checkEntry != normalFacing => continue
 		// Entry (true) != Dot>0 (true) => false (keep).
 		// Exit (false) != Dot>0 (false) => false (keep).
-		dot := rayDelta[0]*seg.Normal[0] + rayDelta[1]*seg.Normal[1]
+		dot := ri.Delta[0]*seg.Normal[0] + ri.Delta[1]*seg.Normal[1]
 		normalFacing := dot > 0
 
-		if checkEntry != normalFacing {
+		if ri.CheckEntry != normalFacing {
 			continue
 		}
 
 		// Find the intersection with this segment.
-		if !seg.Intersect3D(rayStart, rayEnd, &intersectionTest) {
+		if !seg.Intersect3D(ri.Start, ri.End, &intersectionTest) {
 			continue
 		}
 
@@ -75,7 +81,7 @@ func (s *Sector) IntersectRay(rayStart, rayEnd, rayDelta *concepts.Vector3, rayL
 		if seg.AdjacentSector != 0 {
 			// A portal!
 			adj = seg.AdjacentSegment.Sector
-		} else if checkEntry {
+		} else if ri.CheckEntry {
 			// A higher layer segment! If we hit it (entering), the next sector is THIS sector.
 			adj = s
 		} else {
@@ -84,8 +90,8 @@ func (s *Sector) IntersectRay(rayStart, rayEnd, rayDelta *concepts.Vector3, rayL
 
 			// Nudge the intersection point slightly along the ray to see where we end up.
 			// This handles grazing corners where we might clip a corner and exit instantly.
-			nudgeX := (rayDelta[0] / rayLength) * constants.IntersectEpsilon
-			nudgeY := (rayDelta[1] / rayLength) * constants.IntersectEpsilon
+			nudgeX := (ri.Delta[0] / ri.Length) * constants.IntersectEpsilon
+			nudgeY := (ri.Delta[1] / ri.Length) * constants.IntersectEpsilon
 
 			testPoint := intersectionTest.To2D()
 			testPoint[0] += nudgeX
@@ -114,7 +120,7 @@ func (s *Sector) IntersectRay(rayStart, rayEnd, rayDelta *concepts.Vector3, rayL
 			if intersectionTest[2] < floorZ-constants.IntersectEpsilon || intersectionTest[2] > ceilZ+constants.IntersectEpsilon {
 				// Occluded by this sector's floor/ceiling
 				adj = nil
-			} else if !checkEntry && adj != nil {
+			} else if !ri.CheckEntry && adj != nil {
 				// If checking Exit, and we have a next sector, check its floor/ceiling too.
 				// (If checkEntry is true, adj is s, so we already checked it).
 				floorZ2, ceilZ2 = adj.ZAt(i2d)
@@ -126,16 +132,16 @@ func (s *Sector) IntersectRay(rayStart, rayEnd, rayDelta *concepts.Vector3, rayL
 		}
 
 		// Distance checks
-		intersectionDistSq = intersectionTest.DistSq(rayStart)
+		intersectionDistSq = intersectionTest.DistSq(ri.Start)
 
 		// 1. Is it better than current best?
-		if intersectionDistSq >= hitDistSq {
+		if intersectionDistSq >= ri.HitDistSq {
 			continue
 		}
 
 		// 2. Is it ahead of previous hit?
 		// Note: Using epsilon to be safe against floating point error.
-		if intersectionDistSq <= minDistSq + constants.IntersectEpsilon {
+		if intersectionDistSq <= ri.MinDistSq+constants.IntersectEpsilon {
 			// LightSampler: if prevDistSq - intersectionDistSq > 0 { continue }
 			// implies intersectionDistSq < prevDistSq -> continue.
 			// We want intersectionDistSq > prevDistSq.
@@ -143,10 +149,10 @@ func (s *Sector) IntersectRay(rayStart, rayEnd, rayDelta *concepts.Vector3, rayL
 		}
 
 		// We have a valid, better intersection.
-		hitDistSq = intersectionDistSq
-		hitPoint = intersectionTest
-		hitSegment = seg
-		nextSector = adj
+		ri.HitDistSq = intersectionDistSq
+		ri.HitPoint = intersectionTest
+		ri.HitSegment = seg
+		ri.NextSector = adj
 	}
 	return
 }

@@ -18,11 +18,20 @@ import (
 func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodies bool) (s *selection.Selectable, hit concepts.Vector3) {
 	var sampler render.MaterialSampler
 	var isect concepts.Vector3
+	var ri core.RayIntersection
+
 	sampler.Config = &render.Config{}
 	sampler.Ray = ray
 
 	limitSq := ray.Limit * ray.Limit
 	lastBoundaryDistSq := -1.0
+
+	// Initialize Ray State
+	ri.Start = &ray.Start
+	ri.End = &ray.End
+	ri.Delta = &ray.Delta
+	ri.Length = ray.Limit
+	ri.IgnoreSegment = nil
 
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	for sector != nil {
@@ -62,7 +71,15 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 
 		// Check sector boundaries (Exit)
 		// We use hitDistSq as maxDistSq to ensure we only find boundaries closer than any object hit
-		bSeg, bPoint, bDist, bNext := sector.IntersectRay(&ray.Start, &ray.End, &ray.Delta, ray.Limit, nil, lastBoundaryDistSq, hitDistSq, false)
+		ri.MinDistSq = lastBoundaryDistSq
+		ri.MaxDistSq = hitDistSq
+		ri.CheckEntry = false
+		sector.IntersectRay(&ri)
+
+		bSeg := ri.HitSegment
+		bPoint := ri.HitPoint
+		bDist := ri.HitDistSq
+		bNext := ri.NextSector
 
 		// Check higher layer sectors (Entry)
 		bestEntry := false
@@ -80,12 +97,15 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 				currentBest = bDist
 			}
 
-			hSeg, hPoint, hDist, hNext := overlap.IntersectRay(&ray.Start, &ray.End, &ray.Delta, ray.Limit, nil, lastBoundaryDistSq, currentBest, true)
-			if hSeg != nil {
-				bSeg = hSeg
-				bPoint = hPoint
-				bDist = hDist
-				bNext = hNext
+			ri.MaxDistSq = currentBest
+			ri.CheckEntry = true
+			overlap.IntersectRay(&ri)
+
+			if ri.HitSegment != nil {
+				bSeg = ri.HitSegment
+				bPoint = ri.HitPoint
+				bDist = ri.HitDistSq
+				bNext = ri.NextSector
 				bestEntry = true
 			}
 		}

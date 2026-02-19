@@ -52,6 +52,8 @@ type LightSampler struct {
 	SegmentSector *core.Sector
 	Normal        concepts.Vector3
 
+	Ray core.RayIntersection
+
 	prevDistSq, hitDistSq, maxDistSq float64
 
 	maxDist float64
@@ -209,6 +211,13 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	sizeSq := lightBody.Size.Render[0] * 0.5
 	sizeSq *= sizeSq
 
+	// Initialize ray struct
+	ls.Ray.Start = p
+	ls.Ray.End = &lightBody.Pos.Render
+	ls.Ray.Delta = &ls.LightWorld
+	ls.Ray.Length = ls.maxDist
+	ls.Ray.IgnoreSegment = ls.Segment
+
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
@@ -219,25 +228,28 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		// can't just go through the first portal we find, we have to go through
 		// the NEAREST one. Use hitDistSq to keep track...
 		ls.hitDistSq = ls.maxDistSq
+		ls.Ray.MinDistSq = ls.prevDistSq
+		ls.Ray.MaxDistSq = ls.maxDistSq
+		ls.Ray.CheckEntry = false
 
 		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
 			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDistSq))
 		}
 		//Intersect this sector
-		hitSeg, hitPoint, hitDistSq, nextSector := sector.IntersectRay(p, &lightBody.Pos.Render, &ls.LightWorld, ls.maxDist, ls.Segment, ls.prevDistSq, ls.maxDistSq, false)
+		sector.IntersectRay(&ls.Ray)
 
-		if hitSeg != nil {
-			ls.hitDistSq = hitDistSq
-			ls.Hit = hitPoint
-			if math.Abs(hitDistSq-ls.maxDistSq) < sizeSq {
+		if ls.Ray.HitSegment != nil {
+			ls.hitDistSq = ls.Ray.HitDistSq
+			ls.Hit = ls.Ray.HitPoint
+			if math.Abs(ls.Ray.HitDistSq-ls.maxDistSq) < sizeSq {
 				hitSegment = nil
 				next = nil
 			} else {
-				if nextSector == nil {
+				if ls.Ray.NextSector == nil {
 					return false // Occluded by wall
 				}
-				hitSegment = hitSeg
-				next = nextSector
+				hitSegment = ls.Ray.HitSegment
+				next = ls.Ray.NextSector
 			}
 		} else {
 			hitSegment = nil
@@ -245,6 +257,8 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		}
 
 		// Check higher layer sectors for intersections
+		ls.Ray.MaxDistSq = ls.hitDistSq
+		ls.Ray.CheckEntry = true
 		for _, e := range sector.HigherLayers {
 			if e == 0 {
 				continue
@@ -256,20 +270,20 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				continue
 			}
 
-			hSeg, hPoint, hDistSq, hNext := overlap.IntersectRay(p, &lightBody.Pos.Render, &ls.LightWorld, ls.maxDist, ls.Segment, ls.prevDistSq, ls.hitDistSq, true)
+			overlap.IntersectRay(&ls.Ray)
 
-			if hSeg != nil {
-				ls.hitDistSq = hDistSq
-				ls.Hit = hPoint
-				if math.Abs(hDistSq-ls.maxDistSq) < sizeSq {
+			if ls.Ray.HitSegment != nil {
+				ls.hitDistSq = ls.Ray.HitDistSq
+				ls.Hit = ls.Ray.HitPoint
+				if math.Abs(ls.Ray.HitDistSq-ls.maxDistSq) < sizeSq {
 					hitSegment = nil
 					next = nil
 				} else {
-					if hNext == nil {
+					if ls.Ray.NextSector == nil {
 						return false // Occluded by HigherLayer
 					}
-					hitSegment = hSeg
-					next = hNext
+					hitSegment = ls.Ray.HitSegment
+					next = ls.Ray.NextSector
 				}
 			}
 		}
