@@ -19,6 +19,13 @@ const (
 	LogDebugAllEntities = false
 )
 
+type IntersectionHit struct {
+	HitSegment *SectorSegment
+	HitPoint   concepts.Vector3
+	HitDistSq  float64
+	NextSector *Sector
+}
+
 type RayIntersection struct {
 	// Inputs
 	*concepts.Ray
@@ -33,10 +40,7 @@ type RayIntersection struct {
 	DebugEntity uint32
 
 	// Outputs
-	HitSegment *SectorSegment
-	HitPoint   concepts.Vector3
-	HitDistSq  float64
-	NextSector *Sector
+	IntersectionHit
 }
 
 // IntersectRay finds the nearest intersection of a ray with the sector's segments.
