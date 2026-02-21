@@ -199,13 +199,12 @@ func (s *Sector) IntersectRay(ri *RayIntersection) {
 
 		// 2. Is it ahead of previous hit?
 		// Note: Using epsilon to be safe against floating point error.
-		if intersectionDistSq <= ri.MinDistSq+constants.IntersectEpsilon {
+		// We allow hits at roughly the same distance to handle corner cases where we exit one sector
+		// and immediately exit the next (shared vertex).
+		if intersectionDistSq < ri.MinDistSq-constants.IntersectEpsilon {
 			if debug {
-				log.Printf("    Found intersection point before the previous sector: %v <= %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ri.MinDistSq))
+				log.Printf("    Found intersection point before the previous sector: %v < %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(ri.MinDistSq))
 			}
-			// LightSampler: if prevDistSq - intersectionDistSq > 0 { continue }
-			// implies intersectionDistSq < prevDistSq -> continue.
-			// We want intersectionDistSq > prevDistSq.
 			continue
 		}
 
