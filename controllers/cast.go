@@ -18,14 +18,23 @@ import (
 func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodies bool) (s *selection.Selectable, hit concepts.Vector3) {
 	var sampler render.MaterialSampler
 	var isect concepts.Vector3
+	var ri core.RayIntersection
+
 	sampler.Config = &render.Config{}
 	sampler.Ray = ray
 
-	hitDistSq := ray.Limit * ray.Limit
-	idistSq := 0.0
+	limitSq := ray.Limit * ray.Limit
+	lastBoundaryDistSq := -1.0
+
+	// Initialize Ray State
+	ri.Ray = ray
+	ri.IgnoreSegment = nil
 
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	for sector != nil {
+		hitDistSq := limitSq // Best hit in this sector so far
+		s = nil              // Reset selection
+
 		if !ignoreBodies {
 			for _, b := range sector.Bodies {
 				if !b.IsActive() || b.Entity == source {
@@ -36,8 +45,8 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 					if sampler.Output[3] < 0.9 {
 						continue
 					}
-					idistSq = b.Pos.Now.DistSq(&ray.Start)
-					if idistSq < hitDistSq {
+					idistSq := b.Pos.Now.DistSq(&ray.Start)
+					if idistSq < hitDistSq && idistSq > lastBoundaryDistSq {
 						s = selection.SelectableFromBody(b)
 						hitDistSq = idistSq
 						hit = b.Pos.Now
@@ -48,8 +57,8 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 		for _, seg := range sector.InternalSegments {
 			// Find the intersection with this segment.
 			if ok := seg.Intersect3D(&ray.Start, &ray.End, &isect); ok {
-				idistSq = isect.DistSq(&ray.Start)
-				if idistSq < hitDistSq {
+				idistSq := isect.DistSq(&ray.Start)
+				if idistSq < hitDistSq && idistSq > lastBoundaryDistSq {
 					s = selection.SelectableFromInternalSegment(seg)
 					hitDistSq = idistSq
 					hit = isect
@@ -57,74 +66,90 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 			}
 		}
 
-		// Since our sectors can be concave, we can't just go through the first portal we find,
-		// we have to go through the NEAREST one. Use distSq to keep track...
-		distSq := ray.Limit * ray.Limit
-		var next *core.Sector
-		for _, seg := range sector.Segments {
-			// Segment facing backwards from our ray? skip it.
-			if ray.Delta[0]*seg.Normal[0]+ray.Delta[1]*seg.Normal[1] > 0 {
+		// Check sector boundaries (Exit)
+		// We use hitDistSq as maxDistSq to ensure we only find boundaries closer than any object hit
+		ri.MinDistSq = lastBoundaryDistSq
+		ri.MaxDistSq = hitDistSq
+		ri.CheckEntry = false
+		sector.IntersectRay(&ri)
+
+		// Check higher layer sectors (Entry)
+		bestEntry := false
+		bestHit := ri.IntersectionHit
+
+		// Check higher layer sectors (Entry)
+		for _, e := range sector.HigherLayers {
+			if e == 0 {
+				continue
+			}
+			overlap := core.GetSector(e)
+			if overlap == nil {
 				continue
 			}
 
-			// Find the intersection with this segment.
-			//log.Printf("Testing %v<->%v, sector %v, seg %v:", ray.Start.StringHuman(), rayEnd.StringHuman(), sector.String(), seg.ray.Start.StringHuman())
-			if ok := seg.Intersect3D(&ray.Start, &ray.End, &isect); !ok {
-				continue // No intersection, skip it!
+			// We want to check this overlap.
+			// Input: MaxDistSq should be the current best distance found.
+			// If bestHit found something, use bestHit.HitDistSq. Else use limit.
+			currentBestDist := hitDistSq
+			if bestHit.HitSegment != nil {
+				currentBestDist = bestHit.HitDistSq
 			}
 
-			if seg.AdjacentSector == 0 {
-				idistSq = isect.DistSq(&ray.Start)
-				if idistSq < hitDistSq {
-					s = selection.SelectableFromWall(seg, selection.SelectableMid)
-					hitDistSq = idistSq
-					hit = isect
-				}
-				continue
-			}
+			// Reuse ri for the check, but careful not to clobber other state if we needed it (we don't)
+			ri.MaxDistSq = currentBestDist
+			ri.CheckEntry = true
 
-			// Here, we know we have an intersected portal segment. It could still be occluding the light though, since the
-			// bottom/top portions could be in the way.
-			floorZ, ceilZ := sector.ZAt(isect.To2D())
-			floorZ2, ceilZ2 := seg.AdjacentSegment.Sector.ZAt(isect.To2D())
-			if isect[2] < floorZ2 || isect[2] < floorZ {
-				idistSq = isect.DistSq(&ray.Start)
-				if idistSq < hitDistSq {
-					s = selection.SelectableFromWall(seg, selection.SelectableLow)
-					hitDistSq = idistSq
-					hit = isect
-				}
-				continue
-			}
-			if isect[2] < floorZ2 || isect[2] > ceilZ2 ||
-				isect[2] < floorZ || isect[2] > ceilZ {
-				idistSq = isect.DistSq(&ray.Start)
-				if idistSq < hitDistSq {
-					s = selection.SelectableFromWall(seg, selection.SelectableHi)
-					hitDistSq = idistSq
-					hit = isect
-				}
-				continue
-			}
+			overlap.IntersectRay(&ri)
 
-			// Get the square of the distance to the intersection
-			idistSq := isect.DistSq(&ray.Start)
-			if idistSq-distSq > constants.IntersectEpsilon {
-				// If the current intersection point is farther than one we
-				// already have for this sector, we have a concavity, body, or
-				// internal segment. Keep looking.
-				continue
+			if ri.HitSegment != nil {
+				bestHit = ri.IntersectionHit
+				bestEntry = true
 			}
-
-			// We're in the clear! Move to the next adjacent sector.
-			distSq = idistSq
-			next = seg.AdjacentSegment.Sector
 		}
-		depth++
-		if s != nil || next == nil || depth > constants.MaxPortals { // Avoid infinite looping.
+
+		if bestHit.HitSegment != nil {
+			// We hit a boundary closer than any object
+			s = nil
+			hit = bestHit.HitPoint
+
+			if bestHit.NextSector == nil {
+				// Solid Wall Hit (or Occluded Portal)
+				if bestEntry {
+					// Hitting the outside of a higher layer sector
+					s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableMid)
+				} else if bestHit.HitSegment.AdjacentSector != 0 {
+					// Portal Occlusion
+					floorZ, _ := sector.ZAt(bestHit.HitPoint.To2D())
+					floorZ2, _ := bestHit.HitSegment.AdjacentSegment.Sector.ZAt(bestHit.HitPoint.To2D())
+					if bestHit.HitPoint[2] < floorZ2 || bestHit.HitPoint[2] < floorZ {
+						s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableLow)
+					} else {
+						s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableHi)
+					}
+				} else {
+					// Solid Wall
+					s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableMid)
+				}
+				return // Hit wall, return
+			} else {
+				// Traverse
+				lastBoundaryDistSq = bestHit.HitDistSq
+				sector = bestHit.NextSector
+				depth++
+				if depth > constants.MaxPortals {
+					return
+				}
+				continue
+			}
+		}
+
+		// If we hit an object and no boundary was closer
+		if s != nil {
 			return
 		}
-		sector = next
+
+		// Nothing hit in this sector, and no boundary found
+		return
 	}
 
 	return
