@@ -13,18 +13,9 @@ func TestCastCornerTraversal(t *testing.T) {
 	ecs.Initialize()
 
 	// Helper to create a sector
-	createSector := func(id ecs.Entity, x, y, size float64) *core.Sector {
-		s := ecs.NewAttachedComponent(id, core.SectorCID).(*core.Sector)
-		// Manually init essential fields usually handled by Construct
-		s.Segments = make([]*core.SectorSegment, 0)
-		s.Bodies = make(map[ecs.Entity]*core.Body)
-		s.InternalSegments = make(map[ecs.Entity]*core.InternalSegment)
-		s.Top.Sector = s
-		s.Bottom.Sector = s
-		s.Bottom.Normal[2] = 1
-		s.Top.Normal[2] = -1
-
-		s.Entity = id
+	createSector := func(e ecs.Entity, x, y, size float64) *core.Sector {
+		ecs.CreateEntity(e)
+		s := ecs.NewAttachedComponent(e, core.SectorCID).(*core.Sector)
 		// Create 4 segments
 		// 0: Bottom (y) -> (x, y) to (x+size, y)
 		// 1: Right (x+size) -> (x+size, y) to (x+size, y+size)
@@ -37,8 +28,6 @@ func TestCastCornerTraversal(t *testing.T) {
 		s.AddSegment(x+size, y)      // 1
 		s.AddSegment(x+size, y+size) // 2
 		s.AddSegment(x, y+size)      // 3
-		s.Min[2] = 0
-		s.Max[2] = 10
 		s.Top.Z.SetAll(10)
 		s.Bottom.Z.SetAll(0)
 		return s
@@ -94,6 +83,7 @@ func TestCastCornerTraversal(t *testing.T) {
 	br.Precompute()
 
 	// Place a target body in BR
+	ecs.CreateEntity(100)
 	target := ecs.NewAttachedComponent(100, core.BodyCID).(*core.Body)
 	target.SectorEntity = br.Entity
 	target.Pos.Now = concepts.Vector3{15, 5, 5} // Center of BR

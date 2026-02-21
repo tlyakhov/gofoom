@@ -26,7 +26,6 @@ const LogDebug = false
 // For glitchTester6.yml (weird flickering shadows on edges)
 // const LogDebugLightHash = 0x4000270000000f
 const LogDebugLightHash = 0x4100280000000f
-
 const LogDebugLightEntity = 4
 
 const PackedLightBits = 10
@@ -36,29 +35,23 @@ const PackedLightRange = 12
 // All the data and state required to retrieve/calculate a lightmap voxel
 type LightSampler struct {
 	MaterialSampler
-	Hash             uint64
-	Output           concepts.Vector3
-	Filter           concepts.Vector4
-	Hit              concepts.Vector3
-	IntersectionTest concepts.Vector3
-	Q                concepts.Vector3
-	LightWorld       concepts.Vector3
-	InputBody        ecs.Entity
-	Visited          []*core.Sector
+	core.CastRequest
+	Hash       uint64
+	Output     concepts.Vector3
+	Filter     concepts.Vector4
+	Q          concepts.Vector3
+	LightWorld concepts.Vector3
+	InputBody  ecs.Entity
+	Visited    []*core.Sector
 
-	Sector  *core.Sector
-	Segment *core.Segment
+	Sector *core.Sector
 	// This will be different from .Sector for inner segments.
 	SegmentSector *core.Sector
 	Normal        concepts.Vector3
 
-	Intersection core.RayIntersection
-
 	prevDistSq, hitDistSq, maxDistSq float64
-
-	maxDist float64
-
-	xorSeed uint64
+	maxDist                          float64
+	xorSeed                          uint64
 }
 
 func (ls *LightSampler) packLight() uint32 {
@@ -197,30 +190,27 @@ func (ls *LightSampler) lightVisible(p *concepts.Vector3, body *core.Body) bool 
 
 // lightVisibleFromSector determines whether a given light is visible from a world location.
 func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *core.Body, sector *core.Sector) bool {
-	if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+	debug := LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity
+	if debug {
 		log.Printf("LightSampler.lightVisibleFromSector: START")
 		log.Printf("world=%v, light=%v\n", p.String(), lightBody.Pos.Render.String())
 	}
-	var next, overlap *core.Sector
+	var overlap *core.Sector
 	var hitSegment *core.SectorSegment
 
 	if ls.maxDist < 0 {
 		ls.maxDist = math.Sqrt(ls.maxDistSq)
 	}
+	// Initialize ray struct
+	ls.MaterialSampler.Ray = ls.CastRequest.Ray
+	ls.CastRequest.Debug = debug
 	// Setup the ray for intersection
-	ls.Ray.Delta = ls.LightWorld
-	ls.Ray.Delta.MulSelf(1.0 / ls.maxDist)
-	ls.Ray.Limit = ls.maxDist
+	ls.CastRequest.Ray.Delta = ls.LightWorld
+	ls.CastRequest.Ray.Delta.MulSelf(1.0 / ls.maxDist)
+	ls.CastRequest.Ray.Limit = ls.maxDist
 
 	sizeSq := lightBody.Size.Render[0] * 0.5
 	sizeSq *= sizeSq
-
-	// Initialize ray struct
-	ls.Intersection.Ray = ls.Ray
-	ls.Intersection.IgnoreSegment = ls.Segment
-
-	ls.Intersection.DebugHash = ls.Hash
-	ls.Intersection.DebugEntity = uint32(lightBody.Entity)
 
 	// The outer loop traverses portals starting from the sector our target point is in,
 	// and finishes in the sector our light is in (unless occluded)
@@ -232,77 +222,66 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		// can't just go through the first portal we find, we have to go through
 		// the NEAREST one. Use hitDistSq to keep track...
 		ls.hitDistSq = ls.maxDistSq
-		ls.Intersection.MinDistSq = ls.prevDistSq
-		ls.Intersection.MaxDistSq = ls.maxDistSq
-		ls.Intersection.CheckEntry = false
+		ls.MinDistSq = ls.prevDistSq
+		ls.HitSegment = nil
+		ls.NextSector = nil
+		ls.HitDistSq = ls.maxDistSq
+		ls.CheckEntry = false
 
-		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+		if debug {
 			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDistSq))
 		}
 		//Intersect this sector
-		sector.IntersectRay(&ls.Intersection)
+		sector.IntersectRay(&ls.CastRequest)
 
-		bestHit := ls.Intersection.IntersectionHit
+		bestHit := ls.CastResponse
 
 		// Check higher layer sectors for intersections
 		for _, e := range sector.HigherLayers {
 			if e == 0 {
 				continue
 			}
-			if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+			if debug {
 				log.Printf("  Visiting higher layer sector %v, max dist %v", e, ls.maxDistSq)
 			}
 			if overlap = core.GetSector(e); overlap == nil {
 				continue
 			}
 
-			// We want to check this overlap.
-			// Input: MaxDistSq should be the current best distance found.
-			// If bestHit found something, use bestHit.HitDistSq. Else use limit (maxDistSq).
-			currentBestDist := ls.maxDistSq
-			if bestHit.HitSegment != nil {
-				currentBestDist = bestHit.HitDistSq
-			}
-
-			ls.Intersection.MaxDistSq = currentBestDist
-			ls.Intersection.CheckEntry = true
-
-			overlap.IntersectRay(&ls.Intersection)
-
-			if ls.Intersection.HitSegment != nil {
-				bestHit = ls.Intersection.IntersectionHit
+			// We want to check this overlap. IntersectRay will use the
+			// CastResponse values and not update them if there is no closer hit.
+			ls.CheckEntry = true
+			if overlap.IntersectRay(&ls.CastRequest); ls.HitSegment != nil {
+				bestHit = ls.CastResponse
 			}
 		}
 
 		if bestHit.HitSegment != nil {
 			ls.hitDistSq = bestHit.HitDistSq
-			ls.Hit = bestHit.HitPoint
 			if math.Abs(bestHit.HitDistSq-ls.maxDistSq) < sizeSq {
 				hitSegment = nil
-				next = nil
+				bestHit.NextSector = nil
 			} else {
 				if bestHit.NextSector == nil {
 					return false // Occluded by wall
 				}
 				hitSegment = bestHit.HitSegment
-				next = bestHit.NextSector
 			}
 		} else {
 			hitSegment = nil
-			next = nil
 		}
-		if next == nil {
+		if bestHit.NextSector == nil {
 			// No portal sectors, not occluded
 			ls.Visited = append(ls.Visited, sector)
 			break
 		}
 		// If the portal has a transparent material, we need to filter the light
 		if hitSegment.PortalHasMaterial {
-			i2d := ls.Hit.To2D()
+			i2d := bestHit.HitPoint.To2D()
 			floorZ, ceilZ := sector.ZAt(i2d)
 			ls.Initialize(hitSegment.Surface.Material, hitSegment.Surface.ExtraStages)
-			ls.NU = ls.Hit.To2D().Dist(&hitSegment.P.Render) / hitSegment.Length
-			ls.NV = (ceilZ - ls.Hit[2]) / (ceilZ - floorZ)
+			ls.NU = bestHit.HitPoint.To2D().Dist(&hitSegment.P.Render) / hitSegment.Length
+			ls.NV = (ceilZ - bestHit.HitPoint[2]) / (ceilZ - floorZ)
 			ls.U = ls.NU
 			ls.V = ls.NV
 			ls.SampleMaterial(hitSegment.Surface.ExtraStages)
@@ -324,16 +303,17 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			return false
 		}
 		ls.Visited = append(ls.Visited, sector)
-		sector = next
+		sector = bestHit.NextSector
 	}
 	// Some kind of an edge case
 	if lightBody.SectorEntity != 0 && ls.Visited[len(ls.Visited)-1].Entity != lightBody.SectorEntity {
-		if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+		if debug {
 			log.Printf("No intersections, but ended up in a different sector %v than the light sector %v!", ls.Visited[len(ls.Visited)-1].Entity, lightBody.SectorEntity)
 		}
 		return false
 	}
 
+	hit := &ls.CastResponse.HitPoint
 	lightPos := &lightBody.Pos.Render
 	// TODO: Use quadtree here, to avoid thrashing memory with the Visited slice
 	// Generate entity shadows last. That way if the light is blocked by sector
@@ -341,19 +321,19 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	// segments.
 	for _, sector := range ls.Visited {
 		for _, seg := range sector.InternalSegments {
-			if &seg.Segment == ls.Segment {
+			if &seg.Segment == ls.IgnoreSegment {
 				continue
 			}
 			// Find the intersection with this segment.
-			ok := seg.Intersect3D(p, lightPos, &ls.Hit)
-			if !ok || ls.Hit[2] < seg.Bottom || ls.Hit[2] > seg.Top {
+			ok := seg.Intersect3D(p, lightPos, hit)
+			if !ok || hit[2] < seg.Bottom || hit[2] > seg.Top {
 				// log.Printf("No intersection for internal seg %v|%v\n", seg.A.StringHuman(), seg.B.StringHuman())
 				continue // No intersection, skip it!
 			}
 
 			ls.Initialize(seg.Surface.Material, seg.Surface.ExtraStages)
-			ls.NU = ls.Hit.To2D().Dist(seg.A) / seg.Length
-			ls.NV = (seg.Top - ls.Hit[2]) / (seg.Top - seg.Bottom)
+			ls.NU = hit.To2D().Dist(seg.A) / seg.Length
+			ls.NV = (seg.Top - hit[2]) / (seg.Top - seg.Bottom)
 			ls.U = ls.NU
 			ls.V = ls.NV
 			ls.SampleMaterial(seg.Surface.ExtraStages)
@@ -398,7 +378,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			}
 		}
 	}
-	if LogDebug && LogDebugLightHash == ls.Hash && LogDebugLightEntity == lightBody.Entity {
+	if debug {
 		log.Printf("Lit!\n")
 	}
 
@@ -408,9 +388,6 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 var LightSamplerLightsTested, LightSamplerCalcs atomic.Uint64
 
 func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
-	if ls.Ray == nil {
-		ls.Ray = new(concepts.Ray)
-	}
 	ls.Output[0] = 0
 	ls.Output[1] = 0
 	ls.Output[2] = 0
@@ -440,8 +417,8 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 		ls.Filter[3] = 0
 
 		// Update ray
-		ls.Ray.Start = *world
-		ls.Ray.End = body.Pos.Render
+		ls.CastRequest.Ray.Start = *world
+		ls.CastRequest.Ray.End = body.Pos.Render
 		// ls.Ray.Delta and Limit are set later
 
 		if ls.Normal.Dot(&ls.LightWorld) < 0 {

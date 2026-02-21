@@ -62,6 +62,7 @@ func (r *Renderer) Initialize() {
 		r.Blocks[i].Config = r.Config
 		r.Blocks[i].LightLastColHashes = make([]uint64, r.ScreenHeight)
 		r.Blocks[i].LightLastColResults = make([]concepts.Vector3, r.ScreenHeight*8)
+		r.Blocks[i].LightSampler.CastRequest.Ray = &concepts.Ray{}
 		r.Blocks[i].LightSampler.Visited = make([]*core.Sector, 0, 64)
 		r.Blocks[i].Bodies = make(containers.Set[*core.Body])
 		r.Blocks[i].InternalSegments = make(map[*core.InternalSegment]*core.Sector)
@@ -198,7 +199,7 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 	b.LightSampler.InputBody = 0
 	b.LightSampler.Sector = b.Sector
 	b.LightSampler.SegmentSector = b.IntersectedSectorSegment.Sector
-	b.LightSampler.Segment = nil
+	b.LightSampler.IgnoreSegment = nil
 
 	if b.ClippedTop > b.EdgeTop {
 		b.LightSampler.Normal = b.Sector.Top.Normal
@@ -223,7 +224,7 @@ func (r *Renderer) RenderSegmentColumn(b *block) {
 		return
 	}
 
-	b.LightSampler.Segment = b.IntersectedSegment
+	b.LightSampler.IgnoreSegment = b.IntersectedSegment
 	b.IntersectedSegment.Normal.To3D(&b.LightSampler.Normal)
 
 	// Do we have an adjacent segment?

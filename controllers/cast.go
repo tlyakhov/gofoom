@@ -18,7 +18,7 @@ import (
 func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodies bool) (s *selection.Selectable, hit concepts.Vector3) {
 	var sampler render.MaterialSampler
 	var isect concepts.Vector3
-	var ri core.RayIntersection
+	var req core.CastRequest
 
 	sampler.Config = &render.Config{}
 	sampler.Ray = ray
@@ -27,13 +27,15 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 	lastBoundaryDistSq := -1.0
 
 	// Initialize Ray State
-	ri.Ray = ray
-	ri.IgnoreSegment = nil
+	req.Ray = ray
+	req.IgnoreSegment = nil
 
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	for sector != nil {
-		hitDistSq := limitSq // Best hit in this sector so far
-		s = nil              // Reset selection
+		req.HitDistSq = limitSq
+		req.HitSegment = nil
+		req.NextSector = nil
+		s = nil // Reset selection
 
 		if !ignoreBodies {
 			for _, b := range sector.Bodies {
@@ -46,9 +48,9 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 						continue
 					}
 					idistSq := b.Pos.Now.DistSq(&ray.Start)
-					if idistSq < hitDistSq && idistSq > lastBoundaryDistSq {
+					if idistSq < req.HitDistSq && idistSq > lastBoundaryDistSq {
 						s = selection.SelectableFromBody(b)
-						hitDistSq = idistSq
+						req.HitDistSq = idistSq
 						hit = b.Pos.Now
 					}
 				}
@@ -58,24 +60,22 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 			// Find the intersection with this segment.
 			if ok := seg.Intersect3D(&ray.Start, &ray.End, &isect); ok {
 				idistSq := isect.DistSq(&ray.Start)
-				if idistSq < hitDistSq && idistSq > lastBoundaryDistSq {
+				if idistSq < req.HitDistSq && idistSq > lastBoundaryDistSq {
 					s = selection.SelectableFromInternalSegment(seg)
-					hitDistSq = idistSq
+					req.HitDistSq = idistSq
 					hit = isect
 				}
 			}
 		}
 
 		// Check sector boundaries (Exit)
-		// We use hitDistSq as maxDistSq to ensure we only find boundaries closer than any object hit
-		ri.MinDistSq = lastBoundaryDistSq
-		ri.MaxDistSq = hitDistSq
-		ri.CheckEntry = false
-		sector.IntersectRay(&ri)
+		req.MinDistSq = lastBoundaryDistSq
+		req.CheckEntry = false
+		sector.IntersectRay(&req)
 
 		// Check higher layer sectors (Entry)
 		bestEntry := false
-		bestHit := ri.IntersectionHit
+		bestHit := req.CastResponse
 
 		// Check higher layer sectors (Entry)
 		for _, e := range sector.HigherLayers {
@@ -88,68 +88,49 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 			}
 
 			// We want to check this overlap.
-			// Input: MaxDistSq should be the current best distance found.
-			// If bestHit found something, use bestHit.HitDistSq. Else use limit.
-			currentBestDist := hitDistSq
-			if bestHit.HitSegment != nil {
-				currentBestDist = bestHit.HitDistSq
-			}
-
-			// Reuse ri for the check, but careful not to clobber other state if we needed it (we don't)
-			ri.MaxDistSq = currentBestDist
-			ri.CheckEntry = true
-
-			overlap.IntersectRay(&ri)
-
-			if ri.HitSegment != nil {
-				bestHit = ri.IntersectionHit
+			req.CheckEntry = true
+			if overlap.IntersectRay(&req); req.HitSegment != nil {
+				bestHit = req.CastResponse
 				bestEntry = true
 			}
 		}
 
-		if bestHit.HitSegment != nil {
-			// We hit a boundary closer than any object
-			s = nil
-			hit = bestHit.HitPoint
-
-			if bestHit.NextSector == nil {
-				// Solid Wall Hit (or Occluded Portal)
-				if bestEntry {
-					// Hitting the outside of a higher layer sector
-					s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableMid)
-				} else if bestHit.HitSegment.AdjacentSector != 0 {
-					// Portal Occlusion
-					floorZ, _ := sector.ZAt(bestHit.HitPoint.To2D())
-					floorZ2, _ := bestHit.HitSegment.AdjacentSegment.Sector.ZAt(bestHit.HitPoint.To2D())
-					if bestHit.HitPoint[2] < floorZ2 || bestHit.HitPoint[2] < floorZ {
-						s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableLow)
-					} else {
-						s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableHi)
-					}
-				} else {
-					// Solid Wall
-					s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableMid)
-				}
-				return // Hit wall, return
-			} else {
-				// Traverse
-				lastBoundaryDistSq = bestHit.HitDistSq
-				sector = bestHit.NextSector
-				depth++
-				if depth > constants.MaxPortals {
-					return
-				}
-				continue
-			}
-		}
-
-		// If we hit an object and no boundary was closer
-		if s != nil {
+		if bestHit.HitSegment == nil {
+			// Nothing hit in this sector, and no boundary found
 			return
 		}
 
-		// Nothing hit in this sector, and no boundary found
-		return
+		// We hit a boundary closer than any object
+		s = nil
+		hit = bestHit.HitPoint
+
+		if bestHit.NextSector == nil {
+			// Solid Wall Hit (or Occluded Portal)
+			if bestEntry {
+				// Hitting the outside of a higher layer sector
+				s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableMid)
+			} else if bestHit.HitSegment.AdjacentSector != 0 {
+				// Portal Occlusion
+				floorZ, _ := sector.ZAt(bestHit.HitPoint.To2D())
+				floorZ2, _ := bestHit.HitSegment.AdjacentSegment.Sector.ZAt(bestHit.HitPoint.To2D())
+				if bestHit.HitPoint[2] < floorZ2 || bestHit.HitPoint[2] < floorZ {
+					s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableLow)
+				} else {
+					s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableHi)
+				}
+			} else {
+				// Solid Wall
+				s = selection.SelectableFromWall(bestHit.HitSegment, selection.SelectableMid)
+			}
+			return // Hit wall, return
+		}
+		// Traverse
+		lastBoundaryDistSq = bestHit.HitDistSq
+		sector = bestHit.NextSector
+		depth++
+		if depth > constants.MaxPortals {
+			return
+		}
 	}
 
 	return

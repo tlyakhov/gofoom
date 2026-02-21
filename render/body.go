@@ -77,7 +77,7 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 		ls.Normal[1] = math.Sin(b.Angle.Render * concepts.Deg2rad)
 		ls.Normal[2] = 0
 		ls.Hash = block.WorldToLightmapHash(ls.Sector, &b.Pos.Render, &ls.Normal)
-		ls.Segment = nil
+		ls.IgnoreSegment = nil
 		ls.InputBody = b.Entity
 		ls.Get()
 		block.Light[0] = ls.Output[0]
