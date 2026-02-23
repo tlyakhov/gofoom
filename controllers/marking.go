@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/components/selection"
 	"tlyakhov/gofoom/concepts"
@@ -54,32 +55,43 @@ func (mmc *MarkMakerController) addMark(mark materials.Mark) {
 }
 
 func (mmc *MarkMakerController) surfaceFromSelectable(s *selection.Selectable, p *concepts.Vector2) (surf *materials.Surface, bottom, top float64) {
-	// TODO: Implement for higher/lower layer sectors
+	var adj *core.Sector
+	var adjSegment *core.SectorSegment
+
+	// Will be invalid for InternalSegments
+	if s.SectorSegment != nil {
+		adjSegment = s.SectorSegment.AdjacentSegment
+	}
+	// Handle surfaces of edges between different layers
+	if adjSegment == nil &&
+		(s.Type == selection.SelectableHi || s.Type == selection.SelectableLow) {
+		lower := s.Sector.OverlapAt(p, true)
+		if lower == nil {
+			return nil, 0, 0
+		}
+		adj = lower
+		adjSegment = s.SectorSegment
+	} else if adjSegment != nil {
+		adj = adjSegment.Sector
+	}
+
 	switch s.Type {
 	case selection.SelectableHi:
 		top = s.Sector.Top.ZAt(p)
-		if s.SectorSegment.AdjacentSegment == nil {
-			return &s.SectorSegment.HiSurface, top, top + 60
-		}
-		adj := s.SectorSegment.AdjacentSegment.Sector
 		adjTop := adj.Top.ZAt(p)
 		if adjTop <= top {
 			bottom = adjTop
-			surf = &s.SectorSegment.AdjacentSegment.HiSurface
+			surf = &adjSegment.HiSurface
 		} else {
 			bottom, top = top, adjTop
 			surf = &s.SectorSegment.HiSurface
 		}
 	case selection.SelectableLow:
 		bottom = s.Sector.Bottom.ZAt(p)
-		if s.SectorSegment.AdjacentSegment == nil {
-			return &s.SectorSegment.LoSurface, bottom - 60, bottom
-		}
-		adj := s.SectorSegment.AdjacentSegment.Sector
 		adjBottom := adj.Bottom.ZAt(p)
 		if bottom <= adjBottom {
 			top = adjBottom
-			surf = &s.SectorSegment.AdjacentSegment.LoSurface
+			surf = &adjSegment.LoSurface
 		} else {
 			bottom, top = adjBottom, bottom
 			surf = &s.SectorSegment.LoSurface
@@ -118,6 +130,9 @@ func (mmc *MarkMakerController) markSurfaceAndTransform(s *selection.Selectable,
 	}
 
 	surf, bottom, top := mmc.surfaceFromSelectable(s, hit2d)
+	if surf == nil {
+		return nil
+	}
 	// This is reversed because our UV coordinates go top->bottom
 	transform[concepts.MatBasis2Y] = (bottom - top)
 	transform[concepts.MatTransY] = -(mmc.pos[2] - top)
@@ -149,6 +164,9 @@ func (mmc *MarkMakerController) MakeMark(s *selection.Selectable, pos *concepts.
 		shaderStage.Construct(nil)
 		shaderStage.Flags = 0
 		surf := mmc.markSurfaceAndTransform(s, &mmc.transform)
+		if surf == nil {
+			return
+		}
 		surf.ExtraStages = append(surf.ExtraStages, shaderStage)
 		shaderStage.Transform.From(&surf.Transform.Now)
 		shaderStage.Transform.AffineInverseSelf().MulSelf(&mmc.transform)

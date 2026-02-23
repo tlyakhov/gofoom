@@ -26,7 +26,7 @@ type SectorPlane struct {
 	// This is only valid for inner sectors
 	Ignore bool `editable:"Ignore"`
 
-	XYDet float64
+	PlaneDet dynamic.DynamicValue[float64]
 }
 
 func (s *SectorPlane) String() string {
@@ -36,6 +36,7 @@ func (s *SectorPlane) String() string {
 func (s *SectorPlane) Construct(data map[string]any) {
 	s.Surface.Construct(data)
 	s.Z.Construct(nil)
+	s.PlaneDet.Construct(nil)
 
 	if data == nil {
 		return
@@ -86,16 +87,27 @@ func (s *SectorPlane) Serialize() map[string]any {
 
 func (s *SectorPlane) Precompute() {
 	if s.Sector == nil || len(s.Sector.Segments) == 0 {
-		s.XYDet = 0
+		s.PlaneDet.Now = 0
 		return
 	}
 
-	s.XYDet = s.Normal[1]*s.Segments[0].P.Render[1] +
+	s.PlaneDet.Now = s.Normal[2]*s.Z.Render +
+		s.Normal[1]*s.Segments[0].P.Render[1] +
 		s.Normal[0]*s.Segments[0].P.Render[0]
+	s.PlaneDet.Render = s.PlaneDet.Now
 }
 
 func (s *SectorPlane) ZAt(isect *concepts.Vector2) float64 {
-	det := s.Normal[2]*s.Z.Render + s.XYDet
+	if s.Ignore {
+		// This could be expensive, but I doubt we'll have super deep chains
+		// of layers
+		lowerLayer := s.OverlapAt(isect, true)
+		if lowerLayer != nil && s.Normal[2] < 0 {
+			return lowerLayer.Top.ZAt(isect)
+		} else if lowerLayer != nil {
+			return lowerLayer.Bottom.ZAt(isect)
+		}
+	}
 
-	return (det - s.Normal[0]*isect[0] - s.Normal[1]*isect[1]) / s.Normal[2]
+	return (s.PlaneDet.Render - s.Normal[0]*isect[0] - s.Normal[1]*isect[1]) / s.Normal[2]
 }

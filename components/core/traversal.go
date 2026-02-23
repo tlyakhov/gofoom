@@ -16,7 +16,9 @@ const LogDebug = false
 type CastResponse struct {
 	HitSegment *SectorSegment
 	HitPoint   concepts.Vector3
+	// You can also pass in a max limit in this field
 	HitDistSq  float64
+	HitPortal  int // -1 = lo, 0 = mid, 1 = hi
 	NextSector *Sector
 }
 
@@ -37,28 +39,31 @@ type CastRequest struct {
 // It handles portal transitions, higher layer checks, and grazing ray edge cases.
 //
 // Arguments:
-//   - ri: A RayIntersection struct containing ray definition, traversal state, and output fields.
-//     The function will update ri.HitSegment, ri.HitPoint, ri.HitDistSq, and ri.NextSector.
+//   - req: A CastRequest struct containing ray, traversal state, and output fields.
+//     The function will update req.CastResponse if an intersection is found, and
+//     will leave it alone otherwise.
 func (s *Sector) IntersectRay(req *CastRequest) {
 	debug := LogDebug && req.Debug
 
 	// Pre-declare variables for loop
 	var intersectionTest concepts.Vector3
 	var adj *Sector
-	var floorZ, ceilZ, floorZ2, ceilZ2, intersectionDistSq float64
+	var floorZ, ceilZ, intersectionDistSq float64
+	var portal int
 
 	for _, seg := range s.Segments {
 		if debug {
 			log.Printf("    Checking segment [%v]-[%v]\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 		}
 
-		// Don't intersect with the segment we started on
+		// Caller can provide a segment to ignore - this is useful for lighting
+		// where the light sample is on a segment, so we want to ignore it.
 		if &seg.Segment == req.IgnoreSegment {
 			continue
 		}
 
 		// When checking higher layers (Entry check), we ignore portals in that layer.
-		// We only care about entering the sector via a solid boundary (conceptually).
+		// We only care about entering the sector via a solid boundary.
 		if req.CheckEntry && seg.AdjacentSector != 0 {
 			if debug {
 				log.Printf("    Ignoring portal to %v in higher layer sector.", seg.AdjacentSector)
@@ -68,7 +73,6 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 
 		// Check normal facing.
 		// Ray vs Normal dot product.
-		// Ray is rayDelta. Segment normal is seg.Normal.
 		// We want:
 		// Exit (checkEntry=false): Ray going OUT. Normal points IN. Angle obtuse. Dot < 0.
 		// Entry (checkEntry=true): Ray going IN. Normal points IN. Angle acute. Dot > 0.
@@ -82,7 +86,7 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 
 		if req.CheckEntry != normalFacing {
 			if debug {
-				log.Printf("    Ignoring segment [or behind]. higher layer? = %v, normal? = %v. Dot: %v", req.CheckEntry, normalFacing, dot)
+				log.Printf("    Ignoring segment [or behind]. higher layer? = %v, normal? = %v. Dot: %.2f", req.CheckEntry, normalFacing, dot)
 			}
 			continue
 		}
@@ -97,6 +101,25 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 
 		if debug {
 			log.Printf("    Intersection = [%v]\n", intersectionTest.StringHuman(2))
+		}
+
+		// Distance checks
+		intersectionDistSq = intersectionTest.DistSq(&req.Start)
+
+		// 1. Is it worse than current best?
+		if intersectionDistSq >= req.HitDistSq {
+			continue
+		}
+
+		// 2. Is it ahead of previous hit?
+		// Note: Using epsilon to be safe against floating point error.
+		// We allow hits at roughly the same distance to handle corner cases where we exit one sector
+		// and immediately exit the next (shared vertex).
+		if intersectionDistSq < req.MinDistSq-constants.IntersectEpsilon {
+			if debug {
+				log.Printf("    Found intersection point before the previous sector: %v < %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(req.MinDistSq))
+			}
+			continue
 		}
 
 		// Determine the next sector
@@ -144,6 +167,8 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 		// Occlusion Checks (Floor/Ceiling)
 		// Even if we hit a portal segment, the portal might be blocked by floor/ceiling differences.
 
+		// TODO: Fix this - right now it doesn't work for sectors that move in
+		// the Z axis (e.g. doors)
 		/*if intersectionTest[2] < s.Min[2] || intersectionTest[2] > s.Max[2] {
 			if debug {
 				log.Printf("    Occluded by sector min/max %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
@@ -155,53 +180,56 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 		i2d := intersectionTest.To2D()
 		floorZ, ceilZ = s.ZAt(i2d)
 
-		if intersectionTest[2] < floorZ-constants.IntersectEpsilon || intersectionTest[2] > ceilZ+constants.IntersectEpsilon {
+		portal = 0
+		if intersectionTest[2] < floorZ-constants.IntersectEpsilon {
 			if debug {
-				log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
+				log.Printf("    Occluded by floor gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 			}
-			// Occluded by this sector's floor/ceiling
+			// Occluded by this sector's floor
 			adj = nil
-		} else if !req.CheckEntry && adj != nil {
-			// If checking Exit, and we have a next sector, check its floor/ceiling too.
+			portal = -1
+		} else if intersectionTest[2] > ceilZ+constants.IntersectEpsilon {
+			if debug {
+				log.Printf("    Occluded by ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
+			}
+			// Occluded by this sector's ceiling
+			adj = nil
+			portal = 1
+		} else if adj != nil && adj != s {
+			// If  we have a next sector, check its floor/ceiling too.
 			// (If checkEntry is true, adj is s, so we already checked it).
-			floorZ2, ceilZ2 = adj.ZAt(i2d)
-			if intersectionTest[2] < floorZ2-constants.IntersectEpsilon || intersectionTest[2] > ceilZ2+constants.IntersectEpsilon {
+			floorZ, ceilZ = adj.ZAt(i2d)
+			if intersectionTest[2] < floorZ-constants.IntersectEpsilon {
 				if debug {
-					log.Printf("    Occluded by floor/ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
+					log.Printf("    Occluded by adj floor gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
 				}
-				// Occluded by adjacent sector's floor/ceiling
+				// Occluded by adjacent sector's floor
 				adj = nil
+				portal = -1
+			} else if intersectionTest[2] > ceilZ+constants.IntersectEpsilon {
+				if debug {
+					log.Printf("    Occluded by adj ceiling gap: %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
+				}
+				// Occluded by adjacent sector's ceiling
+				adj = nil
+				portal = 1
 			}
 		}
 		//}
 
-		// Distance checks
-		intersectionDistSq = intersectionTest.DistSq(&req.Start)
-
-		// 1. Is it better than current best?
-		if intersectionDistSq >= req.HitDistSq {
-			continue
-		}
-
-		// 2. Is it ahead of previous hit?
-		// Note: Using epsilon to be safe against floating point error.
-		// We allow hits at roughly the same distance to handle corner cases where we exit one sector
-		// and immediately exit the next (shared vertex).
-		if intersectionDistSq < req.MinDistSq-constants.IntersectEpsilon {
-			if debug {
-				log.Printf("    Found intersection point before the previous sector: %v < %v\n", math.Sqrt(intersectionDistSq), math.Sqrt(req.MinDistSq))
-			}
-			continue
-		}
-
 		if debug {
-			log.Printf("    Found a portal to %v without impediment at dist %v.\n", adj, math.Sqrt(intersectionDistSq))
+			if adj != nil {
+				log.Printf("    Next sector to %v at dist %.2f.\n", adj.Entity, math.Sqrt(intersectionDistSq))
+			} else {
+				log.Printf("    Blocked at dist %.2f. Portal = %v\n", math.Sqrt(intersectionDistSq), portal)
+			}
 		}
 
 		// We have a valid, better intersection.
 		req.HitDistSq = intersectionDistSq
 		req.HitPoint = intersectionTest
 		req.HitSegment = seg
+		req.HitPortal = portal
 		req.NextSector = adj
 	}
 }

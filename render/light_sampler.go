@@ -220,7 +220,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	for sector != nil {
 		// Since our sectors can be concave or have inner sectors (holes), we
 		// can't just go through the first portal we find, we have to go through
-		// the NEAREST one. Use hitDistSq to keep track...
+		// the NEAREST one. Use CastResponse (part of ls.CastRequest) to keep track.
 		ls.hitDistSq = ls.maxDistSq
 		ls.MinDistSq = ls.prevDistSq
 		ls.HitSegment = nil
