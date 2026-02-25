@@ -49,9 +49,9 @@ type LightSampler struct {
 	SegmentSector *core.Sector
 	Normal        concepts.Vector3
 
-	prevDistSq, hitDistSq, maxDistSq float64
-	maxDist                          float64
-	xorSeed                          uint64
+	maxDistSq float64
+	maxDist   float64
+	xorSeed   uint64
 }
 
 func (ls *LightSampler) packLight() uint32 {
@@ -196,7 +196,6 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 		log.Printf("world=%v, light=%v\n", p.String(), lightBody.Pos.Render.String())
 	}
 	var overlap *core.Sector
-	var hitSegment *core.SectorSegment
 
 	if ls.maxDist < 0 {
 		ls.maxDist = math.Sqrt(ls.maxDistSq)
@@ -216,25 +215,21 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 	// and finishes in the sector our light is in (unless occluded)
 	depth := 0 // We keep track of portaling depth to avoid infinite traversal in weird cases.
 	ls.Visited = ls.Visited[:0]
-	ls.prevDistSq = -1.0
+	ls.MinDistSq = -1
 	for sector != nil {
 		// Since our sectors can be concave or have inner sectors (holes), we
 		// can't just go through the first portal we find, we have to go through
 		// the NEAREST one. Use CastResponse (part of ls.CastRequest) to keep track.
-		ls.hitDistSq = ls.maxDistSq
-		ls.MinDistSq = ls.prevDistSq
 		ls.HitSegment = nil
 		ls.NextSector = nil
 		ls.HitDistSq = ls.maxDistSq
 		ls.CheckEntry = false
 
 		if debug {
-			log.Printf("  Checking sector %v, max dist %v", sector.Entity, math.Sqrt(ls.maxDistSq))
+			log.Printf("  Checking sector %v, max dist %.2f", sector.Entity, ls.maxDist)
 		}
 		//Intersect this sector
 		sector.IntersectRay(&ls.CastRequest)
-
-		bestHit := ls.CastResponse
 
 		// Check higher layer sectors for intersections
 		for _, e := range sector.HigherLayers {
@@ -251,41 +246,34 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			// We want to check this overlap. IntersectRay will use the
 			// CastResponse values and not update them if there is no closer hit.
 			ls.CheckEntry = true
-			if overlap.IntersectRay(&ls.CastRequest); ls.HitSegment != nil {
-				bestHit = ls.CastResponse
-			}
+			overlap.IntersectRay(&ls.CastRequest)
 		}
 
-		if bestHit.HitSegment != nil {
-			ls.hitDistSq = bestHit.HitDistSq
-			if math.Abs(bestHit.HitDistSq-ls.maxDistSq) < sizeSq {
-				hitSegment = nil
-				bestHit.NextSector = nil
+		if ls.HitSegment != nil {
+			if math.Abs(ls.HitDistSq-ls.maxDistSq) < sizeSq {
+				ls.NextSector = nil
 			} else {
-				if bestHit.NextSector == nil {
+				if ls.NextSector == nil {
 					return false // Occluded by wall
 				}
-				hitSegment = bestHit.HitSegment
 			}
-		} else {
-			hitSegment = nil
 		}
-		if bestHit.NextSector == nil {
+		if ls.NextSector == nil {
 			// No portal sectors, not occluded
 			ls.Visited = append(ls.Visited, sector)
 			break
 		}
 		// If the portal has a transparent material, we need to filter the light
-		if hitSegment.PortalHasMaterial {
-			i2d := bestHit.HitPoint.To2D()
+		if ls.HitSegment.PortalHasMaterial {
+			i2d := ls.HitPoint.To2D()
 			floorZ, ceilZ := sector.ZAt(i2d)
-			ls.Initialize(hitSegment.Surface.Material, hitSegment.Surface.ExtraStages)
-			ls.NU = bestHit.HitPoint.To2D().Dist(&hitSegment.P.Render) / hitSegment.Length
-			ls.NV = (ceilZ - bestHit.HitPoint[2]) / (ceilZ - floorZ)
+			ls.Initialize(ls.HitSegment.Surface.Material, ls.HitSegment.Surface.ExtraStages)
+			ls.NU = i2d.Dist(&ls.HitSegment.P.Render) / ls.HitSegment.Length
+			ls.NV = (ceilZ - ls.HitPoint[2]) / (ceilZ - floorZ)
 			ls.U = ls.NU
 			ls.V = ls.NV
-			ls.SampleMaterial(hitSegment.Surface.ExtraStages)
-			if lit := materials.GetLit(hitSegment.Surface.Material); lit != nil {
+			ls.SampleMaterial(ls.HitSegment.Surface.ExtraStages)
+			if lit := materials.GetLit(ls.HitSegment.Surface.Material); lit != nil {
 				lit.Apply(&ls.MaterialSampler.Output, nil)
 			}
 			if ls.MaterialSampler.Output[3] >= 0.99 {
@@ -295,15 +283,15 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			concepts.BlendColors(&ls.Filter, &ls.MaterialSampler.Output, 1)
 		}
 
-		ls.prevDistSq = ls.hitDistSq
 		depth++
 		if depth > constants.MaxPortals { // Avoid infinite looping.
 			//	dbg := fmt.Sprintf("lightVisible traversed max sectors (p: %v, light: %v)", p, lightBody.Entity)
 			//	ls.Player.Notices.Push(dbg)
 			return false
 		}
+		ls.MinDistSq = ls.HitDistSq
 		ls.Visited = append(ls.Visited, sector)
-		sector = bestHit.NextSector
+		sector = ls.NextSector
 	}
 	// Some kind of an edge case
 	if lightBody.SectorEntity != 0 && ls.Visited[len(ls.Visited)-1].Entity != lightBody.SectorEntity {

@@ -24,6 +24,7 @@ type Weapon struct {
 	State              WeaponState
 	Intent             WeaponIntent `editable:"Intent"`
 	LastStateTimestamp int64        // in ns
+	Fired              bool
 }
 
 func (w *Weapon) String() string {

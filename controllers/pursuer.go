@@ -159,6 +159,7 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 	}
 	// We're within FOV, check for obstacles:
 	ray := &concepts.Ray{Start: pc.Body.Pos.Now, End: *enemy.Pos}
+	ray.Start[2] += pc.Body.Size.Render[1] * 0.5 // Bias up, this should be configurable
 	ray.AnglesFromStartEnd()
 	s, _ := Cast(ray, pc.Body.Sector(), pc.NpcController.Entity, false)
 	if s != nil && s.Entity != enemy.Entity {

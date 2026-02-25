@@ -70,6 +70,7 @@ func (w *WeaponController) newState(s inventory.WeaponState) {
 	//log.Printf("Weapon %v changing from state %v->%v after %vms", w.Entity, w.State, s, (ecs.Simulation.SimTimestamp-w.LastStateTimestamp)/1_000_000)
 	w.State = s
 	w.LastStateTimestamp = ecs.Simulation.SimTimestamp
+	w.Fired = false
 	p := w.Class.Params[w.State]
 	if p.Sound != 0 {
 		audio.PlaySound(p.Sound, w.Body.Entity, "weapon "+s.String(), audio.SoundPlayNormal)
@@ -93,13 +94,18 @@ func weaponUnholstering(wc *WeaponController) {
 }
 
 func weaponFiring(wc *WeaponController) {
-	if wc.Intent != inventory.WeaponFire {
+	if wc.stateCompleted() {
+		wc.newState(inventory.WeaponCooling)
+		return
+	}
+
+	if wc.Fired {
 		return
 	}
 	// TODO: This should be a parameter somewhere, whether to reset the intent
 	// or not.
 	wc.Intent = inventory.WeaponHeld
-	wc.newState(inventory.WeaponCooling)
+	wc.Fired = true
 	if instant := inventory.GetWeaponClassInstant(wc.Entity); instant != nil {
 		wc.fireWeaponInstant(instant)
 	}
@@ -119,6 +125,10 @@ func weaponCooling(wc *WeaponController) {
 	}
 	if wc.Intent == inventory.WeaponHolstered {
 		wc.newState(inventory.WeaponHolstering)
+	} else {
+		// TODO: This should be a parameter somewhere, whether to reset the intent
+		// or not.
+		wc.Intent = inventory.WeaponHeld
 	}
 }
 func weaponReloading(wc *WeaponController) {
