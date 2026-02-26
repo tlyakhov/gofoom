@@ -21,6 +21,8 @@ type Finder struct {
 	Radius      float64
 	StartSector *core.Sector
 	SectorValid func(from *core.Sector, to *core.Sector, p *concepts.Vector2) bool
+	MountHeight float64
+	Ray         concepts.Ray
 }
 
 // Directions: 8 neighbors
@@ -41,16 +43,15 @@ func (f *Finder) sectorForNextPoint(startSector *core.Sector, start, next *conce
 	limit := dist + f.Radius
 	limitSq := limit * limit
 
-	ray := &concepts.Ray{
-		Start: *start,
-		Delta: *dir,
-		Limit: limit,
-	}
-	ray.End = ray.Start
-	ray.End.AddSelf(ray.Delta.Mul(ray.Limit))
+	f.Ray.Start = *start
+	f.Ray.Delta = *dir
+	f.Ray.Limit = limit
+
+	f.Ray.End = f.Ray.Start
+	f.Ray.End.AddSelf(f.Ray.Delta.Mul(f.Ray.Limit))
 
 	var req core.CastRequest
-	req.Ray = ray
+	req.Ray = &f.Ray
 	req.MinDistSq = -1.0
 
 	sector := startSector
@@ -168,6 +169,12 @@ func (f *Finder) ShortestPath() []concepts.Vector3 {
 	// Use a special key for the exact end point
 	endKey := nodeKey{math.MaxInt, math.MaxInt}
 
+	// If MountHeight is set, use it. Otherwise, use a small epsilon.
+	zBias := 0.1
+	if f.MountHeight > 0 {
+		zBias = f.MountHeight
+	}
+
 	for pq.Len() > 0 {
 		current := heap.Pop(&pq).(*node)
 		currentPoint := f.keyToPoint(current.key)
@@ -175,8 +182,8 @@ func (f *Finder) ShortestPath() []concepts.Vector3 {
 		// Adjust Z based on current sector to ensure raycast works
 		if current.sector != nil {
 			fz, _ := current.sector.ZAt(currentPoint.To2D())
-			// Bias slightly up to avoid floor intersection issues
-			currentPoint[2] = fz + 0.1
+			// Bias up to avoid floor intersection issues
+			currentPoint[2] = fz + zBias
 		}
 
 		// Check if we are close enough to end to jump there directly

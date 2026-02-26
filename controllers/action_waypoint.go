@@ -42,6 +42,9 @@ func (ac *ActionController) repath(start, end concepts.Vector3) {
 		Step:        10,
 		SectorValid: ac.pathSectorValid,
 	}
+	if ac.Mobile != nil {
+		ac.State.Finder.MountHeight = ac.Mobile.MountHeight
+	}
 	if ac.Body != nil {
 		ac.State.Finder.Radius = ac.Body.Size.Now[0] * 0.5
 	} else if ac.Sector != nil {
