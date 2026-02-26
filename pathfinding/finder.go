@@ -29,105 +29,84 @@ var directions = []struct{ dx, dy int }{
 	{1, 1}, {1, -1}, {-1, 1}, {-1, -1},
 }
 
-func (f *Finder) insideSectorOrChildren(test *core.Sector, next *concepts.Vector2) *core.Sector {
-	if !test.IsPointInside2D(next) {
-		return nil
+func (f *Finder) sectorForNextPoint(startSector *core.Sector, start, next *concepts.Vector3) *core.Sector {
+	dir := next.Sub(start)
+	dist := dir.Length()
+	if dist < constants.IntersectEpsilon {
+		return startSector
 	}
+	dir.MulSelf(1.0 / dist)
 
-	var overlap *core.Sector
-	result := test
-	for _, e := range test.HigherLayers {
-		if e == 0 {
-			continue
-		}
-		if overlap = core.GetSector(e); overlap == nil {
-			continue
-		}
-		child := f.insideSectorOrChildren(overlap, next)
-		if child != nil {
-			return child
-		}
-	}
-	return result
-}
+	// Check radius by extending the ray beyond the destination
+	limit := dist + f.Radius
+	limitSq := limit * limit
 
-func (f *Finder) tooCloseToSegment(from *core.Sector, to *core.Sector, pos *concepts.Vector2) bool {
-	// Check if we're too close to a segment
-	for _, seg := range to.Segments {
-		if seg.AdjacentSegment != nil && seg.PortalIsPassable {
-			continue
-		}
-		if seg.DistanceToPointSq(pos) < f.Radius*f.Radius {
-			return true
-		}
+	ray := &concepts.Ray{
+		Start: *start,
+		Delta: *dir,
+		Limit: limit,
 	}
+	ray.End = ray.Start
+	ray.End.AddSelf(ray.Delta.Mul(ray.Limit))
 
-	var overlap *core.Sector
-	for _, e := range to.HigherLayers {
-		if e == 0 {
-			continue
-		}
-		if overlap = core.GetSector(e); overlap == nil {
-			continue
-		}
-		if f.SectorValid != nil && !f.SectorValid(from, overlap, pos) &&
-			f.tooCloseToSegment(from, overlap, pos) {
-			return true
-		}
-	}
-	return false
-}
-func (f *Finder) sectorForNextPoint(sector *core.Sector, delta, next *concepts.Vector2, depth int) *core.Sector {
-	// TODO: this logic is garbage, need to think it through better.
-	if test := f.insideSectorOrChildren(sector, next); test != nil {
-		if test == sector {
-			if f.tooCloseToSegment(sector, test, next) {
-				return nil
-			} else {
-				return sector
+	var req core.CastRequest
+	req.Ray = ray
+	req.MinDistSq = -1.0
+
+	sector := startSector
+	depth := 0
+
+	for sector != nil {
+		req.HitDistSq = limitSq
+		req.HitSegment = nil
+		req.NextSector = nil
+
+		// 1. Check Exit (check boundaries of current sector)
+		req.CheckEntry = false
+		sector.IntersectRay(&req)
+
+		// 2. Check Entry (check higher layers)
+		for _, e := range sector.HigherLayers {
+			if e == 0 {
+				continue
 			}
-		} else {
-			if f.SectorValid == nil || f.SectorValid(sector, test, next) {
-				if f.tooCloseToSegment(sector, test, next) {
-					return nil
-				} else {
-					return test
-				}
-			} else {
-				return nil
+			overlap := core.GetSector(e)
+			if overlap == nil {
+				continue
 			}
+			req.CheckEntry = true
+			overlap.IntersectRay(&req)
 		}
-	}
 
-	if depth > 2 {
-		return nil
-	}
+		bestHit := req.CastResponse
 
-	// TODO: Ignore dead ends (e.g. if there's only one portal segment
-	// and the end point isn't in the adj sector, break early)
-	for _, seg := range sector.Segments {
-		if seg.AdjacentSegment == nil {
-			continue
-		}
-		// Don't move backwards
-		if seg.Normal[0]*delta[0]+seg.Normal[1]*delta[1] > 0 {
-			continue
-		}
-		if seg.DistanceToPointSq(next) < constants.IntersectEpsilon {
+		// If no hit found within limit, the path is clear.
+		// We remain in the current sector (or the last traversed sector).
+		if bestHit.HitSegment == nil {
 			return sector
 		}
-		adj := seg.AdjacentSegment.Sector
-		if f.SectorValid != nil && !f.SectorValid(sector, adj, next) {
-			continue
+
+		// We hit something.
+		if bestHit.NextSector == nil {
+			// Hit a solid wall. Path is blocked.
+			return nil
 		}
-		if adj = f.sectorForNextPoint(seg.AdjacentSegment.Sector, delta, next, depth+1); adj != nil {
-			return adj
+
+		// Hit a portal. Check validity.
+		hitPoint2D := bestHit.HitPoint.To2D()
+		if f.SectorValid != nil && !f.SectorValid(sector, bestHit.NextSector, hitPoint2D) {
+			return nil
+		}
+
+		// Traverse to next sector
+		sector = bestHit.NextSector
+		req.MinDistSq = bestHit.HitDistSq
+		depth++
+		if depth > constants.MaxPortals {
+			return nil
 		}
 	}
-	// Outer
-	if adj := sector.OverlapAt(next, true); adj != nil {
-		return adj
-	}
+
 	return nil
 }
 
@@ -136,6 +115,7 @@ func (f *Finder) keyToPoint(k nodeKey) concepts.Vector3 {
 	return concepts.Vector3{
 		f.Start[0] + float64(k.x)*f.Step,
 		f.Start[1] + float64(k.y)*f.Step,
+		f.Start[2],
 	}
 }
 
@@ -191,7 +171,14 @@ func (f *Finder) ShortestPath() []concepts.Vector3 {
 	for pq.Len() > 0 {
 		current := heap.Pop(&pq).(*node)
 		currentPoint := f.keyToPoint(current.key)
-		delta := concepts.Vector2{}
+
+		// Adjust Z based on current sector to ensure raycast works
+		if current.sector != nil {
+			fz, _ := current.sector.ZAt(currentPoint.To2D())
+			// Bias slightly up to avoid floor intersection issues
+			currentPoint[2] = fz + 0.1
+		}
+
 		// Check if we are close enough to end to jump there directly
 		// Using 1.5 * stepSize to cover diagonals and a bit of slack
 		if currentPoint.DistSq(f.End) <= (f.Step * 1.5 * f.Step * 1.5) {
@@ -207,10 +194,11 @@ func (f *Finder) ShortestPath() []concepts.Vector3 {
 
 		for _, d := range directions {
 			nextKey := nodeKey{current.key.x + d.dx, current.key.y + d.dy}
-			delta[0] = float64(d.dx)
-			delta[1] = float64(d.dy)
 			nextPoint := f.keyToPoint(nextKey)
-			nextSector := f.sectorForNextPoint(current.sector, &delta, nextPoint.To2D(), 0)
+			// Assume horizontal step
+			nextPoint[2] = currentPoint[2]
+
+			nextSector := f.sectorForNextPoint(current.sector, &currentPoint, &nextPoint)
 			if nextSector == nil {
 				continue
 			}
@@ -251,6 +239,12 @@ func (f *Finder) ShortestPath() []concepts.Vector3 {
 	}
 
 	for {
+		// Use correct Z for path points too?
+		// keyToPoint uses Start[2]. This might be off if we went up/down.
+		// However, path reconstruction usually cares about X/Y.
+		// If we want 3D path, we should probably store Z in the node or cameFrom map.
+		// But nodeKey is 2D.
+		// We'll stick to 2D approximation for output, or just use keyToPoint.
 		path = append(path, f.keyToPoint(key))
 		if key == startKey {
 			break
