@@ -89,10 +89,11 @@ func TestSectorForNextPoint(t *testing.T) {
 	linkSectors(s1, s2, 1, 3)
 
 	f := &Finder{
-		Start: &concepts.Vector3{5, 5, 0},
-		Step:  1,
+		Start:  &concepts.Vector3{5, 5, 0},
+		Step:   1,
 		Radius: 0.5,
 	}
+	f.Request.Ray = &concepts.Ray{}
 
 	// Test 1: Move inside S1
 	start := concepts.Vector3{5, 5, 50}
@@ -151,7 +152,7 @@ func TestSectorForNextPoint(t *testing.T) {
 func TestKeyToPointZ(t *testing.T) {
 	f := &Finder{
 		Start: &concepts.Vector3{10, 10, 50},
-		Step: 1,
+		Step:  1,
 	}
 	p := f.keyToPoint(nodeKey{0, 0})
 	if p[2] != 50 {

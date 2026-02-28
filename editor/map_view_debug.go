@@ -26,14 +26,21 @@ func (mw *MapWidget) drawPath(path []concepts.Vector3) {
 		mw.Context.LineTo(v[0], v[1])
 	}
 	mw.Context.Stroke()
+	for i, v := range path {
+		if i == 0 {
+			continue
+		}
+		mw.DrawHandle(v.To2D())
+	}
 }
 
 func (mw *MapWidget) drawPaths() {
 	if editor.PathDebugStart != editor.PathDebugEnd {
 		pf := pathfinding.Finder{Start: &editor.PathDebugStart,
-			End:    &editor.PathDebugEnd,
-			Radius: 16,
-			Step:   10}
+			End:         &editor.PathDebugEnd,
+			Radius:      8,
+			MountHeight: 30,
+			Step:        10}
 		mw.drawPath(pf.ShortestPath())
 	}
 
