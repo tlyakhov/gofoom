@@ -13,36 +13,14 @@ import (
 
 const LogDebug = false
 
-type CastResponse struct {
-	HitSegment *SectorSegment
-	HitPoint   concepts.Vector3
-	// You can also pass in a max limit in this field
-	HitDistSq  float64
-	HitPortal  int // -1 = lo, 0 = mid, 1 = hi
-	NextSector *Sector
-}
-
-type CastRequest struct {
-	// Inputs
-	*concepts.Ray
-
-	IgnoreSegment *Segment
-	MinDistSq     float64
-	CheckEntry    bool
-	Debug         bool
-
-	// Input/Output
-	CastResponse
-}
-
-// IntersectRay finds the nearest intersection of a ray with the sector's segments.
+// CastRay finds the nearest intersection of a ray with the sector's segments.
 // It handles portal transitions, higher layer checks, and grazing ray edge cases.
 //
 // Arguments:
 //   - req: A CastRequest struct containing ray, traversal state, and output fields.
 //     The function will update req.CastResponse if an intersection is found, and
 //     will leave it alone otherwise.
-func (s *Sector) IntersectRay(req *CastRequest) {
+func (s *Sector) CastRay(req *CastRequest) {
 	debug := LogDebug && req.Debug
 
 	// Pre-declare variables for loop
@@ -141,16 +119,12 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 
 			// Nudge the intersection point slightly along the ray to see where we end up.
 			// This handles grazing corners where we might clip a corner and exit instantly.
-			nudgeX := req.Delta[0] * constants.IntersectEpsilon
-			nudgeY := req.Delta[1] * constants.IntersectEpsilon
-
-			testPoint := intersectionTest.To2D()
-			testPoint[0] += nudgeX
-			testPoint[1] += nudgeY
+			intersectionTest[0] += req.Delta[0] * constants.IntersectEpsilon
+			intersectionTest[1] += req.Delta[1] * constants.IntersectEpsilon
 
 			// Check if we are overlapping with a lower layer sector (or any overlap).
 			// OverlapAt(..., true) checks LowerLayers.
-			adj = s.OverlapAt(testPoint, true)
+			adj = s.OverlapAt(intersectionTest.To2D(), true)
 
 			if adj == nil {
 				if debug {
@@ -164,19 +138,18 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 			}
 		}
 
+		if req.IgnoreZ {
+			// We have a valid, better intersection.
+			req.HitDistSq = intersectionDistSq
+			req.HitPoint = intersectionTest
+			req.HitSegment = seg
+			req.HitPortal = portal
+			req.NextSector = adj
+			continue
+		}
+
 		// Occlusion Checks (Floor/Ceiling)
 		// Even if we hit a portal segment, the portal might be blocked by floor/ceiling differences.
-
-		// TODO: Fix this - right now it doesn't work for sectors that move in
-		// the Z axis (e.g. doors)
-		/*if intersectionTest[2] < s.Min[2] || intersectionTest[2] > s.Max[2] {
-			if debug {
-				log.Printf("    Occluded by sector min/max %v - %v\n", seg.P.Render.StringHuman(), seg.Next.P.Render.StringHuman())
-			}
-			// Outside sector bounds entirely? Occluded.
-			// Treat as wall (hitSegment set, nextSector nil).
-			adj = nil
-		} else {*/
 		i2d := intersectionTest.To2D()
 		floorZ, ceilZ = s.ZAt(i2d)
 
@@ -215,7 +188,6 @@ func (s *Sector) IntersectRay(req *CastRequest) {
 				portal = 1
 			}
 		}
-		//}
 
 		if debug {
 			if adj != nil {

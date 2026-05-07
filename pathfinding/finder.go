@@ -14,13 +14,14 @@ import (
 	"tlyakhov/gofoom/ecs"
 )
 
+type SectorTraversalCheck func(from *core.Sector, to *core.Sector, p *concepts.Vector2) bool
 type Finder struct {
 	Start       *concepts.Vector3
 	End         *concepts.Vector3
 	Step        float64
 	Radius      float64
 	StartSector *core.Sector
-	SectorValid func(from *core.Sector, to *core.Sector, p *concepts.Vector2) bool
+	PathValid   SectorTraversalCheck
 	MountHeight float64
 	Request     core.CastRequest
 }
@@ -38,7 +39,6 @@ func (f *Finder) sectorForNextPoint(startSector *core.Sector, start, next *conce
 	f.Request.Ray.Delta[1] = next[1] - start[1]
 	f.Request.Ray.Delta[2] = 0
 	f.Request.Ray.Limit = f.Step
-	f.Request.IgnoreSegment = nil
 	if f.Request.Ray.Delta[0] != 0 && f.Request.Ray.Delta[1] != 0 {
 		f.Request.Ray.Limit *= math.Sqrt2
 	}
@@ -46,17 +46,14 @@ func (f *Finder) sectorForNextPoint(startSector *core.Sector, start, next *conce
 	f.Request.Ray.Delta[1] /= f.Request.Ray.Limit
 
 	// Check radius by extending the ray beyond the destination
-	//f.Request.Ray.Limit += f.Radius
+	f.Request.Ray.Limit += f.Radius
 	limitSq := f.Request.Ray.Limit * f.Request.Ray.Limit
 
 	f.Request.Ray.End[0] += f.Request.Ray.Delta[0] * f.Request.Ray.Limit
 	f.Request.Ray.End[1] += f.Request.Ray.Delta[1] * f.Request.Ray.Limit
 
-	if !startSector.IsPointInside2D(f.Request.Ray.End.To2D()) {
-		return nil
-	}
-
 	f.Request.MinDistSq = -1.0
+	f.Request.IgnoreZ = true
 	sector := startSector
 	depth := 0
 
@@ -67,7 +64,7 @@ func (f *Finder) sectorForNextPoint(startSector *core.Sector, start, next *conce
 
 		// 1. Check Exit (check boundaries of current sector)
 		f.Request.CheckEntry = false
-		sector.IntersectRay(&f.Request)
+		sector.CastRay(&f.Request)
 
 		// 2. Check Entry (check higher layers)
 		for _, e := range sector.HigherLayers {
@@ -79,12 +76,15 @@ func (f *Finder) sectorForNextPoint(startSector *core.Sector, start, next *conce
 				continue
 			}
 			f.Request.CheckEntry = true
-			overlap.IntersectRay(&f.Request)
+			overlap.CastRay(&f.Request)
 		}
 
 		// If no hit found within limit, the path is clear.
 		// We remain in the current sector (or the last traversed sector).
 		if f.Request.HitSegment == nil {
+			if !sector.IsPointInside2D(f.Request.Ray.End.To2D()) {
+				return nil
+			}
 			return sector
 		}
 
@@ -95,8 +95,7 @@ func (f *Finder) sectorForNextPoint(startSector *core.Sector, start, next *conce
 		}
 
 		// Hit a portal. Check validity.
-		hitPoint2D := f.Request.HitPoint.To2D()
-		if f.SectorValid != nil && !f.SectorValid(sector, f.Request.NextSector, hitPoint2D) {
+		if f.PathValid != nil && !f.PathValid(sector, f.Request.NextSector, f.Request.HitPoint.To2D()) {
 			return nil
 		}
 
@@ -125,7 +124,7 @@ func (f *Finder) keyToPoint(k nodeKey) concepts.Vector3 {
 // A* algorithm. It builds the graph on the fly by moving in fixed increments
 // from the start point.
 func (f *Finder) ShortestPath() []concepts.Vector3 {
-	//defer concepts.ExecutionDuration(concepts.ExecutionTrack("PathFinder.ShortestPath"))
+	defer concepts.ExecutionDuration(concepts.ExecutionTrack("PathFinder.ShortestPath"))
 	if f.Step <= 0 {
 		return nil
 	}
@@ -252,8 +251,7 @@ func (f *Finder) ShortestPath() []concepts.Vector3 {
 		// keyToPoint uses Start[2]. This might be off if we went up/down.
 		// However, path reconstruction usually cares about X/Y.
 		// If we want 3D path, we should probably store Z in the node or cameFrom map.
-		// But nodeKey is 2D.
-		// We'll stick to 2D approximation for output, or just use keyToPoint.
+		// But nodeKey is 2D so we'll stick to 2D for output, or just use keyToPoint.
 		path = append(path, f.keyToPoint(key))
 		if key == startKey {
 			break

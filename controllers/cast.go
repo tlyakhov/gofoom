@@ -76,7 +76,7 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 
 		// Check sector boundaries (Exit)
 		req.CheckEntry = false
-		sector.IntersectRay(&req)
+		sector.CastRay(&req)
 
 		// Check higher layer sectors (Entry)
 		for _, e := range sector.HigherLayers {
@@ -90,7 +90,7 @@ func Cast(ray *concepts.Ray, sector *core.Sector, source ecs.Entity, ignoreBodie
 
 			// We want to check this overlap.
 			req.CheckEntry = true
-			overlap.IntersectRay(&req)
+			overlap.CastRay(&req)
 		}
 		bestHit := req.CastResponse
 

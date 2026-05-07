@@ -8,6 +8,7 @@ import (
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/concepts"
+	"tlyakhov/gofoom/controllers"
 	"tlyakhov/gofoom/ecs"
 	"tlyakhov/gofoom/pathfinding"
 )
@@ -38,9 +39,19 @@ func (mw *MapWidget) drawPaths() {
 	if editor.PathDebugStart != editor.PathDebugEnd {
 		pf := pathfinding.Finder{Start: &editor.PathDebugStart,
 			End:         &editor.PathDebugEnd,
-			Radius:      8,
+			Radius:      16,
 			MountHeight: 30,
-			Step:        10}
+			Step:        15,
+		}
+		ac := &controllers.ActionController{
+			State: &behaviors.ActorState{
+				Finder: &pf,
+			},
+			Mobile: &core.Mobile{
+				MountHeight: pf.MountHeight,
+			},
+		}
+		pf.PathValid = ac.PathValid
 		mw.drawPath(pf.ShortestPath())
 	}
 

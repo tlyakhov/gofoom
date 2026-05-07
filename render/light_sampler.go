@@ -229,7 +229,7 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 			log.Printf("  Checking sector %v, max dist %.2f", sector.Entity, ls.maxDist)
 		}
 		//Intersect this sector
-		sector.IntersectRay(&ls.CastRequest)
+		sector.CastRay(&ls.CastRequest)
 
 		// Check higher layer sectors for intersections
 		for _, e := range sector.HigherLayers {
@@ -243,10 +243,10 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 				continue
 			}
 
-			// We want to check this overlap. IntersectRay will use the
+			// We want to check this overlap. CastRay will use the
 			// CastResponse values and not update them if there is no closer hit.
 			ls.CheckEntry = true
-			overlap.IntersectRay(&ls.CastRequest)
+			overlap.CastRay(&ls.CastRequest)
 		}
 
 		if ls.HitSegment != nil {

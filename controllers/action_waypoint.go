@@ -13,7 +13,7 @@ import (
 	"tlyakhov/gofoom/pathfinding"
 )
 
-func (ac *ActionController) pathSectorValid(from, to *core.Sector, p *concepts.Vector2) bool {
+func (ac *ActionController) PathValid(from, to *core.Sector, p *concepts.Vector2) bool {
 	// Maybe this or previous sector is a fromDoor?
 	fromDoor := behaviors.GetDoor(from.Entity)
 	toDoor := behaviors.GetDoor(to.Entity)
@@ -39,14 +39,16 @@ func (ac *ActionController) repath(start, end concepts.Vector3) {
 		Start:       &start,
 		StartSector: ac.startSector(),
 		End:         &end,
-		Step:        10,
-		SectorValid: ac.pathSectorValid,
+		Step:        10, // Reasonable, although slow default
+		PathValid:   ac.PathValid,
 	}
 	if ac.Mobile != nil {
 		ac.State.Finder.MountHeight = ac.Mobile.MountHeight
 	}
 	if ac.Body != nil {
 		ac.State.Finder.Radius = ac.Body.Size.Now[0] * 0.5
+		// Scale down 10% to avoid weird grid step issues
+		ac.State.Finder.Step = max(ac.State.Finder.Radius*0.9, 5)
 	} else if ac.Sector != nil {
 		ac.State.Finder.Radius = max(ac.Sector.Max[0]-ac.Sector.Min[0], ac.Sector.Max[1]-ac.Sector.Min[1]) * 0.5
 	}
