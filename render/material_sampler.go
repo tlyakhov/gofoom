@@ -144,12 +144,19 @@ func (ms *MaterialSampler) sampleStage(stage *materials.ShaderStage) {
 		if opacity <= 0 {
 			return
 		}
-
 		if stage.IgnoreSurfaceTransform {
-			u, v = stage.Transform[0]*ms.NU+stage.Transform[2]*ms.NV+stage.Transform[4], stage.Transform[1]*ms.NU+stage.Transform[3]*ms.NV+stage.Transform[5]
-		} else {
-			u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
+			u, v = ms.NU, ms.NV
 		}
+
+		if stage.Bounded {
+			stage.CalculateBounds()
+			if u < stage.MinUV[0] || u > stage.MaxUV[0] || v < stage.MinUV[1] || v > stage.MaxUV[1] {
+				return
+			}
+		}
+
+		u, v = stage.Transform[0]*u+stage.Transform[2]*v+stage.Transform[4], stage.Transform[1]*u+stage.Transform[3]*v+stage.Transform[5]
+
 		if (stage.Flags & materials.ShaderSky) != 0 {
 			v = float64(ms.ScreenY) / (float64(ms.ScreenHeight) - 1)
 			ms.ScaleH = math.MaxInt32 //uint32(ms.ScreenHeight)

@@ -158,6 +158,7 @@ func (mmc *MarkMakerController) MakeMark(s *selection.Selectable, pos *concepts.
 			Material:               mmc.Material,
 			IgnoreSurfaceTransform: false,
 			Tag:                    "MarkMaker " + mmc.Entity.Serialize(),
+			Bounded:                true,
 		}
 		// TODO: Fix this
 		//es.CFlags = ecs.ComponentInternal

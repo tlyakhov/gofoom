@@ -4,6 +4,9 @@
 package materials
 
 import (
+	"math"
+	"sync"
+	"sync/atomic"
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
@@ -38,6 +41,13 @@ type ShaderStage struct {
 	Tag       string             `editable:"Tag"`
 
 	IgnoreSurfaceTransform bool `editable:"Ignore Surface Transform"`
+
+	Bounded bool             `editable:"Bounded"`
+	MinUV   concepts.Vector2 `editable:"Min UV"`
+	MaxUV   concepts.Vector2 `editable:"Max UV"`
+
+	mu              sync.Mutex
+	lastBoundsFrame uint64
 }
 
 func (s *ShaderStage) Construct(data map[string]any) {
@@ -46,6 +56,8 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	s.Opacity = 1
 	s.BlendFunc = concepts.BlendNormal
 	s.Tag = ""
+	s.MaxUV = concepts.Vector2{1, 1}
+	atomic.StoreUint64(&s.lastBoundsFrame, math.MaxUint64)
 
 	if data == nil {
 		return
@@ -86,6 +98,10 @@ func (s *ShaderStage) Construct(data map[string]any) {
 	if v, ok := data["Tag"]; ok {
 		s.Tag = cast.ToString(v)
 	}
+
+	if v, ok := data["Bounded"]; ok {
+		s.Bounded = cast.ToBool(v)
+	}
 }
 
 func (s *ShaderStage) Serialize() map[string]any {
@@ -114,8 +130,61 @@ func (s *ShaderStage) Serialize() map[string]any {
 	if s.IgnoreSurfaceTransform {
 		result["IgnoreSurfaceTransform"] = s.IgnoreSurfaceTransform
 	}
+	if s.Bounded {
+		result["Bounded"] = s.Bounded
+	}
 	if s.Tag != "" {
 		result["Tag"] = s.Tag
 	}
 	return result
+}
+
+// CalculateBounds computes MinUV and MaxUV automatically
+// based on the stage Transform, assuming the decal covers the [0, 1] UV space.
+func (s *ShaderStage) CalculateBounds() {
+	if atomic.LoadUint64(&s.lastBoundsFrame) == ecs.Simulation.Frame {
+		return
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if s.lastBoundsFrame == ecs.Simulation.Frame {
+		return
+	}
+
+	s.Bounded = true
+	det := s.Transform[0]*s.Transform[3] - s.Transform[2]*s.Transform[1]
+	if math.Abs(det) < 1e-8 {
+		s.MinUV = concepts.Vector2{0, 0}
+		s.MaxUV = concepts.Vector2{0, 0}
+	} else {
+		corners := [4]concepts.Vector2{
+			{0, 0},
+			{1, 0},
+			{0, 1},
+			{1, 1},
+		}
+
+		s.MinUV[0], s.MinUV[1] = math.MaxFloat64, math.MaxFloat64
+		s.MaxUV[0], s.MaxUV[1] = -math.MaxFloat64, -math.MaxFloat64
+
+		for _, c := range corners {
+			p := s.Transform.Unproject(&c)
+			if p[0] < s.MinUV[0] {
+				s.MinUV[0] = p[0]
+			}
+			if p[0] > s.MaxUV[0] {
+				s.MaxUV[0] = p[0]
+			}
+			if p[1] < s.MinUV[1] {
+				s.MinUV[1] = p[1]
+			}
+			if p[1] > s.MaxUV[1] {
+				s.MaxUV[1] = p[1]
+			}
+		}
+	}
+
+	atomic.StoreUint64(&s.lastBoundsFrame, ecs.Simulation.Frame)
 }
