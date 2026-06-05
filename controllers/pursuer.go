@@ -178,12 +178,15 @@ func (pc *PursuerController) targetEnemy(enemy *behaviors.PursuerEnemy) {
 	// TODO: parameterize this
 	if len(enemy.Breadcrumbs) > 0 {
 		latest := enemy.Breadcrumbs.PeekMax()
-		if ecs.Simulation.SimTimestamp-latest.Key < constants.PursuitBreadcrumbRateNs {
+		radius := pc.Body.Size.Now[0] * 0.5
+		d := enemy.Body.Pos.Now.DistSq(&latest.Data.Pos)
+		if d < radius*radius {
 			return
 		}
-		radius := pc.Body.Size.Now[0] * 0.5
-		if enemy.Body.Pos.Now.DistSq(&latest.Data.Pos) < radius*radius {
-			return
+		if d < 50*50 {
+			if ecs.Simulation.SimTimestamp-latest.Key < constants.PursuitBreadcrumbRateNs {
+				return
+			}
 		}
 	}
 	// Leave breadcrumb
@@ -289,20 +292,22 @@ func (pc *PursuerController) targetWeight(c *behaviors.Candidate, enemy *behavio
 func (pc *PursuerController) generateWeights() {
 	obstacles := pc.getObstacleBodies()
 	for i, c := range pc.Candidates {
-		// TODO: parameterize? obstacle avoidance distance
 		angle := float64(i) * 360 / float64(len(pc.Candidates))
 		c.Start.From(&pc.Body.Pos.Now)
 		c.FromAngleAndLimit(angle, 0, constants.PursuitWallAvoidDistance)
-		c.Weight = 0
+		c.Interest = 0
+		c.Danger = 0
 		c.Count = 0
 
+		// Interest: enemy targets
 		for _, enemy := range pc.Enemies {
 			if enemy.Pos != nil {
-				c.Weight += pc.targetWeight(c, enemy)
+				c.Count++
+				c.Interest += pc.targetWeight(c, enemy)
 			}
 		}
 
-		// Other NPCs
+		// Interest: NPC avoidance (strafing away from friendly/neutral bodies)
 		for _, body := range obstacles {
 			delta := pc.Body.Pos.Now.To2D().Sub(body.Pos.Now.To2D())
 			dist := delta.Length()
@@ -312,16 +317,22 @@ func (pc *PursuerController) generateWeights() {
 			distWeight := 1 - max(min(dist/constants.PursuitNpcAvoidDistance, 1), 0)
 			weight = 1 - math.Abs(weight-0.65)
 			c.Count++
-			c.Weight += weight * distWeight
+			c.Interest += weight * distWeight
 		}
 
-		// Next, identify non-body obstacles
+		// Danger: wall/geometry obstacles
 		s, hit := Cast(&c.Ray, pc.Body.Sector(), pc.NpcController.Entity, true)
-
-		// Geometry (e.g. walls)
 		if s != nil {
 			c.Count++
-			c.Weight -= 1.0 - min(hit.Dist(&pc.Body.Pos.Now)/constants.PursuitWallAvoidDistance, 1)
+			c.Danger += 1.0 - min(hit.Dist(&pc.Body.Pos.Now)/constants.PursuitWallAvoidDistance, 1)
+		}
+
+		// Combine: if danger exists in this direction, mask out interest entirely
+		if c.Danger > 0.05 {
+			c.Weight = 0
+			c.Count = 0
+		} else {
+			c.Weight = c.Interest - max(c.Danger, 0)
 		}
 	}
 }
@@ -416,16 +427,33 @@ func (pc *PursuerController) idleFrame() {
 }
 
 func (pc *PursuerController) pursue() {
-	delta := concepts.Vector3{}
-	allNegative := true
-	for _, c := range pc.Candidates {
-		delta[0] += c.Delta[0] * c.Weight
-		delta[1] += c.Delta[1] * c.Weight
-		if c.Weight > 0 {
-			allNegative = false
-		}
+	bestIdx, best := pc.TopWeightCandidate()
+	if best == nil {
+		pc.idleFrame()
+		return
 	}
-	if delta.Zero() || len(pc.Candidates) == 0 || allNegative {
+
+	n := len(pc.Candidates)
+
+	// Clamp steering change: max delta of 3 from last direction
+	diff := bestIdx - pc.LastBestIdx
+	if diff > n/2 {
+		diff -= n
+	} else if diff < -n/2 {
+		diff += n
+	}
+	if diff > 3 {
+		diff = 3
+	} else if diff < -3 {
+		diff = -3
+	}
+	clampedIdx := (pc.LastBestIdx + diff + n) % n
+	pc.LastBestIdx = clampedIdx
+
+	c := pc.Candidates[clampedIdx]
+	delta := concepts.Vector3{c.Delta[0], c.Delta[1], 0}
+
+	if delta.Zero() {
 		pc.idleFrame()
 		return
 	}

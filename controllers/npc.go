@@ -102,7 +102,7 @@ func npcIdle(npc *NpcController) {
 		if npc.NextIdleBark != 0 {
 			npc.playSound(npc.BarksIdle)
 		}
-		npc.NextIdleBark = ecs.Simulation.SimTimestamp + concepts.MillisToNanos(5000+rand.Float64()*15000)
+		npc.NextIdleBark = ecs.Simulation.SimTimestamp + concepts.MillisToNanos(15000+rand.Float64()*45000)
 	}
 }
 

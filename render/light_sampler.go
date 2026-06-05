@@ -359,8 +359,8 @@ func (ls *LightSampler) lightVisibleFromSector(p *concepts.Vector3, lightBody *c
 					return false
 				}
 			case materials.ShadowAABB:
-				ext := &concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
-				if concepts.IntersectLineAABB(p, lightPos, &b.Pos.Render, ext) {
+				ext := concepts.Vector3{b.Size.Render[0], b.Size.Render[0], b.Size.Render[1]}
+				if concepts.IntersectLineAABB(p, lightPos, &b.Pos.Render, &ext) {
 					return false
 				}
 			}
@@ -419,11 +419,6 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 			ls.Filter[0] = 0
 			ls.Filter[1] = 0
 			ls.Filter[2] = 0
-			LightSamplerLightsTested.Add(1)
-			if !ls.lightVisible(world, body) {
-				//log.Printf("Shadowed: %v\n", world.StringHuman())
-				return true
-			}
 
 			// Calculate light strength.
 			if light.Attenuation > 0.0 {
@@ -442,13 +437,22 @@ func (ls *LightSampler) Calculate(world *concepts.Vector3) *concepts.Vector3 {
 				//log.Printf("Too far: %v\n", world.StringHuman())
 				return true
 			}
+
+			LightSamplerLightsTested.Add(1)
+			if !ls.lightVisible(world, body) {
+				//log.Printf("Shadowed: %v\n", world.StringHuman())
+				return true
+			}
 		}
 
 		if ls.InputBody != 0 {
 			diffuseLight = attenuation
 		} else {
 			// Normalize
-			ls.LightWorld.MulSelf(1.0 / math.Sqrt(ls.maxDistSq))
+			if ls.maxDist < 0 {
+				ls.maxDist = math.Sqrt(ls.maxDistSq)
+			}
+			ls.LightWorld.MulSelf(1.0 / ls.maxDist)
 			diffuseLight = ls.Normal.Dot(&ls.LightWorld) * attenuation
 		}
 		if ls.Filter[3] == 0 {

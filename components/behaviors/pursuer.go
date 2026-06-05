@@ -22,8 +22,10 @@ type Breadcrumb struct {
 
 type Candidate struct {
 	concepts.Ray
-	Weight float64
-	Count  int
+	Weight   float64
+	Interest float64
+	Danger   float64
+	Count    int
 }
 
 type PursuerEnemy struct {
@@ -51,6 +53,7 @@ type Pursuer struct {
 	ClockwisePreference bool
 	ClockwiseSwitchTime int64
 	NextFireTime        int64
+	LastBestIdx         int
 }
 
 func (p *Pursuer) String() string {
@@ -109,18 +112,20 @@ func (p *Pursuer) Serialize() map[string]any {
 	return result
 }
 
-func (p *Pursuer) BestCandidate() *Candidate {
-	var best *Candidate
-	bestWeight := math.Inf(-1)
-	for _, c := range p.Candidates {
+func (p *Pursuer) TopWeightCandidate() (int, *Candidate) {
+	var top *Candidate
+	topIndex := -1
+	topWeight := math.Inf(-1)
+	for i, c := range p.Candidates {
 		if c.Count == 0 {
 			continue
 		}
 		w := c.Weight /// float64(c.Count)
-		if w > bestWeight {
-			bestWeight = w
-			best = c
+		if w > topWeight {
+			topWeight = w
+			topIndex = i
+			top = c
 		}
 	}
-	return best
+	return topIndex, top
 }
