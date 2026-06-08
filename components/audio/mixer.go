@@ -232,7 +232,7 @@ func (m *mixer) SetListenerOrientation(v *concepts.Vector3) {
 	o.Forward[2] = float32(v[2])
 	o.Up[0] = 0
 	o.Up[1] = 0
-	o.Up[2] = -1 // TODO: make this 1 after converting to RHS coordinate system
+	o.Up[2] = 1
 	al.SetListenerOrientation(o)
 }
 
@@ -292,8 +292,7 @@ func PlaySound(sound ecs.Entity, sourceEntity ecs.Entity, tag string, mode Sound
 func alVectorFromUnits(v *concepts.Vector3) al.Vector {
 	return al.Vector{float32(v[0] / constants.UnitsPerMeter),
 		float32(v[1] / constants.UnitsPerMeter),
-		// TODO: remove the negative after converting to RHS coordinate system
-		float32(-v[2] / constants.UnitsPerMeter)}
+		float32(v[2] / constants.UnitsPerMeter)}
 }
 func SetReverbPreset(preset string) {
 	Mixer.SetReverbPreset(preset)

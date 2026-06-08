@@ -43,8 +43,8 @@ type ShaderStage struct {
 	IgnoreSurfaceTransform bool `editable:"Ignore Surface Transform"`
 
 	Bounded bool             `editable:"Bounded"`
-	MinUV   concepts.Vector2 `editable:"Min UV"`
-	MaxUV   concepts.Vector2 `editable:"Max UV"`
+	MinUV   concepts.Vector2 // For Bounded stages only
+	MaxUV   concepts.Vector2 // For Bounded stages only
 
 	mu              sync.Mutex
 	lastBoundsFrame uint64
@@ -153,7 +153,6 @@ func (s *ShaderStage) CalculateBounds() {
 		return
 	}
 
-	s.Bounded = true
 	det := s.Transform[0]*s.Transform[3] - s.Transform[2]*s.Transform[1]
 	if math.Abs(det) < 1e-8 {
 		s.MinUV = concepts.Vector2{0, 0}

@@ -42,7 +42,7 @@ func (c *Config) Initialize() {
 
 	for i := 0; i < c.ScreenWidth; i++ {
 		// See https://stackoverflow.com/questions/24173966/raycasting-engine-rendering-creating-slight-distortion-increasing-towards-edges
-		c.ViewRadians[i] = math.Atan(float64(i-c.ScreenWidth/2) / c.CameraToProjectionPlane)
+		c.ViewRadians[i] = math.Atan(float64(c.ScreenWidth/2-i) / c.CameraToProjectionPlane)
 		c.ViewFix[i] = c.CameraToProjectionPlane / math.Cos(c.ViewRadians[i])
 	}
 

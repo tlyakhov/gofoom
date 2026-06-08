@@ -27,8 +27,8 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 	// Calculate angles for picking the right sprite, and also relative to camera
 	angleFromPlayer := r.PlayerBody.Angle2DTo(&b.Pos.Render)
 	// 0 degrees is facing right. Why do we need to adjust by 90 degrees?
-	block.SpriteAngle = concepts.NormalizeAngle(b.Angle.Render - angleFromPlayer + 270)
-	angleRender := concepts.NormalizeAngle(angleFromPlayer - r.PlayerBody.Angle.Render)
+	block.SpriteAngle = concepts.NormalizeAngle(angleFromPlayer - b.Angle.Render + 270)
+	angleRender := concepts.NormalizeAngle(r.PlayerBody.Angle.Render - angleFromPlayer)
 	if angleRender >= 180.0 {
 		angleRender -= 360.0
 	}
@@ -61,8 +61,8 @@ func (r *Renderer) renderBody(ebd *entityWithDistSq, block *block, xStart, xEnd 
 		block.PickResult.Selection = append(block.PickResult.Selection, selection.SelectableFromBody(b))
 		xWorld := (float64(block.ScreenX) - xMid) * b.Size.Render[0] / xScale
 		yWorld := (float64(block.ScreenY) - float64(screenTop+screenBottom)*0.5) * b.Size.Render[1] / float64(screenBottom-screenTop)
-		block.PickResult.World[0] = b.Pos.Render[0] + math.Cos((r.PlayerBody.Angle.Render+90)*concepts.Deg2rad)*xWorld
-		block.PickResult.World[1] = b.Pos.Render[1] + math.Sin((r.PlayerBody.Angle.Render+90)*concepts.Deg2rad)*xWorld
+		block.PickResult.World[0] = b.Pos.Render[0] + math.Cos((r.PlayerBody.Angle.Render-90)*concepts.Deg2rad)*xWorld
+		block.PickResult.World[1] = b.Pos.Render[1] + math.Sin((r.PlayerBody.Angle.Render-90)*concepts.Deg2rad)*xWorld
 		block.PickResult.World[2] = b.Pos.Render[2] + yWorld
 		block.PickResult.Normal[0] = math.Cos(b.Angle.Render * concepts.Deg2rad)
 		block.PickResult.Normal[1] = math.Sin(b.Angle.Render * concepts.Deg2rad)

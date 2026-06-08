@@ -34,6 +34,7 @@ func (waypoint *ActionWaypoint) Construct(data map[string]any) {
 
 	if v, ok := data["P"]; ok {
 		waypoint.P.Deserialize(v.(string))
+		//	waypoint.P[0] = -waypoint.P[0]
 	}
 	if v, ok := data["UsePathFinder"]; ok {
 		waypoint.UsePathFinder = cast.ToBool(v)

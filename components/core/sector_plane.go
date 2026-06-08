@@ -47,6 +47,7 @@ func (s *SectorPlane) Construct(data map[string]any) {
 	}
 	if v, ok := data["Normal"]; ok {
 		s.Normal.Deserialize(v.(string))
+		//	s.Normal[0] = -s.Normal[0]
 	}
 	if v, ok := data["Surface"]; ok {
 		s.Surface.Construct(v.(map[string]any))

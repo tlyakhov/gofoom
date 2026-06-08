@@ -120,6 +120,9 @@ func (b *Body) Construct(data map[string]any) {
 
 	if v, ok := data["Pos"]; ok {
 		b.Pos.Construct(v)
+		//b.Pos.Spawn[0] = -b.Pos.Spawn[0]
+		//b.Pos.Now[0] = -b.Pos.Now[0]
+		//b.Pos.Render[0] = -b.Pos.Render[0]
 	}
 
 	if v, ok := data["Size"]; ok {
@@ -127,6 +130,9 @@ func (b *Body) Construct(data map[string]any) {
 	}
 	if v, ok := data["Angle"]; ok {
 		b.Angle.Construct(v)
+		//b.Angle.Spawn = concepts.NormalizeAngle(b.Angle.Spawn + 180)
+		//b.Angle.Now = concepts.NormalizeAngle(b.Angle.Now + 180)
+		//b.Angle.Render = concepts.NormalizeAngle(b.Angle.Render + 180)
 	}
 	if v, ok := data["StepSound"]; ok {
 		b.StepSound, _ = ecs.ParseEntity(cast.ToString(v))

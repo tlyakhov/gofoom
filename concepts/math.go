@@ -48,7 +48,7 @@ func ByteClamp(x float64) uint8 {
 }
 
 func NormalizeAngle(a float64) float64 {
-	a = math.Mod(a, 360) + 360
+	a = math.Mod(a, 360)
 	if a < 0 {
 		return a + 360
 	}

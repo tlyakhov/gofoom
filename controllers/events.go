@@ -63,11 +63,11 @@ func eventMove(evt *dynamic.Event) bool {
 	case EventIdForward:
 		MovePlayer(p.Entity, b.Angle.Now)
 	case EventIdRight:
-		MovePlayer(p.Entity, b.Angle.Now+90)
+		MovePlayer(p.Entity, b.Angle.Now-90)
 	case EventIdBack:
 		MovePlayer(p.Entity, b.Angle.Now+180)
 	case EventIdLeft:
-		MovePlayer(p.Entity, b.Angle.Now+270)
+		MovePlayer(p.Entity, b.Angle.Now+90)
 	}
 	return false
 }
@@ -78,12 +78,11 @@ func eventTurn(evt *dynamic.Event) bool {
 	if b == nil {
 		return false
 	}
-	// TODO: Fix this - our coordinate system is messed up. Angles should increase from right to up
 	switch evt.ID {
 	case EventIdTurnLeft:
-		b.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
-	case EventIdTurnRight:
 		b.Angle.Now += constants.PlayerTurnSpeed * constants.TimeStepS
+	case EventIdTurnRight:
+		b.Angle.Now -= constants.PlayerTurnSpeed * constants.TimeStepS
 	}
 	b.Angle.Now = concepts.NormalizeAngle(b.Angle.Now)
 	return false
@@ -151,7 +150,7 @@ func eventYaw(evt *dynamic.Event) bool {
 	if b == nil {
 		return false
 	}
-	b.Angle.Now += p.AxisValue * 0.25 * constants.PlayerTurnSpeed * constants.TimeStepS
+	b.Angle.Now -= p.AxisValue * 0.25 * constants.PlayerTurnSpeed * constants.TimeStepS
 	b.Angle.Now = concepts.NormalizeAngle(b.Angle.Now)
 	return false
 }

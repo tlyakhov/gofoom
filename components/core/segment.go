@@ -182,9 +182,11 @@ func (s *Segment) Construct(data map[string]any) {
 
 	if v, ok := data["A"]; ok {
 		s.A.Deserialize(v.(string))
+		//s.A[0] = -s.A[0]
 	}
 	if v, ok := data["B"]; ok {
 		s.B.Deserialize(v.(string))
+		//s.B[0] = -s.B[0]
 	}
 	if v, ok := data["Mid"]; ok {
 		s.Surface.Construct(v.(map[string]any))

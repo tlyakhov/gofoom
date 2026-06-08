@@ -5,6 +5,7 @@ package behaviors
 
 import (
 	"fmt"
+	"tlyakhov/gofoom/concepts"
 
 	"github.com/spf13/cast"
 )
@@ -30,6 +31,8 @@ func (face *ActionFace) Construct(data map[string]any) {
 
 	if v, ok := data["Angle"]; ok {
 		face.Angle = cast.ToFloat64(v)
+		face.Angle = concepts.NormalizeAngle(face.Angle)
+
 	}
 }
 

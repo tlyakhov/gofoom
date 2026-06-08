@@ -143,6 +143,9 @@ func (s *SectorSegment) Construct(data map[string]any) {
 
 	if v, ok := data["P"]; ok {
 		s.P.Construct(v)
+		//s.P.Spawn[0] = -s.P.Spawn[0]
+		//s.P.Now[0] = -s.P.Now[0]
+		//s.P.Render[0] = -s.P.Render[0]
 	}
 	if v, ok := data["WallUVIgnoreSlope"]; ok {
 		s.WallUVIgnoreSlope = v.(bool)

@@ -102,10 +102,9 @@ func (r *Renderer) WorldToScreen(world *concepts.Vector3) *concepts.Vector2 {
 	relative := concepts.Vector2{world[0], world[1]}
 	relative[0] -= r.PlayerBody.Pos.Render[0]
 	relative[1] -= r.PlayerBody.Pos.Render[1]
-	radians := math.Atan2(relative[1], relative[0]) - r.PlayerBody.Angle.Render*concepts.Deg2rad
-	for radians < -math.Pi {
-		radians += 2 * math.Pi
-	}
+	radians := r.PlayerBody.Angle.Render*concepts.Deg2rad - math.Atan2(relative[1], relative[0])
+	// Will make -Pi < radians < Pi
+	radians = math.Remainder(radians, 2*math.Pi)
 	if radians < -math.Pi*0.5 || radians > math.Pi*0.5 {
 		return nil
 	}
