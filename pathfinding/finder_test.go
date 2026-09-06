@@ -29,7 +29,7 @@ func createSector(minX, minY, maxX, maxY float64) *core.Sector {
 	points := []concepts.Vector2{p1, p2, p3, p4}
 	s.Segments = make([]*core.SectorSegment, 4)
 
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		seg := &core.SectorSegment{}
 		seg.Sector = s
 		seg.P.Render = points[i]
@@ -37,7 +37,7 @@ func createSector(minX, minY, maxX, maxY float64) *core.Sector {
 	}
 
 	// Link segments
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		curr := s.Segments[i]
 		next := s.Segments[(i+1)%4]
 		curr.Next = next

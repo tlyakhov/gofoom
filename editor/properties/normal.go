@@ -7,6 +7,7 @@ import (
 	"log"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"tlyakhov/gofoom/editor/state"
 
@@ -19,20 +20,20 @@ import (
 
 func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 	origCartesian := ""
-	origPhi := ""
-	origTheta := ""
+	var origPhi strings.Builder
+	var origTheta strings.Builder
 	for i, v := range field.Values {
 		if i != 0 {
 			origCartesian += ", "
-			origPhi += ", "
-			origTheta += ", "
+			origPhi.WriteString(", ")
+			origTheta.WriteString(", ")
 		}
 
 		cartesian := v.Value.Interface().(*concepts.Vector3)
 		_, theta, phi := cartesian.ToSpherical()
 		origCartesian += cartesian.StringHuman(4)
-		origPhi += strconv.FormatFloat(phi*concepts.Rad2deg, 'G', 4, 64)
-		origTheta += strconv.FormatFloat(theta*concepts.Rad2deg, 'G', 4, 64)
+		origPhi.WriteString(strconv.FormatFloat(phi*concepts.Rad2deg, 'G', 4, 64))
+		origTheta.WriteString(strconv.FormatFloat(theta*concepts.Rad2deg, 'G', 4, 64))
 	}
 
 	entryCartesian := widget.NewEntry()
@@ -53,12 +54,12 @@ func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 	}
 
 	entryPhi := widget.NewEntry()
-	entryPhi.SetText(origPhi)
+	entryPhi.SetText(origPhi.String())
 	entryPhi.OnSubmitted = func(text string) {
 		parsed, err := cast.ToFloat64E(text)
 		if err != nil {
 			log.Printf("Couldn't parse number: %v\n", err)
-			entryPhi.SetText(origPhi)
+			entryPhi.SetText(origPhi.String())
 			g.Focus(g.GridWidget)
 			return
 		}
@@ -75,12 +76,12 @@ func (g *Grid) fieldNormal(field *state.PropertyGridField) {
 	}
 
 	entrySlope := widget.NewEntry()
-	entrySlope.SetText(origTheta)
+	entrySlope.SetText(origTheta.String())
 	entrySlope.OnSubmitted = func(text string) {
 		parsed, err := cast.ToFloat64E(text)
 		if err != nil {
 			log.Printf("Couldn't parse number: %v\n", err)
-			entrySlope.SetText(origTheta)
+			entrySlope.SetText(origTheta.String())
 			g.Focus(g.GridWidget)
 			return
 		}

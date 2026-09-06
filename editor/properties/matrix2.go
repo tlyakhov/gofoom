@@ -7,6 +7,7 @@ import (
 	"math"
 	"reflect"
 	"strconv"
+	"strings"
 	"tlyakhov/gofoom/components/core"
 	"tlyakhov/gofoom/components/materials"
 	"tlyakhov/gofoom/concepts"
@@ -75,21 +76,21 @@ func (g *Grid) fieldMatrix2Aspect(field *state.PropertyGridField, scaleHeight bo
 
 func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 	origMatrix := ""
-	origDelta := ""
-	origAngle := ""
+	var origDelta strings.Builder
+	var origAngle strings.Builder
 	origScale := ""
 	for i, v := range field.Values {
 		if i != 0 {
 			origMatrix += ", "
-			origDelta += ", "
-			origAngle += ", "
+			origDelta.WriteString(", ")
+			origAngle.WriteString(", ")
 			origScale += ", "
 		}
 		m := v.Value.Interface().(*concepts.Matrix2)
 		origMatrix += m.String()
 		a, t, s := m.GetTransform()
-		origDelta += t.String()
-		origAngle += strconv.FormatFloat(a, 'f', 2, 64)
+		origDelta.WriteString(t.String())
+		origAngle.WriteString(strconv.FormatFloat(a, 'f', 2, 64))
 		origScale += s.String()
 	}
 
@@ -108,7 +109,7 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		var delta *concepts.Vector2
 		var err error
 		if delta, err = concepts.ParseVector2(text); err != nil {
-			eDelta.SetText(origDelta)
+			eDelta.SetText(origDelta.String())
 			return
 		}
 		action := &actions.SetProperty{
@@ -123,14 +124,14 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		}
 		g.Act(action)
 	}
-	eDelta.SetText(origDelta)
+	eDelta.SetText(origDelta.String())
 
 	eAngle := widget.NewEntry()
 	eAngle.OnSubmitted = func(text string) {
 		var angle float64
 		var err error
 		if angle, err = strconv.ParseFloat(text, 64); err != nil {
-			eAngle.SetText(origAngle)
+			eAngle.SetText(origAngle.String())
 			return
 		}
 		action := &actions.SetProperty{
@@ -145,7 +146,7 @@ func (g *Grid) fieldMatrix2(field *state.PropertyGridField) {
 		}
 		g.Act(action)
 	}
-	eAngle.SetText(origAngle)
+	eAngle.SetText(origAngle.String())
 
 	eScale := widget.NewEntry()
 	eScale.SetText(origScale)

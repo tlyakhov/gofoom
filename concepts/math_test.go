@@ -33,7 +33,7 @@ func BenchmarkColorasm(b *testing.B) {
 }
 
 func BlendFrameBufferGo(buffer []uint8, fb []concepts.Vector4, tint *concepts.Vector4) {
-	for fbIndex := 0; fbIndex < len(fb); fbIndex++ {
+	for fbIndex := range fb {
 		screenIndex := fbIndex * 4
 		inva := 1.0 - tint[3]
 		buffer[screenIndex+3] = 0xFF

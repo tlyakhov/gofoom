@@ -47,7 +47,6 @@ func (g *Grid) fieldSlice(field *state.PropertyGridField) {
 		buttons := make([]fyne.CanvasObject, len(animationTypes))
 		i := 0
 		for name, t := range animationTypes {
-			t := t // To ensure correct scope for closure
 			b := widget.NewButtonWithIcon("Add "+name, theme.ContentAddIcon(), func() { g.fieldSliceAdd(field, t) })
 			if field.Disabled() {
 				b.Disable()

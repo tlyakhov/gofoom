@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"strings"
 	"tlyakhov/gofoom/containers"
 	"tlyakhov/gofoom/dynamic"
 )
@@ -51,11 +52,11 @@ func (r *Relation) String() string {
 		return fmt.Sprintf("Relation [table]: %v.%v = %v", owner, r.Name, r.Table.String())
 	case RelationMap:
 		keys := r.Value.MapKeys()
-		entities := ""
+		var entities strings.Builder
 		for _, v := range keys {
-			entities += v.Interface().(Entity).String()
+			entities.WriteString(v.Interface().(Entity).String())
 		}
-		return fmt.Sprintf("Relation [map]: %v.%v = %v", owner, r.Name, entities)
+		return fmt.Sprintf("Relation [map]: %v.%v = %v", owner, r.Name, entities.String())
 	}
 	return fmt.Sprintf("Relation [unknown]: %v.%v", owner, r.Name)
 }

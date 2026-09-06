@@ -1,7 +1,7 @@
 {
   "gopls": {
     "codelenses": {
-      "gc_details": true // Show a code lens toggling the display of gc's choices.
+      "gc_details": true
     }
   },
   "ui": {
@@ -11,5 +11,8 @@
       }
     }
   },
-  "workbench.tree.indent": 14
+  "workbench.tree.indent": 14,
+  "go.goroot": "${env:HOME}/.goenv/versions/1.26.8",
+  "go.gopath": "${env:HOME}/go/1.26.8",
+  "go.toolsGopath": "${env:HOME}/go/tools"
 }

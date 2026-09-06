@@ -3,6 +3,9 @@
 
 package scripting_symbols
 
+// Don't forget `go install github.com/traefik/yaegi/cmd/yaegi@latest` before
+// running these generators.
+
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols --exclude Flaggable tlyakhov/gofoom/concepts
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/constants
 //go:generate $GOPATH/bin/yaegi extract --name scripting_symbols tlyakhov/gofoom/containers

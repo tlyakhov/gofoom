@@ -395,7 +395,7 @@ func CreateMainMenu() {
 	allMenus := reflect.ValueOf(&editor.EditorMenu).Elem()
 	for i := 0; i < allMenus.NumField(); i++ {
 		f := allMenus.Field(i)
-		if f.Type() != reflect.TypeOf(MenuAction{}) {
+		if f.Type() != reflect.TypeFor[MenuAction]() {
 			continue
 		}
 		action := f.Addr().Interface().(*MenuAction)

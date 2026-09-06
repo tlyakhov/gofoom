@@ -18,22 +18,22 @@ import (
 )
 
 func (g *Grid) originalStrings(field *state.PropertyGridField) string {
-	origValue := ""
+	var origValue strings.Builder
 	i := 0
 	for _, v := range field.Unique {
 		if i != 0 {
-			origValue += ", "
+			origValue.WriteString(", ")
 		}
 		e := v.Elem()
 		if e.Kind() == reflect.String {
-			origValue += e.String()
+			origValue.WriteString(e.String())
 		} else {
 			s := v.MethodByName("String").Call(nil)[0].String()
-			origValue += s
+			origValue.WriteString(s)
 		}
 		i++
 	}
-	return origValue
+	return origValue.String()
 }
 
 func (g *Grid) fieldString(field *state.PropertyGridField, multiline bool) {
