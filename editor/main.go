@@ -25,13 +25,13 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/fogleman/gg"
+
 )
 
 var (
-	PatternSelectionPrimary   = gg.NewSolidPattern(color.NRGBA{0, 255, 0, 255})
-	PatternSelectionSecondary = gg.NewSolidPattern(color.NRGBA{0, 255, 255, 255})
-	PatternPVS                = gg.NewSolidPattern(color.NRGBA{160, 255, 160, 255})
+	PatternSelectionPrimary   = color.NRGBA{0, 255, 0, 255}
+	PatternSelectionSecondary = color.NRGBA{0, 255, 255, 255}
+	PatternPVS                = color.NRGBA{160, 255, 160, 255}
 	editor                    *Editor
 )
 

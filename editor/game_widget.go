@@ -17,7 +17,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
-	"github.com/fogleman/gg"
+	"github.com/gogpu/gg"
 )
 
 // Declare conformity with interfaces

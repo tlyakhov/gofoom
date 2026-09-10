@@ -19,7 +19,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
-	"github.com/fogleman/gg"
+	"github.com/gogpu/gg"
 )
 
 // Declare conformity with interfaces
@@ -88,7 +88,7 @@ func (mw *MapWidget) render() {
 	editor.MapViewGrid.Draw(&editor.EditorState)
 	copy(mw.Context.Image().(*image.RGBA).Pix, editor.MapViewGrid.pixels())
 	TransformContext(mw.Context)
-	mw.Context.FontHeight()
+	// // mw.Context.FontHeight()
 
 	highlightedSectors := make(containers.Set[*core.Sector])
 	for _, s := range editor.Selection.Exact {
@@ -198,12 +198,12 @@ func (mw *MapWidget) render() {
 		mw.Context.DrawStringAnchored(label, gridMouseDown[0], gridMouseDown[1], 0.5, 1.0)
 	case *actions.AddSector:
 		gridMouse := editor.WorldGrid(&editor.MouseWorld)
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		mw.Context.SetColor(PatternSelectionPrimary)
 		mw.DrawHandle(gridMouse)
 	case *actions.SplitSector, *actions.SplitSegment, *actions.AlignGrid, *actions.PathDebug:
 		gridMouse := editor.WorldGrid(&editor.MouseWorld)
 		gridMouseDown := editor.WorldGrid(&editor.MouseDownWorld)
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		mw.Context.SetColor(PatternSelectionPrimary)
 		mw.DrawHandle(gridMouse)
 		if editor.MousePressed {
 			mw.Context.NewSubPath()
