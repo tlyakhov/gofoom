@@ -10,7 +10,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/editor/state"
 
-	"github.com/fogleman/gg"
+	"github.com/gogpu/gg"
 )
 
 type MapViewGrid struct {

@@ -15,7 +15,7 @@ import (
 	"tlyakhov/gofoom/concepts"
 	"tlyakhov/gofoom/ecs"
 
-	"github.com/fogleman/gg"
+	"github.com/gogpu/gg"
 )
 
 func (e *Editor) materialSelectionBorderColor(entity ecs.Entity) *concepts.Vector4 {
@@ -73,8 +73,8 @@ func (e *Editor) imageForMaterial(entity ecs.Entity) image.Image {
 	return img
 }
 
-var patternPrimary = gg.NewSolidPattern(color.NRGBA{255, 255, 255, 255})
-var patternSecondary = gg.NewSolidPattern(color.NRGBA{255, 255, 0, 255})
+var patternPrimary = color.NRGBA{255, 255, 255, 255}
+var patternSecondary = color.NRGBA{255, 255, 0, 255}
 
 func (e *Editor) imageForSector(entity ecs.Entity) image.Image {
 	w, h := 64, 64
@@ -97,9 +97,9 @@ func (e *Editor) imageForSector(entity ecs.Entity) image.Image {
 
 	for _, segment := range sector.Segments {
 		if segment.AdjacentSegment != nil {
-			context.SetStrokeStyle(patternSecondary)
+			context.SetColor(patternSecondary)
 		} else {
-			context.SetStrokeStyle(patternPrimary)
+			context.SetColor(patternPrimary)
 		}
 		context.NewSubPath()
 		x := (segment.P.Render[0] - sector.Min[0]) * float64(w) * dx / (sector.Max[0] - sector.Min[0])

@@ -10,9 +10,10 @@ import (
 	"tlyakhov/gofoom/dynamic"
 	"tlyakhov/gofoom/ecs"
 
-	"github.com/fogleman/gg"
+	"github.com/gogpu/gg"
 	"github.com/spf13/cast"
-	"golang.org/x/image/font/inconsolata"
+	"github.com/gogpu/gg/text"
+	"golang.org/x/image/font/gofont/gomono"
 )
 
 type Text struct {
@@ -40,23 +41,24 @@ func (t *Text) OnAttach() {
 
 func (t *Text) RasterizeText() {
 	padding := 4.0
-	face := inconsolata.Regular8x16
+	fontSource, _ := text.NewFontSource(gomono.TTF)
+	face := fontSource.Face(16.0)
 	// For measuring text
 	c := gg.NewContext(0, 0)
-	c.SetFontFace(face)
+	c.SetFont(face)
 	w, h := c.MeasureMultilineString(t.Label, t.LineSpacing)
 	w += padding * 2
 	h += padding * 2
 	// Actual image & context
 	c = gg.NewContext(int(w), int(h))
-	c.SetFontFace(face)
+	c.SetFont(face)
 	// Color gets applied at render time
-	c.SetRGBA255(255, 255, 255, 255)
+	c.SetRGBA(1, 1, 1, 1)
 	split := strings.Split(t.Label, "\n")
 	// height formula is from MeasureMultilineString
-	lineHeight := c.FontHeight() * t.LineSpacing
+	lineHeight := c.Font().Metrics().LineHeight() * t.LineSpacing
 	th := float64(len(split)) * lineHeight
-	th -= (t.LineSpacing - 1) * c.FontHeight()
+	th -= (t.LineSpacing - 1) * c.Font().Metrics().LineHeight()
 	for i, line := range split {
 		c.DrawStringAnchored(line, w*0.5, padding+(h-th)*0.5+float64(i)*lineHeight, 0.5, 0.5)
 	}

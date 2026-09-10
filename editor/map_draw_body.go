@@ -5,6 +5,7 @@ package main
 
 import (
 	"math"
+	"github.com/gogpu/gg"
 
 	"tlyakhov/gofoom/components/character"
 	"tlyakhov/gofoom/components/core"
@@ -83,14 +84,23 @@ func (mw *MapWidget) DrawBody(body *core.Body) {
 		mw.Context.Push()
 		mw.Context.Translate(body.Pos.Render[0]+2*body.Size.Render[0], body.Pos.Render[1])
 		mw.Context.Scale(2*body.Size.Render[0]/64, 2*body.Size.Render[0]/64)
-		mw.Context.DrawImageAnchored(img, 0, 0, 0.5, 0.5)
+		bounds := img.Bounds()
+		imgBuf, _ := gg.NewImageBuf(bounds.Dx(), bounds.Dy(), gg.FormatRGBA8)
+		for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+			for x := bounds.Min.X; x < bounds.Max.X; x++ {
+				c := img.At(x, y)
+				r, g, b, a := c.RGBA()
+				imgBuf.SetRGBA(x, y, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
+			}
+		}
+		mw.Context.DrawImage(imgBuf, float64(-bounds.Dx()/2), float64(-bounds.Dy()/2))
 		mw.Context.Pop()
 	}
 
 	if selected {
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		mw.Context.SetColor(PatternSelectionPrimary)
 	} else if hovering {
-		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+		mw.Context.SetColor(PatternSelectionSecondary)
 	}
 
 	mw.Context.SetLineWidth(1)

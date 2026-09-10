@@ -6,10 +6,10 @@ require (
 	fyne.io/fyne/v2 v2.8.1
 	github.com/blevesearch/bleve/v2 v2.6.1
 	github.com/disintegration/gift v1.2.1
-	github.com/fogleman/gg v1.3.0
 	github.com/gammazero/deque v1.2.1
 	github.com/go-audio/audio v1.0.0
 	github.com/go-audio/wav v1.1.0
+	github.com/gogpu/gg v0.52.5
 	github.com/gopxl/pixel/v2 v2.3.0
 	github.com/hajimehoshi/go-mp3 v0.3.4
 	github.com/jfreymuth/oggvorbis v1.0.5
@@ -21,8 +21,8 @@ require (
 	github.com/spf13/cast v1.10.0
 	github.com/srwiley/gheap v0.0.0-20250703211911-ec0f97f320ee
 	github.com/traefik/yaegi v0.16.1
-	golang.org/x/image v0.41.0
-	golang.org/x/tools v0.45.0
+	golang.org/x/image v0.44.0
+	golang.org/x/tools v0.47.0
 	gonum.org/v1/gonum v0.17.0
 	sigs.k8s.io/yaml v1.6.0
 )
@@ -40,7 +40,6 @@ require (
 	github.com/go-text/render v0.2.1 // indirect
 	github.com/go-text/typesetting v0.3.4 // indirect
 	github.com/godbus/dbus/v5 v5.2.2 // indirect
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/jsummers/gobmp v0.0.0-20230614200233-a9de23ed2e25 // indirect
 	github.com/kelindar/simd v1.2.0 // indirect
 	github.com/pascaldekloe/name v1.0.1 // indirect
@@ -50,10 +49,10 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/yuin/goldmark v1.8.2 // indirect
-	golang.org/x/mod v0.36.0 // indirect
-	golang.org/x/net v0.55.0 // indirect
-	golang.org/x/sys v0.45.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
+	golang.org/x/mod v0.37.0 // indirect
+	golang.org/x/net v0.56.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.40.0 // indirect
 )
 
 require (
@@ -85,6 +84,8 @@ require (
 	github.com/fyne-io/oksvg v0.2.0 // indirect
 	github.com/go-audio/riff v1.0.0 // indirect
 	github.com/go-gl/glfw/v3.4/glfw v0.1.0-pre.1.0.20260707082822-2a407d02d01a // indirect
+	github.com/gogpu/gpucontext v0.28.0 // indirect
+	github.com/gogpu/gputypes v0.5.2 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/gopxl/glhf/v2 v2.1.0 // indirect
 	github.com/gopxl/mainthread/v2 v2.1.1 // indirect
@@ -102,7 +103,7 @@ require (
 	github.com/rymdport/portal v0.4.2 // indirect
 	go.etcd.io/bbolt v1.4.3 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
-	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

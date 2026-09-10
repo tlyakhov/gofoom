@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gogpu/gg"
 
 	"tlyakhov/gofoom/components/behaviors"
 	"tlyakhov/gofoom/components/core"
@@ -32,9 +33,9 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	bSelected := segmentSelected || editor.Selection.Contains(selection.SelectableFromInternalSegmentB(segment))
 
 	if segmentHovering {
-		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+		mw.Context.SetColor(PatternSelectionSecondary)
 	} else if segmentSelected {
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		mw.Context.SetColor(PatternSelectionPrimary)
 	} else {
 		mw.Context.SetRGB(1, 1, 1)
 	}
@@ -63,10 +64,10 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	}
 
 	if aHovering {
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		mw.Context.SetColor(PatternSelectionPrimary)
 		mw.DrawHandle(segment.A)
 	} else if aSelected {
-		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+		mw.Context.SetColor(PatternSelectionSecondary)
 		mw.DrawHandle(segment.A)
 	} else {
 		mw.Context.SetRGB(1, 1, 1)
@@ -75,10 +76,10 @@ func (mw *MapWidget) DrawInternalSegment(segment *core.InternalSegment) {
 	}
 
 	if bHovering {
-		mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+		mw.Context.SetColor(PatternSelectionSecondary)
 		mw.DrawHandle(segment.B)
 	} else if bSelected {
-		mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+		mw.Context.SetColor(PatternSelectionPrimary)
 		mw.DrawHandle(segment.B)
 	} else {
 		mw.Context.SetRGB(1, 1, 1)
@@ -122,14 +123,14 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 
 		if sectorHovering || sectorSelected {
 			if segment.AdjacentSector == 0 {
-				mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+				mw.Context.SetColor(PatternSelectionPrimary)
 			} else {
-				mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+				mw.Context.SetColor(PatternSelectionSecondary)
 			}
 		} else if segmentHovering {
-			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+			mw.Context.SetColor(PatternSelectionSecondary)
 		} else if segmentSelected {
-			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			mw.Context.SetColor(PatternSelectionPrimary)
 		}
 		/*	if isPartOfPVS && !segmentSelected && !sectorSelected {
 				mw.Context.SetDash(4, 8)
@@ -163,16 +164,25 @@ func (mw *MapWidget) DrawSector(sector *core.Sector) {
 				mw.Context.Push()
 				ne = ns.Add(segment.Normal.Mul(-20.0))
 				mw.Context.ScaleAbout(0.3, 0.3, ne[0], ne[1])
-				mw.Context.DrawImageAnchored(img, (int)(ne[0]), (int)(ne[1]), 0.5, 0.5)
+				bounds := img.Bounds()
+				imgBuf, _ := gg.NewImageBuf(bounds.Dx(), bounds.Dy(), gg.FormatRGBA8)
+				for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+					for x := bounds.Min.X; x < bounds.Max.X; x++ {
+						c := img.At(x, y)
+						r, g, b, a := c.RGBA()
+						imgBuf.SetRGBA(x, y, uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8))
+					}
+				}
+				mw.Context.DrawImage(imgBuf, float64((int)(ne[0]) - bounds.Dx()/2), float64((int)(ne[1]) - bounds.Dy()/2))
 				mw.Context.Pop()
 			}
 		}
 
 		if segmentSelected {
-			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			mw.Context.SetColor(PatternSelectionPrimary)
 			mw.DrawHandle(&segment.P.Render)
 		} else if segmentHovering {
-			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+			mw.Context.SetColor(PatternSelectionSecondary)
 			mw.DrawHandle(&segment.P.Render)
 		} else {
 			mw.Context.DrawRectangle(segment.P.Render[0]-1, segment.P.Render[1]-1, 2, 2)
@@ -217,11 +227,11 @@ func (mw *MapWidget) DrawActions(start ecs.Entity) {
 			mw.Context.SetRGB(0.4, 1, 0.6)
 
 			if waypointHovering || waypointSelected {
-				mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+				mw.Context.SetColor(PatternSelectionPrimary)
 			} else if waypointHovering {
-				mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+				mw.Context.SetColor(PatternSelectionSecondary)
 			} else if waypointSelected {
-				mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+				mw.Context.SetColor(PatternSelectionPrimary)
 			}
 
 			// Draw segment
@@ -246,10 +256,10 @@ func (mw *MapWidget) DrawActions(start ecs.Entity) {
 		}
 
 		if waypointSelected {
-			mw.Context.SetStrokeStyle(PatternSelectionPrimary)
+			mw.Context.SetColor(PatternSelectionPrimary)
 			mw.DrawHandle(waypoint.P.To2D())
 		} else if waypointHovering {
-			mw.Context.SetStrokeStyle(PatternSelectionSecondary)
+			mw.Context.SetColor(PatternSelectionSecondary)
 			mw.DrawHandle(waypoint.P.To2D())
 		} else {
 			mw.Context.DrawRectangle(waypoint.P[0]-1, waypoint.P[1]-1, 2, 2)
